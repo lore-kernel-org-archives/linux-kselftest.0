@@ -2,131 +2,127 @@ Return-Path: <SRS0=8h5t=2I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18C26C43603
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 08:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29811C2D0BF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 15:52:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8AEB2072B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 08:02:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1B002146E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 15:52:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=shutemov-name.20150623.gappssmtp.com header.i=@shutemov-name.20150623.gappssmtp.com header.b="KDdHHJJR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbfLRICN (ORCPT
+        id S1727114AbfLRPwO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 Dec 2019 03:02:13 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37645 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726698AbfLRICN (ORCPT
+        Wed, 18 Dec 2019 10:52:14 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:41395 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726960AbfLRPwO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 03:02:13 -0500
-Received: by mail-ot1-f67.google.com with SMTP id k14so1388967otn.4;
-        Wed, 18 Dec 2019 00:02:12 -0800 (PST)
+        Wed, 18 Dec 2019 10:52:14 -0500
+Received: by mail-lj1-f196.google.com with SMTP id h23so2679016ljc.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2019 07:52:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9SaCbmKz1ngtAKjewhoah2l6ODU7+VciCnZ7nlhe26A=;
+        b=KDdHHJJR0qVpHZqAH81m6HqiNucHS6+DyOVljs3zJhGM2FtVdbdAm0v2Xxx2kkMzcc
+         COndoaW+YFAjiesHFNY+QGvBhkVduyh7QLCQeLwcNzFcgoRSyGgSLcKxln6/f1EUD6yP
+         0y/6+ZumAIbzC9iZaVPFSydS1BkjYoeUFSafS/fB2OWFlpyQaG5ZPEXYvAMbIqCKuFSL
+         vWtk3rEHKc5uyahuOPC2nUQfw14PqKcbFsQXhuikgf46s/H3eDyiCMpavZwnwbAsy3mj
+         YXZ/SZZpNe1V4549MQIslp0gnIgv8CLO8jjGejFKXWpzPMIfXWxDiYo5N9hhWPoVV8yK
+         Z+eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PQqCUv7RKIwxsorFpwyUpfxIl9jds6e+DU9zk9PVPIs=;
-        b=Gb5HqcDsMXKtb+95DTTnDL1xWILA5la5D9B0ajXGdoBC8HvkwtpNC7zKQZO9yM0PUR
-         +/X89b+Ql9CG91oDKppLWoTZTm5HeE8QzaFGtOOs8bm46ePNPX4fD2f/2J9b8M2NOq5u
-         hcabttw6dBArxbz0yplQAAjY94Lzjbsp+6u04f8jiFsdTHfWWwtIcWB0Tm8gQq3c6TJ3
-         0agAGOCpKAIvn+9URzwV0UiYIWGU6v+z5W0+XQiaLAjle6k+flko1QhHaci7x61WiTNs
-         BWQXNgDhFXGbmcF1vGHMSP9dwYMxNuN/V3IEhk7J+u97TkYQ0OCpyX7PKLEG/DLikyje
-         DsRQ==
-X-Gm-Message-State: APjAAAVrLCTyEY5npIhWpWlm0pLQAKdO0/C0qWZtbWswtn7FhbqeyLmn
-        oo5FMRUuIHcItGCs0M/KSzEClA/ISLxZ9/0+rcDcwEhH
-X-Google-Smtp-Source: APXvYqzUfNZ/rvrZwk3wwyL1jpu6Y00InJEF7jIq3BEr3gS2sXwq9ICRHCV3bOYHa11F/bhIR6qTWjscOP47Vu+a3Ak=
-X-Received: by 2002:a9d:7984:: with SMTP id h4mr1280207otm.297.1576656132308;
- Wed, 18 Dec 2019 00:02:12 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9SaCbmKz1ngtAKjewhoah2l6ODU7+VciCnZ7nlhe26A=;
+        b=kspQtEAWvhysJz1IJXW7s3ku8lMx3QKgUbQOq0cAMdMT92r8jWDDC+KD7pXtCJfO9+
+         0dLW1wceVfKjMEPXT2jsLogC0WnAw57YyuEbvwB9kEWd6a5shvs4iCecyIZGU29E/BxS
+         EVF6f2rUcQBzcVL17e8WRFaPbNMJzdWGTU5TFbwryGYIRJWxnClrDxKID/3y9kYUL/4v
+         6dataCsMqz5IqQ3Miwqn2wjjAQZBGuJGyd5IKV4s64sJMDY9gHRO7rVewrj1CX7Yzw6Q
+         SskNdPsHF5gny1Ykcxg3dpQ+AJ00zELbV6akRtsKDtRoik5DqPMyHXGlmlpgBwCE2+gd
+         3srQ==
+X-Gm-Message-State: APjAAAWIkIc7TVlo8RzF3wuiOyQLl45fGW31wHMv7J98QOyGlq85CSbF
+        L9R7yYdJCFTcGpq+Pg9f8qnpYg==
+X-Google-Smtp-Source: APXvYqwSmzkDxFfUqfRx+ol+ctreHSER3AZEkxHGbqQ5sNtLr5I/0+mwtD90Owb4uveY0c44Ujy5Kw==
+X-Received: by 2002:a2e:3312:: with SMTP id d18mr2333248ljc.222.1576684332255;
+        Wed, 18 Dec 2019 07:52:12 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id s16sm1351312lfc.35.2019.12.18.07.52.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 07:52:11 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 66C2E1012CF; Wed, 18 Dec 2019 18:52:11 +0300 (+03)
+Date:   Wed, 18 Dec 2019 18:52:11 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
+Subject: Re: [PATCH v11 01/25] mm/gup: factor out duplicate code from four
+ routines
+Message-ID: <20191218155211.emcegdp5uqgorfwe@box>
+References: <20191216222537.491123-1-jhubbard@nvidia.com>
+ <20191216222537.491123-2-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <878snajjh2.wl-kuninori.morimoto.gx@renesas.com>
-In-Reply-To: <878snajjh2.wl-kuninori.morimoto.gx@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 Dec 2019 09:02:00 +0100
-Message-ID: <CAMuHMdUq6U0i_+Dg57jVNYM4iephuZ8k3QC6AyQ--W_qY5=q9w@mail.gmail.com>
-Subject: Re: [PATCH] sh: use generic strncpy()
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Karl Nasrallah <knnspeed@aol.com>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Linux-SH <linux-sh@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191216222537.491123-2-jhubbard@nvidia.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Morimoto-san, Karl,
+On Mon, Dec 16, 2019 at 02:25:13PM -0800, John Hubbard wrote:
+> +static void put_compound_head(struct page *page, int refs)
+> +{
+> +	/* Do a get_page() first, in case refs == page->_refcount */
+> +	get_page(page);
+> +	page_ref_sub(page, refs);
+> +	put_page(page);
+> +}
 
-On Wed, Dec 18, 2019 at 6:22 AM Kuninori Morimoto
-<kuninori.morimoto.gx@renesas.com> wrote:
-> From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
->
-> Current SH will get below warning at strncpy()
->
-> In file included from ${LINUX}/arch/sh/include/asm/string.h:3,
->                  from ${LINUX}/include/linux/string.h:20,
->                  from ${LINUX}/include/linux/bitmap.h:9,
->                  from ${LINUX}/include/linux/nodemask.h:95,
->                  from ${LINUX}/include/linux/mmzone.h:17,
->                  from ${LINUX}/include/linux/gfp.h:6,
->                  from ${LINUX}/innclude/linux/slab.h:15,
->                  from ${LINUX}/linux/drivers/mmc/host/vub300.c:38:
-> ${LINUX}/drivers/mmc/host/vub300.c: In function 'new_system_port_status':
-> ${LINUX}/arch/sh/include/asm/string_32.h:51:42: warning: array subscript\
->   80 is above array bounds of 'char[26]' [-Warray-bounds]
->    : "0" (__dest), "1" (__src), "r" (__src+__n)
->                                      ~~~~~^~~~
->
-> In general, strncpy() should behave like below.
->
->         char dest[10];
->         char *src = "12345";
->
->         strncpy(dest, src, 10);
->         // dest = {'1', '2', '3', '4', '5',
->                    '\0','\0','\0','\0','\0'}
->
-> But, current SH strnpy() has 2 issues.
-> 1st is it will access to out-of-memory (= src + 10).
+It's not terribly efficient. Maybe something like:
 
-I believe this is not correct: the code does not really access memory
-beyond the end of the source string.  (Recent) gcc just thinks so,
-because "__src+__n" is used as a parameter to the routine.
+	VM_BUG_ON_PAGE(page_ref_count(page) < ref, page);
+	if (refs > 2)
+		page_ref_sub(page, refs - 1);
+	put_page(page);
 
-> 2nd is it needs big fixup for it, and maintenance __asm__
-> code is difficult.
+?
 
-Yeah, the padding is missing.
-
-> To solve these issues, this patch simply uses generic strncpy()
-> instead of architecture specific one.
-
-That will definitely fix the issue, as we assume the generic
-implementation is correct ;-)
-
-Now, I've just tried, naively, to enable CONFIG_STRING_SELFTEST=y in my
-rts7751r2d build (without your patch), and boot it in qemu:
-
-    String selftests succeeded
-
-Woops, turns out lib/test_string.c does not have any testcases for
-strncpy()...
-
-So adding test code for the corner cases may be a valuable contribution.
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+ Kirill A. Shutemov
