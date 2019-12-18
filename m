@@ -2,33 +2,33 @@ Return-Path: <SRS0=8h5t=2I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A49DC43603
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 20:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7196FC43603
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 20:48:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06BC424672
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 20:46:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A87E2176D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Dec 2019 20:48:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbfLRUqv (ORCPT
+        id S1726454AbfLRUsi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 Dec 2019 15:46:51 -0500
-Received: from mga06.intel.com ([134.134.136.31]:19313 "EHLO mga06.intel.com"
+        Wed, 18 Dec 2019 15:48:38 -0500
+Received: from mga03.intel.com ([134.134.136.65]:33139 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726540AbfLRUqv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 15:46:51 -0500
+        id S1726376AbfLRUsh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 18 Dec 2019 15:48:37 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 12:46:50 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 12:48:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
-   d="scan'208";a="217968763"
+   d="scan'208";a="217969085"
 Received: from ray.jf.intel.com (HELO [10.7.201.139]) ([10.7.201.139])
-  by orsmga006.jf.intel.com with ESMTP; 18 Dec 2019 12:46:50 -0800
-Subject: Re: [PATCH v15 06/23] selftests/vm/pkeys: Typecast the pkey register
+  by orsmga006.jf.intel.com with ESMTP; 18 Dec 2019 12:48:11 -0800
+Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
 To:     Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
         linux-kselftest@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
@@ -37,7 +37,6 @@ Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
         bauerman@linux.ibm.com, msuchanek@suse.de,
         linuxppc-dev@lists.ozlabs.org
 References: <cover.1576645161.git.sandipan@linux.ibm.com>
- <719ec65756a64cc03e8464a9c6da51c4519d2389.1576645161.git.sandipan@linux.ibm.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -83,41 +82,27 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <5b6c3f8a-9d2f-2534-c072-89f130ce110f@intel.com>
-Date:   Wed, 18 Dec 2019 12:46:50 -0800
+Message-ID: <ab2d5c1f-3103-78e3-6c5d-990494ee3580@intel.com>
+Date:   Wed, 18 Dec 2019 12:48:11 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <719ec65756a64cc03e8464a9c6da51c4519d2389.1576645161.git.sandipan@linux.ibm.com>
+In-Reply-To: <cover.1576645161.git.sandipan@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 12/17/19 11:51 PM, Sandipan Das wrote:
->  	write_pkey_reg(pkey_reg);
-> -	dprintf4("pkey_reg now: %08x\n", read_pkey_reg());
-> +	dprintf4("pkey_reg now: "PKEY_REG_FMT"\n", read_pkey_reg());
->  }
->  
->  #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
-> diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
-> index 2f04ade8ca9c..5f40901219d3 100644
-> --- a/tools/testing/selftests/vm/pkey-x86.h
-> +++ b/tools/testing/selftests/vm/pkey-x86.h
-> @@ -46,6 +46,8 @@
->  #define HPAGE_SIZE		(1UL<<21)
->  #define PAGE_SIZE		4096
->  #define MB			(1<<20)
-> +#define pkey_reg_t		u32
-> +#define PKEY_REG_FMT		"%016x"
+> Testing
+> -------
+> Verified for correctness on powerpc. Need help with x86 testing as I
+> do not have access to a Skylake server. Client platforms like Coffee
+> Lake do not have the required feature bits set in CPUID.
 
-How big is the ppc one?
-
-I'd really just rather do %016lx *everywhere* than sprinkle the
-PKEY_REG_FMTs around.
-
-BTW, why are you doing a %016lx for a u32?
+FWIW, you can get a Skylake Server instance from cloud providers.  I
+spooled up an Amazon EC3 instance once to run these tests.  It think it
+cost me $0.08.
