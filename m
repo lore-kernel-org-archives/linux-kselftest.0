@@ -2,59 +2,60 @@ Return-Path: <SRS0=uf5D=2K=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74840C43603
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D29A6C2D0D3
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 48F9724680
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A78D624680
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yh4ou2uj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IVWfBjRJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725825AbfLTFOU (ORCPT
+        id S1725874AbfLTFO1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Dec 2019 00:14:20 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38739 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfLTFOT (ORCPT
+        Fri, 20 Dec 2019 00:14:27 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:34844 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727229AbfLTFOZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 00:14:19 -0500
-Received: by mail-wm1-f66.google.com with SMTP id u2so7869679wmc.3;
-        Thu, 19 Dec 2019 21:14:18 -0800 (PST)
+        Fri, 20 Dec 2019 00:14:25 -0500
+Received: by mail-wr1-f65.google.com with SMTP id g17so8154899wro.2;
+        Thu, 19 Dec 2019 21:14:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=23AeX3mMe7i3Lf0MSn5OA/aWIo23lefkqQqpPD1lp80=;
-        b=Yh4ou2ujR2YE+/LvW+VTjTc6VqL4uD7bFBh2kU4KHRUSeMHW5vBCpM9Cc7Ng+ll3XY
-         7P2M/MboalHnV/2r/s+wdFDzKE0NFlbEL1n/84EWEjtMSh0ot8zPAmPToN8YYtmhH3b3
-         PT5GbsiAEAgFpvKRU/zKO91wBoAbWxapQrurgwYXQp3hbMHIkH0Bf8/MBizRmvwvDNyn
-         VimbX5/8IwxNaSyTX2uIAhc7FtfJXvdNymzj3SdKAobKfosM5r1O4Zt9mlmrW6/5iOMT
-         vzDBcF3hUY1l9XzfU8JioutnNDlRCRvCq3Pi0JfjDTHN01RItjer6AnaJTrzY+8gveJV
-         lhnA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=inbP6pGKtJxItdKOeeuDolxjjunfcHjYuKaxBqpxDrE=;
+        b=IVWfBjRJRqaIGCacBEb+txUGuYGchEc3SzdoOwUuW4r4HzAzPgRYpIzG7vjyVGxLwK
+         wwTH0nM3J2KCGbCnpq0+nBO0xNfwjK/yDSBETHIs40P6rK5vkDaC/NLojfesofJTL/lS
+         WjL2w3AttGgKAFRIDP8VbkpDZwWBHgSFVQHIo3jKmFhe/cXj4tUvfRPTurZt5oY+sQqU
+         8bBkodbhLWPNPykLOi3v10kjkoFe37f35Gf3NGHFJ+8oL3zck7DV3VnY01ppqhVT+B45
+         iXVKzMSGdGgyZem3A/6FwuCk2ddb70RJgRgO6mop9CETKXkwApPXcwMZXZyt8PbGvOe1
+         WsVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=23AeX3mMe7i3Lf0MSn5OA/aWIo23lefkqQqpPD1lp80=;
-        b=Tf40wJ7rkybJ8vuC63L3pj0Oy2XjqQ+IJZU9oc/yuVVSMW1t+NxRP5aFOU2QOB8cds
-         Zz4fgT80MF/7sM7r9jCoTZOXXIhY5p8P9Lxh3q2fc0dtQzqNp9clP6AeWSmplvcQiSxY
-         /+hBFPcF25xjSdF/R+pyUaH3MOdhJPU+z+d1I3rK4hC+nWZtKjSb8s9k+FdyL4iQUYiP
-         8MpgDGbY+YBANhq7YE+ihpG6hpH9YgAy8Z6JqPQJx5n/2krHZrINMWEoiKbiUsSdwbM9
-         bHpFCT06V5YFgqxyF9i2mg2hrj9tOWU4hlaXFWY8dxMHxF7SFqaL4kbU0mYIlywclN/c
-         W4eQ==
-X-Gm-Message-State: APjAAAX1ssG2QzaKzzPO4/6zPt1eVogv4B8GjsTBJhDLlVmofW0uImG9
-        O8rTqkGPYPj9I7t6i8e9Jdk=
-X-Google-Smtp-Source: APXvYqwNvwKc7iPXiJfL0xzFh2vKamTudLe9kX5kmPUf/w99aICME8MGbgP4W7/gGwu1Ry1dDGlCBg==
-X-Received: by 2002:a05:600c:2215:: with SMTP id z21mr14610576wml.55.1576818857593;
-        Thu, 19 Dec 2019 21:14:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=inbP6pGKtJxItdKOeeuDolxjjunfcHjYuKaxBqpxDrE=;
+        b=t1xaIBGyA6Z17ElKBKavr+4iPGmYgDECDIQL6rL+uapi3LXDVWciqKP3DWfOakwnov
+         hJg3RcNedmEWF/rDQLR5Kdb0Xi79ycGDqsAsVso3siLOHFh1JOAWlxbh0ZkITIhb+FXI
+         h44eLtJ56yJacqHEmOyxcmOsZtx4Pa8sxIMxk+xOC+Wl4G3hfCF+QJD+mwSJsMs+o4pL
+         6JlnTUBfnCNMq2TbVSetrGsPIMO4uCUiqRTQmeT23QuPZmRcO9nxNgakP1dXPB+adBtI
+         WUHbwd+FTOhy8NRAaJ6OqexZScixilT+7Jug9LEhE4jWyPBidFwhvH/Ki/eC2rKFq2wU
+         8vPg==
+X-Gm-Message-State: APjAAAXuJA8QRSfrjTE8c995dSluFsIOB4SZC9e5CN0bOW8HNaBytqAV
+        4TCfk8hjFdaAf+rpWAY8byk=
+X-Google-Smtp-Source: APXvYqxfFKBom/UlscLNj/eyveSar2ly0Z+JmQKMrrOd6TKgCR6aBNnyx3dPWgaNrdfsG6pVoEgW0A==
+X-Received: by 2002:adf:fd84:: with SMTP id d4mr13025748wrr.211.1576818863463;
+        Thu, 19 Dec 2019 21:14:23 -0800 (PST)
 Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.16
+        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 21:14:17 -0800 (PST)
+        Thu, 19 Dec 2019 21:14:22 -0800 (PST)
 From:   sj38.park@gmail.com
 X-Google-Original-From: sjpark@amazon.de
 To:     shuah@kernel.org
@@ -62,10 +63,12 @@ Cc:     brendanhiggins@google.com, corbet@lwn.net,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         sj38.park@gmail.com, sjpark@amazon.com, sjpark@amazon.de
-Subject: [PATCH v7 0/6] Fix nits in the kunit
-Date:   Fri, 20 Dec 2019 05:14:02 +0000
-Message-Id: <20191220051408.3591-1-sjpark@amazon.de>
+Subject: [PATCH v7 5/6] kunit: Rename 'kunitconfig' to '.kunitconfig'
+Date:   Fri, 20 Dec 2019 05:14:07 +0000
+Message-Id: <20191220051408.3591-6-sjpark@amazon.de>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191220051408.3591-1-sjpark@amazon.de>
+References: <20191220051408.3591-1-sjpark@amazon.de>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -73,67 +76,90 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-This patchset contains trivial fixes for the kunit documentations and
-the wrapper python scripts.
+This commit renames 'kunitconfig' to '.kunitconfig' so that it can be
+automatically ignored by git and do not disturb people who want to type
+'kernel/' by pressing only the 'k' and then 'tab' key.
 
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+---
+ Documentation/dev-tools/kunit/start.rst | 12 +++++-------
+ tools/testing/kunit/kunit.py            |  2 +-
+ tools/testing/kunit/kunit_kernel.py     |  4 ++--
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
-Baseline
---------
-
-This patchset is based on 'kselftest/fixes' branch of
-linux-kselftest[1].  A complete tree is available at my repo:
-https://github.com/sjp38/linux/tree/kunit_fix/20191205_v6
-
-
-Version History
----------------
-
-Changes from v6
-(https://lore.kernel.org/linux-doc/20191212022711.10062-1-sjpark@amazon.de/):
- - Rebased on latest kselftest/fixes
- - Add 'From: SeongJae Park <sjpark@amazon.de>'
-
-Changes from v5
-(https://lore.kernel.org/linux-kselftest/20191205093440.21824-1-sjpark@amazon.com):
- - Rebased on kselftest/fixes
- - Add 'Reviewed-by' and 'Tested-by' from Brendan Higgins
-
-Changes from v4
-(https://lore.kernel.org/linux-doc/1575490683-13015-1-git-send-email-sj38.park@gmail.com/):
- - Rebased on Heidi Fahim's patch[2]
- - Fix failing kunit_tool_test test
- - Add 'build_dir' option test in 'kunit_tool_test.py'
-
-Changes from v3
-(https://lore.kernel.org/linux-kselftest/20191204192141.GA247851@google.com):
- - Fix the 4th patch, "kunit: Place 'test.log' under the 'build_dir'" to
-   set default value of 'build_dir' as '' instead of NULL so that kunit
-   can run even though '--build_dir' option is not given.
-
-Changes from v2
-(https://lore.kernel.org/linux-kselftest/1575361141-6806-1-git-send-email-sj38.park@gmail.com):
- - Make 'build_dir' if not exists (missed from v3 by mistake)
-
-Changes from v1
-(https://lore.kernel.org/linux-doc/1575242724-4937-1-git-send-email-sj38.park@gmail.com):
- - Remove "docs/kunit/start: Skip wrapper run command" (A similar
-   approach is ongoing)
- - Make 'build_dir' if not exists
-
-SeongJae Park (6):
-  docs/kunit/start: Use in-tree 'kunit_defconfig'
-  kunit: Remove duplicated defconfig creation
-  kunit: Create default config in '--build_dir'
-  kunit: Place 'test.log' under the 'build_dir'
-  kunit: Rename 'kunitconfig' to '.kunitconfig'
-  kunit/kunit_tool_test: Test '--build_dir' option run
-
- Documentation/dev-tools/kunit/start.rst | 13 +++++--------
- tools/testing/kunit/kunit.py            | 18 +++++++++++-------
- tools/testing/kunit/kunit_kernel.py     | 10 +++++-----
- tools/testing/kunit/kunit_tool_test.py  | 10 +++++++++-
- 4 files changed, 30 insertions(+), 21 deletions(-)
-
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index d5197f1a45cb..4e1d24db6b13 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -24,18 +24,16 @@ The wrapper can be run with:
+ For more information on this wrapper (also called kunit_tool) checkout the
+ :doc:`kunit-tool` page.
+ 
+-Creating a kunitconfig
+-======================
++Creating a .kunitconfig
++=======================
+ The Python script is a thin wrapper around Kbuild. As such, it needs to be
+-configured with a ``kunitconfig`` file. This file essentially contains the
++configured with a ``.kunitconfig`` file. This file essentially contains the
+ regular Kernel config, with the specific test targets as well.
+ 
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+-	cp arch/um/configs/kunit_defconfig kunitconfig
+-
+-You may want to add kunitconfig to your local gitignore.
++	cp arch/um/configs/kunit_defconfig .kunitconfig
+ 
+ Verifying KUnit Works
+ ---------------------
+@@ -150,7 +148,7 @@ and the following to ``drivers/misc/Makefile``:
+ 
+ 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
+ 
+-Now add it to your ``kunitconfig``:
++Now add it to your ``.kunitconfig``:
+ 
+ .. code-block:: none
+ 
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index e4250c4b06fb..e59eb9e7f923 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -108,7 +108,7 @@ def main(argv, linux=None):
+ 				type=str, default='', metavar='build_dir')
+ 
+ 	run_parser.add_argument('--defconfig',
+-				help='Uses a default kunitconfig.',
++				help='Uses a default .kunitconfig.',
+ 				action='store_true')
+ 
+ 	cli_args = parser.parse_args(argv)
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index a10c0c787bc1..cc5d844ecca1 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -14,7 +14,7 @@ import os
+ import kunit_config
+ 
+ KCONFIG_PATH = '.config'
+-kunitconfig_path = 'kunitconfig'
++kunitconfig_path = '.kunitconfig'
+ 
+ class ConfigError(Exception):
+ 	"""Represents an error trying to configure the Linux kernel."""
+@@ -111,7 +111,7 @@ class LinuxSourceTree(object):
+ 		return True
+ 
+ 	def build_reconfig(self, build_dir):
+-		"""Creates a new .config if it is not a subset of the kunitconfig."""
++		"""Creates a new .config if it is not a subset of the .kunitconfig."""
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		if os.path.exists(kconfig_path):
+ 			existing_kconfig = kunit_config.Kconfig()
 -- 
 2.17.1
 
