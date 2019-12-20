@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9634BC43603
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C2EC2D0C0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 69D542467F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88F492467F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Dec 2019 05:14:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CPvicxW9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrU5T60U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727283AbfLTFOb (ORCPT
+        id S1727192AbfLTFOW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Dec 2019 00:14:31 -0500
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:41335 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727235AbfLTFO0 (ORCPT
+        Fri, 20 Dec 2019 00:14:22 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38742 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfLTFOW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 00:14:26 -0500
-Received: by mail-wr1-f41.google.com with SMTP id c9so8136500wrw.8;
-        Thu, 19 Dec 2019 21:14:25 -0800 (PST)
+        Fri, 20 Dec 2019 00:14:22 -0500
+Received: by mail-wm1-f65.google.com with SMTP id u2so7869737wmc.3;
+        Thu, 19 Dec 2019 21:14:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=wvc6mp8TpYnIrD2kv/SKRsGHLV9BbyYFN352NxRckX0=;
-        b=CPvicxW9ofjoU9RfDadM9o6pV/o7TIeOb7amdLqoW7zVXt7a8iWmfEw/USKNBoLotT
-         SN6+a8nBjwd9H3rD14fcR2In5tc+SyPy0m+Wit28PlEJ+B7shdkrizIfKNXkI1RF/dSp
-         bkRxZbMUQEkVfJ/XTsbt15fMvuaq8AycVp2RG8wTeuAyo5vzLhXvDY32QLRhdwkQtrAY
-         B/kEaxyXDrCj+HmlgPq7Tr99t5dpXl600taZWePd+7KB8CHfiPGSJVeN8sHMxzjEDyW4
-         bjPYSy3141YPvyBLFYMWXEe66kZ+aA/TX72hikxnDbaN0VSivx3/vXh7nEByqZqyFGdt
-         oMJQ==
+        bh=mZWHQXNZbjWrCsuUxUN1Y9Qc19tYv4n773phxKWQndE=;
+        b=nrU5T60UysGF2YIRLSk3nPP6cbi85Zv2mW4ThA0MXV//JR3YjzosHdwu19Wx4BqX1T
+         IWcUVn1EE1JDi+Xplbd7zmCnUkMpcCsGgmCCZ+ZH7VUFOHYNjsS/cPVG5+2aQUzLV1c5
+         HIM2pKhzFS6Ylg77RJo2PIdrAA7l39tojwedjAij36Nuc+DcNGU85dPLU81NCZsr2JR+
+         99+5mLXAxc8lCEqg5C5ODQqG91Hct4x8ryFZdLpSuSNGS2VG2SFyjSe2KcOylk6taKjN
+         kjpW1OCjHLzUN6vkWevuCkG+sYK5ci48GQOXuJ2d8jcApC5DiXb7ZuAKwq3ibIZk8PUS
+         D74Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=wvc6mp8TpYnIrD2kv/SKRsGHLV9BbyYFN352NxRckX0=;
-        b=e5ruXRYFG/wP1HDCqnHLgrQMdpav0CxOMKJtk/qa+kb5HDi3EOjH7Ozb10bLe3l9+M
-         IczuZ1fuCjztCAz5EE0onu1XBjJS5V88QqPQrfEL0ItRrmJWPMrS7kHem/24H4+p747g
-         9HJY/ixe0Z1FJLMDjA0uiE08I/xu5Ogr6xx/8zgx9FzGOXXE1JwEfgwTQj/WPqzWk4r/
-         9QGtLUqjYe+IAQaNhARbDIXfPFxaTtxyJ47MYB/YRYyhRDMPfn2l7/ppBjmgRpEQzXV9
-         bKpx6R6AsEiCsWm9UiT7ETM6wLzab3oDEV6dHJUmTLYAqvWP7ays4rOitD/VKD1zWD81
-         3inA==
-X-Gm-Message-State: APjAAAV+aF8woP4JQzCj+Rq9NKsPxBOxiPpMM8k3sHkk7a2bhaGrQ/8x
-        +1w6gtpeDrPUqmCOIQXXixY=
-X-Google-Smtp-Source: APXvYqxBnPAvPA9JEkJThZNdOy1K1asm1Hw77D3N+Npjpi6OIwkyCiYRLJzJXr9mB0JzRciXSaLOBw==
-X-Received: by 2002:a5d:4984:: with SMTP id r4mr12462934wrq.137.1576818864742;
-        Thu, 19 Dec 2019 21:14:24 -0800 (PST)
+        bh=mZWHQXNZbjWrCsuUxUN1Y9Qc19tYv4n773phxKWQndE=;
+        b=MBjlHZKy2dDeMOev9wnCT4dCdj0RqPU5BF+62PjXqdpJzvbtWHLJnOLoUj7jS+hqMx
+         KZ2vOndaSVpSSd5U0nrBHCvrDKm3n/FXFsLe7lNJVrH8UdOssMuzuHF08AQAFba5SdX2
+         kMKUEwp+b8lCWJ2jNu9kdisss2MYUh72Eb86D/1qjpf1B4weenU6gaDHSfiULiXAt1Bu
+         4i6GRt5pZ1Boz6pFRgvjdTL+ezUbvwj/27QTOH7KhZAccOPHRo16ho7vO1sfioqOg1HM
+         53D8bLPgGVSbA1rsNhW9UQMi9q949qxKnnypUyRxhLGtGCXOOsio4y7gZ1CDQVqxNk3D
+         UzoQ==
+X-Gm-Message-State: APjAAAVDepGARMYIemvwWQvUiLw6H+djxFft8FgWBZLT/Z92GHXjolO+
+        echCc2tzDEYmRzMEdQw3iuI=
+X-Google-Smtp-Source: APXvYqzaWtnwNBBPRPmZs/K2n1dWihJXuAFPZmbYBp7ZO3xDMfSEP3ovrD0no3EXS4/nHRA/QIUN4A==
+X-Received: by 2002:a05:600c:2549:: with SMTP id e9mr14422062wma.6.1576818859888;
+        Thu, 19 Dec 2019 21:14:19 -0800 (PST)
 Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.23
+        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 21:14:24 -0800 (PST)
+        Thu, 19 Dec 2019 21:14:19 -0800 (PST)
 From:   sj38.park@gmail.com
 X-Google-Original-From: sjpark@amazon.de
 To:     shuah@kernel.org
@@ -63,9 +63,9 @@ Cc:     brendanhiggins@google.com, corbet@lwn.net,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         sj38.park@gmail.com, sjpark@amazon.com, sjpark@amazon.de
-Subject: [PATCH v7 6/6] kunit/kunit_tool_test: Test '--build_dir' option run
-Date:   Fri, 20 Dec 2019 05:14:08 +0000
-Message-Id: <20191220051408.3591-7-sjpark@amazon.de>
+Subject: [PATCH v7 2/6] kunit: Remove duplicated defconfig creation
+Date:   Fri, 20 Dec 2019 05:14:04 +0000
+Message-Id: <20191220051408.3591-3-sjpark@amazon.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191220051408.3591-1-sjpark@amazon.de>
 References: <20191220051408.3591-1-sjpark@amazon.de>
@@ -76,40 +76,31 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-This commit adds kunit tool test for the '--build_dir' option.
+'--defconfig' option is handled by the 'main() of the 'kunit.py' but
+again handled in following 'run_tests()'.  This commit removes this
+duplicated handling of the option in the 'run_tests()'.
 
 Signed-off-by: SeongJae Park <sjpark@amazon.de>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Tested-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- tools/testing/kunit/kunit_tool_test.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/testing/kunit/kunit.py | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 22f16e66b3c1..cba97756ac4a 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -174,6 +174,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index efe06d621983..f8f26951cd1b 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -37,9 +37,6 @@ def create_default_kunitconfig():
  
- 	def test_run_passes_args_fail(self):
-@@ -202,5 +203,12 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
-+	def test_run_builddir(self):
-+		build_dir = '.kunit'
-+		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
-+		assert self.linux_source_mock.build_reconfig.call_count == 1
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
-+		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-+
- if __name__ == '__main__':
- 	unittest.main()
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+-	if request.defconfig:
+-		create_default_kunitconfig()
+-
+ 	config_start = time.time()
+ 	success = linux.build_reconfig(request.build_dir)
+ 	config_end = time.time()
 -- 
 2.17.1
 
