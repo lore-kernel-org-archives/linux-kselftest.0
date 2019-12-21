@@ -1,53 +1,46 @@
-Return-Path: <SRS0=wHve=2L=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=8Zt5=2M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CF47C2D0D6
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Dec 2019 10:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDCF5C2D0D2
+	for <linux-kselftest@archiver.kernel.org>; Sun, 22 Dec 2019 00:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D465E24654
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Dec 2019 10:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576922935;
-	bh=9acaA/8fKn1399pza9UZM74CCEP9IQOiAcwxAFB8uv0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=M7JY27p2YMJ6ylBs9XdP48HerzufZqFmGVS7ymVerEmN9LwOwvys8ViVmbn65C4d0
-	 pl3DI8LomSo8Pw0Cv55nPuC0KA1PNke1o1BoUAHHaB/GxukAvHfwPZMMXUq5Jtdr7o
-	 BAeETm41npnd02hBlgCW6lY/WryrVJhOu6Ip5nkA=
+	by mail.kernel.org (Postfix) with ESMTP id 9390E206D3
+	for <linux-kselftest@archiver.kernel.org>; Sun, 22 Dec 2019 00:02:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Ih1gQcFI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbfLUKIu (ORCPT
+        id S1726671AbfLVACZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 21 Dec 2019 05:08:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726087AbfLUKIt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Dec 2019 05:08:49 -0500
-Received: from localhost (unknown [5.29.147.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A0D0206EC;
-        Sat, 21 Dec 2019 10:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576922927;
-        bh=9acaA/8fKn1399pza9UZM74CCEP9IQOiAcwxAFB8uv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C5VL6ejrikwv/fPR/5hW1vC5g7ZxqQArLHZI9V0Acv45zpCoEu7KVSUG363aSOh1d
-         8mWTxU92Mkz/MNea4rOvwk4lPkm3QVmugiAJmAPtyzW4ix2JAMqI4I9mKaT4oTHqTx
-         danVQGmjzaX4h7HmaTFOuro/EjXVdeZW+yY0HmyE=
-Date:   Sat, 21 Dec 2019 12:08:43 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Sat, 21 Dec 2019 19:02:25 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:3582 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbfLVACY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 21 Dec 2019 19:02:24 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dfeb2820001>; Sat, 21 Dec 2019 16:02:11 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sat, 21 Dec 2019 16:02:22 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sat, 21 Dec 2019 16:02:22 -0800
+Received: from [10.2.167.41] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 22 Dec
+ 2019 00:02:18 +0000
+Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
+To:     Leon Romanovsky <leon@kernel.org>
+CC:     Jason Gunthorpe <jgg@ziepe.ca>,
         Andrew Morton <akpm@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Alex Williamson <alex.williamson@redhat.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Christoph Hellwig <hch@infradead.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -56,7 +49,7 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         "David S . Miller" <davem@davemloft.net>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
         Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -64,84 +57,94 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         Maor Gottlieb <maorg@mellanox.com>
-Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
-Message-ID: <20191221100843.GB13335@unreal>
 References: <20191216222537.491123-1-jhubbard@nvidia.com>
  <20191219132607.GA410823@unreal>
  <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
- <20191219210743.GN17227@ziepe.ca>
- <20191220182939.GA10944@unreal>
+ <20191219210743.GN17227@ziepe.ca> <20191220182939.GA10944@unreal>
  <1001a5fc-a71d-9c0f-1090-546c4913d8a2@nvidia.com>
+ <20191221100843.GB13335@unreal>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <9261f37b-5932-4580-cbc8-f591b0b33b2a@nvidia.com>
+Date:   Sat, 21 Dec 2019 15:59:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1001a5fc-a71d-9c0f-1090-546c4913d8a2@nvidia.com>
+In-Reply-To: <20191221100843.GB13335@unreal>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576972931; bh=95pYs1E9YJXlQbksWpOmj6qddfnejBQ8umGtr6ZpFwY=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Ih1gQcFIGgKg5n193VWHK/fpuYOWnxEAjDWwUpeL0db+IZfCrijIZXMmxlXytkJAy
+         GyHybquB0rAC4PSC5fyYYOxPtnlJHJXbYbE1OnuToKQzSNtOX1E6jCjMDILoLbqZ4V
+         OX5Q1eZnL4jcgn4z6z9ok9K0mg+OyYm6pC3L/Y0Cn97KIjBe5Xa80wOPiCj7nBJ7Qf
+         tzyFw5L1dY/NfwyZ7ZrE7k0OMtxXiptqvzxEOmfi4Y/W4Mi7z2d4dMo373vMb2W5ZL
+         8xmwOO+L537Cy6K9gc3OcvyItc0amK8uE6k5ZFJ8R4rau7j4DfEX/idektDGaSQXw9
+         Z/MQNsIwlLFsA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 20, 2019 at 03:54:55PM -0800, John Hubbard wrote:
-> On 12/20/19 10:29 AM, Leon Romanovsky wrote:
-> ...
-> >> $ ./build.sh
-> >> $ build/bin/run_tests.py
-> >>
-> >> If you get things that far I think Leon can get a reproduction for you
-> >
-> > I'm not so optimistic about that.
-> >
->
-> OK, I'm going to proceed for now on the assumption that I've got an overflow
-> problem that happens when huge pages are pinned. If I can get more information,
-> great, otherwise it's probably enough.
->
-> One thing: for your repro, if you know the huge page size, and the system
-> page size for that case, that would really help. Also the number of pins per
-> page, more or less, that you'd expect. Because Jason says that only 2M huge
-> pages are used...
->
-> Because the other possibility is that the refcount really is going negative,
-> likely due to a mismatched pin/unpin somehow.
->
-> If there's not an obvious repro case available, but you do have one (is it easy
-> to repro, though?), then *if* you have the time, I could point you to a github
-> branch that reduces GUP_PIN_COUNTING_BIAS by, say, 4x, by applying this:
+On 12/21/19 2:08 AM, Leon Romanovsky wrote:
+> On Fri, Dec 20, 2019 at 03:54:55PM -0800, John Hubbard wrote:
+>> On 12/20/19 10:29 AM, Leon Romanovsky wrote:
+>> ...
+>>>> $ ./build.sh
+>>>> $ build/bin/run_tests.py
+>>>>
+>>>> If you get things that far I think Leon can get a reproduction for you
+>>>
+>>> I'm not so optimistic about that.
+>>>
+>>
+>> OK, I'm going to proceed for now on the assumption that I've got an overflow
+>> problem that happens when huge pages are pinned. If I can get more information,
+>> great, otherwise it's probably enough.
+>>
+>> One thing: for your repro, if you know the huge page size, and the system
+>> page size for that case, that would really help. Also the number of pins per
+>> page, more or less, that you'd expect. Because Jason says that only 2M huge
+>> pages are used...
+>>
+>> Because the other possibility is that the refcount really is going negative,
+>> likely due to a mismatched pin/unpin somehow.
+>>
+>> If there's not an obvious repro case available, but you do have one (is it easy
+>> to repro, though?), then *if* you have the time, I could point you to a github
+>> branch that reduces GUP_PIN_COUNTING_BIAS by, say, 4x, by applying this:
+> 
+> I'll see what I can do this Sunday.
+> 
 
-I'll see what I can do this Sunday.
+The other data point that might shed light on whether it's a mismatch (this only
+works if the system is not actually crashing, though), is checking the new
+vmstat items, like this:
 
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index bb44c4d2ada7..8526fd03b978 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1077,7 +1077,7 @@ static inline void put_page(struct page *page)
->   * get_user_pages and page_mkclean and other calls that race to set up page
->   * table entries.
->   */
-> -#define GUP_PIN_COUNTING_BIAS (1U << 10)
-> +#define GUP_PIN_COUNTING_BIAS (1U << 8)
->
->  void unpin_user_page(struct page *page);
->  void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
->
-> If that fails to repro, then we would be zeroing in on the root cause.
->
-> The branch is here (I just tested it and it seems healthy):
->
-> git@github.com:johnhubbard/linux.git  pin_user_pages_tracking_v11_with_diags
->
->
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
+$ grep foll_pin /proc/vmstat
+nr_foll_pin_requested 16288188
+nr_foll_pin_returned 16288188
+
+...but OTOH, if you've got long-term pins, then those are *supposed* to be
+mismatched, so it only really helps in between tests.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
