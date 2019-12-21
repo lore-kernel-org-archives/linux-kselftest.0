@@ -6,28 +6,28 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA1A2C43603
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Dec 2019 04:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 594BDC43603
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Dec 2019 04:46:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83DFE2253D
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Dec 2019 04:46:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3901E21927
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Dec 2019 04:46:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727511AbfLUEqt (ORCPT
+        id S1727152AbfLUEqD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Dec 2019 23:46:49 -0500
+        Fri, 20 Dec 2019 23:46:03 -0500
 Received: from mga03.intel.com ([134.134.136.65]:31837 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727175AbfLUEqE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 23:46:04 -0500
+        id S1727102AbfLUEqC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 23:46:02 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:02 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:00 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,338,1571727600"; 
-   d="scan'208";a="222620115"
+   d="scan'208";a="222620102"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:02 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:01 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -54,9 +54,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR IA32_FEAT_CTL is configured
-Date:   Fri, 20 Dec 2019 20:45:07 -0800
-Message-Id: <20191221044513.21680-14-sean.j.christopherson@intel.com>
+Subject: [PATCH v5 11/19] x86/cpu: Print VMX flags in /proc/cpuinfo using VMX_FEATURES_*
+Date:   Fri, 20 Dec 2019 20:45:05 -0800
+Message-Id: <20191221044513.21680-12-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191221044513.21680-1-sean.j.christopherson@intel.com>
 References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
@@ -67,57 +67,140 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new feature flag, X86_FEATURE_MSR_IA32_FEAT_CTL, to track whether
-IA32_FEAT_CTL has been initialized.  This will allow KVM, and any future
-subsystems that depend on IA32_FEAT_CTL, to rely purely on cpufeatures
-to query platform support, e.g. allows a future patch to remove KVM's
-manual IA32_FEAT_CTL MSR checks.
+Add support for generating VMX feature names in capflags.c and use the
+resulting x86_vmx_flags to print the VMX flags in /proc/cpuinfo.  Don't
+print VMX flags if no bits are set in word 0, which holds Pin Controls.
+Pin Control's INTR and NMI exiting are fundamental pillars of VMX, if
+they are not supported then the CPU is broken, it does not actually
+support VMX, or the kernel wasn't built with support for the target CPU.
 
-Various features (on platforms that support IA32_FEAT_CTL) are dependent
-on IA32_FEAT_CTL being configured and locked, e.g. VMX and LMCE.  The
-MSR is always configured during boot, but only if the CPU vendor is
-recognized by the kernel.  Because CPUID doesn't incorporate the current
-IA32_FEAT_CTL value in its reporting of relevant features, it's possible
-for a feature to be reported as supported in cpufeatures but not truly
-enabled, e.g. if the CPU supports VMX but the kernel doesn't recognize
-the CPU.
+Print the features in a dedicated "vmx flags" line to avoid polluting
+the common "flags" and to avoid having to prefix all flags with "vmx_",
+which results in horrendously long names.
 
-As a result, without the flag, KVM would see VMX as supported even if
-IA32_FEAT_CTL hasn't been initialized, and so would need to manually
-read the MSR and check the various enabling bits to avoid taking an
-unexpected #GP on VMXON.
+Keep synthetic VMX flags in cpufeatures to preserve /proc/cpuinfo's ABI
+for those flags.  This means that "flags" and "vmx flags" will have
+duplicate entries for tpr_shadow (virtual_tpr), vnmi, ept, flexpriority,
+vpid and ept_ad, but caps the pollution of "flags" at those six VMX
+features.  The vendor specific code that populates the synthetic flags
+will be consolidated in a future patch to further minimize the lasting
+damage.
 
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/kernel/cpu/feat_ctl.c     | 2 ++
- 2 files changed, 3 insertions(+)
+ arch/x86/boot/mkcpustr.c          |  1 +
+ arch/x86/kernel/cpu/Makefile      |  5 +++--
+ arch/x86/kernel/cpu/mkcapflags.sh | 15 +++++++++++----
+ arch/x86/kernel/cpu/proc.c        | 15 +++++++++++++++
+ 4 files changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index e9b62498fe75..67d21b25ff78 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -220,6 +220,7 @@
- #define X86_FEATURE_ZEN			( 7*32+28) /* "" CPU is AMD family 0x17 (Zen) */
- #define X86_FEATURE_L1TF_PTEINV		( 7*32+29) /* "" L1TF workaround PTE inversion */
- #define X86_FEATURE_IBRS_ENHANCED	( 7*32+30) /* Enhanced IBRS */
-+#define X86_FEATURE_MSR_IA32_FEAT_CTL	( 7*32+31) /* "" MSR IA32_FEAT_CTL configured */
+diff --git a/arch/x86/boot/mkcpustr.c b/arch/x86/boot/mkcpustr.c
+index 9caa10e82217..da0ccc5de538 100644
+--- a/arch/x86/boot/mkcpustr.c
++++ b/arch/x86/boot/mkcpustr.c
+@@ -15,6 +15,7 @@
+ #include "../include/asm/required-features.h"
+ #include "../include/asm/disabled-features.h"
+ #include "../include/asm/cpufeatures.h"
++#include "../include/asm/vmxfeatures.h"
+ #include "../kernel/cpu/capflags.c"
  
- /* Virtualization flags: Linux defined, word 8 */
- #define X86_FEATURE_TPR_SHADOW		( 8*32+ 0) /* Intel TPR Shadow */
-diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
-index fcbb35533cef..24a4fdc1ab51 100644
---- a/arch/x86/kernel/cpu/feat_ctl.c
-+++ b/arch/x86/kernel/cpu/feat_ctl.c
-@@ -126,6 +126,8 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
- 	wrmsrl(MSR_IA32_FEAT_CTL, msr);
+ int main(void)
+diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
+index 4173b0de7a2f..dba6a83bc349 100644
+--- a/arch/x86/kernel/cpu/Makefile
++++ b/arch/x86/kernel/cpu/Makefile
+@@ -57,11 +57,12 @@ obj-$(CONFIG_ACRN_GUEST)		+= acrn.o
  
- update_caps:
-+	set_cpu_cap(c, X86_FEATURE_MSR_IA32_FEAT_CTL);
+ ifdef CONFIG_X86_FEATURE_NAMES
+ quiet_cmd_mkcapflags = MKCAP   $@
+-      cmd_mkcapflags = $(CONFIG_SHELL) $(srctree)/$(src)/mkcapflags.sh $< $@
++      cmd_mkcapflags = $(CONFIG_SHELL) $(srctree)/$(src)/mkcapflags.sh $@ $^
+ 
+ cpufeature = $(src)/../../include/asm/cpufeatures.h
++vmxfeature = $(src)/../../include/asm/vmxfeatures.h
+ 
+-$(obj)/capflags.c: $(cpufeature) $(src)/mkcapflags.sh FORCE
++$(obj)/capflags.c: $(cpufeature) $(vmxfeature) $(src)/mkcapflags.sh FORCE
+ 	$(call if_changed,mkcapflags)
+ endif
+ targets += capflags.c
+diff --git a/arch/x86/kernel/cpu/mkcapflags.sh b/arch/x86/kernel/cpu/mkcapflags.sh
+index aed45b8895d5..1db560ed2ca3 100644
+--- a/arch/x86/kernel/cpu/mkcapflags.sh
++++ b/arch/x86/kernel/cpu/mkcapflags.sh
+@@ -6,8 +6,7 @@
+ 
+ set -e
+ 
+-IN=$1
+-OUT=$2
++OUT=$1
+ 
+ dump_array()
+ {
+@@ -15,6 +14,7 @@ dump_array()
+ 	SIZE=$2
+ 	PFX=$3
+ 	POSTFIX=$4
++	IN=$5
+ 
+ 	PFX_SZ=$(echo $PFX | wc -c)
+ 	TABS="$(printf '\t\t\t\t\t')"
+@@ -57,11 +57,18 @@ trap 'rm "$OUT"' EXIT
+ 	echo "#endif"
+ 	echo ""
+ 
+-	dump_array "x86_cap_flags" "NCAPINTS*32" "X86_FEATURE_" ""
++	dump_array "x86_cap_flags" "NCAPINTS*32" "X86_FEATURE_" "" $2
+ 	echo ""
+ 
+-	dump_array "x86_bug_flags" "NBUGINTS*32" "X86_BUG_" "NCAPINTS*32"
++	dump_array "x86_bug_flags" "NBUGINTS*32" "X86_BUG_" "NCAPINTS*32" $2
++	echo ""
+ 
++	echo "#ifdef CONFIG_X86_VMX_FEATURE_NAMES"
++	echo "#ifndef _ASM_X86_VMXFEATURES_H"
++	echo "#include <asm/vmxfeatures.h>"
++	echo "#endif"
++	dump_array "x86_vmx_flags" "NVMXINTS*32" "VMX_FEATURE_" "" $3
++	echo "#endif /* CONFIG_X86_VMX_FEATURE_NAMES */"
+ ) > $OUT
+ 
+ trap - EXIT
+diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+index cb2e49810d68..4eec8889b0ff 100644
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -7,6 +7,10 @@
+ 
+ #include "cpu.h"
+ 
++#ifdef CONFIG_X86_VMX_FEATURE_NAMES
++extern const char * const x86_vmx_flags[NVMXINTS*32];
++#endif
 +
- 	if (!cpu_has(c, X86_FEATURE_VMX))
- 		return;
+ /*
+  *	Get CPU information for use by the procfs.
+  */
+@@ -102,6 +106,17 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 		if (cpu_has(c, i) && x86_cap_flags[i] != NULL)
+ 			seq_printf(m, " %s", x86_cap_flags[i]);
  
++#ifdef CONFIG_X86_VMX_FEATURE_NAMES
++	if (cpu_has(c, X86_FEATURE_VMX) && c->vmx_capability[0]) {
++		seq_puts(m, "\nvmx flags\t:");
++		for (i = 0; i < 32*NVMXINTS; i++) {
++			if (test_bit(i, (unsigned long *)c->vmx_capability) &&
++			    x86_vmx_flags[i] != NULL)
++				seq_printf(m, " %s", x86_vmx_flags[i]);
++		}
++	}
++#endif
++
+ 	seq_puts(m, "\nbugs\t\t:");
+ 	for (i = 0; i < 32*NBUGINTS; i++) {
+ 		unsigned int bug_bit = 32*NCAPINTS + i;
 -- 
 2.24.1
 
