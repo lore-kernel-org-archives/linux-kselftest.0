@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B3DDC2D0DA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A140C2D0CE
 	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:57:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10AAB22522
+	by mail.kernel.org (Postfix) with ESMTP id 45EE92176D
 	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1577469428;
-	bh=GmOtnR2Eu61QLEuSN3v9F9H3Vw8HY9Qr0TfA7waih40=;
+	bh=jvIKsNNS0M5HdCCq0no463cJMVXdRbq/EAGpse4yLuE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vzbxKe0nu4vvsjZE2ZBShZ1NwHIF4hVSBaW9BIa5S4FMXQy61bI9em6plu0EM3n6C
-	 lSuiEMAslj1+PQssCIXa3N9yjc2usV3GZ4mtBqnajHq3l84xMBrk02plp3gLTAX0q2
-	 gnfiGlKxoOEz8Ht9mhW4w7HT81AEOZCmZzWr9d4M=
+	b=SXoTTGsXNL0fe1PgzMVJ+mddCrnYo54USW+F1wOV785CnbcTqX/GiCEixiXfrJlC9
+	 oQBUvXm9+dm8djeL6oNUW+MLmB1Cf43jzgnHUPCaFDWHSVj+aUd4/jX1K3W8vzYm5o
+	 wobM4l1XgF2cKBl4r8f3ce2Duo52Fje8zJDMFxQM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbfL0Rls (ORCPT
+        id S1727106AbfL0R5H (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:41:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38240 "EHLO mail.kernel.org"
+        Fri, 27 Dec 2019 12:57:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38294 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727605AbfL0Rlr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:41:47 -0500
+        id S1727615AbfL0Rlu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:41:50 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8A9EA2173E;
-        Fri, 27 Dec 2019 17:41:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D63A221927;
+        Fri, 27 Dec 2019 17:41:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468507;
-        bh=GmOtnR2Eu61QLEuSN3v9F9H3Vw8HY9Qr0TfA7waih40=;
+        s=default; t=1577468509;
+        bh=jvIKsNNS0M5HdCCq0no463cJMVXdRbq/EAGpse4yLuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CR8G4ot0B1AVQctA4kF2Kbnuxi50B8uNSELE/WBitEq6O3cVYy0wf6egtRAfGvjp3
-         k1HPsVlc4Gs8qjXR8kF8sOTV8L9BNzR5JqDilu9XSgwiJwOGkIVQ4vpxaXxEsJy4CH
-         CYfbaEv79MjKcqUJ76JWe9CB22159W6xViJS1VjA=
+        b=RkzcQGwR/rxvyPfVP0zuqwt4743iWfMdOAvB8P8gcQfAanua9wbQuOpnh0mEZqGY+
+         YYA+TExtFgM8TuRmbOkLiXnax99DA/P0/XS0icpNkyMlmtRvhmOln5jRLSvrz9CJA0
+         pFOrnvRX+Og/BCHGbOcRCXYXIZL/IAXs0KQw562Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 040/187] selftests/ftrace: Fix to check the existence of set_ftrace_filter
-Date:   Fri, 27 Dec 2019 12:38:28 -0500
-Message-Id: <20191227174055.4923-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 042/187] selftests/ftrace: Do not to use absolute debugfs path
+Date:   Fri, 27 Dec 2019 12:38:30 -0500
+Message-Id: <20191227174055.4923-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
 References: <20191227174055.4923-1-sashal@kernel.org>
@@ -63,45 +63,70 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit fd1baf6ca2ea3550ea47f2bb0bdcf34ec764a779 ]
+[ Upstream commit ba1b9c5048e43716921abe3a1db19cebebf4a5f5 ]
 
-If we run ftracetest on the kernel with CONFIG_DYNAMIC_FTRACE=n,
-there is no set_ftrace_filter and all test cases are failed, because
-reset_ftrace_filter() returns an error.
-Let's check whether set_ftrace_filter exists in reset_ftrace_filter()
-and clean up only set_ftrace_notrace in initialize_ftrace().
+Use relative path to trigger file instead of absolute debugfs path,
+because if the user uses tracefs instead of debugfs, it can be
+mounted at /sys/kernel/tracing.
+Anyway, since the ftracetest is designed to be run at the tracing
+directory, user doesn't need to use absolute path.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ftrace/test.d/functions | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../test.d/trigger/inter-event/trigger-action-hist-xfail.tc   | 4 ++--
+ .../trigger/inter-event/trigger-onchange-action-hist.tc       | 2 +-
+ .../trigger/inter-event/trigger-snapshot-action-hist.tc       | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
-index 86986c4bba54..5d4550591ff9 100644
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -46,6 +46,9 @@ reset_events_filter() { # reset all current setting filters
- }
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
+index 1221240f8cf6..3f2aee115f6e 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
+@@ -21,10 +21,10 @@ grep -q "snapshot()" README || exit_unsupported # version issue
  
- reset_ftrace_filter() { # reset all triggers in set_ftrace_filter
-+    if [ ! -f set_ftrace_filter ]; then
-+      return 0
-+    fi
-     echo > set_ftrace_filter
-     grep -v '^#' set_ftrace_filter | while read t; do
- 	tr=`echo $t | cut -d: -f2`
-@@ -93,7 +96,7 @@ initialize_ftrace() { # Reset ftrace to initial-state
-     disable_events
-     [ -f set_event_pid ] && echo > set_event_pid
-     [ -f set_ftrace_pid ] && echo > set_ftrace_pid
--    [ -f set_ftrace_filter ] && echo | tee set_ftrace_*
-+    [ -f set_ftrace_notrace ] && echo > set_ftrace_notrace
-     [ -f set_graph_function ] && echo | tee set_graph_*
-     [ -f stack_trace_filter ] && echo > stack_trace_filter
-     [ -f kprobe_events ] && echo > kprobe_events
+ echo "Test expected snapshot action failure"
+ 
+-echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
++echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> events/sched/sched_waking/trigger && exit_fail
+ 
+ echo "Test expected save action failure"
+ 
+-echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
++echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> events/sched/sched_waking/trigger && exit_fail
+ 
+ exit_xfail
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+index 064a284e4e75..c80007aa9f86 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+@@ -16,7 +16,7 @@ grep -q "onchange(var)" README || exit_unsupported # version issue
+ 
+ echo "Test onchange action"
+ 
+-echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
++echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> events/sched/sched_waking/trigger
+ 
+ ping $LOCALHOST -c 3
+ nice -n 1 ping $LOCALHOST -c 3
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+index 18fff69fc433..f546c1b66a9b 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+@@ -23,9 +23,9 @@ grep -q "snapshot()" README || exit_unsupported # version issue
+ 
+ echo "Test snapshot action"
+ 
+-echo 1 > /sys/kernel/debug/tracing/events/sched/enable
++echo 1 > events/sched/enable
+ 
+-echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
++echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> events/sched/sched_waking/trigger
+ 
+ ping $LOCALHOST -c 3
+ nice -n 1 ping $LOCALHOST -c 3
 -- 
 2.20.1
 
