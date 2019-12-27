@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F9DC2D0CE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFBD5C2D0DA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:49:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6C5F6222C2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:41:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4DFF2067D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:49:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577468514;
-	bh=kcmHPfgfUkUIZ9s19Gak9QvxgsL0fT1Ndp20b1yWJ/w=;
+	s=default; t=1577468982;
+	bh=BS+mAXFvlqflThf7F1mV4aixoBzjq1S/IWPEOHRCS/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ri3Mu2cu1ycZWVJzbJdMhSVuMrc8OJIQSdmJv+xU1q+dEWxTz3IlL7Ckw4WkQrGun
-	 S6J9k7cF5eGYI1BELyEWE2jkY2csgWZkQ8hueyYAs1duBPigjbueD5lIXntskTOX4Q
-	 7hSwPOzT2gmxzFZi184q04HP22iD9iLBekE2yrpc=
+	b=MfR9M1aOOepXpzk/vHJbVOEEy2EFrLHzKI/Pu/WF46VpgM2cNyT4eEXT/cGrkg1Q0
+	 0n9KoOtMUUHY34odKi4YNmS4mmIY7Vj5FBymPlFoX5V+jFhpTO8zNlPou4oFquWpso
+	 RwwEE/Zb0V0CB2EDb30bfPJTrqMXYCqybOahu4yw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727632AbfL0Rlx (ORCPT
+        id S1728045AbfL0Rtg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:41:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38354 "EHLO mail.kernel.org"
+        Fri, 27 Dec 2019 12:49:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727494AbfL0Rlw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:41:52 -0500
+        id S1728453AbfL0Ro0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:44:26 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B47A222C4;
-        Fri, 27 Dec 2019 17:41:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D0C0321744;
+        Fri, 27 Dec 2019 17:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468511;
-        bh=kcmHPfgfUkUIZ9s19Gak9QvxgsL0fT1Ndp20b1yWJ/w=;
+        s=default; t=1577468665;
+        bh=BS+mAXFvlqflThf7F1mV4aixoBzjq1S/IWPEOHRCS/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K+OyNAE83Z5Zk2AdOh0dNi61Ffc07Oyj7v4A4/Qe/ddxxPgQMds8KjOBafppi/T6g
-         L6j1GDYOoX48UqPe/HJSJEg+CoEm/zwce6nJoVJe1aPkBmkD9yAo4i3eG58/njj6if
-         i+iVRo2nquHfl0cYVPBcLIwor3EK1o5mPmcn1NfU=
+        b=OtQXDKlSTfN6s+w4QOfzv9VmPFfqnja8QD42KrqF/JZITUZIuAsH2m5YCJwXAPT8n
+         vud/jUhrEXBJ5BNhFPzidPxjWPCDvtCPicFu/+9Lz2HT5J2Mi6azACYeiDG/pbjuxm
+         g++lizh6IC1CnUmjbB62cl7qymxSzvx/JcICT6Lo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
+Cc:     Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 044/187] selftests: safesetid: Move link library to LDLIBS
-Date:   Fri, 27 Dec 2019 12:38:32 -0500
-Message-Id: <20191227174055.4923-44-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 26/84] selftests: forwarding: Delete IPv6 address at the end
+Date:   Fri, 27 Dec 2019 12:42:54 -0500
+Message-Id: <20191227174352.6264-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
-References: <20191227174055.4923-1-sashal@kernel.org>
+In-Reply-To: <20191227174352.6264-1-sashal@kernel.org>
+References: <20191227174352.6264-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,47 +60,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+From: Ido Schimmel <idosch@mellanox.com>
 
-[ Upstream commit be12252212fa3dfed6e75112865095c484c0ce87 ]
+[ Upstream commit 65cb13986229cec02635a1ecbcd1e2dd18353201 ]
 
-Move -lcap to LDLIBS from CFLAGS because it is a library
-to be linked.
+When creating the second host in h2_create(), two addresses are assigned
+to the interface, but only one is deleted. When running the test twice
+in a row the following error is observed:
 
-Without this, safesetid failed to build with link error
-as below.
+$ ./router_bridge_vlan.sh
+TEST: ping                                                          [ OK ]
+TEST: ping6                                                         [ OK ]
+TEST: vlan                                                          [ OK ]
+$ ./router_bridge_vlan.sh
+RTNETLINK answers: File exists
+TEST: ping                                                          [ OK ]
+TEST: ping6                                                         [ OK ]
+TEST: vlan                                                          [ OK ]
 
-----
-/usr/bin/ld: /tmp/ccL8rZHT.o: in function `drop_caps':
-safesetid-test.c:(.text+0xe7): undefined reference to `cap_get_proc'
-/usr/bin/ld: safesetid-test.c:(.text+0x107): undefined reference to `cap_set_flag'
-/usr/bin/ld: safesetid-test.c:(.text+0x10f): undefined reference to `cap_set_proc'
-/usr/bin/ld: safesetid-test.c:(.text+0x117): undefined reference to `cap_free'
-/usr/bin/ld: safesetid-test.c:(.text+0x136): undefined reference to `cap_clear'
-collect2: error: ld returned 1 exit status
-----
+Fix this by deleting the address during cleanup.
 
-Fixes: c67e8ec03f3f ("LSM: SafeSetID: add selftest")
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 5b1e7f9ebd56 ("selftests: forwarding: Test routed bridge interface")
+Signed-off-by: Ido Schimmel <idosch@mellanox.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/safesetid/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/forwarding/router_bridge_vlan.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/safesetid/Makefile b/tools/testing/selftests/safesetid/Makefile
-index 98da7a504737..cac42cd36a1b 100644
---- a/tools/testing/selftests/safesetid/Makefile
-+++ b/tools/testing/selftests/safesetid/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -Wall -lcap -O2
-+CFLAGS = -Wall -O2
-+LDLIBS = -lcap
+diff --git a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
+index fef88eb4b873..fa6a88c50750 100755
+--- a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
++++ b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
+@@ -36,7 +36,7 @@ h2_destroy()
+ {
+ 	ip -6 route del 2001:db8:1::/64 vrf v$h2
+ 	ip -4 route del 192.0.2.0/28 vrf v$h2
+-	simple_if_fini $h2 192.0.2.130/28
++	simple_if_fini $h2 192.0.2.130/28 2001:db8:2::2/64
+ }
  
- TEST_PROGS := run_tests.sh
- TEST_GEN_FILES := safesetid-test
+ router_create()
 -- 
 2.20.1
 
