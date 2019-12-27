@@ -2,116 +2,72 @@ Return-Path: <SRS0=5BjP=2R=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA4EC2D0C6
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D51C3F68F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 19:45:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA5542173E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:57:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A8672173E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 19:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577469437;
-	bh=rKXG2FfPMLu109YtxLFFCzBWv+qZUCaZCORPmxlgi04=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aP7iTLTGKhCJ0ZI8YGZJBZ6OJGWq709U6rd2a5GrKKRYdPdfPPpbmdywnVlmvHu8M
-	 FAMTSnqLsM1cidwSxzDNUG/iU1yf2JD9LvqQPbJM3vYfUMNVmtVWbkTtrSFfcxlyV+
-	 fK7LBicDNA9H8GAjocc+TM5hyXT73KyyueEY7aOU=
+	s=default; t=1577475909;
+	bh=C63oD4ICeNPveLiYWEQiRy+FpGhGFjr0TTRjtKvKbMI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=1NMboJsr7Rh30Tc4sY+6cOgn+PZxWYedJsuSOre5dQBr9aNPN8kL8OtxXQengkPVk
+	 QQuQsHuAaGuG5YMJVLKX/onJZVVISzLh3dqEmqcySagFxF7ejjdk400WAcjq02k5/O
+	 MKq7bYLsS8Ar5ChCjHZRRHVicEfrUoYBcPt8cU/Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727628AbfL0R5M (ORCPT
+        id S1727121AbfL0TpJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:57:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38284 "EHLO mail.kernel.org"
+        Fri, 27 Dec 2019 14:45:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727607AbfL0Rls (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:41:48 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD02320CC7;
-        Fri, 27 Dec 2019 17:41:47 +0000 (UTC)
+        id S1726920AbfL0TpI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Dec 2019 14:45:08 -0500
+Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.5-rc4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468508;
-        bh=rKXG2FfPMLu109YtxLFFCzBWv+qZUCaZCORPmxlgi04=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DgYeKwHqCFrWj22SQ7HqEFlgamdfQYItaWs1cNDEJjY/kB1uIgdj12478cqswDe0n
-         fu7KIWYkmNGfq9VkAu5tuMSlWjadKu2Xo/dcEoyb8UEHxhvtISnUK8y5G5fQ2JVcUh
-         oXRSDZ8CbIZ7XNzHK9njoDuGJhhdOq9iOHQQyyXI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        s=default; t=1577475908;
+        bh=C63oD4ICeNPveLiYWEQiRy+FpGhGFjr0TTRjtKvKbMI=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=Qr11t/Excj1jV6Kecm5PIH5GSah7xvhYAYaJKVY0S5uU7tUfbT3ngnY25Jrt+qIJ1
+         q/IXLjgg64g/R1INZy88mPhKCyenLMSswviDAHimvCqmGDvFnItkvsswZZCCbmHigs
+         y54yy4obDzeAQMb/c1JuuYZpO7tIosUUJk5Tua34=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ff093d74-a232-8dfc-d632-196a7a13b611@linuxfoundation.org>
+References: <ff093d74-a232-8dfc-d632-196a7a13b611@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ff093d74-a232-8dfc-d632-196a7a13b611@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-5.5-rc4
+X-PR-Tracked-Commit-Id: 2a1f40adfb54ca65dc4c93bad444dd23b800a76e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f4b3974602a5b527b22c3a0dc61ba71190ea2aa5
+Message-Id: <157747590826.1730.14816195214826236390.pr-tracker-bot@kernel.org>
+Date:   Fri, 27 Dec 2019 19:45:08 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 041/187] selftests/ftrace: Fix ftrace test cases to check unsupported
-Date:   Fri, 27 Dec 2019 12:38:29 -0500
-Message-Id: <20191227174055.4923-41-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
-References: <20191227174055.4923-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+The pull request you sent on Thu, 26 Dec 2019 14:27:27 -0700:
 
-[ Upstream commit 25deae098e748d8d36bc35129a66734b8f6925c9 ]
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.5-rc4
 
-Since dynamic function tracer can be disabled, set_ftrace_filter
-can be disappeared. Test cases which depends on it, must check
-whether the set_ftrace_filter exists or not before testing
-and if not, return as unsupported.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f4b3974602a5b527b22c3a0dc61ba71190ea2aa5
 
-Also, if the function tracer itself is disabled, we can not
-set "function" to current_tracer. Test cases must check it
-before testing, and return as unsupported.
+Thank you!
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc | 2 ++
- tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc | 5 +++++
- 2 files changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-index 36fb59f886ea..1a52f2883fe0 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-@@ -3,6 +3,8 @@
- # description: ftrace - stacktrace filter command
- # flags: instance
- 
-+[ ! -f set_ftrace_filter ] && exit_unsupported
-+
- echo _do_fork:stacktrace >> set_ftrace_filter
- 
- grep -q "_do_fork:stacktrace:unlimited" set_ftrace_filter
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-index 86a1f07ef2ca..71fa3f49e35e 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-@@ -15,6 +15,11 @@ if [ $NP -eq 1 ] ;then
-   exit_unresolved
- fi
- 
-+if ! grep -q "function" available_tracers ; then
-+  echo "Function trace is not enabled"
-+  exit_unsupported
-+fi
-+
- ORIG_CPUMASK=`cat tracing_cpumask`
- 
- do_reset() {
 -- 
-2.20.1
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
