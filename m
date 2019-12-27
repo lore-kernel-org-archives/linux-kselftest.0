@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4944C2D0C6
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:56:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C205C2D0CE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:56:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92B2121582
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:56:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 598BD20CC7
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Dec 2019 17:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1577469398;
-	bh=BS+mAXFvlqflThf7F1mV4aixoBzjq1S/IWPEOHRCS/0=;
+	s=default; t=1577469416;
+	bh=eH1Bug+ns69eCl4OYezFufgJ/9UJKJoBq0c4gH/24ys=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=QSPz+oo3LjotjtVvSt0tm5oysQPpYKwpazkXRcnZPiqOcTF43Ah93ICgM6NbjV9bw
-	 XGD5KWbYmwZhweep0x6s1RJHd4lKU8X1R7Yj4+C92XQS0zenkhAr84ONszRRkRVtN4
-	 ChieAhAS7grIFDku/iSbUpMfGl0DRuiKM7FkUHe4=
+	b=JzvOFI+jc2efoLaJQw3POPHJdH8GejhlqgbHCBYUhwdBK2S6s3FvZzhvcZNYsF2Q9
+	 5rlyKt9s/YneK5YT96h5/IR2IG6cISG1AT6il3+/jIBid9Uh6KcCqWUJ1oFsrQX/v1
+	 dflDVtI89ktyp/eO8u9xfV0Uq4y3Zd8EFBiujvo4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfL0RmA (ORCPT
+        id S1727640AbfL0Rly (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Dec 2019 12:42:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38532 "EHLO mail.kernel.org"
+        Fri, 27 Dec 2019 12:41:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727673AbfL0Rl7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:41:59 -0500
+        id S1727631AbfL0Rlx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:41:53 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9BC2A218AC;
-        Fri, 27 Dec 2019 17:41:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2425721D7E;
+        Fri, 27 Dec 2019 17:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468518;
-        bh=BS+mAXFvlqflThf7F1mV4aixoBzjq1S/IWPEOHRCS/0=;
+        s=default; t=1577468512;
+        bh=eH1Bug+ns69eCl4OYezFufgJ/9UJKJoBq0c4gH/24ys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fkeqlLy+MhHMm5bCSGAtzRveE9gc8FAQUL0+xG0Nh/OdVQwyKWzDE+hEFvioPslsI
-         tVs4sjb8Ggna4F66rJoyy+tutCD/Geb4hrzl7ci+AdJDwyWzsPeZ+1R2PRvgs6tBaa
-         zQBmYugWt3sQa35j0k+pmhLhyAwGqJZ8C3/9DAWQ=
+        b=oG1Lry8mWvrznFXE1RGWhj9mxQ+Xvkt/GuaVExuq2eIbaVPq/FPoERnR+Cn6o9qYy
+         MntxX7JGQQ46Ty1pQ2Bg9rFFDGx3YgtBH8lQ3pWbDkV2MjZUgDr5x8H31kyTXGfJtM
+         3ser/dhoey3jH19cf6KR9K6YdsN8AE3jsi7GFZqU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ido Schimmel <idosch@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 050/187] selftests: forwarding: Delete IPv6 address at the end
-Date:   Fri, 27 Dec 2019 12:38:38 -0500
-Message-Id: <20191227174055.4923-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 045/187] selftests: safesetid: Check the return value of setuid/setgid
+Date:   Fri, 27 Dec 2019 12:38:33 -0500
+Message-Id: <20191227174055.4923-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
 References: <20191227174055.4923-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,47 +61,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ido Schimmel <idosch@mellanox.com>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit 65cb13986229cec02635a1ecbcd1e2dd18353201 ]
+[ Upstream commit 295c4e21cf27ac9af542140e3e797df9e0cf7b5f ]
 
-When creating the second host in h2_create(), two addresses are assigned
-to the interface, but only one is deleted. When running the test twice
-in a row the following error is observed:
+Check the return value of setuid() and setgid().
+This fixes the following warnings and improves test result.
 
-$ ./router_bridge_vlan.sh
-TEST: ping                                                          [ OK ]
-TEST: ping6                                                         [ OK ]
-TEST: vlan                                                          [ OK ]
-$ ./router_bridge_vlan.sh
-RTNETLINK answers: File exists
-TEST: ping                                                          [ OK ]
-TEST: ping6                                                         [ OK ]
-TEST: vlan                                                          [ OK ]
+safesetid-test.c: In function ‘main’:
+safesetid-test.c:294:2: warning: ignoring return value of ‘setuid’, declared with attribute warn_unused_result [-Wunused-result]
+  setuid(NO_POLICY_USER);
+  ^~~~~~~~~~~~~~~~~~~~~~
+safesetid-test.c:295:2: warning: ignoring return value of ‘setgid’, declared with attribute warn_unused_result [-Wunused-result]
+  setgid(NO_POLICY_USER);
+  ^~~~~~~~~~~~~~~~~~~~~~
+safesetid-test.c:309:2: warning: ignoring return value of ‘setuid’, declared with attribute warn_unused_result [-Wunused-result]
+  setuid(RESTRICTED_PARENT);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~
+safesetid-test.c:310:2: warning: ignoring return value of ‘setgid’, declared with attribute warn_unused_result [-Wunused-result]
+  setgid(RESTRICTED_PARENT);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~
+safesetid-test.c: In function ‘test_setuid’:
+safesetid-test.c:216:3: warning: ignoring return value of ‘setuid’, declared with attribute warn_unused_result [-Wunused-result]
+   setuid(child_uid);
+   ^~~~~~~~~~~~~~~~~
 
-Fix this by deleting the address during cleanup.
-
-Fixes: 5b1e7f9ebd56 ("selftests: forwarding: Test routed bridge interface")
-Signed-off-by: Ido Schimmel <idosch@mellanox.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: c67e8ec03f3f ("LSM: SafeSetID: add selftest")
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/forwarding/router_bridge_vlan.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../testing/selftests/safesetid/safesetid-test.c  | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
-index fef88eb4b873..fa6a88c50750 100755
---- a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
-+++ b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
-@@ -36,7 +36,7 @@ h2_destroy()
- {
- 	ip -6 route del 2001:db8:1::/64 vrf v$h2
- 	ip -4 route del 192.0.2.0/28 vrf v$h2
--	simple_if_fini $h2 192.0.2.130/28
-+	simple_if_fini $h2 192.0.2.130/28 2001:db8:2::2/64
- }
+diff --git a/tools/testing/selftests/safesetid/safesetid-test.c b/tools/testing/selftests/safesetid/safesetid-test.c
+index 8f40c6ecdad1..0c4d50644c13 100644
+--- a/tools/testing/selftests/safesetid/safesetid-test.c
++++ b/tools/testing/selftests/safesetid/safesetid-test.c
+@@ -213,7 +213,8 @@ static void test_setuid(uid_t child_uid, bool expect_success)
+ 	}
  
- router_create()
+ 	if (cpid == 0) {	    /* Code executed by child */
+-		setuid(child_uid);
++		if (setuid(child_uid) < 0)
++			exit(EXIT_FAILURE);
+ 		if (getuid() == child_uid)
+ 			exit(EXIT_SUCCESS);
+ 		else
+@@ -291,8 +292,10 @@ int main(int argc, char **argv)
+ 
+ 	// First test to make sure we can write userns mappings from a user
+ 	// that doesn't have any restrictions (as long as it has CAP_SETUID);
+-	setuid(NO_POLICY_USER);
+-	setgid(NO_POLICY_USER);
++	if (setuid(NO_POLICY_USER) < 0)
++		die("Error with set uid(%d)\n", NO_POLICY_USER);
++	if (setgid(NO_POLICY_USER) < 0)
++		die("Error with set gid(%d)\n", NO_POLICY_USER);
+ 
+ 	// Take away all but setid caps
+ 	drop_caps(true);
+@@ -306,8 +309,10 @@ int main(int argc, char **argv)
+ 		die("test_userns failed when it should work\n");
+ 	}
+ 
+-	setuid(RESTRICTED_PARENT);
+-	setgid(RESTRICTED_PARENT);
++	if (setuid(RESTRICTED_PARENT) < 0)
++		die("Error with set uid(%d)\n", RESTRICTED_PARENT);
++	if (setgid(RESTRICTED_PARENT) < 0)
++		die("Error with set gid(%d)\n", RESTRICTED_PARENT);
+ 
+ 	test_setuid(ROOT_USER, false);
+ 	test_setuid(ALLOWED_CHILD1, true);
 -- 
 2.20.1
 
