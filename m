@@ -4,53 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 152ECC00523
-	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Jan 2020 03:36:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41CD1C2D0CE
+	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Jan 2020 03:37:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E199C2465A
-	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Jan 2020 03:36:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 181462465A
+	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Jan 2020 03:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1578108995;
-	bh=CasMzY3yE/z02l19UuHHZrfvowP4z2p5CrjSbNYM8L8=;
+	s=default; t=1578109037;
+	bh=p9B0uT2oHpZTVWWgC2Fc08MdyScnRBmnaT96Qf13I7I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NPCijWFm13f+5MNlXWwHuJu21Qn0k0hPZFyO+Pr3ZumlX4YVnSuTiy+Uzr9Zjm4f7
-	 OYyDwrz6/apUE3CeLVMN6fLtJ3gsvtOxEaHmoxVTwUiJzWuKE7sxOLFgbIJC0RsayA
-	 Aoz4/SwZjpYpylagTbgayAaRLydW96b2w723K1AA=
+	b=LvhbmLRxDwdMdaz2Eu2MwdWZ8nF9K15so6NUS7D914DivQzeVnGy7dLZyIShtYAER
+	 6itUn5z3TMCj009uqfBR3egEumgPdK0ZmSvsr+osSzMiIxtyE+MwaxUzwqNM0coVRB
+	 8mlB6LS6/w3RJEnDtdnLFi25Yh5YFFC8yjklSpaA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727522AbgADDgc (ORCPT
+        id S1727900AbgADDhP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Jan 2020 22:36:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37164 "EHLO mail.kernel.org"
+        Fri, 3 Jan 2020 22:37:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38870 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727514AbgADDgb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Jan 2020 22:36:31 -0500
+        id S1727889AbgADDhO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Jan 2020 22:37:14 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 138E821734;
-        Sat,  4 Jan 2020 03:36:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C81152464B;
+        Sat,  4 Jan 2020 03:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578108990;
-        bh=CasMzY3yE/z02l19UuHHZrfvowP4z2p5CrjSbNYM8L8=;
+        s=default; t=1578109034;
+        bh=p9B0uT2oHpZTVWWgC2Fc08MdyScnRBmnaT96Qf13I7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SWL4IK58XeyujlNTgVLkEb/OfKoyGWJ7zaAaUTZXRJKK/iJcbHgSqSoYsgq4y652/
-         nkM99wIsQPtjyiZPme+U5C7IXjdC/guPImZHvTqrktDGhyMYLWErq56Fe75Ynl/Qls
-         so/0GxFNEb0SiLpBMQVC/9oIyDCYO072kJZ36RuM=
+        b=bAYdyXFG3nv6NrLRCLcjFxI1pdIBeLQfvtSZr1AFvwbT3UdzpMc8zLaQeRHM/Eqfe
+         UdDsJbPxEprODVBqMTvc7UkGziXQDa4wIW37K7s9Pxl/Jkif5n0H7XiqfxfmTyt9nF
+         2u2lFNhCmRE1xZsz7quZu43HUobZXCZioV4nqlKY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 08/10] selftests: firmware: Fix it to do root uid check and skip
-Date:   Fri,  3 Jan 2020 22:36:17 -0500
-Message-Id: <20200104033620.10977-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 2/2] rseq/selftests: Turn off timeout setting
+Date:   Fri,  3 Jan 2020 22:37:10 -0500
+Message-Id: <20200104033710.11393-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200104033620.10977-1-sashal@kernel.org>
-References: <20200104033620.10977-1-sashal@kernel.org>
+In-Reply-To: <20200104033710.11393-1-sashal@kernel.org>
+References: <20200104033710.11393-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,57 +66,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-[ Upstream commit c65e41538b04e0d64a673828745a00cb68a24371 ]
+[ Upstream commit af9cb29c5488381083b0b5ccdfb3cd931063384a ]
 
-firmware attempts to load test modules that require root access
-and fail. Fix it to check for root uid and exit with skip code
-instead.
+As the rseq selftests can run for a long period of time, disable the
+timeout that the general selftests have.
 
-Before this fix:
-
-selftests: firmware: fw_run_tests.sh
-modprobe: ERROR: could not insert 'test_firmware': Operation not permitted
-You must have the following enabled in your kernel:
-CONFIG_TEST_FIRMWARE=y
-CONFIG_FW_LOADER=y
-CONFIG_FW_LOADER_USER_HELPER=y
-CONFIG_IKCONFIG=y
-CONFIG_IKCONFIG_PROC=y
-not ok 1 selftests: firmware: fw_run_tests.sh # SKIP
-
-With this fix:
-
-selftests: firmware: fw_run_tests.sh
-skip all tests: must be run as root
-not ok 1 selftests: firmware: fw_run_tests.sh # SKIP
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviwed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: "H . Peter Anvin" <hpa@zytor.com>
+Cc: Paul Turner <pjt@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/firmware/fw_lib.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/rseq/settings | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/rseq/settings
 
-diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-index b879305a766d..5b8c0fedee76 100755
---- a/tools/testing/selftests/firmware/fw_lib.sh
-+++ b/tools/testing/selftests/firmware/fw_lib.sh
-@@ -34,6 +34,12 @@ test_modprobe()
- 
- check_mods()
- {
-+	local uid=$(id -u)
-+	if [ $uid -ne 0 ]; then
-+		echo "skip all tests: must be run as root" >&2
-+		exit $ksft_skip
-+	fi
-+
- 	trap "test_modprobe" EXIT
- 	if [ ! -d $DIR ]; then
- 		modprobe test_firmware
+diff --git a/tools/testing/selftests/rseq/settings b/tools/testing/selftests/rseq/settings
+new file mode 100644
+index 000000000000..e7b9417537fb
+--- /dev/null
++++ b/tools/testing/selftests/rseq/settings
+@@ -0,0 +1 @@
++timeout=0
 -- 
 2.20.1
 
