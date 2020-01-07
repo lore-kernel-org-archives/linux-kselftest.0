@@ -2,81 +2,110 @@ Return-Path: <SRS0=CKvJ=24=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BB20C282DD
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 19:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D5DBC33CA1
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 21:13:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 68EDC2187F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 19:31:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 109312077B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 21:13:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KQVwsStO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgAGTa5 (ORCPT
+        id S1727536AbgAGVNe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Jan 2020 14:30:57 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:35054 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728307AbgAGTa5 (ORCPT
+        Tue, 7 Jan 2020 16:13:34 -0500
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:41124 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728071AbgAGVNY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 14:30:57 -0500
-Received: from ip-109-41-1-29.web.vodafone.de ([109.41.1.29] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iouZ2-0004Mw-9L; Tue, 07 Jan 2020 19:30:52 +0000
-Date:   Tue, 7 Jan 2020 20:30:54 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Amanieu d'Antras <amanieu@gmail.com>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/7] arm64: Implement copy_thread_tls
-Message-ID: <20200107193054.t2d4txgz3fnrw3gn@wittgenstein>
-References: <20200102172413.654385-1-amanieu@gmail.com>
- <20200102172413.654385-3-amanieu@gmail.com>
- <20200102180130.hmpipoiiu3zsl2d6@wittgenstein>
- <20200106173953.GB9676@willie-the-truck>
- <CA+y5pbSBYLvZ46nJP0pSYZnRohtPxHitOHPEaLXq23-QrPKk2g@mail.gmail.com>
- <20200107090219.jl4py4u2zvofwnbh@wittgenstein>
- <20200107174508.GC32009@willie-the-truck>
- <202001071011.9517D9C0D@keescook>
+        Tue, 7 Jan 2020 16:13:24 -0500
+Received: by mail-vs1-f65.google.com with SMTP id f8so460789vsq.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 13:13:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4bvDGD+uZFRI6wle2DQe8dNEf7/FawRKtQyhzkKp5kw=;
+        b=KQVwsStOsvUFWmEIg1vbufOPH4q4526fnFkHZKuJZrLDUdrYo7b8+m/wOLoLIxlMpQ
+         rifgkmP2r1S8nCyPcgVxzg3CxK/rOoqCa6uKsUsyMbk45IZqSPcRxtTjgKyhdO67JVw2
+         yZDfkKv5zrHZXehKokQv0Ky2Ry9W0r0NEmWM9Rra4jWzzDJNsvUjjwE0gyPp6en9iHX8
+         AB8I2xUL4Ovt8bQoDDJl5+fIYsLQn8fQBttM81wro9kWD1Jcr34on3ie4oTjb184Ifow
+         uXvWDd06kKCirdcfRYDKXGHhcP4gu4+aKneQwt/Fz8UleolmSVLsX5BA0JhjUGa/FhGm
+         ox2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4bvDGD+uZFRI6wle2DQe8dNEf7/FawRKtQyhzkKp5kw=;
+        b=l9/jwio6JV6JXKAVbQKq73eZC1DwcWkL8WTtExaL3yzIB8ah2Oy/GOrKc8VqF/ByfK
+         HBps45PCtFwnl9WQCCC8qIVayq+U4syMwd0uNieb1S4HSDigYYf1q6H0xUl/ZI/y9M0P
+         88Roww+pikRFrWbJ1PBrpnn49XUwiq/JQcL9Cmw8tour3UElIGTrbG9OKgWZSqfRACR2
+         xfUp6sgA3z/8Q7zDHpkzSioirkVGGM/gVpfXbJeQgM2x02spDteHGdNws7k/F0u0Svve
+         bc4q8yLunPSPY2UjjMY15qSHpf5N0eB4izYwO+BkEFrL8ao8j+W3IRS/vjevVBYpNIuz
+         geIA==
+X-Gm-Message-State: APjAAAXvxcAvb+pkT8YbNN8pSD03fk5hROte4ri5ULr+6q7t66lgghYo
+        V7NT17xhIEZSW9PPUUQL8zZfH8PEuwonySXu4Lr7BQ==
+X-Google-Smtp-Source: APXvYqz4dUEEj5q+SNZ0t9tcB9nHne8gPerfQ8ARFF6iQ6Im7uIQEkt0Hpm/+TaVwjf3O0rCQAlQVrwOn4RCK0e1NUM=
+X-Received: by 2002:a67:fc46:: with SMTP id p6mr784857vsq.235.1578431603178;
+ Tue, 07 Jan 2020 13:13:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202001071011.9517D9C0D@keescook>
-User-Agent: NeoMutt/20180716
+References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-3-bgardon@google.com>
+ <20200107160035.GG219677@xz-x1>
+In-Reply-To: <20200107160035.GG219677@xz-x1>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 7 Jan 2020 13:13:12 -0800
+Message-ID: <CANgfPd-GLFtqrWsyg6hvrMFYxWCzxAQEGZ9Ahk4ZATYWs0_VaQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/8] KVM: selftests: Add demand paging content to the
+ demand paging test
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        Andrew Jones <drjones@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 10:12:39AM -0800, Kees Cook wrote:
-> On Tue, Jan 07, 2020 at 05:45:09PM +0000, Will Deacon wrote:
-> > On Tue, Jan 07, 2020 at 10:02:27AM +0100, Christian Brauner wrote:
-> > > [Cc Kees in case he knows something about where arch specific tests live
-> > >  or whether we have a framework for this]
-> > > [...]
-> > > It feels like we must've run into the "this is architecture
-> > > specific"-and-we-want-to-test-this issue before... Do we have a place
-> > > where architecture specific selftests live?
-> > 
-> > For arch-specific selftests there are tools/testing/selftests/$ARCH
-> > directories, although in this case maybe it's better to have an #ifdef
-> > in a header so that architectures with __builtin_thread_pointer can use
-> > that.
-> 
-> Yup, I agree: that's the current best-practice for arch-specific
-> selftests.
+Done. I'll have it in the next version of the patch set I send out.
 
-Thanks! I think using #ifdef in this case with __builtin_thread_pointer
-sounds good.
-So the tests can be moved into the clone3() test-suite for those
-architectures.
-
-Christian
+On Tue, Jan 7, 2020 at 8:00 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Dec 16, 2019 at 01:38:55PM -0800, Ben Gardon wrote:
+>
+> [...]
+>
+> > +static void *uffd_handler_thread_fn(void *arg)
+> > +{
+> > +     struct uffd_handler_args *uffd_args = (struct uffd_handler_args *)arg;
+> > +     int uffd = uffd_args->uffd;
+> > +     int64_t pages = 0;
+> > +
+> > +     while (!quit_uffd_thread) {
+> > +             struct uffd_msg msg;
+> > +             struct pollfd pollfd[1];
+> > +             int r;
+> > +             uint64_t addr;
+> > +
+> > +             pollfd[0].fd = uffd;
+> > +             pollfd[0].events = POLLIN;
+> > +
+> > +             /*
+> > +              * TODO this introduces a 0.5sec delay at the end of the test.
+> > +              * Reduce the timeout or eliminate it following the example in
+> > +              * tools/testing/selftests/vm/userfaultfd.c
+> > +              */
+> > +             r = poll(pollfd, 1, 500);
+>
+> Would you mind implement it instead of adding a todo?  IIUC it's as
+> simple as a few more lines than the comment itself.  Thanks,
+>
+> --
+> Peter Xu
+>
