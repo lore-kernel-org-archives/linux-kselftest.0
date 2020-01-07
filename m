@@ -2,249 +2,253 @@ Return-Path: <SRS0=CKvJ=24=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4CC7C33CA3
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 22:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0C77C282DD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 23:04:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA5B22075A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 22:49:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="W+8dwZIC"
+	by mail.kernel.org (Postfix) with ESMTP id B2D2B2080A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 23:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1578438252;
+	bh=As4XHuxbPyAsqNDDCMgwyNz7WP289jACJyJzPuwU1dc=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=wSUw8WQZSAoeaO3Zlc+xu29/VC/itKRAeSek92PvslyB4BhfcYI42JYFsInRi4h9F
+	 RCuTmx1TLOIALPkYI5OQEbbxDrf+W+/rChKVefFBvuz6Dhd0wefrpDK0AY0d4mADdu
+	 5HlAkWjISzocsxZZsXLyKMj90LedI1U7ylBFvvm4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727923AbgAGWtX (ORCPT
+        id S1727108AbgAGXEM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Jan 2020 17:49:23 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4706 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbgAGWqD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 17:46:03 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e150a170001>; Tue, 07 Jan 2020 14:45:43 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 07 Jan 2020 14:46:01 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 07 Jan 2020 14:46:01 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
- 2020 22:46:00 +0000
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
- 2020 22:46:00 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 7 Jan 2020 22:46:00 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e150a270008>; Tue, 07 Jan 2020 14:45:59 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        "Magnus Karlsson" <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Christoph Hellwig" <hch@lst.de>
-Subject: [PATCH v12 03/22] mm: Cleanup __put_devmap_managed_page() vs ->page_free()
-Date:   Tue, 7 Jan 2020 14:45:39 -0800
-Message-ID: <20200107224558.2362728-4-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200107224558.2362728-1-jhubbard@nvidia.com>
-References: <20200107224558.2362728-1-jhubbard@nvidia.com>
+        Tue, 7 Jan 2020 18:04:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33676 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726803AbgAGXEM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Jan 2020 18:04:12 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 629822072A;
+        Tue,  7 Jan 2020 23:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578438250;
+        bh=As4XHuxbPyAsqNDDCMgwyNz7WP289jACJyJzPuwU1dc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=FkUbGp5yscQX7nlDOJEg1sdeAabMccwELj+YLGv/I2V34fJ7Lb4FxoPOLg74ifwLU
+         1LE+pKvrAcU7gD3oLXTJdWAHQpfR3MNbqrJ98GwN9K+Eak7X0TYt/rhMZhH5Wy40Rg
+         1JI6zR4qJMQ7X/+F3yBZP0eXb/+W356OQFw5iT9I=
+Subject: Re: [RESEND PATCH v7 linux-kselftest-test 3/6] kunit: allow kunit
+ tests to be loaded as a module
+To:     Alan Maguire <alan.maguire@oracle.com>, brendanhiggins@google.com,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, yamada.masahiro@socionext.com,
+        catalin.marinas@arm.com, joe.lawrence@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, urezki@gmail.com,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        davidgow@google.com, adilger.kernel@dilger.ca, tytso@mit.edu,
+        mcgrof@kernel.org, linux-doc@vger.kernel.org,
+        Knut Omang <knut.omang@oracle.com>, shuah <shuah@kernel.org>
+References: <1578349703-15650-1-git-send-email-alan.maguire@oracle.com>
+ <1578349703-15650-4-git-send-email-alan.maguire@oracle.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <6634211a-7ecc-378e-bc78-82c80e24d579@kernel.org>
+Date:   Tue, 7 Jan 2020 16:03:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578437144; bh=EG/ndmk57WYqgnzxcjchAe4qv1nyLB8s4ZN10kfPz0g=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=W+8dwZIC5SbeUTQkZGgYicaoiQpw28m5WnycTWyhqWRzh8fydpnEnuHNg5A+XX3R9
-         BrdSJsnI71v0PxcwNP9tvmfDXqC3YPc+YWovrw/X0gnOHWS+TNplHbIgI0v2n9ey59
-         lNUYRdpjAR6ns6uR6N2CZn0PxmWMUiqREIZwOVNXePRhTaZZmhAaWAJu0BMAiSE0Dc
-         AG6iQ3PCEQgPbM1o7y5WpWdcvhNnW7gCGhBV4z4nUpWSIE2PMxinuyGcJtVQbWTJy1
-         lQLTzyqM+Ds7S9tIY+4qS+0ufv4PKzhYcDpueA2HUY2yb38EUbsQy3T0y0PAZ9OWJ3
-         voNNJO8WquVGA==
+In-Reply-To: <1578349703-15650-4-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+Hi Alan,
 
-After the removal of the device-public infrastructure there are only 2
-->page_free() call backs in the kernel. One of those is a device-private
-callback in the nouveau driver, the other is a generic wakeup needed in
-the DAX case. In the hopes that all ->page_free() callbacks can be
-migrated to common core kernel functionality, move the device-private
-specific actions in __put_devmap_managed_page() under the
-is_device_private_page() conditional, including the ->page_free()
-callback. For the other page types just open-code the generic wakeup.
+Thanks for the resend.
 
-Yes, the wakeup is only needed in the MEMORY_DEVICE_FSDAX case, but it
-does no harm in the MEMORY_DEVICE_DEVDAX and MEMORY_DEVICE_PCI_P2PDMA
-case.
+On 1/6/20 3:28 PM, Alan Maguire wrote:
+> As tests are added to kunit, it will become less feasible to execute
+> all built tests together.  By supporting modular tests we provide
+> a simple way to do selective execution on a running system; specifying
+> 
+> CONFIG_KUNIT=y
+> CONFIG_KUNIT_EXAMPLE_TEST=m
+> 
+> ...means we can simply "insmod example-test.ko" to run the tests.
+> 
+> To achieve this we need to do the following:
+> 
+> o export the required symbols in kunit
+> o string-stream tests utilize non-exported symbols so for now we skip
+>    building them when CONFIG_KUNIT_TEST=m.
+> o drivers/base/power/qos-test.c contains a few unexported interface
+>    references, namely freq_qos_read_value() and freq_constraints_init().
+>    Both of these could be potentially defined as static inline functions
+>    in include/linux/pm_qos.h, but for now we simply avoid supporting
+>    module build for that test suite.
+> o support a new way of declaring test suites.  Because a module cannot
+>    do multiple late_initcall()s, we provide a kunit_test_suites() macro
+>    to declare multiple suites within the same module at once.
+> o some test module names would have been too general ("test-test"
+>    and "example-test" for kunit tests, "inode-test" for ext4 tests);
+>    rename these as appropriate ("kunit-test", "kunit-example-test"
+>    and "ext4-inode-test" respectively).
+> 
+> Also define kunit_test_suite() via kunit_test_suites()
+> as callers in other trees may need the old definition.
+> 
+> Co-developed-by: Knut Omang <knut.omang@oracle.com>
+> Signed-off-by: Knut Omang <knut.omang@oracle.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Acked-by: Theodore Ts'o <tytso@mit.edu> # for ext4 bits
+> Acked-by: David Gow <davidgow@google.com> # For list-test
+> Reported-by: kbuild test robot <lkp@intel.com>
+> ---
+>   drivers/base/power/qos-test.c                      |  2 +-
+>   fs/ext4/Kconfig                                    |  2 +-
+>   fs/ext4/Makefile                                   |  3 +-
+>   fs/ext4/inode-test.c                               |  4 ++-
+>   include/kunit/test.h                               | 37 ++++++++++++++++------
+>   kernel/sysctl-test.c                               |  4 ++-
+>   lib/Kconfig.debug                                  |  4 +--
+>   lib/kunit/Kconfig                                  |  4 +--
+>   lib/kunit/Makefile                                 | 10 ++++--
+>   lib/kunit/assert.c                                 |  8 +++++
+>   lib/kunit/{example-test.c => kunit-example-test.c} |  4 ++-
+>   lib/kunit/{test-test.c => kunit-test.c}            |  5 +--
+>   lib/kunit/string-stream-test.c                     |  2 +-
+>   lib/kunit/test.c                                   |  8 +++++
+>   lib/kunit/try-catch.c                              |  2 ++
+>   lib/list-test.c                                    |  4 ++-
+>   16 files changed, 76 insertions(+), 27 deletions(-)
+>   rename lib/kunit/{example-test.c => kunit-example-test.c} (97%)
+>   rename lib/kunit/{test-test.c => kunit-test.c} (98%)
+> 
+> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
+> index 3115db0..79fc6c4 100644
+> --- a/drivers/base/power/qos-test.c
+> +++ b/drivers/base/power/qos-test.c
+> @@ -114,4 +114,4 @@ static void freq_qos_test_readd(struct kunit *test)
+>   	.name = "qos-kunit-test",
+>   	.test_cases = pm_qos_test_cases,
+>   };
+> -kunit_test_suite(pm_qos_test_module);
+> +kunit_test_suites(&pm_qos_test_module);
+> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
+> index ef42ab0..435510f 100644
+> --- a/fs/ext4/Kconfig
+> +++ b/fs/ext4/Kconfig
+> @@ -108,7 +108,7 @@ config EXT4_DEBUG
+>   		echo 1 > /sys/module/ext4/parameters/mballoc_debug
+>   
+>   config EXT4_KUNIT_TESTS
+> -	bool "KUnit tests for ext4"
+> +	tristate "KUnit tests for ext4"
+>   	select EXT4_FS
+>   	depends on KUNIT
+>   	help
+> diff --git a/fs/ext4/Makefile b/fs/ext4/Makefile
+> index 840b91d..4ccb3c9 100644
+> --- a/fs/ext4/Makefile
+> +++ b/fs/ext4/Makefile
+> @@ -13,5 +13,6 @@ ext4-y	:= balloc.o bitmap.o block_validity.o dir.o ext4_jbd2.o extents.o \
+>   
+>   ext4-$(CONFIG_EXT4_FS_POSIX_ACL)	+= acl.o
+>   ext4-$(CONFIG_EXT4_FS_SECURITY)		+= xattr_security.o
+> -ext4-$(CONFIG_EXT4_KUNIT_TESTS)		+= inode-test.o
+> +ext4-inode-test-objs			+= inode-test.o
+> +obj-$(CONFIG_EXT4_KUNIT_TESTS)		+= ext4-inode-test.o
+>   ext4-$(CONFIG_FS_VERITY)		+= verity.o
+> diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
+> index 92a9da1..95620bf 100644
+> --- a/fs/ext4/inode-test.c
+> +++ b/fs/ext4/inode-test.c
+> @@ -269,4 +269,6 @@ static void inode_test_xtimestamp_decoding(struct kunit *test)
+>   	.test_cases = ext4_inode_test_cases,
+>   };
+>   
+> -kunit_test_suite(ext4_inode_test_suite);
+> +kunit_test_suites(&ext4_inode_test_suite);
+> +
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index dba4830..2dfb550 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -12,6 +12,7 @@
+>   #include <kunit/assert.h>
+>   #include <kunit/try-catch.h>
+>   #include <linux/kernel.h>
+> +#include <linux/module.h>
+>   #include <linux/slab.h>
+>   #include <linux/types.h>
+>   
+> @@ -197,31 +198,47 @@ struct kunit {
+>   int kunit_run_tests(struct kunit_suite *suite);
+>   
+>   /**
+> - * kunit_test_suite() - used to register a &struct kunit_suite with KUnit.
+> + * kunit_test_suites() - used to register one or more &struct kunit_suite
+> + *			 with KUnit.
+>    *
+> - * @suite: a statically allocated &struct kunit_suite.
+> + * @suites: a statically allocated list of &struct kunit_suite.
+>    *
+> - * Registers @suite with the test framework. See &struct kunit_suite for
+> + * Registers @suites with the test framework. See &struct kunit_suite for
+>    * more information.
+>    *
+> - * NOTE: Currently KUnit tests are all run as late_initcalls; this means
+> + * When builtin,  KUnit tests are all run as late_initcalls; this means
+>    * that they cannot test anything where tests must run at a different init
+>    * phase. One significant restriction resulting from this is that KUnit
+>    * cannot reliably test anything that is initialize in the late_init phase;
+>    * another is that KUnit is useless to test things that need to be run in
+>    * an earlier init phase.
+>    *
+> + * An alternative is to build the tests as a module.  Because modules
+> + * do not support multiple late_initcall()s, we need to initialize an
+> + * array of suites for a module.
+> + *
+>    * TODO(brendanhiggins@google.com): Don't run all KUnit tests as
+>    * late_initcalls.  I have some future work planned to dispatch all KUnit
+>    * tests from the same place, and at the very least to do so after
+>    * everything else is definitely initialized.
+>    */
+> -#define kunit_test_suite(suite)						       \
+> -	static int kunit_suite_init##suite(void)			       \
+> -	{								       \
+> -		return kunit_run_tests(&suite);				       \
+> -	}								       \
+> -	late_initcall(kunit_suite_init##suite)
+> +#define kunit_test_suites(...)						\
+> +	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
+> +	static int kunit_test_suites_init(void)				\
+> +	{								\
+> +		unsigned int i;						\
+> +		for (i = 0; suites[i] != NULL; i++)			\
+> +			kunit_run_tests(suites[i]);			\
+> +		return 0;						\
+> +	}								\
+> +	late_initcall(kunit_test_suites_init);				\
+> +	static void __exit kunit_test_suites_exit(void)			\
+> +	{								\
+> +		return;							\
+> +	}								\
+> +	module_exit(kunit_test_suites_exit)
+> +
+> +#define kunit_test_suite(suite)	kunit_test_suites(&suite)
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- drivers/nvdimm/pmem.c |  6 ----
- mm/memremap.c         | 80 ++++++++++++++++++++++++-------------------
- 2 files changed, 44 insertions(+), 42 deletions(-)
+This macro is getting more and more complex. Is there a good reason
+for this code to stay as a macro?
 
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index ad8e4df1282b..4eae441f86c9 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -337,13 +337,7 @@ static void pmem_release_disk(void *__pmem)
- 	put_disk(pmem->disk);
- }
-=20
--static void pmem_pagemap_page_free(struct page *page)
--{
--	wake_up_var(&page->_refcount);
--}
--
- static const struct dev_pagemap_ops fsdax_pagemap_ops =3D {
--	.page_free		=3D pmem_pagemap_page_free,
- 	.kill			=3D pmem_pagemap_kill,
- 	.cleanup		=3D pmem_pagemap_cleanup,
- };
-diff --git a/mm/memremap.c b/mm/memremap.c
-index c51c6bd2fe34..f915d074ac20 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -27,7 +27,8 @@ static void devmap_managed_enable_put(void)
-=20
- static int devmap_managed_enable_get(struct dev_pagemap *pgmap)
- {
--	if (!pgmap->ops || !pgmap->ops->page_free) {
-+	if (pgmap->type =3D=3D MEMORY_DEVICE_PRIVATE &&
-+	    (!pgmap->ops || !pgmap->ops->page_free)) {
- 		WARN(1, "Missing page_free method\n");
- 		return -EINVAL;
- 	}
-@@ -414,44 +415,51 @@ void __put_devmap_managed_page(struct page *page)
- {
- 	int count =3D page_ref_dec_return(page);
-=20
--	/*
--	 * If refcount is 1 then page is freed and refcount is stable as nobody
--	 * holds a reference on the page.
--	 */
--	if (count =3D=3D 1) {
--		/* Clear Active bit in case of parallel mark_page_accessed */
--		__ClearPageActive(page);
--		__ClearPageWaiters(page);
-+	/* still busy */
-+	if (count > 1)
-+		return;
-=20
--		mem_cgroup_uncharge(page);
-+	/* only triggered by the dev_pagemap shutdown path */
-+	if (count =3D=3D 0) {
-+		__put_page(page);
-+		return;
-+	}
-=20
--		/*
--		 * When a device_private page is freed, the page->mapping field
--		 * may still contain a (stale) mapping value. For example, the
--		 * lower bits of page->mapping may still identify the page as
--		 * an anonymous page. Ultimately, this entire field is just
--		 * stale and wrong, and it will cause errors if not cleared.
--		 * One example is:
--		 *
--		 *  migrate_vma_pages()
--		 *    migrate_vma_insert_page()
--		 *      page_add_new_anon_rmap()
--		 *        __page_set_anon_rmap()
--		 *          ...checks page->mapping, via PageAnon(page) call,
--		 *            and incorrectly concludes that the page is an
--		 *            anonymous page. Therefore, it incorrectly,
--		 *            silently fails to set up the new anon rmap.
--		 *
--		 * For other types of ZONE_DEVICE pages, migration is either
--		 * handled differently or not done at all, so there is no need
--		 * to clear page->mapping.
--		 */
--		if (is_device_private_page(page))
--			page->mapping =3D NULL;
-+	/* notify page idle for dax */
-+	if (!is_device_private_page(page)) {
-+		wake_up_var(&page->_refcount);
-+		return;
-+	}
-=20
--		page->pgmap->ops->page_free(page);
--	} else if (!count)
--		__put_page(page);
-+	/* Clear Active bit in case of parallel mark_page_accessed */
-+	__ClearPageActive(page);
-+	__ClearPageWaiters(page);
-+
-+	mem_cgroup_uncharge(page);
-+
-+	/*
-+	 * When a device_private page is freed, the page->mapping field
-+	 * may still contain a (stale) mapping value. For example, the
-+	 * lower bits of page->mapping may still identify the page as an
-+	 * anonymous page. Ultimately, this entire field is just stale
-+	 * and wrong, and it will cause errors if not cleared.  One
-+	 * example is:
-+	 *
-+	 *  migrate_vma_pages()
-+	 *    migrate_vma_insert_page()
-+	 *      page_add_new_anon_rmap()
-+	 *        __page_set_anon_rmap()
-+	 *          ...checks page->mapping, via PageAnon(page) call,
-+	 *            and incorrectly concludes that the page is an
-+	 *            anonymous page. Therefore, it incorrectly,
-+	 *            silently fails to set up the new anon rmap.
-+	 *
-+	 * For other types of ZONE_DEVICE pages, migration is either
-+	 * handled differently or not done at all, so there is no need
-+	 * to clear page->mapping.
-+	 */
-+	page->mapping =3D NULL;
-+	page->pgmap->ops->page_free(page);
- }
- EXPORT_SYMBOL(__put_devmap_managed_page);
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
---=20
-2.24.1
-
+thanks,
+-- Shuah
