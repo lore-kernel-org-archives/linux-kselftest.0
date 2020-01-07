@@ -2,151 +2,132 @@ Return-Path: <SRS0=CKvJ=24=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21139C33C9B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 21:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8981FC33C9B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 22:46:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E75752081E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 21:21:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 410FC2075A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jan 2020 22:46:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B2c24VEr"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="pMHOUYTS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728856AbgAGVVH (ORCPT
+        id S1727741AbgAGWqN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Jan 2020 16:21:07 -0500
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:40221 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728362AbgAGVVF (ORCPT
+        Tue, 7 Jan 2020 17:46:13 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11427 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727619AbgAGWqJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:21:05 -0500
-Received: by mail-vs1-f66.google.com with SMTP id g23so479158vsr.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 13:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xSRU4qb0ZOTzAyNx1lTLU2yX2h3B/4YPYeMRUYoNUNw=;
-        b=B2c24VErfFgKcj+Y8pK4fduvG+1fQI+hXYgNkXJGbBRFwaKnQ/dBzAG8TezMb3/Q9Q
-         m6031Hs6rCtZUh7bmDnZFhiSnSqShiG0SN6iRp876eP4eOImfeY0uKJ9ZWeLETLyWqfs
-         ZvEaJ5UebA6DyfgEHhVXrAEmr3UFLR1V8Z7y4lbVghEPUprT3u9Ns75q6VXY3IBNTYmA
-         rzqG9reCI0/e6EHRkRd7LSyHIGjW03TyI6y8ltFpSP5HkFFf9fyin3FuJdsuef5nzQ4Q
-         QIreO53IIKEtcmoXxH6F+iIuZEQXYkKGC4vyb6gpMMULXGdvg7fWB2J2Zgp84mdF7ZPM
-         ofag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xSRU4qb0ZOTzAyNx1lTLU2yX2h3B/4YPYeMRUYoNUNw=;
-        b=ntqEHNojFZJRHRiCCUYaybU2hMIhnNRLDkFiQCimLa8pjq/Zz2qvhWZlUB1ir+PWGl
-         Vz3sI+5o0ka5fhQR4pwY6PM/T/hA6WuAJEtY/pTrKuZEPWMW42B3cif3Y3IkEEzt3112
-         DkyJI4YjKhneJeEj9bVwopYumi8GjTrbDYBarGErIpHj4dzXky0X1lJXNXFPQHheT03c
-         Gr2tnei0n5shNn0W3+dGrujtXceotVnq7KCI185jxzLfwk0IKNmsLhHeEMcvLfeM+x1V
-         TCOiR7vuaA5D0chE3THHpGScziI1LAqeWEeHM/bxZQPRkmQdFYMcyYKKv2RdimLCotwM
-         htIw==
-X-Gm-Message-State: APjAAAX0iHdOyyiU3lUEHho8WDCzaQ6gOG4ioFXAaXhnIW88cKH5Fok3
-        yi47zNOm2xz01YY9UcQWorQzaM1CvynNbbnW7L/PmQ==
-X-Google-Smtp-Source: APXvYqyENOKFRASsBlhAPSr8XO5DU0ppABR3JIJu+k4Fe6D6fkhlIMmdJuGT0juY1Iv+IXC4K3kUX9+MYDhqzMADc7Y=
-X-Received: by 2002:a67:6f46:: with SMTP id k67mr906097vsc.2.1578432064703;
- Tue, 07 Jan 2020 13:21:04 -0800 (PST)
+        Tue, 7 Jan 2020 17:46:09 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e1509fa0002>; Tue, 07 Jan 2020 14:45:14 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 07 Jan 2020 14:46:02 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 07 Jan 2020 14:46:02 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
+ 2020 22:46:02 +0000
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
+ 2020 22:46:01 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 7 Jan 2020 22:46:01 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e150a290009>; Tue, 07 Jan 2020 14:46:01 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        "Magnus Karlsson" <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v12 17/22] net/xdp: set FOLL_PIN via pin_user_pages()
+Date:   Tue, 7 Jan 2020 14:45:53 -0800
+Message-ID: <20200107224558.2362728-18-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200107224558.2362728-1-jhubbard@nvidia.com>
+References: <20200107224558.2362728-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-9-bgardon@google.com>
- <20200107154227.tvex5natt7a64nzj@kamzik.brq.redhat.com>
-In-Reply-To: <20200107154227.tvex5natt7a64nzj@kamzik.brq.redhat.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 7 Jan 2020 13:20:53 -0800
-Message-ID: <CANgfPd9VxvJYAw_cqG9X2GUAkZ9vumF8mZ1+P==mJoZgShR_rg@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] KVM: selftests: Move large memslots above KVM
- internal memslots in _vm_create
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578437114; bh=ZT0qQeDGzOfjOR8r+Vh655vAE0xyyVSAGHaZ2J8yjZ0=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Type:Content-Transfer-Encoding;
+        b=pMHOUYTSnIGYvp2QjbUK2zP+G/kcACpYigXx78Byfv36Yi6/ec3CnvdeW0+4ZqOqn
+         2h5v1Ndk2jEMU2x2cWs2d2ADGY3mWiI9+nhhJEnGVJ2/S9N7ML4IveqaFcIKWSBuZ4
+         ejfHfyXHww6mtaiHjGC2gJktl3AzAVFB4bXa41XytiA6DBQQDosGEUiewAEarM+Cpd
+         hfK7QpVRSKN2VJdGwSdqFp2z4N9L5QSp+WKFF7xzXfnXM5SHGW9l2uE1A6kdXgOCwM
+         zO8QDGyRa/Rh05r4x5GRSOQzmCzhnXZCmHNRxTNpuQkEknq1/BbzhSudwPGafoet2p
+         ktCEMwz0zfydQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Would it be viable to allocate at 4G be default and then add another
-interface for allocations at low memory addresses? For most tests, I
-don't think there's any value to having the backing paddrs below 3G.
+Convert net/xdp to use the new pin_longterm_pages() call, which sets
+FOLL_PIN. Setting FOLL_PIN is now required for code that requires
+tracking of pinned pages.
 
-On Tue, Jan 7, 2020 at 7:42 AM Andrew Jones <drjones@redhat.com> wrote:
->
-> On Mon, Dec 16, 2019 at 01:39:01PM -0800, Ben Gardon wrote:
-> > KVM creates internal memslots between 3 and 4 GiB paddrs on the first
-> > vCPU creation. If memslot 0 is large enough it collides with these
-> > memslots an causes vCPU creation to fail. When requesting more than 3G,
-> > start memslot 0 at 4G in _vm_create.
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/lib/kvm_util.c | 15 +++++++++++----
-> >  1 file changed, 11 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 41cf45416060f..886d58e6cac39 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -113,6 +113,8 @@ const char * const vm_guest_mode_string[] = {
-> >  _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
-> >              "Missing new mode strings?");
-> >
-> > +#define KVM_INTERNAL_MEMSLOTS_START_PADDR (3UL << 30)
-> > +#define KVM_INTERNAL_MEMSLOTS_END_PADDR (4UL << 30)
-> >  /*
-> >   * VM Create
-> >   *
-> > @@ -128,13 +130,16 @@ _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
-> >   *
-> >   * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K).
-> >   * When phy_pages is non-zero, a memory region of phy_pages physical pages
-> > - * is created and mapped starting at guest physical address 0.  The file
-> > - * descriptor to control the created VM is created with the permissions
-> > - * given by perm (e.g. O_RDWR).
-> > + * is created. If phy_pages is less that 3G, it is mapped starting at guest
-> > + * physical address 0. If phy_pages is greater than 3G it is mapped starting
-> > + * 4G into the guest physical address space to avoid KVM internal memslots
-> > + * which map the region between 3G and 4G. The file descriptor to control the
-> > + * created VM is created with the permissions given by perm (e.g. O_RDWR).
-> >   */
-> >  struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
-> >  {
-> >       struct kvm_vm *vm;
-> > +     uint64_t guest_paddr = 0;
-> >
-> >       DEBUG("Testing guest mode: %s\n", vm_guest_mode_string(mode));
-> >
-> > @@ -227,9 +232,11 @@ struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
-> >
-> >       /* Allocate and setup memory for guest. */
-> >       vm->vpages_mapped = sparsebit_alloc();
-> > +     if (guest_paddr + phy_pages > KVM_INTERNAL_MEMSLOTS_START_PADDR)
-> > +             guest_paddr = KVM_INTERNAL_MEMSLOTS_END_PADDR;
-> >       if (phy_pages != 0)
-> >               vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> > -                                         0, 0, phy_pages, 0);
-> > +                                         guest_paddr, 0, phy_pages, 0);
-> >
-> >       return vm;
-> >  }
-> > --
-> > 2.24.1.735.g03f4e72817-goog
-> >
->
-> I feel like this function is becoming too magic and it'll be more
-> complicated for tests that need to add additional memory regions
-> to know what physical addresses are available. Maybe we should assert
-> if we can't allocate more than 3G at offset zero and also provide
-> another interface for allocating at an offset input by the user,
-> as long as the offset is 4G or above (asserting when it isn't)?
->
-> Thanks,
-> drew
->
+In partial anticipation of this work, the net/xdp code was already
+calling put_user_page() instead of put_page(). Therefore, in order to
+convert from the get_user_pages()/put_page() model, to the
+pin_user_pages()/put_user_page() model, the only change required
+here is to change get_user_pages() to pin_user_pages().
+
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ net/xdp/xdp_umem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index 3049af269fbf..d071003b5e76 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -291,7 +291,7 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem)
+ 		return -ENOMEM;
+=20
+ 	down_read(&current->mm->mmap_sem);
+-	npgs =3D get_user_pages(umem->address, umem->npgs,
++	npgs =3D pin_user_pages(umem->address, umem->npgs,
+ 			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
+ 	up_read(&current->mm->mmap_sem);
+=20
+--=20
+2.24.1
+
