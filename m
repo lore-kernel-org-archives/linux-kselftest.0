@@ -1,104 +1,95 @@
-Return-Path: <SRS0=J3H8=3A=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=smDr=3C=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8663FC282DD
-	for <linux-kselftest@archiver.kernel.org>; Sat, 11 Jan 2020 16:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD60C33CAB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jan 2020 06:46:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5560220880
-	for <linux-kselftest@archiver.kernel.org>; Sat, 11 Jan 2020 16:50:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB3C4214D8
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jan 2020 06:46:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730382AbgAKQuq (ORCPT
+        id S1727222AbgAMGqt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 11 Jan 2020 11:50:46 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65106 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730369AbgAKQuq (ORCPT
+        Mon, 13 Jan 2020 01:46:49 -0500
+Received: from mail02.vodafone.es ([217.130.24.81]:28185 "EHLO
+        mail02.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726435AbgAMGqt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 11 Jan 2020 11:50:46 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00BGnpAN038572
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfb7w93aj-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Sat, 11 Jan 2020 16:50:44 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sat, 11 Jan 2020 16:50:40 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00BGochb1048904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Jan 2020 16:50:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B33EDAE045;
-        Sat, 11 Jan 2020 16:50:38 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4257CAE051;
-        Sat, 11 Jan 2020 16:50:35 +0000 (GMT)
-Received: from [9.199.42.197] (unknown [9.199.42.197])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sat, 11 Jan 2020 16:50:34 +0000 (GMT)
-Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        shuahkh@osg.samsung.com, linux-kselftest@vger.kernel.org,
-        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
-References: <cover.1576645161.git.sandipan@linux.ibm.com>
- <87y2ufxlci.fsf@linux.ibm.com>
- <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Date:   Sat, 11 Jan 2020 22:20:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        Mon, 13 Jan 2020 01:46:49 -0500
+IronPort-SDR: Rzha7B0fXX7EVJWZd4GzUWvKsuSUIOOqRRYzgAY/G9g0PbgdOzAz05XGu9+bjV/4a7weExnDOM
+ a7KoUm0UJzlQ==
+IronPort-PHdr: =?us-ascii?q?9a23=3AVdql8BDwnfYA1qdNNjFYUyQJP3N1i/DPJgcQr6?=
+ =?us-ascii?q?AfoPdwSPX7r8bcNUDSrc9gkEXOFd2Cra4d0KyM7fGrADRYqb+681k6OKRWUB?=
+ =?us-ascii?q?EEjchE1ycBO+WiTXPBEfjxciYhF95DXlI2t1uyMExSBdqsLwaK+i764jEdAA?=
+ =?us-ascii?q?jwOhRoLerpBIHSk9631+ev8JHPfglEnjWwba58IRmsswnct80bjYR/Jqot1h?=
+ =?us-ascii?q?fCv2dFdflRyW50P1yYggzy5t23/J5t8iRQv+wu+stdWqjkfKo2UKJVAi0+P2?=
+ =?us-ascii?q?86+MPkux/DTRCS5nQHSWUZjgBIAwne4x7kWJr6rzb3ufB82CmeOs32UKw0VD?=
+ =?us-ascii?q?G/5KplVBPklCEKPCM//G3Ql8J/kLhUoBehphBm3YPUZ5uVNOJ5fqPHZ9waWX?=
+ =?us-ascii?q?ROUt9PWCxHG4+xc5cPD/YbMulEr4nyuV4OogW4BQmwHe/g1DlIimbx06091e?=
+ =?us-ascii?q?QuDwHH0BU+ENIIrX/YqNv4OLsOXeywyqTD0DfNYO5M2Trl5obGcgohr++PU7?=
+ =?us-ascii?q?xtfsXe1UYhGhjZjliStYPpIy+Z2vgTv2Wd8uFuVfivi2kiqwxpuDag2NsshZ?=
+ =?us-ascii?q?fThokIyl/E8iN5wIkoLtC/UE50f8KkH4VKtyCUMIt2RMwiTnpouCYh0bIJpY?=
+ =?us-ascii?q?S3czQNyJQi3RLfa/+HfpGO7xn+V+iROS91iGx4dL+9nRq+7EatxvHmWsWq31?=
+ =?us-ascii?q?tGtCRIn9nKu3sQzRLc8NKHReF4/kq53DaP0B3c5f9cLEAvkKrbN4Yhwrktlp?=
+ =?us-ascii?q?oPqUjDHjH5mEHxjKKOc0Ur4Omo6+D9Yrr4op+QK4B5hhvgMqQph8OwG+o4Mg?=
+ =?us-ascii?q?8IX2eF4+izyqbj8VX4QLVMkPI2jrHUvI7HKckZvKK1HgFY3po55xqhADqqyt?=
+ =?us-ascii?q?oVkHkfIFJAYh2HjozpO1/UIPD/CPeym0ysnyl3x//YJL3gDJLNLn7MkLr6fb?=
+ =?us-ascii?q?Z98FVTxxYpwd9D4JJUD6sNIPLwWkPprtzXEgc5MxCow+bgENh90oIeWWSSAq?=
+ =?us-ascii?q?6WKa/SskSI6fwrI+mCeI8api39K+Q+6v7wgn82h0UdcbOq3ZQJcnC4GOppI0?=
+ =?us-ascii?q?GDbXrrmNcBHjRCgg1rSO3slU3HUiVeY3iuUrkgzi80BZjgDorZQI2pxrub03?=
+ =?us-ascii?q?SBE4VSd1xBX2iBDXryP7qDXfhEPDqfPsJ7jTsCWriiS5Qr3jmhsQb7z/xsKe?=
+ =?us-ascii?q?+CqQMCspe27NVp6vebqhY0+nQgF8mB3nuSSGd7tmMTTTRw16d650x+nATQmZ?=
+ =?us-ascii?q?NkiuBVQIUAr8hCVR03YMWEl+E=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2ETKgAeERxemCMYgtkUBjMYGgEBAQE?=
+ =?us-ascii?q?BAQEBAQMBAQEBEQEBAQICAQEBAYF7AgEBFwEBgS6BTVIgEpNQgU0fg0OLY4E?=
+ =?us-ascii?q?Agx4VhggTDIFbDQEBAQEBNQIBAYRATgEXgQ8kOgQNAgMNAQEFAQEBAQEFBAE?=
+ =?us-ascii?q?BAhABAQEBAQYNCwYphUqCHQweAQQBAQEBAwMDAQEMAYNdBxkPOUpMAQ4BU4M?=
+ =?us-ascii?q?EgksBATOFJJc5AY0EDQ0ChR2CRAQKgQmBGiOBNgGMGBqBQT+BIyGCKwgBggG?=
+ =?us-ascii?q?CfwESAWyCSIJZBI1CEiGBB4gpmBeCQQR2iUyMAoI3AQ+IAYQxAxCCRQ+BCYg?=
+ =?us-ascii?q?DhE6BfaM3V4EMDXpxMxqCJhqBIE8YDYgbji1AgRYQAk+JLoIyAQE?=
+X-IPAS-Result: =?us-ascii?q?A2ETKgAeERxemCMYgtkUBjMYGgEBAQEBAQEBAQMBAQEBE?=
+ =?us-ascii?q?QEBAQICAQEBAYF7AgEBFwEBgS6BTVIgEpNQgU0fg0OLY4EAgx4VhggTDIFbD?=
+ =?us-ascii?q?QEBAQEBNQIBAYRATgEXgQ8kOgQNAgMNAQEFAQEBAQEFBAEBAhABAQEBAQYNC?=
+ =?us-ascii?q?wYphUqCHQweAQQBAQEBAwMDAQEMAYNdBxkPOUpMAQ4BU4MEgksBATOFJJc5A?=
+ =?us-ascii?q?Y0EDQ0ChR2CRAQKgQmBGiOBNgGMGBqBQT+BIyGCKwgBggGCfwESAWyCSIJZB?=
+ =?us-ascii?q?I1CEiGBB4gpmBeCQQR2iUyMAoI3AQ+IAYQxAxCCRQ+BCYgDhE6BfaM3V4EMD?=
+ =?us-ascii?q?XpxMxqCJhqBIE8YDYgbji1AgRYQAk+JLoIyAQE?=
+X-IronPort-AV: E=Sophos;i="5.69,428,1571695200"; 
+   d="scan'208";a="323859898"
+Received: from mailrel04.vodafone.es ([217.130.24.35])
+  by mail02.vodafone.es with ESMTP; 13 Jan 2020 07:46:47 +0100
+Received: (qmail 24269 invoked from network); 12 Jan 2020 05:00:20 -0000
+Received: from unknown (HELO 192.168.1.3) (quesosbelda@[217.217.179.17])
+          (envelope-sender <peterwong@hsbc.com.hk>)
+          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
+          for <linux-kselftest@vger.kernel.org>; 12 Jan 2020 05:00:20 -0000
+Date:   Sun, 12 Jan 2020 06:00:19 +0100 (CET)
+From:   Peter Wong <peterwong@hsbc.com.hk>
+Reply-To: Peter Wong <peterwonghkhsbc@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Message-ID: <6904412.460747.1578805220278.JavaMail.cash@217.130.24.55>
+Subject: Investment opportunity
 MIME-Version: 1.0
-In-Reply-To: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20011116-0028-0000-0000-000003D0407E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011116-0029-0000-0000-000024945B25
-Message-Id: <3a6280fe-6b0f-7e3c-08a9-8186a9c3ea46@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-11_05:2020-01-10,2020-01-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- clxscore=1015 mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
- mlxlogscore=882 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-2001110147
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
-
-On 10/01/20 11:27 pm, Dave Hansen wrote:
-> 
-> Could you dump these in a git tree, please?  It will make it a wee bit
-> easier for me to ship the resulting tree around to a couple different
-> systems.
-> 
-
-I have pushed a version of this series that uses u64 for all references
-to the pkey register irrespective of architecture. This is available at:
-
-https://github.com/sandip4n/linux/tree/pkey-selftests
+Greetings,
+Please read the attached investment proposal and reply for more details.
+Are you interested in loan?
+Sincerely: Peter Wong
 
 
-- Sandipan
+
+
+----------------------------------------------------
+This email was sent by the shareware version of Postman Professional.
 
