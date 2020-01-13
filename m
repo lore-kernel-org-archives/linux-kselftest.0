@@ -7,40 +7,37 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 162A9C33CB0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jan 2020 22:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6F65C33CAE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jan 2020 22:47:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D68792465A
+	by mail.kernel.org (Postfix) with ESMTP id 96F61217BA
 	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jan 2020 22:47:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="AT64yj12"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="ZaoVRx4y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgAMWrQ (ORCPT
+        id S1728872AbgAMWrc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 13 Jan 2020 17:47:16 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16365 "EHLO
+        Mon, 13 Jan 2020 17:47:32 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16396 "EHLO
         hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728714AbgAMWrO (ORCPT
+        with ESMTP id S1729080AbgAMWrT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jan 2020 17:47:14 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1cf33b0000>; Mon, 13 Jan 2020 14:46:19 -0800
+        Mon, 13 Jan 2020 17:47:19 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e1cf3400001>; Mon, 13 Jan 2020 14:46:24 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 13 Jan 2020 14:47:13 -0800
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 13 Jan 2020 14:47:17 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 13 Jan 2020 14:47:13 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jan
+        by hqpgpgate102.nvidia.com on Mon, 13 Jan 2020 14:47:17 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jan
  2020 22:47:12 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jan
- 2020 22:47:11 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 13 Jan 2020 22:47:11 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 13 Jan 2020 22:47:12 +0000
 Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e1cf36e0002>; Mon, 13 Jan 2020 14:47:10 -0800
+        id <B5e1cf3700000>; Mon, 13 Jan 2020 14:47:12 -0800
 From:   Ralph Campbell <rcampbell@nvidia.com>
 To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
@@ -53,9 +50,9 @@ CC:     Jerome Glisse <jglisse@redhat.com>,
         Ben Skeggs <bskeggs@redhat.com>,
         "Shuah Khan" <shuah@kernel.org>,
         Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH v6 3/6] mm/notifier: add mmu_interval_notifier_update()
-Date:   Mon, 13 Jan 2020 14:47:00 -0800
-Message-ID: <20200113224703.5917-4-rcampbell@nvidia.com>
+Subject: [PATCH v6 5/6] nouveau: use new mmu interval notifiers
+Date:   Mon, 13 Jan 2020 14:47:02 -0800
+Message-ID: <20200113224703.5917-6-rcampbell@nvidia.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200113224703.5917-1-rcampbell@nvidia.com>
 References: <20200113224703.5917-1-rcampbell@nvidia.com>
@@ -64,160 +61,472 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578955579; bh=TvyJfevH15DcsYYlg1rhbnrL9loOhhGn+LYPOlmhmyc=;
+        t=1578955584; bh=fgEYXPzUbpQqXndlAQC6x4Ciedwx9mrvQo4YxSIRLpA=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=AT64yj12cDf8d9m2d5PHRVyJQn01pmmfIgdIF/Mu1SgCFD8gzKo0+N+MLbgytF0Kq
-         08iWJ1L+ANzJiO/IJd2bbKeFsJGwPlw9m3StvGCbYWbsPos5uL8UrqpxJbofrN2vgC
-         fd2J0737Os0CKXwpudp5DfMNnmnN9WqUd7GjPpv805n4G7j5kia/Zp31zmxE/cp/Fl
-         1E3D0qMe+HKOTBd8ZWlrwncTWpqm3ctXcNvVTKAHH/uhTNCokPX2VaCmO52zbvC94b
-         o3iHkoMjsyec15n7Ub2WzQcjeipCuQzu31iazOG3cs5rkCqtmym/5gP9DVvJSAAF02
-         2I5H2/fWA41HQ==
+        b=ZaoVRx4y5nqZZ9eUTs9lSH9d2P9jYrT5bwsMssBu4x8u4vD9F507xqjKYgyHSMgLa
+         5T54QS7ZwvVZqT5PU/ZYDaVpHrB2UnaTikZ4jxniU+7bfyST862S6Sz97nVKYHN6Ti
+         1p1j9qZWpu2dVzr0DuC0WrtRAPkFK+bYz9TEqXcEhqrPiBw5hx0XXF8gsUHWca3nmi
+         mbuyAgfkv7RxtHzIEBDHnHXZzVsqOW9r/nyhRdtwHlBwX0YnikLsGO8TVTwNisz0u1
+         bQZcF2OWWPugtNb/84JjUlAGGty201aAun1/EK0ZAyPanV1+ehz89fEijsIAd0Xm8Y
+         jg7rh+bV1dhTQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When using mmu interval notifiers, the underlying VMA range that the
-interval is tracking might be expanded or shrunk. Add a helper function
-to allow the interval to be updated safely from the ops->invalidate()
-callback in response to VMA range changes. This is effectively removing
-and inserting the mmu interval notifier but more efficient.
+Update nouveau to only use the mmu interval notifiers.
 
 Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
 ---
- include/linux/mmu_notifier.h |  4 +++
- mm/mmu_notifier.c            | 69 ++++++++++++++++++++++++++++++++++--
- 2 files changed, 70 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/nouveau/nouveau_svm.c | 313 +++++++++++++++++---------
+ 1 file changed, 201 insertions(+), 112 deletions(-)
 
-diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
-index 6dcaa632eef7..0ce59b4f22c2 100644
---- a/include/linux/mmu_notifier.h
-+++ b/include/linux/mmu_notifier.h
-@@ -251,6 +251,8 @@ struct mmu_interval_notifier {
- 	struct mm_struct *mm;
- 	struct hlist_node deferred_item;
- 	unsigned long invalidate_seq;
-+	unsigned long updated_start;
-+	unsigned long updated_last;
+diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouvea=
+u/nouveau_svm.c
+index df9bf1fd1bc0..0343e48d41d7 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_svm.c
++++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
+@@ -88,7 +88,7 @@ nouveau_ivmm_find(struct nouveau_svm *svm, u64 inst)
+ }
+=20
+ struct nouveau_svmm {
+-	struct mmu_notifier notifier;
++	struct mm_struct *mm;
+ 	struct nouveau_vmm *vmm;
+ 	struct {
+ 		unsigned long start;
+@@ -98,6 +98,13 @@ struct nouveau_svmm {
+ 	struct mutex mutex;
  };
 =20
- #ifdef CONFIG_MMU_NOTIFIER
-@@ -310,6 +312,8 @@ int mmu_interval_notifier_insert_safe(
- 	const struct mmu_interval_notifier_ops *ops);
- void mmu_interval_notifier_remove(struct mmu_interval_notifier *mni);
- void mmu_interval_notifier_put(struct mmu_interval_notifier *mni);
-+void mmu_interval_notifier_update(struct mmu_interval_notifier *mni,
-+				  unsigned long start, unsigned long last);
-=20
- /**
-  * mmu_interval_set_seq - Save the invalidation sequence
-diff --git a/mm/mmu_notifier.c b/mm/mmu_notifier.c
-index 40c837ae8d90..47ad9cc89aab 100644
---- a/mm/mmu_notifier.c
-+++ b/mm/mmu_notifier.c
-@@ -157,7 +157,14 @@ static void mn_itree_inv_end(struct mmu_notifier_mm *m=
-mn_mm)
- 		else {
- 			interval_tree_remove(&mni->interval_tree,
- 					     &mmn_mm->itree);
--			if (mni->ops->release)
-+			if (mni->updated_last) {
-+				mni->interval_tree.start =3D mni->updated_start;
-+				mni->interval_tree.last =3D mni->updated_last;
-+				mni->updated_start =3D 0;
-+				mni->updated_last =3D 0;
-+				interval_tree_insert(&mni->interval_tree,
-+						     &mmn_mm->itree);
-+			} else if (mni->ops->release)
- 				hlist_add_head(&mni->deferred_item,
- 					       &removed_list);
- 		}
-@@ -872,6 +879,8 @@ static int __mmu_interval_notifier_insert(
- 	mni->ops =3D ops;
- 	RB_CLEAR_NODE(&mni->interval_tree.rb);
- 	mni->interval_tree.start =3D start;
-+	mni->updated_start =3D 0;
-+	mni->updated_last =3D 0;
- 	/*
- 	 * Note that the representation of the intervals in the interval tree
- 	 * considers the ending point as contained in the interval.
-@@ -1038,8 +1047,12 @@ static unsigned long __mmu_interval_notifier_put(
- 		if (RB_EMPTY_NODE(&mni->interval_tree.rb)) {
- 			hlist_del(&mni->deferred_item);
- 		} else {
--			hlist_add_head(&mni->deferred_item,
--				       &mmn_mm->deferred_list);
-+			if (mni->updated_last) {
-+				mni->updated_start =3D 0;
-+				mni->updated_last =3D 0;
-+			} else
-+				hlist_add_head(&mni->deferred_item,
-+					       &mmn_mm->deferred_list);
- 			seq =3D mmn_mm->invalidate_seq;
- 		}
- 	} else {
-@@ -1108,6 +1121,56 @@ void mmu_interval_notifier_put(struct mmu_interval_n=
-otifier *mni)
++struct svmm_interval {
++	struct mmu_interval_notifier notifier;
++	struct nouveau_svmm *svmm;
++};
++
++static const struct mmu_interval_notifier_ops nouveau_svm_mni_ops;
++
+ #define SVMM_DBG(s,f,a...)                                                =
+     \
+ 	NV_DEBUG((s)->vmm->cli->drm, "svm-%p: "f"\n", (s), ##a)
+ #define SVMM_ERR(s,f,a...)                                                =
+     \
+@@ -236,6 +243,8 @@ nouveau_svmm_join(struct nouveau_svmm *svmm, u64 inst)
+ static void
+ nouveau_svmm_invalidate(struct nouveau_svmm *svmm, u64 start, u64 limit)
+ {
++	SVMM_DBG(svmm, "invalidate %016llx-%016llx", start, limit);
++
+ 	if (limit > start) {
+ 		bool super =3D svmm->vmm->vmm.object.client->super;
+ 		svmm->vmm->vmm.object.client->super =3D true;
+@@ -248,58 +257,25 @@ nouveau_svmm_invalidate(struct nouveau_svmm *svmm, u6=
+4 start, u64 limit)
+ 	}
  }
- EXPORT_SYMBOL_GPL(mmu_interval_notifier_put);
 =20
-+/**
-+ * mmu_interval_notifier_update - Update interval notifier range
-+ * @mni: Interval notifier to update
-+ * @start: New starting virtual address to monitor
-+ * @last: New last virtual address (inclusive) to monitor
-+ *
-+ * This function updates the range being monitored and is safe to call fro=
-m
-+ * the invalidate() callback function.
-+ * Upon return, the mmu_interval_notifier range may not be updated in the
-+ * interval tree yet. The caller must use the normal interval notifier rea=
-d
-+ * flow via mmu_interval_read_begin() to establish SPTEs for this range.
-+ */
-+void mmu_interval_notifier_update(struct mmu_interval_notifier *mni,
-+				  unsigned long start, unsigned long last)
-+{
-+	struct mm_struct *mm =3D mni->mm;
-+	struct mmu_notifier_mm *mmn_mm =3D mm->mmu_notifier_mm;
-+	unsigned long seq =3D 0;
+-static int
+-nouveau_svmm_invalidate_range_start(struct mmu_notifier *mn,
+-				    const struct mmu_notifier_range *update)
+-{
+-	struct nouveau_svmm *svmm =3D
+-		container_of(mn, struct nouveau_svmm, notifier);
+-	unsigned long start =3D update->start;
+-	unsigned long limit =3D update->end;
+-
+-	if (!mmu_notifier_range_blockable(update))
+-		return -EAGAIN;
+-
+-	SVMM_DBG(svmm, "invalidate %016lx-%016lx", start, limit);
+-
+-	mutex_lock(&svmm->mutex);
+-	if (unlikely(!svmm->vmm))
+-		goto out;
+-
+-	if (limit > svmm->unmanaged.start && start < svmm->unmanaged.limit) {
+-		if (start < svmm->unmanaged.start) {
+-			nouveau_svmm_invalidate(svmm, start,
+-						svmm->unmanaged.limit);
+-		}
+-		start =3D svmm->unmanaged.limit;
+-	}
+-
+-	nouveau_svmm_invalidate(svmm, start, limit);
+-
+-out:
+-	mutex_unlock(&svmm->mutex);
+-	return 0;
+-}
+-
+-static void nouveau_svmm_free_notifier(struct mmu_notifier *mn)
+-{
+-	kfree(container_of(mn, struct nouveau_svmm, notifier));
+-}
+-
+-static const struct mmu_notifier_ops nouveau_mn_ops =3D {
+-	.invalidate_range_start =3D nouveau_svmm_invalidate_range_start,
+-	.free_notifier =3D nouveau_svmm_free_notifier,
+-};
+-
+ void
+ nouveau_svmm_fini(struct nouveau_svmm **psvmm)
+ {
+ 	struct nouveau_svmm *svmm =3D *psvmm;
++	struct mmu_interval_notifier *mni;
 +
-+	if (WARN_ON(start >=3D last))
-+		return;
-+
-+	spin_lock(&mmn_mm->lock);
-+	if (mn_itree_is_invalidating(mmn_mm)) {
-+		/*
-+		 * Update is being called after insert put this on the
-+		 * deferred list, but before the deferred list was processed.
-+		 */
-+		if (RB_EMPTY_NODE(&mni->interval_tree.rb)) {
-+			mni->interval_tree.start =3D start;
-+			mni->interval_tree.last =3D last;
-+		} else {
-+			if (!mni->updated_last)
-+				hlist_add_head(&mni->deferred_item,
-+					       &mmn_mm->deferred_list);
-+			mni->updated_start =3D start;
-+			mni->updated_last =3D last;
+ 	if (svmm) {
+ 		mutex_lock(&svmm->mutex);
++		while (true) {
++			mni =3D mmu_interval_notifier_find(svmm->mm,
++					&nouveau_svm_mni_ops, 0UL, ~0UL);
++			if (!mni)
++				break;
++			mmu_interval_notifier_put(mni);
 +		}
-+		seq =3D mmn_mm->invalidate_seq;
-+	} else {
-+		WARN_ON(RB_EMPTY_NODE(&mni->interval_tree.rb));
-+		interval_tree_remove(&mni->interval_tree, &mmn_mm->itree);
-+		mni->interval_tree.start =3D start;
-+		mni->interval_tree.last =3D last;
-+		interval_tree_insert(&mni->interval_tree, &mmn_mm->itree);
-+	}
-+	spin_unlock(&mmn_mm->lock);
-+}
-+EXPORT_SYMBOL_GPL(mmu_interval_notifier_update);
+ 		svmm->vmm =3D NULL;
+ 		mutex_unlock(&svmm->mutex);
+-		mmu_notifier_put(&svmm->notifier);
++		mmdrop(svmm->mm);
++		kfree(svmm);
+ 		*psvmm =3D NULL;
+ 	}
+ }
+@@ -343,11 +319,12 @@ nouveau_svmm_init(struct drm_device *dev, void *data,
+ 		goto out_free;
+=20
+ 	down_write(&current->mm->mmap_sem);
+-	svmm->notifier.ops =3D &nouveau_mn_ops;
+-	ret =3D __mmu_notifier_register(&svmm->notifier, current->mm);
++	ret =3D __mmu_notifier_register(NULL, current->mm);
+ 	if (ret)
+ 		goto out_mm_unlock;
+-	/* Note, ownership of svmm transfers to mmu_notifier */
 +
- /**
-  * mmu_notifier_synchronize - Ensure all mmu_notifiers are freed
-  *
++	mmgrab(current->mm);
++	svmm->mm =3D current->mm;
+=20
+ 	cli->svm.svmm =3D svmm;
+ 	cli->svm.cli =3D cli;
+@@ -482,65 +459,212 @@ nouveau_svm_fault_cache(struct nouveau_svm *svm,
+ 		fault->inst, fault->addr, fault->access);
+ }
+=20
+-struct svm_notifier {
+-	struct mmu_interval_notifier notifier;
+-	struct nouveau_svmm *svmm;
+-};
++static struct svmm_interval *nouveau_svmm_new_interval(
++					struct nouveau_svmm *svmm,
++					unsigned long start,
++					unsigned long last)
++{
++	struct svmm_interval *smi;
++	int ret;
++
++	smi =3D kmalloc(sizeof(*smi), GFP_ATOMIC);
++	if (!smi)
++		return NULL;
++
++	smi->svmm =3D svmm;
++
++	ret =3D mmu_interval_notifier_insert_safe(&smi->notifier, svmm->mm,
++				start, last - start + 1, &nouveau_svm_mni_ops);
++	if (ret) {
++		kfree(smi);
++		return NULL;
++	}
++
++	return smi;
++}
++
++static void nouveau_svmm_do_unmap(struct mmu_interval_notifier *mni,
++				 const struct mmu_notifier_range *range)
++{
++	struct svmm_interval *smi =3D
++		container_of(mni, struct svmm_interval, notifier);
++	struct nouveau_svmm *svmm =3D smi->svmm;
++	unsigned long start =3D mmu_interval_notifier_start(mni);
++	unsigned long last =3D mmu_interval_notifier_last(mni);
++
++	if (start >=3D range->start) {
++		/* Remove the whole interval or keep the right-hand part. */
++		if (last <=3D range->end)
++			mmu_interval_notifier_put(mni);
++		else
++			mmu_interval_notifier_update(mni, range->end, last);
++		return;
++	}
++
++	/* Keep the left-hand part of the interval. */
++	mmu_interval_notifier_update(mni, start, range->start - 1);
++
++	/* If a hole is created, create an interval for the right-hand part. */
++	if (last >=3D range->end) {
++		smi =3D nouveau_svmm_new_interval(svmm, range->end, last);
++		/*
++		 * If we can't allocate an interval, we won't get invalidation
++		 * callbacks so clear the mapping and rely on faults to reload
++		 * the mappings if needed.
++		 */
++		if (!smi)
++			nouveau_svmm_invalidate(svmm, range->end, last + 1);
++	}
++}
+=20
+-static bool nouveau_svm_range_invalidate(struct mmu_interval_notifier *mni=
+,
+-					 const struct mmu_notifier_range *range,
+-					 unsigned long cur_seq)
++static bool nouveau_svmm_interval_invalidate(struct mmu_interval_notifier =
+*mni,
++				const struct mmu_notifier_range *range,
++				unsigned long cur_seq)
+ {
+-	struct svm_notifier *sn =3D
+-		container_of(mni, struct svm_notifier, notifier);
++	struct svmm_interval *smi =3D
++		container_of(mni, struct svmm_interval, notifier);
++	struct nouveau_svmm *svmm =3D smi->svmm;
+=20
+ 	/*
+-	 * serializes the update to mni->invalidate_seq done by caller and
++	 * Serializes the update to mni->invalidate_seq done by the caller and
+ 	 * prevents invalidation of the PTE from progressing while HW is being
+-	 * programmed. This is very hacky and only works because the normal
+-	 * notifier that does invalidation is always called after the range
+-	 * notifier.
++	 * programmed.
+ 	 */
+ 	if (mmu_notifier_range_blockable(range))
+-		mutex_lock(&sn->svmm->mutex);
+-	else if (!mutex_trylock(&sn->svmm->mutex))
++		mutex_lock(&svmm->mutex);
++	else if (!mutex_trylock(&svmm->mutex))
+ 		return false;
++
+ 	mmu_interval_set_seq(mni, cur_seq);
+-	mutex_unlock(&sn->svmm->mutex);
++	nouveau_svmm_invalidate(svmm, range->start, range->end);
++
++	/* Stop tracking the range if it is an unmap. */
++	if (range->event =3D=3D MMU_NOTIFY_UNMAP)
++		nouveau_svmm_do_unmap(mni, range);
++
++	mutex_unlock(&svmm->mutex);
+ 	return true;
+ }
+=20
++static void nouveau_svmm_interval_release(struct mmu_interval_notifier *mn=
+i)
++{
++	struct svmm_interval *smi =3D
++		container_of(mni, struct svmm_interval, notifier);
++
++	kfree(smi);
++}
++
+ static const struct mmu_interval_notifier_ops nouveau_svm_mni_ops =3D {
+-	.invalidate =3D nouveau_svm_range_invalidate,
++	.invalidate =3D nouveau_svmm_interval_invalidate,
++	.release =3D nouveau_svmm_interval_release,
+ };
+=20
++/*
++ * Find or create a mmu_interval_notifier for the given range.
++ * Although mmu_interval_notifier_insert_safe() can handle overlapping
++ * intervals, we only create non-overlapping intervals, shrinking the hmm_=
+range
++ * if it spans more than one svmm_interval.
++ */
++static int nouveau_svmm_interval_find(struct nouveau_svmm *svmm,
++				 struct hmm_range *range)
++{
++	struct mmu_interval_notifier *mni;
++	struct svmm_interval *smi;
++	struct vm_area_struct *vma;
++	unsigned long start =3D range->start;
++	unsigned long last =3D range->end - 1;
++	int ret;
++
++	mutex_lock(&svmm->mutex);
++	mni =3D mmu_interval_notifier_find(svmm->mm, &nouveau_svm_mni_ops, start,
++					 last);
++	if (mni) {
++		if (start >=3D mmu_interval_notifier_start(mni)) {
++			smi =3D container_of(mni, struct svmm_interval, notifier);
++			if (last > mmu_interval_notifier_last(mni))
++				range->end =3D
++					mmu_interval_notifier_last(mni) + 1;
++			goto found;
++		}
++		WARN_ON(last <=3D mmu_interval_notifier_start(mni));
++		range->end =3D mmu_interval_notifier_start(mni);
++		last =3D range->end - 1;
++	}
++	/*
++	 * Might as well create an interval covering the underlying VMA to
++	 * avoid having to create a bunch of small intervals.
++	 */
++	vma =3D find_vma(svmm->mm, range->start);
++	if (!vma || start < vma->vm_start) {
++		ret =3D -ENOENT;
++		goto err;
++	}
++	if (range->end > vma->vm_end) {
++		range->end =3D vma->vm_end;
++		last =3D range->end - 1;
++	} else if (!mni) {
++		/* Anything registered on the right part of the vma? */
++		mni =3D mmu_interval_notifier_find(svmm->mm, &nouveau_svm_mni_ops,
++						 range->end, vma->vm_end - 1);
++		if (mni)
++			last =3D mmu_interval_notifier_start(mni) - 1;
++		else
++			last =3D vma->vm_end - 1;
++	}
++	/* Anything registered on the left part of the vma? */
++	mni =3D mmu_interval_notifier_find(svmm->mm, &nouveau_svm_mni_ops,
++					 vma->vm_start, start - 1);
++	if (mni)
++		start =3D mmu_interval_notifier_last(mni) + 1;
++	else
++		start =3D vma->vm_start;
++	smi =3D nouveau_svmm_new_interval(svmm, start, last);
++	if (!smi) {
++		ret =3D -ENOMEM;
++		goto err;
++	}
++
++found:
++	range->notifier =3D &smi->notifier;
++	mutex_unlock(&svmm->mutex);
++	return 0;
++
++err:
++	mutex_unlock(&svmm->mutex);
++	return ret;
++}
++
+ static int nouveau_range_fault(struct nouveau_svmm *svmm,
+ 			       struct nouveau_drm *drm, void *data, u32 size,
+-			       u64 *pfns, struct svm_notifier *notifier)
++			       u64 *pfns, u64 start, u64 end)
+ {
+ 	unsigned long timeout =3D
+ 		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
+ 	/* Have HMM fault pages within the fault window to the GPU. */
+ 	struct hmm_range range =3D {
+-		.notifier =3D &notifier->notifier,
+-		.start =3D notifier->notifier.interval_tree.start,
+-		.end =3D notifier->notifier.interval_tree.last + 1,
++		.start =3D start,
++		.end =3D end,
+ 		.pfns =3D pfns,
+ 		.flags =3D nouveau_svm_pfn_flags,
+ 		.values =3D nouveau_svm_pfn_values,
++		.default_flags =3D 0,
++		.pfn_flags_mask =3D ~0UL,
+ 		.pfn_shift =3D NVIF_VMM_PFNMAP_V0_ADDR_SHIFT,
+ 	};
+-	struct mm_struct *mm =3D notifier->notifier.mm;
++	struct mm_struct *mm =3D svmm->mm;
+ 	long ret;
+=20
+ 	while (true) {
+ 		if (time_after(jiffies, timeout))
+ 			return -EBUSY;
+=20
+-		range.notifier_seq =3D mmu_interval_read_begin(range.notifier);
+-		range.default_flags =3D 0;
+-		range.pfn_flags_mask =3D -1UL;
+ 		down_read(&mm->mmap_sem);
++		ret =3D nouveau_svmm_interval_find(svmm, &range);
++		if (ret) {
++			up_read(&mm->mmap_sem);
++			return ret;
++		}
++		range.notifier_seq =3D mmu_interval_read_begin(range.notifier);
+ 		ret =3D hmm_range_fault(&range, 0);
+ 		up_read(&mm->mmap_sem);
+ 		if (ret <=3D 0) {
+@@ -585,7 +709,6 @@ nouveau_svm_fault(struct nvif_notify *notify)
+ 		} i;
+ 		u64 phys[16];
+ 	} args;
+-	struct vm_area_struct *vma;
+ 	u64 inst, start, limit;
+ 	int fi, fn, pi, fill;
+ 	int replay =3D 0, ret;
+@@ -640,7 +763,6 @@ nouveau_svm_fault(struct nvif_notify *notify)
+ 	args.i.p.version =3D 0;
+=20
+ 	for (fi =3D 0; fn =3D fi + 1, fi < buffer->fault_nr; fi =3D fn) {
+-		struct svm_notifier notifier;
+ 		struct mm_struct *mm;
+=20
+ 		/* Cancel any faults from non-SVM channels. */
+@@ -662,36 +784,12 @@ nouveau_svm_fault(struct nvif_notify *notify)
+ 			start =3D max_t(u64, start, svmm->unmanaged.limit);
+ 		SVMM_DBG(svmm, "wndw %016llx-%016llx", start, limit);
+=20
+-		mm =3D svmm->notifier.mm;
++		mm =3D svmm->mm;
+ 		if (!mmget_not_zero(mm)) {
+ 			nouveau_svm_fault_cancel_fault(svm, buffer->fault[fi]);
+ 			continue;
+ 		}
+=20
+-		/* Intersect fault window with the CPU VMA, cancelling
+-		 * the fault if the address is invalid.
+-		 */
+-		down_read(&mm->mmap_sem);
+-		vma =3D find_vma_intersection(mm, start, limit);
+-		if (!vma) {
+-			SVMM_ERR(svmm, "wndw %016llx-%016llx", start, limit);
+-			up_read(&mm->mmap_sem);
+-			mmput(mm);
+-			nouveau_svm_fault_cancel_fault(svm, buffer->fault[fi]);
+-			continue;
+-		}
+-		start =3D max_t(u64, start, vma->vm_start);
+-		limit =3D min_t(u64, limit, vma->vm_end);
+-		up_read(&mm->mmap_sem);
+-		SVMM_DBG(svmm, "wndw %016llx-%016llx", start, limit);
+-
+-		if (buffer->fault[fi]->addr !=3D start) {
+-			SVMM_ERR(svmm, "addr %016llx", buffer->fault[fi]->addr);
+-			mmput(mm);
+-			nouveau_svm_fault_cancel_fault(svm, buffer->fault[fi]);
+-			continue;
+-		}
+-
+ 		/* Prepare the GPU-side update of all pages within the
+ 		 * fault window, determining required pages and access
+ 		 * permissions based on pending faults.
+@@ -743,18 +841,9 @@ nouveau_svm_fault(struct nvif_notify *notify)
+ 			 args.i.p.addr,
+ 			 args.i.p.addr + args.i.p.size, fn - fi);
+=20
+-		notifier.svmm =3D svmm;
+-		ret =3D mmu_interval_notifier_insert(&notifier.notifier,
+-						   svmm->notifier.mm,
+-						   args.i.p.addr, args.i.p.size,
+-						   &nouveau_svm_mni_ops);
+-		if (!ret) {
+-			ret =3D nouveau_range_fault(
+-				svmm, svm->drm, &args,
+-				sizeof(args.i) + pi * sizeof(args.phys[0]),
+-				args.phys, &notifier);
+-			mmu_interval_notifier_remove(&notifier.notifier);
+-		}
++		ret =3D nouveau_range_fault(svmm, svm->drm, &args,
++			sizeof(args.i) + pi * sizeof(args.phys[0]), args.phys,
++			start, start + args.i.p.size);
+ 		mmput(mm);
+=20
+ 		/* Cancel any faults in the window whose pages didn't manage
 --=20
 2.20.1
 
