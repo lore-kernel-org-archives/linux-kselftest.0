@@ -2,264 +2,170 @@ Return-Path: <SRS0=Wk6r=3F=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17CC8C33CB3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 13:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B974C33CB7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 14:11:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D713E2075B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 13:28:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11BEE2077B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 14:11:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M1d/iEYR"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="JFr3/SZ3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729058AbgAPN2C (ORCPT
+        id S1726555AbgAPOLn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jan 2020 08:28:02 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:28703 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729037AbgAPN1r (ORCPT
+        Thu, 16 Jan 2020 09:11:43 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:37744 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbgAPOLn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 08:27:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579181265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XuvIyltLM6t6CmNPpq0TOwT0hr9nkt4psYwYZFChnPA=;
-        b=M1d/iEYRLYcaRSyd1/WUP54IlSPnhZyhBCrzWg+Ftv3plcuavOhluayjxUb0uftG0PVlqM
-        Mmtmk42HkRnWXI5CaITtLmdzUv5SOHj1THX8vVCaYk/Ox189VEFAmlRNTjWsPsAo/m6DLr
-        Ct0njPEkxW3UAygFv1l/Ox0bXtvPBL8=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-302-2mBXJwJLPsKSh7T-tP6P2A-1; Thu, 16 Jan 2020 08:27:43 -0500
-X-MC-Unique: 2mBXJwJLPsKSh7T-tP6P2A-1
-Received: by mail-lj1-f199.google.com with SMTP id h23so5151312ljk.14
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2020 05:27:43 -0800 (PST)
+        Thu, 16 Jan 2020 09:11:43 -0500
+Received: by mail-qk1-f193.google.com with SMTP id 21so19216891qky.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2020 06:11:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=E4TXCvIZZmY4SQCWQzeLR1MFoYNB31lrG2Qln+AaBO4=;
+        b=JFr3/SZ3UQPbE6tN0WIDrmGEvvrNPfsLSUjntfSPf4H8CaB9Ec8m1JVzlwKdxQI7bR
+         3Wf7o15qkWvfU2BrXgUqDa/P5/s3JU86YwmHmVDJgHJVZpC48Wq+GwpiH70SVGZXzNCW
+         tUB0BZs20iU/qGmkxxbEKTg+rfI7uWyRi6HD7SwwKfn6eeOx5NXa2L4khYzmYqdU/Q73
+         XJzZwnq1+SkVZNFtHtVAhdji1nJv/bWhk/VqEp4wX7VCiTOc5nBu+Cv/vpBioS4yMhnI
+         nFwmiDzAw7e0YnFmBSZ6FJ2C6Eprq+qfGs/8uk/SzOBENKSHugI2ZSccx15T3V2aqTrv
+         rb8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=XuvIyltLM6t6CmNPpq0TOwT0hr9nkt4psYwYZFChnPA=;
-        b=HI+nj2NPYmppgkFJTWcfc5L7OlpTj2VtJgdjRVUAI+7yNC214iG9Lkz+3onuXDumrE
-         oZhS2LbGcbf+Fa1/wSG7LV3ZYITG5yMoeovLzg/4ugFddXCvN3ock54fOvLvXZWqvE00
-         Zcswncv7wLsVTLBhD0A4GQ9bW23t4UzH4ZxQyZarrjSI39ORc2TIiZuDJfFySkeJLMY3
-         mkiYnJLcJVON22j+nSn9FLB+Ybyc9j1dH5Yv3b0VN7wmSTlXq/oXnKAyzozZ9rTWjW6x
-         jlFAJ3I1O+Vagc11TAFb/WUkTXoPxF8iZOIfnNCFcb5R6C8pbxotcS7tbRAr/KOkgX7s
-         YE/Q==
-X-Gm-Message-State: APjAAAU2AWJ9kPwUwGMIZHPxuYcuAZsiOGcDLGFsyokQqrFLpI8YYRAA
-        qEzP+7ynXTD9e3dXqGMCulWEVjWo/Bz4V8fr6DsPQT3+tkYGp4fRXOgO03GuUmv/pCF7nw4mPcm
-        OjEpHShw90fSONpQjH8g/ray+ELr6
-X-Received: by 2002:a2e:7e05:: with SMTP id z5mr2143912ljc.99.1579181262218;
-        Thu, 16 Jan 2020 05:27:42 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwV2vEACriaMxMYq1+Yurp2SBRFnsPX7bITYsC6orHg17S25R+Ekjo1mt4jcs0IEhr7VeKwYg==
-X-Received: by 2002:a2e:7e05:: with SMTP id z5mr2143893ljc.99.1579181261819;
-        Thu, 16 Jan 2020 05:27:41 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id g27sm10722135lfj.49.2020.01.16.05.27.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 05:27:41 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E326A1804D7; Thu, 16 Jan 2020 14:22:21 +0100 (CET)
-Subject: [PATCH bpf-next v3 09/11] selftests: Remove tools/lib/bpf from
- include path
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Date:   Thu, 16 Jan 2020 14:22:21 +0100
-Message-ID: <157918094179.1357254.14428494370073273452.stgit@toke.dk>
-In-Reply-To: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
-References: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
-User-Agent: StGit/0.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=E4TXCvIZZmY4SQCWQzeLR1MFoYNB31lrG2Qln+AaBO4=;
+        b=buLQkZL+WjAWfxSjdFH6aWkw/wTtXSl+k9LEPdxNX8OLQ7tTUn3N2AQ/IJ3CEaImEH
+         WRxy1iGiBaqdN1b/bspXIj/RX+B0fOyFOC5Xf0eGyVLHa4UGNz2JJk8bW5NlxIPEVOTv
+         YHrvXwM9DCUpbl9ToQbuJNSAUdiHZJasmQ5AOBf2HMRmwVJFnWRieD2loC7w3mvYF5RQ
+         XYuL/HkeNjeS1ltg4rwXX0M/5bgalLqoJCMqWD3JsD0pBe2xaUyN8puK6tKMd3ASh8U9
+         /mReThX8Ena13FhkpPSQGabKuftHwS/JxPWgw+yC8l0Zm56MU/wkvDZP3E7o0pG/Nxz7
+         kqUA==
+X-Gm-Message-State: APjAAAXm4sHXKqhFx+6qvDOewjocSVnHaIdbsJBJqpyWWfekGix7a0b3
+        sXZ1X2KS9toqp7aZE57cMSZDJw==
+X-Google-Smtp-Source: APXvYqx6uZpu4GcW1N0sXEyw9K5yx2S6JPwxGtld6dzchDnf5W2zeuoRuG/8THysf1WiLlTh8VyUTg==
+X-Received: by 2002:a37:5fc2:: with SMTP id t185mr32372460qkb.271.1579183901908;
+        Thu, 16 Jan 2020 06:11:41 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-57-212.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.57.212])
+        by smtp.gmail.com with ESMTPSA id g53sm11292147qtk.76.2020.01.16.06.11.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 16 Jan 2020 06:11:41 -0800 (PST)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1is5s4-0003yp-CZ; Thu, 16 Jan 2020 10:11:40 -0400
+Date:   Thu, 16 Jan 2020 10:11:40 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Ralph Campbell <rcampbell@nvidia.com>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v6 4/6] mm/mmu_notifier: add mmu_interval_notifier_find()
+Message-ID: <20200116141140.GA10759@ziepe.ca>
+References: <20200113224703.5917-1-rcampbell@nvidia.com>
+ <20200113224703.5917-5-rcampbell@nvidia.com>
+ <20200114124956.GN20978@mellanox.com>
+ <528c1cff-608c-d342-1e72-90d780555204@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <528c1cff-608c-d342-1e72-90d780555204@nvidia.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+On Wed, Jan 15, 2020 at 02:05:24PM -0800, Ralph Campbell wrote:
+> 
+> On 1/14/20 4:49 AM, Jason Gunthorpe wrote:
+> > On Mon, Jan 13, 2020 at 02:47:01PM -0800, Ralph Campbell wrote:
+> > > diff --git a/mm/mmu_notifier.c b/mm/mmu_notifier.c
+> > > index 47ad9cc89aab..4efecc0f13cb 100644
+> > > +++ b/mm/mmu_notifier.c
+> > > @@ -1171,6 +1171,39 @@ void mmu_interval_notifier_update(struct mmu_interval_notifier *mni,
+> > >   }
+> > >   EXPORT_SYMBOL_GPL(mmu_interval_notifier_update);
+> > > +struct mmu_interval_notifier *mmu_interval_notifier_find(struct mm_struct *mm,
+> > > +				const struct mmu_interval_notifier_ops *ops,
+> > > +				unsigned long start, unsigned long last)
+> > > +{
+> > > +	struct mmu_notifier_mm *mmn_mm = mm->mmu_notifier_mm;
+> > > +	struct interval_tree_node *node;
+> > > +	struct mmu_interval_notifier *mni;
+> > > +	struct mmu_interval_notifier *res = NULL;
+> > > +
+> > > +	spin_lock(&mmn_mm->lock);
+> > > +	node = interval_tree_iter_first(&mmn_mm->itree, start, last);
+> > > +	if (node) {
+> > > +		mni = container_of(node, struct mmu_interval_notifier,
+> > > +				   interval_tree);
+> > > +		while (true) {
+> > > +			if (mni->ops == ops) {
+> > > +				res = mni;
+> > > +				break;
+> > > +			}
+> > > +			node = interval_tree_iter_next(&mni->interval_tree,
+> > > +						       start, last);
+> > > +			if (!node)
+> > > +				break;
+> > > +			mni = container_of(node, struct mmu_interval_notifier,
+> > > +					   interval_tree);
+> > > +		}
+> > > +	}
+> > > +	spin_unlock(&mmn_mm->lock);
+> > 
+> > This doesn't seem safe at all, here we are returning a pointer to
+> > memory from the interval tree with out any kind of lifetime
+> > protection.
+> 
+> It is memory that the driver has allocated and has full control over
+> the lifetime since the driver does all the insertions and removals.
+> The driver does have to hold the HW page table lock so lookups are
+> synchronized with interval insertions and removals and page table
+> entry insertions and removals.
 
-To make sure no new files are introduced that doesn't include the bpf/
-prefix in its #include, remove tools/lib/bpf from the include path
-entirely.
+No.. the ->release is async, so having the driver hold a lock around
+all the mmu_interval_ APIS still doesn't make it safe. The element
+could be on the defered list and it could become freed at any moment.
 
-Instead, we introduce a new header files directory under the scratch tools/
-dir, and add a rule to run the 'install_headers' rule from libbpf to have a
-full set of consistent libbpf headers in $(OUTPUT)/tools/include/bpf, and
-then use $(OUTPUT)/tools/include as the include path for selftests.
+> > If the interval tree is read it must be left in the read lock state
+> > until the caller is done with the pointer.
+> > 
+> > .. and this poses all sorts of questions about consistency with items
+> > on the deferred list. Should find return an item undergoing deletion?
+> 
+> I don't think so. The deferred operations are all complete when
+> mmu_interval_read_begin() returns, and the sequence number check
+> with mmu_interval_read_retry() guarantees there have been no changes
+> while not holding the driver page table lock and calling hmm_range_fault().
 
-For consistency we also make sure we put all the scratch build files from
-other bpftool and libbpf into tools/build/, so everything stays within
-selftests/.
+It seems very dangerous to say, on one hand, that the driver is
+serialized because it holds a lock around all mmu_interval_* calls,
+while on the other saying that on rare edge cases find does not return
+a result that matches the serial-program-order sequence.
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- tools/testing/selftests/bpf/.gitignore |    1 +
- tools/testing/selftests/bpf/Makefile   |   50 +++++++++++++++++++-------------
- 2 files changed, 31 insertions(+), 20 deletions(-)
+This seems like a way to create bugs.
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 1d14e3ab70be..849be9990ad2 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -40,3 +40,4 @@ test_cpp
- /bpf_gcc
- /tools
- bpf_helper_defs.h
-+/include/bpf
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 1fd7da49bd56..c3fa695bb028 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -20,8 +20,8 @@ CLANG		?= clang
- LLC		?= llc
- LLVM_OBJCOPY	?= llvm-objcopy
- BPF_GCC		?= $(shell command -v bpf-gcc;)
--CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(CURDIR) -I$(APIDIR) -I$(LIBDIR)  \
--	  -I$(BPFDIR) -I$(GENDIR) -I$(TOOLSINCDIR)			\
-+CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(CURDIR) -I$(APIDIR)		 \
-+	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR) -I$(TOOLSINCDIR)	\
- 	  -Dbpf_prog_load=bpf_prog_test_load				\
- 	  -Dbpf_load_program=bpf_test_load_program
- LDLIBS += -lcap -lelf -lz -lrt -lpthread
-@@ -97,11 +97,15 @@ OVERRIDE_TARGETS := 1
- override define CLEAN
- 	$(call msg,CLEAN)
- 	$(RM) -r $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(EXTRA_CLEAN)
--	$(MAKE) -C $(BPFDIR) OUTPUT=$(OUTPUT)/ clean
- endef
- 
- include ../lib.mk
- 
-+SCRATCH_DIR := $(OUTPUT)/tools
-+BUILD_DIR := $(SCRATCH_DIR)/build
-+INCLUDE_DIR := $(SCRATCH_DIR)/include
-+INCLUDE_BPF := $(INCLUDE_DIR)/bpf/bpf.h
-+
- # Define simple and short `make test_progs`, `make test_sysctl`, etc targets
- # to build individual tests.
- # NOTE: Semicolon at the end is critical to override lib.mk's default static
-@@ -120,7 +124,7 @@ $(OUTPUT)/urandom_read: urandom_read.c
- 	$(call msg,BINARY,,$@)
- 	$(CC) -o $@ $< -Wl,--build-id
- 
--$(OUTPUT)/test_stub.o: test_stub.c
-+$(OUTPUT)/test_stub.o: test_stub.c $(INCLUDE_BPF)
- 	$(call msg,CC,,$@)
- 	$(CC) -c $(CFLAGS) -o $@ $<
- 
-@@ -129,7 +133,7 @@ $(OUTPUT)/runqslower: force
- 	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	      \
- 		    OUTPUT=$(CURDIR)/tools/ VMLINUX_BTF=$(abspath ../../../../vmlinux)
- 
--BPFOBJ := $(OUTPUT)/libbpf.a
-+BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
- 
- $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
- 
-@@ -155,17 +159,23 @@ force:
- DEFAULT_BPFTOOL := $(OUTPUT)/tools/sbin/bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
- 
--$(DEFAULT_BPFTOOL): force
--	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			      \
-+$(BUILD_DIR)/libbpf $(BUILD_DIR)/bpftool $(INCLUDE_DIR):
-+	$(call msg,MKDIR,,$@)
-+	mkdir -p $@
-+
-+$(DEFAULT_BPFTOOL): force $(BUILD_DIR)/bpftool
-+	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)		\
-+		    OUTPUT=$(BUILD_DIR)/bpftool/			\
- 		    prefix= DESTDIR=$(OUTPUT)/tools/ install
- 
--$(BPFOBJ): force
--	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(OUTPUT)/
-+$(BPFOBJ): force $(BUILD_DIR)/libbpf
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) \
-+		OUTPUT=$(BUILD_DIR)/libbpf/
- 
--BPF_HELPERS := $(OUTPUT)/bpf_helper_defs.h $(wildcard $(BPFDIR)/bpf_*.h)
--$(OUTPUT)/bpf_helper_defs.h: $(BPFOBJ)
--	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR)			      \
--		    OUTPUT=$(OUTPUT)/ $(OUTPUT)/bpf_helper_defs.h
-+BPF_HELPERS := $(wildcard $(BPFDIR)/bpf_*.h) $(INCLUDE_BPF)
-+$(INCLUDE_BPF): force $(BPFOBJ)
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) install_headers \
-+		OUTPUT=$(BUILD_DIR)/libbpf/ DESTDIR=$(SCRATCH_DIR) prefix=
- 
- # Get Clang's default includes on this system, as opposed to those seen by
- # '-target bpf'. This fixes "missing" files on some architectures/distros,
-@@ -185,8 +195,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
- 
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
- BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
--	     -I$(OUTPUT) -I$(CURDIR) -I$(CURDIR)/include/uapi		\
--	     -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(abspath $(OUTPUT)/../usr/include)
-+	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(CURDIR)/include/uapi	\
-+	     -I$(APIDIR) -I$(abspath $(OUTPUT)/../usr/include)
- 
- CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
- 	       -Wno-compare-distinct-pointer-types
-@@ -306,7 +316,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_EXTRA_HDRS)				\
- 		      $(TRUNNER_BPF_OBJS)				\
- 		      $(TRUNNER_BPF_SKELS)				\
--		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
-+		      $$(BPFOBJ) $$(INCLUDE_BPF) | $(TRUNNER_OUTPUT)
- 	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
- 	cd $$(@D) && $$(CC) $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
- 
-@@ -314,7 +324,7 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 		       %.c						\
- 		       $(TRUNNER_EXTRA_HDRS)				\
- 		       $(TRUNNER_TESTS_HDR)				\
--		       $$(BPFOBJ) | $(TRUNNER_OUTPUT)
-+		       $$(BPFOBJ) $$(INCLUDE_BPF) | $(TRUNNER_OUTPUT)
- 	$$(call msg,EXT-OBJ,$(TRUNNER_BINARY),$$@)
- 	$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
- 
-@@ -326,7 +336,7 @@ ifneq ($2,)
- endif
- 
- $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
--			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-+			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ) $$(INCLUDE_BPF)		\
- 			     | $(TRUNNER_BINARY)-extras
- 	$$(call msg,BINARY,,$$@)
- 	$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) -o $$@
-@@ -388,7 +398,7 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
- 	$(call msg,CXX,,$@)
- 	$(CXX) $(CFLAGS) $^ $(LDLIBS) -o $@
- 
--EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)					\
-+EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR)			\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
- 	feature								\
--	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc tools)
-+	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc)
+For instance, if find is consistent with the defered list then it will
+not return any element that has a pending deletion and the above issue
+with lifetime wouldn't happen.
 
+However, I'm still not sure that providing an API tha requires the
+driver to provide tricky locking is the best idea. This basically says
+that if a driver uses find then every single other call to
+mmu_interval_* must be serialized with a single lock.
+
+Jason
