@@ -2,164 +2,83 @@ Return-Path: <SRS0=Wk6r=3F=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A616BC33CB3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:24:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33C17C33CAF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:31:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C9A52073A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579202666;
-	bh=B652F4k9tD2WEfGYtVNwbN/7riZj1x+5P2wOqwV+xf0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=wrIMTGsZayr2XYqRkhvfBIXqD0BBYXWh0BQybij87LBZtEuyuBB+5DTU5pNAgMtMZ
-	 lF98FHqhSNcND5xDwlz5ghITROHmMmSBUU9BpGdfdTeiwnvymVAQoy3MSpywDxfdIs
-	 oyhHldN5LfOwSmvNIDAE49P6khXa8hfSTjlOpJL0=
+	by mail.kernel.org (Postfix) with ESMTP id 07BE72072B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:31:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407395AbgAPTYV (ORCPT
+        id S1730720AbgAPTbm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jan 2020 14:24:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36246 "EHLO mail.kernel.org"
+        Thu, 16 Jan 2020 14:31:42 -0500
+Received: from mga01.intel.com ([192.55.52.88]:13285 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730487AbgAPQwx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:52:53 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 590F621582;
-        Thu, 16 Jan 2020 16:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193573;
-        bh=B652F4k9tD2WEfGYtVNwbN/7riZj1x+5P2wOqwV+xf0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uy5QgMCzc1q9SVd7F6MDzOExcJQ2Rdc5uN7ymykNcMPO8pZZG87gI9ojsj2YTjLYX
-         IJ/Wxq/dsu5VcSH5R/HepEhGEH6HX7iCYh6vD4oRdbUkZqRHCabGRd3jK0sMhEDFMH
-         CK6gd6kqfmEQnQnMMjOajSIfTx+HHobT/hVrEMcE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
+        id S1730712AbgAPTbm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 14:31:42 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 11:31:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,327,1574150400"; 
+   d="scan'208";a="373431363"
+Received: from romley-ivt3.sc.intel.com ([172.25.110.60])
+  by orsmga004.jf.intel.com with ESMTP; 16 Jan 2020 11:31:41 -0800
+Date:   Thu, 16 Jan 2020 11:42:23 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Moger, Babu" <Babu.Moger@amd.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        x86 <x86@kernel.org>, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 116/205] selftests: gen_kselftest_tar.sh: Do not clobber kselftest/
-Date:   Thu, 16 Jan 2020 11:41:31 -0500
-Message-Id: <20200116164300.6705-116-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
+Subject: Re: [PATCH v9 00/13] selftests/resctrl: Add resctrl selftest
+Message-ID: <20200116194222.GB51626@romley-ivt3.sc.intel.com>
+References: <1576535207-2417-1-git-send-email-fenghua.yu@intel.com>
+ <7aacc3e8-4072-c6b9-5d0f-f687a40ad315@amd.com>
+ <CY4PR12MB1574ACDEE30CDCD8113CECA795390@CY4PR12MB1574.namprd12.prod.outlook.com>
+ <20200115211749.GA51626@romley-ivt3.sc.intel.com>
+ <87k15sxu3k.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k15sxu3k.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+On Wed, Jan 15, 2020 at 10:55:43PM +0100, Thomas Gleixner wrote:
+> Fenghua Yu <fenghua.yu@intel.com> writes:
+> >
+> > Hi, Boris, Thomas, Ingo, et al,
+> >
+> > Any comment on this patch set?
+> 
+> No objections from my side, but you forgot to CC the relevant
+> maintainer/mailinglist for tools/testing/selftests/. CC'ed now.
 
-[ Upstream commit ea1bf0bb18c0bd627d7b551196453ff2fff44225 ]
+Thank you for your comments, Thomas!
 
-The default installation location for gen_kselftest_tar.sh was still
-"kselftest/" which collides with the existing directory. Instead, this
-moves the installation target into "kselftest_install/kselftest/" and
-adjusts the tar creation accordingly. This also adjusts indentation and
-logic to be consistent.
+Hi, Shuah,
 
-Fixes: 42d46e57ec97 ("selftests: Extract single-test shell logic from lib.mk")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/gen_kselftest_tar.sh | 21 ++++++++++-------
- tools/testing/selftests/kselftest_install.sh | 24 ++++++++++----------
- 2 files changed, 25 insertions(+), 20 deletions(-)
+Do you want me to resend the v9 resctrl selftest patches to you and
+linux-kselftest?
 
-diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing/selftests/gen_kselftest_tar.sh
-index a27e2eec3586..8b2b6088540d 100755
---- a/tools/testing/selftests/gen_kselftest_tar.sh
-+++ b/tools/testing/selftests/gen_kselftest_tar.sh
-@@ -38,16 +38,21 @@ main()
- 	esac
- 	fi
- 
--	install_dir=./kselftest
-+	# Create working directory.
-+	dest=`pwd`
-+	install_work="$dest"/kselftest_install
-+	install_name=kselftest
-+	install_dir="$install_work"/"$install_name"
-+	mkdir -p "$install_dir"
- 
--# Run install using INSTALL_KSFT_PATH override to generate install
--# directory
--./kselftest_install.sh
--tar $copts kselftest${ext} $install_dir
--echo "Kselftest archive kselftest${ext} created!"
-+	# Run install using INSTALL_KSFT_PATH override to generate install
-+	# directory
-+	./kselftest_install.sh "$install_dir"
-+	(cd "$install_work"; tar $copts "$dest"/kselftest${ext} $install_name)
-+	echo "Kselftest archive kselftest${ext} created!"
- 
--# clean up install directory
--rm -rf kselftest
-+	# clean up top-level install work directory
-+	rm -rf "$install_work"
- }
- 
- main "$@"
-diff --git a/tools/testing/selftests/kselftest_install.sh b/tools/testing/selftests/kselftest_install.sh
-index e2e1911d62d5..407af7da7037 100755
---- a/tools/testing/selftests/kselftest_install.sh
-+++ b/tools/testing/selftests/kselftest_install.sh
-@@ -6,30 +6,30 @@
- # Author: Shuah Khan <shuahkh@osg.samsung.com>
- # Copyright (C) 2015 Samsung Electronics Co., Ltd.
- 
--install_loc=`pwd`
--
- main()
- {
--	if [ $(basename $install_loc) !=  "selftests" ]; then
-+	base_dir=`pwd`
-+	install_dir="$base_dir"/kselftest_install
-+
-+	# Make sure we're in the selftests top-level directory.
-+	if [ $(basename "$base_dir") !=  "selftests" ]; then
- 		echo "$0: Please run it in selftests directory ..."
- 		exit 1;
- 	fi
-+
-+	# Only allow installation into an existing location.
- 	if [ "$#" -eq 0 ]; then
--		echo "$0: Installing in default location - $install_loc ..."
-+		echo "$0: Installing in default location - $install_dir ..."
- 	elif [ ! -d "$1" ]; then
- 		echo "$0: $1 doesn't exist!!"
- 		exit 1;
- 	else
--		install_loc=$1
--		echo "$0: Installing in specified location - $install_loc ..."
-+		install_dir="$1"
-+		echo "$0: Installing in specified location - $install_dir ..."
- 	fi
- 
--	install_dir=$install_loc/kselftest_install
--
--# Create install directory
--	mkdir -p $install_dir
--# Build tests
--	KSFT_INSTALL_PATH=$install_dir make install
-+	# Build tests
-+	KSFT_INSTALL_PATH="$install_dir" make install
- }
- 
- main "$@"
--- 
-2.20.1
+This repository has the v9 patches:
+git://github.com/fyu1/linux resctrl_selftest
 
+Thanks.
+
+-Fenghua
