@@ -2,134 +2,132 @@ Return-Path: <SRS0=Wk6r=3F=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E60AC33CAF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 18:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA93FC3F68F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E96DD20663
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 18:57:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YZ6F46+0"
+	by mail.kernel.org (Postfix) with ESMTP id B1D2D24679
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1579201255;
+	bh=DIN3t0CL3qc9oQivN4pyYzvvL2OYzqK+JGu7m+2wO8M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=GSjeCiEqB1WvRJIDk4mI+OQA+SntlnQ3DcAJOt9ZlL7OP2c2oUgD9ZphhhIH5Z5QM
+	 fdydGhDJrOteg1NYg/X9l8z96X65J+PpadIpCcI/W0ZcFaAJS8lJJc16jXJzJK+M95
+	 KMN0IxGV4kP0iUn3eutDFryfSmCjD97aqIfdfe7w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389103AbgAPS5D (ORCPT
+        id S2389004AbgAPTAy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:57:03 -0500
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:36178 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726892AbgAPS44 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 13:56:56 -0500
-Received: by mail-qv1-f66.google.com with SMTP id m14so9576781qvl.3;
-        Thu, 16 Jan 2020 10:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=X5psP6nW/Y1xNS1QkA2tl6VWc1qbUvTdajI5ErCGOQg=;
-        b=YZ6F46+0Ql9tiDax2D3pRIqtWb2uH/6clZ/R4Lr6fbgSm0ysX5ou/uyy5BuoC5KZHx
-         8st8/A/fzbPc5MEDM8ka45IeaEdn287jnQ09ulnDDbRU2Z+X+SJB5TGaya8YvZDQZOHo
-         dosE7fMsjYfRWSHJFTE2tfk+zQaKAlXFEsWRPQzjn2hNrk9bFtq/mkpNzaZhl1g/GU1r
-         /+QJBjUZvcHrQ3jOdx7G9oHco9tGCc12KUjRM/QhMKCAPh/G07H1B7cSxvYrsikb5slG
-         vuDOE2v9862YneE/V0EEIreA/AdnAlOtO3CsJiZ5ZnNjMhfQbY7dKZH2ZsZ4jo9fb65f
-         nbaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=X5psP6nW/Y1xNS1QkA2tl6VWc1qbUvTdajI5ErCGOQg=;
-        b=mmkwYGlsmoQcb6LyDk7pU17YWhomuo+9MwJIoTvwwdL3ygeov+ZAbMRUVze8p6nzAh
-         nu6PLm82nCxlNYN9uJalTPRyi/eFgxHq4IeriAQIxj/AJttAskOanqucUxNtta++Mx8W
-         y/YXHZsPygqIbZibOQXuIQRK+Ky9Ou0FGLTN06yBduGagIdLVhWcxBw08LKJLXERe113
-         cTlXE++xyHfOrICcXyeCssItK21dFkvKB7+G8I6zaDLt+q+BeUGDNoYdE59Bo9EzbsGI
-         BzqNMHkHLADjeVBrcdoF7eUNhW3npcsaNmBITRB2BLEsgipSdeY/c+6I5+VfwSN8WIeZ
-         f3qw==
-X-Gm-Message-State: APjAAAWRG4zY8xicW3o5o5fGkitJVhemICSUOcYMrTyrxd1nU3rWO3Kh
-        zPMlrsIQuqDqv46RIUn6jZoP3OB3/8uvOkyvAPs=
-X-Google-Smtp-Source: APXvYqwzM3eLifLjAwpflD/TvQsrWRZ8GO/WliSVFamg0MQXjTAHinaBTtjRPHfbzbRCU0WVklRUjmr9Sw4Bcdol86I=
-X-Received: by 2002:ad4:4e34:: with SMTP id dm20mr4141595qvb.163.1579201015134;
- Thu, 16 Jan 2020 10:56:55 -0800 (PST)
+        Thu, 16 Jan 2020 14:00:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35986 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388481AbgAPRGJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:06:09 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A403122522;
+        Thu, 16 Jan 2020 17:06:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579194368;
+        bh=DIN3t0CL3qc9oQivN4pyYzvvL2OYzqK+JGu7m+2wO8M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ffdNfVSH0xKwPk6evCnL/w9ZxtSx4/AI3Hqy3ZTrzqX+X3CFKC4MxxtbJV+mqiFma
+         4ITk3wIOvaSNXh7ZAzfBruALNB4013PNaOIz77zzrHsuSmmKVbD2oswda2mAmLCjOI
+         NMG7pLNhuE+S+vtSxLCvUTmlicf5f60j3LW+XdHE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 302/671] selftests/ipc: Fix msgque compiler warnings
+Date:   Thu, 16 Jan 2020 11:59:00 -0500
+Message-Id: <20200116170509.12787-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <157918093154.1357254.7616059374996162336.stgit@toke.dk> <157918093501.1357254.2594464485570114583.stgit@toke.dk>
-In-Reply-To: <157918093501.1357254.2594464485570114583.stgit@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 16 Jan 2020 10:56:43 -0800
-Message-ID: <CAEf4Bzb2NYxCG69s1f9NzFbLr+ZO6-ZWYyFGvFJFM_HUOX5YLA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 03/11] selftests: Pass VMLINUX_BTF to
- runqslower Makefile
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 5:22 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->
-> Add a VMLINUX_BTF variable with the locally-built path when calling the
-> runqslower Makefile from selftests. This makes sure a simple 'make'
-> invocation in the selftests dir works even when there is no BTF informati=
-on
-> for the running kernel. Because of the previous changes to the runqslower
-> Makefile, if no locally-built vmlinux file exists, the wildcard search wi=
-ll
-> fall back to the pre-defined paths (and error out if they don't exist).
->
-> Fixes: 3a0d3092a4ed ("selftests/bpf: Build runqslower from selftests")
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> ---
->  tools/testing/selftests/bpf/Makefile |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 246d09ffb296..30d0e7a813d2 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -127,7 +127,7 @@ $(OUTPUT)/test_stub.o: test_stub.c
->  .PHONY: $(OUTPUT)/runqslower
->  $(OUTPUT)/runqslower: force
->         $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower      =
-     \
-> -                   OUTPUT=3D$(CURDIR)/tools/
-> +                   OUTPUT=3D$(CURDIR)/tools/ VMLINUX_BTF=3D$(abspath ../=
-../../../vmlinux)
+From: Kees Cook <keescook@chromium.org>
 
-we can do "first match" wildcard trick here instead
+[ Upstream commit a147faa96f832f76e772b1e448e94ea84c774081 ]
 
->
->  BPFOBJ :=3D $(OUTPUT)/libbpf.a
->
->
+This fixes the various compiler warnings when building the msgque
+selftest. The primary change is using sys/msg.h instead of linux/msg.h
+directly to gain the API declarations.
+
+Fixes: 3a665531a3b7 ("selftests: IPC message queue copy feature test")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/ipc/msgque.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
+index dac927e82336..4c156aeab6b8 100644
+--- a/tools/testing/selftests/ipc/msgque.c
++++ b/tools/testing/selftests/ipc/msgque.c
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <linux/msg.h>
++#include <sys/msg.h>
+ #include <fcntl.h>
+ 
+ #include "../kselftest.h"
+@@ -73,7 +74,7 @@ int restore_queue(struct msgque_data *msgque)
+ 	return 0;
+ 
+ destroy:
+-	if (msgctl(id, IPC_RMID, 0))
++	if (msgctl(id, IPC_RMID, NULL))
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 	return ret;
+ }
+@@ -120,7 +121,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
+ 
+ 	ret = 0;
+ err:
+-	if (msgctl(msgque->msq_id, IPC_RMID, 0)) {
++	if (msgctl(msgque->msq_id, IPC_RMID, NULL)) {
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 		return -errno;
+ 	}
+@@ -129,7 +130,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
+ 
+ int dump_queue(struct msgque_data *msgque)
+ {
+-	struct msqid64_ds ds;
++	struct msqid_ds ds;
+ 	int kern_id;
+ 	int i, ret;
+ 
+@@ -245,7 +246,7 @@ int main(int argc, char **argv)
+ 	return ksft_exit_pass();
+ 
+ err_destroy:
+-	if (msgctl(msgque.msq_id, IPC_RMID, 0)) {
++	if (msgctl(msgque.msq_id, IPC_RMID, NULL)) {
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 		return ksft_exit_fail();
+ 	}
+-- 
+2.20.1
+
