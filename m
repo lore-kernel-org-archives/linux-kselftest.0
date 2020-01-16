@@ -2,83 +2,99 @@ Return-Path: <SRS0=Wk6r=3F=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33C17C33CAF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9356BC33CAF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 20:13:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07BE72072B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 19:31:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5AD48206D9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jan 2020 20:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1579205592;
+	bh=fPP11jfjDsjW6JkTbSPKOQE44w8JcAdCqd6Zok8K0Rk=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=jfov20DrEFt9d5fLlwwgNZYUJE0QpJ1Dkqr5mrFbjiNefKn0h/JpCuQoUSjIY/wH1
+	 9VEZw3hNskEnj5yVQi+w4LZb0Pgh/Il0jJOzfYvHcwskIhDrWyBICQ2mzgqQoApSQj
+	 lmkMJr8AVL/Kmec/CdAI1OVw6SbzEtpprSKzGhPI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730720AbgAPTbm (ORCPT
+        id S2387540AbgAPUNM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jan 2020 14:31:42 -0500
-Received: from mga01.intel.com ([192.55.52.88]:13285 "EHLO mga01.intel.com"
+        Thu, 16 Jan 2020 15:13:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35612 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730712AbgAPTbm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 14:31:42 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 11:31:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,327,1574150400"; 
-   d="scan'208";a="373431363"
-Received: from romley-ivt3.sc.intel.com ([172.25.110.60])
-  by orsmga004.jf.intel.com with ESMTP; 16 Jan 2020 11:31:41 -0800
-Date:   Thu, 16 Jan 2020 11:42:23 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Moger, Babu" <Babu.Moger@amd.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        x86 <x86@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        id S1730031AbgAPUNL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 15:13:11 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B3CB20663;
+        Thu, 16 Jan 2020 20:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579205590;
+        bh=fPP11jfjDsjW6JkTbSPKOQE44w8JcAdCqd6Zok8K0Rk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=MjYBJTb4mO0VQE47tEHcptW+/xfnm8QuiiE8Z1Ru88f4hTrfdiYh7WnjYvvbx1mrD
+         03v48LZXueLLw5+ZWjTSx0oX9S0Mswd+RSAynxTUcewAeCLgOEO6SeNkGMsUrEr/Qb
+         vAKYYdmQ4EF+NCi+ruEEaqhu6rLxIZKSah6Laa1U=
+Subject: Re: [PATCH][next] selftests: fix spelling mistake "chainged" ->
+ "chained"
+To:     Colin King <colin.king@canonical.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v9 00/13] selftests/resctrl: Add resctrl selftest
-Message-ID: <20200116194222.GB51626@romley-ivt3.sc.intel.com>
-References: <1576535207-2417-1-git-send-email-fenghua.yu@intel.com>
- <7aacc3e8-4072-c6b9-5d0f-f687a40ad315@amd.com>
- <CY4PR12MB1574ACDEE30CDCD8113CECA795390@CY4PR12MB1574.namprd12.prod.outlook.com>
- <20200115211749.GA51626@romley-ivt3.sc.intel.com>
- <87k15sxu3k.fsf@nanos.tec.linutronix.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20191210112455.171482-1-colin.king@canonical.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <2a02d10f-2ae1-acfc-d5c3-fe49dee9cba3@kernel.org>
+Date:   Thu, 16 Jan 2020 13:13:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k15sxu3k.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20191210112455.171482-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 10:55:43PM +0100, Thomas Gleixner wrote:
-> Fenghua Yu <fenghua.yu@intel.com> writes:
-> >
-> > Hi, Boris, Thomas, Ingo, et al,
-> >
-> > Any comment on this patch set?
+On 12/10/19 4:24 AM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> No objections from my side, but you forgot to CC the relevant
-> maintainer/mailinglist for tools/testing/selftests/. CC'ed now.
+> There is a spelling mistake in a literal string, fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>   tools/testing/selftests/openat2/resolve_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/testing/selftests/openat2/resolve_test.c
+> index 7a94b1da8e7b..bbafad440893 100644
+> --- a/tools/testing/selftests/openat2/resolve_test.c
+> +++ b/tools/testing/selftests/openat2/resolve_test.c
+> @@ -230,7 +230,7 @@ void test_openat2_opath_tests(void)
+>   		{ .name = "[in_root] garbage link to /root",
+>   		  .path = "cheeky/garbageself",	.how.resolve = RESOLVE_IN_ROOT,
+>   		  .out.path = "root",		.pass = true },
+> -		{ .name = "[in_root] chainged garbage links to /root",
+> +		{ .name = "[in_root] chained garbage links to /root",
+>   		  .path = "abscheeky/garbageself", .how.resolve = RESOLVE_IN_ROOT,
+>   		  .out.path = "root",		.pass = true },
+>   		{ .name = "[in_root] relative path to 'root'",
+> 
 
-Thank you for your comments, Thomas!
+It didn't apply to linux-kselftest next
 
-Hi, Shuah,
+If this is going through opennat2 tree then,
 
-Do you want me to resend the v9 resctrl selftest patches to you and
-linux-kselftest?
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-This repository has the v9 patches:
-git://github.com/fyu1/linux resctrl_selftest
+If not I can this for 5.6-rc2
 
-Thanks.
-
--Fenghua
+thanks,
+-- Shuah
