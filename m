@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C4DC33CBA
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 13:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4477C33CB6
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 13:43:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B506020728
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 13:37:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9879620842
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 13:43:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YMfpadaZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GyKF/JCK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbgAQNhm (ORCPT
+        id S1728708AbgAQNnC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Jan 2020 08:37:42 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:50879 "EHLO
+        Fri, 17 Jan 2020 08:43:02 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:43778 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727126AbgAQNgo (ORCPT
+        with ESMTP id S1726566AbgAQNnB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 08:36:44 -0500
+        Fri, 17 Jan 2020 08:43:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579268203;
+        s=mimecast20190719; t=1579268580;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oVICxkwYE819T09jumS9b6kqZZVW9alGabNhw2Byv4c=;
-        b=YMfpadaZgMdxUZqJQ2qP5X2mbfOfxXrEdMtLIhuSny7Blnuzxdj3zeakBnQd/Z5fmBcx++
-        tJt+mf8B2L65iBT09ubkyqwk2yI+TYV9LOx0Z5A6rxM+AS4HdOyCq6uGhLJGvZ+OIlXLEx
-        XtyhCMosgSVBIgQD0RQEk1rHfeF2zlU=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-403-_N2igFNjM9a1rqgdOYIReA-1; Fri, 17 Jan 2020 08:36:41 -0500
-X-MC-Unique: _N2igFNjM9a1rqgdOYIReA-1
-Received: by mail-lf1-f69.google.com with SMTP id t8so4356923lfc.21
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 05:36:41 -0800 (PST)
+        bh=xMnL4G6jmU2OaNfU4L/KK5+b9+BSnKw6V4a/Ssf8Fhg=;
+        b=GyKF/JCKqQ/n1m+wTTamrfY6pkFwl5w1dI3bH2tduNJRHHHvU82T0yL31iR6JChHTOgEgW
+        ujZurFUNOxcMmGtFRoEJYXu9qKgFStw2jcMDrTo5g+Ua9ZTYKcUoArs6ensvlaCTA75Lde
+        FeSlxz3bgK/bdko37zN6gYUOvusdhf8=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-49-jlLmOeJCMkuMMV-AKu0C5Q-1; Fri, 17 Jan 2020 08:42:59 -0500
+X-MC-Unique: jlLmOeJCMkuMMV-AKu0C5Q-1
+Received: by mail-lf1-f70.google.com with SMTP id t3so4383028lfp.15
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 05:42:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=oVICxkwYE819T09jumS9b6kqZZVW9alGabNhw2Byv4c=;
-        b=gBKrQjWJtd+f/ls8T3n/CjwsHs8+HeQGPMkCsJsXDJwdu4GPxEKlMok571jjPrT2ux
-         39bqLOMjZZFBj9eMuxqFjMGMvrcPT+tERQu7UW7+Gn4OfU7bvsyyMh4zk1LXHsNn6zRt
-         71HKiUqqm1QSljXbvOGEHoA95A/MsrJAFPg4vm4twMa+Ry+3oTaHqvWB+syyIerAeYVI
-         7laW2DJkVsbmHljfbwGLcS2sFC5rgeR2jLe6IxIS4J2mF7peQdArhxgEkdhkwqHYsmQU
-         UP8bVW0t1p2jT5u+plP84giwoSQoz4YTZhIBUWxQ9bOd+UVtK5w1ahkFTDDTkEg2fPQa
-         LwEg==
-X-Gm-Message-State: APjAAAW68QYknq7uMFU7fmR+vsS6LCtPrzIhr08Mh9Zz5sdJSvuDg6Ei
-        A5TkYxrt4eUQumajTFwWg8sIHqrtQyqVmw4G7C2Q/0aKgCsBEYnw9q2/KRfTJXJFKQ0fqdClecA
-        WqmKHcqLiehW0/E7NfsNJ1+w/atY+
-X-Received: by 2002:a2e:3504:: with SMTP id z4mr5730211ljz.273.1579268199913;
-        Fri, 17 Jan 2020 05:36:39 -0800 (PST)
-X-Google-Smtp-Source: APXvYqylN+0GVMNBaohq3jT5bbBFBEpPomA9QCEg65LVnS53cMW7Nhrc9Od5tPVFSrsyp0I8uvYr0A==
-X-Received: by 2002:a2e:3504:: with SMTP id z4mr5730180ljz.273.1579268199696;
-        Fri, 17 Jan 2020 05:36:39 -0800 (PST)
+        bh=xMnL4G6jmU2OaNfU4L/KK5+b9+BSnKw6V4a/Ssf8Fhg=;
+        b=l4tz2kyD0Vip/2Mw6ZajrldYz+WgQJpuBo1o2cVfFkioGAWvSdXSzX34mMuWEcdbym
+         vwGYxI0fEZAW1FtwCGO8yuokAN+nbobCVH+dp7bBCNMAcFOvIs0hy8CCdMMJnVfXN6E5
+         JZwkzz/FUgbZsdXKio3L/eVjUGDuTMR+CQd5T6Y3mUjBIabFCFONhzxCW7W8wQQOBObd
+         hbcL+3s39w0LQbL1p6ZeUw3lFWokteV7E9GmSggh1PUfBSqVKKLoKfmM3CzHQrgX7ZHl
+         5r1Fw6Rmz/qx0uBtKjwIkC6+rWx4ML0zy9J3U6VeK7N+tIf8NyO2XLKRUpr9cmhYP/f6
+         rmRQ==
+X-Gm-Message-State: APjAAAVJk2CfooprWGhlevMwlgIXeKhAi7bHrRk8PsUnUnQblilZUNCJ
+        Y2o6OftwPhWqkNTQzIPYnLnziAYZVpo7Jyldztxjeh8w4gonwayuUQl+qoRdUG6Gr9lwFWJlhoJ
+        cgOuK59TVo2kTq2pBShvc5oF2tJRB
+X-Received: by 2002:a2e:b4f6:: with SMTP id s22mr5597186ljm.218.1579268577930;
+        Fri, 17 Jan 2020 05:42:57 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzt3wfXgxOpp/EjUy4KtlwNoojyX+ef3VB3MZN9TMR6dcXGwDFGyY6GF7+SfD2lUiI01/Gy9w==
+X-Received: by 2002:a2e:b4f6:: with SMTP id s22mr5597161ljm.218.1579268577656;
+        Fri, 17 Jan 2020 05:42:57 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id w1sm11999480lfe.96.2020.01.17.05.36.38
+        by smtp.gmail.com with ESMTPSA id i13sm12376914ljg.89.2020.01.17.05.42.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 05:36:39 -0800 (PST)
+        Fri, 17 Jan 2020 05:42:56 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 317BF1804D7; Fri, 17 Jan 2020 14:36:38 +0100 (CET)
-Subject: [PATCH bpf-next v4 01/10] samples/bpf: Don't try to remove user's
- homedir on clean
+        id F09801804D8; Fri, 17 Jan 2020 14:36:47 +0100 (CET)
+Subject: [PATCH bpf-next v4 10/10] tools/runqslower: Remove tools/lib/bpf from
+ include path
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -89,8 +89,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Date:   Fri, 17 Jan 2020 14:36:38 +0100
-Message-ID: <157926819814.1555735.13181807141455624178.stgit@toke.dk>
+Date:   Fri, 17 Jan 2020 14:36:47 +0100
+Message-ID: <157926820790.1555735.1100844709479532083.stgit@toke.dk>
 In-Reply-To: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
 References: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
 User-Agent: StGit/0.21
@@ -104,34 +104,27 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-The 'clean' rule in the samples/bpf Makefile tries to remove backup
-files (ending in ~). However, if no such files exist, it will instead try
-to remove the user's home directory. While the attempt is mostly harmless,
-it does lead to a somewhat scary warning like this:
+Since we are now consistently using the bpf/ prefix on #include directives,
+we don't need to include tools/lib/bpf in the include path. Remove it to
+make sure we don't inadvertently introduce new includes without the prefix.
 
-rm: cannot remove '~': Is a directory
-
-Fix this by using find instead of shell expansion to locate any actual
-backup files that need to be removed.
-
-Fixes: b62a796c109c ("samples/bpf: allow make to be run from samples/bpf/ directory")
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- samples/bpf/Makefile |    2 +-
+ tools/bpf/runqslower/Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 5b89c0370f33..f86d713a17a5 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -254,7 +254,7 @@ all:
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 9f022f7f2593..0cac6f0ddccf 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -5,7 +5,7 @@ LLC := llc
+ LLVM_STRIP := llvm-strip
+ DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+-INCLUDES := -I$(OUTPUT) -I$(abspath ../../lib) -I$(abspath ../../lib/bpf)
++INCLUDES := -I$(OUTPUT) -I$(abspath ../../lib)
+ LIBBPF_SRC := $(abspath ../../lib/bpf)
+ CFLAGS := -g -Wall
  
- clean:
- 	$(MAKE) -C ../../ M=$(CURDIR) clean
--	@rm -f *~
-+	@find $(CURDIR) -type f -name '*~' -delete
- 
- $(LIBBPF): FORCE
- # Fix up variables inherited from Kbuild that tools/ build system won't like
 
