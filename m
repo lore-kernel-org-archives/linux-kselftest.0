@@ -2,131 +2,179 @@ Return-Path: <SRS0=WY7V=3G=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 215E1C33CB7
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 12:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABF28C33CB1
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 13:36:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0322A24685
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 12:51:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83EED21582
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 13:36:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tvsc6oLE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbgAQMvR (ORCPT
+        id S1728792AbgAQNgu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Jan 2020 07:51:17 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29260 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727009AbgAQMvR (ORCPT
+        Fri, 17 Jan 2020 08:36:50 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23952 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728721AbgAQNgs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 07:51:17 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HCm1Zu078273
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:51:16 -0500
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xk0qrc7gj-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:51:15 -0500
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Fri, 17 Jan 2020 12:51:13 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 17 Jan 2020 12:51:08 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HCp7d529557168
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 12:51:07 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 46E135205A;
-        Fri, 17 Jan 2020 12:51:07 +0000 (GMT)
-Received: from fir03.in.ibm.com (unknown [9.121.59.65])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id DEC955204E;
-        Fri, 17 Jan 2020 12:51:04 +0000 (GMT)
-From:   Sandipan Das <sandipan@linux.ibm.com>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
-        dave.hansen@intel.com, x86@kernel.org, linuxram@us.ibm.com,
-        mhocko@kernel.org, linux-mm@kvack.org, mingo@redhat.com,
-        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
-        msuchanek@suse.de, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v16 23/23] selftests: vm: pkeys: Use the correct page size on powerpc
-Date:   Fri, 17 Jan 2020 18:20:02 +0530
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
-References: <cover.1579265066.git.sandipan@linux.ibm.com>
-In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
-References: <cover.1579265066.git.sandipan@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 20011712-0020-0000-0000-000003A195B8
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011712-0021-0000-0000-000021F918F9
-Message-Id: <061b9003ae2eeece0eddb02a025d1b4da138ce3c.1579265066.git.sandipan@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-17_03:2020-01-16,2020-01-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-2001170102
+        Fri, 17 Jan 2020 08:36:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579268207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OknDVKXPzEk2i0iYFrlDPLSC26NRFKasACpxW1z9e2E=;
+        b=Tvsc6oLEwF1TzW4q8w0k26zpnodHO9+f792Le57DHUC/4hPW80csv8iFjzU1U5hjSsWASu
+        qrzFn/BkO18+YHTeZCSjPbyEtf0X7SbtEUzY6oaPrGvJhtlkmyVY2F5/Az/TurlPLpzWV7
+        CFCX8zErO1eAhi+SdIpzmLsKfE5o/6k=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-234-_XngBou3OXijucZsXQQJ8A-1; Fri, 17 Jan 2020 08:36:45 -0500
+X-MC-Unique: _XngBou3OXijucZsXQQJ8A-1
+Received: by mail-lf1-f69.google.com with SMTP id q16so4369015lfa.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 05:36:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=OknDVKXPzEk2i0iYFrlDPLSC26NRFKasACpxW1z9e2E=;
+        b=Z/C6mMMP8pcoT9mL0yepqAL+xRTXHKBXQVFHyDTnvf1UFgOe7Re8PGTT1Jty1P6XLP
+         rVZP0AJ3indPfWovjrn6VCG0cU0WFDCk2+6z8oeyRB+7EtYn3Y06QQQeZqpO/2aevfGg
+         Q2gagLWxHTsRDFCYZ9NFDcN5y63OHjMutUpzCW7vPE4VrJAO2Y4u7/PTTM1tbaT55SKJ
+         lC9MvR+fUgH/eEGPYA/Dd7ueFSPZxgTLQDi073mEuBzAOxT6AyrmrqxuFjSUXyWEEeac
+         RHbY8eadMOCcX4Ua1fRjc0pwuXE0OFBTiozeEw7yjGU+krCUrgXd9TENoa1bkeKNb8GJ
+         EiwA==
+X-Gm-Message-State: APjAAAWZ0J3y6l7heFofRo0+LCBZzkM34v//9bIfYOHtv5OjJpyhPG3b
+        wYYgEyqG/KMFyaR4EP89a5drIF1gpHlWZG1XFrHivLbmy0CJxZh+ouQT6Ofp0aMpFWsu4kiY4GE
+        8IV7E0Nlp1UiCGRbZx4f/14NE30X5
+X-Received: by 2002:ac2:5c4a:: with SMTP id s10mr5379654lfp.88.1579268204093;
+        Fri, 17 Jan 2020 05:36:44 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyusVvlyEVdd3oS7WZRleumOv0TA50N1Au6MBvbWFLhChF/RcwKRx+cbLE29JwaFPZjnu+u7Q==
+X-Received: by 2002:ac2:5c4a:: with SMTP id s10mr5379639lfp.88.1579268203914;
+        Fri, 17 Jan 2020 05:36:43 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id l64sm12147018lfd.30.2020.01.17.05.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 05:36:43 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 5BD791804D6; Fri, 17 Jan 2020 14:36:41 +0100 (CET)
+Subject: [PATCH bpf-next v4 04/10] tools/runqslower: Use consistent include
+ paths for libbpf
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Date:   Fri, 17 Jan 2020 14:36:41 +0100
+Message-ID: <157926820131.1555735.1177228853838027248.stgit@toke.dk>
+In-Reply-To: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
+References: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
+User-Agent: StGit/0.21
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Both 4K and 64K pages are supported on powerpc. Parts of
-the selftest code perform alignment computations based on
-the PAGE_SIZE macro which is currently hardcoded to 64K
-for powerpc. This causes some test failures on kernels
-configured with 4K page size.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-In some cases, we need to enforce function alignment to
-page size. Since this can only be done at build time,
-64K is used as the alignment factor as that ensures 4K
-alignment as well.
+Fix the runqslower tool to include libbpf header files with the bpf/
+prefix, to be consistent with external users of the library. Also ensure
+that all includes of exported libbpf header files (those that are exported
+on 'make install' of the library) use bracketed includes instead of quoted.
 
-cc: Dave Hansen <dave.hansen@intel.com>
-cc: Florian Weimer <fweimer@redhat.com>
-cc: Ram Pai <linuxram@us.ibm.com>
-Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
+To not break the build, keep the old include path until everything has been
+changed to the new one; a subsequent patch will remove that.
+
+Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken from selftests dir")
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/testing/selftests/vm/pkey-powerpc.h    | 2 +-
- tools/testing/selftests/vm/protection_keys.c | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ tools/bpf/runqslower/Makefile         |    5 +++--
+ tools/bpf/runqslower/runqslower.bpf.c |    2 +-
+ tools/bpf/runqslower/runqslower.c     |    4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/pkey-powerpc.h b/tools/testing/selftests/vm/pkey-powerpc.h
-index 1753b01882a7..7435bf30298d 100644
---- a/tools/testing/selftests/vm/pkey-powerpc.h
-+++ b/tools/testing/selftests/vm/pkey-powerpc.h
-@@ -36,7 +36,7 @@
- 					     pkey-31 and exec-only key */
- #define PKEY_BITS_PER_PKEY	2
- #define HPAGE_SIZE		(1UL << 24)
--#define PAGE_SIZE		(1UL << 16)
-+#define PAGE_SIZE		sysconf(_SC_PAGESIZE)
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index b62fc9646c39..9f022f7f2593 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -5,6 +5,7 @@ LLC := llc
+ LLVM_STRIP := llvm-strip
+ DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
++INCLUDES := -I$(OUTPUT) -I$(abspath ../../lib) -I$(abspath ../../lib/bpf)
+ LIBBPF_SRC := $(abspath ../../lib/bpf)
+ CFLAGS := -g -Wall
  
- static inline u32 pkey_bit_position(int pkey)
- {
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 9e04bfbbd7e6..36fe219c8099 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -145,7 +145,12 @@ void abort_hooks(void)
-  * will then fault, which makes sure that the fault code handles
-  * execute-only memory properly.
-  */
-+#ifdef __powerpc64__
-+/* This way, both 4K and 64K alignment are maintained */
-+__attribute__((__aligned__(65536)))
-+#else
- __attribute__((__aligned__(PAGE_SIZE)))
-+#endif
- void lots_o_noops_around_write(int *write_to_me)
- {
- 	dprintf3("running %s()\n", __func__);
--- 
-2.17.1
+@@ -51,13 +52,13 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+ 
+ $(OUTPUT)/%.bpf.o: %.bpf.c $(OUTPUT)/libbpf.a | $(OUTPUT)
+ 	$(call msg,BPF,$@)
+-	$(Q)$(CLANG) -g -O2 -target bpf -I$(OUTPUT) -I$(LIBBPF_SRC)	      \
++	$(Q)$(CLANG) -g -O2 -target bpf $(INCLUDES)	      \
+ 		 -c $(filter %.c,$^) -o $@ &&				      \
+ 	$(LLVM_STRIP) -g $@
+ 
+ $(OUTPUT)/%.o: %.c | $(OUTPUT)
+ 	$(call msg,CC,$@)
+-	$(Q)$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(OUTPUT) -c $(filter %.c,$^) -o $@
++	$(Q)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
+ 
+ $(OUTPUT):
+ 	$(call msg,MKDIR,$@)
+diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
+index 623cce4d37f5..48a39f72fadf 100644
+--- a/tools/bpf/runqslower/runqslower.bpf.c
++++ b/tools/bpf/runqslower/runqslower.bpf.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+ #include "vmlinux.h"
+-#include <bpf_helpers.h>
++#include <bpf/bpf_helpers.h>
+ #include "runqslower.h"
+ 
+ #define TASK_RUNNING 0
+diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
+index 996f0e2c560e..d89715844952 100644
+--- a/tools/bpf/runqslower/runqslower.c
++++ b/tools/bpf/runqslower/runqslower.c
+@@ -6,8 +6,8 @@
+ #include <string.h>
+ #include <sys/resource.h>
+ #include <time.h>
+-#include <libbpf.h>
+-#include <bpf.h>
++#include <bpf/libbpf.h>
++#include <bpf/bpf.h>
+ #include "runqslower.h"
+ #include "runqslower.skel.h"
+ 
 
