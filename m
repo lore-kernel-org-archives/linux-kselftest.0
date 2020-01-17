@@ -6,45 +6,45 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0D10C33CB3
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 12:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18B10C33CB1
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 12:50:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7EE8A2467A
+	by mail.kernel.org (Postfix) with ESMTP id EDF2D24653
 	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jan 2020 12:50:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbgAQMu6 (ORCPT
+        id S1726890AbgAQMu6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Fri, 17 Jan 2020 07:50:58 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4958 "EHLO
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30930 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726506AbgAQMu6 (ORCPT
+        by vger.kernel.org with ESMTP id S1726871AbgAQMu6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 17 Jan 2020 07:50:58 -0500
 Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HClEK3025298
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:50:56 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xk0qrvbmc-1
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HClEdI025345
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:50:57 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xk0qrvbpj-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:50:51 -0500
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:50:56 -0500
 Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Fri, 17 Jan 2020 12:50:49 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Fri, 17 Jan 2020 12:50:55 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 17 Jan 2020 12:50:44 -0000
+        Fri, 17 Jan 2020 12:50:50 -0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HCohhP52691022
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HComeG36176110
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 12:50:43 GMT
+        Fri, 17 Jan 2020 12:50:48 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 433DC5204E;
-        Fri, 17 Jan 2020 12:50:43 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 938A852059;
+        Fri, 17 Jan 2020 12:50:48 +0000 (GMT)
 Received: from fir03.in.ibm.com (unknown [9.121.59.65])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AF0415204F;
-        Fri, 17 Jan 2020 12:50:40 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2D98352054;
+        Fri, 17 Jan 2020 12:50:46 +0000 (GMT)
 From:   Sandipan Das <sandipan@linux.ibm.com>
 To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
@@ -52,25 +52,24 @@ Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
         mhocko@kernel.org, linux-mm@kvack.org, mingo@redhat.com,
         aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
         msuchanek@suse.de, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org,
-        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
-Subject: [PATCH v16 14/23] selftests/vm/pkeys: Fix number of reserved powerpc pkeys
-Date:   Fri, 17 Jan 2020 18:19:53 +0530
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v16 16/23] selftests/vm/pkeys: Improve checks to determine pkey support
+Date:   Fri, 17 Jan 2020 18:19:55 +0530
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
 References: <cover.1579265066.git.sandipan@linux.ibm.com>
 In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
 References: <cover.1579265066.git.sandipan@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 20011712-4275-0000-0000-000003987CE0
+x-cbid: 20011712-0016-0000-0000-000002DE4385
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011712-4276-0000-0000-000038AC7E42
-Message-Id: <2ef4b0cdc95953235d3e5687d98da8a3a074aaf5.1579265066.git.sandipan@linux.ibm.com>
+x-cbparentid: 20011712-0017-0000-0000-00003340DF61
+Message-Id: <0dfcb9e184190bc9f3928031113085e0cd28d844.1579265066.git.sandipan@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-17_03:2020-01-16,2020-01-17 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- malwarescore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=828
+ priorityscore=1501 suspectscore=2 impostorscore=0 adultscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-2001170102
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -78,65 +77,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+From: Ram Pai <linuxram@us.ibm.com>
 
-The number of reserved pkeys in a PowerNV environment is
-different from that on PowerVM or KVM.
+For the pkeys subsystem to work, both the CPU and the
+kernel need to have support. So, additionally check if
+the kernel supports pkeys apart from the CPU feature
+checks.
 
-Tested on PowerVM and PowerNV environments.
-
-Signed-off-by: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+cc: Dave Hansen <dave.hansen@intel.com>
+cc: Florian Weimer <fweimer@redhat.com>
 Signed-off-by: Ram Pai <linuxram@us.ibm.com>
 Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
 ---
- tools/testing/selftests/vm/pkey-powerpc.h | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ tools/testing/selftests/vm/pkey-helpers.h    | 30 ++++++++++++++++++++
+ tools/testing/selftests/vm/pkey-powerpc.h    |  3 +-
+ tools/testing/selftests/vm/pkey-x86.h        |  2 +-
+ tools/testing/selftests/vm/protection_keys.c |  7 +++--
+ 4 files changed, 37 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
+index ec3f87d53b7d..ac9076136fc8 100644
+--- a/tools/testing/selftests/vm/pkey-helpers.h
++++ b/tools/testing/selftests/vm/pkey-helpers.h
+@@ -76,6 +76,8 @@ extern void abort_hooks(void);
+ 
+ __attribute__((noinline)) int read_ptr(int *ptr);
+ void expected_pkey_fault(int pkey);
++int sys_pkey_alloc(unsigned long flags, unsigned long init_val);
++int sys_pkey_free(unsigned long pkey);
+ 
+ #if defined(__i386__) || defined(__x86_64__) /* arch */
+ #include "pkey-x86.h"
+@@ -186,4 +188,32 @@ static inline u32 *siginfo_get_pkey_ptr(siginfo_t *si)
+ #endif
+ }
+ 
++static inline int kernel_has_pkeys(void)
++{
++	/* try allocating a key and see if it succeeds */
++	int ret = sys_pkey_alloc(0, 0);
++	if (ret <= 0) {
++		return 0;
++	}
++	sys_pkey_free(ret);
++	return 1;
++}
++
++static inline int is_pkeys_supported(void)
++{
++	/* check if the cpu supports pkeys */
++	if (!cpu_has_pkeys()) {
++		dprintf1("SKIP: %s: no CPU support\n", __func__);
++		return 0;
++	}
++
++	/* check if the kernel supports pkeys */
++	if (!kernel_has_pkeys()) {
++		dprintf1("SKIP: %s: no kernel support\n", __func__);
++		return 0;
++	}
++
++	return 1;
++}
++
+ #endif /* _PKEYS_HELPER_H */
 diff --git a/tools/testing/selftests/vm/pkey-powerpc.h b/tools/testing/selftests/vm/pkey-powerpc.h
-index f4599a35d2a9..eaced8c198a2 100644
+index eaced8c198a2..a5e5157c4f7e 100644
 --- a/tools/testing/selftests/vm/pkey-powerpc.h
 +++ b/tools/testing/selftests/vm/pkey-powerpc.h
-@@ -28,7 +28,10 @@
- #define NR_RESERVED_PKEYS_4K	27 /* pkey-0, pkey-1, exec-only-pkey
- 				      and 24 other keys that cannot be
- 				      represented in the PTE */
--#define NR_RESERVED_PKEYS_64K	3  /* pkey-0, pkey-1 and exec-only-pkey */
-+#define NR_RESERVED_PKEYS_64K_3KEYS	3 /* PowerNV and KVM: pkey-0,
-+					     pkey-1 and exec-only key */
-+#define NR_RESERVED_PKEYS_64K_4KEYS	4 /* PowerVM: pkey-0, pkey-1,
-+					     pkey-31 and exec-only key */
- #define PKEY_BITS_PER_PKEY	2
- #define HPAGE_SIZE		(1UL << 24)
- #define PAGE_SIZE		(1UL << 16)
-@@ -65,12 +68,27 @@ static inline int cpu_has_pku(void)
+@@ -63,8 +63,9 @@ static inline void __write_pkey_reg(u64 pkey_reg)
+ 			__func__, __read_pkey_reg(), pkey_reg);
+ }
+ 
+-static inline int cpu_has_pku(void)
++static inline int cpu_has_pkeys(void)
+ {
++	/* No simple way to determine this */
  	return 1;
  }
  
-+static inline bool arch_is_powervm()
-+{
-+	struct stat buf;
-+
-+	if ((stat("/sys/firmware/devicetree/base/ibm,partition-name", &buf) == 0) &&
-+	    (stat("/sys/firmware/devicetree/base/hmc-managed?", &buf) == 0) &&
-+	    (stat("/sys/firmware/devicetree/base/chosen/qemu,graphic-width", &buf) == -1) )
-+		return true;
-+
-+	return false;
-+}
-+
- static inline int get_arch_reserved_keys(void)
- {
- 	if (sysconf(_SC_PAGESIZE) == 4096)
- 		return NR_RESERVED_PKEYS_4K;
- 	else
--		return NR_RESERVED_PKEYS_64K;
-+		if (arch_is_powervm())
-+			return NR_RESERVED_PKEYS_64K_4KEYS;
-+		else
-+			return NR_RESERVED_PKEYS_64K_3KEYS;
- }
+diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
+index 296151309a30..207e8c180f39 100644
+--- a/tools/testing/selftests/vm/pkey-x86.h
++++ b/tools/testing/selftests/vm/pkey-x86.h
+@@ -97,7 +97,7 @@ static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
+ #define X86_FEATURE_PKU        (1<<3) /* Protection Keys for Userspace */
+ #define X86_FEATURE_OSPKE      (1<<4) /* OS Protection Keys Enable */
  
- void expect_fault_on_read_execonly_key(void *p1, int pkey)
+-static inline int cpu_has_pku(void)
++static inline int cpu_has_pkeys(void)
+ {
+ 	unsigned int eax;
+ 	unsigned int ebx;
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index a91d11c6a0ec..4a0677e618ac 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -1377,7 +1377,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
+ 	int size = PAGE_SIZE;
+ 	int sret;
+ 
+-	if (cpu_has_pku()) {
++	if (cpu_has_pkeys()) {
+ 		dprintf1("SKIP: %s: no CPU support\n", __func__);
+ 		return;
+ 	}
+@@ -1446,12 +1446,13 @@ void pkey_setup_shadow(void)
+ int main(void)
+ {
+ 	int nr_iterations = 22;
++	int pkeys_supported = is_pkeys_supported();
+ 
+ 	setup_handlers();
+ 
+-	printf("has pku: %d\n", cpu_has_pku());
++	printf("has pkeys: %d\n", pkeys_supported);
+ 
+-	if (!cpu_has_pku()) {
++	if (!pkeys_supported) {
+ 		int size = PAGE_SIZE;
+ 		int *ptr;
+ 
 -- 
 2.17.1
 
