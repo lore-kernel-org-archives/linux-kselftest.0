@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70B31C33CB1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 08:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF48C33CB7
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 08:37:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4F8F820882
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 08:37:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21DED2077C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 08:37:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgATIhK (ORCPT
+        id S1726465AbgATIhV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Jan 2020 03:37:10 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:22958 "EHLO
+        Mon, 20 Jan 2020 03:37:21 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49924 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725872AbgATIhJ (ORCPT
+        by vger.kernel.org with ESMTP id S1726148AbgATIhV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jan 2020 03:37:09 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00K8b0X6181663
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 03:37:09 -0500
+        Mon, 20 Jan 2020 03:37:21 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00K8bBRQ097108
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 03:37:21 -0500
 Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xkxhwp6vu-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xmfyxgm23-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 03:37:08 -0500
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 03:37:20 -0500
 Received: from localhost
         by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Mon, 20 Jan 2020 08:37:03 -0000
+        Mon, 20 Jan 2020 08:37:16 -0000
 Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
         by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 20 Jan 2020 08:36:59 -0000
+        Mon, 20 Jan 2020 08:37:12 -0000
 Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00K8av6n52953102
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00K8bBf651904760
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jan 2020 08:36:57 GMT
+        Mon, 20 Jan 2020 08:37:11 GMT
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89A0311C04C;
-        Mon, 20 Jan 2020 08:36:57 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3C73511C04A;
+        Mon, 20 Jan 2020 08:37:11 +0000 (GMT)
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2599111C04A;
-        Mon, 20 Jan 2020 08:36:55 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id CD47E11C04C;
+        Mon, 20 Jan 2020 08:37:08 +0000 (GMT)
 Received: from fir03.in.ibm.com (unknown [9.121.59.65])
         by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 20 Jan 2020 08:36:54 +0000 (GMT)
+        Mon, 20 Jan 2020 08:37:08 +0000 (GMT)
 From:   Sandipan Das <sandipan@linux.ibm.com>
 To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
@@ -56,99 +56,150 @@ Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
         aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
         msuchanek@suse.de, mpe@ellerman.id.au,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v17 12/24] selftests: vm: pkeys: Use the correct huge page size
-Date:   Mon, 20 Jan 2020 14:06:09 +0530
+Subject: [PATCH v17 17/24] selftests/vm/pkeys: Improve checks to determine pkey support
+Date:   Mon, 20 Jan 2020 14:06:14 +0530
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1579507768.git.sandipan@linux.ibm.com>
 References: <cover.1579507768.git.sandipan@linux.ibm.com>
 In-Reply-To: <cover.1579507768.git.sandipan@linux.ibm.com>
 References: <cover.1579507768.git.sandipan@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 20012008-0008-0000-0000-0000034AFE66
+x-cbid: 20012008-0008-0000-0000-0000034AFE6F
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012008-0009-0000-0000-00004A6B6045
-Message-Id: <e24b5ce670a4731b703ca71b9c4d949145ee06d0.1579507768.git.sandipan@linux.ibm.com>
+x-cbparentid: 20012008-0009-0000-0000-00004A6B604E
+Message-Id: <6e431417c25b60c0c97a5a4d7ac46c1bbd5b103c.1579507768.git.sandipan@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-01-19_08:2020-01-16,2020-01-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- phishscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=2
+ mlxlogscore=836 clxscore=1015 mlxscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-1910280000 definitions=main-2001200077
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The huge page size can vary across architectures. This will
-ensure that the correct huge page size is used when accessing
-the hugetlb controls under sysfs. Instead of using a hardcoded
-page size (i.e. 2MB), this now uses the HPAGE_SIZE macro which
-is arch-specific.
+From: Ram Pai <linuxram@us.ibm.com>
 
+For the pkeys subsystem to work, both the CPU and the
+kernel need to have support. So, additionally check if
+the kernel supports pkeys apart from the CPU feature
+checks.
+
+cc: Dave Hansen <dave.hansen@intel.com>
+cc: Florian Weimer <fweimer@redhat.com>
+Signed-off-by: Ram Pai <linuxram@us.ibm.com>
 Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
 ---
- tools/testing/selftests/vm/protection_keys.c | 23 ++++++++++++++------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ tools/testing/selftests/vm/pkey-helpers.h    | 30 ++++++++++++++++++++
+ tools/testing/selftests/vm/pkey-powerpc.h    |  3 +-
+ tools/testing/selftests/vm/pkey-x86.h        |  2 +-
+ tools/testing/selftests/vm/protection_keys.c |  7 +++--
+ 4 files changed, 37 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 9cc82b65f828..535e464e27e9 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -739,12 +739,15 @@ void *malloc_pkey_anon_huge(long size, int prot, u16 pkey)
+diff --git a/tools/testing/selftests/vm/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
+index 2f4b1eb3a680..59ccdff18214 100644
+--- a/tools/testing/selftests/vm/pkey-helpers.h
++++ b/tools/testing/selftests/vm/pkey-helpers.h
+@@ -76,6 +76,8 @@ extern void abort_hooks(void);
+ 
+ __attribute__((noinline)) int read_ptr(int *ptr);
+ void expected_pkey_fault(int pkey);
++int sys_pkey_alloc(unsigned long flags, unsigned long init_val);
++int sys_pkey_free(unsigned long pkey);
+ 
+ #if defined(__i386__) || defined(__x86_64__) /* arch */
+ #include "pkey-x86.h"
+@@ -186,4 +188,32 @@ static inline u32 *siginfo_get_pkey_ptr(siginfo_t *si)
+ #endif
  }
  
- int hugetlb_setup_ok;
-+#define SYSFS_FMT_NR_HUGE_PAGES "/sys/kernel/mm/hugepages/hugepages-%ldkB/nr_hugepages"
- #define GET_NR_HUGE_PAGES 10
- void setup_hugetlbfs(void)
++static inline int kernel_has_pkeys(void)
++{
++	/* try allocating a key and see if it succeeds */
++	int ret = sys_pkey_alloc(0, 0);
++	if (ret <= 0) {
++		return 0;
++	}
++	sys_pkey_free(ret);
++	return 1;
++}
++
++static inline int is_pkeys_supported(void)
++{
++	/* check if the cpu supports pkeys */
++	if (!cpu_has_pkeys()) {
++		dprintf1("SKIP: %s: no CPU support\n", __func__);
++		return 0;
++	}
++
++	/* check if the kernel supports pkeys */
++	if (!kernel_has_pkeys()) {
++		dprintf1("SKIP: %s: no kernel support\n", __func__);
++		return 0;
++	}
++
++	return 1;
++}
++
+ #endif /* _PKEYS_HELPER_H */
+diff --git a/tools/testing/selftests/vm/pkey-powerpc.h b/tools/testing/selftests/vm/pkey-powerpc.h
+index 319673bbab0b..7d7c3ffafdd9 100644
+--- a/tools/testing/selftests/vm/pkey-powerpc.h
++++ b/tools/testing/selftests/vm/pkey-powerpc.h
+@@ -63,8 +63,9 @@ static inline void __write_pkey_reg(u64 pkey_reg)
+ 			__func__, __read_pkey_reg(), pkey_reg);
+ }
+ 
+-static inline int cpu_has_pku(void)
++static inline int cpu_has_pkeys(void)
  {
- 	int err;
- 	int fd;
--	char buf[] = "123";
-+	char buf[256];
-+	long hpagesz_kb;
-+	long hpagesz_mb;
++	/* No simple way to determine this */
+ 	return 1;
+ }
  
- 	if (geteuid() != 0) {
- 		fprintf(stderr, "WARNING: not run as root, can not do hugetlb test\n");
-@@ -755,11 +758,16 @@ void setup_hugetlbfs(void)
+diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
+index a0c59d4f7af2..6421b846aa16 100644
+--- a/tools/testing/selftests/vm/pkey-x86.h
++++ b/tools/testing/selftests/vm/pkey-x86.h
+@@ -97,7 +97,7 @@ static inline void __cpuid(unsigned int *eax, unsigned int *ebx,
+ #define X86_FEATURE_PKU        (1<<3) /* Protection Keys for Userspace */
+ #define X86_FEATURE_OSPKE      (1<<4) /* OS Protection Keys Enable */
  
- 	/*
- 	 * Now go make sure that we got the pages and that they
--	 * are 2M pages.  Someone might have made 1G the default.
-+	 * are PMD-level pages. Someone might have made PUD-level
-+	 * pages the default.
- 	 */
--	fd = open("/sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages", O_RDONLY);
-+	hpagesz_kb = HPAGE_SIZE / 1024;
-+	hpagesz_mb = hpagesz_kb / 1024;
-+	sprintf(buf, SYSFS_FMT_NR_HUGE_PAGES, hpagesz_kb);
-+	fd = open(buf, O_RDONLY);
- 	if (fd < 0) {
--		perror("opening sysfs 2M hugetlb config");
-+		fprintf(stderr, "opening sysfs %ldM hugetlb config: %s\n",
-+			hpagesz_mb, strerror(errno));
+-static inline int cpu_has_pku(void)
++static inline int cpu_has_pkeys(void)
+ {
+ 	unsigned int eax;
+ 	unsigned int ebx;
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index 5fcbbc525364..95f173049f43 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -1378,7 +1378,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
+ 	int size = PAGE_SIZE;
+ 	int sret;
+ 
+-	if (cpu_has_pku()) {
++	if (cpu_has_pkeys()) {
+ 		dprintf1("SKIP: %s: no CPU support\n", __func__);
  		return;
  	}
+@@ -1447,12 +1447,13 @@ void pkey_setup_shadow(void)
+ int main(void)
+ {
+ 	int nr_iterations = 22;
++	int pkeys_supported = is_pkeys_supported();
  
-@@ -767,13 +775,14 @@ void setup_hugetlbfs(void)
- 	err = read(fd, buf, sizeof(buf)-1);
- 	close(fd);
- 	if (err <= 0) {
--		perror("reading sysfs 2M hugetlb config");
-+		fprintf(stderr, "reading sysfs %ldM hugetlb config: %s\n",
-+			hpagesz_mb, strerror(errno));
- 		return;
- 	}
+ 	setup_handlers();
  
- 	if (atoi(buf) != GET_NR_HUGE_PAGES) {
--		fprintf(stderr, "could not confirm 2M pages, got: '%s' expected %d\n",
--			buf, GET_NR_HUGE_PAGES);
-+		fprintf(stderr, "could not confirm %ldM pages, got: '%s' expected %d\n",
-+			hpagesz_mb, buf, GET_NR_HUGE_PAGES);
- 		return;
- 	}
+-	printf("has pku: %d\n", cpu_has_pku());
++	printf("has pkeys: %d\n", pkeys_supported);
+ 
+-	if (!cpu_has_pku()) {
++	if (!pkeys_supported) {
+ 		int size = PAGE_SIZE;
+ 		int *ptr;
  
 -- 
 2.17.1
