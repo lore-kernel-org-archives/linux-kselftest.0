@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A268CC2D0DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 13:07:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED8F3C2D0DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 13:07:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6951722527
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 13:07:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1EE822314
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Jan 2020 13:07:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BGnzmZRn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I4bfVCcM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729271AbgATNHf (ORCPT
+        id S1727009AbgATNHl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Jan 2020 08:07:35 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:49611 "EHLO
+        Mon, 20 Jan 2020 08:07:41 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:52403 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727117AbgATNGx (ORCPT
+        with ESMTP id S1728827AbgATNGw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jan 2020 08:06:53 -0500
+        Mon, 20 Jan 2020 08:06:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579525612;
+        s=mimecast20190719; t=1579525611;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kZR8zX+ydWBbBu89eT3Dfy7pXd3GWbtA0n7Gp7hmhwM=;
-        b=BGnzmZRnQ6nKpjgoarUwWdbz+0/tj62PJGwNt3gFOXH/vPlLZEpXUdPTlVCVwiVuvS2dbO
-        HiHRO14IWlz/btOJgrQrcBiO7KPh4FuAPCY4oD5F2O+2VJKozCyf60CNYUlpiPKY21tvvA
-        fPZX5aivgK1aUmje1oIW7g1UdiDC+S4=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-316-7Lm7_3--MG-1-4-KzuSCnw-1; Mon, 20 Jan 2020 08:06:51 -0500
-X-MC-Unique: 7Lm7_3--MG-1-4-KzuSCnw-1
-Received: by mail-lf1-f70.google.com with SMTP id w72so6221421lff.20
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 05:06:51 -0800 (PST)
+        bh=FO0YZDCYDI2J/1ujIzZCIdgWpSFgOqfh62+GspZ7r0s=;
+        b=I4bfVCcM8iS2yt9wgWzwkZRPDB/MB4s5uGP3tJrJwqV1cI83rvpXZcS6tsWw3XBsiG2qQb
+        H/yPsqPpMOBi1B3+14POy9mxxYvcLJ8gmLOvjWqHuzRKeyWiffLt4I1Jms7RIn2h6JDkhu
+        oXy56C1gUew00hAg1eCfAXdK28VIiPw=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-27-cmNfIR0hNiiPOe8nd6yhQQ-1; Mon, 20 Jan 2020 08:06:48 -0500
+X-MC-Unique: cmNfIR0hNiiPOe8nd6yhQQ-1
+Received: by mail-lj1-f198.google.com with SMTP id r14so7507653ljc.18
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 05:06:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=kZR8zX+ydWBbBu89eT3Dfy7pXd3GWbtA0n7Gp7hmhwM=;
-        b=mhRj6XV2/CQE1g4HAYqUt4+YHuI1vDKGYXapqMdL7D1UbRyX2tfMd3F4D/bxZoJlcW
-         uInaYl9ks4sedi02jpwgQDAZEQ1IVv1FT619/9Z3b6hMOdNKox4xEBoqbs4deKlmsrSY
-         a48PfktEvopILg58nAWyxuD85l7vRhpUwhN0dfD3j6Jq4z9BqtqO9KsqoruzRMIcR/2o
-         n11gPPMQS1gnpNxyE0JhP9cJHrFG/oe2FnRH+CJuSC5AQM1K8hxDI60HSFrzlaC8iRK5
-         /P0Yuey0iyOOwhWPRSn/KYP6z2oIqeBy1l9E5bwcgov2FaPzNLN4bwkaptysp5oBdpYX
-         yIvA==
-X-Gm-Message-State: APjAAAVSwUqAWkn80LBJxbvoV1qK8ry31jsu8ELLbb1crO67kmnGxEyR
-        J+sNFLULalwe+tQGV+5o/+2PpDv4zhac9vAe39jmvAdfArJ1s5zRYfKk0dpOgEsJl4vz3V0Yagj
-        C+M9fYW4HKiTBAJ64IgwKUlw5tUpu
-X-Received: by 2002:a19:c82:: with SMTP id 124mr6361232lfm.152.1579525610209;
-        Mon, 20 Jan 2020 05:06:50 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzP2QdGmR9drjELXs9stfRKxX9t6uODuDCYi7BoHCel4Br99OHqeQNYuT6HeyyQr5h3NkqBng==
-X-Received: by 2002:a19:c82:: with SMTP id 124mr6361203lfm.152.1579525609886;
-        Mon, 20 Jan 2020 05:06:49 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id y1sm16673362ljm.12.2020.01.20.05.06.48
+        bh=FO0YZDCYDI2J/1ujIzZCIdgWpSFgOqfh62+GspZ7r0s=;
+        b=aiLDv8jbEE0mnBr4a9UJKr8dPsj8P2B/rUiyuqVTdX4oJ0GMMQGs1Hlg7t78W95Dcr
+         yRPt6zNMXNlRf95o77Y0CRHcHOykOISa2JuLn6B84QEhdgRqQbKbA+nQTfy73MaPcRZJ
+         HxifrQcXsEmO908Ojx3xOkHF+2oc7Kb62J49Y5a/PMs0vm2FxQHZi9HjZfwWdmHie6Rm
+         iRkWL57Zj86G8qkvgMQja8ny0A5RUP+P3203cHgaizaLPQuU/fbgUDcaLbkPgdz4mvz3
+         g6dLY5pChfjIe6/NGA97WjW7K6Co1H9xQekjEaQsHPK4XLrtem9Imtz0cdTvi/CTVc73
+         pxwQ==
+X-Gm-Message-State: APjAAAXvilDAMgI9+10ixhOk/+/3NvwApX0QthwSIDFBH2sH8RVrzOK8
+        AJVVoISren69iWSBRi7DDqaSzgTFvZLDiw5MChcpiBN1HNjNxBEz9GoGmT8M7UK44RxgczyzN8+
+        92H5i96GwH4EwRTbOFp2zI+LaEHRO
+X-Received: by 2002:a2e:9cd8:: with SMTP id g24mr13288174ljj.243.1579525606543;
+        Mon, 20 Jan 2020 05:06:46 -0800 (PST)
+X-Google-Smtp-Source: APXvYqy2KwgfqhZ3/kgpwvu4ucvjAcbXYeXmUKFWMhAUlmDBXohA1PpkILdg2v6ESrPD9/+UsXHfOg==
+X-Received: by 2002:a2e:9cd8:: with SMTP id g24mr13288163ljj.243.1579525606301;
+        Mon, 20 Jan 2020 05:06:46 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id g24sm16765412lfb.85.2020.01.20.05.06.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2020 05:06:48 -0800 (PST)
+        Mon, 20 Jan 2020 05:06:45 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 1BCA01804D8; Mon, 20 Jan 2020 14:06:48 +0100 (CET)
-Subject: [PATCH bpf-next v5 07/11] perf: Use consistent include paths for
- libbpf
+        id A70281804D6; Mon, 20 Jan 2020 14:06:44 +0100 (CET)
+Subject: [PATCH bpf-next v5 04/11] tools/runqslower: Use consistent include
+ paths for libbpf
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -89,8 +89,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Date:   Mon, 20 Jan 2020 14:06:48 +0100
-Message-ID: <157952560797.1683545.7685921032671386301.stgit@toke.dk>
+Date:   Mon, 20 Jan 2020 14:06:44 +0100
+Message-ID: <157952560457.1683545.9913736511685743625.stgit@toke.dk>
 In-Reply-To: <157952560001.1683545.16757917515390545122.stgit@toke.dk>
 References: <157952560001.1683545.16757917515390545122.stgit@toke.dk>
 User-Agent: StGit/0.21
@@ -104,90 +104,77 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Fix perf to include libbpf header files with the bpf/ prefix, to
-be consistent with external users of the library.
+Fix the runqslower tool to include libbpf header files with the bpf/
+prefix, to be consistent with external users of the library. Also ensure
+that all includes of exported libbpf header files (those that are exported
+on 'make install' of the library) use bracketed includes instead of quoted.
 
+To not break the build, keep the old include path until everything has been
+changed to the new one; a subsequent patch will remove that.
+
+Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken from selftests dir")
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/perf/examples/bpf/5sec.c             |    2 +-
- tools/perf/examples/bpf/empty.c            |    2 +-
- tools/perf/examples/bpf/sys_enter_openat.c |    2 +-
- tools/perf/include/bpf/pid_filter.h        |    2 +-
- tools/perf/include/bpf/stdio.h             |    2 +-
- tools/perf/include/bpf/unistd.h            |    2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ tools/bpf/runqslower/Makefile         |    5 +++--
+ tools/bpf/runqslower/runqslower.bpf.c |    2 +-
+ tools/bpf/runqslower/runqslower.c     |    4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/perf/examples/bpf/5sec.c b/tools/perf/examples/bpf/5sec.c
-index b9c203219691..49f4f84da485 100644
---- a/tools/perf/examples/bpf/5sec.c
-+++ b/tools/perf/examples/bpf/5sec.c
-@@ -39,7 +39,7 @@
-    Copyright (C) 2018 Red Hat, Inc., Arnaldo Carvalho de Melo <acme@redhat.com>
- */
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 3242ab874ac0..b7b2230f807b 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -6,6 +6,7 @@ LLVM_STRIP := llvm-strip
+ DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+ LIBBPF_SRC := $(abspath ../../lib/bpf)
++INCLUDES := -I$(OUTPUT) -I$(abspath ../../lib) -I$(abspath ../../lib/bpf)
+ CFLAGS := -g -Wall
  
--#include <bpf.h>
-+#include <bpf/bpf.h>
+ # Try to detect best kernel BTF source
+@@ -51,13 +52,13 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
  
- int probe(hrtimer_nanosleep, rqtp->tv_sec)(void *ctx, int err, long sec)
- {
-diff --git a/tools/perf/examples/bpf/empty.c b/tools/perf/examples/bpf/empty.c
-index 3776d26db9e7..7d7fb0c9fe76 100644
---- a/tools/perf/examples/bpf/empty.c
-+++ b/tools/perf/examples/bpf/empty.c
-@@ -1,3 +1,3 @@
--#include <bpf.h>
-+#include <bpf/bpf.h>
+ $(OUTPUT)/%.bpf.o: %.bpf.c $(OUTPUT)/libbpf.a | $(OUTPUT)
+ 	$(call msg,BPF,$@)
+-	$(Q)$(CLANG) -g -O2 -target bpf -I$(OUTPUT) -I$(LIBBPF_SRC)	      \
++	$(Q)$(CLANG) -g -O2 -target bpf $(INCLUDES)			      \
+ 		 -c $(filter %.c,$^) -o $@ &&				      \
+ 	$(LLVM_STRIP) -g $@
  
- license(GPL);
-diff --git a/tools/perf/examples/bpf/sys_enter_openat.c b/tools/perf/examples/bpf/sys_enter_openat.c
-index 9cd124b09392..c4481c390d23 100644
---- a/tools/perf/examples/bpf/sys_enter_openat.c
-+++ b/tools/perf/examples/bpf/sys_enter_openat.c
-@@ -14,7 +14,7 @@
-  * the return value.
-  */
+ $(OUTPUT)/%.o: %.c | $(OUTPUT)
+ 	$(call msg,CC,$@)
+-	$(Q)$(CC) $(CFLAGS) -I$(LIBBPF_SRC) -I$(OUTPUT) -c $(filter %.c,$^) -o $@
++	$(Q)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
  
--#include <bpf.h>
-+#include <bpf/bpf.h>
- 
- struct syscall_enter_openat_args {
- 	unsigned long long unused;
-diff --git a/tools/perf/include/bpf/pid_filter.h b/tools/perf/include/bpf/pid_filter.h
-index 6e61c4bdf548..607189a315b2 100644
---- a/tools/perf/include/bpf/pid_filter.h
-+++ b/tools/perf/include/bpf/pid_filter.h
-@@ -3,7 +3,7 @@
- #ifndef _PERF_BPF_PID_FILTER_
- #define _PERF_BPF_PID_FILTER_
- 
--#include <bpf.h>
-+#include <bpf/bpf.h>
- 
- #define pid_filter(name) pid_map(name, bool)
- 
-diff --git a/tools/perf/include/bpf/stdio.h b/tools/perf/include/bpf/stdio.h
-index 316af5b2ff35..7ca6fa5463ee 100644
---- a/tools/perf/include/bpf/stdio.h
-+++ b/tools/perf/include/bpf/stdio.h
-@@ -1,6 +1,6 @@
+ $(OUTPUT):
+ 	$(call msg,MKDIR,$@)
+diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower/runqslower.bpf.c
+index 623cce4d37f5..48a39f72fadf 100644
+--- a/tools/bpf/runqslower/runqslower.bpf.c
++++ b/tools/bpf/runqslower/runqslower.bpf.c
+@@ -1,7 +1,7 @@
  // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+ #include "vmlinux.h"
+-#include <bpf_helpers.h>
++#include <bpf/bpf_helpers.h>
+ #include "runqslower.h"
  
+ #define TASK_RUNNING 0
+diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
+index 996f0e2c560e..d89715844952 100644
+--- a/tools/bpf/runqslower/runqslower.c
++++ b/tools/bpf/runqslower/runqslower.c
+@@ -6,8 +6,8 @@
+ #include <string.h>
+ #include <sys/resource.h>
+ #include <time.h>
+-#include <libbpf.h>
 -#include <bpf.h>
++#include <bpf/libbpf.h>
 +#include <bpf/bpf.h>
- 
- struct bpf_map SEC("maps") __bpf_stdout__ = {
-        .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
-diff --git a/tools/perf/include/bpf/unistd.h b/tools/perf/include/bpf/unistd.h
-index ca7877f9a976..d1a35b6c649d 100644
---- a/tools/perf/include/bpf/unistd.h
-+++ b/tools/perf/include/bpf/unistd.h
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: LGPL-2.1
- 
--#include <bpf.h>
-+#include <bpf/bpf.h>
- 
- static int (*bpf_get_current_pid_tgid)(void) = (void *)BPF_FUNC_get_current_pid_tgid;
+ #include "runqslower.h"
+ #include "runqslower.skel.h"
  
 
