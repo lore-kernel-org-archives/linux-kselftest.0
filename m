@@ -2,217 +2,183 @@ Return-Path: <SRS0=0IDV=3M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C1AC2D0DB
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 18:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E204AC2D0DB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 18:34:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E32920718
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 18:05:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A713321569
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 18:34:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E+iKTJpp"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IS1prM98";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="gAwbPOtU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729157AbgAWSEu (ORCPT
+        id S1728665AbgAWSet (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Jan 2020 13:04:50 -0500
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:51236 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbgAWSEs (ORCPT
+        Thu, 23 Jan 2020 13:34:49 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5198 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727022AbgAWSet (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 13:04:48 -0500
-Received: by mail-pl1-f202.google.com with SMTP id r2so1825482pls.18
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 10:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=+ajBlD4ZsHzsHJt9G432a6UKIjktZtDyWcSq/QWbHJg=;
-        b=E+iKTJppKfOA15AHNg+JNQPSdGCNa5Uim57JFueZ6xE2XII/5MRDURCmW2HDphgv4z
-         LKGdN16W71YvHNQtTZhiMUJEKlkk3gQnGLB+AAdgS3DPuhQl5Ro/NcXNPR/vK43uOlHp
-         bnXvAW/Y4EcMRojH2fnMUdD8Mt6HPLKAZVV0p86vH/PCc62W5I0dM5DD77tVKV6BFDCF
-         ByQOt+sBgOU25p6T9O/J7gw/xNjI9uHh1g76P/D2x86cmhVlZZ/LlNU9B+0lL+CjOp19
-         H621VSO0YK5egEusQt9dZUPuZ96hyimPiOr8/Co3HQwFdB/aPAjoDI2RkR0qlM7xifmt
-         BpMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+ajBlD4ZsHzsHJt9G432a6UKIjktZtDyWcSq/QWbHJg=;
-        b=mn5qp+Oa4QO0+78UsBdqTyJ+R6Lkmug6gy58iPPa+1RgpMhQQFq60A1dLJ0pebP+sA
-         dFyTYPs2JK67Kd2bKFxJ8I8yI1T30zkwTXXYH7R09ZCXFbZPAANo5E5rBpQkb34+CKjI
-         uUa8PaRxjF1SLyPTDMgHWoJqW0DqYWqgBN1Vnt7SWSO6ppTQeOFfjgF5Fc9Th4Rsafgr
-         LlTxCjLEaZ8HoeCEDsf6DTJx9OIf2KhyhFSUbNVkICJBVsF4SVDCcITcfXBDkPELz4Mt
-         nJCHEfNFVLNC0LtYfznPbcbJ+F0U7aT7lZ8/beJqcW5FhzOwHCk2UV04X0ArYpkvvV9d
-         V0vA==
-X-Gm-Message-State: APjAAAVc6tT52oSfDFKkuMXB84iOKw4Hh3lWws2FbHNhasSUyoTg8x+f
-        68WEZo14pGPmNRz+Z7wNUqemwOOiJ3LQ
-X-Google-Smtp-Source: APXvYqznzCF8rkNRgq/SBrtTpV1jgeJBFQ2M2VKjD3QumwjpQ1GXpdc/5kqyqt7Z2jAeQ3iIDZCvgKjQ69Cq
-X-Received: by 2002:a63:d306:: with SMTP id b6mr5132435pgg.195.1579802687628;
- Thu, 23 Jan 2020 10:04:47 -0800 (PST)
-Date:   Thu, 23 Jan 2020 10:04:29 -0800
-In-Reply-To: <20200123180436.99487-1-bgardon@google.com>
-Message-Id: <20200123180436.99487-4-bgardon@google.com>
-Mime-Version: 1.0
-References: <20200123180436.99487-1-bgardon@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH v4 03/10] KVM: selftests: Add configurable demand paging delay
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 23 Jan 2020 13:34:49 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00NINBik019481;
+        Thu, 23 Jan 2020 10:34:34 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=75NiwwAgjJV6DnGBoawC1dxUbB7h1PrzcaUsJagFBMs=;
+ b=IS1prM98FQYVSOdd3EHfXpgbJFxDADx28l3XRAVCKBppAY41x1emEFodqh8aZmfPNRx9
+ FAgHQnoU4RtNC1TEw3SR6CV90AqsH9bVU9LG00TCMvCvEV1CdIbVCDgJtfcwpjBu5uic
+ dA93EaGiD5U51x/Lva7xc9Eflm4HjBz5TTo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xqgc5r5rq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 23 Jan 2020 10:34:34 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Thu, 23 Jan 2020 10:34:32 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZW2u7XdT5SycilaiUupMUYOGFFJwqP1JKwXUyBW00433L8s07c2EEjOMoHil23UTnHdtojUAEx0p3zSER1oZBoDEtfUmwIB5sdR4SC8p6pl3gDKvy0O28AS+yHzjLlkmd0OdfMdnb4XK26hkGuWFA3QyhtfiDusBf33ibMrr88HSjMsTGYVB+UrKRsRhtWXqkfhS8VD/nT1cCggg1Ues2qINplo0imfURlZiiPr0PP4kQEZZULKtTwEDVJ6F0ybvz7SqzLsSt7LGwsXx+GGsq55HFLu7gN8oF72jIGJw6gezvjMpPvo8xD2Bqr3uhPcFjSKLyMhGPGexIVyO5Q3ziw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=75NiwwAgjJV6DnGBoawC1dxUbB7h1PrzcaUsJagFBMs=;
+ b=DQUer0ZqhM/8DaC0RCOHHPcQwpBq44sHmY0xx7VNJnNhldlIVTYWjMOWI65knz6QjrGBayicZNMXaEGfqGsSco+oF25Nrk8d8GeZ3ADJbQtVCCFsv75C52SihFwgs1ei92Dm+4Y6PldkS/bkPixPUFYqNPXy0IC+uu0/Sxhw6tJ9oPz8NXnsBL2gS6vf+qzyZMkUyk9Wx+zhs2LkevmCMmL50NViMgDoS9MW/MyBZAe9RsaK1Yryq7baIvF4aF3nLoKu5xtVG4+yplSkntYsT5cgOnFE65oPgWrl2CfaRA/ijgGqjzL3w0dyzs2Kdjrhj1jwGcAVfMjF+3GY1kmUlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=75NiwwAgjJV6DnGBoawC1dxUbB7h1PrzcaUsJagFBMs=;
+ b=gAwbPOtULKaTOjsvQjaEJ4welcKhDpf2GJ/ItOC2sZjMTLOEvVUQ0XO9d/GYtFoZMSxiRFV4AlbKkKyRAitq9hbk1s4qfI1uuxbMvKglyTrBLjh+QPZztGN1LEmk9yX1+mlpycKyqJR4CYrpXaud7wv+VaKleKToBeH/eX3Po+U=
+Received: from MN2PR15MB3213.namprd15.prod.outlook.com (20.179.21.76) by
+ MN2PR15MB3182.namprd15.prod.outlook.com (20.179.22.15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2665.20; Thu, 23 Jan 2020 18:34:32 +0000
+Received: from MN2PR15MB3213.namprd15.prod.outlook.com
+ ([fe80::6d1e:f2f7:d36:a42f]) by MN2PR15MB3213.namprd15.prod.outlook.com
+ ([fe80::6d1e:f2f7:d36:a42f%4]) with mapi id 15.20.2644.027; Thu, 23 Jan 2020
+ 18:34:32 +0000
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:200::2:d66d) by MWHPR17CA0094.namprd17.prod.outlook.com (2603:10b6:300:c2::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.20 via Frontend Transport; Thu, 23 Jan 2020 18:34:30 +0000
+From:   Martin Lau <kafai@fb.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>
+CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf 1/4] selftests: bpf: use a temporary file in
+ test_sockmap
+Thread-Topic: [PATCH bpf 1/4] selftests: bpf: use a temporary file in
+ test_sockmap
+Thread-Index: AQHV0g6PlHOQTD0hFEGeoXBT3XL7Yqf4k16A
+Date:   Thu, 23 Jan 2020 18:34:31 +0000
+Message-ID: <20200123183427.wsmwuheq3wcw3usm@kafai-mbp.dhcp.thefacebook.com>
+References: <20200123165934.9584-1-lmb@cloudflare.com>
+ <20200123165934.9584-2-lmb@cloudflare.com>
+In-Reply-To: <20200123165934.9584-2-lmb@cloudflare.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR17CA0094.namprd17.prod.outlook.com
+ (2603:10b6:300:c2::32) To MN2PR15MB3213.namprd15.prod.outlook.com
+ (2603:10b6:208:3d::12)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::2:d66d]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 69fe9c6e-b9b5-4290-fa95-08d7a032e337
+x-ms-traffictypediagnostic: MN2PR15MB3182:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR15MB31829E9A5377B00464B4A802D50F0@MN2PR15MB3182.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 029174C036
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(39860400002)(396003)(366004)(346002)(189003)(199004)(8936002)(81166006)(71200400001)(81156014)(316002)(8676002)(110136005)(54906003)(478600001)(6506007)(186003)(16526019)(4326008)(86362001)(2906002)(5660300002)(7696005)(52116002)(55016002)(9686003)(66946007)(66556008)(66446008)(64756008)(1076003)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR15MB3182;H:MN2PR15MB3213.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PAV7rMMcJEShM3DTorvQ8H/LPrYL4fCWHpU02gS44c/NC/bQlYMqiVC5d5CaugLjKlFWjImqys8NXxSzwf4zRGCaOtnYDXFMaQWdxId4QdtVeXt0rhjr1UdRa2IDswZiwOzwSvgM8JFTya+MFCgndwSaK1dYmKsvesPo1KZ9h9VF+XmVkOFrmD8Gt9cu5bH/Gk7/ziltfcMIDdry0CbvxS7tFfw9Z4PyYpq4xEJkQjCzPQkNT0IwR9V9qlWO3Xkdg8WWAnEJ5rRkFL371jKroHaEtbfT2unA/szYdGSv+gx/Z+YVsdBly48/P6vhpj9ex3/2bKhPDd/k3KtVwxebAa56qTFHlocj0e9/2lBhMGt8Bm7awQ5y1D8KCVhhvDNft0jwFaj8ZCffVF54maIS5aE1/15hzssW5zSMRi79J2AD+M6A3rDQbI4RD4FA0cLj
+x-ms-exchange-antispam-messagedata: Kt/Z1PzJ0aBMi4uT5KL2wWg07oCMugFSq+JqPA5cnnYMvOlMwMVfLmP/+kuwUtBw0Y+65v9pQvdQ/T09ISbQyJlhBC0oDWv266/ToJdk3rKzC6UzEffJ2ElYXH0bNHTmVyAqMTpm/uLwFNWtH1946OR2NL3VKKC6MmlEzjHyET/DQehALGpEB5q8cIb09Wzf
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <406A8A76E111A84FAC876779309A2CE2@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69fe9c6e-b9b5-4290-fa95-08d7a032e337
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2020 18:34:32.0728
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VRRmyLcsM5qF5ClnTC/vIPL5D5plzkVj+5vR4CO5G7H0Ri6E1wGhRpwTFxRMAfSh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB3182
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-23_11:2020-01-23,2020-01-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ adultscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001230141
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running the demand paging test with the -u option, the User Fault
-FD handler essentially adds an arbitrary delay to page fault resolution.
-To enable better simulation of a real demand paging scenario, add a
-configurable delay to the UFFD handler.
+On Thu, Jan 23, 2020 at 04:59:30PM +0000, Lorenz Bauer wrote:
+> Use a proper temporary file for sendpage tests. This means that running
+> the tests doesn't clutter the working directory, and allows running the
+> test on read-only filesystems.
+>=20
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
+>  tools/testing/selftests/bpf/test_sockmap.c | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/s=
+elftests/bpf/test_sockmap.c
+> index 4a851513c842..779e11da979c 100644
+> --- a/tools/testing/selftests/bpf/test_sockmap.c
+> +++ b/tools/testing/selftests/bpf/test_sockmap.c
+> @@ -331,7 +331,7 @@ static int msg_loop_sendpage(int fd, int iov_length, =
+int cnt,
+>  	FILE *file;
+>  	int i, fp;
+> =20
+> -	file =3D fopen(".sendpage_tst.tmp", "w+");
+> +	file =3D tmpfile();
+>  	if (!file) {
+>  		perror("create file for sendpage");
+>  		return 1;
+> @@ -340,13 +340,8 @@ static int msg_loop_sendpage(int fd, int iov_length,=
+ int cnt,
+>  		fwrite(&k, sizeof(char), 1, file);
+>  	fflush(file);
+>  	fseek(file, 0, SEEK_SET);
+> -	fclose(file);
+> =20
+> -	fp =3D open(".sendpage_tst.tmp", O_RDONLY);
+> -	if (fp < 0) {
+> -		perror("reopen file for sendpage");
+> -		return 1;
+> -	}
+> +	fp =3D fileno(file);
+It may be better to keep fp =3D=3D -1 check here.
+It is not clear to me the original intention of reopen.
+I would defer to John for comment.
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Ben Gardon <bgardon@google.com>
----
- .../selftests/kvm/demand_paging_test.c        | 32 +++++++++++++++----
- 1 file changed, 25 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 6fab4468f97f6..01d2c76ada55d 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -143,6 +143,7 @@ bool quit_uffd_thread;
- struct uffd_handler_args {
- 	int uffd;
- 	int pipefd;
-+	useconds_t delay;
- };
- 
- static void *uffd_handler_thread_fn(void *arg)
-@@ -150,6 +151,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 	struct uffd_handler_args *uffd_args = (struct uffd_handler_args *)arg;
- 	int uffd = uffd_args->uffd;
- 	int pipefd = uffd_args->pipefd;
-+	useconds_t delay = uffd_args->delay;
- 	int64_t pages = 0;
- 
- 	while (!quit_uffd_thread) {
-@@ -210,6 +212,8 @@ static void *uffd_handler_thread_fn(void *arg)
- 		if (!(msg.event & UFFD_EVENT_PAGEFAULT))
- 			continue;
- 
-+		if (delay)
-+			usleep(delay);
- 		addr =  msg.arg.pagefault.address;
- 		r = handle_uffd_page_request(uffd, addr);
- 		if (r < 0)
-@@ -221,7 +225,8 @@ static void *uffd_handler_thread_fn(void *arg)
- }
- 
- static int setup_demand_paging(struct kvm_vm *vm,
--			       pthread_t *uffd_handler_thread, int pipefd)
-+			       pthread_t *uffd_handler_thread, int pipefd,
-+			       useconds_t uffd_delay)
- {
- 	int uffd;
- 	struct uffdio_api uffdio_api;
-@@ -262,6 +267,7 @@ static int setup_demand_paging(struct kvm_vm *vm,
- 
- 	uffd_args.uffd = uffd;
- 	uffd_args.pipefd = pipefd;
-+	uffd_args.delay = uffd_delay;
- 	pthread_create(uffd_handler_thread, NULL, uffd_handler_thread_fn,
- 		       &uffd_args);
- 
-@@ -271,7 +277,8 @@ static int setup_demand_paging(struct kvm_vm *vm,
- #define GUEST_MEM_SHIFT 30 /* 1G */
- #define PAGE_SHIFT_4K  12
- 
--static void run_test(enum vm_guest_mode mode, bool use_uffd)
-+static void run_test(enum vm_guest_mode mode, bool use_uffd,
-+		     useconds_t uffd_delay)
- {
- 	pthread_t vcpu_thread;
- 	pthread_t uffd_handler_thread;
-@@ -339,7 +346,8 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd)
- 		r = pipe2(pipefd, O_CLOEXEC | O_NONBLOCK);
- 		TEST_ASSERT(!r, "Failed to set up pipefd");
- 
--		r = setup_demand_paging(vm, &uffd_handler_thread, pipefd[0]);
-+		r = setup_demand_paging(vm, &uffd_handler_thread, pipefd[0],
-+					uffd_delay);
- 		if (r < 0)
- 			exit(-r);
- 	}
-@@ -395,7 +403,7 @@ static void help(char *name)
- 	int i;
- 
- 	puts("");
--	printf("usage: %s [-h] [-m mode] [-u]\n", name);
-+	printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n", name);
- 	printf(" -m: specify the guest mode ID to test\n"
- 	       "     (default: test all supported modes)\n"
- 	       "     This option may be used multiple times.\n"
-@@ -404,7 +412,11 @@ static void help(char *name)
- 		printf("         %d:    %s%s\n", i, vm_guest_mode_string(i),
- 		       vm_guest_mode_params[i].supported ? " (supported)" : "");
- 	}
--	printf(" -u: Use User Fault FD to handle vCPU page faults.\n");
-+	printf(" -u: use User Fault FD to handle vCPU page\n"
-+	       "     faults.\n");
-+	printf(" -d: add a delay in usec to the User Fault\n"
-+	       "     FD handler to simulate demand paging\n"
-+	       "     overheads. Ignored without -u.\n");
- 	puts("");
- 	exit(0);
- }
-@@ -415,6 +427,7 @@ int main(int argc, char *argv[])
- 	unsigned int mode;
- 	int opt, i;
- 	bool use_uffd = false;
-+	useconds_t uffd_delay = 0;
- #ifdef __aarch64__
- 	unsigned int host_ipa_limit;
- #endif
-@@ -438,7 +451,7 @@ int main(int argc, char *argv[])
- 	vm_guest_mode_params_init(VM_MODE_P40V48_4K, true, true);
- #endif
- 
--	while ((opt = getopt(argc, argv, "hm:u")) != -1) {
-+	while ((opt = getopt(argc, argv, "hm:ud:")) != -1) {
- 		switch (opt) {
- 		case 'm':
- 			if (!mode_selected) {
-@@ -454,6 +467,11 @@ int main(int argc, char *argv[])
- 		case 'u':
- 			use_uffd = true;
- 			break;
-+		case 'd':
-+			uffd_delay = strtoul(optarg, NULL, 0);
-+			TEST_ASSERT(uffd_delay >= 0,
-+				    "A negative UFFD delay is not supported.");
-+			break;
- 		case 'h':
- 		default:
- 			help(argv[0]);
-@@ -467,7 +485,7 @@ int main(int argc, char *argv[])
- 		TEST_ASSERT(vm_guest_mode_params[i].supported,
- 			    "Guest mode ID %d (%s) not supported.",
- 			    i, vm_guest_mode_string(i));
--		run_test(i, use_uffd);
-+		run_test(i, use_uffd, uffd_delay);
- 	}
- 
- 	return 0;
--- 
-2.25.0.341.g760bfbb309-goog
-
+> =20
+>  	clock_gettime(CLOCK_MONOTONIC, &s->start);
+>  	for (i =3D 0; i < cnt; i++) {
