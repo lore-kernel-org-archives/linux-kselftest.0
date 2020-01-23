@@ -2,108 +2,144 @@ Return-Path: <SRS0=0IDV=3M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0264C33CB6
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 17:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C734C33CAF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 17:16:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A6F4524684
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 17:00:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE82620704
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 17:16:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="gtrzkuQ3"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TwaUUSak";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="NUy+7rAL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729866AbgAWRAC (ORCPT
+        id S1729207AbgAWRQd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Jan 2020 12:00:02 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45600 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729745AbgAWQ7p (ORCPT
+        Thu, 23 Jan 2020 12:16:33 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64498 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728731AbgAWRQc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 11:59:45 -0500
-Received: by mail-wr1-f65.google.com with SMTP id j42so3864735wrj.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 08:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g7SvZ9phUNQgBFhv9EVqVUJXNc7V2T/+gA9/uB1lrNY=;
-        b=gtrzkuQ3f7nCSsbvZV+79p3YHEpiG55tz/BtLLT1TKC04h4wnV8nBZfVTy/oeleTWI
-         FLytsgneqoqPVgRerwb4UmFKfANQw/OyLCbDS9cyI8/FdPksxF1YRxNFYVfCmifcHrmO
-         gfDjmiP/5qHzq51cApwjJfE8JvSN2pHsTbzhE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g7SvZ9phUNQgBFhv9EVqVUJXNc7V2T/+gA9/uB1lrNY=;
-        b=c+7URWq6P/T9r+zg7Pp0m/lXcXMsIoyRjsnLXIAfMjoQpPt1ETIrPeEGcBiGvhx6uv
-         IhhD3Q2106RFj5GehulKeRu8dgpnoxPtiHmn3kjoMHqOI6UZPOVDjYejmgfdZDd3aRO7
-         pQ2xToWEwwVwNuqKx4vDzranPWzGFJkk0jha+1Iq6Pi3JQl8f3lCmE1E46MUmyXBOQKO
-         ak3/j0KfVaTQg2zZJ4lack9gl7laf67EMiC31piCZZ4R9En1OH8WI75c8UznQv7HAk6u
-         kULn2hFu+2dLQsbkD/mR9scnP11/Y5j+qcnqLWPk9nntq/YW1vknfN00/19xz0lCjXIS
-         jCWA==
-X-Gm-Message-State: APjAAAUrjKr5U8Ol4x2/ICvGAG4bux8WWOtKP1T8te6X4JwdlimyfVR1
-        WznvQOcZldw9wvSCmwb1IPf9kQ==
-X-Google-Smtp-Source: APXvYqxZBMzloyeuvuGWMOXyEMsTRg357vgRAFLanDZW9K3hvo17Oc9CnYfhEOKDJRcCoIGSj/eFaA==
-X-Received: by 2002:adf:cf0a:: with SMTP id o10mr18246948wrj.325.1579798783545;
-        Thu, 23 Jan 2020 08:59:43 -0800 (PST)
-Received: from localhost.localdomain ([2a06:98c0:1000:8250:d0a9:6cca:1210:a574])
-        by smtp.gmail.com with ESMTPSA id u1sm3217698wmc.5.2020.01.23.08.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 08:59:42 -0800 (PST)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 2/4] selftests: bpf: ignore RST packets for reuseport tests
-Date:   Thu, 23 Jan 2020 16:59:31 +0000
-Message-Id: <20200123165934.9584-3-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200123165934.9584-1-lmb@cloudflare.com>
+        Thu, 23 Jan 2020 12:16:32 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00NH8eQA000441;
+        Thu, 23 Jan 2020 09:16:18 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=39vetacuAforZk3W+3gRyQFZuI0sX037sOEZQwB4roY=;
+ b=TwaUUSakuw1ccW0MJ+ixLvwmoIUOlotBLnG5rP+ibxadZkAuWutV1pg1Q3J2oVdtgYkE
+ Wq+QZNeQWBKbWETtvHZGdjYazO+LY2wYrn6XmHP/23DJQeislEtiHErxSFbptTvE3hip
+ jc7QiQ2FnGjOrPbpIaby8WQKrWE5hDUqd2Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xpr4ke2d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 23 Jan 2020 09:16:18 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Thu, 23 Jan 2020 09:16:17 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Td+6jsvrap4VdaOvca3Dtk+67FKPHlXMJv3CJDIofQb/sq1+tY4X2tE/lTGgHsqQ/26gAPjerPQpzgr8eQhMtUBFDPuygCwDkORLfjQjkpbsQthyzYMyom4RKejYgb/jSZ/WgCpm6kEE/DeHJgXSm6Bb/etek8koQqJQagWykX+ixD1jI/uL4X5cJ/8FMcQzfY/n85KUZidCxanmodMpRXGNf1rQXeY2sYqqEwMf0K3w7eLGsElGv8Y7RLdr8pBq4PtZoJDSNsBqzcwDwJ9tWUk8YPqM2gPVKjFEsHD9RlxQbicjFA4FoLbSSUQml7tCYg9kIvOLx3GdQsh0+BLXHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=39vetacuAforZk3W+3gRyQFZuI0sX037sOEZQwB4roY=;
+ b=FbYWIS3XWEeLCr/JSVJI32HmNAcomrPgKfPlYRZEsRD1h7u3JBoI/WQ4V2DAtThkyIl473chXEaFBeX3XJbppTw/deDLyI5OSjqE2G9ojul0kaGhr9sPImja0V/b8zQfY9EnyUnVvFMPhXNzC2qWOd/wjVeZR+CF018+fDsOkoPeUk0ibHxTQK/kWxdBsU6hEcclvMGGzBpwvQDmhAWbt+WIiLbLmc5f/cBEiwnD79NiOuhnocRvRbZ4pm+U6BH3KePNm6+iMrVmJ/4ZlgRYeOu4fXu6DW2yxTt3XS5N5x8AWI462TBqDRIG0waQgeK1758QkuWSbBH4w6uQahoyyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=39vetacuAforZk3W+3gRyQFZuI0sX037sOEZQwB4roY=;
+ b=NUy+7rALW9zj649FYkOTzkWfcstHUt1q0ldWio8AI5SmraEy8rX23W6VwEUhkmKUVMvhzozTRce/qKuW8nndVGaV8IxdNBC+GtlUhqonVsg96pCCd7ioXMFER2XMblm9DQUdjkDwEJIPODpiRP1+PziDe8WZvpXorjLxqPsdoLo=
+Received: from MN2PR15MB3213.namprd15.prod.outlook.com (20.179.21.76) by
+ MN2PR15MB3311.namprd15.prod.outlook.com (20.179.23.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2644.19; Thu, 23 Jan 2020 17:16:16 +0000
+Received: from MN2PR15MB3213.namprd15.prod.outlook.com
+ ([fe80::6d1e:f2f7:d36:a42f]) by MN2PR15MB3213.namprd15.prod.outlook.com
+ ([fe80::6d1e:f2f7:d36:a42f%4]) with mapi id 15.20.2644.027; Thu, 23 Jan 2020
+ 17:16:16 +0000
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:200::2:d66d) by CO2PR04CA0058.namprd04.prod.outlook.com (2603:10b6:102:1::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19 via Frontend Transport; Thu, 23 Jan 2020 17:16:14 +0000
+From:   Martin Lau <kafai@fb.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf 2/4] selftests: bpf: ignore RST packets for reuseport
+ tests
+Thread-Topic: [PATCH bpf 2/4] selftests: bpf: ignore RST packets for reuseport
+ tests
+Thread-Index: AQHV0g6NwgtJo3iSuUOeG+lkP8Lweqf4fYEA
+Date:   Thu, 23 Jan 2020 17:16:16 +0000
+Message-ID: <20200123171612.stdwtlpqibkydz2s@kafai-mbp.dhcp.thefacebook.com>
 References: <20200123165934.9584-1-lmb@cloudflare.com>
+ <20200123165934.9584-3-lmb@cloudflare.com>
+In-Reply-To: <20200123165934.9584-3-lmb@cloudflare.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: CO2PR04CA0058.namprd04.prod.outlook.com
+ (2603:10b6:102:1::26) To MN2PR15MB3213.namprd15.prod.outlook.com
+ (2603:10b6:208:3d::12)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::2:d66d]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fe21180c-3d8b-4811-28d5-08d7a027f4bc
+x-ms-traffictypediagnostic: MN2PR15MB3311:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR15MB33119E72CED3C530C16F895ED50F0@MN2PR15MB3311.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:820;
+x-forefront-prvs: 029174C036
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(346002)(396003)(366004)(39860400002)(199004)(189003)(1076003)(4744005)(2906002)(86362001)(6916009)(54906003)(9686003)(7696005)(52116002)(55016002)(5660300002)(6506007)(478600001)(4326008)(8936002)(316002)(81156014)(81166006)(8676002)(66946007)(71200400001)(16526019)(64756008)(186003)(66446008)(66556008)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR15MB3311;H:MN2PR15MB3213.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: h9sZqhlDdh03cRqb+VWUtIKerG4A04sFM6hhnhJz9Of8Hm04m7JrL7VlA+WD2ZFsqhuFPz75yGia10L3auufwJjzixBISbqz4PrJRBr34kRs9RZMjG29JGu4bphl9/aN14wAdNKMaA5FW+4SRIpQWTJ5XuSEFIku9i+u0TDe+W66SM6yI/CB7S3x82VeiogAuHLI3dnF0jSOjdlxVbpF0fBtEOv47I5I7lcfi/3pL9yP8zY6utdRNEKdpn7vvLVkfI0WCqxPqvEDB39tO3lTWV3Phlg609YpquMkrut74Fm4pWjTzx95dhJNScR7AmXWiktQQCWAPToRSiCNGBv5Mvi4bRhI4yGnk5Euue+lnzgI0HTR2Ns2t+VvSsUegkyiWG1w0a2Rotd6vrEWjyn132tF7ojwTrxGsXTrmv1ztJMl39zPpNq1OjcX+T3r3j3U
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6D75503A71A72A41AA7EF4EC3FF92E32@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe21180c-3d8b-4811-28d5-08d7a027f4bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2020 17:16:16.7954
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PJ1ST79cX6QlYsF9ucsTC/NuYXRh3YOSoDv3U50qZIVkllYKr84PWVUEdwU8WBPm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB3311
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-23_10:2020-01-23,2020-01-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 clxscore=1011 impostorscore=0
+ malwarescore=0 mlxlogscore=661 lowpriorityscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001230134
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The reuseport tests currently suffer from a race condition: RST
-packets count towards DROP_ERR_SKB_DATA, since they don't contain
-a valid struct cmd. Tests will spuriously fail depending on whether
-check_results is called before or after the RST is processed.
-
-Exit the BPF program early if FIN is set.
-
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/progs/test_select_reuseport_kern.c        | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-index d69a1f2bbbfd..26e77dcc7e91 100644
---- a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-@@ -113,6 +113,12 @@ int _select_by_skb_data(struct sk_reuseport_md *reuse_md)
- 		data_check.skb_ports[0] = th->source;
- 		data_check.skb_ports[1] = th->dest;
- 
-+		if (th->fin)
-+			/* The connection is being torn down at the end of a
-+			 * test. It can't contain a cmd, so return early.
-+			 */
-+			return SK_PASS;
-+
- 		if ((th->doff << 2) + sizeof(*cmd) > data_check.len)
- 			GOTO_DONE(DROP_ERR_SKB_DATA);
- 		if (bpf_skb_load_bytes(reuse_md, th->doff << 2, &cmd_copy,
--- 
-2.20.1
-
+On Thu, Jan 23, 2020 at 04:59:31PM +0000, Lorenz Bauer wrote:
+> The reuseport tests currently suffer from a race condition: RST
+> packets count towards DROP_ERR_SKB_DATA, since they don't contain
+> a valid struct cmd. Tests will spuriously fail depending on whether
+> check_results is called before or after the RST is processed.
+>=20
+> Exit the BPF program early if FIN is set.
+Make sense.
+Is it a RST or FIN?  The earlier commit message said RST.
