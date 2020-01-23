@@ -2,164 +2,194 @@ Return-Path: <SRS0=0IDV=3M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 797E0C47409
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 14:47:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B5FC33CAF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 14:54:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 50D9F21835
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 14:47:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DT/WpeL3"
+	by mail.kernel.org (Postfix) with ESMTP id 0E35E21D7D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jan 2020 14:54:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1579791244;
+	bh=hilFPIhlFBQfbuasUEx0/b2WjqD/Zwvg+YvxXvtSuSE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=SJtIp3kOEi8iX+OqRPR05cZhlinRLMZZIPV/XXuZ9vfV7Dn+xgrc3tMtCr6ueR0cT
+	 EHGhJ4Fg3p8Q7QFOL7wNxbXT56D220mcyDw+M7RJj4ui+R6UjIVQIJUmn0WWZWavb8
+	 J3lehqWi9ObA27/FF/Bqa1Rqs09pGq3bOpy7suu4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728927AbgAWOrr (ORCPT
+        id S1729236AbgAWOyA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Jan 2020 09:47:47 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:47592 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728916AbgAWOrp (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 09:47:45 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00NERrZD081837;
-        Thu, 23 Jan 2020 14:47:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=LJyhLcWaqg+AjjFHhdMbMnMRBxEYPQZdjfXc+Qw6vfk=;
- b=DT/WpeL3WeKaYkrSqvO6A8EGHtyz7FYQ7mBtMLB7VHltuH+tqr2Aemr/C3bJnP2OTNDk
- EhPGl2fRCBYwLSOQQhrpZwoFxR4O2t0o3WAZ/bTJFUFQR74H/HaInuIdVrpYwjC1GNQV
- KMYQ6AH3V3ZXOwKhItBwMAvCkqrQlcxOHhQNSovNi5OqZReOjdc96PPYCRCI9BUpHR/y
- PAlUj7aXpio1z9Wqe4eFNcYCh4ZmCPppyAHOV+/LCjlO78+Hv4P+oVK8ULai7ZWYDU7P
- ydgEUfxsKRL20vpp3WJiGkNyn9S/9pa8moKNo8l0wIQsISPh1fE4Oqw35YoU4Bgy790A yw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2xksyqjpt6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jan 2020 14:47:41 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00NESfVZ097430;
-        Thu, 23 Jan 2020 14:47:40 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2xppq7665j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jan 2020 14:47:40 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00NElc8b007935;
-        Thu, 23 Jan 2020 14:47:38 GMT
-Received: from dhcp-10-175-173-105.vpn.oracle.com (/10.175.173.105)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 23 Jan 2020 06:47:37 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com
-Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH kunit 2/3] kunit: add "run" debugfs file to run suites, display results
-Date:   Thu, 23 Jan 2020 14:47:19 +0000
-Message-Id: <1579790840-27009-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1579790840-27009-1-git-send-email-alan.maguire@oracle.com>
+        Thu, 23 Jan 2020 09:54:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729232AbgAWOyA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 Jan 2020 09:54:00 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 24E9021D7D;
+        Thu, 23 Jan 2020 14:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579791239;
+        bh=hilFPIhlFBQfbuasUEx0/b2WjqD/Zwvg+YvxXvtSuSE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BpIp55VYA5xhSBuwunXmJ+sbYZmkHf9BrDJ/TMWlneBJf7HPOfub97LyJC50JX8nT
+         xtOnI0gZv7H4+5+MKx2UvVDXHYbhikjVBlpZERBsx6tDRhfhRJEMn6KWe321c/hx+6
+         v+vO9EXtrAsBt/NDDdrOtvnIvF+BDDYKXaQ6RplU=
+Date:   Thu, 23 Jan 2020 15:53:57 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     brendanhiggins@google.com, corbet@lwn.net,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH kunit 1/3] kunit: add debugfs
+ /sys/kernel/debug/kunit/<suite>/results display
+Message-ID: <20200123145357.GA1687563@kroah.com>
 References: <1579790840-27009-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9508 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=5 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001230124
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9508 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=5 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001230124
+ <1579790840-27009-2-git-send-email-alan.maguire@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1579790840-27009-2-git-send-email-alan.maguire@oracle.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add /sys/kernel/debug/kunit/<suite>/run file which will run the
-specified suite and show results.
+On Thu, Jan 23, 2020 at 02:47:18PM +0000, Alan Maguire wrote:
+> add debugfs support for displaying kunit test suite results; this is
+> especially useful for module-loaded tests to allow disentangling of
+> test result display from other dmesg events.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  include/kunit/test.h |  21 +++++++---
+>  lib/kunit/Makefile   |   3 +-
+>  lib/kunit/debugfs.c  | 111 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  lib/kunit/debugfs.h  |  11 +++++
+>  lib/kunit/test.c     |  88 ++++++++++++++++++++++++++++++----------
+>  5 files changed, 206 insertions(+), 28 deletions(-)
+>  create mode 100644 lib/kunit/debugfs.c
+>  create mode 100644 lib/kunit/debugfs.h
+> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 2dfb550..37219b8a 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -125,6 +125,8 @@ struct kunit_case {
+>  	bool success;
+>  };
+>  
+> +#define	kunit_status2str(status)	(status ? "ok" : "not ok")
+> +
+>  /**
+>   * KUNIT_CASE - A helper for creating a &struct kunit_case
+>   *
+> @@ -157,6 +159,9 @@ struct kunit_suite {
+>  	int (*init)(struct kunit *test);
+>  	void (*exit)(struct kunit *test);
+>  	struct kunit_case *test_cases;
+> +
+> +	/* private - internal use only */
+> +	struct dentry *debugfs;
+>  };
+>  
+>  /**
+> @@ -197,6 +202,15 @@ struct kunit {
+>  
+>  int kunit_run_tests(struct kunit_suite *suite);
+>  
+> +size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
+> +
+> +unsigned int kunit_test_case_num(struct kunit_suite *suite,
+> +				 struct kunit_case *test_case);
+> +
+> +int __kunit_test_suites_init(struct kunit_suite **suites);
+> +
+> +void __kunit_test_suites_exit(struct kunit_suite **suites);
+> +
+>  /**
+>   * kunit_test_suites() - used to register one or more &struct kunit_suite
+>   *			 with KUnit.
+> @@ -226,15 +240,12 @@ struct kunit {
+>  	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
+>  	static int kunit_test_suites_init(void)				\
+>  	{								\
+> -		unsigned int i;						\
+> -		for (i = 0; suites[i] != NULL; i++)			\
+> -			kunit_run_tests(suites[i]);			\
+> -		return 0;						\
+> +		return __kunit_test_suites_init(suites);		\
+>  	}								\
+>  	late_initcall(kunit_test_suites_init);				\
+>  	static void __exit kunit_test_suites_exit(void)			\
+>  	{								\
+> -		return;							\
+> +		return __kunit_test_suites_exit(suites);		\
+>  	}								\
+>  	module_exit(kunit_test_suites_exit)
+>  
+> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+> index fab5564..869aab0 100644
+> --- a/lib/kunit/Makefile
+> +++ b/lib/kunit/Makefile
+> @@ -3,7 +3,8 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
+>  kunit-objs +=				test.o \
+>  					string-stream.o \
+>  					assert.o \
+> -					try-catch.o
+> +					try-catch.o \
+> +					debugfs.o
+>  
+>  obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
+>  
+> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> new file mode 100644
+> index 0000000..5994f32
+> --- /dev/null
+> +++ b/lib/kunit/debugfs.c
+> @@ -0,0 +1,111 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2020, Oracle and/or its affiliates.
+> + *    Author: Alan Maguire <alan.maguire@oracle.com>
+> + */
+> +#include <asm/unistd.h>
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- lib/kunit/debugfs.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Why do you need this asm include file?
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 5994f32..4881261 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -15,6 +15,7 @@
- 
- #define KUNIT_DEBUGFS_ROOT             "kunit"
- #define KUNIT_DEBUGFS_RESULTS          "results"
-+#define KUNIT_DEBUGFS_RUN		"run"
- 
- /*
-  * Create a debugfs representation of test suites:
-@@ -23,6 +24,8 @@
-  * /sys/kernel/debug/kunit/<testsuite>/results	Show results of last run for
-  *						testsuite
-  *
-+ * /sys/kernel/debug/kunit/<testsuite>/run	Run testsuite and show results
-+ *
-  */
- 
- static struct dentry *debugfs_rootdir;
-@@ -72,6 +75,18 @@ static int debugfs_print_results(struct seq_file *seq, void *v)
- 	return 0;
- }
- 
-+/*
-+ * /sys/kernel/debug/kunit/<testsuite>/run (re)runs suite and shows all results.
-+ */
-+static int debugfs_run_print_results(struct seq_file *seq, void *v)
-+{
-+	struct kunit_suite *suite = (struct kunit_suite *)seq->private;
-+
-+	kunit_run_tests(suite);
-+
-+	return debugfs_print_results(seq, v);
-+}
-+
- static int debugfs_release(struct inode *inode, struct file *file)
- {
- 	return single_release(inode, file);
-@@ -93,6 +108,22 @@ static int debugfs_results_open(struct inode *inode, struct file *file)
- 	.release = debugfs_release,
- };
- 
-+static int debugfs_run_open(struct inode *inode, struct file *file)
-+{
-+	struct kunit_suite *suite;
-+
-+	suite = (struct kunit_suite *)inode->i_private;
-+
-+	return single_open(file, debugfs_run_print_results, suite);
-+}
-+
-+static const struct file_operations debugfs_run_fops = {
-+	.open = debugfs_run_open,
-+	.read = seq_read,
-+	.llseek = seq_lseek,
-+	.release = debugfs_release,
-+};
-+
- void debugfs_create_suite(struct kunit_suite *suite)
- {
- 	/* First add /sys/kernel/debug/kunit/<testsuite> */
-@@ -103,6 +134,9 @@ void debugfs_create_suite(struct kunit_suite *suite)
- 	debugfs_create_file(KUNIT_DEBUGFS_RESULTS, S_IFREG | 0444,
- 			    suite->debugfs,
- 			    suite, &debugfs_results_fops);
-+	debugfs_create_file(KUNIT_DEBUGFS_RUN, S_IFREG | 0444,
-+			    suite->debugfs,
-+			    suite, &debugfs_run_fops);
- }
- 
- void debugfs_destroy_suite(struct kunit_suite *suite)
--- 
-1.8.3.1
+> +#include <linux/debugfs.h>
+> +#include <linux/module.h>
+> +#include <linux/time.h>
+> +
+> +#include <uapi/linux/limits.h>
+> +#include <kunit/test.h>
+> +
+> +#include "string-stream.h"
+> +
+> +#define KUNIT_DEBUGFS_ROOT             "kunit"
+> +#define KUNIT_DEBUGFS_RESULTS          "results"
+> +
+> +/*
+> + * Create a debugfs representation of test suites:
+> + *
+> + * Path						Semantics
+> + * /sys/kernel/debug/kunit/<testsuite>/results	Show results of last run for
+> + *						testsuite
+> + *
+> + */
+> +
+> +static struct dentry *debugfs_rootdir;
+> +
+> +void debugfs_cleanup(void)
 
+Can you prefix all of your global symbols here with "kunit_debugfs"
+instead of just "debugfs" to show that this really is not the core
+debugfs kernel code?
+
+thanks,
+
+greg k-h
