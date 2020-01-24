@@ -2,101 +2,126 @@ Return-Path: <SRS0=r/vL=3N=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AD54C2D0DB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 10:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE68AC32771
+	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 11:37:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E98A20718
-	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 10:49:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4638206D4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 11:37:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dAE6J2Zm"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="aGYdZJEs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729093AbgAXKtz (ORCPT
+        id S2391970AbgAXLhy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 24 Jan 2020 05:49:55 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:50513 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729992AbgAXKty (ORCPT
+        Fri, 24 Jan 2020 06:37:54 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:37390 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404136AbgAXL37 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 05:49:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579862993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ewCrWzbjd/xfavGLkDFLJZm0rsCoA772YL+6ee+m1Y8=;
-        b=dAE6J2Zm8Wkm61ripTis5QyQfEDc/CHt5LzmlEutB79xi8edYLO23tppFh/zgNXcsWwfYo
-        uFYFv77+K/iZQ5wenOWcqBJXQO0M5iE8SSZaapP+9YhdQ9n0o9XS5IWRTaSYQ5tPlBJ7ai
-        ixffhUtUHb4XUc3fY9hIi6iBS4u3CNE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-78-M3Hk-twYPbmA3PWUsqo1aQ-1; Fri, 24 Jan 2020 05:49:51 -0500
-X-MC-Unique: M3Hk-twYPbmA3PWUsqo1aQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A00010CE79E;
-        Fri, 24 Jan 2020 10:49:50 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2C07560BEC;
-        Fri, 24 Jan 2020 10:49:46 +0000 (UTC)
-Date:   Fri, 24 Jan 2020 11:49:43 +0100
-From:   Andrew Jones <drjones@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v4 07/10] KVM: selftests: Support multiple vCPUs in
- demand paging test
-Message-ID: <20200124104943.6abkjzegmewnoeiv@kamzik.brq.redhat.com>
-References: <20200123180436.99487-1-bgardon@google.com>
- <20200123180436.99487-8-bgardon@google.com>
+        Fri, 24 Jan 2020 06:29:59 -0500
+Received: by mail-wm1-f66.google.com with SMTP id f129so1375677wmf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 03:29:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cJ4TZV5cXZ/8q9QBQvb7gjQiJz0uB/MAQITB1sj0NIA=;
+        b=aGYdZJEshwF1cDJSP1sWdrNLBZhS7I1RyF6A+y71axz3sMiUBhYP2IE6Kd9mNUgg5W
+         IECZ+kHefZaSIFM+5Bg2JehMCd3qN0v0qS3ULjoDIz6rpsX8FxCiZGK6BXNJbtHF3X4T
+         sv57upHc3Gx34c2KFseWNntiHUPIsA2RuSJ9A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cJ4TZV5cXZ/8q9QBQvb7gjQiJz0uB/MAQITB1sj0NIA=;
+        b=UGwCvdSb5wSpvMnfgEvvqFS4Y4hXBTT+bmtlGCUk8Jxeo3JTU86k4kWqyikAQEK0fa
+         pcDX54C8loweVkFJgnFAa9U1LwmFlSQh6n1cOKtYWluP+VGz6E8L30KhGmAS7QUWUTz+
+         aoEaEf14dBm5pbkHy+oo7L/csLYfacHmWgFB2K5qbGEJ6ylHE7ICtZStlm0eFCsXKv9d
+         ypZKGDUa+4YoZlzznwzGMjJWXqNqcfbp99cSOKptJ/R+6sb539rZKxkQqoclWKmGHSou
+         yd1GwlRZU3ohiQM6+idiZuoZR3lZ8i7xhal4tID9CxU9eJBEFL67mDSnhHh6hrfvMieL
+         4aTg==
+X-Gm-Message-State: APjAAAXAHnPo6+ih7ZzJioKVuKZBOWZXZfRNvBpAjCMJepprQG+lKV9+
+        6cR6yZM2hmZss/EIC4ZbHDKYzA==
+X-Google-Smtp-Source: APXvYqxsibd4gK6MTr1ppba1secKSIQp1ayf0Ni0amvJDL4rkRNpwnjnQZ1jK6nkDlO+g5yIu8e9hQ==
+X-Received: by 2002:a7b:c450:: with SMTP id l16mr2846104wmi.166.1579865397394;
+        Fri, 24 Jan 2020 03:29:57 -0800 (PST)
+Received: from antares.lan (3.a.c.b.c.e.9.a.8.e.c.d.e.4.1.6.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:614e:dce8:a9ec:bca3])
+        by smtp.gmail.com with ESMTPSA id n189sm6808688wme.33.2020.01.24.03.29.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2020 03:29:56 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 4/4] selftests: bpf: reset global state between reuseport test runs
+Date:   Fri, 24 Jan 2020 11:27:54 +0000
+Message-Id: <20200124112754.19664-5-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200124112754.19664-1-lmb@cloudflare.com>
+References: <20200123165934.9584-1-lmb@cloudflare.com>
+ <20200124112754.19664-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200123180436.99487-8-bgardon@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 10:04:33AM -0800, Ben Gardon wrote:
-...
-> -static struct kvm_vm *create_vm(enum vm_guest_mode mode, uint32_t vcpuid,
-> -				uint64_t extra_mem_pages, void *guest_code)
-> +#define PAGE_SHIFT_4K  12
-> +#define PTES_PER_4K_PT 512
-> +
-> +static struct kvm_vm *create_vm(enum vm_guest_mode mode, int vcpus,
-> +				uint64_t vcpu_memory_bytes)
->  {
->  	struct kvm_vm *vm;
-> -	uint64_t extra_pg_pages = extra_mem_pages / 512 * 2;
-> +	uint64_t pages = DEFAULT_GUEST_PHY_PAGES;
-> +
-> +	/* Account for a few pages per-vCPU for stacks */
-> +	pages += DEFAULT_STACK_PGS * vcpus;
-> +
-> +	/*
-> +	 * Reserve twice the ammount of memory needed to map the test region and
-> +	 * the page table / stacks region, at 4k, for page tables. Do the
-> +	 * calculation with 4K page size: the smallest of all archs. (e.g., 64K
-> +	 * page size guest will need even less memory for page tables).
-> +	 */
-> +	pages += (2 * pages) / PTES_PER_4K_PT;
-> +	pages += ((2 * vcpus * vcpu_memory_bytes) >> PAGE_SHIFT_4K) /
-> +		 PTES_PER_4K_PT;
+Currently, there is a lot of false positives if a single reuseport test
+fails. This is because expected_results and the result map are not cleared.
 
-pages needs to be rounded up to the next multiple of 16 in order for this
-to work on aarch64 machines with 64k pages.
+Zero both after individual test runs, which fixes the mentioned false
+positives.
 
-Thanks,
-drew
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Fixes: 91134d849a0e ("bpf: Test BPF_PROG_TYPE_SK_REUSEPORT")
+---
+ .../selftests/bpf/prog_tests/select_reuseport.c  | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index e7e56929751c..098bcae5f827 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -33,7 +33,7 @@
+ #define REUSEPORT_ARRAY_SIZE 32
+ 
+ static int result_map, tmp_index_ovr_map, linum_map, data_check_map;
+-static enum result expected_results[NR_RESULTS];
++static __u32 expected_results[NR_RESULTS];
+ static int sk_fds[REUSEPORT_ARRAY_SIZE];
+ static int reuseport_array = -1, outer_map = -1;
+ static int select_by_skb_data_prog;
+@@ -697,7 +697,19 @@ static void setup_per_test(int type, sa_family_t family, bool inany,
+ 
+ static void cleanup_per_test(bool no_inner_map)
+ {
+-	int i, err;
++	int i, err, zero = 0;
++
++	memset(expected_results, 0, sizeof(expected_results));
++
++	for (i = 0; i < NR_RESULTS; i++) {
++		err = bpf_map_update_elem(result_map, &i, &zero, BPF_ANY);
++		RET_IF(err, "reset elem in result_map",
++		       "i:%u err:%d errno:%d\n", i, err, errno);
++	}
++
++	err = bpf_map_update_elem(linum_map, &zero, &zero, BPF_ANY);
++	RET_IF(err, "reset line number in linum_map", "err:%d errno:%d\n",
++	       err, errno);
+ 
+ 	for (i = 0; i < REUSEPORT_ARRAY_SIZE; i++)
+ 		close(sk_fds[i]);
+-- 
+2.20.1
 
