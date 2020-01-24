@@ -2,110 +2,140 @@ Return-Path: <SRS0=r/vL=3N=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 480DCC2D0DB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 11:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7770AC32771
+	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 11:40:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E39020708
-	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 11:38:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="wyPpvX1o"
+	by mail.kernel.org (Postfix) with ESMTP id 58C9D2468A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jan 2020 11:40:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731637AbgAXLiP (ORCPT
+        id S2392058AbgAXLkd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 24 Jan 2020 06:38:15 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36478 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389526AbgAXL34 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 06:29:56 -0500
-Received: by mail-wr1-f67.google.com with SMTP id z3so1565643wru.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 03:29:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=23V7V0bQTVhkXPFpZHbr/dpA6QXlskc4s7MHHF/kg3o=;
-        b=wyPpvX1on05Qgb1oTJUYHbUJNqNJVywXnK+eYc/CEFlZ+FYyxqBTorCIgNRAatuedc
-         1WogFxqm4Rx0i8D0wQaMEkYW3ZxpGbv9QkI8SDAT6ozhh49OB2EEr2X39omSbAaz9zvK
-         y9U+UJQby0rEgCppiEyU3ntbK9vAInHyG7GO4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=23V7V0bQTVhkXPFpZHbr/dpA6QXlskc4s7MHHF/kg3o=;
-        b=amws2UlKOJkcytTc4n/fSRb0nev+5ZlKHz+GEFH+pVWa4FknV+qhnPp2HkFe5R8lt2
-         gMqCcBSbWAfZhryiHcV/5SYg/YeBbpWlHLgBcn/2LzUy+hC4viy3ehNBtjVIShNiBww1
-         5g3Da9269A+HbY2DoJfkCWF/SpwhrGri7FeM7LOSI0IjMTKuzuaZqqrh4EaFWO2rqE43
-         +c0cxmISY4Mv8N2A0sQDCwa82/W256rciHbfPFLDMCumGhg/c2uAhyN6JlKQ9tPIUewf
-         X3F9kYUL827yMuDpc0SGMUvAhuKl0lANF4FX5flUV3qIadWkMfhOS0IKANqpeLze5NEC
-         0uUA==
-X-Gm-Message-State: APjAAAW0/WfSM0jIX+13WwcNCqS8k0r+pMHLo4xnVCS6fUsRcGLbWcKA
-        hs5aAl8M2iyt/BKEaNTNbsTkdg==
-X-Google-Smtp-Source: APXvYqxR4PnKJm5OXMmu+YwHZ8oajyip6nFIy5+fZ9y6nFyYA1+taQrddJKco673nEo5N8RV5VfLpA==
-X-Received: by 2002:adf:9144:: with SMTP id j62mr3863056wrj.168.1579865394173;
-        Fri, 24 Jan 2020 03:29:54 -0800 (PST)
-Received: from antares.lan (3.a.c.b.c.e.9.a.8.e.c.d.e.4.1.6.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:614e:dce8:a9ec:bca3])
-        by smtp.gmail.com with ESMTPSA id n189sm6808688wme.33.2020.01.24.03.29.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2020 03:29:53 -0800 (PST)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/4] selftests: bpf: ignore FIN packets for reuseport tests
-Date:   Fri, 24 Jan 2020 11:27:52 +0000
-Message-Id: <20200124112754.19664-3-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200124112754.19664-1-lmb@cloudflare.com>
-References: <20200123165934.9584-1-lmb@cloudflare.com>
- <20200124112754.19664-1-lmb@cloudflare.com>
+        Fri, 24 Jan 2020 06:40:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50776 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391200AbgAXLkd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 Jan 2020 06:40:33 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 43407B149;
+        Fri, 24 Jan 2020 11:40:30 +0000 (UTC)
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org
+Cc:     alex.shi@linux.alibaba.com, guro@fb.com, hannes@cmpxchg.org,
+        kernel-team@android.com, linger.lee@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, lizefan@huawei.com,
+        matthias.bgg@gmail.com, shuah@kernel.org, surenb@google.com,
+        tj@kernel.org, tomcherry@google.com
+Subject: [PATCH v2 1/3] cgroup: Iterate tasks that did not finish do_exit()
+Date:   Fri, 24 Jan 2020 12:40:15 +0100
+Message-Id: <20200124114017.8363-2-mkoutny@suse.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200124114017.8363-1-mkoutny@suse.com>
+References: <20200120145635.GA30904@blackbody.suse.cz>
+ <20200124114017.8363-1-mkoutny@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The reuseport tests currently suffer from a race condition: FIN
-packets count towards DROP_ERR_SKB_DATA, since they don't contain
-a valid struct cmd. Tests will spuriously fail depending on whether
-check_results is called before or after the FIN is processed.
+PF_EXITING is set earlier than actual removal from css_set when a task
+is exitting. This can confuse cgroup.procs readers who see no PF_EXITING
+tasks, however, rmdir is checking against css_set membership so it can
+transitionally fail with EBUSY.
 
-Exit the BPF program early if FIN is set.
+Fix this by listing tasks that weren't unlinked from css_set active
+lists.
+It may happen that other users of the task iterator (without
+CSS_TASK_ITER_PROCS) spot a PF_EXITING task before cgroup_exit(). This
+is equal to the state before commit c03cd7738a83 ("cgroup: Include dying
+leaders with live threads in PROCS iterations") but it may be reviewed
+later.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Fixes: 91134d849a0e ("bpf: Test BPF_PROG_TYPE_SK_REUSEPORT")
+Reported-by: Suren Baghdasaryan <surenb@google.com>
+Fixes: c03cd7738a83 ("cgroup: Include dying leaders with live threads in PROCS iterations")
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
 ---
- .../selftests/bpf/progs/test_select_reuseport_kern.c        | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/cgroup.h |  1 +
+ kernel/cgroup/cgroup.c | 23 ++++++++++++++++-------
+ 2 files changed, 17 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-index d69a1f2bbbfd..26e77dcc7e91 100644
---- a/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_select_reuseport_kern.c
-@@ -113,6 +113,12 @@ int _select_by_skb_data(struct sk_reuseport_md *reuse_md)
- 		data_check.skb_ports[0] = th->source;
- 		data_check.skb_ports[1] = th->dest;
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index d7ddebd0cdec..e75d2191226b 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -62,6 +62,7 @@ struct css_task_iter {
+ 	struct list_head		*mg_tasks_head;
+ 	struct list_head		*dying_tasks_head;
  
-+		if (th->fin)
-+			/* The connection is being torn down at the end of a
-+			 * test. It can't contain a cmd, so return early.
-+			 */
-+			return SK_PASS;
-+
- 		if ((th->doff << 2) + sizeof(*cmd) > data_check.len)
- 			GOTO_DONE(DROP_ERR_SKB_DATA);
- 		if (bpf_skb_load_bytes(reuse_md, th->doff << 2, &cmd_copy,
++	struct list_head		*cur_tasks_head;
+ 	struct css_set			*cur_cset;
+ 	struct css_set			*cur_dcset;
+ 	struct task_struct		*cur_task;
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 735af8f15f95..a6e3619e013b 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -4404,12 +4404,16 @@ static void css_task_iter_advance_css_set(struct css_task_iter *it)
+ 		}
+ 	} while (!css_set_populated(cset) && list_empty(&cset->dying_tasks));
+ 
+-	if (!list_empty(&cset->tasks))
++	if (!list_empty(&cset->tasks)) {
+ 		it->task_pos = cset->tasks.next;
+-	else if (!list_empty(&cset->mg_tasks))
++		it->cur_tasks_head = &cset->tasks;
++	} else if (!list_empty(&cset->mg_tasks)) {
+ 		it->task_pos = cset->mg_tasks.next;
+-	else
++		it->cur_tasks_head = &cset->mg_tasks;
++	} else {
+ 		it->task_pos = cset->dying_tasks.next;
++		it->cur_tasks_head = &cset->dying_tasks;
++	}
+ 
+ 	it->tasks_head = &cset->tasks;
+ 	it->mg_tasks_head = &cset->mg_tasks;
+@@ -4467,10 +4471,14 @@ static void css_task_iter_advance(struct css_task_iter *it)
+ 		else
+ 			it->task_pos = it->task_pos->next;
+ 
+-		if (it->task_pos == it->tasks_head)
++		if (it->task_pos == it->tasks_head) {
+ 			it->task_pos = it->mg_tasks_head->next;
+-		if (it->task_pos == it->mg_tasks_head)
++			it->cur_tasks_head = it->mg_tasks_head;
++		}
++		if (it->task_pos == it->mg_tasks_head) {
+ 			it->task_pos = it->dying_tasks_head->next;
++			it->cur_tasks_head = it->dying_tasks_head;
++		}
+ 		if (it->task_pos == it->dying_tasks_head)
+ 			css_task_iter_advance_css_set(it);
+ 	} else {
+@@ -4489,11 +4497,12 @@ static void css_task_iter_advance(struct css_task_iter *it)
+ 			goto repeat;
+ 
+ 		/* and dying leaders w/o live member threads */
+-		if (!atomic_read(&task->signal->live))
++		if (it->cur_tasks_head == it->dying_tasks_head &&
++		    !atomic_read(&task->signal->live))
+ 			goto repeat;
+ 	} else {
+ 		/* skip all dying ones */
+-		if (task->flags & PF_EXITING)
++		if (it->cur_tasks_head == it->dying_tasks_head)
+ 			goto repeat;
+ 	}
+ }
 -- 
-2.20.1
+2.24.1
 
