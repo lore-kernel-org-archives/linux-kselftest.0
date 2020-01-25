@@ -2,280 +2,222 @@ Return-Path: <SRS0=+G7t=3O=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3016FC3524E
-	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jan 2020 02:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED55C35242
+	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jan 2020 09:34:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F016D2075E
-	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jan 2020 02:11:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45E342071E
+	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jan 2020 09:34:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Xh0Rg6kE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S5AEux1E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387679AbgAYCLW (ORCPT
+        id S1726204AbgAYJeV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 24 Jan 2020 21:11:22 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:5889 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387458AbgAYCLV (ORCPT
+        Sat, 25 Jan 2020 04:34:21 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51578 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725710AbgAYJeV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 21:11:21 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e2ba3b90003>; Fri, 24 Jan 2020 18:11:06 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 24 Jan 2020 18:11:20 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 24 Jan 2020 18:11:20 -0800
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 25 Jan
- 2020 02:11:20 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sat, 25 Jan 2020 02:11:19 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e2ba3c60001>; Fri, 24 Jan 2020 18:11:19 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 2/3] mm/gup_benchmark: support pin_user_pages() and related calls
-Date:   Fri, 24 Jan 2020 18:11:14 -0800
-Message-ID: <20200125021115.731629-3-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200125021115.731629-1-jhubbard@nvidia.com>
-References: <20200125021115.731629-1-jhubbard@nvidia.com>
+        Sat, 25 Jan 2020 04:34:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579944860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=799m6qKMV18ggbdbpJL4lidbUmQPUZ2uqN90WWxnXDE=;
+        b=S5AEux1EhbcpuBAEHkgWWnOXSjZ1S6Vgq5x6b/i0bLkzzHismxg6iPkPgUs3dCMMXUPny1
+        NKrAfJ3cQcqCBZ6FDEZ1tAZ4bV5mPRkyfqRT+wYTNjRwKyaTEJhRZGRlanxwukeJGQpG4c
+        M2QQ+Y6N6RDHxf3pUOTx4+fWglN9pdE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-129-SwNAjOGDMqCQpeiIl0vtYQ-1; Sat, 25 Jan 2020 04:34:18 -0500
+X-MC-Unique: SwNAjOGDMqCQpeiIl0vtYQ-1
+Received: by mail-wr1-f71.google.com with SMTP id i9so2763350wru.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 Jan 2020 01:34:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=799m6qKMV18ggbdbpJL4lidbUmQPUZ2uqN90WWxnXDE=;
+        b=hLa9l3RNjgeWunGVR1DCbON7hwX2p+Fb7dkpTP5pxA48rVyu5dtcgsrENmK2VnuUnx
+         QvUoESfwp4YXyak2LMc0zlEVHg7Cl55is+SvX83MQggUwliLvhJV33d9d5fOP+yX5Z1f
+         sHfu7jAeBClYWpZzV6oPcpf6Cuv4TUC4/hIsq0y1Z1eYRsQDD8Km7eRhVOgikXbeAse+
+         o4Hqdes86R6+CGaLTC450s5zg8nzvODALrTe0VBbk7Z7yPJ5P5kyvKN8zZrWWu1gCFWX
+         ZYLwGQEV75Yp3eOzGop8pZY/WjZhTiqusu2xpQ1YejXAI87ua/A9TZ/LpsgoheSEekK6
+         dcGg==
+X-Gm-Message-State: APjAAAXx3/qmcEa3JBhq7ilrdsxgaBOZenR8wlJP/R80F+7zcYDnfeXx
+        pd/KrsH8q8FVn/kycozdeD2s3Wj974KhFNDCczT2B03yA2rm47ay419j1VtFFhekIEhAFMZG4OM
+        O+XJjuaajduIGU3N247BIn28iNt4B
+X-Received: by 2002:adf:f308:: with SMTP id i8mr9489196wro.42.1579944857316;
+        Sat, 25 Jan 2020 01:34:17 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzV+U0Zk/vBr3PYTOy2NS/UOEJyzbyAI9oNA0HJiFpizgJq7/yGvYaD+zj50Eu2svel6qBslw==
+X-Received: by 2002:adf:f308:: with SMTP id i8mr9489175wro.42.1579944857009;
+        Sat, 25 Jan 2020 01:34:17 -0800 (PST)
+Received: from [192.168.10.150] ([93.56.166.5])
+        by smtp.gmail.com with ESMTPSA id f16sm11253860wrm.65.2020.01.25.01.34.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jan 2020 01:34:16 -0800 (PST)
+Subject: Re: [PATCH v4 06/10] KVM: selftests: Add support for vcpu_args_set to
+ aarch64 and s390x
+To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>
+References: <20200123180436.99487-1-bgardon@google.com>
+ <20200123180436.99487-7-bgardon@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <6061cd22-59bb-c191-bd98-f14d7cd274ae@redhat.com>
+Date:   Sat, 25 Jan 2020 10:34:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579918266; bh=bGcDpEgcB5cYnm4qbdN92T2nBSPMa0aPySSlK6IkO1w=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=Xh0Rg6kEnzwn1N5KZSkdukVzRBN3Q5Bs+F+OmUpW52+IuStnQTm1YXJjQGvRSDG48
-         r6uIOug5DKYFruzE8Xfx8e1Iu/vq50hPQeponCiACYk4aKrEjeCcJuufpv6YkucN+M
-         uGpuag0y3TwsfMo0PVJf9dWSBMjw1fj8mP3GvLMWTJcbQFEv3MjhqMQVhUQFHEhaLd
-         6tHnepaTITLZ8bLkUPbWOJA0XrMkEnXQxI3V5XRXW8ZGWdvMNs2oobdYoakLMadSMk
-         IhJw5aLs/I3IK+GTtDuxbqY9tjvKsNgAzA8VrJipU01FZc74RZ5Sfr4XLYY58EmJFv
-         K5K548i4izJdA==
+In-Reply-To: <20200123180436.99487-7-bgardon@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Up until now, gup_benchmark supported testing of the
-following kernel functions:
+On 23/01/20 19:04, Ben Gardon wrote:
+> Currently vcpu_args_set is only implemented for x86. This makes writing
+> tests with multiple vCPUs difficult as each guest vCPU must either a.)
+> do the same thing or b.) derive some kind of unique token from it's
+> registers or the architecture. To simplify the process of writing tests
+> with multiple vCPUs for s390 and aarch64, add set args functions for
+> those architectures.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/lib/aarch64/processor.c     | 33 +++++++++++++++++
+>  .../selftests/kvm/lib/s390x/processor.c       | 35 +++++++++++++++++++
+>  2 files changed, 68 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 86036a59a668e..a2ff90a75f326 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -333,3 +333,36 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  {
+>  	aarch64_vcpu_add_default(vm, vcpuid, NULL, guest_code);
+>  }
+> +
+> +/* VM VCPU Args Set
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - VCPU ID
+> + *   num - number of arguments
+> + *   ... - arguments, each of type uint64_t
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Sets the first num function input arguments to the values
+> + * given as variable args.  Each of the variable args is expected to
+> + * be of type uint64_t. The registers set by this function are r0-r7.
+> + */
+> +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+> +		    "  num: %u\n",
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +
+> +	for (i = 0; i < num; i++)
+> +		set_reg(vm, vcpuid, ARM64_CORE_REG(regs.regs[num]),
+> +			va_arg(ap, uint64_t));
+> +
+> +	va_end(ap);
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 32a02360b1eb0..680f37be9dbc9 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -269,6 +269,41 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  	run->psw_addr = (uintptr_t)guest_code;
+>  }
+>  
+> +/* VM VCPU Args Set
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - VCPU ID
+> + *   num - number of arguments
+> + *   ... - arguments, each of type uint64_t
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Sets the first num function input arguments to the values
+> + * given as variable args.  Each of the variable args is expected to
+> + * be of type uint64_t. The registers set by this function are r2-r6.
+> + */
+> +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +	struct kvm_regs regs;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+> +		    "  num: %u\n",
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +	vcpu_regs_get(vm, vcpuid, &regs);
+> +
+> +	for (i = 0; i < num; i++)
+> +		regs.gprs[i + 2] = va_arg(ap, uint64_t);
+> +
+> +	vcpu_regs_set(vm, vcpuid, &regs);
+> +	va_end(ap);
+> +}
+> +
+>  void vcpu_dump(FILE *stream, struct kvm_vm *vm, uint32_t vcpuid, uint8_t indent)
+>  {
+>  	struct vcpu *vcpu = vm->vcpu_head;
+> 
 
-* get_user_pages(): via the '-U' command line option
-* get_user_pages_longterm(): via the '-L' command line option
-* get_user_pages_fast(): as the default (no options required)
+Squashing this:
 
-Add test coverage for the new corresponding pin_*() functions:
-
-* pin_user_pages_fast(): via the '-a' command line option
-* pin_user_pages():      via the '-b' command line option
-
-Also, add an option for clarity: '-u' for what is now (still) the
-default choice: get_user_pages_fast().
-
-Also, for the commands that set FOLL_PIN, verify that the pages
-really are dma-pinned, via the new is_dma_pinned() routine.
-Those commands are:
-
-    PIN_FAST_BENCHMARK     : calls pin_user_pages_fast()
-    PIN_BENCHMARK          : calls pin_user_pages()
-
-In between the calls to pin_*() and unpin_user_pages(),
-check each page: if page_dma_pinned() returns false, then
-WARN and return.
-
-Do this outside of the benchmark timestamps, so that it doesn't
-affect reported times.
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup_benchmark.c                         | 70 ++++++++++++++++++++--
- tools/testing/selftests/vm/gup_benchmark.c | 15 ++++-
- 2 files changed, 79 insertions(+), 6 deletions(-)
-
-diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
-index 8dba38e79a9f..3d5fb765e4e6 100644
---- a/mm/gup_benchmark.c
-+++ b/mm/gup_benchmark.c
-@@ -8,6 +8,8 @@
- #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
- #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
- #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
-+#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
-+#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
-=20
- struct gup_benchmark {
- 	__u64 get_delta_usec;
-@@ -19,6 +21,47 @@ struct gup_benchmark {
- 	__u64 expansion[10];	/* For future use */
- };
-=20
-+static void put_back_pages(int cmd, struct page **pages, unsigned long nr_=
-pages)
-+{
-+	int i;
-+
-+	switch (cmd) {
-+	case GUP_FAST_BENCHMARK:
-+	case GUP_LONGTERM_BENCHMARK:
-+	case GUP_BENCHMARK:
-+		for (i =3D 0; i < nr_pages; i++)
-+			put_page(pages[i]);
-+		break;
-+
-+	case PIN_FAST_BENCHMARK:
-+	case PIN_BENCHMARK:
-+		unpin_user_pages(pages, nr_pages);
-+		break;
-+	}
-+}
-+
-+static void verify_dma_pinned(int cmd, struct page **pages,
-+			      unsigned long nr_pages)
-+{
-+	int i;
-+	struct page *page;
-+
-+	switch (cmd) {
-+	case PIN_FAST_BENCHMARK:
-+	case PIN_BENCHMARK:
-+		for (i =3D 0; i < nr_pages; i++) {
-+			page =3D pages[i];
-+			if (WARN(!page_dma_pinned(page),
-+				 "pages[%d] is NOT dma-pinned\n", i)) {
-+
-+				dump_page(page, "gup_benchmark failure");
-+				break;
-+			}
-+		}
-+		break;
-+	}
-+}
-+
- static int __gup_benchmark_ioctl(unsigned int cmd,
- 		struct gup_benchmark *gup)
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+index a2ff90a75f32..839a76c96f01 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+@@ -353,6 +353,7 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
  {
-@@ -66,6 +109,14 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
- 			nr =3D get_user_pages(addr, nr, gup->flags, pages + i,
- 					    NULL);
- 			break;
-+		case PIN_FAST_BENCHMARK:
-+			nr =3D pin_user_pages_fast(addr, nr, gup->flags,
-+						 pages + i);
-+			break;
-+		case PIN_BENCHMARK:
-+			nr =3D pin_user_pages(addr, nr, gup->flags, pages + i,
-+					    NULL);
-+			break;
- 		default:
- 			kvfree(pages);
- 			ret =3D -EINVAL;
-@@ -78,15 +129,22 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
- 	}
- 	end_time =3D ktime_get();
-=20
-+	/* Shifting the meaning of nr_pages: now it is actual number pinned: */
-+	nr_pages =3D i;
-+
- 	gup->get_delta_usec =3D ktime_us_delta(end_time, start_time);
- 	gup->size =3D addr - gup->addr;
-=20
-+	/*
-+	 * Take an un-benchmark-timed moment to verify DMA pinned
-+	 * state: print a warning if any non-dma-pinned pages are found:
-+	 */
-+	verify_dma_pinned(cmd, pages, nr_pages);
-+
- 	start_time =3D ktime_get();
--	for (i =3D 0; i < nr_pages; i++) {
--		if (!pages[i])
--			break;
--		put_page(pages[i]);
--	}
-+
-+	put_back_pages(cmd, pages, nr_pages);
-+
- 	end_time =3D ktime_get();
- 	gup->put_delta_usec =3D ktime_us_delta(end_time, start_time);
-=20
-@@ -105,6 +163,8 @@ static long gup_benchmark_ioctl(struct file *filep, uns=
-igned int cmd,
- 	case GUP_FAST_BENCHMARK:
- 	case GUP_LONGTERM_BENCHMARK:
- 	case GUP_BENCHMARK:
-+	case PIN_FAST_BENCHMARK:
-+	case PIN_BENCHMARK:
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/sel=
-ftests/vm/gup_benchmark.c
-index 389327e9b30a..43b4dfe161a2 100644
---- a/tools/testing/selftests/vm/gup_benchmark.c
-+++ b/tools/testing/selftests/vm/gup_benchmark.c
-@@ -18,6 +18,10 @@
- #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
- #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
-=20
-+/* Similar to above, but use FOLL_PIN instead of FOLL_GET. */
-+#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
-+#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
-+
- /* Just the flags we need, copied from mm.h: */
- #define FOLL_WRITE	0x01	/* check pte is writable */
-=20
-@@ -40,8 +44,14 @@ int main(int argc, char **argv)
- 	char *file =3D "/dev/zero";
- 	char *p;
-=20
--	while ((opt =3D getopt(argc, argv, "m:r:n:f:tTLUwSH")) !=3D -1) {
-+	while ((opt =3D getopt(argc, argv, "m:r:n:f:abtTLUuwSH")) !=3D -1) {
- 		switch (opt) {
-+		case 'a':
-+			cmd =3D PIN_FAST_BENCHMARK;
-+			break;
-+		case 'b':
-+			cmd =3D PIN_BENCHMARK;
-+			break;
- 		case 'm':
- 			size =3D atoi(optarg) * MB;
- 			break;
-@@ -63,6 +73,9 @@ int main(int argc, char **argv)
- 		case 'U':
- 			cmd =3D GUP_BENCHMARK;
- 			break;
-+		case 'u':
-+			cmd =3D GUP_FAST_BENCHMARK;
-+			break;
- 		case 'w':
- 			write =3D 1;
- 			break;
---=20
-2.25.0
+ 	va_list ap;
++	int i;
+ 
+ 	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+ 		    "  num: %u\n",
+diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+index 680f37be9dbc..a0b84235c848 100644
+--- a/tools/testing/selftests/kvm/lib/s390x/processor.c
++++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+@@ -289,6 +289,7 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+ {
+ 	va_list ap;
+ 	struct kvm_regs regs;
++	int i;
+ 
+ 	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+ 		    "  num: %u\n",
+
+Paolo
 
