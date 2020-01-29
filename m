@@ -2,149 +2,74 @@ Return-Path: <SRS0=/dwE=3S=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EFC3C35246
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 23:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4412EC35240
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 23:35:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D34F5207FF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 23:00:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NNmcNFI/"
+	by mail.kernel.org (Postfix) with ESMTP id 0FE7620716
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 23:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1580340916;
+	bh=CRHoM1bttD5ePrzojwwnwIxVos1znwcMOdr2HLYJqvs=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=juTDhqNrow3gzDdGjvqgZldRju4KhqqRvH3aGB9LCx76q6UwESR5PJcny1Jt445aA
+	 JnX2PnKdbLbc4vC31ML7Gcb7vCe49y9XVrXU76Kz94fWVk4W5l6LeoRyjnKWUWtSHD
+	 2UmVUxnHSxnVlN2rSF185wXDXoj1mjFIWPJzzXjo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbgA2XAP (ORCPT
+        id S1727103AbgA2XfK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Jan 2020 18:00:15 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:50752 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726401AbgA2XAP (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jan 2020 18:00:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=PK0g+/3O99lm08wVW89CDaU61bRcrU5br3+oiXW0Ri8=; b=NNmcNFI/+NovGu/ALrhlYSdMk
-        iMh/bxDYsf89LTuLM0oYbWjkx8BUoLx9CJ5yP5DmLsua+ZgtQFpZBZw+t46d4ItZbXS07hR4u9c4c
-        fzBY/MSHIT6SGgyRZc45kkRkbMW1kbyCb20Y/ZfoWmJ7X0yFRULFsY0EI/E6cVBx2ZlfXoWxiXKdG
-        Jvcfw2J/lFYJ7R3kySyPktPeHl96BFh9aeR4Orbz6FNEUCmrl22IF4LnWM1KYyXwAkPyUgHD79h41
-        BxHK1Mq+iogUJwdXU4cOT+8uYbU5DwlmanyV6QRL8Wgt7gSmijtdjgeCTOv4DQSIzDd9ZlFCVUF1x
-        Bq/iau1ow==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwwJR-000199-9a; Wed, 29 Jan 2020 22:59:57 +0000
-Date:   Wed, 29 Jan 2020 14:59:57 -0800
-From:   Matthew Wilcox <willy@infradead.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/8] mm: dump_page: print head page's refcount, for
- compound pages
-Message-ID: <20200129225957.GH6615@bombadil.infradead.org>
-References: <20200129032417.3085670-1-jhubbard@nvidia.com>
- <20200129032417.3085670-2-jhubbard@nvidia.com>
- <20200129112510.ulims6u36ofk2qwa@box>
- <b74e8aa9-fcfd-0340-594c-61f185a0ae65@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b74e8aa9-fcfd-0340-594c-61f185a0ae65@nvidia.com>
+        Wed, 29 Jan 2020 18:35:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56434 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726949AbgA2XfK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Jan 2020 18:35:10 -0500
+Subject: Re: [GIT PULL] Kselftest kunit update for Linux 5.6-rc1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580340909;
+        bh=CRHoM1bttD5ePrzojwwnwIxVos1znwcMOdr2HLYJqvs=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=WsNsb4KsMf5XGWBAUWSlwuuD/DCQT0mRrMrUnc8v5ha8wZ4Ix5s32BFZ2y+aYIMLy
+         HL5YyE8L5fHjbHIGz3cy4FtYWGbqdTwDZ8JD5yiVg9tZCWDUMAj5lmfafl5w1hl6Qn
+         EDwauioEIJeo13vwNL3y/iuNLUTlo2ZNJFP9oww0=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <5d0a37f1-f857-eadf-5e20-872ca6c7f656@linuxfoundation.org>
+References: <5d0a37f1-f857-eadf-5e20-872ca6c7f656@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <5d0a37f1-f857-eadf-5e20-872ca6c7f656@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-5.6-rc1-kunit
+X-PR-Tracked-Commit-Id: 35c57fc3f8eac81b38664a0fe160e267b908d8b8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 08a3ef8f6b0b1341c670caba35f782c9a452d488
+Message-Id: <158034090976.30341.6706812193591598185.pr-tracker-bot@kernel.org>
+Date:   Wed, 29 Jan 2020 23:35:09 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 29, 2020 at 02:26:06PM -0800, John Hubbard wrote:
-> On 1/29/20 3:25 AM, Kirill A. Shutemov wrote:
-> > On Tue, Jan 28, 2020 at 07:24:10PM -0800, John Hubbard wrote:
-> >> When debugging a problem that involves compound pages, it is extremely
-> >> helpful if dump_page() reports not only the page->_refcount, but also
-> >> the refcount of the head page of the compound page. That's because the
-> >> head page collects refcounts for the entire compound page.
-> >>
-> >> Therefore, enhance dump_page() so as to print out the refcount of the
-> >> head page of a compound page.
-> >>
-> >> This approach (printing information about a struct page that is not the
-> >> struct page that was passed into dump_page()) has a precedent:
-> >> compound_mapcount is already being printed.
-> > 
-> > refcount on a tail must always be 0. I think we should only print it when
-> > it is non-zero, emphasizing this fact with a standalone message.
-> > 
-> 
-> Hi Kirill,
-> 
-> Yes, good point, that sounds like just the right balance. And it avoids adding 
-> a new item to print in the common case, which is very nice. Here's what I've
-> changed it to for the next version (I'll also rewrite the commit description 
-> accordingly):
-> 
-> 
-> diff --git a/mm/debug.c b/mm/debug.c
-> index a90da5337c14..3a45e2b77de0 100644
-> --- a/mm/debug.c
-> +++ b/mm/debug.c
-> @@ -75,12 +75,17 @@ void __dump_page(struct page *page, const char *reason)
->  	 */
->  	mapcount = PageSlab(page) ? 0 : page_mapcount(page);
->  
-> -	if (PageCompound(page))
-> -		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
-> -			"index:%#lx compound_mapcount: %d\n",
-> -			page, page_ref_count(page), mapcount,
-> +	if (PageCompound(page)) {
-> +		pr_warn("page:%px compound refcount:%d mapcount:%d mapping:%px "
-> +			"index:%#lx compound_mapcount:%d\n",
-> +			page, page_ref_count(compound_head(page)), mapcount,
->  			page->mapping, page_to_pgoff(page),
->  			compound_mapcount(page));
-> +
-> +		if (page != compound_head(page) && page_ref_count(page) != 0)
-> +			pr_warn("page:%px PROBLEM: non-zero refcount (==%d) on "
-> +				"this tail page\n", page, page_ref_count(page));
-> +	}
->  	else
->  		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx\n",
->  			page, page_ref_count(page), mapcount,
+The pull request you sent on Wed, 29 Jan 2020 11:48:07 -0700:
 
-I have a hunk in my current tree which looks like this:
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.6-rc1-kunit
 
-@@ -77,6 +77,11 @@ void __dump_page(struct page *page, const char *reason)
-                pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx
-\n",
-                        page, page_ref_count(page), mapcount,
-                        page->mapping, page_to_pgoff(page));
-+       if (PageTail(page)) {
-+               struct page *head = compound_head(page);
-+               pr_warn("head:%px mapping:%px index:%#lx\n",
-+                       head, head->mapping, page_to_pgoff(head));
-+       }
-        if (PageKsm(page))
-                pr_warn("ksm flags: %#lx(%pGp)\n", page->flags, &page->flags);
-        else if (PageAnon(page))
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/08a3ef8f6b0b1341c670caba35f782c9a452d488
 
-I wonder if we can combine these two patches in some more useful way?
+Thank you!
 
-I also think we probably want a sanity check that 'head' and 'page'
-are within a sane range of each other (ie head < page and head +
-MAX_ORDER_NR_PAGES > page) to protect against a struct page that contains
-complete garbage.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
