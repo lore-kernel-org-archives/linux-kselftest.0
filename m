@@ -2,42 +2,42 @@ Return-Path: <SRS0=/dwE=3S=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57A27C33CB2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 03:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C755AC35240
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 03:24:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1697B20CC7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 03:24:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F9C92468E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Jan 2020 03:24:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="dIdd/4I3"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="E3c5QEyG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbgA2DYU (ORCPT
+        id S1726823AbgA2DYX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Jan 2020 22:24:20 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17856 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726725AbgA2DYU (ORCPT
+        Tue, 28 Jan 2020 22:24:23 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:6362 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726820AbgA2DYX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jan 2020 22:24:20 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e30fad50001>; Tue, 28 Jan 2020 19:24:05 -0800
+        Tue, 28 Jan 2020 22:24:23 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e30fab10001>; Tue, 28 Jan 2020 19:23:29 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate102.nvidia.com (PGP Universal service);
   Tue, 28 Jan 2020 19:24:19 -0800
 X-PGP-Universal: processed;
         by hqpgpgate102.nvidia.com on Tue, 28 Jan 2020 19:24:19 -0800
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Jan
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Jan
  2020 03:24:19 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Wed, 29 Jan 2020 03:24:19 +0000
 Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e30fae30000>; Tue, 28 Jan 2020 19:24:19 -0800
+        id <B5e30fae20004>; Tue, 28 Jan 2020 19:24:18 -0800
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Al Viro <viro@zeniv.linux.org.uk>,
@@ -56,158 +56,69 @@ CC:     Al Viro <viro@zeniv.linux.org.uk>,
         <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v2 3/8] mm/gup: pass a flags arg to __gup_device_* functions
-Date:   Tue, 28 Jan 2020 19:24:12 -0800
-Message-ID: <20200129032417.3085670-4-jhubbard@nvidia.com>
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v2 1/8] mm: dump_page: print head page's refcount, for compound pages
+Date:   Tue, 28 Jan 2020 19:24:10 -0800
+Message-ID: <20200129032417.3085670-2-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200129032417.3085670-1-jhubbard@nvidia.com>
 References: <20200129032417.3085670-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580268245; bh=4jp0QhymG3IBZ2UdWKCHIHfGSO5gi4QtwHm0dzK8Ubk=;
+        t=1580268209; bh=P1TeODLKtRur5z7N4mKfBv38jAYvtdOaySoL8r08WIg=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Type:Content-Transfer-Encoding;
-        b=dIdd/4I37fBknkQablXBtLM78TVO5M8tfksUiIeJqh6sECEvBwy9g/If56u8KHnoR
-         5S6VIticwZFAPD0MMSWWOnyKvxqPE0A3Nkxv46D8zTNZ6hf7msHPDvgoxfFGaCRITn
-         fsO9EdWCjJfUjP53JSRwcQN939LyT92HSwtBJjnjB57jjOMo17+6u/fJOYKpb03bYd
-         Qx+nTX9YZewOqUl5B2Ra8zhcgq21pvEbsQ0rInKRqnytB1ZO78PPoHC2PaPGm5u8f8
-         NcKggXL1i1ymyTtnsTJrBbk6yHLeEZQoWRtU9WaoUpkX/FAufJgmyv7T3Dlrpm3Wk/
-         kMIG/Vf9QZkxA==
+         Content-Transfer-Encoding:Content-Type;
+        b=E3c5QEyGx95NN96IE5SjKIfekR44Kiz+3iLIw4qlBA+LpbSooYT0An9LHX6XD6yl4
+         7lXKNT/kQg8YCcnJmYPOse8qK2L5jU8GMbzDsJ5WhQhpVzoarZvejOPeDSNh67wMcQ
+         hhPTwYPCvGm+OytsPAfw0evq9Lg0XgniczwV2eLW6M6FblnpHUvbCcwtJzhu2nPfuq
+         KZMCTpM8R/TZXtYInxwDY4PQVS0KggBcsXut4esMIK1IpOqrkG0AFWn1oyIHFG6HgV
+         oVgZsqQFU53ImQs7VGD18/+8URzEUhFO6Z663+sFH9Q7FNr95JNFeu5iWQeAs6fJV+
+         IyukOqyF+pdQg==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A subsequent patch requires access to gup flags, so pass the flags
-argument through to the __gup_device_* functions.
+When debugging a problem that involves compound pages, it is extremely
+helpful if dump_page() reports not only the page->_refcount, but also
+the refcount of the head page of the compound page. That's because the
+head page collects refcounts for the entire compound page.
 
-Also placate checkpatch.pl by shortening a nearby line.
+Therefore, enhance dump_page() so as to print out the refcount of the
+head page of a compound page.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+This approach (printing information about a struct page that is not the
+struct page that was passed into dump_page()) has a precedent:
+compound_mapcount is already being printed.
 
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- mm/gup.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ mm/debug.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index b699500da077..9e117998274c 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1963,7 +1963,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long add=
-r, unsigned long end,
+diff --git a/mm/debug.c b/mm/debug.c
+index a90da5337c14..4cc6cad8385d 100644
+--- a/mm/debug.c
++++ b/mm/debug.c
+@@ -76,9 +76,11 @@ void __dump_page(struct page *page, const char *reason)
+ 	mapcount =3D PageSlab(page) ? 0 : page_mapcount(page);
 =20
- #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HUGE=
-PAGE)
- static int __gup_device_huge(unsigned long pfn, unsigned long addr,
--		unsigned long end, struct page **pages, int *nr)
-+			     unsigned long end, unsigned int flags,
-+			     struct page **pages, int *nr)
- {
- 	int nr_start =3D *nr;
- 	struct dev_pagemap *pgmap =3D NULL;
-@@ -1989,13 +1990,14 @@ static int __gup_device_huge(unsigned long pfn, uns=
-igned long addr,
- }
-=20
- static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	unsigned long fault_pfn;
- 	int nr_start =3D *nr;
-=20
- 	fault_pfn =3D pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
--	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-+	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
- 		return 0;
-=20
- 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
-@@ -2006,13 +2008,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t =
-*pmdp, unsigned long addr,
- }
-=20
- static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	unsigned long fault_pfn;
- 	int nr_start =3D *nr;
-=20
- 	fault_pfn =3D pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
--	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-+	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
- 		return 0;
-=20
- 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
-@@ -2023,14 +2026,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_t =
-*pudp, unsigned long addr,
- }
- #else
- static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long ad=
-dr,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	BUILD_BUG();
- 	return 0;
- }
-=20
- static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long add=
-r,
--		unsigned long end, struct page **pages, int *nr)
-+				 unsigned long end, unsigned int flags,
-+				 struct page **pages, int *nr)
- {
- 	BUILD_BUG();
- 	return 0;
-@@ -2146,7 +2151,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- 	if (pmd_devmap(orig)) {
- 		if (unlikely(flags & FOLL_LONGTERM))
- 			return 0;
--		return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
-+		return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
-+					     pages, nr);
- 	}
-=20
- 	page =3D pmd_page(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
-@@ -2167,7 +2173,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- }
-=20
- static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
--		unsigned long end, unsigned int flags, struct page **pages, int *nr)
-+			unsigned long end, unsigned int flags,
-+			struct page **pages, int *nr)
- {
- 	struct page *head, *page;
- 	int refs;
-@@ -2178,7 +2185,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsi=
-gned long addr,
- 	if (pud_devmap(orig)) {
- 		if (unlikely(flags & FOLL_LONGTERM))
- 			return 0;
--		return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
-+		return __gup_device_huge_pud(orig, pudp, addr, end, flags,
-+					     pages, nr);
- 	}
-=20
- 	page =3D pud_page(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+ 	if (PageCompound(page))
+-		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+-			"index:%#lx compound_mapcount: %d\n",
+-			page, page_ref_count(page), mapcount,
++		pr_warn("page:%px refcount:%d head refcount:%d "
++			"mapcount:%d mapping:%px index:%#lx "
++			"compound_mapcount:%d\n",
++			page, page_ref_count(page),
++			page_ref_count(compound_head(page)), mapcount,
+ 			page->mapping, page_to_pgoff(page),
+ 			compound_mapcount(page));
+ 	else
 --=20
 2.25.0
 
