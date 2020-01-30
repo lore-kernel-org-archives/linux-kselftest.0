@@ -2,133 +2,137 @@ Return-Path: <SRS0=xcKX=3T=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2084C33C9E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 07:01:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FAB3C33C9E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 09:20:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ABFD6206F0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 07:01:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8B6E214AF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 09:20:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbgA3HBl (ORCPT
+        id S1726885AbgA3JUW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Jan 2020 02:01:41 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46090 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726185AbgA3HBl (ORCPT
+        Thu, 30 Jan 2020 04:20:22 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29230 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726879AbgA3JUW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 02:01:41 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00U71Utt065173
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 02:01:40 -0500
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xrj74h406-1
+        Thu, 30 Jan 2020 04:20:22 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00U9EwFL032532
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 04:20:20 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xubct681h-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 02:01:39 -0500
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 04:20:20 -0500
 Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Thu, 30 Jan 2020 07:01:28 -0000
+        Thu, 30 Jan 2020 09:20:18 -0000
 Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 30 Jan 2020 07:01:24 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00U71NZl19660994
+        Thu, 30 Jan 2020 09:20:15 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00U9KD1815728656
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jan 2020 07:01:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 714814C04E;
-        Thu, 30 Jan 2020 07:01:23 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D621B4C046;
-        Thu, 30 Jan 2020 07:01:21 +0000 (GMT)
-Received: from fir03.in.ibm.com (unknown [9.121.59.65])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 30 Jan 2020 07:01:21 +0000 (GMT)
+        Thu, 30 Jan 2020 09:20:13 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E53A5205F;
+        Thu, 30 Jan 2020 09:20:13 +0000 (GMT)
+Received: from [9.124.35.38] (unknown [9.124.35.38])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1F9B652050;
+        Thu, 30 Jan 2020 09:20:10 +0000 (GMT)
+Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
 From:   Sandipan Das <sandipan@linux.ibm.com>
-To:     shuah@kernel.org, skhan@linuxfoundation.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        mhiramat@kernel.org, aneesh.kumar@linux.ibm.com,
-        mpe@ellerman.id.au, kamalesh@linux.vnet.ibm.com
-Subject: [PATCH 1/2] selftests: vm: Do not override definition of ARCH
-Date:   Thu, 30 Jan 2020 12:31:18 +0530
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1580367152.git.sandipan@linux.ibm.com>
-References: <cover.1580367152.git.sandipan@linux.ibm.com>
-In-Reply-To: <cover.1580367152.git.sandipan@linux.ibm.com>
-References: <cover.1580367152.git.sandipan@linux.ibm.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1579507768.git.sandipan@linux.ibm.com>
+ <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
+ <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
+ <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
+ <fb83ce52-b92a-ed42-dc06-a86ca8431ff6@linux.ibm.com>
+ <ca6cfdeb-00f2-d926-e4e1-c1723cc25445@intel.com>
+ <26f630e5-1f70-888c-4b43-30e73c9f270c@linux.ibm.com>
+Date:   Thu, 30 Jan 2020 14:50:10 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <26f630e5-1f70-888c-4b43-30e73c9f270c@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-x-cbid: 20013007-0020-0000-0000-000003A5453F
+x-cbid: 20013009-0028-0000-0000-000003D5C3C4
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20013007-0021-0000-0000-000021FCF921
-Message-Id: <471a73600bf9f59a59484726f50f81d7f54f4b2f.1580367152.git.sandipan@linux.ibm.com>
+x-cbparentid: 20013009-0029-0000-0000-0000249A11D6
+Message-Id: <880326d5-e23c-6724-1c93-7b1d0281dcbd@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-30_01:2020-01-28,2020-01-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 impostorscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 spamscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1911200001 definitions=main-2001300046
+ definitions=2020-01-30_02:2020-01-28,2020-01-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ clxscore=1015 adultscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001300066
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Independent builds of the vm selftests is currently broken
-because commit 7549b3364201 overrides the value of ARCH with
-the machine name from uname. This does not always match the
-architecture names used for tasks like header installation.
 
-E.g. for building tests on powerpc64, we need ARCH=powerpc
-and not ARCH=ppc64 or ARCH=ppc64le. Otherwise, the build
-fails as shown below.
 
-  $ uname -m
-  ppc64le
+On 30/01/20 11:49 am, Sandipan Das wrote:
+> Hi Dave,
+> 
+> On 30/01/20 12:29 am, Dave Hansen wrote:
+>> On 1/28/20 1:38 AM, Sandipan Das wrote:
+>>> On 27/01/20 9:12 pm, Dave Hansen wrote:
+>>>> How have you tested this patch (and the whole series for that matter)?
+>>>>
+>>> I replaced the second patch with this one and did a build test.
+>>> Till v16, I had tested the whole series (build + run) on both a POWER8
+>>> system (with 4K and 64K page sizes) and a Skylake SP system but for
+>>> x86_64 only.
+>>
+>> Do you have any idea why I was seeing x86 build errors and you were not?
+>>
+> 
+> There were problems with patch 2 from v17. The fixed patch is what I replied
+> with previously in this thread. The test results that I posted were with that
+> patch included. Will post out v18 today with the fix.
+> 
 
+In patch 2 of v17, the issue was with the target names. Upon adding something
+to TEST_GEN_FILES, rules for targets like the following are expected to be
+defined.
+  <path-to-linux-source>/tools/testing/selftests/vm/protection_keys_32
+  <path-to-linux-source>/tools/testing/selftests/vm/protection_keys_64
+  <path-to-linux-source>/tools/testing/selftests/vm/protection_keys
+
+But instead, I only defined rules for these.
+  protection_keys_32
+  protection_keys_64
+  protection_keys
+
+Hence the build was failing in these cases:
+  $ make -C tools/testing/selftests
   $ make -C tools/testing/selftests/vm
-  make: Entering directory '/home/sandipan/linux/tools/testing/selftests/vm'
-  make --no-builtin-rules ARCH=ppc64le -C ../../../.. headers_install
-  make[1]: Entering directory '/home/sandipan/linux'
-  Makefile:653: arch/ppc64le/Makefile: No such file or directory
-  make[1]: *** No rule to make target 'arch/ppc64le/Makefile'.  Stop.
-  make[1]: Leaving directory '/home/sandipan/linux'
-  ../lib.mk:50: recipe for target 'khdr' failed
-  make: *** [khdr] Error 2
-  make: Leaving directory '/home/sandipan/linux/tools/testing/selftests/vm'
+  $ cd tools/testing/selftests/vm
+  $ make
 
-Fixes: 7549b3364201 ("selftests: vm: Build/Run 64bit tests only on 64bit arch")
-Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
----
- tools/testing/selftests/vm/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But worked in these cases:
+  $ make -C tools/testing/selftests/vm protection_keys
+  $ cd tools/testing/selftests/vm
+  $ make protection_keys
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 7f9a8a8c31da..3f2e2f0ccbc9 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
- uname_M := $(shell uname -m 2>/dev/null || echo not)
--ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
-+MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
- 
- CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
- LDLIBS = -lrt
-@@ -19,7 +19,7 @@ TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
- 
--ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
-+ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
- TEST_GEN_FILES += va_128TBswitch
- TEST_GEN_FILES += virtual_address_range
- endif
--- 
-2.17.1
+This has been addressed in v18.
+
+- Sandipan
 
