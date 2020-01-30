@@ -2,72 +2,78 @@ Return-Path: <SRS0=xcKX=3T=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB9A1C35240
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 13:31:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9097AC2D0DB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 19:29:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AB0742063A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 13:31:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64E6520CC7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 19:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1580412540;
+	bh=hhAIE0Prgk+Wv/0a25D0q0q7GJanUZwEcQHqGsWLry4=;
+	h=From:To:Subject:Date:List-ID:From;
+	b=KTls3pFjilMaSJVjxSBmqzOiy8ZgoDbK2H1Wc84ivG1+v4WaZxnd5fKoT6EsIpNQH
+	 b95alFEgIuBLTv23Cd1BABKtprp40Fd/M8bybtutdPSapwgma21IFfSqw/qYld0TYN
+	 aF8bqJI8WKpTEhteNwCzKVBZmO7Ak6EF/XYKgtD8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbgA3Nbh (ORCPT
+        id S1727515AbgA3T3A (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Jan 2020 08:31:37 -0500
-Received: from mga05.intel.com ([192.55.52.43]:7053 "EHLO mga05.intel.com"
+        Thu, 30 Jan 2020 14:29:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49360 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727374AbgA3Nbh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 08:31:37 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jan 2020 05:31:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,382,1574150400"; 
-   d="scan'208";a="402326794"
-Received: from romley-ivt3.sc.intel.com ([172.25.110.60])
-  by orsmga005.jf.intel.com with ESMTP; 30 Jan 2020 05:31:36 -0800
-Date:   Thu, 30 Jan 2020 05:41:56 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        James Morse <james.morse@arm.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        x86 <x86@kernel.org>
-Subject: Re: [RESEND PATCH v9 00/13] selftests/resctrl: Add resctrl selftest
-Message-ID: <20200130134156.GB74965@romley-ivt3.sc.intel.com>
-References: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1727438AbgA3T3A (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Jan 2020 14:29:00 -0500
+Received: from localhost.localdomain (unknown [194.230.155.229])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7489D2082E;
+        Thu, 30 Jan 2020 19:28:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580412539;
+        bh=hhAIE0Prgk+Wv/0a25D0q0q7GJanUZwEcQHqGsWLry4=;
+        h=From:To:Subject:Date:From;
+        b=MnUTUMHVFAwPb/97kEX+odytMr/+pt115+l+Em3s9LFRMqDYSBfts0AFOm2WbWmsU
+         38pAtsokXDD3NL8jRrUu4gC7VJPRYv1K4g5+5+2pzsIHAmaa99J81XQzMgyyQ22I0L
+         xQYcNgUPUlYDSR8vfdfhr6QpTEEmC56cjBSOl01E=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] wireguard: selftests: Cleanup CONFIG_ENABLE_WARN_DEPRECATED
+Date:   Thu, 30 Jan 2020 20:28:53 +0100
+Message-Id: <20200130192853.3528-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 01:32:33PM -0800, Fenghua Yu wrote:
-> [Resend the v9 patch set to Shuah Khan and linux-kselftest mailing list.
-> No code and commit message change.]
-> 
-> With more and more resctrl features are being added by Intel, AMD
-> and ARM, a test tool is becoming more and more useful to validate
-> that both hardware and software functionalities work as expected.
+CONFIG_ENABLE_WARN_DEPRECATED is gone since
+commit 771c035372a0 ("deprecate the '__deprecated' attribute warnings
+entirely and for good").
 
-Hi, Khan,
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ tools/testing/selftests/wireguard/qemu/debug.config | 1 -
+ 1 file changed, 1 deletion(-)
 
-Any comment on the resctrl selftest tool? Any plan to push the patches
-to upstream?
+diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
+index b9c72706fe4d..5909e7ef2a5c 100644
+--- a/tools/testing/selftests/wireguard/qemu/debug.config
++++ b/tools/testing/selftests/wireguard/qemu/debug.config
+@@ -1,5 +1,4 @@
+ CONFIG_LOCALVERSION="-debug"
+-CONFIG_ENABLE_WARN_DEPRECATED=y
+ CONFIG_ENABLE_MUST_CHECK=y
+ CONFIG_FRAME_POINTER=y
+ CONFIG_STACK_VALIDATION=y
+-- 
+2.17.1
 
-Thanks.
-
--Fenghua
