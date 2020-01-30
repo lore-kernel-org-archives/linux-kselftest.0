@@ -2,212 +2,156 @@ Return-Path: <SRS0=xcKX=3T=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E8F1C35246
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 06:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ED85C33C9E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 06:37:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E962B2083E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 06:34:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="f4pKrMQl"
+	by mail.kernel.org (Postfix) with ESMTP id F173A214D8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 06:37:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgA3Gd6 (ORCPT
+        id S1725873AbgA3GhV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Jan 2020 01:33:58 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:19859 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725865AbgA3Gd6 (ORCPT
+        Thu, 30 Jan 2020 01:37:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1898 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725869AbgA3GhV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 01:33:58 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e3278c70000>; Wed, 29 Jan 2020 22:33:43 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 29 Jan 2020 22:33:57 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 29 Jan 2020 22:33:57 -0800
-Received: from [10.2.165.69] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Jan
- 2020 06:33:57 +0000
-Subject: Re: [PATCH v2 1/8] mm: dump_page: print head page's refcount, for
- compound pages
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20200129032417.3085670-1-jhubbard@nvidia.com>
- <20200129032417.3085670-2-jhubbard@nvidia.com>
- <20200129112510.ulims6u36ofk2qwa@box>
- <b74e8aa9-fcfd-0340-594c-61f185a0ae65@nvidia.com>
- <20200129225957.GH6615@bombadil.infradead.org>
- <a0d66400-96a2-f94e-311d-a94f75e72d65@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <c9aea9a3-53b1-83f0-9f69-c294647e0925@nvidia.com>
-Date:   Wed, 29 Jan 2020 22:30:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <a0d66400-96a2-f94e-311d-a94f75e72d65@nvidia.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580366023; bh=iZY1/g2/MCQ3KPYqu+CkoD4OYyNxEEjqeo4JNbOECuM=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=f4pKrMQlnQ5lVGDlW7PYL/KTudIQAYyxHJ7kADvSvQcMo7xwDlpmNiw7jRHH02XRu
-         LUbhtnmhoFfoViXeCzyURJZ5ZT2tFv9w7Gk9BnbjxiHqqR68cmGGsL8OQpAUrTKwh+
-         R+Oe2oriRiuX2tYa5Q/Y6J9XiamJIsg3qsDjvCKVjyu1CTO3AmyUYsyMOqgYJGoiKo
-         sesGH5ZgSCJZQl6twIoECnFRiCw9hq7fox55hgonciXWj/8hqlGsB2QlJUJEzVCVGm
-         qVSi0u7Haqg8rNwptdG7Ds19fKzYYVrSXNV3FYLO8hwx3z1RyYmwXoib0tTh2UpcP+
-         0MLpWfq4Ga0vw==
+        Thu, 30 Jan 2020 01:37:21 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00U6aHvG020856
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 01:37:20 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xtrmc6drd-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 01:37:20 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Thu, 30 Jan 2020 06:37:18 -0000
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 30 Jan 2020 06:37:14 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00U6bCHL51380350
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jan 2020 06:37:12 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6680B4C046;
+        Thu, 30 Jan 2020 06:37:12 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D408E4C044;
+        Thu, 30 Jan 2020 06:37:09 +0000 (GMT)
+Received: from fir03.in.ibm.com (unknown [9.121.59.65])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Jan 2020 06:37:09 +0000 (GMT)
+From:   Sandipan Das <sandipan@linux.ibm.com>
+To:     shuah@kernel.org, skhan@linuxfoundation.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-mm@kvack.org, fweimer@redhat.com,
+        dave.hansen@intel.com, linuxram@us.ibm.com, mhocko@kernel.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au
+Subject: [PATCH v18 01/24] selftests/x86/pkeys: Move selftests to arch-neutral directory
+Date:   Thu, 30 Jan 2020 12:06:43 +0530
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <cover.1580365432.git.sandipan@linux.ibm.com>
+References: <cover.1580365432.git.sandipan@linux.ibm.com>
+In-Reply-To: <cover.1580365432.git.sandipan@linux.ibm.com>
+References: <cover.1580365432.git.sandipan@linux.ibm.com>
+X-TM-AS-GCONF: 00
+x-cbid: 20013006-0012-0000-0000-00000381F229
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20013006-0013-0000-0000-000021BE4B95
+Message-Id: <2c7111313a759a9c53807caed4b87cc66df807c3.1580365432.git.sandipan@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-30_01:2020-01-28,2020-01-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0 spamscore=0
+ mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001300042
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/29/20 10:23 PM, John Hubbard wrote:
-> On 1/29/20 2:59 PM, Matthew Wilcox wrote:
-> ...
->> I have a hunk in my current tree which looks like this:
->>
->> @@ -77,6 +77,11 @@ void __dump_page(struct page *page, const char *reaso=
-n)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 pr_warn("page:%px refcount:%d mapcount:%d mapping:=
-%px index:%#lx
->> \n",
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pa=
-ge, page_ref_count(page), mapcount,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pa=
-ge->mapping, page_to_pgoff(page));
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (PageTail(page)) {
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 struct page *head =3D compound_head(page);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 pr_warn("head:%px mapping:%px index:%#lx\n",
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 head, head-=
->mapping, page_to_pgoff(head));
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (PageKsm(page))
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 pr_warn("ksm flags: %#lx(%pGp)\n", page->flags, &p=
-age->flags);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 else if (PageAnon(page)=
-)
->>
->> I wonder if we can combine these two patches in some more useful way?
->>
->> I also think we probably want a sanity check that 'head' and 'page'
->> are within a sane range of each other (ie head < page and head +
->> MAX_ORDER_NR_PAGES > page) to protect against a struct page that contain=
-s
->> complete garbage.
->>
->=20
-> OK, here's a go at combining those. I like the observation, implicit in y=
-our
-> diffs, that PageTail rather than PageCompound is the key differentiator i=
-n
-> deciding what to print. How's this look:
->=20
-> diff --git a/mm/debug.c b/mm/debug.c
-> index a90da5337c14..944652843e7b 100644
-> --- a/mm/debug.c
-> +++ b/mm/debug.c
-> @@ -75,12 +75,31 @@ void __dump_page(struct page *page, const char *reaso=
-n)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->  =C2=A0=C2=A0=C2=A0=C2=A0 mapcount =3D PageSlab(page) ? 0 : page_mapcount=
-(page);
->=20
-> -=C2=A0=C2=A0=C2=A0 if (PageCompound(page))
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_warn("page:%px refcount:%d=
- mapcount:%d mapping:%px "
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "inde=
-x:%#lx compound_mapcount: %d\n",
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 page,=
- page_ref_count(page), mapcount,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 page-=
->mapping, page_to_pgoff(page),
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compo=
-und_mapcount(page));
-> +=C2=A0=C2=A0=C2=A0 if (PageTail(page)) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct page *head =3D compoun=
-d_head(page);
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if ((page < head) || (page >=
-=3D head + MAX_ORDER_NR_PAGES)) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- * Page is hopelessly corrupted, so limit any reporting
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- * to information about the page itself. Do not attempt
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- * to look at the head page.
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_wa=
-rn("page:%px refcount:%d mapcount:%d mapping:%px "
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 "index:%#lx (corrupted tail page case)\n",
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 page, page_ref_count(page), mapcount,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 page->mapping, page_to_pgoff(page));
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_wa=
-rn("page:%px compound refcount:%d mapcount:%d "
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 "mapping:%px index:%#lx compound_mapcount:%d\n",
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 page, page_ref_count(head),
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 mapcount, head->mapping, page_to_pgoff(head),
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 compound_mapcount(page));
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (p=
-age_ref_count(page) !=3D 0)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 pr_warn("page:%px PROBLEM: non-zero refcount (=3D=3D%d) =
-on "
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "this tail page\n", page, page_r=
-ef_count(page));
+From: Ram Pai <linuxram@us.ibm.com>
 
-...ahem, I sorta botched the above statement, because that should
-be outside (just below) the "else" statement--it can be done whether or
-not the page fails the safety/bounds check. :)
+cc: Dave Hansen <dave.hansen@intel.com>
+cc: Florian Weimer <fweimer@redhat.com>
+Signed-off-by: Ram Pai <linuxram@us.ibm.com>
+Signed-off-by: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Acked-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
+---
+ tools/testing/selftests/vm/.gitignore                 | 1 +
+ tools/testing/selftests/vm/Makefile                   | 1 +
+ tools/testing/selftests/{x86 => vm}/pkey-helpers.h    | 0
+ tools/testing/selftests/{x86 => vm}/protection_keys.c | 0
+ tools/testing/selftests/x86/.gitignore                | 1 -
+ tools/testing/selftests/x86/Makefile                  | 2 +-
+ 6 files changed, 3 insertions(+), 2 deletions(-)
+ rename tools/testing/selftests/{x86 => vm}/pkey-helpers.h (100%)
+ rename tools/testing/selftests/{x86 => vm}/protection_keys.c (100%)
 
-thanks,
---=20
-John Hubbard
-NVIDIA
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index 31b3c98b6d34..c55837bf39fa 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -14,3 +14,4 @@ virtual_address_range
+ gup_benchmark
+ va_128TBswitch
+ map_fixed_noreplace
++protection_keys
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 7f9a8a8c31da..4e9c741be6af 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -18,6 +18,7 @@ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
++TEST_GEN_FILES += protection_keys
+ 
+ ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
+ TEST_GEN_FILES += va_128TBswitch
+diff --git a/tools/testing/selftests/x86/pkey-helpers.h b/tools/testing/selftests/vm/pkey-helpers.h
+similarity index 100%
+rename from tools/testing/selftests/x86/pkey-helpers.h
+rename to tools/testing/selftests/vm/pkey-helpers.h
+diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+similarity index 100%
+rename from tools/testing/selftests/x86/protection_keys.c
+rename to tools/testing/selftests/vm/protection_keys.c
+diff --git a/tools/testing/selftests/x86/.gitignore b/tools/testing/selftests/x86/.gitignore
+index 7757f73ff9a3..eb30ffd83876 100644
+--- a/tools/testing/selftests/x86/.gitignore
++++ b/tools/testing/selftests/x86/.gitignore
+@@ -11,5 +11,4 @@ ldt_gdt
+ iopl
+ mpx-mini-test
+ ioperm
+-protection_keys
+ test_vdso
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 5d49bfec1e9a..5f16821c7f63 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -12,7 +12,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
+ 
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+-			protection_keys test_vdso test_vsyscall mov_ss_trap \
++			test_vdso test_vsyscall mov_ss_trap \
+ 			syscall_arg_fault
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+-- 
+2.17.1
+
