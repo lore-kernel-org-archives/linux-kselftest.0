@@ -7,58 +7,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18915C33CB3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 23:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB96C35240
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 23:09:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E24B4214D8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 23:08:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21CE4215A4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 23:09:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cea+74kK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SK7qbAbM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgA3XIu (ORCPT
+        id S1727678AbgA3XIi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Jan 2020 18:08:50 -0500
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:43172 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727786AbgA3XIr (ORCPT
+        Thu, 30 Jan 2020 18:08:38 -0500
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:41573 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727639AbgA3XIf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 18:08:47 -0500
-Received: by mail-pl1-f201.google.com with SMTP id n17so2613664plp.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 15:08:47 -0800 (PST)
+        Thu, 30 Jan 2020 18:08:35 -0500
+Received: by mail-pg1-f202.google.com with SMTP id r30so2771215pgm.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 15:08:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dCX2LQDaoIcwFmYSq3cgmAkx+Exp0YNCPmOsw4OCxis=;
-        b=Cea+74kKLR/GteXq64Op60MuNDLPdMizqbgVfNpoWkuF8hmEB2KWidlL87tYLsXrua
-         8Xzbo2dCO77srQ679vBOopPPaT5k/SDDfLFgk2PVYP32VYXEliWcHSPQQvW7RJouxHAe
-         hc+sUOuQ6TRmwjFRtbnmDP2UOQJ2LzmbdTH38wKl5fTpIu7RcFxSIOf2vAfgqu8CZAVW
-         GLEzOaHOLVt2EVc2azlbEU9baY7XraTtjjWlZ/jKsLTm/MLozD7uXkqirkr8AYc/6GXF
-         us3u/wuW2oRnrheLqJLro/pS7keuZISgD+5hxQQ9fLdo+8fcCY/HdMmki7Y+kyw+/l1K
-         d+6g==
+        bh=GWHGFk+tfCHvu/qeG8h3yhiMIdqay1deL3woZTxVWJc=;
+        b=SK7qbAbMVIMUgyE42nQVDPyGZ3xVFHv0chQcoZWlALn4b+uUTa/V5PsexsEkn4W2Kb
+         bZ7asnJNgDPXfOBetYqJnB9J2XcNvSCZ2/XQ46hFJbZuHTPb4tjLrji35a2EH5gEYQHX
+         Vkr9rAsWvphKeh+EesgLzV0XxJ8zZnKFtmATHJ3yzTibY5hSi70Lnx1UCkTYJAuNwZlh
+         OicLwo5w9sN3kYYpjEk4VGqXocphh9jYWtcIwf1NuOdGOcvYH5uehNSugKLXxfxcIe4+
+         5dUSUaen9Esm8+Jozb1twYu1kudX5eI+ybO5b2ahw9UpOS7dJqKDb5rKEe1YFZwBGUag
+         JZJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dCX2LQDaoIcwFmYSq3cgmAkx+Exp0YNCPmOsw4OCxis=;
-        b=ZN9odSi/enVegQjA1TVvENe1QEooePK6JtiJPV8tNqMj9kpEOD4ugF4ldawpzD0IIK
-         05785VCJ4ORUgGRQ1CnieQMdfGBERMbdlpv9P6UnfpNIn08aRtgp4FQADBNB7aw6XZPi
-         soE8cnqe5HPxGd+VQ/lhUdujNH+MOV8w/bIIse4hHiFzkB4a2AwVMIk3T8o6IplKzGnH
-         ulYBtEsouSpgFvTxm4BVNb9SuZKvS4SSzVp8IuC10p7Kv4PEt62k9bg7arediyZ6jWoC
-         T+lZKKcTJZqwecIGURsuFmXaHCbagl07ZamcigL0JdLK3xuzTppvwURt4ZX/j+pqRh32
-         iumA==
-X-Gm-Message-State: APjAAAWpiUmKCRTu1ApijasA/R2xr+VCUIx9Tqr+bG3Tjg/0KXxEqwLO
-        h0dUTsfRIMpiisZ8FYEmKTgd6ilIgNqXNu7PAP7BSw==
-X-Google-Smtp-Source: APXvYqx+2ri6MUmVYy6ptSJgWKOGMVZfjLQX0JTmgMuADBux9koL0KUnaGALzsStF3tXii//z0M3FTNmV1ggHaNXMBaSXw==
-X-Received: by 2002:a63:78cf:: with SMTP id t198mr6898466pgc.287.1580425727146;
- Thu, 30 Jan 2020 15:08:47 -0800 (PST)
-Date:   Thu, 30 Jan 2020 15:08:12 -0800
+        bh=GWHGFk+tfCHvu/qeG8h3yhiMIdqay1deL3woZTxVWJc=;
+        b=D4bK71M78QBH9cifklC4ongWCFghpKtEHax5p5gQCx2RR0UaMGVdukFQQlNhKSdIUk
+         sAtHtR+qBq1JVSp9qwxAZIqnrl5CE7lnGbGQz9XtUJ4VnghQfHXdZVG5ydQVs90BNmI2
+         P106/k7M3YE10+JcK1MfH6zArh+R+uvILOyf03yrKJ+vOFBY9vIhQe6o2MTyySImBmev
+         z7hzumRWj8GpXGQsLteyXPAtRl+zcsfWucxcp2DUmICNLhMjtZJwhnmqDaLG2qstb96V
+         DA3BEopsMQKgAFtw6mxs2I4APzmC3ATfujPhaSOK3egP6w/skDuqAN4AMjNXH8izDy8F
+         xHkg==
+X-Gm-Message-State: APjAAAWShzmlXzwoaj3RXg8eWaHqILYNDcPcyFp8GygH5YlDXlrtuwG9
+        gYp8vEIN8QG9VkBx0vS8eHiaO/vX5MsJk2HhicaUtg==
+X-Google-Smtp-Source: APXvYqzh84slKzyUU7Hf8lA5m17FvOWJKZUYYrXcCEAGxMB3WhDFDTTWmSv14cUPAQuwHTR0/deMhklQVof4n1fVyRG7sw==
+X-Received: by 2002:a65:4142:: with SMTP id x2mr7048130pgp.393.1580425714304;
+ Thu, 30 Jan 2020 15:08:34 -0800 (PST)
+Date:   Thu, 30 Jan 2020 15:08:07 -0800
 In-Reply-To: <20200130230812.142642-1-brendanhiggins@google.com>
-Message-Id: <20200130230812.142642-8-brendanhiggins@google.com>
+Message-Id: <20200130230812.142642-3-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20200130230812.142642-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH v2 7/7] Documentation: Add kunit_shutdown to kernel-parameters.txt
+Subject: [PATCH v2 2/7] arch: um: add linker section for KUnit test suites
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
@@ -77,33 +77,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add kunit_shutdown, an option to specify that the kernel shutsdown after
-running KUnit tests, to the kernel-parameters.txt documentation.
+Add a linker section to UML where KUnit can put references to its test
+suites. This patch is an early step in transitioning to dispatching all
+KUnit tests from a centralized executor rather than having each as its
+own separate late_initcall.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/um/include/asm/common.lds.S | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index ade4e6ec23e03..522fd8bdec949 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2054,6 +2054,13 @@
- 			0: force disabled
- 			1: force enabled
+diff --git a/arch/um/include/asm/common.lds.S b/arch/um/include/asm/common.lds.S
+index 7145ce6999822..eab9ceb450efd 100644
+--- a/arch/um/include/asm/common.lds.S
++++ b/arch/um/include/asm/common.lds.S
+@@ -52,6 +52,10 @@
+ 	CON_INITCALL
+   }
  
-+	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
-+			running tests.
-+			Default:	(flag not present) don't shutdown
-+			poweroff:	poweroff the kernel after running tests
-+			halt:		halt the kernel after running tests
-+			reboot:		reboot the kernel after running tests
++  .kunit_test_suites : {
++	KUNIT_TEST_SUITES
++  }
 +
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
- 
+   .exitcall : {
+ 	__exitcall_begin = .;
+ 	*(.exitcall.exit)
 -- 
 2.25.0.341.g760bfbb309-goog
 
