@@ -1,255 +1,498 @@
-Return-Path: <SRS0=xcKX=3T=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=glE8=3U=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC232C33CB3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 23:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4224C35240
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jan 2020 02:23:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B17F3214D8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Jan 2020 23:09:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A0FE2067C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jan 2020 02:23:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tGK07UCQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F4buFhlf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727650AbgA3XIi (ORCPT
+        id S1727795AbgAaCXw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Jan 2020 18:08:38 -0500
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:59529 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727657AbgA3XIh (ORCPT
+        Thu, 30 Jan 2020 21:23:52 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45273 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727859AbgAaCXw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 18:08:37 -0500
-Received: by mail-pj1-f73.google.com with SMTP id k8so3008128pjs.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 15:08:37 -0800 (PST)
+        Thu, 30 Jan 2020 21:23:52 -0500
+Received: by mail-pl1-f195.google.com with SMTP id b22so2087636pls.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 18:23:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IbDRg6zbsgqc2BEk8PubWRl+PT/RvXbB4sFt6LMz7H0=;
-        b=tGK07UCQYvj9yBuFCz++BIeHcHMWwTlajiYS79eMiJcVAxknMIcATy7OBQfzA85Fhy
-         515PkQZsE6McWZYwRl3wbEg6LtwSwrVb1ejyZTSFspI2+3j37xq+iNypzlchhGUCoYDE
-         jRKxHrZ547i7LLO9tevpjPKeCuB3M2X0eeuyo8c/ZAep8JSJt06NRKGBrg063dwI3rPh
-         9PlD22vT/b8BNTJhrFySAvX4FQw2kgTikkog0Kryd/X2tHyhR4eUo5my1Tso4J58XIMM
-         Gq2NikLDSBIRK8v8KtqjQqNPpaoyQBpPl9TsTrEsuGnFSB1Rin2YzEnzdXnCycBJv2NB
-         Zl3Q==
+        bh=SLxYwA9Uu4oTtCC1U10KKqDE64QrIr9ZELfMN/7Dz6A=;
+        b=F4buFhlfw3Fmag549SUzMEkt5Ms4Ni0tLeraGDwIaLHPgG8Vj/Y58+XbJyNaoGxgxm
+         9cJRjVAcPocSzwTSQ+3WAPx6CaqNEBt+Zna2RJQ4koALntuJ0ISpPMPJF10KZygsXM65
+         +EFZs4mH/9c7DWh3FDDKk77iciigsh3AI46zq66wRnjY8LnN+zpbe7yQQHtNwoJjjNBw
+         DtqrgNLx8Wmm+8pn9K8Ls4adJjH33qWVHUVyBvX4Zcwj9nvwFkoLvatvYG6hNnnALs29
+         fSLFffzhlKu5bwQ8/371NvDfRs/S/nJiyhHoM0zmXp41m0FaWAxQvF3gkpSz8LG/XB1u
+         Tmuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=IbDRg6zbsgqc2BEk8PubWRl+PT/RvXbB4sFt6LMz7H0=;
-        b=P8WTCC3EYRSwOHsF82wIqj3vVfYpeVVfjr4KGVadLZIo7SP6rFi5nF1MtJEnT8tupt
-         plnlg+9EPMoSDOvSII+pAyzFtY7YJaKnxbAGXbN3zbdwp1F2juyz5+rI1waXw/JZ8+pg
-         hB/EObuyF/XWtF4QW4+Zp3kKVnb9O2frLf21M+zEpbEy2G9UHXkrhmNPHKWK3a6fKaGm
-         PNPIrysES/7RD7MCQfclOmC2GLvraW54tzyevzzfTObOEOnDL0Tbg3eBpP2nx0+0aCKt
-         vZrLmCFZ5EdpclN2ZWfB2PYk00tg1Bh+tJaL5qj9cBeRYnjW5V0780B9Asiq9IGOapfi
-         2z+Q==
-X-Gm-Message-State: APjAAAWmKTXUb/VKQyXf2tfQMZhJxMdBuJdGZNmdwV0FD+39xnmYFMSs
-        jvSDsAx6H7Qx7MNsO+26FT+gk3nDLxJ5roiOHqjvbQ==
-X-Google-Smtp-Source: APXvYqxwuwdsPPqkijVFz49bvCbkzV1Lgp/WB4nUutVSt++i1AqepqikQtV+6PXtCjsCWDDqi6BFB4vRqfWPm40CYADj5g==
-X-Received: by 2002:a63:1d1d:: with SMTP id d29mr6674884pgd.387.1580425716847;
- Thu, 30 Jan 2020 15:08:36 -0800 (PST)
-Date:   Thu, 30 Jan 2020 15:08:08 -0800
-In-Reply-To: <20200130230812.142642-1-brendanhiggins@google.com>
-Message-Id: <20200130230812.142642-4-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200130230812.142642-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH v2 3/7] kunit: test: create a single centralized executor for
- all tests
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SLxYwA9Uu4oTtCC1U10KKqDE64QrIr9ZELfMN/7Dz6A=;
+        b=ROKQT2uNo33EoiO/l0b9chUBWZ+PlqbRYdXV9qdQYiJA9H7STlUCFN0zpQyE4hInkw
+         TP5IDl7Jsp1w5DFbQqmLqGKQdXI2SKnLdDndcI3/+YXUQMmBZDv6488hiHIA7sioyBw7
+         aOt7zV7lFX+XAaLypzOckD4hzBDz5QlASrND/OYlz37RwUsHJ6OjuH53K1U8ZY0imZ6t
+         DefeinhGHOaUVGI1MP+JfOqiphU3UQ1UH4WQifVAX79bBRiAVlH6FS1mRjApRH4T5a6/
+         +8VRNaqHrKT01QbkbN4OTdjiM+qXiennl8Hegv1tgq5P1RdgiGkv+ZR652bvgRHwPLRO
+         qvNw==
+X-Gm-Message-State: APjAAAXEKWGiw2zCX5muBnJtC42I+xZx1a0LSt23vxKTeEP5QuBPjVu2
+        7Ud6Z17Nq1p2Epg8cyw9Rsb44gmBap9gwzkX9lC2ww==
+X-Google-Smtp-Source: APXvYqz0Vwb1KHsWbn8/aDWtdLwZ3rRstu0waCJX8IeICsvi6hiFusWUd29/DRu1D1oCQRFUW8e+wiwJuHJFA8W3Gf0=
+X-Received: by 2002:a17:902:9f98:: with SMTP id g24mr7934284plq.325.1580437430525;
+ Thu, 30 Jan 2020 18:23:50 -0800 (PST)
+MIME-Version: 1.0
+References: <1579805221-31905-1-git-send-email-alan.maguire@oracle.com> <1579805221-31905-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1579805221-31905-2-git-send-email-alan.maguire@oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, knut.omang@oracle.com,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 30 Jan 2020 18:23:39 -0800
+Message-ID: <CAFd5g47qWcmM1-BLoLSwd9pA7nDafzMM-0g54cipRBjXTp2edg@mail.gmail.com>
+Subject: Re: [PATCH v2 kunit-next 1/3] kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results
+ display
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+Sorry for taking so long to get to this. It's been a busy couple of weeks.
 
-Add a centralized executor to dispatch tests rather than relying on
-late_initcall to schedule each test suite separately.  Centralized
-execution is for built-in tests only; modules will execute tests
-when loaded.
+On Thu, Jan 23, 2020 at 10:47 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> add debugfs support for displaying kunit test suite results; this is
+> especially useful for module-loaded tests to allow disentangling of
+> test result display from other dmesg events.
+>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  include/kunit/test.h |  21 ++++++++---
+>  lib/kunit/Makefile   |   3 +-
+>  lib/kunit/debugfs.c  | 104 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  lib/kunit/debugfs.h  |  16 ++++++++
+>  lib/kunit/test.c     |  85 ++++++++++++++++++++++++++++++-----------
+>  5 files changed, 202 insertions(+), 27 deletions(-)
+>  create mode 100644 lib/kunit/debugfs.c
+>  create mode 100644 lib/kunit/debugfs.h
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 2dfb550..37219b8a 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -125,6 +125,8 @@ struct kunit_case {
+>         bool success;
+>  };
+>
+> +#define        kunit_status2str(status)        (status ? "ok" : "not ok")
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Co-developed-by: Iurii Zaikin <yzaikin@google.com>
-Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
----
- include/kunit/test.h | 73 +++++++++++++++++++++++++++-----------------
- lib/kunit/Makefile   |  3 +-
- lib/kunit/executor.c | 36 ++++++++++++++++++++++
- 3 files changed, 83 insertions(+), 29 deletions(-)
- create mode 100644 lib/kunit/executor.c
+nit: I would prefer kunit_status_to_string. Also, I would prefer this
+as a static inline function.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 2dfb550c6723a..8a02f93a6b505 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -197,46 +197,63 @@ void kunit_init_test(struct kunit *test, const char *name);
- 
- int kunit_run_tests(struct kunit_suite *suite);
- 
--/**
-- * kunit_test_suites() - used to register one or more &struct kunit_suite
-- *			 with KUnit.
-- *
-- * @suites: a statically allocated list of &struct kunit_suite.
-- *
-- * Registers @suites with the test framework. See &struct kunit_suite for
-- * more information.
-- *
-- * When builtin,  KUnit tests are all run as late_initcalls; this means
-- * that they cannot test anything where tests must run at a different init
-- * phase. One significant restriction resulting from this is that KUnit
-- * cannot reliably test anything that is initialize in the late_init phase;
-- * another is that KUnit is useless to test things that need to be run in
-- * an earlier init phase.
-- *
-- * An alternative is to build the tests as a module.  Because modules
-- * do not support multiple late_initcall()s, we need to initialize an
-- * array of suites for a module.
-- *
-- * TODO(brendanhiggins@google.com): Don't run all KUnit tests as
-- * late_initcalls.  I have some future work planned to dispatch all KUnit
-- * tests from the same place, and at the very least to do so after
-- * everything else is definitely initialized.
-+/*
-+ * If a test suite is built-in, module_init() gets translated into
-+ * an initcall which we don't want as the idea is that for builtins
-+ * the executor will manage execution.  So ensure we do not define
-+ * module_{init|exit} functions for the builtin case when registering
-+ * suites via kunit_test_suites() below.
-  */
--#define kunit_test_suites(...)						\
--	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
--	static int kunit_test_suites_init(void)				\
-+#ifdef MODULE
-+#define kunit_test_suites_for_module(__suites)				\
-+	static int __init kunit_test_suites_init(void)			\
- 	{								\
-+		struct kunit_suite *suites[] = (__suites);		\
- 		unsigned int i;						\
-+									\
- 		for (i = 0; suites[i] != NULL; i++)			\
- 			kunit_run_tests(suites[i]);			\
- 		return 0;						\
- 	}								\
--	late_initcall(kunit_test_suites_init);				\
-+	module_init(kunit_test_suites_init);				\
-+									\
- 	static void __exit kunit_test_suites_exit(void)			\
- 	{								\
- 		return;							\
- 	}								\
- 	module_exit(kunit_test_suites_exit)
-+#else
-+#define kunit_test_suites_for_module(__suites)
-+#endif /* MODULE */
-+
-+#define __kunit_test_suites(unique_array, unique_suites, ...)		       \
-+	static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
-+	kunit_test_suites_for_module(unique_array);			       \
-+	static struct kunit_suite **unique_suites			       \
-+	__used __aligned(8) __section(.kunit_test_suites) = unique_array
-+
-+/**
-+ * kunit_test_suites() - used to register one or more &struct kunit_suite
-+ *			 with KUnit.
-+ *
-+ * @suites: a statically allocated list of &struct kunit_suite.
-+ *
-+ * Registers @suites with the test framework. See &struct kunit_suite for
-+ * more information.
-+ *
-+ * When builtin,  KUnit tests are all run via executor; this is done
-+ * by placing the array of struct kunit_suite * in the .kunit_test_suites
-+ * ELF section.
-+ *
-+ * An alternative is to build the tests as a module.  Because modules do not
-+ * support multiple initcall()s, we need to initialize an array of suites for a
-+ * module.
-+ *
-+ */
-+#define kunit_test_suites(...)						\
-+	__kunit_test_suites(__UNIQUE_ID(array),				\
-+			    __UNIQUE_ID(suites),			\
-+			    __VA_ARGS__)
- 
- #define kunit_test_suite(suite)	kunit_test_suites(&suite)
- 
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index fab55649b69a5..c282f02ca066b 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -3,7 +3,8 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
- kunit-objs +=				test.o \
- 					string-stream.o \
- 					assert.o \
--					try-catch.o
-+					try-catch.o \
-+					executor.o
- 
- obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
- 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-new file mode 100644
-index 0000000000000..6429927d598a5
---- /dev/null
-+++ b/lib/kunit/executor.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <kunit/test.h>
-+
-+/*
-+ * These symbols point to the .kunit_test_suites section and are defined in
-+ * include/asm-generic/vmlinux.lds.h, and consequently must be extern.
-+ */
-+extern struct kunit_suite * const * const __kunit_suites_start[];
-+extern struct kunit_suite * const * const __kunit_suites_end[];
-+
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+
-+static int kunit_run_all_tests(void)
-+{
-+	struct kunit_suite * const * const *suites, * const *subsuite;
-+	bool has_test_failed = false;
-+
-+	for (suites = __kunit_suites_start;
-+	     suites < __kunit_suites_end;
-+	     suites++) {
-+		for (subsuite = *suites; *subsuite != NULL; subsuite++) {
-+			if (kunit_run_tests(*subsuite))
-+				has_test_failed = true;
-+		}
-+	}
-+
-+	if (has_test_failed)
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+late_initcall(kunit_run_all_tests);
-+
-+#endif /* IS_BUILTIN(CONFIG_KUNIT) */
--- 
-2.25.0.341.g760bfbb309-goog
+>  /**
+>   * KUNIT_CASE - A helper for creating a &struct kunit_case
+>   *
+> @@ -157,6 +159,9 @@ struct kunit_suite {
+>         int (*init)(struct kunit *test);
+>         void (*exit)(struct kunit *test);
+>         struct kunit_case *test_cases;
+> +
+> +       /* private - internal use only */
+> +       struct dentry *debugfs;
+>  };
+>
+>  /**
+> @@ -197,6 +202,15 @@ struct kunit {
+>
+>  int kunit_run_tests(struct kunit_suite *suite);
+>
+> +size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
+> +
+> +unsigned int kunit_test_case_num(struct kunit_suite *suite,
+> +                                struct kunit_case *test_case);
+> +
+> +int __kunit_test_suites_init(struct kunit_suite **suites);
+> +
+> +void __kunit_test_suites_exit(struct kunit_suite **suites);
+> +
+>  /**
+>   * kunit_test_suites() - used to register one or more &struct kunit_suite
+>   *                      with KUnit.
+> @@ -226,15 +240,12 @@ struct kunit {
+>         static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};     \
+>         static int kunit_test_suites_init(void)                         \
+>         {                                                               \
+> -               unsigned int i;                                         \
+> -               for (i = 0; suites[i] != NULL; i++)                     \
+> -                       kunit_run_tests(suites[i]);                     \
+> -               return 0;                                               \
+> +               return __kunit_test_suites_init(suites);                \
+>         }                                                               \
+>         late_initcall(kunit_test_suites_init);                          \
+>         static void __exit kunit_test_suites_exit(void)                 \
+>         {                                                               \
+> -               return;                                                 \
+> +               return __kunit_test_suites_exit(suites);                \
+>         }                                                               \
+>         module_exit(kunit_test_suites_exit)
+>
+> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+> index fab5564..869aab0 100644
+> --- a/lib/kunit/Makefile
+> +++ b/lib/kunit/Makefile
+> @@ -3,7 +3,8 @@ obj-$(CONFIG_KUNIT) +=                  kunit.o
+>  kunit-objs +=                          test.o \
+>                                         string-stream.o \
+>                                         assert.o \
+> -                                       try-catch.o
+> +                                       try-catch.o \
+> +                                       debugfs.o
+>
+>  obj-$(CONFIG_KUNIT_TEST) +=            kunit-test.o
+>
+> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> new file mode 100644
+> index 0000000..578843c
+> --- /dev/null
+> +++ b/lib/kunit/debugfs.c
+> @@ -0,0 +1,104 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2020, Oracle and/or its affiliates.
+> + *    Author: Alan Maguire <alan.maguire@oracle.com>
+> + */
+> +
+> +#include <linux/debugfs.h>
+> +#include <linux/module.h>
+> +
+> +#include <kunit/test.h>
+> +
+> +#include "string-stream.h"
+> +
+> +#define KUNIT_DEBUGFS_ROOT             "kunit"
+> +#define KUNIT_DEBUGFS_RESULTS          "results"
+> +
+> +/*
+> + * Create a debugfs representation of test suites:
+> + *
+> + * Path                                                Semantics
+> + * /sys/kernel/debug/kunit/<testsuite>/results Show results of last run for
+> + *                                             testsuite
+> + *
+> + */
+> +
+> +static struct dentry *debugfs_rootdir;
+> +
+> +void kunit_debugfs_cleanup(void)
+> +{
+> +       debugfs_remove_recursive(debugfs_rootdir);
+> +}
+> +
+> +void kunit_debugfs_init(void)
+> +{
+> +       if (!debugfs_rootdir)
+> +               debugfs_rootdir = debugfs_create_dir(KUNIT_DEBUGFS_ROOT, NULL);
+> +}
+> +
+> +static void debugfs_print_result(struct seq_file *seq,
+> +                                struct kunit_suite *suite,
+> +                                struct kunit_case *test_case)
+> +{
+> +       if (!test_case)
+> +               return;
+> +
+> +       seq_printf(seq, "\t%s %d - %s\n", kunit_status2str(test_case->success),
+> +                  kunit_test_case_num(suite, test_case), test_case->name);
 
+Do you think we might want to collect info printed to
+kunit_{info|warn|err}? I would think the expectation failure line at
+least would be desirable, no?
+
+> +}
+> +
+> +/*
+> + * /sys/kernel/debug/kunit/<testsuite>/results shows all results for testsuite.
+> + */
+> +static int debugfs_print_results(struct seq_file *seq, void *v)
+> +{
+> +       struct kunit_suite *suite = (struct kunit_suite *)seq->private;
+> +       struct kunit_case *test_case;
+> +
+> +       if (!suite)
+> +               return 0;
+> +
+> +       seq_printf(seq, "\t# Subtest: %s\n", suite->name);
+> +       seq_printf(seq, "\t1..%zd\n", kunit_suite_num_test_cases(suite));
+
+Is there any way to reuse the format strings/printing from test.c? It
+would be nice if we didn't have to remember to update two printers.
+
+> +
+> +       for (test_case = suite->test_cases; test_case->run_case; test_case++)
+> +               debugfs_print_result(seq, suite, test_case);
+> +
+> +       return 0;
+> +}
+> +
+> +static int debugfs_release(struct inode *inode, struct file *file)
+> +{
+> +       return single_release(inode, file);
+> +}
+> +
+> +static int debugfs_results_open(struct inode *inode, struct file *file)
+> +{
+> +       struct kunit_suite *suite;
+> +
+> +       suite = (struct kunit_suite *)inode->i_private;
+> +
+> +       return single_open(file, debugfs_print_results, suite);
+> +}
+> +
+> +static const struct file_operations debugfs_results_fops = {
+> +       .open = debugfs_results_open,
+> +       .read = seq_read,
+> +       .llseek = seq_lseek,
+> +       .release = debugfs_release,
+> +};
+> +
+> +void kunit_debugfs_create_suite(struct kunit_suite *suite)
+> +{
+> +       /* First add /sys/kernel/debug/kunit/<testsuite> */
+> +       suite->debugfs = debugfs_create_dir(suite->name, debugfs_rootdir);
+> +
+> +       debugfs_create_file(KUNIT_DEBUGFS_RESULTS, S_IFREG | 0444,
+> +                           suite->debugfs,
+> +                           suite, &debugfs_results_fops);
+> +}
+> +
+> +void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
+> +{
+> +       debugfs_remove_recursive(suite->debugfs);
+> +}
+> diff --git a/lib/kunit/debugfs.h b/lib/kunit/debugfs.h
+> new file mode 100644
+> index 0000000..9a92d5e
+> --- /dev/null
+> +++ b/lib/kunit/debugfs.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020, Oracle and/or its affiliates.
+> + */
+> +
+> +#ifndef _KUNIT_DEBUGFS_H
+> +#define _KUNIT_DEBUGFS_H
+> +
+> +#include <kunit/test.h>
+> +
+> +void kunit_debugfs_create_suite(struct kunit_suite *suite);
+> +void kunit_debugfs_destroy_suite(struct kunit_suite *suite);
+> +void kunit_debugfs_init(void);
+> +void kunit_debugfs_cleanup(void);
+> +
+> +#endif /* _KUNIT_DEBUGFS_H */
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 9242f93..07089ca 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/sched/debug.h>
+>
+> +#include "debugfs.h"
+>  #include "string-stream.h"
+>  #include "try-catch-impl.h"
+>
+> @@ -28,22 +29,24 @@ static void kunit_print_tap_version(void)
+>         }
+>  }
+>
+> -static size_t kunit_test_cases_len(struct kunit_case *test_cases)
+> +size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
+>  {
+> -       struct kunit_case *test_case;
+> +       struct kunit_case *test_case, *test_cases = suite->test_cases;
+>         size_t len = 0;
+>
+> -       for (test_case = test_cases; test_case->run_case; test_case++)
+> +       for (test_case = test_cases; test_case && test_case->run_case;
+> +            test_case++)
+>                 len++;
+>
+>         return len;
+>  }
+> +EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+>
+>  static void kunit_print_subtest_start(struct kunit_suite *suite)
+>  {
+>         kunit_print_tap_version();
+>         pr_info("\t# Subtest: %s\n", suite->name);
+> -       pr_info("\t1..%zd\n", kunit_test_cases_len(suite->test_cases));
+> +       pr_info("\t1..%zd\n", kunit_suite_num_test_cases(suite));
+>  }
+>
+>  static void kunit_print_ok_not_ok(bool should_indent,
+> @@ -51,19 +54,15 @@ static void kunit_print_ok_not_ok(bool should_indent,
+>                                   size_t test_number,
+>                                   const char *description)
+>  {
+> -       const char *indent, *ok_not_ok;
+> +       const char *indent;
+>
+>         if (should_indent)
+>                 indent = "\t";
+>         else
+>                 indent = "";
+>
+> -       if (is_ok)
+> -               ok_not_ok = "ok";
+> -       else
+> -               ok_not_ok = "not ok";
+> -
+> -       pr_info("%s%s %zd - %s\n", indent, ok_not_ok, test_number, description);
+> +       pr_info("%s%s %zd - %s\n", indent, kunit_status2str(is_ok),
+> +               test_number, description);
+>  }
+>
+>  static bool kunit_suite_has_succeeded(struct kunit_suite *suite)
+> @@ -87,14 +86,20 @@ static void kunit_print_subtest_end(struct kunit_suite *suite)
+>                               suite->name);
+>  }
+>
+> -static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
+> -                                           size_t test_number)
+> +unsigned int kunit_test_case_num(struct kunit_suite *suite,
+> +                                struct kunit_case *test_case)
+>  {
+> -       kunit_print_ok_not_ok(true,
+> -                             test_case->success,
+> -                             test_number,
+> -                             test_case->name);
+> +       struct kunit_case *tc;
+> +       unsigned int i;
+> +
+> +       for (i = 1, tc = suite->test_cases; tc->run_case; tc++, i++) {
+> +               if (tc == test_case)
+> +                       return i;
+> +       }
+> +
+> +       return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(kunit_test_case_num);
+>
+>  static void kunit_print_string_stream(struct kunit *test,
+>                                       struct string_stream *stream)
+> @@ -102,6 +107,9 @@ static void kunit_print_string_stream(struct kunit *test,
+>         struct string_stream_fragment *fragment;
+>         char *buf;
+>
+> +       if (string_stream_is_empty(stream))
+> +               return;
+> +
+>         buf = string_stream_get_string(stream);
+>         if (!buf) {
+>                 kunit_err(test,
+> @@ -303,19 +311,20 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+>         kunit_try_catch_run(try_catch, &context);
+>
+>         test_case->success = test.success;
+> +
+> +       kunit_print_ok_not_ok(true, test_case->success,
+> +                             kunit_test_case_num(suite, test_case),
+> +                             test_case->name);
+>  }
+>
+>  int kunit_run_tests(struct kunit_suite *suite)
+>  {
+>         struct kunit_case *test_case;
+> -       size_t test_case_count = 1;
+>
+>         kunit_print_subtest_start(suite);
+>
+> -       for (test_case = suite->test_cases; test_case->run_case; test_case++) {
+> +       for (test_case = suite->test_cases; test_case->run_case; test_case++)
+>                 kunit_run_case_catch_errors(suite, test_case);
+> -               kunit_print_test_case_ok_not_ok(test_case, test_case_count++);
+> -       }
+>
+>         kunit_print_subtest_end(suite);
+>
+> @@ -323,6 +332,37 @@ int kunit_run_tests(struct kunit_suite *suite)
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_run_tests);
+>
+> +static void kunit_init_suite(struct kunit_suite *suite)
+> +{
+> +       kunit_debugfs_create_suite(suite);
+> +}
+
+It looks like this is only called in one place, can we just call
+kunit_debugfs_create_suite directly?
+
+> +
+> +int __kunit_test_suites_init(struct kunit_suite **suites)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i = 0; suites[i] != NULL; i++) {
+> +               kunit_init_suite(suites[i]);
+> +               kunit_run_tests(suites[i]);
+> +       }
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+> +
+> +static void kunit_exit_suite(struct kunit_suite *suite)
+> +{
+> +       kunit_debugfs_destroy_suite(suite);
+> +}
+> +
+> +void __kunit_test_suites_exit(struct kunit_suite **suites)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i = 0; suites[i] != NULL; i++)
+> +               kunit_exit_suite(suites[i]);
+> +}
+> +EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
+> +
+>  struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+>                                                     kunit_resource_init_t init,
+>                                                     kunit_resource_free_t free,
+> @@ -489,12 +529,15 @@ void kunit_cleanup(struct kunit *test)
+>
+>  static int __init kunit_init(void)
+>  {
+> +       kunit_debugfs_init();
+> +
+>         return 0;
+>  }
+>  late_initcall(kunit_init);
+>
+>  static void __exit kunit_exit(void)
+>  {
+> +       kunit_debugfs_cleanup();
+>  }
+>  module_exit(kunit_exit);
+>
+> --
+> 1.8.3.1
+>
