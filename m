@@ -2,63 +2,64 @@ Return-Path: <SRS0=glE8=3U=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D84CC35240
-	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jan 2020 14:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 337BAC35240
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jan 2020 14:56:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E788921734
-	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jan 2020 14:55:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED62D20705
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jan 2020 14:56:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bqZKRFmy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P54WA2PG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729113AbgAaOzG (ORCPT
+        id S1729071AbgAaO40 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 31 Jan 2020 09:55:06 -0500
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:46565 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729062AbgAaOzF (ORCPT
+        Fri, 31 Jan 2020 09:56:26 -0500
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:36556 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729012AbgAaO40 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jan 2020 09:55:05 -0500
-Received: by mail-yw1-f65.google.com with SMTP id z141so4426437ywd.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2020 06:55:05 -0800 (PST)
+        Fri, 31 Jan 2020 09:56:26 -0500
+Received: by mail-yw1-f68.google.com with SMTP id n184so4942060ywc.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2020 06:56:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SDj5kNjMiLc1TNHQMyijHY5lqlqUv2q9y5ctnKAZRBM=;
-        b=bqZKRFmycIWRiGhpMQzPAIBZjoFVrYuo2SZLTiBQn9hk3BIfxPOgtiasQqrKsz2M5R
-         xcr70sdeXtlmRgqAkxi4MwwCCGAkJhHqVAsDAT18gQB8K95aCL2+v7W3tf6GiQuTk9wx
-         zSsFPc/QZmAsiQnT6xuRc+WOhhu4GLqhGs9PXg0H7dCfbwXXOUvKNyrwN6IBwhS4kjJP
-         xqgIEUk70E2YY22PIZpKwKrFtorhvE2J/tl5xnCl5++MsQJJfl74Og7nGC7EhicDGutJ
-         s6D889kI9JFG1is8ZQK56+B9Cjutnn92mtrnjX6fCu2blz9jNuBePoRzER6x6s+DTbFF
-         UPKA==
+        bh=f3RC/SQifpuY8VOrKnWaTREoPKqzmE43+PbrL0jAXis=;
+        b=P54WA2PGuxfHKuFWwjrCbu/PdvMVuTnU6Dy7LvFOdRSFKsLV2oQuVF4ER8MQlrTzXG
+         BXeSJzDcUOkjj1ktcmYJEd+ANaql3n7CK1hTX1lLL/noTkNXvixZOjO1xhQKB4i7oNX/
+         Jz0RTVlQUZ6txzCjiRFNpCIY+moznMKuzZ/jwGn076BYfEQ457YobGxXeax8y9d7Sfk/
+         B2HZTKv6CE2qMyFykdxTS3+qtSqlOe24FS78clS9dvGX9mg0/TAofXrBoUqJpS+fjcQf
+         znE14zc4DrIFSnqC41wvvUaa13UJl7g0WxziSCWoLP/A7YDivoTpGwdYYNcAJzpmmvMb
+         Ollg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SDj5kNjMiLc1TNHQMyijHY5lqlqUv2q9y5ctnKAZRBM=;
-        b=dPvbu2fArGi3NfmFDKLMmrKF+Gxs85aOoI0xAj8hxPNdptVLEvHKaw4gk5h+E/a9Nc
-         sJDGYGQSI/YAvv2Bx2D/VAJU3qKFSnkYt9r+tHSGbalY/zE5YZkjwizA9FMVmkODR25L
-         YrqdnVEd91PqJu/SfHSFKF7Sg4zfhU21iiCmuki3hXTar2Vff41YxRKx5yXObC090895
-         esJr1PB9+RFbeu6+TTZvhDGWtctotmb89ZqUQqNe7jNn4biJcE86vC7Cl7hKRI2Ehkno
-         Cto2EoN/8A86XM/tVOXk4PVxDvZ6AtYi/yn3yQ8NdGZaoJfv9wxV2pJCFnGw9WgHvvvN
-         JhUg==
-X-Gm-Message-State: APjAAAW8M+C0uc/ug0x2WJtkeQ5dHQb8scZOVJNIIYOdZXq8gXlc1nV9
-        N7UkDyLiE7WOWGzcC+djHmS3i3BC5+1upKHA7Z77VA==
-X-Google-Smtp-Source: APXvYqyvp5cLvKH6z6kEMndeCtof01VGlsZXoDmYcGmrhf/gmPmDw9GCx5N5tQtW9+VSCDoYF9vhN4WVGMlTHp5v3c0=
-X-Received: by 2002:a25:d112:: with SMTP id i18mr8262683ybg.364.1580482504570;
- Fri, 31 Jan 2020 06:55:04 -0800 (PST)
+        bh=f3RC/SQifpuY8VOrKnWaTREoPKqzmE43+PbrL0jAXis=;
+        b=ZHqBRZ0bHWNFFyuVW9s0s82aTQxv7NnuoOqL9v5E1yR7Nk9VWs/LjLPtEWgVk0+Kvu
+         By24QtzUong3uAJLGzC/0M83dM6z5gf2gOlmRYQ3qmI8igWZJ9EtGC8AZzvPrAGMnlU2
+         Q6Fyty1lMlIChVQbMDaUhlEx3NQotHjzlOdqoLphj2SurZwBedcdIL9WQuIVzWJ/iJZk
+         TeosZru+v7wOVgstpIGTALXUehPWE1Wu8y7xZgeY1Hi3jhb99MZkdGmtHL9Y2iXFNXHz
+         kjIY+DBojSYp3PODo1ntG9JhSFubYrSYP/NjTHnuJOhOPjc+s/jD7ORiH33llEBgqAYy
+         UyAQ==
+X-Gm-Message-State: APjAAAW+GwonR0oTenja1B0xrJUzpeO5TXTsbYxnXCzo9CQfVdwHAUzA
+        eFUGzXc6bNUnQbePS+cPW495LPbVeBVn6M9SSGZGIFzY
+X-Google-Smtp-Source: APXvYqxA/y+W7hbdbObbPKgxxIFfPSwtpl3SGq3C/Avbu4JwPSIPL0Zm0sJFTvez7VjM7JtzbYh23B12TQvZ1QBQ0ck=
+X-Received: by 2002:a0d:c701:: with SMTP id j1mr1163590ywd.52.1580482585227;
+ Fri, 31 Jan 2020 06:56:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20200131122421.23286-1-sjpark@amazon.com> <20200131122421.23286-2-sjpark@amazon.com>
-In-Reply-To: <20200131122421.23286-2-sjpark@amazon.com>
+References: <20200131122421.23286-1-sjpark@amazon.com> <20200131122421.23286-4-sjpark@amazon.com>
+In-Reply-To: <20200131122421.23286-4-sjpark@amazon.com>
 From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 31 Jan 2020 06:54:53 -0800
-Message-ID: <CANn89iK3usa_bAfnD37VKvS45Qf6FH+H4fo-9zNrGGanc=7uAw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] net/ipv4/inet_timewait_sock: Fix inconsistent comments
+Date:   Fri, 31 Jan 2020 06:56:13 -0800
+Message-ID: <CANn89iJrwVuEUHFqH1iCJd3nwTWAuXCdEJozwz6gzDV5Snm3Ug@mail.gmail.com>
+Subject: Re: [PATCH 3/3] selftests: net: Add FIN_ACK processing order related
+ latency spike test
 To:     sjpark@amazon.com
 Cc:     David Miller <davem@davemloft.net>, Shuah Khan <shuah@kernel.org>,
         netdev <netdev@vger.kernel.org>,
@@ -72,32 +73,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 4:24 AM <sjpark@amazon.com> wrote:
+On Fri, Jan 31, 2020 at 4:25 AM <sjpark@amazon.com> wrote:
 >
 > From: SeongJae Park <sjpark@amazon.de>
 >
-> Commit ec94c2696f0b ("tcp/dccp: avoid one atomic operation for timewait
-> hashdance") mistakenly erased a comment for the second step of
-> `inet_twsk_hashdance()`.  This commit restores it for better
-> readability.
+> This commit adds a test for FIN_ACK process races related reconnection
+> latency spike issues.  The issue has described and solved by the
+> previous commit ("tcp: Reduce SYN resend delay if a suspicous ACK is
+> received").
 >
-> Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> ---
->  net/ipv4/inet_timewait_sock.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-> index c411c87ae865..fbfcd63cc170 100644
-> --- a/net/ipv4/inet_timewait_sock.c
-> +++ b/net/ipv4/inet_timewait_sock.c
-> @@ -120,6 +120,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
->
->         spin_lock(lock);
->
-> +       /* Step 2: Hash TW into tcp ehash chain. */
 
-This comment adds no value, please do not bring it back.
+I do not know for other tests, but using a hard coded port (4242) is
+going to be flakky, since the port might be already used.
 
-net-next is closed, now is not the time for cosmetic changes.
-
-Also take a look at Documentation/networking/netdev-FAQ.rst
+Please make sure to run tests on a separate namespace.
