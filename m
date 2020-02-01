@@ -2,141 +2,172 @@ Return-Path: <SRS0=k/Q9=3V=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C06DC33C9E
-	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 06:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 845B8C35246
+	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 07:19:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F73B206D3
-	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 06:08:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5AEC920723
+	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 07:19:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lDpqA8x8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNKN/2nF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgBAGI6 (ORCPT
+        id S1726106AbgBAHTO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 1 Feb 2020 01:08:58 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:34081 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725819AbgBAGI6 (ORCPT
+        Sat, 1 Feb 2020 02:19:14 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46101 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbgBAHTO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 1 Feb 2020 01:08:58 -0500
-Received: by mail-wm1-f65.google.com with SMTP id s144so10270994wme.1;
-        Fri, 31 Jan 2020 22:08:56 -0800 (PST)
+        Sat, 1 Feb 2020 02:19:14 -0500
+Received: by mail-wr1-f68.google.com with SMTP id z7so11192360wrl.13;
+        Fri, 31 Jan 2020 23:19:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to;
-        bh=ishe3wylxU5DdbmCiVhXoDPa+Jea4eY6AcXsmXmzIFM=;
-        b=lDpqA8x8A/NCKTjaahbsIU0krLUS6y0Ky6ZEZ2VgZ0HEk/bFccMZBLbD07jgwPWgBv
-         NCq8k5zTqQU3fmzETffHG+D3W/LIEUAumjlwx0+1GRTv1vApjO4U9RvDRSjc2x4MHSzd
-         oqolgD7LfXS8e/amRdzyrI3tJ4kbNSTbY77GWlnRRZUEEMglF2TcSUjoyyYd83jexsJ8
-         EiWnMqWYkeGEABjiACvFLgvqThV2SN5wec9y5AkJfvYUuFr0KYLPMdNsha+4d5kOizav
-         MqcMttv1RTFhIyrHoHWpavdHSj5SKqWFIzVM8EuF8dvm5q/hrqegCSTcZQn2r2tTRpIe
-         Selw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=eke5sBTLy6OgiheiuxHRk3qgDygD3NTMWAJknxyaymw=;
+        b=TNKN/2nFPUQzkhyZmQ8cOlu4SKJUNAlhH5McodWv3mtwh59+UMcbd1TT2lP0NrGe6/
+         lros/X9McKFfhCFJFT8LtYnvbXY5jVMHtUqH+RIffqj6Dv20gNnhU7K51d3kca1WmiYC
+         hSoHbA906qPZXtGNzK5k8/QG0jP1FGIoDCHJazCvQHiui0FsjQjOkDW7UfE/tOzA9RIX
+         3ZJjRqISoVNNOMWOXfSis+9q+/zTSwy1ohBXaKTgU2OibvJ7e94cKTs8oTgstFMcb9Ro
+         2NsoZBpjc38tgIslJLsEuPJ7ngq3J7qIrb7FsKnox9DwRwD61FsX7mhVauVN5rjg3gI5
+         6NOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to;
-        bh=ishe3wylxU5DdbmCiVhXoDPa+Jea4eY6AcXsmXmzIFM=;
-        b=Snl7/E5NXoWdnHhxhwI1+2jcsqjEqGdfpWw5THZpmRORtSLRBMOGl9F+Wljn3P17gX
-         aNkGNtOxmoLGmcCTEAVtZT6hjD1GBoeOn+ZB1b7vdPgaJvLtVmhMuJ2fo0EVOb/FwY1S
-         hgI4faAxYdaDzGgmpjqia91nKui/JWKw/TnX+uWJ2NpwwpQjC3zMLHiLUEx4bBUdjkU4
-         RnhTfzmzVUYnc8kX/GL0zb2NjMUM9GYVTyEDSQNSsUTZvRAuU09yD5j67few344mvAV+
-         fOA7YZHqM74QzPulXFne9lMwpyT45k/Kvz/H6E56gliqtjEOJfJRNBvxD79QL+trFccz
-         duAw==
-X-Gm-Message-State: APjAAAU5fibQcpaQjhJwO27aNXKyUqiLq4o4GFTqtYbl6z87C7KsPdb4
-        ypADNIxWO9k1vAP9md/uUCw=
-X-Google-Smtp-Source: APXvYqxzUQRkgZgwqSu2maQusGbwl1Dh0Bz+Bn8Coh1ZaVif2TXk/PZnDh9dDWPNLyFTNDQaPUuutg==
-X-Received: by 2002:a1c:7317:: with SMTP id d23mr16843328wmb.165.1580537336016;
-        Fri, 31 Jan 2020 22:08:56 -0800 (PST)
-Received: from localhost.localdomain ([2a02:2450:10d2:194d:bcd7:b36c:40fc:d163])
-        by smtp.gmail.com with ESMTPSA id c15sm14815486wrt.1.2020.01.31.22.08.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=eke5sBTLy6OgiheiuxHRk3qgDygD3NTMWAJknxyaymw=;
+        b=Ab3te8aiyGbAKR1k/Sst0AYRTcCLqRjvi4N9MmODoCFrbdwN5nDflhIfis7tpsMLTS
+         oFHrxOrBdqhYc0BUZmGa2hxCa0mtFj4LkEScyRKcSK22Lte5ajgwWzHScbJAnymo3cLW
+         2NEd5rA22JSGYOsKo+Js+6zFM+DJt7sOaRMGW88GNQEDr/K2DWhtW/6QRtnSPCn4ifIg
+         HD77UDH8Ov/ceN6CrQ+x6jc6Rq/imB5C5i3mZ7/C8vS/062m8YpDaj2CWxhIXKrBv8IR
+         74JlpNI8tNTXcG82NMMeHh+syJ29VRdIhwn6DHR510WN2M4nvuSNxIBbVJS5p1RgopmL
+         n3NA==
+X-Gm-Message-State: APjAAAX5FOkEsptIKQFVpBE9fnAqK1Xsy+BD9W/ajJ42rE+ZFgCDNI4R
+        PqMuqIsx8Jqs2tXtwsY7/MsKFNdR
+X-Google-Smtp-Source: APXvYqwR0qofoMoeKrmpnjGW2PFx1dUNqMR4jfpQBbrzXP0deaIb/Wv+zKjuM8cyS6MMaXcofLQhbw==
+X-Received: by 2002:a5d:66cc:: with SMTP id k12mr3052135wrw.72.1580541552100;
+        Fri, 31 Jan 2020 23:19:12 -0800 (PST)
+Received: from localhost.localdomain (cable-158-181-93-24.cust.telecolumbus.net. [158.181.93.24])
+        by smtp.gmail.com with ESMTPSA id o4sm664286wrw.15.2020.01.31.23.19.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jan 2020 22:08:55 -0800 (PST)
-From:   SeongJae Park <sj38.park@gmail.com>
-To:     Neal Cardwell <ncardwell@google.com>
-Cc:     SeongJae Park <sj38.park@gmail.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>, sjpark@amazon.com,
-        Eric Dumazet <edumazet@google.com>,
-        David Miller <davem@davemloft.net>, shuah@kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, aams@amazon.com,
-        SeongJae Park <sjpark@amazon.de>,
-        Yuchung Cheng <ycheng@google.com>
-Subject: Re: Re: Re: [PATCH 2/3] tcp: Reduce SYN resend delay if a suspicous ACK is received
-Date:   Sat,  1 Feb 2020 07:08:43 +0100
-Message-Id: <20200201060843.21626-1-sj38.park@gmail.com>
+        Fri, 31 Jan 2020 23:19:11 -0800 (PST)
+From:   sj38.park@gmail.com
+To:     eric.dumazet@gmail.com, edumazet@google.com
+Cc:     davem@davemloft.net, aams@amazon.com, ncardwell@google.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuah@kernel.org, ycheng@google.com,
+        David.Laight@ACULAB.COM, sj38.park@gmail.com,
+        SeongJae Park <sjpark@amazon.de>
+Subject: [PATCH v2 1/2] tcp: Reduce SYN resend delay if a suspicous ACK is received
+Date:   Sat,  1 Feb 2020 07:18:58 +0000
+Message-Id: <20200201071859.4231-2-sj38.park@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CADVnQy=oFmmG-Z9QMafWLcALOBgohADgwScn2r+7CGFNAw5jvw@mail.gmail.com> (raw)
+In-Reply-To: <20200201071859.4231-1-sj38.park@gmail.com>
+References: <20200201071859.4231-1-sj38.park@gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 31 Jan 2020 22:55:34 -0500 Neal Cardwell <ncardwell@google.com> wrote:
+From: SeongJae Park <sjpark@amazon.de>
 
-> On Fri, Jan 31, 2020 at 5:18 PM SeongJae Park <sj38.park@gmail.com> wrote:
-> >
-> > On Fri, 31 Jan 2020 17:11:35 -0500 Neal Cardwell <ncardwell@google.com> wrote:
-> >
-> > > On Fri, Jan 31, 2020 at 1:12 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 1/31/20 7:10 AM, Neal Cardwell wrote:
-> > > > > On Fri, Jan 31, 2020 at 7:25 AM <sjpark@amazon.com> wrote:
-> > > > >>
-> > > > >> From: SeongJae Park <sjpark@amazon.de>
-> > > > >>
-> > > > >> When closing a connection, the two acks that required to change closing
-> > > > >> socket's status to FIN_WAIT_2 and then TIME_WAIT could be processed in
-> > > > >> reverse order.  This is possible in RSS disabled environments such as a
-> > > > >> connection inside a host.
-> > [...]
-> > >
-> > > I looked into fixing this, but my quick reading of the Linux
-> > > tcp_rcv_state_process() code is that it should behave correctly and
-> > > that a connection in FIN_WAIT_1 that receives a FIN/ACK should move to
-> > > TIME_WAIT.
-> > >
-> > > SeongJae, do you happen to have a tcpdump trace of the problematic
-> > > sequence where the "process A" ends up in FIN_WAIT_2 when it should be
-> > > in TIME_WAIT?
-> >
-> > Hi Neal,
-> >
-> >
-> > Yes, I have.  You can get it from the previous discussion for this patchset
-> > (https://lore.kernel.org/bpf/20200129171403.3926-1-sjpark@amazon.com/).  As it
-> > also has a reproducer program and how I got the tcpdump trace, I believe you
-> > could get your own trace, too.  If you have any question or need help, feel
-> > free to let me know. :)
-> 
-> Great. Thank you for the pointer.
-> 
-> I had one quick question: in the message:
->   https://lore.kernel.org/bpf/20200129171403.3926-1-sjpark@amazon.com/
-> ... it showed a trace with the client sending a RST/ACK, but this
-> email thread shows a FIN/ACK. I am curious about the motivation for
-> the difference?
+When closing a connection, the two acks that required to change closing
+socket's status to FIN_WAIT_2 and then TIME_WAIT could be processed in
+reverse order.  This is possible in RSS disabled environments such as a
+connection inside a host.
 
-RST/ACK is traced if LINGER socket option is applied in the reproduce program,
-and FIN/ACK is traced if it is not applied.  LINGER applied version shows the
-spikes more frequently, but the main problem logic has no difference.  I
-confirmed this by testing both of the two versions.
+For example, expected state transitions and required packets for the
+disconnection will be similar to below flow.
 
-In the previous discussion, I showed the LINGER applied trace.  However, as
-many other documents are using FIN/ACK, I changed the trace to FIN/ACK version
-in this patchset for better understanding.  I will comment that it doesn't
-matter whether it is FIN/ACK or RST/ACK in the next spin.
+	 00 (Process A)				(Process B)
+	 01 ESTABLISHED				ESTABLISHED
+	 02 close()
+	 03 FIN_WAIT_1
+	 04 		---FIN-->
+	 05 					CLOSE_WAIT
+	 06 		<--ACK---
+	 07 FIN_WAIT_2
+	 08 		<--FIN/ACK---
+	 09 TIME_WAIT
+	 10 		---ACK-->
+	 11 					LAST_ACK
+	 12 CLOSED				CLOSED
 
+In some cases such as LINGER option applied socket, the FIN and FIN/ACK
+will be substituted to RST and RST/ACK, but there is no difference in
+the main logic.
 
-Thanks,
-SeongJae Park
+The acks in lines 6 and 8 are the acks.  If the line 8 packet is
+processed before the line 6 packet, it will be just ignored as it is not
+a expected packet, and the later process of the line 6 packet will
+change the status of Process A to FIN_WAIT_2, but as it has already
+handled line 8 packet, it will not go to TIME_WAIT and thus will not
+send the line 10 packet to Process B.  Thus, Process B will left in
+CLOSE_WAIT status, as below.
 
-> 
-> Anyway, thanks for the report, and thanks to Eric for further clarifying!
-> 
-> neal
-> 
+	 00 (Process A)				(Process B)
+	 01 ESTABLISHED				ESTABLISHED
+	 02 close()
+	 03 FIN_WAIT_1
+	 04 		---FIN-->
+	 05 					CLOSE_WAIT
+	 06 				(<--ACK---)
+	 07	  			(<--FIN/ACK---)
+	 08 				(fired in right order)
+	 09 		<--FIN/ACK---
+	 10 		<--ACK---
+	 11 		(processed in reverse order)
+	 12 FIN_WAIT_2
+
+Later, if the Process B sends SYN to Process A for reconnection using
+the same port, Process A will responds with an ACK for the last flow,
+which has no increased sequence number.  Thus, Process A will send RST,
+wait for TIMEOUT_INIT (one second in default), and then try
+reconnection.  If reconnections are frequent, the one second latency
+spikes can be a big problem.  Below is a tcpdump results of the problem:
+
+    14.436259 IP 127.0.0.1.45150 > 127.0.0.1.4242: Flags [S], seq 2560603644
+    14.436266 IP 127.0.0.1.4242 > 127.0.0.1.45150: Flags [.], ack 5, win 512
+    14.436271 IP 127.0.0.1.45150 > 127.0.0.1.4242: Flags [R], seq 2541101298
+    /* ONE SECOND DELAY */
+    15.464613 IP 127.0.0.1.45150 > 127.0.0.1.4242: Flags [S], seq 2560603644
+
+This commit mitigates the problem by reducing the delay for the next SYN
+if the suspicous ACK is received while in SYN_SENT state.
+
+Following commit will add a selftest, which can be also helpful for
+understanding of this issue.
+
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+ net/ipv4/tcp_input.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 2a976f57f7e7..980bd04b9d95 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5893,8 +5893,14 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
+ 		 *        the segment and return)"
+ 		 */
+ 		if (!after(TCP_SKB_CB(skb)->ack_seq, tp->snd_una) ||
+-		    after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt))
++		    after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)) {
++			/* Previous FIN/ACK or RST/ACK might be ignored. */
++			if (icsk->icsk_retransmits == 0)
++				inet_csk_reset_xmit_timer(sk,
++						ICSK_TIME_RETRANS, TCP_ATO_MIN,
++						TCP_RTO_MAX);
+ 			goto reset_and_undo;
++		}
+ 
+ 		if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr &&
+ 		    !between(tp->rx_opt.rcv_tsecr, tp->retrans_stamp,
+-- 
+2.17.1
+
