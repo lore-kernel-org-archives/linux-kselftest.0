@@ -2,199 +2,124 @@ Return-Path: <SRS0=k/Q9=3V=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAB50C47409
-	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 03:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 306B7C33C9E
+	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 03:55:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B08812073B
-	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 03:41:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED4F5215A4
+	for <linux-kselftest@archiver.kernel.org>; Sat,  1 Feb 2020 03:55:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="o2UyCaqK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VQjFL00X"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgBADkh (ORCPT
+        id S1726758AbgBADzw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 31 Jan 2020 22:40:37 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:11567 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726698AbgBADkg (ORCPT
+        Fri, 31 Jan 2020 22:55:52 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42034 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726743AbgBADzw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jan 2020 22:40:36 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e34f3250000>; Fri, 31 Jan 2020 19:40:21 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 31 Jan 2020 19:40:36 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 31 Jan 2020 19:40:36 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 1 Feb
- 2020 03:40:35 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sat, 1 Feb 2020 03:40:35 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e34f3330000>; Fri, 31 Jan 2020 19:40:35 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 05/12] mm/gup: pass gup flags to two more routines
-Date:   Fri, 31 Jan 2020 19:40:22 -0800
-Message-ID: <20200201034029.4063170-6-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200201034029.4063170-1-jhubbard@nvidia.com>
-References: <20200201034029.4063170-1-jhubbard@nvidia.com>
+        Fri, 31 Jan 2020 22:55:52 -0500
+Received: by mail-oi1-f193.google.com with SMTP id j132so9386983oih.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2020 19:55:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kpR02gdbkQHjEdxG9SGzf7pEIWQTwMtXqw53xDeIps0=;
+        b=VQjFL00X7xtyXkCCDgN3B68jvRIqMEmqrDPxRd5YE3DRN80cjuRwJc+vxnog0d9I5v
+         oefItgDUERaDVY/Gd5fT07KrQSGyCfMFvmsVeDqKTlRMu4QC5hyubUOprxRi3O2iZk9S
+         v53qnNnUyOyS8RL4KLV+hKJDShcM7+QvFo2HLP4uXwSiTMCgRy8D2WH6g4GTnvEFjn5i
+         by/CkmTLDYrhvYjZ9s8vSWSUayYwFsYMnktoKLw6TUHPxil+24ZVVOm8A4US4MkV6VHQ
+         XfULhdcSaKINaYs0Qt9Xq7gu1CkXzn/q0rbEaqmknolSfd9wEwSLp6tTknjiPAawKRvF
+         g/zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kpR02gdbkQHjEdxG9SGzf7pEIWQTwMtXqw53xDeIps0=;
+        b=KL3VIsNxeVcezPexBkFP3JPe/4Ba1g4wH+zDC69eqcDMAXcYtOsOEaqGQQnTXcOPUt
+         UycRkn1oBhfo40Reech5j13LYtkncGb81qyObgzMmuSdv69P7+6T3/PdsfO2I2vn+BAp
+         6WF7Ro5axdNBQCt6BdkRUYdlT/oPBhkNTp0+wNCxQsxYKtJeAnvofPKLuLpx9oiExkC2
+         dLwoKY7i3Iq6GdxXgST/0FX+NHmpYFJduUFqgn+02CDMR5I6xVe5ceQ+yGQvCrFGUKQ2
+         Yyx9frQZWnRQFOqpd5ugcbNU1yumIOcUx9BIZavEsDoGCuPuSaVJAxKA86WlRn46kqsB
+         aVtQ==
+X-Gm-Message-State: APjAAAXVCEHSi80NckWvn3rsbFfShI4hX92sYIxIlApYcukyYXedwzWm
+        DrL/s/CosfVc2k2WhVIPHc6JL9k0nx/7/XqZK3f9AGeQUck=
+X-Google-Smtp-Source: APXvYqxjgAjU3MBV4JGRRnsokOeDc9RuSZPhvl788mDb/V6Q+vKxvqq99N+lRsnjuxpaGJX4PklmpwXXNaKnby1DZuc=
+X-Received: by 2002:aca:1b17:: with SMTP id b23mr6844579oib.95.1580529351343;
+ Fri, 31 Jan 2020 19:55:51 -0800 (PST)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580528421; bh=k59Z87/FYHBXJ8LLM3bAMvqJQE/1MxpluJ3xDpIMcrU=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=o2UyCaqKoIhrlLwHM9fEcUVcv1LbCtiKqeNsJUcnc6V1G6/2k54f6gWL0+gsbziK6
-         eLMFjjAWC/kabi+v646AHzmvMv4MY2ohoekgsJuk3P0rsQ6BAHMVHzZW5Y9zOCNIxZ
-         7EIF8wHQEBTwvEPA4MHBNXAcg1AZsYUpEeWUB20n+A9M1qIby8WRo5YUVXPmdGDCGL
-         ISqTlNNczNG3eDxz4u5S36cmlkUHFmnF1/CkojFzh6zfBPsJoqMmrgk7OSqMut0I1+
-         Sz3+olbOP9hxQl6Tvq7n72B/1qSRLCGECrlLcIspPnR2iu+oG5aoeVgb1/TCDAHp5n
-         HxwlV6DxSy3TQ==
+References: <CADVnQy=Z0YRPY_0bxBpsZvECgamigESNKx6_-meNW5-6_N4kww@mail.gmail.com>
+ <20200131221755.3874-1-sj38.park@gmail.com>
+In-Reply-To: <20200131221755.3874-1-sj38.park@gmail.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Fri, 31 Jan 2020 22:55:34 -0500
+Message-ID: <CADVnQy=oFmmG-Z9QMafWLcALOBgohADgwScn2r+7CGFNAw5jvw@mail.gmail.com>
+Subject: Re: Re: [PATCH 2/3] tcp: Reduce SYN resend delay if a suspicous ACK
+ is received
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>, sjpark@amazon.com,
+        Eric Dumazet <edumazet@google.com>,
+        David Miller <davem@davemloft.net>, shuah@kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, aams@amazon.com,
+        SeongJae Park <sjpark@amazon.de>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In preparation for an upcoming patch, send gup flags args to two more
-routines: put_compound_head(), and undo_dev_pagemap().
+On Fri, Jan 31, 2020 at 5:18 PM SeongJae Park <sj38.park@gmail.com> wrote:
+>
+> On Fri, 31 Jan 2020 17:11:35 -0500 Neal Cardwell <ncardwell@google.com> wrote:
+>
+> > On Fri, Jan 31, 2020 at 1:12 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
+> > >
+> > >
+> > >
+> > > On 1/31/20 7:10 AM, Neal Cardwell wrote:
+> > > > On Fri, Jan 31, 2020 at 7:25 AM <sjpark@amazon.com> wrote:
+> > > >>
+> > > >> From: SeongJae Park <sjpark@amazon.de>
+> > > >>
+> > > >> When closing a connection, the two acks that required to change closing
+> > > >> socket's status to FIN_WAIT_2 and then TIME_WAIT could be processed in
+> > > >> reverse order.  This is possible in RSS disabled environments such as a
+> > > >> connection inside a host.
+> [...]
+> >
+> > I looked into fixing this, but my quick reading of the Linux
+> > tcp_rcv_state_process() code is that it should behave correctly and
+> > that a connection in FIN_WAIT_1 that receives a FIN/ACK should move to
+> > TIME_WAIT.
+> >
+> > SeongJae, do you happen to have a tcpdump trace of the problematic
+> > sequence where the "process A" ends up in FIN_WAIT_2 when it should be
+> > in TIME_WAIT?
+>
+> Hi Neal,
+>
+>
+> Yes, I have.  You can get it from the previous discussion for this patchset
+> (https://lore.kernel.org/bpf/20200129171403.3926-1-sjpark@amazon.com/).  As it
+> also has a reproducer program and how I got the tcpdump trace, I believe you
+> could get your own trace, too.  If you have any question or need help, feel
+> free to let me know. :)
 
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+Great. Thank you for the pointer.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 65a40560c8d0..83473c2165f4 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1870,6 +1870,7 @@ static inline pte_t gup_get_pte(pte_t *ptep)
- #endif /* CONFIG_GUP_GET_PTE_LOW_HIGH */
-=20
- static void __maybe_unused undo_dev_pagemap(int *nr, int nr_start,
-+					    unsigned int flags,
- 					    struct page **pages)
- {
- 	while ((*nr) - nr_start) {
-@@ -1909,7 +1910,7 @@ static int gup_pte_range(pmd_t pmd, unsigned long add=
-r, unsigned long end,
-=20
- 			pgmap =3D get_dev_pagemap(pte_pfn(pte), pgmap);
- 			if (unlikely(!pgmap)) {
--				undo_dev_pagemap(nr, nr_start, pages);
-+				undo_dev_pagemap(nr, nr_start, flags, pages);
- 				goto pte_unmap;
- 			}
- 		} else if (pte_special(pte))
-@@ -1974,7 +1975,7 @@ static int __gup_device_huge(unsigned long pfn, unsig=
-ned long addr,
-=20
- 		pgmap =3D get_dev_pagemap(pfn, pgmap);
- 		if (unlikely(!pgmap)) {
--			undo_dev_pagemap(nr, nr_start, pages);
-+			undo_dev_pagemap(nr, nr_start, flags, pages);
- 			return 0;
- 		}
- 		SetPageReferenced(page);
-@@ -2001,7 +2002,7 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t *p=
-mdp, unsigned long addr,
- 		return 0;
-=20
- 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
--		undo_dev_pagemap(nr, nr_start, pages);
-+		undo_dev_pagemap(nr, nr_start, flags, pages);
- 		return 0;
- 	}
- 	return 1;
-@@ -2019,7 +2020,7 @@ static int __gup_device_huge_pud(pud_t orig, pud_t *p=
-udp, unsigned long addr,
- 		return 0;
-=20
- 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
--		undo_dev_pagemap(nr, nr_start, pages);
-+		undo_dev_pagemap(nr, nr_start, flags, pages);
- 		return 0;
- 	}
- 	return 1;
-@@ -2053,7 +2054,7 @@ static int record_subpages(struct page *page, unsigne=
-d long addr,
- 	return nr;
- }
-=20
--static void put_compound_head(struct page *page, int refs)
-+static void put_compound_head(struct page *page, int refs, unsigned int fl=
-ags)
- {
- 	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
- 	/*
-@@ -2103,7 +2104,7 @@ static int gup_hugepte(pte_t *ptep, unsigned long sz,=
- unsigned long addr,
- 		return 0;
-=20
- 	if (unlikely(pte_val(pte) !=3D pte_val(*ptep))) {
--		put_compound_head(head, refs);
-+		put_compound_head(head, refs, flags);
- 		return 0;
- 	}
-=20
-@@ -2163,7 +2164,7 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsi=
-gned long addr,
- 		return 0;
-=20
- 	if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
--		put_compound_head(head, refs);
-+		put_compound_head(head, refs, flags);
- 		return 0;
- 	}
-=20
-@@ -2197,7 +2198,7 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsi=
-gned long addr,
- 		return 0;
-=20
- 	if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
--		put_compound_head(head, refs);
-+		put_compound_head(head, refs, flags);
- 		return 0;
- 	}
-=20
-@@ -2226,7 +2227,7 @@ static int gup_huge_pgd(pgd_t orig, pgd_t *pgdp, unsi=
-gned long addr,
- 		return 0;
-=20
- 	if (unlikely(pgd_val(orig) !=3D pgd_val(*pgdp))) {
--		put_compound_head(head, refs);
-+		put_compound_head(head, refs, flags);
- 		return 0;
- 	}
-=20
---=20
-2.25.0
+I had one quick question: in the message:
+  https://lore.kernel.org/bpf/20200129171403.3926-1-sjpark@amazon.com/
+... it showed a trace with the client sending a RST/ACK, but this
+email thread shows a FIN/ACK. I am curious about the motivation for
+the difference?
 
+Anyway, thanks for the report, and thanks to Eric for further clarifying!
+
+neal
