@@ -2,132 +2,281 @@ Return-Path: <SRS0=42tX=3Y=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 678FEC35247
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Feb 2020 23:35:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D19C35251
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Feb 2020 23:41:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D9B42082E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Feb 2020 23:35:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFF8424125
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Feb 2020 23:41:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pXCavDKV"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Nk0Ow+Q0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbgBDXfW (ORCPT
+        id S1727795AbgBDXl1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Feb 2020 18:35:22 -0500
-Received: from mail-yw1-f67.google.com ([209.85.161.67]:42688 "EHLO
-        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727461AbgBDXfW (ORCPT
+        Tue, 4 Feb 2020 18:41:27 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8831 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727757AbgBDXl0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Feb 2020 18:35:22 -0500
-Received: by mail-yw1-f67.google.com with SMTP id b81so626957ywe.9;
-        Tue, 04 Feb 2020 15:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a0Zh5A5UVxi7kLLHGfwoywGVILuqTGw6v50Ysx9v2pg=;
-        b=pXCavDKVVuw9mEkjafbCaKO5pjGoKu6fDxeJnvd1MP4Ho/MclHwZFj5TW3BUrhBfmQ
-         1SmqmXVWfty49DriNJQ95H35dObsy498Oq0YoIpQ4xoJcFv0qQQM42YWPwm1cuVFhRqi
-         gwGbaDmTBoJgvutLWDYXQjgZvPTMGnASlyiY45aU8e7IrERrhJzIdzIYilgXMBI45TcA
-         NZbjj1XZ83DjOMTwSxD1+p5WgZhPEX+LU5siBJWHTgRilJ7uHCRgjmbbG/BeQwqY3M7I
-         mr//gJt8IbDaSMZ6o1EXESADBXmSj+iZbjbNuFBCJVG+KsPbFb6nK5xrG1maymE9EjS2
-         Jwsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a0Zh5A5UVxi7kLLHGfwoywGVILuqTGw6v50Ysx9v2pg=;
-        b=pGHYRc536rlxJE/iKM95Mdt4R5SfTKTdbTAlxyrGInQR5ZUhePuk64hbeOI5v5JNqF
-         97Tw0Le4cayQl9KPhkm4cThp0yCLl4zAHL/z7QYcFoA3G6h2iGiBlIwR6WJSuK9Y93X7
-         KfIlG4k7Gf+i77heywRTKC/SFHtCOXrt2CT7VLSaJIAULVrhMZSa314hryipfZbEeY58
-         myvakjO/jhrq35evaE9joeEh6JTWSRaRu7MF2lgY20jHdtqoj5HnM1IGQlONdDbgfU5B
-         aJxRbQpxFWUJiDZZYy8MAfu5yNo/QoXSzCMYZJKeLl8YE8vVneGGpaMsPZ9xpmyVuXRB
-         2juQ==
-X-Gm-Message-State: APjAAAXjjoNdB3JqYdXkTddQFdNVKT0cGSMvQ1k7JD2qB3ZN97IQFBYW
-        jSDvm5Q8xbCmp0m35SqzXR0=
-X-Google-Smtp-Source: APXvYqxDpSKKSu2un/TP0Ysy4WFWa6lTEAL6/sexOdBqb4s9dfVx7yM35vus7F6YnJ3GRb+1LFZYCA==
-X-Received: by 2002:a81:9912:: with SMTP id q18mr7487623ywg.383.1580859319894;
-        Tue, 04 Feb 2020 15:35:19 -0800 (PST)
-Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
-        by smtp.gmail.com with ESMTPSA id o69sm10579207ywd.38.2020.02.04.15.35.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Feb 2020 15:35:19 -0800 (PST)
-Subject: Re: [PATCH v2 0/7] kunit: create a centralized executor to dispatch
- all KUnit tests
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Kees Cook <keescook@chromium.org>,
-        Richard Weinberger <richard@nod.at>, rppt@linux.ibm.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Knut Omang <knut.omang@oracle.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20200130230812.142642-1-brendanhiggins@google.com>
- <20200204071915.AF32B21582@mail.kernel.org>
- <CAFd5g44ZG+E==gT24w49oKc6nHv4nBQFeipikKxXJH3oHdO99Q@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <4d0f42f7-8dbe-3d47-e0df-3e31cc8ebf52@gmail.com>
-Date:   Tue, 4 Feb 2020 17:35:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Tue, 4 Feb 2020 18:41:26 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e3a010a0001>; Tue, 04 Feb 2020 15:40:58 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 04 Feb 2020 15:41:22 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 04 Feb 2020 15:41:22 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 4 Feb
+ 2020 23:41:22 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 4 Feb 2020 23:41:21 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e3a01200005>; Tue, 04 Feb 2020 15:41:21 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v4 11/12] mm/gup_benchmark: support pin_user_pages() and related calls
+Date:   Tue, 4 Feb 2020 15:41:16 -0800
+Message-ID: <20200204234117.2974687-12-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200204234117.2974687-1-jhubbard@nvidia.com>
+References: <20200204234117.2974687-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g44ZG+E==gT24w49oKc6nHv4nBQFeipikKxXJH3oHdO99Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1580859659; bh=p8jVMXkU/AOD6CgGXpT+qSuB3Zba1P74wymVIHxrBWs=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=Nk0Ow+Q0RCg7KxuCkZ/ixtOr5VK7cRAJuJrO5FiBhT7Kl9fAqHcD+cQ3SgaUCL1lP
+         ur1nMVC+NStRUveeaAuNMV/bmJae3Etbwyp3fGJCn9z9lzRjtKWDfwaxadpzfvuyyo
+         MsNEl4J6ccF/8m2xq6xRETC+0dF+ffmOEn5ZJlEICjNuGVqfO8N/OFsYPJ61yIjpzI
+         Wva+38vAabpvKLvEWwSS09W0kC7gm1F7QM1MCL77lhX127uhdErGujVbpG7YQbOii1
+         AMp6RoUTP72WYycek0n3PlvW42/NAsEbe9pJ1JcPL4V8ROkCd7PZZznC7jIKvrVl4I
+         +/NPa3xNHgG7g==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/4/20 1:35 PM, Brendan Higgins wrote:
-> On Mon, Feb 3, 2020 at 11:19 PM Stephen Boyd <sboyd@kernel.org> wrote:
->>
->> Quoting Brendan Higgins (2020-01-30 15:08:05)
->>> ## TL;DR
->>>
->>> This patchset adds a centralized executor to dispatch tests rather than
->>> relying on late_initcall to schedule each test suite separately along
->>> with a couple of new features that depend on it.
->>
->> Is there any diff from v1 to v2? I don't know what changed, but I see
->> that my Reviewed-by tag has been put on everything, so I guess
->> everything I said was addressed or discussed in the previous round.
-> 
-> Oh yes, sorry about that. I have gotten a bit lazy in regard to
-> changing logs. I noticed that a lot of people don't seem to care. I'll
-> make a note that you do.
+Up until now, gup_benchmark supported testing of the
+following kernel functions:
 
-Please ignore those who don't care.  Just always include a change log.
+* get_user_pages(): via the '-U' command line option
+* get_user_pages_longterm(): via the '-L' command line option
+* get_user_pages_fast(): as the default (no options required)
 
-You may encounter bike shedding about where the log belongs (in patch 0,
-in the modified patches, in both locations).  The color of my bike shed
-is simply that they exist somewhere, but my most favorite color is both
-places.
+Add test coverage for the new corresponding pin_*() functions:
 
-> 
-> Changes since last revision:
-> - On patch 6/7, I flipped the include order and removed braces from the if
->   statements.
-> - On patch 7/7, I removed the periods from the short descriptions.
-> 
+* pin_user_pages_fast(): via the '-a' command line option
+* pin_user_pages():      via the '-b' command line option
+
+Also, add an option for clarity: '-u' for what is now (still) the
+default choice: get_user_pages_fast().
+
+Also, for the commands that set FOLL_PIN, verify that the pages
+really are dma-pinned, via the new is_dma_pinned() routine.
+Those commands are:
+
+    PIN_FAST_BENCHMARK     : calls pin_user_pages_fast()
+    PIN_BENCHMARK          : calls pin_user_pages()
+
+In between the calls to pin_*() and unpin_user_pages(),
+check each page: if page_maybe_dma_pinned() returns false, then
+WARN and return.
+
+Do this outside of the benchmark timestamps, so that it doesn't
+affect reported times.
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ mm/gup_benchmark.c                         | 71 ++++++++++++++++++++--
+ tools/testing/selftests/vm/gup_benchmark.c | 15 ++++-
+ 2 files changed, 80 insertions(+), 6 deletions(-)
+
+diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
+index 8dba38e79a9f..be690fa66a46 100644
+--- a/mm/gup_benchmark.c
++++ b/mm/gup_benchmark.c
+@@ -8,6 +8,8 @@
+ #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
+ #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
+ #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
++#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
++#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
+=20
+ struct gup_benchmark {
+ 	__u64 get_delta_usec;
+@@ -19,6 +21,48 @@ struct gup_benchmark {
+ 	__u64 expansion[10];	/* For future use */
+ };
+=20
++static void put_back_pages(unsigned int cmd, struct page **pages,
++			   unsigned long nr_pages)
++{
++	unsigned long i;
++
++	switch (cmd) {
++	case GUP_FAST_BENCHMARK:
++	case GUP_LONGTERM_BENCHMARK:
++	case GUP_BENCHMARK:
++		for (i =3D 0; i < nr_pages; i++)
++			put_page(pages[i]);
++		break;
++
++	case PIN_FAST_BENCHMARK:
++	case PIN_BENCHMARK:
++		unpin_user_pages(pages, nr_pages);
++		break;
++	}
++}
++
++static void verify_dma_pinned(unsigned int cmd, struct page **pages,
++			      unsigned long nr_pages)
++{
++	unsigned long i;
++	struct page *page;
++
++	switch (cmd) {
++	case PIN_FAST_BENCHMARK:
++	case PIN_BENCHMARK:
++		for (i =3D 0; i < nr_pages; i++) {
++			page =3D pages[i];
++			if (WARN(!page_maybe_dma_pinned(page),
++				 "pages[%lu] is NOT dma-pinned\n", i)) {
++
++				dump_page(page, "gup_benchmark failure");
++				break;
++			}
++		}
++		break;
++	}
++}
++
+ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 		struct gup_benchmark *gup)
+ {
+@@ -66,6 +110,14 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 			nr =3D get_user_pages(addr, nr, gup->flags, pages + i,
+ 					    NULL);
+ 			break;
++		case PIN_FAST_BENCHMARK:
++			nr =3D pin_user_pages_fast(addr, nr, gup->flags,
++						 pages + i);
++			break;
++		case PIN_BENCHMARK:
++			nr =3D pin_user_pages(addr, nr, gup->flags, pages + i,
++					    NULL);
++			break;
+ 		default:
+ 			kvfree(pages);
+ 			ret =3D -EINVAL;
+@@ -78,15 +130,22 @@ static int __gup_benchmark_ioctl(unsigned int cmd,
+ 	}
+ 	end_time =3D ktime_get();
+=20
++	/* Shifting the meaning of nr_pages: now it is actual number pinned: */
++	nr_pages =3D i;
++
+ 	gup->get_delta_usec =3D ktime_us_delta(end_time, start_time);
+ 	gup->size =3D addr - gup->addr;
+=20
++	/*
++	 * Take an un-benchmark-timed moment to verify DMA pinned
++	 * state: print a warning if any non-dma-pinned pages are found:
++	 */
++	verify_dma_pinned(cmd, pages, nr_pages);
++
+ 	start_time =3D ktime_get();
+-	for (i =3D 0; i < nr_pages; i++) {
+-		if (!pages[i])
+-			break;
+-		put_page(pages[i]);
+-	}
++
++	put_back_pages(cmd, pages, nr_pages);
++
+ 	end_time =3D ktime_get();
+ 	gup->put_delta_usec =3D ktime_us_delta(end_time, start_time);
+=20
+@@ -105,6 +164,8 @@ static long gup_benchmark_ioctl(struct file *filep, uns=
+igned int cmd,
+ 	case GUP_FAST_BENCHMARK:
+ 	case GUP_LONGTERM_BENCHMARK:
+ 	case GUP_BENCHMARK:
++	case PIN_FAST_BENCHMARK:
++	case PIN_BENCHMARK:
+ 		break;
+ 	default:
+ 		return -EINVAL;
+diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/sel=
+ftests/vm/gup_benchmark.c
+index 389327e9b30a..43b4dfe161a2 100644
+--- a/tools/testing/selftests/vm/gup_benchmark.c
++++ b/tools/testing/selftests/vm/gup_benchmark.c
+@@ -18,6 +18,10 @@
+ #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
+ #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
+=20
++/* Similar to above, but use FOLL_PIN instead of FOLL_GET. */
++#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
++#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
++
+ /* Just the flags we need, copied from mm.h: */
+ #define FOLL_WRITE	0x01	/* check pte is writable */
+=20
+@@ -40,8 +44,14 @@ int main(int argc, char **argv)
+ 	char *file =3D "/dev/zero";
+ 	char *p;
+=20
+-	while ((opt =3D getopt(argc, argv, "m:r:n:f:tTLUwSH")) !=3D -1) {
++	while ((opt =3D getopt(argc, argv, "m:r:n:f:abtTLUuwSH")) !=3D -1) {
+ 		switch (opt) {
++		case 'a':
++			cmd =3D PIN_FAST_BENCHMARK;
++			break;
++		case 'b':
++			cmd =3D PIN_BENCHMARK;
++			break;
+ 		case 'm':
+ 			size =3D atoi(optarg) * MB;
+ 			break;
+@@ -63,6 +73,9 @@ int main(int argc, char **argv)
+ 		case 'U':
+ 			cmd =3D GUP_BENCHMARK;
+ 			break;
++		case 'u':
++			cmd =3D GUP_FAST_BENCHMARK;
++			break;
+ 		case 'w':
+ 			write =3D 1;
+ 			break;
+--=20
+2.25.0
 
