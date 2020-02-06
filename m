@@ -2,165 +2,120 @@ Return-Path: <SRS0=wz/I=32=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13263C2D0B1
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 15:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F02DC33CAC
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 18:16:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DAE5C20838
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 15:12:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03EF9218AC
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 18:16:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="amzS7/EU";
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jF0XGycM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kPIbp8Ej"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbgBFPMw (ORCPT
+        id S1727872AbgBFSQN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Feb 2020 10:12:52 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:55088 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727518AbgBFPMw (ORCPT
+        Thu, 6 Feb 2020 13:16:13 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:41977 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727358AbgBFSQN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Feb 2020 10:12:52 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 016FBR27164704;
-        Thu, 6 Feb 2020 15:11:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=VF7RaskOxU0ICZ79gQNL/Eu75aks0GZtpmw5lql+XJg=;
- b=amzS7/EUlZrHpzmfj17Wmz8LZ4A/44lO7mchUI4EM0hOlGYK8L1+KZXdzmt4uOO+GjrD
- s65TP17mIwS4eO9Wu0rmrR3JUIdvDi49Hcx9bOz5GO7SGGlFdvRZ5xjTXXtXJCDspRlu
- ykv3NQt4NR+WOhkA+fLho8wvhg8yNw4Aw5y9u4HAg3c6FLiBy4UIQrg8C6xtcT9gqWSg
- 6JD2BqDMdZfYDgAMVnR+ZG7Zwet1Km+reZYIHLmRd5FySVQOeRYnU/dsYL07nVIyEPOg
- hzPjPpTXM2tGbJCW7+QIeYhoDfbh7QVGnUBxHEiLyXvMifuGzTMIi4eDdEK048D1fanG YQ== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=VF7RaskOxU0ICZ79gQNL/Eu75aks0GZtpmw5lql+XJg=;
- b=jF0XGycMDLNNFvTGpuqoBUVhYzcGRIRutu5Qw5Yib5zQwbt8o/kTFMrJPnSerMlJMtNU
- W72VNtsHWAvjS+MHnqlyeZ1HKX/aP+XWIfoe4kOP01XYudVdekAddtzs/JPxX3RgTHbb
- gAVR4nnFeA/kG5yUBGbl++kwQzDCG8FZa+GB7RhwVkLTzuJZag9aJMWNw+sSXDuIgYYC
- yirUPNsbM/LgKCgTe19X0YxRk0OdXDG9YAZ9YG3LwgneSZjlnKUykv50JAKnAIPNy9mK
- oH1DHp98ZtNqT8nUMkHY3Z3yhaLuT0IjnrXljqKhkBU2o2BlbbppT3wbYnKqnsYf6tSB Uw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2xykbpa9s5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Feb 2020 15:11:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 016F9Hk3135230;
-        Thu, 6 Feb 2020 15:09:54 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2y0mnjteet-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Feb 2020 15:09:54 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 016F9rmH026826;
-        Thu, 6 Feb 2020 15:09:53 GMT
-Received: from dhcp-10-175-186-149.vpn.oracle.com (/10.175.186.149)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 06 Feb 2020 07:09:52 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     rostedt@goodmis.org, shuah@kernel.org, mhiramat@kernel.org
-Cc:     mingo@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
-        colin.king@canonical.com
-Subject: [PATCH 1/2] ftrace/selftests: workaround cgroup RT scheduling issues
-Date:   Thu,  6 Feb 2020 15:09:19 +0000
-Message-Id: <1581001760-29831-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1581001760-29831-1-git-send-email-alan.maguire@oracle.com>
-References: <1581001760-29831-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=4 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2002060116
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=4 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2002060116
+        Thu, 6 Feb 2020 13:16:13 -0500
+Received: by mail-ot1-f68.google.com with SMTP id r27so6395238otc.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Feb 2020 10:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hqXyWTPsRk1sbEhv4F9kR6Aqgito1sCOBhDIlov5OKo=;
+        b=kPIbp8EjtDr3arTeSUaNQfsuunB6rDyUC15mM8xmbQzCU6cCM9dZcABgKrZu4aA4ot
+         zGuPoZjW03Kp1BP9L3alLJLvShDanfAxcTC0vG5bq/BAE5FXyJVYDAKHvx5m39Yiv3MX
+         3y6ca5OVMQ8AlQEMGZpuo2T9mcNKYt6EI8Z4OfEFgWzxk2cutJWG3VAKPyeJMZETw3Se
+         7IhrMnmTt3fKkQ7CP84POfDcoJX7OVACnImZLwfi4pnotY7FBPiwV+g1jHcv+pYo2k/3
+         zhAr8gEiBDGGaCaQ9VTVp+Kqfq3MxqzKgQw5MLl4pU9oEDHH8EUydogxSexQaL4d5J7x
+         ogaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hqXyWTPsRk1sbEhv4F9kR6Aqgito1sCOBhDIlov5OKo=;
+        b=Yfr557gOTWcMUKp793YiIXDKe0bH9cKWESdhL9WC+rDPDiT4foicqjcLcNWrNpCGaB
+         eP7k8XAzpFVW6ACNYllwFIpputMZwaygMhAh5pGx0VLYIPvrnkpq2ZHV/tWcxqpT9c1X
+         BN6dzL7FIaXHz75irk7soohDoPLvwdER+ycQ9DumhiykzEzwbnF5CL7qt8++y7D6zE1h
+         Th1FduPBKiNBWfDx9lOp6HwJVIRJilJQgobG7gf1tO71q2sWbqsUUPAQg6xxXj6ZUyNG
+         YBPhJE0BWlGPGjWwOG9zKlXcY8IxkX2stsIvnfW5SluPyEPacceieb8nf+zuZYzamiQA
+         ptNA==
+X-Gm-Message-State: APjAAAVsw/urVqCvEMbxgxOBb0ZhYVn2FVN+JjcSq+gemHzfitSeQpLZ
+        yyTEXCtI9f4XcH0BpJrSwDcVbXXxKCj0gKY4VX1cBA==
+X-Google-Smtp-Source: APXvYqwaTckcrFH7bGMSbhTZKw9pvz/Uc/msLLj+ylmlNbFufkDY6NdmzFxf2raQY1DpieW73ZkZW/Hdk58JVEhIdNA=
+X-Received: by 2002:a9d:6a2:: with SMTP id 31mr30905207otx.313.1581012972461;
+ Thu, 06 Feb 2020 10:16:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20200203232248.104733-1-almasrymina@google.com>
+ <20200203232248.104733-2-almasrymina@google.com> <a48fbdd1-fc0e-f17d-09c2-1492c8466254@oracle.com>
+In-Reply-To: <a48fbdd1-fc0e-f17d-09c2-1492c8466254@oracle.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 6 Feb 2020 10:16:01 -0800
+Message-ID: <CAHS8izOYB3cz+EP4G8qNJygO7Zjq6AFbpnGrjthCXKi4DHUx3A@mail.gmail.com>
+Subject: Re: [PATCH v11 2/9] hugetlb_cgroup: add interface for charge/uncharge
+ hugetlb reservations
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-wakeup_rt.tc and wakeup.tc tests in tracers/ subdirectory
-fail due to the chrt command returning:
+On Wed, Feb 5, 2020 at 2:08 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 2/3/20 3:22 PM, Mina Almasry wrote:
+> > Augments hugetlb_cgroup_charge_cgroup to be able to charge hugetlb
+> > usage or hugetlb reservation counter.
+> >
+> > Adds a new interface to uncharge a hugetlb_cgroup counter via
+> > hugetlb_cgroup_uncharge_counter.
+> >
+> > Integrates the counter with hugetlb_cgroup, via hugetlb_cgroup_init,
+> > hugetlb_cgroup_have_usage, and hugetlb_cgroup_css_offline.
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > Acked-by: David Rientjes <rientjes@google.com>
+> >
+> > ---
+> >
+> > Changes in v11:
+> > - Changed all 'reserved' or 'reservation' to 'rsvd' to reflect the user
+> > interface.
+>
+> Thanks.
+>
+> Small nit,
+>
+> > @@ -450,8 +496,7 @@ static ssize_t hugetlb_cgroup_reset(struct kernfs_open_file *of,
+> >       struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
+> >
+> >       counter = &h_cg->hugepage[MEMFILE_IDX(of_cft(of)->private)];
+> > -     rsvd_counter =
+> > -             &h_cg->rsvd_hugepage[MEMFILE_IDX(of_cft(of)->private)];
+> > +     rsvd_counter = &h_cg->rsvd_hugepage[MEMFILE_IDX(of_cft(of)->private)];
+> >
+>
+> That looks like a change just to reformat a line added in the first patch?
+>
+> >       switch (MEMFILE_ATTR(of_cft(of)->private)) {
+> >       case RES_MAX_USAGE:
+>
 
- chrt: failed to set pid 0's policy: Operation not permitted.
+Gah, my bad. I'll move this to patch 1.
 
-To work around this, temporarily disable grout RT scheduling
-during ftracetest execution.  Restore original value on
-test run completion.  With these changes in place, both
-tests consistently pass.
-
-Fixes: c575dea2c1a5 ("selftests/ftrace: Add wakeup_rt tracer testcase")
-Fixes: c1edd060b413 ("selftests/ftrace: Add wakeup tracer testcase")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/testing/selftests/ftrace/ftracetest | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 063ecb2..3207bbf 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -29,8 +29,26 @@ err_ret=1
- # kselftest skip code is 4
- err_skip=4
- 
-+# cgroup RT scheduling prevents chrt commands from succeeding, which
-+# induces failures in test wakeup tests.  Disable for the duration of
-+# the tests.
-+sched_rt_runtime=$(sysctl -n kernel.sched_rt_runtime_us)
-+
-+set_sysctl() {
-+  sysctl -qw ${1}=${2} >/dev/null 2>&1
-+}
-+
-+setup() {
-+  set_sysctl kernel.sched_rt_runtime_us -1
-+}
-+
-+cleanup() {
-+  set_sysctl kernel.sched_rt_runtime_us $sched_rt_runtime
-+}
-+
- errexit() { # message
-   echo "Error: $1" 1>&2
-+  cleanup
-   exit $err_ret
- }
- 
-@@ -39,6 +57,8 @@ if [ `id -u` -ne 0 ]; then
-   errexit "this must be run by root user"
- fi
- 
-+setup
-+
- # Utilities
- absdir() { # file_path
-   (cd `dirname $1`; pwd)
-@@ -235,6 +255,7 @@ TOTAL_RESULT=0
- 
- INSTANCE=
- CASENO=0
-+
- testcase() { # testfile
-   CASENO=$((CASENO+1))
-   desc=`grep "^#[ \t]*description:" $1 | cut -f2 -d:`
-@@ -406,5 +427,7 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
- 
-+cleanup
-+
- # if no error, return 0
- exit $TOTAL_RESULT
--- 
-1.8.3.1
-
+> --
+> Mike Kravetz
