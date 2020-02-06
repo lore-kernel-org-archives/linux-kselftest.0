@@ -2,282 +2,194 @@ Return-Path: <SRS0=wz/I=32=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B930C2D0B1
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 14:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC68C2D0B1
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 15:10:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2F42021927
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 14:13:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 389D420838
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Feb 2020 15:10:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="iqj8wJKo";
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WXVQpb1O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728101AbgBFONo (ORCPT
+        id S1727571AbgBFPKe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Feb 2020 09:13:44 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40488 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727955AbgBFONo (ORCPT
+        Thu, 6 Feb 2020 10:10:34 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:41682 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727481AbgBFPKd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Feb 2020 09:13:44 -0500
-Received: from turingmachine.home (unknown [IPv6:2804:431:c7f5:7989:d711:794d:1c68:5ed3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tonyk)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 1EADB295298;
-        Thu,  6 Feb 2020 14:13:37 +0000 (GMT)
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     linux-kernel@vger.kernel.org, tglx@linutronix.de
-Cc:     kernel@collabora.com, krisman@collabora.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
-        ryao@gentoo.org, peterz@infradead.org, dvhart@infradead.org,
-        mingo@redhat.com, z.figura12@gmail.com, steven@valvesoftware.com,
-        pgriffais@valvesoftware.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v2 4/4] selftests: futex: Add FUTEX_WAIT_MULTIPLE wake up test
-Date:   Thu,  6 Feb 2020 11:10:51 -0300
-Message-Id: <20200206141051.6124-5-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200206141051.6124-1-andrealmeid@collabora.com>
-References: <20200206141051.6124-1-andrealmeid@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Thu, 6 Feb 2020 10:10:33 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 016F87F9142665;
+        Thu, 6 Feb 2020 15:09:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=ARPonP1U7McuPo6Qy5eAIFbn137aCvnTTbf1VmVmhp0=;
+ b=iqj8wJKodIMyaMhZ4RoBknQTCdn2KxRTDl3wNGcP+Gi2NSykO89ELRAwM9F1TqCrylWC
+ kdEvrXDjckAZnFzjbcuGKtkF+uN9RZu2FeuKGVIUVP6YlMVUkRYg8YCx2O35UY9xjImP
+ SV3x42bWPfpvn4wn6oAuwUicULbOGqNVS9eCZIQDsK4fFjzVSAyS5FtOJxprRRpUhJd3
+ Fyt3rz6xFEPqC5fQjPKHi/r+0ttnE7vUETdhkLZYzMGev3AI1GmsqwoiMMswvTStLx4B
+ SDwejtMmXiRhgydsRB8b3AvMel4y2xQOOkrzVHB7xIaXGwlSLu2NVj6jcm2LTOYrchrn 0A== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
+ bh=ARPonP1U7McuPo6Qy5eAIFbn137aCvnTTbf1VmVmhp0=;
+ b=WXVQpb1OLnwYAD1qisJmzC7CtQOjMDttQCNf5lb4VthK5pDecqKQZHJ1Q9sxmFu86XuA
+ OwNwGZ33sZxdtU5MDnFg1B02p4opI7qBnHZItKodUyQGx2tFGRqTaiCuJjDZgbksFde3
+ XyAh8C/Xp1U7Zk72oQStN0w9WcfD+sTv/4U67SWbZLnDVtKRyAZKZdcW/5TIjsq2SZjU
+ UzSf+0oDZ0zUbprVrEBBLDlNvpIUBgFW2ZGLmn+Kbs4oOCn341tYYzd6HFB3mX2U8kvu
+ MfrVkGUeE2OFGtJKrqw73GpbaTal+OM1Zp44GUjMGT6NZz3/bNRAQdu60udHT2puhrjB 8w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2xykbpaaa1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Feb 2020 15:09:57 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 016F9JEA135306;
+        Thu, 6 Feb 2020 15:09:57 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2y0mnjtej0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Feb 2020 15:09:56 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 016F9tUX010096;
+        Thu, 6 Feb 2020 15:09:55 GMT
+Received: from dhcp-10-175-186-149.vpn.oracle.com (/10.175.186.149)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 06 Feb 2020 07:09:55 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     rostedt@goodmis.org, shuah@kernel.org, mhiramat@kernel.org
+Cc:     mingo@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
+        colin.king@canonical.com
+Subject: [PATCH 2/2] ftrace/selftest: absence of modules/programs should trigger unsupported errors
+Date:   Thu,  6 Feb 2020 15:09:20 +0000
+Message-Id: <1581001760-29831-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1581001760-29831-1-git-send-email-alan.maguire@oracle.com>
+References: <1581001760-29831-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=4 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2002060116
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=4 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2002060116
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Gabriel Krisman Bertazi <krisman@collabora.com>
+In a number of cases, the ftrace tests check for the presence of
+ftrace testing-related modules (ftrace-direct, trace-printk) and
+programs (checkbashisms), returning exit_unresolved if these
+are not found.  The problem is, exit_unresolved causes execution
+of ftracetest to return an error, when really our tests are
+failing due to not having the requisite kernel configuration/tools
+present, which is I think more of an unsupported error condition.
+With these fixed, we see no unresolved test cases and ftracetest
+returns success ("ok" when run via kselftest).
 
-Add test for wait at multiple futexes mechanism. Skip the test if it's a
-x32 application and the kernel returned the approtiaded error, since this
-ABI is not supported for this operation.
-
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Co-developed-by: André Almeida <andrealmeid@collabora.com>
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
+Fixes: 646f01ccdd59 ("ftrace/selftest: Add tests to test register_ftrace_direct()")
+Fixes: 4d23e9b4fd2e ("selftests/ftrace: Add trace_printk sample module test")
+Fixes: 7bc026d6c032 ("selftests/ftrace: Add function filter on module testcase")
+Fixes: ff431b1390cb ("selftests/ftrace: Add a test to probe module functions")
+Fixes: 4a075bd4e13f ("selftests/ftrace: Add checkbashisms meta-testcase")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../selftests/futex/functional/.gitignore     |   1 +
- .../selftests/futex/functional/Makefile       |   3 +-
- .../futex/functional/futex_wait_multiple.c    | 173 ++++++++++++++++++
- .../testing/selftests/futex/functional/run.sh |   3 +
- 4 files changed, 179 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/futex/functional/futex_wait_multiple.c
+ tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc  | 2 +-
+ tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc  | 2 +-
+ tools/testing/selftests/ftrace/test.d/event/trace_printk.tc    | 2 +-
+ tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc | 2 +-
+ tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc  | 2 +-
+ tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc     | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index a09f57061902..4660128a545e 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -5,3 +5,4 @@ futex_wait_private_mapped_file
- futex_wait_timeout
- futex_wait_uninitialized_heap
- futex_wait_wouldblock
-+futex_wait_multiple
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 30996306cabc..75f9fface11f 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -14,7 +14,8 @@ TEST_GEN_FILES := \
- 	futex_requeue_pi_signal_restart \
- 	futex_requeue_pi_mismatched_ops \
- 	futex_wait_uninitialized_heap \
--	futex_wait_private_mapped_file
-+	futex_wait_private_mapped_file \
-+	futex_wait_multiple
+diff --git a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
+index d75a869..3d6189e 100644
+--- a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
++++ b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
+@@ -5,7 +5,7 @@
+ rmmod ftrace-direct ||:
+ if ! modprobe ftrace-direct ; then
+   echo "No ftrace-direct sample module - please make CONFIG_SAMPLE_FTRACE_DIRECT=m"
+-  exit_unresolved;
++  exit_unsupported;
+ fi
  
- TEST_PROGS := run.sh
+ echo "Let the module run a little"
+diff --git a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
+index 801ecb6..3d0e3ca 100644
+--- a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
++++ b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
+@@ -5,7 +5,7 @@
+ rmmod ftrace-direct ||:
+ if ! modprobe ftrace-direct ; then
+   echo "No ftrace-direct sample module - please build with CONFIG_SAMPLE_FTRACE_DIRECT=m"
+-  exit_unresolved;
++  exit_unsupported;
+ fi
  
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_multiple.c b/tools/testing/selftests/futex/functional/futex_wait_multiple.c
-new file mode 100644
-index 000000000000..b48422e79f42
---- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex_wait_multiple.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/******************************************************************************
-+ *
-+ *   Copyright © Collabora, Ltd., 2019
-+ *
-+ * DESCRIPTION
-+ *      Test basic semantics of FUTEX_WAIT_MULTIPLE
-+ *
-+ * AUTHOR
-+ *      Gabriel Krisman Bertazi <krisman@collabora.com>
-+ *
-+ * HISTORY
-+ *      2019-Dec-13: Initial version by Krisman <krisman@collabora.com>
-+ *
-+ *****************************************************************************/
-+
-+#include <errno.h>
-+#include <getopt.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <pthread.h>
-+#include "futextest.h"
-+#include "logging.h"
-+
-+#define TEST_NAME "futex-wait-multiple"
-+#define timeout_ns 100000
-+#define MAX_COUNT 128
-+#define WAKE_WAIT_US 3000000
-+
-+int ret = RET_PASS;
-+char *progname;
-+futex_t f[MAX_COUNT] = {0};
-+struct futex_wait_block fwb[MAX_COUNT];
-+
-+void usage(char *prog)
-+{
-+	printf("Usage: %s\n", prog);
-+	printf("  -c	Use color\n");
-+	printf("  -h	Display this help message\n");
-+	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
-+	       VQUIET, VCRITICAL, VINFO);
-+}
-+
-+void test_count_overflow(void)
-+{
-+	futex_t f = FUTEX_INITIALIZER;
-+	struct futex_wait_block fwb[MAX_COUNT+1];
-+	int res, i;
-+
-+	ksft_print_msg("%s: Test a too big number of futexes\n", progname);
-+
-+	for (i = 0; i < MAX_COUNT+1; i++) {
-+		fwb[i].uaddr = &f;
-+		fwb[i].val = f;
-+		fwb[i].bitset = 0;
-+	}
-+
-+	res = futex_wait_multiple(fwb, MAX_COUNT+1, NULL, FUTEX_PRIVATE_FLAG);
-+
-+#ifdef __ILP32__
-+	if (res != -1 || errno != ENOSYS) {
-+		ksft_test_result_fail("futex_wait_multiple returned %d\n",
-+				      res < 0 ? errno : res);
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_skip("futex_wait_multiple not supported at x32\n");
-+	}
-+#else
-+	if (res != -1 || errno != EINVAL) {
-+		ksft_test_result_fail("futex_wait_multiple returned %d\n",
-+				      res < 0 ? errno : res);
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex_wait_multiple count overflow succeed\n");
-+	}
-+
-+#endif /* __ILP32__ */
-+}
-+
-+void *waiterfn(void *arg)
-+{
-+	int res;
-+
-+	res = futex_wait_multiple(fwb, MAX_COUNT, NULL, FUTEX_PRIVATE_FLAG);
-+
-+#ifdef __ILP32__
-+	if (res != -1 || errno != ENOSYS) {
-+		ksft_test_result_fail("futex_wait_multiple returned %d\n",
-+				      res < 0 ? errno : res);
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_skip("futex_wait_multiple not supported at x32\n");
-+	}
-+#else
-+	if (res < 0)
-+		ksft_print_msg("waiter failed %d\n", res);
-+
-+	info("futex_wait_multiple: Got hint futex %d was freed\n", res);
-+#endif /* __ILP32__ */
-+
-+	return NULL;
-+}
-+
-+void test_fwb_wakeup(void)
-+{
-+	int res, i;
-+	pthread_t waiter;
-+
-+	ksft_print_msg("%s: Test wake up in a list of futex\n", progname);
-+
-+	for (i = 0; i < MAX_COUNT; i++) {
-+		fwb[i].uaddr = &f[i];
-+		fwb[i].val = f[i];
-+		fwb[i].bitset = 0xffffffff;
-+	}
-+
-+	res = pthread_create(&waiter, NULL, waiterfn, NULL);
-+	if (res) {
-+		ksft_test_result_fail("Creating waiting thread failed");
-+		ksft_exit_fail();
-+	}
-+
-+	usleep(WAKE_WAIT_US);
-+	res = futex_wake(&(f[MAX_COUNT-1]), 1, FUTEX_PRIVATE_FLAG);
-+	if (res != 1) {
-+		ksft_test_result_fail("Failed to wake thread res=%d\n", res);
-+		ksft_exit_fail();
-+	}
-+
-+	pthread_join(waiter, NULL);
-+	ksft_test_result_pass("%s succeed\n", __func__);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int c;
-+
-+	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-+		switch (c) {
-+		case 'c':
-+			log_color(1);
-+			break;
-+		case 'h':
-+			usage(basename(argv[0]));
-+			exit(0);
-+		case 'v':
-+			log_verbosity(atoi(optarg));
-+			break;
-+		default:
-+			usage(basename(argv[0]));
-+			exit(1);
-+		}
-+	}
-+
-+	progname = basename(argv[0]);
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+
-+	test_count_overflow();
-+
-+#ifdef __ILP32__
-+	// if it's a 32x binary, there's no futex to wakeup
-+	ksft_test_result_skip("futex_wait_multiple not supported at x32\n");
-+#else
-+	test_fwb_wakeup();
-+#endif /* __ILP32__ */
-+
-+	ksft_print_cnts();
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 1acb6ace1680..a8be94f28ff7 100755
---- a/tools/testing/selftests/futex/functional/run.sh
-+++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -73,3 +73,6 @@ echo
- echo
- ./futex_wait_uninitialized_heap $COLOR
- ./futex_wait_private_mapped_file $COLOR
-+
-+echo
-+./futex_wait_multiple $COLOR
+ if [ ! -f kprobe_events ]; then
+diff --git a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+index b02550b..dd8b10d 100644
+--- a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
++++ b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+@@ -5,7 +5,7 @@
+ rmmod trace-printk ||:
+ if ! modprobe trace-printk ; then
+   echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=m"
+-  exit_unresolved;
++  exit_unsupported;
+ fi
+ 
+ echo "Waiting for irq work"
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+index 9330c87..fc22ac0 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+@@ -13,7 +13,7 @@ echo '*:mod:trace_printk' > set_ftrace_filter
+ if ! modprobe trace-printk ; then
+   echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
+ m"
+-  exit_unresolved;
++  exit_unsupported;
+ fi
+ 
+ : "Wildcard should be resolved after loading module"
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+index d861bd7..4e07c69 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+@@ -8,7 +8,7 @@ rmmod trace-printk ||:
+ if ! modprobe trace-printk ; then
+   echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
+ m"
+-  exit_unresolved;
++  exit_unsupported;
+ fi
+ 
+ MOD=trace_printk
+diff --git a/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc b/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+index 1b081e9..1b339bd 100644
+--- a/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
++++ b/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+@@ -9,7 +9,7 @@ fi
+ 
+ if ! which checkbashisms > /dev/null 2>&1 ; then
+   echo "No checkbashisms found. skipped."
+-  exit_unresolved
++  exit_unsupported
+ fi
+ 
+ checkbashisms $FTRACETEST_ROOT/ftracetest
 -- 
-2.25.0
+1.8.3.1
 
