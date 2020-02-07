@@ -2,183 +2,196 @@ Return-Path: <SRS0=Kzrp=33=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86990C35247
-	for <linux-kselftest@archiver.kernel.org>; Fri,  7 Feb 2020 03:38:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F69DC2D0B1
+	for <linux-kselftest@archiver.kernel.org>; Fri,  7 Feb 2020 04:43:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5CA8221927
-	for <linux-kselftest@archiver.kernel.org>; Fri,  7 Feb 2020 03:38:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="ef/4udRo"
+	by mail.kernel.org (Postfix) with ESMTP id CE68122522
+	for <linux-kselftest@archiver.kernel.org>; Fri,  7 Feb 2020 04:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1581050601;
+	bh=+3xB+sHsSQQfV04IaewdRRy2mUuiGKP7QHpWG0DL6h0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=ubNcxBXI9G+qUnUp4ES/rXEKuDzxzTiVPGJ7uWb7DQzkgGHU/j1LSHREA0UO/Aq9n
+	 58T7tY3YQ6RkxSeulIAune/x3U5C117BuSa68jyNKlk0V5WynSxLnv0yNflNAPjsop
+	 g94s+6E4NnEL7JkNhWcALC1g/CP4hqFUDMjIhddY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727845AbgBGDil (ORCPT
+        id S1727131AbgBGEnV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Feb 2020 22:38:41 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4751 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726709AbgBGDhj (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Feb 2020 22:37:39 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e3cdb460004>; Thu, 06 Feb 2020 19:36:38 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 06 Feb 2020 19:37:38 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 06 Feb 2020 19:37:38 -0800
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Feb
- 2020 03:37:37 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 7 Feb 2020 03:37:37 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e3cdb810003>; Thu, 06 Feb 2020 19:37:37 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH v5 09/12] mm: dump_page(): better diagnostics for huge pinned pages
-Date:   Thu, 6 Feb 2020 19:37:32 -0800
-Message-ID: <20200207033735.308000-10-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200207033735.308000-1-jhubbard@nvidia.com>
-References: <20200207033735.308000-1-jhubbard@nvidia.com>
-MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1581046599; bh=jmOUjzJ549EfFTXaNo+IqA1m0L9Edt0hTMtlZOuZ9oI=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=ef/4udRoouVf31SNt8dxH8rGemdY2KQ3FUhL1foXTZbDgzP4IyhLK4YjOkoH8c4J7
-         vZIBhMUtt/Q4ked+2xEBrgqdgHxMVPEsMO+ZlJHNnQBUA0b/dN7rEQuPkTfxV5Iz+m
-         YwMe+ClfugPn1gCR754PWzgyqnw3AwyYFOcqRCqkmf5o2pBbdcO5A8xjcfl4on2s17
-         zxAj6h1KNcrH4VfNdeKRUNav6fFaca+k9pEYjlc5vne5iyY9kswBj9/R7pYLkzXyQ4
-         Vp5jnRVUcRp0yCDbFslLV8IXO7B+toifjZo7qM2L5LOadtrhiHvkBEE9Lq9NvmG1A3
-         7txFYKNBc41Kg==
+        Thu, 6 Feb 2020 23:43:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726674AbgBGEnV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 6 Feb 2020 23:43:21 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4F6222464;
+        Fri,  7 Feb 2020 04:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581050600;
+        bh=+3xB+sHsSQQfV04IaewdRRy2mUuiGKP7QHpWG0DL6h0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QkguPQrSwg0/EOT4N+UxMfL5BUr1KAgVIxlL076WSM8VvDFNSWAwihWA/Kdik+syD
+         xRr37MuioyHtcGbxPpO9CVjhhuCHYYmVtnJycAaHtKXuERY4xvb+Y2eatu4MBoKyyu
+         3azV2nXgOUI3Ya/gBz2TXTe1xqbZBwaI8VvKxPhc=
+Date:   Fri, 7 Feb 2020 13:43:16 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     rostedt@goodmis.org, shuah@kernel.org, mingo@redhat.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        naveen.n.rao@linux.vnet.ibm.com, colin.king@canonical.com
+Subject: Re: [PATCH 2/2] ftrace/selftest: absence of modules/programs should
+ trigger unsupported errors
+Message-Id: <20200207134316.54cfa16707e72e50cb320f8f@kernel.org>
+In-Reply-To: <1581001760-29831-3-git-send-email-alan.maguire@oracle.com>
+References: <1581001760-29831-1-git-send-email-alan.maguire@oracle.com>
+        <1581001760-29831-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As part of pin_user_pages() and related API calls, pages are
-"dma-pinned". For the case of compound pages of order > 1, the per-page
-accounting of dma pins is accomplished via the 3rd struct page in the
-compound page. In order to support debugging of any pin_user_pages()-
-related problems, enhance dump_page() so as to report the pin count
-in that case.
+Hi Alan,
 
-Documentation/core-api/pin_user_pages.rst is also updated accordingly.
+On Thu,  6 Feb 2020 15:09:20 +0000
+Alan Maguire <alan.maguire@oracle.com> wrote:
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- Documentation/core-api/pin_user_pages.rst |  7 +++++
- mm/debug.c                                | 34 +++++++++++++++++------
- 2 files changed, 33 insertions(+), 8 deletions(-)
+> In a number of cases, the ftrace tests check for the presence of
+> ftrace testing-related modules (ftrace-direct, trace-printk) and
+> programs (checkbashisms), returning exit_unresolved if these
+> are not found.  The problem is, exit_unresolved causes execution
+> of ftracetest to return an error, when really our tests are
+> failing due to not having the requisite kernel configuration/tools
+> present, which is I think more of an unsupported error condition.
+> With these fixed, we see no unresolved test cases and ftracetest
+> returns success ("ok" when run via kselftest).
 
-diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core=
--api/pin_user_pages.rst
-index 7e5dd8b1b3f2..24641f1a1eba 100644
---- a/Documentation/core-api/pin_user_pages.rst
-+++ b/Documentation/core-api/pin_user_pages.rst
-@@ -215,6 +215,13 @@ Those are both going to show zero, unless CONFIG_DEBUG=
-_VM is set. This is
- because there is a noticeable performance drop in unpin_user_page(), when =
-they
- are activated.
-=20
-+Other diagnostics
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+dump_page() has been enhanced slightly, to handle these new counting field=
-s, and
-+to better report on compound pages in general. Specifically, for compound =
-pages
-+with order > 1, the exact (hpage_pinned_refcount) pincount is reported.
-+
- References
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-diff --git a/mm/debug.c b/mm/debug.c
-index f074077eee11..e82c878c27df 100644
---- a/mm/debug.c
-+++ b/mm/debug.c
-@@ -57,10 +57,20 @@ static void __dump_tail_page(struct page *page, int map=
-count)
- 			page, page_ref_count(page), mapcount, page->mapping,
- 			page_to_pgoff(page));
- 	} else {
--		pr_warn("page:%px compound refcount:%d mapcount:%d mapping:%px "
--			"index:%#lx compound_mapcount:%d\n",
--			page, page_ref_count(head), mapcount, head->mapping,
--			page_to_pgoff(head), compound_mapcount(page));
-+		if (hpage_pincount_available(page))
-+			pr_warn("page:%px compound refcount:%d mapcount:%d "
-+				"mapping:%px index:%#lx compound_mapcount:%d "
-+				"compound_pincount:%d\n",
-+				page, page_ref_count(head), mapcount,
-+				head->mapping, page_to_pgoff(head),
-+				compound_mapcount(page),
-+				compound_pincount(page));
-+		else
-+			pr_warn("page:%px compound refcount:%d mapcount:%d "
-+				"mapping:%px index:%#lx compound_mapcount:%d\n",
-+				page, page_ref_count(head), mapcount,
-+				head->mapping, page_to_pgoff(head),
-+				compound_mapcount(page));
- 	}
-=20
- 	if (page_ref_count(page) !=3D 0) {
-@@ -104,10 +114,18 @@ void __dump_page(struct page *page, const char *reaso=
-n)
-=20
- 	if (PageTail(page))
- 		__dump_tail_page(page, mapcount);
--	else
--		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx\n",
--			page, page_ref_count(page), mapcount,
--			page->mapping, page_to_pgoff(page));
-+	else {
-+		if (hpage_pincount_available(page))
-+			pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
-+				"index:%#lx compound pincount: %d\n",
-+				page, page_ref_count(page), mapcount,
-+				page->mapping, page_to_pgoff(page),
-+				compound_pincount(page));
-+		else
-+			pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
-+				"index:%#lx\n", page, page_ref_count(page),
-+				mapcount, page->mapping, page_to_pgoff(page));
-+	}
- 	if (PageKsm(page))
- 		type =3D "ksm ";
- 	else if (PageAnon(page))
---=20
-2.25.0
+If your problem is to pass the test even if you don't test the
+feature, please change the ftracetest itself instead of replacing
+unresolved with unsupported. Those notice different situation.
 
+unresolved - Testcase can not find some tools or helper drivers
+             which are required for this testcase.
+
+unsupported - Kernel does not have tested feature because of
+              the version or the configuration.
+
+Obviously the unresolved is a test environment issue. No test-module
+doesn't mean no feature to be tested.
+Could you tell me the reason why you can't install those required
+tools and modules on the test environment?
+
+Thank you,
+
+
+
+> 
+> Fixes: 646f01ccdd59 ("ftrace/selftest: Add tests to test register_ftrace_direct()")
+> Fixes: 4d23e9b4fd2e ("selftests/ftrace: Add trace_printk sample module test")
+> Fixes: 7bc026d6c032 ("selftests/ftrace: Add function filter on module testcase")
+> Fixes: ff431b1390cb ("selftests/ftrace: Add a test to probe module functions")
+> Fixes: 4a075bd4e13f ("selftests/ftrace: Add checkbashisms meta-testcase")
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc  | 2 +-
+>  tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc  | 2 +-
+>  tools/testing/selftests/ftrace/test.d/event/trace_printk.tc    | 2 +-
+>  tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc | 2 +-
+>  tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc  | 2 +-
+>  tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc     | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
+> index d75a869..3d6189e 100644
+> --- a/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/direct/ftrace-direct.tc
+> @@ -5,7 +5,7 @@
+>  rmmod ftrace-direct ||:
+>  if ! modprobe ftrace-direct ; then
+>    echo "No ftrace-direct sample module - please make CONFIG_SAMPLE_FTRACE_DIRECT=m"
+> -  exit_unresolved;
+> +  exit_unsupported;
+>  fi
+>  
+>  echo "Let the module run a little"
+> diff --git a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
+> index 801ecb6..3d0e3ca 100644
+> --- a/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/direct/kprobe-direct.tc
+> @@ -5,7 +5,7 @@
+>  rmmod ftrace-direct ||:
+>  if ! modprobe ftrace-direct ; then
+>    echo "No ftrace-direct sample module - please build with CONFIG_SAMPLE_FTRACE_DIRECT=m"
+> -  exit_unresolved;
+> +  exit_unsupported;
+>  fi
+>  
+>  if [ ! -f kprobe_events ]; then
+> diff --git a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+> index b02550b..dd8b10d 100644
+> --- a/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/event/trace_printk.tc
+> @@ -5,7 +5,7 @@
+>  rmmod trace-printk ||:
+>  if ! modprobe trace-printk ; then
+>    echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=m"
+> -  exit_unresolved;
+> +  exit_unsupported;
+>  fi
+>  
+>  echo "Waiting for irq work"
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+> index 9330c87..fc22ac0 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_mod_trace.tc
+> @@ -13,7 +13,7 @@ echo '*:mod:trace_printk' > set_ftrace_filter
+>  if ! modprobe trace-printk ; then
+>    echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
+>  m"
+> -  exit_unresolved;
+> +  exit_unsupported;
+>  fi
+>  
+>  : "Wildcard should be resolved after loading module"
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+> index d861bd7..4e07c69 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+> @@ -8,7 +8,7 @@ rmmod trace-printk ||:
+>  if ! modprobe trace-printk ; then
+>    echo "No trace-printk sample module - please make CONFIG_SAMPLE_TRACE_PRINTK=
+>  m"
+> -  exit_unresolved;
+> +  exit_unsupported;
+>  fi
+>  
+>  MOD=trace_printk
+> diff --git a/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc b/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+> index 1b081e9..1b339bd 100644
+> --- a/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/selftest/bashisms.tc
+> @@ -9,7 +9,7 @@ fi
+>  
+>  if ! which checkbashisms > /dev/null 2>&1 ; then
+>    echo "No checkbashisms found. skipped."
+> -  exit_unresolved
+> +  exit_unsupported
+>  fi
+>  
+>  checkbashisms $FTRACETEST_ROOT/ftracetest
+> -- 
+> 1.8.3.1
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
