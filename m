@@ -2,91 +2,120 @@ Return-Path: <SRS0=IN6Y=36=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D76DBC35254
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 17:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D33C3B186
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 19:31:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 888FB2080C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 17:46:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9407124672
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 19:31:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="njiKhj7Q"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mqEHj3cJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727697AbgBJRqC (ORCPT
+        id S1727695AbgBJTbD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Feb 2020 12:46:02 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:33588 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727054AbgBJRqC (ORCPT
+        Mon, 10 Feb 2020 14:31:03 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40426 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727682AbgBJTbC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 12:46:02 -0500
-Received: by mail-pg1-f193.google.com with SMTP id 6so4296945pgk.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2020 09:46:02 -0800 (PST)
+        Mon, 10 Feb 2020 14:31:02 -0500
+Received: by mail-oi1-f195.google.com with SMTP id a142so10342368oii.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2020 11:31:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Um+KObYsAAZ4zkjy8DfPk4gMVE/AcI+tTE3voE+GiRg=;
-        b=njiKhj7QaIkkNSNQhUqILnlQOcBdfJGQikxxlQ1pEE0/84uh64gTFEhicom6s7pp4/
-         89OE0A3tM4hYe5VaOCgP7upVl/TzXwLk6l6qyg3N9FosQbbK9sHHXLDKeiUNJJ5S082M
-         GRWq7PpY65hGzS1jzrNMHEGb+6/6tx6KkKDR2itxR7qNft3ET66zfa6X1lNkaZ5I/baG
-         hmGr9Wf1wcPm1rdTIe6COWJGIlBv5edgHE2XByqeAGpajoiW/BIihixLWvWh4EY8BA2y
-         kYZ5z0Z7fGWUCnMO/js/UVGcNimazt1S5INz5Eei5FLlGCq0BPFsC+cPcWOH/f8KvdGc
-         NfIw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hedv3uQpLYtG/8d40iSwsTwWwbRFJKr8vrN4ZiDg04Q=;
+        b=mqEHj3cJctfFXlmy16cRdbd3ZRwBg+PBoqBPYVmqQH/qHbN5NUcjIYDQxGJmRKQ7wa
+         Gh/oTcwv3s+WJTQGeN5oXvRGmYE52sD2Oy62uw9zNjtHK9oLi+CKMUz2V13jB1bNCceN
+         HKebkK1prPWHrTSh29Rcs3l4gWJQcq2tOzhxQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Um+KObYsAAZ4zkjy8DfPk4gMVE/AcI+tTE3voE+GiRg=;
-        b=Bda3TAtcQ0vK1FhXb+AJtA5tLD8RxAI1S5Xn2dsz8dRAyE+qRMTGlXI2YSrDlqABbv
-         i6JbsIIQqiP+40W39qNpvXlXhs/PdGAkrw9AxiCLEWcf6bxgdAp4CaGX3YF4EF9x9wSN
-         mw4WC+7KS3MUNK7cHB1/m/300np3TQ6axBMdR/kh7/rEmBTisee9GtEN+ClAPQImcLj6
-         AaMERbaubRT2RMQDB6i76CYFYLeqL5X3LqL+PJfGkebD2LgPzUBaPhTiGMpG/RuFe3mA
-         VbMaTUJBOoFKi3fxKazhKzMxzZQi0GLwJugai+7YgZiLpoLgT4yk7rpWd7y/mouwjSaw
-         R6NQ==
-X-Gm-Message-State: APjAAAUbuIBChcn4EzZTcxlZ/uTBAQkqf26OFBJLsrtb1D/n4o0jg4Ba
-        QQxb5hNdcYdq6CR6Vu0ccJljikDIZiFAL2ejK2cniw==
-X-Google-Smtp-Source: APXvYqxiIwOpnR4LFNHTjqhqakXmaLmWK3XOeYVT3jSb6tOBB2Wclr5JOuazRiMQs0/fmgICCXuPAx3cnyQ/c648+2A=
-X-Received: by 2002:a63:3754:: with SMTP id g20mr2660474pgn.384.1581356761468;
- Mon, 10 Feb 2020 09:46:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hedv3uQpLYtG/8d40iSwsTwWwbRFJKr8vrN4ZiDg04Q=;
+        b=aK6UjWR9FYZtDTR09eE2Ugh0mww48F88BsKGuieZDDO64ONBCsGCx0Iu2ovAUl7afN
+         aAslFnxazx0APtklzs94tJPCSMkGmgT5rs9dQZfMfmtGpxMt6zmwKwf3SxiNxGDQt/uW
+         GsB8O3gPVaZJE0+2AEmD49D8v/iOg8lS02qI2TtaAm2WXUBWKd7hCsiHG+3scA/ry78v
+         j6DOx6G1qEzUc/0EECaY4WjR2+pVOwUxL2JN7odWZHvZcQt96TWxAPavz0eEkvLHikI9
+         pcd8P8geBiyEKQtpM4Wl9LHKo8pgptDQJHAES5zx9kti/cxCZm26F4gsiQUoqR4hnf/j
+         kbVA==
+X-Gm-Message-State: APjAAAX5IcSmSACO/PjRS/JANG3jlsZ27uH2hPbtgSi70KitDA+THf77
+        Oxt+gSyRRl30tiyoUp0uiuDMZg==
+X-Google-Smtp-Source: APXvYqxzrrMjKkyUG9U1mzxeIF/mXf4CdliJjd23xPg8Q25YEpKS/E/iAhQV5XTWVKedZ6gqCTRpxg==
+X-Received: by 2002:aca:be57:: with SMTP id o84mr419172oif.138.1581363061318;
+        Mon, 10 Feb 2020 11:31:01 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v23sm359350otj.61.2020.02.10.11.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2020 11:30:58 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Hector Marco-Gisbert <hecmargi@upv.es>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Jann Horn <jannh@google.com>,
+        Russell King <linux@armlinux.org.uk>, x86@kernel.org,
+        kernel-hardening@lists.openwall.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 3/7] x86/elf: Disable automatic READ_IMPLIES_EXEC for 64-bit address spaces
+Date:   Mon, 10 Feb 2020 11:30:45 -0800
+Message-Id: <20200210193049.64362-4-keescook@chromium.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200210193049.64362-1-keescook@chromium.org>
+References: <20200210193049.64362-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <9e787393-703b-ce56-8258-8dcf0cd5ff11@infradead.org>
-In-Reply-To: <9e787393-703b-ce56-8258-8dcf0cd5ff11@infradead.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 10 Feb 2020 09:45:51 -0800
-Message-ID: <CAFd5g46b7KS34c3jzJp9wxpneuEOT8BSh+jaPfnYA8DAQpH8CQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: fix Sphinx directive warning
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Knut Omang <knut.omang@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Feb 9, 2020 at 7:31 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> From: Randy Dunlap <rdunlap@infradead.org>
->
-> Fix Documentation warning due to missing a blank line after a directive:
->
-> linux/Documentation/dev-tools/kunit/usage.rst:553: WARNING: Error in "code-block" directive:
-> maximum 1 argument(s) allowed, 3 supplied.
-> .. code-block:: bash
->         modprobe example-test
+With modern x86 64-bit environments, there should never be a need for
+automatic READ_IMPLIES_EXEC, as the architecture is intended to always
+be execute-bit aware (as in, the default memory protection should be NX
+unless a region explicitly requests to be executable).
 
-Uh oh, sorry for wasting your time, but it looks like I already sent
-the exact same patch out already:
+There were very old x86_64 systems that lacked the NX bit, but for those,
+the NX bit is, obviously, unenforceable, so these changes should have
+no impact on them.
 
-https://patchwork.kernel.org/patch/11360711/
+Suggested-by: Hector Marco-Gisbert <hecmargi@upv.es>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/x86/include/asm/elf.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Shuah, can you pick one of these up and send it out in the next rc?
+diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
+index a7035065377c..c9b7be0bcad3 100644
+--- a/arch/x86/include/asm/elf.h
++++ b/arch/x86/include/asm/elf.h
+@@ -287,7 +287,7 @@ extern u32 elf_hwcap2;
+  *              CPU: | lacks NX*  | has NX, ia32     | has NX, x86_64 |
+  * ELF:              |            |                  |                |
+  * -------------------------------|------------------|----------------|
+- * missing GNU_STACK | exec-all   | exec-all         | exec-all       |
++ * missing GNU_STACK | exec-all   | exec-all         | exec-none      |
+  * GNU_STACK == RWX  | exec-stack | exec-stack       | exec-stack     |
+  * GNU_STACK == RW   | exec-none  | exec-none        | exec-none      |
+  *
+@@ -303,7 +303,7 @@ extern u32 elf_hwcap2;
+  *
+  */
+ #define elf_read_implies_exec(ex, executable_stack)	\
+-	(executable_stack == EXSTACK_DEFAULT)
++	(mmap_is_ia32() && executable_stack == EXSTACK_DEFAULT)
+ 
+ struct task_struct;
+ 
+-- 
+2.20.1
+
