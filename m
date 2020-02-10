@@ -2,121 +2,111 @@ Return-Path: <SRS0=IN6Y=36=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00213C3B187
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 19:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D78E3C352A4
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 20:23:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BBDB42085B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 19:31:24 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hvrKfX5Y"
+	by mail.kernel.org (Postfix) with ESMTP id A741D20715
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 20:23:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1581366204;
+	bh=btnofd/k+jH3nX/rejupwEnRoAy92mLvJNzRBam4i08=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=GrpovsPByH73kn9WEsU9RIISc/ti1H2s5AYdmsuI/toZBHuFzboO441ISD6AcPwYr
+	 msngLdA84mAxKXtI7eL2tZpZeJQKpdnv5n/KSe1DY7rvkKku7U7QoJHwp9FgTHvg3q
+	 bRON+ovmr2FkoCr6xM9NN6Pzy/2mqFgHQF3ODLa8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbgBJTbB (ORCPT
+        id S1726563AbgBJUXY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Feb 2020 14:31:01 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37688 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727639AbgBJTbB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 14:31:01 -0500
-Received: by mail-ot1-f67.google.com with SMTP id d3so7577984otp.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2020 11:31:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6noGYPwM3SA0qSn1DjhC04WI3GU5Jbgm29601EFLQxY=;
-        b=hvrKfX5YTyjWi1ypYrma3QUvOIzzwx5eP1e5SWnVM7fYdEB7cTXp0VLscQZXxlorII
-         KASkYlwnUbwRoj+rvzhAZPJR542QwWgAtt0bf9LEgpg4gV9JV9tO3B0r5MmgGnJbfqjc
-         KS/hLBOlgW90PWNOGQmPIgcyzMg0ZELj7LhF8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6noGYPwM3SA0qSn1DjhC04WI3GU5Jbgm29601EFLQxY=;
-        b=pnifBFGk9uwgt1FTgNNrLoiosY+Ca6ahODbdfhCuZwpXCqyDU/4mNshdl7uQTeOmkM
-         3cDEPbQ0GWG8R+i6rRzKf5pVsZD4d80CGKWHozpJ6+DYaNkQ/qBf0uWuM5W6wsaxFU2V
-         /BBIJcfvU0ZAG5r6VD6UH3mmbWsIlMrhYN9O0zxyhDoPrs3OBK+hfym38rlhYw0ucdbw
-         a9WrgiauTGRFfiQeCloJvX+nAvJjJUvfKlYSV8VF0vDxlYE1ubhJJ6PDdSeTQ7c7f8Ki
-         W3mtoTeMqY6rtw/7dvCF5aZPXeMqjKSZ9igYOIA6kS3GNs5gPUiWD8Af8rIJqJ4VU5WG
-         jQjA==
-X-Gm-Message-State: APjAAAUMiljs2uLaZkKvrJ9uWDoC2GnUdaOqrYHkytylvaptwPMLwA1A
-        eng6TRR56PQ/u1ZJ57pXDVwCPQ==
-X-Google-Smtp-Source: APXvYqzRvao2CNFFWbyoxZWSuc7lKKPgMkVudeHRv3oBDW5/WpFR518lDppuCkgzALOGlW3N5WFORw==
-X-Received: by 2002:a9d:6289:: with SMTP id x9mr2292404otk.8.1581363059840;
-        Mon, 10 Feb 2020 11:30:59 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y6sm359826oti.44.2020.02.10.11.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 11:30:58 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Hector Marco-Gisbert <hecmargi@upv.es>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Jann Horn <jannh@google.com>,
-        Russell King <linux@armlinux.org.uk>, x86@kernel.org,
-        kernel-hardening@lists.openwall.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 1/7] x86/elf: Add table to document READ_IMPLIES_EXEC
-Date:   Mon, 10 Feb 2020 11:30:43 -0800
-Message-Id: <20200210193049.64362-2-keescook@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200210193049.64362-1-keescook@chromium.org>
-References: <20200210193049.64362-1-keescook@chromium.org>
+        Mon, 10 Feb 2020 15:23:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727437AbgBJUXY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 10 Feb 2020 15:23:24 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2270C20838;
+        Mon, 10 Feb 2020 20:23:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581366203;
+        bh=btnofd/k+jH3nX/rejupwEnRoAy92mLvJNzRBam4i08=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=xLfMkfDjZaza/wEwkusARSsJyuP4zMbsFKmEcdvmvvsJbnOhPLggr1c6z1wSUK8D5
+         Je+GSCKNeG9hmtbLNkMkTa8YhZe3+eSNRJjY4y+EtsUZKo197qO/GhEq9YiY24AZmC
+         5iNvIJLkBgncsy3XEc5ZD6b5yNGP3PBW0uiyoLVQ=
+Subject: Re: [RESEND PATCH v9 00/13] selftests/resctrl: Add resctrl selftest
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        James Morse <james.morse@arm.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        x86 <x86@kernel.org>, shuah <shuah@kernel.org>
+References: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <72bbb370-9880-2de8-3c50-967bbc3aab10@kernel.org>
+Date:   Mon, 10 Feb 2020 13:22:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a table to document the current behavior of READ_IMPLIES_EXEC in
-preparation for changing the behavior.
+On 1/16/20 2:32 PM, Fenghua Yu wrote:
+> [Resend the v9 patch set to Shuah Khan and linux-kselftest mailing list.
+> No code and commit message change.]
+> 
+> With more and more resctrl features are being added by Intel, AMD
+> and ARM, a test tool is becoming more and more useful to validate
+> that both hardware and software functionalities work as expected.
+> 
+> We introduce resctrl selftest to cover resctrl features on X86, AMD
+> and ARM architectures. It first implements MBM (Memory Bandwidth
+> Monitoring), MBA (Memory Bandwidth Allocation), L3 CAT (Cache Allocation
+> Technology), and CQM (Cache QoS Monitoring)  tests. We will enhance
+> the selftest tool to include more functionality tests in the future.
+> 
+> The tool has been tested on Intel RDT, AMD QoS and ARM MPAM and is
+> in tools/testing/selftests/resctrl in order to have generic test code
+> base for all architectures.
+> 
+> The selftest tool we are introducing here provides a convenient
+> tool which does automatic resctrl testing, is easily available in kernel
+> tree, and covers Intel RDT, AMD QoS and ARM MPAM.
+> 
+> There is an existing resctrl test suite 'intel_cmt_cat'. But its major
+> purpose is to test Intel RDT hardware via writing and reading MSR
+> registers. It does access resctrl file system; but the functionalities
+> are very limited. And it doesn't support automatic test and a lot of
+> manual verifications are involved.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/x86/include/asm/elf.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Thanks for the series. Sorry for the delay in getting back to you.
+I will pull these in for 5.7.
 
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index 69c0f892e310..733f69c2b053 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -281,6 +281,25 @@ extern u32 elf_hwcap2;
- /*
-  * An executable for which elf_read_implies_exec() returns TRUE will
-  * have the READ_IMPLIES_EXEC personality flag set automatically.
-+ *
-+ * The decision process for determining the results are:
-+ *
-+ *              CPU: | lacks NX*  | has NX, ia32     | has NX, x86_64 |
-+ * ELF:              |            |                  |                |
-+ * -------------------------------|------------------|----------------|
-+ * missing GNU_STACK | exec-all   | exec-all         | exec-all       |
-+ * GNU_STACK == RWX  | exec-all   | exec-all         | exec-all       |
-+ * GNU_STACK == RW   | exec-none  | exec-none        | exec-none      |
-+ *
-+ *  exec-all  : all PROT_READ user mappings are executable, except when
-+ *              backed by files on a noexec-filesystem.
-+ *  exec-none : only PROT_EXEC user mappings are executable.
-+ *
-+ *  *this column has no architectural effect: NX markings are ignored by
-+ *   hardware, but may have behavioral effects when "wants X" collides with
-+ *   "cannot be X" constraints in memory permission flags, as in
-+ *   https://lkml.kernel.org/r/20190418055759.GA3155@mellanox.com
-+ *
-  */
- #define elf_read_implies_exec(ex, executable_stack)	\
- 	(executable_stack != EXSTACK_DISABLE_X)
--- 
-2.20.1
+Couple of global comments and things to watch out for:
 
+- Are there checks to prevent this tool from compiling/running
+on architectures that don't support and/or exits gracefully?
+
+I didn't see arch checks in the Makefile.
+
+I am pulling them in and these can be fixed later.
+
+Sorry for the delay.
+
+thanks,
+-- Shuah
