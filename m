@@ -1,137 +1,107 @@
-Return-Path: <SRS0=IN6Y=36=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=eQK9=37=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D8CC352A4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 22:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D64EEC352A4
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Feb 2020 00:15:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5627C2082F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Feb 2020 22:53:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581375210;
-	bh=a8ChlAs1X2BTRLNb92AceNi3XKeTbTaJUZdnEPuWRLw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=qsjItuM+zs2a8YIeR87J+pY/mlmTu2RkS8zW5IaCL3141f9kO9yC/6rghmQFl0YZH
-	 hqyM16Z56MSEfOUbsZKLbGkjRZl0D6fTeM+WrRBdjf0V+Ey8PQJD+7Vp0/ipnsIs0c
-	 ZGHQF6QWwPFBPVn0TtDA77me3rn8U5HTAD38hUII=
+	by mail.kernel.org (Postfix) with ESMTP id AF92320715
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Feb 2020 00:15:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQylGPxd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbgBJWxa (ORCPT
+        id S1727496AbgBKAPa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Feb 2020 17:53:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59122 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727116AbgBJWx3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 17:53:29 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C5A22051A;
-        Mon, 10 Feb 2020 22:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581375209;
-        bh=a8ChlAs1X2BTRLNb92AceNi3XKeTbTaJUZdnEPuWRLw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uh6i/ttIKwArP26pBZNXA0Nrs9ryWsk2Lyy/53tD6LOnLg3H350CXiI7pJha12oa+
-         VX9i+vC1atAMnDGk8YHQibuoAE8qavlN1YjC4VtCarx1t+5t1+wHZuHDS9x4CgD3S1
-         UqbQDN8URkVvwHBr5IWJ4h1KuMqEC1Ctly/fanmE=
-Date:   Tue, 11 Feb 2020 07:53:24 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alan Maguire <alan.maguire@oracle.com>, shuah@kernel.org,
-        mingo@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
-        colin.king@canonical.com
-Subject: Re: [PATCH 1/2] ftrace/selftests: workaround cgroup RT scheduling
- issues
-Message-Id: <20200211075324.101aab59e06aaabaea648cc4@kernel.org>
-In-Reply-To: <20200210171801.521e5faa@gandalf.local.home>
-References: <1581001760-29831-1-git-send-email-alan.maguire@oracle.com>
-        <1581001760-29831-2-git-send-email-alan.maguire@oracle.com>
-        <20200207151456.4177c8974b779a45520b93d7@kernel.org>
-        <20200210171801.521e5faa@gandalf.local.home>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 10 Feb 2020 19:15:30 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45912 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727455AbgBKAPa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 10 Feb 2020 19:15:30 -0500
+Received: by mail-pf1-f193.google.com with SMTP id 2so4504937pfg.12;
+        Mon, 10 Feb 2020 16:15:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=r5ohSbrtojTxCSFCkg8rYW9zCxgtMfpQZkLpXgHPTpk=;
+        b=KQylGPxdiaGvk+7Y+4BneWCRdxmvASR00418Jv7gHTm/EZxZkAZt8Hj7qbRh3JOGFy
+         oxl2x5m6yV6iMc5YLIlOjEox0c90qBOT+fwVam8DvtExHZ1JkoYBwPjGtqNhiRcZzwQq
+         TtY0mLuruewCig3yfcTFRMCAesZI8xyGIGReVInSiRC1XvxvpQq6veSmY1sNTWCG4Fwl
+         LLMc6e0KVLz+vy3Umv/5RTzT1ubEHIv95CCcWRKM8oKJcjqI1cX1Y8UcJSx9wMbYbBi7
+         H3aZXfZWPc9EK8I+72g6uwnDPYF0MUz4QJtn6UjV0uyHk3G1avz4AXDxhznkFQy9s/5o
+         JNFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=r5ohSbrtojTxCSFCkg8rYW9zCxgtMfpQZkLpXgHPTpk=;
+        b=BWJkqB8kaXTQ6vRF2tfYkpBrwH5Aal6vL1eAr01oX1eJZmRWaMdlXeSb+bT5Wxq0ev
+         lnD7SH0TK7edouZG0a82L94GS6l2gAz2Ls9shKGUmebYbR7m7jI+MTkaeidC9DY8wEpG
+         pTiTkiBx9KioZ4HyKMvP9bNN7bEpqUhzP8XgsBjlqh/RC//rXTR5kmyy5lKSZZCqUIcK
+         appJ9QczHPEmclmdmhUVhdF6Z7vAy7Wk/Pu7eH4x1Jh1xN3b0L8S2WP7ze8C5wUWVu87
+         jcxchbeZgZedXllDkuiwxdvOR86zNa8zoG/A+DqQnXwTI4a3FwFFz2yxM1HAq7Ghl+ZB
+         fa7Q==
+X-Gm-Message-State: APjAAAWuyuIpZdTjeu2Lf6XZxEOFiZd6kCV23/J4MXkrVK1roLjQvTLf
+        DYorImDf4/koNJ1Pv9bat+s=
+X-Google-Smtp-Source: APXvYqwaI1pmqbF0HQJmCdNPwqmI2s1WtrWOIQeTyY/IRieg6LQrDFvOhcDN4OionXTTqMh7Vs1K2g==
+X-Received: by 2002:a65:5549:: with SMTP id t9mr4124065pgr.439.1581380129926;
+        Mon, 10 Feb 2020 16:15:29 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:200::2:685c])
+        by smtp.gmail.com with ESMTPSA id z26sm1201161pgu.80.2020.02.10.16.15.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Feb 2020 16:15:29 -0800 (PST)
+Date:   Mon, 10 Feb 2020 16:15:27 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Palmer Dabbelt <palmerdabbelt@google.com>
+Cc:     Bjorn Topel <bjorn.topel@gmail.com>, daniel@iogearbox.net,
+        ast@kernel.org, zlim.lnx@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        andriin@fb.com, shuah@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, kernel-team@android.com
+Subject: Re: [PATCH 4/4] arm64: bpf: Elide some moves to a0 after calls
+Message-ID: <20200211001526.xbfwdnpjqrg3ed6q@ast-mbp>
+References: <20200128021145.36774-1-palmerdabbelt@google.com>
+ <20200128021145.36774-5-palmerdabbelt@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200128021145.36774-5-palmerdabbelt@google.com>
+User-Agent: NeoMutt/20180223
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 10 Feb 2020 17:18:01 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Jan 27, 2020 at 06:11:45PM -0800, Palmer Dabbelt wrote:
+>  
+> +	/* Handle BPF_REG_0, which may be in the wrong place because the ARM64
+> +	 * ABI doesn't match the BPF ABI for function calls. */
+> +	if (ctx->reg0_in_reg1) {
+> +		/* If we're writing BPF_REG_0 then we don't need to do any
+> +		 * extra work to get the registers back in their correct
+> +		 * locations. */
+> +		if (insn->dst_reg == BPF_REG_0)
+> +			ctx->reg0_in_reg1 = false;
+> +
+> +		/* If we're writing to BPF_REG_1 then we need to save BPF_REG_0
+> +		 * into the correct location if it's still alive, as otherwise
+> +		 * it will be clobbered. */
+> +		if (insn->dst_reg == BPF_REG_1) {
+> +			if (!dead_register(ctx, off + 1, BPF_REG_0))
+> +				emit(A64_MOV(1, A64_R(7), A64_R(0)), ctx);
+> +			ctx->reg0_in_reg1 = false;
+> +		}
+> +	}
 
-> On Fri, 7 Feb 2020 15:14:56 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
-> > On Thu,  6 Feb 2020 15:09:19 +0000
-> > Alan Maguire <alan.maguire@oracle.com> wrote:
-> > 
-> > > wakeup_rt.tc and wakeup.tc tests in tracers/ subdirectory
-> > > fail due to the chrt command returning:
-> > > 
-> > >  chrt: failed to set pid 0's policy: Operation not permitted.
-> > > 
-> > > To work around this, temporarily disable grout RT scheduling
-> > > during ftracetest execution.  Restore original value on
-> > > test run completion.  With these changes in place, both
-> > > tests consistently pass.  
-> > 
-> > OK, this looks good to me.
-> > 
-> > Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > 
-> > Thanks!
-> > 
-> > > 
-> > > Fixes: c575dea2c1a5 ("selftests/ftrace: Add wakeup_rt tracer testcase")
-> > > Fixes: c1edd060b413 ("selftests/ftrace: Add wakeup tracer testcase")
-> > > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > > ---
-> > >  tools/testing/selftests/ftrace/ftracetest | 23 +++++++++++++++++++++++
-> > >  1 file changed, 23 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> > > index 063ecb2..3207bbf 100755
-> > > --- a/tools/testing/selftests/ftrace/ftracetest
-> > > +++ b/tools/testing/selftests/ftrace/ftracetest
-> > > @@ -29,8 +29,26 @@ err_ret=1
-> > >  # kselftest skip code is 4
-> > >  err_skip=4
-> > >  
-> > > +# cgroup RT scheduling prevents chrt commands from succeeding, which
-> > > +# induces failures in test wakeup tests.  Disable for the duration of
-> > > +# the tests.
-> > > +sched_rt_runtime=$(sysctl -n kernel.sched_rt_runtime_us)  
-> > 
-> > OK, but can you 
-> 
-> ??
-> 
-> Masami?
-
-Oops, I missed to fill the comment. I meant
-
-"but can you consider to use /proc/sys directly instead of sysctl command,
-because other test cases uses /proc/sys (ftrace/fgraph-filter-stack.tc and
-ftrace/func_stack_tracer.tc)?"
-
-Thank you,
-
-> 
-> -- Steve
-> 
-> > 
-> > > +
-> > > +set_sysctl() {
-> > > +  sysctl -qw ${1}=${2} >/dev/null 2>&1
-> > > +}
-> > > +
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+I'm not sure this is correct, since it processes insns as a linear code, but
+there could be jumps in the middle. The logic should be following the control
+flow of the program. The verifier is a better place to do such analysis.
+I don't see how JITs can do it on their own.
