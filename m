@@ -2,57 +2,59 @@ Return-Path: <SRS0=uToZ=4C=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E161BC3B1A1
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 16:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B52F5C2BA83
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 17:01:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9B56206CC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 16:56:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D5A12067D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 17:01:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581699396;
-	bh=HSfHtUdMFWc6CS5XaUONf1lMrkLQkHO5y1TvGHsvi9A=;
+	s=default; t=1581699715;
+	bh=SZ+EEgFGGs8fHOBEzI2RELZv2D/lFMcVH/KA9xcKH7w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Yl7oqRf1D5/XggYnVWN8tiJC+2iwKpoUO7yXCL+hsyg9JreK90p+BOPIk3Ump6oC/
-	 /3Kcs1deEI7SS0bXd8/MhTFaS1O+MSPxxWfACT4PDsj5+d7NO+CU/Bpagwgwalejv/
-	 r1ZmoTYtzkU8LWrWBAaPHe96x9moL3FOlD4B11CY=
+	b=rj82kSpG5i86tzZFUW64EbUXSkDZn0oyReCCgFIxB3R+w7ifzHxzScgvnZyK+1Uqm
+	 5GxJzKgNcW/8ypS2mY5b34SaQYCcK0VWAxpAL0fNJs5TG6xQnB3kJehWua0shChMLI
+	 iO0+iiUIXe/nIW/nwnK9QQcQmtlhMDIcGymXQdXk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389636AbgBNQ42 (ORCPT
+        id S2392553AbgBNQQT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 14 Feb 2020 11:56:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49648 "EHLO mail.kernel.org"
+        Fri, 14 Feb 2020 11:16:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404615AbgBNQR6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:17:58 -0500
+        id S2392549AbgBNQQS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:16:18 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5E0324694;
-        Fri, 14 Feb 2020 16:17:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B2422467E;
+        Fri, 14 Feb 2020 16:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697077;
-        bh=HSfHtUdMFWc6CS5XaUONf1lMrkLQkHO5y1TvGHsvi9A=;
+        s=default; t=1581696978;
+        bh=SZ+EEgFGGs8fHOBEzI2RELZv2D/lFMcVH/KA9xcKH7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tHfisUWvlh9+4YalNGAXWbu8AAIdGthz/2wEsFz7OyqeAGCByWCXXW+VqyqoeZjM9
-         +8qcx7Sw9pwTnIkWMkvyjg3H8gcGdXiDOo5xT9f8Gd88PWaczdC/LRV0/LpeC4AS4W
-         +fm3Au4pO1GuRfFjwNCa5CABesumzWHhFjBLOXWc=
+        b=wxoa7oT0V6o5VfyIKerlSjOVfVW6/eUo8rAgo2ftn2nSgWUYoq+Hw7NHpX0psICH1
+         3xS44dJLrjURu77n22DjBnYVK7GEPSkN97qPYfHuSpvUdQ6EpyacicVNQ1BWarZxoR
+         WDn0+Kw8c/PgeddBvNZ16VT/B1RaN3ZqSDgjz/4g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Tim Bird <tim.bird@sony.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+Cc:     Lorenz Bauer <lmb@cloudflare.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 032/186] kselftest: Minimise dependency of get_size on C library interfaces
-Date:   Fri, 14 Feb 2020 11:14:41 -0500
-Message-Id: <20200214161715.18113-32-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 215/252] selftests: bpf: Reset global state between reuseport test runs
+Date:   Fri, 14 Feb 2020 11:11:10 -0500
+Message-Id: <20200214161147.15842-215-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,111 +64,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+From: Lorenz Bauer <lmb@cloudflare.com>
 
-[ Upstream commit 6b64a650f0b2ae3940698f401732988699eecf7a ]
+[ Upstream commit 51bad0f05616c43d6d34b0a19bcc9bdab8e8fb39 ]
 
-It was observed[1] on arm64 that __builtin_strlen led to an infinite
-loop in the get_size selftest.  This is because __builtin_strlen (and
-other builtins) may sometimes result in a call to the C library
-function.  The C library implementation of strlen uses an IFUNC
-resolver to load the most efficient strlen implementation for the
-underlying machine and hence has a PLT indirection even for static
-binaries.  Because this binary avoids the C library startup routines,
-the PLT initialization never happens and hence the program gets stuck
-in an infinite loop.
+Currently, there is a lot of false positives if a single reuseport test
+fails. This is because expected_results and the result map are not cleared.
 
-On x86_64 the __builtin_strlen just happens to expand inline and avoid
-the call but that is not always guaranteed.
+Zero both after individual test runs, which fixes the mentioned false
+positives.
 
-Further, while testing on x86_64 (Fedora 31), it was observed that the
-test also failed with a segfault inside write() because the generated
-code for the write function in glibc seems to access TLS before the
-syscall (probably due to the cancellation point check) and fails
-because TLS is not initialised.
-
-To mitigate these problems, this patch reduces the interface with the
-C library to just the syscall function.  The syscall function still
-sets errno on failure, which is undesirable but for now it only
-affects cases where syscalls fail.
-
-[1] https://bugs.linaro.org/show_bug.cgi?id=5479
-
-Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
-Reported-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Tested-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Reviewed-by: Tim Bird <tim.bird@sony.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 91134d849a0e ("bpf: Test BPF_PROG_TYPE_SK_REUSEPORT")
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20200124112754.19664-5-lmb@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/size/get_size.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ .../selftests/bpf/test_select_reuseport.c        | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/size/get_size.c b/tools/testing/selftests/size/get_size.c
-index d4b59ab979a09..f55943b6d1e2a 100644
---- a/tools/testing/selftests/size/get_size.c
-+++ b/tools/testing/selftests/size/get_size.c
-@@ -12,23 +12,35 @@
-  * own execution.  It also attempts to have as few dependencies
-  * on kernel features as possible.
-  *
-- * It should be statically linked, with startup libs avoided.
-- * It uses no library calls, and only the following 3 syscalls:
-+ * It should be statically linked, with startup libs avoided.  It uses
-+ * no library calls except the syscall() function for the following 3
-+ * syscalls:
-  *   sysinfo(), write(), and _exit()
-  *
-  * For output, it avoids printf (which in some C libraries
-  * has large external dependencies) by  implementing it's own
-  * number output and print routines, and using __builtin_strlen()
-+ *
-+ * The test may crash if any of the above syscalls fails because in some
-+ * libc implementations (e.g. the GNU C Library) errno is saved in
-+ * thread-local storage, which does not get initialized due to avoiding
-+ * startup libs.
-  */
+diff --git a/tools/testing/selftests/bpf/test_select_reuseport.c b/tools/testing/selftests/bpf/test_select_reuseport.c
+index 75646d9b34aaa..cdbbdab2725fc 100644
+--- a/tools/testing/selftests/bpf/test_select_reuseport.c
++++ b/tools/testing/selftests/bpf/test_select_reuseport.c
+@@ -30,7 +30,7 @@
+ #define REUSEPORT_ARRAY_SIZE 32
  
- #include <sys/sysinfo.h>
- #include <unistd.h>
-+#include <sys/syscall.h>
+ static int result_map, tmp_index_ovr_map, linum_map, data_check_map;
+-static enum result expected_results[NR_RESULTS];
++static __u32 expected_results[NR_RESULTS];
+ static int sk_fds[REUSEPORT_ARRAY_SIZE];
+ static int reuseport_array, outer_map;
+ static int select_by_skb_data_prog;
+@@ -610,7 +610,19 @@ static void setup_per_test(int type, unsigned short family, bool inany)
  
- #define STDOUT_FILENO 1
- 
- static int print(const char *s)
+ static void cleanup_per_test(void)
  {
--	return write(STDOUT_FILENO, s, __builtin_strlen(s));
-+	size_t len = 0;
+-	int i, err;
++	int i, err, zero = 0;
 +
-+	while (s[len] != '\0')
-+		len++;
++	memset(expected_results, 0, sizeof(expected_results));
 +
-+	return syscall(SYS_write, STDOUT_FILENO, s, len);
- }
++	for (i = 0; i < NR_RESULTS; i++) {
++		err = bpf_map_update_elem(result_map, &i, &zero, BPF_ANY);
++		RET_IF(err, "reset elem in result_map",
++		       "i:%u err:%d errno:%d\n", i, err, errno);
++	}
++
++	err = bpf_map_update_elem(linum_map, &zero, &zero, BPF_ANY);
++	RET_IF(err, "reset line number in linum_map", "err:%d errno:%d\n",
++	       err, errno);
  
- static inline char *num_to_str(unsigned long num, char *buf, int len)
-@@ -80,12 +92,12 @@ void _start(void)
- 	print("TAP version 13\n");
- 	print("# Testing system size.\n");
- 
--	ccode = sysinfo(&info);
-+	ccode = syscall(SYS_sysinfo, &info);
- 	if (ccode < 0) {
- 		print("not ok 1");
- 		print(test_name);
- 		print(" ---\n reason: \"could not get sysinfo\"\n ...\n");
--		_exit(ccode);
-+		syscall(SYS_exit, ccode);
- 	}
- 	print("ok 1");
- 	print(test_name);
-@@ -101,5 +113,5 @@ void _start(void)
- 	print(" ...\n");
- 	print("1..1\n");
- 
--	_exit(0);
-+	syscall(SYS_exit, 0);
- }
+ 	for (i = 0; i < REUSEPORT_ARRAY_SIZE; i++)
+ 		close(sk_fds[i]);
 -- 
 2.20.1
 
