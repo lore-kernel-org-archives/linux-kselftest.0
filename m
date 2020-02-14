@@ -7,54 +7,53 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D653DC3B1B2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 18:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7471C2BA83
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 18:04:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE54A20848
-	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 18:04:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF9A120848
+	for <linux-kselftest@archiver.kernel.org>; Fri, 14 Feb 2020 18:04:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581703476;
-	bh=vKHcwCVRb23yZv/rdCpLWOTPd8K+2jbWZg/bXfSw6CY=;
+	s=default; t=1581703488;
+	bh=fKgzkNovUzgTf8pbQsgdrFyVGaFJHfBMFNKzV/qWmos=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ehhY1xRMGw4EVFzsUoEAecdO6zmd3pE7nhdJIUiTL3krvj/7XYNyOGf/m9eIoiDKa
-	 H/zZZtoeHCR9Nd1VzpmRXbvsykJW/gqg6NtvzwWmurooLOlh4YnUWrQ5tJZSn1C6kT
-	 LWVzKcIfA6yYBecPsIUaKzaPdUIGaIjBhdZ8Swaw=
+	b=uZf1+tW3fPxLAH8x33WFyMcxNnFDYXUd4FddKNWhG29mhvVqmi5RyE1UQvd8K7mji
+	 eU3695Uon5bNaH3PG7yCqrN8pyXNGBO235p5G3j64NtziI3AJRCcCMNVxzs8TIHYXn
+	 d6Kw5v1zPXCZtALDo9rOBHZAixUR//L4UkguTmMI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391325AbgBNSEf (ORCPT
+        id S2388182AbgBNSEm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 14 Feb 2020 13:04:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36836 "EHLO mail.kernel.org"
+        Fri, 14 Feb 2020 13:04:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731452AbgBNPzh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:55:37 -0500
+        id S1731159AbgBNPzg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:55:36 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8FBB24681;
-        Fri, 14 Feb 2020 15:55:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B411D222C4;
+        Fri, 14 Feb 2020 15:55:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695737;
-        bh=vKHcwCVRb23yZv/rdCpLWOTPd8K+2jbWZg/bXfSw6CY=;
+        s=default; t=1581695735;
+        bh=fKgzkNovUzgTf8pbQsgdrFyVGaFJHfBMFNKzV/qWmos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+zfFwINBo9jBCXjF4DBZoV9TmJZzQqjNCETknmZnkFjpAH2tk37ZJ5if6JEuFsKO
-         ZbSmqvQmNvNN6FYOb3IczMmnUIVPR7zKVsjIHWSFxZrMhnHUq3g7Durl1MciVDRL6b
-         +oAbEWcfmruYhsrEOW1kWtv9unZohxCqJ0Ut+3P4=
+        b=HSlAkNBgpHNkXael2tglTgn6xHhTgMTiohT2NNYUa49Prv75FUFW0mN6bCkLZkQv8
+         8ECiA6ZHbXZXYIGzRwKAzaJs42dzgenAJqqoyJP2BxiyAv4yYd1eI9Si4WYzhMkBBv
+         u6DTAv877xOaEPFv+ua5TmzF+lQQpwx8OzLogrfs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.5 310/542] kunit: remove timeout dependence on sysctl_hung_task_timeout_seconds
-Date:   Fri, 14 Feb 2020 10:45:02 -0500
-Message-Id: <20200214154854.6746-310-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 309/542] selftests: Uninitialized variable in test_cgcore_proc_migration()
+Date:   Fri, 14 Feb 2020 10:45:01 -0500
+Message-Id: <20200214154854.6746-309-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -63,78 +62,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 1c024d45151b51c8f8d4749e65958b0bcf3e7c52 ]
+[ Upstream commit 192c197cbca599321de95a4cf15c2fa0681140d3 ]
 
-In discussion of how to handle timeouts, it was noted that if
-sysctl_hung_task_timeout_seconds is exceeded for a kunit test,
-the test task will be killed and an oops generated.  This should
-suffice as a means of debugging such timeout issues for now.
+The "c_threads" variable is used in the error handling code before it
+has been initialized
 
-Hence remove use of sysctl_hung_task_timeout_secs, which has the
-added benefit of avoiding the need to export that symbol from
-the core kernel.
-
-Co-developed-by: Knut Omang <knut.omang@oracle.com>
-Signed-off-by: Knut Omang <knut.omang@oracle.com>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Fixes: 11318989c381 ("selftests: cgroup: Add task migration tests")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Michal Koutný <mkoutny@suse.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/try-catch.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+ tools/testing/selftests/cgroup/test_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 55686839eb619..6b9c5242017f6 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -12,7 +12,6 @@
- #include <linux/completion.h>
- #include <linux/kernel.h>
- #include <linux/kthread.h>
--#include <linux/sched/sysctl.h>
- 
- void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index c5ca669feb2bd..e19ce940cd6a2 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -369,7 +369,7 @@ static void *dummy_thread_fn(void *arg)
+ static int test_cgcore_proc_migration(const char *root)
  {
-@@ -31,8 +30,6 @@ static int kunit_generic_run_threadfn_adapter(void *data)
+ 	int ret = KSFT_FAIL;
+-	int t, c_threads, n_threads = 13;
++	int t, c_threads = 0, n_threads = 13;
+ 	char *src = NULL, *dst = NULL;
+ 	pthread_t threads[n_threads];
  
- static unsigned long kunit_test_timeout(void)
- {
--	unsigned long timeout_msecs;
--
- 	/*
- 	 * TODO(brendanhiggins@google.com): We should probably have some type of
- 	 * variable timeout here. The only question is what that timeout value
-@@ -49,22 +46,11 @@ static unsigned long kunit_test_timeout(void)
- 	 *
- 	 * For more background on this topic, see:
- 	 * https://mike-bland.com/2011/11/01/small-medium-large.html
-+	 *
-+	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
-+	 * the task will be killed and an oops generated.
- 	 */
--	if (sysctl_hung_task_timeout_secs) {
--		/*
--		 * If sysctl_hung_task is active, just set the timeout to some
--		 * value less than that.
--		 *
--		 * In regards to the above TODO, if we decide on variable
--		 * timeouts, this logic will likely need to change.
--		 */
--		timeout_msecs = (sysctl_hung_task_timeout_secs - 1) *
--				MSEC_PER_SEC;
--	} else {
--		timeout_msecs = 300 * MSEC_PER_SEC; /* 5 min */
--	}
--
--	return timeout_msecs;
-+	return 300 * MSEC_PER_SEC; /* 5 min */
- }
- 
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
 -- 
 2.20.1
 
