@@ -2,85 +2,126 @@ Return-Path: <SRS0=FGTY=4G=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 880EAC3404B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Feb 2020 19:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D84C34026
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Feb 2020 19:14:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CD4F24670
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Feb 2020 19:03:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E6C522B48
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Feb 2020 19:14:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="evNMlimV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726339AbgBRTCe (ORCPT
+        id S1726383AbgBRTOe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Feb 2020 14:02:34 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35556 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726283AbgBRTCd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Feb 2020 14:02:33 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 17ADEADAB;
-        Tue, 18 Feb 2020 19:02:31 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 0/6] bpftool: Allow to select sections and filter probes
-Date:   Tue, 18 Feb 2020 20:02:17 +0100
-Message-Id: <20200218190224.22508-1-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.25.0
+        Tue, 18 Feb 2020 14:14:34 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:50842 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbgBRTOe (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 Feb 2020 14:14:34 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01IJDwQt186783;
+        Tue, 18 Feb 2020 19:14:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=klYs7sANTDBUGahPUju9sGWKYr/tKylftyYSkWKVd7M=;
+ b=evNMlimVu3xmXlI/jjEVBPaZZEWMkPu5+xRAILOSZ2HHqMNX69dd4vUwzjS8x59DrKdd
+ 5nxBXGA3OxMdQin9eVnqgx0UqW+1nEMf8x/kDSi86SYett7WmGvjQZ3xU2lv8WtntjVE
+ tPrSIL2BuuBGNJmoTMORRAExFtSh/hQyPT9m1wMTtokQ4/aR5VKRxcCbDqmEOcRMPnXu
+ D6rahYOQtdo0znPDwFlsWuDUii+txSF/XOSXmCiu9lHDxNqfPTnOMaN78+EcuVzTeHaS
+ 2/rVylv79hPpyksaAUnl6ZKWAAQuolmrGuWMalYnfocc3uXd3cNr1f8QnOOGdNhGAkqN Sw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2y699rr9v1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Feb 2020 19:14:24 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01IJDkEC050650;
+        Tue, 18 Feb 2020 19:14:24 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2y6tc2wunw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Feb 2020 19:14:24 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 01IJEM8r000976;
+        Tue, 18 Feb 2020 19:14:23 GMT
+Received: from [192.168.1.206] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 18 Feb 2020 11:14:22 -0800
+Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ counter
+To:     Mina Almasry <almasrymina@google.com>, Qian Cai <cai@lca.pw>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+References: <20200211213128.73302-1-almasrymina@google.com>
+ <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
+ <1582035660.7365.90.camel@lca.pw>
+ <CAHS8izO5=vKs-v9v=Di3hQXBD41+_YpYarXn1yZu9YE6SR-i6Q@mail.gmail.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <d498012a-ec87-ca48-ed78-5fcdaf372888@oracle.com>
+Date:   Tue, 18 Feb 2020 11:14:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izO5=vKs-v9v=Di3hQXBD41+_YpYarXn1yZu9YE6SR-i6Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9535 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
+ suspectscore=27 mlxscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxlogscore=986 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002180129
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9535 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=27
+ malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1011 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002180129
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series extend the "bpftool feature" subcommand with the
-new positional arguments:
+On 2/18/20 10:35 AM, Mina Almasry wrote:
+> On Tue, Feb 18, 2020 at 6:21 AM Qian Cai <cai@lca.pw> wrote:
+>>
+>> On Tue, 2020-02-11 at 15:19 -0800, Andrew Morton wrote:
+>>> On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
+>>>
+>> [ 7933.806377][T14355] ------------[ cut here ]------------
+>> [ 7933.806541][T14355] kernel BUG at mm/hugetlb.c:490!
+>> VM_BUG_ON(t - f <= 1);
+>> [ 7933.806562][T14355] Oops: Exception in kernel mode, sig: 5 [#1]
+<snip>
+> Hi Qian,
+> 
+> Yes this VM_BUG_ON was added by a patch in the series ("hugetlb:
+> disable region_add file_region coalescing") so it's definitely related
+> to the series. I'm taking a look at why this VM_BUG_ON fires. Can you
+> confirm you reproduce this by running hugemmap06 from the ltp on a
+> powerpc machine? Can I maybe have your config?
+> 
+> Thanks!
 
-- "section", which allows to select a specific section of probes (i.e.
-  "system_config", "program_types", "map_types");
-- "filter_in", which allows to select only probes which matches the
-  given regex pattern;
-- "filter_out", which allows to filter out probes which do not match the
-  given regex pattern.
+Hi Mina,
 
-The main motivation behind those changes is ability the fact that some
-probes (for example those related to "trace" or "write_user" helpers)
-emit dmesg messages which might be confusing for people who are running
-on production environments. For details see the Cilium issue[0].
+Looking at the region_chg code again, we do a
 
-[0] https://github.com/cilium/cilium/issues/10048
+	resv->adds_in_progress += *out_regions_needed;
 
-Michal Rostecki (6):
-  bpftool: Move out sections to separate functions
-  bpftool: Allow to select a specific section to probe
-  bpftool: Add arguments for filtering in and filtering out probes
-  bpftool: Update documentation of "bpftool feature" command
-  bpftool: Update bash completion for "bpftool feature" command
-  selftests/bpf: Add test for "bpftool feature" command
-
- .../bpftool/Documentation/bpftool-feature.rst |  37 +-
- tools/bpf/bpftool/bash-completion/bpftool     |  32 +-
- tools/bpf/bpftool/feature.c                   | 592 +++++++++++++-----
- tools/testing/selftests/.gitignore            |   5 +-
- tools/testing/selftests/bpf/Makefile          |   3 +-
- tools/testing/selftests/bpf/test_bpftool.py   | 294 +++++++++
- tools/testing/selftests/bpf/test_bpftool.sh   |   5 +
- 7 files changed, 811 insertions(+), 157 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/test_bpftool.py
- create mode 100755 tools/testing/selftests/bpf/test_bpftool.sh
+and then potentially drop the lock to allocate the needed entries.  Could
+anopther thread (only adding reservation for a single page) then come in
+and notice that there are not enough entries in the cache and hit the
+VM_BUG_ON()?
 
 -- 
-2.25.0
-
+Mike Kravetz
