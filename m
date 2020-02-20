@@ -2,57 +2,56 @@ Return-Path: <SRS0=O+09=4I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4A1EC11D84
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:49:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A669C11D81
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:49:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D05724672
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:49:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4326024671
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:49:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ZeNCpCRG"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Zd6c6RWz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgBTAtH (ORCPT
+        id S1727648AbgBTAst (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Feb 2020 19:49:07 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33526 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727803AbgBTAs7 (ORCPT
+        Wed, 19 Feb 2020 19:48:49 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:36456 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727624AbgBTAss (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 19:48:59 -0500
-Received: by mail-pl1-f196.google.com with SMTP id ay11so832915plb.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2020 16:48:59 -0800 (PST)
+        Wed, 19 Feb 2020 19:48:48 -0500
+Received: by mail-pj1-f68.google.com with SMTP id gv17so128316pjb.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2020 16:48:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3w9edU0bQTA/j4i1GZ5kCMLx5L0gk76mGZ2Jl2DPJv8=;
-        b=ZeNCpCRGcYvQriOrG7nnRAwG2HLKcfUbnNuky4kQOtRD0bn59Hvqtia7UjS5EL1wtm
-         JrkWjvzl+mC614o7v8XfG8+JPEmBrAnWb79QYFg2id7JqxhegfEV05kzAUZv+YfGH2TG
-         oohrRRL84DOMAWaN+EK4SCqh6Sx4owhTbcqhw=
+        bh=1vZUwbK1p/l0BmkVh8fQjfkP2CW4vgl3dyidM1dNgAg=;
+        b=Zd6c6RWz61quAyM09lFToG+rLQNQkLxsbwInvxizF6zUY0AY3qjs9ePf+NAJ7R1LE9
+         uaNhVPMqMU8o9k/xgTvraAbid7xE80LEPk/VLSDxpKS/Swdn9oAXPo/wdg+GS5qyu3bw
+         C00Es6h+BsEcgtjvkV4/JdTkO7oVwLCjzujfo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3w9edU0bQTA/j4i1GZ5kCMLx5L0gk76mGZ2Jl2DPJv8=;
-        b=pWzGOHYJPAQdSHzhH19DecZsK3eH4zCFOn4EmWnewvY3TLJkUKC7R8vjL/SZWVkfvb
-         HqEIkJItxiD+wtWumkZcnw1OTtEQz05oaMNzTNjG0Q3b5AJ3Y61ctcuzoIh838yFFcRz
-         o6PC3fAJ0Hs71L8u4/MoARGNOvN6szLJfcfMv1RJr9acS9HvQToLDCuyp7bTFWt6mCVe
-         AYT/8GBRPSheDDXrB4D3COPUaOoWLifH0Muv+bDwQuqn3Zei8t9GZMpw+uXEXDRK64/V
-         MP3ILGa7nYGu8aUYKohL96UDX3u2B8oq98PzDqLd7cTeCVhrP1iICst+orae0kDIDb/L
-         JCkg==
-X-Gm-Message-State: APjAAAXqyhAKaOECYGb1A8PWqJOKJhZixQBpy3Dpu46IuQV5fNAuupl2
-        9fN1moG6Lw+/q9cEjuWfgoXKSQ==
-X-Google-Smtp-Source: APXvYqxvwfYCexceHmLY8+2NVNDKj2k6UoiRx/YzDmwMEI2NjRSexRZ7sLY6QpdZDmP32eZBMJa/tw==
-X-Received: by 2002:a17:90a:8d81:: with SMTP id d1mr462100pjo.63.1582159738999;
-        Wed, 19 Feb 2020 16:48:58 -0800 (PST)
+        bh=1vZUwbK1p/l0BmkVh8fQjfkP2CW4vgl3dyidM1dNgAg=;
+        b=GNpsOH9Gtws/4Zm4RcKUn0QwoAWOII8OGgueH0kidrA4anY4MGjV9CNumc5qRCHdqQ
+         pSZ3jxnlf6uqTrYeu9Q/ifww8p3y1+EfUOoqboY9g4wZLkoTbnSwvwl4b7oeY38HyTCd
+         BsQtvCQT3pf8+GwB8L9Oc6mGFzNF+Pm2omYg7AVPBOLqe4tqENn0o6IGC+MrzD/Vz3oI
+         nGB1xBK9xUcWqMhvxG0KSgdhWJo0D1/52K4NkUV0KRpQXVRXNimYln8MJWJNUWRijxN+
+         zjLaVqeWb6i+kDr2mDGfDB2GEyOD/p4yqkQKECuPbYw91NifQ+/VXG6TWIHtDzJSjiSP
+         H1Dg==
+X-Gm-Message-State: APjAAAVhekPIcmDXX5HrHVKBj+tgNKXwlNd3PYzB+EXZ1LZAoIsu3cHI
+        GrDc9TaDq2uZ5Q1jvNyUAkGXZw==
+X-Google-Smtp-Source: APXvYqwlXs0/Vy87G6Z0QVBAFYMleqQm7wAipCZQyNLE3Qlivl2QulbcDPKr2GPIkQ8ytGKqO5W15A==
+X-Received: by 2002:a17:902:8647:: with SMTP id y7mr28627552plt.224.1582159727648;
+        Wed, 19 Feb 2020 16:48:47 -0800 (PST)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id 64sm816323pfd.48.2020.02.19.16.48.56
+        by smtp.gmail.com with ESMTPSA id 64sm816323pfd.48.2020.02.19.16.48.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 16:48:58 -0800 (PST)
+        Wed, 19 Feb 2020 16:48:47 -0800 (PST)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -73,9 +72,9 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v2 7/7] MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
-Date:   Wed, 19 Feb 2020 16:48:25 -0800
-Message-Id: <20200220004825.23372-8-scott.branden@broadcom.com>
+Subject: [PATCH v2 3/7] test_firmware: add partial read support for request_firmware_into_buf
+Date:   Wed, 19 Feb 2020 16:48:21 -0800
+Message-Id: <20200220004825.23372-4-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200220004825.23372-1-scott.branden@broadcom.com>
 References: <20200220004825.23372-1-scott.branden@broadcom.com>
@@ -84,31 +83,227 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add maintainer entry for new Broadcom VK Driver
+Add additional hooks to test_firmware to pass in support
+for partial file read using request_firmware_into_buf.
+buf_size: size of buffer to request firmware into
+partial: indicates that a partial file request is being made
+file_offset: to indicate offset into file to request
 
 Signed-off-by: Scott Branden <scott.branden@broadcom.com>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ lib/test_firmware.c | 141 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 138 insertions(+), 3 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4beb8dc4c7eb..c55f34f00b85 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3564,6 +3564,13 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ethernet/broadcom/tg3.*
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 7d1d97fa9a23..6050d3113f92 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -49,6 +49,9 @@ struct test_batched_req {
+  * @name: the name of the firmware file to look for
+  * @into_buf: when the into_buf is used if this is true
+  *	request_firmware_into_buf() will be used instead.
++ * @buf_size: size of buf to allocate when into_buf is true
++ * @file_offset: file offset to request when calling request_firmware_into_buf
++ * @partial: partial read flag value when calling request_firmware_into_buf
+  * @sync_direct: when the sync trigger is used if this is true
+  *	request_firmware_direct() will be used instead.
+  * @send_uevent: whether or not to send a uevent for async requests
+@@ -88,6 +91,9 @@ struct test_batched_req {
+ struct test_config {
+ 	char *name;
+ 	bool into_buf;
++	size_t buf_size;
++	size_t file_offset;
++	bool partial;
+ 	bool sync_direct;
+ 	bool send_uevent;
+ 	u8 num_requests;
+@@ -182,6 +188,9 @@ static int __test_firmware_config_init(void)
+ 	test_fw_config->num_requests = TEST_FIRMWARE_NUM_REQS;
+ 	test_fw_config->send_uevent = true;
+ 	test_fw_config->into_buf = false;
++	test_fw_config->buf_size = TEST_FIRMWARE_BUF_SIZE;
++	test_fw_config->file_offset = 0;
++	test_fw_config->partial = false;
+ 	test_fw_config->sync_direct = false;
+ 	test_fw_config->req_firmware = request_firmware;
+ 	test_fw_config->test_result = 0;
+@@ -253,6 +262,13 @@ static ssize_t config_show(struct device *dev,
+ 	len += scnprintf(buf+len, PAGE_SIZE - len,
+ 			"into_buf:\t\t%s\n",
+ 			test_fw_config->into_buf ? "true" : "false");
++	len += scnprintf(buf+len, PAGE_SIZE - len,
++			"buf_size:\t%zu\n", test_fw_config->buf_size);
++	len += scnprintf(buf+len, PAGE_SIZE - len,
++			"file_offset:\t%zu\n", test_fw_config->file_offset);
++	len += scnprintf(buf+len, PAGE_SIZE - len,
++			"partial:\t\t%s\n",
++			test_fw_config->partial ? "true" : "false");
+ 	len += scnprintf(buf+len, PAGE_SIZE - len,
+ 			"sync_direct:\t\t%s\n",
+ 			test_fw_config->sync_direct ? "true" : "false");
+@@ -322,6 +338,39 @@ test_dev_config_show_bool(char *buf,
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
  
-+BROADCOM VK DRIVER
-+M:	Scott Branden <scott.branden@broadcom.com>
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Supported
-+F:	drivers/misc/bcm-vk/
-+F:	include/uapi/linux/misc/bcm_vk.h
++static int test_dev_config_update_size_t(const char *buf,
++					 size_t size,
++					 size_t *cfg)
++{
++	int ret;
++	long new;
 +
- BROCADE BFA FC SCSI DRIVER
- M:	Anil Gurumurthy <anil.gurumurthy@qlogic.com>
- M:	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
++	ret = kstrtol(buf, 10, &new);
++	if (ret)
++		return ret;
++
++	if (new > SIZE_MAX)
++		return -EINVAL;
++
++	mutex_lock(&test_fw_mutex);
++	*(size_t *)cfg = new;
++	mutex_unlock(&test_fw_mutex);
++
++	/* Always return full write size even if we didn't consume all */
++	return size;
++}
++
++static ssize_t test_dev_config_show_size_t(char *buf, int cfg)
++{
++	size_t val;
++
++	mutex_lock(&test_fw_mutex);
++	val = cfg;
++	mutex_unlock(&test_fw_mutex);
++
++	return snprintf(buf, PAGE_SIZE, "%zu\n", val);
++}
++
+ static ssize_t test_dev_config_show_int(char *buf, int cfg)
+ {
+ 	int val;
+@@ -419,6 +468,83 @@ static ssize_t config_into_buf_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(config_into_buf);
+ 
++static ssize_t config_buf_size_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	int rc;
++
++	mutex_lock(&test_fw_mutex);
++	if (test_fw_config->reqs) {
++		pr_err("Must call release_all_firmware prior to changing config\n");
++		rc = -EINVAL;
++		mutex_unlock(&test_fw_mutex);
++		goto out;
++	}
++	mutex_unlock(&test_fw_mutex);
++
++	rc = test_dev_config_update_size_t(buf, count,
++					   &test_fw_config->buf_size);
++
++out:
++	return rc;
++}
++
++static ssize_t config_buf_size_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	return test_dev_config_show_size_t(buf, test_fw_config->buf_size);
++}
++static DEVICE_ATTR_RW(config_buf_size);
++
++static ssize_t config_file_offset_store(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	int rc;
++
++	mutex_lock(&test_fw_mutex);
++	if (test_fw_config->reqs) {
++		pr_err("Must call release_all_firmware prior to changing config\n");
++		rc = -EINVAL;
++		mutex_unlock(&test_fw_mutex);
++		goto out;
++	}
++	mutex_unlock(&test_fw_mutex);
++
++	rc = test_dev_config_update_size_t(buf, count,
++					   &test_fw_config->file_offset);
++
++out:
++	return rc;
++}
++
++static ssize_t config_file_offset_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
++{
++	return test_dev_config_show_size_t(buf, test_fw_config->file_offset);
++}
++static DEVICE_ATTR_RW(config_file_offset);
++
++static ssize_t config_partial_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	return test_dev_config_update_bool(buf,
++					   count,
++					   &test_fw_config->partial);
++}
++
++static ssize_t config_partial_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
++{
++	return test_dev_config_show_bool(buf, test_fw_config->partial);
++}
++static DEVICE_ATTR_RW(config_partial);
++
+ static ssize_t config_sync_direct_store(struct device *dev,
+ 					struct device_attribute *attr,
+ 					const char *buf, size_t count)
+@@ -613,18 +739,24 @@ static int test_fw_run_batch_request(void *data)
+ 
+ 	if (test_fw_config->into_buf) {
+ 		void *test_buf;
++		unsigned int pread_flags;
+ 
+ 		test_buf = kzalloc(TEST_FIRMWARE_BUF_SIZE, GFP_KERNEL);
+ 		if (!test_buf)
+ 			return -ENOSPC;
+ 
++		if (test_fw_config->partial)
++			pread_flags = KERNEL_PREAD_FLAG_PART;
++		else
++			pread_flags = KERNEL_PREAD_FLAG_WHOLE;
++
+ 		req->rc = request_firmware_into_buf(&req->fw,
+ 						    req->name,
+ 						    req->dev,
+ 						    test_buf,
+-						    TEST_FIRMWARE_BUF_SIZE,
+-						    0,
+-						    KERNEL_PREAD_FLAG_WHOLE);
++						    test_fw_config->buf_size,
++						    test_fw_config->file_offset,
++						    pread_flags);
+ 		if (!req->fw)
+ 			kfree(test_buf);
+ 	} else {
+@@ -897,6 +1029,9 @@ static struct attribute *test_dev_attrs[] = {
+ 	TEST_FW_DEV_ATTR(config_name),
+ 	TEST_FW_DEV_ATTR(config_num_requests),
+ 	TEST_FW_DEV_ATTR(config_into_buf),
++	TEST_FW_DEV_ATTR(config_buf_size),
++	TEST_FW_DEV_ATTR(config_file_offset),
++	TEST_FW_DEV_ATTR(config_partial),
+ 	TEST_FW_DEV_ATTR(config_sync_direct),
+ 	TEST_FW_DEV_ATTR(config_send_uevent),
+ 	TEST_FW_DEV_ATTR(config_read_fw_idx),
 -- 
 2.17.1
 
