@@ -2,180 +2,278 @@ Return-Path: <SRS0=O+09=4I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A74C761A1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE023C11D80
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:48:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BCF9C24673
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582159709;
-	bh=IoyCu3Rfg36TnWgV/FX467X5fODdY0uZIig5iWzvj2Y=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=Tn0AAM+RjsSoeA5i/t7fFl+SbwhbigledNwZYfiqEippX2CHvKJIgu2TGUYzDPTPr
-	 TSs8Bkp4chAXU8slQ5Lt5FVtdrcSxiB2r+SDZIbNOMDd0YctNr1iewm+5zGW/9nL+0
-	 B+9QemQuTIGnRzeizUpXIyX6+tBJEcCZfzAuMOmY=
+	by mail.kernel.org (Postfix) with ESMTP id B77222467C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:48:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="UnfLCt7Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgBTAr0 (ORCPT
+        id S1727488AbgBTAsn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Feb 2020 19:47:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726962AbgBTAr0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 19:47:26 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 793792465D;
-        Thu, 20 Feb 2020 00:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582159645;
-        bh=IoyCu3Rfg36TnWgV/FX467X5fODdY0uZIig5iWzvj2Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dk0aWK516QpktQDynoQnd5IU3diktxkycW0Dz2cwfjo3LG73XXp9yPtJol9GJVjBE
-         mpyTvwkvUQD1H+YXNjkl9x5u6vrrnrEdrVHo6o6gKRjL732msJctzi9ekPggT78WRt
-         eGR9BGUQfx2yzpuFdPqTeoYIAkn68YZU+BfYT720=
-Subject: Re: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Wed, 19 Feb 2020 19:48:43 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40626 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726962AbgBTAsn (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Feb 2020 19:48:43 -0500
+Received: by mail-pl1-f193.google.com with SMTP id y1so819525plp.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2020 16:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=PHpWXDTr6jV3C6iif6ncq7QaqfD+p0zDkr8t4LK8n2s=;
+        b=UnfLCt7ZI/LJPiv9la+HUHVPOpCLsb/8lDB2QgzW6boVkAlLW+/1Ut8WR1iKRJNs8C
+         NNQxZ58srqExB9/lyLJyw6dh2bf5K4xPkcaRAiZMiSSBm4f6NXAWtckrDh4WTd0rhT6l
+         pE3zSEcxU0LMdxdTUfRoggIole3Vnwr9A+8iQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=PHpWXDTr6jV3C6iif6ncq7QaqfD+p0zDkr8t4LK8n2s=;
+        b=H7YR3tPWB/yQ7I3YUbnONQsF1CIfpGEOWfeLgj1JFTnXZ5Jp6NSozKO8NQGP0QMfg6
+         3hH8uxcfYyiqogyVNHDlcx84aVKsFSLVspjzZDwntWuRoUAMQn99XeDRnwPAG8LEV2OE
+         KRZKyUDEU6QIK0ejMECCaqmzou1+5WaQXwPyOOQiDcO2Fn+kocM9PJD30azBGrzVEZHH
+         1uCbic0M9I9tlHBUiGrZIdu2kQokFWPIQ/16U1TKzZZpgWwcZIAG+YU9PGa1VEImfQqR
+         tFG7TpqZgsrImJbstMTmacAoBGDg4SEqYbH88yyeV7rjVlfdTHARV/XVNDeByo6lzl9x
+         64rw==
+X-Gm-Message-State: APjAAAUpau7ntF0P1DcsERBhiAj5kFP0IOUH1ANTu/O7YKu8U7rUSOtS
+        M/hdAgDZ/pLfEbRXtW0PyMA5xQ==
+X-Google-Smtp-Source: APXvYqwhgQGV8EyCQ5SA5mMgL1SQvdvjfoEgsElbBa8yRQQTse48LbXHxD4FJEf0ZLtID3TTzCbAvA==
+X-Received: by 2002:a17:902:bb83:: with SMTP id m3mr28970318pls.258.1582159722265;
+        Wed, 19 Feb 2020 16:48:42 -0800 (PST)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id 64sm816323pfd.48.2020.02.19.16.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 16:48:41 -0800 (PST)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        shuah <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20200219133012.7cb6ac9e@carbon>
- <CAADnVQKQRKtDz0Boy=-cudc4eKGXB-yParGZv6qvYcQR4uMUQQ@mail.gmail.com>
- <20200219180348.40393e28@carbon>
- <CAEf4Bza9imKymHfv_LpSFE=kNB5=ZapTS3SCdeZsDdtrUrUGcg@mail.gmail.com>
- <20200219192854.6b05b807@carbon>
- <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
- <20200219210609.20a097fb@carbon>
- <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
- <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
-From:   shuah <shuah@kernel.org>
-Message-ID: <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
-Date:   Wed, 19 Feb 2020 17:47:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH v2 1/7] fs: introduce kernel_pread_file* support
+Date:   Wed, 19 Feb 2020 16:48:19 -0800
+Message-Id: <20200220004825.23372-2-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200220004825.23372-1-scott.branden@broadcom.com>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/19/20 5:27 PM, Alexei Starovoitov wrote:
-> On Wed, Feb 19, 2020 at 03:59:41PM -0600, Daniel Díaz wrote:
->>>
->>> When I download a specific kernel release, how can I know what LLVM
->>> git-hash or version I need (to use BPF-selftests)?
-> 
-> as discussed we're going to add documentation-like file that will
-> list required commits in tools.
-> This will be enforced for future llvm/pahole commits.
-> 
->>> Do you think it is reasonable to require end-users to compile their own
->>> bleeding edge version of LLVM, to use BPF-selftests?
-> 
-> absolutely.
+Add kernel_pread_file* support to kernel to allow for partial read
+of files with an offset into the file.  Existing kernel_read_file
+functions call new kernel_pread_file functions with offset=0 and
+flags=KERNEL_PREAD_FLAG_WHOLE.
 
-+ linux-kselftest@vger.kernel.org
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+---
+ fs/exec.c          | 77 ++++++++++++++++++++++++++++++++++++----------
+ include/linux/fs.h | 15 +++++++++
+ 2 files changed, 75 insertions(+), 17 deletions(-)
 
-End-users in this context are users and not necessarily developers.
+diff --git a/fs/exec.c b/fs/exec.c
+index db17be51b112..a38f8fb432fa 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -896,10 +896,14 @@ struct file *open_exec(const char *name)
+ }
+ EXPORT_SYMBOL(open_exec);
+ 
+-int kernel_read_file(struct file *file, void **buf, loff_t *size,
+-		     loff_t max_size, enum kernel_read_file_id id)
+-{
+-	loff_t i_size, pos;
++int kernel_pread_file(struct file *file, void **buf, loff_t *size,
++		      loff_t pos, loff_t max_size, unsigned int flags,
++		      enum kernel_read_file_id id)
++{
++	loff_t alloc_size;
++	loff_t buf_pos;
++	loff_t read_end;
++	loff_t i_size;
+ 	ssize_t bytes = 0;
+ 	int ret;
+ 
+@@ -919,21 +923,31 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+-	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
++
++	/* Default read to end of file */
++	read_end = i_size;
++
++	/* Allow reading partial portion of file */
++	if ((flags & KERNEL_PREAD_FLAG_PART) &&
++	    (i_size > (pos + max_size)))
++		read_end = pos + max_size;
++
++	alloc_size = read_end - pos;
++	if (i_size > SIZE_MAX || (max_size > 0 && alloc_size > max_size)) {
+ 		ret = -EFBIG;
+ 		goto out;
+ 	}
+ 
+ 	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
+-		*buf = vmalloc(i_size);
++		*buf = vmalloc(alloc_size);
+ 	if (!*buf) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	pos = 0;
+-	while (pos < i_size) {
+-		bytes = kernel_read(file, *buf + pos, i_size - pos, &pos);
++	buf_pos = 0;
++	while (pos < read_end) {
++		bytes = kernel_read(file, *buf + buf_pos, read_end - pos, &pos);
+ 		if (bytes < 0) {
+ 			ret = bytes;
+ 			goto out_free;
+@@ -941,14 +955,16 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 
+ 		if (bytes == 0)
+ 			break;
++
++		buf_pos += bytes;
+ 	}
+ 
+-	if (pos != i_size) {
++	if (pos != read_end) {
+ 		ret = -EIO;
+ 		goto out_free;
+ 	}
+ 
+-	ret = security_kernel_post_read_file(file, *buf, i_size, id);
++	ret = security_kernel_post_read_file(file, *buf, alloc_size, id);
+ 	if (!ret)
+ 		*size = pos;
+ 
+@@ -964,10 +980,20 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 	allow_write_access(file);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(kernel_pread_file);
++
++int kernel_read_file(struct file *file, void **buf, loff_t *size,
++		     loff_t max_size, enum kernel_read_file_id id)
++{
++	return kernel_pread_file(file, buf, size, 0, max_size,
++				 KERNEL_PREAD_FLAG_WHOLE, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file);
+ 
+-int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
+-			       loff_t max_size, enum kernel_read_file_id id)
++int kernel_pread_file_from_path(const char *path, void **buf,
++				loff_t *size, loff_t pos,
++				loff_t max_size, unsigned int flags,
++				enum kernel_read_file_id id)
+ {
+ 	struct file *file;
+ 	int ret;
+@@ -979,14 +1005,23 @@ int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
+ 	if (IS_ERR(file))
+ 		return PTR_ERR(file);
+ 
+-	ret = kernel_read_file(file, buf, size, max_size, id);
++	ret = kernel_pread_file(file, buf, size, pos, max_size, flags, id);
+ 	fput(file);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(kernel_pread_file_from_path);
++
++int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
++			       loff_t max_size, enum kernel_read_file_id id)
++{
++	return kernel_pread_file_from_path(path, buf, size, 0, max_size,
++					   KERNEL_PREAD_FLAG_WHOLE, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
+ 
+-int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
+-			     enum kernel_read_file_id id)
++int kernel_pread_file_from_fd(int fd, void **buf, loff_t *size, loff_t pos,
++			      loff_t max_size, unsigned int flags,
++			      enum kernel_read_file_id id)
+ {
+ 	struct fd f = fdget(fd);
+ 	int ret = -EBADF;
+@@ -994,11 +1029,19 @@ int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
+ 	if (!f.file)
+ 		goto out;
+ 
+-	ret = kernel_read_file(f.file, buf, size, max_size, id);
++	ret = kernel_pread_file(f.file, buf, size, pos, max_size, flags, id);
+ out:
+ 	fdput(f);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(kernel_pread_file_from_fd);
++
++int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
++			     enum kernel_read_file_id id)
++{
++	return kernel_pread_file_from_fd(fd, buf, size, 0, max_size,
++					 KERNEL_PREAD_FLAG_WHOLE, id);
++}
+ EXPORT_SYMBOL_GPL(kernel_read_file_from_fd);
+ 
+ ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 3cd4fe6b845e..8f39530cfcc2 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -3008,10 +3008,25 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
+ 	return kernel_read_file_str[id];
+ }
+ 
++/* Flags used by kernel_pread_file functions */
++#define KERNEL_PREAD_FLAG_WHOLE	0x0000 /* Only Allow reading of whole file */
++#define KERNEL_PREAD_FLAG_PART	0x0001 /* Allow reading part of file */
++
++extern int kernel_pread_file(struct file *file, void **buf, loff_t *size,
++			     loff_t pos, loff_t max_size, unsigned int flags,
++			     enum kernel_read_file_id id);
+ extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
+ 			    enum kernel_read_file_id);
++extern int kernel_pread_file_from_path(const char *path, void **buf,
++				       loff_t *size, loff_t pos,
++				       loff_t max_size, unsigned int flags,
++				       enum kernel_read_file_id id);
+ extern int kernel_read_file_from_path(const char *, void **, loff_t *, loff_t,
+ 				      enum kernel_read_file_id);
++extern int kernel_pread_file_from_fd(int fd, void **buf, loff_t *size,
++				    loff_t pos, loff_t max_size,
++				    unsigned int flags,
++				    enum kernel_read_file_id id);
+ extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
+ 				    enum kernel_read_file_id);
+ extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+-- 
+2.17.1
 
-> If a developer wants to send a patch they must run all selftests and
-> all of them must pass in their environment.
-> "but I'm adding a tracing feature and don't care about networking tests
-> failing"... is not acceptable.
-
-This is a reasonable expectation when a developers sends bpf patches.
-
-> 
->>> I do hope that some end-users of BPF-selftests will be CI-systems.
->>> That also implies that CI-system maintainers need to constantly do
->>> "latest built from sources" of LLVM git-tree to keep up.  Is that a
->>> reasonable requirement when buying a CI-system in the cloud?
-> 
-> "buying CI-system in the cloud" ?
-> If I could buy such system I would pay for it out of my own pocket to save
-> maintainer's and developer's time.
-> 
->> We [1] are end users of kselftests and many other test suites [2]. We
->> run all of our testing on every git-push on linux-stable-rc, mainline,
->> and linux-next -- approximately 1 million tests per week. We have a
->> dedicated engineering team looking after this CI infrastructure and
->> test results, and as such, I can wholeheartedly echo Jesper's
->> sentiment here: We would really like to help kernel maintainers and
->> developers by automatically testing their code in real hardware, but
->> the BPF kselftests are difficult to work with from a CI perspective.
->> We have caught and reported [3] many [4] build [5] failures [6] in the
->> past for libbpf/Perf, but building is just one of the pieces. We are
->> unable to run the entire BPF kselftests because only a part of the
->> code builds, so our testing is very limited there.
->>
->> We hope that this situation can be improved and that our and everyone
->> else's automated testing can help you guys too. For this to work out,
->> we need some help.
-> 
-
-It would be helpful understand what "help" is in this context.
-
-> I don't understand what kind of help you need. Just install the latest tools.
-
-What would be helpful is to write bpf tests such that older tests that
-worked on older llvm versions continue to work and with some indication
-on which tests require new bleeding edge tools.
-
-> Both the latest llvm and the latest pahole are required.
-
-It would be helpful if you can elaborate why latest tools are a
-requirement.
-
-> If by 'help' you mean to tweak selftests to skip tests then it's a nack.
-> We have human driven CI. Every developer must run selftests/bpf before
-> emailing the patches. Myself and Daniel run them as well before applying.
-> These manual runs is the only thing that keeps bpf tree going.
-> If selftests get to skip tests humans will miss those errors.
-> When I don't see '0 SKIPPED, 0 FAILED' I go and investigate.
-> Anything but zero is a path to broken kernels.
-> 
-> Imagine the tests would get skipped when pahole is too old.
-> That would mean all of the kernel features from year 2019
-> would get skipped. Is there a point of running such selftests?
-> I think the value is not just zero. The value is negative.
-> Such selftests that run old stuff would give false believe
-> that they do something meaningful.
-> "but CI can do build only tests"... If 'helping' such CI means hurting the
-> key developer/maintainer workflow such CI is on its own.
-> 
-
-Skipping tests will be useless. I am with you on that. However,
-figuring out how to maintain some level of backward compatibility
-to run at least older tests and warn users to upgrade would be
-helpful.
-
-I suspect currently users are ignoring bpf failures because they
-are unable to keep up with the requirement to install newer tools
-to run the tests. This isn't great either.
-
-Users that care are sharing their pain to see if they can get some
-help or explanation on why new tools are required every so often.
-I don't think everybody understands why. :)
-
-thanks,
--- Shuah
