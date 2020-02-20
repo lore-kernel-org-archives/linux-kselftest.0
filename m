@@ -2,149 +2,133 @@ Return-Path: <SRS0=O+09=4I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E439AC11D04
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 08:43:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3751EC11D04
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 11:37:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B8C9424654
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 08:43:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 096D4208C4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 11:37:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="j4caedeS"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="eD/dz/6o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbgBTIn3 (ORCPT
+        id S1726885AbgBTLh6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Feb 2020 03:43:29 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:36242 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726764AbgBTIn3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 03:43:29 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01K8cv00119896;
-        Thu, 20 Feb 2020 08:43:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=3DBcmRHN7uJqFWQQFJU2jUM8me9GZcXg5MtIEEBW19g=;
- b=j4caedeSclA+wC5JW86i2YTtdgvD6z7Q21bpuXdgyugzbfmGJ6PlhDKHkjWMPTezuUyA
- 4lUF0IJ01FpBja8+blyiBMv0tip0G6/yebcmWvfF8/qlY9sP4wQT5Op/tDr7ZnNR3BRH
- aKDOHjlNRAqOpdu+XN+PRUTZ3wrMr6M/aBqWq9dRfpbyLkeGRCwOeMDd7p1aH6eaIpbJ
- ytoIF6njfY/t9ju3kSgineXtxaJ0GoniyjbWzBPLiwPlx0gs7LGE0OgL5Hdem3uBeZwr
- 4i+VeWEmWcVvdn8/X3/NnD0/JhjFZuaZhRCq9yqv2IcQFt4B2MhDAgWCKpTaQ+zghH1p MA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2y8udd881t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Feb 2020 08:43:13 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01K8bnNp079829;
-        Thu, 20 Feb 2020 08:43:12 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2y8udbd8vm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Feb 2020 08:43:12 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 01K8h8m4010277;
-        Thu, 20 Feb 2020 08:43:08 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 20 Feb 2020 00:43:07 -0800
-Date:   Thu, 20 Feb 2020 11:42:55 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v2 3/7] test_firmware: add partial read support for
- request_firmware_into_buf
-Message-ID: <20200220084255.GW7838@kadam>
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-4-scott.branden@broadcom.com>
+        Thu, 20 Feb 2020 06:37:58 -0500
+Received: from ozlabs.org ([203.11.71.1]:40943 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726825AbgBTLh6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 06:37:58 -0500
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 48NXdb56Bbz9sRN; Thu, 20 Feb 2020 22:37:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1582198675;
+        bh=0PSWQnV4dwtbFWEhb/W8Y1bno6l3vVQsEFwu7tdFrEU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eD/dz/6oFavYPAFlm4RSrV0jozd5zuxmigkXpeXi7lsb/bfHkMH+MSNpwBSDjqVXt
+         7rvmLoUquCNkrqXPlRV+X7yJTpGB5FC58WBnFcAWQ6lMY42PEUBAXmKx9N0ufOIUqu
+         FDxom2OxM99owVe0UtHlp/EYUjT1w4D1Kh19RTLJvS7QMGvNzbkL8jTX+aQo+Em4c8
+         RDiYr8/Ds3zrVkYPHAR/0IkzBnO+QdN0GqoDEBKC29mznQrB1ltOFI4qH1QEakKOgV
+         z0jdw5BOJDJnlOji+t9dJk8d1j6M9aHa7i+Q2+DXCFFIOxyaiXemC6FwYKpfBdgALm
+         bHH2f+dy8Rm2g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     linux-kselftest@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        mathieu.desnoyers@efficios.com, peterz@infradead.org,
+        paulmck@kernel.org, boqun.feng@gmail.com
+Subject: [PATCH] selftests/rseq: Fix out-of-tree compilation
+Date:   Thu, 20 Feb 2020 22:37:48 +1100
+Message-Id: <20200220113748.15990-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.21.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200220004825.23372-4-scott.branden@broadcom.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9536 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002200064
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9536 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002200064
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 04:48:21PM -0800, Scott Branden wrote:
-> +static int test_dev_config_update_size_t(const char *buf,
-> +					 size_t size,
-> +					 size_t *cfg)
-> +{
-> +	int ret;
-> +	long new;
-> +
-> +	ret = kstrtol(buf, 10, &new);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (new > SIZE_MAX)
+Currently if you build with O=... the rseq tests don't build:
 
-This "new" variable is long and SIZE_MAX is ULONG_MAX so the condition
-can't be true.
+  $ make O=$PWD/output -C tools/testing/selftests/ TARGETS=rseq
+  make: Entering directory '/linux/tools/testing/selftests'
+  ...
+  make[1]: Entering directory '/linux/tools/testing/selftests/rseq'
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./  -shared -fPIC rseq.c -lpthread -o /linux/output/rseq/librseq.so
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/output/rseq/basic_test
+  /usr/bin/ld: cannot find -lrseq
+  collect2: error: ld returned 1 exit status
 
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&test_fw_mutex);
-> +	*(size_t *)cfg = new;
-> +	mutex_unlock(&test_fw_mutex);
-> +
-> +	/* Always return full write size even if we didn't consume all */
-> +	return size;
-> +}
-> +
-> +static ssize_t test_dev_config_show_size_t(char *buf, int cfg)
-> +{
-> +	size_t val;
-> +
-> +	mutex_lock(&test_fw_mutex);
-> +	val = cfg;
-> +	mutex_unlock(&test_fw_mutex);
+This is because the library search path points to the source
+directory, not the output.
 
-Both val and cfg are stack variables so there is no need for locking.
-Probably you meant to pass a pointer to cfg?
+We can fix it by changing the library search path to $(OUTPUT).
 
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%zu\n", val);
-> +}
-> +
->  static ssize_t test_dev_config_show_int(char *buf, int cfg)
->  {
->  	int val;
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+---
 
-regards,
-dan carpenter
+This works in all cases.
 
+With O= set:
+
+  $ make O=$PWD/output -C tools/testing/selftests/ TARGETS=rseq
+  ...
+  make[1]: Entering directory '/linux/tools/testing/selftests/rseq'
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/output/rseq/basic_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  basic_percpu_ops_test.c -lpthread -lrseq -o /linux/output/rseq/basic_percpu_ops_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  param_test.c -lpthread -lrseq -o /linux/output/rseq/param_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  -DBENCHMARK param_test.c -lpthread -lrseq -o /linux/output/rseq/param_test_benchmark
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  -DRSEQ_COMPARE_TWICE param_test.c -lpthread -lrseq -o /linux/output/rseq/param_test_compare_twice
+  make[1]: Leaving directory '/linux/tools/testing/selftests/rseq'
+  make: Leaving directory '/linux/tools/testing/selftests'
+
+And also without, in which case the selftest makefiles set OUTPUT to
+the full path of the source directory:
+
+  $ make -C tools/testing/selftests/ TARGETS=rseq
+  ...
+  make[1]: Entering directory '/linux/tools/testing/selftests/rseq'
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -shared -fPIC rseq.c -lpthread -o /linux/tools/testing/selftests/rseq/librseq.so
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_percpu_ops_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_percpu_ops_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DBENCHMARK param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_benchmark
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DRSEQ_COMPARE_TWICE param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_compare_twice
+  make[1]: Leaving directory '/linux/tools/testing/selftests/rseq'
+  make: Leaving directory '/linux/tools/testing/selftests'
+
+And finally, it also works if you build directly in the rseq
+directory, eg:
+
+  $ cd tools/testing/selftests/rseq
+  $ make
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -shared -fPIC rseq.c -lpthread -o /linux/tools/testing/selftests/rseq/librseq.so
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_percpu_ops_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_percpu_ops_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DBENCHMARK param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_benchmark
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DRSEQ_COMPARE_TWICE param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_compare_twice
+---
+ tools/testing/selftests/rseq/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index d6469535630a..708c1b345245 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -4,7 +4,7 @@ ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
+ CLANG_FLAGS += -no-integrated-as
+ endif
+ 
+-CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
++CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L$(OUTPUT) -Wl,-rpath=./ \
+ 	  $(CLANG_FLAGS)
+ LDLIBS += -lpthread
+ 
+
+base-commit: 11a48a5a18c63fd7621bb050228cebf13566e4d8
+-- 
+2.21.1
 
