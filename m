@@ -2,57 +2,42 @@ Return-Path: <SRS0=O+09=4I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F061FC11D80
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91133C5ACC4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 01:04:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C698B24671
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 00:49:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6529721D56
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 01:04:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="iRWHPF4Z"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Y2F8BNU9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727346AbgBTAsk (ORCPT
+        id S1726962AbgBTBEp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Feb 2020 19:48:40 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:34073 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727329AbgBTAsk (ORCPT
+        Wed, 19 Feb 2020 20:04:45 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:37714 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbgBTBEo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 19:48:40 -0500
-Received: by mail-pg1-f196.google.com with SMTP id j4so1009941pgi.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2020 16:48:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=MCnc7lIWYjCyOM/3eUwsK77pJjRdrQHPG+GhI2DPtOU=;
-        b=iRWHPF4ZxnvlZs+BPBJTKw5+kW68aECGGTAzv+JtpeB/RwX8M734IfDoYVGoNPk9F4
-         VmtB9RXFMaXFNiYpqLN8V3xETnXZBktVcU7NO+/YUMNsmOPqCOXxw9UHsWVgXYgsziFx
-         UKfQ//Feovjz4wGRg9goWtbJLBqZfrJ3YZQ6I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=MCnc7lIWYjCyOM/3eUwsK77pJjRdrQHPG+GhI2DPtOU=;
-        b=hb5GwI7gNIOIxHzfvOIN5bUYojcgxaA7TUg9odi08L+UNWHu7NAjBeQo6AnUaUDM4A
-         hMfNSJSOL5fG+1RcNZZcxnNuEEH3hmJ+aI6UpxHvbqSi4VoiZayMuRRISHXtY7dStw7z
-         5aQZ8C9iBUiOsTxmxcnGSyJazcg8sotytg7TheR4O4mPkxd+5BrNToZtYfyIVcnSusPN
-         dfuPfrNlnQIH6nGM0d3rZ1j1T0Kg6nTLaLPQMetWut26SSAyzXZx6mnaHRR/3A4wADyN
-         f8C0Eio7llop8/rkkP/8qc3bnZc7+AYWMQ+8uoCUQ5mPZqVlGj6Rp1haaRDrX99qfKDV
-         GTew==
-X-Gm-Message-State: APjAAAWCPEGZGOCe3ldNIxyJprmabyRTFkAr0RhIdIgZZD9YvWgUFdnk
-        H9I1SRyh/SbEXzhvI8Q1yVcW6g==
-X-Google-Smtp-Source: APXvYqyPmPeQJdr9Oa52QoVxIdceLP7MLylnFV/IINfia5v++zGBusoLcQHbou1xSZoghCPOQ3Iu3w==
-X-Received: by 2002:a63:ae0a:: with SMTP id q10mr30424929pgf.178.1582159719593;
-        Wed, 19 Feb 2020 16:48:39 -0800 (PST)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id 64sm816323pfd.48.2020.02.19.16.48.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 16:48:38 -0800 (PST)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Wed, 19 Feb 2020 20:04:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=3BHL21ZqYvf4cXWBd1/ab6+pZgwMbOograui/t2in4Q=; b=Y2F8BNU9IGvys2N2MQOenMYNwp
+        +IrnfcmBH0shv9ZUFezaJBrOrMWeJ56kYqWE/S2Co2mp3i1dhZ7D41EsTGAV/yzAHp6kmpl8pMx4y
+        Vz+b2TRxJIDtn63xKBdI/AxAsIUmmRSsdA0yrfu2DcbWpKDkCNyl11/OByWqIF3rNO4EpuEqokqvl
+        A+cSkuI1maBCBJMyQexlSpmMIWzduXQ5i5x6IDABAtR/jrqMXVlFPWizsED2mb2ICNUcnpIu4sfhS
+        DlNmlg3WSV+qRWWX67zw3p/LatenkuXdRZMB4pl0HHOBu8MAy/7r98fbw0e+OLYch2F8b73oqiTyz
+        XcLFyvyA==;
+Received: from [2603:3004:32:9a00::4074]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j4aGe-0002wj-9E; Thu, 20 Feb 2020 01:04:40 +0000
+Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -70,66 +55,87 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v2 0/7] firmware: add partial read support in request_firmware_into_buf
-Date:   Wed, 19 Feb 2020 16:48:18 -0800
-Message-Id: <20200220004825.23372-1-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-7-scott.branden@broadcom.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <827a4520-95ce-5264-90d9-ed730e5918e6@infradead.org>
+Date:   Wed, 19 Feb 2020 17:04:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <20200220004825.23372-7-scott.branden@broadcom.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series adds partial read support in request_firmware_into_buf.
-In order to accept the enhanced API it has been requested that kernel
-selftests and upstreamed driver utilize the API enhancement and so
-are included in this patch series.
+Hi,
 
-Also in this patch series is the addition of a new Broadcom VK driver
-utilizing the new request_firmware_into_buf enhanced API.
+On 2/19/20 4:48 PM, Scott Branden wrote:
+> diff --git a/drivers/misc/bcm-vk/Kconfig b/drivers/misc/bcm-vk/Kconfig
+> new file mode 100644
+> index 000000000000..c75dfb89a38d
+> --- /dev/null
+> +++ b/drivers/misc/bcm-vk/Kconfig
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Broadcom VK device
+> +#
+> +config BCM_VK
+> +	tristate "Support for Broadcom VK Accelerators"
+> +	depends on PCI_MSI
+> +	default m
 
-Scott Branden (7):
-  fs: introduce kernel_pread_file* support
-  firmware: add offset to request_firmware_into_buf
-  test_firmware: add partial read support for request_firmware_into_buf
-  firmware: test partial file reads of request_firmware_into_buf
-  bcm-vk: add bcm_vk UAPI
-  misc: bcm-vk: add Broadcom VK driver
-  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
+Need to justify default m. Normally we don't add drivers as enabled unless
+they are required for basic (boot) operation.
 
- MAINTAINERS                                   |    7 +
- drivers/base/firmware_loader/firmware.h       |    5 +
- drivers/base/firmware_loader/main.c           |   49 +-
- drivers/misc/Kconfig                          |    1 +
- drivers/misc/Makefile                         |    1 +
- drivers/misc/bcm-vk/Kconfig                   |   42 +
- drivers/misc/bcm-vk/Makefile                  |   11 +
- drivers/misc/bcm-vk/bcm_vk.h                  |  357 +++++
- drivers/misc/bcm-vk/bcm_vk_dev.c              | 1197 +++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.c              | 1359 +++++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.h              |  210 +++
- drivers/misc/bcm-vk/bcm_vk_sg.c               |  273 ++++
- drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
- drivers/misc/bcm-vk/bcm_vk_tty.c              |  327 ++++
- drivers/soc/qcom/mdt_loader.c                 |    7 +-
- fs/exec.c                                     |   77 +-
- include/linux/firmware.h                      |    8 +-
- include/linux/fs.h                            |   15 +
- include/uapi/linux/misc/bcm_vk.h              |  117 ++
- lib/test_firmware.c                           |  139 +-
- .../selftests/firmware/fw_filesystem.sh       |   80 +
- 21 files changed, 4305 insertions(+), 37 deletions(-)
- create mode 100644 drivers/misc/bcm-vk/Kconfig
- create mode 100644 drivers/misc/bcm-vk/Makefile
- create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
- create mode 100644 include/uapi/linux/misc/bcm_vk.h
+> +	help
+> +	  Select this option to enable support for Broadcom
+> +	  VK Accelerators.  VK is used for performing
+> +	  specific video offload processing.  This driver enables
+> +	  userspace programs to access these accelerators via /dev/bcm-vk.N
+> +	  devices.
+> +
+> +	  If unsure, say N.
+> +
+> +if BCM_VK
+> +
+> +config BCM_VK_H2VK_VERIFY_AND_RETRY
+> +	bool "Host To VK Verifiy Data and Retry"
 
+	                 Verify
+
+> +	help
+> +	  Turn on to verify the data passed down to VK is good,
+> +	  and if not, do a retry until it succeeds.
+
+No timeout on that retry?
+
+> +	  This is a debug/workaround on FPGA PCIe timing issues
+> +	  but may be found useful for debugging other PCIe hardware issues.
+> +	  Small performance loss by enabling this debug config.
+> +	  For properly operating PCIe hardware no need to enable this.
+> +
+> +	  If unsure, say N.
+> +
+> +config BCM_VK_QSTATS
+> +	bool "VK Queue Statistics"
+> +	help
+> +	  Turn on to enable Queue Statistics.
+> +	  These are useful for debugging purposes.
+> +	  Some performance loss by enabling this debug config.
+> +	  For properly operating PCIe hardware no need to enable this.
+> +
+> +	  If unsure, say N.
+> +
+> +endif
+
+cheers.
 -- 
-2.17.1
-
+~Randy
