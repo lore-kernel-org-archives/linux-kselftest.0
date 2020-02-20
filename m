@@ -2,71 +2,142 @@ Return-Path: <SRS0=O+09=4I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D14C5ACC4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 01:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52081C3404C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 04:42:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C41824670
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 01:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582162218;
-	bh=EpRXWJGGUUbhRf9VzBEnFF/3XdEE4MhQdUCQ0mtrK0E=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=VK9RvhFu49C9pI648vqS6Qvaan8eSPOBhrlbH5S6w4/zyXgMASvEf64Pqwe9KpG4M
-	 mnSLGP2m2zK6fBQqMTHqj87EYcrDmQV0Jw0O9VOYPqN9XjRXyuXW7fhE0Nroqlmwd1
-	 5hfSrtDFgLXiV1PJr7Ak2vIKiOOgtVHpFVW6AJ6Y=
+	by mail.kernel.org (Postfix) with ESMTP id 207502465D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Feb 2020 04:42:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="AwE8pWyc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbgBTBaS (ORCPT
+        id S1727973AbgBTEmt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Feb 2020 20:30:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36780 "EHLO mail.kernel.org"
+        Wed, 19 Feb 2020 23:42:49 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39729 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726962AbgBTBaS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 20:30:18 -0500
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.6-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582162217;
-        bh=EpRXWJGGUUbhRf9VzBEnFF/3XdEE4MhQdUCQ0mtrK0E=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=dN7OJdhiFY5BsWz1ezqX84nhsMxOV3svROfrcS5wNwfHdsGHgk5/d5h3lSfhYIbYH
-         d0Nd3qMKSFJmRg/WquMkPRHaJ5hBQUOv+7s55nVbTmjP6LelBuqTHiWCuwQAdru3uD
-         66EYbTUXJZlc4XsKcpVPxM+jwjZfNoa620GWDW4I=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <a95f0345-405b-82f4-85cd-c0b80ba700e7@linuxfoundation.org>
-References: <a95f0345-405b-82f4-85cd-c0b80ba700e7@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a95f0345-405b-82f4-85cd-c0b80ba700e7@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-5.6-rc3
-X-PR-Tracked-Commit-Id: 9a0584f05687947d5a0b87f046bcd2592a55e67c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ca7e1fd1026c5af6a533b4b5447e1d2f153e28f2
-Message-Id: <158216221756.30253.5687014824412252935.pr-tracker-bot@kernel.org>
-Date:   Thu, 20 Feb 2020 01:30:17 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        id S1727469AbgBTEmt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Feb 2020 23:42:49 -0500
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 48NMQb1JZMz9sRt; Thu, 20 Feb 2020 15:42:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1582173767;
+        bh=DYCVUaJqREzhND+/ZTURlnZqhJ6ZboY/OqZaFazcPb8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AwE8pWycjubfvwD9jO89f6JQoUD0PilynV9mjD6EgLGfXn2d3qYuW5f621z4s0AuO
+         n0oljC15XWSLEOAYfJmx/kakMY9RHpZN8fD/lv8P3NAzgL/ExBzcE+VEF4r7yWKi3v
+         xdV9P5X1BTcXOlyh2fTwR3uBE/XK73IFWlxNilq0Wb/p6nsPcTIBX04UHmvahaIfkH
+         b3foH8VpvuUaEr7AAbde6NxMoTICRM7SXfPThMErfpcCkAGXpSfAXA73mRkkrdra0a
+         Sqf0DMVb0U5pubfX0hp3p/9JUMXzn82TJqmUFUKJVnsu9hkjKm3z3SeoY0HffLgRVK
+         Y/PQ2FWnOJgew==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     linux-kselftest@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: Install settings files to fix TIMEOUT failures
+Date:   Thu, 20 Feb 2020 15:42:41 +1100
+Message-Id: <20200220044241.2878-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.21.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Wed, 19 Feb 2020 15:33:51 -0700:
+Commit 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second
+timeout per test") added a 45 second timeout for tests, and also added
+a way for tests to customise the timeout via a settings file.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.6-rc3
+For example the ftrace tests take multiple minutes to run, so they
+were given longer in commit b43e78f65b1d ("tracing/selftests: Turn off
+timeout setting").
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ca7e1fd1026c5af6a533b4b5447e1d2f153e28f2
+This works when the tests are run from the source tree. However if the
+tests are installed with "make -C tools/testing/selftests install",
+the settings files are not copied into the install directory. When the
+tests are then run from the install directory the longer timeouts are
+not applied and the tests timeout incorrectly.
 
-Thank you!
+So add the settings files to TEST_FILES of the appropriate Makefiles
+to cause the settings files to be installed using the existing install
+logic.
 
+Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+---
+ tools/testing/selftests/ftrace/Makefile    | 2 +-
+ tools/testing/selftests/livepatch/Makefile | 2 ++
+ tools/testing/selftests/net/mptcp/Makefile | 2 ++
+ tools/testing/selftests/rseq/Makefile      | 2 ++
+ tools/testing/selftests/rtc/Makefile       | 2 ++
+ 5 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+index cd1f5b3a7774..d6e106fbce11 100644
+--- a/tools/testing/selftests/ftrace/Makefile
++++ b/tools/testing/selftests/ftrace/Makefile
+@@ -2,7 +2,7 @@
+ all:
+ 
+ TEST_PROGS := ftracetest
+-TEST_FILES := test.d
++TEST_FILES := test.d settings
+ EXTRA_CLEAN := $(OUTPUT)/logs/*
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index 3876d8d62494..1acc9e1fa3fb 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -8,4 +8,6 @@ TEST_PROGS := \
+ 	test-state.sh \
+ 	test-ftrace.sh
+ 
++TEST_FILES := settings
++
+ include ../lib.mk
+diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+index 93de52016dde..ba450e62dc5b 100644
+--- a/tools/testing/selftests/net/mptcp/Makefile
++++ b/tools/testing/selftests/net/mptcp/Makefile
+@@ -8,6 +8,8 @@ TEST_PROGS := mptcp_connect.sh
+ 
+ TEST_GEN_FILES = mptcp_connect
+ 
++TEST_FILES := settings
++
+ EXTRA_CLEAN := *.pcap
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index d6469535630a..f1053630bb6f 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -19,6 +19,8 @@ TEST_GEN_PROGS_EXTENDED = librseq.so
+ 
+ TEST_PROGS = run_param_test.sh
+ 
++TEST_FILES := settings
++
+ include ../lib.mk
+ 
+ $(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
+diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
+index de9c8566672a..90fa1a346908 100644
+--- a/tools/testing/selftests/rtc/Makefile
++++ b/tools/testing/selftests/rtc/Makefile
+@@ -6,4 +6,6 @@ TEST_GEN_PROGS = rtctest
+ 
+ TEST_GEN_PROGS_EXTENDED = setdate
+ 
++TEST_FILES := settings
++
+ include ../lib.mk
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.21.1
+
