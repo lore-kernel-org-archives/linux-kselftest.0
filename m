@@ -4,25 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E287C11D00
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 03:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9047CC11D24
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 03:16:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E81F024654
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 03:16:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67422222C4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 03:16:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgBUDQY (ORCPT
+        id S1729731AbgBUDQk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Feb 2020 22:16:24 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59496 "EHLO mx2.suse.de"
+        Thu, 20 Feb 2020 22:16:40 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59654 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727488AbgBUDQY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 22:16:24 -0500
+        id S1729721AbgBUDQk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 22:16:40 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 9A8EEB1FE;
-        Fri, 21 Feb 2020 03:16:20 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 28A52ADA3;
+        Fri, 21 Feb 2020 03:16:37 +0000 (UTC)
 From:   Michal Rostecki <mrostecki@opensuse.org>
 To:     bpf@vger.kernel.org
 Cc:     Michal Rostecki <mrostecki@opensuse.org>,
@@ -38,9 +39,9 @@ Cc:     Michal Rostecki <mrostecki@opensuse.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v2 1/5] bpftool: Move out sections to separate functions
-Date:   Fri, 21 Feb 2020 04:16:56 +0100
-Message-Id: <20200221031702.25292-2-mrostecki@opensuse.org>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add test for "bpftool feature" command
+Date:   Fri, 21 Feb 2020 04:17:00 +0100
+Message-Id: <20200221031702.25292-6-mrostecki@opensuse.org>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200221031702.25292-1-mrostecki@opensuse.org>
 References: <20200221031702.25292-1-mrostecki@opensuse.org>
@@ -51,277 +52,291 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove all calls of print_end_then_start_section function and for loops
-out from the do_probe function. Instead, provide separate functions for
-each section (like i.e. section_helpers) which are called in do_probe.
-This change is motivated by better readability.
+Add Python module with tests for "bpftool feature" command, which mainly
+wheck whether the "full" option is working properly.
 
 Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
 ---
- tools/bpf/bpftool/feature.c | 219 +++++++++++++++++++++---------------
- 1 file changed, 126 insertions(+), 93 deletions(-)
+ tools/testing/selftests/.gitignore          |   5 +-
+ tools/testing/selftests/bpf/Makefile        |   3 +-
+ tools/testing/selftests/bpf/test_bpftool.py | 228 ++++++++++++++++++++
+ tools/testing/selftests/bpf/test_bpftool.sh |   5 +
+ 4 files changed, 239 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/test_bpftool.py
+ create mode 100755 tools/testing/selftests/bpf/test_bpftool.sh
 
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 941873d778d8..345e4a2b4f53 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -112,18 +112,12 @@ print_start_section(const char *json_title, const char *plain_title,
- 	}
- }
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index 61df01cdf0b2..304fdf1a21dc 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -3,4 +3,7 @@ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
+ tpm2/SpaceTest.log
+-tpm2/*.pyc
++
++# Python bytecode and cache
++__pycache__/
++*.py[cod]
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 257a1aaaa37d..e7d822259c50 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -62,7 +62,8 @@ TEST_PROGS := test_kmod.sh \
+ 	test_tc_tunnel.sh \
+ 	test_tc_edt.sh \
+ 	test_xdping.sh \
+-	test_bpftool_build.sh
++	test_bpftool_build.sh \
++	test_bpftool.sh
  
--static void
--print_end_then_start_section(const char *json_title, const char *plain_title,
--			     const char *define_comment,
--			     const char *define_prefix)
-+static void print_end_section(void)
- {
- 	if (json_output)
- 		jsonw_end_object(json_wtr);
- 	else
- 		printf("\n");
--
--	print_start_section(json_title, plain_title, define_comment,
--			    define_prefix);
- }
- 
- /* Probing functions */
-@@ -584,13 +578,130 @@ probe_large_insn_limit(const char *define_prefix, __u32 ifindex)
- 			   res, define_prefix);
- }
- 
-+static void
-+section_system_config(enum probe_component target, const char *define_prefix)
-+{
-+	switch (target) {
-+	case COMPONENT_KERNEL:
-+	case COMPONENT_UNSPEC:
-+		if (define_prefix)
-+			break;
+ TEST_PROGS_EXTENDED := with_addr.sh \
+ 	with_tunnels.sh \
+diff --git a/tools/testing/selftests/bpf/test_bpftool.py b/tools/testing/selftests/bpf/test_bpftool.py
+new file mode 100644
+index 000000000000..7f545feaec98
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_bpftool.py
+@@ -0,0 +1,228 @@
++# Copyright (c) 2020 SUSE LLC.
++#
++# This software is licensed under the GNU General License Version 2,
++# June 1991 as shown in the file COPYING in the top-level directory of this
++# source tree.
++#
++# THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS"
++# WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
++# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++# FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE
++# OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME
++# THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 +
-+		print_start_section("system_config",
-+				    "Scanning system configuration...",
-+				    NULL, /* define_comment never used here */
-+				    NULL); /* define_prefix always NULL here */
-+		if (check_procfs()) {
-+			probe_unprivileged_disabled();
-+			probe_jit_enable();
-+			probe_jit_harden();
-+			probe_jit_kallsyms();
-+			probe_jit_limit();
-+		} else {
-+			p_info("/* procfs not mounted, skipping related probes */");
-+		}
-+		probe_kernel_image_config();
-+		print_end_section();
-+		break;
-+	default:
-+		break;
-+	}
-+}
++import collections
++import functools
++import json
++import os
++import socket
++import subprocess
++import unittest
 +
-+static bool section_syscall_config(const char *define_prefix)
-+{
-+	bool res;
 +
-+	print_start_section("syscall_config",
-+			    "Scanning system call availability...",
-+			    "/*** System call availability ***/",
-+			    define_prefix);
-+	res = probe_bpf_syscall(define_prefix);
-+	print_end_section();
++# Add the source tree of bpftool and /usr/local/sbin to PATH
++cur_dir = os.path.dirname(os.path.realpath(__file__))
++bpftool_dir = os.path.abspath(os.path.join(cur_dir, "..", "..", "..", "..",
++                                           "tools", "bpf", "bpftool"))
++os.environ["PATH"] = bpftool_dir + ":/usr/local/sbin:" + os.environ["PATH"]
 +
-+	return res;
-+}
++# Probe sections
++SECTION_SYSTEM_CONFIG_PATTERN = b"Scanning system configuration..."
++SECTION_SYSCALL_CONFIG_PATTERN = b"Scanning system call availability..."
++SECTION_PROGRAM_TYPES_PATTERN = b"Scanning eBPF program types..."
++SECTION_MAP_TYPES_PATTERN = b"Scanning eBPF map types..."
++SECTION_HELPERS_PATTERN = b"Scanning eBPF helper functions..."
++SECTION_MISC_PATTERN = b"Scanning miscellaneous eBPF features..."
 +
-+static void
-+section_program_types(bool *supported_types, const char *define_prefix,
-+		      __u32 ifindex)
-+{
-+	unsigned int i;
 +
-+	print_start_section("program_types",
-+			    "Scanning eBPF program types...",
-+			    "/*** eBPF program types ***/",
-+			    define_prefix);
++class IfaceNotFoundError(Exception):
++    pass
 +
-+	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-+		probe_prog_type(i, supported_types, define_prefix, ifindex);
 +
-+	print_end_section();
-+}
++class UnprivilegedUserError(Exception):
++    pass
 +
-+static void section_map_types(const char *define_prefix, __u32 ifindex)
-+{
-+	unsigned int i;
 +
-+	print_start_section("map_types",
-+			    "Scanning eBPF map types...",
-+			    "/*** eBPF map types ***/",
-+			    define_prefix);
++def _bpftool(args, json=True):
++    _args = ["bpftool"]
++    if json:
++        _args.append("-j")
++    _args.extend(args)
 +
-+	for (i = BPF_MAP_TYPE_UNSPEC + 1; i < map_type_name_size; i++)
-+		probe_map_type(i, define_prefix, ifindex);
++    res = subprocess.run(_args, capture_output=True)
++    return res.stdout
 +
-+	print_end_section();
-+}
 +
-+static void
-+section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
-+{
-+	unsigned int i;
++def bpftool(args):
++    return _bpftool(args, json=False)
 +
-+	print_start_section("helpers",
-+			    "Scanning eBPF helper functions...",
-+			    "/*** eBPF helper functions ***/",
-+			    define_prefix);
 +
-+	if (define_prefix)
-+		printf("/*\n"
-+		       " * Use %sHAVE_PROG_TYPE_HELPER(prog_type_name, helper_name)\n"
-+		       " * to determine if <helper_name> is available for <prog_type_name>,\n"
-+		       " * e.g.\n"
-+		       " *	#if %sHAVE_PROG_TYPE_HELPER(xdp, bpf_redirect)\n"
-+		       " *		// do stuff with this helper\n"
-+		       " *	#elif\n"
-+		       " *		// use a workaround\n"
-+		       " *	#endif\n"
-+		       " */\n"
-+		       "#define %sHAVE_PROG_TYPE_HELPER(prog_type, helper)	\\\n"
-+		       "	%sBPF__PROG_TYPE_ ## prog_type ## __HELPER_ ## helper\n",
-+		       define_prefix, define_prefix, define_prefix,
-+		       define_prefix);
-+	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-+		probe_helpers_for_progtype(i, supported_types[i],
-+					   define_prefix, ifindex);
++def bpftool_json(args):
++    res = _bpftool(args)
++    return json.loads(res)
 +
-+	print_end_section();
-+}
 +
-+static void section_misc(const char *define_prefix, __u32 ifindex)
-+{
-+	print_start_section("misc",
-+			    "Scanning miscellaneous eBPF features...",
-+			    "/*** eBPF misc features ***/",
-+			    define_prefix);
-+	probe_large_insn_limit(define_prefix, ifindex);
-+	print_end_section();
-+}
++def get_default_iface():
++    for iface in socket.if_nameindex():
++        if iface[1] != "lo":
++            return iface[1]
++    raise IfaceNotFoundError("Could not find any network interface to probe")
 +
- static int do_probe(int argc, char **argv)
- {
- 	enum probe_component target = COMPONENT_UNSPEC;
- 	const char *define_prefix = NULL;
- 	bool supported_types[128] = {};
- 	__u32 ifindex = 0;
--	unsigned int i;
- 	char *ifname;
- 
- 	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
-@@ -658,97 +769,19 @@ static int do_probe(int argc, char **argv)
- 		jsonw_start_object(json_wtr);
- 	}
- 
--	switch (target) {
--	case COMPONENT_KERNEL:
--	case COMPONENT_UNSPEC:
--		if (define_prefix)
--			break;
--
--		print_start_section("system_config",
--				    "Scanning system configuration...",
--				    NULL, /* define_comment never used here */
--				    NULL); /* define_prefix always NULL here */
--		if (check_procfs()) {
--			probe_unprivileged_disabled();
--			probe_jit_enable();
--			probe_jit_harden();
--			probe_jit_kallsyms();
--			probe_jit_limit();
--		} else {
--			p_info("/* procfs not mounted, skipping related probes */");
--		}
--		probe_kernel_image_config();
--		if (json_output)
--			jsonw_end_object(json_wtr);
--		else
--			printf("\n");
--		break;
--	default:
--		break;
--	}
--
--	print_start_section("syscall_config",
--			    "Scanning system call availability...",
--			    "/*** System call availability ***/",
--			    define_prefix);
--
--	if (!probe_bpf_syscall(define_prefix))
-+	section_system_config(target, define_prefix);
-+	if (!section_syscall_config(define_prefix))
- 		/* bpf() syscall unavailable, don't probe other BPF features */
- 		goto exit_close_json;
--
--	print_end_then_start_section("program_types",
--				     "Scanning eBPF program types...",
--				     "/*** eBPF program types ***/",
--				     define_prefix);
--
--	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_prog_type(i, supported_types, define_prefix, ifindex);
--
--	print_end_then_start_section("map_types",
--				     "Scanning eBPF map types...",
--				     "/*** eBPF map types ***/",
--				     define_prefix);
--
--	for (i = BPF_MAP_TYPE_UNSPEC + 1; i < map_type_name_size; i++)
--		probe_map_type(i, define_prefix, ifindex);
--
--	print_end_then_start_section("helpers",
--				     "Scanning eBPF helper functions...",
--				     "/*** eBPF helper functions ***/",
--				     define_prefix);
--
--	if (define_prefix)
--		printf("/*\n"
--		       " * Use %sHAVE_PROG_TYPE_HELPER(prog_type_name, helper_name)\n"
--		       " * to determine if <helper_name> is available for <prog_type_name>,\n"
--		       " * e.g.\n"
--		       " *	#if %sHAVE_PROG_TYPE_HELPER(xdp, bpf_redirect)\n"
--		       " *		// do stuff with this helper\n"
--		       " *	#elif\n"
--		       " *		// use a workaround\n"
--		       " *	#endif\n"
--		       " */\n"
--		       "#define %sHAVE_PROG_TYPE_HELPER(prog_type, helper)	\\\n"
--		       "	%sBPF__PROG_TYPE_ ## prog_type ## __HELPER_ ## helper\n",
--		       define_prefix, define_prefix, define_prefix,
--		       define_prefix);
--	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_helpers_for_progtype(i, supported_types[i],
--					   define_prefix, ifindex);
--
--	print_end_then_start_section("misc",
--				     "Scanning miscellaneous eBPF features...",
--				     "/*** eBPF misc features ***/",
--				     define_prefix);
--	probe_large_insn_limit(define_prefix, ifindex);
-+	section_program_types(supported_types, define_prefix, ifindex);
-+	section_map_types(define_prefix, ifindex);
-+	section_helpers(supported_types, define_prefix, ifindex);
-+	section_misc(define_prefix, ifindex);
- 
- exit_close_json:
--	if (json_output) {
--		/* End current "section" of probes */
--		jsonw_end_object(json_wtr);
-+	if (json_output)
- 		/* End root object */
- 		jsonw_end_object(json_wtr);
--	}
- 
- 	return 0;
- }
++
++def default_iface(f):
++    @functools.wraps(f)
++    def wrapper(*args, **kwargs):
++        iface = get_default_iface()
++        return f(*args, iface, **kwargs)
++    return wrapper
++
++
++class TestBpftool(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        if os.getuid() != 0:
++            raise UnprivilegedUserError("This test suite eeeds root privileges")
++
++    def _assert_pattern_not_in_dict(self, dct, pattern, check_keys=False):
++        """Check if all string values inside dictionary do not containe the
++        given pattern.
++        """
++        for key, value in dct.items():
++            if check_keys:
++                self.assertNotIn(pattern, key)
++            if isinstance(value, dict):
++                self._assert_pattern_not_in_dict(value, pattern,
++                                                 check_keys=True)
++            elif isinstance(value, str):
++                self.assertNotIn(pattern, value)
++
++    @default_iface
++    def test_feature_dev(self, iface):
++        expected_patterns = [
++            SECTION_SYSCALL_CONFIG_PATTERN,
++            SECTION_PROGRAM_TYPES_PATTERN,
++            SECTION_MAP_TYPES_PATTERN,
++            SECTION_HELPERS_PATTERN,
++            SECTION_MISC_PATTERN,
++        ]
++        unexpected_patterns = [
++            b"bpf_trace_printk",
++            b"bpf_probe_write_user",
++        ]
++
++        res = bpftool(["feature", "probe", "dev", iface])
++        for pattern in expected_patterns:
++            self.assertIn(pattern, res)
++        for pattern in unexpected_patterns:
++            self.assertNotIn(pattern, res)
++
++    @default_iface
++    def test_feature_dev_json(self, iface):
++        expected_keys = [
++            "syscall_config",
++            "program_types",
++            "map_types",
++            "helpers",
++            "misc",
++        ]
++        unexpected_values = [
++            "bpf_trace_printk",
++            "bpf_probe_write_user",
++        ]
++
++        res = bpftool_json(["feature", "probe", "dev", iface])
++        self.assertCountEqual(res.keys(), expected_keys)
++        for value in unexpected_values:
++            self._assert_pattern_not_in_dict(res, value)
++
++    def test_feature_kernel(self):
++        expected_patterns = [
++            SECTION_SYSTEM_CONFIG_PATTERN,
++            SECTION_SYSCALL_CONFIG_PATTERN,
++            SECTION_PROGRAM_TYPES_PATTERN,
++            SECTION_MAP_TYPES_PATTERN,
++            SECTION_HELPERS_PATTERN,
++            SECTION_MISC_PATTERN,
++        ]
++        unexpected_patterns = [
++            b"bpf_trace_printk",
++            b"bpf_probe_write_user",
++        ]
++
++        res_default1 = bpftool(["feature"])
++        res_default2 = bpftool(["feature", "probe"])
++        res = bpftool(["feature", "probe", "kernel"])
++
++        for pattern in expected_patterns:
++            self.assertIn(pattern, res_default1)
++            self.assertIn(pattern, res_default2)
++            self.assertIn(pattern, res)
++        for pattern in unexpected_patterns:
++            self.assertNotIn(pattern, res_default1)
++            self.assertNotIn(pattern, res_default2)
++            self.assertNotIn(pattern, res)
++
++    def test_feature_kernel_full(self):
++        expected_patterns = [
++            SECTION_SYSTEM_CONFIG_PATTERN,
++            SECTION_SYSCALL_CONFIG_PATTERN,
++            SECTION_PROGRAM_TYPES_PATTERN,
++            SECTION_MAP_TYPES_PATTERN,
++            SECTION_HELPERS_PATTERN,
++            SECTION_MISC_PATTERN,
++            b"bpf_trace_printk",
++            b"bpf_probe_write_user",
++        ]
++
++        res_default = bpftool(["feature", "probe", "full"])
++        res = bpftool(["feature", "probe", "kernel", "full"])
++
++        for pattern in expected_patterns:
++            self.assertIn(pattern, res_default)
++            self.assertIn(pattern, res)
++
++    def test_feature_kernel_json(self):
++        expected_keys = [
++            "system_config",
++            "syscall_config",
++            "program_types",
++            "map_types",
++            "helpers",
++            "misc",
++        ]
++        unexpected_values = [
++            "bpf_trace_printk",
++            "bpf_probe_write_user",
++        ]
++
++        res_default1 = bpftool_json(["feature"])
++        self.assertCountEqual(res_default1.keys(), expected_keys)
++        for value in unexpected_values:
++            self._assert_pattern_not_in_dict(res_default1, value)
++
++        res_default2 = bpftool_json(["feature", "probe"])
++        self.assertCountEqual(res_default2.keys(), expected_keys)
++        for value in unexpected_values:
++            self._assert_pattern_not_in_dict(res_default2, value)
++
++        res = bpftool_json(["feature", "probe", "kernel"])
++        self.assertCountEqual(res.keys(), expected_keys)
++        for value in unexpected_values:
++            self._assert_pattern_not_in_dict(res, value)
++
++    def test_feature_macros(self):
++        expected_patterns = [
++            b"/\*\*\* System call availability \*\*\*/",
++            b"#define HAVE_BPF_SYSCALL",
++            b"/\*\*\* eBPF program types \*\*\*/",
++            b"#define HAVE.*PROG_TYPE",
++            b"/\*\*\* eBPF map types \*\*\*/",
++            b"#define HAVE.*MAP_TYPE",
++            b"/\*\*\* eBPF helper functions \*\*\*/",
++            b"#define HAVE.*HELPER",
++            b"/\*\*\* eBPF misc features \*\*\*/",
++        ]
++
++        res = bpftool(["feature", "probe", "macros"])
++        for pattern in expected_patterns:
++            self.assertRegex(res, pattern)
+diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
+new file mode 100755
+index 000000000000..66690778e36d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_bpftool.sh
+@@ -0,0 +1,5 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (c) 2020 SUSE LLC.
++
++python3 -m unittest -v test_bpftool.TestBpftool
 -- 
 2.25.0
 
