@@ -2,248 +2,110 @@ Return-Path: <SRS0=+zqf=4J=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F0EBC11D25
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 03:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B6D0C11D24
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 05:12:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5DBE5222C4
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 03:16:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CECF0208E4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Feb 2020 05:12:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="R+XtdpLE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729660AbgBUDQ2 (ORCPT
+        id S1726018AbgBUFMd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Feb 2020 22:16:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59522 "EHLO mx2.suse.de"
+        Fri, 21 Feb 2020 00:12:33 -0500
+Received: from ozlabs.org ([203.11.71.1]:53129 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727488AbgBUDQ1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 22:16:27 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 68BF4B202;
-        Fri, 21 Feb 2020 03:16:24 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Michal Rostecki <mrostecki@opensuse.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v2 2/5] bpftool: Make probes which emit dmesg warnings optional
-Date:   Fri, 21 Feb 2020 04:16:57 +0100
-Message-Id: <20200221031702.25292-3-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200221031702.25292-1-mrostecki@opensuse.org>
-References: <20200221031702.25292-1-mrostecki@opensuse.org>
+        id S1725973AbgBUFMd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 Feb 2020 00:12:33 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48P02R2Bh2z9sPk;
+        Fri, 21 Feb 2020 16:12:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1582261951;
+        bh=VN01LPmrMRRE7xnQaiPGlfuivp3p3nCGU9JeUtjz/7s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=R+XtdpLEozvcl4JlLLYpijxvQ3ZHQ0ZijmxlvQlNWwRx5fdDNKl9AtanwNuf6YSnh
+         9t1peF/9ZWC5WMOdzPPuJNIGWAMxXbNxqjnpYJVEqCqxG7VLMQekya3eZw6PHNITGr
+         /Uudf/Qlewr4yRXBn7cmfEcwW/EwwUf12ltS5B1QVQTNqK8uHTpCIdmA4FptDytkTV
+         nUv0Esfr9v0ndMoSJGXvqvdF6aaVYqERN55P/NGlpvQxCuBhdTA+sjiSNPePE3G/QZ
+         5Fzir81AZ0ix9bnCLr18CH7u44SrcOaXxL5pJmAsnF2eVb06236eBMPt8e37z21I0x
+         6IY7O9q0I5gqg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests: Install settings files to fix TIMEOUT failures
+In-Reply-To: <fccfcd8b-628b-9b3d-13b1-6dcda49b4df9@linuxfoundation.org>
+References: <20200220044241.2878-1-mpe@ellerman.id.au> <202002201450.A4BB99421@keescook> <fccfcd8b-628b-9b3d-13b1-6dcda49b4df9@linuxfoundation.org>
+Date:   Fri, 21 Feb 2020 16:12:27 +1100
+Message-ID: <87o8tsed6s.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Probes related to bpf_probe_write_user and bpf_trace_printk helpers emit
-dmesg warnings which might be confusing for people running bpftool on
-production environments. This change filters them out by default and
-introduces the new positional argument "full" which enables all
-available probes.
+Shuah Khan <skhan@linuxfoundation.org> writes:
+> On 2/20/20 3:51 PM, Kees Cook wrote:
+>> On Thu, Feb 20, 2020 at 03:42:41PM +1100, Michael Ellerman wrote:
+>>> Commit 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second
+>>> timeout per test") added a 45 second timeout for tests, and also added
+>>> a way for tests to customise the timeout via a settings file.
+>>>
+>>> For example the ftrace tests take multiple minutes to run, so they
+>>> were given longer in commit b43e78f65b1d ("tracing/selftests: Turn off
+>>> timeout setting").
+>>>
+>>> This works when the tests are run from the source tree. However if the
+>>> tests are installed with "make -C tools/testing/selftests install",
+>>> the settings files are not copied into the install directory. When the
+>>> tests are then run from the install directory the longer timeouts are
+>>> not applied and the tests timeout incorrectly.
+>> 
+>> Eek, yes, nice catch.
+>> 
+>>> So add the settings files to TEST_FILES of the appropriate Makefiles
+>>> to cause the settings files to be installed using the existing install
+>>> logic.
+>> 
+>> Instead, shouldn't lib.mk "notice" the settings file and automatically
+>> include it in TEST_FILES instead of having to do this in each separate
+>> Makefile?
+>> 
+>
+> Let's keep it custom per test for now.
 
-Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
----
- tools/bpf/bpftool/feature.c | 80 +++++++++++++++++++++++++++++++++----
- 1 file changed, 73 insertions(+), 7 deletions(-)
+Yeah that seems less magical.
 
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 345e4a2b4f53..0731804b8160 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -3,6 +3,7 @@
- 
- #include <ctype.h>
- #include <errno.h>
-+#include <regex.h>
- #include <string.h>
- #include <unistd.h>
- #include <net/if.h>
-@@ -22,6 +23,9 @@
- # define PROC_SUPER_MAGIC	0x9fa0
- #endif
- 
-+/* Regex pattern for filtering out probes which emit dmesg warnings */
-+#define FILTER_OUT_PATTERN "(trace|write_user)"
-+
- enum probe_component {
- 	COMPONENT_UNSPEC,
- 	COMPONENT_KERNEL,
-@@ -57,6 +61,35 @@ static void uppercase(char *str, size_t len)
- 		str[i] = toupper(str[i]);
- }
- 
-+/* Filtering utility functions */
-+
-+static bool
-+check_filters(const char *name, regex_t *filter_out)
-+{
-+	char err_buf[100];
-+	int ret;
-+
-+	/* Do not probe if filter_out was defined and string matches against the
-+	 * pattern.
-+	 */
-+	if (filter_out) {
-+		ret = regexec(filter_out, name, 0, NULL, 0);
-+		switch (ret) {
-+		case 0:
-+			return false;
-+		case REG_NOMATCH:
-+			break;
-+		default:
-+			regerror(ret, filter_out, err_buf, ARRAY_SIZE(err_buf));
-+			p_err("could not match regex: %s", err_buf);
-+			free(filter_out);
-+			exit(1);
-+		}
-+	}
-+
-+	return true;
-+}
-+
- /* Printing utility functions */
- 
- static void
-@@ -515,7 +548,8 @@ probe_map_type(enum bpf_map_type map_type, const char *define_prefix,
- 
- static void
- probe_helpers_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
--			   const char *define_prefix, __u32 ifindex)
-+			   const char *define_prefix, regex_t *filter_out,
-+			   __u32 ifindex)
- {
- 	const char *ptype_name = prog_type_name[prog_type];
- 	char feat_name[128];
-@@ -542,6 +576,9 @@ probe_helpers_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
- 	}
- 
- 	for (id = 1; id < ARRAY_SIZE(helper_name); id++) {
-+		if (!check_filters(helper_name[id], filter_out))
-+			continue;
-+
- 		if (!supported_type)
- 			res = false;
- 		else
-@@ -634,7 +671,8 @@ section_program_types(bool *supported_types, const char *define_prefix,
- 			    define_prefix);
- 
- 	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
--		probe_prog_type(i, supported_types, define_prefix, ifindex);
-+		probe_prog_type(i, supported_types, define_prefix,
-+				ifindex);
- 
- 	print_end_section();
- }
-@@ -655,7 +693,8 @@ static void section_map_types(const char *define_prefix, __u32 ifindex)
- }
- 
- static void
--section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
-+section_helpers(bool *supported_types, const char *define_prefix,
-+		regex_t *filter_out, __u32 ifindex)
- {
- 	unsigned int i;
- 
-@@ -681,7 +720,7 @@ section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
- 		       define_prefix);
- 	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
- 		probe_helpers_for_progtype(i, supported_types[i],
--					   define_prefix, ifindex);
-+					   define_prefix, filter_out, ifindex);
- 
- 	print_end_section();
- }
-@@ -701,8 +740,13 @@ static int do_probe(int argc, char **argv)
- 	enum probe_component target = COMPONENT_UNSPEC;
- 	const char *define_prefix = NULL;
- 	bool supported_types[128] = {};
-+	regex_t *filter_out = NULL;
-+	bool full_mode = false;
-+	char regerror_buf[100];
- 	__u32 ifindex = 0;
- 	char *ifname;
-+	int reg_ret;
-+	int ret = 0;
- 
- 	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
- 	 * Let's approximate, and restrict usage to root user only.
-@@ -740,6 +784,9 @@ static int do_probe(int argc, char **argv)
- 				      strerror(errno));
- 				return -1;
- 			}
-+		} else if (is_prefix(*argv, "full")) {
-+			full_mode = true;
-+			NEXT_ARG();
- 		} else if (is_prefix(*argv, "macros") && !define_prefix) {
- 			define_prefix = "";
- 			NEXT_ARG();
-@@ -764,6 +811,22 @@ static int do_probe(int argc, char **argv)
- 		}
- 	}
- 
-+	/* If full mode is not acivated, filter out probes which emit dmesg
-+	 * messages.
-+	 */
-+	if (!full_mode) {
-+		filter_out = malloc(sizeof(regex_t));
-+		reg_ret = regcomp(filter_out, FILTER_OUT_PATTERN, REG_EXTENDED);
-+		if (reg_ret) {
-+			regerror(reg_ret, filter_out, regerror_buf,
-+				 ARRAY_SIZE(regerror_buf));
-+			p_err("could not compile regex: %s",
-+			      regerror_buf);
-+			ret = -1;
-+			goto cleanup;
-+		}
-+	}
-+
- 	if (json_output) {
- 		define_prefix = NULL;
- 		jsonw_start_object(json_wtr);
-@@ -775,7 +838,7 @@ static int do_probe(int argc, char **argv)
- 		goto exit_close_json;
- 	section_program_types(supported_types, define_prefix, ifindex);
- 	section_map_types(define_prefix, ifindex);
--	section_helpers(supported_types, define_prefix, ifindex);
-+	section_helpers(supported_types, define_prefix, filter_out, ifindex);
- 	section_misc(define_prefix, ifindex);
- 
- exit_close_json:
-@@ -783,7 +846,10 @@ static int do_probe(int argc, char **argv)
- 		/* End root object */
- 		jsonw_end_object(json_wtr);
- 
--	return 0;
-+cleanup:
-+	free(filter_out);
-+
-+	return ret;
- }
- 
- static int do_help(int argc, char **argv)
-@@ -794,7 +860,7 @@ static int do_help(int argc, char **argv)
- 	}
- 
- 	fprintf(stderr,
--		"Usage: %s %s probe [COMPONENT] [macros [prefix PREFIX]]\n"
-+		"Usage: %s %s probe [COMPONENT] [full] [macros [prefix PREFIX]]\n"
- 		"       %s %s help\n"
- 		"\n"
- 		"       COMPONENT := { kernel | dev NAME }\n"
--- 
-2.25.0
+FWIW the patch below does work, so it's a small patch, but I'm not sure
+it's worth the added complexity vs just listing the file in the few
+tests that need it.
 
+cheers
+
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 1c8a1963d03f..82086c6ad5e7 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -20,6 +20,10 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+ TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+ TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+ 
++ifeq ($(wildcard settings),settings)
++       TEST_FILES += settings
++endif
++
+ ifdef KSFT_KHDR_INSTALL
+ top_srcdir ?= ../../../..
+ include $(top_srcdir)/scripts/subarch.include
