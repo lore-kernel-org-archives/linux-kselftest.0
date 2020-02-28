@@ -2,140 +2,102 @@ Return-Path: <SRS0=Rtub=4Q=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ECF4C3F2D0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 07:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5479C3F2D4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 11:55:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 520C7246AC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 07:22:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A5AE2084E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 11:55:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DqCPFLqa"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="lsd7u/wb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgB1HWn (ORCPT
+        id S1725730AbgB1LzD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 28 Feb 2020 02:22:43 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36838 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726561AbgB1HWn (ORCPT
+        Fri, 28 Feb 2020 06:55:03 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38859 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726925AbgB1Lyt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Feb 2020 02:22:43 -0500
-Received: by mail-pl1-f195.google.com with SMTP id a6so903187plm.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 23:22:43 -0800 (PST)
+        Fri, 28 Feb 2020 06:54:49 -0500
+Received: by mail-wr1-f67.google.com with SMTP id e8so2642673wrm.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2020 03:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s3S+hpLp5sIHa629tQ1zsw+Nl29dkCf3S5rCd+p6od0=;
-        b=DqCPFLqaEV3M2s53qW4elKNy8mZ/LySa/GTkoXsaZ38GB0BNEZFMAuIuyfxvFtj/fV
-         1g3uI/JWkqGyNoLF4Jt3NsTHuDB+RMx/j7XseHQMBe/Fo4TDmtC3fAXKshQbQFlO4I6m
-         cfAb+BHfSIpKCiRExZ/REITPXUg8Ahf6KlY7hUZxYCbDUAGHkv2zb27FSz1461MYHIde
-         Wq8p2AhQjWWTUZiXgUSLT2DwWlAOjA4gGIOkWQmdNpR/flJG4LDdvW+y9oOf02bqCy7e
-         u7AnfPxh6Lw4KW1xH4BwHLfqkTQUps9lJ6oIgi+BkaAHfCRgVIu3ZC9L0DtHvm+sZdef
-         AsMg==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=olVifyTMleE2iedo0uCkocgafSknigkP2OP2Ek8xo9Y=;
+        b=lsd7u/wbZ+WEtU7Zu/blNg6YCQE6j6PcKMK7Ynz/VrYdm9MpeXcL47A6XPJZSubLI8
+         B72tsfM8iIGm2DikmdXwYByhjVNC7eaK7VTQmdfXwCVqaK4gJn8e0jfHBD0Jjp3mi6Hb
+         pOR5x6Xgg2B22tFcttYzzEEMY9hb0e6CI7Vg4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s3S+hpLp5sIHa629tQ1zsw+Nl29dkCf3S5rCd+p6od0=;
-        b=jjdGIFrtEjnBIwkgxKyxXTOyu1xpUsqcOsNqQwNb7fhQBova6CaMPiyxBVT/9pEFzt
-         712l/eFTpL+qCuH6iwOhhBs/SjDxsuiaS3f0Iyj/f5d4j7Xt/vG+P/JoFmMQIUQKgoyM
-         D7w0ewljY0tBfbtucZOCjp5PZNlt+da/uTia4r/VQhaa6dmLhd7FAe1hzuoGONGIcnOy
-         m5B41ztftMzIe6aZ4zSUOxC3EgLbYnADWDt2YXnN9rnPHBviibxawhnIXTfcnPxI3Y7w
-         2oHty2sT0AC+gZa+MWwQ6NTL7GClwOE4r1a6eFtb3LMRuL/v1nfoQxx1FPtKlo7u5Wqx
-         2q7g==
-X-Gm-Message-State: APjAAAUnJILqSIUu+8DrhHoPGkTPEnlwRB/nofBg/Y7RrJ4RQtdBtYjj
-        OGX46x+MrQF0z68tBvClz+dZr7vja3SUeJSml+rnEA==
-X-Google-Smtp-Source: APXvYqzfHO2LjscgalGnPNvJuZJRHFvR5JKj+K4ArJrMoTSjQKwCXbbVKSMib1WlxPMb5cTcx8UR195T8BgeHwMobFY=
-X-Received: by 2002:a17:902:8ec1:: with SMTP id x1mr2808157plo.325.1582874562327;
- Thu, 27 Feb 2020 23:22:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=olVifyTMleE2iedo0uCkocgafSknigkP2OP2Ek8xo9Y=;
+        b=TsXY5qTA87TeyfICmF7VplEopOpt5SrvgsTBmcyFPahuFBhBsMbsYIRGxututQkP1U
+         vrtl8RNXoj3o64WShaKqqpFGux+lZkHmg8+1hFS8fx3nnKYx4LQ7SoMkAEOx+awlhPwe
+         qnj6cZBeXYUdUkS7wQ8iMp8lDdsKjMj292cW38Lcpw4HJwQ54xw8iFjcUa5ho3U+12eM
+         5Pi7xIATpX73PjL1TbktauJ17QLlIcqMqJE7OVHWhl/xuzlbFsZUXeY6AXK9Se3djRi3
+         YCsUvcNLGLK24baBgdAHk/0nJopoVAuNSenqjs0BbRzRAUKvfJDp/3rYT+qbBBzErfsQ
+         KR3A==
+X-Gm-Message-State: APjAAAVIk4Hyqf6Sc/8Pbak1iqvaITDX6NS+F6p2LrJAnfkRNWNBRwnC
+        8fpxCc/+TQb9aYNNBRAhRtjQtA==
+X-Google-Smtp-Source: APXvYqxJOCIBurk6Jls7sZVmorMG3mSVBtjX2iT3L6h2322sJJpOuLtQdNYKQUfCqV/GYafskYxluA==
+X-Received: by 2002:adf:ebca:: with SMTP id v10mr4553098wrn.307.1582890887425;
+        Fri, 28 Feb 2020 03:54:47 -0800 (PST)
+Received: from antares.lan (b.2.d.a.1.b.1.b.2.c.5.e.0.3.d.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:4d30:e5c2:b1b1:ad2b])
+        by smtp.gmail.com with ESMTPSA id q125sm2044284wme.19.2020.02.28.03.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Feb 2020 03:54:46 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     john.fastabend@gmail.com, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 8/9] selftests: bpf: enable UDP sockmap reuseport tests
+Date:   Fri, 28 Feb 2020 11:53:43 +0000
+Message-Id: <20200228115344.17742-9-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200228115344.17742-1-lmb@cloudflare.com>
+References: <20200228115344.17742-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-References: <20200228012036.15682-1-brendanhiggins@google.com> <20200228012036.15682-2-brendanhiggins@google.com>
-In-Reply-To: <20200228012036.15682-2-brendanhiggins@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 27 Feb 2020 23:22:31 -0800
-Message-ID: <CAFd5g46dVaV18=5mPLTHh06KQ6nDh4Xw4r8PAZDfSXASi=Qpmg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] vmlinux.lds.h: add linker section for KUnit test suites
-To:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 5:20 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> Add a linker section where KUnit can put references to its test suites.
-> This patch is the first step in transitioning to dispatching all KUnit
-> tests from a centralized executor rather than having each as its own
-> separate late_initcall.
->
-> Co-developed-by: Iurii Zaikin <yzaikin@google.com>
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  include/asm-generic/vmlinux.lds.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index e00f41aa8ec4f..99a866f49cb3d 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -856,6 +856,13 @@
->                 KEEP(*(.con_initcall.init))                             \
->                 __con_initcall_end = .;
->
-> +/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
-> +#define KUNIT_TEST_SUITES                                              \
-> +               . = ALIGN(8);                                           \
+Remove the guard that disables UDP tests now that sockmap
+has support for them.
 
-After posting this, I saw I had gotten an email from 0day[1]. After
-some investigation, I discovered that this 8 byte alignment works for
-x86 64 bit fine, but only *sometimes* for 32 bit. 4 byte alignment
-seems to work in all cases (so far). I am not sure why we went with
-such a large alignment in hindsight. In any case, I should have a
-fixed revision out pretty soon.
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ tools/testing/selftests/bpf/prog_tests/select_reuseport.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-> +               __kunit_suites_start = .;                               \
-> +               KEEP(*(.kunit_test_suites))                             \
-> +               __kunit_suites_end = .;
-> +
->  #ifdef CONFIG_BLK_DEV_INITRD
->  #define INIT_RAM_FS                                                    \
->         . = ALIGN(4);                                                   \
-> @@ -1024,6 +1031,7 @@
->                 INIT_CALLS                                              \
->                 CON_INITCALL                                            \
->                 INIT_RAM_FS                                             \
-> +               KUNIT_TEST_SUITES                                       \
->         }
->
->  #define BSS_SECTION(sbss_align, bss_align, stop_align)                 \
-> --
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index a1dd13b34d4b..821b4146b7b6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -805,12 +805,6 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 	char s[MAX_TEST_NAME];
+ 	const struct test *t;
+ 
+-	/* SOCKMAP/SOCKHASH don't support UDP yet */
+-	if (sotype == SOCK_DGRAM &&
+-	    (inner_map_type == BPF_MAP_TYPE_SOCKMAP ||
+-	     inner_map_type == BPF_MAP_TYPE_SOCKHASH))
+-		return;
+-
+ 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
+ 		if (t->need_sotype && t->need_sotype != sotype)
+ 			continue; /* test not compatible with socket type */
+-- 
+2.20.1
 
-[1] https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/4I4UW4OAT63ETMIEUJQTOF3BFTMO6ROD/
