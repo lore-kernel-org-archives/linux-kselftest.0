@@ -2,285 +2,77 @@ Return-Path: <SRS0=Rtub=4Q=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9522CC3F2D1
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 11:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EA07C3F2CD
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 13:42:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 615C22084E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 11:55:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="etWy7VMS"
+	by mail.kernel.org (Postfix) with ESMTP id 207B4246AF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 13:42:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbgB1Lys (ORCPT
+        id S1726366AbgB1NmA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 28 Feb 2020 06:54:48 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40503 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726899AbgB1Lyr (ORCPT
+        Fri, 28 Feb 2020 08:42:00 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:48090 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgB1NmA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Feb 2020 06:54:47 -0500
-Received: by mail-wm1-f66.google.com with SMTP id d138so1288934wmd.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Feb 2020 03:54:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qgZ3nu/Bbfdwe+GDZ451yJiCX8ETGH9pPjG5oF9BPog=;
-        b=etWy7VMS5c5Fvlp2X/iYvcnBrHzNw7tAs3b/st1Fe3RCLvzWAWNaX0rMjyjgJxVlVu
-         1q67U3Y4oLiaLTF/9e0nWaEUCFM1saNsaqNaJENf8Z3mAI/uHQSgktjJ7pzyC81wiuRS
-         64fBjjMiFG+AV8+tUwGaVsxdLFk87P0neuvao=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qgZ3nu/Bbfdwe+GDZ451yJiCX8ETGH9pPjG5oF9BPog=;
-        b=IIodzHF5zNDSeqdW7snqbn/ZmH7qSst6QB7crUQqZQQxJTfWlJqIe+EAapf40RAXRF
-         VTWkEDbpsSKNmQzW76C1Q7mMy3r1QWR+bn7e4shfE7CaFuKFoziqcnX/HD+LptdnjOqf
-         Sm7JDRXazibJ7Exrq8EpcWqVWnNESQVJY3DV9iaVc1stJ7ueG9SS/MWafFDXceJHQfF9
-         1A6S28L6l8ULI2KbQOlqFnFiVT2aOkGYxvipWCrxbRTRQQ/0lIqsGTbz0UhDlS5uFn8p
-         HdAABrd8WZIqcQjcC8Z57KDQXiISyc+L7PTh6agzpYIzWWJqwEnOmV+su86lCwPVrtK2
-         PSyQ==
-X-Gm-Message-State: APjAAAXw2IEsXf8tAS9yZSsWtuGaAlda7nb9Fir+8VM+YgetcEz754RF
-        QCsq2FiHLJwzZX0ZiMKBQsRW8w==
-X-Google-Smtp-Source: APXvYqwc05OdtN0Be7Qgk7jhcOkgMo1PUJoree+JaCcUtw6sQ9XkQxZIkMBMrH379PX+OU7nw5Ke4A==
-X-Received: by 2002:a1c:1944:: with SMTP id 65mr4310640wmz.7.1582890883929;
-        Fri, 28 Feb 2020 03:54:43 -0800 (PST)
-Received: from antares.lan (b.2.d.a.1.b.1.b.2.c.5.e.0.3.d.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:4d30:e5c2:b1b1:ad2b])
-        by smtp.gmail.com with ESMTPSA id q125sm2044284wme.19.2020.02.28.03.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 03:54:43 -0800 (PST)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     john.fastabend@gmail.com, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 6/9] selftests: bpf: don't listen() on UDP sockets
-Date:   Fri, 28 Feb 2020 11:53:41 +0000
-Message-Id: <20200228115344.17742-7-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200228115344.17742-1-lmb@cloudflare.com>
-References: <20200228115344.17742-1-lmb@cloudflare.com>
+        Fri, 28 Feb 2020 08:42:00 -0500
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1j7fts-0002rn-Jc; Fri, 28 Feb 2020 13:41:56 +0000
+Date:   Fri, 28 Feb 2020 14:41:55 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Christian Kellner <christian@kellner.me>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests: pidfd: Add pidfd_fdinfo_test in .gitignore
+Message-ID: <20200228134155.2rzxeqwrlofmtre4@wittgenstein>
+References: <966567c7dbaa26a06730d796354f8a086c0ee288.1582847778.git.christophe.leroy@c-s.fr>
+ <DB631DFB-DF8B-4B95-AC50-74F1ED733CAE@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DB631DFB-DF8B-4B95-AC50-74F1ED733CAE@ubuntu.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Most tests for TCP sockmap can be adapted to UDP sockmap if the
-listen call is skipped. Rename listen_loopback, etc. to socket_loopback
-and skip listen() for SOCK_DGRAM.
+On Fri, Feb 28, 2020 at 01:18:44AM +0100, Christian Brauner wrote:
+> On February 28, 2020 1:00:08 AM GMT+01:00, Christophe Leroy <christophe.leroy@c-s.fr> wrote:
+> >The commit identified below added pidfd_fdinfo_test
+> >but failed to add it to .gitignore
+> >
+> >Fixes: 2def297ec7fb ("pidfd: add tests for NSpid info in fdinfo")
+> >Cc: stable@vger.kernel.org
+> >Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> >---
+> > tools/testing/selftests/pidfd/.gitignore | 1 +
+> > 1 file changed, 1 insertion(+)
+> >
+> >diff --git a/tools/testing/selftests/pidfd/.gitignore
+> >b/tools/testing/selftests/pidfd/.gitignore
+> >index 3a779c084d96..39559d723c41 100644
+> >--- a/tools/testing/selftests/pidfd/.gitignore
+> >+++ b/tools/testing/selftests/pidfd/.gitignore
+> >@@ -2,4 +2,5 @@ pidfd_open_test
+> > pidfd_poll_test
+> > pidfd_test
+> > pidfd_wait
+> >+pidfd_fdinfo_test
+> > pidfd_getfd_test
+> 
+> Thanks for spotting this.
+> I'll pick this up along with other fixes I have waiting.
+> 
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c | 47 ++++++++++---------
- 1 file changed, 25 insertions(+), 22 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index b1b2acea0638..4ba41dd26d6b 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -230,7 +230,7 @@ static int enable_reuseport(int s, int progfd)
- 	return 0;
- }
- 
--static int listen_loopback_reuseport(int family, int sotype, int progfd)
-+static int socket_loopback_reuseport(int family, int sotype, int progfd)
- {
- 	struct sockaddr_storage addr;
- 	socklen_t len;
-@@ -249,6 +249,9 @@ static int listen_loopback_reuseport(int family, int sotype, int progfd)
- 	if (err)
- 		goto close;
- 
-+	if (sotype == SOCK_DGRAM)
-+		return s;
-+
- 	err = xlisten(s, SOMAXCONN);
- 	if (err)
- 		goto close;
-@@ -259,9 +262,9 @@ static int listen_loopback_reuseport(int family, int sotype, int progfd)
- 	return -1;
- }
- 
--static int listen_loopback(int family, int sotype)
-+static int socket_loopback(int family, int sotype)
- {
--	return listen_loopback_reuseport(family, sotype, -1);
-+	return socket_loopback_reuseport(family, sotype, -1);
- }
- 
- static void test_insert_invalid(int family, int sotype, int mapfd)
-@@ -333,7 +336,7 @@ static void test_insert_listening(int family, int sotype, int mapfd)
- 	u32 key;
- 	int s;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -349,7 +352,7 @@ static void test_delete_after_insert(int family, int sotype, int mapfd)
- 	u32 key;
- 	int s;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -366,7 +369,7 @@ static void test_delete_after_close(int family, int sotype, int mapfd)
- 	u64 value;
- 	u32 key;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -390,7 +393,7 @@ static void test_lookup_after_insert(int family, int sotype, int mapfd)
- 	u32 key;
- 	int s;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -417,7 +420,7 @@ static void test_lookup_after_delete(int family, int sotype, int mapfd)
- 	u64 value;
- 	u32 key;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -439,7 +442,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
- 	u32 key, value32;
- 	int err, s;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -470,11 +473,11 @@ static void test_update_listening(int family, int sotype, int mapfd)
- 	u64 value;
- 	u32 key;
- 
--	s1 = listen_loopback(family, sotype);
-+	s1 = socket_loopback(family, sotype);
- 	if (s1 < 0)
- 		return;
- 
--	s2 = listen_loopback(family, sotype);
-+	s2 = socket_loopback(family, sotype);
- 	if (s2 < 0)
- 		goto close_s1;
- 
-@@ -500,7 +503,7 @@ static void test_destroy_orphan_child(int family, int sotype, int mapfd)
- 	u64 value;
- 	u32 key;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -534,7 +537,7 @@ static void test_clone_after_delete(int family, int sotype, int mapfd)
- 	u64 value;
- 	u32 key;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s < 0)
- 		return;
- 
-@@ -570,7 +573,7 @@ static void test_accept_after_delete(int family, int sotype, int mapfd)
- 	socklen_t len;
- 	u64 value;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s == -1)
- 		return;
- 
-@@ -624,7 +627,7 @@ static void test_accept_before_delete(int family, int sotype, int mapfd)
- 	socklen_t len;
- 	u64 value;
- 
--	s = listen_loopback(family, sotype);
-+	s = socket_loopback(family, sotype);
- 	if (s == -1)
- 		return;
- 
-@@ -735,7 +738,7 @@ static void test_syn_recv_insert_delete(int family, int sotype, int mapfd)
- 	int err, s;
- 	u64 value;
- 
--	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
-+	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
- 	if (s < 0)
- 		return;
- 
-@@ -877,7 +880,7 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
- 
- 	zero_verdict_count(verd_mapfd);
- 
--	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
-+	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
- 	if (s < 0)
- 		return;
- 
-@@ -1009,7 +1012,7 @@ static void redir_to_listening(int family, int sotype, int sock_mapfd,
- 
- 	zero_verdict_count(verd_mapfd);
- 
--	s = listen_loopback(family, sotype | SOCK_NONBLOCK);
-+	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
- 	if (s < 0)
- 		return;
- 
-@@ -1120,7 +1123,7 @@ static void test_reuseport_select_listening(int family, int sotype,
- 
- 	zero_verdict_count(verd_map);
- 
--	s = listen_loopback_reuseport(family, sotype, reuseport_prog);
-+	s = socket_loopback_reuseport(family, sotype, reuseport_prog);
- 	if (s < 0)
- 		return;
- 
-@@ -1174,7 +1177,7 @@ static void test_reuseport_select_connected(int family, int sotype,
- 
- 	zero_verdict_count(verd_map);
- 
--	s = listen_loopback_reuseport(family, sotype, reuseport_prog);
-+	s = socket_loopback_reuseport(family, sotype, reuseport_prog);
- 	if (s < 0)
- 		return;
- 
-@@ -1249,11 +1252,11 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
- 	zero_verdict_count(verd_map);
- 
- 	/* Create two listeners, each in its own reuseport group */
--	s1 = listen_loopback_reuseport(family, sotype, reuseport_prog);
-+	s1 = socket_loopback_reuseport(family, sotype, reuseport_prog);
- 	if (s1 < 0)
- 		return;
- 
--	s2 = listen_loopback_reuseport(family, sotype, reuseport_prog);
-+	s2 = socket_loopback_reuseport(family, sotype, reuseport_prog);
- 	if (s2 < 0)
- 		goto close_srv1;
- 
--- 
-2.20.1
-
+Applied, thanks!
+Christian
