@@ -7,58 +7,59 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A08EC3F2CF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 01:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74374C3F2C6
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 01:21:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0AD59246B2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 01:21:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42F3421556
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Feb 2020 01:21:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VXCVjRFV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SsFE3blu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730528AbgB1BU7 (ORCPT
+        id S1730569AbgB1BVE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Feb 2020 20:20:59 -0500
-Received: from mail-pl1-f202.google.com ([209.85.214.202]:35328 "EHLO
-        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730464AbgB1BU7 (ORCPT
+        Thu, 27 Feb 2020 20:21:04 -0500
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:34453 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730607AbgB1BVE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Feb 2020 20:20:59 -0500
-Received: by mail-pl1-f202.google.com with SMTP id v24so741466plo.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 17:20:58 -0800 (PST)
+        Thu, 27 Feb 2020 20:21:04 -0500
+Received: by mail-pf1-f202.google.com with SMTP id q5so860030pfh.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Feb 2020 17:21:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gfPIObcjKoc/X97Hku0RqtasQR2kVC34gv6DKj0xOtc=;
-        b=VXCVjRFV1YqUz/8wn7l00lvSHg2xQqUpVRtpFdlra5OC8OF0q0/3b0I8oE3nzS0B4c
-         tupmvt08U9uuorUzoZ1eYDtNg1U63jqDJ0ibGa1taWf7raFaAzoV4BPv3Tg2m4KnmZov
-         V6tpQRa0TMh7UERsCUCTWUWO8SYLoaBeDSCw/OQ+60WXxiMfaBmIcZRNfSDrrnjURMK6
-         m5775Jw2akrEorxQ6H656cKfbZOHEhm9xqa5dDLNBIKMPYG/okbS3dxAbLcir1Asizeo
-         EmLpGy2DdoKfflEyZLFp6qL14aA0ICqAugWB/JNN5PCwqLQlbpj/EvCmMHCfEdUzY9iN
-         cWlw==
+        bh=cCVLhSS60CzKiYZGYxwI2VbhU8XZU4Hf40vQtWu8iAk=;
+        b=SsFE3blufo8LdYviSELXvsTvM0T6Qql+JfE+gkcmFyVuWc/HK2V3Z7XsGX4KEB/xGu
+         xF59/eGpLUZQOdfWvYMqc3ccggH/2yYaHyf3g/sXX/diSyppIas/GkB3hMmyZhjECcu+
+         8aUNyxXfrV/9RSYvHyTO5T4UPHAGKQnrWxy8MBPrRR9UVhhj0DNQZaJ90yR5w0gw5m5o
+         LNyNouDqONnB2LSjpO+g5d5cqKl2bVrTr4HJJKVhqrkY6J/N2hr56T5+3t9oH1Lz08Bf
+         qjNRhmQKl4xKp+AkDQOdtnpIe9TlrjN1rXVeeLvhm0MbwfnJzPwTfUNRQhkumyPabYOy
+         OfRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gfPIObcjKoc/X97Hku0RqtasQR2kVC34gv6DKj0xOtc=;
-        b=VFOk2FdDNrPYSoQIpCpBMhr3vHxPj0T6bryudx03/yhvt8J9Kaw8AD7dqiX2He+hMB
-         dYanatFOoLATQ35BqY13BVTn3/lxCoaQopcP7HBJxo73LkVKatu2zftrvQGx7HmYh1Je
-         i8mt5nguRFuyvD0V6AjuUNu2k+DDctK/7/HQc29vGMtlQlEW/UxPsLZ1q0k3oE0G2Nvu
-         zB18BzwAVhnIWhENRF2miuqog8Lb1+qq3HT1t6h/pvbW88yijUdihMERxG9GXYGuYzxd
-         tinsCUZD4YlnTe//53S6eEULrkoHrdFhBuzldkEeSH5LzR02nblXpYo6oyojoc1dJ7Xr
-         nEiQ==
-X-Gm-Message-State: APjAAAVy1xXqI3j67vACmOv7g4VRcRFmObhhFTOmxn5xUgyTEs6ooSGZ
-        GcaZ0BRHOisB6PnVc6bW85Y9ekps/3IZLBAcuzpAMA==
-X-Google-Smtp-Source: APXvYqypNGxK7wTo1FTf1mIFjhr0aXSAgo4WiptbW+IYOxodMeIGcqOB36P6zCIg73RrYOnWUywb6RzPCsqA6rNjpwfVnA==
-X-Received: by 2002:a63:7f17:: with SMTP id a23mr2129453pgd.47.1582852857820;
- Thu, 27 Feb 2020 17:20:57 -0800 (PST)
-Date:   Thu, 27 Feb 2020 17:20:30 -0800
+        bh=cCVLhSS60CzKiYZGYxwI2VbhU8XZU4Hf40vQtWu8iAk=;
+        b=i8tJnr6MWimwvC8f71U2kiLEeXa6NErr77TY82+4XDXp/mOA0Ix5gPzwDY93jUV1vi
+         fY9+Oo14ON3c4QSefXh0TBAv1LIE5UwU0WTWnegsoZ1upw1lnZd/ftwVd4+QqXesMtDw
+         yMk+NDsuhvY5uTpdz9ZpegFGzS9ygSe3qIZNk8get9m7/ZvvhfulssYvKPVMU+bus8A+
+         5fJD7+ycOnETVIzvUKsGCJfo4GPPNrou7of9npTwTxswhQXPNgn4/y+RdcFyt091TL4F
+         xwo9rU5niL3/Vx/OBebEVQtjkphJ14gmZl/lN8TUDnJWgeW4uo6604t9yaehadmV6SC/
+         RnbQ==
+X-Gm-Message-State: APjAAAWc1yixYdAAcD/k629dx6pltCCwBEf8YlXIQto3j/TtVWP8RamZ
+        Ob1uPQo/aJ6nSI3LgM9gl79FpOuw+Fw7zxSH0TEitQ==
+X-Google-Smtp-Source: APXvYqxhn7x3I6Lzn0KIR8NV/0MZifW5WyJ1YKNwC3WuljjsuRvky6R0M5dahP7sVjviK1tTsWoEXisU7yBpZUSY2pYwyg==
+X-Received: by 2002:a63:2a06:: with SMTP id q6mr2058006pgq.329.1582852863040;
+ Thu, 27 Feb 2020 17:21:03 -0800 (PST)
+Date:   Thu, 27 Feb 2020 17:20:32 -0800
 In-Reply-To: <20200228012036.15682-1-brendanhiggins@google.com>
-Message-Id: <20200228012036.15682-2-brendanhiggins@google.com>
+Message-Id: <20200228012036.15682-4-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20200228012036.15682-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
-Subject: [PATCH v3 1/7] vmlinux.lds.h: add linker section for KUnit test suites
+Subject: [PATCH v3 3/7] kunit: test: create a single centralized executor for
+ all tests
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
@@ -77,45 +78,178 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a linker section where KUnit can put references to its test suites.
-This patch is the first step in transitioning to dispatching all KUnit
-tests from a centralized executor rather than having each as its own
-separate late_initcall.
+From: Alan Maguire <alan.maguire@oracle.com>
 
+Add a centralized executor to dispatch tests rather than relying on
+late_initcall to schedule each test suite separately.  Centralized
+execution is for built-in tests only; modules will execute tests
+when loaded.
+
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 Co-developed-by: Iurii Zaikin <yzaikin@google.com>
 Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+Co-developed-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
- include/asm-generic/vmlinux.lds.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ include/kunit/test.h | 73 +++++++++++++++++++++++++++-----------------
+ lib/kunit/Makefile   |  3 +-
+ lib/kunit/executor.c | 36 ++++++++++++++++++++++
+ 3 files changed, 83 insertions(+), 29 deletions(-)
+ create mode 100644 lib/kunit/executor.c
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index e00f41aa8ec4f..99a866f49cb3d 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -856,6 +856,13 @@
- 		KEEP(*(.con_initcall.init))				\
- 		__con_initcall_end = .;
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 2dfb550c6723a..8a02f93a6b505 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -197,46 +197,63 @@ void kunit_init_test(struct kunit *test, const char *name);
  
-+/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
-+#define KUNIT_TEST_SUITES						\
-+		. = ALIGN(8);						\
-+		__kunit_suites_start = .;				\
-+		KEEP(*(.kunit_test_suites))				\
-+		__kunit_suites_end = .;
+ int kunit_run_tests(struct kunit_suite *suite);
+ 
+-/**
+- * kunit_test_suites() - used to register one or more &struct kunit_suite
+- *			 with KUnit.
+- *
+- * @suites: a statically allocated list of &struct kunit_suite.
+- *
+- * Registers @suites with the test framework. See &struct kunit_suite for
+- * more information.
+- *
+- * When builtin,  KUnit tests are all run as late_initcalls; this means
+- * that they cannot test anything where tests must run at a different init
+- * phase. One significant restriction resulting from this is that KUnit
+- * cannot reliably test anything that is initialize in the late_init phase;
+- * another is that KUnit is useless to test things that need to be run in
+- * an earlier init phase.
+- *
+- * An alternative is to build the tests as a module.  Because modules
+- * do not support multiple late_initcall()s, we need to initialize an
+- * array of suites for a module.
+- *
+- * TODO(brendanhiggins@google.com): Don't run all KUnit tests as
+- * late_initcalls.  I have some future work planned to dispatch all KUnit
+- * tests from the same place, and at the very least to do so after
+- * everything else is definitely initialized.
++/*
++ * If a test suite is built-in, module_init() gets translated into
++ * an initcall which we don't want as the idea is that for builtins
++ * the executor will manage execution.  So ensure we do not define
++ * module_{init|exit} functions for the builtin case when registering
++ * suites via kunit_test_suites() below.
+  */
+-#define kunit_test_suites(...)						\
+-	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
+-	static int kunit_test_suites_init(void)				\
++#ifdef MODULE
++#define kunit_test_suites_for_module(__suites)				\
++	static int __init kunit_test_suites_init(void)			\
+ 	{								\
++		struct kunit_suite *suites[] = (__suites);		\
+ 		unsigned int i;						\
++									\
+ 		for (i = 0; suites[i] != NULL; i++)			\
+ 			kunit_run_tests(suites[i]);			\
+ 		return 0;						\
+ 	}								\
+-	late_initcall(kunit_test_suites_init);				\
++	module_init(kunit_test_suites_init);				\
++									\
+ 	static void __exit kunit_test_suites_exit(void)			\
+ 	{								\
+ 		return;							\
+ 	}								\
+ 	module_exit(kunit_test_suites_exit)
++#else
++#define kunit_test_suites_for_module(__suites)
++#endif /* MODULE */
 +
- #ifdef CONFIG_BLK_DEV_INITRD
- #define INIT_RAM_FS							\
- 	. = ALIGN(4);							\
-@@ -1024,6 +1031,7 @@
- 		INIT_CALLS						\
- 		CON_INITCALL						\
- 		INIT_RAM_FS						\
-+		KUNIT_TEST_SUITES					\
- 	}
++#define __kunit_test_suites(unique_array, unique_suites, ...)		       \
++	static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
++	kunit_test_suites_for_module(unique_array);			       \
++	static struct kunit_suite **unique_suites			       \
++	__used __aligned(8) __section(.kunit_test_suites) = unique_array
++
++/**
++ * kunit_test_suites() - used to register one or more &struct kunit_suite
++ *			 with KUnit.
++ *
++ * @suites: a statically allocated list of &struct kunit_suite.
++ *
++ * Registers @suites with the test framework. See &struct kunit_suite for
++ * more information.
++ *
++ * When builtin,  KUnit tests are all run via executor; this is done
++ * by placing the array of struct kunit_suite * in the .kunit_test_suites
++ * ELF section.
++ *
++ * An alternative is to build the tests as a module.  Because modules do not
++ * support multiple initcall()s, we need to initialize an array of suites for a
++ * module.
++ *
++ */
++#define kunit_test_suites(...)						\
++	__kunit_test_suites(__UNIQUE_ID(array),				\
++			    __UNIQUE_ID(suites),			\
++			    __VA_ARGS__)
  
- #define BSS_SECTION(sbss_align, bss_align, stop_align)			\
+ #define kunit_test_suite(suite)	kunit_test_suites(&suite)
+ 
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index fab55649b69a5..c282f02ca066b 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -3,7 +3,8 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
+ kunit-objs +=				test.o \
+ 					string-stream.o \
+ 					assert.o \
+-					try-catch.o
++					try-catch.o \
++					executor.o
+ 
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
+ 
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+new file mode 100644
+index 0000000000000..6429927d598a5
+--- /dev/null
++++ b/lib/kunit/executor.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <kunit/test.h>
++
++/*
++ * These symbols point to the .kunit_test_suites section and are defined in
++ * include/asm-generic/vmlinux.lds.h, and consequently must be extern.
++ */
++extern struct kunit_suite * const * const __kunit_suites_start[];
++extern struct kunit_suite * const * const __kunit_suites_end[];
++
++#if IS_BUILTIN(CONFIG_KUNIT)
++
++static int kunit_run_all_tests(void)
++{
++	struct kunit_suite * const * const *suites, * const *subsuite;
++	bool has_test_failed = false;
++
++	for (suites = __kunit_suites_start;
++	     suites < __kunit_suites_end;
++	     suites++) {
++		for (subsuite = *suites; *subsuite != NULL; subsuite++) {
++			if (kunit_run_tests(*subsuite))
++				has_test_failed = true;
++		}
++	}
++
++	if (has_test_failed)
++		return -EFAULT;
++
++	return 0;
++}
++
++late_initcall(kunit_run_all_tests);
++
++#endif /* IS_BUILTIN(CONFIG_KUNIT) */
 -- 
 2.25.1.481.gfbce0eb801-goog
 
