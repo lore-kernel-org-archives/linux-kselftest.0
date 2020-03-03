@@ -2,121 +2,115 @@ Return-Path: <SRS0=FEG8=4U=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6991FC3F2D7
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 03:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ECCDC3F2CD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 08:07:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3421D21739
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 03:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583204613;
-	bh=3TigfwXrdUcwuJtxDdM91sunQiw06FIrpMZszuW3/3k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cs5Wsexodrhy7OcM5llJX8F8gjn2HSQBF6VyNHJwmHxTtgMeblPkUukNw6qAZuICx
-	 dX+C123kNIyuu3mh64ih4J/jOr2ttr3icooETOfyAt+i+0IvHaBoXvhU0oaN6tGArP
-	 XP4tEAj2aCw0O+s0Nbk4zCWENmT5ePEFAnliob7Q=
+	by mail.kernel.org (Postfix) with ESMTP id 701B120CC7
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 08:07:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727576AbgCCDD3 (ORCPT
+        id S1727659AbgCCIHX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Mar 2020 22:03:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40596 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727228AbgCCCqV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:46:21 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D3C424681;
-        Tue,  3 Mar 2020 02:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203581;
-        bh=3TigfwXrdUcwuJtxDdM91sunQiw06FIrpMZszuW3/3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z6oaT39MqzyUR6VPTFxGStwF3cqMdBRHE620C2HV8khFPWh9PSEfWNXlIEjCFID+K
-         fyk3hTQXMOgMjjkOFVslw9nRLHwzygwO7/IUeu8mAk0f5PWdjJ21uWCPItVNmZV95S
-         Wm8qdN3rK+aHBL0KsTpOykNH+lQtI5SOogVVRoXk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 04/66] Kernel selftests: tpm2: check for tpm support
-Date:   Mon,  2 Mar 2020 21:45:13 -0500
-Message-Id: <20200303024615.8889-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024615.8889-1-sashal@kernel.org>
-References: <20200303024615.8889-1-sashal@kernel.org>
+        Tue, 3 Mar 2020 03:07:23 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:44314 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727594AbgCCIHX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Mar 2020 03:07:23 -0500
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 50C3727143BE5F251882;
+        Tue,  3 Mar 2020 16:07:19 +0800 (CST)
+Received: from localhost (10.173.228.206) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Tue, 3 Mar 2020
+ 16:07:13 +0800
+From:   Jay Zhou <jianjay.zhou@huawei.com>
+To:     <kvm@vger.kernel.org>
+CC:     <pbonzini@redhat.com>, <peterx@redhat.com>, <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangxinxin.wang@huawei.com>, <weidong.huang@huawei.com>,
+        <liu.jinsong@huawei.com>, <jianjay.zhou@huawei.com>
+Subject: [PATCH] kvm: selftests: Support dirty log initial-all-set test
+Date:   Tue, 3 Mar 2020 16:07:10 +0800
+Message-ID: <20200303080710.1672-1-jianjay.zhou@huawei.com>
+X-Mailer: git-send-email 2.14.1.windows.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.173.228.206]
+X-CFilter-Loop: Reflected
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Since the new capability KVM_DIRTY_LOG_INITIALLY_SET of
+KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2 has been introduced, tweak the
+clear_dirty_log_test to test it.
 
-[ Upstream commit b32694cd0724d4ceca2c62cc7c3d3a8d1ffa11fc ]
-
-tpm2 tests set fails if there is no /dev/tpm0 and /dev/tpmrm0
-supported. Check if these files exist before run and mark test as
-skipped in case of absence.
-
-Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Jay Zhou <jianjay.zhou@huawei.com>
 ---
- tools/testing/selftests/tpm2/test_smoke.sh | 13 +++++++++++--
- tools/testing/selftests/tpm2/test_space.sh |  9 ++++++++-
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/clear_dirty_log_test.c |  4 ++++
+ tools/testing/selftests/kvm/dirty_log_test.c       | 20 +++++++++++++++++---
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 8155c2ea7ccbb..b630c7b5950a9 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -1,8 +1,17 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-+self.flags = flags
+diff --git a/tools/testing/selftests/kvm/clear_dirty_log_test.c b/tools/testing/selftests/kvm/clear_dirty_log_test.c
+index 7493369..11672ec 100644
+--- a/tools/testing/selftests/kvm/clear_dirty_log_test.c
++++ b/tools/testing/selftests/kvm/clear_dirty_log_test.c
+@@ -1,2 +1,6 @@
+ #define USE_CLEAR_DIRTY_LOG
++#define KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE (1 << 0)
++#define KVM_DIRTY_LOG_INITIALLY_SET         (1 << 1)
++#define KVM_DIRTY_LOG_MANUAL_CAPS   (KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE | \
++		KVM_DIRTY_LOG_INITIALLY_SET)
+ #include "dirty_log_test.c"
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index 5614222..7e21addc4 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -264,6 +264,10 @@ static struct kvm_vm *create_vm(enum vm_guest_mode mode, uint32_t vcpuid,
+ #define DIRTY_MEM_BITS 30 /* 1G */
+ #define PAGE_SHIFT_4K  12
  
--python -m unittest -v tpm2_tests.SmokeTest
--python -m unittest -v tpm2_tests.AsyncTest
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
++#ifdef USE_CLEAR_DIRTY_LOG
++static u64 dirty_log_manual_caps;
++#endif
 +
-+
-+if [ -f /dev/tpm0 ] ; then
-+	python -m unittest -v tpm2_tests.SmokeTest
-+	python -m unittest -v tpm2_tests.AsyncTest
-+else
-+	exit $ksft_skip
-+fi
+ static void run_test(enum vm_guest_mode mode, unsigned long iterations,
+ 		     unsigned long interval, uint64_t phys_offset)
+ {
+@@ -320,7 +324,7 @@ static void run_test(enum vm_guest_mode mode, unsigned long iterations,
+ 	struct kvm_enable_cap cap = {};
  
- CLEAR_CMD=$(which tpm2_clear)
- if [ -n $CLEAR_CMD ]; then
-diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
-index a6f5e346635e5..180b469c53b47 100755
---- a/tools/testing/selftests/tpm2/test_space.sh
-+++ b/tools/testing/selftests/tpm2/test_space.sh
-@@ -1,4 +1,11 @@
- #!/bin/bash
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ 	cap.cap = KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2;
+-	cap.args[0] = 1;
++	cap.args[0] = dirty_log_manual_caps;
+ 	vm_enable_cap(vm, &cap);
+ #endif
  
--python -m unittest -v tpm2_tests.SpaceTest
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+if [ -f /dev/tpmrm0 ] ; then
-+	python -m unittest -v tpm2_tests.SpaceTest
-+else
-+	exit $ksft_skip
-+fi
+@@ -438,8 +442,18 @@ int main(int argc, char *argv[])
+ #endif
+ 
+ #ifdef USE_CLEAR_DIRTY_LOG
+-	if (!kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2)) {
+-		fprintf(stderr, "KVM_CLEAR_DIRTY_LOG not available, skipping tests\n");
++	dirty_log_manual_caps =
++		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
++	if (!dirty_log_manual_caps) {
++		fprintf(stderr, "KVM_CLEAR_DIRTY_LOG not available, "
++				"skipping tests\n");
++		exit(KSFT_SKIP);
++	}
++	if (dirty_log_manual_caps != KVM_DIRTY_LOG_MANUAL_CAPS &&
++		dirty_log_manual_caps != KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE) {
++		fprintf(stderr, "KVM_CLEAR_DIRTY_LOG not valid caps "
++				"%"PRIu64", skipping tests\n",
++				dirty_log_manual_caps);
+ 		exit(KSFT_SKIP);
+ 	}
+ #endif
 -- 
-2.20.1
+1.8.3.1
+
 
