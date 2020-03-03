@@ -2,841 +2,512 @@ Return-Path: <SRS0=FEG8=4U=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 674EAC3F2C6
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 16:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9753CC3F2C6
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 16:40:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0AB8921739
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 16:03:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5047821775
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 16:40:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TRbN3dVF"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cEk7U3AW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730252AbgCCQDj (ORCPT
+        id S1729755AbgCCQki (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Mar 2020 11:03:39 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:39072 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729484AbgCCQDj (ORCPT
+        Tue, 3 Mar 2020 11:40:38 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:50086 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727879AbgCCQki (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Mar 2020 11:03:39 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023G2uvr129914;
-        Tue, 3 Mar 2020 16:03:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=WOUt9E5ADujpHGRD49VpweyRzJUD8GlKzRmEzAD/X5c=;
- b=TRbN3dVFjkFamU0cOC52Qy31ewd4TSUB5wsPwGP2AZNc5TCGTFz4wFVq7fg2zCXCuV+J
- zRXCM9bIvzx4bMFXe4KqiVAlcNJIzB3Z2tAtgCSyh9BNWKtSj2E/BTNpCZzCYevOHnf2
- GpH280kayrpqoAa3qwfTZmaCzly5nytlLNpO0hQ6WGk9lViqdt/IgzPq3gadvHSx4iNr
- y7hmxazDxMm6V3fxOMg5uOHZ2Yznq6aN5LWlSvMqS2jND93EUMhJXbOg/8v3JAvPvol4
- CL49IeUQL3dMb9htELHAv2tcUkBfsm88CL5aSqt4WrwWQlJgJCmK7r47+jI+qtW+5IUi 2w== 
+        Tue, 3 Mar 2020 11:40:38 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023GOdVw043795;
+        Tue, 3 Mar 2020 16:40:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=x4CwZHak73B27uGiTrPt9ArseHlYfUqsJkiKLYedkxY=;
+ b=cEk7U3AWG1tM4Tu6AaH3fzoKrV6SSm3XkF2QlCGiIh1Dt2Wcw++CNcugNQnI/yk80VMh
+ IaMD18cESEejAwiwRi/3zLPEQU8EqKMwCUYZQBxOR7OrL4VkAuxtd3lE24fAG3dPl3lJ
+ qb7VFaABamJ41b1Cd3IetQZn6mx9VYmLKaUPVUfyIhsD0HVmIKWVcym2YHo6MeGMoGY0
+ k/WRCGT9SVDZusCdFaLgPbMURg2B1ZZuvHm/Ewuvqo6q7dZjtoHYwA61UL6ysbBjd7Fg
+ nHNDaJSaQuU5bBTmEK43/Uoxk1FgbYEo+ZjtoIVhZvFQ9kcPoFAJsw0hJIs++/oIv+QN Dw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2yghn34288-1
+        by aserp2120.oracle.com with ESMTP id 2yffwqrf8x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Mar 2020 16:03:30 +0000
+        Tue, 03 Mar 2020 16:40:22 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023G2f49038673;
-        Tue, 3 Mar 2020 16:03:29 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2yg1rmbgqn-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023GNGCK029835;
+        Tue, 3 Mar 2020 16:40:22 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 2yg1rmf5m0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Mar 2020 16:03:27 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 023G3R3S011090;
-        Tue, 3 Mar 2020 16:03:27 GMT
+        Tue, 03 Mar 2020 16:40:22 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 023GeJeX021569;
+        Tue, 3 Mar 2020 16:40:19 GMT
 Received: from dhcp-10-175-165-222.vpn.oracle.com (/10.175.165.222)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 03 Mar 2020 16:03:26 +0000
+        with ESMTP ; Tue, 03 Mar 2020 08:40:18 -0800
+Date:   Tue, 3 Mar 2020 16:40:06 +0000 (GMT)
 From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com, trishalfonso@google.com,
-        skhan@linuxfoundation.org
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC PATCH kunit-next 1/2] kunit: generalize kunit_resource API beyond allocated resources
-Date:   Tue,  3 Mar 2020 16:02:40 +0000
-Message-Id: <1583251361-12748-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1583251361-12748-1-git-send-email-alan.maguire@oracle.com>
-References: <1583251361-12748-1-git-send-email-alan.maguire@oracle.com>
+X-X-Sender: alan@dhcp-10-175-165-222.vpn.oracle.com
+To:     Patricia Alfonso <trishalfonso@google.com>
+cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [RFC PATCH 2/2] KUnit: KASAN Integration
+In-Reply-To: <CAKFsvUK2hFV3LePxwBXO_ubrgYoOk7fuKMOy+vSAH5Tf3SrMOA@mail.gmail.com>
+Message-ID: <alpine.LRH.2.20.2003031617400.13146@dhcp-10-175-165-222.vpn.oracle.com>
+References: <20200227024301.217042-1-trishalfonso@google.com> <20200227024301.217042-2-trishalfonso@google.com> <alpine.LRH.2.20.2002271136160.12417@dhcp-10-175-190-15.vpn.oracle.com> <CAKFsvUK2hFV3LePxwBXO_ubrgYoOk7fuKMOy+vSAH5Tf3SrMOA@mail.gmail.com>
+User-Agent: Alpine 2.20 (LRH 67 2015-01-07)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
  suspectscore=1 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003030114
+ engine=8.12.0-2001150001 definitions=main-2003030115
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 spamscore=0
- impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 suspectscore=1
+ phishscore=0 clxscore=1015 bulkscore=0 adultscore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003030114
+ definitions=main-2003030115
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In its original form, the kunit resources API - consisting the
-struct kunit_resource and asscociated functions - was focused on
-adding allocated resources during test operation that would be
-automatically cleaned up on test completion.
+On Fri, 28 Feb 2020, Patricia Alfonso wrote:
 
-The recent RFC patch proposing converting KASAN tests to KUnit [1]
-showed another potential model - where outside of test context,
-but with a pointer to the test state, we wish to access/update
-test-related data, but expressly want to avoid allocations.
+> On Thu, Feb 27, 2020 at 6:04 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > On Wed, 26 Feb 2020, Patricia Alfonso wrote:
+> >
+> > > Integrate KASAN into KUnit testing framework.
+> >
+> > This is a great idea! Some comments/suggestions below...
+> >
+> 
+> Thank you so much for your suggestions!
+>
 
-It turns out we can generalize the kunit_resource to support
-static resources where the struct kunit_resource * is passed
-in and initialized for us. As part of this work, we also
-change the "allocation" field to the more general "data" name,
-as instead of associating an allocation, we can associate a
-pointer to static data.  Static data is distinguished by a NULL
-free functions.  A test is added to cover using kunit_add_resource()
-with a static resource and data.
+No problem! Extending KUnit to test things like KASAN
+is really valuable, as it shows us ways we can improve
+the framework. More below...
+ 
+> > >  - Fail tests when KASAN reports an error that is not expected
+> > >  - Use KUNIT_EXPECT_KASAN_FAIL to expect a KASAN error in KASAN tests
+> > >  - KUnit struct added to current task to keep track of the current test
+> > > from KASAN code
+> > >  - Booleans representing if a KASAN report is expected and if a KASAN
+> > >  report is found added to kunit struct
+> > >  - This prints "line# has passed" or "line# has failed"
+> > >
+> > > Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+> > > ---
+> > > If anyone has any suggestions on how best to print the failure
+> > > messages, please share!
+> > >
+> > > One issue I have found while testing this is the allocation fails in
+> > > kmalloc_pagealloc_oob_right() sometimes, but not consistently. This
+> > > does cause the test to fail on the KUnit side, as expected, but it
+> > > seems to skip all the tests before this one because the output starts
+> > > with this failure instead of with the first test, kmalloc_oob_right().
+> > >
+> > >  include/kunit/test.h                | 24 ++++++++++++++++++++++++
+> > >  include/linux/sched.h               |  7 ++++++-
+> > >  lib/kunit/test.c                    |  7 ++++++-
+> > >  mm/kasan/report.c                   | 19 +++++++++++++++++++
+> > >  tools/testing/kunit/kunit_kernel.py |  2 +-
+> > >  5 files changed, 56 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > > index 2dfb550c6723..2e388f8937f3 100644
+> > > --- a/include/kunit/test.h
+> > > +++ b/include/kunit/test.h
+> > > @@ -21,6 +21,8 @@ struct kunit_resource;
+> > >  typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
+> > >  typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+> > >
+> > > +void kunit_set_failure(struct kunit *test);
+> > > +
+> > >  /**
+> > >   * struct kunit_resource - represents a *test managed resource*
+> > >   * @allocation: for the user to store arbitrary data.
+> > > @@ -191,6 +193,9 @@ struct kunit {
+> > >        * protect it with some type of lock.
+> > >        */
+> > >       struct list_head resources; /* Protected by lock. */
+> > > +
+> > > +     bool kasan_report_expected;
+> > > +     bool kasan_report_found;
+> > >  };
+> > >
+> >
+> > Is this needed here? You're testing something pretty
+> > specific so it seems wrong to add to the generic
+> > kunit resource unless there's a good reason. I see the
+> > code around setting these values in mm/kasan/report.c,
+> > but I wonder if we could do something more generic.
+> >
+> > How about the concept of a static resource (assuming a
+> > dynamically allocated one is out because it messes
+> > with memory allocation tests)? Something like this:
+> >
+> > #define kunit_add_static_resource(test, resource_ptr, resource_field)   \
+> >         do {                                                            \
+> >                 spin_lock(&test->lock);                                 \
+> >                 (resource_ptr)->resource_field.init = NULL;             \
+> >                 (resource_ptr)->resource_field.free = NULL;             \
+> >                 list_add_tail(&(resource_ptr)->resource_field,          \
+> >                               &test->resources);                        \
+> >                 spin_unlock(&test->lock);                               \
+> >         } while (0)
+> >
+> >
+> > Within your kasan code you could then create a kasan-specific
+> > structure that embends a kunit_resource, and contains the
+> > values you need:
+> >
+> > struct kasan_report_resource {
+> >         struct kunit_resource res;
+> >         bool kasan_report_expected;
+> >         bool kasan_report_found;
+> > };
+> >
+> > (One thing we'd need to do for such static resources is fix
+> > kunit_resource_free() to check if there's a free() function,
+> > and if not assume a static resource)
+> >
+> > If you then create an init() function associated with your
+> > kunit suite (which will be run for every case) it can do this:
+> >
+> > int kunit_kasan_test_init(struct kunit *test)
+> > {
+> >         kunit_add_static_resource(test, &my_kasan_report_resource, res);
+> >         ...
+> > }
+> >
+> > The above should also be used to initialize current->kasan_unit_test
+> > instead of doing that in kunit_try_run_case().  With those
+> > changes, you don't (I think) need to change anything in core
+> > kunit (assuming support for static resources).
+> >
+> > To retrieve the resource during tests or in kasan context, the
+> > method seems to be to use kunit_resource_find(). However, that
+> > requires a match function which seems a bit heavyweight for the
+> > static case.  We should probably have a default "find by name"
+> > or similar function here, and add an optional "name" field
+> > to kunit resources to simplify things.  Anyway here you'd
+> > use something like:
+> >
+> >         kasan_report_resource = kunit_resource_find(test, matchfn,
+> >                                                     NULL, matchdata);
+> >
+> >
+> > Are there any barriers to taking this sort of approach (apart
+> > from the support for static resources not being there yet)?
+> >
+> 
+> I'm not sure. I don't have any experience with kunit resources so I
+> would have to put some more effort into understanding how this would
+> work for myself. I wonder if this might be a bit of an over
+> complicated way of eliminating an extraneous boolean... maybe we can
+> find a simpler solution for the first version of this patch and add
+> the notion of a static resource for generic use later.
+>
 
-Finally we also make use of the kernel's krefcount interfaces
-to manage reference counting of KUnit resources.  The motivation
-for this is simple; if we have kernel threads accessing and
-using resources (say via kunit_find_resource()) we need to
-ensure we do not remove said resources (or indeed free them
-if they were dynamically allocated) until the reference count
-reaches zero.  A new function - kunit_put_resource() - is
-added to handle this.
+My personal preference would be to try and learn what's needed
+by KASAN and improve the KUnit APIs so the next developer finds
+life a bit easier. More hassle for you I know, but actual use cases
+like this are invaluable for improving the API.  I've sent
+out an RFC patchset which has the functionality I _think_ you
+need but I may be missing something:
 
-A cosmetic change here also; I've tried moving to
-kunit_[action]_resource() as the format of function names
-for consistency and readability.
+https://lore.kernel.org/linux-kselftest/1583251361-12748-1-git-send-email-alan.maguire@oracle.com/T/#t
 
-[1] https://lkml.org/lkml/2020/2/26/1286
+The idea is your test can do something like this:
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- include/kunit/test.h      | 107 +++++++++++++++++++-------
- lib/kunit/kunit-test.c    |  66 +++++++++++-----
- lib/kunit/string-stream.c |  14 ++--
- lib/kunit/test.c          | 187 ++++++++++++++++++++++++++++++----------------
- 4 files changed, 251 insertions(+), 123 deletions(-)
+struct kasan_data {
+	bool report_expected;
+	bool report_found;
+};
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 2dfb550..11c80f5 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/kref.h>
- 
- struct kunit_resource;
- 
-@@ -23,13 +24,19 @@
- 
- /**
-  * struct kunit_resource - represents a *test managed resource*
-- * @allocation: for the user to store arbitrary data.
-+ * @data: for the user to store arbitrary data.
-  * @free: a user supplied function to free the resource. Populated by
-- * kunit_alloc_resource().
-+ * kunit_resource_alloc().
-  *
-  * Represents a *test managed resource*, a resource which will automatically be
-  * cleaned up at the end of a test case.
-  *
-+ * Resources are reference counted so if a resource is retrieved via
-+ * kunit_alloc_and_get_resource() or kunit_find_resource(), we need
-+ * to call kunit_put_resource() to reduce the resource reference count
-+ * when finished with it.  Note that kunit_alloc_resource() does not require a
-+ * kunit_resource_put() because it does not retrieve the resource itself.
-+ *
-  * Example:
-  *
-  * .. code-block:: c
-@@ -42,9 +49,9 @@
-  *	static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
-  *	{
-  *		struct kunit_kmalloc_params *params = context;
-- *		res->allocation = kmalloc(params->size, params->gfp);
-+ *		res->data = kmalloc(params->size, params->gfp);
-  *
-- *		if (!res->allocation)
-+ *		if (!res->data)
-  *			return -ENOMEM;
-  *
-  *		return 0;
-@@ -52,30 +59,28 @@
-  *
-  *	static void kunit_kmalloc_free(struct kunit_resource *res)
-  *	{
-- *		kfree(res->allocation);
-+ *		kfree(res->data);
-  *	}
-  *
-  *	void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-  *	{
-  *		struct kunit_kmalloc_params params;
-- *		struct kunit_resource *res;
-  *
-  *		params.size = size;
-  *		params.gfp = gfp;
-  *
-- *		res = kunit_alloc_resource(test, kunit_kmalloc_init,
-+ *		return kunit_alloc_resource(test, kunit_kmalloc_init,
-  *			kunit_kmalloc_free, &params);
-- *		if (res)
-- *			return res->allocation;
-- *
-- *		return NULL;
-  *	}
-+ *
-  */
- struct kunit_resource {
--	void *allocation;
-+	void *data;
-+	kunit_resource_init_t init;
- 	kunit_resource_free_t free;
- 
- 	/* private: internal use only. */
-+	struct kref refcount;
- 	struct list_head node;
- };
- 
-@@ -251,6 +256,32 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
- 						    void *context);
- 
- /**
-+ * kunit_put_resource() - When caller is done with retrieved resource,
-+ *			  kunit_put_resource() should be called to drop
-+ *			  reference count.  The resource list maintains
-+ *			  a reference count on resources, so if no users
-+ *			  are utilizing a resource and it is removed from
-+ *			  the resource list, it will be freed via the
-+ *			  associated free function (if any).  Only
-+ *			  needs to be used if we alloc_and_get() or
-+ *			  find() resource.
-+ * @res: resource
-+ */
-+void kunit_put_resource(struct kunit_resource *res);
-+
-+/**
-+ * kunit_add_resource() - Add a *test managed resource*.
-+ * @test: The test context object.
-+ * @init: a user-supplied function to initialize the result (if needed).  If
-+ *        none is supplied, the resource data value is simply set to @data.
-+ *	  If an init function is supplied, @data is passed to it instead.
-+ * @free: a user-supplied function to free the resource (if needed).
-+ * @data: value to pass to init function or set in resource data field.
-+ */
-+int kunit_add_resource(struct kunit *test, kunit_resource_init_t init,
-+		       kunit_resource_free_t free, struct kunit_resource *res,
-+		       void *data);
-+/**
-  * kunit_alloc_resource() - Allocates a *test managed resource*.
-  * @test: The test context object.
-  * @init: a user supplied function to initialize the resource.
-@@ -262,7 +293,7 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
-  * cleaned up at the end of a test case. See &struct kunit_resource for an
-  * example.
-  *
-- * NOTE: KUnit needs to allocate memory for each kunit_resource object. You must
-+ * If KUnit needs to allocate memory for a kunit_resource object, you must
-  * specify an @internal_gfp that is compatible with the use context of your
-  * resource.
-  */
-@@ -274,54 +305,72 @@ static inline void *kunit_alloc_resource(struct kunit *test,
- {
- 	struct kunit_resource *res;
- 
--	res = kunit_alloc_and_get_resource(test, init, free, internal_gfp,
--					   context);
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res)
-+		return NULL;
- 
--	if (res)
--		return res->allocation;
-+	if (!kunit_add_resource(test, init, free, res, context))
-+		return res->data;
- 
- 	return NULL;
- }
- 
- typedef bool (*kunit_resource_match_t)(struct kunit *test,
--				       const void *res,
-+				       struct kunit_resource *res,
- 				       void *match_data);
- 
- /**
-  * kunit_resource_instance_match() - Match a resource with the same instance.
-  * @test: Test case to which the resource belongs.
-- * @res: The data stored in kunit_resource->allocation.
-+ * @res: The resource.
-  * @match_data: The resource pointer to match against.
-  *
-  * An instance of kunit_resource_match_t that matches a resource whose
-  * allocation matches @match_data.
-  */
- static inline bool kunit_resource_instance_match(struct kunit *test,
--						 const void *res,
-+						 struct kunit_resource *res,
- 						 void *match_data)
- {
--	return res == match_data;
-+	return res->data == match_data;
- }
- 
- /**
-- * kunit_resource_destroy() - Find a kunit_resource and destroy it.
-+ * kunit_find_resource() - Find a resource using match function/data.
-+ * @test: Test case to which the resource belongs.
-+ * @match: match function to be applied to resources/match data.
-+ * @match_data: data to be used in matching.
-+ */
-+struct kunit_resource *kunit_find_resource(struct kunit *test,
-+					   kunit_resource_match_t match,
-+					   void *match_data);
-+
-+/**
-+ * kunit_destroy_resource() - Find a kunit_resource and destroy it.
-  * @test: Test case to which the resource belongs.
-  * @match: Match function. Returns whether a given resource matches @match_data.
-- * @free: Must match free on the kunit_resource to free.
-  * @match_data: Data passed into @match.
-  *
-- * Free the latest kunit_resource of @test for which @free matches the
-- * kunit_resource_free_t associated with the resource and for which @match
-- * returns true.
-- *
-  * RETURNS:
-  * 0 if kunit_resource is found and freed, -ENOENT if not found.
-  */
--int kunit_resource_destroy(struct kunit *test,
-+int kunit_destroy_resource(struct kunit *test,
- 			   kunit_resource_match_t match,
--			   kunit_resource_free_t free,
- 			   void *match_data);
- 
-+
-+/**
-+ * kunit_remove_resource: remove resource from resource list associated with
-+ *			  test.
-+ * @test: The test context object.
-+ * @res: The resource to be removed.
-+ *
-+ * Note that the resource will not be immediately freed since it is likely
-+ * the caller has a reference to it via alloc_and_get() or find();
-+ * in this case a final call to kunit_put_resource() is required.
-+ */
-+void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
-+
- /**
-  * kunit_kmalloc() - Like kmalloc() except the allocation is *test managed*.
-  * @test: The test context object.
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index ccb8d2e..b8bf36d 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -118,14 +118,14 @@ static int fake_resource_init(struct kunit_resource *res, void *context)
- {
- 	struct kunit_test_resource_context *ctx = context;
- 
--	res->allocation = &ctx->is_resource_initialized;
-+	res->data = &ctx->is_resource_initialized;
- 	ctx->is_resource_initialized = true;
- 	return 0;
- }
- 
- static void fake_resource_free(struct kunit_resource *res)
- {
--	bool *is_resource_initialized = res->allocation;
-+	bool *is_resource_initialized = res->data;
- 
- 	*is_resource_initialized = false;
- }
-@@ -154,9 +154,11 @@ static void kunit_resource_test_alloc_resource(struct kunit *test)
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
- 	KUNIT_EXPECT_PTR_EQ(test,
- 			    &ctx->is_resource_initialized,
--			    (bool *) res->allocation);
-+			    (bool *) res->data);
- 	KUNIT_EXPECT_TRUE(test, list_is_last(&res->node, &ctx->test.resources));
- 	KUNIT_EXPECT_PTR_EQ(test, free, res->free);
-+
-+	kunit_put_resource(res);
- }
- 
- static void kunit_resource_test_destroy_resource(struct kunit *test)
-@@ -169,11 +171,12 @@ static void kunit_resource_test_destroy_resource(struct kunit *test)
- 			GFP_KERNEL,
- 			ctx);
- 
-+	kunit_put_resource(res);
-+
- 	KUNIT_ASSERT_FALSE(test,
--			   kunit_resource_destroy(&ctx->test,
-+			   kunit_destroy_resource(&ctx->test,
- 						  kunit_resource_instance_match,
--						  res->free,
--						  res->allocation));
-+						  res->data));
- 
- 	KUNIT_EXPECT_FALSE(test, ctx->is_resource_initialized);
- 	KUNIT_EXPECT_TRUE(test, list_empty(&ctx->test.resources));
-@@ -191,6 +194,7 @@ static void kunit_resource_test_cleanup_resources(struct kunit *test)
- 							    fake_resource_free,
- 							    GFP_KERNEL,
- 							    ctx);
-+		kunit_put_resource(resources[i]);
- 	}
- 
- 	kunit_cleanup(&ctx->test);
-@@ -221,14 +225,14 @@ static int fake_resource_2_init(struct kunit_resource *res, void *context)
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 2);
- 
--	res->allocation = ctx;
-+	res->data = ctx;
- 
- 	return 0;
- }
- 
- static void fake_resource_2_free(struct kunit_resource *res)
- {
--	struct kunit_test_resource_context *ctx = res->allocation;
-+	struct kunit_test_resource_context *ctx = res->data;
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 2);
- }
-@@ -236,23 +240,26 @@ static void fake_resource_2_free(struct kunit_resource *res)
- static int fake_resource_1_init(struct kunit_resource *res, void *context)
- {
- 	struct kunit_test_resource_context *ctx = context;
-+	struct kunit_resource *res2;
- 
--	kunit_alloc_and_get_resource(&ctx->test,
--				     fake_resource_2_init,
--				     fake_resource_2_free,
--				     GFP_KERNEL,
--				     ctx);
-+	res2 = kunit_alloc_and_get_resource(&ctx->test,
-+					    fake_resource_2_init,
-+					    fake_resource_2_free,
-+					    GFP_KERNEL,
-+					    ctx);
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, allocate_order, 1);
- 
--	res->allocation = ctx;
-+	res->data = ctx;
-+
-+	kunit_put_resource(res2);
- 
- 	return 0;
- }
- 
- static void fake_resource_1_free(struct kunit_resource *res)
- {
--	struct kunit_test_resource_context *ctx = res->allocation;
-+	struct kunit_test_resource_context *ctx = res->data;
- 
- 	KUNIT_RESOURCE_TEST_MARK_ORDER(ctx, free_order, 1);
- }
-@@ -265,13 +272,14 @@ static void fake_resource_1_free(struct kunit_resource *res)
- static void kunit_resource_test_proper_free_ordering(struct kunit *test)
- {
- 	struct kunit_test_resource_context *ctx = test->priv;
-+	struct kunit_resource *res;
- 
- 	/* fake_resource_1 allocates a fake_resource_2 in its init. */
--	kunit_alloc_and_get_resource(&ctx->test,
--				     fake_resource_1_init,
--				     fake_resource_1_free,
--				     GFP_KERNEL,
--				     ctx);
-+	res = kunit_alloc_and_get_resource(&ctx->test,
-+					   fake_resource_1_init,
-+					   fake_resource_1_free,
-+					   GFP_KERNEL,
-+					   ctx);
- 
- 	/*
- 	 * Since fake_resource_2_init calls KUNIT_RESOURCE_TEST_MARK_ORDER
-@@ -281,6 +289,8 @@ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, ctx->allocate_order[0], 2);
- 	KUNIT_EXPECT_EQ(test, ctx->allocate_order[1], 1);
- 
-+	kunit_put_resource(res);
-+
- 	kunit_cleanup(&ctx->test);
- 
- 	/*
-@@ -292,6 +302,21 @@ static void kunit_resource_test_proper_free_ordering(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, ctx->free_order[1], 2);
- }
- 
-+static void kunit_resource_test_static(struct kunit *test)
-+{
-+	struct kunit_test_resource_context ctx;
-+	struct kunit_resource res;
-+
-+	KUNIT_EXPECT_EQ(test, kunit_add_resource(test, NULL, NULL, &res, &ctx),
-+			0);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, res.data, (void *)&ctx);
-+
-+	kunit_cleanup(test);
-+
-+	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
-+}
-+
- static int kunit_resource_test_init(struct kunit *test)
- {
- 	struct kunit_test_resource_context *ctx =
-@@ -320,6 +345,7 @@ static void kunit_resource_test_exit(struct kunit *test)
- 	KUNIT_CASE(kunit_resource_test_destroy_resource),
- 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
- 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
-+	KUNIT_CASE(kunit_resource_test_static),
- 	{}
- };
- 
-diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-index 3503920..141789c 100644
---- a/lib/kunit/string-stream.c
-+++ b/lib/kunit/string-stream.c
-@@ -33,14 +33,14 @@ static int string_stream_fragment_init(struct kunit_resource *res,
- 	if (!frag->fragment)
- 		return -ENOMEM;
- 
--	res->allocation = frag;
-+	res->data = frag;
- 
- 	return 0;
- }
- 
- static void string_stream_fragment_free(struct kunit_resource *res)
- {
--	struct string_stream_fragment *frag = res->allocation;
-+	struct string_stream_fragment *frag = res->data;
- 
- 	list_del(&frag->node);
- 	kunit_kfree(frag->test, frag->fragment);
-@@ -65,9 +65,8 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
- 
- static int string_stream_fragment_destroy(struct string_stream_fragment *frag)
- {
--	return kunit_resource_destroy(frag->test,
-+	return kunit_destroy_resource(frag->test,
- 				      kunit_resource_instance_match,
--				      string_stream_fragment_free,
- 				      frag);
- }
- 
-@@ -179,7 +178,7 @@ static int string_stream_init(struct kunit_resource *res, void *context)
- 	if (!stream)
- 		return -ENOMEM;
- 
--	res->allocation = stream;
-+	res->data = stream;
- 	stream->gfp = ctx->gfp;
- 	stream->test = ctx->test;
- 	INIT_LIST_HEAD(&stream->fragments);
-@@ -190,7 +189,7 @@ static int string_stream_init(struct kunit_resource *res, void *context)
- 
- static void string_stream_free(struct kunit_resource *res)
- {
--	struct string_stream *stream = res->allocation;
-+	struct string_stream *stream = res->data;
- 
- 	string_stream_clear(stream);
- }
-@@ -211,8 +210,7 @@ struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
- 
- int string_stream_destroy(struct string_stream *stream)
- {
--	return kunit_resource_destroy(stream->test,
-+	return kunit_destroy_resource(stream->test,
- 				      kunit_resource_instance_match,
--				      string_stream_free,
- 				      stream);
- }
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 9242f93..132e9bf 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -8,6 +8,7 @@
- 
- #include <kunit/test.h>
- #include <linux/kernel.h>
-+#include <linux/kref.h>
- #include <linux/sched/debug.h>
- 
- #include "string-stream.h"
-@@ -323,11 +324,67 @@ int kunit_run_tests(struct kunit_suite *suite)
- }
- EXPORT_SYMBOL_GPL(kunit_run_tests);
- 
-+/* Called when refcount reaches zero. */
-+void kunit_release_resource(struct kref *kref)
-+{
-+	struct kunit_resource *res = container_of(kref, struct kunit_resource,
-+						  refcount);
-+
-+	/* If free function is defined, resource was dynamically allocated. */
-+	if (res->free) {
-+		res->free(res);
-+		kfree(res);
-+	}
-+}
-+
-+static void kunit_get_resource(struct kunit_resource *res)
-+{
-+	kref_get(&res->refcount);
-+}
-+
-+void kunit_put_resource(struct kunit_resource *res)
-+{
-+	kref_put(&res->refcount, kunit_release_resource);
-+}
-+EXPORT_SYMBOL_GPL(kunit_put_resource);
-+
-+/*
-+ * Used for static resources and once dynamic kunit_resource * has been
-+ * allocated.  When an init function is supplied, @data is passed into the init
-+ * function; otherwise, we simply set the resource data field to the data
-+ * value passed in.
-+ */
-+int kunit_add_resource(struct kunit *test, kunit_resource_init_t init,
-+		       kunit_resource_free_t free, struct kunit_resource *res,
-+		       void *data)
-+{
-+	int ret = 0;
-+
-+	res->init = init;
-+	res->free = free;
-+	kref_init(&res->refcount);
-+
-+	if (init) {
-+		ret = init(res, data);
-+		if (ret)
-+			return ret;
-+	} else
-+		res->data = data;
-+
-+	spin_lock(&test->lock);
-+	list_add_tail(&res->node, &test->resources);
-+	/* refcount for list is established by kref_init() */
-+	spin_unlock(&test->lock);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(kunit_add_resource);
-+
- struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
- 						    kunit_resource_init_t init,
- 						    kunit_resource_free_t free,
- 						    gfp_t internal_gfp,
--						    void *context)
-+						    void *data)
- {
- 	struct kunit_resource *res;
- 	int ret;
-@@ -336,77 +393,67 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
- 	if (!res)
- 		return NULL;
- 
--	ret = init(res, context);
--	if (ret)
--		return NULL;
--
--	res->free = free;
--	spin_lock(&test->lock);
--	list_add_tail(&res->node, &test->resources);
--	spin_unlock(&test->lock);
--
--	return res;
-+	ret = kunit_add_resource(test, init, free, res, data);
-+	if (!ret) {
-+		/*
-+		 * bump refcount for get; kunit_resource_put() should be called
-+		 * when done.
-+		 */
-+		kunit_get_resource(res);
-+		return res;
-+	}
-+	return NULL;
- }
- EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
- 
--static void kunit_resource_free(struct kunit *test, struct kunit_resource *res)
--{
--	res->free(res);
--	kfree(res);
--}
--
--static struct kunit_resource *kunit_resource_find(struct kunit *test,
--						  kunit_resource_match_t match,
--						  kunit_resource_free_t free,
--						  void *match_data)
-+struct kunit_resource *kunit_find_resource(struct kunit *test,
-+					   kunit_resource_match_t match,
-+					   void *match_data)
- {
--	struct kunit_resource *resource;
-+	struct kunit_resource *res, *found = NULL;
- 
--	lockdep_assert_held(&test->lock);
-+	spin_lock(&test->lock);
- 
--	list_for_each_entry_reverse(resource, &test->resources, node) {
--		if (resource->free != free)
--			continue;
--		if (match(test, resource->allocation, match_data))
--			return resource;
-+	list_for_each_entry_reverse(res, &test->resources, node) {
-+		if (match(test, res, (void *)match_data)) {
-+			found = res;
-+			kunit_get_resource(found);
-+			break;
-+		}
- 	}
- 
--	return NULL;
-+	spin_unlock(&test->lock);
-+
-+	return found;
- }
-+EXPORT_SYMBOL_GPL(kunit_find_resource);
- 
--static struct kunit_resource *kunit_resource_remove(
--		struct kunit *test,
--		kunit_resource_match_t match,
--		kunit_resource_free_t free,
--		void *match_data)
-+void kunit_remove_resource(struct kunit *test, struct kunit_resource *res)
- {
--	struct kunit_resource *resource;
--
- 	spin_lock(&test->lock);
--	resource = kunit_resource_find(test, match, free, match_data);
--	if (resource)
--		list_del(&resource->node);
-+	list_del(&res->node);
- 	spin_unlock(&test->lock);
--
--	return resource;
-+	kunit_put_resource(res);
- }
-+EXPORT_SYMBOL_GPL(kunit_remove_resource);
- 
--int kunit_resource_destroy(struct kunit *test,
--			   kunit_resource_match_t match,
--			   kunit_resource_free_t free,
-+int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
- 			   void *match_data)
- {
--	struct kunit_resource *resource;
--
--	resource = kunit_resource_remove(test, match, free, match_data);
-+	struct kunit_resource *res = kunit_find_resource(test, match,
-+							 match_data);
- 
--	if (!resource)
-+	if (!res)
- 		return -ENOENT;
- 
--	kunit_resource_free(test, resource);
-+	kunit_remove_resource(test, res);
-+
-+	/* We have a reference also via _find(); drop it. */
-+	kunit_put_resource(res);
-+
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(kunit_resource_destroy);
-+EXPORT_SYMBOL_GPL(kunit_destroy_resource);
- 
- struct kunit_kmalloc_params {
- 	size_t size;
-@@ -417,8 +464,8 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
- {
- 	struct kunit_kmalloc_params *params = context;
- 
--	res->allocation = kmalloc(params->size, params->gfp);
--	if (!res->allocation)
-+	res->data = kmalloc(params->size, params->gfp);
-+	if (!res->data)
- 		return -ENOMEM;
- 
- 	return 0;
-@@ -426,7 +473,7 @@ static int kunit_kmalloc_init(struct kunit_resource *res, void *context)
- 
- static void kunit_kmalloc_free(struct kunit_resource *res)
- {
--	kfree(res->allocation);
-+	kfree(res->data);
- }
- 
- void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
-@@ -446,20 +493,25 @@ void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
- 
- void kunit_kfree(struct kunit *test, const void *ptr)
- {
--	int rc;
-+	struct kunit_resource *res;
- 
--	rc = kunit_resource_destroy(test,
--				    kunit_resource_instance_match,
--				    kunit_kmalloc_free,
--				    (void *)ptr);
-+	res = kunit_find_resource(test, kunit_resource_instance_match,
-+				  (void *)ptr);
-+
-+	/*
-+	 * Removing the resource from the list of resources drops the
-+	 * reference count to 1; the final put will trigger the free.
-+	 */
-+	kunit_remove_resource(test, res);
-+
-+	kunit_put_resource(res);
- 
--	WARN_ON(rc);
- }
- EXPORT_SYMBOL_GPL(kunit_kfree);
- 
- void kunit_cleanup(struct kunit *test)
- {
--	struct kunit_resource *resource;
-+	struct kunit_resource *res;
- 
- 	/*
- 	 * test->resources is a stack - each allocation must be freed in the
-@@ -476,13 +528,16 @@ void kunit_cleanup(struct kunit *test)
- 			spin_unlock(&test->lock);
- 			break;
- 		}
--		resource = list_last_entry(&test->resources,
--					   struct kunit_resource,
--					   node);
--		list_del(&resource->node);
-+		res = list_last_entry(&test->resources,
-+				      struct kunit_resource,
-+				      node);
-+		/*
-+		 * Need to unlock here as a resource may remove another
-+		 * resource, and this can't happen if the test->lock
-+		 * is held.
-+		 */
- 		spin_unlock(&test->lock);
--
--		kunit_resource_free(test, resource);
-+		kunit_remove_resource(test, res);
- 	}
- }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
--- 
-1.8.3.1
 
+my_kasan_test(struct kunit *test)
+{
+	struct kunit_resource resource;
+	struct kasan_data kasan_data;
+
+...
+	// add our named resource using static resource/data
+	kunit_add_named_resource(test, NULL, NULL, &resource, 
+				 "kasan_data", &kasan_data);
+...
+
+}
+
+(The NULLs in the function arguments above reflect the fact we
+don't require initialization or cleanup for such static resources)
+
+Then, in KASAN context you can look the above resource up like so:
+
+	struct kunit_resource *resource;
+	struct kasan_data *kasan_data;
+
+	resource = kunit_find_named_resource(test, "kasan_data");
+	kasan_data = resource->data;
+
+	// when finished, reduce reference count on resource
+	kunit_put_resource(resource);
+ 
+Does that work for your use case?
+
+> > >  void kunit_init_test(struct kunit *test, const char *name);
+> > > @@ -941,6 +946,25 @@ do {                                                                            \
+> > >                                               ptr,                           \
+> > >                                               NULL)
+> > >
+> > > +/**
+> > > + * KUNIT_EXPECT_KASAN_FAIL() - Causes a test failure when the expression does
+> > > + * not cause a KASAN error.
+> > > + *
+> > > + */
+> > > +#define KUNIT_EXPECT_KASAN_FAIL(test, condition) do {        \
+> > > +     test->kasan_report_expected = true;     \
+> > > +     test->kasan_report_found = false; \
+> > > +     condition; \
+> > > +     if (test->kasan_report_found == test->kasan_report_expected) { \
+> > > +             pr_info("%d has passed", __LINE__); \
+> > > +     } else { \
+> > > +             kunit_set_failure(test); \
+> > > +             pr_info("%d has failed", __LINE__); \
+> > > +     } \
+> > > +     test->kasan_report_expected = false;    \
+> > > +     test->kasan_report_found = false;       \
+> > > +} while (0)
+> > > +
+> >
+> > Feels like this belongs in test_kasan.c, and could be reworked
+> > to avoid adding test->kasan_report_[expected|found] as described
+> > above.
+> 
+> You're right. Since I don't see any reason why any other tests should
+> want to expect a KASAN error, it does make sense to move this logic
+> inside test_kasan.c. If, in the future, there is a need for this
+> elsewhere, we can always move it back then.
+> 
+> >  Instead of having your own pass/fail logic couldn't you
+> > do this:
+> >
+> >         KUNIT_EXPECT_EQ(test, expected, found);
+> >
+> > ? That will set the failure state too so no need to export
+> > a separate function for that, and no need to log anything
+> > as KUNIT_EXPECT_EQ() should do that for you.
+> >
+> 
+> This is a great idea - I feel a little silly that I didn't think of
+> that myself! Do we think the failure message for the KUNIT_EXPECT_EQ()
+> would be sufficient for KASAN developers?
+> i.e. "Expected kasan_report_expected == kasan_report_found, but
+> kasan_report_expected == true
+> kasan_report_found == false"
+>
+
+I guess the missing piece above is the line number where
+the test failure was encountered, is that the concern?
+ 
+> > >  /**
+> > >   * KUNIT_EXPECT_TRUE() - Causes a test failure when the expression is not true.
+> > >   * @test: The test context object.
+> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > index 04278493bf15..db23d56061e7 100644
+> > > --- a/include/linux/sched.h
+> > > +++ b/include/linux/sched.h
+> > > @@ -32,6 +32,8 @@
+> > >  #include <linux/posix-timers.h>
+> > >  #include <linux/rseq.h>
+> > >
+> > > +#include <kunit/test.h>
+> > > +
+> >
+> > This feels like the wrong place to add this #include, and
+> > when I attempted to build to test I ran into a bunch of
+> > compilation errors; for example:
+> >
+> >  CC      kernel/sched/core.o
+> > In file included from ./include/linux/uaccess.h:11,
+> >                  from ./arch/x86/include/asm/fpu/xstate.h:5,
+> >                  from ./arch/x86/include/asm/pgtable.h:26,
+> >                  from ./include/linux/kasan.h:16,
+> >                  from ./include/linux/slab.h:136,
+> >                  from ./include/kunit/test.h:16,
+> >                  from ./include/linux/sched.h:35,
+> >                  from init/do_mounts.c:3:
+> > ./arch/x86/include/asm/uaccess.h: In function 'set_fs':
+> > ./arch/x86/include/asm/uaccess.h:32:9: error: dereferencing pointer to
+> > incomplete type 'struct task_struct'
+> >   current->thread.addr_limit = fs;
+> >
+> > (I'm testing with CONFIG_SLUB). Removing this #include
+> > resolves these errors, but then causes problems for
+> > lib/test_kasan.c. I'll dig around a bit more.
+> >
+> 
+> Yes, I was only testing with UML. Removing that #include fixed the
+> problem for me for both x86 and UML. Could you share more about the
+> errors you have encountered in lib/test_kasan.c?
+> 
+
+I'll try this again and send details.
+
+I think broadly the issue is that if we #include kunit headers
+in the kasan headers, we end up creating all kinds of problems
+for ourselves, since the kasan headers are in turn included
+in so many places (including the kunit headers themselves, since
+kunit uses memory allocation APIs). I suspect the way forward is
+to try and ensure that we don't utilize the kunit headers in any
+of the kasan headers, but rather just include kunit headers
+in test_kasan.c, and any other kasan .c files we need KUnit APIs
+for. Not sure if that's possible, but it's likely the best way to
+go if it is.
+
+> > >  /* task_struct member predeclarations (sorted alphabetically): */
+> > >  struct audit_context;
+> > >  struct backing_dev_info;
+> > > @@ -1178,7 +1180,10 @@ struct task_struct {
+> > >
+> > >  #ifdef CONFIG_KASAN
+> > >       unsigned int                    kasan_depth;
+> > > -#endif
+> > > +#ifdef CONFIG_KUNIT
+> > > +     struct kunit *kasan_kunit_test;
+> > > +#endif /* CONFIG_KUNIT */
+> > > +#endif /* CONFIG_KASAN */
+> > >
+> > >  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> > >       /* Index of current stored address in ret_stack: */
+> > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > > index 9242f932896c..d266b9495c67 100644
+> > > --- a/lib/kunit/test.c
+> > > +++ b/lib/kunit/test.c
+> > > @@ -9,11 +9,12 @@
+> > >  #include <kunit/test.h>
+> > >  #include <linux/kernel.h>
+> > >  #include <linux/sched/debug.h>
+> > > +#include <linux/sched.h>
+> > >
+> > >  #include "string-stream.h"
+> > >  #include "try-catch-impl.h"
+> > >
+> > > -static void kunit_set_failure(struct kunit *test)
+> > > +void kunit_set_failure(struct kunit *test)
+> > >  {
+> > >       WRITE_ONCE(test->success, false);
+> > >  }
+> > > @@ -236,6 +237,10 @@ static void kunit_try_run_case(void *data)
+> > >       struct kunit_suite *suite = ctx->suite;
+> > >       struct kunit_case *test_case = ctx->test_case;
+> > >
+> > > +#ifdef CONFIG_KASAN
+> > > +     current->kasan_kunit_test = test;
+> > > +#endif
+> > > +
+> > >       /*
+> > >        * kunit_run_case_internal may encounter a fatal error; if it does,
+> > >        * abort will be called, this thread will exit, and finally the parent
+> > > diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> > > index 5ef9f24f566b..5554d23799a5 100644
+> > > --- a/mm/kasan/report.c
+> > > +++ b/mm/kasan/report.c
+> > > @@ -32,6 +32,8 @@
+> > >
+> > >  #include <asm/sections.h>
+> > >
+> > > +#include <kunit/test.h>
+> > > +
+> > >  #include "kasan.h"
+> > >  #include "../slab.h"
+> > >
+> > > @@ -461,6 +463,15 @@ void kasan_report_invalid_free(void *object, unsigned long ip)
+> > >       u8 tag = get_tag(object);
+> > >
+> > >       object = reset_tag(object);
+> > > +
+> > > +     if (current->kasan_kunit_test) {
+> > > +             if (current->kasan_kunit_test->kasan_report_expected) {
+> > > +                     current->kasan_kunit_test->kasan_report_found = true;
+> > > +                     return;
+> > > +             }
+> > > +             kunit_set_failure(current->kasan_kunit_test);
+> > > +     }
+> > > +
+> > >       start_report(&flags);
+> > >       pr_err("BUG: KASAN: double-free or invalid-free in %pS\n", (void *)ip);
+> > >       print_tags(tag, object);
+> > > @@ -481,6 +492,14 @@ void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned lon
+> > >       if (likely(!report_enabled()))
+> > >               return;
+> > >
+> > > +     if (current->kasan_kunit_test) {
+> > > +             if (current->kasan_kunit_test->kasan_report_expected) {
+> > > +                     current->kasan_kunit_test->kasan_report_found = true;
+> > > +                     return;
+> > > +             }
+> > > +             kunit_set_failure(current->kasan_kunit_test);
+> > > +     }
+> > > +
+> > >       disable_trace_on_warning();
+> > >
+> > >       tagged_addr = (void *)addr;
+> > > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > > index cc5d844ecca1..63eab18a8c34 100644
+> > > --- a/tools/testing/kunit/kunit_kernel.py
+> > > +++ b/tools/testing/kunit/kunit_kernel.py
+> > > @@ -141,7 +141,7 @@ class LinuxSourceTree(object):
+> > >               return True
+> > >
+> > >       def run_kernel(self, args=[], timeout=None, build_dir=''):
+> > > -             args.extend(['mem=256M'])
+> > > +             args.extend(['mem=256M', 'kasan_multi_shot'])
+> > >               process = self._ops.linux_bin(args, timeout, build_dir)
+> > >               with open(os.path.join(build_dir, 'test.log'), 'w') as f:
+> > >                       for line in process.stdout:
+> >
+> > I tried applying this to the "kunit" branch of linux-kselftest, and
+> > the above failed. Which branch are you building with? Probably
+> > best to use the kunit branch I think. Thanks!
+> >
+> I believe I am on Torvalds/master. There was some debate as to which
+> branch I should be developing on when I started, but it probably makes
+> sense for me to move to the "kunit" branch.
+>
+
+I think for this case - given that we may need some new KUnit
+functionality - that would be best. Thanks!
+
+Alan
+ 
+> > Alan
+> >
+> > > --
+> > > 2.25.0.265.gbab2e86ba0-goog
+> > >
+> > >
+> 
+> -- 
+> Thank you for all your comments!
+> Patricia Alfonso
+> 
