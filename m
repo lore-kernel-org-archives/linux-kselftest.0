@@ -1,114 +1,134 @@
-Return-Path: <SRS0=Q1vU=4T=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=FEG8=4U=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C46DEC3F2CD
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Mar 2020 23:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 096D9C3F2CD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 02:53:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9445921739
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Mar 2020 23:02:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FPSeLrB7"
+	by mail.kernel.org (Postfix) with ESMTP id D52B821D56
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Mar 2020 02:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1583204019;
+	bh=jWDCjtYXgCN/oYeyT1eU+DWTqGu7bZ3vvAUPWIQIHwI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=IBhr6uJIOkruwGPiQMBxDKZzGpiTsQaxBuwSn5tmveWta5hQ73K9i+LEVlKGvhNqr
+	 meLWPI/F0sgoUlM3LSYIp6n5f36nnV2sK4ESyrsLkKaFdqjrssJlMQ6VRXR7BIVZB+
+	 BGxNe3LcPYRb03XJ2UcEa1x4B6dwe8ru58sWBdY8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgCBXCI (ORCPT
+        id S1727558AbgCCCxc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Mar 2020 18:02:08 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39039 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726752AbgCBXCI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Mar 2020 18:02:08 -0500
-Received: by mail-pf1-f195.google.com with SMTP id l7so442647pff.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Mar 2020 15:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=alU+BgvFGo59yM0O+ldee5pOjl7Ty1NQ+17QZiMtzMo=;
-        b=FPSeLrB7GcxGD/0n0DkgZRMYdBUiZeQ+laPMlp2Pb3icU44iK9eIgS7nJheSVzUk4x
-         XzQrD4vw1cKLDfSG7T4p+rZUN5/fWPWf5odYIvQHZz0B3JCIvnVMia0pRtb1FtCenogk
-         e82T6ScsKsm8DbFN0db3OAll3/2xdOIMdHVxU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=alU+BgvFGo59yM0O+ldee5pOjl7Ty1NQ+17QZiMtzMo=;
-        b=LnxLOOTTenXsEQ26WQpWBe3dJUjQ8FHZ5vWRIi1lq77a/p9yKMJ/Jdc/mVn1nVdFDq
-         9juLvcO95SxzFdWg1rJN+432faG1GgdsgOsr9j3y6ElmdIfkTLMfxWiM+5j75pPZdhDi
-         pukfhSfMJFKqOXbr4mCslp+Y+MCh+EjOnd2Gm9+QIxfgc/ZY4f3nJmqRxGZ95v8Yidtw
-         tSQp8/RMigE6wy3eV7DsJ2zuHNC+HXxTIOcP3lU9WimwanTg+iJjacpddd1Zs41Vtzuo
-         fDzlphZZPyt/yYEFmwfPj3m2SA3//Ctt9rUGEFx8Tce9RJ9eM1qEmY+bfg+bo991ujZ7
-         3eDA==
-X-Gm-Message-State: ANhLgQ0GYASJAmA9y2szN3sUgFXeP3TR119TLtY8qPY4ktwZ4XWx5eMa
-        gunAEOm75V1VZtXC7w5nEwKITg==
-X-Google-Smtp-Source: ADFU+vvaMShTu4H+Bx5ShEjs077RseA1NzW7/myf8UYsI/g5oF2fIvhSkSOhJhD1EMHTIgkyXbQ4Ug==
-X-Received: by 2002:aa7:8bc1:: with SMTP id s1mr1226128pfd.215.1583190127144;
-        Mon, 02 Mar 2020 15:02:07 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v29sm22024356pgc.72.2020.03.02.15.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 15:02:06 -0800 (PST)
-Date:   Mon, 2 Mar 2020 15:02:05 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        David Gow <davidgow@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Subject: Re: [RFC PATCH 1/2] Port KASAN Tests to KUnit
-Message-ID: <202003021500.9E0FEE1BEF@keescook>
-References: <20200227024301.217042-1-trishalfonso@google.com>
- <CACT4Y+Z_fGz2zVpco4kuGOVeCK=jv4zH0q9Uj5Hv5TAFxY3yRg@mail.gmail.com>
- <CAKFsvULZqJT3-NxYLsCaHpxemBCdyZN7nFTuQM40096UGqVzgQ@mail.gmail.com>
- <CACT4Y+YTNZRfKLH1=FibrtGj34MY=naDJY6GWVnpMvgShSLFhg@mail.gmail.com>
- <CAGXu5jKbpbH4sm4sv-74iHa+VzWuvF5v3ci7R-KVt+StRpMESg@mail.gmail.com>
- <CAFd5g47OHZ-6Fao+JOMES+aPd2vyWXSS0zKCkSwL6XczN4R7aQ@mail.gmail.com>
+        Mon, 2 Mar 2020 21:53:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728913AbgCCCti (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:49:38 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DCFCB246D9;
+        Tue,  3 Mar 2020 02:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583203777;
+        bh=jWDCjtYXgCN/oYeyT1eU+DWTqGu7bZ3vvAUPWIQIHwI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tswGIc7GzF4LTAeNfJXfDrYUUboIxNd5ipTjvK2/Ut7MgqmS1ekslfpEmUmKpR/rx
+         kugLccZRGdrhW9hFKv7iOWSRhYKI0OCd+uVTjXuIOlU8/8O0qRAtY5jeM+134wYnVO
+         HfcQ0Y414nTWVwN0qtBk+DPzhve6g4dGLj69wlqw=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jiri Benc <jbenc@redhat.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 03/22] selftests: fix too long argument
+Date:   Mon,  2 Mar 2020 21:49:14 -0500
+Message-Id: <20200303024933.10371-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200303024933.10371-1-sashal@kernel.org>
+References: <20200303024933.10371-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFd5g47OHZ-6Fao+JOMES+aPd2vyWXSS0zKCkSwL6XczN4R7aQ@mail.gmail.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 02:36:48PM -0800, Brendan Higgins wrote:
-> On Mon, Mar 2, 2020 at 9:52 AM Kees Cook <keescook@chromium.org> wrote:
-> > I'm all for unittests (I have earlier kind-of-unit-tests in
-> > lib/test_user_copy.c lib/test_overflow.c etc), but most of LKDTM is
-> 
-> <Minor tangent (sorry)>
-> 
-> I took a brief look at lib/test_user_copy.c, it looks like it doesn't
-> use TAP formatted output. How do you feel about someone converting
-> them over to use KUnit? If nothing else, it would be good getting all
-> the unit-ish tests to output in the same format.
-> 
-> I proposed converting over some of the runtime tests over to KUnit as
-> a LKMP project (Linux Kernel Mentorship Program) here:
-> 
-> https://wiki.linuxfoundation.org/lkmp/lkmp_project_list#convert_runtime_tests_to_kunit_tests
-> 
-> I am curious what you think about this.
-> 
-> </Minor tangent>
+From: Jiri Benc <jbenc@redhat.com>
 
-Yes please! Anything that helps these tests get more exposure/wider
-testing is good. (That said, I don't want to lose any of the existing
-diagnostic messages -- _adding_ TAP would be lovely.)
+[ Upstream commit c363eb48ada5cf732b3f489fab799fc881097842 ]
 
+With some shells, the command construed for install of bpf selftests becomes
+too large due to long list of files:
+
+make[1]: execvp: /bin/sh: Argument list too long
+make[1]: *** [../lib.mk:73: install] Error 127
+
+Currently, each of the file lists is replicated three times in the command:
+in the shell 'if' condition, in the 'echo' and in the 'rsync'. Reduce that
+by one instance by using make conditionals and separate the echo and rsync
+into two shell commands. (One would be inclined to just remove the '@' at
+the beginning of the rsync command and let 'make' echo it by itself;
+unfortunately, it appears that the '@' in the front of mkdir silences output
+also for the following commands.)
+
+Also, separate handling of each of the lists to its own shell command.
+
+The semantics of the makefile is unchanged before and after the patch. The
+ability of individual test directories to override INSTALL_RULE is retained.
+
+Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Tested-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/lib.mk | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 5bef05d6ba393..c9be64dc681d2 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -54,17 +54,20 @@ else
+ 	$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
+ endif
+ 
++define INSTALL_SINGLE_RULE
++	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
++	$(if $(INSTALL_LIST),@echo rsync -a $(INSTALL_LIST) $(INSTALL_PATH)/)
++	$(if $(INSTALL_LIST),@rsync -a $(INSTALL_LIST) $(INSTALL_PATH)/)
++endef
++
+ define INSTALL_RULE
+-	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)" != "X" ]; then					\
+-		mkdir -p ${INSTALL_PATH};										\
+-		echo "rsync -a $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(INSTALL_PATH)/";	\
+-		rsync -a $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(INSTALL_PATH)/;		\
+-	fi
+-	@if [ "X$(TEST_GEN_PROGS)$(TEST_CUSTOM_PROGS)$(TEST_GEN_PROGS_EXTENDED)$(TEST_GEN_FILES)" != "X" ]; then					\
+-		mkdir -p ${INSTALL_PATH};										\
+-		echo "rsync -a $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(INSTALL_PATH)/";	\
+-		rsync -a $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(INSTALL_PATH)/;		\
+-	fi
++	$(eval INSTALL_LIST = $(TEST_PROGS)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_FILES)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_GEN_PROGS)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_CUSTOM_PROGS)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_GEN_FILES)) $(INSTALL_SINGLE_RULE)
+ endef
+ 
+ install: all
 -- 
-Kees Cook
+2.20.1
+
