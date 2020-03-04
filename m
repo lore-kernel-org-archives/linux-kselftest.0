@@ -2,144 +2,178 @@ Return-Path: <SRS0=pTDi=4V=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58041C3F2D7
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 11:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C98D7C3F2CD
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 13:16:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3206D2467E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 11:08:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bz7/VMDY"
+	by mail.kernel.org (Postfix) with ESMTP id A913820838
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 13:16:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729402AbgCDLIK (ORCPT
+        id S2388104AbgCDNQI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Mar 2020 06:08:10 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:34212 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729283AbgCDLIA (ORCPT
+        Wed, 4 Mar 2020 08:16:08 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:55684 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388107AbgCDNQI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Mar 2020 06:08:00 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024B46vf167257;
-        Wed, 4 Mar 2020 11:07:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=BabazQ5yP//ASrPjsFgmGIuh28CWLBs/R03HwSSNcmU=;
- b=bz7/VMDYrY9wwas4kpdEkI6DP0kdmz6zQjg+3JR6W3Y92NutFSpqLWKdwwK78y26TUMI
- 1URPnmKOUJ4Zne2gldyjkOH9pJ36t2KYrb6gglj0edjEXehtjslqIaXqs4d+3JKYaA9S
- vn28djzQApY5VX8VydTjsHMdrwo9vBvlSBf93+89nWwnNsrxEXh3YRXTYd6QR983W/aK
- rAviWa6EkNR7f9eDQ5eNlJwn+ZjPuW8PbJM9KDrCCPJBuNdH7w/KJz7l51johhyemNHq
- Ua+yFimiQ0BCxb1PxAI0YKgD5p0BrWIw/MSrG4NCsRn+axdwLrekZAEYKadXc0vuKh4x bw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2yffwqwm7y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Mar 2020 11:07:53 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024B3TYt027639;
-        Wed, 4 Mar 2020 11:07:52 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2yg1h0nbv0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Mar 2020 11:07:52 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 024B7pDv012708;
-        Wed, 4 Mar 2020 11:07:51 GMT
-Received: from dhcp-10-175-165-222.vpn.oracle.com (/10.175.165.222)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Mar 2020 03:07:50 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com, frowand.list@gmail.com,
-        gregkh@linuxfoundation.org, shuah@kernel.org
-Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v6 kunit-next 2/4] kunit: add log test
-Date:   Wed,  4 Mar 2020 11:07:14 +0000
-Message-Id: <1583320036-442-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1583320036-442-1-git-send-email-alan.maguire@oracle.com>
-References: <1583320036-442-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- suspectscore=3 malwarescore=0 mlxlogscore=999 mlxscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003040086
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 suspectscore=3
- phishscore=0 clxscore=1015 bulkscore=0 adultscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003040086
+        Wed, 4 Mar 2020 08:16:08 -0500
+Received: from mail-pl1-f197.google.com ([209.85.214.197])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1j9Tsb-0007Mc-KU
+        for linux-kselftest@vger.kernel.org; Wed, 04 Mar 2020 13:16:05 +0000
+Received: by mail-pl1-f197.google.com with SMTP id w11so934609plp.22
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 05:16:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FoiB6hzDhu7zhsE/qqdlngAwyG5TADZ8ljLTza6EBz0=;
+        b=Jnu4jcusB5+0CuEEVTIE2hRAOQeHypXMnW6rxfR0JxA980BKmaiYRbY9EE11iJKjBJ
+         1F8f73uHfqbQckgwA/1ixvRMCP2oKgI2zpOIap6hv5Lb230fmKlyof8LMpuc2dp930c1
+         ph3km8PZzOKpvcGHaC+1QeGABIjThwVGVpMB+b/qLrkETSBoQ2eTGyaiOZMSMi0d7FqF
+         AQlaqzRe4zUSpZGjJkSxx3TRnQvhfnKWorDfLu5WDuTKS7o1FTWGWJM77/4bXxIR7Nhd
+         rQoTCXgeX1dzyKXnKWcxyGp5Jiuf5+7G0qgdNwivvhYTQDgHXTF7bkoBiUcMnoPNLsVt
+         sxrg==
+X-Gm-Message-State: ANhLgQ30MZPQOE0SoKu7lZhzuLULVbFm2qp58gAngPFes+qwdz3VSGvf
+        nfRbPcJZGsPMTz/U7Ifi0NzVArKoDqAlXubS7+IQPS/i+wcKA3AcEia+75u4S6OTI4G2lVbladX
+        mUiV5yiNKFA2A9T3VXJKhqNTie07Au1jeondttiTSV9Q1
+X-Received: by 2002:a17:902:d90f:: with SMTP id c15mr3056606plz.190.1583327763908;
+        Wed, 04 Mar 2020 05:16:03 -0800 (PST)
+X-Google-Smtp-Source: ADFU+vvK4uTGiKzjtuDXnV1Gfy92QDaS45ZMs1S30Dw1XFtBScjRpPMHg0ViyThdR/UnPOLJjZ/fzQ==
+X-Received: by 2002:a17:902:d90f:: with SMTP id c15mr3056579plz.190.1583327763544;
+        Wed, 04 Mar 2020 05:16:03 -0800 (PST)
+Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id a143sm3394286pfd.108.2020.03.04.05.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 05:16:02 -0800 (PST)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        shuah@kernel.org
+Subject: [PATCH] selftests/powerpc: Turn off timeout setting for benchmarks, dscr, signal, tm
+Date:   Wed,  4 Mar 2020 21:15:53 +0800
+Message-Id: <20200304131553.27582-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-the logging test ensures multiple strings logged appear in the
-log string associated with the test when CONFIG_KUNIT_DEBUGFS is
-enabled.
+Some specific tests in powerpc can take longer than the default 45
+seconds that added in commit 852c8cbf (selftests/kselftest/runner.sh:
+Add 45 second timeout per test) to run, the following test result was
+collected across 2 Power8 nodes and 1 Power9 node in our pool:
+  powerpc/benchmarks/futex_bench - 52s
+  powerpc/dscr/dscr_sysfs_test - 116s
+  powerpc/signal/signal_fuzzer - 88s
+  powerpc/tm/tm_unavailable_test - 168s
+  powerpc/tm/tm-poison - 240s
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Thus they will fail with TIMEOUT error. Disable the timeout setting
+for these sub-tests to allow them finish properly.
+
+https://bugs.launchpad.net/bugs/1864642
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
 ---
- lib/kunit/kunit-test.c | 41 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ tools/testing/selftests/powerpc/benchmarks/Makefile | 2 ++
+ tools/testing/selftests/powerpc/benchmarks/settings | 1 +
+ tools/testing/selftests/powerpc/dscr/Makefile       | 2 ++
+ tools/testing/selftests/powerpc/dscr/settings       | 1 +
+ tools/testing/selftests/powerpc/signal/Makefile     | 2 ++
+ tools/testing/selftests/powerpc/signal/settings     | 1 +
+ tools/testing/selftests/powerpc/tm/Makefile         | 2 ++
+ tools/testing/selftests/powerpc/tm/settings         | 1 +
+ 8 files changed, 12 insertions(+)
+ create mode 100644 tools/testing/selftests/powerpc/benchmarks/settings
+ create mode 100644 tools/testing/selftests/powerpc/dscr/settings
+ create mode 100644 tools/testing/selftests/powerpc/signal/settings
+ create mode 100644 tools/testing/selftests/powerpc/tm/settings
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index aceb5bf..359bc26 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -329,6 +329,45 @@ static void kunit_resource_test_exit(struct kunit *test)
- 	.exit = kunit_resource_test_exit,
- 	.test_cases = kunit_resource_test_cases,
- };
--kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite);
-+
-+static void kunit_log_test(struct kunit *test);
-+
-+static struct kunit_case kunit_log_test_cases[] = {
-+	KUNIT_CASE(kunit_log_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_log_test_suite = {
-+	.name = "kunit-log-test",
-+	.test_cases = kunit_log_test_cases,
-+};
-+
-+
-+static void kunit_log_test(struct kunit *test)
-+{
-+	struct kunit_suite *suite = &kunit_log_test_suite;
-+
-+	kunit_log(KERN_INFO, test, "put this in log.");
-+	kunit_log(KERN_INFO, test, "this too.");
-+	kunit_log(KERN_INFO, suite, "add to suite log.");
-+	kunit_log(KERN_INFO, suite, "along with this.");
-+
-+#ifdef CONFIG_KUNIT_DEBUGFS
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(test->log, "put this in log."));
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(test->log, "this too."));
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(suite->log, "add to suite log."));
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(suite->log, "along with this."));
-+#else
-+	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
-+	KUNIT_EXPECT_PTR_EQ(test, suite->log, (char *)NULL);
-+#endif
-+}
-+
-+kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
-+		  &kunit_log_test_suite);
+diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
+index d40300a..a32a6ab 100644
+--- a/tools/testing/selftests/powerpc/benchmarks/Makefile
++++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
+@@ -2,6 +2,8 @@
+ TEST_GEN_PROGS := gettimeofday context_switch fork mmap_bench futex_bench null_syscall
+ TEST_GEN_FILES := exec_target
  
- MODULE_LICENSE("GPL v2");
++TEST_FILES := settings
++
+ CFLAGS += -O2
+ 
+ top_srcdir = ../../../../..
+diff --git a/tools/testing/selftests/powerpc/benchmarks/settings b/tools/testing/selftests/powerpc/benchmarks/settings
+new file mode 100644
+index 0000000..e7b9417
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/benchmarks/settings
+@@ -0,0 +1 @@
++timeout=0
+diff --git a/tools/testing/selftests/powerpc/dscr/Makefile b/tools/testing/selftests/powerpc/dscr/Makefile
+index 5df4763..cfa6eed 100644
+--- a/tools/testing/selftests/powerpc/dscr/Makefile
++++ b/tools/testing/selftests/powerpc/dscr/Makefile
+@@ -3,6 +3,8 @@ TEST_GEN_PROGS := dscr_default_test dscr_explicit_test dscr_user_test	\
+ 	      dscr_inherit_test dscr_inherit_exec_test dscr_sysfs_test	\
+ 	      dscr_sysfs_thread_test
+ 
++TEST_FILES := settings
++
+ top_srcdir = ../../../../..
+ include ../../lib.mk
+ 
+diff --git a/tools/testing/selftests/powerpc/dscr/settings b/tools/testing/selftests/powerpc/dscr/settings
+new file mode 100644
+index 0000000..e7b9417
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/dscr/settings
+@@ -0,0 +1 @@
++timeout=0
+diff --git a/tools/testing/selftests/powerpc/signal/Makefile b/tools/testing/selftests/powerpc/signal/Makefile
+index 113838f..153fafc 100644
+--- a/tools/testing/selftests/powerpc/signal/Makefile
++++ b/tools/testing/selftests/powerpc/signal/Makefile
+@@ -5,6 +5,8 @@ CFLAGS += -maltivec
+ $(OUTPUT)/signal_tm: CFLAGS += -mhtm
+ $(OUTPUT)/sigfuz: CFLAGS += -pthread -m64
+ 
++TEST_FILES := settings
++
+ top_srcdir = ../../../../..
+ include ../../lib.mk
+ 
+diff --git a/tools/testing/selftests/powerpc/signal/settings b/tools/testing/selftests/powerpc/signal/settings
+new file mode 100644
+index 0000000..e7b9417
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/signal/settings
+@@ -0,0 +1 @@
++timeout=0
+diff --git a/tools/testing/selftests/powerpc/tm/Makefile b/tools/testing/selftests/powerpc/tm/Makefile
+index b15a1a3..7b99d09 100644
+--- a/tools/testing/selftests/powerpc/tm/Makefile
++++ b/tools/testing/selftests/powerpc/tm/Makefile
+@@ -7,6 +7,8 @@ TEST_GEN_PROGS := tm-resched-dscr tm-syscall tm-signal-msr-resv tm-signal-stack
+ 	$(SIGNAL_CONTEXT_CHK_TESTS) tm-sigreturn tm-signal-sigreturn-nt \
+ 	tm-signal-context-force-tm tm-poison
+ 
++TEST_FILES := settings
++
+ top_srcdir = ../../../../..
+ include ../../lib.mk
+ 
+diff --git a/tools/testing/selftests/powerpc/tm/settings b/tools/testing/selftests/powerpc/tm/settings
+new file mode 100644
+index 0000000..e7b9417
+--- /dev/null
++++ b/tools/testing/selftests/powerpc/tm/settings
+@@ -0,0 +1 @@
++timeout=0
 -- 
-1.8.3.1
+2.7.4
 
