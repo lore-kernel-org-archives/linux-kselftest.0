@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA553C3F2CE
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D244DC3F2CE
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 80FC620866
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A36E720870
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Mar 2020 22:14:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583360052;
-	bh=sg+lRT6T+2CFS1Dw0JSEHqIxXO8uMRbU2SWPKjpkK4I=;
+	s=default; t=1583360067;
+	bh=8YtaRovbocska2CoTH6bYQgSQtXxX7l0Lg3wK/KeTpM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=tqbGekcJ7vDTM+XHK7swDFI/hjvjWAGekdzbx/En9p+/b1KO0Dg7FuAMnaGRtQPz3
-	 P3x3XE6/5QKX8GYrxIJqZXeNl/HulnL29dUC3qIamZPV7v6LpbAFFDErmALt8QOREC
-	 ZxGqBDsiM8UViXyEkbKCATyP0brb2Grb1lKCDq/U=
+	b=SCBZpN2N8KoHAZo58gT94mbNAywlxAgcCOI8e1imvgb3jQZ7fTk36hqZlT0iTG34v
+	 DRB5FaydL3YgyhZbuQwbTurWeqje4/eMPxQogU/WWAvR2d1LYBVDvfFnl3+v7QrDNW
+	 KObCbNMi7P5zUgkL9ig1LqPLYF5NTJMciSCsxuhY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388462AbgCDWOM (ORCPT
+        id S2388528AbgCDWO0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Mar 2020 17:14:12 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:43469 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388389AbgCDWOL (ORCPT
+        Wed, 4 Mar 2020 17:14:26 -0500
+Received: from mail-il1-f171.google.com ([209.85.166.171]:38449 "EHLO
+        mail-il1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388508AbgCDWOZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Mar 2020 17:14:11 -0500
-Received: by mail-io1-f66.google.com with SMTP id n21so4185211ioo.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 14:14:11 -0800 (PST)
+        Wed, 4 Mar 2020 17:14:25 -0500
+Received: by mail-il1-f171.google.com with SMTP id f5so3250222ilq.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Mar 2020 14:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+9gZ3FjUdWgi81CXN9D2iQAnH+lo6JPqrg04R4qEP/8=;
-        b=gZXX9JmFv2DJctPsp75DNG3g9p5eWyxIrIAFUCbjj3XGgwnMcqZvgFvkYd7Xd9sfeI
-         zZEQWmhYX3g7EGtLUCtQBUuPzHEkzgpNKBYXKTAwk0TH8EBhCHvC9IlWnCXxm2mILo4G
-         uqEGWEe60u9mIN2p34S1eJ2s6E8iJvEzG2zy4=
+        bh=BNOtEzNwp4ie5FRfbU1U4EX7nRGPjUgtolRpVq/MBE4=;
+        b=OjekLCqZXQTwkl6Q5+uW5RbrmRq1XHvjg72IzgF+tE8FYdmbprWuZXrMRaz2opWp96
+         eogbo2K2F7+AuIYJXXRlnEbypRyif+rw8vKoVtGZtYDP7P/6XPjLzZGOvctKs/o8fNmS
+         sPQwOLyx918g6f4J/GeVMND2UO72j7YBTftAI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+9gZ3FjUdWgi81CXN9D2iQAnH+lo6JPqrg04R4qEP/8=;
-        b=sIl+RR0XjF4Ijed0z+B2dHEBQt6OBJkFCpmtKcv9PXJlZNLF/WwEHDIzaB1JlTtWXg
-         ASwCdq0I1rCvWDgakPu+aEmCJg+a/Bu5SvozsXGhC3UugsiPLJpsn3D9tO5XjvmQVWUL
-         iEhr0yJScEPT+gBpgQgFWkoRgvDwNlngOarCg9DCgMzPyaYixzTDyLUFQQL4CDXn0o1K
-         uFVP62h1jj4+yy5Qae42L0jutQDwEMbT51HH7ykbAWHmqv8X1W9NHjnfxTlnzq3+KPeN
-         EbfIrNt/XpSPfLRMLXtzvciMZEQKFzPe5lI4Uq+rNFg/+1DfW9utq/5xOeT1SscgZomp
-         rP8w==
-X-Gm-Message-State: ANhLgQ2lvDyOEUiRENiYEDyGX/l2e2aGCDfNUO7/GgEHPHyJiG17EMHy
-        WrtEmUUUU0fK0f+OtoVzRT+oFA==
-X-Google-Smtp-Source: ADFU+vvGc+yswzBxxepbZQqv/WGJj2Qwy8fRbC0QftbuZTZFLG36VzQ2QAbYELI6s/iSwvWfdmZTyg==
-X-Received: by 2002:a6b:660d:: with SMTP id a13mr3690456ioc.18.1583360049769;
-        Wed, 04 Mar 2020 14:14:09 -0800 (PST)
+        bh=BNOtEzNwp4ie5FRfbU1U4EX7nRGPjUgtolRpVq/MBE4=;
+        b=q9tI9FCf7SyFV+cITaaiDNRzFGIhDq4fWHRJDIJDP9iq6UzvbTt9UTD0ax6RUsqhf5
+         5qC5dvnW2d2TeHdc3MHq1CBTtMTsxszsEUD6PG2J82P13Gyne3A/fAMp/FNR343fOHHR
+         Zz6V5pQehlqecNZl7Hy2ewl2Npy07Rj4DnyeOjngXsbYDyJjToLuGgoVkhE8/ch06NDJ
+         Bku+hbFGp+f0EWLOzej9hAJ+gYIBwKvboqgIkDXC/KMabh6RhtEVeK/DDQSnhWXcCv0j
+         +rVBh+0gIFJ+9DbgdiUaQci3YcmvB0da2ROWYOCAlfEC79hfqegi3p6Tow2UikmgITey
+         yJ2w==
+X-Gm-Message-State: ANhLgQ0iuplbEEJJfcIVw5kmEW8uYGYwQh2BfFVwXY7N3KhT7pSNqDWA
+        tAM4EpVk/Z9pX9pQUINfAKrMuw==
+X-Google-Smtp-Source: ADFU+vsMyK+BNv06am40GT7NHnRVpySeoKNzTfsH6ZdL+TH4iiTcuGpNh3lpNJhPS8RjcOqAd+KcwQ==
+X-Received: by 2002:a92:5b11:: with SMTP id p17mr4890257ilb.202.1583360064649;
+        Wed, 04 Mar 2020 14:14:24 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g12sm6850409iom.5.2020.03.04.14.14.08
+        by smtp.gmail.com with ESMTPSA id g12sm6850409iom.5.2020.03.04.14.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 14:14:09 -0800 (PST)
+        Wed, 04 Mar 2020 14:14:24 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org
+To:     shuah@kernel.org, gregkh@linuxfoundation.org, tglx@linutronix.de
 Cc:     Shuah Khan <skhan@linuxfoundation.org>, khilman@baylibre.com,
         mpe@ellerman.id.au, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] selftests: Fix kselftest O=objdir build from cluttering top level objdir
-Date:   Wed,  4 Mar 2020 15:13:32 -0700
-Message-Id: <58d954867391c90fe0792d87e09a82bda26ba4fc.1583358715.git.skhan@linuxfoundation.org>
+Subject: [PATCH 4/4] selftests: android: Fix custom install from skipping test progs
+Date:   Wed,  4 Mar 2020 15:13:35 -0700
+Message-Id: <738dd72fe6c4c277a39f1cab10b342c477e0464f.1583358715.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1583358715.git.skhan@linuxfoundation.org>
 References: <cover.1583358715.git.skhan@linuxfoundation.org>
@@ -76,37 +76,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-make kselftest-all O=objdir builds create generated objects in objdir.
-This clutters the top level directory with kselftest objects. Fix it
-to create sub-directory under objdir for kselftest objects.
+Update custom install rule to install all generated test programs. This
+fixes android/ion tests to be installed correctly.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/android/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6ec503912bea..cd77df3e6bb8 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -91,7 +91,7 @@ override LDFLAGS =
- override MAKEFLAGS =
- endif
+diff --git a/tools/testing/selftests/android/Makefile b/tools/testing/selftests/android/Makefile
+index 7c462714b418..9258306cafe9 100644
+--- a/tools/testing/selftests/android/Makefile
++++ b/tools/testing/selftests/android/Makefile
+@@ -21,7 +21,7 @@ all:
  
--# Append kselftest to KBUILD_OUTPUT to avoid cluttering
-+# Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
- # KBUILD_OUTPUT with selftest objects and headers installed
- # by selftests Makefile or lib.mk.
- ifdef building_out_of_srctree
-@@ -99,7 +99,7 @@ override LDFLAGS =
- endif
+ override define INSTALL_RULE
+ 	mkdir -p $(INSTALL_PATH)
+-	install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)
++install -t $(INSTALL_PATH) $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)  $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
  
- ifneq ($(O),)
--	BUILD := $(O)
-+	BUILD := $(O)/kselftest
- else
- 	ifneq ($(KBUILD_OUTPUT),)
- 		BUILD := $(KBUILD_OUTPUT)/kselftest
+ 	@for SUBDIR in $(SUBDIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$SUBDIR;	\
 -- 
 2.20.1
 
