@@ -2,121 +2,86 @@ Return-Path: <SRS0=Yi3/=4W=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB83C3F2D1
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:23:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BDCCC3F2D2
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:25:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5171320637
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583429023;
-	bh=n60fiqQit++r2dt9ETpVJeF3WsCOgv/ioz+JBtX7UoA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aWVHz7tcYvDgOLLYhQR7QN/p5evKd6LrxjlFADNrKdmddPgkBsLcjmyorDUkWUeD9
-	 sua9Bh9nzxzmO6swKao611boTcsF4VrxpFKy03auJgnTRpjITysyJoypVAJ73jMnow
-	 gEDDP76UyaTMJzjE87leiYcYdHUM3sz3YWkhQEwM=
+	by mail.kernel.org (Postfix) with ESMTP id CC08E20705
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:25:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IYbAITBp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727718AbgCERXi (ORCPT
+        id S1726083AbgCERZt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Mar 2020 12:23:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39200 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727186AbgCERNj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:13:39 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 5 Mar 2020 12:25:49 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:43752 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726049AbgCERZt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:25:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583429148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=LNaeYUuZ/I8N5sWDPpA8Jaa5r8899vfI3fz+QN5P+JQ=;
+        b=IYbAITBpPGA9mko9U1WWd+yI5eq1lE4e4oPdV82mVJ21f9COss20jKa2hmDNUKgVt9IdSb
+        zj81D+Y971N8ecGJBv8FKijv6Qa9gooEsaEz+vIinY0I+elRqXx6rzRYnAekfweHMsuaNU
+        Gnqart5c8f+u1SYXcX+cxFifPdk4XOc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-311-gvySo0gPN4e7waaKGzfUMA-1; Thu, 05 Mar 2020 12:25:47 -0500
+X-MC-Unique: gvySo0gPN4e7waaKGzfUMA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2447524673;
-        Thu,  5 Mar 2020 17:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428419;
-        bh=n60fiqQit++r2dt9ETpVJeF3WsCOgv/ioz+JBtX7UoA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Obac0x9XnhbsWmK441GJNYpIwlVfeGc9YMnDbrBZ8jHuC/SChZMZumBowgC5dmcr8
-         FvCET4SQrBORozo7k0oFS3aSyw0QygY+gwcwMPdmDKQib8PDJrkPWa8kHpJnGssJ2r
-         /Az2/5Y3aWdp/DieWtsJrriqkzBNB8Y4H7I1MhiM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Heidi Fahim <heidifahim@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.5 21/67] kunit: run kunit_tool from any directory
-Date:   Thu,  5 Mar 2020 12:12:22 -0500
-Message-Id: <20200305171309.29118-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
-References: <20200305171309.29118-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1B9C1005509;
+        Thu,  5 Mar 2020 17:25:45 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-116-124.gru2.redhat.com [10.97.116.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 704005C219;
+        Thu,  5 Mar 2020 17:25:41 +0000 (UTC)
+From:   Wainer dos Santos Moschetta <wainersm@redhat.com>
+To:     kvm@vger.kernel.org, pbonzini@redhat.com
+Cc:     shuah@kernel.org, tglx@linutronix.de, thuth@redhat.com,
+        sean.j.christopherson@intel.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/1] kvm: selftests: Add TEST_FAIL macro
+Date:   Thu,  5 Mar 2020 14:25:31 -0300
+Message-Id: <20200305172532.9360-1-wainersm@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Heidi Fahim <heidifahim@google.com>
+The following patch's commit message is self-explanatory about this proposal.
 
-[ Upstream commit be886ba90cce2fb2f5a4dbcda8f3be3fd1b2f484 ]
+I adjusted to use TEST_FAIL only a few source files, in reality it will
+need to change all the ones listed below. I will proceed with the
+adjustments if this new macro idea is accepted.
 
-Implemented small fix so that the script changes work directories to the
-root of the linux kernel source tree from which kunit.py is run. This
-enables the user to run kunit from any working directory. Originally
-considered using os.path.join but this is more error prone as we would
-have to find all file path usages and modify them accordingly. Using
-os.chdir ensures that the entire script is run within /linux.
+$ find . -type f -name "*.c" -exec grep -l "TEST_ASSERT(false" {} \;
+./lib/kvm_util.c
+./lib/io.c
+./lib/x86_64/processor.c
+./lib/aarch64/ucall.c
+./lib/aarch64/processor.c
+./x86_64/vmx_dirty_log_test.c
+./x86_64/state_test.c
+./x86_64/vmx_tsc_adjust_test.c
+./x86_64/svm_vmcall_test.c
+./x86_64/evmcs_test.c
+./x86_64/vmx_close_while_nested_test.c
 
-Signed-off-by: Heidi Fahim <heidifahim@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/kunit/kunit.py | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Wainer dos Santos Moschetta (1):
+  kvm: selftests: Add TEST_FAIL macro
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index e59eb9e7f9236..180ad1e1b04f9 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -24,6 +24,8 @@ KunitResult = namedtuple('KunitResult', ['status','result'])
- 
- KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs', 'build_dir', 'defconfig'])
- 
-+KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
-+
- class KunitStatus(Enum):
- 	SUCCESS = auto()
- 	CONFIG_FAILURE = auto()
-@@ -35,6 +37,13 @@ def create_default_kunitconfig():
- 		shutil.copyfile('arch/um/configs/kunit_defconfig',
- 				kunit_kernel.kunitconfig_path)
- 
-+def get_kernel_root_path():
-+	parts = sys.argv[0] if not __file__ else __file__
-+	parts = os.path.realpath(parts).split('tools/testing/kunit')
-+	if len(parts) != 2:
-+		sys.exit(1)
-+	return parts[0]
-+
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
- 	config_start = time.time()
-@@ -114,6 +123,9 @@ def main(argv, linux=None):
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
-+		if get_kernel_root_path():
-+			os.chdir(get_kernel_root_path())
-+
- 		if cli_args.build_dir:
- 			if not os.path.exists(cli_args.build_dir):
- 				os.mkdir(cli_args.build_dir)
+ tools/testing/selftests/kvm/dirty_log_test.c             | 7 +++----
+ tools/testing/selftests/kvm/include/test_util.h          | 3 +++
+ tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c | 4 ++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
 -- 
-2.20.1
+2.17.2
 
