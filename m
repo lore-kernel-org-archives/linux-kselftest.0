@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90277C3F2D1
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C787C3F2D2
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:23:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 562552467E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:14:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 573AB207FD
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Mar 2020 17:23:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583428485;
+	s=default; t=1583429018;
 	bh=IUgSQBIgrx3acAIdWwuai6U1vJC+ObOnP/PsZf5UV9g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=wIQg5cTbIyiIXLcvaKOqqP7BxkHZy5VCrgYlDagxa+NQHwSOlycSTjuZraCFBGj5m
-	 AKNJoZEcbE2na2rH5QHajghUbE3GCpGd/C5TF4aNTUgKvxRbc6rLzURWpdGrPk8SIg
-	 fiPg6HKNqCD6ONmqnMxsj3iUwxjx8P62wEQoM7NE=
+	b=dEJSgHhk071IIgNj3uvC2YwK1q6xTAzl5+4cyp7gzoqXlWxN32l+poXLpAZN1kSWU
+	 QcMV9bmYwscnZiTkJbEI3w8V2JiASdBtmfjeYD37gE0C1QwShMvMIZiaJGvSBp6449
+	 5s84l1T06Emb3bMm0rCRpin0YW9HsgU+q34/zB/I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbgCEROo (ORCPT
+        id S1727178AbgCERXe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Mar 2020 12:14:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41078 "EHLO mail.kernel.org"
+        Thu, 5 Mar 2020 12:23:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39278 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727768AbgCEROn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:14:43 -0500
+        id S1727195AbgCERNk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:13:40 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 518D6208CD;
-        Thu,  5 Mar 2020 17:14:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 827FA21556;
+        Thu,  5 Mar 2020 17:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428483;
+        s=default; t=1583428420;
         bh=IUgSQBIgrx3acAIdWwuai6U1vJC+ObOnP/PsZf5UV9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ak/98HxOy7igGca74hn23cNtbLghWQBvZGYpUxjfXWhuGT1uvzVEozDHDYxjvwP9X
-         rzJU1nuc1oBNFt4AoBBoe29AEinwB1hL+cvYvYu61stD4DgBW3giutA99WuTwFy/XW
-         7B0JrYQU1KY9P9BqqHMBblDMYpwHN5LDm9NhO+yM=
+        b=Ng1lynTsrk+X6mYwsrXYvUfmseBAmhMUVgPBqrG6+EAVRZMMzfeNgN9RdjV/+tta5
+         gXgcvMe7JXSXAyLNvB0NcyK5RwKxGGmQDwrXRE40f6pMqZflw2/M+kBCo9Tj/EoZSW
+         OxrJ/Oz9T2Wv5X4lwBW5/oH6EYw4Y1ytl+71PLMM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 18/58] selftests/rseq: Fix out-of-tree compilation
-Date:   Thu,  5 Mar 2020 12:13:39 -0500
-Message-Id: <20200305171420.29595-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 22/67] selftests/rseq: Fix out-of-tree compilation
+Date:   Thu,  5 Mar 2020 12:12:23 -0500
+Message-Id: <20200305171309.29118-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171420.29595-1-sashal@kernel.org>
-References: <20200305171420.29595-1-sashal@kernel.org>
+In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
+References: <20200305171309.29118-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
