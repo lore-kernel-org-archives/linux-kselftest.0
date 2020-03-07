@@ -2,82 +2,108 @@ Return-Path: <SRS0=NCqB=4Y=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E19C10F00
-	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Mar 2020 03:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E441C10F00
+	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Mar 2020 14:03:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA5072072D
-	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Mar 2020 03:46:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BFA020675
+	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Mar 2020 14:03:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJVYKpjG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbgCGDqO (ORCPT
+        id S1726074AbgCGODF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Mar 2020 22:46:14 -0500
-Received: from mga11.intel.com ([192.55.52.93]:57577 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726300AbgCGDqN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Mar 2020 22:46:13 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 19:46:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,524,1574150400"; 
-   d="scan'208";a="235035997"
-Received: from sai-dev-mach.sc.intel.com ([143.183.140.153])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2020 19:46:13 -0800
-From:   Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        tony.luck@intel.com, reinette.chatre@intel.com, babu.moger@amd.com,
-        james.morse@arm.com, ravi.v.shankar@intel.com,
-        fenghua.yu@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
-Subject: [PATCH V1 02/13] selftests/resctrl: Fix typo
-Date:   Fri,  6 Mar 2020 19:40:43 -0800
-Message-Id: <b57a42ccba086c42dcdcf42d8e450817c22c4cad.1583657204.git.sai.praneeth.prakhya@intel.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
-References: <cover.1583657204.git.sai.praneeth.prakhya@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sat, 7 Mar 2020 09:03:05 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40812 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726065AbgCGODF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 7 Mar 2020 09:03:05 -0500
+Received: by mail-pf1-f195.google.com with SMTP id l184so2569676pfl.7;
+        Sat, 07 Mar 2020 06:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=gaIKPIrwCubYADjJu7sbLJYt1zqBedkAptVOYUeebnQ=;
+        b=eJVYKpjGNQy3/0jAQG9Yvmmju4EmftP6llatDBOOPcGbKy29auxZvmVwQ+G9vl+BQh
+         93rUD5+1vFq6visDWWmiC7Hx4uhVCIQY2Qu4KQLy2aL5Efusmn+k09u0fN/XZp7KSyDK
+         d8cZ78hOaQ8blzha43rIxWxmspnIv9+GBLWwSn/xN2kqMKKjr8oS1nwHqiCa2GnGeUyS
+         2YNtFB7VqTWNYKuDcGzNGuNFhn/ckhJwOYVkmrvFJMUB0z5mFFrptxFj8P+s7aoIzdlM
+         K/Hscvl/bkXTyhS1LJ2gpKGziIJvN1dE9RW/vLY9cuqPdO1OfpKVv3t6HLGyfejvvZ0T
+         9A5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gaIKPIrwCubYADjJu7sbLJYt1zqBedkAptVOYUeebnQ=;
+        b=pX5PfM9FF4PkxhuiukJWZLfMUvpcctu3Blsy497DeL1nn7Ss+wpOguAyAmBvp4OQqn
+         F3OOJqQ6FCdedriUEpjSXSTF4wNQ4Vnbi8MGlAwfLceLi4+xbk6jrqF1iz+cUBKpcXNg
+         LwqueUj3xXjAXkTQwGNyv/xmCeJQLsIRW2b0U5TND+DwBu/OgtX4xsq/5iy0REVDMNPl
+         NnUHS2Jf4vhepCcULni5ccA6ZlTbN3Bdk5iy4TLi0wNtVmmDNLRttv7peGtdHWkfc8tN
+         6lav2qufAVX6/EH0X5T+AhP9lvUC3LtdTDCgL5HwMZw0ykWIKVSyCL2DYn69vqW8/S8A
+         wbAg==
+X-Gm-Message-State: ANhLgQ2UCfOeC2FAQY2CDmN4/902eVSIn9qcxRC/iGlYZv9P6kRJvkX7
+        aEegRM5qEP4KVYgXf0Uxdrc=
+X-Google-Smtp-Source: ADFU+vtakTVmkQZCG3qPS+GHx36ySsFGc0kyS//oaXdR0rjV9BOP3tvZHFnoLHR0yeJ5lKrymgCgTw==
+X-Received: by 2002:a63:7e52:: with SMTP id o18mr8260708pgn.46.1583589782835;
+        Sat, 07 Mar 2020 06:03:02 -0800 (PST)
+Received: from localhost ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id 7sm12607320pjm.35.2020.03.07.06.03.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 07 Mar 2020 06:03:02 -0800 (PST)
+From:   Leon He <hexiaolong2008@gmail.com>
+To:     shuah@kernel.org, sumit.semwal@linaro.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, Leon He <leon.he@unisoc.com>
+Subject: [v2] dma-buf: heaps: bugfix for selftest failure
+Date:   Sat,  7 Mar 2020 22:02:45 +0800
+Message-Id: <1583589765-19344-1-git-send-email-hexiaolong2008@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Reinette Chatre <reinette.chatre@intel.com>
+From: Leon He <leon.he@unisoc.com>
 
-The format "%sok" is used to print results of a test. If the test
-passes, the empty string is printed and if the test fails "not " is
-printed. This results in output of "ok" when test passes and "not ok"
-when test fails.
+There are two errors in the dmabuf-heap selftest:
+1. The 'char name[5]' was not initialized to zero, which will cause
+   strcmp(name, "vgem") failed in check_vgem().
+2. The return value of test_alloc_errors() should be reversed, other-
+   wise the while loop in main() will be broken.
 
-Fix one instance where "not" (without a space) is printed on test
-failure resulting in output of "notok" on test failure.
-
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
+Signed-off-by: Leon He <leon.he@unisoc.com>
 ---
- tools/testing/selftests/resctrl/cqm_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cqm_test.c b/tools/testing/selftests/resctrl/cqm_test.c
-index c8756152bd61..fb4797cfda09 100644
---- a/tools/testing/selftests/resctrl/cqm_test.c
-+++ b/tools/testing/selftests/resctrl/cqm_test.c
-@@ -58,7 +58,7 @@ static void show_cache_info(unsigned long sum_llc_occu_resc, int no_of_bits,
- 	else
- 		res = false;
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index cd5e1f6..836b185 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -22,7 +22,7 @@
+ static int check_vgem(int fd)
+ {
+ 	drm_version_t version = { 0 };
+-	char name[5];
++	char name[5] = { 0 };
+ 	int ret;
  
--	printf("%sok CQM: diff within %d, %d\%%\n", res ? "" : "not",
-+	printf("%sok CQM: diff within %d, %d\%%\n", res ? "" : "not ",
- 	       MAX_DIFF, (int)MAX_DIFF_PERCENT);
+ 	version.name_len = 4;
+@@ -357,7 +357,7 @@ static int test_alloc_errors(char *heap_name)
+ 	if (heap_fd >= 0)
+ 		close(heap_fd);
  
- 	printf("# diff: %ld\n", avg_diff);
+-	return ret;
++	return !ret;
+ }
+ 
+ int main(void)
 -- 
 2.7.4
 
