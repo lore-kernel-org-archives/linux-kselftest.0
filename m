@@ -2,398 +2,207 @@ Return-Path: <SRS0=Schd=42=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D91BC18E5A
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE55EC10F29
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 20:35:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DB78C2051A
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 828262465A
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 20:35:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="KEx0ardF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X/Ye0ndi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbgCILNy (ORCPT
+        id S1725992AbgCIUfg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Mar 2020 07:13:54 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55140 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726968AbgCILNa (ORCPT
+        Mon, 9 Mar 2020 16:35:36 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38343 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgCIUfg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Mar 2020 07:13:30 -0400
-Received: by mail-wm1-f65.google.com with SMTP id n8so5347752wmc.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2020 04:13:27 -0700 (PDT)
+        Mon, 9 Mar 2020 16:35:36 -0400
+Received: by mail-pl1-f193.google.com with SMTP id w3so4475774plz.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2020 13:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kfIbQ9egZOgHYEi4ZCtd5fcolR6Q2j1G5CwpXRfW+tU=;
-        b=KEx0ardFKYz7mGkN7NWnfSDkRafDapDG2sLJYkCv+JC2SBmTcFSiYizOTPYGLtPwGg
-         bKeyCtwHIy/Z7AkMcCWM04z37PJvzgsnFbsqJ/0sbqLj3L0uzjmytRUSdSQqpfcLzzXg
-         HsIKE38qf+XFkSf2BiB2MbBviHa0n40VfdxG4=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sRk1pke9YTA7cKz/JhbTTwHB3/WLWvrK7Ig2WxoYgI8=;
+        b=X/Ye0ndiT6/vRdYfa8lbznwxNncY7a4bxQhLjQFBDxsxTu/rRPSzWcz2h0sI9lmNuA
+         hAsOCgP2jlB34NAGbuTpEtDK9cLWgSY9FunbCNYCgu8l5nhUPNcItCXxOQzONgIHkgQ2
+         upyb1xJRUv/E1Kt80Uz0oG90aTJ09KRL6VP2NjwdgAnDeVoDBq/vrkkfFU2z3rOqbPjZ
+         RqCX7nXl/mFiViARqSjbJdGsL2EY1L2h1SFwLo8ZXmUEC3LKMaD6Vg7bzWKZLW2QQNaM
+         6hM23O96i1X7VrHAQpQQc2EfrTC0Hpfxx7BnPqPzjdJyvixCT1GTHKx0xlO5MFARX2gj
+         VHFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kfIbQ9egZOgHYEi4ZCtd5fcolR6Q2j1G5CwpXRfW+tU=;
-        b=SvPxdIhniiZgCtLYVNlD/QVhuJZVF7EH6S9q9afry3gu43+wYsRG9y35welEjAvBzN
-         GMEsxMRAp//EgG0J+CbC2+XtWldU0QFdYh14QXYpYE9CF5wg6mXZruIAxOhVbZ7Ef06L
-         zDPfkDmYH5TrRrZsg5OBRLsVxSd2U4Pi4XO3oBSVOrSr6nCvXh8mSfWUmPSkEToGYE0T
-         0tpPQEBlOreU4ftyjAxFZhm01tJowfKTtGG2sxOdA84GY1694ciXXiFVuCxHKesIJZcz
-         sot670u99CGMLiR/NADH66Rq42sVBmEuq03iEptA0rHc9tLDEulQv63Svpt+zqgQBrAS
-         gF0g==
-X-Gm-Message-State: ANhLgQ06RDzfHGbZWIotZWIdQitEfYGAARzvDhp+9VaDCwLQCpNlExrD
-        VVyp7bHgq86vEuCY0todfBZuGFsYatf2IQ==
-X-Google-Smtp-Source: ADFU+vuRfiz5krPEg4BZ5r6jV4YZnMKnig5RI9m5gj5KCO1aBqQF6rqXdPIJcLzJwmHHi1znJBAZHw==
-X-Received: by 2002:a1c:a102:: with SMTP id k2mr6140449wme.125.1583752406466;
-        Mon, 09 Mar 2020 04:13:26 -0700 (PDT)
-Received: from localhost.localdomain ([2a06:98c0:1000:8250:3dcc:c1d:7f05:4873])
-        by smtp.gmail.com with ESMTPSA id a5sm25732846wmb.37.2020.03.09.04.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 04:13:25 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 10/12] selftests: bpf: add tests for UDP sockets in sockmap
-Date:   Mon,  9 Mar 2020 11:12:41 +0000
-Message-Id: <20200309111243.6982-11-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200309111243.6982-1-lmb@cloudflare.com>
-References: <20200309111243.6982-1-lmb@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sRk1pke9YTA7cKz/JhbTTwHB3/WLWvrK7Ig2WxoYgI8=;
+        b=kmMZ83qv9gvE1hPwOBzWvN5G7OFn8SCBAfyTWuExGnCUYgwd15u5XolT//Vkn+bqNc
+         xFZ2PZNM9TtOIu0RQTnQEcq+WCWwoXNv4WYmlE2/PBkqV+146rxgVj/a6UUT3lR9OK8k
+         b+EjMDt2uAe0B3IewfVXpfyytvgvrW+bcnAibc9LdNEL8NP0essG1St01K2udGwdwDfg
+         j0xpXFgxbePEhnj4I2M/SOvhItn+eVJXt8T32WP0WqetFXSfQWGmLz7OZtDdz4zlCqzk
+         wfhAIZ7lrflNIGepehOQB2yHo+Ha4GjEJPoSv0yD1FGy2eXEdx+dPCVhEji5rMhpxdQH
+         +HpQ==
+X-Gm-Message-State: ANhLgQ1QivcC6mIiAhQdrt5K+PJhNfO5aSm5T1GSyy6HPu2tZR7Rfpqv
+        2YhNQUbel/pBOO3hj+iQNo3F/fbg9U69I8xU4y5Xeg==
+X-Google-Smtp-Source: ADFU+vuTyH584565MPNLkZHFudtSZ511Yzn6t9GqkWntGqhnAo7bwReMKNH0tmqTxBu0WOoLRryCBshsqZ+Lm8AbPrw=
+X-Received: by 2002:a17:902:74cc:: with SMTP id f12mr9045912plt.232.1583786132922;
+ Mon, 09 Mar 2020 13:35:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYvRZ9eCE29FjXkv1dQfrdGO3uWp4Tvkip5Z_jsgjVJeAQ@mail.gmail.com>
+ <CAHp75VfhKoLtWkLHUyzg6m=rx833qiCVimWJVKU13qrX+aJz-Q@mail.gmail.com>
+ <CAFd5g45GbSX1BkuaH=8639ESHi-MCGkpFhEZZpycm9=jQb93rg@mail.gmail.com>
+ <CAFd5g47aaE+tGeHPrQmhfi6_nrvi1K4DvtRodh=zN21-uiQ1DQ@mail.gmail.com>
+ <20200305223350.GA2852@mara.localdomain> <20200306120525.GC68079@kuha.fi.intel.com>
+In-Reply-To: <20200306120525.GC68079@kuha.fi.intel.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 9 Mar 2020 13:35:22 -0700
+Message-ID: <CAFd5g45c9L4BBRNtxtQf_NFr2bR6Wgt9uOHW86gzb6Ozeb0SBA@mail.gmail.com>
+Subject: Re: BUG: kernel NULL pointer dereference, address: 00 - ida_free+0x76/0x140
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        hdegoede@redhat.com,
+        "rafael.j.wysocki" <rafael.j.wysocki@intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Expand the TCP sockmap test suite to also check UDP sockets.
+On Fri, Mar 6, 2020 at 4:05 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Fri, Mar 06, 2020 at 12:33:50AM +0200, Sakari Ailus wrote:
+> > Hi Brendan,
+> >
+> > On Thu, Mar 05, 2020 at 11:51:20AM -0800, Brendan Higgins wrote:
+> > > On Thu, Mar 5, 2020 at 11:40 AM Brendan Higgins
+> > > <brendanhiggins@google.com> wrote:
+> > > >
+> > > > On Thu, Mar 5, 2020 at 11:18 AM Andy Shevchenko
+> > > > <andy.shevchenko@gmail.com> wrote:
+> > > > >
+> > > > > +Cc: Sakari
+> > > > >
+> > > > > On Thu, Mar 5, 2020 at 6:00 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > > > >
+> > > > > > Regression reported on Linux next 5.6.0-rc4-next-20200305 on x86_64,
+> > > > > > i386, arm and arm64. The steps to reproduce is running kselftests lib
+> > > > > > printf.sh test case.
+> > > > > > Which is doing modprobe operations.
+> > > > > >
+> > > > > > BTW, there are few RCU warnings from the boot log.
+> > > > > > Please refer below link for more details.
+> > > > > >
+> > > > > > Steps reproduce by using kselftests,
+> > > > > >
+> > > > > >           - lsmod || true
+> > > > > >           - cd /opt/kselftests/default-in-kernel/lib/
+> > > > > >           - export PATH=/opt/kselftests/default-in-kernel/kselftest:$PATH
+> > > > > >           - ./printf.sh || true
+> > > > > >           - ./bitmap.sh || true
+> > > > > >           - ./prime_numbers.sh || true
+> > > > > >           - ./strscpy.sh || true
+> > > > > >
+> > > > > > x86_64 kernel BUG dump.
+> > > > > > + ./printf.sh
+> > > >
+> > > > Oops, I am wondering if I broke this with my change "Revert "software
+> > > > node: Simplify software_node_release() function"":
+> > > >
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d1c19322388d6935b534b494a2c223dd089e30dd
+> > > >
+> > > > I am still investigating, will update later.
+> > >
+> > > Okay, yeah, I am pretty sure I caused the breakage. I got an email
+> > > from kernel test robot a couple days ago that I didn't see:
+> > >
+> > > https://lists.01.org/hyperkitty/list/lkp@lists.01.org/thread/N3ZN5XH7HK24JVEJ5WSQD2SK6YCDRILR/
+> > >
+> > > It shows the same breakage after applying this change.
+> > >
+> > > I am still investigating how my change broke it, nevertheless.
+> >
+> > As nodes in the tree are being removed, the code before the patch that
+> > "simplified" the software_node_release() function accessed the node's parent
+> > in its release function.
+> >
+> > And if CONFIG_DEBUG_KOBJECT_RELEASE is defined, the release functions are no
+> > longer necessarily called in order, leading to referencing released memory.
+> > Oops!
+> >
+> > So Heikki's patch actually fixed a bug. :-)
+>
+> Well, I think it just hid the problem. It looks like the core
+> (lib/kobject.c) allows the parent kobject to be released before the
+> last child kobject is released. To be honest, that does not sound
+> right to me...
+>
+> I think we can workaround this problem by taking reference to the
+> parent when the child is added, and then releasing it when the child
+> is released, and in that way be guaranteed that the parent will not
+> disappear before the child is fully released, but that still does not
+> feel right. It feels more like the core is not doing it's job to me.
+> The parent just should not be released before its children.
+>
+> Either I'm wrong about that, and we still should take the reference on
+> the parent, or we revert my patch like Brendan proposed and then fix
 
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c | 157 ++++++++++++++----
- 1 file changed, 127 insertions(+), 30 deletions(-)
+Either way, isn't it wrong to release the node ID before deleting the
+sysfs entry? I am not sure that my fix was the correct one, but I
+believe the bug that Heidi and I found is actually a bug.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 4ba41dd26d6b..52aa468bdccd 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -108,6 +108,22 @@
- 		__ret;                                                         \
- 	})
- 
-+#define xsend(fd, buf, len, flags)                                             \
-+	({                                                                     \
-+		ssize_t __ret = send((fd), (buf), (len), (flags));             \
-+		if (__ret == -1)                                               \
-+			FAIL_ERRNO("send");                                    \
-+		__ret;                                                         \
-+	})
-+
-+#define xrecv(fd, buf, len, flags)                                             \
-+	({                                                                     \
-+		ssize_t __ret = recv((fd), (buf), (len), (flags));             \
-+		if (__ret == -1)                                               \
-+			FAIL_ERRNO("recv");                                    \
-+		__ret;                                                         \
-+	})
-+
- #define xsocket(family, sotype, flags)                                         \
- 	({                                                                     \
- 		int __ret = socket(family, sotype, flags);                     \
-@@ -330,7 +346,7 @@ static void test_insert_bound(int family, int sotype, int mapfd)
- 	xclose(s);
- }
- 
--static void test_insert_listening(int family, int sotype, int mapfd)
-+static void test_insert(int family, int sotype, int mapfd)
- {
- 	u64 value;
- 	u32 key;
-@@ -467,7 +483,7 @@ static void test_lookup_32_bit_value(int family, int sotype, int mapfd)
- 	xclose(s);
- }
- 
--static void test_update_listening(int family, int sotype, int mapfd)
-+static void test_update_existing(int family, int sotype, int mapfd)
- {
- 	int s1, s2;
- 	u64 value;
-@@ -1116,7 +1132,7 @@ static void test_reuseport_select_listening(int family, int sotype,
- {
- 	struct sockaddr_storage addr;
- 	unsigned int pass;
--	int s, c, p, err;
-+	int s, c, err;
- 	socklen_t len;
- 	u64 value;
- 	u32 key;
-@@ -1145,19 +1161,33 @@ static void test_reuseport_select_listening(int family, int sotype,
- 	if (err)
- 		goto close_cli;
- 
--	p = xaccept(s, NULL, NULL);
--	if (p < 0)
--		goto close_cli;
-+	if (sotype == SOCK_STREAM) {
-+		int p;
-+
-+		p = xaccept(s, NULL, NULL);
-+		if (p < 0)
-+			goto close_cli;
-+		xclose(p);
-+	} else {
-+		char b = 'a';
-+		ssize_t n;
-+
-+		n = xsend(c, &b, sizeof(b), 0);
-+		if (n == -1)
-+			goto close_cli;
-+
-+		n = xrecv(s, &b, sizeof(b), 0);
-+		if (n == -1)
-+			goto close_cli;
-+	}
- 
- 	key = SK_PASS;
- 	err = xbpf_map_lookup_elem(verd_map, &key, &pass);
- 	if (err)
--		goto close_peer;
-+		goto close_cli;
- 	if (pass != 1)
- 		FAIL("want pass count 1, have %d", pass);
- 
--close_peer:
--	xclose(p);
- close_cli:
- 	xclose(c);
- close_srv:
-@@ -1201,9 +1231,24 @@ static void test_reuseport_select_connected(int family, int sotype,
- 	if (err)
- 		goto close_cli0;
- 
--	p0 = xaccept(s, NULL, NULL);
--	if (err)
--		goto close_cli0;
-+	if (sotype == SOCK_STREAM) {
-+		p0 = xaccept(s, NULL, NULL);
-+		if (p0 < 0)
-+			goto close_cli0;
-+	} else {
-+		p0 = xsocket(family, sotype, 0);
-+		if (p0 < 0)
-+			goto close_cli0;
-+
-+		len = sizeof(addr);
-+		err = xgetsockname(c0, sockaddr(&addr), &len);
-+		if (err)
-+			goto close_cli0;
-+
-+		err = xconnect(p0, sockaddr(&addr), len);
-+		if (err)
-+			goto close_cli0;
-+	}
- 
- 	/* Update sock_map[0] to redirect to a connected socket */
- 	key = 0;
-@@ -1216,8 +1261,24 @@ static void test_reuseport_select_connected(int family, int sotype,
- 	if (c1 < 0)
- 		goto close_peer0;
- 
-+	len = sizeof(addr);
-+	err = xgetsockname(s, sockaddr(&addr), &len);
-+	if (err)
-+		goto close_srv;
-+
- 	errno = 0;
- 	err = connect(c1, sockaddr(&addr), len);
-+	if (sotype == SOCK_DGRAM) {
-+		char b = 'a';
-+		ssize_t n;
-+
-+		n = xsend(c1, &b, sizeof(b), 0);
-+		if (n == -1)
-+			goto close_cli1;
-+
-+		n = recv(c1, &b, sizeof(b), 0);
-+		err = n == -1;
-+	}
- 	if (!err || errno != ECONNREFUSED)
- 		FAIL_ERRNO("connect: expected ECONNREFUSED");
- 
-@@ -1281,7 +1342,18 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
- 		goto close_srv2;
- 
- 	err = connect(c, sockaddr(&addr), len);
--	if (err && errno != ECONNREFUSED) {
-+	if (sotype == SOCK_DGRAM) {
-+		char b = 'a';
-+		ssize_t n;
-+
-+		n = xsend(c, &b, sizeof(b), 0);
-+		if (n == -1)
-+			goto close_cli;
-+
-+		n = recv(c, &b, sizeof(b), 0);
-+		err = n == -1;
-+	}
-+	if (!err || errno != ECONNREFUSED) {
- 		FAIL_ERRNO("connect: expected ECONNREFUSED");
- 		goto close_cli;
- 	}
-@@ -1302,9 +1374,9 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
- 	xclose(s1);
- }
- 
--#define TEST(fn)                                                               \
-+#define TEST(fn, ...)                                                          \
- 	{                                                                      \
--		fn, #fn                                                        \
-+		fn, #fn, __VA_ARGS__                                           \
- 	}
- 
- static void test_ops_cleanup(const struct bpf_map *map)
-@@ -1353,18 +1425,31 @@ static const char *map_type_str(const struct bpf_map *map)
- 	}
- }
- 
-+static const char *sotype_str(int sotype)
-+{
-+	switch (sotype) {
-+	case SOCK_DGRAM:
-+		return "UDP";
-+	case SOCK_STREAM:
-+		return "TCP";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
- static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		     int family, int sotype)
- {
- 	const struct op_test {
- 		void (*fn)(int family, int sotype, int mapfd);
- 		const char *name;
-+		int sotype;
- 	} tests[] = {
- 		/* insert */
- 		TEST(test_insert_invalid),
- 		TEST(test_insert_opened),
--		TEST(test_insert_bound),
--		TEST(test_insert_listening),
-+		TEST(test_insert_bound, SOCK_STREAM),
-+		TEST(test_insert),
- 		/* delete */
- 		TEST(test_delete_after_insert),
- 		TEST(test_delete_after_close),
-@@ -1373,28 +1458,32 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		TEST(test_lookup_after_delete),
- 		TEST(test_lookup_32_bit_value),
- 		/* update */
--		TEST(test_update_listening),
-+		TEST(test_update_existing),
- 		/* races with insert/delete */
--		TEST(test_destroy_orphan_child),
--		TEST(test_syn_recv_insert_delete),
--		TEST(test_race_insert_listen),
-+		TEST(test_destroy_orphan_child, SOCK_STREAM),
-+		TEST(test_syn_recv_insert_delete, SOCK_STREAM),
-+		TEST(test_race_insert_listen, SOCK_STREAM),
- 		/* child clone */
--		TEST(test_clone_after_delete),
--		TEST(test_accept_after_delete),
--		TEST(test_accept_before_delete),
-+		TEST(test_clone_after_delete, SOCK_STREAM),
-+		TEST(test_accept_after_delete, SOCK_STREAM),
-+		TEST(test_accept_before_delete, SOCK_STREAM),
- 	};
--	const char *family_name, *map_name;
-+	const char *family_name, *map_name, *sotype_name;
- 	const struct op_test *t;
- 	char s[MAX_TEST_NAME];
- 	int map_fd;
- 
- 	family_name = family_str(family);
- 	map_name = map_type_str(map);
-+	sotype_name = sotype_str(sotype);
- 	map_fd = bpf_map__fd(map);
- 
- 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
--		snprintf(s, sizeof(s), "%s %s %s", map_name, family_name,
--			 t->name);
-+		snprintf(s, sizeof(s), "%s %s %s %s", map_name, family_name,
-+			 sotype_name, t->name);
-+
-+		if (t->sotype != 0 && t->sotype != sotype)
-+			continue;
- 
- 		if (!test__start_subtest(s))
- 			continue;
-@@ -1427,6 +1516,7 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
- 		snprintf(s, sizeof(s), "%s %s %s", map_name, family_name,
- 			 t->name);
-+
- 		if (!test__start_subtest(s))
- 			continue;
- 
-@@ -1441,26 +1531,31 @@ static void test_reuseport(struct test_sockmap_listen *skel,
- 		void (*fn)(int family, int sotype, int socket_map,
- 			   int verdict_map, int reuseport_prog);
- 		const char *name;
-+		int sotype;
- 	} tests[] = {
- 		TEST(test_reuseport_select_listening),
- 		TEST(test_reuseport_select_connected),
- 		TEST(test_reuseport_mixed_groups),
- 	};
- 	int socket_map, verdict_map, reuseport_prog;
--	const char *family_name, *map_name;
-+	const char *family_name, *map_name, *sotype_name;
- 	const struct reuseport_test *t;
- 	char s[MAX_TEST_NAME];
- 
- 	family_name = family_str(family);
- 	map_name = map_type_str(map);
-+	sotype_name = sotype_str(sotype);
- 
- 	socket_map = bpf_map__fd(map);
- 	verdict_map = bpf_map__fd(skel->maps.verdict_map);
- 	reuseport_prog = bpf_program__fd(skel->progs.prog_reuseport);
- 
- 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
--		snprintf(s, sizeof(s), "%s %s %s", map_name, family_name,
--			 t->name);
-+		snprintf(s, sizeof(s), "%s %s %s %s", map_name, family_name,
-+			 sotype_name, t->name);
-+
-+		if (t->sotype != 0 && t->sotype != sotype)
-+			continue;
- 
- 		if (!test__start_subtest(s))
- 			continue;
-@@ -1473,8 +1568,10 @@ static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		      int family)
- {
- 	test_ops(skel, map, family, SOCK_STREAM);
-+	test_ops(skel, map, family, SOCK_DGRAM);
- 	test_redir(skel, map, family, SOCK_STREAM);
- 	test_reuseport(skel, map, family, SOCK_STREAM);
-+	test_reuseport(skel, map, family, SOCK_DGRAM);
- }
- 
- void test_sockmap_listen(void)
--- 
-2.20.1
+> the core with something like this (warning, I did not even try to
+> compile that):
 
+I will try it out.
+
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index 83198cb37d8d..ec5774992337 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -680,6 +680,12 @@ static void kobject_cleanup(struct kobject *kobj)
+>                 kobject_uevent(kobj, KOBJ_REMOVE);
+>         }
+>
+> +       if (t && t->release) {
+> +               pr_debug("kobject: '%s' (%p): calling ktype release\n",
+> +                        kobject_name(kobj), kobj);
+> +               t->release(kobj);
+> +       }
+> +
+>         /* remove from sysfs if the caller did not do it */
+>         if (kobj->state_in_sysfs) {
+>                 pr_debug("kobject: '%s' (%p): auto cleanup kobject_del\n",
+> @@ -687,12 +693,6 @@ static void kobject_cleanup(struct kobject *kobj)
+>                 kobject_del(kobj);
+>         }
+>
+> -       if (t && t->release) {
+> -               pr_debug("kobject: '%s' (%p): calling ktype release\n",
+> -                        kobject_name(kobj), kobj);
+> -               t->release(kobj);
+> -       }
+> -
+>         /* free name if we allocated it */
+>         if (name) {
+>                 pr_debug("kobject: '%s': free name\n", name);
+>
+
+Thanks!
