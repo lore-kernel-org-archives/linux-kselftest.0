@@ -2,71 +2,71 @@ Return-Path: <SRS0=Schd=42=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 095A5C10F27
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 10:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F886C10F27
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D67482072A
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 10:13:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 468F820828
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Mar 2020 11:13:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZujUKSXH"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="vhJLcMYm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgCIKNM (ORCPT
+        id S1726997AbgCILNa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Mar 2020 06:13:12 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:33248 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbgCIKNM (ORCPT
+        Mon, 9 Mar 2020 07:13:30 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50648 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726986AbgCILN3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Mar 2020 06:13:12 -0400
-Received: by mail-qt1-f196.google.com with SMTP id d22so6564395qtn.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2020 03:13:11 -0700 (PDT)
+        Mon, 9 Mar 2020 07:13:29 -0400
+Received: by mail-wm1-f68.google.com with SMTP id a5so9392806wmb.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Mar 2020 04:13:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DTJKzFQSjQhbh2x0Oyy+sE5j12gSTOlD7QkiPO1+EYI=;
-        b=ZujUKSXHYcD6kFn/MaNdpODSGOut11qDYS1oYN2JQKR5XeXX/8x/VJi8qQEY1bJHQ6
-         vKb5V/C/9j9JtJUdpViV09+OXyjli/iTaQhT780zHE93D2WG+gr+YrDBH4RXt4yn+W3P
-         9mUWREQi0o5wY3enCkcBetAgcydc/jO7ZbfDEzkQYLMy+rgyWDGkyQmPpBf9I2Vmvp8W
-         ayE1T/0Jl6Ac2woXvtZzORwr24cKBm1OE5d3dkva9PlGjz7pTwWj+GZbLj7KbPnsc3uO
-         vHuh49szSj7XtOlIRgNGxm4D7hjmNKg6dIa4eInG9vtGjq/+xzWFGJNJRJvXuBTvlH2E
-         Otxw==
+        bh=QaTFcTkFq4Xguxn8bSzfnksfS0c2jnlyVSoCBPs8eek=;
+        b=vhJLcMYmm/qr33TiAo7JT5z9HUaVRDrZxOEz87v6imXUfpQppv5xXULXiHOZUArRRp
+         FFGy2atvM1OycOehbNrLU6P63rckxQ5xm5mpMolVJvbPuKMVwijc1yTXJj+7Q6XXNB9u
+         mCjeJOvp1kRypn4zZL6FicO2iv+f6FuzwaSm0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DTJKzFQSjQhbh2x0Oyy+sE5j12gSTOlD7QkiPO1+EYI=;
-        b=UyjPEAXs1sCHdG1KbXLdn9tz6ny3iEujxgQw504wg1SZQcyz0jrUCPvVt1RBtsRyXF
-         4AgVaGai9UckvKxh3MqqnyJthQ9+aHd3iI4xbKhvpCy7svdoc0BoJEO+MffSjIP/BHJ2
-         bkcAmvy69kx0ZHiEw36EgNhI2u0H5v6lO7eVobdShCFvNueTF6LaGOcxSSp+NaBlhETW
-         kA9W5eUqlqd5Qaz/rYccuoMFaMQ3I+bkKDcpv4EenE63zBQKL4JSc0/m+STxzJbqXJwR
-         Q85PlcPfBGLBPLWwgKje2ChrFlGVzoz/012zzqKbhdkQ4LyILdX5Pdsc73pPpq+iL5ai
-         a1lw==
-X-Gm-Message-State: ANhLgQ0i6AuN/syXSE/xAyWYxyqD3joUdDIpYnxfoWUIBIMiCufudfkj
-        Ha+CwZv9oDt5B3ld5+Z+pdSgfUs22ro=
-X-Google-Smtp-Source: ADFU+vtE0MLb2a1/GHq4N3nsmK4DTOWIfQ4YiLKKh4dA+lEfL4j2Bg2AbsZq9IacvbL00AJyGPqvpw==
-X-Received: by 2002:ac8:7158:: with SMTP id h24mr13595919qtp.63.1583748790889;
-        Mon, 09 Mar 2020 03:13:10 -0700 (PDT)
-Received: from dhcp-12-139.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id t3sm20374416qkt.114.2020.03.09.03.13.08
+        bh=QaTFcTkFq4Xguxn8bSzfnksfS0c2jnlyVSoCBPs8eek=;
+        b=d7N76+ACmQqwul25ssHrWZxESiqxbJ+KhcJMw10R6LJS8Dia6vFzPCwdiydcPZEdnu
+         FmdDeNKNUQJOzgmxVgc2sIey2zDEX+rhZTazBJIjYUcBtBelYxtmshLB7ZiTgRt601T1
+         pxwcH34OBE+cp5zlEtUXjBA70xEadNA6r2lTa3/wlQZMT+QQvo9CQVA0S4/19/aQL7Sa
+         nSARcLFgTqq5YTlnTieX+aoJAdO6uVUq73XmsiCB1OTEG1J0dhtnrGuxoM59J8fRdelo
+         3zYuuUcjnQHKTMahOaMADRHU+pC1uyjgwqvNG15k3A3KEQ73WPqZ+HGWrsXrLaM2sL+x
+         KIWg==
+X-Gm-Message-State: ANhLgQ23pzYQVvA5y5KIrbLcuXJp7z1yOLo05rOhSyOzC5SVejNzIq/4
+        riqJr5XiI4WuxUZNnpEj2AODAg==
+X-Google-Smtp-Source: ADFU+vtelcGYQQ7cq2t6WKsONlaRaq72BxVgq3eY1uel/I49QzMryenNk1JX3ZTxqPj2w/PQTT0LSA==
+X-Received: by 2002:a05:600c:2214:: with SMTP id z20mr18926382wml.57.1583752408076;
+        Mon, 09 Mar 2020 04:13:28 -0700 (PDT)
+Received: from localhost.localdomain ([2a06:98c0:1000:8250:3dcc:c1d:7f05:4873])
+        by smtp.gmail.com with ESMTPSA id a5sm25732846wmb.37.2020.03.09.04.13.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 03:13:10 -0700 (PDT)
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuahkh@osg.samsung.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: [RFC PATCH 1/1] selftests/run_kselftest.sh: make each test individually selectable
-Date:   Mon,  9 Mar 2020 18:12:56 +0800
-Message-Id: <20200309101256.868-2-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20200309101256.868-1-liuhangbin@gmail.com>
-References: <20200309101256.868-1-liuhangbin@gmail.com>
+        Mon, 09 Mar 2020 04:13:27 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 11/12] selftests: bpf: enable UDP sockmap reuseport tests
+Date:   Mon,  9 Mar 2020 11:12:42 +0000
+Message-Id: <20200309111243.6982-12-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200309111243.6982-1-lmb@cloudflare.com>
+References: <20200309111243.6982-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -74,102 +74,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, after generating run_kselftest.sh, there is no way to choose
-which test we could run. All the tests are listed together and we have
-to run all every time. This patch enhanced the run_kselftest.sh to make
-the tests individually selectable.
+Remove the guard that disables UDP tests now that sockmap
+has support for them.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
- tools/testing/selftests/Makefile | 48 +++++++++++++++++++++++++-------
- tools/testing/selftests/lib.mk   |  2 +-
- 2 files changed, 39 insertions(+), 11 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/select_reuseport.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6ec503912bea..3d4bc0071849 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -220,13 +220,9 @@ ifdef INSTALL_PATH
- 	@# Ask all targets to emit their test scripts
- 	echo "#!/bin/sh" > $(ALL_SCRIPT)
- 	echo "BASE_DIR=\$$(realpath \$$(dirname \$$0))" >> $(ALL_SCRIPT)
--	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
- 	echo ". ./kselftest/runner.sh" >> $(ALL_SCRIPT)
--	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
--	echo "if [ \"\$$1\" = \"--summary\" ]; then" >> $(ALL_SCRIPT)
--	echo "  logfile=\$$BASE_DIR/output.log" >> $(ALL_SCRIPT)
--	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
--	echo "fi" >> $(ALL_SCRIPT)
-+	echo "TESTS=\"$(TARGETS)\"" | tr -s "/-" "_" >> $(ALL_SCRIPT)
-+	echo "" >> $(ALL_SCRIPT);
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index a1dd13b34d4b..821b4146b7b6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -805,12 +805,6 @@ static void test_config(int sotype, sa_family_t family, bool inany)
+ 	char s[MAX_TEST_NAME];
+ 	const struct test *t;
  
- 	@# While building run_kselftest.sh skip also non-existent TARGET dirs:
- 	@# they could be the result of a build failure and should NOT be
-@@ -234,15 +230,47 @@ ifdef INSTALL_PATH
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
--		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
--		echo -n "run_many" >> $(ALL_SCRIPT); \
-+		echo "run_$$TARGET()" | tr -s "/-" "_" >> $(ALL_SCRIPT); \
-+		echo "{" >> $(ALL_SCRIPT); \
-+		echo -e "\t[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
-+		echo -e "\tcd $$TARGET" >> $(ALL_SCRIPT); \
-+		echo -en "\trun_many" >> $(ALL_SCRIPT); \
- 		echo -n "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
- 		echo "" >> $(ALL_SCRIPT);	    \
--		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
-+		echo -e "\tcd \$$ROOT" >> $(ALL_SCRIPT); \
-+		echo "}" >> $(ALL_SCRIPT); \
-+		echo "" >> $(ALL_SCRIPT); \
- 	done;
- 
-+	echo "usage()" >> $(ALL_SCRIPT);
-+	echo "{" >> $(ALL_SCRIPT);
-+	echo -e "\tcat <<EOF" >> $(ALL_SCRIPT);
-+	echo "usage: \$${0##*/} OPTS" >> $(ALL_SCRIPT);
-+	echo -e "\t-s | --summary\t\tOnly print summary info and put detailed log in output.log" >> $(ALL_SCRIPT);
-+	echo -e "\t-t | --tests\t\tTest name you want to run specifically" >> $(ALL_SCRIPT);
-+	echo -e "\t-h | --help\t\tShow this usage info" >> $(ALL_SCRIPT);
-+	echo "EOF" >> $(ALL_SCRIPT);
-+	echo "}" >> $(ALL_SCRIPT);
-+	echo "" >> $(ALL_SCRIPT);
-+
-+	echo "while true; do" >> $(ALL_SCRIPT);
-+	echo -e "\tcase \"\$$1\" in" >> $(ALL_SCRIPT);
-+	echo -e "\t-s | --summary ) logfile=\$$BASE_DIR/output.log; cat /dev/null > \$$logfile; shift ;;" >> $(ALL_SCRIPT);
-+	echo -e "\t-t | --tests ) TESTS=\$$2; shift 2 ;;" >> $(ALL_SCRIPT);
-+	echo -e "\t-h | --help ) usage; exit 0;;" >> $(ALL_SCRIPT);
-+	echo -e "\t\"\" ) break;;" >> $(ALL_SCRIPT);
-+	echo -e "\t* ) usage; exit 1;;" >> $(ALL_SCRIPT);
-+	echo -e "\tesac" >> $(ALL_SCRIPT);
-+	echo "done" >> $(ALL_SCRIPT);
-+	echo "" >> $(ALL_SCRIPT);
-+
-+	echo "cd \$$BASE_DIR" >> $(ALL_SCRIPT)
-+	echo "ROOT=\$$PWD" >> $(ALL_SCRIPT)
-+
-+	echo "for test in \$$TESTS; do" >> $(ALL_SCRIPT); \
-+	echo -e "\trun_\$$test" >> $(ALL_SCRIPT); \
-+	echo "done" >> $(ALL_SCRIPT); \
- 	chmod u+x $(ALL_SCRIPT)
- else
- 	$(error Error: set INSTALL_PATH to use install)
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 3ed0134a764d..c352d6dab91d 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -110,7 +110,7 @@ emit_tests:
- 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
- 		BASENAME_TEST=`basename $$TEST`;	\
- 		echo "	\\";				\
--		echo -n "	\"$$BASENAME_TEST\"";	\
-+		echo -ne "\t\t\"$$BASENAME_TEST\"";	\
- 	done;						\
- 
- # define if isn't already. It is undefined in make O= case.
+-	/* SOCKMAP/SOCKHASH don't support UDP yet */
+-	if (sotype == SOCK_DGRAM &&
+-	    (inner_map_type == BPF_MAP_TYPE_SOCKMAP ||
+-	     inner_map_type == BPF_MAP_TYPE_SOCKHASH))
+-		return;
+-
+ 	for (t = tests; t < tests + ARRAY_SIZE(tests); t++) {
+ 		if (t->need_sotype && t->need_sotype != sotype)
+ 			continue; /* test not compatible with socket type */
 -- 
-2.19.2
+2.20.1
 
