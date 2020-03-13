@@ -5,142 +5,112 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C403FC10DCE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 14:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16AC0C5ACBF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 14:47:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9854120746
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 14:47:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1561206FA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 14:47:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PFkkDu3q"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FhPdlmxI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgCMOrM (ORCPT
+        id S1726911AbgCMOrS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 13 Mar 2020 10:47:12 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:50642 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726595AbgCMOrM (ORCPT
+        Fri, 13 Mar 2020 10:47:18 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:35164 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726595AbgCMOrS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 10:47:12 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02DEdgkl099079;
-        Fri, 13 Mar 2020 14:47:04 GMT
+        Fri, 13 Mar 2020 10:47:18 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02DEeaiT042643;
+        Fri, 13 Mar 2020 14:47:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=Bv9nOnLm2ONHio6hokKq2BdqwaVrr/CkDV2+/x9JvxA=;
- b=PFkkDu3qTKUEeDTnwfPo+Wk7XCGQ+a1dd2iI1gArobIOFrszD47a6xQmgfKIeQl6sd4A
- q9uZrb+ukfaN2cB48KFIc1AwB7sXSx4LscJN3577/1LB69vvbrmTczHJ2lay0rMOvOOK
- +CZkqARm7N4GsEuwMcE3VsVJtYE1wNnLpNeTl27qkz1Tc9VdiEumSVQDP69YmOTyRpkN
- 4rYvfCJn+N0WVcRXUmyZQ9LkAYjAdeGlhuiUJ+LrV9RBFX9YcDGWINHu8htGAf8wK/DR
- n7R8vELlbpEfXf0kdBEO4+kkFFzYTYJi5pqLXYEBqLumolUw7hF+kia+bJKjsDVdG4Oo ZA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2yqtavm741-1
+ bh=FAXjI9acl3BvhqBVLHwTP8ZVKrXH638AdGx3om6kJNQ=;
+ b=FhPdlmxIHJvQgls3DVfxUO0C7gZUS4ANPeDN4y7XcZzdaI2Cgt0/cRcXiKIMTn/AyhYi
+ Q8iX7/lRGteQgfbGzldQ5ssv0YJZuxHhLqAmdyf645N9wCJlGEuRMiMK0LT62BBicEye
+ Z2D5UZNmzW/wg+qZlYF+pKjoC1ICr21nniV59zigMaz9YvQ6iB2q34xiHeLY8DzY/dLF
+ wTL7jkj2wd3PKQnOP/bC6BQxueA9hGnJSTQD4c8pqfNvAkSzPzXiQ7nrhaHBIGhyeF5x
+ hO3DaWSxR1RNjkOMFvsceUpr7l8Tdslm6DKMNK2hgqFrScvQQ/65kOqhjZivv0zpcAgb jg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2yqtaev7fa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Mar 2020 14:47:04 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02DEcH6C010936;
-        Fri, 13 Mar 2020 14:45:04 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2yqtact4nr-1
+        Fri, 13 Mar 2020 14:47:10 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02DEcCFW070599;
+        Fri, 13 Mar 2020 14:45:10 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2yqtabb577-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Mar 2020 14:45:04 +0000
+        Fri, 13 Mar 2020 14:45:10 +0000
 Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02DEj2mi002895;
-        Fri, 13 Mar 2020 14:45:02 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02DEj8s5015787;
+        Fri, 13 Mar 2020 14:45:09 GMT
 Received: from dhcp-10-175-173-225.vpn.oracle.com (/10.175.173.225)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 13 Mar 2020 07:45:02 -0700
+        with ESMTP ; Fri, 13 Mar 2020 07:45:08 -0700
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     brendanhiggins@google.com, frowand.list@gmail.com,
         gregkh@linuxfoundation.org, shuah@kernel.org
 Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-doc@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v7 kunit-next 2/4] kunit: add log test
-Date:   Fri, 13 Mar 2020 14:44:40 +0000
-Message-Id: <1584110682-3837-3-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v7 kunit-next 4/4] kunit: update documentation to describe debugfs representation
+Date:   Fri, 13 Mar 2020 14:44:42 +0000
+Message-Id: <1584110682-3837-5-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1584110682-3837-1-git-send-email-alan.maguire@oracle.com>
 References: <1584110682-3837-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=3
- malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003130077
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=3
- phishscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 adultscore=0
- spamscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=3 adultscore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 spamscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
  definitions=main-2003130077
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 suspectscore=3
+ mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003130077
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-the logging test ensures multiple strings logged appear in the
-log string associated with the test when CONFIG_KUNIT_DEBUGFS is
-enabled.
+Documentation should describe debugfs layout and semantics.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Frank Rowand <frank.rowand@sony.com>
 ---
- lib/kunit/kunit-test.c | 41 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ Documentation/dev-tools/kunit/usage.rst | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index aceb5bf..359bc26 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -329,6 +329,45 @@ static void kunit_resource_test_exit(struct kunit *test)
- 	.exit = kunit_resource_test_exit,
- 	.test_cases = kunit_resource_test_cases,
- };
--kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite);
-+
-+static void kunit_log_test(struct kunit *test);
-+
-+static struct kunit_case kunit_log_test_cases[] = {
-+	KUNIT_CASE(kunit_log_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_log_test_suite = {
-+	.name = "kunit-log-test",
-+	.test_cases = kunit_log_test_cases,
-+};
-+
-+
-+static void kunit_log_test(struct kunit *test)
-+{
-+	struct kunit_suite *suite = &kunit_log_test_suite;
-+
-+	kunit_log(KERN_INFO, test, "put this in log.");
-+	kunit_log(KERN_INFO, test, "this too.");
-+	kunit_log(KERN_INFO, suite, "add to suite log.");
-+	kunit_log(KERN_INFO, suite, "along with this.");
-+
-+#ifdef CONFIG_KUNIT_DEBUGFS
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(test->log, "put this in log."));
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(test->log, "this too."));
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(suite->log, "add to suite log."));
-+	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-+				     strstr(suite->log, "along with this."));
-+#else
-+	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
-+	KUNIT_EXPECT_PTR_EQ(test, suite->log, (char *)NULL);
-+#endif
-+}
-+
-+kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
-+		  &kunit_log_test_suite);
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 607758a..473a236 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -591,3 +591,17 @@ able to run one test case per invocation.
  
- MODULE_LICENSE("GPL v2");
+ .. TODO(brendanhiggins@google.com): Add an actual example of an architecture
+    dependent KUnit test.
++
++KUnit debugfs representation
++============================
++When kunit test suites are initialized, they create an associated directory
++in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
++
++- results: "cat results" displays results of each test case and the results
++  of the entire suite for the last test run.
++
++The debugfs representation is primarily of use when kunit test suites are
++run in a native environment, either as modules or builtin.  Having a way
++to display results like this is valuable as otherwise results can be
++intermixed with other events in dmesg output.  The maximum size of each
++results file is KUNIT_LOG_SIZE bytes (defined in include/kunit/test.h).
 -- 
 1.8.3.1
 
