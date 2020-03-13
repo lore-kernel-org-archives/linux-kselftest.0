@@ -2,82 +2,113 @@ Return-Path: <SRS0=HnTg=46=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2346CC2BB1D
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 03:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 550A8C10DCE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 11:40:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E334E20658
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 03:18:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584069513;
-	bh=ILsiPrMpW6mU90mqVPtgUQTlUdPd/plHtmWNc9Q6XIU=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=LmQFzqsEiackj/E6ojd41jn2YK4MvaqGDhbxCxbCsWhxPQitE5ceMViPARVp2MNR6
-	 8cq9mlICKJQl1851ZqTpm4GqbktejKiC1Liss3efQEaGKQSpbxwZZ0XFyVG8G8TE7p
-	 QFIHGlpfHdbt359MaA3AVTts05CdS89+n2i6a3eI=
+	by mail.kernel.org (Postfix) with ESMTP id 3778C20749
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 11:40:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbgCMDR7 (ORCPT
+        id S1726395AbgCMLkj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 12 Mar 2020 23:17:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33808 "EHLO mail.kernel.org"
+        Fri, 13 Mar 2020 07:40:39 -0400
+Received: from sym2.noone.org ([178.63.92.236]:39912 "EHLO sym2.noone.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726377AbgCMDR7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Mar 2020 23:17:59 -0400
-Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A2948206F1;
-        Fri, 13 Mar 2020 03:17:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584069479;
-        bh=ILsiPrMpW6mU90mqVPtgUQTlUdPd/plHtmWNc9Q6XIU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QLRNG/I7Fa5eDgBsuvaqvSZ0khZ8IMKgY/sCwP6iR2j6dPHFFS52WQQBg10wKJHoR
-         5B7BRqjsSZkg/UtIviFo27RVvj3YdZFrzUgt8Ihw9H0cDwJN1qDPQQtnJuK7Whualu
-         z+3p3lTXTP3otQEMTuHyjzQKbV26mQpJhOcBVYJU=
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     shuah@kernel.org
-Cc:     keescook@chromium.org, luto@amacapital.net, wad@chromium.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 0/5] kselftest: add fixture parameters
-Date:   Thu, 12 Mar 2020 20:17:47 -0700
-Message-Id: <20200313031752.2332565-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.24.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726216AbgCMLkj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 13 Mar 2020 07:40:39 -0400
+X-Greylist: delayed 572 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Mar 2020 07:40:39 EDT
+Received: by sym2.noone.org (Postfix, from userid 1002)
+        id 48f3RY57VNzvjdW; Fri, 13 Mar 2020 12:31:05 +0100 (CET)
+From:   Tobias Klauser <tklauser@distanz.ch>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next] tools/bpf: move linux/types.h for selftests and bpftool
+Date:   Fri, 13 Mar 2020 12:31:05 +0100
+Message-Id: <20200313113105.6918-1-tklauser@distanz.ch>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi!
+Commit fe4eb069edb7 ("bpftool: Use linux/types.h from source tree for
+profiler build") added a build dependency on tools/testing/selftests/bpf
+to tools/bpf/bpftool. This is suboptimal with respect to a possible
+stand-alone build of bpftool.
 
-This set is an attempt to make running tests for different
-sets of data easier. The direct motivation is the tls
-test which we'd like to run for TLS 1.2 and TLS 1.3,
-but currently there is no easy way to invoke the same
-tests with different parameters.
+Fix this by moving
+tools/testing/selftests/bpf/include/uapi/linux/types.h to
+tools/include/uapi/linux/types.h
 
-Tested all users of kselftest_harness.h.
+This requires an adjustment in the include search path order for the
+tests in tools/testing/selftests/bpf so that tools/include/linux/types.h
+is selected when building host binaries and
+tools/include/uapi/linux/types.h is selected when building bpf binaries.
 
-Jakub Kicinski (5):
-  selftests/seccomp: use correct FIXTURE macro
-  kselftest: create fixture objects
-  kselftest: run tests by fixture
-  kselftest: add fixture parameters
-  selftests: tls: run all tests for TLS 1.2 and TLS 1.3
+Verified by compiling bpftool and the bpf selftests on x86_64 with this
+change.
 
- Documentation/dev-tools/kselftest.rst         |   3 +-
- tools/testing/selftests/kselftest_harness.h   | 228 +++++++++++++++---
- tools/testing/selftests/net/tls.c             |  93 ++-----
- tools/testing/selftests/seccomp/seccomp_bpf.c |  10 +-
- 4 files changed, 213 insertions(+), 121 deletions(-)
+Fixes: fe4eb069edb7 ("bpftool: Use linux/types.h from source tree for profiler build")
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Quentin Monnet <quentin@isovalent.com>
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+---
+ tools/bpf/bpftool/Makefile                                 | 1 -
+ .../{testing/selftests/bpf => }/include/uapi/linux/types.h | 0
+ tools/testing/selftests/bpf/Makefile                       | 7 ++++---
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+ rename tools/{testing/selftests/bpf => }/include/uapi/linux/types.h (100%)
 
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 9ca3bfbb9ac4..f584d1fdfc64 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -129,7 +129,6 @@ $(OUTPUT)_bpftool: $(_OBJS) $(LIBBPF)
+ skeleton/profiler.bpf.o: skeleton/profiler.bpf.c $(LIBBPF)
+ 	$(QUIET_CLANG)$(CLANG) \
+ 		-I$(srctree)/tools/include/uapi/ \
+-		-I$(srctree)/tools/testing/selftests/bpf/include/uapi \
+ 		-I$(LIBBPF_PATH) -I$(srctree)/tools/lib \
+ 		-g -O2 -target bpf -c $< -o $@
+ 
+diff --git a/tools/testing/selftests/bpf/include/uapi/linux/types.h b/tools/include/uapi/linux/types.h
+similarity index 100%
+rename from tools/testing/selftests/bpf/include/uapi/linux/types.h
+rename to tools/include/uapi/linux/types.h
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index da4389dde9f7..074a05efd1ca 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -20,8 +20,9 @@ CLANG		?= clang
+ LLC		?= llc
+ LLVM_OBJCOPY	?= llvm-objcopy
+ BPF_GCC		?= $(shell command -v bpf-gcc;)
+-CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) -I$(CURDIR) -I$(APIDIR)	\
++CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) -I$(CURDIR)		\
+ 	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR) -I$(TOOLSINCDIR)	\
++	  -I$(APIDIR)							\
+ 	  -Dbpf_prog_load=bpf_prog_test_load				\
+ 	  -Dbpf_load_program=bpf_test_load_program
+ LDLIBS += -lcap -lelf -lz -lrt -lpthread
+@@ -194,8 +195,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+ 
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+ BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
+-	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(CURDIR)/include/uapi	\
+-	     -I$(APIDIR) -I$(abspath $(OUTPUT)/../usr/include)
++	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
++	     -I$(abspath $(OUTPUT)/../usr/include)
+ 
+ CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+ 	       -Wno-compare-distinct-pointer-types
 -- 
-2.24.1
+2.24.0
 
