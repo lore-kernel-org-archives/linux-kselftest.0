@@ -2,55 +2,55 @@ Return-Path: <SRS0=HnTg=46=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C44BBC4CECE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 23:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC777C5ACBF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 23:13:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9273120767
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 23:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3BAE2076B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Mar 2020 23:13:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ClF8fqoB"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Kkqs3BLu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726820AbgCMXM6 (ORCPT
+        id S1726757AbgCMXM7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 13 Mar 2020 19:12:58 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37880 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726837AbgCMXM6 (ORCPT
+        Fri, 13 Mar 2020 19:12:59 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:37880 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727312AbgCMXM7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Mar 2020 19:12:58 -0400
-Received: by mail-pg1-f195.google.com with SMTP id a32so5019491pga.4
+        Fri, 13 Mar 2020 19:12:59 -0400
+Received: by mail-pg1-f194.google.com with SMTP id a32so5019505pga.4
         for <linux-kselftest@vger.kernel.org>; Fri, 13 Mar 2020 16:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jVB9ateUNPWjDSRVGMb+4rgbxEOqdavmk19dJVvZMIM=;
-        b=ClF8fqoBumZSnRpv0Utqo38yv0uvnElq5GseaaNLk/d0T0DTwHAZdaKo5jwGvqJDyU
-         RoNsMHO1KDZdq+giL7q3wYKY9HUW0QO045PUqWadbPDAOdsYSOrHjG1QQg/cYr4ufbU4
-         JnTVX7waraMyka1dAVcE/afVQf2yXqlDROpgE=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K2JbZxMCwj9yygU/wyDgBKZMbpIm9EC3h34COxFARqI=;
+        b=Kkqs3BLuKJ3D6MBEWIMmzbsZsRKqE7w7T7wwPjwk3xFWEUOjqvHR025GoCMbDW6eM1
+         eQMYGMtHgnODYRLvpte18+iNvz69QZDX1ciukmpF8PyPxs1AemNi7GFWwpb1JtmuRQfa
+         iBZLZqY/+f9z51hptUJUq7aPJKBZi1dRothXQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jVB9ateUNPWjDSRVGMb+4rgbxEOqdavmk19dJVvZMIM=;
-        b=Sg9ACLhfbrQr1QRvzglfbMGd/C/4BOMrZszXW6vOWiPZStLky4brHs1t+0tiCiCLwf
-         0crxidrU2/4hvve/w2dsNcvKLr3E/OWnpSwE28in+079sdkjsxP/DGvzkz+rdUYWxO30
-         SsdRQqhF6gKbPg12VpNjZMNMGbZIxaIYFGSe4DALVjZP1imNaXd3SsKVoWy6EzFSYzbd
-         ORg51dA6JdDMLiPmRerj7xQij8pELQDy1Om+KZRHEsbXE2WlLsuj34ESNJ6nyZuUeXgF
-         5bga6qFizm8X8D9oi63CVYK1fpZ0CC4jwF+xNkiGBhLlMEILlmpfdaDEldPIkDeXf3lb
-         ijyg==
-X-Gm-Message-State: ANhLgQ3UR3gYPE2owyFQherRN6FR8ibTTq73JvKkbriXCl38oVabG5Cj
-        VXqD1vKk//s8TzIaF5sfF4jZ6Q==
-X-Google-Smtp-Source: ADFU+vuW5MY2BTvDr6DsWnU09ruFOrR5LSI5+g6PygmDmDlEm+j/U5jO/QNzQgn9N62SKP200VkfvA==
-X-Received: by 2002:a63:445:: with SMTP id 66mr14736826pge.351.1584141177002;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K2JbZxMCwj9yygU/wyDgBKZMbpIm9EC3h34COxFARqI=;
+        b=PE+DeY6Q/OOswuxcZZfIlCQ6SgU7IXetrS/L7zl8/JpfkJGPW1n95YxV7sVFq2DGTZ
+         9miMBELAwk2FKtYVZHjtm3aymO6OlWS3dbwZ+LXMvbzO1pFujtWnwuV2xyjpZLDz1Lgi
+         gB90YrqIZlLsaBf1JVbuOpbhcu+4j6mJZEfgZ6X2ei2+ODDNV1DbWkqj53Nt+UNy29ft
+         fmo4+gTFkCZG9tYiWLvo9fQKOCISRz2xzQAHZwycPpHFq1o1MWrQNA4UxhGBJLnmExp2
+         zDvEQqKT62vAhE8zFDHyPIRjH1sbDjbXtVkJAObPqKzVez0j911UDF7H9L9NulGFN/SQ
+         nLBQ==
+X-Gm-Message-State: ANhLgQ0FxvJNMxwpUffnqoMFWdtj8M7RqL7wiHVALz3EPNl77bOTHPLq
+        /jk8/E02FzQxPq2HX0CJMvOpD+ehx78=
+X-Google-Smtp-Source: ADFU+vsOPRsmmYcwqJ4TRGhHMQesl1WVSQjt29N6D6DzjeWdpqjtSPwAhRNDk2n87LF8Vzp21Y10dQ==
+X-Received: by 2002:a62:e409:: with SMTP id r9mr11685548pfh.119.1584141177491;
         Fri, 13 Mar 2020 16:12:57 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p21sm58790400pfn.103.2020.03.13.16.12.55
+        by smtp.gmail.com with ESMTPSA id i4sm1422000pfq.82.2020.03.13.16.12.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 13 Mar 2020 16:12:55 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -59,18 +59,18 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/harness: Handle timeouts cleanly
-Date:   Fri, 13 Mar 2020 16:12:52 -0700
-Message-Id: <20200313231252.64999-3-keescook@chromium.org>
+Subject: [PATCH v2 0/2] selftests/harness: Handle timeouts cleanly
+Date:   Fri, 13 Mar 2020 16:12:50 -0700
+Message-Id: <20200313231252.64999-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200313231252.64999-1-keescook@chromium.org>
-References: <20200313231252.64999-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
+
+Repeating patch 2/2's commit log:
 
 When a selftest would timeout before, the program would just fall over
 and no accounting of failures would be reported (i.e. it would result in
@@ -96,90 +96,22 @@ After:
 	[==========] 1 / 2 tests passed.
 	[  FAILED  ]
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/kselftest_harness.h | 53 ++++++++++++++++++++-
- 1 file changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index c7b67e379219..2902f6a78f8a 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -639,7 +639,8 @@ struct __test_metadata {
- 	int termsig;
- 	int passed;
- 	int trigger; /* extra handler after the evaluation */
--	int timeout;
-+	int timeout;	/* seconds to wait for test timeout */
-+	bool timed_out;	/* did this test timeout instead of exiting? */
- 	__u8 step;
- 	bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
- 	struct __test_metadata *prev, *next;
-@@ -696,15 +697,63 @@ static inline int __bail(int for_realz, bool no_print, __u8 step)
- 	return 0;
- }
- 
-+struct __test_metadata *__active_test;
-+static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
-+{
-+	struct __test_metadata *t = __active_test;
-+
-+	/* Sanity check handler execution environment. */
-+	if (!t) {
-+		fprintf(TH_LOG_STREAM,
-+			"no active test in SIGARLM handler!?\n");
-+		abort();
-+	}
-+	if (sig != SIGALRM || sig != info->si_signo) {
-+		fprintf(TH_LOG_STREAM,
-+			"%s: SIGALRM handler caught signal %d!?\n",
-+			t->name, sig != SIGALRM ? sig : info->si_signo);
-+		abort();
-+	}
-+
-+	t->timed_out = true;
-+	kill(t->pid, SIGKILL);
-+}
-+
- void __wait_for_test(struct __test_metadata *t)
- {
-+	struct sigaction action = {
-+		.sa_sigaction = __timeout_handler,
-+		.sa_flags = SA_SIGINFO,
-+	};
-+	struct sigaction saved_action;
- 	int status;
- 
-+	if (sigaction(SIGALRM, &action, &saved_action)) {
-+		t->passed = 0;
-+		fprintf(TH_LOG_STREAM,
-+			"%s: unable to install SIGARLM handler\n",
-+			t->name);
-+		return;
-+	}
-+	__active_test = t;
-+	t->timed_out = false;
- 	alarm(t->timeout);
- 	waitpid(t->pid, &status, 0);
- 	alarm(0);
-+	if (sigaction(SIGALRM, &saved_action, NULL)) {
-+		t->passed = 0;
-+		fprintf(TH_LOG_STREAM,
-+			"%s: unable to uninstall SIGARLM handler\n",
-+			t->name);
-+		return;
-+	}
-+	__active_test = NULL;
- 
--	if (WIFEXITED(status)) {
-+	if (t->timed_out) {
-+		t->passed = 0;
-+		fprintf(TH_LOG_STREAM,
-+			"%s: Test terminated by timeout\n", t->name);
-+	} else if (WIFEXITED(status)) {
- 		t->passed = t->termsig == -1 ? !WEXITSTATUS(status) : 0;
- 		if (t->termsig != -1) {
- 			fprintf(TH_LOG_STREAM,
+Thanks!
+
+-Kees
+
+v2:
+- fix typo in subject prefix
+v1: https://lore.kernel.org/lkml/20200311211733.21211-1-keescook@chromium.org
+
+Kees Cook (2):
+  selftests/harness: Move test child waiting logic
+  selftests/harness: Handle timeouts cleanly
+
+ tools/testing/selftests/kselftest_harness.h | 144 ++++++++++++++------
+ 1 file changed, 99 insertions(+), 45 deletions(-)
+
 -- 
 2.20.1
 
