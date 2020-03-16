@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18A37C18E5B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B387FC18E5B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D644F205ED
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A40F20679
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584399430;
-	bh=uNfW+TsJmfpsEE7Mx05r+EtQdgQfht67Sa9pKaTits8=;
+	s=default; t=1584399434;
+	bh=NQWS5Qaqvbo4n877tlRrDy6YHxStZ+KvcQ7X2K0x/Co=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zU8MMvHyWmJBuATrJRSOdQIfrEzf54X4GH7XUNQh7PFDiDiYGvjIjxhhCLPSVhx4h
-	 R9mUsxyX2IJzjIQEShstESqHa/yuvjpS4ci8KRp9JSo2VR4QROithITpWWhIhtUsex
-	 KoZ6AC0Otmfg79ziki0q0EFuBhvFWiL/XMDbPDjA=
+	b=QGeD+SN8go7mz2Fs+nuMRcKroCmKO/MQR+CwP2ne3KaRZ76JTof8dQKOGt3s3x5R6
+	 gZztsx9XpMOQ06t/b47MLEEiLftF6x89jhk0f5C6stf9/pZwrV2iFX0ZUym68Uq4+6
+	 fd0Wow3FGjYUXMlnAg6OJuuJvALzpmL24pzTpNhk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732963AbgCPW5B (ORCPT
+        id S1732946AbgCPW5A (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Mar 2020 18:57:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60272 "EHLO mail.kernel.org"
+        Mon, 16 Mar 2020 18:57:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60258 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732950AbgCPW5B (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Mar 2020 18:57:01 -0400
+        id S1732944AbgCPW5A (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Mar 2020 18:57:00 -0400
 Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90BB420679;
-        Mon, 16 Mar 2020 22:56:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B858720719;
+        Mon, 16 Mar 2020 22:56:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584399420;
-        bh=uNfW+TsJmfpsEE7Mx05r+EtQdgQfht67Sa9pKaTits8=;
+        s=default; t=1584399419;
+        bh=NQWS5Qaqvbo4n877tlRrDy6YHxStZ+KvcQ7X2K0x/Co=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jK+h/fBPqGT3jVqV6DAJICqeT/mDkeIPaT7M2xrkLV3GpFIGwzVWa7wxsivuuTY0X
-         CYIlNV/Js7li2fvqRBZSb3cnvcuJ4908z6GlUU+jtyKuEAXlVB1YwMo9BzWBNJo4qt
-         tTJYi3/cUl3pF3H+wTzKbf17f355P5arNMILzUqQ=
+        b=tR+dmsKx9Ps6EdnZ6jZHyBYzgghi/y0cd1PY5UmilGDm/K8ckdKUfGDMbfLUgnXTB
+         y6bU43j2ThOfVk6sK8q2c08Wcu55x/54FFPW8z/ICn9+/LLKuJAGn/eNe+Lo+6UJFP
+         eGoXp4YF4MA4+nKkg75Mmr6htuowaTx/UA9Mfmm8=
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     shuah@kernel.org, keescook@chromium.org
 Cc:     luto@amacapital.net, wad@chromium.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Tim.Bird@sony.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v3 5/6] kselftest: add fixture variants
-Date:   Mon, 16 Mar 2020 15:56:46 -0700
-Message-Id: <20200316225647.3129354-7-kuba@kernel.org>
+Subject: [PATCH v3 5/6] kselftest: add fixture parameters
+Date:   Mon, 16 Mar 2020 15:56:45 -0700
+Message-Id: <20200316225647.3129354-6-kuba@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200316225647.3129354-1-kuba@kernel.org>
 References: <20200316225647.3129354-1-kuba@kernel.org>
@@ -60,13 +60,13 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Allow users to pass parameters to fixtures.
 
-Each fixture will be evaluated for each of its variants.
+Each fixture will be evaluated for each of its parameter
+sets.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 --
 v3:
- - separate variant name out with a dot;
- - count variants as "cases" in the opening print.
+ - separate variant name out with a dot.
 ---
  Documentation/dev-tools/kselftest.rst       |   3 +-
  tools/testing/selftests/kselftest_harness.h | 145 ++++++++++++++++----
