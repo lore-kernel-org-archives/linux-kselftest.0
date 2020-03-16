@@ -2,99 +2,88 @@ Return-Path: <SRS0=47oa=5B=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 888B1C18E5B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D2DEC0044D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:59:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4D08C20679
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9E03206C0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584399450;
-	bh=TzgLtqq0RK8QYJMNHKKMtrDmIEHuvSE/eTPQdeKuuq0=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=g78N+eBvSA2So/Mf4+VThvZmm1MfXuU6uYK+Ihf5XebvCxJ8kut0lMWuX5ahp8iD4
-	 47IjmDQjSZH/ZqvAiuQc1CK0tyCK7THVxu2yzgWf4xrK0p6Npj+LyRUJ2x1yaPvTii
-	 Rwvwcq0J9aVnqjY5td1ZU3b82GRZ4MY/smCCj5xg=
+	s=default; t=1584399561;
+	bh=fDzZ9sd6ydw01iKuGsTPZvhI4ca9FxZByXLxHe4+dg0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=jpYxVE24j5Yu0vqtCg3eHup8OlhXJYs4gbSg2WC6HqbBxEwX3CwNb/TTwOAZ/5UO7
+	 ABJlqqGZhi57t71LoNwR6VfzZRPgtIRESbCTy/dc717wn1rltL5N+8hWvO7wzAskSr
+	 IfSDf3n9r1fv1R0SOQ8E7wqAG5IZ9QPRQSys/Mgs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732861AbgCPW4z (ORCPT
+        id S1732860AbgCPW7V (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Mar 2020 18:56:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60098 "EHLO mail.kernel.org"
+        Mon, 16 Mar 2020 18:59:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732840AbgCPW4z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Mar 2020 18:56:55 -0400
-Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.1])
+        id S1732846AbgCPW7V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Mar 2020 18:59:21 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 59FC8205ED;
-        Mon, 16 Mar 2020 22:56:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7237820674;
+        Mon, 16 Mar 2020 22:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584399414;
-        bh=TzgLtqq0RK8QYJMNHKKMtrDmIEHuvSE/eTPQdeKuuq0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WkLqPh8tvaVdZug19o9OYyOioZzZhJTLGUZi1tnf7F3X/vhFpVNoLO399Utat2hv+
-         VKRvfbe8eIPXEkkgVhNfLzWoT20tDmtiH4M6IEvvQ9nWtSEVi1SvKVOpugqkFQcqeB
-         oXqnJygKw8KdWM8b8Y7h+S3sRC2FW67NFL+pp3y0=
+        s=default; t=1584399560;
+        bh=fDzZ9sd6ydw01iKuGsTPZvhI4ca9FxZByXLxHe4+dg0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nSpTIy3e2KcyQdsDKHo45qOwSCjeLNnFXY7+uaytRmIQv3iJxOAefEebPANBkVTGS
+         MW/QCvsvU5L92AJJP9WvgwoZkT6MFQ4M2Szfa02VbM+zKfDdQCPkQB6DmJMK6uSug0
+         wAh8+VJv4y4uYw+MSNn2ZLVnn+2UltcRnrKOQ1xw=
+Date:   Mon, 16 Mar 2020 15:59:17 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     shuah@kernel.org, keescook@chromium.org
 Cc:     luto@amacapital.net, wad@chromium.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Tim.Bird@sony.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v3 0/6] kselftest: add fixture parameters
-Date:   Mon, 16 Mar 2020 15:56:40 -0700
-Message-Id: <20200316225647.3129354-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        linux-kernel@vger.kernel.org, kernel-team@fb.com, Tim.Bird@sony.com
+Subject: Re: [PATCH v3 0/6] kselftest: add fixture parameters
+Message-ID: <20200316155917.5ba8db1c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20200316225647.3129354-1-kuba@kernel.org>
+References: <20200316225647.3129354-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi!
+On Mon, 16 Mar 2020 15:56:40 -0700 Jakub Kicinski wrote:
+> Hi!
+> 
+> Shuah please consider applying to the kselftest tree.
+> 
+> This set is an attempt to make running tests for different
+> sets of data easier. The direct motivation is the tls
+> test which we'd like to run for TLS 1.2 and TLS 1.3,
+> but currently there is no easy way to invoke the same
+> tests with different parameters.
+> 
+> Tested all users of kselftest_harness.h.
+> 
+> v2:
+>  - don't run tests by fixture
+>  - don't pass params as an explicit argument
+> 
+> v3:
+>  - go back to the orginal implementation with an extra
+>    parameter, and running by fixture (Kees);
+>  - add LIST_APPEND helper (Kees);
+>  - add a dot between fixture and param name (Kees);
+>  - rename the params to variants (Tim);
+> 
+> v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
+> v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
 
-Shuah please consider applying to the kselftest tree.
+Ugh, sorry I forgot to realign things after the rename :S
 
-This set is an attempt to make running tests for different
-sets of data easier. The direct motivation is the tls
-test which we'd like to run for TLS 1.2 and TLS 1.3,
-but currently there is no easy way to invoke the same
-tests with different parameters.
-
-Tested all users of kselftest_harness.h.
-
-v2:
- - don't run tests by fixture
- - don't pass params as an explicit argument
-
-v3:
- - go back to the orginal implementation with an extra
-   parameter, and running by fixture (Kees);
- - add LIST_APPEND helper (Kees);
- - add a dot between fixture and param name (Kees);
- - rename the params to variants (Tim);
-
-v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
-v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
-
-Jakub Kicinski (6):
-  selftests/seccomp: use correct FIXTURE macro
-  kselftest: factor out list manipulation to a helper
-  kselftest: create fixture objects
-  kselftest: run tests by fixture
-  kselftest: add fixture variants
-  selftests: tls: run all tests for TLS 1.2 and TLS 1.3
-
- Documentation/dev-tools/kselftest.rst         |   3 +-
- tools/testing/selftests/kselftest_harness.h   | 233 ++++++++++++++----
- tools/testing/selftests/net/tls.c             |  93 ++-----
- tools/testing/selftests/seccomp/seccomp_bpf.c |  10 +-
- 4 files changed, 206 insertions(+), 133 deletions(-)
-
--- 
-2.24.1
-
+I'll send a whitespace-only v4 in a hour, allowing a little bit 
+of time in case there are some comments already.
