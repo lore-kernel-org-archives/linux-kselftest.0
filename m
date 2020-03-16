@@ -2,55 +2,52 @@ Return-Path: <SRS0=47oa=5B=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA76DC0044D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 888B1C18E5B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 92F8D20679
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D08C20679
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584399447;
-	bh=dBsWz9addWONFKhna+kM5dhqeNsPSINqhlpIe9wHGnU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uw9NwjX6juP4toNZrDFUMvPgIqyUwl9ebxCj+0fWiloGJFuLn/m7glKxErn8bF6+w
-	 MtHRZPnvjD1GL8v/uWItp9c+bBcPTbdVayRZxjEveV4K11kYsCydCQFSQLxE/EpB0c
-	 XrHQS344b5kxez574qoDOmSYFm+BBxLL8DUbI8JM=
+	s=default; t=1584399450;
+	bh=TzgLtqq0RK8QYJMNHKKMtrDmIEHuvSE/eTPQdeKuuq0=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=g78N+eBvSA2So/Mf4+VThvZmm1MfXuU6uYK+Ihf5XebvCxJ8kut0lMWuX5ahp8iD4
+	 47IjmDQjSZH/ZqvAiuQc1CK0tyCK7THVxu2yzgWf4xrK0p6Npj+LyRUJ2x1yaPvTii
+	 Rwvwcq0J9aVnqjY5td1ZU3b82GRZ4MY/smCCj5xg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732840AbgCPW44 (ORCPT
+        id S1732861AbgCPW4z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Mar 2020 18:56:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60116 "EHLO mail.kernel.org"
+        Mon, 16 Mar 2020 18:56:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732865AbgCPW4z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S1732840AbgCPW4z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 16 Mar 2020 18:56:55 -0400
 Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 03204206E2;
+        by mail.kernel.org (Postfix) with ESMTPSA id 59FC8205ED;
         Mon, 16 Mar 2020 22:56:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584399415;
-        bh=dBsWz9addWONFKhna+kM5dhqeNsPSINqhlpIe9wHGnU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JsktEZ2KZrsXnfehohqXKiicv/WTjqA2HvjEEo/v/XupU0LuhDIZSTvQWdiQ3RpPk
-         sk3IJR/RWPgyt29eEa7diZloXtUY+YsBNRjyFVGsc3m8/zdhZPdIQHhJ8ADfhdl5o3
-         ObQgekkNw3JiOa4Q7cmjcwvx6vOi9nMM+RX4hXrc=
+        s=default; t=1584399414;
+        bh=TzgLtqq0RK8QYJMNHKKMtrDmIEHuvSE/eTPQdeKuuq0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WkLqPh8tvaVdZug19o9OYyOioZzZhJTLGUZi1tnf7F3X/vhFpVNoLO399Utat2hv+
+         VKRvfbe8eIPXEkkgVhNfLzWoT20tDmtiH4M6IEvvQ9nWtSEVi1SvKVOpugqkFQcqeB
+         oXqnJygKw8KdWM8b8Y7h+S3sRC2FW67NFL+pp3y0=
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     shuah@kernel.org, keescook@chromium.org
 Cc:     luto@amacapital.net, wad@chromium.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Tim.Bird@sony.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v3 1/6] selftests/seccomp: use correct FIXTURE macro
-Date:   Mon, 16 Mar 2020 15:56:41 -0700
-Message-Id: <20200316225647.3129354-2-kuba@kernel.org>
+Subject: [PATCH v3 0/6] kselftest: add fixture parameters
+Date:   Mon, 16 Mar 2020 15:56:40 -0700
+Message-Id: <20200316225647.3129354-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200316225647.3129354-1-kuba@kernel.org>
-References: <20200316225647.3129354-1-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -58,73 +55,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting kdoc:
+Hi!
 
-FIXTURE_DATA:
- * This call may be used when the type of the fixture data
- * is needed.  In general, this should not be needed unless
- * the *self* is being passed to a helper directly.
+Shuah please consider applying to the kselftest tree.
 
-FIXTURE:
- * Defines the data provided to TEST_F()-defined tests as *self*.  It should be
- * populated and cleaned up using FIXTURE_SETUP() and FIXTURE_TEARDOWN().
+This set is an attempt to make running tests for different
+sets of data easier. The direct motivation is the tls
+test which we'd like to run for TLS 1.2 and TLS 1.3,
+but currently there is no easy way to invoke the same
+tests with different parameters.
 
-seccomp should use FIXTURE to declare types.
+Tested all users of kselftest_harness.h.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+v2:
+ - don't run tests by fixture
+ - don't pass params as an explicit argument
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index ee1b727ede04..7bf82fb07f67 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -909,7 +909,7 @@ TEST(ERRNO_order)
- 	EXPECT_EQ(12, errno);
- }
- 
--FIXTURE_DATA(TRAP) {
-+FIXTURE(TRAP) {
- 	struct sock_fprog prog;
- };
- 
-@@ -1020,7 +1020,7 @@ TEST_F(TRAP, handler)
- 	EXPECT_NE(0, (unsigned long)sigsys->_call_addr);
- }
- 
--FIXTURE_DATA(precedence) {
-+FIXTURE(precedence) {
- 	struct sock_fprog allow;
- 	struct sock_fprog log;
- 	struct sock_fprog trace;
-@@ -1509,7 +1509,7 @@ void tracer_poke(struct __test_metadata *_metadata, pid_t tracee, int status,
- 	EXPECT_EQ(0, ret);
- }
- 
--FIXTURE_DATA(TRACE_poke) {
-+FIXTURE(TRACE_poke) {
- 	struct sock_fprog prog;
- 	pid_t tracer;
- 	long poked;
-@@ -1817,7 +1817,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
- 		change_syscall(_metadata, tracee, -1, -ESRCH);
- }
- 
--FIXTURE_DATA(TRACE_syscall) {
-+FIXTURE(TRACE_syscall) {
- 	struct sock_fprog prog;
- 	pid_t tracer, mytid, mypid, parent;
- };
-@@ -2321,7 +2321,7 @@ struct tsync_sibling {
- 		}							\
- 	} while (0)
- 
--FIXTURE_DATA(TSYNC) {
-+FIXTURE(TSYNC) {
- 	struct sock_fprog root_prog, apply_prog;
- 	struct tsync_sibling sibling[TSYNC_SIBLINGS];
- 	sem_t started;
+v3:
+ - go back to the orginal implementation with an extra
+   parameter, and running by fixture (Kees);
+ - add LIST_APPEND helper (Kees);
+ - add a dot between fixture and param name (Kees);
+ - rename the params to variants (Tim);
+
+v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
+v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
+
+Jakub Kicinski (6):
+  selftests/seccomp: use correct FIXTURE macro
+  kselftest: factor out list manipulation to a helper
+  kselftest: create fixture objects
+  kselftest: run tests by fixture
+  kselftest: add fixture variants
+  selftests: tls: run all tests for TLS 1.2 and TLS 1.3
+
+ Documentation/dev-tools/kselftest.rst         |   3 +-
+ tools/testing/selftests/kselftest_harness.h   | 233 ++++++++++++++----
+ tools/testing/selftests/net/tls.c             |  93 ++-----
+ tools/testing/selftests/seccomp/seccomp_bpf.c |  10 +-
+ 4 files changed, 206 insertions(+), 133 deletions(-)
+
 -- 
 2.24.1
 
