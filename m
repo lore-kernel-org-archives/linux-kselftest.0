@@ -2,52 +2,52 @@ Return-Path: <SRS0=47oa=5B=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C18C8C3F2CE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA76DC0044D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A2C920679
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92F8D20679
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Mar 2020 22:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584399444;
-	bh=OcVY4eRoS/U8w8yp3h14C8F705LeNMy1yjqKo01PSco=;
+	s=default; t=1584399447;
+	bh=dBsWz9addWONFKhna+kM5dhqeNsPSINqhlpIe9wHGnU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xuV3T9DRJhIfOqqPrSMkJvYpaBHxhE6cXTuLOJ/KkPOOHLahuo5AZqOp5jaO4Awa7
-	 77CPL5Wex3ID1d8hhJE0Sg7mfUNKKPKWNel/23dsmPFRaJ9i8i362SxFz2KOQBvP8V
-	 vhPzCbTuIRsPP34lPBKvrTkPo+FR3qwNQv2s1as0=
+	b=uw9NwjX6juP4toNZrDFUMvPgIqyUwl9ebxCj+0fWiloGJFuLn/m7glKxErn8bF6+w
+	 MtHRZPnvjD1GL8v/uWItp9c+bBcPTbdVayRZxjEveV4K11kYsCydCQFSQLxE/EpB0c
+	 XrHQS344b5kxez574qoDOmSYFm+BBxLL8DUbI8JM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732998AbgCPW5U (ORCPT
+        id S1732840AbgCPW44 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Mar 2020 18:57:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60174 "EHLO mail.kernel.org"
+        Mon, 16 Mar 2020 18:56:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732906AbgCPW45 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Mar 2020 18:56:57 -0400
+        id S1732865AbgCPW4z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Mar 2020 18:56:55 -0400
 Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F66D20736;
-        Mon, 16 Mar 2020 22:56:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 03204206E2;
+        Mon, 16 Mar 2020 22:56:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584399417;
-        bh=OcVY4eRoS/U8w8yp3h14C8F705LeNMy1yjqKo01PSco=;
+        s=default; t=1584399415;
+        bh=dBsWz9addWONFKhna+kM5dhqeNsPSINqhlpIe9wHGnU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=02UC0T5oDz89azih3fbWDjL8Y0bG0BiGO+i4rEE+MfpytZBYa8APxOH3AWYZ+Axr7
-         WBn+2Feot/rm3eTMixJahN6CrcNKFswGDhJsrYTf1PDV+leVWqAWzi3CND095zYati
-         w5YJLzlHcmHWSKp0VJh3vqLVD3Q1PGpRNpnhBJWo=
+        b=JsktEZ2KZrsXnfehohqXKiicv/WTjqA2HvjEEo/v/XupU0LuhDIZSTvQWdiQ3RpPk
+         sk3IJR/RWPgyt29eEa7diZloXtUY+YsBNRjyFVGsc3m8/zdhZPdIQHhJ8ADfhdl5o3
+         ObQgekkNw3JiOa4Q7cmjcwvx6vOi9nMM+RX4hXrc=
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     shuah@kernel.org, keescook@chromium.org
 Cc:     luto@amacapital.net, wad@chromium.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Tim.Bird@sony.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v3 3/6] kselftest: create fixture objects
-Date:   Mon, 16 Mar 2020 15:56:43 -0700
-Message-Id: <20200316225647.3129354-4-kuba@kernel.org>
+Subject: [PATCH v3 1/6] selftests/seccomp: use correct FIXTURE macro
+Date:   Mon, 16 Mar 2020 15:56:41 -0700
+Message-Id: <20200316225647.3129354-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200316225647.3129354-1-kuba@kernel.org>
 References: <20200316225647.3129354-1-kuba@kernel.org>
@@ -58,123 +58,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Grouping tests by fixture will allow us to parametrize
-test runs. Create full objects for fixtures.
+Quoting kdoc:
 
-Add a "global" fixture for tests without a fixture.
+FIXTURE_DATA:
+ * This call may be used when the type of the fixture data
+ * is needed.  In general, this should not be needed unless
+ * the *self* is being passed to a helper directly.
+
+FIXTURE:
+ * Defines the data provided to TEST_F()-defined tests as *self*.  It should be
+ * populated and cleaned up using FIXTURE_SETUP() and FIXTURE_TEARDOWN().
+
+seccomp should use FIXTURE to declare types.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 46 ++++++++++++++++-----
- 1 file changed, 35 insertions(+), 11 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index aaf58fffc8f7..0f68943d6f04 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -169,8 +169,10 @@
- #define __TEST_IMPL(test_name, _signal) \
- 	static void test_name(struct __test_metadata *_metadata); \
- 	static struct __test_metadata _##test_name##_object = \
--		{ .name = "global." #test_name, \
--		  .fn = &test_name, .termsig = _signal, \
-+		{ .name = #test_name, \
-+		  .fn = &test_name, \
-+		  .fixture = &_fixture_global, \
-+		  .termsig = _signal, \
- 		  .timeout = TEST_TIMEOUT_DEFAULT, }; \
- 	static void __attribute__((constructor)) _register_##test_name(void) \
- 	{ \
-@@ -212,10 +214,12 @@
-  * populated and cleaned up using FIXTURE_SETUP() and FIXTURE_TEARDOWN().
-  */
- #define FIXTURE(fixture_name) \
-+	static struct __fixture_metadata _##fixture_name##_fixture_object = \
-+		{ .name =  #fixture_name, }; \
- 	static void __attribute__((constructor)) \
- 	_register_##fixture_name##_data(void) \
- 	{ \
--		__fixture_count++; \
-+		__register_fixture(&_##fixture_name##_fixture_object); \
- 	} \
- 	FIXTURE_DATA(fixture_name)
- 
-@@ -309,8 +313,9 @@
- 	} \
- 	static struct __test_metadata \
- 		      _##fixture_name##_##test_name##_object = { \
--		.name = #fixture_name "." #test_name, \
-+		.name = #test_name, \
- 		.fn = &wrapper_##fixture_name##_##test_name, \
-+		.fixture = &_##fixture_name##_fixture_object, \
- 		.termsig = signal, \
- 		.timeout = tmout, \
- 	 }; \
-@@ -654,10 +659,33 @@
- 	} \
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index ee1b727ede04..7bf82fb07f67 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -909,7 +909,7 @@ TEST(ERRNO_order)
+ 	EXPECT_EQ(12, errno);
  }
  
-+/* Contains all the information about a fixture */
-+struct __fixture_metadata {
-+	const char *name;
-+	struct __fixture_metadata *prev, *next;
-+} _fixture_global __attribute__((unused)) = {
-+	.name = "global",
-+	.prev = &_fixture_global,
-+};
-+
-+static struct __fixture_metadata *__fixture_list = &_fixture_global;
-+static unsigned int __fixture_count;
-+static int __constructor_order;
-+
-+#define _CONSTRUCTOR_ORDER_FORWARD   1
-+#define _CONSTRUCTOR_ORDER_BACKWARD -1
-+
-+static inline void __register_fixture(struct __fixture_metadata *f)
-+{
-+	__fixture_count++;
-+	__LIST_APPEND(__fixture_list, f);
-+}
-+
- /* Contains all the information for test execution and status checking. */
- struct __test_metadata {
- 	const char *name;
- 	void (*fn)(struct __test_metadata *);
-+	struct __fixture_metadata *fixture;
- 	int termsig;
- 	int passed;
- 	int trigger; /* extra handler after the evaluation */
-@@ -670,11 +698,6 @@ struct __test_metadata {
- /* Storage for the (global) tests to be run. */
- static struct __test_metadata *__test_list;
- static unsigned int __test_count;
--static unsigned int __fixture_count;
--static int __constructor_order;
--
--#define _CONSTRUCTOR_ORDER_FORWARD   1
--#define _CONSTRUCTOR_ORDER_BACKWARD -1
+-FIXTURE_DATA(TRAP) {
++FIXTURE(TRAP) {
+ 	struct sock_fprog prog;
+ };
  
- /*
-  * Since constructors are called in reverse order, reverse the test
-@@ -708,7 +731,7 @@ void __run_test(struct __test_metadata *t)
- 
- 	t->passed = 1;
- 	t->trigger = 0;
--	printf("[ RUN      ] %s\n", t->name);
-+	printf("[ RUN      ] %s.%s\n", t->fixture->name, t->name);
- 	alarm(t->timeout);
- 	child_pid = fork();
- 	if (child_pid < 0) {
-@@ -757,7 +780,8 @@ void __run_test(struct __test_metadata *t)
- 				status);
- 		}
- 	}
--	printf("[     %4s ] %s\n", (t->passed ? "OK" : "FAIL"), t->name);
-+	printf("[     %4s ] %s.%s\n", (t->passed ? "OK" : "FAIL"),
-+	       t->fixture->name, t->name);
- 	alarm(0);
+@@ -1020,7 +1020,7 @@ TEST_F(TRAP, handler)
+ 	EXPECT_NE(0, (unsigned long)sigsys->_call_addr);
  }
  
+-FIXTURE_DATA(precedence) {
++FIXTURE(precedence) {
+ 	struct sock_fprog allow;
+ 	struct sock_fprog log;
+ 	struct sock_fprog trace;
+@@ -1509,7 +1509,7 @@ void tracer_poke(struct __test_metadata *_metadata, pid_t tracee, int status,
+ 	EXPECT_EQ(0, ret);
+ }
+ 
+-FIXTURE_DATA(TRACE_poke) {
++FIXTURE(TRACE_poke) {
+ 	struct sock_fprog prog;
+ 	pid_t tracer;
+ 	long poked;
+@@ -1817,7 +1817,7 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+ 		change_syscall(_metadata, tracee, -1, -ESRCH);
+ }
+ 
+-FIXTURE_DATA(TRACE_syscall) {
++FIXTURE(TRACE_syscall) {
+ 	struct sock_fprog prog;
+ 	pid_t tracer, mytid, mypid, parent;
+ };
+@@ -2321,7 +2321,7 @@ struct tsync_sibling {
+ 		}							\
+ 	} while (0)
+ 
+-FIXTURE_DATA(TSYNC) {
++FIXTURE(TSYNC) {
+ 	struct sock_fprog root_prog, apply_prog;
+ 	struct tsync_sibling sibling[TSYNC_SIBLINGS];
+ 	sem_t started;
 -- 
 2.24.1
 
