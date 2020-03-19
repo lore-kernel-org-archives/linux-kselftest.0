@@ -2,281 +2,355 @@ Return-Path: <SRS0=ySB6=5E=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73D51C4332E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Mar 2020 16:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8E9C4332B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Mar 2020 16:59:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 406ED2070A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Mar 2020 16:43:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hdDV9H3L"
+	by mail.kernel.org (Postfix) with ESMTP id 9D0E12072D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Mar 2020 16:59:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727928AbgCSQnB (ORCPT
+        id S1727282AbgCSQ7C (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Mar 2020 12:43:01 -0400
-Received: from mail-pj1-f74.google.com ([209.85.216.74]:36748 "EHLO
-        mail-pj1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728517AbgCSQmr (ORCPT
+        Thu, 19 Mar 2020 12:59:02 -0400
+Received: from smtp-8fac.mail.infomaniak.ch ([83.166.143.172]:46013 "EHLO
+        smtp-8fac.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727649AbgCSQ7A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Mar 2020 12:42:47 -0400
-Received: by mail-pj1-f74.google.com with SMTP id np18so1902549pjb.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Mar 2020 09:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Xrj+8qNx0KoAn4W34u+9YgQgrTU26Dej+YkYnDk+H1c=;
-        b=hdDV9H3LGLfw9B2j+rY32eFKH/QungX8UAevdSoATXhma0CpBUEEQUyIVStD1d/goi
-         vxMe2D29lwWcohOOzgn8GaGyT8UXBOESTGPLl5PuE1zTnk6rMdrlVIU8N8XXvIuBGeJh
-         4MaQVu+ARvZZXACt8TO1IybXdKM0h3mly2l7kpFrc57GUvLUNePANrUIFHwiYdOjNhze
-         Uph5tqZreaTlr9sxV/CZogEQEz4tuSV/MSxfVfIdAtzM5yxzNlIBgCR9+5CFDfefn+iI
-         hOLs1Un9z0uXs3FNLkpQF+L/XcNP7H75PB09b2mZCtE6OT7mnCCM9zFQTBnbYIclq9am
-         muUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Xrj+8qNx0KoAn4W34u+9YgQgrTU26Dej+YkYnDk+H1c=;
-        b=k015UQyYF3HVjN/x0h2NcFKGmdM4NHpfunfqk/4R+QduEqpKuiWRrz0ar5cMc2q2hp
-         U6qksZ/Ig9Q7pzHOHmrw0JbOCvKZ4jaGAkdxHBRw+tsODVtthugI8WtYY7XD5UOHKb5w
-         ZkfBHfcGydE5SOw7hKVIzSIW+eOFkbLo4cPs1nB4LHypqyRJlp36Lp/H1+AQ25u7sqL6
-         Cr9ZkvQIX4rk21yX0SkdxitpKoqkhVWQZncZUEQol4m4pjzZ1k9ZrDV9uyVs/aZX6Co3
-         pCCdsYCJUQmEGJPGvqBTbr/Jt80ZLM9boU6n9vxhDAPgAyKgXJpwEAO9KPVEtNb1uiB5
-         STHQ==
-X-Gm-Message-State: ANhLgQ01PMsJCN5yQcJxYqJHImOxS8+AI8B++hKR1mO8VwW4WtmQl6Bk
-        AMtJoe+HZMbU6YyB03JXI+b2W60tU62iG2mgnA4=
-X-Google-Smtp-Source: ADFU+vvni+PtP80Ym72JDcL2wDY/IhrppRfbMtCdXXnSKQRu9nkusLnMWQK9sqqywJ7J/5+kEz+pKK25dtcp17twTvs=
-X-Received: by 2002:a17:90a:628a:: with SMTP id d10mr4805164pjj.25.1584636166443;
- Thu, 19 Mar 2020 09:42:46 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 09:42:26 -0700
-In-Reply-To: <20200319164227.87419-1-trishalfonso@google.com>
-Message-Id: <20200319164227.87419-3-trishalfonso@google.com>
-Mime-Version: 1.0
-References: <20200319164227.87419-1-trishalfonso@google.com>
-X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
-Subject: [RFC PATCH v2 2/3] KUnit: KASAN Integration
-From:   Patricia Alfonso <trishalfonso@google.com>
-To:     davidgow@google.com, brendanhiggins@google.com,
-        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        Patricia Alfonso <trishalfonso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 19 Mar 2020 12:59:00 -0400
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 48jtR3525rzlhKm9;
+        Thu, 19 Mar 2020 17:58:55 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48jtR0633TzljLrP;
+        Thu, 19 Mar 2020 17:58:52 +0100 (CET)
+Subject: Re: [RFC PATCH v14 00/10] Landlock LSM
+To:     Jann Horn <jannh@google.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mickael.salaun@ssi.gouv.fr>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <20200224160215.4136-1-mic@digikod.net>
+ <CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com>
+ <873d7419-bdd9-8a52-0a9b-dddbe31df4f9@digikod.net>
+ <CAG48ez0=0W5Ok-8nASqZrZ28JboXRRi3gDxV5u6mdcOtzwuRVA@mail.gmail.com>
+ <688dda0f-0907-34eb-c19e-3e9e5f613a74@digikod.net>
+ <CAG48ez16yT+zbK1WPxr2TnxrifW5c2DnpFLbWRRLUT_WpuFNmw@mail.gmail.com>
+ <e8530226-f295-a897-1132-7e6970dad49f@digikod.net>
+ <CAG48ez1K-7Lq2Ep_p9fOvXQ-fwj_8dA1CFd5SVDbT4ccqejDzA@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <2d48e3e3-e7b2-ec33-91c5-be6a308a12d4@digikod.net>
+Date:   Thu, 19 Mar 2020 17:58:52 +0100
+User-Agent: 
+MIME-Version: 1.0
+In-Reply-To: <CAG48ez1K-7Lq2Ep_p9fOvXQ-fwj_8dA1CFd5SVDbT4ccqejDzA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
+X-Antivirus-Code: 0x100000
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Integrate KASAN into KUnit testing framework.
-	- Fail tests when KASAN reports an error that is not expected
-     	- Use KUNIT_EXPECT_KASAN_FAIL to expect a KASAN error in KASAN tests
-     	- Expected KASAN reports pass tests and are still printed when run
-     	without kunit_tool (kunit_tool still bypasses the report due to the
-	test passing)
-     	- KUnit struct in current task used to keep track of the current test
-     	from KASAN code
 
-Make use of "[RFC PATCH kunit-next 1/2] kunit: generalize
-kunit_resource API beyond allocated resources" and "[RFC PATCH
-kunit-next 2/2] kunit: add support for named resources" from Alan
-Maguire [1]
-	- A named resource is added to a test when a KASAN report is
-	 expected
-        - This resource contains a struct for kasan_data containing
-        booleans representing if a KASAN report is expected and if a
-        KASAN report is found
+On 19/03/2020 00:33, Jann Horn wrote:
+> On Wed, Mar 18, 2020 at 1:06 PM Mickaël Salaün <mic@digikod.net> wrote:
+>> On 17/03/2020 20:45, Jann Horn wrote:
+>>> On Tue, Mar 17, 2020 at 6:50 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>>> On 17/03/2020 17:19, Jann Horn wrote:
+>>>>> On Thu, Mar 12, 2020 at 12:38 AM Mickaël Salaün <mic@digikod.net> wrote:
+>>>>>> On 10/03/2020 00:44, Jann Horn wrote:
+>>>>>>> On Mon, Feb 24, 2020 at 5:03 PM Mickaël Salaün <mic@digikod.net> wrote:
+>>>>
+>>>> [...]
+>>>>
+>>>>>>> Aside from those things, there is also a major correctness issue where
+>>>>>>> I'm not sure how to solve it properly:
+>>>>>>>
+>>>>>>> Let's say a process installs a filter on itself like this:
+>>>>>>>
+>>>>>>> struct landlock_attr_ruleset ruleset = { .handled_access_fs =
+>>>>>>> ACCESS_FS_ROUGHLY_WRITE};
+>>>>>>> int ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
+>>>>>>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+>>>>>>> struct landlock_attr_path_beneath path_beneath = {
+>>>>>>>   .ruleset_fd = ruleset_fd,
+>>>>>>>   .allowed_access = ACCESS_FS_ROUGHLY_WRITE,
+>>>>>>>   .parent_fd = open("/tmp/foobar", O_PATH),
+>>>>>>> };
+>>>>>>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+>>>>>>> sizeof(path_beneath), &path_beneath);
+>>>>>>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>>>>>>> struct landlock_attr_enforce attr_enforce = { .ruleset_fd = ruleset_fd };
+>>>>>>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+>>>>>>> sizeof(attr_enforce), &attr_enforce);
+>>>>>>>
+>>>>>>> At this point, the process is not supposed to be able to write to
+>>>>>>> anything outside /tmp/foobar, right? But what happens if the process
+>>>>>>> does the following next?
+>>>>>>>
+>>>>>>> struct landlock_attr_ruleset ruleset = { .handled_access_fs =
+>>>>>>> ACCESS_FS_ROUGHLY_WRITE};
+>>>>>>> int ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
+>>>>>>> LANDLOCK_OPT_CREATE_RULESET, sizeof(ruleset), &ruleset);
+>>>>>>> struct landlock_attr_path_beneath path_beneath = {
+>>>>>>>   .ruleset_fd = ruleset_fd,
+>>>>>>>   .allowed_access = ACCESS_FS_ROUGHLY_WRITE,
+>>>>>>>   .parent_fd = open("/", O_PATH),
+>>>>>>> };
+>>>>>>> landlock(LANDLOCK_CMD_ADD_RULE, LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
+>>>>>>> sizeof(path_beneath), &path_beneath);
+>>>>>>> prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+>>>>>>> struct landlock_attr_enforce attr_enforce = { .ruleset_fd = ruleset_fd };
+>>>>>>> landlock(LANDLOCK_CMD_ENFORCE_RULESET, LANDLOCK_OPT_ENFORCE_RULESET,
+>>>>>>> sizeof(attr_enforce), &attr_enforce);
+>>>>>>>
+>>>>>>> As far as I can tell from looking at the source, after this, you will
+>>>>>>> have write access to the entire filesystem again. I think the idea is
+>>>>>>> that LANDLOCK_CMD_ENFORCE_RULESET should only let you drop privileges,
+>>>>>>> not increase them, right?
+>>>>>>
+>>>>>> There is an additionnal check in syscall.c:get_path_from_fd(): it is
+>>>>>> forbidden to add a rule with a path which is not accessible (according
+>>>>>> to LANDLOCK_ACCESS_FS_OPEN) thanks to a call to security_file_open(),
+>>>>>> but this is definitely not perfect.
+>>>>>
+>>>>> Ah, I missed that.
+>>>>>
+>>>>>>> I think the easy way to fix this would be to add a bitmask to each
+>>>>>>> rule that says from which ruleset it originally comes, and then let
+>>>>>>> check_access_path() collect these bitmasks from each rule with OR, and
+>>>>>>> check at the end whether the resulting bitmask is full - if not, at
+>>>>>>> least one of the rulesets did not permit the access, and it should be
+>>>>>>> denied.
+>>>>>>>
+>>>>>>> But maybe it would make more sense to change how the API works
+>>>>>>> instead, and get rid of the concept of "merging" two rulesets
+>>>>>>> together? Instead, we could make the API work like this:
+>>>>>>>
+>>>>>>>  - LANDLOCK_CMD_CREATE_RULESET gives you a file descriptor whose
+>>>>>>> ->private_data contains a pointer to the old ruleset of the process,
+>>>>>>> as well as a pointer to a new empty ruleset.
+>>>>>>>  - LANDLOCK_CMD_ADD_RULE fails if the specified rule would not be
+>>>>>>> permitted by the old ruleset, then adds the rule to the new ruleset
+>>>>>>>  - LANDLOCK_CMD_ENFORCE_RULESET fails if the old ruleset pointer in
+>>>>>>> ->private_data doesn't match the current ruleset of the process, then
+>>>>>>> replaces the old ruleset with the new ruleset.
+>>>>>>>
+>>>>>>> With this, the new ruleset is guaranteed to be a subset of the old
+>>>>>>> ruleset because each of the new ruleset's rules is permitted by the
+>>>>>>> old ruleset. (Unless the directory hierarchy rotates, but in that case
+>>>>>>> the inaccuracy isn't much worse than what would've been possible
+>>>>>>> through RCU path walk anyway AFAIK.)
+>>>>>>>
+>>>>>>> What do you think?
+>>>>>>>
+>>>>>>
+>>>>>> I would prefer to add the same checks you described at first (with
+>>>>>> check_access_path), but only when creating a new ruleset with
+>>>>>> merge_ruleset() (which should probably be renamed). This enables not to
+>>>>>> rely on a parent ruleset/domain until the enforcement, which is the case
+>>>>>> anyway.
+>>>>>> Unfortunately this doesn't work for some cases with bind mounts. Because
+>>>>>> check_access_path() goes through one path, another (bind mounted) path
+>>>>>> could be illegitimately allowed.
+>>>>>
+>>>>> Hmm... I'm not sure what you mean. At the moment, landlock doesn't
+>>>>> allow any sandboxed process to change the mount hierarchy, right? Can
+>>>>> you give an example where this would go wrong?
+>>>>
+>>>> Indeed, a Landlocked process must no be able to change its mount
+>>>> namespace layout. However, bind mounts may already exist.
+>>>> Let's say a process sandbox itself to only access /a in a read-write
+>>>> way.
+>>>
+>>> So, first policy:
+>>>
+>>> /a RW
+>>>
+>>>> Then, this process (or one of its children) add a new restriction
+>>>> on /a/b to only be able to read this hierarchy.
+>>>
+>>> You mean with the second policy looking like this?
+>>
+>> Right.
+>>
+>>>
+>>> /a RW
+>>> /a/b R
+>>>
+>>> Then the resulting policy would be:
+>>>
+>>> /a RW policy_bitmask=0x00000003 (bits 0 and 1 set)
+>>> /a/b R policy_bitmask=0x00000002 (bit 1 set)
+>>> required_bits=0x00000003 (bits 0 and 1 set)
+>>>
+>>>> The check at insertion
+>>>> time would allow this because this access right is a subset of the
+>>>> access right allowed with the parent directory. However, If /a/b is bind
+>>>> mounted somewhere else, let's say in /private/b, then the second
+>>>> enforcement just gave new access rights to this hierarchy too.
+>>>
+>>> But with the solution I proposed, landlock's path walk would see
+>>> something like this when accessing a file at /private/b/foo:
+>>> /private/b/foo <no rules>
+>>>   policies seen until now: 0x00000000
+>>> /private/b <access: R, policy_bitmask=0x00000002>
+>>>   policies seen until now: 0x00000002
+>>> /private <no rules>
+>>>   policies seen until now: 0x00000002
+>>> / <no rules>
+>>>   policies seen until now: 0x00000002
+>>>
+>>> It wouldn't encounter any rule from the first policy, so the OR of the
+>>> seen policy bitmasks would be 0x00000002, which is not the required
+>>> value 0x00000003, and so the access would be denied.
+>> As I understand your proposition, we need to build the required_bits
+>> when adding a rule or enforcing/merging a ruleset with a domain. The
+>> issue is that a rule only refers to a struct inode, not a struct path.
+>> For your proposition to work, we would need to walk through the file
+>> path when adding a rule to a ruleset, which means that we need to depend
+>> of the current view of the process (i.e. its mount namespace), and its
+>> Landlock domain.
+> 
+> I don't see why that is necessary. Why would we have to walk the file
+> path when adding a rule?
+> 
+>> If the required_bits field is set when the ruleset is
+>> merged with the domain, it is not possible anymore to walk through the
+>> corresponding initial file path, which makes the enforcement step too
+>> late to check for such consistency. The important point is that a
+>> ruleset/domain doesn't have a notion of file hierarchy, a ruleset is
+>> only a set of tagged inodes.
+>>
+>> I'm not sure I got your proposition right, though. When and how would
+>> you generate the required_bits?
+> 
+> Using your terminology:
+> A domain is a collection of N layers, which are assigned indices 0..N-1.
+> For each possible access type, a domain has a bitmask containing N
+> bits that stores which layers control that access type. (Basically a
+> per-layer version of fs_access_mask.)
 
-[1] (https://lore.kernel.org/linux-kselftest/1583251361-12748-1-git-send-email-alan.maguire@oracle.com/T/#t)
+OK, so there is a bit for each domain, which means that you get a limit
+of, let's say 64 layers? Knowing that each layer can be created by a
+standalone application, potentially nested in a bunch of layers, this
+seems artificially limiting.
 
-Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
----
- include/kunit/test.h | 10 ++++++++++
- lib/kunit/test.c     | 10 +++++++++-
- lib/test_kasan.c     | 37 +++++++++++++++++++++++++++++++++++++
- mm/kasan/report.c    | 33 +++++++++++++++++++++++++++++++++
- 4 files changed, 89 insertions(+), 1 deletion(-)
+> To validate an access, you start by ORing together the bitmasks for
+> the requested access types; that gives you the required_bits mask,
+> which lists all layers that want to control the access.
+> Then you set seen_policy_bits=0, then do the
+> check_access_path_continue() loop while keeping track of which layers
+> you've seen with "seen_policy_bits |= access->contributing_policies",
+> or something like that.
+> And in the end, you check that seen_policy_bits is a superset of
+> required_bits - something like `(~seen_policy_bits) & required_bits ==
+> 0`.
+> 
+> AFAICS to create a new domain from a bunch of layers, you wouldn't
+> have to do any path walking.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 70ee581b19cd..2ab265f4f76c 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -19,9 +19,19 @@
- 
- struct kunit_resource;
- 
-+#ifdef CONFIG_KASAN
-+/* kasan_data struct is used in KUnit tests for KASAN expected failures */
-+struct kunit_kasan_expectation {
-+	bool report_expected;
-+	bool report_found;
-+};
-+#endif /* CONFIG_KASAN */
-+
- typedef int (*kunit_resource_init_t)(struct kunit_resource *, void *);
- typedef void (*kunit_resource_free_t)(struct kunit_resource *);
- 
-+void kunit_set_failure(struct kunit *test);
-+
- /**
-  * struct kunit_resource - represents a *test managed resource*
-  * @data: for the user to store arbitrary data.
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 86a4d9ca0a45..3f927ef45827 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -10,11 +10,12 @@
- #include <linux/kernel.h>
- #include <linux/kref.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched.h>
- 
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
--static void kunit_set_failure(struct kunit *test)
-+void kunit_set_failure(struct kunit *test)
- {
- 	WRITE_ONCE(test->success, false);
- }
-@@ -237,6 +238,10 @@ static void kunit_try_run_case(void *data)
- 	struct kunit_suite *suite = ctx->suite;
- 	struct kunit_case *test_case = ctx->test_case;
- 
-+#if (IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT))
-+	current->kunit_test = test;
-+#endif /* IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT) */
-+
- 	/*
- 	 * kunit_run_case_internal may encounter a fatal error; if it does,
- 	 * abort will be called, this thread will exit, and finally the parent
-@@ -590,6 +595,9 @@ void kunit_cleanup(struct kunit *test)
- 		spin_unlock(&test->lock);
- 		kunit_remove_resource(test, res);
- 	}
-+#if (IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT))
-+	current->kunit_test = NULL;
-+#endif /* IS_ENABLED(CONFIG_KASAN) && IS_BUILTIN(CONFIG_KUNIT)*/
- }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
- 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index 3872d250ed2c..cf73c6bee81b 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -23,6 +23,43 @@
- 
- #include <asm/page.h>
- 
-+#include <kunit/test.h>
-+
-+struct kunit_resource resource;
-+struct kunit_kasan_expectation fail_data;
-+
-+#define KUNIT_SET_KASAN_DATA(test) do { \
-+	fail_data.report_expected = true; \
-+	fail_data.report_found = false; \
-+	kunit_add_named_resource(test, \
-+				NULL, \
-+				NULL, \
-+				&resource, \
-+				"kasan_data", &fail_data); \
-+} while (0)
-+
-+#define KUNIT_DO_EXPECT_KASAN_FAIL(test, condition) do { \
-+	struct kunit_resource *resource; \
-+	struct kunit_kasan_expectation *kasan_data; \
-+	condition; \
-+	resource = kunit_find_named_resource(test, "kasan_data"); \
-+	kasan_data = resource->data; \
-+	KUNIT_EXPECT_EQ(test, \
-+			kasan_data->report_expected, \
-+			kasan_data->report_found); \
-+	kunit_put_resource(resource); \
-+} while (0)
-+
-+/**
-+ * KUNIT_EXPECT_KASAN_FAIL() - Causes a test failure when the expression does
-+ * not cause a KASAN error.
-+ *
-+ */
-+#define KUNIT_EXPECT_KASAN_FAIL(test, condition) do { \
-+	KUNIT_SET_KASAN_DATA(test); \
-+	KUNIT_DO_EXPECT_KASAN_FAIL(test, condition); \
-+} while (0)
-+
- /*
-  * Note: test functions are marked noinline so that their names appear in
-  * reports.
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 5ef9f24f566b..ef3d0f54097e 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -32,6 +32,8 @@
- 
- #include <asm/sections.h>
- 
-+#include <kunit/test.h>
-+
- #include "kasan.h"
- #include "../slab.h"
- 
-@@ -455,12 +457,38 @@ static bool report_enabled(void)
- 	return !test_and_set_bit(KASAN_BIT_REPORTED, &kasan_flags);
- }
- 
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+void kasan_update_kunit_status(struct kunit *cur_test)
-+{
-+	struct kunit_resource *resource;
-+	struct kunit_kasan_expectation *kasan_data;
-+
-+	if (kunit_find_named_resource(cur_test, "kasan_data")) {
-+		resource = kunit_find_named_resource(cur_test, "kasan_data");
-+		kasan_data = resource->data;
-+		kasan_data->report_found = true;
-+
-+		if (!kasan_data->report_expected)
-+			kunit_set_failure(current->kunit_test);
-+		else
-+			return;
-+	} else
-+		kunit_set_failure(current->kunit_test);
-+}
-+#endif /* IS_BUILTIN(CONFIG_KUNIT) */
-+
- void kasan_report_invalid_free(void *object, unsigned long ip)
- {
- 	unsigned long flags;
- 	u8 tag = get_tag(object);
- 
- 	object = reset_tag(object);
-+
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+	if (current->kunit_test)
-+		kasan_update_kunit_status(current->kunit_test);
-+#endif /* IS_BUILTIN(CONFIG_KUNIT) */
-+
- 	start_report(&flags);
- 	pr_err("BUG: KASAN: double-free or invalid-free in %pS\n", (void *)ip);
- 	print_tags(tag, object);
-@@ -481,6 +509,11 @@ void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned lon
- 	if (likely(!report_enabled()))
- 		return;
- 
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+	if (current->kunit_test)
-+		kasan_update_kunit_status(current->kunit_test);
-+#endif /* IS_BUILTIN(CONFIG_KUNIT) */
-+
- 	disable_trace_on_warning();
- 
- 	tagged_addr = (void *)addr;
--- 
-2.25.1.696.g5e7596f4ac-goog
+Right, I misunderstood your previous email.
 
+> 
+>> Here is my updated proposition: add a layer level and a depth to each
+>> rule (once enforced/merged with a domain), and a top layer level for a
+>> domain. When enforcing a ruleset (i.e. merging a ruleset into the
+>> current domain), the layer level of a new rule would be the incremented
+>> top layer level.
+>> If there is no rule (from this domain) tied to the same
+>> inode, then the depth of the new rule is 1. However, if there is already
+>> a rule tied to the same inode and if this rule's layer level is the
+>> previous top layer level, then the depth and the layer level are both
+>> incremented and the rule is updated with the new access rights (boolean
+>> AND).
+>>
+>> The policy looks like this:
+>> domain top_layer=2
+>> /a RW policy_bitmask=0x00000003 layer=1 depth=1
+>> /a/b R policy_bitmask=0x00000002 layer=2 depth=1
+>>
+>> The path walk access check walks through all inodes and start with a
+>> layer counter equal to the top layer of the current domain. For each
+>> encountered inode tied to a rule, the access rights are checked and a
+>> new check ensures that the layer of the matching rule is the same as the
+>> counter (this may be a merged ruleset containing rules pertaining to the
+>> same hierarchy, which is fine) or equal to the decremented counter (i.e.
+>> the path walk just reached the underlying layer). If the path walk
+>> encounter a rule with a layer strictly less than the counter minus one,
+>> there is a whole in the layers which means that the ruleset
+>> hierarchy/subset does not match, and the access must be denied.
+>>
+>> When accessing a file at /private/b/foo for a read access:
+>> /private/b/foo <no rules>
+>>   allowed_access=unknown layer_counter=2
+>> /private/b <access: R, policy_bitmask=0x00000002, layer=2, depth=1>
+>>   allowed_access=allowed layer_counter=2
+>> /private <no rules>
+>>   allowed_access=allowed layer_counter=2
+>> / <no rules>
+>>   allowed_access=allowed layer_counter=2
+>>
+>> Because the layer_counter didn't reach 1, the access request is then denied.
+>>
+>> This proposition enables not to rely on a parent ruleset at first, only
+>> when enforcing/merging a ruleset with a domain. This also solves the
+>> issue with multiple inherited/nested rules on the same inode (in which
+>> case the depth just grows). Moreover, this enables to safely stop the
+>> path walk as soon as we reach the layer 1.
+> 
+> (FWIW, you could do the same optimization with the seen_policy_bits approach.)
+> 
+> I guess the difference between your proposal and mine is that in my
+> proposal, the following would work, in effect permitting W access to
+> /foo/bar/baz (and nothing else)?
+> 
+> first ruleset:
+>   /foo W
+> second ruleset:
+>   /foo/bar/baz W
+> third ruleset:
+>   /foo/bar W
+> 
+> whereas in your proposal, IIUC it wouldn't be valid for a new ruleset
+> to whitelist a superset of what was whitelisted in a previous ruleset?
+> 
+
+This behavior seems dangerous because a process which sandbox itself to
+only access /foo/bar W can bypass the restrictions from one of its
+parent domains (i.e. only access /foo/bar/baz W). Indeed, each layer is
+(most of the time) a different and standalone security policy.
+
+To sum up, the bitmask approach doesn't have the notion of layers
+ordering. It is then not possible to check that a rule comes from a
+domain which is the direct ancestor of a child's domain. I want each
+policy/layer to be really nested in the sense that a process sandboxing
+itself can only add more restriction to itself with regard to its parent
+domain (and the whole hierarchy). This is a similar approach to
+seccomp-bpf (with chained filters), except there is almost no overhead
+to nest several policies/layers together because they are flattened.
+Using the layer level and depth approach enables to implement this.
