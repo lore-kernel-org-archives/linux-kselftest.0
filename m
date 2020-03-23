@@ -2,109 +2,285 @@ Return-Path: <SRS0=KNWg=5I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C796C54FCE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 15:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 318D6C3F2CD
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 17:11:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AC8920722
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 15:55:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F145D2074D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 17:11:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DcupFgfR"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dD0eXVvu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727202AbgCWPy7 (ORCPT
+        id S1727257AbgCWRLM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Mar 2020 11:54:59 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:21838 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727207AbgCWPy7 (ORCPT
+        Mon, 23 Mar 2020 13:11:12 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:59934 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727743AbgCWRLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:54:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584978898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aONbZkW7VTtlNQ7IX/OP6HCvxPbDTjsQv8h6JUzUnHw=;
-        b=DcupFgfRD/LTA1e5rN6ma/k+cmMcZNVu9B3iwubyfX2QYPS0gJPH2ivaCgV+FxjXEUZNOM
-        ibBSXqpaxa69SWBGNnJAwAMKRqg3Z2IQVPcWfjkZCleJD9CSJOzA0HNu3lfE5qS//Sto75
-        rHM5a/Qjed83xCfixnZpCTpttGTJQRE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-8D5ohllOMACo1HLXscfZ1Q-1; Mon, 23 Mar 2020 11:54:56 -0400
-X-MC-Unique: 8D5ohllOMACo1HLXscfZ1Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D86F6800D54;
-        Mon, 23 Mar 2020 15:54:54 +0000 (UTC)
-Received: from optiplex-lnx (unknown [10.33.36.220])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1CC919C4F;
-        Mon, 23 Mar 2020 15:54:52 +0000 (UTC)
-Date:   Mon, 23 Mar 2020 11:54:49 -0400
-From:   Rafael Aquini <aquini@redhat.com>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH] tools/testing/selftests/vm/mlock2-tests: fix mlock2
- false-negative errors
-Message-ID: <20200323155449.GG23364@optiplex-lnx>
-References: <20200322020326.GB1068248@t490s>
- <20200321213142.597e23af955de653fc4db7a1@linux-foundation.org>
- <CALvZod7LiMiK1JtfdvvU3W36cGSUKhhKf6dMZpsNZv6nMiJ5=g@mail.gmail.com>
- <20200323075208.GC7524@dhcp22.suse.cz>
- <20200323144240.GB23364@optiplex-lnx>
- <20200323145106.GM7524@dhcp22.suse.cz>
- <20200323150259.GD23364@optiplex-lnx>
- <20200323151256.GP7524@dhcp22.suse.cz>
- <20200323154159.GF23364@optiplex-lnx>
- <20200323155111.GQ7524@dhcp22.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200323155111.GQ7524@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        Mon, 23 Mar 2020 13:11:09 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NH94Cp018203;
+        Mon, 23 Mar 2020 17:11:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=2wHsr8EVvBw92F+gOYMJOtWc9nDb5xvEIXN8o348KFE=;
+ b=dD0eXVvud3iPbAhBVvHWDiWCiyrrodPkfbNeM9Bz3ly1RKNMh+3LTuoNW7I8m1/9G+uw
+ 27I/+wqA4yZN8fkKs2HfpptriQ18erp/7PckId9uWTipAjaG/6Bbc8881ysn7lx/nxZl
+ NjNVHrCduhocPzM1s27YBlfUXu0c6HQ2I0WON3+MI6LONVQufOhPZj/dQQitmylJbp73
+ 2XFvJEnt6zhTgCOxItmsiGcU/JaxoOoKqJ2rAgfjDu/3RvfA+sAswqKzaWqavOJX3F1x
+ uaUTOgAkY+854ZxdakrYQSSyDch64ZbPLREWESJxQc4M1Cp/OmRkQLZfNg1FSoQADCsx EA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2ywavkyv38-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 17:11:04 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NGvgtN163221;
+        Mon, 23 Mar 2020 17:11:03 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2yxw7fx2wr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 17:11:03 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02NHB2EH009873;
+        Mon, 23 Mar 2020 17:11:02 GMT
+Received: from localhost.uk.oracle.com (/10.175.192.214)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 23 Mar 2020 10:11:02 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, shuah@kernel.org,
+        trishalfonso@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 kunit-next 2/2] kunit: add support for named resources
+Date:   Mon, 23 Mar 2020 17:10:43 +0000
+Message-Id: <1584983443-27456-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1584983443-27456-1-git-send-email-alan.maguire@oracle.com>
+References: <1584983443-27456-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=965 spamscore=0
+ adultscore=0 phishscore=0 suspectscore=2 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003230090
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ phishscore=0 suspectscore=2 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003230090
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 04:51:11PM +0100, Michal Hocko wrote:
-> On Mon 23-03-20 11:41:59, Rafael Aquini wrote:
-> > On Mon, Mar 23, 2020 at 04:12:56PM +0100, Michal Hocko wrote:
-> > > On Mon 23-03-20 11:02:59, Rafael Aquini wrote:
-> [...]
-> > > > The selftest also checks the kernel visible effect, via
-> > > > /proc/kpageflags, and that's where it fails after 9c4e6b1a7027f.
-> > > 
-> > > I really fail to see your point. Even if you are right that the self
-> > > test is somehow evaluating the kernel implementation which I am not sure
-> > > is the scope of the selft thest but anyway. The mere fact that the
-> > > kernel test fails on a perfectly valid change should just suggest that
-> > > the test is leading to false positives and therefore should be fixed.
-> > > Your proposed fix is simply suboptimal because it relies on yet another
-> > > side effect which might change anytime in the future and still lead to a
-> > > correctly behaving kernel. See my point?
-> > >
-> > 
-> > OK, I concede your point on the bogusness of checking the page flags in
-> > this particular test and expect certain valuse there, given that no other 
-> > selftest seems to be doing that level of inner kenrel detail scrutiny.
-> > 
-> > I'll repost this fix suggestion getting rif of those related
-> > checkpoints.
-> 
-> Here is what I have after I had to context switch to something else
-> before finishing it. Feel free to reuse if you feel like. It is likely
-> to not even compile.
->
+The kunit resources API allows for custom initialization and
+cleanup code (init/fini); here we use the init code to set the
+new "struct kunit_resource" "name" field, and call an additional
+init function if needed.  Having a simple way to name resources
+is useful in cases such as multithreaded tests where a set of
+resources are shared among threads; a pointer to the
+"struct kunit *" test state then is all that is needed to
+retrieve and use named resources.  Support is provided to add,
+find and destroy named resources; the latter two are simply
+wrappers that use a "match-by-name" callback.
 
-I'm OK with it, if you want to go ahead and do the kill.
+If an attempt to add a resource with a name that already exists
+is made kunit_add_named_resource() will return -EEXIST.
 
-Thanks 
--- Rafael
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ include/kunit/test.h   | 49 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ lib/kunit/kunit-test.c | 37 +++++++++++++++++++++++++++++++++++++
+ lib/kunit/test.c       | 24 ++++++++++++++++++++++++
+ 3 files changed, 109 insertions(+), 1 deletion(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 4608ff0..9a1ee97 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -72,10 +72,15 @@
+  *		return kunit_alloc_resource(test, kunit_kmalloc_init,
+  *			kunit_kmalloc_free, &params);
+  *	}
++ *
++ * Resources can also be named, with lookup/removal done on a name
++ * basis also.  kunit_add_named_resource(), kunit_find_named_resource()
++ * and kunit_destroy_named_resource() below.  Resource names must be
++ * unique within the test instance.
+  */
+ struct kunit_resource {
+ 	void *data;
+-
++	const char *name;		/* optional name */
+ 	/* private: internal use only. */
+ 	kunit_resource_init_t init;
+ 	kunit_resource_free_t free;
+@@ -282,6 +287,21 @@ int kunit_add_resource(struct kunit *test,
+ 		       kunit_resource_free_t free,
+ 		       struct kunit_resource *res,
+ 		       void *data);
++
++/**
++ * kunit_add_named_resource() - Add a named *test managed resource*.
++ * @test: The test context object.
++ * @init: a user-supplied function to initialize the resource data, if needed.
++ * @free: a user-supplied function to free the resource data, if needed.
++ * @name_data: name and data to be set for resource.
++ */
++int kunit_add_named_resource(struct kunit *test,
++			     kunit_resource_init_t init,
++			     kunit_resource_free_t free,
++			     struct kunit_resource *res,
++			     const char *name,
++			     void *data);
++
+ /**
+  * kunit_alloc_resource() - Allocates a *test managed resource*.
+  * @test: The test context object.
+@@ -337,6 +357,19 @@ static inline bool kunit_resource_instance_match(struct kunit *test,
+ }
+ 
+ /**
++ * kunit_resource_name_match() - Match a resource with the same name.
++ * @test: Test case to which the resource belongs.
++ * @res: The resource.
++ * @match_name: The name to match against.
++ */
++static inline bool kunit_resource_name_match(struct kunit *test,
++					     struct kunit_resource *res,
++					     void *match_name)
++{
++	return res->name && strcmp(res->name, match_name) == 0;
++}
++
++/**
+  * kunit_find_resource() - Find a resource using match function/data.
+  * @test: Test case to which the resource belongs.
+  * @match: match function to be applied to resources/match data.
+@@ -346,6 +379,14 @@ struct kunit_resource *kunit_find_resource(struct kunit *test,
+ 					   kunit_resource_match_t match,
+ 					   void *match_data);
+ 
++static inline struct kunit_resource *kunit_find_named_resource(
++					struct kunit *test,
++					const char *name)
++{
++	return kunit_find_resource(test, kunit_resource_name_match,
++				   (void *)name);
++}
++
+ /**
+  * kunit_destroy_resource() - Find a kunit_resource and destroy it.
+  * @test: Test case to which the resource belongs.
+@@ -359,6 +400,12 @@ int kunit_destroy_resource(struct kunit *test,
+ 			   kunit_resource_match_t match,
+ 			   void *match_data);
+ 
++static inline int kunit_destroy_named_resource(struct kunit *test,
++					       const char *name)
++{
++	return kunit_destroy_resource(test, kunit_resource_name_match,
++				      (void *)name);
++}
+ 
+ /**
+  * kunit_remove_resource: remove resource from resource list associated with
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 718ef4c..6463587 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -325,6 +325,42 @@ static void kunit_resource_test_static(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
+ }
+ 
++static void kunit_resource_test_named(struct kunit *test)
++{
++	struct kunit_resource res1, res2, *found = NULL;
++	struct kunit_test_resource_context ctx;
++
++	KUNIT_EXPECT_EQ(test,
++			kunit_add_named_resource(test, NULL, NULL, &res1,
++						 "resource_1", &ctx),
++			0);
++	KUNIT_EXPECT_PTR_EQ(test, res1.data, (void *)&ctx);
++
++	KUNIT_EXPECT_EQ(test,
++			kunit_add_named_resource(test, NULL, NULL, &res1,
++						 "resource_1", &ctx),
++			-EEXIST);
++
++	KUNIT_EXPECT_EQ(test,
++			kunit_add_named_resource(test, NULL, NULL, &res2,
++						 "resource_2", &ctx),
++			0);
++
++	found = kunit_find_named_resource(test, "resource_1");
++
++	KUNIT_EXPECT_PTR_EQ(test, found, &res1);
++
++	if (found)
++		kunit_put_resource(&res1);
++
++	KUNIT_EXPECT_EQ(test, kunit_destroy_named_resource(test, "resource_2"),
++			0);
++
++	kunit_cleanup(test);
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&test->resources));
++}
++
+ static int kunit_resource_test_init(struct kunit *test)
+ {
+ 	struct kunit_test_resource_context *ctx =
+@@ -354,6 +390,7 @@ static void kunit_resource_test_exit(struct kunit *test)
+ 	KUNIT_CASE(kunit_resource_test_cleanup_resources),
+ 	KUNIT_CASE(kunit_resource_test_proper_free_ordering),
+ 	KUNIT_CASE(kunit_resource_test_static),
++	KUNIT_CASE(kunit_resource_test_named),
+ 	{}
+ };
+ 
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 49d9e80..029a5b7 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -382,6 +382,30 @@ int kunit_add_resource(struct kunit *test,
+ }
+ EXPORT_SYMBOL_GPL(kunit_add_resource);
+ 
++int kunit_add_named_resource(struct kunit *test,
++			     kunit_resource_init_t init,
++			     kunit_resource_free_t free,
++			     struct kunit_resource *res,
++			     const char *name,
++			     void *data)
++{
++	struct kunit_resource *existing;
++
++	if (!name)
++		return -EINVAL;
++
++	existing = kunit_find_named_resource(test, name);
++	if (existing) {
++		kunit_put_resource(existing);
++		return -EEXIST;
++	}
++
++	res->name = name;
++
++	return kunit_add_resource(test, init, free, res, data);
++}
++EXPORT_SYMBOL_GPL(kunit_add_named_resource);
++
+ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
+ 						    kunit_resource_init_t init,
+ 						    kunit_resource_free_t free,
+-- 
+1.8.3.1
 
