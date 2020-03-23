@@ -2,117 +2,102 @@ Return-Path: <SRS0=KNWg=5I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96BACC54EEB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 17:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44D39C54EEB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 17:37:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65E8C20786
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 17:11:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C9402072E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 17:37:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eZwZ4T6t"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZScHoZf1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727724AbgCWRLG (ORCPT
+        id S1727720AbgCWRhG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Mar 2020 13:11:06 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:34732 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727257AbgCWRLF (ORCPT
+        Mon, 23 Mar 2020 13:37:06 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:43105 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727714AbgCWRhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 13:11:05 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NHAGRO039472;
-        Mon, 23 Mar 2020 17:11:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=YCzgLbBZj5k8qIFVeAOYpztQF0I1eiKCR70BTCEJVNE=;
- b=eZwZ4T6tF9kC32ji6w2JL764gaCFR9QBe2h5/+r1cHA5ibPrQvp8PwfeE/h2TVR2d41N
- hYFiO93OF7+i7c4BeDAia4STVYRUPUs4nF9wGTX2TOZnJWBM159Zq9MAawg/kkt7cUsY
- 95KPE/RltGhKxq2Nxy52wL4C4ERPtKx7KXJDL5tRTeWUv7R8g4MwldF6qRtNc+y5RE2h
- dId9jFdZ4MNBZ0yo27JofFdX/pT8Qn01QMlw4vsdOmFqbqNFMc9CEULHWdMVkXuQV3Xr
- 87t0oNL4Toy6u0SW+b6D9cFxozIDpsBx5kXOy62+TmSYvYPRdyJvOKa1RocMHYzh2vFe Jg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2yx8abvu34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Mar 2020 17:11:00 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NGvVds067395;
-        Mon, 23 Mar 2020 17:10:59 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2yxw914qf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Mar 2020 17:10:59 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02NHAwOA009796;
-        Mon, 23 Mar 2020 17:10:58 GMT
-Received: from localhost.uk.oracle.com (/10.175.192.214)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 23 Mar 2020 10:10:57 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com, shuah@kernel.org,
-        trishalfonso@google.com
+        Mon, 23 Mar 2020 13:37:06 -0400
+Received: by mail-qt1-f201.google.com with SMTP id x3so1206885qtv.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Mar 2020 10:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=/Zmo3bJ1xnFXe3gBJdx1K9tQ8YxPb1egchdBHFnw3y0=;
+        b=ZScHoZf1uaQ/mboFT1TttcaIeu3+fNOid2hKM58Yx75UeKY4HKiHLzR4NFxwy1oCRX
+         ae566tjGtvinpJcN2Kr6RVSjjJbRvwaHHW7DWYY2AsYO+GeK1rhsCXNPH32y82f1pOQo
+         v9A6OeSn83FbRyjf4N2ioPT40sP2SwZYHxhRB1dqwv68khqvCcnlM17En/ksn314c2uV
+         J84tACIntkO4Mffu3G84xOMjLgO1CnjGmdKIdGxNXr/VeKPFd+f+snkn0d1JxsbrH6oz
+         bcQfdvGYCgCfW5dQcBZ+UOOdawS5fjXGduoYiVoL7VMYxCBGN/Hx10n74i5dHP1iNvl7
+         YYLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=/Zmo3bJ1xnFXe3gBJdx1K9tQ8YxPb1egchdBHFnw3y0=;
+        b=muNOGiOXeyQSA3GFQKkEhpeSRIfuW9kbcHgDc5QzyBnhgBnwAGKaT2FCCDaZlIUfWx
+         xU5zNe8DPHiINWBK5+l4Rd/wKzg2QjK6DZWDAjzRZVAkTCIDFZ/fsk6SwtXbRac8HzuA
+         jnJJ7nDWU7rlMnEZzwGXqpnGopFOEX552mUK5oiRUsAgKsqEXs4r+Kap/oqht1tfN4Jc
+         Io6XWEPcsLcsJRFXVqJysEobqPdEUaQEycOHwtvGk9ZpO9gSzTvTdr/sO+Qw1XVMFSuF
+         QzhpNDKJ0IH+/M6L6L3HALH5+KdfLZm7xxC2D99UGGy6YJBew6XWb0vVZNnLcMaf3oZU
+         jsEw==
+X-Gm-Message-State: ANhLgQ2abt5P1cMp9Qb6VwoEQD866WZbMmINTkf3mcgeqjdRb4P3Q2nw
+        O9p1ezj5wfLaxhNnCi2Ba8USSZYfO0QT2BJ3P7xIYw==
+X-Google-Smtp-Source: ADFU+vt/Nq2hgQpRn9XxiQaB9Am3Vuo6oDf66JgWBcrgQaW91mgN/l5QnylOzJtpli3SyPANctiEW9idVAmfKkHffm02bQ==
+X-Received: by 2002:ac8:7769:: with SMTP id h9mr3509567qtu.234.1584985025152;
+ Mon, 23 Mar 2020 10:37:05 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 10:36:53 -0700
+Message-Id: <20200323173653.41305-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
+Subject: [PATCH v1] kunit: tool: add missing test data file content
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com, heidifahim@google.com
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 kunit-next 0/2] kunit: extend kunit resources API
-Date:   Mon, 23 Mar 2020 17:10:41 +0000
-Message-Id: <1584983443-27456-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
- adultscore=0 mlxscore=0 malwarescore=0 mlxlogscore=891 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003230090
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
- mlxscore=0 adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=955
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003230090
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A recent RFC patch set [1] suggests some additional functionality
-may be needed around kunit resources.  It seems to require
+A test data file for one of the kunit_tool unit tests was missing; add
+it in so that unit tests can run properly.
 
-1. support for resources without allocation
-2. support for lookup of such resources
-3. support for access to resources across multiple kernel threads
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+---
+Shuah, this is a fix for a broken test. Can you apply this for 5.7?
+---
+ .../testing/kunit/test_data/test_pound_sign.log  | Bin 0 -> 1656 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-The proposed changes here are designed to address these needs.
-The idea is we first generalize the API to support adding
-resources with static data; then from there we support named
-resources.  The latter support is needed because if we are
-in a different thread context and only have the "struct kunit *"
-to work with, we need a way to identify a resource in lookup.
+diff --git a/tools/testing/kunit/test_data/test_pound_sign.log b/tools/testing/kunit/test_data/test_pound_sign.log
+index e69de29bb2d1d6434b8b29ae775ad8c2e48c5391..28ffa5ba03bfa81ea02ea9d38e7de7acf3dd9e5d 100644
+GIT binary patch
+literal 1656
+zcmah}U2EGg6n$=g#f7|Vtj^>lPBOzDM#o@mlt9+Kgd${FPEBlGBgsqs?{^h<Y3h$o
+zFBaGLocpP>13GNVmW<8=R3_K%5Q9W*u~4upWe`4q(jqBTdcAw?ZG=v-jA5@FZ|^*5
+zoU$NALGF+lEFssq<A{~zdHR7p&7+U(X~E!_yGM{l@40vQ%(~pazHH!+GB!sI;iCKZ
+zY69Cjp-?V{LrnyMQ5I_>Rp5<1_i#FmdPY1z2tkYI|M1-7PdS}Ub_h8eK~m)?&(I;{
+zd<2<NV1vyl7BWOggn_Hc5ba`wRu)R=x;oPiRuheYD}$9XJTpphG^wKX*mr|pw(;#T
+zTvPxWb#R&-VC|~9KeFD0ooNCooO~P|@vNKL)n#t&WQm2JSh%gFRMuv7!M#yqYailx
+z8TM&AUN~yqVM$ThVIE55OcVU4mW$eHC#dHEeUvCiE1wT#?U%cS^A_HAK$VqiIBG75
+z($V`G!unJPuo@k2@gj4y7$WV7g73Ls@d32giPqc=`3mz^u|IR`05hOx29+=__XXIv
+z%Xf#6<%P11b*dyatBVv$thED!=x%_Ts?sj1OY%b*t$Y}rODc$J2is^#<A~w+w`~mf
+zCs_oC7u=9pAjzurLE}*e38}&1-KX^pd*7wM-Q35(VDtTJOgeOnB`K*rii#c_+)*qi
+zNQ+5Dqv>MG0wcp<uf!}(SCXw)kqXk>xCSP@rQbRs58c`TmTbn>%WO@TFp;w*gB6RU
+km;Ljlo8cvfMVVCc>`K4bOfE$-fO&T9$C>+RbV7Fh7t6}$ApigX
 
-[1] https://lkml.org/lkml/2020/2/26/1286
+literal 0
+HcmV?d00001
 
-Changes since v1:
- - reformatted longer parameter lists to have one parameter per-line
-   (Brendan, patch 1)
- - fixed phrasing in various comments to clarify allocation of memory
-   and added comment to kunit resource tests to clarify why
-   kunit_put_resource() is used there (Brendan, patch 1)
- - changed #define to static inline function (Brendan, patch 2)
- - simplified kunit_add_named_resource() to use more of existing
-   code for non-named resource (Brendan, patch 2)
 
-Alan Maguire (2):
-  kunit: generalize kunit_resource API beyond allocated resources
-  kunit: add support for named resources
-
- include/kunit/test.h      | 159 +++++++++++++++++++++++++++-------
- lib/kunit/kunit-test.c    | 111 +++++++++++++++++++-----
- lib/kunit/string-stream.c |  14 ++-
- lib/kunit/test.c          | 211 ++++++++++++++++++++++++++++++++--------------
- 4 files changed, 371 insertions(+), 124 deletions(-)
-
+base-commit: 021ed9f551da33449a5238e45e849913422671d7
 -- 
-1.8.3.1
+2.25.1.696.g5e7596f4ac-goog
 
