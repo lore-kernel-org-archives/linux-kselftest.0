@@ -2,90 +2,104 @@ Return-Path: <SRS0=KNWg=5I=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B58DC3F2CD
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 15:33:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A607C3F2CD
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 15:40:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1EFE120771
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 15:33:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20B5D20637
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Mar 2020 15:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584977627;
-	bh=jyFWBRIRYk0JA7U0dN/9XleYTgS2UFd/FcsRq3elXVQ=;
-	h=Subject:To:References:From:Date:In-Reply-To:List-ID:From;
-	b=ssAbi47VeEN+MOXvBho+BDTZ3xbK3+S7ob6Kbob9zTNh8MZTcDtOQCEaZ+CYznCZU
-	 sLLnlEeR7G7BXRf7fhTWj9ZM8o7hjp283MM667qy80yXcbmShY0SiwwLCG7LMfXYcb
-	 NmcjMZI5lv+x25akcGjBT/+r0ovVmK0/f3EpYRBQ=
+	s=default; t=1584978028;
+	bh=aEPoTGtrihRR9CH44YGoaszH2LRi7APPappXtHmIFNk=;
+	h=Subject:To:References:From:Cc:Date:In-Reply-To:List-ID:From;
+	b=gonr1/0dneCIYsEqKmIHoPVjoU9o7xk5GVAVTE+0/lEFES+g2zmosmivRWalTZmmE
+	 ZWYhU0tkb69rUBOfokwa60HjdB9CkHYkU77IER/Aj23yf6/86dj9BVv2ImjUCgScPw
+	 CRMegAlYDlrExp2pjf1GUZLP5gKe9QPJhzMbvRLI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgCWPdq (ORCPT
+        id S1727231AbgCWPk1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Mar 2020 11:33:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39210 "EHLO mail.kernel.org"
+        Mon, 23 Mar 2020 11:40:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40874 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727059AbgCWPdq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:33:46 -0400
+        id S1726049AbgCWPk1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 23 Mar 2020 11:40:27 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C711C20409;
-        Mon, 23 Mar 2020 15:33:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BBB5420409;
+        Mon, 23 Mar 2020 15:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584977626;
-        bh=jyFWBRIRYk0JA7U0dN/9XleYTgS2UFd/FcsRq3elXVQ=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=OBOGUwc6BKO42ghUi9CibvkvoSUkPxkD81dK5aV3EKgfqVh4QR9JBNrcRliYV0eNM
-         ORNu+CJ4g6zQOXS5dXh4WHKx69zD5gyoHMB682zrngRVzUO918V+dfHAqD3jy1a71+
-         AFsrAg+13kB30qLqlIyw45luTG/fuZ/lfXbrZ1Sk=
-Subject: Re: [PATCH 0/2] Fix errors when try to build kvm selftests on
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
+        s=default; t=1584978027;
+        bh=aEPoTGtrihRR9CH44YGoaszH2LRi7APPappXtHmIFNk=;
+        h=Subject:To:References:From:Cc:Date:In-Reply-To:From;
+        b=KNgh82obI3osbkUxHnuobfS9X7n1lCRLSiAiWlyeFI9Yc+/taXeC72yNyrqn0o0Sb
+         IJHCafFadCeJiyrWniexKrnkgZYeWzY/KeLph4cThEXqPbV32P1qPXx4D3VNK6oV5g
+         BbikkzEiPRzSs3VmfhhDHFOzAezxobj46Ii2/Ce8=
+Subject: Re: [PATCH 1/2] kvm: selftests: Fix no directory error when OUTPUT
+ specified
+To:     Xiaoyao Li <xiaoyao.li@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, shuah <shuah@kernel.org>
+        kvm@vger.kernel.org
 References: <20200315093425.33600-1-xiaoyao.li@intel.com>
- <7f7a2945-300d-d62c-e5f5-de55c2e3fd2f@redhat.com>
+ <20200315093425.33600-2-xiaoyao.li@intel.com>
 From:   shuah <shuah@kernel.org>
-Message-ID: <b472a6aa-dba1-1e50-c660-7bbecf2d0eff@kernel.org>
-Date:   Mon, 23 Mar 2020 09:33:45 -0600
+Cc:     shuah <shuah@kernel.org>
+Message-ID: <99584925-69e7-7dab-7dd9-ee920ac343a0@kernel.org>
+Date:   Mon, 23 Mar 2020 09:40:26 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <7f7a2945-300d-d62c-e5f5-de55c2e3fd2f@redhat.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <20200315093425.33600-2-xiaoyao.li@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/18/20 7:13 AM, Paolo Bonzini wrote:
-> On 15/03/20 10:34, Xiaoyao Li wrote:
->> I attempted to build KVM selftests on a specified dir, unfortunately
->> neither	"make O=~/mydir TARGETS=kvm" in tools/testing/selftests, nor
->> "make OUTPUT=~/mydir" in tools/testing/selftests/kvm work.
->>
->> This series aims to make both work.
->>
->> Xiaoyao Li (2):
->>    kvm: selftests: Fix no directory error when OUTPUT specified
->>    selftests: export INSTALL_HDR_PATH if using "O" to specify output dir
->>
->>   tools/testing/selftests/Makefile     | 6 +++++-
->>   tools/testing/selftests/kvm/Makefile | 3 ++-
->>   2 files changed, 7 insertions(+), 2 deletions(-)
->>
+On 3/15/20 3:34 AM, Xiaoyao Li wrote:
+> When build kvm selftests to an specified directory with
 > 
-> Queued, thanks.
+> 	make OUTPUT=~/kvm-selftests
 > 
-> Paolo
-> 
-> 
+> it encouters following error：
 
-Sorry for the delay. I would like to see these two to go through
-kselftest tree. These involve frame work changes and will cause
-problems if they aren't integrated in kselftest next branch.
+btw lib.mk can't handle relative paths yet. The problems
+you are seeing are related to that as well. This relative
+path issue should be fixed in lib.mk and not in individual
+tests.
+
+> 
+> /usr/bin/ld: cannot open output file
+> /home/lxy/kvm-selftests/x86_64/cr4_cpuid_sync_test: No such file or
+> directory
+> collect2: error: ld returned 1 exit status
+> make: *** [../lib.mk:141:
+> /home/lxy/kvm-selftests/x86_64/cr4_cpuid_sync_test] Error 1
+> 
+> Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> ---
+>   tools/testing/selftests/kvm/Makefile | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index d91c53b726e6..86797e0242d4 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -66,6 +66,7 @@ LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
+>   # After inclusion, $(OUTPUT) is defined and
+>   # $(TEST_GEN_PROGS) starts with $(OUTPUT)/
+>   include ../lib.mk
+> +x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+
+lib.mk would have created the directory.
 
 thanks,
 -- Shuah
+
