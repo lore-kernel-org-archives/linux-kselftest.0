@@ -2,59 +2,100 @@ Return-Path: <SRS0=pFER=5K=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5303C2D0E5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 19:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE3DC2D0E5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 20:05:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C3F1D20740
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 19:01:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4CFB2074D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 20:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585166734;
+	bh=KQrQobMfXnFgSLgQMvsALc1syatq3RUPZzn2UmwaMVw=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=ZjsIvKsUcBUEE6sQyhspmRGmLBD6QVm6YJh/xKo8EGbxZIWSpnEM0oERGTu6Oe8Vo
+	 YoGX+mPxoRkvGdfdfhQTB1SAw1rvp88ouPpg69QkKc5qd+mSpHz5cKj/18RhqB1FGA
+	 ia7A9krUg5xf8dRfxePg8qqvJtbrOcj+V9JUPz60=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbgCYTBo (ORCPT
+        id S1727275AbgCYUFe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 Mar 2020 15:01:44 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:46448 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727027AbgCYTBo (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Mar 2020 15:01:44 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 836C415A069BF;
-        Wed, 25 Mar 2020 12:01:43 -0700 (PDT)
-Date:   Wed, 25 Mar 2020 12:01:40 -0700 (PDT)
-Message-Id: <20200325.120140.1033549482785105994.davem@davemloft.net>
-To:     liuhangbin@gmail.com
-Cc:     netdev@vger.kernel.org, vadym.kochan@plvision.eu, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests/net/forwarding: define libs as
- TEST_PROGS_EXTENDED
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200325084101.9156-1-liuhangbin@gmail.com>
-References: <20200325084101.9156-1-liuhangbin@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        Wed, 25 Mar 2020 16:05:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43348 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727236AbgCYUFe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Mar 2020 16:05:34 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4542620658;
+        Wed, 25 Mar 2020 20:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585166733;
+        bh=KQrQobMfXnFgSLgQMvsALc1syatq3RUPZzn2UmwaMVw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GV5JghfmqxWq3tY+RJacwokQxZRZmQbmJvX4q4IR9JKa+SwqragqcX5Y9e8cMtR7l
+         xUOZj63b50DHIQeQTeZeYljtcmpe5aKFwQN3m0tm0/a6tjog6aJmnxYzgMDoAM7kEQ
+         rv97ZvcPtzgSJdD3QMYQ96KFBwR3kD8UDDvoVTjk=
+Subject: Re: [PATCH v7 kunit-next 3/4] kunit: subtests should be indented 4
+ spaces according to TAP
+To:     Alan Maguire <alan.maguire@oracle.com>, brendanhiggins@google.com,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org
+Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, shuah <shuah@kernel.org>
+References: <1584110682-3837-1-git-send-email-alan.maguire@oracle.com>
+ <1584110682-3837-4-git-send-email-alan.maguire@oracle.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <dd82e9cb-6c88-58cf-933e-f2a644e09b15@kernel.org>
+Date:   Wed, 25 Mar 2020 14:05:32 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <1584110682-3837-4-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 25 Mar 2020 12:01:43 -0700 (PDT)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
-Date: Wed, 25 Mar 2020 16:41:01 +0800
-
-> The lib files should not be defined as TEST_PROGS, or we will run them
-> in run_kselftest.sh.
+On 3/13/20 8:44 AM, Alan Maguire wrote:
+> Introduce KUNIT_INDENT macro which corresponds to 4-space indentation,
+> and use it to modify indentation from tab to 4 spaces.
 > 
-> Also remove ethtool_lib.sh exec permission.
+> Suggested-by: Frank Rowand <frowand.list@gmail.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+>   include/kunit/test.h                |  7 +++-
+>   lib/kunit/assert.c                  | 79 +++++++++++++++++++------------------
+>   lib/kunit/test.c                    |  6 +--
+>   tools/testing/kunit/kunit_parser.py | 10 ++---
+>   4 files changed, 54 insertions(+), 48 deletions(-)
 > 
-> Fixes: 81573b18f26d ("selftests/net/forwarding: add Makefile to install tests")
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index f7b2ed4c..d49cdb4 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -84,6 +84,10 @@ struct kunit_resource {
+>   /* Size of log associated with test. */
+>   #define KUNIT_LOG_SIZE	512
+>   
+> +/* TAP specifies subtest indentation of 4 spaces. */
+> +#define KUNIT_INDENT	"    "
+> +#define KUNIT_INDENT2	KUNIT_INDENT KUNIT_INDENT
 
-Applied, thanks.
+Sorry for a late comment on this.
+
+What's the reason to do it this way? Why wouldn't you define
+it as 8 spaces long string?
+
+Also can you please make sure to run checkpatch --strict on the
+patches you send?
+
+thanks,
+-- Shuah
