@@ -2,90 +2,94 @@ Return-Path: <SRS0=pFER=5K=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	HK_RANDOM_FROM,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31E78C43331
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 14:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F82C54FCF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 16:13:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0574920B1F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 14:19:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6A1B20777
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Mar 2020 16:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1585152831;
+	bh=z/l7SBBshWOFYbBGR0ClUkeQrd+UBb2CWsZuH43i4Vg=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=Rom5rxxif8Nzo4aZgDHEzeKJVBpOlS1Cg+EFwB2m4Qgwu72fye2FrMVEu81thD+zy
+	 NAHTyhSbYFmXYm3Eb25CeEMCv5FV9fPjKclxdBqcnWti8u1ZEBsd2XT06UqiwfK3BB
+	 qnQydHWKfPYT/Fj1THwOTQwzkFJ9dKPyISz9iGzE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgCYOTM (ORCPT
+        id S1727832AbgCYQNv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 Mar 2020 10:19:12 -0400
-Received: from mga04.intel.com ([192.55.52.120]:42324 "EHLO mga04.intel.com"
+        Wed, 25 Mar 2020 12:13:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727505AbgCYOTL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Mar 2020 10:19:11 -0400
-IronPort-SDR: gXYpgOiS8QxktuKIAtLDG3QsmRtve/otHRnsBw45b99XqkJFW9q33QdVhTiX+I1kcLoSWc21E0
- NJfWVzeB4kmA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 07:19:11 -0700
-IronPort-SDR: AbZJ1HHcIw0fp+5/Lfc/do6mA+kSLGmHIYjxgBaP2nI33NpXdYsbbyawUwK1AD3HfREyBq2Hnx
- tUg5Eavt/Scw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,304,1580803200"; 
-   d="scan'208";a="270811075"
-Received: from lxy-clx-4s.sh.intel.com ([10.239.43.39])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Mar 2020 07:19:10 -0700
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-To:     Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+        id S1727174AbgCYQNv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Mar 2020 12:13:51 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7641720409;
+        Wed, 25 Mar 2020 16:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585152830;
+        bh=z/l7SBBshWOFYbBGR0ClUkeQrd+UBb2CWsZuH43i4Vg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=d5srGXVBWjNKP/w4N+eoVs88y3PQJBDFqAEI8Qpi/R/mv7gG84m3wE1+TDSovJtiw
+         ruLJW+9oq2T58EGMsju0piBrSirMWrctSS4dxMbZ15nrmdYnDSVUnhpvLQhV7keyQr
+         8G3VNE98fkGr35AEvcwLw5c7slY680aAF+jKxojQ=
+Subject: Re: [PATCH v2 0/6] Fix errors when try to build kvm selftests on
+ specified output
+To:     Xiaoyao Li <xiaoyao.li@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: [PATCH v2 1/6] selftests: Create directory when OUTPUT specified
-Date:   Wed, 25 Mar 2020 22:01:28 +0800
-Message-Id: <20200325140133.103236-2-xiaoyao.li@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200325140133.103236-1-xiaoyao.li@intel.com>
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
 References: <20200325140133.103236-1-xiaoyao.li@intel.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <8e5a7de6-25f3-7979-c6b9-49e1ea717f8e@kernel.org>
+Date:   Wed, 25 Mar 2020 10:12:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200325140133.103236-1-xiaoyao.li@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When OUTPUT specified, it may encounter no directory error if there is
-subdir in $TARGET for any of TEST_GEN_PROGS, TEST_GEN_PROGS_EXTENDED, or
-TEST_GEN_FILES.
+On 3/25/20 8:01 AM, Xiaoyao Li wrote:
+> I attempted to build KVM selftests on a specified dir, unfortunately
+> neither	"make O=/path/to/mydir TARGETS=kvm" in tools/testing/selftests, nor
+> "make OUTPUT=/path/to/mydir" in tools/testing/selftests/kvm work.
+> 
 
-This issue is found by running
+Please elaborate on the problems you are seeing. I would like you
+to describe in detail the problems you are seeing and how you are
+fixing them in this patch series.
 
-	make OUTPUT=/path/to/output
+The problem you are fixing here is subdir structure not being
+supported for relocatable builds and the Makefile not being
+able to locate headers files. These are issues, however, these
+need to be fixed in the kvm Makefile.
 
-in tools/testing/selftests/kvm
+Please look at arm64, android, futex tests as examples. lib.mk
+and main selftests Makefile allow for overrides for make targets.
+When a test has sub-dir structure and libraries, it is easier to
+handle these in the individual Makefile.
 
-Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
----
- tools/testing/selftests/lib.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Please fix the problems you are seeing in kvm Makefile.
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 1c8a1963d03f..78fb00bdf5c4 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -20,6 +20,16 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
- TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
- TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
- 
-+ifneq ($(TEST_GEN_PROGS),)
-+$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-+endif
-+ifneq ($(TEST_GEN_PROGS_EXTENDED),)
-+$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS_EXTENDED))))
-+endif
-+ifneq ($(TEST_GEN_FILES),)
-+$(shell mkdir -p $(sort $(dir $(TEST_GEN_FILES))))
-+endif
-+
- ifdef KSFT_KHDR_INSTALL
- top_srcdir ?= ../../../..
- include $(top_srcdir)/scripts/subarch.include
--- 
-2.20.1
+ >I only test the sub TARGET of kvm.
+ >In theory, it won't break other TARGET of selftests.
 
+When you change lib.mk which is a common infrastructure, theory
+doesn't help. Statements like this make me very reluctant to
+accept patches. :)
+
+This is one reason why I asked Paolo to drop these patches.
+
+thanks,
+-- Shuah
