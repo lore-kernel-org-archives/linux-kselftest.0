@@ -2,333 +2,216 @@ Return-Path: <SRS0=H9q3=5L=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1903C2D0E9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Mar 2020 20:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C36C2D0E5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Mar 2020 20:28:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8F41C2078C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Mar 2020 20:28:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B44952076A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Mar 2020 20:28:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IMl0L7K0";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="WPSm2evO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728801AbgCZU2j (ORCPT
+        id S1728317AbgCZU2z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 26 Mar 2020 16:28:39 -0400
-Received: from smtp-190d.mail.infomaniak.ch ([185.125.25.13]:50293 "EHLO
-        smtp-190d.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728728AbgCZU1q (ORCPT
+        Thu, 26 Mar 2020 16:28:55 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23998 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726363AbgCZU2z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Mar 2020 16:27:46 -0400
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 48pGkl6D4JzlhRy4;
-        Thu, 26 Mar 2020 21:27:43 +0100 (CET)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 48pGkl3JmdzlkchX;
-        Thu, 26 Mar 2020 21:27:43 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jann@thejh.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mickael.salaun@ssi.gouv.fr>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v15 03/10] landlock: Set up the security framework and manage credentials
-Date:   Thu, 26 Mar 2020 21:27:24 +0100
-Message-Id: <20200326202731.693608-4-mic@digikod.net>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200326202731.693608-1-mic@digikod.net>
-References: <20200326202731.693608-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 26 Mar 2020 16:28:55 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02QKBIIj005187;
+        Thu, 26 Mar 2020 13:28:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=vpEY5owUP251CpMVMs6pgESngCoQ1uY806QGZ/JvP7w=;
+ b=IMl0L7K0Ypk7Y/een2105NuSulm216r5POMwsVPL0YxwJb+2EkZpaijVQsrNlP/fbLOh
+ e8Oqvhcs3LMhSnTlsivMGfWCpg6RbUEP/IrkOesC+vgK8Oax2ysYdbUD2ezrBU1EnTLc
+ rumxqnbVNVBcebShoqtiTJ+ywxE2fTXMdww= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 2yx2xpah0f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 26 Mar 2020 13:28:50 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1847.3; Thu, 26 Mar 2020 13:28:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eubu+30euWCH5eiv8iFMlzVdOOqwnuInc9rvWW2+S1iWHrsL0b0UA/IVHRxosn736oDGarQ9c09ZCwhbzp4VMZiEzYt+ym+Hkl0Ko7wHcYDylU2E0vzNPXXjNWk0v+CfnnesYJYniYkH3TMe/9av//bXcORaQ3/uuKEoL5jeC4bv+NRY4gZT/GOFgzLYDNSVHGJRgRiQmaTBHY14Gv3qSy9iCKx31iHXHD0dFEK/LMjgdyCmOLtMVDwCSlSl0ULJ4b+xRYji09iHanJRhoG24KqAGIGuFwaIfeJRgvWKGFZotsjaD+uOfR05DuLnfus4BeX9h6icZcLv73fQ8fsSCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vpEY5owUP251CpMVMs6pgESngCoQ1uY806QGZ/JvP7w=;
+ b=WzG8YPdJqQqE3rd9aiTGaiOOsKoPpKscWZlmCobELRP21OeZ62EyYENf3cs6YFYO8xGrrWMR4umD5APKu1NfdrU9s2yXUoW2AtAlimBjS05XfdnVe2wRD+TtE2ufDagUbdc/7KE450OPlKS10yBCFqC0/TxHdmxCiEyxGCwpI6YaTRQzqsl8DwKNXMVEEqiSh+RhpQBggajC/bbs5l/LolKxCa82F+pc7iGW5+gOCSN8eJezKWRc+N/NTWr+kAyIoEyaP7oWqi5ULUrzue2C2m4vEYKU8UZGBy0bTiUy2+S6yQiNnn/bLgDxL+d4P1TUzZs7e1ip4VWkTiFJhY4Sbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vpEY5owUP251CpMVMs6pgESngCoQ1uY806QGZ/JvP7w=;
+ b=WPSm2evOcf4aggHKM0s3tT3FMg//zpCYB81jkYgNhncpmC1u4skKqVCBWPal4IvhLPBTWO/Vf0KN0sfNrS7FnpodSgLq07OVcbba21VPDlRBWP++Uk/vzKmDW0V3jed6kVF8VQspxAGFs3PHAgw1REcftwFqgue79tmb5NDDcWI=
+Received: from MW3PR15MB3753.namprd15.prod.outlook.com (2603:10b6:303:50::17)
+ by MW3PR15MB3753.namprd15.prod.outlook.com (2603:10b6:303:50::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20; Thu, 26 Mar
+ 2020 20:28:48 +0000
+Received: from MW3PR15MB3753.namprd15.prod.outlook.com
+ ([fe80::3517:e69:6e78:4f7c]) by MW3PR15MB3753.namprd15.prod.outlook.com
+ ([fe80::3517:e69:6e78:4f7c%7]) with mapi id 15.20.2856.019; Thu, 26 Mar 2020
+ 20:28:48 +0000
+Subject: Re: runqslower build failed on Debian9
+To:     Liu Yiding <liuyd.fnst@cn.fujitsu.com>
+CC:     <linux-kselftest@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <60b05d23-6352-b978-3bf7-5a86466bb297@cn.fujitsu.com>
+From:   Andrii Nakryiko <andriin@fb.com>
+Message-ID: <c1025a74-1d80-5127-2b0a-87465d3dbcd0@fb.com>
+Date:   Thu, 26 Mar 2020 13:28:45 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.5.0
+In-Reply-To: <60b05d23-6352-b978-3bf7-5a86466bb297@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Antivirus: Dr.Web (R) for Unix mail servers drweb plugin ver.6.0.2.8
-X-Antivirus-Code: 0x100000
+X-ClientProxiedBy: MWHPR14CA0054.namprd14.prod.outlook.com
+ (2603:10b6:300:81::16) To MW3PR15MB3753.namprd15.prod.outlook.com
+ (2603:10b6:303:50::17)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:2103:51:fde8:f2bb:1332] (2620:10d:c090:400::5:7bf1) by MWHPR14CA0054.namprd14.prod.outlook.com (2603:10b6:300:81::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.19 via Frontend Transport; Thu, 26 Mar 2020 20:28:47 +0000
+X-Originating-IP: [2620:10d:c090:400::5:7bf1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ea4a4a37-6ec2-4fa8-b39d-08d7d1c449dd
+X-MS-TrafficTypeDiagnostic: MW3PR15MB3753:
+X-Microsoft-Antispam-PRVS: <MW3PR15MB3753D474929BBC55650E6B0FC6CF0@MW3PR15MB3753.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-Forefront-PRVS: 0354B4BED2
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(39860400002)(136003)(396003)(376002)(346002)(366004)(81156014)(16526019)(36756003)(186003)(316002)(31696002)(8676002)(6916009)(86362001)(52116002)(81166006)(6486002)(4326008)(2906002)(31686004)(478600001)(2616005)(8936002)(53546011)(5660300002)(66556008)(66476007)(66946007);DIR:OUT;SFP:1102;SCL:1;SRVR:MW3PR15MB3753;H:MW3PR15MB3753.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
+Received-SPF: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1XO6P8dOovh8g0KbfCG3K/JlVe4f1vZQs190OU30LrNRlGj7YBmLYkhEAaNFc0zLXdxV8uYmVRol0iUaPyyp//aZUfpRTm08RYTtiFu3+bUPapB2omFXW1SfSKyaylFY8+M86w8KYDjGv4d5n7OTAtg6rUOZq0mEH3trdqSvR3+Gm3061riHa7X3nNDMHhFwXDKJ6GYqUsx6DgUypXOU+bYG6CPvNCY5N7BwkYy4raV+ks2Pb3kXC7bT/nnnV2ArMXzOtk050/5v2bD2h6D1oGnyrdWrm6amNVmYQ4H7MJuLsuNBZjtgA7rNvJEVt67Vc2tgtYji9uP2L0b+32YFcYUHNwLVzpPIMY8oTuCQ7WhM/skxxIHl+7mZvjRcaByG/I+FR0RzZ2zoY8Wljida4teapz5abevdyClWPKw5xlN82l+KHjpFYBH98oOGRK4h
+X-MS-Exchange-AntiSpam-MessageData: BrfwHdDS7Nn5VzjttTZShs6CzB23o3bmQZg+zuJN5/44FKXcI2PsfHBqyEHNPeKvhbZX8MN32mpYba98SXX0DBkbsSxqcASNvcv16mC2GxN7gJHgLOZwg5grhbhdrasNUBQ2ppnr0HadOM6NtmquwKTosteVV7IEn3sjwdMVntytk+gfxXS0Tv91UpLE4kwn
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea4a4a37-6ec2-4fa8-b39d-08d7d1c449dd
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2020 20:28:48.0958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qD5d0QoHrFbyVWb21Km9phlvIUqq7uPOYPVswPB5zcgWhecspu+UuZshavHrjpTZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR15MB3753
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-26_12:2020-03-26,2020-03-26 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 malwarescore=0 clxscore=1011 adultscore=0
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003260147
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A process credentials point to a Landlock domain, which is underneath
-implemented with a ruleset.  In the following commits, this domain is
-used to check and enforce the ptrace and filesystem security policies.
-A domain is inherited from a parent to its child the same way a thread
-inherits a seccomp policy.
+On 3/25/20 10:26 PM, Liu Yiding wrote:
+> Hi, Andrii.
+> 
+> I noticed you had added runqslower tool to tools/bpf, so drop this 
+> problem to you.
+> 
+> 
+> Now i failed to run bpf tests since i can't build runqslower.
+> 
+> Testing env: "Debian GNU/Linux 9 (stretch)"
+> 
+> kernel: 5.6.0-rc5
+> 
+> gcc: gcc 6.3
+> 
+> clang: clang-11.
+> 
+> 
+> Description: Build runqslower failed due to build error "incomplete 
+> type" and libbpf show unsupported BTF_KIND:7.
+> 
+> Whole build log please see the attatchment.
+> 
+> 
+> Error info
+> 
+> ```
+> 
+> root@vm-snb-144 ~/linus/tools/bpf# make
+> 
+> Auto-detecting system features:
+> ...                        libbfd: [ on  ]
+> ...        disassembler-four-args: [ OFF ]
+> 
+> [snip]
+> 
+>    INSTALL  bpftool
+>    LINK     bpf_asm
+>    GEN      vmlinux.h
+> libbpf: unsupported BTF_KIND:7    (Many unsupported errors)
+> libbpf: unsupported BTF_KIND:7
+> libbpf: unsupported BTF_KIND:7
+> 
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: James Morris <jmorris@namei.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
----
+Would you be able to share BTF of vmlinux that is used to generate 
+vmlinux.h? Please run in verbose mode: `make V=1` and search for 
+`bpftool btf dump file` command. It should point either to
+/sys/kernel/btf/vmlinux or some other location, depending on how things 
+are set up on your side.
 
-Changes since v14:
-* Uses pr_fmt from common.h .
-* Constify variables.
-* Remove useless NULL initialization.
+If it's /sys/kernel/btf/vmlinux, you can just `cat 
+/sys/kernel/btf/vmlinux > my_btf.bin`. If it's some other file, easiest 
+would be to just share that file. If not, it's possible to extract .BTF 
+ELF section, let me know if you need help with that.
 
-Changes since v13:
-* totally get ride of the seccomp dependency
-* only keep credential management and LSM setup.
 
-Previous version:
-https://lore.kernel.org/lkml/20191104172146.30797-4-mic@digikod.net/
----
- security/Kconfig           | 10 +++----
- security/landlock/Makefile |  3 ++-
- security/landlock/common.h | 20 ++++++++++++++
- security/landlock/cred.c   | 46 +++++++++++++++++++++++++++++++
- security/landlock/cred.h   | 55 ++++++++++++++++++++++++++++++++++++++
- security/landlock/setup.c  | 31 +++++++++++++++++++++
- security/landlock/setup.h  | 16 +++++++++++
- 7 files changed, 175 insertions(+), 6 deletions(-)
- create mode 100644 security/landlock/common.h
- create mode 100644 security/landlock/cred.c
- create mode 100644 security/landlock/cred.h
- create mode 100644 security/landlock/setup.c
- create mode 100644 security/landlock/setup.h
-
-diff --git a/security/Kconfig b/security/Kconfig
-index 9d9981394fb0..76547b5c694d 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -278,11 +278,11 @@ endchoice
- 
- config LSM
- 	string "Ordered list of enabled LSMs"
--	default "lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor" if DEFAULT_SECURITY_SMACK
--	default "lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo" if DEFAULT_SECURITY_APPARMOR
--	default "lockdown,yama,loadpin,safesetid,integrity,tomoyo" if DEFAULT_SECURITY_TOMOYO
--	default "lockdown,yama,loadpin,safesetid,integrity" if DEFAULT_SECURITY_DAC
--	default "lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,smack,selinux,tomoyo,apparmor" if DEFAULT_SECURITY_SMACK
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,apparmor,selinux,smack,tomoyo" if DEFAULT_SECURITY_APPARMOR
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,tomoyo" if DEFAULT_SECURITY_TOMOYO
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity" if DEFAULT_SECURITY_DAC
-+	default "landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
- 	help
- 	  A comma-separated list of LSMs, in initialization order.
- 	  Any LSMs left off this list will be ignored. This can be
-diff --git a/security/landlock/Makefile b/security/landlock/Makefile
-index d846eba445bb..041ea242e627 100644
---- a/security/landlock/Makefile
-+++ b/security/landlock/Makefile
-@@ -1,3 +1,4 @@
- obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
- 
--landlock-y := object.o ruleset.o
-+landlock-y := setup.o object.o ruleset.o \
-+	cred.o
-diff --git a/security/landlock/common.h b/security/landlock/common.h
-new file mode 100644
-index 000000000000..5dc0fe15707d
---- /dev/null
-+++ b/security/landlock/common.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Common constants and helpers
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ */
-+
-+#ifndef _SECURITY_LANDLOCK_COMMON_H
-+#define _SECURITY_LANDLOCK_COMMON_H
-+
-+#define LANDLOCK_NAME "landlock"
-+
-+#ifdef pr_fmt
-+#undef pr_fmt
-+#endif
-+
-+#define pr_fmt(fmt) LANDLOCK_NAME ": " fmt
-+
-+#endif /* _SECURITY_LANDLOCK_COMMON_H */
-diff --git a/security/landlock/cred.c b/security/landlock/cred.c
-new file mode 100644
-index 000000000000..84ecc78da800
---- /dev/null
-+++ b/security/landlock/cred.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Landlock LSM - Credential hooks
-+ *
-+ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2019 ANSSI
-+ */
-+
-+#include <linux/cred.h>
-+#include <linux/lsm_hooks.h>
-+
-+#include "common.h"
-+#include "cred.h"
-+#include "ruleset.h"
-+#include "setup.h"
-+
-+static int hook_cred_prepare(struct cred *const new,
-+		const struct cred *const old, const gfp_t gfp)
-+{
-+	const struct landlock_cred_security *cred_old = landlock_cred(old);
-+	struct landlock_cred_security *cred_new = landlock_cred(new);
-+	struct landlock_ruleset *dom_old;
-+
-+	dom_old = cred_old->domain;
-+	if (dom_old) {
-+		landlock_get_ruleset(dom_old);
-+		cred_new->domain = dom_old;
-+	}
-+	return 0;
-+}
-+
-+static void hook_cred_free(struct cred *const cred)
-+{
-+	landlock_put_ruleset_deferred(landlock_cred(cred)->domain);
-+}
-+
-+static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
-+	LSM_HOOK_INIT(cred_prepare, hook_cred_prepare),
-+	LSM_HOOK_INIT(cred_free, hook_cred_free),
-+};
-+
-+__init void landlock_add_hooks_cred(void)
-+{
-+	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
-+			LANDLOCK_NAME);
-+}
-diff --git a/security/landlock/cred.h b/security/landlock/cred.h
-new file mode 100644
-index 000000000000..d3a8b1c2a4dd
---- /dev/null
-+++ b/security/landlock/cred.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Credential hooks
-+ *
-+ * Copyright © 2019 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2019 ANSSI
-+ */
-+
-+#ifndef _SECURITY_LANDLOCK_CRED_H
-+#define _SECURITY_LANDLOCK_CRED_H
-+
-+#include <linux/cred.h>
-+#include <linux/init.h>
-+#include <linux/rcupdate.h>
-+
-+#include "ruleset.h"
-+#include "setup.h"
-+
-+struct landlock_cred_security {
-+	struct landlock_ruleset *domain;
-+};
-+
-+static inline struct landlock_cred_security *landlock_cred(
-+		const struct cred *cred)
-+{
-+	return cred->security + landlock_blob_sizes.lbs_cred;
-+}
-+
-+static inline struct landlock_ruleset *landlock_get_current_domain(void)
-+{
-+	return landlock_cred(current_cred())->domain;
-+}
-+
-+/*
-+ * The call needs to come from an RCU read-side critical section.
-+ */
-+static inline struct landlock_ruleset *landlock_get_task_domain(
-+		const struct task_struct *const task)
-+{
-+	return landlock_cred(__task_cred(task))->domain;
-+}
-+
-+static inline bool landlocked(const struct task_struct *const task)
-+{
-+	bool has_dom;
-+
-+	rcu_read_lock();
-+	has_dom = !!landlock_get_task_domain(task);
-+	rcu_read_unlock();
-+	return has_dom;
-+}
-+
-+__init void landlock_add_hooks_cred(void);
-+
-+#endif /* _SECURITY_LANDLOCK_CRED_H */
-diff --git a/security/landlock/setup.c b/security/landlock/setup.c
-new file mode 100644
-index 000000000000..00eb78275cd8
---- /dev/null
-+++ b/security/landlock/setup.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Landlock LSM - Security framework setup
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/lsm_hooks.h>
-+
-+#include "common.h"
-+#include "cred.h"
-+#include "setup.h"
-+
-+struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
-+	.lbs_cred = sizeof(struct landlock_cred_security),
-+};
-+
-+static int __init landlock_init(void)
-+{
-+	pr_info("Registering hooks.\n");
-+	landlock_add_hooks_cred();
-+	return 0;
-+}
-+
-+DEFINE_LSM(LANDLOCK_NAME) = {
-+	.name = LANDLOCK_NAME,
-+	.init = landlock_init,
-+	.blobs = &landlock_blob_sizes,
-+};
-diff --git a/security/landlock/setup.h b/security/landlock/setup.h
-new file mode 100644
-index 000000000000..9fdbf33fcc33
---- /dev/null
-+++ b/security/landlock/setup.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Security framework setup
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ */
-+
-+#ifndef _SECURITY_LANDLOCK_SETUP_H
-+#define _SECURITY_LANDLOCK_SETUP_H
-+
-+#include <linux/lsm_hooks.h>
-+
-+extern struct lsm_blob_sizes landlock_blob_sizes;
-+
-+#endif /* _SECURITY_LANDLOCK_SETUP_H */
--- 
-2.26.0.rc2
+> [snip]
+> 
+> (Many incomplete type errors)
+> 
+> .output/vmlinux.h:8401:18: error: field has incomplete type 'struct 
+> idt_bits'
+>          struct idt_bits bits;
+>                          ^
+> .output/vmlinux.h:8396:8: note: forward declaration of 'struct idt_bits'
+> struct idt_bits;
+>         ^
+> .output/vmlinux.h:8598:21: error: field has incomplete type 'struct 
+> trace_entry'
+>          struct trace_entry ent;
+>                             ^
+> .output/vmlinux.h:8595:8: note: forward declaration of 'struct trace_entry'
+> struct trace_entry;
+>         ^
+> .output/vmlinux.h:9006:25: error: array has incomplete element type 
+> 'struct cyc2ns_data'
+>          struct cyc2ns_data data[2];
+>                                 ^
+> .output/vmlinux.h:3669:8: note: forward declaration of 'struct cyc2ns_data'
+> struct cyc2ns_data;
+>         ^
+> fatal error: too many errors emitted, stopping now [-ferror-limit=]
+> 20 errors generated.
+> Makefile:56: recipe for target '.output/runqslower.bpf.o' failed
+> make[1]: *** [.output/runqslower.bpf.o] Error 1
+> Makefile:119: recipe for target 'runqslower' failed
+> make: *** [runqslower] Error 2
+> 
+> ```
+> 
+> 
 
