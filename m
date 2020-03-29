@@ -1,108 +1,197 @@
-Return-Path: <SRS0=Juwg=5N=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=V9XU=5O=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B12C2C43331
-	for <linux-kselftest@archiver.kernel.org>; Sat, 28 Mar 2020 11:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B4DC2D0E5
+	for <linux-kselftest@archiver.kernel.org>; Sun, 29 Mar 2020 18:43:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8210320723
-	for <linux-kselftest@archiver.kernel.org>; Sat, 28 Mar 2020 11:31:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89C4A2076A
+	for <linux-kselftest@archiver.kernel.org>; Sun, 29 Mar 2020 18:43:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726258AbgC1Lbv (ORCPT
+        id S1728637AbgC2SnU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 28 Mar 2020 07:31:51 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:59310 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbgC1Lbv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 28 Mar 2020 07:31:51 -0400
-Received: from mail-wr1-f71.google.com ([209.85.221.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <andrea.righi@canonical.com>)
-        id 1jI9gr-0003tD-Am
-        for linux-kselftest@vger.kernel.org; Sat, 28 Mar 2020 11:31:49 +0000
-Received: by mail-wr1-f71.google.com with SMTP id y1so6102665wrn.10
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Mar 2020 04:31:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qqy0+XOT8WqhQrltX5gCRS9oS4phxUfRkeGmoD35Mjs=;
-        b=fQyvlnbXJjeX9ByFFnmMZgMR3q+OhAuHadVloDqTw22X3wkXOYswstMxS+dtykmBd0
-         gHgaEl10UvQbvILt4vQNP3uhwq8+i5VsKKNYcOf75v9nCMC8jeORZwQUWwZOw9kabwz7
-         8EPNYjd3m3goZmzNr2WLZd2eRc8ra51VMOoJBwrfz+V89voyxcZ3BLxL3hWKfH9XcqoS
-         W3RNZqpdPJ+rzvyEX+aWOuUXCZd258zyNJJRcdAWFvzp0S80c0lXIPSz1gdbM6lf3yHx
-         jMM3dqRvQKiMQ98W2iWNx6jXN1Uwd/IUblgxalomZ7rzprOfddYBmhEFv8P3lRcpnSPy
-         dWbw==
-X-Gm-Message-State: ANhLgQ16nHspIfPbfvjs9k2+3tQAfXHbBIz30JBBBCBK5keK58/mScJF
-        LHI4A40NrAKEqa1XVdSNnszNHOzO+ePnjlY3EwMzG02JFPn9eRMWgsjsNoBNCWA2u1FzzBBcTOw
-        8/psi38gcf0vf+KLlSNZqdUjDBgEoH2+t2Xe7Xu41gfxCgg==
-X-Received: by 2002:a7b:ce81:: with SMTP id q1mr3551438wmj.156.1585395108832;
-        Sat, 28 Mar 2020 04:31:48 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vsG1dGyA/RHZAnl+8bj6tF2K1BBKGwMYgS9zLyphO5tObGfhkWizV9l3ZWrySWsH7pMn9qEzw==
-X-Received: by 2002:a7b:ce81:: with SMTP id q1mr3551418wmj.156.1585395108528;
-        Sat, 28 Mar 2020 04:31:48 -0700 (PDT)
-Received: from localhost ([95.239.127.44])
-        by smtp.gmail.com with ESMTPSA id o14sm11692573wmh.22.2020.03.28.04.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Mar 2020 04:31:47 -0700 (PDT)
-Date:   Sat, 28 Mar 2020 12:31:45 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/runner: avoid using timeout when timeout is
- disabled
-Message-ID: <20200328113145.GB1371917@xps-13>
-References: <20200327093620.GB1223497@xps-13>
- <202003271208.0D9A3A48CC@keescook>
+        Sun, 29 Mar 2020 14:43:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42908 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728629AbgC2SnU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 29 Mar 2020 14:43:20 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9977E214DB;
+        Sun, 29 Mar 2020 18:43:19 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.93)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1jIcty-002G0g-Fv; Sun, 29 Mar 2020 14:43:18 -0400
+Message-Id: <20200329184318.379484681@goodmis.org>
+User-Agent: quilt/0.65
+Date:   Sun, 29 Mar 2020 14:43:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [for-next][PATCH 20/21] selftests/ftrace: Add test to test new set_event_notrace_pid file
+References: <20200329184252.289087453@goodmis.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202003271208.0D9A3A48CC@keescook>
+Content-Type: text/plain; charset=UTF-8
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 12:28:05PM -0700, Kees Cook wrote:
-> On Fri, Mar 27, 2020 at 10:36:20AM +0100, Andrea Righi wrote:
-> > Avoid using /usr/bin/timeout unnecessarily if timeout is set to 0
-> > (disabled) in the "settings" file for a specific test.
-> 
-> That seems to be a reasonable optimization, sure.
-> 
-> > NOTE: without this change (and adding timeout=0 in the corresponding
-> > settings file - tools/testing/selftests/seccomp/settings) the
-> > seccomp_bpf selftest is always failing with a timeout event during the
-> > syscall_restart step.
-> 
-> This, however, is worrisome. I think there is something else wrong here.
-> I will investigate why the output of seccomp_bpf is weird when running
-> under the runner scripts. Hmmm. The output looks corrupted...
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-Running seccomp_bpf directly (without using runner.sh) shows this error:
+A new file was added to the tracing directory that will allow a user to
+place a PID into it and the task associated to that PID will not have its
+events traced.  If the event-fork option is enabled, then neither will the
+children of that task have its events traced.
 
- $ sudo ./tools/testing/selftests/seccomp/seccomp_bpf
- ...
- seccomp_bpf.c:2839:global.syscall_restart:Expected true (1) == WIFSTOPPED(status) (0)
- global.syscall_restart: Test terminated by assertion
+Cc: linux-kselftest@vger.kernel.org
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+ .../ftrace/test.d/event/event-no-pid.tc       | 125 ++++++++++++++++++
+ 1 file changed, 125 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
 
-Instead, running it via /usr/bin/timeout (with timeout disabled):
+diff --git a/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+new file mode 100644
+index 000000000000..f0f366f18d0c
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/event/event-no-pid.tc
+@@ -0,0 +1,125 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: event tracing - restricts events based on pid notrace filtering
++# flags: instance
++
++do_reset() {
++    echo > set_event
++    echo > set_event_pid
++    echo > set_event_notrace_pid
++    echo 0 > options/event-fork
++    echo 0 > events/enable
++    clear_trace
++    echo 1 > tracing_on
++}
++
++fail() { #msg
++    cat trace
++    do_reset
++    echo $1
++    exit_fail
++}
++
++count_pid() {
++    pid=$@
++    cat trace | grep -v '^#' | sed -e 's/[^-]*-\([0-9]*\).*/\1/' | grep $pid | wc -l
++}
++
++count_no_pid() {
++    pid=$1
++    cat trace | grep -v '^#' | sed -e 's/[^-]*-\([0-9]*\).*/\1/' | grep -v $pid | wc -l
++}
++
++enable_system() {
++    system=$1
++
++    if [ -d events/$system ]; then
++	echo 1 > events/$system/enable
++    fi
++}
++
++enable_events() {
++    echo 0 > tracing_on
++    # Enable common groups of events, as all events can allow for
++    # events to be traced via scheduling that we don't care to test.
++    enable_system syscalls
++    enable_system rcu
++    enable_system block
++    enable_system exceptions
++    enable_system irq
++    enable_system net
++    enable_system power
++    enable_system signal
++    enable_system sock
++    enable_system timer
++    enable_system thermal
++    echo 1 > tracing_on
++}
++
++if [ ! -f set_event -o ! -d events/sched ]; then
++    echo "event tracing is not supported"
++    exit_unsupported
++fi
++
++if [ ! -f set_event_pid -o ! -f set_event_notrace_pid ]; then
++    echo "event pid notrace filtering is not supported"
++    exit_unsupported
++fi
++
++echo 0 > options/event-fork
++
++do_reset
++
++read mypid rest < /proc/self/stat
++
++echo $mypid > set_event_notrace_pid
++grep -q $mypid set_event_notrace_pid
++
++enable_events
++
++yield
++
++echo 0 > tracing_on
++
++cnt=`count_pid $mypid`
++if [ $cnt -ne 0 ]; then
++    fail "Filtered out task has events"
++fi
++
++cnt=`count_no_pid $mypid`
++if [ $cnt -eq 0 ]; then
++    fail "No other events were recorded"
++fi
++
++do_reset
++
++echo $mypid > set_event_notrace_pid
++echo 1 > options/event-fork
++
++enable_events
++
++yield &
++child=$!
++echo "child = $child"
++wait $child
++
++echo 0 > tracing_on
++
++cnt=`count_pid $mypid`
++if [ $cnt -ne 0 ]; then
++    fail "Filtered out task has events"
++fi
++
++cnt=`count_pid $child`
++if [ $cnt -ne 0 ]; then
++    fail "Child of filtered out taskhas events"
++fi
++
++cnt=`count_no_pid $mypid`
++if [ $cnt -eq 0 ]; then
++    fail "No other events were recorded"
++fi
++
++do_reset
++
++exit 0
+-- 
+2.25.1
 
-  $ sudo /usr/bin/timeout 0 ./tools/testing/selftests/seccomp/seccomp_bpf
-  ...
-  [ RUN      ] TSYNC.siblings_fail_prctl
 
-It gets stuck here forever, basically it's during the execution of
-syscall_restart().
-
-I'll investigate more later.
-
-Thanks,
--Andrea
