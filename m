@@ -1,87 +1,91 @@
-Return-Path: <SRS0=V9XU=5O=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=w8VM=5P=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67B3BC43331
-	for <linux-kselftest@archiver.kernel.org>; Sun, 29 Mar 2020 18:44:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D88FC43331
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Mar 2020 00:45:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3804020784
-	for <linux-kselftest@archiver.kernel.org>; Sun, 29 Mar 2020 18:44:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 353B820757
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Mar 2020 00:45:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728592AbgC2SnR (ORCPT
+        id S1727751AbgC3ApS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 29 Mar 2020 14:43:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728571AbgC2SnR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 29 Mar 2020 14:43:17 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 035D920838;
-        Sun, 29 Mar 2020 18:43:17 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.93)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1jIctv-002FrO-Tw; Sun, 29 Mar 2020 14:43:15 -0400
-Message-Id: <20200329184315.812700260@goodmis.org>
-User-Agent: quilt/0.65
-Date:   Sun, 29 Mar 2020 14:42:54 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [for-next][PATCH 02/21] selftest/ftrace: Fix function trigger test to handle trace not
- disabling the tracer
-References: <20200329184252.289087453@goodmis.org>
+        Sun, 29 Mar 2020 20:45:18 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:34176 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727549AbgC3ApS (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 29 Mar 2020 20:45:18 -0400
+X-IronPort-AV: E=Sophos;i="5.72,322,1580745600"; 
+   d="scan'208";a="87771264"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 30 Mar 2020 08:45:16 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 73303406AB15;
+        Mon, 30 Mar 2020 08:35:00 +0800 (CST)
+Received: from localhost.localdomain (10.167.226.81) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Mon, 30 Mar 2020 08:45:18 +0800
+Subject: Re: runqslower build failed on Debian9
+From:   Liu Yiding <liuyd.fnst@cn.fujitsu.com>
+To:     Andrii Nakryiko <andriin@fb.com>
+CC:     <linux-kselftest@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <60b05d23-6352-b978-3bf7-5a86466bb297@cn.fujitsu.com>
+ <c1025a74-1d80-5127-2b0a-87465d3dbcd0@fb.com>
+ <84a70348-62e3-728b-d934-28e902d40fd0@cn.fujitsu.com>
+Message-ID: <da95b852-e556-1b56-42eb-b97e1826710c@cn.fujitsu.com>
+Date:   Mon, 30 Mar 2020 08:46:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <84a70348-62e3-728b-d934-28e902d40fd0@cn.fujitsu.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.167.226.81]
+X-ClientProxiedBy: G08CNEXCHPEKD06.g08.fujitsu.local (10.167.33.205) To
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201)
+X-yoursite-MailScanner-ID: 73303406AB15.A7336
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: liuyd.fnst@cn.fujitsu.com
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Something wrong with my smtp and this email missed.
 
-The ftrace selftest "ftrace - test for function traceon/off triggers"
-enables all events and reads the trace file. Now that the trace file does
-not disable tracing, and will attempt to continually read new data that is
-added, the selftest gets stuck reading the trace file. This is because the
-data added to the trace file will fill up quicker than the reading of it.
+Send again.
 
-By only enabling scheduling events, the read can keep up with the writes.
-Instead of enabling all events, only enable the scheduler events.
 
-Link: http://lkml.kernel.org/r/20200318111345.0516642e@gandalf.local.home
-
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
- .../selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc  | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-index 0c04282d33dd..1947387fe976 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-@@ -41,7 +41,7 @@ fi
- 
- echo '** ENABLE EVENTS'
- 
--echo 1 > events/enable
-+echo 1 > events/sched/enable
- 
- echo '** ENABLE TRACING'
- enable_tracing
+On 3/27/20 11:09 AM, Liu Yiding wrote:
+> Hi, Andrii.
+>
+> Thanks for your prompt reply!
+>
+> Please check attatchment for my_btf.bin.
+>
+>
+> On 3/27/20 4:28 AM, Andrii Nakryiko wrote:
+>> Would you be able to share BTF of vmlinux that is used to generate 
+>> vmlinux.h? Please run in verbose mode: `make V=1` and search for 
+>> `bpftool btf dump file` command. It should point either to
+>> /sys/kernel/btf/vmlinux or some other location, depending on how 
+>> things are set up on your side.
+>>
+>> If it's /sys/kernel/btf/vmlinux, you can just `cat 
+>> /sys/kernel/btf/vmlinux > my_btf.bin`. If it's some other file, 
+>> easiest would be to just share that file. If not, it's possible to 
+>> extract .BTF ELF section, let me know if you need help with that. 
+>
 -- 
-2.25.1
+Best Regards.
+Liu Yiding
+
 
 
