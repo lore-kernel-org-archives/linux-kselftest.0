@@ -2,84 +2,147 @@ Return-Path: <SRS0=w8VM=5P=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0747EC43331
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Mar 2020 07:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F34FAC43331
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Mar 2020 13:00:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CCC2520774
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Mar 2020 07:25:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6D5720733
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Mar 2020 13:00:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hcxg3iYU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729413AbgC3HZI (ORCPT
+        id S1730154AbgC3NAg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 30 Mar 2020 03:25:08 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:37865 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729463AbgC3HZF (ORCPT
+        Mon, 30 Mar 2020 09:00:36 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39273 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730145AbgC3NAg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Mar 2020 03:25:05 -0400
-Received: by mail-io1-f69.google.com with SMTP id p4so15323461ioo.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2020 00:25:03 -0700 (PDT)
+        Mon, 30 Mar 2020 09:00:36 -0400
+Received: by mail-wm1-f66.google.com with SMTP id e9so9861490wme.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Mar 2020 06:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=AWHvGsNPhBXzGS4NrMgp+1wcjkcjrmUG6Apl6yrTBfo=;
+        b=hcxg3iYUoVuRC6BGNJDeo4xelV4a0Ry60PkckUgUSdYHHyTa+hqdTuAKmgYCJjxF5y
+         /cwWwQfkAT+Kj3giYEYPo0Y/6rCPAuK52iOP8bRzZdNf5ppBSQSPHjlRxp180mrsSpWT
+         r3pFwtKmVLmsZoqTYZkOPS/a7Kyj2PO5F36oRUlpYEYTea7zpWgLzGblq5vEKVcpohKJ
+         cxmPajyX+348ZqBVuYpSuy3DxJjrJocAGzTGUgg4SotzwbbOtFas+Ts4XTvg6xPGRQh+
+         E+isGY5U/fzdHHTSzC2uyJ8Cnoc1rvHfNYaQVybarg2ia0BmhtXI+25wHJfZY3XsL8cY
+         6ANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=TZJbpgebPbX3Q4FeLfNCFQJD77ggPTwgpCJg6I/5kLk=;
-        b=m6SlSKbbUmrWUFK6m371S/nmwKIHItpB5g2hurWmkXWmTGr6I2xRPi8jZP0Xv1TQlf
-         e/EplEDphbCSRQiJy/WjeN89ZhxlYsfb4JKFkgpJboRi1mJ6cgUbbfq3q3XtRZDmfjSc
-         64b5Fms6Lh+Z032ZxJMFEIyzjT+RiotA4De7VG+BJwMnfDhM0ffv+JPJlchHKPPh32BF
-         NKGbqIdHeAYPmzJVvXxvMppQ7pmN1kITgFYOH260L4A5SI+bwVI0o5kUOP/n/LEGmYBr
-         d6OkaqritUd0yQR8g/JA1pg4eE6u0h3kxODgtQeMYb1hgjXbFrOMfWvO95HkQGYg6aLA
-         m8aw==
-X-Gm-Message-State: ANhLgQ2GZ4KN4P2BEEaHL7GITd+tGeARmqqGikIU07uumlkJ5rUI3lTs
-        rAURRsrDeI5PvkjYz4PyqoqLsxYUxSXpzBa1Zd4+f1H2drAC
-X-Google-Smtp-Source: ADFU+vtBbBt6BuinPFFJY8ewnoDn/U9q2ryhLsaXg+psdNxruEaMqWJqvCEaD1smqkJhUjifXxvNwbU5if/xCAxan2Tj9cQry9q1
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=AWHvGsNPhBXzGS4NrMgp+1wcjkcjrmUG6Apl6yrTBfo=;
+        b=oZDyFZl/j8rqR7D1kN1beKIr2P4dup5cgl5LkXn0tmXQAUyO/NK5yAD7DnD5uh2ZiG
+         NWMH7KZvCMuskuTrEIm99w5VlNBQHVDUXp6Um84Er+0hmDo3WL4y/B1jT0R9SFDvhryL
+         kwUqzq/vTYcME+J6++pSpC9MLmVou6U2UJd6n2uqO3axlhagvSkJkqMGh+OmfVmnWVXK
+         QkZ2xep05/omjljmICfxpoq2DET+ZiA0xt54O8Ml1gjfU8XT0oqiD7phRO6k7mTOXwzA
+         jNWlnuSJgefff1C0ST3kDNWdM268Ov81R9kGe5yBzSQCVR8ZFIDXqST1KqKmRrJYBYoi
+         p9JA==
+X-Gm-Message-State: ANhLgQ2f0JyttXJy3UtRXKqDuOPF0ZX0nluZfVXdbLcvrOmns6EPsYMz
+        mxXV6zf+Q30fng6pn/yhJFHPww==
+X-Google-Smtp-Source: ADFU+vsBqersxtBFSS7l0GooFW8Sc7ZemO0oM0l/miqy78K1YZikyXE44LwXm/DfO7buWO+JZmMFNg==
+X-Received: by 2002:a1c:7519:: with SMTP id o25mr12882175wmc.90.1585573233198;
+        Mon, 30 Mar 2020 06:00:33 -0700 (PDT)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id f187sm16568039wme.9.2020.03.30.06.00.32
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 30 Mar 2020 06:00:32 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Mon, 30 Mar 2020 13:00:31 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <1609141678.12917.1585573232719.JavaMail.javamailuser@localhost>
+Subject: next-20200330 kselftest results
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e316:: with SMTP id u22mr9378632ioc.1.1585553103320;
- Mon, 30 Mar 2020 00:25:03 -0700 (PDT)
-Date:   Mon, 30 Mar 2020 00:25:03 -0700
-In-Reply-To: <000000000000aa9a23059f62246a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007effb905a20d5904@google.com>
-Subject: Re: WARNING in sk_stream_kill_queues (4)
-From:   syzbot <syzbot+fbe81b56f7df4c0fb21b@syzkaller.appspotmail.com>
-To:     andriin@fb.com, ast@kernel.org, aviadye@mellanox.com,
-        borisp@mellanox.com, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davejwatson@fb.com, davem@davemloft.net, edumazet@google.com,
-        jbaron@akamai.com, john.fastabend@gmail.com, kafai@fb.com,
-        kuba@kernel.org, kuznet@ms2.inr.ac.ru,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        ncardwell@google.com, netdev@vger.kernel.org, shuah@kernel.org,
-        soheil@google.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_12916_1219523201.1585573231781"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-syzbot suspects this bug was fixed by commit:
+------=_Part_12916_1219523201.1585573231781
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-commit b6f6118901d1e867ac9177bbff3b00b185bd4fdc
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Tue Feb 25 19:52:29 2020 +0000
+Summary
+------------------------------------------------------------------------
+kernel: 5.6.0-rc7
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 27a8b6c16291760cfb7d955c58d8e34dc27ec9dc
+git describe: next-20200330
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200330
 
-    ipv6: restrict IPV6_ADDRFORM operation
+Regressions (compared to build next-20200327)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20200327)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1177dc25e00000
-start commit:   f8788d86 Linux 5.6-rc3
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9833e26bab355358
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbe81b56f7df4c0fb21b
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fd92c3e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11679a81e00000
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
 
-If the result looks correct, please mark the bug fixed by replying with:
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- juno-r2-compat
+- juno-r2-kasan
+- x15 - arm
+- x86_64
+- x86-kasan
 
-#syz fix: ipv6: restrict IPV6_ADDRFORM operation
+Test Suites
+-----------
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+Failures
+------------------------------------------------------------------------
+
+dragonboard-410c:
+
+i386:
+
+juno-r2:
+
+x86:
+
+hi6220-hikey:
+
+x15:
+
+juno-r2-kasan:
+
+juno-r2-compat:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_12916_1219523201.1585573231781--
