@@ -6,48 +6,48 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CCE7C43331
-	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Mar 2020 09:59:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A99C4C2D0E8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Mar 2020 09:59:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6C9E020658
-	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Mar 2020 09:59:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 895E621556
+	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Mar 2020 09:59:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730235AbgCaJ7g (ORCPT
+        id S1730354AbgCaJ7l (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 31 Mar 2020 05:59:36 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4494 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730306AbgCaJ7g (ORCPT
+        Tue, 31 Mar 2020 05:59:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26202 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729997AbgCaJ7k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Mar 2020 05:59:36 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02V9XjXi054885
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 05:59:35 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30233876k7-1
+        Tue, 31 Mar 2020 05:59:40 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02V9X1aS119112
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 05:59:40 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 303v2skhh8-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 05:59:34 -0400
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Mar 2020 05:59:39 -0400
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Tue, 31 Mar 2020 10:59:19 +0100
+        Tue, 31 Mar 2020 10:59:25 +0100
 Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 31 Mar 2020 10:59:15 +0100
+        Tue, 31 Mar 2020 10:59:22 +0100
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02V9xQBc53149864
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02V9xXt654001892
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Mar 2020 09:59:27 GMT
+        Tue, 31 Mar 2020 09:59:33 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E28274C059;
-        Tue, 31 Mar 2020 09:59:26 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 067B94C040;
+        Tue, 31 Mar 2020 09:59:33 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A4B54C040;
-        Tue, 31 Mar 2020 09:59:24 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4B1654C044;
+        Tue, 31 Mar 2020 09:59:30 +0000 (GMT)
 Received: from fir03.in.ibm.com (unknown [9.121.59.65])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Mar 2020 09:59:23 +0000 (GMT)
+        Tue, 31 Mar 2020 09:59:30 +0000 (GMT)
 From:   Sandipan Das <sandipan@linux.ibm.com>
 To:     akpm@linux-foundation.org
 Cc:     linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -56,25 +56,25 @@ Cc:     linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
         mingo@redhat.com, aneesh.kumar@linux.ibm.com,
         bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
         shuah@kernel.org, Dave Hansen <dave.hansen@intel.com>
-Subject: [PATCH v19 19/24] selftests/vm/pkeys: Detect write violation on a mapped access-denied-key page
-Date:   Tue, 31 Mar 2020 15:28:20 +0530
+Subject: [PATCH v19 21/24] selftests/vm/pkeys: Test correct behaviour of pkey-0
+Date:   Tue, 31 Mar 2020 15:28:22 +0530
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1585646528.git.sandipan@linux.ibm.com>
 References: <cover.1585646528.git.sandipan@linux.ibm.com>
 In-Reply-To: <cover.1585646528.git.sandipan@linux.ibm.com>
 References: <cover.1585646528.git.sandipan@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 20033109-0016-0000-0000-000002FB8F4C
+x-cbid: 20033109-4275-0000-0000-000003B6D57A
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20033109-0017-0000-0000-0000335F4DB8
-Message-Id: <6a7dd4069ee18a2a51b207a55aa197f3f3c59753.1585646528.git.sandipan@linux.ibm.com>
+x-cbparentid: 20033109-4276-0000-0000-000038CC24B3
+Message-Id: <9b7c54a9b4261894fe0c7e884c70b87214ff8fbb.1585646528.git.sandipan@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-03-31_03:2020-03-30,2020-03-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=1
- impostorscore=0 mlxscore=0 malwarescore=0 clxscore=1015 adultscore=0
- bulkscore=0 mlxlogscore=953 priorityscore=1501 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003310081
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=903
+ adultscore=0 suspectscore=3 spamscore=0 clxscore=1015 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003310086
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -82,49 +82,89 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ram Pai <linuxram@us.ibm.com>
 
-Detect write-violation on a page to which access-disabled
-key is associated much after the page is mapped.
+Ensure that pkey-0 is allocated on start and that it can
+be attached dynamically in various modes, without failures.
 
 cc: Dave Hansen <dave.hansen@intel.com>
 cc: Florian Weimer <fweimer@redhat.com>
 Signed-off-by: Ram Pai <linuxram@us.ibm.com>
-Acked-by: Dave Hansen <dave.hansen@intel.com>
 Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
+Acked-by: Dave Hansen <dave.hansen@intel.com>
 ---
- tools/testing/selftests/vm/protection_keys.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ tools/testing/selftests/vm/protection_keys.c | 53 ++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
 diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index cb31a5cdf6d90..8bb4de1038743 100644
+index d4952b57cc909..a1cb9a71e77ce 100644
 --- a/tools/testing/selftests/vm/protection_keys.c
 +++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1027,6 +1027,18 @@ void test_write_of_access_disabled_region(int *ptr, u16 pkey)
- 	*ptr = __LINE__;
- 	expected_pkey_fault(pkey);
+@@ -964,6 +964,58 @@ __attribute__((noinline)) int read_ptr(int *ptr)
+ 	return *ptr;
  }
-+
-+void test_write_of_access_disabled_region_with_page_already_mapped(int *ptr,
-+			u16 pkey)
+ 
++void test_pkey_alloc_free_attach_pkey0(int *ptr, u16 pkey)
 +{
-+	*ptr = __LINE__;
-+	dprintf1("disabling access; after accessing the page, "
-+		" to PKEY[%02d], doing write\n", pkey);
-+	pkey_access_deny(pkey);
-+	*ptr = __LINE__;
-+	expected_pkey_fault(pkey);
++	int i, err;
++	int max_nr_pkey_allocs;
++	int alloced_pkeys[NR_PKEYS];
++	int nr_alloced = 0;
++	long size;
++
++	pkey_assert(pkey_last_malloc_record);
++	size = pkey_last_malloc_record->size;
++	/*
++	 * This is a bit of a hack.  But mprotect() requires
++	 * huge-page-aligned sizes when operating on hugetlbfs.
++	 * So, make sure that we use something that's a multiple
++	 * of a huge page when we can.
++	 */
++	if (size >= HPAGE_SIZE)
++		size = HPAGE_SIZE;
++
++	/* allocate every possible key and make sure key-0 never got allocated */
++	max_nr_pkey_allocs = NR_PKEYS;
++	for (i = 0; i < max_nr_pkey_allocs; i++) {
++		int new_pkey = alloc_pkey();
++		pkey_assert(new_pkey != 0);
++
++		if (new_pkey < 0)
++			break;
++		alloced_pkeys[nr_alloced++] = new_pkey;
++	}
++	/* free all the allocated keys */
++	for (i = 0; i < nr_alloced; i++) {
++		int free_ret;
++
++		if (!alloced_pkeys[i])
++			continue;
++		free_ret = sys_pkey_free(alloced_pkeys[i]);
++		pkey_assert(!free_ret);
++	}
++
++	/* attach key-0 in various modes */
++	err = sys_mprotect_pkey(ptr, size, PROT_READ, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_WRITE, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_EXEC, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_READ|PROT_WRITE, 0);
++	pkey_assert(!err);
++	err = sys_mprotect_pkey(ptr, size, PROT_READ|PROT_WRITE|PROT_EXEC, 0);
++	pkey_assert(!err);
 +}
 +
- void test_kernel_write_of_access_disabled_region(int *ptr, u16 pkey)
+ void test_read_of_write_disabled_region(int *ptr, u16 pkey)
  {
- 	int ret;
-@@ -1423,6 +1435,7 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
- 	test_write_of_write_disabled_region,
- 	test_write_of_write_disabled_region_with_page_already_mapped,
- 	test_write_of_access_disabled_region,
-+	test_write_of_access_disabled_region_with_page_already_mapped,
- 	test_kernel_write_of_access_disabled_region,
- 	test_kernel_write_of_write_disabled_region,
- 	test_kernel_gup_of_access_disabled_region,
+ 	int ptr_contents;
+@@ -1448,6 +1500,7 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
+ 	test_pkey_syscalls_on_non_allocated_pkey,
+ 	test_pkey_syscalls_bad_args,
+ 	test_pkey_alloc_exhaust,
++	test_pkey_alloc_free_attach_pkey0,
+ };
+ 
+ void run_tests_once(void)
 -- 
 2.17.1
 
