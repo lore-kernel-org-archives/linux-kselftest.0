@@ -1,74 +1,72 @@
-Return-Path: <SRS0=yo5U=5R=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=Ek3k=5S=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4195EC43331
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Apr 2020 23:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8192CC43331
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Apr 2020 06:52:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 134D2207FF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Apr 2020 23:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585783223;
-	bh=jZ5R8NLDr2ipcH//ysEPZpf1mo710GFdetvptQop3i4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=vMWhrr0VaTH4YLug0GiIesz2BTqyXi8kxUmRoSy6VCLjbVHLOv3NE0X1pHLs4bGyS
-	 e8qKW7pXtuFr5D/ayxxWnrpAc3f8VC/a8OZFTOAb32JJSmIzYsjnoGzZOixOh+fuEJ
-	 aHS2TdNxf6LPT96tcb1V3Z1dWoByZdo6CbKpKYUY=
+	by mail.kernel.org (Postfix) with ESMTP id 62B992080C
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Apr 2020 06:52:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387563AbgDAXUR (ORCPT
+        id S1729166AbgDBGwu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Apr 2020 19:20:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59218 "EHLO mail.kernel.org"
+        Thu, 2 Apr 2020 02:52:50 -0400
+Received: from mga12.intel.com ([192.55.52.136]:1100 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387443AbgDAXUQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Apr 2020 19:20:16 -0400
-Subject: Re: [GIT PULL] Kselftest-kunit update for Linux 5.7-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585783216;
-        bh=jZ5R8NLDr2ipcH//ysEPZpf1mo710GFdetvptQop3i4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=B5DRgpWE0KWWQSsIVC4W7SUgYTVLXrLLj1VsHBEvUpcFWclRXL6ZYYJA3Wf530iHL
-         myfu2PofNFmPBkjgcSVL8cCatfbc6EOgI5aUG8mwEqYlG2XgbXRAMeH0ZMPcxZfPKk
-         wuCOq28V/+RzTMIyV5SdV/Ol3QLfZCajoUYjb+fE=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <db495f50-087f-695c-67d8-22683cce0a77@linuxfoundation.org>
-References: <db495f50-087f-695c-67d8-22683cce0a77@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <db495f50-087f-695c-67d8-22683cce0a77@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-kunit-5.7-rc1
-X-PR-Tracked-Commit-Id: e23349af9ee25a5760112a2f8476b94a4ec86f1c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 668f1e9267415153e30bea03828c0530874e92e4
-Message-Id: <158578321625.12544.11451006072732483271.pr-tracker-bot@kernel.org>
-Date:   Wed, 01 Apr 2020 23:20:16 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     torvalds@linux-foundation.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
+        id S1729030AbgDBGwt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 Apr 2020 02:52:49 -0400
+IronPort-SDR: iIWWncgCWDz1euOZGxikixw7SxpYVeG8NbWwiQ4ozWFQjhHw8IlsT6/VWenQNT1EY1bDbG/LRc
+ b2byp4lAEloA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2020 23:52:49 -0700
+IronPort-SDR: evd6HV31MgdXqd7895E10ZsYdinXTTOGytf6a+z+5+enrwiRgI6QIB+o3KQr/CeoZ4vVV6crkG
+ ZEMjcvqzUTCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,334,1580803200"; 
+   d="scan'208";a="238430670"
+Received: from yanchun1-mobl2.ccr.corp.intel.com (HELO lkp-boy.ccr.corp.intel.com) ([10.255.31.3])
+  by orsmga007.jf.intel.com with ESMTP; 01 Apr 2020 23:52:47 -0700
+From:   Li Zhijian <zhijianx.li@intel.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, matthieu.baerts@tessares.net,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Subject: [PATCH] selftests:mptcp: fix empty optstring
+Date:   Thu,  2 Apr 2020 14:52:16 +0800
+Message-Id: <20200402065216.23301-1-zhijianx.li@intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Wed, 1 Apr 2020 11:54:36 -0600:
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.7-rc1
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ tools/testing/selftests/net/mptcp/pm_netlink.sh | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/668f1e9267415153e30bea03828c0530874e92e4
-
-Thank you!
-
+diff --git a/tools/testing/selftests/net/mptcp/pm_netlink.sh b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+index 9172746b6cf0..8c7998c64d9e 100755
+--- a/tools/testing/selftests/net/mptcp/pm_netlink.sh
++++ b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+@@ -8,8 +8,7 @@ usage() {
+ 	echo "Usage: $0 [ -h ]"
+ }
+ 
+-
+-while getopts "$optstring" option;do
++while getopts "h" option;do
+ 	case "$option" in
+ 	"h")
+ 		usage $0
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.17.1
+
