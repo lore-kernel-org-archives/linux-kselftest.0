@@ -2,202 +2,97 @@ Return-Path: <SRS0=KgYl=5T=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D39AC2BA1B
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Apr 2020 17:24:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83DE0C2BA19
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Apr 2020 17:25:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75071206F5
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Apr 2020 17:24:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C77A206F5
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Apr 2020 17:25:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M++cGpVV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fki8HQR0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391146AbgDCRY6 (ORCPT
+        id S2391158AbgDCRY7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Apr 2020 13:24:58 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:44127 "EHLO
+        Fri, 3 Apr 2020 13:24:59 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:51648 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391148AbgDCRYt (ORCPT
+        by vger.kernel.org with ESMTP id S2391127AbgDCRYr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Apr 2020 13:24:49 -0400
+        Fri, 3 Apr 2020 13:24:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585934689;
+        s=mimecast20190719; t=1585934686;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=Y3BsdkhQBkBibI3W5Dm8wcEfZJYqAxE4uyuJVmRry3c=;
-        b=M++cGpVVJd/LnhBWLEmS+QiaZlIs0sChg6ov8/XB+K9DgJShIJqXjEMeZlwhaQRa4UmHms
-        aTvKZusf0Seo6wom7JnMCDRJNrRaHJLImGuxPP69xCUyDZwFOX2FTieOajcWrCm7W8V9LX
-        k38sSq6+7HMaxFIj82F1eed8UYq0oPg=
+         to:to:cc:cc; bh=TeNYEnMMfU3AiH0HRgQNWv1IhmQIdH3VbtTA4I/7zoQ=;
+        b=Fki8HQR0STTDXI20u7bY8oCYF/PdS/ozLY2QUReJdm40yfW/9UoLa90cHmWLvww0x0M9h7
+        PitlSLEXbfCO4Gg6PayfZ0ygXl04TYMth4G5xZQp/PAJUWbAykpITHgZ8/NS5IuFeQQXSr
+        SJic80bN1fd7shHKx5KJLIkfCe0GYrc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-398-8K59qd7FM3ST3cJVRLED0w-1; Fri, 03 Apr 2020 13:24:47 -0400
-X-MC-Unique: 8K59qd7FM3ST3cJVRLED0w-1
+ us-mta-77-AkRCr9DvPSGybudoVX-j4A-1; Fri, 03 Apr 2020 13:24:39 -0400
+X-MC-Unique: AkRCr9DvPSGybudoVX-j4A-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 459BC100550D;
-        Fri,  3 Apr 2020 17:24:46 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 304B7100550D;
+        Fri,  3 Apr 2020 17:24:38 +0000 (UTC)
 Received: from localhost.localdomain (ovpn-116-15.gru2.redhat.com [10.97.116.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CE4865C1BE;
-        Fri,  3 Apr 2020 17:24:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 135E05C1B0;
+        Fri,  3 Apr 2020 17:24:30 +0000 (UTC)
 From:   Wainer dos Santos Moschetta <wainersm@redhat.com>
 To:     pbonzini@redhat.com, kvm@vger.kernel.org
 Cc:     drjones@redhat.com, david@redhat.com, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests: kvm: Add mem_slot_test test
-Date:   Fri,  3 Apr 2020 14:24:28 -0300
-Message-Id: <20200403172428.15574-3-wainersm@redhat.com>
-In-Reply-To: <20200403172428.15574-1-wainersm@redhat.com>
-References: <20200403172428.15574-1-wainersm@redhat.com>
+Subject: [PATCH v2 0/2] selftests: kvm: Introduce the mem_slot_test test
+Date:   Fri,  3 Apr 2020 14:24:26 -0300
+Message-Id: <20200403172428.15574-1-wainersm@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces the mem_slot_test test which checks
-an VM can have added memory slots up to the limit defined in
-KVM_CAP_NR_MEMSLOTS. Then attempt to add one more slot to
-verify it fails as expected.
+This series introduces a new KVM selftest (mem_slot_test) that goal
+is to verify memory slots can be added up to the maximum allowed. An
+extra slot is attempted which should occur on error.
 
-Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore      |  1 +
- tools/testing/selftests/kvm/Makefile        |  3 +
- tools/testing/selftests/kvm/mem_slot_test.c | 85 +++++++++++++++++++++
- 3 files changed, 89 insertions(+)
+The patch 01 is needed so that the VM fd can be accessed from the
+test code (for the ioctl call attempting to add an extra slot).
+
+I ran the test successfully on x86_64, aarch64, and s390x.  This
+is why it is enabled to build on those arches.
+
+v1: https://lore.kernel.org/kvm/20200330204310.21736-1-wainersm@redhat.com
+
+Changes v1 -> v2:
+ - Rebased to queue
+ - vm_get_fd() returns int instead of unsigned int (patch 01) [drjones]
+ - Removed MEM_REG_FLAGS and GUEST_VM_MODE defines [drjones]
+ - Replaced DEBUG() with pr_info() [drjones]
+ - Calculate number of guest pages with vm_calc_num_guest_pages()
+   [drjones]
+ - Using memory region of 1 MB sized (matches mininum needed
+   for s390x)
+ - Removed the increment of guest_addr after the loop [drjones]
+ - Added assert for the errno when adding a slot beyond-the-limit [drjones]
+ - Prefer KVM_MEM_READONLY flag but on s390x it switch to KVM_MEM_LOG_DIRTY_PAGES,
+   so ensure the coverage of both flags. Also somewhat tests the KVM_CAP_READONLY_MEM capability check [drjones]
+ - Moved the test logic to test_add_max_slots(), this allows to more easily add new cases in the "suite".
+
+Wainer dos Santos Moschetta (2):
+  selftests: kvm: Add vm_get_fd() in kvm_util
+  selftests: kvm: Add mem_slot_test test
+
+ tools/testing/selftests/kvm/.gitignore        |  1 +
+ tools/testing/selftests/kvm/Makefile          |  3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  5 ++
+ tools/testing/selftests/kvm/mem_slot_test.c   | 85 +++++++++++++++++++
+ 5 files changed, 95 insertions(+)
  create mode 100644 tools/testing/selftests/kvm/mem_slot_test.c
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 16877c3daabf..232f24d6931a 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -22,3 +22,4 @@
- /dirty_log_test
- /kvm_create_max_vcpus
- /steal_time
-+/mem_slot_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 712a2ddd2a27..69b44178f48b 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -33,12 +33,14 @@ TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
- TEST_GEN_PROGS_x86_64 += steal_time
-+TEST_GEN_PROGS_x86_64 += mem_slot_test
- 
- TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
- TEST_GEN_PROGS_aarch64 += demand_paging_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
- TEST_GEN_PROGS_aarch64 += steal_time
-+TEST_GEN_PROGS_aarch64 += mem_slot_test
- 
- TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/resets
-@@ -46,6 +48,7 @@ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += demand_paging_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-+TEST_GEN_PROGS_s390x += mem_slot_test
- 
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
-diff --git a/tools/testing/selftests/kvm/mem_slot_test.c b/tools/testing/selftests/kvm/mem_slot_test.c
-new file mode 100644
-index 000000000000..eef6f506f41d
---- /dev/null
-+++ b/tools/testing/selftests/kvm/mem_slot_test.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * mem_slot_test
-+ *
-+ * Copyright (C) 2020, Red Hat, Inc.
-+ *
-+ * Test suite for memory region operations.
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <linux/kvm.h>
-+#include <sys/mman.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+
-+/*
-+ * Test it can be added memory slots up to KVM_CAP_NR_MEMSLOTS, then any
-+ * tentative to add further slots should fail.
-+ */
-+static void test_add_max_slots(void)
-+{
-+	struct kvm_vm *vm;
-+	uint32_t max_mem_slots;
-+	uint32_t slot;
-+	uint64_t mem_reg_npages;
-+	uint64_t mem_reg_size;
-+	uint32_t mem_reg_flags;
-+	uint64_t guest_addr;
-+	int ret;
-+
-+	max_mem_slots = kvm_check_cap(KVM_CAP_NR_MEMSLOTS);
-+	TEST_ASSERT(max_mem_slots > 0,
-+		    "KVM_CAP_NR_MEMSLOTS should be greater than 0");
-+	pr_info("Allowed number of memory slots: %i\n", max_mem_slots);
-+
-+	vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-+
-+	/*
-+	 * Uses 1MB sized/aligned memory region since this is the minimal
-+	 * required on s390x.
-+	 */
-+	mem_reg_size = 0x100000;
-+	mem_reg_npages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, mem_reg_size);
-+
-+	mem_reg_flags = kvm_check_cap(KVM_CAP_READONLY_MEM) ? KVM_MEM_READONLY :
-+		KVM_MEM_LOG_DIRTY_PAGES;
-+
-+	guest_addr = 0x0;
-+
-+	/* Check it can be added memory slots up to the maximum allowed */
-+	pr_info("Adding slots 0..%i, each memory region with %ldK size\n",
-+		(max_mem_slots - 1), mem_reg_size >> 10);
-+	for (slot = 0; slot < max_mem_slots; slot++) {
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+					    guest_addr, slot, mem_reg_npages,
-+					    mem_reg_flags);
-+		guest_addr += mem_reg_size;
-+	}
-+
-+	/* Check it cannot be added memory slots beyond the limit */
-+	void *mem = mmap(NULL, mem_reg_size, PROT_READ | PROT_WRITE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	TEST_ASSERT(mem != NULL, "Failed to mmap() host");
-+
-+	struct kvm_userspace_memory_region kvm_region = {
-+		.slot = slot,
-+		.flags = mem_reg_flags,
-+		.guest_phys_addr = guest_addr,
-+		.memory_size = mem_reg_size,
-+		.userspace_addr = (uint64_t) mem,
-+	};
-+
-+	ret = ioctl(vm_get_fd(vm), KVM_SET_USER_MEMORY_REGION, &kvm_region);
-+	TEST_ASSERT(ret == -1, "Adding one more memory slot should fail");
-+	TEST_ASSERT(errno == EINVAL, "Should return EINVAL errno");
-+
-+	munmap(mem, mem_reg_size);
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	test_add_max_slots();
-+	return 0;
-+}
 -- 
 2.17.2
 
