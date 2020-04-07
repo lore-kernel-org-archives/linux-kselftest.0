@@ -2,102 +2,93 @@ Return-Path: <SRS0=gM2l=5X=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B7EC2BA80
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 00:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96BD2C2BA16
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 07:47:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC6F92078A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 00:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586218100;
-	bh=51H9TY8V5noS4FlXlFD3P5jsli5RDi0dx8xUt4ONeBk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=R/jyJI4YdkIdJ3fMyXKVtUv+xoaRFMcFUmQ0kLl/9bwbxYn4DgVdT4TuF+U80MqEX
-	 mi0cXYpqlU6idmjzS0scaTyrtUOR2hk1FW/oZeRi0AeskWW6ybaeKfRb/89O4Id8Pm
-	 zlpsTARpMM7McDirG6tfe0a9wcjh5pouBLED/X5A=
+	by mail.kernel.org (Postfix) with ESMTP id 6749120678
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 07:47:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgDGAIP (ORCPT
+        id S1726707AbgDGHr2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 6 Apr 2020 20:08:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34588 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726928AbgDGABb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Apr 2020 20:01:31 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A07AD2080C;
-        Tue,  7 Apr 2020 00:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586217690;
-        bh=51H9TY8V5noS4FlXlFD3P5jsli5RDi0dx8xUt4ONeBk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WOzLd5rE2PdQIUK0DlF6Plp4SVGb8wwfgKmtJG9r7hJUq5HcVlSH/bC8kGqWG/+Mn
-         k/QYuYpvB3iOhnW27S9zaVxtKgkj6IQ2EVDQUlmzBpUwTgKWzT3As9+11aXSxrFpkJ
-         iU40OzbtPJwYjzu+BSFj86y2dxpS/DFTxhxtt0hA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 25/35] selftests/net: add definition for SOL_DCCP to fix compilation errors for old libc
-Date:   Mon,  6 Apr 2020 20:00:47 -0400
-Message-Id: <20200407000058.16423-25-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200407000058.16423-1-sashal@kernel.org>
-References: <20200407000058.16423-1-sashal@kernel.org>
+        Tue, 7 Apr 2020 03:47:28 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:35054 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726635AbgDGHr2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Apr 2020 03:47:28 -0400
+X-IronPort-AV: E=Sophos;i="5.72,353,1580745600"; 
+   d="scan'208";a="88605379"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 07 Apr 2020 15:47:24 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id ABD92406AB15;
+        Tue,  7 Apr 2020 15:37:02 +0800 (CST)
+Received: from G08CNEXCHPEKD02.g08.fujitsu.local (10.167.33.83) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 7 Apr 2020 15:47:23 +0800
+Received: from Fedora-31.g08.fujitsu.local (10.167.220.31) by
+ G08CNEXCHPEKD02.g08.fujitsu.local (10.167.33.89) with Microsoft SMTP Server
+ id 14.3.439.0; Tue, 7 Apr 2020 15:47:25 +0800
+From:   Xiao Yang <yangx.jy@cn.fujitsu.com>
+To:     <rostedt@goodmis.org>, <mingo@redhat.com>
+CC:     <shuah@kernel.org>, <ice_yangxiao@163.com>,
+        <linux-kselftest@vger.kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>
+Subject: [PATCH] selftests/ftrace: Check the first record for kprobe_args_type.tc
+Date:   Tue, 7 Apr 2020 14:34:19 +0800
+Message-ID: <20200407063419.292821-1-yangx.jy@cn.fujitsu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: ABD92406AB15.A8C4E
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: yangx.jy@cn.fujitsu.com
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+It is possible to get multiple records from trace during test and then more
+than 4 arguments are assigned to ARGS.  This situation results in the failure
+of kprobe_args_type.tc.  For example:
+-----------------------------------------------------------
+grep testprobe trace
+   ftracetest-5902  [001] d... 111195.682227: testprobe: (_do_fork+0x0/0x460) arg1=334823024 arg2=334823024 arg3=0x13f4fe70 arg4=7
+     pmlogger-5949  [000] d... 111195.709898: testprobe: (_do_fork+0x0/0x460) arg1=345308784 arg2=345308784 arg3=0x1494fe70 arg4=7
+ grep testprobe trace
+ sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'
+ARGS='334823024 334823024 0x13f4fe70 7
+345308784 345308784 0x1494fe70 7'
+-----------------------------------------------------------
 
-[ Upstream commit 83a9b6f639e9f6b632337f9776de17d51d969c77 ]
+We don't care which process calls do_fork so just check the first record to
+fix the issue.
 
-Many systems build/test up-to-date kernels with older libcs, and
-an older glibc (2.17) lacks the definition of SOL_DCCP in
-/usr/include/bits/socket.h (it was added in the 4.6 timeframe).
-
-Adding the definition to the test program avoids a compilation
-failure that gets in the way of building tools/testing/selftests/net.
-The test itself will work once the definition is added; either
-skipping due to DCCP not being configured in the kernel under test
-or passing, so there are no other more up-to-date glibc dependencies
-here it seems beyond that missing definition.
-
-Fixes: 11fb60d1089f ("selftests: net: reuseport_addr_any: add DCCP")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
 ---
- tools/testing/selftests/net/reuseport_addr_any.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/reuseport_addr_any.c b/tools/testing/selftests/net/reuseport_addr_any.c
-index c6233935fed14..b8475cb29be7a 100644
---- a/tools/testing/selftests/net/reuseport_addr_any.c
-+++ b/tools/testing/selftests/net/reuseport_addr_any.c
-@@ -21,6 +21,10 @@
- #include <sys/socket.h>
- #include <unistd.h>
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+index 1bcb67dcae26..81490ecaaa92 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+@@ -38,7 +38,7 @@ for width in 64 32 16 8; do
+   echo 0 > events/kprobes/testprobe/enable
  
-+#ifndef SOL_DCCP
-+#define SOL_DCCP 269
-+#endif
-+
- static const char *IP4_ADDR = "127.0.0.1";
- static const char *IP6_ADDR = "::1";
- static const char *IP4_MAPPED6 = "::ffff:127.0.0.1";
+   : "Confirm the arguments is recorded in given types correctly"
+-  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
++  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+   check_types $ARGS $width
+ 
+   : "Clear event for next loop"
 -- 
-2.20.1
+2.25.1
+
+
 
