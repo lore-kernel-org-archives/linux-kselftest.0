@@ -2,41 +2,58 @@ Return-Path: <SRS0=gM2l=5X=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 638D1C2BA80
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 13:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88BD3C2BA2B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 15:30:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3712F2074F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 13:54:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56A022075E
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Apr 2020 15:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1586273431;
+	bh=hJoHzjqxSreSAAmQbaDkwgj4+XIVyLQU6f9ubRsQwkY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=0QDhN1C5LUbCyMww4FODZT4/3cXZ6Zf+mierxmkR3AaruiF+OZzESecvKX38zLVTn
+	 RExdqSCprNuvhTBrqDHnf26DDDp2qJ0vIlMKNspiJjmeYmlGy3wphv/c4mUism4NYm
+	 MgjhMyJo7BP2BNoXvGb3tKPm483ijvzI20Cc7mHc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728596AbgDGNyF (ORCPT
+        id S1729252AbgDGPab (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Apr 2020 09:54:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34572 "EHLO mail.kernel.org"
+        Tue, 7 Apr 2020 11:30:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51410 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728573AbgDGNyE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Apr 2020 09:54:04 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        id S1728306AbgDGPaa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Apr 2020 11:30:30 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD4FC20731;
-        Tue,  7 Apr 2020 13:54:03 +0000 (UTC)
-Date:   Tue, 7 Apr 2020 09:54:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Xiao Yang <yangx.jy@cn.fujitsu.com>
-Cc:     <mingo@redhat.com>, <shuah@kernel.org>, <ice_yangxiao@163.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FDAE20748;
+        Tue,  7 Apr 2020 15:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586273430;
+        bh=hJoHzjqxSreSAAmQbaDkwgj4+XIVyLQU6f9ubRsQwkY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DKc5VqQnfLsPw50LHhnq2BgQCl3JIWgrohPhxAGhueTYWaVPWXkDzbtNaZ0F4e72i
+         dIr/WWlMY2F5BXaz+RpJSjx7/5yMakWIml3eB5Pl45FlnXnC2ebXWKzHDNnl9P9L+z
+         bFRviMdOG9J66c1Ma1mt88azu0xsIxr7T0w1U0zY=
+Date:   Wed, 8 Apr 2020 00:30:26 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Xiao Yang <yangx.jy@cn.fujitsu.com>, <mingo@redhat.com>,
+        <shuah@kernel.org>, <ice_yangxiao@163.com>,
         <linux-kselftest@vger.kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
 Subject: Re: [PATCH] selftests/ftrace: Check the first record for
  kprobe_args_type.tc
-Message-ID: <20200407095400.2a13b821@gandalf.local.home>
-In-Reply-To: <20200407063419.292821-1-yangx.jy@cn.fujitsu.com>
+Message-Id: <20200408003026.24627a881c8f1eacb01cea48@kernel.org>
+In-Reply-To: <20200407095400.2a13b821@gandalf.local.home>
 References: <20200407063419.292821-1-yangx.jy@cn.fujitsu.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        <20200407095400.2a13b821@gandalf.local.home>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -44,46 +61,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 7 Apr 2020 14:34:19 +0800
-Xiao Yang <yangx.jy@cn.fujitsu.com> wrote:
+On Tue, 7 Apr 2020 09:54:00 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> It is possible to get multiple records from trace during test and then more
-> than 4 arguments are assigned to ARGS.  This situation results in the failure
-> of kprobe_args_type.tc.  For example:
-> -----------------------------------------------------------
-> grep testprobe trace
->    ftracetest-5902  [001] d... 111195.682227: testprobe: (_do_fork+0x0/0x460) arg1=334823024 arg2=334823024 arg3=0x13f4fe70 arg4=7
->      pmlogger-5949  [000] d... 111195.709898: testprobe: (_do_fork+0x0/0x460) arg1=345308784 arg2=345308784 arg3=0x1494fe70 arg4=7
->  grep testprobe trace
->  sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'
-> ARGS='334823024 334823024 0x13f4fe70 7
-> 345308784 345308784 0x1494fe70 7'
-> -----------------------------------------------------------
+> On Tue, 7 Apr 2020 14:34:19 +0800
+> Xiao Yang <yangx.jy@cn.fujitsu.com> wrote:
 > 
-> We don't care which process calls do_fork so just check the first record to
-> fix the issue.
-
-Looks good to me, but Masami will need to ack it.
-
--- Steve
-
+> > It is possible to get multiple records from trace during test and then more
+> > than 4 arguments are assigned to ARGS.  This situation results in the failure
+> > of kprobe_args_type.tc.  For example:
+> > -----------------------------------------------------------
+> > grep testprobe trace
+> >    ftracetest-5902  [001] d... 111195.682227: testprobe: (_do_fork+0x0/0x460) arg1=334823024 arg2=334823024 arg3=0x13f4fe70 arg4=7
+> >      pmlogger-5949  [000] d... 111195.709898: testprobe: (_do_fork+0x0/0x460) arg1=345308784 arg2=345308784 arg3=0x1494fe70 arg4=7
+> >  grep testprobe trace
+> >  sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'
+> > ARGS='334823024 334823024 0x13f4fe70 7
+> > 345308784 345308784 0x1494fe70 7'
+> > -----------------------------------------------------------
+> > 
+> > We don't care which process calls do_fork so just check the first record to
+> > fix the issue.
 > 
-> Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
-> ---
->  .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc  | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Looks good to me, but Masami will need to ack it.
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
-> index 1bcb67dcae26..81490ecaaa92 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
-> @@ -38,7 +38,7 @@ for width in 64 32 16 8; do
->    echo 0 > events/kprobes/testprobe/enable
->  
->    : "Confirm the arguments is recorded in given types correctly"
-> -  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
-> +  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
->    check_types $ARGS $width
->  
->    : "Clear event for next loop"
 
+Ah, good catch! I had fixed similar issue but missed this one.
+
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you!
+
+> -- Steve
+> 
+> > 
+> > Signed-off-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+> > ---
+> >  .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc  | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> > index 1bcb67dcae26..81490ecaaa92 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+> > @@ -38,7 +38,7 @@ for width in 64 32 16 8; do
+> >    echo 0 > events/kprobes/testprobe/enable
+> >  
+> >    : "Confirm the arguments is recorded in given types correctly"
+> > -  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+> > +  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+> >    check_types $ARGS $width
+> >  
+> >    : "Clear event for next loop"
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
