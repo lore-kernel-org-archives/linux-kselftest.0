@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AF8AC2D0EC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AE4DC2BBFD
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:53:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C87A62137B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:52:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBB78206C0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586490735;
-	bh=vbESkDHBh4yFSWsX62jVfb3pKRSU4GYw/tznxABimHk=;
+	s=default; t=1586490793;
+	bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=NJRVM8/JmCI8V3LtmjcG3yIN8U8fZYwIrSOmHs3cxWJRIoo7RG+rXsqyryryfSAek
-	 dHauJtV2SIVt/MKTXPXz4qlNrmH2HYPykE+3Ni1j1Ex6QIi/DMQ0WB/9Wa3FHK8xwX
-	 LkK625l/sHYOyp8CuYLQJZYJBKPe3HGVFkCk4XPw=
+	b=nNkQd5VhAPg+u7GpEP/nXqdg6NMrD0aMC2bIN58f+kp+CKPu+wyIBNeq40qlUn2fC
+	 h6ttXqwJyHWw0J7j0GcLrL3XDSCnPaQfteBYxy8l25FeyQrDf9dXVtOMgamYfQu/FH
+	 yJ/cRQftuMfgZr41tXCTQlsmZju6vacraRqGSjwI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgDJDvQ (ORCPT
+        id S1729017AbgDJDuz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:51:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36326 "EHLO mail.kernel.org"
+        Thu, 9 Apr 2020 23:50:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729132AbgDJDvP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:51:15 -0400
+        id S1729013AbgDJDuy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:50:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1AE04206C0;
-        Fri, 10 Apr 2020 03:51:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8E9C215A4;
+        Fri, 10 Apr 2020 03:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490674;
-        bh=vbESkDHBh4yFSWsX62jVfb3pKRSU4GYw/tznxABimHk=;
+        s=default; t=1586490654;
+        bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VDfHYAFz7n0O+5lEiSEv7zZFZVjL/glVFIly2bc9QqCzyaFmEMoOyMDgBO/q26O+O
-         RA7eNAV7UvAPBRNA/Tn3g9ZbSzQmMphju7krIvKaah1rKJ1goTTQg8xa/a+nAdCCYy
-         yln33i5392mT3F2CO3mY+0E1t92iR2aPwNG0Gb4Q=
+        b=qHzmHBYiuJvkVeVUxw/3P+kzYCd5ND8zr3Ng2KrM7t8fUcr9xNZU6dYpR2PvYpvvi
+         DlsnjoDwrLc7RRgUaE3NrsCuwH8YM/tx8k5fcs22iej7ohk4Pny1wDYBVaApsl1J1y
+         oUK4Egm+uuQ5k/x8M0DOgkjv3cs1X1CShHWJShos=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>,
         kbuild test robot <lkp@intel.com>,
         Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/9] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
-Date:   Thu,  9 Apr 2020 23:51:04 -0400
-Message-Id: <20200410035111.9938-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 08/22] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
+Date:   Thu,  9 Apr 2020 23:50:30 -0400
+Message-Id: <20200410035044.9698-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410035111.9938-1-sashal@kernel.org>
-References: <20200410035111.9938-1-sashal@kernel.org>
+In-Reply-To: <20200410035044.9698-1-sashal@kernel.org>
+References: <20200410035044.9698-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,10 +76,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/x86/ptrace_syscall.c b/tools/testing/selftests/x86/ptrace_syscall.c
-index 1e3da137a8bb9..5390c827a359e 100644
+index 6f22238f32173..12aaa063196e7 100644
 --- a/tools/testing/selftests/x86/ptrace_syscall.c
 +++ b/tools/testing/selftests/x86/ptrace_syscall.c
-@@ -413,8 +413,12 @@ int main()
+@@ -414,8 +414,12 @@ int main()
  
  #if defined(__i386__) && (!defined(__GLIBC__) || __GLIBC__ > 2 || __GLIBC_MINOR__ >= 16)
  	vsyscall32 = (void *)getauxval(AT_SYSINFO);
