@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5047DC2BB85
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:56:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D42C2D0EC
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 04:01:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2032220B1F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:56:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6953020BED
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 04:01:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586491000;
+	s=default; t=1586491315;
 	bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=purCOEHE+Vo2YytWJAR4+bJ0pF2HkQGLv/wjM8T5/fAXcCm+VgMPAC3c9ItqyOEZ2
-	 1gPDF0nKzLgUoXMxTluycqB3awq/0r4rvBrxOuAeCt5cI+JcFj4EKSt5/z14oPWyrQ
-	 kdEmgzEZ/awsKw3AsPJmmC8D7dmEiyCwsyR9TcEo=
+	b=DCE4oNM6YH4hhPVUXAMSuhMB0mv0WNz/TiyDhr/sshSGjkjG8VLS4Fz7pyI0cAlUN
+	 NffQ9lN9WhtvWEQIyx68qNyK3wbz93UoM2O0/VRpM8v6eo4R4Yw14i/YL8wE0M7yXD
+	 E1Ur+XMBVExSf9ybDA74gBgjbj4pIiXnxLV8vi1g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727520AbgDJDte (ORCPT
+        id S1725926AbgDJEBu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:49:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33642 "EHLO mail.kernel.org"
+        Fri, 10 Apr 2020 00:01:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58044 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728557AbgDJDtd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:49:33 -0400
+        id S1727302AbgDJDrV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:47:21 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 398BC2173E;
-        Fri, 10 Apr 2020 03:49:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B44FA2145D;
+        Fri, 10 Apr 2020 03:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490574;
+        s=default; t=1586490441;
         bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kg9qt/TJ/M84Cru6YQCBOy2MhodVjaeHfnThhShbcSqsEUIXvKvKHs/J7XhI25O1e
-         2o9tFDCSNOIadXyLhx6kOQdeTtm8IUhy5IsHRsNTFgttX/1cTzhBGqtIN0KjI/jYwO
-         tcMxhdKl3d+jH/GG4eGKbegn4t1U6JliA3FS7dys=
+        b=xTX2BKFCrxMfMz1YcLmWWFBdIm/7ehA5yTXbaBPkDKSk9uWaQCyHml4wiEXm7OtHL
+         nvFJN7Ek5aUlrMvMwRFdoT2TEDS0iUVO8nXPCtS5tWBrtEjq0mP8kXSkHj/jlsx6ZV
+         LuEtzVCxvXApklG7PyNtv47P/mIRyDG5rW4FzhFw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>,
         kbuild test robot <lkp@intel.com>,
         Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 20/46] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
-Date:   Thu,  9 Apr 2020 23:48:43 -0400
-Message-Id: <20200410034909.8922-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 38/68] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
+Date:   Thu,  9 Apr 2020 23:46:03 -0400
+Message-Id: <20200410034634.7731-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034909.8922-1-sashal@kernel.org>
-References: <20200410034909.8922-1-sashal@kernel.org>
+In-Reply-To: <20200410034634.7731-1-sashal@kernel.org>
+References: <20200410034634.7731-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
