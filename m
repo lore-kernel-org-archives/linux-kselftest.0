@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D172EC2D0EC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC31BC2D0EC
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:52:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A010820BED
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:48:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74E3020936
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 03:52:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586490515;
-	bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
+	s=default; t=1586490725;
+	bh=rXNVyeTWN1PwcxtA3YxF+ZGQmp65KQpCYuDUWuHLwSU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=trzAbkEy7cK70SqHHPtthnCU3bg+s1cL5xwQggQfH+PsRIzhnm+OUs5MbEW5pQnr5
-	 AmGbw4bueXmbG+ZEoh+CnHh6/CRl6ydgBjjVLluY2Anwk1Lk0MrA9V6Cnl0jveYvw4
-	 GtYWUwwYUYG6yn/636HVKSbVyXztXf6+wg1dSyvA=
+	b=tM0J8eT+eBS2ViR+IR9xDDx6Z6ThnqVy8wRrrbgorOWdcJP5ettok00VPAfWRAj9e
+	 inXoFbT7EU4aGd8imZOMmGOiCHY+KGesPwcBIQJwPSDdiU81L0hpCSAjbX3xCMelTL
+	 wUtxBX6oT97vgHQ/uyxtWfm0g704nWAOmSmPE3Uo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgDJDse (ORCPT
+        id S1726956AbgDJDwA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Apr 2020 23:48:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60188 "EHLO mail.kernel.org"
+        Thu, 9 Apr 2020 23:52:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728219AbgDJDse (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:48:34 -0400
+        id S1729184AbgDJDvZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:51:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6530321775;
-        Fri, 10 Apr 2020 03:48:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 18F0B215A4;
+        Fri, 10 Apr 2020 03:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490514;
-        bh=vDbC//cFoiarsCOyRPOI0FBifzs1I3USmWge+kKgjaU=;
+        s=default; t=1586490684;
+        bh=rXNVyeTWN1PwcxtA3YxF+ZGQmp65KQpCYuDUWuHLwSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QURg+QSybFVq+7WoXWm9/8Xuzj78o+y+TCIfiafe/Df50L95CMwHxvweWLXqYV+yr
-         YiFOhFdUe81CsjXOpYGIWui7ZmG70xNLNe13ZdhPF06oAV2bxT2SgwcNmH45ok8HW4
-         h+VN9UD4igDDAQd2bGRbtyNmwYsJezPT37thHAn4=
+        b=WqzpMYVN1imC2Uj6RacOPWtHii+iFL1R9ndRW174JgqENgZ2QRNDYfuPhMVfnK4LJ
+         AupWoYv7MLH+/VP6Phz8rnHabjMFbud3vjqMc1O+lxu6ucZdYn0dKEdvAuJEko0DyY
+         vX3rykbDyIEqhY8g5fFp0PZWpsmajG8m5F8OHpNQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>,
         kbuild test robot <lkp@intel.com>,
         Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 28/56] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
-Date:   Thu,  9 Apr 2020 23:47:32 -0400
-Message-Id: <20200410034800.8381-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 2/8] selftests/x86/ptrace_syscall_32: Fix no-vDSO segfault
+Date:   Thu,  9 Apr 2020 23:51:15 -0400
+Message-Id: <20200410035122.10065-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410034800.8381-1-sashal@kernel.org>
-References: <20200410034800.8381-1-sashal@kernel.org>
+In-Reply-To: <20200410035122.10065-1-sashal@kernel.org>
+References: <20200410035122.10065-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,10 +76,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/x86/ptrace_syscall.c b/tools/testing/selftests/x86/ptrace_syscall.c
-index 6f22238f32173..12aaa063196e7 100644
+index 5105b49cd8aa5..8b3c1236f04dc 100644
 --- a/tools/testing/selftests/x86/ptrace_syscall.c
 +++ b/tools/testing/selftests/x86/ptrace_syscall.c
-@@ -414,8 +414,12 @@ int main()
+@@ -284,8 +284,12 @@ int main()
  
  #if defined(__i386__) && (!defined(__GLIBC__) || __GLIBC__ > 2 || __GLIBC_MINOR__ >= 16)
  	vsyscall32 = (void *)getauxval(AT_SYSINFO);
