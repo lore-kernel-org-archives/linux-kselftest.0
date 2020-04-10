@@ -2,85 +2,71 @@ Return-Path: <SRS0=8jg/=52=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92B98C2BB55
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 20:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4340C2D0EC
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 20:45:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 63DBA2166E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 20:39:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586551173;
-	bh=fx/YNx4dh/aRYlOkh+d8yQlgMojYPrhWbJbg1ZKbAn4=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=j914XO2Vx3NhiL+LbKH6lUndLV/Df5hqZTRH2OcHb18b1hPwJ3Zd7jrkIJsgATh0a
-	 v2BpswFO8Dt2oEmwN3KrF2qd9QUeuH68YQn8KocuNRaLn7U7X5TlqmfB082ZWkVJFn
-	 0SuBOCKlVGHEfhml9WvcoB/Md0gNj2gwOZU0lQqo=
+	by mail.kernel.org (Postfix) with ESMTP id AD4E02078E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Apr 2020 20:45:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbgDJUj1 (ORCPT
+        id S1726646AbgDJUpJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Apr 2020 16:39:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47184 "EHLO mail.kernel.org"
+        Fri, 10 Apr 2020 16:45:09 -0400
+Received: from mga12.intel.com ([192.55.52.136]:37826 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726706AbgDJUj1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Apr 2020 16:39:27 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D7C020936;
-        Fri, 10 Apr 2020 20:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586551167;
-        bh=fx/YNx4dh/aRYlOkh+d8yQlgMojYPrhWbJbg1ZKbAn4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jURIy8M8FEXXB1EpC8iZakWlnt+L9s03r6fN4IvDeGeFcgziPpQvGZFT0T4ru1dDU
-         +u6gVkEECNvjwZNRyc/DhrSvze9xqhZSdg4xko38D4yMY7FSPjBxjZXlk9vRKMKZ0Q
-         LwH6LMx17f7XJnJr8KGaf0Ji+hY1leOfEZThBNbc=
-Subject: Re: [PATCH] selftests/seccomp: allow clock_nanosleep instead of
- nanosleep
-To:     Kees Cook <keescook@chromium.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luto@amacapital.net, wad@chromium.org, shuah <shuah@kernel.org>
-References: <20200408235753.8566-1-cascardo@canonical.com>
- <202004101328.075568852D@keescook>
-From:   shuah <shuah@kernel.org>
-Message-ID: <0d4e5356-d40a-8d17-1c61-d5c3c92fd11e@kernel.org>
-Date:   Fri, 10 Apr 2020 14:38:58 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726263AbgDJUpJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Apr 2020 16:45:09 -0400
+IronPort-SDR: 3whyYo5dZuhI1StrbKFEn1HUarpQ0K5SxClT5/nlCXxlcwEsW9G8fBBE+BQMscIWPYAjmY0sfP
+ gItFvQNQpJaw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2020 13:45:09 -0700
+IronPort-SDR: Ida5El/CDEgkpHlIE1XkMu5+hmSvqVIP63Z+oh/fQEnmStIi9kcXxf8FgolAcp0RC8MhUdrVCZ
+ aECBWHySm81Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,368,1580803200"; 
+   d="scan'208";a="276291867"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Apr 2020 13:45:09 -0700
+Date:   Fri, 10 Apr 2020 13:45:09 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Wainer dos Santos Moschetta <wainersm@redhat.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org, drjones@redhat.com,
+        david@redhat.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, krish.sadhukhan@oracle.com
+Subject: Re: [PATCH v5 0/2] selftests: kvm: Introduce the mem_slot_test test
+Message-ID: <20200410204509.GK22482@linux.intel.com>
+References: <20200409220905.26573-1-wainersm@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <202004101328.075568852D@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200409220905.26573-1-wainersm@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/10/20 2:29 PM, Kees Cook wrote:
-> On Wed, Apr 08, 2020 at 08:57:53PM -0300, Thadeu Lima de Souza Cascardo wrote:
->> glibc 2.31 calls clock_nanosleep when its nanosleep function is used. So
->> the restart_syscall fails after that. In order to deal with it, we trace
->> clock_nanosleep and nanosleep. Then we check for either.
->>
->> This works just fine on systems with both glibc 2.30 and glibc 2.31,
->> whereas it failed before on a system with glibc 2.31.
->>
->> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+On Thu, Apr 09, 2020 at 07:09:03PM -0300, Wainer dos Santos Moschetta wrote:
+> This series introduces a new KVM selftest (mem_slot_test) that goal
+> is to verify memory slots can be added up to the maximum allowed. An
+> extra slot is attempted which should occur on error.
 > 
-> Actually, sorry, this should go via Shuah's tree. :) Shuah, do you have
-> anything going Linus's way already for -rc2?
+> The patch 01 is needed so that the VM fd can be accessed from the
+> test code (for the ioctl call attempting to add an extra slot).
 > 
-> Acked-by: Kees Cook <keescook@chromium.org>
-> 
+> I ran the test successfully on x86_64, aarch64, and s390x.  This
+> is why it is enabled to build on those arches.
 
-I have a few patches for rc2. I will pick this up.
+Any objection to folding these patches into a series I have to clean up
+set_memory_region_test (which was mentioned in a prior version) and add
+this as a testcase to set_memory_region_test instead of creating a whole
+new test?
 
-thanks,
--- Shuah
+A large chunk of set_memory_region_test will still be x86_64 only, but
+having the test reside in common code will hopefully make it easier to
+extend to other architectures.
