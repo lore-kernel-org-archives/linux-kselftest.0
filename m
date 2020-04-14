@@ -2,55 +2,61 @@ Return-Path: <SRS0=+yEf=56=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE14C2BA19
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Apr 2020 15:27:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 036EBC352BE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Apr 2020 16:04:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A79A20656
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Apr 2020 15:27:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7D5920775
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Apr 2020 16:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586878060;
-	bh=5lYnj+272sKQvhI108Iv8oKwS0a0XnbkMZ6mg9B3LZc=;
+	s=default; t=1586880290;
+	bh=epy82pHJIjz+R+sTHySiSOV9DXsESpBVEBTHm5bQ8zE=;
 	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=Uzf9idtf3o24Ll+j55xJ+FPsbozkZvu7FJdygL0NaG1R77dTjmOxIf4LS4k89TCM4
-	 375kmeCDTBD47iWPI7oNgzf71YCgREcIxDEujGC2NTLNrVvrPtuAt2bZzlJsuXmZ/C
-	 TnUFVyso5zQO0UfwfdCSakmkW3F+jE+OEvJ7uTKc=
+	b=mEdJAxXDK54h5g0t6QeW6DXydLG2Smq2FoYqXjs/kn+DCOYa9fv+ERt9IYf//V10H
+	 lPbkY72Yk1Euy9vKOaRUdFbfYz5ObsxIHGtu0oUHYdjEClv+eLAjPbSq6Zq6jvyIWP
+	 V212ZiBJwl++Mn66JH51lJFHM9SFsCHaslr1X/Y4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439738AbgDNP1d (ORCPT
+        id S2391269AbgDNQEr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Apr 2020 11:27:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44582 "EHLO mail.kernel.org"
+        Tue, 14 Apr 2020 12:04:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729754AbgDNP1V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Apr 2020 11:27:21 -0400
+        id S2391235AbgDNQEl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Apr 2020 12:04:41 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E9EC20656;
-        Tue, 14 Apr 2020 15:27:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE74E20775;
+        Tue, 14 Apr 2020 16:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586878038;
-        bh=5lYnj+272sKQvhI108Iv8oKwS0a0XnbkMZ6mg9B3LZc=;
+        s=default; t=1586880281;
+        bh=epy82pHJIjz+R+sTHySiSOV9DXsESpBVEBTHm5bQ8zE=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=h6SQjpIDC3OrPSsz6BKe9szCjfpFud0gMGAUL3NugjHfdmf8+jb4nDqMVZcl417t3
-         6lAPLrjYGYhnxo6NLE0q7fwBc7FH+ETMxvkSny+g3SraGSsOt4XgGuTc/LbEHqavAc
-         1WeAUKMRgbtxDg18+voqyLKgXc8LOzi7NrPqKd5E=
-Subject: Re: [PATCH] selftest: add a script to perform selftest compile tests
-To:     Tim Bird <tim@bird.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tbird20d@gmail.com, tim.bird@sony.com, shuah <shuah@kernel.org>
-References: <86508e9d-4aff-d9a0-3783-971a4686ccd1@bird.org>
+        b=uzB6xCQH55+x/gMA2gVncOQC2YIunQFxYsPibIC1gUjHTZfWFMeKqaejV7lSBvD9o
+         cGYSUmxTw40RI/a1Uk5jzTbaPOdKFExmGLUSjp3Keu/NRdxpC6Vi/3UmFTSBtZxMM/
+         wjoLGqZvZ8x1RgdLJQktmDytt8OVQXEk+L+jl0Y4=
+Subject: Re: [PATCH AUTOSEL 5.5 04/66] Kernel selftests: tpm2: check for tpm
+ support
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Nikita Sobolev <Nikita.Sobolev@synopsys.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        shuah <shuah@kernel.org>
+References: <20200303024615.8889-1-sashal@kernel.org>
+ <20200303024615.8889-4-sashal@kernel.org>
 From:   shuah <shuah@kernel.org>
-Message-ID: <9c2a8679-eb90-8dd1-43f6-40ce0a842c87@kernel.org>
-Date:   Tue, 14 Apr 2020 09:27:17 -0600
+Message-ID: <8954e808-6dd9-dd71-e2d7-7dc90c9d66b3@kernel.org>
+Date:   Tue, 14 Apr 2020 10:04:40 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <86508e9d-4aff-d9a0-3783-971a4686ccd1@bird.org>
+In-Reply-To: <20200303024615.8889-4-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,99 +65,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/13/20 4:15 PM, Tim Bird wrote:
-> From: Tim Bird <tim.bird@sony.com>
+On 3/2/20 7:45 PM, Sasha Levin wrote:
+> From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
 > 
-> Add ksft-compile-test.sh.  This is a program used to test
-> cross-compilation and installation of selftest tests.
+> [ Upstream commit b32694cd0724d4ceca2c62cc7c3d3a8d1ffa11fc ]
 > 
-> See the test usage for help
+> tpm2 tests set fails if there is no /dev/tpm0 and /dev/tpmrm0
+> supported. Check if these files exist before run and mark test as
+> skipped in case of absence.
 > 
-> This program currently tests 3 scenarios out of a larger matrix
-> of possibly interesting scenarios.  For each scenario, it conducts
-> multiple tests for correctness.  This version tests:
->   1) does the test compile
-
-Is it necessary to write this long a script? Could we just parse
-the "kselftest
->   2) is the kernel source directory clean after the compile
-
-Can you use make mrproper and see if anything needs cleaning?
-
->   3) does the test install operation succeed
->   4) does the test run script reference the test
-> 
-
-I like the idea of being able to test, however I am not convinced
-you would need a whole new script for it.
-
-
-> Signed-off-by: Tim Bird <tim.bird@sony.com>
+> Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->   MAINTAINERS                                  |   6 +
->   tools/testing/selftests/ksft-compile-test.sh | 567 +++++++++++++++++++++++++++
->   2 files changed, 573 insertions(+)
->   create mode 100755 tools/testing/selftests/ksft-compile-test.sh
+>   tools/testing/selftests/tpm2/test_smoke.sh | 13 +++++++++++--
+>   tools/testing/selftests/tpm2/test_space.sh |  9 ++++++++-
+>   2 files changed, 19 insertions(+), 3 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cc1d18c..a6289c7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9127,6 +9127,12 @@ S:	Maintained
->   F:	tools/testing/selftests/
->   F:	Documentation/dev-tools/kselftest*
->   
-> +KERNEL SELFTEST SELFTEST
-> +M:	Tim Bird <tim.bird@sony.com>
-> +L:	linux-kselftest@vger.kernel.org
-> +S:	Maintained
-> +F:	tools/testing/selftests/ksft-compile-test.sh
-> +
 
-Please don't add another entry to the MAINTAINERS file just
-for a shell script under tools/testing/selftests
-
-This doesn't make sense.
-
->   KERNEL UNIT TESTING FRAMEWORK (KUnit)
->   M:	Brendan Higgins <brendanhiggins@google.com>
->   L:	linux-kselftest@vger.kernel.org
-> diff --git a/tools/testing/selftests/ksft-compile-test.sh b/tools/testing/selftests/ksft-compile-test.sh
-> new file mode 100755
-> index 0000000..e36e858
-> --- /dev/null
-> +++ b/tools/testing/selftests/ksft-compile-test.sh
-> @@ -0,0 +1,567 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0-only OR MIT
-> +#
-> +# ksft-compile-test.sh - test compiling Linux kernel selftests under lots of
-> +#   different configurations.  This is used to check that cross-compilation
-> +#   and install works properly for a newly submitted test target, and
-> +#   also that changes to existing test Makefiles don't regress with regard to
-> +#   this functionality.
-> +#
-> +# Copyright 2020 Sony Corporation
-> +#
-> +# Here are the things that Shuah Kahn asked for on 3/6/2020
-> +# 1. Cross-compilation & relocatable build support
-> +# 2. Generates objects in objdir/kselftest without cluttering main objdir
-> +# 3. Leave source directory clean
-> +# 4. Installs correctly in objdir/kselftest/kselftest_install and adds
-> +#        itself to run_kselftest.sh script generated during install.
-> +#
-
-I was asking for fixes to individual tests.
-
-> +# Would be nice to make sure other features also work:
-> +# 5. can use absolute, relative, or current directory for output directory
-> +# 6. can use ~ in output directory path
-> +#
-
-I do think this can be achieved with a simpler script wrapper around
-existing commands and kselftest_install.sh instead of writing a whole
-new shell script.
+Let's drop this unless it already made it into stables.
+Jarkko Sakkinen found regressions and send in a revert
+for this patch.
 
 thanks,
 -- Shuah
-
