@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ACBDC38A2F
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 14:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 271ADC3A5A0
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 14:55:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E48121D79
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 14:51:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F167C21D6C
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 14:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587221479;
-	bh=wWcxu4OCfXEK46Bg8kOK4Q6L/CNCdcIft+WVM10h9XI=;
+	s=default; t=1587221713;
+	bh=tJx2Pw8jARz8g4y2ONxmN/CJIrowA+R2SLrDY7KpChs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TK4jRC4Q+N8CTnm3JN4/7qChkqED1IA9QZjI7KhJYbNY92F5O9b3/iZVqnrDrgFu3
-	 8i6RtPrnB/+dHClACSZ5S6f4m+hHajPJRnISTeGSeW1tmvlhDlwugGW1+REckSUWLX
-	 Vpy7f7n96zuI6dB+0v/fmFlWIsFYjt5iVHjBgcns=
+	b=xs5IaWpbVFes4jSM5tUtiRG92gjtGFuPH1IdVcWknDQ4QXn2GxyEOOCMJ4IFoswDG
+	 k1EJIRiDxN64+s7g+9ANHDqj5IL3GtriGSOHaBATSt8C+J9tnrIK+Lpw/f3GbGHxyx
+	 BzY9PQCLeKKUDgXSI0XNhRmHvr1s2dh2lHLM6iTI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728432AbgDROms (ORCPT
+        id S1727890AbgDROlU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 18 Apr 2020 10:42:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53142 "EHLO mail.kernel.org"
+        Sat, 18 Apr 2020 10:41:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728425AbgDROmr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:42:47 -0400
+        id S1727881AbgDROlT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:41:19 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 959E321D82;
-        Sat, 18 Apr 2020 14:42:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DFE3621974;
+        Sat, 18 Apr 2020 14:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587220967;
-        bh=wWcxu4OCfXEK46Bg8kOK4Q6L/CNCdcIft+WVM10h9XI=;
+        s=default; t=1587220879;
+        bh=tJx2Pw8jARz8g4y2ONxmN/CJIrowA+R2SLrDY7KpChs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xPQwrTaA3xlN+eJCzkR8XxmlssJbjVeVAF3Sv/CnEGfKucsVW26NACTTuzxYIt277
-         GdEe1EGlFW8WTDx3cCpowA4AUd9tCFVJIhWLczBVMSyrj/iMWQ1yzl4qb8Y0MjdGgV
-         nwoKrg5r2vxg9N3RzMJIQJWiIpaywN/8mQw54uJs=
+        b=0soCJDICTF4hSE2Mvb7YsK2LwyVK6oYG62z2sCKyB081lKlJ2hH+16PujT7J0gxvb
+         7PuDHyEpHbmT9E0lBkrcF4bqVy/SSMNEq2B9AeaKA4G9qLt6mXQS5/OPicIGBaI3Do
+         L5t3JeNjOo8DQ2LQ/2dgTqX8V8g/8YkXEX9X9VrY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Eric Biggers <ebiggers@google.com>,
@@ -52,12 +52,12 @@ Cc:     Eric Biggers <ebiggers@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 15/47] selftests: kmod: fix handling test numbers above 9
-Date:   Sat, 18 Apr 2020 10:41:55 -0400
-Message-Id: <20200418144227.9802-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 25/78] selftests: kmod: fix handling test numbers above 9
+Date:   Sat, 18 Apr 2020 10:39:54 -0400
+Message-Id: <20200418144047.9013-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418144227.9802-1-sashal@kernel.org>
-References: <20200418144227.9802-1-sashal@kernel.org>
+In-Reply-To: <20200418144047.9013-1-sashal@kernel.org>
+References: <20200418144047.9013-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -92,7 +92,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index 0a76314b44149..1f118916a83e4 100755
+index 8b944cf042f6c..315a43111e046 100755
 --- a/tools/testing/selftests/kmod/kmod.sh
 +++ b/tools/testing/selftests/kmod/kmod.sh
 @@ -505,18 +505,23 @@ function test_num()
