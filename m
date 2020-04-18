@@ -2,141 +2,150 @@ Return-Path: <SRS0=a/fv=6C=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 047DBC38A29
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 17:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 492AFC2BA19
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 23:27:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5B9D221E9
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 17:26:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01A9921974
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 23:27:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AOmyP6C8"
+	dkim=pass (1024-bit key) header.d=cs.washington.edu header.i=@cs.washington.edu header.b="E94FC9Je"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726089AbgDRR0I (ORCPT
+        id S1725877AbgDRX1C (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 18 Apr 2020 13:26:08 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:46494 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbgDRR0G (ORCPT
+        Sat, 18 Apr 2020 19:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725804AbgDRX1C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Apr 2020 13:26:06 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IHPocp016214;
-        Sat, 18 Apr 2020 17:26:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=8KrJ/JRh4q1VXJvhPAIpwPjIhjwroyl2FF43PveML6I=;
- b=AOmyP6C8oWDNi5l/CoyTfkazqoakk5toheHi6EoXt7Z1/lOHPDliNJz6O6Y7UftMvuHg
- LB1O+I04Z5Gp+xiGHjJwYHftFt/+FQ43iWeZewL1MbEdRUGyoVXW02c4x8tY91YAyX4U
- fcairSM6SODbk+Nkx+lg59B6jt7B1/FRFul5rN+9yEkYINLqb6O5+jiuRpyCMkmNbZpO
- 35n4T/T65sOSJar7E2xMu91beP+nTzaMOCthE8V5o96xjeKX3WOQuYG8BkJ2glYMB9td
- ELRgm5W0PvVN68E/3FflwPmer6a9diz8lb/iAOQaPrShjxP5Qqk3b4F9I5J2+4XQg6rq lg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 30fxkjrrwf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 17:26:02 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IHLMsG077591;
-        Sat, 18 Apr 2020 17:26:01 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 30fqka2fdx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 17:26:01 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03IHQ0mI015260;
-        Sat, 18 Apr 2020 17:26:00 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 18 Apr 2020 10:26:00 -0700
-Date:   Sat, 18 Apr 2020 20:25:54 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     brendanhiggins@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [bug report] kunit: test: add support for test abort
-Message-ID: <20200418172554.GA802865@mwanda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9595 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=705 adultscore=0
- spamscore=0 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180146
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9595 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
- suspectscore=3 mlxlogscore=773 impostorscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180146
+        Sat, 18 Apr 2020 19:27:02 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B0EC061A0C
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2020 16:27:01 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id a7so2581486pju.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2020 16:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id;
+        bh=V1iSNi3FjSbFymrjsWR16L5sHfocV0iKd0ObfqLdCDE=;
+        b=E94FC9JeOPlEtesZY7pnic5oqXC1UEm6VlEGtC1YgAScMnSkB2LJY+O5H4diMpuWHL
+         d/no2M6eNI/dQY9j/v6SSyhcGs+aK1ScSuDvksCyuVmfHcNTBZoPi8j55p0j3j3YBUoZ
+         Dp5qeYnqs74jXMUqZHwc0BsGZWmWM+mqnvNTg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=V1iSNi3FjSbFymrjsWR16L5sHfocV0iKd0ObfqLdCDE=;
+        b=MWEGEAf5Drbx9Ck7lnVDJWouTBPl3Is6yUmmDcpJSIEGH8FYWYZsAnF1ey9wn96/i5
+         AwNeqz5BhXvDW2XYtm5klLcvjbyQt/kS68g7pJj/TPSvskqjaOFAZ947jR9tKttBzpLz
+         PzXs426Ln6c15sfvl+Bx2bvCTy7of5ez1nQ0uJfOZoMbPlxnozfiCwHZTzPuIj8Bd+Bs
+         nISn2qTXxNdE9vsZP5wFRFMRswcV92LLI9XtZpQV/LP3Ohlm31wDqG1A1CBB79XJTHVJ
+         Jr/Sj6gpiHgQ2n2+ZTt0rCSTgTfJW23rkjtCYsJoxhjXBVcaC+fWbVPrZJlFTI4kR24u
+         dHsw==
+X-Gm-Message-State: AGi0PuYW+7uXUzY7iE7tfBAiHf+O3e/SjVfWxFwroFoozWBUqHaCAwFC
+        Q55lIgvAoECTCEKU1Dwrp93dYw==
+X-Google-Smtp-Source: APiQypJUg540AgQ0gfERSdqKG3/UO/88BFVywKnBq0ADggzskh4vKGlmvKwDR8ejYqwi3brMfHgq9Q==
+X-Received: by 2002:a17:902:a511:: with SMTP id s17mr10176108plq.33.1587252420747;
+        Sat, 18 Apr 2020 16:27:00 -0700 (PDT)
+Received: from localhost.localdomain (c-73-53-94-119.hsd1.wa.comcast.net. [73.53.94.119])
+        by smtp.gmail.com with ESMTPSA id u7sm21429323pfu.90.2020.04.18.16.26.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Apr 2020 16:27:00 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/2] bpf, x86: Fix encoding for lower 8-bit registers in BPF_STX BPF_B
+Date:   Sat, 18 Apr 2020 16:26:53 -0700
+Message-Id: <20200418232655.23870-1-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Brendan Higgins,
+This patch fixes an encoding bug in emit_stx for BPF_B when the source
+register is BPF_REG_FP.
 
-The patch 5f3e06208920: "kunit: test: add support for test abort"
-from Sep 23, 2019, leads to the following static checker warning:
+The current implementation for BPF_STX BPF_B in emit_stx saves one REX
+byte when the operands can be encoded using Mod-R/M alone. The lower 8
+bits of registers %rax, %rbx, %rcx, and %rdx can be accessed without using
+a REX prefix via %al, %bl, %cl, and %dl, respectively. Other registers,
+(e.g., %rsi, %rdi, %rbp, %rsp) require a REX prefix to use their 8-bit
+equivalents (%sil, %dil, %bpl, %spl).
 
-	lib/kunit/try-catch.c:93 kunit_try_catch_run()
-	misplaced newline? '    # %s: Unknown error: %d
+The current code checks if the source for BPF_STX BPF_B is BPF_REG_1
+or BPF_REG_2 (which map to %rdi and %rsi), in which case it emits the
+required REX prefix. However, it misses the case when the source is
+BPF_REG_FP (mapped to %rbp).
 
-lib/kunit/try-catch.c
-    58  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-    59  {
-    60          DECLARE_COMPLETION_ONSTACK(try_completion);
-    61          struct kunit *test = try_catch->test;
-    62          struct task_struct *task_struct;
-    63          int exit_code, time_remaining;
-    64  
-    65          try_catch->context = context;
-    66          try_catch->try_completion = &try_completion;
-    67          try_catch->try_result = 0;
-    68          task_struct = kthread_run(kunit_generic_run_threadfn_adapter,
-    69                                    try_catch,
-    70                                    "kunit_try_catch_thread");
-    71          if (IS_ERR(task_struct)) {
-    72                  try_catch->catch(try_catch->context);
-    73                  return;
-    74          }
-    75  
-    76          time_remaining = wait_for_completion_timeout(&try_completion,
-    77                                                       kunit_test_timeout());
-    78          if (time_remaining == 0) {
-    79                  kunit_err(test, "try timed out\n");
-                                                      ^^
-The kunit_log() macro adds its own newline.  Most of the callers add
-a newline.  It should be the callers add a newline because that's how
-everything else works in the kernel.
+The result is that BPF_STX BPF_B with BPF_REG_FP as the source operand
+will read from register %ch instead of the correct %bpl. This patch fixes
+the problem by fixing and refactoring the check on which registers need
+the extra REX byte. Since no BPF registers map to %rsp, there is no need
+to handle %spl.
 
-The dev_printk() stuff will sometimes add a newline, but never a
-duplicate newline.  In other words, it's slightly complicated.  But
-basically the caller should add a newline.
+Fixes: 622582786c9e0 ("net: filter: x86: internal BPF JIT")
+Signed-off-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
-    80                  try_catch->try_result = -ETIMEDOUT;
-    81          }
-    82  
-    83          exit_code = try_catch->try_result;
-    84  
-    85          if (!exit_code)
-    86                  return;
-    87  
-    88          if (exit_code == -EFAULT)
-    89                  try_catch->try_result = 0;
-    90          else if (exit_code == -EINTR)
-    91                  kunit_err(test, "wake_up_process() was never called\n");
-                                                                           ^^
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 5ea7c2cf7ab4..42b6709e6dc7 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -158,6 +158,19 @@ static bool is_ereg(u32 reg)
+ 			     BIT(BPF_REG_AX));
+ }
+ 
++/*
++ * is_ereg_8l() == true if BPF register 'reg' is mapped to access x86-64
++ * lower 8-bit registers dil,sil,bpl,spl,r8b..r15b, which need extra byte
++ * of encoding. al,cl,dl,bl have simpler encoding.
++ */
++static bool is_ereg_8l(u32 reg)
++{
++	return is_ereg(reg) ||
++	    (1 << reg) & (BIT(BPF_REG_1) |
++			  BIT(BPF_REG_2) |
++			  BIT(BPF_REG_FP));
++}
++
+ static bool is_axreg(u32 reg)
+ {
+ 	return reg == BPF_REG_0;
+@@ -598,9 +611,8 @@ static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ 	switch (size) {
+ 	case BPF_B:
+ 		/* Emit 'mov byte ptr [rax + off], al' */
+-		if (is_ereg(dst_reg) || is_ereg(src_reg) ||
+-		    /* We have to add extra byte for x86 SIL, DIL regs */
+-		    src_reg == BPF_REG_1 || src_reg == BPF_REG_2)
++		if (is_ereg(dst_reg) || is_ereg_8l(src_reg))
++			/* Add extra byte for eregs or SIL,DIL,BPL in src_reg */
+ 			EMIT2(add_2mod(0x40, dst_reg, src_reg), 0x88);
+ 		else
+ 			EMIT1(0x88);
+-- 
+2.17.1
 
-    92          else if (exit_code)
-    93                  kunit_err(test, "Unknown error: %d\n", exit_code);
-                                                          ^^
-
-    94  
-    95          try_catch->catch(try_catch->context);
-    96  }
-
-regards,
-dan carpenter
