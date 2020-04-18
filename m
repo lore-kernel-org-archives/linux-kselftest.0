@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1936AC38A2B
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 03:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0713FC2BA19
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 03:19:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EEC5522201
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 03:18:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D795721D94
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Apr 2020 03:18:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LiW2hxPr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JS/kAYv0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgDRDSw (ORCPT
+        id S1726061AbgDRDS6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Apr 2020 23:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        Fri, 17 Apr 2020 23:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725910AbgDRDSv (ORCPT
+        by vger.kernel.org with ESMTP id S1725887AbgDRDS5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Apr 2020 23:18:51 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8986C061A0F
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2020 20:18:51 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id c13so3551930pga.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2020 20:18:51 -0700 (PDT)
+        Fri, 17 Apr 2020 23:18:57 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE18CC061A0C
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2020 20:18:56 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id i21so528126pgl.19
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2020 20:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=YYm2bwRG5pyX36H9W2qzKGsVlXXcAWI4Cgt0/J71ouQ=;
-        b=LiW2hxPrMSFm5fkJ/9vZyBBYXqojgrvK/l/37unhFUBsSG89eT8P18Bn4TQ/z6iVDu
-         n3YX2GjHmTnWnP4bln5edZuU2i6EsqMbPrKRk3PCxyNe6K93ETh0msABkDwOSd6QKmVO
-         ROtjQCbTQhPdJge29AAITIu9CVABnotNlB0u+5W7oMD8cM8wRflSWzZ4hLcoYeRtIOI9
-         EDOr0j+mJVZwJWPf3dPIB/CpsLy71rCy7ZqjADTOokKVj1+kjB3AvTPR7LjKEYGLcT5N
-         wMOwztkYtGr59RAoamUM9cDex7ekOldD+XjM/yLWm3ZxIaSLMlcjZECp3fEITZg8BolY
-         U4AQ==
+        bh=fsQ6zkM7uoUMiPnsVxSRYiwCGVhnWM0mTHH2Nkqj5zo=;
+        b=JS/kAYv0bCGD7ghxIICrHhV6O1k6xFCnZ7GMKqlZpjiBgcoJUj3wsm7iUi2Dz7IquY
+         hPINCzmhGabkrLB2vUjaGYrSXuOcF5dB0tbFYfzcuw/cFqJmy4Gn8Gs3/+8en/p9cU48
+         t4KeDZnK5hx1xWTBtfSfhA+psL+j2PeR1AOUewseCP8baiMhVJBlOPiyKQEa647DtvUf
+         BXN46tlEBbV21NLpCt3uVOKX5CMHklh9ZoBvRSApLAyKNcCF8LVRPCGBNsNJpOFn2IEa
+         zhWbfUDRaWlAN+zQHMzbokY/Z63QwQ7HBa/TxnB687aWivYgtuwLxORG8rleo8WgA0/m
+         0VHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=YYm2bwRG5pyX36H9W2qzKGsVlXXcAWI4Cgt0/J71ouQ=;
-        b=mgHBBO7v39saotgOSM3kZjYo3d0uHe2C1i0AWZQiGqgaYqCimtrMBziCvTKELtpiM7
-         eugDjPqc6GKf0nKu0iJg4L8nsWOBTjij0uOH6zkPiyzr9LnIhCwDXPCJosnuxC0QKYUw
-         GVoNo7OPtoMLZAhw1DJwCaGJAHYvBnsjvbJqSCq7g8GQRMCto4i9jO/O8oHJVbT1ukyF
-         siA2lun/Na6F5zGKO6URdSROQg9vbd9aBTwzRGXb72ro+egnNXQ/udIJdV8Qi1gzq48r
-         K652QgdLSF/OvwFdKD4ziSb79ZzGHtpl6h77kHCf4WpsDypxE99gnDCpv5NFDyXTgMod
-         RfPQ==
-X-Gm-Message-State: AGi0Pua8ka8nm+IWJu4aT3Mre2li70D+DgGV/a2enr7zpUEytv1gV+wo
-        Dq4y9VciDnOr8nAhQNIFqAZWTI7Un3PJSw==
-X-Google-Smtp-Source: APiQypIiWr7gdvrvRuauItuBDUTc4iMcUcAfx5E8Q9SS19vQRLttPx3IHadEIsUKIO6b0gywQCQTtixmn0Ujrw==
-X-Received: by 2002:a17:90a:348f:: with SMTP id p15mr8245808pjb.115.1587179931314;
- Fri, 17 Apr 2020 20:18:51 -0700 (PDT)
-Date:   Fri, 17 Apr 2020 20:18:30 -0700
+        bh=fsQ6zkM7uoUMiPnsVxSRYiwCGVhnWM0mTHH2Nkqj5zo=;
+        b=mxm2mR+YjqNC/McIrJWobVO0HXbswD2wNs3S5hZ7RrPFQxVPrK1cVFzH72aMpmh/eg
+         ztDpoj/RQecUebpkcUTt49dpp2fsjyoP4ppEw0Y6OvaPUZQZwoxOclZ/tW4pTH+r9ZTu
+         FewISEawApdMkYUV1/aK6C/Zhwz4TzoWmWITOeZCivdgBuW9dR95hQkjtwaPgHtjIL3f
+         ZmjV/ZIfIRKIjbToK6XsWZQsH8lX0Q4AdBnoA1aOUqWkVbtA26pSZlXqquSzhIBhxwlZ
+         11LTH0CcyMFohEVYyBSTD1gMYxhO9EFd7cXXa0bj/Udyrym59cL0FUuqUJ4WIDJiYmkA
+         vBKA==
+X-Gm-Message-State: AGi0PuaP+C98cUN98fXMGg5IkYEjKDxktAOPyb0R+C0BcKEwZuh9Evsf
+        mcGHLiM9ZNrbf/2F8gofJw79U/DvbWjMJA==
+X-Google-Smtp-Source: APiQypJToXA6KorNY8OJq7EE7Oef49xa3b4K1js/y01Pd5WOz27y7u0RrUrRW2a7LEWiRejVuyuGJCRi5RTAfw==
+X-Received: by 2002:a17:90a:7486:: with SMTP id p6mr7991333pjk.62.1587179936368;
+ Fri, 17 Apr 2020 20:18:56 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 20:18:32 -0700
 In-Reply-To: <20200418031833.234942-1-davidgow@google.com>
-Message-Id: <20200418031833.234942-3-davidgow@google.com>
+Message-Id: <20200418031833.234942-5-davidgow@google.com>
 Mime-Version: 1.0
 References: <20200418031833.234942-1-davidgow@google.com>
 X-Mailer: git-send-email 2.26.1.301.g55bc3eb7cb9-goog
-Subject: [PATCH v6 2/5] KUnit: KASAN Integration
+Subject: [PATCH v6 4/5] KASAN: Testing Documentation
 From:   David Gow <davidgow@google.com>
 To:     trishalfonso@google.com, brendanhiggins@google.com,
         aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
@@ -69,8 +69,7 @@ To:     trishalfonso@google.com, brendanhiggins@google.com,
         vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -79,237 +78,94 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Patricia Alfonso <trishalfonso@google.com>
 
-Integrate KASAN into KUnit testing framework.
-        - Fail tests when KASAN reports an error that is not expected
-        - Use KUNIT_EXPECT_KASAN_FAIL to expect a KASAN error in KASAN
-	tests
-        - Expected KASAN reports pass tests and are still printed when run
-        without kunit_tool (kunit_tool still bypasses the report due to the
-        test passing)
-	- KUnit struct in current task used to keep track of the current
-	test from KASAN code
-
-Make use of "[PATCH v3 kunit-next 1/2] kunit: generalize
-kunit_resource API beyond allocated resources" and "[PATCH v3
-kunit-next 2/2] kunit: add support for named resources" from Alan
-Maguire [1]
-        - A named resource is added to a test when a KASAN report is
-         expected
-        - This resource contains a struct for kasan_data containing
-        booleans representing if a KASAN report is expected and if a
-        KASAN report is found
-
-[1] (https://lore.kernel.org/linux-kselftest/1583251361-12748-1-git-send-email-alan.maguire@oracle.com/T/#t)
+Include documentation on how to test KASAN using CONFIG_TEST_KASAN and
+CONFIG_TEST_KASAN_USER.
 
 Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
 Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- include/kunit/test.h  |  5 +++++
- include/linux/kasan.h |  6 ++++++
- lib/kunit/test.c      | 13 ++++++++-----
- lib/test_kasan.c      | 43 ++++++++++++++++++++++++++++++++++++++++---
- mm/kasan/report.c     | 35 +++++++++++++++++++++++++++++++++++
- 5 files changed, 94 insertions(+), 8 deletions(-)
+ Documentation/dev-tools/kasan.rst | 70 +++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index ac59d18e6bab..1dc3d118f64b 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -225,6 +225,11 @@ struct kunit {
- 	struct list_head resources; /* Protected by lock. */
- };
+diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+index c652d740735d..74fa6aa0f0df 100644
+--- a/Documentation/dev-tools/kasan.rst
++++ b/Documentation/dev-tools/kasan.rst
+@@ -281,3 +281,73 @@ unmapped. This will require changes in arch-specific code.
  
-+static inline void kunit_set_failure(struct kunit *test)
-+{
-+	WRITE_ONCE(test->success, false);
-+}
+ This allows ``VMAP_STACK`` support on x86, and can simplify support of
+ architectures that do not have a fixed module region.
 +
- void kunit_init_test(struct kunit *test, const char *name, char *log);
- 
- int kunit_run_tests(struct kunit_suite *suite);
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index 31314ca7c635..d58db2f67f43 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -14,6 +14,12 @@ struct task_struct;
- #include <asm/kasan.h>
- #include <asm/pgtable.h>
- 
-+/* kasan_data struct is used in KUnit tests for KASAN expected failures */
-+struct kunit_kasan_expectation {
-+	bool report_expected;
-+	bool report_found;
-+};
++CONFIG_TEST_KASAN_KUNIT & CONFIG_TEST_KASAN_MODULE
++--------------------------------------------------
 +
- extern unsigned char kasan_early_shadow_page[PAGE_SIZE];
- extern pte_t kasan_early_shadow_pte[PTRS_PER_PTE];
- extern pmd_t kasan_early_shadow_pmd[PTRS_PER_PMD];
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 2cb7c6220a00..030a3281591e 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -10,16 +10,12 @@
- #include <linux/kernel.h>
- #include <linux/kref.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched.h>
- 
- #include "debugfs.h"
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
--static void kunit_set_failure(struct kunit *test)
--{
--	WRITE_ONCE(test->success, false);
--}
--
- static void kunit_print_tap_version(void)
- {
- 	static bool kunit_has_printed_tap_version;
-@@ -288,6 +284,10 @@ static void kunit_try_run_case(void *data)
- 	struct kunit_suite *suite = ctx->suite;
- 	struct kunit_case *test_case = ctx->test_case;
- 
-+#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
-+	current->kunit_test = test;
-+#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
++``CONFIG_TEST_KASAN_KUNIT`` utilizes the KUnit Test Framework for testing.
++This means each test focuses on a small unit of functionality and
++there are a few ways these tests can be run.
 +
- 	/*
- 	 * kunit_run_case_internal may encounter a fatal error; if it does,
- 	 * abort will be called, this thread will exit, and finally the parent
-@@ -603,6 +603,9 @@ void kunit_cleanup(struct kunit *test)
- 		spin_unlock(&test->lock);
- 		kunit_remove_resource(test, res);
- 	}
-+#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
-+	current->kunit_test = NULL;
-+#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
- }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
- 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index e3087d90e00d..a44d3f8a499c 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -23,10 +23,47 @@
- 
- #include <asm/page.h>
- 
--/*
-- * Note: test functions are marked noinline so that their names appear in
-- * reports.
-+#include <kunit/test.h>
++Each test will print the KASAN report if an error is detected and then
++print the number of the test and the status of the test:
 +
-+static struct kunit_resource resource;
-+static struct kunit_kasan_expectation fail_data;
-+static bool multishot;
++pass::
 +
-+static int kasan_test_init(struct kunit *test)
-+{
-+	/*
-+	 * Temporarily enable multi-shot mode and set panic_on_warn=0.
-+	 * Otherwise, we'd only get a report for the first case.
-+	 */
-+	multishot = kasan_save_enable_multi_shot();
++        ok 28 - kmalloc_double_kzfree
++or, if kmalloc failed::
 +
-+	return 0;
-+}
++        # kmalloc_large_oob_right: ASSERTION FAILED at lib/test_kasan.c:163
++        Expected ptr is not null, but is
++        not ok 4 - kmalloc_large_oob_right
++or, if a KASAN report was expected, but not found::
 +
-+static void kasan_test_exit(struct kunit *test)
-+{
-+	kasan_restore_multi_shot(multishot);
-+}
++        # kmalloc_double_kzfree: EXPECTATION FAILED at lib/test_kasan.c:629
++        Expected kasan_data->report_expected == kasan_data->report_found, but
++        kasan_data->report_expected == 1
++        kasan_data->report_found == 0
++        not ok 28 - kmalloc_double_kzfree
 +
-+/**
-+ * KUNIT_EXPECT_KASAN_FAIL() - Causes a test failure when the expression does
-+ * not cause a KASAN error. This uses a KUnit resource named "kasan_data." Do
-+ * Do not use this name for a KUnit resource outside here.
-+ *
-  */
-+#define KUNIT_EXPECT_KASAN_FAIL(test, condition) do { \
-+	fail_data.report_expected = true; \
-+	fail_data.report_found = false; \
-+	kunit_add_named_resource(test, \
-+				NULL, \
-+				NULL, \
-+				&resource, \
-+				"kasan_data", &fail_data); \
-+	condition; \
-+	KUNIT_EXPECT_EQ(test, \
-+			fail_data.report_expected, \
-+			fail_data.report_found); \
-+} while (0)
- 
- static noinline void __init kmalloc_oob_right(void)
- {
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index 80f23c9da6b0..0c206bbf9cb3 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -32,6 +32,8 @@
- 
- #include <asm/sections.h>
- 
-+#include <kunit/test.h>
++All test statuses are tracked as they run and an overall status will
++be printed at the end::
 +
- #include "kasan.h"
- #include "../slab.h"
- 
-@@ -463,12 +465,37 @@ bool report_enabled(void)
- 	return !test_and_set_bit(KASAN_BIT_REPORTED, &kasan_flags);
- }
- 
-+#if IS_ENABLED(CONFIG_KUNIT)
-+static void kasan_update_kunit_status(struct kunit *cur_test)
-+{
-+	struct kunit_resource *resource;
-+	struct kunit_kasan_expectation *kasan_data;
++        ok 1 - kasan_kunit_test
 +
-+	resource = kunit_find_named_resource(cur_test, "kasan_data");
++or::
 +
-+	if (!resource) {
-+		kunit_set_failure(cur_test);
-+		return;
-+	}
++        not ok 1 - kasan_kunit_test
 +
-+	kasan_data = (struct kunit_kasan_expectation *)resource->data;
-+	kasan_data->report_found = true;
-+	kunit_put_resource(resource);
-+}
-+#endif /* IS_ENABLED(CONFIG_KUNIT) */
++(1) Loadable Module
++~~~~~~~~~~~~~~~~~~~~
 +
- void kasan_report_invalid_free(void *object, unsigned long ip)
- {
- 	unsigned long flags;
- 	u8 tag = get_tag(object);
- 
- 	object = reset_tag(object);
++With ``CONFIG_KUNIT`` enabled, ``CONFIG_TEST_KASAN_KUNIT`` can be built as
++a loadable module and run on any architecture that supports KASAN
++using something like insmod or modprobe.
 +
-+#if IS_ENABLED(CONFIG_KUNIT)
-+	if (current->kunit_test)
-+		kasan_update_kunit_status(current->kunit_test);
-+#endif /* IS_ENABLED(CONFIG_KUNIT) */
++(2) Built-In
++~~~~~~~~~~~~~
 +
- 	start_report(&flags);
- 	pr_err("BUG: KASAN: double-free or invalid-free in %pS\n", (void *)ip);
- 	print_tags(tag, object);
-@@ -486,6 +513,14 @@ void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned lon
- 	void *untagged_addr;
- 	unsigned long flags;
- 
-+	if (likely(!report_enabled()))
-+		return;
++With ``CONFIG_KUNIT`` built-in, ``CONFIG_TEST_KASAN_KUNIT`` can be built-in
++on any architecure that supports KASAN. These and any other KUnit
++tests enabled will run and print the results at boot as a late-init
++call.
 +
-+#if IS_ENABLED(CONFIG_KUNIT)
-+	if (current->kunit_test)
-+		kasan_update_kunit_status(current->kunit_test);
-+#endif /* IS_ENABLED(CONFIG_KUNIT) */
++(3) Using kunit_tool
++~~~~~~~~~~~~~~~~~~~~~
 +
- 	disable_trace_on_warning();
- 
- 	tagged_addr = (void *)addr;
++With ``CONFIG_KUNIT`` and ``CONFIG_TEST_KASAN`` built-in, we can also
++use kunit_tool to see the results of these along with other KUnit
++tests in a more readable way. This will not print the KASAN reports
++of tests that passed. Use `KUnit documentation <https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html>`_ for more up-to-date
++information on kunit_tool.
++
++.. _KUnit: https://www.kernel.org/doc/html/latest/dev-tools/kunit/index.html
++
++``CONFIG_TEST_KASAN_MODULE`` is a set of KASAN tests that could not be
++converted to KUnit. These tests can be run only as a module with
++``CONFIG_TEST_KASAN_MODULE`` built as a loadable module and
++``CONFIG_KASAN`` built-in. The type of error expected and the
++function being run is printed before the expression expected to give
++an error. Then the error is printed, if found, and that test
++should be interpretted to pass only if the error was the one expected
++by the test.
 -- 
 2.26.1.301.g55bc3eb7cb9-goog
 
