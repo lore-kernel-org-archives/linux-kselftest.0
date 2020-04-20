@@ -2,143 +2,331 @@ Return-Path: <SRS0=PV9d=6E=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 464B4C3815B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C25ABC3815B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:40:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F59B20775
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:11:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C23F20B1F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:40:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AOyItZaa"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gt5U9Mnv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726432AbgDTQLk (ORCPT
+        id S1726857AbgDTQkS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Apr 2020 12:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        Mon, 20 Apr 2020 12:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725958AbgDTQLk (ORCPT
+        by vger.kernel.org with ESMTP id S1726563AbgDTQkK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:11:40 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7885BC061A0C
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:11:40 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id h69so5277975pgc.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:11:40 -0700 (PDT)
+        Mon, 20 Apr 2020 12:40:10 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E80C03C1AC
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:46 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id u127so236560wmg.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KEO68H9LWxUP8e7V9qIEZ4RFCwqXB+4bdYHYEcs5ssU=;
-        b=AOyItZaa1cf6ofqtJl1E1UyuujFCehxcBbtHwHSAHnRzg2vnQXHPdHcChTJn5kxN6B
-         EeaQtKuUJoHl6IN/NzdZb4yITxbBeodZg09MMNGygDJi6GLVqWdqKEkVocOUohoHW2ZL
-         vN1pg3ku8nh/exZJjBqI4vltQcqt+HHcThFvVI0908UFCHXjuRwaA+slyK9q+5X5EzLx
-         YMf84ZbB0tMIXS0iHwdPDYsVQrNj9Au3ZA0hUd4wwmFWAlHATg6AAwNWvuES33cH/Z9V
-         PxEP15DwFmt8eP/WH/znIkz5rx4ogwMRZS9Tlsyf6lLjKD7jZmvPlrl3uUgpUnu79pPH
-         5EJw==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=fZI4e7IGI7fDUYv3Gq5MrqpKh7M1c4gJcLWvsyHzpwk=;
+        b=gt5U9Mnvb+k7//zpouiwxM6Sb2jmOzN2UIQod3Q77DecNRdCRZBR2Wiszq+0Mtsl3i
+         CBIvfBntklZm7e/MAqtR521ezNYML6Gb1FPH9n3dZ9wRClB25FpeHWlW+LtkXHYgnTVv
+         ECyKt9gKhe86EClxXLhNNQojY5RjJhmkTPrj0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KEO68H9LWxUP8e7V9qIEZ4RFCwqXB+4bdYHYEcs5ssU=;
-        b=O7/CbXrYZt8BOx4OuiqXFNjnnto8XZUi5iL641zKhtvdJ6LZqqhr3hDnAkqpUhaP7L
-         4kY97HtiswbYvsNP5hZPU8x06zzXI7Y3LAR/xAFkxQlGCWMU7N8ziOfmgv8rKNqcMLy6
-         h8+mHyvdxfhgdOI8hm/KoUiVo716m+wb6no6OlRZzKuKAjcgIUvR0w7NA0KIBLmxNgSX
-         6gR9l5n7dnzDro2BWrhuLoFTbzDrb+b1Ub4K1rDkhQS9KIeC9q3cz7WEk1ZZf+vBUEV8
-         tL4kwoqtck38uSUnC61hi3Kf+G6OU7EWIQTTj5fufQ3czmX0XgF+aToopgBYYRPziUtu
-         naWg==
-X-Gm-Message-State: AGi0PuaJJ5jiWiGdr2men04uc2k3S7vXfvOi1g7PQEzWZkvcfSGTMsSc
-        cia/HDko+cl06Hm/kMoYJUVlSwkRdnHsiVqIewnYdAA4
-X-Google-Smtp-Source: APiQypLk63D8vwXRkZXdPPbMeBIl9gET7jIvY60vpotreHbVObfVflSlVmvHjtNKUDloHkgGG6Vc+AW80Pd0gfR8JaQ=
-X-Received: by 2002:a63:1007:: with SMTP id f7mr15218133pgl.384.1587399099757;
- Mon, 20 Apr 2020 09:11:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200418172554.GA802865@mwanda>
-In-Reply-To: <20200418172554.GA802865@mwanda>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 20 Apr 2020 09:11:28 -0700
-Message-ID: <CAFd5g46mUAbxtnnEMx2+-mQbryFpr+SENgcvV34kcKsYNy2s_Q@mail.gmail.com>
-Subject: Re: [bug report] kunit: test: add support for test abort
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=fZI4e7IGI7fDUYv3Gq5MrqpKh7M1c4gJcLWvsyHzpwk=;
+        b=Rvf3UM5TobRKACVUfd/PeWgwzvtTe8XF/rUiVBDr2sF44ouHotRCNvmjVl5zlAR9T5
+         Y6tUK2PNnhKJg16aQAFNowRsLebNzuVIsttqozOn6RT79lGG2Sf/JYHyne78LIoUA0u8
+         bqBnKaI5bGDA3aeNCbzTugJ9W4FLmbxp7G+taveSWCJBOxnxFtPVE/WYa2eMSfax4uD8
+         7sqh+6xNVwE9jEq/CG+7KeAAAe+kJpCZM/4yhhYbrWAiDw0BFZMSQejY7Y4OXsbbMhko
+         lqWGVRsLEjvHurOnHUuyHtpxNr8wlLzB3OcxGn3+bmLlJQtsCR9WNZ8YBguQt3pYVLWf
+         rISA==
+X-Gm-Message-State: AGi0PubmwKj11IcfdlOhQvTdm4VQvmcW9oko1S9kNkU5H5/9JW3aNbiI
+        TPUTgIJ97n7VSiHrofxsCszF6A==
+X-Google-Smtp-Source: APiQypJSvqvsB+317L28K8tG9LbgYrt24JhA/dunC6hlHML0VxNuKXVt7ERZXW1iOunYIIbNUKUg4g==
+X-Received: by 2002:a1c:abc3:: with SMTP id u186mr175515wme.42.1587400125333;
+        Mon, 20 Apr 2020 09:28:45 -0700 (PDT)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id 36sm14882wrc.35.2020.04.20.09.28.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 09:28:44 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH v3 3/7] test_firmware: add partial read support for request_firmware_into_buf
+Date:   Mon, 20 Apr 2020 09:28:05 -0700
+Message-Id: <20200420162809.17529-4-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200420162809.17529-1-scott.branden@broadcom.com>
+References: <20200420162809.17529-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 10:26 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> Hello Brendan Higgins,
->
-> The patch 5f3e06208920: "kunit: test: add support for test abort"
-> from Sep 23, 2019, leads to the following static checker warning:
->
->         lib/kunit/try-catch.c:93 kunit_try_catch_run()
->         misplaced newline? '    # %s: Unknown error: %d
->
-> lib/kunit/try-catch.c
->     58  void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
->     59  {
->     60          DECLARE_COMPLETION_ONSTACK(try_completion);
->     61          struct kunit *test = try_catch->test;
->     62          struct task_struct *task_struct;
->     63          int exit_code, time_remaining;
->     64
->     65          try_catch->context = context;
->     66          try_catch->try_completion = &try_completion;
->     67          try_catch->try_result = 0;
->     68          task_struct = kthread_run(kunit_generic_run_threadfn_adapter,
->     69                                    try_catch,
->     70                                    "kunit_try_catch_thread");
->     71          if (IS_ERR(task_struct)) {
->     72                  try_catch->catch(try_catch->context);
->     73                  return;
->     74          }
->     75
->     76          time_remaining = wait_for_completion_timeout(&try_completion,
->     77                                                       kunit_test_timeout());
->     78          if (time_remaining == 0) {
->     79                  kunit_err(test, "try timed out\n");
->                                                       ^^
-> The kunit_log() macro adds its own newline.  Most of the callers add
-> a newline.  It should be the callers add a newline because that's how
-> everything else works in the kernel.
+Add additional hooks to test_firmware to pass in support
+for partial file read using request_firmware_into_buf.
+buf_size: size of buffer to request firmware into
+partial: indicates that a partial file request is being made
+file_offset: to indicate offset into file to request
 
-Whoops, I thought I removed that extra newline.
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+---
+ lib/test_firmware.c | 146 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 136 insertions(+), 10 deletions(-)
 
-Thanks! I will look into this.
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 55176b0a8318..d1d2b48ed40e 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -50,6 +50,9 @@ struct test_batched_req {
+  * @name: the name of the firmware file to look for
+  * @into_buf: when the into_buf is used if this is true
+  *	request_firmware_into_buf() will be used instead.
++ * @buf_size: size of buf to allocate when into_buf is true
++ * @file_offset: file offset to request when calling request_firmware_into_buf
++ * @partial: partial read flag value when calling request_firmware_into_buf
+  * @sync_direct: when the sync trigger is used if this is true
+  *	request_firmware_direct() will be used instead.
+  * @send_uevent: whether or not to send a uevent for async requests
+@@ -89,6 +92,9 @@ struct test_batched_req {
+ struct test_config {
+ 	char *name;
+ 	bool into_buf;
++	size_t buf_size;
++	size_t file_offset;
++	bool partial;
+ 	bool sync_direct;
+ 	bool send_uevent;
+ 	u8 num_requests;
+@@ -183,6 +189,9 @@ static int __test_firmware_config_init(void)
+ 	test_fw_config->num_requests = TEST_FIRMWARE_NUM_REQS;
+ 	test_fw_config->send_uevent = true;
+ 	test_fw_config->into_buf = false;
++	test_fw_config->buf_size = TEST_FIRMWARE_BUF_SIZE;
++	test_fw_config->file_offset = 0;
++	test_fw_config->partial = false;
+ 	test_fw_config->sync_direct = false;
+ 	test_fw_config->req_firmware = request_firmware;
+ 	test_fw_config->test_result = 0;
+@@ -236,28 +245,35 @@ static ssize_t config_show(struct device *dev,
+ 			dev_name(dev));
+ 
+ 	if (test_fw_config->name)
+-		len += scnprintf(buf+len, PAGE_SIZE - len,
++		len += scnprintf(buf + len, PAGE_SIZE - len,
+ 				"name:\t%s\n",
+ 				test_fw_config->name);
+ 	else
+-		len += scnprintf(buf+len, PAGE_SIZE - len,
++		len += scnprintf(buf + len, PAGE_SIZE - len,
+ 				"name:\tEMTPY\n");
+ 
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"num_requests:\t%u\n", test_fw_config->num_requests);
+ 
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"send_uevent:\t\t%s\n",
+ 			test_fw_config->send_uevent ?
+ 			"FW_ACTION_HOTPLUG" :
+ 			"FW_ACTION_NOHOTPLUG");
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"into_buf:\t\t%s\n",
+ 			test_fw_config->into_buf ? "true" : "false");
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
++			"buf_size:\t%zu\n", test_fw_config->buf_size);
++	len += scnprintf(buf + len, PAGE_SIZE - len,
++			"file_offset:\t%zu\n", test_fw_config->file_offset);
++	len += scnprintf(buf + len, PAGE_SIZE - len,
++			"partial:\t\t%s\n",
++			test_fw_config->partial ? "true" : "false");
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"sync_direct:\t\t%s\n",
+ 			test_fw_config->sync_direct ? "true" : "false");
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"read_fw_idx:\t%u\n", test_fw_config->read_fw_idx);
+ 
+ 	mutex_unlock(&test_fw_mutex);
+@@ -315,6 +331,30 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
++static int test_dev_config_update_size_t(const char *buf,
++					 size_t size,
++					 size_t *cfg)
++{
++	int ret;
++	long new;
++
++	ret = kstrtol(buf, 10, &new);
++	if (ret)
++		return ret;
++
++	mutex_lock(&test_fw_mutex);
++	*(size_t *)cfg = new;
++	mutex_unlock(&test_fw_mutex);
++
++	/* Always return full write size even if we didn't consume all */
++	return size;
++}
++
++static ssize_t test_dev_config_show_size_t(char *buf, size_t val)
++{
++	return snprintf(buf, PAGE_SIZE, "%zu\n", val);
++}
++
+ static ssize_t test_dev_config_show_int(char *buf, int val)
+ {
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+@@ -400,6 +440,83 @@ static ssize_t config_into_buf_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(config_into_buf);
+ 
++static ssize_t config_buf_size_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	int rc;
++
++	mutex_lock(&test_fw_mutex);
++	if (test_fw_config->reqs) {
++		pr_err("Must call release_all_firmware prior to changing config\n");
++		rc = -EINVAL;
++		mutex_unlock(&test_fw_mutex);
++		goto out;
++	}
++	mutex_unlock(&test_fw_mutex);
++
++	rc = test_dev_config_update_size_t(buf, count,
++					   &test_fw_config->buf_size);
++
++out:
++	return rc;
++}
++
++static ssize_t config_buf_size_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	return test_dev_config_show_size_t(buf, test_fw_config->buf_size);
++}
++static DEVICE_ATTR_RW(config_buf_size);
++
++static ssize_t config_file_offset_store(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	int rc;
++
++	mutex_lock(&test_fw_mutex);
++	if (test_fw_config->reqs) {
++		pr_err("Must call release_all_firmware prior to changing config\n");
++		rc = -EINVAL;
++		mutex_unlock(&test_fw_mutex);
++		goto out;
++	}
++	mutex_unlock(&test_fw_mutex);
++
++	rc = test_dev_config_update_size_t(buf, count,
++					   &test_fw_config->file_offset);
++
++out:
++	return rc;
++}
++
++static ssize_t config_file_offset_show(struct device *dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	return test_dev_config_show_size_t(buf, test_fw_config->file_offset);
++}
++static DEVICE_ATTR_RW(config_file_offset);
++
++static ssize_t config_partial_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	return test_dev_config_update_bool(buf,
++					   count,
++					   &test_fw_config->partial);
++}
++
++static ssize_t config_partial_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
++{
++	return test_dev_config_show_bool(buf, test_fw_config->partial);
++}
++static DEVICE_ATTR_RW(config_partial);
++
+ static ssize_t config_sync_direct_store(struct device *dev,
+ 					struct device_attribute *attr,
+ 					const char *buf, size_t count)
+@@ -645,18 +762,24 @@ static int test_fw_run_batch_request(void *data)
+ 
+ 	if (test_fw_config->into_buf) {
+ 		void *test_buf;
++		unsigned int pread_flags;
+ 
+ 		test_buf = kzalloc(TEST_FIRMWARE_BUF_SIZE, GFP_KERNEL);
+ 		if (!test_buf)
+ 			return -ENOSPC;
+ 
++		if (test_fw_config->partial)
++			pread_flags = KERNEL_PREAD_FLAG_PART;
++		else
++			pread_flags = KERNEL_PREAD_FLAG_WHOLE;
++
+ 		req->rc = request_firmware_into_buf(&req->fw,
+ 						    req->name,
+ 						    req->dev,
+ 						    test_buf,
+-						    TEST_FIRMWARE_BUF_SIZE,
+-						    0,
+-						    KERNEL_PREAD_FLAG_WHOLE);
++						    test_fw_config->buf_size,
++						    test_fw_config->file_offset,
++						    pread_flags);
+ 		if (!req->fw)
+ 			kfree(test_buf);
+ 	} else {
+@@ -929,6 +1052,9 @@ static struct attribute *test_dev_attrs[] = {
+ 	TEST_FW_DEV_ATTR(config_name),
+ 	TEST_FW_DEV_ATTR(config_num_requests),
+ 	TEST_FW_DEV_ATTR(config_into_buf),
++	TEST_FW_DEV_ATTR(config_buf_size),
++	TEST_FW_DEV_ATTR(config_file_offset),
++	TEST_FW_DEV_ATTR(config_partial),
+ 	TEST_FW_DEV_ATTR(config_sync_direct),
+ 	TEST_FW_DEV_ATTR(config_send_uevent),
+ 	TEST_FW_DEV_ATTR(config_read_fw_idx),
+-- 
+2.17.1
 
-> The dev_printk() stuff will sometimes add a newline, but never a
-> duplicate newline.  In other words, it's slightly complicated.  But
-> basically the caller should add a newline.
->
->     80                  try_catch->try_result = -ETIMEDOUT;
->     81          }
->     82
->     83          exit_code = try_catch->try_result;
->     84
->     85          if (!exit_code)
->     86                  return;
->     87
->     88          if (exit_code == -EFAULT)
->     89                  try_catch->try_result = 0;
->     90          else if (exit_code == -EINTR)
->     91                  kunit_err(test, "wake_up_process() was never called\n");
->                                                                            ^^
->
->     92          else if (exit_code)
->     93                  kunit_err(test, "Unknown error: %d\n", exit_code);
->                                                           ^^
->
->     94
->     95          try_catch->catch(try_catch->context);
->     96  }
->
-> regards,
-> dan carpenter
