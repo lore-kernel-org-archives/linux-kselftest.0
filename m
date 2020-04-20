@@ -2,59 +2,58 @@ Return-Path: <SRS0=PV9d=6E=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61FFAC38A30
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3FE3C38A30
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:40:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D60A214AF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:40:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7D87520B1F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Apr 2020 16:40:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="fQU+AuwN"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="aum878dL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbgDTQkp (ORCPT
+        id S1726788AbgDTQky (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Apr 2020 12:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        Mon, 20 Apr 2020 12:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726778AbgDTQkI (ORCPT
+        by vger.kernel.org with ESMTP id S1726728AbgDTQkG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:40:08 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C2DC03C1AF
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:52 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id u13so12977398wrp.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:52 -0700 (PDT)
+        Mon, 20 Apr 2020 12:40:06 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36914C061A10
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:30 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id f13so12941223wrm.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2020 09:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=JPCDjhWyTHrRtN+IrpzH/X2NJ9wHqJH6zPza8eFFddg=;
-        b=fQU+AuwN78dS8p/RffRsQD3zEibMPtZpaQi8xF9V558f5Ma++tNgxW/ul2pOIsxnpw
-         ELYOUcKGMdWB8FGbdUepTObNu813OUKjITPCNmwJif28FoUo4vVjflykZGB8le7+MCug
-         zpWNV7+Bn+bx0y5c574pwjj33mLlm+hXsbu1I=
+        h=from:to:cc:subject:date:message-id;
+        bh=y6BXvIfk0R/gZ0twMeBQX3iT31MGytnoVIMSO2j5UM0=;
+        b=aum878dLf5/Y73XSxFsTat47TJHjOeeg6LINMRbsCZDiJlT48QPf0++SYSxzUx6CvN
+         bP3h04KO1U856CbHH3qzKQxtE2Stix58x5qHJ4KxpWNlK7l9DFAVmhwM9jnbliYXnJmb
+         VzRvCxVX2K9PVqBCJYdvPhCKFzQBjxMWyUR+A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=JPCDjhWyTHrRtN+IrpzH/X2NJ9wHqJH6zPza8eFFddg=;
-        b=iB9ifnZAR+8MA7ql8ZTwOI1uBACjxZcysFmkXf8T48XhrsG8mew/Y7d7dmTGIBC448
-         EHXBFhRP7DnWVlIvQkC6LczRKUjcV+4xtHkLDUnu8UAOLiKJow3cPgYETEHOcMHQHNQO
-         HYMzsiOQglN8Vffq7+eCv/qvLfPgNdnpBDYckwzYI6yBGBKUWnwi8rKyAW+4R8LtezHl
-         u7AQMufFNsdq9+u8PpT1vTxRbvWbhl/qUHyVub3ghmSKa1/lkknw1jhofHXcQtI+l9LZ
-         HWp/0C8NT1Pic7ymy6/W8CDlbchbFtv9C7Jp8H0aucdNrRErHQmXbFrc6umPxYDROh5T
-         EAeQ==
-X-Gm-Message-State: AGi0PuZK3DroLDoXvihmKc0VK1f04P7scubmmwxcmh/ZCp/wHfambGvw
-        NjaNGxK1es25O8BIjJD2qFU7yA==
-X-Google-Smtp-Source: APiQypJE17U7UjlhO0thwtwB3HRo9flqpaUhjXQ8JAYBeWvA+eexDk49NW2eFLMN0aesHLyAfKfb/Q==
-X-Received: by 2002:a05:6000:1044:: with SMTP id c4mr21032922wrx.57.1587400130857;
-        Mon, 20 Apr 2020 09:28:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=y6BXvIfk0R/gZ0twMeBQX3iT31MGytnoVIMSO2j5UM0=;
+        b=HHIRrVlJa1nQnLrN2HytWL+pSt7HL+zITPlyWGpHAoiusaSrQIl6tUv6tncJtidBgF
+         Um2qDcuKw8vkrQiSVgcKdoGzPPICCqSC1EZcWJeVwSFyPlNqoE8AWF021Bw9v1HVg9q/
+         ZgITQ23RYZUIYy8IQS4hbA3ZRNwvZFDHRUcWrjO5cXbmK12vR/iaPoGGBE6wBe0nlJrQ
+         LaMugzMHwYAnb1lCVBJzARHp0a/hmwUT4f5WovePr7tPgLJ7jMy5EvBCPAR0PFB/NsNL
+         EVHQSL1xjtI2LJ84jHjMAhBOb+CunF+w7VEw7fPRUVx5Zbeuq6YQiS4gPukD+Y50k2fE
+         WqNw==
+X-Gm-Message-State: AGi0PuYUWXv2CBZUQ7DVHAAGbyTegNHyHzlfA+n3caexbGmOIdszOfJo
+        2L/Xia+3yRBteA87iR1IimGNJA==
+X-Google-Smtp-Source: APiQypK0GeQ9aWgjyRkEgInVfvj7aKu6g0F7ig6yHsVbodIn5FHUwC9TJ6Lfy8OKLglWlXCBO27LYw==
+X-Received: by 2002:a05:6000:110a:: with SMTP id z10mr19362693wrw.389.1587400108867;
+        Mon, 20 Apr 2020 09:28:28 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id 36sm14882wrc.35.2020.04.20.09.28.45
+        by smtp.gmail.com with ESMTPSA id 36sm14882wrc.35.2020.04.20.09.28.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 09:28:50 -0700 (PDT)
+        Mon, 20 Apr 2020 09:28:27 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -75,136 +74,78 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v3 4/7] firmware: test partial file reads of request_firmware_into_buf
-Date:   Mon, 20 Apr 2020 09:28:06 -0700
-Message-Id: <20200420162809.17529-5-scott.branden@broadcom.com>
+Subject: [PATCH v3 0/7] firmware: add partial read support in request_firmware_into_buf
+Date:   Mon, 20 Apr 2020 09:28:02 -0700
+Message-Id: <20200420162809.17529-1-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200420162809.17529-1-scott.branden@broadcom.com>
-References: <20200420162809.17529-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add firmware tests for partial file reads of request_firmware_into_buf.
+This patch series adds partial read support in request_firmware_into_buf.
+In order to accept the enhanced API it has been requested that kernel
+selftests and upstreamed driver utilize the API enhancement and so
+are included in this patch series.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
----
- .../selftests/firmware/fw_filesystem.sh       | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
+Also in this patch series is the addition of a new Broadcom VK driver
+utilizing the new request_firmware_into_buf enhanced API.
 
-diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
-index fcc281373b4d..38e89ba1b4d3 100755
---- a/tools/testing/selftests/firmware/fw_filesystem.sh
-+++ b/tools/testing/selftests/firmware/fw_filesystem.sh
-@@ -149,6 +149,26 @@ config_unset_into_buf()
- 	echo 0 >  $DIR/config_into_buf
- }
- 
-+config_set_buf_size()
-+{
-+	echo $1 >  $DIR/config_buf_size
-+}
-+
-+config_set_file_offset()
-+{
-+	echo $1 >  $DIR/config_file_offset
-+}
-+
-+config_set_partial()
-+{
-+	echo 1 >  $DIR/config_partial
-+}
-+
-+config_unset_partial()
-+{
-+	echo 0 >  $DIR/config_partial
-+}
-+
- config_set_sync_direct()
- {
- 	echo 1 >  $DIR/config_sync_direct
-@@ -207,6 +227,35 @@ read_firmwares()
- 	done
- }
- 
-+read_firmwares_partial()
-+{
-+	if [ "$(cat $DIR/config_into_buf)" == "1" ]; then
-+		fwfile="${FW_INTO_BUF}"
-+	else
-+		fwfile="${FW}"
-+	fi
-+
-+	if [ "$1" = "xzonly" ]; then
-+		fwfile="${fwfile}-orig"
-+	fi
-+
-+	# Strip fwfile down to match partial offset and length
-+	partial_data="$(cat $fwfile)"
-+	partial_data="${partial_data:$2:$3}"
-+
-+	for i in $(seq 0 3); do
-+		config_set_read_fw_idx $i
-+
-+		read_firmware="$(cat $DIR/read_firmware)"
-+
-+		# Verify the contents are what we expect.
-+		if [ $read_firmware != $partial_data ]; then
-+			echo "request #$i: partial firmware was not loaded" >&2
-+			exit 1
-+		fi
-+	done
-+}
-+
- read_firmwares_expect_nofile()
- {
- 	for i in $(seq 0 3); do
-@@ -319,6 +368,21 @@ test_batched_request_firmware_into_buf()
- 	echo "OK"
- }
- 
-+test_batched_request_firmware_into_buf_partial()
-+{
-+	echo -n "Batched request_firmware_into_buf_partial() $2 off=$3 size=$4 try #$1: "
-+	config_reset
-+	config_set_name $TEST_FIRMWARE_INTO_BUF_FILENAME
-+	config_set_into_buf
-+	config_set_partial
-+	config_set_buf_size $4
-+	config_set_file_offset $3
-+	config_trigger_sync
-+	read_firmwares_partial $2 $3 $4
-+	release_all_firmware
-+	echo "OK"
-+}
-+
- test_batched_request_firmware_direct()
- {
- 	echo -n "Batched request_firmware_direct() $2 try #$1: "
-@@ -371,6 +435,22 @@ for i in $(seq 1 5); do
- 	test_batched_request_firmware_into_buf $i normal
- done
- 
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 0 10
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 0 5
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 1 6
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_partial $i normal 2 10
-+done
-+
- for i in $(seq 1 5); do
- 	test_batched_request_firmware_direct $i normal
- done
+Changes from v2:
+ - remove unnecessary code and mutex locks in lib/test_firmware.c
+ - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
+ - remove bitfields
+ - remove Kconfig default m
+ - adjust formatting and some naming based on feedback
+ - fix error handling conditions
+ - use appropriate return codes
+ - use memcpy_toio instead of direct access to PCIE bar
+ - 
+
+Scott Branden (7):
+  fs: introduce kernel_pread_file* support
+  firmware: add offset to request_firmware_into_buf
+  test_firmware: add partial read support for request_firmware_into_buf
+  firmware: test partial file reads of request_firmware_into_buf
+  bcm-vk: add bcm_vk UAPI
+  misc: bcm-vk: add Broadcom VK driver
+  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
+
+ MAINTAINERS                                   |    7 +
+ drivers/base/firmware_loader/firmware.h       |    5 +
+ drivers/base/firmware_loader/main.c           |   52 +-
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/bcm-vk/Kconfig                   |   41 +
+ drivers/misc/bcm-vk/Makefile                  |   12 +
+ drivers/misc/bcm-vk/bcm_vk.h                  |  406 +++++
+ drivers/misc/bcm-vk/bcm_vk_dev.c              | 1179 ++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_legacy.c           |   89 ++
+ drivers/misc/bcm-vk/bcm_vk_msg.c              | 1420 +++++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.h              |  215 +++
+ drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
+ drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
+ drivers/misc/bcm-vk/bcm_vk_tty.c              |  323 ++++
+ drivers/soc/qcom/mdt_loader.c                 |    7 +-
+ fs/exec.c                                     |   96 +-
+ include/linux/firmware.h                      |    8 +-
+ include/linux/fs.h                            |   20 +
+ include/uapi/linux/misc/bcm_vk.h              |   99 ++
+ lib/test_firmware.c                           |  144 +-
+ .../selftests/firmware/fw_filesystem.sh       |   80 +
+ 22 files changed, 4487 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/misc/bcm-vk/Kconfig
+ create mode 100644 drivers/misc/bcm-vk/Makefile
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_legacy.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
+ create mode 100644 include/uapi/linux/misc/bcm_vk.h
+
 -- 
 2.17.1
 
