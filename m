@@ -2,71 +2,88 @@ Return-Path: <SRS0=7LuG=6G=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1F75C54FCB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Apr 2020 18:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90DB5C5518B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Apr 2020 19:35:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC31A2082E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Apr 2020 18:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587579319;
-	bh=e9Q3gBUURQJn8W8fBnaU61Afh/GJO0gIlVx4jzwD4PI=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=WzrDm0gwDdN9m8zLw5WPK2kwHbXPqkaitkyOGdbreZOt7rHrfyYHIUna1lJcnPaWm
-	 nr/uLRKGkxCkY/n6sWmtpQdIc2cX+W7g9ZnXfRQr/buHiWMmgMQGNxKQMHkP+NdoF2
-	 f+pXtoTXbya131Ux67D+XpI4i7DJ+b8cIfKSO9g8=
+	by mail.kernel.org (Postfix) with ESMTP id 6CD252077D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Apr 2020 19:35:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EoF9qkrR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgDVSPT (ORCPT
+        id S1726497AbgDVTf1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Apr 2020 14:15:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726041AbgDVSPT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Apr 2020 14:15:19 -0400
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.7-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587579318;
-        bh=e9Q3gBUURQJn8W8fBnaU61Afh/GJO0gIlVx4jzwD4PI=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=juP1go224cj0b5xV0V4xlcTKTbdtDIwpUMoPl6+Jq3WPMZrVlETcX3hML3Z70UANr
-         krBH8YefgFTpy7c8XI4YsAu0By2bYrKh5P8qguUNpMSwtw5h/J2MmjTUCyDhbeMAfB
-         /BhoWmADrPkrrMY4jeR7qCtROKGxajY51uGIkaaE=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <853c91e8-83ba-3d37-7601-803485dbc8ed@linuxfoundation.org>
-References: <853c91e8-83ba-3d37-7601-803485dbc8ed@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <853c91e8-83ba-3d37-7601-803485dbc8ed@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-5.7-rc3
-X-PR-Tracked-Commit-Id: b87080eab4c1377706c113fc9c0157f19ea8fed1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c578ddb39e565139897124e74e5a43e56538cb33
-Message-Id: <158757931892.21627.9574195646733662759.pr-tracker-bot@kernel.org>
-Date:   Wed, 22 Apr 2020 18:15:18 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     torvalds@linux-foundation.org, skhan@linuxfoundation.org,
+        Wed, 22 Apr 2020 15:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726496AbgDVTf0 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Apr 2020 15:35:26 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C91C03C1A9
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2020 12:35:24 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id np7so1432125pjb.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2020 12:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XuD/ymlDAdY/vC6za/Lkm0V+RpPXcEmYHcLLMeL5WYM=;
+        b=EoF9qkrREtgDvQsWraC9r76+dPLeZESi5INITQFE/cvW1utStfWtm2QDGu1Zt/8wqr
+         NgZST5MDpVwH5qSh1VAQqzHZo5g94q+CkyDh/Ie84elMx5pnJMVrqNKYqTM6z9Dwn1OE
+         d3ufsvhGbp4zXXK2+dTJ9Xf0J+zgjAZpckn2c4/1bdT7cj1E7voL6J1w72QWkn5vCPEp
+         oZ+vLMLpiE56edaSaqMcSYRNks/mTBBCi0WB/b1FbuvFKTNTkPQmLgiR7vknxbz9DDex
+         geioj1m8tuoMq7Z1j42KzW6A2FVWdzHsbT2GnkdtMyPzO5/Rv/txinSK8r/X+/HnnQdz
+         MNnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XuD/ymlDAdY/vC6za/Lkm0V+RpPXcEmYHcLLMeL5WYM=;
+        b=Pw3/4ix62v65o0tGH1m4Buoxuk8VHBPSUYabmuUceXAKRBtaLnu/fAsKBOaHtTSysl
+         fQmWAxsqqiDpKBd/ajmZApQ8wLmAE+VcH4ZrXs9I5ZUOdA4l7RuV3jVSEKQUyVRQfcjS
+         47DBC+Zd18fiKw7DeOCk5SJ58AlnnsOJuZSXW+3bvVEV+OWcmQUYOPLCYXZsYWBqGktM
+         JH80AApyauqEs0+rBMW9VIjAF/NEkLjK9K2tCiwarbc+JSV195zCWm/yWrYY7i3hoDe2
+         kjpebKS4DMD1OXJIdLO/a2kFwJ0m6FL00Xq9XIMKxE7vaoH2bccRTNCHKZ4KOZEqvgor
+         LMSw==
+X-Gm-Message-State: AGi0Puaqiy9UHPyVZqpmLhofxiWJPFv+9MHzMC/vQAoBz/qOvgMaG4Y1
+        Ktxp7ft9QtL9ScWpKjIaww9z4Eu+QQJcqLNBd4qwyg==
+X-Google-Smtp-Source: APiQypJq8+0Y3QtnLZ9pGqBA7cDbR3eGwp0cBiLurpefu/lk53YrHEhQZ+6lvTR3STNKSZD4iWyiSm5XTPgfDdWqxKs=
+X-Received: by 2002:a17:90a:65c5:: with SMTP id i5mr372005pjs.18.1587584124023;
+ Wed, 22 Apr 2020 12:35:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200416114256.226329-1-elver@google.com>
+In-Reply-To: <20200416114256.226329-1-elver@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 22 Apr 2020 12:35:12 -0700
+Message-ID: <CAFd5g46tezcWT7z6DFWBW=7604=_hNopuvkazE80sLOmJvcQbg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Add missing newline in summary message
+To:     Marco Elver <elver@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Wed, 22 Apr 2020 10:57:31 -0600:
+On Thu, Apr 16, 2020 at 4:43 AM Marco Elver <elver@google.com> wrote:
+>
+> Add missing newline, as otherwise flushing of the final summary message
+> to the console log can be delayed.
+>
+> Fixes: e2219db280e3 ("kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display")
+> Signed-off-by: Marco Elver <elver@google.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.7-rc3
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c578ddb39e565139897124e74e5a43e56538cb33
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Thanks!
