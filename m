@@ -2,93 +2,133 @@ Return-Path: <SRS0=ObLP=6M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7852C83002
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 00:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C18C83003
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 01:04:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 747B72078C
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 00:17:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC2032192A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 01:04:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588033063;
-	bh=RvIxbz6xV8TKE7G+MxbFyTQV5ilrjLjm+DZT86ra/fs=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=GAm2d1Y0mXSK1YVLqB1z6hbpwV2T9L4DVMaB4ue9MEfYJbQee9kaXJA3Ww/pk8ve3
-	 lTPkLc1kp6szXG0LgbF4CrxLEeAOedg28FTdypWv40GUEN5h6f6cReaTK2ft0ar1dN
-	 NSaXuWdprGad2bVuh4qVgDJZPiB0DW1O7dYTE1JQ=
+	s=default; t=1588035840;
+	bh=BKCpSG/2cldKziJ1GnfbVna4hwN4ee2myzzzleIlH8c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=sAE9mhYYTylxqHKxLz7AYIFxGUN1ctA9De94A44w4NRg6XQy15n/9kl1Gwyahp+LA
+	 ROqkn1/FCKVFBfD6cOn9Jxxj6ohUSgIJwF0QLg2Tfyi7BLPLb5LcaQS45MbCYj8/Qa
+	 nmy2HtrILXTvp6kZzEkxQ84r5EAoZItwF4KV9byA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgD1ARn (ORCPT
+        id S1726422AbgD1BEA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 27 Apr 2020 20:17:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55360 "EHLO mail.kernel.org"
+        Mon, 27 Apr 2020 21:04:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726204AbgD1ARn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Apr 2020 20:17:43 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726380AbgD1BD6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Apr 2020 21:03:58 -0400
+Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A20DB2072A;
-        Tue, 28 Apr 2020 00:17:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BC09520728;
+        Tue, 28 Apr 2020 01:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588033062;
-        bh=RvIxbz6xV8TKE7G+MxbFyTQV5ilrjLjm+DZT86ra/fs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=otOtwt713Z4AldxEewg5HRKiJKciN128nsMQ+bq0PGpC5D7ZU1ZqpF+3YO+/efMIb
-         4JSS6JEk3VORZoRjGMcoCcSQa20amQXXy9q1o5E4kMz/Hi+SkSFK247KCsmnKx3iMH
-         zASZDdB6wlpUYYkigoji7kgG+ImikasglcTVgkFI=
-Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
-To:     Stefano Brivio <sbrivio@redhat.com>,
-        Veronika Kabatova <vkabatov@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20200427192141.2926018-1-vkabatov@redhat.com>
- <20200427212405.2747394d@redhat.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <bd179be3-2515-1efb-ba95-3c223d573753@kernel.org>
-Date:   Mon, 27 Apr 2020 18:17:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        s=default; t=1588035838;
+        bh=BKCpSG/2cldKziJ1GnfbVna4hwN4ee2myzzzleIlH8c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vuguE3IqmnBTeRnN0pu3nt9fOVlcGYF9OnpZi7qh90epgbcGkyZNXk0hY2kSAtG9q
+         nc+gePr/M4d9h1kMXOzwU2JOmRfaFRPFDyo2hpKC7xqkbcU3M6FToYhJcnNuBNuEH+
+         LvBCHfUVMn4Gya7zRND9PMq0EhjbcCCwP2l1JA2M=
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     keescook@chromium.org, shuah@kernel.org, netdev@vger.kernel.org,
+        luto@amacapital.net, wad@chromium.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Tim.Bird@sony.com,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v6 1/5] kselftest: factor out list manipulation to a helper
+Date:   Mon, 27 Apr 2020 18:03:47 -0700
+Message-Id: <20200428010351.331260-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20200428010351.331260-1-kuba@kernel.org>
+References: <20200428010351.331260-1-kuba@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200427212405.2747394d@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Veronika,
+Kees suggest to factor out the list append code to a macro,
+since following commits need it, which leads to code duplication.
 
-On 4/27/20 1:24 PM, Stefano Brivio wrote:
-> On Mon, 27 Apr 2020 21:21:41 +0200
-> Veronika Kabatova <vkabatov@redhat.com> wrote:
-> 
->> The gen_kselftest_tar.sh always packages *all* selftests and doesn't
->> pass along any variables to `make install` to influence what should be
->> built. This can result in an early error on the command line ("Unknown
->> tarball format TARGETS=XXX"), or unexpected test failures as the
->> tarball contains tests people wanted to skip on purpose.
->>
->> Since the makefile already contains all the logic, we can add a target
->> for packaging. Keep the default .gz target the script uses, and actually
->> extend the supported formats by using tar's autodetection.
->>
->> To not break current workflows, keep the gen_kselftest_tar.sh script as
->> it is, with an added suggestion to use the makefile target instead.
->>
->> Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
-> 
-> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-> 
+Suggested-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Acked-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 42 ++++++++++++---------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
-I don't see this in my Inbox. Please include everybody get_maintainers
-script tells you to do.
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 2bb8c81fc0b4..77f754854f0d 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -631,6 +631,29 @@
+ 	} \
+ } while (0); OPTIONAL_HANDLER(_assert)
+ 
++/* List helpers */
++#define __LIST_APPEND(head, item) \
++{ \
++	/* Circular linked list where only prev is circular. */ \
++	if (head == NULL) { \
++		head = item; \
++		item->next = NULL; \
++		item->prev = item; \
++		return;	\
++	} \
++	if (__constructor_order == _CONSTRUCTOR_ORDER_FORWARD) { \
++		item->next = NULL; \
++		item->prev = head->prev; \
++		item->prev->next = item; \
++		head->prev = item; \
++	} else { \
++		item->next = head; \
++		item->next->prev = item; \
++		item->prev = item; \
++		head = item; \
++	} \
++}
++
+ /* Contains all the information for test execution and status checking. */
+ struct __test_metadata {
+ 	const char *name;
+@@ -667,24 +690,7 @@ static int __constructor_order;
+ static inline void __register_test(struct __test_metadata *t)
+ {
+ 	__test_count++;
+-	/* Circular linked list where only prev is circular. */
+-	if (__test_list == NULL) {
+-		__test_list = t;
+-		t->next = NULL;
+-		t->prev = t;
+-		return;
+-	}
+-	if (__constructor_order == _CONSTRUCTOR_ORDER_FORWARD) {
+-		t->next = NULL;
+-		t->prev = __test_list->prev;
+-		t->prev->next = t;
+-		__test_list->prev = t;
+-	} else {
+-		t->next = __test_list;
+-		t->next->prev = t;
+-		t->prev = t;
+-		__test_list = t;
+-	}
++	__LIST_APPEND(__test_list, t);
+ }
+ 
+ static inline int __bail(int for_realz, bool no_print, __u8 step)
+-- 
+2.25.4
 
-You can add the Reviewed-by: Stefano Brivio <sbrivio@redhat.com> to the
-patch when you resend it.
-
-thanks,
--- Shuah
