@@ -1,81 +1,175 @@
 Return-Path: <SRS0=ObLP=6M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: *
-X-Spam-Status: No, score=1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	PDS_TONAME_EQ_TOLOCAL_SHORT,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Level: 
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A7CBC83000
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 07:07:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 648F4C83000
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 12:38:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07F04206D7
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 07:07:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B874206D7
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 12:38:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QG0Uy9DL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDCLLdPR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgD1HH6 (ORCPT
+        id S1726620AbgD1Mix (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Apr 2020 03:07:58 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47250 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725917AbgD1HH6 (ORCPT
+        Tue, 28 Apr 2020 08:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726361AbgD1Miw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Apr 2020 03:07:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588057677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+1RLQ+qnuaFDd8UwJvPaKMyNwSzawA8K8LvFLCADqqg=;
-        b=QG0Uy9DLVJTk4xCdc721UOUnN5nngc8tbYthQH0z92zKgYNsRXBF0ErFU/x+gk9qMCvk1I
-        Q782CHJR3Jtkol/Q/WizAvHsqOOaV86Wp5cFXqVMQkkoxoviVowrFhOPXiJGuOeKuiSAfb
-        THNZCUHXRQxItbEdUbAotdoPJKGj8z8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-283-d3F40KZOOyqaCfk0j4kvQQ-1; Tue, 28 Apr 2020 03:07:55 -0400
-X-MC-Unique: d3F40KZOOyqaCfk0j4kvQQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3552C462;
-        Tue, 28 Apr 2020 07:07:54 +0000 (UTC)
-Received: from elisabeth (unknown [10.36.110.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C5644272A7;
-        Tue, 28 Apr 2020 07:07:52 +0000 (UTC)
-Date:   Tue, 28 Apr 2020 09:07:47 +0200
-From:   Stefano Brivio <sbrivio@redhat.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Veronika Kabatova <vkabatov@redhat.com>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: introduce gen_tar Makefile target
-Message-ID: <20200428090747.1f1c0649@elisabeth>
-In-Reply-To: <bd179be3-2515-1efb-ba95-3c223d573753@kernel.org>
-References: <20200427192141.2926018-1-vkabatov@redhat.com>
-        <20200427212405.2747394d@redhat.com>
-        <bd179be3-2515-1efb-ba95-3c223d573753@kernel.org>
-Organization: Red Hat
+        Tue, 28 Apr 2020 08:38:52 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D15C03C1A9
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2020 05:38:51 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id 188so2577124wmc.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2020 05:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pOMqC+ChmjG1hOQvFzfugQDf6EqBDj2J7aBYHiMkkmo=;
+        b=HDCLLdPR0t1hqa8N4GTYksD1oiI/2VjJ0Ti87hZP0Yfc+pbh6IWmioqu+jQgkBV8gj
+         mvzDrybUImmmZpXZjOYeAHj3GYh7IVoJ4xeOAca0IXSi0TYxv+uPhE04jqRPbhGLiNA6
+         2jBiSfgssvBJQmJwN/ffBL1o4Z28y2bIT9WrFmCwsigfKEulsn03ZUJvleUyouJFhBla
+         uRLtwiIRKxlif9EeFExO7Du3ykyrywFX12E5JGPlZsEmIBkhcCRQthxyB6Hdqbj6nZSP
+         Y0R59sQDC508HdTeHRk+z/b5Jj0QhDfGA7CpJ4ZZ4ByW6K8OG8wBbCGWmXVOqEb1n8K5
+         aNKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pOMqC+ChmjG1hOQvFzfugQDf6EqBDj2J7aBYHiMkkmo=;
+        b=eytBsQd8rl4iY8OTefEu+DUo4UoUVRr6LcQyHz97xS7wn+LT15bFPcFaL1CVy0lffg
+         BvO6bv6lSB7qVIKhPNYASdlzTNpE9JkzHP2Ti5lCN08xVOBA8B31RKWKFJG4+oeXYHpD
+         avt8Et0ZIkrBWIEB/N8A2MX0NTWsKX/MuM2PjPnX0wLZb7lrqG9K0fjWiadeGJrJpGrl
+         C+vQWBb+J1uL7zR2OaDmNYlosBVHxtMJLCeGtPbxWlEaNgAWJM7XWyRa5TFtYsTFyOnh
+         QaJe7lDBRph5pBvQKv76+0oCQ1/M/KtbELM/faP9AH6h49qIg+1cC3fJd7jXAJV+gISA
+         iPjA==
+X-Gm-Message-State: AGi0PualKezJwT1oDg1W/dm+nYOgKgJR8pUhvb/SpYG4ZBIj+Ae+/POB
+        tUn5bWncrVBHgSKhSUEzG1I=
+X-Google-Smtp-Source: APiQypK8vuaxdForD/GcrcImU+cZn2hQZNlN7gxYz/2CsGa0JJ8vMn8hwK3jWIvT/Przg6xH/Dj3Dg==
+X-Received: by 2002:a05:600c:295a:: with SMTP id n26mr4912466wmd.16.1588077529931;
+        Tue, 28 Apr 2020 05:38:49 -0700 (PDT)
+Received: from steamlocomotive (176-74-128-122.netdatacomm.cz. [176.74.128.122])
+        by smtp.gmail.com with ESMTPSA id m1sm24641444wro.64.2020.04.28.05.38.49
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Tue, 28 Apr 2020 05:38:49 -0700 (PDT)
+From:   Veronika Kabatova <veronicca114@gmail.com>
+X-Google-Original-From: Veronika Kabatova <vkabatov@redhat.com>
+To:     shuah@kernel.org
+Cc:     sbrivio@redhat.com, linux-kselftest@vger.kernel.org,
+        Veronika Kabatova <vkabatov@redhat.com>
+Subject: [PATCH] selftests: introduce gen_tar Makefile target
+Date:   Tue, 28 Apr 2020 14:38:41 +0200
+Message-Id: <20200428123841.2953099-1-vkabatov@redhat.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 27 Apr 2020 18:17:27 -0600
-shuah <shuah@kernel.org> wrote:
+The gen_kselftest_tar.sh always packages *all* selftests and doesn't
+pass along any variables to `make install` to influence what should be
+built. This can result in an early error on the command line ("Unknown
+tarball format TARGETS=XXX"), or unexpected test failures as the
+tarball contains tests people wanted to skip on purpose.
 
-> I don't see this in my Inbox. Please include everybody get_maintainers
-> script tells you to do.
+Since the makefile already contains all the logic, we can add a target
+for packaging. Keep the default .gz target the script uses, and actually
+extend the supported formats by using tar's autodetection.
 
-Strange, the copy I have has you in To: and linux-kselftest in Cc:, and
-yet it's not even on linux-kselftest archives. :( It looks like some MTA
-issue on our side...
+To not break current workflows, keep the gen_kselftest_tar.sh script as
+it is, with an added suggestion to use the makefile target instead.
 
+Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
+Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+---
+ Documentation/dev-tools/kselftest.rst        | 23 ++++++++++++++++++++
+ tools/testing/selftests/Makefile             |  9 +++++++-
+ tools/testing/selftests/gen_kselftest_tar.sh |  5 +++++
+ 3 files changed, 36 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index 61ae13c44f91..3fc559bcb597 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -151,6 +151,29 @@ note some tests will require root privileges::
+    $ cd kselftest
+    $ ./run_kselftest.sh
+ 
++Packaging selftests
++===================
++
++In some cases packaging is desired, such as when tests need to run on a
++different system. To package selftests, run::
++
++   $ make -C tools/testing/selftests gen_tar
++
++This generates a tarball in the `INSTALL_PATH/kselftest-packages` directory. By
++default, `.gz` format is used. The tar format can be overriden by specifying
++a `FORMAT` make variable. Any value recognized by `tar's auto-compress`_ option
++is supported, such as::
++
++    $ make -C tools/testing/selftests gen_tar FORMAT=.xz
++
++`make gen_tar` invokes `make install` so you can use it to package a subset of
++tests by using variables specified in `Running a subset of selftests`_
++section::
++
++    $ make -C tools/testing/selftests gen_tar TARGETS="bpf" FORMAT=.xz
++
++.. _tar's auto-compress: https://www.gnu.org/software/tar/manual/html_node/gzip.html#auto_002dcompress
++
+ Contributing new tests
+ ======================
+ 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 2ff68702fd41..1195bd85af38 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -249,10 +249,17 @@ else
+ 	$(error Error: set INSTALL_PATH to use install)
+ endif
+ 
++FORMAT ?= .gz
++TAR_PATH = $(abspath ${INSTALL_PATH}/kselftest-packages/kselftest.tar${FORMAT})
++gen_tar: install
++	@mkdir -p ${INSTALL_PATH}/kselftest-packages/
++	@tar caf ${TAR_PATH} --exclude=kselftest-packages -C ${INSTALL_PATH} .
++	@echo "Created ${TAR_PATH}"
++
+ clean:
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+ 
+-.PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
++.PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean gen_tar
+diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing/selftests/gen_kselftest_tar.sh
+index 8b2b6088540d..4a974bc03385 100755
+--- a/tools/testing/selftests/gen_kselftest_tar.sh
++++ b/tools/testing/selftests/gen_kselftest_tar.sh
+@@ -49,6 +49,11 @@ main()
+ 	# directory
+ 	./kselftest_install.sh "$install_dir"
+ 	(cd "$install_work"; tar $copts "$dest"/kselftest${ext} $install_name)
++
++	# Don't put the message at the actual end as people may be parsing the
++	# "archive created" line in their scripts.
++	echo -e "\nConsider using 'make gen_tar' instead of this script\n"
++
+ 	echo "Kselftest archive kselftest${ext} created!"
+ 
+ 	# clean up top-level install work directory
 -- 
-Stefano
+2.25.1
 
