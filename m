@@ -2,113 +2,115 @@ Return-Path: <SRS0=ObLP=6M=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01B3BC83001
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 01:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FCCC83000
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 06:21:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA56A206D9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 01:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1588035874;
-	bh=MGJvylZiGkTZwwzCHb5ZFTaQJFtBOk//T/dAGP9LFuk=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=jty/uvHV7OuIhnyddzGHSNnTnFX81EN5ICc2MU0/upuTNcuh58ORARvkvK9CSxxad
-	 C6dJG11b3TvbLjnbBjHvSbvpgsiTrix+LXFE3xPiVYG3BDbG9Hlku1BhVWhQi4Nc/X
-	 naqResbsPSbV4Opddb0Lc59L5+46hHdg9htGy4Go=
+	by mail.kernel.org (Postfix) with ESMTP id F3221206B8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Apr 2020 06:21:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbgD1BD6 (ORCPT
+        id S1726279AbgD1GVO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 27 Apr 2020 21:03:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36556 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726379AbgD1BD6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Apr 2020 21:03:58 -0400
-Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35E50206D6;
-        Tue, 28 Apr 2020 01:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588035837;
-        bh=MGJvylZiGkTZwwzCHb5ZFTaQJFtBOk//T/dAGP9LFuk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=B4HM7VVc2Ui10qnNjm+8cBH8Ycc+25mPPyK4A0JOCN9vXVxeH/2yQO8iuSHHKxu7a
-         K10b9rA/jDKae6xISuL+IN5+3tNKNWuy8l5GgTm/TArZxHNm4ZPNoMqtSggtZPCYuj
-         LmfEvfSWVH+qp6jnrPyIfwxvMubg+ngkjP751/BI=
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     keescook@chromium.org, shuah@kernel.org, netdev@vger.kernel.org,
-        luto@amacapital.net, wad@chromium.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, Tim.Bird@sony.com,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v6 0/5] kselftest: add fixture parameters
-Date:   Mon, 27 Apr 2020 18:03:46 -0700
-Message-Id: <20200428010351.331260-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.25.4
+        Tue, 28 Apr 2020 02:21:14 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11912 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726042AbgD1GVO (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 Apr 2020 02:21:14 -0400
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03S63Cth143380;
+        Tue, 28 Apr 2020 02:20:59 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30mguvmxya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Apr 2020 02:20:59 -0400
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 03S63EM4143427;
+        Tue, 28 Apr 2020 02:20:58 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30mguvmxxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Apr 2020 02:20:58 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03S6EQIv018731;
+        Tue, 28 Apr 2020 06:20:56 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 30mcu5nexn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Apr 2020 06:20:56 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03S6KsOC65339552
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Apr 2020 06:20:54 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2038CA4040;
+        Tue, 28 Apr 2020 06:20:54 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D6E96A4051;
+        Tue, 28 Apr 2020 06:20:53 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 28 Apr 2020 06:20:53 +0000 (GMT)
+Date:   Tue, 28 Apr 2020 08:20:53 +0200
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     svens@stackframe.org, Thomas Gleixner <tglx@linutronix.de>,
+        Steve Winslow <swinslow@gmail.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/vDSO: prevent SIGFPE if vdso_info.nbucket
+ is zero
+Message-ID: <20200428062053.GA62357@tuxmaker.boeblingen.de.ibm.com>
+References: <20200404203704.69412-1-svens@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200404203704.69412-1-svens@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-28_02:2020-04-27,2020-04-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 mlxlogscore=999 mlxscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 impostorscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004280051
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi!
+On Sat, Apr 04, 2020 at 10:37:03PM +0200, Sven Schnelle wrote:
+> If vdso_info can't be parsed correctly, vdso_info.nbucket might
+> contain zero. Add a check and return NULL which will fail the
+> symbol lookup.
 
-This set is an attempt to make running tests for different
-sets of data easier. The direct motivation is the tls
-test which we'd like to run for TLS 1.2 and TLS 1.3,
-but currently there is no easy way to invoke the same
-tests with different parameters.
+Ping?
 
-Tested all users of kselftest_harness.h.
-
-Dave, would it be possible to take these via net-next?
-It seems we're failing to get Shuah's attention.
-
-v2:
- - don't run tests by fixture
- - don't pass params as an explicit argument
-
-v3:
- - go back to the orginal implementation with an extra
-   parameter, and running by fixture (Kees);
- - add LIST_APPEND helper (Kees);
- - add a dot between fixture and param name (Kees);
- - rename the params to variants (Tim);
-
-v4:
- - whitespace fixes.
-
-v5 (Kees):
- - move a comment;
- - remove a temporary variable;
- - reword the commit message on patch 4.
-
-v6:
- - resend for net-next.
-
-v1: https://lore.kernel.org/netdev/20200313031752.2332565-1-kuba@kernel.org/
-v2: https://lore.kernel.org/netdev/20200314005501.2446494-1-kuba@kernel.org/
-v3: https://lore.kernel.org/netdev/20200316225647.3129354-1-kuba@kernel.org/
-v4: https://lore.kernel.org/netdev/20200317010419.3268916-1-kuba@kernel.org/
-v5: https://lore.kernel.org/netdev/20200318010153.40797-1-kuba@kernel.org/
-
-Jakub Kicinski (5):
-  kselftest: factor out list manipulation to a helper
-  kselftest: create fixture objects
-  kselftest: run tests by fixture
-  kselftest: add fixture variants
-  selftests: tls: run all tests for TLS 1.2 and TLS 1.3
-
- Documentation/dev-tools/kselftest.rst       |   3 +-
- tools/testing/selftests/kselftest_harness.h | 234 +++++++++++++++-----
- tools/testing/selftests/net/tls.c           |  93 ++------
- 3 files changed, 202 insertions(+), 128 deletions(-)
-
--- 
-2.25.4
-
+> 
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> ---
+>  tools/testing/selftests/vDSO/parse_vdso.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+> index 1dbb4b87268f..8e5a70a24d9a 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -226,6 +226,9 @@ void *vdso_sym(const char *version, const char *name)
+>  		return 0;
+>  
+>  	ver_hash = elf_hash(version);
+> +	if (!vdso_info.nbucket)
+> +		return NULL;
+> +
+>  	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
+>  
+>  	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
+> -- 
+> 2.17.1
+> 
