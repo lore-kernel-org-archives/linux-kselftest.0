@@ -2,58 +2,59 @@ Return-Path: <SRS0=GLod=6N=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8340C83009
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Apr 2020 17:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF204C83004
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Apr 2020 17:09:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C484320B1F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Apr 2020 17:09:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B61312083B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Apr 2020 17:09:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="dFhGW0VU"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="F8Q2JsPI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726949AbgD2RJc (ORCPT
+        id S1727097AbgD2RJm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Apr 2020 13:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        Wed, 29 Apr 2020 13:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726635AbgD2RJb (ORCPT
+        by vger.kernel.org with ESMTP id S1727074AbgD2RJl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Apr 2020 13:09:31 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922EAC03C1AE
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2020 10:09:31 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d17so1320354pgo.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2020 10:09:31 -0700 (PDT)
+        Wed, 29 Apr 2020 13:09:41 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31117C035493
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2020 10:09:41 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id n24so1047934plp.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2020 10:09:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=XRf8GObyFyiu0kikag+9wy7ttN3b1p/9KRQUdGvi0B8=;
-        b=dFhGW0VUHxp3OA589kT5FEsTI0gcW9DZ9PSljRlxhccRour0WECCxKllvJJbOjgqls
-         QGiR2/d3lgSmvsGENz1m/eNxyxrzop0FmghlK1zgmY+ibt3KYeSqqjL1ByoEaqRYUWMX
-         PMN7i6IYACVz2agI2sR0lM/b6AImqlOllicSw=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=fZI4e7IGI7fDUYv3Gq5MrqpKh7M1c4gJcLWvsyHzpwk=;
+        b=F8Q2JsPIB2MOa0EKoUI7YpHns4PioCGZ0NPHvlHutITSEo8biupQ1zo/jJZ2n98csW
+         x5GfFw9fxusJUDsQlPo+7I/Z45rDrJr1qAEip2kCBiVu1KB58AAq12TrIDhFWszeDEqO
+         9K2oa5+obEEQISd/gBid6Vepslo/aZl2SXk/o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XRf8GObyFyiu0kikag+9wy7ttN3b1p/9KRQUdGvi0B8=;
-        b=a2WqFr7dH5CrKtfQC5UShaHNRV70XrSbFiIUxczK2trXxtYH9/TfqSJJ0uCCHzbPaH
-         6fHh9ElJ9CbSoQ9/6PVmgjmDim49rY+jejgKefc9E0+O/j4i91iu/CiHaAZPCWYlVjHE
-         MBZLl809lY1ij0LQ9Nb97hV5uLPbQAnFsKNruURfTzwNbJu2GP1HnBz3Q6jeRuHASJbH
-         XcDQ9IbVtcwOiK78/RyL32hxwQKsHNnUm1H+HOFASdcA/pXu+F1fIsuURq7FbK+qD+cs
-         l7xl8pkjSDHpftkImyJz1vsSXOWS5RxdU4GIYcsqCV/0AeB7sLt6YryRkhHpR+uV3kMJ
-         Ft+A==
-X-Gm-Message-State: AGi0PuYRaVcI9pTTKSdgj8WBfJ9SH9fuGbO37cDFwGyJ5Sy5Jv3ttFl0
-        nopKhnYF1I6F37u1Puu9cdHLbA==
-X-Google-Smtp-Source: APiQypKbkmBWioZSe35zwE5e39r7ePGHkonrurn32H0uEpW6G6k6V8t8gVW+oaC2HGwZk/j58okUZg==
-X-Received: by 2002:aa7:943c:: with SMTP id y28mr36128122pfo.171.1588180170916;
-        Wed, 29 Apr 2020 10:09:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=fZI4e7IGI7fDUYv3Gq5MrqpKh7M1c4gJcLWvsyHzpwk=;
+        b=tpu+Qki39Zxw5ojDbhEalRVhyJjqNLustq7VLZczNCgGlhB9jdN/KPFOX2RvfxgD82
+         ei/04JWPcwqmzqh2LvZauH6ZmxP15A4r4u3oMcHj1QBNslvKSHVvzvXCGRscmvyesKY2
+         ZLCe780urL6q3AjY2W81mcnNOj8+4/WEs8gG/sYpg/6nMsWD5sn64C2KFToKh8PGkFVS
+         CbdeDR8Wlgu+LrTy7HlU+Dgu4cAQ7/sqRtS0XrxXozwHkgL9lx/Evswqm6EVTxrRrW8/
+         hihTb46sRXCyABuRuWepHmluVogmQ0XhJMlmmjkRprul/9jY+tgPIB9JqWASCLftxIMP
+         JRFg==
+X-Gm-Message-State: AGi0PuYB2wdTAvG+dRFwXDC3ukkicaXzid0OvLJhTQbgL0AT/YCbvAeC
+        nBanHCYCa2fev7sgfg8y/thPaw==
+X-Google-Smtp-Source: APiQypJtwKgqTVNsTYgxGZVH40CrB7xruJgoAoJuQg/63NHmjd1MLWUdpCkTSS0T+L+GPt85zhddxg==
+X-Received: by 2002:a17:902:327:: with SMTP id 36mr33536525pld.185.1588180180630;
+        Wed, 29 Apr 2020 10:09:40 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id y63sm1574456pfg.138.2020.04.29.10.09.27
+        by smtp.gmail.com with ESMTPSA id y63sm1574456pfg.138.2020.04.29.10.09.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 10:09:29 -0700 (PDT)
+        Wed, 29 Apr 2020 10:09:39 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -74,84 +75,258 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v4 0/7] firmware: add partial read support in request_firmware_into_buf
-Date:   Wed, 29 Apr 2020 10:09:07 -0700
-Message-Id: <20200429170914.30976-1-scott.branden@broadcom.com>
+Subject: [PATCH v4 3/7] test_firmware: add partial read support for request_firmware_into_buf
+Date:   Wed, 29 Apr 2020 10:09:10 -0700
+Message-Id: <20200429170914.30976-4-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200429170914.30976-1-scott.branden@broadcom.com>
+References: <20200429170914.30976-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series adds partial read support in request_firmware_into_buf.
-In order to accept the enhanced API it has been requested that kernel
-selftests and upstreamed driver utilize the API enhancement and so
-are included in this patch series.
+Add additional hooks to test_firmware to pass in support
+for partial file read using request_firmware_into_buf.
+buf_size: size of buffer to request firmware into
+partial: indicates that a partial file request is being made
+file_offset: to indicate offset into file to request
 
-Also in this patch series is the addition of a new Broadcom VK driver
-utilizing the new request_firmware_into_buf enhanced API.
+Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+---
+ lib/test_firmware.c | 146 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 136 insertions(+), 10 deletions(-)
 
-Changes from v3:
- - fix sparse warnings
- - fix printf format specifiers for size_t
- - fix 32-bit cross-compiling reports 32-bit shifts
- - use readl/writel,_relaxed to access pci ioremap memory,
-  removed memory barriers and volatile keyword with such change
- - driver optimizations for interrupt/poll functionalities
-Changes from v2:
- - remove unnecessary code and mutex locks in lib/test_firmware.c
- - remove VK_IOCTL_ACCESS_BAR support from driver and use pci sysfs instead
- - remove bitfields
- - remove Kconfig default m
- - adjust formatting and some naming based on feedback
- - fix error handling conditions
- - use appropriate return codes
- - use memcpy_toio instead of direct access to PCIE bar
-
-Scott Branden (7):
-  fs: introduce kernel_pread_file* support
-  firmware: add offset to request_firmware_into_buf
-  test_firmware: add partial read support for request_firmware_into_buf
-  firmware: test partial file reads of request_firmware_into_buf
-  bcm-vk: add bcm_vk UAPI
-  misc: bcm-vk: add Broadcom VK driver
-  MAINTAINERS: bcm-vk: add maintainer for Broadcom VK Driver
-
- MAINTAINERS                                   |    7 +
- drivers/base/firmware_loader/firmware.h       |    5 +
- drivers/base/firmware_loader/main.c           |   52 +-
- drivers/misc/Kconfig                          |    1 +
- drivers/misc/Makefile                         |    1 +
- drivers/misc/bcm-vk/Kconfig                   |   29 +
- drivers/misc/bcm-vk/Makefile                  |   12 +
- drivers/misc/bcm-vk/bcm_vk.h                  |  412 +++++
- drivers/misc/bcm-vk/bcm_vk_dev.c              | 1211 ++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_legacy.c           |   89 ++
- drivers/misc/bcm-vk/bcm_vk_msg.c              | 1414 +++++++++++++++++
- drivers/misc/bcm-vk/bcm_vk_msg.h              |  195 +++
- drivers/misc/bcm-vk/bcm_vk_sg.c               |  271 ++++
- drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
- drivers/misc/bcm-vk/bcm_vk_tty.c              |  352 ++++
- drivers/soc/qcom/mdt_loader.c                 |    7 +-
- fs/exec.c                                     |   96 +-
- include/linux/firmware.h                      |    8 +-
- include/linux/fs.h                            |   20 +
- include/uapi/linux/misc/bcm_vk.h              |   99 ++
- lib/test_firmware.c                           |  144 +-
- .../selftests/firmware/fw_filesystem.sh       |   80 +
- 22 files changed, 4516 insertions(+), 49 deletions(-)
- create mode 100644 drivers/misc/bcm-vk/Kconfig
- create mode 100644 drivers/misc/bcm-vk/Makefile
- create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_legacy.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
- create mode 100644 drivers/misc/bcm-vk/bcm_vk_tty.c
- create mode 100644 include/uapi/linux/misc/bcm_vk.h
-
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 55176b0a8318..d1d2b48ed40e 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -50,6 +50,9 @@ struct test_batched_req {
+  * @name: the name of the firmware file to look for
+  * @into_buf: when the into_buf is used if this is true
+  *	request_firmware_into_buf() will be used instead.
++ * @buf_size: size of buf to allocate when into_buf is true
++ * @file_offset: file offset to request when calling request_firmware_into_buf
++ * @partial: partial read flag value when calling request_firmware_into_buf
+  * @sync_direct: when the sync trigger is used if this is true
+  *	request_firmware_direct() will be used instead.
+  * @send_uevent: whether or not to send a uevent for async requests
+@@ -89,6 +92,9 @@ struct test_batched_req {
+ struct test_config {
+ 	char *name;
+ 	bool into_buf;
++	size_t buf_size;
++	size_t file_offset;
++	bool partial;
+ 	bool sync_direct;
+ 	bool send_uevent;
+ 	u8 num_requests;
+@@ -183,6 +189,9 @@ static int __test_firmware_config_init(void)
+ 	test_fw_config->num_requests = TEST_FIRMWARE_NUM_REQS;
+ 	test_fw_config->send_uevent = true;
+ 	test_fw_config->into_buf = false;
++	test_fw_config->buf_size = TEST_FIRMWARE_BUF_SIZE;
++	test_fw_config->file_offset = 0;
++	test_fw_config->partial = false;
+ 	test_fw_config->sync_direct = false;
+ 	test_fw_config->req_firmware = request_firmware;
+ 	test_fw_config->test_result = 0;
+@@ -236,28 +245,35 @@ static ssize_t config_show(struct device *dev,
+ 			dev_name(dev));
+ 
+ 	if (test_fw_config->name)
+-		len += scnprintf(buf+len, PAGE_SIZE - len,
++		len += scnprintf(buf + len, PAGE_SIZE - len,
+ 				"name:\t%s\n",
+ 				test_fw_config->name);
+ 	else
+-		len += scnprintf(buf+len, PAGE_SIZE - len,
++		len += scnprintf(buf + len, PAGE_SIZE - len,
+ 				"name:\tEMTPY\n");
+ 
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"num_requests:\t%u\n", test_fw_config->num_requests);
+ 
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"send_uevent:\t\t%s\n",
+ 			test_fw_config->send_uevent ?
+ 			"FW_ACTION_HOTPLUG" :
+ 			"FW_ACTION_NOHOTPLUG");
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"into_buf:\t\t%s\n",
+ 			test_fw_config->into_buf ? "true" : "false");
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
++			"buf_size:\t%zu\n", test_fw_config->buf_size);
++	len += scnprintf(buf + len, PAGE_SIZE - len,
++			"file_offset:\t%zu\n", test_fw_config->file_offset);
++	len += scnprintf(buf + len, PAGE_SIZE - len,
++			"partial:\t\t%s\n",
++			test_fw_config->partial ? "true" : "false");
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"sync_direct:\t\t%s\n",
+ 			test_fw_config->sync_direct ? "true" : "false");
+-	len += scnprintf(buf+len, PAGE_SIZE - len,
++	len += scnprintf(buf + len, PAGE_SIZE - len,
+ 			"read_fw_idx:\t%u\n", test_fw_config->read_fw_idx);
+ 
+ 	mutex_unlock(&test_fw_mutex);
+@@ -315,6 +331,30 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
+ 
++static int test_dev_config_update_size_t(const char *buf,
++					 size_t size,
++					 size_t *cfg)
++{
++	int ret;
++	long new;
++
++	ret = kstrtol(buf, 10, &new);
++	if (ret)
++		return ret;
++
++	mutex_lock(&test_fw_mutex);
++	*(size_t *)cfg = new;
++	mutex_unlock(&test_fw_mutex);
++
++	/* Always return full write size even if we didn't consume all */
++	return size;
++}
++
++static ssize_t test_dev_config_show_size_t(char *buf, size_t val)
++{
++	return snprintf(buf, PAGE_SIZE, "%zu\n", val);
++}
++
+ static ssize_t test_dev_config_show_int(char *buf, int val)
+ {
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+@@ -400,6 +440,83 @@ static ssize_t config_into_buf_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(config_into_buf);
+ 
++static ssize_t config_buf_size_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	int rc;
++
++	mutex_lock(&test_fw_mutex);
++	if (test_fw_config->reqs) {
++		pr_err("Must call release_all_firmware prior to changing config\n");
++		rc = -EINVAL;
++		mutex_unlock(&test_fw_mutex);
++		goto out;
++	}
++	mutex_unlock(&test_fw_mutex);
++
++	rc = test_dev_config_update_size_t(buf, count,
++					   &test_fw_config->buf_size);
++
++out:
++	return rc;
++}
++
++static ssize_t config_buf_size_show(struct device *dev,
++				    struct device_attribute *attr,
++				    char *buf)
++{
++	return test_dev_config_show_size_t(buf, test_fw_config->buf_size);
++}
++static DEVICE_ATTR_RW(config_buf_size);
++
++static ssize_t config_file_offset_store(struct device *dev,
++					struct device_attribute *attr,
++					const char *buf, size_t count)
++{
++	int rc;
++
++	mutex_lock(&test_fw_mutex);
++	if (test_fw_config->reqs) {
++		pr_err("Must call release_all_firmware prior to changing config\n");
++		rc = -EINVAL;
++		mutex_unlock(&test_fw_mutex);
++		goto out;
++	}
++	mutex_unlock(&test_fw_mutex);
++
++	rc = test_dev_config_update_size_t(buf, count,
++					   &test_fw_config->file_offset);
++
++out:
++	return rc;
++}
++
++static ssize_t config_file_offset_show(struct device *dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	return test_dev_config_show_size_t(buf, test_fw_config->file_offset);
++}
++static DEVICE_ATTR_RW(config_file_offset);
++
++static ssize_t config_partial_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	return test_dev_config_update_bool(buf,
++					   count,
++					   &test_fw_config->partial);
++}
++
++static ssize_t config_partial_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
++{
++	return test_dev_config_show_bool(buf, test_fw_config->partial);
++}
++static DEVICE_ATTR_RW(config_partial);
++
+ static ssize_t config_sync_direct_store(struct device *dev,
+ 					struct device_attribute *attr,
+ 					const char *buf, size_t count)
+@@ -645,18 +762,24 @@ static int test_fw_run_batch_request(void *data)
+ 
+ 	if (test_fw_config->into_buf) {
+ 		void *test_buf;
++		unsigned int pread_flags;
+ 
+ 		test_buf = kzalloc(TEST_FIRMWARE_BUF_SIZE, GFP_KERNEL);
+ 		if (!test_buf)
+ 			return -ENOSPC;
+ 
++		if (test_fw_config->partial)
++			pread_flags = KERNEL_PREAD_FLAG_PART;
++		else
++			pread_flags = KERNEL_PREAD_FLAG_WHOLE;
++
+ 		req->rc = request_firmware_into_buf(&req->fw,
+ 						    req->name,
+ 						    req->dev,
+ 						    test_buf,
+-						    TEST_FIRMWARE_BUF_SIZE,
+-						    0,
+-						    KERNEL_PREAD_FLAG_WHOLE);
++						    test_fw_config->buf_size,
++						    test_fw_config->file_offset,
++						    pread_flags);
+ 		if (!req->fw)
+ 			kfree(test_buf);
+ 	} else {
+@@ -929,6 +1052,9 @@ static struct attribute *test_dev_attrs[] = {
+ 	TEST_FW_DEV_ATTR(config_name),
+ 	TEST_FW_DEV_ATTR(config_num_requests),
+ 	TEST_FW_DEV_ATTR(config_into_buf),
++	TEST_FW_DEV_ATTR(config_buf_size),
++	TEST_FW_DEV_ATTR(config_file_offset),
++	TEST_FW_DEV_ATTR(config_partial),
+ 	TEST_FW_DEV_ATTR(config_sync_direct),
+ 	TEST_FW_DEV_ATTR(config_send_uevent),
+ 	TEST_FW_DEV_ATTR(config_read_fw_idx),
 -- 
 2.17.1
 
