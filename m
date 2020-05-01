@@ -2,263 +2,87 @@ Return-Path: <SRS0=F/8i=6P=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A039BC47254
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 May 2020 09:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D16C47254
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 May 2020 13:37:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60A652173E
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 May 2020 09:57:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RXxxyQky"
+	by mail.kernel.org (Postfix) with ESMTP id C179124960
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 May 2020 13:37:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588340277;
+	bh=oxOL24FU0cXDlE8Pssg/a1Kx/+IYd0kIxLiLr1oVbFk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=NJ3p7oH4JMke8JwArhjCDL0zAMCfeGtopxU8QPgvZl9MqXMtz4SFVFTsrPuDRN7zO
+	 aV4WKBcF83yuwuOIcEftb+PE+O6NThXSiL/yAR9Df4E9wHk61KpiL/6RWOW5NU6FJL
+	 6IJdIhbDljC47PlrAYRjczzR7K7y/IxNamOfSM6o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728500AbgEAJ5x (ORCPT
+        id S1730560AbgEANh4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 1 May 2020 05:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728492AbgEAJ5v (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 May 2020 05:57:51 -0400
-Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8451FC09B040
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2020 02:57:51 -0700 (PDT)
-Received: by mail-oo1-xc44.google.com with SMTP id i9so610641ool.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2020 02:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nGaU+wKFVbV2rAss2AjKpFbiC5Lau7H8388Zbazbr4Q=;
-        b=RXxxyQky5lthKQjVFb2j2sx4oRqvc9W4m50GmIJ9yBU6zC8RelJVS+wF0nx4uISIwR
-         r9ZciFyAuLFo61Jz/pOWMZJyusJLScbePnqufkI+OR0nM+J0vcnhvOMtPIXetK41H76q
-         7fxq81w1GbA3/j3WIwz3zEbAYgxS9T6tgOPS1TaQOj6T2cpBFINhxxAQ0HR44BYhTsNv
-         0djHiZoWVom7qag5NeHX15wpxdcAqoqYGMmSrVhchKiFzbVTinRoiG6sYtwZyTntSzlv
-         i18fQ4ScDoRbCVhmkp1dPbm7IUz0Pmc26eCO9DJCbEXhrh4dqGlvSlXT1jeMvhzrU8mj
-         DskQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nGaU+wKFVbV2rAss2AjKpFbiC5Lau7H8388Zbazbr4Q=;
-        b=i/UZDBnjdgTcv1ZkY+IxkJuL3JphwJVRxEd0NHXjeV6J9T51hRGzaoxhUACE3JV4LX
-         kelFUrZDWiiwMoeU4JQ6m90R19Vl7qQekyCbh3INa849fNJA99WOPGu6KakPdPiPWukq
-         xNc/IFvoIEDdATbO4/yJ3giGIVU/2GpTdUHDf+5mTbDYEPqgAROUvLo68crTQz+tD3b4
-         iugms80AlqfuIGAgS3SzVjM1ehkoZrkmVV6EaPOJC6kCxvFrTGUa+Q1+hOWslUqXWo3r
-         9z6/6mKZO6Lxqz2qZlqA2/Kez/uEG1GbrGXMIHq5fWusXNDlh0c+q67cy26fwQ+Ebv/b
-         ANuA==
-X-Gm-Message-State: AGi0PubWbrnc3yPHFLZpOI1yWOpML6W03HiJxFQl5cmuh3AJMWZOmx1i
-        CWpoTJ5F0tHhJOEIGFfDerK1JSDaiY25tOTmNUGdpQ==
-X-Google-Smtp-Source: APiQypINO1sPCoWf+LPZMpQkJdEySPVbtW74n8/VWE9is0OO2sbVA0bu/Sw2vW8nlz0V+WEWr8SDwdKWM/j24nXLI0Y=
-X-Received: by 2002:a4a:e1d2:: with SMTP id n18mr3123585oot.36.1588327070112;
- Fri, 01 May 2020 02:57:50 -0700 (PDT)
+        Fri, 1 May 2020 09:37:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37276 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730994AbgEANhz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 1 May 2020 09:37:55 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B079424956;
+        Fri,  1 May 2020 13:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588340275;
+        bh=oxOL24FU0cXDlE8Pssg/a1Kx/+IYd0kIxLiLr1oVbFk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PgdPXbrnlEcQZ7Zdlxg2fjtyQbhPPYoBN77PCimwAJENYjNala+4rCXtKvv++VlrS
+         G4M52huUXzKwpFzDVCeJpBl1FL1SGFSVSQoR3LhqWGeSPXO2byvbBd3pm8fJVqfyaX
+         6/HgjpslBtvb5dtiM9wEUo7gEq4wpBJxjrHTGlL0=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Li Philip <philip.li@intel.com>,
+        Liu Yiding <yidingx.liu@intel.com>
+Subject: [PATCH 2/3] selftests/ftrace: Pick only the first kprobe event to test
+Date:   Fri,  1 May 2020 22:37:51 +0900
+Message-Id: <158834027133.28357.11196486193798517250.stgit@devnote2>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <158834025077.28357.15141584656220094821.stgit@devnote2>
+References: <158834025077.28357.15141584656220094821.stgit@devnote2>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-References: <20200501083510.1413-1-anders.roxell@linaro.org>
-In-Reply-To: <20200501083510.1413-1-anders.roxell@linaro.org>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 1 May 2020 11:57:37 +0200
-Message-ID: <CANpmjNNm9DhVj5T1rhykEdNBiTvkG-YxL6O25bSfQi8ySh9KtA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Kconfig: enable a KUNIT_RUN_ALL fragment
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        john.johansen@canonical.com, jmorris@namei.org, serge@hallyn.com,
-        LKML <linux-kernel@vger.kernel.org>, linux-ext4@vger.kernel.org,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 1 May 2020 at 10:35, Anders Roxell <anders.roxell@linaro.org> wrote:
->
-> Make it easier to enable all KUnit fragments.  This is needed for kernel
-> test-systems, so its easy to get all KUnit tests enabled and if new gets
-> added they will be enabled as well.  Fragments that has to be builtin
-> will be missed if CONFIG_KUNIT_RUN_ALL is set as a module.
->
-> Adding 'if !KUNIT_RUN_ALL' so individual test can be turned of if
-> someone wants that even though KUNIT_RUN_ALL is enabled.
->
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->  drivers/base/Kconfig      |  3 ++-
->  drivers/base/test/Kconfig |  3 ++-
->  fs/ext4/Kconfig           |  3 ++-
->  lib/Kconfig.debug         |  6 ++++--
->  lib/Kconfig.kcsan         |  3 ++-
->  lib/kunit/Kconfig         | 15 ++++++++++++---
->  security/apparmor/Kconfig |  3 ++-
->  7 files changed, 26 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-> index 5f0bc74d2409..c48e6e4ef367 100644
-> --- a/drivers/base/Kconfig
-> +++ b/drivers/base/Kconfig
-> @@ -149,8 +149,9 @@ config DEBUG_TEST_DRIVER_REMOVE
->           test this functionality.
->
->  config PM_QOS_KUNIT_TEST
-> -       bool "KUnit Test for PM QoS features"
-> +       bool "KUnit Test for PM QoS features" if !KUNIT_RUN_ALL
->         depends on KUNIT=y
-> +       default KUNIT_RUN_ALL
->
->  config HMEM_REPORTING
->         bool
-> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
-> index 305c7751184a..0d662d689f6b 100644
-> --- a/drivers/base/test/Kconfig
-> +++ b/drivers/base/test/Kconfig
-> @@ -9,5 +9,6 @@ config TEST_ASYNC_DRIVER_PROBE
->
->           If unsure say N.
->  config KUNIT_DRIVER_PE_TEST
-> -       bool "KUnit Tests for property entry API"
-> +       bool "KUnit Tests for property entry API" if !KUNIT_RUN_ALL
->         depends on KUNIT=y
-> +       default KUNIT_RUN_ALL
-> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
-> index 2a592e38cdfe..76785143259d 100644
-> --- a/fs/ext4/Kconfig
-> +++ b/fs/ext4/Kconfig
-> @@ -103,9 +103,10 @@ config EXT4_DEBUG
->                 echo 1 > /sys/module/ext4/parameters/mballoc_debug
->
->  config EXT4_KUNIT_TESTS
-> -       tristate "KUnit tests for ext4"
-> +       tristate "KUnit tests for ext4" if !KUNIT_RUN_ALL
->         select EXT4_FS
->         depends on KUNIT
-> +       default KUNIT_RUN_ALL
->         help
->           This builds the ext4 KUnit tests.
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 8e4aded46281..993e0c5549bc 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2123,8 +2123,9 @@ config TEST_SYSCTL
->           If unsure, say N.
->
->  config SYSCTL_KUNIT_TEST
-> -       tristate "KUnit test for sysctl"
-> +       tristate "KUnit test for sysctl" if !KUNIT_RUN_ALL
->         depends on KUNIT
-> +       default KUNIT_RUN_ALL
->         help
->           This builds the proc sysctl unit test, which runs on boot.
->           Tests the API contract and implementation correctness of sysctl.
-> @@ -2134,8 +2135,9 @@ config SYSCTL_KUNIT_TEST
->           If unsure, say N.
->
->  config LIST_KUNIT_TEST
-> -       tristate "KUnit Test for Kernel Linked-list structures"
-> +       tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_RUN_ALL
->         depends on KUNIT
-> +       default KUNIT_RUN_ALL
->         help
->           This builds the linked list KUnit test suite.
->           It tests that the API and basic functionality of the list_head type
-> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-> index ea28245c6c1d..91398300a1bc 100644
-> --- a/lib/Kconfig.kcsan
-> +++ b/lib/Kconfig.kcsan
-> @@ -46,8 +46,9 @@ config KCSAN_SELFTEST
->           works as intended.
->
->  config KCSAN_TEST
-> -       tristate "KCSAN test for integrated runtime behaviour"
-> +       tristate "KCSAN test for integrated runtime behaviour" if !KUNIT_RUN_ALL
->         depends on TRACEPOINTS && KUNIT
-> +       default KUNIT_RUN_ALL
->         select TORTURE_TEST
->         help
->           KCSAN test focusing on behaviour of the integrated runtime. Tests
+Since the kprobe/kprobe_args_type.tc reads out all event logs
+from the trace buffer, the test can fail if there is another
+fork event happens.
+Use head command to pick only the first kprobe event from
+the trace buffer to test the argument types.
 
-I think if you want this patch to be picked up you need to split it,
-with one patch for each test that is not yet in mainline or the tree
-that should pick this patch up.
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ .../ftrace/test.d/kprobe/kprobe_args_type.tc       |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The KCSAN test is in the -rcu tree, but I don't expect it to be merged
-before 5.9. Most likely, we would only be able to pick up the patch
-that would make the chance to the KCSAN Kconfig entry once the rest
-here made it into mainline.
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+index 1bcb67dcae26..81490ecaaa92 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_type.tc
+@@ -38,7 +38,7 @@ for width in 64 32 16 8; do
+   echo 0 > events/kprobes/testprobe/enable
+ 
+   : "Confirm the arguments is recorded in given types correctly"
+-  ARGS=`grep "testprobe" trace | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
++  ARGS=`grep "testprobe" trace | head -n 1 | sed -e 's/.* arg1=\(.*\) arg2=\(.*\) arg3=\(.*\) arg4=\(.*\)/\1 \2 \3 \4/'`
+   check_types $ARGS $width
+ 
+   : "Clear event for next loop"
 
-Thanks,
--- Marco
-
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 95d12e3d6d95..d6a912779816 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -15,7 +15,8 @@ menuconfig KUNIT
->  if KUNIT
->
->  config KUNIT_DEBUGFS
-> -       bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation"
-> +       bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation" if !KUNIT_RUN_ALL
-> +       default KUNIT_RUN_ALL
->         help
->           Enable debugfs representation for kunit.  Currently this consists
->           of /sys/kernel/debug/kunit/<test_suite>/results files for each
-> @@ -23,7 +24,8 @@ config KUNIT_DEBUGFS
->           run that occurred.
->
->  config KUNIT_TEST
-> -       tristate "KUnit test for KUnit"
-> +       tristate "KUnit test for KUnit" if !KUNIT_RUN_ALL
-> +       default KUNIT_RUN_ALL
->         help
->           Enables the unit tests for the KUnit test framework. These tests test
->           the KUnit test framework itself; the tests are both written using
-> @@ -32,7 +34,8 @@ config KUNIT_TEST
->           expected.
->
->  config KUNIT_EXAMPLE_TEST
-> -       tristate "Example test for KUnit"
-> +       tristate "Example test for KUnit" if !KUNIT_RUN_ALL
-> +       default KUNIT_RUN_ALL
->         help
->           Enables an example unit test that illustrates some of the basic
->           features of KUnit. This test only exists to help new users understand
-> @@ -41,4 +44,10 @@ config KUNIT_EXAMPLE_TEST
->           is intended for curious hackers who would like to understand how to
->           use KUnit for kernel development.
->
-> +config KUNIT_RUN_ALL
-> +       tristate "KUnit run all test"
-> +       help
-> +         Enables all KUnit tests. If they can be enabled.
-> +         That depends on if KUnit is enabled as a module or builtin.
-> +
-
-s/tests. If/tests, if/ ?
-
->  endif # KUNIT
-> diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-> index 0fe336860773..c4648426ea5d 100644
-> --- a/security/apparmor/Kconfig
-> +++ b/security/apparmor/Kconfig
-> @@ -70,8 +70,9 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
->           the kernel message buffer.
->
->  config SECURITY_APPARMOR_KUNIT_TEST
-> -       bool "Build KUnit tests for policy_unpack.c"
-> +       bool "Build KUnit tests for policy_unpack.c" if !KUNIT_RUN_ALL
->         depends on KUNIT=y && SECURITY_APPARMOR
-> +       default KUNIT_RUN_ALL
->         help
->           This builds the AppArmor KUnit tests.
->
-> --
-> 2.20.1
->
