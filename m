@@ -2,92 +2,107 @@ Return-Path: <SRS0=F1nM=6Q=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D648C47247
-	for <linux-kselftest@archiver.kernel.org>; Sat,  2 May 2020 04:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A695AC3A5A9
+	for <linux-kselftest@archiver.kernel.org>; Sat,  2 May 2020 04:42:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08CD22184D
-	for <linux-kselftest@archiver.kernel.org>; Sat,  2 May 2020 04:11:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E63E24954
+	for <linux-kselftest@archiver.kernel.org>; Sat,  2 May 2020 04:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588394533;
+	bh=S1e9cxXKElXzg5pTAonXc9u8JI0iLsAPtXeYi8T50ZQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=NvtQ8UVaTq84XSfpAmRBsdWQu84V3Q/P4GcIW7IqjvnlTX30EHLQqweIsXOeXRHwb
+	 Z+QCqBIB82akl/xp+H+y9FkEEAS/ugE1j0dCfbmXt/iRQMbd7vbjCyGBX8qnJHgwaz
+	 9I8uOBg0P0UmfIV6HEHSZn/o86t761MQXbg7JMKs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbgEBEL0 (ORCPT
+        id S1726463AbgEBEmN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 2 May 2020 00:11:26 -0400
-Received: from pbmsgap01.intersil.com ([192.157.179.201]:33542 "EHLO
-        pbmsgap01.intersil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgEBEL0 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 May 2020 00:11:26 -0400
-Received: from pps.filterd (pbmsgap01.intersil.com [127.0.0.1])
-        by pbmsgap01.intersil.com (8.16.0.27/8.16.0.27) with SMTP id 0423WbBg030627;
-        Fri, 1 May 2020 23:36:17 -0400
-Received: from pbmxdp02.intersil.corp (pbmxdp02.pb.intersil.com [132.158.200.223])
-        by pbmsgap01.intersil.com with ESMTP id 30mgqyuxy4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 01 May 2020 23:36:17 -0400
-Received: from pbmxdp03.intersil.corp (132.158.200.224) by
- pbmxdp02.intersil.corp (132.158.200.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.1531.3; Fri, 1 May 2020 23:36:16 -0400
-Received: from localhost (132.158.202.109) by pbmxdp03.intersil.corp
- (132.158.200.224) with Microsoft SMTP Server id 15.1.1531.3 via Frontend
- Transport; Fri, 1 May 2020 23:36:15 -0400
-From:   <vincent.cheng.xh@renesas.com>
-To:     <richardcochran@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Vincent Cheng <vincent.cheng.xh@renesas.com>
-Subject: [PATCH v2 net-next 0/3] ptp: Add adjust phase to support phase offset.
-Date:   Fri, 1 May 2020 23:35:35 -0400
-Message-ID: <1588390538-24589-1-git-send-email-vincent.cheng.xh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-X-TM-AS-MML: disable
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-05-01_18:2020-05-01,2020-05-01 signatures=0
-X-Proofpoint-Spam-Details: rule=junk_notspam policy=junk score=0 suspectscore=4 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=672
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-2002250000 definitions=main-2005020027
-X-Proofpoint-Spam-Reason: mlx
+        Sat, 2 May 2020 00:42:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59542 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726435AbgEBEmN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 2 May 2020 00:42:13 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3722B20787;
+        Sat,  2 May 2020 04:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588394532;
+        bh=S1e9cxXKElXzg5pTAonXc9u8JI0iLsAPtXeYi8T50ZQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nqpU/4qORKCayZQW2kFw76As9eRL4aqHNo0fRLBkcXbkmkANQf0cmY7U26Rj87YgY
+         gpp1DcxXeD6yaKArjwb/oHH67NjTfr0U82atZ5NgakvFGnAlTU2VCF5tZTRM5rSzJW
+         1S3TDm7s0YOUzZvnXmEW+K14MtNbn9t/LjsIiRbs=
+Date:   Sat, 2 May 2020 13:42:07 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     shuah <shuah@kernel.org>
+Cc:     Alan Maguire <alan.maguire@oracle.com>, rostedt@goodmis.org,
+        mingo@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2 2/2] ftrace/selftest: make unresolved cases cause
+ failure if --fail-unresolved set
+Message-Id: <20200502134207.0e60ed383c0867f1d82498fd@kernel.org>
+In-Reply-To: <75fc65c3-a639-41cf-0a10-554e632e9612@kernel.org>
+References: <1582104810-12983-1-git-send-email-alan.maguire@oracle.com>
+        <1582104810-12983-3-git-send-email-alan.maguire@oracle.com>
+        <20200219203941.eb0fb66aee13f6d7a47513ac@kernel.org>
+        <20200501184208.2529cac8081a34de0b48617f@kernel.org>
+        <75fc65c3-a639-41cf-0a10-554e632e9612@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Vincent Cheng <vincent.cheng.xh@renesas.com>
+On Fri, 1 May 2020 08:25:50 -0600
+shuah <shuah@kernel.org> wrote:
 
-This series adds adjust phase to the PTP Hardware Clock device interface.
+> On 5/1/20 3:42 AM, Masami Hiramatsu wrote:
+> > On Wed, 19 Feb 2020 20:39:41 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > 
+> >> On Wed, 19 Feb 2020 09:33:30 +0000
+> >> Alan Maguire <alan.maguire@oracle.com> wrote:
+> >>
+> >>> Currently, ftracetest will return 1 (failure) if any unresolved cases
+> >>> are encountered.  The unresolved status results from modules and
+> >>> programs not being available, and as such does not indicate any
+> >>> issues with ftrace itself.  As such, change the behaviour of
+> >>> ftracetest in line with unsupported cases; if unsupported cases
+> >>> happen, ftracetest still returns 0 unless --fail-unsupported.  Here
+> >>> --fail-unresolved is added and the default is to return 0 if
+> >>> unresolved results occur.
+> >>>
+> >>
+> >> OK, this looks good to me. One note, with this change, ftracetest doesn't
+> >> fail even if your test environment is not well prepared anymore.
+> >>
+> >> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > 
+> > Hi Shuah,
+> > Could you pick this up?
+> > 
+> > Po-Hsu Lin seemed to face same problem recently. If this applied, it will be solved.
+> > 
+> 
+> Sorry about this. I will get these in
 
-Some PTP hardware clocks have a write phase mode that has
-a built-in hardware filtering capability.  The write phase mode
-utilizes a phase offset control word instead of a frequency offset 
-control word.  Add adjust phase function to take advantage of this
-capability.
+Thanks Shuah!
 
-Changes since v1:
-- As suggested by Richard Cochran:
-  1. ops->adjphase is new so need to check for non-null function pointer.
-  2. Kernel coding style uses lower_case_underscores.
-  3. Use existing PTP clock API for delayed worker.
+> 
+> thanks,
+> -- Shuah
 
-Vincent Cheng (3):
-  ptp: Add adjphase function to support phase offset control.
-  ptp: Add adjust_phase to ptp_clock_caps capability.
-  ptp: ptp_clockmatrix: Add adjphase() to support PHC write phase mode.
-
- drivers/ptp/ptp_chardev.c             |  1 +
- drivers/ptp/ptp_clock.c               |  3 ++
- drivers/ptp/ptp_clockmatrix.c         | 92 +++++++++++++++++++++++++++++++++++
- drivers/ptp/ptp_clockmatrix.h         |  8 ++-
- include/linux/ptp_clock_kernel.h      |  6 ++-
- include/uapi/linux/ptp_clock.h        |  4 +-
- tools/testing/selftests/ptp/testptp.c |  6 ++-
- 7 files changed, 114 insertions(+), 6 deletions(-)
 
 -- 
-2.7.4
-
+Masami Hiramatsu <mhiramat@kernel.org>
