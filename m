@@ -2,134 +2,83 @@ Return-Path: <SRS0=U9kA=6V=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7B56C38A2A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 May 2020 21:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82084C35280
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 May 2020 23:00:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9686420731
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 May 2020 21:20:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5980F208D6
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 May 2020 23:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1588892400;
+	bh=preWQqOp8Pc/BQDK/HCdOhJQwQn4MK7nty1kqAPm9tU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=sBG2sttfyrzrOIqUAldiHBnl3ifVUNlCLiJJatbhZe0F2z71tNbG4JWz5nQ3kYPiw
+	 1yDsbIaQejAWBFsuN5VrFM/9Jl8ZfQJvKkY7u+hY6MtHETivdrXcDJTEi/D7iUdj4p
+	 LlMWGTfyAEz/BW9nhkVbncoWPsi3K2QtOmmb2tr8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgEGVU7 convert rfc822-to-8bit (ORCPT
+        id S1726531AbgEGXAA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 May 2020 17:20:59 -0400
-Received: from mga17.intel.com ([192.55.52.151]:45901 "EHLO mga17.intel.com"
+        Thu, 7 May 2020 19:00:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56836 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726445AbgEGVU7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 May 2020 17:20:59 -0400
-IronPort-SDR: cXd3lu1vyf3JlKwZtCbxdU0v3ZBCogVKH0d84JxX0dRqOtXjfuLqG4BPVvrzRhhSyYGAqeK+Hm
- MRZnfl3zknXg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 14:20:53 -0700
-IronPort-SDR: 0kTJmYL0Gfq5mjKxjJU2VO/yIYMWAQbdEuo9ogvmNUVvsbwNilNKkyj0X1vnZPFCrmpWp1aXsG
- kYgXgvuVMHaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,365,1583222400"; 
-   d="scan'208";a="295858558"
-Received: from orsmsx105.amr.corp.intel.com ([10.22.225.132])
-  by fmsmga002.fm.intel.com with ESMTP; 07 May 2020 14:20:53 -0700
-Received: from orsmsx114.amr.corp.intel.com ([169.254.8.97]) by
- ORSMSX105.amr.corp.intel.com ([169.254.2.15]) with mapi id 14.03.0439.000;
- Thu, 7 May 2020 14:20:53 -0700
-From:   "Prakhya, Sai Praneeth" <sai.praneeth.prakhya@intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [bug report] selftests/resctrl: Add callback to start a
- benchmark
-Thread-Topic: [bug report] selftests/resctrl: Add callback to start a
- benchmark
-Thread-Index: AQHWJGYSrYgwPG1cd0mIi3zfq7xYEqicw3Fg
-Date:   Thu, 7 May 2020 21:20:52 +0000
-Message-ID: <FFF73D592F13FD46B8700F0A279B802F5738E47D@ORSMSX114.amr.corp.intel.com>
-References: <20200507115056.GA252660@mwanda>
-In-Reply-To: <20200507115056.GA252660@mwanda>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.22.254.139]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1726515AbgEGW77 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 May 2020 18:59:59 -0400
+Received: from embeddedor (unknown [189.207.59.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 23ED3208D6;
+        Thu,  7 May 2020 22:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588892399;
+        bh=preWQqOp8Pc/BQDK/HCdOhJQwQn4MK7nty1kqAPm9tU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t55/I/+/iE+EQgrlSGQQr0+atvBKNAl4fmwb1o42u7jZn42+O8OpABbPyrbIP6WtH
+         Mr6vU/bRtpUpltPkiPsLraTCN8keUWkWQdrisBRzA53yaG45XjcYEzTbUayr7ygoEw
+         5vi/rBn3e0iYEV4YwhZN6iipPDMvQ+iQclYxWUfE=
+Date:   Thu, 7 May 2020 18:04:26 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools/testing: Replace zero-length array with
+ flexible-array
+Message-ID: <20200507230426.GA23186@embeddedor>
+References: <20200507185608.GA14779@embeddedor>
+ <94b19470-9ade-5fcc-00c7-324056d049de@linuxfoundation.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94b19470-9ade-5fcc-00c7-324056d049de@linuxfoundation.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dan,
-
-Thanks for reporting the issues. They look legitimate to me.
-I will send a fix.
-
-> -----Original Message-----
-> From: Dan Carpenter <dan.carpenter@oracle.com>
-> Sent: Thursday, May 7, 2020 4:51 AM
-> To: Prakhya, Sai Praneeth <sai.praneeth.prakhya@intel.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Subject: [bug report] selftests/resctrl: Add callback to start a benchmark
+On Thu, May 07, 2020 at 01:04:14PM -0600, Shuah Khan wrote:
+> > 
+> > diff --git a/tools/testing/selftests/nsfs/pidns.c b/tools/testing/selftests/nsfs/pidns.c
+> > index e0d86e1668c0..e3c772c6a7c7 100644
+> > --- a/tools/testing/selftests/nsfs/pidns.c
+> > +++ b/tools/testing/selftests/nsfs/pidns.c
+> > @@ -27,7 +27,7 @@
+> >   #define __stack_aligned__	__attribute__((aligned(16)))
+> >   struct cr_clone_arg {
+> >   	char stack[128] __stack_aligned__;
+> > -	char stack_ptr[0];
+> > +	char stack_ptr[];
+> >   };
+> >   static int child(void *args)
+> > 
 > 
-> Hello Sai Praneeth Prakhya,
-> 
-> The patch 7f4d257e3a2a: "selftests/resctrl: Add callback to start a benchmark"
-> from Jan 16, 2020, leads to the following static checker
-> warning:
-> 
-> 	tools/testing/selftests/resctrl/resctrl_val.c:545 measure_vals()
-> 	warn: 'bw_imc' unsigned <= 0
-> 
-> 	tools/testing/selftests/resctrl/resctrl_val.c:549 measure_vals()
-> 	warn: 'bw_resc_end' unsigned <= 0
+> Thanks for the patch. I will pull this in for 5.7-rc6
 > 
 
-I agree. There is no point checking for < 0 for unsigned values.
+Thanks, Shuah.
 
-> tools/testing/selftests/resctrl/resctrl_val.c
->    531  static int
->    532  measure_vals(struct resctrl_val_param *param, unsigned long
-> *bw_resc_start)
->    533  {
->    534          unsigned long bw_imc, bw_resc, bw_resc_end;
->    535          int ret;
->    536
->    537          /*
->    538           * Measure memory bandwidth from resctrl and from
->    539           * another source which is perf imc value or could
->    540           * be something else if perf imc event is not available.
->    541           * Compare the two values to validate resctrl value.
->    542           * It takes 1sec to measure the data.
->    543           */
->    544          bw_imc = get_mem_bw_imc(param->cpu_no, param->bw_report);
->    545          if (bw_imc <= 0)
->                     ^^^^^^^^^^^
-> Unsigned.  Also the comments for get_mem_bw_imc() says that zero is success.
+--
+Gustavo
 
-The comment is wrong. It should have been < 0 failure and > 0 as success.
-
->    546                  return bw_imc;
->    547
->    548          bw_resc_end = get_mem_bw_resctrl();
->    549          if (bw_resc_end <= 0)
->                     ^^^^^^^^^^^^^^^^
-> Unsigned
-> 
->    550                  return bw_resc_end;
->    551
->    552          bw_resc = (bw_resc_end - *bw_resc_start) / MB;
->    553          ret = print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
->    554          if (ret)
->    555                  return ret;
->    556
->    557          *bw_resc_start = bw_resc_end;
->    558
->    559          return 0;
->    560  }
-> 
-> regards,
-> dan carpenter
