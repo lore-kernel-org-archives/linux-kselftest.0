@@ -2,42 +2,42 @@ Return-Path: <SRS0=ekWS=6W=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BFAEC38A2A
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 19:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F73FC47257
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 19:20:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBC4020CC7
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 19:20:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41E8320CC7
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 19:20:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="f1uSc3RO"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Bb2vO5A2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgEHTUW (ORCPT
+        id S1727828AbgEHTU3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 8 May 2020 15:20:22 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17039 "EHLO
+        Fri, 8 May 2020 15:20:29 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17055 "EHLO
         hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbgEHTUW (ORCPT
+        with ESMTP id S1727816AbgEHTU2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 May 2020 15:20:22 -0400
+        Fri, 8 May 2020 15:20:28 -0400
 Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eb5b0e90000>; Fri, 08 May 2020 12:20:09 -0700
+        id <B5eb5b0ef0000>; Fri, 08 May 2020 12:20:15 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 08 May 2020 12:20:22 -0700
+  Fri, 08 May 2020 12:20:28 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 08 May 2020 12:20:22 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 8 May
- 2020 19:20:20 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 8 May 2020 19:20:20 +0000
+        by hqpgpgate101.nvidia.com on Fri, 08 May 2020 12:20:28 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 8 May
+ 2020 19:20:26 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 8 May 2020 19:20:26 +0000
 Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5eb5b0f3000a>; Fri, 08 May 2020 12:20:20 -0700
+        id <B5eb5b0f90000>; Fri, 08 May 2020 12:20:25 -0700
 From:   Ralph Campbell <rcampbell@nvidia.com>
 To:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
         <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
@@ -50,25 +50,27 @@ CC:     Jerome Glisse <jglisse@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@linuxfoundation.org>,
         Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH 0/6] nouveau/hmm: add support for mapping large pages
-Date:   Fri, 8 May 2020 12:20:03 -0700
-Message-ID: <20200508192009.15302-1-rcampbell@nvidia.com>
+Subject: [PATCH 4/6] mm/hmm: add output flag for compound page mapping
+Date:   Fri, 8 May 2020 12:20:07 -0700
+Message-ID: <20200508192009.15302-5-rcampbell@nvidia.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200508192009.15302-1-rcampbell@nvidia.com>
+References: <20200508192009.15302-1-rcampbell@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588965609; bh=jFq2mixtkzI32ozqz5hLHkzp0Ygs10xUW1B28WBNaLs=;
+        t=1588965615; bh=VWezLqS4HMRVGScQgCLLJAXh7u1icGGGw3VQK/+GVjs=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Type:
-         Content-Transfer-Encoding;
-        b=f1uSc3ROHwcanB7L/tnLl4h20hmLEQD3keM9GdJxSJn+hErrBRjoEQ9pNFoFKAS3y
-         KXQ272lLCVcvsmn3Xh+CZ8PGvmLztkdvTO9AW7DTZ8K26htGWFfd4Z3lL/AsL0Gqmk
-         a2fyv9afMBkOOvcCPRVcP6FGdddhhrTMTn57sAbBgvBbXHlMkrCpzSzLoZNADRGtOO
-         T2pwhT2QsojXnT8v9nFgKvI91dK5M0SVdfBW0Oflirjs3is2qdNCUgrI1BH++cbcyW
-         YRWzjzSYUGCu/H/jdIfvhJ/DeCELi/J6Udl7WwSWZelaLryvmfp4l417C4xxGZ98PL
-         aKtDXj0RDipAw==
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=Bb2vO5A2hOIdj0cSUnCngCJ1jAZCVlZ/f3ExAGu4jfMOHizJfCs7hcwT8TggEKy71
+         FSGEMOJa6qeJFBqoGrxDNGS/8XBOjVLERYDg7fQ50phKtSk9EAI8M7jGdc4fIaTrEP
+         gmQPmqMsAssiwj6YgVNCEElyN6cYU3BlxMXzYLAHcFuScGOU5uZ87xdsWfACk5VVaG
+         a9eIBYmwaBYuZNNVfQUt4WOLHoYwsNxhVtXNuvhXGOIcNaq9TeKaJTtlfOAvzQoEMe
+         NIz5JRSlDyEk+6reB/J+5FEc13yx67WZcYjmt0oO1i2EWO/9j5C9Y+3hX2M2o32rxH
+         cfcJSWIcVJJbw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -83,42 +85,74 @@ using a larger page size. To be fully general, hmm_range_fault() would need
 to return the mapping size to handle cases like a 1GB compound page being
 mapped with 2MB PMD entries. However, the most common case is the mapping
 size the same as the underlying compound page size.
-This series adds a new output flag to indicate this so that callers know it
-is safe to use a large device page table mapping if one is available.
-Nouveau and the HMM tests are updated to use the new flag.
+Add a new output flag to indicate this so that callers know it is safe to
+use a large device page table mapping if one is available.
 
-Note that this series depends on a patch queued in Ben Skeggs' nouveau
-tree ("nouveau/hmm: map pages after migration") and the patches queued
-in Jason's HMM tree.
-There is also a patch outstanding ("nouveau/hmm: fix nouveau_dmem_chunk
-allocations") that is independent of the above and could be applied
-before or after.
+Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+---
+ include/linux/hmm.h |  4 +++-
+ mm/hmm.c            | 10 +++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-
-Ralph Campbell (6):
-  nouveau/hmm: map pages after migration
-  nouveau: make nvkm_vmm_ctor() and nvkm_mmu_ptp_get() static
-  nouveau/hmm: fault one page at a time
-  mm/hmm: add output flag for compound page mapping
-  nouveau/hmm: support mapping large sysmem pages
-  hmm: add tests for HMM_PFN_COMPOUND flag
-
- drivers/gpu/drm/nouveau/nouveau_dmem.c        |  46 ++-
- drivers/gpu/drm/nouveau/nouveau_dmem.h        |   2 +
- drivers/gpu/drm/nouveau/nouveau_svm.c         | 288 +++++++++---------
- drivers/gpu/drm/nouveau/nouveau_svm.h         |   5 +
- .../gpu/drm/nouveau/nvkm/subdev/mmu/base.c    |   6 +-
- .../gpu/drm/nouveau/nvkm/subdev/mmu/priv.h    |   2 +
- drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |  12 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |   3 -
- .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    |  29 +-
- include/linux/hmm.h                           |   4 +-
- lib/test_hmm.c                                |   2 +
- lib/test_hmm_uapi.h                           |   2 +
- mm/hmm.c                                      |  10 +-
- tools/testing/selftests/vm/hmm-tests.c        |  76 +++++
- 14 files changed, 311 insertions(+), 176 deletions(-)
-
+diff --git a/include/linux/hmm.h b/include/linux/hmm.h
+index e912b9dc4633..f2d38af421e7 100644
+--- a/include/linux/hmm.h
++++ b/include/linux/hmm.h
+@@ -41,12 +41,14 @@ enum hmm_pfn_flags {
+ 	HMM_PFN_VALID =3D 1UL << (BITS_PER_LONG - 1),
+ 	HMM_PFN_WRITE =3D 1UL << (BITS_PER_LONG - 2),
+ 	HMM_PFN_ERROR =3D 1UL << (BITS_PER_LONG - 3),
++	HMM_PFN_COMPOUND =3D 1UL << (BITS_PER_LONG - 4),
+=20
+ 	/* Input flags */
+ 	HMM_PFN_REQ_FAULT =3D HMM_PFN_VALID,
+ 	HMM_PFN_REQ_WRITE =3D HMM_PFN_WRITE,
+=20
+-	HMM_PFN_FLAGS =3D HMM_PFN_VALID | HMM_PFN_WRITE | HMM_PFN_ERROR,
++	HMM_PFN_FLAGS =3D HMM_PFN_VALID | HMM_PFN_WRITE | HMM_PFN_ERROR |
++			HMM_PFN_COMPOUND,
+ };
+=20
+ /*
+diff --git a/mm/hmm.c b/mm/hmm.c
+index 41673a6d8d46..a9dd06e190a1 100644
+--- a/mm/hmm.c
++++ b/mm/hmm.c
+@@ -170,7 +170,9 @@ static inline unsigned long pmd_to_hmm_pfn_flags(struct=
+ hmm_range *range,
+ {
+ 	if (pmd_protnone(pmd))
+ 		return 0;
+-	return pmd_write(pmd) ? (HMM_PFN_VALID | HMM_PFN_WRITE) : HMM_PFN_VALID;
++	return pmd_write(pmd) ?
++			(HMM_PFN_VALID | HMM_PFN_COMPOUND | HMM_PFN_WRITE) :
++			(HMM_PFN_VALID | HMM_PFN_COMPOUND);
+ }
+=20
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+@@ -389,7 +391,9 @@ static inline unsigned long pud_to_hmm_pfn_flags(struct=
+ hmm_range *range,
+ {
+ 	if (!pud_present(pud))
+ 		return 0;
+-	return pud_write(pud) ? (HMM_PFN_VALID | HMM_PFN_WRITE) : HMM_PFN_VALID;
++	return pud_write(pud) ?
++			(HMM_PFN_VALID | HMM_PFN_COMPOUND | HMM_PFN_WRITE) :
++			(HMM_PFN_VALID | HMM_PFN_COMPOUND);
+ }
+=20
+ static int hmm_vma_walk_pud(pud_t *pudp, unsigned long start, unsigned lon=
+g end,
+@@ -484,7 +488,7 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsig=
+ned long hmask,
+=20
+ 	pfn =3D pte_pfn(entry) + ((start & ~hmask) >> PAGE_SHIFT);
+ 	for (; addr < end; addr +=3D PAGE_SIZE, i++, pfn++)
+-		range->hmm_pfns[i] =3D pfn | cpu_flags;
++		range->hmm_pfns[i] =3D pfn | cpu_flags | HMM_PFN_COMPOUND;
+=20
+ 	spin_unlock(ptl);
+ 	return 0;
 --=20
 2.20.1
 
