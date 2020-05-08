@@ -2,319 +2,109 @@ Return-Path: <SRS0=ekWS=6W=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0EFDC54E4B
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 00:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6009FC38A2A
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 04:56:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97BA3208E4
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 00:28:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D622208D6
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 May 2020 04:56:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="WY570466"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YongsVUN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbgEHA14 (ORCPT
+        id S1725780AbgEHE4Q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 May 2020 20:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726768AbgEHA1z (ORCPT
+        Fri, 8 May 2020 00:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725550AbgEHE4Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 May 2020 20:27:55 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFEBC05BD09
-        for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2020 17:27:55 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id f8so2792155plt.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2020 17:27:55 -0700 (PDT)
+        Fri, 8 May 2020 00:56:16 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5121CC05BD43
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2020 21:56:16 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id 207so315610pgc.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2020 21:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=u7/h/eqntzSSX/y8Dnt/qKeb8xeHhhqI6vDQQdqUWRg=;
-        b=WY570466cdXCFDg5UUmDEpWFQ3Yryq9+InRUxLMe8NW5h79Y9EIl/2eziyIKJF9cyv
-         jCRfVFZX7NmtgrYx4V1Ag9KRbvoYh2kdc3NQS7j0GIWbz2B5V+0ET/DZpMcvwPoLB50G
-         AyXiAC20JfNLfpKz3pGDd7MnFKBEnxq39VyG4=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=4CNZy247ICcFx3HCeAu3lFAco0E9gMG+0QdnsbzPiRo=;
+        b=YongsVUNpHD9pyODgLUWb/61UgHn39x8OVioXsqsF8t1wwG89KBDqSL6gSxorgd9k/
+         g5T8jWEiH3DSGv7acmuQXIGGzN7sTXF3NStQ2YTee6G0PEbK67HSSVAtPAHU9XybTN1M
+         aQ49zkZht+DgamSC1QAGbZEfnNrfzBGWhEB/FJGNrkzwzZtGdLWQFuz02wCT9TT6IvwC
+         JdFrTlS8NmCdS1cvcoyFmjapEa4vx4HKpdpKrw8Z0ql2EQG1ZMEzABuFIgLN6U99b9Ta
+         gUYdOvR0cOs+31NukcL5XHWI8vGgztzelE+KIPZ0szEB++UYVvFk1gbHMIiKxJMQQh+u
+         GA2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=u7/h/eqntzSSX/y8Dnt/qKeb8xeHhhqI6vDQQdqUWRg=;
-        b=VgogeDTVe+0vJXMcMf4aHB5K/1whRyK3Ga/u5LMev6EVnN+aVNbN2JJgNq94ozVfV2
-         u9grwGre/zrtLhYad6Y+n7SMpySsOjvx9S54a8cvVfBBKUGh7AJMad1w1FfI817I+YSq
-         zZGLQJ04UN99KiSovhbekkoO+MGb3CarmTDhATPOR2axjmP2eQvhO1Z+SC8lczUDwP7G
-         8hjeKvIkeeRdpnWOPQq2s6QzYzYuKBRuv2MvgJAJ/YoH7kbARn2X94nq52kNvxHhBHzC
-         QUvrCsfvR6fpfAJP+uKb+nbi7ahRcJh9b5E8PLBVjtCSKfEwpQcpXdrL7aGGn3iBDAKr
-         3/+g==
-X-Gm-Message-State: AGi0Pua4B7U4Knq1rP654HW2TwwwwCp8lGDXu6UEn0B0k8Wgy6GZu2rx
-        zVXavBlRNtm+dBYYw+VlKk6bZw==
-X-Google-Smtp-Source: APiQypKKF7MxQSDwOxGW2gNzQx2R0Qm/nhUzyMXxxE1Ui6sskddYRC0KLf1QwIc/o3/Ne063W1uq7g==
-X-Received: by 2002:a17:902:9a41:: with SMTP id x1mr8877118plv.4.1588897674495;
-        Thu, 07 May 2020 17:27:54 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id gz14sm882677pjb.42.2020.05.07.17.27.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4CNZy247ICcFx3HCeAu3lFAco0E9gMG+0QdnsbzPiRo=;
+        b=i0VU7NZwox7G/DiDdGeje6marBmRkFdyZRSB+aVraC7nCkQtpMum2HwMvJYFEs+wNv
+         IRhgDtPHf3KrNoShnxyRAujE5ja49kNoH9dCMvOuAG82YiasrCs1ik9YhjF+6017EHq/
+         q22SzKDSQBrqcrnjq6AkO2L+CZzsio+9ip+45R91mzwBwSVaAgpz5uCZidRr++FGIDXX
+         qj7v3u7If6H7oakkxZGZKrioqc8Lopbtj5TZXgKrbvdP+aInIDrh07F3D2uGDmVKPs5n
+         UwbAs+Y+GhdRLb6YjoN8x/OKbrKtDsAvX7OV+bHULvnsIh9FWZqhPZ2R5tToCVHahCm8
+         iXqA==
+X-Gm-Message-State: AGi0PubDgCM1Hlc/cGxY2ka/WgqwMKvl9oEtCFgW5Ze1+xQyVLtvgB37
+        m5kS9/Z0YTUwM9XncuA+YOH+Ug==
+X-Google-Smtp-Source: APiQypKH7PmGUi/XHWEExL2pZ4ExfPw8tZVjceK5ZGdxg/94ViJwHsuu88DxdsCvzqKaPIiI68ArGA==
+X-Received: by 2002:a63:5824:: with SMTP id m36mr588890pgb.439.1588913775577;
+        Thu, 07 May 2020 21:56:15 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id d124sm426812pfa.98.2020.05.07.21.56.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 17:27:53 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
-Date:   Thu,  7 May 2020 17:27:33 -0700
-Message-Id: <20200508002739.19360-2-scott.branden@broadcom.com>
+        Thu, 07 May 2020 21:56:14 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Laura Abbott <labbott@redhat.com>,
+        "Andrew F. Davis" <afd@ti.com>, linux-kselftest@vger.kernel.org
+Subject: [PATCH] kselftests: dmabuf-heaps: Fix confused return value on expected error testing
+Date:   Fri,  8 May 2020 04:56:10 +0000
+Message-Id: <20200508045610.80522-1-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200508002739.19360-1-scott.branden@broadcom.com>
-References: <20200508002739.19360-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add kernel_pread_file* support to kernel to allow for partial read
-of files with an offset into the file.  Existing kernel_read_file
-functions call new kernel_pread_file functions with offset=0 and
-flags=KERNEL_PREAD_FLAG_WHOLE.
+When I added the expected error testing, I forgot I need to set
+the return to zero when we successfully see an error.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+Without this change we only end up testing a single heap
+before the test quits.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc: Brian Starkey <brian.starkey@arm.com>
+Cc: Laura Abbott <labbott@redhat.com>
+Cc: "Andrew F. Davis" <afd@ti.com>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- fs/exec.c          | 96 ++++++++++++++++++++++++++++++++++++----------
- include/linux/fs.h | 20 ++++++++++
- 2 files changed, 95 insertions(+), 21 deletions(-)
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 06b4c550af5d..cfab212fab9d 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -896,10 +896,14 @@ struct file *open_exec(const char *name)
- }
- EXPORT_SYMBOL(open_exec);
- 
--int kernel_read_file(struct file *file, void **buf, loff_t *size,
--		     loff_t max_size, enum kernel_read_file_id id)
--{
--	loff_t i_size, pos;
-+int kernel_pread_file(struct file *file, void **buf, loff_t *size,
-+		      loff_t pos, loff_t max_size, unsigned int flags,
-+		      enum kernel_read_file_id id)
-+{
-+	loff_t alloc_size;
-+	loff_t buf_pos;
-+	loff_t read_end;
-+	loff_t i_size;
- 	ssize_t bytes = 0;
- 	int ret;
- 
-@@ -919,21 +923,31 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
- 		ret = -EINVAL;
- 		goto out;
- 	}
--	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
-+
-+	/* Default read to end of file */
-+	read_end = i_size;
-+
-+	/* Allow reading partial portion of file */
-+	if ((flags & KERNEL_PREAD_FLAG_PART) &&
-+	    (i_size > (pos + max_size)))
-+		read_end = pos + max_size;
-+
-+	alloc_size = read_end - pos;
-+	if (i_size > SIZE_MAX || (max_size > 0 && alloc_size > max_size)) {
- 		ret = -EFBIG;
- 		goto out;
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index cd5e1f602ac9..909da9cdda97 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -351,6 +351,7 @@ static int test_alloc_errors(char *heap_name)
  	}
  
- 	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
--		*buf = vmalloc(i_size);
-+		*buf = vmalloc(alloc_size);
- 	if (!*buf) {
- 		ret = -ENOMEM;
- 		goto out;
- 	}
- 
--	pos = 0;
--	while (pos < i_size) {
--		bytes = kernel_read(file, *buf + pos, i_size - pos, &pos);
-+	buf_pos = 0;
-+	while (pos < read_end) {
-+		bytes = kernel_read(file, *buf + buf_pos, read_end - pos, &pos);
- 		if (bytes < 0) {
- 			ret = bytes;
- 			goto out_free;
-@@ -941,14 +955,16 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
- 
- 		if (bytes == 0)
- 			break;
-+
-+		buf_pos += bytes;
- 	}
- 
--	if (pos != i_size) {
-+	if (pos != read_end) {
- 		ret = -EIO;
- 		goto out_free;
- 	}
- 
--	ret = security_kernel_post_read_file(file, *buf, i_size, id);
-+	ret = security_kernel_post_read_file(file, *buf, alloc_size, id);
- 	if (!ret)
- 		*size = pos;
- 
-@@ -964,10 +980,20 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
- 	allow_write_access(file);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(kernel_pread_file);
-+
-+int kernel_read_file(struct file *file, void **buf, loff_t *size,
-+		     loff_t max_size, enum kernel_read_file_id id)
-+{
-+	return kernel_pread_file(file, buf, size, 0, max_size,
-+				 KERNEL_PREAD_FLAG_WHOLE, id);
-+}
- EXPORT_SYMBOL_GPL(kernel_read_file);
- 
--int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
--			       loff_t max_size, enum kernel_read_file_id id)
-+int kernel_pread_file_from_path(const char *path, void **buf,
-+				loff_t *size, loff_t pos,
-+				loff_t max_size, unsigned int flags,
-+				enum kernel_read_file_id id)
- {
- 	struct file *file;
- 	int ret;
-@@ -979,15 +1005,25 @@ int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
- 	if (IS_ERR(file))
- 		return PTR_ERR(file);
- 
--	ret = kernel_read_file(file, buf, size, max_size, id);
-+	ret = kernel_pread_file(file, buf, size, pos, max_size, flags, id);
- 	fput(file);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(kernel_pread_file_from_path);
-+
-+int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
-+			       loff_t max_size, enum kernel_read_file_id id)
-+{
-+	return kernel_pread_file_from_path(path, buf, size, 0, max_size,
-+					   KERNEL_PREAD_FLAG_WHOLE, id);
-+}
- EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
- 
--int kernel_read_file_from_path_initns(const char *path, void **buf,
--				      loff_t *size, loff_t max_size,
--				      enum kernel_read_file_id id)
-+extern int kernel_pread_file_from_path_initns(const char *path, void **buf,
-+					      loff_t *size, loff_t pos,
-+					      loff_t max_size,
-+					      unsigned int flags,
-+					      enum kernel_read_file_id id)
- {
- 	struct file *file;
- 	struct path root;
-@@ -1005,14 +1041,24 @@ int kernel_read_file_from_path_initns(const char *path, void **buf,
- 	if (IS_ERR(file))
- 		return PTR_ERR(file);
- 
--	ret = kernel_read_file(file, buf, size, max_size, id);
-+	ret = kernel_pread_file(file, buf, size, pos, max_size, flags, id);
- 	fput(file);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(kernel_pread_file_from_path_initns);
-+
-+int kernel_read_file_from_path_initns(const char *path, void **buf,
-+				      loff_t *size, loff_t max_size,
-+				      enum kernel_read_file_id id)
-+{
-+	return kernel_pread_file_from_path_initns(path, buf, size, 0, max_size,
-+						  KERNEL_PREAD_FLAG_WHOLE, id);
-+}
- EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
- 
--int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
--			     enum kernel_read_file_id id)
-+int kernel_pread_file_from_fd(int fd, void **buf, loff_t *size, loff_t pos,
-+			      loff_t max_size, unsigned int flags,
-+			      enum kernel_read_file_id id)
- {
- 	struct fd f = fdget(fd);
- 	int ret = -EBADF;
-@@ -1020,11 +1066,19 @@ int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
- 	if (!f.file)
- 		goto out;
- 
--	ret = kernel_read_file(f.file, buf, size, max_size, id);
-+	ret = kernel_pread_file(f.file, buf, size, pos, max_size, flags, id);
+ 	printf("Expected error checking passed\n");
++	ret = 0;
  out:
- 	fdput(f);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(kernel_pread_file_from_fd);
-+
-+int kernel_read_file_from_fd(int fd, void **buf, loff_t *size, loff_t max_size,
-+			     enum kernel_read_file_id id)
-+{
-+	return kernel_pread_file_from_fd(fd, buf, size, 0, max_size,
-+					 KERNEL_PREAD_FLAG_WHOLE, id);
-+}
- EXPORT_SYMBOL_GPL(kernel_read_file_from_fd);
- 
- ssize_t read_code(struct file *file, unsigned long addr, loff_t pos, size_t len)
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 45cc10cdf6dd..4bba930b77d7 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3014,12 +3014,32 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
- 	return kernel_read_file_str[id];
- }
- 
-+/* Flags used by kernel_pread_file functions */
-+#define KERNEL_PREAD_FLAG_WHOLE	0x0000 /* Only Allow reading of whole file */
-+#define KERNEL_PREAD_FLAG_PART	0x0001 /* Allow reading part of file */
-+
-+extern int kernel_pread_file(struct file *file, void **buf, loff_t *size,
-+			     loff_t pos, loff_t max_size, unsigned int flags,
-+			     enum kernel_read_file_id id);
- extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
- 			    enum kernel_read_file_id);
-+extern int kernel_pread_file_from_path(const char *path, void **buf,
-+				       loff_t *size, loff_t pos,
-+				       loff_t max_size, unsigned int flags,
-+				       enum kernel_read_file_id id);
- extern int kernel_read_file_from_path(const char *, void **, loff_t *, loff_t,
- 				      enum kernel_read_file_id);
-+extern int kernel_pread_file_from_path_initns(const char *path, void **buf,
-+					      loff_t *size, loff_t pos,
-+					      loff_t max_size,
-+					      unsigned int flags,
-+					      enum kernel_read_file_id id);
- extern int kernel_read_file_from_path_initns(const char *, void **, loff_t *, loff_t,
- 					     enum kernel_read_file_id);
-+extern int kernel_pread_file_from_fd(int fd, void **buf, loff_t *size,
-+				    loff_t pos, loff_t max_size,
-+				    unsigned int flags,
-+				    enum kernel_read_file_id id);
- extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
- 				    enum kernel_read_file_id);
- extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+ 	if (dmabuf_fd >= 0)
+ 		close(dmabuf_fd);
 -- 
 2.17.1
 
