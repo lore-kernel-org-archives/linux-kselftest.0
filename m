@@ -2,111 +2,118 @@ Return-Path: <SRS0=kCkM=6Z=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCCEC54E4A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 13:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6EA5C47255
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 13:36:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 473A220746
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 13:14:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Mf4oTEHJ"
+	by mail.kernel.org (Postfix) with ESMTP id A147820708
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 13:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1589204194;
+	bh=8DynboS6OUq8obog0yLupsM4d16CMsXlKuWciX/Red8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=dh6VaqoITWWeEi/6OhInNV6oH6WLxgtJqiIlACV21x+edTJLFM62S2/TGaQavIyKa
+	 r3Xi3jS6PmwLT9TgQqncgv5GhS2yv5webfm7H0Ta80Abf3gZthS2bwA2zPg6jr27Ik
+	 O87bxi8OAz+Ho+D8Ckq0qPvzJRZ0T2nN4bnWQxQk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730063AbgEKNO4 (ORCPT
+        id S1728683AbgEKNge (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 May 2020 09:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730178AbgEKNOo (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 09:14:44 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9368BC061A0C
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:43 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id u15so9431920ljd.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2020 06:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NUI8ReX5/Xpd2JtmMzMM9tmFtAIP0fE4oQnYr/awLr4=;
-        b=Mf4oTEHJWwSVTn10OhDNWzpklozAK40LfcyfvQ9AbRpvTcuDFjkPFSTgO5oWQGfh5G
-         +OoMFOjdEjCxi0z+ObuIxNswHw0bhXDyGkWNUTl69wkl7eYP5ORiOyP2SOSw9ZJh07J5
-         t+Oeb77OKHbJQUcoGRbrxOJ0aX4BaIrOSX6Gmx2mOf6ABEKoPNrx83Mhn4TJmXvDdFNS
-         sIhm5SpMofg5+pMCXVr1TB1bXdsDsd3Ayye8nOQNw3FhfcwSdzS7y7eDiy2IO/Q1qiJJ
-         vjVa4x33tXG/P4XoV1zIpzeIOqROR8PMYTxcAcMVSQZMne9Bl7un44l5nMcX9BxiLTyq
-         StWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NUI8ReX5/Xpd2JtmMzMM9tmFtAIP0fE4oQnYr/awLr4=;
-        b=gc7Z10JcEhxCTas4ZIlrD10ytqP0yH7lO5PI/QeTXjfFIZLwVZig1jMjm5Dwg1irm5
-         PAJg5GzMOzpMkVXiWP0GbjPBRZFOJcAXerY5lkmIxszcSvkJywOjqM/qnH4sTnFi4Ob+
-         IGpJ+AUB0hK2KMSHWnH+bFF/5467kOtGY51N3JGy/SEH48+9iOJ5ntbytdCtwyDEJUUE
-         YmqAneSn4GKjuILwxrSeaVeijcT1RRHoW02SBASjRRN7a9o4Wg52IaYQ8RpbylHlcfUb
-         37w7JjV2O57eFmys5eEUTJ3MJ3OrVIvvz4QH1kJ8GIXI7BjAP7Ostp7cwNbEWaJA1u8/
-         jRKA==
-X-Gm-Message-State: AOAM533anjSudDKucrkq3qo5tZgLy/6SmFYijqcVfY15AOK5oSKpE8Xt
-        ZS1mDNXYBFpbeF++C/LKQQ/4CQ==
-X-Google-Smtp-Source: ABdhPJy2dZ6Y0VUcG0irmoqyiuwPNOkxYOUJZjg40KYU72VLIUApg9pgi+sw8OwzBxDCJ0ulK7v34g==
-X-Received: by 2002:a2e:7412:: with SMTP id p18mr9935005ljc.256.1589202882058;
-        Mon, 11 May 2020 06:14:42 -0700 (PDT)
-Received: from localhost (c-8c28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.140])
-        by smtp.gmail.com with ESMTPSA id r2sm9984936ljm.8.2020.05.11.06.14.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 06:14:41 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     john.johansen@canonical.com, jmorris@namei.org, serge@hallyn.com,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-security-module@vger.kernel.org,
-        elver@google.com, davidgow@google.com,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v3 5/6] fs: ext4: default KUNIT_* fragments to KUNIT_ALL_TESTS
-Date:   Mon, 11 May 2020 15:14:38 +0200
-Message-Id: <20200511131438.29953-1-anders.roxell@linaro.org>
+        Mon, 11 May 2020 09:36:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43354 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729546AbgEKNge (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 May 2020 09:36:34 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 50C88206F9;
+        Mon, 11 May 2020 13:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589204193;
+        bh=8DynboS6OUq8obog0yLupsM4d16CMsXlKuWciX/Red8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aCmXliY0Luuna4EBlNA170YSeDStzaq/FBchKGaD1YBe5XzWo0xCbYQvOuuL4lFef
+         AFHvZOHpDFaVsi3i2X182LMexoAFz7oX3lPFIVKK6SKrvCi0ye34B65xH2kW0J8PY6
+         EcbzeOkJrfdpIeNZE9sTe62aRqptPpDoJ92nR7y4=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Li Philip <philip.li@intel.com>,
+        Liu Yiding <yidingx.liu@intel.com>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: [PATCH v2] selftests/ftrace: Use printf for backslash included command
+Date:   Mon, 11 May 2020 22:36:27 +0900
+Message-Id: <158920418730.16156.8299185499520876735.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <87imh21x6f.fsf@igel.home>
+References: <87imh21x6f.fsf@igel.home>
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes it easier to enable all KUnit fragments.
+Since the built-in echo has different behavior in POSIX shell
+(dash) and bash, kprobe_syntax_errors.tc can fail on dash which
+interpret backslash escape automatically.
 
-Adding 'if !KUNIT_ALL_TESTS' so individual tests can not be turned off.
-Therefore if KUNIT_ALL_TESTS is enabled that will hide the prompt in
-menuconfig.
+To fix this issue, we explicitly use printf "%s" (not interpret
+backslash escapes) if the command string can include backslash.
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reported-by: Liu Yiding <yidingx.liu@intel.com>
+Suggested-by: Xiao Yang <yangx.jy@cn.fujitsu.com>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- fs/ext4/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/ftrace/test.d/functions    |    8 +++++---
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    4 +++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
-index 2a592e38cdfe..bc7815158503 100644
---- a/fs/ext4/Kconfig
-+++ b/fs/ext4/Kconfig
-@@ -103,9 +103,10 @@ config EXT4_DEBUG
- 		echo 1 > /sys/module/ext4/parameters/mballoc_debug
+diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+index 61a3c7e2634d..697c77ef2e2b 100644
+--- a/tools/testing/selftests/ftrace/test.d/functions
++++ b/tools/testing/selftests/ftrace/test.d/functions
+@@ -119,12 +119,14 @@ yield() {
+     ping $LOCALHOST -c 1 || sleep .001 || usleep 1 || sleep 1
+ }
  
- config EXT4_KUNIT_TESTS
--	tristate "KUnit tests for ext4"
-+	tristate "KUnit tests for ext4" if !KUNIT_ALL_TESTS
- 	select EXT4_FS
- 	depends on KUNIT
-+	default KUNIT_ALL_TESTS
- 	help
- 	  This builds the ext4 KUnit tests.
- 
--- 
-2.20.1
++# Since probe event command may include backslash, explicitly use printf "%s"
++# to NOT interpret it.
+ ftrace_errlog_check() { # err-prefix command-with-error-pos-by-^ command-file
+-    pos=$(echo -n "${2%^*}" | wc -c) # error position
+-    command=$(echo "$2" | tr -d ^)
++    pos=$(printf "%s" "${2%^*}" | wc -c) # error position
++    command=$(printf "%s" "$2" | tr -d ^)
+     echo "Test command: $command"
+     echo > error_log
+-    (! echo "$command" >> "$3" ) 2> /dev/null
++    (! printf "%s" "$command" >> "$3" ) 2> /dev/null
+     grep "$1: error:" -A 3 error_log
+     N=$(tail -n 1 error_log | wc -c)
+     # "  Command: " and "^\n" => 13
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+index ef1e9bafb098..eb0f4ab4e070 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+@@ -91,7 +91,9 @@ esac
+ if grep -q "Create/append/" README && grep -q "imm-value" README; then
+ echo 'p:kprobes/testevent _do_fork' > kprobe_events
+ check_error '^r:kprobes/testevent do_exit'	# DIFF_PROBE_TYPE
+-echo 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
++
++# Explicitly use printf "%s" to not interpret \1
++printf "%s" 'p:kprobes/testevent _do_fork abcd=\1' > kprobe_events
+ check_error 'p:kprobes/testevent _do_fork ^bcd=\1'	# DIFF_ARG_TYPE
+ check_error 'p:kprobes/testevent _do_fork ^abcd=\1:u8'	# DIFF_ARG_TYPE
+ check_error 'p:kprobes/testevent _do_fork ^abcd=\"foo"'	# DIFF_ARG_TYPE
 
