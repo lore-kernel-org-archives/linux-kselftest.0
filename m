@@ -2,31 +2,30 @@ Return-Path: <SRS0=kCkM=6Z=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.7 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D3CC54E4B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 19:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E76C54E90
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 19:22:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DBF02082E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 19:22:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5C0B2075E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 May 2020 19:22:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731383AbgEKTWK (ORCPT
+        id S1731471AbgEKTWb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 May 2020 15:22:10 -0400
-Received: from smtp-190e.mail.infomaniak.ch ([185.125.25.14]:37485 "EHLO
-        smtp-190e.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731376AbgEKTWK (ORCPT
+        Mon, 11 May 2020 15:22:31 -0400
+Received: from smtp-1908.mail.infomaniak.ch ([185.125.25.8]:55307 "EHLO
+        smtp-1908.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731428AbgEKTWW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 May 2020 15:22:10 -0400
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49LW5p4RbfzlhKHH;
-        Mon, 11 May 2020 21:22:06 +0200 (CEST)
+        Mon, 11 May 2020 15:22:22 -0400
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 49LW604ZsKzlhPr8;
+        Mon, 11 May 2020 21:22:16 +0200 (CEST)
 Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 49LW5p1x6hzlhFjg;
-        Mon, 11 May 2020 21:22:06 +0200 (CEST)
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 49LW601z8KzlhDnW;
+        Mon, 11 May 2020 21:22:16 +0200 (CEST)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
@@ -46,9 +45,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v17 01/10] landlock: Add object management
-Date:   Mon, 11 May 2020 21:21:47 +0200
-Message-Id: <20200511192156.1618284-2-mic@digikod.net>
+Subject: [PATCH v17 09/10] samples/landlock: Add a sandbox manager example
+Date:   Mon, 11 May 2020 21:21:55 +0200
+Message-Id: <20200511192156.1618284-10-mic@digikod.net>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200511192156.1618284-1-mic@digikod.net>
 References: <20200511192156.1618284-1-mic@digikod.net>
@@ -62,26 +61,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A Landlock object enables to identify a kernel object (e.g. an inode).
-A Landlock rule is a set of access rights allowed on an object.  Rules
-are grouped in rulesets that may be tied to a set of processes (i.e.
-subjects) to enforce a scoped access-control (i.e. a domain).
-
-Because Landlock's goal is to empower any process (especially
-unprivileged ones) to sandbox themselves, we can't rely on a system-wide
-object identification such as file extended attributes.  Indeed, we need
-innocuous, composable and modular access-controls.
-
-The main challenge with these constraints is to identify kernel objects
-while this identification is useful (i.e. when a security policy makes
-use of this object).  But this identification data should be freed once
-no policy is using it.  This ephemeral tagging should not and may not be
-written in the filesystem.  We then need to manage the lifetime of a
-rule according to the lifetime of its object.  To avoid a global lock,
-this implementation make use of RCU and counters to safely reference
-objects.
-
-A following commit uses this generic object management for inodes.
+Add a basic sandbox tool to launch a command which can only access a
+whitelist of file hierarchies in a read-only or read-write way.
 
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Cc: James Morris <jmorris@namei.org>
@@ -90,302 +71,337 @@ Cc: Kees Cook <keescook@chromium.org>
 Cc: Serge E. Hallyn <serge@hallyn.com>
 ---
 
-Changes since v14:
-* Simplify the object, rule and ruleset management at the expense of a
-  less aggressive memory freeing (contributed by Jann Horn, with
-  additional modifications):
-  - Remove object->list aggregating the rules tied to an object.
-  - Remove landlock_get_object(), landlock_drop_object(),
-    {get,put}_object_cleaner() and landlock_rule_is_disabled().
-  - Rewrite landlock_put_object() to use a more simple mechanism
-    (no tricky RCU).
-  - Replace enum landlock_object_type and landlock_release_object() with
-    landlock_object_underops->release()
-  - Adjust unions and Sparse annotations.
-  Cf. https://lore.kernel.org/lkml/CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com/
-* Merge struct landlock_rule into landlock_ruleset_elem to simplify the
-  rule management.
-* Constify variables.
-* Improve kernel documentation.
-* Cosmetic variable renames.
-* Remove the "default" in the Kconfig (suggested by Jann Horn).
-* Only use refcount_inc() through getter helpers.
-* Update Kconfig description.
+Changes since v16:
+* Switch syscall attribute pointer and size arguments.
 
-Changes since v13:
-* New dedicated implementation, removing the need for eBPF.
+Changes since v15:
+* Update access right names.
+* Properly assign access right to files according to the new related
+  syscall restriction.
+* Replace "select" with "depends on" HEADERS_INSTALL (suggested by Randy
+  Dunlap).
+
+Changes since v14:
+* Fix Kconfig dependency.
+* Remove access rights that may be required for FD-only requests:
+  mmap, truncate, getattr, lock, chmod, chown, chgrp, ioctl.
+* Fix useless hardcoded syscall number.
+* Use execvpe().
+* Follow symlinks.
+* Extend help with common file paths.
+* Constify variables.
+* Clean up comments.
+* Improve error message.
+
+Changes since v11:
+* Add back the filesystem sandbox manager and update it to work with the
+  new Landlock syscall.
 
 Previous changes:
-https://lore.kernel.org/lkml/20190721213116.23476-6-mic@digikod.net/
+https://lore.kernel.org/lkml/20190721213116.23476-9-mic@digikod.net/
 ---
- MAINTAINERS                | 10 +++++
- security/Kconfig           |  1 +
- security/Makefile          |  2 +
- security/landlock/Kconfig  | 18 ++++++++
- security/landlock/Makefile |  3 ++
- security/landlock/object.c | 66 +++++++++++++++++++++++++++
- security/landlock/object.h | 91 ++++++++++++++++++++++++++++++++++++++
- 7 files changed, 191 insertions(+)
- create mode 100644 security/landlock/Kconfig
- create mode 100644 security/landlock/Makefile
- create mode 100644 security/landlock/object.c
- create mode 100644 security/landlock/object.h
+ samples/Kconfig              |   7 ++
+ samples/Makefile             |   1 +
+ samples/landlock/.gitignore  |   1 +
+ samples/landlock/Makefile    |  15 +++
+ samples/landlock/sandboxer.c | 228 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 252 insertions(+)
+ create mode 100644 samples/landlock/.gitignore
+ create mode 100644 samples/landlock/Makefile
+ create mode 100644 samples/landlock/sandboxer.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 091ec22c1a23..011349c9c6c6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9487,6 +9487,16 @@ F:	net/core/sock_map.c
- F:	net/ipv4/tcp_bpf.c
- F:	net/ipv4/udp_bpf.c
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 9d236c346de5..5ec43a732b10 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -120,6 +120,13 @@ config SAMPLE_HIDRAW
+ 	bool "hidraw sample"
+ 	depends on HEADERS_INSTALL
  
-+LANDLOCK SECURITY MODULE
-+M:	Mickaël Salaün <mic@digikod.net>
-+L:	linux-security-module@vger.kernel.org
-+S:	Supported
-+W:	https://landlock.io
-+T:	git https://github.com/landlock-lsm/linux.git
-+F:	security/landlock/
-+K:	landlock
-+K:	LANDLOCK
-+
- LANTIQ / INTEL Ethernet drivers
- M:	Hauke Mehrtens <hauke@hauke-m.de>
- L:	netdev@vger.kernel.org
-diff --git a/security/Kconfig b/security/Kconfig
-index cd3cc7da3a55..582fd777a757 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -238,6 +238,7 @@ source "security/loadpin/Kconfig"
- source "security/yama/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
-+source "security/landlock/Kconfig"
- 
- source "security/integrity/Kconfig"
- 
-diff --git a/security/Makefile b/security/Makefile
-index 22e73a3482bd..b8380650bfb1 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -13,6 +13,7 @@ subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
- subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
- subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
- subdir-$(CONFIG_BPF_LSM)		+= bpf
-+subdir-$(CONFIG_SECURITY_LANDLOCK)		+= landlock
- 
- # always enable default capabilities
- obj-y					+= commoncap.o
-@@ -30,6 +31,7 @@ obj-$(CONFIG_SECURITY_YAMA)		+= yama/
- obj-$(CONFIG_SECURITY_LOADPIN)		+= loadpin/
- obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
- obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
-+obj-$(CONFIG_SECURITY_LANDLOCK)	+= landlock/
- obj-$(CONFIG_CGROUP_DEVICE)		+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
- 
-diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
-new file mode 100644
-index 000000000000..9ec7593a534a
---- /dev/null
-+++ b/security/landlock/Kconfig
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config SECURITY_LANDLOCK
-+	bool "Landlock support"
-+	depends on SECURITY
-+	select SECURITY_PATH
++config SAMPLE_LANDLOCK
++	bool "Build Landlock sample code"
++	depends on HEADERS_INSTALL
 +	help
-+	  Landlock is a safe sandboxing mechanism which enables processes to
-+	  restrict themselves (and their future children) by gradually
-+	  enforcing tailored access control policies.  A security policy is a
-+	  set of access rights (e.g. open a file in read-only, make a
-+	  directory) tied to a file hierarchy.  The configuration can be set by
-+	  any processes, including unprivileged ones, thanks to the landlock()
-+	  system call.
++	  Build a simple Landlock sandbox manager able to launch a process
++	  restricted by a user-defined filesystem access-control security policy.
 +
-+	  See Documentation/security/landlock/ for further information.
-+
-+	  If you are unsure how to answer this question, answer N.
-diff --git a/security/landlock/Makefile b/security/landlock/Makefile
+ config SAMPLE_PIDFD
+ 	bool "pidfd sample"
+ 	depends on HEADERS_INSTALL
+diff --git a/samples/Makefile b/samples/Makefile
+index f8f847b4f61f..61a2bd216f53 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -11,6 +11,7 @@ obj-$(CONFIG_SAMPLE_KDB)		+= kdb/
+ obj-$(CONFIG_SAMPLE_KFIFO)		+= kfifo/
+ obj-$(CONFIG_SAMPLE_KOBJECT)		+= kobject/
+ obj-$(CONFIG_SAMPLE_KPROBES)		+= kprobes/
++subdir-$(CONFIG_SAMPLE_LANDLOCK)	+= landlock
+ obj-$(CONFIG_SAMPLE_LIVEPATCH)		+= livepatch/
+ subdir-$(CONFIG_SAMPLE_PIDFD)		+= pidfd
+ obj-$(CONFIG_SAMPLE_QMI_CLIENT)		+= qmi/
+diff --git a/samples/landlock/.gitignore b/samples/landlock/.gitignore
 new file mode 100644
-index 000000000000..cb6deefbf4c0
+index 000000000000..f43668b2d318
 --- /dev/null
-+++ b/security/landlock/Makefile
-@@ -0,0 +1,3 @@
-+obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
-+
-+landlock-y := object.o
-diff --git a/security/landlock/object.c b/security/landlock/object.c
++++ b/samples/landlock/.gitignore
+@@ -0,0 +1 @@
++/sandboxer
+diff --git a/samples/landlock/Makefile b/samples/landlock/Makefile
 new file mode 100644
-index 000000000000..27da1ed45eaf
+index 000000000000..9dfb571641ba
 --- /dev/null
-+++ b/security/landlock/object.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/samples/landlock/Makefile
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: BSD-3-Clause
++
++hostprogs-y := sandboxer
++
++always := $(hostprogs-y)
++
++KBUILD_HOSTCFLAGS += -I$(objtree)/usr/include
++
++.PHONY: all clean
++
++all:
++	$(MAKE) -C ../.. samples/landlock/
++
++clean:
++	$(MAKE) -C ../.. M=samples/landlock/ clean
+diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
+new file mode 100644
+index 000000000000..e0059706c11f
+--- /dev/null
++++ b/samples/landlock/sandboxer.c
+@@ -0,0 +1,228 @@
++// SPDX-License-Identifier: BSD-3-Clause
 +/*
-+ * Landlock LSM - Object management
++ * Simple Landlock sandbox manager able to launch a process restricted by a
++ * user-defined filesystem access-control security policy.
 + *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
++ * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
++ * Copyright © 2020 ANSSI
 + */
 +
-+#include <linux/bug.h>
-+#include <linux/compiler_types.h>
-+#include <linux/kernel.h>
-+#include <linux/rcupdate.h>
-+#include <linux/refcount.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/landlock.h>
++#include <linux/prctl.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/prctl.h>
++#include <sys/stat.h>
++#include <sys/syscall.h>
++#include <unistd.h>
 +
-+#include "object.h"
-+
-+struct landlock_object *landlock_create_object(
-+		const struct landlock_object_underops *underops,
-+		void *const underobj)
++#ifndef landlock
++static inline int landlock(const unsigned int command,
++		const unsigned int options, void *const attr_ptr,
++		const size_t attr_size)
 +{
-+	struct landlock_object *new_object;
-+
-+	if (WARN_ON_ONCE(!underops || !underobj))
-+		return NULL;
-+	new_object = kzalloc(sizeof(*new_object), GFP_KERNEL);
-+	if (!new_object)
-+		return NULL;
-+	refcount_set(&new_object->usage, 1);
-+	spin_lock_init(&new_object->lock);
-+	new_object->underops = underops;
-+	new_object->underobj = underobj;
-+	return new_object;
++	errno = 0;
++	return syscall(__NR_landlock, command, options, attr_ptr, attr_size,
++			NULL, 0);
 +}
++#endif
 +
-+/*
-+ * The caller must own the object (i.e. thanks to object->usage) to safely put
-+ * it.
-+ */
-+void landlock_put_object(struct landlock_object *const object)
++#define ENV_FS_RO_NAME "LL_FS_RO"
++#define ENV_FS_RW_NAME "LL_FS_RW"
++#define ENV_PATH_TOKEN ":"
++
++static int parse_path(char *env_path, const char ***const path_list)
 +{
-+	/*
-+	 * The call to @object->underops->release(object) might sleep e.g.,
-+	 * because of iput().
-+	 */
-+	might_sleep();
-+	if (!object)
-+		return;
++	int i, path_nb = 0;
 +
-+	/*
-+	 * If the @object's refcount can't drop to zero, we can just decrement
-+	 * the refcount without holding a lock. Otherwise, the decrement must
-+	 * happen under @object->lock for synchronization with things like
-+	 * get_inode_object().
-+	 */
-+	if (refcount_dec_and_lock(&object->usage, &object->lock)) {
-+		__acquire(&object->lock);
-+		/*
-+		 * With @object->lock initially held, remove the reference from
-+		 * @object->underobj to @object (if it still exists).
-+		 */
-+		object->underops->release(object);
-+		kfree_rcu(object, rcu_free);
++	if (env_path) {
++		path_nb++;
++		for (i = 0; env_path[i]; i++) {
++			if (env_path[i] == ENV_PATH_TOKEN[0])
++				path_nb++;
++		}
 +	}
++	*path_list = malloc(path_nb * sizeof(**path_list));
++	for (i = 0; i < path_nb; i++)
++		(*path_list)[i] = strsep(&env_path, ENV_PATH_TOKEN);
++
++	return path_nb;
 +}
-diff --git a/security/landlock/object.h b/security/landlock/object.h
-new file mode 100644
-index 000000000000..942bc0e18064
---- /dev/null
-+++ b/security/landlock/object.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Object management
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ */
 +
-+#ifndef _SECURITY_LANDLOCK_OBJECT_H
-+#define _SECURITY_LANDLOCK_OBJECT_H
++#define ACCESS_FILE ( \
++	LANDLOCK_ACCESS_FS_EXECUTE | \
++	LANDLOCK_ACCESS_FS_WRITE_FILE | \
++	LANDLOCK_ACCESS_FS_READ_FILE)
 +
-+#include <linux/compiler_types.h>
-+#include <linux/refcount.h>
-+#include <linux/spinlock.h>
-+
-+struct landlock_object;
-+
-+/**
-+ * struct landlock_object_underops - Operations on an underlying object
-+ */
-+struct landlock_object_underops {
-+	/**
-+	 * @release: Releases the underlying object (e.g. iput() for an inode).
-+	 */
-+	void (*release)(struct landlock_object *const object)
-+		__releases(object->lock);
-+};
-+
-+/**
-+ * struct landlock_object - Security blob tied to a kernel object
-+ *
-+ * The goal of this structure is to enable to tie a set of ephemeral access
-+ * rights (pertaining to different domains) to a kernel object (e.g an inode)
-+ * in a safe way.  This imply to handle concurrent use and modification.
-+ *
-+ * The lifetime of a &struct landlock_object depends of the rules referring to
-+ * it.
-+ */
-+struct landlock_object {
-+	/**
-+	 * @usage: This counter is used to tie an object to the rules matching
-+	 * it or to keep it alive while adding a new rule.  If this counter
-+	 * reaches zero, this struct must not be modified, but this counter can
-+	 * still be read from within an RCU read-side critical section.  When
-+	 * adding a new rule to an object with a usage counter of zero, we must
-+	 * wait until the pointer to this object is set to NULL (or recycled).
-+	 */
-+	refcount_t usage;
-+	/**
-+	 * @lock: Guards against concurrent modifications.  This lock must be
-+	 * from the time @usage drops to zero until any weak references from
-+	 * @underobj to this object have been cleaned up.
-+	 *
-+	 * Lock ordering: inode->i_lock nests inside this.
-+	 */
-+	spinlock_t lock;
-+	/**
-+	 * @underobj: Used when cleaning up an object and to mark an object as
-+	 * tied to its underlying kernel structure.  This pointer is protected
-+	 * by @lock.  Cf. landlock_release_inodes() and release_inode().
-+	 */
-+	void *underobj;
-+	union {
-+		/**
-+		 * @rcu_free: Enables lockless use of @usage, @lock and
-+		 * @underobj from within an RCU read-side critical section.
-+		 * @rcu_free and @underops are only used by
-+		 * landlock_put_object().
-+		 */
-+		struct rcu_head rcu_free;
-+		/**
-+		 * @underops: Enables landlock_put_object() to release the
-+		 * underlying object (e.g. inode).
-+		 */
-+		const struct landlock_object_underops *underops;
-+	};
-+};
-+
-+struct landlock_object *landlock_create_object(
-+		const struct landlock_object_underops *const underops,
-+		void *const underojb);
-+
-+void landlock_put_object(struct landlock_object *const object);
-+
-+static inline void landlock_get_object(struct landlock_object *const object)
++static int populate_ruleset(
++		const struct landlock_attr_features *const attr_features,
++		const char *const env_var, const int ruleset_fd,
++		const __u64 allowed_access)
 +{
-+	if (object)
-+		refcount_inc(&object->usage);
++	int path_nb, i;
++	char *env_path_name;
++	const char **path_list = NULL;
++	struct landlock_attr_path_beneath path_beneath = {
++		.ruleset_fd = ruleset_fd,
++		.parent_fd = -1,
++	};
++
++	env_path_name = getenv(env_var);
++	if (!env_path_name) {
++		fprintf(stderr, "Missing environment variable %s\n", env_var);
++		return 1;
++	}
++	env_path_name = strdup(env_path_name);
++	unsetenv(env_var);
++	path_nb = parse_path(env_path_name, &path_list);
++	if (path_nb == 1 && path_list[0][0] == '\0') {
++		fprintf(stderr, "Missing path in %s\n", env_var);
++		goto err_free_name;
++	}
++
++	for (i = 0; i < path_nb; i++) {
++		struct stat statbuf;
++
++		path_beneath.parent_fd = open(path_list[i], O_PATH |
++				O_CLOEXEC);
++		if (path_beneath.parent_fd < 0) {
++			fprintf(stderr, "Failed to open \"%s\": %s\n",
++					path_list[i],
++					strerror(errno));
++			goto err_free_name;
++		}
++		if (fstat(path_beneath.parent_fd, &statbuf)) {
++			close(path_beneath.parent_fd);
++			goto err_free_name;
++		}
++		/* Follows a best-effort approach. */
++		path_beneath.allowed_access = allowed_access &
++			attr_features->access_fs;
++		if (!S_ISDIR(statbuf.st_mode))
++			path_beneath.allowed_access &= ACCESS_FILE;
++		if (landlock(LANDLOCK_CMD_ADD_RULE,
++					LANDLOCK_OPT_ADD_RULE_PATH_BENEATH,
++					&path_beneath, sizeof(path_beneath))) {
++			fprintf(stderr, "Failed to update the ruleset with \"%s\": %s\n",
++					path_list[i], strerror(errno));
++			close(path_beneath.parent_fd);
++			goto err_free_name;
++		}
++		close(path_beneath.parent_fd);
++	}
++	free(env_path_name);
++	return 0;
++
++err_free_name:
++	free(env_path_name);
++	return 1;
 +}
 +
-+#endif /* _SECURITY_LANDLOCK_OBJECT_H */
++#define ACCESS_FS_ROUGHLY_READ ( \
++	LANDLOCK_ACCESS_FS_EXECUTE | \
++	LANDLOCK_ACCESS_FS_READ_FILE | \
++	LANDLOCK_ACCESS_FS_READ_DIR | \
++	LANDLOCK_ACCESS_FS_CHROOT)
++
++#define ACCESS_FS_ROUGHLY_WRITE ( \
++	LANDLOCK_ACCESS_FS_WRITE_FILE | \
++	LANDLOCK_ACCESS_FS_REMOVE_DIR | \
++	LANDLOCK_ACCESS_FS_REMOVE_FILE | \
++	LANDLOCK_ACCESS_FS_MAKE_CHAR | \
++	LANDLOCK_ACCESS_FS_MAKE_DIR | \
++	LANDLOCK_ACCESS_FS_MAKE_REG | \
++	LANDLOCK_ACCESS_FS_MAKE_SOCK | \
++	LANDLOCK_ACCESS_FS_MAKE_FIFO | \
++	LANDLOCK_ACCESS_FS_MAKE_BLOCK | \
++	LANDLOCK_ACCESS_FS_MAKE_SYM)
++
++int main(const int argc, char *const argv[], char *const *const envp)
++{
++	const char *cmd_path;
++	char *const *cmd_argv;
++	int ruleset_fd;
++	struct landlock_attr_features attr_features;
++	struct landlock_attr_ruleset ruleset = {
++		.handled_access_fs = ACCESS_FS_ROUGHLY_READ |
++			ACCESS_FS_ROUGHLY_WRITE,
++	};
++	struct landlock_attr_enforce attr_enforce = {};
++
++	if (argc < 2) {
++		fprintf(stderr, "usage: %s=\"...\" %s=\"...\" %s <cmd> [args]...\n\n",
++				ENV_FS_RO_NAME, ENV_FS_RW_NAME, argv[0]);
++		fprintf(stderr, "Launch a command in a restricted environment.\n\n");
++		fprintf(stderr, "Environment variables containing paths, each separated by a colon:\n");
++		fprintf(stderr, "* %s: list of paths allowed to be used in a read-only way.\n",
++				ENV_FS_RO_NAME);
++		fprintf(stderr, "* %s: list of paths allowed to be used in a read-write way.\n",
++				ENV_FS_RO_NAME);
++		fprintf(stderr, "\nexample:\n"
++				"%s=\"/bin:/lib:/usr:/proc:/etc:/dev/urandom\" "
++				"%s=\"/dev/null:/dev/full:/dev/zero:/dev/pts:/tmp\" "
++				"%s bash -i\n",
++				ENV_FS_RO_NAME, ENV_FS_RW_NAME, argv[0]);
++		return 1;
++	}
++
++	if (landlock(LANDLOCK_CMD_GET_FEATURES, LANDLOCK_OPT_GET_FEATURES,
++				&attr_features, sizeof(attr_features))) {
++		perror("Failed to probe the Landlock supported features");
++		switch (errno) {
++		case ENOSYS:
++			fprintf(stderr, "Hint: this kernel does not support Landlock.\n");
++			break;
++		case ENOPKG:
++			fprintf(stderr, "Hint: Landlock is currently disabled. It can be enabled in the kernel configuration or at boot with the \"lsm=landlock\" parameter.\n");
++			break;
++		}
++		return 1;
++	}
++	/* Follows a best-effort approach. */
++	ruleset.handled_access_fs &= attr_features.access_fs;
++	ruleset_fd = landlock(LANDLOCK_CMD_CREATE_RULESET,
++			LANDLOCK_OPT_CREATE_RULESET, &ruleset,
++			sizeof(ruleset));
++	if (ruleset_fd < 0) {
++		perror("Failed to create a ruleset");
++		return 1;
++	}
++	if (populate_ruleset(&attr_features, ENV_FS_RO_NAME, ruleset_fd,
++				ACCESS_FS_ROUGHLY_READ)) {
++		goto err_close_ruleset;
++	}
++	if (populate_ruleset(&attr_features, ENV_FS_RW_NAME, ruleset_fd,
++				ACCESS_FS_ROUGHLY_READ |
++				ACCESS_FS_ROUGHLY_WRITE)) {
++		goto err_close_ruleset;
++	}
++	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
++		perror("Failed to restrict privileges");
++		goto err_close_ruleset;
++	}
++	attr_enforce.ruleset_fd = ruleset_fd;
++	if (landlock(LANDLOCK_CMD_ENFORCE_RULESET,
++				LANDLOCK_OPT_ENFORCE_RULESET, &attr_enforce,
++				sizeof(attr_enforce))) {
++		perror("Failed to enforce ruleset");
++		goto err_close_ruleset;
++	}
++	close(ruleset_fd);
++
++	cmd_path = argv[1];
++	cmd_argv = argv + 1;
++	execvpe(cmd_path, cmd_argv, envp);
++	fprintf(stderr, "Failed to execute \"%s\": %s\n", cmd_path,
++			strerror(errno));
++	fprintf(stderr, "Hint: access to the binary, the interpreter or shared libraries may be denied.\n");
++	return 1;
++
++err_close_ruleset:
++	close(ruleset_fd);
++	return 1;
++}
 -- 
 2.26.2
 
