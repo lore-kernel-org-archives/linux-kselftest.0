@@ -2,64 +2,63 @@ Return-Path: <SRS0=r1F3=63=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE3EC2D0F8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 06:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B7BDC2D0F8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 06:31:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BC4620661
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 06:23:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A14F20718
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 06:31:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="G3CWkGbq"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ZSVlgXkk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbgEMGXe (ORCPT
+        id S1732401AbgEMGbf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 May 2020 02:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        Wed, 13 May 2020 02:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729411AbgEMGXd (ORCPT
+        with ESMTP id S1732390AbgEMGbd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 May 2020 02:23:33 -0400
+        Wed, 13 May 2020 02:31:33 -0400
 Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29333C05BD09
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2020 23:23:32 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t40so10517285pjb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2020 23:23:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF213C05BD09
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2020 23:31:32 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id hi11so10660292pjb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2020 23:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=pPDL7nHthBYJbuOWF4Ez9lptkfcJt9l/vKCI5S+qTUQ=;
-        b=G3CWkGbqwr2ZjOkZmxg0bhfVzNRTgFZZRSpV9HK+yrfulwjrNU4oBk47i1deBCP+ZF
-         nEBsEOGlMLwMdgIHMhAH1l1xiVCVoevr5Btvz/Ug/YyuVlzenAcFdxkJwa9sGfr9jxww
-         LvzPS+Wbj75ICGRhG9ORbuA40ZPMfZnRiBIs4=
+        bh=2csGsD+au94C9xmTiACbfUOMQ7XhAMYTWeJo+alYFFI=;
+        b=ZSVlgXkkpJtSfN7qkaqSe1HuEAcdJz+206DgqQ9a8bBTg1j86M/AV1JMXsfvt6a2jG
+         yj/qedw70QPli6gaJfIS7IWASeacoIDxNbSyu9WdaQPEBjWsWQcEo5g5MJrVhANXE2rX
+         0zouj2RZsoJ6qnQ2ByQjeFr7YxZ7NE5uAypGs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=pPDL7nHthBYJbuOWF4Ez9lptkfcJt9l/vKCI5S+qTUQ=;
-        b=FtJ9wSjUcZLFQH/axVEbzkHZ7JMtGAmRVyrHxClkqFmwFPqjAh/pbQ3RK/V6vkC7sH
-         QTOmWrCEWAP786eLbp6YbsGoxeQF2IOG/0WetiOpXiuJ4ImlleevYFm3f6Shp0W+J739
-         rg8wWjMuu+y92qbKYN7whrRBepTpPdKXsLwJUWdH4uKEKXFFT2sShANF3bJeBkN/kDix
-         da4uLhcYOCeUd7nPdW1y1NF8JDc46zfKG/USEPC+H46exQs25yRTDfcP6l+uItxfl4hz
-         +aVYZS9+rvdqzKo4CwIVLMYubMB4pvea3GnA0KX5iQcJasfI93rR5fx405ijXYWvkhiQ
-         eh6A==
-X-Gm-Message-State: AGi0PuazqqWovBgfSaMesEm2NPBN4OLw9UvtI7QyQZkqMF2WbFcmENOM
-        KjdzXkPGln+lr1mOt3k5yqGTLA==
-X-Google-Smtp-Source: APiQypIFwsxMDhFCuYj9/P/Ksn5rHw0yMkAgXB9HDoGdhukybNyGidMDC7m4rw7KW/4GSfCdYKmotw==
-X-Received: by 2002:a17:90a:d086:: with SMTP id k6mr34164442pju.47.1589351011521;
-        Tue, 12 May 2020 23:23:31 -0700 (PDT)
+        bh=2csGsD+au94C9xmTiACbfUOMQ7XhAMYTWeJo+alYFFI=;
+        b=X6IygfXljTIDlwtEmoIZD6OqRE9QY5WcSjGO9kAHIwMJVDWPMOKeArBNt0r1jjsVP2
+         GnPc2FV8To9BQKMM03YygYgbXGdNYglAF1QCR22cvvFMdi764m44X2yA2T5YMkD/PxMe
+         ZqBnBKl7gX6lZOOaKUn2zJZ1PKBBTqexfBPuGZqWL6G2zi3MfZNmP7bVaRPxaaGH/pG1
+         X2u2vvr1FTrgh5nnq4tq+WSgNsxAY3UT5HNBF280d8FzzQB5Ms7bPsI39IRwf1OG8Ahi
+         sSOMuL0JsJ/sLA5oO2REHeEdrelF3p9NVqdT08cTQUnNOJ/lvB3Mcw8Cj+r5x/XGRITY
+         PILQ==
+X-Gm-Message-State: AOAM53049i4taWVy006JlE7CGMi/hndnS6/rONuhpeYcFvDhrCaTzYld
+        BMy0LsI5SI7f4HIWPLvzBNcHo1S0o6YJXg==
+X-Google-Smtp-Source: ABdhPJzun7l0BGdVwIAv5LpJTCZ51XWx8WkOrhjqdl2WVdRNTqaM1ew0r90ShpQV04nRKtPQ735vBg==
+X-Received: by 2002:a17:902:8505:: with SMTP id bj5mr7220884plb.192.1589351492246;
+        Tue, 12 May 2020 23:31:32 -0700 (PDT)
 Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id l11sm606845pjj.33.2020.05.12.23.23.28
+        by smtp.gmail.com with ESMTPSA id c1sm13716735pfo.152.2020.05.12.23.31.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2020 23:23:30 -0700 (PDT)
-Subject: Re: [PATCH v5 1/7] fs: introduce kernel_pread_file* support
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
+        Tue, 12 May 2020 23:31:31 -0700 (PDT)
+Subject: Re: [PATCH v5 6/7] misc: bcm-vk: add Broadcom VK driver
+To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -76,17 +75,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
+        Andy Gross <agross@kernel.org>,
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
 References: <20200508002739.19360-1-scott.branden@broadcom.com>
- <20200508002739.19360-2-scott.branden@broadcom.com>
- <20200513002741.GG11244@42.do-not-panic.com>
+ <20200508002739.19360-7-scott.branden@broadcom.com>
+ <20200513003830.GJ11244@42.do-not-panic.com>
 From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <2e4bc125-5fe5-e3e5-4881-29374da942aa@broadcom.com>
-Date:   Tue, 12 May 2020 23:23:27 -0700
+Message-ID: <60372b2f-c03d-6384-43a7-8b97413b6672@broadcom.com>
+Date:   Tue, 12 May 2020 23:31:28 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200513002741.GG11244@42.do-not-panic.com>
+In-Reply-To: <20200513003830.GJ11244@42.do-not-panic.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -97,46 +98,37 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Luis,
 
-A few comments inline before I cleanup.
-
-On 2020-05-12 5:27 p.m., Luis Chamberlain wrote:
-> On Thu, May 07, 2020 at 05:27:33PM -0700, Scott Branden wrote:
->> diff --git a/fs/exec.c b/fs/exec.c
->> index 06b4c550af5d..cfab212fab9d 100644
->> --- a/fs/exec.c
->> +++ b/fs/exec.c
->> @@ -896,10 +896,14 @@ struct file *open_exec(const char *name)
->>   }
->>   EXPORT_SYMBOL(open_exec);
->>   
->> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
->> -		     loff_t max_size, enum kernel_read_file_id id)
->> -{
->> -	loff_t i_size, pos;
->> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
->> +		      loff_t pos, loff_t max_size, unsigned int flags,
-> You use int flags, but.. these are mutually exclusive operations, and
-> so flags is a misnomer. Just use an enum instead of a define, that way
-> we can use kdoc for documentation.
-OK, flags could be used to expand with additional flag options in the 
-future (without change to function prototype, but will change to enum if 
-that is what is desired.
->> +EXPORT_SYMBOL_GPL(kernel_pread_file);
->> +EXPORT_SYMBOL_GPL(kernel_pread_file_from_path);
->> +EXPORT_SYMBOL_GPL(kernel_pread_file_from_path_initns);
->> +EXPORT_SYMBOL_GPL(kernel_pread_file_from_fd);
-> If no one is using these don't export them. I think you only use one of
-> these. In fact just remove the code from the ones which are not used.
-I do not use them but added them to provide consistent api with 
-kernel_read_file_* functions.  That way someone can take advantage of 
-the _from_path and from_fd variants in the future if desired. But if you 
-want them removed it is simple to drop the EXPORT_SYMBOL_GPL and then 
-add that back when first driver that calls them needs them in the future.
-
-Note: Existing kernel_read_file_from_path_initns is not used in the 
-kernel.  Should we delete that as well?
-
->
+On 2020-05-12 5:38 p.m., Luis Chamberlain wrote:
+> On Thu, May 07, 2020 at 05:27:38PM -0700, Scott Branden wrote:
+>> +#if defined(CONFIG_REQ_FW_INTO_BUF_PRIV)
+>> +
+>> +#define KERNEL_PREAD_FLAG_PART	0x0001 /* Allow reading part of file */
+>> +#define REQUEST_FIRMWARE_INTO_BUF request_firmware_into_buf_priv
+>> +int request_firmware_into_buf_priv(const struct firmware **firmware_p,
+>> +				   const char *name, struct device *device,
+>> +				   void *buf, size_t size,
+>> +				   size_t offset, unsigned int pread_flags);
+>> +
+>> +#else
+>> +
+>> +#define REQUEST_FIRMWARE_INTO_BUF request_firmware_into_buf
+>> +
+>> +#endif
+>> +
+>> +#endif
+> Please clean this up, the code must reflect only the code upstream. No
+> config stuff like this should be used on the driver. I had to stop my
+> review here.
+The CONFIG_ prefix shouldn't have been there as there is no Kconfig 
+option to select this.
+Would like to just change it to a normal define without CONFIG_ prefix 
+instead?
+This code is here to allow a limited version of the driver to run on 
+older kernels which do not have the necessary partial file read support.
+By having it in the upstream codebase we don't need to maintain an 
+internal version of the driver.  User can take the upstream kernel 
+module and compile it against an old version of the kernel by via the 
+define.
 >    Luis
-Thanks,
-  Scott
+Regards,
+Scott
