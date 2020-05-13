@@ -2,57 +2,56 @@ Return-Path: <SRS0=r1F3=63=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 361DDC2D0FB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 00:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD06C2D0FA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 00:38:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17B382312A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 00:35:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8CCE2078C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 May 2020 00:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589330119;
-	bh=oTPq0GePDtTqfNFxtNM8wAgM7m4kCpRVYn/sqxsR89I=;
+	s=default; t=1589330314;
+	bh=cOjm/7GwqsA2ILplEdz4M1jv9gxyYn4Rl5iu9+dYr7s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=ghUz0O9kdsQDeME3Ga9OYoIYTv4tfaXHg6TWEf4pajIYvKasxQv9sOgO741JonFe4
-	 6NHqKjEeQQZfmlxG84hJjFhHQUoHDyBFLs7UUhbk5JMp01EDDrnlE+EbCtSwofosqt
-	 Q4SCuiaA+vx7tydSGP0zaZLVS+V1eqrfGYlcdNtM=
+	b=WNXTALSEetZJOxHDP1q47k/pr9eBF6AO2XHDDtvTrknPSij7CZStsYcAeJGB8J3Qg
+	 vTYqFYaeF3Keau+PGH9cxe7kUXHOwADr7R3lRB56hDoy51mbWimhiviRYUHO55Kl4V
+	 uh1xUBMdJooeWaW4b3I1hPgnunWfRlMO3eX+yy0w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731785AbgEMAfO (ORCPT
+        id S1731107AbgEMAie (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 May 2020 20:35:14 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40096 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726031AbgEMAfN (ORCPT
+        Tue, 12 May 2020 20:38:34 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33816 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728131AbgEMAie (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 May 2020 20:35:13 -0400
-Received: by mail-pf1-f196.google.com with SMTP id x2so7208208pfx.7;
-        Tue, 12 May 2020 17:35:12 -0700 (PDT)
+        Tue, 12 May 2020 20:38:34 -0400
+Received: by mail-pl1-f196.google.com with SMTP id g11so2895193plp.1;
+        Tue, 12 May 2020 17:38:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yRB9XgmnIGPrh7vcOIMg8BEgGvSJ/DYpyFSMRxz7MlA=;
-        b=gs5MuHvBdt1wRgcswgS/5smzf4y9h715ss/sH+rLoi0o+KVOeEBpFBG2opJm1fBpLZ
-         wHBah/TK9GPzCKjzSAEdroojhbBwrNg8utD55Q7Zo0JsDiqk7jnhhYfklUMZPpH/tGv+
-         TDXxR+Cwq3uxkQY0xz6fddTC6hlY2cOMIKU+DSy30aEk2xMuMebuRBR/+aqaEL7vpChS
-         nFyTXdvHdM1rDYwHgcfePF79F1aXykdMwj4GTrqeodETT8BwDz7Tct4L6KkBTi0Shkvz
-         R0UOWoPPnl0dhfOFEqOsvpLSZpX9JnnVQlTj8KOcU66twdYWTKSw1cpu3UFFwz6Mbho/
-         Jxow==
-X-Gm-Message-State: AGi0PuZIumLcJio5JPYPmyT7QwlM79BY2R2xcHXM5r6H+E9DltiojcB4
-        ZNEeNAWzXEXzpZWjPsGKYDw=
-X-Google-Smtp-Source: APiQypLLwXxPGfFaEOZNFPfNDspb7DfI9yifHyIr96tKek8IpY5phU0AU/Lauy1dnCXSHfFD/0zcTA==
-X-Received: by 2002:a63:ea42:: with SMTP id l2mr22226762pgk.193.1589330111714;
-        Tue, 12 May 2020 17:35:11 -0700 (PDT)
+        bh=CwfbmlNBUU40Zjz8zlAOmtB3ueHeKYzt7ce5wGYgKFA=;
+        b=aqH3pLaspKAfdvXZwLL+58pl/C0iJGFYNZL9atbYNikaxnaboV71owlw3D92JfvO52
+         9Sw7zuGnvVs3qsa0ApEweFJZjUZyrqNDe4obTWdgwjzpWrdfOV1AEAuu1Gb0eiql5upu
+         9LVVb1XJGntMunkvt9nun+ezBsbvd49ziTxGlXL3MsMZw81wPFh0LKzifFYt1cV6ioLL
+         EwCj8D2NbAIvS8afGYccqfmo2wzaT+gzJQ7ZO06v36zTfe84tUOCJLqnY4UQbUyGTi5R
+         OQx89I+OnxW6MV3WNoxvMZIDC3mBvful16jnzhkwCQ4RLPVDxTqLTO+jr1ocBfZLa7Kb
+         6Faw==
+X-Gm-Message-State: AGi0Puaq/9hTNvkY2An66cyZMbS8frs00te00VhubT+nvAq4qVCuIFHl
+        omaUKZsGlJK1LxOqrl1SICQ=
+X-Google-Smtp-Source: APiQypJrCgiM6NaHCnvonCFy7Yn3t2eJw+MEKj198/6OsHFmSqfNPQsM3ObIs9iYeLONwztqCuqQlw==
+X-Received: by 2002:a17:902:bd81:: with SMTP id q1mr22856141pls.46.1589330312971;
+        Tue, 12 May 2020 17:38:32 -0700 (PDT)
 Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id ev5sm31222654pjb.1.2020.05.12.17.35.10
+        by smtp.gmail.com with ESMTPSA id j26sm13098929pfr.215.2020.05.12.17.38.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 17:35:10 -0700 (PDT)
+        Tue, 12 May 2020 17:38:31 -0700 (PDT)
 Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id A45FF4063E; Wed, 13 May 2020 00:35:09 +0000 (UTC)
-Date:   Wed, 13 May 2020 00:35:09 +0000
+        id 60B934063E; Wed, 13 May 2020 00:38:30 +0000 (UTC)
+Date:   Wed, 13 May 2020 00:38:30 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Scott Branden <scott.branden@broadcom.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -71,44 +70,43 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v5 3/7] test_firmware: add partial read support for
- request_firmware_into_buf
-Message-ID: <20200513003509.GI11244@42.do-not-panic.com>
+        Andy Gross <agross@kernel.org>,
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
+Subject: Re: [PATCH v5 6/7] misc: bcm-vk: add Broadcom VK driver
+Message-ID: <20200513003830.GJ11244@42.do-not-panic.com>
 References: <20200508002739.19360-1-scott.branden@broadcom.com>
- <20200508002739.19360-4-scott.branden@broadcom.com>
+ <20200508002739.19360-7-scott.branden@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508002739.19360-4-scott.branden@broadcom.com>
+In-Reply-To: <20200508002739.19360-7-scott.branden@broadcom.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 07, 2020 at 05:27:35PM -0700, Scott Branden wrote:
-> Add additional hooks to test_firmware to pass in support
-> for partial file read using request_firmware_into_buf.
-> buf_size: size of buffer to request firmware into
-> partial: indicates that a partial file request is being made
-> file_offset: to indicate offset into file to request
-> 
-> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-> ---
->  lib/test_firmware.c | 146 +++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 136 insertions(+), 10 deletions(-)
-> 
-> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-> index 55176b0a8318..d1d2b48ed40e 100644
-> --- a/lib/test_firmware.c
-> +++ b/lib/test_firmware.c
-> @@ -645,18 +762,24 @@ static int test_fw_run_batch_request(void *data)
->  
->  	if (test_fw_config->into_buf) {
->  		void *test_buf;
-> +		unsigned int pread_flags;
+On Thu, May 07, 2020 at 05:27:38PM -0700, Scott Branden wrote:
+> +#if defined(CONFIG_REQ_FW_INTO_BUF_PRIV)
+> +
+> +#define KERNEL_PREAD_FLAG_PART	0x0001 /* Allow reading part of file */
+> +#define REQUEST_FIRMWARE_INTO_BUF request_firmware_into_buf_priv
+> +int request_firmware_into_buf_priv(const struct firmware **firmware_p,
+> +				   const char *name, struct device *device,
+> +				   void *buf, size_t size,
+> +				   size_t offset, unsigned int pread_flags);
+> +
+> +#else
+> +
+> +#define REQUEST_FIRMWARE_INTO_BUF request_firmware_into_buf
+> +
+> +#endif
+> +
+> +#endif
 
-Same thing here.
+Please clean this up, the code must reflect only the code upstream. No
+config stuff like this should be used on the driver. I had to stop my
+review here.
 
- Luis
+  Luis
