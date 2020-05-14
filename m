@@ -4,51 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C3CC433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0802BC433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:06:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A90B20643
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:05:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB35820643
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:06:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589483159;
-	bh=JsMmsJ4J2SaBxdTW5GPPIgLM1VAjhlWJyeoMW/Vs5IY=;
+	s=default; t=1589483206;
+	bh=X5J/cOekaw0vJkG0Lx9XCnZIakgENEiU8hA54KZohQg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Aa00isCXxkZFy30ZMRiSJFo83UeWLCA3jEHe170cLW2oe+tHtCm9BmPEthdWrD/9J
-	 uT1l1S8cal9Xgu9uDR+A6bfHGw6WcCntX6F+8soff2AKc1UZfARtyraLSccC/hhIVk
-	 T7WLIQL0gbdBIN3Qad7VFCLtInLEFkN8sTlUT1M0=
+	b=NUYodv5akULJEWrEhAErE0CybvGN2lgTMfpvsqWVUVaj8FIgLOIREDfseQFcSPtY/
+	 gnpMkIJ6U/yri7lRZfRJwexkZt1NlHoTtw0OaUZpYnkENtVdrBNHkj9iSb2RhHmtLD
+	 z+8PGtLEHNAC9uXQNJt7EQbsgY6/FesVw/wBmASw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbgENSyA (ORCPT
+        id S1729411AbgENTGp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 May 2020 14:54:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53676 "EHLO mail.kernel.org"
+        Thu, 14 May 2020 15:06:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728895AbgENSx7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 May 2020 14:53:59 -0400
+        id S1728812AbgENSxo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 May 2020 14:53:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B82782076A;
-        Thu, 14 May 2020 18:53:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ACB6B207C3;
+        Thu, 14 May 2020 18:53:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589482438;
-        bh=JsMmsJ4J2SaBxdTW5GPPIgLM1VAjhlWJyeoMW/Vs5IY=;
+        s=default; t=1589482423;
+        bh=X5J/cOekaw0vJkG0Lx9XCnZIakgENEiU8hA54KZohQg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hrs0vagwcfZBDoAB6xVdws1uSkHuIfxAGnc63Q3zsYGG4bp0JuShPv8WpmpU6X5zm
-         JqbnlRE/GlS4Nqd1CnbiBZZyPm87EyEhPqY6MuaXhRiVBbEjng7BRVbjFL5fjL7z1H
-         ahxxBKxC4hNwHi2KEk/lVVF8DGb+TJhu2JHcEwn4=
+        b=Ktk3WVfzi9HlG1BEh0+/mp+AvefgJBmc/IWmTcV+O/4xu8/K3YK+pzoJVJKChccVn
+         7qPT3d2r4GEBfxN5FTcmeLUFIYA7ROx/2MEdjsL3yDX2lrjM8NHO/HW1IsXDpJsVbh
+         f3ReWoVSgTrpeK2UxjHJ0G5nbImSGmzKJ3CtO2IY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peter Xu <peterx@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
+Cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 38/49] KVM: selftests: Fix build for evmcs.h
-Date:   Thu, 14 May 2020 14:52:59 -0400
-Message-Id: <20200514185311.20294-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 26/49] ftrace/selftest: make unresolved cases cause failure if --fail-unresolved set
+Date:   Thu, 14 May 2020 14:52:47 -0400
+Message-Id: <20200514185311.20294-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200514185311.20294-1-sashal@kernel.org>
 References: <20200514185311.20294-1-sashal@kernel.org>
@@ -61,58 +62,68 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peter Xu <peterx@redhat.com>
+From: Alan Maguire <alan.maguire@oracle.com>
 
-[ Upstream commit 8ffdaf9155ebe517cdec5edbcca19ba6e7ee9c3c ]
+[ Upstream commit b730d668138cb3dd9ce78f8003986d1adae5523a ]
 
-I got this error when building kvm selftests:
+Currently, ftracetest will return 1 (failure) if any unresolved cases
+are encountered.  The unresolved status results from modules and
+programs not being available, and as such does not indicate any
+issues with ftrace itself.  As such, change the behaviour of
+ftracetest in line with unsupported cases; if unsupported cases
+happen, ftracetest still returns 0 unless --fail-unsupported.  Here
+--fail-unresolved is added and the default is to return 0 if
+unresolved results occur.
 
-/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: multiple definition of `current_evmcs'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: first defined here
-/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: multiple definition of `current_vp_assist'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: first defined here
-
-I think it's because evmcs.h is included both in a test file and a lib file so
-the structs have multiple declarations when linking.  After all it's not a good
-habit to declare structs in the header files.
-
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
-Message-Id: <20200504220607.99627-1-peterx@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/include/evmcs.h  | 4 ++--
- tools/testing/selftests/kvm/lib/x86_64/vmx.c | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/ftrace/ftracetest | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/include/evmcs.h b/tools/testing/selftests/kvm/include/evmcs.h
-index 4912d23844bc6..e31ac9c5ead0c 100644
---- a/tools/testing/selftests/kvm/include/evmcs.h
-+++ b/tools/testing/selftests/kvm/include/evmcs.h
-@@ -217,8 +217,8 @@ struct hv_enlightened_vmcs {
- #define HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_MASK	\
- 		(~((1ull << HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT) - 1))
- 
--struct hv_enlightened_vmcs *current_evmcs;
--struct hv_vp_assist_page *current_vp_assist;
-+extern struct hv_enlightened_vmcs *current_evmcs;
-+extern struct hv_vp_assist_page *current_vp_assist;
- 
- int vcpu_enable_evmcs(struct kvm_vm *vm, int vcpu_id);
- 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-index f6ec97b7eaef6..8cc4a59ff369f 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-@@ -17,6 +17,9 @@
- 
- bool enable_evmcs;
- 
-+struct hv_enlightened_vmcs *current_evmcs;
-+struct hv_vp_assist_page *current_vp_assist;
-+
- struct eptPageTableEntry {
- 	uint64_t readable:1;
- 	uint64_t writable:1;
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 144308a757b70..19e9236dec5e2 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -17,6 +17,7 @@ echo "		-v|--verbose Increase verbosity of test messages"
+ echo "		-vv        Alias of -v -v (Show all results in stdout)"
+ echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+ echo "		--fail-unsupported Treat UNSUPPORTED as a failure"
++echo "		--fail-unresolved Treat UNRESOLVED as a failure"
+ echo "		-d|--debug Debug mode (trace all shell commands)"
+ echo "		-l|--logdir <dir> Save logs on the <dir>"
+ echo "		            If <dir> is -, all logs output in console only"
+@@ -112,6 +113,10 @@ parse_opts() { # opts
+       UNSUPPORTED_RESULT=1
+       shift 1
+     ;;
++    --fail-unresolved)
++      UNRESOLVED_RESULT=1
++      shift 1
++    ;;
+     --logdir|-l)
+       LOG_DIR=$2
+       shift 2
+@@ -176,6 +181,7 @@ KEEP_LOG=0
+ DEBUG=0
+ VERBOSE=0
+ UNSUPPORTED_RESULT=0
++UNRESOLVED_RESULT=0
+ STOP_FAILURE=0
+ # Parse command-line options
+ parse_opts $*
+@@ -280,7 +286,7 @@ eval_result() { # sigval
+     $UNRESOLVED)
+       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
+       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+-      return 1 # this is a kind of bug.. something happened.
++      return $UNRESOLVED_RESULT # depends on use case
+     ;;
+     $UNTESTED)
+       prlog "	[${color_blue}UNTESTED${color_reset}]"
 -- 
 2.20.1
 
