@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0095C433E4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:06:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34428C433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:09:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBFD820643
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:06:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D36020643
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589483211;
-	bh=e923IeQUkDFGtCFMSIPljVav9gG9Zf2cBBiEpAXaqGA=;
+	s=default; t=1589483382;
+	bh=uHhK8nlqpp5T5x85pXHiy4QJRKiZuAiavSq3I3XXXcU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kRGzfjqZY54vdTXeARLqTw9z72rSggk74EkL3jtQmpOC3bWZSghg6Htkh9aNEv/C0
-	 r+1h5428MHHi1hl37NiGxB8TSsrA36PyuGyiMdafaOChe6Zt9M8nDhWZsccgAxVhEI
-	 p4BNimncLC/gOUR25jrCWMFtvPmLQby2jshhlgkI=
+	b=VGpL7hbO1Q3pLsJp3rybrg7vdJ4LeE5jB2JjMnyUsMRJzVYGOHF04z30CrWKhxHxd
+	 RQtmVnLxHTHutxkCyrd6OlL8C/bq9TqM1i7wPP9B08/NqMm9W3MrNywa88A0X9JUny
+	 OIiZXORqgnUsIiHWIDtJBfBGB09u2Avv8l0nYylA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730050AbgENTGv (ORCPT
+        id S1730058AbgENTJa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 May 2020 15:06:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53130 "EHLO mail.kernel.org"
+        Thu, 14 May 2020 15:09:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728802AbgENSxm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 May 2020 14:53:42 -0400
+        id S1728398AbgENSwt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 May 2020 14:52:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 38209206F1;
-        Thu, 14 May 2020 18:53:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CFC18206DC;
+        Thu, 14 May 2020 18:52:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589482422;
-        bh=e923IeQUkDFGtCFMSIPljVav9gG9Zf2cBBiEpAXaqGA=;
+        s=default; t=1589482368;
+        bh=uHhK8nlqpp5T5x85pXHiy4QJRKiZuAiavSq3I3XXXcU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R0jY+ysfrW2oBJAEqm7mUlIieaxpxNJ1bqmHVTv7mUHMUCVES97eqc8NczYjgqtRx
-         29IOvjMXb9rHHZlT/arPjslzckhSKKa8HktIbyhIBHeD15+6hmVKOCE3kio0m3Phf4
-         f5dqpcBax915WUu59Q+PBGdMndIChr7duDiOvJvI=
+        b=KR6tyy6q/zuCVcbVfkAU+LKD06QoXXQ0mx2VQtpXwjDvbJldAmpXfNiao3upi4TAg
+         XCfrDB76mmVJ3tFlNemy14AJJtz5QaPkLABTi3XE6QBRz08l/4QYIxVxZwyudKXAk5
+         CMyroVWVm5oLVUOD7w1F41risTcmHuKIMtkG2DCY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
+Cc:     Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 25/49] ftrace/selftests: workaround cgroup RT scheduling issues
-Date:   Thu, 14 May 2020 14:52:46 -0400
-Message-Id: <20200514185311.20294-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 47/62] KVM: selftests: Fix build for evmcs.h
+Date:   Thu, 14 May 2020 14:51:32 -0400
+Message-Id: <20200514185147.19716-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200514185311.20294-1-sashal@kernel.org>
-References: <20200514185311.20294-1-sashal@kernel.org>
+In-Reply-To: <20200514185147.19716-1-sashal@kernel.org>
+References: <20200514185147.19716-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,85 +61,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+From: Peter Xu <peterx@redhat.com>
 
-[ Upstream commit 57c4cfd4a2eef8f94052bd7c0fce0981f74fb213 ]
+[ Upstream commit 8ffdaf9155ebe517cdec5edbcca19ba6e7ee9c3c ]
 
-wakeup_rt.tc and wakeup.tc tests in tracers/ subdirectory
-fail due to the chrt command returning:
+I got this error when building kvm selftests:
 
- chrt: failed to set pid 0's policy: Operation not permitted.
+/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: multiple definition of `current_evmcs'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: first defined here
+/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: multiple definition of `current_vp_assist'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: first defined here
 
-To work around this, temporarily disable grout RT scheduling
-during ftracetest execution.  Restore original value on
-test run completion.  With these changes in place, both
-tests consistently pass.
+I think it's because evmcs.h is included both in a test file and a lib file so
+the structs have multiple declarations when linking.  After all it's not a good
+habit to declare structs in the header files.
 
-Fixes: c575dea2c1a5 ("selftests/ftrace: Add wakeup_rt tracer testcase")
-Fixes: c1edd060b413 ("selftests/ftrace: Add wakeup tracer testcase")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+Message-Id: <20200504220607.99627-1-peterx@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/ftrace/ftracetest | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ tools/testing/selftests/kvm/include/evmcs.h  | 4 ++--
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 063ecb290a5a3..144308a757b70 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -29,8 +29,25 @@ err_ret=1
- # kselftest skip code is 4
- err_skip=4
+diff --git a/tools/testing/selftests/kvm/include/evmcs.h b/tools/testing/selftests/kvm/include/evmcs.h
+index 4912d23844bc6..e31ac9c5ead0c 100644
+--- a/tools/testing/selftests/kvm/include/evmcs.h
++++ b/tools/testing/selftests/kvm/include/evmcs.h
+@@ -217,8 +217,8 @@ struct hv_enlightened_vmcs {
+ #define HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_MASK	\
+ 		(~((1ull << HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT) - 1))
  
-+# cgroup RT scheduling prevents chrt commands from succeeding, which
-+# induces failures in test wakeup tests.  Disable for the duration of
-+# the tests.
-+
-+readonly sched_rt_runtime=/proc/sys/kernel/sched_rt_runtime_us
-+
-+sched_rt_runtime_orig=$(cat $sched_rt_runtime)
-+
-+setup() {
-+  echo -1 > $sched_rt_runtime
-+}
-+
-+cleanup() {
-+  echo $sched_rt_runtime_orig > $sched_rt_runtime
-+}
-+
- errexit() { # message
-   echo "Error: $1" 1>&2
-+  cleanup
-   exit $err_ret
- }
+-struct hv_enlightened_vmcs *current_evmcs;
+-struct hv_vp_assist_page *current_vp_assist;
++extern struct hv_enlightened_vmcs *current_evmcs;
++extern struct hv_vp_assist_page *current_vp_assist;
  
-@@ -39,6 +56,8 @@ if [ `id -u` -ne 0 ]; then
-   errexit "this must be run by root user"
- fi
+ int vcpu_enable_evmcs(struct kvm_vm *vm, int vcpu_id);
  
-+setup
-+
- # Utilities
- absdir() { # file_path
-   (cd `dirname $1`; pwd)
-@@ -235,6 +254,7 @@ TOTAL_RESULT=0
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+index 7aaa99ca4dbc3..ce528f3cf093c 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+@@ -17,6 +17,9 @@
  
- INSTANCE=
- CASENO=0
-+
- testcase() { # testfile
-   CASENO=$((CASENO+1))
-   desc=`grep "^#[ \t]*description:" $1 | cut -f2 -d:`
-@@ -406,5 +426,7 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
- prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
- prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+ bool enable_evmcs;
  
-+cleanup
++struct hv_enlightened_vmcs *current_evmcs;
++struct hv_vp_assist_page *current_vp_assist;
 +
- # if no error, return 0
- exit $TOTAL_RESULT
+ struct eptPageTableEntry {
+ 	uint64_t readable:1;
+ 	uint64_t writable:1;
 -- 
 2.20.1
 
