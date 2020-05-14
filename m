@@ -2,128 +2,168 @@ Return-Path: <SRS0=L0tC=64=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1129CC433E6
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66C99C433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:36:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3D9E206DC
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:10:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589483459;
-	bh=X5J/cOekaw0vJkG0Lx9XCnZIakgENEiU8hA54KZohQg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=W+EFv2WqCne1PAmzQMaVVQESoLKjQ+i92dJaVc/3yU7F6U52rNsWryxdRAUpc/Gru
-	 BkizM/PqpKIf0wyf3qlbI7fOyYtSq1vEallrGGLfx+Qo1gL0tQVdqEwRbEZ8NZxfUJ
-	 /1WmKKk73dqZA6vJy5A3BATdXAImDqt9K2m92FBY=
+	by mail.kernel.org (Postfix) with ESMTP id 424C02065F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 May 2020 19:36:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gbnfcEGy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728219AbgENTK7 (ORCPT
+        id S1728045AbgENTgF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 May 2020 15:10:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50492 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728295AbgENSwX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 May 2020 14:52:23 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98307206F1;
-        Thu, 14 May 2020 18:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589482342;
-        bh=X5J/cOekaw0vJkG0Lx9XCnZIakgENEiU8hA54KZohQg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fc3Q+alJS2RJFMpaZhVVYf+lFvVg3NepCj5wrKwQ8URs7EK6NVRdJ6Uhe6B8b6HnM
-         0NLHMW0j7VyyaIA8ibxB2Xj3hSUPKhzSUiJE2goVhXVRHfOSXFNdimV9Fu4HTa6sCX
-         9d4oizqAGMGpNgCgzjaQsLXeRbYpM1xo9P5/GsrQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 26/62] ftrace/selftest: make unresolved cases cause failure if --fail-unresolved set
-Date:   Thu, 14 May 2020 14:51:11 -0400
-Message-Id: <20200514185147.19716-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200514185147.19716-1-sashal@kernel.org>
-References: <20200514185147.19716-1-sashal@kernel.org>
+        Thu, 14 May 2020 15:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726128AbgENTgE (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 May 2020 15:36:04 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8673CC061A0C
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2020 12:36:04 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id j4so3317457otr.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2020 12:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3mB8eiiLNg/9uJ3nUxq/59BVSbCYvlFaWEg3uZJv8hY=;
+        b=gbnfcEGyjeI2E05TrmYnpbwO5XUejuKLbsbfrYHUGBGhzXIfKiaSJxWicb5N9NCYXW
+         GgYgl4zbUlTIApjgtdTSRPdDIVkeB2irPolCipFB5kshPF5Y8JSOno5jkZzxLeOgmTBA
+         Khm1PuSmasV1okZgPN0wEhJ5FpwHNTQgUrqD7kuusrZVDPFEwMJqKWROLlNg+VD9saM1
+         zo6geu9ijH30I+HzUS0S0ko1pe/p6ezJMWrpUw+GPieAzEKOzZXw10hS+DmoEXNJF7yu
+         DLLhyWlNbOxS/Mqzt4igaQYo6zd7p2jg1Yhot90+cQvX8PLiDDZmfLIY/VXizJUffaey
+         yAiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3mB8eiiLNg/9uJ3nUxq/59BVSbCYvlFaWEg3uZJv8hY=;
+        b=BxkVN5iAaueFyNuuwkI81qiP+jZW2c6R7dNQ+9B4AgXp3qvJFbUPwplMZRlBhVbM85
+         is4ViGmGADMh/hVMJ8lSen+Gz4rKBkoqOhSFdKZt09LmZtMj/Mj7MOTJ4SYpop4sFsRz
+         vWkCuuqa7I6lND/XrVc9sM7ywhBJ6K5MnO3r2ISdJWKZF74PcB1ufBHj2CAeo/QDriyI
+         DuA9ALRiQTtsLSVMsgh2ufN+kDBpH26DRzdKOwqktb8Bg1nd90ysyJtPN5IPiR7iNo2J
+         Sx6CJEto5bIQ7IxiLOOkJKVHnwbd0qzD4kC/wA+UE+3ENbAyEG85+ZlRGGgLT0zagH2I
+         eAqw==
+X-Gm-Message-State: AOAM533AkBUFPcA5P6HT1vV7dk/5YK8uz9wurS0ZvyN9vyUlGJ64qbM9
+        Hphnb7oBJreCeI5/sU+aumW1/T5eRIgZclr38ThVxA==
+X-Google-Smtp-Source: ABdhPJxzXMbOXADm7edX7KBcGIZwn9CE69pYU7XfrV+RF4T8zgJb4e8inNsnKPyJ3tbNEN/48TKx17tf/NonaZ9sMkI=
+X-Received: by 2002:a9d:68c5:: with SMTP id i5mr4430416oto.251.1589484963699;
+ Thu, 14 May 2020 12:36:03 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200513042956.109987-1-davidgow@google.com>
+In-Reply-To: <20200513042956.109987-1-davidgow@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 14 May 2020 21:35:52 +0200
+Message-ID: <CANpmjNOzxt3QL8BR+J+GDT=5BJkEQqEeXXJgqWx7JZAR6G8sHQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] kunit: Support skipped tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        linux-kselftest@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+On Wed, 13 May 2020 at 06:30, David Gow <davidgow@google.com> wrote:
+>
+> This is a proof-of-concept to support "skipping" tests.
+>
+> The kunit_mark_skipped() macro marks the current test as "skipped", with
+> the provided reason. The kunit_skip() macro will mark the test as
+> skipped, and abort the test.
+>
+> The TAP specification supports this "SKIP directive" as a comment after
+> the "ok" / "not ok" for a test. See the "Directives" section of the TAP
+> spec for details:
+> https://testanything.org/tap-specification.html#directives
+>
+> kunit_tool will parse this SKIP directive, and renders skipped tests in
+> yellow and counts them. Skipped tests do not affect the result for a
+> suite.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> Following on from discussions about the KCSAN test[1], which requires a
+> multi-core/processor system to make sense, it would be useful for tests
+> to be able to mark themselves as "skipped", where tests have runtime
+> dependencies which aren't met.
+>
+> As a proof-of-concept, this patch doesn't implement some things which
+> we'd ideally like to have (e.g., non-static "reasons" for skipping the
+> test, maybe some SKIP macros akin to the EXPECT and ASSERT ones), and
+> the implementation is still pretty hacky, but I though I'd put this out
+> there to see if there are any thoughts on the concept in general.
+>
+> Cheers,
+> -- David
+>
+> [1]: https://lkml.org/lkml/2020/5/5/31
+>
+>  include/kunit/test.h                | 12 ++++++++++++
+>  lib/kunit/kunit-example-test.c      |  7 +++++++
+>  lib/kunit/test.c                    | 23 ++++++++++++++++-------
+>  tools/testing/kunit/kunit_parser.py | 21 +++++++++++++++++----
+>  4 files changed, 52 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 9b0c46a6ca1f..7817c5580b2c 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -178,6 +178,7 @@ struct kunit_suite {
+>         /* private - internal use only */
+>         struct dentry *debugfs;
+>         char *log;
+> +       const char *skip_directive;
+>  };
+>
+>  /**
+> @@ -213,6 +214,8 @@ struct kunit {
+>          * protect it with some type of lock.
+>          */
+>         struct list_head resources; /* Protected by lock. */
+> +
+> +       const char *skip_directive;
+>  };
+>
+>  void kunit_init_test(struct kunit *test, const char *name, char *log);
+> @@ -391,6 +394,15 @@ void kunit_cleanup(struct kunit *test);
+>
+>  void kunit_log_append(char *log, const char *fmt, ...);
+>
+> +#define kunit_mark_skipped(test_or_suite, reason)                      \
+> +       (test_or_suite)->skip_directive = "SKIP " reason
+> +
 
-[ Upstream commit b730d668138cb3dd9ce78f8003986d1adae5523a ]
+Would it be useful to make this accept any string possibly with a
+format? Otherwise, the reason will always need to be a constant string
+here.
 
-Currently, ftracetest will return 1 (failure) if any unresolved cases
-are encountered.  The unresolved status results from modules and
-programs not being available, and as such does not indicate any
-issues with ftrace itself.  As such, change the behaviour of
-ftracetest in line with unsupported cases; if unsupported cases
-happen, ftracetest still returns 0 unless --fail-unsupported.  Here
---fail-unresolved is added and the default is to return 0 if
-unresolved results occur.
+I'm fine with printing more detailed info via pr_warn() or so, if
+that's an unreasonable request.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/ftrace/ftracetest | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> +#define kunit_skip(test_or_suite, reason)                              \
+> +       do {                                                            \
+> +               kunit_mark_skipped(test_or_suite, reason);              \
+> +               kunit_try_catch_throw(&((test_or_suite)->try_catch));   \
+> +       } while (0)
+> +
+[...]
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 144308a757b70..19e9236dec5e2 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -17,6 +17,7 @@ echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
- echo "		--fail-unsupported Treat UNSUPPORTED as a failure"
-+echo "		--fail-unresolved Treat UNRESOLVED as a failure"
- echo "		-d|--debug Debug mode (trace all shell commands)"
- echo "		-l|--logdir <dir> Save logs on the <dir>"
- echo "		            If <dir> is -, all logs output in console only"
-@@ -112,6 +113,10 @@ parse_opts() { # opts
-       UNSUPPORTED_RESULT=1
-       shift 1
-     ;;
-+    --fail-unresolved)
-+      UNRESOLVED_RESULT=1
-+      shift 1
-+    ;;
-     --logdir|-l)
-       LOG_DIR=$2
-       shift 2
-@@ -176,6 +181,7 @@ KEEP_LOG=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-+UNRESOLVED_RESULT=0
- STOP_FAILURE=0
- # Parse command-line options
- parse_opts $*
-@@ -280,7 +286,7 @@ eval_result() { # sigval
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
--      return 1 # this is a kind of bug.. something happened.
-+      return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
--- 
-2.20.1
+This looks good to me. One question I'd have is: will this work in
+test_init functions? Because in the KCSAN test, the test setup
+determines if we have enough CPUs, and then causes test_init to return
+a non-zero error code.
 
+Thanks,
+-- Marco
