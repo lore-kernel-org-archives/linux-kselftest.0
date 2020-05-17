@@ -2,102 +2,103 @@ Return-Path: <SRS0=d4mP=67=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EF88C433DF
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 May 2020 00:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5634FC433E0
+	for <linux-kselftest@archiver.kernel.org>; Sun, 17 May 2020 00:25:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D7CA207C4
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 May 2020 00:12:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3054F2075F
+	for <linux-kselftest@archiver.kernel.org>; Sun, 17 May 2020 00:25:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="OeSj0X5l"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="YnG6kEfa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726919AbgEQAMw (ORCPT
+        id S1726797AbgEQAZN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 May 2020 20:12:52 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14723 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbgEQAMv (ORCPT
+        Sat, 16 May 2020 20:25:13 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:16124 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726079AbgEQAZM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 May 2020 20:12:51 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ec080f50000>; Sat, 16 May 2020 17:10:31 -0700
+        Sat, 16 May 2020 20:25:12 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ec0845b0000>; Sat, 16 May 2020 17:24:59 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sat, 16 May 2020 17:12:50 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sat, 16 May 2020 17:25:12 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sat, 16 May 2020 17:12:50 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 17 May
- 2020 00:12:49 +0000
+        by hqpgpgate102.nvidia.com on Sat, 16 May 2020 17:25:12 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 17 May
+ 2020 00:25:11 +0000
 Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
  (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sun, 17 May 2020 00:12:49 +0000
+ Transport; Sun, 17 May 2020 00:25:11 +0000
 Received: from sandstorm.nvidia.com (Not Verified[10.2.48.175]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ec081810000>; Sat, 16 May 2020 17:12:49 -0700
+        id <B5ec084670001>; Sat, 16 May 2020 17:25:11 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Brian Geffon <bgeffon@google.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mina Almasry <almasrymina@google.com>,
         Shuah Khan <shuah@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kselftest@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 0/2] selftests/vm: minor fixes for 5.7-rc5
-Date:   Sat, 16 May 2020 17:12:43 -0700
-Message-ID: <20200517001245.361762-1-jhubbard@nvidia.com>
+Subject: [PATCH 1/1] selftests/vm/.gitignore: add khugepaged, mremap_dontunmap
+Date:   Sat, 16 May 2020 17:25:09 -0700
+Message-ID: <20200517002509.362401-2-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200517002509.362401-1-jhubbard@nvidia.com>
+References: <20200517002509.362401-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589674231; bh=wjLchc1ui/FmZZGmSH4qpXauQ1u6/oTfmbDWbGbON98=;
+        t=1589675099; bh=hLSvN+wnL0qj4RxGnT+ilPGcckAlLs8+Gg8Y7Cvm3mQ=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=OeSj0X5leaSJg3f79iy0ZeLoGjRgdDteo6AyD3A8EHQls2wigV+WF74VdY+ZRYfDP
-         iWynlilWUwj4dYSSxrDCfw4AuqyqH6KKEOnODl96NQzfNNxpjKdbKu5d+vYSX65MJi
-         SuorSMJ4eu+2Gn3uBTwPitYwkGeB1VhuPqeJuX911gmcuTZi3qPQapjRfgwTvTGDRI
-         U4H7MjhF8qgsNxZIXxFh8PW0d7E4mlsRLuCmfTse1tgSU7GfxDQQ6QgyZ/lrwUck3w
-         AavC4b5b/aV/Od1MouLHI3sl2lch21w7qDEP3mNuNAb9zV5rH0W/ubGmvf0a0egNi0
-         mvCjTkVEOUySA==
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=YnG6kEfas4ZWgZtiO4kw8K+46zWqo3PS2sBL2FGm2fHgt8ZbYp3QZz4njTQoIlJQU
+         nTLGj1w972+J7SVQit8Snisv2HLTqOoCu9JUxbjRfvgr8LKNtOBfOYkxSYEzvetr06
+         nyYi4sod+is+26aZn2ORYRI++qzWLL7gtJi9VgAiwxLTSR16a2kJAiw1+qI0IYI6IK
+         Y2jUAygzlSGWf52kmRt4A09iSpksfY9Wf/XGpZhXrSHCO2kKA0skgKFuaYdHJUWNCE
+         m1UwDS/eRjzI9zDkNjdiml+wpuGgBRYh35ld37ZO2Lw5OlXSFOYARvGBhwyYNAGlmK
+         9xARmjFST8Jvg==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here's a couple of tiny fixes, just so we can cleanly build
-selftests/vm. These apply to today's linux.git. Some merge notes:
+Add mremap_dontunmap and khugepaged to .gitignore.
 
-* The .gitignore fix is appropriate for linux.git, but it is a subset of
-  what's required for linux-next and mmotm. In order to fix things now
-  in linux.git, and keep it fixed in mmotm and linux-next, but without
-  manual intervention required in git merges, I'm adding the missing
-  item ("mremap_dontunmap") to the *top* of .gitignore for this patch.
-  And then I'll send a separate patch to be applied to mmotm and
-  linux-next, that will also add a different item ("khugepaged") to the
-  *bottom* of .gitignore.
+Fixes: 6582dba23f8b ("khugepaged: add self test")
+Fixes: 0c28759ee3c9 ("selftests: add MREMAP_DONTUNMAP selftest")
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Brian Geffon <bgeffon@google.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/vm/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-* The write_to_hugetlbfs.c fix is already applied to linux-next, but
-  doesn't seem to be getting picked up for linux.git. Maybe it's in
-  the merge pipeline, but if not, let's fix it here, before the -rc
-  cycle is over.
-
-John Hubbard (2):
-  selftests/vm/write_to_hugetlbfs.c: fix unused variable warning
-  selftests/vm/.gitignore: add mremap_dontunmap
-
- tools/testing/selftests/vm/.gitignore           | 1 +
- tools/testing/selftests/vm/write_to_hugetlbfs.c | 2 --
- 2 files changed, 1 insertion(+), 2 deletions(-)
-
-
-base-commit: 3d1c1e5931ce45b3a3f309385bbc00c78e9951c6
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftest=
+s/vm/.gitignore
+index 4ff9708277fb..ddf5426416fa 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++mremap_dontunmap
+ hugepage-mmap
+ hugepage-shm
+ map_hugetlb
+@@ -18,3 +19,4 @@ va_128TBswitch
+ map_fixed_noreplace
+ write_to_hugetlbfs
+ hmm-tests
++khugepaged
 --=20
 2.26.2
 
