@@ -1,91 +1,198 @@
-Return-Path: <SRS0=M5IW=7B=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=bAhy=7C=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA995C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 May 2020 22:16:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 592D4C433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 May 2020 05:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99606207E8
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 May 2020 22:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1589926601;
-	bh=RyWC/bFV8ItGh7pgttI1BldvKPNDCEUggcCOKsPQbqY=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=TKEq6irEgDkRZlZSsSpNu18G6uVhSs0HJpO0I862TufyhoCWId6sUPrFCfQICQdO9
-	 XBZxFT+GbdbVX+cjm403dnu+UQW1tJUMJGgRRk67GWE1gJx1Jg0U96UTQM4B0n8LiQ
-	 WI6Sq7zxyDcWclB/NS1icmwtXXEQZhnHkZCYOtNU=
+	by mail.kernel.org (Postfix) with ESMTP id 2B6AA206C3
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 May 2020 05:26:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="erUqusEc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbgESWQl (ORCPT
+        id S1727016AbgETF0J (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 May 2020 18:16:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33320 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725998AbgESWQl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 May 2020 18:16:41 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD40C2075F;
-        Tue, 19 May 2020 22:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589926600;
-        bh=RyWC/bFV8ItGh7pgttI1BldvKPNDCEUggcCOKsPQbqY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=AEjsNdF+gGHFEP7llvxMaPuc9ZKhdIspTY6TmH3231krk1J38kqhjBOKYZSTjHSic
-         KjssEgLzGTEJYERmdw/rEZ9CY79EYw7h0FfMSDwN4URkj3pNgw/WZuyRpvIbM4BOH3
-         lyT9RicU6ERj4Z4dVyAzXcjocSyJY6MwfhZQ4dYA=
-Subject: Re: [PATCH v2] selftests: introduce gen_tar Makefile target
-To:     Stefano Brivio <sbrivio@redhat.com>,
-        Veronika Kabatova <vkabatov@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20200519200045.317516-1-vkabatov@redhat.com>
- <20200519225722.49e4d067@redhat.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <35755630-2653-719d-5684-7cf7cc86fd2b@kernel.org>
-Date:   Tue, 19 May 2020 16:16:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 20 May 2020 01:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726857AbgETF0I (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 May 2020 01:26:08 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95871C061A0E;
+        Tue, 19 May 2020 22:26:08 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ci23so727091pjb.5;
+        Tue, 19 May 2020 22:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eRmslym24V6G/rjPE8TehOfLWQ3zK6gG071z6c2z4UU=;
+        b=erUqusEcKRlIP3KYp3chtbL3NTp8aMyzzUU5VsGfE7lUwSaCnAkHLHve1yL3c+2ysw
+         tzV8VcKNivFaTnUwNf6c39c50waU31eQaRd7qXjqQRQ/eDh9+Cv3jBWmurl059hFt+q1
+         V5oSvIaX712w7elQvFTxwaO8IOmcDNBc+4Mgq89Trfv9U2wbq4LjA2t0TKtoCyVxubwp
+         xsvsI/OtlgMIXE7HF5s6y4LKwB34+LPafXCgjk6X9kShKU3OOFvPXQfKn6yIs7beMVT9
+         lIQaPdfIrSu7Rs8KDS7h3xIeNjla/7dr9VFcN+2SayNyRWJAUgAIlDyKIiveEVj+BoQf
+         Ni4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eRmslym24V6G/rjPE8TehOfLWQ3zK6gG071z6c2z4UU=;
+        b=M6QpjsC/fYt5FyVAhLJVkmhxCzynzSJSeAiTIY0k+GimCqmgyz99zZ1y2MjWwv8QrC
+         lCk/H9/ub9YcZUlbAihHOkMS77hoa9WGetnPFdSWVYbhqGtIpCtmv6L4rYaEcihlrZQb
+         /TwRnvBRenECrsj8FWip2SU8GY1DbkstwoTXu8xIy+Fuh9oF17TVPuo9F7ta1GIuIiMU
+         riCEtwKm+WwaNJ6R0WiY6RCOIdw/794aqsqrJsOU8iPYmsKW3uYCk49IjZZjMjVFuJZt
+         KOwLx6/enEuJlfek4N40DRl9OdKQ+2TAQbEGz3vv268V2AubB9E4nGoTrXx/DDazfx6T
+         nehw==
+X-Gm-Message-State: AOAM5315d9/nYhn5b/GxMPDTY8i/bxB4k5QCSo9gGQHNF+rnIultZL7c
+        0e43TjFxCkwnV4tcvQH2ia0=
+X-Google-Smtp-Source: ABdhPJxgU6JMsC870qBMQn3lqTKFkDnKKBt3MvzEuqd85kwCYzn4m4YWzUn1hbHotWgCzS7GTpNWQg==
+X-Received: by 2002:a17:90a:8c85:: with SMTP id b5mr3143434pjo.187.1589952368001;
+        Tue, 19 May 2020 22:26:08 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:8135])
+        by smtp.gmail.com with ESMTPSA id 131sm882738pgf.49.2020.05.19.22.26.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 22:26:06 -0700 (PDT)
+Date:   Tue, 19 May 2020 22:26:04 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andriin@fb.com, bpf@vger.kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: add general instructions for
+ test execution
+Message-ID: <20200520052604.o53ca2kyzd7sd3g3@ast-mbp.dhcp.thefacebook.com>
+References: <1589800990-11209-1-git-send-email-alan.maguire@oracle.com>
+ <20200519155021.6tag46i57z2hsivj@ast-mbp.dhcp.thefacebook.com>
+ <alpine.LRH.2.21.2005192224560.31696@localhost>
 MIME-Version: 1.0
-In-Reply-To: <20200519225722.49e4d067@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.21.2005192224560.31696@localhost>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/19/20 2:57 PM, Stefano Brivio wrote:
-> On Tue, 19 May 2020 22:00:45 +0200
-> Veronika Kabatova <vkabatov@redhat.com> wrote:
+On Tue, May 19, 2020 at 10:34:25PM +0100, Alan Maguire wrote:
+> On Tue, 19 May 2020, Alexei Starovoitov wrote:
 > 
->> The gen_kselftest_tar.sh always packages *all* selftests and doesn't
->> pass along any variables to `make install` to influence what should be
->> built. This can result in an early error on the command line ("Unknown
->> tarball format TARGETS=XXX"), or unexpected test failures as the
->> tarball contains tests people wanted to skip on purpose.
->>
->> Since the makefile already contains all the logic, we can add a target
->> for packaging. Keep the default .gz target the script uses, and actually
->> extend the supported formats by using tar's autodetection.
->>
->> To not break current workflows, keep the gen_kselftest_tar.sh script as
->> it is, with an added suggestion to use the makefile target instead.
->>
->> Signed-off-by: Veronika Kabatova <vkabatov@redhat.com>
+> > On Mon, May 18, 2020 at 12:23:10PM +0100, Alan Maguire wrote:
+> > > Getting a clean BPF selftests run involves ensuring latest trunk LLVM/clang
+> > > are used, pahole is recent (>=1.16) and config matches the specified
+> > > config file as closely as possible.  Document all of this in the general
+> > > README.rst file.  Also note how to work around timeout failures.
+> > > 
+> > > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/README.rst | 46 ++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 46 insertions(+)
+> > > 
+> > > diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+> > > index 0f67f1b..b00eebb 100644
+> > > --- a/tools/testing/selftests/bpf/README.rst
+> > > +++ b/tools/testing/selftests/bpf/README.rst
+> > > @@ -1,6 +1,52 @@
+> > >  ==================
+> > >  BPF Selftest Notes
+> > >  ==================
+> > > +First verify the built kernel config options match the config options
+> > > +specified in the config file in this directory.  Test failures for
+> > > +unknown helpers, inability to find BTF etc will be observed otherwise.
+> > > +
+> > > +To ensure the maximum number of tests pass, it is best to use the latest
+> > > +trunk LLVM/clang, i.e.
+> > > +
+> > > +git clone https://github.com/llvm/llvm-project
+> > > +
+> > > +Build/install trunk LLVM:
+> > > +
+> > > +.. code-block:: bash
+> > > +  git clone https://github.com/llvm/llvm-project
+> > > +  cd llvm-project
+> > > +  mkdir build/llvm
+> > > +  cd build/llvm
+> > > +  cmake ../../llvm/
+> > > +  make
+> > > +  sudo make install
+> > > +  cd ../../
+> > > +
+> > > +Build/install trunk clang:
+> > > +
+> > > +.. code-block:: bash
+> > > +  mkdir -p build/clang
+> > > +  cd build/clang
+> > > +  cmake ../../clang
+> > > +  make
+> > > +  sudo make install
+> > > +
+> > 
+> > these instructions are obsolete and partially incorrect.
+> > May be refer to Documentation/bpf/bpf_devel_QA.rst instead?
+> >
 > 
-> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+> Sure; looks like there are up-to-date sections there on
+> running BPF selftests and building LLVM manually.  Perhaps
+> I should add the notes about pahole etc there too?
+
+yes. please.
+Could you mention distros that have fresh pahole?
+Otherwise users will have an impression that pahole needs
+to be build from scratch as well. Which is not the case.
+
+> I should also have noted that without an up-to-date iproute2
+> failures will be observed also.
+
+Would be good to highlight which tests will fail with old iproute2.
+I'm not sure which version is necessary.
+What is 'up-to-date' ?
+The tests I run before applying work for me and I rebuild iproute2
+every year or so :)
+
+> > > +When building the kernel with CONFIG_DEBUG_INFO_BTF, pahole
+> > > +version 16 or later is also required for BTF function
+> > > +support. pahole can be built from the source at
+> > > +
+> > > +https://github.com/acmel/dwarves
+> > > +
+> > > +It is often available in "dwarves/libdwarves" packages also,
+> > > +but be aware that versions prior to 1.16 will fail with
+> > > +errors that functions cannot be found in BTF.
+> > > +
+> > > +When running selftests, the default timeout of 45 seconds
+> > > +can be exceeded by some tests.  We can override the default
+> > > +timeout via a "settings" file; for example:
+> > > +
+> > > +.. code-block:: bash
+> > > +  echo "timeout=120" > tools/testing/selftests/bpf/settings
+> > 
+> > Is it really the case?
+> > I've never seen anything like this.
+> > 
 > 
+> When running via "make run_tests" on baremetal systems I
+> see test timeouts pretty consistently; e.g. from a bpf tree test
+> run yesterday:
+> 
+> not ok 6 selftests: bpf: test_progs # TIMEOUT
+> not ok 31 selftests: bpf: test_tunnel.sh # TIMEOUT
+> not ok 38 selftests: bpf: test_lwt_ip_encap.sh # TIMEOUT
+> not ok 40 selftests: bpf: test_tc_tunnel.sh # TIMEOUT
+> not ok 42 selftests: bpf: test_xdping.sh # TIMEOUT
+> not ok 43 selftests: bpf: test_bpftool_build.sh # TIMEOUT
+> 
+> These will only occur if running via "make run_tests",
+> so running tests individually would not trigger these
+> failures.
 
-Applied to
-
-git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-for Linux 5.8-rc1.
-
-thanks,
--- Shuah
+If timeout is necessary it's better to fix it in the git
+instead of requiring users to tweak their environment.
