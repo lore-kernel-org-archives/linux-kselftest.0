@@ -1,145 +1,72 @@
-Return-Path: <SRS0=QPb1=7F=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=JHsq=7H=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50974C433DF
-	for <linux-kselftest@archiver.kernel.org>; Sat, 23 May 2020 06:48:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7A80C433E1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 May 2020 06:29:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1268B206DD
-	for <linux-kselftest@archiver.kernel.org>; Sat, 23 May 2020 06:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590216525;
-	bh=zkC/Bzv/4d9imdV7bd4UQsca1L1wLbu0TMHulEGm0Cc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=xGcNN3TBzrYnsdFt7vNxnSGxK9OmsFGQ0XKdENbhnd6gw8B0bj74mZ4geviH2v65J
-	 XtG4Z0dG+cGwwPl1nko0dTPGO9zPZKsCY5JkXCmtrnzxzyJit2j4wseknMzu/tj9C2
-	 +oF/5XMAfgBCGR58EsvJjwZzgsa/si86AOtvIz58=
+	by mail.kernel.org (Postfix) with ESMTP id A67F2207DA
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 May 2020 06:29:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O0/AIBRo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387604AbgEWGso (ORCPT
+        id S1730446AbgEYG3B (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 23 May 2020 02:48:44 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37297 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387466AbgEWGso (ORCPT
+        Mon, 25 May 2020 02:29:01 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:30080 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388631AbgEYG3B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 May 2020 02:48:44 -0400
-Received: by mail-pl1-f195.google.com with SMTP id x10so5304787plr.4;
-        Fri, 22 May 2020 23:48:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=NpNzKiRERZoLVhj+jDvGzomV5rdbxMN4yOkmuyXrsqc=;
-        b=dfSjIyfKRCEdcQDSYFHtXy52a4IusV7vOl3zfbH0GuzpOUbLjPhksRISHxozp792wY
-         /eELU7qVZEOyRRBXJ3y/cGXu/A9fNm3cXpZT7PklU/LxySn/PgilSup+KaXxR8LK6Zap
-         OERMiyxxeKiVBoEb/+E9C8eiT9QvC7IsOT4Gcc3vmiI3tfDobU1B10Kbs1bdDQzFtJmb
-         HB7IQGUHXoBB6n4aTYfVxpaTJt8m0910imxNLzBlsInYg6+Hk9o17ZpA+TJyjMwJ/FbH
-         ncPunslXALS8j98l6ujGrIEWnQq5MgxZFkosMW4eVS67RaGLfn1nCGOFkXBk6BIo5fok
-         jHUw==
-X-Gm-Message-State: AOAM532uAwFwhKytexhN2ubbcKHf2qpUF7TwlDXvuz2WIv3141EjCWl3
-        1mNkz0yOVw0Y07vzJ4WIwgI=
-X-Google-Smtp-Source: ABdhPJwTc/h4nDTy2YuDCAXvaLPEjLXQmwxq1dkA9Y4zNiWHgma1YWCSf2CT4PnncLtLKjIlyguZFw==
-X-Received: by 2002:a17:902:82c9:: with SMTP id u9mr18209345plz.179.1590216523391;
-        Fri, 22 May 2020 23:48:43 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id k24sm8362342pfk.134.2020.05.22.23.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 23:48:42 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 32F45404B0; Sat, 23 May 2020 06:48:41 +0000 (UTC)
-Date:   Sat, 23 May 2020 06:48:41 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH] firmware_loader: change enum fw_opt to u32
-Message-ID: <20200523064841.GJ11244@42.do-not-panic.com>
-References: <20200522214658.12722-1-scott.branden@broadcom.com>
- <20200522224508.GE11244@42.do-not-panic.com>
- <d87aabd0-1195-64ae-d871-b0771be832a8@broadcom.com>
- <20200522230025.GG11244@42.do-not-panic.com>
- <20200523060548.GA3124611@kroah.com>
+        Mon, 25 May 2020 02:29:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590388140;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=LGh412eQYr3rCq8xxf45CgrfvWBm+hok9IqBC+gring=;
+        b=O0/AIBRocsXfLit747v0ymraNmoRtYvrVUfMv2SveN/Io11s+bnW37vvO2wBaIEqTaoOwS
+        xIbErK79Ovr6Acx1Mp3JDCdLSTGvZqAodX4Uryu7Nu+7Rjt9tNhThm8vtU88ucqf+5TFH2
+        7ywSUP511OTOtiN5YAK/ws+aEpwao84=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-94-uQ_nYwdtOAuiI16gi10DWA-1; Mon, 25 May 2020 02:28:56 -0400
+X-MC-Unique: uQ_nYwdtOAuiI16gi10DWA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 634DA1005510;
+        Mon, 25 May 2020 06:28:55 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-112-111.ams2.redhat.com [10.36.112.111])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5810F60CC0;
+        Mon, 25 May 2020 06:28:54 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Subject: OUTPUT and TEST_CUSTOM_PROGS
+Date:   Mon, 25 May 2020 09:28:52 +0300
+Message-ID: <xuny367osf2z.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200523060548.GA3124611@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 23, 2020 at 08:05:48AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, May 22, 2020 at 11:00:25PM +0000, Luis Chamberlain wrote:
-> > On Fri, May 22, 2020 at 03:49:05PM -0700, Scott Branden wrote:
-> > > Hi Luis,
-> > > 
-> > > On 2020-05-22 3:45 p.m., Luis Chamberlain wrote:
-> > > > On Fri, May 22, 2020 at 02:46:58PM -0700, Scott Branden wrote:
-> > > > >   /**
-> > > > > - * enum fw_opt - options to control firmware loading behaviour
-> > > > > + * fw_opt - options to control firmware loading behaviour
-> > > > >    *
-> > > > >    * @FW_OPT_UEVENT: Enables the fallback mechanism to send a kobject uevent
-> > > > >    *	when the firmware is not found. Userspace is in charge to load the
-> > > > > @@ -33,15 +33,13 @@
-> > > > >    *	the platform's main firmware. If both this fallback and the sysfs
-> > > > >    *      fallback are enabled, then this fallback will be tried first.
-> > > > >    */
-> > > > > -enum fw_opt {
-> > > > > -	FW_OPT_UEVENT			= BIT(0),
-> > > > > -	FW_OPT_NOWAIT			= BIT(1),
-> > > > > -	FW_OPT_USERHELPER		= BIT(2),
-> > > > > -	FW_OPT_NO_WARN			= BIT(3),
-> > > > > -	FW_OPT_NOCACHE			= BIT(4),
-> > > > > -	FW_OPT_NOFALLBACK_SYSFS		= BIT(5),
-> > > > > -	FW_OPT_FALLBACK_PLATFORM	= BIT(6),
-> > > > > -};
-> > > > > +#define FW_OPT_UEVENT			BIT(0)
-> > > > > +#define FW_OPT_NOWAIT			BIT(1)
-> > > > > +#define FW_OPT_USERHELPER		BIT(2)
-> > > > > +#define FW_OPT_NO_WARN			BIT(3)
-> > > > > +#define FW_OPT_NOCACHE			BIT(4)
-> > > > > +#define FW_OPT_NOFALLBACK_SYSFS		BIT(5)
-> > > > > +#define FW_OPT_FALLBACK_PLATFORM	BIT(6)
-> > > > Everything looked good up to here. The enum defines each flag.
-> > > > We just want to use an enum for *one* flag represetnation, not
-> > > > a bundle.
-> > >
-> > > I do not know exactly what you are looking for then.  The FW_OPT_*
-> > > values are OR'd together in the code.  You still want the fw_opt enum
-> > > above left in place entirely and then the values used in OR'd
-> > > together?
-> > 
-> > Yes, exactly. If they are combined then we just use a u32 to represent
-> > these are then flags combined. An enum represents just *one* flag, not
-> > a set which are OR'd together. Let me know if this is still not clear.
-> 
-> If this is the case, why have an enum at all?  What difference is it
-> from a #define like was done here?
+Hi!
 
-If used on a switch to test for cases the compiler will error if you
-miss one, and it is easier to use kdoc for them.
+lib.mk expects TEST_GEN_PROGS, TEST_GEN_PROGS_EXTENDED and
+TEST_GEN_FILES to be in local directory and tries to handle out
+of tree build adding OUTPUT to it at the beginning.
 
-  Luis
+commit be16a244c199 ("selftests: lib.mk: add TEST_CUSTOM_PROGS to
+allow custom test run/install") adds TEST_CUSTOM_PROGS but it
+handles it differently. Should it add OUTPUT as well?
+
+-- 
+WBR,
+Yauheni Kaliuta
+
