@@ -2,120 +2,129 @@ Return-Path: <SRS0=xVeE=7J=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98CC9C433E3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 13:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C230C433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 17:02:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78D2D208C3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 13:27:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15E252071A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 17:02:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zwtz3KVN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MzGSm6ce"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387927AbgE0N1E (ORCPT
+        id S1731091AbgE0RCy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 May 2020 09:27:04 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:52866 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2387479AbgE0N1D (ORCPT
+        Wed, 27 May 2020 13:02:54 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40231 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728883AbgE0RCy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 May 2020 09:27:03 -0400
+        Wed, 27 May 2020 13:02:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590586022;
+        s=mimecast20190719; t=1590598973;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rO0Xmu3kpwaS+spo70btHKk/n/bl2TDfOUNRISjvedY=;
-        b=Zwtz3KVNBkXkOAz7DJgnrvHQF910iCD0DumL8CXrwm+AxuidxSFfM0RhTeC+ggATVChFy3
-        VFlVuy7lUS8/hAoKFNgHbMJzej25iaW6narm54BNj/1QRjgpaSt4P4s83CDeu0S6YKgIOL
-        Fvydh9KyOOeBFinUXN8p0rU7UmSj9po=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-314-mAhT6BjBNgaYm4XciCHM3A-1; Wed, 27 May 2020 09:26:59 -0400
-X-MC-Unique: mAhT6BjBNgaYm4XciCHM3A-1
-Received: by mail-wr1-f71.google.com with SMTP id e1so8785895wrm.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2020 06:26:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rO0Xmu3kpwaS+spo70btHKk/n/bl2TDfOUNRISjvedY=;
-        b=tk8NpxyV3si69FULq7NNSIXmjWnkOyvCMIZRm2ckWzP5dtC8mEFeMdd85CwpeEnDUO
-         NFlsv1+oDY25VKAX3dNbzsqPeFC+w4owVNEDJuqPuzERU4Wunlm4pSjGkWXjAGjGShkH
-         f3gqOpbHfBGtSQkkgkCgRVb4SHbbyAFB60ElUqkYdb2tOtjpp9m5Gw/tgNhGiia92MjU
-         CjOcsvD0ufIk99E38VqElb8KLk4mCIUY5kkbKQv5DjfmTBQFNbKZiOy8EZeIjR+LKmbb
-         LyGbcmD9RKUKM9o90Hv/oZB+62UVBoHP2W3Vs1mjllRk3E8WsYb33klsT+X7NITH7xr0
-         tgwg==
-X-Gm-Message-State: AOAM530N6oWYPHb8ttJ5P/SXezpVcjgvqh+o6u0wN1SHLsAh8Upt/gM9
-        ei4zQyecL6a5g3KaG5uZtijeMHw/FjF9mo6zheCk8ByZfrEnewuSiyS6bEfKCtqkRiz631nvCmY
-        d0gr3PE9OKGDtkQN4kVy6iwjrbABJ
-X-Received: by 2002:adf:f582:: with SMTP id f2mr23080016wro.204.1590586018587;
-        Wed, 27 May 2020 06:26:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzksEVrGsPk/xGJQnD5AtcYNTpqAooqkuvHIUr1bqlDBm3LvIU1wHX3ffnsooF7m2BY4wdfbQ==
-X-Received: by 2002:adf:f582:: with SMTP id f2mr23079984wro.204.1590586018345;
-        Wed, 27 May 2020 06:26:58 -0700 (PDT)
-Received: from localhost.localdomain ([194.230.155.225])
-        by smtp.gmail.com with ESMTPSA id c25sm2844600wmb.44.2020.05.27.06.26.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 06:26:57 -0700 (PDT)
-Subject: Re: [PATCH v3 3/7] kunit: tests for stats_fs API
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        Jonathan Adams <jwadams@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-        brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-References: <20200526110318.69006-1-eesposit@redhat.com>
- <20200526110318.69006-4-eesposit@redhat.com>
- <alpine.LRH.2.21.2005271054360.24819@localhost>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Message-ID: <7178ea00-cee5-d5e9-a7aa-58aa46ee416a@redhat.com>
-Date:   Wed, 27 May 2020 15:26:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        bh=0llQvuHUDajWbd807ZLZZoLe6sIkfmzt8DCvGnqKX3w=;
+        b=MzGSm6ceIIbdFeCuNeL/6LoR+xbUNN5WALmpAPq+BIZOONyMPy+GqoOdtEgPYVsBM8oOvj
+        6+b7sIcKgRZByGXb6zrSfXN3JcEK0bJM/V21eH/+PAI4L7BAs6gksX5VQfEKJbDAkfVmPu
+        66diCkWf9cpJsGYa9t04N0zShwFyHP0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-96-1Xhp6ZlVNRWCfah0MzcNvA-1; Wed, 27 May 2020 13:02:49 -0400
+X-MC-Unique: 1Xhp6ZlVNRWCfah0MzcNvA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A786835B47;
+        Wed, 27 May 2020 17:02:48 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-114-49.ams2.redhat.com [10.36.114.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B8401768A0;
+        Wed, 27 May 2020 17:02:43 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Jiri Benc <jbenc@redhat.com>,
+        Jiri Olsa <jolsa@redhat.com>, Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/bpf: split -extras target to -static and -gen
+References: <xuny367so4k3.fsf@redhat.com>
+        <20200522081901.238516-1-yauheni.kaliuta@redhat.com>
+        <CAEf4BzZaCTDT6DcLYvyFr4RUUm4fFbyb743e1JrEp2DS69cbug@mail.gmail.com>
+        <xunya71uosvv.fsf@redhat.com>
+        <CAADnVQJUL9=T576jo29F_zcEd=C6_OiExaGbEup6F-mA01EKZQ@mail.gmail.com>
+        <xuny367lq1z1.fsf@redhat.com>
+        <CAADnVQ+1o1JAm7w1twW0KgKMHbp-JvVjzET2N+VS1z=LajybzA@mail.gmail.com>
+Date:   Wed, 27 May 2020 20:02:41 +0300
+In-Reply-To: <CAADnVQ+1o1JAm7w1twW0KgKMHbp-JvVjzET2N+VS1z=LajybzA@mail.gmail.com>
+        (Alexei Starovoitov's message of "Wed, 27 May 2020 09:48:04 -0700")
+Message-ID: <xunyh7w1nwem.fsf@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.2005271054360.24819@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi, Alexei!
 
->> In order to run them, the kernel .config must set CONFIG_KUNIT=y
->> and a new .kunitconfig file must be created with CONFIG_STATS_FS=y
->> and CONFIG_STATS_FS_TEST=y
->>
-> 
-> It looks like CONFIG_STATS_FS is built-in, but it exports
-> much of the functionality you are testing.  However could the
-> tests also be built as a module (i.e. make CONFIG_STATS_FS_TEST
-> a tristate variable)? To test this you'd need to specify
-> CONFIG_KUNIT=m and CONFIG_STATS_FS_TEST=m, and testing would
-> simply be a case of "modprobe"ing the stats fs module and collecting
-> results in /sys/kernel/debug/kunit/<module_name> (rather
-> than running kunit.py). Are you relying on unexported internals in
-> the the tests that would prevent building them as a module?
-> 
+>>>>> On Wed, 27 May 2020 09:48:04 -0700, Alexei Starovoitov  wrote:
 
-I haven't checked it yet, but tests should work as separate module.
-I will look into it, thanks.
+ > On Wed, May 27, 2020 at 12:19 AM Yauheni Kaliuta
+ > <yauheni.kaliuta@redhat.com> wrote:
+ >> 
+ >> Hi, Alexei!
+ >> 
+ >> >>>>> On Tue, 26 May 2020 22:37:39 -0700, Alexei Starovoitov  wrote:
+ >> 
+ >> > On Tue, May 26, 2020 at 10:31 PM Yauheni Kaliuta
+ >> > <yauheni.kaliuta@redhat.com> wrote:
+ >> >>
+ >> >> Hi, Andrii!
+ >> >>
+ >> >> >>>>> On Tue, 26 May 2020 17:19:18 -0700, Andrii Nakryiko  wrote:
+ >> >>
+ >> >> > On Fri, May 22, 2020 at 1:19 AM Yauheni Kaliuta
+ >> >> > <yauheni.kaliuta@redhat.com> wrote:
+ >> >> >>
+ >> >> >> There is difference in depoying static and generated extra resource
+ >> >> >> files between in/out of tree build and flavors:
+ >> >> >>
+ >> >> >> - in case of unflavored out-of-tree build static files are not
+ >> >> >> available and must be copied as well as both static and generated
+ >> >> >> files for flavored build.
+ >> >> >>
+ >> >> >> So split the rules and variables. The name TRUNNER_EXTRA_GEN_FILES
+ >> >> >> is chosen in analogy to TEST_GEN_* variants.
+ >> >> >>
+ >> >>
+ >> >> > Can we keep them together but be smarter about what needs to
+ >> >> > be copied based on source/target directories? I would really
+ >> >> > like to not blow up all these rules.
+ >> >>
+ >> >> I can try, ok, I just find it a bit more clear. But it's good to
+ >> >> get some input from kselftest about OOT build in general.
+ >> 
+ >> > I see no value in 'make install' of selftests/bpf
+ >> > and since it's broken just remove that makefile target.
+ >> 
+ >> Some CI systems perform testing next stage after building were
+ >> build tree is not available anymore. So it's in use at the
+ >> moment.
 
-Emanuele
+ > such CI systems can do 'cp -r' then
+
+It's a discussion for linux-kselftest@ (added).
+
+At the moment `make install` is generic kselftest functionality
+and since bpf is part of that infra it looks a bit strange to
+break it intentionally.
+
+-- 
+WBR,
+Yauheni Kaliuta
 
