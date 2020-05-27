@@ -2,120 +2,150 @@ Return-Path: <SRS0=xVeE=7J=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C572C433E0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 18:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80542C433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 21:46:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54206208B8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 18:59:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DFl0fF7d"
+	by mail.kernel.org (Postfix) with ESMTP id 51AE6208B8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 May 2020 21:46:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1590615974;
+	bh=o/19GIssmexZ2dq1VzI9u5wRihhIkIqyBJzab36Gty4=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=t3WgPpDrkx5Ktw0wGwctFv7GJB9kWP8l0QaAncDEMz+IoOGOaFZlMVkagaGQ3lwNW
+	 qmmUJUHQkpTr7b6igDMEaWE1AsT7sgIaCqP8p1ZIYcMQ5lYE5+HSVj+YWD2N5ETBNQ
+	 3f8668ObSSsLqH8EPye4/DeGgFQ1mhPQMoasnW5M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729024AbgE0S7F (ORCPT
+        id S1726835AbgE0VqO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 May 2020 14:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728564AbgE0S5h (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 May 2020 14:57:37 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3921DC08C5C1;
-        Wed, 27 May 2020 11:57:37 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id x22so415352otq.4;
-        Wed, 27 May 2020 11:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eW6ryn1rOfnt2FF7cISQz6U787vY1TgBbRYE31eh+Uw=;
-        b=DFl0fF7dcBxB5zqV1ix3II/kS7GQWkr6h7MlBOIRyyX9w/lmsBDVqgZKwMtq0L4M9H
-         JTBc6t/jarulee9eP3RPJKMS2NvII2IvXAT0SjYl2xUHexw2iLgQZVQwSUPKlmY5/tYu
-         blnENDtu+hHIbyK+fWHgVFD2xWYKMl0dQlHidD4j3U3cRAYEdixqEZsEMbCUaOiO6Iem
-         AaZO+xMLT7bai9YdpZ8wEx6wvizd+XffPHmevaIB/n/EpgKdqo1WI7hkfxe32wVQeBOf
-         UFz9ZFZlvdfXGql8cPsqCC4q63jmWoSjd5QqXTYzEdiKuCUTHUkLidSnDhGYt0Y9Sh8U
-         cFrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eW6ryn1rOfnt2FF7cISQz6U787vY1TgBbRYE31eh+Uw=;
-        b=LZ78mXkLqXZvW1PqKUgBHFUBx/MvKDMDC4Qm9+ZhiYzssPBbfTBtDjIcty0DZmQ4pE
-         fwx3iv4/de8yBOM7vACUzK8dUpM4N18JXTja1kx6QoBxniGDbaVfPx2xxnn+nAGC5l0/
-         O7HGgHMs9+e8qxKifvWdb8ZIGqBCS/+c1LyN5tINW0NwHolCgOEZkT0DDhe8mBE290dE
-         an/y7bna+GcgWiCD2W6oouxANX02/mWi+WyntD3LU3UFnPJAqbvH47BB/QP1RNIr8+sV
-         nNONuh416mdRNz8am9nusoLfbskgpXKHdljr0VNzzapkRvYxzhhhB1ycXCwFOVTvQjse
-         Hj3A==
-X-Gm-Message-State: AOAM533pk8tM+prv1mkdjWCfJdlIhLUUe9xkeZrSr/m9pl2u6Wp9+V3m
-        A+zDVORpW/IAUrKgJZ9cN2s=
-X-Google-Smtp-Source: ABdhPJy0KJw3sf9zmT1G+HDG+6Q0TCF/0gOW2ku15pcSyJcP5yU5cr/zlnwmgb0j4Gon70V/ZXqnNw==
-X-Received: by 2002:a9d:4807:: with SMTP id c7mr5327778otf.279.1590605856664;
-        Wed, 27 May 2020 11:57:36 -0700 (PDT)
-Received: from localhost.members.linode.com ([2600:3c00::f03c:92ff:fe3e:1759])
-        by smtp.gmail.com with ESMTPSA id i127sm1074596oih.38.2020.05.27.11.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 11:57:35 -0700 (PDT)
-From:   Anton Protopopov <a.s.protopopov@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Anton Protopopov <a.s.protopopov@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 2/5] selftests/bpf: cleanup some file descriptors in test_maps
-Date:   Wed, 27 May 2020 18:56:57 +0000
-Message-Id: <20200527185700.14658-3-a.s.protopopov@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200527185700.14658-2-a.s.protopopov@gmail.com>
-References: <20200527185700.14658-1-a.s.protopopov@gmail.com>
- <20200527185700.14658-2-a.s.protopopov@gmail.com>
+        Wed, 27 May 2020 17:46:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726787AbgE0VqN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 May 2020 17:46:13 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 168622075A;
+        Wed, 27 May 2020 21:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590615973;
+        bh=o/19GIssmexZ2dq1VzI9u5wRihhIkIqyBJzab36Gty4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=TPuQfDUJ7N4BGc2epf1p/AgWw208vbe+698oJ0WKbimrTDS5uM7qcc7AZYktiMlF3
+         6OsEB56g8ZaM2gt6R/Yq3w7YCKfvCNDm9vr52gZPYIqBVHh2OUglvFz39CAhzQxcT+
+         zi0dhy/+jyLwqldZOdc5JghdB69QqwmivEHS8ioU=
+Subject: Re: kselftest OOT run_tests
+To:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        shuah <shuah@kernel.org>
+References: <xunyblmcqfuu.fsf@redhat.com>
+ <ad5ee014-759c-d0fb-5dc1-f1f25481a453@kernel.org>
+ <xunytv01omwj.fsf@redhat.com>
+ <07bb723f-8174-5373-6715-65b61942080c@kernel.org>
+ <CANoWswn-onWmBG4KVzqNj3mtmRcUw1Fp5HD9Od05wYqTYYcPcg@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <788d61a2-8471-a6b2-8ab6-d4af386c2884@kernel.org>
+Date:   Wed, 27 May 2020 15:46:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANoWswn-onWmBG4KVzqNj3mtmRcUw1Fp5HD9Od05wYqTYYcPcg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test_map_rdonly and test_map_wronly tests should close file descriptors
-which they open.
+On 5/27/20 12:40 PM, Yauheni Kaliuta wrote:
+> On Wed, May 27, 2020 at 9:22 PM shuah <shuah@kernel.org> wrote:
+>>
+>> On 5/27/20 1:30 AM, Yauheni Kaliuta wrote:
+>>> Hi, shuah!
+>>>
+>>>>>>>> On Tue, 26 May 2020 11:13:29 -0600, shuah   wrote:
+>>>
+>>>    > On 5/25/20 7:55 AM, Yauheni Kaliuta wrote:
+>>>    >> Hi!
+>>>    >>
+>>>    >> I'm wondering how out of tree check is supposed to work for make
+>>>    >> O=dir run_tests from selftests (or make -C ...) directory?
+>>>    >>
+>>>    >> (both with 051f278e9d81 ("kbuild: replace KBUILD_SRCTREE with
+>>>    >> boolean building_out_of_srctree") and without)
+>>>    >>
+>>>    >> make M= ... does not work with run_tests.
+>>>    >>
+>>>
+>>>    > Kselftests run_tests target isn't intended for building and
+>>>    > running tests OOT.
+>>>
+>>> But there is code there trying to handle it. All that OUTPUT
+>>> related things must be removed if it's broken, right? Can I post
+>>> a patch?
+>>>
+>>>    > Also make M= doesn't make sense for them.
+>>>
+>>> Well, M=... at least includes all the makefiles.
+>>>
+>>>    > There is no support to build OOT at the moment. I would like
+>>>    > to get a better understanding of your use-case. Can you
+>>>    > elaborate?
+>>>
+>>> I care about make install actually. But fixing it I had to deal
+>>> with OUTPUT. Looking a proper for that I found that it's a bit
+>>> broken.
+>>>
+>>>
+>>
+>> kselftest supports install of all all tests and a sub-set of tests
+>> both native and cross-builds.
+>>
+>> Simple case:
+>> If you want to build all tests and install to $HOME/install/
+>> This has a dependency on kernel being built in the source repo
+>> you are running the following install command from:
+>>
+>> In Kernel source root dir run:
+>> make kselftest-install O=$HOME/install
+>>
+>> You will find installed tests with run script to run them all
+>> under $HOME/install/kselftest/kselftest_install/
+>>
+>> If you run run_kselftest.sh under kselftest_install, it will run
+>> all the tests.
+>>
+>> You can use TARGETS var to build a sub-set of tests.
+>>
+>> In Kernel source root dir run:
+>> make kselftest-install TARGETS=bpf O=$HOME/install
+>>
+> 
+> Have you tried it with the recent bpf tree? ;)
+>  > (BTW, it is a bit misleading, it's building there, not installing).
+> 
 
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
----
- tools/testing/selftests/bpf/test_maps.c | 4 ++++
- 1 file changed, 4 insertions(+)
+It doesn't build for me on Linux 5.7-rc7 - install is another story
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index f717acc0c68d..46cf2c232964 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -1401,6 +1401,8 @@ static void test_map_rdonly(void)
- 	/* Check that key=2 is not found. */
- 	assert(bpf_map_lookup_elem(fd, &key, &value) == -1 && errno == ENOENT);
- 	assert(bpf_map_get_next_key(fd, &key, &value) == -1 && errno == ENOENT);
-+
-+	close(fd);
- }
- 
- static void test_map_wronly(void)
-@@ -1423,6 +1425,8 @@ static void test_map_wronly(void)
- 	/* Check that key=2 is not found. */
- 	assert(bpf_map_lookup_elem(fd, &key, &value) == -1 && errno == EPERM);
- 	assert(bpf_map_get_next_key(fd, &key, &value) == -1 && errno == EPERM);
-+
-+	close(fd);
- }
- 
- static void prepare_reuseport_grp(int type, int map_fd, size_t map_elem_size,
--- 
-2.20.1
+bpf install through kselftest-install hasn't been working for a
+while.
+
+bpf test has dependency bpftool and its Makefile is more complex
+as a result.
+
+
+thanks,
+-- Shuah
+
+
+
+
+
 
