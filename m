@@ -2,72 +2,74 @@ Return-Path: <SRS0=G0iU=7L=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52107C433E0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 May 2020 19:28:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B63A7C433DF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 May 2020 20:03:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2585E207D4
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 May 2020 19:28:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DB05207BC
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 May 2020 20:03:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=massaru-org.20150623.gappssmtp.com header.i=@massaru-org.20150623.gappssmtp.com header.b="rM5yGeEP"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MnQqBwNw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbgE2T2v (ORCPT
+        id S1728077AbgE2UD5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 29 May 2020 15:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        Fri, 29 May 2020 16:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726829AbgE2T2u (ORCPT
+        with ESMTP id S1726866AbgE2UD4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 May 2020 15:28:50 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDF4C03E969
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2020 12:28:50 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id z1so2924465qtn.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2020 12:28:50 -0700 (PDT)
+        Fri, 29 May 2020 16:03:56 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B558C08C5C8
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2020 13:03:56 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id i17so1656237pli.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 May 2020 13:03:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=massaru-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2yrhlCJB5EdnMFeYW6dCoHgeGO9Wv2PNUyggTiWf66I=;
-        b=rM5yGeEPKD1ETwS8p5hRXM1GRXsRU0ckAKC3dyimsrlw1vS2rJwpsAMVoQTgtFp/DV
-         FZHDJ4blwRXdYidNVLHlZkwf/JjNlrxftmAzDI4YNv57PCZn16bKvW8Nbet9apvrGJpB
-         Dh/cAqXEbs7XMI6pWL93SaGxEWJjols/VZTB7lraAPLuupPcyjB0vvNei3Ax64CJmVDM
-         fDdTBepAccSwosJIH6L02feciSsBqqz9GGij+ncBgVWBDiSlua+gQtWczj/baqHgZweG
-         vY9vh+CxNJf5TEjZa/UxWbHsZHQAJuqz41u1xCrnAOxcLSk6oJQpkOk8MnbC/Csho+Nl
-         jpxA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RCmY6exoQe8jgDlgtI8ix1LZA3heHUWvNPlFDsRApLI=;
+        b=MnQqBwNwN160VVgSonbc44ILiWcznwE2zxAqmP5H45SuGW1zWMprJ3fkNzFbqE0ys9
+         jWtfx3lJmUTiW94r+uRvJIC0eBO2AXKPXc8K1/UJJKLekiMh36Na0IUgi+08BhKmWXPz
+         uGfZgj8TvMJQ7eDO/5LFBl8ZQw7s/TpCDauLc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2yrhlCJB5EdnMFeYW6dCoHgeGO9Wv2PNUyggTiWf66I=;
-        b=ChtcbF8yJicIY3FilorliIOUWOAx4RUhPQcxXcRr7OXyTPoKFD7e+NcqGYmtdyYzY6
-         tLWbdVoCwuusTcBmfvwg0BVP80lmc/kXcV0cHWP+2xlsvs6ZC96xCaWneC5X8DJmr3pD
-         XdIPTGs7/u+B8nsddtKXiID9UjxIw6MXSl9FtIeEYYf/cVoc6nD6PsNIaF1aucdbEwg+
-         tlEVkEaqwGWQp7wArENzIdpp6VhM8suYSE5TbU76LONP+FU20+dkxLnrsMLrKWNxqDvN
-         QOJIsEQZkC1qEgEctTFfJFLz+3tmVnIWlK0g/ilDhJphdopEWmKsKYhze400hHki6vop
-         K4vw==
-X-Gm-Message-State: AOAM5317qao2HHs7LPPj8E++ZJ/OCGb7LLGzZL2PUdakdDsh8B3w7tjl
-        n3pt9/oZscBTA8QBhR4KJSH3zw==
-X-Google-Smtp-Source: ABdhPJx5RzeYnSHBhEQtvg6BqNax43i3eDbcLHygMZ5Uh9urOiS7DO2jD4wj/aIF6aluVDFXTouPAw==
-X-Received: by 2002:ac8:4556:: with SMTP id z22mr10639657qtn.37.1590780529381;
-        Fri, 29 May 2020 12:28:49 -0700 (PDT)
-Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id v126sm7486339qkd.36.2020.05.29.12.28.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RCmY6exoQe8jgDlgtI8ix1LZA3heHUWvNPlFDsRApLI=;
+        b=G9uYKKPOdJRj6VGUireb/5CwPRk/rVk4AKZOusm5B4a1n5KscBE/jj9wJcMTna39z8
+         StgZYBNoCFlwQXwtRaV085+NTx3I91h2V7HTDs0sxjEY0mb1au0zch4Z8RZnhKlF2uzC
+         A6ZrN7vcvUGG1hfxN0DHE+kxo7GoEmJjPgnbxjkQEiDjDVW3qAqhfs8piWsPhPKuzROq
+         AZ9cr8nPpgxmAL3YevcntWqssCxsvJs29FdIKo5kYsd7rQUNj9SyopTFCHMFh9F0aMA8
+         JDL53eDP3JfPEKhRHJBt+8WWFRiS52gR++VVQ91MQ0I3dVKNNux5A/MaC4cSXJDh/J1R
+         3Y3A==
+X-Gm-Message-State: AOAM533qfdywZfpYJOHoFrZTUAi/JP4rUup6xEzSOirbgMg2jRC0vOWk
+        Oh+SXqet4miZ2aWdQhu6fN4eew==
+X-Google-Smtp-Source: ABdhPJxeHWBezDRrH1a1yIT6IN5Ko6WOSv1GdMCCm93pznbXED5bbwEvp8L9ykvWeAwn6Ot/xvSGxw==
+X-Received: by 2002:a17:90a:6904:: with SMTP id r4mr11012848pjj.119.1590782635809;
+        Fri, 29 May 2020 13:03:55 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q189sm8188645pfc.112.2020.05.29.13.03.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 12:28:48 -0700 (PDT)
-From:   Vitor Massaru Iha <vitor@massaru.org>
-To:     kunit-dev@googlegroups.com, skhan@linuxfoundation.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brendanhiggins@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] kunit: Fix TabError, remove defconfig code and handle when there is no kunitconfig
-Date:   Fri, 29 May 2020 16:28:45 -0300
-Message-Id: <20200529192845.60468-1-vitor@massaru.org>
-X-Mailer: git-send-email 2.26.2
+        Fri, 29 May 2020 13:03:54 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 3/4] selftests/lkdtm: Reset WARN_ONCE to avoid false negatives
+Date:   Fri, 29 May 2020 13:03:46 -0700
+Message-Id: <20200529200347.2464284-4-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200529200347.2464284-1-keescook@chromium.org>
+References: <20200529200347.2464284-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -75,146 +77,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The identation before this code (`if not os.path.exists(cli_args.build_dir):``)
-was with spaces instead of tabs after fixed up merge conflits,
-this commit revert spaces to tabs:
+Since we expect to see warnings every time for many tests, just reset
+the WARN_ONCE flags each time the script runs.
 
-[iha@bbking linux]$ tools/testing/kunit/kunit.py run
-  File "tools/testing/kunit/kunit.py", line 247
-    if not linux:
-                ^
-TabError: inconsistent use of tabs and spaces in indentation
-
-Remove defconfig related code to fix these two errors,
-the commit 9bdf64b35 was created before 45ba7a893ad,
-and the commit 9bdf64b35 removes defconfig related code:
-
-[iha@bbking linux]$ tools/testing/kunit/kunit.py run
-Traceback (most recent call last):
-  File "tools/testing/kunit/kunit.py", line 338, in <module>
-    main(sys.argv[1:])
-  File "tools/testing/kunit/kunit.py", line 215, in main
-    add_config_opts(config_parser)
-
-[iha@bbking linux]$ tools/testing/kunit/kunit.py run
-Traceback (most recent call last):
-  File "tools/testing/kunit/kunit.py", line 337, in <module>
-    main(sys.argv[1:])
-  File "tools/testing/kunit/kunit.py", line 255, in main
-    result = run_tests(linux, request)
-  File "tools/testing/kunit/kunit.py", line 133, in run_tests
-    request.defconfig,
-AttributeError: 'KunitRequest' object has no attribute 'defconfig'
-
-Handles when there is no .kunitconfig, the error occurs because
-commit 9bdf64b35 was created before 45ba7a893ad.
-
-[iha@bbking linux]$ tools/testing/kunit/kunit.py run
-Traceback (most recent call last):
-  File "tools/testing/kunit/kunit.py", line 335, in <module>
-    main(sys.argv[1:])
-  File "tools/testing/kunit/kunit.py", line 246, in main
-    linux = kunit_kernel.LinuxSourceTree()
-  File "/home/iha/sdb/opensource/lkmp/linux/tools/testing/kunit/kunit_kernel.py", line 109, in __init__
-    self._kconfig.read_from_file(kunitconfig_path)
-  File "/home/iha/sdb/opensource/lkmp/linux/tools/testing/kunit/kunit_config.py", line 88, in read_from_file
-    with open(path, 'r') as f:
-FileNotFoundError: [Errno 2] No such file or directory: '.kunit/.kunitconfig'
-
-Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-Fix the fixup on this commits: 9bdf64b, ddbd60c.
+ tools/testing/selftests/lkdtm/run.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Some errors occurs because these commits were created before
-this commit 45ba7a8, as explained in the commit message.
----
- tools/testing/kunit/kunit.py | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index ec73b07d1265..787b6d4ad716 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -23,7 +23,7 @@ import kunit_parser
- KunitResult = namedtuple('KunitResult', ['status','result','elapsed_time'])
+diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
+index ee64ff8df8f4..8383eb89d88a 100755
+--- a/tools/testing/selftests/lkdtm/run.sh
++++ b/tools/testing/selftests/lkdtm/run.sh
+@@ -8,6 +8,7 @@
+ #
+ set -e
+ TRIGGER=/sys/kernel/debug/provoke-crash/DIRECT
++CLEAR_ONCE=/sys/kernel/debug/clear_warn_once
+ KSELFTEST_SKIP_TEST=4
  
- KunitConfigRequest = namedtuple('KunitConfigRequest',
--				['build_dir', 'defconfig', 'make_options'])
-+				['build_dir', 'make_options'])
- KunitBuildRequest = namedtuple('KunitBuildRequest',
- 			       ['jobs', 'build_dir', 'alltests',
- 				'make_options'])
-@@ -130,7 +130,6 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	run_start = time.time()
+ # Verify we have LKDTM available in the kernel.
+@@ -67,6 +68,11 @@ cleanup() {
+ }
+ trap cleanup EXIT
  
- 	config_request = KunitConfigRequest(request.build_dir,
--					    request.defconfig,
- 					    request.make_options)
- 	config_result = config_tests(linux, config_request)
- 	if config_result.status != KunitStatus.SUCCESS:
-@@ -212,7 +211,6 @@ def main(argv, linux=None):
- 						help='Ensures that .config contains all of '
- 						'the options in .kunitconfig')
- 	add_common_opts(config_parser)
--	add_config_opts(config_parser)
- 
- 	build_parser = subparser.add_parser('build', help='Builds a kernel with KUnit tests')
- 	add_common_opts(build_parser)
-@@ -238,11 +236,14 @@ def main(argv, linux=None):
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
--                if not os.path.exists(cli_args.build_dir):
--                    os.mkdir(cli_args.build_dir)
--                kunit_kernel.kunitconfig_path = os.path.join(
--                        cli_args.build_dir,
--                        kunit_kernel.kunitconfig_path)
-+		if not os.path.exists(cli_args.build_dir):
-+			os.mkdir(cli_args.build_dir)
-+		kunit_kernel.kunitconfig_path = os.path.join(
-+			cli_args.build_dir,
-+			kunit_kernel.kunitconfig_path)
++# Reset WARN_ONCE counters so we trip it each time this runs.
++if [ -w $CLEAR_ONCE ] ; then
++	echo 1 > $CLEAR_ONCE
++fi
 +
-+		if not os.path.exists(kunit_kernel.kunitconfig_path):
-+			create_default_kunitconfig()
- 
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
-@@ -264,11 +265,13 @@ def main(argv, linux=None):
- 				cli_args.build_dir,
- 				kunit_kernel.kunitconfig_path)
- 
-+		if not os.path.exists(kunit_kernel.kunitconfig_path):
-+			create_default_kunitconfig()
-+
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
- 
- 		request = KunitConfigRequest(cli_args.build_dir,
--					     cli_args.defconfig,
- 					     cli_args.make_options)
- 		result = config_tests(linux, request)
- 		kunit_parser.print_with_timestamp((
-@@ -284,6 +287,9 @@ def main(argv, linux=None):
- 				cli_args.build_dir,
- 				kunit_kernel.kunitconfig_path)
- 
-+		if not os.path.exists(kunit_kernel.kunitconfig_path):
-+			create_default_kunitconfig()
-+
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
- 
-@@ -305,6 +311,9 @@ def main(argv, linux=None):
- 				cli_args.build_dir,
- 				kunit_kernel.kunitconfig_path)
- 
-+		if not os.path.exists(kunit_kernel.kunitconfig_path):
-+			create_default_kunitconfig()
-+
- 		if not linux:
- 			linux = kunit_kernel.LinuxSourceTree()
+ # Save existing dmesg so we can detect new content below
+ dmesg > "$DMESG"
  
 -- 
-2.26.2
+2.25.1
 
