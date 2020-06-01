@@ -6,25 +6,25 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B78D0C433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jun 2020 12:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF87C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jun 2020 12:37:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C8B020679
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jun 2020 12:32:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 291F9207DF
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Jun 2020 12:37:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726176AbgFAMcP (ORCPT
+        id S1725847AbgFAMhF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Jun 2020 08:32:15 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45863 "EHLO
+        Mon, 1 Jun 2020 08:37:05 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:45960 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbgFAMcP (ORCPT
+        with ESMTP id S1726073AbgFAMhF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jun 2020 08:32:15 -0400
+        Mon, 1 Jun 2020 08:37:05 -0400
 Received: from 201-95-154-249.dsl.telesp.net.br ([201.95.154.249] helo=localhost.localdomain)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <cascardo@canonical.com>)
-        id 1jfjbx-0003Mb-3J; Mon, 01 Jun 2020 12:32:13 +0000
+        id 1jfjgd-0003mJ-In; Mon, 01 Jun 2020 12:37:04 +0000
 From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
@@ -32,9 +32,9 @@ Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>
-Subject: [PATCH] selftests/seccomp: use 90s as timeout
-Date:   Mon,  1 Jun 2020 09:32:02 -0300
-Message-Id: <20200601123202.1183526-1-cascardo@canonical.com>
+Subject: [PATCH v2] selftests/seccomp: use 90s as timeout
+Date:   Mon,  1 Jun 2020 09:36:56 -0300
+Message-Id: <20200601123656.1184098-1-cascardo@canonical.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,15 +56,16 @@ seems safe enough.
 
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 ---
- tools/testing/selftests/seccomp/settings | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/seccomp/settings | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/seccomp/settings
 
 diff --git a/tools/testing/selftests/seccomp/settings b/tools/testing/selftests/seccomp/settings
-index d61f00d8cad3..ba4d85f74cd6 100644
---- a/tools/testing/selftests/seccomp/settings
+new file mode 100644
+index 000000000000..ba4d85f74cd6
+--- /dev/null
 +++ b/tools/testing/selftests/seccomp/settings
-@@ -1 +1 @@
--90
+@@ -0,0 +1 @@
 +timeout=90
 -- 
 2.25.1
