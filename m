@@ -2,292 +2,92 @@ Return-Path: <SRS0=iJZY=7Q=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D33FC433E1
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2004C433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 22:06:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21B082053B
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L2U1Piwy"
+	by mail.kernel.org (Postfix) with ESMTP id 8A67A206E6
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 22:06:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbgFCSV5 (ORCPT
+        id S1726744AbgFCWGf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Jun 2020 14:21:57 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29847 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726096AbgFCSVm (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jun 2020 14:21:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591208500;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rAog9oXLl/KPRUT67WnomCQCFdAZfZBa0BLOwUhaVok=;
-        b=L2U1Piwy/mz0uEunuiY49FmOFJ7bn7IczmcK62Zm2FQFxqS3EXAEoMsSzciBMq5dV6JN84
-        atVEw8iyc6vgpl358xC7K8ywAHSkqjLU0ED42iwifKmEuuNSugFVu+D4nE/p2Vg95rEACi
-        tgw2z4lYQR1tlXkQyJ0+h8Z/h/lmX+w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-379-vX4zcfqUObyawnGnGgs7yg-1; Wed, 03 Jun 2020 14:21:37 -0400
-X-MC-Unique: vX4zcfqUObyawnGnGgs7yg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D92961005510;
-        Wed,  3 Jun 2020 18:21:35 +0000 (UTC)
-Received: from dm.redhat.com (unknown [10.10.67.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D10E95D9CD;
-        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
-From:   Yannick Cote <ycote@redhat.com>
-To:     live-patching@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
-        kamalesh@linux.vnet.ibm.com
-Subject: [PATCH v2 2/4] selftests/livepatch: rework test-klp-shadow-vars
-Date:   Wed,  3 Jun 2020 14:20:56 -0400
-Message-Id: <20200603182058.109470-3-ycote@redhat.com>
-In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
-References: <20200603182058.109470-1-ycote@redhat.com>
+        Wed, 3 Jun 2020 18:06:35 -0400
+Received: from mga06.intel.com ([134.134.136.31]:12488 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726614AbgFCWGf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Jun 2020 18:06:35 -0400
+IronPort-SDR: W3QnxCBGQoxmAkSbifnW+HiPjZawpZKIBAyW8gEay5Ztc7lXDgqte0kiX5Z7g5/BF8d1vodLil
+ NfxBm8YOFqaA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2020 15:06:34 -0700
+IronPort-SDR: sMphcVLs37uOLYmlTfp+8NPSIpJYLQu68VOHDtkqz+XcScbYO/tn6kCUhKuQLNyyIXwMhHqTK6
+ AcT8FVIxruAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,470,1583222400"; 
+   d="scan'208";a="258147584"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
+  by orsmga007.jf.intel.com with ESMTP; 03 Jun 2020 15:06:34 -0700
+Date:   Wed, 3 Jun 2020 15:06:34 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        asapek@google.com, bp@alien8.de, cedric.xing@intel.com,
+        chenalexchen@google.com, conradparker@google.com,
+        cyhanish@google.com, dave.hansen@intel.com, haitao.huang@intel.com,
+        josh@joshtriplett.org, kai.huang@intel.com, kai.svahn@intel.com,
+        kmoy@google.com, ludloff@google.com, luto@kernel.org,
+        nhorman@redhat.com, npmccallum@redhat.com, puiterwijk@redhat.com,
+        rientjes@google.com, tglx@linutronix.de, yaozhangx@google.com
+Subject: Re: [PATCH v32 19/21] selftests/x86: Add a selftest for SGX
+Message-ID: <20200603220634.GB25606@linux.intel.com>
+References: <20200601075218.65618-1-jarkko.sakkinen@linux.intel.com>
+ <20200601075218.65618-20-jarkko.sakkinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200601075218.65618-20-jarkko.sakkinen@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The initial idea was to make a change to please cppcheck and remove void
-pointer arithmetics found a few times:
+On Mon, Jun 01, 2020 at 10:52:16AM +0300, Jarkko Sakkinen wrote:
+> Add a selftest for SGX. It is a trivial test where a simple enclave
+> copies one 64-bit word of memory between two memory locations.
 
-	portability: 'obj' is of type 'void *'. When using void pointers
-	             in calculations, the behaviour is undefined.
-		     [arithOperationsOnVoidPointer]
+...
 
-The rest of the changes are to help make the test read as an example
-while continuing to verify the shadow variable code. The logic of the
-test is unchanged but restructured to use descriptive names.
+> --- /dev/null
+> +++ b/tools/testing/selftests/sgx/Makefile
+> @@ -0,0 +1,53 @@
+> +top_srcdir = ../../../..
+> +
+> +include ../lib.mk
+> +
+> +.PHONY: all clean
+> +
+> +CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh $(CC) \
+> +			    ../x86/trivial_64bit_program.c)
+> +
+> +ifndef OBJCOPY
+> +OBJCOPY := $(CROSS_COMPILE)objcopy
+> +endif
+> +
+> +INCLUDES := -I$(top_srcdir)/tools/include
+> +HOST_CFLAGS := -Wall -Werror -g $(INCLUDES) -fPIC -z noexecstack
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Yannick Cote <ycote@redhat.com>
----
- lib/livepatch/test_klp_shadow_vars.c | 101 +++++++++++++++------------
- 1 file changed, 57 insertions(+), 44 deletions(-)
+There's a pending pull request for 5.8[1] that includes a patch that turns
+off automatic READ_IMPLIES_EXEC for x86_64[2].  Assuming that gets pulled
+for 5.8, we should drop noexecstack to verify/ensure that the workaround is
+no longer needed to avoid conflicts with the EPCM permissions.
 
-diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
-index f0b5a1d24e55..ec2635cff974 100644
---- a/lib/livepatch/test_klp_shadow_vars.c
-+++ b/lib/livepatch/test_klp_shadow_vars.c
-@@ -109,8 +109,7 @@ static void shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
- static void shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
- {
- 	klp_shadow_free_all(id, dtor);
--	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n",
--		__func__, id, ptr_id(dtor));
-+	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n", __func__, id, ptr_id(dtor));
- }
- 
- 
-@@ -124,8 +123,7 @@ static int shadow_ctor(void *obj, void *shadow_data, void *ctor_data)
- 		return -EINVAL;
- 
- 	*sv = *var;
--	pr_info("%s: PTR%d -> PTR%d\n",
--		__func__, ptr_id(sv), ptr_id(*var));
-+	pr_info("%s: PTR%d -> PTR%d\n", __func__, ptr_id(sv), ptr_id(*var));
- 
- 	return 0;
- }
-@@ -138,49 +136,63 @@ static void shadow_dtor(void *obj, void *shadow_data)
- 		__func__, ptr_id(obj), ptr_id(sv));
- }
- 
--static int test_klp_shadow_vars_init(void)
--{
--	void *obj			= THIS_MODULE;
--	int id			= 0x1234;
--	gfp_t gfp_flags		= GFP_KERNEL;
-+/* dynamically created obj fields have the following shadow var id values */
-+#define SV_ID1 0x1234
-+#define SV_ID2 0x1235
- 
--	int var1, var2, var3, var4;
--	int *pv1, *pv2, *pv3, *pv4;
--	int **sv1, **sv2, **sv3, **sv4;
-+/*
-+ * The main test case adds/removes new fields (shadow var) to each of these
-+ * test structure instances. The last group of fields in the struct represent
-+ * the idea that shadow variables may be added and removed to and from the
-+ * struct during execution.
-+ */
-+struct test_object {
-+	 /* add anything here below and avoid to define an empty struct */
-+	struct shadow_ptr sp;
- 
--	int **sv;
-+	/* these represent shadow vars added and removed with SV_ID{1,2} */
-+	/* char nfield1; */
-+	/* int  nfield2; */
-+};
- 
--	pv1 = &var1;
--	pv2 = &var2;
--	pv3 = &var3;
--	pv4 = &var4;
-+static int test_klp_shadow_vars_init(void)
-+{
-+	struct test_object obj1, obj2, obj3;
-+	char nfield1, nfield2, *pnfield1, *pnfield2, **sv1, **sv2;
-+	int  nfield3, nfield4, *pnfield3, *pnfield4, **sv3, **sv4;
-+	void **sv;
-+
-+	pnfield1 = &nfield1;
-+	pnfield2 = &nfield2;
-+	pnfield3 = &nfield3;
-+	pnfield4 = &nfield4;
- 
- 	ptr_id(NULL);
--	ptr_id(pv1);
--	ptr_id(pv2);
--	ptr_id(pv3);
--	ptr_id(pv4);
-+	ptr_id(pnfield1);
-+	ptr_id(pnfield2);
-+	ptr_id(pnfield3);
-+	ptr_id(pnfield4);
- 
- 	/*
- 	 * With an empty shadow variable hash table, expect not to find
- 	 * any matches.
- 	 */
--	sv = shadow_get(obj, id);
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
- 	/*
- 	 * Allocate a few shadow variables with different <obj> and <id>.
- 	 */
--	sv1 = shadow_alloc(obj, id, sizeof(pv1), gfp_flags, shadow_ctor, &pv1);
-+	sv1 = shadow_alloc(&obj1, SV_ID1, sizeof(pnfield1), GFP_KERNEL, shadow_ctor, &pnfield1);
- 	if (!sv1)
- 		return -ENOMEM;
- 
--	sv2 = shadow_alloc(obj + 1, id, sizeof(pv2), gfp_flags, shadow_ctor, &pv2);
-+	sv2 = shadow_alloc(&obj2, SV_ID1, sizeof(pnfield2), GFP_KERNEL, shadow_ctor, &pnfield2);
- 	if (!sv2)
- 		return -ENOMEM;
- 
--	sv3 = shadow_alloc(obj, id + 1, sizeof(pv3), gfp_flags, shadow_ctor, &pv3);
-+	sv3 = shadow_alloc(&obj1, SV_ID2, sizeof(pnfield3), GFP_KERNEL, shadow_ctor, &pnfield3);
- 	if (!sv3)
- 		return -ENOMEM;
- 
-@@ -188,23 +200,24 @@ static int test_klp_shadow_vars_init(void)
- 	 * Verify we can find our new shadow variables and that they point
- 	 * to expected data.
- 	 */
--	sv = shadow_get(obj, id);
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv1 && *sv1 == pv1)
-+	if ((char **)sv == sv1 && *sv1 == pnfield1)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv1), ptr_id(*sv1));
- 
--	sv = shadow_get(obj + 1, id);
-+	sv = shadow_get(&obj2, SV_ID1);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv2 && *sv2 == pv2)
-+	if ((char **)sv == sv2 && *sv2 == pnfield2)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv2), ptr_id(*sv2));
--	sv = shadow_get(obj, id + 1);
-+
-+	sv = shadow_get(&obj1, SV_ID2);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv3 && *sv3 == pv3)
-+	if ((int **)sv == sv3 && *sv3 == pnfield3)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv3), ptr_id(*sv3));
- 
-@@ -212,14 +225,14 @@ static int test_klp_shadow_vars_init(void)
- 	 * Allocate or get a few more, this time with the same <obj>, <id>.
- 	 * The second invocation should return the same shadow var.
- 	 */
--	sv4 = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
-+	sv4 = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
- 	if (!sv4)
- 		return -ENOMEM;
- 
--	sv = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
-+	sv = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv4 && *sv4 == pv4)
-+	if ((int **)sv == sv4 && *sv4 == pnfield4)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv4), ptr_id(*sv4));
- 
-@@ -227,36 +240,36 @@ static int test_klp_shadow_vars_init(void)
- 	 * Free the <obj=*, id> shadow variables and check that we can no
- 	 * longer find them.
- 	 */
--	shadow_free(obj, id, shadow_dtor);			/* sv1 */
--	sv = shadow_get(obj, id);
-+	shadow_free(&obj1, SV_ID1, shadow_dtor);		/* sv1 */
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
--	shadow_free(obj + 1, id, shadow_dtor);			/* sv2 */
--	sv = shadow_get(obj + 1, id);
-+	shadow_free(&obj2, SV_ID1, shadow_dtor);		/* sv2 */
-+	sv = shadow_get(&obj2, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
--	shadow_free(obj + 2, id, shadow_dtor);			/* sv4 */
--	sv = shadow_get(obj + 2, id);
-+	shadow_free(&obj3, SV_ID1, shadow_dtor);		/* sv4 */
-+	sv = shadow_get(&obj3, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
- 	/*
- 	 * We should still find an <id+1> variable.
- 	 */
--	sv = shadow_get(obj, id + 1);
-+	sv = shadow_get(&obj1, SV_ID2);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv3 && *sv3 == pv3)
-+	if ((int **)sv == sv3 && *sv3 == pnfield3)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv3), ptr_id(*sv3));
- 
- 	/*
- 	 * Free all the <id+1> variables, too.
- 	 */
--	shadow_free_all(id + 1, shadow_dtor);			/* sv3 */
--	sv = shadow_get(obj, id);
-+	shadow_free_all(SV_ID2, shadow_dtor);			/* sv3 */
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		pr_info("  shadow_get() got expected NULL result\n");
- 
--- 
-2.25.4
-
+[1] https://lkml.kernel.org/r/20200603213452.GG19667@zn.tnic
+[2] https://lkml.kernel.org/r/20200327064820.12602-4-keescook@chromium.org
