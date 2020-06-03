@@ -2,55 +2,59 @@ Return-Path: <SRS0=iJZY=7Q=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68161C433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CDE9C433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F1032053B
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E0EF2053B
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VPkJ50Ta"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cKh0Eh5x"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbgFCSVh (ORCPT
+        id S1726200AbgFCSVs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Jun 2020 14:21:37 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:52720 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725884AbgFCSVh (ORCPT
+        Wed, 3 Jun 2020 14:21:48 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39211 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726095AbgFCSVr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jun 2020 14:21:37 -0400
+        Wed, 3 Jun 2020 14:21:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591208496;
+        s=mimecast20190719; t=1591208505;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+c1cgHsK07BrW3OA4NvtHTy/+/91BrD1QDQgKn/57QU=;
-        b=VPkJ50TaienKvfD5j4p6lqvgK9XflWoc8UfNyBqufr/2vRtq8jStDh8l6zX9wZNIwuJaZR
-        Tfrvnlasp+HE9K4CAo6mX4bvfpoaAqqe7nySr0bv0p3+bZ2D/1ERGxKtlltt2DzU1LJJca
-        uFabiJZfID/4zMNrXrXTif+mjnwnrCg=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N8+QQPH2QujNnngMCvTYk2cn6MqYerfKhZLbvp5VGaU=;
+        b=cKh0Eh5xFfrwE4w3RYLwuj9Wp4wdeTNiqlzdzjjwN3hXz2B6CRIBUfhmxKdh9Tg+0cEXVt
+        4/Aayuak5lC5nHGrd4VH53AI6+V7dmr2Crzv9iocjCcdEm0j2sFGszLTUgiJpwCb9P3tv2
+        cg6YMGjGs5tGagpIs28KbVpmeZCNjek=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-214-z6ZVHDynO0SDP4ytoFxXvQ-1; Wed, 03 Jun 2020 14:21:34 -0400
-X-MC-Unique: z6ZVHDynO0SDP4ytoFxXvQ-1
+ us-mta-483-0t8LO991OQmcwyM40xm4Cw-1; Wed, 03 Jun 2020 14:21:42 -0400
+X-MC-Unique: 0t8LO991OQmcwyM40xm4Cw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 608F2107ACF2;
-        Wed,  3 Jun 2020 18:21:33 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CAFEE107ACCA;
+        Wed,  3 Jun 2020 18:21:40 +0000 (UTC)
 Received: from dm.redhat.com (unknown [10.10.67.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 982BD5D9CD;
-        Wed,  3 Jun 2020 18:21:29 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C21DF5D9CD;
+        Wed,  3 Jun 2020 18:21:39 +0000 (UTC)
 From:   Yannick Cote <ycote@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
         linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
         kamalesh@linux.vnet.ibm.com
-Subject: [PATCH v2 0/4] selftests/livepatch: rework of test-klp-{callbacks,shadow_vars}
-Date:   Wed,  3 Jun 2020 14:20:54 -0400
-Message-Id: <20200603182058.109470-1-ycote@redhat.com>
+Subject: [PATCH v2 4/4] selftests/livepatch: fix mem leaks in test-klp-shadow-vars
+Date:   Wed,  3 Jun 2020 14:20:58 -0400
+Message-Id: <20200603182058.109470-5-ycote@redhat.com>
+In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
+References: <20200603182058.109470-1-ycote@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
@@ -59,42 +63,120 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-v2:
- - drop completion variables and flush workqueue [pmladek]
- - comment typo/pr_info cleanup [kbabulal/mbenes]
- - cleanup goto ret assignations [pmladek]
- - allocate pndup[]'s, leave some svar allocations to
-   shadow_get_or_alloc() [pmladek]
- - change allocation order for cleaner test dmesg output [pmladek]
+In some cases, when an error occurs during testing and the main test
+routine returns, a memory leak occurs via leaving previously registered
+shadow variables allocated in the kernel as well as shadow_ptr list
+elements. From now on, in case of error, remove all allocated shadow
+variables and shadow_ptr struct elements.
 
-The test-klp-callbacks change implements a synchronization replacement of
-initial code which relied on solely on sleep delays. Remove the sleeps
-and pass a block_transition flag from test script to module. Use
-flush_workqueue() to serialize module output for test result
-consideration.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Yannick Cote <ycote@redhat.com>
+---
+ lib/livepatch/test_klp_shadow_vars.c | 43 ++++++++++++++++++++--------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
 
-The test-klp-shadow-vars changes first refactors the code to be more of
-a readable example as well as continuing to verify the component code.
-The patch is broken in two to display the renaming and restructuring in
-part 1 and the addition and change of logic in part 2. The last change
-frees memory before bailing in case of errors.
-
-Patchset to be merged via the livepatching tree is against: livepatching/for-next
-
-Joe Lawrence (1):
-  selftests/livepatch: simplify test-klp-callbacks busy target tests
-
-Yannick Cote (3):
-  selftests/livepatch: rework test-klp-shadow-vars
-  selftests/livepatch: more verification in test-klp-shadow-vars
-  selftests/livepatch: fix mem leaks in test-klp-shadow-vars
-
- lib/livepatch/test_klp_callbacks_busy.c       |  37 ++-
- lib/livepatch/test_klp_shadow_vars.c          | 240 ++++++++++--------
- .../selftests/livepatch/test-callbacks.sh     |  29 +--
- .../selftests/livepatch/test-shadow-vars.sh   |  81 +++---
- 4 files changed, 225 insertions(+), 162 deletions(-)
-
+diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
+index a49265e56917..b99116490858 100644
+--- a/lib/livepatch/test_klp_shadow_vars.c
++++ b/lib/livepatch/test_klp_shadow_vars.c
+@@ -170,6 +170,7 @@ static int test_klp_shadow_vars_init(void)
+ 	char *pndup[NUM_OBJS];
+ 	int nfields2[NUM_OBJS], *pnfields2[NUM_OBJS], **sv2[NUM_OBJS];
+ 	void **sv;
++	int ret;
+ 	int i;
+ 
+ 	ptr_id(NULL);
+@@ -196,31 +197,39 @@ static int test_klp_shadow_vars_init(void)
+ 					sizeof(pnfields1[i]), GFP_KERNEL,
+ 					shadow_ctor, &pnfields1[i]);
+ 		}
+-		if (!sv1[i])
+-			return -ENOMEM;
++		if (!sv1[i]) {
++			ret = -ENOMEM;
++			goto out;
++		}
+ 
+ 		pnfields2[i] = &nfields2[i];
+ 		ptr_id(pnfields2[i]);
+ 		sv2[i] = shadow_alloc(&objs[i], SV_ID2, sizeof(pnfields2[i]),
+ 					GFP_KERNEL, shadow_ctor, &pnfields2[i]);
+-		if (!sv2[i])
+-			return -ENOMEM;
++		if (!sv2[i]) {
++			ret = -ENOMEM;
++			goto out;
++		}
+ 	}
+ 
+ 	/* pass 2: verify we find allocated svars and where they point to */
+ 	for (i = 0; i < NUM_OBJS; i++) {
+ 		/* check the "char" svar for all objects */
+ 		sv = shadow_get(&objs[i], SV_ID1);
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((char **)sv == sv1[i] && *sv1[i] == pnfields1[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 				ptr_id(sv1[i]), ptr_id(*sv1[i]));
+ 
+ 		/* check the "int" svar for all objects */
+ 		sv = shadow_get(&objs[i], SV_ID2);
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((int **)sv == sv2[i] && *sv2[i] == pnfields2[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 				ptr_id(sv2[i]), ptr_id(*sv2[i]));
+@@ -233,8 +242,10 @@ static int test_klp_shadow_vars_init(void)
+ 
+ 		sv = shadow_get_or_alloc(&objs[i], SV_ID1, sizeof(pndup[i]),
+ 					GFP_KERNEL, shadow_ctor, &pndup[i]);
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((char **)sv == sv1[i] && *sv1[i] == pnfields1[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 					ptr_id(sv1[i]), ptr_id(*sv1[i]));
+@@ -251,8 +262,10 @@ static int test_klp_shadow_vars_init(void)
+ 	/* pass 5: check we still find <objs[*], SV_ID2> svar pairs */
+ 	for (i = 0; i < NUM_OBJS; i++) {
+ 		sv = shadow_get(&objs[i], SV_ID2);	/* 'int' pairs */
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((int **)sv == sv2[i] && *sv2[i] == pnfields2[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 					ptr_id(sv2[i]), ptr_id(*sv2[i]));
+@@ -269,6 +282,12 @@ static int test_klp_shadow_vars_init(void)
+ 	free_ptr_list();
+ 
+ 	return 0;
++out:
++	shadow_free_all(SV_ID1, NULL);		/* 'char' pairs */
++	shadow_free_all(SV_ID2, NULL);		/* 'int' pairs */
++	free_ptr_list();
++
++	return ret;
+ }
+ 
+ static void test_klp_shadow_vars_exit(void)
 -- 
 2.25.4
 
