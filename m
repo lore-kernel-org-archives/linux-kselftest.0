@@ -2,95 +2,108 @@ Return-Path: <SRS0=4RUT=7T=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CECDC433DF
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Jun 2020 03:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9369C433E1
+	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Jun 2020 04:03:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0A91207D5
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Jun 2020 03:20:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6529207F5
+	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Jun 2020 04:03:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HrDnOjP8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yw2TjbZf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728554AbgFFDUS (ORCPT
+        id S1726366AbgFFED6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Jun 2020 23:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        Sat, 6 Jun 2020 00:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728523AbgFFDUR (ORCPT
+        with ESMTP id S1725791AbgFFED5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Jun 2020 23:20:17 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CE4C08C5C2;
-        Fri,  5 Jun 2020 20:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QCHbUkMYkrQJAPIqPlZ6VLNz3QmvlT+5Bsoz5d+kZkc=; b=HrDnOjP8lxTV2gp0+5S/V/+6Fe
-        TJRoS3b62IqjQPH+Zb5/opZi+c4jc1QX24zhotF/L58RfchUFUuIGkNIlD9CbsM98qcbucS/ae8bB
-        wMiWijV5Dl1Cpo3BzYy6ptUO5/P8TVIg7LXzYl7GTSLgsP9bSReADMpSbfCCf+8sFx/j92lJhM870
-        +2YkvOm2FukwHVomLONhTQdt7rzMaK8wCbonT+O+IbtaVvC9HBtlRbGpCskkxDG+iR6N7fKSJzAfa
-        Df6OTAVzzn2VTbeklQUgl8LO6FiQPsUBExeD1fuZHBrmv8RRRxtKy7MUbpguf6N/UtXwTMlkil0lB
-        B59V0GAQ==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jhPNT-0001pB-IT; Sat, 06 Jun 2020 03:20:11 +0000
-Date:   Fri, 5 Jun 2020 20:20:11 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v6 1/8] fs: introduce kernel_pread_file* support
-Message-ID: <20200606032011.GM19604@bombadil.infradead.org>
-References: <20200605225959.12424-1-scott.branden@broadcom.com>
- <20200605225959.12424-2-scott.branden@broadcom.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200605225959.12424-2-scott.branden@broadcom.com>
+        Sat, 6 Jun 2020 00:03:57 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DF6C08C5C4
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Jun 2020 21:03:57 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e192so14231303ybf.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jun 2020 21:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=og6aLJN4ELJf8ujcyhVHLwiOkETXN2fux8N+5uOmros=;
+        b=Yw2TjbZfqO7BR8Z+rdQauW0blSDY61NfK6iq+vipx19CT8oOy3nxvfW0lXAlzm5j7I
+         4F5eZVvaQDY+lFonPbBEAESzserEOWIFcD2LpZzu2Azo3gMlcFpj2kYOg9b/P252oKhz
+         D0C4/GIgHjTo9o7xtCmqggR9L6JEFCUSJ5zyeeKTSwpWdiscYNRs8bOIByVWGGcpvlIL
+         tYhab6ooLvqETdhEgMHobEisGMzF/+R9+fNSwQptVOo445XTEJYg8TwnoshnHJVVG9wY
+         hkTeqofaDtiu1PuRhg5pynNx0D+mA1NjtOKQRSZ1WulmcSq5kAe2awqRMuQPS7oMkRmU
+         weww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=og6aLJN4ELJf8ujcyhVHLwiOkETXN2fux8N+5uOmros=;
+        b=dgYoPTvYxjpgLyNhqqQq3cTG6hmeqy3AKB25lP0Oa4gaSfKQKvM1bUOMcjN9nta63G
+         cX27QZpIw0ScwwLKxXIWCRQQBMwr/AchyZrNbFuN1h6PXFcyECvPK0NzH6oNzwn5z8Nq
+         /HxWlgzFMq/zwk2gmNS7WL3cqItcFYsIhsoOOkiVYKjC1M/P8vgm0/pgfvGM9hwxOywf
+         zUGddZS1xBzEek82v+LjYwrhYg8R95ZVHWh662BX+KZuTYgJ9HAaKx6AvLz54OB3mtNp
+         UDVf+gBKWSXNh9QfWPIuuM+NZLPlGeoQw9NoJWaQ/5kvQuELopUOF/1+IFelmOqIa0So
+         SK+w==
+X-Gm-Message-State: AOAM532/hhtVT0rzvTIXttyzUSjGa223HMXZFXkk+nvgurm4swt/TeP+
+        7LWprlVfaEjaxzJKWIcOpTvYyv9HZsHj4A==
+X-Google-Smtp-Source: ABdhPJzPXTXIY3eyePHEYSuFSmhdKtJr3OV90MeGFlPhv6dE6T5rySReWu7+/kP8N0kSIMpNQ86sDpckpeKS1Q==
+X-Received: by 2002:a25:7ac2:: with SMTP id v185mr21268882ybc.278.1591416236401;
+ Fri, 05 Jun 2020 21:03:56 -0700 (PDT)
+Date:   Fri,  5 Jun 2020 21:03:45 -0700
+In-Reply-To: <20200606040349.246780-1-davidgow@google.com>
+Message-Id: <20200606040349.246780-2-davidgow@google.com>
+Mime-Version: 1.0
+References: <20200606040349.246780-1-davidgow@google.com>
+X-Mailer: git-send-email 2.27.0.278.ge193c7cf3a9-goog
+Subject: [PATCH v8 1/5] Add KUnit Struct to Current Task
+From:   David Gow <davidgow@google.com>
+To:     trishalfonso@google.com, brendanhiggins@google.com,
+        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, andreyknvl@google.com, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 05, 2020 at 03:59:52PM -0700, Scott Branden wrote:
-> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
-> -		     loff_t max_size, enum kernel_read_file_id id)
-> -{
-> -	loff_t i_size, pos;
-> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
-> +		      loff_t pos, loff_t max_size,
-> +		      enum kernel_pread_opt opt,
-> +		      enum kernel_read_file_id id)
+From: Patricia Alfonso <trishalfonso@google.com>
 
-What is this 'kernel_pread_opt' foolishness?  Why not just pass in
-~0UL as max_size if you want the entire file?
+In order to integrate debugging tools like KASAN into the KUnit
+framework, add KUnit struct to the current task to keep track of the
+current KUnit test.
 
-> -int kernel_read_file_from_path_initns(const char *path, void **buf,
-> -				      loff_t *size, loff_t max_size,
-> -				      enum kernel_read_file_id id)
-> +extern int kernel_pread_file_from_path_initns(const char *path, void **buf,
+Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ include/linux/sched.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-extern?  really?  i'm shocked gcc doesn't vomit on that.
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 4418f5cb8324..e50c568a8dc7 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1188,6 +1188,10 @@ struct task_struct {
+ 	unsigned int			kasan_depth;
+ #endif
+ 
++#if IS_ENABLED(CONFIG_KUNIT)
++	struct kunit			*kunit_test;
++#endif
++
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ 	/* Index of current stored address in ret_stack: */
+ 	int				curr_ret_stack;
+-- 
+2.27.0.278.ge193c7cf3a9-goog
 
