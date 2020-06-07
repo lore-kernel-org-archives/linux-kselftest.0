@@ -1,141 +1,147 @@
-Return-Path: <SRS0=4RUT=7T=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=KMF9=7U=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B859C433DF
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Jun 2020 15:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B685C433E0
+	for <linux-kselftest@archiver.kernel.org>; Sun,  7 Jun 2020 15:00:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A16F2073E
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Jun 2020 15:52:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 715A72067B
+	for <linux-kselftest@archiver.kernel.org>; Sun,  7 Jun 2020 15:00:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BIkLwIVP"
+	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="pypu3wjj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728102AbgFFPwa (ORCPT
+        id S1726683AbgFGPAQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 6 Jun 2020 11:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727100AbgFFPw3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 6 Jun 2020 11:52:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E378C03E96A;
-        Sat,  6 Jun 2020 08:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9Knot+Lv+Z0XYiseAFBiA62c5+NhkBbKX/gLTI08qrs=; b=BIkLwIVPjTQ4Z6dLUSwN9BNF2d
-        jF6fhDw7QKtkUY0qVUNSVq9AuL8hjm+dtqFVaVANc6f6TM0lnrILTlyCzv0Zn5AN1XdlGt9cdBwHi
-        zD4X30KKbBKG0kzETQ6drLgJ3Xm5yfjabYFhl168BExjPSZP8wck4zfkTJ/uEj0mPlieD9rGrnMG6
-        oHS20QVWiOO4dubZEecydxU8HQa8CKlZjNY5CeOYhnFTWlNFS18HJHQ5PEw6bzRyrREoU/dHDX3lo
-        5nr4gMAxgOOu45lOty30n8+bLPrmT9YJXIxJAyFMEXFkjOBDaMyZrsiHZP9xz4cTJdqHnZJglVMc5
-        Y9vIXEPQ==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jhb7I-0001SV-JG; Sat, 06 Jun 2020 15:52:16 +0000
-Date:   Sat, 6 Jun 2020 08:52:16 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Scott Branden <scott.branden@broadcom.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH v7 1/8] fs: introduce kernel_pread_file* support
-Message-ID: <20200606155216.GP19604@bombadil.infradead.org>
-References: <20200606050458.17281-1-scott.branden@broadcom.com>
- <20200606050458.17281-2-scott.branden@broadcom.com>
+        Sun, 7 Jun 2020 11:00:16 -0400
+Received: from mail-am6eur05on2089.outbound.protection.outlook.com ([40.107.22.89]:48904
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726595AbgFGPAO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 7 Jun 2020 11:00:14 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=imriIrWZ35ljUfwBUO1GZE0wqn8jZe0EcUBGCPlnxIIqSOO6uy97Z8w9I5zMjghPsRVx+svE6WE4ayfn/DPan3xEMiaT0qoAgNEdX3hdszBLfKInRtNwyOSqwNO+TkkiZ2nMR5hZNQf2REQugJKw6yqV/vgmXaTyMDfRVHaGMD8orFYqvgg4VZAz8wTr8VXdiRiuIvXC9NHvBIb7sn/AJomKNeS+DVV+RObOerPVq1uPYVe/EBjrd3W6SG7rO/8LPl0fumK392MJJAhvNCqdOSwqg8Cw2etvCzjrobDWWtunYMfmBWTarXteplPGrBODhEDQhoFLtgCOiwK4FXA9ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rwNh1QN4b46yiYV8lIgAPkOSqxYAk4IThekHyt1r2wk=;
+ b=kj0xyCk6YM6tQrR+NMldQEgasmosycrsX8qn0EsnXq6XPVRR1TlYJ/wnnRussBAxmv7+iCdLFGUJJVmkYFtvaoMW312Dy2NtYARPRRWzv26trDFgNr1qYrcfMOTOTSTbU55EttDXUzZAra5ng/Tn5NwwvCOcEMgtQMYZio49esxyVf9+8dWYl9IKRyOKtKUMu6wWamFj6HdiPYtsJh14CycK+GPB+G52ffefPbJlOskibbYH8yMHyJHuYla+q7QRCgNWuYIPSIL2/+FPDgVv3T7coklsNi480RXQ+JMdoZ94t8fH7lSzIV6ZzESCyaWCfPsWz+XXydIqgzSNSpFGTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rwNh1QN4b46yiYV8lIgAPkOSqxYAk4IThekHyt1r2wk=;
+ b=pypu3wjjEgv585aiFw9g18ffgU6prF2Eggq8M4vbBTsQfd3hJ2PQgWZaMxTILssW0cEwsnNdEKF8Zm2roaLRqtmMRvvbBzI39VP++jfADIWtS4b0iWUolej8lf9bSAwg7+mdZ5b7Y3U+ZqbvvngzfhHyw+jJNBhaaELVBPNvXDw=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=mellanox.com;
+Received: from AM0PR0502MB3826.eurprd05.prod.outlook.com
+ (2603:10a6:208:1b::25) by AM0PR0502MB4003.eurprd05.prod.outlook.com
+ (2603:10a6:208:2::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.23; Sun, 7 Jun
+ 2020 15:00:08 +0000
+Received: from AM0PR0502MB3826.eurprd05.prod.outlook.com
+ ([fe80::2dae:c2a2:c26a:f5b]) by AM0PR0502MB3826.eurprd05.prod.outlook.com
+ ([fe80::2dae:c2a2:c26a:f5b%7]) with mapi id 15.20.3066.023; Sun, 7 Jun 2020
+ 15:00:08 +0000
+From:   Amit Cohen <amitc@mellanox.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, corbet@lwn.net,
+        jiri@mellanox.com, idosch@mellanox.com, shuah@kernel.org,
+        mkubecek@suse.cz, gustavo@embeddedor.com, amitc@mellanox.com,
+        cforno12@linux.vnet.ibm.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        linux@rempel-privat.de, alexandru.ardelean@analog.com,
+        ayal@mellanox.com, petrm@mellanox.com, mlxsw@mellanox.com,
+        liuhangbin@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH net-next 01/10] mlxsw: spectrum_dcb: Rename mlxsw_sp_port_headroom_set()
+Date:   Sun,  7 Jun 2020 17:59:36 +0300
+Message-Id: <20200607145945.30559-2-amitc@mellanox.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200607145945.30559-1-amitc@mellanox.com>
+References: <20200607145945.30559-1-amitc@mellanox.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR10CA0015.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:17c::25) To AM0PR0502MB3826.eurprd05.prod.outlook.com
+ (2603:10a6:208:1b::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200606050458.17281-2-scott.branden@broadcom.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from dev-r-vrt-155.mtr.labs.mlnx (37.142.13.130) by AM0PR10CA0015.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:17c::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18 via Frontend Transport; Sun, 7 Jun 2020 15:00:05 +0000
+X-Mailer: git-send-email 2.20.1
+X-Originating-IP: [37.142.13.130]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 01cf4b40-59cc-4ec1-c97a-08d80af377dc
+X-MS-TrafficTypeDiagnostic: AM0PR0502MB4003:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM0PR0502MB400339A860A4728CA32783DFD7840@AM0PR0502MB4003.eurprd05.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-Forefront-PRVS: 04270EF89C
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Jhrx9Bhe9ZGED7//LFfrE4cV3gb6x1o0+xQfMLUR5fWzgMr2OPhV5SK4Cz0iYMxLvU81a2etBTrmK3ih0MSbxFc5uUb/WJA7eZNQTr49PR2eRBfFhUiw7LM1M2hbStyiNgvpaReDf/D1DM9D16xA8J+r4GalZVKVU7r6BoBjebmznGT4ycSO1JnePWtkksE51GyOfJ+3iTgH0hWW3xfeT3gv5ILIAnhs/s2OFgrL46Eyv5uffje1LI9D2pYgFjvHaHQGkB/ZgSneExH9O1ZyI6UaR4AA8g1g24xMxKvLKAPznrI4u6an1daQ2mon/VsDkqN/3OPgBwSBH51DudR5XA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0502MB3826.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(366004)(346002)(136003)(39860400002)(66476007)(66946007)(66556008)(1076003)(186003)(8936002)(16526019)(26005)(52116002)(478600001)(6506007)(36756003)(2906002)(6666004)(7416002)(5660300002)(8676002)(4326008)(83380400001)(6486002)(316002)(86362001)(6916009)(2616005)(956004)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: VoPEQHNCSnKykzyQMrIwai4GoeoYA8HFLMLgJ4yLpwOFwZDBoAmKDeoFBnFl/CEKn3MbpnkCRfn6l/S8TomYTjPDvcTsya0LaB6SjQxR4SS8205e/6d0M+QBmzNXnRToRt1bzmJnVJkVhe4I2b0pZVZafY9KHIs2b6J2UibarGL1lOdYGVYpVAeXBDsOFGAlDxBrDtBmCLt5MLW35C9hSvUBFSxgBKTX2YLdVK2yww7BCyi6ElCwq2mhVZcwxtDqMIE/AV9F5bDlsqjxiwdfaDM6Jxbl2akC7KCRxu/SyPZzEdIdJPs0WoxHuzRFSkz2uFrM4y9nXwFauYi5EraE1dJJ4FxA2aEDfpfiqCA3FZAPr7V3P5XA/a7H7uThMBmYlu6vr+bLrfT/xBf8qMmgd2+L8JAHxx8xGopFXc7XYm4HXRbST7WwopJ9u/AeJfogxvJXuZyxinodm0pBMcX2YMYaT7nUMJKkKwXWNml5nb4=
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01cf4b40-59cc-4ec1-c97a-08d80af377dc
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2020 15:00:08.0052
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9GwKk4Y7R6r3FjH0n8PdjD0D5N5B7fSwXE0ybsHqYZEP2KMnzgi5OmdXXPkKQvYkIPAOx9AYxHYthyhzErrLjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0502MB4003
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 05, 2020 at 10:04:51PM -0700, Scott Branden wrote:
-> -int kernel_read_file(struct file *file, void **buf, loff_t *size,
-> -		     loff_t max_size, enum kernel_read_file_id id)
-> -{
-> -	loff_t i_size, pos;
-> +int kernel_pread_file(struct file *file, void **buf, loff_t *size,
-> +		      loff_t pos, loff_t max_size,
-> +		      enum kernel_pread_opt opt,
-> +		      enum kernel_read_file_id id)
-> +{
-> +	loff_t alloc_size;
-> +	loff_t buf_pos;
-> +	loff_t read_end;
-> +	loff_t i_size;
->  	ssize_t bytes = 0;
->  	int ret;
->  
+mlxsw_sp_port_headroom_set() is defined twice - in spectrum.c and in
+spectrum_dcb.c, with different arguments and different implementation
+but the name is same.
 
-Look, it's not your fault, but this is a great example of how we end
-up with atrocious interfaces.  Someone comes along and implements a
-simple DWIM interface that solves their problem.  Then somebody else
-adds a slight variant that solves their problem, and so on and so on,
-and we end up with this bonkers API where the arguments literally change
-meaning depending on other arguments.
+Rename mlxsw_sp_port_headroom_set() to mlxsw_sp_port_headroom_ets_set()
+in order to allow using the second function in several files, and not
+only as static function in spectrum.c.
 
-> @@ -950,21 +955,31 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
->  		ret = -EINVAL;
->  		goto out;
->  	}
-> -	if (i_size > SIZE_MAX || (max_size > 0 && i_size > max_size)) {
-> +
-> +	/* Default read to end of file */
-> +	read_end = i_size;
-> +
-> +	/* Allow reading partial portion of file */
-> +	if ((opt == KERNEL_PREAD_PART) &&
-> +	    (i_size > (pos + max_size)))
-> +		read_end = pos + max_size;
-> +
-> +	alloc_size = read_end - pos;
-> +	if (i_size > SIZE_MAX || (max_size > 0 && alloc_size > max_size)) {
->  		ret = -EFBIG;
->  		goto out;
+Signed-off-by: Amit Cohen <amitc@mellanox.com>
+Reviewed-by: Petr Machata <petrm@mellanox.com>
+Reviewed-by: Jiri Pirko <jiri@mellanox.com>
+---
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-... like that.
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+index 49a72a8f1f57..e4e0c7c7e9d4 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+@@ -110,8 +110,8 @@ static int mlxsw_sp_port_pg_destroy(struct mlxsw_sp_port *mlxsw_sp_port,
+ 	return mlxsw_reg_write(mlxsw_sp->core, MLXSW_REG(pbmc), pbmc_pl);
+ }
+ 
+-static int mlxsw_sp_port_headroom_set(struct mlxsw_sp_port *mlxsw_sp_port,
+-				      struct ieee_ets *ets)
++static int mlxsw_sp_port_headroom_ets_set(struct mlxsw_sp_port *mlxsw_sp_port,
++					  struct ieee_ets *ets)
+ {
+ 	bool pause_en = mlxsw_sp_port_is_pause_en(mlxsw_sp_port);
+ 	struct ieee_ets *my_ets = mlxsw_sp_port->dcb.ets;
+@@ -180,7 +180,7 @@ static int __mlxsw_sp_dcbnl_ieee_setets(struct mlxsw_sp_port *mlxsw_sp_port,
+ 	}
+ 
+ 	/* Ingress configuration. */
+-	err = mlxsw_sp_port_headroom_set(mlxsw_sp_port, ets);
++	err = mlxsw_sp_port_headroom_ets_set(mlxsw_sp_port, ets);
+ 	if (err)
+ 		goto err_port_headroom_set;
+ 
+-- 
+2.20.1
 
-I think what we actually want is:
-
-ssize_t vmap_file_range(struct file *, loff_t start, loff_t end, void **bufp);
-void vunmap_file_range(struct file *, void *buf);
-
-If end > i_size, limit the allocation to i_size.  Returns the number
-of bytes allocated, or a negative errno.  Writes the pointer allocated
-to *bufp.  Internally, it should use the page cache to read in the pages
-(taking appropriate reference counts).  Then it maps them using vmap()
-instead of copying them to a private vmalloc() array.
-
-kernel_read_file() can be converted to use this API.  The users will
-need to be changed to call kernel_read_end(struct file *file, void *buf)
-instead of vfree() so it can call allow_write_access() for them.
-
-vmap_file_range() has a lot of potential uses.  I'm surprised we don't
-have it already, to be honest.
