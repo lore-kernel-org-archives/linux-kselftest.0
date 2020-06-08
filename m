@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5234C433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4AE2C433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:44:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3F662076C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:42:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84CDF20737
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591663367;
-	bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
+	s=default; t=1591663480;
+	bh=iGDstssJZNRPmYGflzsJwE0HzniypEW0XvpWSC3yA2I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=IMJw3UjoJ5q6vtY0pJgCtgP44zRDbTqvFgiXG2/lzqFZbTRlZYjzkZHmQHp1Bdnf9
-	 obZ8L77c2ghrgJunPXQbI5c1U4jCLgLf541vJlIt7cCAGX53ERVdoO5UPHAZ6X6d7H
-	 bhPcx9NsEv8IPhyO7axqykTVXsp8eTVCiEA0tAxY=
+	b=g/qtTX3Apde4FNw1kpv+u1SSEZpZlfagv0V1kyKILO65tzgdZpl1YijNyTDmUTahb
+	 aDowD7hXZNMkFeuonXTZ5FJ2+lp+ExBMWIkPsh+HANxws1aiQn1qvTgqzNF8TVLM8t
+	 gkILhm1F1IHu0pDakBWupRIIu2iDPRqkLsIBA85o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729075AbgFHXMX (ORCPT
+        id S1729032AbgFIAoj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:12:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59772 "EHLO mail.kernel.org"
+        Mon, 8 Jun 2020 20:44:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59148 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728384AbgFHXMU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:12:20 -0400
+        id S1729024AbgFHXL7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:11:59 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C7C1212CC;
-        Mon,  8 Jun 2020 23:12:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C04922151B;
+        Mon,  8 Jun 2020 23:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657940;
-        bh=52liZxWS/YVroA/0/89/gMuhBgSh5CrWsVrWvpMtxo8=;
+        s=default; t=1591657919;
+        bh=iGDstssJZNRPmYGflzsJwE0HzniypEW0XvpWSC3yA2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HDwlKid4kRMpQBoMqO5E0dhfpM2WucrsJdCMZSl2gmfXwr4Qck+ua9JJor+CEFOWG
-         kX/FZp20iu9P2XerocXebmYl3jWbHVWPGLvxZ3GW+K+2gf1EhkxP/CWbDNsI7S/Gyd
-         FbXoh99o0Mjt2LgjSMFSOXdI7HKu1neJNUvOLtXQ=
+        b=Htg8w5k1y/J5HtQqrgjsQ6NJoIwdPfmWHKemovmEEC4zZzrEd14CmnrsKHBpi4DZe
+         /PyOxqP+EwgfDZee8AY5IE+/EFFzQzc/T/cVtaZJVWBjHSCDAxiKKqX+7tcOZNFf9w
+         FhSL2drySbTiFp4CoHoyjrZQ6mF73EfZK7LuSLn8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sasha Levin <sashal@kernel.org>, Andrii Nakryiko <andriin@fb.com>,
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 006/606] bpf: Fix bug in mmap() implementation for BPF array map
-Date:   Mon,  8 Jun 2020 19:02:11 -0400
-Message-Id: <20200608231211.3363633-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 269/274] selftests/bpf, flow_dissector: Close TAP device FD after the test
+Date:   Mon,  8 Jun 2020 19:06:02 -0400
+Message-Id: <20200608230607.3361041-269-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
+In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
+References: <20200608230607.3361041-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,63 +61,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ Upstream commit 333291ce5055f2039afc907badaf5b66bc1adfdc ]
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-mmap() subsystem allows user-space application to memory-map region with
-initial page offset. This wasn't taken into account in initial implementation
-of BPF array memory-mapping. This would result in wrong pages, not taking into
-account requested page shift, being memory-mmaped into user-space. This patch
-fixes this gap and adds a test for such scenario.
+[ Upstream commit b8215dce7dfd817ca38807f55165bf502146cd68 ]
 
-Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+test_flow_dissector leaves a TAP device after it's finished, potentially
+interfering with other tests that will run after it. Fix it by closing the
+TAP descriptor on cleanup.
+
+Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200512235925.3817805-1-andriin@fb.com
+Link: https://lore.kernel.org/bpf/20200531082846.2117903-11-jakub@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/arraymap.c                         | 7 ++++++-
- tools/testing/selftests/bpf/prog_tests/mmap.c | 9 +++++++++
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 95d77770353c..1d6120fd5ba6 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -486,7 +486,12 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- 	if (!(map->map_flags & BPF_F_MMAPABLE))
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index 92563898867c..9f3634c9971d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -523,6 +523,7 @@ void test_flow_dissector(void)
+ 		CHECK_ATTR(err, tests[i].name, "bpf_map_delete_elem %d\n", err);
+ 	}
  
--	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array), pgoff);
-+	if (vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
-+	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
-+		return -EINVAL;
-+
-+	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
-+				   vma->vm_pgoff + pgoff);
++	close(tap_fd);
+ 	bpf_prog_detach(prog_fd, BPF_FLOW_DISSECTOR);
+ 	bpf_object__close(obj);
  }
- 
- const struct bpf_map_ops array_map_ops = {
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index 16a814eb4d64..b0e789678aa4 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -197,6 +197,15 @@ void test_mmap(void)
- 	CHECK_FAIL(map_data->val[far] != 3 * 321);
- 
- 	munmap(tmp2, 4 * page_size);
-+
-+	/* map all 4 pages, but with pg_off=1 page, should fail */
-+	tmp1 = mmap(NULL, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
-+		    data_map_fd, page_size /* initial page shift */);
-+	if (CHECK(tmp1 != MAP_FAILED, "adv_mmap7", "unexpected success")) {
-+		munmap(tmp1, 4 * page_size);
-+		goto cleanup;
-+	}
-+
- cleanup:
- 	if (bss_mmaped)
- 		CHECK_FAIL(munmap(bss_mmaped, bss_sz));
 -- 
 2.25.1
 
