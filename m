@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76BEAC433E1
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8270FC433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:34:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 502E020835
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:29:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D7E5207ED
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662543;
-	bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
+	s=default; t=1591662845;
+	bh=vXYk7JUvoeakSGmPKmqeDoVsAFE/QUqU1NhtnvOHL0I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=hqEssu7ppL7Wr735skTao4JWnDrn1B4m4wl6OuXgV7ZkFb7st3+rt+K0Jn+sE784N
-	 gadPP/MHdu+7nT05ZNFG026XWhRbELXjKrM6gtnC5TMjRf6GafIZHn9+tBqJCl3FU6
-	 NMkau9hcKARgO6I+AdkL3BPSZ8zhktbzY2KJEn0U=
+	b=SS2ib2QyW/J7yfb5nWyhy4CiA0soGrD5UkO/v/HX5vFvvLv96hFaDfgqMFI1VPOKL
+	 l55Pl7G7CNIEzG+fmPk8CPN8CBkb2afD4CmwQildVuKyx5M8DMb3gC8VtJPFhU2H0L
+	 fwyYWcUc7rLCImp1kraxSzd8h8nQMkvpNKEEf9p4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731546AbgFIA2n (ORCPT
+        id S1730425AbgFIAds (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37598 "EHLO mail.kernel.org"
+        Mon, 8 Jun 2020 20:33:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727961AbgFHXQR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:16:17 -0400
+        id S1729906AbgFHXOs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:14:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF3D220870;
-        Mon,  8 Jun 2020 23:16:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 598ED20C09;
+        Mon,  8 Jun 2020 23:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658176;
-        bh=SCfhZTIaHqAp/kDN9R0eV/qpGB7J/zlJUu4kD5LbpR4=;
+        s=default; t=1591658088;
+        bh=vXYk7JUvoeakSGmPKmqeDoVsAFE/QUqU1NhtnvOHL0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NlDhpgY3zdcxammlDi8Szyi/2zvJ7gXCxtW6Sj36eBLjcVLWP8V0YZzSg+3m1gA9m
-         CSVMqQGDB3WdER5VEAm3VKPmQ6SogVBPMEi5POAlcXYptnXQ1GPLA8WJLD3LHNm6Oa
-         BMON3MP4ROd0jd18g6uM9jR/fV13LPqWfQ5QsVZg=
+        b=ObgWlcolMem3z4ya4QgbYf9Qx81nUplV6n4vlh+yGDLQna7yO0r9AkK0GJIB4sIYm
+         KADzNxwf+24NasCvo+qvT8XmV9nWQ9T+cqGV9MBut09UZnlvpeKBL6WkCMKnNTvdu5
+         SxzOOnGXDkY5lPIwNoGVrvglxBSgXhy13kVMQGnw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>, Jann Horn <jannh@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 202/606] bpf: Prevent mmap()'ing read-only maps as writable
-Date:   Mon,  8 Jun 2020 19:05:27 -0400
-Message-Id: <20200608231211.3363633-202-sashal@kernel.org>
+Cc:     Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 131/606] KVM: selftests: Fix build for evmcs.h
+Date:   Mon,  8 Jun 2020 19:04:16 -0400
+Message-Id: <20200608231211.3363633-131-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -60,110 +61,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+From: Peter Xu <peterx@redhat.com>
 
-[ Upstream commit dfeb376dd4cb2c5004aeb625e2475f58a5ff2ea7 ]
+[ Upstream commit 8ffdaf9155ebe517cdec5edbcca19ba6e7ee9c3c ]
 
-As discussed in [0], it's dangerous to allow mapping BPF map, that's meant to
-be frozen and is read-only on BPF program side, because that allows user-space
-to actually store a writable view to the page even after it is frozen. This is
-exacerbated by BPF verifier making a strong assumption that contents of such
-frozen map will remain unchanged. To prevent this, disallow mapping
-BPF_F_RDONLY_PROG mmap()'able BPF maps as writable, ever.
+I got this error when building kvm selftests:
 
-  [0] https://lore.kernel.org/bpf/CAEf4BzYGWYhXdp6BJ7_=9OQPJxQpgug080MMjdSB72i9R+5c6g@mail.gmail.com/
+/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: multiple definition of `current_evmcs'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:222: first defined here
+/usr/bin/ld: /home/xz/git/linux/tools/testing/selftests/kvm/libkvm.a(vmx.o):/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: multiple definition of `current_vp_assist'; /tmp/cco1G48P.o:/home/xz/git/linux/tools/testing/selftests/kvm/include/evmcs.h:223: first defined here
 
-Fixes: fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
-Suggested-by: Jann Horn <jannh@google.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Jann Horn <jannh@google.com>
-Link: https://lore.kernel.org/bpf/20200519053824.1089415-1-andriin@fb.com
+I think it's because evmcs.h is included both in a test file and a lib file so
+the structs have multiple declarations when linking.  After all it's not a good
+habit to declare structs in the header files.
+
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+Message-Id: <20200504220607.99627-1-peterx@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c                          | 17 ++++++++++++++---
- tools/testing/selftests/bpf/prog_tests/mmap.c | 13 ++++++++++++-
- tools/testing/selftests/bpf/progs/test_mmap.c |  8 ++++++++
- 3 files changed, 34 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kvm/include/evmcs.h  | 4 ++--
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e04ea4c8f935..c0ab9bfdf28a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -629,9 +629,20 @@ static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
+diff --git a/tools/testing/selftests/kvm/include/evmcs.h b/tools/testing/selftests/kvm/include/evmcs.h
+index 4912d23844bc..e31ac9c5ead0 100644
+--- a/tools/testing/selftests/kvm/include/evmcs.h
++++ b/tools/testing/selftests/kvm/include/evmcs.h
+@@ -217,8 +217,8 @@ struct hv_enlightened_vmcs {
+ #define HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_MASK	\
+ 		(~((1ull << HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT) - 1))
  
- 	mutex_lock(&map->freeze_mutex);
+-struct hv_enlightened_vmcs *current_evmcs;
+-struct hv_vp_assist_page *current_vp_assist;
++extern struct hv_enlightened_vmcs *current_evmcs;
++extern struct hv_vp_assist_page *current_vp_assist;
  
--	if ((vma->vm_flags & VM_WRITE) && map->frozen) {
--		err = -EPERM;
--		goto out;
-+	if (vma->vm_flags & VM_WRITE) {
-+		if (map->frozen) {
-+			err = -EPERM;
-+			goto out;
-+		}
-+		/* map is meant to be read-only, so do not allow mapping as
-+		 * writable, because it's possible to leak a writable page
-+		 * reference and allows user-space to still modify it after
-+		 * freezing, while verifier will assume contents do not change
-+		 */
-+		if (map->map_flags & BPF_F_RDONLY_PROG) {
-+			err = -EACCES;
-+			goto out;
-+		}
- 	}
+ int vcpu_enable_evmcs(struct kvm_vm *vm, int vcpu_id);
  
- 	/* set default open/close callbacks */
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index b0e789678aa4..5495b669fccc 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -19,7 +19,7 @@ void test_mmap(void)
- 	const size_t map_sz = roundup_page(sizeof(struct map_data));
- 	const int zero = 0, one = 1, two = 2, far = 1500;
- 	const long page_size = sysconf(_SC_PAGE_SIZE);
--	int err, duration = 0, i, data_map_fd;
-+	int err, duration = 0, i, data_map_fd, rdmap_fd;
- 	struct bpf_map *data_map, *bss_map;
- 	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
- 	struct test_mmap__bss *bss_data;
-@@ -36,6 +36,17 @@ void test_mmap(void)
- 	data_map = skel->maps.data_map;
- 	data_map_fd = bpf_map__fd(data_map);
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+index 7aaa99ca4dbc..ce528f3cf093 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+@@ -17,6 +17,9 @@
  
-+	rdmap_fd = bpf_map__fd(skel->maps.rdonly_map);
-+	tmp1 = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, rdmap_fd, 0);
-+	if (CHECK(tmp1 != MAP_FAILED, "rdonly_write_mmap", "unexpected success\n")) {
-+		munmap(tmp1, 4096);
-+		goto cleanup;
-+	}
-+	/* now double-check if it's mmap()'able at all */
-+	tmp1 = mmap(NULL, 4096, PROT_READ, MAP_SHARED, rdmap_fd, 0);
-+	if (CHECK(tmp1 == MAP_FAILED, "rdonly_read_mmap", "failed: %d\n", errno))
-+		goto cleanup;
+ bool enable_evmcs;
+ 
++struct hv_enlightened_vmcs *current_evmcs;
++struct hv_vp_assist_page *current_vp_assist;
 +
- 	bss_mmaped = mmap(NULL, bss_sz, PROT_READ | PROT_WRITE, MAP_SHARED,
- 			  bpf_map__fd(bss_map), 0);
- 	if (CHECK(bss_mmaped == MAP_FAILED, "bss_mmap",
-diff --git a/tools/testing/selftests/bpf/progs/test_mmap.c b/tools/testing/selftests/bpf/progs/test_mmap.c
-index 6239596cd14e..4eb42cff5fe9 100644
---- a/tools/testing/selftests/bpf/progs/test_mmap.c
-+++ b/tools/testing/selftests/bpf/progs/test_mmap.c
-@@ -7,6 +7,14 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 4096);
-+	__uint(map_flags, BPF_F_MMAPABLE | BPF_F_RDONLY_PROG);
-+	__type(key, __u32);
-+	__type(value, char);
-+} rdonly_map SEC(".maps");
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
- 	__uint(max_entries, 512 * 4); /* at least 4 pages of data */
+ struct eptPageTableEntry {
+ 	uint64_t readable:1;
+ 	uint64_t writable:1;
 -- 
 2.25.1
 
