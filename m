@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F704C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0853EC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA1E620774
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:50:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D27AE20737
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591663848;
-	bh=GgNbKupob62BqUCj27AYN8DGZuT/nucfLviwTiGLsBs=;
+	s=default; t=1591664164;
+	bh=gxk9MSh3P8MPirDz3R+VvLbXVPW8bi0sEi+cQ9ZIbSQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pVXYr6KAmlQO7+3M/sMtWURKkA3uAI5UAgMBCtUGuoz7dOwNUpCjIURm/lMynULnT
-	 e7B//c0NK9W68+ke3RH1Q3Ab/mcZvYJcB55zl8a9FHFG6biyCYhgwc0bfZ1E13rWcf
-	 GGSO9yF8DClCaaCYbds7jyratYHUld10tjpsPW0c=
+	b=ynpPBvGTBIyp/jXBi/oqTocYamGggxHfb89lStvYaJAEftaCsv+Oku3RpqihxlN5q
+	 6EQ0KzmmshTplP33u3imES4tQ7vbhqsu8CcQkIZtZgwzNMiqE/SKPRxbdZO3ywfVmd
+	 xTPwQh5fp66C9RvVFs7QnW79JeeW5OLqEjCaOgKU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728664AbgFHXK2 (ORCPT
+        id S1728344AbgFHXJJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:10:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56570 "EHLO mail.kernel.org"
+        Mon, 8 Jun 2020 19:09:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726973AbgFHXK0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:10:26 -0400
+        id S1728338AbgFHXJH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C9D43208A9;
-        Mon,  8 Jun 2020 23:10:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAC5120897;
+        Mon,  8 Jun 2020 23:09:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657825;
-        bh=GgNbKupob62BqUCj27AYN8DGZuT/nucfLviwTiGLsBs=;
+        s=default; t=1591657746;
+        bh=gxk9MSh3P8MPirDz3R+VvLbXVPW8bi0sEi+cQ9ZIbSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbHDfA+96pe6Nco1zWoUDuGBpT0FGmgNziFO/3nJOJL+YKSOUB0MmuKB0fb+hxdyx
-         9Uqn5zU5rFItUqIKJOibbXC14MlgbT22a5TGhwpDOKj7rulvRNRPHOiP5LXztaCk/5
-         jv27mj6wLrwaoFTp4i5JxCVmltA/RLpIzqHMUCg4=
+        b=lTxNbrXd+EOIMJt2pS99zyO2GfR0vIAOu4a+fGMlJwKVArStOjHwFJNWkQPh7/9bc
+         P8DDXjDBa1lrJAe6NRyVD4rNwoczRNN6Xwvg2lJ2Ria87y/i6a5lzSTZJVNc90SVGk
+         DE+a9f39QHE+UAU7aQ/ab9wHqtbOlUqYtJRzOkvA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Carlos Neira <cneirabustos@gmail.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 197/274] selftests/bpf: Install generated test progs
-Date:   Mon,  8 Jun 2020 19:04:50 -0400
-Message-Id: <20200608230607.3361041-197-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 134/274] selftests/bpf: Fix bpf_link leak in ns_current_pid_tgid selftest
+Date:   Mon,  8 Jun 2020 19:03:47 -0400
+Message-Id: <20200608230607.3361041-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -62,39 +62,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 309b81f0fdc4209d998bc63f0da52c2e96340d4e ]
+[ Upstream commit 8d30e80a049ad699264e4a12911e349f93c7279a ]
 
-Before commit 74b5a5968fe8 ("selftests/bpf: Replace test_progs and
-test_maps w/ general rule") selftests/bpf used generic install
-target from selftests/lib.mk to install generated bpf test progs
-by mentioning them in TEST_GEN_FILES variable.
+If condition is inverted, but it's also just not necessary.
 
-Take that functionality back.
-
-Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ general rule")
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Link: https://lore.kernel.org/bpf/20200513021722.7787-1-yauheni.kaliuta@redhat.com
+Fixes: 1c1052e0140a ("tools/testing/selftests/bpf: Add self-tests for new helper bpf_get_ns_current_pid_tgid.")
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Cc: Carlos Neira <cneirabustos@gmail.com>
+Link: https://lore.kernel.org/bpf/20200429012111.277390-11-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 01c95f8278c7..af139d0e2e0c 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -264,6 +264,7 @@ TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o, $$(TRUNNER_BPF_SRCS)
- TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
- 				 $$(filter-out $(SKEL_BLACKLIST),	\
- 					       $$(TRUNNER_BPF_SRCS)))
-+TEST_GEN_FILES += $$(TRUNNER_BPF_OBJS)
- 
- # Evaluate rules now with extra TRUNNER_XXX variables above already defined
- $$(eval $$(call DEFINE_TEST_RUNNER_RULES,$1,$2))
+diff --git a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+index 542240e16564..e74dc501b27f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
++++ b/tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+@@ -80,9 +80,6 @@ void test_ns_current_pid_tgid(void)
+ 		  "User pid/tgid %llu BPF pid/tgid %llu\n", id, bss.pid_tgid))
+ 		goto cleanup;
+ cleanup:
+-	if (!link) {
+-		bpf_link__destroy(link);
+-		link = NULL;
+-	}
++	bpf_link__destroy(link);
+ 	bpf_object__close(obj);
+ }
 -- 
 2.25.1
 
