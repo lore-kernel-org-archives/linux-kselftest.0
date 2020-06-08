@@ -7,49 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDF30C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:34:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B5AC433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:37:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B04A207F9
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:34:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69D2D206C3
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:37:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662894;
-	bh=kRGGgjOgo1DcPwnCKmyH1WLigFc+jT/yp6endMImLxk=;
+	s=default; t=1591663066;
+	bh=WqI1PTDKZAdRarwsH99PbqlFFjL5B6QoYx6yi1O0fD8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=y2CBFZi3qOdJhDfghFz9rTWBq5/r7RVw2p0bKR6RrUYyjNTvK/8lWMpxUiORhVTGs
-	 5QomAK96l1Py+c6AAggan1++bNf/6i+mxgZ3/oCMJc9EG9lbkJqq646cRvLh6HeScS
-	 4VzdHNzqEHgxPZiwJskvCmG+OTfmAK4dX2qx/mGU=
+	b=I/4SCMUArX/hyaRX6jbS94CVqLuipju8qjdm9yaBhKREiV+ymnnZYr2NXDS2DrVnV
+	 S7ZnqaNI8r7qve10IPmbI2l0pwMX36vAeZhSWCkYiSNFhNZ2V64hHPsWu2InZbNDAS
+	 xBKd1I3ElDcMIPG72TQUsheyizRjElgq7FkKgY3A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730990AbgFIAet (ORCPT
+        id S1728663AbgFHXNp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Jun 2020 20:34:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34936 "EHLO mail.kernel.org"
+        Mon, 8 Jun 2020 19:13:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33592 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729831AbgFHXOd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:14:33 -0400
+        id S1729565AbgFHXNo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:13:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A50A215A4;
-        Mon,  8 Jun 2020 23:14:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E70EC21527;
+        Mon,  8 Jun 2020 23:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658073;
-        bh=kRGGgjOgo1DcPwnCKmyH1WLigFc+jT/yp6endMImLxk=;
+        s=default; t=1591658023;
+        bh=WqI1PTDKZAdRarwsH99PbqlFFjL5B6QoYx6yi1O0fD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p0la07guw795SCBWdnlLyEKkdI2keXQ0xQ0TAGVNKP4k2Qso/fOQmHnvHlDeEsq4Q
-         TXQpJRTr+29JxkuwrWC7bVWA41NzGpSBXXyo2kq8KPSdT201gftgUpbtrhn9pwgVa5
-         8o989XBXOOFQwnmL/+N27EVsJHFDCz7Xj0YMTamw=
+        b=Q1s+xWP9LgVw9/isBtjxfhwugcTK7rTZPzpJmJPB2zr76w5JXxeTY+Yk5TcyXbBWw
+         LBxkBeteZX/ePRtZZekNGnQM0z/VLdSTapagFU3gd9G/uKtwQsuVd2nU3EG8vD88wn
+         2VB8ufKlM1jGQ6WX2mBFrg3f8rekKSxpKXIutPdk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 118/606] ftrace/selftest: make unresolved cases cause failure if --fail-unresolved set
-Date:   Mon,  8 Jun 2020 19:04:03 -0400
-Message-Id: <20200608231211.3363633-118-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 076/606] selftests/bpf: Enforce returning 0 for fentry/fexit programs
+Date:   Mon,  8 Jun 2020 19:03:21 -0400
+Message-Id: <20200608231211.3363633-76-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -62,68 +61,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alan Maguire <alan.maguire@oracle.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit b730d668138cb3dd9ce78f8003986d1adae5523a ]
+commit 6d74f64b922b8394dccc52576659cb0dc0a1da7b upstream.
 
-Currently, ftracetest will return 1 (failure) if any unresolved cases
-are encountered.  The unresolved status results from modules and
-programs not being available, and as such does not indicate any
-issues with ftrace itself.  As such, change the behaviour of
-ftracetest in line with unsupported cases; if unsupported cases
-happen, ftracetest still returns 0 unless --fail-unsupported.  Here
---fail-unresolved is added and the default is to return 0 if
-unresolved results occur.
+There are a few fentry/fexit programs returning non-0.
+The tests with these programs will break with the previous
+patch which enfoced return-0 rules. Fix them properly.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ac065870d928 ("selftests/bpf: Add BPF_PROG, BPF_KPROBE, and BPF_KRETPROBE macros")
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200514053207.1298479-1-yhs@fb.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/ftrace/ftracetest | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/test_overhead.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 144308a757b7..19e9236dec5e 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -17,6 +17,7 @@ echo "		-v|--verbose Increase verbosity of test messages"
- echo "		-vv        Alias of -v -v (Show all results in stdout)"
- echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
- echo "		--fail-unsupported Treat UNSUPPORTED as a failure"
-+echo "		--fail-unresolved Treat UNRESOLVED as a failure"
- echo "		-d|--debug Debug mode (trace all shell commands)"
- echo "		-l|--logdir <dir> Save logs on the <dir>"
- echo "		            If <dir> is -, all logs output in console only"
-@@ -112,6 +113,10 @@ parse_opts() { # opts
-       UNSUPPORTED_RESULT=1
-       shift 1
-     ;;
-+    --fail-unresolved)
-+      UNRESOLVED_RESULT=1
-+      shift 1
-+    ;;
-     --logdir|-l)
-       LOG_DIR=$2
-       shift 2
-@@ -176,6 +181,7 @@ KEEP_LOG=0
- DEBUG=0
- VERBOSE=0
- UNSUPPORTED_RESULT=0
-+UNRESOLVED_RESULT=0
- STOP_FAILURE=0
- # Parse command-line options
- parse_opts $*
-@@ -280,7 +286,7 @@ eval_result() { # sigval
-     $UNRESOLVED)
-       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
-       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
--      return 1 # this is a kind of bug.. something happened.
-+      return $UNRESOLVED_RESULT # depends on use case
-     ;;
-     $UNTESTED)
-       prlog "	[${color_blue}UNTESTED${color_reset}]"
+diff --git a/tools/testing/selftests/bpf/progs/test_overhead.c b/tools/testing/selftests/bpf/progs/test_overhead.c
+index bfe9fbcb9684..e15c7589695e 100644
+--- a/tools/testing/selftests/bpf/progs/test_overhead.c
++++ b/tools/testing/selftests/bpf/progs/test_overhead.c
+@@ -33,13 +33,13 @@ int prog3(struct bpf_raw_tracepoint_args *ctx)
+ SEC("fentry/__set_task_comm")
+ int BPF_PROG(prog4, struct task_struct *tsk, const char *buf, bool exec)
+ {
+-	return !tsk;
++	return 0;
+ }
+ 
+ SEC("fexit/__set_task_comm")
+ int BPF_PROG(prog5, struct task_struct *tsk, const char *buf, bool exec)
+ {
+-	return !tsk;
++	return 0;
+ }
+ 
+ char _license[] SEC("license") = "GPL";
 -- 
 2.25.1
 
