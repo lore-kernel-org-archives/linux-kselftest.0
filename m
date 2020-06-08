@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED772C433E3
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35595C433E1
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEF2B2076C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0415220737
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 00:56:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591664186;
-	bh=t8EX+OcVvPjkVogK7HTxyL6ukX9m/HBgPkG41B/CT7o=;
+	s=default; t=1591664190;
+	bh=TZrUG0c+bqLjBayBmaG07PdziZ3fDMuG7ttxZs3ZcfA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bYkdhLS8Pwv5wF5kcrpE50f47h7/gpOUdBYKUMQocO9SATspBu8Q0lnkcLlmEUkDo
-	 GzkVcriW8rk3agYHsxnbmMBGLOP4cZzNrOS6bshSzbfcq4vbjK9fNfflO3MX4rPW5/
-	 HSRmEFVnlQ/5wH/RlVgnTB7NbDap3KfKclUvwbcw=
+	b=APNg9QEerbRK8jH9k8pUiwxPxKKoGdCS/eD+SwRSBAjjFG+wDJeK+bD+uSj0sxsNQ
+	 Iq+WzzIqw1+Bb9WpwoBx4G0Nlywhq16MJNapuicemt2gcLyG72q+lCcNRtPWcZThKj
+	 VOrbfRtIiWKrHdCPePavLat4M6Gxp/B0oVlfS/jw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728321AbgFHXJF (ORCPT
+        id S1728433AbgFIA42 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:09:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54628 "EHLO mail.kernel.org"
+        Mon, 8 Jun 2020 20:56:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54664 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728314AbgFHXJC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:09:02 -0400
+        id S1728315AbgFHXJE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:09:04 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB0CB208E4;
-        Mon,  8 Jun 2020 23:09:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 48858208C9;
+        Mon,  8 Jun 2020 23:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657741;
-        bh=t8EX+OcVvPjkVogK7HTxyL6ukX9m/HBgPkG41B/CT7o=;
+        s=default; t=1591657744;
+        bh=TZrUG0c+bqLjBayBmaG07PdziZ3fDMuG7ttxZs3ZcfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IroOBB1iUIAbfWFEHwfez+w4FimyjYl1vuD59NknoZ2ENcif8Ul+4Z7s9EM+6mNXx
-         OdNuQ9pXXqiVIg/He419YAyJvdXbpePYsXTJUHCaSXxKlxdJnJGNLAC5+ci33MozDM
-         8S4O/QBqADEG0DZtfGNkdVyHBR/7e6zUNrS2TKGA=
+        b=WiO8QZiOI3Ynh2+DZ4bUY5Ztma6D67bJ8l6uGYfHfxU0x4762+TSZ6giP2AYjbOOr
+         IM9bhDI6rWoRBpVdxapEJgmFj9jdG6d+aMJtetVvp/jhcxqA+CWjma/YHjB/k65S0i
+         lY4rOEYn6EhaVNhVxSWQ7so43sIQpQHAaq0d6yfo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andrii Nakryiko <andriin@fb.com>,
@@ -46,9 +46,9 @@ Cc:     Andrii Nakryiko <andriin@fb.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 130/274] selftests/bpf: Fix memory leak in test selector
-Date:   Mon,  8 Jun 2020 19:03:43 -0400
-Message-Id: <20200608230607.3361041-130-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 132/274] selftests/bpf: Fix invalid memory reads in core_relo selftest
+Date:   Mon,  8 Jun 2020 19:03:45 -0400
+Message-Id: <20200608230607.3361041-132-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
 References: <20200608230607.3361041-1-sashal@kernel.org>
@@ -63,58 +63,33 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit f25d5416d64c796aa639136eb0b076c8bd579b54 ]
+[ Upstream commit 13c908495e5d51718a6da84ae925fa2aac056380 ]
 
-Free test selector substrings, which were strdup()'ed.
+Another one found by AddressSanitizer. input_len is bigger than actually
+initialized data size.
 
-Fixes: b65053cd94f4 ("selftests/bpf: Add whitelist/blacklist of test names to test_progs")
+Fixes: c7566a69695c ("selftests/bpf: Add field existence CO-RE relocs tests")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200429012111.277390-6-andriin@fb.com
+Link: https://lore.kernel.org/bpf/20200429012111.277390-8-andriin@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_progs.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/core_reloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index b521e0a512b6..86d0020c9eec 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -420,6 +420,18 @@ static int libbpf_print_fn(enum libbpf_print_level level,
- 	return 0;
- }
- 
-+static void free_str_set(const struct str_set *set)
-+{
-+	int i;
-+
-+	if (!set)
-+		return;
-+
-+	for (i = 0; i < set->cnt; i++)
-+		free((void *)set->strs[i]);
-+	free(set->strs);
-+}
-+
- static int parse_str_list(const char *s, struct str_set *set)
- {
- 	char *input, *state = NULL, *next, **tmp, **strs = NULL;
-@@ -756,11 +768,11 @@ int main(int argc, char **argv)
- 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
- 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
- 
--	free(env.test_selector.blacklist.strs);
--	free(env.test_selector.whitelist.strs);
-+	free_str_set(&env.test_selector.blacklist);
-+	free_str_set(&env.test_selector.whitelist);
- 	free(env.test_selector.num_set);
--	free(env.subtest_selector.blacklist.strs);
--	free(env.subtest_selector.whitelist.strs);
-+	free_str_set(&env.subtest_selector.blacklist);
-+	free_str_set(&env.subtest_selector.whitelist);
- 	free(env.subtest_selector.num_set);
- 
- 	return env.fail_cnt ? EXIT_FAILURE : EXIT_SUCCESS;
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index 31e177adbdf1..084ed26a7d78 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -392,7 +392,7 @@ static struct core_reloc_test_case test_cases[] = {
+ 		.input = STRUCT_TO_CHAR_PTR(core_reloc_existence___minimal) {
+ 			.a = 42,
+ 		},
+-		.input_len = sizeof(struct core_reloc_existence),
++		.input_len = sizeof(struct core_reloc_existence___minimal),
+ 		.output = STRUCT_TO_CHAR_PTR(core_reloc_existence_output) {
+ 			.a_exists = 1,
+ 			.b_exists = 0,
 -- 
 2.25.1
 
