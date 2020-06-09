@@ -2,118 +2,70 @@ Return-Path: <SRS0=E1M1=7W=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D83C433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 16:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB5F8C433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 17:10:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99EF920737
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 16:44:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A524220734
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Jun 2020 17:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591722628;
+	bh=mUhfWNznLxmCWMFhxxdUHx438NavV98MJxuKPN+4wQM=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=rzQBdXOkHRPiirgU78xeSRf7NFQe04Sa0SXimnsV3GgLlaEZqbNZwn/uSToKtVG2H
+	 BqVsfoE65Vm/AFHHqHWMPrxzNhhkAYsWO0mMDvuysO1FKK/nTassGStlDAt4BznCl7
+	 Yp+SwDnjqfkMlLGKuKGpupV0Z4QkafJqZpW0xV28=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731170AbgFIQoP (ORCPT
+        id S1728344AbgFIRK0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 9 Jun 2020 12:44:15 -0400
-Received: from smtp.asem.it ([151.1.184.197]:62867 "EHLO smtp.asem.it"
+        Tue, 9 Jun 2020 13:10:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34716 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730985AbgFIQoP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Jun 2020 12:44:15 -0400
-X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Jun 2020 12:44:14 EDT
-Received: from webmail.asem.it
-        by asem.it (smtp.asem.it)
-        (SecurityGateway 6.5.2)
-        with ESMTP id SG000307121.MSG 
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jun 2020 18:39:07 +0200S
-Received: from ASAS044.asem.intra (172.16.16.44) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 9 Jun
- 2020 18:39:05 +0200
-Received: from flavio-x.asem.intra (172.16.17.208) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Tue, 9 Jun 2020 18:39:05 +0200
-From:   Flavio Suligoi <f.suligoi@asem.it>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH 1/1] tools: testing: ftrace: trigger: fix spelling mistake
-Date:   Tue, 9 Jun 2020 18:38:53 +0200
-Message-ID: <20200609163853.1602-1-f.suligoi@asem.it>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-SGHeloLookup-Result: pass smtp.helo=webmail.asem.it (ip=172.16.16.44)
-X-SGSPF-Result: none (smtp.asem.it)
-X-SGOP-RefID: str=0001.0A090203.5EDFBB2A.0025,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0 (_st=1 _vt=0 _iwf=0)
+        id S1727777AbgFIRKX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 9 Jun 2020 13:10:23 -0400
+Subject: Re: [GIT PULL] Kunit update for Linux 5.8-rc1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591722623;
+        bh=mUhfWNznLxmCWMFhxxdUHx438NavV98MJxuKPN+4wQM=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=1V/HIUeYSC9aTuWb8mRowJI7O7kSWkQLypqsEEgFvXABk6YIgyjsoedk51UiGlsuR
+         uwAnbwyA9zSumU2GZSEMyTJBNfYYtvGbzIOpypqyY68MIxfm1jza1q0FABKFzOK5d1
+         w3AtdHVGpA/ceDQqroK+alWBaC1VT8faUsiPoHe4=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <a975bc3c-a101-fe24-a2e3-1ae70ad7b181@linuxfoundation.org>
+References: <a975bc3c-a101-fe24-a2e3-1ae70ad7b181@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <a975bc3c-a101-fe24-a2e3-1ae70ad7b181@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-kunit-5.8-rc1
+X-PR-Tracked-Commit-Id: 6d6861d45e38d42a7df9db244c871ee3856acf57
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 595a56ac1b0d5f0a16a89589ef55ffd35c1967a2
+Message-Id: <159172262303.7211.17730688109818843743.pr-tracker-bot@kernel.org>
+Date:   Tue, 09 Jun 2020 17:10:23 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix typo: "tigger" --> "trigger"
+The pull request you sent on Mon, 8 Jun 2020 16:23:52 -0600:
 
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
----
- tools/testing/selftests/ftrace/test.d/trigger/trigger-hist.tc   | 2 +-
- .../selftests/ftrace/test.d/trigger/trigger-stacktrace.tc       | 2 +-
- .../ftrace/test.d/trigger/trigger-trace-marker-hist.tc          | 2 +-
- .../ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc      | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.8-rc1
 
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist.tc
-index 177e8d4c4744..bf6374e1f6ae 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist.tc
-@@ -23,7 +23,7 @@ if [ ! -f events/sched/sched_process_fork/hist ]; then
-     exit_unsupported
- fi
- 
--echo "Test histogram basic tigger"
-+echo "Test histogram basic trigger"
- 
- echo 'hist:keys=parent_pid:vals=child_pid' > events/sched/sched_process_fork/trigger
- for i in `seq 1 10` ; do ( echo "forked" > /dev/null); done
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-stacktrace.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-stacktrace.tc
-index 398c05c4d2a7..6248e6b40704 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-stacktrace.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-stacktrace.tc
-@@ -23,7 +23,7 @@ if [ -z "$FEATURE" ]; then
-     exit_unsupported
- fi
- 
--echo "Test stacktrace tigger"
-+echo "Test stacktrace trigger"
- echo 0 > trace
- echo 0 > options/stacktrace
- echo 'stacktrace' > events/sched/sched_process_fork/trigger
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc
-index ab6bedb25736..01fdfd50b4be 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-hist.tc
-@@ -28,7 +28,7 @@ if [ ! -f events/ftrace/print/hist ]; then
-     exit_unsupported
- fi
- 
--echo "Test histogram trace_marker tigger"
-+echo "Test histogram trace_marker trigger"
- 
- echo 'hist:keys=common_pid' > events/ftrace/print/trigger
- for i in `seq 1 10` ; do echo "hello" > trace_marker; done
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
-index df246e505af7..a7fef298e476 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-trace-marker-snapshot.tc
-@@ -46,7 +46,7 @@ test_trace() {
-     done
- }
- 
--echo "Test snapshot trace_marker tigger"
-+echo "Test snapshot trace_marker trigger"
- 
- echo 'snapshot' > events/ftrace/print/trigger
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/595a56ac1b0d5f0a16a89589ef55ffd35c1967a2
+
+Thank you!
+
 -- 
-2.17.1
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
