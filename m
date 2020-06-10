@@ -2,509 +2,141 @@ Return-Path: <SRS0=R2lZ=7X=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 236FDC433E2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jun 2020 17:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B09C2C433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jun 2020 17:43:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED87E2070B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jun 2020 17:21:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 899EE204EC
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Jun 2020 17:43:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="akq3zEyG"
+	dkim=pass (1024-bit key) header.d=Sony.onmicrosoft.com header.i=@Sony.onmicrosoft.com header.b="rg5U2kqI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgFJRVL (ORCPT
+        id S1726531AbgFJRnd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Jun 2020 13:21:11 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:43038 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727955AbgFJRVL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jun 2020 13:21:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591809668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1LRhykQpOmb1H2bCeoxEXO6dMe5cNt02JGn/mkXab/Q=;
-        b=akq3zEyGbwINvJ3BKmFoa3YxAKynHeySMNbX37PRhg5iUJGXpbYOdNknILlh9pZrcrvDjP
-        +0XWOw/dYW5IxxYV/p/UI2DhpLRiMCZ3n+2zTDAuQSOmCAzW2HQoezGa/V6PPlzfeJT9Sp
-        EqiOxbLLYZTl27L6XJDSxtEmp1yz2Ig=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-15-Huc58XV9OZ2rj3aMzGslxg-1; Wed, 10 Jun 2020 13:21:04 -0400
-X-MC-Unique: Huc58XV9OZ2rj3aMzGslxg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E9461801504;
-        Wed, 10 Jun 2020 17:21:03 +0000 (UTC)
-Received: from jlaw-desktop.redhat.com (ovpn-117-142.rdu2.redhat.com [10.10.117.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B4711944D;
-        Wed, 10 Jun 2020 17:21:03 +0000 (UTC)
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/3] selftests/livepatch: Don't clear dmesg when running tests
-Date:   Wed, 10 Jun 2020 13:20:59 -0400
-Message-Id: <20200610172101.21910-2-joe.lawrence@redhat.com>
-In-Reply-To: <20200610172101.21910-1-joe.lawrence@redhat.com>
-References: <20200610172101.21910-1-joe.lawrence@redhat.com>
+        Wed, 10 Jun 2020 13:43:33 -0400
+Received: from mail-eopbgr760124.outbound.protection.outlook.com ([40.107.76.124]:6022
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726462AbgFJRnd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 10 Jun 2020 13:43:33 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e9GLaYxU81Hmo+jXnyZTgQjIzlf4HLZ6j7utuWoMA+PlCYajOo6a/UemZLBTXn9aMlAugsOYWyjzOCVe83Um8z/LQhTAm08qLzSjjRPoZV++uIdIF0Hj0hPCq6PXlcpMGVuxV/IC2ozktVmHn/LStctfcddl28rw0MCi6cuTX2G9SaYsdbDAnp0HV1pxwOOuj3VI4RhHaTvqE/+MjgJz2NypgB+HykU8v+2lExPBR7E8EOg39VmF0i6zOKQ+zDtiiYKiAMqB9K1Maypaxt7euYmXj4fJMKyGr2vx4Gti88DOqT+YCFg5pGXukgv6SEHJgP6yFzcba7XFIvS0EheC5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8XDaFYLNrjC+/O9+tidBH1zZi8YzYHptc58LfSNFNP8=;
+ b=nvDSrT64Ogyq5qAwz6mav40w0Nv9940IjOI66MjENJcVU+LNVyaJl7IuMHBuGWMeKNiYeVrP8rkSZys4+vQGex4EFROgP8g+xyXfQet+MT4Sc0naqq9fZ22AwfSvfUa9XeKbAU2D+fp67Edr7emPNTKFLs7KXSHQQp/Qn4FeV03o5OAewwMFZQh8PH3krRVTLMoEIjpn+6v0aOooUwbAY7mClT2HIGwA3bQqWdSD5kCUNQfGJdR6r4ycs82WxcJ5oQnL7uLvuF3ta737GF8UsKIQFm7w1G/vqLYb4ao0Ekj9xfD96feB7KWlWkbdeQrfK3ZX5QXxKXSkvDbZdYFxUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
+ s=selector2-Sony-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8XDaFYLNrjC+/O9+tidBH1zZi8YzYHptc58LfSNFNP8=;
+ b=rg5U2kqIE8mO8SmTV+5d11WJ74im2H7rRfKTJmgiZ4Yp1HQb+TYmQrIOFSAiKVfsf6OUznwJgi/e9ckwvtu4RHDVAxsF8WkTnXkxG3eNhazmxgiQsSgRbndUjc+7SrYxJ/iaWaoaN0twc9QIlikj/bz0lfzFT3hOKr+AAlX+BiI=
+Received: from CY4PR13MB1175.namprd13.prod.outlook.com (2603:10b6:903:40::23)
+ by CY4PR1301MB2104.namprd13.prod.outlook.com (2603:10b6:910:45::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.13; Wed, 10 Jun
+ 2020 17:43:27 +0000
+Received: from CY4PR13MB1175.namprd13.prod.outlook.com
+ ([fe80::e486:a4f:7430:536e]) by CY4PR13MB1175.namprd13.prod.outlook.com
+ ([fe80::e486:a4f:7430:536e%9]) with mapi id 15.20.3088.018; Wed, 10 Jun 2020
+ 17:43:27 +0000
+From:   "Bird, Tim" <Tim.Bird@sony.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH] kselftest: runner: fix TAP output for skipped tests
+Thread-Topic: [PATCH] kselftest: runner: fix TAP output for skipped tests
+Thread-Index: AQHWPz4jOoN+nSyJY0qUhBN3V+N4d6jSBzeAgAAVxfA=
+Date:   Wed, 10 Jun 2020 17:43:27 +0000
+Message-ID: <CY4PR13MB1175A17F29B281642DF05A6DFD830@CY4PR13MB1175.namprd13.prod.outlook.com>
+References: <20200610154447.15826-1-pbonzini@redhat.com>
+ <ac2c1eaa-acd7-7ac6-0666-6e6c0cbd546b@linuxfoundation.org>
+In-Reply-To: <ac2c1eaa-acd7-7ac6-0666-6e6c0cbd546b@linuxfoundation.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=sony.com;
+x-originating-ip: [160.33.195.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 91188255-4df4-44bb-6c19-08d80d65c859
+x-ms-traffictypediagnostic: CY4PR1301MB2104:
+x-microsoft-antispam-prvs: <CY4PR1301MB21048ABF95B9480C0BE1A791FD830@CY4PR1301MB2104.namprd13.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0430FA5CB7
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5JGs9nXuulsXSjjerSMa/AeeqQFF+BLhprbvM+cHyk4+lRx/6dxglK+JraqbPlYVlcDwFeVYYRdcx3X0i0non0alvxcWaNbCuTv1pUcfmHPMbeJyJ1RDuGbyA17ex0gsITRmwhbqL9GJtR7ezfDN6q5thNoS9cJ10m8bkvhRDxYyPBnNVGbeSJOst+VcJtFdWpXtHUVNeXXQtI9J0JZ4TD4TZPs/QzsaR6kJLkTCmrQofNM64BQw0YxF9/Us5Ia6ZDniteu4rDhGqnH4GqYBN6zAla9G9Yv96rw4lpifWE65sSUDHFhyBekEWq4a0cMqLDTQePyEq0QVbkQFZOTpVLMleHvqlM61ZKUk8SRN3ZwpESquoHHxZWdIPlJ2GqkzF4fuZhE6RE4Y/QkIptulEQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR13MB1175.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(136003)(376002)(366004)(396003)(39860400002)(478600001)(8936002)(71200400001)(86362001)(54906003)(2906002)(76116006)(66556008)(66476007)(66446008)(66946007)(33656002)(316002)(64756008)(55016002)(7696005)(4326008)(8676002)(9686003)(6506007)(53546011)(186003)(110136005)(26005)(5660300002)(83380400001)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: JAumHO2E277lc4HGA4YB9cQUDhqwk/PtGIMSYmEDoeSkpdCCoEfy/jvhs88sz7pm6qld1ZpFuAmXD7VO3bQN/NQMXLofUY3ZXdQcQKMFoJhvamfnaP5FIs5TX/6eBeXmlREZFFeHjsWiI3ay5KMBophzcg77rLL5/8G7SVNqDUL1hhzKyCh1YTTKQmHCR419p3sXL/Av78nd5QVT+NxKm0hbNm3H76/n6rqYvLfUI8oCndBv2nz+433IWxfy2a9H81PlfU7Q7qe8Mg6t2uWvb6UYMkNuPXrffL1RIMD/zDRFLzGEApMVAG65g/FDsK61S6zc7e7yHQlUELkt0mZxsizzID39h/HeQGkvqTsp/RstCtZs/GBhMxHoBwhKQKZ0+lunAJN2K78eauoPVz2KMjam/CpEJJC8tQpo9LXTNTO+GOUZkVA2VihLCbOc2f0xdYSXHddzr0ZBhyclLd8lRWC4ynuHDTZyrYKgx4UF+BM=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91188255-4df4-44bb-6c19-08d80d65c859
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2020 17:43:27.6157
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WbXMJNH9i6tWLDHD3jYbUhyCVJLeKup6R3gzjcsXAmw5BqynFijImGu6TZ0MA5zmJ416YQiXNeXa5lf25ca8Qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1301MB2104
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Inspired by commit f131d9edc29d ("selftests/lkdtm: Don't clear dmesg
-when running tests"), keep a reference dmesg copy when beginning each
-test.  This way check_result() can compare against the initial copy
-rather than relying upon an empty log.
-
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- tools/testing/selftests/livepatch/README      | 16 +++---
- .../testing/selftests/livepatch/functions.sh  | 16 +++++-
- .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
- .../selftests/livepatch/test-ftrace.sh        |  5 +-
- .../selftests/livepatch/test-livepatch.sh     | 15 +----
- .../selftests/livepatch/test-shadow-vars.sh   |  5 +-
- .../testing/selftests/livepatch/test-state.sh | 20 ++-----
- 7 files changed, 43 insertions(+), 89 deletions(-)
-
-diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
-index 621d325425c2..0942dd5826f8 100644
---- a/tools/testing/selftests/livepatch/README
-+++ b/tools/testing/selftests/livepatch/README
-@@ -6,8 +6,8 @@ This is a small set of sanity tests for the kernel livepatching.
- 
- The test suite loads and unloads several test kernel modules to verify
- livepatch behavior.  Debug information is logged to the kernel's message
--buffer and parsed for expected messages.  (Note: the tests will clear
--the message buffer between individual tests.)
-+buffer and parsed for expected messages.  (Note: the tests will compare
-+the message buffer for only the duration of each individual test.)
- 
- 
- Config
-@@ -35,9 +35,9 @@ Adding tests
- ------------
- 
- See the common functions.sh file for the existing collection of utility
--functions, most importantly setup_config() and check_result().  The
--latter function greps the kernel's ring buffer for "livepatch:" and
--"test_klp" strings, so tests be sure to include one of those strings for
--result comparison.  Other utility functions include general module
--loading and livepatch loading helpers (waiting for patch transitions,
--sysfs entries, etc.)
-+functions, most importantly setup_config(), start_test() and
-+check_result().  The latter function greps the kernel's ring buffer for
-+"livepatch:" and "test_klp" strings, so tests be sure to include one of
-+those strings for result comparison.  Other utility functions include
-+general module loading and livepatch loading helpers (waiting for patch
-+transitions, sysfs entries, etc.)
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 2aab9791791d..e84375a33852 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -243,13 +243,25 @@ function set_pre_patch_ret {
- 		die "failed to set pre_patch_ret parameter for $mod module"
- }
- 
-+function start_test {
-+	local test="$1"
-+
-+	# Save existing dmesg so we can detect new content below
-+	SAVED_DMESG=$(mktemp --tmpdir -t klp-dmesg-XXXXXX)
-+	dmesg > "$SAVED_DMESG"
-+
-+	echo -n "TEST: $test ... "
-+}
-+
- # check_result() - verify dmesg output
- #	TODO - better filter, out of order msgs, etc?
- function check_result {
- 	local expect="$*"
- 	local result
- 
--	result=$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
-+	result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
-+		 grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | \
-+		 sed 's/^\[[ 0-9.]*\] //')
- 
- 	if [[ "$expect" == "$result" ]] ; then
- 		echo "ok"
-@@ -257,4 +269,6 @@ function check_result {
- 		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
- 		die "livepatch kselftest(s) failed"
- 	fi
-+
-+	rm -f "$SAVED_DMESG"
- }
-diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-index 32b57ba07f4f..c3d949da5bb7 100755
---- a/tools/testing/selftests/livepatch/test-callbacks.sh
-+++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-@@ -12,7 +12,7 @@ MOD_TARGET_BUSY=test_klp_callbacks_busy
- setup_config
- 
- 
--# TEST: target module before livepatch
-+start_test "target module before livepatch"
- #
- # Test a combination of loading a kernel module and a livepatch that
- # patches a function in the first module.  Load the target module
-@@ -28,9 +28,6 @@ setup_config
- #   unpatching transition starts.  klp_objects are reverted, post-patch
- #   callbacks execute and the transition completes.
- 
--echo -n "TEST: target module before livepatch ... "
--dmesg -C
--
- load_mod $MOD_TARGET
- load_lp $MOD_LIVEPATCH
- disable_lp $MOD_LIVEPATCH
-@@ -63,7 +60,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- $MOD_TARGET: ${MOD_TARGET}_exit"
- 
- 
--# TEST: module_coming notifier
-+start_test "module_coming notifier"
- #
- # This test is similar to the previous test, but (un)load the livepatch
- # module before the target kernel module.  This tests the livepatch
-@@ -78,9 +75,6 @@ $MOD_TARGET: ${MOD_TARGET}_exit"
- # - On livepatch disable, all currently loaded klp_objects' (vmlinux and
- #   $MOD_TARGET) pre/post-unpatch callbacks are executed.
- 
--echo -n "TEST: module_coming notifier ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- load_mod $MOD_TARGET
- disable_lp $MOD_LIVEPATCH
-@@ -114,7 +108,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- $MOD_TARGET: ${MOD_TARGET}_exit"
- 
- 
--# TEST: module_going notifier
-+start_test "module_going notifier"
- #
- # Test loading the livepatch after a targeted kernel module, then unload
- # the kernel module before disabling the livepatch.  This tests the
-@@ -129,9 +123,6 @@ $MOD_TARGET: ${MOD_TARGET}_exit"
- # - When the livepatch is disabled, pre and post-unpatch callbacks are
- #   run for the remaining klp_object, vmlinux.
- 
--echo -n "TEST: module_going notifier ... "
--dmesg -C
--
- load_mod $MOD_TARGET
- load_lp $MOD_LIVEPATCH
- unload_mod $MOD_TARGET
-@@ -165,7 +156,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: module_coming and module_going notifiers
-+start_test "module_coming and module_going notifiers"
- #
- # This test is similar to the previous test, however the livepatch is
- # loaded first.  This tests the livepatch core's module_coming and
-@@ -180,9 +171,6 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- #   from the $MOD_TARGET klp_object.  As such, only pre and
- #   post-unpatch callbacks are executed when this occurs.
- 
--echo -n "TEST: module_coming and module_going notifiers ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- load_mod $MOD_TARGET
- unload_mod $MOD_TARGET
-@@ -217,7 +205,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: target module not present
-+start_test "target module not present"
- #
- # A simple test of loading a livepatch without one of its patch target
- # klp_objects ever loaded ($MOD_TARGET).
-@@ -227,9 +215,6 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- # - As expected, only pre/post-(un)patch handlers are executed for
- #   vmlinux.
- 
--echo -n "TEST: target module not present ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
-@@ -252,7 +237,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: pre-patch callback -ENODEV
-+start_test "pre-patch callback -ENODEV"
- #
- # Test a scenario where a vmlinux pre-patch callback returns a non-zero
- # status (ie, failure).
-@@ -265,9 +250,6 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- #   The result is that the insmod command refuses to load the livepatch
- #   module.
- 
--echo -n "TEST: pre-patch callback -ENODEV ... "
--dmesg -C
--
- load_mod $MOD_TARGET
- load_failing_mod $MOD_LIVEPATCH pre_patch_ret=-19
- unload_mod $MOD_TARGET
-@@ -288,7 +270,7 @@ modprobe: ERROR: could not insert '$MOD_LIVEPATCH': No such device
- $MOD_TARGET: ${MOD_TARGET}_exit"
- 
- 
--# TEST: module_coming + pre-patch callback -ENODEV
-+start_test "module_coming + pre-patch callback -ENODEV"
- #
- # Similar to the previous test, setup a livepatch such that its vmlinux
- # pre-patch callback returns success.  However, when a targeted kernel
-@@ -307,9 +289,6 @@ $MOD_TARGET: ${MOD_TARGET}_exit"
- #
- # - Pre/post-unpatch callbacks are run for the vmlinux klp_object.
- 
--echo -n "TEST: module_coming + pre-patch callback -ENODEV ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- set_pre_patch_ret $MOD_LIVEPATCH -19
- load_failing_mod $MOD_TARGET
-@@ -341,7 +320,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: multiple target modules
-+start_test "multiple target modules"
- #
- # Test loading multiple targeted kernel modules.  This test-case is
- # mainly for comparing with the next test-case.
-@@ -353,9 +332,6 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- #   module.  Post-patch callbacks are executed and the transition
- #   completes quickly.
- 
--echo -n "TEST: multiple target modules ... "
--dmesg -C
--
- load_mod $MOD_TARGET_BUSY block_transition=N
- load_lp $MOD_LIVEPATCH
- load_mod $MOD_TARGET
-@@ -402,7 +378,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- 
- 
--# TEST: busy target module
-+start_test "busy target module"
- #
- # A similar test as the previous one, but force the "busy" kernel module
- # to block the livepatch transition.
-@@ -431,9 +407,6 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- #   klp_object's post-patch callbacks executed, the remaining
- #   klp_object's pre-unpatch callbacks are skipped.
- 
--echo -n "TEST: busy target module ... "
--dmesg -C
--
- load_mod $MOD_TARGET_BUSY block_transition=Y
- load_lp_nowait $MOD_LIVEPATCH
- 
-@@ -478,7 +451,7 @@ $MOD_TARGET_BUSY: busymod_work_func exit
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- 
- 
--# TEST: multiple livepatches
-+start_test "multiple livepatches"
- #
- # Test loading multiple livepatches.  This test-case is mainly for comparing
- # with the next test-case.
-@@ -487,9 +460,6 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- #   execute as each patch progresses through its (un)patching
- #   transition.
- 
--echo -n "TEST: multiple livepatches ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- load_lp $MOD_LIVEPATCH2
- disable_lp $MOD_LIVEPATCH2
-@@ -531,7 +501,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: atomic replace
-+start_test "atomic replace"
- #
- # Load multiple livepatches, but the second as an 'atomic-replace'
- # patch.  When the latter loads, the original livepatch should be
-@@ -547,9 +517,6 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- # - Once the atomic replace module is loaded, only its pre and post
- #   unpatch callbacks are executed.
- 
--echo -n "TEST: atomic replace ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- load_lp $MOD_LIVEPATCH2 replace=1
- disable_lp $MOD_LIVEPATCH2
-diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-index e2a76887f40a..c839f906ffc2 100755
---- a/tools/testing/selftests/livepatch/test-ftrace.sh
-+++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-@@ -9,14 +9,11 @@ MOD_LIVEPATCH=test_klp_livepatch
- setup_config
- 
- 
--# TEST: livepatch interaction with ftrace_enabled sysctl
-+start_test "livepatch interaction with ftrace_enabled sysctl"
- # - turn ftrace_enabled OFF and verify livepatches can't load
- # - turn ftrace_enabled ON and verify livepatch can load
- # - verify that ftrace_enabled can't be turned OFF while a livepatch is loaded
- 
--echo -n "TEST: livepatch interaction with ftrace_enabled sysctl ... "
--dmesg -C
--
- set_ftrace_enabled 0
- load_failing_mod $MOD_LIVEPATCH
- 
-diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-index 493e3df415a1..3b84ee34fe71 100755
---- a/tools/testing/selftests/livepatch/test-livepatch.sh
-+++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-@@ -10,14 +10,11 @@ MOD_REPLACE=test_klp_atomic_replace
- setup_config
- 
- 
--# TEST: basic function patching
-+start_test "basic function patching"
- # - load a livepatch that modifies the output from /proc/cmdline and
- #   verify correct behavior
- # - unload the livepatch and make sure the patch was removed
- 
--echo -n "TEST: basic function patching ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- 
- if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-@@ -47,16 +44,13 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: multiple livepatches
-+start_test "multiple livepatches"
- # - load a livepatch that modifies the output from /proc/cmdline and
- #   verify correct behavior
- # - load another livepatch and verify that both livepatches are active
- # - unload the second livepatch and verify that the first is still active
- # - unload the first livepatch and verify none are active
- 
--echo -n "TEST: multiple livepatches ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- 
- grep 'live patched' /proc/cmdline > /dev/kmsg
-@@ -109,7 +103,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: atomic replace livepatch
-+start_test "atomic replace livepatch"
- # - load a livepatch that modifies the output from /proc/cmdline and
- #   verify correct behavior
- # - load an atomic replace livepatch and verify that only the second is active
-@@ -117,9 +111,6 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- #   is still active
- # - remove the atomic replace livepatch and verify that none are active
- 
--echo -n "TEST: atomic replace livepatch ... "
--dmesg -C
--
- load_lp $MOD_LIVEPATCH
- 
- grep 'live patched' /proc/cmdline > /dev/kmsg
-diff --git a/tools/testing/selftests/livepatch/test-shadow-vars.sh b/tools/testing/selftests/livepatch/test-shadow-vars.sh
-index 7c016548c2ea..71990d0b5d19 100755
---- a/tools/testing/selftests/livepatch/test-shadow-vars.sh
-+++ b/tools/testing/selftests/livepatch/test-shadow-vars.sh
-@@ -9,12 +9,9 @@ MOD_TEST=test_klp_shadow_vars
- setup_config
- 
- 
--# TEST: basic shadow variable API
-+start_test "basic shadow variable API"
- # - load a module that exercises the shadow variable API
- 
--echo -n "TEST: basic shadow variable API ... "
--dmesg -C
--
- load_mod $MOD_TEST
- unload_mod $MOD_TEST
- 
-diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
-index a08212708115..bf8db1613961 100755
---- a/tools/testing/selftests/livepatch/test-state.sh
-+++ b/tools/testing/selftests/livepatch/test-state.sh
-@@ -10,10 +10,7 @@ MOD_LIVEPATCH3=test_klp_state3
- 
- setup_config
- 
--# TEST: Loading and removing a module that modifies the system state
--
--echo -n "TEST: system state modification ... "
--dmesg -C
-+start_test "Loading and removing a module that modifies the system state"
- 
- load_lp $MOD_LIVEPATCH
- disable_lp $MOD_LIVEPATCH
-@@ -41,10 +38,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# TEST: Take over system state change by a cumulative patch
--
--echo -n "TEST: taking over system state modification ... "
--dmesg -C
-+start_test "Take over system state change by a cumulative patch"
- 
- load_lp $MOD_LIVEPATCH
- load_lp $MOD_LIVEPATCH2
-@@ -85,10 +79,7 @@ livepatch: '$MOD_LIVEPATCH2': unpatching complete
- % rmmod $MOD_LIVEPATCH2"
- 
- 
--# TEST: Take over system state change by a cumulative patch
--
--echo -n "TEST: compatible cumulative livepatches ... "
--dmesg -C
-+start_test "Take over system state change by a cumulative patch"
- 
- load_lp $MOD_LIVEPATCH2
- load_lp $MOD_LIVEPATCH3
-@@ -142,10 +133,7 @@ livepatch: '$MOD_LIVEPATCH2': unpatching complete
- % rmmod $MOD_LIVEPATCH3"
- 
- 
--# TEST: Failure caused by incompatible cumulative livepatches
--
--echo -n "TEST: incompatible cumulative livepatches ... "
--dmesg -C
-+start_test "Failure caused by incompatible cumulative livepatches"
- 
- load_lp $MOD_LIVEPATCH2
- load_failing_mod $MOD_LIVEPATCH
--- 
-2.21.3
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogbGludXgta3NlbGZ0ZXN0
+LW93bmVyQHZnZXIua2VybmVsLm9yZyA8bGludXgta3NlbGZ0ZXN0LW93bmVyQHZnZXIua2VybmVs
+Lm9yZz4gT24gQmVoYWxmIE9mIFNodWFoIEtoYW4NCj4gDQo+IE9uIDYvMTAvMjAgOTo0NCBBTSwg
+UGFvbG8gQm9uemluaSB3cm90ZToNCj4gPiBBY2NvcmRpbmcgdG8gdGhlIFRBUCBzcGVjaWZpY2F0
+aW9uLCBhIHNraXBwZWQgdGVzdCBtdXN0IGJlIG1hcmtlZCBhcyAib2siDQo+ID4gYW5kIGFubm90
+YXRlZCB3aXRoIHRoZSBTS0lQIGRpcmVjdGl2ZSwgZm9yIGV4YW1wbGUNCj4gPg0KPiA+ICAgICBv
+ayAyMyAjIHNraXAgSW5zdWZmaWNpZW50IGZsb2dpc3RvbiBwcmVzc3VyZS4NCj4gPiAgICAgKGh0
+dHBzOi8vdGVzdGFueXRoaW5nLm9yZy90YXAtc3BlY2lmaWNhdGlvbi5odG1sKQ0KPiA+DQo+ID4g
+Rml4IHRoZSBydW5uZXIgc2NyaXB0IHRvIG1hdGNoIHRoaXMuDQo+ID4NCj4gPiBTaWduZWQtb2Zm
+LWJ5OiBQYW9sbyBCb256aW5pIDxwYm9uemluaUByZWRoYXQuY29tPg0KPiA+IC0tLQ0KPiA+ICAg
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaCB8IDIgKy0NCj4gPiAg
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiA+DQo+ID4g
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdC9ydW5uZXIuc2gg
+Yi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoDQo+ID4gaW5kZXgg
+Njc2YjNhOGIxMTRkLi5mNDgxNWNiY2Q2MGYgMTAwNjQ0DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaA0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2tzZWxmdGVzdC9ydW5uZXIuc2gNCj4gPiBAQCAtNzcsNyArNzcsNyBAQCBydW5f
+b25lKCkNCj4gPiAgIAkJZWNobyAib2sgJHRlc3RfbnVtICRURVNUX0hEUl9NU0ciKSB8fA0KPiA+
+ICAgCQkocmM9JD87CVwNCj4gPiAgIAkJaWYgWyAkcmMgLWVxICRza2lwX3JjIF07IHRoZW4JXA0K
+PiA+IC0JCQllY2hvICJub3Qgb2sgJHRlc3RfbnVtICRURVNUX0hEUl9NU0cgIyBTS0lQIg0KPiA+
+ICsJCQllY2hvICJvayAkdGVzdF9udW0gJFRFU1RfSERSX01TRyAjIFNLSVAiDQoNClRoaXMgaXMg
+YSBwcmV0dHkgYmlnIGNoYW5nZSwgYW5kIG1pZ2h0IGJyZWFrIHVwc3RyZWFtIENJcyB0aGF0IGhh
+dmUgY29tZSB0bw0KcmVseSBvbiBrc2VsZnRlc3QncyBleGlzdGluZyBiZWhhdmlvci4gIEkga25v
+dyBpdCdzIGdvaW5nIHRvIGJyZWFrIEZ1ZWdvJ3MgcGFyc2luZw0Kb2YgcmVzdWx0cy4NCg0Ka3Nl
+bGZ0ZXN0IGhhcyBhIGZldyBjb252ZW50aW9ucyB0aGF0IGFyZSBkaWZmZXJlbnQgZnJvbSB0aGUg
+VEFQIHNwZWMsIA0KYW5kIGEgZmV3IGl0ZW1zIGl0IGRvZXMgdGhhdCBhcmUgZXh0ZW5zaW9ucyB0
+byB0aGUgVEFQIHNwZWMuDQpJTUhPLCB0aGUgVEFQIHNwZWMgZ290IHRoaXMgb25lIHdyb25nLCBi
+dXQgSSBjb3VsZCBiZSBjb252aW5jZWQNCm90aGVyd2lzZS4gIEJ1dCBJIHRoaW5rIHdlIHNob3Vs
+ZCBkaXNjdXNzIHRoaXMgYW1vbmcgQ0kgdXNlcnMgb2YNCmtzZWxmdGVzdCBiZWZvcmUgbWFraW5n
+IHRoZSBjaGFuZ2UuDQoNCkkgc3RhcnRlZCB3b3JrIHF1aXRlIGEgd2hpbGUgYWdvIG9uIGFuIGVm
+Zm9ydCB0byBkb2N1bWVudCB0aGUNCmNvbnZlbnRpb25zIHVzZWQgYnkga3NlbGZ0ZXN0IChwYXJ0
+aWN1bGFybHkgd2hlcmUgaXQgZGV2aWF0ZXMNCmZyb20gdGhlIFRBUCBzcGVjKSwgIGJ1dCBuZXZl
+ciBzdWJtaXR0ZWQgaXQuDQoNCkknbSBnb2luZyB0byBzdWJtaXQgd2hhdCBJJ3ZlIGdvdCBhcyBh
+biBSRkMgbm93LCBmb3IgZGlzY3Vzc2lvbiwNCmV2ZW4gdGhvdWdoIGl0J3Mgbm90IGZpbmlzaGVk
+LiAgSSdsbCBkbyB0aGF0IGluIGEgc2VwYXJhdGUgdGhyZWFkLg0KDQoNCj4gPiAgIAkJZWxpZiBb
+ICRyYyAtZXEgJHRpbWVvdXRfcmMgXTsgdGhlbiBcDQo+ID4gICAJCQllY2hvICIjIg0KPiA+ICAg
+CQkJZWNobyAibm90IG9rICR0ZXN0X251bSAkVEVTVF9IRFJfTVNHICMgVElNRU9VVCINCj4gPg0K
+PiANCj4gVGhhbmtzLiBJIHdpbGwgcHVsbCB0aGlzIGluIGZvciBMaW51eCA1LjgtcmMyDQpTaHVh
+aCAtIGNhbiB5b3UgaG9sZCBvZmYgb24gdGhpcyB1bnRpbCB3ZSBkaXNjdXNzIGl0Pw0KDQpUaGFu
+a3MsDQogLS0gVGltDQoNCg==
