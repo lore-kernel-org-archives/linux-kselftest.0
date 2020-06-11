@@ -7,67 +7,66 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61292C433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 22:40:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DEB9C433E2
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 22:40:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39EFE2074B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 22:40:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A3F7206D7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 22:40:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PcTbzcIf"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YdqUcRqs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgFKWkg (ORCPT
+        id S1726396AbgFKWkh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jun 2020 18:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        Thu, 11 Jun 2020 18:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbgFKWkf (ORCPT
+        with ESMTP id S1726375AbgFKWkf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 11 Jun 2020 18:40:35 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04058C08C5C3
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853CCC08C5C1
         for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:34 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id m1so3176489pgk.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:33 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t16so2891619plo.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8dWTlQmCMbwiCMRbCjZeVNLJgh+V7boVZ7LhOeAZmyo=;
-        b=PcTbzcIfN/saE1AKyLP3QLfA2xn3sj1rQc12e9h4y1nZg/WpR5cJ+Y9txDFlpgmijY
-         iv7lV8cF7cbYkv1xG90AL2+IXFI7kSxFS2byEqpOo4nhl3KwK0vDiOUpNAQrfjAlAQHL
-         Bh7Lva7/LeYU5LS9+4ahqy3TpQhYjTKtzBo2I=
+        bh=xrEmoJ2HANJq2pVV7su7gEAYovMisFRPydaVaSLcslY=;
+        b=YdqUcRqshrV3hTSfk5FyqH8OeZjcF51jaAGKETs6CFkhNLsMH+YhSNAGfP50LqZPTV
+         f7JLUnqjwCbkFhWwLyu/2p9ulKE2BffT0oPRL8PaMcP0st4o83B1NkkMlR4jMpBfcpUR
+         5NsNgeNDuDJ2Gag9F84HARRU+HaQ5YHLnmUgU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8dWTlQmCMbwiCMRbCjZeVNLJgh+V7boVZ7LhOeAZmyo=;
-        b=FJBBtfHCYsgsIQJHF6xHAdx7ARrQyx4l0MJ8O7LNVTA0KFDH9kCvzy6mTFMNnUy1k8
-         269gP/iKUruGUghTy5vEKA6AWUoFNuPWJs2WxcYr0GxIu8GkI4omCWrQvgtclN0cEk+u
-         Z+QxS9qIKWgS+vKJdpnhbiZJmbBF2jXEANCPYLzbPR8z3Ycpy5UL31NtIEZXq1dnXEYt
-         U3gUFZUVyALrydsosWIXacqsTnJpYlCSKgYlmzf7soFm0acAC37zdRKaJgOVn7xq/BYs
-         0wYREFAJupeUX+hU+N30lQmG0n2BfX/gXzmIXc4k0spI8jAjkJZowymr90G2+XA77siK
-         kw6A==
-X-Gm-Message-State: AOAM532fxUk4XZhLhEaIxtvO69aSDP5LLh0STAvRaFda0s8EblAdmZxD
-        tKTZ6NEy6wpRyQyaCgWHs7evPg==
-X-Google-Smtp-Source: ABdhPJwYQE6Yn7l9IEG5W8ln2RLgM5dItUHSf0HKCuHaqmAy5cEJBOXotmVD2AqsDCadSqoYlr4Okw==
-X-Received: by 2002:a65:6247:: with SMTP id q7mr8112057pgv.353.1591915233518;
-        Thu, 11 Jun 2020 15:40:33 -0700 (PDT)
+        bh=xrEmoJ2HANJq2pVV7su7gEAYovMisFRPydaVaSLcslY=;
+        b=VYdioS6YigwuYStqwgwoCJoCWAfTRotkZAwEIMsOcun1ODC+wDi4y0Bjbr4Ygoll+J
+         rpJE0byxxKBEDgA2rO2dQfrTi6RA3gO/A8dfXG09OOlp6ubDE2VQs1PGnYPy/h+q/Tw7
+         orZ8/KXDr06ED8uNB2eUSFcbwn+OV7WTWUFHXxTGKcLMR5kjwj1N23l6GNYbggallHIN
+         rqLxypHpr9m0hKhhnywIHRS74P8NvCgRB+rdvgHFCSagWQuIpLZOxu0ZXKkzpa5koiyK
+         XeiSMo0+TsX5J0GAck7CO8BRzVvzhPlxl4mcyHO6YAnKSmDoTVqAyO4QMnVJleZOzkMe
+         TjQQ==
+X-Gm-Message-State: AOAM530H1UZsJfbP+lXL14fwU9+Ue5r6MQIIjDLuR69TMoSJ5/KGLMzq
+        YErxPKGISdQBzQHz45lgFY98Qg==
+X-Google-Smtp-Source: ABdhPJzcsbdkSdiBs6DWddZ1aILv0BfJ42BCN5k32FTTR22ozpTSNlCMceYX08+OcGjE9eUQ5XvnOg==
+X-Received: by 2002:a17:90b:1013:: with SMTP id gm19mr10193710pjb.231.1591915234095;
+        Thu, 11 Jun 2020 15:40:34 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v9sm4125147pfe.198.2020.06.11.15.40.31
+        by smtp.gmail.com with ESMTPSA id b5sm3515676pjz.34.2020.06.11.15.40.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 11 Jun 2020 15:40:31 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
         Christian Brauner <christian@brauner.io>,
-        linux-kselftest@vger.kernel.org,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] selftests: Remove unneeded selftest API headers
-Date:   Thu, 11 Jun 2020 15:40:23 -0700
-Message-Id: <20200611224028.3275174-3-keescook@chromium.org>
+Subject: [PATCH 4/7] selftests: Add header documentation and helpers
+Date:   Thu, 11 Jun 2020 15:40:25 -0700
+Message-Id: <20200611224028.3275174-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200611224028.3275174-1-keescook@chromium.org>
 References: <20200611224028.3275174-1-keescook@chromium.org>
@@ -78,67 +77,124 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove unused includes of the kselftest.h header.
+Add "how to use this API" documentation to kselftest.h, and include some
+addition helpers and notes to make things easier to use.
 
-Cc: Christian Brauner <christian@brauner.io>
+Additionally removes the incorrect "Bail out!" line from the standard exit
+path. The TAP13 specification says that "Bail out!"  should be used when
+giving up before all tests have been run. For a "normal" execution run,
+the selftests should not report "Bail out!".
+
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/pid_namespace/regression_enomem.c | 1 -
- tools/testing/selftests/pidfd/pidfd_getfd_test.c          | 1 -
- tools/testing/selftests/pidfd/pidfd_setns_test.c          | 1 -
- tools/testing/selftests/uevent/uevent_filtering.c         | 1 -
- 4 files changed, 4 deletions(-)
+ tools/testing/selftests/kselftest.h | 60 ++++++++++++++++++++++++++++-
+ 1 file changed, 58 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/pid_namespace/regression_enomem.c b/tools/testing/selftests/pid_namespace/regression_enomem.c
-index 73d532556d17..7d84097ad45c 100644
---- a/tools/testing/selftests/pid_namespace/regression_enomem.c
-+++ b/tools/testing/selftests/pid_namespace/regression_enomem.c
-@@ -11,7 +11,6 @@
- #include <syscall.h>
- #include <sys/wait.h>
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 0ac49d91a260..5716cbb9eecc 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -6,6 +6,36 @@
+  * Copyright (c) 2014 Shuah Khan <shuahkh@osg.samsung.com>
+  * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+  *
++ * Using this API consists of first counting how many tests your code
++ * has to run, and then starting up the reporting:
++ *
++ *     ksft_print_header();
++ *     ksft_set_plan(total_number_of_tests);
++ *
++ * For each test, report any progress, debugging, etc with:
++ *
++ *     ksft_print_msg(fmt, ...);
++ *
++ * and finally report the pass/fail/skip state of the test with one of:
++ *
++ *     ksft_test_result(condition, fmt, ...);
++ *     ksft_test_result_pass(fmt, ...);
++ *     ksft_test_result_fail(fmt, ...);
++ *     ksft_test_result_skip(fmt, ...);
++ *     ksft_test_result_error(fmt, ...);
++ *
++ * When all tests are finished, clean up and exit the program with one of:
++ *
++ *    ksft_exit(condition);
++ *    ksft_exit_pass();
++ *    ksft_exit_fail();
++ *
++ * If the program wants to report details on why the entire program has
++ * failed, it can instead exit with a message (this is usually done when
++ * the program is aborting before finishing all tests):
++ *
++ *    ksft_exit_fail_msg(fmt, ...);
++ *
+  */
+ #ifndef __KSELFTEST_H
+ #define __KSELFTEST_H
+@@ -74,7 +104,7 @@ static inline void ksft_print_cnts(void)
+ 	if (ksft_plan != ksft_test_num())
+ 		printf("# Planned tests != run tests (%u != %u)\n",
+ 			ksft_plan, ksft_test_num());
+-	printf("# Pass %d Fail %d Xfail %d Xpass %d Skip %d Error %d\n",
++	printf("# Totals: pass:%d fail:%d xfail:%d xpass:%d skip:%d error:%d\n",
+ 		ksft_cnt.ksft_pass, ksft_cnt.ksft_fail,
+ 		ksft_cnt.ksft_xfail, ksft_cnt.ksft_xpass,
+ 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
+@@ -120,6 +150,20 @@ static inline void ksft_test_result_fail(const char *msg, ...)
+ 	va_end(args);
+ }
  
--#include "../kselftest.h"
- #include "../kselftest_harness.h"
- #include "../pidfd/pidfd.h"
++/**
++ * ksft_test_result() - Report test success based on truth of condition
++ *
++ * @condition: if true, report test success, otherwise failure.
++ */
++#define ksft_test_result(condition, fmt, ...) do {	\
++	if (!!(condition))				\
++		ksft_test_result_pass(fmt, ##__VA_ARGS__);\
++	else						\
++		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
++	} while (0)
++
++/* TODO: add ksft_test_result_xfail() */
++
+ static inline void ksft_test_result_skip(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+@@ -134,6 +178,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
+ 	va_end(args);
+ }
  
-diff --git a/tools/testing/selftests/pidfd/pidfd_getfd_test.c b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-index 401a7c1d0312..eecbf18510fd 100644
---- a/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-@@ -18,7 +18,6 @@
- #include <linux/kcmp.h>
++/* TODO: how does "error" differ from "fail" or "skip"? */
+ static inline void ksft_test_result_error(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+@@ -156,11 +201,22 @@ static inline int ksft_exit_pass(void)
  
- #include "pidfd.h"
--#include "../kselftest.h"
- #include "../kselftest_harness.h"
+ static inline int ksft_exit_fail(void)
+ {
+-	printf("Bail out!\n");
+ 	ksft_print_cnts();
+ 	exit(KSFT_FAIL);
+ }
  
- /*
-diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-index 133ec5b6cda8..f66861cf9c4d 100644
---- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-@@ -20,7 +20,6 @@
- 
- #include "pidfd.h"
- #include "../clone3/clone3_selftests.h"
--#include "../kselftest.h"
- #include "../kselftest_harness.h"
- 
- enum {
-diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
-index f83391aa42cf..5cebfb356345 100644
---- a/tools/testing/selftests/uevent/uevent_filtering.c
-+++ b/tools/testing/selftests/uevent/uevent_filtering.c
-@@ -19,7 +19,6 @@
- #include <sys/wait.h>
- #include <unistd.h>
- 
--#include "../kselftest.h"
- #include "../kselftest_harness.h"
- 
- #define __DEV_FULL "/sys/devices/virtual/mem/full/uevent"
++/**
++ * ksft_exit() - Exit selftest based on truth of condition
++ *
++ * @condition: if true, exit self test with success, otherwise fail.
++ */
++#define ksft_exit(condition) do {	\
++	if (!!(condition))		\
++		ksft_exit_pass();	\
++	else				\
++		ksft_exit_fail();	\
++	} while (0)
++
+ static inline int ksft_exit_fail_msg(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
 -- 
 2.25.1
 
