@@ -2,94 +2,177 @@ Return-Path: <SRS0=+KT+=7Y=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA87C433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 14:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2453C433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 19:38:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF2802075F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 14:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591886183;
-	bh=3odZMer00sE/n4jCKTZHS4GFSMcNc1Rw3n8kkCHJfEQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=nsYWm+73dfYsC9rl13rz00fwtDdGO/dEWS5hTcrvMiw4IjQvOxJnHeqaK+eRa8er/
-	 IghAtb/faGHJhcaxYNlm+W7Wytgm9vff09N5SY7bSIRmt+2ay95dEdFHwsHiLtNm+h
-	 r1gzesYIhFbPzwX9O8oBDaEa4kSu4e5dk9QlIOVo=
+	by mail.kernel.org (Postfix) with ESMTP id 9EC0A20792
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 19:38:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SxvIDIbf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbgFKOgW (ORCPT
+        id S1725799AbgFKTim (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jun 2020 10:36:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728243AbgFKOgW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jun 2020 10:36:22 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5E77206C3;
-        Thu, 11 Jun 2020 14:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591886181;
-        bh=3odZMer00sE/n4jCKTZHS4GFSMcNc1Rw3n8kkCHJfEQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aFgE3zp3Wr0SKQ/LfsNkmxoBBhaGtaXYxpzQcgggDRA+d8qLmt8LEEQdKdGgkNP8d
-         i37NA0C3UdreAWUYguOQ4Rgn2WHWlotx8N9Wy8qC2JAlS8fr8BECuinP2D6/yXboeI
-         HYhsk+KMIIsh+fheB99/2qCIah17m1lZ8HusoMLQ=
-Date:   Thu, 11 Jun 2020 23:36:17 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>
-Subject: Re: [PATCH v3 4/7] selftests/ftrace: Convert required interface
- checks into requires list
-Message-Id: <20200611233617.2dc66dec28e6aef848352700@kernel.org>
-In-Reply-To: <f8cc0d67-3f35-134a-a6c4-ad4a98a215a3@linuxfoundation.org>
-References: <159115200085.70027.6141550347953439240.stgit@devnote2>
-        <159115203782.70027.2241223276591824366.stgit@devnote2>
-        <1cf646af-ef25-a7df-9df3-1e6aa8e6a9c8@linuxfoundation.org>
-        <20200610145535.747d2765d60e6e3923441768@kernel.org>
-        <5a658ffa-348a-436d-fb74-e01f56541d6b@linuxfoundation.org>
-        <20200610093206.5b9fb1b7@oasis.local.home>
-        <f8cc0d67-3f35-134a-a6c4-ad4a98a215a3@linuxfoundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Thu, 11 Jun 2020 15:38:42 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:58377 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725782AbgFKTil (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 11 Jun 2020 15:38:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591904319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
+        bh=+T/pLFOFWhPqP/4Y2+KijPsKT8TaUEKgCEsaihLS+Sg=;
+        b=SxvIDIbfBaq0FkKa594pM9rr7H0SJKCt9AhqemUoKb30wG68wQDO2zQQVF/z/sDsJZ2v7D
+        EBIXi6lJWGknxXDoCcP6mMHj8SduaNyDrPgy+KKQ0v0NHCBwz3njp/fNDoBR6dtm0LKaGj
+        8ef5L0FGK7MCcErB33KvUzcx0pN0VYI=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-422-y_kux-AxNSeR2iCa5Z6D9A-1; Thu, 11 Jun 2020 15:38:38 -0400
+X-MC-Unique: y_kux-AxNSeR2iCa5Z6D9A-1
+Received: by mail-qv1-f72.google.com with SMTP id q5so5137177qvp.23
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 12:38:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=+T/pLFOFWhPqP/4Y2+KijPsKT8TaUEKgCEsaihLS+Sg=;
+        b=JCkYeHjKJY2PhFxwYAXXgXLcp7/bNWXNX+4uyUh9JoR1zsfjs5aZIaImH/8bTJcs1u
+         VnoRIhi8o1AGDgxOadgtghnzZizWkst0ee9gA7wbGHiIB0iyNg1GIhebwZYJp8EtXauV
+         jRl3G8BkhsYtjWOLm2BigvM7HSdfkp9W6jgZEN59PGC/9Om02Brz90mYDygz/yC3vHWn
+         eKSCGaPfxHxmsSy096JWmSg+Jm1FS85G0VR9awaZmeDQSAe5xKrJkHoGhJa7A00ttQc0
+         ialatVdfqdZsl+5R2PRcq2hOZ7E+5GZnlRZOSw8zqWrN8qCi36TJJsYZ2RDaPoinK0gq
+         vm2Q==
+X-Gm-Message-State: AOAM531cgZgoT2syKbhjZHRsqCp0cP1HRjDGhbMmrvN3xAaMy0Um1bLx
+        5iMhkTeACsHOAWtEtb1QTagIjkpEgg3wqCArbl85AjAPR/3ZMtJ8qUOyQo42a933z/X8BsgvmhQ
+        0g6sVzYuR+Lknn3UxUSz9GbFX6i+C
+X-Received: by 2002:a05:620a:1245:: with SMTP id a5mr10654831qkl.161.1591904317562;
+        Thu, 11 Jun 2020 12:38:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw4dpfStmnjpuWuvm5A7olHToa/nIp2crCfHajW7c6kq15mk+mW7+DCk7P8myHlXdCLoeAhPQ==
+X-Received: by 2002:a05:620a:1245:: with SMTP id a5mr10654816qkl.161.1591904317344;
+        Thu, 11 Jun 2020 12:38:37 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id j22sm3020783qke.117.2020.06.11.12.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jun 2020 12:38:36 -0700 (PDT)
+From:   trix@redhat.com
+To:     shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH v2 1/1] selftests: fpga: dfl: A test for afu interrupt support
+Date:   Thu, 11 Jun 2020 12:38:27 -0700
+Message-Id: <20200611193827.8302-2-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
+In-Reply-To: <20200611193827.8302-1-trix@redhat.com>
+References: <20200611193827.8302-1-trix@redhat.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 11 Jun 2020 06:03:50 -0600
-Shuah Khan <skhan@linuxfoundation.org> wrote:
+From: Tom Rix <trix@redhat.com>
 
-> On 6/10/20 7:32 AM, Steven Rostedt wrote:
-> > On Wed, 10 Jun 2020 06:04:33 -0600
-> > Shuah Khan <skhan@linuxfoundation.org> wrote:
-> > 
-> >>> Steve, what would you think?
-> >>>    
-> >>
-> >> No worries. As far as kselftest tree is concrned, I can apply these
-> >> after rc1 comes out with Tom's patch.
-> >>
-> >> Or I can give Ack and Steve can take these through tracing tree.
-> > 
-> > All my patches have already made it to Linus's tree. Perhaps
-> > cherry-pick the commit needed from Linus's tree (it shouldn't break
-> > anything when Linus pulls it). Just let Linus know what you did, and
-> > everything should be fine.
-> > 
-> 
-> Good to know. I will get these in.
+Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
+an expected result.
 
-Thanks Shuah and Steve!
+Tested on vf device 0xbcc1
 
+Sample run with
+ # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
+ ...
+ # selftests: drivers/fpga: afu_intr
+ # # Pass 0 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
+ ok 1 selftests: drivers/fpga: afu_intr
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/drivers/fpga/Makefile |  9 +++++
+ .../testing/selftests/drivers/fpga/afu_intr.c | 33 +++++++++++++++++++
+ tools/testing/selftests/drivers/fpga/config   |  1 +
+ 4 files changed, 44 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
+ create mode 100644 tools/testing/selftests/drivers/fpga/afu_intr.c
+ create mode 100644 tools/testing/selftests/drivers/fpga/config
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 1195bd85af38..4c6eda659125 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -9,6 +9,7 @@ TARGETS += clone3
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += drivers/dma-buf
++TARGETS += drivers/fpga
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
+new file mode 100644
+index 000000000000..0a472e8c67c5
+--- /dev/null
++++ b/tools/testing/selftests/drivers/fpga/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0-only
++CFLAGS += -I../../../../../usr/include/
++CFLAGS += -I../../../../../include/uapi/
++
++TEST_GEN_PROGS := afu_intr
++
++top_srcdir ?=../../../../..
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/drivers/fpga/afu_intr.c b/tools/testing/selftests/drivers/fpga/afu_intr.c
+new file mode 100644
+index 000000000000..e4ef3fac764d
+--- /dev/null
++++ b/tools/testing/selftests/drivers/fpga/afu_intr.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <string.h>
++#include <linux/fcntl.h>
++#include <linux/fpga-dfl.h>
++
++#include "../../kselftest.h"
++
++int main(int argc, char *argv[])
++{
++	int devfd, status;
++	struct dfl_fpga_port_info port_info;
++	uint32_t irq_num;
++
++	devfd = open("/dev/dfl-port.0", O_RDONLY);
++	if (devfd < 0)
++		ksft_exit_skip("no fpga afu device 0\n");
++
++	/*
++	 * From fpga-dl.h :
++	 * Currently hardware supports up to 1 irq.
++	 * Return: 0 on success, -errno on failure.
++	 */
++	irq_num = -1;
++	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
++	if (status != 0 || irq_num > 255)
++		ksft_exit_fail_msg("Could not get the number of afu error irqs\n");
++
++	close(devfd);
++	ksft_exit_pass();
++}
+diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
+new file mode 100644
+index 000000000000..e2111b81d8d7
+--- /dev/null
++++ b/tools/testing/selftests/drivers/fpga/config
+@@ -0,0 +1 @@
++CONFIG_FPGA_DFL_AFU=m
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.18.1
+
