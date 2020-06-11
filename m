@@ -2,103 +2,162 @@ Return-Path: <SRS0=+KT+=7Y=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E55E1C433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 19:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19E64C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 21:17:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B721820792
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 19:39:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4CDE207ED
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 21:17:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BeAqUNIE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tP05nD18"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgFKTjL (ORCPT
+        id S1726279AbgFKVRL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jun 2020 15:39:11 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:38098 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726134AbgFKTjL (ORCPT
+        Thu, 11 Jun 2020 17:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726186AbgFKVRL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jun 2020 15:39:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591904350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=u8/OdraxV9Bf+mXB4Fs4dcRV8raf0sIOF0iql8UflHo=;
-        b=BeAqUNIEZBaRHj8/b9uIS1f+wHRzjiuosnZY0+I5E3GB9GpXfJ7RN5pcaoFYbO6s1ycpa7
-        3c6Qj3+fXuuX/tMxTmatj8sYhIUVCHvfHDgchjtlupdaInFUizg5wFQIR/Ze+O8LmWvh5H
-        jDYRpVd1ewvs23PrmwftNS6j+qal+Mk=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-331-vlezEvJgM_6V9R-mFP0KAQ-1; Thu, 11 Jun 2020 15:38:35 -0400
-X-MC-Unique: vlezEvJgM_6V9R-mFP0KAQ-1
-Received: by mail-qv1-f71.google.com with SMTP id z7so5183714qve.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 12:38:35 -0700 (PDT)
+        Thu, 11 Jun 2020 17:17:11 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A0FC08C5C1;
+        Thu, 11 Jun 2020 14:17:11 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id q8so8017815iow.7;
+        Thu, 11 Jun 2020 14:17:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FLt18Y6W5gGwuw6RcLD1KD4cexUWiAcYxlXCoMhY/Zk=;
+        b=tP05nD18zyaPnjbVlSYPcWkm5O+mR5kSp+Bea8c0B39sT1mHxTIWV/AbGudu3IWuwj
+         rA7CYX35ckaGfR3Fq+P2SHJ8tG1CSzGoiwj/W1rceGoumqMrwGrSA9nK498/cEZeR5j7
+         YcRWV7ySvYHPI/YKRyZ1aIcVDRDfX2L7cNax4ynlrFvKuykNAAiG/+6+JBsrvaMAKyDc
+         tkzquw62Z67g0/IuY5fyBvSy2tflDQXnCmbdW0d9AWvR44z9E6r5gBLIr1d0VVxpojJo
+         BHykrz3Ooe6M5dNES1lPjZRBOrN7e7nBQzL7S+NtPdKAUCXuONCdVdDM6ZUUMz3u4klb
+         XjZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=u8/OdraxV9Bf+mXB4Fs4dcRV8raf0sIOF0iql8UflHo=;
-        b=VUXs+jqx9lpCW579ReHaLfzZS3/2MpvaJqJ2k6LGTEjH53w6NdTNh15GCBL/v5fgB/
-         sWluudqBtCcUHqdqiqCg7LD0jliggwduNbit70kI6hCJaQWYYt7zAqpS7ThWSJ89D69T
-         ga159dsrv4hCSRblZJY4spL007ID9OpxNK2zDbggrbmBV6cP8zgzDuDR3A2gPbQbh0d8
-         rAMA3EjEhAE7Svg0WK44XRwMtibSdNRUQqWMNpSpmqMwaPMOj1Y3SEaJIYe/h2dSWaCp
-         +6faba36KJbLIzlcpw1t4mrY45AKqPmprVf46G8BCrC+N7zAfCh5io0pzt23PnIRMVuR
-         yTIA==
-X-Gm-Message-State: AOAM530ZSzH/pl5/76DgTJ9A6/86SY3gm2+ze9kKPIWSUQjwGWM+Fbkp
-        ArMl+WHWEMBaXP9jB0q7QVJXywcLmF8649VmLCnft/P/0uEUQlr0lhmhEiGwOGfDPuehClaEepB
-        yeU5M8OhRlZm9KcP80mkAS28mQLSc
-X-Received: by 2002:a37:9a4c:: with SMTP id c73mr10196335qke.450.1591904314732;
-        Thu, 11 Jun 2020 12:38:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzQtwswsTGgRQ9rrZiZRxCAHbWdA8cWacLl6m7dxpVA5zy7jW4IXrGz/yV8yRp3gYQa1DE2tg==
-X-Received: by 2002:a37:9a4c:: with SMTP id c73mr10196317qke.450.1591904314480;
-        Thu, 11 Jun 2020 12:38:34 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id j22sm3020783qke.117.2020.06.11.12.38.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FLt18Y6W5gGwuw6RcLD1KD4cexUWiAcYxlXCoMhY/Zk=;
+        b=J3RoNFvTAY5rN9hyGCb9J8WgYgKZnn3J0ToNSjG8ZUVCIYeY3onOsKUWbK33PQybhz
+         rHCyYUN4ox57nQ3pcI60AeYwwI0RLmfdHzTqqUaExSnJa788ejypBV0TSV6+PKdl13XH
+         wUDPRXD2NUDBUa5xjY5xze35GeMPeLT+kPkLWdaDHBGdOGvXITAqtuWPXTHWn7I5MQ0c
+         /teIYjL1VECOlNSWmkxRhUfu1LmvKvsVc+xaB2A72s3Yq0ovjsPMfG++6wXF4IgbiTk+
+         VTst1jlSNcYDxJ8+Us6F6FMUe0D1qZ8CGDbqtzVqtZtQw/0DE5xQxhbUjw9PWj+2EOuh
+         QduQ==
+X-Gm-Message-State: AOAM532B3ufWDMt0LT12AUqMnKk0U6nsI+53WMcGU04IDHVbDSdYqn37
+        XG3LiDKoehc4A9vB6Pg4hzg=
+X-Google-Smtp-Source: ABdhPJykLH7xMIrgm/4Hl6xB7+2dr3D8cF3Z326nWJplAsfWiRQQc5uMdx6aA8SYE8/hbgBv9SxK+w==
+X-Received: by 2002:a6b:5f06:: with SMTP id t6mr10095418iob.88.1591910230430;
+        Thu, 11 Jun 2020 14:17:10 -0700 (PDT)
+Received: from urieldev.c.googlers.com.com (243.199.238.35.bc.googleusercontent.com. [35.238.199.243])
+        by smtp.gmail.com with ESMTPSA id n7sm2031738ile.76.2020.06.11.14.17.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2020 12:38:33 -0700 (PDT)
-From:   trix@redhat.com
-To:     shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v2 0/1]  selftests: fpga: dfl: A test for afu interrupt support
-Date:   Thu, 11 Jun 2020 12:38:26 -0700
-Message-Id: <20200611193827.8302-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        Thu, 11 Jun 2020 14:17:09 -0700 (PDT)
+From:   Uriel Guajardo <urielguajardojr@gmail.com>
+To:     brendanhiggins@google.com
+Cc:     Uriel Guajardo <urielguajardo@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: show error if kunit results are not present
+Date:   Thu, 11 Jun 2020 21:05:45 +0000
+Message-Id: <20200611210545.173886-1-urielguajardojr@gmail.com>
+X-Mailer: git-send-email 2.27.0.278.ge193c7cf3a9-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Uriel Guajardo <urielguajardo@google.com>
 
-repo: linux-next
-tag: next-20200611
+Currently, if the kernel is configured incorrectly or if it crashes before any
+kunit tests are run, kunit finishes without error, reporting
+that 0 test cases were run.
 
-Start applying selftests to drivers/fpga.
+To fix this, an error is shown when the tap header is not found, which
+indicates that kunit was not able to run at all.
 
-While testing out this upcoming change on linux-fpga
-'Add interrupt support to FPGA DFL drivers'
+Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+---
+ tools/testing/kunit/kunit_parser.py               |   8 ++++----
+ tools/testing/kunit/kunit_tool_test.py            |  11 +++++++++++
+ .../kunit/test_data/test_insufficient_memory.log  | Bin 0 -> 856 bytes
+ 3 files changed, 15 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/kunit/test_data/test_insufficient_memory.log
 
-I did not see any existing fpga tests.
-So I added one.
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 64aac9dcd431..f13e0c0d6663 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -265,11 +265,9 @@ def bubble_up_suite_errors(test_suite_list: List[TestSuite]) -> TestStatus:
+ 	return bubble_up_errors(lambda x: x.status, test_suite_list)
+ 
+ def parse_test_result(lines: List[str]) -> TestResult:
+-	if not lines:
+-		return TestResult(TestStatus.NO_TESTS, [], lines)
+ 	consume_non_diagnositic(lines)
+-	if not parse_tap_header(lines):
+-		return None
++	if not lines or not parse_tap_header(lines):
++		return TestResult(TestStatus.NO_TESTS, [], lines)
+ 	test_suites = []
+ 	test_suite = parse_test_suite(lines)
+ 	while test_suite:
+@@ -282,6 +280,8 @@ def parse_run_tests(kernel_output) -> TestResult:
+ 	failed_tests = 0
+ 	crashed_tests = 0
+ 	test_result = parse_test_result(list(isolate_kunit_output(kernel_output)))
++	if test_result.status == TestStatus.NO_TESTS:
++		print_with_timestamp(red('[ERROR] ') + 'no kunit output detected')
+ 	for test_suite in test_result.suites:
+ 		if test_suite.status == TestStatus.SUCCESS:
+ 			print_suite_divider(green('[PASSED] ') + test_suite.name)
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 984588d6ba95..4a7ef2eef831 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -170,6 +170,17 @@ class KUnitParserTest(unittest.TestCase):
+ 			result.status)
+ 		file.close()
+ 
++	def test_no_kunit_output(self):
++		crash_log = get_absolute_path(
++			'test_data/test_insufficient_memory.log')
++		file = open(crash_log)
++		print_mock = mock.patch('builtins.print').start()
++		result = kunit_parser.parse_run_tests(
++			kunit_parser.isolate_kunit_output(file.readlines()))
++		print_mock.assert_any_call(StrContains("no kunit output detected"))
++		print_mock.stop()
++		file.close()
++
+ 	def test_crashed_test(self):
+ 		crashed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-crash.log')
+diff --git a/tools/testing/kunit/test_data/test_insufficient_memory.log b/tools/testing/kunit/test_data/test_insufficient_memory.log
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c9e4da7b6d763a03c0c83302b2faa6dc21a6ea6
+GIT binary patch
+literal 856
+zcmbu6Piw<448`yH6xx0L3mw^@hf#VOv}5$J+fZ#KHj8CrJK6H>=Z2=CgO$<hA}n~n
+z_av{ZCy=#qP-&xMfG4=6vR)i)5n%+={(WUX@f3QQc$@8JeI=@sWh+JEQ*#MXVFVXF
+z3Ic%)LLrv~p$(Btnp72VZT95Dcs$;|{9!uqlCTqzsVj`yGB}JvL1F#T<`SpJ4?L6&
+zvLJa#bUk?B5jWafHpCGc^cwdSg)SXJ+Sp0$Q$V&%X;`!D6P@>grwf=!Y9>J$&;ioE
+z(YWH`vCdK5Yv8@UZFe8*_w@>lK?j;o`2XCkM`zDc9)5TBu*ma#3i~#uEu#ge+Mv@N
+z!H}`OJ&aI@v}o*ZK;I-rL20Tal*zuYY-cSL^z~bR2OA<uaygqX^7-Rzeh;N?h?hs>
+F><3Em&*A_8
 
-Change from v1
-Use ksft_* functions for reporting
-
-Tom Rix (1):
-  selftests: fpga: dfl: A test for afu interrupt support
-
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/drivers/fpga/Makefile |  9 +++++
- .../testing/selftests/drivers/fpga/afu_intr.c | 33 +++++++++++++++++++
- tools/testing/selftests/drivers/fpga/config   |  1 +
- 4 files changed, 44 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
- create mode 100644 tools/testing/selftests/drivers/fpga/afu_intr.c
- create mode 100644 tools/testing/selftests/drivers/fpga/config
+literal 0
+HcmV?d00001
 
 -- 
-2.18.1
+2.27.0.278.ge193c7cf3a9-goog
 
