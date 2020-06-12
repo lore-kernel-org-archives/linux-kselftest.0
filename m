@@ -1,140 +1,148 @@
-Return-Path: <SRS0=+KT+=7Y=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=FDDF=7Z=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B45DC433E1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 22:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89F21C433E2
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jun 2020 09:49:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 248E2206D7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Jun 2020 22:41:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kqd6PapK"
+	by mail.kernel.org (Postfix) with ESMTP id 73F062083E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Jun 2020 09:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgFKWke (ORCPT
+        id S1726024AbgFLJtI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Jun 2020 18:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbgFKWkd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jun 2020 18:40:33 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF185C03E96F
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:32 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id m1so3176468pgk.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jun 2020 15:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fLfetYDG8Hj+ZD7+f5tmR+S0GsdbzHMWoDQj21buSPw=;
-        b=kqd6PapK/+TOoz8EkUrOmtB4aQD7tjF70sfmyPZHb4No96IUQQV3TWEzBhf3z8017N
-         ecgy8jS3+kIkONCJxeoUTRC2Fd+wn5/Hbt6sikumR5ZdfFx2UcE+HWglkf9soSsQt824
-         1QcD7yW7zfet3D62ADeIqR/SxqgaAeBF2xnDU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fLfetYDG8Hj+ZD7+f5tmR+S0GsdbzHMWoDQj21buSPw=;
-        b=kroFqDe5Jz7NplWbe2tvunvDZEYjp35kDe+dXw3px1QOUj7Mj9ypC2HP6Z0dUvVXcU
-         Hkh47SriRq3De6snqeG/3bbmDD8i9LOyxBaMYdrx/Ji32kVjDdoKG2p/jr8aAwj2+Imp
-         yDHfniAz456XWMCD22cFsloSiEGH3jRD8t+K/cGzLWxOsOJQGqX2Bp4y5OxVh/toB+S4
-         O1NslLOjbuiVnXvemxv8RjH0Xb0PJjr4u2NhG0vfpTe4iZ9S4UdJBmJjg0NPPIv7NgvT
-         KZdo0sP5i/B0t+Ubsd4TOKdJ4EpLLRCvuIiCyaDZISdylmTPDyie98R6MMztLFfk1esc
-         PEeQ==
-X-Gm-Message-State: AOAM532xqM9x9OUerz+pojMhMwWb3ECx1GjNgc0Rq263Uy0Y+MtCVufa
-        98eVIJMRx7QndGWwuV2jRlotjQ==
-X-Google-Smtp-Source: ABdhPJw4SbI17i9uWSNasj87VfFWE+1K/bw74n/2CXdL6sLZZMpd71TQiHPwGFLBAqUEsOLmmrDPTA==
-X-Received: by 2002:a63:f502:: with SMTP id w2mr8376139pgh.321.1591915232249;
-        Thu, 11 Jun 2020 15:40:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y4sm4162506pfr.182.2020.06.11.15.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2020 15:40:31 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-kselftest@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] selftests/clone3: Reorder reporting output
-Date:   Thu, 11 Jun 2020 15:40:22 -0700
-Message-Id: <20200611224028.3275174-2-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200611224028.3275174-1-keescook@chromium.org>
-References: <20200611224028.3275174-1-keescook@chromium.org>
+        Fri, 12 Jun 2020 05:49:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41880 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725868AbgFLJtG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Jun 2020 05:49:06 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id EF01BADC5;
+        Fri, 12 Jun 2020 09:49:07 +0000 (UTC)
+Date:   Fri, 12 Jun 2020 11:49:03 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/3] selftests/livepatch: Don't clear dmesg when running
+ tests
+Message-ID: <20200612094903.GE4311@linux-b0ei>
+References: <20200610172101.21910-1-joe.lawrence@redhat.com>
+ <20200610172101.21910-2-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200610172101.21910-2-joe.lawrence@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Selftest output reporting was happening before the TAP headers and plan
-had been emitted. Move the first test reports later.
+On Wed 2020-06-10 13:20:59, Joe Lawrence wrote:
+> Inspired by commit f131d9edc29d ("selftests/lkdtm: Don't clear dmesg
+> when running tests"), keep a reference dmesg copy when beginning each
+> test.  This way check_result() can compare against the initial copy
+> rather than relying upon an empty log.
+> 
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> ---
+>  tools/testing/selftests/livepatch/README      | 16 +++---
+>  .../testing/selftests/livepatch/functions.sh  | 16 +++++-
+>  .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
+>  .../selftests/livepatch/test-ftrace.sh        |  5 +-
+>  .../selftests/livepatch/test-livepatch.sh     | 15 +----
+>  .../selftests/livepatch/test-shadow-vars.sh   |  5 +-
+>  .../testing/selftests/livepatch/test-state.sh | 20 ++-----
+>  7 files changed, 43 insertions(+), 89 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+> index 621d325425c2..0942dd5826f8 100644
+> --- a/tools/testing/selftests/livepatch/README
+> +++ b/tools/testing/selftests/livepatch/README
+> @@ -6,8 +6,8 @@ This is a small set of sanity tests for the kernel livepatching.
+>  
+>  The test suite loads and unloads several test kernel modules to verify
+>  livepatch behavior.  Debug information is logged to the kernel's message
+> -buffer and parsed for expected messages.  (Note: the tests will clear
+> -the message buffer between individual tests.)
+> +buffer and parsed for expected messages.  (Note: the tests will compare
+> +the message buffer for only the duration of each individual test.)
+>  
+>  
+>  Config
+> @@ -35,9 +35,9 @@ Adding tests
+>  ------------
+>  
+>  See the common functions.sh file for the existing collection of utility
+> -functions, most importantly setup_config() and check_result().  The
+> -latter function greps the kernel's ring buffer for "livepatch:" and
+> -"test_klp" strings, so tests be sure to include one of those strings for
+> -result comparison.  Other utility functions include general module
+> -loading and livepatch loading helpers (waiting for patch transitions,
+> -sysfs entries, etc.)
+> +functions, most importantly setup_config(), start_test() and
+> +check_result().  The latter function greps the kernel's ring buffer for
+> +"livepatch:" and "test_klp" strings, so tests be sure to include one of
+> +those strings for result comparison.  Other utility functions include
+> +general module loading and livepatch loading helpers (waiting for patch
+> +transitions, sysfs entries, etc.)
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 2aab9791791d..e84375a33852 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -243,13 +243,25 @@ function set_pre_patch_ret {
+>  		die "failed to set pre_patch_ret parameter for $mod module"
+>  }
+>  
+> +function start_test {
+> +	local test="$1"
+> +
+> +	# Save existing dmesg so we can detect new content below
+> +	SAVED_DMESG=$(mktemp --tmpdir -t klp-dmesg-XXXXXX)
 
-Cc: Christian Brauner <christian@brauner.io>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/clone3/clone3.c               | 2 +-
- tools/testing/selftests/clone3/clone3_clear_sighand.c | 3 +--
- tools/testing/selftests/clone3/clone3_set_tid.c       | 2 +-
- 3 files changed, 3 insertions(+), 4 deletions(-)
+There is a nice trick how to remove the temporary files even
+when the script fails from other reasons. The following should
+do the job:
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index f14c269a5a18..b7e6dec36173 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -131,9 +131,9 @@ int main(int argc, char *argv[])
- 
- 	uid_t uid = getuid();
- 
--	test_clone3_supported();
- 	ksft_print_header();
- 	ksft_set_plan(17);
-+	test_clone3_supported();
- 
- 	/* Just a simple clone3() should return 0.*/
- 	test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
-diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-index 9e1af8aa7698..db5fc9c5edcf 100644
---- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
-+++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-@@ -119,9 +119,8 @@ static void test_clone3_clear_sighand(void)
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
--	test_clone3_supported();
--
- 	ksft_set_plan(1);
-+	test_clone3_supported();
- 
- 	test_clone3_clear_sighand();
- 
-diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
-index 25beb22f35b5..5831c1082d6d 100644
---- a/tools/testing/selftests/clone3/clone3_set_tid.c
-+++ b/tools/testing/selftests/clone3/clone3_set_tid.c
-@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
- 	pid_t set_tid[MAX_PID_NS_LEVEL * 2];
- 
- 	ksft_print_header();
--	test_clone3_supported();
- 	ksft_set_plan(29);
-+	test_clone3_supported();
- 
- 	if (pipe(pipe_1) < 0 || pipe(pipe_2) < 0)
- 		ksft_exit_fail_msg("pipe() failed\n");
--- 
-2.25.1
+function cleanup {
+	rm -f "$SAVED_DMESG"
+}
 
+trap cleanup EXIT
+
+> +	dmesg > "$SAVED_DMESG"
+> +
+> +	echo -n "TEST: $test ... "
+> +}
+> +
+>  # check_result() - verify dmesg output
+>  #	TODO - better filter, out of order msgs, etc?
+>  function check_result {
+>  	local expect="$*"
+>  	local result
+>  
+> -	result=$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
+> +	result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
+> +		 grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | \
+> +		 sed 's/^\[[ 0-9.]*\] //')
+>  
+>  	if [[ "$expect" == "$result" ]] ; then
+>  		echo "ok"
+> @@ -257,4 +269,6 @@ function check_result {
+>  		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
+>  		die "livepatch kselftest(s) failed"
+>  	fi
+> +
+> +	rm -f "$SAVED_DMESG"
+
+This change will not be necessary with the above trap handler.
+
+Otherwise, I really like the change. I was always a bit worried that these
+tests were clearing all other messages.
+
+Best Regards,
+Petr
