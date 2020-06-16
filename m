@@ -5,70 +5,70 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87E70C433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F020C433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:25:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 665AF20756
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:25:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C17320756
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:25:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IgudgnzK"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="H6W7RXGg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgFPDZq (ORCPT
+        id S1726699AbgFPDZ5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Jun 2020 23:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        Mon, 15 Jun 2020 23:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726704AbgFPDZb (ORCPT
+        with ESMTP id S1726846AbgFPDZv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jun 2020 23:25:31 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E39C08C5C2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:30 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id n9so7775700plk.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:30 -0700 (PDT)
+        Mon, 15 Jun 2020 23:25:51 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572A5C0085C1
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:37 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id d8so7756772plo.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=d7bw5q/TJxpqMicrHyIFon0t9gt+svhVPDuc7AUFnrI=;
-        b=IgudgnzK6YOeQXxO/GhbZyRnD7yKsB19/poCwHH5zYg0DNwv/OjS7ClaVfKBcPYMJl
-         gk02nAiuMCNLKeX/ZV8hAsNyo4xkNMZpUlVd73LjLWPTM3vu0gDsAt4qIgmqVBNttPDZ
-         W8gmwOqh2kvJFeY1MjkoUB2YMUS901i5ZFCmE=
+        bh=vY6XnehwafBZJOkQHoxk+049ZnyiWS2rNzwOao2yGyU=;
+        b=H6W7RXGgrY5QaaraC5tiCpRsU2fQjleZAbAysPWcLB/lm4uvRa4nDCyrB7m5Fpv68L
+         sFaHX1//uplN2O2KasdqIAT1ZcPKCkxL7o44qnplZN7SG5a1kFcuUZsiBOYrynPhn69y
+         b2TZ01u48Wnn5F82vOy3WCTHh8BuZPHjk/uK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=d7bw5q/TJxpqMicrHyIFon0t9gt+svhVPDuc7AUFnrI=;
-        b=NEqkDD4QIJ8/MN5k+/YMTQwcfv1hmhx2Ua9+1ep3Q5Dg4/ZJX1uXsKgOE3XtxhAOMs
-         MJvFs9EgwO5blZawjbgfTQfeq4KTLNIeXV5nldBPgDjcTEMwfJxBdVW6tmOlcAvEihnR
-         u6pN228+cKbTco8Ri+aOeoyRL7mYKAMR5t9I4wyDUWY+IeFB31BkauD12g2v2LIu6y/H
-         hz1UWPkwJUCWztRoBHgHROX4EbTtvsPpKNzIlZ0f6ZV49lysT3tnVinn89Lp1huiwhOo
-         xBAn8uFT9mAOZ4SGp/PE7JgNzn5IaAK68y67dr/ie0NZdzxV00+S7P+Y7/BqKb66/2s0
-         gAMQ==
-X-Gm-Message-State: AOAM531f0gKtGSDgLFwHiGT4q9p/zfDKSyUMrvI21kWT52NJn6sG07W4
-        ZrpUYozFlTid6tHom1HT4/ePzw==
-X-Google-Smtp-Source: ABdhPJw66Qb+fMMy1G2QTWCPav55PuClQnfisvC1pdmVOLwHIqdy34tq0HaqwNMimHEa+bRLc4w0yQ==
-X-Received: by 2002:a17:902:8346:: with SMTP id z6mr329196pln.27.1592277930455;
-        Mon, 15 Jun 2020 20:25:30 -0700 (PDT)
+        bh=vY6XnehwafBZJOkQHoxk+049ZnyiWS2rNzwOao2yGyU=;
+        b=IxARCgYvBgue2moMSADmpKh6TKx3nLxLZ4jWk4a7NhoGxZYgLifDFAkXJ1fDxrvZcK
+         KVbIgi0JwDtPI9K/vRMz/KzfpLn+16iPnlTaysKrjmNkjpvaw98fcxILBhnqSvhRTgUF
+         RUTleCXiPD0W5p/GP4KK9HQXBOg/o1MFLt3lIzsaHglsWd8U2wSsA5UYuLv+ZfmQj/85
+         KaRkVl8rHGySSg159/oZp27BftCwUryjw8AAUalrkDlEbOmrYtyP6tmsvTWdT0Xmptmd
+         giygNkgHWZ+Rygte5l6cJ4EqmvoJVBLIILoX4HUmEy5JkgDAUe5uRo/oU4lRCOkFK75L
+         95vg==
+X-Gm-Message-State: AOAM532E7krXQkN2BYIGasefLNSiQs4a69y+C+hjFHSlOBqWlBHtWwK1
+        UTWLySkLdBogSaFbIdH1qI24Uw==
+X-Google-Smtp-Source: ABdhPJyih+Kodk3wUY89vUdRFHOPEIv8KpSbbjXu+ND3SdRoOfgZEnFg+Ja+pXOE9M61S+nyEKMgug==
+X-Received: by 2002:a17:90a:c797:: with SMTP id gn23mr756375pjb.165.1592277936331;
+        Mon, 15 Jun 2020 20:25:36 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u4sm762715pjn.42.2020.06.15.20.25.28
+        by smtp.gmail.com with ESMTPSA id o1sm767346pja.49.2020.06.15.20.25.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 20:25:28 -0700 (PDT)
+        Mon, 15 Jun 2020 20:25:32 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
         Sargun Dhillon <sargun@sargun.me>,
+        Matt Denton <mpdenton@google.com>,
         Christian Brauner <christian@brauner.io>,
         "David S. Miller" <davem@davemloft.net>,
         Christoph Hellwig <hch@lst.de>,
         Tycho Andersen <tycho@tycho.ws>,
         Jakub Kicinski <kuba@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Matt Denton <mpdenton@google.com>,
-        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
+        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
+        Chris Palmer <palmer@google.com>,
         Robert Sesek <rsesek@google.com>,
         Giuseppe Scrivano <gscrivan@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -77,9 +77,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         netdev@vger.kernel.org, containers@lists.linux-foundation.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 04/11] pidfd: Replace open-coded partial fd_install_received()
-Date:   Mon, 15 Jun 2020 20:25:17 -0700
-Message-Id: <20200616032524.460144-5-keescook@chromium.org>
+Subject: [PATCH v4 06/11] seccomp: Introduce addfd ioctl to seccomp user notifier
+Date:   Mon, 15 Jun 2020 20:25:19 -0700
+Message-Id: <20200616032524.460144-7-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200616032524.460144-1-keescook@chromium.org>
 References: <20200616032524.460144-1-keescook@chromium.org>
@@ -90,41 +90,320 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The sock counting (sock_update_netprioidx() and sock_update_classid()) was
-missing from pidfd's implementation of received fd installation.  Replace
-the open-coded version with a call to the new fd_install_received()
-helper.
+From: Sargun Dhillon <sargun@sargun.me>
 
-Fixes: 8649c322f75c ("pid: Implement pidfd_getfd syscall")
+This adds a seccomp notifier ioctl which allows for the listener to
+"add" file descriptors to a process which originated a seccomp user
+notification. This allows calls like mount, and mknod to be "implemented",
+as the return value, and the arguments are data in memory. On the other
+hand, calls like connect can be "implemented" using pidfd_getfd.
+
+Unfortunately, there are calls which return file descriptors, like
+open, which are vulnerable to ToCToU attacks, and require that the more
+privileged supervisor can inspect the argument, and perform the syscall
+on behalf of the process generating the notification. This allows the
+file descriptor generated from that open call to be returned to the
+calling process.
+
+In addition, there is functionality to allow for replacement of specific
+file descriptors, following dup2-like semantics.
+
+As a note, the seccomp_notif_addfd structure is laid out based on 8-byte
+alignment without requiring packing as there have been packing issues
+with uapi highlighted before[1][2]. Although we could overload the
+newfd field and use -1 to indicate that it is not to be used, doing
+so requires changing the size of the fd field, and introduces struct
+packing complexity.
+
+[1]: https://lore.kernel.org/lkml/87o8w9bcaf.fsf@mid.deneb.enyo.de/
+[2]: https://lore.kernel.org/lkml/a328b91d-fd8f-4f27-b3c2-91a9c45f18c0@rasmusvillemoes.dk/
+
+Suggested-by: Matt Denton <mpdenton@google.com>
+Link: https://lore.kernel.org/r/20200603011044.7972-4-sargun@sargun.me
+Signed-off-by: Sargun Dhillon <sargun@sargun.me>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- kernel/pid.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ include/uapi/linux/seccomp.h |  25 ++++++
+ kernel/seccomp.c             | 165 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 189 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/pid.c b/kernel/pid.c
-index f1496b757162..24924ec5df0e 100644
---- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -635,18 +635,9 @@ static int pidfd_getfd(struct pid *pid, int fd)
- 	if (IS_ERR(file))
- 		return PTR_ERR(file);
+diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+index c1735455bc53..c347160378e5 100644
+--- a/include/uapi/linux/seccomp.h
++++ b/include/uapi/linux/seccomp.h
+@@ -113,6 +113,27 @@ struct seccomp_notif_resp {
+ 	__u32 flags;
+ };
  
--	ret = security_file_receive(file);
--	if (ret) {
--		fput(file);
--		return ret;
--	}
--
--	ret = get_unused_fd_flags(O_CLOEXEC);
-+	ret = fd_install_received(file, O_CLOEXEC);
- 	if (ret < 0)
- 		fput(file);
--	else
--		fd_install(ret, file);
--
++/* valid flags for seccomp_notif_addfd */
++#define SECCOMP_ADDFD_FLAG_SETFD	(1UL << 0) /* Specify remote fd */
++
++/**
++ * struct seccomp_notif_addfd
++ * @size: The size of the seccomp_notif_addfd structure
++ * @id: The ID of the seccomp notification
++ * @flags: SECCOMP_ADDFD_FLAG_*
++ * @srcfd: The local fd number
++ * @newfd: Optional remote FD number if SETFD option is set, otherwise 0.
++ * @newfd_flags: The O_* flags the remote FD should have applied
++ */
++struct seccomp_notif_addfd {
++	__u64 size;
++	__u64 id;
++	__u32 flags;
++	__u32 srcfd;
++	__u32 newfd;
++	__u32 newfd_flags;
++};
++
+ #define SECCOMP_IOC_MAGIC		'!'
+ #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
+ #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
+@@ -124,4 +145,8 @@ struct seccomp_notif_resp {
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+ #define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++/* On success, the return value is the remote process's added fd number */
++#define SECCOMP_IOCTL_NOTIF_ADDFD	SECCOMP_IOW(3, \
++						struct seccomp_notif_addfd)
++
+ #endif /* _UAPI_LINUX_SECCOMP_H */
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 0016cad0e605..3c913f3b8451 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -78,10 +78,42 @@ struct seccomp_knotif {
+ 	long val;
+ 	u32 flags;
+ 
+-	/* Signals when this has entered SECCOMP_NOTIFY_REPLIED */
++	/*
++	 * Signals when this has changed states, such as the listener
++	 * dying, a new seccomp addfd message, or changing to REPLIED
++	 */
+ 	struct completion ready;
+ 
+ 	struct list_head list;
++
++	/* outstanding addfd requests */
++	struct list_head addfd;
++};
++
++/**
++ * struct seccomp_kaddfd - container for seccomp_addfd ioctl messages
++ *
++ * @file: A reference to the file to install in the other task
++ * @fd: The fd number to install it at. If the fd number is -1, it means the
++ *      installing process should allocate the fd as normal.
++ * @flags: The flags for the new file descriptor. At the moment, only O_CLOEXEC
++ *         is allowed.
++ * @ret: The return value of the installing process. It is set to the fd num
++ *       upon success (>= 0).
++ * @completion: Indicates that the installing process has completed fd
++ *              installation, or gone away (either due to successful
++ *              reply, or signal)
++ *
++ */
++struct seccomp_kaddfd {
++	struct file *file;
++	int fd;
++	unsigned int flags;
++
++	/* To only be set on reply */
++	int ret;
++	struct completion completion;
++	struct list_head list;
+ };
+ 
+ /**
+@@ -784,6 +816,17 @@ static u64 seccomp_next_notify_id(struct seccomp_filter *filter)
+ 	return filter->notif->next_id++;
+ }
+ 
++static void seccomp_handle_addfd(struct seccomp_kaddfd *addfd)
++{
++	/*
++	 * Remove the notification, and reset the list pointers, indicating
++	 * that it has been handled.
++	 */
++	list_del_init(&addfd->list);
++	addfd->ret = fd_replace_received(addfd->fd, addfd->file, addfd->flags);
++	complete(&addfd->completion);
++}
++
+ static int seccomp_do_user_notification(int this_syscall,
+ 					struct seccomp_filter *match,
+ 					const struct seccomp_data *sd)
+@@ -792,6 +835,7 @@ static int seccomp_do_user_notification(int this_syscall,
+ 	u32 flags = 0;
+ 	long ret = 0;
+ 	struct seccomp_knotif n = {};
++	struct seccomp_kaddfd *addfd, *tmp;
+ 
+ 	mutex_lock(&match->notify_lock);
+ 	err = -ENOSYS;
+@@ -804,6 +848,7 @@ static int seccomp_do_user_notification(int this_syscall,
+ 	n.id = seccomp_next_notify_id(match);
+ 	init_completion(&n.ready);
+ 	list_add(&n.list, &match->notif->notifications);
++	INIT_LIST_HEAD(&n.addfd);
+ 
+ 	up(&match->notif->request);
+ 	wake_up_poll(&match->wqh, EPOLLIN | EPOLLRDNORM);
+@@ -812,14 +857,31 @@ static int seccomp_do_user_notification(int this_syscall,
+ 	/*
+ 	 * This is where we wait for a reply from userspace.
+ 	 */
++wait:
+ 	err = wait_for_completion_interruptible(&n.ready);
+ 	mutex_lock(&match->notify_lock);
+ 	if (err == 0) {
++		/* Check if we were woken up by a addfd message */
++		addfd = list_first_entry_or_null(&n.addfd,
++						 struct seccomp_kaddfd, list);
++		if (addfd && n.state != SECCOMP_NOTIFY_REPLIED) {
++			seccomp_handle_addfd(addfd);
++			mutex_unlock(&match->notify_lock);
++			goto wait;
++		}
+ 		ret = n.val;
+ 		err = n.error;
+ 		flags = n.flags;
+ 	}
+ 
++	/* If there were any pending addfd calls, clear them out */
++	list_for_each_entry_safe(addfd, tmp, &n.addfd, list) {
++		/* The process went away before we got a chance to handle it */
++		addfd->ret = -ESRCH;
++		list_del_init(&addfd->list);
++		complete(&addfd->completion);
++	}
++
+ 	/*
+ 	 * Note that it's possible the listener died in between the time when
+ 	 * we were notified of a respons (or a signal) and when we were able to
+@@ -1060,6 +1122,11 @@ static int seccomp_notify_release(struct inode *inode, struct file *file)
+ 		knotif->error = -ENOSYS;
+ 		knotif->val = 0;
+ 
++		/*
++		 * We do not need to wake up any pending addfd messages, as
++		 * the notifier will do that for us, as this just looks
++		 * like a standard reply.
++		 */
+ 		complete(&knotif->ready);
+ 	}
+ 
+@@ -1224,6 +1291,100 @@ static long seccomp_notify_id_valid(struct seccomp_filter *filter,
  	return ret;
  }
  
++static long seccomp_notify_addfd(struct seccomp_filter *filter,
++				 struct seccomp_notif_addfd __user *uaddfd)
++{
++	struct seccomp_notif_addfd addfd;
++	struct seccomp_knotif *knotif;
++	struct seccomp_kaddfd kaddfd;
++	u64 size;
++	int ret;
++
++	ret = get_user(size, &uaddfd->size);
++	if (ret)
++		return ret;
++
++	ret = copy_struct_from_user(&addfd, sizeof(addfd), uaddfd, size);
++	if (ret)
++		return ret;
++
++	if (addfd.newfd_flags & ~O_CLOEXEC)
++		return -EINVAL;
++
++	if (addfd.flags & ~SECCOMP_ADDFD_FLAG_SETFD)
++		return -EINVAL;
++
++	if (addfd.newfd && !(addfd.flags & SECCOMP_ADDFD_FLAG_SETFD))
++		return -EINVAL;
++
++	kaddfd.file = fget(addfd.srcfd);
++	if (!kaddfd.file)
++		return -EBADF;
++
++	kaddfd.flags = addfd.newfd_flags;
++	kaddfd.fd = (addfd.flags & SECCOMP_ADDFD_FLAG_SETFD) ?
++		    addfd.newfd : -1;
++	init_completion(&kaddfd.completion);
++
++	ret = mutex_lock_interruptible(&filter->notify_lock);
++	if (ret < 0)
++		goto out;
++
++	knotif = find_notification(filter, addfd.id);
++	if (!knotif) {
++		ret = -ENOENT;
++		goto out_unlock;
++	}
++
++	/*
++	 * We do not want to allow for FD injection to occur before the
++	 * notification has been picked up by a userspace handler, or after
++	 * the notification has been replied to.
++	 */
++	if (knotif->state != SECCOMP_NOTIFY_SENT) {
++		ret = -EINPROGRESS;
++		goto out_unlock;
++	}
++
++	list_add(&kaddfd.list, &knotif->addfd);
++	complete(&knotif->ready);
++	mutex_unlock(&filter->notify_lock);
++
++	/* Now we wait for it to be processed or be interrupted */
++	ret = wait_for_completion_interruptible(&kaddfd.completion);
++	if (ret == 0) {
++		/*
++		 * We had a successful completion. The other side has already
++		 * removed us from the addfd queue, and
++		 * wait_for_completion_interruptible has a memory barrier upon
++		 * success that lets us read this value directly without
++		 * locking.
++		 */
++		ret = kaddfd.ret;
++		goto out;
++	}
++
++	mutex_lock(&filter->notify_lock);
++	/*
++	 * Even though we were woken up by a signal and not a successful
++	 * completion, a completion may have happened in the mean time.
++	 *
++	 * We need to check again if the addfd request has been handled,
++	 * and if not, we will remove it from the queue.
++	 */
++	if (list_empty(&kaddfd.list))
++		ret = kaddfd.ret;
++	else
++		list_del(&kaddfd.list);
++
++out_unlock:
++	mutex_unlock(&filter->notify_lock);
++out:
++	fput(kaddfd.file);
++
++	return ret;
++}
++
+ static long seccomp_notify_ioctl(struct file *file, unsigned int cmd,
+ 				 unsigned long arg)
+ {
+@@ -1237,6 +1398,8 @@ static long seccomp_notify_ioctl(struct file *file, unsigned int cmd,
+ 		return seccomp_notify_send(filter, buf);
+ 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
+ 		return seccomp_notify_id_valid(filter, buf);
++	case SECCOMP_IOCTL_NOTIF_ADDFD:
++		return seccomp_notify_addfd(filter, buf);
+ 	default:
+ 		return -EINVAL;
+ 	}
 -- 
 2.25.1
 
