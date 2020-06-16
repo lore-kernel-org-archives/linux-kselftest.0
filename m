@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0131AC433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BF2FC433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D054D20882
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32CD120776
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HpjCg7s8"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="V3XA0nHM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgFPDZq (ORCPT
+        id S1726392AbgFPD0g (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Jun 2020 23:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
+        Mon, 15 Jun 2020 23:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726837AbgFPDZd (ORCPT
+        with ESMTP id S1726306AbgFPDZi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jun 2020 23:25:33 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2306C00862E
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:31 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id j1so8841916pfe.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:31 -0700 (PDT)
+        Mon, 15 Jun 2020 23:25:38 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B978C08C5C4
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:36 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id m2so893259pjv.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oyriWhFwZcOqgM4PO4Jyyu/qJTCulFv+DEEh0q062EY=;
-        b=HpjCg7s834tKul7kAuPNlzps+b+PtwMmuQnNQtB2ybY3eNYyVlVAX1E48bUa7ifziY
-         WEuk2wRaWqHWnePpikebUGzfRspaYQogiR4RsBpv6GtXmEkjb8kybzAdAlRIe/VV+0B4
-         TETdfRwh1in+J+7dzhfIAcqWQUA58SGX8lcSU=
+        bh=rE3Y2iFwUUd87kC4LPkJ/n5Ro7lODcTLpnlUXVeVqP4=;
+        b=V3XA0nHMmtCHiAAjYJ+ZyCD0LYHJYFVci/dawxxSgdePAiA4xV8RysbhxpPr+L3zVP
+         34KqKhpQ2oyvvwl6p1Hw7IgxnST9JWeyZLSe5rxdOOI4bbcYAgkCRIRj4tk0JM60C9JZ
+         M+G42YS35Vm30gy42rDJy0fo0E5XO0KuRrgn0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oyriWhFwZcOqgM4PO4Jyyu/qJTCulFv+DEEh0q062EY=;
-        b=F0NaI7JfAdn/APf93xXTF9vGg4iq3yI0gxfkhYms8BGqU+ivUy0NKAQce0Lc5agcGp
-         mLb6LI1x3QgP+OnH/n8jyMxmt8hbjthplZHgtvDdXMOeXk51nBqdifBfQh/03XaEAcm+
-         8vyFuIZ3FGH1p6PpHGieav7XXF2676L7jJpKf7teE6UdZgBVC84Q1rLEplfjdDVQc5qM
-         mivw4DDHfenBVwbex7B0iYo6/feVN8BhfNJsok74OVdT6WSoa0t19QSAUJ9tbWZdKaN3
-         yygzGhvwq0dOG7CRlaQl6xe6+Q/kaTvtfIEBRhVXe2pkn/H0MuePPWazqM23y0uPBT1q
-         nDBQ==
-X-Gm-Message-State: AOAM532Ye3sUOPR5W/rm/yATDEp82OTeMsbkvQr66xFjdktthNP1aysL
-        HqeipyvuU8wZEO3FJ/lr7UJaXQ==
-X-Google-Smtp-Source: ABdhPJw7pibyApxcW0HTCKGuo+wGuZHjGWqDQ1geQiQj5yzGoxu4dCsSmOiutEA0KBdqVhPfsovK+w==
-X-Received: by 2002:a62:1407:: with SMTP id 7mr267875pfu.282.1592277931423;
-        Mon, 15 Jun 2020 20:25:31 -0700 (PDT)
+        bh=rE3Y2iFwUUd87kC4LPkJ/n5Ro7lODcTLpnlUXVeVqP4=;
+        b=t5JGBHO3HaQyWc/RdrRM6iRb9ULfWPku4ytv4bf1JYpodrzW70ln89EAUERm9+faF5
+         boQeyeg0Tiy42OOeiC74S00VBc66cZlWODdzDctiv66D9aQWzmnykrDQTaA3SlbHEx1c
+         clEBzunhvUvrrpR4FvEhH7P0udHkDtJj3GEYRE+RFTBJ7SVeIuWWC5Y7eC1Ik1czCOeK
+         OFwJ3/f7qSn2f2vTkJv/38d0qYG5ZUoDoH5Jx609YEsZHbXki4umPYaSULB0QpfVGGBe
+         tneHaSL6oL8FtGCykBI8jjRJoM/6Wpt/r/aHSge8yLUThbG0rqp87TijfFFgyjiWu7fn
+         F7zQ==
+X-Gm-Message-State: AOAM530B2mNWq3zrOv03iiRy1HrC+x0125gXvB5h8ur3qcgS0kchHeQh
+        9gyirORFNUyklqyfAIy2GL2eLw==
+X-Google-Smtp-Source: ABdhPJxCZqVuV3kzeXed/HFT/JXAbaWaHZ3nnHfrJBQ1uX2cvtIopqK121014OWTVMCuzhtnGpPz3A==
+X-Received: by 2002:a17:90b:234c:: with SMTP id ms12mr836787pjb.164.1592277935719;
+        Mon, 15 Jun 2020 20:25:35 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l63sm15635109pfd.122.2020.06.15.20.25.28
+        by smtp.gmail.com with ESMTPSA id ds11sm785227pjb.0.2020.06.15.20.25.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 20:25:28 -0700 (PDT)
+        Mon, 15 Jun 2020 20:25:32 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -77,9 +77,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         netdev@vger.kernel.org, containers@lists.linux-foundation.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 01/11] net/scm: Regularize compat handling of scm_detach_fds()
-Date:   Mon, 15 Jun 2020 20:25:14 -0700
-Message-Id: <20200616032524.460144-2-keescook@chromium.org>
+Subject: [PATCH v4 09/11] selftests/seccomp: Rename user_trap_syscall() to user_notif_syscall()
+Date:   Mon, 15 Jun 2020 20:25:22 -0700
+Message-Id: <20200616032524.460144-10-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200616032524.460144-1-keescook@chromium.org>
 References: <20200616032524.460144-1-keescook@chromium.org>
@@ -90,181 +90,200 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Duplicate the cleanups from commit 2618d530dd8b ("net/scm: cleanup
-scm_detach_fds") into the compat code.
+The user_trap_syscall() helper creates a filter with
+SECCOMP_RET_USER_NOTIF. To avoid confusion with SECCOMP_RET_TRAP, rename
+the helper to user_notif_syscall().
 
-Move the check added in commit 1f466e1f15cf ("net: cleanly handle kernel
-vs user buffers for ->msg_control") to before the compat call, even
-though it should be impossible for an in-kernel call to also be compat.
+Additionally fix a redundant "return" after XFAIL.
 
-Correct the int "flags" argument to unsigned int to match fd_install()
-and similar APIs.
-
-Regularize any remaining differences, including a whitespace issue,
-a checkpatch warning, and add the check from commit 6900317f5eff ("net,
-scm: fix PaX detected msg_controllen overflow in scm_detach_fds") which
-fixed an overflow unique to 64-bit. To avoid confusion when comparing
-the compat handler to the native handler, just include the same check
-in the compat handler.
-
-Fixes: 48a87cc26c13 ("net: netprio: fd passed in SCM_RIGHTS datagram not set correctly")
-Fixes: d84295067fc7 ("net: net_cls: fd passed in SCM_RIGHTS datagram not set correctly")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/net/scm.h |  1 +
- net/compat.c      | 55 +++++++++++++++++++++--------------------------
- net/core/scm.c    | 18 ++++++++--------
- 3 files changed, 35 insertions(+), 39 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 60 +++++++++----------
+ 1 file changed, 29 insertions(+), 31 deletions(-)
 
-diff --git a/include/net/scm.h b/include/net/scm.h
-index 1ce365f4c256..581a94d6c613 100644
---- a/include/net/scm.h
-+++ b/include/net/scm.h
-@@ -37,6 +37,7 @@ struct scm_cookie {
- #endif
- };
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 40ed846744e4..95b134933831 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -3110,10 +3110,8 @@ TEST(get_metadata)
+ 	long ret;
  
-+int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags);
- void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
- void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm);
- int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm);
-diff --git a/net/compat.c b/net/compat.c
-index 5e3041a2c37d..27d477fdcaa0 100644
---- a/net/compat.c
-+++ b/net/compat.c
-@@ -281,39 +281,31 @@ int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *dat
- 	return 0;
+ 	/* Only real root can get metadata. */
+-	if (geteuid()) {
+-		XFAIL(return, "get_metadata requires real root");
+-		return;
+-	}
++	if (geteuid())
++		XFAIL(return, "get_metadata test requires real root");
+ 
+ 	ASSERT_EQ(0, pipe(pipefd));
+ 
+@@ -3170,7 +3168,7 @@ TEST(get_metadata)
+ 	ASSERT_EQ(0, kill(pid, SIGKILL));
  }
  
--void scm_detach_fds_compat(struct msghdr *kmsg, struct scm_cookie *scm)
-+static int scm_max_fds_compat(struct msghdr *msg)
+-static int user_trap_syscall(int nr, unsigned int flags)
++static int user_notif_syscall(int nr, unsigned int flags)
  {
--	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control;
--	int fdmax = (kmsg->msg_controllen - sizeof(struct compat_cmsghdr)) / sizeof(int);
--	int fdnum = scm->fp->count;
--	struct file **fp = scm->fp->fp;
--	int __user *cmfptr;
--	int err = 0, i;
-+	if (msg->msg_controllen <= sizeof(struct compat_cmsghdr))
-+		return 0;
-+	return (msg->msg_controllen - sizeof(struct compat_cmsghdr)) / sizeof(int);
-+}
+ 	struct sock_filter filter[] = {
+ 		BPF_STMT(BPF_LD+BPF_W+BPF_ABS,
+@@ -3216,7 +3214,7 @@ TEST(user_notification_basic)
  
--	if (fdnum < fdmax)
--		fdmax = fdnum;
-+void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
-+{
-+	struct compat_cmsghdr __user *cm =
-+		(struct compat_cmsghdr __user *)msg->msg_control;
-+	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
-+	int fdmax = min_t(int, scm_max_fds_compat(msg), scm->fp->count);
-+	int __user *cmsg_data = CMSG_USER_DATA(cm);
-+	int err = 0, i;
+ 	/* Check that we get -ENOSYS with no listener attached */
+ 	if (pid == 0) {
+-		if (user_trap_syscall(__NR_getppid, 0) < 0)
++		if (user_notif_syscall(__NR_getppid, 0) < 0)
+ 			exit(1);
+ 		ret = syscall(__NR_getppid);
+ 		exit(ret >= 0 || errno != ENOSYS);
+@@ -3233,13 +3231,13 @@ TEST(user_notification_basic)
+ 	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
  
--	for (i = 0, cmfptr = (int __user *) CMSG_COMPAT_DATA(cm); i < fdmax; i++, cmfptr++) {
--		int new_fd;
--		err = security_file_receive(fp[i]);
-+	for (i = 0; i < fdmax; i++) {
-+		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
- 		if (err)
- 			break;
--		err = get_unused_fd_flags(MSG_CMSG_CLOEXEC & kmsg->msg_flags
--					  ? O_CLOEXEC : 0);
--		if (err < 0)
--			break;
--		new_fd = err;
--		err = put_user(new_fd, cmfptr);
--		if (err) {
--			put_unused_fd(new_fd);
--			break;
--		}
--		/* Bump the usage count and install the file. */
--		fd_install(new_fd, get_file(fp[i]));
+ 	/* Check that the basic notification machinery works */
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	/* Installing a second listener in the chain should EBUSY */
+-	EXPECT_EQ(user_trap_syscall(__NR_getppid,
+-				    SECCOMP_FILTER_FLAG_NEW_LISTENER),
++	EXPECT_EQ(user_notif_syscall(__NR_getppid,
++				     SECCOMP_FILTER_FLAG_NEW_LISTENER),
+ 		  -1);
+ 	EXPECT_EQ(errno, EBUSY);
+ 
+@@ -3303,12 +3301,12 @@ TEST(user_notification_with_tsync)
+ 	/* these were exclusive */
+ 	flags = SECCOMP_FILTER_FLAG_NEW_LISTENER |
+ 		SECCOMP_FILTER_FLAG_TSYNC;
+-	ASSERT_EQ(-1, user_trap_syscall(__NR_getppid, flags));
++	ASSERT_EQ(-1, user_notif_syscall(__NR_getppid, flags));
+ 	ASSERT_EQ(EINVAL, errno);
+ 
+ 	/* but now they're not */
+ 	flags |= SECCOMP_FILTER_FLAG_TSYNC_ESRCH;
+-	ret = user_trap_syscall(__NR_getppid, flags);
++	ret = user_notif_syscall(__NR_getppid, flags);
+ 	close(ret);
+ 	ASSERT_LE(0, ret);
+ }
+@@ -3326,8 +3324,8 @@ TEST(user_notification_kill_in_middle)
+ 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
  	}
  
- 	if (i > 0) {
- 		int cmlen = CMSG_COMPAT_LEN(i * sizeof(int));
-+
- 		err = put_user(SOL_SOCKET, &cm->cmsg_level);
- 		if (!err)
- 			err = put_user(SCM_RIGHTS, &cm->cmsg_type);
-@@ -321,16 +313,19 @@ void scm_detach_fds_compat(struct msghdr *kmsg, struct scm_cookie *scm)
- 			err = put_user(cmlen, &cm->cmsg_len);
- 		if (!err) {
- 			cmlen = CMSG_COMPAT_SPACE(i * sizeof(int));
--			kmsg->msg_control += cmlen;
--			kmsg->msg_controllen -= cmlen;
-+			if (msg->msg_controllen < cmlen)
-+				cmlen = msg->msg_controllen;
-+			msg->msg_control += cmlen;
-+			msg->msg_controllen -= cmlen;
- 		}
- 	}
--	if (i < fdnum)
--		kmsg->msg_flags |= MSG_CTRUNC;
-+
-+	if (i < scm->fp->count || (scm->fp->count && fdmax <= 0))
-+		msg->msg_flags |= MSG_CTRUNC;
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
  
  	/*
--	 * All of the files that fit in the message have had their
--	 * usage counts incremented, so we just free the list.
-+	 * All of the files that fit in the message have had their usage counts
-+	 * incremented, so we just free the list.
- 	 */
- 	__scm_destroy(scm);
- }
-diff --git a/net/core/scm.c b/net/core/scm.c
-index 875df1c2989d..6151678c73ed 100644
---- a/net/core/scm.c
-+++ b/net/core/scm.c
-@@ -280,7 +280,7 @@ void put_cmsg_scm_timestamping(struct msghdr *msg, struct scm_timestamping_inter
- }
- EXPORT_SYMBOL(put_cmsg_scm_timestamping);
+@@ -3380,8 +3378,8 @@ TEST(user_notification_signal)
  
--static int __scm_install_fd(struct file *file, int __user *ufd, int o_flags)
-+int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags)
- {
- 	struct socket *sock;
- 	int new_fd;
-@@ -319,29 +319,29 @@ static int scm_max_fds(struct msghdr *msg)
+ 	ASSERT_EQ(socketpair(PF_LOCAL, SOCK_SEQPACKET, 0, sk_pair), 0);
  
- void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
- {
--	struct cmsghdr __user *cm
--		= (__force struct cmsghdr __user*)msg->msg_control;
--	int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
-+	struct cmsghdr __user *cm =
-+		(__force struct cmsghdr __user *)msg->msg_control;
-+	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
- 	int fdmax = min_t(int, scm_max_fds(msg), scm->fp->count);
- 	int __user *cmsg_data = CMSG_USER_DATA(cm);
- 	int err = 0, i;
+-	listener = user_trap_syscall(__NR_gettid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_gettid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
  
-+	/* no use for FD passing from kernel space callers */
-+	if (WARN_ON_ONCE(!msg->msg_control_is_user))
-+		return;
-+
- 	if (msg->msg_flags & MSG_CMSG_COMPAT) {
- 		scm_detach_fds_compat(msg, scm);
- 		return;
+ 	pid = fork();
+@@ -3450,8 +3448,8 @@ TEST(user_notification_closed_listener)
+ 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
  	}
  
--	/* no use for FD passing from kernel space callers */
--	if (WARN_ON_ONCE(!msg->msg_control_is_user))
--		return;
--
- 	for (i = 0; i < fdmax; i++) {
- 		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
- 		if (err)
- 			break;
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	/*
+@@ -3484,8 +3482,8 @@ TEST(user_notification_child_pid_ns)
+ 
+ 	ASSERT_EQ(unshare(CLONE_NEWUSER | CLONE_NEWPID), 0);
+ 
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	pid = fork();
+@@ -3524,8 +3522,8 @@ TEST(user_notification_sibling_pid_ns)
+ 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
  	}
  
--	if (i > 0)  {
-+	if (i > 0) {
- 		int cmlen = CMSG_LEN(i * sizeof(int));
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
  
- 		err = put_user(SOL_SOCKET, &cm->cmsg_level);
+ 	pid = fork();
+@@ -3589,8 +3587,8 @@ TEST(user_notification_fault_recv)
+ 
+ 	ASSERT_EQ(unshare(CLONE_NEWUSER), 0);
+ 
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	pid = fork();
+@@ -3641,7 +3639,7 @@ TEST(user_notification_continue)
+ 		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
+ 	}
+ 
+-	listener = user_trap_syscall(__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	pid = fork();
+@@ -3736,7 +3734,7 @@ TEST(user_notification_filter_empty)
+ 	if (pid == 0) {
+ 		int listener;
+ 
+-		listener = user_trap_syscall(__NR_mknod, SECCOMP_FILTER_FLAG_NEW_LISTENER);
++		listener = user_notif_syscall(__NR_mknod, SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 		if (listener < 0)
+ 			_exit(EXIT_FAILURE);
+ 
+@@ -3792,7 +3790,7 @@ TEST(user_notification_filter_empty_threaded)
+ 		int listener, status;
+ 		pthread_t thread;
+ 
+-		listener = user_trap_syscall(__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER);
++		listener = user_notif_syscall(__NR_dup, SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 		if (listener < 0)
+ 			_exit(EXIT_FAILURE);
+ 
+@@ -3869,8 +3867,8 @@ TEST(user_notification_sendfd)
+ 	}
+ 
+ 	/* Check that the basic notification machinery works */
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	pid = fork();
+@@ -3993,8 +3991,8 @@ TEST(user_notification_sendfd_rlimit)
+ 	}
+ 
+ 	/* Check that the basic notification machinery works */
+-	listener = user_trap_syscall(__NR_getppid,
+-				     SECCOMP_FILTER_FLAG_NEW_LISTENER);
++	listener = user_notif_syscall(__NR_getppid,
++				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
+ 	ASSERT_GE(listener, 0);
+ 
+ 	pid = fork();
 -- 
 2.25.1
 
