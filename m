@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 474FDC433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0131AC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 287E2207D4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D054D20882
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Jun 2020 03:26:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="X0n1cxGN"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HpjCg7s8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbgFPD0Y (ORCPT
+        id S1726523AbgFPDZq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Jun 2020 23:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        Mon, 15 Jun 2020 23:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726979AbgFPDZr (ORCPT
+        with ESMTP id S1726837AbgFPDZd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jun 2020 23:25:47 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C96EC008639
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:36 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id a45so659084pje.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:36 -0700 (PDT)
+        Mon, 15 Jun 2020 23:25:33 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2306C00862E
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:31 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id j1so8841916pfe.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jun 2020 20:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KTfRvQ2+mCIDg0D8OuodXNewLgRfaqh/goGXJ65dENQ=;
-        b=X0n1cxGNpvYeOHV2yPu2fBSFtc2MKAx3yZ0vLy7WL65O5apqTRKBhNQ4cLyYniRtqA
-         YIsZEQnj/LbWXG8JdYe19vjrgC11ZH94DIAwq1Z5BFk1A00VDCjehfs2gVsj0Ngd59yG
-         hrpViber5y5CaAhre8WjGi+EtY95WWh28cVKo=
+        bh=oyriWhFwZcOqgM4PO4Jyyu/qJTCulFv+DEEh0q062EY=;
+        b=HpjCg7s834tKul7kAuPNlzps+b+PtwMmuQnNQtB2ybY3eNYyVlVAX1E48bUa7ifziY
+         WEuk2wRaWqHWnePpikebUGzfRspaYQogiR4RsBpv6GtXmEkjb8kybzAdAlRIe/VV+0B4
+         TETdfRwh1in+J+7dzhfIAcqWQUA58SGX8lcSU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KTfRvQ2+mCIDg0D8OuodXNewLgRfaqh/goGXJ65dENQ=;
-        b=qlM7UDa4CyJl5H+w4exJflJj9ExRMRx8eBZgC6qK/vqaOFuAApeVxXYgmKB3nN4ywP
-         yhWHhLmFvhMdZh0lxNNOd2LQOSdQ9quiNFHmQ7fWhM5oNHPSRpWEerI2FHKGr5obRla0
-         Z0xcvuDEcEGwgmxkmkaZEVF7BSWgNaAf/RWL7zINoB0bHr857sKZmsdnAkLZbuSj9OA2
-         ih2ir+4mCy0Hcb1CIk4WDqGjI/d+u6T6eGyKRyHAcPfg3mlwbQhRbKHHguy+kt7e8c89
-         Gh6uy/2CqYg7BLgjdh1jU7WvNTXyHPZ4mwXo4ACHr2lHlWBzh2X2sziJpKKbtBXEjR7o
-         mkxQ==
-X-Gm-Message-State: AOAM531bDaWIlxU3j/5iEOUdnzM/K6sOrx/KxI1C6416l8WecYoy3qHt
-        aHWYqHJxb+HuhzZFkTaD/EcSyg==
-X-Google-Smtp-Source: ABdhPJx6ntz1tupSkb6Z5KF9pZydUmMhD/o4/B/Oo+8svDxMTBwbLKSSqbRRvTlmCqWioCbQypQnnA==
-X-Received: by 2002:a17:90a:250b:: with SMTP id j11mr1073537pje.194.1592277934971;
-        Mon, 15 Jun 2020 20:25:34 -0700 (PDT)
+        bh=oyriWhFwZcOqgM4PO4Jyyu/qJTCulFv+DEEh0q062EY=;
+        b=F0NaI7JfAdn/APf93xXTF9vGg4iq3yI0gxfkhYms8BGqU+ivUy0NKAQce0Lc5agcGp
+         mLb6LI1x3QgP+OnH/n8jyMxmt8hbjthplZHgtvDdXMOeXk51nBqdifBfQh/03XaEAcm+
+         8vyFuIZ3FGH1p6PpHGieav7XXF2676L7jJpKf7teE6UdZgBVC84Q1rLEplfjdDVQc5qM
+         mivw4DDHfenBVwbex7B0iYo6/feVN8BhfNJsok74OVdT6WSoa0t19QSAUJ9tbWZdKaN3
+         yygzGhvwq0dOG7CRlaQl6xe6+Q/kaTvtfIEBRhVXe2pkn/H0MuePPWazqM23y0uPBT1q
+         nDBQ==
+X-Gm-Message-State: AOAM532Ye3sUOPR5W/rm/yATDEp82OTeMsbkvQr66xFjdktthNP1aysL
+        HqeipyvuU8wZEO3FJ/lr7UJaXQ==
+X-Google-Smtp-Source: ABdhPJw7pibyApxcW0HTCKGuo+wGuZHjGWqDQ1geQiQj5yzGoxu4dCsSmOiutEA0KBdqVhPfsovK+w==
+X-Received: by 2002:a62:1407:: with SMTP id 7mr267875pfu.282.1592277931423;
+        Mon, 15 Jun 2020 20:25:31 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m10sm775999pjs.27.2020.06.15.20.25.30
+        by smtp.gmail.com with ESMTPSA id l63sm15635109pfd.122.2020.06.15.20.25.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 20:25:32 -0700 (PDT)
+        Mon, 15 Jun 2020 20:25:28 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -77,9 +77,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         netdev@vger.kernel.org, containers@lists.linux-foundation.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 08/11] selftests/seccomp: Make kcmp() less required
-Date:   Mon, 15 Jun 2020 20:25:21 -0700
-Message-Id: <20200616032524.460144-9-keescook@chromium.org>
+Subject: [PATCH v4 01/11] net/scm: Regularize compat handling of scm_detach_fds()
+Date:   Mon, 15 Jun 2020 20:25:14 -0700
+Message-Id: <20200616032524.460144-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200616032524.460144-1-keescook@chromium.org>
 References: <20200616032524.460144-1-keescook@chromium.org>
@@ -90,189 +90,181 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The seccomp tests are a bit noisy without CONFIG_CHECKPOINT_RESTORE (due
-to missing the kcmp() syscall). The seccomp tests are more accurate with
-kcmp(), but it's not strictly required. Refactor the tests to use
-alternatives (comparing fd numbers), and provide a central test for
-kcmp() so there is a single XFAIL instead of many. Continue to produce
-warnings for the other tests, though.
+Duplicate the cleanups from commit 2618d530dd8b ("net/scm: cleanup
+scm_detach_fds") into the compat code.
 
-Additionally adds some more bad flag EINVAL tests to the addfd selftest.
+Move the check added in commit 1f466e1f15cf ("net: cleanly handle kernel
+vs user buffers for ->msg_control") to before the compat call, even
+though it should be impossible for an in-kernel call to also be compat.
 
+Correct the int "flags" argument to unsigned int to match fd_install()
+and similar APIs.
+
+Regularize any remaining differences, including a whitespace issue,
+a checkpatch warning, and add the check from commit 6900317f5eff ("net,
+scm: fix PaX detected msg_controllen overflow in scm_detach_fds") which
+fixed an overflow unique to 64-bit. To avoid confusion when comparing
+the compat handler to the native handler, just include the same check
+in the compat handler.
+
+Fixes: 48a87cc26c13 ("net: netprio: fd passed in SCM_RIGHTS datagram not set correctly")
+Fixes: d84295067fc7 ("net: net_cls: fd passed in SCM_RIGHTS datagram not set correctly")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 100 +++++++++++-------
- 1 file changed, 64 insertions(+), 36 deletions(-)
+ include/net/scm.h |  1 +
+ net/compat.c      | 55 +++++++++++++++++++++--------------------------
+ net/core/scm.c    | 18 ++++++++--------
+ 3 files changed, 35 insertions(+), 39 deletions(-)
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index c4e264b37c30..40ed846744e4 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -258,6 +258,27 @@ int seccomp(unsigned int op, unsigned int flags, void *args)
- #define SIBLING_EXIT_FAILURE	0xbadface
- #define SIBLING_EXIT_NEWPRIVS	0xbadfeed
+diff --git a/include/net/scm.h b/include/net/scm.h
+index 1ce365f4c256..581a94d6c613 100644
+--- a/include/net/scm.h
++++ b/include/net/scm.h
+@@ -37,6 +37,7 @@ struct scm_cookie {
+ #endif
+ };
  
-+static int filecmp(pid_t pid1, pid_t pid2, int fd1, int fd2)
-+{
-+#ifdef __NR_kcmp
-+	errno = 0;
-+	return syscall(__NR_kcmp, pid1, pid2, KCMP_FILE, fd1, fd2);
-+#else
-+	errno = ENOSYS;
-+	return -1;
-+#endif
-+}
-+
-+TEST(kcmp)
-+{
-+	int ret;
-+
-+	ret = filecmp(getpid(), getpid(), 1, 1);
-+	EXPECT_EQ(ret, 0);
-+	if (ret != 0 && errno == ENOSYS)
-+		XFAIL(return, "Kernel does not support kcmp() (missing CONFIG_CHECKPOINT_RESTORE?)");
-+}
-+
- TEST(mode_strict_support)
- {
- 	long ret;
-@@ -3606,16 +3627,6 @@ TEST(seccomp_get_notif_sizes)
- 	EXPECT_EQ(sizes.seccomp_notif_resp, sizeof(struct seccomp_notif_resp));
++int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags);
+ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
+ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm);
+ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *scm);
+diff --git a/net/compat.c b/net/compat.c
+index 5e3041a2c37d..27d477fdcaa0 100644
+--- a/net/compat.c
++++ b/net/compat.c
+@@ -281,39 +281,31 @@ int put_cmsg_compat(struct msghdr *kmsg, int level, int type, int len, void *dat
+ 	return 0;
  }
  
--static int filecmp(pid_t pid1, pid_t pid2, int fd1, int fd2)
--{
--#ifdef __NR_kcmp
--	return syscall(__NR_kcmp, pid1, pid2, KCMP_FILE, fd1, fd2);
--#else
--	errno = ENOSYS;
--	return -1;
--#endif
--}
--
- TEST(user_notification_continue)
+-void scm_detach_fds_compat(struct msghdr *kmsg, struct scm_cookie *scm)
++static int scm_max_fds_compat(struct msghdr *msg)
  {
- 	pid_t pid;
-@@ -3640,20 +3651,20 @@ TEST(user_notification_continue)
- 		int dup_fd, pipe_fds[2];
- 		pid_t self;
+-	struct compat_cmsghdr __user *cm = (struct compat_cmsghdr __user *) kmsg->msg_control;
+-	int fdmax = (kmsg->msg_controllen - sizeof(struct compat_cmsghdr)) / sizeof(int);
+-	int fdnum = scm->fp->count;
+-	struct file **fp = scm->fp->fp;
+-	int __user *cmfptr;
+-	int err = 0, i;
++	if (msg->msg_controllen <= sizeof(struct compat_cmsghdr))
++		return 0;
++	return (msg->msg_controllen - sizeof(struct compat_cmsghdr)) / sizeof(int);
++}
  
--		ret = pipe(pipe_fds);
--		if (ret < 0)
--			exit(1);
-+		ASSERT_GE(pipe(pipe_fds), 0);
+-	if (fdnum < fdmax)
+-		fdmax = fdnum;
++void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm)
++{
++	struct compat_cmsghdr __user *cm =
++		(struct compat_cmsghdr __user *)msg->msg_control;
++	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
++	int fdmax = min_t(int, scm_max_fds_compat(msg), scm->fp->count);
++	int __user *cmsg_data = CMSG_USER_DATA(cm);
++	int err = 0, i;
  
- 		dup_fd = dup(pipe_fds[0]);
--		if (dup_fd < 0)
--			exit(1);
-+		ASSERT_GE(dup_fd, 0);
-+		EXPECT_NE(pipe_fds[0], dup_fd);
- 
- 		self = getpid();
--
- 		ret = filecmp(self, self, pipe_fds[0], dup_fd);
--		if (ret)
--			exit(2);
--
-+		if (ret != 0) {
-+			if (ret < 0 && errno == ENOSYS) {
-+				TH_LOG("kcmp() syscall missing (test is less accurate)");
-+			} else
-+				ASSERT_EQ(ret, 0);
-+		}
- 		exit(0);
+-	for (i = 0, cmfptr = (int __user *) CMSG_COMPAT_DATA(cm); i < fdmax; i++, cmfptr++) {
+-		int new_fd;
+-		err = security_file_receive(fp[i]);
++	for (i = 0; i < fdmax; i++) {
++		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
+ 		if (err)
+ 			break;
+-		err = get_unused_fd_flags(MSG_CMSG_CLOEXEC & kmsg->msg_flags
+-					  ? O_CLOEXEC : 0);
+-		if (err < 0)
+-			break;
+-		new_fd = err;
+-		err = put_user(new_fd, cmfptr);
+-		if (err) {
+-			put_unused_fd(new_fd);
+-			break;
+-		}
+-		/* Bump the usage count and install the file. */
+-		fd_install(new_fd, get_file(fp[i]));
  	}
  
-@@ -3700,12 +3711,7 @@ TEST(user_notification_continue)
- skip:
- 	EXPECT_EQ(waitpid(pid, &status, 0), pid);
- 	EXPECT_EQ(true, WIFEXITED(status));
--	EXPECT_EQ(0, WEXITSTATUS(status)) {
--		if (WEXITSTATUS(status) == 2) {
--			XFAIL(return, "Kernel does not support kcmp() syscall");
--			return;
--		}
--	}
-+	EXPECT_EQ(0, WEXITSTATUS(status));
- }
- 
- TEST(user_notification_filter_empty)
-@@ -3847,7 +3853,7 @@ TEST(user_notification_sendfd)
- {
- 	pid_t pid;
- 	long ret;
--	int status, listener, memfd;
-+	int status, listener, memfd, fd;
- 	struct seccomp_notif_addfd addfd = {};
- 	struct seccomp_notif req = {};
- 	struct seccomp_notif_resp resp = {};
-@@ -3880,34 +3886,56 @@ TEST(user_notification_sendfd)
- 
- 	addfd.size = sizeof(addfd);
- 	addfd.srcfd = memfd;
--	addfd.newfd_flags = O_CLOEXEC;
- 	addfd.newfd = 0;
- 	addfd.id = req.id;
--	addfd.flags = 0xff;
-+	addfd.flags = 0;
+ 	if (i > 0) {
+ 		int cmlen = CMSG_COMPAT_LEN(i * sizeof(int));
 +
-+	/* Verify bad newfd_flags cannot be set */
-+	addfd.newfd_flags = ~O_CLOEXEC;
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
-+	EXPECT_EQ(errno, EINVAL);
-+	addfd.newfd_flags = O_CLOEXEC;
+ 		err = put_user(SOL_SOCKET, &cm->cmsg_level);
+ 		if (!err)
+ 			err = put_user(SCM_RIGHTS, &cm->cmsg_type);
+@@ -321,16 +313,19 @@ void scm_detach_fds_compat(struct msghdr *kmsg, struct scm_cookie *scm)
+ 			err = put_user(cmlen, &cm->cmsg_len);
+ 		if (!err) {
+ 			cmlen = CMSG_COMPAT_SPACE(i * sizeof(int));
+-			kmsg->msg_control += cmlen;
+-			kmsg->msg_controllen -= cmlen;
++			if (msg->msg_controllen < cmlen)
++				cmlen = msg->msg_controllen;
++			msg->msg_control += cmlen;
++			msg->msg_controllen -= cmlen;
+ 		}
+ 	}
+-	if (i < fdnum)
+-		kmsg->msg_flags |= MSG_CTRUNC;
++
++	if (i < scm->fp->count || (scm->fp->count && fdmax <= 0))
++		msg->msg_flags |= MSG_CTRUNC;
  
- 	/* Verify bad flags cannot be set */
-+	addfd.flags = 0xff;
- 	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
- 	EXPECT_EQ(errno, EINVAL);
-+	addfd.flags = 0;
+ 	/*
+-	 * All of the files that fit in the message have had their
+-	 * usage counts incremented, so we just free the list.
++	 * All of the files that fit in the message have had their usage counts
++	 * incremented, so we just free the list.
+ 	 */
+ 	__scm_destroy(scm);
+ }
+diff --git a/net/core/scm.c b/net/core/scm.c
+index 875df1c2989d..6151678c73ed 100644
+--- a/net/core/scm.c
++++ b/net/core/scm.c
+@@ -280,7 +280,7 @@ void put_cmsg_scm_timestamping(struct msghdr *msg, struct scm_timestamping_inter
+ }
+ EXPORT_SYMBOL(put_cmsg_scm_timestamping);
  
- 	/* Verify that remote_fd cannot be set without setting flags */
--	addfd.flags = 0;
- 	addfd.newfd = 1;
- 	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), -1);
- 	EXPECT_EQ(errno, EINVAL);
+-static int __scm_install_fd(struct file *file, int __user *ufd, int o_flags)
++int __scm_install_fd(struct file *file, int __user *ufd, unsigned int o_flags)
+ {
+ 	struct socket *sock;
+ 	int new_fd;
+@@ -319,29 +319,29 @@ static int scm_max_fds(struct msghdr *msg)
+ 
+ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm)
+ {
+-	struct cmsghdr __user *cm
+-		= (__force struct cmsghdr __user*)msg->msg_control;
+-	int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
++	struct cmsghdr __user *cm =
++		(__force struct cmsghdr __user *)msg->msg_control;
++	unsigned int o_flags = (msg->msg_flags & MSG_CMSG_CLOEXEC) ? O_CLOEXEC : 0;
+ 	int fdmax = min_t(int, scm_max_fds(msg), scm->fp->count);
+ 	int __user *cmsg_data = CMSG_USER_DATA(cm);
+ 	int err = 0, i;
+ 
++	/* no use for FD passing from kernel space callers */
++	if (WARN_ON_ONCE(!msg->msg_control_is_user))
++		return;
++
+ 	if (msg->msg_flags & MSG_CMSG_COMPAT) {
+ 		scm_detach_fds_compat(msg, scm);
+ 		return;
+ 	}
+ 
+-	/* no use for FD passing from kernel space callers */
+-	if (WARN_ON_ONCE(!msg->msg_control_is_user))
+-		return;
 -
--	/* Verify we can set an arbitrary remote fd */
- 	addfd.newfd = 0;
+ 	for (i = 0; i < fdmax; i++) {
+ 		err = __scm_install_fd(scm->fp->fp[i], cmsg_data + i, o_flags);
+ 		if (err)
+ 			break;
+ 	}
  
--	ret = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
--	EXPECT_GE(ret, 0);
--	EXPECT_EQ(filecmp(getpid(), pid, memfd, ret), 0);
-+	/* Verify we can set an arbitrary remote fd */
-+	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
-+	/*
-+	 * The child has fds 0(stdin), 1(stdout), 2(stderr), 3(memfd),
-+	 * 4(listener), so the newly allocated fd should be 5.
-+	 */
-+	EXPECT_EQ(fd, 5);
-+	ret = filecmp(getpid(), pid, memfd, fd);
-+	if (ret != 0) {
-+		if (ret < 0 && errno == ENOSYS) {
-+			TH_LOG("kcmp() syscall missing (test is less accurate)");
-+		} else
-+			EXPECT_EQ(ret, 0);
-+	}
+-	if (i > 0)  {
++	if (i > 0) {
+ 		int cmlen = CMSG_LEN(i * sizeof(int));
  
- 	/* Verify we can set a specific remote fd */
- 	addfd.newfd = 42;
- 	addfd.flags = SECCOMP_ADDFD_FLAG_SETFD;
- 
--	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd), 42);
--	EXPECT_EQ(filecmp(getpid(), pid, memfd, 42), 0);
-+	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
-+	EXPECT_EQ(fd, 42);
-+	ret = filecmp(getpid(), pid, memfd, fd);
-+	if (ret != 0) {
-+		if (ret < 0 && errno == ENOSYS) {
-+			TH_LOG("kcmp() syscall missing (test is less accurate)");
-+		} else
-+			EXPECT_EQ(ret, 0);
-+	}
- 
- 	resp.id = req.id;
- 	resp.error = 0;
+ 		err = put_user(SOL_SOCKET, &cm->cmsg_level);
 -- 
 2.25.1
 
