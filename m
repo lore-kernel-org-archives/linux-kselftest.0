@@ -2,37 +2,36 @@ Return-Path: <SRS0=yK7M=76=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5AA6C433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 19:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6939C433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 19:08:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4E752088E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 19:05:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A10FD2088E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 19:08:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbgFQTF2 (ORCPT
+        id S1726998AbgFQTII (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 15:05:28 -0400
-Received: from mga04.intel.com ([192.55.52.120]:48989 "EHLO mga04.intel.com"
+        Wed, 17 Jun 2020 15:08:08 -0400
+Received: from mga04.intel.com ([192.55.52.120]:48955 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbgFQTF0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 15:05:26 -0400
-IronPort-SDR: rWOlf+KEPivNXjSJoSjQgPetUTvQJArbAH+Cu1LtRTozHUGKO2agV5xct5ZTp+Svr/ty8LwIgN
- AK602w/AeZtA==
+        id S1726496AbgFQTIH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 15:08:07 -0400
+IronPort-SDR: GXAD86Y+v0sAZ7jjCoGmhuL8BUfr1j6pluGgzU4R9vqHj7R/YWI1hhy/F7olgkkf0YqS2oMViU
+ Z5Wc2qnZ0GdA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 12:05:10 -0700
-IronPort-SDR: vJEpKL+AIa7KhEzPupD3WbOKuBWu+CYvk8p+IiV4ZdOZMRARIttvSmd3m0FmydNAtiba+osmr/
- hjQT5dpQEtyg==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 12:05:05 -0700
+IronPort-SDR: f4PG7rOzUp9wJxnaGIS99b7kAedDAFG1mwUMnkZiMuYr+yJgZN+GU8YukTeTJ/vMUngKvmiene
+ 3v5dNH4Wg0Qg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,523,1583222400"; 
-   d="scan'208";a="273609661"
+   d="scan'208";a="273609545"
 Received: from gza.jf.intel.com ([10.54.75.28])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2020 12:05:10 -0700
+  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2020 12:05:04 -0700
 From:   John Andersen <john.s.andersen@intel.com>
 To:     corbet@lwn.net, pbonzini@redhat.com, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
@@ -55,297 +54,350 @@ Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         kernel-hardening@lists.openwall.com
-Subject: [PATCH 3/4] selftests: kvm: add test for CR pinning with SMM
-Date:   Wed, 17 Jun 2020 12:07:56 -0700
-Message-Id: <20200617190757.27081-4-john.s.andersen@intel.com>
+Subject: [PATCH 0/4] Paravirtualized Control Register pinning
+Date:   Wed, 17 Jun 2020 12:07:53 -0700
+Message-Id: <20200617190757.27081-1-john.s.andersen@intel.com>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200617190757.27081-1-john.s.andersen@intel.com>
-References: <20200617190757.27081-1-john.s.andersen@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Check that paravirtualized control register pinning blocks modifications
-of pinned CR values stored in SMRAM on exit from SMM.
+The paravirtualized CR pinning patchset is a strengthened version of
+existing control registers pinning for paravritualized guests. It
+protects KVM guests from ROP based attacks which attempt to disable key
+security features. Virtualized Linux guests such as Kata Containers, AWS
+Lambda, and Chromos Termina will get this protection enabled by default
+when they update their kernel / configs. Using virtualization allows us
+to provide a stronger version of a proven exploit mitigation technique.
 
-Signed-off-by: John Andersen <john.s.andersen@intel.com>
----
+We’ve patched KVM to create 6 new KVM specific MSRs used to query which
+bits may be pinned, and to set which bits are pinned high or low in
+control registers 0 and 4. Linux guest support was added so that
+non-kexec guests will be able to take advantage of this strengthened
+protection by default. A plan for enabling guests with kexec is proposed
+in this cover letter. As part of that plan, we add a command line flag
+that allows users to opt-in to the protection on boot if they have kexec
+built into their kernel, effectively opting out of kexec support.
+Hibernation and suspend to ram were enabled by updating the location
+where bits in control register 4 were saved to and restored from. The
+work also includes minor patches for QEMU to ensure reboot works by
+clearing the added MSRs and exposing the new CPUID feature bit. There is
+one SMM related selftest added in this patchset and another patch for
+kvm-unit-tests that will be sent separately.
+
+Thank you to Sean and Drew who reviewed v2, to Boris, Paolo, Andy, and
+Liran who reviewed v1, and to Sean, Dave, Kristen, and Rick who've
+provided feedback throughout. I appreciate your time spent reviewing and
+feedback.
+
+Here are the previous RFC versions of this patchset for reference
+
+RFC v2: https://lkml.org/lkml/2020/2/18/1162
+RFC v1: https://lkml.org/lkml/2019/12/24/380
+
+
+
+=== High level overview of the changes ===
+
+- A CPUID feature bit as well as MSRs were added to KVM. Guests can use
+  the CPUID feature bit to determine if MSRs are available. Reading the
+  first 2 MSRs returns the bits which may be pinned for CR0/4
+  respectively. The next 4 MSRs are writeable and allow the guest and
+  host userspace to set which bits are pinned low or pinned high for
+  CR0/4.
+
+- Hibernation and suspend-to-RAM are supported. This was done by
+  updating mmu_cr4_features on feature identification of the boot CPU.
+  As such, mmu_cr4_features is no longer read only after init.
+
+- CPU hotplug is supported. Pinning is per vCPU. When running as a guest
+  pinning is requested after CPU identification for non-boot CPUs. The
+  boot CPU requests pinning a directly after existing pinning is setup.
+
+- Nested virtualization is supported. SVM / VMX restore pinned bits on
+  VM-Exit if they had been unset in the host VMCB / VMCS.
+
+- As suggested by Sean, unpinning of pinned bits on return from SMM due
+  to modification of SMRAM will cause an unhandleable emulation fault
+  resulting in termination of the guest.
+
+- kexec support is still pending, since the plan is a bit long it's been
+  moved to the end of the cover letter. It talks about the decision to
+  make a command line parameter, why we opt in to pinning (and
+  effectively out of kexec). Being that those changes wouldn't be
+  localized to KVM (and this patchset is on top of kvm/next).
+
+- As Paolo requested, a patch will be sent immediately following this
+  patchset for kvm-unit-tests with the unit tests for general
+  functionality. selftests are included for SMM specific functionality.
+
+
+
+=== Chanages since RFCv2 ===
+
+- Related to Drew's comments
+
+  - Used linux/stringify.h in selftests
+
+  - Added comments on why we don't use GUEST_* due to SMM trickiness.
+    We opt not to use GUEST_SYNC() because we also have to make a sync call
+    from SMM. As such, the address of the ucall struct we'd need to pass isn't
+    something we can put into the machine code in a maintainable way. At least
+    so far as I could tell.
+
+- Related to Sean's comments
+
+  - Allowed pinning bits high or low rather than just high
+
+  - Cleaner code path for guest and host when writing to MSRs
+
+    - Didn't use read modify write behavior due to that requiring changes to
+      selftest save restore code which made me suspect that there might be
+      issues with other VMMs. The issue was because we read CR0/4 in the RWM
+      operation on the MSR, we must do KVM_SET_REGS before KVM_SET_MSRS, we also
+      had to call KVM_SET_SREGS and add checks for if we're in SMM or not. This
+      made it a bit more messy overall so I went with the first approach Sean
+      suggested where we just have pin high/low semantics.
+
+  - If the guest writes values to the allowed MSRs that are not the correct
+    value the wrmsr fails.
+
+  - If SMRAM modification would result in unpinning bits we bail with
+    X86EMUL_UNHANDLEABLE
+
+  - Added silent restoration of pinned bits for SVM and VMX when they may have
+    been modified in VMCB / VMCS. This didn't seem like a place were we'd want
+    to inject a fault, please let me know if we should.
+
+
+
+=== Description of changes and rational ===
+
+Paravirtualized Control Register pinning is a strengthened version of
+existing protections on the Write Protect, Supervisor Mode Execution /
+Access Protection, and User-Mode Instruction Prevention bits. The
+existing protections prevent native_write_cr*() functions from writing
+values which disable those bits. This patchset prevents any guest
+writes to control registers from disabling pinned bits, not just writes
+from native_write_cr*(). This stops attackers within the guest from
+using ROP to disable protection bits.
+
+https://web.archive.org/web/20171029060939/http://www.blackbunny.io/linux-kernel-x86-64-bypass-smep-kaslr-kptr_restric/
+
+The protection is implemented by adding MSRs to KVM which contain the
+bits that are allowed to be pinned, and the bits which are pinned. The
+guest or userspace can enable bit pinning by reading MSRs to check
+which bits are allowed to be pinned, and then writing MSRs to set which
+bits they want pinned.
+
+Other hypervisors such as HyperV have implemented similar protections
+for Control Registers and MSRs; which security researchers have found
+effective.
+
+https://www.abatchy.com/2018/01/kernel-exploitation-4
+
+We add a CR pin feature bit to the KVM cpuid, read only MSRs which
+guests use to identify which bits they may request be pinned, and CR
+pinned low/high MSRs which contain the pinned bits. Guests can request
+that KVM pin bits within control register 0 or 4 via the CR pinned MSRs.
+Writes to the MSRs fail if they include bits that aren't allowed to be
+pinned. Host userspace may clear or modify pinned bits at any time. Once
+pinned bits are set, the guest may pin more allowed bits, but may never
+clear pinned bits.
+
+In the event that the guest vCPU attempts to disable any of the pinned
+bits, the vCPU that issued the write is sent a general protection
+fault, and the register is left unchanged.
+
+When running with KVM guest support and paravirtualized CR pinning
+enabled, paravirtualized and existing pinning are setup at the same
+point on the boot CPU. Non-boot CPUs setup pinning upon identification.
+
+Pinning is not active when running in SMM. Entering SMM disables pinned
+bits. Writes to control registers within SMM would therefore trigger
+general protection faults if pinning was enforced. Upon exit from SMM,
+SMRAM is modified to ensure the values of CR0/4 that will be restored
+contain the correct values for pinned bits. CR0/4 values are then
+restored from SMRAM as usual.
+
+When running with nested virtualization, should pinned bits be cleared
+from host VMCS / VMCB, on VM-Exit, they will be silently restored.
+
+Should userspace expose the CR pining CPUID feature bit, it must zero
+CR pinned MSRs on reboot. If it does not, it runs the risk of having
+the guest enable pinning and subsequently cause general protection
+faults on next boot due to early boot code setting control registers to
+values which do not contain the pinned bits.
+
+Hibernation to disk and suspend-to-RAM are supported. identify_cpu was
+updated to ensure SMEP/SMAP/UMIP are present in mmu_cr4_features. This
+is necessary to ensure protections stay active during hibernation image
+restoration.
+
+Guests using the kexec system call currently do not support
+paravirtualized control register pinning. This is due to early boot
+code writing known good values to control registers, these values do
+not contain the protected bits. This is due to CPU feature
+identification being done at a later time, when the kernel properly
+checks if it can enable protections. As such, the pv_cr_pin command
+line option has been added which instructs the kernel to disable kexec
+in favor of enabling paravirtualized control register pinning.
+crashkernel is also disabled when the pv_cr_pin parameter is specified
+due to its reliance on kexec.
+
+When we make kexec compatible, we will still need a way for a kernel
+with support to know if the kernel it is attempting to load has
+support. If a kernel with this enabled attempts to kexec a kernel where
+this is not supported, it would trigger a fault almost immediately.
+
+Liran suggested adding a section to the built image acting as a flag to
+signify support for being kexec'd by a kernel with pinning enabled.
+Should that approach be implemented, it is likely that the command line
+flag (pv_cr_pin) would still be desired for some deprecation period. We
+wouldn't want the default behavior to change from being able to kexec
+older kernels to not being able to, as this might break some users
+workflows. Since we require that the user opt-in to break kexec we've
+held off on attempting to fix kexec in this patchset. This way no one
+sees any behavior they are not explicitly opting in to.
+
+Security conscious kernel configurations disable kexec already, per
+KSPP guidelines. Projects such as Kata Containers, AWS Lambda, ChromeOS
+Termina, and others using KVM to virtualize Linux will benefit from
+this protection without the need to specify pv_cr_pin on the command
+line.
+
+Pinning of sensitive CR bits has already been implemented to protect
+against exploits directly calling native_write_cr*(). The current
+protection cannot stop ROP attacks which jump directly to a MOV CR
+instruction. Guests running with paravirtualized CR pinning are now
+protected against the use of ROP to disable CR bits. The same bits that
+are being pinned natively may be pinned via the CR pinned MSRs. These
+bits are WP in CR0, and SMEP, SMAP, and UMIP in CR4.
+
+Future patches could implement similar MSRs to protect bits in MSRs.
+The NXE bit of the EFER MSR is a prime candidate.
+
+
+
+=== Plan for kexec support ===
+
+Andy's suggestion of a boot option has been incorporated as the
+pv_cr_pin command line option. Boris mentioned that short-term
+solutions become immutable. However, for the reasons outlined below
+we need a way for the user to opt-in to pinning over kexec if both
+are compiled in, and the command line parameter seems to be a good
+way to do that. Liran's proposed solution of a flag within the ELF
+would allow us to identify which kernels have support is assumed to
+be implemented in the following scenarios.
+
+We then have the following cases (without the addition of pv_cr_pin):
+
+
+- Kernel running without pinning enabled kexecs kernel with pinning.
+
+  - Loaded kernel has kexec
+
+    - Do not enable pinning
+
+  - Loaded kernel lacks kexec
+
+    - Enable pinning
+
+- Kernel running with pinning enabled kexecs kernel with pinning (as
+  identified by ELF addition).
+
+  - Okay
+
+- Kernel running with pinning enabled kexecs kernel without pinning
+  (as identified by lack of ELF addition).
+
+  - User is presented with an error saying that they may not kexec
+    a kernel without pinning support.
+
+
+With the addition of pv_cr_pin we have the following situations:
+
+
+- Kernel running without pinning enabled kexecs kernel with pinning.
+
+  - Loaded kernel has kexec
+
+    - pv_cr_pin command line parameter present for new kernel
+
+      - Enable pinning
+
+    - pv_cr_pin command line parameter not present for new kernel
+
+      - Do not enable pinning
+
+  - Loaded kernel lacks kexec
+
+    - Enable pinning
+
+- Kernel running with pinning enabled kexecs kernel with pinning (as
+  identified by ELF addition).
+
+  - Okay
+
+- Kernel running with kexec and pinning enabled (opt-in via pv_cr_pin)
+  kexecs kernel without pinning (as identified by lack of ELF addition).
+
+  - User is presented with an error saying that they have opted
+    into pinning support and may not kexec a kernel without pinning
+    support.
+
+
+Without the command line parameter I'm not sure how we could preserve
+users workflows which might rely on kexecing older kernels (ones
+which wouldn't have support). I see the benefit here being that users
+have to opt-in to the possibility of breaking their workflow, via
+their addition of the pv_cr_pin command line flag. Which could of
+course also be called nokexec. A deprecation period could then be
+chosen where eventually pinning takes preference over kexec and users
+are presented with the error if they try to kexec an older kernel.
+Input on this would be much appreciated, as well as if this is the
+best way to handle things or if there's another way that would be
+preferred. This is just what we were able to come up with to ensure
+users didn't get anything broken they didn't agree to have broken.
+
+
+Thanks,
+John
+
+John Andersen (4):
+  X86: Update mmu_cr4_features during feature identification
+  KVM: x86: Introduce paravirt feature CR0/CR4 pinning
+  selftests: kvm: add test for CR pinning with SMM
+  X86: Use KVM CR pin MSRs
+
+ .../admin-guide/kernel-parameters.txt         |  11 +
+ Documentation/virt/kvm/msr.rst                |  53 +++++
+ arch/x86/Kconfig                              |  10 +
+ arch/x86/include/asm/kvm_host.h               |   7 +
+ arch/x86/include/asm/kvm_para.h               |  28 +++
+ arch/x86/include/uapi/asm/kvm_para.h          |   7 +
+ arch/x86/kernel/cpu/common.c                  |  11 +-
+ arch/x86/kernel/kvm.c                         |  39 ++++
+ arch/x86/kernel/setup.c                       |  12 +-
+ arch/x86/kvm/cpuid.c                          |   3 +-
+ arch/x86/kvm/emulate.c                        |   3 +-
+ arch/x86/kvm/kvm_emulate.h                    |   2 +-
+ arch/x86/kvm/svm/nested.c                     |  11 +-
+ arch/x86/kvm/vmx/nested.c                     |  10 +-
+ arch/x86/kvm/x86.c                            | 106 ++++++++-
  tools/testing/selftests/kvm/.gitignore        |   1 +
  tools/testing/selftests/kvm/Makefile          |   1 +
  .../selftests/kvm/include/x86_64/processor.h  |  13 ++
  .../selftests/kvm/x86_64/smm_cr_pin_test.c    | 207 ++++++++++++++++++
- 4 files changed, 222 insertions(+)
+ 19 files changed, 521 insertions(+), 14 deletions(-)
  create mode 100644 tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 452787152748..c0666c3efcbb 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -10,6 +10,7 @@
- /x86_64/platform_info_test
- /x86_64/set_sregs_test
- /x86_64/smm_test
-+/x86_64/smm_cr_pin_test
- /x86_64/state_test
- /x86_64/vmx_preemption_timer_test
- /x86_64/svm_vmcall_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 4a166588d99f..c5c205637f38 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -45,6 +45,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/mmio_warning_test
- TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
- TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
- TEST_GEN_PROGS_x86_64 += x86_64/smm_test
-+TEST_GEN_PROGS_x86_64 += x86_64/smm_cr_pin_test
- TEST_GEN_PROGS_x86_64 += x86_64/state_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 82b7fe16a824..8a2da0449772 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -200,6 +200,11 @@ static inline uint64_t get_cr0(void)
- 	return cr0;
- }
- 
-+static inline void set_cr0(uint64_t val)
-+{
-+	__asm__ __volatile__("mov %0, %%cr0" : : "r" (val) : "memory");
-+}
-+
- static inline uint64_t get_cr3(void)
- {
- 	uint64_t cr3;
-@@ -383,4 +388,12 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits);
- /* VMX_EPT_VPID_CAP bits */
- #define VMX_EPT_VPID_CAP_AD_BITS       (1ULL << 21)
- 
-+/* KVM MSRs */
-+#define MSR_KVM_CR0_PIN_ALLOWED	0x4b564d08
-+#define MSR_KVM_CR4_PIN_ALLOWED	0x4b564d09
-+#define MSR_KVM_CR0_PINNED_LOW	0x4b564d0a
-+#define MSR_KVM_CR0_PINNED_HIGH	0x4b564d0b
-+#define MSR_KVM_CR4_PINNED_LOW	0x4b564d0c
-+#define MSR_KVM_CR4_PINNED_HIGH	0x4b564d0d
-+
- #endif /* SELFTEST_KVM_PROCESSOR_H */
-diff --git a/tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c b/tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c
-new file mode 100644
-index 000000000000..a32f577ca1e5
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/smm_cr_pin_test.c
-@@ -0,0 +1,207 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Tests for control register pinning not being affected by SMRAM writes.
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <linux/stringify.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+
-+#include "processor.h"
-+
-+#define VCPU_ID	      1
-+
-+#define PAGE_SIZE  4096
-+
-+#define SMRAM_SIZE 65536
-+#define SMRAM_MEMSLOT ((1 << 16) | 1)
-+#define SMRAM_PAGES (SMRAM_SIZE / PAGE_SIZE)
-+#define SMRAM_GPA 0x1000000
-+#define SMRAM_STAGE_SUCCESS 0xfe
-+#define SMRAM_STAGE_FAILURE 0xfd
-+
-+#define XSTR(s) __stringify(s)
-+
-+#define SYNC_PORT 0xe
-+#define DONE 0xff
-+
-+#define CR0_PINNED X86_CR0_WP
-+#define CR4_PINNED (X86_CR4_SMAP | X86_CR4_UMIP)
-+#define CR4_ALL (CR4_PINNED | X86_CR4_SMEP)
-+
-+/*
-+ * This is compiled as normal 64-bit code, however, SMI handler is executed
-+ * in real-address mode. To stay simple we're limiting ourselves to a mode
-+ * independent subset of asm here.
-+ * SMI handler always report back fixed stage SMRAM_STAGE_SUCCESS.
-+ */
-+uint8_t smi_handler_success[] = {
-+	0xb0, SMRAM_STAGE_SUCCESS,    /* mov $SMRAM_STAGE_SUCCESS, %al */
-+	0xe4, SYNC_PORT,              /* in $SYNC_PORT, %al */
-+	0x0f, 0xaa,                   /* rsm */
-+};
-+uint8_t smi_handler_fault[] = {
-+	0xb0, SMRAM_STAGE_FAILURE,    /* mov $SMRAM_STAGE_FAILURE, %al */
-+	0xe4, SYNC_PORT,              /* in $SYNC_PORT, %al */
-+	0x0f, 0xaa,                   /* rsm */
-+};
-+
-+/* We opt not to use GUEST_SYNC() here because we also have to make a sync call
-+ * from SMM. As such, the address of the ucall struct we'd need to pass isn't
-+ * something we can put into the above machine code in a maintainable way
-+ */
-+static inline void sync_with_host(uint64_t phase)
-+{
-+	asm volatile("in $" XSTR(SYNC_PORT)", %%al\n"
-+		     : "+a" (phase));
-+}
-+
-+void self_smi(void)
-+{
-+	wrmsr(APIC_BASE_MSR + (APIC_ICR >> 4),
-+	      APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_SMI);
-+}
-+
-+void guest_code(void)
-+{
-+	uint64_t apicbase = rdmsr(MSR_IA32_APICBASE);
-+
-+	sync_with_host(1);
-+
-+	wrmsr(MSR_IA32_APICBASE, apicbase | X2APIC_ENABLE);
-+
-+	sync_with_host(2);
-+
-+	set_cr0(get_cr0() | CR0_PINNED);
-+
-+	wrmsr(MSR_KVM_CR0_PINNED_HIGH, CR0_PINNED);
-+
-+	sync_with_host(3);
-+
-+	set_cr4(get_cr4() | CR4_PINNED);
-+
-+	sync_with_host(4);
-+
-+	/* Pin SMEP low */
-+	wrmsr(MSR_KVM_CR4_PINNED_HIGH, CR4_PINNED);
-+
-+	sync_with_host(5);
-+
-+	self_smi();
-+
-+	sync_with_host(DONE);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_regs regs;
-+	struct kvm_sregs sregs;
-+	struct kvm_vm *vm;
-+	struct kvm_run *run;
-+	struct kvm_x86_state *state;
-+	int failure, stage, stage_reported;
-+	u64 *cr;
-+
-+	for (failure = 0; failure <= 1; failure++) {
-+		stage_reported = 0;
-+
-+		/* Create VM */
-+		vm = vm_create_default(VCPU_ID, 0, guest_code);
-+
-+		vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
-+
-+		run = vcpu_state(vm, VCPU_ID);
-+
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, SMRAM_GPA,
-+					    SMRAM_MEMSLOT, SMRAM_PAGES, 0);
-+		TEST_ASSERT(vm_phy_pages_alloc(vm, SMRAM_PAGES, SMRAM_GPA, SMRAM_MEMSLOT)
-+			    == SMRAM_GPA, "could not allocate guest physical addresses?");
-+
-+		memset(addr_gpa2hva(vm, SMRAM_GPA), 0x0, SMRAM_SIZE);
-+		if (failure) {
-+			memcpy(addr_gpa2hva(vm, SMRAM_GPA) + 0x8000, smi_handler_fault,
-+			       sizeof(smi_handler_fault));
-+		} else {
-+			memcpy(addr_gpa2hva(vm, SMRAM_GPA) + 0x8000, smi_handler_success,
-+			       sizeof(smi_handler_success));
-+		}
-+		vcpu_set_msr(vm, VCPU_ID, MSR_IA32_SMBASE, SMRAM_GPA);
-+
-+		for (stage = 1;; stage++) {
-+			_vcpu_run(vm, VCPU_ID);
-+
-+			memset(&regs, 0, sizeof(regs));
-+			vcpu_regs_get(vm, VCPU_ID, &regs);
-+
-+			memset(&sregs, 0, sizeof(sregs));
-+			vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+
-+			/* stage_reported is currrently the last stage reported */
-+			if (failure && stage_reported == SMRAM_STAGE_FAILURE) {
-+				/* Ensure that we exit on smram modification of CR4 */
-+				TEST_ASSERT(run->exit_reason == KVM_EXIT_INTERNAL_ERROR &&
-+					    run->internal.suberror == KVM_INTERNAL_ERROR_EMULATION,
-+					    "Stage %d: unexpected exit reason: %u, suberror: %u (%s),\n",
-+					    stage, run->exit_reason, run->internal.suberror,
-+					    exit_reason_str(run->exit_reason));
-+				if (run->exit_reason == KVM_EXIT_INTERNAL_ERROR)
-+					goto done;
-+			} else {
-+				TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+					    "Stage %d: unexpected exit reason: %u (%s),\n",
-+					    stage, run->exit_reason,
-+					    exit_reason_str(run->exit_reason));
-+			}
-+
-+			stage_reported = regs.rax & 0xff;
-+
-+			if (stage_reported == DONE) {
-+				TEST_ASSERT((sregs.cr0 & CR0_PINNED) == CR0_PINNED,
-+					    "Unexpected cr0. Bits missing: %llx",
-+					    sregs.cr0 ^ (CR0_PINNED | sregs.cr0));
-+				TEST_ASSERT((sregs.cr4 & CR4_ALL) == CR4_PINNED,
-+					    "Unexpected cr4. Bits missing: %llx, cr4: %llx",
-+					    sregs.cr4 ^ (CR4_ALL | sregs.cr4),
-+					    sregs.cr4);
-+				goto done;
-+			}
-+
-+			TEST_ASSERT(stage_reported == stage ||
-+				    stage_reported == SMRAM_STAGE_SUCCESS ||
-+				    stage_reported == SMRAM_STAGE_FAILURE,
-+				    "Unexpected stage: #%x, got %x",
-+				    stage, stage_reported);
-+
-+			/* Within SMM modify CR0/4 to not contain pinned bits. */
-+			if (stage_reported == SMRAM_STAGE_FAILURE) {
-+				cr = (u64 *)(addr_gpa2hva(vm, SMRAM_GPA + 0x8000 + 0x7f58));
-+				*cr &= ~CR0_PINNED;
-+
-+				cr = (u64 *)(addr_gpa2hva(vm, SMRAM_GPA + 0x8000 + 0x7f48));
-+				/* Unset pinned, set one that was pinned low */
-+				*cr &= ~CR4_PINNED;
-+				*cr |= X86_CR4_SMEP;
-+			}
-+
-+			state = vcpu_save_state(vm, VCPU_ID);
-+			kvm_vm_release(vm);
-+			kvm_vm_restart(vm, O_RDWR);
-+			vm_vcpu_add(vm, VCPU_ID);
-+			vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
-+			vcpu_load_state(vm, VCPU_ID, state);
-+			run = vcpu_state(vm, VCPU_ID);
-+			free(state);
-+		}
-+
-+done:
-+		kvm_vm_free(vm);
-+	}
-+}
+
+base-commit: 49b3deaad3452217d62dbd78da8df24eb0c7e169
 -- 
 2.21.0
 
