@@ -2,113 +2,142 @@ Return-Path: <SRS0=yK7M=76=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B49E7C433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 18:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE379C433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 19:05:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81EDB208B8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 18:40:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hHeKJA5b"
+	by mail.kernel.org (Postfix) with ESMTP id D16BE2088E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Jun 2020 19:05:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbgFQSk3 (ORCPT
+        id S1726761AbgFQTFK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 14:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726851AbgFQSkY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 14:40:24 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAEBC0613EF
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2020 11:40:24 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id s88so1487110pjb.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jun 2020 11:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KcSum0XnLgDWG/9J1zd7huPRZUcbTdd3T0stJfNhXtU=;
-        b=hHeKJA5bpWojfm1pX2unVw+EfqUuRl8oPBdUNPLoCxjZ64sU0oStIKYfknHILmDFaZ
-         H9ZHJAe3xkt0qMgGgjNa6EjvRt/0qyjX/4NrDrZCZMQNniC1zsg9rGq+JkViIVv/0vWR
-         +7lVX4VJq+6OYKuN/6lWKksWFEEFKKkIWjELs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KcSum0XnLgDWG/9J1zd7huPRZUcbTdd3T0stJfNhXtU=;
-        b=JI5dE7pTWIor4e5nH312LnE4y1P7y24GUvpSt0SxjGoRH+HqdjJitjf7mv43WxYWxO
-         f3g6srcTdPt6+caGyfLzEKLlsVrmK+QYoN7qIoH9TEO047ctlJK1Qy3B1y55rGgyOZNO
-         bbSq68Fodocv5/BKmaeJbhYAmqzCOO4sL9eJcx77cqbbhSjBNtwvhW+GMHFIxqXgRvm9
-         KH+g7vCzXvCwGvna6sRL0Y0Y5ddW4ZJIQFgTi2Iz3JXSWK39NqfAaFD3Dt6Bt/t3I+uj
-         TgQUV69+vJ4yMX/7jYBaOUSqB34en/1RNCZlLi6X3FEnObhnpeiQGYynnd4PfHLbifmX
-         iM8A==
-X-Gm-Message-State: AOAM5339nVXQABjFlnVd7mkPe7yN14oq45yCTqMx4QzTfn8VCZRhlD4J
-        nXctwxj1SfID59w2nDHwjFOCkw==
-X-Google-Smtp-Source: ABdhPJzMCEeKbMD2vkbh+chVGcN7dvBNIk/GO49GvRnea+7Iwh7JIl8l4xjbafw6OC9ChWgKjmpkjA==
-X-Received: by 2002:a17:90a:218c:: with SMTP id q12mr383955pjc.116.1592419223126;
-        Wed, 17 Jun 2020 11:40:23 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u128sm506788pfu.148.2020.06.17.11.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 11:40:21 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 11:40:20 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian@brauner.io>,
-        "David S. Miller" <davem@davemloft.net>,
-        Christoph Hellwig <hch@lst.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Matt Denton <mpdenton@google.com>,
-        Jann Horn <jannh@google.com>, Chris Palmer <palmer@google.com>,
-        Robert Sesek <rsesek@google.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 02/11] fs: Move __scm_install_fd() to
- __fd_install_received()
-Message-ID: <202006171139.98B1735@keescook>
-References: <20200616032524.460144-1-keescook@chromium.org>
- <20200616032524.460144-3-keescook@chromium.org>
- <b58ef9a368214b69a86c7a78b67f84d5@AcuMS.aculab.com>
+        Wed, 17 Jun 2020 15:05:10 -0400
+Received: from mga04.intel.com ([192.55.52.120]:48978 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726511AbgFQTFJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 15:05:09 -0400
+IronPort-SDR: AaiEpV1M2bHzO3SoB3gB0kDeMlLcmFiso+sqionkh6V0Y2sUWRjKZOjqQBSZhXw+wVZKAlu31Y
+ MBkvjzRcaAIA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 12:05:09 -0700
+IronPort-SDR: XaTM/0pxYcUKBtQfhnD+idd+M4VFhRN/WvrCorf4TvEgLkY2ri0Xu/TSQT3k5nLvh2ixTBEmy0
+ BGSU6Y+wGWJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,523,1583222400"; 
+   d="scan'208";a="273609601"
+Received: from gza.jf.intel.com ([10.54.75.28])
+  by orsmga003.jf.intel.com with ESMTP; 17 Jun 2020 12:05:07 -0700
+From:   John Andersen <john.s.andersen@intel.com>
+To:     corbet@lwn.net, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        shuah@kernel.org, sean.j.christopherson@intel.com,
+        liran.alon@oracle.com, drjones@redhat.com,
+        rick.p.edgecombe@intel.com, kristen@linux.intel.com
+Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, mchehab+huawei@kernel.org,
+        gregkh@linuxfoundation.org, paulmck@kernel.org,
+        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
+        mike.kravetz@oracle.com, oneukum@suse.com, luto@kernel.org,
+        peterz@infradead.org, fenghua.yu@intel.com,
+        reinette.chatre@intel.com, vineela.tummalapalli@intel.com,
+        dave.hansen@linux.intel.com, john.s.andersen@intel.com,
+        arjan@linux.intel.com, caoj.fnst@cn.fujitsu.com, bhe@redhat.com,
+        nivedita@alum.mit.edu, keescook@chromium.org,
+        dan.j.williams@intel.com, eric.auger@redhat.com,
+        aaronlewis@google.com, peterx@redhat.com,
+        makarandsonare@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        kernel-hardening@lists.openwall.com
+Subject: [PATCH 1/4] X86: Update mmu_cr4_features during feature identification
+Date:   Wed, 17 Jun 2020 12:07:54 -0700
+Message-Id: <20200617190757.27081-2-john.s.andersen@intel.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20200617190757.27081-1-john.s.andersen@intel.com>
+References: <20200617190757.27081-1-john.s.andersen@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b58ef9a368214b69a86c7a78b67f84d5@AcuMS.aculab.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 03:25:41PM +0000, David Laight wrote:
-> From: Kees Cook
-> > Sent: 16 June 2020 04:25
->  
-> > In preparation for users of the "install a received file" logic outside
-> > of net/ (pidfd and seccomp), relocate and rename __scm_install_fd() from
-> > net/core/scm.c to __fd_install_received() in fs/file.c, and provide a
-> > wrapper named fd_install_received_user(), as future patches will change
-> > the interface to __fd_install_received().
-> 
-> Any reason for the leading __ ??
+In identify_cpu when setting up SMEP/SMAP/UMIP call
+cr4_set_bits_and_update_boot instead of cr4_set_bits. This ensures that
+mmu_cr4_features contains those bits, and does not disable those
+protections when in hibernation asm.
 
-Mainly because of the code pattern of only using the inline helpers to
-call it.
+setup_arch updates mmu_cr4_features to save what identified features are
+supported for later use in hibernation asm when cr4 needs to be modified
+to toggle PGE. cr4 writes happen in restore_image and restore_registers.
+setup_arch occurs before identify_cpu, this leads to mmu_cr4_features
+not containing some of the cr4 features which were enabled via
+identify_cpu when hibernation asm is executed.
 
+On CPU bringup when cr4_set_bits_and_update_boot is called
+mmu_cr4_features will now be written to. For the boot CPU,
+the __ro_after_init on mmu_cr4_features does not cause a fault. However,
+__ro_after_init was removed due to it triggering faults on non-boot
+CPUs.
+
+Signed-off-by: John Andersen <john.s.andersen@intel.com>
+---
+ arch/x86/kernel/cpu/common.c | 6 +++---
+ arch/x86/kernel/setup.c      | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index d07809286b95..921e67086a00 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -297,7 +297,7 @@ __setup("nosmep", setup_disable_smep);
+ static __always_inline void setup_smep(struct cpuinfo_x86 *c)
+ {
+ 	if (cpu_has(c, X86_FEATURE_SMEP))
+-		cr4_set_bits(X86_CR4_SMEP);
++		cr4_set_bits_and_update_boot(X86_CR4_SMEP);
+ }
+ 
+ static __init int setup_disable_smap(char *arg)
+@@ -316,7 +316,7 @@ static __always_inline void setup_smap(struct cpuinfo_x86 *c)
+ 
+ 	if (cpu_has(c, X86_FEATURE_SMAP)) {
+ #ifdef CONFIG_X86_SMAP
+-		cr4_set_bits(X86_CR4_SMAP);
++		cr4_set_bits_and_update_boot(X86_CR4_SMAP);
+ #else
+ 		cr4_clear_bits(X86_CR4_SMAP);
+ #endif
+@@ -333,7 +333,7 @@ static __always_inline void setup_umip(struct cpuinfo_x86 *c)
+ 	if (!cpu_has(c, X86_FEATURE_UMIP))
+ 		goto out;
+ 
+-	cr4_set_bits(X86_CR4_UMIP);
++	cr4_set_bits_and_update_boot(X86_CR4_UMIP);
+ 
+ 	pr_info_once("x86/cpu: User Mode Instruction Prevention (UMIP) activated\n");
+ 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index a3767e74c758..d9c678b37a9b 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -138,9 +138,9 @@ EXPORT_SYMBOL(boot_cpu_data);
+ 
+ 
+ #if !defined(CONFIG_X86_PAE) || defined(CONFIG_X86_64)
+-__visible unsigned long mmu_cr4_features __ro_after_init;
++__visible unsigned long mmu_cr4_features;
+ #else
+-__visible unsigned long mmu_cr4_features __ro_after_init = X86_CR4_PAE;
++__visible unsigned long mmu_cr4_features = X86_CR4_PAE;
+ #endif
+ 
+ /* Boot loader ID and version as integers, for the benefit of proc_dointvec */
 -- 
-Kees Cook
+2.21.0
+
