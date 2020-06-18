@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09928C433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB79C433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:35:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD5872083B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:25:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B2DA221FA
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592443548;
+	s=default; t=1592444150;
 	bh=WJhUlbUTIN1K73n4tY0V57/KVBPeXnvmTmlAw1UHdiw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=R45p3P0bPperMuP2ay52FM8Cw+VLKML6gieZ7ZSO5lrZ/eshfGaIoYRBZcwDKHxfr
-	 VQwvVN1LfBh5iK6msVbwhbDPHRFHAl7xoV/PoqZj4Am0cFoZDUGl70lCT+ZTpVU0fV
-	 UPgzxa7uxcXhcqlUh74HJIam8N9X6eb02bJn0vas=
+	b=mxy+ZEWPiHXZ7pdBQhBy0wYYM4SRWg/5gR+F8NNajAZM2MbcmiGZKON0ijPnGP5sT
+	 ncC0VGpHr3a2StWg2WeAZ6Iim+roWk49skNQD7qTlgK68wi1gGnHz4am0H44PmFeqJ
+	 WgksRSF9ql5aV7MnxXQ6h1QMSv6GVMB/lfcm+qPM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730602AbgFRBZs (ORCPT
+        id S1730248AbgFRBfk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 21:25:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32876 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 21:35:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731497AbgFRBZq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:25:46 -0400
+        id S1732757AbgFRBbW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:31:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5DF8C2075E;
-        Thu, 18 Jun 2020 01:25:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8F3422257;
+        Thu, 18 Jun 2020 01:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443546;
+        s=default; t=1592443881;
         bh=WJhUlbUTIN1K73n4tY0V57/KVBPeXnvmTmlAw1UHdiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=unVnacMYIz2Ds4VS9qeA7UNzayuBPR4EqRa808R3915kCAxkzbCiBgEF9whRz9W9c
-         MeK1bYjJkL4jR8WcR1E2UZKbClnP7USx1SE8yv3C33Wrfg5eHB4rMBRZRVQfNZw+Hu
-         cooPIHIxyypRk4ExECQ9xdl3MeK9ayOFwogUEI7U=
+        b=SGMYzoi0/Nr8Jt8bBK8Hh5RQKv9/57ipsZStfOT4ksagWUa6myup/VHUJlEeKxAnD
+         PSxsJ9H7E4EUxBd7kCgtKJdMt1lpRjWgosWH/5wMANQXwez79SgDWynnAaNe02ShI2
+         CZ58cXn56OA1AxDv0yueEMQRVhIMpObh4NLkcT9k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     tannerlove <tannerlove@google.com>,
@@ -46,12 +46,12 @@ Cc:     tannerlove <tannerlove@google.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 162/172] selftests/net: in timestamping, strncpy needs to preserve null byte
-Date:   Wed, 17 Jun 2020 21:22:08 -0400
-Message-Id: <20200618012218.607130-162-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 59/60] selftests/net: in timestamping, strncpy needs to preserve null byte
+Date:   Wed, 17 Jun 2020 21:30:03 -0400
+Message-Id: <20200618013004.610532-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
-References: <20200618012218.607130-1-sashal@kernel.org>
+In-Reply-To: <20200618013004.610532-1-sashal@kernel.org>
+References: <20200618013004.610532-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
