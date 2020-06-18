@@ -4,56 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38C04C433E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B92C433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:30:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17330207DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:30:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86074207DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:30:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592447427;
-	bh=bYRMw//X8rJwEygETmaSBUpaIrQsEaz+kvtKSZHbExQ=;
+	s=default; t=1592447441;
+	bh=KCnVK+gaeeikLm3JJfgKmPmF/BQMXdMBHmPPaLyIHyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qIYIVZFf0brfTLsBKqsDdPd6knJbOaGKnwa+NTXWZEFAUUjNhuswM+3PpF9VqxDsF
-	 fkhww8gQkj8h6UkClxKtHouBi5Fo8ciFhrm0PRGNve34+ItjYAdwN2rAHA1WPh6OkF
-	 wmb/UHo4LrSiHv2/tii1QjLkzahasxEC76Rd/5BE=
+	b=uuWfSKaAf/N6nTa5e9XOIHw9Cb9UT8fguAPksrRmKHFEmwJHKNq57Ff8pseeZnTur
+	 n6g6d8GukaJpAYBAuEhLNoNUN+lA+H0S2Ue3zXAyaxaKy6NkjtIaz4MTbec84NP8SI
+	 7o7PecKkkp0FzcMQXSCjETON9AcR8S7Xtb0jTcU0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728977AbgFRBPy (ORCPT
+        id S1733283AbgFRCak (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 21:15:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46134 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 22:30:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729520AbgFRBPw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:15:52 -0400
+        id S1728938AbgFRBPo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:15:44 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44A26206F1;
-        Thu, 18 Jun 2020 01:15:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 05FA6221FD;
+        Thu, 18 Jun 2020 01:15:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442950;
-        bh=bYRMw//X8rJwEygETmaSBUpaIrQsEaz+kvtKSZHbExQ=;
+        s=default; t=1592442944;
+        bh=KCnVK+gaeeikLm3JJfgKmPmF/BQMXdMBHmPPaLyIHyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yZZhQMaCyllvZ8FEPAtn7FgJzVyUhGEn1PbMZwX/1l0iB64ciA4bbuiJErEc5Jwiq
-         ulSt4MIKuzX9/ZbNIwn6lEPYB0gsWi6B9cZVC2/JJyfruQ73zch6UD9c96vB1G38/A
-         EwN8R5QINnr52f/jZW7oABKY2ugyx1Gnbb4qlGic=
+        b=UQ34EhzRFQB/N0+EVlHb8hg6nxKn7yoNb134A/twE01DKspDRCuypLFk8FHxmZguJ
+         W4+r6rsoIhnB3KOz1dG7YoBp81KSeyHe3iYofgbzwh4WeBB4aFSqSp5zFqxdRoiD4H
+         vMHWTapapFn9swHspdg3kF1EpLlOuTnAfFCLbKLI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     tannerlove <tannerlove@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 359/388] selftests/net: in timestamping, strncpy needs to preserve null byte
-Date:   Wed, 17 Jun 2020 21:07:36 -0400
-Message-Id: <20200618010805.600873-359-sashal@kernel.org>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Alexander Fomichev <fomichev.ru@gmail.com>,
+        Jon Mason <jdmason@kudzu.us>, Sasha Levin <sashal@kernel.org>,
+        linux-ntb@googlegroups.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 354/388] NTB: ntb_test: Fix bug when counting remote files
+Date:   Wed, 17 Jun 2020 21:07:31 -0400
+Message-Id: <20200618010805.600873-354-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -62,63 +61,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: tannerlove <tannerlove@google.com>
+From: Logan Gunthorpe <logang@deltatee.com>
 
-[ Upstream commit 8027bc0307ce59759b90679fa5d8b22949586d20 ]
+[ Upstream commit 2130c0ba69d69bb21f5c52787f2587db00d13d8a ]
 
-If user passed an interface option longer than 15 characters, then
-device.ifr_name and hwtstamp.ifr_name became non-null-terminated
-strings. The compiler warned about this:
+When remote files are counted in get_files_count, without using SSH,
+the code returns 0 because there is a colon prepended to $LOC. $VPATH
+should have been used instead of $LOC.
 
-timestamping.c:353:2: warning: ‘strncpy’ specified bound 16 equals \
-destination size [-Wstringop-truncation]
-  353 |  strncpy(device.ifr_name, interface, sizeof(device.ifr_name));
-
-Fixes: cb9eff097831 ("net: new user space API for time stamping of incoming and outgoing packets")
-Signed-off-by: Tanner Love <tannerlove@google.com>
-Acked-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 06bd0407d06c ("NTB: ntb_test: Update ntb_tool Scratchpad tests")
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Acked-by: Allen Hubbe <allenbh@gmail.com>
+Tested-by: Alexander Fomichev <fomichev.ru@gmail.com>
+Signed-off-by: Jon Mason <jdmason@kudzu.us>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/timestamping.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ tools/testing/selftests/ntb/ntb_test.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/timestamping.c b/tools/testing/selftests/net/timestamping.c
-index aca3491174a1..f4bb4fef0f39 100644
---- a/tools/testing/selftests/net/timestamping.c
-+++ b/tools/testing/selftests/net/timestamping.c
-@@ -313,10 +313,16 @@ int main(int argc, char **argv)
- 	int val;
- 	socklen_t len;
- 	struct timeval next;
-+	size_t if_len;
+diff --git a/tools/testing/selftests/ntb/ntb_test.sh b/tools/testing/selftests/ntb/ntb_test.sh
+index 9c60337317c6..020137b61407 100755
+--- a/tools/testing/selftests/ntb/ntb_test.sh
++++ b/tools/testing/selftests/ntb/ntb_test.sh
+@@ -241,7 +241,7 @@ function get_files_count()
+ 	split_remote $LOC
  
- 	if (argc < 2)
- 		usage(0);
- 	interface = argv[1];
-+	if_len = strlen(interface);
-+	if (if_len >= IFNAMSIZ) {
-+		printf("interface name exceeds IFNAMSIZ\n");
-+		exit(1);
-+	}
- 
- 	for (i = 2; i < argc; i++) {
- 		if (!strcasecmp(argv[i], "SO_TIMESTAMP"))
-@@ -350,12 +356,12 @@ int main(int argc, char **argv)
- 		bail("socket");
- 
- 	memset(&device, 0, sizeof(device));
--	strncpy(device.ifr_name, interface, sizeof(device.ifr_name));
-+	memcpy(device.ifr_name, interface, if_len + 1);
- 	if (ioctl(sock, SIOCGIFADDR, &device) < 0)
- 		bail("getting interface IP address");
- 
- 	memset(&hwtstamp, 0, sizeof(hwtstamp));
--	strncpy(hwtstamp.ifr_name, interface, sizeof(hwtstamp.ifr_name));
-+	memcpy(hwtstamp.ifr_name, interface, if_len + 1);
- 	hwtstamp.ifr_data = (void *)&hwconfig;
- 	memset(&hwconfig, 0, sizeof(hwconfig));
- 	hwconfig.tx_type =
+ 	if [[ "$REMOTE" == "" ]]; then
+-		echo $(ls -1 "$LOC"/${NAME}* 2>/dev/null | wc -l)
++		echo $(ls -1 "$VPATH"/${NAME}* 2>/dev/null | wc -l)
+ 	else
+ 		echo $(ssh "$REMOTE" "ls -1 \"$VPATH\"/${NAME}* | \
+ 		       wc -l" 2> /dev/null)
 -- 
 2.25.1
 
