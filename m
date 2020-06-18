@@ -4,65 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0D6BC433E1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89429C433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:47:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D42E21941
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:40:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ECD5221F7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592444427;
-	bh=zc5Pcx9v24n3UXJ4a8J2O/2UsMOZOwQWmlgwTrqiHvI=;
+	s=default; t=1592444833;
+	bh=bIk6w6VvDx5GaB2S3OeclfhGrx+NuGFb52D0NAChQF0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=D+HgES4b1PQ2gSPqKezrEDSMs9vmttG4nfpMc0ii7GSkZO6xV+uhNDchCFhsXaX9Z
-	 20R4Av+WdP8rK5s4o00pEWyRziW4LEo1fVLzBPG6aPwBNRs2QJuce1DxRqJrcCp/B1
-	 Hulp7/USqa36F/zxAsPF25efBvb807YY8PtDrx4w=
+	b=Yn1YUAU0/vQ3p3rHMQ/dUr2RKdpfjGfmBGDZKsEzIbEAyxH7LuasGZI+P5EpEW25S
+	 p1CLsWEBb8txt17zZZKEuUImWkiuHc47vTh6qvS5icUEkA6HDItuZvrAXUPk/GCNNG
+	 IEz9xIRzAIKuldMyd3MkrU1yKVoqhHTFlyHEj3z8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732152AbgFRBk0 (ORCPT
+        id S1732057AbgFRB2R (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 21:40:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39780 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 21:28:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36812 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732436AbgFRBaB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:30:01 -0400
+        id S1732052AbgFRB2Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:28:16 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6568522249;
-        Thu, 18 Jun 2020 01:29:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE9A02220D;
+        Thu, 18 Jun 2020 01:28:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443801;
-        bh=zc5Pcx9v24n3UXJ4a8J2O/2UsMOZOwQWmlgwTrqiHvI=;
+        s=default; t=1592443695;
+        bh=bIk6w6VvDx5GaB2S3OeclfhGrx+NuGFb52D0NAChQF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCFlAkU7bIZhlK7lw8p59cdcg4ooUF3AKVsafSfPvIK2trMKIDuZncDfKB74wzHal
-         GBHpEb41WBOoe62/XucDHKHUKcpdHsZvEKMxSBxFd/Gw0I1vM0n1iGfehu3Qxx8xaG
-         xKIziRTdLHYp+wU62y3KKWyd30NiFDSXGwezvpn8=
+        b=2Hiau6h5cr6tgXFDNe8O+jlmn2ECBDwGlYIh59T1cIirtT9wJxvSbdw/qqzFTDawX
+         a4KBzmLd3hWeUM91IUUNGa94gHznCp8LsD8ACuB15Z5EeirrDXtt5BzSsCAUf/7450
+         sZwpu97/BTfii4VN8x4Aobpk5zSOq793I0095eUc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ram Pai <linuxram@us.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     tannerlove <tannerlove@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 78/80] selftests/vm/pkeys: fix alloc_random_pkey() to make it really random
-Date:   Wed, 17 Jun 2020 21:28:17 -0400
-Message-Id: <20200618012819.609778-78-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 106/108] selftests/net: in rxtimestamp getopt_long needs terminating null entry
+Date:   Wed, 17 Jun 2020 21:25:58 -0400
+Message-Id: <20200618012600.608744-106-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012819.609778-1-sashal@kernel.org>
-References: <20200618012819.609778-1-sashal@kernel.org>
+In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
+References: <20200618012600.608744-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -72,58 +61,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ram Pai <linuxram@us.ibm.com>
+From: tannerlove <tannerlove@google.com>
 
-[ Upstream commit 6e373263ce07eeaa6410843179535fbdf561fc31 ]
+[ Upstream commit 865a6cbb2288f8af7f9dc3b153c61b7014fdcf1e ]
 
-alloc_random_pkey() was allocating the same pkey every time.  Not all
-pkeys were geting tested.  This fixes it.
+getopt_long requires the last element to be filled with zeros.
+Otherwise, passing an unrecognized option can cause a segfault.
 
-Signed-off-by: Ram Pai <linuxram@us.ibm.com>
-Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Acked-by: Dave Hansen <dave.hansen@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Michal Suchanek <msuchanek@suse.de>
-Cc: Shuah Khan <shuah@kernel.org>
-Link: http://lkml.kernel.org/r/0162f55816d4e783a0d6e49e554d0ab9a3c9a23b.1585646528.git.sandipan@linux.ibm.com
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 16e781224198 ("selftests/net: Add a test to validate behavior of rx timestamps")
+Signed-off-by: Tanner Love <tannerlove@google.com>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/x86/protection_keys.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/networking/timestamping/rxtimestamp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
-index 874972ccfc95..5338e668b5e6 100644
---- a/tools/testing/selftests/x86/protection_keys.c
-+++ b/tools/testing/selftests/x86/protection_keys.c
-@@ -23,6 +23,7 @@
- #define _GNU_SOURCE
- #include <errno.h>
- #include <linux/futex.h>
-+#include <time.h>
- #include <sys/time.h>
- #include <sys/syscall.h>
- #include <string.h>
-@@ -608,10 +609,10 @@ int alloc_random_pkey(void)
- 	int nr_alloced = 0;
- 	int random_index;
- 	memset(alloced_pkeys, 0, sizeof(alloced_pkeys));
-+	srand((unsigned int)time(NULL));
+diff --git a/tools/testing/selftests/networking/timestamping/rxtimestamp.c b/tools/testing/selftests/networking/timestamping/rxtimestamp.c
+index dd4162fc0419..7a573fb4c1c4 100644
+--- a/tools/testing/selftests/networking/timestamping/rxtimestamp.c
++++ b/tools/testing/selftests/networking/timestamping/rxtimestamp.c
+@@ -114,6 +114,7 @@ static struct option long_options[] = {
+ 	{ "tcp", no_argument, 0, 't' },
+ 	{ "udp", no_argument, 0, 'u' },
+ 	{ "ip", no_argument, 0, 'i' },
++	{ NULL, 0, NULL, 0 },
+ };
  
- 	/* allocate every possible key and make a note of which ones we got */
- 	max_nr_pkey_allocs = NR_PKEYS;
--	max_nr_pkey_allocs = 1;
- 	for (i = 0; i < max_nr_pkey_allocs; i++) {
- 		int new_pkey = alloc_pkey();
- 		if (new_pkey < 0)
+ static int next_port = 19999;
 -- 
 2.25.1
 
