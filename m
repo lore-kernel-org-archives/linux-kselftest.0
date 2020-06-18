@@ -2,190 +2,396 @@ Return-Path: <SRS0=/+yp=77=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A19DC433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90EFCC433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:52:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7745F21D81
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592447831;
-	bh=1L1IL2y01Qzhmft+H/AeRDpC/FR4sANsggs28guR4Ug=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OOJahYjB3YrughDWqOuo7P1bh9I8B9HvDG+Gnzy8DjCOwSW7txXsk9gNebIeEZ94P
-	 nk+mB/4syPAtlMLNbOYl9Vtzm74kBDc12aUVuVmHkUktjTgPr1m/n1tBTH6UU3UaFX
-	 mf+2QXiStuvkyLSW8e49Ut2z1pVMMlwsy72Ooc6E=
+	by mail.kernel.org (Postfix) with ESMTP id 70FA420776
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:52:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729201AbgFRBNs (ORCPT
+        id S2387933AbgFRCw6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 21:13:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43156 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 22:52:58 -0400
+Received: from mga11.intel.com ([192.55.52.93]:58718 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728176AbgFRBNr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:13:47 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E223820EDD;
-        Thu, 18 Jun 2020 01:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442826;
-        bh=1L1IL2y01Qzhmft+H/AeRDpC/FR4sANsggs28guR4Ug=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d4Rzd+wBXlq2u+gD9Fl96r0RpiMMX4XYtwRmM13AVZN6XfnwIw9VVsf32+mxMgyzo
-         /WWHwyJ3iSI6Fi4kvYkEmXpL9vuxNRFhbnOcGlLnATByI8XCvBCa/fyKGhT5wOYSFz
-         5tRyUAVJioBU7Fd3gK1dIaPKa5T6oeV9ZWJsnkbU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 262/388] selftests/timens: handle a case when alarm clocks are not supported
-Date:   Wed, 17 Jun 2020 21:05:59 -0400
-Message-Id: <20200618010805.600873-262-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1728161AbgFRCwz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 22:52:55 -0400
+IronPort-SDR: 2fSgot4c2J4cs+COgOphYUbw/PMNZGY1MW36xZRjCOBCGWM7rK4r6oColzDKcQDlJmmrK8iqPI
+ obEQ0v2Bw3qg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2020 19:52:53 -0700
+IronPort-SDR: Gu66Sly+A4MSw6hpLfxeVq3rRbb7Pj7R6eY7wGmpGAaztCYgSI8+bXAZ/9FZCNasmJ3xVt0O0E
+ 1Pj9KSGbellQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,524,1583222400"; 
+   d="scan'208";a="262777561"
+Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
+  by orsmga007.jf.intel.com with ESMTP; 17 Jun 2020 19:52:51 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai Svahn <kai.svahn@intel.com>
+Subject: [Linux] [PATCH] Kernel selftests: tpm2: upgrade tpm2 tests from python2 to python3
+Date:   Thu, 18 Jun 2020 11:02:45 +0800
+Message-Id: <20200618030245.7153-1-pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrei Vagin <avagin@gmail.com>
+Some Linux OS will never support python2 anymore, so upgrade tpm2 selftests
+to python3.
 
-[ Upstream commit 558ae0355a91c7d28fdf4c0011bee6ebb5118632 ]
-
-This can happen if a testing node doesn't have RTC (real time clock)
-hardware or it doesn't support alarms.
-
-Fixes: 61c57676035d ("selftests/timens: Add Time Namespace test for supported clocks")
-Acked-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Reported-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
 ---
- tools/testing/selftests/timens/clock_nanosleep.c |  2 +-
- tools/testing/selftests/timens/timens.c          |  2 +-
- tools/testing/selftests/timens/timens.h          | 13 ++++++++++++-
- tools/testing/selftests/timens/timer.c           |  5 +++++
- tools/testing/selftests/timens/timerfd.c         |  5 +++++
- 5 files changed, 24 insertions(+), 3 deletions(-)
+ tools/testing/selftests/tpm2/test_smoke.sh |  4 +-
+ tools/testing/selftests/tpm2/test_space.sh |  2 +-
+ tools/testing/selftests/tpm2/tpm2.py       | 68 ++++++++++++++--------
+ tools/testing/selftests/tpm2/tpm2_tests.py | 24 +++++---
+ 4 files changed, 61 insertions(+), 37 deletions(-)
 
-diff --git a/tools/testing/selftests/timens/clock_nanosleep.c b/tools/testing/selftests/timens/clock_nanosleep.c
-index 8e7b7c72ef65..72d41b955fb2 100644
---- a/tools/testing/selftests/timens/clock_nanosleep.c
-+++ b/tools/testing/selftests/timens/clock_nanosleep.c
-@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index 663062701d5a..d05467f6d258 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -6,8 +6,8 @@ ksft_skip=4
  
- 	ksft_set_plan(4);
+ [ -f /dev/tpm0 ] || exit $ksft_skip
  
--	check_config_posix_timers();
-+	check_supported_timers();
+-python -m unittest -v tpm2_tests.SmokeTest
+-python -m unittest -v tpm2_tests.AsyncTest
++python3 -m unittest -v tpm2_tests.SmokeTest
++python3 -m unittest -v tpm2_tests.AsyncTest
  
- 	if (unshare_timens())
- 		return 1;
-diff --git a/tools/testing/selftests/timens/timens.c b/tools/testing/selftests/timens/timens.c
-index 098be7c83be3..52b6a1185f52 100644
---- a/tools/testing/selftests/timens/timens.c
-+++ b/tools/testing/selftests/timens/timens.c
-@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
+ CLEAR_CMD=$(which tpm2_clear)
+ if [ -n $CLEAR_CMD ]; then
+diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
+index 36c9d030a1c6..151c64e8ee9f 100755
+--- a/tools/testing/selftests/tpm2/test_space.sh
++++ b/tools/testing/selftests/tpm2/test_space.sh
+@@ -6,4 +6,4 @@ ksft_skip=4
  
- 	nscheck();
+ [ -f /dev/tpmrm0 ] || exit $ksft_skip
  
--	check_config_posix_timers();
-+	check_supported_timers();
+-python -m unittest -v tpm2_tests.SpaceTest
++python3 -m unittest -v tpm2_tests.SpaceTest
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index d0fcb66a88a6..b0ccc1499c53 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -247,14 +247,18 @@ class ProtocolError(Exception):
+ class AuthCommand(object):
+     """TPMS_AUTH_COMMAND"""
  
- 	ksft_set_plan(ARRAY_SIZE(clocks) * 2);
+-    def __init__(self, session_handle=TPM2_RS_PW, nonce='', session_attributes=0,
+-                 hmac=''):
++    def __init__(self, session_handle=TPM2_RS_PW, nonce=''.encode(),
++                 session_attributes=0, hmac=''.encode()):
++        if not isinstance(nonce, bytes):
++            nonce = nonce.encode()
++        if not isinstance(hmac, bytes):
++            hmac = hmac.encode()
+         self.session_handle = session_handle
+         self.nonce = nonce
+         self.session_attributes = session_attributes
+         self.hmac = hmac
  
-diff --git a/tools/testing/selftests/timens/timens.h b/tools/testing/selftests/timens/timens.h
-index e09e7e39bc52..d4fc52d47146 100644
---- a/tools/testing/selftests/timens/timens.h
-+++ b/tools/testing/selftests/timens/timens.h
-@@ -14,15 +14,26 @@
- #endif
+-    def __str__(self):
++    def __bytes__(self):
+         fmt = '>I H%us B H%us' % (len(self.nonce), len(self.hmac))
+         return struct.pack(fmt, self.session_handle, len(self.nonce),
+                            self.nonce, self.session_attributes, len(self.hmac),
+@@ -268,11 +272,15 @@ class AuthCommand(object):
+ class SensitiveCreate(object):
+     """TPMS_SENSITIVE_CREATE"""
  
- static int config_posix_timers = true;
-+static int config_alarm_timers = true;
+-    def __init__(self, user_auth='', data=''):
++    def __init__(self, user_auth=''.encode(), data=''.encode()):
++        if not isinstance(user_auth, bytes):
++            user_auth = user_auth.encode()
++        if not isinstance(data, bytes):
++            data = data.encode()
+         self.user_auth = user_auth
+         self.data = data
  
--static inline void check_config_posix_timers(void)
-+static inline void check_supported_timers(void)
- {
-+	struct timespec ts;
-+
- 	if (timer_create(-1, 0, 0) == -1 && errno == ENOSYS)
- 		config_posix_timers = false;
-+
-+	if (clock_gettime(CLOCK_BOOTTIME_ALARM, &ts) == -1 && errno == EINVAL)
-+		config_alarm_timers = false;
- }
+-    def __str__(self):
++    def __bytes__(self):
+         fmt = '>H%us H%us' % (len(self.user_auth), len(self.data))
+         return struct.pack(fmt, len(self.user_auth), self.user_auth,
+                            len(self.data), self.data)
+@@ -296,8 +304,15 @@ class Public(object):
+         return '>HHIH%us%usH%us' % \
+             (len(self.auth_policy), len(self.parameters), len(self.unique))
  
- static inline bool check_skip(int clockid)
- {
-+	if (!config_alarm_timers && clockid == CLOCK_BOOTTIME_ALARM) {
-+		ksft_test_result_skip("CLOCK_BOOTTIME_ALARM isn't supported\n");
-+		return true;
-+	}
-+
- 	if (config_posix_timers)
- 		return false;
+-    def __init__(self, object_type, name_alg, object_attributes, auth_policy='',
+-                 parameters='', unique=''):
++    def __init__(self, object_type, name_alg, object_attributes,
++                 auth_policy=''.encode(), parameters=''.encode(),
++                 unique=''.encode()):
++        if not isinstance(auth_policy, bytes):
++            auth_policy = auth_policy.encode()
++        if not isinstance(parameters, bytes):
++            parameters = parameters.encode()
++        if not isinstance(unique, bytes):
++            unique = unique.encode()
+         self.object_type = object_type
+         self.name_alg = name_alg
+         self.object_attributes = object_attributes
+@@ -305,7 +320,7 @@ class Public(object):
+         self.parameters = parameters
+         self.unique = unique
  
-diff --git a/tools/testing/selftests/timens/timer.c b/tools/testing/selftests/timens/timer.c
-index 96dba11ebe44..5e7f0051bd7b 100644
---- a/tools/testing/selftests/timens/timer.c
-+++ b/tools/testing/selftests/timens/timer.c
-@@ -22,6 +22,9 @@ int run_test(int clockid, struct timespec now)
- 	timer_t fd;
- 	int i;
+-    def __str__(self):
++    def __bytes__(self):
+         return struct.pack(self.__fmt(),
+                            self.object_type,
+                            self.name_alg,
+@@ -343,7 +358,7 @@ def get_algorithm(name):
  
-+	if (check_skip(clockid))
-+		return 0;
-+
- 	for (i = 0; i < 2; i++) {
- 		struct sigevent sevp = {.sigev_notify = SIGEV_NONE};
- 		int flags = 0;
-@@ -74,6 +77,8 @@ int main(int argc, char *argv[])
+ def hex_dump(d):
+     d = [format(ord(x), '02x') for x in d]
+-    d = [d[i: i + 16] for i in xrange(0, len(d), 16)]
++    d = [d[i: i + 16] for i in range(0, len(d), 16)]
+     d = [' '.join(x) for x in d]
+     d = os.linesep.join(d)
  
- 	nscheck();
+@@ -401,7 +416,7 @@ class Client:
+         pcrsel_len = max((i >> 3) + 1, 3)
+         pcrsel = [0] * pcrsel_len
+         pcrsel[i >> 3] = 1 << (i & 7)
+-        pcrsel = ''.join(map(chr, pcrsel))
++        pcrsel = ''.join(map(chr, pcrsel)).encode()
  
-+	check_supported_timers();
-+
- 	ksft_set_plan(3);
+         fmt = '>HII IHB%us' % (pcrsel_len)
+         cmd = struct.pack(fmt,
+@@ -430,6 +445,8 @@ class Client:
+         return rsp
  
- 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
-diff --git a/tools/testing/selftests/timens/timerfd.c b/tools/testing/selftests/timens/timerfd.c
-index eff1ec5ff215..9edd43d6b2c1 100644
---- a/tools/testing/selftests/timens/timerfd.c
-+++ b/tools/testing/selftests/timens/timerfd.c
-@@ -28,6 +28,9 @@ int run_test(int clockid, struct timespec now)
- 	long long elapsed;
- 	int fd, i;
+     def extend_pcr(self, i, dig, bank_alg = TPM2_ALG_SHA1):
++        if not isinstance(dig, bytes):
++            dig = dig.encode()
+         ds = get_digest_size(bank_alg)
+         assert(ds == len(dig))
  
-+	if (check_skip(clockid))
-+		return 0;
-+
- 	if (tclock_gettime(clockid, &now))
- 		return pr_perror("clock_gettime(%d)", clockid);
+@@ -443,7 +460,7 @@ class Client:
+             TPM2_CC_PCR_EXTEND,
+             i,
+             len(auth_cmd),
+-            str(auth_cmd),
++            bytes(auth_cmd),
+             1, bank_alg, dig)
  
-@@ -81,6 +84,8 @@ int main(int argc, char *argv[])
+         self.send_cmd(cmd)
+@@ -457,7 +474,7 @@ class Client:
+                           TPM2_RH_NULL,
+                           TPM2_RH_NULL,
+                           16,
+-                          '\0' * 16,
++                          ('\0' * 16).encode(),
+                           0,
+                           session_type,
+                           TPM2_ALG_NULL,
+@@ -472,7 +489,7 @@ class Client:
  
- 	nscheck();
+         for i in pcrs:
+             pcr = self.read_pcr(i, bank_alg)
+-            if pcr == None:
++            if pcr is None:
+                 return None
+             x += pcr
  
-+	check_supported_timers();
-+
- 	ksft_set_plan(3);
+@@ -489,7 +506,7 @@ class Client:
+         pcrsel = [0] * pcrsel_len
+         for i in pcrs:
+             pcrsel[i >> 3] |= 1 << (i & 7)
+-        pcrsel = ''.join(map(chr, pcrsel))
++        pcrsel = ''.join(map(chr, pcrsel)).encode()
  
- 	clock_gettime(CLOCK_MONOTONIC, &mtime_now);
+         fmt = '>HII IH%usIHB3s' % ds
+         cmd = struct.pack(fmt,
+@@ -497,7 +514,8 @@ class Client:
+                           struct.calcsize(fmt),
+                           TPM2_CC_POLICY_PCR,
+                           handle,
+-                          len(dig), str(dig),
++                          len(dig),
++                          bytes(dig),
+                           1,
+                           bank_alg,
+                           pcrsel_len, pcrsel)
+@@ -570,11 +588,11 @@ class Client:
+             TPM2_CC_CREATE_PRIMARY,
+             TPM2_RH_OWNER,
+             len(auth_cmd),
+-            str(auth_cmd),
++            bytes(auth_cmd),
+             len(sensitive),
+-            str(sensitive),
++            bytes(sensitive),
+             len(public),
+-            str(public),
++            bytes(public),
+             0, 0)
+ 
+         return struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
+@@ -608,11 +626,11 @@ class Client:
+             TPM2_CC_CREATE,
+             parent_key,
+             len(auth_cmd),
+-            str(auth_cmd),
++            bytes(auth_cmd),
+             len(sensitive),
+-            str(sensitive),
++            bytes(sensitive),
+             len(public),
+-            str(public),
++            bytes(public),
+             0, 0)
+ 
+         rsp = self.send_cmd(cmd)
+@@ -635,7 +653,7 @@ class Client:
+             TPM2_CC_LOAD,
+             parent_key,
+             len(auth_cmd),
+-            str(auth_cmd),
++            bytes(auth_cmd),
+             blob)
+ 
+         data_handle = struct.unpack('>I', self.send_cmd(cmd)[10:14])[0]
+@@ -653,7 +671,7 @@ class Client:
+             TPM2_CC_UNSEAL,
+             data_handle,
+             len(auth_cmd),
+-            str(auth_cmd))
++            bytes(auth_cmd))
+ 
+         try:
+             rsp = self.send_cmd(cmd)
+@@ -675,7 +693,7 @@ class Client:
+             TPM2_CC_DICTIONARY_ATTACK_LOCK_RESET,
+             TPM2_RH_LOCKOUT,
+             len(auth_cmd),
+-            str(auth_cmd))
++            bytes(auth_cmd))
+ 
+         self.send_cmd(cmd)
+ 
+@@ -693,7 +711,7 @@ class Client:
+         more_data, cap, cnt = struct.unpack('>BII', rsp[:9])
+         rsp = rsp[9:]
+ 
+-        for i in xrange(0, cnt):
++        for i in range(0, cnt):
+             handle = struct.unpack('>I', rsp[:4])[0]
+             handles.append(handle)
+             rsp = rsp[4:]
+diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+index 728be7c69b76..e134033e6f67 100644
+--- a/tools/testing/selftests/tpm2/tpm2_tests.py
++++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+@@ -25,7 +25,9 @@ class SmokeTest(unittest.TestCase):
+ 
+         blob = self.client.seal(self.root_key, data, auth, None)
+         result = self.client.unseal(self.root_key, blob, auth, None)
+-        self.assertEqual(data, result)
++        if not isinstance(result, bytes):
++            result = result.encode()
++        self.assertEqual(data.encode(), result)
+ 
+     def test_seal_with_policy(self):
+         handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+@@ -51,11 +53,13 @@ class SmokeTest(unittest.TestCase):
+             self.client.policy_password(handle)
+ 
+             result = self.client.unseal(self.root_key, blob, auth, handle)
++            if not isinstance(result, bytes):
++                result = result.encode()
+         except:
+             self.client.flush_context(handle)
+             raise
+ 
+-        self.assertEqual(data, result)
++        self.assertEqual(data.encode(), result)
+ 
+     def test_unseal_with_wrong_auth(self):
+         data = 'X' * 64
+@@ -65,7 +69,7 @@ class SmokeTest(unittest.TestCase):
+         blob = self.client.seal(self.root_key, data, auth, None)
+         try:
+             result = self.client.unseal(self.root_key, blob, auth[:-1] + 'B', None)
+-        except ProtocolError, e:
++        except ProtocolError as e:
+             rc = e.rc
+ 
+         self.assertEqual(rc, tpm2.TPM2_RC_AUTH_FAIL)
+@@ -100,11 +104,13 @@ class SmokeTest(unittest.TestCase):
+             self.client.policy_password(handle)
+ 
+             result = self.client.unseal(self.root_key, blob, auth, handle)
++            if not isinstance(result, bytes):
++                result = result.encode()
+         except:
+             self.client.flush_context(handle)
+             raise
+ 
+-        self.assertEqual(data, result)
++        self.assertEqual(data.encode(), result)
+ 
+         # Then, extend a PCR that is part of the policy and try to unseal.
+         # This should fail.
+@@ -119,7 +125,7 @@ class SmokeTest(unittest.TestCase):
+             self.client.policy_password(handle)
+ 
+             result = self.client.unseal(self.root_key, blob, auth, handle)
+-        except ProtocolError, e:
++        except ProtocolError as e:
+             rc = e.rc
+             self.client.flush_context(handle)
+         except:
+@@ -136,7 +142,7 @@ class SmokeTest(unittest.TestCase):
+         rc = 0
+         try:
+             blob = self.client.seal(self.root_key, data, auth, None)
+-        except ProtocolError, e:
++        except ProtocolError as e:
+             rc = e.rc
+ 
+         self.assertEqual(rc, tpm2.TPM2_RC_SIZE)
+@@ -152,7 +158,7 @@ class SmokeTest(unittest.TestCase):
+                               0xDEADBEEF)
+ 
+             self.client.send_cmd(cmd)
+-        except IOError, e:
++        except IOError as e:
+             rejected = True
+         except:
+             pass
+@@ -212,7 +218,7 @@ class SmokeTest(unittest.TestCase):
+             self.client.tpm.write(cmd)
+             rsp = self.client.tpm.read()
+ 
+-        except IOError, e:
++        except IOError as e:
+             # read the response
+             rsp = self.client.tpm.read()
+             rejected = True
+@@ -283,7 +289,7 @@ class SpaceTest(unittest.TestCase):
+         rc = 0
+         try:
+             space1.send_cmd(cmd)
+-        except ProtocolError, e:
++        except ProtocolError as e:
+             rc = e.rc
+ 
+         self.assertEqual(rc, tpm2.TPM2_RC_COMMAND_CODE |
 -- 
-2.25.1
+2.17.1
 
