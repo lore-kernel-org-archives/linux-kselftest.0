@@ -4,66 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E08BC433E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:56:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1715C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:10:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DB3921974
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 01:56:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 824872080D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Jun 2020 02:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592445382;
-	bh=3Y28IQJRP/ezhBpnEpB+dmDxveaTNUSxYYSQeDeRMpI=;
+	s=default; t=1592446228;
+	bh=SdAsGTEh4YSIpjca/gOG4Zr9i9WbiV3UVuk6iPsESWs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uBAJNN29/iyTEB5jONGPBhY05vxXMaotJJHjJ5hNI3WpAqyCVBGgOi9WvGpHCHJaE
-	 s5WbWym7y7jvEZfEozfBMzyKzBnqzyMcnqDAIrZ85k/SqsWpbdbaXE90hsP0XuvVQx
-	 eS2aIuImDzrlFLR4mDh8OaFHfeHCDQODo/QaaQLk=
+	b=yo2vONlYXnhdfXtlH0U8kkEWQHFZqY5OvHLwOQmlkwh14mWt2iCnRrabvyQUM/Ekf
+	 e2hFXJYPiXY98hiGJwwhGrs9adw1b4fpVfPwpz19vighPfipUrYyqSA5hgxE1TDFzy
+	 7yFZQXrxGeeKgJ9vIcDiwR3zKUxYwVsmAX1O7rfw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731495AbgFRB4V (ORCPT
+        id S1729477AbgFRCK1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Jun 2020 21:56:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60712 "EHLO mail.kernel.org"
+        Wed, 17 Jun 2020 22:10:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729924AbgFRBZ2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:25:28 -0400
+        id S1729122AbgFRBVu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:21:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F07EF221ED;
-        Thu, 18 Jun 2020 01:25:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2D59720CC7;
+        Thu, 18 Jun 2020 01:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443528;
-        bh=3Y28IQJRP/ezhBpnEpB+dmDxveaTNUSxYYSQeDeRMpI=;
+        s=default; t=1592443310;
+        bh=SdAsGTEh4YSIpjca/gOG4Zr9i9WbiV3UVuk6iPsESWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IuyUAptaWgXEUh4E96oFIeB0vatTAV/43YZbU4MNYFh35p/xXqoW/KxlxOMtKdmIo
-         fED9Hb2nQsUVMzVVCjZQbMTEkzsX8NcLh5NQBrySgBAUiAQPzyrTcG2MPgfsXyFZ8W
-         Sia2ZDW4pS8hUbDct1mAKiVPc9rXClGcMBq3zXG4=
+        b=Cj63tcwu/18YKnkdUqeePr6mxOmeBtIiMD951C5KtU3CAdlDdQAeBQSSBeDpCMSa6
+         8FWXZAmW21VZeOz7s4hZ7ZafBgq6L0WSgwyp9vj4tUgMfxl86ZBewZreUBjeP9KxMq
+         KjV138HL7I7SZqXji0bud1wnwLdAAwQiLvK3j3xc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ram Pai <linuxram@us.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     tannerlove <tannerlove@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 148/172] selftests/vm/pkeys: fix alloc_random_pkey() to make it really random
-Date:   Wed, 17 Jun 2020 21:21:54 -0400
-Message-Id: <20200618012218.607130-148-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 247/266] selftests/net: in timestamping, strncpy needs to preserve null byte
+Date:   Wed, 17 Jun 2020 21:16:12 -0400
+Message-Id: <20200618011631.604574-247-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
-References: <20200618012218.607130-1-sashal@kernel.org>
+In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
+References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -72,58 +62,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ram Pai <linuxram@us.ibm.com>
+From: tannerlove <tannerlove@google.com>
 
-[ Upstream commit 6e373263ce07eeaa6410843179535fbdf561fc31 ]
+[ Upstream commit 8027bc0307ce59759b90679fa5d8b22949586d20 ]
 
-alloc_random_pkey() was allocating the same pkey every time.  Not all
-pkeys were geting tested.  This fixes it.
+If user passed an interface option longer than 15 characters, then
+device.ifr_name and hwtstamp.ifr_name became non-null-terminated
+strings. The compiler warned about this:
 
-Signed-off-by: Ram Pai <linuxram@us.ibm.com>
-Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Acked-by: Dave Hansen <dave.hansen@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Michal Suchanek <msuchanek@suse.de>
-Cc: Shuah Khan <shuah@kernel.org>
-Link: http://lkml.kernel.org/r/0162f55816d4e783a0d6e49e554d0ab9a3c9a23b.1585646528.git.sandipan@linux.ibm.com
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+timestamping.c:353:2: warning: ‘strncpy’ specified bound 16 equals \
+destination size [-Wstringop-truncation]
+  353 |  strncpy(device.ifr_name, interface, sizeof(device.ifr_name));
+
+Fixes: cb9eff097831 ("net: new user space API for time stamping of incoming and outgoing packets")
+Signed-off-by: Tanner Love <tannerlove@google.com>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/x86/protection_keys.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../selftests/networking/timestamping/timestamping.c   | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
-index 5d546dcdbc80..b8778960da10 100644
---- a/tools/testing/selftests/x86/protection_keys.c
-+++ b/tools/testing/selftests/x86/protection_keys.c
-@@ -24,6 +24,7 @@
- #define _GNU_SOURCE
- #include <errno.h>
- #include <linux/futex.h>
-+#include <time.h>
- #include <sys/time.h>
- #include <sys/syscall.h>
- #include <string.h>
-@@ -612,10 +613,10 @@ int alloc_random_pkey(void)
- 	int nr_alloced = 0;
- 	int random_index;
- 	memset(alloced_pkeys, 0, sizeof(alloced_pkeys));
-+	srand((unsigned int)time(NULL));
+diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
+index aca3491174a1..f4bb4fef0f39 100644
+--- a/tools/testing/selftests/networking/timestamping/timestamping.c
++++ b/tools/testing/selftests/networking/timestamping/timestamping.c
+@@ -313,10 +313,16 @@ int main(int argc, char **argv)
+ 	int val;
+ 	socklen_t len;
+ 	struct timeval next;
++	size_t if_len;
  
- 	/* allocate every possible key and make a note of which ones we got */
- 	max_nr_pkey_allocs = NR_PKEYS;
--	max_nr_pkey_allocs = 1;
- 	for (i = 0; i < max_nr_pkey_allocs; i++) {
- 		int new_pkey = alloc_pkey();
- 		if (new_pkey < 0)
+ 	if (argc < 2)
+ 		usage(0);
+ 	interface = argv[1];
++	if_len = strlen(interface);
++	if (if_len >= IFNAMSIZ) {
++		printf("interface name exceeds IFNAMSIZ\n");
++		exit(1);
++	}
+ 
+ 	for (i = 2; i < argc; i++) {
+ 		if (!strcasecmp(argv[i], "SO_TIMESTAMP"))
+@@ -350,12 +356,12 @@ int main(int argc, char **argv)
+ 		bail("socket");
+ 
+ 	memset(&device, 0, sizeof(device));
+-	strncpy(device.ifr_name, interface, sizeof(device.ifr_name));
++	memcpy(device.ifr_name, interface, if_len + 1);
+ 	if (ioctl(sock, SIOCGIFADDR, &device) < 0)
+ 		bail("getting interface IP address");
+ 
+ 	memset(&hwtstamp, 0, sizeof(hwtstamp));
+-	strncpy(hwtstamp.ifr_name, interface, sizeof(hwtstamp.ifr_name));
++	memcpy(hwtstamp.ifr_name, interface, if_len + 1);
+ 	hwtstamp.ifr_data = (void *)&hwconfig;
+ 	memset(&hwconfig, 0, sizeof(hwconfig));
+ 	hwconfig.tx_type =
 -- 
 2.25.1
 
