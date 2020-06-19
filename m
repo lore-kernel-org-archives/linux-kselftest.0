@@ -2,42 +2,42 @@ Return-Path: <SRS0=RW2w=AA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46C95C433E0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B255C433DF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:58:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EC9922210
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:58:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05AB52224A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:58:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="KXI6tObJ"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="h9Ue237V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728309AbgFSV5L (ORCPT
+        id S1728551AbgFSV6F (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Jun 2020 17:57:11 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:8491 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728259AbgFSV5H (ORCPT
+        Fri, 19 Jun 2020 17:58:05 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:4459 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbgFSV5K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 17:57:07 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eed344e0003>; Fri, 19 Jun 2020 14:55:26 -0700
+        Fri, 19 Jun 2020 17:57:10 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eed34800007>; Fri, 19 Jun 2020 14:56:16 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
+  by hqpgpgate101.nvidia.com (PGP Universal service);
   Fri, 19 Jun 2020 14:57:07 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 19 Jun 2020 14:57:07 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Jun
+        by hqpgpgate101.nvidia.com on Fri, 19 Jun 2020 14:57:07 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Jun
  2020 21:56:59 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Fri, 19 Jun 2020 21:56:59 +0000
 Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5eed34ab0006>; Fri, 19 Jun 2020 14:56:59 -0700
+        id <B5eed34aa0003>; Fri, 19 Jun 2020 14:56:58 -0700
 From:   Ralph Campbell <rcampbell@nvidia.com>
 To:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
         <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
@@ -50,124 +50,80 @@ CC:     Jerome Glisse <jglisse@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
         Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH 06/16] mm/hmm: test mixed normal and device private migrations
-Date:   Fri, 19 Jun 2020 14:56:39 -0700
-Message-ID: <20200619215649.32297-7-rcampbell@nvidia.com>
+Subject: [PATCH 00/16] mm/hmm/nouveau: THP mapping and migration
+Date:   Fri, 19 Jun 2020 14:56:33 -0700
+Message-ID: <20200619215649.32297-1-rcampbell@nvidia.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200619215649.32297-1-rcampbell@nvidia.com>
-References: <20200619215649.32297-1-rcampbell@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1592603726; bh=WFEHCal/gCxROdrgkDzRDfE196T9tyXmpg2D/HYI1XY=;
+        t=1592603776; bh=cY2z0OG1pUaoe5jBUN9mz4n6ug8KS7Y4KUbr8HDt6lM=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=KXI6tObJ5oTpDCSapDH+P+HDDS1sHlEs6IY8U+F8yA+CNTh3TGWL08aSrGrVJDdEk
-         4+hhQ7CeAcfhYZPA1V12+m0twUBVV1/dQJNz87q+KFer73+2p9OvPiszT3nHnSqyy0
-         71alAOAQCO5Ayi3dQPAx+ja+ZGPkhoaw+JRo8Fc/QOqX9TvpJgu8gvO9Rh1Pfw1ZFH
-         Ryl7MZncUdy2sq5NLByALPlQUU8cL7A12pk+/YgpgY9FnQH9+4Kyg5c+8IWoWue1jO
-         MAvqIY0JcKxx+vn+MVEie4P2D8VVJiXgOop00f7tI6m6ax852mLbrY53XPUBS0Gbn2
-         VSsAMh+L63vXQ==
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=h9Ue237VUS0DYlx4+ZPf7DBfdsfGNigyNS8eyYLe4mqxhix4iw4hCoiwj2ACeJcIP
+         cOTmq6M+LU527F7YEWJ/54n1+Y5dEeKouADPnbmr/KPkjT3o7tPCziz0MoMr3pTyp8
+         A1HW3B5f4n7FfjOHYCOtmc7IWlH5MRslPGnMBkrylKMFrXZnTHcKMnGmyTWhiSDiR3
+         HOTG6yr7LJLQEWip29sWfhQOotCaV5PlNKnifKnVuKEFYI9228oqDmbwJnbmLHiKu7
+         8L0xm1X2SJ5LKTbMoZamhFqZdsFKD5qaniMTzm5doSBLxYF69Hm2lMaHC1hEA3Rdja
+         a/eQhOsyz/uLA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test to check that migrating a range of addresses with mixed
-device private pages and normal anonymous pages are all migrated.
+These patches apply to linux-5.8.0-rc1. Patches 1-3 should probably go
+into 5.8, the others can be queued for 5.9. Patches 4-6 improve the HMM
+self tests. Patch 7-8 prepare nouveau for the meat of this series which
+adds support and testing for compound page mapping of system memory
+(patches 9-11) and compound page migration to device private memory
+(patches 12-16). Since these changes are split across mm core, nouveau,
+and testing, I'm guessing Jason Gunthorpe's HMM tree would be appropriate.
 
-Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
----
- lib/test_hmm.c                         | 22 +++++++++++++++++-----
- tools/testing/selftests/vm/hmm-tests.c | 18 ++++++++++++++----
- 2 files changed, 31 insertions(+), 9 deletions(-)
+Ralph Campbell (16):
+  mm: fix migrate_vma_setup() src_owner and normal pages
+  nouveau: fix migrate page regression
+  nouveau: fix mixed normal and device private page migration
+  mm/hmm: fix test timeout on slower machines
+  mm/hmm/test: remove redundant page table invalidate
+  mm/hmm: test mixed normal and device private migrations
+  nouveau: make nvkm_vmm_ctor() and nvkm_mmu_ptp_get() static
+  nouveau/hmm: fault one page at a time
+  mm/hmm: add output flag for compound page mapping
+  nouveau/hmm: support mapping large sysmem pages
+  hmm: add tests for HMM_PFN_COMPOUND flag
+  mm/hmm: optimize migrate_vma_setup() for holes
+  mm: support THP migration to device private memory
+  mm/thp: add THP allocation helper
+  mm/hmm/test: add self tests for THP migration
+  nouveau: support THP migration to private memory
 
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index f7c2b51a7a9d..50bdf041770a 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -588,12 +588,24 @@ static void dmirror_migrate_alloc_and_copy(struct mig=
-rate_vma *args,
-=20
- 		/*
- 		 * Don't migrate device private pages from our own driver or
--		 * others. For our own we would do a device private memory copy
--		 * not a migration and for others, we would need to fault the
--		 * other device's page into system memory first.
-+		 * others. Other device's private pages are skipped because
-+		 * the src_owner field won't match. The migrate_vma_setup()
-+		 * will have invalidated our page tables for our own device
-+		 * private pages as part of isolating and locking the pages.
-+		 * In this case, repopulate our page table.
- 		 */
--		if (spage && is_zone_device_page(spage))
-+		if (spage && is_zone_device_page(spage)) {
-+			unsigned long pfn =3D addr >> PAGE_SHIFT;
-+			void *entry;
-+
-+			mutex_lock(&dmirror->mutex);
-+			entry =3D spage->zone_device_data;
-+			if (*src & MIGRATE_PFN_WRITE)
-+				entry =3D xa_tag_pointer(entry, DPT_XA_TAG_WRITE);
-+			xa_store(&dmirror->pt, pfn, entry, GFP_ATOMIC);
-+			mutex_unlock(&dmirror->mutex);
- 			continue;
-+		}
-=20
- 		dpage =3D dmirror_devmem_alloc_page(mdevice);
- 		if (!dpage)
-@@ -703,7 +715,7 @@ static int dmirror_migrate(struct dmirror *dmirror,
- 		args.dst =3D dst_pfns;
- 		args.start =3D addr;
- 		args.end =3D next;
--		args.src_owner =3D NULL;
-+		args.src_owner =3D dmirror->mdevice;
- 		ret =3D migrate_vma_setup(&args);
- 		if (ret)
- 			goto out;
-diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftes=
-ts/vm/hmm-tests.c
-index bdfa95ac9a7d..e2a36783e99d 100644
---- a/tools/testing/selftests/vm/hmm-tests.c
-+++ b/tools/testing/selftests/vm/hmm-tests.c
-@@ -881,8 +881,9 @@ TEST_F(hmm, migrate)
- }
-=20
- /*
-- * Migrate anonymous memory to device private memory and fault it back to =
-system
-- * memory.
-+ * Migrate anonymous memory to device private memory and fault some of it =
-back
-+ * to system memory, then try migrating the resulting mix of system and de=
-vice
-+ * private memory to the device.
-  */
- TEST_F(hmm, migrate_fault)
- {
-@@ -924,8 +925,17 @@ TEST_F(hmm, migrate_fault)
- 	for (i =3D 0, ptr =3D buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ASSERT_EQ(ptr[i], i);
-=20
--	/* Fault pages back to system memory and check them. */
--	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
-+	/* Fault half the pages back to system memory and check them. */
-+	for (i =3D 0, ptr =3D buffer->ptr; i < size / (2 * sizeof(*ptr)); ++i)
-+		ASSERT_EQ(ptr[i], i);
-+
-+	/* Migrate memory to the device again. */
-+	ret =3D hmm_dmirror_cmd(self->fd, HMM_DMIRROR_MIGRATE, buffer, npages);
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(buffer->cpages, npages);
-+
-+	/* Check what the device read. */
-+	for (i =3D 0, ptr =3D buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ASSERT_EQ(ptr[i], i);
-=20
- 	hmm_buffer_free(buffer);
+ drivers/gpu/drm/nouveau/nouveau_dmem.c        | 177 +++++---
+ drivers/gpu/drm/nouveau/nouveau_svm.c         | 241 +++++------
+ drivers/gpu/drm/nouveau/nouveau_svm.h         |   3 +-
+ .../gpu/drm/nouveau/nvkm/subdev/mmu/base.c    |   6 +-
+ .../gpu/drm/nouveau/nvkm/subdev/mmu/priv.h    |   2 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |  10 +-
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |   3 -
+ .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    |  29 +-
+ include/linux/gfp.h                           |  10 +
+ include/linux/hmm.h                           |   4 +-
+ include/linux/migrate.h                       |   1 +
+ include/linux/mm.h                            |   1 +
+ lib/test_hmm.c                                | 359 ++++++++++++----
+ lib/test_hmm_uapi.h                           |   2 +
+ mm/hmm.c                                      |  10 +-
+ mm/huge_memory.c                              |  46 ++-
+ mm/internal.h                                 |   1 -
+ mm/memory.c                                   |  10 +-
+ mm/memremap.c                                 |   9 +-
+ mm/migrate.c                                  | 236 +++++++++--
+ mm/page_alloc.c                               |   1 +
+ tools/testing/selftests/vm/hmm-tests.c        | 388 +++++++++++++++++-
+ 22 files changed, 1203 insertions(+), 346 deletions(-)
+
 --=20
 2.20.1
 
