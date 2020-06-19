@@ -2,126 +2,153 @@ Return-Path: <SRS0=RW2w=AA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 966A6C433E0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADE5DC433E0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:56:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72D9522243
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:59:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="I7rwRv4j"
+	by mail.kernel.org (Postfix) with ESMTP id 9678621D7D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:56:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgFSV7E (ORCPT
+        id S1729918AbgFSW4s (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Jun 2020 17:59:04 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2193 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728242AbgFSV5H (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 17:57:07 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eed34a50002>; Fri, 19 Jun 2020 14:56:53 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 19 Jun 2020 14:57:06 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 19 Jun 2020 14:57:06 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Jun
- 2020 21:56:59 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 19 Jun 2020 21:56:59 +0000
-Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5eed34ab0004>; Fri, 19 Jun 2020 14:56:59 -0700
-From:   Ralph Campbell <rcampbell@nvidia.com>
-To:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Ben Skeggs" <bskeggs@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH 05/16] mm/hmm/test: remove redundant page table invalidate
-Date:   Fri, 19 Jun 2020 14:56:38 -0700
-Message-ID: <20200619215649.32297-6-rcampbell@nvidia.com>
+        Fri, 19 Jun 2020 18:56:48 -0400
+Received: from smtp.uniroma2.it ([160.80.6.16]:33335 "EHLO smtp.uniroma2.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729896AbgFSW4q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Jun 2020 18:56:46 -0400
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05JMuRJE014086
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 20 Jun 2020 00:56:29 +0200
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Donald Sharp <sharpd@cumulusnetworks.com>,
+        Roopa Prabhu <roopa@cumulusnetworks.com>,
+        Dinesh Dutt <didutt@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [net-next,v1,4/5] vrf: add l3mdev registration for table to VRF device lookup
+Date:   Sat, 20 Jun 2020 00:54:46 +0200
+Message-Id: <20200619225447.1445-5-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200619215649.32297-1-rcampbell@nvidia.com>
-References: <20200619215649.32297-1-rcampbell@nvidia.com>
+In-Reply-To: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
+References: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1592603813; bh=/sU0fsdcnEwURrqlxGb1H/zsI5qpcxe39CKQwEfKf7w=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=I7rwRv4jtx0PGmvB9STFPnybf36OQ/oYAAEEfTxoK6JTZPjO9M24eLKi1nRSwaZ5n
-         15aqTCY0n/5hRAi4O0IZZfy+U9KY5r/HBVKepmXUMf5o6FkYtz5XRLXd/hfXb0nvwa
-         4s6c9wgBjqd2tvbOEyTQyyyFRKww5AcjKlMSzAn/Q8+W99JQoCyZhOJ9QSaF8cYZp7
-         Dd2Ku+wjYpqSA/fHUxPD30JaFCboOViegswfhiOmnNGWr1lQFy3sMkZWXJhCGoN3jg
-         L/l4NTUss+RttcS4JNW06KSPhAT7GmXTyzdXmxYQRmJO+wiW4vi4pvxJzedEk/BrfU
-         mKSzmLt5kU+Ag==
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When migrating pages to or from device private memory, the device's
-page tables will be invalidated as part of migrate_vma_setup() locking
-and isolating the pages. The HMM self test driver doesn't need to
-invalidate the page table a second time after migrating pages to system
-memory so remove that bit of extra code.
+During the initialization phase of the VRF module, the callback for table
+to VRF device lookup is registered in l3mdev.
 
-Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- lib/test_hmm.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ drivers/net/vrf.c | 59 +++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 55 insertions(+), 4 deletions(-)
 
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index 28528285942c..f7c2b51a7a9d 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -1018,15 +1018,6 @@ static vm_fault_t dmirror_devmem_fault_alloc_and_cop=
-y(struct migrate_vma *args,
- 	return 0;
+diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
+index c53e57354d2c..46599606ff10 100644
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -183,6 +183,19 @@ static struct vrf_map *netns_vrf_map_by_dev(struct net_device *dev)
+ 	return netns_vrf_map(dev_net(dev));
  }
-=20
--static void dmirror_devmem_fault_finalize_and_map(struct migrate_vma *args=
-,
--						  struct dmirror *dmirror)
--{
--	/* Invalidate the device's page table mapping. */
--	mutex_lock(&dmirror->mutex);
--	dmirror_do_update(dmirror, args->start, args->end);
--	mutex_unlock(&dmirror->mutex);
--}
--
- static vm_fault_t dmirror_devmem_fault(struct vm_fault *vmf)
+ 
++static int vrf_map_elem_get_vrf_ifindex(struct vrf_map_elem *me)
++{
++	struct list_head *me_head = &me->vrf_list;
++	struct net_vrf *vrf;
++
++	if (list_empty(me_head))
++		return -ENODEV;
++
++	vrf = list_first_entry(me_head, struct net_vrf, me_list);
++
++	return vrf->ifindex;
++}
++
+ static struct vrf_map_elem *vrf_map_elem_alloc(gfp_t flags)
  {
- 	struct migrate_vma args;
-@@ -1059,7 +1050,10 @@ static vm_fault_t dmirror_devmem_fault(struct vm_fau=
-lt *vmf)
- 	if (ret)
- 		return ret;
- 	migrate_vma_pages(&args);
--	dmirror_devmem_fault_finalize_and_map(&args, dmirror);
-+	/*
-+	 * No device finalize step is needed since migrate_vma_setup() will
-+	 * have already invalidated the device page table.
-+	 */
- 	migrate_vma_finalize(&args);
- 	return 0;
+ 	struct vrf_map_elem *me;
+@@ -384,6 +397,34 @@ static void vrf_map_unregister_dev(struct net_device *dev)
+ 	vrf_map_unlock(vmap);
  }
---=20
+ 
++/* return the vrf device index associated with the table_id */
++static int vrf_ifindex_lookup_by_table_id(struct net *net, u32 table_id)
++{
++	struct vrf_map *vmap = netns_vrf_map(net);
++	struct vrf_map_elem *me;
++	int ifindex;
++
++	vrf_map_lock(vmap);
++
++	if (!vmap->strict_mode) {
++		ifindex = -EPERM;
++		goto unlock;
++	}
++
++	me = vrf_map_lookup_elem(vmap, table_id);
++	if (!me) {
++		ifindex = -ENODEV;
++		goto unlock;
++	}
++
++	ifindex = vrf_map_elem_get_vrf_ifindex(me);
++
++unlock:
++	vrf_map_unlock(vmap);
++
++	return ifindex;
++}
++
+ /* by default VRF devices do not have a qdisc and are expected
+  * to be created with only a single queue.
+  */
+@@ -1847,14 +1888,24 @@ static int __init vrf_init_module(void)
+ 	if (rc < 0)
+ 		goto error;
+ 
++	rc = l3mdev_table_lookup_register(L3MDEV_TYPE_VRF,
++					  vrf_ifindex_lookup_by_table_id);
++	if (rc < 0)
++		goto unreg_pernet;
++
+ 	rc = rtnl_link_register(&vrf_link_ops);
+-	if (rc < 0) {
+-		unregister_pernet_subsys(&vrf_net_ops);
+-		goto error;
+-	}
++	if (rc < 0)
++		goto table_lookup_unreg;
+ 
+ 	return 0;
+ 
++table_lookup_unreg:
++	l3mdev_table_lookup_unregister(L3MDEV_TYPE_VRF,
++				       vrf_ifindex_lookup_by_table_id);
++
++unreg_pernet:
++	unregister_pernet_subsys(&vrf_net_ops);
++
+ error:
+ 	unregister_netdevice_notifier(&vrf_notifier_block);
+ 	return rc;
+-- 
 2.20.1
 
