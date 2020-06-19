@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFA78C433E0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46C95C433E0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A83222210
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:57:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EC9922210
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 21:58:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WZIOlNEQ"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="KXI6tObJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728332AbgFSV5N (ORCPT
+        id S1728309AbgFSV5L (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Jun 2020 17:57:13 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:4433 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728256AbgFSV5I (ORCPT
+        Fri, 19 Jun 2020 17:57:11 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:8491 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728259AbgFSV5H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 17:57:08 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eed34800004>; Fri, 19 Jun 2020 14:56:16 -0700
+        Fri, 19 Jun 2020 17:57:07 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eed344e0003>; Fri, 19 Jun 2020 14:55:26 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
+  by hqpgpgate102.nvidia.com (PGP Universal service);
   Fri, 19 Jun 2020 14:57:07 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 19 Jun 2020 14:57:07 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Jun
+        by hqpgpgate102.nvidia.com on Fri, 19 Jun 2020 14:57:07 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Jun
  2020 21:56:59 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Fri, 19 Jun 2020 21:56:59 +0000
 Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5eed34ab000a>; Fri, 19 Jun 2020 14:56:59 -0700
+        id <B5eed34ab0006>; Fri, 19 Jun 2020 14:56:59 -0700
 From:   Ralph Campbell <rcampbell@nvidia.com>
 To:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
         <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
@@ -50,9 +50,9 @@ CC:     Jerome Glisse <jglisse@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
         Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH 09/16] mm/hmm: add output flag for compound page mapping
-Date:   Fri, 19 Jun 2020 14:56:42 -0700
-Message-ID: <20200619215649.32297-10-rcampbell@nvidia.com>
+Subject: [PATCH 06/16] mm/hmm: test mixed normal and device private migrations
+Date:   Fri, 19 Jun 2020 14:56:39 -0700
+Message-ID: <20200619215649.32297-7-rcampbell@nvidia.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200619215649.32297-1-rcampbell@nvidia.com>
 References: <20200619215649.32297-1-rcampbell@nvidia.com>
@@ -61,98 +61,113 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1592603776; bh=JPgQkHIpNzBsyjWBqEqB+kAjfFMrODd+Eb4Y45RUY/w=;
+        t=1592603726; bh=WFEHCal/gCxROdrgkDzRDfE196T9tyXmpg2D/HYI1XY=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=WZIOlNEQWncuTcywertFlHcnMuAxg3zWmP9O70STDKDcbRFB57tRuceh7ta4wz9k+
-         CYHdRm/RmK+LnY1pOz8UdaLCLoSkZdQU03Dd0ug+WIvbJsqCszfEPEL/wm9zWiJw0y
-         fuB5hh+gv1MgU01BmnKjpRl7s9OP//5ILxDijPEYJPbOEv45V1iJhr+WxJzkQOUaoo
-         h3+tQ48LakW8p5M8A9IS6dKTTaQ17xHmqaluKWc6r3+3sVj49DjmsIfhronpIaSRtG
-         i8Mr5Uuaxm1HIyAb8v5POXXV9Bkeec4QfJ8I97rzH0SpDXZpnNnJlA2W+Tx7ZWROLW
-         vy88FBsN/ROJA==
+        b=KXI6tObJ5oTpDCSapDH+P+HDDS1sHlEs6IY8U+F8yA+CNTh3TGWL08aSrGrVJDdEk
+         4+hhQ7CeAcfhYZPA1V12+m0twUBVV1/dQJNz87q+KFer73+2p9OvPiszT3nHnSqyy0
+         71alAOAQCO5Ayi3dQPAx+ja+ZGPkhoaw+JRo8Fc/QOqX9TvpJgu8gvO9Rh1Pfw1ZFH
+         Ryl7MZncUdy2sq5NLByALPlQUU8cL7A12pk+/YgpgY9FnQH9+4Kyg5c+8IWoWue1jO
+         MAvqIY0JcKxx+vn+MVEie4P2D8VVJiXgOop00f7tI6m6ax852mLbrY53XPUBS0Gbn2
+         VSsAMh+L63vXQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-hmm_range_fault() returns an array of page frame numbers and flags for
-how the pages are mapped in the requested process' page tables. The PFN
-can be used to get the struct page with hmm_pfn_to_page() and the page size
-order can be determined with compound_order(page) but if the page is larger
-than order 0 (PAGE_SIZE), there is no indication that the page is mapped
-using a larger page size. To be fully general, hmm_range_fault() would need
-to return the mapping size to handle cases like a 1GB compound page being
-mapped with 2MB PMD entries. However, the most common case is the mapping
-size is the same as the underlying compound page size.
-Add a new output flag to indicate this so that callers know it is safe to
-use a large device page table mapping if one is available.
+Add a test to check that migrating a range of addresses with mixed
+device private pages and normal anonymous pages are all migrated.
 
 Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
 ---
- include/linux/hmm.h |  4 +++-
- mm/hmm.c            | 10 +++++++---
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ lib/test_hmm.c                         | 22 +++++++++++++++++-----
+ tools/testing/selftests/vm/hmm-tests.c | 18 ++++++++++++++----
+ 2 files changed, 31 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/hmm.h b/include/linux/hmm.h
-index f4a09ed223ac..d0db78025baa 100644
---- a/include/linux/hmm.h
-+++ b/include/linux/hmm.h
-@@ -41,12 +41,14 @@ enum hmm_pfn_flags {
- 	HMM_PFN_VALID =3D 1UL << (BITS_PER_LONG - 1),
- 	HMM_PFN_WRITE =3D 1UL << (BITS_PER_LONG - 2),
- 	HMM_PFN_ERROR =3D 1UL << (BITS_PER_LONG - 3),
-+	HMM_PFN_COMPOUND =3D 1UL << (BITS_PER_LONG - 4),
+diff --git a/lib/test_hmm.c b/lib/test_hmm.c
+index f7c2b51a7a9d..50bdf041770a 100644
+--- a/lib/test_hmm.c
++++ b/lib/test_hmm.c
+@@ -588,12 +588,24 @@ static void dmirror_migrate_alloc_and_copy(struct mig=
+rate_vma *args,
 =20
- 	/* Input flags */
- 	HMM_PFN_REQ_FAULT =3D HMM_PFN_VALID,
- 	HMM_PFN_REQ_WRITE =3D HMM_PFN_WRITE,
+ 		/*
+ 		 * Don't migrate device private pages from our own driver or
+-		 * others. For our own we would do a device private memory copy
+-		 * not a migration and for others, we would need to fault the
+-		 * other device's page into system memory first.
++		 * others. Other device's private pages are skipped because
++		 * the src_owner field won't match. The migrate_vma_setup()
++		 * will have invalidated our page tables for our own device
++		 * private pages as part of isolating and locking the pages.
++		 * In this case, repopulate our page table.
+ 		 */
+-		if (spage && is_zone_device_page(spage))
++		if (spage && is_zone_device_page(spage)) {
++			unsigned long pfn =3D addr >> PAGE_SHIFT;
++			void *entry;
++
++			mutex_lock(&dmirror->mutex);
++			entry =3D spage->zone_device_data;
++			if (*src & MIGRATE_PFN_WRITE)
++				entry =3D xa_tag_pointer(entry, DPT_XA_TAG_WRITE);
++			xa_store(&dmirror->pt, pfn, entry, GFP_ATOMIC);
++			mutex_unlock(&dmirror->mutex);
+ 			continue;
++		}
 =20
--	HMM_PFN_FLAGS =3D HMM_PFN_VALID | HMM_PFN_WRITE | HMM_PFN_ERROR,
-+	HMM_PFN_FLAGS =3D HMM_PFN_VALID | HMM_PFN_WRITE | HMM_PFN_ERROR |
-+			HMM_PFN_COMPOUND,
- };
+ 		dpage =3D dmirror_devmem_alloc_page(mdevice);
+ 		if (!dpage)
+@@ -703,7 +715,7 @@ static int dmirror_migrate(struct dmirror *dmirror,
+ 		args.dst =3D dst_pfns;
+ 		args.start =3D addr;
+ 		args.end =3D next;
+-		args.src_owner =3D NULL;
++		args.src_owner =3D dmirror->mdevice;
+ 		ret =3D migrate_vma_setup(&args);
+ 		if (ret)
+ 			goto out;
+diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftes=
+ts/vm/hmm-tests.c
+index bdfa95ac9a7d..e2a36783e99d 100644
+--- a/tools/testing/selftests/vm/hmm-tests.c
++++ b/tools/testing/selftests/vm/hmm-tests.c
+@@ -881,8 +881,9 @@ TEST_F(hmm, migrate)
+ }
 =20
  /*
-diff --git a/mm/hmm.c b/mm/hmm.c
-index e9a545751108..d145d44256df 100644
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -170,7 +170,9 @@ static inline unsigned long pmd_to_hmm_pfn_flags(struct=
- hmm_range *range,
+- * Migrate anonymous memory to device private memory and fault it back to =
+system
+- * memory.
++ * Migrate anonymous memory to device private memory and fault some of it =
+back
++ * to system memory, then try migrating the resulting mix of system and de=
+vice
++ * private memory to the device.
+  */
+ TEST_F(hmm, migrate_fault)
  {
- 	if (pmd_protnone(pmd))
- 		return 0;
--	return pmd_write(pmd) ? (HMM_PFN_VALID | HMM_PFN_WRITE) : HMM_PFN_VALID;
-+	return pmd_write(pmd) ?
-+			(HMM_PFN_VALID | HMM_PFN_COMPOUND | HMM_PFN_WRITE) :
-+			(HMM_PFN_VALID | HMM_PFN_COMPOUND);
- }
+@@ -924,8 +925,17 @@ TEST_F(hmm, migrate_fault)
+ 	for (i =3D 0, ptr =3D buffer->mirror; i < size / sizeof(*ptr); ++i)
+ 		ASSERT_EQ(ptr[i], i);
 =20
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-@@ -389,7 +391,9 @@ static inline unsigned long pud_to_hmm_pfn_flags(struct=
- hmm_range *range,
- {
- 	if (!pud_present(pud))
- 		return 0;
--	return pud_write(pud) ? (HMM_PFN_VALID | HMM_PFN_WRITE) : HMM_PFN_VALID;
-+	return pud_write(pud) ?
-+			(HMM_PFN_VALID | HMM_PFN_COMPOUND | HMM_PFN_WRITE) :
-+			(HMM_PFN_VALID | HMM_PFN_COMPOUND);
- }
+-	/* Fault pages back to system memory and check them. */
+-	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
++	/* Fault half the pages back to system memory and check them. */
++	for (i =3D 0, ptr =3D buffer->ptr; i < size / (2 * sizeof(*ptr)); ++i)
++		ASSERT_EQ(ptr[i], i);
++
++	/* Migrate memory to the device again. */
++	ret =3D hmm_dmirror_cmd(self->fd, HMM_DMIRROR_MIGRATE, buffer, npages);
++	ASSERT_EQ(ret, 0);
++	ASSERT_EQ(buffer->cpages, npages);
++
++	/* Check what the device read. */
++	for (i =3D 0, ptr =3D buffer->mirror; i < size / sizeof(*ptr); ++i)
+ 		ASSERT_EQ(ptr[i], i);
 =20
- static int hmm_vma_walk_pud(pud_t *pudp, unsigned long start, unsigned lon=
-g end,
-@@ -484,7 +488,7 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsig=
-ned long hmask,
-=20
- 	pfn =3D pte_pfn(entry) + ((start & ~hmask) >> PAGE_SHIFT);
- 	for (; addr < end; addr +=3D PAGE_SIZE, i++, pfn++)
--		range->hmm_pfns[i] =3D pfn | cpu_flags;
-+		range->hmm_pfns[i] =3D pfn | cpu_flags | HMM_PFN_COMPOUND;
-=20
- 	spin_unlock(ptl);
- 	return 0;
+ 	hmm_buffer_free(buffer);
 --=20
 2.20.1
 
