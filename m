@@ -2,27 +2,28 @@ Return-Path: <SRS0=RW2w=AA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAB7C433DF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA798C433E2
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7228C21D7D
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACDD22240A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729927AbgFSW4s (ORCPT
+        id S1730046AbgFSW5X (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Jun 2020 18:56:48 -0400
-Received: from smtp.uniroma2.it ([160.80.6.16]:33339 "EHLO smtp.uniroma2.it"
+        Fri, 19 Jun 2020 18:57:23 -0400
+Received: from smtp.uniroma2.it ([160.80.6.16]:33334 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729890AbgFSW4r (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 18:56:47 -0400
+        id S1729891AbgFSW4s (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Jun 2020 18:56:48 -0400
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05JMuRJA014086
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05JMuRJF014086
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sat, 20 Jun 2020 00:56:27 +0200
+        Sat, 20 Jun 2020 00:56:29 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     David Ahern <dsahern@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -38,10 +39,12 @@ Cc:     Donald Sharp <sharpd@cumulusnetworks.com>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next,v1,0/5] Strict mode for VRF
-Date:   Sat, 20 Jun 2020 00:54:42 +0200
-Message-Id: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
+Subject: [net-next,v1,5/5] selftests: add selftest for the VRF strict mode
+Date:   Sat, 20 Jun 2020 00:54:47 +0200
+Message-Id: <20200619225447.1445-6-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
+References: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
@@ -51,137 +54,411 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch set adds the new "strict mode" functionality to the Virtual
-Routing and Forwarding infrastructure (VRF). Hereafter we discuss the
-requirements and the main features of the "strict mode" for VRF.
+The new strict mode functionality is tested in different configurations and
+on different network namespaces.
 
-On VRF creation, it is necessary to specify the associated routing table used
-during the lookup operations. Currently, there is no mechanism that avoids
-creating multiple VRFs sharing the same routing table. In other words, it is not
-possible to force a one-to-one relationship between a specific VRF and the table
-associated with it.
-
-
-The "strict mode" imposes that each VRF can be associated to a routing table
-only if such routing table is not already in use by any other VRF.
-In particular, the strict mode ensures that:
- 
- 1) given a specific routing table, the VRF (if exists) is uniquely identified;
- 2) given a specific VRF, the related table is not shared with any other VRF.
-
-Constraints (1) and (2) force a one-to-one relationship between each VRF and the
-corresponding routing table.
-
-
-The strict mode feature is designed to be network-namespace aware and it can be
-directly enabled/disabled acting on the "strict_mode" parameter.
-Read and write operations are carried out through the classic sysctl command on
-net.vrf.strict_mode path, i.e: sysctl -w net.vrf.strict_mode=1.
-
-Only two distinct values {0,1} are accepted by the strict_mode parameter:
-
- - with strict_mode=0, multiple VRFs can be associated with the same table.
-   This is the (legacy) default kernel behavior, the same that we experience
-   when the strict mode patch set is not applied;
-
- - with strict_mode=1, the one-to-one relationship between the VRFs and the
-   associated tables is guaranteed. In this configuration, the creation of a VRF
-   which refers to a routing table already associated with another VRF fails and
-   the error is returned to the user.
-
-
-The kernel keeps track of the associations between a VRF and the routing table
-during the VRF setup, in the "management" plane. Therefore, the strict mode does
-not impact the performance or the intrinsic functionality of the data plane in
-any way.
-
-When the strict mode is active it is always possible to disable the strict mode,
-while the reverse operation is not always allowed.
-Setting the strict_mode parameter to 0 is equivalent to removing the one-to-one
-constraint between any single VRF and its associated routing table.
-
-Conversely, if the strict mode is disabled and there are multiple VRFs that
-refer to the same routing table, then it is prohibited to set the strict_mode
-parameter to 1. In this configuration, any attempt to perform the operation will
-lead to an error and it will be reported to the user.
-To enable strict mode once again (by setting the strict_mode parameter to 1),
-you must first remove all the VRFs that share common tables.
-
-There are several use cases which can take advantage from the introduction of
-the strict mode feature. In particular, the strict mode allows us to:
-
-  i) guarantee the proper functioning of some applications which deal with
-     routing protocols;
-
- ii) perform some tunneling decap operations which require to use specific
-     routing tables for segregating and forwarding the traffic.
-
-
-Considering (i), the creation of different VRFs that point to the same table
-leads to the situation where two different routing entities believe they have
-exclusive access to the same table. This leads to the situation where different
-routing daemons can conflict for gaining routes control due to overlapping
-tables. By enabling strict mode it is possible to prevent this situation which
-often occurs due to incorrect configurations done by the users. 
-The ability to enable/disable the strict mode functionality does not depend on
-the tool used for configuring the networking. In essence, the strict mode patch
-solves, at the kernel level, what some other patches [1] had tried to solve at
-the userspace level (using only iproute2) with all the related problems.
-
-Considering (ii), the introduction of the strict mode functionality allows us
-implementing the SRv6 End.DT4 behavior. Such behavior terminates a SR tunnel and
-it forwards the IPv4 traffic according to the routes present in the routing
-table supplied during the configuration. The SRv6 End.DT4 can be realized
-exploiting the routing capabilities made available by the VRF infrastructure.
-This behavior could leverage a specific VRF for forcing the traffic to be
-forwarded in accordance with the routes available in the VRF table.
-Anyway, in order to make the End.DT4 properly work, it must be guaranteed that
-the table used for the route lookup operations is bound to one and only one VRF.
-In this way, it is possible to use the table for uniquely retrieving the
-associated VRF and for routing packets.
-
-I would like to thank David Ahern for his constant and valuable support during
-the design and development phases of this patch set.
-
-Comments, suggestions and improvements are very welcome!
-
-Thanks,
-Andrea Mayer
-
-
-v1
- l3mdev: add infrastructure for table to VRF mapping
-  - define l3mdev_lock as static, thanks to Jakub Kicinski;
-  - move lookup_by_table_id_t from l3mdev.c to l3mdev.h and update the
-    l3mdev_dev_table_lookup_{un}register functions accordingly, thanks to
-    David Ahern.
-
- vrf: track associations between VRF devices and tables
-  - change shared_tables type from 'int' to 'u32', thanks to Stephen Hemminger
-    and David Ahern;
-  - update comments for share_tables.
-
- vrf: add sysctl parameter for strict mode
-  - change type 'void __user *buffer' to 'void *buffer' in argument 3 of
-    vrf_shared_table_handler function, thanks to Jakub Kicinski.
-
-
-[1] https://lore.kernel.org/netdev/20200307205916.15646-1-sharpd@cumulusnetworks.com/
-
-Andrea Mayer (5):
-  l3mdev: add infrastructure for table to VRF mapping
-  vrf: track associations between VRF devices and tables
-  vrf: add sysctl parameter for strict mode
-  vrf: add l3mdev registration for table to VRF device lookup
-  selftests: add selftest for the VRF strict mode
-
- drivers/net/vrf.c                             | 450 +++++++++++++++++-
- include/net/l3mdev.h                          |  39 ++
- net/l3mdev/l3mdev.c                           |  93 ++++
- .../selftests/net/vrf_strict_mode_test.sh     | 390 +++++++++++++++
- 4 files changed, 963 insertions(+), 9 deletions(-)
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ .../selftests/net/vrf_strict_mode_test.sh     | 390 ++++++++++++++++++
+ 1 file changed, 390 insertions(+)
  create mode 100755 tools/testing/selftests/net/vrf_strict_mode_test.sh
 
+diff --git a/tools/testing/selftests/net/vrf_strict_mode_test.sh b/tools/testing/selftests/net/vrf_strict_mode_test.sh
+new file mode 100755
+index 000000000000..5274f4a1fba1
+--- /dev/null
++++ b/tools/testing/selftests/net/vrf_strict_mode_test.sh
+@@ -0,0 +1,390 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This test is designed for testing the new VRF strict_mode functionality.
++
++ret=0
++
++# identifies the "init" network namespace which is often called root network
++# namespace.
++INIT_NETNS_NAME="init"
++
++PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
++
++log_test()
++{
++	local rc=$1
++	local expected=$2
++	local msg="$3"
++
++	if [ ${rc} -eq ${expected} ]; then
++		nsuccess=$((nsuccess+1))
++		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
++	else
++		ret=1
++		nfail=$((nfail+1))
++		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
++		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
++			echo
++			echo "hit enter to continue, 'q' to quit"
++			read a
++			[ "$a" = "q" ] && exit 1
++		fi
++	fi
++}
++
++print_log_test_results()
++{
++	if [ "$TESTS" != "none" ]; then
++		printf "\nTests passed: %3d\n" ${nsuccess}
++		printf "Tests failed: %3d\n"   ${nfail}
++	fi
++}
++
++log_section()
++{
++	echo
++	echo "################################################################################"
++	echo "TEST SECTION: $*"
++	echo "################################################################################"
++}
++
++ip_expand_args()
++{
++	local nsname=$1
++	local nsarg=""
++
++	if [ "${nsname}" != "${INIT_NETNS_NAME}" ]; then
++		nsarg="-netns ${nsname}"
++	fi
++
++	echo "${nsarg}"
++}
++
++vrf_count()
++{
++	local nsname=$1
++	local nsarg="$(ip_expand_args ${nsname})"
++
++	ip ${nsarg} -o link show type vrf | wc -l
++}
++
++count_vrf_by_table_id()
++{
++	local nsname=$1
++	local tableid=$2
++	local nsarg="$(ip_expand_args ${nsname})"
++
++	ip ${nsarg} -d -o link show type vrf | grep "table ${tableid}" | wc -l
++}
++
++add_vrf()
++{
++	local nsname=$1
++	local vrfname=$2
++	local vrftable=$3
++	local nsarg="$(ip_expand_args ${nsname})"
++
++	ip ${nsarg} link add ${vrfname} type vrf table ${vrftable} &>/dev/null
++}
++
++add_vrf_and_check()
++{
++	local nsname=$1
++	local vrfname=$2
++	local vrftable=$3
++	local cnt
++	local rc
++
++	add_vrf ${nsname} ${vrfname} ${vrftable}; rc=$?
++
++	cnt=$(count_vrf_by_table_id ${nsname} ${vrftable})
++
++	log_test ${rc} 0 "${nsname}: add vrf ${vrfname}, ${cnt} vrfs for table ${vrftable}"
++}
++
++add_vrf_and_check_fail()
++{
++	local nsname=$1
++	local vrfname=$2
++	local vrftable=$3
++	local cnt
++	local rc
++
++	add_vrf ${nsname} ${vrfname} ${vrftable}; rc=$?
++
++	cnt=$(count_vrf_by_table_id ${nsname} ${vrftable})
++
++	log_test ${rc} 2 "${nsname}: CANNOT add vrf ${vrfname}, ${cnt} vrfs for table ${vrftable}"
++}
++
++del_vrf_and_check()
++{
++	local nsname=$1
++	local vrfname=$2
++	local nsarg="$(ip_expand_args ${nsname})"
++
++	ip ${nsarg} link del ${vrfname}
++	log_test $? 0 "${nsname}: remove vrf ${vrfname}"
++}
++
++config_vrf_and_check()
++{
++	local nsname=$1
++	local addr=$2
++	local vrfname=$3
++	local nsarg="$(ip_expand_args ${nsname})"
++
++	ip ${nsarg} link set dev ${vrfname} up && \
++		ip ${nsarg} addr add ${addr} dev ${vrfname}
++	log_test $? 0 "${nsname}: vrf ${vrfname} up, addr ${addr}"
++}
++
++read_strict_mode()
++{
++	local nsname=$1
++	local rval
++	local rc=0
++	local nsexec=""
++
++	if [ "${nsname}" != "${INIT_NETNS_NAME}" ]; then
++		# a custom network namespace is provided
++		nsexec="ip netns exec ${nsname}"
++	fi
++
++	rval="$(${nsexec} bash -c "cat /proc/sys/net/vrf/strict_mode" | \
++		grep -E "^[0-1]$")" &> /dev/null
++	if [ $? -ne 0 ]; then
++		# set errors
++		rval=255
++		rc=1
++	fi
++
++	# on success, rval can be only 0 or 1; on error, rval is equal to 255
++	echo ${rval}
++	return ${rc}
++}
++
++read_strict_mode_compare_and_check()
++{
++	local nsname=$1
++	local expected=$2
++	local res
++
++	res="$(read_strict_mode ${nsname})"
++	log_test ${res} ${expected} "${nsname}: check strict_mode=${res}"
++}
++
++set_strict_mode()
++{
++	local nsname=$1
++	local val=$2
++	local nsexec=""
++
++	if [ "${nsname}" != "${INIT_NETNS_NAME}" ]; then
++		# a custom network namespace is provided
++		nsexec="ip netns exec ${nsname}"
++	fi
++
++	${nsexec} bash -c "echo ${val} >/proc/sys/net/vrf/strict_mode" &>/dev/null
++}
++
++enable_strict_mode()
++{
++	local nsname=$1
++
++	set_strict_mode ${nsname} 1
++}
++
++disable_strict_mode()
++{
++	local nsname=$1
++
++	set_strict_mode ${nsname} 0
++}
++
++disable_strict_mode_and_check()
++{
++	local nsname=$1
++
++	disable_strict_mode ${nsname}
++	log_test $? 0 "${nsname}: disable strict_mode (=0)"
++}
++
++enable_strict_mode_and_check()
++{
++	local nsname=$1
++
++	enable_strict_mode ${nsname}
++	log_test $? 0 "${nsname}: enable strict_mode (=1)"
++}
++
++enable_strict_mode_and_check_fail()
++{
++	local nsname=$1
++
++	enable_strict_mode ${nsname}
++	log_test $? 1 "${nsname}: CANNOT enable strict_mode"
++}
++
++strict_mode_check_default()
++{
++	local nsname=$1
++	local strictmode
++	local vrfcnt
++
++	vrfcnt=$(vrf_count ${nsname})
++	strictmode=$(read_strict_mode ${nsname})
++	log_test ${strictmode} 0 "${nsname}: strict_mode=0 by default, ${vrfcnt} vrfs"
++}
++
++setup()
++{
++	modprobe vrf
++
++	ip netns add testns
++	ip netns exec testns ip link set lo up
++}
++
++cleanup()
++{
++	ip netns del testns 2>/dev/null
++
++	ip link del vrf100 2>/dev/null
++	ip link del vrf101 2>/dev/null
++	ip link del vrf102 2>/dev/null
++
++	echo 0 >/proc/sys/net/vrf/strict_mode 2>/dev/null
++}
++
++vrf_strict_mode_tests_init()
++{
++	vrf_strict_mode_check_support init
++
++	strict_mode_check_default init
++
++	add_vrf_and_check init vrf100 100
++	config_vrf_and_check init 172.16.100.1/24 vrf100
++
++	enable_strict_mode_and_check init
++
++	add_vrf_and_check_fail init vrf101 100
++
++	disable_strict_mode_and_check init
++
++	add_vrf_and_check init vrf101 100
++	config_vrf_and_check init 172.16.101.1/24 vrf101
++
++	enable_strict_mode_and_check_fail init
++
++	del_vrf_and_check init vrf101
++
++	enable_strict_mode_and_check init
++
++	add_vrf_and_check init vrf102 102
++	config_vrf_and_check init 172.16.102.1/24 vrf102
++
++	# the strict_modle is enabled in the init
++}
++
++vrf_strict_mode_tests_testns()
++{
++	vrf_strict_mode_check_support testns
++
++	strict_mode_check_default testns
++
++	enable_strict_mode_and_check testns
++
++	add_vrf_and_check testns vrf100 100
++	config_vrf_and_check testns 10.0.100.1/24 vrf100
++
++	add_vrf_and_check_fail testns vrf101 100
++
++	add_vrf_and_check_fail testns vrf102 100
++
++	add_vrf_and_check testns vrf200 200
++
++	disable_strict_mode_and_check testns
++
++	add_vrf_and_check testns vrf101 100
++
++	add_vrf_and_check testns vrf102 100
++
++	#the strict_mode is disabled in the testns
++}
++
++vrf_strict_mode_tests_mix()
++{
++	read_strict_mode_compare_and_check init 1
++
++	read_strict_mode_compare_and_check testns 0
++
++	del_vrf_and_check testns vrf101
++
++	del_vrf_and_check testns vrf102
++
++	disable_strict_mode_and_check init
++
++	enable_strict_mode_and_check testns
++
++	enable_strict_mode_and_check init
++	enable_strict_mode_and_check init
++
++	disable_strict_mode_and_check testns
++	disable_strict_mode_and_check testns
++
++	read_strict_mode_compare_and_check init 1
++
++	read_strict_mode_compare_and_check testns 0
++}
++
++vrf_strict_mode_tests()
++{
++	log_section "VRF strict_mode test on init network namespace"
++	vrf_strict_mode_tests_init
++
++	log_section "VRF strict_mode test on testns network namespace"
++	vrf_strict_mode_tests_testns
++
++	log_section "VRF strict_mode test mixing init and testns network namespaces"
++	vrf_strict_mode_tests_mix
++}
++
++vrf_strict_mode_check_support()
++{
++	local nsname=$1
++	local output
++	local rc
++
++	output="$(lsmod | grep '^vrf' | awk '{print $1}')"
++	if [ -z "${output}" ]; then
++		modinfo vrf || return $?
++	fi
++
++	# we do not care about the value of the strict_mode; we only check if
++	# the strict_mode parameter is available or not.
++	read_strict_mode ${nsname} &>/dev/null; rc=$?
++	log_test ${rc} 0 "${nsname}: net.vrf.strict_mode is available"
++
++	return ${rc}
++}
++
++if [ "$(id -u)" -ne 0 ];then
++	echo "SKIP: Need root privileges"
++	exit 0
++fi
++
++if [ ! -x "$(command -v ip)" ]; then
++	echo "SKIP: Could not run test without ip tool"
++	exit 0
++fi
++
++cleanup &> /dev/null
++
++setup
++vrf_strict_mode_tests
++cleanup
++
++print_log_test_results
++
++exit $ret
 -- 
 2.20.1
 
