@@ -4,26 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA798C433E2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68DBBC433E0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ACDD22240A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C1C021D7D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Jun 2020 22:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730046AbgFSW5X (ORCPT
+        id S1730118AbgFSW5k (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Jun 2020 18:57:23 -0400
-Received: from smtp.uniroma2.it ([160.80.6.16]:33334 "EHLO smtp.uniroma2.it"
+        Fri, 19 Jun 2020 18:57:40 -0400
+Received: from smtp.uniroma2.it ([160.80.6.16]:33337 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729891AbgFSW4s (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jun 2020 18:56:48 -0400
+        id S1729899AbgFSW4r (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Jun 2020 18:56:47 -0400
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05JMuRJF014086
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 05JMuRJB014086
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sat, 20 Jun 2020 00:56:29 +0200
+        Sat, 20 Jun 2020 00:56:28 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     David Ahern <dsahern@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -39,9 +38,9 @@ Cc:     Donald Sharp <sharpd@cumulusnetworks.com>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next,v1,5/5] selftests: add selftest for the VRF strict mode
-Date:   Sat, 20 Jun 2020 00:54:47 +0200
-Message-Id: <20200619225447.1445-6-andrea.mayer@uniroma2.it>
+Subject: [net-next,v1,1/5] l3mdev: add infrastructure for table to VRF mapping
+Date:   Sat, 20 Jun 2020 00:54:43 +0200
+Message-Id: <20200619225447.1445-2-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
 References: <20200619225447.1445-1-andrea.mayer@uniroma2.it>
@@ -54,411 +53,187 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The new strict mode functionality is tested in different configurations and
-on different network namespaces.
+Add infrastructure to l3mdev (the core code for Layer 3 master devices) in
+order to find out the corresponding VRF device for a given table id.
+Therefore, the l3mdev implementations:
+ - can register a callback that returns the device index of the l3mdev
+   associated with a given table id;
+ - can offer the lookup function (table to VRF device).
 
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- .../selftests/net/vrf_strict_mode_test.sh     | 390 ++++++++++++++++++
- 1 file changed, 390 insertions(+)
- create mode 100755 tools/testing/selftests/net/vrf_strict_mode_test.sh
+ include/net/l3mdev.h | 39 +++++++++++++++++++
+ net/l3mdev/l3mdev.c  | 93 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 132 insertions(+)
 
-diff --git a/tools/testing/selftests/net/vrf_strict_mode_test.sh b/tools/testing/selftests/net/vrf_strict_mode_test.sh
-new file mode 100755
-index 000000000000..5274f4a1fba1
---- /dev/null
-+++ b/tools/testing/selftests/net/vrf_strict_mode_test.sh
-@@ -0,0 +1,390 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/include/net/l3mdev.h b/include/net/l3mdev.h
+index e942372b077b..031c661aa14d 100644
+--- a/include/net/l3mdev.h
++++ b/include/net/l3mdev.h
+@@ -10,6 +10,16 @@
+ #include <net/dst.h>
+ #include <net/fib_rules.h>
+ 
++enum l3mdev_type {
++	L3MDEV_TYPE_UNSPEC,
++	L3MDEV_TYPE_VRF,
++	__L3MDEV_TYPE_MAX
++};
 +
-+# This test is designed for testing the new VRF strict_mode functionality.
++#define L3MDEV_TYPE_MAX (__L3MDEV_TYPE_MAX - 1)
 +
-+ret=0
++typedef int (*lookup_by_table_id_t)(struct net *net, u32 table_d);
 +
-+# identifies the "init" network namespace which is often called root network
-+# namespace.
-+INIT_NETNS_NAME="init"
+ /**
+  * struct l3mdev_ops - l3mdev operations
+  *
+@@ -37,6 +47,15 @@ struct l3mdev_ops {
+ 
+ #ifdef CONFIG_NET_L3_MASTER_DEV
+ 
++int l3mdev_table_lookup_register(enum l3mdev_type l3type,
++				 lookup_by_table_id_t fn);
 +
-+PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
++void l3mdev_table_lookup_unregister(enum l3mdev_type l3type,
++				    lookup_by_table_id_t fn);
 +
-+log_test()
++int l3mdev_ifindex_lookup_by_table_id(enum l3mdev_type l3type, struct net *net,
++				      u32 table_id);
++
+ int l3mdev_fib_rule_match(struct net *net, struct flowi *fl,
+ 			  struct fib_lookup_arg *arg);
+ 
+@@ -280,6 +299,26 @@ struct sk_buff *l3mdev_ip6_out(struct sock *sk, struct sk_buff *skb)
+ 	return skb;
+ }
+ 
++static inline
++int l3mdev_table_lookup_register(enum l3mdev_type l3type,
++				 lookup_by_table_id_t fn)
 +{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ ${rc} -eq ${expected} ]; then
-+		nsuccess=$((nsuccess+1))
-+		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
++	return -EOPNOTSUPP;
 +}
 +
-+print_log_test_results()
++static inline
++void l3mdev_table_lookup_unregister(enum l3mdev_type l3type,
++				    lookup_by_table_id_t fn)
 +{
-+	if [ "$TESTS" != "none" ]; then
-+		printf "\nTests passed: %3d\n" ${nsuccess}
-+		printf "Tests failed: %3d\n"   ${nfail}
-+	fi
 +}
 +
-+log_section()
++static inline
++int l3mdev_ifindex_lookup_by_table_id(enum l3mdev_type l3type, struct net *net,
++				      u32 table_id)
 +{
-+	echo
-+	echo "################################################################################"
-+	echo "TEST SECTION: $*"
-+	echo "################################################################################"
++	return -ENODEV;
 +}
 +
-+ip_expand_args()
+ static inline
+ int l3mdev_fib_rule_match(struct net *net, struct flowi *fl,
+ 			  struct fib_lookup_arg *arg)
+diff --git a/net/l3mdev/l3mdev.c b/net/l3mdev/l3mdev.c
+index f35899d45a9a..e71ca5aec684 100644
+--- a/net/l3mdev/l3mdev.c
++++ b/net/l3mdev/l3mdev.c
+@@ -9,6 +9,99 @@
+ #include <net/fib_rules.h>
+ #include <net/l3mdev.h>
+ 
++static DEFINE_SPINLOCK(l3mdev_lock);
++
++struct l3mdev_handler {
++	lookup_by_table_id_t dev_lookup;
++};
++
++static struct l3mdev_handler l3mdev_handlers[L3MDEV_TYPE_MAX + 1];
++
++static int l3mdev_check_type(enum l3mdev_type l3type)
 +{
-+	local nsname=$1
-+	local nsarg=""
++	if (l3type <= L3MDEV_TYPE_UNSPEC || l3type > L3MDEV_TYPE_MAX)
++		return -EINVAL;
 +
-+	if [ "${nsname}" != "${INIT_NETNS_NAME}" ]; then
-+		nsarg="-netns ${nsname}"
-+	fi
-+
-+	echo "${nsarg}"
++	return 0;
 +}
 +
-+vrf_count()
++int l3mdev_table_lookup_register(enum l3mdev_type l3type,
++				 lookup_by_table_id_t fn)
 +{
-+	local nsname=$1
-+	local nsarg="$(ip_expand_args ${nsname})"
++	struct l3mdev_handler *hdlr;
++	int res;
 +
-+	ip ${nsarg} -o link show type vrf | wc -l
++	res = l3mdev_check_type(l3type);
++	if (res)
++		return res;
++
++	hdlr = &l3mdev_handlers[l3type];
++
++	spin_lock(&l3mdev_lock);
++
++	if (hdlr->dev_lookup) {
++		res = -EBUSY;
++		goto unlock;
++	}
++
++	hdlr->dev_lookup = fn;
++	res = 0;
++
++unlock:
++	spin_unlock(&l3mdev_lock);
++
++	return res;
 +}
++EXPORT_SYMBOL_GPL(l3mdev_table_lookup_register);
 +
-+count_vrf_by_table_id()
++void l3mdev_table_lookup_unregister(enum l3mdev_type l3type,
++				    lookup_by_table_id_t fn)
 +{
-+	local nsname=$1
-+	local tableid=$2
-+	local nsarg="$(ip_expand_args ${nsname})"
++	struct l3mdev_handler *hdlr;
 +
-+	ip ${nsarg} -d -o link show type vrf | grep "table ${tableid}" | wc -l
++	if (l3mdev_check_type(l3type))
++		return;
++
++	hdlr = &l3mdev_handlers[l3type];
++
++	spin_lock(&l3mdev_lock);
++
++	if (hdlr->dev_lookup == fn)
++		hdlr->dev_lookup = NULL;
++
++	spin_unlock(&l3mdev_lock);
 +}
++EXPORT_SYMBOL_GPL(l3mdev_table_lookup_unregister);
 +
-+add_vrf()
++int l3mdev_ifindex_lookup_by_table_id(enum l3mdev_type l3type,
++				      struct net *net, u32 table_id)
 +{
-+	local nsname=$1
-+	local vrfname=$2
-+	local vrftable=$3
-+	local nsarg="$(ip_expand_args ${nsname})"
++	lookup_by_table_id_t lookup;
++	struct l3mdev_handler *hdlr;
++	int ifindex = -EINVAL;
++	int res;
 +
-+	ip ${nsarg} link add ${vrfname} type vrf table ${vrftable} &>/dev/null
++	res = l3mdev_check_type(l3type);
++	if (res)
++		return res;
++
++	hdlr = &l3mdev_handlers[l3type];
++
++	spin_lock(&l3mdev_lock);
++
++	lookup = hdlr->dev_lookup;
++	if (!lookup)
++		goto unlock;
++
++	ifindex = lookup(net, table_id);
++
++unlock:
++	spin_unlock(&l3mdev_lock);
++
++	return ifindex;
 +}
-+
-+add_vrf_and_check()
-+{
-+	local nsname=$1
-+	local vrfname=$2
-+	local vrftable=$3
-+	local cnt
-+	local rc
-+
-+	add_vrf ${nsname} ${vrfname} ${vrftable}; rc=$?
-+
-+	cnt=$(count_vrf_by_table_id ${nsname} ${vrftable})
-+
-+	log_test ${rc} 0 "${nsname}: add vrf ${vrfname}, ${cnt} vrfs for table ${vrftable}"
-+}
-+
-+add_vrf_and_check_fail()
-+{
-+	local nsname=$1
-+	local vrfname=$2
-+	local vrftable=$3
-+	local cnt
-+	local rc
-+
-+	add_vrf ${nsname} ${vrfname} ${vrftable}; rc=$?
-+
-+	cnt=$(count_vrf_by_table_id ${nsname} ${vrftable})
-+
-+	log_test ${rc} 2 "${nsname}: CANNOT add vrf ${vrfname}, ${cnt} vrfs for table ${vrftable}"
-+}
-+
-+del_vrf_and_check()
-+{
-+	local nsname=$1
-+	local vrfname=$2
-+	local nsarg="$(ip_expand_args ${nsname})"
-+
-+	ip ${nsarg} link del ${vrfname}
-+	log_test $? 0 "${nsname}: remove vrf ${vrfname}"
-+}
-+
-+config_vrf_and_check()
-+{
-+	local nsname=$1
-+	local addr=$2
-+	local vrfname=$3
-+	local nsarg="$(ip_expand_args ${nsname})"
-+
-+	ip ${nsarg} link set dev ${vrfname} up && \
-+		ip ${nsarg} addr add ${addr} dev ${vrfname}
-+	log_test $? 0 "${nsname}: vrf ${vrfname} up, addr ${addr}"
-+}
-+
-+read_strict_mode()
-+{
-+	local nsname=$1
-+	local rval
-+	local rc=0
-+	local nsexec=""
-+
-+	if [ "${nsname}" != "${INIT_NETNS_NAME}" ]; then
-+		# a custom network namespace is provided
-+		nsexec="ip netns exec ${nsname}"
-+	fi
-+
-+	rval="$(${nsexec} bash -c "cat /proc/sys/net/vrf/strict_mode" | \
-+		grep -E "^[0-1]$")" &> /dev/null
-+	if [ $? -ne 0 ]; then
-+		# set errors
-+		rval=255
-+		rc=1
-+	fi
-+
-+	# on success, rval can be only 0 or 1; on error, rval is equal to 255
-+	echo ${rval}
-+	return ${rc}
-+}
-+
-+read_strict_mode_compare_and_check()
-+{
-+	local nsname=$1
-+	local expected=$2
-+	local res
-+
-+	res="$(read_strict_mode ${nsname})"
-+	log_test ${res} ${expected} "${nsname}: check strict_mode=${res}"
-+}
-+
-+set_strict_mode()
-+{
-+	local nsname=$1
-+	local val=$2
-+	local nsexec=""
-+
-+	if [ "${nsname}" != "${INIT_NETNS_NAME}" ]; then
-+		# a custom network namespace is provided
-+		nsexec="ip netns exec ${nsname}"
-+	fi
-+
-+	${nsexec} bash -c "echo ${val} >/proc/sys/net/vrf/strict_mode" &>/dev/null
-+}
-+
-+enable_strict_mode()
-+{
-+	local nsname=$1
-+
-+	set_strict_mode ${nsname} 1
-+}
-+
-+disable_strict_mode()
-+{
-+	local nsname=$1
-+
-+	set_strict_mode ${nsname} 0
-+}
-+
-+disable_strict_mode_and_check()
-+{
-+	local nsname=$1
-+
-+	disable_strict_mode ${nsname}
-+	log_test $? 0 "${nsname}: disable strict_mode (=0)"
-+}
-+
-+enable_strict_mode_and_check()
-+{
-+	local nsname=$1
-+
-+	enable_strict_mode ${nsname}
-+	log_test $? 0 "${nsname}: enable strict_mode (=1)"
-+}
-+
-+enable_strict_mode_and_check_fail()
-+{
-+	local nsname=$1
-+
-+	enable_strict_mode ${nsname}
-+	log_test $? 1 "${nsname}: CANNOT enable strict_mode"
-+}
-+
-+strict_mode_check_default()
-+{
-+	local nsname=$1
-+	local strictmode
-+	local vrfcnt
-+
-+	vrfcnt=$(vrf_count ${nsname})
-+	strictmode=$(read_strict_mode ${nsname})
-+	log_test ${strictmode} 0 "${nsname}: strict_mode=0 by default, ${vrfcnt} vrfs"
-+}
-+
-+setup()
-+{
-+	modprobe vrf
-+
-+	ip netns add testns
-+	ip netns exec testns ip link set lo up
-+}
-+
-+cleanup()
-+{
-+	ip netns del testns 2>/dev/null
-+
-+	ip link del vrf100 2>/dev/null
-+	ip link del vrf101 2>/dev/null
-+	ip link del vrf102 2>/dev/null
-+
-+	echo 0 >/proc/sys/net/vrf/strict_mode 2>/dev/null
-+}
-+
-+vrf_strict_mode_tests_init()
-+{
-+	vrf_strict_mode_check_support init
-+
-+	strict_mode_check_default init
-+
-+	add_vrf_and_check init vrf100 100
-+	config_vrf_and_check init 172.16.100.1/24 vrf100
-+
-+	enable_strict_mode_and_check init
-+
-+	add_vrf_and_check_fail init vrf101 100
-+
-+	disable_strict_mode_and_check init
-+
-+	add_vrf_and_check init vrf101 100
-+	config_vrf_and_check init 172.16.101.1/24 vrf101
-+
-+	enable_strict_mode_and_check_fail init
-+
-+	del_vrf_and_check init vrf101
-+
-+	enable_strict_mode_and_check init
-+
-+	add_vrf_and_check init vrf102 102
-+	config_vrf_and_check init 172.16.102.1/24 vrf102
-+
-+	# the strict_modle is enabled in the init
-+}
-+
-+vrf_strict_mode_tests_testns()
-+{
-+	vrf_strict_mode_check_support testns
-+
-+	strict_mode_check_default testns
-+
-+	enable_strict_mode_and_check testns
-+
-+	add_vrf_and_check testns vrf100 100
-+	config_vrf_and_check testns 10.0.100.1/24 vrf100
-+
-+	add_vrf_and_check_fail testns vrf101 100
-+
-+	add_vrf_and_check_fail testns vrf102 100
-+
-+	add_vrf_and_check testns vrf200 200
-+
-+	disable_strict_mode_and_check testns
-+
-+	add_vrf_and_check testns vrf101 100
-+
-+	add_vrf_and_check testns vrf102 100
-+
-+	#the strict_mode is disabled in the testns
-+}
-+
-+vrf_strict_mode_tests_mix()
-+{
-+	read_strict_mode_compare_and_check init 1
-+
-+	read_strict_mode_compare_and_check testns 0
-+
-+	del_vrf_and_check testns vrf101
-+
-+	del_vrf_and_check testns vrf102
-+
-+	disable_strict_mode_and_check init
-+
-+	enable_strict_mode_and_check testns
-+
-+	enable_strict_mode_and_check init
-+	enable_strict_mode_and_check init
-+
-+	disable_strict_mode_and_check testns
-+	disable_strict_mode_and_check testns
-+
-+	read_strict_mode_compare_and_check init 1
-+
-+	read_strict_mode_compare_and_check testns 0
-+}
-+
-+vrf_strict_mode_tests()
-+{
-+	log_section "VRF strict_mode test on init network namespace"
-+	vrf_strict_mode_tests_init
-+
-+	log_section "VRF strict_mode test on testns network namespace"
-+	vrf_strict_mode_tests_testns
-+
-+	log_section "VRF strict_mode test mixing init and testns network namespaces"
-+	vrf_strict_mode_tests_mix
-+}
-+
-+vrf_strict_mode_check_support()
-+{
-+	local nsname=$1
-+	local output
-+	local rc
-+
-+	output="$(lsmod | grep '^vrf' | awk '{print $1}')"
-+	if [ -z "${output}" ]; then
-+		modinfo vrf || return $?
-+	fi
-+
-+	# we do not care about the value of the strict_mode; we only check if
-+	# the strict_mode parameter is available or not.
-+	read_strict_mode ${nsname} &>/dev/null; rc=$?
-+	log_test ${rc} 0 "${nsname}: net.vrf.strict_mode is available"
-+
-+	return ${rc}
-+}
-+
-+if [ "$(id -u)" -ne 0 ];then
-+	echo "SKIP: Need root privileges"
-+	exit 0
-+fi
-+
-+if [ ! -x "$(command -v ip)" ]; then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit 0
-+fi
-+
-+cleanup &> /dev/null
-+
-+setup
-+vrf_strict_mode_tests
-+cleanup
-+
-+print_log_test_results
-+
-+exit $ret
++EXPORT_SYMBOL_GPL(l3mdev_ifindex_lookup_by_table_id);
++
+ /**
+  *	l3mdev_master_ifindex - get index of L3 master device
+  *	@dev: targeted interface
 -- 
 2.20.1
 
