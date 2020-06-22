@@ -2,125 +2,114 @@ Return-Path: <SRS0=WGuL=AD=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63164C433E1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88C57C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:45:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4126F2076A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:17:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66A742076A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:45:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mNyAXwzX"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Rw1MHPXF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730303AbgFVSQ6 (ORCPT
+        id S1730121AbgFVSpJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 22 Jun 2020 14:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730157AbgFVSQ5 (ORCPT
+        Mon, 22 Jun 2020 14:45:09 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:12286 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729605AbgFVSpI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 14:16:57 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D89C061573
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:56 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d8so7899574plo.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cs1TzbVWJcRX8QIkepO+whzfzA7CjoIqZIBpgLWkg48=;
-        b=mNyAXwzXxYYhNCAHgqFwOMl8/f3f+cfn9sRi1jO3ptYqEqq24+KHoJqcbDFhKS6Yl6
-         Y5vq/Ru0pZsrqwsvcYpi9Sj4/h1lSCo6+QSOjSuZdtgsOk7zIw652Hw6W4gLHEEpugGG
-         cKHE+ab+jFSL2sZBEELNtSMkajV+8MeXa2wRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cs1TzbVWJcRX8QIkepO+whzfzA7CjoIqZIBpgLWkg48=;
-        b=awRiTzsNz6V4crLNucpIlwQK0HyvSplMduHGhicUv8giaqEWuB6NMhrPC6PU4BAFrw
-         EV00P7bz1Ef8a2rsU4/RuRu3fYNj7aeS+5joBe8MLV7jRWK5I7zgDxdKWfv9K7eqKPIw
-         8YnXijLVqOlGsZ3vmb67AlPph9HQ9tlf3JhQjBwVYPJbjHLToMpTTWiXm5YBw8VkakXz
-         UqB3rAeCRMFLcldr210yCgU84bnmDsvhg5u+r4/MADPswavNlYO809DDKLkAu/ItX8bg
-         maqHji9izFUOlBp0yb5Eq3Qv7XqFB3dpcTGvtgywMyhmHR0La0P2TXBmLjXd91IVcgKW
-         Vs1g==
-X-Gm-Message-State: AOAM530arsn3HcrHb7zzL32VTR8WXMfxPR6ZhzCmrGqS2CpFjltyxjSo
-        OSCH/m4mDfaNacNP8ru3mHPQoQ==
-X-Google-Smtp-Source: ABdhPJx4Xvw8G70Ihu9eJfSDjh/kyqUe3WotbHQ6CsslNUCxNiCGGS9DgOCH6cVeGQ6wSyyWHbjT0Q==
-X-Received: by 2002:a17:902:b706:: with SMTP id d6mr21132209pls.304.1592849815700;
-        Mon, 22 Jun 2020 11:16:55 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k26sm11732375pgt.90.2020.06.22.11.16.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 11:16:54 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        David Gow <davidgow@google.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/8] selftests/harness: Switch to TAP output
-Date:   Mon, 22 Jun 2020 11:16:43 -0700
-Message-Id: <20200622181651.2795217-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 22 Jun 2020 14:45:08 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ef0fc270000>; Mon, 22 Jun 2020 11:44:55 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 22 Jun 2020 11:45:08 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 22 Jun 2020 11:45:08 -0700
+Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 22 Jun
+ 2020 18:44:59 +0000
+Subject: Re: [PATCH 08/16] nouveau/hmm: fault one page at a time
+To:     Jason Gunthorpe <jgg@mellanox.com>
+CC:     <nouveau@lists.freedesktop.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jerome Glisse <jglisse@redhat.com>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20200619215649.32297-1-rcampbell@nvidia.com>
+ <20200619215649.32297-9-rcampbell@nvidia.com>
+ <20200622172233.GA2874652@mellanox.com>
+From:   Ralph Campbell <rcampbell@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <f529df0d-707c-cb67-ac12-356784e54ef8@nvidia.com>
+Date:   Mon, 22 Jun 2020 11:44:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200622172233.GA2874652@mellanox.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1592851495; bh=edTvH4CLD4vItWTGQfSjP32xxPYuTSK47wQwLKtpC2o=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Rw1MHPXFCHxs683/WECRpVcEISDyJHi11DYaKjk6Je+Hzsfmso1p97Ec8fYZM2+nM
+         A+Whgg2ThDXh90YDXJAKBJwzuaP2WzJlG8bwz/1/VnakrGPCT7sb/aLJ+IleyTzN4h
+         9jH1TmNccMQ6YU399/RKKkKq2dPSZhr92L71xYLncMKZOVOR48E1BIFUCpW11mwjOE
+         t+M8mWr0WSNGayrNmi4RHcERwZ+hLyLIlZZD5cjsTt043/R1L5B5ihX/JKG3DP2Aem
+         qU3pd3KpJt+qQyE2dumEr5djt4hCCHzY/BBBtQZeeGZ0+hG3skWe1a6K8PfsLkY2WT
+         4nfL0AaTfpmSw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
 
-v2:
-- switch harness from XFAIL to SKIP
-- pass skip reason from test into TAP output
-- add acks/reviews
-v1: https://lore.kernel.org/lkml/20200611224028.3275174-1-keescook@chromium.org/
+On 6/22/20 10:22 AM, Jason Gunthorpe wrote:
+> On Fri, Jun 19, 2020 at 02:56:41PM -0700, Ralph Campbell wrote:
+>> The SVM page fault handler groups faults into a range of contiguous
+>> virtual addresses and requests hmm_range_fault() to populate and
+>> return the page frame number of system memory mapped by the CPU.
+>> In preparation for supporting large pages to be mapped by the GPU,
+>> process faults one page at a time. In addition, use the hmm_range
+>> default_flags to fix a corner case where the input hmm_pfns array
+>> is not reinitialized after hmm_range_fault() returns -EBUSY and must
+>> be called again.
+> 
+> Are you sure? hmm_range_fault is pretty expensive per call..
+> 
+> Jason
+> 
 
+Short answer is no, I'm not 100% sure.
 
-I finally got around to converting the kselftest_harness.h API to actually
-use the kselftest.h API so all the tools using it can actually report
-TAP correctly. As part of this, there are a bunch of related cleanups,
-API updates, and additions.
+The GPU might generate a list of dozens or hundreds of fault entries in the
+same 4K page, or sequential 4K pages, or some other stride.
+A single 2MB mapping might satisfy all of those after calling hmm_range_fault()
+for the first fault entry and then skipping all the other fault entries
+that fall into that range. So mostly, I'm proposing this change because it
+makes handling the compound page case and -EBUSY case simpler.
 
-Thanks!
-
--Kees
-
-Kees Cook (8):
-  selftests/clone3: Reorder reporting output
-  selftests: Remove unneeded selftest API headers
-  selftests/binderfs: Fix harness API usage
-  selftests: Add header documentation and helpers
-  selftests/harness: Switch to TAP output
-  selftests/harness: Refactor XFAIL into SKIP
-  selftests/harness: Display signed values correctly
-  selftests/harness: Report skip reason
-
- tools/testing/selftests/clone3/clone3.c       |   2 +-
- .../selftests/clone3/clone3_clear_sighand.c   |   3 +-
- .../testing/selftests/clone3/clone3_set_tid.c |   2 +-
- .../filesystems/binderfs/binderfs_test.c      | 284 +++++++++---------
- tools/testing/selftests/kselftest.h           |  78 ++++-
- tools/testing/selftests/kselftest_harness.h   | 169 ++++++++---
- .../pid_namespace/regression_enomem.c         |   1 -
- .../selftests/pidfd/pidfd_getfd_test.c        |   1 -
- .../selftests/pidfd/pidfd_setns_test.c        |   1 -
- tools/testing/selftests/seccomp/seccomp_bpf.c |   8 +-
- .../selftests/uevent/uevent_filtering.c       |   1 -
- 11 files changed, 356 insertions(+), 194 deletions(-)
-
--- 
-2.25.1
-
+As for performance, that is hard to say because nouveau is missing policies
+for whether to migrate data to GPU memory on a fault or to map system memory.
+Since GPU memory is much higher bandwidth, overall performance
+can be much higher if the data is migrated to the GPU's local memory but
+currently, migration is only performed explicitly under application request
+(via OpenCL clEnqueueSVMMigrateMem() call).
+If the GPU is only accessing system memory a few times, then it can be faster
+to map system memory and not migrate the data so it depends on the application.
+Then there is thrashing to consider if the GPU and CPU are both trying to
+access the same pages...
