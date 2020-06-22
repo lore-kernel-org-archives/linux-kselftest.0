@@ -7,59 +7,58 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B4CC433E4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB647C433E3
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:16:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5FC220656
+	by mail.kernel.org (Postfix) with ESMTP id BA3D220656
 	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Jun 2020 18:16:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gCn6sUrc"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="igQ4F2As"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730319AbgFVSQ7 (ORCPT
+        id S1730308AbgFVSQ7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 22 Jun 2020 14:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730299AbgFVSQ6 (ORCPT
+        with ESMTP id S1730293AbgFVSQ5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 14:16:58 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796B0C061795
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:58 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id d6so223752pjs.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:58 -0700 (PDT)
+        Mon, 22 Jun 2020 14:16:57 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76269C061796
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:57 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bh7so7892252plb.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jun 2020 11:16:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gmWEkUNicDeCM4kFpW02gLeTggGe1CX/sAbQL0lp4ok=;
-        b=gCn6sUrcglxjrNfNk1b4t8uFQEW2ivCw6IGFERgd2ucag2WSZ8dDQVZj+vjoeZkv4W
-         5XzU1emOkx+4It3oK9atoQRugJQPMIyYZeW5I20TMGNQLCuuFGM2zrbLRHheiDGuUbET
-         wCPTcPVHrrk2VgUkAhMgytOiH4Im0X2QdI3oA=
+        bh=NdWdw5uqOY7GNoRF552kmYRxLLZI1VEZdvZJuO73sB8=;
+        b=igQ4F2AsBuFMhsCWMOLTwF/H3/kaG0sqGzdY+Wytwuxq6e/uKTWWZnsPI76Km2mz0+
+         nEqo+yagADKE9baC5lMW7uN0CdJmGe7IJ5L+lUCPoK0rIzt9/kAfhBglrfoxjhPtrHXo
+         KZ53xCkVDM+ShYy4idI6tMiFdg+wComjuCdDE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gmWEkUNicDeCM4kFpW02gLeTggGe1CX/sAbQL0lp4ok=;
-        b=sBWUVK8XzKrJey0x8bkLFnV/u62Zg+Mf6GA6zAGKacpkqn8m1+1xi9k9nzfq90D672
-         Ow5FkifmLDTj1PfrPpIArK3HaoCYRlI7fRtiMWMqt4ae3eDnASWVeQ2xG4Gd1HwzS1mN
-         8JOOGMqVvxvBeo73ylqp5BD5hJNkYmIkXeIlihxhRgr8yiYyMxhybq1QlLBBC33O/hp0
-         439kIad2VWc1J+dS0YFWPizNX/ABV1/sz+NwludPp/x79iRJX0IjhUO6g/5g+FMkUxeo
-         segFf+CGhnbGRAmsNV8Md+MFatzosEDbTilpRl3KIuesTi9PPtXovFp4ugCfZs8CQKMn
-         Q94g==
-X-Gm-Message-State: AOAM533XEU1Ym0/yjM5VS4FTyMbkMBm+HrzPbag6Cf3RJtntXNZfpZex
-        PNYO6YeCKeE4IUyjO/Fwyx8aXw==
-X-Google-Smtp-Source: ABdhPJyjnPW8KKOQGeoi/F2bXOPpiEJeT6vo2t99kS7iITrMKDcamCLyXSzQuGqFiPic8NSEaNumwg==
-X-Received: by 2002:a17:90a:30e1:: with SMTP id h88mr18277609pjb.43.1592849818071;
-        Mon, 22 Jun 2020 11:16:58 -0700 (PDT)
+        bh=NdWdw5uqOY7GNoRF552kmYRxLLZI1VEZdvZJuO73sB8=;
+        b=CIBk/Lshn31gjuXw8r3Ph+HvQJMlcV9bwm6hM2Gh05OTKrqhKk3L7BUimmuOMWze05
+         BMTNnJtq66OxtPvTaHXpxxLt5axIOhQefvWZZmR7cEDjbbHhCnKkJPmxFxoD33OE3ZjB
+         CXoj+S9sP6pyLuJsRd+xvCLi2frwFajVjtE7v8+osNk9CA3KP0hX+GbHhjIvAdxz3jJo
+         v5qerZpcEg1ckRo2wBA/XwB6tCM0MMfSsj2e13FP4PZby86l8MR66VmSxxPcXLmQlvah
+         liLK1o6Aish4wBqFH7T7b/pkQPokCM7FQy6zHKE7dyEoFdlWnretNaCVIfj4sppToLh3
+         UM5w==
+X-Gm-Message-State: AOAM533oZjM0yjio3XVy4nuBeXXrIMJXbhhVkRvhAS/eqxS2CkfNtdJ/
+        Uv2aZXW7H22DwRTjhnZbpCThbw==
+X-Google-Smtp-Source: ABdhPJwq72KZ9gketyAOgkCA0hDWYwYTZcWhMXRJL7/p9uFfjQQpCc2yeF/hOsiB0gysgWFLTeHzhQ==
+X-Received: by 2002:a17:90a:e2c4:: with SMTP id fr4mr19588058pjb.32.1592849816996;
+        Mon, 22 Jun 2020 11:16:56 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h17sm14314190pfo.168.2020.06.22.11.16.54
+        by smtp.gmail.com with ESMTPSA id k19sm15346589pfg.153.2020.06.22.11.16.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 22 Jun 2020 11:16:55 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
         Christian Brauner <christian@brauner.io>,
         David Gow <davidgow@google.com>,
         Frank Rowand <frowand.list@gmail.com>,
@@ -70,9 +69,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/8] selftests/clone3: Reorder reporting output
-Date:   Mon, 22 Jun 2020 11:16:44 -0700
-Message-Id: <20200622181651.2795217-2-keescook@chromium.org>
+Subject: [PATCH v2 4/8] selftests: Add header documentation and helpers
+Date:   Mon, 22 Jun 2020 11:16:47 -0700
+Message-Id: <20200622181651.2795217-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200622181651.2795217-1-keescook@chromium.org>
 References: <20200622181651.2795217-1-keescook@chromium.org>
@@ -83,61 +82,135 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Selftest output reporting was happening before the TAP headers and plan
-had been emitted. Move the first test reports later.
+Add "how to use this API" documentation to kselftest.h, and include some
+addition helpers and notes to make things easier to use.
 
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Additionally removes the incorrect "Bail out!" line from the standard exit
+path. The TAP13 specification says that "Bail out!"  should be used when
+giving up before all tests have been run. For a "normal" execution run,
+the selftests should not report "Bail out!".
+
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/clone3/clone3.c               | 2 +-
- tools/testing/selftests/clone3/clone3_clear_sighand.c | 3 +--
- tools/testing/selftests/clone3/clone3_set_tid.c       | 2 +-
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kselftest.h | 73 ++++++++++++++++++++++++++++-
+ 1 file changed, 71 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index f14c269a5a18..b7e6dec36173 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -131,9 +131,9 @@ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 0ac49d91a260..2cd5eefed4d2 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -6,6 +6,37 @@
+  * Copyright (c) 2014 Shuah Khan <shuahkh@osg.samsung.com>
+  * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+  *
++ * Using this API consists of first counting how many tests your code
++ * has to run, and then starting up the reporting:
++ *
++ *     ksft_print_header();
++ *     ksft_set_plan(total_number_of_tests);
++ *
++ * For each test, report any progress, debugging, etc with:
++ *
++ *     ksft_print_msg(fmt, ...);
++ *
++ * and finally report the pass/fail/skip/xfail state of the test with one of:
++ *
++ *     ksft_test_result(condition, fmt, ...);
++ *     ksft_test_result_pass(fmt, ...);
++ *     ksft_test_result_fail(fmt, ...);
++ *     ksft_test_result_skip(fmt, ...);
++ *     ksft_test_result_xfail(fmt, ...);
++ *     ksft_test_result_error(fmt, ...);
++ *
++ * When all tests are finished, clean up and exit the program with one of:
++ *
++ *    ksft_exit(condition);
++ *    ksft_exit_pass();
++ *    ksft_exit_fail();
++ *
++ * If the program wants to report details on why the entire program has
++ * failed, it can instead exit with a message (this is usually done when
++ * the program is aborting before finishing all tests):
++ *
++ *    ksft_exit_fail_msg(fmt, ...);
++ *
+  */
+ #ifndef __KSELFTEST_H
+ #define __KSELFTEST_H
+@@ -74,7 +105,7 @@ static inline void ksft_print_cnts(void)
+ 	if (ksft_plan != ksft_test_num())
+ 		printf("# Planned tests != run tests (%u != %u)\n",
+ 			ksft_plan, ksft_test_num());
+-	printf("# Pass %d Fail %d Xfail %d Xpass %d Skip %d Error %d\n",
++	printf("# Totals: pass:%d fail:%d xfail:%d xpass:%d skip:%d error:%d\n",
+ 		ksft_cnt.ksft_pass, ksft_cnt.ksft_fail,
+ 		ksft_cnt.ksft_xfail, ksft_cnt.ksft_xpass,
+ 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
+@@ -120,6 +151,32 @@ static inline void ksft_test_result_fail(const char *msg, ...)
+ 	va_end(args);
+ }
  
- 	uid_t uid = getuid();
- 
--	test_clone3_supported();
- 	ksft_print_header();
- 	ksft_set_plan(17);
-+	test_clone3_supported();
- 
- 	/* Just a simple clone3() should return 0.*/
- 	test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
-diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-index 9e1af8aa7698..db5fc9c5edcf 100644
---- a/tools/testing/selftests/clone3/clone3_clear_sighand.c
-+++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-@@ -119,9 +119,8 @@ static void test_clone3_clear_sighand(void)
- int main(int argc, char **argv)
++/**
++ * ksft_test_result() - Report test success based on truth of condition
++ *
++ * @condition: if true, report test success, otherwise failure.
++ */
++#define ksft_test_result(condition, fmt, ...) do {	\
++	if (!!(condition))				\
++		ksft_test_result_pass(fmt, ##__VA_ARGS__);\
++	else						\
++		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
++	} while (0)
++
++static inline void ksft_test_result_xfail(const char *msg, ...)
++{
++	int saved_errno = errno;
++	va_list args;
++
++	ksft_cnt.ksft_xfail++;
++
++	va_start(args, msg);
++	printf("ok %d # XFAIL ", ksft_test_num());
++	errno = saved_errno;
++	vprintf(msg, args);
++	va_end(args);
++}
++
+ static inline void ksft_test_result_skip(const char *msg, ...)
  {
- 	ksft_print_header();
--	test_clone3_supported();
--
- 	ksft_set_plan(1);
-+	test_clone3_supported();
+ 	int saved_errno = errno;
+@@ -134,6 +191,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
+ 	va_end(args);
+ }
  
- 	test_clone3_clear_sighand();
++/* TODO: how does "error" differ from "fail" or "skip"? */
+ static inline void ksft_test_result_error(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+@@ -156,11 +214,22 @@ static inline int ksft_exit_pass(void)
  
-diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
-index 25beb22f35b5..5831c1082d6d 100644
---- a/tools/testing/selftests/clone3/clone3_set_tid.c
-+++ b/tools/testing/selftests/clone3/clone3_set_tid.c
-@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
- 	pid_t set_tid[MAX_PID_NS_LEVEL * 2];
+ static inline int ksft_exit_fail(void)
+ {
+-	printf("Bail out!\n");
+ 	ksft_print_cnts();
+ 	exit(KSFT_FAIL);
+ }
  
- 	ksft_print_header();
--	test_clone3_supported();
- 	ksft_set_plan(29);
-+	test_clone3_supported();
- 
- 	if (pipe(pipe_1) < 0 || pipe(pipe_2) < 0)
- 		ksft_exit_fail_msg("pipe() failed\n");
++/**
++ * ksft_exit() - Exit selftest based on truth of condition
++ *
++ * @condition: if true, exit self test with success, otherwise fail.
++ */
++#define ksft_exit(condition) do {	\
++	if (!!(condition))		\
++		ksft_exit_pass();	\
++	else				\
++		ksft_exit_fail();	\
++	} while (0)
++
+ static inline int ksft_exit_fail_msg(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
 -- 
 2.25.1
 
