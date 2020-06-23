@@ -2,55 +2,55 @@ Return-Path: <SRS0=j3G/=AE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26656C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44B6CC433E1
 	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 00:16:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00A122076A
+	by mail.kernel.org (Postfix) with ESMTP id 23E0920738
 	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 00:16:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NAfAXsSV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EG1u6SPG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731547AbgFWAP4 (ORCPT
+        id S1731479AbgFWAQK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 22 Jun 2020 20:15:56 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37213 "EHLO
+        Mon, 22 Jun 2020 20:16:10 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23566 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731534AbgFWAP4 (ORCPT
+        with ESMTP id S1731542AbgFWAP4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 22 Jun 2020 20:15:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592871354;
+        s=mimecast20190719; t=1592871355;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kkkQSPBNrpI2IxqYiVh2Iw1joFoBdbYBL6lvveSvkPc=;
-        b=NAfAXsSVgJTdUPwELRiLw9W+5ETGfbtNr85nktt6zWZRtp0AI42J9BASqazs+2hJYMHeSD
-        uPCPFDsk4dQIfhzBgD7n254xyks6xWly7/qAFW8FAF635rJPefhX0T6F39LvSg61cDSa+w
-        /O2fXPXdVNcEiUhURz1SwQ/JvFbswi4=
+        bh=Q1lLIJ0cCWWPfmSXCSyECLoLdAvobJtTbw4S3xAekBQ=;
+        b=EG1u6SPG0la5Htr3xl+HclMOyUEyhI+c4nBO4AuAocoEGKB7Ll3r7+8Kk6BqOnkMm6wk2Q
+        QJNaSThlJdO3hFChY4RtJ+n7bJG2CJhQzhE+16vb9aJ9rqjIwtNa6cutUgkImPdHLbI4K5
+        pqfGS9SzYZoOfLHKJ2FL4ERSdn/1u6o=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-507-4kzhHYcoPZaa1qZAXt5OyA-1; Mon, 22 Jun 2020 20:15:52 -0400
-X-MC-Unique: 4kzhHYcoPZaa1qZAXt5OyA-1
+ us-mta-500-Ikyc-M39OL6VNejlDLltCA-1; Mon, 22 Jun 2020 20:15:51 -0400
+X-MC-Unique: Ikyc-M39OL6VNejlDLltCA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F11AA464;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5BC76801503;
         Tue, 23 Jun 2020 00:15:50 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 833E060BEC;
-        Tue, 23 Jun 2020 00:15:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E1F2C60BEC;
+        Tue, 23 Jun 2020 00:15:49 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/6] selftests: pidfd: do not use ksft_exit_skip after ksft_set_plan
-Date:   Mon, 22 Jun 2020 20:15:45 -0400
-Message-Id: <20200623001547.22255-5-pbonzini@redhat.com>
+Subject: [PATCH v2 3/6] selftests: breakpoints: do not use ksft_exit_skip after ksft_set_plan
+Date:   Mon, 22 Jun 2020 20:15:44 -0400
+Message-Id: <20200623001547.22255-4-pbonzini@redhat.com>
 In-Reply-To: <20200623001547.22255-1-pbonzini@redhat.com>
 References: <20200623001547.22255-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -62,109 +62,152 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Calling ksft_exit_skip after ksft_set_plan results in executing fewer tests
-than planned.  Use ksft_test_result_skip instead.
-
-The plan passed to ksft_set_plan was wrong, too, so fix it while at it.
+than planned.  Use ksft_test_result_skip for the individual tests.
+The call in suspend() is fine, but ksft_set_plan should be after it.
 
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- tools/testing/selftests/pidfd/pidfd_test.c | 39 ++++++++++++++++++----
- 1 file changed, 33 insertions(+), 6 deletions(-)
+ .../breakpoints/step_after_suspend_test.c     | 45 +++++++++++--------
+ 1 file changed, 26 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index 7aff2d3b42c0..380c6314e6a2 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -8,6 +8,7 @@
- #include <sched.h>
- #include <signal.h>
- #include <stdio.h>
-+#include <stdbool.h>
- #include <stdlib.h>
- #include <string.h>
- #include <syscall.h>
-@@ -27,6 +28,8 @@
+diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+index 983ee6182e25..2cf6f10ab7c4 100644
+--- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
++++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+@@ -47,7 +47,7 @@ void child(int cpu)
+ 	_exit(0);
+ }
  
- #define MAX_EVENTS 5
- 
-+static bool have_pidfd_send_signal = false;
-+
- static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+-bool run_test(int cpu)
++int run_test(int cpu)
  {
- 	size_t stack_size = 1024;
-@@ -56,6 +59,13 @@ static int test_pidfd_send_signal_simple_success(void)
- 	int pidfd, ret;
- 	const char *test_name = "pidfd_send_signal send SIGUSR1";
+ 	int status;
+ 	pid_t pid = fork();
+@@ -55,7 +55,7 @@ bool run_test(int cpu)
  
-+	if (!have_pidfd_send_signal) {
-+		ksft_test_result_skip(
-+			"%s test: pidfd_send_signal() syscall not supported\n",
-+			test_name);
-+		return 0;
-+	}
-+
- 	pidfd = open("/proc/self", O_DIRECTORY | O_CLOEXEC);
- 	if (pidfd < 0)
- 		ksft_exit_fail_msg(
-@@ -86,6 +96,13 @@ static int test_pidfd_send_signal_exited_fail(void)
- 	pid_t pid;
- 	const char *test_name = "pidfd_send_signal signal exited process";
- 
-+	if (!have_pidfd_send_signal) {
-+		ksft_test_result_skip(
-+			"%s test: pidfd_send_signal() syscall not supported\n",
-+			test_name);
-+		return 0;
-+	}
-+
- 	pid = fork();
- 	if (pid < 0)
- 		ksft_exit_fail_msg("%s test: Failed to create new process\n",
-@@ -137,6 +154,13 @@ static int test_pidfd_send_signal_recycled_pid_fail(void)
- 	pid_t pid1;
- 	const char *test_name = "pidfd_send_signal signal recycled pid";
- 
-+	if (!have_pidfd_send_signal) {
-+		ksft_test_result_skip(
-+			"%s test: pidfd_send_signal() syscall not supported\n",
-+			test_name);
-+		return 0;
-+	}
-+
- 	ret = unshare(CLONE_NEWPID);
- 	if (ret < 0)
- 		ksft_exit_fail_msg("%s test: Failed to unshare pid namespace\n",
-@@ -325,13 +349,16 @@ static int test_pidfd_send_signal_syscall_support(void)
- 
- 	ret = sys_pidfd_send_signal(pidfd, 0, NULL, 0);
- 	if (ret < 0) {
--		if (errno == ENOSYS)
--			ksft_exit_skip(
-+		if (errno == ENOSYS) {
-+			ksft_test_result_skip(
- 				"%s test: pidfd_send_signal() syscall not supported\n",
- 				test_name);
--
--		ksft_exit_fail_msg("%s test: Failed to send signal\n",
--				   test_name);
-+		} else {
-+			ksft_exit_fail_msg("%s test: Failed to send signal\n",
-+					   test_name);
-+		}
-+	} else {
-+		have_pidfd_send_signal = true;
+ 	if (pid < 0) {
+ 		ksft_print_msg("fork() failed: %s\n", strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (pid == 0)
+ 		child(cpu);
+@@ -63,67 +63,68 @@ bool run_test(int cpu)
+ 	wpid = waitpid(pid, &status, __WALL);
+ 	if (wpid != pid) {
+ 		ksft_print_msg("waitpid() failed: %s\n", strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (!WIFSTOPPED(status)) {
+ 		ksft_print_msg("child did not stop: %s\n", strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (WSTOPSIG(status) != SIGSTOP) {
+ 		ksft_print_msg("child did not stop with SIGSTOP: %s\n",
+ 			strerror(errno));
+-		return false;
++		return KSFT_FAIL;
  	}
  
- 	close(pidfd);
-@@ -521,7 +548,7 @@ static void test_pidfd_poll_leader_exit(int use_waitpid)
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
--	ksft_set_plan(4);
-+	ksft_set_plan(8);
+ 	if (ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL) < 0) {
+ 		if (errno == EIO) {
+-			ksft_exit_skip(
++			ksft_print_msg(
+ 				"ptrace(PTRACE_SINGLESTEP) not supported on this architecture: %s\n",
+ 				strerror(errno));
++			return KSFT_SKIP;
+ 		}
+ 		ksft_print_msg("ptrace(PTRACE_SINGLESTEP) failed: %s\n",
+ 			strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
  
- 	test_pidfd_poll_exec(0);
- 	test_pidfd_poll_exec(1);
+ 	wpid = waitpid(pid, &status, __WALL);
+ 	if (wpid != pid) {
+ 		ksft_print_msg("waitpid() failed: $s\n", strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (WIFEXITED(status)) {
+ 		ksft_print_msg("child did not single-step: %s\n",
+ 			strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (!WIFSTOPPED(status)) {
+ 		ksft_print_msg("child did not stop: %s\n", strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (WSTOPSIG(status) != SIGTRAP) {
+ 		ksft_print_msg("child did not stop with SIGTRAP: %s\n",
+ 			strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 
+ 	if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
+ 		ksft_print_msg("ptrace(PTRACE_CONT) failed: %s\n",
+ 			strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 
+ 	wpid = waitpid(pid, &status, __WALL);
+ 	if (wpid != pid) {
+ 		ksft_print_msg("waitpid() failed: %s\n", strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 	if (!WIFEXITED(status)) {
+ 		ksft_print_msg("child did not exit after PTRACE_CONT: %s\n",
+ 			strerror(errno));
+-		return false;
++		return KSFT_FAIL;
+ 	}
+ 
+-	return true;
++	return KSFT_PASS;
+ }
+ 
+ void suspend(void)
+@@ -192,23 +193,29 @@ int main(int argc, char **argv)
+ 			continue;
+ 		tests++;
+ 	}
+-	ksft_set_plan(tests);
+ 
+ 	if (do_suspend)
+ 		suspend();
+ 
++	ksft_set_plan(tests);
+ 	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
+-		bool test_success;
++		int test_success;
+ 
+ 		if (!CPU_ISSET(cpu, &available_cpus))
+ 			continue;
+ 
+ 		test_success = run_test(cpu);
+-		if (test_success) {
++		switch (test_success) {
++		case KSFT_PASS:
+ 			ksft_test_result_pass("CPU %d\n", cpu);
+-		} else {
++			break;
++		case KSFT_SKIP:
++			ksft_test_result_skip("CPU %d\n", cpu);
++			break;
++		case KSFT_FAIL:
+ 			ksft_test_result_fail("CPU %d\n", cpu);
+ 			succeeded = false;
++			break;
+ 		}
+ 	}
+ 
 -- 
 2.26.2
 
