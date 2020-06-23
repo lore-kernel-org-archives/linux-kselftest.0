@@ -2,103 +2,163 @@ Return-Path: <SRS0=j3G/=AE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4995BC433E1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 07:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFA9BC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 11:32:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D6F7206B7
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 07:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1592896211;
-	bh=sTFjDVFNxvaxYL1XIBkVBYNkDxJgnmCW7W2tRtvvhLM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=o2+3ERKwGYMH36sGy4++siMYVsGeet67n78xxrHFmzeMZnRNzHbtF1tX5j1TwfR94
-	 Yb/ufk40YhJCjf8nwLGRvyVmkhl2I5MQoIAOl7vNZxHF9blF+kumr/LcmgliAsBJ8J
-	 orpdi8rnipUUSLNEvGT0JLgnATpJgQJN4Ks608m4=
+	by mail.kernel.org (Postfix) with ESMTP id D38B32072E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 11:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731313AbgFWHKC (ORCPT
+        id S1732409AbgFWLcO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Jun 2020 03:10:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39932 "EHLO mail.kernel.org"
+        Tue, 23 Jun 2020 07:32:14 -0400
+Received: from mga01.intel.com ([192.55.52.88]:13397 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731306AbgFWHJQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 03:09:16 -0400
-Received: from mail.kernel.org (unknown [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 69B58207D8;
-        Tue, 23 Jun 2020 07:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592896155;
-        bh=sTFjDVFNxvaxYL1XIBkVBYNkDxJgnmCW7W2tRtvvhLM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m++TRjfKXjCGKujF4infLuDUtr+4rY07SzmgNgJUzP0lIpre7KbvVx9a/U1bmWWsX
-         zqdDkcgPvulkmmoqmK0NhqQwz75nvw2JhXeSg22823VDBErEq9pzNCTVzCAX6afbjH
-         LzqNoOqBlBdah9HYIbo/FYSpvWpydFHL5KqUsQFQ=
-Received: from mchehab by mail.kernel.org with local (Exim 4.93)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jnd3R-003qjG-8Q; Tue, 23 Jun 2020 09:09:13 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ram Pai <linuxram@us.ibm.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 09/15] selftests/vm/keys: fix a broken reference at protection_keys.c
-Date:   Tue, 23 Jun 2020 09:09:05 +0200
-Message-Id: <cf65aa052669f55b9dc976a5c8026aef5840741d.1592895969.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1592895969.git.mchehab+huawei@kernel.org>
-References: <cover.1592895969.git.mchehab+huawei@kernel.org>
+        id S1732450AbgFWLcH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Jun 2020 07:32:07 -0400
+IronPort-SDR: pMpnCYkGbQbgOtkmZxsuOb8kyRtrhcIjn2UmW+3nO2zehu17+aRiUcCtP7+PKAdbbU89Ua/qRu
+ pPzdNd9tIKKQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="162125691"
+X-IronPort-AV: E=Sophos;i="5.75,271,1589266800"; 
+   d="scan'208";a="162125691"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 04:32:04 -0700
+IronPort-SDR: 5tkfT0mZr3W/taJOkL52IkrQPichvXxonir3i8I80hB2DPMHRI27NufAZe238Pjv7lkhilhA4x
+ ntx8O0syHBkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,271,1589266800"; 
+   d="scan'208";a="353775553"
+Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
+  by orsmga001.jf.intel.com with ESMTP; 23 Jun 2020 04:32:01 -0700
+Date:   Tue, 23 Jun 2020 19:41:55 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Heng Su <heng.su@intel.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kai Svahn <kai.svahn@intel.com>
+Subject: Re: [PATCH v2] Kernel selftests: TPM2: upgrade TPM2 tests from
+ Python 2 to Python 3
+Message-ID: <20200623114155.GA15561@xpf-desktop.sh.intel.com>
+References: <20200618081502.15302-1-pengfei.xu@intel.com>
+ <20200622214613.GA22727@linux.intel.com>
+ <20200622214739.GB22727@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200622214739.GB22727@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changeset 1eecbcdca2bd ("docs: move protection-keys.rst to the core-api book")
-from Jun 7, 2019 converted protection-keys.txt file to ReST.
+Hi Jarkk,
+  Thanks for your comments!
+  My feedback is as below.
 
-A recent change at protection_keys.c partially reverted such
-changeset, causing it to point to a non-existing file:
+  BR.
 
-	- * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-	+ * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
+On 2020-06-23 at 00:47:39 +0300, Jarkko Sakkinen wrote:
+> On Tue, Jun 23, 2020 at 12:46:18AM +0300, Jarkko Sakkinen wrote:
+> > On Thu, Jun 18, 2020 at 04:15:02PM +0800, Pengfei Xu wrote:
+> > > Python 2 is no longer supported by the Python upstream project, so
+> > > upgrade TPM2 tests to Python 3.
+> > > 
+> > > Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+> > 
+> > Use "selftests: tpm: <short summary>".
+> > 
 
-It sounds to me that the changeset that introduced such change
-4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
-could also have other side effects, as it sounds that it was not
-generated against uptream code, but, instead, against a version
-older than Jun 7, 2019.
+   Will do.
 
-Fixes: 4645e3563673 ("selftests/vm/pkeys: rename all references to pkru to a generic name")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/testing/selftests/vm/protection_keys.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > ---
+> > >  tools/testing/selftests/tpm2/test_smoke.sh |  4 +-
+> > >  tools/testing/selftests/tpm2/test_space.sh |  2 +-
+> > >  tools/testing/selftests/tpm2/tpm2.py       | 68 ++++++++++++++--------
+> > >  tools/testing/selftests/tpm2/tpm2_tests.py | 24 +++++---
+> > >  4 files changed, 61 insertions(+), 37 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+> > > index 663062701d5a..d05467f6d258 100755
+> > > --- a/tools/testing/selftests/tpm2/test_smoke.sh
+> > > +++ b/tools/testing/selftests/tpm2/test_smoke.sh
+> > > @@ -6,8 +6,8 @@ ksft_skip=4
+> > >  
+> > >  [ -f /dev/tpm0 ] || exit $ksft_skip
+> > >  
+> > > -python -m unittest -v tpm2_tests.SmokeTest
+> > > -python -m unittest -v tpm2_tests.AsyncTest
+> > > +python3 -m unittest -v tpm2_tests.SmokeTest
+> > > +python3 -m unittest -v tpm2_tests.AsyncTest
+> > >  
+> > >  CLEAR_CMD=$(which tpm2_clear)
+> > >  if [ -n $CLEAR_CMD ]; then
+> > > diff --git a/tools/testing/selftests/tpm2/test_space.sh b/tools/testing/selftests/tpm2/test_space.sh
+> > > index 36c9d030a1c6..151c64e8ee9f 100755
+> > > --- a/tools/testing/selftests/tpm2/test_space.sh
+> > > +++ b/tools/testing/selftests/tpm2/test_space.sh
+> > > @@ -6,4 +6,4 @@ ksft_skip=4
+> > >  
+> > >  [ -f /dev/tpmrm0 ] || exit $ksft_skip
+> > >  
+> > > -python -m unittest -v tpm2_tests.SpaceTest
+> > > +python3 -m unittest -v tpm2_tests.SpaceTest
+> > > diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+> > > index d0fcb66a88a6..b0ccc1499c53 100644
+> > > --- a/tools/testing/selftests/tpm2/tpm2.py
+> > > +++ b/tools/testing/selftests/tpm2/tpm2.py
+> > > @@ -247,14 +247,18 @@ class ProtocolError(Exception):
+> > >  class AuthCommand(object):
+> > >      """TPMS_AUTH_COMMAND"""
+> > >  
+> > > -    def __init__(self, session_handle=TPM2_RS_PW, nonce='', session_attributes=0,
+> > > -                 hmac=''):
+> > > +    def __init__(self, session_handle=TPM2_RS_PW, nonce=''.encode(),
+> > > +                 session_attributes=0, hmac=''.encode()):
+> > > +        if not isinstance(nonce, bytes):
+> > > +            nonce = nonce.encode()
+> > > +        if not isinstance(hmac, bytes):
+> > > +            hmac = hmac.encode()
+> > 
+> > This looks messy. Please, instead
+> > 
+> >     def __init__(self, session_handle=TPM2_RS_PW, nonce=bytes(),
+> >                  session_attributes=0, hmac=bytes()):
+> >          self.session_handle = session_handle
+> >          self.nonce = nonce
+> >          self.session_attributes = session_attributes
+> > 
+> > Applies also to other places.
+> 
+> I.e. use '.encode()' in the call site.
+> 
 
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index fc19addcb5c8..fdbb602ecf32 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Tests Memory Protection Keys (see Documentation/vm/protection-keys.txt)
-+ * Tests Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-  *
-  * There are examples in here of:
-  *  * how to set protection keys on memory
--- 
-2.26.2
+  I tried to use bytes(parm, encoding='UTF-8') way, it met the situation
+  that sometimes parm is string, sometimes parm is bytes.
+  And it's better we could convert all types value to bytes in
+  __init__ function.
 
+  Could we modify it as below:
+def ConvertToBytes(parm):
+    if not isinstance(parm, bytes):
+        parm = parm.encode()
+    return parm
+
+class AuthCommand(object):
+    """TPMS_AUTH_COMMAND"""
+
+    def __init__(self, session_handle=TPM2_RS_PW, nonce='',
+                 session_attributes=0, hmac=''):
+        self.session_handle = session_handle
+        self.nonce = ConvertToBytes(nonce)
+        self.session_attributes = session_attributes
+        self.hmac = ConvertToBytes(hmac)
+
+Thanks!
+
+> /Jarkko
