@@ -2,171 +2,159 @@ Return-Path: <SRS0=j3G/=AE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A63C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 20:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3CABC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 21:19:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2F6121D7A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 20:44:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90DD120768
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 21:19:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d3UM5mS3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392056AbgFWUos (ORCPT
+        id S2391636AbgFWVS6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Jun 2020 16:44:48 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34879 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390082AbgFWUon (ORCPT
+        Tue, 23 Jun 2020 17:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391638AbgFWVSt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:44:43 -0400
-Received: from ip5f5af08c.dynamic.kabel-deutschland.de ([95.90.240.140] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jnpmb-0002XV-Ib; Tue, 23 Jun 2020 20:44:41 +0000
-Date:   Tue, 23 Jun 2020 22:44:41 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, keescook@chromium.org
-Subject: Re: [PATCH v2 4/6] selftests: pidfd: do not use ksft_exit_skip after
- ksft_set_plan
-Message-ID: <20200623204441.phngiwlj2idonpe6@wittgenstein>
-References: <20200623001547.22255-1-pbonzini@redhat.com>
- <20200623001547.22255-5-pbonzini@redhat.com>
+        Tue, 23 Jun 2020 17:18:49 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF0BC061573
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 14:18:49 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bh7so9661897plb.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Jun 2020 14:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mJWzvNZU1DMsijzcM8pSgSd+l6gBq4CZTTDgQGADwPk=;
+        b=d3UM5mS3Lwn1zCoUYBgL4MOdtaGDbpZ45FPQQmIiPWsUMcrblQ5pb3qHERiGLD+POo
+         npuxt5fXnoKsGH+DKJAJ+ul8Y6EIbNJlyhdRsgqhAJJVelU3+pcBdfBAZbEE0IALc384
+         HvWlGLE8Lxqn759AEnWNmPzbSamSO0pLN7FZSwLXeXqyRZnZlzI1T+dLxqjN669bHpfc
+         4PUyBqpVX/KHW0QckUDmH8mwi2foQLWmoCOCWIHp9tf3Vad3W1LL3blo7BhXrgl1U32a
+         ZjXCghkz45tieXrFU8exdMXC0j/7LeiqFZ1w/Xc8XlOUWq/TprLg9rEQAMqc44FXv3Xc
+         rFQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mJWzvNZU1DMsijzcM8pSgSd+l6gBq4CZTTDgQGADwPk=;
+        b=SGkI/U3y6TGQVUZyVvZPQF8gXAdHSzk7Au/9kCF+A65G4zqjwnx0Wsir8ibJ+U+RkS
+         3GS2Srj7jlD0xM5g8uaLwZILAs157SDUC+udoAQLEtH+KGVZr2a8Irqa4N6QKE9RaP50
+         +38PCUhI0BQjNFlw63AZ3LVw/0EGs8r7VA3Gw0LegRdf0Y83l8lRhsHmieD8sWuJ7LTm
+         vsrmULiORPcEjkQhiiYQU+k1uEdRae6vb1Ltou9IIN641CReZaMsEURTw7mLW8Fa1PHX
+         69bLVe4kMDU8SyP0Set/TWR0pSQ/LGRCX1liB6CEvaQpi1ZXDhOngQKrw8w48om7C/L4
+         kKcQ==
+X-Gm-Message-State: AOAM533vNyh1b3WADxFf0GHwcRKWx5THZJHXDgIKF/3OT3XCbm7hS/5v
+        TwkcrJWK9CrFMOYmgUdIRKOHjhkoTOkFj1bBdbYHrQ==
+X-Google-Smtp-Source: ABdhPJxLAk9Ot+Z5BtINKEITMd+CQ0dUpAGNCdMnfGs22621xhkUMbtlO0eW9G4/rU2unSlLcfsNUito8iq6hb4/NFI=
+X-Received: by 2002:a17:902:32d:: with SMTP id 42mr15721221pld.297.1592947128738;
+ Tue, 23 Jun 2020 14:18:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200623001547.22255-5-pbonzini@redhat.com>
+References: <d38bf9f9-8a39-87a6-8ce7-d37e4a641675@gmail.com> <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
+In-Reply-To: <CABVgOSkwZUAEjxrqO46kqj=uY5HDzr-E_LR9i04yXEKqjp91Og@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 23 Jun 2020 14:18:37 -0700
+Message-ID: <CAFd5g44+cUBhbHCx7dGk_dyn0Ph7U8dpaBzESWRi6L6qQizbFQ@mail.gmail.com>
+Subject: Re: RFC: KTAP documentation - expected messages
+To:     David Gow <davidgow@google.com>, Dmitry Vyukov <dvyukov@google.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 08:15:45PM -0400, Paolo Bonzini wrote:
-> Calling ksft_exit_skip after ksft_set_plan results in executing fewer tests
-> than planned.  Use ksft_test_result_skip instead.
-> 
-> The plan passed to ksft_set_plan was wrong, too, so fix it while at it.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+On Mon, Jun 22, 2020 at 7:47 PM David Gow <davidgow@google.com> wrote:
+>
+> On Mon, Jun 22, 2020 at 6:45 AM Frank Rowand <frowand.list@gmail.com> wrote:
+> >
+> > Tim Bird started a thread [1] proposing that he document the selftest result
+> > format used by Linux kernel tests.
+> >
+> > [1] https://lore.kernel.org/r/CY4PR13MB1175B804E31E502221BC8163FD830@CY4PR13MB1175.namprd13.prod.outlook.com
+> >
+> > The issue of messages generated by the kernel being tested (that are not
+> > messages directly created by the tests, but are instead triggered as a
+> > side effect of the test) came up.  In this thread, I will call these
+> > messages "expected messages".  Instead of sidetracking that thread with
+> > a proposal to handle expected messages, I am starting this new thread.
+>
+> Thanks for doing this: I think there are quite a few tests which could
+> benefit from something like this.
+>
+> I think there were actually two separate questions: what do we do with
+> unexpected messages (most of which I expect are useless, but some of
+> which may end up being related to an unexpected test failure), and how
+> to have tests "expect" a particular message to appear. I'll stick to
+> talking about the latter for this thread, but even there there's two
+> possible interpretations of "expected messages" we probably want to
+> explicitly distinguish between: a message which must be present for
+> the test to pass (which I think best fits the "expected message"
+> name), and a message which the test is likely to produce, but which
+> shouldn't alter the result (an "ignored message"). I don't see much
+> use for the latter at present, but if we wanted to do more things with
+> messages and had some otherwise very verbose tests, it could
+> potentially be useful.
 
-Thanks for the patch!
-Hm, this series misses a bunch of Cces for the maintainers of these files...
-(Also note that Kees has a/some series with most of us Cced that might
-conflict with some of these changes. But not sure rn.)
++Dmitry Vyukov, I think you were interested in this for KASAN before
+we went with the signalling approach. Any thoughts?
 
-A comment below.
-
->  tools/testing/selftests/pidfd/pidfd_test.c | 39 ++++++++++++++++++----
->  1 file changed, 33 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-> index 7aff2d3b42c0..380c6314e6a2 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
-> @@ -8,6 +8,7 @@
->  #include <sched.h>
->  #include <signal.h>
->  #include <stdio.h>
-> +#include <stdbool.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <syscall.h>
-> @@ -27,6 +28,8 @@
->  
->  #define MAX_EVENTS 5
->  
-> +static bool have_pidfd_send_signal = false;
-> +
->  static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
->  {
->  	size_t stack_size = 1024;
-> @@ -56,6 +59,13 @@ static int test_pidfd_send_signal_simple_success(void)
->  	int pidfd, ret;
->  	const char *test_name = "pidfd_send_signal send SIGUSR1";
->  
-> +	if (!have_pidfd_send_signal) {
-> +		ksft_test_result_skip(
-> +			"%s test: pidfd_send_signal() syscall not supported\n",
-> +			test_name);
-> +		return 0;
-> +	}
-> +
->  	pidfd = open("/proc/self", O_DIRECTORY | O_CLOEXEC);
->  	if (pidfd < 0)
->  		ksft_exit_fail_msg(
-> @@ -86,6 +96,13 @@ static int test_pidfd_send_signal_exited_fail(void)
->  	pid_t pid;
->  	const char *test_name = "pidfd_send_signal signal exited process";
->  
-> +	if (!have_pidfd_send_signal) {
-> +		ksft_test_result_skip(
-> +			"%s test: pidfd_send_signal() syscall not supported\n",
-> +			test_name);
-> +		return 0;
-> +	}
-> +
->  	pid = fork();
->  	if (pid < 0)
->  		ksft_exit_fail_msg("%s test: Failed to create new process\n",
-> @@ -137,6 +154,13 @@ static int test_pidfd_send_signal_recycled_pid_fail(void)
->  	pid_t pid1;
->  	const char *test_name = "pidfd_send_signal signal recycled pid";
->  
-> +	if (!have_pidfd_send_signal) {
-> +		ksft_test_result_skip(
-> +			"%s test: pidfd_send_signal() syscall not supported\n",
-> +			test_name);
-> +		return 0;
-> +	}
-> +
->  	ret = unshare(CLONE_NEWPID);
->  	if (ret < 0)
->  		ksft_exit_fail_msg("%s test: Failed to unshare pid namespace\n",
-> @@ -325,13 +349,16 @@ static int test_pidfd_send_signal_syscall_support(void)
->  
->  	ret = sys_pidfd_send_signal(pidfd, 0, NULL, 0);
->  	if (ret < 0) {
-> -		if (errno == ENOSYS)
-> -			ksft_exit_skip(
-> +		if (errno == ENOSYS) {
-> +			ksft_test_result_skip(
->  				"%s test: pidfd_send_signal() syscall not supported\n",
->  				test_name);
-
-If pidfd_send_signal() is not supported, you're falling through and then
-you're reporting:
-
-ok 5 # SKIP pidfd_send_signal check for support test: pidfd_send_signal() syscall not supported
-ok 6 pidfd_send_signal check for support test: pidfd_send_signal() syscall is supported. Tests can be executed
-
-which seems wrong.
-
-> -
-> -		ksft_exit_fail_msg("%s test: Failed to send signal\n",
-> -				   test_name);
-> +		} else {
-> +			ksft_exit_fail_msg("%s test: Failed to send signal\n",
-> +					   test_name);
-> +		}
-> +	} else {
-> +		have_pidfd_send_signal = true;
->  	}
->  
->  	close(pidfd);
-> @@ -521,7 +548,7 @@ static void test_pidfd_poll_leader_exit(int use_waitpid)
->  int main(int argc, char **argv)
->  {
->  	ksft_print_header();
-> -	ksft_set_plan(4);
-> +	ksft_set_plan(8);
->  
->  	test_pidfd_poll_exec(0);
->  	test_pidfd_poll_exec(1);
-> -- 
-> 2.26.2
-> 
-> 
+> The other thing I'd note here is that this proposal seems to be doing
+> all of the actual message filtering in userspace, which makes a lot of
+> sense for kselftest tests, but does mean that the kernel can't know if
+> the test has passed or failed. There's definitely a tradeoff between
+> trying to put too much needless string parsing in the kernel and
+> having to have a userland tool determine the test results. The
+> proposed KCSAN test suite[1] is using tracepoints to do this in the
+> kernel. It's not the cleanest thing, but there's no reason KUnit or
+> similar couldn't implement a nicer API around it.
+>
+> [1]: https://lkml.org/lkml/2020/6/22/1506
+>
+> > I implemented an API for expected messages that are triggered by tests
+> > in the Devicetree unittest code, with the expectation that the specific
+> > details may change when the Devicetree unittest code adapts the KUnit
+> > API.  It seems appropriate to incorporate the concept of expected
+> > messages in Tim's documentation instead of waiting to address the
+> > subject when the Devicetree unittest code adapts the KUnit API, since
+> > Tim's document may become the kernel selftest standard.
+>
+> Is having a nice way to handle expected messages the only thing
+> holding up porting this to KUnit?
+>
+> > Instead of creating a very long email containing multiple objects,
+> > I will reply to this email with a separate reply for each of:
+> >
+> >   The "expected messages" API implemention and use can be from
+> >   drivers/of/unittest.c in the mainline kernel.
+> >
+> >   of_unittest_expect - A proof of concept perl program to filter console
+> >                        output containing expected messages output
+> >
+> >                        of_unittest_expect is also available by cloning
+> >                        https://github.com/frowand/dt_tools.git
+> >
+> >   An example raw console output with timestamps and expect messages.
+> >
+> >   An example of console output processed by filter program
+> >   of_unittest_expect to be more human readable.  The expected
+> >   messages are not removed, but are flagged.
+> >
+> >   An example of console output processed by filter program
+> >   of_unittest_expect to be more human readable.  The expected
+> >   messages are removed instead of being flagged.
+>
+> Cheers,
+> -- David
