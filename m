@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0887C433E1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 00:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDBE0C433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 00:16:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFB8720738
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 00:15:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B975D20738
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Jun 2020 00:16:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M9eOQ+br"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EKlOhTxM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731000AbgFWAP4 (ORCPT
+        id S1731513AbgFWAP6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 22 Jun 2020 20:15:56 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23045 "EHLO
+        Mon, 22 Jun 2020 20:15:58 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23551 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731512AbgFWAPz (ORCPT
+        with ESMTP id S1731550AbgFWAP5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jun 2020 20:15:55 -0400
+        Mon, 22 Jun 2020 20:15:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592871353;
+        s=mimecast20190719; t=1592871356;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8qgBvDcdooZK3cvfCeVH38SXW8qfkg0wa/Chs7ICVeU=;
-        b=M9eOQ+brEw/DgXsL5rdwJ8IZcRD6JufPjpikGnmk/oe3XHFqgjGvorCcycPna2HgysbU7z
-        iBPKVN1loaHaRhg3RD0MwrP5Q/pY73SOUlN7k7pvgaHBBkFb9IzP2V35G2a4XB5OOOdm4q
-        YaldXP2Wj41brCKqDucCef96FQruis8=
+        bh=O11bai/WfxTMD0Tokzy2Pw6ubRFmjw4OTVAKl7T1ggw=;
+        b=EKlOhTxMDdT8dK5dQchLmmAwi/ZpeWE0b7shtI5/ta2YXo3HAvmAPNnloB6ztFgmtaptqU
+        ITbKHf7WDAmdNKBaWWDNWqL5a/lddArzuFjj0EKyuIemUtZVqWfPNwVQkeTZzaOB+gcXKE
+        O99vt7TFfcbsn+coDQar0aECeyqhlH4=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-20-aUMp7raEN9S2xszyh1TTrA-1; Mon, 22 Jun 2020 20:15:50 -0400
-X-MC-Unique: aUMp7raEN9S2xszyh1TTrA-1
+ us-mta-372--XcLyiNbOY2WktSFxKBTyQ-1; Mon, 22 Jun 2020 20:15:52 -0400
+X-MC-Unique: -XcLyiNbOY2WktSFxKBTyQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 26B7CEC1A0;
-        Tue, 23 Jun 2020 00:15:49 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 925511005512;
+        Tue, 23 Jun 2020 00:15:51 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AC34560BEC;
-        Tue, 23 Jun 2020 00:15:48 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 23F7E60BEC;
+        Tue, 23 Jun 2020 00:15:51 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 1/6] kselftest: fix TAP output for skipped tests
-Date:   Mon, 22 Jun 2020 20:15:42 -0400
-Message-Id: <20200623001547.22255-2-pbonzini@redhat.com>
+Subject: [PATCH v2 5/6] selftests: sigaltstack: do not use ksft_exit_skip after ksft_set_plan
+Date:   Mon, 22 Jun 2020 20:15:46 -0400
+Message-Id: <20200623001547.22255-6-pbonzini@redhat.com>
 In-Reply-To: <20200623001547.22255-1-pbonzini@redhat.com>
 References: <20200623001547.22255-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -61,91 +61,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-According to the TAP specification, a skipped test must be marked as "ok"
-and annotated with the SKIP directive, for example
-
-   ok 23 # skip Insufficient flogiston pressure.
-   (https://testanything.org/tap-specification.html)
-
-Fix the kselftest infrastructure to match this.
-
-For ksft_exit_skip, it is preferrable to emit a dummy plan line that
-indicates the whole test was skipped, but this is not always possible
-because of ksft_exit_skip being used as a "shortcut" by the tests.
-In that case, print the test counts and a normal "ok" line.  The format
-is now the same independent of whether msg is NULL or not (but it is
-never NULL in any caller right now).
+Calling ksft_exit_skip after ksft_set_plan results in executing fewer tests
+than planned.  Use ksft_test_result_skip when possible, or just bail out if
+memory corruption is detected.
 
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- tools/testing/selftests/kselftest.h         | 28 +++++++++++++++------
- tools/testing/selftests/kselftest/runner.sh |  2 +-
- 2 files changed, 21 insertions(+), 9 deletions(-)
+ tools/testing/selftests/sigaltstack/sas.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 862eee734553..1b0075359734 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -128,7 +128,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
- 	ksft_cnt.ksft_xskip++;
- 
- 	va_start(args, msg);
--	printf("not ok %d # SKIP ", ksft_test_num());
-+	printf("ok %d # SKIP ", ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -190,18 +190,30 @@ static inline int ksft_exit_xpass(void)
- 
- static inline int ksft_exit_skip(const char *msg, ...)
- {
--	if (msg) {
--		int saved_errno = errno;
--		va_list args;
-+	int saved_errno = errno;
-+	va_list args;
- 
--		va_start(args, msg);
--		printf("not ok %d # SKIP ", 1 + ksft_test_num());
-+	va_start(args, msg);
-+
-+	/*
-+	 * FIXME: several tests misuse ksft_exit_skip so produce
-+	 * something sensible if some tests have already been run
-+	 * or a plan has been printed.  Those tests should use
-+	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
-+	 */
-+	if (ksft_plan || ksft_test_num()) {
-+		ksft_cnt.ksft_xskip++;
-+		printf("ok %d # SKIP ", 1 + ksft_test_num());
-+	} else {
-+		printf("1..0 # SKIP ");
-+	}
-+	if (msg) {
- 		errno = saved_errno;
- 		vprintf(msg, args);
- 		va_end(args);
--	} else {
--		ksft_print_cnts();
+diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+index ad0f8df2ca0a..8934a3766d20 100644
+--- a/tools/testing/selftests/sigaltstack/sas.c
++++ b/tools/testing/selftests/sigaltstack/sas.c
+@@ -71,7 +71,7 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+ 	swapcontext(&sc, &uc);
+ 	ksft_print_msg("%s\n", p->msg);
+ 	if (!p->flag) {
+-		ksft_exit_skip("[RUN]\tAborting\n");
++		ksft_exit_fail_msg("[RUN]\tAborting\n");
+ 		exit(EXIT_FAILURE);
  	}
-+	if (ksft_test_num())
-+		ksft_print_cnts();
- 	exit(KSFT_SKIP);
  }
- 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 676b3a8b114d..f4815cbcd60f 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -77,7 +77,7 @@ run_one()
- 		echo "ok $test_num $TEST_HDR_MSG") ||
- 		(rc=$?;	\
- 		if [ $rc -eq $skip_rc ]; then	\
--			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
-+			echo "ok $test_num $TEST_HDR_MSG # SKIP"
- 		elif [ $rc -eq $timeout_rc ]; then \
- 			echo "#"
- 			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT"
+@@ -144,7 +144,7 @@ int main(void)
+ 	err = sigaltstack(&stk, NULL);
+ 	if (err) {
+ 		if (errno == EINVAL) {
+-			ksft_exit_skip(
++			ksft_test_result_skip(
+ 				"[NOTE]\tThe running kernel doesn't support SS_AUTODISARM\n");
+ 			/*
+ 			 * If test cases for the !SS_AUTODISARM variant were
 -- 
 2.26.2
 
