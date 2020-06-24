@@ -2,112 +2,99 @@ Return-Path: <SRS0=glib=AF=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7C91C433E0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDF8C433E1
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 21:30:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B87942075A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F4EF20836
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 21:30:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r4C8omzl"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Jgwwd3HK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391619AbgFXU7T (ORCPT
+        id S2403910AbgFXVaB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Jun 2020 16:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        Wed, 24 Jun 2020 17:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389453AbgFXU6P (ORCPT
+        with ESMTP id S2390437AbgFXVaB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jun 2020 16:58:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC26FC061573
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:14 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id j3so3603834yba.14
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=hiFp+uoptqOZ2rqi90LxI+MqGbDbXrg3yHQVzKDmQQ4=;
-        b=r4C8omzldjna6reCrt2PzuMWWZE3IZ2y3f6lclc933vQMY5LTWLxwFuKexT4JvEe9A
-         iElOlRcRe7ONH9zL0N4HZ5GBzncNZey4G1Aoed+ZlwUMSzmLjxbt1S7d8G7s/Q1XyI78
-         vPZb6jL2BlxrYw6quFHLcZOJf/UggWPfVY4qEsf4A8F6Bru5l+b/GBLsNWCcwZiYHph+
-         Dbsa9CXKlN1jQwhe67MA252WId0W7TqOPepmJ+EVxQyaURVV/mC47v+za56p/w4E8JVC
-         87eyLI9ICUIfZX+noq394fm9wzUFuOaDtYoDrAvqofPlXjDofFz5QEHCCF1kl+6cQ/sl
-         eR1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=hiFp+uoptqOZ2rqi90LxI+MqGbDbXrg3yHQVzKDmQQ4=;
-        b=tI/xI9uWLNEwE6VWBBRoE5lJJ0pZsj5+VJzoVjJktDz8SlGuoF1K64HR+DXC7O4jvG
-         BNnX0rZ5eqdPR8uV18aa6g3ZfiiPHeIAF1AneAB6LBzJrrUTzNKZFnID5VDukRW32n85
-         LhdQBWcaRURY1fBlU5eOZ+LQOGuo01jkoKKKbQq8u7f7uhjXsQtmmGOsI/wD5edRbF6+
-         G0r4/3Tv/Sz0JMt3pVdavtbYlgAEzjlgDHfjI+uok4ryAYtnMwqoyYYK1cqMJx0DCZkQ
-         Z+gk4762V/aFPUO2lks+IGoa5Zvl1abZAiEE30pNV131V2XjKLdo2hemBxtOW+QLCgmL
-         efRw==
-X-Gm-Message-State: AOAM532ZJhfoM8vze7bIWcOTB5+2H4x/04QPoLa5jmv46TIfsr2zcgpJ
-        bd44Ap/lRca9FhaL0OkdS1EnzXfEWuLjYmykd6J1LQ==
-X-Google-Smtp-Source: ABdhPJzw0PE1cr6miTcf36AU/8/D6CtmczIAUZsitjQKI4FCtj13PFtWbSnnwhEssKH9DHeczUteecQfDP7L+Nwm+WqoHA==
-X-Received: by 2002:a5b:2c7:: with SMTP id h7mr46550583ybp.162.1593032294101;
- Wed, 24 Jun 2020 13:58:14 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 13:55:42 -0700
-In-Reply-To: <20200624205550.215599-1-brendanhiggins@google.com>
-Message-Id: <20200624205550.215599-4-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200624205550.215599-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH v4 03/11] arch: microblaze: add linker section for KUnit test suites
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        monstr@monstr.eu, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, chris@zankel.net, jcmvbkbc@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 24 Jun 2020 17:30:01 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCCAC061573;
+        Wed, 24 Jun 2020 14:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=1HvsEisY+JqAH4eB24qkTv31vmmbufpD8xgSfU5UPdM=; b=Jgwwd3HKSCGDIrGfcDNLwUtCRw
+        owE94w39EisUXpMHYIv1pbv2n5zjSMpa7/iif05p6zELIAPYkGaboNNN6TH29l13zX633oAS6RM8i
+        u+py1W93Ar3xSPtumosRbnxJhxzE/IlIJ8zzS6Msi31BJfjrcR7Li/mepAU5QxssYRUraWQyCdWh/
+        e0DBYe+ioO8w/tPmJJ0AAlXzL2Y9mhiO5Z3pKnX3q8XvSWDPiBsyiYMeVffdZCvaIkWLaSxm+lp/5
+        GzV+OHjm+HMcDNoGcHIV0nUjJZLKNJmSJLKH4rSTl33X5olQIgDM/8f26BmNOkuNFTA7+0rVin7ia
+        KLsAR9OA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1joCxj-0007YQ-1Z; Wed, 24 Jun 2020 21:29:43 +0000
+Subject: Re: [PATCH drivers/misc 0/4] lkdtm: Various clean ups
+To:     Kees Cook <keescook@chromium.org>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Richard Weinberger <richard.weinberger@gmail.com>
+References: <20200529200347.2464284-1-keescook@chromium.org>
+ <202006231610.4993DC5@keescook>
+ <2356a78c-750b-538f-3d64-b9c78aff89cb@infradead.org>
+ <903628180.54697.1592983405305.JavaMail.zimbra@nod.at>
+ <202006241335.2C0FB5DF90@keescook>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <b97853f0-c4be-7039-1d4c-96b3ab802472@infradead.org>
+Date:   Wed, 24 Jun 2020 14:29:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <202006241335.2C0FB5DF90@keescook>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a linker section to microblaze where KUnit can put references to its
-test suites. This patch is an early step in transitioning to dispatching
-all KUnit tests from a centralized executor rather than having each as
-its own separate late_initcall.
+On 6/24/20 1:36 PM, Kees Cook wrote:
+> On Wed, Jun 24, 2020 at 09:23:25AM +0200, Richard Weinberger wrote:
+>> ----- Ursprüngliche Mail -----
+>>>>> Regardless, it seems arch/x86/um/asm/desc.h is not needed any more?
+>>>
+>>>> True that, we can rip the file.
+>>>
+>>> Has anyone fixed the uml build errors?
+>>
+>> I didn't realize that this is a super urgent issue. ;-)
+>>
+>> Kees, if you want you can carry a patch in your series, I'll ack it.
+>> Otherwise I can also do a patch and bring it via the uml tree upstream
+>> as soon more fixes queued up.
+> 
+> I think the lkdtm change will tweak this bug, so I'm happy to carry the
+> patch (I just haven't had time to create and test one). Is it really
+> just as simple as removing arch/x86/um/asm/desc.h?
+> 
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- arch/microblaze/kernel/vmlinux.lds.S | 4 ++++
- 1 file changed, 4 insertions(+)
+I just tried that and the build is still failing, so No, it's not that simple.
 
-diff --git a/arch/microblaze/kernel/vmlinux.lds.S b/arch/microblaze/kernel/vmlinux.lds.S
-index df07b3d06cd6b..4fc32f8979a60 100644
---- a/arch/microblaze/kernel/vmlinux.lds.S
-+++ b/arch/microblaze/kernel/vmlinux.lds.S
-@@ -128,6 +128,10 @@ SECTIONS {
- 
- 	__init_end = .;
- 
-+	.kunit_test_suites : {
-+		KUNIT_TEST_SUITES
-+	}
-+
- 	.bss ALIGN (PAGE_SIZE) : AT(ADDR(.bss) - LOAD_OFFSET) {
- 		/* page aligned when MMU used */
- 		__bss_start = . ;
+But thanks for offering.
+
+I'll just ignore the UML build errors for now.
+
 -- 
-2.27.0.212.ge8ba1cc988-goog
+~Randy
 
