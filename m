@@ -5,63 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 901EDC433E0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8199CC433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 693032081A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 646852075A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MyLNvjH4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tc++vE8O"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388964AbgFXU7H (ORCPT
+        id S2389453AbgFXU7T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Jun 2020 16:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        Wed, 24 Jun 2020 16:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388014AbgFXU6T (ORCPT
+        with ESMTP id S2389235AbgFXU6N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jun 2020 16:58:19 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CF7C061795
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:18 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j3so3603973yba.14
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:18 -0700 (PDT)
+        Wed, 24 Jun 2020 16:58:13 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E6AC0613ED
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:11 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e192so3543254ybf.17
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=hVa5/5YjHA4HA55L6gqApWSV/fHdhhYIjiCaFnqYV3g=;
-        b=MyLNvjH4BaSpMVt4m7OL8w8Kh4XLox5uMmU6/Z0ItdZP4yMrnH98CNwuV3QeifZL92
-         3Y8tuGJwfcNuWZHxP1UkeqK/xJb1NRFlgtf+ZsZAZxk1HsrR1w7SdO7zb9wvBE1lihXo
-         /gM/39u4cbejNpzreOPpLQs+1yfAKtUU1a9px0EyuTVEN0JzHssKb05XMKZvWoaTlB2G
-         t5NtebZVftxPJvJkT4/iXrbXs6qVYFATI3eRi67iQDiHIAzrHfb/09cLTk76ga0CyglA
-         oHFKXvdwJWazciq0ZtyNXvUR8S40GGOhq2T3LzC+e+3smItGPZh/hoBFWoC5eBtta1xc
-         lXFg==
+        bh=J3ivtuBCWWA6WF3YNE0hm8BpVh0hgAMk0icQw8PVzV4=;
+        b=tc++vE8OqiFWBPWLgjgz+8iB4vui6irGevOP603lUg1UNDik9D3RHD3BRtfvQnnEf0
+         jrKRLdHrhmzWJKnehTSRLbse6SnSXGQd35K2w5Zw9Z+uwoCNqlj6mkrJWH36qGOISkU2
+         3NifzTZEtRhL18lQl5iPbyga7DEY6bWA2ca3xSr4TZGtif0WyKPDe33h2W95GCGjYoTD
+         LoLgCnF8B+dCod++2Ii9nCw49QtFtdis8Pk9VuDF5L/wQjwjqBE0rPgSwa+KcPbSzpms
+         Ap+f4GQjV/9IxN/DKcUM1pSafBVlQkPDdfl802IjkfV7kftNlqpzgQEn6l454cRI3B5c
+         XxTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=hVa5/5YjHA4HA55L6gqApWSV/fHdhhYIjiCaFnqYV3g=;
-        b=JRWnGrpoiPSjQosgivmQWXBNg/ib8bqLULnGEG9eIQDA5FuBRFxRDdDJcJmEbM5dTW
-         y+8vlkWYjwRBn508Z+ap05ZHGAGzt6ls/VfaNum3Xa7eJA6e2Ps8ohtExIsUArVnXVvt
-         Jc5smvhf3jPcXVca6BIq9HiOQWcM8BOGidxxNrLwxYryf8tlQtyKLOllgkeggtalJjs0
-         ZnjSbgY8BLQQYnYLVzWAKXnZEuo9a683o2mC9ad5ClunlZKmbvn7NRPPmRam7IL6uzME
-         tyKWfeiShgsgupqZpX7c/arMjqWBJKYmsyUA0Dcd2Z0CrSna0lRmKywHxn3UOIGHbdmF
-         molA==
-X-Gm-Message-State: AOAM531PoA7tUjy2x2Ajwv/LgmLnwlMPsu2CfotHT9WdqZ+tocnRHofD
-        BaCKq3CVbs9nVY1sfVxxVdsmTZVnK3CRGShz1WcKmQ==
-X-Google-Smtp-Source: ABdhPJzg+Au4umwjyLRblCRE3PuIJNmc8kxElVJsT/B0YDcGaL41JkWSqA7GJtKTxCWTEEXd8EUt+BFhsEEeVgNcGl0dpQ==
-X-Received: by 2002:a25:73c3:: with SMTP id o186mr43621885ybc.230.1593032297774;
- Wed, 24 Jun 2020 13:58:17 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 13:55:44 -0700
+        bh=J3ivtuBCWWA6WF3YNE0hm8BpVh0hgAMk0icQw8PVzV4=;
+        b=drJmTl/0BzYUscYeZc/aeHW7LwGIfPxzK3W4ShF1m/A1/s+I57n/0I1AEVq3x05XHD
+         k/05LEsfDwwX9XDqcithTQ/zrckF9exR1RBeAt0JCxyPfNcukxOhF69Z/SXyTvBRF23y
+         MgBqM2I9g4dfO3lTcM7DouNCdZ47RAVCmo5Qb7Be4Q7rONvShHCdCrPYY0ZE5w8vVXEp
+         Fo4QCOuGE52BzldtojdfCQBid/g015na8+AeUAofAOB4nTbP9WnxhymoZ7dlD65SAZsg
+         P5YI6N+A4MLs7vJvZT+F98fWXntYbHllfP+t24tzsp+5tAXnpAqFAdEpV1H2j8176cQ9
+         hCIw==
+X-Gm-Message-State: AOAM533hD9yjmSIs1ow1bZ2TKVxEBX+azmOKp3HOai1SwbqQ+zuzmocN
+        KxRxmsnG1qrE6iNp0IOt0BnEq/REV2jRNePK7F35mg==
+X-Google-Smtp-Source: ABdhPJxdBp1vku0LQMvgNodo050SkO7FsfUngwFhnwGxx7442lwKRrC6xg8fX13lreYNm4d8BSbKm5F9o+C9V7i1TJs25w==
+X-Received: by 2002:a25:ba09:: with SMTP id t9mr49146881ybg.128.1593032290524;
+ Wed, 24 Jun 2020 13:58:10 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 13:55:40 -0700
 In-Reply-To: <20200624205550.215599-1-brendanhiggins@google.com>
-Message-Id: <20200624205550.215599-6-brendanhiggins@google.com>
+Message-Id: <20200624205550.215599-2-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20200624205550.215599-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH v4 05/11] arch: um: add linker section for KUnit test suites
+Subject: [PATCH v4 01/11] vmlinux.lds.h: add linker section for KUnit test suites
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
@@ -83,32 +83,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a linker section to UML where KUnit can put references to its test
-suites. This patch is an early step in transitioning to dispatching all
-KUnit tests from a centralized executor rather than having each as its
-own separate late_initcall.
+Add a linker section where KUnit can put references to its test suites.
+This patch is the first step in transitioning to dispatching all KUnit
+tests from a centralized executor rather than having each as its own
+separate late_initcall.
 
+Co-developed-by: Iurii Zaikin <yzaikin@google.com>
+Signed-off-by: Iurii Zaikin <yzaikin@google.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
- arch/um/include/asm/common.lds.S | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/asm-generic/vmlinux.lds.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/um/include/asm/common.lds.S b/arch/um/include/asm/common.lds.S
-index eca6c452a41bd..9a9c97f45694c 100644
---- a/arch/um/include/asm/common.lds.S
-+++ b/arch/um/include/asm/common.lds.S
-@@ -52,6 +52,10 @@
- 	CON_INITCALL
-   }
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index db600ef218d7d..4f9b036fc9616 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -881,6 +881,13 @@
+ 		KEEP(*(.con_initcall.init))				\
+ 		__con_initcall_end = .;
  
-+  .kunit_test_suites : {
-+	KUNIT_TEST_SUITES
-+  }
++/* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
++#define KUNIT_TEST_SUITES						\
++		. = ALIGN(8);						\
++		__kunit_suites_start = .;				\
++		KEEP(*(.kunit_test_suites))				\
++		__kunit_suites_end = .;
 +
-   .exitcall : {
- 	__exitcall_begin = .;
- 	*(.exitcall.exit)
+ #ifdef CONFIG_BLK_DEV_INITRD
+ #define INIT_RAM_FS							\
+ 	. = ALIGN(4);							\
+@@ -1056,6 +1063,7 @@
+ 		INIT_CALLS						\
+ 		CON_INITCALL						\
+ 		INIT_RAM_FS						\
++		KUNIT_TEST_SUITES					\
+ 	}
+ 
+ #define BSS_SECTION(sbss_align, bss_align, stop_align)			\
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
