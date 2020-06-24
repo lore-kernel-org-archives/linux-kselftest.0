@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECCA4C433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C8AEC433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6C5C2081A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:58:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E2352100A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Jun 2020 20:59:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BxVsCiRl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ht//4dFC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391452AbgFXU6Y (ORCPT
+        id S2391608AbgFXU7I (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Jun 2020 16:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        Wed, 24 Jun 2020 16:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389744AbgFXU6U (ORCPT
+        with ESMTP id S2389697AbgFXU6S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jun 2020 16:58:20 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF24C06179A
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:20 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id g12so2474038qko.19
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:20 -0700 (PDT)
+        Wed, 24 Jun 2020 16:58:18 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C006FC061799
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:16 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 186so3517710yby.19
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jun 2020 13:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Nq9F0z4123tt4UqM776+npgcQr2vACSfzkMX0VOkyz8=;
-        b=BxVsCiRl31FUZaXeXGi8TV70WMTRIEfLDWFsMjf9VqWbt1aplCwkMUV6du/2DbXHDA
-         nmIqbT++UfoVt2spbm6O4fmSAaacN8xjQv9Vk7mvxhaVZJ9BPTkHJu8aBCdCnIu51P5m
-         wZ24eLo2g5qlSjSP/eIlooA1u/pqdwQEihkdjLYouX/8rVxWrLxhZOX/WQfJheEnbE5o
-         v0W7rWqeaGSn+q7Ev6eTL12tKFayk99cr69qnKqzeZeUGe9TC4veYRnMtqICU6y6UEt0
-         7wl+R6AWP851Ken+D6iQ9SXiZ9pQ1MwxBJLG5X11cZGeJs5LD4j/ew5gVX1NXLQSps+b
-         CAMA==
+        bh=0vYZtvNiMw5LFIFKa+iHi1yqO9mFLTJ7LRF4fjft6YQ=;
+        b=Ht//4dFCRi5Ycs+UMuxNJ7MV/84NLNKbMMrbLHuEjXQGLBEQPIpFzadQ2ao7vcuRer
+         GOsbiPE75wfUufWuNvRORj1w7XTppFNHZFb/w9vysRIKLTiJA+xHpDaE+N3XmZZUH7MH
+         7lhF9i0xb8VvBZ80IiWVYGeXmeCW1iu7iamWPbdRq557jmWCZkqp+qV8y6jB2OCJy6VA
+         GRc001gVOpxxqc8MYG1JaA8vAVmiGkBrQE6r3W6gpRO7/UpoQZRQV1myeC7/+NUvoKC7
+         jr4U5f2PnAS3X2qv6X8g99vU6G58oTPXti+dwKaI8fPvVdUIML6AitHtRQ3va9rivd/F
+         VRew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Nq9F0z4123tt4UqM776+npgcQr2vACSfzkMX0VOkyz8=;
-        b=ZuPXWpfNnO26AjZKkcCM4f5Lf5Q3Jg77RMe3YActflTARAsfzZK4zL/8cR+fdkt0z0
-         XAszgEgP+gKtjYncH/BAFQ+T87vukLvYiAQ5cgmNI5wmt5DxvrUlKvmikiNCv8aVD8Mh
-         3UJcjgBStSAtbNcoVZ7di/CrF3/onvF0fXHZUfqgC1pH7vjmTNAHMVz7ZgHlH0DVzi+L
-         ICUVssJkr67VFN/xgm5cihO9MLK4psZ9zSEn5OS2MiHuKMS9fUZU+Gpq5rwRQXQvkCA0
-         WJks2lGrS12G9T+cF3KoGLVQu0HT2OyprD+sBU7naahajn3yBMGJc1+GdKekd1A0YLPb
-         gbcA==
-X-Gm-Message-State: AOAM530kq29XVvIwbS4Y3Fq+k2JIFgw5ZtKcceiEXg2uMdlfIom/+Q8q
-        L754xitlLjButAwt73mnoPXj4WkkLeHX3AKe3GtdrQ==
-X-Google-Smtp-Source: ABdhPJzQqVhx61203uYXm1i0yxcc0AnVKozIfTJnOAmP5bxUytYJO1bkE34YZASYNKaxdzL6HRViJV73fScMedut3CXRZg==
-X-Received: by 2002:a0c:ecc6:: with SMTP id o6mr32877909qvq.243.1593032299582;
- Wed, 24 Jun 2020 13:58:19 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 13:55:45 -0700
+        bh=0vYZtvNiMw5LFIFKa+iHi1yqO9mFLTJ7LRF4fjft6YQ=;
+        b=DOB1zERqst2GEngoWUyazZJivgXksB6HIbPedCi3MgrYHaUkV9S52AJKILwRTJvqQs
+         qmq7sEyk4DHP/pxiUfTXsldwg6tbOYIKDXZgahN764OeYMwo5eN1wijqAzejVrI8vOlg
+         wwG351Gri9Nk5IPH4in+Z16wIkg9EPvWGZtqJKW3Oxc+vOhkzgGRoA7fSuI8BaTTGIN3
+         vg5Mob1FayvZfLnulsf1Eo1HPAGEQwHTd+9u9dBQeOxt9a1au8nkKC36ZjeDMsHxCS4b
+         f0oPeocT4hcESjqHgI353Iar5z0jve9yj4vyjh0jUNTqC0qSIs+0uor9vYjxeWwnkuHr
+         mxAw==
+X-Gm-Message-State: AOAM530A6Ek7/yZhdof42POYlAUXzbBCdkTFsbOFvP7g5c1IjiPlGFYn
+        iibynbj+pWaaXjtcZpD1nF+LEf/geM/i++LWzHO7KA==
+X-Google-Smtp-Source: ABdhPJwOWDerhRlyEc+SD7GJHD/aFxbe2dcsXrDdYmbTX35zuFg+yS8T/ZZb/3aA+5pG2lFXNE77oD59Izt1xQSc+67yag==
+X-Received: by 2002:a25:8403:: with SMTP id u3mr47227886ybk.276.1593032295892;
+ Wed, 24 Jun 2020 13:58:15 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 13:55:43 -0700
 In-Reply-To: <20200624205550.215599-1-brendanhiggins@google.com>
-Message-Id: <20200624205550.215599-7-brendanhiggins@google.com>
+Message-Id: <20200624205550.215599-5-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20200624205550.215599-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH v4 06/11] arch: xtensa: add linker section for KUnit test suites
+Subject: [PATCH v4 04/11] arch: powerpc: add linker section for KUnit test suites
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
         arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
@@ -83,31 +83,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a linker section to xtensa where KUnit can put references to its
-test suites. This patch is an early step in transitioning to dispatching
-all KUnit tests from a centralized executor rather than having each as
-its own separate late_initcall.
+Add a linker section to powerpc where KUnit can put references to its test
+suites. This patch is an early step in transitioning to dispatching all
+KUnit tests from a centralized executor rather than having each as its
+own separate late_initcall.
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- arch/xtensa/kernel/vmlinux.lds.S | 4 ++++
+ arch/powerpc/kernel/vmlinux.lds.S | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/xtensa/kernel/vmlinux.lds.S b/arch/xtensa/kernel/vmlinux.lds.S
-index d23a6e38f0625..9aec4ef67d0b0 100644
---- a/arch/xtensa/kernel/vmlinux.lds.S
-+++ b/arch/xtensa/kernel/vmlinux.lds.S
-@@ -216,6 +216,10 @@ SECTIONS
-     INIT_RAM_FS
-   }
+diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
+index 326e113d2e456..0cc97dbfde0ad 100644
+--- a/arch/powerpc/kernel/vmlinux.lds.S
++++ b/arch/powerpc/kernel/vmlinux.lds.S
+@@ -202,6 +202,10 @@ SECTIONS
+ 		CON_INITCALL
+ 	}
  
-+  .kunit_test_suites : {
-+  	KUNIT_TEST_SUITES
-+  }
++	.kunit_test_suites : {
++		KUNIT_TEST_SUITES
++	}
 +
-   PERCPU_SECTION(XCHAL_ICACHE_LINESIZE)
- 
-   /* We need this dummy segment here */
+ 	. = ALIGN(8);
+ 	__ftr_fixup : AT(ADDR(__ftr_fixup) - LOAD_OFFSET) {
+ 		__start___ftr_fixup = .;
 -- 
 2.27.0.212.ge8ba1cc988-goog
 
