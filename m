@@ -2,63 +2,63 @@ Return-Path: <SRS0=JWew=AG=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20837C433E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40DA5C433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3E26207D8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E98620767
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RBKdveDB"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T+TvmO6f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407168AbgFYUhY (ORCPT
+        id S2407163AbgFYUhJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 25 Jun 2020 16:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        Thu, 25 Jun 2020 16:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407167AbgFYUhJ (ORCPT
+        with ESMTP id S2405138AbgFYUhJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 25 Jun 2020 16:37:09 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A07C08C5C1
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8FCC08C5C1
         for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2020 13:37:09 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id q90so3128238pjh.3
+Received: by mail-pf1-x444.google.com with SMTP id d66so3583283pfd.6
         for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2020 13:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zH4NCz4WUaJ18HzpAMLRB8JzZlzE4XmxaFkgad5236Q=;
-        b=RBKdveDB6/6TryZmoNNALhVnkzSsz2R1ULWjvCpcvukqeMwo0hJIk9HrScRw9ugson
-         xp2VUC3/+oZibhV2ktrPBevQZ01heoCGaHB/q3pX2tYDKAkzMDAnS509Kjmw6py7sBnO
-         iDJiP31nLw90dXJS/kd9DdxoeZQKV42Tk6wmQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3GeLK+nXjwF6qopXKxu4ABEIWtd3N9QgHPk+DpZ9DQ=;
+        b=T+TvmO6fHmdSxxhmwQF6bCqwTYesZ26yWqZboO+42b4Ie4kzH6zGD3MEM6/mR+k1qo
+         3/53fF6qs1obN0PM9p7Ghgh3T59x1FbCG7HXARnuUe34xNmxM1tkRPBj2CkA0LelU/GV
+         Anxsf9KOCQ0VaVa1QhyynBigEsblv0lSlybEc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zH4NCz4WUaJ18HzpAMLRB8JzZlzE4XmxaFkgad5236Q=;
-        b=QbU/xo/OTeZ1209gniTWtc7v5WXBv+GyPn/Q6pDK0EsrMrg8eAGJxyb6stOmFQc9dg
-         VINk8DERA9MOIyh/9Qj46qhtz0mz7/IO93CKdWOy+NJxaIQqNlGyCrCFuRfckMGNq62p
-         3DQ3cfRgFF+ABxEtDn0mMoyh/lNVqFnyHj2nExGRzkontzPsOqiD2a+DG9KfQKLVprTp
-         JKaTMMgt4bGp9Lwap1QdiLJMR8TZ8KiS5W6IED9Ft7HKRpNwUJWkSXBEu++Sevw3dyAu
-         PlWlAOM9HMm2RU0Xn6cI14Fxwmxf6a58w59BCsu35N1VnB337+3ZZ744BnLjMYLZ9HmA
-         jZKg==
-X-Gm-Message-State: AOAM5317VkPlTV2YjVJuNEu0yARPqqvOtwTi+RcaE2r8/cpa07uxpede
-        A6rAKofqMXspA6atZIW0tJ4mYw==
-X-Google-Smtp-Source: ABdhPJz2pFPgByh8wHP5gvDAbO6WFvVcu96QLX6WXAcgHZxo44RtCOOw8GvDsRRsJb/3q0x6ZUOY1w==
-X-Received: by 2002:a17:902:dc86:: with SMTP id n6mr35678275pld.82.1593117429438;
-        Thu, 25 Jun 2020 13:37:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d3GeLK+nXjwF6qopXKxu4ABEIWtd3N9QgHPk+DpZ9DQ=;
+        b=Z7KOzw9Op7WdBZ2g3Rt2lq9U0CORX4CuE46sIJePPV+rXTZFvE2CEl0GOEkEHgIeM2
+         iNkPh3f4lZszxJ69iHNRafghQpXe8XtnGeLNwrsIVYhkSDR+EoyU7Ojus9+ImlD/21Pz
+         I2kIJUrEwarVF/QLExl1GQuaJOC3GPiL8ffguphQl/3uewKTNKhzIibeRTjiTrrwCOaD
+         yiRyBhB9DAi/DzdfO0bGzikJzUIUTjfeZszmKoOMCGG4q3I0eMKCH8KSsh3gJrbRvBGI
+         LLqtEjr2Qg3zLXPFTjGMIIp5Y2y5l56SvMDuHwwOXwXLIDcPpADsYvBH5ivvNKeqEk/S
+         wEpw==
+X-Gm-Message-State: AOAM530QjrIh0N2zQ5wT1QJ87K1cna8AySL1Jy4qKRDXNN7wJ1XiSHoS
+        TiZY7K3/6yf+loifs7bB8C7ONA==
+X-Google-Smtp-Source: ABdhPJxuNWPKYgd5trz2foxr85WYRx00emue48cZggJc6TgB+Btx4HxdZWfpU/cEGBgAfXWd09NKFg==
+X-Received: by 2002:a63:fe0a:: with SMTP id p10mr21957815pgh.255.1593117428713;
+        Thu, 25 Jun 2020 13:37:08 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id cm13sm9447469pjb.5.2020.06.25.13.37.07
+        by smtp.gmail.com with ESMTPSA id w10sm21295494pgm.70.2020.06.25.13.37.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 25 Jun 2020 13:37:07 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
+Cc:     Kees Cook <keescook@chromium.org>,
         Prasad Sodagudi <psodagud@codeaurora.org>,
         Sami Tolvanen <samitolvanen@google.com>,
         Amit Daniel Kachhap <amit.kachhap@arm.com>,
@@ -66,12 +66,10 @@ Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
         Richard Weinberger <richard@nod.at>,
         linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: [PATCH drivers/misc v2 2/4] lkdtm/heap: Avoid edge and middle of slabs
-Date:   Thu, 25 Jun 2020 13:37:02 -0700
-Message-Id: <20200625203704.317097-3-keescook@chromium.org>
+Subject: [PATCH drivers/misc v2 0/4] lkdtm: Various clean ups
+Date:   Thu, 25 Jun 2020 13:37:00 -0700
+Message-Id: <20200625203704.317097-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200625203704.317097-1-keescook@chromium.org>
-References: <20200625203704.317097-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -79,38 +77,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Har har, after I moved the slab freelist pointer into the middle of the
-slab, now it looks like the contents are getting poisoned. Adjust the
-test to avoid the freelist pointer again.
+Hi Greg,
 
-Fixes: 3202fa62fb43 ("slub: relocate freelist pointer to middle of object")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/misc/lkdtm/heap.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+(Since this was aleady pending, I just spun a v2, resent here.)
 
-diff --git a/drivers/misc/lkdtm/heap.c b/drivers/misc/lkdtm/heap.c
-index 3c5cec85edce..1323bc16f113 100644
---- a/drivers/misc/lkdtm/heap.c
-+++ b/drivers/misc/lkdtm/heap.c
-@@ -58,11 +58,12 @@ void lkdtm_READ_AFTER_FREE(void)
- 	int *base, *val, saw;
- 	size_t len = 1024;
- 	/*
--	 * The slub allocator uses the first word to store the free
--	 * pointer in some configurations. Use the middle of the
--	 * allocation to avoid running into the freelist
-+	 * The slub allocator will use the either the first word or
-+	 * the middle of the allocation to store the free pointer,
-+	 * depending on configurations. Store in the second word to
-+	 * avoid running into the freelist.
- 	 */
--	size_t offset = (len / sizeof(*base)) / 2;
-+	size_t offset = sizeof(*base);
- 
- 	base = kmalloc(len, GFP_KERNEL);
- 	if (!base) {
+Can you please apply these patches to your drivers/misc tree for LKDTM?
+It's mostly a collection of fixes and improvements and tweaks to the
+selftest integration.
+
+Thanks!
+
+-Kees
+
+v2: - add fix for UML build failures (Randy, Richard)
+v1: https://lore.kernel.org/lkml/20200529200347.2464284-1-keescook@chromium.org/
+
+Kees Cook (4):
+  lkdtm: Avoid more compiler optimizations for bad writes
+  lkdtm/heap: Avoid edge and middle of slabs
+  selftests/lkdtm: Reset WARN_ONCE to avoid false negatives
+  lkdtm: Make arch-specific tests always available
+
+ drivers/misc/lkdtm/bugs.c               | 49 +++++++++++++------------
+ drivers/misc/lkdtm/heap.c               |  9 +++--
+ drivers/misc/lkdtm/lkdtm.h              |  2 -
+ drivers/misc/lkdtm/perms.c              | 22 +++++++----
+ drivers/misc/lkdtm/usercopy.c           |  7 +++-
+ tools/testing/selftests/lkdtm/run.sh    |  6 +++
+ tools/testing/selftests/lkdtm/tests.txt |  1 +
+ 7 files changed, 58 insertions(+), 38 deletions(-)
+
 -- 
 2.25.1
 
