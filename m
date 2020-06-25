@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A8EFC433E1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 656D0C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55FCD20767
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 384E420791
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Jun 2020 20:37:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="P+XqKwc+"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z+l6Gdwk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407181AbgFYUhM (ORCPT
+        id S2407192AbgFYUhT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 25 Jun 2020 16:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        Thu, 25 Jun 2020 16:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407177AbgFYUhL (ORCPT
+        with ESMTP id S2407172AbgFYUhK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Jun 2020 16:37:11 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60395C08C5DB
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2020 13:37:11 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id e9so3859606pgo.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2020 13:37:11 -0700 (PDT)
+        Thu, 25 Jun 2020 16:37:10 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87870C08C5DD
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2020 13:37:10 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d66so3583318pfd.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jun 2020 13:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BfbOYxKLeIPqE6ZPzW8hgon31KuqJHQqU6xvmcaKi7A=;
-        b=P+XqKwc+b/59wUthhc09B6vtmxG5CXTL/uoQtqWWUdzNLEnOz5dLYJovrHWXz7laXS
-         IKf1ZHNwwzSvC9TofFThIw/u0MTl26+Bz6PoFAJrY2NlRgcSAOR6dG+dw4NdWor+ZZz5
-         iPnPkSW3TRGLBFIo9fEYhaMM8QGTOZOdJzs+I=
+        bh=SR6ATnMcWEmdUOJ6DbZTTEtf2IDw/YJ2aizPOaBcct0=;
+        b=Z+l6GdwkOd72fTNtHvSsdUn7TKOnxeeN7JeN5GTZo8cfHL+0EpGVAWRA45M5x8Hay9
+         Lnc4QZpwTo9P293mTeHnToaY5IkuFtejak/F2BeOdZtxIjYSRQA4mtnSRz2SIXFr5yFi
+         52pcgmThTn6s0zv2SlhZdkY8mLePuLr8ATAGI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BfbOYxKLeIPqE6ZPzW8hgon31KuqJHQqU6xvmcaKi7A=;
-        b=jlCmboRuk0IO/acIempMczIa40HG6qfMDN67yZFoAREFIYuag1aEhYMMUusnFY/Qj4
-         LkRA2eK6Y8bqeBWxHsdTvbxONYgdyYHzuBct20x7mcDYXPHGWb7hsl/rCQ04CV62JUfD
-         +D0YBZtPY2V2/mzam/ZsM1SgmGQVbhYgulvtMnRLw2vwXnSh1wqkAxWQC1KOY+dHY46y
-         3SsF3f+MQQ6jxxfkhv0MbV1Y2OnuY4p3F7AKAq1fNHjLNjsnrDjTwm9IR7c2ymVQhxST
-         Ok7P3W6Tja4NFz6qtm+KAOwxHasNHsvlwepRcMOrgtAXw7w6TBqYHRxtswokvDu0yB0z
-         CNlw==
-X-Gm-Message-State: AOAM531sYZcZeGgrObLu/v8I202NJte2edhN5OBTi1zZabOQNBeyIbU0
-        ZtRKpWjlsOWFqD86VtS/bZguVA==
-X-Google-Smtp-Source: ABdhPJzIsRSzWksqfzO2CgtSoh+UMwMb6lOLLAlaJ+X4NJEUDDhQjf2qivW77bipnhkgdfXM8HCGjw==
-X-Received: by 2002:a63:7246:: with SMTP id c6mr27896788pgn.422.1593117430937;
+        bh=SR6ATnMcWEmdUOJ6DbZTTEtf2IDw/YJ2aizPOaBcct0=;
+        b=N3OLcJljcKmcK2bI+nuBCYjh8iOez9w9A03OvXPD45VRPuil3CM36EX1lTMcJyo/8L
+         Eo4GfmP0VoXTEbzVzJOXkZL00wmTurZva7iTRl0SwLMJiAV1SlfUsYeX7sxCbgyU8B8V
+         eVAyaI6WZDWt8yHw3cK8FLsoWoYIXcex5rCbo3AKbYdHamLpUl811meRuXMpiWy7G4M2
+         T094N4P8HHpLuZn5RzpY/0ysFowG9XY05201g0d0HiHMO2yYT8GwS/D1ZPQKZLgjaefO
+         bmxNe7Zb+bfljIQywWRIwemDA03TyVffERYoQyTbX/lR1oWPpyr2nc7hzmp63JoYKllY
+         +eUA==
+X-Gm-Message-State: AOAM530dwGmoC6q1mrckFdnkj5diLE/g/DCIvA/uVcPBRfM2RaYXA+xD
+        /ZvSXJ4+MP6HKaG3ZV8TJ9i31w==
+X-Google-Smtp-Source: ABdhPJytLKN5EnbcLgkC49A0EERl56GpicC+cP7LwdDwUZOYrAuRO1Lb7t+7poX/m1wym1e0HyEqFA==
+X-Received: by 2002:a62:a218:: with SMTP id m24mr2510238pff.156.1593117430052;
         Thu, 25 Jun 2020 13:37:10 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y12sm24064569pfm.158.2020.06.25.13.37.07
+        by smtp.gmail.com with ESMTPSA id q6sm23903896pff.163.2020.06.25.13.37.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 25 Jun 2020 13:37:07 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -66,9 +66,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Richard Weinberger <richard@nod.at>,
         linux-kselftest@vger.kernel.org,
         clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: [PATCH drivers/misc v2 4/4] lkdtm: Make arch-specific tests always available
-Date:   Thu, 25 Jun 2020 13:37:04 -0700
-Message-Id: <20200625203704.317097-5-keescook@chromium.org>
+Subject: [PATCH drivers/misc v2 1/4] lkdtm: Avoid more compiler optimizations for bad writes
+Date:   Thu, 25 Jun 2020 13:37:01 -0700
+Message-Id: <20200625203704.317097-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200625203704.317097-1-keescook@chromium.org>
 References: <20200625203704.317097-1-keescook@chromium.org>
@@ -79,128 +79,186 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I'd like arch-specific tests to XFAIL when on a mismatched architecture
-so that we can more easily compare test coverage across all systems.
-Lacking kernel configs or CPU features count as a FAIL, not an XFAIL.
+It seems at least Clang is able to throw away writes it knows are
+destined for read-only memory, which makes things like the WRITE_RO test
+fail, as the write gets elided. Instead, force the variable to be
+volatile, and make similar changes through-out other tests in an effort
+to avoid needing to repeat fixing these kinds of problems. Also includes
+pr_err() calls in failure paths so that kernel logs are more clear in
+the failure case.
 
-Additionally fixes a build failure under 32-bit UML.
-
-Fixes: b09511c253e5 ("lkdtm: Add a DOUBLE_FAULT crash type on x86")
-Fixes: cea23efb4de2 ("lkdtm/bugs: Make double-fault test always available")
-Fixes: 6cb6982f42cb ("lkdtm: arm64: test kernel pointer authentication")
+Reported-by: Prasad Sodagudi <psodagud@codeaurora.org>
+Suggested-by: Sami Tolvanen <samitolvanen@google.com>
+Fixes: 9ae113ce5faf ("lkdtm: add tests for additional page permissions")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/lkdtm/bugs.c               | 38 ++++++++++++++-----------
- drivers/misc/lkdtm/lkdtm.h              |  2 --
- tools/testing/selftests/lkdtm/tests.txt |  1 +
- 3 files changed, 22 insertions(+), 19 deletions(-)
+ drivers/misc/lkdtm/bugs.c     | 11 +++++------
+ drivers/misc/lkdtm/perms.c    | 22 +++++++++++++++-------
+ drivers/misc/lkdtm/usercopy.c |  7 +++++--
+ 3 files changed, 25 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-index 08c70281c380..10338800f6be 100644
+index 736675f0a246..08c70281c380 100644
 --- a/drivers/misc/lkdtm/bugs.c
 +++ b/drivers/misc/lkdtm/bugs.c
-@@ -13,7 +13,7 @@
- #include <linux/uaccess.h>
- #include <linux/slab.h>
+@@ -118,9 +118,8 @@ noinline void lkdtm_CORRUPT_STACK(void)
+ 	/* Use default char array length that triggers stack protection. */
+ 	char data[8] __aligned(sizeof(void *));
  
--#ifdef CONFIG_X86_32
-+#if IS_ENABLED(CONFIG_X86_32) && !IS_ENABLED(CONFIG_UML)
- #include <asm/desc.h>
- #endif
+-	__lkdtm_CORRUPT_STACK(&data);
+-
+-	pr_info("Corrupted stack containing char array ...\n");
++	pr_info("Corrupting stack containing char array ...\n");
++	__lkdtm_CORRUPT_STACK((void *)&data);
+ }
  
-@@ -418,7 +418,7 @@ void lkdtm_UNSET_SMEP(void)
+ /* Same as above but will only get a canary with -fstack-protector-strong */
+@@ -131,9 +130,8 @@ noinline void lkdtm_CORRUPT_STACK_STRONG(void)
+ 		unsigned long *ptr;
+ 	} data __aligned(sizeof(void *));
  
- void lkdtm_DOUBLE_FAULT(void)
+-	__lkdtm_CORRUPT_STACK(&data);
+-
+-	pr_info("Corrupted stack containing union ...\n");
++	pr_info("Corrupting stack containing union ...\n");
++	__lkdtm_CORRUPT_STACK((void *)&data);
+ }
+ 
+ void lkdtm_UNALIGNED_LOAD_STORE_WRITE(void)
+@@ -248,6 +246,7 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 
+ 	kfree(not_checked);
+ 	kfree(checked);
++	pr_err("FAIL: survived array bounds overflow!\n");
+ }
+ 
+ void lkdtm_CORRUPT_LIST_ADD(void)
+diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
+index 62f76d506f04..2dede2ef658f 100644
+--- a/drivers/misc/lkdtm/perms.c
++++ b/drivers/misc/lkdtm/perms.c
+@@ -57,6 +57,7 @@ static noinline void execute_location(void *dst, bool write)
+ 	}
+ 	pr_info("attempting bad execution at %px\n", func);
+ 	func();
++	pr_err("FAIL: func returned\n");
+ }
+ 
+ static void execute_user_location(void *dst)
+@@ -75,20 +76,22 @@ static void execute_user_location(void *dst)
+ 		return;
+ 	pr_info("attempting bad execution at %px\n", func);
+ 	func();
++	pr_err("FAIL: func returned\n");
+ }
+ 
+ void lkdtm_WRITE_RO(void)
  {
--#ifdef CONFIG_X86_32
-+#if IS_ENABLED(CONFIG_X86_32) && !IS_ENABLED(CONFIG_UML)
+-	/* Explicitly cast away "const" for the test. */
+-	unsigned long *ptr = (unsigned long *)&rodata;
++	/* Explicitly cast away "const" for the test and make volatile. */
++	volatile unsigned long *ptr = (unsigned long *)&rodata;
+ 
+ 	pr_info("attempting bad rodata write at %px\n", ptr);
+ 	*ptr ^= 0xabcd1234;
++	pr_err("FAIL: survived bad write\n");
+ }
+ 
+ void lkdtm_WRITE_RO_AFTER_INIT(void)
+ {
+-	unsigned long *ptr = &ro_after_init;
++	volatile unsigned long *ptr = &ro_after_init;
+ 
  	/*
- 	 * Trigger #DF by setting the stack limit to zero.  This clobbers
- 	 * a GDT TLS slot, which is okay because the current task will die
-@@ -453,38 +453,42 @@ void lkdtm_DOUBLE_FAULT(void)
- #endif
+ 	 * Verify we were written to during init. Since an Oops
+@@ -102,19 +105,21 @@ void lkdtm_WRITE_RO_AFTER_INIT(void)
+ 
+ 	pr_info("attempting bad ro_after_init write at %px\n", ptr);
+ 	*ptr ^= 0xabcd1234;
++	pr_err("FAIL: survived bad write\n");
  }
  
--#ifdef CONFIG_ARM64_PTR_AUTH
-+#ifdef CONFIG_ARM64
- static noinline void change_pac_parameters(void)
+ void lkdtm_WRITE_KERN(void)
  {
--	/* Reset the keys of current task */
--	ptrauth_thread_init_kernel(current);
--	ptrauth_thread_switch_kernel(current);
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH)) {
-+		/* Reset the keys of current task */
-+		ptrauth_thread_init_kernel(current);
-+		ptrauth_thread_switch_kernel(current);
-+	}
+ 	size_t size;
+-	unsigned char *ptr;
++	volatile unsigned char *ptr;
+ 
+ 	size = (unsigned long)do_overwritten - (unsigned long)do_nothing;
+ 	ptr = (unsigned char *)do_overwritten;
+ 
+ 	pr_info("attempting bad %zu byte write at %px\n", size, ptr);
+-	memcpy(ptr, (unsigned char *)do_nothing, size);
++	memcpy((void *)ptr, (unsigned char *)do_nothing, size);
+ 	flush_icache_range((unsigned long)ptr, (unsigned long)(ptr + size));
++	pr_err("FAIL: survived bad write\n");
+ 
+ 	do_overwritten();
  }
-+#endif
+@@ -193,9 +198,11 @@ void lkdtm_ACCESS_USERSPACE(void)
+ 	pr_info("attempting bad read at %px\n", ptr);
+ 	tmp = *ptr;
+ 	tmp += 0xc0dec0de;
++	pr_err("FAIL: survived bad read\n");
  
--#define CORRUPT_PAC_ITERATE	10
- noinline void lkdtm_CORRUPT_PAC(void)
+ 	pr_info("attempting bad write at %px\n", ptr);
+ 	*ptr = tmp;
++	pr_err("FAIL: survived bad write\n");
+ 
+ 	vm_munmap(user_addr, PAGE_SIZE);
+ }
+@@ -203,19 +210,20 @@ void lkdtm_ACCESS_USERSPACE(void)
+ void lkdtm_ACCESS_NULL(void)
  {
-+#ifdef CONFIG_ARM64
-+#define CORRUPT_PAC_ITERATE	10
- 	int i;
+ 	unsigned long tmp;
+-	unsigned long *ptr = (unsigned long *)NULL;
++	volatile unsigned long *ptr = (unsigned long *)NULL;
  
-+	if (!IS_ENABLED(CONFIG_ARM64_PTR_AUTH))
-+		pr_err("FAIL: kernel not built with CONFIG_ARM64_PTR_AUTH\n");
-+
- 	if (!system_supports_address_auth()) {
--		pr_err("FAIL: arm64 pointer authentication feature not present\n");
-+		pr_err("FAIL: CPU lacks pointer authentication feature\n");
+ 	pr_info("attempting bad read at %px\n", ptr);
+ 	tmp = *ptr;
+ 	tmp += 0xc0dec0de;
++	pr_err("FAIL: survived bad read\n");
+ 
+ 	pr_info("attempting bad write at %px\n", ptr);
+ 	*ptr = tmp;
++	pr_err("FAIL: survived bad write\n");
+ }
+ 
+ void __init lkdtm_perms_init(void)
+ {
+ 	/* Make sure we can write to __ro_after_init values during __init */
+ 	ro_after_init |= 0xAA;
+-
+ }
+diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
+index e172719dd86d..b833367a45d0 100644
+--- a/drivers/misc/lkdtm/usercopy.c
++++ b/drivers/misc/lkdtm/usercopy.c
+@@ -304,19 +304,22 @@ void lkdtm_USERCOPY_KERNEL(void)
  		return;
  	}
  
--	pr_info("Change the PAC parameters to force function return failure\n");
-+	pr_info("changing PAC parameters to force function return failure...\n");
- 	/*
--	 * Pac is a hash value computed from input keys, return address and
-+	 * PAC is a hash value computed from input keys, return address and
- 	 * stack pointer. As pac has fewer bits so there is a chance of
- 	 * collision, so iterate few times to reduce the collision probability.
- 	 */
- 	for (i = 0; i < CORRUPT_PAC_ITERATE; i++)
- 		change_pac_parameters();
+-	pr_info("attempting good copy_to_user from kernel rodata\n");
++	pr_info("attempting good copy_to_user from kernel rodata: %px\n",
++		test_text);
+ 	if (copy_to_user((void __user *)user_addr, test_text,
+ 			 unconst + sizeof(test_text))) {
+ 		pr_warn("copy_to_user failed unexpectedly?!\n");
+ 		goto free_user;
+ 	}
  
--	pr_err("FAIL: %s test failed. Kernel may be unstable from here\n", __func__);
--}
--#else /* !CONFIG_ARM64_PTR_AUTH */
--noinline void lkdtm_CORRUPT_PAC(void)
--{
--	pr_err("FAIL: arm64 pointer authentication config disabled\n");
--}
-+	pr_err("FAIL: survived PAC changes! Kernel may be unstable from here\n");
-+#else
-+	pr_err("XFAIL: this test is arm64-only\n");
- #endif
-+}
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index 601a2156a0d4..8878538b2c13 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -31,9 +31,7 @@ void lkdtm_CORRUPT_USER_DS(void);
- void lkdtm_STACK_GUARD_PAGE_LEADING(void);
- void lkdtm_STACK_GUARD_PAGE_TRAILING(void);
- void lkdtm_UNSET_SMEP(void);
--#ifdef CONFIG_X86_32
- void lkdtm_DOUBLE_FAULT(void);
--#endif
- void lkdtm_CORRUPT_PAC(void);
+-	pr_info("attempting bad copy_to_user from kernel text\n");
++	pr_info("attempting bad copy_to_user from kernel text: %px\n",
++		vm_mmap);
+ 	if (copy_to_user((void __user *)user_addr, vm_mmap,
+ 			 unconst + PAGE_SIZE)) {
+ 		pr_warn("copy_to_user failed, but lacked Oops\n");
+ 		goto free_user;
+ 	}
++	pr_err("FAIL: survived bad copy_to_user()\n");
  
- /* lkdtm_heap.c */
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 92ca32143ae5..9d266e79c6a2 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -14,6 +14,7 @@ STACK_GUARD_PAGE_LEADING
- STACK_GUARD_PAGE_TRAILING
- UNSET_SMEP CR4 bits went missing
- DOUBLE_FAULT
-+CORRUPT_PAC
- UNALIGNED_LOAD_STORE_WRITE
- #OVERWRITE_ALLOCATION Corrupts memory on failure
- #WRITE_AFTER_FREE Corrupts memory on failure
+ free_user:
+ 	vm_munmap(user_addr, PAGE_SIZE);
 -- 
 2.25.1
 
