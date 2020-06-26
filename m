@@ -2,104 +2,111 @@ Return-Path: <SRS0=cV19=AH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB651C433E1
-	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Jun 2020 20:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A2DEC433E2
+	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Jun 2020 21:09:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB5C720720
-	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Jun 2020 20:59:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 397CE20B80
+	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Jun 2020 21:09:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TI8Zc7pt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IYUk8Yqg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgFZU7q (ORCPT
+        id S1726279AbgFZVJ3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 26 Jun 2020 16:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
+        Fri, 26 Jun 2020 17:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725803AbgFZU7q (ORCPT
+        with ESMTP id S1726165AbgFZVJ2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Jun 2020 16:59:46 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004E9C03E97A
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 13:59:45 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id w2so4646665pgg.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 13:59:45 -0700 (PDT)
+        Fri, 26 Jun 2020 17:09:28 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F84C03E979
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 14:09:28 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id m7so7452045pgv.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jun 2020 14:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=vzE/LHOrs411ALZFAPX5s4XQ3VOyYMCpxKznqqbDvQ4=;
-        b=TI8Zc7pt4AdbPofHKO372L5Kta8OeeO3t3PXk/6qhNeAO+yCbS0Doy0WS9y2bVqgZ/
-         tI4T3y1zUN+TnjuQXTcXv8tWquNbcXAoocAEuAFcTaqkXpiPwLgebf3YagDWZMlxOhlz
-         4G0CXBgXdsf2kQOWXSTX3CW+pV7onm4JkG2bo=
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=9cJ18y40uUPYFZL7TN4SHcIdjwmkZDveAIhoXIvPo38=;
+        b=IYUk8YqgZgCYajUvAr7+TZpYM4MMks4ME5jJR4NVadGy4ZU8CwXELvDm9bauUFB3L6
+         MUcT96gdSqW5+5z/avFny8BX08RC9p8Y5njsdOPASFhovoAmh4OpguPdJDLxPdDlL8wH
+         sp8gBQ6KdTpddWyZpEu6zGrsSRpgYbXbK7x4cCxZRVANzDO3EjonaRvSwY1PXJroQJmj
+         8ohKF8v+doy8LmpsmkdBSyq0EG3AEnmmfRs0Rb2q8rpSFPq3YC+AUHyHeWkgoGopcbJn
+         nBDwB0rz8Ui93SdomCLrCW+Ku6Fjn0SFklLb+6i/vy36pSSNMv/TbI0f696FLOb/W9s8
+         ZqGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=vzE/LHOrs411ALZFAPX5s4XQ3VOyYMCpxKznqqbDvQ4=;
-        b=ar8TePiuHflGKh/2tyR8IaQcO8OV3RPZ6mXHxNwJPK4dJwPHtqC2iJ5o3mHZykoTEh
-         6maeU+a6s4ICGvFVA76nRwEIYY+r7owMeW8nr965dbjEhOwDBEnUA2BwZkLhmsXua2fp
-         YiA0V0XVHcgHgcdjWNmF7Jg17p1t3a/M6x8r1UURgii3zbr4gCHN5MefWd9a/jNbsCCI
-         6AasfU4Vvl3K3J3dIN1ngpUKbYkY7baFKgmjG+IrPh3CcxsNyI8lkYbZg54PDlv+BhHI
-         cd84GOGJzhSfpP5nA1zMn4zML+rgv8Gvcgt1I/1kJetJXCB1a7HmsbvGQ/HxLJl/Vjzi
-         kEJw==
-X-Gm-Message-State: AOAM530BxhPxgbntxWXt4tkwWI9cn7/GUS9Ic/NCXcwHkcvhWTKUSFgu
-        n+S9uUQLCmWDJftHV/MuLsTx8A==
-X-Google-Smtp-Source: ABdhPJy9ZcI5XAF6R6FENmskB+t4X3sgpFeAprNtq3GGr6iredh9lEzDpleAFN9acuLpA/roa4lVGA==
-X-Received: by 2002:a63:c44b:: with SMTP id m11mr522600pgg.404.1593205185366;
-        Fri, 26 Jun 2020 13:59:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b4sm5673856pfr.149.2020.06.26.13.59.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 13:59:44 -0700 (PDT)
-Date:   Fri, 26 Jun 2020 13:59:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
-Message-ID: <202006261358.3E8AA623A9@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=9cJ18y40uUPYFZL7TN4SHcIdjwmkZDveAIhoXIvPo38=;
+        b=pNO+4LEVzfoZ/Cv/9Ulp65uEoMGaMvEhHLmMa1aBmC9AUx1Ycl9H90vJ/bq86SgJvt
+         Ab1LDeGQKPux7+fvqHnNEYWRc4y4Ih52yhdEx0qHLqoo4jVuA1XlrqiG7RoSutTid+sn
+         g8F6DqbT7dNwMs3cgn439BUTRuTjkm1bxCyvsjmw4nhfS0Hefrr69X4VhwjBP43B9cpO
+         XR/3Bge1jTMVXQI+Mqo4imuJ8a0/ttkTLsV3Sex6wXPKrMw/OcH3dfHwGtLnekGbPEsE
+         OZHom2FZjA4w3tV8W+royT9RYTZEO/a/NrQ13fsG1fvKPjxMefHO3xBB1y5Medybk5oS
+         QVmQ==
+X-Gm-Message-State: AOAM531souJdNDXFMnDQAgJkJLK3QxfzDfT6HnqSmfGrVqDlYkowRyX5
+        Uh6zR1x8CHjYPQdEWBvXdh24Z1RPQalNuVNQKiARFw==
+X-Google-Smtp-Source: ABdhPJzjvOtIhOG1aOdqb6LPRxa8gBDRx7iYFD1jkF8voJyCoykf8S53mwqKxZn9IwZNUt+dngOweMijabbbSnkBKS6K4A==
+X-Received: by 2002:a17:90a:70c6:: with SMTP id a6mr5043991pjm.16.1593205767469;
+ Fri, 26 Jun 2020 14:09:27 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 14:09:07 -0700
+In-Reply-To: <20200626210917.358969-1-brendanhiggins@google.com>
+Message-Id: <20200626210917.358969-3-brendanhiggins@google.com>
+Mime-Version: 1.0
+References: <20200626210917.358969-1-brendanhiggins@google.com>
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+Subject: [PATCH v5 02/12] arch: arm64: add linker section for KUnit test suites
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com,
+        frowand.list@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        monstr@monstr.eu, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, chris@zankel.net, jcmvbkbc@gmail.com
+Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Instead of full GNU diff (which smaller boot environments may not have),
-use "comm" which is more available.
+Add a linker section to arm64 where KUnit can put references to its test
+suites. This patch is an early step in transitioning to dispatching all
+KUnit tests from a centralized executor rather than having each as its
+own separate late_initcall.
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Link: https://lore.kernel.org/lkml/CA+G9fYtHP+Gg+BrR_GkBMxu2oOi-_e9pATtpb6TVRswv1G1r1Q@mail.gmail.com
-Fixes: f131d9edc29d ("selftests/lkdtm: Don't clear dmesg when running tests")
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- tools/testing/selftests/lkdtm/run.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kernel/vmlinux.lds.S | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/lkdtm/run.sh b/tools/testing/selftests/lkdtm/run.sh
-index 8383eb89d88a..5fe23009ae13 100755
---- a/tools/testing/selftests/lkdtm/run.sh
-+++ b/tools/testing/selftests/lkdtm/run.sh
-@@ -82,7 +82,7 @@ dmesg > "$DMESG"
- ($SHELL -c 'cat <(echo '"$test"') >'"$TRIGGER" 2>/dev/null) || true
- 
- # Record and dump the results
--dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$DMESG" - > "$LOG" || true
-+dmesg | comm -13 "$DMESG" - > "$LOG" || true
- 
- cat "$LOG"
- # Check for expected output
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index 6827da7f3aa54..a1cae9cc655d7 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -181,6 +181,9 @@ SECTIONS
+ 		INIT_RAM_FS
+ 		*(.init.rodata.* .init.bss)	/* from the EFI stub */
+ 	}
++	.kunit_test_suites : {
++		KUNIT_TEST_SUITES
++	}
+ 	.exit.data : {
+ 		EXIT_DATA
+ 	}
 -- 
-2.25.1
+2.27.0.212.ge8ba1cc988-goog
 
-
--- 
-Kees Cook
