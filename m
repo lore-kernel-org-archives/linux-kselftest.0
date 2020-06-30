@@ -1,79 +1,107 @@
-Return-Path: <SRS0=aTDy=AK=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=1woi=AL=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5800C433E1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Jun 2020 20:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E9AFC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Jun 2020 07:15:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A73FA20663
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Jun 2020 20:46:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16FA220768
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Jun 2020 07:15:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="ZiiGvlHC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mHPPQN9W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731629AbgF2Uqg (ORCPT
+        id S1730670AbgF3HPl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        Tue, 30 Jun 2020 03:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731552AbgF2TNx (ORCPT
+        with ESMTP id S1730538AbgF3HPl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:53 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B8DC08EA4B;
-        Sun, 28 Jun 2020 22:48:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wGjw1lCLz9sRk;
-        Mon, 29 Jun 2020 15:48:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1593409684;
-        bh=/YQUWPTNF1yfjssmjTfskL+aXMkfJR2ADKApusEzfaA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZiiGvlHCBnvAF3APkTommNfdvQmDkuYoZMa+llNNHmj31m9lhBnJPy19xfNxjMJiI
-         LOEHaJ8xq26BiOKskUPmfOW4WUU+T79cfWSyDx7RdzCKZJzLLkNz4Oq9G8fr8h9PHV
-         PpMSd3Xc/PQdrP1409zgma9HkuMVo4knpGsQy4+X88UPXbLERDNgC1cb6A2fF7WI5P
-         WiWe7WtJ2hrelBssuoZAIEukoh8LAXk/XNOtW0D20iY0LEcnXYlflR65DabbSdQuIL
-         Gj9HDWDpu1Zwa3R6DkW58ykovlV/uoJL3w1+hw4OyzGz778jSZTfL6rFVsmmhSmNAX
-         mvOcCg0ljaiLQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
-In-Reply-To: <202006270849.7190A26@keescook>
-References: <202006261358.3E8AA623A9@keescook> <87k0zsbubg.fsf@mpe.ellerman.id.au> <202006270849.7190A26@keescook>
-Date:   Mon, 29 Jun 2020 15:50:18 +1000
-Message-ID: <87lfk68lph.fsf@mpe.ellerman.id.au>
+        Tue, 30 Jun 2020 03:15:41 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0111C061755
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2020 00:15:40 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id f139so18497934wmf.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jun 2020 00:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qomXq2ActQZN/6bFPVvt+u08Ypzth62dhj61jRlqIqg=;
+        b=mHPPQN9W6sb5xzGjh62onzl2oulcD9KtmeoN3pj89jyErg91srjiDxZWGa0QP4AU81
+         hNytKu4gO1Hf57LjmGAHupV3KhZ6p7CP5e2bf1da5aZ/2Z8cECbVqs1BBE0k2MvEYqYS
+         AN13UDyfULgP0X2RttKExd9B7DOT7Y79cE+/fIOh/sYi11Hkq0VwmsCYk2uA/11QhZQf
+         capG494GGtRpc/Iecx47e5KMHddbnKyn/QXCZkCqBhw2n1GIR7jnkgI4Gtr8lyi2rsBX
+         5S8tnxAbcNGgp/h3MCUI/FhDtuUhaGODB7BFHDnSfKDU+7ImIZu6J1q0Ec9+OQ4JXn42
+         Kbgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qomXq2ActQZN/6bFPVvt+u08Ypzth62dhj61jRlqIqg=;
+        b=UrMimxwIZrMz2WOejtxJNaXvWV2VfYAdgPlQwfm77S1uIiZzsiVwS25Xck81SZ6YsB
+         jXyzBtTjKTxWHw2mGHPymjJcXjYGBOchRHgSJjUZtd3UK/8m6R61j2fISJlNMDIFf5S+
+         jbDP/Cm9e3eQmH60S8ck5tn2ZNNPv2ZBGhxz4m6nTIGyCmRkpMH2RwlWSI86EElHQzIJ
+         tOCJTo7EMhaXqKrlfwj1uiRWwU84RQ+kchoygPV5tCO38CFLECXpKS/d2lKK/UtFgyf+
+         7Pr2CYpvJMC41twUnMXFPsb9Iq+ZjWCch8+m37A4BFA4gjOBltPR3N6yrzRkNGWf/vps
+         3vKw==
+X-Gm-Message-State: AOAM5315EipP/eOIVGTJYf7JZ1fwQoQyxuwTxy3ALh+E3abquDW5CpsE
+        mrJAr8WuOXqz2eFMrxcnQtq7SiG30dMyqWMC0KtT0Q==
+X-Google-Smtp-Source: ABdhPJyKohk0LvsHxuOJ7RF09tiNLq0s5bjM/CBQtjGt7EOC+N3RWtGru1+JzCh2phyG6SALIaXkSdAO0MtBxqVEh7s=
+X-Received: by 2002:a1c:5a41:: with SMTP id o62mr5429652wmb.16.1593501339411;
+ Tue, 30 Jun 2020 00:15:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200607215715.90981-1-rikard.falkeborn@gmail.com>
+In-Reply-To: <20200607215715.90981-1-rikard.falkeborn@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 30 Jun 2020 15:15:28 +0800
+Message-ID: <CABVgOSnqyqg8xPT2wM=taN2=pPTAm_ySD-WscHuBW175QipuEw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: kunit_config: Fix parsing of CONFIG options with space
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        masahiroy@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-> On Sat, Jun 27, 2020 at 09:51:31PM +1000, Michael Ellerman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> > Instead of full GNU diff (which smaller boot environments may not have),
->> > use "comm" which is more available.
->> 
->> Although using "comm" requires CONFIG_PRINTK_TIME=y doesn't it?
+On Mon, Jun 8, 2020 at 5:57 AM Rikard Falkeborn
+<rikard.falkeborn@gmail.com> wrote:
 >
-> No, it doesn't seem to. "comm" doesn't carry about the line prefixes.
-> AIUI, the only reason for a mention of "sort" is because of how "comm"
-> does its line pairing. i.e. as soon as it goes out of sync, it starts
-> accounting for the disjunction between files. But that's exactly what we
-> want it doing, and the prefix doesn't matter.
+> Commit 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is
+> updated") introduced a new CONFIG option CONFIG_CC_VERSION_TEXT. On my
+> system, this is set to "gcc (GCC) 10.1.0" which breaks KUnit config
+> parsing which did not like the spaces in the string.
+>
+> Fix this by updating the regex to allow strings containing spaces.
+>
+> Fixes: 8b59cd81dc5e ("kbuild: ensure full rebuild when the compiler is updated")
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 
-OK, if it works.
+Tested-by: David Gow <davidgow@google.com>
 
-cheers
+I've been using this patch quite a bit, and haven't hit any problems.
+
++Shuah: Any chance we get this into the kunit branch sooner rather
+than later? The KUnit tooling is quite broken without it.
+
+> ---
+> Maybe it would have been sufficient to just use
+> CONFIG_PATTERN = r'^CONFIG_(\w+)=(.*)$' instead?
+>
+
+FWIW, I tried this myself, and it seemed to work, but I think I like
+requiring the quotes more.
+
+Cheers,
+-- David
