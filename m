@@ -1,120 +1,362 @@
-Return-Path: <SRS0=q5XP=AM=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=3nmi=AN=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62322C433E1
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Jul 2020 22:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F1DC433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Jul 2020 07:14:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3FF75207E8
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Jul 2020 22:54:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E87720874
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Jul 2020 07:14:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="sCvs0+5a"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bdlc7ZwZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727961AbgGAWy3 (ORCPT
+        id S1727006AbgGBHOZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Jul 2020 18:54:29 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:19501 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726586AbgGAWyN (ORCPT
+        Thu, 2 Jul 2020 03:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726963AbgGBHOY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jul 2020 18:54:13 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5efd13e20000>; Wed, 01 Jul 2020 15:53:22 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 01 Jul 2020 15:54:12 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 01 Jul 2020 15:54:12 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 1 Jul
- 2020 22:54:04 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 1 Jul 2020 22:54:03 +0000
-Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5efd140b0002>; Wed, 01 Jul 2020 15:54:03 -0700
-From:   Ralph Campbell <rcampbell@nvidia.com>
-To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        <nouveau@lists.freedesktop.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Ben Skeggs" <bskeggs@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH v3 0/5] mm/hmm/nouveau: add PMD system memory mapping
-Date:   Wed, 1 Jul 2020 15:53:47 -0700
-Message-ID: <20200701225352.9649-1-rcampbell@nvidia.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-X-NVConfidentiality: public
+        Thu, 2 Jul 2020 03:14:24 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AAFC08C5DC
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Jul 2020 00:14:24 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id u64so14414740ybf.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2020 00:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=0MPFvMqMThNlqIXSGXzk3uL7fUIp1+1hZOAZp0aIFwA=;
+        b=bdlc7ZwZTDFsLsoFXz42E7eAeV+b9lPIs0tdRLSBoLa1uHbCsGZPxJ3hVSMJZLlNmz
+         4nsaqDJ8Ls7FfE8uwy67W4Ybtv9I46noCqW8y4WdZhfXo9+VmSNjfip0MOvZYU4zDdtf
+         lppv9sqgyLILvAKTXAkMrXIPSTx6JBnnzu1UA330MvTrma0ry+v5nRce2KG9D58btsog
+         M7saHzBbJd6f8moXykXOSVlKNf43cP4Moov4ivaB56FmYRc3MGOCe63Dcffi5xk5s5Kb
+         AJK5X4T6XGWa7ISrOI7immZ9UVsBrhxJqbcV/FalorvbVDtGP2cCNxU4y2bCxpBO2gia
+         FBSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=0MPFvMqMThNlqIXSGXzk3uL7fUIp1+1hZOAZp0aIFwA=;
+        b=uaAQALw0ghUWPFx/nj7ZE+90PYDE6JryBUHGAXk9VoJ/lqGLDrVaxLDT+TBgmdmqlE
+         HB0x8mP4CcMoT0myRqf5eXJ7X+EseIMFWJrG3KDhCVCJjL0hGjkqSup4u6wIr816ESkD
+         tUS9DL3E7Snz6AP/gnqp9954Mrb/An2z5bzArjjzyTWDrN5lf9kUSao5Cf2u18tJlQOX
+         iAmEnnniioG3ssub3iS8t6pq4G+oiuqiT9rtbplL6iVI3296CadqpzTnSY9pIIFfnrDu
+         cqSG/p0w1zzGYNVrPrcD6WpnXnOnM41vEDTZ03Mtuu/v6+9wUwya6M2IRL5aH9ZXZ78b
+         nACw==
+X-Gm-Message-State: AOAM532SpgAvlpR5Z4NQTaO8ee+FiFZAZBbkdPGKwp4HRZDFSUGiWFYJ
+        z49YyF7T591UflFr7uJ4wl1A5Yl67YuWGg==
+X-Google-Smtp-Source: ABdhPJwiHir8TS/erd15crPhqF0xsId3SapDysSYHvv7OHwGS8fbayeX14AfWbGTj/L1XQvwl+B3SqkmGiotKg==
+X-Received: by 2002:a25:d80b:: with SMTP id p11mr1614734ybg.506.1593674063431;
+ Thu, 02 Jul 2020 00:14:23 -0700 (PDT)
+Date:   Thu,  2 Jul 2020 00:14:16 -0700
+Message-Id: <20200702071416.1780522-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+Subject: [PATCH] Documentation: kunit: Add naming guidelines
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Randy Dunlap <rd.dunlab@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Tim Bird <Tim.Bird@sony.com>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1593644002; bh=MJfr/HRLE6OMXyolgR7JmbdNUj2YCkglGntcmeExnQQ=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=sCvs0+5aWDEOa98ScHYnH1kou2nuKpIArM70MeHNN0z0Lr2no8sM2jlI5eFdengEi
-         E+EDwBZoNE23w6xILrPPhA7UnQef8+TszwrfBGodCUpC9KY/0jTaS2ESZ8FGYMGJOc
-         ZzhDvtIDp/v45zSQg8e7TdlJg4gwJJmf2Vme3SJ8Uf3hBwc13UsxccJxTpCXK8J551
-         RR/eLZBrmiSGQdHD1T/LjRsWVOvVcYUEvQ1Hnie2f73rD3baTsk0WOT4DyEnu479CW
-         Gvu/PHs94sF/7QBbqZDK8kMjXvmZtHIQk1SeYxLbpF8jNVRMfDiSwgYwaG8jEq3bla
-         OA1t1ZY+Q64uA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The goal for this series is to introduce the hmm_pfn_to_map_order()
-function. This allows a device driver to know that a given 4K PFN is
-actually mapped by the CPU using a larger sized CPU page table entry and
-therefore the device driver can safely map system memory using larger
-device MMU PTEs.
-The series is based on 5.8.0-rc3 and is intended for Jason Gunthorpe's
-hmm tree. These were originally part of a larger series:
-https://lore.kernel.org/linux-mm/20200619215649.32297-1-rcampbell@nvidia.co=
-m/
+As discussed in [1], KUnit tests have hitherto not had a particularly
+consistent naming scheme. This adds documentation outlining how tests
+and test suites should be named, including how those names should be
+used in Kconfig entries and filenames.
 
-Changes in v3:
-Replaced the HMM_PFN_P[MU]D flags with hmm_pfn_to_map_order() to
-indicate the size of the CPU mapping.
+[1]:
+https://lore.kernel.org/linux-kselftest/202006141005.BA19A9D3@keescook/t/#u
 
-Changes in v2:
-Make the hmm_range_fault() API changes into a separate series and add
-  two output flags for PMD/PUD instead of a single compund page flag as
-  suggested by Jason Gunthorpe.
-Make the nouveau page table changes a separate patch as suggested by
-  Ben Skeggs.
-Only add support for 2MB nouveau mappings initially since changing the
-1:1 CPU/GPU page table size assumptions requires a bigger set of changes.
-Rebase to 5.8.0-rc3.
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+---
+This is a follow-up v1 to the RFC patch here:
+https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@go=
+ogle.com/T/#u
 
-Ralph Campbell (5):
-  nouveau/hmm: fault one page at a time
-  mm/hmm: add hmm_mapping order
-  nouveau: fix mapping 2MB sysmem pages
-  nouveau/hmm: support mapping large sysmem pages
-  hmm: add tests for HMM_PFN_PMD flag
+There weren't any fundamental objections to the naming guidelines
+themselves, so nothing's changed on that front.
 
- drivers/gpu/drm/nouveau/nouveau_svm.c         | 236 ++++++++----------
- drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |   5 +-
- .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    |  82 ++++++
- include/linux/hmm.h                           |  24 +-
- lib/test_hmm.c                                |   4 +
- lib/test_hmm_uapi.h                           |   4 +
- mm/hmm.c                                      |  14 +-
- tools/testing/selftests/vm/hmm-tests.c        |  76 ++++++
- 8 files changed, 299 insertions(+), 146 deletions(-)
+Otherwise, changes since the RFC:
+- Fixed a bit of space/tab confusion in the index (Thanks, Randy)
+- Added some more examples (and some test case examples).
+- Added some examples of what not to call subsystems and suites.
+- No longer explicitly require "If unsure, put N" in Kconfig entries.
+- Minor formatting changes.
 
+Cheers,
+-- David
+
+ Documentation/dev-tools/kunit/index.rst |   1 +
+ Documentation/dev-tools/kunit/style.rst | 181 ++++++++++++++++++++++++
+ 2 files changed, 182 insertions(+)
+ create mode 100644 Documentation/dev-tools/kunit/style.rst
+
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-to=
+ols/kunit/index.rst
+index e93606ecfb01..c234a3ab3c34 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -11,6 +11,7 @@ KUnit - Unit Testing for the Linux Kernel
+ 	usage
+ 	kunit-tool
+ 	api/index
++	style
+ 	faq
+=20
+ What is KUnit?
+diff --git a/Documentation/dev-tools/kunit/style.rst b/Documentation/dev-to=
+ols/kunit/style.rst
+new file mode 100644
+index 000000000000..8cad2627924c
+--- /dev/null
++++ b/Documentation/dev-tools/kunit/style.rst
+@@ -0,0 +1,181 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
++Test Style and Nomenclature
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
++
++Subsystems, Suites, and Tests
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
++
++In order to make tests as easy to find as possible, they're grouped into s=
+uites
++and subsystems. A test suite is a group of tests which test a related area=
+ of
++the kernel, and a subsystem is a set of test suites which test different p=
+arts
++of the same kernel subsystem or driver.
++
++Subsystems
++----------
++
++Every test suite must belong to a subsystem. A subsystem is a collection o=
+f one
++or more KUnit test suites which test the same driver or part of the kernel=
+. A
++rule of thumb is that a test subsystem should match a single kernel module=
+. If
++the code being tested can't be compiled as a module, in many cases the sub=
+system
++should correspond to a directory in the source tree or an entry in the
++MAINTAINERS file. If unsure, follow the conventions set by tests in simila=
+r
++areas.
++
++Test subsystems should be named after the code being tested, either after =
+the
++module (wherever possible), or after the directory or files being tested. =
+Test
++subsystems should be named to avoid ambiguity where necessary.
++
++If a test subsystem name has multiple components, they should be separated=
+ by
++underscores. *Do not* include "test" or "kunit" directly in the subsystem =
+name
++unless you are actually testing other tests or the kunit framework itself.
++
++Example subsystems could be:
++
++``ext4``
++  Matches the module and filesystem name.
++``apparmor``
++  Matches the module name and LSM name.
++``kasan``
++  Common name for the tool, prominent part of the path ``mm/kasan``
++``snd_hda_codec_hdmi``
++  Has several components (``snd``, ``hda``, ``codec``, ``hdmi``) separated=
+ by
++  underscores. Matches the module name.
++
++Avoid names like these:
++
++``linear-ranges``
++  Names should use underscores, not dashes, to separate words. Prefer
++  ``linear_ranges``.
++``qos-kunit-test``
++  As well as using underscores, this name should not have "kunit-test" as =
+a
++  suffix, and ``qos`` is ambiguous as a subsystem name. ``power_qos`` woul=
+d be a
++  better name.
++``pc_parallel_port``
++  The corresponding module name is ``parport_pc``, so this subsystem shoul=
+d also
++  be named ``parport_pc``.
++
++.. note::
++        The KUnit API and tools do not explicitly know about subsystems. T=
+hey're
++        simply a way of categorising test suites and naming modules which
++        provides a simple, consistent way for humans to find and run tests=
+. This
++        may change in the future, though.
++
++Suites
++------
++
++KUnit tests are grouped into test suites, which cover a specific area of
++functionality being tested. Test suites can have shared initialisation and
++shutdown code which is run for all tests in the suite.
++Not all subsystems will need to be split into multiple test suites (e.g. s=
+imple drivers).
++
++Test suites are named after the subsystem they are part of. If a subsystem
++contains several suites, the specific area under test should be appended t=
+o the
++subsystem name, separated by an underscore.
++
++The full test suite name (including the subsystem name) should be specifie=
+d as
++the ``.name`` member of the ``kunit_suite`` struct, and forms the base for=
+ the
++module name (see below).
++
++Example test suites could include:
++
++``ext4_inode``
++  Part of the ``ext4`` subsystem, testing the ``inode`` area.
++``kunit_try_catch``
++  Part of the ``kunit`` implementation itself, testing the ``try_catch`` a=
+rea.
++``apparmor_property_entry``
++  Part of the ``apparmor`` subsystem, testing the ``property_entry`` area.
++``kasan``
++  The ``kasan`` subsystem has only one suite, so the suite name is the sam=
+e as
++  the subsystem name.
++
++Avoid names like:
++
++``ext4_ext4_inode``
++  There's no reason to state the subsystem twice.
++``property_entry``
++  The suite name is ambiguous without the subsystem name.
++``kasan_unit_test``
++  Because there is only one suite in the ``kasan`` subsystem, the suite sh=
+ould
++  just be called ``kasan``. There's no need to redundantly add ``unit_test=
+``.
++
++Test Cases
++----------
++
++Individual tests consist of a single function which tests a constrained
++codepath, property, or function. In the test output, individual tests' res=
+ults
++will show up as subtests of the suite's results.
++
++Tests should be named after what they're testing. This is often the name o=
+f the
++function being tested, with a description of the input or codepath being t=
+ested.
++As tests are C functions, they should be named and written in accordance w=
+ith
++the kernel coding style.
++
++.. note::
++        As tests are themselves functions, their names cannot conflict wit=
+h
++        other C identifiers in the kernel. This may require some creative
++        naming. It's a good idea to make your test functions `static` to a=
+void
++        polluting the global namespace.
++
++Example test names include:
++
++``unpack_u32_with_null_name``
++  Tests the ``unpack_u32`` function when a NULL name is passed in.
++``test_list_splice``
++  Tests the ``list_splice`` macro. It has the prefix ``test_`` to avoid a
++  name conflict with the macro itself.
++
++
++Should it be necessary to refer to a test outside the context of its test =
+suite,
++the *fully-qualified* name of a test should be the suite name followed by =
+the
++test name, separated by a colon (i.e. ``suite:test``).
++
++Test Kconfig Entries
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++Every test suite should be tied to a Kconfig entry.
++
++This Kconfig entry must:
++
++* be named ``CONFIG_<name>_KUNIT_TEST``: where <name> is the name of the t=
+est
++  suite.
++* be listed either alongside the config entries for the driver/subsystem b=
+eing
++  tested, or be under [Kernel Hacking]=E2=86=92[Kernel Testing and Coverag=
+e]
++* depend on ``CONFIG_KUNIT``
++* be visible only if ``CONFIG_KUNIT_ALL_TESTS`` is not enabled.
++* have a default value of ``CONFIG_KUNIT_ALL_TESTS``.
++* have a brief description of KUnit in the help text
++
++Unless there's a specific reason not to (e.g. the test is unable to be bui=
+lt as
++a module), Kconfig entries for tests should be tristate.
++
++An example Kconfig entry:
++
++.. code-block:: none
++
++        config FOO_KUNIT_TEST
++                tristate "KUnit test for foo" if !KUNIT_ALL_TESTS
++                depends on KUNIT
++                default KUNIT_ALL_TESTS
++                help
++                    This builds unit tests for foo.
++
++                    For more information on KUnit and unit tests in genera=
+l, please refer
++                    to the KUnit documentation in Documentation/dev-tools/=
+kunit
++
++                    If unsure, say N
++
++
++Test Filenames
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++Where possible, test suites should be placed in a separate source file in =
+the
++same directory as the code being tested.
++
++This file should be named ``<suite>_kunit.c``. It may make sense to strip
++excessive namespacing from the source filename (e.g., ``firmware_kunit.c``=
+ instead of
++``<drivername>_firmware.c``), but please ensure the module name does conta=
+in the
++full suite name.
++
++
 --=20
-2.20.1
+2.27.0.212.ge8ba1cc988-goog
 
