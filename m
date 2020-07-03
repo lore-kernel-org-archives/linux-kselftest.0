@@ -2,95 +2,71 @@ Return-Path: <SRS0=KINM=AO=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB82AC433E0
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Jul 2020 01:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C8D4C433DF
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Jul 2020 05:40:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B912920747
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Jul 2020 01:10:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A74E2084C
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Jul 2020 05:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1593754809;
+	bh=ocskdSa0KVruh+R4uOpgC7Tiw8alBDbBAnXQd6V/rgo=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=ZsCGP3jZfWq8dAjdE95SC4gvr5394Xi2gPOkY9NACpbL6MMB1UHzEqpos5sG1i5T4
+	 vzWgKJsGbPSOMPXTRVO73UUcT8wtDwhwI+wGYIVUt3JN4nn+pISGOngXqhnJmt2mNe
+	 qjSThOandyihLqWmWBtDUyfGRwSysU0LRyjqYdUM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgGCBKS (ORCPT
+        id S1726169AbgGCFkI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 2 Jul 2020 21:10:18 -0400
-Received: from mga18.intel.com ([134.134.136.126]:33118 "EHLO mga18.intel.com"
+        Fri, 3 Jul 2020 01:40:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48360 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbgGCBKS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Jul 2020 21:10:18 -0400
-IronPort-SDR: ZcNxe+KN403AQeSQTJXcLlyHYxK++nSgMNegoxzU22R/WfL3+n6Cp5rrbfpu22BfftMnem+f7t
- ylFjeywgE8/w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="134523863"
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="134523863"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 18:10:17 -0700
-IronPort-SDR: hhzfnRppsSt1HZlwFkl+A9lSroPpFTv/+m1cEBZgvi+zT05eg3cgffRKVE4QVyqI/qYcDGTZQX
- tb4Z/KJkQrzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,306,1589266800"; 
-   d="scan'208";a="265844749"
-Received: from xpf-desktop.sh.intel.com ([10.239.13.107])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jul 2020 18:10:15 -0700
-Date:   Fri, 3 Jul 2020 09:20:06 +0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
+        id S1725779AbgGCFkI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Jul 2020 01:40:08 -0400
+Subject: Re: [GIT PULL] Kunit fixes update for Linux 5.8-rc4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593754808;
+        bh=ocskdSa0KVruh+R4uOpgC7Tiw8alBDbBAnXQd6V/rgo=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=aLlOd09mgW6cNmxHE46hmJFdD1v51zC0bh8qFch1cg48R2Ablw0OJ/EAB1YaVuIG+
+         62Egl+ck/HGUpYhbKbjCrmUbth84VjD6qxuK4xarH7I3yj8Ls6luivFQt86M0LDAGM
+         Pop6aXruZ5uLlppr5b+56k2cv6pchjRHm34ryx4E=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
+References: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <39219b27-98db-609c-d77b-3db2eb64345a@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-kunit-fixes-5.8-rc4
+X-PR-Tracked-Commit-Id: c63d2dd7e134ebddce4745c51f9572b3f0d92b26
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 55844741a1e74bd41b4cea57502c2efedc99bf47
+Message-Id: <159375480808.400.11761356366202390858.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Jul 2020 05:40:08 +0000
 To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Heng Su <heng.su@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai Svahn <kai.svahn@intel.com>
-Subject: Re: [PATCH v4] selftests: tpm: upgrade TPM2 tests from Python 2 to
- Python 3
-Message-ID: <20200703012005.GA23276@xpf-desktop.sh.intel.com>
-References: <20200626034052.25263-1-pengfei.xu@intel.com>
- <20200702194435.GA28988@linux.intel.com>
- <52f0d32d-d63a-ae1e-cdd9-1ed7bd4edbc0@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52f0d32d-d63a-ae1e-cdd9-1ed7bd4edbc0@linuxfoundation.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Cc:     torvalds@linux-foundation.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, skhan@linuxfoundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks a lot Jarkko and Shuah!
+The pull request you sent on Thu, 2 Jul 2020 09:23:55 -0600:
 
-BR.
-Thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.8-rc4
 
-On 2020-07-02 at 15:32:49 -0600, Shuah Khan wrote:
-> On 7/2/20 1:44 PM, Jarkko Sakkinen wrote:
-> > On Fri, Jun 26, 2020 at 11:40:52AM +0800, Pengfei Xu wrote:
-> > > Python 2 is no longer supported by the Python upstream project, so
-> > > upgrade TPM2 tests to Python 3.
-> > > 
-> > > Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
-> > 
-> > I think that it's perfect now. Thank you.
-> > 
-> > Also
-> > 
-> > 1. I checked that scripts/checkpatch.pl did not report any errors.
-> > 2. sudo python3 -m unittest -v tpm2_tests.SmokeTest
-> > 3. sudo python3 -m unittest -v tpm2_tests.SpaceTest
-> > 
-> > Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > Tested-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-> > 
-> > Shuah, I could pick this up after your PR (with my earlier fixes) lands
-> > to mainline, and sort out possible merge conflicts if they uprise. Is
-> > this fine by you?
-> > 
-> 
-> Yes. I will apply them as soon as PR clears and hopefully they can go
-> into rc5.
-> 
-> thanks,
-> -- Shuah
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/55844741a1e74bd41b4cea57502c2efedc99bf47
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
