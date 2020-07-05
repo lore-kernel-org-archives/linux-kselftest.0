@@ -2,385 +2,225 @@ Return-Path: <SRS0=Fgov=AQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D838C433E1
-	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5F2EC433DF
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:32:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0ED4920899
-	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:12:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A259520874
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:32:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dYnMuSbB"
+	dkim=pass (2048-bit key) header.d=dilger-ca.20150623.gappssmtp.com header.i=@dilger-ca.20150623.gappssmtp.com header.b="ZkJkXi+4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgGEGMq (ORCPT
+        id S1725873AbgGEGcm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 5 Jul 2020 02:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        Sun, 5 Jul 2020 02:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbgGEGMj (ORCPT
+        with ESMTP id S1725901AbgGEGcm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jul 2020 02:12:39 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0E2C08C5DE
-        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:12:39 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id z3so6357132pfn.12
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:12:39 -0700 (PDT)
+        Sun, 5 Jul 2020 02:32:42 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD6BC08C5DF
+        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:32:42 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x11so14107963plo.7
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3E0uLB2FTHGittSE2WW+VBNudtR2vmOtGreRUF/f/08=;
-        b=dYnMuSbB17n9OLZDtK7z/14x0Xb0QPfd20H+TekXxuK3S2XhAXgecX1iQGY+4FZpLf
-         IonmjGnoInvwbHuSEkJhm+VL9ApHm67nbCAaIG7R3fTJg66Y3BbgJap4ghLslERBhKUF
-         WV7aPcWwNf0czNLJSHCY3sCIoQhaOyNMfA3XA=
+        d=dilger-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
+         :references;
+        bh=WCQEsdCuQ9yFesPb0P6L21dKrxXpFZDsrMqQwx+GSTE=;
+        b=ZkJkXi+4dQk/smjOS+gAMftw8iLt0lIoYUPMioM6cB75Cd2e+suQg7Z3PgVEn2jMKu
+         L7W5ZbRNMy0LAiu+GVWQ3ABkYJlrIJGAmCwQcTInqg6Itj7nc0cDPLKv7bEto5F43R2O
+         yx5Qa7aukHcTcJq/HgOpgyc+PbNivsP5yFJ685k4H7v4rrf31YrfC0zVKncgXt+kx2wk
+         hE+UVW7xpWxJDAsXBA3nkO7Zq4oqz27mC3wb21zvqsAhWEQIrnQo7YATnlPPxwf8UG2F
+         cfAeArQQBXead75eYpr3duXEKYFASiHwCdZQ3pVCEDjFj3o5VSg1HepNpoU7FXTtSXMX
+         9+JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3E0uLB2FTHGittSE2WW+VBNudtR2vmOtGreRUF/f/08=;
-        b=jLqVzbJ0uC3+mUFpuTaDR4tHMmFWlyArsTd8Jj/CoY/TAMp1WIXBMj8Saf8yDh6VMy
-         nAT133dxFn5W7N9UwFINxfGJ7cWQN187wO7YEHe77GOgKN+5vzVbuPDJTeQwYRWPzbn0
-         ltyp01KPYmKXWCPfD8xnJRPJzLvbqANjaAvpMUZneWfh/gRDTp22AZVsq4/+bfKLZH+9
-         TjdD4rVbCgN7y1VGtxslNO9dyyOF2Ph/3zbm/yWLgX0/n6ulQE2OMEv/F+sUIcV/rUWt
-         bXII+n23F9ay2wbumfJBTDw1WQT7uae+v1CIQWpqMPHUksfQ9s/YDM/o9wQlsKl7f9v6
-         VeSQ==
-X-Gm-Message-State: AOAM530GRPPLel1MaRcnOr/1FKDJMtmjIXmM31OOJSssE00QfF+/qy6o
-        XyaVBG9+8i5AJfy+fQ09NIgwUA==
-X-Google-Smtp-Source: ABdhPJxCPU1z+SvR3EFcNeiEW/8U1XFg952c7+MC2aV7TWlUYQ4rWpe49hTsCPFiUu/4LX3XoaRT7A==
-X-Received: by 2002:a63:7c5e:: with SMTP id l30mr35179751pgn.276.1593929558913;
-        Sat, 04 Jul 2020 23:12:38 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g135sm16340876pfb.41.2020.07.04.23.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2020 23:12:37 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] selftests/seccomp: Refactor to use fixture variants
-Date:   Sat,  4 Jul 2020 23:12:31 -0700
-Message-Id: <20200705061232.4151319-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200705061232.4151319-1-keescook@chromium.org>
-References: <20200705061232.4151319-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:message-id:mime-version:subject:date
+         :in-reply-to:cc:to:references;
+        bh=WCQEsdCuQ9yFesPb0P6L21dKrxXpFZDsrMqQwx+GSTE=;
+        b=VY2oV9e7bwyJ9Amk2C5fb/jRiJX3vTC2X31Jyt5iGXKXY6cFWatAbcamRCFNlyQn1+
+         wogesXXgoTKZNIldvldyaljMjiK0k4n2Ob5nzLeLjEcphvdoiVsBO0YUOY2YtyqTI0Uq
+         QYY8n8pFK6x48ucUONjj25OeFP1+Bep+LO4uHK3xt0sqII7IbuV76bhTCLEZIgeFVPHw
+         tPSYLEuUUGnsfkpuFo+4EUM8qFEGHYv9YwhaEZqEqQto7oX20wvlBBrn+eGZr0sIV/Po
+         5FvJVqZkJMIB45YXdmPICDBQJfGsXa23FN+Ni09QixJErgFLAKk1UOQgcfYUksYcKuAM
+         gHXA==
+X-Gm-Message-State: AOAM532ycdFE6G/Roq0/SKw+b4WUQue7HL3rokX+mURcfZDlBpgC/WQD
+        VRO3pKVG8xBu9qfl/wkRX7Lq+A==
+X-Google-Smtp-Source: ABdhPJwJkMLBJdpDYqM5AYWawg6/cZLfnUq+DQZ33ACOlcuCfixDJ35bJodagdEXHonrGw1k3Vhylw==
+X-Received: by 2002:a17:90a:32cb:: with SMTP id l69mr41609009pjb.205.1593930761767;
+        Sat, 04 Jul 2020 23:32:41 -0700 (PDT)
+Received: from cabot.hitronhub.home (S0106bc4dfb596de3.ek.shawcable.net. [174.0.67.248])
+        by smtp.gmail.com with ESMTPSA id br9sm14470529pjb.56.2020.07.04.23.32.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 04 Jul 2020 23:32:41 -0700 (PDT)
+From:   Andreas Dilger <adilger@dilger.ca>
+Message-Id: <37170CC1-C132-40BE-8ABA-B14E3419975C@dilger.ca>
+Content-Type: multipart/signed;
+ boundary="Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH 0/3] readfile(2): a new syscall to make open/read/close
+ faster
+Date:   Sun, 5 Jul 2020 00:32:38 -0600
+In-Reply-To: <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, gregkh@linuxfoundation.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-man@vger.kernel.org, mtk.manpages@gmail.com,
+        shuah@kernel.org, viro@zeniv.linux.org.uk
+To:     Jan Ziak <0xe2.0x9a.0x9b@gmail.com>
+References: <CAODFU0q6CrUB_LkSdrbp5TQ4Jm6Sw=ZepZwD-B7-aFudsOvsig@mail.gmail.com>
+ <20200705021631.GR25523@casper.infradead.org>
+ <CAODFU0qwtPTaBRbA3_ufA6N7fajhi61Sp5iE75Shdk25NSOTLA@mail.gmail.com>
+X-Mailer: Apple Mail (2.3273)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that the selftest harness has variants, use them to eliminate a
-bunch of copy/paste duplication.
 
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 199 ++++--------------
- 1 file changed, 42 insertions(+), 157 deletions(-)
+--Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=us-ascii
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 6439c031a85d..966dec340ea8 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -1541,6 +1541,7 @@ pid_t setup_trace_fixture(struct __test_metadata *_metadata,
- 
- 	return tracer_pid;
- }
-+
- void teardown_trace_fixture(struct __test_metadata *_metadata,
- 			    pid_t tracer)
- {
-@@ -1820,7 +1821,7 @@ void change_syscall(struct __test_metadata *_metadata,
- 	EXPECT_EQ(0, ret);
- }
- 
--void tracer_syscall(struct __test_metadata *_metadata, pid_t tracee,
-+void tracer_seccomp(struct __test_metadata *_metadata, pid_t tracee,
- 		    int status, void *args)
- {
- 	int ret;
-@@ -1897,6 +1898,24 @@ FIXTURE(TRACE_syscall) {
- 	pid_t tracer, mytid, mypid, parent;
- };
- 
-+FIXTURE_VARIANT(TRACE_syscall) {
-+	/*
-+	 * All of the SECCOMP_RET_TRACE behaviors can be tested with either
-+	 * SECCOMP_RET_TRACE+PTRACE_CONT or plain ptrace()+PTRACE_SYSCALL.
-+	 * This indicates if we should use SECCOMP_RET_TRACE (false), or
-+	 * ptrace (true).
-+	 */
-+	bool use_ptrace;
-+};
-+
-+FIXTURE_VARIANT_ADD(TRACE_syscall, ptrace) {
-+	.use_ptrace = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(TRACE_syscall, seccomp) {
-+	.use_ptrace = false,
-+};
-+
- FIXTURE_SETUP(TRACE_syscall)
- {
- 	struct sock_filter filter[] = {
-@@ -1912,12 +1931,11 @@ FIXTURE_SETUP(TRACE_syscall)
- 		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_TRACE | 0x1005),
- 		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
- 	};
--
--	memset(&self->prog, 0, sizeof(self->prog));
--	self->prog.filter = malloc(sizeof(filter));
--	ASSERT_NE(NULL, self->prog.filter);
--	memcpy(self->prog.filter, filter, sizeof(filter));
--	self->prog.len = (unsigned short)ARRAY_SIZE(filter);
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+	long ret;
- 
- 	/* Prepare some testable syscall results. */
- 	self->mytid = syscall(__NR_gettid);
-@@ -1935,60 +1953,28 @@ FIXTURE_SETUP(TRACE_syscall)
- 	ASSERT_NE(self->parent, self->mypid);
- 
- 	/* Launch tracer. */
--	self->tracer = setup_trace_fixture(_metadata, tracer_syscall, NULL,
--					   false);
--}
--
--FIXTURE_TEARDOWN(TRACE_syscall)
--{
--	teardown_trace_fixture(_metadata, self->tracer);
--	if (self->prog.filter)
--		free(self->prog.filter);
--}
-+	self->tracer = setup_trace_fixture(_metadata,
-+					   variant->use_ptrace ? tracer_ptrace
-+							       : tracer_seccomp,
-+					   NULL, variant->use_ptrace);
- 
--TEST_F(TRACE_syscall, ptrace_syscall_redirected)
--{
--	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
--	teardown_trace_fixture(_metadata, self->tracer);
--	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
--					   true);
--
--	/* Tracer will redirect getpid to getppid. */
--	EXPECT_NE(self->mypid, syscall(__NR_getpid));
--}
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret);
- 
--TEST_F(TRACE_syscall, ptrace_syscall_errno)
--{
--	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
--	teardown_trace_fixture(_metadata, self->tracer);
--	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
--					   true);
-+	if (variant->use_ptrace)
-+		return;
- 
--	/* Tracer should skip the open syscall, resulting in ESRCH. */
--	EXPECT_SYSCALL_RETURN(-ESRCH, syscall(__NR_openat));
-+	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
-+	ASSERT_EQ(0, ret);
- }
- 
--TEST_F(TRACE_syscall, ptrace_syscall_faked)
-+FIXTURE_TEARDOWN(TRACE_syscall)
- {
--	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
- 	teardown_trace_fixture(_metadata, self->tracer);
--	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
--					   true);
--
--	/* Tracer should skip the gettid syscall, resulting fake pid. */
--	EXPECT_SYSCALL_RETURN(45000, syscall(__NR_gettid));
- }
- 
- TEST_F(TRACE_syscall, syscall_allowed)
- {
--	long ret;
--
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &self->prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
- 	/* getppid works as expected (no changes). */
- 	EXPECT_EQ(self->parent, syscall(__NR_getppid));
- 	EXPECT_NE(self->mypid, syscall(__NR_getppid));
-@@ -1996,14 +1982,6 @@ TEST_F(TRACE_syscall, syscall_allowed)
- 
- TEST_F(TRACE_syscall, syscall_redirected)
- {
--	long ret;
--
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &self->prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
- 	/* getpid has been redirected to getppid as expected. */
- 	EXPECT_EQ(self->parent, syscall(__NR_getpid));
- 	EXPECT_NE(self->mypid, syscall(__NR_getpid));
-@@ -2011,33 +1989,17 @@ TEST_F(TRACE_syscall, syscall_redirected)
- 
- TEST_F(TRACE_syscall, syscall_errno)
- {
--	long ret;
--
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &self->prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* openat has been skipped and an errno return. */
-+	/* Tracer should skip the open syscall, resulting in ESRCH. */
- 	EXPECT_SYSCALL_RETURN(-ESRCH, syscall(__NR_openat));
- }
- 
- TEST_F(TRACE_syscall, syscall_faked)
- {
--	long ret;
--
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &self->prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* gettid has been skipped and an altered return value stored. */
-+	/* Tracer skips the gettid syscall and store altered return value. */
- 	EXPECT_SYSCALL_RETURN(45000, syscall(__NR_gettid));
- }
- 
--TEST_F(TRACE_syscall, skip_after_RET_TRACE)
-+TEST_F(TRACE_syscall, skip_after)
- {
- 	struct sock_filter filter[] = {
- 		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
-@@ -2052,14 +2014,7 @@ TEST_F(TRACE_syscall, skip_after_RET_TRACE)
- 	};
- 	long ret;
- 
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Install fixture filter. */
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &self->prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Install "errno on getppid" filter. */
-+	/* Install additional "errno on getppid" filter. */
- 	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
- 	ASSERT_EQ(0, ret);
- 
-@@ -2069,7 +2024,7 @@ TEST_F(TRACE_syscall, skip_after_RET_TRACE)
- 	EXPECT_EQ(EPERM, errno);
- }
- 
--TEST_F_SIGNAL(TRACE_syscall, kill_after_RET_TRACE, SIGSYS)
-+TEST_F_SIGNAL(TRACE_syscall, kill_after, SIGSYS)
- {
- 	struct sock_filter filter[] = {
- 		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
-@@ -2084,77 +2039,7 @@ TEST_F_SIGNAL(TRACE_syscall, kill_after_RET_TRACE, SIGSYS)
- 	};
- 	long ret;
- 
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Install fixture filter. */
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &self->prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Install "death on getppid" filter. */
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Tracer will redirect getpid to getppid, and we should die. */
--	EXPECT_NE(self->mypid, syscall(__NR_getpid));
--}
--
--TEST_F(TRACE_syscall, skip_after_ptrace)
--{
--	struct sock_filter filter[] = {
--		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
--			offsetof(struct seccomp_data, nr)),
--		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_getppid, 0, 1),
--		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ERRNO | EPERM),
--		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
--	};
--	struct sock_fprog prog = {
--		.len = (unsigned short)ARRAY_SIZE(filter),
--		.filter = filter,
--	};
--	long ret;
--
--	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
--	teardown_trace_fixture(_metadata, self->tracer);
--	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
--					   true);
--
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Install "errno on getppid" filter. */
--	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Tracer will redirect getpid to getppid, and we should see EPERM. */
--	EXPECT_EQ(-1, syscall(__NR_getpid));
--	EXPECT_EQ(EPERM, errno);
--}
--
--TEST_F_SIGNAL(TRACE_syscall, kill_after_ptrace, SIGSYS)
--{
--	struct sock_filter filter[] = {
--		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
--			offsetof(struct seccomp_data, nr)),
--		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_getppid, 0, 1),
--		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_KILL),
--		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
--	};
--	struct sock_fprog prog = {
--		.len = (unsigned short)ARRAY_SIZE(filter),
--		.filter = filter,
--	};
--	long ret;
--
--	/* Swap SECCOMP_RET_TRACE tracer for PTRACE_SYSCALL tracer. */
--	teardown_trace_fixture(_metadata, self->tracer);
--	self->tracer = setup_trace_fixture(_metadata, tracer_ptrace, NULL,
--					   true);
--
--	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
--	ASSERT_EQ(0, ret);
--
--	/* Install "death on getppid" filter. */
-+	/* Install additional "death on getppid" filter. */
- 	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
- 	ASSERT_EQ(0, ret);
- 
--- 
-2.25.1
+On Jul 4, 2020, at 8:46 PM, Jan Ziak <0xe2.0x9a.0x9b@gmail.com> wrote:
+> 
+> On Sun, Jul 5, 2020 at 4:16 AM Matthew Wilcox <willy@infradead.org> wrote:
+>> 
+>> On Sun, Jul 05, 2020 at 04:06:22AM +0200, Jan Ziak wrote:
+>>> Hello
+>>> 
+>>> At first, I thought that the proposed system call is capable of
+>>> reading *multiple* small files using a single system call - which
+>>> would help increase HDD/SSD queue utilization and increase IOPS (I/O
+>>> operations per second) - but that isn't the case and the proposed
+>>> system call can read just a single file.
+>>> 
+>>> Without the ability to read multiple small files using a single system
+>>> call, it is impossible to increase IOPS (unless an application is
+>>> using multiple reader threads or somehow instructs the kernel to
+>>> prefetch multiple files into memory).
+>> 
+>> What API would you use for this?
+>> 
+>> ssize_t readfiles(int dfd, char **files, void **bufs, size_t *lens);
+>> 
+>> I pretty much hate this interface, so I hope you have something better
+>> in mind.
+> 
+> I am proposing the following:
+> 
+> struct readfile_t {
+>  int dirfd;
+>  const char *pathname;
+>  void *buf;
+>  size_t count;
+>  int flags;
+>  ssize_t retval; // set by kernel
+>  int reserved; // not used by kernel
+> };
 
+If you are going to pass a struct from userspace to the kernel, it
+should not mix int and pointer types (which may be 64-bit values,
+so that there are not structure packing issues, like:
+
+struct readfile {
+	int	dirfd;
+	int	flags;
+	const char *pathname;
+	void	*buf;
+	size_t	count;
+	ssize_t retval;
+};
+
+It would be better if "retval" was returned in "count", so that
+the structure fits nicely into 32 bytes on a 64-bit system, instead
+of being 40 bytes per entry, which adds up over many entries, like.
+
+struct readfile {
+	int	dirfd;
+	int	flags;
+	const char *pathname;
+	void	*buf;
+	ssize_t count;	/* input: bytes requested, output: bytes read or -errno */
+};
+
+
+However, there is still an issue with passing pointers from userspace,
+since they may be 32-bit userspace pointers on a 64-bit kernel.
+
+> int readfiles(struct readfile_t *requests, size_t count);
+
+It's not clear why count is a "size_t" since it is not a size.
+An unsigned int is fine here, since it should never be negative.
+
+> Returns zero if all requests succeeded, otherwise the returned value
+> is non-zero (glibc wrapper: -1) and user-space is expected to check
+> which requests have succeeded and which have failed. retval in
+> readfile_t is set to what the single-file readfile syscall would
+> return if it was called with the contents of the corresponding
+> readfile_t struct.
+> 
+> The glibc library wrapper of this system call is expected to store the
+> errno in the "reserved" field. Thus, a programmer using glibc sees:
+> 
+> struct readfile_t {
+>  int dirfd;
+>  const char *pathname;
+>  void *buf;
+>  size_t count;
+>  int flags;
+>  ssize_t retval; // set by glibc (-1 on error)
+>  int errno; // set by glibc if retval is -1
+> };
+
+Why not just return the errno directly in "retval", or in "count" as
+proposed?  That avoids further bloating the structure by another field.
+
+> retval and errno in glibc's readfile_t are set to what the single-file
+> glibc readfile would return (retval) and set (errno) if it was called
+> with the contents of the corresponding readfile_t struct. In case of
+> an error, glibc will pick one readfile_t which failed (such as: the
+> 1st failed one) and use it to set glibc's errno.
+
+
+Cheers, Andreas
+
+
+
+
+
+
+--Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
+
+iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAl8BdAYACgkQcqXauRfM
+H+Ct9hAAvj7/hD4n/PIbh60MFpaeOapkuMHxCnYr65O3YXwd4uVcU++4K1ZgTZ2o
+I3Q5YBjjX3qNSUbCR98tJV22Fe0wCTaicCLT9u1g205mAiswMOt+dTIRysmJ2gLr
+L3SUz3NLzJKYSSuLE9ItKwTD6gp/7jAukDc+0dbMd8YPIfG79woUVapwV4me3Lxh
+swvwCRkS18c/TC5/w8jAAiiCBoMc6Q0HcDUUKeG/FfrAI8pQVk46pZ9EEGVaDRsp
+cnoudMACfe/hgEzhRT+tSlNF6dq9myIStYkKG/B4X2cP1JPpw2IN05oZfM8TDH4Y
+vpoaj1iw/gOC8KT/fHWmH8ESBDFolihLUY0H1ka6/YW16cb4SzwKUuhzWJMi/mZ8
+UyYQeXUGwOgYDWGkPNf9gTmNKVH1243NRxiciunN4C19n53TiowvsUyixMlFBgwc
+qvjRvZc9PYZSSGKWgEQR7fAihtNcPzbRfnLmRJZSI61CrWsV6AmUchr4hgm6da0H
+pAO1dpPIZAKwVph9N/Cf7JXdErHGHO4BTP8r+BGYmxE1IWtdMjhq4eqVQJ2b5DZd
+hDPk4hnA7peOXC3NJ52+quST3kvnkJ4CFKfi3iPQYmj9Cq+0XVAr7aXedlG68qdP
+oI8Wp7rbxzqAt5JQWy5t6sPFjMs4Y0Okp5AMpn2/yrdPKtTcBZc=
+=v31i
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_293BF5D1-B121-42C0-8357-294F8B72126D--
