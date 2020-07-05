@@ -2,72 +2,74 @@ Return-Path: <SRS0=Fgov=AQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A7C6C433E0
-	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36D3BC433DF
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:12:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 665C220771
-	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:12:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13F2B20899
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Jul 2020 06:12:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XyO2RmkE"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eHez7mRe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbgGEGMj (ORCPT
+        id S1726558AbgGEGMl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 5 Jul 2020 02:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
+        Sun, 5 Jul 2020 02:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbgGEGMi (ORCPT
+        with ESMTP id S1726538AbgGEGMk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jul 2020 02:12:38 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A5FC08C5DE
-        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:12:38 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x9so441846plr.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:12:38 -0700 (PDT)
+        Sun, 5 Jul 2020 02:12:40 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356EBC08C5DF
+        for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2020 23:12:40 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id o22so10579247pjw.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2020 23:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s7QQXwEm4dnmq+jlTbXbOEq302bTMUVfN5lq4IjhYc8=;
-        b=XyO2RmkEGRaFfFZkIuTkygla4ZXv0c89QtCF7yaqlKX3Gr5EOroGlW72oG3IyXMG92
-         BEK5FUNsUTcLlnU41uBg2FuxDaX5Bq0y0zjTFTZnAAqHSX2RpiF8SjE1qjAu2zG+G2rH
-         a8rEmOxPZky9FBjyj5nqDoD79Riqo9Nvbu6ks=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fPweZ6DZU1ENxuozio/NA02HLt4qwCgCF26PVdwgmUw=;
+        b=eHez7mRezl3LRANbjE9V3fYHuiKTipMbrZxyLSQ8DYa+CsUnkd7R93uYjLh8qhclBF
+         astTE3wzBXb6w0ko4CNb3iCWSSyKMABzRVflBHuKZATMtETPiDqIYxCGlugWhQxJnQAe
+         tcWFVOjHZeqkFFnKprhnoBDKbp1h+KP0S01jU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s7QQXwEm4dnmq+jlTbXbOEq302bTMUVfN5lq4IjhYc8=;
-        b=UAYtQ37JQpdB81M5r8i2JELuLZ0Zjlnu/aEZ2gELv1LVPTiL9cePEn0Os1DJAjBid3
-         hWSn6M6HEGyqcYrm5gxQ3XxF0o/0SbztT1zsRrh+MJYBGeZsmXb/4oiCKY1ezNjQGPiP
-         VXNp7slt1pdvjcgA/ZMsgkp/64SOVB2zyh1uAB20eQsTRo7XmnGktZBM0BgZrIDAGL3v
-         o7BY+H5Vc9dXIbEgCmMtdvBJmYs0tc3PFcCbO1NctSPKBvTGxAa0rsVHDExP6zMR4eaL
-         WV621dtDVr3+qcPS7HPpKK5OidtJNxnn2uYcRCxXRZUSKBvnpmRTe1S3bIgkSwUnScn+
-         /wZA==
-X-Gm-Message-State: AOAM531OVRP4387GSE7LoHq4RoLNZn9mCl5jm9IKN7YjZ62y2Ovqi2ca
-        ycC/pPWf6K8XXGEUPviYgYB6Aw==
-X-Google-Smtp-Source: ABdhPJygzPaieVb3XQ6+2JIScvsgING0EAgONcSvvoMj/Xyn1uQ6SLPo+DogPpeL8b3+2sdKe8YpEA==
-X-Received: by 2002:a17:90b:3842:: with SMTP id nl2mr44572479pjb.111.1593929558010;
-        Sat, 04 Jul 2020 23:12:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fPweZ6DZU1ENxuozio/NA02HLt4qwCgCF26PVdwgmUw=;
+        b=uS+k4jHU3wBsOJaU4m+K/i0QzT1OpyWK+sTgOPn+HBrDaSBW3MtY1Rb7ioeYuUTZJj
+         UudOA4czzdXoIINIs/Ayb0+9OB4hqntTv2zPMf9AIcPLUP2tM5GJ/e/57Mci1y1kttET
+         vK64XOUzDq0zPb1R85piQzt2qP59kwoi+spEnoq7HC7kfjcxhasYSmHPYtUkpaPRj8eA
+         W0MbgAHyQjpM7EBkHC/QVyjv5xztM2hXvymexxxbBPDoKdAoE0axI2PIVTGF8ZZAWqi8
+         hE4+MhLD2Q+tp871J7v+QNfOOxzJ1Qb5uWEcFhI/qMRi2hb88wGxeN7OEAd3u8o/h+Si
+         yoEA==
+X-Gm-Message-State: AOAM5309a8zgaNCCHUfIlBdx6L4st67tlYUOJAJnxliXBPc/KJy0xfQg
+        /S12TV6XJMdoovWnDzCbADqUCg==
+X-Google-Smtp-Source: ABdhPJz3fz9uNnH3pm1N5xpLDXk919zAKiGqawBuegK156HeIrG5riLllTgK7fEcIVuXZxaN1UTCSw==
+X-Received: by 2002:a17:90a:c5:: with SMTP id v5mr46527588pjd.192.1593929559801;
+        Sat, 04 Jul 2020 23:12:39 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a9sm15525789pfr.103.2020.07.04.23.12.36
+        by smtp.gmail.com with ESMTPSA id n62sm5275663pjb.28.2020.07.04.23.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 04 Jul 2020 23:12:37 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Will Deacon <will@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Keno Fischer <keno@juliacomputing.com>,
         Andy Lutomirski <luto@amacapital.net>,
         Will Drewry <wad@chromium.org>,
+        Keno Fischer <keno@juliacomputing.com>,
         Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH for-next/seccomp 0/3] Check ENOSYS under tracing
-Date:   Sat,  4 Jul 2020 23:12:29 -0700
-Message-Id: <20200705061232.4151319-1-keescook@chromium.org>
+Subject: [PATCH 3/3] selftests/seccomp: Check ENOSYS under tracing
+Date:   Sat,  4 Jul 2020 23:12:32 -0700
+Message-Id: <20200705061232.4151319-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200705061232.4151319-1-keescook@chromium.org>
+References: <20200705061232.4151319-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -75,32 +77,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+There should be no difference between -1 and other negative syscalls
+while tracing.
 
-This expands the seccomp selftest to poke a architectural behavior corner
-that Keno Fischer noticed[1]. In the process, I took the opportunity
-to do the kselftest harness variant refactoring I'd been meaning to do,
-which made adding this test much nicer.
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Keno Fischer <keno@juliacomputing.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-I'd prefer this went via the seccomp tree, as it builds on top of the
-other recent seccomp feature addition tests. Testing and reviews are
-welcome! :)
-
-Thanks,
-
--Kees
-
-[1] https://lore.kernel.org/lkml/CABV8kRxA9mXPZwtYrjbAfOfFewhABHddipccgk-LQJO+ZYu4Xg@mail.gmail.com
-
-Kees Cook (3):
-  selftests/harness: Clean up kern-doc for fixtures
-  selftests/seccomp: Refactor to use fixture variants
-  selftests/seccomp: Check ENOSYS under tracing
-
- tools/testing/selftests/kselftest_harness.h   |  15 +-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 217 ++++++------------
- 2 files changed, 72 insertions(+), 160 deletions(-)
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 966dec340ea8..bf6aa06c435c 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1973,6 +1973,32 @@ FIXTURE_TEARDOWN(TRACE_syscall)
+ 	teardown_trace_fixture(_metadata, self->tracer);
+ }
+ 
++TEST(negative_ENOSYS)
++{
++	/* Untraced negative syscalls should return ENOSYS. */
++	errno = 0;
++	EXPECT_EQ(-1, syscall(-1));
++	EXPECT_EQ(errno, ENOSYS);
++	errno = 0;
++	EXPECT_EQ(-1, syscall(-101));
++	EXPECT_EQ(errno, ENOSYS);
++}
++
++TEST_F(TRACE_syscall, negative_ENOSYS)
++{
++	/*
++	 * There should be no difference between an "internal" skip
++	 * and userspace asking for syscall "-1".
++	 */
++	errno = 0;
++	EXPECT_EQ(-1, syscall(-1));
++	EXPECT_EQ(errno, ENOSYS);
++	/* And no difference for "still not valid but not -1". */
++	errno = 0;
++	EXPECT_EQ(-1, syscall(-101));
++	EXPECT_EQ(errno, ENOSYS);
++}
++
+ TEST_F(TRACE_syscall, syscall_allowed)
+ {
+ 	/* getppid works as expected (no changes). */
 -- 
 2.25.1
 
