@@ -2,60 +2,60 @@ Return-Path: <SRS0=PlYT=AR=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DD32C433E1
-	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Jul 2020 20:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4040C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Jul 2020 20:17:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 062142073E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Jul 2020 20:17:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E323206F5
+	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Jul 2020 20:17:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="mJU+sunK"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ERiKeHam"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727031AbgGFURa (ORCPT
+        id S1727091AbgGFURh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 6 Jul 2020 16:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        Mon, 6 Jul 2020 16:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726933AbgGFUR3 (ORCPT
+        with ESMTP id S1727085AbgGFURd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jul 2020 16:17:29 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE31C08C5E0
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 13:17:29 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x11so15762407plo.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 13:17:29 -0700 (PDT)
+        Mon, 6 Jul 2020 16:17:33 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784CDC08C5DF
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2020 13:17:33 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id d10so15769746pls.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2020 13:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vf4k4Ca2nC/UfmU2LxKOu9rGFn+24YTVR8SOW5pJDec=;
-        b=mJU+sunK9zmAyi94aCrQaVMEcNI9fn4lmtE75ZhOryFRcI5/2/Y3okHuI5wzVQTZ0F
-         SbtV5x1CJaMOcfiR79RFgYVBA8loddfYiYJUib7+F+erFyU6Xrgp+o/GLSxwl1owwifi
-         Oh6VXWDp5quFpNnUiennE/lwBZqWhCr3rnQnM=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=miXIw5tlW1kMw3gvoNj0rt2nrDVv5q0ksIbG8jEcgPA=;
+        b=ERiKeHamqD13D7iMhoOFZ30HuQH3w4nC4ZdHObpVZKxDE+PFUlDmQIHsKZ4W+5px6Y
+         yQ933a3huuc+cXNNWapWLCmjG2kwTad8cwFUgWpT/CryLWTzMMChk+NlRwtzKP86BhZr
+         w6Q4Rrq56WYTfoVkcqnQUucNPt+RjpAiK0cow=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vf4k4Ca2nC/UfmU2LxKOu9rGFn+24YTVR8SOW5pJDec=;
-        b=unLekzmqdeTo+p4S/II2cE8mhIVt/lPgVasmSCX/VP/Yz0PZ2wvRKcds4S/OkltK4R
-         otXjgQWB3+qQmXLeCE5E1/viI3pTvwFcHlJcN6gbguWOFzQpO5D9tlJshmLm9R5jNHNr
-         /1hVOoKGcAWqHOV6W3pluH1jo83pQ5eIPmwGaQMAu0SSvbCjnBPr6Yqs+CHfKzmCI4D5
-         2mTkywnSnuCz7ypSo8I2U+ueiE0AhjWewOneDcbx8dIZTYSQqFON/bOqyg3Q8KhgKQE5
-         RZsrwz0Ka/iHmzElFwqJTAiO13Wkp/pWSMT5Zun2wj7Mi0vmDCoVU/3hUfK3M2K1vWN7
-         EzdA==
-X-Gm-Message-State: AOAM530BzcExVtfG7sJ9Iz9F1uTIfNITOOBTVxm2Ol7WMWmI5i0k7qve
-        CbN0j1qVPIMbWWG5eSbj22YWRQ==
-X-Google-Smtp-Source: ABdhPJzOvQDeykz31VBtkhS2Id0OhcoG/jXjb7a9fQnSucy63QTtpHAuZEVpfeWypZ6tk3Q+EfIw3w==
-X-Received: by 2002:a17:902:8685:: with SMTP id g5mr42813271plo.270.1594066648526;
-        Mon, 06 Jul 2020 13:17:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=miXIw5tlW1kMw3gvoNj0rt2nrDVv5q0ksIbG8jEcgPA=;
+        b=BkKvl+RCXeVoxvgLL7AXBHzkAUBCL4L3Rg4JB2ShnTcsiNaBFIw0PH00ac4jGe+CGb
+         ssoTJoK067+hBs11JuRjILjjsC/BULNSpmDpD886u+Om2HCuskFpqZnvbm85cwez91AX
+         3xA37z5ueTQQl43T420qBMgi4x1KJS2MTLdeeHm2diyulkNHPAyGRCQ62AdATqNCYEpx
+         4Oqtbt6NCatk8NGfKRXoUvzNFr4WGlROOyLT06qByO8pmLDX4UvgKZXmwc9gXOHnGR9c
+         OZHtVp1NcUHt+8kRa1xzLyvjivIvr0E9l5KipsSNwr2ERXAlPPkbNtrPmThT7ph+y1DK
+         ZD0A==
+X-Gm-Message-State: AOAM5319CzBZp1/KYzi029Uu1I5rt6TOFMqPnFRQcmS+IKde5Ng0hFbv
+        eEPn3vbfsmE5+PHA1iLuaTNVAA==
+X-Google-Smtp-Source: ABdhPJzwAOzHVYdk4Dd1Tsm1BHv4WTEImdL0TAdmqz7o1hfTZz1qQHFXOzl5ff5rnBTNrdGfW1qSkg==
+X-Received: by 2002:a17:902:b101:: with SMTP id q1mr34450888plr.221.1594066653020;
+        Mon, 06 Jul 2020 13:17:33 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m6sm291257pjb.34.2020.07.06.13.17.27
+        by smtp.gmail.com with ESMTPSA id c188sm19973389pfc.143.2020.07.06.13.17.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 13:17:27 -0700 (PDT)
+        Mon, 06 Jul 2020 13:17:31 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -78,10 +78,12 @@ Cc:     Kees Cook <keescook@chromium.org>,
         netdev@vger.kernel.org, containers@lists.linux-foundation.org,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 0/7] Add seccomp notifier ioctl that enables adding fds
-Date:   Mon,  6 Jul 2020 13:17:13 -0700
-Message-Id: <20200706201720.3482959-1-keescook@chromium.org>
+Subject: [PATCH v6 5/7] fs: Expand __receive_fd() to accept existing fd
+Date:   Mon,  6 Jul 2020 13:17:18 -0700
+Message-Id: <20200706201720.3482959-6-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200706201720.3482959-1-keescook@chromium.org>
+References: <20200706201720.3482959-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -89,51 +91,114 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
+Expand __receive_fd() with support for replace_fd() for the coming seccomp
+"addfd" ioctl(). Add new wrapper receive_fd_replace() for the new behavior
+and update existing wrappers to retain old behavior.
 
-v6:
-- fix missing fput()
-- API name change: s/fd_install_received/receive_fd/
-v5: https://lore.kernel.org/lkml/20200617220327.3731559-1-keescook@chromium.org/
+Thanks to Colin Ian King <colin.king@canonical.com> for pointing out an
+uninitialized variable exposure in an earlier version of this patch.
 
-This continues the thread-merge between [1] and [2]. tl;dr: add a way for
-a seccomp user_notif process manager to inject files into the managed
-process in order to handle emulation of various fd-returning syscalls
-across security boundaries. Containers folks and Chrome are in need
-of the feature, and investigating this solution uncovered (and fixed)
-implementation issues with existing file sending routines.
+Reviewed-by: Sargun Dhillon <sargun@sargun.me>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ fs/file.c            | 24 ++++++++++++++++++------
+ include/linux/file.h | 10 +++++++---
+ 2 files changed, 25 insertions(+), 9 deletions(-)
 
-I intend to carry this in the for-next/seccomp tree, unless someone
-has objections. :) Please review and test!
-
--Kees
-
-[1] https://lore.kernel.org/lkml/20200603011044.7972-1-sargun@sargun.me/
-[2] https://lore.kernel.org/lkml/20200610045214.1175600-1-keescook@chromium.org/
-
-
-Kees Cook (5):
-  net/scm: Regularize compat handling of scm_detach_fds()
-  fs: Move __scm_install_fd() to __receive_fd()
-  fs: Add receive_fd() wrapper for __receive_fd()
-  pidfd: Replace open-coded partial receive_fd()
-  fs: Expand __receive_fd() to accept existing fd
-
-Sargun Dhillon (2):
-  seccomp: Introduce addfd ioctl to seccomp user notifier
-  selftests/seccomp: Test SECCOMP_IOCTL_NOTIF_ADDFD
-
- fs/file.c                                     |  67 +++++
- include/linux/file.h                          |  19 ++
- include/linux/net.h                           |   9 +
- include/uapi/linux/seccomp.h                  |  22 ++
- kernel/pid.c                                  |  13 +-
- kernel/seccomp.c                              | 172 ++++++++++++-
- net/compat.c                                  |  55 ++---
- net/core/scm.c                                |  50 +---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 229 ++++++++++++++++++
- 9 files changed, 554 insertions(+), 82 deletions(-)
-
+diff --git a/fs/file.c b/fs/file.c
+index 0efdcf413210..11313ff36802 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -937,6 +937,7 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
+ /**
+  * __receive_fd() - Install received file into file descriptor table
+  *
++ * @fd: fd to install into (if negative, a new fd will be allocated)
+  * @file: struct file that was received from another process
+  * @ufd: __user pointer to write new fd number to
+  * @o_flags: the O_* flags to apply to the new fd entry
+@@ -950,7 +951,7 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
+  *
+  * Returns newly install fd or -ve on error.
+  */
+-int __receive_fd(struct file *file, int __user *ufd, unsigned int o_flags)
++int __receive_fd(int fd, struct file *file, int __user *ufd, unsigned int o_flags)
+ {
+ 	struct socket *sock;
+ 	int new_fd;
+@@ -960,18 +961,30 @@ int __receive_fd(struct file *file, int __user *ufd, unsigned int o_flags)
+ 	if (error)
+ 		return error;
+ 
+-	new_fd = get_unused_fd_flags(o_flags);
+-	if (new_fd < 0)
+-		return new_fd;
++	if (fd < 0) {
++		new_fd = get_unused_fd_flags(o_flags);
++		if (new_fd < 0)
++			return new_fd;
++	} else
++		new_fd = fd;
+ 
+ 	if (ufd) {
+ 		error = put_user(new_fd, ufd);
+ 		if (error) {
+-			put_unused_fd(new_fd);
++			if (fd < 0)
++				put_unused_fd(new_fd);
+ 			return error;
+ 		}
+ 	}
+ 
++	if (fd < 0)
++		fd_install(new_fd, get_file(file));
++	else {
++		error = replace_fd(new_fd, file, o_flags);
++		if (error)
++			return error;
++	}
++
+ 	/*
+ 	 * Bump the usage count and install the file. The resulting value of
+ 	 * "error" is ignored here since we only need to take action when
+@@ -982,7 +995,6 @@ int __receive_fd(struct file *file, int __user *ufd, unsigned int o_flags)
+ 		sock_update_netprioidx(&sock->sk->sk_cgrp_data);
+ 		sock_update_classid(&sock->sk->sk_cgrp_data);
+ 	}
+-	fd_install(new_fd, get_file(file));
+ 	return new_fd;
+ }
+ 
+diff --git a/include/linux/file.h b/include/linux/file.h
+index d9fee9f5c8da..225982792fa2 100644
+--- a/include/linux/file.h
++++ b/include/linux/file.h
+@@ -92,18 +92,22 @@ extern void put_unused_fd(unsigned int fd);
+ 
+ extern void fd_install(unsigned int fd, struct file *file);
+ 
+-extern int __receive_fd(struct file *file, int __user *ufd,
++extern int __receive_fd(int fd, struct file *file, int __user *ufd,
+ 			unsigned int o_flags);
+ static inline int receive_fd_user(struct file *file, int __user *ufd,
+ 				  unsigned int o_flags)
+ {
+ 	if (ufd == NULL)
+ 		return -EFAULT;
+-	return __receive_fd(file, ufd, o_flags);
++	return __receive_fd(-1, file, ufd, o_flags);
+ }
+ static inline int receive_fd(struct file *file, unsigned int o_flags)
+ {
+-	return __receive_fd(file, NULL, o_flags);
++	return __receive_fd(-1, file, NULL, o_flags);
++}
++static inline int receive_fd_replace(int fd, struct file *file, unsigned int o_flags)
++{
++	return __receive_fd(fd, file, NULL, o_flags);
+ }
+ 
+ extern void flush_delayed_fput(void);
 -- 
 2.25.1
 
