@@ -2,108 +2,164 @@ Return-Path: <SRS0=J+bb=AS=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4018C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jul 2020 14:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52A6EC433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jul 2020 15:29:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B098206DF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jul 2020 14:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594133267;
-	bh=wpxKqYd6Uu1Eu9MxWdoi1u9E8c9n095AFpv+q1QYwI4=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=OidvOR2F7MSEM1NkhHh2BDuIwVle/aakybYU+QsaTMMe52chz8+7+jA+WAoaIvkCd
-	 bAqimNmM00ttQGD7gPRPwk2Uw+rBLqc6JdKFOHU6dUulxATGErpTbYnvpPF+FpCnvx
-	 sK5D8ZYSQCJFF4rfJGyHLB2WPWrX3TCyaZIb0nco=
+	by mail.kernel.org (Postfix) with ESMTP id 3BC61207D0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Jul 2020 15:29:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728290AbgGGOrq (ORCPT
+        id S1729697AbgGGP3x (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Jul 2020 10:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728094AbgGGOrp (ORCPT
+        Tue, 7 Jul 2020 11:29:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7858 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728955AbgGGP3w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jul 2020 10:47:45 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276BC061755
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2020 07:47:45 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id a21so11204280otq.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2020 07:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sMQ6Ydbi+JLRxo2wUoaqNkEbroT35jIeSMVLdMnQJWE=;
-        b=KKEOd/zcLE2AXf5EazxiwBI3wxnMQokNu1T7spQD5pucgLYbBftQ5GJMo7eNlBy5Bg
-         1daQghNKmn3JNMiv+raekaRF5RbFEROANXZ3LlGN72LhRBAxRj9IBWmoxYrAhEMc5YNy
-         uIaNwdXjfS56SVk/E6viWXQUSXgt4+0f4F0J8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sMQ6Ydbi+JLRxo2wUoaqNkEbroT35jIeSMVLdMnQJWE=;
-        b=Hg41smFb0Hk4Ot+8HhEUUF6C5PDCgVqZB7i9rOu2W3sWdUWtx3SrRicGKaSKSaZM/c
-         b0l0WqlhokHEXFmhHITVkM6jUiGQQQaugu/VT70mNf6gmsGYYevdPljOpbWfdo3189RR
-         zSpLP81l9uaYZvzXFI2UwtLUN1/ju6/FQz6dGgZcp7rKzTI2AMwT7WuOaBWoPYycGdOg
-         aKOBax6rBKRAW4tE+2dhWiXeYiBBIvyH9GWc1WiFXrtnU+a+GryCad7VFu4R/CPVVeGy
-         Dwd/bSZH7j/exskw/PZwY261Z6f1J1WzsZle+B9z03QhbDtKUuginkm5YDegki+Ks/T7
-         kiJQ==
-X-Gm-Message-State: AOAM532lIrWtxXbBT89p4h8VXHmIr7hPm/ymI2zeV7Mr0Jv08N7wpc4A
-        a4SiYkpyZzEZalU9Gf1CQtH1YA==
-X-Google-Smtp-Source: ABdhPJyfUM4uWVUnXhjAo/DPvH6bOqAhnd77oFnO76HAeZaTPhavgaDuQOEPEUkEdS9dr48siBZaWA==
-X-Received: by 2002:a05:6830:1313:: with SMTP id p19mr42194391otq.132.1594133264580;
-        Tue, 07 Jul 2020 07:47:44 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c206sm172930oob.22.2020.07.07.07.47.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 07:47:43 -0700 (PDT)
-Subject: Re: [PATCH v3 0/2] selftests: pidfd: prefer ksft_test_result_skip to
- ksft_exit_*
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        christian@brauner.io, shuah@kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200707101936.12052-1-pbonzini@redhat.com>
- <20200707135257.u65ggyr2hcgjfgyh@wittgenstein>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0c56c23f-284c-6904-8403-b2183eae2574@linuxfoundation.org>
-Date:   Tue, 7 Jul 2020 08:47:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Tue, 7 Jul 2020 11:29:52 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 067F3Ghu051693;
+        Tue, 7 Jul 2020 11:29:25 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 324pxshwr5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 11:29:24 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 067F6qAD013963;
+        Tue, 7 Jul 2020 15:29:22 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 322h1h3gw4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 15:29:22 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 067FTKUU53673996
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Jul 2020 15:29:20 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5F113AE057;
+        Tue,  7 Jul 2020 15:29:20 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EB1EAE045;
+        Tue,  7 Jul 2020 15:29:18 +0000 (GMT)
+Received: from pratiks-thinkpad.ibmuc.com (unknown [9.85.70.197])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Jul 2020 15:29:18 +0000 (GMT)
+From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/2] Selftest for cpuidle latency measurement
+Date:   Tue,  7 Jul 2020 20:59:15 +0530
+Message-Id: <20200707152917.10652-1-psampat@linux.ibm.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-In-Reply-To: <20200707135257.u65ggyr2hcgjfgyh@wittgenstein>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-07_08:2020-07-07,2020-07-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 cotscore=-2147483648 suspectscore=0 adultscore=0
+ mlxlogscore=623 spamscore=0 priorityscore=1501 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007070109
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/7/20 7:52 AM, Christian Brauner wrote:
-> On Tue, Jul 07, 2020 at 06:19:34AM -0400, Paolo Bonzini wrote:
->> Calling ksft_exit_* results in executing fewer tests than planned, which
->> is wrong for ksft_exit_skip or suboptimal (because it results in a bail
->> out) for ksft_exit_fail_msg.
->>
->> Using ksft_test_result_skip instead skips only one test and lets the
->> test plan proceed as promised by ksft_set_plan.
->>
->> Paolo
-> 
-> Thanks for fixing this, Paolo!
-> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-> 
-> Shuah, want me to take it or do you want to take it?
-> 
+The patch series introduces a mechanism to measure wakeup latency for
+IPI and timer based interrupts
+The motivation behind this series is to find significant deviations
+behind advertised latency and resisdency values
 
-I will apply it to my tree with Paolo's other patches in this series.
+To achieve this, we introduce a kernel module and expose its control
+knobs through the debugfs interface that the selftests can engage with.
 
-thanks,
--- Shuah
+The kernel module provides the following interfaces within
+/sys/kernel/debug/latency_test/ for,
+1. IPI test:
+  ipi_cpu_dest   # Destination CPU for the IPI
+  ipi_cpu_src    # Origin of the IPI
+  ipi_latency_ns # Measured latency time in ns
+2. Timeout test:
+  timeout_cpu_src     # CPU on which the timer to be queued
+  timeout_expected_ns # Timer duration
+  timeout_diff_ns     # Difference of actual duration vs expected timer
+To include the module, check option and include as module
+kernel hacking -> Cpuidle latency selftests
+
+The selftest inserts the module, disables all the idle states and
+enables them one by one testing:
+1. Keeping source CPU constant, iterates through all the CPUS measuring
+   IPI latency for baseline (CPU is busy with "yes" workload) and the
+   when the CPU is at rest
+2. Iterating through all the CPUs, sending expected timer durations to
+   be equivalent to the residency of the the deepest idle state
+   enabled and extracting the difference in time between the time of
+   wakeup and the expected timer duration
+
+Usage
+-----
+Can be used in conjuction to the rest of the selftests.
+Default Output location in: tools/testing/cpuidle/cpuidle.log
+
+To run this test specifically:
+$ make -C tools/testing/selftests TARGETS="cpuidle" run_tests
+
+There are a few optinal arguments too that the script can take
+	[-h <help>]
+	[-m <location of the module>]
+	[-o <location of the output>]
+
+Sample output snippet
+---------------------
+--IPI Latency Test---
+---Enabling state: 0---
+SRC_CPU   DEST_CPU Base_IPI_Latency(ns) IPI_Latency(ns)
+0            0          328                291
+0            1         1500               1071
+0            2         1070               1062
+0            3         1557               1668
+. . . .
+Expected IPI latency(ns): 1000
+Baseline Average IPI latency(ns): 1113
+Observed Average IPI latency(ns): 1023
+--Timeout Latency Test--
+---Enabling state: 0---
+Wakeup_src Baseline_delay(ns)  Delay(ns)
+0            3134               2128
+1            2275               2107
+2            2222               2198
+3            2421               2325
+. . . .
+Expected timeout(ns): 200
+Baseline Average timeout diff(ns): 2513
+Observed Average timeout diff(ns): 2189
+
+Pratik Rajesh Sampat (2):
+  cpuidle: Trace IPI based and timer based wakeup latency from idle
+    states
+  selftest/cpuidle: Add support for cpuidle latency measurement
+
+ drivers/cpuidle/Makefile                   |   1 +
+ drivers/cpuidle/test-cpuidle_latency.c     | 150 +++++++++++++
+ lib/Kconfig.debug                          |  10 +
+ tools/testing/selftests/Makefile           |   1 +
+ tools/testing/selftests/cpuidle/Makefile   |   6 +
+ tools/testing/selftests/cpuidle/cpuidle.sh | 240 +++++++++++++++++++++
+ tools/testing/selftests/cpuidle/settings   |   1 +
+ 7 files changed, 409 insertions(+)
+ create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+ create mode 100644 tools/testing/selftests/cpuidle/Makefile
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle.sh
+ create mode 100644 tools/testing/selftests/cpuidle/settings
+
+-- 
+2.25.4
+
