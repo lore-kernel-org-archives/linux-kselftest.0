@@ -2,112 +2,148 @@ Return-Path: <SRS0=8YN2=AY=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D10C433E1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jul 2020 12:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CB5BC433E8
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jul 2020 17:22:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E30F206F0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jul 2020 12:51:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E14520849
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Jul 2020 17:22:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H9pbEBLV"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="VswAJyQZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729543AbgGMMva (ORCPT
+        id S1730410AbgGMRWH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 13 Jul 2020 08:51:30 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21116 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729494AbgGMMva (ORCPT
+        Mon, 13 Jul 2020 13:22:07 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:3758 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729644AbgGMRWF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jul 2020 08:51:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594644688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjOX0+qMsr0MZ2n7yEIvNR1la6gfCqgxiam2qlcsRPU=;
-        b=H9pbEBLVe/orSI4qPJD4iDl0fMb0FMKGswKkFgoBVgSnQLPNDGlU8mSEHyu3lO4OyUCxh3
-        BpqFjuZ8BcD97fkpdTv5WSZdp3yrIhT9hFQVh4DLtfWW/fIKAape9rXlUSnbytUNXraHLq
-        TCuxCaXG4Jyrvl8LaBfwxMMykuWgzNk=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-381-_uypYKDCNNmHosexGv-YjA-1; Mon, 13 Jul 2020 08:51:27 -0400
-X-MC-Unique: _uypYKDCNNmHosexGv-YjA-1
-Received: by mail-qv1-f69.google.com with SMTP id v20so7338594qvt.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2020 05:51:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YjOX0+qMsr0MZ2n7yEIvNR1la6gfCqgxiam2qlcsRPU=;
-        b=rrwKvN1+RmIOxBUJQCQThrbF61XriBSL3umfEHOxSq5YOCvGQndsZtSkkvjmB5BPkV
-         Y0TuVDaRzF84AwWMXE/z/jbP5wNviQE1ZAZ6Ksp85WXmstE7ogvzDOMwQNnKm/lynBTF
-         u0tQWMTvsbC3edlZcWuqKU5jX/hhwnfAi6wPtMuiBFOXelbP6UpkqFHK3/7M75zHfmYh
-         DRQt+EGE9JbCn7MWjDpFy3EQKVs33dfJliUUJaoz0Z5EDdQXph0qUSTgcZBnIyenD0dw
-         ectEvuTT21VZdwms46ahlHbN4c3Ezee7xMMR/pP8qdLYyd9nwVzS1a2IIRWUVVuPF1Fh
-         MyEQ==
-X-Gm-Message-State: AOAM533vsMpfkKFwfyaYBBli1Jyx6Lfyn5t9SX+XBamOQtvDH6m0SemJ
-        6ai05tfv6vdyG7sm16D4hMXNTJAjZuAo9i8Nhng7eY1lSGLzniI+FyxtCapGIPi1mA1A2wGBrNs
-        1nSsNg/hLtc+Rw/z3H1S0wXEydYLr7G9tS3tBjLQnW5X8
-X-Received: by 2002:a37:5b81:: with SMTP id p123mr79713626qkb.150.1594644686658;
-        Mon, 13 Jul 2020 05:51:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxekftooSxa1u1VC3aPSrNHxSTGnX+9e052hcG04Me+8Z6Np01h076NBmbFLdN/2WyjobuC1GlPp9SslA84gNU=
-X-Received: by 2002:a37:5b81:: with SMTP id p123mr79713605qkb.150.1594644686341;
- Mon, 13 Jul 2020 05:51:26 -0700 (PDT)
+        Mon, 13 Jul 2020 13:22:05 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0c97cd0000>; Mon, 13 Jul 2020 10:20:13 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 13 Jul 2020 10:22:05 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 13 Jul 2020 10:22:05 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jul
+ 2020 17:21:59 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 13 Jul 2020 17:21:59 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f0c98360005>; Mon, 13 Jul 2020 10:21:59 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Ben Skeggs" <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        "Ralph Campbell" <rcampbell@nvidia.com>
+Subject: [PATCH v2 1/5] nouveau: fix storing invalid ptes
+Date:   Mon, 13 Jul 2020 10:21:45 -0700
+Message-ID: <20200713172149.2310-2-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200713172149.2310-1-rcampbell@nvidia.com>
+References: <20200713172149.2310-1-rcampbell@nvidia.com>
 MIME-Version: 1.0
-References: <20200710183745.19730-1-joe.lawrence@redhat.com>
-In-Reply-To: <20200710183745.19730-1-joe.lawrence@redhat.com>
-From:   Yannick Cote <ycote@redhat.com>
-Date:   Mon, 13 Jul 2020 08:51:15 -0400
-Message-ID: <CAKMMXfb0kuynAjA76fnB+BWX+wRVY2NQ+hPs4nSJi3YgbEnsew@mail.gmail.com>
-Subject: Re: [PATCH] selftests/livepatch: Use "comm" instead of "diff" for dmesg
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Petr Mladek <pmladek@suse.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594660813; bh=rz9ii3/rSLaotraZODv9PDOOFrnasJhkv9z9XY7GWhs=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=VswAJyQZ7manJ2SfOLznJm8rAKzIbt64JdSJ43MkwLlhuHyXzmFh52wAvmFtpNPDW
+         +jyEcn970ykf8LGntBY+F+RIDnr2nFHfOC0b9btqH8RNqeo+T+haRZmc9tLLE0cifQ
+         wrWYu1OALfcGxVn3Q1f0RqDYOB8vZCa3Wg3CZgHjJE6Nm2acpHo0M01MG0oJpsyphH
+         ANNoa0KS+FojsYBXaBordvpqiTpWIlC14Z3XmoijCG5KmSRaXVJoZb6yy/Ie6hxDYu
+         8I7ZtUJ9uwHhYIOBrHIiXkklut9fRHTrxiR0UD7Vqc6pulM5yOXNyn9amCeRJf1913
+         x68cXPgjrdxtQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 2:39 PM Joe Lawrence <joe.lawrence@redhat.com> wrote:
->
-> BusyBox diff doesn't support the GNU diff '--LTYPE-line-format' options
-> that were used in the selftests to filter older kernel log messages from
-> dmesg output.
->
-> Use "comm" which is more available in smaller boot environments.
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> ---
->
-> based-on: livepatching.git/for-5.9/selftests-cleanup
-> merge-thru: livepatching.git
->
->  tools/testing/selftests/livepatch/functions.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 36648ca367c2..408529d94ddb 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -277,7 +277,7 @@ function check_result {
->         # help differentiate repeated testing runs.  Remove them with a
->         # post-comparison sed filter.
->
-> -       result=$(dmesg | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
-> +       result=$(dmesg | comm -13 "$SAVED_DMESG" - | \
->                  grep -e 'livepatch:' -e 'test_klp' | \
->                  grep -v '\(tainting\|taints\) kernel' | \
->                  sed 's/^\[[ 0-9.]*\] //')
-> --
-> 2.21.3
->
+When migrating a range of system memory to device private memory, some
+of the pages in the address range may not be migrating. In this case,
+the non migrating pages won't have a new GPU MMU entry to store but
+the nvif_object_ioctl() NVIF_VMM_V0_PFNMAP method doesn't check the input
+and stores a bad valid GPU page table entry.
+Fix this by skipping the invalid input PTEs when updating the GPU page
+tables.
 
-Reviewed-by: Yannick Cote <ycote@redhat.com>
+Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c b/drivers/g=
+pu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
+index ed37fddd063f..7eabe9fe0d2b 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmmgp100.c
+@@ -79,8 +79,12 @@ gp100_vmm_pgt_pfn(struct nvkm_vmm *vmm, struct nvkm_mmu_=
+pt *pt,
+ 	dma_addr_t addr;
+=20
+ 	nvkm_kmap(pt->memory);
+-	while (ptes--) {
++	for (; ptes; ptes--, map->pfn++) {
+ 		u64 data =3D 0;
++
++		if (!(*map->pfn & NVKM_VMM_PFN_V))
++			continue;
++
+ 		if (!(*map->pfn & NVKM_VMM_PFN_W))
+ 			data |=3D BIT_ULL(6); /* RO. */
+=20
+@@ -100,7 +104,6 @@ gp100_vmm_pgt_pfn(struct nvkm_vmm *vmm, struct nvkm_mmu=
+_pt *pt,
+ 		}
+=20
+ 		VMM_WO064(pt, vmm, ptei++ * 8, data);
+-		map->pfn++;
+ 	}
+ 	nvkm_done(pt->memory);
+ }
+@@ -310,9 +313,12 @@ gp100_vmm_pd0_pfn(struct nvkm_vmm *vmm, struct nvkm_mm=
+u_pt *pt,
+ 	dma_addr_t addr;
+=20
+ 	nvkm_kmap(pt->memory);
+-	while (ptes--) {
++	for (; ptes; ptes--, map->pfn++) {
+ 		u64 data =3D 0;
+=20
++		if (!(*map->pfn & NVKM_VMM_PFN_V))
++			continue;
++
+ 		if (!(*map->pfn & NVKM_VMM_PFN_W))
+ 			data |=3D BIT_ULL(6); /* RO. */
+=20
+@@ -332,7 +338,6 @@ gp100_vmm_pd0_pfn(struct nvkm_vmm *vmm, struct nvkm_mmu=
+_pt *pt,
+ 		}
+=20
+ 		VMM_WO064(pt, vmm, ptei++ * 16, data);
+-		map->pfn++;
+ 	}
+ 	nvkm_done(pt->memory);
+ }
+--=20
+2.20.1
 
