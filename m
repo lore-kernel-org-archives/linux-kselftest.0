@@ -2,62 +2,67 @@ Return-Path: <SRS0=qnq0=AZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1768C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 20:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4F34C433E2
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 20:41:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2E172064B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 20:41:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FAAF20658
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 20:41:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hYirHOdz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GSTmdPmZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbgGNUli (ORCPT
+        id S1727114AbgGNUln (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Jul 2020 16:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        Tue, 14 Jul 2020 16:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbgGNUli (ORCPT
+        with ESMTP id S1727104AbgGNUll (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 16:41:38 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D7C061794
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 13:41:37 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id h4so13870636qkl.23
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 13:41:37 -0700 (PDT)
+        Tue, 14 Jul 2020 16:41:41 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C9CC061755
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 13:41:41 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id n32so13209397pgb.22
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 13:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Q3rrVuP9UcmnEc3sFtdze+zW9FfErqo0k9Y3L17GKQE=;
-        b=hYirHOdzI0sQFji9qH7roDn0LxGicKlGTxMz2qOWPolOluUbgars+R3ttiDM2N4DMH
-         YOers1ca1QTctawzrEGsx9GDMOi0hYSQytUtBQyndWskw/iNZNombd6ldqho1wOu5vr5
-         r/KbpGk1kthb4SfKnhtgRNWosVFE9GoLYxiZ63Q3QowMjKMRa5WpW8KpbDCKAnDluOpC
-         9uDWcDFgIu+zmzs199k/Y2Kfykz6EFKNRsvWVmu3ChmRbjz7/fGaQq3ffwWuSk7itBqc
-         vHVzLJYYb2quazJvK7I4AXOAtzD3pSMfT1gKur4haF60DwD35BZX6gG+rm/lucPztw2j
-         Dzhw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=6s+MXnvd3oZrHD1TWsZDFjEGlJK3au/LhRDIVmT50mg=;
+        b=GSTmdPmZs5/LuQS+PqoOMDxWmVCXOYNaPR0TT0mmTF3Cn4HxGa4a2g15XgvJGe02D1
+         N36LC5t8VLDWbjMIAyqQOB2xbnvpkdHoU/yhc+NqUoVxl0rK+h/pDQjGbIWn1qaeUV9T
+         ymE/p+Tg4/Qb1kTQt7Ga33WAxrsA0qutY5MLeffP03E9QFFTBmWRSoZQTaDl+Zi21dAQ
+         /3L1oq4o8N+LfGMVK19VPsJQ7qSAO7T8f+5J0yITXEb4xrVpItGDtvxOalsLEeTAp7BB
+         3cOyxAXiMXfiRfltwNzvQMqsQjjfCTzD+Nn16pbOF6H06ESJTjETootvdO8gHoKxVX7u
+         rpTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Q3rrVuP9UcmnEc3sFtdze+zW9FfErqo0k9Y3L17GKQE=;
-        b=fJzZ096m8sfQkC/oKTRqPTHNCEQifhv1ku5x7nkMmhrgQK4dB0+15ixuZQmGa9T8ta
-         2ERYW4QZS/wIKzMS/RqFmd6PzayYFG3417e43ZE3SOIjcTnRexlKXVzmRg0ai8HY8lJO
-         57BzJAsupQ7GE7V9bzQ3oqPnVprUvsbAmU511TZ8SvlsjzEFHbDbhGK5tjkiwlGliiOF
-         oeIF9OCaqqahDHZRXEa++UTxY4UjGgbMcW7v0UGm8ISldHYp0nw6Ts87v3iSlQaDYUsA
-         puaPn4uNR0L9ksANZElOFSAeUPqxuCdWtkeqmmZVn2K8Eph90lmGiZzVP7VxKGm4a69z
-         5J7A==
-X-Gm-Message-State: AOAM530tD3rklR3IzufE8oe1igcLu7pLKbppMkHmFQwAbSsaMoAYotw8
-        /yQsttOd+gQJIViVuvghBSW/fzDYRyswOfugrIZj/w==
-X-Google-Smtp-Source: ABdhPJxjEriJNkfflDAtJ6oQdSMaIhOS/i3pb/+Nqu8CMMkXiwelLWUdnwm3+uOX+eRbCCDp7ZoW9QJPKNtEH3OoiCnoAg==
-X-Received: by 2002:a0c:e008:: with SMTP id j8mr6522255qvk.87.1594759296996;
- Tue, 14 Jul 2020 13:41:36 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 13:41:28 -0700
-Message-Id: <20200714204130.54729-1-brendanhiggins@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=6s+MXnvd3oZrHD1TWsZDFjEGlJK3au/LhRDIVmT50mg=;
+        b=V+LLVqW72y8mUpOC5Vs2jkDcAPbt/S4z5GzbTB9XDR9ssV6jcxmo04knmDqL0AK+El
+         6AJqwZ6lpnFe2/CB6niQ5QnEsZZG7APsKn8ToMWieSTc+pJnzqboOoAE2IpmiVXVgu1n
+         KkarwjF2HFgghLbjr2t2g+lvKvQgpUxy6vXuqTPX6UlDQm1+Q2Q21nU9cFRlTOt8tQcJ
+         SAG6IMYwfZceOOsVyZGeSbQmYckw9wVBmDRvLT30Pd2TunxwBTZbT9sPs8hoUPsZZi7E
+         QivEVRei3AA/f9FWDsxZAB504TWn5/BTBQxEo8pPvzfpYADULKNWDm/np/8bNSaK+OM5
+         6WRw==
+X-Gm-Message-State: AOAM533O7tHJrF8XbMNABGZYceThL5Dt2+v+K0R8TzZKoayrHMfqEsIE
+        K/bsKOEoEeRO6FOppnRY4GDlHdnjNCQd6hU7j2AEjQ==
+X-Google-Smtp-Source: ABdhPJy1xaopIsv9GnReFpKEXHapYr4apuN7LZkkOxgiLsmHv25JyILfxJ5xfbB9S0anhxhhkiXVGim/7x7t0OkqdnN8vw==
+X-Received: by 2002:a17:90a:2465:: with SMTP id h92mr6080491pje.26.1594759300840;
+ Tue, 14 Jul 2020 13:41:40 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 13:41:30 -0700
+In-Reply-To: <20200714204130.54729-1-brendanhiggins@google.com>
+Message-Id: <20200714204130.54729-3-brendanhiggins@google.com>
 Mime-Version: 1.0
+References: <20200714204130.54729-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.27.0.389.gc38d7665816-goog
-Subject: [PATCH v1 0/2] kunit: tool: fix kunit_tool unit tests
+Subject: [PATCH v1 2/2] kunit: tool: fix improper treatment of file location
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com, vitor@massaru.org
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -69,19 +74,102 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Apparently we haven't run the unit tests for kunit_tool in a while and
-consequently some things have broken. This patchset fixes those issues.
+Commits 01397e822af4 ("kunit: Fix TabError, remove defconfig code and
+handle when there is no kunitconfig") and 45ba7a893ad8 ("kunit:
+kunit_tool: Separate out config/build/exec/parse") introduced two
+closely related issues which built off of each other: they excessively
+created the build directory when not present and modified a constant
+(constants in Python only exist by convention).
 
-Brendan Higgins (2):
-  kunit: tool: fix broken default args in unit tests
-  kunit: tool: fix improper treatment of file location
+Together these issues broken a number of unit tests for KUnit tool, so
+fix them.
 
+Fixes: 01397e822af4 ("kunit: Fix TabError, remove defconfig code and handle when there is no kunitconfig")
+Fixes: 45ba7a893ad8 ("kunit: kunit_tool: Separate out config/build/exec/parse")
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+---
  tools/testing/kunit/kunit.py           | 24 ------------------------
- tools/testing/kunit/kunit_tool_test.py | 14 +++++++-------
- 2 files changed, 7 insertions(+), 31 deletions(-)
+ tools/testing/kunit/kunit_tool_test.py |  4 ++--
+ 2 files changed, 2 insertions(+), 26 deletions(-)
 
-
-base-commit: a581387e415bbb0085e7e67906c8f4a99746590e
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index f9b769f3437dd..425ef40067e7e 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -240,12 +240,6 @@ def main(argv, linux=None):
+ 	if cli_args.subcommand == 'run':
+ 		if not os.path.exists(cli_args.build_dir):
+ 			os.mkdir(cli_args.build_dir)
+-		kunit_kernel.kunitconfig_path = os.path.join(
+-			cli_args.build_dir,
+-			kunit_kernel.kunitconfig_path)
+-
+-		if not os.path.exists(kunit_kernel.kunitconfig_path):
+-			create_default_kunitconfig()
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+@@ -263,12 +257,6 @@ def main(argv, linux=None):
+ 		if cli_args.build_dir:
+ 			if not os.path.exists(cli_args.build_dir):
+ 				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
+-
+-		if not os.path.exists(kunit_kernel.kunitconfig_path):
+-			create_default_kunitconfig()
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+@@ -285,12 +273,6 @@ def main(argv, linux=None):
+ 		if cli_args.build_dir:
+ 			if not os.path.exists(cli_args.build_dir):
+ 				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
+-
+-		if not os.path.exists(kunit_kernel.kunitconfig_path):
+-			create_default_kunitconfig()
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+@@ -309,12 +291,6 @@ def main(argv, linux=None):
+ 		if cli_args.build_dir:
+ 			if not os.path.exists(cli_args.build_dir):
+ 				os.mkdir(cli_args.build_dir)
+-			kunit_kernel.kunitconfig_path = os.path.join(
+-				cli_args.build_dir,
+-				kunit_kernel.kunitconfig_path)
+-
+-		if not os.path.exists(kunit_kernel.kunitconfig_path):
+-			create_default_kunitconfig()
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree()
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index ee942d80bdd02..287c74d821c33 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -251,7 +251,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		pass
+ 
+ 	def test_config_passes_args_pass(self):
+-		kunit.main(['config'], self.linux_source_mock)
++		kunit.main(['config', '--build_dir=.kunit'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		assert self.linux_source_mock.run_kernel.call_count == 0
+ 
+@@ -326,7 +326,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_run_builddir(self):
+ 		build_dir = '.kunit'
+-		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
++		kunit.main(['run', '--build_dir=.kunit'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			build_dir=build_dir, timeout=300)
 -- 
 2.27.0.389.gc38d7665816-goog
 
