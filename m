@@ -2,94 +2,126 @@ Return-Path: <SRS0=qnq0=AZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F4FCC433F2
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 19:06:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1CF6C433FC
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 19:06:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B58522C7B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 19:06:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA6AD22AAF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 19:06:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730264AbgGNSx0 (ORCPT
+        id S1730564AbgGNTG0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Jul 2020 14:53:26 -0400
-Received: from mga14.intel.com ([192.55.52.115]:43539 "EHLO mga14.intel.com"
+        Tue, 14 Jul 2020 15:06:26 -0400
+Received: from mga14.intel.com ([192.55.52.115]:45257 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730626AbgGNSxY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 14:53:24 -0400
-IronPort-SDR: 1fV2sjGxhfIIrmYdRIGsuPzZPRGWZ8Q7/l9/XE9GhF22y4AbDkhq/zODkTmJnsLY8r8J+dCiYr
- 7M4lYHM7d5Mg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="148142821"
+        id S1731196AbgGNTGR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jul 2020 15:06:17 -0400
+IronPort-SDR: 27iBeCfoeLRrVUeRTy/BI0zBGPcmN+PmJoub48PPOgpH+618PXlf6ue/5i8667iiPyfSDqvbOY
+ ES4o41RqYn5w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="148148363"
 X-IronPort-AV: E=Sophos;i="5.75,352,1589266800"; 
-   d="scan'208";a="148142821"
+   d="scan'208";a="148148363"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 11:53:23 -0700
-IronPort-SDR: K8KPclbMvzgCpNFSFhz9Nn0YwCcdCbQhJi73NeRnxAdxCClsbyjKHY02fk6MDlf/UteP15gYg8
- 6LDggwpzlYUQ==
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 12:06:16 -0700
+IronPort-SDR: 372ah54Muur1nzmIJ6WpFVvasq6EKc/XBygmqwb4njk9NqFeHdl/Vb7u58xf0Grd72pTvNiTPg
+ ndEouPAOrQ8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,352,1589266800"; 
-   d="scan'208";a="307978346"
+   d="scan'208";a="324632815"
 Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jul 2020 11:53:23 -0700
-Date:   Tue, 14 Jul 2020 11:53:22 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jul 2020 12:06:16 -0700
+Date:   Tue, 14 Jul 2020 12:06:16 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 04/15] x86/pks: Preserve the PKRS MSR on context
- switch
-Message-ID: <20200714185322.GB3008823@iweiny-DESK2.sc.intel.com>
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 12/15] kmap: Add stray write protection for device
+ pages
+Message-ID: <20200714190615.GC3008823@iweiny-DESK2.sc.intel.com>
 References: <20200714070220.3500839-1-ira.weiny@intel.com>
- <20200714070220.3500839-5-ira.weiny@intel.com>
- <20200714082701.GO10769@hirez.programming.kicks-ass.net>
+ <20200714070220.3500839-13-ira.weiny@intel.com>
+ <20200714084451.GQ10769@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200714082701.GO10769@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200714084451.GQ10769@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 10:27:01AM +0200, Peter Zijlstra wrote:
-> On Tue, Jul 14, 2020 at 12:02:09AM -0700, ira.weiny@intel.com wrote:
+On Tue, Jul 14, 2020 at 10:44:51AM +0200, Peter Zijlstra wrote:
+> On Tue, Jul 14, 2020 at 12:02:17AM -0700, ira.weiny@intel.com wrote:
 > > From: Ira Weiny <ira.weiny@intel.com>
 > > 
-> > The PKRS MSR is defined as a per-core register.  This isolates memory
-> > access by CPU.  Unfortunately, the MSR is not preserved by XSAVE.
-> > Therefore, We must preserve the protections for individual tasks even if
-> > they are context switched out and placed on another cpu later.
+> > Device managed pages may have additional protections.  These protections
+> > need to be removed prior to valid use by kernel users.
+> > 
+> > Check for special treatment of device managed pages in kmap and take
+> > action if needed.  We use kmap as an interface for generic kernel code
+> > because under normal circumstances it would be a bug for general kernel
+> > code to not use kmap prior to accessing kernel memory.  Therefore, this
+> > should allow any valid kernel users to seamlessly use these pages
+> > without issues.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > ---
+> >  include/linux/highmem.h | 32 +++++++++++++++++++++++++++++++-
+> >  1 file changed, 31 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+> > index d6e82e3de027..7f809d8d5a94 100644
+> > --- a/include/linux/highmem.h
+> > +++ b/include/linux/highmem.h
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/mm.h>
+> >  #include <linux/uaccess.h>
+> >  #include <linux/hardirq.h>
+> > +#include <linux/memremap.h>
+> >  
+> >  #include <asm/cacheflush.h>
+> >  
+> > @@ -31,6 +32,20 @@ static inline void invalidate_kernel_vmap_range(void *vaddr, int size)
+> >  
+> >  #include <asm/kmap_types.h>
+> >  
+> > +static inline void enable_access(struct page *page)
+> > +{
+> > +	if (!page_is_access_protected(page))
+> > +		return;
+> > +	dev_access_enable();
+> > +}
+> > +
+> > +static inline void disable_access(struct page *page)
+> > +{
+> > +	if (!page_is_access_protected(page))
+> > +		return;
+> > +	dev_access_disable();
+> > +}
 > 
-> This is a contradiction and utter trainwreck.
+> So, if I followed along correctly, you're proposing to do a WRMSR per
+> k{,un}map{_atomic}(), sounds like excellent performance all-round :-(
 
-I don't understand where there is a contradiction?  Perhaps I should have said
-the MSR is not XSAVE managed vs 'preserved'?
+Only to pages which have this additional protection, ie not DRAM.
 
-> We're not going to do more
-> per-core MSRs and pretend they make sense per-task.
-
-I don't understand how this does not make sense.  The PKRS register is
-controlling the task's access to kernel memory and is designed to be restricted
-to that task.  Put another way, this is similar to CR3 which ultimately
-controls tasks memory access.  Per-process mm is inherent to memory access
-control and is per-task.  So how is this any different?  Many MSRs are like
-this.
-
-I suppose an alternative might be to disallow a context switch while the PKRS
-value is not the default but I don't see this being very desirable at all.
+User mappings of this memory is not affected (would be covered by User PKeys if
+desired).  User mappings to persistent memory are the primary use case and the
+performant path.
 
 Ira
