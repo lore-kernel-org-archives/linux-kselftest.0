@@ -7,34 +7,34 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCD0BC43618
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 07:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B60AC4345A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 07:04:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB34922225
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 07:04:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 425B72222F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jul 2020 07:04:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbgGNHEd (ORCPT
+        id S1727091AbgGNHEx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Jul 2020 03:04:33 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61109 "EHLO mga09.intel.com"
+        Tue, 14 Jul 2020 03:04:53 -0400
+Received: from mga02.intel.com ([134.134.136.20]:7568 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727029AbgGNHE3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 03:04:29 -0400
-IronPort-SDR: /KgLZW4dFvREbw1hbd/0VuJ+D/5ZkkxHP23O7JcRBzVKZ5kBY8G0qeUyPItldvf6eR8wDCH6pU
- XnnPra5O9u8g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="150261214"
+        id S1726964AbgGNHEX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jul 2020 03:04:23 -0400
+IronPort-SDR: g8izOY92QYbvCb/YVWxnMmgkQ1KonhvoN4mEpeapEZGPRPlN8eTnCQEzzCiGodv4Z2S0UY59Mx
+ c+X4MlOOq2sQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="136970732"
 X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="150261214"
+   d="scan'208";a="136970732"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 00:04:28 -0700
-IronPort-SDR: M1818UDpOziaMV+1NuZExXbDGKfxAHE7xxsE/1/8eIxmubbVe3Yh1zWgdqipkeJC59admPi65v
- orXIGfMQFVpQ==
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 00:04:22 -0700
+IronPort-SDR: i0LqExrBzUtJkU9eqNM0y424kEtZ8Ql24Gg0EKNp03C+/z+emnIMY4v+O6oNf5WcrrVRGG2n8D
+ +66KNsFjR4FQ==
 X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="390397762"
+   d="scan'208";a="360295775"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 00:04:26 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 00:04:21 -0700
 From:   ira.weiny@intel.com
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -49,9 +49,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 13/15] dax: Stray write protection for dax_direct_access()
-Date:   Tue, 14 Jul 2020 00:02:18 -0700
-Message-Id: <20200714070220.3500839-14-ira.weiny@intel.com>
+Subject: [RFC PATCH 12/15] kmap: Add stray write protection for device pages
+Date:   Tue, 14 Jul 2020 00:02:17 -0700
+Message-Id: <20200714070220.3500839-13-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200714070220.3500839-1-ira.weiny@intel.com>
 References: <20200714070220.3500839-1-ira.weiny@intel.com>
@@ -64,41 +64,120 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-dax_direct_access() is a special case of accessing pmem via a page
-offset and without a struct page.
+Device managed pages may have additional protections.  These protections
+need to be removed prior to valid use by kernel users.
 
-Because the dax driver is well aware of the special protections it has
-mapped memory with, call dev_access_[en|dis]able() directly instead of
-the unnecessary overhead of trying to get a page to kmap.
-
-Like kmap though, leverage the existing dax_read[un]lock() functions
-because they are already required to surround the use of the memory
-returned from dax_direct_access().
+Check for special treatment of device managed pages in kmap and take
+action if needed.  We use kmap as an interface for generic kernel code
+because under normal circumstances it would be a bug for general kernel
+code to not use kmap prior to accessing kernel memory.  Therefore, this
+should allow any valid kernel users to seamlessly use these pages
+without issues.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- drivers/dax/super.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/highmem.h | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index 021739768093..e8d0a28e6ed2 100644
---- a/drivers/dax/super.c
-+++ b/drivers/dax/super.c
-@@ -30,12 +30,14 @@ static DEFINE_SPINLOCK(dax_host_lock);
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index d6e82e3de027..7f809d8d5a94 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -8,6 +8,7 @@
+ #include <linux/mm.h>
+ #include <linux/uaccess.h>
+ #include <linux/hardirq.h>
++#include <linux/memremap.h>
  
- int dax_read_lock(void)
- {
+ #include <asm/cacheflush.h>
+ 
+@@ -31,6 +32,20 @@ static inline void invalidate_kernel_vmap_range(void *vaddr, int size)
+ 
+ #include <asm/kmap_types.h>
+ 
++static inline void enable_access(struct page *page)
++{
++	if (!page_is_access_protected(page))
++		return;
 +	dev_access_enable();
- 	return srcu_read_lock(&dax_srcu);
- }
- EXPORT_SYMBOL_GPL(dax_read_lock);
- 
- void dax_read_unlock(int id)
- {
++}
++
++static inline void disable_access(struct page *page)
++{
++	if (!page_is_access_protected(page))
++		return;
 +	dev_access_disable();
- 	srcu_read_unlock(&dax_srcu, id);
++}
++
+ #ifdef CONFIG_HIGHMEM
+ extern void *kmap_atomic_high_prot(struct page *page, pgprot_t prot);
+ extern void kunmap_atomic_high(void *kvaddr);
+@@ -55,6 +70,11 @@ static inline void *kmap(struct page *page)
+ 	else
+ 		addr = kmap_high(page);
+ 	kmap_flush_tlb((unsigned long)addr);
++	/*
++	 * Even non-highmem pages may have additional access protections which
++	 * need to be checked and potentially enabled.
++	 */
++	enable_access(page);
+ 	return addr;
  }
- EXPORT_SYMBOL_GPL(dax_read_unlock);
+ 
+@@ -63,6 +83,11 @@ void kunmap_high(struct page *page);
+ static inline void kunmap(struct page *page)
+ {
+ 	might_sleep();
++	/*
++	 * Even non-highmem pages may have additional access protections which
++	 * need to be checked and potentially disabled.
++	 */
++	disable_access(page);
+ 	if (!PageHighMem(page))
+ 		return;
+ 	kunmap_high(page);
+@@ -85,6 +110,7 @@ static inline void *kmap_atomic_prot(struct page *page, pgprot_t prot)
+ {
+ 	preempt_disable();
+ 	pagefault_disable();
++	enable_access(page);
+ 	if (!PageHighMem(page))
+ 		return page_address(page);
+ 	return kmap_atomic_high_prot(page, prot);
+@@ -137,6 +163,7 @@ static inline unsigned long totalhigh_pages(void) { return 0UL; }
+ static inline void *kmap(struct page *page)
+ {
+ 	might_sleep();
++	enable_access(page);
+ 	return page_address(page);
+ }
+ 
+@@ -146,6 +173,7 @@ static inline void kunmap_high(struct page *page)
+ 
+ static inline void kunmap(struct page *page)
+ {
++	disable_access(page);
+ #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+ 	kunmap_flush_on_unmap(page_address(page));
+ #endif
+@@ -155,6 +183,7 @@ static inline void *kmap_atomic(struct page *page)
+ {
+ 	preempt_disable();
+ 	pagefault_disable();
++	enable_access(page);
+ 	return page_address(page);
+ }
+ #define kmap_atomic_prot(page, prot)	kmap_atomic(page)
+@@ -216,7 +245,8 @@ static inline void kmap_atomic_idx_pop(void)
+ #define kunmap_atomic(addr)                                     \
+ do {                                                            \
+ 	BUILD_BUG_ON(__same_type((addr), struct page *));       \
+-	kunmap_atomic_high(addr);                                  \
++	disable_access(kmap_to_page(addr));                     \
++	kunmap_atomic_high(addr);                               \
+ 	pagefault_enable();                                     \
+ 	preempt_enable();                                       \
+ } while (0)
 -- 
 2.25.1
 
