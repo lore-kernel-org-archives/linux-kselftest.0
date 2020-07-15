@@ -7,67 +7,67 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDF66C433E6
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Jul 2020 03:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61541C433ED
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Jul 2020 03:11:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2ED72074B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Jul 2020 03:11:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3726320663
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Jul 2020 03:11:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=massaru-org.20150623.gappssmtp.com header.i=@massaru-org.20150623.gappssmtp.com header.b="UcHLhxat"
+	dkim=pass (2048-bit key) header.d=massaru-org.20150623.gappssmtp.com header.i=@massaru-org.20150623.gappssmtp.com header.b="Xb6ums6c"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbgGODLb (ORCPT
+        id S1726769AbgGODLg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Jul 2020 23:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        Tue, 14 Jul 2020 23:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728264AbgGODLa (ORCPT
+        with ESMTP id S1728312AbgGODLf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jul 2020 23:11:30 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003F6C061794
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 20:11:29 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id 145so526294qke.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 20:11:29 -0700 (PDT)
+        Tue, 14 Jul 2020 23:11:35 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0823CC061794
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 20:11:35 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id t7so276281qvl.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2020 20:11:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=massaru-org.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=p5ugr8SBpOEIPk83xuP6S7qqsMwu3YEwqOS3htJwZGQ=;
-        b=UcHLhxatMZqdUWFOSfbIPKvwT2aorC3sxS2uvSAdaQnZdU4wtpEiMlHW4vRzmWi9w1
-         HXv9ydiuctPHcDioT9+en8gGF79MfOygnQrXwnk4YfO1TrSVQgC0FPpUU00QGBRSnKBA
-         mq4qs6zKURhkh6JQlukiLAEQXLJ05XqiaY8yFdAB5tVguVbfqmEKQtA4TK2d3ytoBIwg
-         r0Ql98haWZasezTo/yfTy5crfL+i7y3JtQVpenVgDEAz7KTSmlBGX+abWW7pq69j4HM+
-         4ZL51rWoNa/fZhIJg9v98zl4pNYoeji5TxdnRskjDDgO5fuP1wuhwEkiWirEmH+ZnDrZ
-         Ddaw==
+        bh=cUJiovbNVwntJwYEYrO2M5wZ2Fsv3Q2I69d4EmxoNZY=;
+        b=Xb6ums6cuVR54GjzGz5PuBYCJlIvrRxDdWL2rG/BpiawgLkOvs+BEQYVEfesfl+ClE
+         5z+yVSKAyOOlJ7jKIGlcIdraAZzWUlmeZ6j1SnakALMU7QyyqHFkC+IZQhKt7KV6+Z/d
+         QWbBjGRVgjRYatdaaeVzlCxC/NHQokkYBKixtjsy5ClUSg/pbr+UtGJyUg/Ol6LFU4C6
+         uXdVLm1GM5kD3wVpCXJ1o/uLdQrtz7GA9eYIZv/4Mv0/mAmyyGVz8za2B5CTXTGwxs+q
+         FHMxvQy6AmV8K/64/uUdgOQdge6/z1ElRBjs4ffgsu213nnlcd9aH9edXQwXa6BEQcgo
+         es3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=p5ugr8SBpOEIPk83xuP6S7qqsMwu3YEwqOS3htJwZGQ=;
-        b=Su/Wg+bF7KeJLu0aVcyLTQb4T4ngcssbjnHNb0mcgjBFSHXiQ/a+CyIpbwKdfj77I3
-         1SDE2tL3OpyKnxcQi7TfU690A5kKvI9SJucOnPvCBK/hsrQBHmYzAjBkZm+63pFG3wdq
-         dHoAY6EP9pLbMb759uQbutsAtv8APRl+R5cDy7zeeBGX0sdL1NNmD6cZDEFZF+KWxryN
-         0/ZTWE0b0Xxmq5s+Mf9RwOmLc16Gv7S5Gc7qDQgvDDKzlmlfuS7xtCLoUw2LVATMCm9c
-         h6uZ6PHbtgFMexc2A/8V2Xws9UApNeEXXi/zBGTM30h3bZbIFqxmy9VTFQtDct3cGYhp
-         OGIA==
-X-Gm-Message-State: AOAM530X2ArdTEyLBrbn58xqk6Ka1Ur6Yv3jgyR61TZoy2Loqd7mffvP
-        ENTRS/0EwC/6VNFmGtG7HS/FcA==
-X-Google-Smtp-Source: ABdhPJwVi16v5J/Vn+jtW0D1XLBdnxRQmxyVuxkxh75QvN81MmUKOOQuM5bdggIpYaY76hHMqYa2Pw==
-X-Received: by 2002:a37:4015:: with SMTP id n21mr7087517qka.240.1594782689069;
-        Tue, 14 Jul 2020 20:11:29 -0700 (PDT)
+        bh=cUJiovbNVwntJwYEYrO2M5wZ2Fsv3Q2I69d4EmxoNZY=;
+        b=qj6BAxbDUGOngNaM1JQ0+aK4m1+69JSmZSGacGdDZICEPjLKwqGyL65hDyP7pgNfh1
+         rNzct9JXIMMUFdXBflr23vaYu9RZ9BG3SOV/NAWfGOgewMFHkH78i9BkaEA+W2MaW8Np
+         xr3ldLtd/Xf0nNPHF9aQ66DAqJCG5tThOyUjmFZTe5QJx807u595oKYhxr7r5LF2GBch
+         nyQnAX1hCLaEWeCCLH7PHcAU7aYGRFMuyzdlkIoupHy9sD05C/gGkSJdtc8TSur9Qy+k
+         yGcDYARj4ohKA1Kx8hYC62v74CsJdWl+1SAu48Lq/ke0oNu2bCFFFK5MRLeJslARWrEy
+         pCvg==
+X-Gm-Message-State: AOAM530vWBfL9JmRFA9/Jt1j7K5kFOOMuIrW3yVACrjOTIxZJm2vJB/f
+        +qGFiKZ+O4NcTo30/IVVk53WIw==
+X-Google-Smtp-Source: ABdhPJz5O4C+oMNqiLwKlqSkoxsKw8XJ5G3kAsnYN+eydhgUTS/NPmFpf7ZWXQX6ncAZGYzQMLMyVQ==
+X-Received: by 2002:ad4:4d83:: with SMTP id cv3mr7766243qvb.236.1594782694096;
+        Tue, 14 Jul 2020 20:11:34 -0700 (PDT)
 Received: from bbking.lan ([2804:14c:4a5:36c::cd2])
-        by smtp.gmail.com with ESMTPSA id x29sm1269229qtx.74.2020.07.14.20.11.26
+        by smtp.gmail.com with ESMTPSA id x29sm1269229qtx.74.2020.07.14.20.11.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 20:11:28 -0700 (PDT)
+        Tue, 14 Jul 2020 20:11:33 -0700 (PDT)
 From:   Vitor Massaru Iha <vitor@massaru.org>
 To:     kunit-dev@googlegroups.com
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         brendanhiggins@google.com, keescook@chromium.org,
         davidgow@google.com, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [RFC 1/3] kunit: tool: Add support root filesystem in kunit-tool
-Date:   Wed, 15 Jul 2020 00:11:18 -0300
-Message-Id: <20200715031120.1002016-2-vitor@massaru.org>
+Subject: [RFC 3/3] lib: Convert test_user_copy to KUnit test
+Date:   Wed, 15 Jul 2020 00:11:20 -0300
+Message-Id: <20200715031120.1002016-4-vitor@massaru.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200715031120.1002016-1-vitor@massaru.org>
 References: <20200715031120.1002016-1-vitor@massaru.org>
@@ -78,353 +78,410 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes it possible to use KUnit tests as modules.
-And with that the tests can run in userspace.
-
-The filesystem was created using debootstrap:
-   sudo debootstrap buster buster_rootfs
-
-And change the owner of the root filesystem files
-for your user:
-   sudo chown -R $USER:$USER buster_rootfs
-
-For the kunit-tool to correctly capture the test results,
-uml_utilities must be installed on the host to halt uml.
+This adds the conversion of the runtime tests of test_user_copy fuctions,
+from `lib/test_user_copy.c`to KUnit tests.
 
 Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
 ---
- tools/testing/kunit/kunit.py        |  37 ++++++++--
- tools/testing/kunit/kunit_kernel.py | 105 ++++++++++++++++++++++++----
- 2 files changed, 121 insertions(+), 21 deletions(-)
+ lib/Kconfig.debug                           |  17 ++
+ lib/Makefile                                |   2 +-
+ lib/{test_user_copy.c => user_copy_kunit.c} | 196 +++++++++-----------
+ 3 files changed, 102 insertions(+), 113 deletions(-)
+ rename lib/{test_user_copy.c => user_copy_kunit.c} (55%)
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 787b6d4ad716..6d8ba0215b90 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -23,16 +23,16 @@ import kunit_parser
- KunitResult = namedtuple('KunitResult', ['status','result','elapsed_time'])
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 9ad9210d70a1..29558674c011 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2154,6 +2154,23 @@ config SYSCTL_KUNIT_TEST
  
- KunitConfigRequest = namedtuple('KunitConfigRequest',
--				['build_dir', 'make_options'])
-+				['build_dir', 'uml_root_dir', 'make_options'])
- KunitBuildRequest = namedtuple('KunitBuildRequest',
--			       ['jobs', 'build_dir', 'alltests',
-+			       ['jobs', 'build_dir', 'uml_root_dir', 'alltests',
- 				'make_options'])
- KunitExecRequest = namedtuple('KunitExecRequest',
--			      ['timeout', 'build_dir', 'alltests'])
-+			      ['timeout', 'build_dir', 'uml_root_dir', 'alltests'])
- KunitParseRequest = namedtuple('KunitParseRequest',
- 			       ['raw_output', 'input_data'])
- KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
--					   'build_dir', 'alltests',
-+					   'build_dir', 'uml_root_dir', 'alltests',
- 					   'make_options'])
+ 	  If unsure, say N.
  
- KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
-@@ -47,7 +47,6 @@ def create_default_kunitconfig():
- 	if not os.path.exists(kunit_kernel.kunitconfig_path):
- 		shutil.copyfile('arch/um/configs/kunit_defconfig',
- 				kunit_kernel.kunitconfig_path)
++config USER_COPY_KUNIT
++	tristate "KUnit Test for user/kernel boundary protections"
++	depends on KUNIT
++	depends on m
++	help
++	  This builds the "test_user_copy" module that runs sanity checks
++	  on the copy_to/from_user infrastructure, making sure basic
++	  user/kernel boundary testing is working. If it fails to load,
++	  a regression has been detected in the user/kernel memory boundary
++	  protections.
++
++          For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
++
+ config LIST_KUNIT_TEST
+ 	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+diff --git a/lib/Makefile b/lib/Makefile
+index b1c42c10073b..8c145f85accc 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -78,7 +78,6 @@ obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
+ obj-$(CONFIG_TEST_OVERFLOW) += test_overflow.o
+ obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
+ obj-$(CONFIG_TEST_SORT) += test_sort.o
+-obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
+ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
+ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
+ obj-$(CONFIG_TEST_PRINTF) += test_printf.o
+@@ -318,3 +317,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+ # KUnit tests
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
++obj-$(CONFIG_USER_COPY_KUNIT) += user_copy_kunit.o
+diff --git a/lib/test_user_copy.c b/lib/user_copy_kunit.c
+similarity index 55%
+rename from lib/test_user_copy.c
+rename to lib/user_copy_kunit.c
+index 5ff04d8fe971..c15bb1e997d6 100644
+--- a/lib/test_user_copy.c
++++ b/lib/user_copy_kunit.c
+@@ -16,6 +16,7 @@
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/vmalloc.h>
++#include <kunit/test.h>
+ 
+ /*
+  * Several 32-bit architectures support 64-bit {get,put}_user() calls.
+@@ -31,26 +32,16 @@
+ # define TEST_U64
+ #endif
+ 
+-#define test(condition, msg, ...)					\
+-({									\
+-	int cond = (condition);						\
+-	if (cond)							\
+-		pr_warn("[%d] " msg "\n", __LINE__, ##__VA_ARGS__);	\
+-	cond;								\
+-})
 -
- def get_kernel_root_path():
- 	parts = sys.argv[0] if not __file__ else __file__
- 	parts = os.path.realpath(parts).split('tools/testing/kunit')
-@@ -58,10 +57,22 @@ def get_kernel_root_path():
- def config_tests(linux: kunit_kernel.LinuxSourceTree,
- 		 request: KunitConfigRequest) -> KunitResult:
- 	kunit_parser.print_with_timestamp('Configuring KUnit Kernel ...')
-+	defconfig = False
+ static bool is_zeroed(void *from, size_t size)
+ {
+ 	return memchr_inv(from, 0x0, size) == NULL;
+ }
  
- 	config_start = time.time()
- 	create_default_kunitconfig()
--	success = linux.build_reconfig(request.build_dir, request.make_options)
+-static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
++static void test_check_nonzero_user(struct kunit *test, char *kmem, char __user *umem, size_t size)
+ {
+-	int ret = 0;
+ 	size_t start, end, i, zero_start, zero_end;
+ 
+-	if (test(size < 2 * PAGE_SIZE, "buffer too small"))
+-		return -EINVAL;
++	KUNIT_EXPECT_FALSE_MSG(test, size < 2 * PAGE_SIZE, "buffer too small");
+ 
+ 	/*
+ 	 * We want to cross a page boundary to exercise the code more
+@@ -84,7 +75,7 @@ static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
+ 	for (i = zero_end; i < size; i += 2)
+ 		kmem[i] = 0xff;
+ 
+-	ret |= test(copy_to_user(umem, kmem, size),
++	KUNIT_EXPECT_FALSE_MSG(test, copy_to_user(umem, kmem, size),
+ 		    "legitimate copy_to_user failed");
+ 
+ 	for (start = 0; start <= size; start++) {
+@@ -93,35 +84,31 @@ static int test_check_nonzero_user(char *kmem, char __user *umem, size_t size)
+ 			int retval = check_zeroed_user(umem + start, len);
+ 			int expected = is_zeroed(kmem + start, len);
+ 
+-			ret |= test(retval != expected,
+-				    "check_nonzero_user(=%d) != memchr_inv(=%d) mismatch (start=%zu, end=%zu)",
+-				    retval, expected, start, end);
++			KUNIT_EXPECT_FALSE_MSG(test, retval != expected,
++			    "check_nonzero_user(=%d) != memchr_inv(=%d) mismatch (start=%zu, end=%zu)",
++			    retval, expected, start, end);
+ 		}
+ 	}
+-
+-	return ret;
+ }
+ 
+-static int test_copy_struct_from_user(char *kmem, char __user *umem,
++static void test_copy_struct_from_user(struct kunit *test, char *kmem, char __user *umem,
+ 				      size_t size)
+ {
+-	int ret = 0;
+ 	char *umem_src = NULL, *expected = NULL;
+ 	size_t ksize, usize;
+ 
+ 	umem_src = kmalloc(size, GFP_KERNEL);
+-	ret = test(umem_src == NULL, "kmalloc failed");
+-	if (ret)
+-		goto out_free;
++	KUNIT_EXPECT_FALSE_MSG(test, umem_src == NULL, "kmalloc failed");
+ 
+ 	expected = kmalloc(size, GFP_KERNEL);
+-	ret = test(expected == NULL, "kmalloc failed");
+-	if (ret)
+-		goto out_free;
 +
-+	if request.uml_root_dir != None:
-+		if os.path.exists(request.uml_root_dir):
-+			kunit_kernel.uml_root_path = os.path.abspath(request.uml_root_dir)
-+			defconfig = True
-+		else:
-+			config_end = time.time()
-+			return KunitResult(KunitStatus.CONFIG_FAILURE,
-+					'could not configure kernel',
-+					config_end - config_start)
++	if (expected == NULL)
++		kfree(umem_src);
++	KUNIT_EXPECT_FALSE_MSG(test, expected == NULL, "kmalloc failed");
+ 
+ 	/* Fill umem with a fixed byte pattern. */
+ 	memset(umem_src, 0x3e, size);
+-	ret |= test(copy_to_user(umem, umem_src, size),
++	KUNIT_EXPECT_FALSE_MSG(test, copy_to_user(umem, umem_src, size),
+ 		    "legitimate copy_to_user failed");
+ 
+ 	/* Check basic case -- (usize == ksize). */
+@@ -131,9 +118,9 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
+ 	memcpy(expected, umem_src, ksize);
+ 
+ 	memset(kmem, 0x0, size);
+-	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize),
++	KUNIT_EXPECT_FALSE_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize),
+ 		    "copy_struct_from_user(usize == ksize) failed");
+-	ret |= test(memcmp(kmem, expected, ksize),
++	KUNIT_EXPECT_FALSE_MSG(test, memcmp(kmem, expected, ksize),
+ 		    "copy_struct_from_user(usize == ksize) gives unexpected copy");
+ 
+ 	/* Old userspace case -- (usize < ksize). */
+@@ -144,9 +131,9 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
+ 	memset(expected + usize, 0x0, ksize - usize);
+ 
+ 	memset(kmem, 0x0, size);
+-	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize),
++	KUNIT_EXPECT_FALSE_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize),
+ 		    "copy_struct_from_user(usize < ksize) failed");
+-	ret |= test(memcmp(kmem, expected, ksize),
++	KUNIT_EXPECT_FALSE_MSG(test, memcmp(kmem, expected, ksize),
+ 		    "copy_struct_from_user(usize < ksize) gives unexpected copy");
+ 
+ 	/* New userspace (-E2BIG) case -- (usize > ksize). */
+@@ -154,7 +141,7 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
+ 	usize = size;
+ 
+ 	memset(kmem, 0x0, size);
+-	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize) != -E2BIG,
++	KUNIT_EXPECT_FALSE_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize) != -E2BIG,
+ 		    "copy_struct_from_user(usize > ksize) didn't give E2BIG");
+ 
+ 	/* New userspace (success) case -- (usize > ksize). */
+@@ -162,24 +149,18 @@ static int test_copy_struct_from_user(char *kmem, char __user *umem,
+ 	usize = size;
+ 
+ 	memcpy(expected, umem_src, ksize);
+-	ret |= test(clear_user(umem + ksize, usize - ksize),
++	KUNIT_EXPECT_FALSE_MSG(test, clear_user(umem + ksize, usize - ksize),
+ 		    "legitimate clear_user failed");
+ 
+ 	memset(kmem, 0x0, size);
+-	ret |= test(copy_struct_from_user(kmem, ksize, umem, usize),
++	KUNIT_EXPECT_FALSE_MSG(test, copy_struct_from_user(kmem, ksize, umem, usize),
+ 		    "copy_struct_from_user(usize > ksize) failed");
+-	ret |= test(memcmp(kmem, expected, ksize),
++	KUNIT_EXPECT_FALSE_MSG(test, memcmp(kmem, expected, ksize),
+ 		    "copy_struct_from_user(usize > ksize) gives unexpected copy");
+-
+-out_free:
+-	kfree(expected);
+-	kfree(umem_src);
+-	return ret;
+ }
+ 
+-static int __init test_user_copy_init(void)
++static void user_copy_test(struct kunit *test)
+ {
+-	int ret = 0;
+ 	char *kmem;
+ 	char __user *usermem;
+ 	char *bad_usermem;
+@@ -192,16 +173,14 @@ static int __init test_user_copy_init(void)
+ #endif
+ 
+ 	kmem = kmalloc(PAGE_SIZE * 2, GFP_KERNEL);
+-	if (!kmem)
+-		return -ENOMEM;
++	KUNIT_EXPECT_FALSE_MSG(test, kmem == NULL, "kmalloc failed");
+ 
+ 	user_addr = vm_mmap(NULL, 0, PAGE_SIZE * 2,
+ 			    PROT_READ | PROT_WRITE | PROT_EXEC,
+ 			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
+ 	if (user_addr >= (unsigned long)(TASK_SIZE)) {
+-		pr_warn("Failed to allocate user memory\n");
+ 		kfree(kmem);
+-		return -ENOMEM;
++		KUNIT_FAIL(test, "Failed to allocate user memory");
+ 	}
+ 
+ 	usermem = (char __user *)user_addr;
+@@ -211,29 +190,29 @@ static int __init test_user_copy_init(void)
+ 	 * Legitimate usage: none of these copies should fail.
+ 	 */
+ 	memset(kmem, 0x3a, PAGE_SIZE * 2);
+-	ret |= test(copy_to_user(usermem, kmem, PAGE_SIZE),
+-		    "legitimate copy_to_user failed");
++	KUNIT_EXPECT_FALSE_MSG(test, copy_to_user(usermem, kmem, PAGE_SIZE), "legitimate copy_to_user failed");
 +
-+	success = linux.build_reconfig(request.build_dir, defconfig, request.make_options)
- 	config_end = time.time()
- 	if not success:
- 		return KunitResult(KunitStatus.CONFIG_FAILURE,
-@@ -79,6 +90,7 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 	success = linux.build_um_kernel(request.alltests,
- 					request.jobs,
- 					request.build_dir,
-+					request.uml_root_dir,
- 					request.make_options)
- 	build_end = time.time()
- 	if not success:
-@@ -97,7 +109,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree,
- 	test_start = time.time()
- 	result = linux.run_kernel(
- 		timeout=None if request.alltests else request.timeout,
--		build_dir=request.build_dir)
-+		build_dir=request.build_dir, uml_root_dir=request.uml_root_dir)
- 
- 	test_end = time.time()
- 
-@@ -130,12 +142,14 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	run_start = time.time()
- 
- 	config_request = KunitConfigRequest(request.build_dir,
-+					    request.uml_root_dir,
- 					    request.make_options)
- 	config_result = config_tests(linux, config_request)
- 	if config_result.status != KunitStatus.SUCCESS:
- 		return config_result
- 
- 	build_request = KunitBuildRequest(request.jobs, request.build_dir,
-+					  request.uml_root_dir,
- 					  request.alltests,
- 					  request.make_options)
- 	build_result = build_tests(linux, build_request)
-@@ -143,6 +157,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 		return build_result
- 
- 	exec_request = KunitExecRequest(request.timeout, request.build_dir,
-+					request.uml_root_dir,
- 					request.alltests)
- 	exec_result = exec_tests(linux, exec_request)
- 	if exec_result.status != KunitStatus.SUCCESS:
-@@ -168,6 +183,10 @@ def add_common_opts(parser):
- 			    help='As in the make command, it specifies the build '
- 			    'directory.',
-                             type=str, default='.kunit', metavar='build_dir')
-+	parser.add_argument('--uml_root_dir',
-+			    help='To load modules, a root filesystem is '
-+			    'required to install and load these modules.',
-+                            type=str, default=None, metavar='uml_root_dir')
- 	parser.add_argument('--make_options',
- 			    help='X=Y make option, can be repeated.',
- 			    action='append')
-@@ -252,6 +271,7 @@ def main(argv, linux=None):
- 				       cli_args.timeout,
- 				       cli_args.jobs,
- 				       cli_args.build_dir,
-+				       cli_args.uml_root_dir,
- 				       cli_args.alltests,
- 				       cli_args.make_options)
- 		result = run_tests(linux, request)
-@@ -272,6 +292,7 @@ def main(argv, linux=None):
- 			linux = kunit_kernel.LinuxSourceTree()
- 
- 		request = KunitConfigRequest(cli_args.build_dir,
-+					     cli_args.uml_root_dir,
- 					     cli_args.make_options)
- 		result = config_tests(linux, request)
- 		kunit_parser.print_with_timestamp((
-@@ -295,6 +316,7 @@ def main(argv, linux=None):
- 
- 		request = KunitBuildRequest(cli_args.jobs,
- 					    cli_args.build_dir,
-+					    cli_args.uml_root_dir,
- 					    cli_args.alltests,
- 					    cli_args.make_options)
- 		result = build_tests(linux, request)
-@@ -319,6 +341,7 @@ def main(argv, linux=None):
- 
- 		exec_request = KunitExecRequest(cli_args.timeout,
- 						cli_args.build_dir,
-+						cli_args.uml_root_dir,
- 						cli_args.alltests)
- 		exec_result = exec_tests(linux, exec_request)
- 		parse_request = KunitParseRequest(cli_args.raw_output,
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 63dbda2d029f..d712f4619eaa 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -11,6 +11,7 @@ import logging
- import subprocess
- import os
- import signal
-+import time
- 
- from contextlib import ExitStack
- 
-@@ -19,7 +20,59 @@ import kunit_parser
- 
- KCONFIG_PATH = '.config'
- kunitconfig_path = '.kunitconfig'
-+X86_64_DEFCONFIG_PATH = 'arch/um/configs/x86_64_defconfig'
- BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
-+uml_root_path = None
+ 	memset(kmem, 0x0, PAGE_SIZE);
+-	ret |= test(copy_from_user(kmem, usermem, PAGE_SIZE),
+-		    "legitimate copy_from_user failed");
+-	ret |= test(memcmp(kmem, kmem + PAGE_SIZE, PAGE_SIZE),
+-		    "legitimate usercopy failed to copy data");
+-
+-#define test_legit(size, check)						  \
+-	do {								  \
+-		val_##size = check;					  \
+-		ret |= test(put_user(val_##size, (size __user *)usermem), \
+-		    "legitimate put_user (" #size ") failed");		  \
+-		val_##size = 0;						  \
+-		ret |= test(get_user(val_##size, (size __user *)usermem), \
+-		    "legitimate get_user (" #size ") failed");		  \
+-		ret |= test(val_##size != check,			  \
+-		    "legitimate get_user (" #size ") failed to do copy"); \
+-		if (val_##size != check) {				  \
+-			pr_info("0x%llx != 0x%llx\n",			  \
+-				(unsigned long long)val_##size,		  \
+-				(unsigned long long)check);		  \
+-		}							  \
++	KUNIT_EXPECT_FALSE_MSG(test, copy_from_user(kmem, usermem, PAGE_SIZE),
++			       "legitimate copy_from_user failed");
++	KUNIT_EXPECT_FALSE_MSG(test, memcmp(kmem, kmem + PAGE_SIZE, PAGE_SIZE),
++			       "legitimate usercopy failed to copy data");
 +
-+make_cmd = {
-+	'make': {
-+		'command': ['make', 'ARCH=um'],
-+		'msg_error': 'Could not call execute make: ',
-+	},
-+	'make_modules': {
-+		'command': ['make', 'modules', 'ARCH=um'],
-+		'msg_error': 'Could not call execute make modules: ',
-+	},
-+	'make_modules_install': {
-+		'command': ['make', 'modules_install', 'ARCH=um'],
-+		'msg_error': 'Could not call execute make modules_install: ',
-+	}
-+}
-+
-+def halt_uml():
-+	try:
-+		subprocess.call(['uml_mconsole', 'kunitid', 'halt'])
-+	except OSError as e:
-+		raise ConfigError('Could not call uml_mconsole ' + e)
-+	except subprocess.CalledProcessError as e:
-+			raise ConfigError(e.output)
-+
-+
-+def enable_uml_modules_on_boot(output_command):
-+	uml_modules_path = None
-+	found_kernel_version = False
-+	modules = []
-+	for i in output_command.decode('utf-8').split():
-+		if found_kernel_version:
-+			kernel_version = i
-+			uml_modules_path = os.path.join(uml_root_path,
-+			      'lib/modules/', kernel_version, 'kernel/lib/')
-+			break
-+		if 'DEPMOD' in i:
-+			found_kernel_version = True
-+
-+	try:
-+		if os.path.exists(uml_modules_path):
-+			modules = subprocess.check_output(['ls',
-+					    uml_modules_path]).decode('utf-8').split()
-+	except OSError as e:
-+		raise ConfigError('Could not list directory ' + e)
-+	except subprocess.CalledProcessError as e:
-+			raise ConfigError(e.output)
-+
-+	with open(os.path.join(uml_root_path, 'etc/modules'), 'w') as f:
-+		for i in modules:
-+			f.write(i.replace('.ko', ''))
++#define test_legit(size, check)									\
++	do {											\
++		val_##size = check;								\
++		KUNIT_EXPECT_FALSE_MSG(test, put_user(val_##size, (size __user *)usermem),	\
++				"legitimate put_user (" #size ") failed");			\
++		val_##size = 0;									\
++		KUNIT_EXPECT_FALSE_MSG(test, get_user(val_##size, (size __user *)usermem),	\
++				"legitimate get_user (" #size ") failed");			\
++		KUNIT_EXPECT_FALSE_MSG(test, val_##size != check,				\
++				"legitimate get_user (" #size ") failed to do copy");		\
++		if (val_##size != check) {							\
++			kunit_info(test, "0x%llx != 0x%llx\n",					\
++				(unsigned long long)val_##size,					\
++				(unsigned long long)check);					\
++		}										\
+ 	} while (0)
  
- class ConfigError(Exception):
- 	"""Represents an error trying to configure the Linux kernel."""
-@@ -70,20 +123,27 @@ class LinuxSourceTreeOperations(object):
- 		kunit_parser.print_with_timestamp(
- 			'Starting Kernel with all configs takes a few minutes...')
+ 	test_legit(u8,  0x5a);
+@@ -245,9 +224,9 @@ static int __init test_user_copy_init(void)
+ #undef test_legit
  
--	def make(self, jobs, build_dir, make_options):
--		command = ['make', 'ARCH=um', '--jobs=' + str(jobs)]
-+	def make(self, cmd, jobs, build_dir, make_options):
-+		command = make_cmd[cmd]['command'] + ['--jobs=' + str(jobs)]
+ 	/* Test usage of check_nonzero_user(). */
+-	ret |= test_check_nonzero_user(kmem, usermem, 2 * PAGE_SIZE);
++	test_check_nonzero_user(test, kmem, usermem, 2 * PAGE_SIZE);
+ 	/* Test usage of copy_struct_from_user(). */
+-	ret |= test_copy_struct_from_user(kmem, usermem, 2 * PAGE_SIZE);
++	test_copy_struct_from_user(test, kmem, usermem, 2 * PAGE_SIZE);
+ 
+ 	/*
+ 	 * Invalid usage: none of these copies should succeed.
+@@ -258,13 +237,13 @@ static int __init test_user_copy_init(void)
+ 	memset(kmem + PAGE_SIZE, 0, PAGE_SIZE);
+ 
+ 	/* Reject kernel-to-kernel copies through copy_from_user(). */
+-	ret |= test(!copy_from_user(kmem, (char __user *)(kmem + PAGE_SIZE),
+-				    PAGE_SIZE),
+-		    "illegal all-kernel copy_from_user passed");
++	KUNIT_EXPECT_FALSE_MSG(test, !copy_from_user(kmem, (char __user *)(kmem + PAGE_SIZE),
++						 PAGE_SIZE),
++				"illegal all-kernel copy_from_user passed");
+ 
+ 	/* Destination half of buffer should have been zeroed. */
+-	ret |= test(memcmp(kmem + PAGE_SIZE, kmem, PAGE_SIZE),
+-		    "zeroing failure for illegal all-kernel copy_from_user");
++	KUNIT_EXPECT_FALSE_MSG(test, memcmp(kmem + PAGE_SIZE, kmem, PAGE_SIZE),
++			"zeroing failure for illegal all-kernel copy_from_user");
+ 
+ #if 0
+ 	/*
+@@ -273,30 +252,28 @@ static int __init test_user_copy_init(void)
+ 	 * to be tested in LKDTM instead, since this test module does not
+ 	 * expect to explode.
+ 	 */
+-	ret |= test(!copy_from_user(bad_usermem, (char __user *)kmem,
+-				    PAGE_SIZE),
+-		    "illegal reversed copy_from_user passed");
++	KUNIT_EXPECT_FALSE_MSG(test, !copy_from_user(bad_usermem, (char __user *)kmem,
++						     PAGE_SIZE),
++				"illegal reversed copy_from_user passed");
+ #endif
+-	ret |= test(!copy_to_user((char __user *)kmem, kmem + PAGE_SIZE,
+-				  PAGE_SIZE),
+-		    "illegal all-kernel copy_to_user passed");
+-	ret |= test(!copy_to_user((char __user *)kmem, bad_usermem,
+-				  PAGE_SIZE),
+-		    "illegal reversed copy_to_user passed");
+-
+-#define test_illegal(size, check)					    \
+-	do {								    \
+-		val_##size = (check);					    \
+-		ret |= test(!get_user(val_##size, (size __user *)kmem),	    \
+-		    "illegal get_user (" #size ") passed");		    \
+-		ret |= test(val_##size != (size)0,			    \
+-		    "zeroing failure for illegal get_user (" #size ")");    \
+-		if (val_##size != (size)0) {				    \
+-			pr_info("0x%llx != 0\n",			    \
+-				(unsigned long long)val_##size);	    \
+-		}							    \
+-		ret |= test(!put_user(val_##size, (size __user *)kmem),	    \
+-		    "illegal put_user (" #size ") passed");		    \
++	KUNIT_EXPECT_FALSE_MSG(test, !copy_to_user((char __user *)kmem, kmem + PAGE_SIZE, PAGE_SIZE),
++			"illegal all-kernel copy_to_user passed");
++	KUNIT_EXPECT_FALSE_MSG(test, !copy_to_user((char __user *)kmem, bad_usermem, PAGE_SIZE),
++			"illegal reversed copy_to_user passed");
 +
- 		if make_options:
- 			command.extend(make_options)
- 		if build_dir:
- 			command += ['O=' + build_dir]
-+
-+		if cmd == 'make_modules_install':
-+			command += ['INSTALL_MOD_PATH=' + uml_root_path]
-+
- 		try:
--			subprocess.check_output(command)
-+			output = subprocess.check_output(command)
-+			if cmd == 'make_modules_install':
-+				 enable_uml_modules_on_boot(output)
- 		except OSError as e:
--			raise BuildError('Could not call execute make: ' + e)
-+			raise BuildError(make_cmd[cmd][msg_error] + e)
- 		except subprocess.CalledProcessError as e:
- 			raise BuildError(e.output)
++#define test_illegal(size, check)								\
++	do {											\
++		val_##size = (check);								\
++		KUNIT_EXPECT_FALSE_MSG(test, !get_user(val_##size, (size __user *)kmem),	\
++				"illegal get_user (" #size ") passed");				\
++		KUNIT_EXPECT_FALSE_MSG(test, val_##size != (size)0,				\
++				"zeroing failure for illegal get_user (" #size ")");		\
++		if (val_##size != (size)0) {							\
++			kunit_info(test, "0x%llx != 0\n",					\
++					(unsigned long long)val_##size);			\
++		}										\
++		KUNIT_EXPECT_FALSE_MSG(test, !put_user(val_##size, (size __user *)kmem),	\
++				"illegal put_user (" #size ") passed");				\
+ 	} while (0)
  
--	def linux_bin(self, params, timeout, build_dir, outfile):
-+	def linux_bin(self, params, timeout, build_dir, uml_root_dir, outfile):
- 		"""Runs the Linux UML binary. Must be named 'linux'."""
- 		linux_bin = './linux'
- 		if build_dir:
-@@ -92,7 +152,11 @@ class LinuxSourceTreeOperations(object):
- 			process = subprocess.Popen([linux_bin] + params,
- 						   stdout=output,
- 						   stderr=subprocess.STDOUT)
--			process.wait(timeout)
-+			if uml_root_dir:
-+				time.sleep(timeout)
-+				halt_uml()
-+			else:
-+				process.wait(timeout)
+ 	test_illegal(u8,  0x5a);
+@@ -309,23 +286,18 @@ static int __init test_user_copy_init(void)
  
+ 	vm_munmap(user_addr, PAGE_SIZE * 2);
+ 	kfree(kmem);
+-
+-	if (ret == 0) {
+-		pr_info("tests passed.\n");
+-		return 0;
+-	}
+-
+-	return -EINVAL;
+ }
  
- def get_kconfig_path(build_dir):
-@@ -132,11 +196,16 @@ class LinuxSourceTree(object):
- 			return False
- 		return True
+-module_init(test_user_copy_init);
+-
+-static void __exit test_user_copy_exit(void)
+-{
+-	pr_info("unloaded.\n");
+-}
++static struct kunit_case user_copy_test_cases[] = {
++	KUNIT_CASE(user_copy_test),
++	{}
++};
  
--	def build_config(self, build_dir, make_options):
-+	def build_config(self, build_dir, defconfig, make_options):
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if build_dir and not os.path.exists(build_dir):
- 			os.mkdir(build_dir)
- 		self._kconfig.write_to_file(kconfig_path)
-+
-+		if defconfig:
-+			with open(kconfig_path, 'a')  as fw:
-+				with open(X86_64_DEFCONFIG_PATH, 'r') as fr:
-+					fw.write(fr.read())
- 		try:
- 			self._ops.make_olddefconfig(build_dir, make_options)
- 		except ConfigError as e:
-@@ -144,7 +213,7 @@ class LinuxSourceTree(object):
- 			return False
- 		return self.validate_config(build_dir)
+-module_exit(test_user_copy_exit);
++static struct kunit_suite user_copy_test_suite = {
++	.name = "user_copy",
++	.test_cases = user_copy_test_cases,
++};
  
--	def build_reconfig(self, build_dir, make_options):
-+	def build_reconfig(self, build_dir, defconfig, make_options):
- 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if os.path.exists(kconfig_path):
-@@ -153,28 +222,36 @@ class LinuxSourceTree(object):
- 			if not self._kconfig.is_subset_of(existing_kconfig):
- 				print('Regenerating .config ...')
- 				os.remove(kconfig_path)
--				return self.build_config(build_dir, make_options)
-+				return self.build_config(build_dir, defconfig, make_options)
- 			else:
- 				return True
- 		else:
- 			print('Generating .config ...')
--			return self.build_config(build_dir, make_options)
-+			return self.build_config(build_dir, defconfig, make_options)
- 
--	def build_um_kernel(self, alltests, jobs, build_dir, make_options):
-+	def build_um_kernel(self, alltests, jobs, build_dir, uml_root_dir, make_options):
- 		if alltests:
- 			self._ops.make_allyesconfig()
- 		try:
- 			self._ops.make_olddefconfig(build_dir, make_options)
--			self._ops.make(jobs, build_dir, make_options)
-+			self._ops.make('make', jobs, build_dir, make_options)
-+			if uml_root_dir:
-+				self._ops.make('make_modules', jobs, build_dir,
-+						make_options)
-+				self._ops.make('make_modules_install', jobs,
-+						build_dir, make_options)
- 		except (ConfigError, BuildError) as e:
- 			logging.error(e)
- 			return False
- 		return self.validate_config(build_dir)
- 
--	def run_kernel(self, args=[], build_dir='', timeout=None):
-+	def run_kernel(self, args=[], build_dir='', uml_root_dir=None, timeout=None):
- 		args.extend(['mem=1G'])
-+		if uml_root_dir:
-+			args.extend(['root=/dev/root', 'rootfstype=hostfs',
-+				     'rootflags=' + uml_root_path, 'umid=kunitid'])
- 		outfile = 'test.log'
--		self._ops.linux_bin(args, timeout, build_dir, outfile)
-+		self._ops.linux_bin(args, timeout, build_dir, uml_root_dir, outfile)
- 		subprocess.call(['stty', 'sane'])
- 		with open(outfile, 'r') as file:
- 			for line in file:
++kunit_test_suites(&user_copy_test_suite);
+ MODULE_AUTHOR("Kees Cook <keescook@chromium.org>");
+ MODULE_LICENSE("GPL");
 -- 
 2.26.2
 
