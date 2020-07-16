@@ -2,106 +2,91 @@ Return-Path: <SRS0=zopU=A3=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E0E5C433E7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 20:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FEA9C433E6
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 20:30:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7AF3120853
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 20:25:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LjQmSvLJ"
+	by mail.kernel.org (Postfix) with ESMTP id 7A220207E8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 20:30:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725921AbgGPUZr (ORCPT
+        id S1726381AbgGPUay (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jul 2020 16:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        Thu, 16 Jul 2020 16:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbgGPUZq (ORCPT
+        with ESMTP id S1725921AbgGPUax (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jul 2020 16:25:46 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4175AC08C5C0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 13:25:46 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id m9so4228544pfh.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 13:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hA+Aqo4SV3ko2kO8EuK2W/Tvr+vtNwBN3+1D4FXT5iI=;
-        b=LjQmSvLJxhYwI0Uux7CkRfdDlLxJHThvP2ZmnUcX0HKl0LYtyj4F5cXRL7xqnFAJRv
-         ELf6wnYFK3WPSx0yRsuvoVqq6x+YbYPCrfsKm9+nPf2JALM0X8q3PtOjmASBTTGpLXLG
-         OgKrZ4p1AN7EzbMN8TB4ug/wl3tl/t2nhtzOg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hA+Aqo4SV3ko2kO8EuK2W/Tvr+vtNwBN3+1D4FXT5iI=;
-        b=ZzYVkbi8utreorPaifupnqNSe3ZV0lVBm13vtKJSaz2erv52a4ZAZySbcbWtYMGppF
-         j7uwR1WgzvvTedtA9iJ4K/0R0cmBPxIteP5Xc546DMFi2XvOz0p1rqonVRdgMghb+XnU
-         XI4xsBbsJkm2nFxUh8UPVsouzowRjUMZlG+O6nOuNmRgpw5z1dny+Gd9JSYAeXRyXV/G
-         jF22svHmzj+TiSff2EUpKm0G3DAY9i4dYNhsTySI5OdqkUELWIDlfpQy7UKl8KISj95Y
-         Kw/FcK+8tnxqlzbbNNELr78CID0PtlcUKe3dWq92877wQmQU8thr7Ham7cSF45s1n28z
-         bV7A==
-X-Gm-Message-State: AOAM531dP24f2OhZkcoRgxO9EfsayJR/Nr+1+Ym08rIU6o2+BZ8PzzFk
-        /QZTZgYHEmH0gAYRdFGtDbnjQw==
-X-Google-Smtp-Source: ABdhPJzluoB8Hr1x2E3MstyVdN1H30YSZ/nI6IrWid+cCKeHVafzMiYGYyTlGMFOxVnCzxBRlnzUmA==
-X-Received: by 2002:aa7:9ec5:: with SMTP id r5mr4848033pfq.86.1594931145764;
-        Thu, 16 Jul 2020 13:25:45 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t126sm5576396pfd.214.2020.07.16.13.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 13:25:44 -0700 (PDT)
-Date:   Thu, 16 Jul 2020 13:25:43 -0700
-From:   Kees Cook <keescook@chromium.org>
+        Thu, 16 Jul 2020 16:30:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951CFC061755;
+        Thu, 16 Jul 2020 13:30:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id EA6E62A5A65
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
 To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+Cc:     Kees Cook <keescook@chromium.org>,
         Andy Lutomirski <luto@kernel.org>,
         Matthew Wilcox <willy@infradead.org>, tglx@linutronix.de,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         gofmanp@gmail.com, linux-api@vger.kernel.org, x86@kernel.org,
         linux-kselftest@vger.kernel.org, shuah@kernel.org, jannh@google.com
 Subject: Re: [PATCH v4 0/2] Syscall User Redirection
-Message-ID: <202007161324.E75E01B@keescook>
+Organization: Collabora
 References: <20200716193141.4068476-1-krisman@collabora.com>
- <202007161300.7452A2C5@keescook>
- <20200716202234.wryj7pj7zmwcrxxx@wittgenstein>
+        <202007161300.7452A2C5@keescook>
+        <20200716202234.wryj7pj7zmwcrxxx@wittgenstein>
+        <202007161324.E75E01B@keescook>
+        <20200716202935.yorxrz2om67r366x@wittgenstein>
+Date:   Thu, 16 Jul 2020 16:30:48 -0400
+In-Reply-To: <20200716202935.yorxrz2om67r366x@wittgenstein> (Christian
+        Brauner's message of "Thu, 16 Jul 2020 22:29:35 +0200")
+Message-ID: <871rlbjj7r.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200716202234.wryj7pj7zmwcrxxx@wittgenstein>
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 10:22:34PM +0200, Christian Brauner wrote:
-> On Thu, Jul 16, 2020 at 01:04:38PM -0700, Kees Cook wrote:
-> > On Thu, Jul 16, 2020 at 03:31:39PM -0400, Gabriel Krisman Bertazi wrote:
-> > > This is v4 of Syscall User Redirection.  The implementation itself is
-> > > not modified from v3, it only applies the latest round of reviews to the
-> > > selftests.
-> > > 
-> > > __NR_syscalls is not really exported in header files other than
-> > > asm-generic for every architecture, so it felt safer to optionally
-> > > expose it with a fallback to a high value.
-> > > 
-> > > Also, I didn't expose tests for PR_GET as that is not currently
-> > > implemented.  If possible, I'd have it supported by a future patchset,
-> > > since it is not immediately necessary to support this feature.
-> > 
-> > Thanks! That all looks good to me.
-> 
-> Don't have any problem with this but did this ever get exposure on
-> linux-api? This is the first time I see this pop up.
+Christian Brauner <christian.brauner@ubuntu.com> writes:
 
-I thought I'd added it to CC in the past, but that might have been other
-recent unrelated threads. Does this need a full repost there too, you
-think?
+> On Thu, Jul 16, 2020 at 01:25:43PM -0700, Kees Cook wrote:
+>> On Thu, Jul 16, 2020 at 10:22:34PM +0200, Christian Brauner wrote:
+>> > On Thu, Jul 16, 2020 at 01:04:38PM -0700, Kees Cook wrote:
+>> > > On Thu, Jul 16, 2020 at 03:31:39PM -0400, Gabriel Krisman Bertazi wrote:
+>> > > > This is v4 of Syscall User Redirection.  The implementation itself is
+>> > > > not modified from v3, it only applies the latest round of reviews to the
+>> > > > selftests.
+>> > > > 
+>> > > > __NR_syscalls is not really exported in header files other than
+>> > > > asm-generic for every architecture, so it felt safer to optionally
+>> > > > expose it with a fallback to a high value.
+>> > > > 
+>> > > > Also, I didn't expose tests for PR_GET as that is not currently
+>> > > > implemented.  If possible, I'd have it supported by a future patchset,
+>> > > > since it is not immediately necessary to support this feature.
+>> > > 
+>> > > Thanks! That all looks good to me.
+>> > 
+>> > Don't have any problem with this but did this ever get exposure on
+>> > linux-api? This is the first time I see this pop up.
+>> 
+>> I thought I'd added it to CC in the past, but that might have been other
+>> recent unrelated threads. Does this need a full repost there too, you
+>> think?
+>
+> Nah, wasn't my intention to force a repost. Seems that several people
+> have looked this over. :) Just curious why it didn't get to linux-api
+> and we know quite some people who only do look at linux-api (for sanity). :)
+
+That's my mistake.  I didn't think about it when submitting :(
+
+If this get re-spinned again I will make sure to CC linux-api.
 
 -- 
-Kees Cook
+Gabriel Krisman Bertazi
