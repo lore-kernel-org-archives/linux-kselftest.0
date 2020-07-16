@@ -2,507 +2,103 @@ Return-Path: <SRS0=zopU=A3=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F381FC433E1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 19:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65312C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 20:04:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CCB4D2074B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 19:31:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36926207CB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Jul 2020 20:04:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R2wl2O3b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729573AbgGPTb6 (ORCPT
+        id S1729136AbgGPUEl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jul 2020 15:31:58 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48970 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729376AbgGPTb5 (ORCPT
+        Thu, 16 Jul 2020 16:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728907AbgGPUEk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jul 2020 15:31:57 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id A1B262A217E
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, kernel@collabora.com,
-        willy@infradead.org, luto@kernel.org, gofmanp@gmail.com,
-        keescook@chromium.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, Gabriel Krisman Bertazi <krisman@collabora.com>
-Subject: [PATCH v4 1/2] kernel: Implement selective syscall userspace redirection
-Date:   Thu, 16 Jul 2020 15:31:40 -0400
-Message-Id: <20200716193141.4068476-2-krisman@collabora.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200716193141.4068476-1-krisman@collabora.com>
+        Thu, 16 Jul 2020 16:04:40 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BD9C061755
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 13:04:40 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id cv18so3315737pjb.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2020 13:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8cjlPgn09p7l40db0k5FtyWMlNcHlH5a0ko12DoYDl8=;
+        b=R2wl2O3bAKRmcG8CwSs2Q1w5Hfu4lrQCtvgaHOXYz089uxJGqL7jfyozh0dElVhkht
+         HihXpzUVBYBgCTDp49G6vJod1zIH+8LnNuatOpdSaa02mG64zIzslDVh2t4P2ws/pltF
+         4GmSr2KOtIN649ayUtFptrou3zZo1Q2nqVrD8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8cjlPgn09p7l40db0k5FtyWMlNcHlH5a0ko12DoYDl8=;
+        b=Li3RG4b4cGLfgfzx1RnGMqgnaqGOp/MrQOanV3urELB3iWeycAv9iA5hFOrU71JfPN
+         BlKVa1TP8X1F+UegXkjp0HA6UoGeHnoC5YF5UOPzYNOta4tnyu+OcvmpbsMNJkqG39gi
+         t6akY5ZuwITaK1dhVduYozEG6xmeMwwkvcw4+JvwI58iqpgwa44cfHUwZ4NzT3ZZA15C
+         o5NN91Eu5U8h4DveiYyi/jeOxpevTvBFA6h0E4QQPBfmMn15eopycmUf1m6d14ZitynB
+         osaMnynhpLziqn4c7Fk5xkMQG2dUBs148hAAkE4HQyiQYBLkkqxn81EdXEjdKVPEf2h3
+         IL6w==
+X-Gm-Message-State: AOAM5323GywmTNa0e6Ok+p6Oi/CTO+dtKNwV+VgzqUguKVzWrHguGwh2
+        TzyX8uURQBMPg7igbxqrKifqqw==
+X-Google-Smtp-Source: ABdhPJzQmwwQY4qaLuGuH2c57JaOLP7yXkUxTXHj7pOsYZEf+Uu5diFNUB050bd6hczoiR9qcdlZ9g==
+X-Received: by 2002:a17:90a:a50d:: with SMTP id a13mr6205936pjq.95.1594929879858;
+        Thu, 16 Jul 2020 13:04:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y19sm5695800pgj.35.2020.07.16.13.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 13:04:38 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 13:04:38 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, gofmanp@gmail.com, linux-api@vger.kernel.org,
+        x86@kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v4 0/2] Syscall User Redirection
+Message-ID: <202007161300.7452A2C5@keescook>
 References: <20200716193141.4068476-1-krisman@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200716193141.4068476-1-krisman@collabora.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a mechanism to quickly disable/enable syscall handling for a
-specific process and redirect to userspace via SIGSYS.  This is useful
-for processes with parts that require syscall redirection and parts that
-don't, but who need to perform this boundary crossing really fast,
-without paying the cost of a system call to reconfigure syscall handling
-on each boundary transition.  This is particularly important for Windows
-games running over Wine.
+On Thu, Jul 16, 2020 at 03:31:39PM -0400, Gabriel Krisman Bertazi wrote:
+> This is v4 of Syscall User Redirection.  The implementation itself is
+> not modified from v3, it only applies the latest round of reviews to the
+> selftests.
+> 
+> __NR_syscalls is not really exported in header files other than
+> asm-generic for every architecture, so it felt safer to optionally
+> expose it with a fallback to a high value.
+> 
+> Also, I didn't expose tests for PR_GET as that is not currently
+> implemented.  If possible, I'd have it supported by a future patchset,
+> since it is not immediately necessary to support this feature.
 
-The proposed interface looks like this:
+Thanks! That all looks good to me.
 
-  prctl(PR_SET_SYSCALL_USER_DISPATCH, <op>, <start_addr>, <end_addr>, [selector])
+> Finally, one question: Which tree would this go through?
 
-The range [<start_addr>,<end_addr>] is a part of the process memory map
-that is allowed to by-pass the redirection code and dispatch syscalls
-directly, such that in fast paths a process doesn't need to disable the
-trap nor the kernel has to check the selector.  This is essential to
-return from SIGSYS to a blocked area without triggering another SIGSYS
-from rt_sigreturn.
+I haven't heard from several other x86 maintainers yet (which is where
+I would normally expect this series to land), but I would be comfortable
+taking this through my seccomp tree if I got Acks/Reviews at least from
+Andy and Matthew.
 
-selector is an optional pointer to a char-sized userspace memory region
-that has a key switch for the mechanism. This key switch is set to
-either PR_SYS_DISPATCH_ON, PR_SYS_DISPATCH_OFF to enable and disable the
-redirection without calling the kernel.
+Andy, Matthew, what do you think of this?
 
-The feature is meant to be set per-thread and it is disabled on
-fork/clone/execv.
-
-Internally, this doesn't add overhead to the syscall hot path, and it
-requires very little per-architecture support.  I avoided using seccomp,
-even though it duplicates some functionality, due to previous feedback
-that maybe it shouldn't mix with seccomp since it is not a security
-mechanism.  And obviously, this should never be considered a security
-mechanism, since any part of the program can by-pass it by using the
-syscall dispatcher.
-
-For the sysinfo benchmark, which measures the overhead added to
-executing a native syscall that doesn't require interception, the
-overhead using only the direct dispatcher region to issue syscalls is
-pretty much irrelevant.  The overhead of using the selector goes around
-40ns for a native (unredirected) syscall in my system, and it is (as
-expected) dominated by the supervisor-mode user-address access.  In
-fact, with SMAP off, the overhead is consistently less than 5ns on my
-test box.
-
-Right now, it is only supported by x86_64 and x86, but it should be
-easily enabled for other architectures.
-
-An example code using this interface can be found at:
-  https://gitlab.collabora.com/krisman/syscall-disable-personality
-
-Changes since v2:
-  (Matthew Wilcox suggestions)
-  - Drop __user on non-ptr type.
-  - Move #define closer to similar defs
-  - Allow a memory region that can dispatch directly
-  (Kees Cook suggestions)
-  - Improve kconfig summary line
-  - Move flag cleanup on execve to begin_new_exec
-  - Hint branch predictor in the syscall path
-  (Me)
-  - Convert selector to char
-
-Changes since RFC:
-  (Kees Cook suggestions)
-  - Don't mention personality while explaining the feature
-  - Use syscall_get_nr
-  - Remove header guard on several places
-  - Convert WARN_ON to WARN_ON_ONCE
-  - Explicit check for state values
-  - Rename to syscall user dispatcher
-
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Paul Gofman <gofmanp@gmail.com>
-Cc: Kees Cook <keescook@chromium.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
----
- arch/Kconfig                          | 20 ++++++
- arch/x86/Kconfig                      |  1 +
- arch/x86/entry/common.c               |  5 ++
- arch/x86/include/asm/thread_info.h    |  4 +-
- arch/x86/kernel/signal_compat.c       |  2 +-
- fs/exec.c                             |  2 +
- include/linux/sched.h                 |  3 +
- include/linux/syscall_user_dispatch.h | 50 +++++++++++++++
- include/uapi/asm-generic/siginfo.h    |  3 +-
- include/uapi/linux/prctl.h            |  5 ++
- kernel/Makefile                       |  1 +
- kernel/fork.c                         |  1 +
- kernel/sys.c                          |  5 ++
- kernel/syscall_user_dispatch.c        | 92 +++++++++++++++++++++++++++
- 14 files changed, 191 insertions(+), 3 deletions(-)
- create mode 100644 include/linux/syscall_user_dispatch.h
- create mode 100644 kernel/syscall_user_dispatch.c
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 8cc35dc556c7..0ebd971d0d8f 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -465,6 +465,26 @@ config SECCOMP_FILTER
- 
- 	  See Documentation/userspace-api/seccomp_filter.rst for details.
- 
-+config HAVE_ARCH_SYSCALL_USER_DISPATCH
-+	bool
-+	help
-+	  An arch should select this symbol if it provides all of these things:
-+	  - TIF_SYSCALL_USER_DISPATCH
-+	  - syscall_get_arch
-+	  - syscall_rollback
-+	  - syscall_get_nr
-+	  - SIGSYS siginfo_t support
-+
-+config SYSCALL_USER_DISPATCH
-+	bool "Support syscall redirection to userspace dispatcher"
-+	depends on HAVE_ARCH_SYSCALL_USER_DISPATCH
-+	help
-+	  Enable tasks to ask the kernel to redirect syscalls not
-+	  issued from a predefined dispatcher back to userspace,
-+	  depending on a userspace memory selector.
-+
-+	  This option is useful to optimize games running over Wine.
-+
- config HAVE_ARCH_STACKLEAK
- 	bool
- 	help
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 883da0abf779..466a3a9c0708 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -149,6 +149,7 @@ config X86
- 	select HAVE_ARCH_COMPAT_MMAP_BASES	if MMU && COMPAT
- 	select HAVE_ARCH_PREL32_RELOCATIONS
- 	select HAVE_ARCH_SECCOMP_FILTER
-+	select HAVE_ARCH_SYSCALL_USER_DISPATCH
- 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST
- 	select HAVE_ARCH_STACKLEAK
- 	select HAVE_ARCH_TRACEHOOK
-diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
-index bd3f14175193..6c1360a7f260 100644
---- a/arch/x86/entry/common.c
-+++ b/arch/x86/entry/common.c
-@@ -138,6 +138,11 @@ static long syscall_trace_enter(struct pt_regs *regs)
- 			return -1L;
- 	}
- 
-+	if (work & _TIF_SYSCALL_USER_DISPATCH) {
-+		if (do_syscall_user_dispatch(regs))
-+			return -1L;
-+	}
-+
- #ifdef CONFIG_SECCOMP
- 	/*
- 	 * Do seccomp after ptrace, to catch any tracer changes.
-diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
-index 8de8ceccb8bc..b26a9f2f0491 100644
---- a/arch/x86/include/asm/thread_info.h
-+++ b/arch/x86/include/asm/thread_info.h
-@@ -93,6 +93,7 @@ struct thread_info {
- #define TIF_NOTSC		16	/* TSC is not accessible in userland */
- #define TIF_IA32		17	/* IA32 compatibility process */
- #define TIF_SLD			18	/* Restore split lock detection on context switch */
-+#define TIF_SYSCALL_USER_DISPATCH 19	/* Redirect syscall for userspace handling */
- #define TIF_MEMDIE		20	/* is terminating due to OOM killer */
- #define TIF_POLLING_NRFLAG	21	/* idle is polling for TIF_NEED_RESCHED */
- #define TIF_IO_BITMAP		22	/* uses I/O bitmap */
-@@ -123,6 +124,7 @@ struct thread_info {
- #define _TIF_NOTSC		(1 << TIF_NOTSC)
- #define _TIF_IA32		(1 << TIF_IA32)
- #define _TIF_SLD		(1 << TIF_SLD)
-+#define _TIF_SYSCALL_USER_DISPATCH (1 << TIF_SYSCALL_USER_DISPATCH)
- #define _TIF_POLLING_NRFLAG	(1 << TIF_POLLING_NRFLAG)
- #define _TIF_IO_BITMAP		(1 << TIF_IO_BITMAP)
- #define _TIF_FORCED_TF		(1 << TIF_FORCED_TF)
-@@ -136,7 +138,7 @@ struct thread_info {
- /* Work to do before invoking the actual syscall. */
- #define _TIF_WORK_SYSCALL_ENTRY	\
- 	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_EMU | _TIF_SYSCALL_AUDIT |	\
--	 _TIF_SECCOMP | _TIF_SYSCALL_TRACEPOINT)
-+	 _TIF_SECCOMP | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_USER_DISPATCH)
- 
- /* flags to check in __switch_to() */
- #define _TIF_WORK_CTXSW_BASE					\
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-index 9ccbf0576cd0..210aecc6eab9 100644
---- a/arch/x86/kernel/signal_compat.c
-+++ b/arch/x86/kernel/signal_compat.c
-@@ -31,7 +31,7 @@ static inline void signal_compat_build_tests(void)
- 	BUILD_BUG_ON(NSIGBUS  != 5);
- 	BUILD_BUG_ON(NSIGTRAP != 5);
- 	BUILD_BUG_ON(NSIGCHLD != 6);
--	BUILD_BUG_ON(NSIGSYS  != 1);
-+	BUILD_BUG_ON(NSIGSYS  != 2);
- 
- 	/* This is part of the ABI and can never change in size: */
- 	BUILD_BUG_ON(sizeof(compat_siginfo_t) != 128);
-diff --git a/fs/exec.c b/fs/exec.c
-index e6e8a9a70327..849f618ed790 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1386,6 +1386,8 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	flush_thread();
- 	me->personality &= ~bprm->per_clear;
- 
-+	clear_tsk_syscall_user_dispatch(me);
-+
- 	/*
- 	 * We have to apply CLOEXEC before we change whether the process is
- 	 * dumpable (in setup_new_exec) to avoid a race with a process in userspace
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 692e327d7455..407b868146e1 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -32,6 +32,7 @@
- #include <linux/posix-timers.h>
- #include <linux/rseq.h>
- #include <linux/kcsan.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- /* task_struct member predeclarations (sorted alphabetically): */
- struct audit_context;
-@@ -953,6 +954,8 @@ struct task_struct {
- #endif
- 	struct seccomp			seccomp;
- 
-+	struct syscall_user_dispatch	syscall_dispatch;
-+
- 	/* Thread group tracking: */
- 	u64				parent_exec_id;
- 	u64				self_exec_id;
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-new file mode 100644
-index 000000000000..a49e2de93705
---- /dev/null
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020 Collabora Ltd.
-+ */
-+#ifndef _SYSCALL_USER_DISPATCH_H
-+#define _SYSCALL_USER_DISPATCH_H
-+
-+struct task_struct;
-+static void clear_tsk_thread_flag(struct task_struct *tsk, int flag);
-+
-+#ifdef CONFIG_SYSCALL_USER_DISPATCH
-+struct syscall_user_dispatch {
-+	char __user *selector;
-+	unsigned long dispatcher_start;
-+	unsigned long dispatcher_end;
-+};
-+
-+int do_syscall_user_dispatch(struct pt_regs *regs);
-+int set_syscall_user_dispatch(int mode, unsigned long dispatcher_start,
-+			      unsigned long dispatcher_end,
-+			      char __user *selector);
-+
-+static inline void clear_tsk_syscall_user_dispatch(struct task_struct *tsk)
-+{
-+	clear_tsk_thread_flag(tsk, TIF_SYSCALL_USER_DISPATCH);
-+}
-+
-+#else
-+struct syscall_user_dispatch {};
-+
-+static inline int set_syscall_user_dispatch(int mode, unsigned long dispatcher_start,
-+					    unsigned long dispatcher_end,
-+					    char __user *selector)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int do_syscall_user_dispatch(struct pt_regs *regs)
-+{
-+	WARN_ON_ONCE(1);
-+	return 0;
-+}
-+
-+static inline void clear_tsk_syscall_user_dispatch(struct task_struct *tsk)
-+{
-+}
-+
-+#endif /* CONFIG_SYSCALL_USER_DISPATCH */
-+
-+#endif /* _SYSCALL_USER_DISPATCH_H */
-diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-index cb3d6c267181..37741908b846 100644
---- a/include/uapi/asm-generic/siginfo.h
-+++ b/include/uapi/asm-generic/siginfo.h
-@@ -284,7 +284,8 @@ typedef struct siginfo {
-  * SIGSYS si_codes
-  */
- #define SYS_SECCOMP	1	/* seccomp triggered */
--#define NSIGSYS		1
-+#define SYS_USER_DISPATCH 2	/* syscall user dispatch triggered */
-+#define NSIGSYS		2
- 
- /*
-  * SIGEMT si_codes
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index 07b4f8131e36..96265246383d 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -238,4 +238,9 @@ struct prctl_mm_map {
- #define PR_SET_IO_FLUSHER		57
- #define PR_GET_IO_FLUSHER		58
- 
-+/* Dispatch syscalls to a userspace handler */
-+#define PR_SET_SYSCALL_USER_DISPATCH	59
-+# define PR_SYS_DISPATCH_OFF		0
-+# define PR_SYS_DISPATCH_ON		1
-+
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/Makefile b/kernel/Makefile
-index f3218bc5ec69..158b8c61592f 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -92,6 +92,7 @@ obj-$(CONFIG_DETECT_HUNG_TASK) += hung_task.o
- obj-$(CONFIG_LOCKUP_DETECTOR) += watchdog.o
- obj-$(CONFIG_HARDLOCKUP_DETECTOR_PERF) += watchdog_hld.o
- obj-$(CONFIG_SECCOMP) += seccomp.o
-+obj-$(CONFIG_SYSCALL_USER_DISPATCH) += syscall_user_dispatch.o
- obj-$(CONFIG_RELAY) += relay.o
- obj-$(CONFIG_SYSCTL) += utsname_sysctl.o
- obj-$(CONFIG_TASK_DELAY_ACCT) += delayacct.o
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 142b23645d82..c6b64a849fec 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -921,6 +921,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 	clear_user_return_notifier(tsk);
- 	clear_tsk_need_resched(tsk);
- 	set_task_stack_end_magic(tsk);
-+	clear_tsk_syscall_user_dispatch(tsk);
- 
- #ifdef CONFIG_STACKPROTECTOR
- 	tsk->stack_canary = get_random_canary();
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 00a96746e28a..d85880873c92 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -42,6 +42,7 @@
- #include <linux/syscore_ops.h>
- #include <linux/version.h>
- #include <linux/ctype.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- #include <linux/compat.h>
- #include <linux/syscalls.h>
-@@ -2527,6 +2528,10 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 
- 		error = (current->flags & PR_IO_FLUSHER) == PR_IO_FLUSHER;
- 		break;
-+	case PR_SET_SYSCALL_USER_DISPATCH:
-+		error = set_syscall_user_dispatch((int) arg2, arg3, arg4,
-+						  (char __user *) arg5);
-+		break;
- 	default:
- 		error = -EINVAL;
- 		break;
-diff --git a/kernel/syscall_user_dispatch.c b/kernel/syscall_user_dispatch.c
-new file mode 100644
-index 000000000000..39ee29c2b91f
---- /dev/null
-+++ b/kernel/syscall_user_dispatch.c
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020 Collabora Ltd.
-+ */
-+#include <linux/sched.h>
-+#include <linux/prctl.h>
-+#include <linux/syscall_user_dispatch.h>
-+#include <linux/uaccess.h>
-+#include <linux/signal.h>
-+
-+#include <asm/syscall.h>
-+
-+#include <linux/sched/signal.h>
-+#include <linux/sched/task_stack.h>
-+
-+static void trigger_sigsys(struct pt_regs *regs)
-+{
-+	struct kernel_siginfo info;
-+
-+	clear_siginfo(&info);
-+	info.si_signo = SIGSYS;
-+	info.si_code = SYS_USER_DISPATCH;
-+	info.si_call_addr = (void __user *)KSTK_EIP(current);
-+	info.si_errno = 0;
-+	info.si_arch = syscall_get_arch(current);
-+	info.si_syscall = syscall_get_nr(current, regs);
-+
-+	force_sig_info(&info);
-+}
-+
-+int do_syscall_user_dispatch(struct pt_regs *regs)
-+{
-+	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
-+	unsigned long ip = instruction_pointer(regs);
-+	char state;
-+
-+	if (likely(ip >= sd->dispatcher_start && ip <= sd->dispatcher_end))
-+		return 0;
-+
-+	if (likely(sd->selector)) {
-+		if (unlikely(__get_user(state, sd->selector)))
-+			do_exit(SIGSEGV);
-+
-+		if (likely(state == 0))
-+			return 0;
-+
-+		if (state != 1)
-+			do_exit(SIGSEGV);
-+	}
-+
-+	syscall_rollback(current, regs);
-+	trigger_sigsys(regs);
-+
-+	return 1;
-+}
-+
-+int set_syscall_user_dispatch(int mode, unsigned long dispatcher_start,
-+			      unsigned long dispatcher_end, char __user *selector)
-+{
-+	switch (mode) {
-+	case PR_SYS_DISPATCH_OFF:
-+		if (dispatcher_start || dispatcher_end || selector)
-+			return -EINVAL;
-+		break;
-+	case PR_SYS_DISPATCH_ON:
-+		/*
-+		 * Validate the direct dispatcher region just for basic
-+		 * sanity.  If the user is able to submit a syscall from
-+		 * an address, that address is obviously valid.
-+		 */
-+		if (dispatcher_end < dispatcher_start)
-+			return -EINVAL;
-+
-+		if (selector && !access_ok(selector, 1))
-+			return -EFAULT;
-+
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	current->syscall_dispatch.selector = selector;
-+	current->syscall_dispatch.dispatcher_start = dispatcher_start;
-+	current->syscall_dispatch.dispatcher_end = dispatcher_end;
-+
-+	if (mode == PR_SYS_DISPATCH_ON)
-+		set_tsk_thread_flag(current, TIF_SYSCALL_USER_DISPATCH);
-+	else
-+		clear_tsk_thread_flag(current, TIF_SYSCALL_USER_DISPATCH);
-+
-+	return 0;
-+}
 -- 
-2.27.0
-
+Kees Cook
