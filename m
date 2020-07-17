@@ -7,50 +7,51 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C07D3C43445
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCACC4161F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:22:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A29EB2076A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:22:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D173A2074B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:22:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728273AbgGQHWT (ORCPT
+        id S1727943AbgGQHVC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Jul 2020 03:22:19 -0400
-Received: from mga02.intel.com ([134.134.136.20]:38280 "EHLO mga02.intel.com"
+        Fri, 17 Jul 2020 03:21:02 -0400
+Received: from mga12.intel.com ([192.55.52.136]:48157 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727989AbgGQHVE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jul 2020 03:21:04 -0400
-IronPort-SDR: 20fR+/Gn2SecUpqdL5CxY/xhbemrORuDHPSRZ6oCkJntn0crl78QqZxteh0SQogEzxLL+YqB/n
- vZo/Reg5Khmw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="137666002"
+        id S1726250AbgGQHVC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Jul 2020 03:21:02 -0400
+IronPort-SDR: fcsDcWXzIWFMfX5+wLXKbf/3ZBg2YCAL3vW+4YFXjH9LXQCGCaYBcc2Ha564J2o4CwgwrxN0aA
+ oMrXmBOO8bpg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="129111920"
 X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
-   d="scan'208";a="137666002"
+   d="scan'208";a="129111920"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:02 -0700
-IronPort-SDR: T0X54Up0hzXrelQKBCFriABUplplx0wn+etZAwWtZeijUUT+2ZTs7WpOxrsRmfFkw7Z2Mqtz0B
- LN5/HIH0BGQg==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:01 -0700
+IronPort-SDR: cdErG/obMkB2uzheKvp3J9YqSdjW6nRYsemBkcE2GrApL24pSQZlosFuj11x7nFqgQJqp+BE4g
+ kg5LLjjLgoIQ==
 X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
-   d="scan'208";a="318690690"
+   d="scan'208";a="326768967"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:02 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:00 -0700
 From:   ira.weiny@intel.com
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC V2 04/17] x86/pks: Preserve the PKRS MSR on context switch
-Date:   Fri, 17 Jul 2020 00:20:43 -0700
-Message-Id: <20200717072056.73134-5-ira.weiny@intel.com>
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH RFC V2 01/17] x86/pkeys: Create pkeys_internal.h
+Date:   Fri, 17 Jul 2020 00:20:40 -0700
+Message-Id: <20200717072056.73134-2-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20200717072056.73134-1-ira.weiny@intel.com>
 References: <20200717072056.73134-1-ira.weiny@intel.com>
@@ -63,215 +64,176 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The PKRS MSR is defined as a per-logical-processor register.  This
-isolates memory access by CPU.  Unfortunately, the MSR is not managed
-by XSAVE.  Therefore, We must preserve the protections for individual
-tasks even if they are context switched out and placed on another cpu
-later.
+Protection Keys User (PKU) and Protection Keys Supervisor (PKS) work in
+similar fashions.
 
-Define a saved PKRS value in the task struct, as well as a cached
-per-logical-processor MSR value which mirrors the MSR value of the
-current CPU.  Initialize, all tasks with the default MSR value.  Then,
-on schedule in, check the saved task MSR vs the per-cpu value.  If
-different proceed to write the MSR.  If not we avoid the overhead of the
-MSR write and continue.
+Share code between them by creating a header with common defines, move
+those defines into this header, change their names to reflect the new
+use, and include the header where needed.
 
-Follow on patches will update the saved PKRS as well as the MSR if
-needed.
-
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- arch/x86/include/asm/msr-index.h      |  1 +
- arch/x86/include/asm/pkeys_internal.h | 20 +++++++++++++++
- arch/x86/include/asm/processor.h      | 12 +++++++++
- arch/x86/kernel/cpu/common.c          |  2 ++
- arch/x86/kernel/process.c             | 35 +++++++++++++++++++++++++++
- arch/x86/mm/pkeys.c                   | 13 ++++++++++
- 6 files changed, 83 insertions(+)
+ arch/x86/include/asm/pgtable.h        | 13 ++++++-------
+ arch/x86/include/asm/pkeys.h          |  2 ++
+ arch/x86/include/asm/pkeys_internal.h | 11 +++++++++++
+ arch/x86/include/asm/processor.h      |  1 +
+ arch/x86/kernel/fpu/xstate.c          |  8 ++++----
+ arch/x86/mm/pkeys.c                   | 14 ++++++--------
+ 6 files changed, 30 insertions(+), 19 deletions(-)
+ create mode 100644 arch/x86/include/asm/pkeys_internal.h
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index e8370e64a155..b6ffdfc3f388 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -727,6 +727,7 @@
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 76aa21e8128d..30e97fc8a683 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1364,9 +1364,7 @@ static inline pmd_t pmd_swp_clear_uffd_wp(pmd_t pmd)
+ }
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_WP */
  
- #define MSR_IA32_TSC_DEADLINE		0x000006E0
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
+-#define PKRU_BITS_PER_PKEY 2
++#include <asm/pkeys_internal.h>
  
-+#define MSR_IA32_PKRS			0x000006E1
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+ extern u32 init_pkru_value;
+@@ -1376,18 +1374,19 @@ extern u32 init_pkru_value;
  
- #define MSR_TSX_FORCE_ABORT		0x0000010F
+ static inline bool __pkru_allows_read(u32 pkru, u16 pkey)
+ {
+-	int pkru_pkey_bits = pkey * PKRU_BITS_PER_PKEY;
+-	return !(pkru & (PKRU_AD_BIT << pkru_pkey_bits));
++	int pkru_pkey_bits = pkey * PKR_BITS_PER_PKEY;
++
++	return !(pkru & (PKR_AD_BIT << pkru_pkey_bits));
+ }
  
+ static inline bool __pkru_allows_write(u32 pkru, u16 pkey)
+ {
+-	int pkru_pkey_bits = pkey * PKRU_BITS_PER_PKEY;
++	int pkru_pkey_bits = pkey * PKR_BITS_PER_PKEY;
+ 	/*
+ 	 * Access-disable disables writes too so we need to check
+ 	 * both bits here.
+ 	 */
+-	return !(pkru & ((PKRU_AD_BIT|PKRU_WD_BIT) << pkru_pkey_bits));
++	return !(pkru & ((PKR_AD_BIT|PKR_WD_BIT) << pkru_pkey_bits));
+ }
+ 
+ static inline u16 pte_flags_pkey(unsigned long pte_flags)
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index 2ff9b98812b7..be8b3e448f76 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_X86_PKEYS_H
+ #define _ASM_X86_PKEYS_H
+ 
++#include <asm/pkeys_internal.h>
++
+ #define ARCH_DEFAULT_PKEY	0
+ 
+ /*
 diff --git a/arch/x86/include/asm/pkeys_internal.h b/arch/x86/include/asm/pkeys_internal.h
-index a9f086f1e4b4..05257cdc7200 100644
---- a/arch/x86/include/asm/pkeys_internal.h
+new file mode 100644
+index 000000000000..a9f086f1e4b4
+--- /dev/null
 +++ b/arch/x86/include/asm/pkeys_internal.h
-@@ -8,4 +8,24 @@
- 
- #define PKR_AD_KEY(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
- 
-+/*
-+ * Define a default PKRS value for each task.
-+ *
-+ * Key 0 has no restriction.  All other keys are set to the most restrictive
-+ * value which is access disabled (AD=1).
-+ *
-+ * NOTE: This needs to be a macro to be used as part of the INIT_THREAD macro.
-+ */
-+#define INIT_PKRS_VALUE (PKR_AD_KEY(1) | PKR_AD_KEY(2) | PKR_AD_KEY(3) | \
-+			 PKR_AD_KEY(4) | PKR_AD_KEY(5) | PKR_AD_KEY(6) | \
-+			 PKR_AD_KEY(7) | PKR_AD_KEY(8) | PKR_AD_KEY(9) | \
-+			 PKR_AD_KEY(10) | PKR_AD_KEY(11) | PKR_AD_KEY(12) | \
-+			 PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15))
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_PKEYS_INTERNAL_H
++#define _ASM_X86_PKEYS_INTERNAL_H
 +
-+#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+void write_pkrs(u32 pkrs_val);
-+#else
-+static inline void write_pkrs(u32 pkrs_val) { }
-+#endif
++#define PKR_AD_BIT 0x1
++#define PKR_WD_BIT 0x2
++#define PKR_BITS_PER_PKEY 2
 +
- #endif /*_ASM_X86_PKEYS_INTERNAL_H */
++#define PKR_AD_KEY(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
++
++#endif /*_ASM_X86_PKEYS_INTERNAL_H */
 diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 7da9855b5068..704d9f28fd4e 100644
+index 03b7c4ca425a..7da9855b5068 100644
 --- a/arch/x86/include/asm/processor.h
 +++ b/arch/x86/include/asm/processor.h
-@@ -545,6 +545,11 @@ struct thread_struct {
- 
- 	unsigned int		sig_on_uaccess_err:1;
- 
-+#ifdef	CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+	/* Saved Protection key register for supervisor mappings */
-+	u32			saved_pkrs;
-+#endif
-+
- 	/* Floating point and extended processor state */
- 	struct fpu		fpu;
- 	/*
-@@ -907,8 +912,15 @@ static inline void spin_lock_prefetch(const void *x)
- #define STACK_TOP		TASK_SIZE_LOW
- #define STACK_TOP_MAX		TASK_SIZE_MAX
- 
-+#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+#define INIT_THREAD_PKRS	.saved_pkrs = INIT_PKRS_VALUE,
-+#else
-+#define INIT_THREAD_PKRS
-+#endif
-+
- #define INIT_THREAD  {						\
- 	.addr_limit		= KERNEL_DS,			\
-+	INIT_THREAD_PKRS					\
- }
- 
- extern unsigned long KSTK_ESP(struct task_struct *task);
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index f34bcefeda42..b8241936cbbf 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -56,6 +56,7 @@
- #include <asm/intel-family.h>
- #include <asm/cpu_device_id.h>
- #include <asm/uv/uv.h>
+@@ -27,6 +27,7 @@ struct vm86;
+ #include <asm/unwind_hints.h>
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
 +#include <asm/pkeys_internal.h>
  
- #include "cpu.h"
- 
-@@ -1442,6 +1443,7 @@ static void setup_pks(void)
- 		return;
- 
- 	cr4_set_bits(X86_CR4_PKS);
-+	write_pkrs(INIT_PKRS_VALUE);
- }
- 
- /*
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index f362ce0d5ac0..d69250a7c1bf 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -42,6 +42,7 @@
- #include <asm/spec-ctrl.h>
- #include <asm/io_bitmap.h>
- #include <asm/proto.h>
-+#include <asm/pkeys_internal.h>
- 
- #include "process.h"
- 
-@@ -184,6 +185,36 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long sp,
- 	return ret;
- }
- 
-+/*
-+ * NOTE: We wrap pks_init_task() and pks_sched_in() with
-+ * CONFIG_ARCH_HAS_SUPERVISOR_PKEYS because using IS_ENABLED() fails
-+ * due to the lack of task_struct->saved_pkrs in this configuration.
-+ * Furthermore, we place them here because of the complexity introduced by
-+ * header conflicts introduced to get the task_struct definition in the pkeys
-+ * headers.
-+ */
-+#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+DECLARE_PER_CPU(u32, pkrs_cache);
-+static inline void pks_init_task(struct task_struct *tsk)
-+{
-+	/* New tasks get the most restrictive PKRS value */
-+	tsk->thread.saved_pkrs = INIT_PKRS_VALUE;
-+}
-+static inline void pks_sched_in(void)
-+{
-+	u64 current_pkrs = current->thread.saved_pkrs;
-+
-+	/* Only update the MSR when current's pkrs is different from the MSR. */
-+	if (this_cpu_read(pkrs_cache) == current_pkrs)
-+		return;
-+
-+	write_pkrs(current_pkrs);
-+}
-+#else
-+static inline void pks_init_task(struct task_struct *tsk) { }
-+static inline void pks_sched_in(void) { }
-+#endif
-+
- void flush_thread(void)
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index bda2e5eaca0e..fc1ec2986e03 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -955,7 +955,7 @@ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 		unsigned long init_val)
  {
- 	struct task_struct *tsk = current;
-@@ -192,6 +223,8 @@ void flush_thread(void)
- 	memset(tsk->thread.tls_array, 0, sizeof(tsk->thread.tls_array));
+ 	u32 old_pkru;
+-	int pkey_shift = (pkey * PKRU_BITS_PER_PKEY);
++	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
+ 	u32 new_pkru_bits = 0;
  
- 	fpu__clear_all(&tsk->thread.fpu);
-+
-+	pks_init_task(tsk);
- }
+ 	/*
+@@ -974,16 +974,16 @@ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
  
- void disable_TSC(void)
-@@ -655,6 +688,8 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
+ 	/* Set the bits we need in PKRU:  */
+ 	if (init_val & PKEY_DISABLE_ACCESS)
+-		new_pkru_bits |= PKRU_AD_BIT;
++		new_pkru_bits |= PKR_AD_BIT;
+ 	if (init_val & PKEY_DISABLE_WRITE)
+-		new_pkru_bits |= PKRU_WD_BIT;
++		new_pkru_bits |= PKR_WD_BIT;
  
- 	if ((tifp ^ tifn) & _TIF_SLD)
- 		switch_to_sld(tifn);
-+
-+	pks_sched_in();
- }
+ 	/* Shift the bits in to the correct place in PKRU for pkey: */
+ 	new_pkru_bits <<= pkey_shift;
  
- /*
+ 	/* Get old PKRU and mask off any old bits in place: */
+ 	old_pkru = read_pkru();
+-	old_pkru &= ~((PKRU_AD_BIT|PKRU_WD_BIT) << pkey_shift);
++	old_pkru &= ~((PKR_AD_BIT|PKR_WD_BIT) << pkey_shift);
+ 
+ 	/* Write old part along with new part: */
+ 	write_pkru(old_pkru | new_pkru_bits);
 diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index a5c680d32930..0f86f2374bd7 100644
+index 8873ed1438a9..f5efb4007e74 100644
 --- a/arch/x86/mm/pkeys.c
 +++ b/arch/x86/mm/pkeys.c
-@@ -236,3 +236,16 @@ u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val)
- 	/* Return the old part along with the new part: */
- 	return old_pkr | new_pkr_bits;
+@@ -111,19 +111,17 @@ int __arch_override_mprotect_pkey(struct vm_area_struct *vma, int prot, int pkey
+ 	return vma_pkey(vma);
  }
-+
-+DEFINE_PER_CPU(u32, pkrs_cache);
-+
-+/*
-+ * Write the PKey Register Supervisor.  This must be run with preemption
-+ * disabled as it does not guarantee the atomicity of updating the pkrs_cache
-+ * and MSR on its own.
-+ */
-+void write_pkrs(u32 pkrs_val)
-+{
-+	this_cpu_write(pkrs_cache, pkrs_val);
-+	wrmsrl(MSR_IA32_PKRS, pkrs_val);
-+}
+ 
+-#define PKRU_AD_KEY(pkey)	(PKRU_AD_BIT << ((pkey) * PKRU_BITS_PER_PKEY))
+-
+ /*
+  * Make the default PKRU value (at execve() time) as restrictive
+  * as possible.  This ensures that any threads clone()'d early
+  * in the process's lifetime will not accidentally get access
+  * to data which is pkey-protected later on.
+  */
+-u32 init_pkru_value = PKRU_AD_KEY( 1) | PKRU_AD_KEY( 2) | PKRU_AD_KEY( 3) |
+-		      PKRU_AD_KEY( 4) | PKRU_AD_KEY( 5) | PKRU_AD_KEY( 6) |
+-		      PKRU_AD_KEY( 7) | PKRU_AD_KEY( 8) | PKRU_AD_KEY( 9) |
+-		      PKRU_AD_KEY(10) | PKRU_AD_KEY(11) | PKRU_AD_KEY(12) |
+-		      PKRU_AD_KEY(13) | PKRU_AD_KEY(14) | PKRU_AD_KEY(15);
++u32 init_pkru_value = PKR_AD_KEY( 1) | PKR_AD_KEY( 2) | PKR_AD_KEY( 3) |
++		      PKR_AD_KEY( 4) | PKR_AD_KEY( 5) | PKR_AD_KEY( 6) |
++		      PKR_AD_KEY( 7) | PKR_AD_KEY( 8) | PKR_AD_KEY( 9) |
++		      PKR_AD_KEY(10) | PKR_AD_KEY(11) | PKR_AD_KEY(12) |
++		      PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15);
+ 
+ /*
+  * Called from the FPU code when creating a fresh set of FPU
+@@ -173,7 +171,7 @@ static ssize_t init_pkru_write_file(struct file *file,
+ 	 * up immediately if someone attempts to disable access
+ 	 * or writes to pkey 0.
+ 	 */
+-	if (new_init_pkru & (PKRU_AD_BIT|PKRU_WD_BIT))
++	if (new_init_pkru & (PKR_AD_BIT|PKR_WD_BIT))
+ 		return -EINVAL;
+ 
+ 	WRITE_ONCE(init_pkru_value, new_init_pkru);
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
