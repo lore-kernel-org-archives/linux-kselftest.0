@@ -7,51 +7,50 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FAE1C433DF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92FE8C4332E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:21:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20F4020768
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:21:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7936A2076A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jul 2020 07:21:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728238AbgGQHVj (ORCPT
+        id S1726250AbgGQHVI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Jul 2020 03:21:39 -0400
+        Fri, 17 Jul 2020 03:21:08 -0400
 Received: from mga07.intel.com ([134.134.136.100]:43785 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728075AbgGQHVK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jul 2020 03:21:10 -0400
-IronPort-SDR: mpCI5GwvWZvuhxZTBf/E+PskpFzSiIYegx8jPnlZ0jWozbzhGsY3wgYPWcUGW8NAAXtldnpw8/
- /fOAI44uECkQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="214268945"
+        id S1727992AbgGQHVI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Jul 2020 03:21:08 -0400
+IronPort-SDR: zHh1j819bUVCIU5cBFagKdnAsDC+WdOsx1FHaPHhBCA/ErujY2+EuU6KJubelVYdRYB51XhNfO
+ Py5Av/wZd2KQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="214268929"
 X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
-   d="scan'208";a="214268945"
+   d="scan'208";a="214268929"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:08 -0700
-IronPort-SDR: L5N41W1IZMYqtEO0G+MmXEdL7gPoNKH9/M9p+sSFdda5Nsq8X33DPhrp/daPHnsytrbgemyQNn
- zPgSpidsfJCg==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:03 -0700
+IronPort-SDR: YuI06+zcQTmtYh2FhfRWS0zFPlu++X6tf+pbLZ6KHWdJSf9+QDz6KRcknyroF05uy/NVCkDi73
+ CtVQWNKmYc0Q==
 X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
-   d="scan'208";a="308927483"
+   d="scan'208";a="317271922"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:07 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 00:21:02 -0700
 From:   ira.weiny@intel.com
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Vishal Verma <vishal.l.verma@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC V2 12/17] memremap: Add zone device access protection
-Date:   Fri, 17 Jul 2020 00:20:51 -0700
-Message-Id: <20200717072056.73134-13-ira.weiny@intel.com>
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH RFC V2 05/17] x86/pks: Add PKS kernel API
+Date:   Fri, 17 Jul 2020 00:20:44 -0700
+Message-Id: <20200717072056.73134-6-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20200717072056.73134-1-ira.weiny@intel.com>
 References: <20200717072056.73134-1-ira.weiny@intel.com>
@@ -62,336 +61,261 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+From: Fenghua Yu <fenghua.yu@intel.com>
 
-Device managed memory exposes itself to the kernel direct map which
-allows stray pointers to access these device memories.
+PKS allows kernel users to define domains of page mappings which have
+additional protections beyond the paging protections.
 
-Stray pointers to normal memory may result in a crash or other
-undesirable behavior which, while unfortunate, are usually recoverable
-with a reboot.  Stray writes to areas such as non-volatile memory are
-permanent in nature and thus are more likely to result in permanent user
-data loss vs a stray write to other memory areas
+Add an API to allocate, use, and free a protection key which identifies
+such a domain.
 
-Set up an infrastructure for extra device access protection. Then
-implement the new protection using the new Protection Keys Supervisor
-(PKS) on architectures which support it.
+We export 2 new symbols pks_key_alloc() and pks_key_free() while
+pks_update_protection() is exposed as an inline function via header
+file.
 
-To enable this extra protection devices specify a flag in the pgmap to
-indicate that these areas wish to use additional protection.
+pks_key_alloc() reserves pkey 0 for default kernel pages.  The other 15
+keys are dynamically allocated to allow better use of the limited key
+space.
 
-Kernel code which intends to access this memory can do so automatically
-through the use of the kmap infrastructure calling into
-dev_access_[enable|disable]() described here.  The kmap infrastructure
-is implemented in a follow on patch.
+This, and the fact that PKS may not be available on all arch's, means
+callers of the allocator _must_ be prepared for it to fail and take
+appropriate action to run without their allocated domain.  This is not
+anticipated to be a problem as these protections only serve to harden
+memory and users should be no worse off than before the introduction of
+PKS.
 
-In addition, users can directly enable/disable the access through
-dev_access_[enable|disable]() if they have a priori knowledge of the
-type of pages they are accessing.
+PAGE_KERNEL_PKEY(key) and _PAGE_PKEY(pkey) aid in setting page table
+entry bits by kernel users.  Note these defines will be used in follow
+on patches but are included here for a complete interface.
 
-All calls to enable/disable protection flow through
-dev_access_[enable|disable]() and are nestable by the use of a per task
-reference count.  This reference count does 2 things.
+pks_update_protection() is inlined for performance and allows kernel
+users the ability to change the protections for the domain identified by
+the pkey specified.  It is undefined behavior to call this on a pkey not
+allocated by the allocator.  And will WARN_ON if called on architectures
+which do not support PKS.  (Again callers are expected to check the
+return of pks_key_alloc() before using this API further.)
 
-1) Allows a thread to nest calls to disable protection such that the
-   first call to re-enable protection does not 'break' the last access of
-   the pmem device memory.
+It should also be noted that the underlying WRMSR(MSR_IA32_PKRS) is not
+serializing but still maintains ordering properties similar to WRPKRU.
+The current SDM section on PKRS needs updating but should be the same as
+that of WRPKRU.  So to quote from the WRPKRU text:
 
-2) Provides faster performance by avoiding lots of MSR writes.  For
-   example, looping over a sequence of pmem pages.
+	WRPKRU will never execute speculatively. Memory accesses
+	affected by PKRU register will not execute (even speculatively)
+	until all prior executions of WRPKRU have completed execution
+	and updated the PKRU register.
 
-IRQ context borrows the reference count of the interrupted task.  This
-is a trade off vs saving/restoring on interrupt entry/exit.  The
-following example shows how this works:
+Finally, pks_key_free() allows a user to return the key to the
+allocator for use by others.
 
-...
-	// ref == 0
-        dev_access_enable()  // ref += 1 ==> disable protection
-                irq()
-                        dev_access_enable()   // ref += 1 ==> 2
-                        dev_access_disable()  // ref -= 1 ==> 1
-        do_pmem_thing()  // all good here
-        dev_access_disable() // ref -= 1 ==> 0 ==> enable protection
-...
+The interface maintains Access Disabled (AD=1) for all keys not
+currently allocated.  Therefore, the user can depend on access being
+disabled when pks_key_alloc() returns a key.
 
-While this does leave some openings for stray writes during irq's the
-over all protection is much stronger after this patch and implementing
-save/restore during irq's would have been a much more complicated
-implementation.  So we compromise.
-
-The pkey value is never free'ed as this too optimizes the implementation
-to be either on or off using the static branch conditional in the fast
-paths.
-
+Co-developed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- include/linux/memremap.h |  1 +
- include/linux/mm.h       | 33 ++++++++++++++
- include/linux/sched.h    |  3 ++
- init/init_task.c         |  3 ++
- kernel/fork.c            |  3 ++
- mm/Kconfig               | 13 ++++++
- mm/memremap.c            | 98 ++++++++++++++++++++++++++++++++++++++++
- 7 files changed, 154 insertions(+)
+ arch/x86/include/asm/pgtable_types.h  |  4 ++
+ arch/x86/include/asm/pkeys.h          | 30 ++++++++++
+ arch/x86/include/asm/pkeys_internal.h |  4 ++
+ arch/x86/mm/pkeys.c                   | 79 +++++++++++++++++++++++++++
+ include/linux/pkeys.h                 | 14 +++++
+ 5 files changed, 131 insertions(+)
 
-diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-index 5f5b2df06e61..87a9772b1aa7 100644
---- a/include/linux/memremap.h
-+++ b/include/linux/memremap.h
-@@ -90,6 +90,7 @@ struct dev_pagemap_ops {
- };
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index 816b31c68550..2ab45ef89c7d 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -73,6 +73,8 @@
+ 			 _PAGE_PKEY_BIT2 | \
+ 			 _PAGE_PKEY_BIT3)
  
- #define PGMAP_ALTMAP_VALID	(1 << 0)
-+#define PGMAP_PROT_ENABLED	(1 << 1)
++#define _PAGE_PKEY(pkey)	(_AT(pteval_t, pkey) << _PAGE_BIT_PKEY_BIT0)
++
+ #if defined(CONFIG_X86_64) || defined(CONFIG_X86_PAE)
+ #define _PAGE_KNL_ERRATUM_MASK (_PAGE_DIRTY | _PAGE_ACCESSED)
+ #else
+@@ -229,6 +231,8 @@ enum page_cache_mode {
+ #define PAGE_KERNEL_IO		__pgprot_mask(__PAGE_KERNEL_IO)
+ #define PAGE_KERNEL_IO_NOCACHE	__pgprot_mask(__PAGE_KERNEL_IO_NOCACHE)
  
- /**
-  * struct dev_pagemap - metadata for ZONE_DEVICE mappings
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index dc7b87310c10..99d0914e26f9 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1123,6 +1123,39 @@ static inline bool is_pci_p2pdma_page(const struct page *page)
- 		page->pgmap->type == MEMORY_DEVICE_PCI_P2PDMA;
- }
++#define PAGE_KERNEL_PKEY(pkey)	__pgprot_mask(__PAGE_KERNEL | _PAGE_PKEY(pkey))
++
+ #endif	/* __ASSEMBLY__ */
  
-+#ifdef CONFIG_ZONE_DEVICE_ACCESS_PROTECTION
-+DECLARE_STATIC_KEY_FALSE(dev_protection_static_key);
+ /*         xwr */
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index 34cef29fed20..e30ea907abb6 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -138,4 +138,34 @@ static inline int vma_pkey(struct vm_area_struct *vma)
+ 
+ u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val);
+ 
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++int pks_key_alloc(const char *const pkey_user);
++void pks_key_free(int pkey);
++u32 get_new_pkr(u32 old_pkr, int pkey, unsigned long init_val);
 +
 +/*
-+ * We make page_is_access_protected() as quick as possible.
-+ *    1) If no mappings have been enabled with extra protection we skip this
-+ *       entirely
-+ *    2) Skip pages which are not ZONE_DEVICE
-+ *    3) Only then check if this particular page was mapped with extra
-+ *       protections.
++ * pks_update_protection - Update the protection of the specified key
++ *
++ * @pkey: Key for the domain to change
++ * @protection: protection bits to be used
++ *
++ * Protection utilizes the same protection bits specified for User pkeys
++ *     PKEY_DISABLE_ACCESS
++ *     PKEY_DISABLE_WRITE
++ *
++ * This is not a global update.  It only affects the current running thread.
++ *
++ * It is undefined and a bug for users to call this without having allocated a
++ * pkey and using it as pkey here.
 + */
-+static inline bool page_is_access_protected(struct page *page)
++static inline void pks_update_protection(int pkey, unsigned long protection)
 +{
-+	if (!static_branch_unlikely(&dev_protection_static_key))
-+		return false;
-+	if (!is_zone_device_page(page))
-+		return false;
-+	if (page->pgmap->flags & PGMAP_PROT_ENABLED)
-+		return true;
-+	return false;
++	current->thread.saved_pkrs = get_new_pkr(current->thread.saved_pkrs,
++						 pkey, protection);
++	preempt_disable();
++	write_pkrs(current->thread.saved_pkrs);
++	preempt_enable();
 +}
++#endif /* CONFIG_ARCH_HAS_SUPERVISOR_PKEYS */
 +
-+void dev_access_enable(void);
-+void dev_access_disable(void);
-+#else
-+static inline bool page_is_access_protected(struct page *page)
-+{
-+	return false;
-+}
-+static inline void dev_access_enable(void) { }
-+static inline void dev_access_disable(void) { }
-+#endif /* CONFIG_ZONE_DEVICE_ACCESS_PROTECTION */
+ #endif /*_ASM_X86_PKEYS_H */
+diff --git a/arch/x86/include/asm/pkeys_internal.h b/arch/x86/include/asm/pkeys_internal.h
+index 05257cdc7200..e34f380c66d1 100644
+--- a/arch/x86/include/asm/pkeys_internal.h
++++ b/arch/x86/include/asm/pkeys_internal.h
+@@ -22,6 +22,10 @@
+ 			 PKR_AD_KEY(10) | PKR_AD_KEY(11) | PKR_AD_KEY(12) | \
+ 			 PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15))
+ 
++/*  PKS supports 16 keys. Key 0 is reserved for the kernel. */
++#define        PKS_KERN_DEFAULT_KEY    0
++#define        PKS_NUM_KEYS            16
 +
- /* 127: arbitrary random number, small enough to assemble well */
- #define page_ref_zero_or_close_to_overflow(page) \
- 	((unsigned int) page_ref_count(page) + 127u <= 127u)
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 692e327d7455..2a8dbbb371ee 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1313,6 +1313,9 @@ struct task_struct {
- 	struct callback_head		mce_kill_me;
- #endif
- 
-+#ifdef CONFIG_ZONE_DEVICE_ACCESS_PROTECTION
-+	unsigned int			dev_page_access_ref;
-+#endif
- 	/*
- 	 * New fields for task_struct should be added above here, so that
- 	 * they are included in the randomized portion of task_struct.
-diff --git a/init/init_task.c b/init/init_task.c
-index 15089d15010a..17766b059606 100644
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -204,6 +204,9 @@ struct task_struct init_task
- #ifdef CONFIG_SECURITY
- 	.security	= NULL,
- #endif
-+#ifdef CONFIG_ZONE_DEVICE_ACCESS_PROTECTION
-+	.dev_page_access_ref = 0,
-+#endif
- };
- EXPORT_SYMBOL(init_task);
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index efc5493203ae..a6c14b962a27 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -957,6 +957,9 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 
- #ifdef CONFIG_MEMCG
- 	tsk->active_memcg = NULL;
-+#endif
-+#ifdef CONFIG_ZONE_DEVICE_ACCESS_PROTECTION
-+	tsk->dev_page_access_ref = 0;
- #endif
- 	return tsk;
- 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index e541d2c0dcac..f6029f3c2c89 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -798,6 +798,19 @@ config ZONE_DEVICE
- 
- 	  If FS_DAX is enabled, then say Y.
- 
-+config ZONE_DEVICE_ACCESS_PROTECTION
-+	bool "Device memory access protection"
-+	depends on ZONE_DEVICE
-+	depends on ARCH_HAS_SUPERVISOR_PKEYS
+ #ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
+ void write_pkrs(u32 pkrs_val);
+ #else
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index 0f86f2374bd7..16f735c12fcd 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -3,6 +3,9 @@
+  * Intel Memory Protection Keys management
+  * Copyright (c) 2015, Intel Corporation.
+  */
++#undef pr_fmt
++#define pr_fmt(fmt) "x86/pkeys: " fmt
 +
-+	help
-+	  Enable the option of having access protections on device memory
-+	  areas.  This protects against access to device memory which is not
-+	  intended such as stray writes.  This feature is particularly useful
-+	  to protect against corruption of persistent memory.
-+
-+	  If in doubt, say 'Y'.
-+
- config DEV_PAGEMAP_OPS
- 	bool
- 
-diff --git a/mm/memremap.c b/mm/memremap.c
-index 9fb9ad500e78..513d9c3a48de 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -6,12 +6,16 @@
- #include <linux/memory_hotplug.h>
- #include <linux/mm.h>
- #include <linux/pfn_t.h>
-+#include <linux/pkeys.h>
- #include <linux/swap.h>
- #include <linux/mmzone.h>
- #include <linux/swapops.h>
- #include <linux/types.h>
- #include <linux/wait_bit.h>
- #include <linux/xarray.h>
-+#include <uapi/asm-generic/mman-common.h>
-+
-+#define PKEY_INVALID (INT_MIN)
- 
- static DEFINE_XARRAY(pgmap_array);
- 
-@@ -67,6 +71,97 @@ static void devmap_managed_enable_put(void)
+ #include <linux/debugfs.h>		/* debugfs_create_u32()		*/
+ #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
+ #include <linux/pkeys.h>                /* PKEY_*                       */
+@@ -249,3 +252,79 @@ void write_pkrs(u32 pkrs_val)
+ 	this_cpu_write(pkrs_cache, pkrs_val);
+ 	wrmsrl(MSR_IA32_PKRS, pkrs_val);
  }
- #endif /* CONFIG_DEV_PAGEMAP_OPS */
- 
-+#ifdef CONFIG_ZONE_DEVICE_ACCESS_PROTECTION
++
++DEFINE_MUTEX(pks_lock);
++static const char pks_key_user0[] = "kernel";
++
++/* Store names of allocated keys for debug.  Key 0 is reserved for the kernel.  */
++static const char *pks_key_users[PKS_NUM_KEYS] = {
++	pks_key_user0
++};
++
 +/*
-+ * Note all devices which have asked for protections share the same key.  The
-+ * key may, or may not, have been provided by the core.  If not, protection
-+ * will remain disabled.  The key acquisition is attempted at init time and
-+ * never again.  So we don't have to worry about dev_page_pkey changing.
++ * Each key is represented by a bit.  Bit 0 is set for key 0 and reserved for
++ * its use.  We use ulong for the bit operations but only 16 bits are used.
 + */
-+static int dev_page_pkey = PKEY_INVALID;
-+DEFINE_STATIC_KEY_FALSE(dev_protection_static_key);
-+EXPORT_SYMBOL(dev_protection_static_key);
++static unsigned long pks_key_allocation_map = 1 << PKS_KERN_DEFAULT_KEY;
 +
-+static pgprot_t dev_protection_enable_get(struct dev_pagemap *pgmap, pgprot_t prot)
++/*
++ * pks_key_alloc - Allocate a PKS key
++ *
++ * @pkey_user: String stored for debugging of key exhaustion.  The caller is
++ * responsible to maintain this memory until pks_key_free().
++ */
++int pks_key_alloc(const char * const pkey_user)
 +{
-+	if (pgmap->flags & PGMAP_PROT_ENABLED && dev_page_pkey != PKEY_INVALID) {
-+		pgprotval_t val = pgprot_val(prot);
++	int nr, old_bit, pkey;
 +
-+		static_branch_inc(&dev_protection_static_key);
-+		prot = __pgprot(val | _PAGE_PKEY(dev_page_pkey));
++	might_sleep();
++
++	if (!cpu_feature_enabled(X86_FEATURE_PKS))
++		return -EINVAL;
++
++	mutex_lock(&pks_lock);
++	/* Find a free bit (0) in the bit map. */
++	old_bit = 1;
++	while (old_bit) {
++		nr = ffz(pks_key_allocation_map);
++		old_bit = __test_and_set_bit(nr, &pks_key_allocation_map);
 +	}
-+	return prot;
++
++	if (nr < PKS_NUM_KEYS) {
++		pkey = nr;
++		/* for debugging key exhaustion */
++		pks_key_users[pkey] = pkey_user;
++	} else {
++		pkey = -ENOSPC;
++		pr_info("Cannot allocate supervisor key for %s.\n",
++			pkey_user);
++	}
++
++	mutex_unlock(&pks_lock);
++	return pkey;
 +}
++EXPORT_SYMBOL_GPL(pks_key_alloc);
 +
-+static void dev_protection_enable_put(struct dev_pagemap *pgmap)
-+{
-+	if (pgmap->flags & PGMAP_PROT_ENABLED && dev_page_pkey != PKEY_INVALID)
-+		static_branch_dec(&dev_protection_static_key);
-+}
-+
-+void dev_access_disable(void)
-+{
-+	unsigned long flags;
-+
-+	if (!static_branch_unlikely(&dev_protection_static_key))
-+		return;
-+
-+	local_irq_save(flags);
-+	current->dev_page_access_ref--;
-+	if (current->dev_page_access_ref == 0)
-+		pks_update_protection(dev_page_pkey, PKEY_DISABLE_ACCESS);
-+	local_irq_restore(flags);
-+}
-+EXPORT_SYMBOL_GPL(dev_access_disable);
-+
-+void dev_access_enable(void)
-+{
-+	unsigned long flags;
-+
-+	if (!static_branch_unlikely(&dev_protection_static_key))
-+		return;
-+
-+	local_irq_save(flags);
-+	/* 0 clears the PKEY_DISABLE_ACCESS bit, allowing access */
-+	if (current->dev_page_access_ref == 0)
-+		pks_update_protection(dev_page_pkey, 0);
-+	current->dev_page_access_ref++;
-+	local_irq_restore(flags);
-+}
-+EXPORT_SYMBOL_GPL(dev_access_enable);
-+
-+/**
-+ * dev_access_protection_init: Configure a PKS key domain for device pages
++/*
++ * pks_key_free - Free a previously allocate PKS key
 + *
-+ * The domain defaults to the protected state.  Device page mappings should set
-+ * the PGMAP_PROT_ENABLED flag when mapping pages.
-+ *
-+ * Note the pkey is never free'ed.  This is run at init time and we either get
-+ * the key or we do not.  We need to do this to maintian a constant key (or
-+ * not) as device memory is added or removed.
++ * @pkey: Key to be free'ed
 + */
-+static int __init __dev_access_protection_init(void)
++void pks_key_free(int pkey)
 +{
-+	int pkey = pks_key_alloc("Device Memory");
++	might_sleep();
 +
-+	if (pkey < 0)
-+		return 0;
++	if (!cpu_feature_enabled(X86_FEATURE_PKS))
++		return;
 +
-+	dev_page_pkey = pkey;
++	if (pkey >= PKS_NUM_KEYS || pkey <= PKS_KERN_DEFAULT_KEY)
++		return;
 +
-+	return 0;
++	mutex_lock(&pks_lock);
++	__clear_bit(pkey, &pks_key_allocation_map);
++	pks_key_users[pkey] = NULL;
++	/* Restore to default AD=1 and WD=0. */
++	pks_update_protection(pkey, PKEY_DISABLE_ACCESS);
++	mutex_unlock(&pks_lock);
 +}
-+subsys_initcall(__dev_access_protection_init);
-+#else
-+static pgprot_t dev_protection_enable_get(struct dev_pagemap *pgmap, pgprot_t prot)
-+{
-+	return prot;
-+}
-+static void dev_protection_enable_put(struct dev_pagemap *pgmap)
-+{
-+}
-+#endif /* CONFIG_ZONE_DEVICE_ACCESS_PROTECTION */
-+
- static void pgmap_array_delete(struct resource *res)
- {
- 	xa_store_range(&pgmap_array, PHYS_PFN(res->start), PHYS_PFN(res->end),
-@@ -156,6 +251,7 @@ void memunmap_pages(struct dev_pagemap *pgmap)
- 	pgmap_array_delete(res);
- 	WARN_ONCE(pgmap->altmap.alloc, "failed to free all reserved pages\n");
- 	devmap_managed_enable_put();
-+	dev_protection_enable_put(pgmap);
- }
- EXPORT_SYMBOL_GPL(memunmap_pages);
++EXPORT_SYMBOL_GPL(pks_key_free);
+diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
+index 2955ba976048..e4bff77d7b49 100644
+--- a/include/linux/pkeys.h
++++ b/include/linux/pkeys.h
+@@ -50,4 +50,18 @@ static inline void copy_init_pkru_to_fpregs(void)
  
-@@ -191,6 +287,8 @@ void *memremap_pages(struct dev_pagemap *pgmap, int nid)
- 	int error, is_ram;
- 	bool need_devmap_managed = true;
+ #endif /* ! CONFIG_ARCH_HAS_PKEYS */
  
-+	params.pgprot = dev_protection_enable_get(pgmap, params.pgprot);
++#ifndef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++static inline int pks_key_alloc(const char * const pkey_user)
++{
++	return -EINVAL;
++}
++static inline void pks_key_free(int pkey)
++{
++}
++static inline void pks_update_protection(int pkey, unsigned long protection)
++{
++	WARN_ON_ONCE(1);
++}
++#endif /* ! CONFIG_ARCH_HAS_SUPERVISOR_PKEYS */
 +
- 	switch (pgmap->type) {
- 	case MEMORY_DEVICE_PRIVATE:
- 		if (!IS_ENABLED(CONFIG_DEVICE_PRIVATE)) {
+ #endif /* _LINUX_PKEYS_H */
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
