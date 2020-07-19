@@ -1,135 +1,196 @@
-Return-Path: <SRS0=6IiA=A5=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=Ht+A=A6=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	FROM_LOCAL_NOVOWEL,HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 876F7C433E0
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Jul 2020 05:51:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B23A7C433E2
+	for <linux-kselftest@archiver.kernel.org>; Sun, 19 Jul 2020 02:17:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6857D207FB
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Jul 2020 05:51:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91A8821741
+	for <linux-kselftest@archiver.kernel.org>; Sun, 19 Jul 2020 02:17:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sUh8rRPh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726499AbgGRFvG (ORCPT
+        id S1726657AbgGSCRE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 18 Jul 2020 01:51:06 -0400
-Received: from mga18.intel.com ([134.134.136.126]:11135 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726249AbgGRFvF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jul 2020 01:51:05 -0400
-IronPort-SDR: AYj5vi9SRqf90NzlG1PtvIWR5kP8GG2xKuSQJMNrukWUMpeW1xa+p5v6uCymiFzQveeMn9wzGH
- rTUZnN7GJfGw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9685"; a="137186390"
-X-IronPort-AV: E=Sophos;i="5.75,365,1589266800"; 
-   d="scan'208";a="137186390"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 22:51:04 -0700
-IronPort-SDR: Bc8yS/Mga/P/JELyDS9maVNQZIck4wfEmlGO3VkOyOrNQb8SVgJAdVZL/lTq/KBuOwtXK2wrMt
- piSYLWsQeJ9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,365,1589266800"; 
-   d="scan'208";a="282993538"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jul 2020 22:51:04 -0700
-Date:   Fri, 17 Jul 2020 22:51:03 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V2 12/17] memremap: Add zone device access protection
-Message-ID: <20200718055103.GU3008823@iweiny-DESK2.sc.intel.com>
-References: <20200717072056.73134-1-ira.weiny@intel.com>
- <20200717072056.73134-13-ira.weiny@intel.com>
- <20200717091718.GA10769@hirez.programming.kicks-ass.net>
+        Sat, 18 Jul 2020 22:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgGSCRD (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 18 Jul 2020 22:17:03 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B499C0619D2;
+        Sat, 18 Jul 2020 19:17:03 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id l6so7077331plt.7;
+        Sat, 18 Jul 2020 19:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DDjkruDZZiGuO+G4uGfQWxOYHUq1vj3yKKda7hKMhwc=;
+        b=sUh8rRPhAmf8OutYt/BHJG13s9KA8uRNsqFyjyJz/7Yh/Y7BbVuVKPk/Pt1FLSzi9X
+         xm66I9JrTallWYHWskBcOH1tB9T1NAuD/+Vi9G6hA3/1Sc4jpdKTVzkN+G8kj5CIinxh
+         G2Y6TLfZmgvsZT7R2LMk1eRJ8HNBpHfNn/AbwXvv97eVJYl7SqBsbsswjWECFSGd0the
+         kUi+PWWD3hTage2lAs7zlvsE+cRDlI7nAnHXLoRnBcqnCasO2TuIgxMyQdA4nDeQcz3h
+         nwrEVd/e18B0GtZvKaE6bySlF+sR3I0UDIeilLQaYS9xAGVTXZWdxjQ/b4YfWAC0vtqD
+         kJRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DDjkruDZZiGuO+G4uGfQWxOYHUq1vj3yKKda7hKMhwc=;
+        b=ekTpisN8gB2M/86ZnRR+Xh5NSNuO5HXvsOgE3rpvbkSSifjYdlb9guSCGaHpryWqHw
+         hM4f7Ml7VMT/0ypv4ChV7zFdww/dNyca0ooN7guY2xgAtoyfVMFvx3+Vv6RGwCaVMhec
+         T5+1QG9+c6rsu7oQ/8sw+DM5BeUqf+qohK9Yb28Klp3Chgr4fXCjgAOmCEx3/HyRbTT0
+         h+DiWVwPYYcnJsEebT5rtS8ZZvwGN6U5ZpFLpEhHLtA4VQ+Z5ynHLwtStXYvnqSKcfd5
+         urxNuPanRJJnklTPpZCYg083EO4xAexTqiLwKYV36PDzX1sdJDP8Ip0PcBFARUqPA3gD
+         6S3A==
+X-Gm-Message-State: AOAM533RaWTkY/YUBoBjnWk0bnR3HOr6yr5OY6Huw2LSKgN2s3VWpNaX
+        zEz5pkJxFxgjLG6OuGsdfhI=
+X-Google-Smtp-Source: ABdhPJxmljm8zDhaLPjcvSwj4FLShwRug5hPC3m746l57iWWBN7Pxoltt6WHUz8jkfNkm7UaNsp3ag==
+X-Received: by 2002:a17:902:fe0d:: with SMTP id g13mr13465637plj.326.1595125022614;
+        Sat, 18 Jul 2020 19:17:02 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:400:e00:19b7:f650:7bbe:a7fb])
+        by smtp.gmail.com with ESMTPSA id a68sm6891159pje.35.2020.07.18.19.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jul 2020 19:17:02 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 2/3] xtensa: add seccomp support
+Date:   Sat, 18 Jul 2020 19:16:53 -0700
+Message-Id: <20200719021654.25922-3-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200719021654.25922-1-jcmvbkbc@gmail.com>
+References: <20200719021654.25922-1-jcmvbkbc@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200717091718.GA10769@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 11:17:18AM +0200, Peter Zijlstra wrote:
-> On Fri, Jul 17, 2020 at 12:20:51AM -0700, ira.weiny@intel.com wrote:
-> > +void dev_access_disable(void)
-> > +{
-> > +	unsigned long flags;
-> > +
-> > +	if (!static_branch_unlikely(&dev_protection_static_key))
-> > +		return;
-> > +
-> > +	local_irq_save(flags);
-> > +	current->dev_page_access_ref--;
-> > +	if (current->dev_page_access_ref == 0)
-> 
-> 	if (!--current->dev_page_access_ref)
+Add SECCOMP to xtensa Kconfig, select HAVE_ARCH_SECCOMP_FILTER, add
+TIF_SECCOMP and call secure_computing from do_syscall_trace_enter.
 
-It's not my style but I'm ok with it.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ .../seccomp/seccomp-filter/arch-support.txt       |  2 +-
+ arch/xtensa/Kconfig                               | 15 +++++++++++++++
+ arch/xtensa/include/asm/Kbuild                    |  1 +
+ arch/xtensa/include/asm/thread_info.h             |  5 ++++-
+ arch/xtensa/kernel/ptrace.c                       |  4 +++-
+ 5 files changed, 24 insertions(+), 3 deletions(-)
 
-> 
-> > +		pks_update_protection(dev_page_pkey, PKEY_DISABLE_ACCESS);
-> > +	local_irq_restore(flags);
-> > +}
-> > +EXPORT_SYMBOL_GPL(dev_access_disable);
-> > +
-> > +void dev_access_enable(void)
-> > +{
-> > +	unsigned long flags;
-> > +
-> > +	if (!static_branch_unlikely(&dev_protection_static_key))
-> > +		return;
-> > +
-> > +	local_irq_save(flags);
-> > +	/* 0 clears the PKEY_DISABLE_ACCESS bit, allowing access */
-> > +	if (current->dev_page_access_ref == 0)
-> > +		pks_update_protection(dev_page_pkey, 0);
-> > +	current->dev_page_access_ref++;
-> 
-> 	if (!current->dev_page_access_ref++)
+diff --git a/Documentation/features/seccomp/seccomp-filter/arch-support.txt b/Documentation/features/seccomp/seccomp-filter/arch-support.txt
+index c7b837f735b1..7b3ec8ea174a 100644
+--- a/Documentation/features/seccomp/seccomp-filter/arch-support.txt
++++ b/Documentation/features/seccomp/seccomp-filter/arch-support.txt
+@@ -30,5 +30,5 @@
+     |          um: |  ok  |
+     |   unicore32: | TODO |
+     |         x86: |  ok  |
+-    |      xtensa: | TODO |
++    |      xtensa: |  ok  |
+     -----------------------
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index a7def0991a01..a461ee051e73 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -24,6 +24,7 @@ config XTENSA
+ 	select HAVE_ARCH_AUDITSYSCALL
+ 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL
+ 	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL
++	select HAVE_ARCH_SECCOMP_FILTER
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_COPY_THREAD_TLS
+ 	select HAVE_DEBUG_KMEMLEAK
+@@ -217,6 +218,20 @@ config HOTPLUG_CPU
+ 
+ 	  Say N if you want to disable CPU hotplug.
+ 
++config SECCOMP
++	bool
++	prompt "Enable seccomp to safely compute untrusted bytecode"
++	help
++	  This kernel feature is useful for number crunching applications
++	  that may need to compute untrusted bytecode during their
++	  execution. By using pipes or other transports made available to
++	  the process as file descriptors supporting the read/write
++	  syscalls, it's possible to isolate those applications in
++	  their own address space using seccomp. Once seccomp is
++	  enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
++	  and the task is only allowed to execute a few safe syscalls
++	  defined by each seccomp mode.
++
+ config FAST_SYSCALL_XTENSA
+ 	bool "Enable fast atomic syscalls"
+ 	default n
+diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
+index 9718e9593564..c59c42a1221a 100644
+--- a/arch/xtensa/include/asm/Kbuild
++++ b/arch/xtensa/include/asm/Kbuild
+@@ -7,4 +7,5 @@ generic-y += mcs_spinlock.h
+ generic-y += param.h
+ generic-y += qrwlock.h
+ generic-y += qspinlock.h
++generic-y += seccomp.h
+ generic-y += user.h
+diff --git a/arch/xtensa/include/asm/thread_info.h b/arch/xtensa/include/asm/thread_info.h
+index c49cc4a1f39a..8918f0f20c53 100644
+--- a/arch/xtensa/include/asm/thread_info.h
++++ b/arch/xtensa/include/asm/thread_info.h
+@@ -112,6 +112,7 @@ static inline struct thread_info *current_thread_info(void)
+ #define TIF_NOTIFY_RESUME	7	/* callback before returning to user */
+ #define TIF_DB_DISABLED		8	/* debug trap disabled for syscall */
+ #define TIF_SYSCALL_AUDIT	9	/* syscall auditing active */
++#define TIF_SECCOMP		10	/* secure computing */
+ 
+ #define _TIF_SYSCALL_TRACE	(1<<TIF_SYSCALL_TRACE)
+ #define _TIF_SIGPENDING		(1<<TIF_SIGPENDING)
+@@ -119,9 +120,11 @@ static inline struct thread_info *current_thread_info(void)
+ #define _TIF_SINGLESTEP		(1<<TIF_SINGLESTEP)
+ #define _TIF_SYSCALL_TRACEPOINT	(1<<TIF_SYSCALL_TRACEPOINT)
+ #define _TIF_SYSCALL_AUDIT	(1<<TIF_SYSCALL_AUDIT)
++#define _TIF_SECCOMP		(1<<TIF_SECCOMP)
+ 
+ #define _TIF_WORK_MASK		(_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP | \
+-				 _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
++				 _TIF_SYSCALL_TRACEPOINT | \
++				 _TIF_SYSCALL_AUDIT | _TIF_SECCOMP)
+ 
+ #define THREAD_SIZE KERNEL_STACK_SIZE
+ #define THREAD_SIZE_ORDER (KERNEL_STACK_SHIFT - PAGE_SHIFT)
+diff --git a/arch/xtensa/kernel/ptrace.c b/arch/xtensa/kernel/ptrace.c
+index 437b4297948d..ce4a32bd2294 100644
+--- a/arch/xtensa/kernel/ptrace.c
++++ b/arch/xtensa/kernel/ptrace.c
+@@ -22,6 +22,7 @@
+ #include <linux/regset.h>
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
++#include <linux/seccomp.h>
+ #include <linux/security.h>
+ #include <linux/signal.h>
+ #include <linux/smp.h>
+@@ -559,7 +560,8 @@ int do_syscall_trace_enter(struct pt_regs *regs)
+ 		return 0;
+ 	}
+ 
+-	if (regs->syscall == NO_SYSCALL) {
++	if (regs->syscall == NO_SYSCALL ||
++	    secure_computing() == -1) {
+ 		do_syscall_trace_leave(regs);
+ 		return 0;
+ 	}
+-- 
+2.20.1
 
-Sure.
-
-> 
-> > +	local_irq_restore(flags);
-> > +}
-> > +EXPORT_SYMBOL_GPL(dev_access_enable);
-> 
-> 
-> Also, you probably want something like:
-> 
-> static __always_inline devm_access_disable(void)
-
-Yes that is better.
-
-However, again Dan and I agree devm is not the right prefix here.
-
-I've updated.
-
-Thanks!
-Ira
-
-> {
-> 	if (static_branch_unlikely(&dev_protection_static_key))
-> 		__devm_access_disable();
-> }
-> 
-> static __always_inline devm_access_enable(void)
-> {
-> 	if (static_branch_unlikely(&dev_protection_static_key))
-> 		__devm_access_enable();
-> }
