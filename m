@@ -1,98 +1,114 @@
-Return-Path: <SRS0=WrDJ=BA=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=fgMe=BB=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA1DC433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Jul 2020 23:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 846B7C433E3
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jul 2020 02:11:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B92EA20717
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Jul 2020 23:53:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p1xsv+Js"
+	by mail.kernel.org (Postfix) with ESMTP id 62473208E4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jul 2020 02:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595383884;
+	bh=h159DtF8H/HlBrBOihL3MSedIBpWWvld7e60yiwJG7o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=YSG3nJUmxhMiyEBa7b9bmV1QJS3nylZpSGITMXlEmw0hiu2vQxAdNl9TyMw6C1k1h
+	 AceBlW6vx9w4eP4rKWGM1C5HLmDSRN3gW85hKLjXoZuVD0/HBbvhVnJwCg2kyGaGf6
+	 bUTbHQZBl3wdsZLMMTzKB4c856cBoLzpULLWo2dg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgGUXxE (ORCPT
+        id S1731782AbgGVCLU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 21 Jul 2020 19:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726148AbgGUXxD (ORCPT
+        Tue, 21 Jul 2020 22:11:20 -0400
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:32111 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731621AbgGVCLU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 19:53:03 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321C2C061794
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 16:53:03 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d7so57629plq.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2020 16:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9GAANOVEkg7Oss4DpDH0gr9ifNPUbhRTyDcGnsT2WTE=;
-        b=p1xsv+JsYJXhYalj5ZZCc9wnW1uf56mVn0Gc1i+QWyJBhVm2oAo15ONIoGH5a++qc3
-         nS8vtFYiWBbBZN/ZbGkIgOWNPX3q2HAp+ZRYAz0yz6yBgjgbaVNRv9jJYBy2nfqY++4s
-         49RCXlqcN1Khtcr2FHPAlM6wIONJZ/uQkd34FX01Bue6DVy0I1d2B1vmNGTCO94yzDW+
-         Fsd6zuBB7YB7X0nSbZNQjQSwkxI+h8rk5XJzp/8bgnBgal//1dKnFv7A0QGSbptnJ7tf
-         1JcrpYnLejhIZ2RRFRpcz+Ki1fmJRs7nlyLeVDnnreujKpiOcnohfnZRviTLvcVEKJgB
-         pezg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9GAANOVEkg7Oss4DpDH0gr9ifNPUbhRTyDcGnsT2WTE=;
-        b=U17CNPY2z5NM2ux40dVlF7kYDLa7vVstL9vE1NEM1LUGvFVR/wJuSl/0bkp7FR6z+F
-         Qw8Y3oAJ72kRh5CiqjpZcGdCs9gn+lTMIPloYLluZUHow3ZkVUjvTaDRRGilnHCKd+i8
-         /3MjAPah0oeDBRNufTzk5UCrE3Cfq7iLCuVXiuTAX6AxY+E7J46xLWTdqAsjDTj/Lga8
-         ++8bxW9GlBi9tzfF88AYrSghxGQWESMvLTqtNDbxepTthfoxL1nNiW0GnZGMR9KVIQ3L
-         fk9AFnBQM7sA0SSHDfVeX2Z7JLfjKFiJKKhoH1vdEFgRaryBZbCr1ebrzsL1TErKeLMW
-         pRlQ==
-X-Gm-Message-State: AOAM530K2zMLYLWg5rnLQt0Dljnl3LTvYM5hd6jTKy7RJEPcYh2/7agK
-        x/wKfBIVryLdw3GVh7dZUkOiRAvQyJmP9os9rLXYNg==
-X-Google-Smtp-Source: ABdhPJwlgYLxoZWZx8+svKNEBY0q6bxsav7DHLE6pxfIoOZcXdRkc72QEfSINPDlzRr5arUe6DKa0UAUjzPNjGbgJMA=
-X-Received: by 2002:a17:902:10e:: with SMTP id 14mr23017886plb.297.1595375582338;
- Tue, 21 Jul 2020 16:53:02 -0700 (PDT)
+        Tue, 21 Jul 2020 22:11:20 -0400
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 06M2AmTB032054;
+        Wed, 22 Jul 2020 11:10:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 06M2AmTB032054
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1595383849;
+        bh=Aih6VBubiSXnprivmgnxaVTSC58fZZfIbh+5AaCTBIM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EK80SaE1oXZzPoKURYSTxTH+hxVXKvKr12Tsuy/FX5trsgAahkshxC3XvvjFV8sKp
+         kvotbDYshJF+qwdVkQQYifZ3+p5XbQPCpf7NpGo6h/4SAC4fDPF0PE7zVmWgGQMSC5
+         0m3wOAfD08HO837L/IdMOPyCR2dKjbl3qXPXwhL5F0NcX88G6GCXNdaRnxw3rmBmWQ
+         0lpwHzpXbHChzvgzNs9gUkl7CDhLTAd2xKp4S7Wkpizq8GR3wjLLfzLcwl7EVGVrXO
+         PQ9Ye5lj1XuTXoMaojlnlT72b0Qcj48tzNwqpLcZdjIYZEGDOIjehke/+UON54o26F
+         j1ed1QcFQuTWg==
+X-Nifty-SrcIP: [209.85.217.44]
+Received: by mail-vs1-f44.google.com with SMTP id m6so308180vsl.12;
+        Tue, 21 Jul 2020 19:10:49 -0700 (PDT)
+X-Gm-Message-State: AOAM532hd9TXd3U8NO2/v9pvDAN9mdt0OZd3LJx5Zq7WAOv5BRj84pde
+        7NZZ1/ng5/lcAMkqR1JZfeK2M8EM97RlQlziUfo=
+X-Google-Smtp-Source: ABdhPJxePnkwQjGrTtR0b/vKzaaoGDrx5Lo9YH6/7fWyDIDmz0k8/gl81kgwfi+UC9Pxo7G80Dx5Q555MuZEA4oNWjo=
+X-Received: by 2002:a67:2e4d:: with SMTP id u74mr21559012vsu.215.1595383847947;
+ Tue, 21 Jul 2020 19:10:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200721174036.71072-1-vitor@massaru.org>
-In-Reply-To: <20200721174036.71072-1-vitor@massaru.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 21 Jul 2020 16:52:51 -0700
-Message-ID: <CAFd5g45DrBCA2Oq0RCb5FDWybt9NnXj=tN7pZFqjMLhuWWQoew@mail.gmail.com>
-Subject: Re: [PATCH v3] lib: kunit: Provides a userspace memory context when
- tests are compiled as module
-To:     Vitor Massaru Iha <vitor@massaru.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
+References: <20200707092117.963394-1-masahiroy@kernel.org> <20200707092117.963394-2-masahiroy@kernel.org>
+ <20200708065223.GA11164@alley> <20200708092324.GA4751@alley>
+In-Reply-To: <20200708092324.GA4751@alley>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 22 Jul 2020 11:10:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARFTzfx772bTUnLxbN9pwyX3=H284cg-YWKc3YUY9_8KA@mail.gmail.com>
+Message-ID: <CAK7LNARFTzfx772bTUnLxbN9pwyX3=H284cg-YWKc3YUY9_8KA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Haren Myneni <haren@us.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, live-patching@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 10:40 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
+On Wed, Jul 8, 2020 at 6:23 PM Petr Mladek <pmladek@suse.com> wrote:
 >
-> KUnit test cases run on kthreads, and kthreads don't have an
-> adddress space (current->mm is NULL), but processes have mm.
+> On Wed 2020-07-08 08:52:23, Petr Mladek wrote:
+> >
+> > PS: BTW: The livepatch selftests fail in Linus's master now. But it
+> > seems to be for another reason. I am going to dig into it.
 >
-> The purpose of this patch is to allow to borrow mm to KUnit kthread
-> after userspace is brought up, because we know that there are processes
-> running, at least the process that loaded the module to borrow mm.
+> JFYI, the livepatch selftests are actually working. I have messed
+> the testing here. I am sorry for the noise.
 >
-> This allows, for example, tests such as user_copy_kunit, which uses
-> vm_mmap, which needs current->mm.
->
-> Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> Best Regards,
+> Petr
 
-Isn't this a dependency for the test_user_copy? Also, don't we also
-need the change that makes kunit_tool build modules? It seems like you
-should put these together in a patchset like you did before. If not,
-you should at least reference the dependencies in each patch.
+No worry, thank you for testing this patch.
+
+
+I deleted the following two lines,
+otherwise $(CC_FLAGS_FTRACE) would be added twice.
+
+# Target modules to be livepatched require CC_FLAGS_FTRACE
+CFLAGS_test_klp_callbacks_busy.o       += $(CC_FLAGS_FTRACE)
+CFLAGS_test_klp_callbacks_mod.o                += $(CC_FLAGS_FTRACE)
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
