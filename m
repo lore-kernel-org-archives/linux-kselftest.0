@@ -2,126 +2,178 @@ Return-Path: <SRS0=fgMe=BB=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 803E2C433E4
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jul 2020 02:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9502EC433E8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jul 2020 05:27:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60410207BB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jul 2020 02:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595383990;
-	bh=/0U2fEQH/R6Siol8+zW3/Zd7e3Wqp+wrimSvDNfUgds=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=MnDxSXKGP5c5sBpRZ+tejC8c7xsx7GYk1W4x/z/LD6K//21AbF5Tv0NDFxkFBGZss
-	 oiEkUM8xZlAuWrAJlqmJQm1Cntp8OGGC6v5O6SjAgAWFDDITRoBBCC9Pyl68G2Cnmq
-	 RkqqABbKywb1qI6JA6/ML8GcPCYD1yHiamUN+dsU=
+	by mail.kernel.org (Postfix) with ESMTP id 7E8B821702
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jul 2020 05:27:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731630AbgGVCNK (ORCPT
+        id S1727794AbgGVF1L (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 21 Jul 2020 22:13:10 -0400
-Received: from condef-07.nifty.com ([202.248.20.72]:30785 "EHLO
-        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731621AbgGVCNJ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jul 2020 22:13:09 -0400
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-07.nifty.com with ESMTP id 06M29rjj003253;
-        Wed, 22 Jul 2020 11:09:53 +0900
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 06M29TuW014750;
-        Wed, 22 Jul 2020 11:09:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 06M29TuW014750
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1595383770;
-        bh=06gcJexBF/tpPqvX05Gt/CkE+hULn79ToD587rmdDQs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dSg4gOQ/jjsop05eIvXnSVytHbNKER9gJUCj/xFmRlxYS+uGMyhYC2Jk8d1UBmCVX
-         N1wjZTgmQYzpQCSGv2J5c4KvJ2kjyLKOzJFC5l8gYX1yjdoAtZ7mns1fCfS9MfKUGa
-         feiB1WnrJiEjtgGX1PThQkOVSt0m95ze/qj3NqeLBZOk3KVAJoyBMNQGHxUiE6bUgU
-         S7BpYr/Q3jpf2LPbiVV4KR9pdEwxudC0XZrB2hLCO21kIoIwLsPStojFwuyeXxnb3e
-         +DA66Lbh5i1vksPqHMaAxXTAXudMclMGABTxcYMX8driO5gHjm+9iL6JkpQWAP1/AR
-         VVd88rpFkynxw==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id s20so330522vsq.5;
-        Tue, 21 Jul 2020 19:09:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533nsgc4IMlpB454vyz6TB6mt+fAfr7w+7yvTX9jwoDxUQuIjOAS
-        1ZOQry2AGUE6VKL880TXZIx/CvCLACPhDxKUjJI=
-X-Google-Smtp-Source: ABdhPJzHR+EIktThMD2rIpFhI4uTJPOQdJWdMC4eTf5k71hKCt1edF/2edrSgjCexGMNslyvA9SMcKmKrD1IOmpXMxw=
-X-Received: by 2002:a67:de09:: with SMTP id q9mr21900661vsk.179.1595383768506;
- Tue, 21 Jul 2020 19:09:28 -0700 (PDT)
+        Wed, 22 Jul 2020 01:27:11 -0400
+Received: from mga06.intel.com ([134.134.136.31]:45932 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726147AbgGVF1L (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Jul 2020 01:27:11 -0400
+IronPort-SDR: weyePju+AsTR0Ef5QloQE9O2UvHGs10/tJroV6wLgWLHPS9De8wGeg1auGWizBniw5sGOS4jrq
+ 4bbBnlPmk5+g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="211816469"
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="211816469"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 22:27:10 -0700
+IronPort-SDR: 99GhxGM5RE4/FWZPVc87eqBXDP7QFCYYA1UR13FqqLtQTjcvudNbcYc3VQFdlM1dFySzls+p48
+ DehFI7uYAdaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="288166459"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2020 22:27:09 -0700
+Date:   Tue, 21 Jul 2020 22:27:09 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across
+ exceptions
+Message-ID: <20200722052709.GB478587@iweiny-DESK2.sc.intel.com>
+References: <20200717072056.73134-1-ira.weiny@intel.com>
+ <20200717072056.73134-18-ira.weiny@intel.com>
+ <20200717100610.GH10769@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20200707092117.963394-1-masahiroy@kernel.org> <20200707092117.963394-2-masahiroy@kernel.org>
- <20200707120212.7010fa4f@oasis.local.home>
-In-Reply-To: <20200707120212.7010fa4f@oasis.local.home>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 22 Jul 2020 11:08:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASdytWgqQWux1cyBrGJb_FvS7Ur5UqgHaA2Xf5cwfL85A@mail.gmail.com>
-Message-ID: <CAK7LNASdytWgqQWux1cyBrGJb_FvS7Ur5UqgHaA2Xf5cwfL85A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Haren Myneni <haren@us.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717100610.GH10769@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 8, 2020 at 1:02 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Tue,  7 Jul 2020 18:21:17 +0900
-> Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> >   ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
-> >
-> > exists here in sub-directories of lib/ to keep the behavior of
-> > commit 2464a609ded0 ("ftrace: do not trace library functions").
-> >
-> > Since that commit, not only the objects in lib/ but also the ones in
-> > the sub-directories are excluded from ftrace (although the commit
-> > description did not explicitly mention this).
-> >
-> > However, most of library functions in sub-directories are not so hot.
-> > Re-add them to ftrace.
->
-> I'm OK with this change, but note, it wasn't just the hot path that I
-> disabled ftrace on lib for, but some of these calls are done very early
-> at boot up. It may have been PowerPC that I was stumbling over. The
-> issue is that they would call mcount before the kernel was mapped
-> properly, and the system would crash.
->
-> My PowerPC box no longer boots so I can't test this anymore. But a lot
-> has changed since 2008, and all this may very well be OK.
->
-> -- Steve
+On Fri, Jul 17, 2020 at 12:06:10PM +0200, Peter Zijlstra wrote:
+> On Fri, Jul 17, 2020 at 12:20:56AM -0700, ira.weiny@intel.com wrote:
+> > First I'm not sure if adding this state to idtentry_state and having
+> > that state copied is the right way to go.  It seems like we should start
+> > passing this by reference instead of value.  But for now this works as
+> > an RFC.  Comments?
+> 
+> As long as you keep sizeof(struct idtentry_state_t) <= sizeof(u64) or
+> possibly 2*sizeof(unsigned long), code gen shouldn't be too horrid IIRC.
+> You'll have to look at what the compiler makes of it.
+> 
+> > Second, I'm not 100% happy with having to save the reference count in
+> > the exception handler.  It seems like a very ugly layering violation but
+> > I don't see a way around it at the moment.
+> 
+> So I've been struggling with that API, all the way from
+> pks_update_protection() to that dev_access_{en,dis}able(). I _really_
+> hate it, but I see how you ended up with it.
+> 
+> I wanted to propose something like:
+> 
+> u32 current_pkey_save(int pkey, unsigned flags)
+> {
+> 	u32 *lpkr = get_cpu_ptr(&local_pkr);
+> 	u32 pkr, saved = *lpkr;
+> 
+> 	pkr = update_pkey_reg(saved, pkey, flags);
+> 	if (pkr != saved)
+> 		wrpkr(pkr);
+> 
+> 	put_cpu_ptr(&local_pkr);
+> 	return saved;
+> }
+> 
+> void current_pkey_restore(u32 pkr)
+> {
+> 	u32 *lpkr = get_cpu_ptr(&local_pkr);
+> 	if (*lpkr != pkr)
+> 		wrpkr(pkr);
+> 	put_cpu_ptr(&local_pkr);
+> }
+> 
+> Together with:
+> 
+> void pkey_switch(struct task_struct *prev, struct task_struct *next)
+> {
+> 	prev->pkr = this_cpu_read(local_pkr);
+> 	if (prev->pkr != next->pkr)
+> 		wrpkr(next->pkr);
+> }
+> 
+> But that's actually hard to frob into the kmap() model :-( The upside is
+> that you only have 1 word of state, instead of the 2 you have now.
 
+I'm still mulling over if what you have really helps us.  It seems like we may
+be able to remove the percpu pkrs_cache variable...  But I'm hesitant to do so.
 
-That's why I split this into two commits
-so that we can do git-bisect and
-revert the second one in case of a regression.
+Regardless that is not the big issue right now...
 
-Anyway, we have some more time to test this in linux-next
-(and somebody reports an issue, if any).
+> 
+> > Third, this patch has gone through a couple of revisions as I've had
+> > crashes which just don't make sense to me.  One particular issue I've
+> > had is taking a MCE during memcpy_mcsafe causing my WARN_ON() to fire.
+> > The code path was a pmem copy and the ref count should have been
+> > elevated due to dev_access_enable() but why was
+> > idtentry_enter()->idt_save_pkrs() not called I don't know.
+> 
+> Because MCEs are NMI-like and don't go through the normal interrupt
+> path. MCEs are an abomination, please wear all the protective devices
+> you can lay hands on when delving into that.
 
+I've been really digging into this today and I'm very concerned that I'm
+completely missing something WRT idtentry_enter() and idtentry_exit().
 
--- 
-Best Regards
-Masahiro Yamada
+I've instrumented idt_{save,restore}_pkrs(), and __dev_access_{en,dis}able()
+with trace_printk()'s.
+
+With this debug code, I have found an instance where it seems like
+idtentry_enter() is called without a corresponding idtentry_exit().  This has
+left the thread ref counter at 0 which results in very bad things happening
+when __dev_access_disable() is called and the ref count goes negative.
+
+Effectively this seems to be happening:
+
+...
+	// ref == 0
+	dev_access_enable()  // ref += 1 ==> disable protection
+		// exception  (which one I don't know)
+			idtentry_enter()
+				// ref = 0
+				_handler() // or whatever code...
+			// *_exit() not called [at least there is no trace_printk() output]...
+			// Regardless of trace output, the ref is left at 0
+	dev_access_disable() // ref -= 1 ==> -1 ==> does not enable protection
+	(Bad stuff is bound to happen now...)
+...
+
+The ref count ends up completely messed up after this sequence...  and the PKRS
+register gets out of sync as well.  This is starting to make some sense of how
+I was getting what seemed like random crashes before.
+
+Unfortunately I don't understand the idt entry/exit code well enough to see
+clearly what is going on.  Is there any reason idtentry_exit() is not called
+after idtentry_enter()?  Perhaps some NMI/MCE or 'not normal' exception code
+path I'm not seeing?  In my searches I see a corresponding exit for every
+enter.  But MCE is pretty hard to follow.
+
+Also is there any chance that the process could be getting scheduled and that
+is causing an issue?
+
+Thanks,
+Ira
