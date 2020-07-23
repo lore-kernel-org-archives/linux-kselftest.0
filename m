@@ -2,128 +2,122 @@ Return-Path: <SRS0=kImH=BC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9768C433E3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 09:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2B2C433ED
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 10:22:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 923C12071A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 09:02:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74D2B208E4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 10:22:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726815AbgGWJCF (ORCPT
+        id S1728434AbgGWKWo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Jul 2020 05:02:05 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:41668 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgGWJCE (ORCPT
+        Thu, 23 Jul 2020 06:22:44 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16150 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728418AbgGWKWn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jul 2020 05:02:04 -0400
-Received: from mail-lf1-f69.google.com ([209.85.167.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1jyX74-0001SU-32
-        for linux-kselftest@vger.kernel.org; Thu, 23 Jul 2020 09:02:02 +0000
-Received: by mail-lf1-f69.google.com with SMTP id y21so1274504lfg.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2020 02:02:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U+wT4uWfBoeVxuv9M2M1SsHXGOIE2eDw5GOYNjnOws0=;
-        b=RTUVN1gu85Q6D1VML+ZbpeyUvPD04X1Y61Myc8jOLdAN5VaP8+YUCB3b//wCcjWUmt
-         KIsBTIQ7+NX7WwFz0+QuDTiMk8W4YQc9tgKuCUlt9ktKJm13FOc1wl4hzC0jzSRMS4vD
-         nSL4mD2P+++XSlucLNDgF0yfLGd4JF+mDcu0xCQDITYlvVq/huz6ONRgDrthY3vf9zfC
-         uVRyRy2qe04bk26+Sut+YAbQ9mT2ogm9mOUAdPuHp34KIo1bKLOYsJ1onlU4N+8s9wHi
-         0UoPqUEw0qwd2CfMkr5ZQRRYUevfdAfQi9eq+gLGQz4SguUbUsDXr3f/OXwZ4PKJ0Ybf
-         VVlg==
-X-Gm-Message-State: AOAM532be2581MqAEkyxNUHlZdWNYCxAg46SO/B5mx06cqeUbejP9Fcv
-        eGNvcuG0+FpVAjHnGcw5ehmqzClxj56iVLruZsl8UDIqZcW4UZ6U+CalyDkQB2MexHMrxwg3esE
-        BGHPmhK6yu0T52ZUpnLkxAEesKPjH6H6gI48LpiBs1gBywuSeuQKMpy93NXx3
-X-Received: by 2002:a2e:9d86:: with SMTP id c6mr1497764ljj.418.1595494920938;
-        Thu, 23 Jul 2020 02:02:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJd3/VfgnjFYGCdo/JmUiXjd56BUIkYcecDQxaWSkFheEj5HUm6LObhj/XQNcciCiYaWu+tCWJIVdHgz99xd0=
-X-Received: by 2002:a2e:9d86:: with SMTP id c6mr1497750ljj.418.1595494920649;
- Thu, 23 Jul 2020 02:02:00 -0700 (PDT)
+        Thu, 23 Jul 2020 06:22:43 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06NA1dlG052873;
+        Thu, 23 Jul 2020 06:22:19 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32f1vm246q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 06:22:19 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06NA4Diw063344;
+        Thu, 23 Jul 2020 06:22:18 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32f1vm2467-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 06:22:18 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06NAEiD3017152;
+        Thu, 23 Jul 2020 10:22:17 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 32brq86277-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 10:22:16 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06NAKnpv63504816
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jul 2020 10:20:49 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 212A9A405F;
+        Thu, 23 Jul 2020 10:22:13 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EB91A405B;
+        Thu, 23 Jul 2020 10:22:10 +0000 (GMT)
+Received: from bangoria.ibmuc.com (unknown [9.199.40.160])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Jul 2020 10:22:09 +0000 (GMT)
+From:   Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+To:     mpe@ellerman.id.au, paulus@samba.org
+Cc:     ravi.bangoria@linux.ibm.com, mikey@neuling.org, npiggin@gmail.com,
+        pbonzini@redhat.com, christophe.leroy@c-s.fr, jniethe5@gmail.com,
+        pedromfc@br.ibm.com, rogealve@br.ibm.com, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 3/7] powerpc/watchpoint/kvm: Introduce new capability for 2nd DAWR
+Date:   Thu, 23 Jul 2020 15:50:54 +0530
+Message-Id: <20200723102058.312282-4-ravi.bangoria@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200723102058.312282-1-ravi.bangoria@linux.ibm.com>
+References: <20200723102058.312282-1-ravi.bangoria@linux.ibm.com>
 MIME-Version: 1.0
-References: <20200318024215.5270-1-po-hsu.lin@canonical.com>
-In-Reply-To: <20200318024215.5270-1-po-hsu.lin@canonical.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Thu, 23 Jul 2020 17:01:49 +0800
-Message-ID: <CAMy_GT9g48Xf=U==FeFd-8CaFM97u4WMkDBT013uzfjeqKMcfw@mail.gmail.com>
-Subject: Re: [PATCHv3] selftests/timers: Turn off timeout setting
-To:     linux-kselftest@vger.kernel.org
-Cc:     shuah <shuah@kernel.org>, sboyd@kernel.org, tglx@linutronix.de,
-        John Stultz <john.stultz@linaro.org>, joe.lawrence@redhat.com,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-23_03:2020-07-22,2020-07-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ suspectscore=0 bulkscore=0 spamscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 clxscore=1015 mlxlogscore=812 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230072
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-(Adding Shuah's linuxfoundation mail)
-Hello,
-do you need more changes / tests for this test?
+Introduce KVM_CAP_PPC_DAWR1 which can be used by Qemu to query whether
+kvm supports 2nd DAWR or not.
 
-Thanks!
-Po-Hsu
+Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+---
+ arch/powerpc/kvm/powerpc.c | 3 +++
+ include/uapi/linux/kvm.h   | 1 +
+ 2 files changed, 4 insertions(+)
 
-On Wed, Mar 18, 2020 at 10:42 AM Po-Hsu Lin <po-hsu.lin@canonical.com> wrote:
->
-> The following 4 tests in timers can take longer than the default 45
-> seconds that added in commit 852c8cbf34d3 ("selftests/kselftest/runner.sh:
-> Add 45 second timeout per test") to run:
->   * nsleep-lat - 2m7.350s
->   * set-timer-lat - 2m0.66s
->   * inconsistency-check - 1m45.074s
->   * raw_skew - 2m0.013s
->
-> Thus they will be marked as failed with the current 45s setting:
->   not ok 3 selftests: timers: nsleep-lat # TIMEOUT
->   not ok 4 selftests: timers: set-timer-lat # TIMEOUT
->   not ok 6 selftests: timers: inconsistency-check # TIMEOUT
->   not ok 7 selftests: timers: raw_skew # TIMEOUT
->
-> Disable the timeout setting for timers can make these tests finish
-> properly:
->   ok 3 selftests: timers: nsleep-lat
->   ok 4 selftests: timers: set-timer-lat
->   ok 6 selftests: timers: inconsistency-check
->   ok 7 selftests: timers: raw_skew
->
-> https://bugs.launchpad.net/bugs/1864626
-> Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> ---
->  tools/testing/selftests/timers/Makefile | 1 +
->  tools/testing/selftests/timers/settings | 1 +
->  2 files changed, 2 insertions(+)
->  create mode 100644 tools/testing/selftests/timers/settings
->
-> diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
-> index 7656c7c..0e73a16 100644
-> --- a/tools/testing/selftests/timers/Makefile
-> +++ b/tools/testing/selftests/timers/Makefile
-> @@ -13,6 +13,7 @@ DESTRUCTIVE_TESTS = alarmtimer-suspend valid-adjtimex adjtick change_skew \
->
->  TEST_GEN_PROGS_EXTENDED = $(DESTRUCTIVE_TESTS)
->
-> +TEST_FILES := settings
->
->  include ../lib.mk
->
-> diff --git a/tools/testing/selftests/timers/settings b/tools/testing/selftests/timers/settings
-> new file mode 100644
-> index 0000000..e7b9417
-> --- /dev/null
-> +++ b/tools/testing/selftests/timers/settings
-> @@ -0,0 +1 @@
-> +timeout=0
-> --
-> 2.7.4
->
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index dd7d141e33e8..f38380fd1fe9 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -676,6 +676,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 			!kvmppc_hv_ops->enable_svm(NULL);
+ 		break;
+ #endif
++	case KVM_CAP_PPC_DAWR1:
++		r = cpu_has_feature(CPU_FTR_DAWR1);
++		break;
+ 	default:
+ 		r = 0;
+ 		break;
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 4fdf30316582..2c3713d6526a 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1031,6 +1031,7 @@ struct kvm_ppc_resize_hpt {
+ #define KVM_CAP_PPC_SECURE_GUEST 181
+ #define KVM_CAP_HALT_POLL 182
+ #define KVM_CAP_ASYNC_PF_INT 183
++#define KVM_CAP_PPC_DAWR1 184
+ 
+ #ifdef KVM_CAP_IRQ_ROUTING
+ 
+-- 
+2.26.2
+
