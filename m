@@ -2,125 +2,217 @@ Return-Path: <SRS0=kImH=BC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3484AC433EA
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 22:14:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFE97C433F4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 22:31:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12DB820825
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 22:14:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBF4E22B43
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jul 2020 22:31:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="V5Z5Rq1n";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DpE/SglP"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="c5NVsizi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbgGWWOb (ORCPT
+        id S1727901AbgGWWaw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Jul 2020 18:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726417AbgGWWOb (ORCPT
+        Thu, 23 Jul 2020 18:30:52 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:13862 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727861AbgGWWav (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jul 2020 18:14:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC07C0619D3;
-        Thu, 23 Jul 2020 15:14:31 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1595542468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JmyzjmH8/olb4mM6hh3RrBawdAZ1ohRuT2f6HKf6J84=;
-        b=V5Z5Rq1nk71rXzhuUOz5ybYySxFdqFcH8dpWSElBd5qV0W8MCoBko+38RNWOwqWv2ju5Ig
-        bQIZTjLoRGXb0gRm8ytYEZ+t/kr7TRL00g3qwWdo76SMcfJ4GqUmx1vL6JGaDTvO7FZH+R
-        ehWAUFsqGo/fbWIHtNHboBF7FH01EARrdMRiueauNFcaZcnEvopvmfNUwCfpZJv1T5dDwT
-        im0DmUgWCCRiLQJaa9slhiO8uBTVN7eOzTJKLsyQvSGFvkDS9iSTv6B55CVKQYzX50pMS/
-        92w4HmCS53+4wG2ZzwtaOhcrmTM/WnQ4LlDs75AQoLaiaAd4mZmRHbv65Gb2eA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1595542468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JmyzjmH8/olb4mM6hh3RrBawdAZ1ohRuT2f6HKf6J84=;
-        b=DpE/SglP+UbEOY+9bcINMPHA9y7J8tMcjgmZMJCa1/pPbw5ifZwHGpOKKPr+c+G54aYYVK
-        9inwqDxRJmQ+XGDQ==
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Weiny Ira <ira.weiny@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RFC V2 17/17] x86/entry: Preserve PKRS MSR across exceptions
-In-Reply-To: <CALCETrUdxpVP3dZgsZBpCODxW8yaiHguxTu=aHg_AkRbs91dWg@mail.gmail.com>
-References: <20200723165204.GB77434@romley-ivt3.sc.intel.com> <C03DA782-BD1A-42E3-B118-ABB34BC5F2AF@amacapital.net> <87imeevv6b.fsf@nanos.tec.linutronix.de> <CALCETrUdxpVP3dZgsZBpCODxW8yaiHguxTu=aHg_AkRbs91dWg@mail.gmail.com>
-Date:   Fri, 24 Jul 2020 00:14:28 +0200
-Message-ID: <874kpxx4jf.fsf@nanos.tec.linutronix.de>
+        Thu, 23 Jul 2020 18:30:51 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f1a0f200000>; Thu, 23 Jul 2020 15:28:48 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 23 Jul 2020 15:30:50 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 23 Jul 2020 15:30:50 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 Jul
+ 2020 22:30:42 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 23 Jul 2020 22:30:42 +0000
+Received: from rcampbell-dev.nvidia.com (Not Verified[10.110.48.66]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f1a0f910002>; Thu, 23 Jul 2020 15:30:41 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        <nouveau@lists.freedesktop.org>, <kvm-ppc@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Ben Skeggs" <bskeggs@redhat.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        "Ralph Campbell" <rcampbell@nvidia.com>
+Subject: [PATCH v4 5/6] mm/hmm/test: use the new migration invalidation
+Date:   Thu, 23 Jul 2020 15:30:03 -0700
+Message-ID: <20200723223004.9586-6-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200723223004.9586-1-rcampbell@nvidia.com>
+References: <20200723223004.9586-1-rcampbell@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1595543328; bh=BeVUOTJgQepW+LMWyDGWqpRY0jrU7O9ftBuhCh+HHBg=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=c5NVsiziP4cirzdcWC6K4LcVP4KSZN9WPHjiDB+wb369XeSgW+x0ffbg5/GsZEdHZ
+         VNlqkYRVXriPkI7ArKZLO64O9s9bii6xIeiWVSn4lGPyTmw4PRgI+Gtqh+QLzLZuZj
+         YWQRDbCiFOqf/ouBw74NnHOkciuxCGS3m1CrofSqd3zATJF3aqCFPcZZXNR6CqiIZz
+         KekhEI0xT5i1MApDLFN41+rGbDo1hdbh0//Zubm+a3DuFfV5TO6Xv8RGAzhZEjAhEO
+         j5W7XxfbfN+/isxrdbiUbqx1idn5RUo2XnM3MonM0s/2zPxlLTN2gpqZZau7Ejo0tO
+         MGzZ+BIT5US8A==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Andy Lutomirski <luto@kernel.org> writes:
->> On Jul 23, 2020, at 1:22 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
->> =EF=BB=BFAndy Lutomirski <luto@amacapital.net> writes:
->>> My suggestion is to enlarge pt_regs.  The save and restore logic can
->>> probably be in C, but pt_regs is the logical place to put a register
->>> that is saved and restored across all entries.
->>
->> Kinda, but that still sucks because schedule from #PF will get it wrong
->> unless you do extra nasties.
->
-> This seems like we=E2=80=99re reinventing the wheel.  PKRS is not
-> fundamentally different from, say, RSP.  If we want to save it across
-> exceptions, we save it on entry and context-switch-out and restore it
-> on exit and context-switch-in.
+Use the new MMU_NOTIFY_MIGRATE event to skip MMU invalidations of device
+private memory and handle the invalidation in the driver as part of
+migrating device private memory.
 
-It's fundamentally different from RSP because it has state (refcount)
-attached, which RSP clearly has not. If you get rid of the state then
-yes.
+Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+---
+ lib/test_hmm.c                         | 30 +++++++++++++++-----------
+ tools/testing/selftests/vm/hmm-tests.c | 18 ++++++++++++----
+ 2 files changed, 31 insertions(+), 17 deletions(-)
 
->>> Whoever does this work will have the delightful job of figuring out
->>> whether BPF thinks that the layout of pt_regs is ABI and, if so,
->>> fixing the resulting mess.
->>>
->>> The fact the new fields will go at the beginning of pt_regs will make
->>> this an entertaining prospect.
->>
->> Good luck with all of that.
->
-> We can always cheat like this:
->
-> struct real_pt_regs {
->   unsigned long pkrs;
->   struct pt_regs regs;
-> };
->
-> and pass a pointer to regs around.  What BPF doesn't know about can't hur=
-t it.
+diff --git a/lib/test_hmm.c b/lib/test_hmm.c
+index e78a1414f58e..e7dc3de355b7 100644
+--- a/lib/test_hmm.c
++++ b/lib/test_hmm.c
+@@ -214,6 +214,14 @@ static bool dmirror_interval_invalidate(struct mmu_int=
+erval_notifier *mni,
+ {
+ 	struct dmirror *dmirror =3D container_of(mni, struct dmirror, notifier);
+=20
++	/*
++	 * Ignore invalidation callbacks for device private pages since
++	 * the invalidation is handled as part of the migration process.
++	 */
++	if (range->event =3D=3D MMU_NOTIFY_MIGRATE &&
++	    range->migrate_pgmap_owner =3D=3D dmirror->mdevice)
++		return true;
++
+ 	if (mmu_notifier_range_blockable(range))
+ 		mutex_lock(&dmirror->mutex);
+ 	else if (!mutex_trylock(&dmirror->mutex))
+@@ -693,7 +701,7 @@ static int dmirror_migrate(struct dmirror *dmirror,
+ 		args.dst =3D dst_pfns;
+ 		args.start =3D addr;
+ 		args.end =3D next;
+-		args.pgmap_owner =3D NULL;
++		args.pgmap_owner =3D dmirror->mdevice;
+ 		args.flags =3D MIGRATE_VMA_SELECT_SYSTEM;
+ 		ret =3D migrate_vma_setup(&args);
+ 		if (ret)
+@@ -983,7 +991,7 @@ static void dmirror_devmem_free(struct page *page)
+ }
+=20
+ static vm_fault_t dmirror_devmem_fault_alloc_and_copy(struct migrate_vma *=
+args,
+-						struct dmirror_device *mdevice)
++						      struct dmirror *dmirror)
+ {
+ 	const unsigned long *src =3D args->src;
+ 	unsigned long *dst =3D args->dst;
+@@ -1005,6 +1013,7 @@ static vm_fault_t dmirror_devmem_fault_alloc_and_copy=
+(struct migrate_vma *args,
+ 			continue;
+=20
+ 		lock_page(dpage);
++		xa_erase(&dmirror->pt, addr >> PAGE_SHIFT);
+ 		copy_highpage(dpage, spage);
+ 		*dst =3D migrate_pfn(page_to_pfn(dpage)) | MIGRATE_PFN_LOCKED;
+ 		if (*src & MIGRATE_PFN_WRITE)
+@@ -1013,15 +1022,6 @@ static vm_fault_t dmirror_devmem_fault_alloc_and_cop=
+y(struct migrate_vma *args,
+ 	return 0;
+ }
+=20
+-static void dmirror_devmem_fault_finalize_and_map(struct migrate_vma *args=
+,
+-						  struct dmirror *dmirror)
+-{
+-	/* Invalidate the device's page table mapping. */
+-	mutex_lock(&dmirror->mutex);
+-	dmirror_do_update(dmirror, args->start, args->end);
+-	mutex_unlock(&dmirror->mutex);
+-}
+-
+ static vm_fault_t dmirror_devmem_fault(struct vm_fault *vmf)
+ {
+ 	struct migrate_vma args;
+@@ -1051,11 +1051,15 @@ static vm_fault_t dmirror_devmem_fault(struct vm_fa=
+ult *vmf)
+ 	if (migrate_vma_setup(&args))
+ 		return VM_FAULT_SIGBUS;
+=20
+-	ret =3D dmirror_devmem_fault_alloc_and_copy(&args, dmirror->mdevice);
++	ret =3D dmirror_devmem_fault_alloc_and_copy(&args, dmirror);
+ 	if (ret)
+ 		return ret;
+ 	migrate_vma_pages(&args);
+-	dmirror_devmem_fault_finalize_and_map(&args, dmirror);
++	/*
++	 * No device finalize step is needed since
++	 * dmirror_devmem_fault_alloc_and_copy() will have already
++	 * invalidated the device page table.
++	 */
+ 	migrate_vma_finalize(&args);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftes=
+ts/vm/hmm-tests.c
+index b533dd08da1d..91d38a29956b 100644
+--- a/tools/testing/selftests/vm/hmm-tests.c
++++ b/tools/testing/selftests/vm/hmm-tests.c
+@@ -881,8 +881,9 @@ TEST_F(hmm, migrate)
+ }
+=20
+ /*
+- * Migrate anonymous memory to device private memory and fault it back to =
+system
+- * memory.
++ * Migrate anonymous memory to device private memory and fault some of it =
+back
++ * to system memory, then try migrating the resulting mix of system and de=
+vice
++ * private memory to the device.
+  */
+ TEST_F(hmm, migrate_fault)
+ {
+@@ -924,8 +925,17 @@ TEST_F(hmm, migrate_fault)
+ 	for (i =3D 0, ptr =3D buffer->mirror; i < size / sizeof(*ptr); ++i)
+ 		ASSERT_EQ(ptr[i], i);
+=20
+-	/* Fault pages back to system memory and check them. */
+-	for (i =3D 0, ptr =3D buffer->ptr; i < size / sizeof(*ptr); ++i)
++	/* Fault half the pages back to system memory and check them. */
++	for (i =3D 0, ptr =3D buffer->ptr; i < size / (2 * sizeof(*ptr)); ++i)
++		ASSERT_EQ(ptr[i], i);
++
++	/* Migrate memory to the device again. */
++	ret =3D hmm_dmirror_cmd(self->fd, HMM_DMIRROR_MIGRATE, buffer, npages);
++	ASSERT_EQ(ret, 0);
++	ASSERT_EQ(buffer->cpages, npages);
++
++	/* Check what the device read. */
++	for (i =3D 0, ptr =3D buffer->mirror; i < size / sizeof(*ptr); ++i)
+ 		ASSERT_EQ(ptr[i], i);
+=20
+ 	hmm_buffer_free(buffer);
+--=20
+2.20.1
 
-Yes, but that's the easy part of the problem :)
-
-Thanks,
-
-        tglx
