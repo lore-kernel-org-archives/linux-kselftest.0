@@ -7,69 +7,69 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDAF9C28E87
-	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jul 2020 21:38:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1AECC41604
+	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jul 2020 21:38:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB2F02070B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jul 2020 21:38:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8EE120748
+	for <linux-kselftest@archiver.kernel.org>; Fri, 24 Jul 2020 21:38:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IghqIwoB"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fKCBbMIZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbgGXVif (ORCPT
+        id S1726862AbgGXVig (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 24 Jul 2020 17:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
+        Fri, 24 Jul 2020 17:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726945AbgGXVgs (ORCPT
+        with ESMTP id S1726826AbgGXVgq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jul 2020 17:36:48 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B761C0619E8
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:36:48 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id k5so6243607pjg.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:36:48 -0700 (PDT)
+        Fri, 24 Jul 2020 17:36:46 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B51C0619E7
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:36:46 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id b9so5295079plx.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2020 14:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2/kBhrQPbzovHh41OSaPnXat9qGyJUFnv0iXtUuMMKE=;
-        b=IghqIwoBfKGdBHowpyxVljQEPV4EvfpdQWYORYH5ljggyOoUB93bDQtlXhE3tkR1xG
-         NqF6JhgR17Y5MKkkypz0qY7Odys1mTMmr5e+6P8C5CnGiggDf6CucxbUm93J2hL0KjhG
-         WQJk6B8gXZFngzLozgAGQtzopAVTs2DRYO93s=
+        bh=YLy0ZgqcjQnksBvi3DviLt6cbR749pq+3Sg+gKabpfk=;
+        b=fKCBbMIZ3wdYF10uVKEMHpjA/Pyc5cd2gK6PF4DES9Hf/TmROG98SwIzq1cz3ecKbE
+         4V95zYjMGsp3xFoSuaYl9TLiiKDAAoOMUx0gTdDeVtwLSn8fJo9z9X12CyOAVZQ+m6xX
+         /jodBAjN9zbIl5vwaKZj5rSbmxaQztk2wdscQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2/kBhrQPbzovHh41OSaPnXat9qGyJUFnv0iXtUuMMKE=;
-        b=nelDFPxPBEKR8eN5TVNuGwCiKXZDvLoTh8JfS9xalgT7gIfmJ5sUy7uMUO/znShu8Y
-         dPRv4SDNDZfd7rVyXoBPg9xA0PHc5yeRKadVyE6XpWBzTeJFalWPEEDXjwHM/A0OgtcG
-         M3/3aYYQ7DDZljtrX1m06ImU1a6Pm1ryZEAU7YI7+gGLU8HRdG6gDy8cH16WufSZ8YTM
-         2/ObR9WXrPMwVweDmKfSz1Y7+XhYTNeDTS7ZRI6qwIBKAcen1RtALynBbMiv9mAzGqPL
-         VnF7ZKv9r4h3JWrT0y748c5ZSXXc4O/CRda0LVDrPp6ZLdn4cWS49H33eElBGvB+EGWT
-         3nQQ==
-X-Gm-Message-State: AOAM531Qmp6cYYJtBUylGWXIEsCXHFv/IW3J33X8HOl9IW6sgR/JkcV0
-        nTlPYdKlaRUMopBQNO7sdtkm1A==
-X-Google-Smtp-Source: ABdhPJzPJqhzQYIlmFMm0JvuP6Chr0PhV314mA4W5L786J7f7YtpqYDyRBviJfOTvbrBAVr9J0xosQ==
-X-Received: by 2002:a17:90b:338d:: with SMTP id ke13mr7268603pjb.60.1595626607402;
-        Fri, 24 Jul 2020 14:36:47 -0700 (PDT)
+        bh=YLy0ZgqcjQnksBvi3DviLt6cbR749pq+3Sg+gKabpfk=;
+        b=dYTFoH3uGdEl8QHGxuGZ+DI5RstHCq1GvWtrAizHEkJfckIlck8pk6WSs1xNkxek3u
+         NTWf0X5IyiAup2erWpUiTpof8sUG1oaRpcGXf+eb8z68zB8D+JuSzynvHnwMB1vHJoU7
+         ovHwzlmVbO+wGG/qeG9+4EIynJ63UzyCe+/nlh2FbZDesmpyc8L79IfFC0XQlwcPDwct
+         +/ACPGfYI2D9k89h9ziwBp03DGwVnxT5Xvfk2kCzx3MYhLWCiwHH0qWd/xjrSppmyl+q
+         oioseV0Io5OuoRfxIEQNXrkWUMkTi/EEKOZ3TOckpcusOyXnvW7itKwiLRKHRxuwcWqh
+         H9fw==
+X-Gm-Message-State: AOAM532c35DINaPePpEnTv+VYilqORI6zyR6MWWgvx7jZhsyWOa9fGcY
+        S4/vgdbJnOg8Rz5xa4YmsBmEIA==
+X-Google-Smtp-Source: ABdhPJzEgcuNxLo7+nIkeLiK3TbI31y3cje0lQLd0ywUWaYIzS1iN/WrgbXv7zFopX1hiOOQmatiMw==
+X-Received: by 2002:a17:902:446:: with SMTP id 64mr9977003ple.157.1595626605892;
+        Fri, 24 Jul 2020 14:36:45 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x10sm7377865pfp.80.2020.07.24.14.36.43
+        by smtp.gmail.com with ESMTPSA id o17sm6398650pjq.6.2020.07.24.14.36.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 24 Jul 2020 14:36:43 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        SeongJae Park <sjpark@amazon.de>,
+Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>,
         Mimi Zohar <zohar@linux.ibm.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, KP Singh <kpsingh@chromium.org>,
-        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
         linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 02/19] selftest/firmware: Add selftest timeout in settings
-Date:   Fri, 24 Jul 2020 14:36:23 -0700
-Message-Id: <20200724213640.389191-3-keescook@chromium.org>
+Subject: [PATCH v3 04/19] fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER enum
+Date:   Fri, 24 Jul 2020 14:36:25 -0700
+Message-Id: <20200724213640.389191-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200724213640.389191-1-keescook@chromium.org>
 References: <20200724213640.389191-1-keescook@chromium.org>
@@ -80,58 +80,171 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The firmware tests would always time out for me. Add a correct timeout,
-including details on how the value was reached. Additionally allow the
-test harness to skip comments in settings files and report how long a
-given timeout was.
+FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
+that are interested in filtering between types of things. The "how"
+should be an internal detail made uninteresting to the LSMs.
 
-Reviewed-by: SeongJae Park <sjpark@amazon.de>
+Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
+Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
+Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
+Cc: stable@vger.kernel.org
 Acked-by: Scott Branden <scott.branden@broadcom.com>
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/firmware/settings   | 8 ++++++++
- tools/testing/selftests/kselftest/runner.sh | 6 +++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/firmware/settings
+To aid in backporting, this change is made before moving
+kernel_read_file() to separate header/source files.
+---
+ drivers/base/firmware_loader/main.c | 5 ++---
+ fs/exec.c                           | 7 ++++---
+ include/linux/fs.h                  | 2 +-
+ kernel/module.c                     | 2 +-
+ security/integrity/digsig.c         | 2 +-
+ security/integrity/ima/ima_fs.c     | 2 +-
+ security/integrity/ima/ima_main.c   | 6 ++----
+ 7 files changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/firmware/settings b/tools/testing/selftests/firmware/settings
-new file mode 100644
-index 000000000000..085e664ee093
---- /dev/null
-+++ b/tools/testing/selftests/firmware/settings
-@@ -0,0 +1,8 @@
-+# The async firmware timeout is set to 1 second (but ends up being effectively
-+# 2 seconds). There are 3 test configs, each done with and without firmware
-+# present, each with 2 "nowait" functions tested 5 times. Expected time for a
-+# normal execution should be 2 * 3 * 2 * 2 * 5 = 120 seconds for those alone.
-+# Additionally, fw_fallback may take 5 seconds for internal timeouts in each
-+# of the 3 configs, so at least another 15 seconds are needed. Add another
-+# 10 seconds for each testing config: 120 + 15 + 30
-+timeout=165
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 676b3a8b114d..cd5ddf979f15 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -53,6 +53,10 @@ run_one()
- 	settings="$BASE_DIR/$DIR/settings"
- 	if [ -r "$settings" ] ; then
- 		while read line ; do
-+			# Skip comments.
-+			if echo "$line" | grep -q '^#'; then
-+				continue
-+			fi
- 			field=$(echo "$line" | cut -d= -f1)
- 			value=$(echo "$line" | cut -d= -f2-)
- 			eval "kselftest_$field"="$value"
-@@ -80,7 +84,7 @@ run_one()
- 			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
- 		elif [ $rc -eq $timeout_rc ]; then \
- 			echo "#"
--			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT"
-+			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
- 		else
- 			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
- 		fi)
+diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+index ca871b13524e..c2f57cedcd6f 100644
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -465,14 +465,12 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+ 	int i, len;
+ 	int rc = -ENOENT;
+ 	char *path;
+-	enum kernel_read_file_id id = READING_FIRMWARE;
+ 	size_t msize = INT_MAX;
+ 	void *buffer = NULL;
+ 
+ 	/* Already populated data member means we're loading into a buffer */
+ 	if (!decompress && fw_priv->data) {
+ 		buffer = fw_priv->data;
+-		id = READING_FIRMWARE_PREALLOC_BUFFER;
+ 		msize = fw_priv->allocated_size;
+ 	}
+ 
+@@ -496,7 +494,8 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+ 
+ 		/* load firmware files from the mount namespace of init */
+ 		rc = kernel_read_file_from_path_initns(path, &buffer,
+-						       &size, msize, id);
++						       &size, msize,
++						       READING_FIRMWARE);
+ 		if (rc) {
+ 			if (rc != -ENOENT)
+ 				dev_warn(device, "loading %s failed with error %d\n",
+diff --git a/fs/exec.c b/fs/exec.c
+index e6e8a9a70327..2bf549757ce7 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -927,6 +927,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ {
+ 	loff_t i_size, pos;
+ 	ssize_t bytes = 0;
++	void *allocated = NULL;
+ 	int ret;
+ 
+ 	if (!S_ISREG(file_inode(file)->i_mode) || max_size < 0)
+@@ -950,8 +951,8 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 		goto out;
+ 	}
+ 
+-	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
+-		*buf = vmalloc(i_size);
++	if (!*buf)
++		*buf = allocated = vmalloc(i_size);
+ 	if (!*buf) {
+ 		ret = -ENOMEM;
+ 		goto out;
+@@ -980,7 +981,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 
+ out_free:
+ 	if (ret < 0) {
+-		if (id != READING_FIRMWARE_PREALLOC_BUFFER) {
++		if (allocated) {
+ 			vfree(*buf);
+ 			*buf = NULL;
+ 		}
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 3f881a892ea7..95fc775ed937 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2993,10 +2993,10 @@ static inline void i_readcount_inc(struct inode *inode)
+ #endif
+ extern int do_pipe_flags(int *, int);
+ 
++/* This is a list of *what* is being read, not *how*. */
+ #define __kernel_read_file_id(id) \
+ 	id(UNKNOWN, unknown)		\
+ 	id(FIRMWARE, firmware)		\
+-	id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
+ 	id(FIRMWARE_EFI_EMBEDDED, firmware)	\
+ 	id(MODULE, kernel-module)		\
+ 	id(KEXEC_IMAGE, kexec-image)		\
+diff --git a/kernel/module.c b/kernel/module.c
+index 0c6573b98c36..26105148f4d2 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3988,7 +3988,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ {
+ 	struct load_info info = { };
+ 	loff_t size;
+-	void *hdr;
++	void *hdr = NULL;
+ 	int err;
+ 
+ 	err = may_init_module();
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index e9cbadade74b..ac02b7632353 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -169,7 +169,7 @@ int __init integrity_add_key(const unsigned int id, const void *data,
+ 
+ int __init integrity_load_x509(const unsigned int id, const char *path)
+ {
+-	void *data;
++	void *data = NULL;
+ 	loff_t size;
+ 	int rc;
+ 	key_perm_t perm;
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index e3fcad871861..15a44c5022f7 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -272,7 +272,7 @@ static const struct file_operations ima_ascii_measurements_ops = {
+ 
+ static ssize_t ima_read_policy(char *path)
+ {
+-	void *data;
++	void *data = NULL;
+ 	char *datap;
+ 	loff_t size;
+ 	int rc, pathlen = strlen(path);
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index c1583d98c5e5..f80ee4ce4669 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -611,19 +611,17 @@ void ima_post_path_mknod(struct dentry *dentry)
+ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+ {
+ 	/*
+-	 * READING_FIRMWARE_PREALLOC_BUFFER
+-	 *
+ 	 * Do devices using pre-allocated memory run the risk of the
+ 	 * firmware being accessible to the device prior to the completion
+ 	 * of IMA's signature verification any more than when using two
+-	 * buffers?
++	 * buffers? It may be desirable to include the buffer address
++	 * in this API and walk all the dma_map_single() mappings to check.
+ 	 */
+ 	return 0;
+ }
+ 
+ const int read_idmap[READING_MAX_ID] = {
+ 	[READING_FIRMWARE] = FIRMWARE_CHECK,
+-	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
+ 	[READING_MODULE] = MODULE_CHECK,
+ 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
+ 	[READING_KEXEC_INITRAMFS] = KEXEC_INITRAMFS_CHECK,
 -- 
 2.25.1
 
