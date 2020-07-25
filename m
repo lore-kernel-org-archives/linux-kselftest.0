@@ -2,85 +2,102 @@ Return-Path: <SRS0=ui4p=BE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB0DDC433E1
-	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jul 2020 17:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB5BC433DF
+	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jul 2020 18:15:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E9D320758
-	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jul 2020 17:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595697655;
-	bh=tsXknhVBYEmB2CJYeY9vU2qcrD5B43pPBPyaIHl7sCk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=CGYZexHP/MwoRq3u1WHivovbHzJFfgOjIunF8hjD2jh7+t6Guo7/sujPnB0K06R8p
-	 lC8Supy1beHxjchANrEzigLkoL+3foQ34W1GSiyDwhaN5qIf2+3/6SdT088erd36ra
-	 ILL35C2U9vX/EhSBYNxJjnJEAQRAE002DPst4z84=
+	by mail.kernel.org (Postfix) with ESMTP id 2699F206D8
+	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Jul 2020 18:15:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jt8+hJpY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727013AbgGYRUz (ORCPT
+        id S1727043AbgGYSPe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 25 Jul 2020 13:20:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726926AbgGYRUy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Jul 2020 13:20:54 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 62DC9206D8;
-        Sat, 25 Jul 2020 17:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595697654;
-        bh=tsXknhVBYEmB2CJYeY9vU2qcrD5B43pPBPyaIHl7sCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gRrUSykOt9EXcm6iUGecAcMKn8B+gQ2uDu91Esx9bYDK9fpRh7BzoCy5yk/EPvryl
-         PRKAUvqpxHPFfIfqOxCxoTdJ9FNBo7En15jyn746/g/l7ujY6HfgeXyylfYvO7FYU5
-         QHidFPL6+CVaAR5ojKH7ET3hoPO4f16GRUZsz4Hg=
-Date:   Sat, 25 Jul 2020 19:20:50 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     stable@vger.kernel.org, Scott Branden <scott.branden@broadcom.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/19] firmware_loader: EFI firmware loader must
- handle pre-allocated buffer
-Message-ID: <20200725172050.GA405510@kroah.com>
-References: <20200724213640.389191-1-keescook@chromium.org>
- <20200724213640.389191-4-keescook@chromium.org>
- <20200725100700.GB1073708@kroah.com>
- <202007250849.2B58CD3B@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202007250849.2B58CD3B@keescook>
+        Sat, 25 Jul 2020 14:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726727AbgGYSPe (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 25 Jul 2020 14:15:34 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD9FC08C5C0;
+        Sat, 25 Jul 2020 11:15:34 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id w9so9333848qts.6;
+        Sat, 25 Jul 2020 11:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id;
+        bh=BoLLs9pL25bQsh1K8AZlZy8BCoVEU1VbiiHrpjhJ70k=;
+        b=jt8+hJpYx7U7Pv4o2UdmKJnGDCnIYuK7uaPWiLSuPerSnu/1L9O+7cW1Se5svGYhBq
+         PGZN5uls/Pto4Vf8OVG6r0LfbTqSTYWzZ6dhgYu/LwwpKeF7H2iN9ZCqxnST7LDMPY44
+         m+WLoh1ICZwjWcMswMJXNyzFCk7+FYnXesjgx8VPwC72onuXCRtKugi7xXofHe5bCsZl
+         dIGiubPw2iiJSqPVzRwcJcr52Kq0GlUIMug5dee0xyCLfV2uOtWLjR6QAB+ZyVrdl8JK
+         yo/RS/RzGqC+pjxl2B+88wB2t5fQDXYExVbKqi4ThXbx5oczuTI7hPQirh1Uc7bY/uhQ
+         Qr+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=BoLLs9pL25bQsh1K8AZlZy8BCoVEU1VbiiHrpjhJ70k=;
+        b=qxkyAcEMGR+OkytRYFFV3m3OScuPtnlRvY9T6+KqWFnldbMBkwsrqp0YWG8/jHOcGa
+         /4m4XXl10WYesVIkYITNks66VGSO5lVvQ/DwnPoCv7gll1qvdcrWbJySI74iKSpJfNsP
+         5qh6S3QDglXr7Wm4o10sT2suk3RkZKBjUzdUD/Fhu3eyeGdKXaywiqjG4X1ZZRrsK3wu
+         t6S8qsikw9pXuCIvqd0tYeqeYeEs/uyupw9gb9VkC6ujZZ1F0l91d75eO8Yaa4sGW9bR
+         XFXo8WZk+EmPe1eKuUauzX3RsnnVGjXnmHErSICMc+BZ66kTdDWbUlB7qCVW4id3dEx5
+         He3w==
+X-Gm-Message-State: AOAM530uK7oCNMHlxwXiHLXit1zVa5zeAZgfI2s+xvuKQrH2qCtPgPyV
+        dy2FSWFgiN/Tw9AjmUL1QSRdcGqJEVyuXQ==
+X-Google-Smtp-Source: ABdhPJxGFMafz00I9Zqenkqzb2gAb3+rqPW8PStREmdM83sDRCB6ZQeowtht6kGoIDWaz3WOadCKOQ==
+X-Received: by 2002:ac8:478e:: with SMTP id k14mr12856517qtq.21.1595700933813;
+        Sat, 25 Jul 2020 11:15:33 -0700 (PDT)
+Received: from linux.home ([2604:2000:1344:41d:dd0e:1a59:cbe4:73ee])
+        by smtp.googlemail.com with ESMTPSA id o184sm12177664qkd.41.2020.07.25.11.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jul 2020 11:15:33 -0700 (PDT)
+From:   Gaurav Singh <gaurav1086@gmail.com>
+To:     gaurav1086@gmail.com, Shuah Khan <shuah@kernel.org>,
+        Tejun Heo <tj@kernel.org>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <guro@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] [cgroup/testing] cg_read_strcmp: Fix null pointer dereference
+Date:   Sat, 25 Jul 2020 14:14:51 -0400
+Message-Id: <20200725181506.20199-1-gaurav1086@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 25, 2020 at 08:50:33AM -0700, Kees Cook wrote:
-> On Sat, Jul 25, 2020 at 12:07:00PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Jul 24, 2020 at 02:36:24PM -0700, Kees Cook wrote:
-> > > The EFI platform firmware fallback would clobber any pre-allocated
-> > > buffers. Instead, correctly refuse to reallocate when too small (as
-> > > already done in the sysfs fallback), or perform allocation normally
-> > > when needed.
-> > > 
-> > > Fixes: e4c2c0ff00ec ("firmware: Add new platform fallback mechanism and firm ware_request_platform()")
-> > 
-> > "firmware_request_platform()" :)
-> 
-> Weird... I'm not sure where that mangling happened. Perhaps a bad
-> cut/paste at 80 columns? Hmpf; thanks for catching. I've updated it on
-> my end (I assume you fixed this manually, though?)
+Passing NULL in strcmp will cause a segmentation fault.
+Fix this by returning -1 if expected is NULL pointer. 
 
-Yes, I fixed it up already, no worries.
+Signed-off-by: Gaurav Singh <gaurav1086@gmail.com>
+---
+ tools/testing/selftests/cgroup/cgroup_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 8a637ca7d73a..05853b0b8831 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -106,7 +106,7 @@ int cg_read_strcmp(const char *cgroup, const char *control,
+ 
+ 	/* Handle the case of comparing against empty string */
+ 	if (!expected)
+-		size = 32;
++		return -1;
+ 	else
+ 		size = strlen(expected) + 1;
+ 
+-- 
+2.17.1
+
