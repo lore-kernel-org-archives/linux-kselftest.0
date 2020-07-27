@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D57EEC43461
-	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Jul 2020 23:29:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7C2C35277
+	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Jul 2020 23:30:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A52F02173E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Jul 2020 23:29:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02D3E208E4
+	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Jul 2020 23:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595892579;
-	bh=h34qtxaIin9fvca5iz4rgj6oOZSApYPiXFr73+LDPjY=;
+	s=default; t=1595892600;
+	bh=I2dTzUq/9wZciNDjDhbRp5+H1zAaUup4cSjPwG9P8DI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1eVHAHlHxrfv8tA60GTHvIifzRzVNMz5EELcb7xCTvvZDE4W4bb6EwC13G+pTiNvg
-	 yL+S4ifUV2I/pXpNkctUWqaSFm0MG2Y7oWRShY0nEOe4HAQwmlwTzRGeLzXgFswRno
-	 +59rXRrKKf2k7l/avtFXdcHcnEsscjYls3HopeNc=
+	b=zSMD4KRAFmyQwezXJAzjzPUlF32SxrvAZOe/jqXex1RGCYfK9SHAzywnrK12xiHqm
+	 R+7ldqLOVsAbYwpxtDMMMA9N1wAwy9jxODRyjk9y6dFdNbsGbIQCsll0M6XFt6WHIG
+	 P2rOeLDshmoM9fqxYg4GUA8MT6TfGS56QpLvPhc0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgG0X3Y (ORCPT
+        id S1726340AbgG0X37 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 27 Jul 2020 19:29:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34970 "EHLO mail.kernel.org"
+        Mon, 27 Jul 2020 19:29:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34716 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbgG0XYG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:24:06 -0400
+        id S1727940AbgG0XXz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:23:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9DEE02173E;
-        Mon, 27 Jul 2020 23:24:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1EDC220A8B;
+        Mon, 27 Jul 2020 23:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892245;
-        bh=h34qtxaIin9fvca5iz4rgj6oOZSApYPiXFr73+LDPjY=;
+        s=default; t=1595892235;
+        bh=I2dTzUq/9wZciNDjDhbRp5+H1zAaUup4cSjPwG9P8DI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z0TETOFPJ4YcNgEhVxA1UVuq5Pbif0kCWRscX9+EgSsPnkb/sG24s7DHBu5s1hjMd
-         sDPvSX2wx7XOeZ2Wzxa8UrNS5qQpp3tAq+vOB4hwGS/l29Y8EoH3VDC9uIg2Zkt2/p
-         gMfd/uHvSlI37AzeLMEHAf8usGo4g9yXnYWLQwfg=
+        b=SjcrjdePUCW5hCWkOxycGS8bv3eQjSzRJGTq+ylPD1i4vEPFARGVBwWAaFS34rpGR
+         BDpVa1xJ2Nqbv9ksiVbOVjZIdz9t6l22Jl93L5CzljCSyRn1N/XZhy2koMAx/ELGXH
+         CiHQqtInTlUMDRrjvTzqRTH8tj2r2YEObBVBfT3U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paolo Pisati <paolo.pisati@canonical.com>,
-        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 14/25] selftest: txtimestamp: fix net ns entry logic
-Date:   Mon, 27 Jul 2020 19:23:34 -0400
-Message-Id: <20200727232345.717432-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 06/25] selftests: net: ip_defrag: modprobe missing nf_defrag_ipv6 support
+Date:   Mon, 27 Jul 2020 19:23:26 -0400
+Message-Id: <20200727232345.717432-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200727232345.717432-1-sashal@kernel.org>
 References: <20200727232345.717432-1-sashal@kernel.org>
@@ -63,33 +63,56 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Paolo Pisati <paolo.pisati@canonical.com>
 
-[ Upstream commit b346c0c85892cb8c53e8715734f71ba5bbec3387 ]
+[ Upstream commit aba69d49fb49c9166596dd78926514173b7f9ab5 ]
 
-According to 'man 8 ip-netns', if `ip netns identify` returns an empty string,
-there's no net namespace associated with current PID: fix the net ns entrance
-logic.
+Fix ip_defrag.sh when CONFIG_NF_DEFRAG_IPV6=m:
+
+$ sudo ./ip_defrag.sh
++ set -e
++ mktemp -u XXXXXX
++ readonly NETNS=ns-rGlXcw
++ trap cleanup EXIT
++ setup
++ ip netns add ns-rGlXcw
++ ip -netns ns-rGlXcw link set lo up
++ ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_high_thresh=9000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_low_thresh=7000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv4.ipfrag_time=1
++ ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_high_thresh=9000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_low_thresh=7000000
++ ip netns exec ns-rGlXcw sysctl -w net.ipv6.ip6frag_time=1
++ ip netns exec ns-rGlXcw sysctl -w net.netfilter.nf_conntrack_frag6_high_thresh=9000000
++ cleanup
++ ip netns del ns-rGlXcw
+
+$ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
+ls: cannot access '/proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh': No such file or directory
+
+$ sudo modprobe nf_defrag_ipv6
+$ ls -la /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
+-rw-r--r-- 1 root root 0 Jul 14 12:34 /proc/sys/net/netfilter/nf_conntrack_frag6_high_thresh
 
 Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
-Acked-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/txtimestamp.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/ip_defrag.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/net/txtimestamp.sh b/tools/testing/selftests/net/txtimestamp.sh
-index eea6f5193693f..31637769f59f6 100755
---- a/tools/testing/selftests/net/txtimestamp.sh
-+++ b/tools/testing/selftests/net/txtimestamp.sh
-@@ -75,7 +75,7 @@ main() {
- 	fi
- }
+diff --git a/tools/testing/selftests/net/ip_defrag.sh b/tools/testing/selftests/net/ip_defrag.sh
+index 15d3489ecd9ce..ceb7ad4dbd945 100755
+--- a/tools/testing/selftests/net/ip_defrag.sh
++++ b/tools/testing/selftests/net/ip_defrag.sh
+@@ -6,6 +6,8 @@
+ set +x
+ set -e
  
--if [[ "$(ip netns identify)" == "root" ]]; then
-+if [[ -z "$(ip netns identify)" ]]; then
- 	./in_netns.sh $0 $@
- else
- 	main $@
++modprobe -q nf_defrag_ipv6
++
+ readonly NETNS="ns-$(mktemp -u XXXXXX)"
+ 
+ setup() {
 -- 
 2.25.1
 
