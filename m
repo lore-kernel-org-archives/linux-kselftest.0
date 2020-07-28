@@ -2,473 +2,365 @@ Return-Path: <SRS0=KCse=BH=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E11C433E4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jul 2020 10:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B88C433E3
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jul 2020 13:31:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F74220FC3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jul 2020 10:09:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4234D20759
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jul 2020 13:31:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728305AbgG1KJJ (ORCPT
+        id S1730012AbgG1Na7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Jul 2020 06:09:09 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50626 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727973AbgG1KJJ (ORCPT
+        Tue, 28 Jul 2020 09:30:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21980 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729044AbgG1Na6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jul 2020 06:09:09 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: rcn)
-        with ESMTPSA id 51753296389
-From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To:     akpm@linux-foundation.org
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] selftests: add mincore() tests
-Date:   Tue, 28 Jul 2020 12:04:50 +0200
-Message-Id: <20200728100450.4065-1-ricardo.canuelo@collabora.com>
-X-Mailer: git-send-email 2.18.0
+        Tue, 28 Jul 2020 09:30:58 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06SD2W2h044543;
+        Tue, 28 Jul 2020 09:30:21 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32j0a5ujc6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jul 2020 09:30:21 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06SD2kka045277;
+        Tue, 28 Jul 2020 09:30:20 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32j0a5ujb4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jul 2020 09:30:20 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06SDP7Tv019695;
+        Tue, 28 Jul 2020 13:30:19 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 32gcy4kqy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 28 Jul 2020 13:30:18 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06SDSpkP66584934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jul 2020 13:28:51 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C319A406D;
+        Tue, 28 Jul 2020 13:30:16 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE116A4057;
+        Tue, 28 Jul 2020 13:30:13 +0000 (GMT)
+Received: from [9.102.29.60] (unknown [9.102.29.60])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 28 Jul 2020 13:30:13 +0000 (GMT)
+Subject: Re: [PATCH v3 1/2] cpuidle: Trace IPI based and timer based wakeup
+ latency from idle states
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, srivatsa@csail.mit.edu,
+        Shuah Khan <shuah@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Vaidyanathan Srinivasan <svaidy@linux.ibm.com>,
+        pratik.r.sampat@gmail.com, Linux PM <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+References: <20200721124300.65615-1-psampat@linux.ibm.com>
+ <20200721124300.65615-2-psampat@linux.ibm.com>
+ <CAJZ5v0j3ip77opkaW3Rtn0cqT7VTL_8goctFBDVehWoZowDY0Q@mail.gmail.com>
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Message-ID: <9dfff062-9e68-c91f-f36c-8699e8c3fc1b@linux.ibm.com>
+Date:   Tue, 28 Jul 2020 19:00:12 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0j3ip77opkaW3Rtn0cqT7VTL_8goctFBDVehWoZowDY0Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-28_07:2020-07-28,2020-07-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007280095
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test suite for the mincore() syscall. It tests most of its use
-cases as well as its interface.
+Hello Rafael,
 
-Tests implemented:
 
-  - basic interface test
-  - behavior on anonymous mappings
-  - behavior on anonymous mappings with huge tlb pages
-  - file-backed mapping with a regular file
-  - file-backed mapping with a tmpfs file
+On 27/07/20 7:12 pm, Rafael J. Wysocki wrote:
+> On Tue, Jul 21, 2020 at 2:43 PM Pratik Rajesh Sampat
+> <psampat@linux.ibm.com> wrote:
+>> Fire directed smp_call_function_single IPIs from a specified source
+>> CPU to the specified target CPU to reduce the noise we have to wade
+>> through in the trace log.
+> And what's the purpose of it?
 
-Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
----
-Tested in next-20200727 with:
+The idea for this comes from that fact that estimating wake-up
+latencies and residencies for stop states is not an easy task.
 
-    make -C tools/testing/selftests
+The purpose is essentially to determine wakeup latencies, that are
+caused by either, an IPI or a timer and compare with the advertised
+wakeup latencies for each stop state.
 
-and
+This might help in determining the accuracy of our advertised values
+and/or if they need any re-calibration.
 
-    make -C tools/testing/selftests run_tests
+>> The module is based on the idea written by Srivatsa Bhat and maintained
+>> by Vaidyanathan Srinivasan internally.
+>>
+>> Queue HR timer and measure jitter. Wakeup latency measurement for idle
+>> states using hrtimer.  Echo a value in ns to timer_test_function and
+>> watch trace. A HRtimer will be queued and when it fires the expected
+>> wakeup vs actual wakeup is computes and delay printed in ns.
+>>
+>> Implemented as a module which utilizes debugfs so that it can be
+>> integrated with selftests.
+>>
+>> To include the module, check option and include as module
+>> kernel hacking -> Cpuidle latency selftests
+>>
+>> [srivatsa.bhat@linux.vnet.ibm.com: Initial implementation in
+>>   cpidle/sysfs]
+>>
+>> [svaidy@linux.vnet.ibm.com: wakeup latency measurements using hrtimer
+>>   and fix some of the time calculation]
+>>
+>> [ego@linux.vnet.ibm.com: Fix some whitespace and tab errors and
+>>   increase the resolution of IPI wakeup]
+>>
+>> Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
+>> Reviewed-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+>> ---
+>>   drivers/cpuidle/Makefile               |   1 +
+>>   drivers/cpuidle/test-cpuidle_latency.c | 150 +++++++++++++++++++++++++
+>>   lib/Kconfig.debug                      |  10 ++
+>>   3 files changed, 161 insertions(+)
+>>   create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+>>
+>> diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+>> index f07800cbb43f..2ae05968078c 100644
+>> --- a/drivers/cpuidle/Makefile
+>> +++ b/drivers/cpuidle/Makefile
+>> @@ -8,6 +8,7 @@ obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
+>>   obj-$(CONFIG_DT_IDLE_STATES)             += dt_idle_states.o
+>>   obj-$(CONFIG_ARCH_HAS_CPU_RELAX)         += poll_state.o
+>>   obj-$(CONFIG_HALTPOLL_CPUIDLE)           += cpuidle-haltpoll.o
+>> +obj-$(CONFIG_IDLE_LATENCY_SELFTEST)      += test-cpuidle_latency.o
+>>
+>>   ##################################################################################
+>>   # ARM SoC drivers
+>> diff --git a/drivers/cpuidle/test-cpuidle_latency.c b/drivers/cpuidle/test-cpuidle_latency.c
+>> new file mode 100644
+>> index 000000000000..61574665e972
+>> --- /dev/null
+>> +++ b/drivers/cpuidle/test-cpuidle_latency.c
+>> @@ -0,0 +1,150 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Module-based API test facility for cpuidle latency using IPIs and timers
+> I'd like to see a more detailed description of what it does and how it
+> works here.
 
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/mincore/.gitignore    |   2 +
- tools/testing/selftests/mincore/Makefile      |   6 +
- .../selftests/mincore/mincore_selftest.c      | 361 ++++++++++++++++++
- 4 files changed, 370 insertions(+)
- create mode 100644 tools/testing/selftests/mincore/.gitignore
- create mode 100644 tools/testing/selftests/mincore/Makefile
- create mode 100644 tools/testing/selftests/mincore/mincore_selftest.c
+Right, I'll add that.
+Based on comments from Daniel I have also been working on a
+user-space only variant of this test as that does seem like
+a better way to go.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index e03bc15ce731..9018f45d631d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -32,6 +32,7 @@ TARGETS += lkdtm
- TARGETS += membarrier
- TARGETS += memfd
- TARGETS += memory-hotplug
-+TARGETS += mincore
- TARGETS += mount
- TARGETS += mqueue
- TARGETS += net
-diff --git a/tools/testing/selftests/mincore/.gitignore b/tools/testing/selftests/mincore/.gitignore
-new file mode 100644
-index 000000000000..15c4dfc2df00
---- /dev/null
-+++ b/tools/testing/selftests/mincore/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0+
-+mincore_selftest
-diff --git a/tools/testing/selftests/mincore/Makefile b/tools/testing/selftests/mincore/Makefile
-new file mode 100644
-index 000000000000..38c7db1e8926
---- /dev/null
-+++ b/tools/testing/selftests/mincore/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0+
-+
-+CFLAGS += -Wall
-+
-+TEST_GEN_PROGS := mincore_selftest
-+include ../lib.mk
-diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
-new file mode 100644
-index 000000000000..5a1e85ff5d32
---- /dev/null
-+++ b/tools/testing/selftests/mincore/mincore_selftest.c
-@@ -0,0 +1,361 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * kselftest suite for mincore().
-+ *
-+ * Copyright (C) 2020 Collabora, Ltd.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <sys/mman.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <string.h>
-+
-+#include "../kselftest.h"
-+#include "../kselftest_harness.h"
-+
-+/* Default test file size: 4MB */
-+#define MB (1UL << 20)
-+#define FILE_SIZE (4 * MB)
-+
-+
-+/*
-+ * Tests the user interface. This test triggers most of the documented
-+ * error conditions in mincore().
-+ */
-+TEST(basic_interface)
-+{
-+	int retval;
-+	int page_size;
-+	unsigned char vec[1];
-+	char *addr;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+
-+	/* Query a 0 byte sized range */
-+	retval = mincore(0, 0, vec);
-+	EXPECT_EQ(0, retval);
-+
-+	/* Addresses in the specified range are invalid or unmapped */
-+	errno = 0;
-+	retval = mincore(NULL, page_size, vec);
-+	EXPECT_EQ(-1, retval);
-+	EXPECT_EQ(ENOMEM, errno);
-+
-+	errno = 0;
-+	addr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, addr) {
-+		TH_LOG("mmap error: %s", strerror(errno));
-+	}
-+
-+	/* <addr> argument is not page-aligned */
-+	errno = 0;
-+	retval = mincore(addr + 1, page_size, vec);
-+	EXPECT_EQ(-1, retval);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	/* <length> argument is too large */
-+	errno = 0;
-+	retval = mincore(addr, -1, vec);
-+	EXPECT_EQ(-1, retval);
-+	EXPECT_EQ(ENOMEM, errno);
-+
-+	/* <vec> argument points to an illegal address */
-+	errno = 0;
-+	retval = mincore(addr, page_size, NULL);
-+	EXPECT_EQ(-1, retval);
-+	EXPECT_EQ(EFAULT, errno);
-+	munmap(addr, page_size);
-+}
-+
-+
-+/*
-+ * Test mincore() behavior on a private anonymous page mapping.
-+ * Check that the page is not loaded into memory right after the mapping
-+ * but after accessing it (on-demand allocation).
-+ * Then free the page and check that it's not memory-resident.
-+ */
-+TEST(check_anonymous_locked_pages)
-+{
-+	unsigned char vec[1];
-+	char *addr;
-+	int retval;
-+	int page_size;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+
-+	/* Map one page and check it's not memory-resident */
-+	errno = 0;
-+	addr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, addr) {
-+		TH_LOG("mmap error: %s", strerror(errno));
-+	}
-+	retval = mincore(addr, page_size, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(0, vec[0]) {
-+		TH_LOG("Page found in memory before use");
-+	}
-+
-+	/* Touch the page and check again. It should now be in memory */
-+	addr[0] = 1;
-+	mlock(addr, page_size);
-+	retval = mincore(addr, page_size, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(1, vec[0]) {
-+		TH_LOG("Page not found in memory after use");
-+	}
-+
-+	/*
-+	 * It shouldn't be memory-resident after unlocking it and
-+	 * marking it as unneeded.
-+	 */
-+	munlock(addr, page_size);
-+	madvise(addr, page_size, MADV_DONTNEED);
-+	retval = mincore(addr, page_size, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(0, vec[0]) {
-+		TH_LOG("Page in memory after being zapped");
-+	}
-+	munmap(addr, page_size);
-+}
-+
-+
-+/*
-+ * Check mincore() behavior on huge pages.
-+ * This test will be skipped if the mapping fails (ie. if there are no
-+ * huge pages available).
-+ *
-+ * Make sure the system has at least one free huge page, check
-+ * "HugePages_Free" in /proc/meminfo.
-+ * Increment /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages if
-+ * needed.
-+ */
-+TEST(check_huge_pages)
-+{
-+	unsigned char vec[1];
-+	char *addr;
-+	int retval;
-+	int page_size;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+
-+	errno = 0;
-+	addr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
-+		-1, 0);
-+	if (addr == MAP_FAILED) {
-+		if (errno == ENOMEM)
-+			SKIP(return, "No huge pages available.");
-+		else
-+			TH_LOG("mmap error: %s", strerror(errno));
-+	}
-+	retval = mincore(addr, page_size, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(0, vec[0]) {
-+		TH_LOG("Page found in memory before use");
-+	}
-+
-+	addr[0] = 1;
-+	mlock(addr, page_size);
-+	retval = mincore(addr, page_size, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(1, vec[0]) {
-+		TH_LOG("Page not found in memory after use");
-+	}
-+
-+	munlock(addr, page_size);
-+	munmap(addr, page_size);
-+}
-+
-+
-+/*
-+ * Test mincore() behavior on a file-backed page.
-+ * No pages should be loaded into memory right after the mapping. Then,
-+ * accessing any address in the mapping range should load the page
-+ * containing the address and a number of subsequent pages (readahead).
-+ *
-+ * The actual readahead settings depend on the test environment, so we
-+ * can't make a lot of assumptions about that. This test covers the most
-+ * general cases.
-+ */
-+TEST(check_file_mmap)
-+{
-+	unsigned char *vec;
-+	int vec_size;
-+	char *addr;
-+	int retval;
-+	int page_size;
-+	int fd;
-+	int i;
-+	int ra_pages = 0;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	vec_size = FILE_SIZE / page_size;
-+	if (FILE_SIZE % page_size)
-+		vec_size++;
-+
-+	vec = calloc(vec_size, sizeof(unsigned char));
-+	ASSERT_NE(NULL, vec) {
-+		TH_LOG("Can't allocate array");
-+	}
-+
-+	errno = 0;
-+	fd = open(".", O_TMPFILE | O_RDWR, 0600);
-+	ASSERT_NE(-1, fd) {
-+		TH_LOG("Can't create temporary file: %s",
-+			strerror(errno));
-+	}
-+	errno = 0;
-+	retval = fallocate(fd, 0, 0, FILE_SIZE);
-+	ASSERT_EQ(0, retval) {
-+		TH_LOG("Error allocating space for the temporary file: %s",
-+			strerror(errno));
-+	}
-+
-+	/*
-+	 * Map the whole file, the pages shouldn't be fetched yet.
-+	 */
-+	errno = 0;
-+	addr = mmap(NULL, FILE_SIZE, PROT_READ | PROT_WRITE,
-+			MAP_SHARED, fd, 0);
-+	ASSERT_NE(MAP_FAILED, addr) {
-+		TH_LOG("mmap error: %s", strerror(errno));
-+	}
-+	retval = mincore(addr, FILE_SIZE, vec);
-+	ASSERT_EQ(0, retval);
-+	for (i = 0; i < vec_size; i++) {
-+		ASSERT_EQ(0, vec[i]) {
-+			TH_LOG("Unexpected page in memory");
-+		}
-+	}
-+
-+	/*
-+	 * Touch a page in the middle of the mapping. We expect the next
-+	 * few pages (the readahead window) to be populated too.
-+	 */
-+	addr[FILE_SIZE / 2] = 1;
-+	retval = mincore(addr, FILE_SIZE, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(1, vec[FILE_SIZE / 2 / page_size]) {
-+		TH_LOG("Page not found in memory after use");
-+	}
-+
-+	i = FILE_SIZE / 2 / page_size + 1;
-+	while (i < vec_size && vec[i]) {
-+		ra_pages++;
-+		i++;
-+	}
-+	EXPECT_GT(ra_pages, 0) {
-+		TH_LOG("No read-ahead pages found in memory");
-+	}
-+
-+	EXPECT_LT(i, vec_size) {
-+		TH_LOG("Read-ahead pages reached the end of the file");
-+	}
-+	/*
-+	 * End of the readahead window. The rest of the pages shouldn't
-+	 * be in memory.
-+	 */
-+	if (i < vec_size) {
-+		while (i < vec_size && !vec[i])
-+			i++;
-+		EXPECT_EQ(vec_size, i) {
-+			TH_LOG("Unexpected page in memory beyond readahead window");
-+		}
-+	}
-+
-+	munmap(addr, FILE_SIZE);
-+	close(fd);
-+	free(vec);
-+}
-+
-+
-+/*
-+ * Test mincore() behavior on a page backed by a tmpfs file.  This test
-+ * performs the same steps as the previous one. However, we don't expect
-+ * any readahead in this case.
-+ */
-+TEST(check_tmpfs_mmap)
-+{
-+	unsigned char *vec;
-+	int vec_size;
-+	char *addr;
-+	int retval;
-+	int page_size;
-+	int fd;
-+	int i;
-+	int ra_pages = 0;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	vec_size = FILE_SIZE / page_size;
-+	if (FILE_SIZE % page_size)
-+		vec_size++;
-+
-+	vec = calloc(vec_size, sizeof(unsigned char));
-+	ASSERT_NE(NULL, vec) {
-+		TH_LOG("Can't allocate array");
-+	}
-+
-+	errno = 0;
-+	fd = open("/dev/shm", O_TMPFILE | O_RDWR, 0600);
-+	ASSERT_NE(-1, fd) {
-+		TH_LOG("Can't create temporary file: %s",
-+			strerror(errno));
-+	}
-+	errno = 0;
-+	retval = fallocate(fd, 0, 0, FILE_SIZE);
-+	ASSERT_EQ(0, retval) {
-+		TH_LOG("Error allocating space for the temporary file: %s",
-+			strerror(errno));
-+	}
-+
-+	/*
-+	 * Map the whole file, the pages shouldn't be fetched yet.
-+	 */
-+	errno = 0;
-+	addr = mmap(NULL, FILE_SIZE, PROT_READ | PROT_WRITE,
-+			MAP_SHARED, fd, 0);
-+	ASSERT_NE(MAP_FAILED, addr) {
-+		TH_LOG("mmap error: %s", strerror(errno));
-+	}
-+	retval = mincore(addr, FILE_SIZE, vec);
-+	ASSERT_EQ(0, retval);
-+	for (i = 0; i < vec_size; i++) {
-+		ASSERT_EQ(0, vec[i]) {
-+			TH_LOG("Unexpected page in memory");
-+		}
-+	}
-+
-+	/*
-+	 * Touch a page in the middle of the mapping. We expect only
-+	 * that page to be fetched into memory.
-+	 */
-+	addr[FILE_SIZE / 2] = 1;
-+	retval = mincore(addr, FILE_SIZE, vec);
-+	ASSERT_EQ(0, retval);
-+	ASSERT_EQ(1, vec[FILE_SIZE / 2 / page_size]) {
-+		TH_LOG("Page not found in memory after use");
-+	}
-+
-+	i = FILE_SIZE / 2 / page_size + 1;
-+	while (i < vec_size && vec[i]) {
-+		ra_pages++;
-+		i++;
-+	}
-+	ASSERT_EQ(ra_pages, 0) {
-+		TH_LOG("Read-ahead pages found in memory");
-+	}
-+
-+	munmap(addr, FILE_SIZE);
-+	close(fd);
-+	free(vec);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.18.0
+The only downside is that the latency will be higher, but as we are
+taking baseline measurements the diff of that from our observed reading
+should still remain the same. Just that the test will take longer to run.
+I'm yet to accurately confirm this.
+
+I would appreciate your thoughts on that.
+
+>> + */
+>> +
+>> +#include <linux/debugfs.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +
+>> +/* IPI based wakeup latencies */
+>> +struct latency {
+>> +       unsigned int src_cpu;
+>> +       unsigned int dest_cpu;
+>> +       ktime_t time_start;
+>> +       ktime_t time_end;
+>> +       u64 latency_ns;
+>> +} ipi_wakeup;
+>> +
+>> +static void measure_latency(void *info)
+>> +{
+>> +       struct latency *v;
+>> +       ktime_t time_diff;
+>> +
+>> +       v = (struct latency *)info;
+>> +       v->time_end = ktime_get();
+>> +       time_diff = ktime_sub(v->time_end, v->time_start);
+>> +       v->latency_ns = ktime_to_ns(time_diff);
+>> +}
+>> +
+>> +void run_smp_call_function_test(unsigned int cpu)
+>> +{
+>> +       ipi_wakeup.src_cpu = smp_processor_id();
+>> +       ipi_wakeup.dest_cpu = cpu;
+>> +       ipi_wakeup.time_start = ktime_get();
+>> +       smp_call_function_single(cpu, measure_latency, &ipi_wakeup, 1);
+>> +}
+>> +
+>> +/* Timer based wakeup latencies */
+>> +struct timer_data {
+>> +       unsigned int src_cpu;
+>> +       u64 timeout;
+>> +       ktime_t time_start;
+>> +       ktime_t time_end;
+>> +       struct hrtimer timer;
+>> +       u64 timeout_diff_ns;
+>> +} timer_wakeup;
+>> +
+>> +static enum hrtimer_restart timer_called(struct hrtimer *hrtimer)
+>> +{
+>> +       struct timer_data *w;
+>> +       ktime_t time_diff;
+>> +
+>> +       w = container_of(hrtimer, struct timer_data, timer);
+>> +       w->time_end = ktime_get();
+>> +
+>> +       time_diff = ktime_sub(w->time_end, w->time_start);
+>> +       time_diff = ktime_sub(time_diff, ns_to_ktime(w->timeout));
+>> +       w->timeout_diff_ns = ktime_to_ns(time_diff);
+>> +       return HRTIMER_NORESTART;
+>> +}
+>> +
+>> +static void run_timer_test(unsigned int ns)
+>> +{
+>> +       hrtimer_init(&timer_wakeup.timer, CLOCK_MONOTONIC,
+>> +                    HRTIMER_MODE_REL);
+>> +       timer_wakeup.timer.function = timer_called;
+>> +       timer_wakeup.time_start = ktime_get();
+>> +       timer_wakeup.src_cpu = smp_processor_id();
+>> +       timer_wakeup.timeout = ns;
+>> +
+>> +       hrtimer_start(&timer_wakeup.timer, ns_to_ktime(ns),
+>> +                     HRTIMER_MODE_REL_PINNED);
+>> +}
+>> +
+>> +static struct dentry *dir;
+>> +
+>> +static int cpu_read_op(void *data, u64 *value)
+>> +{
+>> +       *value = ipi_wakeup.dest_cpu;
+>> +       return 0;
+>> +}
+>> +
+>> +static int cpu_write_op(void *data, u64 value)
+>> +{
+>> +       run_smp_call_function_test(value);
+>> +       return 0;
+>> +}
+>> +DEFINE_SIMPLE_ATTRIBUTE(ipi_ops, cpu_read_op, cpu_write_op, "%llu\n");
+>> +
+>> +static int timeout_read_op(void *data, u64 *value)
+>> +{
+>> +       *value = timer_wakeup.timeout;
+>> +       return 0;
+>> +}
+>> +
+>> +static int timeout_write_op(void *data, u64 value)
+>> +{
+>> +       run_timer_test(value);
+>> +       return 0;
+>> +}
+>> +DEFINE_SIMPLE_ATTRIBUTE(timeout_ops, timeout_read_op, timeout_write_op, "%llu\n");
+>> +
+>> +static int __init latency_init(void)
+>> +{
+>> +       struct dentry *temp;
+>> +
+>> +       dir = debugfs_create_dir("latency_test", 0);
+>> +       if (!dir) {
+>> +               pr_alert("latency_test: failed to create /sys/kernel/debug/latency_test\n");
+>> +               return -1;
+>> +       }
+>> +       temp = debugfs_create_file("ipi_cpu_dest",
+>> +                                  0666,
+>> +                                  dir,
+>> +                                  NULL,
+>> +                                  &ipi_ops);
+>> +       if (!temp) {
+>> +               pr_alert("latency_test: failed to create /sys/kernel/debug/ipi_cpu_dest\n");
+>> +               return -1;
+>> +       }
+>> +       debugfs_create_u64("ipi_latency_ns", 0444, dir, &ipi_wakeup.latency_ns);
+>> +       debugfs_create_u32("ipi_cpu_src", 0444, dir, &ipi_wakeup.src_cpu);
+>> +
+>> +       temp = debugfs_create_file("timeout_expected_ns",
+>> +                                  0666,
+>> +                                  dir,
+>> +                                  NULL,
+>> +                                  &timeout_ops);
+>> +       if (!temp) {
+>> +               pr_alert("latency_test: failed to create /sys/kernel/debug/timeout_expected_ns\n");
+>> +               return -1;
+>> +       }
+>> +       debugfs_create_u64("timeout_diff_ns", 0444, dir, &timer_wakeup.timeout_diff_ns);
+>> +       debugfs_create_u32("timeout_cpu_src", 0444, dir, &timer_wakeup.src_cpu);
+>> +       pr_info("Latency Test module loaded\n");
+>> +       return 0;
+>> +}
+>> +
+>> +static void __exit latency_cleanup(void)
+>> +{
+>> +       pr_info("Cleaning up Latency Test module.\n");
+>> +       debugfs_remove_recursive(dir);
+>> +}
+>> +
+>> +module_init(latency_init);
+>> +module_exit(latency_cleanup);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_AUTHOR("IBM Corporation");
+>> +MODULE_DESCRIPTION("Measuring idle latency for IPIs and Timers");
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index d74ac0fd6b2d..e2283790245a 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -1375,6 +1375,16 @@ config DEBUG_KOBJECT
+>>            If you say Y here, some extra kobject debugging messages will be sent
+>>            to the syslog.
+>>
+>> +config IDLE_LATENCY_SELFTEST
+>> +       tristate "Cpuidle latency selftests"
+>> +       depends on CPU_IDLE
+>> +       help
+>> +         This option provides a kernel module that runs tests using the IPI and
+>> +         timers to measure latency.
+> What latency does it measure?
+
+It measures latencies incurred on wakeup after an IPI and a timer interrupt.
+
+>> +
+>> +         Say M if you want these self tests to build as a module.
+>> +         Say N if you are unsure.
+>> +
+>>   config DEBUG_KOBJECT_RELEASE
+>>          bool "kobject release debugging"
+>>          depends on DEBUG_OBJECTS_TIMERS
+>> --
+>> 2.25.4
+>>
+Thanks,
+Pratik
 
