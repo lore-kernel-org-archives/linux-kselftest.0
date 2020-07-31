@@ -2,109 +2,87 @@ Return-Path: <SRS0=qYDQ=BK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84EFEC433E3
-	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jul 2020 04:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CB9EC433E0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jul 2020 05:50:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6326E2072A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jul 2020 04:43:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F58A22BF5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Jul 2020 05:50:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wK2O50yS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Os677kuu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729519AbgGaEnE (ORCPT
+        id S1730905AbgGaFuu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 31 Jul 2020 00:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        Fri, 31 Jul 2020 01:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgGaEnC (ORCPT
+        with ESMTP id S1726972AbgGaFuu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jul 2020 00:43:02 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986E5C061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2020 21:43:02 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id p138so13130509yba.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2020 21:43:02 -0700 (PDT)
+        Fri, 31 Jul 2020 01:50:50 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3649DC061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2020 22:50:50 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id p1so16392368pls.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2020 22:50:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=beEVykI/w3KZVAvPQjbc06TAF1ssDBP5sJ8EW7g7IJE=;
-        b=wK2O50ySlF5ASt2GKsAqVARb1LUmHwMkknk0UmPXxVufvAvC9lPGBOkaNfqYgrUDnJ
-         4VBXnS9MseaGLdap+ZvQlGrYrI3snt1mfaZn7LxpF2cXgy4V6aPkzKy8R6u7XFWktHGT
-         t2+H/wWC4qg7iKNZYvNWzcklCOmnyiKLU0AZ0DvC9ceOf+LTgyhPZH3x6Y4TeED/2h/x
-         f3/STNqkn2miCTcRso4ITLjV0JevDlJHzw26WTn/mm5BBmQ5oRKPl8lcFJRamwkHGMTg
-         qU3vreHwygr5pbQ+xaLEqDePQXvDflCaVQZQeZJUyhv5081JqiQIAaqtyrxFlZM1B66V
-         3Bqg==
+        bh=lPQTMMuUie6XJgopmwRnDGUbsFO8oXkWbGOWjLGiBQo=;
+        b=Os677kuuNvMKQYx2pXT/cjvVadrtcqtx9pUBxd76a5AQsJuD7IXHqglgWnx4ml0RuS
+         mgynRnZcACLF6szDB3raYg3Bga416fU/r90Q4NnJlRsPGANHjc7gpdqh+vtxHijU8u0B
+         3lTwGRJxqoUfBi7kLAyQ/Z45PXxBCNrQGWu3seGH30CeW5/d7rIqqRprhJAWsqVPbyeq
+         zFcT9ljJbdXFRy12xu2ssJYeVyi/1z12UcaN4xszgG4oR3ynQFQkQ8iodBfsQi8mc52Z
+         goRLFkCzZQS4w/B8K8n+L8P8k/xtjz9D9p97VQHCHjSrBfDCr3s3IWGyi/O8jADOgVdv
+         AjQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=beEVykI/w3KZVAvPQjbc06TAF1ssDBP5sJ8EW7g7IJE=;
-        b=lmsTubqTTFQ3ztcc0d75WwYzu1XUf2fiquavfFAWK0foluX6xt2aybleRbCu75JYfw
-         ueQPDzPrN+RufQUoHDlDGXCVY3OYDv/qsM+zsd7piRQ3UAkYpUJ2salGGnT/lwaygRSG
-         udO/V3HLevfKlcbuVRIeDvgIJuSlgE1KMDFKtfzFCCW2oT4mH2oVANYXC50iL46SwDMo
-         I10oE6PCoNELj4i3dfr9/s2+y7q7syd9FF694hqrsVFIqJ68R1NcQt94I2+Xkp8P2qHS
-         bxvQ1wuwr3qe+v2ABzbeCrSvuRPt0ucQ/wigEoTtpVZ8moRUBgE7NJsyS6bOUBJsCsfF
-         6hVw==
-X-Gm-Message-State: AOAM530HGL8mE5ILFfL/hPQogn1a7UBJ5tTCp2xF2yD1LnpHGhRmrk5G
-        CMRhgI0pdol2kqyHvYy1VvGb6iu5schQBQ==
-X-Google-Smtp-Source: ABdhPJwu24MFR6IZ+344IkbGVBQg1N3XcrFl0sy/7OerPAGdbj160vL5rZ6Qdok7k/Q4sjw98Arnn+OnNTN0Jw==
-X-Received: by 2002:a5b:30d:: with SMTP id j13mr3228618ybp.51.1596170581813;
- Thu, 30 Jul 2020 21:43:01 -0700 (PDT)
-Date:   Thu, 30 Jul 2020 21:42:38 -0700
-In-Reply-To: <20200731044242.1323143-1-davidgow@google.com>
-Message-Id: <20200731044242.1323143-2-davidgow@google.com>
-Mime-Version: 1.0
-References: <20200731044242.1323143-1-davidgow@google.com>
-X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
-Subject: [PATCH v9 1/5] Add KUnit Struct to Current Task
-From:   David Gow <davidgow@google.com>
-To:     trishalfonso@google.com, brendanhiggins@google.com,
-        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, andreyknvl@google.com, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        David Gow <davidgow@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lPQTMMuUie6XJgopmwRnDGUbsFO8oXkWbGOWjLGiBQo=;
+        b=khpurXn3/JOkpNHxC6EvZpm5QL/4W5YFfo4J47zmEtfuBFtsDWTkYUVDTFosim5l/c
+         ZTr/oW6SXaFGqxggaSRFjSLswVQr+RTLv2IvR4QeI8jLn5zz7JrQOwzYPbBhVSmX3yNg
+         q6mxTpTKqWrj76ODADp22qoeslI+DF20xddXD6x5BvJDdPSd9UEJ+uPnQBuYMXn5Pcs5
+         GAv/9mEBPRmZX1TaPI71vexei+QV1sRTYQhvtegdkzseENlqU1YcgLPYZpXfICz1YhxU
+         xa1p/w1/vY/ffejOR+axSFUnPviq8ovkjxfv4z6bBISLxWpg+zBN1KWolEE4ijW9HynK
+         DkhA==
+X-Gm-Message-State: AOAM533sVGlDka9+5IuX/K6wrxdWgunVETpBCIo7oQ7VOOS5xGk0JHEk
+        zVQEmV7jTUR++gg6W6W8SJPYuLIJF3dRMSKEMA5phg==
+X-Google-Smtp-Source: ABdhPJxKv2g8sKZeB55V/Np8ZzNtHyGySCg0eNp27a92WFk7ob3lUVGsyrtY2NRfNBuyj2fhT8mxdMZAjDxcjKfw5VU=
+X-Received: by 2002:a63:d501:: with SMTP id c1mr2185919pgg.159.1596174649335;
+ Thu, 30 Jul 2020 22:50:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200730121656.45302-1-98.arpi@gmail.com>
+In-Reply-To: <20200730121656.45302-1-98.arpi@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 30 Jul 2020 22:50:38 -0700
+Message-ID: <CAFd5g46wpYxF1=bs3LvXeVg6mPHrT6Ggp=QxScaf87O=yqcpBA@mail.gmail.com>
+Subject: Re: [PATCH] lib: Convert test_uuid.c to KUnit
+To:     Arpitha Raghunandan <98.arpi@gmail.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Patricia Alfonso <trishalfonso@google.com>
+On Thu, Jul 30, 2020 at 5:18 AM Arpitha Raghunandan <98.arpi@gmail.com> wrote:
+>
+> Converts test lib/test_uuid.c to KUnit
 
-In order to integrate debugging tools like KASAN into the KUnit
-framework, add KUnit struct to the current task to keep track of the
-current KUnit test.
+Can you add some more detail to the commit message? Maybe link to
+KUnit and say something about why this change is beneficial.
 
-Signed-off-by: Patricia Alfonso <trishalfonso@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
- include/linux/sched.h | 4 ++++
- 1 file changed, 4 insertions(+)
+> Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 683372943093..3a27399c98b1 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1197,6 +1197,10 @@ struct task_struct {
- 	struct kcsan_ctx		kcsan_ctx;
- #endif
- 
-+#if IS_ENABLED(CONFIG_KUNIT)
-+	struct kunit			*kunit_test;
-+#endif
-+
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
- 	/* Index of current stored address in ret_stack: */
- 	int				curr_ret_stack;
--- 
-2.28.0.163.g6104cc2f0b6-goog
-
+Change mostly looks good to me.
