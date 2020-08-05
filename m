@@ -2,99 +2,104 @@ Return-Path: <SRS0=Me5x=BP=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97C92C433E0
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Aug 2020 17:34:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1A06C433E3
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Aug 2020 19:08:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 665052310C
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Aug 2020 17:34:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596648871;
-	bh=0b0E6WKbiQlBVu/fGFXi0So5DhXTlE8qcVrcu7H76Qg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=zfvd/slMZc8G+tmyIEj77JNpWQPVB6uxDvXenQpw+WLI0Hkqjq/y/Au8lyYbVjQMA
-	 qqrpGJIPuWpKt7WBeYpDQ+KBFTwxwoY4mjxI+o1cUODlZiMy3vzpv9JX/pAykIUxpp
-	 gnnFhdRpkoR6cO5HkOKAqArDhGwhKlyhe4SPqJIs=
+	by mail.kernel.org (Postfix) with ESMTP id A13C12064B
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Aug 2020 19:08:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DC2dgjyq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728908AbgHEReW (ORCPT
+        id S1727985AbgHETIN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 Aug 2020 13:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728462AbgHERdC (ORCPT
+        Wed, 5 Aug 2020 15:08:13 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:30293 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728147AbgHES4u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:33:02 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ADBC061575
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2020 10:32:46 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id x24so7369469lfe.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2020 10:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0O/A2cezVuB/QMtGDV0w8M/cQpgej4IbeFVmCUBKN34=;
-        b=g2z0q3DehVGOj6+EVJm4x/hwlkqyBJ+6sjjEolBgDgmrVojA82SWGyPYplXGk6nZz4
-         tBDDsgA5D3E9t07YwgHjqIhce2JrBaqR24SLIZ9H7iaBBCDQfXGPdagobUmPf8h2MrgL
-         A7vpzsGgHrnqUu6WLBssX3eI8MTOw2kBAKj0I=
+        Wed, 5 Aug 2020 14:56:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596653782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hymn0Sfg1TJ19WBAjozBxwIK1aOHio4HHWImCGmRqUw=;
+        b=DC2dgjyqrHtI8yFjA1OOHZqoBAQUWEujxddK7inq8eNMBc9DrNu83kJLUEJNbuv8NKCkjv
+        pAwRCtMqviyD/dLW4kPzCsufXVOdwjH+2kgnmjOgsk1bHYSr+yxTT5V/U0KgBgC3wEibSJ
+        zAjxh1rr9fN0zd85XBGt9fjrd5HgwaY=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-205-TOzn69JPN5i8S5iNeSho6g-1; Wed, 05 Aug 2020 14:48:06 -0400
+X-MC-Unique: TOzn69JPN5i8S5iNeSho6g-1
+Received: by mail-wr1-f69.google.com with SMTP id w7so13904868wrt.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2020 11:48:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0O/A2cezVuB/QMtGDV0w8M/cQpgej4IbeFVmCUBKN34=;
-        b=Ai3sYDHAOJRw5XrinPmB8FUV8uPOUiIzRcaCxr5V1bUPCgvKBLW3E3K3tg/xaZpysZ
-         4txrMXTykRza2ZrUrPbJmDUOxjE2BL7Fjokdd2w7hmYVnBjXvgIdVktRgAWq/1T3/w8Y
-         l3afFBZNoFZA6mHn5y/S8YycPnoYVMFJQhQC39eGN3PLREMXyDSKegIx2O4XJ0DTOlcn
-         IziEZD3XhQBWHxxVBEdoxqEkI9OfK5CmnPVJ2qCDbKd6wYwFV/0put6wbckGnmv9OloW
-         EmqA3k05OPP4fMhtrFZoYZklXIOXAfvMHNZIJrCpfB4MyFRmDAdKmLgOswnPlf6G/VsL
-         u9lQ==
-X-Gm-Message-State: AOAM533DbI3xv0NuLc37xOEVYuX2AohqrV4NyrztgxnyJYh30Bq0m5zT
-        F2Jxw6lBzdk0U4sd1NF0Zftj8U056SI=
-X-Google-Smtp-Source: ABdhPJxDGt4mkAlbiaufpY2OD2D1BrRC+KGCKa/X1DV3KODFTE+TU66AMjoLUiEWfodvpj3BnqN+0Q==
-X-Received: by 2002:a19:bcc:: with SMTP id 195mr2070076lfl.160.1596648764117;
-        Wed, 05 Aug 2020 10:32:44 -0700 (PDT)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id k23sm1152791ljk.37.2020.08.05.10.32.42
-        for <linux-kselftest@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hymn0Sfg1TJ19WBAjozBxwIK1aOHio4HHWImCGmRqUw=;
+        b=fN32GxoqjuQ7WBo71RxTMl+jzCHxWZFMiA8dJzBs0ODbb8fmy/D5NYOXichRSY1IVK
+         ATIHueyS2eIAlm2fsTWsDXH6EMyZANSRXM8QptvGkj6qmOzgpV5pIvEu0soH7qvN2WKY
+         fEXLbdlTpOYWY2ydHYNRua0jL2+aEGtq4AThRPe8xccfknG8GQNv8xJddPyXYbctO47+
+         zBuNKiXInNFl5BnL4ZQ7qA13HobI4oybbxobKM7KOq6Po+KCbt4dcldBdv5BgcqNz/Zy
+         X3NzcMbeHfrH8r3qQscz+6tO7OaJVjZgOZ5cXcBpE0a2IcfGpp8jxORKgpuLFAQroVWF
+         Sv6Q==
+X-Gm-Message-State: AOAM531T+PEH6pgi4rVWA9mfsW3vE76EC94T2mB6dKuG4ZQpntu6yvKy
+        cbsTdfwUTkvx0FhIbTM5zMV0OHPPauz6D4KuEcZL95EqbJa0QXyDFNonhYVXH3I8MJ2jhkY6iAn
+        D+63G0YCT7Ue8CuW36NBhrPdiJ4/4
+X-Received: by 2002:a1c:286:: with SMTP id 128mr4206656wmc.37.1596653284954;
+        Wed, 05 Aug 2020 11:48:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxMFtqWVfa9ps/xQ0YYj/MHXx500Q/j+ugxOTprbSKK6roqR5QcQxjQa6u8ZT4SfEKfWTMCUg==
+X-Received: by 2002:a1c:286:: with SMTP id 128mr4206635wmc.37.1596653284682;
+        Wed, 05 Aug 2020 11:48:04 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:7841:78cc:18c6:1e20? ([2001:b07:6468:f312:7841:78cc:18c6:1e20])
+        by smtp.gmail.com with ESMTPSA id l18sm3776157wrm.52.2020.08.05.11.48.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2020 10:32:42 -0700 (PDT)
-Received: by mail-lj1-f174.google.com with SMTP id t23so25116326ljc.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2020 10:32:42 -0700 (PDT)
-X-Received: by 2002:a2e:545:: with SMTP id 66mr2031802ljf.285.1596648762224;
- Wed, 05 Aug 2020 10:32:42 -0700 (PDT)
+        Wed, 05 Aug 2020 11:48:03 -0700 (PDT)
+Subject: Re: [PATCH 1/1] kvm: mmu: zap pages when zapping only parent
+To:     Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        Peter Shier <pshier@google.com>
+References: <20200727203324.2614917-1-bgardon@google.com>
+ <20200804211444.GA31916@linux.intel.com>
+ <CANgfPd9kbnzW+eaBi+dwA1+E2VXEd6JfN4n2PstWrmh4VPRFjA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <cf54ab19-611c-c975-8080-b49e13c966f3@redhat.com>
+Date:   Wed, 5 Aug 2020 20:48:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-References: <0e3a9c1f-7ac6-33e2-ed11-5a56659fc5f7@linuxfoundation.org>
- <CAHk-=wi4iDwuazgXQ-1yvM_JMTBepi9rc-zfSMeyjfDgSS2fgA@mail.gmail.com> <8d894cb3-83ac-66bc-48ec-dc273d1afcbe@linuxfoundation.org>
-In-Reply-To: <8d894cb3-83ac-66bc-48ec-dc273d1afcbe@linuxfoundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 5 Aug 2020 10:32:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiKe_rBFthfttj1fM3cwqaArSUN0Dz1KhARdMNo1a2F=A@mail.gmail.com>
-Message-ID: <CAHk-=wiKe_rBFthfttj1fM3cwqaArSUN0Dz1KhARdMNo1a2F=A@mail.gmail.com>
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.9-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CANgfPd9kbnzW+eaBi+dwA1+E2VXEd6JfN4n2PstWrmh4VPRFjA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 7:13 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Please pull the following Kselftest update for Linux 5.9-rc1.
+On 05/08/20 19:10, Ben Gardon wrote:
+>>
+>> Alternatively, what about moving this logic into mmu_page_zap_pte()?  That
+>> can be done with a little massaging of FNAME(invlpg) and would avoid what is
+>> effectively redundant checks on is_shadow_present_pte() and is_last_spte().
+>> Patches attached and somewhat tested.
+> That seems like a good change to me and the patches you attached look
+> good to me. I'm happy to review them more if you want to send them to
+> the mailing list as their own series. Thanks for putting them
+> together.
+> 
 
-Ok, it worked fine this time, although now you lost the note about the
-conflict ;)
+Thanks, I'll wait for that.
 
-I took the version from the seccomp tree that seemed to be the
-slightly cleaned-up one.
+Paolo
 
-            Linus
