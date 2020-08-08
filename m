@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2741FC433E0
-	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Aug 2020 23:49:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06BD9C433DF
+	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Aug 2020 23:49:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01E5820672
-	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Aug 2020 23:49:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6C9420723
+	for <linux-kselftest@archiver.kernel.org>; Sat,  8 Aug 2020 23:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596930551;
-	bh=EuYOFVLnvPo1+2S5w/3/GkQEHKQPzj6YFWOX9TrrUfY=;
+	s=default; t=1596930558;
+	bh=UCGiZ204cxB9dbRnXHlFZB9TQWCCrxb35jvAi/jUETw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=boc07H+vajyO0Sa/ULB/8Q0DvOMkZ11rzQ+KzweyoGIcw0hXeHIJY74JMBNLs2k5n
-	 wARgAAfBTy8zWbQr7hVvlGYdOS0WaVQ/WCKT9x+JvyKPLRXXZnD+e9CbZ+ahFauYtb
-	 gnz7NMV0cegKVJiMq4OtjH/4njjU7xd20Ap+S9x4=
+	b=nYLm7Xj4ng3W1X+2XthsjMrbMgCd9Q7PTVrNhF/vjDproA6f8Co+Tb8M0+pMeR8s8
+	 NA6J9uaYjoZvlrqUZ12Mm9jketJgrzsIxL0xy2Kj4J6dfY0UHw2b7ePKCUF+LkyFIA
+	 UORzJcNijlSfw+NmPWm5AkmETyzMQV3oI8rS/wB0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbgHHXtH (ORCPT
+        id S1726382AbgHHXhF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 8 Aug 2020 19:49:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50060 "EHLO mail.kernel.org"
+        Sat, 8 Aug 2020 19:37:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727864AbgHHXhM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:37:12 -0400
+        id S1725950AbgHHXhF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 8 Aug 2020 19:37:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35BA72073E;
-        Sat,  8 Aug 2020 23:37:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A6367207FB;
+        Sat,  8 Aug 2020 23:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596929832;
-        bh=EuYOFVLnvPo1+2S5w/3/GkQEHKQPzj6YFWOX9TrrUfY=;
+        s=default; t=1596929824;
+        bh=UCGiZ204cxB9dbRnXHlFZB9TQWCCrxb35jvAi/jUETw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ARKLd2XpVdLSC6lKZTBTvUmRKZmEoh53WU1HuiINjgioZA7ugKsQa7P4NMgVaMgnq
-         W1zzCnUFEKUeN3Kf5aFrHJuF2VYHAdf16S8aeGyHLXRwrv2ieu+aYBiTjqv9ENyTgq
-         v2Bvd32eLCOhrwG5i2M72MY2RtCLJb9XIZ/o+f9Q=
+        b=wbJe7HAXu6Bl3aPU/Pau1GNgGg0KgeuxrSoxjZTWMVZUyoTeZ5FTe21V0hMiUU2aI
+         y7QGf1wQCgnNxILxlLt2PyDB4O2kiISM9/jmTCjl6G7hTc0NFI7Zot8ho5gaQGKOgt
+         /5Tv/psAX9+RGa/+8pBetd2tjPMm82iLfz6Q6zic=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.8 63/72] kunit: tool: fix broken default args in unit tests
-Date:   Sat,  8 Aug 2020 19:35:32 -0400
-Message-Id: <20200808233542.3617339-63-sashal@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 57/72] seccomp: Fix ioctl number for SECCOMP_IOCTL_NOTIF_ID_VALID
+Date:   Sat,  8 Aug 2020 19:35:26 -0400
+Message-Id: <20200808233542.3617339-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200808233542.3617339-1-sashal@kernel.org>
 References: <20200808233542.3617339-1-sashal@kernel.org>
@@ -60,70 +59,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Brendan Higgins <brendanhiggins@google.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 6816fe61bda8c819c368ad2002cd27172ecb79de ]
+[ Upstream commit 47e33c05f9f07cac3de833e531bcac9ae052c7ca ]
 
-Commit ddbd60c779b4 ("kunit: use --build_dir=.kunit as default") changed
-the default build directory for KUnit tests, but failed to update
-associated unit tests for kunit_tool, so update them.
+When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced it had the wrong
+direction flag set. While this isn't a big deal as nothing currently
+enforces these bits in the kernel, it should be defined correctly. Fix
+the define and provide support for the old command until it is no longer
+needed for backward compatibility.
 
-Fixes: ddbd60c779b4 ("kunit: use --build_dir=.kunit as default")
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/kunit/kunit_tool_test.py | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ include/uapi/linux/seccomp.h                  | 3 ++-
+ kernel/seccomp.c                              | 9 +++++++++
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index f9eeaea94cad1..ee942d80bdd02 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -258,14 +258,14 @@ class KUnitMainTest(unittest.TestCase):
- 	def test_build_passes_args_pass(self):
- 		kunit.main(['build'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 0
--		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, '', None)
-+		self.linux_source_mock.build_um_kernel.assert_called_once_with(False, 8, '.kunit', None)
- 		assert self.linux_source_mock.run_kernel.call_count == 0
+diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+index c1735455bc536..965290f7dcc28 100644
+--- a/include/uapi/linux/seccomp.h
++++ b/include/uapi/linux/seccomp.h
+@@ -123,5 +123,6 @@ struct seccomp_notif_resp {
+ #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+-#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
++
+ #endif /* _UAPI_LINUX_SECCOMP_H */
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index d653d8426de90..c461ba9925136 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -42,6 +42,14 @@
+ #include <linux/uaccess.h>
+ #include <linux/anon_inodes.h>
  
- 	def test_exec_passes_args_pass(self):
- 		kunit.main(['exec'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 0
- 		assert self.linux_source_mock.run_kernel.call_count == 1
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
++/*
++ * When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced, it had the
++ * wrong direction flag in the ioctl number. This is the broken one,
++ * which the kernel needs to keep supporting until all userspaces stop
++ * using the wrong command number.
++ */
++#define SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR	SECCOMP_IOR(2, __u64)
++
+ enum notify_state {
+ 	SECCOMP_NOTIFY_INIT,
+ 	SECCOMP_NOTIFY_SENT,
+@@ -1186,6 +1194,7 @@ static long seccomp_notify_ioctl(struct file *file, unsigned int cmd,
+ 		return seccomp_notify_recv(filter, buf);
+ 	case SECCOMP_IOCTL_NOTIF_SEND:
+ 		return seccomp_notify_send(filter, buf);
++	case SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR:
+ 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
+ 		return seccomp_notify_id_valid(filter, buf);
+ 	default:
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 252140a525531..ccf276e138829 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -180,7 +180,7 @@ struct seccomp_metadata {
+ #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
+ #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
+ 						struct seccomp_notif_resp)
+-#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
++#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
  
- 	def test_run_passes_args_pass(self):
-@@ -273,7 +273,7 @@ class KUnitMainTest(unittest.TestCase):
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
--			build_dir='', timeout=300)
-+			build_dir='.kunit', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_exec_passes_args_fail(self):
-@@ -313,7 +313,7 @@ class KUnitMainTest(unittest.TestCase):
- 	def test_exec_timeout(self):
- 		timeout = 3453
- 		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
--		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_timeout(self):
-@@ -321,7 +321,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
--			build_dir='', timeout=timeout)
-+			build_dir='.kunit', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_builddir(self):
+ struct seccomp_notif {
+ 	__u64 id;
 -- 
 2.25.1
 
