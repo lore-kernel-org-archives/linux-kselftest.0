@@ -4,26 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D58C433DF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Aug 2020 23:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19548C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Aug 2020 23:27:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6205D206C3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Aug 2020 23:27:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF704206C3
+	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Aug 2020 23:27:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727922AbgHJX1C (ORCPT
+        id S1727965AbgHJX1M (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Aug 2020 19:27:02 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51386 "EHLO
+        Mon, 10 Aug 2020 19:27:12 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51412 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726634AbgHJX1A (ORCPT
+        with ESMTP id S1726634AbgHJX1H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Aug 2020 19:27:00 -0400
+        Mon, 10 Aug 2020 19:27:07 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: krisman)
-        with ESMTPSA id 2908F29480F
+        with ESMTPSA id B004628DB7F
 From:   Gabriel Krisman Bertazi <krisman@collabora.com>
 To:     luto@kernel.org, tglx@linutronix.de
 Cc:     keescook@chromium.org, x86@kernel.org,
@@ -31,9 +31,9 @@ Cc:     keescook@chromium.org, x86@kernel.org,
         willy@infradead.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, Gabriel Krisman Bertazi <krisman@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH v5 4/9] signal: Expose SYS_USER_DISPATCH si_code type
-Date:   Mon, 10 Aug 2020 19:26:31 -0400
-Message-Id: <20200810232636.1415588-5-krisman@collabora.com>
+Subject: [PATCH v5 6/9] kernel: entry: Support Syscall User Dispatch for common syscall entry
+Date:   Mon, 10 Aug 2020 19:26:33 -0400
+Message-Id: <20200810232636.1415588-7-krisman@collabora.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200810232636.1415588-1-krisman@collabora.com>
 References: <20200810232636.1415588-1-krisman@collabora.com>
@@ -44,43 +44,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SYS_USER_DISPATCH will be triggered when a syscall is sent to userspace
-by the Syscall User Dispatch mechanism.  This adjusts eventual
-BUILD_BUG_ON around the tree.
+Syscall User Dispatch (SUD) must take precedence over seccomp, since the
+use case is emulation (it can be invoked with a different ABI) such that
+seccomp filtering by syscall number doesn't make sense in the first
+place.  In addition, either the syscall is dispatched back to userspace,
+in which case there is no resource for seccomp to protect, or the
+syscall will be executed, and seccomp will execute next.
+
+Regarding ptrace, I experimented with before and after, and while the
+same ABI argument applies, I felt it was easier to debug if I let ptrace
+happen for syscalls that are dispatched back to userspace.  In addition,
+doing it after ptrace makes the code in syscall_exit_work slightly
+simpler, since it doesn't require special handling for this feature.
 
 Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
 ---
- arch/x86/kernel/signal_compat.c    | 2 +-
- include/uapi/asm-generic/siginfo.h | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ kernel/entry/common.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-index 9ccbf0576cd0..210aecc6eab9 100644
---- a/arch/x86/kernel/signal_compat.c
-+++ b/arch/x86/kernel/signal_compat.c
-@@ -31,7 +31,7 @@ static inline void signal_compat_build_tests(void)
- 	BUILD_BUG_ON(NSIGBUS  != 5);
- 	BUILD_BUG_ON(NSIGTRAP != 5);
- 	BUILD_BUG_ON(NSIGCHLD != 6);
--	BUILD_BUG_ON(NSIGSYS  != 1);
-+	BUILD_BUG_ON(NSIGSYS  != 2);
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 80db3f146462..f05a4ee094a1 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -6,6 +6,8 @@
+ #include <linux/audit.h>
+ #include <linux/syscall_intercept.h>
  
- 	/* This is part of the ABI and can never change in size: */
- 	BUILD_BUG_ON(sizeof(compat_siginfo_t) != 128);
-diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-index cb3d6c267181..37741908b846 100644
---- a/include/uapi/asm-generic/siginfo.h
-+++ b/include/uapi/asm-generic/siginfo.h
-@@ -284,7 +284,8 @@ typedef struct siginfo {
-  * SIGSYS si_codes
-  */
- #define SYS_SECCOMP	1	/* seccomp triggered */
--#define NSIGSYS		1
-+#define SYS_USER_DISPATCH 2	/* syscall user dispatch triggered */
-+#define NSIGSYS		2
++#include "common.h"
++
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/syscalls.h>
  
- /*
-  * SIGEMT si_codes
+@@ -47,6 +49,12 @@ static inline long do_syscall_intercept(struct pt_regs *regs)
+ 	int sysint_work = READ_ONCE(current->syscall_intercept);
+ 	int ret;
+ 
++	if (sysint_work & SYSINT_USER_DISPATCH) {
++		ret = do_syscall_user_dispatch(regs);
++		if (ret == -1L)
++			return ret;
++	}
++
+ 	if (sysint_work & SYSINT_SECCOMP) {
+ 		ret = __secure_computing(NULL);
+ 		if (ret == -1L)
 -- 
 2.28.0
 
