@@ -5,65 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC5FAC433EB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Aug 2020 05:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73DE3C433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Aug 2020 05:39:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74E9F20772
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Aug 2020 05:39:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D3DD20772
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Aug 2020 05:39:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tHAO4iJN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NowArW/W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728301AbgHKFjs (ORCPT
+        id S1728229AbgHKFjo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Aug 2020 01:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
+        Tue, 11 Aug 2020 01:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728294AbgHKFjr (ORCPT
+        with ESMTP id S1728214AbgHKFjn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Aug 2020 01:39:47 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08701C06174A
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 22:39:47 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id l67so15493796ybb.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 22:39:46 -0700 (PDT)
+        Tue, 11 Aug 2020 01:39:43 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBCEC061756
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 22:39:43 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id d6so8627228qkg.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 22:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=z+/W2Lb1k0h/CCYiwDe5JijUnwa2JcEcWzU8gpWcUfw=;
-        b=tHAO4iJNAEzJVYvZQdBfl/Z0HJY38AuKODLE4Ch1wZBc8FPg/7KBHMPJyf8/uTGa2e
-         E6klPsx4jU07UlBRuauki8fP8QiBAPYycbCl1RDqcjzChLjeDP4E2k1e1NnpULdZnzv1
-         Pl8iQesn3UiLyjEZOnShWyZkTZA+n4xtyP8tzlxbdeudDI8XTUsWsGqywXNK1eIeCWBz
-         3qjrz1HaOS6k9W/9yXae8zdCnwm1yQpe5q7lFbbL0i94z9RVr+3vhvKoInjL+Nblfb0t
-         cJpkzK5h/Tri0RocDIDd2pIR/eUsEGMktj67qOjOYUxaBd3zxwrutEWKbzr0abxxWFdS
-         +mbQ==
+        bh=gAVP1K6ZLdiDBp4x0JlTDJszv82bsLWnDKbp/k/SAGw=;
+        b=NowArW/WIpqfcCEQcWUdGHdIr8igSp2WVNE6zlPjPrd+/jdd/y6MGpu9c+RBeOQHCu
+         q+L5WTZjUOZOcqrtBP0FQyFgT3mbMM6cnWxSqJry1RHpNroEksLmFIAodB5ab1eTBMpq
+         6Ih/T2Y5/0H3paEK7MkAHufI8DfyhpKUaXlRheWWdY4EaYFldTzFuEOzH+SZywtFiii6
+         anyP3/4xe49f5jlEPeUcIM+rQk9Slx0tPMue80wtGB49pFQyPwDlvSP2UpeT9p167zfq
+         EZQGuxa/fum6JPUK3Yjl2yK64D1OyXQPiK+cDox3DmGXlIeIz3xr9FYYpR2pD06H4+/N
+         +EpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=z+/W2Lb1k0h/CCYiwDe5JijUnwa2JcEcWzU8gpWcUfw=;
-        b=jOPhp84sJmHshYHTdRhXHBSGfIiLz9bPDbUDHipGV3XqDpU3LWX/JpPLuxnY/2tlin
-         j7aKuZs1C4jeo5wWRSjdjwMH6jmiJOFD+MFbzXpkbLCDHKuAt7ZrvA7zE4NHRjat0xAs
-         pz2LN0SVGrl+oom7NbDQ297TrrY5la+I+XsQhnAevXbkfTSsX8GkQ6Nkt4Df+EmYagmw
-         IySG1EHCfbiMCp0SzKUKFxt7xq3+0EWPKj7P4HMhuREkFOznR2mtDeDZRCdcnSoCmG83
-         ACkqe0gDmL4JTIaFT9CkmwU7uS837e2/FMk/bJmHW+CNlGkzd1SgHC4JWat7ktmCoJO0
-         YHEQ==
-X-Gm-Message-State: AOAM5337yGHGveAlopX/MvSr+WXUbbzgsWn6CSBo5o8k2j98Wcs4IjgJ
-        zdtb+jkU+GEXsSm1OnvUqugU+UF94pI0KA==
-X-Google-Smtp-Source: ABdhPJx02k8uMoR6T3Ar7ZJVf6WCI2ZKosVhH/to+X0ddTMzwXgqLTS/eGRWzl6vu4PuJiIyGRtJ9xX8Em6y5A==
-X-Received: by 2002:a5b:308:: with SMTP id j8mr41696962ybp.185.1597124386219;
- Mon, 10 Aug 2020 22:39:46 -0700 (PDT)
-Date:   Mon, 10 Aug 2020 22:39:15 -0700
+        bh=gAVP1K6ZLdiDBp4x0JlTDJszv82bsLWnDKbp/k/SAGw=;
+        b=JevjjhKHg2Kzts+z04M6yaIaRF4Nqh1Hbn46ie1qzETe9Ws/uk3D32ATVkjH/+8si6
+         +B15MO7nJTCDtyOqXC7JjYbfRJGs6mqef7MWjFBbYk0FvJZ5fLwPCYfzyauGRZOOEZz3
+         SmLiQtuExM6RkDqoa883sVwIbZvCzHF7HjdnITknePhf590zmyimlfHo/IpiueYFmviU
+         42TV3o3USslMQL8lLGXyB3WaonCSGXn3QW5DEdQj9bOpwdDaE/KZetn6+2bUZgFI+7Lu
+         TfcYR02MtQEhNEQwHZtXJArCGdFC3Yebs+AUqXSPyP5lpxNQN+c5WBP3zYqB2tO4NVBn
+         azQw==
+X-Gm-Message-State: AOAM532jwPqF/qN9l8bEUQigRrKkGe+Uxpjvphh6h30+3WSkZwmDVhmA
+        E9fBaEYwnSOwlnBlIUY0Q/bUtme6DjblnQ==
+X-Google-Smtp-Source: ABdhPJypEXPG0RvaL7btivQ/9qX0xXbb0CBcfQpL23P90/6aEkVoasKA9CT8V+3py3W8mtnxTQP3rzIC/BaZpA==
+X-Received: by 2002:a05:6214:724:: with SMTP id c4mr32552143qvz.0.1597124382423;
+ Mon, 10 Aug 2020 22:39:42 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 22:39:13 -0700
 In-Reply-To: <20200811053914.652710-1-davidgow@google.com>
-Message-Id: <20200811053914.652710-7-davidgow@google.com>
+Message-Id: <20200811053914.652710-5-davidgow@google.com>
 Mime-Version: 1.0
 References: <20200811053914.652710-1-davidgow@google.com>
 X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-Subject: [PATCH v12 6/6] mm: kasan: Do not panic if both panic_on_warn and
- kasan_multishot set
+Subject: [PATCH v12 4/6] kasan: test: Make KASAN KUnit test comply with naming guidelines
 From:   David Gow <davidgow@google.com>
 To:     trishalfonso@google.com, brendanhiggins@google.com,
         aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
@@ -79,39 +78,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KASAN errors will currently trigger a panic when panic_on_warn is set.
-This renders kasan_multishot useless, as further KASAN errors won't be
-reported if the kernel has already paniced. By making kasan_multishot
-disable this behaviour for KASAN errors, we can still have the benefits
-of panic_on_warn for non-KASAN warnings, yet be able to use
-kasan_multishot.
+The proposed KUnit test naming guidelines[1] suggest naming KUnit test
+modules [suite]_kunit (and hence test source files [suite]_kunit.c).
 
-This is particularly important when running KASAN tests, which need to
-trigger multiple KASAN errors: previously these would panic the system
-if panic_on_warn was set, now they can run (and will panic the system
-should non-KASAN warnings show up).
+Rename test_kunit.c to kasan_kunit.c to comply with this, and be
+consistent with other KUnit tests.
+
+[1]: https://lore.kernel.org/linux-kselftest/20200702071416.1780522-1-davidgow@google.com/
 
 Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Tested-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/kasan/report.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/Makefile                        | 6 +++---
+ lib/{test_kasan.c => kasan_kunit.c} | 0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename lib/{test_kasan.c => kasan_kunit.c} (100%)
 
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index e2c14b10bc81..00a53f1355ae 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -95,7 +95,7 @@ static void end_report(unsigned long *flags)
- 	pr_err("==================================================================\n");
- 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
- 	spin_unlock_irqrestore(&report_lock, *flags);
--	if (panic_on_warn) {
-+	if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags)) {
- 		/*
- 		 * This thread may hit another WARN() in the panic path.
- 		 * Resetting this prevents additional WARN() from panicking the
+diff --git a/lib/Makefile b/lib/Makefile
+index 6ade090a29ff..ed26f56ceda2 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -60,9 +60,9 @@ CFLAGS_test_bitops.o += -Werror
+ obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
+ obj-$(CONFIG_TEST_HASH) += test_hash.o test_siphash.o
+ obj-$(CONFIG_TEST_IDA) += test_ida.o
+-obj-$(CONFIG_KASAN_KUNIT_TEST) += test_kasan.o
+-CFLAGS_test_kasan.o += -fno-builtin
+-CFLAGS_test_kasan.o += $(call cc-disable-warning, vla)
++obj-$(CONFIG_KASAN_KUNIT_TEST) += kasan_kunit.o
++CFLAGS_kasan_kunit.o += -fno-builtin
++CFLAGS_kasan_kunit.o += $(call cc-disable-warning, vla)
+ obj-$(CONFIG_TEST_KASAN_MODULE) += test_kasan_module.o
+ obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
+ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
+diff --git a/lib/test_kasan.c b/lib/kasan_kunit.c
+similarity index 100%
+rename from lib/test_kasan.c
+rename to lib/kasan_kunit.c
 -- 
 2.28.0.236.gb10cc79966-goog
 
