@@ -1,414 +1,195 @@
-Return-Path: <SRS0=KvUf=BU=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=buan=BV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E739CC433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Aug 2020 23:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B5B9C433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Aug 2020 04:30:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDCC5206E9
-	for <linux-kselftest@archiver.kernel.org>; Mon, 10 Aug 2020 23:27:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C91E12076B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Aug 2020 04:30:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ecIE6H8P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgHJX1R (ORCPT
+        id S1726493AbgHKEaO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 10 Aug 2020 19:27:17 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51430 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbgHJX1R (ORCPT
+        Tue, 11 Aug 2020 00:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725898AbgHKEaM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Aug 2020 19:27:17 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 34E082948EB
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     luto@kernel.org, tglx@linutronix.de
-Cc:     keescook@chromium.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        willy@infradead.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, Gabriel Krisman Bertazi <krisman@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v5 8/9] selftests: Add kselftest for syscall user dispatch
-Date:   Mon, 10 Aug 2020 19:26:35 -0400
-Message-Id: <20200810232636.1415588-9-krisman@collabora.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200810232636.1415588-1-krisman@collabora.com>
-References: <20200810232636.1415588-1-krisman@collabora.com>
+        Tue, 11 Aug 2020 00:30:12 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F2AC06174A
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 21:30:12 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a14so10159852wra.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2020 21:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UTA/jlI4ZkjE+5vHGh7qBO6GyXxZqYMrHrBvLYqNA/8=;
+        b=ecIE6H8POPKe2GmWnNT6j85kVXuCut+VRP5UWYxjZhFuR0utGUaTCLiyLZFEFaDGXA
+         Nk/IlTphNYMbm49+EFFnIapGm8TEPL82eic3iPh2Rlf0lJA+8IhA3A3oHXIQu8w5MVug
+         OvVkhDq+VZYnuiK6dN1Bu0HPFneZmrTPkI3nfzbMatTEZlaex8bGobr6YOJ7YoXcI07z
+         DkFRr3Qa5XPbsrwvmjqdYC/0QkNHbwQzMak6Zf9z33kZSpuCDs0VGKCcRf8TGkbkT+vT
+         dqycUjwh94zMZvgPC4Dchf6trndi28QLRRNPB7oCxwuYZkAjf/7FraDP6yUyEczB2yKe
+         wI5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UTA/jlI4ZkjE+5vHGh7qBO6GyXxZqYMrHrBvLYqNA/8=;
+        b=uFK/UcfbL4ISyiV8Rzo1cHPmp2zqvbq52uphnrWPuhW2qO6n9YqQbjQD7+aCP9sfXD
+         VjZJiry5Mh9hBsGkMX8kGpPXH/rdS8IGOTlzUyWIyjoihb+S9DS4VgatpYkWLJi53Cs1
+         juttCNuAqOkBaEmdPEc7KyneT9fvGHkH61AuPr5LcD+jNe62eA5K29BLe1krQ/EjacSH
+         yjNACT+nq//u7+sRNhovp4TqeKtumLracVmufCxN9mUmSHh8aRq/WS+kwo6bLcytJYSE
+         cePQDmHpAzbLzGXIqSC36c7C0vP4wFIaANnfEQ1SlraKXK3iiNQTtuvfw5Taoa56e1yU
+         v5Zw==
+X-Gm-Message-State: AOAM531MOUm3JIaJSp5NGnjV8azuYYU84f4MDTYk9QwqAeJfRNi7AYzA
+        q8fw5xJMADyKQ3WfAxYjAvQiCTzAxz/+s4p1glnAuw==
+X-Google-Smtp-Source: ABdhPJycvgzrejAmWvErgPyXmMcxP7oFh0zNGsbjxXriifiC7oqFsCyotTtJ4bM768Iz1pVpC2Nv3L+9xIOQhTKoCgc=
+X-Received: by 2002:adf:f511:: with SMTP id q17mr4184981wro.414.1597120210798;
+ Mon, 10 Aug 2020 21:30:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200808011651.2113930-1-brendanhiggins@google.com>
+ <CABVgOSkEiQkcOy+gF9irJo-R6xCeiCvDRZXa_ubzCfz+9Yx2ZA@mail.gmail.com> <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
+In-Reply-To: <CAFd5g47itmDHzVRiihUe_P2yjqGuvGC8LPLpiDx1D8aQX1T1BA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 11 Aug 2020 12:29:59 +0800
+Message-ID: <CABVgOSkpTuT6=V08xU0eun-7_OgMR2TdQe0f5rA=mvEPkVrrsw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] kunit: tool: fix running kunit_tool from outside
+ kernel tree
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implement functionality tests for syscall user dispatch.  In order to
-make the test portable, refrain from open coding syscall dispatchers and
-calculating glibc memory ranges.
+On Sat, Aug 8, 2020 at 4:51 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Fri, Aug 7, 2020 at 10:45 PM David Gow <davidgow@google.com> wrote:
+> >
+> > On Sat, Aug 8, 2020 at 9:17 AM Brendan Higgins
+> > <brendanhiggins@google.com> wrote:
+> > >
+> > > Currently kunit_tool does not work correctly when executed from a path
+> > > outside of the kernel tree, so make sure that the current working
+> > > directory is correct and the kunit_dir is properly initialized before
+> > > running.
+> > >
+> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > ---
+> > >  tools/testing/kunit/kunit.py | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > > index 425ef40067e7..96344a11ff1f 100755
+> > > --- a/tools/testing/kunit/kunit.py
+> > > +++ b/tools/testing/kunit/kunit.py
+> > > @@ -237,9 +237,14 @@ def main(argv, linux=None):
+> > >
+> > >         cli_args = parser.parse_args(argv)
+> > >
+> > > +       if get_kernel_root_path():
+> > > +               print('cd ' + get_kernel_root_path())
+> > Do we want to print this, or is it a leftover debug statement?
+>
+> Whoops, I was supposed to delete that. That's embarrassing... ^_^;
+>
+> > > +               os.chdir(get_kernel_root_path())
+> > > +
+> > >         if cli_args.subcommand == 'run':
+> > >                 if not os.path.exists(cli_args.build_dir):
+> > >                         os.mkdir(cli_args.build_dir)
+> > > +                       create_default_kunitconfig()
+> > Why are we adding this everywhere when it's already in config_tests,
+> > which should already be called in all of the places where a
+> > kunitconfig is required?
+>
+> Ah yes, .kunitconfig needs to be created before config_tests() can be
+> called because the LinuxSourceTree constructor needs .kunitconfig to
+> exist.
 
-Changes since v4:
-  - Update bad selector test to reflect change in API
+I see. I guess the ultimate solution will be for LinuxSourceTree not
+require a .kunitconfig unless it's actually being used.
 
-Changes since v3:
-  - Sort entry in Makefile
-  - Add SPDX header
-  - Use __NR_syscalls if available
+> > Is the goal to always copy the default kunitconfig when creating a new
+> > build_dir? While I can sort-of see why we might want to do that, if
+> > the build dir doesn't exist, most of the subcommands will fail anyway
+> > (maybe we should only create the build-dir for 'config' and 'run'?)
+>
+> I just did it because we were getting a failure in a constructor so we
+> couldn't do much. Ideally we would check that the current state allows
+> for the command that the user intended to run, but I think that's
+> beyond the scope of this change.
+>
+> So I guess the real question is: Is it okay for it to crash in the
+> constructor with a cryptic error message for now, or do we want to let
+> it fail with a slightly less cryptic message later?
+>
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
----
- tools/testing/selftests/Makefile              |   1 +
- .../syscall_user_dispatch/.gitignore          |   2 +
- .../selftests/syscall_user_dispatch/Makefile  |   9 +
- .../selftests/syscall_user_dispatch/config    |   1 +
- .../syscall_user_dispatch.c                   | 292 ++++++++++++++++++
- 5 files changed, 305 insertions(+)
- create mode 100644 tools/testing/selftests/syscall_user_dispatch/.gitignore
- create mode 100644 tools/testing/selftests/syscall_user_dispatch/Makefile
- create mode 100644 tools/testing/selftests/syscall_user_dispatch/config
- create mode 100644 tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
+I personally am leaning towards allowing it to crash in the build,
+exec, etc. subcommands for now, and tidying up the error messages
+later, rather than silently creating a blank build dir, only for it
+then to fail later.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index e03bc15ce731..1521daffa4c3 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -55,6 +55,7 @@ TARGETS += sparc64
- TARGETS += splice
- TARGETS += static_keys
- TARGETS += sync
-+TARGETS += syscall_user_dispatch
- TARGETS += sysctl
- TARGETS += tc-testing
- TARGETS += timens
-diff --git a/tools/testing/selftests/syscall_user_dispatch/.gitignore b/tools/testing/selftests/syscall_user_dispatch/.gitignore
-new file mode 100644
-index 000000000000..637f08107add
---- /dev/null
-+++ b/tools/testing/selftests/syscall_user_dispatch/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+syscall_user_dispatch
-diff --git a/tools/testing/selftests/syscall_user_dispatch/Makefile b/tools/testing/selftests/syscall_user_dispatch/Makefile
-new file mode 100644
-index 000000000000..eeb07a791057
---- /dev/null
-+++ b/tools/testing/selftests/syscall_user_dispatch/Makefile
-@@ -0,0 +1,9 @@
-+# SPDX-License-Identifier: GPL-2.0
-+top_srcdir = ../../../..
-+INSTALL_HDR_PATH = $(top_srcdir)/usr
-+LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
-+
-+CFLAGS += -Wall -I$(LINUX_HDR_PATH)
-+
-+TEST_GEN_PROGS := syscall_user_dispatch
-+include ../lib.mk
-diff --git a/tools/testing/selftests/syscall_user_dispatch/config b/tools/testing/selftests/syscall_user_dispatch/config
-new file mode 100644
-index 000000000000..22c4dfe167ca
---- /dev/null
-+++ b/tools/testing/selftests/syscall_user_dispatch/config
-@@ -0,0 +1 @@
-+CONFIG_SYSCALL_USER_DISPATCH=y
-diff --git a/tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c b/tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
-new file mode 100644
-index 000000000000..885b5125bd90
---- /dev/null
-+++ b/tools/testing/selftests/syscall_user_dispatch/syscall_user_dispatch.c
-@@ -0,0 +1,292 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2020 Collabora Ltd.
-+ *
-+ * Test code for syscall user dispatch
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sys/prctl.h>
-+#include <sys/sysinfo.h>
-+#include <sys/syscall.h>
-+#include <signal.h>
-+
-+#include <asm/unistd.h>
-+#include "../kselftest_harness.h"
-+
-+#ifndef PR_SET_SYSCALL_USER_DISPATCH
-+# define PR_SET_SYSCALL_USER_DISPATCH	59
-+# define PR_SYS_DISPATCH_OFF	0
-+# define PR_SYS_DISPATCH_ON	1
-+#endif
-+
-+#ifndef SYS_USER_DISPATCH
-+# define SYS_USER_DISPATCH	2
-+#endif
-+
-+#ifdef __NR_syscalls
-+# define MAGIC_SYSCALL_1 (__NR_syscalls + 1) /* Bad Linux syscall number */
-+#else
-+# define MAGIC_SYSCALL_1 (0xff00)  /* Bad Linux syscall number */
-+#endif
-+
-+#define SYSCALL_DISPATCH_ON(x) ((x) = 1)
-+#define SYSCALL_DISPATCH_OFF(x) ((x) = 0)
-+
-+/* Test Summary:
-+ *
-+ * - dispatch_trigger_sigsys: Verify if PR_SET_SYSCALL_USER_DISPATCH is
-+ *   able to trigger SIGSYS on a syscall.
-+ *
-+ * - bad_selector: Test that a bad selector value triggers SIGSYS with
-+ *   si_errno EINVAL.
-+ *
-+ * - bad_prctl_param: Test that the API correctly rejects invalid
-+ *   parameters on prctl
-+ *
-+ * - dispatch_and_return: Test that a syscall is selectively dispatched
-+ *   to userspace depending on the value of selector.
-+ *
-+ * - disable_dispatch: Test that the PR_SYS_DISPATCH_OFF correctly
-+ *   disables the dispatcher
-+ *
-+ * - direct_dispatch_range: Test that a syscall within the allowed range
-+ *   can bypass the dispatcher.
-+ */
-+
-+TEST_SIGNAL(dispatch_trigger_sigsys, SIGSYS)
-+{
-+	char sel = 0;
-+	struct sysinfo info;
-+	int ret;
-+
-+	ret = sysinfo(&info);
-+	ASSERT_EQ(0, ret);
-+
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &sel);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-+	}
-+
-+	SYSCALL_DISPATCH_ON(sel);
-+
-+	sysinfo(&info);
-+
-+	EXPECT_FALSE(true) {
-+		TH_LOG("Unreachable!");
-+	}
-+}
-+
-+TEST(bad_prctl_param)
-+{
-+	char sel = 0;
-+	int op;
-+
-+	/* Invalid op */
-+	op = -1;
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0, 0, &sel);
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	/* PR_SYS_DISPATCH_OFF */
-+	op = PR_SYS_DISPATCH_OFF;
-+
-+	/* start_addr != 0 */
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x1, 0xff, 0);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	/* end_addr != 0 */
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0xff, 0);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	/* sel != NULL */
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0x0, &sel);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	/* Valid parameter */
-+	errno = 0;
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0x0, 0x0);
-+	EXPECT_EQ(0, errno);
-+
-+	/* PR_SYS_DISPATCH_ON */
-+	op = PR_SYS_DISPATCH_ON;
-+
-+	/* start_addr > end_addr */
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x1, 0x0, &sel);
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	/* Invalid selector */
-+	prctl(PR_SET_SYSCALL_USER_DISPATCH, op, 0x0, 0x1, (void *) -1);
-+	ASSERT_EQ(EFAULT, errno);
-+}
-+
-+/*
-+ * Use global selector for handle_sigsys tests, to avoid passing
-+ * selector to signal handler
-+ */
-+char glob_sel;
-+int nr_syscalls_emulated;
-+int si_code;
-+int si_errno;
-+
-+static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
-+{
-+	si_code = info->si_code;
-+	si_errno = info->si_errno;
-+
-+	if (info->si_syscall == MAGIC_SYSCALL_1)
-+		nr_syscalls_emulated++;
-+
-+	/* In preparation for sigreturn. */
-+	SYSCALL_DISPATCH_OFF(glob_sel);
-+}
-+
-+TEST(dispatch_and_return)
-+{
-+	long ret;
-+	struct sigaction act;
-+	sigset_t mask;
-+
-+	glob_sel = 0;
-+	nr_syscalls_emulated = 0;
-+	si_code = 0;
-+	si_errno = 0;
-+
-+	memset(&act, 0, sizeof(act));
-+	sigemptyset(&mask);
-+
-+	act.sa_sigaction = handle_sigsys;
-+	act.sa_flags = SA_SIGINFO;
-+	act.sa_mask = mask;
-+
-+	ret = sigaction(SIGSYS, &act, NULL);
-+	ASSERT_EQ(0, ret);
-+
-+	/* Make sure selector is good prior to prctl. */
-+	SYSCALL_DISPATCH_OFF(glob_sel);
-+
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &glob_sel);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-+	}
-+
-+	/* MAGIC_SYSCALL_1 doesn't exist. */
-+	SYSCALL_DISPATCH_OFF(glob_sel);
-+	ret = syscall(MAGIC_SYSCALL_1);
-+	EXPECT_EQ(-1, ret) {
-+		TH_LOG("Dispatch triggered unexpectedly");
-+	}
-+
-+	/* MAGIC_SYSCALL_1 should be emulated. */
-+	nr_syscalls_emulated = 0;
-+	SYSCALL_DISPATCH_ON(glob_sel);
-+
-+	ret = syscall(MAGIC_SYSCALL_1);
-+	EXPECT_EQ(MAGIC_SYSCALL_1, ret) {
-+		TH_LOG("Failed to intercept syscall");
-+	}
-+	EXPECT_EQ(1, nr_syscalls_emulated) {
-+		TH_LOG("Failed to emulate syscall");
-+	}
-+	ASSERT_EQ(SYS_USER_DISPATCH, si_code) {
-+		TH_LOG("Bad si_code in SIGSYS");
-+	}
-+	ASSERT_EQ(0, si_errno) {
-+		TH_LOG("Bad si_errno in SIGSYS");
-+	}
-+}
-+
-+TEST_SIGNAL(bad_selector, SIGSYS)
-+{
-+	long ret;
-+	struct sigaction act;
-+	sigset_t mask;
-+	struct sysinfo info;
-+
-+	glob_sel = 0;
-+	nr_syscalls_emulated = 0;
-+	si_code = 0;
-+	si_errno = 0;
-+
-+	memset(&act, 0, sizeof(act));
-+	sigemptyset(&mask);
-+
-+	act.sa_sigaction = handle_sigsys;
-+	act.sa_flags = SA_SIGINFO;
-+	act.sa_mask = mask;
-+
-+	ret = sigaction(SIGSYS, &act, NULL);
-+	ASSERT_EQ(0, ret);
-+
-+	/* Make sure selector is good prior to prctl. */
-+	SYSCALL_DISPATCH_OFF(glob_sel);
-+
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &glob_sel);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-+	}
-+
-+	glob_sel = -1;
-+
-+	sysinfo(&info);
-+
-+	/* Even though it is ready to catch SIGSYS, the signal is
-+	 * supposed to be uncatchable.
-+	 */
-+
-+	EXPECT_FALSE(true) {
-+		TH_LOG("Unreachable!");
-+	}
-+}
-+
-+TEST(disable_dispatch)
-+{
-+	int ret;
-+	struct sysinfo info;
-+	char sel = 0;
-+
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0, &sel);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-+	}
-+
-+	/* MAGIC_SYSCALL_1 doesn't exist. */
-+	SYSCALL_DISPATCH_OFF(glob_sel);
-+
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_OFF, 0, 0, 0);
-+	EXPECT_EQ(0, ret) {
-+		TH_LOG("Failed to unset syscall user dispatch");
-+	}
-+
-+	/* Shouldn't have any effect... */
-+	SYSCALL_DISPATCH_ON(glob_sel);
-+
-+	ret = syscall(__NR_sysinfo, &info);
-+	EXPECT_EQ(0, ret) {
-+		TH_LOG("Dispatch triggered unexpectedly");
-+	}
-+}
-+
-+TEST(direct_dispatch_range)
-+{
-+	int ret = 0;
-+	struct sysinfo info;
-+	char sel = 0;
-+
-+	/*
-+	 * Instead of calculating libc addresses; allow the entire
-+	 * memory map and lock the selector.
-+	 */
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, -1L, &sel);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support CONFIG_SYSCALL_USER_DISPATCH");
-+	}
-+
-+	SYSCALL_DISPATCH_ON(sel);
-+
-+	ret = sysinfo(&info);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Dispatch triggered unexpectedly");
-+	}
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.28.0
+In the meantime, yeah, we can add this for the config and run tasks,
+and maybe remove the whole "if cli_args.build_dir" / mkdir branch from
+the other subcommands.
 
+If we weren't going to fix the LinuxSourceTree constructor, it'd make
+sense to get rid of the redundant code to create it in config_tests(),
+too, but I'm not sure it's worthwhile.
+
+In any case, now I know what's happening, I'm okay with anything
+moderately sensible which gets the 'config' and 'run' subcommands
+working on an empty build dir, and the code and error messages can be
+fixed when tidying up the LinuxSourceTree() constructor in a separate
+patch.
+
+Cheers,
+-- David
+
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > > @@ -257,6 +262,7 @@ def main(argv, linux=None):
+> > >                 if cli_args.build_dir:
+> > >                         if not os.path.exists(cli_args.build_dir):
+> > >                                 os.mkdir(cli_args.build_dir)
+> > > +                               create_default_kunitconfig()
+> > >
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > > @@ -273,6 +279,7 @@ def main(argv, linux=None):
+> > >                 if cli_args.build_dir:
+> > >                         if not os.path.exists(cli_args.build_dir):
+> > >                                 os.mkdir(cli_args.build_dir)
+> > > +                               create_default_kunitconfig()
+> > >
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > > @@ -291,6 +298,7 @@ def main(argv, linux=None):
+> > >                 if cli_args.build_dir:
+> > >                         if not os.path.exists(cli_args.build_dir):
+> > >                                 os.mkdir(cli_args.build_dir)
+> > > +                               create_default_kunitconfig()
+> > >
+> > >                 if not linux:
+> > >                         linux = kunit_kernel.LinuxSourceTree()
+> > >
+> > > base-commit: 30185b69a2d533c4ba6ca926b8390ce7de495e29
+> > > --
+> > > 2.28.0.236.gb10cc79966-goog
+> > >
