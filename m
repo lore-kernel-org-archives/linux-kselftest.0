@@ -2,79 +2,72 @@ Return-Path: <SRS0=MMRU=BX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F33C433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Aug 2020 20:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0241AC433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Aug 2020 23:17:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F003920838
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Aug 2020 20:57:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B86C72087C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Aug 2020 23:17:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FicCNtgk"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aLfC6UYu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbgHMU5e (ORCPT
+        id S1726499AbgHMXRd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Aug 2020 16:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        Thu, 13 Aug 2020 19:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726499AbgHMU5e (ORCPT
+        with ESMTP id S1726205AbgHMXRc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Aug 2020 16:57:34 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3C5C061383;
-        Thu, 13 Aug 2020 13:57:34 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id b17so8745681ion.7;
-        Thu, 13 Aug 2020 13:57:34 -0700 (PDT)
+        Thu, 13 Aug 2020 19:17:32 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA568C061757
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2020 16:17:32 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id r11so3594980pfl.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2020 16:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Z/ASPTS2Ee55jSURHALLk5ixEglfeB12zyqYUwDPixY=;
-        b=FicCNtgk9br8P0aDJP+IkrIIj/ykK3OW4UarPWg55HNmL6X0l4yBUJeGk+5s3Acj5d
-         /xRUYLZSs5YL86NqzVWmlKfhtw3TzJ5+236ebO+fozx06CDEO0MIV08O7RUizOHUazCY
-         MbBKO0npIVzb3CQszRycq83Vv1N1vBIAE/Xm9xmqaWVkdRAbHVYnM+bxCLtB1wEZKkUz
-         UlfzR/D1uzy58h7cSgxQmc+CcOpZSD+BbStz8gjuySxnvN3M6czi+8PCHq3k7LHLv4yM
-         ShuPAOw2rot3GIGJMkIT2ucJQqBOcdAkznSiXbcen4JMbvL+nVL8dJdo380wjEJf+kFn
-         4NBQ==
+        bh=avc6yc7kzMjacgIGFQGvDcoJW2VT5v82MJin+mvldc0=;
+        b=aLfC6UYu9UMx13JgFaIbJIYrdSm44IU/4IYDJlAO0DRGQk35YEfEKjMPviBuL4KqRU
+         HaExMvImOCKpTwCMPvD2atLuDNJin6Qvr/Kity/oTu3g4I6SfTbtqDHLyD91nNPplujK
+         iX64+oJCX7cpsClr8fH3s0f7K8Wq9zTG38xM4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z/ASPTS2Ee55jSURHALLk5ixEglfeB12zyqYUwDPixY=;
-        b=dWRcTY+rMXTvsM4JU+OAVPFdVQUwV9RqLDRib4+mYHf3Rj09iL0VO1GgK2U0XNgJsR
-         vsvsxuVdhfQHP0S0djbypFdVa5fWB4/RRH2M6Ekw71n7nBZEQ6EVdHWTvG4bXcOzlPcD
-         nGrJ/LeM2wU42qXa+Dp1frd1GGLFcrhJBUMxIaoU3zyQMCvPuU17E66E5e5WMRYUJawH
-         T8bFUMcxuiw321dYPDaCbQ1arjjlKz046yfnRcgx8olMQUCHoqMhd/5fGbt58sYkH+sh
-         oQbCUely01Pph+YsiDa/g0jSFGypr9TAPNsUCEHWOLBqZDw1+QcnC5v+ZAzJ0I1ovI52
-         D4/Q==
-X-Gm-Message-State: AOAM533Wr2M7LAGeVTzeUvkwVOJ87OlwaTA+QD/dLkuuKuLEPbOInoU+
-        3EnKq8s+3ZQipuNUMZn8bHA=
-X-Google-Smtp-Source: ABdhPJwQTeRwrYnJMO8lXxIeQcSevKEfdwVrHpBE4+C5UU9Incq/oGqGH0rhsgSy0tEvO7Ia+E5FhQ==
-X-Received: by 2002:a02:8384:: with SMTP id z4mr7069563jag.121.1597352253446;
-        Thu, 13 Aug 2020 13:57:33 -0700 (PDT)
-Received: from urieldev.c.googlers.com.com (243.199.238.35.bc.googleusercontent.com. [35.238.199.243])
-        by smtp.gmail.com with ESMTPSA id s3sm3148603iol.49.2020.08.13.13.57.32
+        bh=avc6yc7kzMjacgIGFQGvDcoJW2VT5v82MJin+mvldc0=;
+        b=gCl+ep5MO7AFDyP/o9GwLIyBhf/j7wF+n3OMg8Bv68oGVz+ksOCZDgkPlwPXjs6EhT
+         LZ9ZlKJVCiaEXDwUPzEo386r9iauHoHzb14C3fnwKj0GOlrQEf8aSl3W/9cJVkzHgOBT
+         t28tKK/Pjtf6i9IVfYmHWOTC7C49ZriUJQRIZgyw7Qul9B6IEFI7ceET8ZdN/PvqGoIk
+         t7rMbUf9crv+Pj3q9IGvFNCisjr3/qKZkdbQH7nZG6U6dTS+iS3ZXYFVgWbeI712SI2D
+         vUn3JJ04EkNXTIa5puhcCeDGzBFKDt1M83GtqrWGtHsEwYYcTuSSZTpAS7j1AL2+4z+m
+         vqkQ==
+X-Gm-Message-State: AOAM530c39xgCcDziYK0qm/ARRf951tF57cbXrL9P6pkNU06UhVDfi1g
+        NwY3LP7JZ6Cj2pOJOzSCwybhQQ==
+X-Google-Smtp-Source: ABdhPJwedwgRy8a/KOfOm4UfYdsHSavcGAlnFwTouC13lrZRCjMPI1VJMqmNPrMJ2zsyk9VTQdGENg==
+X-Received: by 2002:a63:5f8b:: with SMTP id t133mr5650060pgb.340.1597360652151;
+        Thu, 13 Aug 2020 16:17:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d128sm7118284pfa.24.2020.08.13.16.17.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 13:57:33 -0700 (PDT)
-From:   Uriel Guajardo <urielguajardojr@gmail.com>
-To:     brendanhiggins@google.com
-Cc:     urielguajardo@google.com, akpm@linux-foundation.org,
-        keescook@chromium.org, rdunlap@infradead.org,
-        herbert@gondor.apana.org.au, christian.brauner@ubuntu.com,
-        peterz@infradead.org, ardb@kernel.og, arnd@arndb.de,
-        julien.grall@arm.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Uriel Guajardo <urielguajardojr@gmail.com>
-Subject: [PATCH 2/2] kunit: ubsan integration
-Date:   Thu, 13 Aug 2020 20:57:22 +0000
-Message-Id: <20200813205722.1384108-2-urielguajardojr@gmail.com>
-X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
-In-Reply-To: <20200813205722.1384108-1-urielguajardojr@gmail.com>
-References: <20200813205722.1384108-1-urielguajardojr@gmail.com>
+        Thu, 13 Aug 2020 16:17:30 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/2] exec: Restore EACCES of S_ISDIR execve()
+Date:   Thu, 13 Aug 2020 16:17:22 -0700
+Message-Id: <20200813231723.2725102-2-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200813231723.2725102-1-keescook@chromium.org>
+References: <20200813231723.2725102-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -82,34 +75,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-whenever it reports undefined behavior.
+The return code for attempting to execute a directory has always been
+EACCES. Adjust the S_ISDIR exec test to reflect the old errno instead
+of the general EISDIR for other kinds of "open" attempts on directories.
 
-Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+Reported-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/lkml/20200813151305.6191993b@why
+Fixes: 633fb6ac3980 ("exec: move S_ISREG() check earlier")
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- lib/ubsan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/namei.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index cb9af3f6b77e..1460e2c828c8 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -14,6 +14,7 @@
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/uaccess.h>
-+#include <kunit/test.h>
- 
- #include "ubsan.h"
- 
-@@ -137,6 +138,7 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
- {
- 	current->in_ubsan++;
- 
-+	kunit_fail_current_test();
- 	pr_err("========================================"
- 		"========================================\n");
- 	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
+diff --git a/fs/namei.c b/fs/namei.c
+index 2112e578dccc..e99e2a9da0f7 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -2849,8 +2849,10 @@ static int may_open(const struct path *path, int acc_mode, int flag)
+ 	case S_IFLNK:
+ 		return -ELOOP;
+ 	case S_IFDIR:
+-		if (acc_mode & (MAY_WRITE | MAY_EXEC))
++		if (acc_mode & MAY_WRITE)
+ 			return -EISDIR;
++		if (acc_mode & MAY_EXEC)
++			return -EACCES;
+ 		break;
+ 	case S_IFBLK:
+ 	case S_IFCHR:
 -- 
-2.28.0.163.g6104cc2f0b6-goog
+2.25.1
 
