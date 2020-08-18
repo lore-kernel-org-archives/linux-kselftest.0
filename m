@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95513C433E3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 136B2C433E8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:35:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71CB420674
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:35:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8D9620674
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgHRReg (ORCPT
+        id S1728682AbgHRRef (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Aug 2020 13:34:36 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:52418 "EHLO
+        Tue, 18 Aug 2020 13:34:35 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:52427 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728523AbgHRRea (ORCPT
+        with ESMTP id S1728622AbgHRRed (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Aug 2020 13:34:30 -0400
+        Tue, 18 Aug 2020 13:34:33 -0400
 Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1k85VD-0003E9-Ko; Tue, 18 Aug 2020 17:34:27 +0000
+        id 1k85VG-0003E9-B8; Tue, 18 Aug 2020 17:34:30 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Christoph Hewllig <hch@infradead.org>,
         linux-kernel@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         kgdb-bugreport@lists.sourceforge.net,
         linux-kselftest@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH 05/11] nios2: switch to kernel_clone()
-Date:   Tue, 18 Aug 2020 19:34:05 +0200
-Message-Id: <20200818173411.404104-6-christian.brauner@ubuntu.com>
+Subject: [PATCH 07/11] x86: switch to kernel_clone()
+Date:   Tue, 18 Aug 2020 19:34:07 +0200
+Message-Id: <20200818173411.404104-8-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200818173411.404104-1-christian.brauner@ubuntu.com>
 References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
@@ -74,23 +74,27 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
 The latter adheres to naming conventions for kernel internal syscall helpers.
 
-Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
- arch/nios2/kernel/process.c | 2 +-
+ arch/x86/kernel/sys_ia32.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/nios2/kernel/process.c b/arch/nios2/kernel/process.c
-index 88a4ec03edab..4ffe857e6ada 100644
---- a/arch/nios2/kernel/process.c
-+++ b/arch/nios2/kernel/process.c
-@@ -266,5 +266,5 @@ asmlinkage int nios2_clone(unsigned long clone_flags, unsigned long newsp,
- 		.tls		= tls,
+diff --git a/arch/x86/kernel/sys_ia32.c b/arch/x86/kernel/sys_ia32.c
+index 720cde885042..6cf65397d225 100644
+--- a/arch/x86/kernel/sys_ia32.c
++++ b/arch/x86/kernel/sys_ia32.c
+@@ -251,6 +251,6 @@ COMPAT_SYSCALL_DEFINE5(ia32_clone, unsigned long, clone_flags,
+ 		.tls		= tls_val,
  	};
  
 -	return _do_fork(&args);
 +	return kernel_clone(&args);
  }
+ #endif /* CONFIG_IA32_EMULATION */
 -- 
 2.28.0
 
