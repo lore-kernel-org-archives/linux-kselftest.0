@@ -2,44 +2,32 @@ Return-Path: <SRS0=Kqr7=B4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AB47C433E1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51A9AC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:58:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1140A2054F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:44:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fICQlLgf"
+	by mail.kernel.org (Postfix) with ESMTP id 3E24620786
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:58:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726588AbgHRRo6 (ORCPT
+        id S1726652AbgHRR56 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Aug 2020 13:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726569AbgHRRo5 (ORCPT
+        Tue, 18 Aug 2020 13:57:58 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:53273 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726552AbgHRR55 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Aug 2020 13:44:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932EC061389;
-        Tue, 18 Aug 2020 10:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VUwmIR+lImU3NRAfKAiYvoX2F1rNIteoEgPghMUy3n4=; b=fICQlLgf7nqw1v5EVdw+y4UkgP
-        kbIROvywOoijsDOmGkmor5zGA36mtA9nORnPdRV0+PY6SgIHRyUiYvquWKJzwh5dVSuVFAFvX3DME
-        uAmwFhMRtuIsHO7AxjC/Hf6i4yUHlUCTV0VhFn4FHFVQ71s5gGsrDviphLM3xYp35OmWKPBpLVRcf
-        hwpTdFcUGW3d/jWbjCTyNWqqxGNmLCqcnEhJLRysG1hkTFskpa06/7toKpSoT4Zo3bffiyMFfe8De
-        fS6X/+bj0bRKlbATWH2OR/lk0NRD8TCNYrCLq21TKS0tsjdfMcrFa8oUinpiBxN298K5q3iSTGAud
-        JKE97/QA==;
-Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k85fD-0006aT-In; Tue, 18 Aug 2020 17:44:47 +0000
-Date:   Tue, 18 Aug 2020 18:44:47 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
+        Tue, 18 Aug 2020 13:57:57 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1k85rt-0005EW-F5; Tue, 18 Aug 2020 17:57:53 +0000
+Date:   Tue, 18 Aug 2020 19:57:51 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Christoph Hewllig <hch@infradead.org>,
         linux-kernel@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
@@ -70,24 +58,40 @@ Cc:     Christoph Hewllig <hch@infradead.org>,
         kgdb-bugreport@lists.sourceforge.net,
         linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 00/11] Introduce kernel_clone(), kill _do_fork()
-Message-ID: <20200818174447.GV17456@casper.infradead.org>
+Message-ID: <20200818175751.xg726hgyirbt354d@wittgenstein>
 References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+ <20200818174447.GV17456@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+In-Reply-To: <20200818174447.GV17456@casper.infradead.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 07:34:00PM +0200, Christian Brauner wrote:
-> The only remaining function callable outside of kernel/fork.c is
-> _do_fork(). It doesn't really follow the naming of kernel-internal
-> syscall helpers as Christoph righly pointed out. Switch all callers and
-> references to kernel_clone() and remove _do_fork() once and for all.
+On Tue, Aug 18, 2020 at 06:44:47PM +0100, Matthew Wilcox wrote:
+> On Tue, Aug 18, 2020 at 07:34:00PM +0200, Christian Brauner wrote:
+> > The only remaining function callable outside of kernel/fork.c is
+> > _do_fork(). It doesn't really follow the naming of kernel-internal
+> > syscall helpers as Christoph righly pointed out. Switch all callers and
+> > references to kernel_clone() and remove _do_fork() once and for all.
+> 
+> My only concern is around return type.  long, int, pid_t ... can we
+> choose one and stick to it?  pid_t is probably the right return type
+> within the kernel, despite the return type of clone3().  It'll save us
+> some work if we ever go through the hassle of growing pid_t beyond 31-bit.
 
-My only concern is around return type.  long, int, pid_t ... can we
-choose one and stick to it?  pid_t is probably the right return type
-within the kernel, despite the return type of clone3().  It'll save us
-some work if we ever go through the hassle of growing pid_t beyond 31-bit.
+It should be safe to switch kernel_clone() to return pid_t. (Afair, the
+syscall wrappers all have "long" as return type. (I think Linus provided
+some more details on that in another mail. Also see
+include/linux/syscalls.h. So the return type for clone3() is really
+somewhat a userspace thing, I think.)
+
+I wonder whether I should take the opportunity and switch the advertised
+flag arguments for the legacy clone() syscalls and kernel_thread() from
+unsigned long to unsigned int so we can get rid of the lower
+		.flags		= (lower_32_bits(clone_flags) & ~CSIGNAL),
+calls I added to fix sign extension issues glibc ran into...
+
+Christian
