@@ -2,99 +2,116 @@ Return-Path: <SRS0=Kqr7=B4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF2ACC433E3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 13:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2EB3C433E1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:34:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 951CF206B5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 13:18:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF5BD20674
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Aug 2020 17:34:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbgHRNR7 (ORCPT
+        id S1728676AbgHRRef (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Aug 2020 09:17:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:25225 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbgHRNR6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Aug 2020 09:17:58 -0400
-IronPort-SDR: uHYqtMT/M54AWW3BlBdHudQ2bJfUXkwXJqXao1hiF/ZWyWdwh5sV9dB8oouSfV6GHWcVmJpZ8t
- oBje9+COTsgg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="155976632"
-X-IronPort-AV: E=Sophos;i="5.76,327,1592895600"; 
-   d="scan'208";a="155976632"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 06:17:48 -0700
-IronPort-SDR: uFtynHMcWZI6xURtD/H07dODdvGvzmqr+/TXJuel2NcLbuEW6vESpjCzFGXlEtgS+ppjkQop7l
- e3uQW/TWUsgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,327,1592895600"; 
-   d="scan'208";a="296839664"
-Received: from local-michael-cet-test.sh.intel.com (HELO localhost) ([10.239.159.128])
-  by orsmga006.jf.intel.com with ESMTP; 18 Aug 2020 06:17:46 -0700
-Date:   Tue, 18 Aug 2020 21:25:26 +0800
-From:   Yang Weijiang <weijiang.yang@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Yang Weijiang <weijiang.yang@intel.com>, kvm@vger.kernel.org,
-        shuah@kernel.org, peterx@redhat.com,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: kvm: Fix an unexpected failure with newer gcc
- compiler
-Message-ID: <20200818132525.GA14830@local-michael-cet-test.sh.intel.com>
-References: <20200814132105.5122-1-weijiang.yang@intel.com>
- <20200817164238.GD22407@linux.intel.com>
- <7ad0f9fa-bb57-4c19-475b-3439d7a61bcd@redhat.com>
+        Tue, 18 Aug 2020 13:34:35 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:52420 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728528AbgHRReb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 Aug 2020 13:34:31 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1k85VE-0003E9-UJ; Tue, 18 Aug 2020 17:34:29 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Christoph Hewllig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alexandre Chartre <alexandre.chartre@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Xiao Yang <yangx.jy@cn.fujitsu.com>, linux-doc@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-kselftest@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH 06/11] sparc: switch to kernel_clone()
+Date:   Tue, 18 Aug 2020 19:34:06 +0200
+Message-Id: <20200818173411.404104-7-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200818173411.404104-1-christian.brauner@ubuntu.com>
+References: <20200818173411.404104-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ad0f9fa-bb57-4c19-475b-3439d7a61bcd@redhat.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 07:19:17PM +0200, Paolo Bonzini wrote:
-> On 17/08/20 18:42, Sean Christopherson wrote:
-> > On Fri, Aug 14, 2020 at 09:21:05PM +0800, Yang Weijiang wrote:
-> >> If debug_regs.c is built with newer gcc, e.g., 8.3.1 on my side, then the generated
-> >> binary looks like over-optimized by gcc:
-> >>
-> >> asm volatile("ss_start: "
-> >>              "xor %%rax,%%rax\n\t"
-> >>              "cpuid\n\t"
-> >>              "movl $0x1a0,%%ecx\n\t"
-> >>              "rdmsr\n\t"
-> >>              : : : "rax", "ecx");
-> >>
-> >> is translated to :
-> >>
-> >>   000000000040194e <ss_start>:
-> >>   40194e:       31 c0                   xor    %eax,%eax     <----- rax->eax?
-> >>   401950:       0f a2                   cpuid
-> >>   401952:       b9 a0 01 00 00          mov    $0x1a0,%ecx
-> >>   401957:       0f 32                   rdmsr
-> >>
-> >> As you can see rax is replaced with eax in taret binary code.
-> > 
-> > It's an optimization.  `xor rax, rax` and `xor eax, eax` yield the exact
-> > same result, as writing the lower 32 bits of a GPR in 64-bit mode clears
-> > the upper 32 bits.  Using the eax variant avoids the REX prefix and saves
-> > a byte of code.
-> 
-> I would have expected that from binutils though, not GCC.
-> 
-> > Use `xor %%eax, %%eax`.  That should always generate a 2 byte instruction.
-> > Encoding a 64-bit operation would technically be legal, but I doubt any
-> > compiler would do that in practice.
-> 
-> Indeed, and in addition the clobbers are incorrect since they miss rbx
-> and rdx.  I've sent a patch.
->
-Thanks Paolo and Sean for the feedback!
+The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
+The latter adheres to naming conventions for kernel internal syscall helpers.
 
-> Paolo
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ arch/sparc/kernel/process.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/sparc/kernel/process.c b/arch/sparc/kernel/process.c
+index 5234b5ccc0b9..0442ab00518d 100644
+--- a/arch/sparc/kernel/process.c
++++ b/arch/sparc/kernel/process.c
+@@ -25,7 +25,7 @@ asmlinkage long sparc_fork(struct pt_regs *regs)
+ 		.stack		= regs->u_regs[UREG_FP],
+ 	};
+ 
+-	ret = _do_fork(&args);
++	ret = kernel_clone(&args);
+ 
+ 	/* If we get an error and potentially restart the system
+ 	 * call, we're screwed because copy_thread() clobbered
+@@ -50,7 +50,7 @@ asmlinkage long sparc_vfork(struct pt_regs *regs)
+ 		.stack		= regs->u_regs[UREG_FP],
+ 	};
+ 
+-	ret = _do_fork(&args);
++	ret = kernel_clone(&args);
+ 
+ 	/* If we get an error and potentially restart the system
+ 	 * call, we're screwed because copy_thread() clobbered
+@@ -96,7 +96,7 @@ asmlinkage long sparc_clone(struct pt_regs *regs)
+ 	else
+ 		args.stack = regs->u_regs[UREG_FP];
+ 
+-	ret = _do_fork(&args);
++	ret = kernel_clone(&args);
+ 
+ 	/* If we get an error and potentially restart the system
+ 	 * call, we're screwed because copy_thread() clobbered
+-- 
+2.28.0
+
