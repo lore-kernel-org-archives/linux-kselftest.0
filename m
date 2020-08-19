@@ -2,57 +2,54 @@ Return-Path: <SRS0=0SIZ=B5=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21ECFC433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 11:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42E9FC433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 12:14:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3EB722B43
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 11:52:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17FEB2075E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 12:13:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597837954;
-	bh=F1AYrEcZ7mpD0EYEJHQ5gNlFCjBTpcbcw3WgaRKBGUQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aGkOJ86Qqw1Ut84bluGI159xVAti++2eI74XSoskfpEx0sSKd6D/Y8I8NxBQSFrWJ
-	 AdbaOlrCOnOo4trz8pWsPjN5p8AW0ldFpgAGVWmJYiUJ2D9Y0zP0Qb2XzABLKU4ZJL
-	 wPJ3PG2nAv2tx6WL2QrC9RBcql9NoMhe/b2dKTR8=
+	s=default; t=1597839240;
+	bh=bIFlSXIIsQjIccJou2YAZAKBbvj6NCQucUbNoOBlCVU=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=y0NBV1GAFHMqQ6itWQJOV7mvNozHdyLtmySTo//1tC+BSKqKi7qRnstO23hlfO/Ro
+	 uKkk4eEzRWB4mD0gjeJrU9460WRYl4Ly5yyXY3mQQJpeZ6SFEuzQs8eDkh5s4PaVEO
+	 yLFp34Y6dDQJarBdIXcLOmNhKmgq3Kf3U7dRSSzk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727818AbgHSLwG (ORCPT
+        id S1726794AbgHSMN7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Aug 2020 07:52:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54592 "EHLO mail.kernel.org"
+        Wed, 19 Aug 2020 08:13:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728241AbgHSLvW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:51:22 -0400
+        id S1726752AbgHSMN6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Aug 2020 08:13:58 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 789752086A;
-        Wed, 19 Aug 2020 11:50:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDBAD206DA;
+        Wed, 19 Aug 2020 12:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597837859;
-        bh=F1AYrEcZ7mpD0EYEJHQ5gNlFCjBTpcbcw3WgaRKBGUQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Txmtr6PsMcrpt9rmhvgIVD70xDe8vvlOpTezQHxlsu41FJLiR8ww4J44oNMthar0N
-         6r5+dO7oWgAs39tIlV+hB1unkNUjbHg4LTULioDdFklsMHDXQkmV679Vq8gUfCSby9
-         R4Zdt/iCHi/AksfXKaCNPpp1M3exX1TX2whTinvM=
+        s=default; t=1597839238;
+        bh=bIFlSXIIsQjIccJou2YAZAKBbvj6NCQucUbNoOBlCVU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pttSn2hY0g6Ci3LmbH9QuR4JebHg1e14+H+BxYrIEeDsg/BSs12kksw8bw+ooHOeI
+         ma8/hfbQ91rYXMvPA5BUP7qHLmnHCUeQ8sSeZJSq9+zgB/oyco+/+8z7L89/L12bjT
+         RA/8V1D/mD2o6Ir//A6D1nXRA8HjjARKGA8Fyba0=
 From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 5/6] selftests: arm64: Add wrapper scripts for stress tests
-Date:   Wed, 19 Aug 2020 12:48:36 +0100
-Message-Id: <20200819114837.51466-6-broonie@kernel.org>
+Subject: [PATCH v3 0/5] arm64: vdso: getcpu() support
+Date:   Wed, 19 Aug 2020 13:13:13 +0100
+Message-Id: <20200819121318.52158-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200819114837.51466-1-broonie@kernel.org>
-References: <20200819114837.51466-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -60,149 +57,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add wrapper scripts which invoke fpsimd-test and sve-test with several
-copies per CPU such that the context switch code will be appropriately
-exercised.
+Some applications, especially tracing ones, benefit from avoiding the
+syscall overhead for getcpu() so it is common for architectures to have
+vDSO implementations. Add one for arm64, using TPIDRRO_EL0 to pass a
+pointer to per-CPU data rather than just store the immediate value in
+order to allow for future extensibility.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../testing/selftests/arm64/fp/fpsimd-stress  | 60 +++++++++++++++++++
- tools/testing/selftests/arm64/fp/sve-stress   | 59 ++++++++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100755 tools/testing/selftests/arm64/fp/fpsimd-stress
- create mode 100755 tools/testing/selftests/arm64/fp/sve-stress
+It is questionable if something TPIDRRO_EL0 based is worthwhile at all
+on current kernels, since v4.18 we have had support for restartable
+sequences which can be used to provide a sched_getcpu() implementation
+with generally better performance than the vDSO approach on
+architectures which have that[1]. Work is ongoing to implement this for
+glibc:
 
-diff --git a/tools/testing/selftests/arm64/fp/fpsimd-stress b/tools/testing/selftests/arm64/fp/fpsimd-stress
-new file mode 100755
-index 000000000000..781b5b022eaf
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/fpsimd-stress
-@@ -0,0 +1,60 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2015-2019 ARM Limited.
-+# Original author: Dave Martin <Dave.Martin@arm.com>
-+
-+set -ue
-+
-+NR_CPUS=`nproc`
-+
-+pids=
-+logs=
-+
-+cleanup () {
-+	trap - INT TERM CHLD
-+	set +e
-+
-+	if [ -n "$pids" ]; then
-+		kill $pids
-+		wait $pids
-+		pids=
-+	fi
-+
-+	if [ -n "$logs" ]; then
-+		cat $logs
-+		rm $logs
-+		logs=
-+	fi
-+}
-+
-+interrupt () {
-+	cleanup
-+	exit 0
-+}
-+
-+child_died () {
-+	cleanup
-+	exit 1
-+}
-+
-+trap interrupt INT TERM EXIT
-+trap child_died CHLD
-+
-+for x in `seq 0 $((NR_CPUS * 4))`; do
-+	log=`mktemp`
-+	logs=$logs\ $log
-+	./fpsimd-test >$log &
-+	pids=$pids\ $!
-+done
-+
-+# Wait for all child processes to be created:
-+sleep 10
-+
-+while :; do
-+	kill -USR1 $pids
-+done &
-+pids=$pids\ $!
-+
-+wait
-+
-+exit 1
-diff --git a/tools/testing/selftests/arm64/fp/sve-stress b/tools/testing/selftests/arm64/fp/sve-stress
-new file mode 100755
-index 000000000000..24dd0922cc02
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/sve-stress
-@@ -0,0 +1,59 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2015-2019 ARM Limited.
-+# Original author: Dave Martin <Dave.Martin@arm.com>
-+
-+set -ue
-+
-+NR_CPUS=`nproc`
-+
-+pids=
-+logs=
-+
-+cleanup () {
-+	trap - INT TERM CHLD
-+	set +e
-+
-+	if [ -n "$pids" ]; then
-+		kill $pids
-+		wait $pids
-+		pids=
-+	fi
-+
-+	if [ -n "$logs" ]; then
-+		cat $logs
-+		rm $logs
-+		logs=
-+	fi
-+}
-+
-+interrupt () {
-+	cleanup
-+	exit 0
-+}
-+
-+child_died () {
-+	cleanup
-+	exit 1
-+}
-+
-+trap interrupt INT TERM EXIT
-+
-+for x in `seq 0 $((NR_CPUS * 4))`; do
-+	log=`mktemp`
-+	logs=$logs\ $log
-+	./sve-test >$log &
-+	pids=$pids\ $!
-+done
-+
-+# Wait for all child processes to be created:
-+sleep 10
-+
-+while :; do
-+	kill -USR1 $pids
-+done &
-+pids=$pids\ $!
-+
-+wait
-+
-+exit 1
+    https://lore.kernel.org/lkml/20200527185130.5604-3-mathieu.desnoyers@efficios.com/
+
+but is not yet merged and will need similar work for other userspaces.
+The main advantages for the vDSO implementation are the node parameter
+(though this is a static mapping to CPU number so could be looked up
+separately when processing data if it's needed, it shouldn't need to be
+in the hot path) and ease of implementation for users.
+
+This is currently not compatible with KPTI due to the use of TPIDRRO_EL0
+by the KPTI trampoline, this could be addressed by reinitializing that
+system register in the return path but I have found it hard to justify
+adding that overhead for all users for something that is essentially a
+profiling optimization which is likely to get superceeded by a more
+modern implementation - if there are other uses for the per-CPU data
+then the balance might change here.
+
+This builds on work done by Kristina Martsenko some time ago but is a
+new implementation.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7822b1e24f2df5df98c76f0e94a5416349ff759
+
+v3:
+ - Rebase on v5.9-rc1.
+ - Drop in progress portions of the series.
+v2:
+ - Rebase on v5.8-rc3.
+ - Add further cleanup patches & a first draft of multi-page support.
+
+Mark Brown (5):
+  arm64: vdso: Provide a define when building the vDSO
+  arm64: vdso: Add per-CPU data
+  arm64: vdso: Initialise the per-CPU vDSO data
+  arm64: vdso: Add getcpu() implementation
+  selftests: vdso: Support arm64 in getcpu() test
+
+ arch/arm64/include/asm/processor.h            | 12 +----
+ arch/arm64/include/asm/vdso/datapage.h        | 54 +++++++++++++++++++
+ arch/arm64/kernel/process.c                   | 26 ++++++++-
+ arch/arm64/kernel/vdso.c                      | 33 +++++++++++-
+ arch/arm64/kernel/vdso/Makefile               |  4 +-
+ arch/arm64/kernel/vdso/vdso.lds.S             |  1 +
+ arch/arm64/kernel/vdso/vgetcpu.c              | 48 +++++++++++++++++
+ .../testing/selftests/vDSO/vdso_test_getcpu.c | 10 ++++
+ 8 files changed, 172 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/include/asm/vdso/datapage.h
+ create mode 100644 arch/arm64/kernel/vdso/vgetcpu.c
+
 -- 
 2.20.1
 
