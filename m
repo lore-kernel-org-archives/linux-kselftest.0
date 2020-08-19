@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D8AC433E5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 10:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5368C433E1
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 10:50:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 946FB206B5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 10:50:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3C69206B5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Aug 2020 10:50:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727863AbgHSKrc (ORCPT
+        id S1728180AbgHSKuG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Aug 2020 06:47:32 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53970 "EHLO
+        Wed, 19 Aug 2020 06:50:06 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:53984 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727074AbgHSKr3 (ORCPT
+        with ESMTP id S1727846AbgHSKrd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 06:47:29 -0400
+        Wed, 19 Aug 2020 06:47:33 -0400
 Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1k8Lcs-0006IE-9L; Wed, 19 Aug 2020 10:47:26 +0000
+        id 1k8Lcw-0006IE-Fh; Wed, 19 Aug 2020 10:47:30 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Jonathan Corbet <corbet@lwn.net>,
@@ -58,9 +58,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Christoph Hewllig <hch@infradead.org>,
         Matthew Wilcox <willy@infradead.org>,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v2 02/11] h8300: switch to kernel_clone()
-Date:   Wed, 19 Aug 2020 12:46:46 +0200
-Message-Id: <20200819104655.436656-3-christian.brauner@ubuntu.com>
+Subject: [PATCH v2 05/11] nios2: switch to kernel_clone()
+Date:   Wed, 19 Aug 2020 12:46:49 +0200
+Message-Id: <20200819104655.436656-6-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200819104655.436656-1-christian.brauner@ubuntu.com>
 References: <20200819104655.436656-1-christian.brauner@ubuntu.com>
@@ -74,27 +74,25 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 The old _do_fork() helper is removed in favor of the new kernel_clone() helper.
 The latter adheres to naming conventions for kernel internal syscall helpers.
 
-Cc: Greentime Hu <green.hu@gmail.com>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
 /* v2 */
 unchanged
 ---
- arch/h8300/kernel/process.c | 2 +-
+ arch/nios2/kernel/process.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/h8300/kernel/process.c b/arch/h8300/kernel/process.c
-index 83ce3caf7313..aea0a40b77a9 100644
---- a/arch/h8300/kernel/process.c
-+++ b/arch/h8300/kernel/process.c
-@@ -172,5 +172,5 @@ asmlinkage int sys_clone(unsigned long __user *args)
- 	kargs.exit_signal	= (lower_32_bits(clone_flags) & CSIGNAL);
- 	kargs.stack		= newsp;
+diff --git a/arch/nios2/kernel/process.c b/arch/nios2/kernel/process.c
+index 88a4ec03edab..4ffe857e6ada 100644
+--- a/arch/nios2/kernel/process.c
++++ b/arch/nios2/kernel/process.c
+@@ -266,5 +266,5 @@ asmlinkage int nios2_clone(unsigned long clone_flags, unsigned long newsp,
+ 		.tls		= tls,
+ 	};
  
--	return _do_fork(&kargs);
-+	return kernel_clone(&kargs);
+-	return _do_fork(&args);
++	return kernel_clone(&args);
  }
 -- 
 2.28.0
