@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC6B6C433E4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Aug 2020 00:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9151C433E8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Aug 2020 00:07:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8ED73214F1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Aug 2020 00:01:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A823C207FB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Aug 2020 00:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597881718;
-	bh=DaLrVr7gb8fmO/aKLBWZESC8SZ7KeLFUyl9HyttA2JA=;
+	s=default; t=1597882040;
+	bh=APaZWR8dp4pm9OJV+km8jzu4nmbPaHhaC0PDHDJ+Elc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=nigGK/Vnr085pu6GU/WYqLnj7dGG1L3cjGU3uFgg3HrZSdl6R1hgMolgsGVqbwFSw
-	 j+u4DsSRqoDV0g+hL7rUz+cpbVHgKkL7KzPm98DahuK20KNkCKkZut70MfSf8CrcH1
-	 Y9g8BRta4tk6L8ZFuk2ilEe0OcYq3NAKaXy2VN5o=
+	b=PV0uNiInhbHWHIDfRWhNM9y+VUgwRZ/AxVDCbtQyA4qQgp2sHZEacRHM+ih9eP1Pq
+	 CZmbBhAEGXROVXL6G8BYklQ1kt8AEPKSdmnIN+d3m2SJUIFFVEr5nHFVCjdgGRRbsC
+	 XYyAdKi2Vbe/mSqv+ZP8b3TGIR2j8xWrjdU1uFaw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbgHTAB6 (ORCPT
+        id S1728470AbgHTAHT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Aug 2020 20:01:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58018 "EHLO mail.kernel.org"
+        Wed, 19 Aug 2020 20:07:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32962 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727036AbgHTABt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:01:49 -0400
+        id S1728265AbgHTADX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:03:23 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6BDDA2224D;
-        Thu, 20 Aug 2020 00:01:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF9D8214F1;
+        Thu, 20 Aug 2020 00:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881708;
-        bh=DaLrVr7gb8fmO/aKLBWZESC8SZ7KeLFUyl9HyttA2JA=;
+        s=default; t=1597881803;
+        bh=APaZWR8dp4pm9OJV+km8jzu4nmbPaHhaC0PDHDJ+Elc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNtzfwnPkLvf1mw7RXhvxn5r8Q0DKN7ILTCepyJjthC/6KcVGpJ78Anik47V/P0EJ
-         NIdGhIt1d3OkzLK4+YRVjLXxoQiQN4kNC1Q10l1T1s+Kwx7GURNzKduiUoAyLfipNq
-         ZvNU7Dw6qjShqhW5LJ6hipdBMFOIEeAGVIAlWC0k=
+        b=1IjlvELnjThGp5az8W5xG7akMmO3OnSCa5ZJu6UDbXhRpjtG9Z6Rn0uQkh9iF5Ck1
+         c/ug898svZ4kRV+D5NJiLjngukIVUl6u7OQ8LzApdQ0wPpCYJcO8SEiL9Gxut6FZDp
+         PLxJTNNL3pZadUffELgrpBaF3m/3WHf7VgXyP5X8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Gaurav Singh <gaurav1086@gmail.com>,
@@ -50,12 +50,12 @@ Cc:     Gaurav Singh <gaurav1086@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 23/27]  tools/testing/selftests/cgroup/cgroup_util.c: cg_read_strcmp: fix null pointer dereference
-Date:   Wed, 19 Aug 2020 20:01:12 -0400
-Message-Id: <20200820000116.214821-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 15/18]  tools/testing/selftests/cgroup/cgroup_util.c: cg_read_strcmp: fix null pointer dereference
+Date:   Wed, 19 Aug 2020 20:02:58 -0400
+Message-Id: <20200820000302.215560-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820000116.214821-1-sashal@kernel.org>
-References: <20200820000116.214821-1-sashal@kernel.org>
+In-Reply-To: <20200820000302.215560-1-sashal@kernel.org>
+References: <20200820000302.215560-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 8a637ca7d73a4..05853b0b88318 100644
+index 075cb0c730149..90418d79ef676 100644
 --- a/tools/testing/selftests/cgroup/cgroup_util.c
 +++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -106,7 +106,7 @@ int cg_read_strcmp(const char *cgroup, const char *control,
+@@ -95,7 +95,7 @@ int cg_read_strcmp(const char *cgroup, const char *control,
  
  	/* Handle the case of comparing against empty string */
  	if (!expected)
