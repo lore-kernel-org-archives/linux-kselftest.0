@@ -2,261 +2,196 @@ Return-Path: <SRS0=q/gA=B7=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D653AC433E5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 17:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B60DC433DF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 21:50:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6BAE22CF8
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 17:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598030780;
-	bh=Bdpad47Y9xaJkg3DYY8jaH4brrvoaBEGpKqgrVpA5KM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sO9TwgB/7GbPX+1Cpn0ULJCaNO/4lEw9jVU4uhpmxqH87lQusKeAG1WYeQ/iAFNLP
-	 TYeRGtMPrwfgA6ICkCiqYrE7sFgcyC7y0oNhQVOFcr+TM0t80FnY6m9IPa3imz3QxY
-	 xmHjzxebEZaQOUMKkFnkHX+SNu9GyY+6li4stlyo=
+	by mail.kernel.org (Postfix) with ESMTP id 2F4AB207CD
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 21:50:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T8qkn1gP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbgHUQPK (ORCPT
+        id S1726766AbgHUVuR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Aug 2020 12:15:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47254 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727797AbgHUQPG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:15:06 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A4086214F1;
-        Fri, 21 Aug 2020 16:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026505;
-        bh=Bdpad47Y9xaJkg3DYY8jaH4brrvoaBEGpKqgrVpA5KM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OVyiWpqLR+xhEimNspfVvV1JVpsq7dme02Vmn/A7aeJTj2Y9S0ZHII62nq6GcJHO4
-         OrNjlI1+zQXWdS6zaw19bX9T+4Vie3PSt6yTZQscDkrcLlovRMIRZ9qf9+BW0chkoo
-         6WoNhk1pd2P3IRAOQstS7hsoYp0NLAtGhKet+lbA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 33/62] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
-Date:   Fri, 21 Aug 2020 12:13:54 -0400
-Message-Id: <20200821161423.347071-33-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161423.347071-1-sashal@kernel.org>
-References: <20200821161423.347071-1-sashal@kernel.org>
+        Fri, 21 Aug 2020 17:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgHUVuQ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 Aug 2020 17:50:16 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A3CC061573;
+        Fri, 21 Aug 2020 14:50:16 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id i10so1781223ybt.11;
+        Fri, 21 Aug 2020 14:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LCtDZbEXzC+Kn+f0fxyMM1jOnFnep3y18ErpLmPyWt4=;
+        b=T8qkn1gP+Rp85/WBW+E10QZI55mtY/lvclpr3P7fxqBrHSA7suC3XiloMsmuuWf/+m
+         HmDmMB04s32ENwcls/J6AbATRIcvsmO+7lr+2ePM9UbcWDZC0tR1yvN1ch++35SfNpqN
+         qV1Wx+XrikqB2RucXlQQro36UTEy8/13alnvL09oSLB1mp1Bnei89N9W7DWiwD6SQF5z
+         NKD0AA5Cb/2D2oaZ1K7mIIiGD4z4kPLKHMzWUxBdW9+vr+buKs1ySwQVfukV11vWRVv5
+         RrukKViMe3OkIWkbygbUP4X3ffqQBygwF0bZYkYHYoYESW/pmE0sAnHnnnaAXM0nHfNF
+         8t/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LCtDZbEXzC+Kn+f0fxyMM1jOnFnep3y18ErpLmPyWt4=;
+        b=VEmldfgKf4tdpxUyOhCwrQGBSmSX+sQ6g20MczEUldZci+vSlXQ6SNJshd61IFjyif
+         6YiaSTyX8wH9+Kd4SsnOtjfUpbETXtT61Hn5bDwtjB7amNQFb/G/BxFdBJtF0R/ssC/2
+         KNVJin++sohPxuwZBWTWwj8EdKzAIzzFypVCaf+UyjAZddQqItvN96xfXFfmpZg3emqk
+         1Thu0yDpc0h/MG9QaofCnXNt19dPdiYFFCy7GzoHaO7F4evSAQiuZi8n4iq3PTLTx87k
+         ykTItNkTuIWwKkvZxxEUBtBHljY4/7tAAWohUZRTwkNs4/PiMgGRs8ad0rdLpjJPf3y0
+         lP3Q==
+X-Gm-Message-State: AOAM531klb6ZjzL00vPj5jPubAIXYcnqPKcGmtT8aYm7bumghWBNiTek
+        HVCESD8WuE/vAV4sd73Tu9i4pL22bSYlSqenAr8=
+X-Google-Smtp-Source: ABdhPJxfazP3ESG4tMzcWn+ppdV1i2aqc1DNrqYNaLzJ3GbVy/tyCs1m/FpQa0NbRO17DXJ0YwXfaY18lWUIeijSrZs=
+X-Received: by 2002:a25:2ad3:: with SMTP id q202mr6235577ybq.27.1598046615439;
+ Fri, 21 Aug 2020 14:50:15 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200819224030.1615203-1-haoluo@google.com> <20200819224030.1615203-4-haoluo@google.com>
+ <d50a1530-9a9f-45b2-5aba-05fe4b895fbc@fb.com>
+In-Reply-To: <d50a1530-9a9f-45b2-5aba-05fe4b895fbc@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 21 Aug 2020 14:50:04 -0700
+Message-ID: <CAEf4BzZmLUcw4M16U6w-s2Zd6KbsuY4dzzkeEBx9CejetT5BwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/8] bpf: Introduce help function to validate
+ ksym's type.
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Hao Luo <haoluo@google.com>, Networking <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>
+On Thu, Aug 20, 2020 at 10:22 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 8/19/20 3:40 PM, Hao Luo wrote:
+> > For a ksym to be safely dereferenced and accessed, its type defined in
+> > bpf program should basically match its type defined in kernel. Implement
+> > a help function for a quick matching, which is used by libbpf when
+> > resolving the kernel btf_id of a ksym.
+> >
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+> >   tools/lib/bpf/btf.c | 171 ++++++++++++++++++++++++++++++++++++++++++++
+> >   tools/lib/bpf/btf.h |   2 +
+> >   2 files changed, 173 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index a3d259e614b0..2ff31f244d7a 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -1005,6 +1005,177 @@ int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
+> >       return 0;
+> >   }
+> >
+> > +/*
+> > + * Basic type check for ksym support. Only checks type kind and resolved size.
+> > + */
+> > +static inline
+> > +bool btf_ksym_equal_type(const struct btf *ba, __u32 type_a,
+> > +                      const struct btf *bb, __u32 type_b)
+>
+> "ba" and "bb" is not descriptive. Maybe "btf_a" or "btf_b"?
+> or even "btf1" or "btf2" since the number does not carry
+> extra meaning compared to letters.
+>
+> The same for below, may be t1, t2?
+>
+> > +{
+> > +     const struct btf_type *ta, *tb;
+> > +
+> > +     ta = btf__type_by_id(ba, type_a);
+> > +     tb = btf__type_by_id(bb, type_b);
+> > +
+> > +     /* compare type kind */
+> > +     if (btf_kind(ta) != btf_kind(tb))
+> > +             return false;
+> > +
+> > +     /* compare resolved type size */
+> > +     return btf__resolve_size(ba, type_a) == btf__resolve_size(bb, type_b);
+> > +}
+> > +
+> > +/*
+> > + * Match a ksym's type defined in bpf programs against its type encoded in
+> > + * kernel btf.
+> > + */
+> > +bool btf_ksym_type_match(const struct btf *ba, __u32 id_a,
+> > +                      const struct btf *bb, __u32 id_b)
+> > +{
 
-[ Upstream commit 3337bf41e0dd70b4064cdf60acdfcdc2d050066c ]
+[...]
 
-An extra count on ebb_state.stats.pmc_count[PMC_INDEX(pmc)] is being per-
-formed when count_pmc() is used to reset PMCs on a few selftests. This
-extra pmc_count can occasionally invalidate results, such as the ones from
-cycles_test shown hereafter. The ebb_check_count() failed with an above
-the upper limit error due to the extra value on ebb_state.stats.pmc_count.
+> > +                     }
+> > +             }
+>
+> I am wondering whether this is too strict and how this can co-work with
+> CO-RE. Forcing users to write almost identical structure definition to
+> the underlying kernel will not be user friendly and may not work cross
+> kernel versions even if the field user cares have not changed.
+>
+> Maybe we can relax the constraint here. You can look at existing
+> libbpf CO-RE code.
 
-Furthermore, this extra count is also indicated by extra PMC1 trace_log on
-the output of the cycle test (as well as on pmc56_overflow_test):
+Right. Hao, can you just re-use bpf_core_types_are_compat() instead?
+See if semantics makes sense, but I think it should. BPF CO-RE has
+been permissive in terms of struct size and few other type aspects,
+because it handles relocations so well. This approach allows to not
+have to exactly match all possible variations of some struct
+definition, which is a big problem with ever-changing kernel data
+structures.
 
-==========
-   ...
-   [21]: counter = 8
-   [22]: register SPRN_MMCR0 = 0x0000000080000080
-   [23]: register SPRN_PMC1  = 0x0000000080000004
-   [24]: counter = 9
-   [25]: register SPRN_MMCR0 = 0x0000000080000080
-   [26]: register SPRN_PMC1  = 0x0000000080000004
-   [27]: counter = 10
-   [28]: register SPRN_MMCR0 = 0x0000000080000080
-   [29]: register SPRN_PMC1  = 0x0000000080000004
->> [30]: register SPRN_PMC1  = 0x000000004000051e
-PMC1 count (0x280000546) above upper limit 0x2800003e8 (+0x15e)
-[FAIL] Test FAILED on line 52
-failure: cycles
-==========
+>
+> > +             break;
+> > +     }
 
-Signed-off-by: Desnes A. Nunes do Rosario <desnesn@linux.ibm.com>
-Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20200626164737.21943-1-desnesn@linux.ibm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c     | 2 --
- tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c      | 2 --
- .../selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c    | 2 --
- .../selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c     | 2 --
- tools/testing/selftests/powerpc/pmu/ebb/ebb.c              | 2 --
- .../selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c  | 2 --
- .../selftests/powerpc/pmu/ebb/lost_exception_test.c        | 1 -
- .../testing/selftests/powerpc/pmu/ebb/multi_counter_test.c | 7 -------
- .../selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c       | 2 --
- .../testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c | 2 --
- .../selftests/powerpc/pmu/ebb/pmc56_overflow_test.c        | 2 --
- 11 files changed, 26 deletions(-)
+[...]
 
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c b/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c
-index a2d7b0e3dca97..a26ac122c759f 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/back_to_back_ebbs_test.c
-@@ -91,8 +91,6 @@ int back_to_back_ebbs(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	event_close(&event);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c b/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c
-index bc893813483ee..bb9f587fa76e8 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/cycles_test.c
-@@ -42,8 +42,6 @@ int cycles(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	event_close(&event);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c
-index dcd351d203289..9ae795ce314e6 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_freeze_test.c
-@@ -99,8 +99,6 @@ int cycles_with_freeze(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	printf("EBBs while frozen %d\n", ebbs_while_frozen);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c
-index 94c99c12c0f23..4b45a2e70f62b 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/cycles_with_mmcr2_test.c
-@@ -71,8 +71,6 @@ int cycles_with_mmcr2(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	event_close(&event);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-index dfbc5c3ad52d7..21537d6eb6b7d 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-@@ -396,8 +396,6 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	event_close(&event);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c
-index ca2f7d729155b..b208bf6ad58d3 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb_on_willing_child_test.c
-@@ -38,8 +38,6 @@ static int victim_child(union pipe read_pipe, union pipe write_pipe)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	FAIL_IF(ebb_state.stats.ebb_count == 0);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c b/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c
-index ac3e6e182614a..ba2681a12cc7b 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/lost_exception_test.c
-@@ -75,7 +75,6 @@ static int test_body(void)
- 	ebb_freeze_pmcs();
- 	ebb_global_disable();
- 
--	count_pmc(4, sample_period);
- 	mtspr(SPRN_PMC4, 0xdead);
- 
- 	dump_summary_ebb_state();
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c b/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c
-index b8242e9d97d2d..791d37ba327b5 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/multi_counter_test.c
-@@ -70,13 +70,6 @@ int multi_counter(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--	count_pmc(2, sample_period);
--	count_pmc(3, sample_period);
--	count_pmc(4, sample_period);
--	count_pmc(5, sample_period);
--	count_pmc(6, sample_period);
--
- 	dump_ebb_state();
- 
- 	for (i = 0; i < 6; i++)
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c b/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c
-index a05c0e18ded63..9b0f70d597020 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/multi_ebb_procs_test.c
-@@ -61,8 +61,6 @@ static int cycles_child(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_summary_ebb_state();
- 
- 	event_close(&event);
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c b/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c
-index 153ebc92234fd..2904c741e04e5 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/pmae_handling_test.c
-@@ -82,8 +82,6 @@ static int test_body(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(1, sample_period);
--
- 	dump_ebb_state();
- 
- 	if (mmcr0_mismatch)
-diff --git a/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c b/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c
-index eadad75ed7e6f..b29f8ba22d1e6 100644
---- a/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c
-+++ b/tools/testing/selftests/powerpc/pmu/ebb/pmc56_overflow_test.c
-@@ -76,8 +76,6 @@ int pmc56_overflow(void)
- 	ebb_global_disable();
- 	ebb_freeze_pmcs();
- 
--	count_pmc(2, sample_period);
--
- 	dump_ebb_state();
- 
- 	printf("PMC5/6 overflow %d\n", pmc56_overflowed);
--- 
-2.25.1
+> > +
+> >   struct btf_ext_sec_setup_param {
+> >       __u32 off;
+> >       __u32 len;
+> > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> > index 91f0ad0e0325..5ef220e52485 100644
+> > --- a/tools/lib/bpf/btf.h
+> > +++ b/tools/lib/bpf/btf.h
+> > @@ -52,6 +52,8 @@ LIBBPF_API int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
+> >                                   __u32 expected_key_size,
+> >                                   __u32 expected_value_size,
+> >                                   __u32 *key_type_id, __u32 *value_type_id);
+> > +LIBBPF_API bool btf_ksym_type_match(const struct btf *ba, __u32 id_a,
+> > +                                 const struct btf *bb, __u32 id_b);
+> >
+> >   LIBBPF_API struct btf_ext *btf_ext__new(__u8 *data, __u32 size);
+> >   LIBBPF_API void btf_ext__free(struct btf_ext *btf_ext);
+>
+> The new API function should be added to libbpf.map.
 
+My question is why does this even have to be a public API?
