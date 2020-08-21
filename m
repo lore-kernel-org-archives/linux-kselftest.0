@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC80C433DF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 16:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1325DC433DF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 16:34:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02C442063A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 16:20:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E31002086A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Aug 2020 16:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598026856;
-	bh=yKqhpIt2E7otdBYwhnTyQ4kLewxec0P6sMq8BMGFrfk=;
+	s=default; t=1598027694;
+	bh=7Uo2pJuwCbbTqy/tnaGNXjPYUXUGLFNxprM4K3WLQlQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cp2945kCnc8YAiu8yTfN+M4pcvSbvjH4kbEWflI6Qj1de4e7kPvHlwsQDMQsC6PDI
-	 TAiYcEYz45h6v7753n/ONhIMruAL969waxTHLXFgt5D3nM/zop3RiHoTNm+9x3QIUx
-	 PSVgRp9wLsOAP4p+IOGYmqbX98c8LaMDRtvfRsDM=
+	b=l0T0WB9FyRbkKWJvopgWO85tvVhoiPGETuhJdbbKi/cT+ASSBkZ4sZsvsIHNJn1S1
+	 uhbc8CrKb/7ZGkiBGDHAxAJgCAjoFMGZmbZ1juZbJjGaUEcHYWdC0CprcDMygp8R1t
+	 RreuhIru2gBaFv/YSedSKbGCnpe+VbZ8MjrlIybk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728394AbgHUQUm (ORCPT
+        id S1728543AbgHUQdJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Aug 2020 12:20:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50002 "EHLO mail.kernel.org"
+        Fri, 21 Aug 2020 12:33:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728356AbgHUQUH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:20:07 -0400
+        id S1728450AbgHUQV0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 21 Aug 2020 12:21:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21A7022E03;
-        Fri, 21 Aug 2020 16:19:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C9A4120656;
+        Fri, 21 Aug 2020 16:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598026760;
-        bh=yKqhpIt2E7otdBYwhnTyQ4kLewxec0P6sMq8BMGFrfk=;
+        s=default; t=1598026830;
+        bh=7Uo2pJuwCbbTqy/tnaGNXjPYUXUGLFNxprM4K3WLQlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Wr50MoJZjs7rxRdcanhI7oiPNhKIw8m3838ij528kwN8x2U+IoSKWsbYRMm1sscp
-         +qcLiOM7FlPWC7ueXRabZ4ricjuWq3S74fxezSfytR3s8pgVydmkzpCsaTf0K+x2Wl
-         bHHoNRXJf3y0NjlaXaJMR4KH0plW0Wk/6ybgLGN8=
+        b=h3rgCuAF+FLQrzTYYQy9/XyHDmkCE5RoJnpZeKHVTZ8E8YcpIG8mW+4Fy4JXeX8Z1
+         l27OUKekRu3+PJ3tXZTSfrwQ/IJ/ted/YDLIlXA1I98CS6rXs7Sj0nZMpP3tt5UCaK
+         T7s8jI+65p9+gVrGQXWpO+gfsW+SfsUwIYs7YTY8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
@@ -46,12 +46,12 @@ Cc:     "Desnes A. Nunes do Rosario" <desnesn@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/30] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
-Date:   Fri, 21 Aug 2020 12:18:44 -0400
-Message-Id: <20200821161857.348955-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 12/22] selftests/powerpc: Purge extra count_pmc() calls of ebb selftests
+Date:   Fri, 21 Aug 2020 12:20:04 -0400
+Message-Id: <20200821162014.349506-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200821161857.348955-1-sashal@kernel.org>
-References: <20200821161857.348955-1-sashal@kernel.org>
+In-Reply-To: <20200821162014.349506-1-sashal@kernel.org>
+References: <20200821162014.349506-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -163,10 +163,10 @@ index c0faba520b35c..b9b30f974b5ea 100644
  
  	event_close(&event);
 diff --git a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-index 46681fec549b8..2694ae161a84a 100644
+index 9729d9f902187..4154498bc5dc5 100644
 --- a/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
 +++ b/tools/testing/selftests/powerpc/pmu/ebb/ebb.c
-@@ -396,8 +396,6 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
+@@ -398,8 +398,6 @@ int ebb_child(union pipe read_pipe, union pipe write_pipe)
  	ebb_global_disable();
  	ebb_freeze_pmcs();
  
