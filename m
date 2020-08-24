@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76377C433DF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Aug 2020 16:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21166C433E1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Aug 2020 17:02:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B38D22D6F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Aug 2020 16:37:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7B752074D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Aug 2020 17:02:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598287079;
-	bh=elLIwk+vXIz3X/dNZdhcxZlWgo/Xj0p8DfSj9gycQNg=;
+	s=default; t=1598288575;
+	bh=suhF0qwwSU0yECNHcaKgTLO11nlKyMh0NmEMGkWs6+U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=0AvQKXCPg2CIZbSZTtujL09jP31AWboIkbobWFYnfCL5UnaoAg9XjmJ7igcnI+R2e
-	 OmCO1aLrA+Gas/MIHnt8aelo3fz3NXYwMe2gnP79nvlVQotnIyjBC6qEWUGXYGXyTO
-	 /7DLVx1yZHtMbJ6nv20nAGoWW8ISDP6ZSyMgTvjY=
+	b=W0xFDcgDRpVCLzHA9u9fwgTHAREOEWT3VkonFimjevMMuXZ/AkIzDOfLrnphQt9A3
+	 eyK3YFcdqAAi9mXuY+EdPhLxqm+qDaK4eHNUEugOilp9edr80tv++KL9ZiVJijg0pX
+	 d2GAs/o/xmMR5F0W+Q/UHO1NwKtUpm5/q4fie+xI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728384AbgHXQhr (ORCPT
+        id S1726798AbgHXRCy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Aug 2020 12:37:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41070 "EHLO mail.kernel.org"
+        Mon, 24 Aug 2020 13:02:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728044AbgHXQgx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:36:53 -0400
+        id S1728481AbgHXQii (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:38:38 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C0AA522B49;
-        Mon, 24 Aug 2020 16:36:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C5BE022D70;
+        Mon, 24 Aug 2020 16:38:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286988;
-        bh=elLIwk+vXIz3X/dNZdhcxZlWgo/Xj0p8DfSj9gycQNg=;
+        s=default; t=1598287102;
+        bh=suhF0qwwSU0yECNHcaKgTLO11nlKyMh0NmEMGkWs6+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yCWE7NgoqdSuzd+hE9k0yfjNDrsSkvYlqJaZpwuWXOralpziX4+Pw3xzIfTfZMLPV
-         KILJ1ucjxj+ikjztHMvVGhftJJpqICCqcopL7Sbk1bUxNlxgM7Rb+C1qxXAxHa376Q
-         OTDoCVxuuOBCNdJXfsUveCayvZrNtc4Zsl0rkumE=
+        b=dX8jLqaCNJBKjhDYgGwXGWVEG8+ahICXV+iXVorxpb9nm+ifSoO+Aydw6W0QkAdCU
+         iE/ro1uJpzGKi0mh8jeCEVEmNfD02N49/77+Qjyd0LcG8rLMvTGBUsTJrQmyjBvBgQ
+         RxqY88GyxAfSmRoe8khZzSJuXgpdcVlxrgqiNKFY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 61/63] bpf: selftests: global_funcs: Check err_str before strstr
-Date:   Mon, 24 Aug 2020 12:35:01 -0400
-Message-Id: <20200824163504.605538-61-sashal@kernel.org>
+Cc:     David Ahern <dsahern@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 23/38] selftests: disable rp_filter for icmp_redirect.sh
+Date:   Mon, 24 Aug 2020 12:37:35 -0400
+Message-Id: <20200824163751.606577-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163504.605538-1-sashal@kernel.org>
-References: <20200824163504.605538-1-sashal@kernel.org>
+In-Reply-To: <20200824163751.606577-1-sashal@kernel.org>
+References: <20200824163751.606577-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,42 +60,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+From: David Ahern <dsahern@kernel.org>
 
-[ Upstream commit c210773d6c6f595f5922d56b7391fe343bc7310e ]
+[ Upstream commit bcf7ddb0186d366f761f86196b480ea6dd2dc18c ]
 
-The error path in libbpf.c:load_program() has calls to pr_warn()
-which ends up for global_funcs tests to
-test_global_funcs.c:libbpf_debug_print().
+h1 is initially configured to reach h2 via r1 rather than the
+more direct path through r2. If rp_filter is set and inherited
+for r2, forwarding fails since the source address of h1 is
+reachable from eth0 vs the packet coming to it via r1 and eth1.
+Since rp_filter setting affects the test, explicitly reset it.
 
-For the tests with no struct test_def::err_str initialized with a
-string, it causes call of strstr() with NULL as the second argument
-and it segfaults.
-
-Fix it by calling strstr() only for non-NULL err_str.
-
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20200820115843.39454-1-yauheni.kaliuta@redhat.com
+Signed-off-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/test_global_funcs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/icmp_redirect.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-index 25b068591e9a4..193002b14d7f6 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-@@ -19,7 +19,7 @@ static int libbpf_debug_print(enum libbpf_print_level level,
- 	log_buf = va_arg(args, char *);
- 	if (!log_buf)
- 		goto out;
--	if (strstr(log_buf, err_str) == 0)
-+	if (err_str && strstr(log_buf, err_str) == 0)
- 		found = true;
- out:
- 	printf(format, log_buf);
+diff --git a/tools/testing/selftests/net/icmp_redirect.sh b/tools/testing/selftests/net/icmp_redirect.sh
+index 18c5de53558af..bf361f30d6ef9 100755
+--- a/tools/testing/selftests/net/icmp_redirect.sh
++++ b/tools/testing/selftests/net/icmp_redirect.sh
+@@ -180,6 +180,8 @@ setup()
+ 			;;
+ 		r[12]) ip netns exec $ns sysctl -q -w net.ipv4.ip_forward=1
+ 		       ip netns exec $ns sysctl -q -w net.ipv4.conf.all.send_redirects=1
++		       ip netns exec $ns sysctl -q -w net.ipv4.conf.default.rp_filter=0
++		       ip netns exec $ns sysctl -q -w net.ipv4.conf.all.rp_filter=0
+ 
+ 		       ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=1
+ 		       ip netns exec $ns sysctl -q -w net.ipv6.route.mtu_expires=10
 -- 
 2.25.1
 
