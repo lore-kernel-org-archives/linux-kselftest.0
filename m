@@ -1,160 +1,98 @@
-Return-Path: <SRS0=s2pX=CC=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=29CO=CD=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FD1C433E5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Aug 2020 17:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 519EBC433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Aug 2020 00:05:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1787520866
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Aug 2020 17:27:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598290066;
-	bh=TYTTdCegp15oLYrWq/F7PP5Ab8BnxcWk62tjoSVlprc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=MhE/E2G8D/j5570V/OMnkfXTu2fh5w9dxiNqNtyT+Vq3QGu8Lmo7M91vybcQX8unG
-	 RkTVvQyo8TBoPLCZbv+lIgeJ7FN6OTCDHSHozUuYsZSsR03VlZO1X6r6sgd2eDGCEo
-	 q92aB+NWzTkyYn2l0DIORw666vzyjLGvUZWSslY4=
+	by mail.kernel.org (Postfix) with ESMTP id 2BB7A206BE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Aug 2020 00:05:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QApUvtXG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbgHXR1o (ORCPT
+        id S1726828AbgHYAFj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Aug 2020 13:27:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728253AbgHXQfd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:35:33 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C295F22CB3;
-        Mon, 24 Aug 2020 16:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286932;
-        bh=TYTTdCegp15oLYrWq/F7PP5Ab8BnxcWk62tjoSVlprc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fvM2waNELlc+JzCWDkFWEcIekDarNnw3hnpLX4gTSi0P8k7qWbYrD7h363vM4w0wy
-         XmBlHDlKz7EchMWE2Wd+1IfJKbLLrLOD5zBHlKpFg/PEZrixrtCIHtFd5cMSRJb/yI
-         TPpoS1S5N/pu1DguqSot1IPaAEEDfV5O0etr+0n0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jianlin Lv <Jianlin.Lv@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 21/63] selftests/bpf: Fix segmentation fault in test_progs
-Date:   Mon, 24 Aug 2020 12:34:21 -0400
-Message-Id: <20200824163504.605538-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163504.605538-1-sashal@kernel.org>
-References: <20200824163504.605538-1-sashal@kernel.org>
+        Mon, 24 Aug 2020 20:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgHYAFg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Aug 2020 20:05:36 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0502C061755
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2020 17:05:35 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id d11so13958386ejt.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2020 17:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qSJ3hn6SwlvnIDydC8UlMXM4TqY2oPyCDRxRi3ibWKE=;
+        b=QApUvtXGB19mVLe2YJN+0fc/ADwHcSDUAddvOk2oAlHGx94SRMwAiMJTJvczmY5/LJ
+         5H8+z7s7ZKd4wBvGD40WowzmVgvVsHC7ykBwWbntxs+LCdWQ0VlGq5aJy0tz0qdKFdin
+         uqbcvQg3gw5dEsFtO/tv+zUPbf76fN0Xd+WIdO2tZWQV+cPBuKHwpaS0iqoIazyjb0WC
+         0VZo8VziYEC6cUStvp9KOD1OLo0QqjVFLoqT/QcWYj/HyXpaO7wUMO/DhvkzYkOkf+Q8
+         50J2vA7dD1LC81Uhbyha05eeIKaAFh7rlFdSCBn2tV5rFA3cEm13F4JrxvRfM0oeesYi
+         BmQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qSJ3hn6SwlvnIDydC8UlMXM4TqY2oPyCDRxRi3ibWKE=;
+        b=cYgYnQ2OdJgfBRHfAVVAEambbk/ToEr/wZGwMcshHcNm6wzGiFpicakwWnN/fmu0LK
+         fGbL7KFLgwou6fk+/N+2mEKjROIKym9y6FIloWx9xubyveujowhvSD1zz6PfQ/FhnRcc
+         S1t/TCD9pR4KlzOBkildgOeixg9Euov/321u44kTIUXBkUotZWKO29iUaT4OONw0SGB3
+         MyZiVRGPPwXnHMbgogKUZTGC9NlgR9VoQZ+LjLc3rPgbc4lrvsnettmR5bZ5raQ5yia+
+         /sNCdbj7SyVAcN7aQIBw72yWU5zrBjQCWjI9mnwb49H/wlfgbMAbhHPNDRhxgCc83DVL
+         4ysQ==
+X-Gm-Message-State: AOAM531/e3JiFZSL2x/PJNBMmH8gbh3DtFG0N3S3JvxjiffJm58N7Yij
+        dzyWjz1CG8nttjNECT62su5OXE127Tm33JwPiqcjmQ==
+X-Google-Smtp-Source: ABdhPJwq7yY0fgxViANrAk7HQzEo+kQDYpeeuJOcuEDl5RbeTE9wZIRWTSGvgD/2fC4+y7BPhunkS6W3JpETlvNIrSg=
+X-Received: by 2002:a17:906:a085:: with SMTP id q5mr7825181ejy.136.1598313933985;
+ Mon, 24 Aug 2020 17:05:33 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200819224030.1615203-1-haoluo@google.com> <20200819224030.1615203-2-haoluo@google.com>
+ <35519fec-754c-0a17-4f01-9d6e39a8a7e8@fb.com>
+In-Reply-To: <35519fec-754c-0a17-4f01-9d6e39a8a7e8@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 24 Aug 2020 17:05:22 -0700
+Message-ID: <CA+khW7iGs=tN2FT=rEiPZMQ_Z9=sqhRe4dY7dKbVoViwX666BQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/8] bpf: Introduce pseudo_btf_id
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jianlin Lv <Jianlin.Lv@arm.com>
+Yonghong,
 
-[ Upstream commit 0390c429dbed4068bd2cd8dded937d9a5ec24cd2 ]
+An update on this thread. I successfully reproduced this issue on a
+8.2.0 gcc compiler, It looks like gcc 4.9 did not have this issue. I
+was also using clang which did not show this bug.
 
-test_progs reports the segmentation fault as below:
+It seems having a DW_AT_specification that refers to another
+DW_TAG_variable isn't handled in pahole. I have a (maybe hacky) pahole
+patch as fix and let me clean it up and post for review soon.
 
-  $ sudo ./test_progs -t mmap --verbose
-  test_mmap:PASS:skel_open_and_load 0 nsec
-  [...]
-  test_mmap:PASS:adv_mmap1 0 nsec
-  test_mmap:PASS:adv_mmap2 0 nsec
-  test_mmap:PASS:adv_mmap3 0 nsec
-  test_mmap:PASS:adv_mmap4 0 nsec
-  Segmentation fault
-
-This issue was triggered because mmap() and munmap() used inconsistent
-length parameters; mmap() creates a new mapping of 3 * page_size, but the
-length parameter set in the subsequent re-map and munmap() functions is
-4 * page_size; this leads to the destruction of the process space.
-
-To fix this issue, first create 4 pages of anonymous mapping, then do all
-the mmap() with MAP_FIXED.
-
-Another issue is that when unmap the second page fails, the length
-parameter to delete tmp1 mappings should be 4 * page_size.
-
-Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Link: https://lore.kernel.org/bpf/20200810153940.125508-1-Jianlin.Lv@arm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/mmap.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/mmap.c b/tools/testing/selftests/bpf/prog_tests/mmap.c
-index 43d0b5578f461..9c3c5c0f068fb 100644
---- a/tools/testing/selftests/bpf/prog_tests/mmap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mmap.c
-@@ -21,7 +21,7 @@ void test_mmap(void)
- 	const long page_size = sysconf(_SC_PAGE_SIZE);
- 	int err, duration = 0, i, data_map_fd, data_map_id, tmp_fd, rdmap_fd;
- 	struct bpf_map *data_map, *bss_map;
--	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp1, *tmp2;
-+	void *bss_mmaped = NULL, *map_mmaped = NULL, *tmp0, *tmp1, *tmp2;
- 	struct test_mmap__bss *bss_data;
- 	struct bpf_map_info map_info;
- 	__u32 map_info_sz = sizeof(map_info);
-@@ -183,16 +183,23 @@ void test_mmap(void)
- 
- 	/* check some more advanced mmap() manipulations */
- 
-+	tmp0 = mmap(NULL, 4 * page_size, PROT_READ, MAP_SHARED | MAP_ANONYMOUS,
-+			  -1, 0);
-+	if (CHECK(tmp0 == MAP_FAILED, "adv_mmap0", "errno %d\n", errno))
-+		goto cleanup;
-+
- 	/* map all but last page: pages 1-3 mapped */
--	tmp1 = mmap(NULL, 3 * page_size, PROT_READ, MAP_SHARED,
-+	tmp1 = mmap(tmp0, 3 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
- 			  data_map_fd, 0);
--	if (CHECK(tmp1 == MAP_FAILED, "adv_mmap1", "errno %d\n", errno))
-+	if (CHECK(tmp0 != tmp1, "adv_mmap1", "tmp0: %p, tmp1: %p\n", tmp0, tmp1)) {
-+		munmap(tmp0, 4 * page_size);
- 		goto cleanup;
-+	}
- 
- 	/* unmap second page: pages 1, 3 mapped */
- 	err = munmap(tmp1 + page_size, page_size);
- 	if (CHECK(err, "adv_mmap2", "errno %d\n", errno)) {
--		munmap(tmp1, map_sz);
-+		munmap(tmp1, 4 * page_size);
- 		goto cleanup;
- 	}
- 
-@@ -201,7 +208,7 @@ void test_mmap(void)
- 		    MAP_SHARED | MAP_FIXED, data_map_fd, 0);
- 	if (CHECK(tmp2 == MAP_FAILED, "adv_mmap3", "errno %d\n", errno)) {
- 		munmap(tmp1, page_size);
--		munmap(tmp1 + 2*page_size, page_size);
-+		munmap(tmp1 + 2*page_size, 2 * page_size);
- 		goto cleanup;
- 	}
- 	CHECK(tmp1 + page_size != tmp2, "adv_mmap4",
-@@ -211,7 +218,7 @@ void test_mmap(void)
- 	tmp2 = mmap(tmp1, 4 * page_size, PROT_READ, MAP_SHARED | MAP_FIXED,
- 		    data_map_fd, 0);
- 	if (CHECK(tmp2 == MAP_FAILED, "adv_mmap5", "errno %d\n", errno)) {
--		munmap(tmp1, 3 * page_size); /* unmap page 1 */
-+		munmap(tmp1, 4 * page_size); /* unmap page 1 */
- 		goto cleanup;
- 	}
- 	CHECK(tmp1 != tmp2, "adv_mmap6", "tmp1: %p, tmp2: %p\n", tmp1, tmp2);
--- 
-2.25.1
-
+Hao
