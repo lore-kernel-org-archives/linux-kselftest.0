@@ -2,92 +2,70 @@ Return-Path: <SRS0=R99N=CE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74B59C433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Aug 2020 14:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 440AAC433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Aug 2020 16:14:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5797521741
-	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Aug 2020 14:45:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CA932075E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Aug 2020 16:14:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726904AbgHZOp3 (ORCPT
+        id S1727030AbgHZQOE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 26 Aug 2020 10:45:29 -0400
-Received: from smtprelay0086.hostedemail.com ([216.40.44.86]:49674 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726700AbgHZOp2 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Aug 2020 10:45:28 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 325391822326E;
-        Wed, 26 Aug 2020 14:45:27 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: owl38_5e0175327065
-X-Filterd-Recvd-Size: 2293
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf16.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 26 Aug 2020 14:45:25 +0000 (UTC)
-Message-ID: <7b78e43a01865ec0c296ad9acad0616a6c2c3b86.camel@perches.com>
-Subject: Re: [PATCH 29/29] tools: Avoid comma separated statements
-From:   Joe Perches <joe@perches.com>
-To:     Thomas Renninger <trenn@suse.com>,
-        Jiri Kosina <trivial@kernel.org>, linux-kernel@vger.kernel.org
+        Wed, 26 Aug 2020 12:14:04 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50782 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727814AbgHZQNd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Aug 2020 12:13:33 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 0CD5FB6FA;
+        Wed, 26 Aug 2020 16:14:03 +0000 (UTC)
+From:   Thomas Renninger <trenn@suse.com>
+To:     Jiri Kosina <trivial@kernel.org>, linux-kernel@vger.kernel.org,
+        Joe Perches <joe@perches.com>
 Cc:     Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Date:   Wed, 26 Aug 2020 07:45:24 -0700
-In-Reply-To: <6011591.XMClsHuqKX@c100>
-References: <cover.1598331148.git.joe@perches.com>
-         <52b68acfeb441b483de188f7e100600291f8c3ec.1598331149.git.joe@perches.com>
-         <6011591.XMClsHuqKX@c100>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+Subject: Re: [PATCH 29/29] tools: Avoid comma separated statements
+Date:   Wed, 26 Aug 2020 18:13:30 +0200
+Message-ID: <1696974.unB1bf7olB@c100>
+In-Reply-To: <7b78e43a01865ec0c296ad9acad0616a6c2c3b86.camel@perches.com>
+References: <cover.1598331148.git.joe@perches.com> <6011591.XMClsHuqKX@c100> <7b78e43a01865ec0c296ad9acad0616a6c2c3b86.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2020-08-26 at 11:30 +0200, Thomas Renninger wrote:
-> Hi,
-> 
-> getting rid of lines with multiple instructions, separated by comma is
-> certainly a good idea.
-> One nit pick, though:
-> 
-> Am Dienstag, 25. August 2020, 06:56:26 CEST schrieb Joe Perches:
-> > Use semicolons and braces.
+Am Mittwoch, 26. August 2020, 16:45:24 CEST schrieb Joe Perches:
+> On Wed, 2020-08-26 at 11:30 +0200, Thomas Renninger wrote:
+> > Hi,
 > > 
-> > Signed-off-by: Joe Perches <joe@perches.com>
-> > ---
-[]
-> I can remember patches being rejected with one line statements in a condition,
-> surounded by braces.
-> I just read up Documentation/process/coding-style.rst, to be sure this still is up-to-date.
-> It's not a must, but line 180 says:
-> "Do not unnecessarily use braces where a single statement will do."
 
-Read the block immediately below that too:
-
-"This does not apply if only one branch of a conditional statement is a
-single statement; in the latter case use braces in both branches:"
-
-> I haven't reviewed every line, but I expect you only split up comma separated instructions
-> into separate lines and added braces?
-
-I do not.
-
-While there was a defect using this style though in another patch,
-this is a style only change.
-
-> Afaik there isn't a specific tag, but having:
-> cleanup only: No functional change
+> Read the block immediately below that too:
 > 
-> in the changelog would be nice for people looking for fixes to backport.
+> "This does not apply if only one branch of a conditional statement is a
+> single statement; in the latter case use braces in both branches:"
 
-This is not a fix, so it's not for backporting.
+Then +1 from here.
+
+> > Afaik there isn't a specific tag, but having:
+> > cleanup only: No functional change
+> > 
+> > in the changelog would be nice for people looking for fixes to backport.
+> 
+> This is not a fix, so it's not for backporting.
+
+Mentioning that in the changelog explicitly or even in the title - cleanup 
+only
+is nice imho, but should definitely not be the reason for re-posting.
+
+Thanks for doing this,
+
+   Thomas
 
 
