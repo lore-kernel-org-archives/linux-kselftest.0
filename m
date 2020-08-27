@@ -6,26 +6,26 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38BBEC433E1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Aug 2020 20:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AB36C433E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Aug 2020 20:10:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07E2D20737
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Aug 2020 20:08:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29A4320737
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Aug 2020 20:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbgH0UIJ (ORCPT
+        id S1726400AbgH0UKR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Aug 2020 16:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        Thu, 27 Aug 2020 16:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726266AbgH0UIJ (ORCPT
+        with ESMTP id S1726321AbgH0UKQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Aug 2020 16:08:09 -0400
+        Thu, 27 Aug 2020 16:10:16 -0400
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7EC061264;
-        Thu, 27 Aug 2020 13:08:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13B4C061264;
+        Thu, 27 Aug 2020 13:10:16 -0700 (PDT)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kBOBl-005k79-Px; Thu, 27 Aug 2020 20:08:01 +0000
-Date:   Thu, 27 Aug 2020 21:08:01 +0100
+        id 1kBODv-005kB0-12; Thu, 27 Aug 2020 20:10:15 +0000
+Date:   Thu, 27 Aug 2020 21:10:15 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Ross Zwisler <zwisler@chromium.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -43,50 +43,54 @@ Cc:     linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Ross Zwisler <zwisler@google.com>
 Subject: Re: [PATCH v9 1/2] Add a "nosymfollow" mount option.
-Message-ID: <20200827200801.GB1236603@ZenIV.linux.org.uk>
+Message-ID: <20200827201015.GC1236603@ZenIV.linux.org.uk>
 References: <20200827170947.429611-1-zwisler@google.com>
+ <20200827200801.GB1236603@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200827170947.429611-1-zwisler@google.com>
+In-Reply-To: <20200827200801.GB1236603@ZenIV.linux.org.uk>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 11:09:46AM -0600, Ross Zwisler wrote:
-> From: Mattias Nissler <mnissler@chromium.org>
+On Thu, Aug 27, 2020 at 09:08:01PM +0100, Al Viro wrote:
+> On Thu, Aug 27, 2020 at 11:09:46AM -0600, Ross Zwisler wrote:
+> > From: Mattias Nissler <mnissler@chromium.org>
+> > 
+> > For mounts that have the new "nosymfollow" option, don't follow symlinks
+> > when resolving paths. The new option is similar in spirit to the
+> > existing "nodev", "noexec", and "nosuid" options, as well as to the
+> > LOOKUP_NO_SYMLINKS resolve flag in the openat2(2) syscall. Various BSD
+> > variants have been supporting the "nosymfollow" mount option for a long
+> > time with equivalent implementations.
+> > 
+> > Note that symlinks may still be created on file systems mounted with
+> > the "nosymfollow" option present. readlink() remains functional, so
+> > user space code that is aware of symlinks can still choose to follow
+> > them explicitly.
+> > 
+> > Setting the "nosymfollow" mount option helps prevent privileged
+> > writers from modifying files unintentionally in case there is an
+> > unexpected link along the accessed path. The "nosymfollow" option is
+> > thus useful as a defensive measure for systems that need to deal with
+> > untrusted file systems in privileged contexts.
+> > 
+> > More information on the history and motivation for this patch can be
+> > found here:
+> > 
+> > https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/hardening-against-malicious-stateful-data#TOC-Restricting-symlink-traversal
+> > 
+> > Signed-off-by: Mattias Nissler <mnissler@chromium.org>
+> > Signed-off-by: Ross Zwisler <zwisler@google.com>
+> > Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
+> > ---
+> > Changes since v8 [1]:
+> >  * Look for MNT_NOSYMFOLLOW in link->mnt->mnt_flags so we are testing
+> >    the link itself rather than the directory holding the link. (Al Viro)
+> >  * Rebased onto v5.9-rc2.
 > 
-> For mounts that have the new "nosymfollow" option, don't follow symlinks
-> when resolving paths. The new option is similar in spirit to the
-> existing "nodev", "noexec", and "nosuid" options, as well as to the
-> LOOKUP_NO_SYMLINKS resolve flag in the openat2(2) syscall. Various BSD
-> variants have been supporting the "nosymfollow" mount option for a long
-> time with equivalent implementations.
-> 
-> Note that symlinks may still be created on file systems mounted with
-> the "nosymfollow" option present. readlink() remains functional, so
-> user space code that is aware of symlinks can still choose to follow
-> them explicitly.
-> 
-> Setting the "nosymfollow" mount option helps prevent privileged
-> writers from modifying files unintentionally in case there is an
-> unexpected link along the accessed path. The "nosymfollow" option is
-> thus useful as a defensive measure for systems that need to deal with
-> untrusted file systems in privileged contexts.
-> 
-> More information on the history and motivation for this patch can be
-> found here:
-> 
-> https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/hardening-against-malicious-stateful-data#TOC-Restricting-symlink-traversal
-> 
-> Signed-off-by: Mattias Nissler <mnissler@chromium.org>
-> Signed-off-by: Ross Zwisler <zwisler@google.com>
-> Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
-> ---
-> Changes since v8 [1]:
->  * Look for MNT_NOSYMFOLLOW in link->mnt->mnt_flags so we are testing
->    the link itself rather than the directory holding the link. (Al Viro)
->  * Rebased onto v5.9-rc2.
+> AFAICS, it applies clean to -rc1; what was the rebase about?
 
-AFAICS, it applies clean to -rc1; what was the rebase about?
+Applied (to -rc1) and pushed
