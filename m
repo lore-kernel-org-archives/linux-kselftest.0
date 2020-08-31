@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8785C433E2
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 11:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23F15C433E2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 11:15:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 908132068E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 11:15:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0335F2098B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 11:15:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbgHaLKr (ORCPT
+        id S1726106AbgHaLPi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Aug 2020 07:10:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:56636 "EHLO foss.arm.com"
+        Mon, 31 Aug 2020 07:15:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:56602 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726523AbgHaLFe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 07:05:34 -0400
+        id S1726503AbgHaLFV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 31 Aug 2020 07:05:21 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4129B12FC;
-        Mon, 31 Aug 2020 04:05:29 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4748101E;
+        Mon, 31 Aug 2020 04:05:20 -0700 (PDT)
 Received: from e124572.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D10293F71F;
-        Mon, 31 Aug 2020 04:05:26 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FA233F71F;
+        Mon, 31 Aug 2020 04:05:17 -0700 (PDT)
 From:   Boyan Karatotev <boyan.karatotev@arm.com>
 To:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -34,9 +34,9 @@ Cc:     vincenzo.frascino@arm.com, amit.kachhap@arm.com,
         Shuah Khan <shuah@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
-Subject: [PATCH v2 4/4] kselftests/arm64: add PAuth tests for single threaded consistency and key uniqueness
-Date:   Mon, 31 Aug 2020 12:04:50 +0100
-Message-Id: <20200831110450.30188-5-boyan.karatotev@arm.com>
+Subject: [PATCH v2 1/4] kselftests/arm64: add a basic Pointer Authentication test
+Date:   Mon, 31 Aug 2020 12:04:47 +0100
+Message-Id: <20200831110450.30188-2-boyan.karatotev@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200831110450.30188-1-boyan.karatotev@arm.com>
 References: <20200831110450.30188-1-boyan.karatotev@arm.com>
@@ -45,10 +45,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PAuth adds 5 different keys that can be used to sign addresses.
+PAuth signs and verifies return addresses on the stack. It does so by
+inserting a Pointer Authentication code (PAC) into some of the unused top
+bits of an address. This is achieved by adding paciasp/autiasp instructions
+at the beginning and end of a function.
 
-Add a test that verifies that the kernel initializes them uniquely and
-preserves them across context switches.
+This feature is partially backwards compatible with earlier versions of the
+ARM architecture. To coerce the compiler into emitting fully backwards
+compatible code the main file is compiled to target an earlier ARM version.
+This allows the tests to check for the feature and print meaningful error
+messages instead of crashing.
+
+Add a test to verify that corrupting the return address results in a
+SIGSEGV on return.
 
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
@@ -57,182 +66,170 @@ Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
 Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
 Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
 ---
- tools/testing/selftests/arm64/pauth/pac.c | 118 ++++++++++++++++++++++
- 1 file changed, 118 insertions(+)
+ tools/testing/selftests/arm64/Makefile        |  2 +-
+ .../testing/selftests/arm64/pauth/.gitignore  |  1 +
+ tools/testing/selftests/arm64/pauth/Makefile  | 32 +++++++++++++++++
+ tools/testing/selftests/arm64/pauth/helper.h  |  9 +++++
+ tools/testing/selftests/arm64/pauth/pac.c     | 31 ++++++++++++++++
+ .../selftests/arm64/pauth/pac_corruptor.S     | 35 +++++++++++++++++++
+ 6 files changed, 109 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/pauth/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/pauth/Makefile
+ create mode 100644 tools/testing/selftests/arm64/pauth/helper.h
+ create mode 100644 tools/testing/selftests/arm64/pauth/pac.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/pac_corruptor.S
 
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index 93b567d23c8b..525506fd97b9 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -4,7 +4,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+
+ ifneq (,$(filter $(ARCH),aarch64 arm64))
+-ARM64_SUBTARGETS ?= tags signal
++ARM64_SUBTARGETS ?= tags signal pauth
+ else
+ ARM64_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/arm64/pauth/.gitignore b/tools/testing/selftests/arm64/pauth/.gitignore
+new file mode 100644
+index 000000000000..b557c916720a
+--- /dev/null
++++ b/tools/testing/selftests/arm64/pauth/.gitignore
+@@ -0,0 +1 @@
++pac
+diff --git a/tools/testing/selftests/arm64/pauth/Makefile b/tools/testing/selftests/arm64/pauth/Makefile
+new file mode 100644
+index 000000000000..01d35aaa610a
+--- /dev/null
++++ b/tools/testing/selftests/arm64/pauth/Makefile
+@@ -0,0 +1,32 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2020 ARM Limited
++
++# preserve CC value from top level Makefile
++ifeq ($(CC),cc)
++CC := $(CROSS_COMPILE)gcc
++endif
++
++CFLAGS += -mbranch-protection=pac-ret
++# check if the compiler supports ARMv8.3 and branch protection with PAuth
++pauth_cc_support := $(shell if ($(CC) $(CFLAGS) -march=armv8.3-a -E -x c /dev/null -o /dev/null 2>&1) then echo "1"; fi)
++
++ifeq ($(pauth_cc_support),1)
++TEST_GEN_PROGS := pac
++TEST_GEN_FILES := pac_corruptor.o
++endif
++
++include ../../lib.mk
++
++ifeq ($(pauth_cc_support),1)
++# pac* and aut* instructions are not available on architectures berfore
++# ARMv8.3. Therefore target ARMv8.3 wherever they are used directly
++$(OUTPUT)/pac_corruptor.o: pac_corruptor.S
++	$(CC) -c $^ -o $@ $(CFLAGS) -march=armv8.3-a
++
++# when -mbranch-protection is enabled and the target architecture is ARMv8.3 or
++# greater, gcc emits pac* instructions which are not in HINT NOP space,
++# preventing the tests from occurring at all. Compile for ARMv8.2 so tests can
++# run on earlier targets and print a meaningful error messages
++$(OUTPUT)/pac: pac.c $(OUTPUT)/pac_corruptor.o
++	$(CC) $^ -o $@ $(CFLAGS) -march=armv8.2-a
++endif
+diff --git a/tools/testing/selftests/arm64/pauth/helper.h b/tools/testing/selftests/arm64/pauth/helper.h
+new file mode 100644
+index 000000000000..3e0a2a404bf4
+--- /dev/null
++++ b/tools/testing/selftests/arm64/pauth/helper.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2020 ARM Limited */
++
++#ifndef _HELPER_H_
++#define _HELPER_H_
++
++void pac_corruptor(void);
++
++#endif
 diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-index 1b9e3acfeb61..7d0ba2ec2e9e 100644
---- a/tools/testing/selftests/arm64/pauth/pac.c
+new file mode 100644
+index 000000000000..7fc02b02dede
+--- /dev/null
 +++ b/tools/testing/selftests/arm64/pauth/pac.c
-@@ -1,10 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (C) 2020 ARM Limited
- 
-+#define _GNU_SOURCE
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2020 ARM Limited
 +
- #include <sys/auxv.h>
- #include <sys/types.h>
- #include <sys/wait.h>
- #include <signal.h>
-+#include <sched.h>
- 
- #include "../../kselftest_harness.h"
- #include "helper.h"
-@@ -21,6 +24,7 @@
-  * The VA space size is 48 bits. Bigger is opt-in.
-  */
- #define PAC_MASK (~0xff80ffffffffffff)
-+#define ARBITRARY_VALUE (0x1234)
- #define ASSERT_PAUTH_ENABLED() \
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
-@@ -66,13 +70,36 @@ int are_same(struct signatures *old, struct signatures *new, int nkeys)
- 	return res;
- }
- 
-+int are_unique(struct signatures *sign, int nkeys)
++#include <sys/auxv.h>
++#include <signal.h>
++
++#include "../../kselftest_harness.h"
++#include "helper.h"
++
++/*
++ * Tests are ARMv8.3 compliant. They make no provisions for features present in
++ * future version of the arm architecture
++ */
++
++#define ASSERT_PAUTH_ENABLED() \
++do { \
++	unsigned long hwcaps = getauxval(AT_HWCAP); \
++	/* data key instructions are not in NOP space. This prevents a SIGILL */ \
++	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
++} while (0)
++
++
++/* check that a corrupted PAC results in SIGSEGV */
++TEST_SIGNAL(corrupt_pac, SIGSEGV)
 +{
-+	size_t vals[nkeys];
-+
-+	vals[0] = sign->keyia & PAC_MASK;
-+	vals[1] = sign->keyib & PAC_MASK;
-+	vals[2] = sign->keyda & PAC_MASK;
-+	vals[3] = sign->keydb & PAC_MASK;
-+
-+	if (nkeys >= 4)
-+		vals[4] = sign->keyg & PAC_MASK;
-+
-+	for (int i = 0; i < nkeys - 1; i++) {
-+		for (int j = i + 1; j < nkeys; j++) {
-+			if (vals[i] == vals[j])
-+				return 0;
-+		}
-+	}
-+	return 1;
-+}
-+
- int exec_sign_all(struct signatures *signed_vals, size_t val)
- {
- 	int new_stdin[2];
- 	int new_stdout[2];
- 	int status;
-+	int i;
- 	ssize_t ret;
- 	pid_t pid;
-+	cpu_set_t mask;
- 
- 	ret = pipe(new_stdin);
- 	if (ret == -1) {
-@@ -86,6 +113,20 @@ int exec_sign_all(struct signatures *signed_vals, size_t val)
- 		return -1;
- 	}
- 
-+	/*
-+	 * pin this process and all its children to a single CPU, so it can also
-+	 * guarantee a context switch with its child
-+	 */
-+	sched_getaffinity(0, sizeof(mask), &mask);
-+
-+	for (i = 0; i < sizeof(cpu_set_t); i++)
-+		if (CPU_ISSET(i, &mask))
-+			break;
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(i, &mask);
-+	sched_setaffinity(0, sizeof(mask), &mask);
-+
- 	pid = fork();
- 	// child
- 	if (pid == 0) {
-@@ -192,6 +233,40 @@ TEST(pac_instructions_not_nop_generic)
- 	ASSERT_NE(0, keyg)  TH_LOG("keyg instructions did nothing");
- }
- 
-+TEST(single_thread_unique_keys)
-+{
-+	int unique = 0;
-+	int nkeys = NKEYS;
-+	struct signatures signed_vals;
-+	unsigned long hwcaps = getauxval(AT_HWCAP);
-+
-+	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
-+	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	if (!(hwcaps & HWCAP_PACG)) {
-+		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
-+		nkeys = NKEYS - 1;
-+	}
-+
-+	/*
-+	 * In Linux the PAC field can be up to 7 bits wide. Even if keys are
-+	 * unique, there is about 5% chance for PACs to collide with different
-+	 * addresses. This chance rapidly increases with fewer bits allocated
-+	 * for the PAC (e.g. wider address). A comparison of the keys directly
-+	 * will be more reliable.
-+	 * All signed values need to be unique at least once out of n attempts
-+	 * to be certain that the keys are unique
-+	 */
-+	for (int i = 0; i < PAC_COLLISION_ATTEMPTS; i++) {
-+		if (nkeys == NKEYS)
-+			sign_all(&signed_vals, i);
-+		else
-+			sign_specific(&signed_vals, i);
-+		unique |= are_unique(&signed_vals, nkeys);
-+	}
-+
-+	ASSERT_EQ(1, unique) TH_LOG("keys clashed every time");
-+}
-+
- /*
-  * fork() does not change keys. Only exec() does so call a worker program.
-  * Its only job is to sign a value and report back the resutls
-@@ -227,4 +302,47 @@ TEST(exec_unique_keys)
- 	ASSERT_EQ(1, different) TH_LOG("exec() did not change keys");
- }
- 
-+TEST(context_switch_keep_keys)
-+{
-+	int ret;
-+	struct signatures trash;
-+	struct signatures before;
-+	struct signatures after;
-+
 +	ASSERT_PAUTH_ENABLED();
 +
-+	sign_specific(&before, ARBITRARY_VALUE);
-+
-+	/* will context switch with a process with different keys at least once */
-+	ret = exec_sign_all(&trash, ARBITRARY_VALUE);
-+	ASSERT_EQ(0, ret) TH_LOG("failed to run worker");
-+
-+	sign_specific(&after, ARBITRARY_VALUE);
-+
-+	ASSERT_EQ(before.keyia, after.keyia) TH_LOG("keyia changed after context switching");
-+	ASSERT_EQ(before.keyib, after.keyib) TH_LOG("keyib changed after context switching");
-+	ASSERT_EQ(before.keyda, after.keyda) TH_LOG("keyda changed after context switching");
-+	ASSERT_EQ(before.keydb, after.keydb) TH_LOG("keydb changed after context switching");
++	pac_corruptor();
 +}
 +
-+TEST(context_switch_keep_keys_generic)
-+{
-+	int ret;
-+	struct signatures trash;
-+	size_t before;
-+	size_t after;
++TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/arm64/pauth/pac_corruptor.S b/tools/testing/selftests/arm64/pauth/pac_corruptor.S
+new file mode 100644
+index 000000000000..0780052ac3b5
+--- /dev/null
++++ b/tools/testing/selftests/arm64/pauth/pac_corruptor.S
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2020 ARM Limited */
 +
-+	ASSERT_GENERIC_PAUTH_ENABLED();
++.global pac_corruptor
 +
-+	before = keyg_sign(ARBITRARY_VALUE);
++.text
++/*
++ * Corrupting a single bit of the PAC ensures the authentication will fail.  It
++ * also guarantees no possible collision. TCR_EL1.TBI0 is set by default so no
++ * top byte PAC is tested
++ */
++ pac_corruptor:
++	paciasp
 +
-+	/* will context switch with a process with different keys at least once */
-+	ret = exec_sign_all(&trash, ARBITRARY_VALUE);
-+	ASSERT_EQ(0, ret) TH_LOG("failed to run worker");
++	/* make stack frame */
++	sub sp, sp, #16
++	stp x29, lr, [sp]
++	mov x29, sp
 +
-+	after = keyg_sign(ARBITRARY_VALUE);
++	/* prepare mask for bit to be corrupted (bit 54) */
++	mov x1, xzr
++	add x1, x1, #1
++	lsl x1, x1, #54
 +
-+	ASSERT_EQ(before, after) TH_LOG("keyg changed after context switching");
-+}
++	/* get saved lr, corrupt selected bit, put it back */
++	ldr x0, [sp, #8]
++	eor x0, x0, x1
++	str x0, [sp, #8]
 +
- TEST_HARNESS_MAIN
--- 
++	/* remove stack frame */
++	ldp x29, lr, [sp]
++	add sp, sp, #16
++
++	autiasp
++	ret
+--
 2.17.1
 
