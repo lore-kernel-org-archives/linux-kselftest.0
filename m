@@ -2,111 +2,159 @@ Return-Path: <SRS0=vZem=CJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E649C433E2
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 11:17:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13034C433E2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 13:48:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46AFA2068E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 11:17:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E793F20719
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 13:48:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgHaLRj (ORCPT
+        id S1727861AbgHaNry (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Aug 2020 07:17:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:56592 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726472AbgHaLFS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 07:05:18 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AAEE61FB;
-        Mon, 31 Aug 2020 04:05:17 -0700 (PDT)
-Received: from e124572.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 502E93F71F;
-        Mon, 31 Aug 2020 04:05:15 -0700 (PDT)
-From:   Boyan Karatotev <boyan.karatotev@arm.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     vincenzo.frascino@arm.com, amit.kachhap@arm.com,
-        boian4o1@gmail.com, Boyan Karatotev <boyan.karatotev@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH v2 0/4] kselftests/arm64: add PAuth tests
-Date:   Mon, 31 Aug 2020 12:04:46 +0100
-Message-Id: <20200831110450.30188-1-boyan.karatotev@arm.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 31 Aug 2020 09:47:54 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43642 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727783AbgHaNr3 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 31 Aug 2020 09:47:29 -0400
+Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1kCk8y-00062w-R6; Mon, 31 Aug 2020 13:46:44 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH 1/4] pidfd: support PIDFD_NONBLOCK in pidfd_open()
+Date:   Mon, 31 Aug 2020 15:45:48 +0200
+Message-Id: <20200831134551.1599689-2-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
+References: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Pointer Authentication (PAuth) is a security feature introduced in ARMv8.3.
-It introduces instructions to sign addresses and later check for potential
-corruption using a second modifier value and one of a set of keys. The
-signature, in the form of the Pointer Authentication Code (PAC), is stored
-in some of the top unused bits of the virtual address (e.g. [54: 49] if
-TBID0 is enabled and TnSZ is set to use a 48 bit VA space). A set of
-controls are present to enable/disable groups of instructions (which use
-certain keys) for compatibility with libraries that do not utilize the
-feature. PAuth is used to verify the integrity of return addresses on the
-stack with less memory than the stack canary.
+Introduce PIDFD_NONBLOCK to support non-blocking pidfd file descriptors.
 
-This patchset adds kselftests to verify the kernel's configuration of the
-feature and its runtime behaviour. There are 7 tests which verify that:
-	* an authentication failure leads to a SIGSEGV
-	* the data/instruction instruction groups are enabled
-	* the generic instructions are enabled
-	* all 5 keys are unique for a single thread
-	* exec() changes all keys to new unique ones
-	* context switching preserves the 4 data/instruction keys
-	* context switching preserves the generic keys
+Ever since the introduction of pidfds and more advanced async io various
+programming languages such as Rust have grown support for async event
+libraries. These libraries are created to help build epoll-based event loops
+around file descriptors. A common pattern is to automatically make all file
+descriptors they manage to O_NONBLOCK.
 
-The tests have been verified to work on qemu without a working PAUTH
-Implementation and on ARM's FVP with a full or partial PAuth
-implementation.
+For such libraries the EAGAIN error code is treated specially. When a function
+is called that returns EAGAIN the function isn't called again until the event
+loop indicates the the file descriptor is ready. Supporting EAGAIN when
+waiting on pidfds makes such libraries just work with little effort. In the
+following patch we will extend waitid() internally to support non-blocking
+pidfds.
 
-Changes in v2:
-* remove extra lines at end of files
-* Patch 1: "kselftests: add a basic arm64 Pointer Authentication test"
-	* add checks for a compatible compiler in Makefile
-* Patch 4: "kselftests: add PAuth tests for single threaded consistency and
-key uniqueness"
-	* rephrase comment for clarity in pac.c
+Link: https://lore.kernel.org/lkml/20200811181236.GA18763@localhost/
+Link: https://github.com/joshtriplett/async-pidfd
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Sargun Dhillon <sargun@sargun.me>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Suggested-by: Josh Triplett <josh@joshtriplett.org>
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ include/uapi/linux/pidfd.h | 12 ++++++++++++
+ kernel/pid.c               | 12 +++++++-----
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+ create mode 100644 include/uapi/linux/pidfd.h
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
-Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
-Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
-
-Boyan Karatotev (4):
-  kselftests/arm64: add a basic Pointer Authentication test
-  kselftests/arm64: add nop checks for PAuth tests
-  kselftests/arm64: add PAuth test for whether exec() changes keys
-  kselftests/arm64: add PAuth tests for single threaded consistency and
-    key uniqueness
-
- tools/testing/selftests/arm64/Makefile        |   2 +-
- .../testing/selftests/arm64/pauth/.gitignore  |   2 +
- tools/testing/selftests/arm64/pauth/Makefile  |  39 ++
- .../selftests/arm64/pauth/exec_target.c       |  35 ++
- tools/testing/selftests/arm64/pauth/helper.c  |  40 ++
- tools/testing/selftests/arm64/pauth/helper.h  |  29 ++
- tools/testing/selftests/arm64/pauth/pac.c     | 348 ++++++++++++++++++
- .../selftests/arm64/pauth/pac_corruptor.S     |  35 ++
- 8 files changed, 529 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/pauth/.gitignore
- create mode 100644 tools/testing/selftests/arm64/pauth/Makefile
- create mode 100644 tools/testing/selftests/arm64/pauth/exec_target.c
- create mode 100644 tools/testing/selftests/arm64/pauth/helper.c
- create mode 100644 tools/testing/selftests/arm64/pauth/helper.h
- create mode 100644 tools/testing/selftests/arm64/pauth/pac.c
- create mode 100644 tools/testing/selftests/arm64/pauth/pac_corruptor.S
-
---
-2.17.1
+diff --git a/include/uapi/linux/pidfd.h b/include/uapi/linux/pidfd.h
+new file mode 100644
+index 000000000000..5406fbc13074
+--- /dev/null
++++ b/include/uapi/linux/pidfd.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++
++#ifndef _UAPI_LINUX_PIDFD_H
++#define _UAPI_LINUX_PIDFD_H
++
++#include <linux/types.h>
++#include <linux/fcntl.h>
++
++/* Flags for pidfd_open().  */
++#define PIDFD_NONBLOCK O_NONBLOCK
++
++#endif /* _UAPI_LINUX_PIDFD_H */
+diff --git a/kernel/pid.c b/kernel/pid.c
+index b2562a7ce525..74ddbff1a6ba 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -43,6 +43,7 @@
+ #include <linux/sched/task.h>
+ #include <linux/idr.h>
+ #include <net/sock.h>
++#include <uapi/linux/pidfd.h>
+ 
+ struct pid init_struct_pid = {
+ 	.count		= REFCOUNT_INIT(1),
+@@ -522,7 +523,8 @@ struct pid *find_ge_pid(int nr, struct pid_namespace *ns)
+ /**
+  * pidfd_create() - Create a new pid file descriptor.
+  *
+- * @pid:  struct pid that the pidfd will reference
++ * @pid:   struct pid that the pidfd will reference
++ * @flags: flags to pass
+  *
+  * This creates a new pid file descriptor with the O_CLOEXEC flag set.
+  *
+@@ -532,12 +534,12 @@ struct pid *find_ge_pid(int nr, struct pid_namespace *ns)
+  * Return: On success, a cloexec pidfd is returned.
+  *         On error, a negative errno number will be returned.
+  */
+-static int pidfd_create(struct pid *pid)
++static int pidfd_create(struct pid *pid, unsigned int flags)
+ {
+ 	int fd;
+ 
+ 	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
+-			      O_RDWR | O_CLOEXEC);
++			      flags | O_RDWR | O_CLOEXEC);
+ 	if (fd < 0)
+ 		put_pid(pid);
+ 
+@@ -565,7 +567,7 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+ 	int fd;
+ 	struct pid *p;
+ 
+-	if (flags)
++	if (flags & ~PIDFD_NONBLOCK)
+ 		return -EINVAL;
+ 
+ 	if (pid <= 0)
+@@ -576,7 +578,7 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+ 		return -ESRCH;
+ 
+ 	if (pid_has_task(p, PIDTYPE_TGID))
+-		fd = pidfd_create(p);
++		fd = pidfd_create(p, flags);
+ 	else
+ 		fd = -EINVAL;
+ 
+-- 
+2.28.0
 
