@@ -2,201 +2,120 @@ Return-Path: <SRS0=vZem=CJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 711D3C433E7
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 13:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7948CC433E2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 20:49:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E35520719
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 13:48:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D33F2064B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Aug 2020 20:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598906998;
+	bh=1PN8WQU4Q/rGpX1x5xvJOD6uO9iIoxtDne+ONOWMDu0=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=oAnsUOYlHMT9cP8AufoeXS6VKVmgZ6RF0zP20u570qsrRqv5s+SEDmLcySRr1xZhM
+	 tom3VIR2//JzP3ra65FLtWhuz1lAL6MO1CFFUKYykhmGDoxjD5TCZGg94GrZLPZX6B
+	 gRCSagzHjGzolySc6M81AuZXKLqnI0Q8AwlvSx9o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbgHaNs3 (ORCPT
+        id S1729143AbgHaUty (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Aug 2020 09:48:29 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43637 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727066AbgHaNr2 (ORCPT
+        Mon, 31 Aug 2020 16:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728355AbgHaUtx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Aug 2020 09:47:28 -0400
-Received: from ip5f5af70b.dynamic.kabel-deutschland.de ([95.90.247.11] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kCk8z-00062w-Hy; Mon, 31 Aug 2020 13:46:45 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Brauner <christian@brauner.io>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-kselftest@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 2/4] exit: support non-blocking pidfds
-Date:   Mon, 31 Aug 2020 15:45:49 +0200
-Message-Id: <20200831134551.1599689-3-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
-References: <20200831134551.1599689-1-christian.brauner@ubuntu.com>
+        Mon, 31 Aug 2020 16:49:53 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F385AC061575
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 13:49:52 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id z195so2184707oia.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2020 13:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DXLdw2EqWHhI2TwwrM4XKt/5YHttNOrLrhTDhUQWFAg=;
+        b=a58amqfO6WuUD4Noh1GsIb+tsswivJ0nu660wqYL5R2D7jdZaR8vqDpVk+wS5iFLgi
+         BvReR4oTMyY5KUix15VtUCRDn7a3xjKWJX20qftFOJHCWEvuD0QQXkwAnPqfFR9LonOZ
+         W7j1IXgpoeLq1x355d/+O+Ub8UcWA1QtCuF54=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DXLdw2EqWHhI2TwwrM4XKt/5YHttNOrLrhTDhUQWFAg=;
+        b=K5l/t6mWuxkVNg5v/YyvFdDZ0QvXxE0uKCXDEQ/fTIBDpWlLMGy6DgYrZiH1WT8Pir
+         nX1lPDcQ/RfnlEpsypMriv0izWGQC6N3PIY/cP/j9tFV1NH8naHwyROfc31ZK4xdx76s
+         I5fTsWEh0PUNtfjFPFRUwa+0uQp4o56iohrn+G9h+cVrvBSt2QV0EpvEQ4GEx/rnsV5j
+         m4X+6Piy77Ny9isThBOXZVFSsJ6zoI3c9mlCt4oVb1W4DTsHOXtiVWLFcS9D/wPcsDNo
+         s7R0crzQ4C5E05ajqlH6c/dFPgIcwGjGA7kY2drKz80LHeJS77foxT7VxgfvPmQqD0ot
+         FVsg==
+X-Gm-Message-State: AOAM530oGCKpNIakZoJKlm8muRXYyYfnvDYC+kl79Q5iiO31SVEzVwmP
+        6lu5DLsF3a468dE1//HboKpLmmFqHyd78g==
+X-Google-Smtp-Source: ABdhPJyZnOHiWoW/j0WJMwcoA5h8XCMzg98FexYAoM57h/Zd3reUKXgNajigD561Ru00ls+Vhnee+A==
+X-Received: by 2002:aca:ccd3:: with SMTP id c202mr695607oig.146.1598906992242;
+        Mon, 31 Aug 2020 13:49:52 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o5sm1983694otp.8.2020.08.31.13.49.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Aug 2020 13:49:51 -0700 (PDT)
+Subject: Re: [PATCH] selftests: use "$(MAKE)" instead of "make" for
+ headers_install
+To:     Denys Vlasenko <dvlasenk@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200817150946.21477-1-dvlasenk@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8ea61655-c4b3-0fa9-ec70-b63adbbe5c84@linuxfoundation.org>
+Date:   Mon, 31 Aug 2020 14:49:50 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200817150946.21477-1-dvlasenk@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Passing a non-blocking pidfd to waitid() currently has no effect, i.e.
-is not supported. There are users which would like to use waitid() on
-pidfds that are O_NONBLOCK and mix it with pidfds that are blocking and
-both pass them to waitid().
-The expected behavior is to have waitid() return -EAGAIN for
-non-blocking pidfds and to block for blocking pidfds without needing to
-perform any additional checks for flags set on the pidfd before passing
-it to waitid().
-Non-blocking pidfds will return EAGAIN from waitid() when no child
-process is ready yet. Returning -EAGAIN for non-blocking pidfds makes it
-easier for event loops that handle EAGAIN specially.
+On 8/17/20 9:09 AM, Denys Vlasenko wrote:
+> If top make invocation uses -j4 or larger, this patch reduces
+> "make headers_install" subtask run time from 30 to 7 seconds.
+> 
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Shuah Khan <skhan@linuxfoundation.org>
+> CC: linux-kselftest@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> Signed-off-by: Denys Vlasenko <dvlasenk@redhat.com>
+> ---
+>   tools/testing/selftests/lib.mk | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 7a17ea815736..51124b962d56 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -47,9 +47,9 @@ ARCH		?= $(SUBARCH)
+>   khdr:
+>   ifndef KSFT_KHDR_INSTALL_DONE
+>   ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+> -	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+> +	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   else
+> -	make --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
+> +	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
+>   		ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   endif
+>   endif
+> 
 
-It also makes the API more consistent and uniform. In essence, waitid()
-is treated like a read on a non-blocking pidfd or a recvmsg() on a
-non-blocking socket.
-With the addition of support for non-blocking pidfds we support the same
-functionality that sockets do. For sockets() recvmsg() supports
-MSG_DONTWAIT for pidfds waitid() supports WNOHANG. Both flags are
-per-call options. In contrast non-blocking pidfds and non-blocking
-sockets are a setting on an open file description affecting all threads
-in the calling process as well as other processes that hold file
-descriptors referring to the same open file description. Both behaviors,
-per call and per open file description, have genuine use-cases.
+Thanks for the patch. Applied to linux-kselftest next for 5.10
 
-The implementation should be straightforward, we simply raise the
-WNOHANG flag when a non-blocking pidfd is passed and introduce a
-eagain_error member in struct wait_opts similar to the notask_error
-member. The former is set to -EAGAIN for non-blocking pidfds and to zero
-for all other cases. If no child process exists non-blocking pidfd users
-will continue to see ECHILD but if child processes exist but have not
-yet exited users will see EAGAIN.
-
-A concrete use-case that was brought on-list was Josh's async pidfd
-library. Ever since the introduction of pidfds and more advanced async
-io various programming languages such as Rust have grown support for
-async event libraries. These libraries are created to help build
-epoll-based event loops around file descriptors. A common pattern is to
-automatically make all file descriptors they manage to O_NONBLOCK.
-
-For such libraries the EAGAIN error code is treated specially. When a
-function is called that returns EAGAIN the function isn't called again
-until the event loop indicates the the file descriptor is ready.
-Supporting EAGAIN when waiting on pidfds makes such libraries just work
-with little effort.
-
-Link: https://lore.kernel.org/lkml/20200811181236.GA18763@localhost/
-Link: https://github.com/joshtriplett/async-pidfd
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Sargun Dhillon <sargun@sargun.me>
-Cc: Jann Horn <jannh@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Suggested-by: Josh Triplett <josh@joshtriplett.org>
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- kernel/exit.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 733e80f334e7..598f2fefd721 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -934,6 +934,7 @@ struct wait_opts {
- 
- 	wait_queue_entry_t		child_wait;
- 	int			notask_error;
-+	int			eagain_error;
- };
- 
- static int eligible_pid(struct wait_opts *wo, struct task_struct *p)
-@@ -1461,6 +1462,8 @@ static long do_wait(struct wait_opts *wo)
- 
- notask:
- 	retval = wo->notask_error;
-+	if (!retval)
-+		retval = wo->eagain_error;
- 	if (!retval && !(wo->wo_flags & WNOHANG)) {
- 		retval = -ERESTARTSYS;
- 		if (!signal_pending(current)) {
-@@ -1474,7 +1477,7 @@ static long do_wait(struct wait_opts *wo)
- 	return retval;
- }
- 
--static struct pid *pidfd_get_pid(unsigned int fd)
-+static struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags)
- {
- 	struct fd f;
- 	struct pid *pid;
-@@ -1484,8 +1487,10 @@ static struct pid *pidfd_get_pid(unsigned int fd)
- 		return ERR_PTR(-EBADF);
- 
- 	pid = pidfd_pid(f.file);
--	if (!IS_ERR(pid))
-+	if (!IS_ERR(pid)) {
- 		get_pid(pid);
-+		*flags = f.file->f_flags;
-+	}
- 
- 	fdput(f);
- 	return pid;
-@@ -1498,6 +1503,7 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
- 	struct pid *pid = NULL;
- 	enum pid_type type;
- 	long ret;
-+	unsigned int f_flags = 0;
- 
- 	if (options & ~(WNOHANG|WNOWAIT|WEXITED|WSTOPPED|WCONTINUED|
- 			__WNOTHREAD|__WCLONE|__WALL))
-@@ -1531,9 +1537,10 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
- 		if (upid < 0)
- 			return -EINVAL;
- 
--		pid = pidfd_get_pid(upid);
-+		pid = pidfd_get_pid(upid, &f_flags);
- 		if (IS_ERR(pid))
- 			return PTR_ERR(pid);
-+
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -1544,6 +1551,11 @@ static long kernel_waitid(int which, pid_t upid, struct waitid_info *infop,
- 	wo.wo_flags	= options;
- 	wo.wo_info	= infop;
- 	wo.wo_rusage	= ru;
-+	wo.eagain_error = 0;
-+	if (f_flags & O_NONBLOCK) {
-+		wo.wo_flags	|= WNOHANG;
-+		wo.eagain_error	= -EAGAIN;
-+	}
- 	ret = do_wait(&wo);
- 
- 	put_pid(pid);
-@@ -1618,6 +1630,7 @@ long kernel_wait4(pid_t upid, int __user *stat_addr, int options,
- 	wo.wo_info	= NULL;
- 	wo.wo_stat	= 0;
- 	wo.wo_rusage	= ru;
-+	wo.eagain_error	= 0;
- 	ret = do_wait(&wo);
- 	put_pid(pid);
- 	if (ret > 0 && stat_addr && put_user(wo.wo_stat, stat_addr))
--- 
-2.28.0
-
+thanks,
+-- Shuah
