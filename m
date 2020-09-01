@@ -2,267 +2,97 @@ Return-Path: <SRS0=8nfT=CK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CDCC433E7
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Sep 2020 09:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83ADEC433E6
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Sep 2020 10:47:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F0802098B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Sep 2020 09:28:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E0A3206C0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Sep 2020 10:47:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598957259;
+	bh=eP4q1p11WzN5WKwI6hk4Fgwfr7yOfJDe2qOvgtwwQTA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=cuzzw20lxnqE/MFObL+ReH8fVuggHlLcJMAjyQu/I34teG4pYTmfKEd/4Lt6mBjM3
+	 x3ovi286ZO6gX0lQnd45fmeeftZXegzUvTkgsF+DYKUXCOo8N6cD789EqwO6oLY53j
+	 XTjuF8zFkYN0/nx/oOr0/liItYo1/EaEiWpuoI6U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbgIAJ1o (ORCPT
+        id S1726091AbgIAKri (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Sep 2020 05:27:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:39146 "EHLO foss.arm.com"
+        Tue, 1 Sep 2020 06:47:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35490 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726537AbgIAJ1m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Sep 2020 05:27:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D719D1063;
-        Tue,  1 Sep 2020 02:27:41 -0700 (PDT)
-Received: from a077416.arm.com (unknown [10.57.6.112])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 081273F71F;
-        Tue,  1 Sep 2020 02:27:38 -0700 (PDT)
-From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1725949AbgIAKrd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Sep 2020 06:47:33 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D2D7206C0;
+        Tue,  1 Sep 2020 10:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598957252;
+        bh=eP4q1p11WzN5WKwI6hk4Fgwfr7yOfJDe2qOvgtwwQTA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DyUUJmZwGkDbPfnBuDAsMAVRUYPLtj5Kr9BhIzz5qrnoN5aluJHp1WfhbaDgUwm6c
+         Z3Tix+VNtTyCnPR8c0/jHtkHiPZGz+ifRX0ngD1nz8v9uFw5yBNlj4aAPqsnbafdNO
+         nSQIWlFzoicfHMr3WRIxW4mz9XJ0gz+Muv1w3Tf4=
+Date:   Tue, 1 Sep 2020 11:46:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Gabor Kertesz <gabor.kertesz@arm.com>
-Subject: [PATCH 2/6] kselftest/arm64: Verify mte tag inclusion via prctl
-Date:   Tue,  1 Sep 2020 14:57:15 +0530
-Message-Id: <20200901092719.9918-3-amit.kachhap@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200901092719.9918-1-amit.kachhap@arm.com>
-References: <20200901092719.9918-1-amit.kachhap@arm.com>
+        linux-arm-kernel@lists.infradead.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 0/5] arm64: vdso: getcpu() support
+Message-ID: <20200901104652.GA6262@sirena.org.uk>
+References: <20200819121318.52158-1-broonie@kernel.org>
+ <315d97af-715a-9942-a731-11de2fbbbded@linuxfoundation.org>
+ <20200901092551.GG5561@gaia>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <20200901092551.GG5561@gaia>
+X-Cookie: Equal bytes for women.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This testcase verifies that the tag generated with "irg" instruction
-contains only included tags. This is done via prtcl call.
 
-This test covers 4 scenarios,
-* At least one included tag.
-* More than one included tags.
-* None included.
-* All included.
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Co-developed-by: Gabor Kertesz <gabor.kertesz@arm.com>
-Signed-off-by: Gabor Kertesz <gabor.kertesz@arm.com>
-Signed-off-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
----
- tools/testing/selftests/arm64/mte/.gitignore  |   1 +
- .../arm64/mte/check_tags_inclusion.c          | 183 ++++++++++++++++++
- 2 files changed, 184 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+On Tue, Sep 01, 2020 at 10:25:52AM +0100, Catalin Marinas wrote:
 
-diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index 3f8c1f6c82b9..c3fca255d3d6 100644
---- a/tools/testing/selftests/arm64/mte/.gitignore
-+++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -1 +1,2 @@
- check_buffer_fill
-+check_tags_inclusion
-diff --git a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
-new file mode 100644
-index 000000000000..9614988e2e75
---- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
-@@ -0,0 +1,183 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2020 ARM Limited
-+
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <ucontext.h>
-+#include <sys/wait.h>
-+
-+#include "kselftest.h"
-+#include "mte_common_util.h"
-+#include "mte_def.h"
-+
-+#define BUFFER_SIZE		(5 * MT_GRANULE_SIZE)
-+#define RUNS			(MT_TAG_COUNT * 2)
-+#define MTE_LAST_TAG_MASK	(0x7FFF)
-+
-+static int verify_mte_pointer_validity(char *ptr, int mode)
-+{
-+	mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE);
-+	/* Check the validity of the tagged pointer */
-+	memset((void *)ptr, '1', BUFFER_SIZE);
-+	mte_wait_after_trig();
-+	if (cur_mte_cxt.fault_valid)
-+		return KSFT_FAIL;
-+	/* Proceed further for nonzero tags */
-+	if (!MT_FETCH_TAG((uintptr_t)ptr))
-+		return KSFT_PASS;
-+	mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE + 1);
-+	/* Check the validity outside the range */
-+	ptr[BUFFER_SIZE] = '2';
-+	mte_wait_after_trig();
-+	if (!cur_mte_cxt.fault_valid)
-+		return KSFT_FAIL;
-+	else
-+		return KSFT_PASS;
-+}
-+
-+static int check_single_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+	int tag, run, result = KSFT_PASS;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
-+				   mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	for (tag = 0; (tag < MT_TAG_COUNT) && (result == KSFT_PASS); tag++) {
-+		mte_switch_mode(mode, MT_INCLUDE_VALID_TAG(tag));
-+		/* Try to catch a excluded tag by a number of tries. */
-+		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
-+			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+			/* Check tag value */
-+			if (MT_FETCH_TAG((uintptr_t)ptr) == tag) {
-+				ksft_print_msg("FAIL: wrong tag = 0x%x with include mask=0x%x\n",
-+					       MT_FETCH_TAG((uintptr_t)ptr),
-+					       MT_INCLUDE_VALID_TAG(tag));
-+				result = KSFT_FAIL;
-+				break;
-+			}
-+			result = verify_mte_pointer_validity(ptr, mode);
-+		}
-+	}
-+	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
-+	return result;
-+}
-+
-+static int check_multiple_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+	int tag, run, result = KSFT_PASS;
-+	unsigned long excl_mask = 0;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
-+				   mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	for (tag = 0; (tag < MT_TAG_COUNT - 1) && (result == KSFT_PASS); tag++) {
-+		excl_mask |= 1 << tag;
-+		mte_switch_mode(mode, MT_INCLUDE_VALID_TAGS(excl_mask));
-+		/* Try to catch a excluded tag by a number of tries. */
-+		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
-+			/* If excl_mask is all except last then clear tag for the next loop */
-+			if (excl_mask == MTE_LAST_TAG_MASK && run)
-+				ptr = (char *)MT_CLEAR_TAG((unsigned long)ptr);
-+			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+			/* Check tag value */
-+			if (MT_FETCH_TAG((uintptr_t)ptr) < tag) {
-+				ksft_print_msg("FAIL: wrong tag = 0x%x with include mask=0x%x\n",
-+					       MT_FETCH_TAG((uintptr_t)ptr),
-+					       MT_INCLUDE_VALID_TAGS(excl_mask));
-+				result = KSFT_FAIL;
-+				break;
-+			}
-+			result = verify_mte_pointer_validity(ptr, mode);
-+		}
-+	}
-+	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
-+	return result;
-+}
-+
-+static int check_all_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+	int run, result = KSFT_PASS;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
-+				   mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	mte_switch_mode(mode, MT_INCLUDE_TAG_MASK);
-+	/* Try to catch a excluded tag by a number of tries. */
-+	for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
-+		ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+		/*
-+		 * Here tag byte can be between 0x0 to 0xF so no need to match so
-+		 * just verify if it is writable.
-+		 */
-+		result = verify_mte_pointer_validity(ptr, mode);
-+	}
-+	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
-+	return result;
-+}
-+
-+static int check_none_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE, mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	mte_switch_mode(mode, 0);
-+	ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+	/* Check tag value */
-+	if (MT_FETCH_TAG((uintptr_t)ptr)) {
-+		ksft_print_msg("FAIL: included tag value found\n");
-+		return KSFT_FAIL;
-+	}
-+	mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE);
-+	/* Check the write validity of the untagged pointer */
-+	memset((void *)ptr, '1', BUFFER_SIZE);
-+	mte_wait_after_trig();
-+	if (cur_mte_cxt.fault_valid)
-+		return KSFT_FAIL;
-+	else
-+		return KSFT_PASS;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int err;
-+
-+	err = mte_default_setup();
-+	if (err)
-+		return err;
-+
-+	/* Register SIGSEGV handler */
-+	mte_register_signal(SIGSEGV, mte_default_handler);
-+
-+	evaluate_test(check_single_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check an included tag value with sync mode\n");
-+
-+	evaluate_test(check_multiple_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check different included tags value with sync mode\n");
-+
-+	evaluate_test(check_none_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check none included tags value with sync mode\n");
-+
-+	evaluate_test(check_all_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check all included tags value with sync mode\n");
-+
-+	mte_restore_setup();
-+	ksft_print_cnts();
-+	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
-+}
--- 
-2.17.1
+> Thanks Shuah for the ack. We are still pondering whether the merge these
+> patches as they have some limitations (the per-CPU data structures may
+> not fit in the sole data vDSO page).
 
+They definitely don't fit, I did have some half-written proof of concept
+patches that I posted that extend this but I was waiting to see if there
+was any interest in a vDSO getcpu() at all before taking it further.
+Vincenzo's work on doing the multipage user data that he announced at
+Plumbers would cover it as well, I hadn't been aware of that.
+
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9OJpwACgkQJNaLcl1U
+h9AJbwf+NnZaU2qy244rbX9A60dIIsoejhe2IdUqWfUtrupmdl8JK7s0VP5Bxh7z
+0UeIlPxLb8xY7OalRrmWDLYEJAK9zVDVmRaUkuwWaKQICNAfkwq/G0aMXndKLBA3
+CvQVNZXFuzW39z3W2e/+DZ3pwW2AYQmD6hiLv9Y7TTat+JM4CL73C1xH4R82Wsdo
+HicEuEvSfuR0mvCcK2/W521PXabdaSPPQZAkhd41FflS3SXUgfTdUsdx4ZV00c36
+Or6s+JRdKTQ5CyGb8cfdi4myEKu9kXAn6Lw7FOS5WUYDomiZPi7eTFHX0e6xTUZ5
+2dWx1UbtRwR3o4anKiDjinQB2JgHUg==
+=FH9R
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
