@@ -2,136 +2,111 @@ Return-Path: <SRS0=2OzW=CM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CD3C43461
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Sep 2020 13:56:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFC2C433E9
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Sep 2020 14:33:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2B71208C7
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Sep 2020 13:56:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D12B206EB
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Sep 2020 14:33:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lca.pw header.i=@lca.pw header.b="l+VpGWun"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AUQSdRQH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728844AbgICN42 (ORCPT
+        id S1729217AbgICOdA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Sep 2020 09:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728852AbgICMid (ORCPT
+        Thu, 3 Sep 2020 10:33:00 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:41722 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729278AbgICObg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Sep 2020 08:38:33 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55779C061245
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2020 05:38:32 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id k25so776274qtu.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2020 05:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=C2d6QG1IblDeyroVtS3hMSNO/LsvLyKHGpkVymmB4pg=;
-        b=l+VpGWunXGi10wTShVSflV5Z/zSRT8cCTRxA819xi63BVbtXqlDpnECjBDN7GsHK7z
-         or/7Sqa1wMEMzBpsWVzrxXsFMyFqiWbufjImu+VlfgkFRZCjpHcxErVTGWkswDasZfQr
-         6yWHvRV1b8AQlYNlt89QWL9z+Q4EZpOls6QyvVy3ESS8+f+aqBaB8vcShXcMkuM19NnG
-         p7mGV8w5kiUuRNUWzqMRO4W8fA5nR9arzaRRoe75UAP/QmfNfZLu/zF1Zi5HnyFyFN/I
-         XfCL0idn3B2DF1Z7l3CRyneOXAHtA0bZYF7e2xSkOuCf2ax+VpT3DVFrFYwQFzAhADRE
-         X7wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=C2d6QG1IblDeyroVtS3hMSNO/LsvLyKHGpkVymmB4pg=;
-        b=gOyx4fP9GPj3Qh+z4HEVM8KhewSOLqrEflbmd+xsFvhyFVXiHRofBK9Wi2t6DA5jCT
-         Nxteb+h05Q66te9+8jWRMMKpiPzn5NgZUSEG63x1/twrwE73UbL30Z5KAZYD8+BsGEGN
-         B080ArHkXNr4fSfpNfWtnrlTzgWaA1dBey8nRX+rtkyrhymIVx2vyE5cl0ZEhRXL433L
-         p8p8te8am++5n48zzqQ0qvbQ6F4oAG/QNYe65X4JB5FWW1BwSM3py9gWafTbr1vY2J1b
-         Y/fGUPRP1vBXObHecBGrFivtwL6T0imxNjAe3Nm9oda7SgXjxdG1rPS9JuJ1a4V7u66Z
-         E6Dg==
-X-Gm-Message-State: AOAM532KTFKdFZ/j3fHH8YnhWq+BIYFiIOtfJSTmarQh43tRUlXOxgJq
-        vGeVzl7zclUgJ52JxdW8Ylg9FA==
-X-Google-Smtp-Source: ABdhPJzk9Vn1uJfPyBefi7iCXkdsWcTrDpZZF56VRUWX7CwcPp80tVcpXoqV9sLgSyT7IGuTrTs0uA==
-X-Received: by 2002:aed:2ce7:: with SMTP id g94mr3289809qtd.184.1599136711564;
-        Thu, 03 Sep 2020 05:38:31 -0700 (PDT)
-Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id r6sm2088194qkc.43.2020.09.03.05.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 05:38:30 -0700 (PDT)
-Date:   Thu, 3 Sep 2020 08:38:25 -0400
-From:   Qian Cai <cai@lca.pw>
-To:     skhan@linuxfoundation.org, sfr@canb.auug.org.au
-Cc:     brendanhiggins@google.com, urielguajardo@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-next@vger.kernel.org
-Subject: Re: [PATCH 2/2] kunit: ubsan integration
-Message-ID: <20200903123824.GA4225@lca.pw>
-References: <20200806174326.3577537-1-urielguajardojr@gmail.com>
- <20200806174326.3577537-2-urielguajardojr@gmail.com>
- <20200902125223.GA5676@lca.pw>
+        Thu, 3 Sep 2020 10:31:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599143495;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H7bJQ7h2myCkqnHq7O24s1ZUYNalRzEYrGJNorlqx6s=;
+        b=AUQSdRQH4PcxdN9PdwZG90owQKwPJdYPuqvLCDhROwZiIx7r8b+du7e3yYN/9U8SGiNvQB
+        OpOVwCVZfMKTSZMKXALpY2EKYv7Hr/9KvhisrFBIiQPLypIJ5J3P3e+hDZYpJHYCOOoXhP
+        qcjJGMQfimR7Xh8FWxk9FmEB5TvQ/V8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-41-nWV_P8BGM4aUcJJCqxZSZw-1; Thu, 03 Sep 2020 10:31:33 -0400
+X-MC-Unique: nWV_P8BGM4aUcJJCqxZSZw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6248C425E8;
+        Thu,  3 Sep 2020 14:31:31 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.114])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 14BDB1055803;
+        Thu,  3 Sep 2020 14:31:26 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  3 Sep 2020 16:31:31 +0200 (CEST)
+Date:   Thu, 3 Sep 2020 16:31:25 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        linux-kselftest@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-api@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] pidfd: support PIDFD_NONBLOCK in pidfd_open()
+Message-ID: <20200903143124.GJ4386@redhat.com>
+References: <20200902102130.147672-1-christian.brauner@ubuntu.com>
+ <20200902102130.147672-2-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200902125223.GA5676@lca.pw>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200902102130.147672-2-christian.brauner@ubuntu.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 08:52:24AM -0400, Qian Cai wrote:
-> On Thu, Aug 06, 2020 at 05:43:26PM +0000, Uriel Guajardo wrote:
-> > Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-> > whenever it reports undefined behavior.
-> > 
-> > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-> 
-> It looks like this patch had been merged into linux-next but the "[PATCH 1/2]
-> kunit: support failure from dynamic analysis tools" did not. Hence, it caused a
-> compiling failure.
-> 
-> lib/ubsan.c: In function ‘ubsan_prologue’:
-> lib/ubsan.c:141:2: error: implicit declaration of function ‘kunit_fail_current_test’; did you mean ‘kunit_init_test’? [-Werror=implicit-function-declaration]
->   kunit_fail_current_test();
->   ^~~~~~~~~~~~~~~~~~~~~~~
->   kunit_init_test
-> cc1: some warnings being treated as errors
+On 09/02, Christian Brauner wrote:
+>
+> -static int pidfd_create(struct pid *pid)
+> +static int pidfd_create(struct pid *pid, unsigned int flags)
+>  {
+>  	int fd;
+>  
+>  	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
+> -			      O_RDWR | O_CLOEXEC);
+> +			      flags | O_RDWR | O_CLOEXEC);
+>  	if (fd < 0)
+>  		put_pid(pid);
+>  
+> @@ -565,7 +567,7 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+>  	int fd;
+>  	struct pid *p;
+>  
+> -	if (flags)
+> +	if (flags & ~PIDFD_NONBLOCK)
+>  		return -EINVAL;
+>  
+>  	if (pid <= 0)
+> @@ -576,7 +578,7 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+>  		return -ESRCH;
+>  
+>  	if (pid_has_task(p, PIDTYPE_TGID))
+> -		fd = pidfd_create(p);
+> +		fd = pidfd_create(p, flags);
+>  	else
+>  		fd = -EINVAL;
+>  
 
-Stephen, Shuah, can you revert this commit or pick up its dependency as well?
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
-https://lore.kernel.org/linux-kselftest/20200813205722.1384108-1-urielguajardojr@gmail.com/
-
-Still seeing this on today's linux-next build.
-
-> 
-> > ---
-> >  lib/ubsan.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/lib/ubsan.c b/lib/ubsan.c
-> > index cb9af3f6b77e..1460e2c828c8 100644
-> > --- a/lib/ubsan.c
-> > +++ b/lib/ubsan.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/types.h>
-> >  #include <linux/sched.h>
-> >  #include <linux/uaccess.h>
-> > +#include <kunit/test.h>
-> >  
-> >  #include "ubsan.h"
-> >  
-> > @@ -137,6 +138,7 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
-> >  {
-> >  	current->in_ubsan++;
-> >  
-> > +	kunit_fail_current_test();
-> >  	pr_err("========================================"
-> >  		"========================================\n");
-> >  	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
-> > -- 
-> > 2.28.0.163.g6104cc2f0b6-goog
-> > 
