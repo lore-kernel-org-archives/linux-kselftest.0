@@ -5,57 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9505C2D0E1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4870C2D0E4
 	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:11:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77BE321548
+	by mail.kernel.org (Postfix) with ESMTP id ACF11221EF
 	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:11:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LqQ/QyMb"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Qf2k8aw+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725880AbgILLLf (ORCPT
+        id S1725894AbgILLLh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 12 Sep 2020 07:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        Sat, 12 Sep 2020 07:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgILLIs (ORCPT
+        with ESMTP id S1725887AbgILLIs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sat, 12 Sep 2020 07:08:48 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F4CC0617A3
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:31 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id s65so7140158pgb.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:31 -0700 (PDT)
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC09C0617A1
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:27 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 67so8185361pgd.12
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jbIVGVeXL3UcD5Zx3+0sHrDQsZkQmD0nziWY3w5+YuI=;
-        b=LqQ/QyMbPHbN/COohSTcKyMAKLl5cT78qQitFk8CTTS3dxBKp0xZo1Q2/Pnj7vV2qy
-         RLb83+qRl281SbYQByqtCv58OW/cIMeoQuNZP7O7zHoBXuxMSUgD493bWxSJcqnwYYg9
-         rLdRfx2N0xOFGRKseP1KmNGFygnsLvdtukIbE=
+        bh=Z1U82n+b6P1wGMlr0n/lm8DqFMBKpyd7dLyrkvRpbNk=;
+        b=Qf2k8aw+QpxPUC+okglry6q3bVbH3jKZsyuLzav4/0cOGrbWLhJCSFaj1PEq6tcYip
+         cuLmT6KIbM3WOoZcf0/LFo4j2n7CM514U3FYPw2+tttxkQZAULy8Rm5GeDsNU+3BKVoc
+         NRHsw3rDvlbw+As6Aw0BRlGiWP+5YqgU+1uN8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jbIVGVeXL3UcD5Zx3+0sHrDQsZkQmD0nziWY3w5+YuI=;
-        b=lUJbMb0sjx4SDSoNITOaNryjP4MET1m9ejfgumW2xJbkzXUhXXFpulV2qGtPQ42Yd6
-         hDB49JkLJFLbz8nf8TrsR9WVjAXbsCgsT2d14G/4HK0lQvfi0qFtOjERhbacDvTldtwf
-         Ai4vTGCvboWaX+KXAELkAepf9QAS6bw6LhvYOOu5TaUc89/EVjohZdEBR3sbqOLePjIA
-         r2qTNu2UKomkq7iuX2kpOD1e+Mm7cOjOdu3yDaJPGIdceL5LkE6gUVdNab41zcqNA/G2
-         JdP37jbGB3O4wFnvjylhH6Fx+1q/UruzGhc5ogqi30qZ2pqeBWdU8vQJV7LoawOWlw9B
-         nnWA==
-X-Gm-Message-State: AOAM530lEq8UV3U3mUVr6fmo4uClqAL19UnQp4OIj3nXt4NFex4+6fWC
-        SdkJZO4OMn0Qmk+Viv4cR2Zq7w==
-X-Google-Smtp-Source: ABdhPJxPd8dhUmxmmh/f8D3tYc3els9U203dCey201+Libct5mZfeDfZE6CqjRDTC4JFXw6rBxndIA==
-X-Received: by 2002:a05:6a00:1b:b029:13e:d13d:a101 with SMTP id h27-20020a056a00001bb029013ed13da101mr5730307pfk.29.1599908908451;
-        Sat, 12 Sep 2020 04:08:28 -0700 (PDT)
+        bh=Z1U82n+b6P1wGMlr0n/lm8DqFMBKpyd7dLyrkvRpbNk=;
+        b=aDcJe28eRyiEuGSA/CFOSlX0Q9dvbMlTNjElFQtd4cf8wGXb13HaICPw/tdHxuOp8c
+         +qT/5OHa+wnb6lpQRVfvQiY/q2ehOKyHb0Tc/hfZcg5pd7MB/0H3ajP5sjjskJNrMbgq
+         oZmFDIBCmj9vZ3NyQlI6iUFUzY+y0aHGRDy/l2NDlCYpk/BZDqc3FOFro7jAaot7attY
+         CFXOtajv09c6gLujtaC6lsfx2kLMC2ynapDQbggTuTm8J0FeVkkQMv9MN1La0aVBplPV
+         8wKXyx7IygAoDlNfwNS/wZEnEoVEAm4vJJ564swFpGEgeJCg0TgHxq+ORb6tPh6meDj3
+         CzAA==
+X-Gm-Message-State: AOAM532K0YmaEGUJ22Gkpj4FcrCMlKn2VQdQ9LlsA3zViDysVourBVG+
+        MbxiYqijWUkadd9cXZEN3KVG5Q==
+X-Google-Smtp-Source: ABdhPJyIeKXZzrcW8QXXXcIxMUHiRH2LjdHzWxFK1aSkuh5GSRlfE14+bSH/SUUsXgpGMgWZ3MHufQ==
+X-Received: by 2002:a62:8011:: with SMTP id j17mr5948038pfd.98.1599908906421;
+        Sat, 12 Sep 2020 04:08:26 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x20sm4980626pfr.190.2020.09.12.04.08.25
+        by smtp.gmail.com with ESMTPSA id o1sm4788707pfg.83.2020.09.12.04.08.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Sep 2020 04:08:27 -0700 (PDT)
+        Sat, 12 Sep 2020 04:08:23 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -68,9 +69,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-xtensa@linux-xtensa.org,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 05/15] selftests/seccomp: arm64: Define SYSCALL_NUM_SET macro
-Date:   Sat, 12 Sep 2020 04:08:10 -0700
-Message-Id: <20200912110820.597135-6-keescook@chromium.org>
+Subject: [PATCH 01/15] selftests/seccomp: Refactor arch register macros to avoid xtensa special case
+Date:   Sat, 12 Sep 2020 04:08:06 -0700
+Message-Id: <20200912110820.597135-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200912110820.597135-1-keescook@chromium.org>
 References: <20200912110820.597135-1-keescook@chromium.org>
@@ -81,61 +82,169 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove the arm64 special-case in change_syscall().
+To avoid an xtensa special-case, refactor all arch register macros to
+take the register variable instead of depending on the macro expanding
+as a struct member name.
 
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 27 +++++++++----------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 97 +++++++++----------
+ 1 file changed, 47 insertions(+), 50 deletions(-)
 
 diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 610fc036e374..cfa606d96086 100644
+index c5002fc25b00..fef15080b575 100644
 --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
 +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -1717,6 +1717,18 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+@@ -1698,64 +1698,64 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ }
+ 
+ #if defined(__x86_64__)
+-# define ARCH_REGS	struct user_regs_struct
+-# define SYSCALL_NUM	orig_rax
+-# define SYSCALL_RET	rax
++# define ARCH_REGS		struct user_regs_struct
++# define SYSCALL_NUM(_regs)	(_regs).orig_rax
++# define SYSCALL_RET(_regs)	(_regs).rax
+ #elif defined(__i386__)
+-# define ARCH_REGS	struct user_regs_struct
+-# define SYSCALL_NUM	orig_eax
+-# define SYSCALL_RET	eax
++# define ARCH_REGS		struct user_regs_struct
++# define SYSCALL_NUM(_regs)	(_regs).orig_eax
++# define SYSCALL_RET(_regs)	(_regs).eax
+ #elif defined(__arm__)
+-# define ARCH_REGS	struct pt_regs
+-# define SYSCALL_NUM	ARM_r7
+-# define SYSCALL_RET	ARM_r0
++# define ARCH_REGS		struct pt_regs
++# define SYSCALL_NUM(_regs)	(_regs).ARM_r7
++# define SYSCALL_RET(_regs)	(_regs).ARM_r0
  #elif defined(__aarch64__)
- # define ARCH_REGS		struct user_pt_regs
- # define SYSCALL_NUM(_regs)	(_regs).regs[8]
-+# ifndef NT_ARM_SYSTEM_CALL
-+#  define NT_ARM_SYSTEM_CALL 0x404
-+# endif
-+# define SYSCALL_NUM_SET(_regs, _nr)				\
-+	do {							\
-+		struct iovec __v;				\
-+		typeof(_nr) __nr = (_nr);			\
-+		__v.iov_base = &__nr;				\
-+		__v.iov_len = sizeof(__nr);			\
-+		EXPECT_EQ(0, ptrace(PTRACE_SETREGSET, tracee,	\
-+				    NT_ARM_SYSTEM_CALL, &__v));	\
-+	} while (0)
- # define SYSCALL_RET(_regs)	(_regs).regs[0]
+-# define ARCH_REGS	struct user_pt_regs
+-# define SYSCALL_NUM	regs[8]
+-# define SYSCALL_RET	regs[0]
++# define ARCH_REGS		struct user_pt_regs
++# define SYSCALL_NUM(_regs)	(_regs).regs[8]
++# define SYSCALL_RET(_regs)	(_regs).regs[0]
  #elif defined(__riscv) && __riscv_xlen == 64
- # define ARCH_REGS		struct user_regs_struct
-@@ -1852,23 +1864,10 @@ void change_syscall(struct __test_metadata *_metadata,
- #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
- 	defined(__s390__) || defined(__hppa__) || defined(__riscv) || \
- 	defined(__xtensa__) || defined(__csky__) || defined(__sh__) || \
--	defined(__mips__) || defined(__arm__)
-+	defined(__mips__) || defined(__arm__) || defined(__aarch64__)
- 	{
- 		SYSCALL_NUM_SET(regs, syscall);
- 	}
--
--#elif defined(__aarch64__)
--# ifndef NT_ARM_SYSTEM_CALL
--#  define NT_ARM_SYSTEM_CALL 0x404
--# endif
--	{
--		iov.iov_base = &syscall;
--		iov.iov_len = sizeof(syscall);
--		ret = ptrace(PTRACE_SETREGSET, tracee, NT_ARM_SYSTEM_CALL,
--			     &iov);
--		EXPECT_EQ(0, ret);
--	}
--
+-# define ARCH_REGS	struct user_regs_struct
+-# define SYSCALL_NUM	a7
+-# define SYSCALL_RET	a0
++# define ARCH_REGS		struct user_regs_struct
++# define SYSCALL_NUM(_regs)	(_regs).a7
++# define SYSCALL_RET(_regs)	(_regs).a0
+ #elif defined(__csky__)
+-# define ARCH_REGS	struct pt_regs
+-#if defined(__CSKYABIV2__)
+-# define SYSCALL_NUM	regs[3]
+-#else
+-# define SYSCALL_NUM	regs[9]
+-#endif
+-# define SYSCALL_RET	a0
++# define ARCH_REGS		struct pt_regs
++#  if defined(__CSKYABIV2__)
++#   define SYSCALL_NUM(_regs)	(_regs).regs[3]
++#  else
++#   define SYSCALL_NUM(_regs)	(_regs).regs[9]
++#  endif
++# define SYSCALL_RET(_regs)	(_regs).a0
+ #elif defined(__hppa__)
+-# define ARCH_REGS	struct user_regs_struct
+-# define SYSCALL_NUM	gr[20]
+-# define SYSCALL_RET	gr[28]
++# define ARCH_REGS		struct user_regs_struct
++# define SYSCALL_NUM(_regs)	(_regs).gr[20]
++# define SYSCALL_RET(_regs)	(_regs).gr[28]
+ #elif defined(__powerpc__)
+-# define ARCH_REGS	struct pt_regs
+-# define SYSCALL_NUM	gpr[0]
+-# define SYSCALL_RET	gpr[3]
++# define ARCH_REGS		struct pt_regs
++# define SYSCALL_NUM(_regs)	(_regs).gpr[0]
++# define SYSCALL_RET(_regs)	(_regs).gpr[3]
+ #elif defined(__s390__)
+-# define ARCH_REGS     s390_regs
+-# define SYSCALL_NUM   gprs[2]
+-# define SYSCALL_RET   gprs[2]
++# define ARCH_REGS		s390_regs
++# define SYSCALL_NUM(_regs)	(_regs).gprs[2]
++# define SYSCALL_RET(_regs)	(_regs).gprs[2]
+ # define SYSCALL_NUM_RET_SHARE_REG
+ #elif defined(__mips__)
+-# define ARCH_REGS	struct pt_regs
+-# define SYSCALL_NUM	regs[2]
+-# define SYSCALL_SYSCALL_NUM regs[4]
+-# define SYSCALL_RET	regs[2]
++# define ARCH_REGS		struct pt_regs
++# define SYSCALL_NUM(_regs)	(_regs).regs[2]
++# define SYSCALL_SYSCALL_NUM	regs[4]
++# define SYSCALL_RET(_regs)	(_regs).regs[2]
+ # define SYSCALL_NUM_RET_SHARE_REG
+ #elif defined(__xtensa__)
+-# define ARCH_REGS	struct user_pt_regs
+-# define SYSCALL_NUM	syscall
++# define ARCH_REGS		struct user_pt_regs
++# define SYSCALL_NUM(_regs)	(_regs).syscall
+ /*
+  * On xtensa syscall return value is in the register
+  * a2 of the current window which is not fixed.
+  */
+-#define SYSCALL_RET(reg) a[(reg).windowbase * 4 + 2]
++#define SYSCALL_RET(_regs)	(_regs).a[(_regs).windowbase * 4 + 2]
+ #elif defined(__sh__)
+-# define ARCH_REGS	struct pt_regs
+-# define SYSCALL_NUM	gpr[3]
+-# define SYSCALL_RET	gpr[0]
++# define ARCH_REGS		struct pt_regs
++# define SYSCALL_NUM(_regs)	(_regs).gpr[3]
++# define SYSCALL_RET(_regs)	(_regs).gpr[0]
  #else
- 	ASSERT_EQ(1, 0) {
- 		TH_LOG("How is the syscall changed on this architecture?");
+ # error "Do not know how to find your architecture's registers and syscalls"
+ #endif
+@@ -1804,10 +1804,10 @@ int get_syscall(struct __test_metadata *_metadata, pid_t tracee)
+ #endif
+ 
+ #if defined(__mips__)
+-	if (regs.SYSCALL_NUM == __NR_O32_Linux)
++	if (SYSCALL_NUM(regs) == __NR_O32_Linux)
+ 		return regs.SYSCALL_SYSCALL_NUM;
+ #endif
+-	return regs.SYSCALL_NUM;
++	return SYSCALL_NUM(regs);
+ }
+ 
+ /* Architecture-specific syscall changing routine. */
+@@ -1830,14 +1830,14 @@ void change_syscall(struct __test_metadata *_metadata,
+ 	defined(__s390__) || defined(__hppa__) || defined(__riscv) || \
+ 	defined(__xtensa__) || defined(__csky__) || defined(__sh__)
+ 	{
+-		regs.SYSCALL_NUM = syscall;
++		SYSCALL_NUM(regs) = syscall;
+ 	}
+ #elif defined(__mips__)
+ 	{
+-		if (regs.SYSCALL_NUM == __NR_O32_Linux)
++		if (SYSCALL_NUM(regs) == __NR_O32_Linux)
+ 			regs.SYSCALL_SYSCALL_NUM = syscall;
+ 		else
+-			regs.SYSCALL_NUM = syscall;
++			SYSCALL_NUM(regs) = syscall;
+ 	}
+ 
+ #elif defined(__arm__)
+@@ -1871,11 +1871,8 @@ void change_syscall(struct __test_metadata *_metadata,
+ 	if (syscall == -1)
+ #ifdef SYSCALL_NUM_RET_SHARE_REG
+ 		TH_LOG("Can't modify syscall return on this architecture");
+-
+-#elif defined(__xtensa__)
+-		regs.SYSCALL_RET(regs) = result;
+ #else
+-		regs.SYSCALL_RET = result;
++		SYSCALL_RET(regs) = result;
+ #endif
+ 
+ #ifdef HAVE_GETREGS
 -- 
 2.25.1
 
