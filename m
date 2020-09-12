@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA34AC10DAA
-	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9536C433E2
+	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:11:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9B44921D7E
-	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:11:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 786B821548
+	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:11:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AHH/amkQ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dIji5loM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725986AbgILLLN (ORCPT
+        id S1725904AbgILLLe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 12 Sep 2020 07:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        Sat, 12 Sep 2020 07:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725923AbgILLJW (ORCPT
+        with ESMTP id S1725874AbgILLIw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Sep 2020 07:09:22 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD869C061389
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:33 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id l126so9081286pfd.5
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:33 -0700 (PDT)
+        Sat, 12 Sep 2020 07:08:52 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B193C0617B1
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:31 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id t6so832987plz.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pONZKNsoYmecan6Kvfo6IohiIkOTvwMfLoaC7wDxjJY=;
-        b=AHH/amkQdeWLyBAxU3pffopTPxgFrBFBprJ+PpEdvWf1lAYD5H+lgruCFy2n/X0+XX
-         yY7j6ILtJvVkoXTgPU/Q0Nx0Ff/quYRXHPXNvwJmR6j+U5zNUucDghfcm6CBWGBetvGy
-         4eTIchjU58tkxxv/jWjM7df5Qqcmyycxt1Xts=
+        bh=C4bs7CzTnl1kRyMgFNAx/cMdF4zfB7LMPrNYc0foUqg=;
+        b=dIji5loM94lPX2BlTVOZY2wSfFrN4iEdIXvEB9ZXwb9K/O+5wmsPzNlErfm8yXGVnj
+         TZPx65IreQCDy5KfHVk+h3ribfRTCS3w07xBw9RenEHHmWnwHiCYzDqMOh8nMd28EDm/
+         Boz7+C1dQLQJ9R1+3Y82JwQo1BdlrCLDw68lI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pONZKNsoYmecan6Kvfo6IohiIkOTvwMfLoaC7wDxjJY=;
-        b=HypRj7tzqy+iqMtQDnPlcbucvVBq+Tpi+ABawLZ4+tJYEH0gYYRbG1+ltzqQb9z1hQ
-         fAFl+3q9K973Cn7HKJB9I1CMlzhEkdfMSjeWJB1BBDfreVMGkvEYQBUvPwFwFnBmgt0Q
-         bkRY8Je2nUKRQr62WJqg2MOAszG91SlYz2SvaX2yLgZwWUTTB9Y+FJKAODk5R/ZbWRfc
-         d25aJxN2toszDV85PAj38+eryMsu5UqWw5ok4trIyDU4diVkLhs7DrBcNJQTPcmjhJse
-         Ln04HHH4zOiUaNjFMLEGk7qP+7r7CmGkzN651iNoZ1c528pU4M6SWldfKfMaRiIuFkMK
-         0p+A==
-X-Gm-Message-State: AOAM531gGHeAWpbTfrzg54f1BRJd/SyvGXhoZj374C85AQTaKhen7oWN
-        NraWCxlbUsy3XaffCVP6P23tkQ==
-X-Google-Smtp-Source: ABdhPJxh5feYLWNyYkQfm0AMemI2YVevpROI7r4tOHO1a8H0MHk0I/H+X87vqakNf9zn1pnikeC7qw==
-X-Received: by 2002:a05:6a00:8c5:b029:13e:ce2c:88bd with SMTP id s5-20020a056a0008c5b029013ece2c88bdmr5950676pfu.0.1599908913398;
-        Sat, 12 Sep 2020 04:08:33 -0700 (PDT)
+        bh=C4bs7CzTnl1kRyMgFNAx/cMdF4zfB7LMPrNYc0foUqg=;
+        b=QL/aTv4ZhkBouk3PKqdALvFdRc8eEmxOhwcTJwBwk25MGRBjHRMhSOuJ0FB1M4Oi9b
+         oEOt6ZYdx6n2e9KOXAzOc6jmpj325u466IrF2vNmr68EAujhJzEIQ45i0sGK5zEQAd4K
+         2MnYkOsYHB1GcgG7JOiqC/P/B1uLR+kanlQI7kkLPez4x8QFrPyQJgnsj9o0op0w2Lo7
+         IEtQG7KuRc78TvMjWbMjqdcOK3kZvq+QTz81XDFJ+9034jJ/2+DBCSUdZM8mqjZ1VIjO
+         ls9BAefYRKZbTbmYuxG1DY1aN7en1dlWrxzWl22RHMg13o3bWqPzBal23xhb7xAlFH75
+         nUBQ==
+X-Gm-Message-State: AOAM530/cuEjA2ZdQ5ZNJ8tCigWWejNuGcKzHepE2B9iC/v7XlOZ+/XP
+        +YTioRmEXdzYt7UNNj1jEDvoMA==
+X-Google-Smtp-Source: ABdhPJx1tWnz+cXsPRMCEeezndnRWBXI9qrLyAtAljqVPQP8qrRmd00oQlT/nRtVdCFkQkBaLysfAw==
+X-Received: by 2002:a17:902:c404:: with SMTP id k4mr5997422plk.70.1599908909955;
+        Sat, 12 Sep 2020 04:08:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id np1sm4004435pjb.2.2020.09.12.04.08.27
+        by smtp.gmail.com with ESMTPSA id bx22sm4345524pjb.23.2020.09.12.04.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 12 Sep 2020 04:08:27 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -69,9 +69,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-xtensa@linux-xtensa.org,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 12/15] selftests/seccomp: powerpc: Fix seccomp return value testing
-Date:   Sat, 12 Sep 2020 04:08:17 -0700
-Message-Id: <20200912110820.597135-13-keescook@chromium.org>
+Subject: [PATCH 08/15] selftests/seccomp: Convert HAVE_GETREG into ARCH_GETREG/ARCH_SETREG
+Date:   Sat, 12 Sep 2020 04:08:13 -0700
+Message-Id: <20200912110820.597135-9-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200912110820.597135-1-keescook@chromium.org>
 References: <20200912110820.597135-1-keescook@chromium.org>
@@ -82,44 +82,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On powerpc, the errno is not inverted, and depends on ccr.so being
-set. Add this to a powerpc definition of SYSCALL_RET_SET().
+Instead of special-casing the get/set-registers routines, move the
+HAVE_GETREG logic into the new ARCH_GETREG() and ARCH_SETREG() macros.
 
-Co-developed-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Link: https://lore.kernel.org/linux-kselftest/20200911181012.171027-1-cascardo@canonical.com/
-Fixes: 5d83c2b37d43 ("selftests/seccomp: Add powerpc support")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 27 ++++++++++---------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 623953a53032..bbab2420d708 100644
+index 3b77bdbe7125..a986f2332327 100644
 --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
 +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -1750,6 +1750,21 @@ TEST_F(TRACE_poke, getpid_runs_normally)
- # define ARCH_REGS		struct pt_regs
- # define SYSCALL_NUM(_regs)	(_regs).gpr[0]
- # define SYSCALL_RET(_regs)	(_regs).gpr[3]
-+# define SYSCALL_RET_SET(_regs, _val)				\
-+	do {							\
-+		typeof(_val) _result = (_val);			\
-+		/*						\
-+		 * A syscall error is signaled by CR0 SO bit	\
-+		 * and the code is stored as a positive value.	\
-+		 */						\
-+		if (_result < 0) {				\
-+			SYSCALL_RET(_regs) = -result;		\
-+			(_regs).ccr |= 0x10000000;		\
-+		} else {					\
-+			SYSCALL_RET(_regs) = result;		\
-+			(_regs).ccr &= ~0x10000000;		\
-+		}						\
-+	} while (0)
- #elif defined(__s390__)
- # define ARCH_REGS		s390_regs
- # define SYSCALL_NUM(_regs)	(_regs).gprs[2]
+@@ -1821,20 +1821,21 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ 	} while (0)
+ #endif
+ 
+-/* Use PTRACE_GETREGS and PTRACE_SETREGS when available. This is useful for
++/*
++ * Use PTRACE_GETREGS and PTRACE_SETREGS when available. This is useful for
+  * architectures without HAVE_ARCH_TRACEHOOK (e.g. User-mode Linux).
+  */
+ #if defined(__x86_64__) || defined(__i386__) || defined(__mips__)
+-#define HAVE_GETREGS
++# define ARCH_GETREGS(_regs)	ptrace(PTRACE_GETREGS, tracee, 0, &(_regs))
++# define ARCH_SETREGS(_regs)	ptrace(PTRACE_SETREGS, tracee, 0, &(_regs))
+ #endif
+ 
+ /* Architecture-specific syscall fetching routine. */
+ int get_syscall(struct __test_metadata *_metadata, pid_t tracee)
+ {
+ 	ARCH_REGS regs;
+-#ifdef HAVE_GETREGS
+-	EXPECT_EQ(0, ptrace(PTRACE_GETREGS, tracee, 0, &regs)) {
+-		TH_LOG("PTRACE_GETREGS failed");
++#ifdef ARCH_GETREGS
++	EXPECT_EQ(0, ARCH_GETREGS(regs)) {
+ 		return -1;
+ 	}
+ #else
+@@ -1855,17 +1856,19 @@ int get_syscall(struct __test_metadata *_metadata, pid_t tracee)
+ void change_syscall(struct __test_metadata *_metadata,
+ 		    pid_t tracee, int syscall, int result)
+ {
+-	int ret;
+ 	ARCH_REGS regs;
+-#ifdef HAVE_GETREGS
+-	ret = ptrace(PTRACE_GETREGS, tracee, 0, &regs);
++#ifdef ARCH_GETREGS
++	EXPECT_EQ(0, ARCH_GETREGS(regs)) {
++		return;
++	}
+ #else
++	int ret;
+ 	struct iovec iov;
+ 	iov.iov_base = &regs;
+ 	iov.iov_len = sizeof(regs);
+ 	ret = ptrace(PTRACE_GETREGSET, tracee, NT_PRSTATUS, &iov);
+-#endif
+ 	EXPECT_EQ(0, ret);
++#endif
+ 
+ 	SYSCALL_NUM_SET(regs, syscall);
+ 
+@@ -1878,14 +1881,14 @@ void change_syscall(struct __test_metadata *_metadata,
+ #endif
+ 
+ 	/* Flush any register changes made. */
+-#ifdef HAVE_GETREGS
+-	ret = ptrace(PTRACE_SETREGS, tracee, 0, &regs);
++#ifdef ARCH_SETREGS
++	EXPECT_EQ(0, ARCH_SETREGS(regs));
+ #else
+ 	iov.iov_base = &regs;
+ 	iov.iov_len = sizeof(regs);
+ 	ret = ptrace(PTRACE_SETREGSET, tracee, NT_PRSTATUS, &iov);
+-#endif
+ 	EXPECT_EQ(0, ret);
++#endif
+ }
+ 
+ void tracer_seccomp(struct __test_metadata *_metadata, pid_t tracee,
 -- 
 2.25.1
 
