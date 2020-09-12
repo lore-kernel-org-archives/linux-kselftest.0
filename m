@@ -2,58 +2,58 @@ Return-Path: <SRS0=cLq/=CV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F01A4C433E2
-	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96952C43461
+	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:08:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B65AE20855
-	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:08:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C1BC21548
+	for <linux-kselftest@archiver.kernel.org>; Sat, 12 Sep 2020 11:08:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lxbnERcX"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="d1mnMUse"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725892AbgILLIt (ORCPT
+        id S1725868AbgILLIv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 12 Sep 2020 07:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        Sat, 12 Sep 2020 07:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbgILLI0 (ORCPT
+        with ESMTP id S1725874AbgILLIg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Sep 2020 07:08:26 -0400
+        Sat, 12 Sep 2020 07:08:36 -0400
 Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AA2C0613ED
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:25 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id l126so9081182pfd.5
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE3C061798
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:26 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id k15so9061916pfc.12
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Sep 2020 04:08:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qryMAhh4tCU77jVApdDoFb63yM4c6k01SDqhkwf1rR0=;
-        b=lxbnERcXy+J7vWuyRLux24/YF+Scq3YZcjre8kUbR0Fvb4JjXcrDpAuJYIbx0s7Szo
-         SCpNE6vcqS6SkUKkfyeHCdjQFgyVa/JW4qT/hBTp7+60WwtB92PGYsy/s6InhaUg0Iqd
-         e7QE5NCl5CYO9aCTFnXI0PCpQSxqRvyp3aSGQ=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OInAC9GW/Qn15XLBfoA31qdN7XBIGKQcBMz86oeUNCI=;
+        b=d1mnMUsez3jOBFoeA7qprWEYhqBNscyNUCJRSrHACM1kolvFIIVwE0oTDarfqfRRyt
+         EZVqDdMOBIDrx85v7uTznjrh1+fZH1TRrnXTBVJXU5uxfzDk9SrvZpuEZ3qybLVI/4Vi
+         38ppObnAfNv4LDTV+R926cyWt9vORTT60LLnc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qryMAhh4tCU77jVApdDoFb63yM4c6k01SDqhkwf1rR0=;
-        b=JF4d1ks/iOgIYNCy+jRwsWkUkMbdjq+d+OJc8kIaWDoNnYhuZ+3pT2byauDX3as0gp
-         Ekie81XNm6H1UnqVym0CxFJ9jSRWw99KVKEKoXtOSVECLWC6ggOmTOBD/X4x6WwnImfX
-         4ghTHyddmNosLdjt+AiK6OroLYKkbkzGj9l31HWzEFFjOc7VqCXz6rpEpLPpQBfXmDyl
-         v9158jXsz1YIFSrkxN3/0It1amYdN/8KAMY5nsOnH8Vn3mpjtzxs5HbP8u+pn0gzVEOW
-         yiI7sIJHW7TuLO1UBtnMKNYuV1ivRsTJgcp+6k2JbHmmk36jYKgM0vmmTLay/LcUJdel
-         GAjw==
-X-Gm-Message-State: AOAM531ofXovlwoZds79MZCBYeYZ6oiNOXB49dPTMlFZ8F7FFjinOOpb
-        EQcpBhJMbrbEOmxMZE/2kxHdUQ==
-X-Google-Smtp-Source: ABdhPJyZOtkAmn+q/X44Pwpnmi6XqAZyxaYzw+q4IoaZx/a0QbSZc5nYuFdBvbPz0fB5B+xl5qPKPA==
-X-Received: by 2002:a63:2f43:: with SMTP id v64mr416632pgv.69.1599908904499;
-        Sat, 12 Sep 2020 04:08:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OInAC9GW/Qn15XLBfoA31qdN7XBIGKQcBMz86oeUNCI=;
+        b=d8IVaOdCtbx3rZcQIn0QmOT3gt3s+VQajSAcSY8IMgtO9WgX0qi/MvKiuxajGlFssL
+         56t0Ibi/O1PE5M2yri+IwPyWgnjVFgrGAtuTY9Njw794TtldwuVuNxaM7loErEqRzQws
+         ZQ+EIyYW1nVZHbJtgQAH7v5By1ntbSI10SKzRMDIYCfFijF2jApNfPBC8cB8GpIY73/0
+         MsBtILqwNpYyd3AvPg6cU0mKmIKRchG1Yhpr2TH1BBxZKuV4zpGnQj1KIsN6G04j0bYn
+         qp1snCarUQ3eU5Mqjq+63E4HLI1OcvWhJfPDXRDuhRzUYDzPcwiUdzxhPcU+eUkiQon0
+         D3Bw==
+X-Gm-Message-State: AOAM530AennFZSkimp4KJXrf0KPDkM4XniJJMhJwCjVe35tvZzA4bxaV
+        6OsGQcgFHJACVfc/p2w8qlSqTQ==
+X-Google-Smtp-Source: ABdhPJyDPU6BahqLywZ5Wass8ihB9w09WdZMZEJjPIamOh7TwZSYjVn9+opdSDMO1VWUvStVtnivFw==
+X-Received: by 2002:a65:5a0b:: with SMTP id y11mr4507630pgs.395.1599908905771;
+        Sat, 12 Sep 2020 04:08:25 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s9sm3964920pgm.40.2020.09.12.04.08.23
+        by smtp.gmail.com with ESMTPSA id b10sm4811155pff.85.2020.09.12.04.08.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 12 Sep 2020 04:08:23 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -68,10 +68,12 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-xtensa@linux-xtensa.org,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 00/15] selftests/seccomp: Refactor change_syscall()
-Date:   Sat, 12 Sep 2020 04:08:05 -0700
-Message-Id: <20200912110820.597135-1-keescook@chromium.org>
+Subject: [PATCH 03/15] selftests/seccomp: mips: Define SYSCALL_NUM_SET macro
+Date:   Sat, 12 Sep 2020 04:08:08 -0700
+Message-Id: <20200912110820.597135-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200912110820.597135-1-keescook@chromium.org>
+References: <20200912110820.597135-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -79,48 +81,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Remove the mips special-case in change_syscall().
 
-This refactors the seccomp selftest macros used in change_syscall(),
-in an effort to remove special cases for mips, arm, arm64, and xtensa,
-which paves the way for powerpc fixes.
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-I'm not entirely done testing, but all-arch build tests and x86_64
-selftests pass. I'll be doing arm, arm64, and i386 selftests shortly,
-but I currently don't have an easy way to check xtensa, mips, nor
-powerpc. Any help there would be appreciated!
-
-(FWIW, I expect to take these via the seccomp tree.)
-
-Thanks,
-
--Kees
-
-
-Kees Cook (15):
-  selftests/seccomp: Refactor arch register macros to avoid xtensa
-    special case
-  selftests/seccomp: Provide generic syscall setting macro
-  selftests/seccomp: mips: Define SYSCALL_NUM_SET macro
-  selftests/seccomp: arm: Define SYSCALL_NUM_SET macro
-  selftests/seccomp: arm64: Define SYSCALL_NUM_SET macro
-  selftests/seccomp: mips: Remove O32-specific macro
-  selftests/seccomp: Remove syscall setting #ifdefs
-  selftests/seccomp: Convert HAVE_GETREG into ARCH_GETREG/ARCH_SETREG
-  selftests/seccomp: Convert REGSET calls into ARCH_GETREG/ARCH_SETREG
-  selftests/seccomp: Avoid redundant register flushes
-  selftests/seccomp: Remove SYSCALL_NUM_RET_SHARE_REG in favor of
-    SYSCALL_RET_SET
-  selftests/seccomp: powerpc: Fix seccomp return value testing
-  selftests/seccomp: powerpc: Set syscall return during ptrace syscall
-    exit
-  selftests/clone3: Avoid OS-defined clone_args
-  selftests/seccomp: Use __NR_mknodat instead of __NR_mknod
-
- .../selftests/clone3/clone3_selftests.h       |  16 +-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 313 ++++++++++--------
- 2 files changed, 184 insertions(+), 145 deletions(-)
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 1c83e743bfb1..02a9a6599746 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1742,6 +1742,13 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ # define ARCH_REGS		struct pt_regs
+ # define SYSCALL_NUM(_regs)	(_regs).regs[2]
+ # define SYSCALL_SYSCALL_NUM	regs[4]
++# define SYSCALL_NUM_SET(_regs, _nr)			\
++	do {						\
++		if ((_regs).regs[2] == __NR_O32_Linux)	\
++			(_regs).regs[4] = _nr;		\
++		else					\
++			(_regs).regs[2] = _nr;		\
++	} while (0)
+ # define SYSCALL_RET(_regs)	(_regs).regs[2]
+ # define SYSCALL_NUM_RET_SHARE_REG
+ #elif defined(__xtensa__)
+@@ -1839,17 +1846,11 @@ void change_syscall(struct __test_metadata *_metadata,
+ 
+ #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+ 	defined(__s390__) || defined(__hppa__) || defined(__riscv) || \
+-	defined(__xtensa__) || defined(__csky__) || defined(__sh__)
++	defined(__xtensa__) || defined(__csky__) || defined(__sh__) || \
++	defined(__mips__)
+ 	{
+ 		SYSCALL_NUM_SET(regs, syscall);
+ 	}
+-#elif defined(__mips__)
+-	{
+-		if (SYSCALL_NUM(regs) == __NR_O32_Linux)
+-			regs.SYSCALL_SYSCALL_NUM = syscall;
+-		else
+-			SYSCALL_NUM_SET(regs, syscall);
+-	}
+ 
+ #elif defined(__arm__)
+ # ifndef PTRACE_SET_SYSCALL
 -- 
 2.25.1
 
