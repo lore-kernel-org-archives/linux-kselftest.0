@@ -2,181 +2,153 @@ Return-Path: <SRS0=IJDX=CX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5791C2D0E3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Sep 2020 18:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 031D2C433E2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Sep 2020 18:09:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 717A321BE5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Sep 2020 18:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600106883;
-	bh=urbtEzAStq9D8KVHTpwpJn7jcktQ6xC9fDu3gqRUPFY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=LA+n40As5tkR0INTvYuQATZHSfFzKjrAY5hm+7LP5Bnzmz/zMxb8OgcTuIrtg35Bj
-	 yU0/SsX9OdTEU4pjhEBaNnpf/EDSD82SDdJamlGm7DCshflIsyT4UT2KgZmrKsuAPT
-	 SKSG4oIrr03ZTLtsF66FlcpLkvElDeXMDLLoaGXg=
+	by mail.kernel.org (Postfix) with ESMTP id C15BB214F1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Sep 2020 18:09:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bvpLQv9t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgINSIC (ORCPT
+        id S1726073AbgINSJg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Sep 2020 14:08:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38334 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726142AbgINSHp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Sep 2020 14:07:45 -0400
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E328421BE5;
-        Mon, 14 Sep 2020 18:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600106864;
-        bh=urbtEzAStq9D8KVHTpwpJn7jcktQ6xC9fDu3gqRUPFY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NFTeoWN5BtSyuRAkk3F3SSt0TKQNWr5/wwsVvf2VWeFhvOic4nJw99gnG4AI5nCk2
-         fVtUprdLbmrmRpszi0/2pIvVrivYCeEIcFu0qw2qKEygXwV4EA0RwiQ3dZcDLjLg8U
-         G3PXt85ubBilRmGyyCaN3nv244fWnikl+9wGDjd8=
-Received: by mail-lf1-f49.google.com with SMTP id m5so251456lfp.7;
-        Mon, 14 Sep 2020 11:07:43 -0700 (PDT)
-X-Gm-Message-State: AOAM531tdWmu5PJcAvQbHvJv6mL/64onvHLXXB0nPJjh6ibB2y3g5lN6
-        FolqOERlnf3gXu9t6qglIgnshGToxpcLuoKCRHQ=
-X-Google-Smtp-Source: ABdhPJyREUEE8MAAwOs63WnZ92YdJHUoIdZ/ETZfDrACdaP4fhOS0Obz6X1gohOICs2Ujw3g1l+QQn5wORhY2QkJ/24=
-X-Received: by 2002:a19:8907:: with SMTP id l7mr4802438lfd.105.1600106862141;
- Mon, 14 Sep 2020 11:07:42 -0700 (PDT)
+        Mon, 14 Sep 2020 14:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726202AbgINSJR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:09:17 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE046C06174A;
+        Mon, 14 Sep 2020 11:09:16 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id k2so548966ybp.7;
+        Mon, 14 Sep 2020 11:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=so1lhnXSV+Q1fNFA9pCNKDjNqWeQTG29k8KOhsDMenA=;
+        b=bvpLQv9twuL9Gtw0qJYz+jdFfuSY431ujBeL6K/GmOBPujdG9xTSuwHAzT7nsIHCxR
+         v17d7AenY6LZ9AeAPMiHb/mIxkkKyIgcQlubcLlvAd+RPh3PW18fy2MOoB0Iu5jBqsFJ
+         KfK2ZPqqYtftwjPZ0f3Ro9zxFUTLs1EEGM0KQEeeueV98vnOxpQ1yDK9IC8eRAu9EOMB
+         71cz6tHf9PV6PQOWDpg+WGM0bSsgGziNf82dq46SMdLGsA3R/Tl6Ugnx2vhJTirbNLIs
+         IJHouAYaD8bvwfSWbaQdEWDhU3wr0Kg9v5v5WKumSEQq602r4ZFkx8jXLGjugHUDVXht
+         RxIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=so1lhnXSV+Q1fNFA9pCNKDjNqWeQTG29k8KOhsDMenA=;
+        b=sp5WM1/C349VuQ0o9afp71sA7p5IrZyzYipMQDFnGYs+Dfj7sw5/323z0ap7Q6iB2/
+         p2ErMmxzyGldAuzWhmyquUG0uYnvpuhd8mVtJ0NfkARZw1Cdv8vz4ueM3kmnOxVHe6Yr
+         /nvTPNRpuf63EOKvZp5//eBB6/6x5ZRhDxfYgjONkaJme7Exng3YruDxWKxdLRTY+peP
+         uhDE+a9OwYuaBFo1tcqJbMkHd+8dLBCMPX2VkJ5amJG+Guk9w6g7zGyTbQDK2W5xahL4
+         33RQdBbkvQUpdw8+sz1kp4wrPELFhSojiVGp/4ixjcVtnLVn3SR3SZs20qfwapT1uide
+         ad2w==
+X-Gm-Message-State: AOAM531mPrUWQ6j7ZEv160T5ciqag8T7lASXS4u6luxx6tZHwLf801Tf
+        LSDo5ENMxOAfHSSdrA656AbfTQoKAXQvWdvei24=
+X-Google-Smtp-Source: ABdhPJx3MHbiy5SPBwLNISkJzc2l7TGFXz9mJmllm5GTu0J7lQ6yohxOZy0fLOzI3ZwaLi8Icsvl3h06PJ20EwpEFcg=
+X-Received: by 2002:a25:ef43:: with SMTP id w3mr19690513ybm.230.1600106955983;
+ Mon, 14 Sep 2020 11:09:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200911143022.414783-1-nicolas.rybowski@tessares.net> <20200911143022.414783-4-nicolas.rybowski@tessares.net>
-In-Reply-To: <20200911143022.414783-4-nicolas.rybowski@tessares.net>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 14 Sep 2020 11:07:30 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5Gbx2pWgM1XcSYqVsN6L=q+0u3QFNxG7A+Qez=Tziu2A@mail.gmail.com>
-Message-ID: <CAPhsuW5Gbx2pWgM1XcSYqVsN6L=q+0u3QFNxG7A+Qez=Tziu2A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/5] bpf: selftests: add MPTCP test base
-To:     Nicolas Rybowski <nicolas.rybowski@tessares.net>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+References: <20200903223332.881541-1-haoluo@google.com> <20200903223332.881541-5-haoluo@google.com>
+ <CAEf4BzYbpp2jiODvN=GO4R4SNpw-w5shPMaR+=jssv7fNLA0oA@mail.gmail.com> <CA+khW7goxucH5dNcW5nU+9r7JgCHo=MkL1orDsju-OOv7u1UNw@mail.gmail.com>
+In-Reply-To: <CA+khW7goxucH5dNcW5nU+9r7JgCHo=MkL1orDsju-OOv7u1UNw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 14 Sep 2020 11:09:05 -0700
+Message-ID: <CAEf4BzZWr7aw0D3d0Etmm=AVrLVsgDbY5W+1Aj9o8iBYkhJWew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/6] bpf: Introduce bpf_per_cpu_ptr()
+To:     Hao Luo <haoluo@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 8:02 AM Nicolas Rybowski
-<nicolas.rybowski@tessares.net> wrote:
+On Sun, Sep 13, 2020 at 10:01 PM Hao Luo <haoluo@google.com> wrote:
 >
-> This patch adds a base for MPTCP specific tests.
+> Thanks for review, Andrii.
 >
-> It is currently limited to the is_mptcp field in case of plain TCP
-> connection because for the moment there is no easy way to get the subflow
-> sk from a msk in userspace. This implies that we cannot lookup the
-> sk_storage attached to the subflow sk in the sockops program.
+> One question, should I add bpf_{per, this}_cpu_ptr() to the
+> bpf_base_func_proto() in kernel/bpf/helpers.c?
+
+Yes, probably, but given it allows poking at kernel memory, it
+probably needs to be guarded by perfmon_capable() check, similar to
+bpf_get_current_task_proto.
+
 >
-> Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
+> On Fri, Sep 4, 2020 at 1:04 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Sep 3, 2020 at 3:35 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > Add bpf_per_cpu_ptr() to help bpf programs access percpu vars.
+> > > bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the kernel
+> > > except that it may return NULL. This happens when the cpu parameter is
+> > > out of range. So the caller must check the returned value.
+> > >
+> > > Acked-by: Andrii Nakryiko <andriin@fb.com>
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> > >  include/linux/bpf.h            |  3 ++
+> > >  include/linux/btf.h            | 11 ++++++
+> > >  include/uapi/linux/bpf.h       | 17 +++++++++
+> > >  kernel/bpf/btf.c               | 10 ------
+> > >  kernel/bpf/verifier.c          | 66 +++++++++++++++++++++++++++++++---
+> > >  kernel/trace/bpf_trace.c       | 18 ++++++++++
+> > >  tools/include/uapi/linux/bpf.h | 17 +++++++++
+> > >  7 files changed, 128 insertions(+), 14 deletions(-)
+> > >
 
-Acked-by: Song Liu <songliubraving@fb.com>
-
-With some nitpicks below.
-
-> ---
->
-> Notes:
->     v1 -> v2:
->     - new patch: mandatory selftests (Alexei)
->
-[...]
->                      int timeout_ms);
-> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> new file mode 100644
-> index 000000000000..0e65d64868e9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-> @@ -0,0 +1,119 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include "cgroup_helpers.h"
-> +#include "network_helpers.h"
-> +
-> +struct mptcp_storage {
-> +       __u32 invoked;
-> +       __u32 is_mptcp;
-> +};
-> +
-> +static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 is_mptcp)
-> +{
-> +       int err = 0, cfd = client_fd;
-> +       struct mptcp_storage val;
-> +
-> +       /* Currently there is no easy way to get back the subflow sk from the MPTCP
-> +        * sk, thus we cannot access here the sk_storage associated to the subflow
-> +        * sk. Also, there is no sk_storage associated with the MPTCP sk since it
-> +        * does not trigger sockops events.
-> +        * We silently pass this situation at the moment.
-> +        */
-> +       if (is_mptcp == 1)
-> +               return 0;
-> +
-> +       if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
-> +               perror("Failed to read socket storage");
-
-Maybe simplify this with CHECK(), which contains a customized error message?
-Same for some other calls.
-
-> +               return -1;
-> +       }
-> +
-> +       if (val.invoked != 1) {
-> +               log_err("%s: unexpected invoked count %d != %d",
-> +                       msg, val.invoked, 1);
-> +               err++;
-> +       }
-> +
-> +       if (val.is_mptcp != is_mptcp) {
-> +               log_err("%s: unexpected bpf_tcp_sock.is_mptcp %d != %d",
-> +                       msg, val.is_mptcp, is_mptcp);
-> +               err++;
-> +       }
-> +
-> +       return err;
-> +}
-> +
-> +static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
 [...]
 
-> +
-> +       client_fd = is_mptcp ? connect_to_mptcp_fd(server_fd, 0) :
-> +                              connect_to_fd(server_fd, 0);
-> +       if (client_fd < 0) {
-> +               err = -1;
-> +               goto close_client_fd;
+> > > @@ -5002,6 +5016,30 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+> > >                 regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
+> > >                 regs[BPF_REG_0].id = ++env->id_gen;
+> > >                 regs[BPF_REG_0].mem_size = meta.mem_size;
+> > > +       } else if (fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL) {
+> >
+> > Given this is internal implementation detail, this return type is
+> > fine, but I'm wondering if it would be better to just make
+> > PTR_TO_BTF_ID to allow not just structs? E.g., if we have an int, just
+> > allow reading those 4 bytes.
+> >
+> > Not sure what the implications are in terms of implementation, but
+> > conceptually that shouldn't be a problem, given we do have BTF type ID
+> > describing size and all.
+> >
+>
+> Yeah. Totally agree. I looked at it initially. My take is
+> PTR_TO_BTF_ID is meant for struct types. It required some code
+> refactoring to break this assumption. I can add it to my TODO list and
+> investigate it if this makes more sense.
 
-This should be "goto close_bpf_object;", and we don't really need the label
-close_client_fd.
+PTR_TO_BTF_ID was *implemented* for struct, but at least naming-wise
+nothing suggests it has to be restricted to structs. But yeah, this
+should be a separate change, don't block your patches on that.
 
-> +       }
-> +
-> +       err += is_mptcp ? verify_sk(map_fd, client_fd, "MPTCP subflow socket", 1) :
+>
+> > > +               const struct btf_type *t;
+> > > +
 
-It doesn't really change the logic, but I guess we only need "err = xxx"?
-
-> +                         verify_sk(map_fd, client_fd, "plain TCP socket", 0);
-> +
-> +close_client_fd:
-> +       close(client_fd);
-> +
-> +close_bpf_object:
-> +       bpf_object__close(obj);
-> +       return err;
-> +}
-> +
+[...]
