@@ -2,107 +2,112 @@ Return-Path: <SRS0=KzEz=CY=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EDC4C433E2
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 01:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F06C7C43461
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 01:29:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9D44212CC
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 01:29:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B18B421655
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 01:29:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="fzuigUMO"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="mtdtXYcE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbgIOB3O (ORCPT
+        id S1726201AbgIOB3S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Sep 2020 21:29:14 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:10924 "EHLO
+        Mon, 14 Sep 2020 21:29:18 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:10927 "EHLO
         hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726183AbgIOB3D (ORCPT
+        with ESMTP id S1726196AbgIOB3D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 14 Sep 2020 21:29:03 -0400
 Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f6018520000>; Mon, 14 Sep 2020 18:26:42 -0700
+        id <B5f6018520001>; Mon, 14 Sep 2020 18:26:42 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 14 Sep 2020 18:29:02 -0700
+  Mon, 14 Sep 2020 18:29:03 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 14 Sep 2020 18:29:02 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL107.nvidia.com
+        by hqpgpgate101.nvidia.com on Mon, 14 Sep 2020 18:29:03 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 15 Sep
  2020 01:29:02 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
  Transport; Tue, 15 Sep 2020 01:29:02 +0000
 Received: from sandstorm.nvidia.com (Not Verified[10.2.52.22]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f6018de0005>; Mon, 14 Sep 2020 18:29:02 -0700
+        id <B5f6018de0004>; Mon, 14 Sep 2020 18:29:02 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 1/2] selftests/vm: fix false build success on the second and later attempts
-Date:   Mon, 14 Sep 2020 18:29:00 -0700
-Message-ID: <20200915012901.1655280-2-jhubbard@nvidia.com>
+Subject: [PATCH 0/2] selftests/vm: fix some minor aggravating factors in the Makefile
+Date:   Mon, 14 Sep 2020 18:28:59 -0700
+Message-ID: <20200915012901.1655280-1-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200915012901.1655280-1-jhubbard@nvidia.com>
-References: <20200915012901.1655280-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1600133202; bh=x5qALEIabmrvz75oOg/DIfroc5FkHi76HfQxR/yMV5M=;
+        t=1600133202; bh=0djzV/LDjmQc0EmERcsWRX2BdMhvHYwhbZYf6UboQaU=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=fzuigUMOi4XuHMYL2JqDjqpHHqh+1Hn8/y7RSrLY+PziwtmntBZUtaor39QJCTqyj
-         QzXfM1spGRgn4WmAWIO0dsY0nWXwO+il9Xq4iDBstgKadbuSU5tngCKo7W6vBg9C+5
-         kCtRFCgNpk5sIYNUuVuvGdbnhxQuSHfsXBff2E8jc/Tayx5+0pgXJ8Xi1/8LIWTYVE
-         bqnfkdol+ENCS3euCQD+mZfSnW/K54S+tiHe5xcvNkSS06pZdLFGm3ibvXcdqhBc05
-         mk+c8kTuZ/1CMVUDrA48FfiqcoRavt/8v50NtOEVZsKr7kFuDVMxet8/7xSTqJala8
-         eNm3rHVUiEA1Q==
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=mtdtXYcEh9CMQkeKkVZq4XA41wpSDBcY3Z827QcXQumR8D/AqUL6PHSPJgvcc7fIH
+         2j/wUnEvAlvHN7Pp5UoLGKmm0FT8gBTt2d1jJ0S8hScn7AfxXHiOPJLmh+4zKa6Pq3
+         VOkaWFC24RjCCZ1NrMbMByPbav7MofKO6Y3jxt4oDvsw3e3fDF7qJlCdbqQXR+KzUU
+         YF9/+VRnfV4rpiWrZz7E0ljfXSLebhiXtTdHfwGAxvhEj8mKB8OB8jyMoaeXTh1TDh
+         uZm+5Jv0cSWsz/4G4AjF4hJCthkLILW9YInzmYAMImioVifKKD8k38i/6Xsd961h47
+         B6cEArXKhsyyA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If one or more of these selftest fail to build, then after the first
-failure, subsequent invocations of "make" will make it appear that there
-are no build failures, after all.
+Hi,
 
-That's because the failed build products remain, with up-to-date
-timestamps, thus tricking Make (and you!) into believing that there's
-nothing else to build.
+This fixes a couple of minor aggravating factors that I ran across while
+trying to do some changes in selftests/vm. These are simple things, but
+like most things with GNU Make, it's rarely obvious what's wrong until
+you understand *the entire Makefile and all of its includes*.
 
-Fix this by telling Make to delete targets that didn't completely
-succeed.
+So while there is, of course, joy in learning those details, I thought I'd
+fix these little things, so as to allow others to skip out on the Joy if
+they so choose. :)
 
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vm/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+First of all, if you have an item (let's choose userfaultfd for an
+example) that fails to build, you might do this:
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/=
-vm/Makefile
-index a9026706d597..9f2625bebf07 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -3,6 +3,11 @@
- uname_M :=3D $(shell uname -m 2>/dev/null || echo not)
- MACHINE ?=3D $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
-=20
-+# Without this, failed build products remain, with up-to-date timestamps,
-+# thus tricking Make (and you!) into believing that All Is Well, in subseq=
-uent
-+# make invocations:
-+.DELETE_ON_ERROR:
-+
- CFLAGS =3D -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
- LDLIBS =3D -lrt
- TEST_GEN_FILES =3D compaction_test
+$ make -j32
+
+    # ...you observe a failed item in the threaded output
+
+# OK, let's get a closer look
+
+$ make
+    # ...but now the build quietly "succeeds".
+
+That's what Patch 0001 fixes.
+
+Second, if you instead attempt this approach for your closer look (a casual
+mistake, as it's not supported):
+
+$ make userfaultfd
+
+    # ...userfaultfd fails to link, due to incomplete LDLIBS
+
+That's what Patch 0002 fixes.
+
+John Hubbard (2):
+  selftests/vm: fix false build success on the second and later attempts
+  selftests/vm: fix incorrect gcc invocation in some cases
+
+ tools/testing/selftests/vm/Makefile | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
 --=20
 2.28.0
 
