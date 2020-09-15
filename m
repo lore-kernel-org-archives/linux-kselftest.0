@@ -2,228 +2,179 @@ Return-Path: <SRS0=KzEz=CY=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B29AC2D0E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 03:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E86DDC43461
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 06:21:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CD07208FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 03:59:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="T7K2uPiW"
+	by mail.kernel.org (Postfix) with ESMTP id 99126212CC
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 06:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600150883;
+	bh=yHPOwHAJMf2CyGYn5iaGApE31+NbMN1jtYRrQr3OqtY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=GkBojRCNTbxFCatDT16C8M2KazZ3oTENDRgZkPjuVxr1XXS7XC4fHcK4Ux9OpMuOM
+	 fevkACNhmZ89MBPZRNH3KXb35HHSCWdRCqH7MQ5u5aIN0885ATPJ83Qkjc6OE8rGvR
+	 Eycn6SxSpW1E+krz5Su9x1QyMRwX3h5xoOK/MMhM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbgIOD7m (ORCPT
+        id S1726110AbgIOGVN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Sep 2020 23:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgIOD6l (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Sep 2020 23:58:41 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCEFC061788
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2020 20:58:40 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id 196so2018951qkn.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Sep 2020 20:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=t2EDhHpbxYvpooWPkPafyfVXhtngpgFAoszDJvgbFKI=;
-        b=T7K2uPiWj2/D4flL80U8mqzn5rMfoUQXEWNSI0T4NT3AQdaHDdR/iUmosD/SXF/gJM
-         e4BooMeud5QB2lsoVPeWNYoqNsRwEMyFJZ1yPwbV0zxK3ay0wPpZ6J0yOta0Kx0DsnbH
-         6vdxIIBPzVA446vCS/6sICma3oY5h4jZzgEhEQu0OzwSDbDkFE67uGfIiIHeTYbDvCvj
-         m0hyC0GaaJ9p1XIKFNjsAETvPYeYvl8dveZCfMKLyuL2Fh6kPz8G1H1j2oWCW/xOawcJ
-         Sa4rMpmJFO2fRYQa7wAD8Dway/VsZrCfc3wkdEXc++ojnafFmUVmhCUPp7KfAOJQo9Kp
-         BLcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=t2EDhHpbxYvpooWPkPafyfVXhtngpgFAoszDJvgbFKI=;
-        b=VEa+CiJBgui6L461fFicIWabYrSdvRuntHpT+w6UETr5yKcM6y897rbIKy2wosmww1
-         znyYZyLW6aP1kWu6JPzPxsv9s8HrFHbl34OgnU5VVoUg+SWFMECXOSa4JcA0ylvSFL3i
-         YNcb8xuaz2llC7DlyWF8x1ledlvM9OeybjfNKID9/HmAf406ghX3jZE+x/t7Gwac6Vmo
-         569/ZqVvQB/Udyi2wg6ng0KWizQCTF8hGtZC9FqG2fiJsEHtw2KcVdCvkIFgNmQ7ytqa
-         6MSX3pMZmDM6tN/oRnkLQGWwrlySy5xCb7ezWoCZ3sfAy+ifNjm0NX/oDZwNFclcigAP
-         Ol1g==
-X-Gm-Message-State: AOAM533mrPgN8tSS6RUqO4NdIFEur5CDd3tU5QH+6GFnIu3g0Rskb3lF
-        kCua9W9JGttXDtC46oi88FYm2vILR3L8VQ==
-X-Google-Smtp-Source: ABdhPJx4kZCH+lUX05DU7QtIqz06LxRL3r8CaW8jFmcjWdT3GD5SGcna4PTCsgScYU2C/3e9APTgIbwx1TvAww==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:42a8:f0ff:fe4d:3548])
- (user=davidgow job=sendgmr) by 2002:a05:6214:1712:: with SMTP id
- db18mr15740565qvb.4.1600142317345; Mon, 14 Sep 2020 20:58:37 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 20:58:23 -0700
-Message-Id: <20200915035828.570483-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH v14 0/5] KASAN-KUnit Integration
-From:   David Gow <davidgow@google.com>
-To:     trishalfonso@google.com, brendanhiggins@google.com,
-        aryabinin@virtuozzo.com, dvyukov@google.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, andreyknvl@google.com,
-        shuah@kernel.org, akpm@linux-foundation.org
-Cc:     David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+        Tue, 15 Sep 2020 02:21:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726033AbgIOGVL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Sep 2020 02:21:11 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E769820829;
+        Tue, 15 Sep 2020 06:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600150871;
+        bh=yHPOwHAJMf2CyGYn5iaGApE31+NbMN1jtYRrQr3OqtY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TmmxknEGZyvx8vlGW5CGW73+O4uXGgraFnOf4HjrP8W3fP+hO00OxomgQPDZMrWul
+         TTPtnmKpuFwwNrUFpHPuMsrGwVxISsxidGAMi4sBmKygdDvEVG1y6hO3MT19lxjr8u
+         N8b5Mw4ZsilvmmxhDCjXlk2EUymtxsG5fkzIFbZw=
+Received: by mail-oi1-f181.google.com with SMTP id t76so2601491oif.7;
+        Mon, 14 Sep 2020 23:21:10 -0700 (PDT)
+X-Gm-Message-State: AOAM532JEFrNyVHpVvb+wHWzd3dsPQ590j1jMbQS1d/HZBmAzKD+2EmP
+        mFapXA9Xoy8foO4dBQsD5kaexBIBbd9lTXLeW0Y=
+X-Google-Smtp-Source: ABdhPJyUSykKZBGXRh2yEfSyDpEqCADm2R5enp/Wn0v7qrNEGX7YgMeVQQUInE2Y4YU+sX9Jw9CdsuzBUOw9ncgQn/s=
+X-Received: by 2002:aca:d845:: with SMTP id p66mr2094330oig.47.1600150870261;
+ Mon, 14 Sep 2020 23:21:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <CAHk-=wjOV6f_ddg+QVCF6RUe+pXPhSR2WevnNyOs9oT+q2ihEA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjOV6f_ddg+QVCF6RUe+pXPhSR2WevnNyOs9oT+q2ihEA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 15 Sep 2020 09:20:59 +0300
+X-Gmail-Original-Message-ID: <CAMj1kXHrDU50D08TwLfzz2hCK+8+C7KGPF99PphXtsOYZ-ff1g@mail.gmail.com>
+Message-ID: <CAMj1kXHrDU50D08TwLfzz2hCK+8+C7KGPF99PphXtsOYZ-ff1g@mail.gmail.com>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset contains everything needed to integrate KASAN and KUnit.
+On Tue, 15 Sep 2020 at 01:43, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Sep 14, 2020 at 3:24 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Ard and Herbert added to participants: see
+> > chacha20poly1305_crypt_sg_inplace(), which does
+> >
+> >         flags = SG_MITER_TO_SG;
+> >         if (!preemptible())
+> >                 flags |= SG_MITER_ATOMIC;
+> >
+> > introduced in commit d95312a3ccc0 ("crypto: lib/chacha20poly1305 -
+> > reimplement crypt_from_sg() routine").
+>
+> As far as I can tell, the only reason for this all is to try to use
+> "kmap()" rather than "kmap_atomic()".
+>
+> And kmap() actually has the much more complex "might_sleep()" tests,
+> and apparently the "preemptible()" check wasn't even the proper full
+> debug check, it was just a complete hack to catch the one that
+> triggered.
+>
 
-KUnit will be able to:
-(1) Fail tests when an unexpected KASAN error occurs
-(2) Pass tests when an expected KASAN error occurs
+This was not driven by a failing check.
 
-Convert KASAN tests to KUnit with the exception of copy_user_test
-because KUnit is unable to test those.
+The documentation of kmap_atomic() states the following:
 
-Add documentation on how to run the KASAN tests with KUnit and what to
-expect when running these tests.
+ * The use of kmap_atomic/kunmap_atomic is discouraged - kmap/kunmap
+ * gives a more generic (and caching) interface. But kmap_atomic can
+ * be used in IRQ contexts, so in some (very limited) cases we need
+ * it.
 
-The dependencies for this patchset are all present in 5.9-rc1+.
+so if this is no longer accurate, perhaps we should fix it?
 
-Changes from v13:
- - Fix some compile warnings in test_kasan_module[9]
-
-Changes from v12:
- - Rebased on top of mainline (ab29a807)
- - Updated to match latest KUnit guidelines (no longer rename the test)
- - Fix some small issues with the documentation to match the correct
-   test name and mention the module name.
-
-Changes from v11:
- - Rebased on top of latest -next (20200810)
- - Fixed a redundant memchr() call in kasan_memchr()
- - Added Andrey's "Tested-by" to everything.
-
-Changes from v10:
- - Fixed some whitespace issues in patch 2.
- - Split out the renaming of the KUnit test suite into a separate patch.
-
-Changes from v9:
- - Rebased on top of linux-next (20200731) + kselftest/kunit and [7]
- - Note that the kasan_rcu_uaf test has not been ported to KUnit, and
-   remains in test_kasan_module. This is because:
-   (a) KUnit's expect failure will not check if the RCU stacktraces
-       show.
-   (b) KUnit is unable to link the failure to the test, as it occurs in
-       an RCU callback.
-
-Changes from v8:
- - Rebased on top of kselftest/kunit
- - (Which, with this patchset, should rebase cleanly on 5.8-rc7)
- - Renamed the KUnit test suite, config name to patch the proposed
-   naming guidelines for KUnit tests[6]
-
-Changes from v7:
- - Rebased on top of kselftest/kunit
- - Rebased on top of v4 of the kunit resources API[1]
- - Rebased on top of v4 of the FORTIFY_SOURCE fix[2,3,4]
- - Updated the Kconfig entry to support KUNIT_ALL_TESTS
-
-Changes from v6:
- - Rebased on top of kselftest/kunit
- - Rebased on top of Daniel Axtens' fix for FORTIFY_SOURCE
-   incompatibilites [2]
- - Removed a redundant report_enabled() check.
- - Fixed some places with out of date Kconfig names in the
-   documentation.
-
-Changes from v5:
- - Split out the panic_on_warn changes to a separate patch.
- - Fix documentation to fewer to the new Kconfig names.
- - Fix some changes which were in the wrong patch.
- - Rebase on top of kselftest/kunit (currently identical to 5.7-rc1)
-
-Changes from v4:
- - KASAN no longer will panic on errors if both panic_on_warn and
-   kasan_multishot are enabled.
- - As a result, the KASAN tests will no-longer disable panic_on_warn.
- - This also means panic_on_warn no-longer needs to be exported.
- - The use of temporary "kasan_data" variables has been cleaned up
-   somewhat.
- - A potential refcount/resource leak should multiple KASAN errors
-   appear during an assertion was fixed.
- - Some wording changes to the KASAN test Kconfig entries.
-
-Changes from v3:
- - KUNIT_SET_KASAN_DATA and KUNIT_DO_EXPECT_KASAN_FAIL have been
- combined and included in KUNIT_DO_EXPECT_KASAN_FAIL() instead.
- - Reordered logic in kasan_update_kunit_status() in report.c to be
- easier to read.
- - Added comment to not use the name "kasan_data" for any kunit tests
- outside of KUNIT_EXPECT_KASAN_FAIL().
-
-Changes since v2:
- - Due to Alan's changes in [1], KUnit can be built as a module.
- - The name of the tests that could not be run with KUnit has been
- changed to be more generic: test_kasan_module.
- - Documentation on how to run the new KASAN tests and what to expect
- when running them has been added.
- - Some variables and functions are now static.
- - Now save/restore panic_on_warn in a similar way to kasan_multi_shot
- and renamed the init/exit functions to be more generic to accommodate.
- - Due to [4] in kasan_strings, kasan_memchr, and
- kasan_memcmp will fail if CONFIG_AMD_MEM_ENCRYPT is enabled so return
- early and print message explaining this circumstance.
- - Changed preprocessor checks to C checks where applicable.
-
-Changes since v1:
- - Make use of Alan Maguire's suggestion to use his patch that allows
-   static resources for integration instead of adding a new attribute to
-   the kunit struct
- - All KUNIT_EXPECT_KASAN_FAIL statements are local to each test
- - The definition of KUNIT_EXPECT_KASAN_FAIL is local to the
-   test_kasan.c file since it seems this is the only place this will
-   be used.
- - Integration relies on KUnit being builtin
- - copy_user_test has been separated into its own file since KUnit
-   is unable to test these. This can be run as a module just as before,
-   using CONFIG_TEST_KASAN_USER
- - The addition to the current task has been separated into its own
-   patch as this is a significant enough change to be on its own.
+But another reason I tried to avoid kmap_atomic() is that it disables
+preemption unconditionally, even on 64-bit architectures where HIGHMEM
+is irrelevant. So using kmap_atomic() here means that the bulk of
+WireGuard packet encryption runs with preemption disabled, essentially
+for legacy reasons.
 
 
-[1] https://lore.kernel.org/linux-kselftest/CAFd5g46Uu_5TG89uOm0Dj5CMq+11cwjBnsd-k_CVy6bQUeU4Jw@mail.gmail.com/T/#t
-[2] https://lore.kernel.org/linux-mm/20200424145521.8203-1-dja@axtens.net/
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=adb72ae1915db28f934e9e02c18bfcea2f3ed3b7
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47227d27e2fcb01a9e8f5958d8997cf47a820afc
-[5] https://bugzilla.kernel.org/show_bug.cgi?id=206337
-[6] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/
-[7] https://lkml.org/lkml/2020/7/31/571
-[8] https://lore.kernel.org/linux-kselftest/8d43e88e-1356-cd63-9152-209b81b16746@linuxfoundation.org/T/#u
-[9] https://www.spinics.net/lists/kernel/msg3660451.html
-
-
-David Gow (1):
-  mm: kasan: Do not panic if both panic_on_warn and kasan_multishot set
-
-Patricia Alfonso (4):
-  Add KUnit Struct to Current Task
-  KUnit: KASAN Integration
-  KASAN: Port KASAN Tests to KUnit
-  KASAN: Testing Documentation
-
- Documentation/dev-tools/kasan.rst |  70 +++
- include/kunit/test.h              |   5 +
- include/linux/kasan.h             |   6 +
- include/linux/sched.h             |   4 +
- lib/Kconfig.kasan                 |  22 +-
- lib/Makefile                      |   4 +-
- lib/kunit/test.c                  |  13 +-
- lib/test_kasan.c                  | 728 ++++++++++++------------------
- lib/test_kasan_module.c           | 111 +++++
- mm/kasan/report.c                 |  34 +-
- 10 files changed, 554 insertions(+), 443 deletions(-)
- create mode 100644 lib/test_kasan_module.c
-
--- 
-2.28.0.618.gf4bc123cb7-goog
-
+> From a quick look, that code should probably just get rid of
+> SG_MITER_ATOMIC entirely, and alwayse use kmap_atomic().
+>
+> kmap_atomic() is actually the faster and proper interface to use
+> anyway (never mind that any of this matters on any sane hardware). The
+> old kmap() and kunmap() interfaces should generally be avoided like
+> the plague - yes, they allow sleeping in the middle and that is
+> sometimes required, but if you don't need that, you should never ever
+> use them.
+>
+> We used to have a very nasty kmap_atomic() that required people to be
+> very careful and know exactly which atomic entry to use, and that was
+> admitedly quite nasty.
+>
+> So it _looks_ like this code started using kmap() - probably back when
+> kmap_atomic() was so cumbersome to use - and was then converted
+> (conditionally) to kmap_atomic() rather than just changed whole-sale.
+> Is there actually something that wants to use those sg_miter functions
+> and sleep?
+>
+> Because if there is, that choice should come from the outside, not
+> from inside lib/scatterlist.c trying to make some bad guess based on
+> the wrong thing entirely.
+>
+>                  Linus
