@@ -6,26 +6,26 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F1DBC433E2
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 22:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8D9EC43461
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 22:26:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D5C3212CC
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 22:24:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 863CD20872
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Sep 2020 22:26:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727670AbgIOWYj (ORCPT
+        id S1727451AbgIOQWV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Sep 2020 18:24:39 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49602 "EHLO
+        Tue, 15 Sep 2020 12:22:21 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:49527 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727667AbgIOQXq (ORCPT
+        with ESMTP id S1727658AbgIOQWP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Sep 2020 12:23:46 -0400
+        Tue, 15 Sep 2020 12:22:15 -0400
 Received: from ip5f5af089.dynamic.kabel-deutschland.de ([95.90.240.137] helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kIDOE-00061Q-NV; Tue, 15 Sep 2020 16:01:06 +0000
-Date:   Tue, 15 Sep 2020 18:01:05 +0200
+        id 1kIDYD-0007Hd-J1; Tue, 15 Sep 2020 16:11:25 +0000
+Date:   Tue, 15 Sep 2020 18:11:24 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -38,22 +38,28 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-xtensa@linux-xtensa.org,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 07/15] selftests/seccomp: Remove syscall setting #ifdefs
-Message-ID: <20200915160105.sqo7x2qyt6uwzphx@wittgenstein>
+Subject: Re: [PATCH 11/15] selftests/seccomp: Remove
+ SYSCALL_NUM_RET_SHARE_REG in favor of SYSCALL_RET_SET
+Message-ID: <20200915161124.oqgoiegni3jqwtno@wittgenstein>
 References: <20200912110820.597135-1-keescook@chromium.org>
- <20200912110820.597135-8-keescook@chromium.org>
+ <20200912110820.597135-12-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200912110820.597135-8-keescook@chromium.org>
+In-Reply-To: <20200912110820.597135-12-keescook@chromium.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 12, 2020 at 04:08:12AM -0700, Kees Cook wrote:
-> With all architectures now using the common SYSCALL_NUM_SET() macro, the
-> arch-specific #ifdef can be removed from change_syscall() itself.
+On Sat, Sep 12, 2020 at 04:08:16AM -0700, Kees Cook wrote:
+> Instead of special-casing the specific case of shared registers, create
+> a default SYSCALL_RET_SET() macro (mirroring SYSCALL_NUM_SET()), that
+> writes to the SYSCALL_RET register. For architectures that can't set the
+> return value (for whatever reason), they can define SYSCALL_RET_SET()
+> without an associated SYSCALL_RET() macro. This also paves the way for
+> architectures that need to do special things to set the return value
+> (e.g. powerpc).
 > 
 > Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
