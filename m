@@ -2,113 +2,191 @@ Return-Path: <SRS0=suP2=CZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	FROM_LOCAL_NOVOWEL,HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47D27C43461
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 00:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35453C35263
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 07:37:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04669207DE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 00:57:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E956B20684
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 07:37:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/MAEsVT"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Wbmy2wm4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726199AbgIOLM6 (ORCPT
+        id S1726402AbgIPHhe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Sep 2020 07:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        Wed, 16 Sep 2020 03:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbgIOLMp (ORCPT
+        with ESMTP id S1726285AbgIPHhc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Sep 2020 07:12:45 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15F6C06174A;
-        Tue, 15 Sep 2020 04:12:37 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id z22so4437072ejl.7;
-        Tue, 15 Sep 2020 04:12:37 -0700 (PDT)
+        Wed, 16 Sep 2020 03:37:32 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFCBC06178C
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 00:37:30 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id g10so5776589otq.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 00:37:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=ffwll.ch; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=B4bOYSHsWHocnYArElpYthybN5SxC006LAFmz/36FHU=;
-        b=Z/MAEsVTEnQKv9yb0HSOEZbJscLkrEI2KA6jePSwMg1TwHWUG2zmL/K+AbtjHO6/2o
-         aIcnbhckWr6rgCmNGSrXn/T9XMsHZZKm/PsdMekg45hebYJEoEh6DtSQc6AwPL0FexMQ
-         QEcy40U+GKpucQlCREx876BJYFzTaICPrYW4syFH6C95NZecWVgDFi7ziO/VvX17lotJ
-         DDZY+9PHfKcooxB486MYcbnHky26yYukszeQjs76Kwm/6X3Co9rV5HLW0BzJkHQ4SNlQ
-         948TjdNG8+d8rKLvuzJokO+1T8T3AZzYmxIxeK7CMSgHmOVQw0cHLexkCCkg+JNIGJLn
-         Ny/w==
+        bh=ir83kA7yZmatKHQpy7nyYwdfudWOyhH141WksSrpLpI=;
+        b=Wbmy2wm4Y3Z7IHj2WQgnSxJHvWaqiIYxvJrRLzN5yosJdstiBZVZo9gvc44pSE/nA1
+         P9hDpmjXczq2zLOkqvx/WHir/QasP1J2aBD5X+7FKjnP91s5nxsyqJv2jhU8PZzNRGRF
+         pjrrhaFUmLe21mq1kggp9iTxwlhfZdVWViCcQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=B4bOYSHsWHocnYArElpYthybN5SxC006LAFmz/36FHU=;
-        b=JylZ1zrcUFvjjAjzNM5oeIOUN2UCaOTkDESSxSRb0bPB6Sr/IPrjM2RqcNIuNaTFnt
-         szDWL0/a6c4VmpMkajWoh3G1f4fkUb23pNscttHfyE5YcXsOqt6s80T0vW0oEgrYQax7
-         w1A07oRnsYzJMWjMhllr8KHaFPjQcpyVkCeRj6Yty5PvvIPgB4AUuekP4WiKsbKxnesL
-         lxAYhQ8arCoNJB9vEE04yzmS8keenNT6wgRzridBEJ2HnM9cErNU9e9gMeOQtqVmnTfH
-         wsQvvrP+AqL7MnBfWER0VAziN3AcStVoLpb8lJ84P+x0UR5o/lI18gPS0WIrXgJdxdAa
-         SGyQ==
-X-Gm-Message-State: AOAM531bmONJCFQT3H+0vuqNMhZjJHmHf9YY4WRJsVsYEancMGo3B0rm
-        yOGQWs2HemLZdlxzimQ+Pf+7rsOmJ/IIF3x3z+rJrYgo
-X-Google-Smtp-Source: ABdhPJwPU+9ZWIwNO56zgtgygOIdmPreND4z7Ge5DlUnTt0Tfg9IxfvCSMJOXmsXBV/ZabpWxbhtETys6v+wayV6BRQ=
-X-Received: by 2002:a17:906:30c5:: with SMTP id b5mr19838526ejb.98.1600168356388;
- Tue, 15 Sep 2020 04:12:36 -0700 (PDT)
+        bh=ir83kA7yZmatKHQpy7nyYwdfudWOyhH141WksSrpLpI=;
+        b=Y1m5uwTZ6/hMFXCby4pxidPKFUHS0SP2VN3+eZR3LdxuGi7kkjUG42fgf53TAQMjvl
+         DN/+xvVFpHxEuzD/nvDOYBz2K3pKb7GZx8W5/NTPW24GAlOU/E/cKpbjKWdP3WCZDUCm
+         d8yuNEOU/nQVqqr8eXTJN2MR/z151vmr/GD++CpIUqvkYOV6iUeFzVbFBzV/unW6Spr3
+         XbNtSW35N24mWVJ4NTWaTQJLVR40h3eTN2jA5c9F5SrZUVOi/bdy0VIMawoVbbpiTCgv
+         qFPldycqRD3p/bMTzVBHdFLpuQyFQoNCe5zHlmfc+1Isg9gynA025ReZKpLiAU6/ZZkB
+         7hvA==
+X-Gm-Message-State: AOAM530QVHDn0CEOTZ5hrnIa9l/uxbRJB+VDi4LyEXlndqC2eG+bpiAJ
+        Xk5nWXN0rW2WCLDY+8Pu79/y2+KD7yAfyTg5EZjx+w==
+X-Google-Smtp-Source: ABdhPJwGl0rb2zlMJB/+T8+6pHD/ce/ZZx4zrU0sObZFxXtLXBpNIcPMMRDqJU2JyoR0WPCWkLBmcTGbfcRbBMPy77o=
+X-Received: by 2002:a05:6830:14d9:: with SMTP id t25mr16390529otq.188.1600241849077;
+ Wed, 16 Sep 2020 00:37:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200912110820.597135-1-keescook@chromium.org>
- <87wo0wpnah.fsf@mpe.ellerman.id.au> <202009141321.366935EF52@keescook>
-In-Reply-To: <202009141321.366935EF52@keescook>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 15 Sep 2020 04:12:24 -0700
-Message-ID: <CAMo8BfK0Jcmt4EJ1R2d_4Hp9siSRrBsgaNDqCVjcQ0GK8XBGZA@mail.gmail.com>
-Subject: Re: [PATCH 00/15] selftests/seccomp: Refactor change_syscall()
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+References: <20200914204209.256266093@linutronix.de> <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de> <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de> <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+In-Reply-To: <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Wed, 16 Sep 2020 09:37:17 +0200
+Message-ID: <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         LKML <linux-kernel@vger.kernel.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 1:32 PM Kees Cook <keescook@chromium.org> wrote:
-> On Mon, Sep 14, 2020 at 10:15:18PM +1000, Michael Ellerman wrote:
-> > Kees Cook <keescook@chromium.org> writes:
-> However...
+On Tue, Sep 15, 2020 at 7:35 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
+> On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
 > >
-> > cheers
-> >
-> >
-> > ./seccomp_bpf
-> > TAP version 13
-> > 1..86
-> > # Starting 86 tests from 7 test cases.
-> > #  RUN           global.kcmp ...
-> > #            OK  global.kcmp
-> > ok 1 global.kcmp
-> > [...]
-> > #  RUN           global.KILL_thread ...
-> > TAP version 13
-> > 1..86
-> > # Starting 86 tests from 7 test cases.
+> > OTOH, having a working 'preemptible()' or maybe better named
+> > 'can_schedule()' check makes tons of sense to make decisions about
+> > allocation modes or other things.
 >
-> Was this a mis-paste, or has something very very bad happened here in
-> global.KILL_one_arg_six finishes?
+> No. I think that those kinds of decisions about actual behavior are
+> always simply fundamentally wrong.
+>
+> Note that this is very different from having warnings about invalid
+> use. THAT is correct. It may not warn in all configurations, but that
+> doesn't matter: what matters is that it warns in common enough
+> configurations that developers will catch it.
+>
+> So having a warning in "might_sleep()" that doesn't always trigger,
+> because you have a limited configuration that can't even detect the
+> situation, that's fine and dandy and intentional.
+>
+> But having code like
+>
+>        if (can_schedule())
+>            .. do something different ..
+>
+> is fundamentally complete and utter garbage.
+>
+> It's one thing if you test for "am I in hardware interrupt context".
+> Those tests aren't great either, but at least they make sense.
+>
+> But a driver - or some library routine - making a difference based on
+> some nebulous "can I schedule" is fundamentally and basically WRONG.
+>
+> If some code changes behavior, it needs to be explicit to the *caller*
+> of that code.
+>
+> So this is why GFP_ATOMIC is fine, but "if (!can_schedule())
+> do_something_atomic()" is pure shite.
+>
+> And I am not IN THE LEAST interested in trying to help people doing
+> pure shite. We need to fix them. Like the crypto code is getting
+> fixed.
 
-I observe similar output corruption on xtensa when I redirect test output
-into a file or pipe it to 'cat'. When it goes to the terminal it looks normal.
+Just figured I'll throw my +1 in from reading too many (gpu) drivers.
+Code that tries to cleverly adjust its behaviour depending upon the
+context it's running in is harder to understand and blows up in more
+interesting ways. We still have drm_can_sleep() and it's mostly just
+used for debug code, and I've largely ended up just deleting
+everything that used it because when you're driver is blowing up the
+last thing you want is to realize your debug code and output can't be
+relied upon. Or worse, that the only Oops you have is the one in the
+debug code, because the real one scrolled away - the original idea
+behind drm_can_sleep was to make all the modeset code work
+automagically both in normal ioctl/kworker context and in the panic
+handlers or kgdb callbacks. Wishful thinking at best.
 
+Also at least for me that extends to everything, e.g. I much prefer
+explicit spin_lock and spin_lock_irq vs magic spin_lock_irqsave for
+locks shared with interrupt handlers, since the former two gives me
+clear information from which contexts such function can be called.
+Other end is the memalloc_no*_save/restore functions, where I recently
+made a real big fool of myself because I didn't realize how much that
+impacts everything that's run within - suddenly "GFP_KERNEL for small
+stuff never fails" is wrong everywhere.
+
+It's all great for debugging and sanity checks (and we run with all
+that stuff enabled in our CI), but really semantic changes depending
+upon magic context checks freak my out :-)
+-Daniel
 -- 
-Thanks.
--- Max
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
