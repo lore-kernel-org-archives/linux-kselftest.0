@@ -2,482 +2,284 @@ Return-Path: <SRS0=suP2=CZ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB8DEC433E2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 22:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B678C43461
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 22:40:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F49E21D90
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 22:39:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="l4cnTSkb"
+	by mail.kernel.org (Postfix) with ESMTP id C9EDC2087D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Sep 2020 22:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600296000;
+	bh=RCUp2GsaUjP3KjD3p3qyvmzKntp/WbVM0ouPcgzRRDU=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:List-ID:
+	 From;
+	b=XY+Vbz0V7agqfpDzv/CYoXPllC7xvuJROJkOASZ1I0hDZeMobEPqUEq6KcU7iEWRl
+	 Dx6zAmR1xlJMsxqb9Y7PzE7XAqUYRkD9OE3fp8RiW7w5mpK6Ita6CLlJFqH/k8meTc
+	 MRIevvIQbrzFdnPCMeEvs4y0RzLGVNClAqbBtc+s=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbgIPWjM (ORCPT
+        id S1727022AbgIPWj6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Sep 2020 18:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726458AbgIPWh4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Sep 2020 18:37:56 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE77C06174A
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 15:37:56 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 207so264297ybd.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Sep 2020 15:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=NOsssfJ80Jxaxnpxlk2jZAvBPv0057S2yLjIy6L/yns=;
-        b=l4cnTSkb1lzZ1puozhVwglicr1QG0BOY7FGQAkDGhLjL0LSScyDPRY+wYN3+EGT44V
-         KeQ+C9tPp3wb0DRXh4bYKb12tzvHaFQ47YVHq5UsuhsL1hFZj4xfQfE+Xw2n0riKCiGz
-         ebgNdRuSe+OkaO4lzU0lk3QIlOFyEsTiaGfWirD5y8BMZu96DbZVl1lFBXLBVsjl8NMU
-         p6vpzhZU2rUz0Pt8Mnn5pX//LIZL9azYbTNiF4p360Cw01/r1ATMXTp6dITNAkwpGHCo
-         bM5QlhZ55kTsmPVoMoxEFVb9+S0AA5JieqvBlTwEVLZI/4KJ0oF0/boyZTf+JZ5ez8ND
-         /WKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=NOsssfJ80Jxaxnpxlk2jZAvBPv0057S2yLjIy6L/yns=;
-        b=D8BDLuVLIg86OGx7LO4Zp+bWkVfkTJi/NYYtc1J8JtmNWJFqNJm/wKfBTBIxRcLynb
-         79HC3pVNAaV6c2Eqs5NnAuC/3mt7kheSbVZ+2dzXA2EJvduw2M/vZKJ7n1i6oUvVNLbH
-         /ZDtd6XmKCVcHmT2BW5GoVxnrukuwcKhz0+PhQzLpUNS/FGrkNUmhkNX3XTf1v5s+1EU
-         OT6oZjAoOLAYCfm4j+VGo2FAo0tKs/wh/0wEdq3rdmXyMhZ7IXJhhBSAbrYChkZS5AK5
-         G8b+2ru3KUx8O3aeb7/awCXRqrzYsOpeyfCXpeKQl9nWIdK6lFYwK8ewWk/al629rhBg
-         Msmw==
-X-Gm-Message-State: AOAM530lEn99tU+hOtwhT8su/HRlddp22Ik117Ui8VMurjhhjtzjAkpN
-        PdX2oAaq0z0N56J1tF3a3mDz4IQov/c=
-X-Google-Smtp-Source: ABdhPJxUGcVO6aqlkoz8RN8L/n7i+P0DcEEKNyMMsqawLCCa3acxT9dltpcCUkziPZ/EHq50Nd/RgV38fwM=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a25:20d5:: with SMTP id g204mr38255640ybg.337.1600295875309;
- Wed, 16 Sep 2020 15:37:55 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 15:35:07 -0700
-In-Reply-To: <20200916223512.2885524-1-haoluo@google.com>
-Message-Id: <20200916223512.2885524-2-haoluo@google.com>
-Mime-Version: 1.0
-References: <20200916223512.2885524-1-haoluo@google.com>
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH bpf-next v3 1/6] bpf: Introduce pseudo_btf_id
-From:   Hao Luo <haoluo@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Hao Luo <haoluo@google.com>,
+        Wed, 16 Sep 2020 18:39:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46756 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726397AbgIPWjx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Sep 2020 18:39:53 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9997D2080C;
+        Wed, 16 Sep 2020 22:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600295991;
+        bh=RCUp2GsaUjP3KjD3p3qyvmzKntp/WbVM0ouPcgzRRDU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fKFN6BcMv+15//IDmLi2f2NV7C8b6ABIsMYin7ITdJ80ZX8PLb7gIP4LBXom3WNzq
+         szBDRTf0ftJFsk5mVlvgZQXvg2eXlz+UKDOGlM2y0ArIF5ljHuARigv2cYf8VCFi3E
+         2UWWYXuOPaiwDqHd9OF74mk5aMOanoaxnWNoKiHg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 5954A3522BA0; Wed, 16 Sep 2020 15:39:51 -0700 (PDT)
+Date:   Wed, 16 Sep 2020 15:39:51 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Ingo Molnar <mingo@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [patch 00/13] preempt: Make preempt count unconditional
+Message-ID: <20200916223951.GG29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <CAHk-=win80rdof8Pb=5k6gT9j_v+hz-TQzKPVastZDvBe9RimQ@mail.gmail.com>
+ <871rj4owfn.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wj0eUuVQ=hRFZv_nY7g5ZLt7Fy3K7SMJL0ZCzniPtsbbg@mail.gmail.com>
+ <87bli75t7v.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wht7kAeyR5xEW2ORj7m0hibVxZ3t+2ie8vNHLQfdbN2_g@mail.gmail.com>
+ <CAKMK7uHAk9-Vy2cof0ws=DrcD52GHiCDiyHbjLd19CgpBU2rKQ@mail.gmail.com>
+ <20200916152956.GV29330@paulmck-ThinkPad-P72>
+ <CAKMK7uGFyfhEyt=jmdk2jDO-hq0_Pf0ck+cKSELHjr2U3rPuYQ@mail.gmail.com>
+ <20200916205840.GD29330@paulmck-ThinkPad-P72>
+ <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uHL2dMv80b8uBXr=BqHD2TQeODQQM1MGYhAfCYbX7sLrA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Pseudo_btf_id is a type of ld_imm insn that associates a btf_id to a
-ksym so that further dereferences on the ksym can use the BTF info
-to validate accesses. Internally, when seeing a pseudo_btf_id ld insn,
-the verifier reads the btf_id stored in the insn[0]'s imm field and
-marks the dst_reg as PTR_TO_BTF_ID. The btf_id points to a VAR_KIND,
-which is encoded in btf_vminux by pahole. If the VAR is not of a struct
-type, the dst reg will be marked as PTR_TO_MEM instead of PTR_TO_BTF_ID
-and the mem_size is resolved to the size of the VAR's type.
+On Wed, Sep 16, 2020 at 11:43:02PM +0200, Daniel Vetter wrote:
+> On Wed, Sep 16, 2020 at 10:58 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Sep 16, 2020 at 10:29:06PM +0200, Daniel Vetter wrote:
+> > > On Wed, Sep 16, 2020 at 5:29 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Wed, Sep 16, 2020 at 09:37:17AM +0200, Daniel Vetter wrote:
+> > > > > On Tue, Sep 15, 2020 at 7:35 PM Linus Torvalds
+> > > > > <torvalds@linux-foundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, Sep 15, 2020 at 1:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > > > > >
+> > > > > > > OTOH, having a working 'preemptible()' or maybe better named
+> > > > > > > 'can_schedule()' check makes tons of sense to make decisions about
+> > > > > > > allocation modes or other things.
+> > > > > >
+> > > > > > No. I think that those kinds of decisions about actual behavior are
+> > > > > > always simply fundamentally wrong.
+> > > > > >
+> > > > > > Note that this is very different from having warnings about invalid
+> > > > > > use. THAT is correct. It may not warn in all configurations, but that
+> > > > > > doesn't matter: what matters is that it warns in common enough
+> > > > > > configurations that developers will catch it.
+> > > > > >
+> > > > > > So having a warning in "might_sleep()" that doesn't always trigger,
+> > > > > > because you have a limited configuration that can't even detect the
+> > > > > > situation, that's fine and dandy and intentional.
+> > > > > >
+> > > > > > But having code like
+> > > > > >
+> > > > > >        if (can_schedule())
+> > > > > >            .. do something different ..
+> > > > > >
+> > > > > > is fundamentally complete and utter garbage.
+> > > > > >
+> > > > > > It's one thing if you test for "am I in hardware interrupt context".
+> > > > > > Those tests aren't great either, but at least they make sense.
+> > > > > >
+> > > > > > But a driver - or some library routine - making a difference based on
+> > > > > > some nebulous "can I schedule" is fundamentally and basically WRONG.
+> > > > > >
+> > > > > > If some code changes behavior, it needs to be explicit to the *caller*
+> > > > > > of that code.
+> > > > > >
+> > > > > > So this is why GFP_ATOMIC is fine, but "if (!can_schedule())
+> > > > > > do_something_atomic()" is pure shite.
+> > > > > >
+> > > > > > And I am not IN THE LEAST interested in trying to help people doing
+> > > > > > pure shite. We need to fix them. Like the crypto code is getting
+> > > > > > fixed.
+> > > > >
+> > > > > Just figured I'll throw my +1 in from reading too many (gpu) drivers.
+> > > > > Code that tries to cleverly adjust its behaviour depending upon the
+> > > > > context it's running in is harder to understand and blows up in more
+> > > > > interesting ways. We still have drm_can_sleep() and it's mostly just
+> > > > > used for debug code, and I've largely ended up just deleting
+> > > > > everything that used it because when you're driver is blowing up the
+> > > > > last thing you want is to realize your debug code and output can't be
+> > > > > relied upon. Or worse, that the only Oops you have is the one in the
+> > > > > debug code, because the real one scrolled away - the original idea
+> > > > > behind drm_can_sleep was to make all the modeset code work
+> > > > > automagically both in normal ioctl/kworker context and in the panic
+> > > > > handlers or kgdb callbacks. Wishful thinking at best.
+> > > > >
+> > > > > Also at least for me that extends to everything, e.g. I much prefer
+> > > > > explicit spin_lock and spin_lock_irq vs magic spin_lock_irqsave for
+> > > > > locks shared with interrupt handlers, since the former two gives me
+> > > > > clear information from which contexts such function can be called.
+> > > > > Other end is the memalloc_no*_save/restore functions, where I recently
+> > > > > made a real big fool of myself because I didn't realize how much that
+> > > > > impacts everything that's run within - suddenly "GFP_KERNEL for small
+> > > > > stuff never fails" is wrong everywhere.
+> > > > >
+> > > > > It's all great for debugging and sanity checks (and we run with all
+> > > > > that stuff enabled in our CI), but really semantic changes depending
+> > > > > upon magic context checks freak my out :-)
+> > > >
+> > > > All fair, but some of us need to write code that must handle being
+> > > > invoked from a wide variety of contexts.  Now perhaps you like the idea of
+> > > > call_rcu() for schedulable contexts, call_rcu_nosched() when preemption
+> > > > is disabled, call_rcu_irqs_are_disabled() when interrupts are disabled,
+> > > > call_rcu_raw_atomic() from contexts where (for example) raw spinlocks
+> > > > are held, and so on.  However, from what I can see, most people instead
+> > > > consistently prefer that the RCU API instead be consolidated.
+> > > >
+> > > > Some in-flight cache-efficiency work for kvfree_rcu() and call_rcu()
+> > > > needs to be able to allocate memory occasionally.  It can do that when
+> > > > invoked from some contexts, but not when invoked from others.  Right now,
+> > > > in !PREEMPT kernels, it cannot tell, and must either do things to the
+> > > > memory allocators that some of the MM hate or must unnecessarily invoke
+> > > > workqueues.  Thomas's patches would allow the code to just allocate in
+> > > > the common case when these primitives are invoked from contexts where
+> > > > allocation is permitted.
+> > > >
+> > > > If we want to restrict access to the can_schedule() or whatever primitive,
+> > > > fine and good.  We can add a check to checkpatch.pl, for example.  Maybe
+> > > > we can go back to the old brlock approach of requiring certain people's
+> > > > review for each addition to the kernel.
+> > > >
+> > > > But there really are use cases that it would greatly help.
+> > >
+> > > We can deadlock in random fun places if random stuff we're calling
+> > > suddenly starts allocating. Sometimes. Maybe once in a blue moon, to
+> > > make it extra fun to reproduce. Maybe most driver subsystems are less
+> > > brittle, but gpu drivers definitely need to know about the details for
+> > > exactly this example. And yes gpu drivers use rcu for freeing
+> > > dma_fence structures, and that tends to happen in code that we only
+> > > recently figured out should really not allocate memory.
+> > >
+> > > I think minimally you need to throw in an unconditional
+> > > fs_reclaim_acquire();fs_reclaim_release(); so that everyone who runs
+> > > with full debugging knows what might happen. It's kinda like
+> > > might_sleep, but a lot more specific. might_sleep() alone is not
+> > > enough, because in the specific code paths I'm thinking of (and
+> > > created special lockdep annotations for just recently) sleeping is
+> > > allowed, but any memory allocations with GFP_RECLAIM set are no-go.
+> >
+> > Completely agreed!  Any allocation on any free path must be handled
+> > -extremely- carefully.  To that end...
+> >
+> > First, there is always a fallback in case the allocation fails.  Which
+> > might have performance or corner-case robustness issues, but which will
+> > at least allow forward progress.  Second, we consulted with a number of
+> > MM experts to arrive at appropriate GFP_* flags (and their patience is
+> > greatly appreciated).  Third, the paths that can allocate will do so about
+> > one time of 500, so any issues should be spotted sooner rather than later.
+> >
+> > So you are quite right to be concerned, but I believe we will be doing the
+> > right things.  And based on his previous track record, I am also quite
+> > certain that Mr. Murphy will be on hand to provide me any additional
+> > education that I might require.
+> >
+> > Finally, I have noted down your point about fs_reclaim_acquire() and
+> > fs_reclaim_release().  Whether or not they prove to be needed, I do
+> > appreciate your calling them to my attention.
+> 
+> I just realized that since these dma_fence structs are refcounted and
+> userspace can hold references (directly, it can pass them around
+> behind file descriptors) we might never hit such a path until slightly
+> unusual or evil userspace does something interesting. Do you have
+> links to those patches? Some googling didn't turn up anything. I can
+> then figure out whether it's better to risk not spotting issues with
+> call_rcu vs slapping a memalloc_noio_save/restore around all these
+> critical section which force-degrades any allocation to GFP_ATOMIC at
+> most, but has the risk that we run into code that assumes "GFP_KERNEL
+> never fails for small stuff" and has a decidedly less tested fallback
+> path than rcu code.
 
-From the VAR btf_id, the verifier can also read the address of the
-ksym's corresponding kernel var from kallsyms and use that to fill
-dst_reg.
+Here is the previous early draft version, which will change considerably
+for the next version:
 
-Therefore, the proper functionality of pseudo_btf_id depends on (1)
-kallsyms and (2) the encoding of kernel global VARs in pahole, which
-should be available since pahole v1.18.
+	lore.kernel.org/lkml/20200809204354.20137-1-urezki@gmail.com
 
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- include/linux/bpf_verifier.h   |   7 ++
- include/linux/btf.h            |  15 ++++
- include/uapi/linux/bpf.h       |  36 +++++++---
- kernel/bpf/btf.c               |  15 ----
- kernel/bpf/verifier.c          | 125 +++++++++++++++++++++++++++++----
- tools/include/uapi/linux/bpf.h |  36 +++++++---
- 6 files changed, 188 insertions(+), 46 deletions(-)
+This does kvfree_rcu(), but we expect to handle call_rcu() similarly.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 53c7bd568c5d..6a9dd0279ea4 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -308,6 +308,13 @@ struct bpf_insn_aux_data {
- 			u32 map_index;		/* index into used_maps[] */
- 			u32 map_off;		/* offset from value base address */
- 		};
-+		struct {
-+			u32 reg_type;		/* type of pseudo_btf_id */
-+			union {
-+				u32 btf_id;	/* btf_id for struct typed var */
-+				u32 mem_size;	/* mem_size for non-struct typed var */
-+			};
-+		} btf_var;
- 	};
- 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index a9af5e7a7ece..592373d359b9 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -106,6 +106,21 @@ static inline bool btf_type_is_func_proto(const struct btf_type *t)
- 	return BTF_INFO_KIND(t->info) == BTF_KIND_FUNC_PROTO;
- }
- 
-+static inline bool btf_type_is_var(const struct btf_type *t)
-+{
-+	return BTF_INFO_KIND(t->info) == BTF_KIND_VAR;
-+}
-+
-+/* union is only a special case of struct:
-+ * all its offsetof(member) == 0
-+ */
-+static inline bool btf_type_is_struct(const struct btf_type *t)
-+{
-+	u8 kind = BTF_INFO_KIND(t->info);
-+
-+	return kind == BTF_KIND_STRUCT || kind == BTF_KIND_UNION;
-+}
-+
- static inline u16 btf_type_vlen(const struct btf_type *t)
- {
- 	return BTF_INFO_VLEN(t->info);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a22812561064..96c828a80520 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -356,18 +356,36 @@ enum bpf_link_type {
- #define BPF_F_SLEEPABLE		(1U << 4)
- 
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-- * two extensions:
-- *
-- * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
-- * insn[0].imm:      map fd              map fd
-- * insn[1].imm:      0                   offset into value
-- * insn[0].off:      0                   0
-- * insn[1].off:      0                   0
-- * ldimm64 rewrite:  address of map      address of map[0]+offset
-- * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
-+ * the following extensions:
-+ *
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD
-+ * insn[0].imm:      map fd
-+ * insn[1].imm:      0
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of map
-+ * verifier type:    CONST_PTR_TO_MAP
-  */
- #define BPF_PSEUDO_MAP_FD	1
-+/* insn[0].src_reg:  BPF_PSEUDO_MAP_VALUE
-+ * insn[0].imm:      map fd
-+ * insn[1].imm:      offset into value
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of map[0]+offset
-+ * verifier type:    PTR_TO_MAP_VALUE
-+ */
- #define BPF_PSEUDO_MAP_VALUE	2
-+/* insn[0].src_reg:  BPF_PSEUDO_BTF_ID
-+ * insn[0].imm:      kernel btd id of VAR
-+ * insn[1].imm:      0
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of the kernel variable
-+ * verifier type:    PTR_TO_BTF_ID or PTR_TO_MEM, depending on whether the var
-+ *                   is struct/union.
-+ */
-+#define BPF_PSEUDO_BTF_ID	3
- 
- /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
-  * offset to another bpf function
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index f9ac6935ab3c..5831d9f3f3c5 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -355,16 +355,6 @@ static bool btf_type_nosize_or_null(const struct btf_type *t)
- 	return !t || btf_type_nosize(t);
- }
- 
--/* union is only a special case of struct:
-- * all its offsetof(member) == 0
-- */
--static bool btf_type_is_struct(const struct btf_type *t)
--{
--	u8 kind = BTF_INFO_KIND(t->info);
--
--	return kind == BTF_KIND_STRUCT || kind == BTF_KIND_UNION;
--}
--
- static bool __btf_type_is_struct(const struct btf_type *t)
- {
- 	return BTF_INFO_KIND(t->info) == BTF_KIND_STRUCT;
-@@ -375,11 +365,6 @@ static bool btf_type_is_array(const struct btf_type *t)
- 	return BTF_INFO_KIND(t->info) == BTF_KIND_ARRAY;
- }
- 
--static bool btf_type_is_var(const struct btf_type *t)
--{
--	return BTF_INFO_KIND(t->info) == BTF_KIND_VAR;
--}
--
- static bool btf_type_is_datasec(const struct btf_type *t)
- {
- 	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 814bc6c1ad16..de7421a52dbc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7378,6 +7378,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
- 	struct bpf_insn_aux_data *aux = cur_aux(env);
- 	struct bpf_reg_state *regs = cur_regs(env);
-+	struct bpf_reg_state *dst_reg;
- 	struct bpf_map *map;
- 	int err;
- 
-@@ -7394,25 +7395,44 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	if (err)
- 		return err;
- 
-+	dst_reg = &regs[insn->dst_reg];
- 	if (insn->src_reg == 0) {
- 		u64 imm = ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
- 
--		regs[insn->dst_reg].type = SCALAR_VALUE;
-+		dst_reg->type = SCALAR_VALUE;
- 		__mark_reg_known(&regs[insn->dst_reg], imm);
- 		return 0;
- 	}
- 
-+	if (insn->src_reg == BPF_PSEUDO_BTF_ID) {
-+		mark_reg_known_zero(env, regs, insn->dst_reg);
-+
-+		dst_reg->type = aux->btf_var.reg_type;
-+		switch (dst_reg->type) {
-+		case PTR_TO_MEM:
-+			dst_reg->mem_size = aux->btf_var.mem_size;
-+			break;
-+		case PTR_TO_BTF_ID:
-+			dst_reg->btf_id = aux->btf_var.btf_id;
-+			break;
-+		default:
-+			verbose(env, "bpf verifier is misconfigured\n");
-+			return -EFAULT;
-+		}
-+		return 0;
-+	}
-+
- 	map = env->used_maps[aux->map_index];
- 	mark_reg_known_zero(env, regs, insn->dst_reg);
--	regs[insn->dst_reg].map_ptr = map;
-+	dst_reg->map_ptr = map;
- 
- 	if (insn->src_reg == BPF_PSEUDO_MAP_VALUE) {
--		regs[insn->dst_reg].type = PTR_TO_MAP_VALUE;
--		regs[insn->dst_reg].off = aux->map_off;
-+		dst_reg->type = PTR_TO_MAP_VALUE;
-+		dst_reg->off = aux->map_off;
- 		if (map_value_has_spin_lock(map))
--			regs[insn->dst_reg].id = ++env->id_gen;
-+			dst_reg->id = ++env->id_gen;
- 	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD) {
--		regs[insn->dst_reg].type = CONST_PTR_TO_MAP;
-+		dst_reg->type = CONST_PTR_TO_MAP;
- 	} else {
- 		verbose(env, "bpf verifier is misconfigured\n");
- 		return -EINVAL;
-@@ -9288,6 +9308,73 @@ static int do_check(struct bpf_verifier_env *env)
- 	return 0;
- }
- 
-+/* replace pseudo btf_id with kernel symbol address */
-+static int check_pseudo_btf_id(struct bpf_verifier_env *env,
-+			       struct bpf_insn *insn,
-+			       struct bpf_insn_aux_data *aux)
-+{
-+	u32 type, id = insn->imm;
-+	const struct btf_type *t;
-+	const char *sym_name;
-+	u64 addr;
-+
-+	if (!btf_vmlinux) {
-+		verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=y is specified in Kconfig.\n");
-+		return -EINVAL;
-+	}
-+
-+	t = btf_type_by_id(btf_vmlinux, id);
-+	if (!t) {
-+		verbose(env, "ldimm64 insn specifies invalid btf_id %d.\n", id);
-+		return -ENOENT;
-+	}
-+
-+	if (insn[1].imm != 0) {
-+		verbose(env, "reserved field (insn[1].imm) is used in pseudo_btf_id ldimm64 insn.\n");
-+		return -EINVAL;
-+	}
-+
-+	if (!btf_type_is_var(t)) {
-+		verbose(env, "pseudo btf_id %d in ldimm64 isn't KIND_VAR.\n",
-+			id);
-+		return -EINVAL;
-+	}
-+
-+	sym_name = btf_name_by_offset(btf_vmlinux, t->name_off);
-+	addr = kallsyms_lookup_name(sym_name);
-+	if (!addr) {
-+		verbose(env, "ldimm64 failed to find the address for kernel symbol '%s'.\n",
-+			sym_name);
-+		return -ENOENT;
-+	}
-+
-+	insn[0].imm = (u32)addr;
-+	insn[1].imm = addr >> 32;
-+
-+	type = t->type;
-+	t = btf_type_skip_modifiers(btf_vmlinux, type, NULL);
-+	if (!btf_type_is_struct(t)) {
-+		const struct btf_type *ret;
-+		const char *tname;
-+		u32 tsize;
-+
-+		/* resolve the type size of ksym. */
-+		ret = btf_resolve_size(btf_vmlinux, t, &tsize);
-+		if (IS_ERR(ret)) {
-+			tname = btf_name_by_offset(btf_vmlinux, t->name_off);
-+			verbose(env, "ldimm64 unable to resolve the size of type '%s': %ld\n",
-+				tname, PTR_ERR(ret));
-+			return -EINVAL;
-+		}
-+		aux->btf_var.reg_type = PTR_TO_MEM;
-+		aux->btf_var.mem_size = tsize;
-+	} else {
-+		aux->btf_var.reg_type = PTR_TO_BTF_ID;
-+		aux->btf_var.btf_id = type;
-+	}
-+	return 0;
-+}
-+
- static int check_map_prealloc(struct bpf_map *map)
- {
- 	return (map->map_type != BPF_MAP_TYPE_HASH &&
-@@ -9398,10 +9485,14 @@ static bool bpf_map_is_cgroup_storage(struct bpf_map *map)
- 		map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
- }
- 
--/* look for pseudo eBPF instructions that access map FDs and
-- * replace them with actual map pointers
-+/* find and rewrite pseudo imm in ld_imm64 instructions:
-+ *
-+ * 1. if it accesses map FD, replace it with actual map pointer.
-+ * 2. if it accesses btf_id of a VAR, replace it with pointer to the var.
-+ *
-+ * NOTE: btf_vmlinux is required for converting pseudo btf_id.
-  */
--static int replace_map_fd_with_map_ptr(struct bpf_verifier_env *env)
-+static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- {
- 	struct bpf_insn *insn = env->prog->insnsi;
- 	int insn_cnt = env->prog->len;
-@@ -9442,6 +9533,14 @@ static int replace_map_fd_with_map_ptr(struct bpf_verifier_env *env)
- 				/* valid generic load 64-bit imm */
- 				goto next_insn;
- 
-+			if (insn[0].src_reg == BPF_PSEUDO_BTF_ID) {
-+				aux = &env->insn_aux_data[i];
-+				err = check_pseudo_btf_id(env, insn, aux);
-+				if (err)
-+					return err;
-+				goto next_insn;
-+			}
-+
- 			/* In final convert_pseudo_ld_imm64() step, this is
- 			 * converted into regular 64-bit imm load insn.
- 			 */
-@@ -11392,10 +11491,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	if (is_priv)
- 		env->test_state_freq = attr->prog_flags & BPF_F_TEST_STATE_FREQ;
- 
--	ret = replace_map_fd_with_map_ptr(env);
--	if (ret < 0)
--		goto skip_full_check;
--
- 	if (bpf_prog_is_dev_bound(env->prog->aux)) {
- 		ret = bpf_prog_offload_verifier_prep(env->prog);
- 		if (ret)
-@@ -11421,6 +11516,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	if (ret)
- 		goto skip_full_check;
- 
-+	ret = resolve_pseudo_ldimm64(env);
-+	if (ret < 0)
-+		goto skip_full_check;
-+
- 	ret = check_cfg(env);
- 	if (ret < 0)
- 		goto skip_full_check;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a22812561064..96c828a80520 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -356,18 +356,36 @@ enum bpf_link_type {
- #define BPF_F_SLEEPABLE		(1U << 4)
- 
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-- * two extensions:
-- *
-- * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
-- * insn[0].imm:      map fd              map fd
-- * insn[1].imm:      0                   offset into value
-- * insn[0].off:      0                   0
-- * insn[1].off:      0                   0
-- * ldimm64 rewrite:  address of map      address of map[0]+offset
-- * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
-+ * the following extensions:
-+ *
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD
-+ * insn[0].imm:      map fd
-+ * insn[1].imm:      0
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of map
-+ * verifier type:    CONST_PTR_TO_MAP
-  */
- #define BPF_PSEUDO_MAP_FD	1
-+/* insn[0].src_reg:  BPF_PSEUDO_MAP_VALUE
-+ * insn[0].imm:      map fd
-+ * insn[1].imm:      offset into value
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of map[0]+offset
-+ * verifier type:    PTR_TO_MAP_VALUE
-+ */
- #define BPF_PSEUDO_MAP_VALUE	2
-+/* insn[0].src_reg:  BPF_PSEUDO_BTF_ID
-+ * insn[0].imm:      kernel btd id of VAR
-+ * insn[1].imm:      0
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of the kernel variable
-+ * verifier type:    PTR_TO_BTF_ID or PTR_TO_MEM, depending on whether the var
-+ *                   is struct/union.
-+ */
-+#define BPF_PSEUDO_BTF_ID	3
- 
- /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
-  * offset to another bpf function
--- 
-2.28.0.618.gf4bc123cb7-goog
+The version in preparation will use workqueues to do the allocation in a
+known-safe environment and also use lockless access to certain portions
+of the allocator caches (as noted earlier, this last is not much loved
+by some of the MM guys).  Given Thomas's patch, we could with high
+probability allocate directly, perhaps even not needing memory-allocator
+modifications.
 
+Either way, kvfree_rcu(), and later call_rcu(), will avoid asking the
+allocator to do anything that the calling context prohibits.  So what
+types of bugs are you looking for?  Where reclaim calls back into the
+driver or some such?
+
+							Thanx, Paul
