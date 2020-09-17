@@ -2,151 +2,135 @@ Return-Path: <SRS0=hXTE=C2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C29FDC43461
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Sep 2020 19:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC35FC43464
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Sep 2020 22:06:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7746620878
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Sep 2020 19:17:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5949620872
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Sep 2020 22:06:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wPTmRKV7"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EaqigPaJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgIQTRu (ORCPT
+        id S1726054AbgIQWGm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Sep 2020 15:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        Thu, 17 Sep 2020 18:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728395AbgIQQSX (ORCPT
+        with ESMTP id S1725886AbgIQWGl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 12:18:23 -0400
+        Thu, 17 Sep 2020 18:06:41 -0400
 Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364B5C06178B
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 08:53:03 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id a9so1508087pjg.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 08:53:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF56C061756
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 15:06:41 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id v14so1908477pjd.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 15:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0bpeJmfLaUdJUdRQCC+1Kkaahik9MfGdV1JCQQN+ftA=;
-        b=wPTmRKV7mzIGoyC0/19DkfpvYXemkGgKI/iGQM4Fdiinvf2NCxAs3ZEabWCfux8ImY
-         hXmIzcCLXR8o7A+rE2lXB7YLN54APTzj4nLGIm2uKgAe3LG7522D/4ELuDr4tRrFYIId
-         r/ZH7sFBXdUXoS3kthIR3gCxRTi6d5xQBFRVY5+3dB/Eo0YjyqH5fN6bN48VyLHIuqKf
-         BoyVePZutG74g2JLDexWawC2CbQv5WropMXHekT3PAOQldXFUWFJn/O3xbEBo2G2yCwZ
-         SAkjfNu/giXR8pqEJC5bA0W3tV+9Z1S6qE1N0qK03UURdLzrS+12648xIa3dfCvTKFEt
-         b11Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=KGNmIQxkdvUG3FJy4i5PBk+ji2PTypNkOa0bskKz16s=;
+        b=EaqigPaJOr6zzGO1gy3rVaDoZkIxYX1OWLosQF+sjumKAYPELnTLFQ6bdp1H+yafVN
+         HXWuwkjp9Zd4RV142Qe0R8wi6t+9dYOVRkwH0gGxAIL9j2GhMUlDd76IwzQZTGTCjyAT
+         gGCBimh9PMJ72w2Oa2z4sAEFv0bybwKf8JJ04=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0bpeJmfLaUdJUdRQCC+1Kkaahik9MfGdV1JCQQN+ftA=;
-        b=CeMyCu8Adop12ChWpH14YwsfBqEUttcx3vk4Ir24lKErkIvTY5MjLWLwsLHrb5Ojob
-         jCyNFvUEXgrU7rfILwZKqr9GnK2OIGEOCUBAykl/D0pHNj80Y5D5hvWZYiy1haM0Ha7Y
-         oBzsMpMfxIluKKiNQ9kVXP65jkCBb20tksp7KFMJmaHH36n/pxH/cmUlHsWqNj1JPTGF
-         xPGDOMB4KkuKXhiasMnUL6TH+Xa/H1rWXG0k9/Uuej+AJ/dmBmOziZIIDbbLIBhW/M0a
-         ImvCqh7KBJVpYLMaNfJFN1yhdVVmiQIgq+iaxeLc3pKEUkqKNoPgB8pHZZIeHL064Ofk
-         Lu0A==
-X-Gm-Message-State: AOAM530qAbW2sF8S7I5S1qWD05J0NoKoMFnUfNyMHaoN7jT5Ee4WjPQ7
-        EruNalBNnDd/7pEiWAXhTYVp2aQ51/ldRCv9WK+gfw==
-X-Google-Smtp-Source: ABdhPJzxBD08XLMZ/eMtjTIwg6DpVlX5XjkQM77G7WqyVfiLwHULJwFyZzC5fFdye7ihxhxIu1whj65ca14QsM1AhSU=
-X-Received: by 2002:a17:90a:db49:: with SMTP id u9mr8923866pjx.90.1600357982512;
- Thu, 17 Sep 2020 08:53:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <0100017492de8180-c524cff4-bd4e-4777-9f33-7e1da2c986d2-000000@email.amazonses.com>
- <CANKHsTfyE64ygNB0H0Nx=P63D-kqYa6aGOXS6ZmNUspLJJtS=Q@mail.gmail.com> <f9144c49-d39a-af67-2a5a-3828b86ea86c@linuxfoundation.org>
-In-Reply-To: <f9144c49-d39a-af67-2a5a-3828b86ea86c@linuxfoundation.org>
-From:   Justin Cook <justin.cook@linaro.org>
-Date:   Thu, 17 Sep 2020 10:52:51 -0500
-Message-ID: <CANKHsTeOix88zT=d1ywROXXXZRxYnYOEzRQDJGJgoh4DVbnPjQ@mail.gmail.com>
-Subject: Re: [REGRESSION] kselftest: next-20200915
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=KGNmIQxkdvUG3FJy4i5PBk+ji2PTypNkOa0bskKz16s=;
+        b=hFMioPqyynjjUT2/nRZljTmURjw6J7xwKMnLJTd/FFTukUpHQO14j4lNJzA3YQHTMg
+         K6q9OxQD3i2+Fc3URJ/nuw8fupTqHqRFxJt+qaCr38/Oll6dmRaBPIJb4qQiKZ3bhCG8
+         7xkLYRREK/9TEsxKx84YqMYkU4OJHV1Agl4D8FLPySmeTkPS8HELocW9B6j5ajKioSsW
+         3B69beMYlN5toIlJ0oCJfK8KoN2ZpAu46X6I+aAccfkHrx94X8mZ6U9PohJDw8UDgYhw
+         Y1FRO5rShUSqikd3C2KRhLzcokk9Jn6V9C1UGi7ZzeBpgd7J+DBXkahw7kuSmeSJGcSF
+         o9iQ==
+X-Gm-Message-State: AOAM531g851RDxC+AIeYjoffLTApGAn9nqZ0lVxk0ilONYdSc53gPUoG
+        GBXZO/9B49L1rzZ/LOaDETqXLA==
+X-Google-Smtp-Source: ABdhPJxVxMDAVNtxxj0yGmkKjx8X6uSL8vN/TWKF3VyOltmqZVZ34+YdBYAC7vSM7w8gckWvKUnQVg==
+X-Received: by 2002:a17:902:b10b:b029:d1:e5e7:bdf8 with SMTP id q11-20020a170902b10bb02900d1e5e7bdf8mr12609117plr.43.1600380401403;
+        Thu, 17 Sep 2020 15:06:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d128sm661053pfc.8.2020.09.17.15.06.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 15:06:40 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 15:06:39 -0700
+From:   Kees Cook <keescook@chromium.org>
 To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     LKFT <lkft@linaro.org>, lkft-triage@lists.linaro.org,
-        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/harness: Flush stdout before forking
+Message-ID: <202009171506.535C5678@keescook>
+References: <20200917041519.3284582-1-mpe@ellerman.id.au>
+ <CAMo8BfJ5j4nG0z1Bk00J=3xPM++J68Hp2idJ-D5aHT84-vOzsQ@mail.gmail.com>
+ <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
+ <99f67c84-4dcd-278a-e7b8-e19054818ecf@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99f67c84-4dcd-278a-e7b8-e19054818ecf@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah,
+On Thu, Sep 17, 2020 at 10:51:32AM -0600, Shuah Khan wrote:
+> On 9/17/20 6:58 AM, Shuah Khan wrote:
+> > On 9/16/20 10:53 PM, Max Filippov wrote:
+> > > On Wed, Sep 16, 2020 at 9:16 PM Michael Ellerman
+> > > <mpe@ellerman.id.au> wrote:
+> > > > 
+> > > > The test harness forks() a child to run each test. Both the parent and
+> > > > the child print to stdout using libc functions. That can lead to
+> > > > duplicated (or more) output if the libc buffers are not flushed before
+> > > > forking.
+> > > > 
+> > > > It's generally not seen when running programs directly, because stdout
+> > > > will usually be line buffered when it's pointing to a terminal.
+> > > > 
+> > > > This was noticed when running the seccomp_bpf test, eg:
+> > > > 
+> > > >    $ ./seccomp_bpf | tee test.log
+> > > >    $ grep -c "TAP version 13" test.log
+> > > >    2
+> > > > 
+> > > > But we only expect the TAP header to appear once.
+> > > > 
+> > > > It can be exacerbated using stdbuf to increase the buffer size:
+> > > > 
+> > > >    $ stdbuf -o 1MB ./seccomp_bpf > test.log
+> > > >    $ grep -c "TAP version 13" test.log
+> > > >    13
+> > > > 
+> > > > The fix is simple, we just flush stdout & stderr before fork. Usually
+> > > > stderr is unbuffered, but that can be changed, so flush it as well
+> > > > just to be safe.
+> > > > 
+> > > > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> > > > ---
+> > > >   tools/testing/selftests/kselftest_harness.h | 5 +++++
+> > > >   1 file changed, 5 insertions(+)
+> > > 
+> > > Tested-by: Max Filippov <jcmvbkbc@gmail.com>
+> > > 
+> > 
+> > Thank you both. Applying to linux-kselftest fixes for 5.9-rc7
+> > 
+> 
+> Kees,
+> 
+> I haven't pulled this in yet. If you want to take this through seccomp
+> tree for dependencies:
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-The report sent was meant to be a general summary, rather than a deep
-dive, of the results. Most of that information can be gathered by
-viewing the test details.
+You can have it -- it's a global fix and more than the seccomp selftest
+is likely affected. :)
 
->     * Test details:
->     https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200915
-
-If you open that link in a web browser, there are a number of ways to
-dig down into the results. If you have questions about the best ways
-to do this, please let me know.
-
-Maybe that isn't the best way? I'm very open to feedback. I just tried
-to best copy the previous report that was being sent out to start.
-
-Please feel free to ask any questions you have or provide me with
-feedback. I'm here to help.
-
-Thanks,
-
-Justin
-
-On Tue, 15 Sep 2020 at 15:18, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 9/15/20 11:52 AM, Justin Cook wrote:
-> > Hello,
-> >
-> > Linaro had previously been sending out a report based on our testing of
-> > the linux kernel using kselftest. We paused sending that report to fix a
-> > few issues. We are now continuing the process, starting with this report.
-> >
-> > If you have any questions, comments, feedback, or concerns please email
-> > lkft@linaro.org <mailto:lkft@linaro.org>.
-> >
-> > Thanks,
-> >
-> > Justin
-> >
->
-> Hi Justin,
->
-> Thanks for the report. It would be nice to see the reports. However, it
-> is hard for me to determine which tests failed and why.
->
-> > On Tue, 15 Sep 2020 at 12:44, LKFT <lkft@linaro.org
-> > <mailto:lkft@linaro.org>> wrote:
-> >
-> >     ## Kernel
-> >     * kernel: 5.9.0-rc5
-> >     * git repo:
-> >     ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git',
-> >     'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-> >     * git branch: master
-> >     * git commit: 6b02addb1d1748d21dd1261e46029b264be4e5a0
-> >     * git describe: next-20200915
-> >     * Test details:
-> >     https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200915
-> >
-> >     ## Regressions (compared to build next-20200914)
-> >
-> >     juno-r2:
-> >        kselftest:
-> >          * memfd_memfd_test
-> >
-> >     x86:
-> >        kselftest-vsyscall-mode-native:
-> >          * kvm_vmx_preemption_timer_test
->
-> I looked for the above two failures to start with since these
-> are regressions and couldn't find them.
->
-> Are the regressions tied to new commits in linux-next from the
-> mm and kvm trees?
->
-> thanks,
-> -- Shuah
->
+-- 
+Kees Cook
