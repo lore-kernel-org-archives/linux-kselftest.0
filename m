@@ -1,70 +1,103 @@
-Return-Path: <SRS0=hXTE=C2=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=yemh=C3=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9A8DC43463
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Sep 2020 23:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3519AC43464
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 03:37:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7DB6208E4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Sep 2020 23:26:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5E9422211
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 03:37:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="d/6/w5s6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbgIQX0h (ORCPT
+        id S1726463AbgIRDhp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Sep 2020 19:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        Thu, 17 Sep 2020 23:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725886AbgIQX0h (ORCPT
+        with ESMTP id S1726260AbgIRDhn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Sep 2020 19:26:37 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31263C06174A;
-        Thu, 17 Sep 2020 16:26:37 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 785791365D75F;
-        Thu, 17 Sep 2020 16:09:49 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 16:26:35 -0700 (PDT)
-Message-Id: <20200917.162635.1949227267966227941.davem@davemloft.net>
-To:     matthieu.baerts@tessares.net
-Cc:     mathew.j.martineau@linux.intel.com, kuba@kernel.org,
-        shuah@kernel.org, pabeni@redhat.com, dcaratti@redhat.com,
-        fw@strlen.de, netdev@vger.kernel.org, mptcp@lists.01.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: mptcp: interpret \n as a new line
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200916131352.3072764-1-matthieu.baerts@tessares.net>
-References: <20200916131352.3072764-1-matthieu.baerts@tessares.net>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [2620:137:e000::1:9]); Thu, 17 Sep 2020 16:09:49 -0700 (PDT)
+        Thu, 17 Sep 2020 23:37:43 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E78C06174A
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 20:37:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bt0035J9Yz9sRR;
+        Fri, 18 Sep 2020 13:37:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1600400259;
+        bh=f+WI+4Y5FqCAKO5vI/9vI4pfQazkTL/VYPrdXvYY8fc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=d/6/w5s6c9CO1f97Mol+q4eV4zfmEBkZqG2s4JuhiDKVhnNJWc5BrI+ZbKp2yPZXm
+         rLb+teRkc65mrjjFi+LJg8GF0cteV4C/iDp1HzFSLeUK/dNWZ3umckQ0LclSP5GfeG
+         waXRmi+DsFeLUFM7gpHcWFKIe9HGtH6ZDQe9EAnZM07N5jAVZCuKaHCqI8KjRYysWi
+         yVQZJJEDSU7s3+hfcQvRZdbs+BJ0EtylUCIAncVEyAzhORUMv9qVlvP2du5Im7ucvi
+         TlSUp4EMTrAqCyJPK066nR0sZ0PVZ+VvAODpl4clbLW+MKNT7nn8a0aWOfx6Rk0ZOW
+         b2AGwACZctcDw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/harness: Flush stdout before forking
+In-Reply-To: <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
+References: <20200917041519.3284582-1-mpe@ellerman.id.au> <CAMo8BfJ5j4nG0z1Bk00J=3xPM++J68Hp2idJ-D5aHT84-vOzsQ@mail.gmail.com> <e24df908-c50d-59ef-563c-9db24c819248@linuxfoundation.org>
+Date:   Fri, 18 Sep 2020 13:37:33 +1000
+Message-ID: <87o8m3oiv6.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Matthieu Baerts <matthieu.baerts@tessares.net>
-Date: Wed, 16 Sep 2020 15:13:51 +0200
+Shuah Khan <skhan@linuxfoundation.org> writes:
+> On 9/16/20 10:53 PM, Max Filippov wrote:
+>> On Wed, Sep 16, 2020 at 9:16 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>>>
+>>> The test harness forks() a child to run each test. Both the parent and
+>>> the child print to stdout using libc functions. That can lead to
+>>> duplicated (or more) output if the libc buffers are not flushed before
+>>> forking.
+>>>
+>>> It's generally not seen when running programs directly, because stdout
+>>> will usually be line buffered when it's pointing to a terminal.
+>>>
+>>> This was noticed when running the seccomp_bpf test, eg:
+>>>
+>>>    $ ./seccomp_bpf | tee test.log
+>>>    $ grep -c "TAP version 13" test.log
+>>>    2
+>>>
+>>> But we only expect the TAP header to appear once.
+>>>
+>>> It can be exacerbated using stdbuf to increase the buffer size:
+>>>
+>>>    $ stdbuf -o 1MB ./seccomp_bpf > test.log
+>>>    $ grep -c "TAP version 13" test.log
+>>>    13
+>>>
+>>> The fix is simple, we just flush stdout & stderr before fork. Usually
+>>> stderr is unbuffered, but that can be changed, so flush it as well
+>>> just to be safe.
+>>>
+>>> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+>>> ---
+>>>   tools/testing/selftests/kselftest_harness.h | 5 +++++
+>>>   1 file changed, 5 insertions(+)
+>> 
+>> Tested-by: Max Filippov <jcmvbkbc@gmail.com>
+>
+> Thank you both. Applying to linux-kselftest fixes for 5.9-rc7
 
-> In case of errors, this message was printed:
-> 
->   (...)
->   # read: Resource temporarily unavailable
->   #  client exit code 0, server 3
->   # \nnetns ns1-0-BJlt5D socket stat for 10003:
->   (...)
-> 
-> Obviously, the idea was to add a new line before the socket stat and not
-> print "\nnetns".
-> 
-> Fixes: b08fbf241064 ("selftests: add test-cases for MPTCP MP_JOIN")
-> Fixes: 048d19d444be ("mptcp: add basic kselftest for mptcp")
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+It can wait for v5.10 IMHO, but up to you.
 
-Applied.
+cheers
