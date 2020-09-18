@@ -2,117 +2,163 @@ Return-Path: <SRS0=yemh=C3=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B47EC43464
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 06:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05490C43464
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 10:47:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A26220866
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 06:22:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B02F822208
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 10:47:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="l7dNtbkM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8uylnaC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbgIRGWi (ORCPT
+        id S1726234AbgIRKrp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Sep 2020 02:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        Fri, 18 Sep 2020 06:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbgIRGWi (ORCPT
+        with ESMTP id S1725941AbgIRKrp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 02:22:38 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177F5C06174A
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Sep 2020 23:22:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Bt3fL2Pwyz9sRR;
-        Fri, 18 Sep 2020 16:22:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1600410154;
-        bh=APF+Hu9MA5D4HnG4laKM+f7u7SvD7NRYuT//39Fs6VQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=l7dNtbkM9rdm64fN3MmtDmKbUJqqvo0XqjGPRY26OL/JuHsWcWAlU+fdVo9xHrHxR
-         caKYIUL9BQg7CZQRu3ZxFtppBVoehgNzeHtHE8TpT95SV3M/T7SLVcAq6TW3wW5rqq
-         dTAUGu3j0ue7ItvpsE6ERycHGQSWthnScq0Y+cte/bB+gJufIcwj8OQG9BknS5z/h4
-         yUTALq2hbVNaQsWK0QW/kSxY//EkirQ7SA8bG5s/Iy1LHP7cr7TX947UBgh2LkCJbZ
-         fbmJEMNRZur46nOD0pNayZUFMWdSq3EHlgf3jfGFg9f3Jd1sFexgRhz1+MoRu/nLi0
-         sJFYRAP0mGe4g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kselftest@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] selftests/seccomp: fix ptrace tests on powerpc
-In-Reply-To: <20200917225100.GG314880@mussarela>
-References: <20200630164739.1268222-1-cascardo@canonical.com> <202009081505.D9FE52510B@keescook> <20200911180637.GI4002@mussarela> <875z8hrh2o.fsf@mpe.ellerman.id.au> <202009171536.7FACD19@keescook> <20200917225100.GG314880@mussarela>
-Date:   Fri, 18 Sep 2020 16:22:31 +1000
-Message-ID: <87imcbob88.fsf@mpe.ellerman.id.au>
+        Fri, 18 Sep 2020 06:47:45 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8537C06174A;
+        Fri, 18 Sep 2020 03:47:44 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id s13so4852868wmh.4;
+        Fri, 18 Sep 2020 03:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xrrwpvwP94b/+YAXXQ8PRjS0aa/rbtbfYwVTAOcVfYc=;
+        b=E8uylnaClQh/WtXEc0IMvde9j0F4AqLT4Ug/3Efr8XJnCwJePpTspgKzEnAxDq5JHJ
+         0gv7J6GV0hMuaHT4N/MiC/uSatwva0RwOuFuNIamL6yv9hsG/ioH79iCYRQi4o3XaRLg
+         Y9o/yioaO66koDHV+VvtLROWUpGNqKdubS7OWwEsdDmeDsoq9FlBQ89wkp8x60TGHPmt
+         CjyVevbi6DDJAvEt3H6avRKUPy+uYt/MGJ7HlrWf+5cJSgkmR4eh6mUdRiOWvdTkJX4L
+         0pswkNmLy0qN2xGTKqO7+9rh9nQ5zkpdLDa8OfVmZvTkknTTsFCo93UCBDyJUFGWPUwS
+         99GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xrrwpvwP94b/+YAXXQ8PRjS0aa/rbtbfYwVTAOcVfYc=;
+        b=g07RS+wXdKa72HUjDDCYQ0MLrmIxlboo8Fq+CGauqvrvLcL0WVjSE6j+g7AmtPqSR9
+         ahVhY8v8bieOeUGG8CpeinGq5rGx9ffimJvZQWnR5fGYGvMr2BeT4tQN6LlwECVjF0vM
+         0ZaWG64xKwk22vvCACPhD1xbJiAvrOtcRL94X1iHWgfAFUme3C/xPuSmUoJyW+WczpTR
+         atVQ2N9t1dMFzH1b7y8G0jINZzTmPKivYlzKLBDQs05on8UGwJK/mDvdAs/lYIOtJPmA
+         eHLKiglUz0OCsXYqMNFF3iU4mJ5GnFsNyV+7MseAQPWPuWtjxiLqSLlXxXIBH7HwmN5c
+         LPbw==
+X-Gm-Message-State: AOAM530YSuVagXKc0aN3vNMEoiNzrRRVrpc+pLaWkSgcGAE+pBb85Zk5
+        rTB8CqT85b3i3jOBOnZJnpU=
+X-Google-Smtp-Source: ABdhPJyfnMklXrXIbSYVPGWFbMEloX3r12Pfud66LELFK94r5w2DkCjDNNY/TZNKD10SjkektgdMKg==
+X-Received: by 2002:a1c:1b86:: with SMTP id b128mr15549287wmb.5.1600426063613;
+        Fri, 18 Sep 2020 03:47:43 -0700 (PDT)
+Received: from trantor.home (cpc153975-seac28-2-0-cust722.7-2.cable.virginm.net. [81.109.38.211])
+        by smtp.gmail.com with ESMTPSA id h4sm5197846wrm.54.2020.09.18.03.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2020 03:47:43 -0700 (PDT)
+From:   Boyan Karatotev <boian4o1@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Boyan Karatotev <boian4o1@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Boyan Karatotev <boyan.karatotev@arm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v3 0/4] kselftests/arm64: add PAuth tests
+Date:   Fri, 18 Sep 2020 11:47:11 +0100
+Message-Id: <20200918104715.182310-1-boian4o1@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com> writes:
-> On Thu, Sep 17, 2020 at 03:37:16PM -0700, Kees Cook wrote:
->> On Sun, Sep 13, 2020 at 10:34:23PM +1000, Michael Ellerman wrote:
->> > Thadeu Lima de Souza Cascardo <cascardo@canonical.com> writes:
->> > > On Tue, Sep 08, 2020 at 04:18:17PM -0700, Kees Cook wrote:
->> > >> On Tue, Jun 30, 2020 at 01:47:39PM -0300, Thadeu Lima de Souza Cascardo wrote:
->> > ...
->> > >> > @@ -1809,10 +1818,15 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
->> > >> >  	EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->> > >> >  			: PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
->> > >> >  
->> > >> > -	if (!entry)
->> > >> > +	if (!entry && !syscall_nr)
->> > >> >  		return;
->> > >> >  
->> > >> > -	nr = get_syscall(_metadata, tracee);
->> > >> > +	if (entry)
->> > >> > +		nr = get_syscall(_metadata, tracee);
->> > >> > +	else
->> > >> > +		nr = *syscall_nr;
->> > >> 
->> > >> This is weird? Shouldn't get_syscall() be modified to do the right thing
->> > >> here instead of depending on the extra arg?
->> > >> 
->> > >
->> > > R0 might be clobered. Same documentation mentions it as volatile. So, during
->> > > syscall exit, we can't tell for sure that R0 will have the original syscall
->> > > number. So, we need to grab it during syscall enter, save it somewhere and
->> > > reuse it. I used the test context/args for that.
->> > 
->> > The user r0 (in regs->gpr[0]) shouldn't be clobbered.
->> > 
->> > But it is modified if the tracer skips the syscall, by setting the
->> > syscall number to -1. Or if the tracer changes the syscall number.
->> > 
->> > So if you need the original syscall number in the exit path then I think
->> > you do need to save it at entry.
->> 
->> ... the selftest code wants to test the updated syscall (-1 or
->> whatever), so this sounds correct. Was this test actually failing on
->> powerpc? (I'd really rather not split entry/exit if I don't have to.)
->
-> Yes, it started failing when the return code started being changed as well.
-> Though ptrace can change the syscall at entry (IIRC), it can't change the
-> return code. And that is part of the ABI. If ppc is changed so it allows
-> changing the return code during ptrace entry, some strace uses will break. So
-> that is not an option.
+Pointer Authentication (PAuth) is a security feature introduced in ARMv8.3.
+It introduces instructions to sign addresses and later check for potential
+corruption using a second modifier value and one of a set of keys. The
+signature, in the form of the Pointer Authentication Code (PAC), is stored
+in some of the top unused bits of the virtual address (e.g. [54: 49] if
+TBID0 is enabled and TnSZ is set to use a 48 bit VA space). A set of
+controls are present to enable/disable groups of instructions (which use
+certain keys) for compatibility with libraries that do not utilize the
+feature. PAuth is used to verify the integrity of return addresses on the
+stack with less memory than the stack canary.
 
-Yep.
+This patchset adds kselftests to verify the kernel's configuration of the
+feature and its runtime behaviour. There are 7 tests which verify that:
+	* an authentication failure leads to a SIGSEGV
+	* the data/instruction instruction groups are enabled
+	* the generic instructions are enabled
+	* all 5 keys are different for a single thread
+	* exec() changes all keys to new different ones
+	* context switching preserves the 4 data/instruction keys
+	* context switching preserves the generic keys
 
-I don't know that it would break anything to change that part of the
-ptrace ABI, but it definitely could break things and it would be subtle,
-so it's not really an option.
+The tests have been verified to work on qemu without a working PAUTH
+Implementation and on ARM's FVP with a full or partial PAuth
+implementation.
 
-So for powerpc we do need the return code change done in the exit hook,
-sorry.
+Changes in v3:
+* remove double blank lines
+* Patch 1: "kselftests: add a basic arm64 Pointer Authentication test"
+    * shorten pac_corruptor.S to cut out unnecessary code
+    * add second signal handler to cover ARMv8.6 compatibily
+* Patch 3: "kselftests/arm64: add PAuth test for whether exec() changes keys"
+    * change name of "exec_unique_keys" to "exec_changed_keys"
+    * change reporting of error to be how many keys were left unchanged
+* Path 4: "kselftests/arm64: add PAuth tests for single threaded consistency and key uniqueness"
+    * change unique to different
+    * rename "single_thread_unique_keys" to "single_thread_different_keys"
+    * change reporting of error to be how many keys were left unchanged
 
-cheers
+Changes in v2:
+* remove extra lines at end of files
+* Patch 1: "kselftests: add a basic arm64 Pointer Authentication test"
+	* add checks for a compatible compiler in Makefile
+* Patch 4: "kselftests: add PAuth tests for single threaded consistency and
+key uniqueness"
+	* rephrase comment for clarity in pac.c
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Reviewed-by: Vincenzo Frascino <Vincenzo.Frascino@arm.com>
+Reviewed-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
+Signed-off-by: Boyan Karatotev <boyan.karatotev@arm.com>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Boyan Karatotev (4):
+  kselftests/arm64: add a basic Pointer Authentication test
+  kselftests/arm64: add nop checks for PAuth tests
+  kselftests/arm64: add PAuth test for whether exec() changes keys
+  kselftests/arm64: add PAuth tests for single threaded consistency and
+    differently initialized keys
+
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ .../testing/selftests/arm64/pauth/.gitignore  |   2 +
+ tools/testing/selftests/arm64/pauth/Makefile  |  39 ++
+ .../selftests/arm64/pauth/exec_target.c       |  34 ++
+ tools/testing/selftests/arm64/pauth/helper.c  |  39 ++
+ tools/testing/selftests/arm64/pauth/helper.h  |  28 ++
+ tools/testing/selftests/arm64/pauth/pac.c     | 368 ++++++++++++++++++
+ .../selftests/arm64/pauth/pac_corruptor.S     |  19 +
+ 8 files changed, 530 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/pauth/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/pauth/Makefile
+ create mode 100644 tools/testing/selftests/arm64/pauth/exec_target.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/helper.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/helper.h
+ create mode 100644 tools/testing/selftests/arm64/pauth/pac.c
+ create mode 100644 tools/testing/selftests/arm64/pauth/pac_corruptor.S
+
+--
+2.28.0
+
