@@ -7,62 +7,63 @@ X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D6E6C43463
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F0FC43465
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E835123119
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24F4F21D7F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="GsTN0Fqq"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="HmvLe9z/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbgIRScJ (ORCPT
+        id S1726276AbgIRScQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Sep 2020 14:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        Fri, 18 Sep 2020 14:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726392AbgIRScH (ORCPT
+        with ESMTP id S1726426AbgIRScO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 14:32:07 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B985C0613D2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:07 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id q131so5265682qke.22
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:07 -0700 (PDT)
+        Fri, 18 Sep 2020 14:32:14 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E304FC0613D1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:13 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id q2so4199229pfc.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=y15UkrpVILsyPpJzSCvvGnSuGfIrAVdnneb1O3jNsec=;
-        b=GsTN0Fqqhr374zpwIsk8tbfwFUnxs21Z1dtpKfsPyeb7jpd9rHIdP8GYAg8FnOXys1
-         OIELCjgsdH3BIVjw86Wfbp18sFXjglTYNmRe6WyWgnHdOnmLf5OHztZ1z1ZsqesIbc/F
-         ESNH2BQqgu6t3B+r0/gAd+vKO/SpgK/Pf81UF3UtC1s7TjsIsWzzw46LzqRHl/I2DYbi
-         rWiuctWHFJSS6NqpRtIJ/yInOZp/06u+5rFNOk48qJN7KI+sTVNFrZxcQAqy2Rwyaf8u
-         GKZXXZ6VfYpG0agd95n5l1D9JPG7YS586nJzRMU4OZfPEhJa+ScjBra5/BaqPPynH/yV
-         jtkg==
+        bh=cPz3Z/ppac2nY/GXURJ4xkQdaGjEQS0g7ag3fTB34qQ=;
+        b=HmvLe9z/W5qCfw/uM7p8oYqTc76MH1XO+eMLd00qQ355CsDJ3odqWPqqD2I2MVTDPu
+         NvRiNHn7UP+FtE3XXeebvafwA6XTLkoYy0uPdr9ENpFA53jXsENrNug7SUCJkiEiDv4N
+         TWzV9H/xuM+Q67eqSqCLoVtX7TsSL6s04OUEh/vDc5q14y/8KTTMpkZGjzKYBttmJR55
+         Ioau45kPMezbxQ03AJGb1BJ4pa8O7sbHkGCDn5BwnBxDHWwaKayRN2XuzhQ1H+E6m4bC
+         HgXOM2WqaODTGQOHqZYa6l+YLOaGgwDOxjP/odjopHKlnWKgGx0CRIF1mf4mwZNir22/
+         z/+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=y15UkrpVILsyPpJzSCvvGnSuGfIrAVdnneb1O3jNsec=;
-        b=a+3q7BafcOcJoq/72lxtIXybpLYfvXe0LOdkjQcFqa1ivkYysIB8ErGqd1tuMrH5Bw
-         BQymVlH/gsRDY5rZZKe/PtKoZ/g1UlPWMrR7r7fCymX9dOPZ8ERS1kHrLmuyWIAUCL/v
-         uqVJ/YANvu+yhAwnzHgeX4K2zDj3PLaER9XV1uUZk2U33GLv4soWrmOFP570MnpNx/16
-         8a1mW+I9rlBb99BE+tVo23aH9gvwTF+IXYDXLvi9QP1pwhT512LJFzPFro7cDvSn8EcJ
-         tPh8y/QMsGK8SJAxV6e2vUYV109insGOx2RrX4yYPJXmR9BHeDt2WHvtqHlu8AWjBDzt
-         fwFg==
-X-Gm-Message-State: AOAM531fNndCWel8jNGp7uTE4TsOaMTc9sAR0IcLkohlh4w0dS+UcylA
-        0YubvgauLsF+sEByA81YwMxmkMfiUDl3iA==
-X-Google-Smtp-Source: ABdhPJzjKGUVA/MU3if7G/38erCuSrsG3UTt9u//MEEn/WGslt9fIIYhmXXIsbH6L0FlpdMCZ1OrFueu6Rarmw==
+        bh=cPz3Z/ppac2nY/GXURJ4xkQdaGjEQS0g7ag3fTB34qQ=;
+        b=axOND7H2IMRIDZNnd3zMcP8cDIq+2/2XkJF1LSJcU/U9DkHq6a4h0bkxWxZOAMxdF6
+         jCS9HEfkI2VBR8g6Qivohhl/JT7D+Yr1NgjHmmroQZjyzEGISyKCMmRKmFoVdXowxbFR
+         u0YvqI43083a19ghXboGv3X+yQXp731AzEWamsydL7/2PVPlHWvl+/tFVp/U1Fxnvh+V
+         dzJQwhJ+mENwFMKC9t0nys/kogxw+Y2EslDfM0X4lmcuGr249dpLKvwuyc2ZS4U8mJPf
+         eD8jJVwauwxkPZN6URSUsAn5aTPzhXaKmJLGcjKqfJS2IvyboeDOa01Zhi3sYIS/fcXS
+         Q82Q==
+X-Gm-Message-State: AOAM530Be55fgXfN48g7kOvgofLcu1dOX++GGKzDonxR5UKvqXRNW0nJ
+        TjhEXEHWlas/XLMlwgV+ilz0ijX44Ia4Tw==
+X-Google-Smtp-Source: ABdhPJxaIDSYGE3ed2yiP+5YVIdjO8bpnP9N9w+zIEwSxuh0uwZQbFPHcuBQ3hG2+AD8JrP110I4/KawuJ0M1g==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:ad4:58e7:: with SMTP id
- di7mr18236843qvb.36.1600453926645; Fri, 18 Sep 2020 11:32:06 -0700 (PDT)
-Date:   Fri, 18 Sep 2020 11:31:09 -0700
+ (user=dlatypov job=sendgmr) by 2002:a17:902:a715:b029:d0:89f3:28cf with SMTP
+ id w21-20020a170902a715b02900d089f328cfmr34144407plq.11.1600453933377; Fri,
+ 18 Sep 2020 11:32:13 -0700 (PDT)
+Date:   Fri, 18 Sep 2020 11:31:12 -0700
 In-Reply-To: <20200918183114.2571146-1-dlatypov@google.com>
-Message-Id: <20200918183114.2571146-8-dlatypov@google.com>
+Message-Id: <20200918183114.2571146-11-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20200918183114.2571146-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
-Subject: [RFC v1 07/12] kunit: mock: add internal mock infrastructure
+Subject: [RFC v1 10/12] kunit: mock: add class mocking support
 From:   Daniel Latypov <dlatypov@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         David Gow <davidgow@google.com>,
@@ -80,535 +81,1054 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Brendan Higgins <brendanhiggins@google.com>
 
-Add the core internal mechanisms that mocks are implemented with; in
-particular, this adds the mechanisms by which expectation on mocks are
-validated and by which actions may be supplied and then executed when
-mocks are called.
+Introduce basic class mocking, the ability to automatically generate a
+Linux C-style class implementation whose behavior is controlled by test
+cases, which can also set expectations on when and how mocks are called.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Co-developed-by: Daniel Latypov <dlatypov@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- include/kunit/mock.h | 126 +++++++++++++++
- lib/kunit/Makefile   |   1 +
- lib/kunit/mock.c     | 364 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 491 insertions(+)
- create mode 100644 include/kunit/mock.h
- create mode 100644 lib/kunit/mock.c
+ include/kunit/mock.h           | 433 +++++++++++++++++++++++++++++++++
+ lib/kunit/Makefile             |   5 +-
+ lib/kunit/kunit-example-test.c |  90 +++++++
+ lib/kunit/mock-macro-test.c    |  91 +++++++
+ lib/kunit/mock-test.c          | 320 ++++++++++++++++++++++++
+ 5 files changed, 937 insertions(+), 2 deletions(-)
+ create mode 100644 lib/kunit/mock-test.c
 
 diff --git a/include/kunit/mock.h b/include/kunit/mock.h
-new file mode 100644
-index 000000000000..299b423fdd51
---- /dev/null
+index 13fdeb8730b5..43f797c7e8bb 100644
+--- a/include/kunit/mock.h
 +++ b/include/kunit/mock.h
-@@ -0,0 +1,126 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Mocking API for KUnit.
-+ *
-+ * Copyright (C) 2020, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins@google.com>
-+ */
-+
-+#ifndef _KUNIT_MOCK_H
-+#define _KUNIT_MOCK_H
-+
-+#include <linux/types.h>
-+#include <linux/tracepoint.h> /* For PARAMS(...) */
-+#include <kunit/test.h>
-+#include <kunit/kunit-stream.h>
-+#include <kunit/params.h>
+@@ -123,6 +123,439 @@ struct mock_expectation *mock_add_matcher(struct mock *mock,
+ 					  struct mock_param_matcher *matchers[],
+ 					  int len);
+ 
++#define MOCK(name) name##_mock
 +
 +/**
-+ * struct mock_param_matcher - represents a matcher used in a *call expectation*
-+ * @match: the function that performs the matching
++ * KUNIT_EXPECT_CALL() - Declares a *call expectation* on a mock function.
++ * @expectation_call: a mocked method or function with parameters replaced with
++ *                    matchers.
 + *
-+ * The matching function takes a couple of parameters:
++ * Example:
 + *
-+ * - ``this``: refers to the parent struct
-+ * - ``stream``: a &kunit_stream to which a detailed message should be added as
-+ *   to why the parameter matches or not
-+ * - ``param``: a pointer to the parameter to check for a match
++ * .. code-block:: c
 + *
-+ * The matching function should return whether or not the passed parameter
-+ * matches.
++ *	// Class to mock.
++ *	struct example {
++ *		int (*foo)(struct example *, int);
++ *	};
++ *
++ *	// Define the mock.
++ *	DECLARE_STRUCT_CLASS_MOCK_PREREQS(example);
++ *
++ *	DEFINE_STRUCT_CLASS_MOCK(METHOD(foo), CLASS(example),
++ *				 RETURNS(int),
++ *				 PARAMS(struct example *, int));
++ *
++ *	static int example_init(struct MOCK(example) *mock_example)
++ *	{
++ *		struct example *example = mock_get_trgt(mock_example);
++ *
++ *		example->foo = foo;
++ *		return 0;
++ *	}
++ *
++ *	DEFINE_STRUCT_CLASS_MOCK_INIT(example, example_init);
++ *
++ *	static void foo_example_test_success(struct kunit *test)
++ *	{
++ *		struct MOCK(example) *mock_example;
++ *		struct example *example = mock_get_trgt(mock_example);
++ *		struct mock_expectation *handle;
++ *
++ *		mock_example = CONSTRUCT_MOCK(example, test);
++ *
++ *		handle = KUNIT_EXPECT_CALL(foo(mock_get_ctrl(mock_example),
++ *					       kunit_int_eq(test, 5)));
++ *		handle->action = int_return(test, 2);
++ *
++ *		KUNIT_EXPECT_EQ(test, 2, example_bar(example, 5));
++ *	}
++ *
++ * Return:
++ * A &struct mock_expectation representing the call expectation.
++ * allowing additional conditions and actions to be specified.
 + */
-+struct mock_param_matcher {
-+	bool (*match)(struct mock_param_matcher *this,
-+		      struct kunit_stream *stream,
-+		      const void *param);
-+};
++#define KUNIT_EXPECT_CALL(expectation_call) mock_master_##expectation_call
 +
-+#define MOCK_MAX_PARAMS 255
++#define mock_get_ctrl_internal(mock_object) (&(mock_object)->ctrl)
++#define mock_get_ctrl(mock_object) mock_get_ctrl_internal(mock_object)
 +
-+struct mock_matcher {
-+	struct mock_param_matcher *matchers[MOCK_MAX_PARAMS];
-+	int num;
-+};
++#define mock_get_trgt_internal(mock_object) (&(mock_object)->trgt)
++#define mock_get_trgt(mock_object) mock_get_trgt_internal(mock_object)
++
++#define mock_get_test(mock_object) (mock_get_ctrl(mock_object)->test)
++
++#define CLASS(struct_name) struct_name
++#define HANDLE_INDEX(index) index
++#define METHOD(method_name) method_name
++#define RETURNS(return_type) return_type
++/* #define PARAMS(...) __VA_ARGS__ included by linux/tracepoint.h */
++
++#define MOCK_INIT_ID(struct_name) struct_name##mock_init
++#define REAL_ID(func_name) __real__##func_name
++#define INVOKE_ID(func_name) __invoke__##func_name
++
++#define DECLARE_MOCK_CLIENT(name, return_type, param_types...) \
++		return_type name(PARAM_LIST_FROM_TYPES(param_types))
++
++#define DECLARE_MOCK_MASTER(name, ctrl_index, param_types...)		       \
++		struct mock_expectation *mock_master_##name(		       \
++				MATCHER_PARAM_LIST_FROM_TYPES(ctrl_index,      \
++							      param_types))
++
++#define DECLARE_MOCK_COMMON(name, handle_index, return_type, param_types...)   \
++		DECLARE_MOCK_CLIENT(name, return_type, param_types);	       \
++		DECLARE_MOCK_MASTER(name, handle_index, param_types)
++
++#define DECLARE_STRUCT_CLASS_MOCK_STRUCT(struct_name)			       \
++		struct MOCK(struct_name) {				       \
++			struct mock		ctrl;			       \
++			struct struct_name	trgt;			       \
++		}
++
++#define DECLARE_STRUCT_CLASS_MOCK_CONVERTER(struct_name)		       \
++		static inline struct mock *from_##struct_name##_to_mock(       \
++				const struct struct_name *trgt)		       \
++		{							       \
++			return mock_get_ctrl(				       \
++					container_of(trgt,		       \
++						     struct MOCK(struct_name), \
++						     trgt));		       \
++		}
 +
 +/**
-+ * struct mock_action - Represents an action that a mock performs when
-+ *                      expectation is matched
-+ * @do_action: the action to perform
++ * DECLARE_STRUCT_CLASS_MOCK_PREREQS() - Create a mock child class
++ * @struct_name: name of the class/struct to be mocked
 + *
-+ * The action function is given some parameters:
++ * Creates a mock child class of ``struct_name`` named
++ * ``struct MOCK(struct_name)`` along with supporting internally used methods.
 + *
-+ * - ``this``: refers to the parent struct
-+ * - ``params``: an array of pointers to the params passed into the mocked
-+ *   method or function. **The class argument is excluded for a mocked class
-+ *   method.**
-+ * - ``len``: size of ``params``
-+ *
-+ * The action function returns a pointer to the value that the mocked method
-+ * or function should be returning.
++ * See KUNIT_EXPECT_CALL() for example usages.
 + */
-+struct mock_action {
-+	void *(*do_action)(struct mock_action *this,
-+			   const void **params,
-+			   int len);
-+};
++#define DECLARE_STRUCT_CLASS_MOCK_PREREQS(struct_name)			       \
++		DECLARE_STRUCT_CLASS_MOCK_STRUCT(struct_name);		       \
++		DECLARE_STRUCT_CLASS_MOCK_CONVERTER(struct_name)
++
++#define DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX_INTERNAL(name,		       \
++							struct_name,	       \
++							handle_index,	       \
++							return_type,	       \
++							param_types...)	       \
++		DECLARE_MOCK_COMMON(name,				       \
++				    handle_index,			       \
++				    return_type,			       \
++				    param_types)
++
++#define DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX(name,			       \
++					       struct_name,		       \
++					       handle_index,		       \
++					       return_type,		       \
++					       param_types...)		       \
++		DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX_INTERNAL(name,	       \
++								struct_name,   \
++								handle_index,  \
++								return_type,   \
++								param_types)
 +
 +/**
-+ * struct mock_expectation - represents a *call expectation* on a function.
-+ * @action: A &struct mock_action to perform when the function is called.
-+ * @max_calls_expected: maximum number of times an expectation may be called.
-+ * @min_calls_expected: minimum number of times an expectation may be called.
-+ * @retire_on_saturation: no longer match once ``max_calls_expected`` is
-+ *			  reached.
++ * DECLARE_STRUCT_CLASS_MOCK()
++ * @name: method name
++ * @struct_name: name of the class/struct
++ * @return_type: return type of the method
++ * @param_types: parameters of the method
 + *
-+ * Represents a *call expectation* on a function created with
-+ * KUNIT_EXPECT_CALL().
++ * Same as DEFINE_STRUCT_CLASS_MOCK(), but only makes header compatible
++ * declarations.
 + */
-+struct mock_expectation {
-+	struct mock_action *action;
-+	int max_calls_expected;
-+	int min_calls_expected;
-+	bool retire_on_saturation;
-+	/* private: internal use only. */
-+	const char *expectation_name;
-+	struct list_head node;
-+	struct mock_matcher *matcher;
-+	int times_called;
-+};
++#define DECLARE_STRUCT_CLASS_MOCK(name,					       \
++				  struct_name,				       \
++				  return_type,				       \
++				  param_types...)			       \
++		DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX(name,		       \
++						       struct_name,	       \
++						       0,		       \
++						       return_type,	       \
++						       param_types)
 +
-+struct mock_method {
-+	struct list_head node;
-+	const char *method_name;
-+	const void *method_ptr;
-+	struct mock_action *default_action;
-+	struct list_head expectations;
-+};
++/**
++ * DECLARE_STRUCT_CLASS_MOCK_VOID_RETURN()
++ * @name: method name
++ * @struct_name: name of the class/struct
++ * @param_types: parameters of the method
++ *
++ * Same as DEFINE_STRUCT_CLASS_MOCK_VOID_RETURN(), but only makes header
++ * compatible declarations.
++ */
++#define DECLARE_STRUCT_CLASS_MOCK_VOID_RETURN(name,			       \
++					      struct_name,		       \
++					      param_types...)		       \
++		DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX(name,		       \
++						       struct_name,	       \
++						       0,		       \
++						       void,		       \
++						       param_types)
 +
-+struct mock {
-+	struct kunit_post_condition parent;
-+	struct kunit *test;
-+	struct list_head methods;
-+	/* TODO(brendanhiggins@google.com): add locking to do_expect. */
-+	const void *(*do_expect)(struct mock *mock,
-+				 const char *method_name,
-+				 const void *method_ptr,
-+				 const char * const *param_types,
-+				 const void **params,
-+				 int len);
-+};
++/**
++ * DECLARE_STRUCT_CLASS_MOCK_INIT()
++ * @struct_name: name of the class/struct
++ *
++ * Same as DEFINE_STRUCT_CLASS_MOCK_INIT(), but only makes header compatible
++ * declarations.
++ */
++#define DECLARE_STRUCT_CLASS_MOCK_INIT(struct_name)			       \
++		struct MOCK(struct_name) *MOCK_INIT_ID(struct_name)(	       \
++				struct kunit *test)
 +
-+void mock_init_ctrl(struct kunit *test, struct mock *mock);
++/**
++ * CONSTRUCT_MOCK()
++ * @struct_name: name of the class
++ * @test: associated test
++ *
++ * Constructs and allocates a test managed ``struct MOCK(struct_name)`` given
++ * the name of the class for which the mock is defined and a test object.
++ *
++ * See KUNIT_EXPECT_CALL() for example usage.
++ */
++#define CONSTRUCT_MOCK(struct_name, test) MOCK_INIT_ID(struct_name)(test)
 +
-+void mock_validate_expectations(struct mock *mock);
++#define DEFINE_MOCK_CLIENT_COMMON(name,					       \
++				  handle_index,				       \
++				  MOCK_SOURCE,				       \
++				  mock_source_ctx,			       \
++				  return_type,				       \
++				  RETURN,				       \
++				  param_types...)			       \
++		return_type name(PARAM_LIST_FROM_TYPES(param_types))	       \
++		{							       \
++			struct mock *mock = MOCK_SOURCE(mock_source_ctx,       \
++							handle_index);	       \
++			static const char * const param_type_names[] = {       \
++				TYPE_NAMES_FROM_TYPES(handle_index,	       \
++						      param_types)	       \
++			};						       \
++			const void *params[] = {			       \
++				PTR_TO_ARG_FROM_TYPES(handle_index,	       \
++						      param_types)	       \
++			};						       \
++			const void *retval;				       \
++									       \
++			retval = mock->do_expect(mock,			       \
++						 #name,			       \
++						 name,			       \
++						 param_type_names,	       \
++						 params,		       \
++						 ARRAY_SIZE(params));	       \
++			KUNIT_ASSERT_NOT_ERR_OR_NULL(mock->test, retval);      \
++			if (!retval) {					       \
++				kunit_info(mock->test,			       \
++					   "no action installed for "#name"\n");\
++				BUG();					       \
++			}						       \
++			RETURN(return_type, retval);			       \
++		}
 +
-+int mock_set_default_action(struct mock *mock,
-+			    const char *method_name,
-+			    const void *method_ptr,
-+			    struct mock_action *action);
++#define CLASS_MOCK_CLIENT_SOURCE(ctx, handle_index) ctx(arg##handle_index)
++#define DEFINE_MOCK_METHOD_CLIENT_COMMON(name,				       \
++					 handle_index,			       \
++					 mock_converter,		       \
++					 return_type,			       \
++					 RETURN,			       \
++					 param_types...)		       \
++		DEFINE_MOCK_CLIENT_COMMON(name,				       \
++					  handle_index,			       \
++					  CLASS_MOCK_CLIENT_SOURCE,	       \
++					  mock_converter,		       \
++					  return_type,			       \
++					  RETURN,			       \
++					  param_types)
 +
-+struct mock_expectation *mock_add_matcher(struct mock *mock,
-+					  const char *method_name,
-+					  const void *method_ptr,
-+					  struct mock_param_matcher *matchers[],
-+					  int len);
++#define CAST_AND_RETURN(return_type, retval) return *((return_type *) retval)
++#define NO_RETURN(return_type, retval)
 +
-+#endif /* _KUNIT_MOCK_H */
++#define DEFINE_MOCK_METHOD_CLIENT(name,					       \
++				  handle_index,				       \
++				  mock_converter,			       \
++				  return_type,				       \
++				  param_types...)			       \
++		DEFINE_MOCK_METHOD_CLIENT_COMMON(name,			       \
++						 handle_index,		       \
++						 mock_converter,	       \
++						 return_type,		       \
++						 CAST_AND_RETURN,	       \
++						 param_types)
++
++#define DEFINE_MOCK_METHOD_CLIENT_VOID_RETURN(name,			       \
++					      handle_index,		       \
++					      mock_converter,		       \
++					      param_types...)		       \
++		DEFINE_MOCK_METHOD_CLIENT_COMMON(name,			       \
++						 handle_index,		       \
++						 mock_converter,	       \
++						 void,			       \
++						 NO_RETURN,		       \
++						 param_types)
++
++#define DEFINE_MOCK_MASTER_COMMON_INTERNAL(name,			       \
++					   ctrl_index,			       \
++					   MOCK_SOURCE,			       \
++					   param_types...)		       \
++		struct mock_expectation *mock_master_##name(		       \
++				MATCHER_PARAM_LIST_FROM_TYPES(ctrl_index,      \
++							      param_types))    \
++		{ \
++			struct mock_param_matcher *matchers[] = {	       \
++				ARG_NAMES_FROM_TYPES(ctrl_index, param_types)  \
++			};						       \
++									       \
++			return mock_add_matcher(MOCK_SOURCE(ctrl_index),       \
++						#name,			       \
++						(const void *) name,	       \
++						matchers,		       \
++						ARRAY_SIZE(matchers));	       \
++		}
++#define DEFINE_MOCK_MASTER_COMMON(name,					       \
++				  ctrl_index,				       \
++				  MOCK_SOURCE,				       \
++				  param_types...)			       \
++		DEFINE_MOCK_MASTER_COMMON_INTERNAL(name,		       \
++						   ctrl_index,		       \
++						   MOCK_SOURCE,		       \
++						   param_types)
++
++#define CLASS_MOCK_MASTER_SOURCE(ctrl_index) arg##ctrl_index
++#define DEFINE_MOCK_METHOD_MASTER(name, ctrl_index, param_types...)	       \
++		DEFINE_MOCK_MASTER_COMMON(name,				       \
++					  ctrl_index,			       \
++					  CLASS_MOCK_MASTER_SOURCE,	       \
++					  param_types)
++
++#define DEFINE_MOCK_COMMON(name,					       \
++			   handle_index,				       \
++			   mock_converter,				       \
++			   return_type,					       \
++			   param_types...)				       \
++		DEFINE_MOCK_METHOD_CLIENT(name,				       \
++					  handle_index,			       \
++					  mock_converter,		       \
++					  return_type,			       \
++					  param_types);			       \
++		DEFINE_MOCK_METHOD_MASTER(name, handle_index, param_types)
++
++#define DEFINE_MOCK_COMMON_VOID_RETURN(name,				       \
++				       handle_index,			       \
++				       mock_converter,			       \
++				       param_types...)			       \
++		DEFINE_MOCK_METHOD_CLIENT_VOID_RETURN(name,		       \
++						      handle_index,	       \
++						      mock_converter,	       \
++						      param_types);	       \
++		DEFINE_MOCK_METHOD_MASTER(name, handle_index, param_types)
++
++#define DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX_INTERNAL(name,		       \
++						       struct_name,	       \
++						       handle_index,	       \
++						       return_type,	       \
++						       param_types...)	       \
++		DEFINE_MOCK_COMMON(name,				       \
++				   handle_index,			       \
++				   from_##struct_name##_to_mock,	       \
++				   return_type, param_types)
++#define DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX(name,			       \
++					      struct_name,		       \
++					      handle_index,		       \
++					      return_type,		       \
++					      param_types...)		       \
++		DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX_INTERNAL(name,	       \
++							       struct_name,    \
++							       handle_index,   \
++							       return_type,    \
++							       param_types)
++
++#define DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX_VOID_RETURN_INTERNAL(	       \
++		name,							       \
++		struct_name,						       \
++		handle_index,						       \
++		param_types...)						       \
++		DEFINE_MOCK_COMMON_VOID_RETURN(name,			       \
++					       handle_index,		       \
++					       from_##struct_name##_to_mock,   \
++					       param_types)
++#define DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX_VOID_RETURN(name,		       \
++							  struct_name,	       \
++							  handle_index,	       \
++							  param_types...)      \
++		DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX_VOID_RETURN_INTERNAL(    \
++				name,					       \
++				struct_name,				       \
++				handle_index,				       \
++				param_types)
++
++/**
++ * DEFINE_STRUCT_CLASS_MOCK()
++ * @name: name of the method
++ * @struct_name: name of the class of which the method belongs
++ * @return_type: return type of the method to be created. **Must not be void.**
++ * @param_types: parameters to method to be created.
++ *
++ * See KUNIT_EXPECT_CALL() for example usage.
++ */
++#define DEFINE_STRUCT_CLASS_MOCK(name,					       \
++				 struct_name,				       \
++				 return_type,				       \
++				 param_types...)			       \
++		DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX(name,		       \
++						      struct_name,	       \
++						      0,		       \
++						      return_type,	       \
++						      param_types)
++
++/**
++ * DEFINE_STRUCT_CLASS_MOCK_VOID_RETURN()
++ * @name: name of the method
++ * @struct_name: name of the class of which the method belongs
++ * @param_types: parameters to method to be created.
++ *
++ * Same as DEFINE_STRUCT_CLASS_MOCK() except the method has a ``void`` return
++ * type.
++ */
++#define DEFINE_STRUCT_CLASS_MOCK_VOID_RETURN(name, struct_name, param_types...)\
++		DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX_VOID_RETURN(name,	       \
++								  struct_name, \
++								  0,	       \
++								  param_types)
++
++/**
++ * DEFINE_STRUCT_CLASS_MOCK_INIT()
++ * @struct_name: name of the class
++ * @init_func: a function of type ``int (*)(struct MOCK(struct_name) *)``. This
++ *             function is passed a pointer to an allocated, *but not
++ *             initialized*, ``struct MOCK(struct_name)``. The job of this user
++ *             provided function is to perform remaining initialization. Usually
++ *             this entails assigning mock methods to the function pointers in
++ *             the parent struct.
++ *
++ * See KUNIT_EXPECT_CALL() for example usage.
++ */
++#define DEFINE_STRUCT_CLASS_MOCK_INIT(struct_name, init_func)		       \
++		struct MOCK(struct_name) *MOCK_INIT_ID(struct_name)(	       \
++				struct kunit *test)			       \
++		{							       \
++			struct MOCK(struct_name) *mock_obj;		       \
++									       \
++			mock_obj = kunit_kzalloc(test,			       \
++						sizeof(*mock_obj),	       \
++						GFP_KERNEL);		       \
++			if (!mock_obj)					       \
++				return NULL;				       \
++									       \
++			mock_init_ctrl(test, mock_get_ctrl(mock_obj));	       \
++									       \
++			if (init_func(mock_obj))			       \
++				return NULL;				       \
++									       \
++			return mock_obj;				       \
++		}
++
+ #define CONVERT_TO_ACTUAL_TYPE(type, ptr) (*((type *) ptr))
+ 
+ /**
 diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 1707660c8b1c..a51157970502 100644
+index a7a3c5e0a8bf..649e1c1f0d00 100644
 --- a/lib/kunit/Makefile
 +++ b/lib/kunit/Makefile
-@@ -1,6 +1,7 @@
- obj-$(CONFIG_KUNIT) +=			kunit.o
+@@ -13,11 +13,12 @@ kunit-objs +=				debugfs.o
+ endif
  
- kunit-objs +=				test.o \
-+					mock.o \
- 					string-stream.o \
- 					assert.o \
- 					kunit-stream.o \
-diff --git a/lib/kunit/mock.c b/lib/kunit/mock.c
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o \
+-					mock-macro-test.o
++					mock-macro-test.o \
++					mock-test.o
+ 
+ # string-stream-test compiles built-in only.
+ ifeq ($(CONFIG_KUNIT_TEST),y)
+ obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
+ endif
+ 
+-obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
++obj-$(CONFIG_KUNIT_EXAMPLE_TEST)	+= kunit-example-test.o
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index be1164ecc476..cd538cdb2a96 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <kunit/test.h>
++#include <kunit/mock.h>
+ 
+ /*
+  * This is the most fundamental element of KUnit, the test case. A test case
+@@ -29,6 +30,84 @@ static void example_simple_test(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, 1 + 1, 2);
+ }
+ 
++/*
++ * A lot of times, you have a C-style class like this, which acts an abstraction
++ * over hardware, a file system implementation, or some other subsystem that you
++ * want to reason about in a generic way.
++ */
++struct example {
++	int (*foo)(struct example *example, int num);
++};
++
++static int example_bar(struct example *example, int num)
++{
++	return example->foo(example, num);
++}
++
++/*
++ * KUnit allows such a class to be "mocked out" with the following:
++ */
++
++/*
++ * This macro creates a mock subclass of the specified class.
++ */
++DECLARE_STRUCT_CLASS_MOCK_PREREQS(example);
++
++/*
++ * This macro creates a mock implementation of the specified method of the
++ * specified class.
++ */
++DEFINE_STRUCT_CLASS_MOCK(METHOD(foo), CLASS(example),
++			 RETURNS(int),
++			 PARAMS(struct example *, int));
++
++/*
++ * This tells KUnit how to initialize the parts of the mock that come from the
++ * parent. In this example, all we have to do is populate the member functions
++ * of the parent class with the mock versions we defined.
++ */
++static int example_init(struct MOCK(example) *mock_example)
++{
++	/* This is how you get a pointer to the parent class of a mock. */
++	struct example *example = mock_get_trgt(mock_example);
++
++	/*
++	 * Here we populate the member function (method) with our mock method.
++	 */
++	example->foo = foo;
++	return 0;
++}
++
++/*
++ * This registers our parent init function above, allowing KUnit to create a
++ * constructor for the mock.
++ */
++DEFINE_STRUCT_CLASS_MOCK_INIT(example, example_init);
++
++/*
++ * This is a test case where we use our mock.
++ */
++static void example_mock_test(struct kunit *test)
++{
++	struct MOCK(example) *mock_example = test->priv;
++	struct example *example = mock_get_trgt(mock_example);
++	struct mock_expectation *handle;
++
++	/*
++	 * Here we make an expectation that our mock method will be called with
++	 * a parameter equal to 5 passed in.
++	 */
++	handle = KUNIT_EXPECT_CALL(foo(mock_get_ctrl(mock_example),
++				       kunit_int_eq(test, 5)));
++	/*
++	 * We specify that when our mock is called in this way, we want it to
++	 * return 2.
++	 */
++	handle->action = kunit_int_return(test, 2);
++
++	KUNIT_EXPECT_EQ(test, 2, example_bar(example, 5));
++}
++
+ /*
+  * This is run once before each test case, see the comment on
+  * example_test_suite for more information.
+@@ -37,6 +116,16 @@ static int example_test_init(struct kunit *test)
+ {
+ 	kunit_info(test, "initializing\n");
+ 
++	/*
++	 * Here we construct the mock and store it in test's `priv` field; this
++	 * field is for KUnit users. You can put whatever you want here, but
++	 * most often it is a place that the init function can put stuff to be
++	 * used by test cases.
++	 */
++	test->priv = CONSTRUCT_MOCK(example, test);
++	if (!test->priv)
++		return -EINVAL;
++
+ 	return 0;
+ }
+ 
+@@ -52,6 +141,7 @@ static struct kunit_case example_test_cases[] = {
+ 	 * test suite.
+ 	 */
+ 	KUNIT_CASE(example_simple_test),
++	KUNIT_CASE(example_mock_test),
+ 	{}
+ };
+ 
+diff --git a/lib/kunit/mock-macro-test.c b/lib/kunit/mock-macro-test.c
+index 6c3dc2193edb..d196dbee2407 100644
+--- a/lib/kunit/mock-macro-test.c
++++ b/lib/kunit/mock-macro-test.c
+@@ -8,6 +8,55 @@
+ 
+ #include <kunit/test.h>
+ #include <kunit/params.h>
++#include <kunit/mock.h>
++
++struct mock_macro_dummy_struct {
++	int (*one_param)(struct mock_macro_dummy_struct *test_struct);
++	int (*two_param)(struct mock_macro_dummy_struct *test_struct, int num);
++	int (*non_first_slot_param)(
++			int num,
++			struct mock_macro_dummy_struct *test_struct);
++	void *(*void_ptr_return)(struct mock_macro_dummy_struct *test_struct);
++};
++
++DECLARE_STRUCT_CLASS_MOCK_PREREQS(mock_macro_dummy_struct);
++
++DEFINE_STRUCT_CLASS_MOCK(METHOD(one_param), CLASS(mock_macro_dummy_struct),
++			 RETURNS(int),
++			 PARAMS(struct mock_macro_dummy_struct *));
++
++DEFINE_STRUCT_CLASS_MOCK(METHOD(two_param), CLASS(mock_macro_dummy_struct),
++			 RETURNS(int),
++			 PARAMS(struct mock_macro_dummy_struct *, int));
++
++DEFINE_STRUCT_CLASS_MOCK_HANDLE_INDEX(METHOD(non_first_slot_param),
++			 CLASS(mock_macro_dummy_struct), HANDLE_INDEX(1),
++			 RETURNS(int),
++			 PARAMS(int, struct mock_macro_dummy_struct *));
++
++DEFINE_STRUCT_CLASS_MOCK(METHOD(void_ptr_return),
++			 CLASS(mock_macro_dummy_struct),
++			 RETURNS(void *),
++			 PARAMS(struct mock_macro_dummy_struct *));
++
++static int mock_macro_dummy_struct_init(
++		struct MOCK(mock_macro_dummy_struct) *mock_test_struct)
++{
++	struct mock_macro_dummy_struct *test_struct =
++			mock_get_trgt(mock_test_struct);
++
++	test_struct->one_param = one_param;
++	test_struct->two_param = two_param;
++	test_struct->non_first_slot_param = non_first_slot_param;
++	return 0;
++}
++
++DEFINE_STRUCT_CLASS_MOCK_INIT(mock_macro_dummy_struct,
++			      mock_macro_dummy_struct_init);
++
++struct mock_macro_context {
++	struct MOCK(mock_macro_dummy_struct) *mock_test_struct;
++};
+ 
+ #define TO_STR_INTERNAL(...) #__VA_ARGS__
+ #define TO_STR(...) TO_STR_INTERNAL(__VA_ARGS__)
+@@ -132,6 +181,46 @@ static void mock_macro_arg_names_from_types(struct kunit *test)
+ 						      type15)));
+ }
+ 
++static void mock_macro_test_generated_method_code_works(struct kunit *test)
++{
++	struct mock_macro_context *ctx = test->priv;
++	struct MOCK(mock_macro_dummy_struct) *mock_test_struct =
++			ctx->mock_test_struct;
++	struct mock_macro_dummy_struct *test_struct =
++			mock_get_trgt(mock_test_struct);
++	struct mock_expectation *handle;
++
++	handle = KUNIT_EXPECT_CALL(one_param(mock_get_ctrl(mock_test_struct)));
++	handle->action = kunit_int_return(test, 0);
++	handle = KUNIT_EXPECT_CALL(two_param(mock_get_ctrl(mock_test_struct),
++					     kunit_int_eq(test, 5)));
++	handle->action = kunit_int_return(test, 1);
++	handle = KUNIT_EXPECT_CALL(non_first_slot_param(
++			kunit_int_eq(test, 5),
++			mock_get_ctrl(mock_test_struct)));
++	handle->action = kunit_int_return(test, 1);
++
++	test_struct->one_param(test_struct);
++	test_struct->two_param(test_struct, 5);
++	test_struct->non_first_slot_param(5, test_struct);
++}
++
++static int mock_macro_test_init(struct kunit *test)
++{
++	struct mock_macro_context *ctx;
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++	test->priv = ctx;
++
++	ctx->mock_test_struct = CONSTRUCT_MOCK(mock_macro_dummy_struct, test);
++	if (!ctx->mock_test_struct)
++		return -EINVAL;
++
++	return 0;
++}
++
+ static struct kunit_case mock_macro_test_cases[] = {
+ 	KUNIT_CASE(mock_macro_is_equal),
+ 	KUNIT_CASE(mock_macro_if),
+@@ -140,11 +229,13 @@ static struct kunit_case mock_macro_test_cases[] = {
+ 	KUNIT_CASE(mock_macro_for_each_param),
+ 	KUNIT_CASE(mock_macro_param_list_from_types_basic),
+ 	KUNIT_CASE(mock_macro_arg_names_from_types),
++	KUNIT_CASE(mock_macro_test_generated_method_code_works),
+ 	{}
+ };
+ 
+ static struct kunit_suite mock_macro_test_suite = {
+ 	.name = "mock-macro-test",
++	.init = mock_macro_test_init,
+ 	.test_cases = mock_macro_test_cases,
+ };
+ kunit_test_suite(mock_macro_test_suite);
+diff --git a/lib/kunit/mock-test.c b/lib/kunit/mock-test.c
 new file mode 100644
-index 000000000000..12fb88899451
+index 000000000000..8a0fa33d087c
 --- /dev/null
-+++ b/lib/kunit/mock.c
-@@ -0,0 +1,364 @@
++++ b/lib/kunit/mock-test.c
+@@ -0,0 +1,320 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Mocking API for KUnit.
++ * KUnit test for mock.h.
 + *
 + * Copyright (C) 2020, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
 +
++#include <kunit/test.h>
 +#include <kunit/mock.h>
 +
-+static bool mock_match_params(struct mock_matcher *matcher,
-+			      struct kunit_stream *stream,
-+			      const void **params,
-+			      int len)
++// A simple class for unit-testing/example purposes.
++struct adder {
++	int (*add)(struct adder *adder, int x, int y);
++};
++
++static int real_add(struct adder *adder, int x, int y)
 +{
-+	struct mock_param_matcher *param_matcher;
-+	bool ret = true, tmp;
-+	int i;
-+
-+	BUG_ON(matcher->num != len);
-+
-+	for (i = 0; i < matcher->num; i++) {
-+		param_matcher = matcher->matchers[i];
-+		kunit_stream_add(stream, "\t");
-+		tmp = param_matcher->match(param_matcher, stream, params[i]);
-+		ret = ret && tmp;
-+		kunit_stream_add(stream, "\n");
-+	}
-+
-+	return ret;
++	return x + y;
 +}
 +
-+static const void *mock_do_expect(struct mock *mock,
-+				  const char *method_name,
-+				  const void *method_ptr,
-+				  const char * const *type_names,
-+				  const void **params,
-+				  int len);
-+
-+static void fail_and_flush(struct kunit *test, struct kunit_stream *stream)
++static void adder_real_init(struct adder *adder)
 +{
-+	kunit_set_failure(test);
-+	kunit_stream_commit(stream);
++	  adder->add = real_add;
 +}
 +
-+void mock_validate_expectations(struct mock *mock)
-+{
-+	struct mock_expectation *expectation, *expectation_safe;
-+	struct kunit_stream *stream;
-+	struct mock_method *method;
-+	int times_called;
++DECLARE_STRUCT_CLASS_MOCK_PREREQS(adder);
++DEFINE_STRUCT_CLASS_MOCK(METHOD(mock_add), CLASS(adder), RETURNS(int),
++				     PARAMS(struct adder*, int, int));
++DECLARE_STRUCT_CLASS_MOCK_INIT(adder);
 +
-+	stream = alloc_kunit_stream(mock->test, GFP_KERNEL);
-+	list_for_each_entry(method, &mock->methods, node) {
-+		list_for_each_entry_safe(expectation, expectation_safe,
-+					 &method->expectations, node) {
-+			times_called = expectation->times_called;
-+			if (!(expectation->min_calls_expected <= times_called &&
-+			      times_called <= expectation->max_calls_expected)
-+			    ) {
-+				kunit_stream_add(stream,
-+						 "Expectation was not called the specified number of times:\n\t");
-+				kunit_stream_add(stream,
-+						 "Function: %s, min calls: %d, max calls: %d, actual calls: %d\n",
-+						 method->method_name,
-+						 expectation->min_calls_expected,
-+						 expectation->max_calls_expected,
-+						 times_called);
-+				fail_and_flush(mock->test, stream);
-+			}
-+			list_del(&expectation->node);
-+		}
-+	}
++// This would normally live in the .c file.
++static int adder_mock_init(struct MOCK(adder) *mock_adder)
++{
++	struct adder *real = mock_get_trgt(mock_adder);
++
++	adder_real_init(real);
++
++	real->add = mock_add;
++	mock_set_default_action(mock_get_ctrl(mock_adder),
++				"mock_add",
++				mock_add,
++				kunit_int_return(mock_get_test(mock_adder), 0));
++	return 0;
++}
++DEFINE_STRUCT_CLASS_MOCK_INIT(adder, adder_mock_init);
++
++
++/*
++ * Note: we create a new `failing_test` so we can validate that failed mock
++ * expectations mark tests as failed.
++ * Marking the real `test` as failed is obviously problematic.
++ *
++ * See mock_test_failed_expect_call_fails_test for an example.
++ */
++struct mock_test_context {
++	struct kunit *failing_test;
++	struct mock  *mock;
++};
++
++static void mock_test_do_expect_basic(struct kunit *test)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct mock *mock = ctx->mock;
++	int param0 = 5, param1 = -4;
++	static const char * const two_param_types[] = {"int", "int"};
++	const void *two_params[] = {&param0, &param1};
++	struct mock_param_matcher *matchers_any_two[] = {
++		kunit_any(test), kunit_any(test)
++	};
++	struct mock_expectation *expectation;
++	const void *ret;
++
++	expectation = mock_add_matcher(mock,
++				       "",
++				       NULL,
++				       matchers_any_two,
++				       ARRAY_SIZE(matchers_any_two));
++	expectation->action = kunit_int_return(test, 5);
++	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
++
++	ret = mock->do_expect(mock,
++			      "",
++			      NULL,
++			      two_param_types,
++			      two_params,
++			      ARRAY_SIZE(two_params));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
++	KUNIT_EXPECT_EQ(test, 5, *((int *) ret));
++	KUNIT_EXPECT_EQ(test, 1, expectation->times_called);
 +}
 +
-+static void mock_validate_wrapper(struct kunit_post_condition *condition)
++static void mock_test_ptr_eq(struct kunit *test)
 +{
-+	struct mock *mock = container_of(condition, struct mock, parent);
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++	void *param0 = ctx, *param1 = failing_test;
++	static const char * const two_param_types[] = {"void *", "void *"};
++	const void *two_params[] = {&param0, &param1};
++	struct mock_param_matcher *matchers_two_ptrs[] = {
++		kunit_ptr_eq(test, param0), kunit_ptr_eq(test, param1)
++	};
++	struct mock_expectation *expectation;
++	const void *ret;
++
++	expectation = mock_add_matcher(mock,
++				       "",
++				       NULL,
++				       matchers_two_ptrs,
++				       ARRAY_SIZE(matchers_two_ptrs));
++	expectation->action = kunit_int_return(test, 0);
++	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
++
++	ret = mock->do_expect(mock,
++			      "",
++			      NULL,
++			      two_param_types,
++			      two_params,
++			      ARRAY_SIZE(two_params));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
++	KUNIT_EXPECT_EQ(test, 1, expectation->times_called);
++}
++
++static void mock_test_ptr_eq_not_equal(struct kunit *test)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++
++	/* Pick some two pointers, but pass in different values. */
++	void *param0 = test, *param1 = failing_test;
++	static const char * const two_param_types[] = {"void *", "void *"};
++	const void *two_params[] = {&param0, &param1};
++	struct mock_param_matcher *matchers_two_ptrs[] = {
++		kunit_ptr_eq(failing_test, param0),
++		kunit_ptr_eq(failing_test, param1 - 1)
++	};
++	struct mock_expectation *expectation;
++	const void *ret;
++
++	expectation = mock_add_matcher(mock,
++				       "",
++				       NULL,
++				       matchers_two_ptrs,
++				       ARRAY_SIZE(matchers_two_ptrs));
++	expectation->action = kunit_int_return(failing_test, 0);
++	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
++
++	ret = mock->do_expect(mock,
++			      "",
++			      NULL,
++			      two_param_types,
++			      two_params,
++			      ARRAY_SIZE(two_params));
++	KUNIT_EXPECT_FALSE(test, ret);
++	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
++
++	KUNIT_EXPECT_FALSE(test, failing_test->success);
++}
++
++/*
++ * In order for us to be able to rely on KUNIT_EXPECT_CALL to validate other
++ * behavior, we need to test that unsatisfied KUNIT_EXPECT_CALL causes a test
++ * failure.
++ *
++ * In order to understand what this test is testing we must first understand how
++ * KUNIT_EXPECT_CALL() works conceptually. In theory, a test specifies that it
++ * expects some function to be called some number of times (can be zero), with
++ * some particular arguments. Hence, KUNIT_EXPECT_CALL() must do two things:
++ *
++ * 1) Determine whether a function call matches the expectation.
++ *
++ * 2) Fail if there are too many or too few matches.
++ */
++static void mock_test_failed_expect_call_fails_test(struct kunit *test)
++{
++       /*
++	* We do not want to fail the real `test` object used to run this test.
++	* So we use a separate `failing_test` for KUNIT_EXPECT_CALL().
++	*/
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++
++	/*
++	 * Put an expectation on mock, which we won't satisify.
++	 *
++	 * NOTE: it does not actually matter what function we expect here.
++	 * `mock` does not represent an actual mock on anything; we just need to
++	 * create some expectation, that we won't satisfy.
++	 */
++	KUNIT_EXPECT_CALL(mock_add(mock,
++			       kunit_any(failing_test),
++			       kunit_any(failing_test)));
++
++	/*
++	 * Validate the unsatisfied expectation that we just created. This
++	 * should cause `failing_test` to fail.
++	 */
++	mock_validate_expectations(mock);
++
++	/* Verify that `failing_test` has actually failed. */
++	KUNIT_EXPECT_FALSE(test, failing_test->success);
++}
++
++static void mock_test_do_expect_default_return(struct kunit *test)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct mock *mock = ctx->mock;
++	int param0 = 5, param1 = -5;
++	static const char * const two_param_types[] = {"int", "int"};
++	const void *two_params[] = {&param0, &param1};
++	struct mock_param_matcher *matchers[] = {
++		kunit_int_eq(test, 5),
++		kunit_int_eq(test, -4)
++	};
++	struct mock_expectation *expectation;
++	const void *ret;
++
++	expectation = mock_add_matcher(mock,
++				       "add",
++				       mock_add,
++				       matchers,
++				       ARRAY_SIZE(matchers));
++	expectation->action = kunit_int_return(test, 5);
++	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
++
++	KUNIT_EXPECT_FALSE(test,
++			   mock_set_default_action(mock,
++						   "add",
++						   mock_add,
++						   kunit_int_return(test, -4)));
++
++	ret = mock->do_expect(mock,
++			      "add",
++			      mock_add,
++			      two_param_types,
++			      two_params,
++			      ARRAY_SIZE(two_params));
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ret);
++	KUNIT_EXPECT_EQ(test, -4, *((int *) ret));
++	KUNIT_EXPECT_EQ(test, 0, expectation->times_called);
++}
++
++static void mock_test_mock_validate_expectations(struct kunit *test)
++{
++	struct mock_test_context *ctx = test->priv;
++	struct kunit *failing_test = ctx->failing_test;
++	struct mock *mock = ctx->mock;
++
++	struct mock_param_matcher *matchers[] = {
++		kunit_int_eq(failing_test, 5),
++		kunit_int_eq(failing_test, -4)
++	};
++	struct mock_expectation *expectation;
++
++
++	expectation = mock_add_matcher(mock,
++				       "add",
++				       mock_add,
++				       matchers,
++				       ARRAY_SIZE(matchers));
++	expectation->times_called = 0;
++	expectation->min_calls_expected = 1;
++	expectation->max_calls_expected = 1;
 +
 +	mock_validate_expectations(mock);
++
++	KUNIT_EXPECT_FALSE(test, failing_test->success);
 +}
 +
-+void mock_init_ctrl(struct kunit *test, struct mock *mock)
++static int mock_test_init(struct kunit *test)
 +{
-+	mock->test = test;
-+	INIT_LIST_HEAD(&mock->methods);
-+	mock->do_expect = mock_do_expect;
-+	mock->parent.validate = mock_validate_wrapper;
-+	list_add_tail(&mock->parent.node, &test->post_conditions);
-+}
++	struct mock_test_context *ctx;
 +
-+static struct mock_method *mock_lookup_method(struct mock *mock,
-+					      const void *method_ptr)
-+{
-+	struct mock_method *ret;
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++	test->priv = ctx;
 +
-+	list_for_each_entry(ret, &mock->methods, node) {
-+		if (ret->method_ptr == method_ptr)
-+			return ret;
-+	}
++	ctx->failing_test = kunit_kzalloc(test, sizeof(*ctx->failing_test),
++					  GFP_KERNEL);
++	if (!ctx->failing_test)
++		return -EINVAL;
++	kunit_init_test(ctx->failing_test, NULL, NULL);
 +
-+	return NULL;
-+}
-+
-+static struct mock_method *mock_add_method(struct mock *mock,
-+					   const char *method_name,
-+					   const void *method_ptr)
-+{
-+	struct mock_method *method;
-+
-+	method = kunit_kzalloc(mock->test, sizeof(*method), GFP_KERNEL);
-+	if (!method)
-+		return NULL;
-+
-+	INIT_LIST_HEAD(&method->expectations);
-+	method->method_name = method_name;
-+	method->method_ptr = method_ptr;
-+	list_add_tail(&method->node, &mock->methods);
-+
-+	return method;
-+}
-+
-+static int mock_add_expectation(struct mock *mock,
-+				const char *method_name,
-+				const void *method_ptr,
-+				struct mock_expectation *expectation)
-+{
-+	struct mock_method *method;
-+
-+	method = mock_lookup_method(mock, method_ptr);
-+	if (!method) {
-+		method = mock_add_method(mock, method_name, method_ptr);
-+		if (!method)
-+			return -ENOMEM;
-+	}
-+
-+	list_add_tail(&expectation->node, &method->expectations);
++	ctx->mock = kunit_kzalloc(test, sizeof(*ctx->mock), GFP_KERNEL);
++	if (!ctx->mock)
++		return -ENOMEM;
++	mock_init_ctrl(ctx->failing_test, ctx->mock);
 +
 +	return 0;
 +}
 +
-+struct mock_expectation *mock_add_matcher(struct mock *mock,
-+					  const char *method_name,
-+					  const void *method_ptr,
-+					  struct mock_param_matcher *matchers[],
-+					  int len)
++static void mock_test_exit(struct kunit *test)
 +{
-+	struct mock_expectation *expectation;
-+	struct mock_matcher *matcher;
-+	int ret;
++	struct mock_test_context *ctx = test->priv;
 +
-+	expectation = kunit_kzalloc(mock->test,
-+				   sizeof(*expectation),
-+				   GFP_KERNEL);
-+	if (!expectation)
-+		return NULL;
-+
-+	matcher = kunit_kmalloc(mock->test, sizeof(*matcher), GFP_KERNEL);
-+	if (!matcher)
-+		return NULL;
-+
-+	memcpy(&matcher->matchers, matchers, sizeof(*matchers) * len);
-+	matcher->num = len;
-+
-+	expectation->matcher = matcher;
-+	expectation->max_calls_expected = 1;
-+	expectation->min_calls_expected = 1;
-+
-+	ret = mock_add_expectation(mock, method_name, method_ptr, expectation);
-+	if (ret < 0)
-+		return NULL;
-+
-+	return expectation;
++	kunit_cleanup(ctx->failing_test);
 +}
 +
-+int mock_set_default_action(struct mock *mock,
-+			    const char *method_name,
-+			    const void *method_ptr,
-+			    struct mock_action *action)
-+{
-+	struct mock_method *method;
++static struct kunit_case mock_test_cases[] = {
++	KUNIT_CASE(mock_test_do_expect_basic),
++	KUNIT_CASE(mock_test_ptr_eq),
++	KUNIT_CASE(mock_test_ptr_eq_not_equal),
++	KUNIT_CASE(mock_test_failed_expect_call_fails_test),
++	KUNIT_CASE(mock_test_do_expect_default_return),
++	KUNIT_CASE(mock_test_mock_validate_expectations),
++	{}
++};
 +
-+	method = mock_lookup_method(mock, method_ptr);
-+	if (!method) {
-+		method = mock_add_method(mock, method_name, method_ptr);
-+		if (!method)
-+			return -ENOMEM;
-+	}
++static struct kunit_suite mock_test_suite = {
++	.name = "mock-test",
++	.init = mock_test_init,
++	.exit = mock_test_exit,
++	.test_cases = mock_test_cases,
++};
 +
-+	method->default_action = action;
-+
-+	return 0;
-+}
-+
-+static void mock_format_param(struct kunit_stream *stream,
-+			      const char *type_name,
-+			      const void *param)
-+{
-+	/*
-+	 * Cannot find formatter, so just print the pointer of the
-+	 * symbol.
-+	 */
-+	kunit_stream_add(stream, "<%pS>", param);
-+}
-+
-+static void mock_add_method_declaration_to_stream(
-+		struct kunit_stream *stream,
-+		const char *function_name,
-+		const char * const *type_names,
-+		const void **params,
-+		int len)
-+{
-+	int i;
-+
-+	kunit_stream_add(stream, "%s(", function_name);
-+	for (i = 0; i < len; i++) {
-+		mock_format_param(stream, type_names[i], params[i]);
-+		if (i < len - 1)
-+			kunit_stream_add(stream, ", ");
-+	}
-+	kunit_stream_add(stream, ")\n");
-+}
-+
-+static struct kunit_stream *mock_initialize_failure_message(
-+		struct kunit *test,
-+		const char *function_name,
-+		const char * const *type_names,
-+		const void **params,
-+		int len)
-+{
-+	struct kunit_stream *stream;
-+
-+	stream = alloc_kunit_stream(test, GFP_KERNEL);
-+	if (!stream)
-+		return NULL;
-+
-+	kunit_stream_add(stream,
-+			 "EXPECTATION FAILED: no expectation for call: ");
-+	mock_add_method_declaration_to_stream(stream,
-+					      function_name,
-+					      type_names,
-+					      params,
-+					      len);
-+	return stream;
-+}
-+
-+static bool mock_is_expectation_retired(struct mock_expectation *expectation)
-+{
-+	return expectation->retire_on_saturation &&
-+			expectation->times_called ==
-+			expectation->max_calls_expected;
-+}
-+
-+static void mock_add_method_expectation_error(struct kunit *test,
-+					      struct kunit_stream *stream,
-+					      char *message,
-+					      struct mock *mock,
-+					      struct mock_method *method,
-+					      const char * const *type_names,
-+					      const void **params,
-+					      int len)
-+{
-+	kunit_stream_clear(stream);
-+	kunit_stream_add(stream, message);
-+	mock_add_method_declaration_to_stream(stream,
-+		method->method_name, type_names, params, len);
-+}
-+
-+static struct mock_expectation *mock_apply_expectations(
-+		struct mock *mock,
-+		struct mock_method *method,
-+		const char * const *type_names,
-+		const void **params,
-+		int len)
-+{
-+	struct kunit_stream *attempted_matching_stream;
-+	bool expectations_all_saturated = true;
-+	struct kunit *test = mock->test;
-+	struct kunit_stream *stream = alloc_kunit_stream(test, GFP_KERNEL);
-+	struct mock_expectation *ret;
-+
-+	if (list_empty(&method->expectations)) {
-+		mock_add_method_expectation_error(test, stream,
-+			"Method was called with no expectations declared: ",
-+			mock, method, type_names, params, len);
-+		kunit_stream_commit(stream);
-+		return NULL;
-+	}
-+
-+	attempted_matching_stream = mock_initialize_failure_message(
-+			test,
-+			method->method_name,
-+			type_names,
-+			params,
-+			len);
-+
-+	list_for_each_entry(ret, &method->expectations, node) {
-+		if (mock_is_expectation_retired(ret))
-+			continue;
-+		expectations_all_saturated = false;
-+
-+		kunit_stream_add(attempted_matching_stream,
-+				 "Tried expectation: %s, but\n",
-+				 ret->expectation_name);
-+		if (mock_match_params(ret->matcher,
-+			attempted_matching_stream, params, len)) {
-+			/*
-+			 * Matcher was found; we won't print, so clean up the
-+			 * log.
-+			 */
-+			kunit_stream_clear(attempted_matching_stream);
-+			return ret;
-+		}
-+	}
-+
-+	if (expectations_all_saturated) {
-+		mock_add_method_expectation_error(test, stream,
-+			"Method was called with fully saturated expectations: ",
-+			mock, method, type_names, params, len);
-+	} else {
-+		mock_add_method_expectation_error(test, stream,
-+			"Method called that did not match any expectations: ",
-+			mock, method, type_names, params, len);
-+		kunit_stream_append(stream, attempted_matching_stream);
-+	}
-+	fail_and_flush(test, stream);
-+	kunit_stream_clear(attempted_matching_stream);
-+	return NULL;
-+}
-+
-+static const void *mock_do_expect(struct mock *mock,
-+				  const char *method_name,
-+				  const void *method_ptr,
-+				  const char * const *param_types,
-+				  const void **params,
-+				  int len)
-+{
-+	struct mock_expectation *expectation;
-+	struct mock_method *method;
-+	struct mock_action *action;
-+
-+	method = mock_lookup_method(mock, method_ptr);
-+	if (!method)
-+		return NULL;
-+
-+	expectation = mock_apply_expectations(mock,
-+					      method,
-+					      param_types,
-+					      params,
-+					      len);
-+	if (!expectation) {
-+		action = method->default_action;
-+	} else {
-+		expectation->times_called++;
-+		if (expectation->action)
-+			action = expectation->action;
-+		else
-+			action = method->default_action;
-+	}
-+	if (!action)
-+		return NULL;
-+
-+	return action->do_action(action, params, len);
-+}
++kunit_test_suite(mock_test_suite);
 -- 
 2.28.0.681.g6f77f65b4e-goog
 
