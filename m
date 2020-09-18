@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBAC5C43463
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A04BC43465
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F3F923888
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB20B22211
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 18:32:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="gDr8SX0K"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="bUtWKfIL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgIRSc1 (ORCPT
+        id S1726360AbgIRScJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Sep 2020 14:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        Fri, 18 Sep 2020 14:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgIRScM (ORCPT
+        with ESMTP id S1726382AbgIRScG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 14:32:12 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2530CC0613CE
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:12 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v106so6383673ybi.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:12 -0700 (PDT)
+        Fri, 18 Sep 2020 14:32:06 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52795C0613D1
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:05 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id w69so3986261pgw.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 11:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=4ufz9l0cCzYsCoL4r8GDrSIfCJnmy8gI1393Dh+Rmy0=;
-        b=gDr8SX0KFSof3ETP10gZupoFduQgqaPI99rHGbDjuBM8Gbb5fSKkoVPowjgLhGuGej
-         18awEJF8MKVAhlVwtFJzbS+JlJBF7l/zj27KETQuv35X/QgqO5w3iKEI1QPd4DB1gsKx
-         hq5Y5NheUrI4kS3JZSVcABnsdGvan9KtjLJd5EWWQ0JteT+TRiU6T2fRLXLm/YvjQFUg
-         +wuXvUmLse8ZQ5k8XndeLKHAwApIIUWmJI0Xf50EnDl53mL/yleeS+C3+nEXIxym9kyj
-         2LB80b+xFatQkgJfTORws0mQDHYCu1bg571LIN+GFiHWsMMB49vSNqI5Hr7EYNYPHNJH
-         xCAg==
+        bh=gJao4X6+KTMHEows7N2UhZIG5yfBzHyRTcMMo4PkBvg=;
+        b=bUtWKfIL4GW4/m+BQNZHjOvLG9OLF6Pflcmhg4nwTBIY7SmZyZ5E08RvdQOWuxM8/z
+         CUUO40mBIm9Rxb5NWOWGndOTyL2ANa/40lymPISHyAX9GZg4SoqNqJQJOIP5IRiMACKS
+         0vsklPoVUCUX4kgNvHBwQEXssHqqd8lX/TRmQ3wOmP6akOSrQcClZ8GsWlpO59D6+wmD
+         f/J1gwNkt3DMxNrt1rQ3GM2xRxORb2iSg9854Ub5+umHzs2HJYp9ZntmqUpJ80WBGvPP
+         FMzIDbB0raDqCjleJ3AwtblhBw1aH2ei3oippBsg7KoCyASeYATk8tMZ5z23BD0pgNyL
+         k1CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=4ufz9l0cCzYsCoL4r8GDrSIfCJnmy8gI1393Dh+Rmy0=;
-        b=bIJzcwZzVbleNx44nZ4wz1ZFVNOBA8Mo+pB4fEwslYDjzUK0W5RV0b1x8snGq8O2Lp
-         e8uTqJKvTdwdiL5eeCSTJGpJv1sfmlLStybTeAepgjSV4eEED5hEDR0oPK37qyU2TKjR
-         ePeSt8m6+adYvpqXtPCBydaFI4R3HN4kAvVw+wyfYNRa8+OgirVcsJnONljL7iuylER2
-         VeqIlXeMN4ixNnIT2iZZebnO3dPZkVEAKVtKQri3UginW3TkCJooTgrR9QcUjvPxzBJz
-         zCohtXkO1EY/GPB+gRZzTTpxVxA7mOHZu6pjGGu2MYoogCw8uWDyvyGnGjFM90aAUDH1
-         wh8w==
-X-Gm-Message-State: AOAM5301U5I7krpng/9DhvmJQs+1YckiPR2pg2q6qOklbZPKQ3l5VhJz
-        4G9vLJPyJV4Vg8x9HkI5hfCCR64T7rVzXg==
-X-Google-Smtp-Source: ABdhPJyAluzyfa0U446HFUAVXW6a9HYsuxaYq7Q2k1km1l9MpCq1TNrLdsb174tXI9pMbjsb1BJvhZb6Y87KEg==
+        bh=gJao4X6+KTMHEows7N2UhZIG5yfBzHyRTcMMo4PkBvg=;
+        b=W6byRFFYDKoYRG3kdYoTjxq8xCZeD9w05kNmG3s8FkTlcm2GkaU95PhkF5ObYdva90
+         bAJO5Uu6yj9lIE5ZFoo0TJecPnlU15Y0Yk74ARC4ZRpReSMbZow65wtQYo9309p/Qce1
+         KMU1zeqEqEEYepPrj4u6GMq57PuV13Vw2G3TLRzNx99f4lgn2aBt4H9ym8+QGXDvxYOo
+         0pWPafqqGfjA/bK0nJTR+3PSVqmbdGCdQ0Mk7O75yqR6umnEWTbS2r26zrrF+UHljtxV
+         f5wlem//GlXWV+bgZ/0bfeNf8e+VB6jWBXjJahYkP6dUW8ZfsgX6AnkrZsIwcpjtX48S
+         YL7A==
+X-Gm-Message-State: AOAM530SdFRcHYWNYKPQBhtWntiqejojUq14ypdji6zE61Sk8NCHOz9h
+        khcoryBfHNNLjjPByJGK+knECG7gOFBF2w==
+X-Google-Smtp-Source: ABdhPJz/rWUW/Gc65pMGhH0XQKJ0DeOELYpZc4eku1aD31lT5XDBFBKecK+/VkMTyhsPDgDiMyllt7OFvyj1YQ==
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a25:5346:: with SMTP id
- h67mr14433285ybb.420.1600453931272; Fri, 18 Sep 2020 11:32:11 -0700 (PDT)
-Date:   Fri, 18 Sep 2020 11:31:11 -0700
+ (user=dlatypov job=sendgmr) by 2002:a17:902:aa0a:b029:d0:89f4:6224 with SMTP
+ id be10-20020a170902aa0ab02900d089f46224mr34591239plb.12.1600453924807; Fri,
+ 18 Sep 2020 11:32:04 -0700 (PDT)
+Date:   Fri, 18 Sep 2020 11:31:08 -0700
 In-Reply-To: <20200918183114.2571146-1-dlatypov@google.com>
-Message-Id: <20200918183114.2571146-10-dlatypov@google.com>
+Message-Id: <20200918183114.2571146-7-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20200918183114.2571146-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
-Subject: [RFC v1 09/12] kunit: mock: add macro machinery to pick correct
- format args
+Subject: [RFC v1 06/12] kunit: expose kunit_set_failure() for use by mocking
 From:   Daniel Latypov <dlatypov@google.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         David Gow <davidgow@google.com>,
@@ -73,77 +73,47 @@ Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         Luis Chamberlain <mcgrof@kernel.org>,
         Alan Maguire <alan.maguire@oracle.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
         Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Being able to fail the test outside of expectations and assertions is a
+requirement for new features, e.g. mocking, dynamic analysis, etc.
 
-Note: It was unclear if there was existing code that could be reused.
-
-This is used by DEFINE_MATCHER to generate matching funcs for primitive
-types that don't trigger compiler warnings.
-
-After preprocessing, we now generate matcher func code like
-  kunit_stream_add(stream, "%p not > "%p", actual, matcher->expected)
-as opposed to the hoping %d will work for all types.
-
-Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- lib/kunit/common-mocks.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ include/kunit/test.h | 2 ++
+ lib/kunit/test.c     | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kunit/common-mocks.c b/lib/kunit/common-mocks.c
-index b3a410fda63a..1f755f26cf5f 100644
---- a/lib/kunit/common-mocks.c
-+++ b/lib/kunit/common-mocks.c
-@@ -42,6 +42,27 @@ struct mock_param_matcher *kunit_any(struct kunit *test)
- 					    matcher);			       \
- 		}
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 0eb3abb00da4..05330593243d 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -233,6 +233,8 @@ struct kunit {
  
-+#define TYPE_FRMT(type_name) FORMAT_##type_name
-+#define FORMAT_u8 "%hu"
-+#define FORMAT_u16 "%hu"
-+#define FORMAT_u32 "%u"
-+#define FORMAT_u64 "%llu"
-+#define FORMAT_char "%c"
-+#define FORMAT_uchar "%c"
-+#define FORMAT_schar "%c"
-+#define FORMAT_short "%hd"
-+#define FORMAT_ushort "%hu"
-+#define FORMAT_int "%d"
-+#define FORMAT_uint "%u"
-+#define FORMAT_long "%ld"
-+#define FORMAT_ulong "%lu"
-+#define FORMAT_longlong "%lld"
-+#define FORMAT_ulonglong "%llu"
-+#define FORMAT_ptr "%p"
+ void kunit_init_test(struct kunit *test, const char *name, char *log);
+ 
++void kunit_set_failure(struct kunit *test);
 +
-+#define CMP_FORMAT(type_name, msg, op)                                        \
-+	       TYPE_FRMT(type_name) msg " " #op " " TYPE_FRMT(type_name)
-+
- #define DEFINE_MATCH_FUNC(type_name, type, op_name, op)			       \
- 		bool match_##type_name##_##op_name(			       \
- 				struct mock_param_matcher *pmatcher,	       \
-@@ -55,12 +76,12 @@ struct mock_param_matcher *kunit_any(struct kunit *test)
- 									       \
- 			if (matches)					       \
- 				kunit_stream_add(stream,		       \
--						 "%d "#op" %d",		       \
-+						 CMP_FORMAT(type_name, "", op),\
- 						 actual,		       \
- 						 matcher->expected);	       \
- 			else						       \
- 				kunit_stream_add(stream,		       \
--						 "%d not "#op" %d",	       \
-+						 CMP_FORMAT(type_name, " not", op), \
- 						 actual,		       \
- 						 matcher->expected);	       \
- 									       \
+ int kunit_run_tests(struct kunit_suite *suite);
+ 
+ size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 4e8c74c89073..1ccf6dbecd73 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -15,7 +15,7 @@
+ #include "debugfs.h"
+ #include "try-catch-impl.h"
+ 
+-static void kunit_set_failure(struct kunit *test)
++void kunit_set_failure(struct kunit *test)
+ {
+ 	WRITE_ONCE(test->success, false);
+ }
 -- 
 2.28.0.681.g6f77f65b4e-goog
 
