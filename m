@@ -2,114 +2,925 @@ Return-Path: <SRS0=/1Qb=C4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEDF1C43466
-	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Sep 2020 08:07:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 716CDC43464
+	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Sep 2020 19:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9738A235FD
-	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Sep 2020 08:07:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F329722211
+	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Sep 2020 19:56:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VliAdCAK"
+	dkim=pass (1024-bit key) header.d=linaro.org header.i=@linaro.org header.b="TTuK7S5k";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="isqaaYIU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbgISIGr (ORCPT
+        id S1726520AbgIST4k (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 19 Sep 2020 04:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726097AbgISIGr (ORCPT
+        Sat, 19 Sep 2020 15:56:40 -0400
+Received: from a48-34.smtp-out.amazonses.com ([54.240.48.34]:58996 "EHLO
+        a48-34.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726518AbgIST4k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Sep 2020 04:06:47 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05FFC0613D0
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2020 01:06:46 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id k13so4459184pfg.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2020 01:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9iH7lg3YkHOWr7NTqH/dXox+CFNwDp9U5uBDltp9opg=;
-        b=VliAdCAKA8262/f1rFGSxP8xylGXaZO4FcA+nCHPcdNqzcUPuWcsjFUnaLb/PJdGDc
-         77LDfBN6skG3zcIHXXKVxcVAm5eMB9le2+2lsMUje1wbpOCIZh2A4ZLSie9ILwBOpC9K
-         4vvx0i4xKcWt+EOoZlwSsPar86nskR8syAyuE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9iH7lg3YkHOWr7NTqH/dXox+CFNwDp9U5uBDltp9opg=;
-        b=Ozz1uP4ZRf1WAf1cuwHcpDXS0QccS+aw59M/oXnEQWNGibzuBA5UhMv0lAbaAj9BR5
-         yr/hz3I0gqHmJyx0ooSpYuo3t9/2U00E9cNFyH8yKDiWUM0q6daMnNMoS8VxT08EYu+t
-         KBUGQEqV01KIbf1J7grbQvgGXUh6LFyUN14Bcodb7QBdGzV0hy3YzlVj20OsByyrWOXz
-         XbQ5fiuk7V2TGRuqeh9EU0pJaEx71DSpGhgCCoS2FSWArB1XDHzcRdOAj/dqltPjcaWr
-         k84caqXqL39lQCKA2oEQKgFGHvhtELwJD9NoaD/C1AynjnX48jTu5o9TClaHdZi1gz3L
-         VwTQ==
-X-Gm-Message-State: AOAM533dxE1Bs37FneuWSB9RF/vVZJCYHYz8c3DnRaFiaZPVMg/qZxtw
-        ahl0IYDQA/rudiBlizR3OxVMDw==
-X-Google-Smtp-Source: ABdhPJxqwI/NRVwSlA1Y4+c6UzNBZYDGK/U+ZUNMSqUez01WLw6CEsVrOzXeoFKh2YifcS+xdf+aPg==
-X-Received: by 2002:aa7:87da:0:b029:13c:1611:66bf with SMTP id i26-20020aa787da0000b029013c161166bfmr35672458pfo.10.1600502806153;
-        Sat, 19 Sep 2020 01:06:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id gj6sm4896682pjb.10.2020.09.19.01.06.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2020 01:06:45 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v2 0/4] selftests/seccomp: Refactor change_syscall()
-Date:   Sat, 19 Sep 2020 01:06:33 -0700
-Message-Id: <20200919080637.259478-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
+        Sat, 19 Sep 2020 15:56:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=iv2huwi6zmqabdt6b4lbuyos6pcvh5gh; d=linaro.org; t=1600545398;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=k6cEeAvVSC8GlzjEww5wcm+t/vczcQ0go8rdKw6+KS0=;
+        b=TTuK7S5klCQXq6fikays+K7sxEIWRVBOGK2h0kpHVu118LcUE1wI1imNbrTgQaht
+        mWClIdQpD21wUttC8+Tb0Y9QNQKA+FEOdoIl0oyBPwhF/4iDH6rAxqCuuXw9MVYAi0z
+        QZvhRmsXHFsMqp6JU2ltIGEYx+1iywVuNXSVcHyg=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1600545398;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=k6cEeAvVSC8GlzjEww5wcm+t/vczcQ0go8rdKw6+KS0=;
+        b=isqaaYIU5t5c9uQY90ZgtZxa9+35pNG/lc6OXERfo0o7GMoNKeeWdvbhJt9CpUg3
+        /C8dB9tQuB7BfhMUVyTNwgYyDB+DIoaVhYHmC9G6JbWrl/gWlICW1ZnBRuNv1fZk2fr
+        tkiC+zyzF6aLMLV9aqds3OfsnHGE9/zj2yzs+H3M=
+From:   LKFT <lkft@linaro.org>
+To:     lkft@linaro.org, lkft-triage@lists.linaro.org,
+        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org
+Cc:     sfr@canb.auug.org.au, shuah@kernel.org
+Subject: [REGRESSION] kselftest: next-20200918
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000174a7f09e85-5d9ca9c6-1d75-4c00-9fed-aa405edfe366-000000@email.amazonses.com>
+Date:   Sat, 19 Sep 2020 19:56:38 +0000
+X-SES-Outgoing: 2020.09.19-54.240.48.34
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-v1: https://lore.kernel.org/lkml/20200912110820.597135-1-keescook@chromium.org
-v2:
-- Took Acked patches into -next
-- refactored powerpc syscall setting implementation
-- refactored clone3 args implementation
+## Kernel
+* kernel: 5.9.0-rc5
+* git repo: ['https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: b652d2a5f2a4e93d803cc33eb57fdc41ee528500
+* git describe: next-20200918
+* Test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200918
 
-Hi,
+## Regressions (compared to build next-20200917)
 
-This finishes the refactoring of the seccomp selftest logic used in
-for ptrace syscall number/return handling for powerpc. Additionally
-fixes clone3 (which seccomp depends on for testing) to run under MIPS
-where an old struct clone_args has become visible.
+juno-r2:
+  kselftest:
+    * cgroup_test_freezer
 
-(FWIW, I expect to take these via the seccomp tree.)
+x86:
+  kselftest-vsyscall-mode-native:
+    * net_fib-onlink-tests.sh
+    * tc-testing_tdc.sh
+  kselftest-vsyscall-mode-none:
+    * kvm_vmx_preemption_timer_test
 
-Thanks,
+## Fixes (compared to build next-20200917)
 
-Kees Cook (4):
-  selftests/seccomp: Record syscall during ptrace entry
-  selftests/seccomp: Allow syscall nr and ret value to be set separately
-  selftests/seccomp: powerpc: Set syscall return during ptrace syscall
-    exit
-  selftests/clone3: Avoid OS-defined clone_args
+x86:
+  kselftest:
+    * kvm_vmx_preemption_timer_test
+    * net_ip_defrag.sh
+    * proc_read
 
- tools/testing/selftests/clone3/clone3.c       |  45 +++----
- .../clone3/clone3_cap_checkpoint_restore.c    |   4 +-
- .../selftests/clone3/clone3_clear_sighand.c   |   2 +-
- .../selftests/clone3/clone3_selftests.h       |  24 ++--
- .../testing/selftests/clone3/clone3_set_tid.c |   4 +-
- tools/testing/selftests/seccomp/seccomp_bpf.c | 120 ++++++++++++++----
- 6 files changed, 131 insertions(+), 68 deletions(-)
+i386:
+  kselftest:
+    * pidfd_pidfd_test
 
--- 
-2.25.1
+## Summary
+### i386, kselftest
+* total: 318
+* pass: 144
+* fail: 135
+* skip: 39
+* xfail: 0
+### juno-r2, kselftest
+* total: 278
+* pass: 127
+* fail: 116
+* skip: 35
+* xfail: 0
+### x86, kselftest
+* total: 312
+* pass: 167
+* fail: 111
+* skip: 34
+* xfail: 0
+### x86, kselftest-vsyscall-mode-native
+* total: 315
+* pass: 166
+* fail: 115
+* skip: 34
+* xfail: 0
+### x86, kselftest-vsyscall-mode-none
+* total: 314
+* pass: 166
+* fail: 114
+* skip: 34
+* xfail: 0
 
+## Environments
+* dragonboard-410c
+* hi6220-hikey
+* i386
+* juno-r2
+* juno-r2-compat
+* juno-r2-kasan
+* nxp-ls2088
+* qemu_arm
+* qemu_arm64
+* qemu_i386
+* qemu_x86_64
+* x15
+* x86
+* x86-kasan
+
+## Suites
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+## Failures
+### i386, kselftest
+* bpf_test_progs
+* bpf_test_dev_cgroup
+* bpf_test_tcpbpf_user
+* bpf_get_cgroup_id_user
+* bpf_test_socket_cookie
+* bpf_test_netcnt
+* bpf_test_tcpnotify_user
+* bpf_test_sock_fields
+* bpf_test_sysctl
+* bpf_test_progs-no_alu32
+* bpf_test_sock_addr.sh
+* bpf_test_tunnel.sh
+* bpf_test_lwt_seg6local.sh
+* bpf_test_flow_dissector.sh
+* bpf_test_lwt_ip_encap.sh
+* bpf_test_tc_tunnel.sh
+* bpf_test_tc_edt.sh
+* bpf_test_xdping.sh
+* bpf_test_bpftool.sh
+* clone3_clone3_clear_sighand
+* clone3_clone3_cap_checkpoint_restore
+* core_close_range_test
+* firmware_fw_run_tests.sh
+* ftrace_ftracetest
+* intel_pstate_run.sh
+* kvm_cr4_cpuid_sync_test
+* kvm_evmcs_test
+* kvm_hyperv_cpuid
+* kvm_mmio_warning_test
+* kvm_platform_info_test
+* kvm_set_sregs_test
+* kvm_smm_test
+* kvm_state_test
+* kvm_vmx_preemption_timer_test
+* kvm_svm_vmcall_test
+* kvm_sync_regs_test
+* kvm_vmx_close_while_nested_test
+* kvm_vmx_dirty_log_test
+* kvm_vmx_set_nested_state_test
+* kvm_vmx_tsc_adjust_test
+* kvm_xss_msr_test
+* kvm_debug_regs
+* kvm_clear_dirty_log_test
+* kvm_demand_paging_test
+* kvm_dirty_log_test
+* kvm_kvm_create_max_vcpus
+* kvm_set_memory_region_test
+* kvm_steal_time
+* lkdtm_BUG.sh
+* lkdtm_WARNING.sh
+* lkdtm_WARNING_MESSAGE.sh
+* lkdtm_EXCEPTION.sh
+* lkdtm_CORRUPT_LIST_ADD.sh
+* lkdtm_CORRUPT_LIST_DEL.sh
+* lkdtm_STACK_GUARD_PAGE_LEADING.sh
+* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm_UNSET_SMEP.sh
+* lkdtm_DOUBLE_FAULT.sh
+* lkdtm_CORRUPT_PAC.sh
+* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm_READ_AFTER_FREE.sh
+* lkdtm_READ_BUDDY_AFTER_FREE.sh
+* lkdtm_SLAB_FREE_DOUBLE.sh
+* lkdtm_SLAB_FREE_CROSS.sh
+* lkdtm_SLAB_FREE_PAGE.sh
+* lkdtm_EXEC_DATA.sh
+* lkdtm_EXEC_STACK.sh
+* lkdtm_EXEC_KMALLOC.sh
+* lkdtm_EXEC_VMALLOC.sh
+* lkdtm_EXEC_RODATA.sh
+* lkdtm_EXEC_USERSPACE.sh
+* lkdtm_EXEC_NULL.sh
+* lkdtm_ACCESS_USERSPACE.sh
+* lkdtm_ACCESS_NULL.sh
+* lkdtm_WRITE_RO.sh
+* lkdtm_WRITE_RO_AFTER_INIT.sh
+* lkdtm_WRITE_KERN.sh
+* lkdtm_REFCOUNT_INC_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_DEC_ZERO.sh
+* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_INC_ZERO.sh
+* lkdtm_REFCOUNT_ADD_ZERO.sh
+* lkdtm_REFCOUNT_INC_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_SATURATED.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm_USERCOPY_STACK_FRAME_TO.sh
+* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm_USERCOPY_STACK_BEYOND.sh
+* lkdtm_USERCOPY_KERNEL.sh
+* lkdtm_STACKLEAK_ERASING.sh
+* lkdtm_CFI_FORWARD_PROTO.sh
+* mincore_mincore_selftest
+* mqueue_mq_perf_tests
+* net_fib_tests.sh
+* net_fib-onlink-tests.sh
+* net_pmtu.sh
+* net_udpgso_bench.sh
+* net_psock_snd.sh
+* net_test_vxlan_under_vrf.sh
+* net_l2tp.sh
+* net_traceroute.sh
+* net_altnames.sh
+* net_icmp_redirect.sh
+* net_txtimestamp.sh
+* net_vrf-xfrm-tests.sh
+* net_devlink_port_split.py
+* netfilter_nft_concat_range.sh
+* netfilter_nft_queue.sh
+* pidfd_pidfd_open_test
+* pidfd_pidfd_poll_test
+* proc_proc-self-syscall
+* proc_proc-fsconfig-hidepid
+* pstore_pstore_tests
+* ptrace_vmaccess
+* openat2_openat2_test
+* openat2_resolve_test
+* openat2_rename_attack_test
+* rtc_rtctest
+* seccomp_seccomp_bpf
+* seccomp_seccomp_benchmark
+* splice_short_splice_read.sh
+* vm_run_vmtests
+### juno-r2, kselftest
+* bpf_test_tag
+* bpf_get_cgroup_id_user
+* bpf_test_socket_cookie
+* bpf_test_netcnt
+* bpf_test_tcpnotify_user
+* bpf_test_sysctl
+* bpf_test_progs-no_alu32
+* bpf_test_sock_addr.sh
+* bpf_test_tunnel.sh
+* bpf_test_lwt_seg6local.sh
+* bpf_test_flow_dissector.sh
+* bpf_test_lwt_ip_encap.sh
+* bpf_test_tcp_check_syncookie.sh
+* bpf_test_tc_tunnel.sh
+* bpf_test_tc_edt.sh
+* bpf_test_xdping.sh
+* bpf_test_bpftool.sh
+* cgroup_test_freezer
+* clone3_clone3_cap_checkpoint_restore
+* core_close_range_test
+* cpufreq_main.sh
+* firmware_fw_run_tests.sh
+* ftrace_ftracetest
+* lkdtm_BUG.sh
+* lkdtm_WARNING.sh
+* lkdtm_WARNING_MESSAGE.sh
+* lkdtm_EXCEPTION.sh
+* lkdtm_CORRUPT_LIST_ADD.sh
+* lkdtm_CORRUPT_LIST_DEL.sh
+* lkdtm_STACK_GUARD_PAGE_LEADING.sh
+* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm_UNSET_SMEP.sh
+* lkdtm_CORRUPT_PAC.sh
+* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm_READ_AFTER_FREE.sh
+* lkdtm_READ_BUDDY_AFTER_FREE.sh
+* lkdtm_SLAB_FREE_DOUBLE.sh
+* lkdtm_SLAB_FREE_CROSS.sh
+* lkdtm_SLAB_FREE_PAGE.sh
+* lkdtm_EXEC_DATA.sh
+* lkdtm_EXEC_STACK.sh
+* lkdtm_EXEC_KMALLOC.sh
+* lkdtm_EXEC_VMALLOC.sh
+* lkdtm_EXEC_RODATA.sh
+* lkdtm_EXEC_USERSPACE.sh
+* lkdtm_EXEC_NULL.sh
+* lkdtm_ACCESS_USERSPACE.sh
+* lkdtm_ACCESS_NULL.sh
+* lkdtm_WRITE_RO.sh
+* lkdtm_WRITE_RO_AFTER_INIT.sh
+* lkdtm_WRITE_KERN.sh
+* lkdtm_REFCOUNT_INC_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_DEC_ZERO.sh
+* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_INC_ZERO.sh
+* lkdtm_REFCOUNT_ADD_ZERO.sh
+* lkdtm_REFCOUNT_INC_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_SATURATED.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm_USERCOPY_STACK_FRAME_TO.sh
+* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm_USERCOPY_STACK_BEYOND.sh
+* lkdtm_USERCOPY_KERNEL.sh
+* lkdtm_STACKLEAK_ERASING.sh
+* lkdtm_CFI_FORWARD_PROTO.sh
+* memory-hotplug_mem-on-off-test.sh
+* mincore_mincore_selftest
+* net_run_netsocktests
+* net_fib_tests.sh
+* net_fib-onlink-tests.sh
+* net_pmtu.sh
+* net_udpgso_bench.sh
+* net_fib_rule_tests.sh
+* net_psock_snd.sh
+* net_test_vxlan_under_vrf.sh
+* net_tcp_fastopen_backup_key.sh
+* net_l2tp.sh
+* net_fib_nexthops.sh
+* net_altnames.sh
+* net_icmp_redirect.sh
+* net_txtimestamp.sh
+* net_vrf-xfrm-tests.sh
+* net_devlink_port_split.py
+* netfilter_nft_nat.sh
+* netfilter_conntrack_icmp_related.sh
+* netfilter_nft_concat_range.sh
+* netfilter_nft_queue.sh
+* pidfd_pidfd_test
+* pidfd_pidfd_fdinfo_test
+* pidfd_pidfd_open_test
+* pidfd_pidfd_poll_test
+* proc_proc-fsconfig-hidepid
+* pstore_pstore_tests
+* ptrace_vmaccess
+* openat2_openat2_test
+* openat2_resolve_test
+* openat2_rename_attack_test
+* rtc_rtctest
+* seccomp_seccomp_bpf
+* seccomp_seccomp_benchmark
+* splice_short_splice_read.sh
+* sysctl_sysctl.sh
+* tc-testing_tdc.sh
+### x86, kselftest
+* bpf_test_progs
+* bpf_test_dev_cgroup
+* bpf_test_tcpbpf_user
+* bpf_get_cgroup_id_user
+* bpf_test_socket_cookie
+* bpf_test_netcnt
+* bpf_test_tcpnotify_user
+* bpf_test_sock_fields
+* bpf_test_sysctl
+* bpf_test_progs-no_alu32
+* bpf_test_sock_addr.sh
+* bpf_test_tunnel.sh
+* bpf_test_lwt_seg6local.sh
+* bpf_test_flow_dissector.sh
+* bpf_test_lwt_ip_encap.sh
+* bpf_test_tc_tunnel.sh
+* bpf_test_tc_edt.sh
+* bpf_test_xdping.sh
+* bpf_test_bpftool.sh
+* clone3_clone3_cap_checkpoint_restore
+* core_close_range_test
+* firmware_fw_run_tests.sh
+* ftrace_ftracetest
+* intel_pstate_run.sh
+* kvm_debug_regs
+* lkdtm_BUG.sh
+* lkdtm_WARNING.sh
+* lkdtm_WARNING_MESSAGE.sh
+* lkdtm_EXCEPTION.sh
+* lkdtm_CORRUPT_LIST_ADD.sh
+* lkdtm_CORRUPT_LIST_DEL.sh
+* lkdtm_STACK_GUARD_PAGE_LEADING.sh
+* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm_UNSET_SMEP.sh
+* lkdtm_CORRUPT_PAC.sh
+* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm_READ_AFTER_FREE.sh
+* lkdtm_READ_BUDDY_AFTER_FREE.sh
+* lkdtm_SLAB_FREE_DOUBLE.sh
+* lkdtm_SLAB_FREE_CROSS.sh
+* lkdtm_SLAB_FREE_PAGE.sh
+* lkdtm_EXEC_DATA.sh
+* lkdtm_EXEC_STACK.sh
+* lkdtm_EXEC_KMALLOC.sh
+* lkdtm_EXEC_VMALLOC.sh
+* lkdtm_EXEC_RODATA.sh
+* lkdtm_EXEC_USERSPACE.sh
+* lkdtm_EXEC_NULL.sh
+* lkdtm_ACCESS_USERSPACE.sh
+* lkdtm_ACCESS_NULL.sh
+* lkdtm_WRITE_RO.sh
+* lkdtm_WRITE_RO_AFTER_INIT.sh
+* lkdtm_WRITE_KERN.sh
+* lkdtm_REFCOUNT_INC_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_DEC_ZERO.sh
+* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_INC_ZERO.sh
+* lkdtm_REFCOUNT_ADD_ZERO.sh
+* lkdtm_REFCOUNT_INC_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_SATURATED.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm_USERCOPY_STACK_FRAME_TO.sh
+* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm_USERCOPY_STACK_BEYOND.sh
+* lkdtm_USERCOPY_KERNEL.sh
+* lkdtm_STACKLEAK_ERASING.sh
+* lkdtm_CFI_FORWARD_PROTO.sh
+* mqueue_mq_perf_tests
+* net_xfrm_policy.sh
+* net_fib_tests.sh
+* net_fib-onlink-tests.sh
+* net_pmtu.sh
+* net_udpgso_bench.sh
+* net_psock_snd.sh
+* net_test_vxlan_under_vrf.sh
+* net_l2tp.sh
+* net_traceroute.sh
+* net_altnames.sh
+* net_icmp_redirect.sh
+* net_txtimestamp.sh
+* net_vrf-xfrm-tests.sh
+* net_devlink_port_split.py
+* netfilter_nft_concat_range.sh
+* netfilter_nft_queue.sh
+* pidfd_pidfd_open_test
+* pidfd_pidfd_poll_test
+* proc_proc-fsconfig-hidepid
+* pstore_pstore_tests
+* ptrace_vmaccess
+* openat2_openat2_test
+* openat2_resolve_test
+* openat2_rename_attack_test
+* rtc_rtctest
+* seccomp_seccomp_bpf
+* seccomp_seccomp_benchmark
+* splice_short_splice_read.sh
+* vm_run_vmtests
+* x86_syscall_numbering_64
+### x86, kselftest-vsyscall-mode-native
+* bpf_test_progs
+* bpf_test_dev_cgroup
+* bpf_test_tcpbpf_user
+* bpf_get_cgroup_id_user
+* bpf_test_socket_cookie
+* bpf_test_netcnt
+* bpf_test_tcpnotify_user
+* bpf_test_sock_fields
+* bpf_test_sysctl
+* bpf_test_progs-no_alu32
+* bpf_test_sock_addr.sh
+* bpf_test_tunnel.sh
+* bpf_test_lwt_seg6local.sh
+* bpf_test_flow_dissector.sh
+* bpf_test_lwt_ip_encap.sh
+* bpf_test_tc_tunnel.sh
+* bpf_test_tc_edt.sh
+* bpf_test_xdping.sh
+* bpf_test_bpftool.sh
+* clone3_clone3_cap_checkpoint_restore
+* core_close_range_test
+* firmware_fw_run_tests.sh
+* ftrace_ftracetest
+* intel_pstate_run.sh
+* kvm_debug_regs
+* lkdtm_BUG.sh
+* lkdtm_WARNING.sh
+* lkdtm_WARNING_MESSAGE.sh
+* lkdtm_EXCEPTION.sh
+* lkdtm_CORRUPT_LIST_ADD.sh
+* lkdtm_CORRUPT_LIST_DEL.sh
+* lkdtm_STACK_GUARD_PAGE_LEADING.sh
+* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm_UNSET_SMEP.sh
+* lkdtm_CORRUPT_PAC.sh
+* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm_READ_AFTER_FREE.sh
+* lkdtm_READ_BUDDY_AFTER_FREE.sh
+* lkdtm_SLAB_FREE_DOUBLE.sh
+* lkdtm_SLAB_FREE_CROSS.sh
+* lkdtm_SLAB_FREE_PAGE.sh
+* lkdtm_EXEC_DATA.sh
+* lkdtm_EXEC_STACK.sh
+* lkdtm_EXEC_KMALLOC.sh
+* lkdtm_EXEC_VMALLOC.sh
+* lkdtm_EXEC_RODATA.sh
+* lkdtm_EXEC_USERSPACE.sh
+* lkdtm_EXEC_NULL.sh
+* lkdtm_ACCESS_USERSPACE.sh
+* lkdtm_ACCESS_NULL.sh
+* lkdtm_WRITE_RO.sh
+* lkdtm_WRITE_RO_AFTER_INIT.sh
+* lkdtm_WRITE_KERN.sh
+* lkdtm_REFCOUNT_INC_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_DEC_ZERO.sh
+* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_INC_ZERO.sh
+* lkdtm_REFCOUNT_ADD_ZERO.sh
+* lkdtm_REFCOUNT_INC_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_SATURATED.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm_USERCOPY_STACK_FRAME_TO.sh
+* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm_USERCOPY_STACK_BEYOND.sh
+* lkdtm_USERCOPY_KERNEL.sh
+* lkdtm_STACKLEAK_ERASING.sh
+* lkdtm_CFI_FORWARD_PROTO.sh
+* mincore_mincore_selftest
+* mqueue_mq_perf_tests
+* net_run_netsocktests
+* net_xfrm_policy.sh
+* net_fib_tests.sh
+* net_fib-onlink-tests.sh
+* net_pmtu.sh
+* net_udpgso_bench.sh
+* net_psock_snd.sh
+* net_test_vxlan_under_vrf.sh
+* net_l2tp.sh
+* net_traceroute.sh
+* net_altnames.sh
+* net_icmp_redirect.sh
+* net_txtimestamp.sh
+* net_vrf-xfrm-tests.sh
+* net_devlink_port_split.py
+* netfilter_nft_concat_range.sh
+* netfilter_nft_queue.sh
+* pidfd_pidfd_test
+* pidfd_pidfd_open_test
+* pidfd_pidfd_poll_test
+* proc_proc-fsconfig-hidepid
+* pstore_pstore_tests
+* ptrace_vmaccess
+* openat2_openat2_test
+* openat2_resolve_test
+* openat2_rename_attack_test
+* rtc_rtctest
+* seccomp_seccomp_bpf
+* seccomp_seccomp_benchmark
+* splice_short_splice_read.sh
+* tc-testing_tdc.sh
+* vm_run_vmtests
+* x86_syscall_numbering_64
+### x86, kselftest-vsyscall-mode-none
+* bpf_test_progs
+* bpf_test_dev_cgroup
+* bpf_test_tcpbpf_user
+* bpf_get_cgroup_id_user
+* bpf_test_socket_cookie
+* bpf_test_netcnt
+* bpf_test_tcpnotify_user
+* bpf_test_sock_fields
+* bpf_test_sysctl
+* bpf_test_progs-no_alu32
+* bpf_test_sock_addr.sh
+* bpf_test_tunnel.sh
+* bpf_test_lwt_seg6local.sh
+* bpf_test_flow_dissector.sh
+* bpf_test_lwt_ip_encap.sh
+* bpf_test_tc_tunnel.sh
+* bpf_test_tc_edt.sh
+* bpf_test_xdping.sh
+* bpf_test_bpftool.sh
+* clone3_clone3_cap_checkpoint_restore
+* core_close_range_test
+* firmware_fw_run_tests.sh
+* ftrace_ftracetest
+* intel_pstate_run.sh
+* kvm_vmx_preemption_timer_test
+* kvm_debug_regs
+* lkdtm_BUG.sh
+* lkdtm_WARNING.sh
+* lkdtm_WARNING_MESSAGE.sh
+* lkdtm_EXCEPTION.sh
+* lkdtm_CORRUPT_LIST_ADD.sh
+* lkdtm_CORRUPT_LIST_DEL.sh
+* lkdtm_STACK_GUARD_PAGE_LEADING.sh
+* lkdtm_STACK_GUARD_PAGE_TRAILING.sh
+* lkdtm_UNSET_SMEP.sh
+* lkdtm_CORRUPT_PAC.sh
+* lkdtm_UNALIGNED_LOAD_STORE_WRITE.sh
+* lkdtm_READ_AFTER_FREE.sh
+* lkdtm_READ_BUDDY_AFTER_FREE.sh
+* lkdtm_SLAB_FREE_DOUBLE.sh
+* lkdtm_SLAB_FREE_CROSS.sh
+* lkdtm_SLAB_FREE_PAGE.sh
+* lkdtm_EXEC_DATA.sh
+* lkdtm_EXEC_STACK.sh
+* lkdtm_EXEC_KMALLOC.sh
+* lkdtm_EXEC_VMALLOC.sh
+* lkdtm_EXEC_RODATA.sh
+* lkdtm_EXEC_USERSPACE.sh
+* lkdtm_EXEC_NULL.sh
+* lkdtm_ACCESS_USERSPACE.sh
+* lkdtm_ACCESS_NULL.sh
+* lkdtm_WRITE_RO.sh
+* lkdtm_WRITE_RO_AFTER_INIT.sh
+* lkdtm_WRITE_KERN.sh
+* lkdtm_REFCOUNT_INC_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_OVERFLOW.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_OVERFLOW.sh
+* lkdtm_REFCOUNT_DEC_ZERO.sh
+* lkdtm_REFCOUNT_DEC_NEGATIVE.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_NEGATIVE.sh
+* lkdtm_REFCOUNT_INC_ZERO.sh
+* lkdtm_REFCOUNT_ADD_ZERO.sh
+* lkdtm_REFCOUNT_INC_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_SATURATED.sh
+* lkdtm_REFCOUNT_INC_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_ADD_NOT_ZERO_SATURATED.sh
+* lkdtm_REFCOUNT_DEC_AND_TEST_SATURATED.sh
+* lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED.sh
+* lkdtm_USERCOPY_HEAP_SIZE_TO.sh
+* lkdtm_USERCOPY_HEAP_SIZE_FROM.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_TO.sh
+* lkdtm_USERCOPY_HEAP_WHITELIST_FROM.sh
+* lkdtm_USERCOPY_STACK_FRAME_TO.sh
+* lkdtm_USERCOPY_STACK_FRAME_FROM.sh
+* lkdtm_USERCOPY_STACK_BEYOND.sh
+* lkdtm_USERCOPY_KERNEL.sh
+* lkdtm_STACKLEAK_ERASING.sh
+* lkdtm_CFI_FORWARD_PROTO.sh
+* mincore_mincore_selftest
+* mqueue_mq_perf_tests
+* net_run_netsocktests
+* net_xfrm_policy.sh
+* net_fib_tests.sh
+* net_pmtu.sh
+* net_udpgso_bench.sh
+* net_psock_snd.sh
+* net_test_vxlan_under_vrf.sh
+* net_l2tp.sh
+* net_traceroute.sh
+* net_altnames.sh
+* net_icmp_redirect.sh
+* net_txtimestamp.sh
+* net_vrf-xfrm-tests.sh
+* net_devlink_port_split.py
+* netfilter_nft_concat_range.sh
+* netfilter_nft_queue.sh
+* pidfd_pidfd_open_test
+* pidfd_pidfd_poll_test
+* proc_proc-fsconfig-hidepid
+* pstore_pstore_tests
+* ptrace_vmaccess
+* openat2_openat2_test
+* openat2_resolve_test
+* openat2_rename_attack_test
+* rtc_rtctest
+* seccomp_seccomp_bpf
+* seccomp_seccomp_benchmark
+* splice_short_splice_read.sh
+* vm_run_vmtests
+* x86_fsgsbase_64
+* x86_syscall_numbering_64
+
+## Skips
+### i386, kselftest
+* bpf_test_xdp_veth.sh
+* bpf_test_bpftool_metadata.sh
+* cgroup_test_memcontrol
+* cgroup_test_kmem
+* cgroup_test_core
+* cgroup_test_stress.sh
+* efivarfs_efivarfs.sh
+* fpu_run_test_fpu.sh
+* ir_ir_loopback.sh
+* kexec_test_kexec_load.sh
+* kexec_test_kexec_file_load.sh
+* livepatch_test-livepatch.sh
+* livepatch_test-callbacks.sh
+* livepatch_test-shadow-vars.sh
+* livepatch_test-state.sh
+* livepatch_test-ftrace.sh
+* lkdtm_PANIC.sh
+* lkdtm_LOOP.sh
+* lkdtm_EXHAUST_STACK.sh
+* lkdtm_CORRUPT_STACK.sh
+* lkdtm_CORRUPT_STACK_STRONG.sh
+* lkdtm_OVERWRITE_ALLOCATION.sh
+* lkdtm_WRITE_AFTER_FREE.sh
+* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm_SOFTLOCKUP.sh
+* lkdtm_HARDLOCKUP.sh
+* lkdtm_SPINLOCKUP.sh
+* lkdtm_HUNG_TASK.sh
+* lkdtm_REFCOUNT_TIMING.sh
+* lkdtm_ATOMIC_TIMING.sh
+* memory-hotplug_mem-on-off-test.sh
+* net_reuseport_bpf_numa
+* netfilter_ipvs.sh
+* netfilter_nft_conntrack_helper.sh
+* netfilter_nft_meta.sh
+* proc_proc-pid-vm
+* pstore_pstore_post_reboot_tests
+* tpm2_test_smoke.sh
+* tpm2_test_space.sh
+### juno-r2, kselftest
+* bpf_test_xdp_veth.sh
+* bpf_test_bpftool_metadata.sh
+* cgroup_test_kmem
+* cgroup_test_core
+* cgroup_test_stress.sh
+* efivarfs_efivarfs.sh
+* fpu_run_test_fpu.sh
+* intel_pstate_run.sh
+* ir_ir_loopback.sh
+* livepatch_test-livepatch.sh
+* livepatch_test-callbacks.sh
+* livepatch_test-shadow-vars.sh
+* livepatch_test-state.sh
+* livepatch_test-ftrace.sh
+* lkdtm_PANIC.sh
+* lkdtm_LOOP.sh
+* lkdtm_EXHAUST_STACK.sh
+* lkdtm_CORRUPT_STACK.sh
+* lkdtm_CORRUPT_STACK_STRONG.sh
+* lkdtm_DOUBLE_FAULT.sh
+* lkdtm_OVERWRITE_ALLOCATION.sh
+* lkdtm_WRITE_AFTER_FREE.sh
+* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm_SOFTLOCKUP.sh
+* lkdtm_HARDLOCKUP.sh
+* lkdtm_SPINLOCKUP.sh
+* lkdtm_HUNG_TASK.sh
+* lkdtm_REFCOUNT_TIMING.sh
+* lkdtm_ATOMIC_TIMING.sh
+* net_xfrm_policy.sh
+* netfilter_ipvs.sh
+* netfilter_nft_conntrack_helper.sh
+* netfilter_nft_meta.sh
+* proc_proc-pid-vm
+* pstore_pstore_post_reboot_tests
+### x86, kselftest
+* bpf_test_xdp_veth.sh
+* bpf_test_bpftool_metadata.sh
+* cgroup_test_memcontrol
+* cgroup_test_kmem
+* cgroup_test_core
+* cgroup_test_stress.sh
+* efivarfs_efivarfs.sh
+* fpu_run_test_fpu.sh
+* ir_ir_loopback.sh
+* kexec_test_kexec_load.sh
+* kexec_test_kexec_file_load.sh
+* kvm_mmio_warning_test
+* kvm_svm_vmcall_test
+* lkdtm_PANIC.sh
+* lkdtm_LOOP.sh
+* lkdtm_EXHAUST_STACK.sh
+* lkdtm_CORRUPT_STACK.sh
+* lkdtm_CORRUPT_STACK_STRONG.sh
+* lkdtm_DOUBLE_FAULT.sh
+* lkdtm_OVERWRITE_ALLOCATION.sh
+* lkdtm_WRITE_AFTER_FREE.sh
+* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm_SOFTLOCKUP.sh
+* lkdtm_HARDLOCKUP.sh
+* lkdtm_SPINLOCKUP.sh
+* lkdtm_HUNG_TASK.sh
+* lkdtm_REFCOUNT_TIMING.sh
+* lkdtm_ATOMIC_TIMING.sh
+* netfilter_ipvs.sh
+* netfilter_nft_conntrack_helper.sh
+* netfilter_nft_meta.sh
+* pstore_pstore_post_reboot_tests
+* tpm2_test_smoke.sh
+* tpm2_test_space.sh
+### x86, kselftest-vsyscall-mode-native
+* bpf_test_xdp_veth.sh
+* bpf_test_bpftool_metadata.sh
+* cgroup_test_memcontrol
+* cgroup_test_kmem
+* cgroup_test_core
+* cgroup_test_stress.sh
+* efivarfs_efivarfs.sh
+* fpu_run_test_fpu.sh
+* ir_ir_loopback.sh
+* kexec_test_kexec_load.sh
+* kexec_test_kexec_file_load.sh
+* kvm_mmio_warning_test
+* kvm_svm_vmcall_test
+* lkdtm_PANIC.sh
+* lkdtm_LOOP.sh
+* lkdtm_EXHAUST_STACK.sh
+* lkdtm_CORRUPT_STACK.sh
+* lkdtm_CORRUPT_STACK_STRONG.sh
+* lkdtm_DOUBLE_FAULT.sh
+* lkdtm_OVERWRITE_ALLOCATION.sh
+* lkdtm_WRITE_AFTER_FREE.sh
+* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm_SOFTLOCKUP.sh
+* lkdtm_HARDLOCKUP.sh
+* lkdtm_SPINLOCKUP.sh
+* lkdtm_HUNG_TASK.sh
+* lkdtm_REFCOUNT_TIMING.sh
+* lkdtm_ATOMIC_TIMING.sh
+* netfilter_ipvs.sh
+* netfilter_nft_conntrack_helper.sh
+* netfilter_nft_meta.sh
+* pstore_pstore_post_reboot_tests
+* tpm2_test_smoke.sh
+* tpm2_test_space.sh
+### x86, kselftest-vsyscall-mode-none
+* bpf_test_xdp_veth.sh
+* bpf_test_bpftool_metadata.sh
+* cgroup_test_memcontrol
+* cgroup_test_kmem
+* cgroup_test_core
+* cgroup_test_stress.sh
+* efivarfs_efivarfs.sh
+* fpu_run_test_fpu.sh
+* ir_ir_loopback.sh
+* kexec_test_kexec_load.sh
+* kexec_test_kexec_file_load.sh
+* kvm_mmio_warning_test
+* kvm_svm_vmcall_test
+* lkdtm_PANIC.sh
+* lkdtm_LOOP.sh
+* lkdtm_EXHAUST_STACK.sh
+* lkdtm_CORRUPT_STACK.sh
+* lkdtm_CORRUPT_STACK_STRONG.sh
+* lkdtm_DOUBLE_FAULT.sh
+* lkdtm_OVERWRITE_ALLOCATION.sh
+* lkdtm_WRITE_AFTER_FREE.sh
+* lkdtm_WRITE_BUDDY_AFTER_FREE.sh
+* lkdtm_SOFTLOCKUP.sh
+* lkdtm_HARDLOCKUP.sh
+* lkdtm_SPINLOCKUP.sh
+* lkdtm_HUNG_TASK.sh
+* lkdtm_REFCOUNT_TIMING.sh
+* lkdtm_ATOMIC_TIMING.sh
+* netfilter_ipvs.sh
+* netfilter_nft_conntrack_helper.sh
+* netfilter_nft_meta.sh
+* pstore_pstore_post_reboot_tests
+* tpm2_test_smoke.sh
+* tpm2_test_space.sh
+
+--
+Linaro LKFT
+https://lkft.linaro.org
