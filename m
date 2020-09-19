@@ -1,66 +1,65 @@
-Return-Path: <SRS0=yemh=C3=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=/1Qb=C4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF106C43464
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 22:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ED3AC43465
+	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Sep 2020 08:06:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5ED5208DB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Sep 2020 22:00:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C742421741
+	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Sep 2020 08:06:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="F3F4STQx"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NPIiKYAr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgIRWAu (ORCPT
+        id S1726327AbgISIGs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Sep 2020 18:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        Sat, 19 Sep 2020 04:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726262AbgIRWAu (ORCPT
+        with ESMTP id S1726309AbgISIGr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Sep 2020 18:00:50 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BC2C0613D0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 15:00:50 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id w7so4302238pfi.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Sep 2020 15:00:50 -0700 (PDT)
+        Sat, 19 Sep 2020 04:06:47 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45636C0613CF
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2020 01:06:47 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id k133so96915pgc.7
+        for <linux-kselftest@vger.kernel.org>; Sat, 19 Sep 2020 01:06:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=JxUdFoGAxFplTWGtoXNZgS71eI4uX7HGfO5ucGAc8lo=;
-        b=F3F4STQx9TEbezd5dpqkh+1WgHncbTN/t8oI9gLXFGTIZBF4umVMyWZs6/5SC4DPNe
-         BdEswkxGJNvw8UKNxsjmhcgGCOWOfL+FnYmzid7dcH3dg8ENtuW1e1zau+x+4ZWOfwET
-         oYzijV7/xANP6xFwAgQjhsqbAUPQauG787ODk=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=35YzUlNbVtiet2PZ45LS5yY7R0/2AJJr6WQjB9kb9DQ=;
+        b=NPIiKYArpLnpWfZp2HXxYn+rhNR6sHO84+EVXiHS/T9DNxwqVpJsTgJu6e6UOqIac5
+         bDkvvguK356n60RctscGCaXQ5NOApiENU+nr9wKDX2+G6Dwk6/Kt2ohTlILyR4XhG7Vd
+         EmOtzDVI6LSIRYyfxPFLa8F7JELTXGEK7gbOM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JxUdFoGAxFplTWGtoXNZgS71eI4uX7HGfO5ucGAc8lo=;
-        b=A7O4BHCNkR8iJH+Jn3SxwVf6hDmS9+A0BWIGa3DzGr/Yq9Wxxl38V/DtOiKTF5vJAr
-         cZe0MM16ee6fWRP2fE3C6Sq4Ey7qkcpXJpCdRv/qpKz/syURldRdaTM131oFQYYN0nyn
-         7V0NBsHexg8ctCGHGOksGqsrJXs553Y8w+uvPbDzUlt7XrxLPBVRm9sGn5Iuq0JU8SkY
-         +KRMznXMPeG72/bohxpGqsNzSoaHFK9JD0Fv4ZS7iwijH2XBzqyhNVV7qkmK+ghAK6Vr
-         5AZoqQ1SoOA3H2nnh4p2sPuyvnPLY/e7wGyayJuIAqy8YCOiE4kmkGb2ljvHb4Uwju9i
-         NHFw==
-X-Gm-Message-State: AOAM532kgwbNWeE2UlQvxHlhAjD0ZeI1ksDDwvXLxs3T+YPRo6l8vbKY
-        5surXr4VpuNbqpHlt/0+AAQaSg==
-X-Google-Smtp-Source: ABdhPJw0uH7wi+N0H7/B8Z1EuUZoi1IOCarbau2BnWaa5f2mRZZbuRvvXpA7+ce1jDkK2XKWqANrBA==
-X-Received: by 2002:a63:5b5c:: with SMTP id l28mr1381997pgm.243.1600466449680;
-        Fri, 18 Sep 2020 15:00:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=35YzUlNbVtiet2PZ45LS5yY7R0/2AJJr6WQjB9kb9DQ=;
+        b=AZ0ZrNrsDKYi+ITiAbam6UixSiiox3d/O/vDdtM28SMlPoVAH2hN+XP6jPmyfHyxkx
+         pzufSfWuAnM/pKT7qS+gVI1O+9XrmLhsjIcvSwq7u/GO4In8kvv83KuZ57PAjPP/4AqG
+         5Jv7udPe1vDC5ywXOPd6nUyRQbS7I3zlZTbwNemXBhEyj3CXN040RtA33+IugQfBOibf
+         F/rilZ9yquaiWo15i6ffydG/oz8NEzD4FWQL/SHPiBFAUL2iEFgY+pu2CwuW59SBygmM
+         7YE68eI8qeEnKE3Mvmg8+vzVo16XxOeHFi5QLrXM8C3L9PRM1E7aI4LsuBDtHzvXHBdC
+         SK7A==
+X-Gm-Message-State: AOAM531ylP63bDAzd1vWIlI6ULeOznN2LlLjUHMk0caX/8b/yD49LLdw
+        WkQkOMbj8VS5D4LeixOUDT24Jw==
+X-Google-Smtp-Source: ABdhPJyNRXL2Utm2uMp6p2aTrp/bIX0uxScQD/cHSmnwCqXqPd9T4QRySA1oqwyg3Lqotd99libtWg==
+X-Received: by 2002:a65:6449:: with SMTP id s9mr21340653pgv.388.1600502806814;
+        Sat, 19 Sep 2020 01:06:46 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v204sm4236125pfc.10.2020.09.18.15.00.48
+        by smtp.gmail.com with ESMTPSA id e27sm5744480pfj.62.2020.09.19.01.06.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2020 15:00:48 -0700 (PDT)
-Date:   Fri, 18 Sep 2020 15:00:48 -0700
+        Sat, 19 Sep 2020 01:06:45 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-kernel@vger.kernel.org,
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
         Max Filippov <jcmvbkbc@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -70,78 +69,86 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-xtensa@linux-xtensa.org,
         linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 14/15] selftests/clone3: Avoid OS-defined clone_args
-Message-ID: <202009181500.9A560349@keescook>
-References: <20200912110820.597135-1-keescook@chromium.org>
- <20200912110820.597135-15-keescook@chromium.org>
- <20200915162528.x7admy45pdqsoke4@wittgenstein>
+Subject: [PATCH v2 3/4] selftests/seccomp: powerpc: Set syscall return during ptrace syscall exit
+Date:   Sat, 19 Sep 2020 01:06:36 -0700
+Message-Id: <20200919080637.259478-4-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200919080637.259478-1-keescook@chromium.org>
+References: <20200919080637.259478-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200915162528.x7admy45pdqsoke4@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 06:25:28PM +0200, Christian Brauner wrote:
-> On Sat, Sep 12, 2020 at 04:08:19AM -0700, Kees Cook wrote:
-> > As the UAPI headers start to appear in distros, we need to avoid
-> > outdated versions of struct clone_args to be able to test modern
-> > features. Additionally pull in the syscall numbers correctly.
-> > 
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> 
-> Hm, with this patch applied I'm getting:
-> 
-> gcc -g -I../../../../usr/include/    clone3_set_tid.c /home/brauner/src/git/linux/linux/tools/testing/selftests/kselftest_harness.h /home/brauner/src/git/linux/linux/tools/testing/selftests/kselftest.h -lcap -o /home/brauner/src/git/linux/linux/tools/testing/selftests/clone3/clone3_set_tid
-> In file included from clone3_set_tid.c:24:
-> clone3_selftests.h:37:8: error: redefinition of ‘struct clone_args’
->    37 | struct clone_args {
->       |        ^~~~~~~~~~
-> In file included from clone3_set_tid.c:12:
-> /usr/include/linux/sched.h:92:8: note: originally defined here
->    92 | struct clone_args {
->       |        ^~~~~~~~~~
-> make: *** [../lib.mk:140: /home/brauner/src/git/linux/linux/tools/testing/selftests/clone3/clone3_set_tid] Error 1
+Some archs (like powerpc) only support changing the return code during
+syscall exit when ptrace is used. Test entry vs exit phases for which
+portions of the syscall number and return values need to be set at which
+different phases. For non-powerpc, all changes are made during ptrace
+syscall entry, as before. For powerpc, the syscall number is changed at
+ptrace syscall entry and the syscall return value is changed on ptrace
+syscall exit.
 
-Hm, weird.
+Reported-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Suggested-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Link: https://lore.kernel.org/linux-kselftest/20200911181012.171027-1-cascardo@canonical.com/
+Fixes: 58d0a862f573 ("seccomp: add tests for ptrace hole")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 25 ++++++++++++++++---
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-> One trick to avoid this could be:
-> 
-> #ifndef CLONE_ARGS_SIZE_VER0
-> #define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
-> #endif
-> 
-> #ifndef CLONE_ARGS_SIZE_VER1
-> #define CLONE_ARGS_SIZE_VER1 80 /* sizeof second published struct */
-> #endif
-> 
-> #ifndef CLONE_ARGS_SIZE_VER2
-> #define CLONE_ARGS_SIZE_VER2 88 /* sizeof third published struct */
-> #endif
-> 
-> struct __clone_args {
-> 	__aligned_u64 flags;
-> 	__aligned_u64 pidfd;
-> 	__aligned_u64 child_tid;
-> 	__aligned_u64 parent_tid;
-> 	__aligned_u64 exit_signal;
-> 	__aligned_u64 stack;
-> 	__aligned_u64 stack_size;
-> 	__aligned_u64 tls;
-> 	__aligned_u64 set_tid;
-> 	__aligned_u64 set_tid_size;
-> 	__aligned_u64 cgroup;
-> };
-> 
-> static pid_t sys_clone3(struct __clone_args *args, size_t size)
-> {
-> 	return syscall(__NR_clone3, args, size);
-> }
-
-Yeah, that has fewer down sides. I'll rework it.
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 98ce5e8a6398..894c2404d321 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -1765,6 +1765,7 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ 			(_regs).ccr &= ~0x10000000;		\
+ 		}						\
+ 	} while (0)
++# define SYSCALL_RET_SET_ON_PTRACE_EXIT
+ #elif defined(__s390__)
+ # define ARCH_REGS		s390_regs
+ # define SYSCALL_NUM(_regs)	(_regs).gprs[2]
+@@ -1853,6 +1854,18 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+ 	} while (0)
+ #endif
+ 
++/*
++ * Some architectures (e.g. powerpc) can only set syscall
++ * return values on syscall exit during ptrace.
++ */
++const bool ptrace_entry_set_syscall_nr = true;
++const bool ptrace_entry_set_syscall_ret =
++#ifndef SYSCALL_RET_SET_ON_PTRACE_EXIT
++	true;
++#else
++	false;
++#endif
++
+ /*
+  * Use PTRACE_GETREGS and PTRACE_SETREGS when available. This is useful for
+  * architectures without HAVE_ARCH_TRACEHOOK (e.g. User-mode Linux).
+@@ -2006,11 +2019,15 @@ void tracer_ptrace(struct __test_metadata *_metadata, pid_t tracee,
+ 	 */
+ 	if (entry)
+ 		self->syscall_nr = get_syscall(_metadata, tracee);
+-	else
+-		return;
+ 
+-	syscall_nr = &syscall_nr_val;
+-	syscall_ret = &syscall_ret_val;
++	/*
++	 * Depending on the architecture's syscall setting abilities, we
++	 * pick which things to set during this phase (entry or exit).
++	 */
++	if (entry == ptrace_entry_set_syscall_nr)
++		syscall_nr = &syscall_nr_val;
++	if (entry == ptrace_entry_set_syscall_ret)
++		syscall_ret = &syscall_ret_val;
+ 
+ 	/* Now handle the actual rewriting cases. */
+ 	switch (self->syscall_nr) {
 -- 
-Kees Cook
+2.25.1
+
