@@ -2,141 +2,157 @@ Return-Path: <SRS0=100x=DA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A36C2D0A8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Sep 2020 21:19:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F89CC2D0A8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Sep 2020 21:53:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB0B021D43
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Sep 2020 21:19:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WgG8VKS1"
+	by mail.kernel.org (Postfix) with ESMTP id D0E1323787
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Sep 2020 21:53:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600898023;
+	bh=oSVSXMWBykttLygt5aN0g09iuixU6pI2jADfHnzzhFw=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=AzeHPueJNnoGPHhscx19eBXSsHcUFbCDbnQ5KT/aysie0J8pNqnmdDtE6GbdrdYVV
+	 +jlE7ThU29WuqdpnJTIdeA0gRfRG+dH3WK8W8V4N4JDlzhkuYpA4tDjxYciV8rTixH
+	 +vX+ls4joUAvpcPKACs0fz1BSqKb9PDTyRxpGUtk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgIWVTr (ORCPT
+        id S1726596AbgIWVxm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Sep 2020 17:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        Wed, 23 Sep 2020 17:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726515AbgIWVTr (ORCPT
+        with ESMTP id S1726199AbgIWVxm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Sep 2020 17:19:47 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84B6C0613D1
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 14:19:46 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id 139so658293qkl.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 14:19:46 -0700 (PDT)
+        Wed, 23 Sep 2020 17:53:42 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09956C0613CE
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 14:53:42 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id g96so1173709otb.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Sep 2020 14:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=TH7NITt1/yHWLLqIMcLUH9XOOzYm0k8mnM3wRK4YRh8=;
-        b=WgG8VKS18X+Z+jXJohpNfVgAhGpTnwAYZbGIWi+8sGilAcec/NVcKG5BlYbMnM8Qxo
-         QaAc4E3ThgHPxOZx+QeuMvr4ynnOTly5AHb11TJcpRvcycNfW+CU07vyXZTYaI4pTPNv
-         bOuaL8pokxQSWjwCaAbtkVyXrLnyfX+Udjpi4uwfMmg1Lda7d31f/Dfn4MfpbO9k6Koe
-         acj8k8k1BRIYBtX7hzST5Qxk1xBtt+to87EAliTUqE5H2lDFM9MGUQGcN28+kEmeLK8u
-         BV6956ogKNdVDwfmwOzK8UsCcgFWc8vdOFfHLV1lRdlB9jmCWVr4MVXWqZQpHeethTLS
-         I60Q==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fOb33T+YNOHc4vIBVgqzuq7U+UoXOh9A3nK6B7gM0do=;
+        b=UIrV3HdF2956LQEYJdqcgj3NASCJwUzME0jGDZrc8T8x/GnbaKUwPdLcnQ5Ze1tOBG
+         DPPFL7J30nCzElb6Ryo9LWY6A/qtpfhiqM4yVuQ2KiZM/Unn46Jh+DjAkWNG3wsj1pHH
+         7eso/9lJqZ7RjsxGYz/cF9AlxtY5DUyvosIuQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=TH7NITt1/yHWLLqIMcLUH9XOOzYm0k8mnM3wRK4YRh8=;
-        b=gnJvkGhShBlKDgaC2vlZuTPCy8Y6VLmtCNdo56HNzhGU3z+gAWznVisqSVYfqob6mr
-         A+gPn7h50+iniHdpCpTLas97jnYuppcV/zLV4ljLJjHT4MFCDIehdo2ZW0N8j2rc1rX4
-         Mca6mSCVS29nqKUrpk/LxxAd+5KVshKJQbingLBOXtdayk1ZmZcoKgrOqbZ2am65XqNl
-         oa4U+YYQccsqM2j/dfpc1e5/sXDhl2b1p14nFnSuQRDdc2cuL9MzBLxNiZc1EAXaTGlt
-         qpWywPa/ZgR8+rhGrqU2hTzmINBvyHzrVcQAHwgI4i83GoTHYbs5xPenphzTKoXPXS8W
-         wDLg==
-X-Gm-Message-State: AOAM532RDFTrQcX4WedzR8KnAE4b0vGq3sYFwaLa/ZtBo31cktfG6O5C
-        zoNArAIM1EUGig54SzgqGmfil6uIFF/m0YWA+FGdIg==
-X-Google-Smtp-Source: ABdhPJw43+sjSUo7FKERKf2xCxxc8JPOYcaeJHrxsWgON3azJYYkTt6PQXCKR9w1wBB51KBkOXp8oqPSBu6aZD1+dNNVJQ==
-Sender: "brendanhiggins via sendgmr" 
-        <brendanhiggins@mactruck.svl.corp.google.com>
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:1:c634:6bff:fe71:d8d1])
- (user=brendanhiggins job=sendgmr) by 2002:a0c:eac5:: with SMTP id
- y5mr2205279qvp.2.1600895985596; Wed, 23 Sep 2020 14:19:45 -0700 (PDT)
-Date:   Wed, 23 Sep 2020 14:19:38 -0700
-Message-Id: <20200923211938.3727976-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
-Subject: [PATCH v1] kunit: tool: fix --alltests flag
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fOb33T+YNOHc4vIBVgqzuq7U+UoXOh9A3nK6B7gM0do=;
+        b=hExP8vtZdK/6VPuVlloBkEqr0oM4rJXhkp1v+JA7FRgqPHbI2A00Ti8zAFa0jbuHC4
+         Po3MDWF+h4rdbTS+Asbq/kEtEdHrTEVa9IfjWz6iXU85NkPxfqobz2fv1JyRnparpl1T
+         rQlz7e1tANbsfN+lME4u/HFOblOojMzd3JEdLR7r7NS5C0+GoN3jia3UVjJHRphG9/OC
+         EpyqD6V9PksvUaAzb6pUnHULrLoPH8KLkJJV8YWTjEZUmaPr4R/0HRsmWc329vbFSjEH
+         1VcsHCXoObPbl6AlTvH5qV6D+X0aq8yrmLKsgh+Lmkzue+vp6j85FSLGvS33uqHBJPWa
+         W7RQ==
+X-Gm-Message-State: AOAM530AfIja1OwzFlKtjo4LqNS2fqSZB+VaHXJp7HOChECoPpbC6MFs
+        IUHjp8iCNxhxf66QJlZrpdZBWw==
+X-Google-Smtp-Source: ABdhPJxExq4JHuVzVZKU9uaUiYXh3uICLg9b4TOBOOJQi7zlKYp3+50qVXQgomQIypWjMNM9eK2RIw==
+X-Received: by 2002:a05:6830:1191:: with SMTP id u17mr1099399otq.335.1600898020691;
+        Wed, 23 Sep 2020 14:53:40 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e19sm323206ote.37.2020.09.23.14.53.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2020 14:53:40 -0700 (PDT)
+Subject: Re: [PATCH v1] kunit: tool: fix --alltests flag
+To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
+        davidgow@google.com
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20200923211938.3727976-1-brendanhiggins@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3fbc056e-6baa-a457-cc5f-058606903fe3@linuxfoundation.org>
+Date:   Wed, 23 Sep 2020 15:53:39 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200923211938.3727976-1-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Alltests flag evidently stopped working when run from outside of the
-root of the source tree, so fix that. Also add an additional broken
-config to the broken_on_uml config.
+On 9/23/20 3:19 PM, Brendan Higgins wrote:
+> Alltests flag evidently stopped working when run from outside of the
+> root of the source tree, so fix that. Also add an additional broken
+> config to the broken_on_uml config.
+> 
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>   tools/testing/kunit/configs/broken_on_uml.config |  1 +
+>   tools/testing/kunit/kunit_kernel.py              | 15 ++++++++++-----
+>   2 files changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
+> index 239b9f03da2c..a7f0603d33f6 100644
+> --- a/tools/testing/kunit/configs/broken_on_uml.config
+> +++ b/tools/testing/kunit/configs/broken_on_uml.config
+> @@ -39,3 +39,4 @@
+>   # CONFIG_QCOM_CPR is not set
+>   # CONFIG_RESET_BRCMSTB_RESCAL is not set
+>   # CONFIG_RESET_INTEL_GW is not set
+> +# CONFIG_ADI_AXI_ADC is not set
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index e20e2056cb38..1b1826500f61 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -53,18 +53,23 @@ class LinuxSourceTreeOperations(object):
+>   		except subprocess.CalledProcessError as e:
+>   			raise ConfigError(e.output)
+>   
+> -	def make_allyesconfig(self):
+> +	def make_allyesconfig(self, build_dir, make_options):
+>   		kunit_parser.print_with_timestamp(
+>   			'Enabling all CONFIGs for UML...')
+> +		command = ['make', 'ARCH=um', 'allyesconfig']
+> +		if make_options:
+> +			command.extend(make_options)
+> +		if build_dir:
+> +			command += ['O=' + build_dir]
+>   		process = subprocess.Popen(
+> -			['make', 'ARCH=um', 'allyesconfig'],
+> +			command,
+>   			stdout=subprocess.DEVNULL,
+>   			stderr=subprocess.STDOUT)
+>   		process.wait()
+>   		kunit_parser.print_with_timestamp(
+>   			'Disabling broken configs to run KUnit tests...')
+>   		with ExitStack() as es:
+> -			config = open(KCONFIG_PATH, 'a')
+> +			config = open(get_kconfig_path(build_dir), 'a')
+>   			disable = open(BROKEN_ALLCONFIG_PATH, 'r').read()
+>   			config.write(disable)
+>   		kunit_parser.print_with_timestamp(
+> @@ -161,9 +166,9 @@ class LinuxSourceTree(object):
+>   			return self.build_config(build_dir, make_options)
+>   
+>   	def build_um_kernel(self, alltests, jobs, build_dir, make_options):
+> -		if alltests:
+> -			self._ops.make_allyesconfig()
+>   		try:
+> +			if alltests:
+> +				self._ops.make_allyesconfig(build_dir, make_options)
+>   			self._ops.make_olddefconfig(build_dir, make_options)
+>   			self._ops.make(jobs, build_dir, make_options)
+>   		except (ConfigError, BuildError) as e:
+> 
+> base-commit: 92a2b470086f68bf35eb9f94b6cb5ebdfac41b25
+> 
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- tools/testing/kunit/configs/broken_on_uml.config |  1 +
- tools/testing/kunit/kunit_kernel.py              | 15 ++++++++++-----
- 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
-index 239b9f03da2c..a7f0603d33f6 100644
---- a/tools/testing/kunit/configs/broken_on_uml.config
-+++ b/tools/testing/kunit/configs/broken_on_uml.config
-@@ -39,3 +39,4 @@
- # CONFIG_QCOM_CPR is not set
- # CONFIG_RESET_BRCMSTB_RESCAL is not set
- # CONFIG_RESET_INTEL_GW is not set
-+# CONFIG_ADI_AXI_ADC is not set
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index e20e2056cb38..1b1826500f61 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -53,18 +53,23 @@ class LinuxSourceTreeOperations(object):
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output)
- 
--	def make_allyesconfig(self):
-+	def make_allyesconfig(self, build_dir, make_options):
- 		kunit_parser.print_with_timestamp(
- 			'Enabling all CONFIGs for UML...')
-+		command = ['make', 'ARCH=um', 'allyesconfig']
-+		if make_options:
-+			command.extend(make_options)
-+		if build_dir:
-+			command += ['O=' + build_dir]
- 		process = subprocess.Popen(
--			['make', 'ARCH=um', 'allyesconfig'],
-+			command,
- 			stdout=subprocess.DEVNULL,
- 			stderr=subprocess.STDOUT)
- 		process.wait()
- 		kunit_parser.print_with_timestamp(
- 			'Disabling broken configs to run KUnit tests...')
- 		with ExitStack() as es:
--			config = open(KCONFIG_PATH, 'a')
-+			config = open(get_kconfig_path(build_dir), 'a')
- 			disable = open(BROKEN_ALLCONFIG_PATH, 'r').read()
- 			config.write(disable)
- 		kunit_parser.print_with_timestamp(
-@@ -161,9 +166,9 @@ class LinuxSourceTree(object):
- 			return self.build_config(build_dir, make_options)
- 
- 	def build_um_kernel(self, alltests, jobs, build_dir, make_options):
--		if alltests:
--			self._ops.make_allyesconfig()
- 		try:
-+			if alltests:
-+				self._ops.make_allyesconfig(build_dir, make_options)
- 			self._ops.make_olddefconfig(build_dir, make_options)
- 			self._ops.make(jobs, build_dir, make_options)
- 		except (ConfigError, BuildError) as e:
+Thanks. Applied to linux-kselftest kunit-fiex for 5.10-rc1
 
-base-commit: 92a2b470086f68bf35eb9f94b6cb5ebdfac41b25
--- 
-2.28.0.681.g6f77f65b4e-goog
-
+thanks,
+-- Shuah
