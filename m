@@ -1,121 +1,202 @@
-Return-Path: <SRS0=F9xq=DB=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=308b=DC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF72BC4363D
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Sep 2020 16:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57179C4346E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Sep 2020 00:33:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8642F2311B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Sep 2020 16:21:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B124238D6
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Sep 2020 00:33:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qolVVq1I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbgIXQVa (ORCPT
+        id S1726694AbgIYAd3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 24 Sep 2020 12:21:30 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35348 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgIXQVa (ORCPT
+        Thu, 24 Sep 2020 20:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726631AbgIYAd3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Sep 2020 12:21:30 -0400
-Received: from ip5f5af089.dynamic.kabel-deutschland.de ([95.90.240.137] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kLTzr-00031R-6I; Thu, 24 Sep 2020 16:21:27 +0000
-Date:   Thu, 24 Sep 2020 18:21:26 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
-        lkft-triage@lists.linaro.org
-Subject: Re: selftests: pidfd: pidfd_wait hangs on linux next kernel on all
- devices
-Message-ID: <20200924162126.mbthwz32w7rba7oe@wittgenstein>
-References: <CA+G9fYtF44bTzjswt26tOwfEQxrWvcSOROmEtH0HKfGn24QbRQ@mail.gmail.com>
- <20200924143317.getruzwu423g3o3e@wittgenstein>
+        Thu, 24 Sep 2020 20:33:29 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6042C0613CE;
+        Thu, 24 Sep 2020 17:33:28 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g29so1027240pgl.2;
+        Thu, 24 Sep 2020 17:33:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=heSZ+vYMpgFHhWomcOAQ0pB3xOxWwgLlUEvkB5nligg=;
+        b=qolVVq1IXAH2KQsr1j+mJ189ZPsIRozzGguGVAMYYXukIe7sljhxPZT+XB3Z4bB0mh
+         1nMqK1+EN03THQFbpx6SY1wavqCTlq3Jd8q9ehUKXQfwrKIGfJNmPo/M7XpfoUAhe5mS
+         skl1yghN9442sSafo5zZml7QG5D6QMWG4kYn5xW8TTRFrvuQjp0TRXLR2I1UNoIJpVE2
+         pUCUl71FFEaJLNeCWT7X/o3URttG5Sc9kK7uclod8TPYVNywP4UpAXyKy3QaAwy9g9NY
+         LwaMVHdhWQwBdhkLSUTWoThubO+wLdUH0wZ+4YgfvsmRQeu74S2CyaKZYO/4cCt/nwoD
+         FF8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=heSZ+vYMpgFHhWomcOAQ0pB3xOxWwgLlUEvkB5nligg=;
+        b=UiXn4GtBcrC1SWJmj5aGGrXGfpDKs7/vDwYELr59/4vjwuYFBbudwkQqE22UAwR0vr
+         13zYeC1HbcQRVjr+FJFC0B2+lJK4uSrPlChgIOdswov2pmaGs8RoWnRtwGRoDfWVp6ul
+         09RjRJELF0N/CJbGL98KS+8M1DeVpInZ/zYwWqGwShg3TT8qyrFrOpBQjgp9qkw7X8Sy
+         J5tI+pH2cahxsJdFHM6v6eMY/hAEnQNXZYoyCyg48xloaFeElDpezeHAq1+S0fM0WZIX
+         FXTR6Z2YyWkmcFfovrzxSpz0ixHkqBAIdrcv1cmAOlci7naPoqvmEub7ts+yyjBMQG0u
+         g4eQ==
+X-Gm-Message-State: AOAM530nhcGjOm/glfGznAi4j2NG02syU9jAtnVMWD6lwu2DrYjb4uom
+        p4mIYe42dguNWTRy9aO0VQk=
+X-Google-Smtp-Source: ABdhPJzAV7rIzcHLywe8VSGKzhq95U0ycxS2I81hHRVEYrbo3sKMnkRgNi8ea0dj1c2XdBuo85vX0w==
+X-Received: by 2002:aa7:9986:0:b029:142:2501:39db with SMTP id k6-20020aa799860000b0290142250139dbmr1599765pfh.42.1600994008051;
+        Thu, 24 Sep 2020 17:33:28 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:49ed])
+        by smtp.gmail.com with ESMTPSA id z7sm594743pfj.75.2020.09.24.17.33.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2020 17:33:27 -0700 (PDT)
+Date:   Thu, 24 Sep 2020 17:33:23 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com,
+        linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        acme@kernel.org
+Subject: Re: [PATCH v6 bpf-next 2/6] bpf: move to generic BTF show support,
+ apply it to seq files/strings
+Message-ID: <20200925003323.u2s2vyyqq2uhtij7@ast-mbp.dhcp.thefacebook.com>
+References: <1600883188-4831-1-git-send-email-alan.maguire@oracle.com>
+ <1600883188-4831-3-git-send-email-alan.maguire@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200924143317.getruzwu423g3o3e@wittgenstein>
+In-Reply-To: <1600883188-4831-3-git-send-email-alan.maguire@oracle.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 24, 2020 at 04:33:17PM +0200, Christian Brauner wrote:
-> On Wed, Sep 23, 2020 at 07:52:05PM +0530, Naresh Kamboju wrote:
-> > selftests: pidfd: pidfd_wait hangs on linux next kernel on x86_64,
-> > i386 and arm64 Juno-r2
-> > These devices are using NFS mounted rootfs.
-> > I have tested pidfd testcases independently and all test PASS.
-> > 
-> > The Hang or exit from test run noticed when run by run_kselftest.sh
-> > 
-> > pidfd_wait.c:208:wait_nonblock:Expected sys_waitid(P_PIDFD, pidfd,
-> > &info, WSTOPPED, NULL) (-1) == 0 (0)
-> > wait_nonblock: Test terminated by assertion
-> > 
-> > metadata:
-> >   git branch: master
-> >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> >   git commit: e64997027d5f171148687e58b78c8b3c869a6158
-> >   git describe: next-20200922
-> >   make_kernelversion: 5.9.0-rc6
-> >   kernel-config:
-> > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/865/config
-> > 
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> 
-> Thanks for reproting this. I'm taking a look now!
+On Wed, Sep 23, 2020 at 06:46:24PM +0100, Alan Maguire wrote:
+>  
+> +/* Chunk size we use in safe copy of data to be shown. */
+> +#define BTF_SHOW_OBJ_SAFE_SIZE		256
 
-Ok, this is a simple race in the selftests, that I overlooked and which
-is more likely to hit when there's a lot of processes running on the
-system. Basically the child process hasn't SIGSTOPed itself yet but the
-parent is already calling waitid() on a O_NONBLOCK pidfd. Since it
-doesn't find a WSTOPPED process it returns -EAGAIN correctly.
+sizeof(struct btf_show) == 472
+It's allocated on stack and called from bpf prog.
+It's a leaf function, but it still worries me a bit.
+I've trimmed it down to 32 and everything seems to be printing fine.
+There will be more calls to copy_from_kernel_nofault(), but so what?
+Is there a downside to make it that small?
 
-The fix for this is to move the line where we're removing the O_NONBLOCK
-property from the fd before the waitid() WSTOPPED call so we hang until
-the child becomes stopped.
+Similarly state.name is 128 bytes. May be use 80 there?
+I think that should be plenty still.
 
-So I believe the fix is:
+> + * Another problem is we want to ensure the data for display is safe to
+> + * access.  To support this, the "struct obj" is used to track the data
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index 4063d6f31fa4..be2943f072f6 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -205,6 +205,8 @@ TEST(wait_nonblock)
-        ret = sys_waitid(P_PIDFD, pidfd, &info, WEXITED | WNOHANG, NULL);
-        ASSERT_EQ(ret, 0);
+'struct obj' doesn't exist. It's an anon field 'struct {} obj;' inside btf_show
+that you're referring to, right?
+Would be good to fix this comment.
 
-+       ASSERT_EQ(fcntl(pidfd, F_SETFL, (flags & ~O_NONBLOCK)), 0);
-+
-        ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
-        ASSERT_EQ(info.si_signo, SIGCHLD);
-        ASSERT_EQ(info.si_code, CLD_STOPPED);
-@@ -212,8 +214,6 @@ TEST(wait_nonblock)
+> +struct btf_show {
+> +	u64 flags;
+> +	void *target;	/* target of show operation (seq file, buffer) */
+> +	void (*showfn)(struct btf_show *show, const char *fmt, ...);
 
-        ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
+buildbot complained that this field needs to be annotated.
 
--       ASSERT_EQ(fcntl(pidfd, F_SETFL, (flags & ~O_NONBLOCK)), 0);
--
-        ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL), 0);
-        ASSERT_EQ(info.si_signo, SIGCHLD);
-        ASSERT_EQ(info.si_code, CLD_EXITED);
+> +#define btf_show(show, ...)						      \
+> +	do {								      \
+> +		if (!show->state.depth_check)				      \
+> +			show->showfn(show, __VA_ARGS__);		      \
+> +	} while (0)
 
-Christian
+Does it have to be a macro? What are you gaining from macro
+instead of vararg function?
+
+> +static inline const char *__btf_show_indent(struct btf_show *show)
+
+please remove all 'inline' from .c file.
+There is no need to give such hints to the compiler.
+
+> +#define btf_show_indent(show)						       \
+> +	((show->flags & BTF_SHOW_COMPACT) ? "" : __btf_show_indent(show))
+> +
+> +#define btf_show_newline(show)						       \
+> +	((show->flags & BTF_SHOW_COMPACT) ? "" : "\n")
+> +
+> +#define btf_show_delim(show)						       \
+> +	(show->state.depth == 0 ? "" :					       \
+> +	 ((show->flags & BTF_SHOW_COMPACT) && show->state.type &&	       \
+> +	  BTF_INFO_KIND(show->state.type->info) == BTF_KIND_UNION) ? "|" : ",")
+> +
+> +#define btf_show_type_value(show, fmt, value)				       \
+> +	do {								       \
+> +		if ((value) != 0 || (show->flags & BTF_SHOW_ZERO) ||	       \
+> +		    show->state.depth == 0) {				       \
+> +			btf_show(show, "%s%s" fmt "%s%s",		       \
+> +				 btf_show_indent(show),			       \
+> +				 btf_show_name(show),			       \
+> +				 value, btf_show_delim(show),		       \
+> +				 btf_show_newline(show));		       \
+> +			if (show->state.depth > show->state.depth_to_show)     \
+> +				show->state.depth_to_show = show->state.depth; \
+> +		}							       \
+> +	} while (0)
+> +
+> +#define btf_show_type_values(show, fmt, ...)				       \
+> +	do {								       \
+> +		btf_show(show, "%s%s" fmt "%s%s", btf_show_indent(show),       \
+> +			 btf_show_name(show),				       \
+> +			 __VA_ARGS__, btf_show_delim(show),		       \
+> +			 btf_show_newline(show));			       \
+> +		if (show->state.depth > show->state.depth_to_show)	       \
+> +			show->state.depth_to_show = show->state.depth;	       \
+> +	} while (0)
+> +
+> +/* How much is left to copy to safe buffer after @data? */
+> +#define btf_show_obj_size_left(show, data)				       \
+> +	(show->obj.head + show->obj.size - data)
+> +
+> +/* Is object pointed to by @data of @size already copied to our safe buffer? */
+> +#define btf_show_obj_is_safe(show, data, size)				       \
+> +	(data >= show->obj.data &&					       \
+> +	 (data + size) < (show->obj.data + BTF_SHOW_OBJ_SAFE_SIZE))
+> +
+> +/*
+> + * If object pointed to by @data of @size falls within our safe buffer, return
+> + * the equivalent pointer to the same safe data.  Assumes
+> + * copy_from_kernel_nofault() has already happened and our safe buffer is
+> + * populated.
+> + */
+> +#define __btf_show_obj_safe(show, data, size)				       \
+> +	(btf_show_obj_is_safe(show, data, size) ?			       \
+> +	 show->obj.safe + (data - show->obj.data) : NULL)
+
+Similarly I don't understand the benefit of macros.
+They all could have been normal functions.
+
+> +static inline void *btf_show_obj_safe(struct btf_show *show,
+> +				      const struct btf_type *t,
+> +				      void *data)
+
+drop 'inline' pls.
+
+> +{
+> +	int size_left, size;
+> +	void *safe = NULL;
+> +
+> +	if (show->flags & BTF_SHOW_UNSAFE)
+> +		return data;
+> +
+> +	(void) btf_resolve_size(show->btf, t, &size);
+
+Is this ok to ignore the error?
