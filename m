@@ -2,158 +2,145 @@ Return-Path: <SRS0=wMNL=DF=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 599DAC2D0A8
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 09:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68BB6C2D0A8
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 11:33:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E1EB21D95
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 09:42:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 177E8221E8
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 11:33:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Gluq6xLY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgI1Jmv (ORCPT
+        id S1726567AbgI1Ldb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Sep 2020 05:42:51 -0400
-Received: from a.mx.secunet.com ([62.96.220.36]:54752 "EHLO a.mx.secunet.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726547AbgI1Jmv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 05:42:51 -0400
-X-Greylist: delayed 535 seconds by postgrey-1.27 at vger.kernel.org; Mon, 28 Sep 2020 05:42:50 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 00CBD200AA;
-        Mon, 28 Sep 2020 11:33:55 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WBC-QPeQ3xKS; Mon, 28 Sep 2020 11:33:50 +0200 (CEST)
-Received: from cas-essen-02.secunet.de (unknown [10.53.40.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 2D10E20504;
-        Mon, 28 Sep 2020 11:33:50 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 28 Sep 2020 11:33:49 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2044.4; Mon, 28 Sep
- 2020 11:33:49 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 3EE86318470F; Mon, 28 Sep 2020 11:33:49 +0200 (CEST)
-Date:   Mon, 28 Sep 2020 11:33:49 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Dmitry Safonov <dima@arista.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Westphal <fw@strlen.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Stephen Suryaputra <ssuryaextr@gmail.com>,
-        <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 0/7] xfrm: Add compat layer
-Message-ID: <20200928093349.GJ20687@gauss3.secunet.de>
-References: <20200921143657.604020-1-dima@arista.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200921143657.604020-1-dima@arista.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+        Mon, 28 Sep 2020 07:33:31 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:55764 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbgI1Ldb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 28 Sep 2020 07:33:31 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBTxMb110752;
+        Mon, 28 Sep 2020 11:32:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=37Z0JsSoofOsUBt2zOf138my4O9f6xHJT6kyKH4ahLI=;
+ b=Gluq6xLY/0zVVeWbK1C8/dLgDZKG0sWrgGkVk53zgZJbQbH2Crq0HD7Fq1SSCKZDr9SJ
+ aZrzqkXqXbg9RdG0i76QyqnT+yIEN+RFiyv7J4cohdygN5NPYURcv9dyohihdTySb3ws
+ Bw4oeM4bZDjBjNzZg0g//4YSMlAXQ1LbRd9oDq27kbRRBw/FFABATBlVKlWvcEr1W8bY
+ Zmun7t+b7EtrK4eQmSkM4/FbULpTj+HdOxhuEz019/C8W/6ZR1uumoAtKkb7A5xTli71
+ fi3HZeKj86pKnHmFultJHfncz64rAaOwB/5PW4UeNekqujU6UIbgv/HFleaBCBo8QKwr JQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 33su5amhjq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Sep 2020 11:32:37 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBUKvv057308;
+        Mon, 28 Sep 2020 11:32:37 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 33tfhw57dr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Sep 2020 11:32:37 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08SBWZxw012783;
+        Mon, 28 Sep 2020 11:32:35 GMT
+Received: from localhost.uk.oracle.com (/10.175.167.231)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 28 Sep 2020 04:32:34 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, acme@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v7 bpf-next 1/8] bpf: provide function to get vmlinux BTF information
+Date:   Mon, 28 Sep 2020 12:31:03 +0100
+Message-Id: <1601292670-1616-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 03:36:50PM +0100, Dmitry Safonov wrote:
-> Changes since v2:
-> - added struct xfrm_translator as API to register xfrm_compat.ko with
->   xfrm_state.ko. This allows compilation of translator as a loadable
->   module
-> - fixed indention and collected reviewed-by (Johannes Berg)
-> - moved boilerplate from commit messages into cover-letter (Steffen
->   Klassert)
-> - found on KASAN build and fixed non-initialised stack variable usage
->   in the translator
-> 
-> The resulting v2/v3 diff can be found here:
-> https://gist.github.com/0x7f454c46/8f68311dfa1f240959fdbe7c77ed2259
-> 
-> Patches as a .git branch:
-> https://github.com/0x7f454c46/linux/tree/xfrm-compat-v3
-> 
-> Changes since v1:
-> - reworked patches set to use translator
-> - separated the compat layer into xfrm_compat.c,
->   compiled under XFRM_USER_COMPAT config
-> - 32-bit messages now being sent in frag_list (like wext-core does)
-> - instead of __packed add compat_u64 members in compat structures
-> - selftest reworked to kselftest lib API
-> - added netlink dump testing to the selftest
-> 
-> XFRM is disabled for compatible users because of the UABI difference.
-> The difference is in structures paddings and in the result the size
-> of netlink messages differ.
-> 
-> Possibility for compatible application to manage xfrm tunnels was
-> disabled by: the commmit 19d7df69fdb2 ("xfrm: Refuse to insert 32 bit
-> userspace socket policies on 64 bit systems") and the commit 74005991b78a
-> ("xfrm: Do not parse 32bits compiled xfrm netlink msg on 64bits host").
-> 
-> This is my second attempt to resolve the xfrm/compat problem by adding
-> the 64=>32 and 32=>64 bit translators those non-visibly to a user
-> provide translation between compatible user and kernel.
-> Previous attempt was to interrupt the message ABI according to a syscall
-> by xfrm_user, which resulted in over-complicated code [1].
-> 
-> Florian Westphal provided the idea of translator and some draft patches
-> in the discussion. In these patches, his idea is reused and some of his
-> initial code is also present.
-> 
-> There were a couple of attempts to solve xfrm compat problem:
-> https://lkml.org/lkml/2017/1/20/733
-> https://patchwork.ozlabs.org/patch/44600/
-> http://netdev.vger.kernel.narkive.com/2Gesykj6/patch-net-next-xfrm-correctly-parse-netlink-msg-from-32bits-ip-command-on-64bits-host
-> 
-> All the discussions end in the conclusion that xfrm should have a full
-> compatible layer to correctly work with 32-bit applications on 64-bit
-> kernels:
-> https://lkml.org/lkml/2017/1/23/413
-> https://patchwork.ozlabs.org/patch/433279/
-> 
-> In some recent lkml discussion, Linus said that it's worth to fix this
-> problem and not giving people an excuse to stay on 32-bit kernel:
-> https://lkml.org/lkml/2018/2/13/752
-> 
-> There is also an selftest for ipsec tunnels.
-> It doesn't depend on any library and compat version can be easy
-> build with: make CFLAGS=-m32 net/ipsec
-> 
-> [1]: https://lkml.kernel.org/r/20180726023144.31066-1-dima@arista.com
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Florian Westphal <fw@strlen.de>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: Stephen Suryaputra <ssuryaextr@gmail.com>
-> Cc: Dmitry Safonov <0x7f454c46@gmail.com>
-> Cc: netdev@vger.kernel.org
-> 
-> Dmitry Safonov (7):
->   xfrm: Provide API to register translator module
->   xfrm/compat: Add 64=>32-bit messages translator
->   xfrm/compat: Attach xfrm dumps to 64=>32 bit translator
->   netlink/compat: Append NLMSG_DONE/extack to frag_list
->   xfrm/compat: Add 32=>64-bit messages translator
->   xfrm/compat: Translate 32-bit user_policy from sockptr
->   selftest/net/xfrm: Add test for ipsec tunnel
+It will be used later for BPF structure display support
 
-Series applied to ipsec-next. Thanks a lot for your work Dmitry!
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/verifier.c | 18 ++++++++++++------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7990232..2eae3f3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1355,6 +1355,8 @@ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr);
+ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+ 
++struct btf *bpf_get_btf_vmlinux(void);
++
+ /* Map specifics */
+ struct xdp_buff;
+ struct sk_buff;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b25ba98..686f6a9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11517,6 +11517,17 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	}
+ }
+ 
++struct btf *bpf_get_btf_vmlinux(void)
++{
++	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
++		mutex_lock(&bpf_verifier_lock);
++		if (!btf_vmlinux)
++			btf_vmlinux = btf_parse_vmlinux();
++		mutex_unlock(&bpf_verifier_lock);
++	}
++	return btf_vmlinux;
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr)
+ {
+@@ -11550,12 +11561,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	env->ops = bpf_verifier_ops[env->prog->type];
+ 	is_priv = bpf_capable();
+ 
+-	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+-		mutex_lock(&bpf_verifier_lock);
+-		if (!btf_vmlinux)
+-			btf_vmlinux = btf_parse_vmlinux();
+-		mutex_unlock(&bpf_verifier_lock);
+-	}
++	bpf_get_btf_vmlinux();
+ 
+ 	/* grab the mutex to protect few globals used by verifier */
+ 	if (!is_priv)
+-- 
+1.8.3.1
+
