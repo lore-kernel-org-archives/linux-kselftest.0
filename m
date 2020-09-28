@@ -2,152 +2,236 @@ Return-Path: <SRS0=wMNL=DF=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-11.9 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86D82C4727F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02034C2D0A8
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:24:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59ED52076A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601335159;
-	bh=XQKyASpPIt40WNaNXBoU3KZo5t8ZAquVbgrnzpIDkQs=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=E1po4+WZyEnl2EdiMk03Q7bNuXDUrmLoZ0XRBE1WQIDfTCOgR74MQOH7vC517HzTt
-	 R8N6vjTwo3h/gH2bvr3/Un4EgnmKKfDjlUnrZCVdmHm2pyJHVmRnLzTw2UdRd0y6hi
-	 M5aMXS1wDhel8WYeiqOIf/0l/YUhWttMNlXVZBS8=
+	by mail.kernel.org (Postfix) with ESMTP id B716A2076A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:24:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kd6WT9db"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgI1XTS (ORCPT
+        id S1726948AbgI1XYh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Sep 2020 19:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        Mon, 28 Sep 2020 19:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgI1XSm (ORCPT
+        with ESMTP id S1726897AbgI1XYh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 19:18:42 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5B7C0610E0
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 16:01:58 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id y5so2664306otg.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 16:01:58 -0700 (PDT)
+        Mon, 28 Sep 2020 19:24:37 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31277C0613D3
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 16:24:37 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n14so2670030pff.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 16:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=G0T+RHalnOsx2x8ckC0/qbcC+AW5CzDJJe/ApeOC0+k=;
-        b=Bm4inKBH6owPhXAt+WYO1qUH2sD6gp/JHO/rGqnxUTTZurVuB2oOlCFyuxF6Mrm1Fb
-         Jl3P3mG83W6n3SQ1lAam+xSpWMDhH6aKSofFE4lx90AFeuypIUoqFdZzThdjUvc+zhBH
-         v12MOvqlrd7l6N2Dd1M3mkf+WXumL1sotF7rM=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c8c07NCI0HNyfXA8pNgzDuXTfAuvdY/rU2PMr/Kt1gE=;
+        b=Kd6WT9dbwHkkmu8kpx/n9Lm5oozOFJtfnMPVThHwHXXdkXXa+d6q82yImX08oVRfb0
+         h4Ihz7RvaRAuevB7IgvvAJubZaJ7Sfnj6jleqaFR2+VKhr9OOdOPNcBb6tllCi57ounz
+         gu9ECoqp0Dgxz52ntjUnsoQwI6lK2cvmsowWnfTI1ZcqLnmrRh/bgxLV1XJWvaN24jFD
+         EqQlD5o3cdL3m8hfyo8pLU1BtZyDhdZwHq1NOc9V4hh2MRt7zQHf++k9tgB4fEKhOApI
+         Z6/m1EKa3uizyyVFkT4ibgf45o5d/aHx5svhDl3f/p9xDJNypXftBhltZ/ywIcGvIzid
+         8ZEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=G0T+RHalnOsx2x8ckC0/qbcC+AW5CzDJJe/ApeOC0+k=;
-        b=O1mPlhIHd6mj/BVNvpFYE6SONqxezKGLwVpvgLCkkahAmx9fS2qCgjh1WRphEv7/lZ
-         YhI/BTGW+A4EPOCl1WPxiEusLd4VGTq+X+uoTRq4jzkqbhBZIR8f1LnysmTxMAZlYRal
-         z7Tca5nvMJ9QRIxofl/i+EUUbJyTwoZDIniRkJvlNWKzQo36z+2ajjgJ7Blsl7BSdloY
-         HMq6/C/q3HLocHXyTvcMTl6MebPorgnGMvL3VDWwuCqybLLEj1MptKdoPTG8VWuhYBv2
-         OEkgC4vDNc7TgHd3vgzyNUNC4c7fkuD6iao23ZAr7/UbiEGPr9LO91ct/vxj9qheCwfg
-         lIYQ==
-X-Gm-Message-State: AOAM530MI++havgU2KQw3SU835KEwJTGGFh7eoMDx0fVFduQa9A7SvVB
-        EvnusuhC6ymOpuOdw1xjZ1c5Og==
-X-Google-Smtp-Source: ABdhPJwSkr7ZuRk8wTA1EBTCYkbbMO+PyhCPeIPgE2gfdGNAWiJW8KkTuzvV5dYyicY9sgk6dMhK3A==
-X-Received: by 2002:a05:6830:1616:: with SMTP id g22mr823663otr.289.1601334117878;
-        Mon, 28 Sep 2020 16:01:57 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a22sm559885oie.13.2020.09.28.16.01.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2020 16:01:57 -0700 (PDT)
-Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
-To:     Joel Fernandes <joel@joelfernandes.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        christian@brauner.io, hridya@google.com, surenb@google.com,
-        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
-        rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1601073127.git.skhan@linuxfoundation.org>
- <20200927233526.GA500818@google.com> <202009281331.444F36A7B@keescook>
- <20200928211709.GA2641213@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9c237ead-5b68-2e3f-2af6-a08c03b24fde@linuxfoundation.org>
-Date:   Mon, 28 Sep 2020 17:01:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c8c07NCI0HNyfXA8pNgzDuXTfAuvdY/rU2PMr/Kt1gE=;
+        b=KrhvonNj7iRceRGDJmtt+aMLNUUvudWX3T0QlCSeZMuP6HmAxkyKqfl3uydM/UD6j+
+         3U0DjFaivLJ1zoB6pI7knjhFmJwD+cpt2/mTjL3rSxS3zooai8H195W4o/m+2HYLNH6d
+         1tYgK3UJQ08a/snyTke0/RfjOphM7CCdbDMJCwqyn8DEK6cjv/wW1IhxNkg5CZXmjKu+
+         sXHyUfc74wzCiDYt9VHtsfwCzKmE5k7XHJ8gILhDGnZx+mvxVoSDaq+6lHK2/eoLG54Q
+         +aFgy0DAzsUgzSq1TdzSHmImgBEuRb8+8+qiQXh/92xMPraS4rYH0xWB5wbiJu/r8ZUu
+         Fa0g==
+X-Gm-Message-State: AOAM532EzLDoS7U2JU7vbDfWqw8Tgl1HE7KwpjZPcTDdPzUcL8OuHa8k
+        OvQhsqGsNE6gWw3juuwZrbSR2i7axmWeNTyTxFIClA==
+X-Google-Smtp-Source: ABdhPJzlUY0jjFKVbxniJdGEY8S7rc5WyJxI+1qW0Yunn4msssQLOsFHaOmHFb07b0vRqLL6rkQB5KEb0m4bquqyU8U=
+X-Received: by 2002:a63:fd03:: with SMTP id d3mr999729pgh.201.1601335476300;
+ Mon, 28 Sep 2020 16:24:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200928211709.GA2641213@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200918183114.2571146-1-dlatypov@google.com> <CAGS_qxpt1NLhh=XEKLCNEayTmB4ZhjOY32XjmL1YRPDnYVvYMw@mail.gmail.com>
+In-Reply-To: <CAGS_qxpt1NLhh=XEKLCNEayTmB4ZhjOY32XjmL1YRPDnYVvYMw@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 28 Sep 2020 16:24:25 -0700
+Message-ID: <CAFd5g44dLSRUVMA6ggYFACNcYtuh5-z7JyMzpBpjXG3UvBh-zg@mail.gmail.com>
+Subject: Re: [RFC v1 00/12] kunit: introduce class mocking support.
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/28/20 3:17 PM, Joel Fernandes wrote:
-> On Mon, Sep 28, 2020 at 01:34:31PM -0700, Kees Cook wrote:
->> On Sun, Sep 27, 2020 at 07:35:26PM -0400, Joel Fernandes wrote:
->>> On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
->>>> This patch series is a result of discussion at the refcount_t BOF
->>>> the Linux Plumbers Conference. In this discussion, we identified
->>>> a need for looking closely and investigating atomic_t usages in
->>>> the kernel when it is used strictly as a counter without it
->>>> controlling object lifetimes and state changes.
->>>>
->>>> There are a number of atomic_t usages in the kernel where atomic_t api
->>>> is used strictly for counting and not for managing object lifetime. In
->>>> some cases, atomic_t might not even be needed.
->>>>      
->>>> The purpose of these counters is twofold: 1. clearly differentiate
->>>> atomic_t counters from atomic_t usages that guard object lifetimes,
->>>> hence prone to overflow and underflow errors. It allows tools that scan
->>>> for underflow and overflow on atomic_t usages to detect overflow and
->>>> underflows to scan just the cases that are prone to errors. 2. provides
->>>> non-atomic counters for cases where atomic isn't necessary.
->>>
->>> Nice series :)
->>>
+On Tue, Sep 22, 2020 at 5:24 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Fri, Sep 18, 2020 at 11:31 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > # Background
+> > KUnit currently lacks any first-class support for mocking.
+> > For an overview and discussion on the pros and cons, see
+> > https://martinfowler.com/articles/mocksArentStubs.html
+> >
+> > This patch set introduces the basic machinery needed for mocking:
+> > setting and validating expectations, setting default actions, etc.
+> >
+> > Using that basic infrastructure, we add macros for "class mocking", as
+> > it's probably the easiest type of mocking to start with.
+> >
+> > ## Class mocking
+> >
+> > By "class mocking", we're referring mocking out function pointers stored
+> > in structs like:
+> >   struct sender {
+> >         int (*send)(struct sender *sender, int data);
+> >   };
+>
+> Discussed this offline a bit with Brendan and David.
+> The requirement that the first argument is a `sender *` means this
+> doesn't work for a few common cases.
+>
+> E.g. ops structs don't usually have funcs that take `XXX_ops *`
+> `pci_ops` all take a `struct pci_bus *`, which at least contains a
+> `struct pci_ops*`.
+>
+> Why does this matter?
+> We need to stash a  `struct mock` somewhere to store expectations.
+> For this version of class mocking (in patch 10), we've assumed we could have
+>
+> struct MOCK(sender) {
+>          struct mock ctrl;
+>          struct sender trgt; //&trgt assumed to be the first param
+> }
+>
+> Then we can always use `container_of(sender)` to get the MOCK(sender)
+> which holds `ctrl`.
+> But if the first parameter isn't a `struct sender*`, this trick
+> obviously doesn't work.
+>
+> So to support something like pci_ops, we'd need another approach to
+> stash `ctrl`.
+>
+> After thinking a bit more, we could perhaps decouple the first param
+> from the mocked struct.
+> Using pci_ops as the example:
+>
+> struct MOCK(pci_ops) {
+>          struct mock ctrl;
+>          struct pci_bus *self; // this is the first param. Using
+> python terminology here.
+>          struct pci_ops trgt; // continue to store this, as this holds
+> the function pointers
+> }
+>
+> // Name of this func is currently based on the class we're mocking
+> static inline struct mock *from_pci_ops_to_mock(
+>   const struct pci_bus *self)
+> {
+>           return mock_get_ctrl(container_of(self, struct MOCK(pci_ops), self));
+> }
+>
+> // then in tests, we'd need something like
+> struct pci_bus bus;
+> bus.ops = mock_get_trgt(mock_ops);
+> mock_ops.self = &bus;
+>
+> Do others have thoughts/opinions?
 
-Thanks.
+In the above example, wouldn't we actually want to mock struct
+pci_bus, not struct pci_ops?
 
->>> It appears there is no user of counter_simple in this series other than the
->>> selftest. Would you be planning to add any conversions in the series itself,
->>> for illustration of use? Sorry if I missed a usage.
->>>
->>> Also how do we guard against atomicity of counter_simple RMW operations? Is
->>> the implication that it should be guarded using other synchronization to
->>> prevent lost-update problem?
->>>
->>> Some more comments:
->>>
->>> 1.  atomic RMW operations that have a return value are fully ordered. Would
->>>      you be adding support to counter_simple for such ordering as well, for
->>>      consistency?
->>
->> No -- there is no atomicity guarantee for counter_simple. I would prefer
->> counter_simple not exist at all, specifically for this reason.
-> 
-> Yeah I am ok with it not existing, especially also as there are no examples
-> of its conversion/usage in the series.
-> 
+I think pci_bus is what actually gets implemented. Consider the
+Rockchip PCIe host controller:
 
-No. counter_simple is just for counting when there is no need for
-atomicity with the premise that there might be some use-cases. You
-are right that this patch series doesn't use these. My hunch is though
-that atomic_t is overused and it isn't needed in all cases.
+Rockchip provides it's own pci_ops struct:
 
-I will do some research to look for any places that can use
-counter_simple before I spin v2. If I don't find any, I can drop them.
+https://elixir.bootlin.com/linux/latest/source/drivers/pci/controller/pcie-rockchip-host.c#L256
 
-thanks,
--- Shuah
+If you look at one of the implemented methods, say
+rockchip_pcie_rd_conf(), you will see:
 
+...
+struct rockchip_pcie *rockchip = bus->sysdata;
+...
+(This function signature is:
+
+int (*read)(struct pci_bus *bus, unsigned int devfn, int where, int
+size, u32 *val);
+
+).
+
+Thus, conceptually struct pci_bus is what is being manipulated; it
+best fits the candidate for the *self pointer.
+
+In fact - if I am not mistaken - I think if you were to mock pci_bus
+and just pretend that the methods were on pci_bus, not pci_ops, I
+think it might just work.
+
+The bigger problem is that it seems pci_bus does not want the user to
+allocate it: in the case of rockchip_pcie, it is allocated by
+devm_pci_alloc_host_bridge(). Thus, embedding pci_bus inside of a
+MOCK(pci_bus) would probably not work, so you would need to have
+different tooling around that and would then need to provide a custom
+definition of from_pci_bus_to_mock() (generated by
+DECLARE_STRUCT_CLASS_MOCK_CONVERTER()).
+
+> After grepping around for examples, I'm struck by how the number of
+> outliers there are.
+> E.g. most take a `struct thing *` as the first param, but cfspi_ifc in
+> caif_spi.h opts to take that as the last parameter.
+
+That's not a problem, just use the
+DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX() variant to create your mock
+(as opposed to DECLARE_STRUCT_CLASS_MOCK()).
+
+For example let's say you have the following struct that you want to mock:
+
+struct example {
+    ...
+    int (*foo)(int bar, char baz, struct example *self);
+};
+
+You could mock the function with:
+
+DECLARE_STRUCT_CLASS_MOCK_HANDLE_INDEX(
+    METHOD(foo), CLASS(example),
+    2, /* The "handle" is in position 2. */
+    RETURNS(int),
+    PARAMS(int, char, struct example *));
+
+> And others take a different mix of structs for each function.
+>
+> But it feels like a decoupled self / struct-holding-func-pointers
+> approach should be generic enough, as far as I can tell.
+> The more exotic types will probably have to remain unsupported.
+
+I think the code is pretty much here to handle any situation in which
+one of the parameters input to the function can be used to look up a
+mock object; we just need to expose the from_<class>_to_mock()
+function to the user to override. The problem I see with what we have
+now is the assumption that the user gets to create the object that
+they want to mock. Your example has illustrated that that is not a
+safe assumption.
+
+But yes, sufficiently exoctic cases will have to be unsupported.
+
+BTW, sorry for not sharing the above in our offline discussion; since
+we were talking without concrete examples in front of us, the problem
+sounded worse than it looks here.
+
+[...]
