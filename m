@@ -2,152 +2,157 @@ Return-Path: <SRS0=wMNL=DF=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE685C47420
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3203C2D0A8
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:31:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9F742076B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:29:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 717162076A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 23:31:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601335740;
-	bh=nnRug9dteeonRq+YEloKfaI1QyjcctRZlNrTT+QWteU=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=yK4tYfrxPhvbkOAATQ1nonEMF/A0XZn4sRneZ/tQQ0p48EYgaWm2e+qpUdS+UNqfN
-	 eJeHBKroo6OAMNjry4e7xM4cbCb+ZQ3MVSN2/Lf/o7KV2kaWlyfmkDO42Of7F/WJDc
-	 HUakBcl67SUgv/5LU7M38XQfnfpjg+H+JLy0oU4g=
+	s=default; t=1601335893;
+	bh=9WDYSIgcM70ZSt1ogPogXsa7pZ4ZwMTDe/YOAI/QvvA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=sNPta264J0gJoX2u1kialci+UJpE9GugGaWBV1SqH26nuYr1727QGiUavjKii44vE
+	 rdNIyJSqO3tPNVhFfUS2O8e3Z3J7ILJpSPQ4ekjWECSECE49ah+iSkdxRDojrkRVrP
+	 AS8C2M5Kv7Hmme5/aMhYgokebWXf/ouC87JN46UI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgI1X2n (ORCPT
+        id S1727294AbgI1XbX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Sep 2020 19:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgI1X2n (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Sep 2020 19:28:43 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785F2C0613BF
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 15:52:44 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id a2so2613099otr.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Sep 2020 15:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/zjWGaKaB98mjjh0ZLrJCSXNEtOUo09qmy6NjayUDvk=;
-        b=SE0OYfnZMo5uyZPc6mgIG21MkoqGNIbmK0jm0vy2aZv5VKA6ku7jwSWs6b1NGUoty/
-         wn4UKOoXxTXy903PvYRPnkC+er2m5Wrf3iavraHJxa+QAxqpaiJN2b04VaT2qF2SzrVa
-         Hk27i3iLwkmTdLboVB3hrjT8YMf/YNUT+GaDk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/zjWGaKaB98mjjh0ZLrJCSXNEtOUo09qmy6NjayUDvk=;
-        b=p2sWAUi1ux6dEVwCv0nx/CUeUP/dTNbKCZCke33bbB6h7EdGhKvBSDPe45RYw/ZZZm
-         6ZDZo4fL+ohfu6zwfPAPKyXv/eqJykay9tmNfJ10QJXx7GdDenA26eyWsUa8nc7uIfpN
-         9Lb0wUxaZ6uO0UYxwq4n9ZI0E8P1Fr4a1fvePoE673aTUjJnzq0AH84LSGahtfGKZS8I
-         w6T7MXhIwvg0glxcjJcqZPPaM4FhKfp8BBxwl8O2rKrsyyR1nILegGvpf/jA0YhEdUWK
-         wr6Qvhcouv49JoLV93NqkCqTcOH8yls3GZ8tFT3LechpJHkHl+ihX1bc61ji98Bs+wQo
-         Cy9g==
-X-Gm-Message-State: AOAM531IJjnsn3o2dGiyCL/LD35C8Vv02mhvlEnK0bJBbLl5PXLvOjZv
-        wZ/IV8r/lx+eWumjzZIE/p94ww==
-X-Google-Smtp-Source: ABdhPJxIHmX1phtewwAqu5CcHxH1zl2JXO7LDJyED8CkXQgctT2koxk9D4O4EqsfNA/ONHttUfK08A==
-X-Received: by 2002:a05:6830:1e56:: with SMTP id e22mr785307otj.303.1601333563685;
-        Mon, 28 Sep 2020 15:52:43 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g23sm2586552ooh.45.2020.09.28.15.52.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Sep 2020 15:52:43 -0700 (PDT)
-Subject: Re: [PATCH 00/11] Introduce Simple atomic and non-atomic counters
-To:     Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1601073127.git.skhan@linuxfoundation.org>
- <202009251650.193E2AD@keescook>
- <7d8f86ab-4333-afa1-6523-e42ae5c7d9b2@linuxfoundation.org>
- <202009260930.9252966D@keescook>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <31f28240-a3f1-e730-0b10-024125b1d2ab@linuxfoundation.org>
-Date:   Mon, 28 Sep 2020 16:52:41 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <202009260930.9252966D@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Mon, 28 Sep 2020 19:31:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727234AbgI1XbH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 28 Sep 2020 19:31:07 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6D6C23A60;
+        Mon, 28 Sep 2020 23:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601335867;
+        bh=9WDYSIgcM70ZSt1ogPogXsa7pZ4ZwMTDe/YOAI/QvvA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TsLNPIIuOtrZsZn0wLFPkQ2L1yhMM5Kt5hm1+rmq5oV0nxYTdPcr42BXPSyiGeR77
+         Hqj1d9+Rh9gGp4uraNtqZc0W4mPdtoyNq8mkwbSyIT2O8E3XuBMomQdLyP9vLRdeLz
+         hTmeQzMa/qbtCYjMacstfNiQa6Eu1ueZr7PFjITM=
+From:   paulmck@kernel.org
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
+        jiangshanlai@gmail.com, akpm@linux-foundation.org,
+        mathieu.desnoyers@efficios.com, josh@joshtriplett.org,
+        tglx@linutronix.de, peterz@infradead.org, rostedt@goodmis.org,
+        dhowells@redhat.com, edumazet@google.com, fweisbec@gmail.com,
+        oleg@redhat.com, joel@joelfernandes.org, mhocko@kernel.org,
+        mgorman@techsingularity.net, torvalds@linux-foundation.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH tip/core/rcu 12/15] rcutorture: Cleanup PREEMPT_COUNT leftovers
+Date:   Mon, 28 Sep 2020 16:30:59 -0700
+Message-Id: <20200928233102.24265-12-paulmck@kernel.org>
+X-Mailer: git-send-email 2.9.5
+In-Reply-To: <20200928233041.GA23230@paulmck-ThinkPad-P72>
+References: <20200928233041.GA23230@paulmck-ThinkPad-P72>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/20 10:33 AM, Kees Cook wrote:
-> On Fri, Sep 25, 2020 at 06:13:37PM -0600, Shuah Khan wrote:
->> On 9/25/20 5:52 PM, Kees Cook wrote:
->>> On Fri, Sep 25, 2020 at 05:47:14PM -0600, Shuah Khan wrote:
->>>> -- Addressed Kees's comments:
->>>>      1. Non-atomic counters renamed to counter_simple32 and counter_simple64
->>>>         to clearly indicate size.
->>>>      2. Added warning for counter_simple* usage and it should be used only
->>>>         when there is no need for atomicity.
->>>>      3. Renamed counter_atomic to counter_atomic32 to clearly indicate size.
->>>>      4. Renamed counter_atomic_long to counter_atomic64 and it now uses
->>>>         atomic64_t ops and indicates size.
->>>>      5. Test updated for the API renames.
->>>>      6. Added helper functions for test results printing
->>>>      7. Verified that the test module compiles in kunit env. and test
->>>>         module can be loaded to run the test.
->>>
->>> Thanks for all of this!
->>>
->>>>      8. Updated Documentation to reflect the intent to make the API
->>>>         restricted so it can never be used to guard object lifetimes
->>>>         and state management. I left _return ops for now, inc_return
->>>>         is necessary for now as per the discussion we had on this topic.
->>>
->>> I still *really* do not want dec_return() to exist. That is asking for
->>> trouble. I'd prefer inc_return() not exist either, but I can live with
->>> it. ;)
->>>
->>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-I didn't read this correctly the first time around.
+CONFIG_PREEMPT_COUNT is now unconditionally enabled and will be
+removed. Cleanup the leftovers before doing so.
 
->> Thanks. I am equally concerned about adding anything that can be used to
->> guard object lifetimes. So I will make sure this set won't expand and
->> plan to remove dec_return() if we don't find any usages.
-> 
-> I would like it much stronger than "if". dec_return() needs to be just
-> dec() and read(). It will not be less efficient (since they're both
-> inlines), but it _will_ create a case where the atomicity cannot be used
-> for ref counting. My point is that anything that _requires_ dec_return()
-> (or, frankly, inc_return()) is _not_ "just" a statistical counter. It
-> may not be a refcounter, but it relies on the inc/dec atomicity for some
-> reason beyond counting in once place and reporting it in another.
-> 
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: rcu@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ tools/testing/selftests/rcutorture/configs/rcu/SRCU-t            | 1 -
+ tools/testing/selftests/rcutorture/configs/rcu/SRCU-u            | 1 -
+ tools/testing/selftests/rcutorture/configs/rcu/TINY01            | 1 -
+ tools/testing/selftests/rcutorture/doc/TINY_RCU.txt              | 5 ++---
+ tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt      | 1 -
+ tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h | 1 -
+ 6 files changed, 2 insertions(+), 8 deletions(-)
 
-I am not thinking about efficiency rather two calls instead of one if
-an decrement needs to followed by return. In any case, I agree with you
-that there is no need to add dec_return now without any use-cases.
-
-I will update the patch series to remove it.
-
-thanks,
--- Shuah
-
-
-
-
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t
+index 6c78022..553cf65 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t
++++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-t
+@@ -7,4 +7,3 @@ CONFIG_RCU_TRACE=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
+-#CHECK#CONFIG_PREEMPT_COUNT=y
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u
+index c15ada8..99563da 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u
++++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-u
+@@ -7,4 +7,3 @@ CONFIG_RCU_TRACE=n
+ CONFIG_DEBUG_LOCK_ALLOC=y
+ CONFIG_PROVE_LOCKING=y
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+-CONFIG_PREEMPT_COUNT=n
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TINY01 b/tools/testing/selftests/rcutorture/configs/rcu/TINY01
+index 6db705e..9b22b8e 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TINY01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TINY01
+@@ -10,4 +10,3 @@ CONFIG_RCU_TRACE=n
+ #CHECK#CONFIG_RCU_STALL_COMMON=n
+ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+-CONFIG_PREEMPT_COUNT=n
+diff --git a/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt b/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt
+index a75b169..d30cedf 100644
+--- a/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt
++++ b/tools/testing/selftests/rcutorture/doc/TINY_RCU.txt
+@@ -3,11 +3,10 @@ This document gives a brief rationale for the TINY_RCU test cases.
+ 
+ Kconfig Parameters:
+ 
+-CONFIG_DEBUG_LOCK_ALLOC -- Do all three and none of the three.
+-CONFIG_PREEMPT_COUNT
++CONFIG_DEBUG_LOCK_ALLOC -- Do both and none of the two.
+ CONFIG_RCU_TRACE
+ 
+-The theory here is that randconfig testing will hit the other six possible
++The theory here is that randconfig testing will hit the other two possible
+ combinations of these parameters.
+ 
+ 
+diff --git a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
+index 1b96d68..cfdd48f 100644
+--- a/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
++++ b/tools/testing/selftests/rcutorture/doc/TREE_RCU-kconfig.txt
+@@ -43,7 +43,6 @@ CONFIG_64BIT
+ 
+ 	Used only to check CONFIG_RCU_FANOUT value, inspection suffices.
+ 
+-CONFIG_PREEMPT_COUNT
+ CONFIG_PREEMPT_RCU
+ 
+ 	Redundant with CONFIG_PREEMPT, ignore.
+diff --git a/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h b/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h
+index 283d710..d0d485d 100644
+--- a/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h
++++ b/tools/testing/selftests/rcutorture/formal/srcu-cbmc/src/config.h
+@@ -8,7 +8,6 @@
+ #undef CONFIG_HOTPLUG_CPU
+ #undef CONFIG_MODULES
+ #undef CONFIG_NO_HZ_FULL_SYSIDLE
+-#undef CONFIG_PREEMPT_COUNT
+ #undef CONFIG_PREEMPT_RCU
+ #undef CONFIG_PROVE_RCU
+ #undef CONFIG_RCU_NOCB_CPU
+-- 
+2.9.5
 
