@@ -8,30 +8,30 @@ X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 265D1C4727C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59452C47426
 	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 06:22:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA73D20B80
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 06:22:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 260A220BED
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Sep 2020 06:22:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="cexyc+mE"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="rzTD0u01"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgI1GWT (ORCPT
+        id S1726692AbgI1GWT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 28 Sep 2020 02:22:19 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:2564 "EHLO
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:2557 "EHLO
         hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726652AbgI1GWE (ORCPT
+        with ESMTP id S1726648AbgI1GWE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 28 Sep 2020 02:22:04 -0400
 Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f7180d90003>; Sun, 27 Sep 2020 23:21:13 -0700
+        id <B5f7180d90001>; Sun, 27 Sep 2020 23:21:13 -0700
 Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 28 Sep
- 2020 06:22:03 +0000
+ 2020 06:22:02 +0000
 Received: from sandstorm.nvidia.com (10.124.1.5) by mail.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Mon, 28 Sep 2020 06:22:03 +0000
+ Transport; Mon, 28 Sep 2020 06:22:02 +0000
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Jonathan Corbet <corbet@lwn.net>,
@@ -41,9 +41,9 @@ CC:     Jonathan Corbet <corbet@lwn.net>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-s390@vger.kernel.org>, John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 8/8] selftests/vm: hmm-tests: remove the libhugetlbfs dependency
-Date:   Sun, 27 Sep 2020 23:21:59 -0700
-Message-ID: <20200928062159.923212-9-jhubbard@nvidia.com>
+Subject: [PATCH 6/8] selftests/vm: gup_test: introduce the dump_pages() sub-test
+Date:   Sun, 27 Sep 2020 23:21:57 -0700
+Message-ID: <20200928062159.923212-7-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200928062159.923212-1-jhubbard@nvidia.com>
 References: <20200928062159.923212-1-jhubbard@nvidia.com>
@@ -52,209 +52,308 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1601274073; bh=xzG0NswHS5qQ6W+MqWObPXUxvjzoGYmrEjfnzKI66EY=;
+        t=1601274073; bh=w5tBxpMI8YINMUR83e6/Vx1VxBEjMs3TXUkBG1Thw54=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
          References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=cexyc+mES/q0Ay4o6Z0cnL30CRDRPbKEb5j7DfORo/lQmTltKbCwDrMgr/VAbHn69
-         B+pTTuR6nfm1maaAK34c86+Hr1t2JsdNRD+0EPEfE9MPXFsdt9XfDNnIICXfD9JSu6
-         k+dRwSEbg9yNS3XN+maAYFnu9Atc8emC+BoS12+gvIIsZZX2b0Pq0w0jIDNELFeQJs
-         YHwLOcrsRRINGQWVY5CgcRthycQ4PFRCIzM6qPgBSOZxehiA3Vr6nTpjfakCAZPRxJ
-         av64aRmdADLS3XS7I0q6uWZynjTqpnqFigg/OBk5OpSJmtbqMXai65zpx5N9sH1LVp
-         Vu5uLHyMbvVUw==
+        b=rzTD0u01V+KC9mk62B9+WdAVUG3QDLYZHnqlQfjmQjDuDzUcXg30WlpzwGSzoMwuj
+         La74Dy/Yplgcq/QaSbXgBVqLSY/hDFDyOlYiU4ZwA4B7rpE7cfnZ87JPRq1fSWGqoR
+         2yk+SrtxF2r0RWJC5RArfKPr34E2CdTD6+0/4IF2LoW5+CjyTEDcePdTZBZQnObjWg
+         13D+WMMWVt1ErP1y6MCe1oR1STyhDZPy/gw6R/YQqzIipv40M/noB9+O+R8qFUkJmJ
+         GI7Pp0WQAJmB72w0YiH5miA3iCCBwLJs5AC3gI6TzLa6Y4AvaLw7CH1sGhbvwdXR73
+         6eikaWsb9Fqrg==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-HMM selftests are incredibly useful, but they are only effective if
-people actually build and run them. All the other tests in selftests/vm
-can be built with very standard, always-available libraries: libpthread,
-librt. The hmm-tests.c program, on the other hand, requires something
-that is (much) less readily available: libhugetlbfs. And so the build
-will typically fail for many developers.
+For quite a while, I was doing a quick hack to gup_test.c (previously,
+gup_benchmark.c) whenever I wanted to try out my changes to dump_page().
+This makes that hack unnecessary, and instead allows anyone to easily
+get the same coverage from a user space program. That saves a lot of
+time because you don't have to change the kernel, in order to test
+different pages and options.
 
-A simple attempt to install libhugetlbfs will also run into
-complications on some common distros these days: Fedora and Arch Linux
-(yes, Arch AUR has it, but that's fragile, as always with AUR). The
-library is not maintained actively enough at the moment, for distros to
-deal with it. I had to build it from source, for Fedora, and that didn't
-go too smoothly either.
+The new sub-test takes advantage of the existing gup_test
+infrastructure, which already provides a simple user space program, some
+allocated user space pages, an ioctl call, pinning of those pages (via
+either get_user_pages or pin_user_pages) and a corresponding kernel-side
+test invocation. There's not much more required, mainly just a couple of
+inputs from the user.
 
-It turns out that, out of 21 tests in hmm-tests.c, only 2 actually
-require functionality from libhugetlbfs. Therefore, if libhugetlbfs is
-missing, simply ifdef those two tests out and allow the developer to at
-least have the other 19 tests, if they don't want to pause to work
-through the above issues. Also issue a warning, so that it's clear that
-there is an imperfection in the build.
+In fact, the new test re-uses the existing command line options in order
+to get various helpful combinations (THP or normal, _fast or slow gup,
+gup vs. pup, and more).
 
-In order to do that, a tiny shell script (check_config.sh) runs a quick
-compile (not link, that's too prone to false failures with library
-paths), and basically, if the compiler doesn't find hugetlbfs.h in its
-standard locations, then the script concludes that libhugetlbfs is not
-available. The output is in two files, one for inclusion in hmm-test.c
-(local_config.h), and one for inclusion in the Makefile
-(local_config.mk).
+New command line options are: which pages to dump, and what type of
+"get/pin" to use.
 
-Cc: Ralph Campbell <rcampbell@nvidia.com>
+In order to figure out which pages to dump, the logic is:
+
+* If the user doesn't specify anything, the page 0 (the first page in
+the address range that the program sets up for testing) is dumped.
+
+* Or, the user can type up to 8 page indices anywhere on the command
+line. If you type more than 8, then it uses the first 8 and ignores the
+remaining items.
+
+For example:
+
+    ./gup_test -ct -F 1 0 19 0x1000
+
+Meaning:
+    -c:          dump pages sub-test
+    -t:          use THP pages
+    -F 1:        use pin_user_pages() instead of get_user_pages()
+    0 19 0x1000: dump pages 0, 19, and 4096
+
+Also, invoke the new test from run_vmtests.sh. This keeps it in use, and
+also provides a good example of how to invoke it.
+
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/vm/.gitignore      |  1 +
- tools/testing/selftests/vm/Makefile        | 24 +++++++++++++++--
- tools/testing/selftests/vm/check_config.sh | 30 ++++++++++++++++++++++
- tools/testing/selftests/vm/hmm-tests.c     | 10 +++++++-
- 4 files changed, 62 insertions(+), 3 deletions(-)
- create mode 100755 tools/testing/selftests/vm/check_config.sh
+ mm/Kconfig                            |  6 +++
+ mm/gup_test.c                         | 54 ++++++++++++++++++++++++++-
+ mm/gup_test.h                         | 10 +++++
+ tools/testing/selftests/vm/gup_test.c | 47 +++++++++++++++++++++--
+ 4 files changed, 112 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftest=
-s/vm/.gitignore
-index 2c8ddcf41c0e..e90d28bcd518 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -20,3 +20,4 @@ va_128TBswitch
- map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
-+local_config.*
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/=
-vm/Makefile
-index 2579242386ac..986a90fa9653 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,5 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
-+
-+include local_config.mk
-+
- uname_M :=3D $(shell uname -m 2>/dev/null || echo not)
- MACHINE ?=3D $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 588984ee5fb4..f7c4c21e5cb1 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -845,6 +845,12 @@ config GUP_TEST
+ 	  get_user_pages*() and pin_user_pages*(), as well as smoke tests of
+ 	  the non-_fast variants.
 =20
-@@ -76,8 +79,6 @@ TEST_FILES :=3D test_vmalloc.sh
- KSFT_KHDR_INSTALL :=3D 1
- include ../lib.mk
++	  There is also a sub-test that allows running dump_page() on any
++	  of up to eight pages (selected by command line args) within the
++	  range of user-space addresses. These pages are either pinned via
++	  pin_user_pages*(), or pinned via get_user_pages*(), as specified
++	  by other command line arguments.
++
+ 	  See tools/testing/selftests/vm/gup_test.c
 =20
--$(OUTPUT)/hmm-tests: LDLIBS +=3D -lhugetlbfs
--
- ifeq ($(ARCH),x86_64)
- BINARIES_32 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
- BINARIES_64 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
-@@ -130,3 +131,22 @@ endif
- $(OUTPUT)/mlock-random-test: LDLIBS +=3D -lcap
+ config GUP_GET_PTE_LOW_HIGH
+diff --git a/mm/gup_test.c b/mm/gup_test.c
+index a980c4a194f0..e79dc364eafb 100644
+--- a/mm/gup_test.c
++++ b/mm/gup_test.c
+@@ -7,7 +7,7 @@
+ #include "gup_test.h"
 =20
- $(OUTPUT)/gup_test: ../../../../mm/gup_test.h
-+
-+$(OUTPUT)/hmm-tests: local_config.h
-+
-+# HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
-+$(OUTPUT)/hmm-tests: LDLIBS +=3D $(HMM_EXTRA_LIBS)
-+
-+local_config.mk local_config.h: check_config.sh
-+	./check_config.sh
-+
-+EXTRA_CLEAN +=3D local_config.mk local_config.h
-+
-+ifeq ($(HMM_EXTRA_LIBS),)
-+all: warn_missing_hugelibs
-+
-+warn_missing_hugelibs:
-+	@echo ; \
-+	echo "Warning: missing libhugetlbfs support. Some HMM tests will be skipp=
-ed." ; \
-+	echo
-+endif
-diff --git a/tools/testing/selftests/vm/check_config.sh b/tools/testing/sel=
-ftests/vm/check_config.sh
-new file mode 100755
-index 000000000000..651a4b192479
---- /dev/null
-+++ b/tools/testing/selftests/vm/check_config.sh
-@@ -0,0 +1,30 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Probe for libraries and create header files to record the results. Both =
-C
-+# header files and Makefile include fragments are created.
-+
-+OUTPUT_H_FILE=3Dlocal_config.h
-+OUTPUT_MKFILE=3Dlocal_config.mk
-+
-+# libhugetlbfs
-+tmpname=3D$(mktemp)
-+tmpfile_c=3D${tmpname}.c
-+tmpfile_o=3D${tmpname}.o
-+
-+echo "#include <sys/types.h>"        > $tmpfile_c
-+echo "#include <hugetlbfs.h>"       >> $tmpfile_c
-+echo "int func(void) { return 0; }" >> $tmpfile_c
-+
-+gcc -c $tmpfile_c -o $tmpfile_o >/dev/null 2>&1
-+
-+if [ -f $tmpfile_o ]; then
-+    echo "#define LOCAL_CONFIG_HAVE_LIBHUGETLBFS 1" > $OUTPUT_H_FILE
-+    echo "HMM_EXTRA_LIBS =3D -lhugetlbfs"             > $OUTPUT_MKFILE
-+else
-+    echo "// No libhugetlbfs support found"      > $OUTPUT_H_FILE
-+    echo "# No libhugetlbfs support found, so:"  > $OUTPUT_MKFILE
-+    echo "HMM_EXTRA_LIBS =3D "                    >> $OUTPUT_MKFILE
-+fi
-+
-+rm ${tmpname}.*
-diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftes=
-ts/vm/hmm-tests.c
-index 0a28a6a29581..6b79723d7dc6 100644
---- a/tools/testing/selftests/vm/hmm-tests.c
-+++ b/tools/testing/selftests/vm/hmm-tests.c
-@@ -21,12 +21,16 @@
- #include <strings.h>
- #include <time.h>
- #include <pthread.h>
--#include <hugetlbfs.h>
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <sys/mman.h>
- #include <sys/ioctl.h>
+ static void put_back_pages(unsigned int cmd, struct page **pages,
+-			   unsigned long nr_pages)
++			   unsigned long nr_pages, unsigned int gup_test_flags)
+ {
+ 	unsigned long i;
 =20
-+#include "./local_config.h"
-+#ifdef LOCAL_CONFIG_HAVE_LIBHUGETLBFS
-+#include <hugetlbfs.h>
-+#endif
+@@ -23,6 +23,15 @@ static void put_back_pages(unsigned int cmd, struct page=
+ **pages,
+ 	case PIN_LONGTERM_BENCHMARK:
+ 		unpin_user_pages(pages, nr_pages);
+ 		break;
++	case DUMP_USER_PAGES_TEST:
++		if (gup_test_flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN) {
++			unpin_user_pages(pages, nr_pages);
++		} else {
++			for (i =3D 0; i < nr_pages; i++)
++				put_page(pages[i]);
 +
- /*
-  * This is a private UAPI to the kernel test module so it isn't exported
-  * in the usual include/uapi/... directory.
-@@ -662,6 +666,7 @@ TEST_F(hmm, anon_write_huge)
- 	hmm_buffer_free(buffer);
++		}
++		break;
+ 	}
  }
 =20
-+#ifdef LOCAL_CONFIG_HAVE_LIBHUGETLBFS
- /*
-  * Write huge TLBFS page.
-  */
-@@ -720,6 +725,7 @@ TEST_F(hmm, anon_write_hugetlbfs)
- 	buffer->ptr =3D NULL;
- 	hmm_buffer_free(buffer);
- }
-+#endif /* LOCAL_CONFIG_HAVE_LIBHUGETLBFS */
-=20
- /*
-  * Read mmap'ed file memory.
-@@ -1336,6 +1342,7 @@ TEST_F(hmm2, snapshot)
- 	hmm_buffer_free(buffer);
+@@ -49,6 +58,37 @@ static void verify_dma_pinned(unsigned int cmd, struct p=
+age **pages,
+ 	}
  }
 =20
-+#ifdef LOCAL_CONFIG_HAVE_LIBHUGETLBFS
- /*
-  * Test the hmm_range_fault() HMM_PFN_PMD flag for large pages that
-  * should be mapped by a large page table entry.
-@@ -1411,6 +1418,7 @@ TEST_F(hmm, compound)
- 	buffer->ptr =3D NULL;
- 	hmm_buffer_free(buffer);
- }
-+#endif /* LOCAL_CONFIG_HAVE_LIBHUGETLBFS */
++static void dump_pages_test(struct gup_test *gup, struct page **pages,
++			    unsigned long nr_pages)
++{
++	unsigned int index_to_dump;
++	unsigned int i;
++
++	/*
++	 * Zero out any user-supplied page index that is out of range. Remember:
++	 * .which_pages[] contains a 1-based set of page indices.
++	 */
++	for (i =3D 0; i < GUP_TEST_MAX_PAGES_TO_DUMP; i++) {
++		if (gup->which_pages[i] > nr_pages) {
++			pr_warn("ZEROING due to out of range: .which_pages[%u]: %u\n",
++				i, gup->which_pages[i]);
++			gup->which_pages[i] =3D 0;
++		}
++	}
++
++	for (i =3D 0; i < GUP_TEST_MAX_PAGES_TO_DUMP; i++) {
++		index_to_dump =3D gup->which_pages[i];
++
++		if (index_to_dump) {
++			index_to_dump--; // Decode from 1-based, to 0-based
++			pr_info("---- page #%u, starting from user virt addr: 0x%llx\n",
++				index_to_dump, gup->addr);
++			dump_page(pages[index_to_dump],
++				  "gup_test: dump_pages() test");
++		}
++	}
++}
++
+ static int __gup_test_ioctl(unsigned int cmd,
+ 		struct gup_test *gup)
+ {
+@@ -104,6 +144,14 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 					    gup->flags | FOLL_LONGTERM,
+ 					    pages + i, NULL);
+ 			break;
++		case DUMP_USER_PAGES_TEST:
++			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
++				nr =3D pin_user_pages(addr, nr, gup->flags,
++						    pages + i, NULL);
++			else
++				nr =3D get_user_pages(addr, nr, gup->flags,
++						    pages + i, NULL);
++			break;
+ 		default:
+ 			kvfree(pages);
+ 			ret =3D -EINVAL;
+@@ -127,10 +175,11 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 	 * state: print a warning if any non-dma-pinned pages are found:
+ 	 */
+ 	verify_dma_pinned(cmd, pages, nr_pages);
++	dump_pages_test(gup, pages, nr_pages);
 =20
- /*
-  * Test two devices reading the same memory (double mapped).
+ 	start_time =3D ktime_get();
+=20
+-	put_back_pages(cmd, pages, nr_pages);
++	put_back_pages(cmd, pages, nr_pages, gup->flags);
+=20
+ 	end_time =3D ktime_get();
+ 	gup->put_delta_usec =3D ktime_us_delta(end_time, start_time);
+@@ -152,6 +201,7 @@ static long gup_test_ioctl(struct file *filep, unsigned=
+ int cmd,
+ 	case PIN_LONGTERM_BENCHMARK:
+ 	case GUP_BASIC_TEST:
+ 	case PIN_BASIC_TEST:
++	case DUMP_USER_PAGES_TEST:
+ 		break;
+ 	default:
+ 		return -EINVAL;
+diff --git a/mm/gup_test.h b/mm/gup_test.h
+index 921b4caad8ef..90a6713d50eb 100644
+--- a/mm/gup_test.h
++++ b/mm/gup_test.h
+@@ -9,6 +9,11 @@
+ #define PIN_LONGTERM_BENCHMARK	_IOWR('g', 3, struct gup_test)
+ #define GUP_BASIC_TEST		_IOWR('g', 4, struct gup_test)
+ #define PIN_BASIC_TEST		_IOWR('g', 5, struct gup_test)
++#define DUMP_USER_PAGES_TEST	_IOWR('g', 6, struct gup_test)
++
++#define GUP_TEST_MAX_PAGES_TO_DUMP		8
++
++#define GUP_TEST_FLAG_DUMP_PAGES_USE_PIN	0x1
+=20
+ struct gup_test {
+ 	__u64 get_delta_usec;
+@@ -17,6 +22,11 @@ struct gup_test {
+ 	__u64 size;
+ 	__u32 nr_pages_per_call;
+ 	__u32 flags;
++	/*
++	 * Each non-zero entry is the number of the page (1-based: first page is
++	 * page 1, so that zero entries mean "do nothing") from the .addr base.
++	 */
++	__u32 which_pages[GUP_TEST_MAX_PAGES_TO_DUMP];
+ };
+=20
+ #endif	/* __GUP_TEST_H */
+diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftest=
+s/vm/gup_test.c
+index 67d57a1cc8b6..68137b337114 100644
+--- a/tools/testing/selftests/vm/gup_test.c
++++ b/tools/testing/selftests/vm/gup_test.c
+@@ -27,21 +27,23 @@ static char *cmd_to_str(unsigned long cmd)
+ 		return "GUP_BASIC_TEST";
+ 	case PIN_BASIC_TEST:
+ 		return "PIN_BASIC_TEST";
++	case DUMP_USER_PAGES_TEST:
++		return "DUMP_USER_PAGES_TEST";
+ 	}
+ 	return "Unknown command";
+ }
+=20
+ int main(int argc, char **argv)
+ {
+-	struct gup_test gup;
++	struct gup_test gup =3D { 0 };
+ 	unsigned long size =3D 128 * MB;
+ 	int i, fd, filed, opt, nr_pages =3D 1, thp =3D -1, repeats =3D 1, write =
+=3D 0;
+-	int cmd =3D GUP_FAST_BENCHMARK;
++	unsigned long cmd =3D GUP_FAST_BENCHMARK;
+ 	int flags =3D MAP_PRIVATE;
+ 	char *file =3D "/dev/zero";
+ 	char *p;
+=20
+-	while ((opt =3D getopt(argc, argv, "m:r:n:f:abtTLUuwSH")) !=3D -1) {
++	while ((opt =3D getopt(argc, argv, "m:r:n:F:f:abctTLUuwSH")) !=3D -1) {
+ 		switch (opt) {
+ 		case 'a':
+ 			cmd =3D PIN_FAST_BENCHMARK;
+@@ -52,6 +54,21 @@ int main(int argc, char **argv)
+ 		case 'L':
+ 			cmd =3D PIN_LONGTERM_BENCHMARK;
+ 			break;
++		case 'c':
++			cmd =3D DUMP_USER_PAGES_TEST;
++			/*
++			 * Dump page 0 (index 1). May be overridden later, by
++			 * user's non-option arguments.
++			 *
++			 * .which_pages is zero-based, so that zero can mean "do
++			 * nothing".
++			 */
++			gup.which_pages[0] =3D 1;
++			break;
++		case 'F':
++			/* strtol, so you can pass flags in hex form */
++			gup.flags =3D strtol(optarg, 0, 0);
++			break;
+ 		case 'm':
+ 			size =3D atoi(optarg) * MB;
+ 			break;
+@@ -91,6 +108,30 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+=20
++	if (optind < argc) {
++		int extra_arg_count =3D 0;
++		/*
++		 * For example:
++		 *
++		 *   ./gup_test -c 0 1 0x1001
++		 *
++		 * ...to dump pages 0, 1, and 4097
++		 */
++
++		while ((optind < argc) &&
++		       (extra_arg_count < GUP_TEST_MAX_PAGES_TO_DUMP)) {
++			/*
++			 * Do the 1-based indexing here, so that the user can
++			 * use normal 0-based indexing on the command line.
++			 */
++			long page_index =3D strtol(argv[optind], 0, 0) + 1;
++
++			gup.which_pages[extra_arg_count] =3D page_index;
++			extra_arg_count++;
++			optind++;
++		}
++	}
++
+ 	filed =3D open(file, O_RDWR|O_CREAT);
+ 	if (filed < 0) {
+ 		perror("open");
 --=20
 2.28.0
 
