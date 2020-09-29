@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-20.9 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB1AC47423
-	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Sep 2020 23:51:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A5EC47425
+	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Sep 2020 23:51:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 907E220897
-	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Sep 2020 23:51:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2776F21548
+	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Sep 2020 23:51:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rd+SVfPu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="abi7h0Nm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729672AbgI2Xvd (ORCPT
+        id S1729674AbgI2Xve (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 29 Sep 2020 19:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        Tue, 29 Sep 2020 19:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729551AbgI2XvR (ORCPT
+        with ESMTP id S1729545AbgI2XvD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Sep 2020 19:51:17 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57990C0613D9
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 16:51:05 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id n13so6650768ybk.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 16:51:05 -0700 (PDT)
+        Tue, 29 Sep 2020 19:51:03 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A205C0613D1
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 16:51:01 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id b8so6706901yba.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Sep 2020 16:51:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=oZ34IDN4PvgG8eYWuVE6yYAnqnV9VjHwLOqvMFaCnG4=;
-        b=Rd+SVfPuulplK1E109Equtk/M5beOIneDgAfiYgJY2AU8DTGX6OVr13ECLolfHv1Z2
-         WIuef+JtNsL/7r6sJ7O6GhqMDFEX1/aYDzzhCf8tbgT66bkODmteH3yAFBUTEFW9uhmv
-         TN0wd4Updh0CIRe3fPB8hFcIwbLRZHKeG+7LCNeakDQWf0cXu/OgEsprB7G0VuDYcMv9
-         NiAOafcF7RIiUTskr/92QZgAt6aNM4DhBSihQiXmA4jvv+ARMYlHpfIf2eV92JUD3kot
-         0IGjFFJmFaBjPPPyRi5rfgHF6o3AC3ftzKvRgAcwPtezN0x2hfYniWxvRXJJYa9PkTmN
-         peZw==
+        bh=A4Oqp0CLLH9oXEcyczMQ5fiEJQabhL7UoJYa+mznIIQ=;
+        b=abi7h0NmVrv1LjCT6z09WLxpYxl2XukfcMdSMx57t+tjmDEcFgCxHDMJAItaDwJJZ3
+         5EruksbBKs2jPKWOLZvbHhsr2+MfFfOx3TbKULyDHhbUtj6LkkClF5LwI0spv8SkPLWg
+         IR4Bemj49I21ymR0SO8uRfZo3teUQaVCvtWhtJX0BhUDO6hS/sR9zudbZWe9CMOtU+Jw
+         ZoC3Jq0cYOszH+JPzesqCOXhP7+8MvI8cRTSYOW1LSk0lne5I8k4XFub7SkXLo03gJ0H
+         l6RHougx7V74SN5WbDOAM6VEWj7r0AAbEEQbhvf1NjOsLIP5lJOv4irGAf+FJP/o+4fE
+         372Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=oZ34IDN4PvgG8eYWuVE6yYAnqnV9VjHwLOqvMFaCnG4=;
-        b=HM/pEyzW0yFmnsQUx4gh2Sq4gPfltvbE0WKEoVjNGSSdJOGHhqPmoApFaTw5/Glc1T
-         b2ofc5JUlww6CWzTP5ePb34nOaaf7eRJQlDlHxNE17YWGyoxsZuPWXKkPK51oOwW1i5H
-         +qOEEGdGF+xVk2oJk4SLbwCNZFh92oE1NWmpjBSHGsHB/81Eb0GAoxQNObgSBEH2blEP
-         7267XCw4CzcyaLZGumOD8v+h6YK50eUnRYr+xGAEOtVfPO4caSliswDPhVYtXHRbiRoa
-         utL/UXMNugRFiI0Z08ixDUtbq6kEMr+2GH/kJCCTQaYGS7CZ3DZ9hU6vrlAbgyu4AxzP
-         MrHA==
-X-Gm-Message-State: AOAM533oLyCeSIM2HlrRIySS/4TsYtklR7Dj9+WzHIepgCbR7sJqrLWR
-        L7l70/wwlGNDsdOVdtoe/XKH/OwXJUQ=
-X-Google-Smtp-Source: ABdhPJyRwrFW8nDN3cFC4o4OI3uF8P5xyz5wlnYgk2pIlVFxBvpcnGY33y/MInNGGp5omDhVJLV6nmPAFzs=
+        bh=A4Oqp0CLLH9oXEcyczMQ5fiEJQabhL7UoJYa+mznIIQ=;
+        b=ZmI4DB4m54O9Kk4tcJA2Eb/Lk6xXJWvckgu81HEZ8mTF9iFaq7OovoRE/AjxmH63hJ
+         UalbZ8YG8w4MIL0QY8RyWDM1CMbXKnhWJ2LEvaeul/+ht4Du2b2BcPAiWYG4MCQUCdrM
+         3esBGglBEEKBbeP7d/ZCRso1bLachy02wqwI4e/UzorNFZkvFt6DZSbrxx6BWXlYydXC
+         ihQzll/3kIRdhhk6pKKGacdoA6JQOBvesQspUOHdQBPgdq+HAhlDVh4HJWPwDQ9VzfJG
+         OxxurmVpJ0lLFOWYQqmaXKE4i9kf9M4uZqC1yfpzm2nuYy2MKItc7DnXozH2LRwXOvi2
+         CJXQ==
+X-Gm-Message-State: AOAM533XFuhhnpOI+bloMLsK9pFeXgvkZmHi76EY9suneunRZqb5F7jZ
+        Dc4pypX4SpRX2pZ5PiQ8VcyJ5gQcscA=
+X-Google-Smtp-Source: ABdhPJxm58lsUZxO0TlGkLFT9QfyDBT3TzLjlJiIC1VrRTHCdeQNuafLvVguSFFGmkFSSWWgP3m8g9hbBB0=
 Sender: "haoluo via sendgmr" <haoluo@haoluo.svl.corp.google.com>
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a25:b31f:: with SMTP id l31mr9908979ybj.198.1601423464570;
- Tue, 29 Sep 2020 16:51:04 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 16:50:48 -0700
+ (user=haoluo job=sendgmr) by 2002:a05:6902:4ae:: with SMTP id
+ r14mr9619849ybs.22.1601423460672; Tue, 29 Sep 2020 16:51:00 -0700 (PDT)
+Date:   Tue, 29 Sep 2020 16:50:46 -0700
 In-Reply-To: <20200929235049.2533242-1-haoluo@google.com>
-Message-Id: <20200929235049.2533242-6-haoluo@google.com>
+Message-Id: <20200929235049.2533242-4-haoluo@google.com>
 Mime-Version: 1.0
 References: <20200929235049.2533242-1-haoluo@google.com>
 X-Mailer: git-send-email 2.28.0.709.gb0816b6eb0-goog
-Subject: [PATCH bpf-next v4 5/6] bpf: Introducte bpf_this_cpu_ptr()
+Subject: [PATCH bpf-next v4 3/6] selftests/bpf: ksyms_btf to test typed ksyms
 From:   Hao Luo <haoluo@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
@@ -84,181 +84,239 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add bpf_this_cpu_ptr() to help access percpu var on this cpu. This
-helper always returns a valid pointer, therefore no need to check
-returned value for NULL. Also note that all programs run with
-preemption disabled, which means that the returned pointer is stable
-during all the execution of the program.
+Selftests for typed ksyms. Tests two types of ksyms: one is a struct,
+the other is a plain int. This tests two paths in the kernel. Struct
+ksyms will be converted into PTR_TO_BTF_ID by the verifier while int
+typed ksyms will be converted into PTR_TO_MEM.
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- include/linux/bpf.h            |  2 ++
- include/uapi/linux/bpf.h       | 13 +++++++++++++
- kernel/bpf/helpers.c           | 14 ++++++++++++++
- kernel/bpf/verifier.c          | 11 ++++++++---
- kernel/trace/bpf_trace.c       |  2 ++
- tools/include/uapi/linux/bpf.h | 13 +++++++++++++
- 6 files changed, 52 insertions(+), 3 deletions(-)
+ .../testing/selftests/bpf/prog_tests/ksyms.c  | 38 ++++------
+ .../selftests/bpf/prog_tests/ksyms_btf.c      | 70 +++++++++++++++++++
+ .../selftests/bpf/progs/test_ksyms_btf.c      | 23 ++++++
+ tools/testing/selftests/bpf/trace_helpers.c   | 27 +++++++
+ tools/testing/selftests/bpf/trace_helpers.h   |  4 ++
+ 5 files changed, 137 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_btf.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9dde15b2479d..dc63eeed4fd9 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -309,6 +309,7 @@ enum bpf_return_type {
- 	RET_PTR_TO_ALLOC_MEM_OR_NULL,	/* returns a pointer to dynamically allocated memory or NULL */
- 	RET_PTR_TO_BTF_ID_OR_NULL,	/* returns a pointer to a btf_id or NULL */
- 	RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL, /* returns a pointer to a valid memory or a btf_id or NULL */
-+	RET_PTR_TO_MEM_OR_BTF_ID,	/* returns a pointer to a valid memory or a btf_id */
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms.c b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+index b771804b2342..b295969b263b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksyms.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms.c
+@@ -7,40 +7,28 @@
  
- /* eBPF function prototype used by verifier to allow BPF_CALLs from eBPF programs
-@@ -1832,6 +1833,7 @@ extern const struct bpf_func_proto bpf_skc_to_udp6_sock_proto;
- extern const struct bpf_func_proto bpf_copy_from_user_proto;
- extern const struct bpf_func_proto bpf_snprintf_btf_proto;
- extern const struct bpf_func_proto bpf_per_cpu_ptr_proto;
-+extern const struct bpf_func_proto bpf_this_cpu_ptr_proto;
+ static int duration;
  
- const struct bpf_func_proto *bpf_tracing_func_proto(
- 	enum bpf_func_id func_id, const struct bpf_prog *prog);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index feae87eaa8c6..8b360fd42094 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3678,6 +3678,18 @@ union bpf_attr {
-  *     Return
-  *             A pointer pointing to the kernel percpu variable on *cpu*, or
-  *             NULL, if *cpu* is invalid.
-+ *
-+ * void *bpf_this_cpu_ptr(const void *percpu_ptr)
-+ *	Description
-+ *		Take a pointer to a percpu ksym, *percpu_ptr*, and return a
-+ *		pointer to the percpu kernel variable on this cpu. See the
-+ *		description of 'ksym' in **bpf_per_cpu_ptr**\ ().
-+ *
-+ *		bpf_this_cpu_ptr() has the same semantic as this_cpu_ptr() in
-+ *		the kernel. Different from **bpf_per_cpu_ptr**\ (), it would
-+ *		never return NULL.
-+ *	Return
-+ *		A pointer pointing to the kernel percpu variable on this cpu.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3832,6 +3844,7 @@ union bpf_attr {
- 	FN(snprintf_btf),		\
- 	FN(seq_printf_btf),		\
- 	FN(bpf_per_cpu_ptr),            \
-+	FN(bpf_this_cpu_ptr),		\
- 	/* */
+-static __u64 kallsyms_find(const char *sym)
+-{
+-	char type, name[500];
+-	__u64 addr, res = 0;
+-	FILE *f;
+-
+-	f = fopen("/proc/kallsyms", "r");
+-	if (CHECK(!f, "kallsyms_fopen", "failed to open: %d\n", errno))
+-		return 0;
+-
+-	while (fscanf(f, "%llx %c %499s%*[^\n]\n", &addr, &type, name) > 0) {
+-		if (strcmp(name, sym) == 0) {
+-			res = addr;
+-			goto out;
+-		}
+-	}
+-
+-	CHECK(false, "not_found", "symbol %s not found\n", sym);
+-out:
+-	fclose(f);
+-	return res;
+-}
+-
+ void test_ksyms(void)
+ {
+-	__u64 per_cpu_start_addr = kallsyms_find("__per_cpu_start");
+-	__u64 link_fops_addr = kallsyms_find("bpf_link_fops");
+ 	const char *btf_path = "/sys/kernel/btf/vmlinux";
+ 	struct test_ksyms *skel;
+ 	struct test_ksyms__data *data;
++	__u64 link_fops_addr, per_cpu_start_addr;
+ 	struct stat st;
+ 	__u64 btf_size;
+ 	int err;
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 14fe3f64fd82..25520f5eeaf6 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -639,6 +639,18 @@ const struct bpf_func_proto bpf_per_cpu_ptr_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_1(bpf_this_cpu_ptr, const void *, percpu_ptr)
++	err = kallsyms_find("bpf_link_fops", &link_fops_addr);
++	if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
++		return;
++	if (CHECK(err == -ENOENT, "ksym_find", "symbol 'bpf_link_fops' not found\n"))
++		return;
++
++	err = kallsyms_find("__per_cpu_start", &per_cpu_start_addr);
++	if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
++		return;
++	if (CHECK(err == -ENOENT, "ksym_find", "symbol 'per_cpu_start' not found\n"))
++		return;
++
+ 	if (CHECK(stat(btf_path, &st), "stat_btf", "err %d\n", errno))
+ 		return;
+ 	btf_size = st.st_size;
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+new file mode 100644
+index 000000000000..c6ef06c0629a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Google */
++
++#include <test_progs.h>
++#include <bpf/libbpf.h>
++#include <bpf/btf.h>
++#include "test_ksyms_btf.skel.h"
++
++static int duration;
++
++void test_ksyms_btf(void)
 +{
-+	return (unsigned long)this_cpu_ptr((const void __percpu *)percpu_ptr);
++	__u64 runqueues_addr, bpf_prog_active_addr;
++	struct test_ksyms_btf *skel = NULL;
++	struct test_ksyms_btf__data *data;
++	struct btf *btf;
++	int percpu_datasec;
++	int err;
++
++	err = kallsyms_find("runqueues", &runqueues_addr);
++	if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
++		return;
++	if (CHECK(err == -ENOENT, "ksym_find", "symbol 'runqueues' not found\n"))
++		return;
++
++	err = kallsyms_find("bpf_prog_active", &bpf_prog_active_addr);
++	if (CHECK(err == -EINVAL, "kallsyms_fopen", "failed to open: %d\n", errno))
++		return;
++	if (CHECK(err == -ENOENT, "ksym_find", "symbol 'bpf_prog_active' not found\n"))
++		return;
++
++	btf = libbpf_find_kernel_btf();
++	if (CHECK(IS_ERR(btf), "btf_exists", "failed to load kernel BTF: %ld\n",
++		  PTR_ERR(btf)))
++		return;
++
++	percpu_datasec = btf__find_by_name_kind(btf, ".data..percpu",
++						BTF_KIND_DATASEC);
++	if (percpu_datasec < 0) {
++		printf("%s:SKIP:no PERCPU DATASEC in kernel btf\n",
++		       __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	skel = test_ksyms_btf__open_and_load();
++	if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
++		goto cleanup;
++
++	err = test_ksyms_btf__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	/* trigger tracepoint */
++	usleep(1);
++
++	data = skel->data;
++	CHECK(data->out__runqueues_addr != runqueues_addr, "runqueues_addr",
++	      "got %llu, exp %llu\n",
++	      (unsigned long long)data->out__runqueues_addr,
++	      (unsigned long long)runqueues_addr);
++	CHECK(data->out__bpf_prog_active_addr != bpf_prog_active_addr, "bpf_prog_active_addr",
++	      "got %llu, exp %llu\n",
++	      (unsigned long long)data->out__bpf_prog_active_addr,
++	      (unsigned long long)bpf_prog_active_addr);
++
++cleanup:
++	btf__free(btf);
++	test_ksyms_btf__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_btf.c b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
+new file mode 100644
+index 000000000000..7dde2082131d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ksyms_btf.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Google */
++
++#include "vmlinux.h"
++
++#include <bpf/bpf_helpers.h>
++
++__u64 out__runqueues_addr = -1;
++__u64 out__bpf_prog_active_addr = -1;
++
++extern const struct rq runqueues __ksym; /* struct type global var. */
++extern const int bpf_prog_active __ksym; /* int type global var. */
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	out__runqueues_addr = (__u64)&runqueues;
++	out__bpf_prog_active_addr = (__u64)&bpf_prog_active;
++
++	return 0;
 +}
 +
-+const struct bpf_func_proto bpf_this_cpu_ptr_proto = {
-+	.func		= bpf_this_cpu_ptr,
-+	.gpl_only	= false,
-+	.ret_type	= RET_PTR_TO_MEM_OR_BTF_ID,
-+	.arg1_type	= ARG_PTR_TO_PERCPU_BTF_ID,
-+};
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 4d0e913bbb22..1bbd1d9830c8 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -90,6 +90,33 @@ long ksym_get_addr(const char *name)
+ 	return 0;
+ }
+ 
++/* open kallsyms and read symbol addresses on the fly. Without caching all symbols,
++ * this is faster than load + find.
++ */
++int kallsyms_find(const char *sym, unsigned long long *addr)
++{
++	char type, name[500];
++	unsigned long long value;
++	int err = 0;
++	FILE *f;
 +
- const struct bpf_func_proto bpf_get_current_task_proto __weak;
- const struct bpf_func_proto bpf_probe_read_user_proto __weak;
- const struct bpf_func_proto bpf_probe_read_user_str_proto __weak;
-@@ -707,6 +719,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_jiffies64_proto;
- 	case BPF_FUNC_bpf_per_cpu_ptr:
- 		return &bpf_per_cpu_ptr_proto;
-+	case BPF_FUNC_bpf_this_cpu_ptr:
-+		return &bpf_this_cpu_ptr_proto;
- 	default:
- 		break;
- 	}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 216b8ece23ce..d9dbf271ebab 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5128,7 +5128,8 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 		regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
- 		regs[BPF_REG_0].id = ++env->id_gen;
- 		regs[BPF_REG_0].mem_size = meta.mem_size;
--	} else if (fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL) {
-+	} else if (fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL ||
-+		   fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID) {
- 		const struct btf_type *t;
++	f = fopen("/proc/kallsyms", "r");
++	if (!f)
++		return -EINVAL;
++
++	while (fscanf(f, "%llx %c %499s%*[^\n]\n", &value, &type, name) > 0) {
++		if (strcmp(name, sym) == 0) {
++			*addr = value;
++			goto out;
++		}
++	}
++	err = -ENOENT;
++
++out:
++	fclose(f);
++	return err;
++}
++
+ void read_trace_pipe(void)
+ {
+ 	int trace_fd;
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+index 25ef597dd03f..f62fdef9e589 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -12,6 +12,10 @@ struct ksym {
+ int load_kallsyms(void);
+ struct ksym *ksym_search(long key);
+ long ksym_get_addr(const char *name);
++
++/* open kallsyms and find addresses on the fly, faster than load + search. */
++int kallsyms_find(const char *sym, unsigned long long *addr);
++
+ void read_trace_pipe(void);
  
- 		mark_reg_known_zero(env, regs, BPF_REG_0);
-@@ -5146,10 +5147,14 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 					tname, PTR_ERR(ret));
- 				return -EINVAL;
- 			}
--			regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
-+			regs[BPF_REG_0].type =
-+				fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID ?
-+				PTR_TO_MEM : PTR_TO_MEM_OR_NULL;
- 			regs[BPF_REG_0].mem_size = tsize;
- 		} else {
--			regs[BPF_REG_0].type = PTR_TO_BTF_ID_OR_NULL;
-+			regs[BPF_REG_0].type =
-+				fn->ret_type == RET_PTR_TO_MEM_OR_BTF_ID ?
-+				PTR_TO_BTF_ID : PTR_TO_BTF_ID_OR_NULL;
- 			regs[BPF_REG_0].btf_id = meta.ret_btf_id;
- 		}
- 	} else if (fn->ret_type == RET_PTR_TO_BTF_ID_OR_NULL) {
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 364a322e2898..a136a6a63a71 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1329,6 +1329,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_snprintf_btf_proto;
- 	case BPF_FUNC_bpf_per_cpu_ptr:
- 		return &bpf_per_cpu_ptr_proto;
-+	case BPF_FUNC_bpf_this_cpu_ptr:
-+		return &bpf_this_cpu_ptr_proto;
- 	default:
- 		return NULL;
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index feae87eaa8c6..8b360fd42094 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3678,6 +3678,18 @@ union bpf_attr {
-  *     Return
-  *             A pointer pointing to the kernel percpu variable on *cpu*, or
-  *             NULL, if *cpu* is invalid.
-+ *
-+ * void *bpf_this_cpu_ptr(const void *percpu_ptr)
-+ *	Description
-+ *		Take a pointer to a percpu ksym, *percpu_ptr*, and return a
-+ *		pointer to the percpu kernel variable on this cpu. See the
-+ *		description of 'ksym' in **bpf_per_cpu_ptr**\ ().
-+ *
-+ *		bpf_this_cpu_ptr() has the same semantic as this_cpu_ptr() in
-+ *		the kernel. Different from **bpf_per_cpu_ptr**\ (), it would
-+ *		never return NULL.
-+ *	Return
-+ *		A pointer pointing to the kernel percpu variable on this cpu.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3832,6 +3844,7 @@ union bpf_attr {
- 	FN(snprintf_btf),		\
- 	FN(seq_printf_btf),		\
- 	FN(bpf_per_cpu_ptr),            \
-+	FN(bpf_this_cpu_ptr),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+ #endif
 -- 
 2.28.0.709.gb0816b6eb0-goog
 
