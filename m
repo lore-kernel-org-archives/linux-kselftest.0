@@ -2,161 +2,249 @@ Return-Path: <SRS0=br+Z=DJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C2E7C4363C
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 17:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F5C2C4727D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 17:38:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D28F208A9
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 17:31:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 112A820795
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 17:38:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YjsyE36h"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="P86pB/HX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgJBRbq (ORCPT
+        id S2388317AbgJBRif (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Oct 2020 13:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        Fri, 2 Oct 2020 13:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387908AbgJBRbq (ORCPT
+        with ESMTP id S2388054AbgJBRie (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 13:31:46 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612F3C0613E2
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 10:31:46 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id o8so2128120otl.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2020 10:31:46 -0700 (PDT)
+        Fri, 2 Oct 2020 13:38:34 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12DEC0613E5
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Oct 2020 10:38:34 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b124so1723921pfg.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Oct 2020 10:38:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rUB+RLk3PpShfXBqDpZYZe36j+5/9E7JczJN7NQ9uno=;
-        b=YjsyE36hS3ag8aak5brR0ERZIBQK/xagWisuHtNr5mrtPspdbyxWqxgv6WobzeGsU3
-         AN3KuXZMRhgHAtH70eUnMpJf8GNtBOdZnIyDz3MRRG1x8RCukJ3i07Sj7f52I9Oygyil
-         x3rRP66aChwnRvohcRykHqp1zRxx6M9OMEFHUvYUptScpGMhd/e36LWPWii/nQJcLg6n
-         7bIIVzlSGk8Q//9vDoyO4NrkMiiF2dN4afHAvH5KdkKtNAsmG+0ooxG9L1BjMXPEXV75
-         vpfV9GrLSdEoMKNEH4ILodCA0i7WYtljNw5hZ+brKZ2QQCtEWXmDJuZSWNeCdFyfUCFw
-         NXKg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zaz5SJSv7A3XIuY8irUlDYqrESCe7gCcbO5tyaj03YU=;
+        b=P86pB/HXvB1w66ujMKVlopbZUXuUA9r/mPIuYxOvuiet70Gi6UIgoN+Kxio24CM2/7
+         JfgmdRD8tgSfN3CFJ4Y75Bc4bn3m64UX/3OdRDLmD2nFCO6GweQosA22/MJXNgddI2Ip
+         1C480tVdsX9QUYYwIHMsDzV2XEJnCWfTsf7Xc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rUB+RLk3PpShfXBqDpZYZe36j+5/9E7JczJN7NQ9uno=;
-        b=KXUPk9FKRAG7GyOlj9zVMTSusDwkMf0TCULjkU5a+T5aQsiFDyyx+4vyxM8wEx+lv4
-         HJ38icXvpfnR6pbIK1ul4MHGSM8ZlFEcarCIN87DGv53yF79XHmoKyRF9FLGCLli9lmN
-         jAzXMxb9tLTUasixEsKlOVb8Phxo1vPndzOGOl1l7b9RrS5+dnH1zNh01LRPO3RCSz9K
-         o2ffqH6ujMxFTRxsq1iC+7q9621k0M4sKxrj+W6vz2v5bbNetq7QyiRhV3vL/MRuLZ7D
-         FWW0v1SV5vAjdpnNYBRHT4GjUaAFkGzm6wma1VlieDzZbrJDSQBpWOeviLzntzO19D3b
-         m+jA==
-X-Gm-Message-State: AOAM530pmqoj9LV6iGxRcqcbqQF0OBQjmwROrAefkZcKHXSsK+x3RbFW
-        yoOhsZIkJPZTTzmTB+6jUmw4Z5ZU+r2xBlvI9UjDrA==
-X-Google-Smtp-Source: ABdhPJyzeZQmZr4PjAotLl+ipebUwWEeSYJELG7O8J2R7HvezAxYHoPLjn6Xryi6L+RcPkCJNiYj3WIDsPlaYAcOjiU=
-X-Received: by 2002:a9d:4b99:: with SMTP id k25mr2608245otf.281.1601659905629;
- Fri, 02 Oct 2020 10:31:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zaz5SJSv7A3XIuY8irUlDYqrESCe7gCcbO5tyaj03YU=;
+        b=ZbHIENtwQD25QoGezymPiljvYQ4dwjszM5NtKwgzpgycpaxSzGhu3TX3f0xRia8XbA
+         yfqAWh46HdN8pDxAwd8O9YJeoKGKIkkyOZmx82i7HjH5YnKadA8QTF4z8WtFboddrAFd
+         sALGD0M/r0RnPlrftmWcyIB+XhcaxpVGanORdj9+xezA7pAjzmxk8zJKOKu2bpV9HCiL
+         UP6JBxjLuhwnEbNaOn3z1fms4mjv8RnOe6ny7DyQTKAjxW3DU1GhLkEczaUrD1eaToAC
+         JvTJAQtj8WxpnZerxnEx3g8QfctWMvjmc+hB6GdLIp9+5NJ/MdnkVIgfUR6ik1mFpvKk
+         0Fxg==
+X-Gm-Message-State: AOAM532Yiq8bcOl0eNgxx30KHmIq/O7WsU71Gh/RRWfK85Ft7mmw6q3e
+        RzAITphsoO9taKVE50RYQZbuCGY+mZHpBsK0
+X-Google-Smtp-Source: ABdhPJxJZ5x2VgwvjB+CQFTtiG0FWPNxJc97Kyr4F/xETn9n8wWrhHY845HJDJm4z1m1PHBe9jXOTw==
+X-Received: by 2002:a63:121f:: with SMTP id h31mr3361167pgl.274.1601660313889;
+        Fri, 02 Oct 2020 10:38:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j25sm2609285pfn.212.2020.10.02.10.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2020 10:38:33 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
+        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 01/16] fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER enum
+Date:   Fri,  2 Oct 2020 10:38:13 -0700
+Message-Id: <20201002173828.2099543-2-keescook@chromium.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201002173828.2099543-1-keescook@chromium.org>
+References: <20201002173828.2099543-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <CA+G9fYtF44bTzjswt26tOwfEQxrWvcSOROmEtH0HKfGn24QbRQ@mail.gmail.com>
- <20200924143317.getruzwu423g3o3e@wittgenstein> <20200924162126.mbthwz32w7rba7oe@wittgenstein>
-In-Reply-To: <20200924162126.mbthwz32w7rba7oe@wittgenstein>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 2 Oct 2020 23:01:34 +0530
-Message-ID: <CA+G9fYsEwvzW1yLsPtiETGzcEnMSsEdU-0r_OJ+S6h9Bbsntqg@mail.gmail.com>
-Subject: Re: selftests: pidfd: pidfd_wait hangs on linux next kernel on all devices
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 24 Sep 2020 at 21:51, Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
->
-> On Thu, Sep 24, 2020 at 04:33:17PM +0200, Christian Brauner wrote:
-> > On Wed, Sep 23, 2020 at 07:52:05PM +0530, Naresh Kamboju wrote:
-> > > selftests: pidfd: pidfd_wait hangs on linux next kernel on x86_64,
-> > > i386 and arm64 Juno-r2
-> > > These devices are using NFS mounted rootfs.
-> > > I have tested pidfd testcases independently and all test PASS.
-> > >
-> > > The Hang or exit from test run noticed when run by run_kselftest.sh
-> > >
-> > > pidfd_wait.c:208:wait_nonblock:Expected sys_waitid(P_PIDFD, pidfd,
-> > > &info, WSTOPPED, NULL) (-1) == 0 (0)
-> > > wait_nonblock: Test terminated by assertion
-> > >
-> > > metadata:
-> > >   git branch: master
-> > >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > >   git commit: e64997027d5f171148687e58b78c8b3c869a6158
-> > >   git describe: next-20200922
-> > >   make_kernelversion: 5.9.0-rc6
-> > >   kernel-config:
-> > > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/865/config
-> > >
-> > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> >
-> > Thanks for reproting this. I'm taking a look now!
->
-> Ok, this is a simple race in the selftests, that I overlooked and which
-> is more likely to hit when there's a lot of processes running on the
-> system. Basically the child process hasn't SIGSTOPed itself yet but the
-> parent is already calling waitid() on a O_NONBLOCK pidfd. Since it
-> doesn't find a WSTOPPED process it returns -EAGAIN correctly.
->
-> The fix for this is to move the line where we're removing the O_NONBLOCK
-> property from the fd before the waitid() WSTOPPED call so we hang until
-> the child becomes stopped.
->
-> So I believe the fix is:
+FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
+that are interested in filtering between types of things. The "how"
+should be an internal detail made uninteresting to the LSMs.
 
-I have tested this patch and the pidfd_wait test did not hang this time.
+Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
+Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
+Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/base/firmware_loader/main.c | 5 ++---
+ fs/exec.c                           | 7 ++++---
+ include/linux/fs.h                  | 2 +-
+ kernel/module.c                     | 2 +-
+ security/integrity/digsig.c         | 2 +-
+ security/integrity/ima/ima_fs.c     | 2 +-
+ security/integrity/ima/ima_main.c   | 6 ++----
+ 7 files changed, 12 insertions(+), 14 deletions(-)
 
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+index 63b9714a0154..b0ec2721f55d 100644
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -470,14 +470,12 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+ 	int i, len;
+ 	int rc = -ENOENT;
+ 	char *path;
+-	enum kernel_read_file_id id = READING_FIRMWARE;
+ 	size_t msize = INT_MAX;
+ 	void *buffer = NULL;
+ 
+ 	/* Already populated data member means we're loading into a buffer */
+ 	if (!decompress && fw_priv->data) {
+ 		buffer = fw_priv->data;
+-		id = READING_FIRMWARE_PREALLOC_BUFFER;
+ 		msize = fw_priv->allocated_size;
+ 	}
+ 
+@@ -501,7 +499,8 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
+ 
+ 		/* load firmware files from the mount namespace of init */
+ 		rc = kernel_read_file_from_path_initns(path, &buffer,
+-						       &size, msize, id);
++						       &size, msize,
++						       READING_FIRMWARE);
+ 		if (rc) {
+ 			if (rc != -ENOENT)
+ 				dev_warn(device, "loading %s failed with error %d\n",
+diff --git a/fs/exec.c b/fs/exec.c
+index a91003e28eaa..9233cd50dc4c 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -954,6 +954,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ {
+ 	loff_t i_size, pos;
+ 	ssize_t bytes = 0;
++	void *allocated = NULL;
+ 	int ret;
+ 
+ 	if (!S_ISREG(file_inode(file)->i_mode) || max_size < 0)
+@@ -977,8 +978,8 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 		goto out;
+ 	}
+ 
+-	if (id != READING_FIRMWARE_PREALLOC_BUFFER)
+-		*buf = vmalloc(i_size);
++	if (!*buf)
++		*buf = allocated = vmalloc(i_size);
+ 	if (!*buf) {
+ 		ret = -ENOMEM;
+ 		goto out;
+@@ -1007,7 +1008,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
+ 
+ out_free:
+ 	if (ret < 0) {
+-		if (id != READING_FIRMWARE_PREALLOC_BUFFER) {
++		if (allocated) {
+ 			vfree(*buf);
+ 			*buf = NULL;
+ 		}
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 7519ae003a08..7336e22d0c5d 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2858,10 +2858,10 @@ static inline void i_readcount_inc(struct inode *inode)
+ #endif
+ extern int do_pipe_flags(int *, int);
+ 
++/* This is a list of *what* is being read, not *how*. */
+ #define __kernel_read_file_id(id) \
+ 	id(UNKNOWN, unknown)		\
+ 	id(FIRMWARE, firmware)		\
+-	id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
+ 	id(FIRMWARE_EFI_EMBEDDED, firmware)	\
+ 	id(MODULE, kernel-module)		\
+ 	id(KEXEC_IMAGE, kexec-image)		\
+diff --git a/kernel/module.c b/kernel/module.c
+index 1c5cff34d9f2..b2808acac46b 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4035,7 +4035,7 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ {
+ 	struct load_info info = { };
+ 	loff_t size;
+-	void *hdr;
++	void *hdr = NULL;
+ 	int err;
+ 
+ 	err = may_init_module();
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index e9cbadade74b..ac02b7632353 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -169,7 +169,7 @@ int __init integrity_add_key(const unsigned int id, const void *data,
+ 
+ int __init integrity_load_x509(const unsigned int id, const char *path)
+ {
+-	void *data;
++	void *data = NULL;
+ 	loff_t size;
+ 	int rc;
+ 	key_perm_t perm;
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index e3fcad871861..15a44c5022f7 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -272,7 +272,7 @@ static const struct file_operations ima_ascii_measurements_ops = {
+ 
+ static ssize_t ima_read_policy(char *path)
+ {
+-	void *data;
++	void *data = NULL;
+ 	char *datap;
+ 	loff_t size;
+ 	int rc, pathlen = strlen(path);
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 8a91711ca79b..2f187784c5bc 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -611,19 +611,17 @@ void ima_post_path_mknod(struct dentry *dentry)
+ int ima_read_file(struct file *file, enum kernel_read_file_id read_id)
+ {
+ 	/*
+-	 * READING_FIRMWARE_PREALLOC_BUFFER
+-	 *
+ 	 * Do devices using pre-allocated memory run the risk of the
+ 	 * firmware being accessible to the device prior to the completion
+ 	 * of IMA's signature verification any more than when using two
+-	 * buffers?
++	 * buffers? It may be desirable to include the buffer address
++	 * in this API and walk all the dma_map_single() mappings to check.
+ 	 */
+ 	return 0;
+ }
+ 
+ const int read_idmap[READING_MAX_ID] = {
+ 	[READING_FIRMWARE] = FIRMWARE_CHECK,
+-	[READING_FIRMWARE_PREALLOC_BUFFER] = FIRMWARE_CHECK,
+ 	[READING_MODULE] = MODULE_CHECK,
+ 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
+ 	[READING_KEXEC_INITRAMFS] = KEXEC_INITRAMFS_CHECK,
+-- 
+2.25.1
 
-test log link
-https://lkft.validation.linaro.org/scheduler/job/1813223
-
->
-> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-> index 4063d6f31fa4..be2943f072f6 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-> @@ -205,6 +205,8 @@ TEST(wait_nonblock)
->         ret = sys_waitid(P_PIDFD, pidfd, &info, WEXITED | WNOHANG, NULL);
->         ASSERT_EQ(ret, 0);
->
-> +       ASSERT_EQ(fcntl(pidfd, F_SETFL, (flags & ~O_NONBLOCK)), 0);
-> +
->         ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
->         ASSERT_EQ(info.si_signo, SIGCHLD);
->         ASSERT_EQ(info.si_code, CLD_STOPPED);
-> @@ -212,8 +214,6 @@ TEST(wait_nonblock)
->
->         ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
->
-> -       ASSERT_EQ(fcntl(pidfd, F_SETFL, (flags & ~O_NONBLOCK)), 0);
-> -
->         ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WEXITED, NULL), 0);
->         ASSERT_EQ(info.si_signo, SIGCHLD);
->         ASSERT_EQ(info.si_code, CLD_EXITED);
->
-
-- Naresh
-
-> Christian
