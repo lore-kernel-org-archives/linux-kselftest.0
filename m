@@ -4,28 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AAE1C4363D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 11:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70526C4741F
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 11:57:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13A12207F7
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 11:57:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EB4A207F7
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 11:57:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387950AbgJBL44 (ORCPT
+        id S1726090AbgJBL5E (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Oct 2020 07:56:56 -0400
-Received: from foss.arm.com ([217.140.110.172]:33752 "EHLO foss.arm.com"
+        Fri, 2 Oct 2020 07:57:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:33772 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726090AbgJBL4w (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 07:56:52 -0400
+        id S2387963AbgJBL47 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 07:56:59 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C4301063;
-        Fri,  2 Oct 2020 04:56:51 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 262FE1063;
+        Fri,  2 Oct 2020 04:56:58 -0700 (PDT)
 Received: from a077416.blr.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 094FF3F70D;
-        Fri,  2 Oct 2020 04:56:47 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 232323F70D;
+        Fri,  2 Oct 2020 04:56:54 -0700 (PDT)
 From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
 To:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
@@ -35,9 +35,9 @@ Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
         Gabor Kertesz <gabor.kertesz@arm.com>,
         Amit Daniel Kachhap <amit.kachhap@arm.com>
-Subject: [PATCH v2 2/6] kselftest/arm64: Verify mte tag inclusion via prctl
-Date:   Fri,  2 Oct 2020 17:26:26 +0530
-Message-Id: <20201002115630.24683-3-amit.kachhap@arm.com>
+Subject: [PATCH v2 4/6] kselftest/arm64: Verify all different mmap MTE options
+Date:   Fri,  2 Oct 2020 17:26:28 +0530
+Message-Id: <20201002115630.24683-5-amit.kachhap@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201002115630.24683-1-amit.kachhap@arm.com>
 References: <20201002115630.24683-1-amit.kachhap@arm.com>
@@ -45,14 +45,14 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This testcase verifies that the tag generated with "irg" instruction
-contains only included tags. This is done via prtcl call.
+This testcase checks the different unsupported/supported options for mmap
+if used with PROT_MTE memory protection flag. These checks are,
 
-This test covers 4 scenarios,
-* At least one included tag.
-* More than one included tags.
-* All included.
-* None included.
+* Either pstate.tco enable or prctl PR_MTE_TCF_NONE option should not cause
+  any tag mismatch faults.
+* Different combinations of anonymous/file memory mmap, mprotect,
+  sync/async error mode and private/shared mappings should work.
+* mprotect should not be able to clear the PROT_MTE page property.
 
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
@@ -61,207 +61,283 @@ Co-developed-by: Gabor Kertesz <gabor.kertesz@arm.com>
 Signed-off-by: Gabor Kertesz <gabor.kertesz@arm.com>
 Signed-off-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
 ---
-Changes in v2:
-* Small fix to check all tags in check_multiple_included_tags function.
-
  tools/testing/selftests/arm64/mte/.gitignore  |   1 +
- .../arm64/mte/check_tags_inclusion.c          | 185 ++++++++++++++++++
- 2 files changed, 186 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+ .../selftests/arm64/mte/check_mmap_options.c  | 262 ++++++++++++++++++
+ 2 files changed, 263 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/mte/check_mmap_options.c
 
 diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index 3f8c1f6c82b9..c3fca255d3d6 100644
+index b5fcc0fb4d97..79a215d3bbd0 100644
 --- a/tools/testing/selftests/arm64/mte/.gitignore
 +++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -1 +1,2 @@
+@@ -1,3 +1,4 @@
  check_buffer_fill
-+check_tags_inclusion
-diff --git a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+ check_tags_inclusion
+ check_child_memory
++check_mmap_options
+diff --git a/tools/testing/selftests/arm64/mte/check_mmap_options.c b/tools/testing/selftests/arm64/mte/check_mmap_options.c
 new file mode 100644
-index 000000000000..94d245a0ed56
+index 000000000000..33b13b86199b
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
-@@ -0,0 +1,185 @@
++++ b/tools/testing/selftests/arm64/mte/check_mmap_options.c
+@@ -0,0 +1,262 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// Copyright (C) 2020 ARM Limited
 +
 +#define _GNU_SOURCE
 +
 +#include <errno.h>
++#include <fcntl.h>
 +#include <signal.h>
 +#include <stdio.h>
 +#include <stdlib.h>
 +#include <string.h>
 +#include <ucontext.h>
-+#include <sys/wait.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/types.h>
 +
 +#include "kselftest.h"
 +#include "mte_common_util.h"
 +#include "mte_def.h"
 +
-+#define BUFFER_SIZE		(5 * MT_GRANULE_SIZE)
-+#define RUNS			(MT_TAG_COUNT * 2)
-+#define MTE_LAST_TAG_MASK	(0x7FFF)
++#define RUNS			(MT_TAG_COUNT)
++#define UNDERFLOW		MT_GRANULE_SIZE
++#define OVERFLOW		MT_GRANULE_SIZE
++#define TAG_CHECK_ON		0
++#define TAG_CHECK_OFF		1
 +
-+static int verify_mte_pointer_validity(char *ptr, int mode)
++static size_t page_size;
++static int sizes[] = {
++	1, 537, 989, 1269, MT_GRANULE_SIZE - 1, MT_GRANULE_SIZE,
++	/* page size - 1*/ 0, /* page_size */ 0, /* page size + 1 */ 0
++};
++
++static int check_mte_memory(char *ptr, int size, int mode, int tag_check)
 +{
-+	mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE);
-+	/* Check the validity of the tagged pointer */
-+	memset((void *)ptr, '1', BUFFER_SIZE);
++	mte_initialize_current_context(mode, (uintptr_t)ptr, size);
++	memset(ptr, '1', size);
 +	mte_wait_after_trig();
-+	if (cur_mte_cxt.fault_valid)
++	if (cur_mte_cxt.fault_valid == true)
 +		return KSFT_FAIL;
-+	/* Proceed further for nonzero tags */
-+	if (!MT_FETCH_TAG((uintptr_t)ptr))
-+		return KSFT_PASS;
-+	mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE + 1);
-+	/* Check the validity outside the range */
-+	ptr[BUFFER_SIZE] = '2';
++
++	mte_initialize_current_context(mode, (uintptr_t)ptr, -UNDERFLOW);
++	memset(ptr - UNDERFLOW, '2', UNDERFLOW);
 +	mte_wait_after_trig();
-+	if (!cur_mte_cxt.fault_valid)
++	if (cur_mte_cxt.fault_valid == false && tag_check == TAG_CHECK_ON)
 +		return KSFT_FAIL;
-+	else
-+		return KSFT_PASS;
++	if (cur_mte_cxt.fault_valid == true && tag_check == TAG_CHECK_OFF)
++		return KSFT_FAIL;
++
++	mte_initialize_current_context(mode, (uintptr_t)ptr, size + OVERFLOW);
++	memset(ptr + size, '3', OVERFLOW);
++	mte_wait_after_trig();
++	if (cur_mte_cxt.fault_valid == false && tag_check == TAG_CHECK_ON)
++		return KSFT_FAIL;
++	if (cur_mte_cxt.fault_valid == true && tag_check == TAG_CHECK_OFF)
++		return KSFT_FAIL;
++
++	return KSFT_PASS;
 +}
 +
-+static int check_single_included_tags(int mem_type, int mode)
++static int check_anonymous_memory_mapping(int mem_type, int mode, int mapping, int tag_check)
 +{
-+	char *ptr;
-+	int tag, run, result = KSFT_PASS;
++	char *ptr, *map_ptr;
++	int run, result, map_size;
++	int item = sizeof(sizes)/sizeof(int);
 +
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
-+				   mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
++	item = sizeof(sizes)/sizeof(int);
++	mte_switch_mode(mode, MTE_ALLOW_NON_ZERO_TAG);
++	for (run = 0; run < item; run++) {
++		map_size = sizes[run] + OVERFLOW + UNDERFLOW;
++		map_ptr = (char *)mte_allocate_memory(map_size, mem_type, mapping, false);
++		if (check_allocated_memory(map_ptr, map_size, mem_type, false) != KSFT_PASS)
++			return KSFT_FAIL;
 +
-+	for (tag = 0; (tag < MT_TAG_COUNT) && (result == KSFT_PASS); tag++) {
-+		mte_switch_mode(mode, MT_INCLUDE_VALID_TAG(tag));
-+		/* Try to catch a excluded tag by a number of tries. */
-+		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
-+			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+			/* Check tag value */
-+			if (MT_FETCH_TAG((uintptr_t)ptr) == tag) {
-+				ksft_print_msg("FAIL: wrong tag = 0x%x with include mask=0x%x\n",
-+					       MT_FETCH_TAG((uintptr_t)ptr),
-+					       MT_INCLUDE_VALID_TAG(tag));
-+				result = KSFT_FAIL;
-+				break;
-+			}
-+			result = verify_mte_pointer_validity(ptr, mode);
-+		}
-+	}
-+	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
-+	return result;
-+}
-+
-+static int check_multiple_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+	int tag, run, result = KSFT_PASS;
-+	unsigned long excl_mask = 0;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
-+				   mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	for (tag = 0; (tag < MT_TAG_COUNT - 1) && (result == KSFT_PASS); tag++) {
-+		excl_mask |= 1 << tag;
-+		mte_switch_mode(mode, MT_INCLUDE_VALID_TAGS(excl_mask));
-+		/* Try to catch a excluded tag by a number of tries. */
-+		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
-+			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+			/* Check tag value */
-+			if (MT_FETCH_TAG((uintptr_t)ptr) < tag) {
-+				ksft_print_msg("FAIL: wrong tag = 0x%x with include mask=0x%x\n",
-+					       MT_FETCH_TAG((uintptr_t)ptr),
-+					       MT_INCLUDE_VALID_TAGS(excl_mask));
-+				result = KSFT_FAIL;
-+				break;
-+			}
-+			result = verify_mte_pointer_validity(ptr, mode);
-+		}
-+	}
-+	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
-+	return result;
-+}
-+
-+static int check_all_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+	int run, result = KSFT_PASS;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
-+				   mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	mte_switch_mode(mode, MT_INCLUDE_TAG_MASK);
-+	/* Try to catch a excluded tag by a number of tries. */
-+	for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
-+		ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+		/*
-+		 * Here tag byte can be between 0x0 to 0xF (full allowed range)
-+		 * so no need to match so just verify if it is writable.
-+		 */
-+		result = verify_mte_pointer_validity(ptr, mode);
-+	}
-+	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
-+	return result;
-+}
-+
-+static int check_none_included_tags(int mem_type, int mode)
-+{
-+	char *ptr;
-+	int run;
-+
-+	ptr = (char *)mte_allocate_memory(BUFFER_SIZE, mem_type, 0, false);
-+	if (check_allocated_memory(ptr, BUFFER_SIZE, mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	mte_switch_mode(mode, MT_EXCLUDE_TAG_MASK);
-+	/* Try to catch a excluded tag by a number of tries. */
-+	for (run = 0; run < RUNS; run++) {
-+		ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
-+		/* Here all tags exluded so tag value generated should be 0 */
-+		if (MT_FETCH_TAG((uintptr_t)ptr)) {
-+			ksft_print_msg("FAIL: included tag value found\n");
-+			mte_free_memory((void *)ptr, BUFFER_SIZE, mem_type, true);
++		ptr = map_ptr + UNDERFLOW;
++		mte_initialize_current_context(mode, (uintptr_t)ptr, sizes[run]);
++		/* Only mte enabled memory will allow tag insertion */
++		ptr = mte_insert_tags((void *)ptr, sizes[run]);
++		if (!ptr || cur_mte_cxt.fault_valid == true) {
++			ksft_print_msg("FAIL: Insert tags on anonymous mmap memory\n");
++			munmap((void *)map_ptr, map_size);
 +			return KSFT_FAIL;
 +		}
-+		mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE);
-+		/* Check the write validity of the untagged pointer */
-+		memset((void *)ptr, '1', BUFFER_SIZE);
-+		mte_wait_after_trig();
-+		if (cur_mte_cxt.fault_valid)
++		result = check_mte_memory(ptr, sizes[run], mode, tag_check);
++		mte_clear_tags((void *)ptr, sizes[run]);
++		mte_free_memory((void *)map_ptr, map_size, mem_type, false);
++		if (result == KSFT_FAIL)
++			return KSFT_FAIL;
++	}
++	return KSFT_PASS;
++}
++
++static int check_file_memory_mapping(int mem_type, int mode, int mapping, int tag_check)
++{
++	char *ptr, *map_ptr;
++	int run, fd, map_size;
++	int total = sizeof(sizes)/sizeof(int);
++	int result = KSFT_PASS;
++
++	mte_switch_mode(mode, MTE_ALLOW_NON_ZERO_TAG);
++	for (run = 0; run < total; run++) {
++		fd = create_temp_file();
++		if (fd == -1)
++			return KSFT_FAIL;
++
++		map_size = sizes[run] + UNDERFLOW + OVERFLOW;
++		map_ptr = (char *)mte_allocate_file_memory(map_size, mem_type, mapping, false, fd);
++		if (check_allocated_memory(map_ptr, map_size, mem_type, false) != KSFT_PASS) {
++			close(fd);
++			return KSFT_FAIL;
++		}
++		ptr = map_ptr + UNDERFLOW;
++		mte_initialize_current_context(mode, (uintptr_t)ptr, sizes[run]);
++		/* Only mte enabled memory will allow tag insertion */
++		ptr = mte_insert_tags((void *)ptr, sizes[run]);
++		if (!ptr || cur_mte_cxt.fault_valid == true) {
++			ksft_print_msg("FAIL: Insert tags on file based memory\n");
++			munmap((void *)map_ptr, map_size);
++			close(fd);
++			return KSFT_FAIL;
++		}
++		result = check_mte_memory(ptr, sizes[run], mode, tag_check);
++		mte_clear_tags((void *)ptr, sizes[run]);
++		munmap((void *)map_ptr, map_size);
++		close(fd);
++		if (result == KSFT_FAIL)
 +			break;
 +	}
-+	mte_free_memory((void *)ptr, BUFFER_SIZE, mem_type, false);
-+	if (cur_mte_cxt.fault_valid)
-+		return KSFT_FAIL;
-+	else
-+		return KSFT_PASS;
++	return result;
++}
++
++static int check_clear_prot_mte_flag(int mem_type, int mode, int mapping)
++{
++	char *ptr, *map_ptr;
++	int run, prot_flag, result, fd, map_size;
++	int total = sizeof(sizes)/sizeof(int);
++
++	prot_flag = PROT_READ | PROT_WRITE;
++	mte_switch_mode(mode, MTE_ALLOW_NON_ZERO_TAG);
++	for (run = 0; run < total; run++) {
++		map_size = sizes[run] + OVERFLOW + UNDERFLOW;
++		ptr = (char *)mte_allocate_memory_tag_range(sizes[run], mem_type, mapping,
++							    UNDERFLOW, OVERFLOW);
++		if (check_allocated_memory_range(ptr, sizes[run], mem_type,
++						 UNDERFLOW, OVERFLOW) != KSFT_PASS)
++			return KSFT_FAIL;
++		map_ptr = ptr - UNDERFLOW;
++		/* Try to clear PROT_MTE property and verify it by tag checking */
++		if (mprotect(map_ptr, map_size, prot_flag)) {
++			mte_free_memory_tag_range((void *)ptr, sizes[run], mem_type,
++						  UNDERFLOW, OVERFLOW);
++			ksft_print_msg("FAIL: mprotect not ignoring clear PROT_MTE property\n");
++			return KSFT_FAIL;
++		}
++		result = check_mte_memory(ptr, sizes[run], mode, TAG_CHECK_ON);
++		mte_free_memory_tag_range((void *)ptr, sizes[run], mem_type, UNDERFLOW, OVERFLOW);
++		if (result != KSFT_PASS)
++			return KSFT_FAIL;
++
++		fd = create_temp_file();
++		if (fd == -1)
++			return KSFT_FAIL;
++		ptr = (char *)mte_allocate_file_memory_tag_range(sizes[run], mem_type, mapping,
++								 UNDERFLOW, OVERFLOW, fd);
++		if (check_allocated_memory_range(ptr, sizes[run], mem_type,
++						 UNDERFLOW, OVERFLOW) != KSFT_PASS) {
++			close(fd);
++			return KSFT_FAIL;
++		}
++		map_ptr = ptr - UNDERFLOW;
++		/* Try to clear PROT_MTE property and verify it by tag checking */
++		if (mprotect(map_ptr, map_size, prot_flag)) {
++			ksft_print_msg("FAIL: mprotect not ignoring clear PROT_MTE property\n");
++			mte_free_memory_tag_range((void *)ptr, sizes[run], mem_type,
++						  UNDERFLOW, OVERFLOW);
++			close(fd);
++			return KSFT_FAIL;
++		}
++		result = check_mte_memory(ptr, sizes[run], mode, TAG_CHECK_ON);
++		mte_free_memory_tag_range((void *)ptr, sizes[run], mem_type, UNDERFLOW, OVERFLOW);
++		close(fd);
++		if (result != KSFT_PASS)
++			return KSFT_FAIL;
++	}
++	return KSFT_PASS;
 +}
 +
 +int main(int argc, char *argv[])
 +{
 +	int err;
++	int item = sizeof(sizes)/sizeof(int);
 +
 +	err = mte_default_setup();
 +	if (err)
 +		return err;
++	page_size = getpagesize();
++	if (!page_size) {
++		ksft_print_msg("ERR: Unable to get page size\n");
++		return KSFT_FAIL;
++	}
++	sizes[item - 3] = page_size - 1;
++	sizes[item - 2] = page_size;
++	sizes[item - 1] = page_size + 1;
 +
-+	/* Register SIGSEGV handler */
++	/* Register signal handlers */
++	mte_register_signal(SIGBUS, mte_default_handler);
 +	mte_register_signal(SIGSEGV, mte_default_handler);
 +
-+	evaluate_test(check_single_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check an included tag value with sync mode\n");
-+	evaluate_test(check_multiple_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check different included tags value with sync mode\n");
-+	evaluate_test(check_none_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check none included tags value with sync mode\n");
-+	evaluate_test(check_all_included_tags(USE_MMAP, MTE_SYNC_ERR),
-+		      "Check all included tags value with sync mode\n");
++	mte_enable_pstate_tco();
++	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_OFF),
++	"Check anonymous memory with private mapping, sync error mode, mmap memory and tag check off\n");
++	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_OFF),
++	"Check file memory with private mapping, sync error mode, mmap/mprotect memory and tag check off\n");
++
++	mte_disable_pstate_tco();
++	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_NONE_ERR, MAP_PRIVATE, TAG_CHECK_OFF),
++	"Check anonymous memory with private mapping, no error mode, mmap memory and tag check off\n");
++	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_NONE_ERR, MAP_PRIVATE, TAG_CHECK_OFF),
++	"Check file memory with private mapping, no error mode, mmap/mprotect memory and tag check off\n");
++
++	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check anonymous memory with private mapping, sync error mode, mmap memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check anonymous memory with private mapping, sync error mode, mmap/mprotect memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check anonymous memory with shared mapping, sync error mode, mmap memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check anonymous memory with shared mapping, sync error mode, mmap/mprotect memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_ASYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check anonymous memory with private mapping, async error mode, mmap memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MPROTECT, MTE_ASYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check anonymous memory with private mapping, async error mode, mmap/mprotect memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_ASYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check anonymous memory with shared mapping, async error mode, mmap memory and tag check on\n");
++	evaluate_test(check_anonymous_memory_mapping(USE_MPROTECT, MTE_ASYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check anonymous memory with shared mapping, async error mode, mmap/mprotect memory and tag check on\n");
++
++	evaluate_test(check_file_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check file memory with private mapping, sync error mode, mmap memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check file memory with private mapping, sync error mode, mmap/mprotect memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check file memory with shared mapping, sync error mode, mmap memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check file memory with shared mapping, sync error mode, mmap/mprotect memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MMAP, MTE_ASYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check file memory with private mapping, async error mode, mmap memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_ASYNC_ERR, MAP_PRIVATE, TAG_CHECK_ON),
++	"Check file memory with private mapping, async error mode, mmap/mprotect memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MMAP, MTE_ASYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check file memory with shared mapping, async error mode, mmap memory and tag check on\n");
++	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_ASYNC_ERR, MAP_SHARED, TAG_CHECK_ON),
++	"Check file memory with shared mapping, async error mode, mmap/mprotect memory and tag check on\n");
++
++	evaluate_test(check_clear_prot_mte_flag(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE),
++	"Check clear PROT_MTE flags with private mapping, sync error mode and mmap memory\n");
++	evaluate_test(check_clear_prot_mte_flag(USE_MPROTECT, MTE_SYNC_ERR, MAP_PRIVATE),
++	"Check clear PROT_MTE flags with private mapping and sync error mode and mmap/mprotect memory\n");
 +
 +	mte_restore_setup();
 +	ksft_print_cnts();
