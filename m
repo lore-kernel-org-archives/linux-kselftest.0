@@ -2,243 +2,105 @@ Return-Path: <SRS0=br+Z=DJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA89C47426
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 11:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC654C4363D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 13:08:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1E8820874
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 11:57:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8908A207EA
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 13:08:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601644081;
+	bh=tGcvLaxrqDDCepQoPpCJ+QRbLhGUg0YgG7YGHIaSBKE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=UHSmnY9Cuig6P05jMI4ssy34E6Wwwq1BP3FgTwOH8FO+SDB4Mq6Xs6KljrXd8rZ4l
+	 FlKwsfE/BC/X6BlvNEfWYCh74kDAsCI8/8u7XIxYvYJrm3Hn6C5MavGOamPP/BZG2T
+	 mHdSAOehC6n205DeG/xWrTiBbeiLDqIedKYso5Sc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387966AbgJBL5F (ORCPT
+        id S2387412AbgJBNIB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Oct 2020 07:57:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:33786 "EHLO foss.arm.com"
+        Fri, 2 Oct 2020 09:08:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387813AbgJBL5C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 07:57:02 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACC9F1396;
-        Fri,  2 Oct 2020 04:57:01 -0700 (PDT)
-Received: from a077416.blr.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A99EE3F70D;
-        Fri,  2 Oct 2020 04:56:58 -0700 (PDT)
-From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Gabor Kertesz <gabor.kertesz@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>
-Subject: [PATCH v2 5/6] kselftest/arm64: Verify KSM page merge for MTE pages
-Date:   Fri,  2 Oct 2020 17:26:29 +0530
-Message-Id: <20201002115630.24683-6-amit.kachhap@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201002115630.24683-1-amit.kachhap@arm.com>
-References: <20201002115630.24683-1-amit.kachhap@arm.com>
+        id S1726017AbgJBNIB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 09:08:01 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88B1720708;
+        Fri,  2 Oct 2020 13:07:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601644080;
+        bh=tGcvLaxrqDDCepQoPpCJ+QRbLhGUg0YgG7YGHIaSBKE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mjHGrQqp0vtUW2aU5vruBq1KCn6u2uX/cyAImLc/BX5abSGSWVW+Rkdo98+vvwo2M
+         emrBabeZFa5sWFJnNvdm4EPpvwzXVfQ6wz1xFgZM5PBrqvcZShnv3FKpCvX/peNqUM
+         ebNeIxc7z8oJf7W3UeaFD5ukB0DtbUGIUaKZ6Gek=
+Date:   Fri, 2 Oct 2020 22:07:56 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: check for do_sys_openat2 in
+ user-memory test
+Message-Id: <20201002220756.b62653d1e6aba102521054d2@kernel.org>
+In-Reply-To: <20201001085641.51130-1-colin.king@canonical.com>
+References: <20201001085641.51130-1-colin.king@canonical.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a testcase to check that KSM should not merge pages containing
-same data with same/different MTE tag values.
+On Thu,  1 Oct 2020 09:56:41 +0100
+Colin King <colin.king@canonical.com> wrote:
 
-This testcase has one positive tests and passes if page merging
-happens according to the above rule. It also saves and restores
-any modified ksm sysfs entries.
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> More recent libc implementations are now using openat/openat2 system
+> calls so also add do_sys_openat2 to the tracing so that the test
+> passes on these systems because do_sys_open may not be called.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  .../testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc  | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+> index a30a9c07290d..cf1b4c3e9e6b 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+> @@ -9,6 +9,8 @@ grep -A10 "fetcharg:" README | grep -q '\[u\]<offset>' || exit_unsupported
+>  :;: "user-memory access syntax and ustring working on user memory";:
+>  echo 'p:myevent do_sys_open path=+0($arg2):ustring path2=+u0($arg2):string' \
+>  	> kprobe_events
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
----
-Changes in v2:
-* Moved read/write sysfs functions from global to local functions.
+OK, at first, you need to check the kernel has do_sys_openat2 from
+/proc/kallsyms (grep -qw will help you), because it is new syscall.
 
- tools/testing/selftests/arm64/mte/.gitignore  |   1 +
- .../selftests/arm64/mte/check_ksm_options.c   | 159 ++++++++++++++++++
- 2 files changed, 160 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/mte/check_ksm_options.c
+> +echo 'p:myevent2 do_sys_openat2 path=+0($arg2):ustring path2=+u0($arg2):string' \
+> +	> kprobe_events
 
-diff --git a/tools/testing/selftests/arm64/mte/.gitignore b/tools/testing/selftests/arm64/mte/.gitignore
-index 79a215d3bbd0..44e9bfdaeca6 100644
---- a/tools/testing/selftests/arm64/mte/.gitignore
-+++ b/tools/testing/selftests/arm64/mte/.gitignore
-@@ -2,3 +2,4 @@ check_buffer_fill
- check_tags_inclusion
- check_child_memory
- check_mmap_options
-+check_ksm_options
-diff --git a/tools/testing/selftests/arm64/mte/check_ksm_options.c b/tools/testing/selftests/arm64/mte/check_ksm_options.c
-new file mode 100644
-index 000000000000..bc41ae630c86
---- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/check_ksm_options.c
-@@ -0,0 +1,159 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2020 ARM Limited
-+
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <ucontext.h>
-+#include <sys/mman.h>
-+
-+#include "kselftest.h"
-+#include "mte_common_util.h"
-+#include "mte_def.h"
-+
-+#define TEST_UNIT	10
-+#define PATH_KSM	"/sys/kernel/mm/ksm/"
-+#define MAX_LOOP	4
-+
-+static size_t page_sz;
-+static unsigned long ksm_sysfs[5];
-+
-+static unsigned long read_sysfs(char *str)
-+{
-+	FILE *f;
-+	unsigned long val = 0;
-+
-+	f = fopen(str, "r");
-+	if (!f) {
-+		ksft_print_msg("ERR: missing %s\n", str);
-+		return 0;
-+	}
-+	fscanf(f, "%lu", &val);
-+	fclose(f);
-+	return val;
-+}
-+
-+static void write_sysfs(char *str, unsigned long val)
-+{
-+	FILE *f;
-+
-+	f = fopen(str, "w");
-+	if (!f) {
-+		ksft_print_msg("ERR: missing %s\n", str);
-+		return;
-+	}
-+	fprintf(f, "%lu", val);
-+	fclose(f);
-+}
-+
-+static void mte_ksm_setup(void)
-+{
-+	ksm_sysfs[0] = read_sysfs(PATH_KSM "merge_across_nodes");
-+	write_sysfs(PATH_KSM "merge_across_nodes", 1);
-+	ksm_sysfs[1] = read_sysfs(PATH_KSM "sleep_millisecs");
-+	write_sysfs(PATH_KSM "sleep_millisecs", 0);
-+	ksm_sysfs[2] = read_sysfs(PATH_KSM "run");
-+	write_sysfs(PATH_KSM "run", 1);
-+	ksm_sysfs[3] = read_sysfs(PATH_KSM "max_page_sharing");
-+	write_sysfs(PATH_KSM "max_page_sharing", ksm_sysfs[3] + TEST_UNIT);
-+	ksm_sysfs[4] = read_sysfs(PATH_KSM "pages_to_scan");
-+	write_sysfs(PATH_KSM "pages_to_scan", ksm_sysfs[4] + TEST_UNIT);
-+}
-+
-+static void mte_ksm_restore(void)
-+{
-+	write_sysfs(PATH_KSM "merge_across_nodes", ksm_sysfs[0]);
-+	write_sysfs(PATH_KSM "sleep_millisecs", ksm_sysfs[1]);
-+	write_sysfs(PATH_KSM "run", ksm_sysfs[2]);
-+	write_sysfs(PATH_KSM "max_page_sharing", ksm_sysfs[3]);
-+	write_sysfs(PATH_KSM "pages_to_scan", ksm_sysfs[4]);
-+}
-+
-+static void mte_ksm_scan(void)
-+{
-+	int cur_count = read_sysfs(PATH_KSM "full_scans");
-+	int scan_count = cur_count + 1;
-+	int max_loop_count = MAX_LOOP;
-+
-+	while ((cur_count < scan_count) && max_loop_count) {
-+		sleep(1);
-+		cur_count = read_sysfs(PATH_KSM "full_scans");
-+		max_loop_count--;
-+	}
-+#ifdef DEBUG
-+	ksft_print_msg("INFO: pages_shared=%lu pages_sharing=%lu\n",
-+			read_sysfs(PATH_KSM "pages_shared"),
-+			read_sysfs(PATH_KSM "pages_sharing"));
-+#endif
-+}
-+
-+static int check_madvise_options(int mem_type, int mode, int mapping)
-+{
-+	char *ptr;
-+	int err, ret;
-+
-+	err = KSFT_FAIL;
-+	if (access(PATH_KSM, F_OK) == -1) {
-+		ksft_print_msg("ERR: Kernel KSM config not enabled\n");
-+		return err;
-+	}
-+
-+	mte_switch_mode(mode, MTE_ALLOW_NON_ZERO_TAG);
-+	ptr = mte_allocate_memory(TEST_UNIT * page_sz, mem_type, mapping, true);
-+	if (check_allocated_memory(ptr, TEST_UNIT * page_sz, mem_type, false) != KSFT_PASS)
-+		return KSFT_FAIL;
-+
-+	/* Insert same data in all the pages */
-+	memset(ptr, 'A', TEST_UNIT * page_sz);
-+	ret = madvise(ptr, TEST_UNIT * page_sz, MADV_MERGEABLE);
-+	if (ret) {
-+		ksft_print_msg("ERR: madvise failed to set MADV_UNMERGEABLE\n");
-+		goto madvise_err;
-+	}
-+	mte_ksm_scan();
-+	/* Tagged pages should not merge */
-+	if ((read_sysfs(PATH_KSM "pages_shared") < 1) ||
-+	    (read_sysfs(PATH_KSM "pages_sharing") < (TEST_UNIT - 1)))
-+		err = KSFT_PASS;
-+madvise_err:
-+	mte_free_memory(ptr, TEST_UNIT * page_sz, mem_type, true);
-+	return err;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int err;
-+
-+	err = mte_default_setup();
-+	if (err)
-+		return err;
-+	page_sz = getpagesize();
-+	if (!page_sz) {
-+		ksft_print_msg("ERR: Unable to get page size\n");
-+		return KSFT_FAIL;
-+	}
-+	/* Register signal handlers */
-+	mte_register_signal(SIGBUS, mte_default_handler);
-+	mte_register_signal(SIGSEGV, mte_default_handler);
-+	/* Enable KSM */
-+	mte_ksm_setup();
-+
-+	evaluate_test(check_madvise_options(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE),
-+		"Check KSM mte page merge for private mapping, sync mode and mmap memory\n");
-+	evaluate_test(check_madvise_options(USE_MMAP, MTE_ASYNC_ERR, MAP_PRIVATE),
-+		"Check KSM mte page merge for private mapping, async mode and mmap memory\n");
-+	evaluate_test(check_madvise_options(USE_MMAP, MTE_SYNC_ERR, MAP_SHARED),
-+		"Check KSM mte page merge for shared mapping, sync mode and mmap memory\n");
-+	evaluate_test(check_madvise_options(USE_MMAP, MTE_ASYNC_ERR, MAP_SHARED),
-+		"Check KSM mte page merge for shared mapping, async mode and mmap memory\n");
-+
-+	mte_ksm_restore();
-+	mte_restore_setup();
-+	ksft_print_cnts();
-+	return ksft_get_fail_cnt() == 0 ? KSFT_PASS : KSFT_FAIL;
-+}
+Also, you need to append (">>") it instead overwrite (">") to kprobe_events.
+
+>  
+>  grep myevent kprobe_events | \
+>  	grep -q 'path=+0($arg2):ustring path2=+u0($arg2):string'
+
+And also you have to enable both myevent and myevent2 (if exists) after
+this.
+
+Then I think your patch will work correctly.
+
+Thank you!
+
 -- 
-2.17.1
-
+Masami Hiramatsu <mhiramat@kernel.org>
