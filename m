@@ -2,59 +2,120 @@ Return-Path: <SRS0=br+Z=DJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D8BC4363D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 18:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 501C4C35257
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 22:05:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98F49208A9
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 18:00:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F08C120754
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Oct 2020 22:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601676323;
+	bh=A/PUNC/h74mMFqFuFyQBZzOM4+GqXQWYyk2J9FTBXHU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=0FJecUz9Q5r+ZARUm9EN3lxBydlMU6CThI5fWbUme7b5l4A6IWA+59wqJXesLrYqY
+	 hH2pDFQWv28WhS5v1JemzKNrvKtIO7RxWuqhaTsGf+eB5nwW8xKvVjKG0zOyvqRReO
+	 9IypuEcKmi6hFcYzKJL/jXyAI5X3gAjaS5sTmvXY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387768AbgJBSAS (ORCPT
+        id S1725601AbgJBWFW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Oct 2020 14:00:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59852 "EHLO mail.kernel.org"
+        Fri, 2 Oct 2020 18:05:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387602AbgJBSAS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 14:00:18 -0400
-Received: from gaia (unknown [95.149.105.49])
+        id S1725446AbgJBWFW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 2 Oct 2020 18:05:22 -0400
+Received: from X1 (c-76-21-107-111.hsd1.ca.comcast.net [76.21.107.111])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D2FB206DD;
-        Fri,  2 Oct 2020 18:00:16 +0000 (UTC)
-Date:   Fri, 2 Oct 2020 19:00:14 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Amit Daniel Kachhap <amit.kachhap@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Gabor Kertesz <gabor.kertesz@arm.com>
-Subject: Re: [PATCH v2 0/6] kselftest: arm64/mte: Tests for user-space MTE
-Message-ID: <20201002180013.GA6099@gaia>
-References: <20201002115630.24683-1-amit.kachhap@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201002115630.24683-1-amit.kachhap@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD27C20719;
+        Fri,  2 Oct 2020 22:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601676322;
+        bh=A/PUNC/h74mMFqFuFyQBZzOM4+GqXQWYyk2J9FTBXHU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gDd85F52dSGYlWT7WLjb6cPPYCWvYOjIS1DAhkHOAS81iXNE3o1e1VQntR7DqkM0x
+         ud10WxaijIbe9zMe/BQYIddIVa2H5Eaib8MiYft0L1YO+xxfhMCf8rfHr/TC2PhIjq
+         wcTv0vTS+IYJxrh6oaonopzTcGeq75KcRrd8cQNE=
+Date:   Fri, 2 Oct 2020 15:05:20 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        Sri Jayaramappa <sjayaram@akamai.com>
+Subject: Re: [PATCH 1/1] selftests/vm: 8x compaction_test speedup
+Message-Id: <20201002150520.2ea3db53d88f8d10ba8348c9@linux-foundation.org>
+In-Reply-To: <20201002080621.551044-2-jhubbard@nvidia.com>
+References: <20201002080621.551044-1-jhubbard@nvidia.com>
+        <20201002080621.551044-2-jhubbard@nvidia.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 05:26:24PM +0530, Amit Daniel Kachhap wrote:
-> Amit Daniel Kachhap (6):
->   kselftest/arm64: Add utilities and a test to validate mte memory
->   kselftest/arm64: Verify mte tag inclusion via prctl
->   kselftest/arm64: Check forked child mte memory accessibility
->   kselftest/arm64: Verify all different mmap MTE options
->   kselftest/arm64: Verify KSM page merge for MTE pages
->   kselftest/arm64: Check mte tagged user address in kernel
+On Fri, 2 Oct 2020 01:06:21 -0700 John Hubbard <jhubbard@nvidia.com> wrote:
 
-Thanks Amit for respinning the series. Tested on FVP (some Qemu bugs get
-in the way and they fail).
+> This patch reduces the running time for compaction_test from about 27
+> sec, to 3.3 sec, which is about an 8x speedup.
+> 
+> These numbers are for an Intel x86_64 system with 32 GB of DRAM.
+> 
+> The compaction_test.c program was spending most of its time doing
+> mmap(), 1 MB at a time, on about 25 GB of memory.
+> 
+> Instead, do the mmaps 100 MB at a time. (Going past 100 MB doesn't make
+> things go much faster, because other parts of the program are using the
+> remaining time.)
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Tested-by: Catalin Marinas <catalin.marinas@arm.com>
+Seems nice.  It's been 5 years, but hopefully Sri is still at Akamai?
+
+> --- a/tools/testing/selftests/vm/compaction_test.c
+> +++ b/tools/testing/selftests/vm/compaction_test.c
+> @@ -18,7 +18,8 @@
+>  
+>  #include "../kselftest.h"
+>  
+> -#define MAP_SIZE 1048576
+> +#define MAP_SIZE_MB	100
+> +#define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
+>  
+>  struct map_list {
+>  	void *map;
+> @@ -165,7 +166,7 @@ int main(int argc, char **argv)
+>  	void *map = NULL;
+>  	unsigned long mem_free = 0;
+>  	unsigned long hugepage_size = 0;
+> -	unsigned long mem_fragmentable = 0;
+> +	long mem_fragmentable_MB = 0;
+>  
+>  	if (prereq() != 0) {
+>  		printf("Either the sysctl compact_unevictable_allowed is not\n"
+> @@ -190,9 +191,9 @@ int main(int argc, char **argv)
+>  		return -1;
+>  	}
+>  
+> -	mem_fragmentable = mem_free * 0.8 / 1024;
+> +	mem_fragmentable_MB = mem_free * 0.8 / 1024;
+>  
+> -	while (mem_fragmentable > 0) {
+> +	while (mem_fragmentable_MB > 0) {
+>  		map = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
+>  			   MAP_ANONYMOUS | MAP_PRIVATE | MAP_LOCKED, -1, 0);
+>  		if (map == MAP_FAILED)
+> @@ -213,7 +214,7 @@ int main(int argc, char **argv)
+>  		for (i = 0; i < MAP_SIZE; i += page_size)
+>  			*(unsigned long *)(map + i) = (unsigned long)map + i;
+>  
+> -		mem_fragmentable--;
+> +		mem_fragmentable_MB -= MAP_SIZE_MB;
+>  	}
+>  
+>  	for (entry = list; entry != NULL; entry = entry->next) {
+> -- 
+> 2.28.0
+> 
