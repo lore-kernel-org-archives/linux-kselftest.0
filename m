@@ -2,108 +2,95 @@ Return-Path: <SRS0=UMjK=DK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70FE9C4363C
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Oct 2020 00:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26910C4363C
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Oct 2020 01:17:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 234C1206F8
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Oct 2020 00:48:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD97F20719
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Oct 2020 01:17:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="kufoFTR1"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="SoUIN9/u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725379AbgJCAs4 (ORCPT
+        id S1725601AbgJCBRY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Oct 2020 20:48:56 -0400
-Received: from mx0a-00190b01.pphosted.com ([67.231.149.131]:6834 "EHLO
-        mx0a-00190b01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725283AbgJCAs4 (ORCPT
+        Fri, 2 Oct 2020 21:17:24 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15319 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725446AbgJCBRY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Oct 2020 20:48:56 -0400
-X-Greylist: delayed 4942 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 20:48:55 EDT
-Received: from pps.filterd (m0122333.ppops.net [127.0.0.1])
-        by mx0a-00190b01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 092NNn6u026132;
-        Sat, 3 Oct 2020 00:25:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=jan2016.eng;
- bh=QkGqoqC57AUJwO3z6/p3ypBKSby7UUfX4Z/QC16CsrM=;
- b=kufoFTR1IjDsPgi+CLGpSP2IqkKL7HKcnqeKaAWRjcQgQA75iJs6BDJg6YPuqv+q2Nlb
- R++l+58+5i9AsF+9tf7WXjOZgZtjcxxNRqijyVJZsmOP/6FY2GqfZ3Kob5cjUf/dXCQO
- 77IfRCch6Hpw/5tjF6ZLeu+Q92Ap9JG3L1Z7JHRH88ikq70/vvdx4uIAO4aLKRLyDbF4
- O6Y61abD0mprQbEuEjgjF/mf7KsSijuf9hPJ6YRt5hwBsBbrO5zF1N65aUrnlWQqeky3
- lm2zFO5jayEgLk+2dnAOeqfKJxTwx/raQ2L098YP/wUUH23GVpWa6xBkch60Mkb0+sOA 0w== 
-Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60] (may be forged))
-        by mx0a-00190b01.pphosted.com with ESMTP id 33svwjvheg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 03 Oct 2020 00:25:27 +0100
-Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
-        by prod-mail-ppoint5.akamai.com (8.16.0.42/8.16.0.42) with SMTP id 092N23PV009413;
-        Fri, 2 Oct 2020 16:25:26 -0700
-Received: from email.msg.corp.akamai.com ([172.27.123.30])
-        by prod-mail-ppoint5.akamai.com with ESMTP id 33t3mb359m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 02 Oct 2020 16:25:26 -0700
-Received: from usma1ex-dag1mb6.msg.corp.akamai.com (172.27.123.65) by
- usma1ex-dag1mb2.msg.corp.akamai.com (172.27.123.102) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Fri, 2 Oct 2020 19:25:25 -0400
-Received: from usma1ex-dag1mb6.msg.corp.akamai.com ([172.27.123.65]) by
- usma1ex-dag1mb6.msg.corp.akamai.com ([172.27.123.65]) with mapi id
- 15.00.1497.006; Fri, 2 Oct 2020 19:25:25 -0400
-From:   "Jayaramappa, Srilakshmi" <sjayaram@akamai.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>
+        Fri, 2 Oct 2020 21:17:24 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f77d0bb0000>; Fri, 02 Oct 2020 18:15:39 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 3 Oct
+ 2020 01:17:23 +0000
+Received: from sandstorm.nvidia.com (172.20.13.39) by mail.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Sat, 3 Oct 2020 01:17:23 +0000
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 1/1] selftests/vm: 8x compaction_test speedup
-Thread-Topic: [PATCH 1/1] selftests/vm: 8x compaction_test speedup
-Thread-Index: AQHWmQghQfWhsaODLEKsEX7Nj7R8+6mE9IyA
-Date:   Fri, 2 Oct 2020 23:25:25 +0000
-Message-ID: <050F889A-AE47-47E4-8334-0D6FC7170721@akamai.com>
-References: <20201002080621.551044-1-jhubbard@nvidia.com>
- <20201002080621.551044-2-jhubbard@nvidia.com>
- <20201002150520.2ea3db53d88f8d10ba8348c9@linux-foundation.org>
-In-Reply-To: <20201002150520.2ea3db53d88f8d10ba8348c9@linux-foundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.41.20091302
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.19.112.71]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6AFFAE2D00926F479C7BED904B92EF2D@akamai.com>
-Content-Transfer-Encoding: base64
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: [PATCH] selftests/vm: 10x speedup for hmm-tests
+Date:   Fri, 2 Oct 2020 18:17:21 -0700
+Message-ID: <20201003011721.44238-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-02_14:2020-10-02,2020-10-02 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- spamscore=0 bulkscore=0 suspectscore=0 mlxlogscore=791 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010020174
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-02_14:2020-10-02,2020-10-02 signatures=0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1601687739; bh=YW/NWGpa68jtDIRpTXUYduQIdru2AkHtxJU2AhNsM+0=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+         X-NVConfidentiality:Content-Transfer-Encoding:Content-Type;
+        b=SoUIN9/u21hlPuWqGmiNhBACDJHJQd9Sn87vBzky3eLvGj5B72TVGaEHnYyH5QUlJ
+         TMsVPyuYUtXFvaqPM6WIBfbsRs1PdRP6RdUW5E9XBUHNoCwz8QBmFhTc9xrde9QCZM
+         NoqFEMU/8nEp7J1Hl4DKNYfMSNNl2m2yeOFGQEzeWrm4fXc8HtOZ9wSBLi6JFvUkY3
+         q04FbnaWAW4TLzb5xewaBBh0oMWBA8TGIXMf3E7RhejB8SdmomvxhKeiHlxgRbOzIy
+         9h4gnsKWzrQItebOvLEpeX4lQnyEhFQgD2B2k7oSndB3/3GMK0Qee3gntO4v0he4jV
+         U1JzvDbLUk7OA==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQrvu79PbiAxMC8yLzIwLCA2OjA1IFBNLCAiQW5kcmV3IE1vcnRvbiIgPGFrcG1AbGludXgtZm91
-bmRhdGlvbi5vcmc+IHdyb3RlOg0KDQogICAgT24gRnJpLCAyIE9jdCAyMDIwIDAxOjA2OjIxIC0w
-NzAwIEpvaG4gSHViYmFyZCA8amh1YmJhcmRAbnZpZGlhLmNvbT4gd3JvdGU6DQoNCiAgICA+IFRo
-aXMgcGF0Y2ggcmVkdWNlcyB0aGUgcnVubmluZyB0aW1lIGZvciBjb21wYWN0aW9uX3Rlc3QgZnJv
-bSBhYm91dCAyNw0KICAgID4gc2VjLCB0byAzLjMgc2VjLCB3aGljaCBpcyBhYm91dCBhbiA4eCBz
-cGVlZHVwLg0KICAgID4gDQogICAgPiBUaGVzZSBudW1iZXJzIGFyZSBmb3IgYW4gSW50ZWwgeDg2
-XzY0IHN5c3RlbSB3aXRoIDMyIEdCIG9mIERSQU0uDQogICAgPiANCiAgICA+IFRoZSBjb21wYWN0
-aW9uX3Rlc3QuYyBwcm9ncmFtIHdhcyBzcGVuZGluZyBtb3N0IG9mIGl0cyB0aW1lIGRvaW5nDQog
-ICAgPiBtbWFwKCksIDEgTUIgYXQgYSB0aW1lLCBvbiBhYm91dCAyNSBHQiBvZiBtZW1vcnkuDQog
-ICAgPiANCiAgICA+IEluc3RlYWQsIGRvIHRoZSBtbWFwcyAxMDAgTUIgYXQgYSB0aW1lLiAoR29p
-bmcgcGFzdCAxMDAgTUIgZG9lc24ndCBtYWtlDQogICAgPiB0aGluZ3MgZ28gbXVjaCBmYXN0ZXIs
-IGJlY2F1c2Ugb3RoZXIgcGFydHMgb2YgdGhlIHByb2dyYW0gYXJlIHVzaW5nIHRoZQ0KICAgID4g
-cmVtYWluaW5nIHRpbWUuKQ0KDQogICAgU2VlbXMgbmljZS4gIEl0J3MgYmVlbiA1IHllYXJzLCBi
-dXQgaG9wZWZ1bGx5IFNyaSBpcyBzdGlsbCBhdCBBa2FtYWk/DQoNCiAgICBMb29rcyBnb29kIHRv
-IG1lLg0KDQogICAgVGhhbmtzDQogICAgLVNyaQ0KDQoNCg==
+This patch reduces the running time for hmm-tests from about 10+
+seconds, to just under 1.0 second, for an approximately 10x speedup.
+That brings it in line with most of the other tests in selftests/vm,
+which mostly run in < 1 sec.
+
+This is done with a one-line change that simply reduces the number of
+iterations of several tests, from 256, to 10. Thanks to Ralph Campbell
+for suggesting changing NTIMES as a way to get the speedup.
+
+Suggested-by: Ralph Campbell <rcampbell@nvidia.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+
+This is based on mmotm.
+
+ tools/testing/selftests/vm/hmm-tests.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftes=
+ts/vm/hmm-tests.c
+index 6b79723d7dc6..5d1ac691b9f4 100644
+--- a/tools/testing/selftests/vm/hmm-tests.c
++++ b/tools/testing/selftests/vm/hmm-tests.c
+@@ -49,7 +49,7 @@ struct hmm_buffer {
+ #define TWOMEG		(1 << 21)
+ #define HMM_BUFFER_SIZE (1024 << 12)
+ #define HMM_PATH_MAX    64
+-#define NTIMES		256
++#define NTIMES		10
+=20
+ #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+=20
+--=20
+2.28.0
+
