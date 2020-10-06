@@ -2,73 +2,121 @@ Return-Path: <SRS0=eSIB=DN=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 018D6C47425
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Oct 2020 17:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0476EC47095
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Oct 2020 19:05:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A74ED2078E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Oct 2020 17:48:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DA1820789
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Oct 2020 19:05:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nCuVvffN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgJFRsj (ORCPT
+        id S1726854AbgJFTFf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Oct 2020 13:48:39 -0400
-Received: from namei.org ([65.99.196.166]:33334 "EHLO namei.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725925AbgJFRsj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Oct 2020 13:48:39 -0400
-X-Greylist: delayed 1831 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Oct 2020 13:48:38 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by namei.org (8.14.4/8.14.4) with ESMTP id 096HHqvb007464;
-        Tue, 6 Oct 2020 17:17:52 GMT
-Date:   Wed, 7 Oct 2020 04:17:52 +1100 (AEDT)
-From:   James Morris <jmorris@namei.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Jessica Yu <jeyu@kernel.org>, SeongJae Park <sjpark@amazon.de>,
-        KP Singh <kpsingh@chromium.org>, linux-efi@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 01/16] fs/kernel_read_file: Remove FIRMWARE_PREALLOC_BUFFER
- enum
-In-Reply-To: <20201002173828.2099543-2-keescook@chromium.org>
-Message-ID: <alpine.LRH.2.21.2010070417400.18879@namei.org>
-References: <20201002173828.2099543-1-keescook@chromium.org> <20201002173828.2099543-2-keescook@chromium.org>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        Tue, 6 Oct 2020 15:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726760AbgJFTFf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 6 Oct 2020 15:05:35 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4213C061755;
+        Tue,  6 Oct 2020 12:05:34 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id u8so16266563lff.1;
+        Tue, 06 Oct 2020 12:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dbgm9EPpdn69MOQOGW1NmOkPRWAvrhHZv3YgGUWUYO4=;
+        b=nCuVvffNUqX3JHoJTL9N3FEG+N30Jd67eXqBiN11gRdobkj619iU7qnZfhWN2CSEyh
+         IyJhCzb9gliT0Hm24v2E+9076qVfyt08uSMi6g502CXaooTTt/s/riIq+fnwdt+LvWw0
+         xg3lQ5LM38VN/83InIxsW33CTndDLDt+uLVSrAjiy/Hfbj5tuhMO1vb46/88sGJbPmoQ
+         oLcQokDa8/8s7nHNZYPUE2LqIkKukXI64kI/Bg3Yltk58eNsCaVVZTNWK8AliJwUJCjF
+         znWN2uG/Bfym9eoD6L5xgV4Nl6YUxKrN5p3FXF+KqjJ34pWwSGy2ypFvtUCAWjcmOC3O
+         x2RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dbgm9EPpdn69MOQOGW1NmOkPRWAvrhHZv3YgGUWUYO4=;
+        b=Uzxp3uARMDC6WwQV5yzziD44cjP0oQxNtUcj1kUG2Y0cjCKXpUrPDwViVnD1iAe4lZ
+         zeFtufERoLvtc0vXWGfqsh9p24f93moAEFqpCZ57D49cEBguJ0S47xnfElTdP+cIguR3
+         k+Bzj+aVXM6/kp+62PjQ24nXaP5Nnh70ot6COJbfj4exvcJWxF6YEIgXDyOObbGrswOO
+         Tpv4Xk7IEuPtH0+HO8xMxQ8Qa06yCmz60XxmGuZtc/MqTQMKUbeh+lxwqv7z8ijNEZTT
+         6Ikp1mDECjVCSoLDFPyYW0geUcI02wDrfBq5gGBjaq3YDiR/GC/58g5i7jjPnTauAA01
+         tkFA==
+X-Gm-Message-State: AOAM532jgeylR6abF9/s0LHMjW7elemkIo8gH115puiODQ46NysOzWoD
+        +rtAYa5lxWgere7ximHUHucPJJKbkt2cqNvun4U=
+X-Google-Smtp-Source: ABdhPJwjRtjH65ntww7uSgF852KSTpZTpwRT5o9+a5Afmw3wub9NAuaJ2GJkzguay1vK1/vQdch8KAwchaYlo+9Ohr4=
+X-Received: by 2002:a19:8457:: with SMTP id g84mr890012lfd.500.1602011132919;
+ Tue, 06 Oct 2020 12:05:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20200929235049.2533242-1-haoluo@google.com> <20200929235049.2533242-2-haoluo@google.com>
+In-Reply-To: <20200929235049.2533242-2-haoluo@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 6 Oct 2020 12:05:21 -0700
+Message-ID: <CAADnVQKc4m6X62udhpPE3EBBvuOA2ngyWSOKQ7fc-rtqdeQj6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/6] bpf: Introduce pseudo_btf_id
+To:     Hao Luo <haoluo@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2 Oct 2020, Kees Cook wrote:
+On Tue, Sep 29, 2020 at 4:50 PM Hao Luo <haoluo@google.com> wrote:
+>
+> -       ret = replace_map_fd_with_map_ptr(env);
+> -       if (ret < 0)
+> -               goto skip_full_check;
+> -
+>         if (bpf_prog_is_dev_bound(env->prog->aux)) {
+>                 ret = bpf_prog_offload_verifier_prep(env->prog);
+>                 if (ret)
+> @@ -11662,6 +11757,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+>         if (ret)
+>                 goto skip_full_check;
+>
+> +       ret = resolve_pseudo_ldimm64(env);
+> +       if (ret < 0)
+> +               goto skip_full_check;
+> +
 
-> FIRMWARE_PREALLOC_BUFFER is a "how", not a "what", and confuses the LSMs
-> that are interested in filtering between types of things. The "how"
-> should be an internal detail made uninteresting to the LSMs.
-> 
-> Fixes: a098ecd2fa7d ("firmware: support loading into a pre-allocated buffer")
-> Fixes: fd90bc559bfb ("ima: based on policy verify firmware signatures (pre-allocated buffer)")
-> Fixes: 4f0496d8ffa3 ("ima: based on policy warn about loading firmware (pre-allocated buffer)")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Acked-by: Scott Branden <scott.branden@broadcom.com>
-> Cc: stable@vger.kernel.org
+Hao,
 
+this change broke several tests in test_verifier:
+#21/u empty prog FAIL
+Unexpected error message!
+    EXP: unknown opcode 00
+    RES: last insn is not an exit or jmp
 
-Reviewed-by: James Morris <jamorris@linux.microsoft.com>
+#656/u test5 ld_imm64 FAIL
+Unexpected error message!
+    EXP: invalid bpf_ld_imm64 insn
+    RES: last insn is not an exit or jmp
 
+#656/p test5 ld_imm64 FAIL
+Unexpected error message!
+    EXP: invalid bpf_ld_imm64 insn
+    RES: last insn is not an exit or jmp
 
--- 
-James Morris
-<jmorris@namei.org>
-
+Please send a fix.
+Thanks
