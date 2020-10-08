@@ -5,60 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D17AC4363A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Oct 2020 12:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F70C46466
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Oct 2020 12:27:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDFF9217BA
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Oct 2020 12:27:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1527217BA
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Oct 2020 12:27:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="EpjWpUPD"
+	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="IEUspo+N"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729968AbgJHM1Q (ORCPT
+        id S1729980AbgJHM1V (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 8 Oct 2020 08:27:16 -0400
-Received: from mail-eopbgr70138.outbound.protection.outlook.com ([40.107.7.138]:59779
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        Thu, 8 Oct 2020 08:27:21 -0400
+Received: from mail-eopbgr30090.outbound.protection.outlook.com ([40.107.3.90]:33432
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729962AbgJHM1O (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Oct 2020 08:27:14 -0400
+        id S1729963AbgJHM1Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 8 Oct 2020 08:27:16 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QEClyS21qHYvr+WiTjSKtELnJFD7solx2dpBN5Q0MY2tN0qd59Hvy/ptGxFdMvlhuaudubOeZlinZn1WVN24BXmL1m5Ncobf7ntG6Q4YPcbZLNUkZNMDfYORi0ZeJ/QuCufY5rp4rZMl4gJsXXM+UP/Gm3AeOfgCK5JJhly6vmK3+/pGBME0X7se2I/9G0cwPihlyxLlx9lVNpm9fe1RDVbrr1OsPBBhpHGGKIAAPYSnCdd3BbD0DJkIgDiDXHADl0bTE9swaqyZKFJTGFtuBi2xXE1IAdDma3D4Xj0n360/GIB4OvtpoKf21q/i9fLEsqAeOGzz/Uwwd8EjiqKuAw==
+ b=O9UOlTcX740sKR95rQsLBpVP6WFvvDFQHHVRiEYM/duf8LMnJc17yW5Bq+gyXQSuBhKpPSP1OoJ7KfVMHGNzmNNXEiz0m/uaW55KzunIOxtUn/vbL3JwCyiMZeb/7V+jMpLCZFxGRfjTzyZwKsWchnqcoCqC/2IDGRpSukgEFyxgtBA8jlqw26kWqaK4/4i6QoEjY6Xui53eRd9aDKa9wtBn4Ds2YnDPh0Hu8ClW4loTNNCvyexhtIFWB78ICpxYowEqPxXjsCbTYarZAa3KRMc1RMDohDA/b+OtQFVt3di7glz+gEbSTSS6w4lIG/tHTezFqh2GTHb92MNZqBkiNg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eeuCNWQN9zksOYRDjokWNtTDANbB0ABqJMbNXINb4b8=;
- b=n0H4aEJ237xKYH48Cf3c4EpcsZoIe/U6s1+xtHpI0bZTtMjWarjvn39hRcZP/XqOdIE6gDZMqHhxtvZ+uFTDOZdDYa9Wp+kcfqmLyRmwT4Wd62JfhqePdh5JfaztYedkJ/C9B9aJO2dki9+bnhTNUSCQvpDNNJk1BdiwqvDmL0WutpecYs8xkyKDh6GrJo0g4Vnx7JBN6NF6tZRoBcn/Upcym8ZRpiBDkvAPU5tmAHabYY6v2zdjnOgaOinYHR43VRu0cJbcqPloWKfiUQ9y8uVc69pzXB7ybC6VJAtAK7SE/+vBcMdLbRFEJdml1DIv2lVS8ikJQEVWIywZLlDGpw==
+ bh=0AXQJ/zIQPA6jZaA19ielLnhq2gohOuE5mCfAYzCK1A=;
+ b=Dcmcn5lb6Ka2kfmFzMc6tsV5SkcdZXVZ54E3qccpmRKWZJsyXebt9UhC1EOc0FmV/1gCS8A+vcypwwGIjTYl8VW9G8rfdg+ZjC413J7lnZaJzjctlcWRObERqst5u5cfs949ACvydnQhZjCNKpjoKGX8jVJKsdwzYAWMOMTWkBpRqcjeo3qJvX+lj/24GY77rH/N2NJgemkIf1OF4EHwL/xSagYNlByyVbOA9fBXil3i/Ka5bAnDQQj9YQtdiB47a4YRv12QxMTMwZEZY3yrpH0ygDT1BgTaqp8WqqZdNlxGFagTq9fr1U5CZLAFuHZIc5djtqeNiXJ+ad/zNf6xFQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
  dkim=pass header.d=nokia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
  s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eeuCNWQN9zksOYRDjokWNtTDANbB0ABqJMbNXINb4b8=;
- b=EpjWpUPD0BYT7plnQ7ZGlv0/ElD8/Lnreu7mxhSeHWOCJKRPJYmE9rA17XalcWn8SRq/cjYXe0ofx6Xc/9JMv82ILGB+CEfEI1xgAKH7jKp3JmxD8ZYwcTNzFXPhLdmuiypME4L/iZHZ8BW/YMYQ8uJWmVd9RLAOjcV9DOE8/rE=
+ bh=0AXQJ/zIQPA6jZaA19ielLnhq2gohOuE5mCfAYzCK1A=;
+ b=IEUspo+NktatnSHLOLNgpt/uDs2bem43Rnw7/0aBQM+Y8m60/kMTTMTFya8w84Tnb20/nVp87TAOb1ctHek3CZyL+Kxr5gGnVW2EHK9D/10Iz/cw5LhA218nyYCoLTwTZXedQFEu6tLkz6UmkqjiV5e6pRvCYgguKFVGPGj3+v4=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
 Received: from HE1PR07MB3450.eurprd07.prod.outlook.com (2603:10a6:7:2c::17) by
- HE1PR0701MB2890.eurprd07.prod.outlook.com (2603:10a6:3:4c::9) with Microsoft
+ HE1PR0701MB2347.eurprd07.prod.outlook.com (2603:10a6:3:6f::19) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3477.11; Thu, 8 Oct 2020 12:27:07 +0000
+ 15.20.3477.11; Thu, 8 Oct 2020 12:27:00 +0000
 Received: from HE1PR07MB3450.eurprd07.prod.outlook.com
  ([fe80::eca3:4085:434:e74]) by HE1PR07MB3450.eurprd07.prod.outlook.com
  ([fe80::eca3:4085:434:e74%6]) with mapi id 15.20.3455.023; Thu, 8 Oct 2020
- 12:27:07 +0000
+ 12:27:00 +0000
 From:   Tommi Rantala <tommi.t.rantala@nokia.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>
 Cc:     Tommi Rantala <tommi.t.rantala@nokia.com>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 13/13] selftests: binderfs: use SKIP instead of XFAIL
-Date:   Thu,  8 Oct 2020 15:26:33 +0300
-Message-Id: <20201008122633.687877-14-tommi.t.rantala@nokia.com>
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH 10/13] selftests: proc: fix warning: _GNU_SOURCE redefined
+Date:   Thu,  8 Oct 2020 15:26:30 +0300
+Message-Id: <20201008122633.687877-11-tommi.t.rantala@nokia.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
 References: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
@@ -70,78 +68,80 @@ X-ClientProxiedBy: HE1PR08CA0076.eurprd08.prod.outlook.com
  (2603:10a6:7:2c::17)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from trfedora.emea.nsn-net.net (131.228.2.17) by HE1PR08CA0076.eurprd08.prod.outlook.com (2603:10a6:7:2a::47) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Thu, 8 Oct 2020 12:27:06 +0000
+Received: from trfedora.emea.nsn-net.net (131.228.2.17) by HE1PR08CA0076.eurprd08.prod.outlook.com (2603:10a6:7:2a::47) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Thu, 8 Oct 2020 12:26:59 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b90c13dc-fc07-4eab-258b-08d86b85782a
-X-MS-TrafficTypeDiagnostic: HE1PR0701MB2890:
+X-MS-Office365-Filtering-Correlation-Id: c71a2c5d-6e42-463b-6020-08d86b857440
+X-MS-TrafficTypeDiagnostic: HE1PR0701MB2347:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <HE1PR0701MB2890CE0CC0D2E96C14E1E061B40B0@HE1PR0701MB2890.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-Microsoft-Antispam-PRVS: <HE1PR0701MB23470BEEF7B2777BEF3F527DB40B0@HE1PR0701MB2347.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GXaRemM/R4aTqW46R6H225rmUmQcV1Js1nGjQJh3Q5m4p51Y+OCrN7dIoctzSLnaMN9+7sCpxlthkF7DNoZ1qJMOPzmRUrJCAhJe6LwR+ie0uIKhUxQaHZ3XnbDvUNvbwEzl8eAPYSgQT8u/O/hYKhf98XNLjL7gcKUMPmTOmeqVu0fJpCWTP877UtOAxwtDqiRYXCeTWGCSrpAX5vO3Hc5fM8f9PWzvM0Rto7o11vyqLr24dx58JP/g6pt6rsQwLYfdWNkLw/So4ZlIUopa+uj2Yr6EelsdnOfSm5U26/08C91eTRCXFSjoSHWdrM6a
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR07MB3450.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(396003)(39860400002)(136003)(376002)(4326008)(5660300002)(83380400001)(8676002)(478600001)(16526019)(186003)(26005)(6506007)(86362001)(52116002)(1076003)(103116003)(6512007)(6916009)(2906002)(66946007)(66476007)(66556008)(8936002)(6486002)(36756003)(316002)(2616005)(956004)(54906003)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: pJR6CCu3bXEBaPOLgIHNglil0qVumvtd4OxxCZWBppNf5SOy4uEfvQi2huAJnOmh/S2TuetEpmJWwFEyZoGlCL6kEGC6/Rh60j3+D+LsTQhz5NujHTdBHuU9PFdwVXbi0V60HFzqtaC63yW6pq7f5PnKZ7JqP5P45mj6WVOphYPYjd5BPa1P+QkrQqZwXyNi0/GQwNCRpqAOa0oZ/hLenJL0r7gJ8Gj5ZuuLmVH2sge8a5Ogz+aqQVo6nRKM4cLPySnUwkijkI2f3di4pTmKOf/Nj5M7Z/Cxt+iCelwU2vjkf4y92TNbqD+DbfhG1iv95IpsfcxtzbD4VPldOPQ/uy3qMZsg40PZPWvyyyXiJXUhgRDWfkCGn9T6VEXH34SaT9pq7prCkPF/+/yK8yT4R5uvfmlIcET52JY1133+KEQSXOQfaAFIgsa7W7tEKbsx2OBBVjAdgxd2Yo5xELX7hgIpyxPMRqgceY5fKbgYR6doQK00a2q1rXldaXMx97G47BRlmqOkfdgHt+xvv3gxFyc8QrzToE6e0QGlVURCPX1M+5qLQ7Q8/7pBuz9zQApayW5wzseTZJjcoNFbd/T0oUE4sQIJQh+C5SMiutEgELiGZPxkY2/MgGEkHZg0dsmEagRbiJ5g67JjRu1+tq7iMg==
+X-Microsoft-Antispam-Message-Info: ftUUnHAhw2d86T1ZPSHKFO/0otWY3C2CLR2wJ1Q2culefnpv46DQNUg+saBPA1o/i56kS1l5mFgHy6ucXkYaosuATkIRjfCoUHZmXL+0bF4Iw5HzEPH9i9y6Nbpc7cCH0m/y2JqoLtuYMSwBSuKqOHVCoVWQb/pgtHDNMiyxqnomC5zC8IUevmHhy8VwL4hL+lp4A+2wQkJSMjKxIWflvZHKEsVOZtGOeS8ESnP8tNrReaF1QuggyfwkQC7WfT0E4NTqukR3WX7dl6kWexE7PDMIvbdNaDHQtEnUCWE8/MWW27Zf4wXDEAxTcorx12nIfgDx2uT1Q6x77xo59flQtw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR07MB3450.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(66556008)(66476007)(103116003)(36756003)(5660300002)(6666004)(86362001)(66946007)(2906002)(54906003)(6486002)(4326008)(1076003)(316002)(6512007)(6916009)(26005)(52116002)(8936002)(83380400001)(186003)(478600001)(16526019)(6506007)(8676002)(956004)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: z5e5HB3M2SJsZW3JI6Q4uI1T5wm/DOW0N8ELIaJBLXcb9wuyEzIRamJk5lVfbaA44J1pHdBBHKyefYrOowHYvNPczJxsAGdTCyKJyMXSEinNWUbDfADTFaZlD2FtoYbwV80D/3bLZGlTK0T06SSrhchHkM/jTXOuzDVYfG2j4AUi8VlGc0UNtIWDpWkvHOW8MPxE0h8nJsAYNXcY3CH+NR7PDd3kFbfGnWHZGhwZ79GzXc2G5CyI1oKRg+ec/CQZGlssT033HCmd5HwV07IMnI/PXs37AzlLiuZSMIF6zYPWJsNC+BFrDCYonMTivQvuQEQsL+fdXIPjxnvW19jNDkno4uF0QywMm+A5FfI4+atCI17akZvwV4AAV+4QimIapq/MByGmC0xe9lNtb1+Iypih1VYvhuGX1U0pp8SgCr/sPAeavekbxzpavI5V8YfSiLl0ejXwPtlsP3u5tUwOg4xPMvS9S/jfMzsaKuTt3kB6lNneB+YcdJFZxVQzFeFxZE2002sYNlajGyJYdrXFzggGh3zpsNlvYgkc4acopcky9QtVQz4CTKTM51RtdYYoAnQhpeTz2fAO5K5r0tXlCG+zU4us8LICv3fmEpWMbdcUESRMUcCrJJADDc90mvehwdv1+d2vlIOILfL9Fcx+hw==
 X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b90c13dc-fc07-4eab-258b-08d86b85782a
+X-MS-Exchange-CrossTenant-Network-Message-Id: c71a2c5d-6e42-463b-6020-08d86b857440
 X-MS-Exchange-CrossTenant-AuthSource: HE1PR07MB3450.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2020 12:27:06.8712
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2020 12:27:00.5139
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7ATaAHrAw4PxS8Y87Fvfkya6cxB7pxAnPvuxk5HbdecClvBmklG8UHc0r6YtTmAsJqdaevw63RRDNSyOI6ep5YtAVnl4Hbn+x7iSYzOu1aI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0701MB2890
+X-MS-Exchange-CrossTenant-UserPrincipalName: fytmCR4InArBmABdXuRMQjLCddLOqcAu2gkIvAVIvMhEdiILVHa1iArDS4fp5xK2JCWPyiju1YllEslJWklFjXFtLdjK/yk0JRSPBsIl2Rg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0701MB2347
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-XFAIL is gone since 9847d24af95c ("selftests/harness: Refactor XFAIL
-into SKIP"), use SKIP instead.
+Makefile already contains -D_GNU_SOURCE, so we can remove it from the
+*.c files.
 
-Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
 Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
 ---
- .../selftests/filesystems/binderfs/binderfs_test.c        | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/proc/proc-loadavg-001.c  | 1 -
+ tools/testing/selftests/proc/proc-self-syscall.c | 1 -
+ tools/testing/selftests/proc/proc-uptime-002.c   | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-index 1d27f52c61e6..477cbb042f5b 100644
---- a/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-+++ b/tools/testing/selftests/filesystems/binderfs/binderfs_test.c
-@@ -74,7 +74,7 @@ static int __do_binderfs_test(struct __test_metadata *_metadata)
- 	ret = mount(NULL, binderfs_mntpt, "binder", 0, 0);
- 	EXPECT_EQ(ret, 0) {
- 		if (errno == ENODEV)
--			XFAIL(goto out, "binderfs missing");
-+			SKIP(goto out, "binderfs missing");
- 		TH_LOG("%s - Failed to mount binderfs", strerror(errno));
- 		goto rmdir;
- 	}
-@@ -475,10 +475,10 @@ TEST(binderfs_stress)
- TEST(binderfs_test_privileged)
- {
- 	if (geteuid() != 0)
--		XFAIL(return, "Tests are not run as root. Skipping privileged tests");
-+		SKIP(return, "Tests are not run as root. Skipping privileged tests");
- 
- 	if (__do_binderfs_test(_metadata))
--		XFAIL(return, "The Android binderfs filesystem is not available");
-+		SKIP(return, "The Android binderfs filesystem is not available");
- }
- 
- TEST(binderfs_test_unprivileged)
-@@ -511,7 +511,7 @@ TEST(binderfs_test_unprivileged)
- 	ret = wait_for_pid(pid);
- 	if (ret) {
- 		if (ret == 2)
--			XFAIL(return, "The Android binderfs filesystem is not available");
-+			SKIP(return, "The Android binderfs filesystem is not available");
- 		ASSERT_EQ(ret, 0) {
- 			TH_LOG("wait_for_pid() failed");
- 		}
+diff --git a/tools/testing/selftests/proc/proc-loadavg-001.c b/tools/testing/selftests/proc/proc-loadavg-001.c
+index 471e2aa28077..fb4fe9188806 100644
+--- a/tools/testing/selftests/proc/proc-loadavg-001.c
++++ b/tools/testing/selftests/proc/proc-loadavg-001.c
+@@ -14,7 +14,6 @@
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ /* Test that /proc/loadavg correctly reports last pid in pid namespace. */
+-#define _GNU_SOURCE
+ #include <errno.h>
+ #include <sched.h>
+ #include <sys/types.h>
+diff --git a/tools/testing/selftests/proc/proc-self-syscall.c b/tools/testing/selftests/proc/proc-self-syscall.c
+index 9f6d000c0245..8511dcfe67c7 100644
+--- a/tools/testing/selftests/proc/proc-self-syscall.c
++++ b/tools/testing/selftests/proc/proc-self-syscall.c
+@@ -13,7 +13,6 @@
+  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+-#define _GNU_SOURCE
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ #include <sys/types.h>
+diff --git a/tools/testing/selftests/proc/proc-uptime-002.c b/tools/testing/selftests/proc/proc-uptime-002.c
+index 30e2b7849089..e7ceabed7f51 100644
+--- a/tools/testing/selftests/proc/proc-uptime-002.c
++++ b/tools/testing/selftests/proc/proc-uptime-002.c
+@@ -15,7 +15,6 @@
+  */
+ // Test that values in /proc/uptime increment monotonically
+ // while shifting across CPUs.
+-#define _GNU_SOURCE
+ #undef NDEBUG
+ #include <assert.h>
+ #include <unistd.h>
 -- 
 2.26.2
 
