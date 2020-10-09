@@ -2,55 +2,113 @@ Return-Path: <SRS0=cfcg=DQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F3D5C433E7
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 09:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74D22C433E7
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 09:58:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 463F62225A
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 09:44:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 114BD2226B
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 09:58:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731012AbgJIJo2 (ORCPT
+        id S2387400AbgJIJ6Q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Oct 2020 05:44:28 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53937 "EHLO
+        Fri, 9 Oct 2020 05:58:16 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54230 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbgJIJo2 (ORCPT
+        with ESMTP id S1726357AbgJIJ6Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Oct 2020 05:44:28 -0400
-Received: from [81.92.17.130] (helo=wittgenstein)
+        Fri, 9 Oct 2020 05:58:16 -0400
+Received: from [81.92.17.135] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kQowt-0006EX-GB; Fri, 09 Oct 2020 09:44:27 +0000
-Date:   Fri, 9 Oct 2020 11:44:26 +0200
+        id 1kQpAC-00078I-DG; Fri, 09 Oct 2020 09:58:12 +0000
+Date:   Fri, 9 Oct 2020 11:58:11 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Tommi Rantala <tommi.t.rantala@nokia.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH 11/13] selftests: core: use SKIP instead of XFAIL in
- close_range_test.c
-Message-ID: <20201009094426.luu53pbhr5woo7eg@wittgenstein>
-References: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
- <20201008122633.687877-12-tommi.t.rantala@nokia.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
+        lkft-triage@lists.linaro.org
+Subject: Re: selftests: pidfd: pidfd_wait hangs on linux next kernel on all
+ devices
+Message-ID: <20201009095811.inrr6yrnbg2ke5gh@wittgenstein>
+References: <CA+G9fYtF44bTzjswt26tOwfEQxrWvcSOROmEtH0HKfGn24QbRQ@mail.gmail.com>
+ <20200924143317.getruzwu423g3o3e@wittgenstein>
+ <20200924162126.mbthwz32w7rba7oe@wittgenstein>
+ <CA+G9fYsEwvzW1yLsPtiETGzcEnMSsEdU-0r_OJ+S6h9Bbsntqg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201008122633.687877-12-tommi.t.rantala@nokia.com>
+In-Reply-To: <CA+G9fYsEwvzW1yLsPtiETGzcEnMSsEdU-0r_OJ+S6h9Bbsntqg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 03:26:31PM +0300, Tommi Rantala wrote:
-> XFAIL is gone since 9847d24af95c ("selftests/harness: Refactor XFAIL
-> into SKIP"), use SKIP instead.
+On Fri, Oct 02, 2020 at 11:01:34PM +0530, Naresh Kamboju wrote:
+> On Thu, 24 Sep 2020 at 21:51, Christian Brauner
+> <christian.brauner@ubuntu.com> wrote:
+> >
+> > On Thu, Sep 24, 2020 at 04:33:17PM +0200, Christian Brauner wrote:
+> > > On Wed, Sep 23, 2020 at 07:52:05PM +0530, Naresh Kamboju wrote:
+> > > > selftests: pidfd: pidfd_wait hangs on linux next kernel on x86_64,
+> > > > i386 and arm64 Juno-r2
+> > > > These devices are using NFS mounted rootfs.
+> > > > I have tested pidfd testcases independently and all test PASS.
+> > > >
+> > > > The Hang or exit from test run noticed when run by run_kselftest.sh
+> > > >
+> > > > pidfd_wait.c:208:wait_nonblock:Expected sys_waitid(P_PIDFD, pidfd,
+> > > > &info, WSTOPPED, NULL) (-1) == 0 (0)
+> > > > wait_nonblock: Test terminated by assertion
+> > > >
+> > > > metadata:
+> > > >   git branch: master
+> > > >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > > >   git commit: e64997027d5f171148687e58b78c8b3c869a6158
+> > > >   git describe: next-20200922
+> > > >   make_kernelversion: 5.9.0-rc6
+> > > >   kernel-config:
+> > > > http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/865/config
+> > > >
+> > > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > >
+> > > Thanks for reproting this. I'm taking a look now!
+> >
+> > Ok, this is a simple race in the selftests, that I overlooked and which
+> > is more likely to hit when there's a lot of processes running on the
+> > system. Basically the child process hasn't SIGSTOPed itself yet but the
+> > parent is already calling waitid() on a O_NONBLOCK pidfd. Since it
+> > doesn't find a WSTOPPED process it returns -EAGAIN correctly.
+> >
+> > The fix for this is to move the line where we're removing the O_NONBLOCK
+> > property from the fd before the waitid() WSTOPPED call so we hang until
+> > the child becomes stopped.
+> >
+> > So I believe the fix is:
 > 
-> Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
-> Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
-> ---
+> I have tested this patch and the pidfd_wait test did not hang this time.
+> 
+> Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> 
+> test log link
+> https://lkft.validation.linaro.org/scheduler/job/1813223
 
-Thanks!
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Thanks for testing, Naresh. I've applied the patch:
+https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/commit/?h=pidfd_o_nonblock&id=01361b665a26ef0c087e53f14cf310d1cfe0cf98
+
+Christian
