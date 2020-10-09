@@ -2,66 +2,168 @@ Return-Path: <SRS0=cfcg=DQ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EE67C43457
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 12:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31B16C433DF
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 15:56:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CD76222B9
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 12:07:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA913222C2
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 15:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602259000;
+	bh=c8+49jdbSRsr1R3XfNyz1NWuzUjdF9sgS+SLjJrvCiY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=jJKS42rmuaaDD2T6MpzlGW5VTX8JpYc++IlT15qY3eDl+TwE+xLL/5TA8+ATv0fDo
+	 nfWDOk7H+/kE79l18ZHGwtCN8tEE8ax7lfEyNI/4l+z967n9lzvDxGfk4wjcmYL8Kw
+	 mPS3X1gow4N3eqrTSiD+tnB6cEk5e4FL+IkILEZU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732995AbgJIMHT (ORCPT
+        id S2389517AbgJIP4V (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Oct 2020 08:07:19 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57156 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730726AbgJIMHT (ORCPT
+        Fri, 9 Oct 2020 11:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389355AbgJIP4O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Oct 2020 08:07:19 -0400
-Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kQrB7-0008Oj-Q5; Fri, 09 Oct 2020 12:07:17 +0000
-Date:   Fri, 9 Oct 2020 14:07:17 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Tommi Rantala <tommi.t.rantala@nokia.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [PATCH 00/13] selftests fixes
-Message-ID: <20201009120717.qerrilcv4tp53on4@wittgenstein>
-References: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
+        Fri, 9 Oct 2020 11:56:14 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDDC0613D6
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2020 08:56:13 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id q21so9399196ota.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2020 08:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NhVKT+1Dp3cLQ927y3IeE45PijqPHl/y1tcL0VMnAkY=;
+        b=MJ59A2zSUmOd4vH98m00yfAlFCElHYcQzDfBMYHrVQy7lR2WZx36tRcnEIiex/HpTh
+         psiwZkcYnFqUu7CqyFJf/2WggvVUrR8lhitdRnQgqBvey72k6+WleuW5MyqR1ij81nka
+         s1sooOAOzyxbgRa3UcAAW84OfUXQpR1PvmUpI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NhVKT+1Dp3cLQ927y3IeE45PijqPHl/y1tcL0VMnAkY=;
+        b=aI87CwbuB6NIEZyFAdrlRiJN1ziu99XY5v2h4PkHY2icxr2HfiFCkk+7a1HYjs7l+J
+         Yvr42cf9s9mOQDgFRdWhteCIXHvaVgZyGs+qj2YOX++vcCN9rsXovhNlPV6oMSoERJQX
+         N6qWRfGh+ITIRdyy3oDGnM96B5qTwKcfDnvjl03EvaHnOoLRUCEi6hmqIfeR4F0JarwO
+         zWmn5spBFOOMAVPyShIquzZEr1xHte5QVOB91O5rIo4jLHgjgferAMz7EZiWRV+OD7xt
+         eyJl/ukVSK8Ynhq9qGaq1zJck65pXRXQpFctkRtkGqUX9xeosolhf/wZORyPUodRwsCG
+         PM8A==
+X-Gm-Message-State: AOAM533WzdeVuengUEfWNNltswr9VO5uV+7eNaH4Gdkp5ogC83OWGP7o
+        HoFS/T8Z9muIy3SfGz+PyPhE1A==
+X-Google-Smtp-Source: ABdhPJxStfMuXX1WzYtWLp3zKvwHlUVTk033Hdfs1+nAN/BlfU0MSSy8ICasd76nlLmEKo4UR+BpUQ==
+X-Received: by 2002:a05:6830:1d75:: with SMTP id l21mr8771101oti.89.1602258972855;
+        Fri, 09 Oct 2020 08:56:12 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e7sm7347246oia.9.2020.10.09.08.56.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 08:56:12 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, keescook@chromium.org, gregkh@linuxfoundation.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 02/11] selftests:lib:test_counters: add new test for counters
+Date:   Fri,  9 Oct 2020 09:55:57 -0600
+Message-Id: <688424d7ff981d34523cd6794d7ce3c27cfe57b4.1602209970.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1602209970.git.skhan@linuxfoundation.org>
+References: <cover.1602209970.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 03:26:20PM +0300, Tommi Rantala wrote:
-> Hi, small fixes to issues I hit with selftests.
-> 
-> Tommi Rantala (13):
->   selftests: filter kselftest headers from command in lib.mk
->   selftests: pidfd: fix compilation errors due to wait.h
->   selftests: add vmaccess to .gitignore
->   selftests/harness: prettify SKIP message whitespace again
->   selftests: pidfd: use ksft_test_result_skip() when skipping test
->   selftests: pidfd: skip test on kcmp() ENOSYS
->   selftests: pidfd: add CONFIG_CHECKPOINT_RESTORE=y to config
->   selftests: pidfd: drop needless linux/kcmp.h inclusion in
->     pidfd_setns_test.c
->   selftests: android: fix multiple definition of sock_name
->   selftests: proc: fix warning: _GNU_SOURCE redefined
->   selftests: core: use SKIP instead of XFAIL in close_range_test.c
->   selftests: clone3: use SKIP instead of XFAIL
->   selftests: binderfs: use SKIP instead of XFAIL
+Add a new selftest for testing counter_atomic* Counters API. This test
+load test_counters test modules and unloads.
 
-This mostly deals with stuff I maintain but it can go via the selftest
-tree, thanks!
+The test module runs tests and prints results in dmesg.
 
-Christian
+There are a number of atomic_t usages in the kernel where atomic_t api
+is used strictly for counting and not for managing object lifetime. In
+some cases, atomic_t might not even be needed.
+
+The purpose of these counters is to clearly differentiate atomic_t
+counters from atomic_t usages that guard object lifetimes, hence prone
+to overflow and underflow errors. It allows tools that scan for underflow
+and overflow on atomic_t usages to detect overflow and underflows to scan
+just the cases that are prone to errors.
+
+Simple atomic counters api provides interfaces for simple atomic counters
+that just count, and don't guard resource lifetimes. The interfaces are
+built on top of atomic_t api, providing a smaller subset of atomic_t
+interfaces necessary to support simple counters.
+
+Counter wraps around to INT_MIN when it overflows and should not be used
+to guard resource lifetimes, device usage and open counts that control
+state changes, and pm states. Overflowing to INT_MIN is consistent with
+the atomic_t api, which it is built on top of.
+
+Using counter_atomic* to guard lifetimes could lead to use-after free
+when it overflows and undefined behavior when used to manage state
+changes and device usage/open states.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ MAINTAINERS                                  |  1 +
+ tools/testing/selftests/lib/Makefile         |  1 +
+ tools/testing/selftests/lib/config           |  1 +
+ tools/testing/selftests/lib/test_counters.sh | 10 ++++++++++
+ 4 files changed, 13 insertions(+)
+ create mode 100755 tools/testing/selftests/lib/test_counters.sh
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4e82d0ffcab0..26719b8dd48e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15845,6 +15845,7 @@ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	include/linux/counters.h
+ F:	lib/test_counters.c
++F:	tools/testing/selftests/lib/test_counters.sh
+ 
+ SIMPLE FIRMWARE INTERFACE (SFI)
+ S:	Obsolete
+diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
+index a105f094676e..e8960d7934e2 100644
+--- a/tools/testing/selftests/lib/Makefile
++++ b/tools/testing/selftests/lib/Makefile
+@@ -5,5 +5,6 @@
+ all:
+ 
+ TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
++TEST_PROGS += test_counters.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
+index b80ee3f6e265..6ed25024d371 100644
+--- a/tools/testing/selftests/lib/config
++++ b/tools/testing/selftests/lib/config
+@@ -3,3 +3,4 @@ CONFIG_TEST_BITMAP=m
+ CONFIG_PRIME_NUMBERS=m
+ CONFIG_TEST_STRSCPY=m
+ CONFIG_TEST_BITOPS=m
++CONFIG_TEST_COUNTERS=m
+diff --git a/tools/testing/selftests/lib/test_counters.sh b/tools/testing/selftests/lib/test_counters.sh
+new file mode 100755
+index 000000000000..78726cad5c7a
+--- /dev/null
++++ b/tools/testing/selftests/lib/test_counters.sh
+@@ -0,0 +1,10 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2020 Shuah Khan <skhan@linuxfoundation.org>
++# Copyright (c) 2020 The Linux Foundation
++#
++# Tests the Simple Atomic Counters interfaces using test_counters
++# kernel module
++#
++$(dirname $0)/../kselftest/module.sh "test_counters" test_counters
+-- 
+2.25.1
+
