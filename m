@@ -6,67 +6,49 @@ X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA8B1C433DF
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 12:03:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 941A8C433E7
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 12:04:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F203222B8
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 12:03:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D9FE222B8
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Oct 2020 12:04:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732456AbgJIMDm (ORCPT
+        id S1729347AbgJIMEX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Oct 2020 08:03:42 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57010 "EHLO
+        Fri, 9 Oct 2020 08:04:23 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57055 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgJIMDm (ORCPT
+        with ESMTP id S1726118AbgJIMEX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Oct 2020 08:03:42 -0400
+        Fri, 9 Oct 2020 08:04:23 -0400
 Received: from ip5f5af0a0.dynamic.kabel-deutschland.de ([95.90.240.160] helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1kQr7c-00083q-DF; Fri, 09 Oct 2020 12:03:40 +0000
-Date:   Fri, 9 Oct 2020 14:03:39 +0200
+        id 1kQr8H-00087a-HZ; Fri, 09 Oct 2020 12:04:21 +0000
+Date:   Fri, 9 Oct 2020 14:04:20 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     Tommi Rantala <tommi.t.rantala@nokia.com>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Christian Brauner <christian@brauner.io>
-Subject: Re: [PATCH 05/13] selftests: pidfd: use ksft_test_result_skip() when
- skipping test
-Message-ID: <20201009120339.vcg6vds2frawu7b6@wittgenstein>
+Subject: Re: [PATCH 06/13] selftests: pidfd: skip test on kcmp() ENOSYS
+Message-ID: <20201009120420.5ns2mq5f6eur6lu4@wittgenstein>
 References: <20201008122633.687877-1-tommi.t.rantala@nokia.com>
- <20201008122633.687877-6-tommi.t.rantala@nokia.com>
+ <20201008122633.687877-7-tommi.t.rantala@nokia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201008122633.687877-6-tommi.t.rantala@nokia.com>
+In-Reply-To: <20201008122633.687877-7-tommi.t.rantala@nokia.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 08, 2020 at 03:26:25PM +0300, Tommi Rantala wrote:
-> There's planned tests != run tests in pidfd_test when some test is
-> skipped:
-> 
->   $ ./pidfd_test
->   TAP version 13
->   1..8
->   [...]
->   # pidfd_send_signal signal recycled pid test: Skipping test
->   # Planned tests != run tests (8 != 7)
->   # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> Fix by using ksft_test_result_skip():
-> 
->   $ ./pidfd_test
->   TAP version 13
->   1..8
->   [...]
->   ok 8 # SKIP pidfd_send_signal signal recycled pid test: Unsharing pid namespace not permitted
->   # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:1 error:0
+On Thu, Oct 08, 2020 at 03:26:26PM +0300, Tommi Rantala wrote:
+> Skip test if kcmp() is not available, for example if kernel is compiled
+> without CONFIG_CHECKPOINT_RESTORE=y.
 > 
 > Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
 > ---
 
-Thanks, I never got around to fixing this myself.
+Good catch, thanks!
 Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
