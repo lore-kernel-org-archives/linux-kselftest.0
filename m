@@ -2,117 +2,184 @@ Return-Path: <SRS0=4bWI=DR=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0ABDC433E7
-	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Oct 2020 05:45:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3A32C43457
+	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Oct 2020 22:56:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94ED2207FB
-	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Oct 2020 05:45:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83C6520795
+	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Oct 2020 22:56:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Igmi6UxL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S0bHV9R8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730833AbgJJFpd (ORCPT
+        id S2390282AbgJJW4w (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 10 Oct 2020 01:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        Sat, 10 Oct 2020 18:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730825AbgJJFnv (ORCPT
+        with ESMTP id S1731400AbgJJTT1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 10 Oct 2020 01:43:51 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF553C0613D0
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Oct 2020 22:43:39 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d6so5510174plo.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Oct 2020 22:43:39 -0700 (PDT)
+        Sat, 10 Oct 2020 15:19:27 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B21AC05BD25;
+        Sat, 10 Oct 2020 07:56:08 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id l18so726678pgg.0;
+        Sat, 10 Oct 2020 07:56:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kFwAQEfRAq8FtPUZLvTkvSzxZYBk8EF9wpuaJH7X7GY=;
-        b=Igmi6UxLzccnc2TE+34dHjbp7LfrvPqUECDYUDNjjBAoj8bFcnZ3pUuS4pD13CdsnD
-         JTufCaRuZFI8EFfJd0gdMJpn9Ymuq8gsJ4kXo/OjGkmniazSyqGkzY/shaG/K6cCv3+V
-         /8k3/Y/OYtNOGCnAvebc9+0xVEXF+Cx9VXwm6LrtTxmPD068srK1ZYPmeT53A/+g5zyw
-         q5YUatkkQx02jtC1/dVLADaxbFPPpgVNk2HnFKYkk/x1lwooJUsK84UOeU5l2DMYsS2N
-         eXZMnpTWTG3t5oF8FcwupyOdGPoaRDLhOQq7RjubF48NNKCi4OTSZOhTqkONO1++xdLW
-         IYKg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sGNQhmhArB3UYXjNX9OpITFlGmNkphwKVloKhJ0FzDk=;
+        b=S0bHV9R8IhVO9EMs0iK7yrbR9/nG29nDS7qurazS5LxD8zbNK3TonOw+ODuwYkr0Xz
+         iAz6LIcuk3FOv+wYDLTUYGdlgftQHT6fH4JA+X76wXWQzQNbuIfCB4pkkDfB11e/EXcS
+         caPiNhdvF920dM+R+qVUOmbfG6kDe12QiytZyXlMmgMLBEnI62woruxD1K0mC+UiTHd0
+         gN+Jq8PKyKrY2n6lL494N13JOjevEzTZbFGelaqVhCsw8NVJhTUkHotnbUGCG58qaWs9
+         XaHEViNfP3r83XE3caXzP/F+2iRylYzLc4FhHD1DUBMleXO9DDAZAcvT6fDYhVHJQUGb
+         lx/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kFwAQEfRAq8FtPUZLvTkvSzxZYBk8EF9wpuaJH7X7GY=;
-        b=t3UfwUQnWSeyjQvl8fcNgRVaPwGZ5pqhoIcU59eoFMNwtwlmsyl28/2460Z00oM53f
-         FWCQfzVfqdT6UHxhotQBVIIEQf6XS5AYxZlK/4fY/Ri8RNcx5jUo6AEKB2UwptOhNPzh
-         6wIuAsJtDx9D7gwjsbqxdwMIh3dkr5IvWFwynX4frFn7w5gCqTGuUii0KOy8a5GHlMiI
-         ytA7bv4IGo+HnyBw6WHBnpjKICYjrb8HSUSvDs5BZz5i9SxdGH1XThP6+R1vcD2KCXV2
-         WSZHKwO6w/kWXOEoM8rmILptb1IClM3L3iYt2oCG9EMbJnISINaTZZc5YQs594rwIXXV
-         PQEg==
-X-Gm-Message-State: AOAM531teomrLjZazsnBGv8CekSvhuRqOEsN0v66cl3OfU7+CAjmPtnm
-        EB7cBrGL9glnRCtLvmmZiMXXwhcB2Uw1pDiEMRWbpg==
-X-Google-Smtp-Source: ABdhPJwXfmNuJgEHIdyho6pdwZBoaygjLew4trl1rGVoAGD6VfneLi3tBm/wiT7MqbfIZaH5DN3JlWSsYhRH9SqwjAw=
-X-Received: by 2002:a17:902:7087:b029:d3:f1e5:b629 with SMTP id
- z7-20020a1709027087b02900d3f1e5b629mr14635001plk.51.1602308618238; Fri, 09
- Oct 2020 22:43:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200729175849.148332-1-vitor@massaru.org> <CAFd5g47s09BfsqNx2RY1Zdp-TC4KbKgsMgr9-SHv1Nf6P9vAMQ@mail.gmail.com>
- <cfcb01c087fdd9f22a875721444a7659bceec05f.camel@sipsolutions.net>
-In-Reply-To: <cfcb01c087fdd9f22a875721444a7659bceec05f.camel@sipsolutions.net>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 9 Oct 2020 22:43:27 -0700
-Message-ID: <CAFd5g45o-tiDCmbeoo2KEF0bSqsFUpULgmgEGf=ra+eYHm30xA@mail.gmail.com>
-Subject: Re: [PATCH] lib: kunit: add bitfield test conversion to KUnit
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Vitor Massaru Iha <vitor@massaru.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sGNQhmhArB3UYXjNX9OpITFlGmNkphwKVloKhJ0FzDk=;
+        b=Cn8UeYjPCMTxCh5fDnjKFPbOzIpAyK966BViEDTCYxek01hulEN+DaHOXZ+X2Js+3l
+         +nOF8QLtzkGi+NqbuuWVATL9TjRhPmv9+fFX2/PUDB4cMQ7qUKdp6X19sFxv2iKiBKKc
+         KihSmOa3VbLJzjo03PUxKUtPRYAaET+zlGBxkAaIZiy5EyRC+bbNiDMCuWKKASUZLBBp
+         M5IPFFTwMon1myn54jO6ssS/TakIDv8YJStLpW031aB8vJlK1DBmqKUGZ8w16q4kX+Ll
+         XcCz8eilqCyJdShdeaqTh79Ev2rlG6OyI+yVGzblgPSy/Qm1MKysmPAi+ESGbyxEl1I7
+         jmCQ==
+X-Gm-Message-State: AOAM532lf2SfHE/vpGSskgZDbDgGl3T2oUgPGXbfOjtbXuqduyW91OoO
+        7xsXaTMHyATb3RLIM+23JxI=
+X-Google-Smtp-Source: ABdhPJwCEv+ay9FATziABv5KBkBcSRyRNFrawVj/C+EPxIiukIjt9wNklPDflMWdoEMYv4NU11s6cg==
+X-Received: by 2002:a17:90a:b902:: with SMTP id p2mr10309905pjr.15.1602341768089;
+        Sat, 10 Oct 2020 07:56:08 -0700 (PDT)
+Received: from arpitha-Inspiron-7570.lan ([106.51.240.187])
+        by smtp.gmail.com with ESMTPSA id j19sm14304252pfi.51.2020.10.10.07.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Oct 2020 07:56:07 -0700 (PDT)
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+To:     brendanhiggins@google.com, skhan@linuxfoundation.org,
+        yzaikin@google.com, elver@google.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel-mentees@lists.linuxfoundation.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kvalo@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] fs: ext4: Modify inode-test.c to use KUnit parameterized testing feature
+Date:   Sat, 10 Oct 2020 20:25:44 +0530
+Message-Id: <20201010145544.61034-1-98.arpi@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201010145357.60886-1-98.arpi@gmail.com>
+References: <20201010145357.60886-1-98.arpi@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 3:00 AM Johannes Berg <johannes@sipsolutions.net> wrote:
->
-> On Wed, 2020-08-19 at 14:10 -0700, Brendan Higgins wrote:
-> > On Wed, Jul 29, 2020 at 10:58 AM Vitor Massaru Iha <vitor@massaru.org> wrote:
-> > > This adds the conversion of the runtime tests of test_bitfield,
-> > > from `lib/test_bitfield.c` to KUnit tests.
-> > >
-> > > Please apply this commit first (linux-kselftest/kunit-fixes):
-> > > 3f37d14b8a3152441f36b6bc74000996679f0998 kunit: kunit_config: Fix parsing of CONFIG options with space
-> > >
-> > > Code Style Documentation: [0]
-> > >
-> > > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
-> > > Link: [0] https://lore.kernel.org/linux-kselftest/20200620054944.167330-1-davidgow@google.com/T/#u
-> >
-> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> >
-> > Probably still want a review from Johannes though.
->
-> Huh, sorry, this slipped through the cracks.
->
-> Yeah, don't really care, looks fine to me? I'm not familiar with the
-> kunit infrastructure much yet.
+Modifies fs/ext4/inode-test.c to use the parameterized testing
+feature of KUnit.
 
-Cool, well in that case I will apply it.
+Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+---
+ fs/ext4/inode-test.c | 64 +++++++++++++++++++++++++-------------------
+ 1 file changed, 36 insertions(+), 28 deletions(-)
 
-> Not sure I see much value in converting TEST_BITFIELD_COMPILE to a
-> KUNIT_CASE though, because anyway it will not compile if you enable
-> that? IOW, just leaving the function there without any KUNIT_CASE()
-> reference to it should be fine and saves you an ifdef ...
+diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
+index d62d802c9c12..691ef0a4ffe1 100644
+--- a/fs/ext4/inode-test.c
++++ b/fs/ext4/inode-test.c
+@@ -72,6 +72,8 @@
+ #define UPPER_BOUND_NONNEG_EXTRA_BITS_1_CASE\
+ 	"2446-05-10 Upper bound of 32bit >=0 timestamp. All extra sec bits on"
+ 
++#define NUMBER_OF_TESTCASES 16
++
+ struct timestamp_expectation {
+ 	const char *test_case_name;
+ 	struct timespec64 expected;
+@@ -101,7 +103,36 @@ static time64_t get_32bit_time(const struct timestamp_expectation * const test)
+  */
+ static void inode_test_xtimestamp_decoding(struct kunit *test)
+ {
+-	const struct timestamp_expectation test_data[] = {
++	struct timespec64 timestamp;
++
++	struct timestamp_expectation *test_data =
++		(struct timestamp_expectation *)get_test_case_parameters(test);
++
++	timestamp.tv_sec = get_32bit_time(test_data);
++	ext4_decode_extra_time(&timestamp,
++			       cpu_to_le32(test_data->extra_bits));
++
++	KUNIT_EXPECT_EQ_MSG(test,
++			    test_data->expected.tv_sec,
++			    timestamp.tv_sec,
++			    CASE_NAME_FORMAT,
++			    test_data->test_case_name,
++			    test_data->msb_set,
++			    test_data->lower_bound,
++			    test_data->extra_bits);
++	KUNIT_EXPECT_EQ_MSG(test,
++			    test_data->expected.tv_nsec,
++			    timestamp.tv_nsec,
++			    CASE_NAME_FORMAT,
++			    test_data->test_case_name,
++			    test_data->msb_set,
++			    test_data->lower_bound,
++			    test_data->extra_bits);
++}
++
++struct timestamp_expectation *get_test_parameters(void)
++{
++	static struct timestamp_expectation test_data[] = {
+ 		{
+ 			.test_case_name = LOWER_BOUND_NEG_NO_EXTRA_BITS_CASE,
+ 			.msb_set = true,
+@@ -231,36 +262,13 @@ static void inode_test_xtimestamp_decoding(struct kunit *test)
+ 			.expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
+ 		}
+ 	};
+-
+-	struct timespec64 timestamp;
+-	int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
+-		timestamp.tv_sec = get_32bit_time(&test_data[i]);
+-		ext4_decode_extra_time(&timestamp,
+-				       cpu_to_le32(test_data[i].extra_bits));
+-
+-		KUNIT_EXPECT_EQ_MSG(test,
+-				    test_data[i].expected.tv_sec,
+-				    timestamp.tv_sec,
+-				    CASE_NAME_FORMAT,
+-				    test_data[i].test_case_name,
+-				    test_data[i].msb_set,
+-				    test_data[i].lower_bound,
+-				    test_data[i].extra_bits);
+-		KUNIT_EXPECT_EQ_MSG(test,
+-				    test_data[i].expected.tv_nsec,
+-				    timestamp.tv_nsec,
+-				    CASE_NAME_FORMAT,
+-				    test_data[i].test_case_name,
+-				    test_data[i].msb_set,
+-				    test_data[i].lower_bound,
+-				    test_data[i].extra_bits);
+-	}
++	return test_data;
+ }
+ 
+ static struct kunit_case ext4_inode_test_cases[] = {
+-	KUNIT_CASE(inode_test_xtimestamp_decoding),
++	KUNIT_CASE_PARAM(inode_test_xtimestamp_decoding,
++			get_test_parameters, NUMBER_OF_TESTCASES,
++			sizeof(struct timestamp_expectation)),
+ 	{}
+ };
+ 
+-- 
+2.25.1
 
-Well I think it is also the case that we only want to count the test
-case if it actually has everything to run; that is a point that is
-somewhat up in the air. David is exploring adding the concept of
-"skipped" tests to KUnit, but we don't have that yet.
-
-Cheers!
