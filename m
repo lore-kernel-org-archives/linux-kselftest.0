@@ -2,122 +2,252 @@ Return-Path: <SRS0=4bWI=DR=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02CFAC4363A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F962C35257
 	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Oct 2020 23:09:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6D7F20760
+	by mail.kernel.org (Postfix) with ESMTP id E9B56208C7
 	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Oct 2020 23:09:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eBUno4bX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pDMCrxd/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390296AbgJJW4x (ORCPT
+        id S2390289AbgJJW4w (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        Sat, 10 Oct 2020 18:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731185AbgJJTxO (ORCPT
+        with ESMTP id S1731493AbgJJT3p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:53:14 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713B0C0613B4;
-        Sat, 10 Oct 2020 04:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6cV+tWxBY2tCvh0w9RakejaDPboIY9tCeHrHg2GCiPA=; b=eBUno4bXjQVLTMDPOm+sW25Lwv
-        cowKD724NzwUh0wGoDX2eG2v9P5KJVKb8dHlTaXOU5VS9yonxo5dacyZ9QBDrEL6/NHu9yrFDVlul
-        uJaKEt4lT+vM8kcKN1F9biakAjn/UcusJA6djK/yyy9on5fKvTsxSO+3sp/2KlZsoUnoiEKzwrMB4
-        7TSBcjnZnVEnKSgMC/MZVlM/dgfJ6XN++gsUwy/SxMYtctBJGqU5CSC+MXoSkcGbzs6L+g82bBhNO
-        Y/Lg46iD7UQGhyO+fwbJTDWyUte30Cln331o8ECV+9e4trlBM1tLfDi1pnpFFiEEQbQZdIxL/9tRX
-        HbGqIARQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kRCkg-00026L-PN; Sat, 10 Oct 2020 11:09:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BEED3003E5;
-        Sat, 10 Oct 2020 13:09:21 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 017E52010B5FA; Sat, 10 Oct 2020 13:09:20 +0200 (CEST)
-Date:   Sat, 10 Oct 2020 13:09:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
-        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
-        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, arve@android.com,
-        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
-        christian@brauner.io, hridya@google.com, surenb@google.com,
-        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
-        rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-Message-ID: <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
- <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
- <202010091255.246395A6@keescook>
+        Sat, 10 Oct 2020 15:29:45 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681A0C05BD23;
+        Sat, 10 Oct 2020 07:54:45 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id d1so1061953pfc.0;
+        Sat, 10 Oct 2020 07:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/krkgGWRLPwrBOotoEiPAuKzZC5AWMQrtjDnDpAK2FI=;
+        b=pDMCrxd/zMBAJCqjki45oqVCT+zX55BDa9Ycymnp0lMpeZBUVnoSz8ksHcktrZKRq7
+         lcOeufePSzUUMeU3fzBGlYBph5pcUaZQqt87oykxn6idISuIc7fhlRTpWA+RU5alacTr
+         4iegTO4ybojBhElULXjQToX8+ifPswiUXZ+drmKsH0JC6K16Ovy8cc+/Vyh+Lt9D+pr6
+         AsQ0CFbyOm1uvljB+Ej8t+Dufxz3p+heCtLN4ENRcAh3rtwWPkSWV8MalbKb96YHx6Qz
+         Ygf3wFXOniHOUUoBDezcXXWwH+8Ot4HyVlxYYjg+UrVlZ2zYq0WM+MeLZFY3rgRr71Zi
+         i7cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/krkgGWRLPwrBOotoEiPAuKzZC5AWMQrtjDnDpAK2FI=;
+        b=ov1p1FO0LlXRApD/Y2ED73vo7wtir3Dmo2g8HvO32wdn2oSVacf4MQkWBNVz7g8QE+
+         Qjm9/s5HALYU1gEzU5QR1Lfx3Vk0uY9TUfLjfgRstAKPgyLuQj5ewhEX1qfHqLVyJweD
+         4US07FEzG8nUyBamQWO63SDc4eZ8C1QTGrNTVygWpx8SwK7zLZpL0ZYASlquS8dQCG9Z
+         ln4ZOVsaGKUKCDrECLfxY9wz8c+3mv91nnIxTQGPqtBkuSAkM4GIRcweg9OKCg0Vj13r
+         r0513OZvPjV91epuDncC/cLTNcewAtIGM0sT+jeHNGIYGDi1Rx9JfDMORxHhxaFjxGQG
+         zZKw==
+X-Gm-Message-State: AOAM530XkHF2two3IVCkOjvv4GdPIXUBL4CK3ZfHvzz/Umx8LCwsXZGJ
+        xBDl5gXxOPS+RncOKMtwkSY=
+X-Google-Smtp-Source: ABdhPJwkQW2le5RVdC4V9Sn8fTVfqQ39bAof6kT8+Bi38tuJ+vH393jZam3QMTBaK9swjMMH5rg9Zw==
+X-Received: by 2002:a63:3193:: with SMTP id x141mr7266188pgx.254.1602341684887;
+        Sat, 10 Oct 2020 07:54:44 -0700 (PDT)
+Received: from arpitha-Inspiron-7570.lan ([106.51.240.187])
+        by smtp.gmail.com with ESMTPSA id gg24sm15772806pjb.44.2020.10.10.07.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Oct 2020 07:54:44 -0700 (PDT)
+From:   Arpitha Raghunandan <98.arpi@gmail.com>
+To:     brendanhiggins@google.com, skhan@linuxfoundation.org,
+        yzaikin@google.com, elver@google.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] kunit: Support for Parameterized Testing
+Date:   Sat, 10 Oct 2020 20:23:57 +0530
+Message-Id: <20201010145357.60886-1-98.arpi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202010091255.246395A6@keescook>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 09, 2020 at 01:45:43PM -0700, Kees Cook wrote:
-> On Fri, Oct 09, 2020 at 09:37:46PM +0200, Peter Zijlstra wrote:
-> > On Fri, Oct 09, 2020 at 09:55:55AM -0600, Shuah Khan wrote:
-> > > Simple atomic counters api provides interfaces for simple atomic counters
-> > > that just count, and don't guard resource lifetimes. The interfaces are
-> > > built on top of atomic_t api, providing a smaller subset of atomic_t
-> > > interfaces necessary to support simple counters.
-> > 
-> > To what actual purpose?!? AFACIT its pointless wrappery, it gets us
-> > nothing.
-> 
-> It's not pointless. There is value is separating types for behavioral
-> constraint to avoid flaws. atomic_t provides a native operation. We gained
-> refcount_t for the "must not wrap" type, and this gets us the other side
-> of that behavioral type, which is "wrapping is expected". Separating the
-> atomic_t uses allows for a clearer path to being able to reason about
-> code flow, whether it be a human or a static analyzer.
+Implementation of support for parameterized testing in KUnit.
 
-refcount_t got us actual rutime exceptions that atomic_t doesn't. This
-propsal gets us nothing.
+Signed-off-by: Arpitha Raghunandan <98.arpi@gmail.com>
+---
+ include/kunit/test.h | 29 +++++++++++++++++++++++++++++
+ lib/kunit/test.c     | 44 +++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 72 insertions(+), 1 deletion(-)
 
-atomic_t is very much expected to wrap.
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 59f3144f009a..4740d66269b4 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -140,10 +140,14 @@ struct kunit;
+ struct kunit_case {
+ 	void (*run_case)(struct kunit *test);
+ 	const char *name;
++	void* (*get_params)(void);
++	int max_parameters_count;
++	int parameter_size;
+ 
+ 	/* private: internal use only. */
+ 	bool success;
+ 	char *log;
++	bool parameterized;
+ };
+ 
+ static inline char *kunit_status_to_string(bool status)
+@@ -162,6 +166,11 @@ static inline char *kunit_status_to_string(bool status)
+  */
+ #define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+ 
++#define KUNIT_CASE_PARAM(test_name, getparams, count, size)				\
++		{ .run_case = test_name, .name = #test_name,				\
++		  .parameterized = true, .get_params = (void* (*)(void))getparams,	\
++		  .max_parameters_count = count, .parameter_size = size }
++
+ /**
+  * struct kunit_suite - describes a related collection of &struct kunit_case
+  *
+@@ -206,6 +215,23 @@ struct kunit {
+ 	/* private: internal use only. */
+ 	const char *name; /* Read only after initialization! */
+ 	char *log; /* Points at case log after initialization */
++	bool parameterized; /* True for parameterized tests */
++	/* param_values stores the test parameters
++	 * for parameterized tests.
++	 */
++	void *param_values;
++	/* max_parameters_count indicates maximum number of
++	 * parameters for parameterized tests.
++	 */
++	int max_parameters_count;
++	/* iterator_count is used by the iterator method
++	 * for parameterized tests.
++	 */
++	int iterator_count;
++	/* parameter_size indicates size of a single test case
++	 * for parameterized tests.
++	 */
++	int parameter_size;
+ 	struct kunit_try_catch try_catch;
+ 	/*
+ 	 * success starts as true, and may only be set to false during a
+@@ -225,6 +251,7 @@ struct kunit {
+ };
+ 
+ void kunit_init_test(struct kunit *test, const char *name, char *log);
++void kunit_init_param_test(struct kunit *test, struct kunit_case *test_case);
+ 
+ int kunit_run_tests(struct kunit_suite *suite);
+ 
+@@ -237,6 +264,8 @@ int __kunit_test_suites_init(struct kunit_suite **suites);
+ 
+ void __kunit_test_suites_exit(struct kunit_suite **suites);
+ 
++void *get_test_case_parameters(struct kunit *test);
++
+ /**
+  * kunit_test_suites() - used to register one or more &struct kunit_suite
+  *			 with KUnit.
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c36037200310..ab9e13c81d4a 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -142,6 +142,11 @@ unsigned int kunit_test_case_num(struct kunit_suite *suite,
+ }
+ EXPORT_SYMBOL_GPL(kunit_test_case_num);
+ 
++static void kunit_print_failed_param(struct kunit *test)
++{
++	kunit_err(test, "\n\tTest failed at parameter: %d\n", test->iterator_count);
++}
++
+ static void kunit_print_string_stream(struct kunit *test,
+ 				      struct string_stream *stream)
+ {
+@@ -182,6 +187,9 @@ static void kunit_fail(struct kunit *test, struct kunit_assert *assert)
+ 
+ 	assert->format(assert, stream);
+ 
++	if (test->parameterized)
++		kunit_print_failed_param(test);
++
+ 	kunit_print_string_stream(test, stream);
+ 
+ 	WARN_ON(string_stream_destroy(stream));
+@@ -236,6 +244,18 @@ void kunit_init_test(struct kunit *test, const char *name, char *log)
+ }
+ EXPORT_SYMBOL_GPL(kunit_init_test);
+ 
++void kunit_init_param_test(struct kunit *test, struct kunit_case *test_case)
++{
++	spin_lock_init(&test->lock);
++	INIT_LIST_HEAD(&test->resources);
++	test->parameterized = true;
++	test->param_values = (void *)(test_case->get_params());
++	test->max_parameters_count = test_case->max_parameters_count;
++	test->parameter_size = test_case->parameter_size;
++	test->iterator_count = 0;
++}
++EXPORT_SYMBOL_GPL(kunit_init_param_test);
++
+ /*
+  * Initializes and runs test case. Does not clean up or do post validations.
+  */
+@@ -254,7 +274,14 @@ static void kunit_run_case_internal(struct kunit *test,
+ 		}
+ 	}
+ 
+-	test_case->run_case(test);
++	if (!test->parameterized) {
++		test_case->run_case(test);
++	} else {
++		int i;
++
++		for (i = 0; i < test->max_parameters_count; i++)
++			test_case->run_case(test);
++	}
+ }
+ 
+ static void kunit_case_internal_cleanup(struct kunit *test)
+@@ -343,6 +370,8 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	struct kunit test;
+ 
+ 	kunit_init_test(&test, test_case->name, test_case->log);
++	if (test_case->parameterized)
++		kunit_init_param_test(&test, test_case);
+ 	try_catch = &test.try_catch;
+ 
+ 	kunit_try_catch_init(try_catch,
+@@ -407,6 +436,19 @@ void __kunit_test_suites_exit(struct kunit_suite **suites)
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
+ 
++/*
++ * Iterator method for the parameterized test cases
++ */
++void *get_test_case_parameters(struct kunit *test)
++{
++	int index = test->iterator_count * test->parameter_size;
++
++	if (test->iterator_count != test->max_parameters_count)
++		test->iterator_count++;
++	return (test->param_values + index);
++}
++EXPORT_SYMBOL_GPL(get_test_case_parameters);
++
+ /*
+  * Used for static resources and when a kunit_resource * has been created by
+  * kunit_alloc_resource().  When an init function is supplied, @data is passed
+-- 
+2.25.1
 
-> The counter wrappers add nothing to the image size, and only serve to
-> confine the API to one that cannot be used for lifetime management.
-
-It doesn't add anything period. It doesn't get us new behaviour, it
-splits a 'can wrap' use-case from a 'can wrap' type. That's sodding
-pointless.
-
-Worse, it mixes 2 unrelated cases into one type, which just makes a
-mockery of things (all the inc_return users are not statistics, some
-might even mis-behave if they wrap).
-
-> Once conversions are done, we have a clean line between refcounting
-> and statistical atomics, which means we have a much lower chance of
-> introducing new flaws (and maybe we'll fix flaws during the conversion,
-> which we've certainly seen before when doing this stricter type/language
-> changes).
-> 
-> I don't see why this is an objectionable goal.
-
-People can and will always find a way to mess things up.
-
-Only add types when you get behavioural changes, otherwise it's
-pointless noise.
-
-My NAK stands.
