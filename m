@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30E6DC433DF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 22:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C06DC433DF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 22:21:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8C8C20797
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 22:21:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2AF4E20838
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 22:21:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="szzZCqZ6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I64Q6ZYI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388879AbgJLWV2 (ORCPT
+        id S2388941AbgJLWV1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Oct 2020 18:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388947AbgJLWV1 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 12 Oct 2020 18:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388883AbgJLWVW (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Oct 2020 18:21:22 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEBBC0613D0
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:27 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z3so12912607yba.21
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21220C0613D0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:21 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id z27so9073146ybi.17
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=B6scR+VlLRNFLgmyfaEV2UlB/ec1kTho3dHQ6KxaOc4=;
-        b=szzZCqZ6YnlKRQC4DoN2/uYCR0GP8qVEWZNPD2tMzUE//qWxVozZIuFbNwY2Nra0sA
-         ANDM8gagFPrZaYcN1X6ELrpJ4fIR6boZ6U4Ny9oU2Hal3M3eN/Oi52ggm05Jh99SR+J3
-         Kw63fM9VtyqQydpbOA/cKEqN5RT/iwTb1gIYaRNDtMSSzcptxU2TnK94WHmiK0V5TPqZ
-         EI7KUOPYymkWfJ3ZCze676CmMl4Pa+BIgsgnLMQjMpQZGjZ7Eqc7cGjDYmC8tXropHNq
-         cr5x6yHnnhVZHM8ON5pwg8LY63z7PmO82D734/CTUSTFZ6M0TkcjLw5JKpsDzzVanKAI
-         0RgA==
+        bh=s4/aCAy0gkB7fEnOHtnGOn6EzeGugxBihpSoxVben5o=;
+        b=I64Q6ZYIzkaQ/aXhpEEUNRxnyQOvIoYx+vu0OanAISVg2LGW3fUQBxub42taCj22As
+         AzEwooUcmSdD0fUEiVbEleTrgpbzqvsLxMHK/AhyYmEy1iJ32EMv+vWNKCkBXBTJAMY8
+         tFALtF5NxuL0bVgqZLsDL1Nd49jCiqL1R0vaX91ttowzpwFlQgQvunJYdRoyl41KZWfo
+         pszPbBt/0LGQg5OWQMnm3qIPeyQ8Z6pHYfBMJ3lnnvqVcrDX0KYfCxc7BS2Qcx4EM3jQ
+         zoNwaXmr90ISMz8KLqeCNVTNHAVO5C+lm/oM5GdAYrti2ITx7KsY0oPm98zNXAnNQnT4
+         mTEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=B6scR+VlLRNFLgmyfaEV2UlB/ec1kTho3dHQ6KxaOc4=;
-        b=Wm2MnPrjh7B9wiLnq7gNqRzhLWjKrON9oNEOqtfF7oQ3w1K+qzTDy5GitpUB4m++g7
-         iKtwPi1KFDEx+se+znpMkiWOtwNFJG6jtWlODcdru630WVXcddr+8CpFml2ywpcHeX6L
-         r/0nFCQ/NStP9Ko/TrVGa0fEN8cPJT9x9reGyBVLWCuvHg2PZASfab0V5iCGLocgaoTY
-         rXo2CIxyhJg1mjONVpdm1IwotNI0t/SPbJpyDacavxQ5cQV/x8wViSZpuIo694kBQT+8
-         wpm/GwZiXEmuYpbl/tknHOXYtt/VebbErH/aPKiP0EfahdvAhC0VHXdHdElDGO0IUEy8
-         LGHA==
-X-Gm-Message-State: AOAM532PlWo0CK6WVAAnmGaM19i/KaPJ4P9YgYFu1zNU+H78dcnqLGAv
-        Dz1HZdY0vSCQdb2/uBaE4kje+R7Oz+nopA==
-X-Google-Smtp-Source: ABdhPJy8zxCkqGgEjBL34sOeVTyTnXjEDr/D9qO3d9EV6+GVzM2APAl5MBgtW4VlYO9AkpRTErZV/BwPzseZdA==
+        bh=s4/aCAy0gkB7fEnOHtnGOn6EzeGugxBihpSoxVben5o=;
+        b=LRs15MEPNvCFmEgqv2Xrav9EbekYklF99Eotn/j9Cv75IEG4Q8tUr4pG5q8+eEHy6Z
+         j7VSEK7fYx04+d6foLo9LyTpHd+maqc07fzVOMMyB1N3pGMxU8cwyXlNgRF+hrvLs3RW
+         PVSMDLt7MxxQZaCAnRTPhpa8IMy93xV2sWWajNhh15xKay3VQu3txNCP2Suh5DC8C3AM
+         FijrQjsFY9/YOmiyz5phMVKNDNvxscjNOnZFPW8oqGgaa0eZLw7tbTGGi226wN6/rM8E
+         FDZNvo2gKsTMZkhUeuszptvoTjfGEsnQw/+uRD62OTAozB+4GXTQzd1RrxBA2pwdBdV5
+         QtaQ==
+X-Gm-Message-State: AOAM531YA/g+JFDcXClwhjxacgL1RUMAHfSvCgKwAP2aSs7oNz7jx7RD
+        lNiQbK1Zu2goTm2h/kISYdJ4ImYnJvwfQg==
+X-Google-Smtp-Source: ABdhPJzod1mdhkOJQpB9loDPpaYuWs/JBFphf2ZFLjAcvhVRrOPDjTwguPLfuDtJXvxtyY60nQRvEo7wTfz0Zg==
 Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:514:: with SMTP id
- x20mr11824204ybs.111.1602541286356; Mon, 12 Oct 2020 15:21:26 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 15:20:43 -0700
+ (user=dlatypov job=sendgmr) by 2002:a25:6ec3:: with SMTP id
+ j186mr12997260ybc.165.1602541280289; Mon, 12 Oct 2020 15:21:20 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 15:20:40 -0700
 In-Reply-To: <20201012222050.999431-1-dlatypov@google.com>
-Message-Id: <20201012222050.999431-6-dlatypov@google.com>
+Message-Id: <20201012222050.999431-3-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20201012222050.999431-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [RFC v2 05/12] kunit: mock: add parameter list manipulation macros
+Subject: [RFC v2 02/12] kunit: test: add kunit_stream a std::stream like logger
 From:   Daniel Latypov <dlatypov@google.com>
 To:     dlatypov@google.com
 Cc:     alan.maguire@oracle.com, brendanhiggins@google.com,
@@ -79,500 +79,306 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Brendan Higgins <brendanhiggins@google.com>
 
-Add macros for parsing and manipulating parameter lists needed for
-generating mocks.
+A lot of the expectation and assertion infrastructure prints out fairly
+complicated test failure messages, so add a C++ style log library for
+for logging test results called `struct kunit_stream`.
+
+kunit_stream allows us to construct a message before we know whether we
+want to print it out; this can be extremely handy if there is
+information you might need for a failure message that is easiest to
+collect in the steps leading up to the actual check.
+
+Note that kunit_stream is distinct from string_stream: whereas
+string_stream is really just a string builder, kunit_stream is
+specifically used for constructing expectation/assertion (introduced
+later in this series) messages to a user of KUnit.
+
+Patch was previously reviewed at
+https://lore.kernel.org/linux-fsdevel/20190712081744.87097-5-brendanhiggins@google.com/
+Primary differences are
+* kunit/ => lib/kunit/
+* re-expose string_stream_clear(), which was made static since then
 
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
 ---
- include/kunit/params.h      | 305 ++++++++++++++++++++++++++++++++++++
- lib/kunit/Makefile          |   3 +-
- lib/kunit/mock-macro-test.c | 150 ++++++++++++++++++
- 3 files changed, 457 insertions(+), 1 deletion(-)
- create mode 100644 include/kunit/params.h
- create mode 100644 lib/kunit/mock-macro-test.c
+ include/kunit/kunit-stream.h  |  94 +++++++++++++++++++++++++++++
+ include/kunit/string-stream.h |   2 +
+ include/kunit/test.h          |   1 +
+ lib/kunit/Makefile            |   1 +
+ lib/kunit/kunit-stream.c      | 110 ++++++++++++++++++++++++++++++++++
+ lib/kunit/string-stream.c     |   2 +-
+ 6 files changed, 209 insertions(+), 1 deletion(-)
+ create mode 100644 include/kunit/kunit-stream.h
+ create mode 100644 lib/kunit/kunit-stream.c
 
-diff --git a/include/kunit/params.h b/include/kunit/params.h
+diff --git a/include/kunit/kunit-stream.h b/include/kunit/kunit-stream.h
 new file mode 100644
-index 000000000000..06efcb58c2c0
+index 000000000000..9a768732a04b
 --- /dev/null
-+++ b/include/kunit/params.h
-@@ -0,0 +1,305 @@
++++ b/include/kunit/kunit-stream.h
+@@ -0,0 +1,94 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Macros for parsing and manipulating parameter lists needed for generating
-+ * mocks.
++ * C++ stream style string formatter and printer used in KUnit for outputting
++ * KUnit messages.
 + *
 + * Copyright (C) 2020, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
 +
-+#ifndef _KUNIT_PARAMS_H
-+#define _KUNIT_PARAMS_H
++#ifndef _KUNIT_KUNIT_STREAM_H
++#define _KUNIT_KUNIT_STREAM_H
 +
-+#define NUM_VA_ARGS_IMPL(__dummy,					       \
-+			 __1,						       \
-+			 __2,						       \
-+			 __3,						       \
-+			 __4,						       \
-+			 __5,						       \
-+			 __6,						       \
-+			 __7,						       \
-+			 __8,						       \
-+			 __9,						       \
-+			 __10,						       \
-+			 __11,						       \
-+			 __12,						       \
-+			 __13,						       \
-+			 __14,						       \
-+			 __15,						       \
-+			 __16,						       \
-+			 __nargs, args...) __nargs
++#include <linux/types.h>
++#include <kunit/string-stream.h>
 +
-+#define NUM_VA_ARGS(args...) NUM_VA_ARGS_IMPL(__dummy, ##args,		       \
-+					  16,				       \
-+					  15,				       \
-+					  14,				       \
-+					  13,				       \
-+					  12,				       \
-+					  11,				       \
-+					  10,				       \
-+					  9,				       \
-+					  8,				       \
-+					  7,				       \
-+					  6,				       \
-+					  5,				       \
-+					  4,				       \
-+					  3,				       \
-+					  2,				       \
-+					  1,				       \
-+					  0)
++struct kunit;
 +
-+#define CONCAT_INTERNAL(left, right) left##right
-+#define CONCAT(left, right) CONCAT_INTERNAL(left, right)
-+
-+#define EMPTY()
-+
-+/*
-+ * Takes the name of a function style macro such as FOO() and prevents it from
-+ * being evaluated on the current pass.
++/**
++ * struct kunit_stream - a std::stream style string builder.
 + *
-+ * This is useful when you need to write a "recursive" macro since a macro name
-+ * becomes painted after it is pasted. If a different macro is pasted, this
-+ * different macro won't be pasted; if we then defer the evaluation of the this
-+ * "indirection macro", we can prevent the original definition from getting
-+ * painted.
++ * A std::stream style string builder. Allows messages to be built up and
++ * printed all at once. Note that the intention is to only use
++ * &struct kunit_stream to communicate with a user of KUnit, most often to
++ * communicate something about an expectation or an assertion to the user. If
++ * you want a similar interface, but aren't sure if this is the right class for
++ * you to use, you probably want to use the related string_stream class, which
++ * is allowed for generic string construction in a similar manner. This class is
++ * really only for the KUnit library to communicate certain kinds of information
++ * to KUnit users and should not be used by anyone else.
 + *
-+ * Example:
-+ *   #define EXAMPLE EXPAND(FOO()) // FOO() is evaluated on 1st pass.
-+ *   #define EXAMPLE EXPAND(DEFER(FOO)()) // FOO() is evaluated on the second
-+ *					  // pass.
++ * A note on &struct kunit_stream's usage: a kunit_stream will generally
++ * accompany *one* expectation or assertion. Multiple expectations/assertions
++ * may be validated concurrently at any given time, even within a single test
++ * case, so sharing a kunit_stream between expectations/assertions may result in
++ * unintended consequences.
 + */
-+#define DEFER(macro_id) macro_id EMPTY()
++struct kunit_stream {
++	/* private: internal use only. */
++	struct kunit *test;
++	struct string_stream *internal_stream;
++};
 +
-+/*
-+ * Takes the name of a function style macro such as FOO() and prevents it from
-+ * being evaluated on the current or following pass.
++/**
++ * alloc_kunit_stream() - constructs a new &struct kunit_stream.
++ * @test: The test context object.
++ * @gfp: The GFP flags to use for internal allocations.
 + *
-+ * This is useful when you need to DEFER inside an operation which causes an
-+ * extra pass, like IF.
++ * Constructs a new test managed &struct kunit_stream.
++ */
++struct kunit_stream *alloc_kunit_stream(struct kunit *test,
++					gfp_t gfp);
++
++/**
++ * kunit_stream_add(): adds the formatted input to the internal buffer.
++ * @kstream: the stream being operated on.
++ * @fmt: printf style format string to append to stream.
 + *
-+ * Example:
-+ *   #define EXAMPLE EXPAND(FOO()) // FOO() is evaluated on 1st pass.
-+ *   #define EXAMPLE EXPAND(DEFER(FOO)()) // FOO() is evaluated on the second
-+ *					  // pass.
-+ *   #define EXAMPLE EXPAND(OBSTRUCT(FOO)()) // FOO() is evaluated on the third
-+ *					     // pass.
++ * Appends the formatted string, @fmt, to the internal buffer.
 + */
-+#define OBSTRUCT(macro_id) macro_id DEFER(EMPTY)()
++void __printf(2, 3) kunit_stream_add(struct kunit_stream *kstream,
++				     const char *fmt, ...);
 +
-+#define EXPAND_1(args...) args
-+#define EXPAND_2(args...) EXPAND_1(EXPAND_1(args))
-+#define EXPAND_4(args...) EXPAND_2(EXPAND_2(args))
-+#define EXPAND_8(args...) EXPAND_4(EXPAND_4(args))
-+#define EXPAND_16(args...) EXPAND_8(EXPAND_8(args))
-+
-+/*
-+ * Causes multiple evaluation passes of a macro.
++/**
++ * kunit_stream_append(): appends the contents of @other to @kstream.
++ * @kstream: the stream to which @other is appended.
++ * @other: the stream whose contents are appended to @kstream.
 + *
-+ * CPP is implemented as a push down automaton. It consumes a stream of tokens
-+ * and as it comes across macros, it either evaluates them and pastes the
-+ * result, or if the macro is a function macro, it pushes the macro to a stack,
-+ * it evaluates the input to the function macro, pops the state from the stack
-+ * and continues.
++ * Appends the contents of @other to @kstream.
++ */
++void kunit_stream_append(struct kunit_stream *kstream,
++			 struct kunit_stream *other);
++
++/**
++ * kunit_stream_commit(): prints out the internal buffer to the user.
++ * @kstream: the stream being operated on.
 + *
-+ * This macro serves the function of making the cursor return to the beginging
-+ * of a macro that requires mulitple passes to evaluate. It is most useful when
-+ * used with DEFER(...) and OBSTRUCT(...).
++ * Outputs the contents of the internal buffer as a kunit_printk formatted
++ * output. KUNIT_STREAM ONLY OUTPUTS ITS BUFFER TO THE USER IF COMMIT IS
++ * CALLED!!! The reason for this is that it allows us to construct a message
++ * before we know whether we want to print it out; this can be extremely handy
++ * if there is information you might need for a failure message that is easiest
++ * to collect in the steps leading up to the actual check.
 + */
-+#define EXPAND(args...) EXPAND_16(args)
++void kunit_stream_commit(struct kunit_stream *kstream);
 +
-+#define INC(id) INC_##id
-+#define INC_0  1
-+#define INC_1  2
-+#define INC_2  3
-+#define INC_3  4
-+#define INC_4  5
-+#define INC_5  6
-+#define INC_6  7
-+#define INC_7  8
-+#define INC_8  9
-+#define INC_9  10
-+#define INC_10 11
-+#define INC_11 12
-+#define INC_12 13
-+#define INC_13 14
-+#define INC_14 15
-+#define INC_15 16
-+#define INC_16 17
-+
-+#define DEC(id) DEC_##id
-+#define DEC_1  0
-+#define DEC_2  1
-+#define DEC_3  2
-+#define DEC_4  3
-+#define DEC_5  4
-+#define DEC_6  5
-+#define DEC_7  6
-+#define DEC_8  7
-+#define DEC_9  8
-+#define DEC_10 9
-+#define DEC_11 10
-+#define DEC_12 11
-+#define DEC_13 12
-+#define DEC_14 13
-+#define DEC_15 14
-+#define DEC_16 15
-+
-+#define DROP_FIRST_ARG_INTERNAL(dropped, x, args...) x
-+#define DROP_FIRST_ARG(args...) DROP_FIRST_ARG_INTERNAL(args)
-+
-+#define EQUAL(left, right) EQUAL_##left##_##right
-+#define EQUAL_0_0 dropped, 1
-+#define EQUAL_1_1 dropped, 1
-+#define EQUAL_2_2 dropped, 1
-+#define EQUAL_3_3 dropped, 1
-+#define EQUAL_4_4 dropped, 1
-+#define EQUAL_5_5 dropped, 1
-+#define EQUAL_6_6 dropped, 1
-+#define EQUAL_7_7 dropped, 1
-+#define EQUAL_8_8 dropped, 1
-+#define EQUAL_9_9 dropped, 1
-+#define EQUAL_10_10 dropped, 1
-+#define EQUAL_11_11 dropped, 1
-+#define EQUAL_12_12 dropped, 1
-+#define EQUAL_13_13 dropped, 1
-+#define EQUAL_14_14 dropped, 1
-+#define EQUAL_15_15 dropped, 1
-+#define EQUAL_16_16 dropped, 1
-+
-+#define IS_EQUAL(left, right) DROP_FIRST_ARG(EQUAL(left, right), 0)
-+
-+#define NOT_INTERNAL(condition) NOT_##condition
-+#define NOT(condition) NOT_INTERNAL(condition)
-+#define NOT_0 1
-+#define NOT_1 0
-+
-+#define IS_NOT_EQUAL(left, right) NOT(IS_EQUAL(left, right))
-+
-+#define EMPTY_IMPL(tokens) CONCAT(EMPTY_, tokens)
-+#define IS_EMPTY(tokens)
-+
-+#define OR_INTERNAL(left, right) OR_##left##_##right
-+#define OR(left, right) OR_INTERNAL(left, right)
-+#define OR_0_0 0
-+#define OR_0_1 1
-+#define OR_1_0 1
-+#define OR_1_1 1
-+
-+#define IF(condition) CONCAT(IF_, condition)
-+#define IF_0(body)
-+#define IF_1(body) body
-+
-+#define COMMA() ,
-+
-+#define APPLY_TOKENS_INTERNAL(tokens, yield_token, seen_token) \
-+		IF(yield_token)(IF(seen_token)(COMMA()) tokens)
-+#define APPLY_TOKENS(tokens, yield_token, seen_token) \
-+		APPLY_TOKENS_INTERNAL(tokens, yield_token, seen_token)
-+
-+/*
-+ * Provides the indirection to keep the PARAM_LIST_RECURSE_INTERNAL from getting
-+ * pasted, only useful if used with DEFER(...) or OBSTRUCT(...).
-+ */
-+#define PARAM_LIST_RECURSE_INDIRECT() PARAM_LIST_RECURSE_INTERNAL
-+
-+/*
-+ * Given a starting index, a number of args, a MACRO to apply, and a list of
-+ * types (with at least one element) this will call MACRO with the first type in
-+ * the list and index; it will then call itself again on all remaining types, if
-+ * any, while incrementing index, and decrementing nargs.
++/**
++ * kunit_stream_clear(): clears the internal buffer.
++ * @kstream: the stream being operated on.
 + *
-+ * Assumes nargs is the number of types in the list.
++ * Clears the contents of the internal buffer.
 + */
-+#define PARAM_LIST_RECURSE_INTERNAL(index,				       \
-+				    nargs,				       \
-+				    MACRO,				       \
-+				    FILTER,				       \
-+				    context,				       \
-+				    seen_token,				       \
-+				    type,				       \
-+				    args...)				       \
-+		APPLY_TOKENS(MACRO(context, type, index),		       \
-+			     FILTER(context, type, index),		       \
-+			     seen_token)				       \
-+		IF(IS_NOT_EQUAL(nargs, 1))				       \
-+			(OBSTRUCT(PARAM_LIST_RECURSE_INDIRECT)()	       \
-+			 (INC(index), DEC(nargs),			       \
-+			  MACRO, FILTER, context,			       \
-+			  OR(seen_token, FILTER(context, type, index)),	       \
-+			  args))
++void kunit_stream_clear(struct kunit_stream *kstream);
 +
-+#define PARAM_LIST_RECURSE(index, nargs, MACRO, FILTER, context, args...)      \
-+		IF(IS_NOT_EQUAL(nargs, 0))				       \
-+			(OBSTRUCT(PARAM_LIST_RECURSE_INTERNAL)(index,	       \
-+							       nargs,	       \
-+							       MACRO,	       \
-+							       FILTER,	       \
-+							       context,	       \
-+							       0,	       \
-+							       args))
++#endif /* _KUNIT_KUNIT_STREAM_H */
+diff --git a/include/kunit/string-stream.h b/include/kunit/string-stream.h
+index fe98a00b75a9..44677c386890 100644
+--- a/include/kunit/string-stream.h
++++ b/include/kunit/string-stream.h
+@@ -46,6 +46,8 @@ int string_stream_append(struct string_stream *stream,
+ 
+ bool string_stream_is_empty(struct string_stream *stream);
+ 
++void string_stream_clear(struct string_stream *stream);
 +
-+#define FILTER_NONE(context, type, index) 1
-+
-+#define FILTER_INDEX_INTERNAL(index_to_drop, type, index) \
-+		IS_NOT_EQUAL(index, index_to_drop)
-+#define FILTER_INDEX(index_to_drop, type, index) \
-+		FILTER_INDEX_INTERNAL(index_to_drop, type, index)
-+
-+/*
-+ * Applies a MACRO which takes a type and the index of the type and outputs a
-+ * sequence of tokens to a list of types.
-+ */
-+#define FOR_EACH_PARAM(MACRO, FILTER, context, args...) \
-+		EXPAND(PARAM_LIST_RECURSE(0,\
-+					  NUM_VA_ARGS(args),\
-+					  MACRO,\
-+					  FILTER,\
-+					  context,\
-+					  args))
-+
-+#define PRODUCE_TYPE_AND_ARG(context, type, index) type arg##index
-+#define PARAM_LIST_FROM_TYPES(args...)					       \
-+		FOR_EACH_PARAM(PRODUCE_TYPE_AND_ARG,			       \
-+			       FILTER_NONE,				       \
-+			       not_used,				       \
-+			       args)
-+
-+#define PRODUCE_TYPE_NAME(context, type, index) #type
-+#define TYPE_NAMES_FROM_TYPES(handle_index, args...)			       \
-+		FOR_EACH_PARAM(PRODUCE_TYPE_NAME,			       \
-+			       FILTER_INDEX,				       \
-+			       handle_index,				       \
-+			       args)
-+
-+#define PRODUCE_PTR_TO_ARG(context, type, index) &arg##index
-+#define PTR_TO_ARG_FROM_TYPES(handle_index, args...)			       \
-+		FOR_EACH_PARAM(PRODUCE_PTR_TO_ARG,			       \
-+			       FILTER_INDEX,				       \
-+			       handle_index,				       \
-+			       args)
-+
-+#define PRODUCE_MATCHER_AND_ARG(ctrl_index, type, index)		       \
-+		IF(IS_EQUAL(index, ctrl_index))(struct mock *arg##ctrl_index)  \
-+		IF(IS_NOT_EQUAL(index, ctrl_index))(			       \
-+				struct mock_param_matcher *arg##index)
-+#define MATCHER_PARAM_LIST_FROM_TYPES(ctrl_index, args...)		       \
-+		FOR_EACH_PARAM(PRODUCE_MATCHER_AND_ARG,			       \
-+			       FILTER_NONE,				       \
-+			       ctrl_index,				       \
-+			       args)
-+
-+#define PRODUCE_ARG(context, type, index) arg##index
-+#define ARG_NAMES_FROM_TYPES(ctrl_index, args...)			       \
-+		FOR_EACH_PARAM(PRODUCE_ARG,				       \
-+			       FILTER_INDEX,				       \
-+			       ctrl_index,				       \
-+			       args)
-+
-+#define PRODUCE_ARRAY_ACCESSOR(context, type, index) *((type *) params[index])
-+#define ARRAY_ACCESSORS_FROM_TYPES(args...)				       \
-+		FOR_EACH_PARAM(PRODUCE_ARRAY_ACCESSOR,			       \
-+			       FILTER_NONE,				       \
-+			       not_used,				       \
-+			       args)
-+
-+#endif /* _KUNIT_PARAMS_H */
+ int string_stream_destroy(struct string_stream *stream);
+ 
+ #endif /* _KUNIT_STRING_STREAM_H */
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 59f3144f009a..687782fa44d9 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -10,6 +10,7 @@
+ #define _KUNIT_TEST_H
+ 
+ #include <kunit/assert.h>
++#include <kunit/kunit-stream.h>
+ #include <kunit/try-catch.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
 diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 523a7b0f9783..1707660c8b1c 100644
+index 724b94311ca3..523a7b0f9783 100644
 --- a/lib/kunit/Makefile
 +++ b/lib/kunit/Makefile
-@@ -10,7 +10,8 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
- kunit-objs +=				debugfs.o
- endif
+@@ -3,6 +3,7 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
+ kunit-objs +=				test.o \
+ 					string-stream.o \
+ 					assert.o \
++					kunit-stream.o \
+ 					try-catch.o
  
--obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
-+obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o \
-+					mock-macro-test.o
- 
- # string-stream-test compiles built-in only.
- ifeq ($(CONFIG_KUNIT_TEST),y)
-diff --git a/lib/kunit/mock-macro-test.c b/lib/kunit/mock-macro-test.c
+ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+diff --git a/lib/kunit/kunit-stream.c b/lib/kunit/kunit-stream.c
 new file mode 100644
-index 000000000000..6c3dc2193edb
+index 000000000000..744798693f39
 --- /dev/null
-+++ b/lib/kunit/mock-macro-test.c
-@@ -0,0 +1,150 @@
++++ b/lib/kunit/kunit-stream.c
+@@ -0,0 +1,110 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * KUnit test for parameter list parsing macros.
++ * C++ stream style string formatter and printer used in KUnit for outputting
++ * KUnit messages.
 + *
 + * Copyright (C) 2020, Google LLC.
 + * Author: Brendan Higgins <brendanhiggins@google.com>
 + */
 +
 +#include <kunit/test.h>
-+#include <kunit/params.h>
++#include <kunit/kunit-stream.h>
++#include <kunit/string-stream.h>
 +
-+#define TO_STR_INTERNAL(...) #__VA_ARGS__
-+#define TO_STR(...) TO_STR_INTERNAL(__VA_ARGS__)
-+
-+static void mock_macro_is_equal(struct kunit *test)
++void kunit_stream_add(struct kunit_stream *kstream, const char *fmt, ...)
 +{
-+	KUNIT_EXPECT_STREQ(test, "dropped, 1", TO_STR(EQUAL(1, 1)));
-+	KUNIT_EXPECT_EQ(test, 1, DROP_FIRST_ARG(dropped, 1, 0));
-+	KUNIT_EXPECT_EQ(test, 0, DROP_FIRST_ARG(1, 0));
-+	KUNIT_EXPECT_EQ(test, 0, DROP_FIRST_ARG(EQUAL(1, 0), 0));
-+	KUNIT_EXPECT_EQ(test, 1, IS_EQUAL(1, 1));
-+	KUNIT_EXPECT_EQ(test, 0, IS_EQUAL(1, 0));
++	va_list args;
++	struct string_stream *stream = kstream->internal_stream;
++
++	va_start(args, fmt);
++
++	if (string_stream_vadd(stream, fmt, args))
++		kunit_err(kstream->test,
++			  "Failed to allocate fragment: %s\n",
++			  fmt);
++
++	va_end(args);
 +}
 +
-+static void mock_macro_if(struct kunit *test)
++void kunit_stream_append(struct kunit_stream *kstream,
++			 struct kunit_stream *other)
 +{
-+	KUNIT_EXPECT_STREQ(test, "body", ""IF(1)("body"));
-+	KUNIT_EXPECT_STREQ(test, "", ""IF(0)("body"));
-+	KUNIT_EXPECT_STREQ(test, "body", ""IF(IS_EQUAL(1, 1))("body"));
-+	KUNIT_EXPECT_STREQ(test, "", ""IF(IS_EQUAL(0, 1))("body"));
++	int ret;
++
++	ret = string_stream_append(kstream->internal_stream,
++				   other->internal_stream);
++
++	if (ret)
++		kunit_err(kstream->test,
++			  "Failed to append other stream: %d\n", ret);
 +}
 +
-+static void mock_macro_apply_tokens(struct kunit *test)
++void kunit_stream_clear(struct kunit_stream *kstream)
 +{
-+	KUNIT_EXPECT_STREQ(test, "type", TO_STR(APPLY_TOKENS(type, 1, 0)));
-+	KUNIT_EXPECT_STREQ(test, ", type", TO_STR(APPLY_TOKENS(type, 1, 1)));
-+	KUNIT_EXPECT_STREQ(test, "", TO_STR(APPLY_TOKENS(type, 0, 1)));
++	string_stream_clear(kstream->internal_stream);
 +}
 +
-+#define IDENTITY(context, type, index) type
-+
-+static void mock_macro_param_list_recurse(struct kunit *test)
++void kunit_stream_commit(struct kunit_stream *kstream)
 +{
-+	KUNIT_EXPECT_STREQ(test, "", TO_STR(PARAM_LIST_RECURSE(0,
-+							      0,
-+							      IDENTITY,
-+							      FILTER_NONE,
-+							      not_used)));
-+	KUNIT_EXPECT_STREQ(test,
-+			  "type",
-+			  TO_STR(EXPAND(PARAM_LIST_RECURSE(0,
-+							   1,
-+							   IDENTITY,
-+							   FILTER_NONE,
-+							   not_used,
-+							   type))));
-+	KUNIT_EXPECT_STREQ(test,
-+			  "type0 , type1 , type2 , type3 , type4 , type5 , "
-+			  "type6 , type7 , type8 , type9 , type10 , type11 , "
-+			  "type12 , type13 , type14 , type15",
-+			  TO_STR(EXPAND(PARAM_LIST_RECURSE(0, 16,
-+							   IDENTITY,
-+							   FILTER_NONE,
-+							   not_used,
-+							   type0, type1, type2,
-+							   type3, type4, type5,
-+							   type6, type7, type8,
-+							   type9, type10,
-+							   type11, type12,
-+							   type13, type14,
-+							   type15))));
++	struct string_stream *stream = kstream->internal_stream;
++	struct string_stream_fragment *fragment;
++	struct kunit *test = kstream->test;
++	char *buf;
++
++	buf = string_stream_get_string(stream);
++	if (!buf) {
++		kunit_err(test,
++			  "Could not allocate buffer, dumping stream:\n");
++		list_for_each_entry(fragment, &stream->fragments, node) {
++			kunit_err(test, "%s", fragment->fragment);
++		}
++		kunit_err(test, "\n");
++	} else {
++		kunit_err(test, "%s", buf);
++	}
++
++	kunit_stream_clear(kstream);
 +}
 +
-+static void mock_macro_for_each_param(struct kunit *test)
-+{
-+	KUNIT_EXPECT_STREQ(test,
-+			  "type0 , type1",
-+			  TO_STR(FOR_EACH_PARAM(IDENTITY,
-+						FILTER_NONE,
-+						not_used,
-+						type0,
-+						type1)));
-+	KUNIT_EXPECT_STREQ(test,
-+			  "type1",
-+			  TO_STR(FOR_EACH_PARAM(IDENTITY,
-+						FILTER_INDEX,
-+						0,
-+						type0,
-+						type1)));
-+}
-+
-+static void mock_macro_param_list_from_types_basic(struct kunit *test)
-+{
-+	KUNIT_EXPECT_STREQ(test, "", TO_STR(PARAM_LIST_FROM_TYPES()));
-+	KUNIT_EXPECT_STREQ(test, "int arg0",
-+			   TO_STR(PARAM_LIST_FROM_TYPES(int)));
-+	KUNIT_EXPECT_STREQ(test, "struct kunit_struct * arg0 , int arg1",
-+			  TO_STR(PARAM_LIST_FROM_TYPES(struct kunit_struct *,
-+						       int)));
-+	KUNIT_EXPECT_STREQ(test,
-+			  "type0 arg0 , type1 arg1 , type2 arg2 , type3 arg3 , "
-+			  "type4 arg4 , type5 arg5 , type6 arg6 , type7 arg7 , "
-+			  "type8 arg8 , type9 arg9 , type10 arg10 , "
-+			  "type11 arg11 , type12 arg12 , type13 arg13 , "
-+			  "type14 arg14 , type15 arg15",
-+			  TO_STR(PARAM_LIST_FROM_TYPES(type0, type1, type2,
-+						       type3, type4, type5,
-+						       type6, type7, type8,
-+						       type9, type10, type11,
-+						       type12, type13, type14,
-+						       type15)));
-+}
-+
-+static void mock_macro_arg_names_from_types(struct kunit *test)
-+{
-+	KUNIT_EXPECT_STREQ(test, "", TO_STR(ARG_NAMES_FROM_TYPES(0)));
-+	KUNIT_EXPECT_STREQ(test, "", TO_STR(ARG_NAMES_FROM_TYPES(0, int)));
-+	KUNIT_EXPECT_STREQ(test,
-+			  "arg1",
-+			  TO_STR(ARG_NAMES_FROM_TYPES(0,
-+						      struct kunit_struct *,
-+						      int)));
-+	KUNIT_EXPECT_STREQ(test,
-+			  "arg0 , arg1 , arg3 , arg4 , arg5 , arg6 , arg7 , "
-+			  "arg8 , arg9 , arg10 , arg11 , arg12 , arg13 , "
-+			  "arg14 , arg15",
-+			  TO_STR(ARG_NAMES_FROM_TYPES(2, type0, type1, type2,
-+						      type3, type4, type5,
-+						      type6, type7, type8,
-+						      type9, type10, type11,
-+						      type12, type13, type14,
-+						      type15)));
-+}
-+
-+static struct kunit_case mock_macro_test_cases[] = {
-+	KUNIT_CASE(mock_macro_is_equal),
-+	KUNIT_CASE(mock_macro_if),
-+	KUNIT_CASE(mock_macro_apply_tokens),
-+	KUNIT_CASE(mock_macro_param_list_recurse),
-+	KUNIT_CASE(mock_macro_for_each_param),
-+	KUNIT_CASE(mock_macro_param_list_from_types_basic),
-+	KUNIT_CASE(mock_macro_arg_names_from_types),
-+	{}
++struct kunit_stream_alloc_context {
++	struct kunit *test;
++	gfp_t gfp;
 +};
 +
-+static struct kunit_suite mock_macro_test_suite = {
-+	.name = "mock-macro-test",
-+	.test_cases = mock_macro_test_cases,
-+};
-+kunit_test_suite(mock_macro_test_suite);
++static int kunit_stream_init(struct kunit_resource *res, void *context)
++{
++	struct kunit_stream_alloc_context *ctx = context;
++	struct kunit_stream *stream;
++
++	stream = kunit_kzalloc(ctx->test, sizeof(*stream), ctx->gfp);
++	if (!stream)
++		return -ENOMEM;
++
++	stream->test = ctx->test;
++	stream->internal_stream = alloc_string_stream(ctx->test, ctx->gfp);
++	if (!stream->internal_stream)
++		return -ENOMEM;
++
++	res->data = stream;
++	return 0;
++}
++
++static void kunit_stream_free(struct kunit_resource *res)
++{
++	/* Do nothing because cleanup is handled by KUnit managed resources */
++}
++
++struct kunit_stream *alloc_kunit_stream(struct kunit *test,
++					gfp_t gfp)
++{
++	struct kunit_stream_alloc_context ctx = {
++		.test = test,
++		.gfp = gfp
++	};
++
++	return kunit_alloc_resource(test,
++				    kunit_stream_init,
++				    kunit_stream_free,
++				    gfp,
++				    &ctx);
++}
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index 151a0e7ac349..a94004134928 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -112,7 +112,7 @@ int string_stream_add(struct string_stream *stream, const char *fmt, ...)
+ 	return result;
+ }
+ 
+-static void string_stream_clear(struct string_stream *stream)
++void string_stream_clear(struct string_stream *stream)
+ {
+ 	struct string_stream_fragment *frag_container, *frag_container_safe;
+ 
 -- 
 2.28.0.1011.ga647a8990f-goog
 
