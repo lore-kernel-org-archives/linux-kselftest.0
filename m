@@ -2,147 +2,156 @@ Return-Path: <SRS0=3xsr=DT=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E0AFC43457
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 22:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C68FC41604
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 23:31:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E33D20797
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 22:22:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dJmMJXFc"
+	by mail.kernel.org (Postfix) with ESMTP id 2ECC5218AC
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Oct 2020 23:31:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389191AbgJLWVx (ORCPT
+        id S2388856AbgJLXbc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Oct 2020 18:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389210AbgJLWVg (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Oct 2020 18:21:36 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6880C0613D2
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:34 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id 139so13643475qkl.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Oct 2020 15:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=3U+Fcas1apO9zkp2uie6RVp/REzkW4tgtQ1I3cCtcMs=;
-        b=dJmMJXFcJsI2IPPVbFmC+XU26TnOljliXdvklavMAECzjqMdwvjfC4zWbJr1MauBff
-         sJjeCU5CqPiySsV54uwvkNtdC53TfYsnFVqS6uOEFS3Eg/90jmnkMifYsWYLAxqa2jzv
-         o9UAL2cBqCX0i7jorUoTNrRJ+UiZJtXUAShkakjeouNLqo+1KT1SR18MBwV1nQCf3q7w
-         NOOiXw2bD3kRzbTNoiGgxl95mVbb74dnq1mmMSoBUmyuByoqv/8ZnoO8zTM8bzR55eVd
-         qFAjR4UG5NH/MQvxg+pWtyujFTjG0YxBrupJ/Ki91H3tlTwoS2xIviwjYH7SaQ+ptReg
-         Pbtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=3U+Fcas1apO9zkp2uie6RVp/REzkW4tgtQ1I3cCtcMs=;
-        b=miOzDdmT+qVbQZPMhL0yeq7b4B6PLhXyozMDgoO/97cMSm57uu8CGYcrbAEfee2Vbv
-         Q1QBerkGC3+N5BAoZ4YyApLEsACNbvrAIP/SJfn/cilvsB9wMIXYvkF/iSxWk/cJN0EY
-         0TSp1X66qEnTUav4hRLJ/sAV1ylp+vuHvZVaSM6LfQitWzV5pfJhH4txKnCdR+Atx5hh
-         2vnqihUQqrKQukKDRsA9SnhoGck2+bJfnXt6ynKaTTuELjyOc9zvfIaZ/5+W50xbS9bt
-         U8r6zBZib9h7T5AvxOAr1ucdgk0jQY+IlUFFkmJw3nIdSkUkJwPJ3EjCKf/l5w9ikeBV
-         XMdA==
-X-Gm-Message-State: AOAM533sD+d7aawuWk7rya1+PkoWabQMLjJUOxh0e1/zOqBdJQd8h9Xe
-        CS5k2TtoKQu4WvuSIFJ7yuzciodgAiRY8Q==
-X-Google-Smtp-Source: ABdhPJwM6iK7jt1J3LI/TsIHXw1h9NcHoyJVKzFqrwix5e3p1NooRLAYVvucmAHzQ7HziKz/+InvjUJgTY2+5Q==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
- (user=dlatypov job=sendgmr) by 2002:ad4:40c6:: with SMTP id
- x6mr27592944qvp.20.1602541293871; Mon, 12 Oct 2020 15:21:33 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 15:20:47 -0700
-In-Reply-To: <20201012222050.999431-1-dlatypov@google.com>
-Message-Id: <20201012222050.999431-10-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20201012222050.999431-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [RFC v2 09/12] kunit: mock: add macro machinery to pick correct
- format args
-From:   Daniel Latypov <dlatypov@google.com>
-To:     dlatypov@google.com
-Cc:     alan.maguire@oracle.com, brendanhiggins@google.com,
-        davidgow@google.com, keescook@chromium.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mcgrof@kernel.org,
-        sboyd@kernel.org, skhan@linuxfoundation.org,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 12 Oct 2020 19:31:32 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32822 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726780AbgJLXb3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Oct 2020 19:31:29 -0400
+IronPort-SDR: v8kc3Fio+LjPoyvQb3mY8ylUGqFR6CzeawpaCTXAqt1VAiQ6XIXdXgWe/N/tGX+W/WtGkwX1MB
+ Yyz30aCCeR2g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="162351722"
+X-IronPort-AV: E=Sophos;i="5.77,368,1596524400"; 
+   d="scan'208";a="162351722"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 16:31:28 -0700
+IronPort-SDR: tYujEEKuwB7pwkDEJNgfSBtOh7hwJ+YZEVhRvoIibttlBusG3o0pRElwiIGjx+C70rOitVdHyl
+ N8yvUi3stUVQ==
+X-IronPort-AV: E=Sophos;i="5.77,368,1596524400"; 
+   d="scan'208";a="313606559"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 16:31:27 -0700
+Date:   Mon, 12 Oct 2020 16:31:26 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-aio@kvack.org,
+        linux-efi@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        target-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, samba-technical@lists.samba.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-afs@lists.infradead.org, cluster-devel@redhat.com,
+        linux-cachefs@redhat.com, intel-wired-lan@lists.osuosl.org,
+        xen-devel@lists.xenproject.org, linux-ext4@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, intel-gfx@lists.freedesktop.org,
+        linux-erofs@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        io-uring@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH RFC PKS/PMEM 22/58] fs/f2fs: Utilize new kmap_thread()
+Message-ID: <20201012233126.GD2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009195033.3208459-23-ira.weiny@intel.com>
+ <20201009213434.GA839@sol.localdomain>
+ <20201010003954.GW20115@casper.infradead.org>
+ <20201010013036.GD1122@sol.localdomain>
+ <20201012065635.GB2046448@iweiny-DESK2.sc.intel.com>
+ <20201012161946.GA858@sol.localdomain>
+ <5d621db9-23d4-e140-45eb-d7fca2093d2b@intel.com>
+ <20201012164438.GA20115@casper.infradead.org>
+ <20201012195354.GC2046448@iweiny-DESK2.sc.intel.com>
+ <20201012200254.GB20115@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201012200254.GB20115@casper.infradead.org>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+On Mon, Oct 12, 2020 at 09:02:54PM +0100, Matthew Wilcox wrote:
+> On Mon, Oct 12, 2020 at 12:53:54PM -0700, Ira Weiny wrote:
+> > On Mon, Oct 12, 2020 at 05:44:38PM +0100, Matthew Wilcox wrote:
+> > > On Mon, Oct 12, 2020 at 09:28:29AM -0700, Dave Hansen wrote:
+> > > > kmap_atomic() is always preferred over kmap()/kmap_thread().
+> > > > kmap_atomic() is _much_ more lightweight since its TLB invalidation is
+> > > > always CPU-local and never broadcast.
+> > > > 
+> > > > So, basically, unless you *must* sleep while the mapping is in place,
+> > > > kmap_atomic() is preferred.
+> > > 
+> > > But kmap_atomic() disables preemption, so the _ideal_ interface would map
+> > > it only locally, then on preemption make it global.  I don't even know
+> > > if that _can_ be done.  But this email makes it seem like kmap_atomic()
+> > > has no downsides.
+> > 
+> > And that is IIUC what Thomas was trying to solve.
+> > 
+> > Also, Linus brought up that kmap_atomic() has quirks in nesting.[1]
+> > 
+> > >From what I can see all of these discussions support the need to have something
+> > between kmap() and kmap_atomic().
+> > 
+> > However, the reason behind converting call sites to kmap_thread() are different
+> > between Thomas' patch set and mine.  Both require more kmap granularity.
+> > However, they do so with different reasons and underlying implementations but
+> > with the _same_ resulting semantics; a thread local mapping which is
+> > preemptable.[2]  Therefore they each focus on changing different call sites.
+> > 
+> > While this patch set is huge I think it serves a valuable purpose to identify a
+> > large number of call sites which are candidates for this new semantic.
+> 
+> Yes, I agree.  My problem with this patch-set is that it ties it to
+> some Intel feature that almost nobody cares about.
 
-Note: It was unclear if there was existing code that could be reused.
+I humbly disagree.  At this level the only thing this is tied to is the idea
+that there are additional memory protections available which can be enabled
+quickly on a per-thread basis.  PKS on Intel is but 1 implementation of that.
 
-This is used by DEFINE_MATCHER to generate matching funcs for primitive
-types that don't trigger compiler warnings.
+Even the kmap code only has knowledge that there is something which needs to be
+done special on a devm page.
 
-After preprocessing, we now generate matcher func code like
-  kunit_stream_add(stream, "%p not > "%p", actual, matcher->expected)
-as opposed to the hoping %d will work for all types.
+>
+> Maybe we should
+> care about it, but you didn't try very hard to make anyone care about
+> it in the cover letter.
 
-Signed-off-by: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- lib/kunit/common-mocks.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+Ok my bad.  We have customers who care very much about restricting access to
+the PMEM pages to prevent bugs in the kernel from causing permanent damage to
+their data/file systems.  I'll reword the cover letter better.
 
-diff --git a/lib/kunit/common-mocks.c b/lib/kunit/common-mocks.c
-index 4d8a3c9d5f0f..ce8929157ded 100644
---- a/lib/kunit/common-mocks.c
-+++ b/lib/kunit/common-mocks.c
-@@ -42,6 +42,27 @@ struct mock_param_matcher *kunit_any(struct kunit *test)
- 					    matcher);			       \
- 		}
- 
-+#define TYPE_FRMT(type_name) FORMAT_##type_name
-+#define FORMAT_u8 "%hu"
-+#define FORMAT_u16 "%hu"
-+#define FORMAT_u32 "%u"
-+#define FORMAT_u64 "%llu"
-+#define FORMAT_char "%c"
-+#define FORMAT_uchar "%c"
-+#define FORMAT_schar "%c"
-+#define FORMAT_short "%hd"
-+#define FORMAT_ushort "%hu"
-+#define FORMAT_int "%d"
-+#define FORMAT_uint "%u"
-+#define FORMAT_long "%ld"
-+#define FORMAT_ulong "%lu"
-+#define FORMAT_longlong "%lld"
-+#define FORMAT_ulonglong "%llu"
-+#define FORMAT_ptr "%p"
-+
-+#define CMP_FORMAT(type_name, msg, op)                                        \
-+	       TYPE_FRMT(type_name) msg " " #op " " TYPE_FRMT(type_name)
-+
- #define DEFINE_MATCH_FUNC(type_name, type, op_name, op)			       \
- 		static bool match_##type_name##_##op_name(		       \
- 				struct mock_param_matcher *pmatcher,	       \
-@@ -55,12 +76,12 @@ struct mock_param_matcher *kunit_any(struct kunit *test)
- 									       \
- 			if (matches)					       \
- 				kunit_stream_add(stream,		       \
--						 "%d "#op" %d",		       \
-+						 CMP_FORMAT(type_name, "", op),\
- 						 actual,		       \
- 						 matcher->expected);	       \
- 			else						       \
- 				kunit_stream_add(stream,		       \
--						 "%d not "#op" %d",	       \
-+						 CMP_FORMAT(type_name, " not", op), \
- 						 actual,		       \
- 						 matcher->expected);	       \
- 									       \
--- 
-2.28.0.1011.ga647a8990f-goog
+> 
+> For a future patch-set, I'd like to see you just introduce the new
+> API.  Then you can optimise the Intel implementation of it afterwards.
+> Those patch-sets have entirely different reviewers.
 
+I considered doing this.  But this seemed more logical because the feature is
+being driven by PMEM which is behind the kmap interface not by the users of the
+API.
+
+I can introduce a patch set with a kmap_thread() call which does nothing if
+that is more palatable but it seems wrong to me to do so.
+
+Ira
