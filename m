@@ -2,129 +2,143 @@ Return-Path: <SRS0=QRmN=DU=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 605D4C433DF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Oct 2020 11:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BB58C433DF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Oct 2020 17:46:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12DF920870
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Oct 2020 11:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602590192;
-	bh=/bHl1yHvnGqPKNbvJvHMSS5pZd7oY1zhfyqb1y94N8k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=HUbzPQK7JXWUaO0BVDF0NPqUX2Tq8h0RjmDb15dowrMCkgSUOSJZThJJE63VI5cgl
-	 A7eUiwolFBBa22IEzvhZoOIocYEyq9UwmIiKzerRPbQBEtZslzjV1LS3hqtMQm8Edz
-	 /jlJL5S1DzWkhETx8RnfRy9zgW0k2kfRZwExIfT4=
+	by mail.kernel.org (Postfix) with ESMTP id C4EAF2537B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Oct 2020 17:46:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728024AbgJML4b (ORCPT
+        id S1726202AbgJMRqT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Oct 2020 07:56:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57432 "EHLO mail.kernel.org"
+        Tue, 13 Oct 2020 13:46:19 -0400
+Received: from mga01.intel.com ([192.55.52.88]:33930 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727674AbgJMLyt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Oct 2020 07:54:49 -0400
-Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 643F622522;
-        Tue, 13 Oct 2020 11:54:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602590081;
-        bh=/bHl1yHvnGqPKNbvJvHMSS5pZd7oY1zhfyqb1y94N8k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qJSDrlV6GRFR/TU/l/hKCldbSIieoO0iSbL/1nxNFEFQL6yHxmlN8TJkgl5VEKNEP
-         aM1GZoG4Lm6eYBxVZyfrhLnfvqYjyPJt+1zwLRYEOg+O+M+CDgCb90iGVqeCoEQ/aJ
-         bv+DGGHi2YM0CtlWVtac6KBCoYD5F84CZ5+SwW28=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kSIt5-006CW3-EM; Tue, 13 Oct 2020 13:54:39 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        id S1725899AbgJMRqT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Oct 2020 13:46:19 -0400
+IronPort-SDR: vAaDb2GeOGaRBXP3BbJAEwIqjx20P40kDC8HelaKrFk+h1wwagV2vjEnynUBerFI/x265Mi3yO
+ 6P/BUDSYA6Ug==
+X-IronPort-AV: E=McAfee;i="6000,8403,9773"; a="183442281"
+X-IronPort-AV: E=Sophos;i="5.77,371,1596524400"; 
+   d="scan'208";a="183442281"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 10:46:17 -0700
+IronPort-SDR: UbtoTtFSPYVfOnxZbvSkvgnWaB78ds0E2ciP4lzikIfoSU1heNRegrjE7nU/3mlcEH99Tfll+P
+ m4LK8wv1e+6A==
+X-IronPort-AV: E=Sophos;i="5.77,371,1596524400"; 
+   d="scan'208";a="346268085"
+Received: from murawskx-mobl.amr.corp.intel.com (HELO [10.209.9.29]) ([10.209.9.29])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 10:46:17 -0700
+Subject: Re: [PATCH RFC V3 1/9] x86/pkeys: Create pkeys_common.h
+To:     ira.weiny@intel.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 61/80] kunit: test.h: solve kernel-doc warnings
-Date:   Tue, 13 Oct 2020 13:54:16 +0200
-Message-Id: <ed46994d6097086de8e19ee588747194f0aa57a4.1602589096.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1602589096.git.mchehab+huawei@kernel.org>
-References: <cover.1602589096.git.mchehab+huawei@kernel.org>
+References: <20201009194258.3207172-1-ira.weiny@intel.com>
+ <20201009194258.3207172-2-ira.weiny@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <0305912d-891f-839a-e861-49f5fada62b1@intel.com>
+Date:   Tue, 13 Oct 2020 10:46:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20201009194258.3207172-2-ira.weiny@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are some warnings there:
-	./include/kunit/test.h:90: warning: Function parameter or member 'name' not described in 'kunit_resource'
-	./include/kunit/test.h:353: warning: Function parameter or member 'res' not described in 'kunit_add_resource'
-	./include/kunit/test.h:367: warning: Function parameter or member 'res' not described in 'kunit_add_named_resource'
-	./include/kunit/test.h:367: warning: Function parameter or member 'name' not described in 'kunit_add_named_resource'
-	./include/kunit/test.h:367: warning: Function parameter or member 'data' not described in 'kunit_add_named_resource'
-	./include/kunit/test.h:367: warning: Excess function parameter 'name_data' description in 'kunit_add_named_resource'
+On 10/9/20 12:42 PM, ira.weiny@intel.com wrote:
+> Protection Keys User (PKU) and Protection Keys Supervisor (PKS) work
+> in similar fashions and can share common defines.
 
-Address them, ensuring that all non-private arguments will
-be properly described. With that regards, at struct kunit_resource,
-the free argument is described as user-provided. So, this
-doesn't seem to belong to the "private" part of the struct.
+Could we be a bit less abstract?  PKS and PKU each have:
+1. A single control register
+2. The same number of keys
+3. The same number of bits in the register per key
+4. Access and Write disable in the same bit locations
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- include/kunit/test.h | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+That means that we can share all the macros that synthesize and
+manipulate register values between the two features.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 59f3144f009a..41b3a266bf8c 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -25,6 +25,7 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
- /**
-  * struct kunit_resource - represents a *test managed resource*
-  * @data: for the user to store arbitrary data.
-+ * @name: optional name
-  * @free: a user supplied function to free the resource. Populated by
-  * kunit_resource_alloc().
-  *
-@@ -80,10 +81,10 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
-  */
- struct kunit_resource {
- 	void *data;
--	const char *name;		/* optional name */
--
--	/* private: internal use only. */
-+	const char *name;
- 	kunit_resource_free_t free;
-+
-+	/* private: internal use only. */
- 	struct kref refcount;
- 	struct list_head node;
- };
-@@ -343,6 +344,7 @@ static inline void kunit_put_resource(struct kunit_resource *res)
-  *        none is supplied, the resource data value is simply set to @data.
-  *	  If an init function is supplied, @data is passed to it instead.
-  * @free: a user-supplied function to free the resource (if needed).
-+ * @res: The resource.
-  * @data: value to pass to init function or set in resource data field.
-  */
- int kunit_add_resource(struct kunit *test,
-@@ -356,7 +358,9 @@ int kunit_add_resource(struct kunit *test,
-  * @test: The test context object.
-  * @init: a user-supplied function to initialize the resource data, if needed.
-  * @free: a user-supplied function to free the resource data, if needed.
-- * @name_data: name and data to be set for resource.
-+ * @res: The resource.
-+ * @name: name to be set for resource.
-+ * @data: value to pass to init function or set in resource data field.
-  */
- int kunit_add_named_resource(struct kunit *test,
- 			     kunit_resource_init_t init,
--- 
-2.26.2
+> +++ b/arch/x86/include/asm/pkeys_common.h
+> @@ -0,0 +1,11 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_X86_PKEYS_INTERNAL_H
+> +#define _ASM_X86_PKEYS_INTERNAL_H
+> +
+> +#define PKR_AD_BIT 0x1
+> +#define PKR_WD_BIT 0x2
+> +#define PKR_BITS_PER_PKEY 2
+> +
+> +#define PKR_AD_KEY(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
 
+Now that this has moved away from its use-site, it's a bit less
+self-documenting.  Let's add a comment:
+
+/*
+ * Generate an Access-Disable mask for the given pkey.  Several of these
+ * can be OR'd together to generate pkey register values.
+ */
+
+Once that's in place, along with the updated changelog:
+
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
