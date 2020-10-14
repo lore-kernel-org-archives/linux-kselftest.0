@@ -2,147 +2,181 @@ Return-Path: <SRS0=Q6l9=DV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD5DFC433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:17:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B14BC43457
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:19:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 757AE20BED
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:17:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB98920B1F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:19:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bbHVobEM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G3gn7F39"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729194AbgJNJR5 (ORCPT
+        id S1730424AbgJNJTy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        Wed, 14 Oct 2020 05:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726323AbgJNJR4 (ORCPT
+        with ESMTP id S1730448AbgJNJTk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:17:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD00C051101;
-        Wed, 14 Oct 2020 02:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oSoCzew+YknB0dx5EoXOzxp1GOMgWSJZPnYxGNWDbHw=; b=bbHVobEMV+gxKJvM2yym+cXIBq
-        fr+AXG56PjCs1dnTUCUFhA1KXpxjWdj+INB1pvURTaabIE118jh6jK8Ie8/ARC+Pmgp45nmv/ifqS
-        mqDWYvAzc8+sJ/BAxkz2sVSKdNFeujBFY8Ovj+C/cNykURt2cFMx2UNiPpfD9qHUfsCmiLFejXHxP
-        emit1XplFzfQI+kL4BAibB+Bb6r/6UqlL6KbtRTBCtsFKGKALZpQ7G5AGARKpVFfX42onYfwZPB/b
-        F0er87EC0E3DR0lqy3cCSF/VE4aSvCn+U9OI1AMBf4CG5GRBlyMf0BFwjrx22xyBB8UuD8IQ0wcrM
-        uSW/YzsA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kScuP-0000Ui-V4; Wed, 14 Oct 2020 09:17:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46051304E03;
-        Wed, 14 Oct 2020 11:17:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 21495201A8541; Wed, 14 Oct 2020 11:17:20 +0200 (CEST)
-Date:   Wed, 14 Oct 2020 11:17:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, corbet@lwn.net,
-        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
-        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, arve@android.com,
-        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
-        christian@brauner.io, hridya@google.com, surenb@google.com,
-        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
-        rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-Message-ID: <20201014091720.GC2628@hirez.programming.kicks-ass.net>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
- <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
- <202010091255.246395A6@keescook>
- <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
- <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
+        Wed, 14 Oct 2020 05:19:40 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFACC0251B6
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:14 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id ec4so1077656qvb.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:cc;
+        bh=TvfbBMDu2+s5YUKb/QcLi0FhzELrCQpbsXkcpSpM+Nk=;
+        b=G3gn7F39iSNCnEd7q8+PVe/kEIgBPlqHPHHGmF2OPFgrjxC5QoofX4MDKRT2oC2O9r
+         hV6n/EbqK4wdl8qi76HX5kMbwSIvdJepo6MbII62VZq0Uy9vM7eSpi7J/fSzRBT/x9VJ
+         JmtkqQIxbilR0WKfR9oQqXFr+CHI0qaZQjOkejT7V7SEYKvDoY1wJYkfB/RI+1G+l9wa
+         4F+5fRoIJwXTMOXh4Al28eIZc71nv6AtVZ00GVY1xil+lb0YwwPFO+2RInHsXiVBfhWx
+         25Jblpp8+HkwMPVx/nTi2L97HVLH2HmXAPfuxhlAVRLFAVdeUvqn9aN9v2fAuYxiIA5i
+         9iKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc;
+        bh=TvfbBMDu2+s5YUKb/QcLi0FhzELrCQpbsXkcpSpM+Nk=;
+        b=BrSkiMKajsQmpa9WdokXKq/FI+s6Aea09CU7YxpU7gcaaiEAIojeiFgwwW1kZj7lfI
+         VAqzsXYAj6eDmms+EFWz1xSY7nB2T9NArle2s2BtqL7i6uWWtYud2IeEbJgP8aus53f+
+         k2Oyp5WYfLqc0W6JBoFbzEqaryElxDmAm/sRArOU98pfqH2ra86K/AYnOb9LB4nEqsdc
+         Fi0ES6qbK+dZjJNxXlMC9v+2hPd4tAZlH2Xqy4FDTkjh/tc6d2V47ufvVbCaOUqNMdxZ
+         QSvXl3I7TjYZ18E6NySGKauSVQCbx64PE5vWs3Kde/1ITsJjiWO0LnqkdcvyqFzmS7HS
+         nxaQ==
+X-Gm-Message-State: AOAM531pboeX8YyggL2avv0CRpHxvgh6zMLrw9hzGYoAyUG6TXnT0+Xo
+        jvxXfEq/jxaFhH9VuiO3N+E5PS5A9k7qZLYzyQ==
+X-Google-Smtp-Source: ABdhPJw3tFbAz+wnBZvW4VQhuqFS/HjgU1bMTVbFcRuRjcOeKAwU0JK4uA8tv1QRCL/TMwPmerYSJ8B0YbB0LRqP4g==
+Sender: "kaleshsingh via sendgmr" <kaleshsingh@kaleshsingh.c.googlers.com>
+X-Received: from kaleshsingh.c.googlers.com ([fda3:e722:ac3:10:14:4d90:c0a8:2145])
+ (user=kaleshsingh job=sendgmr) by 2002:ad4:46a8:: with SMTP id
+ br8mr2664505qvb.24.1602636853194; Tue, 13 Oct 2020 17:54:13 -0700 (PDT)
+Date:   Wed, 14 Oct 2020 00:53:07 +0000
+In-Reply-To: <20201014005320.2233162-1-kaleshsingh@google.com>
+Message-Id: <20201014005320.2233162-3-kaleshsingh@google.com>
+Mime-Version: 1.0
+References: <20201014005320.2233162-1-kaleshsingh@google.com>
+X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
+Subject: [PATCH v4 2/5] arm64: mremap speedup - Enable HAVE_MOVE_PMD
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, minchan@google.com, joelaf@google.com,
+        lokeshgidra@google.com, kaleshsingh@google.com,
+        kernel-team@android.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Brown <broonie@kernel.org>, Gavin Shan <gshan@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Jia He <justin.he@arm.com>, John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Brian Geffon <bgeffon@google.com>,
+        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 08:12:20PM -0600, Shuah Khan wrote:
+HAVE_MOVE_PMD enables remapping pages at the PMD level if both the
+source and destination addresses are PMD-aligned.
 
-> They don't add any new behavior, As Kees mentioned they do give us a
-> way to clearly differentiate atomic usages that can wrap.
+HAVE_MOVE_PMD is already enabled on x86. The original patch [1] that
+introduced this config did not enable it on arm64 at the time because
+of performance issues with flushing the TLB on every PMD move. These
+issues have since been addressed in more recent releases with
+improvements to the arm64 TLB invalidation and core mmu_gather code as
+Will Deacon mentioned in [2].
 
-No it doesn't! atomic_t can wrap, this thing can wrap, no distinction.
+From the data below, it can be inferred that there is approximately
+8x improvement in performance when HAVE_MOVE_PMD is enabled on arm64.
 
-All it does is fragment the API and sow confusion. FOR NO BENEFIT.
+--------- Test Results ----------
 
-> > Worse, it mixes 2 unrelated cases into one type, which just makes a
-> > mockery of things (all the inc_return users are not statistics, some
-> > might even mis-behave if they wrap).
-> > 
-> 
-> You are right that all inc_return usages aren't statistics. There are
-> 3 distinct usages:
-> 
-> 1. Stats
-> 2. Cases where wrapping is fine
-> 3. Cases where wrapping could be a problem. In which case, this API
->    shouldn't be used.
+The following results were obtained on an arm64 device running a 5.4
+kernel, by remapping a PMD-aligned, 1GB sized region to a PMD-aligned
+destination. The results from 10 iterations of the test are given below.
+All times are in nanoseconds.
 
-And yet, afaict patch 4 is case 3...
+Control    HAVE_MOVE_PMD
 
-> There is no need to keep inc_return in this API as such. I included it
-> so it can be used for above cases 1 and 2, so the users don't have to
-> call inc() followed by read(). It can be left out of the API.
-> 
-> The atomic_t usages in the kernel fall into the following categories:
-> 
-> 1. Stats (tolerance for accuracy determines whether they need to be
->    atomic or not). RFC version included non-atomic API for cases
->    when lossiness is acceptable. All these cases use/need just init
->    and inc. There are two variations in this case:
-> 
->    a. No checks for wrapping. Use signed value.
->    b. No checks for wrapping, but return unsigned.
-> 
-> 2. Reference counters that release resource and rapping could result
->    in use-after-free type problems. There are two variations in this
->    case:
-> 
->    a. Increments and decrements aren't bounded.
->    b. Increments and decrements are bounded.
-> 
->    Currently tools that flag unsafe atomic_t usages that are candidates
->    for refcount_t conversions don't make a distinction between the two.
-> 
->    The second case, since increments and decrements are bounded, it is
->    safe to continue to use it. At the moment there is no good way to
->    tell them apart other than looking at each of these cases.
-> 
-> 3. Reference counters that manage/control states. Wrapping is a problem
->    in this case, as it could lead to undefined behavior. These cases
->    don't use test and free, use inc/dec. At the moment there is no good
->    way to tell them apart other than looking at each of these cases.
->    This is addressed by REFCOUNT_SATURATED case.
+9220833    1247761
+9002552    1219896
+9254115    1094792
+8725885    1227760
+9308646    1043698
+9001667    1101771
+8793385    1159896
+8774636    1143594
+9553125    1025833
+9374010    1078125
 
-Wrong! The atomic usage in mutex doesn't fall in any of those
-categories.
+9100885.4  1134312.6    <-- Mean Time in nanoseconds
 
+Total mremap time for a 1GB sized PMD-aligned region drops from
+~9.1 milliseconds to ~1.1 milliseconds. (~8x speedup).
 
-The only thing you're all saying that makes sense is that unintentional
-wrapping can have bad consequences, the rest is pure confusion.
+[1] https://lore.kernel.org/r/20181108181201.88826-3-joelaf@google.com
+[2] https://www.mail-archive.com/linuxppc-dev@lists.ozlabs.org/msg140837.html
 
-Focus on the non-wrapping cases, _everything_ else is not going
-anywhere.
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+Changes in v4:
+  - Add Kirill's Acked-by.
 
-So audit the kernel, find the cases that should not wrap, categorize and
-create APIs for them that trap the wrapping. But don't go around
-confusing things that don't need confusion.
+ arch/arm64/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 4b136e923ccb..434d6791e869 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -123,6 +123,7 @@ config ARM64
+ 	select GENERIC_VDSO_TIME_NS
+ 	select HANDLE_DOMAIN_IRQ
+ 	select HARDIRQS_SW_RESEND
++	select HAVE_MOVE_PMD
+ 	select HAVE_PCI
+ 	select HAVE_ACPI_APEI if (ACPI && EFI)
+ 	select HAVE_ALIGNED_STRUCT_PAGE if SLUB
+-- 
+2.28.0.1011.ga647a8990f-goog
+
