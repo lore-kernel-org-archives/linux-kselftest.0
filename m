@@ -2,188 +2,186 @@ Return-Path: <SRS0=Q6l9=DV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B347C4363A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 948E1C43467
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:21:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4365C20B1F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:21:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4248C22244
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:21:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WVUVCVw4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CMRAL6JA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731021AbgJNJVb (ORCPT
+        id S1731027AbgJNJVa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        Wed, 14 Oct 2020 05:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731022AbgJNJUl (ORCPT
+        with ESMTP id S1731025AbgJNJUl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 14 Oct 2020 05:20:41 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445FBC025278
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:53:49 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id w8so1584690ybj.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:53:49 -0700 (PDT)
+Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1FBC0251BC
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:39 -0700 (PDT)
+Received: by mail-ua1-x94a.google.com with SMTP id x5so239148uau.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:cc
-         :content-transfer-encoding;
-        bh=kqal+0zLGFPhz9I+TIzRUZfLWtzX1D3uO8CqpABK0Y0=;
-        b=WVUVCVw4XS9agygn2X5xXGsf6TB48LO7rOqfRM26gPVAcIi/Q0oNF1DmibxWSjxvAs
-         umqZ3cfMD9qO8wONFXAV1wVytwjdvMH7Iqeu//x9hJm4vxVOfjDJ98PK+VXVClZTGTCG
-         0y3Rh/MhLWD6DC1A2hLxY66SD1DNrE0QRDtvOp/lj9yp1fFI130ysngIs7343WzrLyWV
-         vAwj1nW2id05cmwRLC9a8wH1x5ttIdjCeTv8vih/+GMRjVdUKKR/pF48iDG0sGWo42ns
-         5vmFdl3WQlhAHmw2TuEqZOWYE+pmhQORZLE+F+93WPbOaTRJN3ZpC+ltSa7l+3PJv/iA
-         TOtQ==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:cc;
+        bh=htuM5XIelPXQQXL8oIf2e/a5DAtFUl+iOYnn4bwvhGc=;
+        b=CMRAL6JAtDqSgRV7ZpF02r6NBp/0nc+94iGdBDTPU4PFiUZAv/Y8jRqN27jzxwPPnp
+         vFLsngZcAyUU4xkRcpm1NFeKRmryyQP+fIVaPMNUpCX7nipK//0mhwToBcbbm//49Us7
+         ECHrX/3nZUKbULbZaqhOX1/zGLBAGzJ3WfYq2z5KhQXv6oORHwIN3MpulDFaG6oq722y
+         2/Kw2pi8QZLqn1DCHLaOFIvLY5/Yvg/aRP6S/Rz0VbFMh8XltQKWyAkMsZt3sNViURIJ
+         l3jVm32z1TgDhRNocvrC/nsAUzCWhkrMOnW355gs+qtWsum8sO+E9aDZI11FZLqRBAOQ
+         saZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :cc:content-transfer-encoding;
-        bh=kqal+0zLGFPhz9I+TIzRUZfLWtzX1D3uO8CqpABK0Y0=;
-        b=t7Z8eaVMPj0z34OtKA/xx6zYKS/HfdbIESFse1CNx6C+021z6qrgl/UyPtzh6Vjsc1
-         5+n3/mLV/xxPUrLO6cBzUgWVCEUDMf3lbHKBg4eqlImofIrVA0eAMljQ1KPdN+GpmgC8
-         3UQEnnfxJPn/6YQYsvTjpf5tCKp03cRf8KxSzilh210ssdV9DvCxRLwvRnzyeCXnOPdb
-         dZbp7proN2H14Xs8pKftSAO/sTF6/WAk3+CFgF2DJmQWZtmmw3EPGx8wcfAdbSrmjm3D
-         UP2qb0VfwOS8W6s4YZfY7Cu0+7iNM0MWf6kOEYl0SZCRtVpssFSFnwWtJ1QuiM1R0sFB
-         vNdA==
-X-Gm-Message-State: AOAM530LtZGKSdtIUH3ZjSgnSsTm42Sof257cJ3wFYrIGIMNjZ0vTTkP
-        hbiK9fWoLRKFdr7DxGa9AetQLvnE0PfuvJmskg==
-X-Google-Smtp-Source: ABdhPJxcUglBSX8zjEb9PvLiSn3/zi25+djWBaggtZDkIuOyPU3cZl6r6XPSEWn/Zr5eA1goeDpmGvNtLwj26KYQ5g==
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc;
+        bh=htuM5XIelPXQQXL8oIf2e/a5DAtFUl+iOYnn4bwvhGc=;
+        b=ivruwrIIReWYiVJmPW/oQwzn3zu+U8EiXJxc3FgTzOcYVgsH6vHjmRXes0Lwp80zDH
+         AJGqssiCHzRoVsGnC6iH0pKxbn5d4/mrPTCpdlDTt2m5K1ltDDTXWIyWoukAgY252p2B
+         4lolz2tlflSwtH3Q3N1U22KID5zMovkmp8OB9PeV74IcRJz9Cjyl0+yx2J6KMfzaQZMy
+         f0M3hNZRlNiYuLH14KR4jEvN00PGcWCDkCvP5QTgjLl21b3IKt1xFuPXMIy9+swFy3hN
+         giCBgEmOxcqmZSzHIWA48pQX1QLAyQg9qmQimyp+R/NpEzDJxPPqiS8uhSoBbqUFb7gj
+         s3Ag==
+X-Gm-Message-State: AOAM530MapS6Q3z1zC7nOSoW2JMhD19g6P1PybgDKNl+zAt9jD5GWLNK
+        7ZPdP+6+ugootjSUo/HGOiSLbrqqzJVd8RzdEw==
+X-Google-Smtp-Source: ABdhPJzHDHcV5e3UInygktDbdw7yXMcUWhr9PYP72zl9/yMs684UPaTPlpY9Qpc7526JumFcKN8SYtlhOEeScdw1og==
 Sender: "kaleshsingh via sendgmr" <kaleshsingh@kaleshsingh.c.googlers.com>
 X-Received: from kaleshsingh.c.googlers.com ([fda3:e722:ac3:10:14:4d90:c0a8:2145])
- (user=kaleshsingh job=sendgmr) by 2002:a25:c709:: with SMTP id
- w9mr3716846ybe.327.1602636828326; Tue, 13 Oct 2020 17:53:48 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 00:53:05 +0000
-Message-Id: <20201014005320.2233162-1-kaleshsingh@google.com>
+ (user=kaleshsingh job=sendgmr) by 2002:a05:6122:804:: with SMTP id
+ 4mr1935610vkj.15.1602636878883; Tue, 13 Oct 2020 17:54:38 -0700 (PDT)
+Date:   Wed, 14 Oct 2020 00:53:09 +0000
+In-Reply-To: <20201014005320.2233162-1-kaleshsingh@google.com>
+Message-Id: <20201014005320.2233162-5-kaleshsingh@google.com>
 Mime-Version: 1.0
+References: <20201014005320.2233162-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [PATCH v4 0/5] Speed up mremap on large regions
+Subject: [PATCH v4 4/5] arm64: mremap speedup - Enable HAVE_MOVE_PUD
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     surenb@google.com, minchan@google.com, joelaf@google.com,
         lokeshgidra@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, Catalin Marinas <catalin.marinas@arm.com>,
+        kernel-team@android.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Frederic Weisbecker <frederic@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Hassan Naveed <hnaveed@wavecomp.com>,
         Christian Brauner <christian.brauner@ubuntu.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>, Gavin Shan <gshan@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
+        Gavin Shan <gshan@redhat.com>, Mike Rapoport <rppt@kernel.org>,
         Steven Price <steven.price@arm.com>,
         Jia He <justin.he@arm.com>, John Hubbard <jhubbard@nvidia.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Ram Pai <linuxram@us.ibm.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Mina Almasry <almasrymina@google.com>,
         Sandipan Das <sandipan@linux.ibm.com>,
         Dave Hansen <dave.hansen@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
         Brian Geffon <bgeffon@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
         SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a repost of the mremap speed up patches, adding Kirill's
-Acked-by's (from a separate discussion). The previous versions are
-posted at:
-v1 - https://lore.kernel.org/r/20200930222130.4175584-1-kaleshsingh@google.=
-com
-v2 - https://lore.kernel.org/r/20201002162101.665549-1-kaleshsingh@google.c=
-om
-v3 - http://lore.kernel.org/r/20201005154017.474722-1-kaleshsingh@google.co=
-m
+HAVE_MOVE_PUD enables remapping pages at the PUD level if both the
+source and destination addresses are PUD-aligned.
 
-mremap time can be optimized by moving entries at the PMD/PUD level if
-the source and destination addresses are PMD/PUD-aligned and
-PMD/PUD-sized. Enable moving at the PMD and PUD levels on arm64 and
-x86. Other architectures where this type of move is supported and known to
-be safe can also opt-in to these optimizations by enabling HAVE_MOVE_PMD
-and HAVE_MOVE_PUD.
+With HAVE_MOVE_PUD enabled it can be inferred that there is approximately
+a 19x improvement in performance on arm64. (See data below).
 
-Observed Performance Improvements for remapping a PUD-aligned 1GB-sized
-region on x86 and arm64:
+------- Test Results ---------
 
-    - HAVE_MOVE_PMD is already enabled on x86 : N/A
-    - Enabling HAVE_MOVE_PUD on x86   : ~13x speed up
+The following results were obtained using a 5.4 kernel, by remapping
+a PUD-aligned, 1GB sized region to a PUD-aligned destination.
+The results from 10 iterations of the test are given below:
 
-    - Enabling HAVE_MOVE_PMD on arm64 : ~ 8x speed up
-    - Enabling HAVE_MOVE_PUD on arm64 : ~19x speed up
+Total mremap times for 1GB data on arm64. All times are in nanoseconds.
 
-          Altogether, HAVE_MOVE_PMD and HAVE_MOVE_PUD
-          give a total of ~150x speed up on arm64.
+Control          HAVE_MOVE_PUD
 
-Changes in v2:
-  - Reduce mremap_test time by only validating a configurable
-    threshold of the remapped region, as per John.
-  - Use a random pattern for mremap validation. Provide pattern
-    seed in test output, as per John.
-  - Moved set_pud_at() to separate patch, per Kirill.
-  - Use switch() instead of ifs in move_pgt_entry(), per Kirill.
-  - Update commit message with description of Android
-    garbage collector use case for HAVE_MOVE_PUD, as per Joel.
-  - Fix build test error reported by kernel test robot in [1].
+1247761          74271
+1219896          46771
+1094792          59687
+1227760          48385
+1043698          76666
+1101771          50365
+1159896          52500
+1143594          75261
+1025833          61354
+1078125          48697
 
+1134312.6        59395.7    <-- Mean time in nanoseconds
+
+A 1GB mremap completion time drops from ~1.1 milliseconds
+to ~59 microseconds on arm64. (~19x speed up).
+
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
 Changes in v3:
-  - Make lines 80 cols or less where they don=E2=80=99t need to be longer,
-    per John.
-  - Removed unused PATTERN_SIZE in mremap_test
-  - Added Reviewed-by tag for patch 1/5 (mremap kselftest patch).
-  - Use switch() instead of ifs in get_extent(), per Kirill
-  - Add BUILD_BUG() is get_extent() default case.
-  - Move get_old_pud() and alloc_new_pud() out of
-    #ifdef CONFIG_HAVE_MOVE_PUD, per Kirill.
-  - Have get_old_pmd() and alloc_new_pmd() use get_old_pud() and
-    alloc_old_pud(), per Kirill.
-  - Replace #ifdef CONFIG_HAVE_MOVE_PMD / PUD in move_page_tables()
-    with IS_ENABLED(CONFIG_HAVE_MOVE_PMD / PUD), per Kirill.
-  - Fold Add set_pud_at() patch into patch 4/5, per Kirill.
+  - Add set_pud_at() macro - Used by move_normal_pud().
 
-[1] https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/CKP=
-GL4FH4NG7TGH2CVYX2UX76L25BTA3/
+Changes in v4:
+  - Add Kirill's Acked-by.
 
-Kalesh Singh (5):
-  kselftests: vm: Add mremap tests
-  arm64: mremap speedup - Enable HAVE_MOVE_PMD
-  mm: Speedup mremap on 1GB or larger regions
-  arm64: mremap speedup - Enable HAVE_MOVE_PUD
-  x86: mremap speedup - Enable HAVE_MOVE_PUD
+ arch/arm64/Kconfig               | 1 +
+ arch/arm64/include/asm/pgtable.h | 1 +
+ 2 files changed, 2 insertions(+)
 
- arch/Kconfig                             |   7 +
- arch/arm64/Kconfig                       |   2 +
- arch/arm64/include/asm/pgtable.h         |   1 +
- arch/x86/Kconfig                         |   1 +
- mm/mremap.c                              | 230 ++++++++++++---
- tools/testing/selftests/vm/.gitignore    |   1 +
- tools/testing/selftests/vm/Makefile      |   1 +
- tools/testing/selftests/vm/mremap_test.c | 344 +++++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests   |  11 +
- 9 files changed, 558 insertions(+), 40 deletions(-)
- create mode 100644 tools/testing/selftests/vm/mremap_test.c
-
---=20
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 434d6791e869..7191a79fb44d 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -124,6 +124,7 @@ config ARM64
+ 	select HANDLE_DOMAIN_IRQ
+ 	select HARDIRQS_SW_RESEND
+ 	select HAVE_MOVE_PMD
++	select HAVE_MOVE_PUD
+ 	select HAVE_PCI
+ 	select HAVE_ACPI_APEI if (ACPI && EFI)
+ 	select HAVE_ALIGNED_STRUCT_PAGE if SLUB
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index a11bf52e0c38..0b0b36974757 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -454,6 +454,7 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
+ #define pfn_pud(pfn,prot)	__pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
+ 
+ #define set_pmd_at(mm, addr, pmdp, pmd)	set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd))
++#define set_pud_at(mm, addr, pudp, pud)	set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud))
+ 
+ #define __p4d_to_phys(p4d)	__pte_to_phys(p4d_pte(p4d))
+ #define __phys_to_p4d_val(phys)	__phys_to_pte_val(phys)
+-- 
 2.28.0.1011.ga647a8990f-goog
 
