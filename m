@@ -2,507 +2,193 @@ Return-Path: <SRS0=Q6l9=DV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F49CC433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4116DC433E7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12D03206F4
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0F4420709
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eFflQM/+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yGsJGrun"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730331AbgJNJXH (ORCPT
+        id S1728315AbgJNJX7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        Wed, 14 Oct 2020 05:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731226AbgJNJWy (ORCPT
+        with ESMTP id S1731144AbgJNJWk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:22:54 -0400
-Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9B3C0251B9
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:27 -0700 (PDT)
-Received: by mail-ua1-x949.google.com with SMTP id o15so238268uai.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:27 -0700 (PDT)
+        Wed, 14 Oct 2020 05:22:40 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA43BC05110D
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 23:50:14 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id t18so3892581ilo.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 23:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:cc:content-transfer-encoding;
-        bh=IzZGCID9b9HhzvZ8/RaJRTkHytRRFfTSaspmRMNwBaA=;
-        b=eFflQM/+RG4BVBAYNVEyyuipSodkeK8wBPKcxdINO7USZ9W/P0l35dgH9vl1VIZeJ9
-         bkiZQM7OsCg60ny6AwEjl2XwAPMh0AGcBwhyXH+Suu5GVLf9M2QF5n/qFt2CbJyBsVaP
-         fwLS3MlHGuZvTfQkza3F8/AIzqsg+Gy4OLLQMsmJQ4gFMBbEG4khhuZPJ+qt2wkGS4/b
-         8Ww9904eDDdSwERaVP8fqC1FRqmRHw1svdmTCUG8UxkTqoCm1gGL2523YVhvrT1zH/XD
-         tXXjMs3ezBMgWipmuQy0W+MhUsjB6r4HZ5DMcPI0+jhBIa8a2TNELZ0LOr7Aeyiui0YP
-         TQ+A==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=4ElDEesyg0K0qnDmN25EoqLVZHDvVGnEe9oIGE+GbpY=;
+        b=yGsJGrunBc8kcDsuG6rQsb9Gi1UWyLuGHPMOjfNqcJYM8NYjLqrxTBD9axJuRe18zU
+         HQkqtoT0925++y4wEzZBq13ntiRfp+ztZ0mDXnUdL/DvJhCreJEXfAa182D+qe97LEkO
+         irPKkX4zfBbl1xcfW5PpBAR52e4Oxl4tjn5J3Yh3jn1ITYtzYpjqrPFLqodqCN8XfrUk
+         dLs6vZPItghAdRarI9xQ1Cxs2V5c5nxJNBgLLgZBspfGmq2VhatarOyYFOVd0EAD4080
+         lhCt/ii1JOENmaqe3S7tG0tp2S0XruPJjXdxCV4VttS68y59UWFitMvHdujhyBd/saDj
+         eSRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc:content-transfer-encoding;
-        bh=IzZGCID9b9HhzvZ8/RaJRTkHytRRFfTSaspmRMNwBaA=;
-        b=OfjufXOfi6a8Sbl11fjOFEQdTUcBFfY3D6vBD4uIhfoimqy9GFWI1JBxg4MsueeQpT
-         yenqYZbYE7FK9y9kcs8PJq23Sh1VVXizXZB/+xo6a3UaAotLa00mDsEXjaNvVJWNOA8o
-         JyCru9o3UIg03+HfADtHqY+RuxDEGIJn6zb0JVMOLHsMR/pewnyzog8kZD0GCmUQdpET
-         kVKj1S0cvF2I/CgBtKvCok65261vydpbVjGL0tkiwzNYLHvz5di3vzysXo05rtgBrKKf
-         LvYrscrVzVvLhfchE3DZV9ZpxYZTpn8FBVHBS8n+VmhE79ylBIXCeBjxLhkQaePQtYNl
-         ixCQ==
-X-Gm-Message-State: AOAM533FUidVDX62vAgrEJY5ORV/naCwIjFERnNL2yYF99YdlcKP+sHJ
-        fa9nwOc9cibMLvQQDNA7g+A6l++KB2VskC5Fww==
-X-Google-Smtp-Source: ABdhPJyvWVIRplGNDjzvs0XGL0v2uPPAxCKlSxv45bumE3CxcrygOi7erdOIOjU1LBZ+S2o7fjKUgCNTdGy1u8o7iA==
-Sender: "kaleshsingh via sendgmr" <kaleshsingh@kaleshsingh.c.googlers.com>
-X-Received: from kaleshsingh.c.googlers.com ([fda3:e722:ac3:10:14:4d90:c0a8:2145])
- (user=kaleshsingh job=sendgmr) by 2002:a9f:3dc7:: with SMTP id
- e7mr1870481uaj.3.1602636866064; Tue, 13 Oct 2020 17:54:26 -0700 (PDT)
-Date:   Wed, 14 Oct 2020 00:53:08 +0000
-In-Reply-To: <20201014005320.2233162-1-kaleshsingh@google.com>
-Message-Id: <20201014005320.2233162-4-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20201014005320.2233162-1-kaleshsingh@google.com>
-X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
-Subject: [PATCH v4 3/5] mm: Speedup mremap on 1GB or larger regions
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     surenb@google.com, minchan@google.com, joelaf@google.com,
-        lokeshgidra@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, kernel test robot <lkp@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Hassan Naveed <hnaveed@wavecomp.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Gavin Shan <gshan@redhat.com>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Jia He <justin.he@arm.com>, John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ram Pai <linuxram@us.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=4ElDEesyg0K0qnDmN25EoqLVZHDvVGnEe9oIGE+GbpY=;
+        b=hsBeJdaRyd00dthNcu7n5tx9ZB2m6EzqZQuo8ykxC2wwDAbwsiIWedy0kZrnS4tTj5
+         3k4pBZh5iP85EEqWEbHkx3ZPPbvbMJGTpsySF81vSBTkkdAnGEvwv371mx4Jg3NaLxs9
+         oWb9hfvxDxG9ZP3Xg7+n6Mv+TBkMH/nO1uqdqfqCiQHreDKevkw9RX2w4MOoulayKBfa
+         9fnHaTljOYVgnq/aiVEbfdzw92txwGBLfHsSJaHf0eGxXwau07R7ObWpq8HQa52VmRED
+         17ST4doqdIHU+/+BfOuENp3/KkeFEHcLLDDilc819QzMjHwnnlEIvUwec5U102gDGVjM
+         AoJg==
+X-Gm-Message-State: AOAM530vBwqM5QLcAVLIMMOK4UZ//Vg79VuOVeqVMsMeRvtf20kiYbCH
+        9kddfQ6AsuD36C0DKnO/qVxxpTuzMTf6pElrGCIIByg9KPGdRFBg
+X-Google-Smtp-Source: ABdhPJwp3I8FXlHDe3+yUeiJIWIJmB6SHTRFkbQNvXxGizAU1lL1FALkkQgXS5sL9C/VXtC/MPUiLkp0WUpyy1PrrpA=
+X-Received: by 2002:a05:6e02:5ad:: with SMTP id k13mr1306184ils.71.1602658213139;
+ Tue, 13 Oct 2020 23:50:13 -0700 (PDT)
+MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Oct 2020 12:20:00 +0530
+Message-ID: <CA+G9fYvFUpODs+NkSYcnwKnXm62tmP=ksLeBPmB+KFrB2rvCtQ@mail.gmail.com>
+Subject: WARNING: at net/netfilter/nf_tables_api.c:622 lockdep_nfnl_nft_mutex_not_held+0x28/0x38
+ [nf_tables]
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        open list <linux-kernel@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org
+Cc:     pablo@netfilter.org, Florian Westphal <fw@strlen.de>,
+        fabf@skynet.be, Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Android needs to move large memory regions for garbage collection.
-The GC requires moving physical pages of multi-gigabyte heap
-using mremap. During this move, the application threads have to
-be paused for correctness. It is critical to keep this pause as
-short as possible to avoid jitters during user interaction.
+While running kselftest netfilter on arm64 hikey device on Linux next
+20201013 the following
+kernel warning noticed.
 
-Optimize mremap for >=3D 1GB-sized regions by moving at the PUD/PGD
-level if the source and destination addresses are PUD-aligned.
-For CONFIG_PGTABLE_LEVELS =3D=3D 3, moving at the PUD level in effect moves
-PGD entries, since the PUD entry is =E2=80=9Cfolded back=E2=80=9D onto the =
-PGD entry.
-Add HAVE_MOVE_PUD so that architectures where moving at the PUD level
-isn't supported/tested can turn this off by not selecting the config.
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: f2fb1afc57304f9dd68c20a08270e287470af2eb
+  git describe: next-20201013
+  make_kernelversion: 5.9.0
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/hikey/lkft/linux-next/879/config
 
-Fix build test error from v1 of this series reported by
-kernel test robot in [1].
+steps to reproduce:
+---------------------------
+# cd /opt/kselftests/default-in-kernel/
+# ./run_kselftest.sh -c netfilter
 
-[1] https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/CKP=
-GL4FH4NG7TGH2CVYX2UX76L25BTA3/
+crash log:
+----------------
+# selftests: netfilter: nft_trans_stress.sh
+[ 1913.862919] ------------[ cut here ]------------
+[ 1913.869773] WARNING: CPU: 2 PID: 31416 at
+/usr/src/kernel/net/netfilter/nf_tables_api.c:622
+lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1913.885399] Modules linked in: nf_tables nfnetlink act_mirred
+cls_u32 sch_etf xt_conntrack nf_conntrack nf_defrag_ipv4 libcrc32c
+ip6_tables nf_defrag_ipv6 ip_tables x_tables netdevsim 8021q garp mrp
+bridge stp llc sch_fq sch_ingress veth algif_hash wl18xx wlcore
+mac80211 cfg80211 snd_soc_hdmi_codec hci_uart btqca btbcm crct10dif_ce
+snd_soc_audio_graph_card snd_soc_simple_card_utils adv7511 wlcore_sdio
+cec bluetooth kirin_drm lima rfkill dw_drm_dsi gpu_sched
+drm_kms_helper drm fuse [last unloaded: test_blackhole_dev]
+[ 1913.941924] CPU: 2 PID: 31416 Comm: nft Tainted: G        W
+5.9.0-next-20201013 #1
+[ 1913.954131] Hardware name: HiKey Development Board (DT)
+[ 1913.963342] pstate: 00000005 (nzcv daif -PAN -UAO -TCO BTYPE=--)
+[ 1913.973483] pc : lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1913.984271] lr : lockdep_nfnl_nft_mutex_not_held+0x18/0x38 [nf_tables]
+[ 1913.995018] sp : ffff800013bc3550
+[ 1914.002559] x29: ffff800013bc3550 x28: ffff800013bc3930
+[ 1914.012197] x27: 0000000000000001 x26: ffff000045dc4e00
+[ 1914.021880] x25: 0000000000000001 x24: ffff000045dc4e00
+[ 1914.031565] x23: ffff800013bc3930 x22: 0000000000000001
+[ 1914.041298] x21: ffff800012750000 x20: ffff800013bc3668
+[ 1914.051068] x19: ffff800012750000 x18: 0000000000000000
+[ 1914.060876] x17: 0000000000000000 x16: 0000000000000000
+[ 1914.070699] x15: 0000000000000000 x14: ffff800009996d48
+[ 1914.080534] x13: ffffffffff000000 x12: 0000000000000028
+[ 1914.090418] x11: 0101010101010101 x10: 7f7f7f7f7f7f7f7f
+[ 1914.100355] x9 : fefefefefefefeff x8 : 7f7f7f7f7f7f7f7f
+[ 1914.110325] x7 : fefeff53544f4d48 x6 : 0000000000007ab8
+[ 1914.120339] x5 : 0000000000000005 x4 : 0000000000000001
+[ 1914.130388] x3 : 0000000000000001 x2 : 0000000000000000
+[ 1914.140454] x1 : 00000000ffffffff x0 : 0000000000000001
+[ 1914.150529] Call trace:
+[ 1914.157789]  lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1914.168967]  nft_chain_parse_hook+0x58/0x320 [nf_tables]
+[ 1914.179342]  nf_tables_addchain.isra.66+0xb8/0x510 [nf_tables]
+[ 1914.190340]  nf_tables_newchain+0x408/0x618 [nf_tables]
+[ 1914.200734]  nfnetlink_rcv_batch+0x4a0/0x610 [nfnetlink]
+[ 1914.211284]  nfnetlink_rcv+0x174/0x1a8 [nfnetlink]
+[ 1914.221351]  netlink_unicast+0x1dc/0x290
+[ 1914.230589]  netlink_sendmsg+0x2b8/0x3f8
+[ 1914.239840]  ____sys_sendmsg+0x288/0x2d0
+[ 1914.249117]  ___sys_sendmsg+0x90/0xd0
+[ 1914.258154]  __sys_sendmsg+0x78/0xd0
+[ 1914.267140]  __arm64_sys_sendmsg+0x2c/0x38
+[ 1914.276705]  el0_svc_common.constprop.3+0x7c/0x198
+[ 1914.287041]  do_el0_svc+0x34/0xa0
+[ 1914.295928]  el0_sync_handler+0x128/0x190
+[ 1914.305567]  el0_sync+0x140/0x180
+[ 1914.314535] CPU: 2 PID: 31416 Comm: nft Tainted: G        W
+5.9.0-next-20201013 #1
+[ 1914.328670] Hardware name: HiKey Development Board (DT)
+[ 1914.339812] Call trace:
+[ 1914.348184]  dump_backtrace+0x0/0x1f0
+[ 1914.357841]  show_stack+0x2c/0x80
+[ 1914.367181]  dump_stack+0xf8/0x160
+[ 1914.376615]  __warn+0xac/0x168
+[ 1914.385732]  report_bug+0xcc/0x180
+[ 1914.395242]  bug_handler+0x24/0x78
+[ 1914.404783]  call_break_hook+0x80/0xa0
+[ 1914.414725]  brk_handler+0x28/0x68
+[ 1914.424358]  do_debug_exception+0xbc/0x128
+[ 1914.434744]  el1_sync_handler+0x7c/0x128
+[ 1914.445017]  el1_sync+0x7c/0x100
+[ 1914.454625]  lockdep_nfnl_nft_mutex_not_held+0x28/0x38 [nf_tables]
+[ 1914.467351]  nft_chain_parse_hook+0x58/0x320 [nf_tables]
+[ 1914.479276]  nf_tables_addchain.isra.66+0xb8/0x510 [nf_tables]
+[ 1914.491818]  nf_tables_newchain+0x408/0x618 [nf_tables]
+[ 1914.503774]  nfnetlink_rcv_batch+0x4a0/0x610 [nfnetlink]
+[ 1914.515899]  nfnetlink_rcv+0x174/0x1a8 [nfnetlink]
+[ 1914.527525]  netlink_unicast+0x1dc/0x290
+[ 1914.538318]  netlink_sendmsg+0x2b8/0x3f8
+[ 1914.549125]  ____sys_sendmsg+0x288/0x2d0
+[ 1914.559959]  ___sys_sendmsg+0x90/0xd0
+[ 1914.570557]  __sys_sendmsg+0x78/0xd0
+[ 1914.581111]  __arm64_sys_sendmsg+0x2c/0x38
+[ 1914.592241]  el0_svc_common.constprop.3+0x7c/0x198
+[ 1914.604152]  do_el0_svc+0x34/0xa0
+[ 1914.614497]  el0_sync_handler+0x128/0x190
+[ 1914.625540]  el0_sync+0x140/0x180
+[ 1914.635652] irq event stamp: 0
+[ 1914.645091] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[ 1914.657471] hardirqs last disabled at (0): [<ffff80001008975c>]
+copy_process+0x68c/0x1910
+[ 1914.671402] softirqs last  enabled at (0): [<ffff80001008975c>]
+copy_process+0x68c/0x1910
+[ 1914.685201] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[ 1914.696977] ---[ end trace 180274a5ab806f4e ]---
+[ 1917.244483] hisi_thermal f7030700.tsensor: sensor <2> THERMAL
+ALARM: 66385 > 65000
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
----
-Changes in v2:
-  - Update commit message with description of Android GC's use case.
-  - Move set_pud_at() to a separate patch.
-  - Use switch() instead of ifs in move_pgt_entry()
-  - Fix build test error reported by kernel test robot on x86_64 in [1].
-    Guard move_huge_pmd() with IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE),
-    since this section doesn't get optimized out in the kernel test
-    robot's build test when HAVE_MOVE_PUD is enabled.
-  - Keep WARN_ON_ONCE(1) instead of BUILD_BUG() for the aforementioned
-    reason.
+Full test log link,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201013/testrun/3302070/suite/linux-log-parser/test/check-kernel-warning-1839079/log
 
-Changes in v3:
-  - Move get_old_pud() and alloc_new_pud() out of
-    #ifdef CONFIG_HAVE_MOVE_PUD.
-  - Have get_old_pmd() and alloc_new_pmd() use get_old_pud() and
-    alloc_old_pud().
-  - Use switch() in get_extent() instead of ifs.
-  - Add BUILD_BUG() to default case of get_extent().
-  - Replace #ifdef CONFIG_HAVE_MOVE_PMD/PUD in move_page_tables() with
-    IS_ENABLED(CONFIG_HAVE_MOVE_PMD/PUD).
-  - Make lines 80 cols or less, where they don=E2=80=99t need to be longer.
-  - s/=3D  /=3D /g (Fixed double spaces after '=3D').
 
-Changes in v4:
-  - Add Kirill's Acked-by.
-
- arch/Kconfig |   7 ++
- mm/mremap.c  | 230 ++++++++++++++++++++++++++++++++++++++++++---------
- 2 files changed, 197 insertions(+), 40 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 76ec3395b843..79da6d714264 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -608,6 +608,13 @@ config HAVE_IRQ_TIME_ACCOUNTING
- 	  Archs need to ensure they use a high enough resolution clock to
- 	  support irq time accounting and then call enable_sched_clock_irqtime().
-=20
-+config HAVE_MOVE_PUD
-+	bool
-+	help
-+	  Architectures that select this are able to move page tables at the
-+	  PUD level. If there are only 3 page table levels, the move effectively
-+	  happens at the PGD level.
-+
- config HAVE_MOVE_PMD
- 	bool
- 	help
-diff --git a/mm/mremap.c b/mm/mremap.c
-index 138abbae4f75..078f731277b6 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -30,12 +30,11 @@
-=20
- #include "internal.h"
-=20
--static pmd_t *get_old_pmd(struct mm_struct *mm, unsigned long addr)
-+static pud_t *get_old_pud(struct mm_struct *mm, unsigned long addr)
- {
- 	pgd_t *pgd;
- 	p4d_t *p4d;
- 	pud_t *pud;
--	pmd_t *pmd;
-=20
- 	pgd =3D pgd_offset(mm, addr);
- 	if (pgd_none_or_clear_bad(pgd))
-@@ -49,6 +48,18 @@ static pmd_t *get_old_pmd(struct mm_struct *mm, unsigned=
- long addr)
- 	if (pud_none_or_clear_bad(pud))
- 		return NULL;
-=20
-+	return pud;
-+}
-+
-+static pmd_t *get_old_pmd(struct mm_struct *mm, unsigned long addr)
-+{
-+	pud_t *pud;
-+	pmd_t *pmd;
-+
-+	pud =3D get_old_pud(mm, addr);
-+	if (!pud)
-+		return NULL;
-+
- 	pmd =3D pmd_offset(pud, addr);
- 	if (pmd_none(*pmd))
- 		return NULL;
-@@ -56,19 +67,27 @@ static pmd_t *get_old_pmd(struct mm_struct *mm, unsigne=
-d long addr)
- 	return pmd;
- }
-=20
--static pmd_t *alloc_new_pmd(struct mm_struct *mm, struct vm_area_struct *v=
-ma,
-+static pud_t *alloc_new_pud(struct mm_struct *mm, struct vm_area_struct *v=
-ma,
- 			    unsigned long addr)
- {
- 	pgd_t *pgd;
- 	p4d_t *p4d;
--	pud_t *pud;
--	pmd_t *pmd;
-=20
- 	pgd =3D pgd_offset(mm, addr);
- 	p4d =3D p4d_alloc(mm, pgd, addr);
- 	if (!p4d)
- 		return NULL;
--	pud =3D pud_alloc(mm, p4d, addr);
-+
-+	return pud_alloc(mm, p4d, addr);
-+}
-+
-+static pmd_t *alloc_new_pmd(struct mm_struct *mm, struct vm_area_struct *v=
-ma,
-+			    unsigned long addr)
-+{
-+	pud_t *pud;
-+	pmd_t *pmd;
-+
-+	pud =3D alloc_new_pud(mm, vma, addr);
- 	if (!pud)
- 		return NULL;
-=20
-@@ -249,14 +268,148 @@ static bool move_normal_pmd(struct vm_area_struct *v=
-ma, unsigned long old_addr,
-=20
- 	return true;
- }
-+#else
-+static inline bool move_normal_pmd(struct vm_area_struct *vma,
-+		unsigned long old_addr, unsigned long new_addr, pmd_t *old_pmd,
-+		pmd_t *new_pmd)
-+{
-+	return false;
-+}
- #endif
-=20
-+#ifdef CONFIG_HAVE_MOVE_PUD
-+static bool move_normal_pud(struct vm_area_struct *vma, unsigned long old_=
-addr,
-+		  unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
-+{
-+	spinlock_t *old_ptl, *new_ptl;
-+	struct mm_struct *mm =3D vma->vm_mm;
-+	pud_t pud;
-+
-+	/*
-+	 * The destination pud shouldn't be established, free_pgtables()
-+	 * should have released it.
-+	 */
-+	if (WARN_ON_ONCE(!pud_none(*new_pud)))
-+		return false;
-+
-+	/*
-+	 * We don't have to worry about the ordering of src and dst
-+	 * ptlocks because exclusive mmap_lock prevents deadlock.
-+	 */
-+	old_ptl =3D pud_lock(vma->vm_mm, old_pud);
-+	new_ptl =3D pud_lockptr(mm, new_pud);
-+	if (new_ptl !=3D old_ptl)
-+		spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
-+
-+	/* Clear the pud */
-+	pud =3D *old_pud;
-+	pud_clear(old_pud);
-+
-+	VM_BUG_ON(!pud_none(*new_pud));
-+
-+	/* Set the new pud */
-+	set_pud_at(mm, new_addr, new_pud, pud);
-+	flush_tlb_range(vma, old_addr, old_addr + PUD_SIZE);
-+	if (new_ptl !=3D old_ptl)
-+		spin_unlock(new_ptl);
-+	spin_unlock(old_ptl);
-+
-+	return true;
-+}
-+#else
-+static inline bool move_normal_pud(struct vm_area_struct *vma,
-+		unsigned long old_addr, unsigned long new_addr, pud_t *old_pud,
-+		pud_t *new_pud)
-+{
-+	return false;
-+}
-+#endif
-+
-+enum pgt_entry {
-+	NORMAL_PMD,
-+	HPAGE_PMD,
-+	NORMAL_PUD,
-+};
-+
-+/*
-+ * Returns an extent of the corresponding size for the pgt_entry specified=
- if
-+ * valid. Else returns a smaller extent bounded by the end of the source a=
-nd
-+ * destination pgt_entry.
-+ */
-+static unsigned long get_extent(enum pgt_entry entry, unsigned long old_ad=
-dr,
-+			unsigned long old_end, unsigned long new_addr)
-+{
-+	unsigned long next, extent, mask, size;
-+
-+	switch (entry) {
-+	case HPAGE_PMD:
-+	case NORMAL_PMD:
-+		mask =3D PMD_MASK;
-+		size =3D PMD_SIZE;
-+		break;
-+	case NORMAL_PUD:
-+		mask =3D PUD_MASK;
-+		size =3D PUD_SIZE;
-+		break;
-+	default:
-+		BUILD_BUG();
-+		break;
-+	}
-+
-+	next =3D (old_addr + size) & mask;
-+	/* even if next overflowed, extent below will be ok */
-+	extent =3D (next > old_end) ? old_end - old_addr : next - old_addr;
-+	next =3D (new_addr + size) & mask;
-+	if (extent > next - new_addr)
-+		extent =3D next - new_addr;
-+	return extent;
-+}
-+
-+/*
-+ * Attempts to speedup the move by moving entry at the level corresponding=
- to
-+ * pgt_entry. Returns true if the move was successful, else false.
-+ */
-+static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vm=
-a,
-+			unsigned long old_addr, unsigned long new_addr,
-+			void *old_entry, void *new_entry, bool need_rmap_locks)
-+{
-+	bool moved =3D false;
-+
-+	/* See comment in move_ptes() */
-+	if (need_rmap_locks)
-+		take_rmap_locks(vma);
-+
-+	switch (entry) {
-+	case NORMAL_PMD:
-+		moved =3D move_normal_pmd(vma, old_addr, new_addr, old_entry,
-+					new_entry);
-+		break;
-+	case NORMAL_PUD:
-+		moved =3D move_normal_pud(vma, old_addr, new_addr, old_entry,
-+					new_entry);
-+		break;
-+	case HPAGE_PMD:
-+		moved =3D IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
-+			move_huge_pmd(vma, old_addr, new_addr, old_entry,
-+				      new_entry);
-+		break;
-+	default:
-+		WARN_ON_ONCE(1);
-+		break;
-+	}
-+
-+	if (need_rmap_locks)
-+		drop_rmap_locks(vma);
-+
-+	return moved;
-+}
-+
- unsigned long move_page_tables(struct vm_area_struct *vma,
- 		unsigned long old_addr, struct vm_area_struct *new_vma,
- 		unsigned long new_addr, unsigned long len,
- 		bool need_rmap_locks)
- {
--	unsigned long extent, next, old_end;
-+	unsigned long extent, old_end;
- 	struct mmu_notifier_range range;
- 	pmd_t *old_pmd, *new_pmd;
-=20
-@@ -269,53 +422,50 @@ unsigned long move_page_tables(struct vm_area_struct =
-*vma,
-=20
- 	for (; old_addr < old_end; old_addr +=3D extent, new_addr +=3D extent) {
- 		cond_resched();
--		next =3D (old_addr + PMD_SIZE) & PMD_MASK;
--		/* even if next overflowed, extent below will be ok */
--		extent =3D next - old_addr;
--		if (extent > old_end - old_addr)
--			extent =3D old_end - old_addr;
--		next =3D (new_addr + PMD_SIZE) & PMD_MASK;
--		if (extent > next - new_addr)
--			extent =3D next - new_addr;
-+		/*
-+		 * If extent is PUD-sized try to speed up the move by moving at the
-+		 * PUD level if possible.
-+		 */
-+		extent =3D get_extent(NORMAL_PUD, old_addr, old_end, new_addr);
-+		if (IS_ENABLED(CONFIG_HAVE_MOVE_PUD) && extent =3D=3D PUD_SIZE) {
-+			pud_t *old_pud, *new_pud;
-+
-+			old_pud =3D get_old_pud(vma->vm_mm, old_addr);
-+			if (!old_pud)
-+				continue;
-+			new_pud =3D alloc_new_pud(vma->vm_mm, vma, new_addr);
-+			if (!new_pud)
-+				break;
-+			if (move_pgt_entry(NORMAL_PUD, vma, old_addr, new_addr,
-+					   old_pud, new_pud, need_rmap_locks))
-+				continue;
-+		}
-+
-+		extent =3D get_extent(NORMAL_PMD, old_addr, old_end, new_addr);
- 		old_pmd =3D get_old_pmd(vma->vm_mm, old_addr);
- 		if (!old_pmd)
- 			continue;
- 		new_pmd =3D alloc_new_pmd(vma->vm_mm, vma, new_addr);
- 		if (!new_pmd)
- 			break;
--		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) || pmd_devmap(*old=
-_pmd)) {
--			if (extent =3D=3D HPAGE_PMD_SIZE) {
--				bool moved;
--				/* See comment in move_ptes() */
--				if (need_rmap_locks)
--					take_rmap_locks(vma);
--				moved =3D move_huge_pmd(vma, old_addr, new_addr,
--						      old_pmd, new_pmd);
--				if (need_rmap_locks)
--					drop_rmap_locks(vma);
--				if (moved)
--					continue;
--			}
-+		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) ||
-+		    pmd_devmap(*old_pmd)) {
-+			if (extent =3D=3D HPAGE_PMD_SIZE &&
-+			    move_pgt_entry(HPAGE_PMD, vma, old_addr, new_addr,
-+					   old_pmd, new_pmd, need_rmap_locks))
-+				continue;
- 			split_huge_pmd(vma, old_pmd, old_addr);
- 			if (pmd_trans_unstable(old_pmd))
- 				continue;
--		} else if (extent =3D=3D PMD_SIZE) {
--#ifdef CONFIG_HAVE_MOVE_PMD
-+		} else if (IS_ENABLED(CONFIG_HAVE_MOVE_PMD) &&
-+			   extent =3D=3D PMD_SIZE) {
- 			/*
- 			 * If the extent is PMD-sized, try to speed the move by
- 			 * moving at the PMD level if possible.
- 			 */
--			bool moved;
--
--			if (need_rmap_locks)
--				take_rmap_locks(vma);
--			moved =3D move_normal_pmd(vma, old_addr, new_addr,
--						old_pmd, new_pmd);
--			if (need_rmap_locks)
--				drop_rmap_locks(vma);
--			if (moved)
-+			if (move_pgt_entry(NORMAL_PMD, vma, old_addr, new_addr,
-+					   old_pmd, new_pmd, need_rmap_locks))
- 				continue;
--#endif
- 		}
-=20
- 		if (pte_alloc(new_vma->vm_mm, new_pmd))
---=20
-2.28.0.1011.ga647a8990f-goog
-
+-- 
+Linaro LKFT
+https://lkft.linaro.org
