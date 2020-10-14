@@ -2,119 +2,147 @@ Return-Path: <SRS0=Q6l9=DV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98248C433DF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 02:08:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD5DFC433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:17:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63C8321D7F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 02:08:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 757AE20BED
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:17:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bbHVobEM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728780AbgJNCI3 (ORCPT
+        id S1729194AbgJNJR5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Oct 2020 22:08:29 -0400
-Received: from mga17.intel.com ([192.55.52.151]:22912 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725874AbgJNCI3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Oct 2020 22:08:29 -0400
-IronPort-SDR: yBPi+WL7a4DNdUvyrh1MJhTW+GyOOMVGIX1S38Tc37EzWAxgs4WvuDTApBhoYjxT5xoHjKRQD/
- ifcKXwlt0QhQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9773"; a="145879786"
-X-IronPort-AV: E=Sophos;i="5.77,373,1596524400"; 
-   d="scan'208";a="145879786"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 19:08:27 -0700
-IronPort-SDR: inQ4qbS0lmxsXC1fa/JBY45Zh6JLJm29uxHgtI4QzSetpkgZ6qu/XIxzj094gWeTQWPgLeSmUk
- brKTQAX3Hb1w==
-X-IronPort-AV: E=Sophos;i="5.77,373,1596524400"; 
-   d="scan'208";a="530644675"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 19:08:26 -0700
-Date:   Tue, 13 Oct 2020 19:08:25 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC V3 3/9] x86/pks: Enable Protection Keys Supervisor
- (PKS)
-Message-ID: <20201014020825.GM2046448@iweiny-DESK2.sc.intel.com>
-References: <20201009194258.3207172-1-ira.weiny@intel.com>
- <20201009194258.3207172-4-ira.weiny@intel.com>
- <cfd8e361-9d5b-5b24-08d4-31ad3d392255@intel.com>
+        Wed, 14 Oct 2020 05:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726323AbgJNJR4 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 14 Oct 2020 05:17:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD00C051101;
+        Wed, 14 Oct 2020 02:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oSoCzew+YknB0dx5EoXOzxp1GOMgWSJZPnYxGNWDbHw=; b=bbHVobEMV+gxKJvM2yym+cXIBq
+        fr+AXG56PjCs1dnTUCUFhA1KXpxjWdj+INB1pvURTaabIE118jh6jK8Ie8/ARC+Pmgp45nmv/ifqS
+        mqDWYvAzc8+sJ/BAxkz2sVSKdNFeujBFY8Ovj+C/cNykURt2cFMx2UNiPpfD9qHUfsCmiLFejXHxP
+        emit1XplFzfQI+kL4BAibB+Bb6r/6UqlL6KbtRTBCtsFKGKALZpQ7G5AGARKpVFfX42onYfwZPB/b
+        F0er87EC0E3DR0lqy3cCSF/VE4aSvCn+U9OI1AMBf4CG5GRBlyMf0BFwjrx22xyBB8UuD8IQ0wcrM
+        uSW/YzsA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kScuP-0000Ui-V4; Wed, 14 Oct 2020 09:17:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46051304E03;
+        Wed, 14 Oct 2020 11:17:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 21495201A8541; Wed, 14 Oct 2020 11:17:20 +0200 (CEST)
+Date:   Wed, 14 Oct 2020 11:17:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, corbet@lwn.net,
+        gregkh@linuxfoundation.org, shuah@kernel.org, rafael@kernel.org,
+        johannes@sipsolutions.net, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, arve@android.com,
+        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
+        christian@brauner.io, hridya@google.com, surenb@google.com,
+        minyard@acm.org, arnd@arndb.de, mchehab@kernel.org,
+        rric@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
+Message-ID: <20201014091720.GC2628@hirez.programming.kicks-ass.net>
+References: <cover.1602209970.git.skhan@linuxfoundation.org>
+ <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
+ <202010091255.246395A6@keescook>
+ <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
+ <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cfd8e361-9d5b-5b24-08d4-31ad3d392255@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 11:23:08AM -0700, Dave Hansen wrote:
-> On 10/9/20 12:42 PM, ira.weiny@intel.com wrote:
-> > +/*
-> > + * PKS is independent of PKU and either or both may be supported on a CPU.
-> > + * Configure PKS if the cpu supports the feature.
-> > + */
-> 
-> Let's at least be consistent about CPU vs. cpu in a single comment. :)
+On Tue, Oct 13, 2020 at 08:12:20PM -0600, Shuah Khan wrote:
 
-Sorry, done.
+> They don't add any new behavior, As Kees mentioned they do give us a
+> way to clearly differentiate atomic usages that can wrap.
 
-> 
-> > +static void setup_pks(void)
-> > +{
-> > +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SUPERVISOR_PKEYS))
-> > +		return;
-> > +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> > +		return;
-> 
-> If you put X86_FEATURE_PKS in disabled-features.h, you can get rid of
-> the explicit CONFIG_ check.
+No it doesn't! atomic_t can wrap, this thing can wrap, no distinction.
 
-Done.
+All it does is fragment the API and sow confusion. FOR NO BENEFIT.
 
-> 
-> > +	cr4_set_bits(X86_CR4_PKS);
-> > +}
-> > +
-> >  /*
-> >   * This does the hard work of actually picking apart the CPU stuff...
-> >   */
-> > @@ -1544,6 +1558,7 @@ static void identify_cpu(struct cpuinfo_x86 *c)
-> >  
-> >  	x86_init_rdrand(c);
-> >  	setup_pku(c);
-> > +	setup_pks();
-> >  
-> >  	/*
-> >  	 * Clear/Set all flags overridden by options, need do it
-> > diff --git a/mm/Kconfig b/mm/Kconfig
-> > index 6c974888f86f..1b9bc004d9bc 100644
-> > --- a/mm/Kconfig
-> > +++ b/mm/Kconfig
-> > @@ -822,6 +822,8 @@ config ARCH_USES_HIGH_VMA_FLAGS
-> >  	bool
-> >  config ARCH_HAS_PKEYS
-> >  	bool
-> > +config ARCH_HAS_SUPERVISOR_PKEYS
-> > +	bool
-> >  
-> >  config PERCPU_STATS
-> >  	bool "Collect percpu memory statistics"
+> > Worse, it mixes 2 unrelated cases into one type, which just makes a
+> > mockery of things (all the inc_return users are not statistics, some
+> > might even mis-behave if they wrap).
 > > 
 > 
+> You are right that all inc_return usages aren't statistics. There are
+> 3 distinct usages:
+> 
+> 1. Stats
+> 2. Cases where wrapping is fine
+> 3. Cases where wrapping could be a problem. In which case, this API
+>    shouldn't be used.
+
+And yet, afaict patch 4 is case 3...
+
+> There is no need to keep inc_return in this API as such. I included it
+> so it can be used for above cases 1 and 2, so the users don't have to
+> call inc() followed by read(). It can be left out of the API.
+> 
+> The atomic_t usages in the kernel fall into the following categories:
+> 
+> 1. Stats (tolerance for accuracy determines whether they need to be
+>    atomic or not). RFC version included non-atomic API for cases
+>    when lossiness is acceptable. All these cases use/need just init
+>    and inc. There are two variations in this case:
+> 
+>    a. No checks for wrapping. Use signed value.
+>    b. No checks for wrapping, but return unsigned.
+> 
+> 2. Reference counters that release resource and rapping could result
+>    in use-after-free type problems. There are two variations in this
+>    case:
+> 
+>    a. Increments and decrements aren't bounded.
+>    b. Increments and decrements are bounded.
+> 
+>    Currently tools that flag unsafe atomic_t usages that are candidates
+>    for refcount_t conversions don't make a distinction between the two.
+> 
+>    The second case, since increments and decrements are bounded, it is
+>    safe to continue to use it. At the moment there is no good way to
+>    tell them apart other than looking at each of these cases.
+> 
+> 3. Reference counters that manage/control states. Wrapping is a problem
+>    in this case, as it could lead to undefined behavior. These cases
+>    don't use test and free, use inc/dec. At the moment there is no good
+>    way to tell them apart other than looking at each of these cases.
+>    This is addressed by REFCOUNT_SATURATED case.
+
+Wrong! The atomic usage in mutex doesn't fall in any of those
+categories.
+
+
+The only thing you're all saying that makes sense is that unintentional
+wrapping can have bad consequences, the rest is pure confusion.
+
+Focus on the non-wrapping cases, _everything_ else is not going
+anywhere.
+
+So audit the kernel, find the cases that should not wrap, categorize and
+create APIs for them that trap the wrapping. But don't go around
+confusing things that don't need confusion.
