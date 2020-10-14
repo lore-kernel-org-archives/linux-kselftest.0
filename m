@@ -7,58 +7,58 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFE8FC433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 02:05:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2990BC433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 02:14:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A57022258
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 02:05:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF6F322263
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 02:14:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=massaru-org.20150623.gappssmtp.com header.i=@massaru-org.20150623.gappssmtp.com header.b="PfUavVuK"
+	dkim=pass (2048-bit key) header.d=massaru-org.20150623.gappssmtp.com header.i=@massaru-org.20150623.gappssmtp.com header.b="qEnFg0M6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728776AbgJOCFO (ORCPT
+        id S1730448AbgJOCOj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Oct 2020 22:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        Wed, 14 Oct 2020 22:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732536AbgJOCFD (ORCPT
+        with ESMTP id S1730445AbgJOCOj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 22:05:03 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D56C0613D6
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 19:05:00 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id 140so1205237qko.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 19:04:59 -0700 (PDT)
+        Wed, 14 Oct 2020 22:14:39 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F724C025278
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 16:47:53 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id z6so995272qkz.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Oct 2020 16:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=massaru-org.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=c0cFyvDYJwXB3yd+7/P2nUc5iqvNKygR8nPLmQrIdH4=;
-        b=PfUavVuKFuMrQYnPUE8cAHNGX9Ajpfjl8sqSbP0g5FfOiMufre5o65Yf72vIvGYaqs
-         aq1bwXyAYAg/F5xAbsjNtc3kM6YlodJedu5d2H7TWGgsnNuDPMM+/ho6dVKPBfWRiwge
-         aCwV6T1Uk13Hm7FKvLub2loYlwir1MvNZ+HjGnj0aOG06YzGD2G0TvH8C/jlcA2Ik8vP
-         Pk+GA/+uIFanTYYrepAybORZpIUvnbMU1H0gUTQXABFXM6nRW7M7N8uhfgqbB8NEnuME
-         AmmdziPe6gSPB09ro0G7WZWa0gmhjVACUSlYJKoa0PgFCrS6stALWX2NTTQqIAAjlgy2
-         FG0w==
+        bh=3wrnn6DD0M5Puv0hp8zDhFVfWjeqMqGBFBnj5V/64+8=;
+        b=qEnFg0M6WRHbr0ghrj4kW7FV63er+uXVMUMlGSqITZvQ5UbcP3ssFjukWGpoOMlRPb
+         AZCECvbM+LTJrelT+H7lo+etK1CkVQvdrDhnuTJhiwhKXIcVgCuo83fepS64ijCj5I27
+         19wRwXz/L/4fRVFncSXnZ6xadj7OGe0xA66hC1X4uDvHjyx8EJUbOx3Ug4tfs+yW+ocy
+         V3Q2Zbrf+GzTcW0ve0Mg9zKrwZEL8zTCYbpPPkAWTCTyxIoVvzs61OjPokHNdPFdtA9G
+         Q6uHJosqD3wFRY4wGouwq9SI7myfHxIzp8FzjoH8w5hrmMsbV8rTF5OEqE6C/oC1BEGT
+         Xf8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=c0cFyvDYJwXB3yd+7/P2nUc5iqvNKygR8nPLmQrIdH4=;
-        b=mFHG4JA7xbI4ZdOjifhuSRSGnpXgaVW5yoIYxzy7lRqVH69HtTfQSd+16GXGr9jsG8
-         nFT2+BiI/3cSsidKW3SVH38JzewAnCuVGr2jfMPTMvfNRJhzjGHch1LPd6UquwBnYcAw
-         xI/kyJTAy0JSGpS90FTu4zvajpGR7r63M3H3a6CyKOwtC7mSBY94FlmxLupWNu3jZCt+
-         /6im5RQtiYNjLL1Bblwdk724fB0g+SnfXlxQd8irrOAV4ZYv7VCu7ZlgIJ5JdAjCqmtW
-         7qN3GONxJDlLIuny85YXgbeHNYwoFp+HQAPIOlZ8oGaaJwdb3IeDcUDTrcJfJ7znq5iy
-         d+jg==
-X-Gm-Message-State: AOAM530y1QdLYLvce3D37Z4FZWWXP9lte3kd6DtYcAhn5iFxrvqVTyZp
-        eY8G3jvxFoTK7yxZ06R9HlReNA==
-X-Google-Smtp-Source: ABdhPJwQlM5OerP8i+GB+Itwc1WB76p7g7oRvfyXuDh/Fwjd85kNhXAdmLyw5Mwbcr9WWjoOXdj9EA==
-X-Received: by 2002:a37:9c4f:: with SMTP id f76mr1899894qke.403.1602727499071;
-        Wed, 14 Oct 2020 19:04:59 -0700 (PDT)
+        bh=3wrnn6DD0M5Puv0hp8zDhFVfWjeqMqGBFBnj5V/64+8=;
+        b=Ey2ftUXkKzUgAuOWs9i4Ldydt3aVtkjXMvpUJR8P3ffmwLNOOdPHQClWi0ZQB94roe
+         OZDhx/VAmbnR5/NDlsRErkaqbCl0C2Xubt4CwczNiLGPPbdKdlXtOGGcA4YstIYhx+eA
+         drQYZn4PSMp/vzBJyZywHPxUV1O53Ph2ekkxQD9gD0ttwQlE7GKqyOFSO3xkW/PBK3vU
+         bVmqG0W/TJqaNajZvLwA0Vn8DphXd6G/kjt0E/1lf4E7vIrQnUJiw/+Cq5MOTr81mHuE
+         LfRa38BjELtWtmBADQoct1mL97ESJf8EtrVG9kPtpKcd9KEIVOutZkF1BYzJrrm4xdnP
+         Ut/A==
+X-Gm-Message-State: AOAM532h7NFD31tE+jGUlK/GaFUpWdOQ4i9HjkLb7qKSDAAbIkZVEHFZ
+        BcBeb0RCNYjB4MrlCeM2kTw9oQ==
+X-Google-Smtp-Source: ABdhPJyYMusmq4hM6y9MlxGdGlBhIL8YURIXybDIuyDfZEwkjVaG+VBd2wyeSMTiriXa4qUw5u9TPw==
+X-Received: by 2002:a05:620a:6d2:: with SMTP id 18mr1613165qky.280.1602719271253;
+        Wed, 14 Oct 2020 16:47:51 -0700 (PDT)
 Received: from localhost.localdomain ([2804:431:c7cb:5e0b:6f3d:fca0:306c:a15d])
-        by smtp.gmail.com with ESMTPSA id e4sm665386qkb.4.2020.10.14.19.04.56
+        by smtp.gmail.com with ESMTPSA id l25sm515286qtf.18.2020.10.14.16.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 19:04:58 -0700 (PDT)
+        Wed, 14 Oct 2020 16:47:50 -0700 (PDT)
 From:   Vitor Massaru Iha <vitor@massaru.org>
 To:     kunit-dev@googlegroups.com, irogers@google.com,
         brendanhiggins@google.com
@@ -66,9 +66,9 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         peterz@infradead.org, mingo@kernel.org
-Subject: [RESEND PATCH v2] lib: kunit: add test_min_heap test conversion to KUnit
-Date:   Wed, 14 Oct 2020 23:04:54 -0300
-Message-Id: <20201015020454.314186-1-vitor@massaru.org>
+Subject: [PATCH v2] lib: kunit: add test_min_heap test conversion to KUnit
+Date:   Wed, 14 Oct 2020 20:47:46 -0300
+Message-Id: <20201014234746.235634-1-vitor@massaru.org>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -82,19 +82,16 @@ from `lib/test_min_heap.c` to KUnit tests.
 Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
 ---
   v2: 
-    * change Kconfig entries to be more adherent to KUnit documentation,
-      min_heap test runs when enabling full test coverage (KUNIT_ALL_TESTS).
-    * make kconfig help more concise;
-    * fix KUNIT_TEST sufix;
+    * min_heap test now runs when enabling full test coverage (KUNIT_ALL_TESTS).
 ---
- lib/Kconfig.debug                         |  24 +++--
+ lib/Kconfig.debug                         |  29 ++++--
  lib/Makefile                              |   2 +-
  lib/{test_min_heap.c => min_heap_kunit.c} | 117 ++++++++++++----------
- 3 files changed, 78 insertions(+), 65 deletions(-)
+ 3 files changed, 83 insertions(+), 65 deletions(-)
  rename lib/{test_min_heap.c => min_heap_kunit.c} (60%)
 
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 4f09c6505a2e..0e10ef1176de 100644
+index 4f09c6505a2e..b75f4541e7d2 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
 @@ -1915,16 +1915,6 @@ config TEST_LIST_SORT
@@ -114,11 +111,11 @@ index 4f09c6505a2e..0e10ef1176de 100644
  config TEST_SORT
  	tristate "Array-based sort test"
  	depends on DEBUG_KERNEL || m
-@@ -2256,6 +2246,20 @@ config BITS_TEST
+@@ -2256,6 +2246,25 @@ config BITS_TEST
  
  	  If unsure, say N.
  
-+config MIN_HEAP_KUNIT_TEST
++config MIN_HEAP_KUNIT
 +	tristate "KUnit test for Min heap" if !KUNIT_ALL_TESTS
 +	depends on KUNIT
 +	default KUNIT_ALL_TESTS
@@ -126,6 +123,11 @@ index 4f09c6505a2e..0e10ef1176de 100644
 +	  Enable this to turn on min heap function tests. This test is
 +	  executed only once during system boot (so affects only boot time),
 +	  or at module load time.
++
++	  KUnit tests run during boot and output the results to the debug log
++	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  running the KUnit test harness, and not intended for inclusion into a
++	  production build.
 +
 +	  For more information on KUnit and unit tests in general please refer
 +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
@@ -136,7 +138,7 @@ index 4f09c6505a2e..0e10ef1176de 100644
  	tristate "udelay test driver"
  	help
 diff --git a/lib/Makefile b/lib/Makefile
-index d862d41fdc3d..03d12e672cf8 100644
+index d862d41fdc3d..c88ade843502 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
 @@ -68,7 +68,6 @@ CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
@@ -151,7 +153,7 @@ index d862d41fdc3d..03d12e672cf8 100644
  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
  obj-$(CONFIG_BITS_TEST) += test_bits.o
-+obj-$(CONFIG_MIN_HEAP_KUNIT_TEST) += min_heap_kunit.o
++obj-$(CONFIG_MIN_HEAP_KUNIT) += min_heap_kunit.o
 diff --git a/lib/test_min_heap.c b/lib/min_heap_kunit.c
 similarity index 60%
 rename from lib/test_min_heap.c
