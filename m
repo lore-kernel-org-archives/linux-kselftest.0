@@ -2,217 +2,507 @@ Return-Path: <SRS0=Q6l9=DV=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B858C43457
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F49CC433DF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C4A7206D9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602667355;
-	bh=a8MuFYxaVgIysdtIrpf3i9lBnP2/fWsfxDweWGTsVHc=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=L657krttZHsb2z6sUjAc5kBMVKTJWb5g3vTLU2JDPhk12TtrNDWScoSSit3ieeobw
-	 wV19cgIgGhh++NvmGhgFbTZ3em3/E3o6tsZtRZZvngUg+lsohnUPU6NTl5rLvOlF6Q
-	 ou8rE50Tu+qlsjXYIJIpAo6pOegySPTUkSASVFQU=
+	by mail.kernel.org (Postfix) with ESMTP id 12D03206F4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eFflQM/+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgJNJWd (ORCPT
+        id S1730331AbgJNJXH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        Wed, 14 Oct 2020 05:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729968AbgJNJVv (ORCPT
+        with ESMTP id S1731226AbgJNJWy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:21:51 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3BAC0F26CF
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 19:12:24 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id q1so3429614ilt.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 19:12:24 -0700 (PDT)
+        Wed, 14 Oct 2020 05:22:54 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9B3C0251B9
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:27 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id o15so238268uai.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Oct 2020 17:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=O0EZovHPBRBu6d4nMiG34aB96fSPYJLap8VHOicm/qs=;
-        b=DbWW5TtsBc6Dyb8YsskACaBaCbQEtISHSCVxTRgFAHlHJjmD1dU40N2/h5pZJ6i9bJ
-         +F2NBNfzuZOj7AsXvJYavEYGwGPq4uL8mop/7Jirc9xAaKdAITSdhsoI+JolGBgvo7jC
-         FaHWhFiSslkjQ7vjKYWsBMu2t4YFei5779oSs=
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:cc:content-transfer-encoding;
+        bh=IzZGCID9b9HhzvZ8/RaJRTkHytRRFfTSaspmRMNwBaA=;
+        b=eFflQM/+RG4BVBAYNVEyyuipSodkeK8wBPKcxdINO7USZ9W/P0l35dgH9vl1VIZeJ9
+         bkiZQM7OsCg60ny6AwEjl2XwAPMh0AGcBwhyXH+Suu5GVLf9M2QF5n/qFt2CbJyBsVaP
+         fwLS3MlHGuZvTfQkza3F8/AIzqsg+Gy4OLLQMsmJQ4gFMBbEG4khhuZPJ+qt2wkGS4/b
+         8Ww9904eDDdSwERaVP8fqC1FRqmRHw1svdmTCUG8UxkTqoCm1gGL2523YVhvrT1zH/XD
+         tXXjMs3ezBMgWipmuQy0W+MhUsjB6r4HZ5DMcPI0+jhBIa8a2TNELZ0LOr7Aeyiui0YP
+         TQ+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=O0EZovHPBRBu6d4nMiG34aB96fSPYJLap8VHOicm/qs=;
-        b=d4eL5H+vBIpYuF6IBRp6vidIBryX0nBoJDc1sGqlAIrM/FekaGKlX3jprwdp+MFUHZ
-         AqroBGCSeI9nZxR8CIntBn5yy4vkH2ABC+Qa5j6zSoIKeYADdB3GlGvYPxNlXZH2sDp7
-         hzNf7acz1gUavcORSPJKb79u5pdlqphqW6BRTpq5vAG7YVn+CSoXy0CG4y/pXPWXNqWF
-         eplBKUkmG9QeC5kSZdk/vQ7+kdZHGKDTYxPJR///Qml4ppmc1lOWRqdrbfqrkupW6O6z
-         6fnj/GzqLEGgx6Zu6U3koHbNX+i4rgAk4KP4ejLwgjPDMaThNA1cNLMfU74NJI508gE2
-         3VBg==
-X-Gm-Message-State: AOAM530WUeDG8Qw+WYMmFEPHXg44+Doom+q4HKGCtgn36kSangxj/Eo7
-        GYehFhL7LozkySL7fNDV9Gql6A==
-X-Google-Smtp-Source: ABdhPJzg8Uk3iABEzJ4woM5C8q7wCnJ5fWvm66m83Hyk77SwQ9t1b/UHHFa4UxnY/E8z7l/WVw75Zg==
-X-Received: by 2002:a92:bb0d:: with SMTP id w13mr2338778ili.168.1602641542819;
-        Tue, 13 Oct 2020 19:12:22 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 15sm1611292ilz.66.2020.10.13.19.12.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 19:12:22 -0700 (PDT)
-Subject: Re: [PATCH v3 00/11] Introduce Simple atomic counters
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     corbet@lwn.net, gregkh@linuxfoundation.org, shuah@kernel.org,
-        rafael@kernel.org, johannes@sipsolutions.net, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io, hridya@google.com,
-        surenb@google.com, minyard@acm.org, arnd@arndb.de,
-        mchehab@kernel.org, rric@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devel@driverdev.osuosl.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-edac@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1602209970.git.skhan@linuxfoundation.org>
- <20201009193746.GA1073957@hirez.programming.kicks-ass.net>
- <202010091255.246395A6@keescook>
- <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <6e1dd408-653e-817e-b659-23649259a929@linuxfoundation.org>
-Date:   Tue, 13 Oct 2020 20:12:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201010110920.GQ2628@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc:content-transfer-encoding;
+        bh=IzZGCID9b9HhzvZ8/RaJRTkHytRRFfTSaspmRMNwBaA=;
+        b=OfjufXOfi6a8Sbl11fjOFEQdTUcBFfY3D6vBD4uIhfoimqy9GFWI1JBxg4MsueeQpT
+         yenqYZbYE7FK9y9kcs8PJq23Sh1VVXizXZB/+xo6a3UaAotLa00mDsEXjaNvVJWNOA8o
+         JyCru9o3UIg03+HfADtHqY+RuxDEGIJn6zb0JVMOLHsMR/pewnyzog8kZD0GCmUQdpET
+         kVKj1S0cvF2I/CgBtKvCok65261vydpbVjGL0tkiwzNYLHvz5di3vzysXo05rtgBrKKf
+         LvYrscrVzVvLhfchE3DZV9ZpxYZTpn8FBVHBS8n+VmhE79ylBIXCeBjxLhkQaePQtYNl
+         ixCQ==
+X-Gm-Message-State: AOAM533FUidVDX62vAgrEJY5ORV/naCwIjFERnNL2yYF99YdlcKP+sHJ
+        fa9nwOc9cibMLvQQDNA7g+A6l++KB2VskC5Fww==
+X-Google-Smtp-Source: ABdhPJyvWVIRplGNDjzvs0XGL0v2uPPAxCKlSxv45bumE3CxcrygOi7erdOIOjU1LBZ+S2o7fjKUgCNTdGy1u8o7iA==
+Sender: "kaleshsingh via sendgmr" <kaleshsingh@kaleshsingh.c.googlers.com>
+X-Received: from kaleshsingh.c.googlers.com ([fda3:e722:ac3:10:14:4d90:c0a8:2145])
+ (user=kaleshsingh job=sendgmr) by 2002:a9f:3dc7:: with SMTP id
+ e7mr1870481uaj.3.1602636866064; Tue, 13 Oct 2020 17:54:26 -0700 (PDT)
+Date:   Wed, 14 Oct 2020 00:53:08 +0000
+In-Reply-To: <20201014005320.2233162-1-kaleshsingh@google.com>
+Message-Id: <20201014005320.2233162-4-kaleshsingh@google.com>
+Mime-Version: 1.0
+References: <20201014005320.2233162-1-kaleshsingh@google.com>
+X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
+Subject: [PATCH v4 3/5] mm: Speedup mremap on 1GB or larger regions
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, minchan@google.com, joelaf@google.com,
+        lokeshgidra@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, kernel test robot <lkp@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Gavin Shan <gshan@redhat.com>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Jia He <justin.he@arm.com>, John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/10/20 5:09 AM, Peter Zijlstra wrote:
-> On Fri, Oct 09, 2020 at 01:45:43PM -0700, Kees Cook wrote:
->> On Fri, Oct 09, 2020 at 09:37:46PM +0200, Peter Zijlstra wrote:
->>> On Fri, Oct 09, 2020 at 09:55:55AM -0600, Shuah Khan wrote:
->>>> Simple atomic counters api provides interfaces for simple atomic counters
->>>> that just count, and don't guard resource lifetimes. The interfaces are
->>>> built on top of atomic_t api, providing a smaller subset of atomic_t
->>>> interfaces necessary to support simple counters.
->>>
->>> To what actual purpose?!? AFACIT its pointless wrappery, it gets us
->>> nothing.
->>
->> It's not pointless. There is value is separating types for behavioral
->> constraint to avoid flaws. atomic_t provides a native operation. We gained
->> refcount_t for the "must not wrap" type, and this gets us the other side
->> of that behavioral type, which is "wrapping is expected". Separating the
->> atomic_t uses allows for a clearer path to being able to reason about
->> code flow, whether it be a human or a static analyzer.
-> 
-> refcount_t got us actual rutime exceptions that atomic_t doesn't. This
-> propsal gets us nothing.
-> 
-> atomic_t is very much expected to wrap.
-> 
->> The counter wrappers add nothing to the image size, and only serve to
->> confine the API to one that cannot be used for lifetime management.
-> 
-> It doesn't add anything period. It doesn't get us new behaviour, it
-> splits a 'can wrap' use-case from a 'can wrap' type. That's sodding
-> pointless.
-> 
+Android needs to move large memory regions for garbage collection.
+The GC requires moving physical pages of multi-gigabyte heap
+using mremap. During this move, the application threads have to
+be paused for correctness. It is critical to keep this pause as
+short as possible to avoid jitters during user interaction.
 
-They don't add any new behavior, As Kees mentioned they do give us a
-way to clearly differentiate atomic usages that can wrap.
+Optimize mremap for >=3D 1GB-sized regions by moving at the PUD/PGD
+level if the source and destination addresses are PUD-aligned.
+For CONFIG_PGTABLE_LEVELS =3D=3D 3, moving at the PUD level in effect moves
+PGD entries, since the PUD entry is =E2=80=9Cfolded back=E2=80=9D onto the =
+PGD entry.
+Add HAVE_MOVE_PUD so that architectures where moving at the PUD level
+isn't supported/tested can turn this off by not selecting the config.
 
-Let's discuss the problem at hand before dismissing it as pointless.
+Fix build test error from v1 of this series reported by
+kernel test robot in [1].
 
-> Worse, it mixes 2 unrelated cases into one type, which just makes a
-> mockery of things (all the inc_return users are not statistics, some
-> might even mis-behave if they wrap).
-> 
+[1] https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/CKP=
+GL4FH4NG7TGH2CVYX2UX76L25BTA3/
 
-You are right that all inc_return usages aren't statistics. There are
-3 distinct usages:
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+Changes in v2:
+  - Update commit message with description of Android GC's use case.
+  - Move set_pud_at() to a separate patch.
+  - Use switch() instead of ifs in move_pgt_entry()
+  - Fix build test error reported by kernel test robot on x86_64 in [1].
+    Guard move_huge_pmd() with IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE),
+    since this section doesn't get optimized out in the kernel test
+    robot's build test when HAVE_MOVE_PUD is enabled.
+  - Keep WARN_ON_ONCE(1) instead of BUILD_BUG() for the aforementioned
+    reason.
 
-1. Stats
-2. Cases where wrapping is fine
-3. Cases where wrapping could be a problem. In which case, this API
-    shouldn't be used.
+Changes in v3:
+  - Move get_old_pud() and alloc_new_pud() out of
+    #ifdef CONFIG_HAVE_MOVE_PUD.
+  - Have get_old_pmd() and alloc_new_pmd() use get_old_pud() and
+    alloc_old_pud().
+  - Use switch() in get_extent() instead of ifs.
+  - Add BUILD_BUG() to default case of get_extent().
+  - Replace #ifdef CONFIG_HAVE_MOVE_PMD/PUD in move_page_tables() with
+    IS_ENABLED(CONFIG_HAVE_MOVE_PMD/PUD).
+  - Make lines 80 cols or less, where they don=E2=80=99t need to be longer.
+  - s/=3D  /=3D /g (Fixed double spaces after '=3D').
 
-There is no need to keep inc_return in this API as such. I included it
-so it can be used for above cases 1 and 2, so the users don't have to
-call inc() followed by read(). It can be left out of the API.
+Changes in v4:
+  - Add Kirill's Acked-by.
 
-The atomic_t usages in the kernel fall into the following categories:
+ arch/Kconfig |   7 ++
+ mm/mremap.c  | 230 ++++++++++++++++++++++++++++++++++++++++++---------
+ 2 files changed, 197 insertions(+), 40 deletions(-)
 
-1. Stats (tolerance for accuracy determines whether they need to be
-    atomic or not). RFC version included non-atomic API for cases
-    when lossiness is acceptable. All these cases use/need just init
-    and inc. There are two variations in this case:
-
-    a. No checks for wrapping. Use signed value.
-    b. No checks for wrapping, but return unsigned.
-
-2. Reference counters that release resource and rapping could result
-    in use-after-free type problems. There are two variations in this
-    case:
-
-    a. Increments and decrements aren't bounded.
-    b. Increments and decrements are bounded.
-
-    Currently tools that flag unsafe atomic_t usages that are candidates
-    for refcount_t conversions don't make a distinction between the two.
-
-    The second case, since increments and decrements are bounded, it is
-    safe to continue to use it. At the moment there is no good way to
-    tell them apart other than looking at each of these cases.
-
-3. Reference counters that manage/control states. Wrapping is a problem
-    in this case, as it could lead to undefined behavior. These cases
-    don't use test and free, use inc/dec. At the moment there is no good
-    way to tell them apart other than looking at each of these cases.
-    This is addressed by REFCOUNT_SATURATED case.
-
-This API addresses 1a. Stats. No checks for wrapping. Use signed value
-at the moment with plan to add support for unsigned for cases where
-unsigned is being used.
-
-It is possible to cover 2b in this API, so it becomes easier to make a
-clear distinction the two cases and we can focus on only the atomic_t
-cases that need to converted to refcount_t. This is easy to do by
-allowing max. threshold for the variable and checking against that
-and not letting it go above it.
-
-There are several atomic_t usages that use just:
-
--- init or set and inc
--- init or set and inc/dec (including the ones that manage state)
--- Increments and decrements are bounded
-
-Creating a sub-set of atomic_t api would help us with differentiate
-these cases and make it easy for us identify and fix cases where
-refcount_t should be used.
-
-Would you be open to considering a subset if it addresses 2b and
-unsigned returns for stats?
-
-thanks,
--- Shuah
-
-
-
-
-
-
-
-
-
-
-
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 76ec3395b843..79da6d714264 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -608,6 +608,13 @@ config HAVE_IRQ_TIME_ACCOUNTING
+ 	  Archs need to ensure they use a high enough resolution clock to
+ 	  support irq time accounting and then call enable_sched_clock_irqtime().
+=20
++config HAVE_MOVE_PUD
++	bool
++	help
++	  Architectures that select this are able to move page tables at the
++	  PUD level. If there are only 3 page table levels, the move effectively
++	  happens at the PGD level.
++
+ config HAVE_MOVE_PMD
+ 	bool
+ 	help
+diff --git a/mm/mremap.c b/mm/mremap.c
+index 138abbae4f75..078f731277b6 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -30,12 +30,11 @@
+=20
+ #include "internal.h"
+=20
+-static pmd_t *get_old_pmd(struct mm_struct *mm, unsigned long addr)
++static pud_t *get_old_pud(struct mm_struct *mm, unsigned long addr)
+ {
+ 	pgd_t *pgd;
+ 	p4d_t *p4d;
+ 	pud_t *pud;
+-	pmd_t *pmd;
+=20
+ 	pgd =3D pgd_offset(mm, addr);
+ 	if (pgd_none_or_clear_bad(pgd))
+@@ -49,6 +48,18 @@ static pmd_t *get_old_pmd(struct mm_struct *mm, unsigned=
+ long addr)
+ 	if (pud_none_or_clear_bad(pud))
+ 		return NULL;
+=20
++	return pud;
++}
++
++static pmd_t *get_old_pmd(struct mm_struct *mm, unsigned long addr)
++{
++	pud_t *pud;
++	pmd_t *pmd;
++
++	pud =3D get_old_pud(mm, addr);
++	if (!pud)
++		return NULL;
++
+ 	pmd =3D pmd_offset(pud, addr);
+ 	if (pmd_none(*pmd))
+ 		return NULL;
+@@ -56,19 +67,27 @@ static pmd_t *get_old_pmd(struct mm_struct *mm, unsigne=
+d long addr)
+ 	return pmd;
+ }
+=20
+-static pmd_t *alloc_new_pmd(struct mm_struct *mm, struct vm_area_struct *v=
+ma,
++static pud_t *alloc_new_pud(struct mm_struct *mm, struct vm_area_struct *v=
+ma,
+ 			    unsigned long addr)
+ {
+ 	pgd_t *pgd;
+ 	p4d_t *p4d;
+-	pud_t *pud;
+-	pmd_t *pmd;
+=20
+ 	pgd =3D pgd_offset(mm, addr);
+ 	p4d =3D p4d_alloc(mm, pgd, addr);
+ 	if (!p4d)
+ 		return NULL;
+-	pud =3D pud_alloc(mm, p4d, addr);
++
++	return pud_alloc(mm, p4d, addr);
++}
++
++static pmd_t *alloc_new_pmd(struct mm_struct *mm, struct vm_area_struct *v=
+ma,
++			    unsigned long addr)
++{
++	pud_t *pud;
++	pmd_t *pmd;
++
++	pud =3D alloc_new_pud(mm, vma, addr);
+ 	if (!pud)
+ 		return NULL;
+=20
+@@ -249,14 +268,148 @@ static bool move_normal_pmd(struct vm_area_struct *v=
+ma, unsigned long old_addr,
+=20
+ 	return true;
+ }
++#else
++static inline bool move_normal_pmd(struct vm_area_struct *vma,
++		unsigned long old_addr, unsigned long new_addr, pmd_t *old_pmd,
++		pmd_t *new_pmd)
++{
++	return false;
++}
+ #endif
+=20
++#ifdef CONFIG_HAVE_MOVE_PUD
++static bool move_normal_pud(struct vm_area_struct *vma, unsigned long old_=
+addr,
++		  unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
++{
++	spinlock_t *old_ptl, *new_ptl;
++	struct mm_struct *mm =3D vma->vm_mm;
++	pud_t pud;
++
++	/*
++	 * The destination pud shouldn't be established, free_pgtables()
++	 * should have released it.
++	 */
++	if (WARN_ON_ONCE(!pud_none(*new_pud)))
++		return false;
++
++	/*
++	 * We don't have to worry about the ordering of src and dst
++	 * ptlocks because exclusive mmap_lock prevents deadlock.
++	 */
++	old_ptl =3D pud_lock(vma->vm_mm, old_pud);
++	new_ptl =3D pud_lockptr(mm, new_pud);
++	if (new_ptl !=3D old_ptl)
++		spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
++
++	/* Clear the pud */
++	pud =3D *old_pud;
++	pud_clear(old_pud);
++
++	VM_BUG_ON(!pud_none(*new_pud));
++
++	/* Set the new pud */
++	set_pud_at(mm, new_addr, new_pud, pud);
++	flush_tlb_range(vma, old_addr, old_addr + PUD_SIZE);
++	if (new_ptl !=3D old_ptl)
++		spin_unlock(new_ptl);
++	spin_unlock(old_ptl);
++
++	return true;
++}
++#else
++static inline bool move_normal_pud(struct vm_area_struct *vma,
++		unsigned long old_addr, unsigned long new_addr, pud_t *old_pud,
++		pud_t *new_pud)
++{
++	return false;
++}
++#endif
++
++enum pgt_entry {
++	NORMAL_PMD,
++	HPAGE_PMD,
++	NORMAL_PUD,
++};
++
++/*
++ * Returns an extent of the corresponding size for the pgt_entry specified=
+ if
++ * valid. Else returns a smaller extent bounded by the end of the source a=
+nd
++ * destination pgt_entry.
++ */
++static unsigned long get_extent(enum pgt_entry entry, unsigned long old_ad=
+dr,
++			unsigned long old_end, unsigned long new_addr)
++{
++	unsigned long next, extent, mask, size;
++
++	switch (entry) {
++	case HPAGE_PMD:
++	case NORMAL_PMD:
++		mask =3D PMD_MASK;
++		size =3D PMD_SIZE;
++		break;
++	case NORMAL_PUD:
++		mask =3D PUD_MASK;
++		size =3D PUD_SIZE;
++		break;
++	default:
++		BUILD_BUG();
++		break;
++	}
++
++	next =3D (old_addr + size) & mask;
++	/* even if next overflowed, extent below will be ok */
++	extent =3D (next > old_end) ? old_end - old_addr : next - old_addr;
++	next =3D (new_addr + size) & mask;
++	if (extent > next - new_addr)
++		extent =3D next - new_addr;
++	return extent;
++}
++
++/*
++ * Attempts to speedup the move by moving entry at the level corresponding=
+ to
++ * pgt_entry. Returns true if the move was successful, else false.
++ */
++static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vm=
+a,
++			unsigned long old_addr, unsigned long new_addr,
++			void *old_entry, void *new_entry, bool need_rmap_locks)
++{
++	bool moved =3D false;
++
++	/* See comment in move_ptes() */
++	if (need_rmap_locks)
++		take_rmap_locks(vma);
++
++	switch (entry) {
++	case NORMAL_PMD:
++		moved =3D move_normal_pmd(vma, old_addr, new_addr, old_entry,
++					new_entry);
++		break;
++	case NORMAL_PUD:
++		moved =3D move_normal_pud(vma, old_addr, new_addr, old_entry,
++					new_entry);
++		break;
++	case HPAGE_PMD:
++		moved =3D IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
++			move_huge_pmd(vma, old_addr, new_addr, old_entry,
++				      new_entry);
++		break;
++	default:
++		WARN_ON_ONCE(1);
++		break;
++	}
++
++	if (need_rmap_locks)
++		drop_rmap_locks(vma);
++
++	return moved;
++}
++
+ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		unsigned long old_addr, struct vm_area_struct *new_vma,
+ 		unsigned long new_addr, unsigned long len,
+ 		bool need_rmap_locks)
+ {
+-	unsigned long extent, next, old_end;
++	unsigned long extent, old_end;
+ 	struct mmu_notifier_range range;
+ 	pmd_t *old_pmd, *new_pmd;
+=20
+@@ -269,53 +422,50 @@ unsigned long move_page_tables(struct vm_area_struct =
+*vma,
+=20
+ 	for (; old_addr < old_end; old_addr +=3D extent, new_addr +=3D extent) {
+ 		cond_resched();
+-		next =3D (old_addr + PMD_SIZE) & PMD_MASK;
+-		/* even if next overflowed, extent below will be ok */
+-		extent =3D next - old_addr;
+-		if (extent > old_end - old_addr)
+-			extent =3D old_end - old_addr;
+-		next =3D (new_addr + PMD_SIZE) & PMD_MASK;
+-		if (extent > next - new_addr)
+-			extent =3D next - new_addr;
++		/*
++		 * If extent is PUD-sized try to speed up the move by moving at the
++		 * PUD level if possible.
++		 */
++		extent =3D get_extent(NORMAL_PUD, old_addr, old_end, new_addr);
++		if (IS_ENABLED(CONFIG_HAVE_MOVE_PUD) && extent =3D=3D PUD_SIZE) {
++			pud_t *old_pud, *new_pud;
++
++			old_pud =3D get_old_pud(vma->vm_mm, old_addr);
++			if (!old_pud)
++				continue;
++			new_pud =3D alloc_new_pud(vma->vm_mm, vma, new_addr);
++			if (!new_pud)
++				break;
++			if (move_pgt_entry(NORMAL_PUD, vma, old_addr, new_addr,
++					   old_pud, new_pud, need_rmap_locks))
++				continue;
++		}
++
++		extent =3D get_extent(NORMAL_PMD, old_addr, old_end, new_addr);
+ 		old_pmd =3D get_old_pmd(vma->vm_mm, old_addr);
+ 		if (!old_pmd)
+ 			continue;
+ 		new_pmd =3D alloc_new_pmd(vma->vm_mm, vma, new_addr);
+ 		if (!new_pmd)
+ 			break;
+-		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) || pmd_devmap(*old=
+_pmd)) {
+-			if (extent =3D=3D HPAGE_PMD_SIZE) {
+-				bool moved;
+-				/* See comment in move_ptes() */
+-				if (need_rmap_locks)
+-					take_rmap_locks(vma);
+-				moved =3D move_huge_pmd(vma, old_addr, new_addr,
+-						      old_pmd, new_pmd);
+-				if (need_rmap_locks)
+-					drop_rmap_locks(vma);
+-				if (moved)
+-					continue;
+-			}
++		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) ||
++		    pmd_devmap(*old_pmd)) {
++			if (extent =3D=3D HPAGE_PMD_SIZE &&
++			    move_pgt_entry(HPAGE_PMD, vma, old_addr, new_addr,
++					   old_pmd, new_pmd, need_rmap_locks))
++				continue;
+ 			split_huge_pmd(vma, old_pmd, old_addr);
+ 			if (pmd_trans_unstable(old_pmd))
+ 				continue;
+-		} else if (extent =3D=3D PMD_SIZE) {
+-#ifdef CONFIG_HAVE_MOVE_PMD
++		} else if (IS_ENABLED(CONFIG_HAVE_MOVE_PMD) &&
++			   extent =3D=3D PMD_SIZE) {
+ 			/*
+ 			 * If the extent is PMD-sized, try to speed the move by
+ 			 * moving at the PMD level if possible.
+ 			 */
+-			bool moved;
+-
+-			if (need_rmap_locks)
+-				take_rmap_locks(vma);
+-			moved =3D move_normal_pmd(vma, old_addr, new_addr,
+-						old_pmd, new_pmd);
+-			if (need_rmap_locks)
+-				drop_rmap_locks(vma);
+-			if (moved)
++			if (move_pgt_entry(NORMAL_PMD, vma, old_addr, new_addr,
++					   old_pmd, new_pmd, need_rmap_locks))
+ 				continue;
+-#endif
+ 		}
+=20
+ 		if (pte_alloc(new_vma->vm_mm, new_pmd))
+--=20
+2.28.0.1011.ga647a8990f-goog
 
