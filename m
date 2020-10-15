@@ -2,177 +2,88 @@ Return-Path: <SRS0=uG9B=DW=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C20C9C4363A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 12:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85668C433E7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 13:59:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7197122268
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 12:32:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37C6D22254
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 13:59:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728430AbgJOMcH (ORCPT
+        id S1729908AbgJON7N (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Oct 2020 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbgJOMcG (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Oct 2020 08:32:06 -0400
-Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CA1C061755
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Oct 2020 05:32:05 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CBpZB5fPXzlhTQt;
-        Thu, 15 Oct 2020 14:32:02 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [94.23.54.103])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CBpZ66ymBzlh8V2;
-        Thu, 15 Oct 2020 14:31:58 +0200 (CEST)
-Subject: Re: [PATCH v21 12/12] landlock: Add user and kernel documentation
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Richard Weinberger <richard@nod.at>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201008153103.1155388-1-mic@digikod.net>
- <20201008153103.1155388-13-mic@digikod.net>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <fc1c5675-034b-bf5b-ba2b-6be06e03b458@digikod.net>
-Date:   Thu, 15 Oct 2020 14:31:58 +0200
-User-Agent: 
+        Thu, 15 Oct 2020 09:59:13 -0400
+Received: from mga11.intel.com ([192.55.52.93]:1435 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729930AbgJON7M (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 15 Oct 2020 09:59:12 -0400
+IronPort-SDR: 3szwI2BwOHJr5/9Z/6ceqUesXt/WYzdJXG0pGmgA5VccffbuEyIZO17uce6tkhQnZ8GBoTuUHi
+ j0Qk56W2Ivtw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9774"; a="162885697"
+X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
+   d="scan'208";a="162885697"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 06:59:12 -0700
+IronPort-SDR: kbuXbelmblFd9vM2S/tHMAwClthUfDK4OxYSr3LOD2YFdADVzUXsZEjRfCaLuqWjESgKwFf/Zh
+ 6gbczUOe/Bag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
+   d="scan'208";a="319027226"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 15 Oct 2020 06:59:10 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 94038FC; Thu, 15 Oct 2020 16:59:09 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kunit-dev@googlegroups.com
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] lib/test_list: Follow existing pattern for a file name
+Date:   Thu, 15 Oct 2020 16:59:08 +0300
+Message-Id: <20201015135908.36628-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20201008153103.1155388-13-mic@digikod.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Test in lib/ either KUnit or not are named in the same pattern,
+i.e. test_*.c, except few ones. Rename list-test.c to test_list.c
+to follow this pattern.
 
-On 08/10/2020 17:31, Mickaël Salaün wrote:
-> From: Mickaël Salaün <mic@linux.microsoft.com>
-> 
-> This documentation can be built with the Sphinx framework.
-> 
-> Cc: James Morris <jmorris@namei.org>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Serge E. Hallyn <serge@hallyn.com>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> Reviewed-by: Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>
-> ---
-> 
-> Changes since v20:
-> * Update examples and documentation with the new syscalls.
-> 
-> Changes since v19:
-> * Update examples and documentation with the new syscalls.
-> 
-> Changes since v15:
-> * Add current limitations.
-> 
-> Changes since v14:
-> * Fix spelling (contributed by Randy Dunlap).
-> * Extend documentation about inheritance and explain layer levels.
-> * Remove the use of now-removed access rights.
-> * Use GitHub links.
-> * Improve kernel documentation.
-> * Add section for tests.
-> * Update example.
-> 
-> Changes since v13:
-> * Rewrote the documentation according to the major revamp.
-> 
-> Previous changes:
-> https://lore.kernel.org/lkml/20191104172146.30797-8-mic@digikod.net/
-> ---
->  Documentation/security/index.rst           |   1 +
->  Documentation/security/landlock/index.rst  |  18 ++
->  Documentation/security/landlock/kernel.rst |  69 ++++++
->  Documentation/security/landlock/user.rst   | 242 +++++++++++++++++++++
->  4 files changed, 330 insertions(+)
->  create mode 100644 Documentation/security/landlock/index.rst
->  create mode 100644 Documentation/security/landlock/kernel.rst
->  create mode 100644 Documentation/security/landlock/user.rst
-> 
-> diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-> index 8129405eb2cc..e3f2bf4fef77 100644
-> --- a/Documentation/security/index.rst
-> +++ b/Documentation/security/index.rst
-> @@ -16,3 +16,4 @@ Security Documentation
->     siphash
->     tpm/index
->     digsig
-> +   landlock/index
-> diff --git a/Documentation/security/landlock/index.rst b/Documentation/security/landlock/index.rst
-> new file mode 100644
-> index 000000000000..2520f8f33f5e
-> --- /dev/null
-> +++ b/Documentation/security/landlock/index.rst
-> @@ -0,0 +1,18 @@
-> +=========================================
-> +Landlock LSM: unprivileged access control
-> +=========================================
-> +
-> +:Author: Mickaël Salaün
-> +
-> +The goal of Landlock is to enable to restrict ambient rights (e.g.  global
-> +filesystem access) for a set of processes.  Because Landlock is a stackable
-> +LSM, it makes possible to create safe security sandboxes as new security layers
-> +in addition to the existing system-wide access-controls. This kind of sandbox
-> +is expected to help mitigate the security impact of bugs or
-> +unexpected/malicious behaviors in user-space applications. Landlock empowers
-> +any process, including unprivileged ones, to securely restrict themselves.
-> +
-> +.. toctree::
-> +
-> +    user
-> +    kernel
-> diff --git a/Documentation/security/landlock/kernel.rst b/Documentation/security/landlock/kernel.rst
-> new file mode 100644
-> index 000000000000..27c0933a0b6e
-> --- /dev/null
-> +++ b/Documentation/security/landlock/kernel.rst
-> @@ -0,0 +1,69 @@
-> +==============================
-> +Landlock: kernel documentation
-> +==============================
-Cf. https://landlock.io/linux-doc/landlock-v21/security/landlock/kernel.html
+Note, current documentation doesn't specify any file name conventions,
+and we glad to stick with a current one in the subsystem.
 
-I guess this is the good place for kernel API documentation.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ lib/Makefile                     | 4 ++--
+ lib/{list-test.c => test_list.c} | 0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename lib/{list-test.c => test_list.c} (100%)
 
-> diff --git a/Documentation/security/landlock/user.rst b/Documentation/security/landlock/user.rst
-> new file mode 100644
-> index 000000000000..e6fbc75c1af1
-> --- /dev/null
-> +++ b/Documentation/security/landlock/user.rst
-> @@ -0,0 +1,242 @@
-> +=================================
-> +Landlock: userspace documentation
-> +=================================
-Cf. https://landlock.io/linux-doc/landlock-v21/security/landlock/user.html
+diff --git a/lib/Makefile b/lib/Makefile
+index 5ca03ba6ee45..e71abeea4a3e 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -350,6 +350,6 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
+ 
+ # KUnit tests
+ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
+-obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+-obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
++obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
++obj-$(CONFIG_LIST_KUNIT_TEST) += test_list.o
+diff --git a/lib/list-test.c b/lib/test_list.c
+similarity index 100%
+rename from lib/list-test.c
+rename to lib/test_list.c
+-- 
+2.28.0
 
-Shouldn't this go in Documentation/userspace-api/ instead?
-
-Documentation/security/lsm-development.rst says that LSM documentation
-should go to Documentation/admin-guide/LSM/ but this is not (like
-seccomp) an admin documentation.
-Should the Documentation/userspace-api/landlock.rst be linked from
-Documentation/admin-guide/LSM/index.rst too?
