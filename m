@@ -2,74 +2,88 @@ Return-Path: <SRS0=uG9B=DW=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D506C433DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BF20C433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:44:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1818520760
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:27:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 415A42080A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:44:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729208AbgJOS1u (ORCPT
+        id S2389628AbgJOSoW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Oct 2020 14:27:50 -0400
-Received: from mga11.intel.com ([192.55.52.93]:30955 "EHLO mga11.intel.com"
+        Thu, 15 Oct 2020 14:44:22 -0400
+Received: from mga02.intel.com ([134.134.136.20]:59310 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727468AbgJOS1u (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Oct 2020 14:27:50 -0400
-IronPort-SDR: GEiG+tUgnJt3zzaJyubbqSesl68zbmQn4jv99ZnDc/LZisxMeoBxapLp7Twj7zYJaMQ1D1VAy2
- 3fbwsKU0TIyQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="162956854"
-X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
-   d="scan'208";a="162956854"
+        id S2389644AbgJOSoV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 15 Oct 2020 14:44:21 -0400
+IronPort-SDR: V/lNwlnGu0eRL05ilA+X9mAGJRJhDu91d0Nsp08g6ooe/h/FtKXrv2EYaDoFVqxCf1TtYZ0yRH
+ NdqbsCyMKudA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="153355665"
+X-IronPort-AV: E=Sophos;i="5.77,380,1596524400"; 
+   d="scan'208";a="153355665"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 11:27:49 -0700
-IronPort-SDR: oQzVxkm4YzuM9HZArQwQD9sk+RYThewSVVCAoZiGsXPtKf2yH1yIW3vtgv6eg73dOqezO3COMU
- +5DIlZoh9KOQ==
-X-IronPort-AV: E=Sophos;i="5.77,379,1596524400"; 
-   d="scan'208";a="521943142"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 11:27:48 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kT7zf-007dBX-Mc; Thu, 15 Oct 2020 21:28:51 +0300
-Date:   Thu, 15 Oct 2020 21:28:51 +0300
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 11:44:21 -0700
+IronPort-SDR: nar9uvyy0HqcxBtNP3+mlux/IYCMaUOtlIQ5Q3u7QStQsHKdK61IGY5B+YWir9hNDuNty2t0En
+ YhYCWWXz4Vgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,380,1596524400"; 
+   d="scan'208";a="300400764"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Oct 2020 11:44:18 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id DEA21163; Thu, 15 Oct 2020 21:44:17 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
+To:     linux-kselftest@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v1] lib/test_list: Follow existing pattern for a file name
-Message-ID: <20201015182851.GB4077@smile.fi.intel.com>
-References: <20201015135908.36628-1-andriy.shevchenko@linux.intel.com>
+        kunit-dev@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 3/3] lib/bits_kunit: Follow new file name convention for KUnit tests
+Date:   Thu, 15 Oct 2020 21:44:16 +0300
+Message-Id: <20201015184416.38999-3-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201015184416.38999-1-andriy.shevchenko@linux.intel.com>
+References: <20201015184416.38999-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201015135908.36628-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 04:59:08PM +0300, Andy Shevchenko wrote:
-> Test in lib/ either KUnit or not are named in the same pattern,
-> i.e. test_*.c, except few ones. Rename list-test.c to test_list.c
-> to follow this pattern.
-> 
-> Note, current documentation doesn't specify any file name conventions,
-> and we glad to stick with a current one in the subsystem.
+Follow new file name convention for the KUnit tests.
+Since we have lib/*test*.c in a few variations,
+use 'kunit' suffix to distinguish usual test cases
+with KUnit-based ones.
 
-Okay, according to new convention it should be either _test or _kunit. Still
-not clear where to put it. New convention tell about nearby to the module it
-tests, but this is header file!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: new patch
+ lib/Makefile                      | 2 +-
+ lib/{test_bits.c => bits_kunit.c} | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename lib/{test_bits.c => bits_kunit.c} (100%)
 
-Please, update documentation accordingly.
-
+diff --git a/lib/Makefile b/lib/Makefile
+index 5c18519d6733..70a4a21ff5d6 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -350,6 +350,6 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
+ 
+ # KUnit tests
+ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
++obj-$(CONFIG_BITS_TEST) += bits_kunit.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += linear_ranges_kunit.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list_kunit.o
+-obj-$(CONFIG_BITS_TEST) += test_bits.o
+diff --git a/lib/test_bits.c b/lib/bits_kunit.c
+similarity index 100%
+rename from lib/test_bits.c
+rename to lib/bits_kunit.c
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.28.0
 
