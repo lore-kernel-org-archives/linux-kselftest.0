@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 931CCC433E7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 22:19:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2833C433DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 22:19:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C2BC20776
+	by mail.kernel.org (Postfix) with ESMTP id AF88020776
 	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 22:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1602800380;
-	bh=Mf4fM4L/Vxw62qPGaTAmFsbvXkUt/1LTYplx5bOa+WE=;
+	bh=7Hs2/c0SuTxv8FWOInF6Cyfz9wWihCf+MKtfTXYrqFM=;
 	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=AmMphUWUGB9i7uYxcBCyc3BjtNP6Zrpp/GppEmTB4JdC5Egdys73cHBRzK6o0aJ+e
-	 bTT1ywsyytDdHlGW0+ZzhN4rDKTZf5fFl+1fNTC/DFaq0g4As6xJCpo21MI/HkIBAo
-	 f/mO31uytzHkAz0Dbl/Wfq+dcWhS/YEWbW0x1q0s=
+	b=sfOr4hG6dPTAzzVdWtPlAQFUV3zKqKNWeLi+4AR608pJS5xUvx7V3Nz06gLsL00Bl
+	 djHbgSMRxtBS794l8ebHlz88wnZF54ZkgLeCgwW5JElI+zY/O2voS3WUTFtLRT3THN
+	 TWMDjbJ2t136WnYaQ9mxVJtYfsx8TMofHnmLKSRc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731791AbgJOWTb (ORCPT
+        id S1731806AbgJOWTb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 15 Oct 2020 18:19:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55222 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:55204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731787AbgJOWTa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S1731784AbgJOWTa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 15 Oct 2020 18:19:30 -0400
-Subject: Re: [GIT PULL] Kunit fixes update for Linux 5.10-rc1
+Subject: Re: [GIT PULL] Kselftest next update for Linux 5.10-rc1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602800370;
-        bh=Mf4fM4L/Vxw62qPGaTAmFsbvXkUt/1LTYplx5bOa+WE=;
+        s=default; t=1602800369;
+        bh=7Hs2/c0SuTxv8FWOInF6Cyfz9wWihCf+MKtfTXYrqFM=;
         h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=FiOLghuS4d2uXiY6ApsxWdu9rIs40e2pOW6SbpbG/u6OS8mKF9Fp7vaw3C/MREwo5
-         T0y/YJo9/89HNqR1rCs0J2jYS+yqlDmf1NyUNrq4pyZyW9BxKSwopWDQYuJNBemeac
-         JGHS6jrs7Go00eMjWQjg0bImuiW18MBWrLPlQPS8=
+        b=RzgEgY1UsqLS3iXV1MELy/u5/omJbBTRidMkp7tgShxCOydF94imD8mWVFGoI8Iez
+         AjFgtZLt5Qz8YL5arUn5Vd98MBvVtvxsJc78yuJu3wKJOn5L29RI6hLPrDq4+S0r2J
+         MCqZK5UFULK+hc9vz1UiqloyJPkOPAMWSgFkROGc=
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <18ef2c05-5e4e-bdb3-560b-847aada816c3@linuxfoundation.org>
-References: <18ef2c05-5e4e-bdb3-560b-847aada816c3@linuxfoundation.org>
+In-Reply-To: <e91227aa-4f7d-7a45-0b40-c6bbc72ea67f@linuxfoundation.org>
+References: <e91227aa-4f7d-7a45-0b40-c6bbc72ea67f@linuxfoundation.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <18ef2c05-5e4e-bdb3-560b-847aada816c3@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.10-rc1
-X-PR-Tracked-Commit-Id: 1abdd39f14b25dd2d69096b624a4f86f158a9feb
+X-PR-Tracked-Message-Id: <e91227aa-4f7d-7a45-0b40-c6bbc72ea67f@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.10-rc1
+X-PR-Tracked-Commit-Id: 4c8511317b4ec75cc3868f80a7b9fddb8322e512
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 578a7155c5a1894a789d4ece181abf9d25dc6b0d
-Message-Id: <160280037009.16623.3214734245182391802.pr-tracker-bot@kernel.org>
-Date:   Thu, 15 Oct 2020 22:19:30 +0000
+X-PR-Merge-Commit-Id: 0674324b16d40e14b9d8ea2d667627c010608c28
+Message-Id: <160280036978.16623.14806471272884269061.pr-tracker-bot@kernel.org>
+Date:   Thu, 15 Oct 2020 22:19:29 +0000
 To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Thu, 15 Oct 2020 15:13:02 -0600:
+The pull request you sent on Thu, 15 Oct 2020 13:55:07 -0600:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.10-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.10-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/578a7155c5a1894a789d4ece181abf9d25dc6b0d
+https://git.kernel.org/torvalds/c/0674324b16d40e14b9d8ea2d667627c010608c28
 
 Thank you!
 
