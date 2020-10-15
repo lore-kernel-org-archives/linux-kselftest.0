@@ -7,45 +7,47 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BF20C433DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CF64C433E7
 	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:44:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 415A42080A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:44:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE4592080A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Oct 2020 18:44:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389628AbgJOSoW (ORCPT
+        id S2389654AbgJOSoV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Oct 2020 14:44:22 -0400
-Received: from mga02.intel.com ([134.134.136.20]:59310 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389644AbgJOSoV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 15 Oct 2020 14:44:21 -0400
-IronPort-SDR: V/lNwlnGu0eRL05ilA+X9mAGJRJhDu91d0Nsp08g6ooe/h/FtKXrv2EYaDoFVqxCf1TtYZ0yRH
- NdqbsCyMKudA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="153355665"
+Received: from mga12.intel.com ([192.55.52.136]:59588 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389628AbgJOSoV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 15 Oct 2020 14:44:21 -0400
+IronPort-SDR: I3/Zlz/p+PRacvkSRRJEte0Ujb+EXDVnwUyaeV18TeYsdvtRik4o1Twv/TpBBletvrdU/Aj6ZI
+ 0VCp9IUf/bMw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="145734503"
 X-IronPort-AV: E=Sophos;i="5.77,380,1596524400"; 
-   d="scan'208";a="153355665"
+   d="scan'208";a="145734503"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 11:44:21 -0700
-IronPort-SDR: nar9uvyy0HqcxBtNP3+mlux/IYCMaUOtlIQ5Q3u7QStQsHKdK61IGY5B+YWir9hNDuNty2t0En
- YhYCWWXz4Vgw==
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2020 11:44:21 -0700
+IronPort-SDR: FJPXkMnIJ/lrpftwBAV6zc5FAn9c62MOoBYcoRdU44blh5l5mckVmCOMZpMITxT6e9/dCRZPPK
+ 2jZAz8U9yCEQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,380,1596524400"; 
-   d="scan'208";a="300400764"
+   d="scan'208";a="330901909"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 15 Oct 2020 11:44:18 -0700
+  by orsmga002.jf.intel.com with ESMTP; 15 Oct 2020 11:44:18 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DEA21163; Thu, 15 Oct 2020 21:44:17 +0300 (EEST)
+        id D4C21B8; Thu, 15 Oct 2020 21:44:17 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
         kunit-dev@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 3/3] lib/bits_kunit: Follow new file name convention for KUnit tests
-Date:   Thu, 15 Oct 2020 21:44:16 +0300
-Message-Id: <20201015184416.38999-3-andriy.shevchenko@linux.intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v2 2/3] lib/linear_ranges_kunit: Follow new file name convention for KUnit tests
+Date:   Thu, 15 Oct 2020 21:44:15 +0300
+Message-Id: <20201015184416.38999-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201015184416.38999-1-andriy.shevchenko@linux.intel.com>
 References: <20201015184416.38999-1-andriy.shevchenko@linux.intel.com>
@@ -60,30 +62,47 @@ Since we have lib/*test*.c in a few variations,
 use 'kunit' suffix to distinguish usual test cases
 with KUnit-based ones.
 
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
 v2: new patch
- lib/Makefile                      | 2 +-
- lib/{test_bits.c => bits_kunit.c} | 0
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename lib/{test_bits.c => bits_kunit.c} (100%)
+ MAINTAINERS                                         | 3 +--
+ lib/Makefile                                        | 2 +-
+ lib/{test_linear_ranges.c => linear_ranges_kunit.c} | 0
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+ rename lib/{test_linear_ranges.c => linear_ranges_kunit.c} (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 20facbca9388..249417a036f9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10069,8 +10069,7 @@ F:	include/uapi/linux/lightnvm.h
+ LINEAR RANGES HELPERS
+ M:	Mark Brown <broonie@kernel.org>
+ R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+-F:	lib/linear_ranges.c
+-F:	lib/test_linear_ranges.c
++F:	lib/linear_ranges*.c
+ F:	include/linux/linear_range.h
+ 
+ LINUX FOR POWER MACINTOSH
 diff --git a/lib/Makefile b/lib/Makefile
-index 5c18519d6733..70a4a21ff5d6 100644
+index 1a5e6a6ebe8d..5c18519d6733 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
 @@ -350,6 +350,6 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
  
  # KUnit tests
  obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
-+obj-$(CONFIG_BITS_TEST) += bits_kunit.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += linear_ranges_kunit.o
++obj-$(CONFIG_LINEAR_RANGES_TEST) += linear_ranges_kunit.o
  obj-$(CONFIG_LIST_KUNIT_TEST) += list_kunit.o
--obj-$(CONFIG_BITS_TEST) += test_bits.o
-diff --git a/lib/test_bits.c b/lib/bits_kunit.c
+-obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) += test_bits.o
+diff --git a/lib/test_linear_ranges.c b/lib/linear_ranges_kunit.c
 similarity index 100%
-rename from lib/test_bits.c
-rename to lib/bits_kunit.c
+rename from lib/test_linear_ranges.c
+rename to lib/linear_ranges_kunit.c
 -- 
 2.28.0
 
