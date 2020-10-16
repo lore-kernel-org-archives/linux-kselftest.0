@@ -2,78 +2,97 @@ Return-Path: <SRS0=amRC=DX=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF531C433DF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Oct 2020 11:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D61C43457
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Oct 2020 11:12:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76D1320EDD
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Oct 2020 11:09:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B1BA20FC3
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Oct 2020 11:12:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602846764;
+	bh=vD+hWuFYQbpI7FKukNRvn0j/lyn5YOtPaoQa962+vnc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=KrdsX5u6lFEG+nmLUjq+g00d4e/SavdaUqEad9sF62sbRDTwb86SXoKrv2xP4qlP1
+	 oWTMfhuSmBCf1RZ95bvr1teuRBu0BWHC+3j2ZmVgKKP5fnWOi9gij5qaAbQFGmR39Y
+	 EEbPsCR885aJ/RfkKs2pDxyxO/pznIEVp+qydkB0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406120AbgJPLJD (ORCPT
+        id S2406803AbgJPLMn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 16 Oct 2020 07:09:03 -0400
-Received: from mga05.intel.com ([192.55.52.43]:21426 "EHLO mga05.intel.com"
+        Fri, 16 Oct 2020 07:12:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57244 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406107AbgJPLJD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Oct 2020 07:09:03 -0400
-IronPort-SDR: qcXH5Q0m15OCIWRF9KWD9xzkBgCvdenB2zFKJUWlBuSjdSiO7z5Af5ikdmLviFJ/D0AnqMHF6N
- O2Kr5miVLzxA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9775"; a="251276419"
-X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
-   d="scan'208";a="251276419"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 04:09:02 -0700
-IronPort-SDR: lLeoYPXZBTBGZjsgKqmVxaJF56agc3/SVJ/fwMq2fl6Ys3hJRVerDVELyi+YzJCXiN+8a4dVz0
- qDH320QWvRNQ==
-X-IronPort-AV: E=Sophos;i="5.77,382,1596524400"; 
-   d="scan'208";a="319415660"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2020 04:09:01 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kTNcZ-008Bkg-Hf; Fri, 16 Oct 2020 14:10:03 +0300
-Date:   Fri, 16 Oct 2020 14:10:03 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
+        id S2406802AbgJPLMn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 16 Oct 2020 07:12:43 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E1D7207F7;
+        Fri, 16 Oct 2020 11:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602846763;
+        bh=vD+hWuFYQbpI7FKukNRvn0j/lyn5YOtPaoQa962+vnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jgt/3hc7y1lFGQ41t+tvn286Rhm+urshXXkvkSwBjOG0L+A1KVzpsXyKZQd4CaFAw
+         /8HfJcQYu39qUsJyPxjCMbSHqNPMVwPZ6d9BCMlSWCn7JGebuw1YO1QGCftYhHxm7n
+         CGEm5VouerIc13+EELsoIdlCt4g4dkC5RYSvGzQ8=
+Date:   Fri, 16 Oct 2020 12:12:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-kselftest@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
         kunit-dev@googlegroups.com, Shuah Khan <skhan@linuxfoundation.org>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Subject: Re: [PATCH v2 2/3] lib/linear_ranges_kunit: Follow new file name
  convention for KUnit tests
-Message-ID: <20201016111003.GK4077@smile.fi.intel.com>
+Message-ID: <20201016111234.GB5274@sirena.org.uk>
 References: <20201015184416.38999-1-andriy.shevchenko@linux.intel.com>
  <20201015184416.38999-2-andriy.shevchenko@linux.intel.com>
  <20201016103841.GA5274@sirena.org.uk>
  <20201016110344.GJ4077@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PmA2V3Z32TCmWXqI"
 Content-Disposition: inline
 In-Reply-To: <20201016110344.GJ4077@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Cookie: Pournelle must die!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+
+--PmA2V3Z32TCmWXqI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
 On Fri, Oct 16, 2020 at 02:03:44PM +0300, Andy Shevchenko wrote:
 > On Fri, Oct 16, 2020 at 11:38:41AM +0100, Mark Brown wrote:
-> > On Thu, Oct 15, 2020 at 09:44:15PM +0300, Andy Shevchenko wrote:
 
 > > I'm missing the rest of this series - what's the story with dependencies
 > > here?
-> 
+
 > There is a dependency in Makefile. Do you want me to send a new version with
 > Cc'ing you all?
 
-v3 has been sent.
+It's fine this time but please don't do this in future, people need at
+least a cover letter so they know how things rae related to each other.
 
--- 
-With Best Regards,
-Andy Shevchenko
+--PmA2V3Z32TCmWXqI
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl+JgCEACgkQJNaLcl1U
+h9BxbQf/ZyruSpx9Kqb2YFF3YMHqT/BPqeTFtkDNxoFmwH5eDLkJGlo2V1obbEO/
+XPjZ5vmSTG5yhWV2bc3nmU6qiGZZfY4GI8SjY6CCzCPIQr0rjdVHr9cWX248KvLp
++xN1DAfLGXuE8cmnRXPARXH9wUKzsYy3YkRPTnAmxJ24umzSFEyOaiVG+g7OEsTp
+ODOo9IE8gq77CjQjEY6BWF5ekalmIfJqKtx16vEQr4tlhw7WgKc0jVyJAAaBT4bw
+9KQouHB1PTd6VyHvLFjqRQOGVjBpxSakCSUs+89sKIdtdAFFxDL8xGjwNzfd/W41
+ir3/3G7VndovWbdSJKTubFyiLOhkTw==
+=S9jZ
+-----END PGP SIGNATURE-----
+
+--PmA2V3Z32TCmWXqI--
