@@ -5,52 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 992B6C433DF
-	for <linux-kselftest@archiver.kernel.org>; Sun, 18 Oct 2020 19:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3618FC43457
+	for <linux-kselftest@archiver.kernel.org>; Sun, 18 Oct 2020 19:48:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 674D022365
-	for <linux-kselftest@archiver.kernel.org>; Sun, 18 Oct 2020 19:23:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A69220714
+	for <linux-kselftest@archiver.kernel.org>; Sun, 18 Oct 2020 19:48:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603049026;
-	bh=XvMgVztAh3JO68OK0QUk3KY/LnZc26xvhCUuPLNnCpA=;
+	s=default; t=1603050513;
+	bh=D2rn82u9XBoGzM/QeR1D+rIp50ldv11A3HZpYHRRCSg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GRp1IfQrJZg4A1mWLBy4OHuSBjKa1pg+Ao532qR5UMmtWWMpm/v7K1lTVeO1nwk9b
-	 Y4ngmk6qJnGgwd/Vm0NMsNzEXAHQNCr0loTOj1fDGZwQ4poQHHDjSHgCP0TqY6juTn
-	 Q4C6KP1agSXSlPgJK+b6z5GlZkW8AUaCehA8BLsE=
+	b=kqAMEnDrXsW5aGHaEtYA381ZtjEa5tRXGV15PqRuRvTEnn4sonuq+IjL703/lrMwK
+	 6tKbehO+u6nO0HotNVz6W5vB645vebJdvFGsifpUaTf0yzRdWkzh5uyPeOgT/qaxik
+	 vxr7bqoT6gOH8BAv8HYcodyE2BKVeiLdruHQifNA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730431AbgJRTXp (ORCPT
+        id S1729653AbgJRTV4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 18 Oct 2020 15:23:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37256 "EHLO mail.kernel.org"
+        Sun, 18 Oct 2020 15:21:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34408 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730410AbgJRTXo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:23:44 -0400
+        id S1728196AbgJRTVz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:21:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F3D7E222E7;
-        Sun, 18 Oct 2020 19:23:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C46E4222C8;
+        Sun, 18 Oct 2020 19:21:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049023;
-        bh=XvMgVztAh3JO68OK0QUk3KY/LnZc26xvhCUuPLNnCpA=;
+        s=default; t=1603048914;
+        bh=D2rn82u9XBoGzM/QeR1D+rIp50ldv11A3HZpYHRRCSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TL+3xUUzxxqwSgrZ2kvFwfJ0zHu3QPuQ/vwlAcyWMYYwWFtX4s16nGZJkKqUnpgQr
-         LQZViAorEsdKQiTIx/1X6IaEsZb+BceZJa2PihmJIQJ01EM5mSHOfDWilh4PKRDYte
-         MtcUvQZAOPFcgTXFGtbFlPnBDUuIZ47kXdOiiuBc=
+        b=2PZdyTyboKasAZtG0L1Jl361BQKOUNyljkVli8pvBScEjvyfCRK4DRsN9Kt/pqFJ4
+         g+/ItHzrpPdA3qlLz/qMJ5oaq86RZ1IfzDcbl5O4rNG/IfVy4SFrbUzct1gTcbkSgt
+         aY+hGD/U4Jv7MgfqzrUZTYoQ589n8R3z5lk0f4AY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 57/80] selftests/bpf: Fix test_sysctl_loop{1, 2} failure due to clang change
-Date:   Sun, 18 Oct 2020 15:22:08 -0400
-Message-Id: <20201018192231.4054535-57-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 073/101] selftests/bpf: Fix test_sysctl_loop{1, 2} failure due to clang change
+Date:   Sun, 18 Oct 2020 15:19:58 -0400
+Message-Id: <20201018192026.4053674-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
-References: <20201018192231.4054535-1-sashal@kernel.org>
+In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
+References: <20201018192026.4053674-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -145,7 +145,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-index d22e438198cf7..9af8822ece477 100644
+index 458b0d69133e4..553a282d816ab 100644
 --- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
 +++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
 @@ -18,11 +18,11 @@
@@ -163,7 +163,7 @@ index d22e438198cf7..9af8822ece477 100644
  
  	memset(name, 0, sizeof(name));
 diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-index cb201cbe11e77..55251046c9b73 100644
+index b2e6f9b0894d8..2b64bc563a12e 100644
 --- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
 +++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
 @@ -18,11 +18,11 @@
