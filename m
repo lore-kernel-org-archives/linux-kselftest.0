@@ -2,52 +2,41 @@ Return-Path: <SRS0=355I=D2=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 294F2C433DF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Oct 2020 09:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F04EC43467
+	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Oct 2020 18:49:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C332122263
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Oct 2020 09:37:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UjWOH0rq"
+	by mail.kernel.org (Postfix) with ESMTP id 4A561223FD
+	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Oct 2020 18:49:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725776AbgJSJhl (ORCPT
+        id S1730871AbgJSSs7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 19 Oct 2020 05:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727556AbgJSJhl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Oct 2020 05:37:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C6C0613CE;
-        Mon, 19 Oct 2020 02:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=O3B5SDSSGOQ/+MQUdt0Hy/pyKJ8BUU2Uw0eRUC0gQJw=; b=UjWOH0rqHpfO2evvAot8XfZPhm
-        Ujz8nN5NXFhX2X4ST7K3yr0FRVocJcnYRDv/x7ri2cofoF0tNd4LH43/uNrRKlRuD7TzTxbBiCxfy
-        f08AUp6A/Do8cyTspB4hlKZPrmm2mETomhSipdZAEa6fN7de/Z1evQijJAVE/MGG/DxVM2iU4Qn1q
-        FUGEOKLtigWd+T+4WYYGb9bKOVXkDEghzmKrV64OZSbp3a8dondpd2YaqnxT8BjrOR+snVk2sP+AP
-        w4nUUDdb7ykKA7E8PI1XyPVgSG1NlxEHDdKwSNLo4JS+pBVzA5E8S9e3uLAZUr0QXqTZzSQjS9Nvy
-        WFDYp1rg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kURbQ-0003ky-22; Mon, 19 Oct 2020 09:37:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B242E3012C3;
-        Mon, 19 Oct 2020 11:37:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A127821447780; Mon, 19 Oct 2020 11:37:14 +0200 (CEST)
-Date:   Mon, 19 Oct 2020 11:37:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ira Weiny <ira.weiny@intel.com>
+        Mon, 19 Oct 2020 14:48:59 -0400
+Received: from mga03.intel.com ([134.134.136.65]:16370 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727681AbgJSSs7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 19 Oct 2020 14:48:59 -0400
+IronPort-SDR: 2Uu/efrXkwcYfZ13Vh1e4bjXBRJyN9t9x+RU4MYsgiXB2tp3pGHkTIYkhFr3Ho6UuJp57RtEiL
+ HnJy6ekHAn/A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9779"; a="167165415"
+X-IronPort-AV: E=Sophos;i="5.77,395,1596524400"; 
+   d="scan'208";a="167165415"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 11:48:51 -0700
+IronPort-SDR: 9Q6lfeqmVXf8xJoZpKKEiMAlLaNRA4+210TknTwmbYMu5RiGfjwSmlxLQWJuXLP/L8JCdm8vZJ
+ yjNckI9qdKrw==
+X-IronPort-AV: E=Sophos;i="5.77,395,1596524400"; 
+   d="scan'208";a="301476541"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 11:48:49 -0700
+Date:   Mon, 19 Oct 2020 11:48:49 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Dave Hansen <dave.hansen@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -61,39 +50,50 @@ Cc:     Dave Hansen <dave.hansen@intel.com>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH RFC V3 4/9] x86/pks: Preserve the PKRS MSR on context
  switch
-Message-ID: <20201019093714.GI2628@hirez.programming.kicks-ass.net>
+Message-ID: <20201019184849.GC3713473@iweiny-DESK2.sc.intel.com>
 References: <20201009194258.3207172-1-ira.weiny@intel.com>
  <20201009194258.3207172-5-ira.weiny@intel.com>
  <429789d3-ab5b-49c3-65c3-f0fc30a12516@intel.com>
  <20201016111226.GN2611@hirez.programming.kicks-ass.net>
  <20201017051410.GW2046448@iweiny-DESK2.sc.intel.com>
+ <20201019093714.GI2628@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201017051410.GW2046448@iweiny-DESK2.sc.intel.com>
+In-Reply-To: <20201019093714.GI2628@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 10:14:10PM -0700, Ira Weiny wrote:
-> > so it either needs to
-> > explicitly do so, or have an assertion that preemption is indeed
-> > disabled.
+On Mon, Oct 19, 2020 at 11:37:14AM +0200, Peter Zijlstra wrote:
+> On Fri, Oct 16, 2020 at 10:14:10PM -0700, Ira Weiny wrote:
+> > > so it either needs to
+> > > explicitly do so, or have an assertion that preemption is indeed
+> > > disabled.
+> > 
+> > However, I don't think I understand clearly.  Doesn't [get|put]_cpu_ptr()
+> > handle the preempt_disable() for us? 
 > 
-> However, I don't think I understand clearly.  Doesn't [get|put]_cpu_ptr()
-> handle the preempt_disable() for us? 
-
-It does.
-
-> Is it not sufficient to rely on that?
-
-It is.
-
-> Dave's comment seems to be the opposite where we need to eliminate preempt
-> disable before calling write_pkrs().
+> It does.
 > 
-> FWIW I think I'm mistaken in my response to Dave regarding the
-> preempt_disable() in pks_update_protection().
+> > Is it not sufficient to rely on that?
+> 
+> It is.
+> 
+> > Dave's comment seems to be the opposite where we need to eliminate preempt
+> > disable before calling write_pkrs().
+> > 
+> > FWIW I think I'm mistaken in my response to Dave regarding the
+> > preempt_disable() in pks_update_protection().
+> 
+> Dave's concern is that we're calling with with preemption already
+> disabled so disabling it again is superfluous.
 
-Dave's concern is that we're calling with with preemption already
-disabled so disabling it again is superfluous.
+Ok, thanks, and after getting my head straight I think I agree with him, and
+you.
+
+Thanks I've reworked the code to removed the superfluous calls.  Sorry about
+being so dense...  :-D
+
+Ira
