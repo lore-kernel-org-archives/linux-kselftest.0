@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C06DCC4363D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF0BC388F7
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 786812222D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C16C92225F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439412AbgJTXvm (ORCPT
+        id S2439404AbgJTXvj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Oct 2020 19:51:42 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11167 "EHLO mga07.intel.com"
+        Tue, 20 Oct 2020 19:51:39 -0400
+Received: from mga07.intel.com ([134.134.136.100]:11172 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439403AbgJTXvk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 19:51:40 -0400
-IronPort-SDR: nyB/k2MPyR/zKJZqhFLQUt3QbPLUPsHM7bXdzxP31r7MYN+dRAYqB57JCLqHw2/+J1XxJJ0RzK
- I9EbSsSaUxyg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486371"
+        id S2439393AbgJTXvj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Oct 2020 19:51:39 -0400
+IronPort-SDR: PoXjpDQkWip98lnLnT88RjKUJspluMJ0i5Kb5r6sjkk4P8Y8XW+0xj86St190hjP2ax48uaK+N
+ fgTFpqh8pTtw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486368"
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="231486371"
+   d="scan'208";a="231486368"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:33 -0700
-IronPort-SDR: LiOgrtKtMvcQKftOATkPcQJHTmVGHP5zugz0N90o18SBcClqSmjcvi4lzTSCzGBrpIs8xqNe0d
- tjb1lQQvt3fw==
+IronPort-SDR: yIzvBCaW+hcymhJzp6YspDY9aYHm0U4M9bjCk/WSY7TJpWf5ycw8slybrX6IQjKDKEJjCH7GfJ
+ LizHxsYXmMug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="320833901"
+   d="scan'208";a="320833886"
 Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:33 -0700
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:32 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
 To:     "Shuah Khan" <shuah@kernel.org>,
         "Reinette Chatre" <reinette.chatre@intel.com>,
@@ -48,9 +48,9 @@ To:     "Shuah Khan" <shuah@kernel.org>,
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 20/21] selftests/resctrl: Fix unnecessary usage of global variables
-Date:   Tue, 20 Oct 2020 23:51:25 +0000
-Message-Id: <20201020235126.1871815-21-fenghua.yu@intel.com>
+Subject: [PATCH v3 17/21] selftests/resctrl: Unmount resctrl FS after running all tests
+Date:   Tue, 20 Oct 2020 23:51:22 +0000
+Message-Id: <20201020235126.1871815-18-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
 References: <20201020235126.1871815-1-fenghua.yu@intel.com>
@@ -60,85 +60,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Reinette reported following compilation issue on Fedora 32, gcc version
-10.1.1
+Resctrl test suite is expected to unmount the resctrl file system upon
+exit. But there are few scenarios where resctrl test suite might forget to
+unmount resctrl FS upon exit. For example, running only mba test on a
+Broadwell (BDW) machine (MBA isn't supported on BDW CPU).
 
-/usr/bin/ld: cmt_test.o:<src_dir>/cmt_test.c:22: multiple definition of
-`cache_size'; cat_test.o:<src_dir>/cat_test.c:23: first defined here
+This happens because validate_resctrl_feature_request() would mount resctrl
+FS to check if mba is enabled on the platform or not and finds that the H/W
+doesn't support mba and hence will return false to run_mba_test(). This in
+turn makes the main() function return without unmounting resctrl FS.
 
-The same issue is reported for long_mask and count_of_bits variables as
-well. Compiler isn't happy because these variables are defined globally in
-two .c files namely cmt_test.c and cat_test.c and the compiler during
-compilation finds that the variable is already defined (multiple definition
-error).
+Fix this by calling umount_resctrlfs() before returning from main()
+function, so that the resctrl FS will always be unmounted upon exit.
 
-Taking a closer look at the usage of these variables reveals that these
-variables are used only locally to cmt_resctrl_val() (defined in
-cmt_test.c) and cat_perf_miss_val() (defined in cat_test.c) functions.
-These variables are not shared between the two functions. So, there is no
-need for these variables to be global. Hence, fix this issue by making
-them local variables to the functions where they are used.
-
-Fixes: 78941183d1b15 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
-Fixes: 790bf585b0eee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
-Reported-by: Reinette Chatre <reinette.chatre@intel.com>
+Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c | 7 ++-----
- tools/testing/selftests/resctrl/cmt_test.c | 6 ++----
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_tests.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index a18a37ce626c..e518f8f7b4d8 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -17,10 +17,7 @@
- #define MAX_DIFF_PERCENT	4
- #define MAX_DIFF		1000000
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index a22dc96c0b43..fb66da65b373 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -257,6 +257,7 @@ int main(int argc, char **argv)
+ 		run_cat_test(cpu_no, no_of_bits);
  
--int count_of_bits;
- char cbm_mask[256];
--unsigned long long_mask;
--unsigned long cache_size;
+ out:
++	umount_resctrlfs();
+ 	printf("1..%d\n", tests_run);
  
- /*
-  * Change schemata. Write schemata to specified
-@@ -121,8 +118,8 @@ void cat_test_cleanup(void)
- 
- int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- {
--	unsigned long l_mask, l_mask_1;
--	int ret, pipefd[2], sibling_cpu_no;
-+	unsigned long l_mask, l_mask_1, long_mask, cache_size;
-+	int ret, pipefd[2], sibling_cpu_no, count_of_bits;
- 	char pipe_message;
- 	pid_t bm_pid;
- 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 119ae65abec7..f0cb441cca9f 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -16,10 +16,7 @@
- #define MAX_DIFF		2000000
- #define MAX_DIFF_PERCENT	15
- 
--int count_of_bits;
- char cbm_mask[256];
--unsigned long long_mask;
--unsigned long cache_size;
- 
- static int cmt_setup(int num, ...)
- {
-@@ -113,7 +110,8 @@ void cmt_test_cleanup(void)
- 
- int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- {
--	int ret, mum_resctrlfs;
-+	int ret, mum_resctrlfs, count_of_bits;
-+	unsigned long long_mask, cache_size;
- 
- 	cache_size = 0;
- 	mum_resctrlfs = 1;
+ 	return 0;
 -- 
 2.29.0
 
