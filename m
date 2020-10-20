@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD29C388F7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F00D7C388F9
 	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D744B22456
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD830223C6
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:52:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439491AbgJTXwJ (ORCPT
+        id S2439370AbgJTXwI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Oct 2020 19:52:09 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11167 "EHLO mga07.intel.com"
+        Tue, 20 Oct 2020 19:52:08 -0400
+Received: from mga07.intel.com ([134.134.136.100]:11170 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439389AbgJTXvj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S2439400AbgJTXvj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Oct 2020 19:51:39 -0400
-IronPort-SDR: GokqX+YSaVwTiE3nmfmxY/Ndt4fZT4nxqx3hwm8boJG/fYnYPWRzdFGeY3XJT4LuWyMmNKwrnz
- EXCAbInEyHQg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486366"
+IronPort-SDR: WUzWOB5lYL0N4mZedbaeENaYbZFf6vmZFUiV2XnoyxBNwcud32foVJQ0Kq+UUYXnnxROhQIZ19
+ YM5CTYsCc5UA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486370"
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="231486366"
+   d="scan'208";a="231486370"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:32 -0700
-IronPort-SDR: Wn+3VXrCIewVyoO0fAd1GrMg+HQE9+evazolLwy3o5M8vf+MsVTkPervSsrFmwf+uO258CHKxg
- dNHJ8/gIFPFw==
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:33 -0700
+IronPort-SDR: Us20K3CBo3ru3wmGQnMap/rI7C+t6tTb/cIr0y0zRg9vc3vI5q/QY2wgHirvdf6Dip+yZK01k4
+ Y3GO8dOMpTmQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="320833871"
+   d="scan'208";a="320833897"
 Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:32 -0700
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:33 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
 To:     "Shuah Khan" <shuah@kernel.org>,
         "Reinette Chatre" <reinette.chatre@intel.com>,
@@ -47,10 +47,11 @@ To:     "Shuah Khan" <shuah@kernel.org>,
         "Ravi V Shankar" <ravi.v.shankar@intel.com>
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 15/21] selftests/resctrl: Skip the test if requested resctrl feature is not supported
-Date:   Tue, 20 Oct 2020 23:51:20 +0000
-Message-Id: <20201020235126.1871815-16-fenghua.yu@intel.com>
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v3 19/21] selftests/resctrl: Fix checking for < 0 for unsigned values
+Date:   Tue, 20 Oct 2020 23:51:24 +0000
+Message-Id: <20201020235126.1871815-20-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
 References: <20201020235126.1871815-1-fenghua.yu@intel.com>
@@ -60,153 +61,134 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There could be two reasons why a resctrl feature might not be enabled on
-the platform
-1. H/W might not support the feature
-2. Even if the H/W supports it, the user might have disabled the feature
-   through kernel command line arguments
+Dan reported following static checker warnings
 
-Hence, any resctrl unit test (like cmt, cat, mbm and mba) before starting
-the test will first check if the feature is enabled on the platform or not.
-If the feature isn't enabled, then the test returns with an error status.
-For example, if MBA isn't supported on a platform and if the user tries to
-run MBA, the output will look like this
+tools/testing/selftests/resctrl/resctrl_val.c:545 measure_vals()
+warn: 'bw_imc' unsigned <= 0
 
-ok mounting resctrl to "/sys/fs/resctrl"
-not ok MBA: schemata change
+tools/testing/selftests/resctrl/resctrl_val.c:549 measure_vals()
+warn: 'bw_resc_end' unsigned <= 0
 
-But, not supporting a feature isn't a test failure. So, instead of treating
-it as an error, use the SKIP directive of the TAP protocol. With the
-change, the output will look as below
+These warnings are reported because
+1. measure_vals() declares 'bw_imc' and 'bw_resc_end' as unsigned long
+   variables
+2. Return value of get_mem_bw_imc() and get_mem_bw_resctrl() are assigned
+   to 'bw_imc' and 'bw_resc_end' respectively
+3. The returned values are checked for <= 0 to see if the calls failed
 
-ok MBA # SKIP Hardware does not support MBA or MBA is disabled
+Checking for < 0 for an unsigned value doesn't make any sense.
 
-Fixes: 01fee6b4d1f9 ("selftests/resctrl: Add MBA test")
-Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
-Fixes: 78941183d1b15 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
-Fixes: 790bf585b0eee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Fix this issue by changing the implementation of get_mem_bw_imc() and
+get_mem_bw_resctrl() such that they now accept reference to a variable
+and set the variable appropriately upon success and return 0, else return
+< 0 on error.
+
+Fixes: 7f4d257e3a2a ("selftests/resctrl: Add callback to start a benchmark")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c    |  3 ---
- tools/testing/selftests/resctrl/cmt_test.c    |  3 ---
- tools/testing/selftests/resctrl/mba_test.c    |  3 ---
- tools/testing/selftests/resctrl/mbm_test.c    |  3 ---
- .../testing/selftests/resctrl/resctrl_tests.c | 24 +++++++++++++++++++
- 5 files changed, 24 insertions(+), 12 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_val.c | 41 +++++++++++--------
+ 1 file changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 1bce84e23783..a18a37ce626c 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -132,9 +132,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	if (ret)
- 		return ret;
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 88f9b641d753..f723d8534cf2 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -300,9 +300,9 @@ static int initialize_mem_bw_imc(void)
+  * Memory B/W utilized by a process on a socket can be calculated using
+  * iMC counters. Perf events are used to read these counters.
+  *
+- * Return: >= 0 on success. < 0 on failure.
++ * Return: = 0 on success. < 0 on failure.
+  */
+-static float get_mem_bw_imc(int cpu_no, char *bw_report)
++static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
+ {
+ 	float reads, writes, of_mul_read, of_mul_write;
+ 	int imc, j, ret;
+@@ -373,13 +373,18 @@ static float get_mem_bw_imc(int cpu_no, char *bw_report)
+ 		close(imc_counters_config[imc][WRITE].fd);
+ 	}
  
--	if (!validate_resctrl_feature_request("cat"))
--		return -1;
--
- 	/* Get default cbm mask for L3/L2 cache */
- 	ret = get_cbm_mask(cache_type);
- 	if (ret)
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 282ba7fcf17c..119ae65abec7 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -122,9 +122,6 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- 	if (ret)
- 		return ret;
- 
--	if (!validate_resctrl_feature_request("cmt"))
--		return -1;
--
- 	ret = get_cbm_mask("L3");
- 	if (ret)
- 		return ret;
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index ba0234d4829e..6f09d46a5424 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -156,9 +156,6 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd)
- 
- 	remove(RESULT_FILE_NAME);
- 
--	if (!validate_resctrl_feature_request("mba"))
--		return -1;
--
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index ca610c3ebc8c..cb3113cb3b10 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -129,9 +129,6 @@ int mbm_bw_change(int span, int cpu_no, char *bw_report, char **benchmark_cmd)
- 
- 	remove(RESULT_FILE_NAME);
- 
--	if (!validate_resctrl_feature_request("mbm"))
--		return -1;
--
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index be7cd57efca8..a22dc96c0b43 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -60,6 +60,12 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
- 	int res;
- 
- 	printf("# Starting MBM BW change ...\n");
-+
-+	if (!validate_resctrl_feature_request("mbm")) {
-+		printf("ok MBM # SKIP Hardware does not support MBM or MBM is disabled\n");
-+		return;
+-	if (strcmp(bw_report, "reads") == 0)
+-		return reads;
++	if (strcmp(bw_report, "reads") == 0) {
++		*bw_imc = reads;
++		return 0;
 +	}
-+
- 	if (!has_ben)
- 		sprintf(benchmark_cmd[5], "%s", "mba");
- 	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
-@@ -74,6 +80,12 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
- 	int res;
  
- 	printf("# Starting MBA Schemata change ...\n");
-+
-+	if (!validate_resctrl_feature_request("mba")) {
-+		printf("ok MBA # SKIP Hardware does not support MBA or MBA is disabled\n");
-+		return;
+-	if (strcmp(bw_report, "writes") == 0)
+-		return writes;
++	if (strcmp(bw_report, "writes") == 0) {
++		*bw_imc = writes;
++		return 0;
 +	}
-+
- 	if (!has_ben)
- 		sprintf(benchmark_cmd[1], "%d", span);
- 	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
-@@ -87,6 +99,12 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
- 	int res;
  
- 	printf("# Starting CMT test ...\n");
-+
-+	if (!validate_resctrl_feature_request("cmt")) {
-+		printf("ok CMT # SKIP Hardware does not support CMT or CMT is disabled\n");
-+		return;
-+	}
-+
- 	if (!has_ben)
- 		sprintf(benchmark_cmd[5], "%s", "cmt");
- 	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
-@@ -100,6 +118,12 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- 	int res;
+-	return (reads + writes);
++	*bw_imc = reads + writes;
++	return 0;
+ }
  
- 	printf("# Starting CAT test ...\n");
-+
-+	if (!validate_resctrl_feature_request("cat")) {
-+		printf("ok CAT # SKIP Hardware does not support CAT or CAT is disabled\n");
-+		return;
-+	}
-+
- 	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
- 	printf("%sok CAT: test\n", res ? "not " : "");
- 	tests_run++;
+ void set_mbm_path(const char *ctrlgrp, const char *mongrp, int resource_id)
+@@ -438,9 +443,8 @@ static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
+  * 1. If con_mon grp is given, then read from it
+  * 2. If con_mon grp is not given, then read from root con_mon grp
+  */
+-static unsigned long get_mem_bw_resctrl(void)
++static int get_mem_bw_resctrl(unsigned long *mbm_total)
+ {
+-	unsigned long mbm_total = 0;
+ 	FILE *fp;
+ 
+ 	fp = fopen(mbm_total_path, "r");
+@@ -449,7 +453,7 @@ static unsigned long get_mem_bw_resctrl(void)
+ 
+ 		return -1;
+ 	}
+-	if (fscanf(fp, "%lu", &mbm_total) <= 0) {
++	if (fscanf(fp, "%lu", mbm_total) <= 0) {
+ 		perror("Could not get mbm local bytes");
+ 		fclose(fp);
+ 
+@@ -457,7 +461,7 @@ static unsigned long get_mem_bw_resctrl(void)
+ 	}
+ 	fclose(fp);
+ 
+-	return mbm_total;
++	return 0;
+ }
+ 
+ pid_t bm_pid, ppid;
+@@ -549,7 +553,8 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ static int
+ measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
+ {
+-	unsigned long bw_imc, bw_resc, bw_resc_end;
++	unsigned long bw_resc, bw_resc_end;
++	float bw_imc;
+ 	int ret;
+ 
+ 	/*
+@@ -559,13 +564,13 @@ measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
+ 	 * Compare the two values to validate resctrl value.
+ 	 * It takes 1sec to measure the data.
+ 	 */
+-	bw_imc = get_mem_bw_imc(param->cpu_no, param->bw_report);
+-	if (bw_imc <= 0)
+-		return bw_imc;
++	ret = get_mem_bw_imc(param->cpu_no, param->bw_report, &bw_imc);
++	if (ret < 0)
++		return ret;
+ 
+-	bw_resc_end = get_mem_bw_resctrl();
+-	if (bw_resc_end <= 0)
+-		return bw_resc_end;
++	ret = get_mem_bw_resctrl(&bw_resc_end);
++	if (ret < 0)
++		return ret;
+ 
+ 	bw_resc = (bw_resc_end - *bw_resc_start) / MB;
+ 	ret = print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
 -- 
 2.29.0
 
