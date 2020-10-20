@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 447C1C5517A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B517FC4363D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1A162242F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B4E422409
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410719AbgJTXvc (ORCPT
+        id S2439391AbgJTXvi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Oct 2020 19:51:32 -0400
-Received: from mga01.intel.com ([192.55.52.88]:63669 "EHLO mga01.intel.com"
+        Tue, 20 Oct 2020 19:51:38 -0400
+Received: from mga07.intel.com ([134.134.136.100]:11167 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410711AbgJTXvb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Oct 2020 19:51:31 -0400
-IronPort-SDR: O2mKKckwCsjDaQte+NxwgrxoCFuCEMQTWfOXpJy3c4qR6WCGYIcRVWoz4HSh4ozq+Y5M5qbcXB
- Apcw8yshognA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="184942261"
+        id S2439384AbgJTXvi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Oct 2020 19:51:38 -0400
+IronPort-SDR: wh+UwQ7YhNvwlHvxKfpF7lM6mzimvLntiT5SM1qYhzmtG+w7FIahRBZRq2HA5NqdWE/eXbgAeH
+ xMjKS7dVtttw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486365"
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="184942261"
+   d="scan'208";a="231486365"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:30 -0700
-IronPort-SDR: AxdBHfuovxbP4EHBgRKEa27JaykkvvyNS+lMx6IbqNFBy269Evw5YRs1xL6ojhs5gA13F8NF8+
- P9Y7NWm3Pgtg==
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:32 -0700
+IronPort-SDR: muGKTsd+g7WL1zwRJ4sJo4sXh7g95/4q+IUEnAxlZRXU0NBAHGI3rSuRiwmk+TVqpABq0FGMTI
+ XlKL09KE22BA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="320833832"
+   d="scan'208";a="320833862"
 Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:30 -0700
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:32 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
 To:     "Shuah Khan" <shuah@kernel.org>,
         "Reinette Chatre" <reinette.chatre@intel.com>,
@@ -48,9 +48,9 @@ To:     "Shuah Khan" <shuah@kernel.org>,
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 07/21] selftests/resctrl: Use resctrl/info for feature detection
-Date:   Tue, 20 Oct 2020 23:51:12 +0000
-Message-Id: <20201020235126.1871815-8-fenghua.yu@intel.com>
+Subject: [PATCH v3 14/21] selftests/resctrl: Modularize resctrl test suite main() function
+Date:   Tue, 20 Oct 2020 23:51:19 +0000
+Message-Id: <20201020235126.1871815-15-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
 References: <20201020235126.1871815-1-fenghua.yu@intel.com>
@@ -60,148 +60,149 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Resctrl test suite before running any unit test (like cmt, cat, mbm and
-mba) should first check if the feature is enabled (by kernel and not just
-supported by H/W) on the platform or not.
-validate_resctrl_feature_request() is supposed to do that. This function
-intends to grep for relevant flags in /proc/cpuinfo but there are several
-issues here
+Resctrl test suite main() function does the following things
+1. Parses command line arguments passed by user
+2. Some setup checks
+3. Logic that calls into each unit test
+4. Print result and clean up after running each unit test
 
-1. validate_resctrl_feature_request() calls fgrep() to get flags from
-   /proc/cpuinfo. But, fgrep() can only return a string with maximum of 255
-   characters and hence the complete cpu flags are never returned.
-2. The substring search logic is also busted. If strstr() finds requested
-   resctrl feature in the cpu flags, it returns pointer to the first
-   occurrence. But, the logic negates the return value of strstr() and
-   hence validate_resctrl_feature_request() returns false if the feature is
-   present in the cpu flags and returns true if the feature is not present.
-3. validate_resctrl_feature_request() checks if a resctrl feature is
-   reported in /proc/cpuinfo flags or not. Having a cpu flag means that the
-   H/W supports the feature, but it doesn't mean that the kernel enabled
-   it. A user could selectively enable only a subset of resctrl features
-   using kernel command line arguments. Hence, /proc/cpuinfo isn't a
-   reliable source to check if a feature is enabled or not.
+Introduce wrapper functions for steps 3 and 4 to modularize the main()
+function. Adding these wrapper functions makes it easier to add any logic
+to each individual test.
 
-The 3rd issue being the major one and fixing it requires changing the way
-validate_resctrl_feature_request() works. Since, /proc/cpuinfo isn't the
-right place to check if a resctrl feature is enabled or not, a more
-appropriate place is /sys/fs/resctrl/info directory. Change
-validate_resctrl_feature_request() such that,
+Please note that this is a preparatory patch for the next one and no
+functional changes are intended.
 
-1. For cat, check if /sys/fs/resctrl/info/L3 directory is present or not
-2. For mba, check if /sys/fs/resctrl/info/MB directory is present or not
-3. For cmt, check if /sys/fs/resctrl/info/L3_MON directory is present and
-   check if /sys/fs/resctrl/info/L3_MON/mon_features has llc_occupancy
-4. For mbm, check if /sys/fs/resctrl/info/L3_MON directory is present and
-   check if /sys/fs/resctrl/info/L3_MON/mon_features has
-   mbm_<total/local>_bytes
-
-Please note that only L3_CAT, L3_CMT, MBA and MBM are supported. CDP and L2
-variants can be added later.
-
-Fixes: 591a6e8588fc ("selftests/resctrl: Add basic resctrl file system operations and data")
-Reported-by: Reinette Chatre <reinette.chatre@intel.com>
+Fixes: 01fee6b4d1f9 ("selftests/resctrl: Add MBA test")
+Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+Fixes: 78941183d1b15 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
+Fixes: 790bf585b0eee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl.h   |  6 ++-
- tools/testing/selftests/resctrl/resctrlfs.c | 51 ++++++++++++++++-----
- 2 files changed, 45 insertions(+), 12 deletions(-)
+ .../testing/selftests/resctrl/resctrl_tests.c | 96 ++++++++++++-------
+ 1 file changed, 61 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 814d0dd517a4..65ca24bf3eac 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -28,6 +28,10 @@
- #define RESCTRL_PATH		"/sys/fs/resctrl"
- #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
- #define CBM_MASK_PATH		"/sys/fs/resctrl/info"
-+#define L3_PATH			"/sys/fs/resctrl/info/L3"
-+#define MB_PATH			"/sys/fs/resctrl/info/MB"
-+#define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
-+#define L3_MON_FEATURES_PATH	"/sys/fs/resctrl/info/L3_MON/mon_features"
- 
- #define PARENT_EXIT(err_msg)			\
- 	do {					\
-@@ -74,7 +78,7 @@ int remount_resctrlfs(bool mum_resctrlfs);
- int get_resource_id(int cpu_no, int *resource_id);
- int umount_resctrlfs(void);
- int validate_bw_report_request(char *bw_report);
--bool validate_resctrl_feature_request(char *resctrl_val);
-+bool validate_resctrl_feature_request(const char *resctrl_val);
- char *fgrep(FILE *inf, const char *str);
- int taskset_benchmark(pid_t bm_pid, int cpu_no);
- void run_benchmark(int signum, siginfo_t *info, void *ucontext);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index e43ddebd1aa4..67d775d03271 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -618,26 +618,55 @@ char *fgrep(FILE *inf, const char *str)
-  * validate_resctrl_feature_request - Check if requested feature is valid.
-  * @resctrl_val:	Requested feature
-  *
-- * Return: 0 on success, non-zero on failure
-+ * Return: True if the feature is supported, else false
-  */
--bool validate_resctrl_feature_request(char *resctrl_val)
-+bool validate_resctrl_feature_request(const char *resctrl_val)
- {
--	FILE *inf = fopen("/proc/cpuinfo", "r");
-+	struct stat statbuf;
- 	bool found = false;
- 	char *res;
-+	FILE *inf;
- 
--	if (!inf)
-+	if (!resctrl_val)
- 		return false;
- 
--	res = fgrep(inf, "flags");
--
--	if (res) {
--		char *s = strchr(res, ':');
-+	if (remount_resctrlfs(false))
-+		return false;
- 
--		found = s && !strstr(s, resctrl_val);
--		free(res);
-+	if (!strcmp(resctrl_val, "cat")) {
-+		if (!stat(L3_PATH, &statbuf))
-+			return true;
-+	} else if (!strcmp(resctrl_val, "mba")) {
-+		if (!stat(MB_PATH, &statbuf))
-+			return true;
-+	} else if (!strcmp(resctrl_val, "mbm") || !strcmp(resctrl_val, "cmt")) {
-+		if (!stat(L3_MON_PATH, &statbuf)) {
-+			inf = fopen(L3_MON_FEATURES_PATH, "r");
-+			if (!inf)
-+				return false;
-+
-+			if (!strcmp(resctrl_val, "cmt")) {
-+				res = fgrep(inf, "llc_occupancy");
-+				if (res) {
-+					found = true;
-+					free(res);
-+				}
-+			}
-+
-+			if (!strcmp(resctrl_val, "mbm")) {
-+				res = fgrep(inf, "mbm_total_bytes");
-+				if (res) {
-+					free(res);
-+					res = fgrep(inf, "mbm_local_bytes");
-+					if (res) {
-+						found = true;
-+						free(res);
-+					}
-+				}
-+			}
-+			fclose(inf);
-+		}
- 	}
--	fclose(inf);
- 
- 	return found;
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 5c217d0228f4..be7cd57efca8 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -54,10 +54,62 @@ void tests_cleanup(void)
+ 	cat_test_cleanup();
  }
+ 
++static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
++			 int cpu_no, char *bw_report)
++{
++	int res;
++
++	printf("# Starting MBM BW change ...\n");
++	if (!has_ben)
++		sprintf(benchmark_cmd[5], "%s", "mba");
++	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
++	printf("%sok MBM: bw change\n", res ? "not " : "");
++	mbm_test_cleanup();
++	tests_run++;
++}
++
++static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
++			 int cpu_no, char *bw_report)
++{
++	int res;
++
++	printf("# Starting MBA Schemata change ...\n");
++	if (!has_ben)
++		sprintf(benchmark_cmd[1], "%d", span);
++	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
++	printf("%sok MBA: schemata change\n", res ? "not " : "");
++	mba_test_cleanup();
++	tests_run++;
++}
++
++static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
++{
++	int res;
++
++	printf("# Starting CMT test ...\n");
++	if (!has_ben)
++		sprintf(benchmark_cmd[5], "%s", "cmt");
++	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
++	printf("%sok CMT: test\n", res ? "not " : "");
++	cmt_test_cleanup();
++	tests_run++;
++}
++
++static void run_cat_test(int cpu_no, int no_of_bits)
++{
++	int res;
++
++	printf("# Starting CAT test ...\n");
++	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
++	printf("%sok CAT: test\n", res ? "not " : "");
++	tests_run++;
++	cat_test_cleanup();
++}
++
+ int main(int argc, char **argv)
+ {
+ 	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
+-	int res, c, cpu_no = 1, span = 250, argc_new = argc, i, no_of_bits = 0;
++	int c, cpu_no = 1, span = 250, argc_new = argc, i, no_of_bits = 0;
+ 	char *benchmark_cmd[BENCHMARK_ARGS], bw_report[64], bm_type[64];
+ 	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
+ 	int ben_ind, ben_count;
+@@ -168,43 +220,17 @@ int main(int argc, char **argv)
+ 
+ 	filter_dmesg();
+ 
+-	if (!is_amd && mbm_test) {
+-		printf("# Starting MBM BW change ...\n");
+-		if (!has_ben)
+-			sprintf(benchmark_cmd[5], "%s", "mba");
+-		res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
+-		printf("%sok MBM: bw change\n", res ? "not " : "");
+-		mbm_test_cleanup();
+-		tests_run++;
+-	}
++	if (!is_amd && mbm_test)
++		run_mbm_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
+ 
+-	if (!is_amd && mba_test) {
+-		printf("# Starting MBA Schemata change ...\n");
+-		if (!has_ben)
+-			sprintf(benchmark_cmd[1], "%d", span);
+-		res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
+-		printf("%sok MBA: schemata change\n", res ? "not " : "");
+-		mba_test_cleanup();
+-		tests_run++;
+-	}
++	if (!is_amd && mba_test)
++		run_mba_test(has_ben, benchmark_cmd, span, cpu_no, bw_report);
+ 
+-	if (cmt_test) {
+-		printf("# Starting CMT test ...\n");
+-		if (!has_ben)
+-			sprintf(benchmark_cmd[5], "%s", "cmt");
+-		res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
+-		printf("%sok CMT: test\n", res ? "not " : "");
+-		cmt_test_cleanup();
+-		tests_run++;
+-	}
++	if (cmt_test)
++		run_cmt_test(has_ben, benchmark_cmd, cpu_no);
+ 
+-	if (cat_test) {
+-		printf("# Starting CAT test ...\n");
+-		res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
+-		printf("%sok CAT: test\n", res ? "not " : "");
+-		tests_run++;
+-		cat_test_cleanup();
+-	}
++	if (cat_test)
++		run_cat_test(cpu_no, no_of_bits);
+ 
+ out:
+ 	printf("1..%d\n", tests_run);
 -- 
 2.29.0
 
