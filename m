@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D019C388F2
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 447C1C5517A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8331223BF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1A162242F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410717AbgJTXvb (ORCPT
+        id S2410719AbgJTXvc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Oct 2020 19:51:31 -0400
-Received: from mga01.intel.com ([192.55.52.88]:63667 "EHLO mga01.intel.com"
+        Tue, 20 Oct 2020 19:51:32 -0400
+Received: from mga01.intel.com ([192.55.52.88]:63669 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410707AbgJTXvb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S2410711AbgJTXvb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Oct 2020 19:51:31 -0400
-IronPort-SDR: GyL8bzwSKiLp5PXA8hgsQLafPmZ9QQnHE5J8wsZx/6H8asqJOde1P2BQdIb9aa5Z0+oe9D+5AY
- 8UIaFODcvEcQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="184942260"
+IronPort-SDR: O2mKKckwCsjDaQte+NxwgrxoCFuCEMQTWfOXpJy3c4qR6WCGYIcRVWoz4HSh4ozq+Y5M5qbcXB
+ Apcw8yshognA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="184942261"
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="184942260"
+   d="scan'208";a="184942261"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:30 -0700
-IronPort-SDR: 6HJuakSKekhfC//zPXe1PWYwjNaWg1dXHcBlZ4RHyb5eWqMurFcDVihpJUwcn7nJqAz4ioH/KQ
- GN/YUG8Ra+yQ==
+IronPort-SDR: AxdBHfuovxbP4EHBgRKEa27JaykkvvyNS+lMx6IbqNFBy269Evw5YRs1xL6ojhs5gA13F8NF8+
+ P9Y7NWm3Pgtg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="320833826"
+   d="scan'208";a="320833832"
 Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
   by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:30 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -48,9 +48,9 @@ To:     "Shuah Khan" <shuah@kernel.org>,
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 05/21] selftests/resctrl: Return if resctrl file system is not supported
-Date:   Tue, 20 Oct 2020 23:51:10 +0000
-Message-Id: <20201020235126.1871815-6-fenghua.yu@intel.com>
+Subject: [PATCH v3 07/21] selftests/resctrl: Use resctrl/info for feature detection
+Date:   Tue, 20 Oct 2020 23:51:12 +0000
+Message-Id: <20201020235126.1871815-8-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
 References: <20201020235126.1871815-1-fenghua.yu@intel.com>
@@ -60,49 +60,148 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-check_resctrlfs_support() checks if the platform supports resctrl file
-system or not by looking for resctrl in /proc/filesystems and returns a
-boolean value. The main function of resctrl test suite calls
-check_resctrlfs_support() but forgets to check for it's return value. This
-means that resctrl test suite will attempt to run resctrl tests (like CMT,
-CAT, MBM and MBA) even if the platform doesn't support resctrl file system.
+Resctrl test suite before running any unit test (like cmt, cat, mbm and
+mba) should first check if the feature is enabled (by kernel and not just
+supported by H/W) on the platform or not.
+validate_resctrl_feature_request() is supposed to do that. This function
+intends to grep for relevant flags in /proc/cpuinfo but there are several
+issues here
 
-Fix this by checking for the return value of check_resctrlfs_support() in
-the main function. If resctrl file system isn't supported on the platform
-then exit the test suite gracefully without attempting to run any of
-resctrl unit tests.
+1. validate_resctrl_feature_request() calls fgrep() to get flags from
+   /proc/cpuinfo. But, fgrep() can only return a string with maximum of 255
+   characters and hence the complete cpu flags are never returned.
+2. The substring search logic is also busted. If strstr() finds requested
+   resctrl feature in the cpu flags, it returns pointer to the first
+   occurrence. But, the logic negates the return value of strstr() and
+   hence validate_resctrl_feature_request() returns false if the feature is
+   present in the cpu flags and returns true if the feature is not present.
+3. validate_resctrl_feature_request() checks if a resctrl feature is
+   reported in /proc/cpuinfo flags or not. Having a cpu flag means that the
+   H/W supports the feature, but it doesn't mean that the kernel enabled
+   it. A user could selectively enable only a subset of resctrl features
+   using kernel command line arguments. Hence, /proc/cpuinfo isn't a
+   reliable source to check if a feature is enabled or not.
 
-Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+The 3rd issue being the major one and fixing it requires changing the way
+validate_resctrl_feature_request() works. Since, /proc/cpuinfo isn't the
+right place to check if a resctrl feature is enabled or not, a more
+appropriate place is /sys/fs/resctrl/info directory. Change
+validate_resctrl_feature_request() such that,
+
+1. For cat, check if /sys/fs/resctrl/info/L3 directory is present or not
+2. For mba, check if /sys/fs/resctrl/info/MB directory is present or not
+3. For cmt, check if /sys/fs/resctrl/info/L3_MON directory is present and
+   check if /sys/fs/resctrl/info/L3_MON/mon_features has llc_occupancy
+4. For mbm, check if /sys/fs/resctrl/info/L3_MON directory is present and
+   check if /sys/fs/resctrl/info/L3_MON/mon_features has
+   mbm_<total/local>_bytes
+
+Please note that only L3_CAT, L3_CMT, MBA and MBM are supported. CDP and L2
+variants can be added later.
+
+Fixes: 591a6e8588fc ("selftests/resctrl: Add basic resctrl file system operations and data")
+Reported-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl_tests.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ tools/testing/selftests/resctrl/resctrl.h   |  6 ++-
+ tools/testing/selftests/resctrl/resctrlfs.c | 51 ++++++++++++++++-----
+ 2 files changed, 45 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index b2a560c0c5dc..d24de546d4ef 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -155,7 +155,11 @@ int main(int argc, char **argv)
- 	sprintf(bw_report, "reads");
- 	sprintf(bm_type, "fill_buf");
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 814d0dd517a4..65ca24bf3eac 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -28,6 +28,10 @@
+ #define RESCTRL_PATH		"/sys/fs/resctrl"
+ #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
+ #define CBM_MASK_PATH		"/sys/fs/resctrl/info"
++#define L3_PATH			"/sys/fs/resctrl/info/L3"
++#define MB_PATH			"/sys/fs/resctrl/info/MB"
++#define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
++#define L3_MON_FEATURES_PATH	"/sys/fs/resctrl/info/L3_MON/mon_features"
  
--	check_resctrlfs_support();
-+	if (!check_resctrlfs_support()) {
-+		printf("Bail out! resctrl FS does not exist\n");
-+		goto out;
-+	}
+ #define PARENT_EXIT(err_msg)			\
+ 	do {					\
+@@ -74,7 +78,7 @@ int remount_resctrlfs(bool mum_resctrlfs);
+ int get_resource_id(int cpu_no, int *resource_id);
+ int umount_resctrlfs(void);
+ int validate_bw_report_request(char *bw_report);
+-bool validate_resctrl_feature_request(char *resctrl_val);
++bool validate_resctrl_feature_request(const char *resctrl_val);
+ char *fgrep(FILE *inf, const char *str);
+ int taskset_benchmark(pid_t bm_pid, int cpu_no);
+ void run_benchmark(int signum, siginfo_t *info, void *ucontext);
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index e43ddebd1aa4..67d775d03271 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -618,26 +618,55 @@ char *fgrep(FILE *inf, const char *str)
+  * validate_resctrl_feature_request - Check if requested feature is valid.
+  * @resctrl_val:	Requested feature
+  *
+- * Return: 0 on success, non-zero on failure
++ * Return: True if the feature is supported, else false
+  */
+-bool validate_resctrl_feature_request(char *resctrl_val)
++bool validate_resctrl_feature_request(const char *resctrl_val)
+ {
+-	FILE *inf = fopen("/proc/cpuinfo", "r");
++	struct stat statbuf;
+ 	bool found = false;
+ 	char *res;
++	FILE *inf;
+ 
+-	if (!inf)
++	if (!resctrl_val)
+ 		return false;
+ 
+-	res = fgrep(inf, "flags");
+-
+-	if (res) {
+-		char *s = strchr(res, ':');
++	if (remount_resctrlfs(false))
++		return false;
+ 
+-		found = s && !strstr(s, resctrl_val);
+-		free(res);
++	if (!strcmp(resctrl_val, "cat")) {
++		if (!stat(L3_PATH, &statbuf))
++			return true;
++	} else if (!strcmp(resctrl_val, "mba")) {
++		if (!stat(MB_PATH, &statbuf))
++			return true;
++	} else if (!strcmp(resctrl_val, "mbm") || !strcmp(resctrl_val, "cmt")) {
++		if (!stat(L3_MON_PATH, &statbuf)) {
++			inf = fopen(L3_MON_FEATURES_PATH, "r");
++			if (!inf)
++				return false;
 +
- 	filter_dmesg();
- 
- 	if (!is_amd && mbm_test) {
-@@ -196,6 +200,7 @@ int main(int argc, char **argv)
- 		cat_test_cleanup();
++			if (!strcmp(resctrl_val, "cmt")) {
++				res = fgrep(inf, "llc_occupancy");
++				if (res) {
++					found = true;
++					free(res);
++				}
++			}
++
++			if (!strcmp(resctrl_val, "mbm")) {
++				res = fgrep(inf, "mbm_total_bytes");
++				if (res) {
++					free(res);
++					res = fgrep(inf, "mbm_local_bytes");
++					if (res) {
++						found = true;
++						free(res);
++					}
++				}
++			}
++			fclose(inf);
++		}
  	}
+-	fclose(inf);
  
-+out:
- 	printf("1..%d\n", tests_run);
- 
- 	return 0;
+ 	return found;
+ }
 -- 
 2.29.0
 
