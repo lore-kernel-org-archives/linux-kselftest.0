@@ -7,35 +7,35 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1266BC388F2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84568C388F7
 	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D05332246B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40415224D1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Oct 2020 23:51:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439396AbgJTXvj (ORCPT
+        id S2439401AbgJTXvj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 20 Oct 2020 19:51:39 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11170 "EHLO mga07.intel.com"
+Received: from mga07.intel.com ([134.134.136.100]:11172 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439383AbgJTXvi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S2439386AbgJTXvi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Oct 2020 19:51:38 -0400
-IronPort-SDR: 0NXVAYk8t44ewDEJwQMkTtgkCQUqml1Pp09jRwOhb8DHeY61NnLJmudt9wBIXW6iV1XLDDw0S/
- 8HxA+ezCA8gg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486364"
+IronPort-SDR: btX0oEPhJSc8spxAYl2KzOX9o9lQndrgNkmW/pdE/hmnXTrnA23b0QmQx7ByI9Kmb/0rYbxZmT
+ WpedWoVN9ZXQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9780"; a="231486359"
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="231486364"
+   d="scan'208";a="231486359"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:32 -0700
-IronPort-SDR: LenO+0omYoy+QePb68FFyACvDU7YBUzp8qM7f49cphTvIxeWyq6UF98u3swWUmoyyIAsP3g/BW
- qIXGaXpnPkCg==
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2020 16:51:31 -0700
+IronPort-SDR: GZhf/SJEjG338i/Gnxvsbhmhqh7s1dJfNMmF2b1xaxjQyefwUqlRzi17lbf2BPJ2GOpWA/4Fsa
+ iTBFHBzbpYdQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,399,1596524400"; 
-   d="scan'208";a="320833853"
+   d="scan'208";a="320833836"
 Received: from otcwcpicx6.sc.intel.com ([172.25.55.29])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:31 -0700
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2020 16:51:30 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
 To:     "Shuah Khan" <shuah@kernel.org>,
         "Reinette Chatre" <reinette.chatre@intel.com>,
@@ -48,9 +48,9 @@ To:     "Shuah Khan" <shuah@kernel.org>,
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 13/21] selftests/resctrl: Don't hard code value of "no_of_bits" variable
-Date:   Tue, 20 Oct 2020 23:51:18 +0000
-Message-Id: <20201020235126.1871815-14-fenghua.yu@intel.com>
+Subject: [PATCH v3 08/21] selftests/resctrl: Ensure sibling CPU is not same as original CPU
+Date:   Tue, 20 Oct 2020 23:51:13 +0000
+Message-Id: <20201020235126.1871815-9-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
 References: <20201020235126.1871815-1-fenghua.yu@intel.com>
@@ -60,79 +60,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cache related tests (like CAT and CMT) depend on a variable called
-no_of_bits to run. no_of_bits defines the number of contiguous bits
-that should be set in the CBM mask and a user can pass a value for
-no_of_bits using -n command line argument. If a user hasn't passed any
-value, it defaults to 5 (randomly chosen value).
+From: Reinette Chatre <reinette.chatre@intel.com>
 
-Hard coding no_of_bits to 5 will make the cache tests fail to run on
-systems that support maximum cbm mask that is less than or equal to 5 bits.
-Hence, don't hard code no_of_bits value.
+The resctrl tests can accept a CPU on which the tests are run and use
+default of CPU #1 if it is not provided. In the CAT test a "sibling CPU"
+is determined that is from the same package where another thread will be
+run.
 
-If a user passes a value for "no_of_bits" using -n option, use it.
-Otherwise, no_of_bits is equal to half of the maximum number of bits in
-the cbm mask.
+The current algorithm with which a "sibling CPU" is determined does not
+take the provided/default CPU into account and when that CPU is the
+first CPU in a package then the "sibling CPU" will be selected to be the
+same CPU since it starts by picking the first CPU from core_siblings_list.
 
-Please note that CMT test is still hard coded to 5 bits. It will change in
-subsequent patches that change CMT test.
+Fix the "sibling CPU" selection by taking the provided/default CPU into
+account and ensuring a sibling that is a different CPU is selected.
 
-Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
+Fixes: 78941183d1b1 ("selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest")
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c      | 5 ++++-
- tools/testing/selftests/resctrl/resctrl_tests.c | 8 ++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ tools/testing/selftests/resctrl/resctrlfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 5da43767b973..1bce84e23783 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -151,7 +151,10 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	/* Get max number of bits from default-cabm mask */
- 	count_of_bits = count_bits(long_mask);
- 
--	if (n < 1 || n > count_of_bits - 1) {
-+	if (!n)
-+		n = count_of_bits / 2;
-+
-+	if (n > count_of_bits - 1) {
- 		printf("Invalid input value for no_of_bits n!\n");
- 		printf("Please Enter value in range 1 to %d\n",
- 		       count_of_bits - 1);
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index f4867a81eee6..5c217d0228f4 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -57,7 +57,7 @@ void tests_cleanup(void)
- int main(int argc, char **argv)
- {
- 	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
--	int res, c, cpu_no = 1, span = 250, argc_new = argc, i, no_of_bits = 5;
-+	int res, c, cpu_no = 1, span = 250, argc_new = argc, i, no_of_bits = 0;
- 	char *benchmark_cmd[BENCHMARK_ARGS], bw_report[64], bm_type[64];
- 	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
- 	int ben_ind, ben_count;
-@@ -106,6 +106,10 @@ int main(int argc, char **argv)
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 67d775d03271..05956319d9ce 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -268,7 +268,7 @@ int get_core_sibling(int cpu_no)
+ 	while (token) {
+ 		sibling_cpu_no = atoi(token);
+ 		/* Skipping core 0 as we don't want to run test on core 0 */
+-		if (sibling_cpu_no != 0)
++		if (sibling_cpu_no != 0 && sibling_cpu_no != cpu_no)
  			break;
- 		case 'n':
- 			no_of_bits = atoi(optarg);
-+			if (no_of_bits <= 0) {
-+				printf("Bail out! invalid argument for no_of_bits\n");
-+				return -1;
-+			}
- 			break;
- 		case 'h':
- 			cmd_help();
-@@ -188,7 +192,7 @@ int main(int argc, char **argv)
- 		printf("# Starting CMT test ...\n");
- 		if (!has_ben)
- 			sprintf(benchmark_cmd[5], "%s", "cmt");
--		res = cmt_resctrl_val(cpu_no, no_of_bits, benchmark_cmd);
-+		res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
- 		printf("%sok CMT: test\n", res ? "not " : "");
- 		cmt_test_cleanup();
- 		tests_run++;
+ 		token = strtok(NULL, "-,");
+ 	}
 -- 
 2.29.0
 
