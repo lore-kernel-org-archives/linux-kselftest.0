@@ -2,28 +2,28 @@ Return-Path: <SRS0=zqGR=D4=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF8DEC388F9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Oct 2020 18:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B6CC4363A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Oct 2020 18:50:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AA1022456
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Oct 2020 18:50:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9176E22470
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Oct 2020 18:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440867AbgJUSuI (ORCPT
+        id S2504425AbgJUSui (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 21 Oct 2020 14:50:08 -0400
-Received: from smtp.uniroma2.it ([160.80.6.22]:47171 "EHLO smtp.uniroma2.it"
+        Wed, 21 Oct 2020 14:50:38 -0400
+Received: from smtp.uniroma2.it ([160.80.6.22]:47182 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394632AbgJUSuH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Oct 2020 14:50:07 -0400
-X-Greylist: delayed 406 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Oct 2020 14:50:06 EDT
+        id S2503511AbgJUSuh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 21 Oct 2020 14:50:37 -0400
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 09LIga9f005673
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 09LIga9h005673
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 21 Oct 2020 20:42:37 +0200
+        Wed, 21 Oct 2020 20:42:38 +0200
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -38,10 +38,12 @@ Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [RFC,net-next, 0/4] seg6: add support for SRv6 End.DT4 behavior
-Date:   Wed, 21 Oct 2020 20:41:12 +0200
-Message-Id: <20201021184116.2722-1-andrea.mayer@uniroma2.it>
+Subject: [RFC,net-next, 2/4] seg6: add callbacks for customizing the creation/destruction of a behavior
+Date:   Wed, 21 Oct 2020 20:41:14 +0200
+Message-Id: <20201021184116.2722-3-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201021184116.2722-1-andrea.mayer@uniroma2.it>
+References: <20201021184116.2722-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
@@ -50,46 +52,117 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset adds support for the SRv6 End.DT4 behavior.
+We introduce two callbacks used for customizing the creation/destruction of
+a SRv6 behavior. Such callbacks are defined in the new struct
+seg6_local_lwtunnel_ops and hereafter we provide a brief description of
+them:
 
-The SRv6 End.DT4 is used to implement multi-tenant IPv4 L3VPN. It decapsulates
-the received packets and performs IPv4 routing lookup in the routing table of
-the tenant. The SRv6 End.DT4 Linux implementation leverages a VRF device. SRv6
-End.DT4 is defined in the SRv6 Network Programming [1].
+ - build_state(...): used for calling the custom constructor of the
+   behavior during its initialization phase and after all the attributes
+   have been successfully parsed;
 
-- Patch 1/4 is needed to solve a pre-existing issue with tunneled packets
-  when a sniffer is attached;
+ - destroy_state(...): used for calling the custom destructor of the
+   behavior before it is completely destroyed.
 
-- Patch 2/4 introduces two callbacks used for customizing the
-  creation/destruction of a SRv6 behavior;
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ net/ipv6/seg6_local.c | 57 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-- Patch 3/4 is the core patch that adds support for the SRv6 End.DT4 behavior;
-
-- Patch 4/4 adds the selftest for SRv6 End.DT4.
-
-I would like to thank David Ahern for his support during the development of
-this patch set.
-
-Comments, suggestions and improvements are very welcome!
-
-Thanks,
-Andrea Mayer
-
-[1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
-
-Andrea Mayer (4):
-  vrf: push mac header for tunneled packets when sniffer is attached
-  seg6: add callbacks for customizing the creation/destruction of a
-    behavior
-  seg6: add support for the SRv6 End.DT4 behavior
-  add selftest for the SRv6 End.DT4 behavior
-
- drivers/net/vrf.c                             |  78 ++-
- net/ipv6/seg6_local.c                         | 261 ++++++++++
- .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 490 ++++++++++++++++++
- 3 files changed, 823 insertions(+), 6 deletions(-)
- create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
-
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index eba23279912d..f70687e1b8a9 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -33,11 +33,23 @@
+ 
+ struct seg6_local_lwt;
+ 
++typedef int (*slwt_build_state_t)(struct seg6_local_lwt *slwt, const void *cfg,
++				  struct netlink_ext_ack *extack);
++typedef void (*slwt_destroy_state_t)(struct seg6_local_lwt *slwt);
++
++/* callbacks used for customizing the creation and destruction of a behavior */
++struct seg6_local_lwtunnel_ops {
++	slwt_build_state_t build_state;
++	slwt_destroy_state_t destroy_state;
++};
++
+ struct seg6_action_desc {
+ 	int action;
+ 	unsigned long attrs;
+ 	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
+ 	int static_headroom;
++
++	struct seg6_local_lwtunnel_ops slwt_ops;
+ };
+ 
+ struct bpf_lwt_prog {
+@@ -938,6 +950,45 @@ static struct seg6_action_param seg6_action_params[SEG6_LOCAL_MAX + 1] = {
+ 
+ };
+ 
++/* call the custom constructor of the behavior during its initialization phase
++ * and after that all its attributes have been successfully parsed.
++ */
++static int
++seg6_local_lwtunnel_build_state(struct seg6_local_lwt *slwt, const void *cfg,
++				struct netlink_ext_ack *extack)
++{
++	slwt_build_state_t build_func;
++	struct seg6_action_desc *desc;
++	int err = 0;
++
++	desc = slwt->desc;
++	if (!desc)
++		return -EINVAL;
++
++	build_func = desc->slwt_ops.build_state;
++	if (build_func)
++		err = build_func(slwt, cfg, extack);
++
++	return err;
++}
++
++/* call the custom destructor of the behavior which is invoked before the
++ * tunnel is going to be destroyed.
++ */
++static void seg6_local_lwtunnel_destroy_state(struct seg6_local_lwt *slwt)
++{
++	slwt_destroy_state_t destroy_func;
++	struct seg6_action_desc *desc;
++
++	desc = slwt->desc;
++	if (!desc)
++		return;
++
++	destroy_func = desc->slwt_ops.destroy_state;
++	if (destroy_func)
++		destroy_func(slwt);
++}
++
+ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
+ {
+ 	struct seg6_action_param *param;
+@@ -1003,6 +1054,10 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
+ 	if (err < 0)
+ 		goto out_free;
+ 
++	err = seg6_local_lwtunnel_build_state(slwt, cfg, extack);
++	if (err < 0)
++		goto out_free;
++
+ 	newts->type = LWTUNNEL_ENCAP_SEG6_LOCAL;
+ 	newts->flags = LWTUNNEL_STATE_INPUT_REDIRECT;
+ 	newts->headroom = slwt->headroom;
+@@ -1021,6 +1076,8 @@ static void seg6_local_destroy_state(struct lwtunnel_state *lwt)
+ {
+ 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
+ 
++	seg6_local_lwtunnel_destroy_state(slwt);
++
+ 	kfree(slwt->srh);
+ 
+ 	if (slwt->desc->attrs & (1 << SEG6_LOCAL_BPF)) {
 -- 
 2.20.1
 
