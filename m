@@ -1,45 +1,104 @@
 Return-Path: <SRS0=IbkC=D6=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: **
-X-Spam-Status: No, score=2.9 required=3.0 tests=BAYES_50,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8666FC55178
-	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Oct 2020 21:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E48F8C388F9
+	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Oct 2020 21:50:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39849208FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Oct 2020 21:08:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AED5208FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Oct 2020 21:50:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0yAkbZnT";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1RyBpBn3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1752363AbgJWVIH convert rfc822-to-8bit (ORCPT
+        id S1756936AbgJWVuO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Oct 2020 17:08:07 -0400
-Received: from ws86-195-133-112.rcil.gov.in ([112.133.192.86]:59763 "EHLO
-        notokin.jp" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1752338AbgJWVIG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Oct 2020 17:08:06 -0400
-X-Greylist: delayed 82695 seconds by postgrey-1.27 at vger.kernel.org; Fri, 23 Oct 2020 17:08:05 EDT
-Reply-To: info@free551.com
-From:   "FM" <info@notokin.jp>
-To:     linux-kselftest@vger.kernel.org
-Subject: =?UTF-8?B?44GU5oyo5ou2?=
-Date:   24 Oct 2020 02:38:02 +0530
-Message-ID: <20201024023802.59B25AA292AECB92@notokin.jp>
+        Fri, 23 Oct 2020 17:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1756934AbgJWVuO (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 23 Oct 2020 17:50:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4874C0613CE;
+        Fri, 23 Oct 2020 14:50:13 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1603489811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cHZqtXRz0EpqKwmVvrfGdZyZvC7siQQGSvicS0vKKBg=;
+        b=0yAkbZnTwDY2ALAbXdGN6vr3ehp2VwpXNIcf51OXNu5rvFRvmCFOCTkkOciH3bsMMB1GTJ
+        M49Ooo+35dE2U2EdR4GV6DqIHTyROF7HKJgwhEe+YkykUW9BNC5m+IszzFX1oA8ZEa0XuD
+        1d/dCepUNoGiDlYmKWo738FoXRvvngEHtiadyKHOVShEMn5o8bVNUoOmknFSNyw0C29P1y
+        lG0GxNgCHxB0lekDN0U72B9z95n6HUAC3ZK2mGWWUMRbEJvRSTaJxxe2QqwdMQCr0LGqOO
+        auNEwTjIY0XSihJxFVb3YEpC1IQVLCt4JgLsfilbBuSQ9ygKHpb0dXjIER+lPQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1603489811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cHZqtXRz0EpqKwmVvrfGdZyZvC7siQQGSvicS0vKKBg=;
+        b=1RyBpBn3mRKQKuLJjCvQxmBBrnxabQDijrSaiAdGjc2n/P1b8Vr9dL2Zi4iX0nPaJ9AC7Q
+        vT1Rr3Z8/S0zuhCQ==
+To:     ira.weiny@intel.com, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 06/10] x86/entry: Move nmi entry/exit into common code
+In-Reply-To: <20201022222701.887660-7-ira.weiny@intel.com>
+References: <20201022222701.887660-1-ira.weiny@intel.com> <20201022222701.887660-7-ira.weiny@intel.com>
+Date:   Fri, 23 Oct 2020 23:50:11 +0200
+Message-ID: <874kmk6298.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ご挨拶、
+On Thu, Oct 22 2020 at 15:26, ira weiny wrote:
+
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> Lockdep state handling on NMI enter and exit is nothing specific to X86. It's
+> not any different on other architectures. Also the extra state type is not
+> necessary, irqentry_state_t can carry the necessary information as well.
+>
+> Move it to common code and extend irqentry_state_t to carry lockdep
+> state.
+
+This lacks something like:
+
+ [ Ira: Made the states a union as they are mutually exclusive and added
+        the missing kernel doc ]
+
+Hrm.
  
-私の名前はフェリックスです。亡くなった口座名義人が所有する清算されたBTC口座から生じた900万米ドルを超える資金に関する緊急事項
-（取引）についてご連絡いたします。 
-私の計画と、私があなたの返事を受け取り、あなたの信頼を得た後、私が最初にあなたに連絡することを選んだ理由をあなたに知らせます。
- 
-たくさんの感謝とあなたの返事を楽しみにしています。
- 
-フェリックス。
+>  #ifndef irqentry_state
+>  typedef struct irqentry_state {
+> -	bool	exit_rcu;
+> +	union {
+> +		bool	exit_rcu;
+> +		bool	lockdep;
+> +	};
+>  } irqentry_state_t;
+>  #endif
+
+  -E_NO_KERNELDOC
+
+Thanks,
+
+        tglx
