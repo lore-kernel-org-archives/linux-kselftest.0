@@ -2,60 +2,60 @@ Return-Path: <SRS0=jrD+=EA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12975C388F7
-	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 21:48:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D9EC388F7
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 21:49:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DE6F222E8
-	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 21:48:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 679F4222D9
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 21:49:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="ChazOuCH"
+	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="YVUcgWiM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1418974AbgJYVsu (ORCPT
+        id S1418983AbgJYVs4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 25 Oct 2020 17:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        Sun, 25 Oct 2020 17:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1418969AbgJYVst (ORCPT
+        with ESMTP id S1418981AbgJYVsv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Oct 2020 17:48:49 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8F0C0613D0
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2020 14:48:48 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id d6so6013116ejb.11
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2020 14:48:48 -0700 (PDT)
+        Sun, 25 Oct 2020 17:48:51 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B28DC061755
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2020 14:48:51 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id v19so7384993edx.9
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2020 14:48:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pU074RtjEkyjZnTLMDzJX6R1Y/207D0sC+J/EOOsTPs=;
-        b=ChazOuCH96T9UctvjyJS1OV4Cai/f9qmCl3cYdHZcpY+pBDXWlm8/YrIv4PALLSIWh
-         wVB2meCNnIhoCJ7n1eIw3t/k0v9SltjOYSosNoa9yNHL+iYjQcy63V0zjaKyZK24UfXc
-         me+KfcjjAQ11X2MgO18S+pxtrwQpYObQQ84tc=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cCvtSrWUoPfjEX3MMgBAPpFowxLdp4ZIN2gqdndxr2k=;
+        b=YVUcgWiMnFEVymldu6NwvFVQ/iODVY2Me/b603T8P+yLTFzayAhQ4TcXi6GVUOGlXT
+         C5e5z4KjVtabsaTt+bW1YrqRjERzD41hasjbeCPU8ka+c9X9qSZk2k0GCEgK2/G1I24/
+         YpFolPYq4MNEte2aEV8C/AnTtCKsZX3uGXoBI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pU074RtjEkyjZnTLMDzJX6R1Y/207D0sC+J/EOOsTPs=;
-        b=sfpmKjJZKvaIlW1MaPlOT4oqBZ+Cm8h1y5bluJ2QfhkMuuofJSPpT1wypz5os/yLlt
-         6yOthSNBS25HoydtQ4VNyhzvRhxu3TZSzdV5N32PPtbt31kASc16e0kjbBLE/uIog4uS
-         kQDgaxgzx3NjRa8VDfsdbnw+8u8Bx/TaR8DWqKUItv+6QuZSeF3qvEuToRllRrA46kX8
-         SIf5XKM0vauD7koUdt++ZgmjXaty29r+SsK+5tO7iSPLulkO5SP+cUsYz8ROCKuHofYn
-         F/tv/BNSs4uir4ZjoYkv787FuasNib02pIcxIcIYOuxcZYfIw9EdWOpb4XAt3wEYJCi5
-         JaNw==
-X-Gm-Message-State: AOAM530anlV/oTYk+DAnHu1mdMVPbpm7drSVpVw6yJ2Bjax4W9aGZKU2
-        D9AhVqKlqgyeXSIfMvwyiWhpqQ==
-X-Google-Smtp-Source: ABdhPJzRi7xuqs7AugiF/Li1BWT4PMw6UBqLt7+vT1zkoqrNiAcL19YB9zipY0qRvJy2hotXjPq/Pw==
-X-Received: by 2002:a17:906:5e4f:: with SMTP id b15mr13091466eju.353.1603662526661;
-        Sun, 25 Oct 2020 14:48:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cCvtSrWUoPfjEX3MMgBAPpFowxLdp4ZIN2gqdndxr2k=;
+        b=rXLHk2E55UrSbdCdLA6FH+hoxEA4qGX8DxdsOv5LdixT5QlGbMOIogWLgGr8un1FRT
+         gRJYgmQVaeJWPeTNtrISPmrkDg/gryaSPrF5K+bEDw28hdS+GfKGAZF8SzVzmq4oJgks
+         sLiO2Vh9ZFiohPypfxKLF1PoyaE85Y9iForyREfL+A1lNGY8q5N0QpO8VLIJI4Dcf3kI
+         3FXO+dlqi97Kb65mxWGrArgg7GL3rblo2gr5fBCYrfBMJ5wKv+JRAE5IBDPucJJHOgbG
+         K8H9eP2VPl7a/Rr7IeTUHzgQ7C0Am60Tzv+jnNZqNHRUbAIOtLjcqENf+tUNTPGhu/WT
+         ztvQ==
+X-Gm-Message-State: AOAM5335mqrCnXh5B3EyTAYx9xmhVCiCrA9Zr5u+mmkRIVOZ+VbaUUBh
+        R/KBB+D/QjCTKUVYpruQRjHosg==
+X-Google-Smtp-Source: ABdhPJyRXxvVb1mq0cFESQTCfX7TrThR73A0MfZ4vV7HWiF8yz2HPztG24hB4iqv4YSAK8TqoiKldw==
+X-Received: by 2002:aa7:cd42:: with SMTP id v2mr10886769edw.191.1603662530159;
+        Sun, 25 Oct 2020 14:48:50 -0700 (PDT)
 Received: from prevas-ravi.prevas.se (5.186.115.188.cgn.fibianet.dk. [5.186.115.188])
-        by smtp.gmail.com with ESMTPSA id k18sm4115867eds.93.2020.10.25.14.48.45
+        by smtp.gmail.com with ESMTPSA id k18sm4115867eds.93.2020.10.25.14.48.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2020 14:48:46 -0700 (PDT)
+        Sun, 25 Oct 2020 14:48:49 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>
 Cc:     Petr Mladek <pmladek@suse.com>, Willy Tarreau <w@1wt.eu>,
@@ -64,57 +64,114 @@ Cc:     Petr Mladek <pmladek@suse.com>, Willy Tarreau <w@1wt.eu>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Brendan Higgins <brendanhiggins@google.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH 0/4] deterministic random testing
-Date:   Sun, 25 Oct 2020 22:48:38 +0100
-Message-Id: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
+Subject: [PATCH 3/4] kselftest_module.h: add struct rnd_state and seed parameter
+Date:   Sun, 25 Oct 2020 22:48:41 +0100
+Message-Id: <20201025214842.5924-4-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
+References: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a bit of a mixed bag.
+Some test suites make use of random numbers to increase the test
+coverage when the test suite gets run on different machines and
+increase the chance of some corner case bug being discovered - and I'm
+planning on extending some existing ones in that direction as
+well. However, should a bug be found this way, it's important that the
+exact same series of tests can be repeated to verify the bug is
+fixed. That means the random numbers must be obtained
+deterministically from a generator private to the test module.
 
-The background is that I have some sort() and list_sort() rework
-planned, but as part of that series I want to extend their their test
-suites somewhat to make sure I don't goof up - and I want to use lots
-of random list lengths with random contents to increase the chance of
-somebody eventually hitting "hey, sort() is broken when the length is
-3 less than a power of 2 and only the last two elements are out of
-order". But when such a case is hit, it's vitally important that the
-developer can reproduce the exact same test case, which means using a
-deterministic sequence of random numbers.
+To avoid adding boilerplate to various test modules, put some logic
+into kselftest_module.h: If the module declares that it will use
+random numbers, add a "seed" module parameter. If not explicitly given
+when the module is loaded (or via kernel command line), obtain a
+random one. In either case, print the seed used, and repeat that
+information if there was at least one test failing.
 
-Since Petr noticed [1] the non-determinism in test_printf in
-connection with Arpitha's work on rewriting it to kunit, this prompted
-me to use test_printf as a first place to apply that principle, and
-get the infrastructure in place that will avoid repeating the "module
-parameter/seed the rnd_state/report the seed used" boilerplate in each
-module.
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ tools/testing/selftests/kselftest_module.h | 35 ++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-Shuah, assuming the kselftest_module.h changes are ok, I think it's
-most natural if you carry these patches, though I'd be happy with any
-other route as well.
-
-[1] https://lore.kernel.org/lkml/20200821113710.GA26290@alley/
-
-
-Rasmus Villemoes (4):
-  prandom.h: add *_state variant of prandom_u32_max
-  kselftest_module.h: unconditionally expand the KSTM_MODULE_GLOBALS()
-    macro
-  kselftest_module.h: add struct rnd_state and seed parameter
-  lib/test_printf.c: use deterministic sequence of random numbers
-
- Documentation/dev-tools/kselftest.rst      |  2 --
- include/linux/prandom.h                    | 29 ++++++++++++++++
- lib/test_bitmap.c                          |  3 --
- lib/test_printf.c                          | 13 ++++---
- lib/test_strscpy.c                         |  2 --
- tools/testing/selftests/kselftest_module.h | 40 ++++++++++++++++++----
- 6 files changed, 72 insertions(+), 17 deletions(-)
-
+diff --git a/tools/testing/selftests/kselftest_module.h b/tools/testing/selftests/kselftest_module.h
+index c81c0b0c054befaf665b..43f3ca58fcd550b8ac83 100644
+--- a/tools/testing/selftests/kselftest_module.h
++++ b/tools/testing/selftests/kselftest_module.h
+@@ -3,14 +3,31 @@
+ #define __KSELFTEST_MODULE_H
+ 
+ #include <linux/module.h>
++#include <linux/prandom.h>
++#include <linux/random.h>
+ 
+ /*
+  * Test framework for writing test modules to be loaded by kselftest.
+  * See Documentation/dev-tools/kselftest.rst for an example test module.
+  */
+ 
++/*
++ * If the test module makes use of random numbers, define KSTM_RANDOM
++ * to 1 before including this header. Then a module parameter "seed"
++ * will be defined. If not given, a random one will be obtained. In
++ * either case, the used seed is reported, so the exact same series of
++ * tests can be repeated by loading the module with that seed
++ * given.
++ */
++
++#ifndef KSTM_RANDOM
++#define KSTM_RANDOM 0
++#endif
++
+ static unsigned int total_tests __initdata;
+ static unsigned int failed_tests __initdata;
++static struct rnd_state rnd_state __initdata;
++static u64 seed __initdata;
+ 
+ #define KSTM_CHECK_ZERO(x) do {						\
+ 	total_tests++;							\
+@@ -22,11 +39,13 @@ static unsigned int failed_tests __initdata;
+ 
+ static inline int kstm_report(unsigned int total_tests, unsigned int failed_tests)
+ {
+-	if (failed_tests == 0)
++	if (failed_tests == 0) {
+ 		pr_info("all %u tests passed\n", total_tests);
+-	else
++	} else {
+ 		pr_warn("failed %u out of %u tests\n", failed_tests, total_tests);
+-
++		if (KSTM_RANDOM)
++			pr_info("random seed used was 0x%016llx\n", seed);
++	}
+ 	return failed_tests ? -EINVAL : 0;
+ }
+ 
+@@ -34,6 +53,12 @@ static inline int kstm_report(unsigned int total_tests, unsigned int failed_test
+ static int __init __module##_init(void)			\
+ {							\
+ 	pr_info("loaded.\n");				\
++	if (KSTM_RANDOM) {				\
++		if (!seed)				\
++			seed = get_random_u64();	\
++		prandom_seed_state(&rnd_state, seed);	\
++		pr_info("random seed = 0x%016llx\n", seed);	\
++	}						\
+ 	selftest();					\
+ 	return kstm_report(total_tests, failed_tests);	\
+ }							\
+@@ -44,4 +69,8 @@ static void __exit __module##_exit(void)		\
+ module_init(__module##_init);				\
+ module_exit(__module##_exit)
+ 
++#if KSTM_RANDOM
++module_param(seed, ullong, 0444);
++#endif
++
+ #endif	/* __KSELFTEST_MODULE_H */
 -- 
 2.23.0
 
