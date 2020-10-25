@@ -2,98 +2,137 @@ Return-Path: <SRS0=jrD+=EA=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_ADSP_NXDOMAIN,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B59DC388F7
-	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 13:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DF79C4363A
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 21:48:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3941A208E4
-	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 13:01:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEF4322282
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Oct 2020 21:48:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="RW8QN6Bs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1416147AbgJYNBF (ORCPT
+        id S1418970AbgJYVsu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 25 Oct 2020 09:01:05 -0400
-Received: from fgw21-7.mail.saunalahti.fi ([62.142.5.82]:34216 "EHLO
-        fgw21-7.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1416145AbgJYNBF (ORCPT
+        Sun, 25 Oct 2020 17:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409271AbgJYVst (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Oct 2020 09:01:05 -0400
-X-Greylist: delayed 962 seconds by postgrey-1.27 at vger.kernel.org; Sun, 25 Oct 2020 09:01:04 EDT
-Received: from localhost (88-115-248-186.elisa-laajakaista.fi [88.115.248.186])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id e49f1d72-16bf-11eb-9eb8-005056bdd08f;
-        Sun, 25 Oct 2020 14:44:59 +0200 (EET)
-Date:   Sun, 25 Oct 2020 14:44:59 +0200
-From:   andy@surfacebook.localdomain
-To:     SeongJae Park <sjpark@amazon.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        SeongJae Park <sjpark@amazon.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] kunit: tool: Mark 'kunittest_config' as constant
- again
-Message-ID: <20201025124459.GA1157488@surfacebook.localdomain>
-References: <CAFd5g44CxPuXbHund397PJSQPHGhWy1-7ij7JnJNzCO0NF6dCA@mail.gmail.com>
- <20201022063526.12554-1-sjpark@amazon.com>
+        Sun, 25 Oct 2020 17:48:49 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B486C0613CE
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2020 14:48:49 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id c15so10708382ejs.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 25 Oct 2020 14:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=H5U5b0c60OiFhVBev3K4PZ1W16Gukohw1HLrLU313w4=;
+        b=RW8QN6BsYUCXyComtBNVPU+Wuq7tGZce9IKJCqRFMeJFb4UOTB0H+p7OtuKYDOxloX
+         SGy4VJSUpLgwmepKy5TB3bPmvKpAf0UdY80LU3u6PbEWPvsBAHGld5F1Tl6wDU1/WBZA
+         ieEFEZbBWeNSZo246dtVlZPew5w9JoD84iN9Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=H5U5b0c60OiFhVBev3K4PZ1W16Gukohw1HLrLU313w4=;
+        b=RvNrRdoqWD/Be2gQMBJ0fxDiKt+hn9CAxATS0maKIbggfoZ21Iqt+edSEqoX89L2c3
+         7kMqqcs+KKOSNVDZ7EdRkhTwGXgSlEqCR8cYoMn8Hs0gsQWEisHAz5+o1fCTMGA5Sv7n
+         oJKXxQGcQ1r5fC0r7+DPfh8xzj8/X8K0J4i2+WejEkkmtLoVqmf0eggSsUchAIJ7wq5D
+         wSevUZrWS0Xax8LTA2j3AvpvQ4vC1D4XDdM2yyMGPgtNNPcCX7uRqFoaVzj4nKC2Abna
+         9ue40RsIT/Ajr656cBEwTTfvevzPxn+HISaXvrIs0htxevbUHN4JyaF+ksnHEu7kKkoj
+         MYVQ==
+X-Gm-Message-State: AOAM5321Mq5xpHgAtL5SYchmX0M27U6HGW3NGFFfhoUm4Y3psXFPKWFO
+        cAmKGvAXYPEVzIABFWNhWR+7Lg==
+X-Google-Smtp-Source: ABdhPJwxybB6/16DSKWT5fFJnAy73ROXTKxIaOw0NFDYYHOGwzcOCa8wK+ww7arm7DyMpMYdOTC8YQ==
+X-Received: by 2002:a17:906:2987:: with SMTP id x7mr12651220eje.301.1603662527946;
+        Sun, 25 Oct 2020 14:48:47 -0700 (PDT)
+Received: from prevas-ravi.prevas.se (5.186.115.188.cgn.fibianet.dk. [5.186.115.188])
+        by smtp.gmail.com with ESMTPSA id k18sm4115867eds.93.2020.10.25.14.48.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2020 14:48:47 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc:     Petr Mladek <pmladek@suse.com>, Willy Tarreau <w@1wt.eu>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arpitha Raghunandan <98.arpi@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH 1/4] prandom.h: add *_state variant of prandom_u32_max
+Date:   Sun, 25 Oct 2020 22:48:39 +0100
+Message-Id: <20201025214842.5924-2-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
+References: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201022063526.12554-1-sjpark@amazon.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 08:35:26AM +0200, SeongJae Park wrote:
-> On Wed, 21 Oct 2020 14:32:52 -0700 Brendan Higgins <brendanhiggins@google.com> wrote:
-> 
-> > On Mon, Oct 12, 2020 at 3:27 AM SeongJae Park <sjpark@amazon.com> wrote:
-> > >
-> > > From: SeongJae Park <sjpark@amazon.de>
-> > >
-> > > 'kunit_kernel.kunittest_config' was constant at first, and therefore it
-> > > used UPPER_SNAKE_CASE naming convention that usually means it is
-> > > constant in Python world.  But, commit e3212513a8f0 ("kunit: Create
-> > > default config in '--build_dir'") made it modifiable to fix a use case
-> > > of the tool and thus the naming also changed to lower_snake_case.
-> > > However, this resulted in a confusion.  As a result, some successing
-> > > changes made the tool unittest fail, and a fix[1] of it again incurred
-> > > the '--build_dir' use case failure.
-> > >
-> > > As the previous commit fixed the '--build_dir' use case without
-> > > modifying the variable again, this commit marks the variable as constant
-> > > again with UPPER_SNAKE_CASE, to reduce future confusions.
-> > >
-> > > [1] Commit d43c7fb05765 ("kunit: tool: fix improper treatment of file location")
-> > >
-> > > Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> > 
-> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> 
-> Thanks :)
-> 
-> > 
-> > Thanks for this! This is something I meant to fix a while ago and forgot about.
-> > 
-> > One minor issue, this patch does not apply on torvalds/master right
-> > now. Could you please rebase this?
-> 
-> Surely of course, I will send next version soon.
+It is useful for test modules that make use of random numbers to allow
+the exact same series of test cases to be repeated (e.g., after fixing
+a bug in the code being tested). For that, the test module needs to
+obtain its random numbers from a private state that can be seeded by a
+known seed, e.g. given as a module parameter (and using a random seed
+when that parameter is not given).
 
-May I ask what happened to [1]?
-I mean it seems these two are goind to collide.
+There's a few test modules I'm going to modify to follow that
+scheme. As preparation, add a _state variant of the existing
+prandom_u32_max(), and for convenience, also add a variant that
+produces a value in a given range.
 
-Brendan?
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ include/linux/prandom.h | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-[1]: https://lore.kernel.org/linux-kselftest/20201015152348.65147-1-andriy.shevchenko@linux.intel.com/
-
-
+diff --git a/include/linux/prandom.h b/include/linux/prandom.h
+index aa16e6468f91e79e1f31..58ffcd56c705be34fb98 100644
+--- a/include/linux/prandom.h
++++ b/include/linux/prandom.h
+@@ -46,6 +46,35 @@ static inline u32 prandom_u32_max(u32 ep_ro)
+ 	return (u32)(((u64) prandom_u32() * ep_ro) >> 32);
+ }
+ 
++/**
++ * prandom_u32_max_state - get pseudo-random number in internal [0, hi)
++ *
++ * Like prandom_u32_max, but use the given state structure.
++ * @state: pointer to state structure
++ * @hi: (exclusive) upper bound
++ *
++ * Exception: If @hi == 0, this returns 0.
++ */
++static inline u32 prandom_u32_max_state(struct rnd_state *state, u32 hi)
++{
++	return ((u64)prandom_u32_state(state) * hi) >> 32;
++}
++
++/**
++ * prandom_u32_range_state - get pseudo-random number in internal [lo, hi)
++ *
++ * @state: pointer to state structure
++ * @lo: (inclusive) lower bound
++ * @hi: (exclusive) upper bound
++ *
++ * Exception: If @lo == @hi, this returns @lo. Results are unspecified
++ * for @lo > @hi.
++ */
++static inline u32 prandom_u32_range_state(struct rnd_state *state, u32 lo, u32 hi)
++{
++	return lo + prandom_u32_max_state(state, hi - lo);
++}
++
+ /*
+  * Handle minimum values for seeds
+  */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.23.0
 
