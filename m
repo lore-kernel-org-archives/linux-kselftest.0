@@ -2,60 +2,124 @@ Return-Path: <SRS0=rOeY=EB=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 449B2C55178
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 16:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69D5CC2D0A3
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 17:00:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FB6822409
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 16:04:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F56B2463C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 17:00:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1784733AbgJZQEW (ORCPT
+        id S1775084AbgJZRA6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Oct 2020 12:04:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49184 "EHLO mail.kernel.org"
+        Mon, 26 Oct 2020 13:00:58 -0400
+Received: from mga09.intel.com ([134.134.136.24]:47764 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1784723AbgJZQD0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 12:03:26 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2AFF22400;
-        Mon, 26 Oct 2020 16:03:25 +0000 (UTC)
-Date:   Mon, 26 Oct 2020 12:03:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: [PATCH] selftests/ftrace: remove _do_fork() leftovers
-Message-ID: <20201026120323.14058f56@gandalf.local.home>
-In-Reply-To: <20201024103112.64372203e6729279e9ef92f5@kernel.org>
-References: <1603443123-17457-1-git-send-email-agordeev@linux.ibm.com>
-        <20201023093523.65c495f8@gandalf.local.home>
-        <20201024103112.64372203e6729279e9ef92f5@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1775119AbgJZQ7f (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Oct 2020 12:59:35 -0400
+IronPort-SDR: RV5cc06c4FYeSrFaWBVCKn286eFe11KvbVMG6QPzZAx6EHSgKIwF2Wa7T+cFdWHibVe+ly0NbF
+ 8yG7uUbV1g4Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9786"; a="168077924"
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="168077924"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2020 09:59:32 -0700
+IronPort-SDR: gQqa/wCLlj462fRNL76nSH9vYqOxgVpTeg9OpJypn24Xp8iMf0aW/1Fe2jK8c/xSnKMxWRdYO2
+ xYP48bFP0RYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,420,1596524400"; 
+   d="scan'208";a="303472428"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Oct 2020 09:59:30 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 75072176; Mon, 26 Oct 2020 18:59:29 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, SeongJae Park <sjpark@amazon.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH v2 3/3] kunit: Introduce get_file_path() helper
+Date:   Mon, 26 Oct 2020 18:59:27 +0200
+Message-Id: <20201026165927.19020-3-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201026165927.19020-1-andriy.shevchenko@linux.intel.com>
+References: <20201026165927.19020-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, 24 Oct 2020 10:31:12 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Helper allows to derive file names depending on --build_dir argument.
 
-> > Perhaps we should have:
-> > 
-> > 	# older kernels have do_fork, but newer kernels have kernel_clone
-> > 	echo kernel_clone >> set_ftrace_filter || echo *do_fork >> set_ftrace_filter  
-> 
-> Good catch. BTW, can we check the filter-bility by grep the pattern from set_ftrace_filter?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
+---
+v2: added tags (Brendan)
 
-I think we need to use /proc/kallsyms, as the kprobe code should still work
-if function tracing is disabled, and the function filter files will not
-exist.
+ tools/testing/kunit/kunit_kernel.py | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
--- Steve
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index b4768fa03ce0..7e3f7f9aac96 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -23,6 +23,11 @@ DEFAULT_KUNITCONFIG_PATH = 'arch/um/configs/kunit_defconfig'
+ BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+ OUTFILE_PATH = 'test.log'
+ 
++def get_file_path(build_dir, default):
++	if build_dir:
++		default = os.path.join(build_dir, default)
++	return default
++
+ class ConfigError(Exception):
+ 	"""Represents an error trying to configure the Linux kernel."""
+ 
+@@ -92,9 +97,7 @@ class LinuxSourceTreeOperations(object):
+ 
+ 	def linux_bin(self, params, timeout, build_dir):
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+-		linux_bin = './linux'
+-		if build_dir:
+-			linux_bin = os.path.join(build_dir, 'linux')
++		linux_bin = get_file_path(build_dir, 'linux')
+ 		outfile = get_outfile_path(build_dir)
+ 		with open(outfile, 'w') as output:
+ 			process = subprocess.Popen([linux_bin] + params,
+@@ -103,22 +106,13 @@ class LinuxSourceTreeOperations(object):
+ 			process.wait(timeout)
+ 
+ def get_kconfig_path(build_dir):
+-	kconfig_path = KCONFIG_PATH
+-	if build_dir:
+-		kconfig_path = os.path.join(build_dir, KCONFIG_PATH)
+-	return kconfig_path
++	return get_file_path(build_dir, KCONFIG_PATH)
+ 
+ def get_kunitconfig_path(build_dir):
+-	kunitconfig_path = KUNITCONFIG_PATH
+-	if build_dir:
+-		kunitconfig_path = os.path.join(build_dir, KUNITCONFIG_PATH)
+-	return kunitconfig_path
++	return get_file_path(build_dir, KUNITCONFIG_PATH)
+ 
+ def get_outfile_path(build_dir):
+-	outfile_path = OUTFILE_PATH
+-	if build_dir:
+-		outfile_path = os.path.join(build_dir, OUTFILE_PATH)
+-	return outfile_path
++	return get_file_path(build_dir, OUTFILE_PATH)
+ 
+ class LinuxSourceTree(object):
+ 	"""Represents a Linux kernel source tree with KUnit tests."""
+-- 
+2.28.0
+
