@@ -1,55 +1,57 @@
-Return-Path: <SRS0=rOeY=EB=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=7AXU=EC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B05DC55178
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 23:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A5E8C56201
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 00:05:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F52021D7B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 23:52:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6654520754
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 00:05:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603756377;
-	bh=s7HO3kJ3IJ3+Hgbu3ZKKnFqr4ZVc22GMfUCDuqNgJzk=;
+	s=default; t=1603757150;
+	bh=FY29NxHkzmGKfl2iAk9y+aUJIBJ6wEIHkqUvYG9bZg4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=i3q+9/w9hqtEPNWkjDsDgxIhNl0tJVuJpXI0GPLMy5yvF9c5aIJYgPuCBePaQMTCH
-	 AfvMEAMg/ijs2wRh70sDTo7575WIar4nJMJSKzd7D7nIxFtYt/DBtlfh//Ka//zd3C
-	 VZpWH5qNaY2LZe9NikGYyDIGEIHI6YmKjjvlWEK8=
+	b=OXbppR+ByozLZ3nEBrSOfwV65GQll3pwg9A5FK9g0m7eIi9MCgzbZxWZYDVnBZmV5
+	 u8KY2Ol88BU4sT7d/rZDuM6Er92Gn6BDNkI9FLc+bn5VLGHqrDBve83A6Nw0ee4guA
+	 Tadoew1tPd4GrvW5AavZA33iIChOHdyeY1ojbt6U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409885AbgJZXwu (ORCPT
+        id S2437574AbgJ0AEC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Oct 2020 19:52:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56012 "EHLO mail.kernel.org"
+        Mon, 26 Oct 2020 20:04:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35160 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409744AbgJZXwt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:52:49 -0400
+        id S2411015AbgJZXz7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:55:59 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7BFCB21BE5;
-        Mon, 26 Oct 2020 23:52:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CE3F92224E;
+        Mon, 26 Oct 2020 23:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756369;
-        bh=s7HO3kJ3IJ3+Hgbu3ZKKnFqr4ZVc22GMfUCDuqNgJzk=;
+        s=default; t=1603756558;
+        bh=FY29NxHkzmGKfl2iAk9y+aUJIBJ6wEIHkqUvYG9bZg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A4w1L3Wzpx4dvkwqgvBnnJgMtOnRgBh/N0dszLwmMwB/zIK8eKUhZkOZ5aA0yJVtb
-         jToXFbweERqG7YBd1lbKo0jK5Oookl5AUH/L8aXKJMJRuEn9ZDhIEiteiiKf0oFwKD
-         9HSsmIcYzSzDvgBl6FniIE8uzqkpTQifltaiwwY4=
+        b=f95hcGnDBUdByzbJfXqUY8OzjahauPPd6kTqItTTFCn1lrOlAgOb6xZ12wmzBxNdP
+         3jfh7rzNJQztEQpRAzWLUsudSzag6O6HgYeHX/o78sA69Re/f2hJPYBLS18tJDCcvu
+         UfZCxLFfBvV2D/uVNNQUO9wzyukiyXdf+HKpH0kk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 036/132] selftests/x86/fsgsbase: Reap a forgotten child
-Date:   Mon, 26 Oct 2020 19:50:28 -0400
-Message-Id: <20201026235205.1023962-36-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.4 34/80] selftests/bpf: Define string const as global for test_sysctl_prog.c
+Date:   Mon, 26 Oct 2020 19:54:30 -0400
+Message-Id: <20201026235516.1025100-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
-References: <20201026235205.1023962-1-sashal@kernel.org>
+In-Reply-To: <20201026235516.1025100-1-sashal@kernel.org>
+References: <20201026235516.1025100-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,34 +60,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andy Lutomirski <luto@kernel.org>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit ab2dd173330a3f07142e68cd65682205036cd00f ]
+[ Upstream commit 6e057fc15a2da4ee03eb1fa6889cf687e690106e ]
 
-The ptrace() test forgot to reap its child.  Reap it.
+When tweaking llvm optimizations, I found that selftest build failed
+with the following error:
+  libbpf: elf: skipping unrecognized data section(6) .rodata.str1.1
+  libbpf: prog 'sysctl_tcp_mem': bad map relo against '.L__const.is_tcp_mem.tcp_mem_name'
+          in section '.rodata.str1.1'
+  Error: failed to open BPF object file: Relocation failed
+  make: *** [/work/net-next/tools/testing/selftests/bpf/test_sysctl_prog.skel.h] Error 255
+  make: *** Deleting file `/work/net-next/tools/testing/selftests/bpf/test_sysctl_prog.skel.h'
 
-Signed-off-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/e7700a503f30e79ab35a63103938a19893dbeff2.1598461151.git.luto@kernel.org
+The local string constant "tcp_mem_name" is put into '.rodata.str1.1' section
+which libbpf cannot handle. Using untweaked upstream llvm, "tcp_mem_name"
+is completely inlined after loop unrolling.
+
+Commit 7fb5eefd7639 ("selftests/bpf: Fix test_sysctl_loop{1, 2}
+failure due to clang change") solved a similar problem by defining
+the string const as a global. Let us do the same here
+for test_sysctl_prog.c so it can weather future potential llvm changes.
+
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200910202718.956042-1-yhs@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/x86/fsgsbase.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/bpf/progs/test_sysctl_prog.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 15a329da59fa3..5f3aea210e018 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -499,6 +499,9 @@ static void test_ptrace_write_gsbase(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
+index 5cbbff416998c..4396faf33394a 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
+@@ -19,11 +19,11 @@
+ #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+ #endif
  
- END:
- 	ptrace(PTRACE_CONT, child, NULL, NULL);
-+	wait(&status);
-+	if (!WIFEXITED(status))
-+		printf("[WARN]\tChild didn't exit cleanly.\n");
- }
++const char tcp_mem_name[] = "net/ipv4/tcp_mem";
+ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	char tcp_mem_name[] = "net/ipv4/tcp_mem";
+ 	unsigned char i;
+-	char name[64];
++	char name[sizeof(tcp_mem_name)];
+ 	int ret;
  
- int main()
+ 	memset(name, 0, sizeof(name));
 -- 
 2.25.1
 
