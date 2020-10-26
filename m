@@ -2,85 +2,60 @@ Return-Path: <SRS0=rOeY=EB=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CECA0C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 12:14:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 449B2C55178
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 16:04:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9712122404
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 12:14:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FB6822409
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 16:04:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1774858AbgJZMN6 (ORCPT
+        id S1784733AbgJZQEW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Oct 2020 08:13:58 -0400
-Received: from foss.arm.com ([217.140.110.172]:37146 "EHLO foss.arm.com"
+        Mon, 26 Oct 2020 12:04:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1774784AbgJZMNM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 08:13:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0223D1480;
-        Mon, 26 Oct 2020 05:13:12 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDBE73F719;
-        Mon, 26 Oct 2020 05:13:10 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Gabor Kertesz <gabor.kertesz@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>
-Subject: [PATCH 4/6] kselftest/arm64: Fix check_mmap_options test
-Date:   Mon, 26 Oct 2020 12:12:46 +0000
-Message-Id: <20201026121248.2340-5-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201026121248.2340-1-vincenzo.frascino@arm.com>
-References: <20201026121248.2340-1-vincenzo.frascino@arm.com>
+        id S1784723AbgJZQD0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Oct 2020 12:03:26 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2AFF22400;
+        Mon, 26 Oct 2020 16:03:25 +0000 (UTC)
+Date:   Mon, 26 Oct 2020 12:03:23 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: Re: [PATCH] selftests/ftrace: remove _do_fork() leftovers
+Message-ID: <20201026120323.14058f56@gandalf.local.home>
+In-Reply-To: <20201024103112.64372203e6729279e9ef92f5@kernel.org>
+References: <1603443123-17457-1-git-send-email-agordeev@linux.ibm.com>
+        <20201023093523.65c495f8@gandalf.local.home>
+        <20201024103112.64372203e6729279e9ef92f5@kernel.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The check_mmap_options test reports the error below because the test
-plan is not declared correctly:
+On Sat, 24 Oct 2020 10:31:12 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-  # Planned tests != run tests (0 != 22)
+> > Perhaps we should have:
+> > 
+> > 	# older kernels have do_fork, but newer kernels have kernel_clone
+> > 	echo kernel_clone >> set_ftrace_filter || echo *do_fork >> set_ftrace_filter  
+> 
+> Good catch. BTW, can we check the filter-bility by grep the pattern from set_ftrace_filter?
 
-Fix the test adding the correct test plan declaration.
+I think we need to use /proc/kallsyms, as the kprobe code should still work
+if function tracing is disabled, and the function filter files will not
+exist.
 
-Fixes: 53ec81d23213 ("kselftest/arm64: Verify all different mmap MTE options")
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Gabor Kertesz <gabor.kertesz@arm.com>
-Cc: Amit Daniel Kachhap <amit.kachhap@arm.com>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- tools/testing/selftests/arm64/mte/check_mmap_options.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/arm64/mte/check_mmap_options.c b/tools/testing/selftests/arm64/mte/check_mmap_options.c
-index 33b13b86199b..a04b12c21ac9 100644
---- a/tools/testing/selftests/arm64/mte/check_mmap_options.c
-+++ b/tools/testing/selftests/arm64/mte/check_mmap_options.c
-@@ -205,7 +205,11 @@ int main(int argc, char *argv[])
- 	mte_register_signal(SIGBUS, mte_default_handler);
- 	mte_register_signal(SIGSEGV, mte_default_handler);
- 
-+	/* Set test plan */
-+	ksft_set_plan(22);
-+
- 	mte_enable_pstate_tco();
-+
- 	evaluate_test(check_anonymous_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_OFF),
- 	"Check anonymous memory with private mapping, sync error mode, mmap memory and tag check off\n");
- 	evaluate_test(check_file_memory_mapping(USE_MPROTECT, MTE_SYNC_ERR, MAP_PRIVATE, TAG_CHECK_OFF),
--- 
-2.28.0
-
+-- Steve
