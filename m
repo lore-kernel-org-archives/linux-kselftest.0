@@ -8,30 +8,30 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4192C63699
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAC08C5517A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 944BB2225C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B1CF2225C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="E1Ygppwg"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="C6vzKzTp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1770602AbgJZGlW (ORCPT
+        id S1770611AbgJZGl0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Oct 2020 02:41:22 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:16903 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1770535AbgJZGlC (ORCPT
+        Mon, 26 Oct 2020 02:41:26 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12987 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1770526AbgJZGlB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Oct 2020 02:41:02 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f966f680001>; Sun, 25 Oct 2020 23:40:40 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 26 Oct
- 2020 06:41:01 +0000
+        Mon, 26 Oct 2020 02:41:01 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f966f810006>; Sun, 25 Oct 2020 23:41:05 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 26 Oct
+ 2020 06:41:00 +0000
 Received: from sandstorm.nvidia.com (10.124.1.5) by mail.nvidia.com
  (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Mon, 26 Oct 2020 06:41:01 +0000
+ Transport; Mon, 26 Oct 2020 06:41:00 +0000
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Shuah Khan <shuah@kernel.org>,
@@ -42,9 +42,9 @@ CC:     Shuah Khan <shuah@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kselftest@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 5/9] selftests/vm: only some gup_test items are really benchmarks
-Date:   Sun, 25 Oct 2020 23:40:17 -0700
-Message-ID: <20201026064021.3545418-6-jhubbard@nvidia.com>
+Subject: [PATCH v3 2/9] selftests/vm: use a common gup_test.h
+Date:   Sun, 25 Oct 2020 23:40:14 -0700
+Message-ID: <20201026064021.3545418-3-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201026064021.3545418-1-jhubbard@nvidia.com>
 References: <20201026064021.3545418-1-jhubbard@nvidia.com>
@@ -53,40 +53,39 @@ Content-Type: text/plain; charset="UTF-8"
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1603694440; bh=NxnuVV34DOWHPgW892qcJLQ6f9CUj10LF23lyEi9hac=;
+        t=1603694465; bh=+khF+ZvzeyIHDY5/eKTF89q/JBWMw4rRReFYWF4Hd4w=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
          References:MIME-Version:Content-Type:X-NVConfidentiality:
          Content-Transfer-Encoding;
-        b=E1YgppwgU1b/CpA7wYDE1oZfLxkzJZ8OGQrCwVlzIWCLrE2new4GAyA3aiwqZ8EuK
-         VrkPirm8FQDhW0CsGrzf1rZrRQ88Jg9McNg4bOscIUIQxPTP56oAPoupQaKA0WuH4a
-         BJt4Y2BzkPBDdQupdfePR2QkoyyTNC3coElbVuJ4pCfce6cMRs2BX8mGfjvIF4TGXC
-         660tHpdQjDnuKeS4Ihvr9Rccr/CoMNRffHwXXYF5S+szHLzOOTFcK/1b6DKZT6rn3T
-         DJXNbfBbqGXi5hYwHfFEg/LjE39K88c+uHFw8xwMElsZgCFX5+VtM8IhM2Dyu25kSI
-         bVLjaxp7PYqEg==
+        b=C6vzKzTpU4BWPEu+QeWyi689JB0MDDzfLgcoADTBK9hJBXuvbxIRWK22Fn4XTOz7K
+         Io39s5Stx+Nnq4lwcxTH5RMOWdpkwViXnZ1mjJdbYo0qnDp6kMex8APbr7+YWX+tbH
+         V8xCUlt0ueqEtZJ3XyT4S39j4ZTFNSPT0sa4kBpDut1DP0MhkHIsClVLCbynHaPW25
+         nfFS/mvRCRD1WbYfWORLpYNCF0ojASCO3f/GcHdYlwu8FuPyKqmVc0HelH0QZuRnvn
+         9pLYPTOQFMczMDEjOllvIfGxdOP0t1SGXvCTzcwLvqn0NB3xLQjOtE7W9WaAYRiRyD
+         8tvDG+qbcFjXQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Therefore, some minor cleanup and improvements are in order:
+Avoid the need to copy-paste the gup_test ioctl commands and the struct
+gup_test definition, between the kernel and the user space application, by
+providing a new header file for these.  This allows easier and safer
+adding of new ioctl calls, as well as reducing the overall line count.
 
-1. Rename the other items appropriately.
+Details: The header file has to be able to compile independently, because
+of the arguably unfortunate way that the Makefile is written: the Makefile
+tries to build all of its prerequisites, when really it should be only
+building the .c files, and leaving the other prerequisites (LOCAL_HDRS) as
+pure dependencies.
 
-2. Stop reporting timing information on the non-benchmark items. It's
-   still being recorded and is available, but there's no point in
-   cluttering up the report with data that no one reasonably needs to
-   check.
+That Makefile limitation is probably not worth fixing, but it explains why
+one of the includes had to be moved into the new header file.
 
-3. Don't do iterations, for non-benchmark items.
-
-4. Print out a shorter, more appropriate report for the non-benchmark
-   tests.
-
-5. Add the command that was run, to the report. This really helps, as
-   there are quite a lot of options now.
-
-6. Use a larger integer type for cmd, now that it's being compared
-   Otherwise it doesn't work, because in this case cmd is about 3 billion,
-   which is the perfect size for problems with signed vs unsigned int.
+Also: simplify the ioctl struct (struct gup_test), by deleting the unused
+__expansion[10] field.  This sort of thing is what you might see in a
+stable ABI, but this low-level, kernel-developer-oriented selftests/vm
+system is very much not subject to ABI stability.  So "expansion" and
+"reserved" fields are unnecessary here.
 
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 Cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
@@ -94,202 +93,126 @@ Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: Ralph Campbell <rcampbell@nvidia.com>
 Cc: Shuah Khan <shuah@kernel.org>
 ---
- Documentation/core-api/pin_user_pages.rst |  2 +-
- mm/gup_test.c                             | 14 +++----
- mm/gup_test.h                             |  8 ++--
- tools/testing/selftests/vm/gup_test.c     | 47 +++++++++++++++++++----
- 4 files changed, 51 insertions(+), 20 deletions(-)
+ mm/gup_test.c                         | 17 +----------------
+ mm/gup_test.h                         | 22 ++++++++++++++++++++++
+ tools/testing/selftests/vm/Makefile   |  2 ++
+ tools/testing/selftests/vm/gup_test.c | 22 +---------------------
+ 4 files changed, 26 insertions(+), 37 deletions(-)
+ create mode 100644 mm/gup_test.h
 
-diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core=
--api/pin_user_pages.rst
-index eae972b23224..fcf605be43d0 100644
---- a/Documentation/core-api/pin_user_pages.rst
-+++ b/Documentation/core-api/pin_user_pages.rst
-@@ -226,7 +226,7 @@ This file::
- has the following new calls to exercise the new pin*() wrapper functions:
-=20
- * PIN_FAST_BENCHMARK (./gup_test -a)
--* PIN_BENCHMARK (./gup_test -b)
-+* PIN_BASIC_TEST (./gup_test -b)
-=20
- You can monitor how many total dma-pinned pages have been acquired and rel=
-eased
- since the system was booted, via two new /proc/vmstat entries: ::
 diff --git a/mm/gup_test.c b/mm/gup_test.c
-index 4c2d70d88f24..173bb38f3688 100644
+index 59472ea6aa39..4c2d70d88f24 100644
 --- a/mm/gup_test.c
 +++ b/mm/gup_test.c
-@@ -13,13 +13,13 @@ static void put_back_pages(unsigned int cmd, struct pag=
-e **pages,
-=20
- 	switch (cmd) {
- 	case GUP_FAST_BENCHMARK:
--	case GUP_BENCHMARK:
-+	case GUP_BASIC_TEST:
- 		for (i =3D 0; i < nr_pages; i++)
- 			put_page(pages[i]);
- 		break;
-=20
- 	case PIN_FAST_BENCHMARK:
--	case PIN_BENCHMARK:
-+	case PIN_BASIC_TEST:
- 	case PIN_LONGTERM_BENCHMARK:
- 		unpin_user_pages(pages, nr_pages);
- 		break;
-@@ -34,7 +34,7 @@ static void verify_dma_pinned(unsigned int cmd, struct pa=
-ge **pages,
-=20
- 	switch (cmd) {
- 	case PIN_FAST_BENCHMARK:
--	case PIN_BENCHMARK:
-+	case PIN_BASIC_TEST:
- 	case PIN_LONGTERM_BENCHMARK:
- 		for (i =3D 0; i < nr_pages; i++) {
- 			page =3D pages[i];
-@@ -94,7 +94,7 @@ static int __gup_test_ioctl(unsigned int cmd,
- 			nr =3D get_user_pages_fast(addr, nr, gup->flags,
- 						 pages + i);
- 			break;
--		case GUP_BENCHMARK:
-+		case GUP_BASIC_TEST:
- 			nr =3D get_user_pages(addr, nr, gup->flags, pages + i,
- 					    NULL);
- 			break;
-@@ -102,7 +102,7 @@ static int __gup_test_ioctl(unsigned int cmd,
- 			nr =3D pin_user_pages_fast(addr, nr, gup->flags,
- 						 pages + i);
- 			break;
--		case PIN_BENCHMARK:
-+		case PIN_BASIC_TEST:
- 			nr =3D pin_user_pages(addr, nr, gup->flags, pages + i,
- 					    NULL);
- 			break;
-@@ -157,10 +157,10 @@ static long gup_test_ioctl(struct file *filep, unsign=
-ed int cmd,
-=20
- 	switch (cmd) {
- 	case GUP_FAST_BENCHMARK:
--	case GUP_BENCHMARK:
- 	case PIN_FAST_BENCHMARK:
--	case PIN_BENCHMARK:
- 	case PIN_LONGTERM_BENCHMARK:
-+	case GUP_BASIC_TEST:
-+	case PIN_BASIC_TEST:
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/mm/gup_test.h b/mm/gup_test.h
-index 931c2f3f477a..921b4caad8ef 100644
---- a/mm/gup_test.h
-+++ b/mm/gup_test.h
-@@ -5,10 +5,10 @@
- #include <linux/types.h>
-=20
- #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_test)
+@@ -4,22 +4,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/ktime.h>
+ #include <linux/debugfs.h>
+-
+-#define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_test)
 -#define GUP_BENCHMARK		_IOWR('g', 2, struct gup_test)
 -#define PIN_FAST_BENCHMARK	_IOWR('g', 3, struct gup_test)
 -#define PIN_BENCHMARK		_IOWR('g', 4, struct gup_test)
 -#define PIN_LONGTERM_BENCHMARK	_IOWR('g', 5, struct gup_test)
-+#define PIN_FAST_BENCHMARK	_IOWR('g', 2, struct gup_test)
-+#define PIN_LONGTERM_BENCHMARK	_IOWR('g', 3, struct gup_test)
-+#define GUP_BASIC_TEST		_IOWR('g', 4, struct gup_test)
-+#define PIN_BASIC_TEST		_IOWR('g', 5, struct gup_test)
+-
+-struct gup_test {
+-	__u64 get_delta_usec;
+-	__u64 put_delta_usec;
+-	__u64 addr;
+-	__u64 size;
+-	__u32 nr_pages_per_call;
+-	__u32 flags;
+-	__u64 expansion[10];	/* For future use */
+-};
++#include "gup_test.h"
 =20
- struct gup_test {
- 	__u64 get_delta_usec;
+ static void put_back_pages(unsigned int cmd, struct page **pages,
+ 			   unsigned long nr_pages)
+diff --git a/mm/gup_test.h b/mm/gup_test.h
+new file mode 100644
+index 000000000000..931c2f3f477a
+--- /dev/null
++++ b/mm/gup_test.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#ifndef __GUP_TEST_H
++#define __GUP_TEST_H
++
++#include <linux/types.h>
++
++#define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_test)
++#define GUP_BENCHMARK		_IOWR('g', 2, struct gup_test)
++#define PIN_FAST_BENCHMARK	_IOWR('g', 3, struct gup_test)
++#define PIN_BENCHMARK		_IOWR('g', 4, struct gup_test)
++#define PIN_LONGTERM_BENCHMARK	_IOWR('g', 5, struct gup_test)
++
++struct gup_test {
++	__u64 get_delta_usec;
++	__u64 put_delta_usec;
++	__u64 addr;
++	__u64 size;
++	__u32 nr_pages_per_call;
++	__u32 flags;
++};
++
++#endif	/* __GUP_TEST_H */
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/=
+vm/Makefile
+index d1ae706d9927..9cc6bc087461 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -130,3 +130,5 @@ endif
+ $(OUTPUT)/userfaultfd: LDLIBS +=3D -lpthread
+=20
+ $(OUTPUT)/mlock-random-test: LDLIBS +=3D -lcap
++
++$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
 diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftest=
 s/vm/gup_test.c
-index 1a54771ad97e..f9163e1bb57a 100644
+index 00b4731f535e..03f7c4f1beaf 100644
 --- a/tools/testing/selftests/vm/gup_test.c
 +++ b/tools/testing/selftests/vm/gup_test.c
-@@ -14,12 +14,30 @@
+@@ -2,39 +2,19 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+-
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <sys/prctl.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+-
+-#include <linux/types.h>
++#include "../../../../mm/gup_test.h"
+=20
+ #define MB (1UL << 20)
+ #define PAGE_SIZE sysconf(_SC_PAGESIZE)
+=20
+-#define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_test)
+-#define GUP_BENCHMARK		_IOWR('g', 2, struct gup_test)
+-
+-/* Similar to above, but use FOLL_PIN instead of FOLL_GET. */
+-#define PIN_FAST_BENCHMARK	_IOWR('g', 3, struct gup_test)
+-#define PIN_BENCHMARK		_IOWR('g', 4, struct gup_test)
+-#define PIN_LONGTERM_BENCHMARK	_IOWR('g', 5, struct gup_test)
+-
  /* Just the flags we need, copied from mm.h: */
  #define FOLL_WRITE	0x01	/* check pte is writable */
 =20
-+static char *cmd_to_str(unsigned long cmd)
-+{
-+	switch (cmd) {
-+	case GUP_FAST_BENCHMARK:
-+		return "GUP_FAST_BENCHMARK";
-+	case PIN_FAST_BENCHMARK:
-+		return "PIN_FAST_BENCHMARK";
-+	case PIN_LONGTERM_BENCHMARK:
-+		return "PIN_LONGTERM_BENCHMARK";
-+	case GUP_BASIC_TEST:
-+		return "GUP_BASIC_TEST";
-+	case PIN_BASIC_TEST:
-+		return "PIN_BASIC_TEST";
-+	}
-+	return "Unknown command";
-+}
-+
+-struct gup_test {
+-	__u64 get_delta_usec;
+-	__u64 put_delta_usec;
+-	__u64 addr;
+-	__u64 size;
+-	__u32 nr_pages_per_call;
+-	__u32 flags;
+-	__u64 expansion[10];	/* For future use */
+-};
+-
  int main(int argc, char **argv)
  {
  	struct gup_test gup;
- 	unsigned long size =3D 128 * MB;
- 	int i, fd, filed, opt, nr_pages =3D 1, thp =3D -1, repeats =3D 1, write =
-=3D 0;
--	int cmd =3D GUP_FAST_BENCHMARK, flags =3D MAP_PRIVATE;
-+	unsigned long cmd =3D GUP_FAST_BENCHMARK;
-+	int flags =3D MAP_PRIVATE;
- 	char *file =3D "/dev/zero";
- 	char *p;
-=20
-@@ -29,7 +47,7 @@ int main(int argc, char **argv)
- 			cmd =3D PIN_FAST_BENCHMARK;
- 			break;
- 		case 'b':
--			cmd =3D PIN_BENCHMARK;
-+			cmd =3D PIN_BASIC_TEST;
- 			break;
- 		case 'L':
- 			cmd =3D PIN_LONGTERM_BENCHMARK;
-@@ -50,7 +68,7 @@ int main(int argc, char **argv)
- 			thp =3D 0;
- 			break;
- 		case 'U':
--			cmd =3D GUP_BENCHMARK;
-+			cmd =3D GUP_BASIC_TEST;
- 			break;
- 		case 'u':
- 			cmd =3D GUP_FAST_BENCHMARK;
-@@ -104,18 +122,31 @@ int main(int argc, char **argv)
- 	for (; (unsigned long)p < gup.addr + size; p +=3D PAGE_SIZE)
- 		p[0] =3D 0;
-=20
--	for (i =3D 0; i < repeats; i++) {
-+	/* Only report timing information on the *_BENCHMARK commands: */
-+	if ((cmd =3D=3D PIN_FAST_BENCHMARK) || (cmd =3D=3D GUP_FAST_BENCHMARK) ||
-+	     (cmd =3D=3D PIN_LONGTERM_BENCHMARK)) {
-+		for (i =3D 0; i < repeats; i++) {
-+			gup.size =3D size;
-+			if (ioctl(fd, cmd, &gup))
-+				perror("ioctl"), exit(1);
-+
-+			printf("%s: Time: get:%lld put:%lld us",
-+			       cmd_to_str(cmd), gup.get_delta_usec,
-+			       gup.put_delta_usec);
-+			if (gup.size !=3D size)
-+				printf(", truncated (size: %lld)", gup.size);
-+			printf("\n");
-+		}
-+	} else {
- 		gup.size =3D size;
- 		if (ioctl(fd, cmd, &gup)) {
- 			perror("ioctl");
- 			exit(1);
- 		}
-=20
--		printf("Time: get:%lld put:%lld us", gup.get_delta_usec,
--			gup.put_delta_usec);
-+		printf("%s: done\n", cmd_to_str(cmd));
- 		if (gup.size !=3D size)
--			printf(", truncated (size: %lld)", gup.size);
--		printf("\n");
-+			printf("Truncated (size: %lld)\n", gup.size);
- 	}
-=20
- 	return 0;
 --=20
 2.29.0
 
