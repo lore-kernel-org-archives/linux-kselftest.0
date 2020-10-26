@@ -8,30 +8,30 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87D59C63697
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83F24C63699
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 50D9E22400
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FF7322282
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Oct 2020 06:41:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="nQ/vYKgn"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Z2utBgK/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1770576AbgJZGlM (ORCPT
+        id S1770574AbgJZGlL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Oct 2020 02:41:12 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11580 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1770543AbgJZGlC (ORCPT
+        Mon, 26 Oct 2020 02:41:11 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13010 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1770549AbgJZGlC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 26 Oct 2020 02:41:02 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f966f850004>; Sun, 25 Oct 2020 23:41:09 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 26 Oct
- 2020 06:41:01 +0000
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f966f830001>; Sun, 25 Oct 2020 23:41:07 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 26 Oct
+ 2020 06:41:02 +0000
 Received: from sandstorm.nvidia.com (10.124.1.5) by mail.nvidia.com
  (172.20.187.18) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Mon, 26 Oct 2020 06:41:01 +0000
+ Transport; Mon, 26 Oct 2020 06:41:02 +0000
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     Shuah Khan <shuah@kernel.org>,
@@ -42,91 +42,68 @@ CC:     Shuah Khan <shuah@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kselftest@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 7/9] selftests/vm: run_vmtests.sh: update and clean up gup_test invocation
-Date:   Sun, 25 Oct 2020 23:40:19 -0700
-Message-ID: <20201026064021.3545418-8-jhubbard@nvidia.com>
+Subject: [PATCH v3 9/9] selftests/vm: 2x speedup for run_vmtests.sh
+Date:   Sun, 25 Oct 2020 23:40:21 -0700
+Message-ID: <20201026064021.3545418-10-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201026064021.3545418-1-jhubbard@nvidia.com>
 References: <20201026064021.3545418-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1603694469; bh=kXhIomNPDXSJUAeDw7QMEoffInptLRlozO6MNqQpgtY=;
+        t=1603694467; bh=YaxNbn53iJTo0Zqqd0XK0hs/zmsFR5Tq5VhzHL3FjMc=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Type:X-NVConfidentiality:
-         Content-Transfer-Encoding;
-        b=nQ/vYKgns44XaoejV8YzR6nOeGow4IlDX6kRCsL2ezmIdjzrU11SSIovmPelmHRah
-         veQovypKnBpgNbg2Vly9kj4sBYvwdkbNlcj/WOfu6JADkmKkS+dH8760c+c/jdlxf+
-         +qPoq77990uLl1APXVGwuCRuY0PpIDEoytYUK+vN5565I9+tAOBVFojT9M+pZyxDO3
-         msYnob0qCH8h3fZZt/1Va/JT30DdHULC5gexH/gS71Qjx5/H+Wo+p9oAkwwMt4aN7U
-         AlL1Gldw2PKjRKdYP0LdRazq945xUJupTKytzKKaWTZwvMjfa8jkanXzNsoQ+66S/W
-         PcBE9c/0GdWnw==
+         References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=Z2utBgK/QM6HMt/paiqpFJE3pN4KXFgyn2VjwwMQYkBlAY26mL/4fqFu2U2oWYhvt
+         A4JIP9Tm2a1OaJLI2cAtKONTtVkSrKBFK997J+1I3S6R2C2X62Jw7MJ5JbNCrDWFSi
+         jPzil8KDf5D+qjiHvLialCa6RNpR3llgKttBzRXZnEoDIeLRUvkr/WudssyyLF1Xof
+         do61iGiBi01RNougugJsQcI4Ni3kAK5YQVFrC7nkX9u0YTg0GmsMRdmIKRWpnfbuaM
+         HecH/4Ayj7vpIJfPk07ociCu/2kK6qWHSqCRPvvzBqxQj5ML/hSHJN7JdKU3k5dxPl
+         ryhHtakDhFAoA==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Run benchmarks on the _fast variants of gup and pup, as originally
-intended.
+Each invocation of userfaultfd for "anon" and "shmem" was taking about
+6.5 sec to run, contributing to an overall run time of about 22 sec for
+run_vmtests.sh.
 
-Run the new gup_test sub-test: dump pages.  In addition to exercising the
-dump_page() call, it also demonstrates the various options you can use to
-specify which pages to dump, and how.
+Reduce the size and bounce input values to the userfaultfd invocation
+within run_vmtests.sh, enough to get each invocation down to about 1.0
+sec. This should still provide a reasonable smoke test, while staying
+within a nominal time budget of around 1 second or so per test. And this
+brings the overall running time of run_vmtests.sh down to 11 second.
 
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Cc: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
+Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
 Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/vm/run_vmtests.sh | 28 ++++++++++++++++-------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+ tools/testing/selftests/vm/run_vmtests.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/self=
 tests/vm/run_vmtests.sh
-index d1843d5f3c30..4ac84b350d9f 100755
+index 4ac84b350d9f..9e8837768ee2 100755
 --- a/tools/testing/selftests/vm/run_vmtests.sh
 +++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -123,10 +123,10 @@ else
- 	echo "[PASS]"
- fi
-=20
--echo "--------------------------------------------"
--echo "running 'gup_test -U' (normal/slow gup)"
--echo "--------------------------------------------"
--./gup_test -U
-+echo "------------------------------------------------------"
-+echo "running: gup_test -u # get_user_pages_fast() benchmark"
-+echo "------------------------------------------------------"
-+./gup_test -u
+@@ -160,7 +160,7 @@ fi
+ echo "-------------------"
+ echo "running userfaultfd"
+ echo "-------------------"
+-./userfaultfd anon 128 32
++./userfaultfd anon 20 16
  if [ $? -ne 0 ]; then
  	echo "[FAIL]"
  	exitcode=3D1
-@@ -134,10 +134,22 @@ else
- 	echo "[PASS]"
- fi
-=20
--echo "------------------------------------------"
--echo "running gup_test -b (pin_user_pages)"
--echo "------------------------------------------"
--./gup_test -b
-+echo "------------------------------------------------------"
-+echo "running: gup_test -a # pin_user_pages_fast() benchmark"
-+echo "------------------------------------------------------"
-+./gup_test -a
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
-+echo "------------------------------------------------------------"
-+echo "# Dump pages 0, 19, and 4096, using pin_user_pages:"
-+echo "running: gup_test -ct -F 0x1 0 19 0x1000 # dump_page() test"
-+echo "------------------------------------------------------------"
-+./gup_test -ct -F 0x1 0 19 0x1000
+@@ -185,7 +185,7 @@ rm -f $mnt/ufd_test_file
+ echo "-------------------------"
+ echo "running userfaultfd_shmem"
+ echo "-------------------------"
+-./userfaultfd shmem 128 32
++./userfaultfd shmem 20 16
  if [ $? -ne 0 ]; then
  	echo "[FAIL]"
  	exitcode=3D1
