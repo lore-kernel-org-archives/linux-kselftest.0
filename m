@@ -2,92 +2,108 @@ Return-Path: <SRS0=7AXU=EC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31A9AC4363A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 18:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03E7BC4363A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 19:06:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE540207DE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 18:49:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="1zdoLICv"
+	by mail.kernel.org (Postfix) with ESMTP id B027121556
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 19:06:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603825610;
+	bh=Kd8c7+a7Mz/+x4X4kH9DOS4ODh6z3EM1qWds9ARdUVM=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=Ad7n1EfD/PmLWrH0PUdwU2oTj7DQjiEBG5GIPBjxiYVJXN55bFHFaR85W96gJjoWe
+	 Jo2hpeGGS7V+y9E6omoDOcpJTlLpzWvKcgHdVzfVV0+TSygnLahVlEnRJnut9+A1Ay
+	 OJDUgQkRFJAcLbAumxIK9byO0DuHYdTZiGONToZU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1829124AbgJ0StV (ORCPT
+        id S2902440AbgJ0TGt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Oct 2020 14:49:21 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:38712 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1829117AbgJ0StQ (ORCPT
+        Tue, 27 Oct 2020 15:06:49 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:34487 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S369529AbgJ0TGq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 14:49:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=46Byy3Rt7NiFA9tn4Js32CXeLAf2iqHq9BuLVB2Ne/U=; b=1zdoLICv1XhcaJtSVlHYDS2FBr
-        TZ+cvKhtf/4Wp59eTV6qTMjIRIIib02AuDj+iN4aI6+4261zSvmHbpvZE+1r06f8DkHTxaaUSadzW
-        nYzebO6Y5xXb75jPI96C875iIAUoF0NVusWU/C5iWC6MbW2ZCnhdMa8KAW4IAfFJqRyUorulRRfgq
-        pP9UYeHRuEL1QKkpFTJ7yhwLB9HIUlT8Xis8HiwakwTt8EhIM8hSC6aXForWjFYa63RyJr8n617uC
-        zrVN7FRW7FjQhbl1bimjtx61K+rLhoK+ls/VpLDrEfBGzsL6ADBofQreaXkWzRlevaNuHrw2Sb+wS
-        RTykY0og==;
-Received: from [2601:1c0:6280:3f0::507c] (helo=smtpauth.infradead.org)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kXU1y-0008AW-Ik; Tue, 27 Oct 2020 18:49:15 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Subject: [PATCH] KUnit: Docs: style: fix some Kconfig example issues
-Date:   Tue, 27 Oct 2020 11:49:09 -0700
-Message-Id: <20201027184909.20881-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        Tue, 27 Oct 2020 15:06:46 -0400
+Received: by mail-io1-f65.google.com with SMTP id z5so2760239iob.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 12:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=coz6L+xiFoQZV2Vxdqg9iD/Q24xRRVSUodgb27gSoZI=;
+        b=NZtVctUU8Wlajt9aO3t4DyQNeU4xDeX79lGJwlAy+vpQiGx73VmhgKRVbFl2ldRUzh
+         AS1j+ImOWNJyHPXsQRlAYwDpJdrFG7+1dGGiRrM8Bj/mvM3Sh7UEO78o6P1KAX/nYQGx
+         qBG9qTgnmRXKCnP8K72A2EpefUUlte38amUlc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=coz6L+xiFoQZV2Vxdqg9iD/Q24xRRVSUodgb27gSoZI=;
+        b=CqQEhpe+iQE6GX6zE5Xs6koBsWGZPFAhHK0XlmRFykfR4B+WoSyqivZsd2w2w65ebz
+         Wu5d3Is3lbDCa+cgUaINHiCm1NoLHJ8rcr5Wl3daN2SK6H8E0Hr5ysBQd1WXdMyBxws+
+         Li6Kgstyb4IfDNToKVpaYTTA0gGG2fxTcuV/aoU/zfXCVZZS3OyRdXWqAJjWzMHjt46G
+         iEUi7m1iKYNPhGL41gfbfT8bRidxKyFzuTB38pv0tEwur9TfWAWbO4gSu1K4ht/vGLEo
+         Td+HFuSeLL7YxWYOQGGf01RsMSXU0sDcXv8PLErGwcj7xJodCof9yCM+hsVo11mNqBBG
+         ORaA==
+X-Gm-Message-State: AOAM5307BEk4CieP7T4efsC0Hhlp0qJm17DFs+hDES/IiyhaRvlvxVxD
+        P7dYr10rb7jFUGLg1OkCHSk9Bg==
+X-Google-Smtp-Source: ABdhPJwA0O4Oz5p1kn4CgBnlbdtAWAnkTmCiYd1F+ZisJqDaI+vUGpTJ7L56/22cOXVDAcVi1P/frA==
+X-Received: by 2002:a05:6602:22cf:: with SMTP id e15mr3416769ioe.1.1603825604788;
+        Tue, 27 Oct 2020 12:06:44 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id n15sm1354758ilt.58.2020.10.27.12.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 12:06:44 -0700 (PDT)
+Subject: Re: [PATCH] selftests/ftrace: Use $FUNCTION_FORK to reference kernel
+ fork function
+To:     Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201026162032.124c728d@gandalf.local.home>
+ <20201027223831.dba931ab868584fc999b0617@kernel.org>
+ <20201027102548.713c4604@gandalf.local.home>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3ba0fbc0-1071-48a4-5821-fbbe75f96d29@linuxfoundation.org>
+Date:   Tue, 27 Oct 2020 13:06:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201027102548.713c4604@gandalf.local.home>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the Kconfig example to be closer to Kconfig coding style.
-(Except that it still uses spaces instead of tabs for indentation;
-I guess that Sphinx wants it that way.)
+On 10/27/20 8:25 AM, Steven Rostedt wrote:
+> On Tue, 27 Oct 2020 22:38:31 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+>>>
+>>> Fixes: eea11285dab3 ("tracing: switch to kernel_clone()")
+>>> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+>>
+>> This looks good to me.
+>>
+>> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> Shuah,
+> 
+> Can you take this through your tree?
+> 
 
-Also add punctuation and a trailing slash ('/') to a sub-directory
-name -- this is how the text mostly appears in other Kconfig files.
+Yes. I will queue this up for next rc.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: David Gow <davidgow@google.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/style.rst |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
---- linux-next-20201027.orig/Documentation/dev-tools/kunit/style.rst
-+++ linux-next-20201027/Documentation/dev-tools/kunit/style.rst
-@@ -180,12 +180,12 @@ An example Kconfig entry:
-                 depends on KUNIT
-                 default KUNIT_ALL_TESTS
-                 help
--                    This builds unit tests for foo.
-+                  This builds unit tests for foo.
- 
--                    For more information on KUnit and unit tests in general, please refer
--                    to the KUnit documentation in Documentation/dev-tools/kunit
-+                  For more information on KUnit and unit tests in general, please refer
-+                  to the KUnit documentation in Documentation/dev-tools/kunit/.
- 
--                    If unsure, say N
-+                  If unsure, say N.
- 
- 
- Test File and Module Names
+thanks,
+-- Shuah
