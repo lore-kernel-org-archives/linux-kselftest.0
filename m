@@ -2,284 +2,162 @@ Return-Path: <SRS0=7AXU=EC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9456EC55178
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC6ECC4363A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:08:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A88D22275
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:05:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E83120829
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603829318;
+	bh=LfaTYgrHJ/h/R3n4i8YOy4vzzt+4z3SltizRbY8g+CI=;
+	h=Subject:To:References:From:Date:In-Reply-To:List-ID:From;
+	b=JiyRV/8oRk6tgRIkfDLXd0BhgPC/fJNyT576QXT2Rp6kpjcFnNtF1vgyqVLGcYIUG
+	 1jNGFtTS/M+HUL183Vf21BvIuFt1JKPrp3Of658rmLhM7434y9slJirb49y0c3MDZQ
+	 cwZ+3F84Hj/hxlouvNMtz+6noke5P9pufyjmQRn4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1830879AbgJ0UFr (ORCPT
+        id S1830924AbgJ0UIf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Oct 2020 16:05:47 -0400
-Received: from smtp-bc0c.mail.infomaniak.ch ([45.157.188.12]:57281 "EHLO
-        smtp-bc0c.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1830649AbgJ0UEO (ORCPT
+        Tue, 27 Oct 2020 16:08:35 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:33981 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504558AbgJ0UIf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 16:04:14 -0400
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CLN2L2HbKzlhY92;
-        Tue, 27 Oct 2020 21:04:10 +0100 (CET)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CLN2L01C3zlh8TS;
-        Tue, 27 Oct 2020 21:04:09 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
+        Tue, 27 Oct 2020 16:08:35 -0400
+Received: by mail-io1-f65.google.com with SMTP id z5so2954940iob.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 13:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=4HIc/0MR2zHvdieD9zh6vgSLY8pbQbGIFImMryqW80s=;
+        b=PPPa3tmp2ks9hMD+/SvUol0Jx+R7oBCr+e32JI5nCuiG5v1h2ucr/FqTIkj9xsqVMk
+         82ZR0Ou9cOuG1rkvlK/33AXrWcAmuXcDoj7+Ax3tfPhEd4XOPHUE2JgiVGcHG2kAVp07
+         zvMESFRR7oZiOKXo8KvZpW4q9iZ9AgHen6rdI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4HIc/0MR2zHvdieD9zh6vgSLY8pbQbGIFImMryqW80s=;
+        b=kCY+Dytnpva12IBUCtaLMFqXS2+WOjSDIwRbdwC85OkTrwfLsyXT0CTgtXP5Mu1d7B
+         00UpdlhjBmZdffYp1hfgQMDfYZXAmQrlk24XnGh4YS7ho4PXa5BHAmWaCisFOPuipNm9
+         rVVi23FYmQ7u2J5S62gFUlcyvirTsCO++nsW6Op/lV6R0shhT8lbn+d1c4IvYUSVjILS
+         9v0SkdR3OK3lKH+SASVWt9wmjW/ZC4PsiWNhErs83tNxDkfLLSNA09RxNUsAfxz9KjJc
+         Wvq4bziouYtOvPOPoTyIog1zZFanGfGFoDzQksH3LAcB54B3ETXeBXxCMahN06bzs72p
+         JBOQ==
+X-Gm-Message-State: AOAM5302EbXkmlVUkfCzL/OjjldkkOde5W4m0P+k9vMsqKy/Mlu/BN00
+        OIKN6Ixgzezistp9e0G4TathF2ndMG9zCw==
+X-Google-Smtp-Source: ABdhPJxEnhHXp/fd89iC17rp6whQwz7mY2Q1l1AjQHbSPGMfQBiuPwlJgoZQ8cCXi+zUMR++RBiyyw==
+X-Received: by 2002:a6b:cf18:: with SMTP id o24mr3595316ioa.57.1603829313981;
+        Tue, 27 Oct 2020 13:08:33 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id r14sm1456512ilc.78.2020.10.27.13.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 13:08:33 -0700 (PDT)
+Subject: Re: [PATCH] selftests: intel_pstate: ftime() is deprecated
+To:     Tommi Rantala <tommi.t.rantala@nokia.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v22 04/12] landlock: Add ptrace restrictions
-Date:   Tue, 27 Oct 2020 21:03:50 +0100
-Message-Id: <20201027200358.557003-5-mic@digikod.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201027200358.557003-1-mic@digikod.net>
-References: <20201027200358.557003-1-mic@digikod.net>
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d315994a-3398-be41-1b26-e78f8359aa5c@linuxfoundation.org>
+Date:   Tue, 27 Oct 2020 14:08:32 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
+Hi Tommi,
 
-Using ptrace(2) and related debug features on a target process can lead
-to a privilege escalation.  Indeed, ptrace(2) can be used by an attacker
-to impersonate another task and to remain undetected while performing
-malicious activities.  Thanks to  ptrace_may_access(), various part of
-the kernel can check if a tracer is more privileged than a tracee.
+On 10/16/20 7:22 AM, Tommi Rantala wrote:
+> Use clock_gettime() instead of deprecated ftime().
+> 
+>    aperf.c: In function ‘main’:
+>    aperf.c:58:2: warning: ‘ftime’ is deprecated [-Wdeprecated-declarations]
+>       58 |  ftime(&before);
+>          |  ^~~~~
+>    In file included from aperf.c:9:
+>    /usr/include/sys/timeb.h:39:12: note: declared here
+>       39 | extern int ftime (struct timeb *__timebuf)
+>          |            ^~~~~
+> 
 
-A landlocked process has fewer privileges than a non-landlocked process
-and must then be subject to additional restrictions when manipulating
-processes. To be allowed to use ptrace(2) and related syscalls on a
-target process, a landlocked process must have a subset of the target
-process's rules (i.e. the tracee must be in a sub-domain of the tracer).
+Thanks for the fix. One comment below
 
-Cc: James Morris <jmorris@namei.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
----
+> Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
+> ---
+>   tools/testing/selftests/intel_pstate/aperf.c | 17 ++++++++++++-----
+>   1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
+> index f6cd03a87493..eea9dbab459b 100644
+> --- a/tools/testing/selftests/intel_pstate/aperf.c
+> +++ b/tools/testing/selftests/intel_pstate/aperf.c
+> @@ -10,6 +10,7 @@
+>   #include <sched.h>
+>   #include <errno.h>
+>   #include <string.h>
+> +#include <time.h>
+>   #include "../kselftest.h"
+>   
+>   void usage(char *name) {
+> @@ -22,7 +23,7 @@ int main(int argc, char **argv) {
+>   	long long tsc, old_tsc, new_tsc;
+>   	long long aperf, old_aperf, new_aperf;
+>   	long long mperf, old_mperf, new_mperf;
+> -	struct timeb before, after;
+> +	struct timespec before, after;
+>   	long long int start, finish, total;
+>   	cpu_set_t cpuset;
+>   
+> @@ -55,7 +56,10 @@ int main(int argc, char **argv) {
+>   		return 1;
+>   	}
+>   
+> -	ftime(&before);
+> +	if (clock_gettime(CLOCK_MONOTONIC, &before) < 0) {
+> +		perror("clock_gettime");
+> +		return 1;
+> +	}
+>   	pread(fd, &old_tsc,  sizeof(old_tsc), 0x10);
+>   	pread(fd, &old_aperf,  sizeof(old_mperf), 0xe7);
+>   	pread(fd, &old_mperf,  sizeof(old_aperf), 0xe8);
+> @@ -64,7 +68,10 @@ int main(int argc, char **argv) {
+>   		sqrt(i);
+>   	}
+>   
+> -	ftime(&after);
+> +	if (clock_gettime(CLOCK_MONOTONIC, &after) < 0) {
+> +		perror("clock_gettime");
+> +		return 1;
+> +	}
+>   	pread(fd, &new_tsc,  sizeof(new_tsc), 0x10);
+>   	pread(fd, &new_aperf,  sizeof(new_mperf), 0xe7);
+>   	pread(fd, &new_mperf,  sizeof(new_aperf), 0xe8);
+> @@ -73,8 +80,8 @@ int main(int argc, char **argv) {
+>   	aperf = new_aperf-old_aperf;
+>   	mperf = new_mperf-old_mperf;
+>   
+> -	start = before.time*1000 + before.millitm;
+> -	finish = after.time*1000 + after.millitm;
+> +	start = before.tv_sec*1000 + before.tv_nsec/1000000L;
+> +	finish = after.tv_sec*1000 + after.tv_nsec/1000000L;
 
-Changes since v21:
-* Fix copyright dates.
+Why not use timespec dNSEC_PER_MSEC define from  include/vdso/time64.h?
 
-Changes since v14:
-* Constify variables.
-
-Changes since v13:
-* Make the ptrace restriction mandatory, like in the v10.
-* Remove the eBPF dependency.
-
-Previous changes:
-https://lore.kernel.org/lkml/20191104172146.30797-5-mic@digikod.net/
----
- security/landlock/Makefile |   2 +-
- security/landlock/ptrace.c | 120 +++++++++++++++++++++++++++++++++++++
- security/landlock/ptrace.h |  14 +++++
- security/landlock/setup.c  |   2 +
- 4 files changed, 137 insertions(+), 1 deletion(-)
- create mode 100644 security/landlock/ptrace.c
- create mode 100644 security/landlock/ptrace.h
-
-diff --git a/security/landlock/Makefile b/security/landlock/Makefile
-index 041ea242e627..f1d1eb72fa76 100644
---- a/security/landlock/Makefile
-+++ b/security/landlock/Makefile
-@@ -1,4 +1,4 @@
- obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
- 
- landlock-y := setup.o object.o ruleset.o \
--	cred.o
-+	cred.o ptrace.o
-diff --git a/security/landlock/ptrace.c b/security/landlock/ptrace.c
-new file mode 100644
-index 000000000000..77c77bb1fe97
---- /dev/null
-+++ b/security/landlock/ptrace.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Landlock LSM - Ptrace hooks
-+ *
-+ * Copyright © 2017-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2019-2020 ANSSI
-+ */
-+
-+#include <asm/current.h>
-+#include <linux/cred.h>
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/lsm_hooks.h>
-+#include <linux/rcupdate.h>
-+#include <linux/sched.h>
-+
-+#include "common.h"
-+#include "cred.h"
-+#include "ptrace.h"
-+#include "ruleset.h"
-+#include "setup.h"
-+
-+/**
-+ * domain_scope_le - Checks domain ordering for scoped ptrace
-+ *
-+ * @parent: Parent domain.
-+ * @child: Potential child of @parent.
-+ *
-+ * Checks if the @parent domain is less or equal to (i.e. an ancestor, which
-+ * means a subset of) the @child domain.
-+ */
-+static bool domain_scope_le(const struct landlock_ruleset *const parent,
-+		const struct landlock_ruleset *const child)
-+{
-+	const struct landlock_hierarchy *walker;
-+
-+	if (!parent)
-+		return true;
-+	if (!child)
-+		return false;
-+	for (walker = child->hierarchy; walker; walker = walker->parent) {
-+		if (walker == parent->hierarchy)
-+			/* @parent is in the scoped hierarchy of @child. */
-+			return true;
-+	}
-+	/* There is no relationship between @parent and @child. */
-+	return false;
-+}
-+
-+static bool task_is_scoped(const struct task_struct *const parent,
-+		const struct task_struct *const child)
-+{
-+	bool is_scoped;
-+	const struct landlock_ruleset *dom_parent, *dom_child;
-+
-+	rcu_read_lock();
-+	dom_parent = landlock_get_task_domain(parent);
-+	dom_child = landlock_get_task_domain(child);
-+	is_scoped = domain_scope_le(dom_parent, dom_child);
-+	rcu_read_unlock();
-+	return is_scoped;
-+}
-+
-+static int task_ptrace(const struct task_struct *const parent,
-+		const struct task_struct *const child)
-+{
-+	/* Quick return for non-landlocked tasks. */
-+	if (!landlocked(parent))
-+		return 0;
-+	if (task_is_scoped(parent, child))
-+		return 0;
-+	return -EPERM;
-+}
-+
-+/**
-+ * hook_ptrace_access_check - Determines whether the current process may access
-+ *			      another
-+ *
-+ * @child: Process to be accessed.
-+ * @mode: Mode of attachment.
-+ *
-+ * If the current task has Landlock rules, then the child must have at least
-+ * the same rules.  Else denied.
-+ *
-+ * Determines whether a process may access another, returning 0 if permission
-+ * granted, -errno if denied.
-+ */
-+static int hook_ptrace_access_check(struct task_struct *const child,
-+		const unsigned int mode)
-+{
-+	return task_ptrace(current, child);
-+}
-+
-+/**
-+ * hook_ptrace_traceme - Determines whether another process may trace the
-+ *			 current one
-+ *
-+ * @parent: Task proposed to be the tracer.
-+ *
-+ * If the parent has Landlock rules, then the current task must have the same
-+ * or more rules.  Else denied.
-+ *
-+ * Determines whether the nominated task is permitted to trace the current
-+ * process, returning 0 if permission is granted, -errno if denied.
-+ */
-+static int hook_ptrace_traceme(struct task_struct *const parent)
-+{
-+	return task_ptrace(parent, current);
-+}
-+
-+static struct security_hook_list landlock_hooks[] __lsm_ro_after_init = {
-+	LSM_HOOK_INIT(ptrace_access_check, hook_ptrace_access_check),
-+	LSM_HOOK_INIT(ptrace_traceme, hook_ptrace_traceme),
-+};
-+
-+__init void landlock_add_hooks_ptrace(void)
-+{
-+	security_add_hooks(landlock_hooks, ARRAY_SIZE(landlock_hooks),
-+			LANDLOCK_NAME);
-+}
-diff --git a/security/landlock/ptrace.h b/security/landlock/ptrace.h
-new file mode 100644
-index 000000000000..6740c6a723de
---- /dev/null
-+++ b/security/landlock/ptrace.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Ptrace hooks
-+ *
-+ * Copyright © 2017-2019 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2019 ANSSI
-+ */
-+
-+#ifndef _SECURITY_LANDLOCK_PTRACE_H
-+#define _SECURITY_LANDLOCK_PTRACE_H
-+
-+__init void landlock_add_hooks_ptrace(void);
-+
-+#endif /* _SECURITY_LANDLOCK_PTRACE_H */
-diff --git a/security/landlock/setup.c b/security/landlock/setup.c
-index 39ee1766f175..5e7540fdeefa 100644
---- a/security/landlock/setup.c
-+++ b/security/landlock/setup.c
-@@ -11,6 +11,7 @@
- 
- #include "common.h"
- #include "cred.h"
-+#include "ptrace.h"
- #include "setup.h"
- 
- struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
-@@ -20,6 +21,7 @@ struct lsm_blob_sizes landlock_blob_sizes __lsm_ro_after_init = {
- static int __init landlock_init(void)
- {
- 	landlock_add_hooks_cred();
-+	landlock_add_hooks_ptrace();
- 	pr_info("Up and running.\n");
- 	return 0;
- }
--- 
-2.28.0
+thanks,
+-- Shuah
 
