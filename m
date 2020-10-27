@@ -1,112 +1,138 @@
-Return-Path: <SRS0=7AXU=EC=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=j5jC=ED=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DAA4C55179
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 22:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A86C5517A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 535F52223C
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 22:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603837713;
-	bh=Sq7acSzMUyVKbpz70YHtUmBPJKD4yKfHDfXjg+tbsFg=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=2ZHDqgPMk0yBZK1PlMHnocWKDfTeyDuGSB3zhtpJ704ldpoaq+BmeU1QMDuJpHlNo
-	 GMcCNrgizD3zKHKlh8EWD/3dP+3EvltMkxHyTG8RlqLkn4bO6JvLs+fTKKnrhg+GAt
-	 9R4gfOV9oK8NKri7XFAgm7SDeKcXKvDpAa9Swxc4=
+	by mail.kernel.org (Postfix) with ESMTP id 5388D22202
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 01:48:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="itfhbWha"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1832355AbgJ0W23 (ORCPT
+        id S1725950AbgJ1BiX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Oct 2020 18:28:29 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:41254 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1749929AbgJ0W22 (ORCPT
+        Tue, 27 Oct 2020 21:38:23 -0400
+Received: from mail-qv1-f73.google.com ([209.85.219.73]:54285 "EHLO
+        mail-qv1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1833039AbgJ0Xhp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 18:28:28 -0400
-Received: by mail-io1-f67.google.com with SMTP id u62so3305026iod.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 15:28:28 -0700 (PDT)
+        Tue, 27 Oct 2020 19:37:45 -0400
+Received: by mail-qv1-f73.google.com with SMTP id ec4so1872327qvb.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 16:37:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Yd2294ZBZMy4XljpTTzjUGRIXipCuL8kyBKHe5NQtNI=;
-        b=UvStF98FJhE092zgD2uanf57kDNaIOnaSuCHnKirsofWd0aCjRO4Qy5GS3JnhbXeJd
-         R0JIdamE6oJenSkkX6e4uPkCcRw420HhLdJjWD91oSYP5oBUv2PrnHcU21GtGHURFmaL
-         AqzzPN//XnWoxpYoy6vkYKeKEXLuzf7F4/9rI=
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=x6wLtdcIt0/96ievd4JxmwDh+1dU8Ex+ok+TDZduo48=;
+        b=itfhbWhaPImJ0pCOH18DUxk6w9aL+vOw6DQBrq/KZBnRYqhUMnypvHoJHs4LLR6RvG
+         ozwIoZGs7glu2fVnj8JGPq3GNxIjsLM/DHgXs8SbkWKqFkBd+iFAjDEp1ZljXFDNCsZq
+         n76Z1UKhq8oXte/aS8kof330ypXIkitVhRl6ksELoVjV0BHHKiaOiCZYwDfjxoJYT4Rd
+         yMLILqotZAH8zjHCo5C/uJMFBz3c2UpRkKMdxA/aJ2e0qu8bDLWJKeSUpP6YGaLhN4t9
+         YQV6GZ5yaGDfwvEZ4sssB4EFhLs7lXgHLWXW6wK9mjhpvjJc6V1rI0Z8Rb29jOCS7h6V
+         o6tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Yd2294ZBZMy4XljpTTzjUGRIXipCuL8kyBKHe5NQtNI=;
-        b=JxHTxP9ZXY8eldYvuuUdzQEMsiyFGm+dilauSQ9ZKiX/54/qb/vHeRCE90dRKp/iY0
-         cfz3baYVKvqO2TAO8rW5XLjBYmBVK/yKMMD037lhW0xjqzweLKy9LyrtzHwoYKicBX/z
-         vT2EcIfgfwkKZJpSHaUg1CywakyLfs5Nu5OOxpNWaBM1Vbphb/FNNprs6bXXozOCdMzc
-         pzCpuBXQuXpObXrXzqnMDY9XiWE8wqQBquedAtGmE7LFgiJNkTFqCM214RdrRLSSk2ua
-         Egi695avgU4d5iU27eFIo4tk1Co/J74HYoO7NwLDTHdfwTix+RXige9GjbYKYvXRHZTo
-         k8sw==
-X-Gm-Message-State: AOAM531k07uy8EhqWGloDEnYYehmVQ7NUNTsmTqEZ+nAH7vcu9Tjwqkf
-        AvRxaKlOSwvDHxerh0CWjpQQ2Q==
-X-Google-Smtp-Source: ABdhPJySrsRO6td3S9ry6TCmbA6yj3jZ4Si223/83KN70hGwaMF2taBI3cWZWOi8+OG8ZYgPWvMvBQ==
-X-Received: by 2002:a5e:8349:: with SMTP id y9mr3812931iom.188.1603837707726;
-        Tue, 27 Oct 2020 15:28:27 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id i201sm1549583ild.12.2020.10.27.15.28.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 15:28:27 -0700 (PDT)
-Subject: Re: [PATCH] openat2: reject RESOLVE_BENEATH|RESOLVE_IN_ROOT
-To:     Aleksa Sarai <cyphar@cyphar.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     stable@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        containers@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201007103608.17349-1-cyphar@cyphar.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4ce6ba2c-8b23-78aa-47c0-8c9673273e8f@linuxfoundation.org>
-Date:   Tue, 27 Oct 2020 16:28:26 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201007103608.17349-1-cyphar@cyphar.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=x6wLtdcIt0/96ievd4JxmwDh+1dU8Ex+ok+TDZduo48=;
+        b=EvugBuMYynNWkDxYd6A0ME3xxGkJc+bUG+/+l7qIn1atPr4AF7AbbCfoM/0QIJzi6v
+         Zi8YPMkw2iGqhfVXfFb6gXQWCMXjbQeWr0BJjeRJzNLWimRktF4R+2LCfVWzuSNYkzgD
+         fRDbJbiMuqoo6cXccDv8UBsQit6BcKMsOQhBS5cHjwxqZx7XrI3vbC11SvCQd8Ugg5oS
+         OatdB16xoF2upzrurgTqAL1DWYXifTNlLS2J+yYkTU5nBlEhaGfMZZI0jDZzOBS0WwqV
+         KtzUXBybfWC5LdwD5GbNSBgo7qQFaSlWZP3+7YgXYJd3pjYhIDyMLx8GiTm6kiTYDwJk
+         CxQw==
+X-Gm-Message-State: AOAM532iscdb27t1XtuM7ilvMiqH90cyytBm31UVPpPM3CjI1COi1SjN
+        4m31vhh/wVFp1kHJH12vAMY4xhSjAvnX
+X-Google-Smtp-Source: ABdhPJzs8krdkxB8S7D+VTEBOFBuSiP2LcmV3o02NKDS1JF0CIIrz8hSTEvZUEyRqj4hRvr5onH84TugRn6m
+Sender: "bgardon via sendgmr" <bgardon@bgardon.sea.corp.google.com>
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:f693:9fff:fef4:a293])
+ (user=bgardon job=sendgmr) by 2002:ad4:4f46:: with SMTP id
+ eu6mr4984942qvb.9.1603841863857; Tue, 27 Oct 2020 16:37:43 -0700 (PDT)
+Date:   Tue, 27 Oct 2020 16:37:32 -0700
+In-Reply-To: <20201027233733.1484855-1-bgardon@google.com>
+Message-Id: <20201027233733.1484855-5-bgardon@google.com>
+Mime-Version: 1.0
+References: <20201027233733.1484855-1-bgardon@google.com>
+X-Mailer: git-send-email 2.29.0.rc2.309.g374f81d7ae-goog
+Subject: [PATCH 4/5] KVM: selftests: Add wrfract to common guest code
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Peter Feiner <pfeiner@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/7/20 4:36 AM, Aleksa Sarai wrote:
-> This was an oversight in the original implementation, as it makes no
-> sense to specify both scoping flags to the same openat2(2) invocation
-> (before this patch, the result of such an invocation was equivalent to
-> RESOLVE_IN_ROOT being ignored).
-> 
-> This is a userspace-visible ABI change, but the only user of openat2(2)
-> at the moment is LXC which doesn't specify both flags and so no
-> userspace programs will break as a result.
-> 
-> Cc: <stable@vger.kernel.org> # v5.6+
-> Fixes: fddb5d430ad9 ("open: introduce openat2(2) syscall")
-> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> ---
->   fs/open.c                                      | 4 +++
->   tools/testing/selftests/openat2/openat2_test.c | 8 +++++++-
+Wrfract will be used by the dirty logging perf test introduced later in
+this series to dirty memory sparsely.
 
-You are combining fs change with selftest change.
+This series was tested by running the following invocations on an Intel
+Skylake machine:
+dirty_log_perf_test -b 20m -i 100 -v 64
+dirty_log_perf_test -b 20g -i 5 -v 4
+dirty_log_perf_test -b 4g -i 5 -v 32
+demand_paging_test -b 20m -v 64
+demand_paging_test -b 20g -v 4
+demand_paging_test -b 4g -v 32
+All behaved as expected.
 
-Is there a reason why these two changes are combined?
-2 separate patches is better.
+Signed-off-by: Ben Gardon <bgardon@google.com>
+---
+ tools/testing/selftests/kvm/demand_paging_test.c     | 2 ++
+ tools/testing/selftests/kvm/include/perf_test_util.h | 6 +++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+index 7de6feb000760..47defc65aedac 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -266,6 +266,8 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+ 
+ 	vm = create_vm(mode, vcpus, vcpu_memory_bytes);
+ 
++	perf_test_args.wr_fract = 1;
++
+ 	guest_data_prototype = malloc(perf_test_args.host_page_size);
+ 	TEST_ASSERT(guest_data_prototype,
+ 		    "Failed to allocate buffer for guest data pattern");
+diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
+index 838f946700f0c..1716300469c04 100644
+--- a/tools/testing/selftests/kvm/include/perf_test_util.h
++++ b/tools/testing/selftests/kvm/include/perf_test_util.h
+@@ -46,6 +46,7 @@ struct perf_test_args {
+ 	struct kvm_vm *vm;
+ 	uint64_t host_page_size;
+ 	uint64_t guest_page_size;
++	int wr_fract;
+ 
+ 	struct vcpu_args vcpu_args[MAX_VCPUS];
+ };
+@@ -72,7 +73,10 @@ static void guest_code(uint32_t vcpu_id)
+ 	for (i = 0; i < pages; i++) {
+ 		uint64_t addr = gva + (i * perf_test_args.guest_page_size);
+ 
+-		*(uint64_t *)addr = 0x0123456789ABCDEF;
++		if (i % perf_test_args.wr_fract == 0)
++			*(uint64_t *)addr = 0x0123456789ABCDEF;
++		else
++			READ_ONCE(*(uint64_t *)addr);
+ 	}
+ 
+ 	GUEST_SYNC(1);
+-- 
+2.29.0.rc2.309.g374f81d7ae-goog
+
