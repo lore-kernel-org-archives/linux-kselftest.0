@@ -2,162 +2,359 @@ Return-Path: <SRS0=7AXU=EC=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC6ECC4363A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 305C1C55178
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:11:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E83120829
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603829318;
-	bh=LfaTYgrHJ/h/R3n4i8YOy4vzzt+4z3SltizRbY8g+CI=;
-	h=Subject:To:References:From:Date:In-Reply-To:List-ID:From;
-	b=JiyRV/8oRk6tgRIkfDLXd0BhgPC/fJNyT576QXT2Rp6kpjcFnNtF1vgyqVLGcYIUG
-	 1jNGFtTS/M+HUL183Vf21BvIuFt1JKPrp3Of658rmLhM7434y9slJirb49y0c3MDZQ
-	 cwZ+3F84Hj/hxlouvNMtz+6noke5P9pufyjmQRn4=
+	by mail.kernel.org (Postfix) with ESMTP id E7C04207E8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 20:11:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1830924AbgJ0UIf (ORCPT
+        id S372730AbgJ0ULL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Oct 2020 16:08:35 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:33981 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504558AbgJ0UIf (ORCPT
+        Tue, 27 Oct 2020 16:11:11 -0400
+Received: from smtp-8fa9.mail.infomaniak.ch ([83.166.143.169]:33647 "EHLO
+        smtp-8fa9.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2504898AbgJ0ULL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 16:08:35 -0400
-Received: by mail-io1-f65.google.com with SMTP id z5so2954940iob.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Oct 2020 13:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=4HIc/0MR2zHvdieD9zh6vgSLY8pbQbGIFImMryqW80s=;
-        b=PPPa3tmp2ks9hMD+/SvUol0Jx+R7oBCr+e32JI5nCuiG5v1h2ucr/FqTIkj9xsqVMk
-         82ZR0Ou9cOuG1rkvlK/33AXrWcAmuXcDoj7+Ax3tfPhEd4XOPHUE2JgiVGcHG2kAVp07
-         zvMESFRR7oZiOKXo8KvZpW4q9iZ9AgHen6rdI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4HIc/0MR2zHvdieD9zh6vgSLY8pbQbGIFImMryqW80s=;
-        b=kCY+Dytnpva12IBUCtaLMFqXS2+WOjSDIwRbdwC85OkTrwfLsyXT0CTgtXP5Mu1d7B
-         00UpdlhjBmZdffYp1hfgQMDfYZXAmQrlk24XnGh4YS7ho4PXa5BHAmWaCisFOPuipNm9
-         rVVi23FYmQ7u2J5S62gFUlcyvirTsCO++nsW6Op/lV6R0shhT8lbn+d1c4IvYUSVjILS
-         9v0SkdR3OK3lKH+SASVWt9wmjW/ZC4PsiWNhErs83tNxDkfLLSNA09RxNUsAfxz9KjJc
-         Wvq4bziouYtOvPOPoTyIog1zZFanGfGFoDzQksH3LAcB54B3ETXeBXxCMahN06bzs72p
-         JBOQ==
-X-Gm-Message-State: AOAM5302EbXkmlVUkfCzL/OjjldkkOde5W4m0P+k9vMsqKy/Mlu/BN00
-        OIKN6Ixgzezistp9e0G4TathF2ndMG9zCw==
-X-Google-Smtp-Source: ABdhPJxEnhHXp/fd89iC17rp6whQwz7mY2Q1l1AjQHbSPGMfQBiuPwlJgoZQ8cCXi+zUMR++RBiyyw==
-X-Received: by 2002:a6b:cf18:: with SMTP id o24mr3595316ioa.57.1603829313981;
-        Tue, 27 Oct 2020 13:08:33 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id r14sm1456512ilc.78.2020.10.27.13.08.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2020 13:08:33 -0700 (PDT)
-Subject: Re: [PATCH] selftests: intel_pstate: ftime() is deprecated
-To:     Tommi Rantala <tommi.t.rantala@nokia.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 27 Oct 2020 16:11:11 -0400
+X-Greylist: delayed 424 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Oct 2020 16:11:10 EDT
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CLN2S3W65zlhMKj;
+        Tue, 27 Oct 2020 21:04:16 +0100 (CET)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CLN2S15dszlh8T7;
+        Tue, 27 Oct 2020 21:04:16 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
         Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d315994a-3398-be41-1b26-e78f8359aa5c@linuxfoundation.org>
-Date:   Tue, 27 Oct 2020 14:08:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH v22 09/12] arch: Wire up Landlock syscalls
+Date:   Tue, 27 Oct 2020 21:03:55 +0100
+Message-Id: <20201027200358.557003-10-mic@digikod.net>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201027200358.557003-1-mic@digikod.net>
+References: <20201027200358.557003-1-mic@digikod.net>
 MIME-Version: 1.0
-In-Reply-To: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Tommi,
+From: Mickaël Salaün <mic@linux.microsoft.com>
 
-On 10/16/20 7:22 AM, Tommi Rantala wrote:
-> Use clock_gettime() instead of deprecated ftime().
-> 
->    aperf.c: In function ‘main’:
->    aperf.c:58:2: warning: ‘ftime’ is deprecated [-Wdeprecated-declarations]
->       58 |  ftime(&before);
->          |  ^~~~~
->    In file included from aperf.c:9:
->    /usr/include/sys/timeb.h:39:12: note: declared here
->       39 | extern int ftime (struct timeb *__timebuf)
->          |            ^~~~~
-> 
+Wire up the following system calls for all architectures:
+* landlock_create_ruleset(2)
+* landlock_add_rule(2)
+* landlock_enforce_ruleset_current(2)
 
-Thanks for the fix. One comment below
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: James Morris <jmorris@namei.org>
+Cc: Jann Horn <jannh@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+---
 
-> Signed-off-by: Tommi Rantala <tommi.t.rantala@nokia.com>
-> ---
->   tools/testing/selftests/intel_pstate/aperf.c | 17 ++++++++++++-----
->   1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/intel_pstate/aperf.c b/tools/testing/selftests/intel_pstate/aperf.c
-> index f6cd03a87493..eea9dbab459b 100644
-> --- a/tools/testing/selftests/intel_pstate/aperf.c
-> +++ b/tools/testing/selftests/intel_pstate/aperf.c
-> @@ -10,6 +10,7 @@
->   #include <sched.h>
->   #include <errno.h>
->   #include <string.h>
-> +#include <time.h>
->   #include "../kselftest.h"
->   
->   void usage(char *name) {
-> @@ -22,7 +23,7 @@ int main(int argc, char **argv) {
->   	long long tsc, old_tsc, new_tsc;
->   	long long aperf, old_aperf, new_aperf;
->   	long long mperf, old_mperf, new_mperf;
-> -	struct timeb before, after;
-> +	struct timespec before, after;
->   	long long int start, finish, total;
->   	cpu_set_t cpuset;
->   
-> @@ -55,7 +56,10 @@ int main(int argc, char **argv) {
->   		return 1;
->   	}
->   
-> -	ftime(&before);
-> +	if (clock_gettime(CLOCK_MONOTONIC, &before) < 0) {
-> +		perror("clock_gettime");
-> +		return 1;
-> +	}
->   	pread(fd, &old_tsc,  sizeof(old_tsc), 0x10);
->   	pread(fd, &old_aperf,  sizeof(old_mperf), 0xe7);
->   	pread(fd, &old_mperf,  sizeof(old_aperf), 0xe8);
-> @@ -64,7 +68,10 @@ int main(int argc, char **argv) {
->   		sqrt(i);
->   	}
->   
-> -	ftime(&after);
-> +	if (clock_gettime(CLOCK_MONOTONIC, &after) < 0) {
-> +		perror("clock_gettime");
-> +		return 1;
-> +	}
->   	pread(fd, &new_tsc,  sizeof(new_tsc), 0x10);
->   	pread(fd, &new_aperf,  sizeof(new_mperf), 0xe7);
->   	pread(fd, &new_mperf,  sizeof(new_aperf), 0xe8);
-> @@ -73,8 +80,8 @@ int main(int argc, char **argv) {
->   	aperf = new_aperf-old_aperf;
->   	mperf = new_mperf-old_mperf;
->   
-> -	start = before.time*1000 + before.millitm;
-> -	finish = after.time*1000 + after.millitm;
-> +	start = before.tv_sec*1000 + before.tv_nsec/1000000L;
-> +	finish = after.tv_sec*1000 + after.tv_nsec/1000000L;
+Changes since v21:
+* Rebase and leave space for watch_mount(2) from -next.
 
-Why not use timespec dNSEC_PER_MSEC define from  include/vdso/time64.h?
+Changes since v20:
+* Remove landlock_get_features(2).
+* Decrease syscall numbers to stick to process_madvise(2) in -next.
+* Rename landlock_enforce_ruleset(2) to
+  landlock_enforce_ruleset_current(2).
 
-thanks,
--- Shuah
+Changes since v19:
+* Increase syscall numbers by 4 to leave space for new ones (in
+  linux-next): watch_mount(2), watch_sb(2), fsinfo(2) and
+  process_madvise(2) (requested by Arnd Bergmann).
+* Replace the previous multiplexor landlock(2) with 4 syscalls:
+  landlock_get_features(2), landlock_create_ruleset(2),
+  landlock_add_rule(2) and landlock_enforce_ruleset(2).
+
+Changes since v18:
+* Increase the syscall number because of the new faccessat2(2).
+
+Changes since v14:
+* Add all architectures.
+
+Changes since v13:
+* New implementation.
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      | 3 +++
+ arch/arm/tools/syscall.tbl                  | 3 +++
+ arch/arm64/include/asm/unistd.h             | 2 +-
+ arch/arm64/include/asm/unistd32.h           | 6 ++++++
+ arch/ia64/kernel/syscalls/syscall.tbl       | 3 +++
+ arch/m68k/kernel/syscalls/syscall.tbl       | 3 +++
+ arch/microblaze/kernel/syscalls/syscall.tbl | 3 +++
+ arch/mips/kernel/syscalls/syscall_n32.tbl   | 3 +++
+ arch/mips/kernel/syscalls/syscall_n64.tbl   | 3 +++
+ arch/mips/kernel/syscalls/syscall_o32.tbl   | 3 +++
+ arch/parisc/kernel/syscalls/syscall.tbl     | 3 +++
+ arch/powerpc/kernel/syscalls/syscall.tbl    | 3 +++
+ arch/s390/kernel/syscalls/syscall.tbl       | 3 +++
+ arch/sh/kernel/syscalls/syscall.tbl         | 3 +++
+ arch/sparc/kernel/syscalls/syscall.tbl      | 3 +++
+ arch/x86/entry/syscalls/syscall_32.tbl      | 3 +++
+ arch/x86/entry/syscalls/syscall_64.tbl      | 3 +++
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 3 +++
+ include/uapi/asm-generic/unistd.h           | 8 +++++++-
+ 19 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index ee7b01bb7346..7ef9966fc654 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -480,3 +480,6 @@
+ 548	common	pidfd_getfd			sys_pidfd_getfd
+ 549	common	faccessat2			sys_faccessat2
+ 550	common	process_madvise			sys_process_madvise
++552	common	landlock_create_ruleset				sys_landlock_create_ruleset
++553	common	landlock_add_rule					sys_landlock_add_rule
++554	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index d056a548358e..5bde774cef96 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -454,3 +454,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index b3b2019f8d16..64ebdc1ec581 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -38,7 +38,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		441
++#define __NR_compat_syscalls		445
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 107f08e03b9f..253521adb064 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -889,6 +889,12 @@ __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
+ __SYSCALL(__NR_faccessat2, sys_faccessat2)
+ #define __NR_process_madvise 440
+ __SYSCALL(__NR_process_madvise, sys_process_madvise)
++#define __NR_landlock_create_ruleset 442
++__SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
++#define __NR_landlock_add_rule 443
++__SYSCALL(__NR_landlock_add_rule, sys_landlock_add_rule)
++#define __NR_landlock_enforce_ruleset_current 444
++__SYSCALL(__NR_landlock_enforce_ruleset_current, sys_landlock_enforce_ruleset_current)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index b96ed8b8a508..b3790ee36efa 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -361,3 +361,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 625fb6d32842..1958c994511b 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -440,3 +440,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index aae729c95cf9..213f731f719f 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -446,3 +446,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 32817c954435..d9df5ab558d9 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -379,3 +379,6 @@
+ 438	n32	pidfd_getfd			sys_pidfd_getfd
+ 439	n32	faccessat2			sys_faccessat2
+ 440	n32	process_madvise			sys_process_madvise
++442	n32	landlock_create_ruleset				sys_landlock_create_ruleset
++443	n32	landlock_add_rule					sys_landlock_add_rule
++444	n32	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 9e4ea3c31b1c..d7f7f1b8586a 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -355,3 +355,6 @@
+ 438	n64	pidfd_getfd			sys_pidfd_getfd
+ 439	n64	faccessat2			sys_faccessat2
+ 440	n64	process_madvise			sys_process_madvise
++442	n64	landlock_create_ruleset				sys_landlock_create_ruleset
++443	n64	landlock_add_rule					sys_landlock_add_rule
++444	n64	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 29f5f28cf5ce..940572554130 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -428,3 +428,6 @@
+ 438	o32	pidfd_getfd			sys_pidfd_getfd
+ 439	o32	faccessat2			sys_faccessat2
+ 440	o32	process_madvise			sys_process_madvise
++442	o32	landlock_create_ruleset				sys_landlock_create_ruleset
++443	o32	landlock_add_rule					sys_landlock_add_rule
++444	o32	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index f375ea528e59..344bd5011555 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -438,3 +438,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index 1275daec7fec..a00381d714ed 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -530,3 +530,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 28c168000483..2b58ee29e071 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -443,3 +443,6 @@
+ 438  common	pidfd_getfd		sys_pidfd_getfd			sys_pidfd_getfd
+ 439  common	faccessat2		sys_faccessat2			sys_faccessat2
+ 440  common	process_madvise		sys_process_madvise		sys_process_madvise
++442  common	landlock_create_ruleset				sys_landlock_create_ruleset				sys_landlock_create_ruleset
++443  common	landlock_add_rule					sys_landlock_add_rule					sys_landlock_add_rule
++444  common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 783738448ff5..adf7c7de5e2b 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -443,3 +443,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 78160260991b..c9b58cdd8830 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -486,3 +486,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 0d0667a9fbd7..2a3d87873d76 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -445,3 +445,6 @@
+ 438	i386	pidfd_getfd		sys_pidfd_getfd
+ 439	i386	faccessat2		sys_faccessat2
+ 440	i386	process_madvise		sys_process_madvise
++442	i386	landlock_create_ruleset				sys_landlock_create_ruleset
++443	i386	landlock_add_rule					sys_landlock_add_rule
++444	i386	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 1f47e24fb65c..9da85292cb79 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -362,6 +362,9 @@
+ 438	common	pidfd_getfd		sys_pidfd_getfd
+ 439	common	faccessat2		sys_faccessat2
+ 440	common	process_madvise		sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index b070f272995d..09c587a75625 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -411,3 +411,6 @@
+ 438	common	pidfd_getfd			sys_pidfd_getfd
+ 439	common	faccessat2			sys_faccessat2
+ 440	common	process_madvise			sys_process_madvise
++442	common	landlock_create_ruleset				sys_landlock_create_ruleset
++443	common	landlock_add_rule					sys_landlock_add_rule
++444	common	landlock_enforce_ruleset_current	sys_landlock_enforce_ruleset_current
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 2056318988f7..6892c0de6fbd 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -859,9 +859,15 @@ __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
+ __SYSCALL(__NR_faccessat2, sys_faccessat2)
+ #define __NR_process_madvise 440
+ __SYSCALL(__NR_process_madvise, sys_process_madvise)
++#define __NR_landlock_create_ruleset 442
++__SYSCALL(__NR_landlock_create_ruleset, sys_landlock_create_ruleset)
++#define __NR_landlock_add_rule 443
++__SYSCALL(__NR_landlock_add_rule, sys_landlock_add_rule)
++#define __NR_landlock_enforce_ruleset_current 444
++__SYSCALL(__NR_landlock_enforce_ruleset_current, sys_landlock_enforce_ruleset_current)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 441
++#define __NR_syscalls 445
+ 
+ /*
+  * 32 bit systems traditionally used different
+-- 
+2.28.0
 
