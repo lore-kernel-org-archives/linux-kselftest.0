@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63F38C55179
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 14:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41D79C388F9
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 15:29:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A16320715
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 14:58:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F242B22275
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 15:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603810693;
+	s=default; t=1603812562;
 	bh=vT6TQiAhfCEnptE16SMHV42f9bp7lBiVGUO/RjqiwFg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lsvPzkjewcr+zxHgnYJX1Xq7bDyNkzxaNGgfC9IN0GmFnLf6RGN0Ey6IAmBIdTEzE
-	 uW3bwJCdLEi21stib3NCes86MepxVdslzFZlyWukiB9Q4Q3MWZViJ/4tFLV4x12HMl
-	 bfeVpDdLXXtQWfszXnQPWJAlMAfwDH/FBspuXqWc=
+	b=uiYn2wuSzV0w9lHZPVd8hU83ohAJSUGKUwFY2lA7R0/lbBysHicQcD6s60pLZDJmj
+	 NHWeEJd/wfvW0wkPyHXRVf28zDOlU5b1sbCar4Bi3WRvnEkOqG5yTZmY5PdiH83NtQ
+	 xmT4NFYUhZ5aphUP82IwVGA15mIrfEiH1cT1IkG0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783357AbgJ0O6K (ORCPT
+        id S1798624AbgJ0P3S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Oct 2020 10:58:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59340 "EHLO mail.kernel.org"
+        Tue, 27 Oct 2020 11:29:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45576 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1783346AbgJ0O6J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 10:58:09 -0400
+        id S1798617AbgJ0P3Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Oct 2020 11:29:16 -0400
 Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF64320714;
-        Tue, 27 Oct 2020 14:58:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 412462225E;
+        Tue, 27 Oct 2020 15:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603810688;
+        s=default; t=1603812554;
         bh=vT6TQiAhfCEnptE16SMHV42f9bp7lBiVGUO/RjqiwFg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OByCnbB5mJqKl8mykiHfttSJQvFV5Qj23j6/qv5UGxjIGww6xSD7J5xA7mIROt+e7
-         UH52qCdMRL38aKJdfCCEkESWD7UKN/bt6lskAuft8Q98JjQyUbF/ZoV6JyPiMVtqAY
-         HIgT3obHesQm2h4s3yA9Yzm20HFK3IvNoxxLqjpk=
+        b=e+9aEIqwiR/tRtP9gru36SFKo0icLdNVXUOSyeeGq4AUHoG+dQRjTwyEt08w38WDZ
+         +aqGPs11pq+7Ruwig/ancFMUe0NR8SfUmARl4cFBqP1nF8VBg4c8fu9d2V2jD0biMj
+         7QJtWbHS9MgxcgidjBTTiY9fPkTcFPPsFaCaWNyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,12 +46,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.8 211/633] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
-Date:   Tue, 27 Oct 2020 14:49:14 +0100
-Message-Id: <20201027135532.579821523@linuxfoundation.org>
+Subject: [PATCH 5.9 251/757] selftests/lkdtm: Use "comm" instead of "diff" for dmesg
+Date:   Tue, 27 Oct 2020 14:48:21 +0100
+Message-Id: <20201027135502.347605691@linuxfoundation.org>
 X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201027135522.655719020@linuxfoundation.org>
-References: <20201027135522.655719020@linuxfoundation.org>
+In-Reply-To: <20201027135450.497324313@linuxfoundation.org>
+References: <20201027135450.497324313@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
