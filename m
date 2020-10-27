@@ -5,28 +5,28 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.4 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BEF5C4363A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 10:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01448C55179
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 10:34:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D2E822264
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 10:33:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0FBA22264
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Oct 2020 10:34:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898371AbgJ0KdQ (ORCPT
+        id S2898276AbgJ0Kal (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Oct 2020 06:33:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:37738 "EHLO foss.arm.com"
+        Tue, 27 Oct 2020 06:30:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:37652 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2898368AbgJ0KdK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Oct 2020 06:33:10 -0400
+        id S2898137AbgJ0K3j (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Oct 2020 06:29:39 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3404930E;
-        Tue, 27 Oct 2020 03:33:10 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C1A830E;
+        Tue, 27 Oct 2020 03:29:38 -0700 (PDT)
 Received: from [10.57.11.195] (unknown [10.57.11.195])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 435033F66E;
-        Tue, 27 Oct 2020 03:33:06 -0700 (PDT)
-Subject: Re: [PATCH 5/6] kselftest/arm64: Fix check_ksm_options test
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AC6E3F66E;
+        Tue, 27 Oct 2020 03:29:35 -0700 (PDT)
+Subject: Re: [PATCH 3/6] kselftest/arm64: Fix check_child_memory test
 To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -35,14 +35,14 @@ Cc:     Shuah Khan <shuah@kernel.org>,
         Will Deacon <will@kernel.org>,
         Gabor Kertesz <gabor.kertesz@arm.com>
 References: <20201026121248.2340-1-vincenzo.frascino@arm.com>
- <20201026121248.2340-6-vincenzo.frascino@arm.com>
+ <20201026121248.2340-4-vincenzo.frascino@arm.com>
 From:   Amit Kachhap <amit.kachhap@arm.com>
-Message-ID: <3610bc25-1c4f-8fac-9217-837679708b60@arm.com>
-Date:   Tue, 27 Oct 2020 16:03:04 +0530
+Message-ID: <415f8728-8379-2094-4186-de7cf338c1e3@arm.com>
+Date:   Tue, 27 Oct 2020 15:59:32 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20201026121248.2340-6-vincenzo.frascino@arm.com>
+In-Reply-To: <20201026121248.2340-4-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -53,17 +53,18 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 On 10/26/20 5:42 PM, Vincenzo Frascino wrote:
-> The check_ksm_options test reports the error below because the test
+> The check_child_memory test reports the error below because the test
 > plan is not declared correctly:
 > 
->    # Planned tests != run tests (0 != 4)
+>    # Planned tests != run tests (0 != 12)
 > 
 > Fix the test adding the correct test plan declaration.
-This change makes sense and got missed earlier.
+
+This change is required and got missed earlier.
 Acked by: Amit Daniel Kachhap <amit.kachhap@arm.com>
 
 > 
-> Fixes: f981d8fa2646 ("kselftest/arm64: Verify KSM page merge for MTE pages")
+> Fixes: dfe537cf4718 ("kselftest/arm64: Check forked child mte memory accessibility")
 > Cc: Shuah Khan <shuah@kernel.org>
 > Cc: Catalin Marinas <catalin.marinas@arm.com>
 > Cc: Will Deacon <will@kernel.org>
@@ -71,22 +72,21 @@ Acked by: Amit Daniel Kachhap <amit.kachhap@arm.com>
 > Cc: Amit Daniel Kachhap <amit.kachhap@arm.com>
 > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > ---
->   tools/testing/selftests/arm64/mte/check_ksm_options.c | 4 ++++
->   1 file changed, 4 insertions(+)
+>   tools/testing/selftests/arm64/mte/check_child_memory.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/arm64/mte/check_ksm_options.c b/tools/testing/selftests/arm64/mte/check_ksm_options.c
-> index bc41ae630c86..3b23c4d61d38 100644
-> --- a/tools/testing/selftests/arm64/mte/check_ksm_options.c
-> +++ b/tools/testing/selftests/arm64/mte/check_ksm_options.c
-> @@ -140,6 +140,10 @@ int main(int argc, char *argv[])
->   	/* Register signal handlers */
->   	mte_register_signal(SIGBUS, mte_default_handler);
+> diff --git a/tools/testing/selftests/arm64/mte/check_child_memory.c b/tools/testing/selftests/arm64/mte/check_child_memory.c
+> index 97bebdecd29e..43bd94f853ba 100644
+> --- a/tools/testing/selftests/arm64/mte/check_child_memory.c
+> +++ b/tools/testing/selftests/arm64/mte/check_child_memory.c
+> @@ -163,6 +163,9 @@ int main(int argc, char *argv[])
 >   	mte_register_signal(SIGSEGV, mte_default_handler);
-> +
-> +	/* Set test plan */
-> +	ksft_set_plan(4);
-> +
->   	/* Enable KSM */
->   	mte_ksm_setup();
+>   	mte_register_signal(SIGBUS, mte_default_handler);
 >   
+> +	/* Set test plan */
+> +	ksft_set_plan(12);
+> +
+>   	evaluate_test(check_child_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_PRIVATE),
+>   		"Check child anonymous memory with private mapping, precise mode and mmap memory\n");
+>   	evaluate_test(check_child_memory_mapping(USE_MMAP, MTE_SYNC_ERR, MAP_SHARED),
 > 
