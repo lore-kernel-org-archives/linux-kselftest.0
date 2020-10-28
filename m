@@ -2,119 +2,104 @@ Return-Path: <SRS0=j5jC=ED=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B191CC55179
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4321C388F7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:12:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5813C24724
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:11:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5942B24724
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:12:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fyot2M6w"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hp0ozUsP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730295AbgJ1WLo (ORCPT
+        id S1730754AbgJ1WLv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        Wed, 28 Oct 2020 18:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730727AbgJ1WLn (ORCPT
+        with ESMTP id S1730750AbgJ1WLu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:11:43 -0400
+        Wed, 28 Oct 2020 18:11:50 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F99C0613D1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:11:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D13FC0613D1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=TYXwyDweTdlROEn0LKotPPCUWy/YdCFJnxIV8tWbKOY=; b=fyot2M6wdT1GjHX/vIjWe7CRgG
-        n+NLQZc8OREKTSLmSisX4TYSLXTFjZ2polVVRdNnyTWHXhbIwrdL1r2rRrWp30y0mApO5UKkRmqPq
-        W3PsVn77EJXak6Wmh4jfgTg5bdGxmzwzD0Xn8Fj8GLkACz9Us6l2FY7xAd17BPF46GysGRLvyCfYi
-        vOXt9zNX+yWy+AFbI6SepEUiro0ZOqUeQ+5bP+/B202KhmGVw+SsjWUc4sLu3DCQST1w6rHOCCN6n
-        dtBWOJF8h9fu8/CKM6/4ow1W0j3imQ+GUC3EY+XL6U+yuNIRLUkFcfSGpB044Xp0IYKYBwobJXYNt
-        DSOvT0Fg==;
-Received: from [2601:1c0:6280:3f0::507c] (helo=smtpauth.infradead.org)
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=wdyb7qRuLjR6s6XwwT89tkhrLT43vXhm0ixZ6vQNaB8=; b=hp0ozUsPB0Fw0gJZivtfAYk/bf
+        B3KQahTA80SGKkWIi0hizERQVDna+C8kieHsEy5H+ZmnPW21mAy6mbkJoUGlMXk6ACxJDftsb6i72
+        LiKErYWinHPh0kJeJLhA7IA7FoE/cq1oKWV/cIJyELTLtXm1XGg8nEt9miOxHuJvD1tNor6oajeI4
+        5+nZ0oTtfnVjFCQAEo7N3e8ysg2bp1V1Et7ryebPWpkJfhdgKiOc/rOjXjl7/U3tD+S/hXYcuphfM
+        34hn8ghQSFdXtHknDES69h1fSYRe6pzzjLDcWJnObIRtAvGoFUPMiVh2Q71UGv0b2JsGcHc50v7Lk
+        Shzlo54A==;
+Received: from [2601:1c0:6280:3f0::507c]
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kXpTn-0007Sv-E4; Wed, 28 Oct 2020 17:43:24 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        id 1kXe4V-0001wK-41; Wed, 28 Oct 2020 05:32:31 +0000
+Subject: Re: [PATCH] KUnit: Docs: style: fix some Kconfig example issues
+To:     David Gow <davidgow@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Brendan Higgins <brendanhiggins@google.com>
-Subject: [PATCH] KUnit: Docs: usage: wording fixes
-Date:   Wed, 28 Oct 2020 10:43:19 -0700
-Message-Id: <20201028174319.11817-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+References: <20201027184909.20881-1-rdunlap@infradead.org>
+ <CABVgOSmtTK=V8EFL8KTmN+e+pP6HKZQo+LMsmqG3PnxuhFtZ9A@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <07963645-1644-53c2-b1da-8f89fe865eda@infradead.org>
+Date:   Tue, 27 Oct 2020 22:32:26 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABVgOSmtTK=V8EFL8KTmN+e+pP6HKZQo+LMsmqG3PnxuhFtZ9A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix minor grammar and punctutation glitches.
-Hyphenate "architecture-specific" instances.
+On 10/27/20 8:00 PM, David Gow wrote:
+> On Wed, Oct 28, 2020 at 2:49 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> Fix the Kconfig example to be closer to Kconfig coding style.
+>> (Except that it still uses spaces instead of tabs for indentation;
+>> I guess that Sphinx wants it that way.)
+>>
+>> Also add punctuation and a trailing slash ('/') to a sub-directory
+>> name -- this is how the text mostly appears in other Kconfig files.
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: David Gow <davidgow@google.com>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: kunit-dev@googlegroups.com
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: Shuah Khan <skhan@linuxfoundation.org>
+>> Cc: Brendan Higgins <brendanhiggins@google.com>
+>> ---
+> 
+> Thanks for fixing this!
+> 
+> For what it's worth, I _think_ we could get away with tabs for
+> indentation in the file without Sphinx actually complaining, but it
+> does annoy some of the editors, and as far as I can tell, Sphinx
+> converts them back to spaces in its output. I'm far from an expert,
+> though...
+> 
+> Regardless, this is:
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: David Gow <davidgow@google.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/usage.rst |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I tested with tabs for indentation and it's no problem with Sphinx.
+Some editors care?  I am surprised.  and don't much care.
 
---- linux-next-20201027.orig/Documentation/dev-tools/kunit/usage.rst
-+++ linux-next-20201027/Documentation/dev-tools/kunit/usage.rst
-@@ -92,7 +92,7 @@ behavior of a function called ``add``; t
- the second parameter, in this case, is what the value is expected to be; the
- last value is what the value actually is. If ``add`` passes all of these
- expectations, the test case, ``add_test_basic`` will pass; if any one of these
--expectations fail, the test case will fail.
-+expectations fails, the test case will fail.
- 
- It is important to understand that a test case *fails* when any expectation is
- violated; however, the test will continue running, potentially trying other
-@@ -202,7 +202,7 @@ Example:
- 	kunit_test_suite(example_test_suite);
- 
- In the above example the test suite, ``example_test_suite``, would run the test
--cases ``example_test_foo``, ``example_test_bar``, and ``example_test_baz``,
-+cases ``example_test_foo``, ``example_test_bar``, and ``example_test_baz``;
- each would have ``example_test_init`` called immediately before it and would
- have ``example_test_exit`` called immediately after it.
- ``kunit_test_suite(example_test_suite)`` registers the test suite with the
-@@ -229,7 +229,7 @@ through some sort of indirection where a
- such that the definition of that function can be changed without affecting the
- rest of the code base. In the kernel this primarily comes from two constructs,
- classes, structs that contain function pointers that are provided by the
--implementer, and architecture specific functions which have definitions selected
-+implementer, and architecture-specific functions which have definitions selected
- at compile time.
- 
- Classes
-@@ -459,7 +459,7 @@ KUnit on non-UML architectures
- By default KUnit uses UML as a way to provide dependencies for code under test.
- Under most circumstances KUnit's usage of UML should be treated as an
- implementation detail of how KUnit works under the hood. Nevertheless, there
--are instances where being able to run architecture specific code or test
-+are instances where being able to run architecture-specific code or test
- against real hardware is desirable. For these reasons KUnit supports running on
- other architectures.
- 
-@@ -599,7 +599,7 @@ writing normal KUnit tests. One special
- hardware state in between test cases; if this is not possible, you may only be
- able to run one test case per invocation.
- 
--.. TODO(brendanhiggins@google.com): Add an actual example of an architecture
-+.. TODO(brendanhiggins@google.com): Add an actual example of an architecture-
-    dependent KUnit test.
- 
- KUnit debugfs representation
+I would be happy to submit a v2 using tabs for indentation.
+
+thanks.
+-- 
+~Randy
