@@ -1,101 +1,176 @@
-Return-Path: <SRS0=j5jC=ED=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=rw0z=EE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C61DC56201
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B679AC4363A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 00:00:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF1FA20757
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBDZ0zu6"
+	by mail.kernel.org (Postfix) with ESMTP id 5AFC8207DE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 00:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603929600;
+	bh=ibR8hzdaBcuOcjF332myJVx6iPFrWG7oUygXlo+L9/s=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=na+FSVd10niR1p64dpyyXinXh53VbgFuAhXYezhfQkJb8DE1e6c68zlah1GxcLkGj
+	 /HBvsU0UhDzUPJdk51ywbf2zg6sLM9sipe70h3aJ6M6Ca1CA34yP5m6ly3D8W4Wwo6
+	 z2jaSB+MEnFBGAPZn+s/70iaj2eVYe8wYtjLbyxE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389938AbgJ1XAO (ORCPT
+        id S1726677AbgJ1X7z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        Wed, 28 Oct 2020 19:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389912AbgJ1W6b (ORCPT
+        with ESMTP id S2387393AbgJ1X6V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:58:31 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DF8C0613CF
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:58:31 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id 9so1314719oir.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:58:31 -0700 (PDT)
+        Wed, 28 Oct 2020 19:58:21 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AADC0613CF
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 16:58:21 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id k6so1334832ilq.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 16:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3930iRmn2v3Kax0YMICyLXH418zhIQShLMpjbBJsYVk=;
-        b=mBDZ0zu6yqM90QwvYssjTCu2/6XJfEdTwhQn3O3Q+LQ+6pwAu5vOu6/SqTVGWf6GfF
-         zeT8h0XW2PUzlDztrhC0mec2e3NsVORVGL5DtkZoZ+JBn1hnXKa26YfLz2Btu7A4TonS
-         G18pDBypT1Tga7/s8r1lXoclGg/ZDUE9Js2nFUEygtsObLeUrzhAErlMb0DusAqlxQhi
-         /y+nViUcINueaKs6rmzg8O7Fvh5ZS/44eaUQCTeJEOJDhaVefNcdwtb7eTPjDsQW1t8O
-         ZaJ1cndCCdk9uFoXX0PVwOPXiqC6stoZT3sV6n/A2V7BVeuyVAYKtrMOEVra2oSk2ihw
-         oAWw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=d+bPcjkE2LVvE1S9DHK/44sPSiMl3Agmljqghbm1BJA=;
+        b=XvOPCvBe+/l29dhLk+GdU320nX+TYX8gpkBGik4OML59fTK5mRJTXm3dUbJTGTata/
+         y1RXyi4oApdYxQV0Em/q2E/juCAYj1yAhkRaM0OOfw3SR5ZgDmrRm2kZknUiu4pp/t3R
+         O0envp0rG4Yg8yyejP2Kv7k79egzL/KRgXWnk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3930iRmn2v3Kax0YMICyLXH418zhIQShLMpjbBJsYVk=;
-        b=NT4+TeIglxQY3Xk4+jTM5drHtPdXA0e0d2S3Knu3R3qVAFvmxAfemHvze8kMceRPFd
-         eJ1M4HdRkGIoUTkzdc4g9sGXVPOcQ0guCt0I0zW45xMZ6uP8Z+gtNoNyzRHpejScM/ty
-         wb+IWav8Cqir/ZLb3djLWtx3le6insW8RbDqcmUzHR4h9/0tnemm5lbvZtsUPp9mkx+z
-         dF17A7KJDdm1ZT0pCBokvctXV8oE6xQYfQxnCvJhy/zouDHpg2cQIw4t6211HX+g6ISO
-         wWZJTuQmmXZSpRxtyt01UlCDPwUzAJSUXGey6X31lGM8cUQglS7PGuuD6WYWo2v/e24a
-         53aQ==
-X-Gm-Message-State: AOAM531dlB7syV99mBSK+/xjhhkDKZZ4kOZs6fsfZ55N9+QBzNFTQwjr
-        lk2UQn1gvmYo/GMxC/7ZBwp6xqvZuydHRLMf
-X-Google-Smtp-Source: ABdhPJzFL28dyXJVDGkldCnxjqLxNFvgziaF4tLGgk4ki+mvWXX2ukfc+qW+Tqj7KSEJtVuIXvzDdQ==
-X-Received: by 2002:a17:90b:460e:: with SMTP id ia14mr5622530pjb.7.1603873888670;
-        Wed, 28 Oct 2020 01:31:28 -0700 (PDT)
-Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a14sm4995618pfo.203.2020.10.28.01.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 01:31:28 -0700 (PDT)
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-kselftest@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH] selftests/run_kselftest.sh: fix dry-run typo
-Date:   Wed, 28 Oct 2020 16:31:14 +0800
-Message-Id: <20201028083114.3754412-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.25.4
+        bh=d+bPcjkE2LVvE1S9DHK/44sPSiMl3Agmljqghbm1BJA=;
+        b=VfxlOIalqNcYlsCa7DwP23gchPnPmKo7Do4J1erBO38tAd62kQM962SIynTgZWbqEv
+         2v8OfNAYF2yWm1t0w9X9JlcnWQOYLSiQ3sROXYar7UAnYymeAwZKmTlxTAX6UVJPxW/O
+         bC/CA2+WsYCvovJ5uabe2CZBgw1GG5McBy5s5GCJDfiJ39FZGXM0xJgm5q3+jBONnKQd
+         wv/CGOEGlEZzsWNoZhZXnpeHEXwKQeUkEhJ8uFrepT7xKZnwezw4vNsQ3BYZunN79FaD
+         945qWAVYQ3sBMh4MqbC/N+E0KuDNRBcNob3EgUW9JHNI4SXhyJf1xKX0ZzC3lWoTx0xC
+         Lx2w==
+X-Gm-Message-State: AOAM532gqvhXAja9+Uq7j+GqF2k07vuDKK4gZGZkQx55VctQfWmTCazj
+        /ns2gohpRHt+sr6hiqaE+BQynODD4C2wcw==
+X-Google-Smtp-Source: ABdhPJyikOuQn42ZMGpH1yzv4D5VzSSVW1A/W0mHa8GOSOvs0WhOgM7RqHqpN9/07/EP1hAgbMqZlQ==
+X-Received: by 2002:a92:ad0f:: with SMTP id w15mr3521796ilh.97.1603845989333;
+        Tue, 27 Oct 2020 17:46:29 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e4sm1796075ill.70.2020.10.27.17.46.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2020 17:46:28 -0700 (PDT)
+Subject: Re: [PATCH v3 00/21] Miscellaneous fixes for resctrl selftests
+To:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>
+Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201020235126.1871815-1-fenghua.yu@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <c4fe6c5a-e5c4-0653-9e35-ab03f5494744@linuxfoundation.org>
+Date:   Tue, 27 Oct 2020 18:46:27 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201020235126.1871815-1-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Should be -d instead of -n for dry-run.
+On 10/20/20 5:51 PM, Fenghua Yu wrote:
+> This patch set has several miscellaneous fixes to resctrl selftest tool
+> that are easily visible to user. V1 had fixes to CAT test and CMT test
+> but they were dropped in V2 because having them here made the patchset
+> humongous. So, changes to CAT test and CMT test will be posted in another
+> patchset.
+> 
 
-Fixes: 5da1918446a1 ("selftests/run_kselftest.sh: Make each test individually selectable")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- tools/testing/selftests/run_kselftest.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is still a very long patch series. Several of the patches can be
+combined and can be rearranged. 21 patches don't seem to any specific
+order.
 
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 609a4ef9300e..97165a83df63 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -48,7 +48,7 @@ while true; do
- 		-l | --list)
- 			echo "$available"
- 			exit 0 ;;
--		-n | --dry-run)
-+		-d | --dry-run)
- 			dryrun="echo"
- 			shift ;;
- 		-h | --help)
--- 
-2.25.4
+> Change Log:
+> v3:
+> Address various comments (commit messages, return value on test failure,
+> print failure info on test failure etc) from Reinette and Tony.
+> [v2: https://lore.kernel.org/linux-kselftest/cover.1589835155.git.sai.praneeth.prakhya@intel.com/]
+> 
+> v2:
+> 1. Dropped changes to CAT test and CMT test as they will be posted in a later
+>     series.
+> 2. Added several other fixes
+> [v1: https://lore.kernel.org/linux-kselftest/cover.1583657204.git.sai.praneeth.prakhya@intel.com/]
+> 
+> Fenghua Yu (18):
+>    selftests/resctrl: Rename CQM test as CMT test
+>    selftests/resctrl: Declare global variables as extern
+>    selftests/resctrl: Return if resctrl file system is not supported
+>    selftests/resctrl: Check for resctrl mount point only if resctrl FS is
+>      supported
+>    selftests/resctrl: Use resctrl/info for feature detection
+>    selftests/resctrl: Fix missing options "-n" and "-p"
+>    selftests/resctrl: Fix MBA/MBM results reporting format
+>    selftests/resctrl: Abort running tests if not root user
+>    selftests/resctrl: Enable gcc checks to detect buffer overflows
+>    selftests/resctrl: Don't hard code value of "no_of_bits" variable
 
+>    selftests/resctrl: Modularize resctrl test suite main() function
+
+Yes. This is a needed change. I didn't make it to this patch yet.
+
+>    selftests/resctrl: Skip the test if requested resctrl feature is not
+>      supported
+
+Commented on this patch already. Look into using config file like other
+tests.
+
+>    selftests/resctrl: Umount resctrl FS only if mounted
+>    selftests/resctrl: Unmount resctrl FS after running all tests
+>    selftests/resctrl: Fix incorrect parsing of iMC counters
+>    selftests/resctrl: Fix checking for < 0 for unsigned values
+>    selftests/resctrl: Fix unnecessary usage of global variables
+>    selftests/resctrl: Don't use global variable for capacity bitmask
+>      (CBM)
+> 
+> Reinette Chatre (3):
+>    selftests/resctrl: Fix typo
+>    selftests/resctrl: Fix typo in help text
+
+Why not combine the above two patches. The commit summary doesn't
+make sense.
+
+>    selftests/resctrl: Ensure sibling CPU is not same as original CPU
+> 
+>   tools/testing/selftests/resctrl/Makefile      |   2 +-
+>   tools/testing/selftests/resctrl/README        |   4 +-
+>   tools/testing/selftests/resctrl/cache.c       |   4 +-
+>   tools/testing/selftests/resctrl/cat_test.c    |  20 +--
+>   .../resctrl/{cqm_test.c => cmt_test.c}        |  34 ++--
+>   tools/testing/selftests/resctrl/mba_test.c    |  23 ++-
+>   tools/testing/selftests/resctrl/mbm_test.c    |  16 +-
+>   tools/testing/selftests/resctrl/resctrl.h     |  20 ++-
+>   .../testing/selftests/resctrl/resctrl_tests.c | 156 ++++++++++++------
+>   tools/testing/selftests/resctrl/resctrl_val.c |  75 ++++++---
+>   tools/testing/selftests/resctrl/resctrlfs.c   |  79 ++++++---
+>   11 files changed, 272 insertions(+), 161 deletions(-)
+>   rename tools/testing/selftests/resctrl/{cqm_test.c => cmt_test.c} (85%)
+> 
+
+I will review rest of the patches. Try to combine a few patches and
+collapse fixes. I would like to see all the fixes first and then
+renaming from CQM to CMT.
+
+thanks,
+-- Shuah
