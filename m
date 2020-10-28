@@ -2,125 +2,106 @@ Return-Path: <SRS0=j5jC=ED=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC87C4363A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D879C388F7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:11:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6159224724
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:08:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C60052474F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Oct 2020 22:11:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jXVmiXZu"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="I6lk8Hx+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730290AbgJ1WIP (ORCPT
+        id S1730692AbgJ1WLk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        Wed, 28 Oct 2020 18:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729980AbgJ1WIO (ORCPT
+        with ESMTP id S1730705AbgJ1WLi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:08:14 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD87C0613CF
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:08:14 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id s21so1225323oij.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oi3DVB8F/e6EwkVxfJQHDyhN7VFOzS0P58Y6d1svvv8=;
-        b=jXVmiXZu8yXdx16UWUKRRcQW3d958GquYkHbBD+UBM1BPN+6qvYgJfy3VeQGJ24Er9
-         Zyy9kg0kOBFCkTfmlt7AEiymxOS24MvSVlxaGJlT6LDTdTo3HkObCm3o5CAvLdeKuEd1
-         1MwK/jhtdR6eAYlD5msixjWuvxQ51caQvrx8vzMywcPUfkh8s7wGVU8/y0uZQxmO/dSK
-         rmwJebMNGW26sQmiMxBvnwuNwp15brRu5elZDrXOKsuAB9tEMmk9UYuC0pciTb+7Cu89
-         UkP+tgbtvoWYq7vgxJZkAf1eJgARDuCB6qEs7dSVONNSpoDituc/ejF+0MtQZoDaGf07
-         PDWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oi3DVB8F/e6EwkVxfJQHDyhN7VFOzS0P58Y6d1svvv8=;
-        b=mwAgwePkCLVgEKq1muX744AeYCn1JpYbRSDGALpCHcHLp2iX+Dq3igNfeidSYxgCPK
-         0Otn055P+dr1FzerYnI3Ai4+iaUsDqDbLbs0LHPfQikeBDCQj2GLxieYC4+GuOe/ahIL
-         XiOVIjtAr8S2qI4Fx5osr2EdpeEBW/5dtOThFF00XLj2Pbi4WB7EYzvDU5v9JqqGXKPD
-         ZK7v/ch7B15zkKqSTUK2k6OrX41RvBGsTEKvEmADbKAwyn54mhZxNgraRd8fFcwZvdZ7
-         qtdNx2wf5Uj0IbbpUd4OalTKir0ZLJVHqP7B5e0BZOjsp0fqvQnWo1satTTay/hHUXda
-         cjYA==
-X-Gm-Message-State: AOAM531c3a6/2zCu+wMycp/0nZTqmcGJyIwofcsv5vecU6n+YR5PX/46
-        xgYP3L8/77RcuemSCGc5gkOXLoP5UttDpa4s8NpPaUdXfYQ=
-X-Google-Smtp-Source: ABdhPJxj/onBTr0+oaQG6L0+1VCfWvQlbvRrZgPHmV1pKzB6lkeZtNDMJpWQCfeN82ldP6Q5gdmTTr3To2SpR/zHFMs=
-X-Received: by 2002:a54:4812:: with SMTP id j18mr4608973oij.70.1603873837192;
- Wed, 28 Oct 2020 01:30:37 -0700 (PDT)
+        Wed, 28 Oct 2020 18:11:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D86FC0613D3
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 15:11:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=UuWciXtDDMkvKh0Vv+GVLGgNQQOwDDD9jqSv8mkONwA=; b=I6lk8Hx+YtZLEeLtSc1E5QRXeR
+        Ak9LUcdMvh8Ur2JJqCOUZPfWCfauGFeTnRpmYrBnAxNR8SXY8ntNaelx8POwCANijIzc+1kV1BNmz
+        qrMybcCzW8k5NkjVwde57qCbB28odbFImsjLIsJ817Pbk7p9s1MGgDmQDRrVptNZeMbAsI3CRyC/6
+        hUPIVPTHJGTIQamK1neUpF38LfMdZ8aXSqhAyxn3xXPapE6iYnQZWTHeHnMia0tw/13Amgpa3rWMs
+        Xxueu2CsiuJ3DIO2sUvImj3rORv7V3ZXgNFW0lfmS8IDfGffHS8ZPepBAdkU0cKwz2xUxYGdjjELG
+        JumX3F3w==;
+Received: from [2601:1c0:6280:3f0::507c] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kXpSp-0007Qd-KC; Wed, 28 Oct 2020 17:42:25 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: [PATCH v2] KUnit: Docs: style: fix some Kconfig example issues
+Date:   Wed, 28 Oct 2020 10:42:18 -0700
+Message-Id: <20201028174218.11750-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20201027174726.85284-1-98.arpi@gmail.com> <202010280748.WUyq8OoJ-lkp@intel.com>
-In-Reply-To: <202010280748.WUyq8OoJ-lkp@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 28 Oct 2020 09:30:25 +0100
-Message-ID: <CANpmjNON4e6Gh7-NQw4CT4e--vOrH_rFyGi9U9TiUNS_zn+_vw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] fs: ext4: Modify inode-test.c to use KUnit
- parameterized testing feature
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        skhan@linuxfoundation.org, Iurii Zaikin <yzaikin@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        kbuild-all@lists.01.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 28 Oct 2020 at 00:50, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Arpitha,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on ext4/dev]
-> [also build test WARNING on linus/master v5.10-rc1 next-20201027]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Arpitha-Raghunandan/kunit-Support-for-Parameterized-Testing/20201028-015018
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-> config: mips-randconfig-r016-20201027 (attached as .config)
-> compiler: mipsel-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/2de1e52708cd83d1dc4c718876683f6809045a98
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Arpitha-Raghunandan/kunit-Support-for-Parameterized-Testing/20201028-015018
->         git checkout 2de1e52708cd83d1dc4c718876683f6809045a98
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=mips
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from fs/ext4/inode-test.c:7:
->    fs/ext4/inode-test.c: In function 'ext4_inode_gen_params':
-> >> include/kunit/test.h:1735:58: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
->     1735 |   return __next - (array) < ARRAY_SIZE((array)) ? __next : NULL;   \
->    fs/ext4/inode-test.c:214:1: note: in expansion of macro 'KUNIT_ARRAY_PARAM'
->      214 | KUNIT_ARRAY_PARAM(ext4_inode, test_data);
->          | ^~~~~~~~~~~~~~~~~
+Fix the Kconfig example to be closer to Kconfig coding style.
 
-So this means we probably want to make the param_value, and the return
-and prev types of the generator "const void*".
+Also add punctuation and a trailing slash ('/') to a sub-directory
+name -- this is how the text mostly appears in other Kconfig files.
 
-Thanks,
--- Marco
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: David Gow <davidgow@google.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+v2: covert spaces indentation to tabs in Kconfig example
+
+ Documentation/dev-tools/kunit/style.rst |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+--- linux-next-20201027.orig/Documentation/dev-tools/kunit/style.rst
++++ linux-next-20201027/Documentation/dev-tools/kunit/style.rst
+@@ -175,17 +175,17 @@ An example Kconfig entry:
+ 
+ .. code-block:: none
+ 
+-        config FOO_KUNIT_TEST
+-                tristate "KUnit test for foo" if !KUNIT_ALL_TESTS
+-                depends on KUNIT
+-                default KUNIT_ALL_TESTS
+-                help
+-                    This builds unit tests for foo.
++	config FOO_KUNIT_TEST
++		tristate "KUnit test for foo" if !KUNIT_ALL_TESTS
++		depends on KUNIT
++		default KUNIT_ALL_TESTS
++		help
++		  This builds unit tests for foo.
+ 
+-                    For more information on KUnit and unit tests in general, please refer
+-                    to the KUnit documentation in Documentation/dev-tools/kunit
++		  For more information on KUnit and unit tests in general, please refer
++		  to the KUnit documentation in Documentation/dev-tools/kunit/.
+ 
+-                    If unsure, say N
++		  If unsure, say N.
+ 
+ 
+ Test File and Module Names
