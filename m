@@ -2,100 +2,167 @@ Return-Path: <SRS0=rw0z=EE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40815C388F7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FADFC55179
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 02:02:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7E9B2192A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:56:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D07820791
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 02:02:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tiC/AVoV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GFAlwCKG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbgJ2B4R (ORCPT
+        id S1727486AbgJ1VtO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727403AbgJ2Byf (ORCPT
+        Wed, 28 Oct 2020 17:49:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:43167 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727461AbgJ1VtM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 21:54:35 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253EC0613D1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:54:35 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r127so1251685lff.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KdFzVv58H65jJdmf3Ufqe4CniXPY8PDzCg5XmX8U0Sk=;
-        b=tiC/AVoVMmn8tilMgdX+in8K0Yjj4INH3BlSiJE1i/FYsg5/tdHYBPHV8a6SM+mjLf
-         p2LtCkHoBgwc/uCSaWm0K/UgbEqo/zbgJBhcsG6FKaeb9oPjL8/1k8O2KdNBlI3kqxPA
-         0ptuwCxuUeJopPXLCfmFKPToBf+aJ9489F2hcG6WUdFwQEyHQdpKhGBkyjwBnm47mK8o
-         7/HpY2jimntzVbQDlxOO5FE0zN3R5/7+JsgqFa24E/KzZjHu/0JRQbLqb8EguIWoCQBY
-         xZFoiNwFyIpu/8JjUkjEKYbqhcXN0fvI0gqflwj9S4pQDKkceoD+HBU6S7ErkW0xMrrO
-         cdkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KdFzVv58H65jJdmf3Ufqe4CniXPY8PDzCg5XmX8U0Sk=;
-        b=Vi2Pj+HaE5xdpdzrOi/wctoxnV/HM7B03+Oh1/KHOqeh2Rw23kOE4Y1AaGkLypllgD
-         kHZWiEpzlh6WbW4R/jQKYL9+aRcPCfHT6bwTcjyBcpVyOeppMPohj7WPoQpX9ejIkPia
-         zdW4TD2F84a2TYKStsllLuOp1NVvR581wAXJg60sP2VZAESPVeoA9kqOPbr5xtEWSNCH
-         GQKsdeNB6toB5f9d06lHWzS1HppjMayXjGyofydrIRSGwYOB66OkDU1U3aYROXDoB6ap
-         3Q656paENS3NHdo4dhSj82rKW+PCGreP1PdtuXY/vref4ZW/elA/C+GYzWeaZGF0L9BI
-         cCwA==
-X-Gm-Message-State: AOAM531H41SgEcxzi9WoCQ2b+g3CpptHvCqFoVDyyxGOmOXrifLOGBtF
-        QOqxpJOsRvNO6MtD9Aa6G0+wu1oM26jkuB5kkCH/uQ==
-X-Google-Smtp-Source: ABdhPJwauBImhfKJM6NoGIwTjek7s8o4dkYW2qotO1xbRGWxPztTmolQB6je1z2UiNNM0Z4FnaKpNsbAdrRpO7nIh0c=
-X-Received: by 2002:a19:c357:: with SMTP id t84mr620041lff.34.1603936473887;
- Wed, 28 Oct 2020 18:54:33 -0700 (PDT)
+        Wed, 28 Oct 2020 17:49:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603921750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vRfli5Z5DUhcuyRlIgm4cbCOglHgREI9yrOIn+85HoI=;
+        b=GFAlwCKGoTzx9mf6V63YhHPBFIrZ3ARut8oZMHBjIy+5c3kkNJhQcTbvr0XxUep4aE63Js
+        FbLzmeaQLAxhSKnHkOQH7fwL6Ps94G94qnDXTLD3qSo0jDNonOVC+Bf8mtxD7S4Dz+R93A
+        WJtXZ2MgmJFj+G8rKi3LyYSYpWcXWS8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-306-VDuhqbblOD6oapEgFdZfoQ-1; Wed, 28 Oct 2020 13:47:02 -0400
+X-MC-Unique: VDuhqbblOD6oapEgFdZfoQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 00D1F18A0727;
+        Wed, 28 Oct 2020 17:46:40 +0000 (UTC)
+Received: from gerbillo.redhat.com (ovpn-115-68.ams2.redhat.com [10.36.115.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EB78F6198D;
+        Wed, 28 Oct 2020 17:46:37 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [PATCH net-next 3/3] self-tests: introduce self-tests for RPS default mask
+Date:   Wed, 28 Oct 2020 18:46:03 +0100
+Message-Id: <27a3dd523e015ba27ba5666ad727ff5d935ce3a8.1603906564.git.pabeni@redhat.com>
+In-Reply-To: <cover.1603906564.git.pabeni@redhat.com>
+References: <cover.1603906564.git.pabeni@redhat.com>
 MIME-Version: 1.0
-References: <20201028174218.11750-1-rdunlap@infradead.org>
-In-Reply-To: <20201028174218.11750-1-rdunlap@infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 29 Oct 2020 09:54:22 +0800
-Message-ID: <CABVgOSnNU1dOGEGhtRW=odkwjDDk7B_=FvdDmxAB_t-mNVY-9g@mail.gmail.com>
-Subject: Re: [PATCH v2] KUnit: Docs: style: fix some Kconfig example issues
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 1:42 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Fix the Kconfig example to be closer to Kconfig coding style.
->
-> Also add punctuation and a trailing slash ('/') to a sub-directory
-> name -- this is how the text mostly appears in other Kconfig files.
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: David Gow <davidgow@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
-> v2: covert spaces indentation to tabs in Kconfig example
->
+Ensure that RPS default mask changes take place on
+all newly created netns/devices and don't affect
+existing ones.
 
-Thanks! Sphinx is still converting the tabs to spaces for its HTML
-output, but this is nevertheless an improvement.
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+---
+ tools/testing/selftests/net/Makefile          |  1 +
+ tools/testing/selftests/net/config            |  3 +
+ .../testing/selftests/net/rps_default_mask.sh | 57 +++++++++++++++++++
+ 3 files changed, 61 insertions(+)
+ create mode 100644 tools/testing/selftests/net/rps_default_mask.sh
 
-Cheers,
--- David
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index ef352477cac6..2531ec3e5027 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -21,6 +21,7 @@ TEST_PROGS += rxtimestamp.sh
+ TEST_PROGS += devlink_port_split.py
+ TEST_PROGS += drop_monitor_tests.sh
+ TEST_PROGS += vrf_route_leaking.sh
++TEST_PROGS += rps_default_mask.sh
+ TEST_PROGS_EXTENDED := in_netns.sh
+ TEST_GEN_FILES =  socket nettest
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 4d5df8e1eee7..5d467364f082 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -34,3 +34,6 @@ CONFIG_TRACEPOINTS=y
+ CONFIG_NET_DROP_MONITOR=m
+ CONFIG_NETDEVSIM=m
+ CONFIG_NET_FOU=m
++CONFIG_RPS=y
++CONFIG_SYSFS=y
++CONFIG_PROC_SYSCTL=y
+diff --git a/tools/testing/selftests/net/rps_default_mask.sh b/tools/testing/selftests/net/rps_default_mask.sh
+new file mode 100644
+index 000000000000..c81c0ac7ddfe
+--- /dev/null
++++ b/tools/testing/selftests/net/rps_default_mask.sh
+@@ -0,0 +1,57 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++readonly ksft_skip=4
++readonly cpus=$(nproc)
++ret=0
++
++[ $cpus -gt 2 ] || exit $ksft_skip
++
++readonly INITIAL_RPS_DEFAULT_MASK=$(cat /proc/sys/net/core/rps_default_mask)
++readonly NETNS="ns-$(mktemp -u XXXXXX)"
++
++setup() {
++	ip netns add "${NETNS}"
++	ip -netns "${NETNS}" link set lo up
++}
++
++cleanup() {
++	echo $INITIAL_RPS_DEFAULT_MASK > /proc/sys/net/core/rps_default_mask
++	ip netns del $NETNS
++}
++
++chk_rps() {
++	local rps_mask expected_rps_mask=$3
++	local dev_name=$2
++	local msg=$1
++
++	rps_mask=$(ip netns exec $NETNS cat /sys/class/net/$dev_name/queues/rx-0/rps_cpus)
++	printf "%-60s" "$msg"
++	if [ $rps_mask -eq $expected_rps_mask ]; then
++		echo "[ ok ]"
++	else
++		echo "[fail] expected $expected_rps_mask found $rps_mask"
++		ret=1
++	fi
++}
++
++trap cleanup EXIT
++
++echo 0 > /proc/sys/net/core/rps_default_mask
++setup
++chk_rps "empty rps_default_mask" lo 0
++cleanup
++
++echo 1 > /proc/sys/net/core/rps_default_mask
++setup
++chk_rps "non zero rps_default_mask" lo 1
++
++echo 3 > /proc/sys/net/core/rps_default_mask
++chk_rps "changing rps_default_mask dont affect existing netns" lo 1
++
++ip -n $NETNS link add type veth
++ip -n $NETNS link set dev veth0 up
++ip -n $NETNS link set dev veth1 up
++chk_rps "changing rps_default_mask affect newly created devices" veth0 3
++chk_rps "changing rps_default_mask affect newly created devices[II]" veth1 3
++exit $ret
+-- 
+2.26.2
+
