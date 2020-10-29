@@ -2,110 +2,116 @@ Return-Path: <SRS0=rw0z=EE=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0926C388F7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17DB4C388F7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:07:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5121A20796
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:04:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B155620796
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:07:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nokia.onmicrosoft.com header.i=@nokia.onmicrosoft.com header.b="jxYJUeVa"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CQS/TTCS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730699AbgJ1WMh (ORCPT
+        id S2404186AbgJ2BHJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:12:37 -0400
-Received: from mail-eopbgr80120.outbound.protection.outlook.com ([40.107.8.120]:59271
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730835AbgJ1WM2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:12:28 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fym6HEowA2/8nYYzjAi5rCnU+QKp4nA0c9Z+sjW+HZ3GBlgCrfu5y5eCiSFTQjSIRCA/r0Z2Th7WeFPjmIdQwqPeljXx0tZHl/eSk/OWppepiL1L7nFj36Aq05pdTEdjcv7X3OGw90bXUF6VDYomnLT7Z4uICs98CDtCswd5CRhPosmmmj4yAr+u70AoRjxe5RIooi1KjrqIAfWnK59tBGpWUDmQrdtcLcY9t5Y+xq5VyrxfPor+iTvRJbbT4IVE6iCYTyJjxAkHu8NlOZU6bKZi7YYSj8Pxwns7lr/2w2+NFvrUaZWn+jxmDwgQHEUl8GlXZkIzXu1hdcjUbmjupw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ggBPTv3eqPWQgUEfpSO8CuvQkPHx+VmKp1TFuUd34rw=;
- b=iBBd3MzbUK6T7ifouWpBJ3CJxDvUFaz6s/cM+vycWPIght+nDvnHQV73YF5DkgaqH/cgT4SQR0YtPrhR2t0N+LJ7aG96kBSQNRxY7e0qGWZ7os4U5u3bJTB9zduwTxb4Y+S6D2YzEvZlO2SOXxrbHrRASCl1A+Sfk1FEJ4Ty0W/08E6oqVRfz8MPTZs3+xZfHjGYMdyftgp94BbshGKD7zaudkU5AFDjag/+OMyRtQ1fc2QX4lzTX7stHlqn3Ov4EskZY8VnYAKNteNiCZW1x54g/zIfVyWyo5ioKuwX2Ql4W0DcON4e/c052e/ZTW0np5diuvGo6ymlRY1m1irO6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ggBPTv3eqPWQgUEfpSO8CuvQkPHx+VmKp1TFuUd34rw=;
- b=jxYJUeVaUT3O129QLJcISdxJHT/7rvCj7PQ7NrWU+Nt4cll3R9L/8dJjRVqUy5Z6zo93zOpRHCfDaL7dL7MTY/glCF9ih+jDfwTF6lgAidMh1zxgUWy8UzWu/0gyJCWWFoWmMA7+VC6TqCqpc3OWbU+7xhkfskIjpPjTQH/ukMk=
-Received: from HE1PR07MB3450.eurprd07.prod.outlook.com (2603:10a6:7:2c::17) by
- HE1PR0701MB2793.eurprd07.prod.outlook.com (2603:10a6:3:99::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3499.15; Wed, 28 Oct 2020 07:36:32 +0000
-Received: from HE1PR07MB3450.eurprd07.prod.outlook.com
- ([fe80::eca3:4085:434:e74]) by HE1PR07MB3450.eurprd07.prod.outlook.com
- ([fe80::eca3:4085:434:e74%6]) with mapi id 15.20.3499.015; Wed, 28 Oct 2020
- 07:36:32 +0000
-From:   "Rantala, Tommi T. (Nokia - FI/Espoo)" <tommi.t.rantala@nokia.com>
-To:     "shuah@kernel.org" <shuah@kernel.org>,
-        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests: intel_pstate: ftime() is deprecated
-Thread-Topic: [PATCH] selftests: intel_pstate: ftime() is deprecated
-Thread-Index: AQHWo7+GrW4fp0iZN0eO7f/RAP0xKKmr8mMAgADAOYA=
-Date:   Wed, 28 Oct 2020 07:36:32 +0000
-Message-ID: <d4adb97b3325ac93295d5e42dc07e8381fb9efab.camel@nokia.com>
-References: <20201016132245.73378-1-tommi.t.rantala@nokia.com>
-         <d315994a-3398-be41-1b26-e78f8359aa5c@linuxfoundation.org>
-In-Reply-To: <d315994a-3398-be41-1b26-e78f8359aa5c@linuxfoundation.org>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.5 (3.36.5-1.fc32) 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nokia.com;
-x-originating-ip: [131.228.2.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 468d14f2-7511-4305-cf36-08d87b143141
-x-ms-traffictypediagnostic: HE1PR0701MB2793:
-x-microsoft-antispam-prvs: <HE1PR0701MB27936599F14D38A76B94B223B4170@HE1PR0701MB2793.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YHI9b0GIbR5ObhL4k6b5snWXNCKohgVrwMXVP3efbRTUOtc/qXDzXJ/3bmSpwP5GVCNSipYB6ayNoZr9RiA9M+YBRZvPkJ3TAw3iFuACVWOtCw4EQsKs2B2mTcwNeavpaeVlbsh+zs7RMbdCKQdPHHdjor6rvlB+yr9OgBVu7zWihBL/CKykhk/wOaDTcoVRjxaBCKRPJ6cjzlL3+gGjiuYaY2IzIoIj52FXIV2gBcIgU2P+Q3qT7Jlqh9khtiGvRKilMoWYxMEgy9YLprkpNqO+4y3B0oABncRpiTtIiYqjIwXCfEfJNtM5oT+VhFGr
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR07MB3450.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(376002)(366004)(346002)(136003)(66476007)(2616005)(8676002)(66446008)(5660300002)(26005)(2906002)(76116006)(36756003)(86362001)(66946007)(6506007)(478600001)(64756008)(66556008)(4744005)(110136005)(8936002)(4001150100001)(186003)(316002)(6512007)(71200400001)(6486002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: puk8pElpPJni58LTEv9+m77v2ZfpQpwcStTKJ0WqNXTiSqLP/4jhqGs+zy4HGu9ouiomh2Fel9psSU9RRUjZgurKYwSV4bSvmj9GTR/lN3OUujL7JZYP8Z/1RkBCRaroQy7Zf2kbhGrm55gfOD4qQPzDyXSqg+DRhuDStR0WgQwZQE1ftFiWeV5r/0yJIRgAo6V6AuSuJ2QF2nwu0gNyFAFuEl0ohupK0QaDAjioLjStmQAutx47rpGCu2VIjIhGiDpK96nuRCUUtNlcUzGFGatVsXiISL6lioNiyMNZ7eXntl0d6KB5zTgEbJmbx2lobpEZlXJOaS34U0HYFwLObxreadi1VpNrY9LaitbK+2rDsvMp1h9jj9GHxcTRZBF87RTnZ3cMAbBKapaYiKaarF8+qynXjk/ygQbr8lvofT9QMOVDATRNRis04rSS+E/EXCdRNNZV7sFfvkXp684ypO8UZJMG0uFRQW0jx9xxFvsl4VvY5sWbHVkjo3Vc6JBaXjUIJ1/b22q6/MAJoyHsdDkUo+FeY3T3Zp0moFUYfvF/WDv8aHz7B7zeKS2WNRkDNujzsELu5Sd20fnG80Mq/dcMm9cBWrqwPJW+6XrCF7Rd5I5/JWvdt0fiOrTTuLEArcS3xANpKsCS0WTy3fimdg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <324B20705E37B7408C84C8A13A60B959@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 28 Oct 2020 21:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404157AbgJ2BGg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Oct 2020 21:06:36 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF60C0613D6
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:35 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id a9so1185660lfc.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pn1ECaKgjWXcAj9IGY9xa/P/urhrG9XYha2Ze81haPI=;
+        b=CQS/TTCSV/PXnE8RKTiVdoB9MOH5R7RwtttysBDMDTrgm/gdARB43BDZ0IDwXRbttP
+         ztHZD+0ZqXCLCfwhTBFjTJ/tiDFdE5MfzqiqiGCR+7qo4iT6gbpszW4gnmqQCqcjiJpS
+         2TE6AWWOiPiIHtCacy+jotlH1GyWUK1IMX8yXc8Mz7No8vs/C8JnIaRhweaK8oe5/GL8
+         Jfgwtgs4gp/wo+Iw7O3nmUyVGt/oQ9DoZH/ghQZ47kjp3G1BZkOXJfz4E7+ioxLBPKqf
+         wNABOnStf+0wcuigg1mHsL0KxMLpB2iVoTZoknuLmehB39wLMOwYtSz1o0w4ntAQ9dSd
+         hmXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pn1ECaKgjWXcAj9IGY9xa/P/urhrG9XYha2Ze81haPI=;
+        b=N01itjGRaLMZWW2bqKVbldY4DZ+gcXSZXziqHOIXtU3i5jS5AWKVk9+s/7Akp3P2KA
+         RifnntVGXvVB2hH+pXux/kAcJH9irzCD0rbsfvtl98fnTn2kPfdJYY4N7mw2nL8bXAkr
+         Pc/M+fiJ6naJm07P3XoP3gGBlxK9PipujkYYTBJHLfevNJgcUbtw3X+u/T9SyYGOP3gN
+         Fj0iSjS1IYIkGcYNLR3bWpSKu18u0I4si4vI/VYznFTmJ+8FDAxBs+w1rzUIZzuHdQ9S
+         SKvjp3wojdr5VjBhX+JOBjleXOux7GajWMGIFf3iU15V623Z68oTYnyBJK+XBVYM55JO
+         8Kqw==
+X-Gm-Message-State: AOAM531kawmTLLCIbTvN6+tEaFFlyzMOV5tTJ8INNwrKIQl/cgpxhaH7
+        l+7OILbThDiAt39C4+pFyDusaG6lnE8EQHAz4sQ7uA==
+X-Google-Smtp-Source: ABdhPJxixA+XOTBfZ3BYWY3Zb24muHdDJFJXA6IB2XijLR/mZHkSGkBIOx58SM+pLP1LMZ2g2O7vRP785516kejacuI=
+X-Received: by 2002:a19:e308:: with SMTP id a8mr562788lfh.573.1603933593718;
+ Wed, 28 Oct 2020 18:06:33 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR07MB3450.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 468d14f2-7511-4305-cf36-08d87b143141
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 07:36:32.7185
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sgc6wldo9/Uab8KZD7pqtb0b4vUQ1accN8vkIryXbgZa8l9pR8Uur2MyjOmJBJXB9soBqP2eyoJ0A1A9Rd8gXoSxoJ/j9Mc4kNoFIPUdozw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0701MB2793
+References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-5-mic@digikod.net>
+In-Reply-To: <20201027200358.557003-5-mic@digikod.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 29 Oct 2020 02:06:06 +0100
+Message-ID: <CAG48ez1W2sHBeL4pV4QqUonUJc-snNnxE_jh8FVP=pyhhm0fdg@mail.gmail.com>
+Subject: Re: [PATCH v22 04/12] landlock: Add ptrace restrictions
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTEwLTI3IGF0IDE0OjA4IC0wNjAwLCBTaHVhaCBLaGFuIHdyb3RlOg0KPiAN
-Cj4gPiBAQCAtNzMsOCArODAsOCBAQCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpIHsN
-Cj4gPiAgIAlhcGVyZiA9IG5ld19hcGVyZi1vbGRfYXBlcmY7DQo+ID4gICAJbXBlcmYgPSBuZXdf
-bXBlcmYtb2xkX21wZXJmOw0KPiA+ICAgDQo+ID4gLQlzdGFydCA9IGJlZm9yZS50aW1lKjEwMDAg
-KyBiZWZvcmUubWlsbGl0bTsNCj4gPiAtCWZpbmlzaCA9IGFmdGVyLnRpbWUqMTAwMCArIGFmdGVy
-Lm1pbGxpdG07DQo+ID4gKwlzdGFydCA9IGJlZm9yZS50dl9zZWMqMTAwMCArIGJlZm9yZS50dl9u
-c2VjLzEwMDAwMDBMOw0KPiA+ICsJZmluaXNoID0gYWZ0ZXIudHZfc2VjKjEwMDAgKyBhZnRlci50
-dl9uc2VjLzEwMDAwMDBMOw0KPiANCj4gV2h5IG5vdCB1c2UgdGltZXNwZWMgZE5TRUNfUEVSX01T
-RUMgZGVmaW5lIGZyb20gIGluY2x1ZGUvdmRzby90aW1lNjQuaD8NCg0KSGksDQoNCklmIHRoZSBk
-ZWZpbmUgd2FzIGF2YWlsYWJsZSBpbiB0aGUgVUFQSSBoZWFkZXJzLCB0aGVuIGNlcnRhaW5seSB3
-b3VsZCBtYWtlDQpzZW5zZSB0byB1c2UgaXQuIEJ1dCBJIHdvdWxkIG5vdCBtZXNzIHdpdGggdGhl
-IGtlcm5lbCBpbnRlcm5hbCBoZWFkZXJzIGhlcmUuDQoNCi1Ub21taQ0KDQo=
+On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+> Using ptrace(2) and related debug features on a target process can lead
+> to a privilege escalation.  Indeed, ptrace(2) can be used by an attacker
+> to impersonate another task and to remain undetected while performing
+> malicious activities.  Thanks to  ptrace_may_access(), various part of
+> the kernel can check if a tracer is more privileged than a tracee.
+>
+> A landlocked process has fewer privileges than a non-landlocked process
+> and must then be subject to additional restrictions when manipulating
+> processes. To be allowed to use ptrace(2) and related syscalls on a
+> target process, a landlocked process must have a subset of the target
+> process's rules (i.e. the tracee must be in a sub-domain of the tracer).
+>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+
+Reviewed-by: Jann Horn <jannh@google.com>
