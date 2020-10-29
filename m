@@ -7,61 +7,62 @@ X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2771AC56201
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:07:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58AE9C5DF9D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:07:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDB5820796
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:07:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16B84207DE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Oct 2020 01:07:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UDRPLu9m"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OQFoy5zJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404182AbgJ2BHJ (ORCPT
+        id S2404135AbgJ2BH0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        Wed, 28 Oct 2020 21:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404161AbgJ2BGu (ORCPT
+        with ESMTP id S2404138AbgJ2BG2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Oct 2020 21:06:50 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8A9C0613D2
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:49 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id l28so1164769lfp.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:49 -0700 (PDT)
+        Wed, 28 Oct 2020 21:06:28 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494C9C0613D1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:28 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id d24so1247671ljg.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Oct 2020 18:06:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=bPMDf0qf5u7i+D1hct4Y8ywTPSNEiqZnANVXp2csHmo=;
-        b=UDRPLu9msJZF3jU3f0cfRMmMUjv4al6mEdH+doXP3CJs1E+meQHwswUn6FfxeU4M7Y
-         mdjF6dlxs/r9X+nsG+jvBBpuJoeemwz7oZzHEH8cu2FuE4WoJMkmPz/Ji0yhM4+WiFtB
-         rhpBehRSmY/cTeZk76/aJgyzXOLL3NJE1/q4NlCTkpqRI97pcMZ+gNtjS3uoF4nuh7W1
-         yw24PiXpzrFEiT3OI82ePRsw7PnnCJjT7Cw+g66nh4wZX1yx+HybJu5UCEhtHD658mi+
-         886WmiZsQzGj6z4/CpD39D+FU4YLDTEf8HsVVyfPaptpyJrsYS5a5QKE4zded/CZpn7z
-         MwYg==
+        bh=sdW8glxlqT52o6OrX86F7zpNSSHvHFcM+yTkw93QmvU=;
+        b=OQFoy5zJcvGaPYRjULm9FRQ4mPpGgZUmLkSBusyWrqN7wYA6OKMhtdFCj7k6mxGVVn
+         /OB6g0MYcj16bI3y0RZAnTaIqfzbpgMOw5XGd4GR3BPNbqmLRVZfrNgeih5y59Ukq7m8
+         hQ2JsWLBe5/8kwUHrYWzO15rATBwrSZSug26Qn738s0cmusMvscNdYWrEyDFeIIxigX/
+         djhhUiRssu5Q15Vhx6qIjm2Ox/u4rrcbzo4r3H7eYiBYzRqiKzLmUsoc0+Jsbge3+k21
+         5yjSQlazLmxu+Kte6xds9kyAl4e/NpD7HFcpW0zVmKkL0FHCl8jErMGvQv9yJe4Z5ez9
+         yF+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bPMDf0qf5u7i+D1hct4Y8ywTPSNEiqZnANVXp2csHmo=;
-        b=YJ7EPP/Dw4SToXar7Ynl2UmM7n5Pgq5OAhxdRY7DDYAm/i/U27o2TrAr3v7tt8fByv
-         Q+FGNNpzCPiKgK8h3UPOTQw1LFVBolxroyvb0gWQyikmsnKPMDeSrjmZk87FNNJ2kukM
-         +52ixQwulkpvaJtRomQzBzqfbnnydS99ovQSXp2W8xF86bxAsNG8FCoKhOieKtLHMq+9
-         zgFaNZS1o1+pn36WxL6yOyPmdHGJWH9BbXg7KCkfuqOQyGxiP/DDMqdyowiED1NMYzz3
-         UNRUat0RKvQ5/XUd5vZVirlimGbt68kGy6eilh+/FP7SNb7CqsCrCHW5Nr9Tt2nOWYSI
-         8qzw==
-X-Gm-Message-State: AOAM531a1j9RYwIxbFglpsI+6kVU2DcExlT2JUWAkJjJjY9ZyYXitcDJ
-        rPBf2wrMD2lgv5/HIgAXmpaSxkUYSGIB+4bUivbDcQ==
-X-Google-Smtp-Source: ABdhPJzDdFVnRlhR1ZLyXcR/6gy+QFM2Be7EL54Ws7cTI4I+QtUU5EktO2FmKhpKLEYWon1ieCyZ/uOiqgKG+1NYZAk=
-X-Received: by 2002:a05:6512:1182:: with SMTP id g2mr584148lfr.198.1603933608096;
- Wed, 28 Oct 2020 18:06:48 -0700 (PDT)
+        bh=sdW8glxlqT52o6OrX86F7zpNSSHvHFcM+yTkw93QmvU=;
+        b=eAjR+MSU2UWH+n8Q90k7mK5XJqivpHTNS+lW0VL6Xr3YYUGF/h938tlAkd+dzCX0f7
+         ozPLyV9k9igsjlVFfzZWqwN6xUv82AbAkKiU9aQixs4m+BHwbmUEEp+weZqpQ/Ydwrjx
+         lfoZrtocdO50RCGFRy//nAiLmGUl1HzQDAo+lXknnVdMATgPlxqx9hLdQ2EVQ/SWqtAL
+         LlJzYbDCxIszNLm3/aNpfLIlKXnq/BAvYfWgCCCZYWPe+Y8rBj98fcWLwIWXkXGva3K7
+         i2YBOxOwlunPahNZkmZSAhNN0JFj1T8DqJKCoa0086jPzx3R7joAwi4dUHCLAAwwoaEG
+         ZrLA==
+X-Gm-Message-State: AOAM532+KM1i0gnNe3VfoP624XQKLI25unlTIwUyTWtkjSAMfZwVtjxq
+        ydtKkBLwDIANUtAynQnnf+mGQ60tWlEqMOCsIvhHDA==
+X-Google-Smtp-Source: ABdhPJzyyZaaLe2JA3VvgL7cUtSj9LlNwA65qJkm7Fv1qbvcq5QSy/4U16ih92Ck7/3Dyb1x1IAYXE/2zulh7bsAAQY=
+X-Received: by 2002:a2e:b888:: with SMTP id r8mr712081ljp.138.1603933586611;
+ Wed, 28 Oct 2020 18:06:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-7-mic@digikod.net>
-In-Reply-To: <20201027200358.557003-7-mic@digikod.net>
+References: <20201027200358.557003-1-mic@digikod.net> <20201027200358.557003-4-mic@digikod.net>
+In-Reply-To: <20201027200358.557003-4-mic@digikod.net>
 From:   Jann Horn <jannh@google.com>
-Date:   Thu, 29 Oct 2020 02:06:21 +0100
-Message-ID: <CAG48ez0venF9OnBG82yc8U+px1LUfUU498f1kJxYMu0hcU0+-A@mail.gmail.com>
-Subject: Re: [PATCH v22 06/12] fs,security: Add sb_delete hook
+Date:   Thu, 29 Oct 2020 02:06:00 +0100
+Message-ID: <CAG48ez2idPLmoQmqi5SL-kL1B=3W4LBAEc8r7oUp2J9SxTr1rA@mail.gmail.com>
+Subject: Re: [PATCH v22 03/12] landlock: Set up the security framework and
+ manage credentials
 To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
 Cc:     James Morris <jmorris@namei.org>,
         "Serge E . Hallyn" <serge@hallyn.com>,
@@ -96,15 +97,12 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Oct 27, 2020 at 9:04 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
 wrote:
-> The sb_delete security hook is called when shutting down a superblock,
-> which may be useful to release kernel objects tied to the superblock's
-> lifetime (e.g. inodes).
+> Process's credentials point to a Landlock domain, which is underneath
+> implemented with a ruleset.  In the following commits, this domain is
+> used to check and enforce the ptrace and filesystem security policies.
+> A domain is inherited from a parent to its child the same way a thread
+> inherits a seccomp policy.
 >
-> This new hook is needed by Landlock to release (ephemerally) tagged
-> struct inodes.  This comes from the unprivileged nature of Landlock
-> described in the next commit.
->
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
 > Cc: James Morris <jmorris@namei.org>
 > Cc: Jann Horn <jannh@google.com>
 > Cc: Kees Cook <keescook@chromium.org>
