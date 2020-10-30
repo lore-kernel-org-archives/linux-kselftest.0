@@ -2,131 +2,206 @@ Return-Path: <SRS0=eqYf=EF=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5377C00A89
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 12:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C64C00A89
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 15:48:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3AA0A20725
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 12:58:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="LeCwheLx"
+	by mail.kernel.org (Postfix) with ESMTP id BF349206E9
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 15:48:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbgJ3M6t (ORCPT
+        id S1727043AbgJ3PsH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Oct 2020 08:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgJ3M6r (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 08:58:47 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D1C0613CF
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 05:58:45 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id a7so7726061lfk.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 05:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uNc4aZmCV+V66ek4n0vGZyiabsnlsPVrA/E+N6Pxy2w=;
-        b=LeCwheLxnLSKQ0afV1Zx/F0R0vdGaODFv+ShILQ1t99lDmCgZXhHgnsxb2XVZ+y75H
-         PC5Y6abOYPnX1IlhLrUphlEpSxVHu0Q8Rx7lu3oIRqDXAFXipeU12yM6ByjjGSQYfsYT
-         RRM8IA98Kyq//zkbpAYkpV+s2yFVOGGyf3GNo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uNc4aZmCV+V66ek4n0vGZyiabsnlsPVrA/E+N6Pxy2w=;
-        b=sNjZkLaBBYvt58mzL6CkaDOQTZJCXPd2Magys65VK/mq9q2wOzHssZ/qMBSLYDMdSi
-         JyGW+VRhtDK3bB1NzAC42/kab8QA6745U0c7RvqXW5gurc6LJJp3ezOKH4HwWx6yLgyW
-         DhtxvySqznplt/X7M+1EotCzay4FxthbnnFaDsZD85mUZgqyQBc+hroG4+E4oSgAk3zz
-         W4N87Fbq1u9ObTlyChHY6bNfh9TuSYT5P7ivIL3TTmLP0CSYm5HODXZ3+mc6HmEJINMa
-         5qneUjYJivLM/9G7hUvqs3D4GbXN8OWjD3UjvU/V1EhsjGFnJb6b8a4FfxPTwO+ZLhhq
-         IcIA==
-X-Gm-Message-State: AOAM531GHJKJkyw78/EJABrvUjq7Ijjdjd2pma/tX/W9YH0B+rqMhvM9
-        1HznoDVdsZ0KDxr0mC4W61B3tw==
-X-Google-Smtp-Source: ABdhPJzY3CJVQ93L6hUMcAs1mWQGITL9zUbrGBXT9azIo9XmUImab/GfczuRGjf7PGl+41B3aWjVUA==
-X-Received: by 2002:a19:7e56:: with SMTP id z83mr813191lfc.98.1604062724149;
-        Fri, 30 Oct 2020 05:58:44 -0700 (PDT)
-Received: from [172.16.11.132] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id n18sm616110lfq.255.2020.10.30.05.58.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Oct 2020 05:58:43 -0700 (PDT)
-Subject: Re: [PATCH 0/4] deterministic random testing
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, Willy Tarreau <w@1wt.eu>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arpitha Raghunandan <98.arpi@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-References: <20201025214842.5924-1-linux@rasmusvillemoes.dk>
- <20201026105927.GC4077@smile.fi.intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <24397a58-17cd-7238-488c-7a3346465ab8@rasmusvillemoes.dk>
-Date:   Fri, 30 Oct 2020 13:58:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 30 Oct 2020 11:48:07 -0400
+Received: from foss.arm.com ([217.140.110.172]:38098 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726899AbgJ3PsG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Oct 2020 11:48:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1720B1435;
+        Fri, 30 Oct 2020 08:48:06 -0700 (PDT)
+Received: from [10.57.54.223] (unknown [10.57.54.223])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C47C3F719;
+        Fri, 30 Oct 2020 08:48:04 -0700 (PDT)
+Subject: Re: [PATCH 1/2] dma-mapping: add benchmark support for streaming DMA
+ APIs
+To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>
+Cc:     "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20201027035330.29612-1-song.bao.hua@hisilicon.com>
+ <20201027035330.29612-2-song.bao.hua@hisilicon.com>
+ <f9aebee4-5081-da8c-930c-c36617ab57c4@arm.com>
+ <8fe90795064d4373b4af32959c4e9781@hisilicon.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <472cf21a-5196-dbb5-caef-c1c0d982fe1c@arm.com>
+Date:   Fri, 30 Oct 2020 15:48:03 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20201026105927.GC4077@smile.fi.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+In-Reply-To: <8fe90795064d4373b4af32959c4e9781@hisilicon.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/10/2020 11.59, Andy Shevchenko wrote:
-> On Sun, Oct 25, 2020 at 10:48:38PM +0100, Rasmus Villemoes wrote:
->> This is a bit of a mixed bag.
+On 2020-10-29 21:39, Song Bao Hua (Barry Song) wrote:
+[...]
+>>> +struct map_benchmark {
+>>> +	__u64 map_nsec;
+>>> +	__u64 unmap_nsec;
+>>> +	__u32 threads; /* how many threads will do map/unmap in parallel */
+>>> +	__u32 seconds; /* how long the test will last */
+>>> +	int node; /* which numa node this benchmark will run on */
+>>> +	__u64 expansion[10];	/* For future use */
+>>> +};
 >>
->> The background is that I have some sort() and list_sort() rework
->> planned, but as part of that series I want to extend their their test
->> suites somewhat to make sure I don't goof up - and I want to use lots
->> of random list lengths with random contents to increase the chance of
->> somebody eventually hitting "hey, sort() is broken when the length is
->> 3 less than a power of 2 and only the last two elements are out of
->> order". But when such a case is hit, it's vitally important that the
->> developer can reproduce the exact same test case, which means using a
->> deterministic sequence of random numbers.
->>
->> Since Petr noticed [1] the non-determinism in test_printf in
->> connection with Arpitha's work on rewriting it to kunit, this prompted
->> me to use test_printf as a first place to apply that principle, and
->> get the infrastructure in place that will avoid repeating the "module
->> parameter/seed the rnd_state/report the seed used" boilerplate in each
->> module.
->>
->> Shuah, assuming the kselftest_module.h changes are ok, I think it's
->> most natural if you carry these patches, though I'd be happy with any
->> other route as well.
+>> I'm no expert on userspace ABIs (and what little experience I do have is
+>> mostly of Win32...), so hopefully someone else will comment if there's
+>> anything of concern here. One thing I wonder is that there's a fair
+>> likelihood of functionality evolving here over time, so might it be
+>> appropriate to have some sort of explicit versioning parameter for
+>> robustness?
 > 
-> Completely in favour of this.
+> I copied that from gup_benchmark. There is no this kind of code to
+> compare version.
+> I believe there is a likelihood that kernel module is changed but users
+> are still using old userspace tool, this might lead to the incompatible
+> data structure.
+> But not sure if it is a big problem :-)
+
+Yeah, like I say I don't really have a good feeling for what would be 
+best here, I'm just thinking of what I do know and wary of the potential 
+for a "640 bits ought to be enough for anyone" issue ;)
+
+>>> +struct map_benchmark_data {
+>>> +	struct map_benchmark bparam;
+>>> +	struct device *dev;
+>>> +	struct dentry  *debugfs;
+>>> +	atomic64_t total_map_nsecs;
+>>> +	atomic64_t total_map_loops;
+>>> +	atomic64_t total_unmap_nsecs;
+>>> +	atomic64_t total_unmap_loops;
+>>> +};
+>>> +
+>>> +static int map_benchmark_thread(void *data)
+>>> +{
+>>> +	struct page *page;
+>>> +	dma_addr_t dma_addr;
+>>> +	struct map_benchmark_data *map = data;
+>>> +	int ret = 0;
+>>> +
+>>> +	page = alloc_page(GFP_KERNEL);
+>>> +	if (!page)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	while (!kthread_should_stop())  {
+>>> +		ktime_t map_stime, map_etime, unmap_stime, unmap_etime;
+>>> +
+>>> +		map_stime = ktime_get();
+>>> +		dma_addr = dma_map_page(map->dev, page, 0, PAGE_SIZE,
+>> DMA_BIDIRECTIONAL);
+>>
+>> Note that for a non-coherent device, this will give an underestimate of
+>> the real-world overhead of BIDIRECTIONAL or TO_DEVICE mappings, since
+>> the page will never be dirty in the cache (except possibly the very
+>> first time through).
 > 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Agreed. I'd like to add a DIRECTION parameter like "-d 0", "-d 1" after we have
+> this basic framework.
 
-Thanks.
+That wasn't so much about the direction itself, just that if it's 
+anything other than FROM_DEVICE, we should probably do something to 
+dirty the buffer by a reasonable amount before each map. Otherwise the 
+measured performance is going to be unrealistic on many systems.
 
-> One note though. AFAIU the global variables are always being used in the
-> modules that include the corresponding header. Otherwise we might have an extra
-> warning(s). I believe you have compiled with W=1 to exclude other cases.
+[...]
+>>> +		atomic64_add((long long)ktime_to_ns(ktime_sub(unmap_etime,
+>> unmap_stime)),
+>>> +				&map->total_unmap_nsecs);
+>>> +		atomic64_inc(&map->total_map_loops);
+>>> +		atomic64_inc(&map->total_unmap_loops);
+>>
+>> I think it would be worth keeping track of the variances as well - it
+>> can be hard to tell if a reasonable-looking average is hiding terrible
+>> worst-case behaviour.
+> 
+> This is a sensible requirement. I believe it is better to be handled by the
+> existing kernel tracing method.
+> 
+> Maybe we need a histogram like:
+> Delay   sample count
+> 1-2us   1000              ***
+> 2-3us   2000              *******
+> 3-4us   100               *
+> .....
+> This will be more precise than the maximum latency in the worst
+> case.
+> 
+> I'd believe this can be handled by:
+> tracepoint  A
+> Map
+> Tracepoint  B
+> 
+> Tracepoint   C
+> Unmap
+> Tracepoint   D
+> 
+> Let the userspace ebpf to draw the histogram for the delta of B-A and D-C.
+> 
+> So I am planning to put this requirement into todo list and write an userspace
+> ebpf/bcc script for histogram and put in tools/ directory.
+> 
+> Please give your comments on this.
 
-Yes, I unconditionally define the two new variables. gcc doesn't warn
-about them being unused, since they are referenced from inside a
+Right, I wasn't suggesting trying to homebrew a full data collection 
+system here - I agree there are better tools for that already - just 
+that it's basically free to track a sum of squares alongside a sum, so 
+that we can trivially calculate a useful variance (or standard 
+deviation) figure alongside the mean at the end.
 
-  if (0) {}
+[...]
+>>> +	for (i = 0; i < threads; i++) {
+>>> +		tsk[i] = kthread_create_on_node(map_benchmark_thread, map,
+>>> +				map->bparam.node, "dma-map-benchmark/%d", i);
+>>> +		if (IS_ERR(tsk[i])) {
+>>> +			dev_err(map->dev, "create dma_map thread failed\n");
+>>> +			return PTR_ERR(tsk[i]);
+>>> +		}
+>>> +
+>>> +		if (node != NUMA_NO_NODE && node_online(node))
+>>> +			kthread_bind_mask(tsk[i], cpu_mask);
+>>> +
+>>> +		wake_up_process(tsk[i]);
+>>
+>> Might it be better to create all the threads first, *then* start kicking
+>> them?
+> 
+> The difficulty is that we don't know how many threads we should create as
+> the thread number is a parameter to test the contention of IOMMU driver.
+> In my test case, I'd like to test things like
+> One thread
+> Two threads
+> ....
+> 8 threads
+> 12 threads
+> 16 threads...
+> 
+> On the other hand, I think it is better to drop the memory of task_struct of those
+> test threads while we are not testing dma map.
 
-block. And when those references are the only ones, gcc is smart enough
-to elide the static variables completely, so they don't even take up
-space in .data (or .init.data) - you can verify by running nm on
-test_printf.o and test_bitmap.o - the former has 'seed' and 'rnd_state'
-symbols, the latter does not.
+I simply meant splitting the loop here into two - one to create the 
+threads and set their affinity, then another to wake them all up - so we 
+don't start unnecessarily thrashing the system while we're still trying 
+to set up the rest of the test ;)
 
-I did it that way to reduce the need for explicit preprocessor
-conditionals inside C functions.
-
-Rasmus
+Robin.
