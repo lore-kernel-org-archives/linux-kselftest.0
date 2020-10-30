@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4BF0C00A89
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 12:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 827D5C4742C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 12:14:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 578522087E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 12:14:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18CE52076E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 12:14:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eD7q7WNC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tLf3hXPn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgJ3MOk (ORCPT
+        id S1726482AbgJ3MOk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Fri, 30 Oct 2020 08:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgJ3MOh (ORCPT
+        with ESMTP id S1726362AbgJ3MOj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 08:14:37 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F13C0613D2;
-        Fri, 30 Oct 2020 05:14:37 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id i16so810574wrv.1;
-        Fri, 30 Oct 2020 05:14:36 -0700 (PDT)
+        Fri, 30 Oct 2020 08:14:39 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59715C0613D5;
+        Fri, 30 Oct 2020 05:14:39 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id b8so6256986wrn.0;
+        Fri, 30 Oct 2020 05:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rUFViTUnY+kgYImFFGX/ElRXc1tRT3Fz4yeUpO6dpm8=;
-        b=eD7q7WNCJwZDteaNeRC0DIwsweHyqHcGhqj4ou3o7ChzlLFIF+44wuZ8wB7g+ynIzW
-         cg/SH96s7CWXXLbN6EMBjYk40lTLN5RvYnbkjV3SFPPUuT1iUKlOoF07ZGwzhm03WFFA
-         EQe3QazWtNAMY+DoGrQCVatoz9tyYQuAYYbtoJ/zny16Ilf8qzUGLtcJwDpfQJYoGnwL
-         Q1sSn2fFl7FicY5O8WP/ucLm1WDU22oqfdstlv7+49bXKfsaxi76DRO8vmpJgxnaVQ+q
-         DIbYmE1/Wa6+2+M3rIokXjZr+jk0XkfNusdkUCgsbVwLUzzlTtNEG0sIeYr0kLUbIFkA
-         wGiQ==
+        bh=S7+2YlYexcf1AU0qOsB2/bovpOihknJOQtAdl1enaOE=;
+        b=tLf3hXPnutrvK8FKC/fGQhfazCRZY9Yoo2HYgJoHng4lZYn+vq5hU3c5uyWuH7t1ke
+         gZopjwQf+JzBzsVvyjBGXiqTi7/7cCpQDG2wNMEfm5PlsstRBhdY7TSDRBoJcvbuTTvW
+         0N+EOxHQ2fwfI1wDd5WHTZuqYP7Z64pyPUWMlq9k0ckgS7bCnXcxQKx5oUFawIBlpUsi
+         E3QiiN+h3LW9cwbeNiqOUDcoo4U8qB5H7NtPlTO3ZKsI8DMprdPK1fj5eDXGvjQMGiH5
+         xA5SMUz5R9RaxFDD8LZN1eQidnSGfSHUoAz28a4fe45UqNbAxXp4HegbPYnkeW1YZItT
+         CKnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rUFViTUnY+kgYImFFGX/ElRXc1tRT3Fz4yeUpO6dpm8=;
-        b=eCl7EYeF16ND2XDHFrXEiqhBIeAtoVYZQWiY2SyqfH5W8au7K9n3QloikZsaHKXIk2
-         MIVuQJfwsI+CA7d/R4ymiXd2Q+aPQyHgIcti6jBRZug95lXzAg0EqA8KK2Z6hwG94ks/
-         IVGa2IRnRfDtgOQCS/vlYwrpwZrME+KzIdaV/Mo9TMwXoaHElfLG9vwF/4tzz+jvCOOH
-         Y5yEFs3eoNVsrKECw0jT6rMOkfNN81/nzV29Xp44MS0xaH+BQddtfZGdNjxYuJZwarlP
-         pxcOKoKrw3IO7dbpBSNUJ8g9ON8BwRjcwY19xWWDu2fW0eDM8Ak5C0W66i5mgcsPV3Jk
-         LRdg==
-X-Gm-Message-State: AOAM531wDjnAGjxQy2kPi/PXbXaxqyDfZlXwjRWv7apytSj6N4yAKVVp
-        Swz6deEUnXiiU4+AF+1FdCsWC9hmPJjJUCkilk0=
-X-Google-Smtp-Source: ABdhPJzxJbfPPlECdxc672x63KmTeRs0JMKEC7HxIKbkT92hUID98JsqTTD52jrVrtfpNLux6hhTiw==
-X-Received: by 2002:a5d:61c9:: with SMTP id q9mr2791022wrv.395.1604060075004;
-        Fri, 30 Oct 2020 05:14:35 -0700 (PDT)
+        bh=S7+2YlYexcf1AU0qOsB2/bovpOihknJOQtAdl1enaOE=;
+        b=HX98gajNZd4duJfBBs14MfDfYzG+zMWP5YMFRXYBYjJgZNVhVlTZ99iy+QittfJgwe
+         JMHQqZWyfL8/Sci0mSo7GdbapugPc1urpwGFO+hrh7j9Mpj009wEGO1XaY/ylxzLGD2/
+         r9oSgB6W+kNYWbkLwd2L4XnPFB7hFQrB3bQ6GCd0aFduUkqriEuiCwiXpskUNwYcuTjO
+         A3JKDSiTmcs8fFMZDivtfc3ej8vUU3Ly+MTC9JzUPSmPxQz7fDcVIFIZcrx9e314h3G/
+         Tjuc9/o1LKm/mVS36vViip7VtacU5f3Id6xdZtLzPtJuiwWG5Oic2DYtixz3FfhvauWM
+         pXDQ==
+X-Gm-Message-State: AOAM530gRqeGadkL7OP26d/rqcbAPsHnFtgUxL64NwGSX/9nwhKiA4Or
+        auEXD08h24aTWlM7lRcqgcIOgW2fQLbY3XcPzHk=
+X-Google-Smtp-Source: ABdhPJyvJFaeJthNQ00vU1zaOK/Th+z0uytT8g0oCH+iUP9IXyluxv5WOfuwDEI1GXhiJ462flE3DA==
+X-Received: by 2002:adf:9361:: with SMTP id 88mr2658680wro.37.1604060077431;
+        Fri, 30 Oct 2020 05:14:37 -0700 (PDT)
 Received: from kernel-dev.chello.ie ([80.111.136.190])
-        by smtp.gmail.com with ESMTPSA id 90sm10020925wrh.35.2020.10.30.05.14.33
+        by smtp.gmail.com with ESMTPSA id 90sm10020925wrh.35.2020.10.30.05.14.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 05:14:34 -0700 (PDT)
+        Fri, 30 Oct 2020 05:14:36 -0700 (PDT)
 From:   Weqaar Janjua <weqaar.janjua@gmail.com>
 X-Google-Original-From: Weqaar Janjua <weqaar.a.janjua@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
@@ -67,236 +67,85 @@ To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
 Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
         skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
         anders.roxell@linaro.org, jonathan.lemon@gmail.com
-Subject: [PATCH bpf-next 1/5] selftests/xsk: xsk selftests framework
-Date:   Fri, 30 Oct 2020 12:13:43 +0000
-Message-Id: <20201030121347.26984-2-weqaar.a.janjua@intel.com>
+Subject: [PATCH bpf-next 3/5] selftests/xsk: xsk selftests - DRV POLL, NOPOLL
+Date:   Fri, 30 Oct 2020 12:13:45 +0000
+Message-Id: <20201030121347.26984-4-weqaar.a.janjua@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201030121347.26984-1-weqaar.a.janjua@intel.com>
 References: <20201030121347.26984-1-weqaar.a.janjua@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds AF_XDP selftests framework under selftests/xsk.
+Adds following tests:
 
-Prerequisites setup by script TEST_PREREQUISITES.sh:
-
-   Set up veth interfaces as per the topology shown in README:
-   * setup two veth interfaces and one namespace
-   ** veth<xxxx> in root namespace
-   ** veth<yyyy> in af_xdp<xxxx> namespace
-   ** namespace af_xdp<xxxx>
-   * create a spec file veth.spec that includes this run-time configuration
-     that is read by test scripts - filenames prefixed with TEST_XSK
-   *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
-       conflict with any existing interface
+2. AF_XDP DRV/Native mode
+   Works on any netdevice with XDP_REDIRECT support, driver dependent.
+   Processes packets before SKB allocation. Provides better performance
+   than SKB. Driver hook available just after DMA of buffer descriptor.
+   a. nopoll
+   b. poll
+   * Only copy mode is supported because veth does not currently support
+     zero-copy mode
 
 Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
 ---
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/xsk/Makefile          |  10 ++
- tools/testing/selftests/xsk/README            |  72 +++++++++++
- .../selftests/xsk/TEST_PREREQUISITES.sh       |  53 ++++++++
- tools/testing/selftests/xsk/TEST_XSK.sh       |  15 +++
- tools/testing/selftests/xsk/config            |   1 +
- tools/testing/selftests/xsk/prereqs.sh        | 119 ++++++++++++++++++
- tools/testing/selftests/xsk/xskenv.sh         |  33 +++++
- 9 files changed, 305 insertions(+)
- create mode 100644 tools/testing/selftests/xsk/Makefile
- create mode 100644 tools/testing/selftests/xsk/README
- create mode 100755 tools/testing/selftests/xsk/TEST_PREREQUISITES.sh
- create mode 100755 tools/testing/selftests/xsk/TEST_XSK.sh
- create mode 100644 tools/testing/selftests/xsk/config
- create mode 100755 tools/testing/selftests/xsk/prereqs.sh
- create mode 100755 tools/testing/selftests/xsk/xskenv.sh
+ tools/testing/selftests/xsk/Makefile          |  4 +++-
+ tools/testing/selftests/xsk/README            | 11 +++++++++-
+ .../selftests/xsk/TEST_XSK_DRV_NOPOLL.sh      | 18 ++++++++++++++++
+ .../selftests/xsk/TEST_XSK_DRV_POLL.sh        | 21 +++++++++++++++++++
+ .../selftests/xsk/TEST_XSK_SKB_POLL.sh        |  3 ---
+ .../selftests/xsk/xdpprogs/xdpxceiver.c       | 11 ++++++++--
+ .../selftests/xsk/xdpprogs/xdpxceiver.h       |  1 +
+ 7 files changed, 62 insertions(+), 7 deletions(-)
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_DRV_NOPOLL.sh
+ create mode 100755 tools/testing/selftests/xsk/TEST_XSK_DRV_POLL.sh
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f281f8077de0..41c214375f9e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19127,6 +19127,7 @@ F:	include/uapi/linux/if_xdp.h
- F:	net/xdp/
- F:	samples/bpf/xdpsock*
- F:	tools/lib/bpf/xsk*
-+F:	tools/testing/selftests/xsk/
- 
- XEN BLOCK SUBSYSTEM
- M:	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d9c283503159..d9b1f7d4313b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -67,6 +67,7 @@ TARGETS += tpm2
- TARGETS += user
- TARGETS += vm
- TARGETS += x86
-+TARGETS += xsk
- TARGETS += zram
- #Please keep the TARGETS list alphabetically sorted
- # Run "make quicktest=1 run_tests" or
 diff --git a/tools/testing/selftests/xsk/Makefile b/tools/testing/selftests/xsk/Makefile
-new file mode 100644
-index 000000000000..6e0d657bc5e0
---- /dev/null
+index 63008cd90ab6..472d8975fa5a 100644
+--- a/tools/testing/selftests/xsk/Makefile
 +++ b/tools/testing/selftests/xsk/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright(c) 2020 Intel Corporation.
-+
-+TEST_PROGS := TEST_PREREQUISITES.sh \
-+	TEST_XSK.sh
-+TEST_FILES := prereqs.sh xskenv.sh
-+TEST_TRANSIENT_FILES := veth.spec
-+
-+KSFT_KHDR_INSTALL := 1
-+include ../lib.mk
+@@ -8,7 +8,9 @@ XSKOBJ := xdpxceiver
+ 
+ TEST_PROGS := TEST_PREREQUISITES.sh \
+ 	TEST_XSK_SKB_NOPOLL.sh \
+-	TEST_XSK_SKB_POLL.sh
++	TEST_XSK_SKB_POLL.sh \
++	TEST_XSK_DRV_NOPOLL.sh \
++	TEST_XSK_DRV_POLL.sh
+ TEST_FILES := prereqs.sh xskenv.sh
+ TEST_TRANSIENT_FILES := veth.spec
+ TEST_PROGS_EXTENDED := $(XSKDIR)/$(XSKOBJ)
 diff --git a/tools/testing/selftests/xsk/README b/tools/testing/selftests/xsk/README
-new file mode 100644
-index 000000000000..a255b3050afc
---- /dev/null
+index db507a0057c1..0088c136a0d1 100644
+--- a/tools/testing/selftests/xsk/README
 +++ b/tools/testing/selftests/xsk/README
-@@ -0,0 +1,72 @@
-+Copyright (c) 2020 Intel Corporation, Weqaar Janjua <weqaar.a.janjua@intel.com>
+@@ -64,7 +64,16 @@ The following tests are run:
+    a. nopoll - soft-irq processing
+    b. poll - using poll() syscall
+ 
+-Total tests: 2.
++2. AF_XDP DRV/Native mode
++   Works on any netdevice with XDP_REDIRECT support, driver dependent. Processes
++   packets before SKB allocation. Provides better performance than SKB. Driver
++   hook available just after DMA of buffer descriptor.
++   a. nopoll
++   b. poll
++   * Only copy mode is supported because veth does not currently support
++     zero-copy mode
 +
-+AF_XDP selftests based on veth
-+
-+# End-to-end AF_XDP over Veth test
-+#
-+# Topology:
-+# ---------
-+#                 -----------
-+#               _ | Process | _
-+#              /  -----------  \
-+#             /        |        \
-+#            /         |         \
-+#      -----------     |     -----------
-+#      | Thread1 |     |     | Thread2 |
-+#      -----------     |     -----------
-+#           |          |          |
-+#      -----------     |     -----------
-+#      |  xskX   |     |     |  xskY   |
-+#      -----------     |     -----------
-+#           |          |          |
-+#      -----------     |     ----------
-+#      |  vethX  | --------- |  vethY |
-+#      -----------   peer    ----------
-+#           |          |          |
-+#      namespaceX      |     namespaceY
-+
-+AF_XDP is an address family optimized for high performance packet processing,
-+it is XDP’s user-space interface.
-+
-+An AF_XDP socket is linked to a single UMEM which is a region of virtual
-+contiguous memory, divided into equal-sized frames.
-+
-+Refer to AF_XDP Kernel Documentation for detailed information:
-+https://www.kernel.org/doc/html/latest/networking/af_xdp.html
-+
-+Prerequisites setup by script TEST_PREREQUISITES.sh:
-+
-+   Set up veth interfaces as per the topology shown ^^:
-+   * setup two veth interfaces and one namespace
-+   ** veth<xxxx> in root namespace
-+   ** veth<yyyy> in af_xdp<xxxx> namespace
-+   ** namespace af_xdp<xxxx>
-+   * create a spec file veth.spec that includes this run-time configuration
-+     that is read by test scripts - filenames prefixed with TEST_XSK_
-+   *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
-+       conflict with any existing interface
-+
-+Kernel configuration:
-+---------------------
-+See "config" file for recommended kernel config options.
-+
-+Turn on XDP sockets and veth support when compiling i.e.
-+	Networking support -->
-+		Networking options -->
-+			[ * ] XDP sockets
-+
-+Executing Tests:
-+----------------
-+Must run with CAP_NET_ADMIN capability.
-+
-+Run (summary only):
-+  sudo make summary=1 run_tests
-+
-+Run (full color-coded output):
-+  sudo make colorconsole=1 run_tests
-+
-+Run (full output without color-coding):
-+  sudo make run_tests
-+
-+Clean:
-+  make clean
-diff --git a/tools/testing/selftests/xsk/TEST_PREREQUISITES.sh b/tools/testing/selftests/xsk/TEST_PREREQUISITES.sh
++Total tests: 4.
+ 
+ Flow:
+ * Single process spawns two threads: Tx and Rx
+diff --git a/tools/testing/selftests/xsk/TEST_XSK_DRV_NOPOLL.sh b/tools/testing/selftests/xsk/TEST_XSK_DRV_NOPOLL.sh
 new file mode 100755
-index 000000000000..cd542dbaf7ac
+index 000000000000..420f33ad6d14
 --- /dev/null
-+++ b/tools/testing/selftests/xsk/TEST_PREREQUISITES.sh
-@@ -0,0 +1,53 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright(c) 2020 Intel Corporation.
-+
-+. prereqs.sh
-+
-+TEST_NAME="PREREQUISITES"
-+
-+URANDOM=/dev/urandom
-+[ ! -e "${URANDOM}" ] && { echo "${URANDOM} not found. Skipping tests."; test_exit 1 1; }
-+
-+VETH0_POSTFIX=$(cat ${URANDOM} | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 4)
-+VETH0=ve${VETH0_POSTFIX}
-+VETH1_POSTFIX=$(cat ${URANDOM} | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 4)
-+VETH1=ve${VETH1_POSTFIX}
-+NS1=af_xdp${VETH1_POSTFIX}
-+IPADDR_VETH0=192.168.222.1/30
-+IPADDR_VETH1=192.168.222.2/30
-+MTU=1500
-+
-+setup_vethPairs() {
-+	echo "setting up ${VETH0}: root: ${IPADDR_VETH0}"
-+	ip netns add ${NS1}
-+	ip link add ${VETH0} type veth peer name ${VETH1}
-+	ip addr add dev ${VETH0} ${IPADDR_VETH0}
-+	echo "setting up ${VETH1}: ${NS1}: ${IPADDR_VETH1}"
-+	ip link set ${VETH1} netns ${NS1}
-+	ip netns exec ${NS1} ip addr add dev ${VETH1} ${IPADDR_VETH1}
-+	ip netns exec ${NS1} ip link set ${VETH1} mtu ${MTU}
-+	ip netns exec ${NS1} ip link set ${VETH1} up
-+	ip link set ${VETH0} mtu ${MTU}
-+	ip link set ${VETH0} up
-+}
-+
-+validate_root_exec
-+validate_veth_support ${VETH0}
-+validate_configs
-+setup_vethPairs
-+
-+retval=$?
-+if [ $retval -ne 0 ]; then
-+	test_status $retval "${TEST_NAME}"
-+	cleanup_exit ${VETH0} ${VETH1} ${NS1}
-+	exit $retval
-+fi
-+
-+echo "${VETH0}:${VETH1},${NS1}" > ${SPECFILE}
-+
-+echo "Spec file created: ${SPECFILE}"
-+
-+test_status $retval "${TEST_NAME}"
-+
-+exit $retval
-diff --git a/tools/testing/selftests/xsk/TEST_XSK.sh b/tools/testing/selftests/xsk/TEST_XSK.sh
-new file mode 100755
-index 000000000000..ad31b3e38b8f
---- /dev/null
-+++ b/tools/testing/selftests/xsk/TEST_XSK.sh
-@@ -0,0 +1,15 @@
++++ b/tools/testing/selftests/xsk/TEST_XSK_DRV_NOPOLL.sh
+@@ -0,0 +1,18 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +# Copyright(c) 2020 Intel Corporation.
@@ -304,185 +153,118 @@ index 000000000000..ad31b3e38b8f
 +. prereqs.sh
 +. xskenv.sh
 +
-+TEST_NAME="XSK FRAMEWORK"
++TEST_NAME="DRV NOPOLL"
 +
-+test_status $ksft_pass "${TEST_NAME}"
++vethXDPnative ${VETH0} ${VETH1} ${NS1}
 +
-+# Must be called in the last test to execute
-+cleanup_exit ${VETH0} ${VETH1} ${NS1}
++params=("-N")
++execxdpxceiver params
 +
-+test_exit $ksft_pass 0
-diff --git a/tools/testing/selftests/xsk/config b/tools/testing/selftests/xsk/config
-new file mode 100644
-index 000000000000..80311f71266d
---- /dev/null
-+++ b/tools/testing/selftests/xsk/config
-@@ -0,0 +1 @@
-+CONFIG_VETH=m
-diff --git a/tools/testing/selftests/xsk/prereqs.sh b/tools/testing/selftests/xsk/prereqs.sh
++retval=$?
++test_status $retval "${TEST_NAME}"
++
++test_exit $retval 0
+diff --git a/tools/testing/selftests/xsk/TEST_XSK_DRV_POLL.sh b/tools/testing/selftests/xsk/TEST_XSK_DRV_POLL.sh
 new file mode 100755
-index 000000000000..4c20aec45d99
+index 000000000000..05e6c0372074
 --- /dev/null
-+++ b/tools/testing/selftests/xsk/prereqs.sh
-@@ -0,0 +1,119 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright(c) 2020 Intel Corporation.
-+
-+ksft_pass=0
-+ksft_fail=1
-+ksft_xfail=2
-+ksft_xpass=3
-+ksft_skip=4
-+
-+GREEN='\033[0;92m'
-+YELLOW='\033[0;93m'
-+RED='\033[0;31m'
-+NC='\033[0m'
-+STACK_LIM=131072
-+SPECFILE=veth.spec
-+
-+validate_root_exec()
-+{
-+	msg="skip all tests:"
-+	if [ $UID != 0 ]; then
-+		echo $msg must be run as root >&2
-+		test_exit $ksft_fail 2
-+	else
-+		return $ksft_pass
-+	fi
-+}
-+
-+validate_veth_support()
-+{
-+	msg="skip all tests:"
-+	if [ $(ip link add $1 type veth 2>/dev/null; echo $?;) != 0 ]; then
-+		echo $msg veth kernel support not available >&2
-+		test_exit $ksft_skip 1
-+	else
-+		ip link del $1
-+		return $ksft_pass
-+	fi
-+}
-+
-+validate_veth_spec_file()
-+{
-+	if [ ! -f ${SPECFILE} ]; then
-+		test_exit $ksft_skip 1
-+	fi
-+}
-+
-+test_status()
-+{
-+	statusval=$1
-+	if [ -n "${colorconsole+set}" ]; then
-+		if [ $statusval -eq 2 ]; then
-+			echo -e "${YELLOW}$2${NC}: ${RED}FAIL${NC}"
-+		elif [ $statusval -eq 1 ]; then
-+			echo -e "${YELLOW}$2${NC}: ${RED}SKIPPED${NC}"
-+		elif [ $statusval -eq 0 ]; then
-+			echo -e "${YELLOW}$2${NC}: ${GREEN}PASS${NC}"
-+		fi
-+	else
-+		if [ $statusval -eq 2 ]; then
-+			echo -e "$2: FAIL"
-+		elif [ $statusval -eq 1 ]; then
-+			echo -e "$2: SKIPPED"
-+		elif [ $statusval -eq 0 ]; then
-+			echo -e "$2: PASS"
-+		fi
-+	fi
-+}
-+
-+test_exit()
-+{
-+	retval=$1
-+	if [ $2 -ne 0 ]; then
-+		test_status $2 $(basename $0)
-+	fi
-+	exit $retval
-+}
-+
-+clear_configs()
-+{
-+	if [ $(ip netns show | grep $3 &>/dev/null; echo $?;) == 0 ]; then
-+		[ $(ip netns exec $3 ip link show $2 &>/dev/null; echo $?;) == 0 ] &&
-+			{ echo "removing link $2"; ip netns exec $3 ip link del $2; }
-+		echo "removing ns $3"
-+		ip netns del $3
-+	fi
-+	#Once we delete a veth pair node, the entire veth pair is removed,
-+	#this is just to be cautious just incase the NS does not exist then
-+	#veth node inside NS won't get removed so we explicitly remove it
-+	[ $(ip link show $1 &>/dev/null; echo $?;) == 0 ] &&
-+		{ echo "removing link $1"; ip link del $1; }
-+	if [ -f ${SPECFILE} ]; then
-+		echo "removing spec file:" veth.spec
-+		rm -f ${SPECFILE}
-+	fi
-+}
-+
-+cleanup_exit()
-+{
-+	echo "cleaning up..."
-+	clear_configs $1 $2 $3
-+}
-+
-+validate_configs()
-+{
-+	[ ! $(type -P ip) ] && { echo "'ip' not found. Skipping tests."; test_exit $ksft_skip 1; }
-+}
-+
-+vethXDPgeneric()
-+{
-+	ip link set dev $1 xdpdrv off
-+	ip netns exec $3 ip link set dev $2 xdpdrv off
-+}
-+
-+vethXDPnative()
-+{
-+	ip link set dev $1 xdpgeneric off
-+	ip netns exec $3 ip link set dev $2 xdpgeneric off
-+}
-diff --git a/tools/testing/selftests/xsk/xskenv.sh b/tools/testing/selftests/xsk/xskenv.sh
-new file mode 100755
-index 000000000000..afc10bbdfb50
---- /dev/null
-+++ b/tools/testing/selftests/xsk/xskenv.sh
-@@ -0,0 +1,33 @@
++++ b/tools/testing/selftests/xsk/TEST_XSK_DRV_POLL.sh
+@@ -0,0 +1,21 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +# Copyright(c) 2020 Intel Corporation.
 +
 +. prereqs.sh
++. xskenv.sh
 +
-+XSKDIR=xdpprogs
-+XSKOBJ=xdpxceiver
-+NUMPKTS=10000
++TEST_NAME="DRV POLL"
 +
-+validate_veth_spec_file
++vethXDPnative ${VETH0} ${VETH1} ${NS1}
 +
-+VETH0=$(cat ${SPECFILE} | cut -d':' -f 1)
-+VETH1=$(cat ${SPECFILE} | cut -d':' -f 2 | cut -d',' -f 1)
-+NS1=$(cat ${SPECFILE} | cut -d':' -f 2 | cut -d',' -f 2)
++params=("-N" "-p")
++execxdpxceiver params
 +
-+execxdpxceiver()
-+{
-+	local -a 'paramkeys=("${!'"$1"'[@]}")' copy
-+	paramkeysstr=${paramkeys[*]}
++retval=$?
++test_status $retval "${TEST_NAME}"
 +
-+	for index in $paramkeysstr;
-+		do
-+			current=$1"[$index]"
-+			copy[$index]=${!current}
-+		done
++# Must be called in the last test to execute
++cleanup_exit ${VETH0} ${VETH1} ${NS1}
 +
-+	if [ -f ./${XSKOBJ} ]; then
-+		./${XSKOBJ} -i ${VETH0} -i ${VETH1},${NS1} ${copy[*]} -C ${NUMPKTS}
-+	else
-+		./${XSKDIR}/${XSKOBJ} -i ${VETH0} -i ${VETH1},${NS1} ${copy[*]} -C ${NUMPKTS}
-+	fi
-+}
++test_exit $retval 0
+diff --git a/tools/testing/selftests/xsk/TEST_XSK_SKB_POLL.sh b/tools/testing/selftests/xsk/TEST_XSK_SKB_POLL.sh
+index 4d314ed72cd8..a06582855d6e 100755
+--- a/tools/testing/selftests/xsk/TEST_XSK_SKB_POLL.sh
++++ b/tools/testing/selftests/xsk/TEST_XSK_SKB_POLL.sh
+@@ -15,7 +15,4 @@ execxdpxceiver params
+ retval=$?
+ test_status $retval "${TEST_NAME}"
+ 
+-# Must be called in the last test to execute
+-cleanup_exit ${VETH0} ${VETH1} ${NS1}
+-
+ test_exit $retval 0
+diff --git a/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.c b/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.c
+index 9855a3b33fae..777f839bbd3a 100644
+--- a/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.c
++++ b/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.c
+@@ -49,7 +49,7 @@ static void __exit_with_error(int error, const char *file, const char *func, int
+ #define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
+ 
+ #define print_ksft_result(void)\
+-	(ksft_test_result_pass("PASS: %s %s\n", uut ? "" : "SKB", opt_poll ? "POLL" : "NOPOLL"))
++	(ksft_test_result_pass("PASS: %s %s\n", uut ? "DRV" : "SKB", opt_poll ? "POLL" : "NOPOLL"))
+ 
+ static void pthread_init_mutex(void)
+ {
+@@ -272,6 +272,7 @@ static struct option long_options[] = {
+ 	{"queue", optional_argument, 0, 'q'},
+ 	{"poll", no_argument, 0, 'p'},
+ 	{"xdp-skb", no_argument, 0, 'S'},
++	{"xdp-native", no_argument, 0, 'N'},
+ 	{"copy", no_argument, 0, 'c'},
+ 	{"debug", optional_argument, 0, 'D'},
+ 	{"tx-pkt-count", optional_argument, 0, 'C'},
+@@ -287,6 +288,7 @@ static void usage(const char *prog)
+ 	    "  -q, --queue=n        Use queue n (default 0)\n"
+ 	    "  -p, --poll           Use poll syscall\n"
+ 	    "  -S, --xdp-skb=n      Use XDP SKB mode\n"
++	    "  -N, --xdp-native=n   Enforce XDP DRV (native) mode\n"
+ 	    "  -c, --copy           Force copy mode\n"
+ 	    "  -D, --debug          Debug mode - dump packets L2 - L5\n"
+ 	    "  -C, --tx-pkt-count=n Number of packets to send\n";
+@@ -378,7 +380,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
+ 
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "i:q:pScDC:", long_options, &option_index);
++		c = getopt_long(argc, argv, "i:q:pSNcDC:", long_options, &option_index);
+ 
+ 		if (c == -1)
+ 			break;
+@@ -408,6 +410,11 @@ static void parse_command_line(int argc, char **argv)
+ 			opt_xdp_bind_flags |= XDP_COPY;
+ 			uut = ORDER_CONTENT_VALIDATE_XDP_SKB;
+ 			break;
++		case 'N':
++			opt_xdp_flags |= XDP_FLAGS_DRV_MODE;
++			opt_xdp_bind_flags |= XDP_COPY;
++			uut = ORDER_CONTENT_VALIDATE_XDP_DRV;
++			break;
+ 		case 'c':
+ 			opt_xdp_bind_flags |= XDP_COPY;
+ 			break;
+diff --git a/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.h b/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.h
+index 385a01ab04c0..91ddc01836c9 100644
+--- a/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.h
++++ b/tools/testing/selftests/xsk/xdpprogs/xdpxceiver.h
+@@ -45,6 +45,7 @@ typedef __u8 u8;
+ 
+ enum TESTS {
+ 	ORDER_CONTENT_VALIDATE_XDP_SKB = 0,
++	ORDER_CONTENT_VALIDATE_XDP_DRV = 1,
+ };
+ 
+ u8 uut;
 -- 
 2.20.1
 
