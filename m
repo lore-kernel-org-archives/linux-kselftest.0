@@ -1,70 +1,68 @@
-Return-Path: <SRS0=eqYf=EF=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=qdIi=EG=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 428AEC00A89
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 22:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C85BC388F7
+	for <linux-kselftest@archiver.kernel.org>; Sat, 31 Oct 2020 04:01:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E40DC22245
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Oct 2020 22:40:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08EC2221EB
+	for <linux-kselftest@archiver.kernel.org>; Sat, 31 Oct 2020 04:01:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V+1Ed5WW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mHiQjW81"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725850AbgJ3WkX (ORCPT
+        id S1725794AbgJaEB6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Oct 2020 18:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        Sat, 31 Oct 2020 00:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgJ3WkX (ORCPT
+        with ESMTP id S1725536AbgJaEB6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Oct 2020 18:40:23 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B39C0613D7
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 15:40:22 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id s7so9095721iol.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 15:40:22 -0700 (PDT)
+        Sat, 31 Oct 2020 00:01:58 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6727C0613D5
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 21:01:57 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id y16so9072407ljk.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Oct 2020 21:01:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qPiHiPR7+ri0iS+ZKcEuF5v+EX92UMPdQOzhZido+90=;
-        b=V+1Ed5WWxhUEd2T+xYfgrxQLcLBRp/fDTNPqWMqBJRbP37K0HXQmGkreqcmY1+e6xy
-         cwz6NoS0bV1KK1rY4bDZ7/+JjvS63QyzVAbG6gra9eCDQVHYnIKP79aR6If622aUK9Qt
-         g7+lI2LEEXI2vsA70xU/sPxJX6bDBNLl1Xo1rgWnM8h0kmXaNHMf/mY5Nkv7j0p20YIZ
-         9tvrBCXDDlbtNBdq37yVVuZ9suuxTgAJBny88Pt2VmozIff6pGdHNMN/2JyU2wgoJzTu
-         jJ8Py3pgSbyldg6SBtlougxENzmSYMuUap4glz86k/Mj5GBRZ4UiPGrhQTGeMaZ3Xt2s
-         FTNA==
+        bh=ETtqSrQhvAh1kNurb1hmA5QcXFWk0AIhIay9EmRKULE=;
+        b=mHiQjW815EHewCpRcXjUgBXggmms34FwzyqgZC7aIm7n7geiTuNeF6EswiM3Kc5kGl
+         t2+6HJ8eps93bd1YNv9SKTmKsI7gyrbrjV28ZsxCY2v6ByoLzBiH+5jrmDxoxVMUqfvA
+         Ffqe9ZoutlC3Ze5SJeQqUGtZEHclUOYjOtacm/IzhtsBN7OHXZmR4vs4r1sGhbmqoLJ2
+         XnnGTLf7aWYLEytSagawhVKvtbd/AbZSBlRqHcuzK6NPY1judRZpwjNJ7YXQlzshiW6i
+         XxtpqSKNUlJav9eXYp3QlnxgopIZIC8VUjtj+GJEhfa9C9/V1mLOEg8CubWdn830KE3O
+         WSLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qPiHiPR7+ri0iS+ZKcEuF5v+EX92UMPdQOzhZido+90=;
-        b=EIj8n3T08iJjod0gytCGEHMJ94M+qPRxY7MDKi31mBUkS1XHYPCAWieKNl5FuFJbwg
-         iLJbl8EIxm5tXBQV54OrvbTZ303OmDD5QgNdpxpOVThgM/7ch3PkDZYEcBU7VGg/RSpX
-         9WFKI05HfxcVHat4u8jKc0RxGy9hrdxcuxs/FHKJoxgGjkNFUoOZd3bxPLGnE6hROHb+
-         YpEJ51zWx0af5zFaEgTIFA0xnsUaYvxeJSNDQRvCeYbq1AAhfPgG9MEz4+hP/VikMQLG
-         1GrzWMLxd5Bsblq9JvaPvIXATLAl25KWVoSK+HNvvjcEHpQbwm1MieJmp+2aQuCavyh1
-         mN5A==
-X-Gm-Message-State: AOAM533uKxWYIiqf/tOhIErU1im7dOqhSkasbceEb4lIpYeJ0D6QyS2A
-        c5lflxJeFszpQlkNiqdqTgmusNMX7gJ5CrJPVuJGlZU0PR3bgA==
-X-Google-Smtp-Source: ABdhPJycj4MjGkAuGF0rlZv4n/ZCRZtVJcarw1o17K1FczKhw3FxWPknw794sFF0U+P4iN2gyyj2p5UhWHkK0YqstfE=
-X-Received: by 2002:a05:6602:235b:: with SMTP id r27mr3557242iot.123.1604097621978;
- Fri, 30 Oct 2020 15:40:21 -0700 (PDT)
+        bh=ETtqSrQhvAh1kNurb1hmA5QcXFWk0AIhIay9EmRKULE=;
+        b=pVWXcVIneGEBIBlUmghbNpcwGUyyW86M3jznEwpeHf7gDQJ+rBkJ5E4Sgu4ppDuDFD
+         YqfdpVVA1oXlyMyCuCVn+kjS7zLihclWOafWhacD4JLpopHfeGTBlWUE5+mLzCZYc323
+         lhNfeUiCM1dLRr8RdBxRDdfAembDjRJPCqMTP+yv2stO/xUYIXnR4mRyLAExhwqmP5kH
+         jwL1w6L2HAOOBSbYFu9uJKm/p+BlyBDX6ynZRj4wU+S2Hv/G9RRF3KsFrtoCTkgoku7m
+         vZx3VM6H5WAo7bMjxXddmZTuBAmuKJssvU5AhtVoXKzDAYWtwDACPamQ6U9sreaoZyth
+         fx1Q==
+X-Gm-Message-State: AOAM533mq1YoW/jd6Wk3ow3xwZWdGQVuKArcc4jaVx+LHF5G+raFbzEx
+        zm9YYwxPVKR3TpAC0q0mI2kjkasqWkJOocKD9zEJWA==
+X-Google-Smtp-Source: ABdhPJwLljGjbuVkn45WqSFbkW+Y4oSPE4gIh9HxQfVQ2vX401iUH6Xg48APQHoBApEEU5fyzmueYps8M0P75O01c+Y=
+X-Received: by 2002:a2e:7c0f:: with SMTP id x15mr2131261ljc.401.1604116915849;
+ Fri, 30 Oct 2020 21:01:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201020233219.4146059-1-dlatypov@google.com> <CABVgOSnPpC=j7MrcmDpvvG6i_voiFQe4137ieyYX+-9B4=G39w@mail.gmail.com>
- <CAGS_qxpp5ZwA_fWuSG0_P2azS2PpojQDQjzQrwWqYoNNZYs7tg@mail.gmail.com> <CABVgOSkbq+t919Bf6z_Ua=WSmOuCCRPy5fe+sseR2R65QtyrCg@mail.gmail.com>
-In-Reply-To: <CABVgOSkbq+t919Bf6z_Ua=WSmOuCCRPy5fe+sseR2R65QtyrCg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 30 Oct 2020 15:40:10 -0700
-Message-ID: <CAGS_qxo75FDOpG3e3eskWMx3CoveiyG+ujM-sxuLWw4+7myh5g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: fix extra trailing \n in parsed test output
-To:     David Gow <davidgow@google.com>
+References: <20201030223853.554597-1-dlatypov@google.com>
+In-Reply-To: <20201030223853.554597-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 31 Oct 2020 12:01:44 +0800
+Message-ID: <CABVgOSkTnBpvUGYFUmdrW=ouMsrG__BeU36YAo8D6Kco4NGMFA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: fix extra trailing \n in raw + parsed test output
+To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
@@ -75,125 +73,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 12:22 AM David Gow <davidgow@google.com> wrote:
+On Sat, Oct 31, 2020 at 6:39 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Fri, Oct 30, 2020 at 1:41 PM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > On Thu, Oct 29, 2020 at 7:34 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > On Wed, Oct 21, 2020 at 7:32 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > > >
-> > > > For simplcity, strip all trailing whitespace from parsed output.
-> > > > I imagine no one is printing out meaningful trailing whitespace via
-> > > > KUNIT_FAIL() or similar, and that if they are, they really shouldn't.
-> > > >
-> > > > At some point, the lines from `isolate_kunit_output()` started having
-> > > > trailing \n, which results in artifacty output like this:
-> > > >
-> > > > $ ./tools/testing/kunit/kunit.py run
-> > > > [16:16:46] [FAILED] example_simple_test
-> > > > [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-> > > >
-> > > > [16:16:46]     Expected 1 + 1 == 3, but
-> > > >
-> > > > [16:16:46]         1 + 1 == 2
-> > > >
-> > > > [16:16:46]         3 == 3
-> > > >
-> > > > [16:16:46]     not ok 1 - example_simple_test
-> > > >
-> > > > [16:16:46]
-> > > >
-> > > > After this change:
-> > > > [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
-> > > > [16:16:46]     Expected 1 + 1 == 3, but
-> > > > [16:16:46]         1 + 1 == 2
-> > > > [16:16:46]         3 == 3
-> > > > [16:16:46]     not ok 1 - example_simple_test
-> > > > [16:16:46]
-> > > >
-> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > > > ---
-> > >
-> > > Thanks! This is a long-overdue fix, and it worked well for me.
-> > >
-> > > Tested-by: David Gow <davidgow@google.com>
-> > >
-> > > One comment below:
-> > >
-> > > >  tools/testing/kunit/kunit_parser.py | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> > > > index 8019e3dd4c32..e68b1c66a73f 100644
-> > > > --- a/tools/testing/kunit/kunit_parser.py
-> > > > +++ b/tools/testing/kunit/kunit_parser.py
-> > > > @@ -342,7 +342,8 @@ def parse_run_tests(kernel_output) -> TestResult:
-> > > >         total_tests = 0
-> > > >         failed_tests = 0
-> > > >         crashed_tests = 0
-> > > > -       test_result = parse_test_result(list(isolate_kunit_output(kernel_output)))
-> > > > +       test_result = parse_test_result(list(
-> > > > +            l.rstrip() for l in isolate_kunit_output(kernel_output)))
-> > >
-> > > Could we do this inside isolate_kunit_output() instead? That seems
-> > > like it'd be a more logical place for it (removing the newline is a
-> > > sort of isolating the output), and it'd avoid making this line quite
-> > > as horrifyingly nested.
-> >
-> > Good point.
-> > We could either do it on each yield (messy), or before, i.e.
-> >
-> > diff --git a/tools/testing/kunit/kunit_parser.py
-> > b/tools/testing/kunit/kunit_parser.py
-> > index 8019e3dd4c32..14d35deb96cd 100644
-> > --- a/tools/testing/kunit/kunit_parser.py
-> > +++ b/tools/testing/kunit/kunit_parser.py
-> > @@ -54,6 +54,7 @@ kunit_end_re = re.compile('(List of all partitions:|'
-> >  def isolate_kunit_output(kernel_output):
-> >         started = False
-> >         for line in kernel_output:
-> > +               line = line.rstrip()  # line always has a trailing \n
-> >                 if kunit_start_re.search(line):
-> >                         prefix_len = len(line.split('TAP version')[0])
-> >                         started = True
-> >
-> > I had some vague concerns about this as
-> >   kunit_start_re = re.compile(r'TAP version [0-9]+$')
-> > has that anchor at the end.
-> >
-> > This could ostensibly make it match more things than before.
-> > Since I'm using rstrip() out of laziness, that means strings like
-> >   '<prefix we allow for some reason>TAP version 42\t\n'
-> > will now also match.
-> >
-> > I don't really think that's an issue, but I'd sent this as a more
-> > conservative change initially.
-> > I can send the diff above as a replacement for this patch.
+> For simplcity, strip all trailing whitespace from parsed output.
+> I imagine no one is printing out meaningful trailing whitespace via
+> KUNIT_FAIL() or similar, and that if they are, they really shouldn't.
 >
-> I prefer this if it works. From my cursory testing, it does (though
-> the kunt_tool_tests.py tests will need updating). At the very least,
-> I'm able to get it to work with --alltests / allyesconfig (with a few
-> options tactically disabled), which was the main reason we needed
-> isolate_kunit_output() in the first place.
+> `isolate_kunit_output()` yielded liens with trailing \n, which results
+> in artifacty output like this:
 >
-> So, unless anyone can find a real-world case where this breaks
-> something, let's go with this.
+> $ ./tools/testing/kunit/kunit.py run
+> [16:16:46] [FAILED] example_simple_test
+> [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+>
+> [16:16:46]     Expected 1 + 1 == 3, but
+>
+> [16:16:46]         1 + 1 == 2
+>
+> [16:16:46]         3 == 3
+>
+> [16:16:46]     not ok 1 - example_simple_test
+>
+> [16:16:46]
+>
+> After this change:
+> [16:16:46]     # example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:29
+> [16:16:46]     Expected 1 + 1 == 3, but
+> [16:16:46]         1 + 1 == 2
+> [16:16:46]         3 == 3
+> [16:16:46]     not ok 1 - example_simple_test
+> [16:16:46]
+>
+> We should *not* be expecting lines to end with \n in kunit_tool_test.py
+> for this reason.
+>
+> Do the same for `raw_output()` as well which suffers from the same
+> issue.
+>
+> This is a followup to [1], but rebased onto kunit-fixes to pick up the
+> other raw_output() fix and fixes for kunit_tool_test.py.
+>
+> [1] https://lore.kernel.org/linux-kselftest/20201020233219.4146059-1-dlatypov@google.com/
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Sounds good.
-Sent https://lore.kernel.org/linux-kselftest/20201030223853.554597-1-dlatypov@google.com
+Thanks!
 
->
-> Cheers,
-> -- David
->
-> >
-> > >
-> > > >         if test_result.status == TestStatus.NO_TESTS:
-> > > >                 print(red('[ERROR] ') + yellow('no tests run!'))
-> > > >         elif test_result.status == TestStatus.FAILURE_TO_PARSE_TESTS:
-> > > >
-> > > > base-commit: c4d6fe7311762f2e03b3c27ad38df7c40c80cc93
-> > > > --
-> > > > 2.29.0.rc1.297.gfa9743e501-goog
-> > > >
+I tried this out against everything I could (including the nastier
+--alltests option), and didn't hit any problems, so it looks good to
+go to me!
+
+Reviewed-by: David Gow <davidgow@google.com>
+Tested-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
