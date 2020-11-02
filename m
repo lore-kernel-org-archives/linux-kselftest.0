@@ -2,213 +2,296 @@ Return-Path: <SRS0=9g6x=EI=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9382DC00A89
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 18:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D30BC00A89
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 20:53:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42BFD21D91
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 18:00:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WRYlpH7a"
+	by mail.kernel.org (Postfix) with ESMTP id CDB5E206CA
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 20:53:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725974AbgKBSAk (ORCPT
+        id S1727028AbgKBUxn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Nov 2020 13:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgKBSAk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 13:00:40 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8EC0617A6
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 Nov 2020 10:00:40 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id o129so11790222pfb.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Nov 2020 10:00:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JCS8+Foym0V3+0lDcQEbg6YNaDy+BKQJweT9xWhLD6U=;
-        b=WRYlpH7a96POABS9s0MQrALwydcOMlPt3dJUSkIW1s+A3yFw6H1Aic3HU+Sy7qFQpc
-         vmL9BB6rwGKUex2Xw/uwpzkeoBDP80Qc7R25CGCks0ZNYA9zEZpudFs6SajrK/+CUz/E
-         xGcjt3lg2iTT/50AHF0h90Wow3/dAvEVQtEKOxesCYYZtNYvfaexobSiUTsQRRcR+Z8v
-         XChiuVDzYKdGt51m/Qson+1W8tU/PKrHb9feBpiHA9a2mAJSpbiFOe5JeT4dUSO90q6v
-         //LGaw2txuHywdVHc4+xfOzHlHJifppn4x3UEYjNnM30SEdWA8XuX0LRo5bCcR1sFmVz
-         Bmrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JCS8+Foym0V3+0lDcQEbg6YNaDy+BKQJweT9xWhLD6U=;
-        b=fZJWCZSvIiAHp4b4768dcbi9x8/cORRZrObiVUwO6JyJ94XB6DL64kJPfpuVxFq3sI
-         Qzigp54rXE976Mkl8iOEjHUbLgc/pqPeAcWidf6K6wbr99Itf9FL+DaowIUJCrebrtUk
-         +bDIF7hemfcLBUPsZFyPM4KUkZz/aouDrtKRuZDwDfZIbe4llELJloFC3N/qLUsHeBFb
-         iIp+uvrSW3hfRUEpf7H7tnXjwG0GdYLL5iT7xk5gdTZKitdvuADM+Wg+eGmGxhD4uJdL
-         SO1VFrdPnIu/LJfuiy38dOqEU5bGXmgxXq3hbOJUzkJwvhQ/9MTKOwj4yD4KBf/Cs112
-         qSXg==
-X-Gm-Message-State: AOAM533v0XZ0o76DNqPdD98qvPsaS6BrdhebfEBjSvpGAX2j+BiZws7q
-        L0fOLmkHING05TvglEhZaZmV6nJX6l+753I8f51Ddw==
-X-Google-Smtp-Source: ABdhPJywSgxMdnM1FRrYcgCzQSM1DiB2wRZWCaPsou6QXTFAY8X8jeHj6iUML+/rYs26RFWYkhsL131C0UNB3hwW6iw=
-X-Received: by 2002:a17:90a:de94:: with SMTP id n20mr6747196pjv.217.1604340039685;
- Mon, 02 Nov 2020 10:00:39 -0800 (PST)
+        Mon, 2 Nov 2020 15:53:43 -0500
+Received: from mga04.intel.com ([192.55.52.120]:8872 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726891AbgKBUxm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Nov 2020 15:53:42 -0500
+IronPort-SDR: LFMFKNv1fy1hrOlyRJ2z7KVlOGGXSf4qjtDeZs6n2x+yYhVFnKRoMkDpXnQYrT8sfAEyXxLQEd
+ 6Y9FwkCFFMzg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9793"; a="166359125"
+X-IronPort-AV: E=Sophos;i="5.77,445,1596524400"; 
+   d="scan'208";a="166359125"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2020 12:53:42 -0800
+IronPort-SDR: ta3U9kd0Jsn/cIY2nPtdojoxRCkd+dStFMatPLl9Nam6TvbTjoC4kRArmbI3g4iAWYMaKeVB6x
+ NR6Q8kmAW2bQ==
+X-IronPort-AV: E=Sophos;i="5.77,445,1596524400"; 
+   d="scan'208";a="363369735"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2020 12:53:41 -0800
+From:   ira.weiny@intel.com
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V2 08/10] x86/entry: Preserve PKRS MSR across exceptions
+Date:   Mon,  2 Nov 2020 12:53:18 -0800
+Message-Id: <20201102205320.1458656-9-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
+In-Reply-To: <20201102205320.1458656-1-ira.weiny@intel.com>
+References: <20201102205320.1458656-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-References: <20201012222050.999431-1-dlatypov@google.com>
-In-Reply-To: <20201012222050.999431-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 2 Nov 2020 10:00:28 -0800
-Message-ID: <CAFd5g45kdj8mTqStN6hreJEaa47z3+2ZXQDnzZ=Nz6vA50x=Gg@mail.gmail.com>
-Subject: Re: [RFC v2 00/12] kunit: introduce class mocking support.
-To:     Daniel Latypov <dlatypov@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        David Gow <davidgow@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+Joel Stanley +Daniel Vetter
+From: Ira Weiny <ira.weiny@intel.com>
 
-If I remember correctly, both of you said you were interested in
-mocking on KUnit. This RFC only has some of the mocking features that
-I mentioned previously, but I would still like to get your thoughts.
+The PKRS MSR is not managed by XSAVE.  It is preserved through a context
+switch but this support leaves exception handling code open to memory
+accesses during exceptions.
 
-On Mon, Oct 12, 2020 at 3:21 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> # Background
-> KUnit currently lacks any first-class support for mocking.
-> For an overview and discussion on the pros and cons, see
-> https://martinfowler.com/articles/mocksArentStubs.html
->
-> This patch set introduces the basic machinery needed for mocking:
-> setting and validating expectations, setting default actions, etc.
->
-> Using that basic infrastructure, we add macros for "class mocking", as
-> it's probably the easiest type of mocking to start with.
->
-> ## Class mocking
->
-> By "class mocking", we're referring mocking out function pointers stored
-> in structs like:
->   struct sender {
->         int (*send)(struct sender *sender, int data);
->   };
-> or in ops structs
->   struct sender {
->         struct send_ops *ops; // contains `send`
->   };
->
-> After the necessary DEFINE_* macros, we can then write code like
->   struct MOCK(sender) mock_sender = CONSTRUCT_MOCK(sender, test);
->
->   /* Fake an error for a specific input. */
->   handle = KUNIT_EXPECT_CALL(send(<omitted>, kunit_int_eq(42)));
->   handle->action = kunit_int_return(test, -EINVAL);
->
->   /* Pass the mocked object to some code under test. */
->   KUNIT_EXPECT_EQ(test, -EINVAL, send_message(...));
->
-> I.e. the goal is to make it easier to test
-> 1) with less dependencies (we don't need to setup a real `sender`)
-> 2) unusual/error conditions more easily.
->
-> In the future, we hope to build upon this to support mocking in more
-> contexts, e.g. standalone funcs, etc.
->
-> # TODOs
->
-> ## Naming
-> This introduces a number of new macros for dealing with mocks,
-> e.g:
->   DEFINE_STRUCT_CLASS_MOCK(METHOD(foo), CLASS(example),
->                            RETURNS(int),
->                            PARAMS(struct example *, int));
->   ...
->   KUNIT_EXPECT_CALL(foo(mock_get_ctrl(mock_example), ...);
-> For consistency, we could prefix everything with KUNIT, e.g.
-> `KUNIT_DEFINE_STRUCT_CLASS_MOCK` and `kunit_mock_get_ctrl`, but it feels
-> like the names might be long enough that they would hinder readability.
->
-> ## Usage
-> For now the only use of class mocking is in kunit-example-test.c
-> As part of changing this from an RFC to a real patch set, we're hoping
-> to include at least one example.
->
-> Pointers to bits of code where this would be useful that aren't too
-> hairy would be appreciated.
-> E.g. could easily add a test for tools/perf/ui/progress.h, e.g. that
-> ui_progress__init() calls ui_progress_ops.init(), but that likely isn't
-> useful to anyone.
->
-> ---
-> v2:
-> * Pass `struct kunit *` to mock init's to allow allocating ops structs.
-> * Update kunit-example-test.cc to do so as a more realistic example.
-> v1: https://lore.kernel.org/linux-kselftest/20200918183114.2571146-1-dlatypov@google.com/
-> ---
->
-> Brendan Higgins (9):
->   kunit: test: add kunit_stream a std::stream like logger
->   kunit: test: add concept of post conditions
->   checkpatch: add support for struct MOCK(foo) syntax
->   kunit: mock: add parameter list manipulation macros
->   kunit: mock: add internal mock infrastructure
->   kunit: mock: add basic matchers and actions
->   kunit: mock: add class mocking support
->   kunit: mock: add struct param matcher
->   kunit: mock: implement nice, strict and naggy mock distinctions
->
-> Daniel Latypov (2):
->   Revert "kunit: move string-stream.h to lib/kunit"
->   kunit: expose kunit_set_failure() for use by mocking
->
-> Marcelo Schmitt (1):
->   kunit: mock: add macro machinery to pick correct format args
->
->  include/kunit/assert.h                 |   3 +-
->  include/kunit/kunit-stream.h           |  94 +++
->  include/kunit/mock.h                   | 902 +++++++++++++++++++++++++
->  include/kunit/params.h                 | 305 +++++++++
->  {lib => include}/kunit/string-stream.h |   2 +
->  include/kunit/test.h                   |   9 +
->  lib/kunit/Makefile                     |   9 +-
->  lib/kunit/assert.c                     |   2 -
->  lib/kunit/common-mocks.c               | 409 +++++++++++
->  lib/kunit/kunit-example-test.c         |  98 +++
->  lib/kunit/kunit-stream.c               | 110 +++
->  lib/kunit/mock-macro-test.c            | 241 +++++++
->  lib/kunit/mock-test.c                  | 531 +++++++++++++++
->  lib/kunit/mock.c                       | 370 ++++++++++
->  lib/kunit/string-stream-test.c         |   3 +-
->  lib/kunit/string-stream.c              |   5 +-
->  lib/kunit/test.c                       |  15 +-
->  scripts/checkpatch.pl                  |   4 +
->  18 files changed, 3099 insertions(+), 13 deletions(-)
->  create mode 100644 include/kunit/kunit-stream.h
->  create mode 100644 include/kunit/mock.h
->  create mode 100644 include/kunit/params.h
->  rename {lib => include}/kunit/string-stream.h (95%)
->  create mode 100644 lib/kunit/common-mocks.c
->  create mode 100644 lib/kunit/kunit-stream.c
->  create mode 100644 lib/kunit/mock-macro-test.c
->  create mode 100644 lib/kunit/mock-test.c
->  create mode 100644 lib/kunit/mock.c
->
->
-> base-commit: 10b82d5176488acee2820e5a2cf0f2ec5c3488b6
-> --
-> 2.28.0.1011.ga647a8990f-goog
->
+2 possible places for preserving this state were considered,
+irqentry_state_t or pt_regs.[1]  pt_regs was much more complicated and
+was potentially fraught with unintended consequences.[2]
+irqentry_state_t was already an object being used in the exception
+handling and is straightforward.  It is also easy for any number of
+nested states to be tracked and eventually can be enhanced to store the
+reference counting required to support PKS through kmap reentry
+
+Preserve the current task's PKRS values in irqentry_state_t on exception
+entry and restoring them on exception exit.
+
+Each nested exception is further saved allowing for any number of levels
+of exception handling.
+
+Peter and Thomas both suggested parts of the patch, IDT and NMI respectively.
+
+[1] https://lore.kernel.org/lkml/CALCETrVe1i5JdyzD_BcctxQJn+ZE3T38EFPgjxN1F577M36g+w@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/874kpxx4jf.fsf@nanos.tec.linutronix.de/#t
+
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+
+---
+Changes from V1
+	remove redundant irq_state->pkrs
+		This value is only needed for the global tracking.  So
+		it should be included in that patch and not in this one.
+
+Changes from RFC V3
+	Standardize on 'irq_state' variable name
+	Per Dave Hansen
+		irq_save_pkrs() -> irq_save_set_pkrs()
+	Rebased based on clean up patch by Thomas Gleixner
+		This includes moving irq_[save_set|restore]_pkrs() to
+		the core as well.
+---
+ arch/x86/entry/common.c             | 38 +++++++++++++++++++++++++++++
+ arch/x86/include/asm/pkeys_common.h |  5 ++--
+ arch/x86/mm/pkeys.c                 |  2 +-
+ include/linux/entry-common.h        | 13 ++++++++++
+ kernel/entry/common.c               | 14 +++++++++--
+ 5 files changed, 67 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
+index 87dea56a15d2..1b6a419a6fac 100644
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -19,6 +19,7 @@
+ #include <linux/nospec.h>
+ #include <linux/syscalls.h>
+ #include <linux/uaccess.h>
++#include <linux/pkeys.h>
+ 
+ #ifdef CONFIG_XEN_PV
+ #include <xen/xen-ops.h>
+@@ -209,6 +210,41 @@ SYSCALL_DEFINE0(ni_syscall)
+ 	return -ENOSYS;
+ }
+ 
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++/*
++ * PKRS is a per-logical-processor MSR which overlays additional protection for
++ * pages which have been mapped with a protection key.
++ *
++ * The register is not maintained with XSAVE so we have to maintain the MSR
++ * value in software during context switch and exception handling.
++ *
++ * Context switches save the MSR in the task struct thus taking that value to
++ * other processors if necessary.
++ *
++ * To protect against exceptions having access to this memory we save the
++ * current running value and set the PKRS value for the duration of the
++ * exception.  Thus preventing exception handlers from having the elevated
++ * access of the interrupted task.
++ */
++noinstr void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_PKS))
++		return;
++
++	irq_state->thread_pkrs = current->thread.saved_pkrs;
++	write_pkrs(INIT_PKRS_VALUE);
++}
++
++noinstr void irq_restore_pkrs(irqentry_state_t *irq_state)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_PKS))
++		return;
++
++	write_pkrs(irq_state->thread_pkrs);
++	current->thread.saved_pkrs = irq_state->thread_pkrs;
++}
++#endif /* CONFIG_ARCH_HAS_SUPERVISOR_PKEYS */
++
+ #ifdef CONFIG_XEN_PV
+ #ifndef CONFIG_PREEMPTION
+ /*
+@@ -272,6 +308,8 @@ __visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
+ 
+ 	inhcall = get_and_clear_inhcall();
+ 	if (inhcall && !WARN_ON_ONCE(irq_state.exit_rcu)) {
++		/* Normally called by irqentry_exit, we must restore pkrs here */
++		irq_restore_pkrs(&irq_state);
+ 		instrumentation_begin();
+ 		irqentry_exit_cond_resched();
+ 		instrumentation_end();
+diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
+index cd492c23b28c..f921c58793f9 100644
+--- a/arch/x86/include/asm/pkeys_common.h
++++ b/arch/x86/include/asm/pkeys_common.h
+@@ -31,9 +31,10 @@
+ #define        PKS_NUM_KEYS            16
+ 
+ #ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
+-void write_pkrs(u32 new_pkrs);
++DECLARE_PER_CPU(u32, pkrs_cache);
++noinstr void write_pkrs(u32 new_pkrs);
+ #else
+-static inline void write_pkrs(u32 new_pkrs) { }
++static __always_inline void write_pkrs(u32 new_pkrs) { }
+ #endif
+ 
+ #endif /*_ASM_X86_PKEYS_INTERNAL_H */
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index 0dc77409957a..39ec034cf379 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -252,7 +252,7 @@ DEFINE_PER_CPU(u32, pkrs_cache);
+  *     until all prior executions of WRPKRU have completed execution
+  *     and updated the PKRU register.
+  */
+-void write_pkrs(u32 new_pkrs)
++noinstr void write_pkrs(u32 new_pkrs)
+ {
+ 	u32 *pkrs;
+ 
+diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+index 0e10d0b85817..235110f34a06 100644
+--- a/include/linux/entry-common.h
++++ b/include/linux/entry-common.h
+@@ -343,6 +343,8 @@ void irqentry_exit_to_user_mode(struct pt_regs *regs);
+ #ifndef irqentry_state
+ /**
+  * struct irqentry_state - Opaque object for exception state storage
++ * @thread_pkrs: Thread Supervisor Pkey value to be restored when exception is
++ *               complete.
+  * @exit_rcu: Used exclusively in the irqentry_*() calls; signals whether the
+  *            exit path has to invoke rcu_irq_exit().
+  * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures that
+@@ -357,6 +359,9 @@ void irqentry_exit_to_user_mode(struct pt_regs *regs);
+  * the maintenance of the irqentry_*() functions.
+  */
+ typedef struct irqentry_state {
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++	u32 thread_pkrs;
++#endif
+ 	union {
+ 		bool	exit_rcu;
+ 		bool	lockdep;
+@@ -364,6 +369,14 @@ typedef struct irqentry_state {
+ } irqentry_state_t;
+ #endif
+ 
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++noinstr void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val);
++noinstr void irq_restore_pkrs(irqentry_state_t *irq_state);
++#else
++static __always_inline void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val) { }
++static __always_inline void irq_restore_pkrs(irqentry_state_t *irq_state) { }
++#endif
++
+ /**
+  * irqentry_enter - Handle state tracking on ordinary interrupt entries
+  * @regs:	Pointer to pt_regs of interrupted context
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 359688400c6b..2340011a5a06 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -326,7 +326,7 @@ noinstr void irqentry_enter(struct pt_regs *regs, irqentry_state_t *irq_state)
+ 		instrumentation_end();
+ 
+ 		irq_state->exit_rcu = true;
+-		return;
++		goto done;
+ 	}
+ 
+ 	/*
+@@ -340,6 +340,9 @@ noinstr void irqentry_enter(struct pt_regs *regs, irqentry_state_t *irq_state)
+ 	/* Use the combo lockdep/tracing function */
+ 	trace_hardirqs_off();
+ 	instrumentation_end();
++
++done:
++	irq_save_set_pkrs(irq_state, INIT_PKRS_VALUE);
+ }
+ 
+ void irqentry_exit_cond_resched(void)
+@@ -361,7 +364,12 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t *irq_state)
+ 	/* Check whether this returns to user mode */
+ 	if (user_mode(regs)) {
+ 		irqentry_exit_to_user_mode(regs);
+-	} else if (!regs_irqs_disabled(regs)) {
++		return;
++	}
++
++	irq_restore_pkrs(irq_state);
++
++	if (!regs_irqs_disabled(regs)) {
+ 		/*
+ 		 * If RCU was not watching on entry this needs to be done
+ 		 * carefully and needs the same ordering of lockdep/tracing
+@@ -407,10 +415,12 @@ void noinstr irqentry_nmi_enter(struct pt_regs *regs, irqentry_state_t *irq_stat
+ 	trace_hardirqs_off_finish();
+ 	ftrace_nmi_enter();
+ 	instrumentation_end();
++	irq_save_set_pkrs(irq_state, INIT_PKRS_VALUE);
+ }
+ 
+ void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t *irq_state)
+ {
++	irq_restore_pkrs(irq_state);
+ 	instrumentation_begin();
+ 	ftrace_nmi_exit();
+ 	if (irq_state->lockdep) {
+-- 
+2.28.0.rc0.12.gb6a658bd00c9
+
