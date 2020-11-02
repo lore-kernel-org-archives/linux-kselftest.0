@@ -2,39 +2,44 @@ Return-Path: <SRS0=9g6x=EI=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 215D8C388F9
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 08:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F02D4C00A89
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 08:13:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6C4422275
+	by mail.kernel.org (Postfix) with ESMTP id 9C37522272
 	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 08:13:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727953AbgKBILf (ORCPT
+        id S1727802AbgKBILf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 2 Nov 2020 03:11:35 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7569 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727818AbgKBIKq (ORCPT
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6726 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728046AbgKBILA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 03:10:46 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CPlwL3HrBzLpT6;
-        Mon,  2 Nov 2020 16:10:42 +0800 (CST)
+        Mon, 2 Nov 2020 03:11:00 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CPlwY02r0zkdXb;
+        Mon,  2 Nov 2020 16:10:53 +0800 (CST)
 Received: from SWX921481.china.huawei.com (10.126.202.65) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 2 Nov 2020 16:10:37 +0800
+ 14.3.487.0; Mon, 2 Nov 2020 16:10:46 +0800
 From:   Barry Song <song.bao.hua@hisilicon.com>
 To:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
         <robin.murphy@arm.com>, <m.szyprowski@samsung.com>
 CC:     <linuxarm@huawei.com>, <linux-kselftest@vger.kernel.org>,
-        <xuwei5@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>
-Subject: [PATCH v3 0/2] dma-mapping: provide a benchmark for streaming DMA mapping
-Date:   Mon, 2 Nov 2020 21:06:44 +1300
-Message-ID: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
+        <xuwei5@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v3 2/2] selftests/dma: add test application for DMA_MAP_BENCHMARK
+Date:   Mon, 2 Nov 2020 21:06:46 +1300
+Message-ID: <20201102080646.2180-3-song.bao.hua@hisilicon.com>
 X-Mailer: git-send-email 2.21.0.windows.1
+In-Reply-To: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
+References: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -44,70 +49,174 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Nowadays, there are increasing requirements to benchmark the performance
-of dma_map and dma_unmap particually while the device is attached to an
-IOMMU.
+This patch provides the test application for DMA_MAP_BENCHMARK.
 
-This patchset provides the benchmark infrastruture for streaming DMA
-mapping. The architecture of the code is pretty much similar with GUP
-benchmark:
-* mm/gup_benchmark.c provides kernel interface;
-* tools/testing/selftests/vm/gup_benchmark.c provides user program to
-call the interface provided by mm/gup_benchmark.c.
+Before running the test application, we need to bind a device to dma_map_
+benchmark driver. For example, unbind "xxx" from its original driver and
+bind to dma_map_benchmark:
 
-In our case, kernel/dma/map_benchmark.c is like mm/gup_benchmark.c;
-tools/testing/selftests/dma/dma_map_benchmark.c is like tools/testing/
-selftests/vm/gup_benchmark.c
+echo dma_map_benchmark > /sys/bus/platform/devices/xxx/driver_override
+echo xxx > /sys/bus/platform/drivers/xxx/unbind
+echo xxx > /sys/bus/platform/drivers/dma_map_benchmark/bind
 
-A major difference with GUP benchmark is DMA_MAP benchmark needs to run
-on a device. Considering one board with below devices and IOMMUs
-device A  ------- IOMMU 1
-device B  ------- IOMMU 2
-device C  ------- non-IOMMU
+Another example for PCI devices:
+echo dma_map_benchmark > /sys/bus/pci/devices/0000:00:01.0/driver_override
+echo 0000:00:01.0 > /sys/bus/pci/drivers/xxx/unbind
+echo 0000:00:01.0 > /sys/bus/pci/drivers/dma_map_benchmark/bind
 
-Different devices might attach to different IOMMU or non-IOMMU. To make
-benchmark run, we can either
-* create a virtual device and hack the kernel code to attach the virtual
-device to IOMMU1, IOMMU2 or non-IOMMU.
-* use the existing driver_override mechinism, unbind device A,B, OR c from
-their original driver and bind A to dma_map_benchmark platform driver or
-pci driver for benchmarking.
+The below command will run 16 threads on numa node 0 for 10 seconds on
+the device bound to dma_map_benchmark platform_driver or pci_driver:
+./dma_map_benchmark -t 16 -s 10 -n 0
+dma mapping benchmark: threads:16 seconds:10
+average map latency(us):1.1 standard deviation:1.9
+average unmap latency(us):0.5 standard deviation:0.8
 
-In this patchset, I prefer to use the driver_override and avoid the ugly
-hack in kernel. We can dynamically switch device behind different IOMMUs
-to get the performance of IOMMU or non-IOMMU.
-
--v3:
-  * fix build issues reported by 0day kernel test robot
--v2:
-  * add PCI support; v1 supported platform devices only
-  * replace ssleep by msleep_interruptible() to permit users to exit
-    benchmark before it is completed
-  * many changes according to Robin's suggestions, thanks! Robin
-    - add standard deviation output to reflect the worst case
-    - check users' parameters strictly like the number of threads
-    - make cache dirty before dma_map
-    - fix unpaired dma_map_page and dma_unmap_single;
-    - remove redundant "long long" before ktime_to_ns();
-    - use devm_add_action()
-
-Barry Song (2):
-  dma-mapping: add benchmark support for streaming DMA APIs
-  selftests/dma: add test application for DMA_MAP_BENCHMARK
-
- MAINTAINERS                                   |   6 +
- kernel/dma/Kconfig                            |   8 +
- kernel/dma/Makefile                           |   1 +
- kernel/dma/map_benchmark.c                    | 296 ++++++++++++++++++
- tools/testing/selftests/dma/Makefile          |   6 +
- tools/testing/selftests/dma/config            |   1 +
- .../testing/selftests/dma/dma_map_benchmark.c |  87 +++++
- 7 files changed, 405 insertions(+)
- create mode 100644 kernel/dma/map_benchmark.c
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+---
+ MAINTAINERS                                   |  6 ++
+ tools/testing/selftests/dma/Makefile          |  6 ++
+ tools/testing/selftests/dma/config            |  1 +
+ .../testing/selftests/dma/dma_map_benchmark.c | 87 +++++++++++++++++++
+ 4 files changed, 100 insertions(+)
  create mode 100644 tools/testing/selftests/dma/Makefile
  create mode 100644 tools/testing/selftests/dma/config
  create mode 100644 tools/testing/selftests/dma/dma_map_benchmark.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 608fc8484c02..a1e38d5e14f6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5247,6 +5247,12 @@ F:	include/linux/dma-mapping.h
+ F:	include/linux/dma-map-ops.h
+ F:	kernel/dma/
+ 
++DMA MAPPING BENCHMARK
++M:	Barry Song <song.bao.hua@hisilicon.com>
++L:	iommu@lists.linux-foundation.org
++F:	kernel/dma/map_benchmark.c
++F:	tools/testing/selftests/dma/
++
+ DMA-BUF HEAPS FRAMEWORK
+ M:	Sumit Semwal <sumit.semwal@linaro.org>
+ R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
+diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
+new file mode 100644
+index 000000000000..aa8e8b5b3864
+--- /dev/null
++++ b/tools/testing/selftests/dma/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++CFLAGS += -I../../../../usr/include/
++
++TEST_GEN_PROGS := dma_map_benchmark
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/dma/config b/tools/testing/selftests/dma/config
+new file mode 100644
+index 000000000000..6102ee3c43cd
+--- /dev/null
++++ b/tools/testing/selftests/dma/config
+@@ -0,0 +1 @@
++CONFIG_DMA_MAP_BENCHMARK=y
+diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
+new file mode 100644
+index 000000000000..4778df0c458f
+--- /dev/null
++++ b/tools/testing/selftests/dma/dma_map_benchmark.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2020 Hisilicon Limited.
++ */
++
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <linux/types.h>
++
++#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
++#define DMA_MAP_MAX_THREADS	1024
++#define DMA_MAP_MAX_SECONDS     300
++
++struct map_benchmark {
++	__u64 avg_map_100ns; /* average map latency in 100ns */
++	__u64 map_stddev; /* standard deviation of map latency */
++	__u64 avg_unmap_100ns; /* as above */
++	__u64 unmap_stddev;
++	__u32 threads; /* how many threads will do map/unmap in parallel */
++	__u32 seconds; /* how long the test will last */
++	int node; /* which numa node this benchmark will run on */
++	__u64 expansion[10];	/* For future use */
++};
++
++int main(int argc, char **argv)
++{
++	struct map_benchmark map;
++	int fd, opt;
++	/* default single thread, run 20 seconds on NUMA_NO_NODE */
++	int threads = 1, seconds = 20, node = -1;
++	int cmd = DMA_MAP_BENCHMARK;
++	char *p;
++
++	while ((opt = getopt(argc, argv, "t:s:n:")) != -1) {
++		switch (opt) {
++		case 't':
++			threads = atoi(optarg);
++			break;
++		case 's':
++			seconds = atoi(optarg);
++			break;
++		case 'n':
++			node = atoi(optarg);
++			break;
++		default:
++			return -1;
++		}
++	}
++
++	if (threads <= 0 || threads > DMA_MAP_MAX_THREADS) {
++		fprintf(stderr, "invalid number of threads, must be in 1-%d\n",
++			DMA_MAP_MAX_THREADS);
++		exit(1);
++	}
++
++	if (seconds <= 0 || seconds > DMA_MAP_MAX_SECONDS) {
++		fprintf(stderr, "invalid number of seconds, must be in 1-%d\n",
++			DMA_MAP_MAX_SECONDS);
++		exit(1);
++	}
++
++	fd = open("/sys/kernel/debug/dma_map_benchmark", O_RDWR);
++	if (fd == -1) {
++		perror("open");
++		exit(1);
++	}
++
++	map.seconds = seconds;
++	map.threads = threads;
++	map.node = node;
++	if (ioctl(fd, cmd, &map)) {
++		perror("ioctl");
++		exit(1);
++	}
++
++	printf("dma mapping benchmark: threads:%d seconds:%d\n", threads, seconds);
++	printf("average map latency(us):%.1f standard deviation:%.1f\n",
++			map.avg_map_100ns/10.0, map.map_stddev/10.0);
++	printf("average unmap latency(us):%.1f standard deviation:%.1f\n",
++			map.avg_unmap_100ns/10.0, map.unmap_stddev/10.0);
++
++	return 0;
++}
 -- 
 2.25.1
 
