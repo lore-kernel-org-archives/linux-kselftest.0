@@ -2,433 +2,186 @@ Return-Path: <SRS0=9g6x=EI=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D380C388F2
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 08:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1845CC5517A
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 09:11:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0A7722277
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 08:13:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5A4E223BF
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Nov 2020 09:11:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvonQJwk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgKBILf (ORCPT
+        id S1728254AbgKBJLc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Nov 2020 03:11:35 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7570 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727953AbgKBIKx (ORCPT
+        Mon, 2 Nov 2020 04:11:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20052 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727806AbgKBJLc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Nov 2020 03:10:53 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CPlwR48zpzLqJd;
-        Mon,  2 Nov 2020 16:10:47 +0800 (CST)
-Received: from SWX921481.china.huawei.com (10.126.202.65) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 2 Nov 2020 16:10:43 +0800
-From:   Barry Song <song.bao.hua@hisilicon.com>
-To:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
-        <robin.murphy@arm.com>, <m.szyprowski@samsung.com>
-CC:     <linuxarm@huawei.com>, <linux-kselftest@vger.kernel.org>,
-        <xuwei5@huawei.com>, Barry Song <song.bao.hua@hisilicon.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v3 1/2] dma-mapping: add benchmark support for streaming DMA APIs
-Date:   Mon, 2 Nov 2020 21:06:45 +1300
-Message-ID: <20201102080646.2180-2-song.bao.hua@hisilicon.com>
-X-Mailer: git-send-email 2.21.0.windows.1
-In-Reply-To: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
-References: <20201102080646.2180-1-song.bao.hua@hisilicon.com>
+        Mon, 2 Nov 2020 04:11:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604308290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wsx9rV62BpQWr7OrGkSf+6thseF+6yM3BDN31bmg5MQ=;
+        b=TvonQJwkqVfxbePBPyLAhhMGFOHNK0//eDZUnuQKJ8KOQXRzG8xTZ+pEBJxVbtAxN5GtPB
+        OjZI3UocJHbPnxJ/PPbeMuGYGOksHFF76aFnsqiFeUhXu9xEW0d6/xRDo8LHPsvt/Pwymb
+        bMK222WaKSH0l4eJSWUTWM1gaEz10ZA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-41-ghMbzMWdOp2vAAAUSLZQlg-1; Mon, 02 Nov 2020 04:11:26 -0500
+X-MC-Unique: ghMbzMWdOp2vAAAUSLZQlg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 744641009E28;
+        Mon,  2 Nov 2020 09:11:21 +0000 (UTC)
+Received: from [10.36.113.163] (ovpn-113-163.ams2.redhat.com [10.36.113.163])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 02AF25D9D2;
+        Mon,  2 Nov 2020 09:11:12 +0000 (UTC)
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+References: <20200924132904.1391-1-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <9c38ac3b-c677-6a87-ce82-ec53b69eaf71@redhat.com>
+Date:   Mon, 2 Nov 2020 10:11:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.126.202.65]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20200924132904.1391-1-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Nowadays, there are increasing requirements to benchmark the performance
-of dma_map and dma_unmap particually while the device is attached to an
-IOMMU.
+On 24.09.20 15:28, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Hi,
+> 
+> This is an implementation of "secret" mappings backed by a file descriptor.
+> I've dropped the boot time reservation patch for now as it is not strictly
+> required for the basic usage and can be easily added later either with or
+> without CMA.
 
-This patch enables the support. Users can run specified number of threads
-to do dma_map_page and dma_unmap_page on a specific NUMA node with the
-specified duration. Then dma_map_benchmark will calculate the average
-latency for map and unmap.
+Hi Mike,
 
-A difficulity for this benchmark is that dma_map/unmap APIs must run on
-a particular device. Each device might have different backend of IOMMU or
-non-IOMMU.
+I'd like to stress again that I'd prefer *any* secretmem allocations 
+going via CMA as long as these pages are unmovable. The user can 
+allocate a non-significant amount of unmovable allocations only fenced 
+by the mlock limit, which behave very different to mlocked pages - they 
+are not movable for page compaction/migration.
 
-So we use the driver_override to bind dma_map_benchmark to a particual
-device by:
-For platform devices:
-echo dma_map_benchmark > /sys/bus/platform/devices/xxx/driver_override
-echo xxx > /sys/bus/platform/drivers/xxx/unbind
-echo xxx > /sys/bus/platform/drivers/dma_map_benchmark/bind
+Assume you have a system with quite some ZONE_MOVABLE memory (esp. in 
+virtualized environments), eating up a significant amount of 
+!ZONE_MOVABLE memory dynamically at runtime can lead to non-obvious 
+issues. It looks like you have plenty of free memory, but the kernel 
+might still OOM when trying to do kernel allocations e.g., for 
+pagetables. With CMA we at least know what we're dealing with - it 
+behaves like ZONE_MOVABLE except for the owner that can place unmovable 
+pages there. We can use it to compute statically the amount of 
+ZONE_MOVABLE memory we can have in the system without doing harm to the 
+system.
 
-For PCI devices:
-echo dma_map_benchmark > /sys/bus/pci/devices/0000:00:01.0/driver_override
-echo 0000:00:01.0 > /sys/bus/pci/drivers/xxx/unbind
-echo 0000:00:01.0 > /sys/bus/pci/drivers/dma_map_benchmark/bind
+Ideally, we would want to support page migration/compaction and allow 
+for allocation from ZONE_MOVABLE as well. Would involve temporarily 
+mapping, copying, unmapping. Sounds feasible, but not sure which 
+roadblocks we would find on the way.
 
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
----
--v3:
-  * fix build issues reported by 0day kernel test robot
--v2:
-  * add PCI support; v1 supported platform devices only
-  * replace ssleep by msleep_interruptible() to permit users to exit
-    benchmark before it is completed
-  * many changes according to Robin's suggestions, thanks! Robin
-    - add standard deviation output to reflect the worst case
-    - check users' parameters strictly like the number of threads
-    - make cache dirty before dma_map
-    - fix unpaired dma_map_page and dma_unmap_single;
-    - remove redundant "long long" before ktime_to_ns();
-    - use devm_add_action()
+[...]
 
- kernel/dma/Kconfig         |   8 +
- kernel/dma/Makefile        |   1 +
- kernel/dma/map_benchmark.c | 296 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 305 insertions(+)
- create mode 100644 kernel/dma/map_benchmark.c
+> 
+> The file descriptor backing secret memory mappings is created using a
+> dedicated memfd_secret system call The desired protection mode for the
+> memory is configured using flags parameter of the system call. The mmap()
+> of the file descriptor created with memfd_secret() will create a "secret"
+> memory mapping. The pages in that mapping will be marked as not present in
+> the direct map and will have desired protection bits set in the user page
+> table. For instance, current implementation allows uncached mappings.
+> 
+> Although normally Linux userspace mappings are protected from other users,
+> such secret mappings are useful for environments where a hostile tenant is
+> trying to trick the kernel into giving them access to other tenants
+> mappings.
+> 
+> Additionally, the secret mappings may be used as a mean to protect guest
+> memory in a virtual machine host.
+> 
+> For demonstration of secret memory usage we've created a userspace library
+> [1] that does two things: the first is act as a preloader for openssl to
+> redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+> keys get automatically protected this way and the other thing it does is
+> expose the API to the user who needs it. We anticipate that a lot of the
+> use cases would be like the openssl one: many toolkits that deal with
+> secret keys already have special handling for the memory to try to give
+> them greater protection, so this would simply be pluggable into the
+> toolkits without any need for user application modification.
+> 
+> I've hesitated whether to continue to use new flags to memfd_create() or to
+> add a new system call and I've decided to use a new system call after I've
+> started to look into man pages update. There would have been two completely
+> independent descriptions and I think it would have been very confusing.
 
-diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
-index c99de4a21458..949c53da5991 100644
---- a/kernel/dma/Kconfig
-+++ b/kernel/dma/Kconfig
-@@ -225,3 +225,11 @@ config DMA_API_DEBUG_SG
- 	  is technically out-of-spec.
- 
- 	  If unsure, say N.
-+
-+config DMA_MAP_BENCHMARK
-+	bool "Enable benchmarking of streaming DMA mapping"
-+	help
-+	  Provides /sys/kernel/debug/dma_map_benchmark that helps with testing
-+	  performance of dma_(un)map_page.
-+
-+	  See tools/testing/selftests/dma/dma_map_benchmark.c
-diff --git a/kernel/dma/Makefile b/kernel/dma/Makefile
-index dc755ab68aab..7aa6b26b1348 100644
---- a/kernel/dma/Makefile
-+++ b/kernel/dma/Makefile
-@@ -10,3 +10,4 @@ obj-$(CONFIG_DMA_API_DEBUG)		+= debug.o
- obj-$(CONFIG_SWIOTLB)			+= swiotlb.o
- obj-$(CONFIG_DMA_COHERENT_POOL)		+= pool.o
- obj-$(CONFIG_DMA_REMAP)			+= remap.o
-+obj-$(CONFIG_DMA_MAP_BENCHMARK)		+= map_benchmark.o
-diff --git a/kernel/dma/map_benchmark.c b/kernel/dma/map_benchmark.c
-new file mode 100644
-index 000000000000..dc4e5ff48a2d
---- /dev/null
-+++ b/kernel/dma/map_benchmark.c
-@@ -0,0 +1,296 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020 Hisilicon Limited.
-+ */
-+
-+#define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
-+
-+#include <linux/debugfs.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/kernel.h>
-+#include <linux/kthread.h>
-+#include <linux/math64.h>
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/timekeeping.h>
-+
-+#define DMA_MAP_BENCHMARK	_IOWR('d', 1, struct map_benchmark)
-+#define DMA_MAP_MAX_THREADS	1024
-+#define DMA_MAP_MAX_SECONDS	300
-+
-+struct map_benchmark {
-+	__u64 avg_map_100ns; /* average map latency in 100ns */
-+	__u64 map_stddev; /* standard deviation of map latency */
-+	__u64 avg_unmap_100ns; /* as above */
-+	__u64 unmap_stddev;
-+	__u32 threads; /* how many threads will do map/unmap in parallel */
-+	__u32 seconds; /* how long the test will last */
-+	int node; /* which numa node this benchmark will run on */
-+	__u64 expansion[10];	/* For future use */
-+};
-+
-+struct map_benchmark_data {
-+	struct map_benchmark bparam;
-+	struct device *dev;
-+	struct dentry  *debugfs;
-+	atomic64_t sum_map_100ns;
-+	atomic64_t sum_unmap_100ns;
-+	atomic64_t sum_square_map;
-+	atomic64_t sum_square_unmap;
-+	atomic64_t loops;
-+};
-+
-+static int map_benchmark_thread(void *data)
-+{
-+	void *buf;
-+	dma_addr_t dma_addr;
-+	struct map_benchmark_data *map = data;
-+	int ret = 0;
-+
-+	buf = (void *)__get_free_page(GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	while (!kthread_should_stop())  {
-+		__u64 map_100ns, unmap_100ns, map_square, unmap_square;
-+		ktime_t map_stime, map_etime, unmap_stime, unmap_etime;
-+
-+		/*
-+		 * for a non-coherent device, if we don't stain them in the cache,
-+		 * this will give an underestimate of the real-world overhead of
-+		 * BIDIRECTIONAL or TO_DEVICE mappings
-+		 * 66 means evertything goes well! 66 is lucky.
-+		 */
-+		memset(buf, 0x66, PAGE_SIZE);
-+
-+		map_stime = ktime_get();
-+		dma_addr = dma_map_single(map->dev, buf, PAGE_SIZE, DMA_BIDIRECTIONAL);
-+		if (unlikely(dma_mapping_error(map->dev, dma_addr))) {
-+			pr_err("dma_map_single failed on %s\n", dev_name(map->dev));
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+		map_etime = ktime_get();
-+
-+		unmap_stime = ktime_get();
-+		dma_unmap_single(map->dev, dma_addr, PAGE_SIZE, DMA_BIDIRECTIONAL);
-+		unmap_etime = ktime_get();
-+
-+		/* calculate sum and sum of squares */
-+		map_100ns = div64_ul(ktime_to_ns(ktime_sub(map_etime, map_stime)),  100);
-+		unmap_100ns = div64_ul(ktime_to_ns(ktime_sub(unmap_etime, unmap_stime)), 100);
-+		map_square = map_100ns * map_100ns;
-+		unmap_square = unmap_100ns * unmap_100ns;
-+
-+		atomic64_add(map_100ns, &map->sum_map_100ns);
-+		atomic64_add(unmap_100ns, &map->sum_unmap_100ns);
-+		atomic64_add(map_square, &map->sum_square_map);
-+		atomic64_add(unmap_square, &map->sum_square_unmap);
-+		atomic64_inc(&map->loops);
-+	}
-+
-+out:
-+	free_page((unsigned long)buf);
-+	return ret;
-+}
-+
-+static int do_map_benchmark(struct map_benchmark_data *map)
-+{
-+	struct task_struct **tsk;
-+	int threads = map->bparam.threads;
-+	int node = map->bparam.node;
-+	const cpumask_t *cpu_mask = cpumask_of_node(node);
-+	__u64 loops;
-+	int ret = 0;
-+	int i;
-+
-+	tsk = kmalloc_array(threads, sizeof(tsk), GFP_KERNEL);
-+	if (!tsk)
-+		return -ENOMEM;
-+
-+	get_device(map->dev);
-+
-+	for (i = 0; i < threads; i++) {
-+		tsk[i] = kthread_create_on_node(map_benchmark_thread, map,
-+				map->bparam.node, "dma-map-benchmark/%d", i);
-+		if (IS_ERR(tsk[i])) {
-+			pr_err("create dma_map thread failed\n");
-+			ret = PTR_ERR(tsk[i]);
-+			goto out;
-+		}
-+
-+		if (node != NUMA_NO_NODE && node_online(node))
-+			kthread_bind_mask(tsk[i], cpu_mask);
-+	}
-+
-+	/* clear the old value in the previous benchmark */
-+	atomic64_set(&map->sum_map_100ns, 0);
-+	atomic64_set(&map->sum_unmap_100ns, 0);
-+	atomic64_set(&map->sum_square_map, 0);
-+	atomic64_set(&map->sum_square_unmap, 0);
-+	atomic64_set(&map->loops, 0);
-+
-+	for (i = 0; i < threads; i++)
-+		wake_up_process(tsk[i]);
-+
-+	msleep_interruptible(map->bparam.seconds * 1000);
-+
-+	/* wait for the completion of benchmark threads */
-+	for (i = 0; i < threads; i++) {
-+		ret = kthread_stop(tsk[i]);
-+		if (ret)
-+			goto out;
-+	}
-+
-+	loops = atomic64_read(&map->loops);
-+	if (likely(loops > 0)) {
-+		__u64 map_variance, unmap_variance;
-+
-+		/* average latency */
-+		map->bparam.avg_map_100ns = div64_u64(atomic64_read(&map->sum_map_100ns), loops);
-+		map->bparam.avg_unmap_100ns = div64_u64(atomic64_read(&map->sum_unmap_100ns), loops);
-+
-+		/* standard deviation of latency */
-+		map_variance = div64_u64(atomic64_read(&map->sum_square_map),  loops) -
-+			map->bparam.avg_map_100ns * map->bparam.avg_map_100ns;
-+		unmap_variance = div64_u64(atomic64_read(&map->sum_square_unmap), loops) -
-+			map->bparam.avg_unmap_100ns * map->bparam.avg_unmap_100ns;
-+		map->bparam.map_stddev = int_sqrt64(map_variance);
-+		map->bparam.unmap_stddev = int_sqrt64(unmap_variance);
-+	}
-+
-+out:
-+	put_device(map->dev);
-+	kfree(tsk);
-+	return ret;
-+}
-+
-+static long map_benchmark_ioctl(struct file *filep, unsigned int cmd,
-+		unsigned long arg)
-+{
-+	struct map_benchmark_data *map = filep->private_data;
-+	int ret;
-+
-+	if (copy_from_user(&map->bparam, (void __user *)arg, sizeof(map->bparam)))
-+		return -EFAULT;
-+
-+	switch (cmd) {
-+	case DMA_MAP_BENCHMARK:
-+		if (map->bparam.threads == 0 || map->bparam.threads > DMA_MAP_MAX_THREADS) {
-+			pr_err("invalid thread number\n");
-+			return -EINVAL;
-+		}
-+		if (map->bparam.seconds == 0 || map->bparam.seconds > DMA_MAP_MAX_SECONDS) {
-+			pr_err("invalid duration seconds\n");
-+			return -EINVAL;
-+		}
-+
-+		ret = do_map_benchmark(map);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (copy_to_user((void __user *)arg, &map->bparam, sizeof(map->bparam)))
-+		return -EFAULT;
-+
-+	return ret;
-+}
-+
-+static const struct file_operations map_benchmark_fops = {
-+	.open = simple_open,
-+	.unlocked_ioctl = map_benchmark_ioctl,
-+};
-+
-+static void map_benchmark_remove_debugfs(void *data)
-+{
-+	struct map_benchmark_data *map = (struct map_benchmark_data *)data;
-+
-+	debugfs_remove(map->debugfs);
-+}
-+
-+static int __map_benchmark_probe(struct device *dev)
-+{
-+	struct dentry *entry;
-+	struct map_benchmark_data *map;
-+	int ret;
-+
-+	map = devm_kzalloc(dev, sizeof(*map), GFP_KERNEL);
-+	if (!map)
-+		return -ENOMEM;
-+	map->dev = dev;
-+
-+	ret = devm_add_action(dev, map_benchmark_remove_debugfs, map);
-+	if (ret) {
-+		pr_err("Can't add debugfs remove action\n");
-+		return ret;
-+	}
-+
-+	/*
-+	 * we only permit a device bound with this driver, 2nd probe
-+	 * will fail
-+	 */
-+	entry = debugfs_create_file("dma_map_benchmark", 0600, NULL, map,
-+			&map_benchmark_fops);
-+	if (IS_ERR(entry))
-+		return PTR_ERR(entry);
-+	map->debugfs = entry;
-+
-+	return 0;
-+}
-+
-+static int map_benchmark_platform_probe(struct platform_device *pdev)
-+{
-+	return __map_benchmark_probe(&pdev->dev);
-+}
-+
-+static struct platform_driver map_benchmark_platform_driver = {
-+	.driver		= {
-+		.name	= "dma_map_benchmark",
-+	},
-+	.probe = map_benchmark_platform_probe,
-+};
-+
-+static int map_benchmark_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+{
-+	return __map_benchmark_probe(&pdev->dev);
-+}
-+
-+static struct pci_driver map_benchmark_pci_driver = {
-+	.name	= "dma_map_benchmark",
-+	.probe	= map_benchmark_pci_probe,
-+};
-+
-+static int __init map_benchmark_init(void)
-+{
-+	int ret;
-+
-+	ret = pci_register_driver(&map_benchmark_pci_driver);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_driver_register(&map_benchmark_platform_driver);
-+	if (ret) {
-+		pci_unregister_driver(&map_benchmark_pci_driver);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit map_benchmark_cleanup(void)
-+{
-+	platform_driver_unregister(&map_benchmark_platform_driver);
-+	pci_unregister_driver(&map_benchmark_pci_driver);
-+}
-+
-+module_init(map_benchmark_init);
-+module_exit(map_benchmark_cleanup);
-+
-+MODULE_AUTHOR("Barry Song <song.bao.hua@hisilicon.com>");
-+MODULE_DESCRIPTION("dma_map benchmark driver");
-+MODULE_LICENSE("GPL");
+This was also raised on lwn.net by "dullfire" [1]. I do wonder if it 
+would be the right place as well.
+
+[1] https://lwn.net/Articles/835342/#Comments
+
+> 
+> Hiding secret memory mappings behind an anonymous file allows (ab)use of
+> the page cache for tracking pages allocated for the "secret" mappings as
+> well as using address_space_operations for e.g. page migration callbacks.
+> 
+> The anonymous file may be also used implicitly, like hugetlb files, to
+> implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+> ABIs in the future.
+> 
+> As the fragmentation of the direct map was one of the major concerns raised
+> during the previous postings, I've added an amortizing cache of PMD-size
+> pages to each file descriptor that is used as an allocation pool for the
+> secret memory areas.
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
