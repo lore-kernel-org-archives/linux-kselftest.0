@@ -2,239 +2,187 @@ Return-Path: <SRS0=ZJPN=EJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 804C0C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 12:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D52B5C388F7
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 12:54:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C92C223BD
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 12:27:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PMqrhYu5"
+	by mail.kernel.org (Postfix) with ESMTP id 8986520735
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 12:54:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729004AbgKCM1H (ORCPT
+        id S1729049AbgKCMyE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Nov 2020 07:27:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728168AbgKCM1H (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 07:27:07 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A457C0613D1;
-        Tue,  3 Nov 2020 04:27:07 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id o70so14686287ybc.1;
-        Tue, 03 Nov 2020 04:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/oGvFRQbq4HreLrXjHnEtr7tAWzubMYz9Ycf6hG9M6Y=;
-        b=PMqrhYu5rRVDsRsmZwdpvhUCtEaGa8UvENFKcH1PBZmbgvyJNsmKrgvE7ljueeMcLg
-         NhV1VT1DSTdh4F9yel+w8GHjCDDsjJTY1KplwnQEGMs4G6U8arqlSDGKp0drghJKvM/Y
-         9J7nXLfhSGKs0PurizR1TsmriKkZyh/4mDq1gd99YH/QAJO1BR6ZxlqNc+Yj1OE5/0p2
-         kOoEY9igKRfbogRgaHq5D1BuiyNv20BI2zgkfsRb+tVnfkZaR1V1VyZXfCxPIDbZmYHb
-         wh6cK7UmLZ6Cr0O9sPnwePWvYCO5zAjt62U/t1xswaj6wUNyAZ1lLH+PzH160TyfLQJ9
-         tR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/oGvFRQbq4HreLrXjHnEtr7tAWzubMYz9Ycf6hG9M6Y=;
-        b=t1iPwoFeHgDkzQXVx4KyoaHQy9vuwMaNBvR0QqlCIKYNnaon5mRaJWoekdanc/QyVi
-         ci9QKG573OU3157MIrwssVE9jTy/XcgZSQc2+boRyg6H6t3qTFRRT9P5uFn8EcGBtXE0
-         dQwwWeGWJ1OY5dkbGMah9J4a5wy3dbk+UK+M/n+I6lcHUAaH8IfiWNBY7OGRcnDKb2Vc
-         wVmFlAbMx4o2QCvRgYmLUV7xR6X2wplFg6oJo7V11zJKxhDfyPMSLMGn5DaFDaFQU7oD
-         6llN+TCou1TYQfS9BWDZAzmGVbfjVz8OGvdV3aoVLryO1p2J0l4E5MFsEZuFA/rW+866
-         8oCw==
-X-Gm-Message-State: AOAM533iEtZWzlpVjortBdjIKt6WEF+L0193zA7TcF9Oze6Tj05igpEV
-        z7mrV69gMroJnga1ajF/mREHjUZen4XIFo3fsLA=
-X-Google-Smtp-Source: ABdhPJxTjZ0FInF8gzileXbGEcynkRQ7h7V3u+6gpPHTLS21zRCkdqLqLCyaVG7AyYNf3KIkMk4IbzUXax6fobsYOzI=
-X-Received: by 2002:a25:4757:: with SMTP id u84mr26255916yba.179.1604406426527;
- Tue, 03 Nov 2020 04:27:06 -0800 (PST)
+        Tue, 3 Nov 2020 07:54:04 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:46052 "EHLO smtp.uniroma2.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728582AbgKCMyD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Nov 2020 07:54:03 -0500
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0A3CquXn020392
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 3 Nov 2020 13:52:59 +0100
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [net-next,v1,1/5] vrf: add mac header for tunneled packets when sniffer is attached
+Date:   Tue,  3 Nov 2020 13:52:38 +0100
+Message-Id: <20201103125242.11468-2-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
+References: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
-References: <20201030121347.26984-1-weqaar.a.janjua@intel.com> <0fef6ce4-86cd-ae3a-0a29-953d87402afe@iogearbox.net>
-In-Reply-To: <0fef6ce4-86cd-ae3a-0a29-953d87402afe@iogearbox.net>
-From:   Weqaar Janjua <weqaar.janjua@gmail.com>
-Date:   Tue, 3 Nov 2020 12:26:40 +0000
-Message-ID: <CAPLEeBa3PL03mW4STe_avwK8wr-KKu_epJ1uAM07OgMzUFJw1w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] selftests/xsk: xsk selftests
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        jonathan.lemon@gmail.com, andrii.nakryiko@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2 Nov 2020 at 23:08, Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 10/30/20 1:13 PM, Weqaar Janjua wrote:
-> > This patch set adds AF_XDP selftests based on veth to selftests/xsk/.
-> >
-> > # Topology:
-> > # ---------
-> > #                 -----------
-> > #               _ | Process | _
-> > #              /  -----------  \
-> > #             /        |        \
-> > #            /         |         \
-> > #      -----------     |     -----------
-> > #      | Thread1 |     |     | Thread2 |
-> > #      -----------     |     -----------
-> > #           |          |          |
-> > #      -----------     |     -----------
-> > #      |  xskX   |     |     |  xskY   |
-> > #      -----------     |     -----------
-> > #           |          |          |
-> > #      -----------     |     ----------
-> > #      |  vethX  | --------- |  vethY |
-> > #      -----------   peer    ----------
-> > #           |          |          |
-> > #      namespaceX      |     namespaceY
-> >
-> > These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
-> > Ethernet interfaces.
-> >
-> > The test program contains two threads, each thread is single socket with
-> > a unique UMEM. It validates in-order packet delivery and packet content
-> > by sending packets to each other.
-> >
-> > Prerequisites setup by script TEST_PREREQUISITES.sh:
-> >
-> >     Set up veth interfaces as per the topology shown ^^:
-> >     * setup two veth interfaces and one namespace
-> >     ** veth<xxxx> in root namespace
-> >     ** veth<yyyy> in af_xdp<xxxx> namespace
-> >     ** namespace af_xdp<xxxx>
-> >     * create a spec file veth.spec that includes this run-time configuration
-> >       that is read by test scripts - filenames prefixed with TEST_XSK
-> >     *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
-> >         conflict with any existing interface.
-> >
-> > The following tests are provided:
-> >
-> > 1. AF_XDP SKB mode
-> >     Generic mode XDP is driver independent, used when the driver does
-> >     not have support for XDP. Works on any netdevice using sockets and
-> >     generic XDP path. XDP hook from netif_receive_skb().
-> >     a. nopoll - soft-irq processing
-> >     b. poll - using poll() syscall
-> >     c. Socket Teardown
-> >        Create a Tx and a Rx socket, Tx from one socket, Rx on another.
-> >        Destroy both sockets, then repeat multiple times. Only nopoll mode
-> >         is used
-> >     d. Bi-directional Sockets
-> >        Configure sockets as bi-directional tx/rx sockets, sets up fill
-> >         and completion rings on each socket, tx/rx in both directions.
-> >         Only nopoll mode is used
-> >
-> > 2. AF_XDP DRV/Native mode
-> >     Works on any netdevice with XDP_REDIRECT support, driver dependent.
-> >     Processes packets before SKB allocation. Provides better performance
-> >     than SKB. Driver hook available just after DMA of buffer descriptor.
-> >     a. nopoll
-> >     b. poll
-> >     c. Socket Teardown
-> >     d. Bi-directional Sockets
-> >     * Only copy mode is supported because veth does not currently support
-> >       zero-copy mode
-> >
-> > Total tests: 8.
-> >
-> > Flow:
-> > * Single process spawns two threads: Tx and Rx
-> > * Each of these two threads attach to a veth interface within their
-> >    assigned namespaces
-> > * Each thread creates one AF_XDP socket connected to a unique umem
-> >    for each veth interface
-> > * Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
-> > * Rx thread verifies if all 10k packets were received and delivered
-> >    in-order, and have the right content
-> >
-> > Structure of the patch set:
-> >
-> > Patch 1: This patch adds XSK Selftests framework under
-> >           tools/testing/selftests/xsk, and README
-> > Patch 2: Adds tests: SKB poll and nopoll mode, mac-ip-udp debug,
-> >           and README updates
-> > Patch 3: Adds tests: DRV poll and nopoll mode, and README updates
-> > Patch 4: Adds tests: SKB and DRV Socket Teardown, and README updates
-> > Patch 5: Adds tests: SKB and DRV Bi-directional Sockets, and README
-> >           updates
-> >
-> > Thanks: Weqaar
-> >
-> > Weqaar Janjua (5):
-> >    selftests/xsk: xsk selftests framework
-> >    selftests/xsk: xsk selftests - SKB POLL, NOPOLL
-> >    selftests/xsk: xsk selftests - DRV POLL, NOPOLL
-> >    selftests/xsk: xsk selftests - Socket Teardown - SKB, DRV
-> >    selftests/xsk: xsk selftests - Bi-directional Sockets - SKB, DRV
->
-> Thanks a lot for adding the selftests, Weqaar! Given this needs to copy quite
-> a bit of BPF selftest base infra e.g. from Makefiles I'd prefer if you could
-> place these under selftests/bpf/ instead to avoid duplicating changes into two
-> locations. I understand that these tests don't integrate well into test_progs,
-> but for example see test_tc_redirect.sh or test_tc_edt.sh for stand-alone tests
-> which could be done similarly with the xsk ones. Would be great if you could
-> integrate them and spin a v2 with that.
->
-> Thanks,
-> Daniel
+Before this patch, a sniffer attached to a VRF used as the receiving
+interface of L3 tunneled packets detects them as malformed packets and
+it complains about that (i.e.: tcpdump shows bogus packets).
 
-Hi Daniel,
+The reason is that a tunneled L3 packet does not carry any L2
+information and when the VRF is set as the receiving interface of a
+decapsulated L3 packet, no mac header is currently set or valid.
+Therefore, the purpose of this patch consists of adding a MAC header to
+any packet which is directly received on the VRF interface ONLY IF:
 
-Appreciate the pointers and suggestions which I will re-evaluate
-against merging of selftests/xsk into selftests/bpf, let me explain a
-bit to get your opinion re-evaluated on this - perhaps selftests/xsk
-could still work (as per my clarifications below) or we somehow have
-selftests/bpf/Makefile trigger selftests/bpf/test_xsk/Makefile<or
-whatever>.
+ i) a sniffer is attached on the VRF and ii) the mac header is not set.
 
-I had a look at selftests/bpf earlier, the problem was the same as you
-indicated - xsk tests do not integrate well into selftests/bpf as the
-semantics in the top level Makefile for both do no merge well - the
-way xsk tests are designed is systematically different.
+In this case, the mac address of the VRF is copied in both the
+destination and the source address of the ethernet header. The protocol
+type is set either to IPv4 or IPv6, depending on which L3 packet is
+received.
 
-If you look closely into the patch set patches -> 2/5 - 5/5, that is
-where the major difference shows up, xsk/xdpprogs/xdpxceiver.* is a
-self-contained binary utilized for testing and it is a major piece of
-code:
-tools/testing/selftests/xsk/xdpprogs/Makefile |   64 ++
- .../selftests/xsk/xdpprogs/Makefile.target    |   68 ++
- .../selftests/xsk/xdpprogs/xdpxceiver.c       | 1000 +++++++++++++++++
- .../selftests/xsk/xdpprogs/xdpxceiver.h       |  159 +++
-...
- 21 files changed, 1833 insertions(+)
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ drivers/net/vrf.c | 78 +++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 72 insertions(+), 6 deletions(-)
 
-Bits that -> copy quite a bit of BPF selftest base infra isn't the
-top-level selftests/xsk/Makefile|*, it is these (patches -> 2/5 -
-5/5):
-tools/testing/selftests/xsk/xdpprogs/Makefile |   64 ++
- .../selftests/xsk/xdpprogs/Makefile.target    |   68 ++
+diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
+index 60c1aadece89..26f2ed02a5c1 100644
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -1263,6 +1263,61 @@ static void vrf_ip6_input_dst(struct sk_buff *skb, struct net_device *vrf_dev,
+ 	skb_dst_set(skb, &rt6->dst);
+ }
+ 
++static int vrf_prepare_mac_header(struct sk_buff *skb,
++				  struct net_device *vrf_dev, u16 proto)
++{
++	struct ethhdr *eth;
++	int err;
++
++	/* in general, we do not know if there is enough space in the head of
++	 * the packet for hosting the mac header.
++	 */
++	err = skb_cow_head(skb, LL_RESERVED_SPACE(vrf_dev));
++	if (unlikely(err))
++		/* no space in the skb head */
++		return -ENOBUFS;
++
++	__skb_push(skb, ETH_HLEN);
++	eth = (struct ethhdr *)skb->data;
++
++	skb_reset_mac_header(skb);
++
++	/* we set the ethernet destination and the source addresses to the
++	 * address of the VRF device.
++	 */
++	ether_addr_copy(eth->h_dest, vrf_dev->dev_addr);
++	ether_addr_copy(eth->h_source, vrf_dev->dev_addr);
++	eth->h_proto = htons(proto);
++
++	/* the destination address of the Ethernet frame corresponds to the
++	 * address set on the VRF interface; therefore, the packet is intended
++	 * to be processed locally.
++	 */
++	skb->protocol = eth->h_proto;
++	skb->pkt_type = PACKET_HOST;
++
++	skb_postpush_rcsum(skb, skb->data, ETH_HLEN);
++
++	skb_pull_inline(skb, ETH_HLEN);
++
++	return 0;
++}
++
++/* prepare and add the mac header to the packet if it was not set previously.
++ * In this way, packet sniffers such as tcpdump can parse the packet correctly.
++ * If the mac header was already set, the original mac header is left
++ * untouched and the function returns immediately.
++ */
++static int vrf_add_mac_header_if_unset(struct sk_buff *skb,
++				       struct net_device *vrf_dev,
++				       u16 proto)
++{
++	if (skb_mac_header_was_set(skb))
++		return 0;
++
++	return vrf_prepare_mac_header(skb, vrf_dev, proto);
++}
++
+ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 				   struct sk_buff *skb)
+ {
+@@ -1289,9 +1344,15 @@ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 		skb->skb_iif = vrf_dev->ifindex;
+ 
+ 		if (!list_empty(&vrf_dev->ptype_all)) {
+-			skb_push(skb, skb->mac_len);
+-			dev_queue_xmit_nit(skb, vrf_dev);
+-			skb_pull(skb, skb->mac_len);
++			int err;
++
++			err = vrf_add_mac_header_if_unset(skb, vrf_dev,
++							  ETH_P_IPV6);
++			if (likely(!err)) {
++				skb_push(skb, skb->mac_len);
++				dev_queue_xmit_nit(skb, vrf_dev);
++				skb_pull(skb, skb->mac_len);
++			}
+ 		}
+ 
+ 		IP6CB(skb)->flags |= IP6SKB_L3SLAVE;
+@@ -1334,9 +1395,14 @@ static struct sk_buff *vrf_ip_rcv(struct net_device *vrf_dev,
+ 	vrf_rx_stats(vrf_dev, skb->len);
+ 
+ 	if (!list_empty(&vrf_dev->ptype_all)) {
+-		skb_push(skb, skb->mac_len);
+-		dev_queue_xmit_nit(skb, vrf_dev);
+-		skb_pull(skb, skb->mac_len);
++		int err;
++
++		err = vrf_add_mac_header_if_unset(skb, vrf_dev, ETH_P_IP);
++		if (likely(!err)) {
++			skb_push(skb, skb->mac_len);
++			dev_queue_xmit_nit(skb, vrf_dev);
++			skb_pull(skb, skb->mac_len);
++		}
+ 	}
+ 
+ 	skb = vrf_rcv_nfhook(NFPROTO_IPV4, NF_INET_PRE_ROUTING, skb, vrf_dev);
+-- 
+2.20.1
 
-This is 132++ of 1833++ or ~7% of similarity.
-
-I had a look at these today, and some other tests earlier:
-- test_tc_redirect.sh -> test_xdp_redirect.sh (perhaps you meant this?)
-- test_tc_edt.sh
-
-Patch 1/5 might look similar to these^^ as that sets up the base xsk
-test framework, but the xsk tests really start with patches -> 2/5 -
-5/5 which will give you a better picture, please let me know if this
-clarifies my intent for selftests/xsk/, or otherwise if you insist
-merging into selftests/bpf, I will then go ahead and work it out
-accordingly.
-
-Thanks,
-
-/Weqaar
