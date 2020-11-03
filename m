@@ -2,189 +2,128 @@ Return-Path: <SRS0=ZJPN=EJ=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5E3EC2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 12:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B719AC56201
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 13:52:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66D9E20735
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 12:54:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 700B322264
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Nov 2020 13:52:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728999AbgKCMyD (ORCPT
+        id S1729515AbgKCNw2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Nov 2020 07:54:03 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:46050 "EHLO smtp.uniroma2.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbgKCMyC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Nov 2020 07:54:02 -0500
-Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0A3CquXp020392
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 3 Nov 2020 13:52:59 +0100
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next,v1,3/5] seg6: add callbacks for customizing the creation/destruction of a behavior
-Date:   Tue,  3 Nov 2020 13:52:40 +0100
-Message-Id: <20201103125242.11468-4-andrea.mayer@uniroma2.it>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
-References: <20201103125242.11468-1-andrea.mayer@uniroma2.it>
+        Tue, 3 Nov 2020 08:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729362AbgKCNw0 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Nov 2020 08:52:26 -0500
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050::465:202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C31C0613D1;
+        Tue,  3 Nov 2020 05:52:26 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4CQWS671PfzQkKw;
+        Tue,  3 Nov 2020 14:52:22 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id FlqcKCn97r9e; Tue,  3 Nov 2020 14:52:18 +0100 (CET)
+Date:   Tue, 3 Nov 2020 14:52:14 +0100 (CET)
+From:   Hagen Paul Pfeifer <hagen@jauu.net>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Idan Yaniv <idan.yaniv@ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, Tycho Andersen <tycho@tycho.ws>,
+        Will Deacon <will@kernel.org>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Message-ID: <1547601988.128687.1604411534845@office.mailbox.org>
+In-Reply-To: <20201102154028.GD4879@kernel.org>
+References: <20200924132904.1391-1-rppt@kernel.org>
+ <20201101110935.GA4105325@laniakea> <20201102154028.GD4879@kernel.org>
+Subject: Re: [PATCH v6 0/6] mm: introduce memfd_secret system call to create
+ "secret" memory areas
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -0.65 / 15.00 / 15.00
+X-Rspamd-Queue-Id: D612C1723
+X-Rspamd-UID: 9101f0
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We introduce two callbacks used for customizing the creation/destruction of
-a SRv6 behavior. Such callbacks are defined in the new struct
-seg6_local_lwtunnel_ops and hereafter we provide a brief description of
-them:
+> On 11/02/2020 4:40 PM Mike Rapoport <rppt@kernel.org> wrote:
 
- - build_state(...): used for calling the custom constructor of the
-   behavior during its initialization phase and after all the attributes
-   have been parsed successfully;
+> > Isn't memfd_secret currently *unnecessarily* designed to be a "one task
+> > feature"? memfd_secret fulfills exactly two (generic) features:
+> > 
+> > - address space isolation from kernel (aka SECRET_EXCLUSIVE, not in kernel's
+> >   direct map) - hide from kernel, great
+> > - disabling processor's memory caches against speculative-execution vulnerabilities
+> >   (spectre and friends, aka SECRET_UNCACHED), also great
+> > 
+> > But, what about the following use-case: implementing a hardened IPC mechanism
+> > where even the kernel is not aware of any data and optionally via SECRET_UNCACHED
+> > even the hardware caches are bypassed! With the patches we are so close to
+> > achieving this.
+> > 
+> > How? Shared, SECRET_EXCLUSIVE and SECRET_UNCACHED mmaped pages for IPC
+> > involved tasks required to know this mapping (and memfd_secret fd). After IPC
+> > is done, tasks can copy sensitive data from IPC pages into memfd_secret()
+> > pages, un-sensitive data can be used/copied everywhere.
+> 
+> As long as the task share the file descriptor, they can share the
+> secretmem pages, pretty much like normal memfd.
 
- - destroy_state(...): used for calling the custom destructor of the
-   behavior before it is completely destroyed.
+Including process_vm_readv() and process_vm_writev()? Let's take a hypothetical
+"dbus-daemon-secure" service that receives data from process A and wants to
+copy/distribute it to data areas of N other processes. Much like dbus but without
+SOCK_DGRAM rather direct copy into secretmem/mmap pages (ring-buffer). Should be
+possible, right?
 
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- net/ipv6/seg6_local.c | 64 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+> > One missing piece is still the secure zeroization of the page(s) if the
+> > mapping is closed by last process to guarantee a secure cleanup. This can
+> > probably done as an general mmap feature, not coupled to memfd_secret() and
+> > can be done independently ("reverse" MAP_UNINITIALIZED feature).
+> 
+> There are "init_on_alloc" and "init_on_free" kernel parameters that
+> enable zeroing of the pages on alloc and on free globally.
+> Anyway, I'll add zeroing of the freed memory to secretmem.
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 63a82e2fdea9..4b0f155d641d 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -33,11 +33,23 @@
- 
- struct seg6_local_lwt;
- 
-+typedef int (*slwt_build_state_t)(struct seg6_local_lwt *slwt, const void *cfg,
-+				  struct netlink_ext_ack *extack);
-+typedef void (*slwt_destroy_state_t)(struct seg6_local_lwt *slwt);
-+
-+/* callbacks used for customizing the creation and destruction of a behavior */
-+struct seg6_local_lwtunnel_ops {
-+	slwt_build_state_t build_state;
-+	slwt_destroy_state_t destroy_state;
-+};
-+
- struct seg6_action_desc {
- 	int action;
- 	unsigned long attrs;
- 	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
- 	int static_headroom;
-+
-+	struct seg6_local_lwtunnel_ops slwt_ops;
- };
- 
- struct bpf_lwt_prog {
-@@ -1015,6 +1027,45 @@ static void destroy_attrs(struct seg6_local_lwt *slwt)
- 	__destroy_attrs(attrs, 0, SEG6_LOCAL_MAX + 1, slwt);
- }
- 
-+/* call the custom constructor of the behavior during its initialization phase
-+ * and after that all its attributes have been parsed successfully.
-+ */
-+static int
-+seg6_local_lwtunnel_build_state(struct seg6_local_lwt *slwt, const void *cfg,
-+				struct netlink_ext_ack *extack)
-+{
-+	slwt_build_state_t build_func;
-+	struct seg6_action_desc *desc;
-+	int err = 0;
-+
-+	desc = slwt->desc;
-+	if (!desc)
-+		return -EINVAL;
-+
-+	build_func = desc->slwt_ops.build_state;
-+	if (build_func)
-+		err = build_func(slwt, cfg, extack);
-+
-+	return err;
-+}
-+
-+/* call the custom destructor of the behavior which is invoked before the
-+ * tunnel is going to be destroyed.
-+ */
-+static void seg6_local_lwtunnel_destroy_state(struct seg6_local_lwt *slwt)
-+{
-+	slwt_destroy_state_t destroy_func;
-+	struct seg6_action_desc *desc;
-+
-+	desc = slwt->desc;
-+	if (!desc)
-+		return;
-+
-+	destroy_func = desc->slwt_ops.destroy_state;
-+	if (destroy_func)
-+		destroy_func(slwt);
-+}
-+
- static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
- {
- 	struct seg6_action_param *param;
-@@ -1090,8 +1141,16 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
- 
- 	err = parse_nla_action(tb, slwt);
- 	if (err < 0)
-+		/* In case of error, the parse_nla_action() takes care of
-+		 * releasing resources which have been acquired during the
-+		 * processing of attributes.
-+		 */
- 		goto out_free;
- 
-+	err = seg6_local_lwtunnel_build_state(slwt, cfg, extack);
-+	if (err < 0)
-+		goto free_attrs;
-+
- 	newts->type = LWTUNNEL_ENCAP_SEG6_LOCAL;
- 	newts->flags = LWTUNNEL_STATE_INPUT_REDIRECT;
- 	newts->headroom = slwt->headroom;
-@@ -1100,6 +1159,9 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
- 
- 	return 0;
- 
-+free_attrs:
-+	destroy_attrs(slwt);
-+
- out_free:
- 	kfree(newts);
- 	return err;
-@@ -1109,6 +1171,8 @@ static void seg6_local_destroy_state(struct lwtunnel_state *lwt)
- {
- 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
- 
-+	seg6_local_lwtunnel_destroy_state(slwt);
-+
- 	destroy_attrs(slwt);
- 
- 	return;
--- 
-2.20.1
+Great, this allows page-specific (thus runtime-performance-optimized) zeroing
+of secured pages. init_on_free lowers the performance to much and is not precice
+enough.
 
+Hagen
