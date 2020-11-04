@@ -5,41 +5,45 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09F30C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C5E0C4741F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A028722280
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:10:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4A9A22280
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:10:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="FSawxRlJ"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="mLeKP7vy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729016AbgKDKJ6 (ORCPT
+        id S1729211AbgKDKKE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Nov 2020 05:09:58 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58219 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728229AbgKDKJ5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 05:09:57 -0500
+        Wed, 4 Nov 2020 05:10:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728535AbgKDKJz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 05:09:55 -0500
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F028BC061A4A;
+        Wed,  4 Nov 2020 02:09:54 -0800 (PST)
 Received: by ozlabs.org (Postfix, from userid 1034)
-        id 4CR2Sx6FHYz9sVN; Wed,  4 Nov 2020 21:09:53 +1100 (AEDT)
+        id 4CR2Sx0Fksz9sVK; Wed,  4 Nov 2020 21:09:52 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
         s=201909; t=1604484593;
-        bh=3kFSwF+mKTTL4Iah+YZCWoNxgZ901GzljCfDkfAwxW0=;
+        bh=QdkZmMlvcp+swaCH7i/edBCL/QIGYMmP5xj/ytrnGyU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FSawxRlJDKo9uROKSB32k4Z/z3AOVHuT31P2LG+Q0cjSKQGpr2nSAG6pvPu7/gEP4
-         0SM90Lhy9WtXeH8oOycfvYv2DW3zzD+r/t3A7xiMybhWJqzAbB+iju8EdTrqreDOt0
-         97BAe99otfYwzOWIA+XXmDOlV0XV96p4ouMz2skY0iylXTuFuajisA6V5EGesfvN2S
-         EnWIKPp5gbDjHjv8pbw5zMIdkaEOipWJDjbISEl1XoZDWp2Ygwg5zrDyDsVAUn9lbe
-         RbBE9DjUCZ4sJ3xUIGrL2VBBtoIDzPsnA0PohN7BLvFPe7xFJoTQwXf9YDXHrZFwvd
-         2ryOz6wRJb6ww==
+        b=mLeKP7vy1SjZ0eVFOsVU5Q3kG9DJLP7rOZNmdd5RnXXxiP52+/d/1J3rLxNWvawf8
+         t69pl5Cwf7gndCJ7e2ch1UlbDWnhqyNHjmPAa8e0qIa7Ohn8+FYyD5i12RlEkqJoVM
+         tDpifag+Y6Lecj/qorwY9ksbNDdNeQvsTF2a6RtfOYtpj6jW9TgQys239zwwRIkufH
+         UQobA+RFGUZc1dK7d6VVc8RRUVil4c36ZMJSK/lIKCPvGZ29Cs92dsDQ8UB7spc6Mp
+         pBmNXWii1hmB1qmMF3Mq7Fq+NlTesafHqP6IL92zn/e9SSUvAO0av8xDeSJ2RiBiOF
+         8CQVGGzOxjI3Q==
 From:   Michael Ellerman <mpe@ellerman.id.au>
 To:     linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: [PATCH 4/4] selftests/gpio: Add to CLEAN rule rather than overriding
-Date:   Wed,  4 Nov 2020 21:08:43 +1100
-Message-Id: <20201104100843.660407-4-mpe@ellerman.id.au>
+Subject: [PATCH 2/4] selftests/gpio: Move include of lib.mk up
+Date:   Wed,  4 Nov 2020 21:08:41 +1100
+Message-Id: <20201104100843.660407-2-mpe@ellerman.id.au>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201104100843.660407-1-mpe@ellerman.id.au>
 References: <20201104100843.660407-1-mpe@ellerman.id.au>
@@ -49,29 +53,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rather than overriding the CLEAN rule we can just append to it.
+Move the include of lib.mk up so that in a subsequent patch we can use
+OUTPUT, which is initialised by lib.mk, in the definition of the GPIO
+variables.
 
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- tools/testing/selftests/gpio/Makefile | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ tools/testing/selftests/gpio/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index acf4088a9891..41582fe485ee 100644
+index c85fb5acf5f4..615c8a953ade 100644
 --- a/tools/testing/selftests/gpio/Makefile
 +++ b/tools/testing/selftests/gpio/Makefile
-@@ -20,10 +20,7 @@ GPIODIR := $(realpath ../../../gpio)
- GPIOOUT := $(OUTPUT)/tools-gpio/
- GPIOOBJ := $(GPIOOUT)/gpio-utils.o
+@@ -13,6 +13,9 @@ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+ TEST_GEN_PROGS_EXTENDED := gpio-mockup-chardev
  
--override define CLEAN
--	$(RM) $(TEST_GEN_PROGS_EXTENDED)
--	$(RM) -rf $(GPIOOUT)
--endef
-+CLEAN += ; $(RM) -rf $(GPIOOUT)
++KSFT_KHDR_INSTALL := 1
++include ../lib.mk
++
+ GPIODIR := $(realpath ../../../gpio)
+ GPIOOBJ := gpio-utils.o
  
- $(TEST_GEN_PROGS_EXTENDED): $(GPIOOBJ)
+@@ -21,9 +24,6 @@ override define CLEAN
+ 	$(MAKE) -C $(GPIODIR) OUTPUT=$(GPIODIR)/ clean
+ endef
  
+-KSFT_KHDR_INSTALL := 1
+-include ../lib.mk
+-
+ $(TEST_GEN_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
+ 
+ $(GPIODIR)/$(GPIOOBJ):
 -- 
 2.25.1
 
