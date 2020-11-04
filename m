@@ -2,103 +2,99 @@ Return-Path: <SRS0=J0+f=EK=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E740C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:10:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 730FDC4741F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:55:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC4FB2224E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:10:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03A3F22409
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Nov 2020 10:55:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="neaKBrQn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QvVRp7HT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729242AbgKDKKK (ORCPT
+        id S1729600AbgKDKzG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Nov 2020 05:10:10 -0500
-Received: from ozlabs.org ([203.11.71.1]:50033 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727923AbgKDKJz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Nov 2020 05:09:55 -0500
-Received: by ozlabs.org (Postfix, from userid 1034)
-        id 4CR2Sx3CqYz9sVM; Wed,  4 Nov 2020 21:09:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1604484593;
-        bh=a5WygqkHDCvwgU6p3aiWlaAFRr9MW05zMhpOiiyYDM8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=neaKBrQnwCB9rzlcas5HnhYy9tFLA98XSU3+J5icD6SfgCl+IvbLy8Cz3jKuNrkX/
-         Nmw5MTRXBp9fwviHydCqFEvsxSSapEU+5VOt+kkcOHDp8tekBpsfjFw73eX5Y1gYiP
-         bD1BZW8C+5SureaekOP4OzqPPs2Qh3/o4QjReNGQpVhlbDebzscNF016gDzZPgIzjv
-         krDQhtcBQ6KPdEoJQ7XPyrd1Ri5GTAsBHeRh7s+UlMPRHOOjD4wVOb5Fy6EYQ6cBqW
-         qxzD//co8O0TXn3xLpWXjyKILLLth8mRbZaNbB9fWvcHO40ZQufKrRY+QOfvcp8G9A
-         yr1dfKtcUA6rw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: [PATCH 3/4] selftests/gpio: Fix build when source tree is read only
-Date:   Wed,  4 Nov 2020 21:08:42 +1100
-Message-Id: <20201104100843.660407-3-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201104100843.660407-1-mpe@ellerman.id.au>
-References: <20201104100843.660407-1-mpe@ellerman.id.au>
+        Wed, 4 Nov 2020 05:55:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47154 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729597AbgKDKzF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Nov 2020 05:55:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604487304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q3u0+lkwsfiVe4d5JwGEYaEFEFtHacqRJXTy/nsAlx0=;
+        b=QvVRp7HTFPjU6Ea6ibUGOdrb8A7Xx38hQTYIpDaEkp8DTlpfUBj72sFvyYdJM9EMwWmCKr
+        te/HgfiEuazmRFPTY/+t5+Il5BeeiNQPdCiRQPA4GL6n9/QSnxRXk2Gkm8a4Ywx1InQ5Lw
+        Qlj8tiHZGs+DctZIhn9RUN75DziRv7Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-570-m8B7P33NNe-Xsxrs1Gxuww-1; Wed, 04 Nov 2020 05:55:00 -0500
+X-MC-Unique: m8B7P33NNe-Xsxrs1Gxuww-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 724DE8030D7;
+        Wed,  4 Nov 2020 10:54:59 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.40.192.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 28C655B4BB;
+        Wed,  4 Nov 2020 10:54:52 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 11:54:50 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v2 1/5] KVM: selftests: Remove address rounding in guest
+ code
+Message-ID: <20201104105450.t2frosra4mvixrwi@kamzik.brq.redhat.com>
+References: <20201103234952.1626730-1-bgardon@google.com>
+ <20201103234952.1626730-2-bgardon@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201103234952.1626730-2-bgardon@google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the gpio selftests fail to build if the source tree is read
-only:
+On Tue, Nov 03, 2020 at 03:49:48PM -0800, Ben Gardon wrote:
+> Rounding the address the guest writes to a host page boundary
+> will only have an effect if the host page size is larger than the guest
+> page size, but in that case the guest write would still go to the same
+> host page. There's no reason to round the address down, so remove the
+> rounding to simplify the demand paging test.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  tools/testing/selftests/kvm/demand_paging_test.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index 360cd3ea4cd67..32a42eafc6b5c 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -103,7 +103,6 @@ static void guest_code(uint32_t vcpu_id)
+>  	for (i = 0; i < pages; i++) {
+>  		uint64_t addr = gva + (i * guest_page_size);
+>  
+> -		addr &= ~(host_page_size - 1);
+>  		*(uint64_t *)addr = 0x0123456789ABCDEF;
+>  	}
+>  
+> -- 
+> 2.29.1.341.ge80a0c044ae-goog
+>
 
-  make -j 160 -C tools/testing/selftests TARGETS=gpio
-  make[1]: Entering directory '/linux/tools/testing/selftests/gpio'
-  make OUTPUT=/linux/tools/gpio/ -C /linux/tools/gpio
-  make[2]: Entering directory '/linux/tools/gpio'
-  mkdir -p /linux/tools/gpio/include/linux 2>&1 || true
-  ln -sf /linux/tools/gpio/../../include/uapi/linux/gpio.h /linux/tools/gpio/include/linux/gpio.h
-  ln: failed to create symbolic link '/linux/tools/gpio/include/linux/gpio.h': Read-only file system
-
-This happens because we ask make to build ../../../gpio (tools/gpio)
-without pointing OUTPUT away from the source directory.
-
-To fix it we create a subdirectory of the existing OUTPUT directory,
-called tools-gpio, and tell tools/gpio to build in there.
-
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- tools/testing/selftests/gpio/Makefile | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 615c8a953ade..acf4088a9891 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -17,14 +17,18 @@ KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
- GPIODIR := $(realpath ../../../gpio)
--GPIOOBJ := gpio-utils.o
-+GPIOOUT := $(OUTPUT)/tools-gpio/
-+GPIOOBJ := $(GPIOOUT)/gpio-utils.o
- 
- override define CLEAN
- 	$(RM) $(TEST_GEN_PROGS_EXTENDED)
--	$(MAKE) -C $(GPIODIR) OUTPUT=$(GPIODIR)/ clean
-+	$(RM) -rf $(GPIOOUT)
- endef
- 
--$(TEST_GEN_PROGS_EXTENDED): $(GPIODIR)/$(GPIOOBJ)
-+$(TEST_GEN_PROGS_EXTENDED): $(GPIOOBJ)
- 
--$(GPIODIR)/$(GPIOOBJ):
--	$(MAKE) OUTPUT=$(GPIODIR)/ -C $(GPIODIR)
-+$(GPIOOUT):
-+	mkdir -p $@
-+
-+$(GPIOOBJ): $(GPIOOUT)
-+	$(MAKE) OUTPUT=$(GPIOOUT) -C $(GPIODIR)
--- 
-2.25.1
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 
