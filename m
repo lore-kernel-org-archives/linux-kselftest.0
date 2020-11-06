@@ -2,27 +2,26 @@ Return-Path: <SRS0=AyEC=EM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28423C55178
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15897C5517A
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:57:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC6A22065E
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:56:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B415D206D4
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:57:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgKFH4S (ORCPT
+        id S1726565AbgKFH5H (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Nov 2020 02:56:18 -0500
-Received: from verein.lst.de ([213.95.11.211]:50447 "EHLO verein.lst.de"
+        Fri, 6 Nov 2020 02:57:07 -0500
+Received: from verein.lst.de ([213.95.11.211]:50458 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725830AbgKFH4Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 02:56:16 -0500
+        id S1726563AbgKFH5H (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Nov 2020 02:57:07 -0500
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id D368168B05; Fri,  6 Nov 2020 08:56:13 +0100 (CET)
-Date:   Fri, 6 Nov 2020 08:56:13 +0100
+        id B130A68B05; Fri,  6 Nov 2020 08:57:05 +0100 (CET)
+Date:   Fri, 6 Nov 2020 08:57:05 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Ralph Campbell <rcampbell@nvidia.com>
 Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
@@ -39,7 +38,7 @@ Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
         Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [PATCH v3 2/6] mm/migrate: move migrate_vma_collect_skip()
-Message-ID: <20201106075613.GB31341@lst.de>
+Message-ID: <20201106075705.GC31341@lst.de>
 References: <20201106005147.20113-1-rcampbell@nvidia.com> <20201106005147.20113-3-rcampbell@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -50,13 +49,6 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 04:51:43PM -0800, Ralph Campbell wrote:
-> Move the definition of migrate_vma_collect_skip() to make it callable
-> by migrate_vma_collect_hole(). This helps make the next patch easier
-> to read.
-> 
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-
-Looks good,
+Looks good:
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
