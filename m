@@ -2,26 +2,27 @@ Return-Path: <SRS0=AyEC=EM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AC42C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28423C55178
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F09B92087D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:55:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC6A22065E
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 07:56:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgKFHz6 (ORCPT
+        id S1725848AbgKFH4S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Nov 2020 02:55:58 -0500
-Received: from verein.lst.de ([213.95.11.211]:50436 "EHLO verein.lst.de"
+        Fri, 6 Nov 2020 02:56:18 -0500
+Received: from verein.lst.de ([213.95.11.211]:50447 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725830AbgKFHz6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 02:55:58 -0500
+        id S1725830AbgKFH4Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Nov 2020 02:56:16 -0500
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id AA44B68B02; Fri,  6 Nov 2020 08:55:54 +0100 (CET)
-Date:   Fri, 6 Nov 2020 08:55:54 +0100
+        id D368168B05; Fri,  6 Nov 2020 08:56:13 +0100 (CET)
+Date:   Fri, 6 Nov 2020 08:56:13 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Ralph Campbell <rcampbell@nvidia.com>
 Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
@@ -37,32 +38,25 @@ Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
         Yang Shi <yang.shi@linux.alibaba.com>,
         Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 1/6] mm/thp: add prep_transhuge_device_private_page()
-Message-ID: <20201106075554.GA31341@lst.de>
-References: <20201106005147.20113-1-rcampbell@nvidia.com> <20201106005147.20113-2-rcampbell@nvidia.com>
+Subject: Re: [PATCH v3 2/6] mm/migrate: move migrate_vma_collect_skip()
+Message-ID: <20201106075613.GB31341@lst.de>
+References: <20201106005147.20113-1-rcampbell@nvidia.com> <20201106005147.20113-3-rcampbell@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201106005147.20113-2-rcampbell@nvidia.com>
+In-Reply-To: <20201106005147.20113-3-rcampbell@nvidia.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 04:51:42PM -0800, Ralph Campbell wrote:
-> +extern void prep_transhuge_device_private_page(struct page *page);
+On Thu, Nov 05, 2020 at 04:51:43PM -0800, Ralph Campbell wrote:
+> Move the definition of migrate_vma_collect_skip() to make it callable
+> by migrate_vma_collect_hole(). This helps make the next patch easier
+> to read.
+> 
+> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
 
-No need for the extern.
+Looks good,
 
-> +static inline void prep_transhuge_device_private_page(struct page *page)
-> +{
-> +}
-
-Is the code to call this even reachable if THP support is configured
-out?  If not just declaring it unconditionally and letting dead code
-elimination do its job might be a tad cleaner.
-
-> +void prep_transhuge_device_private_page(struct page *page)
-
-I think a kerneldoc comment explaining what this function is useful for
-would be helpful.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
