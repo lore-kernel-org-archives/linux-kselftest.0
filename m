@@ -2,89 +2,169 @@ Return-Path: <SRS0=AyEC=EM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A7A9C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 21:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79322C4741F
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:29:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D180A2078B
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 21:26:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="D+Hb3S3I"
+	by mail.kernel.org (Postfix) with ESMTP id 36FA921556
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbgKFV0x (ORCPT
+        id S1728766AbgKFX3Z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Nov 2020 16:26:53 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12456 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbgKFV0x (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 16:26:53 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fa5bf9a0000>; Fri, 06 Nov 2020 13:26:50 -0800
-Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov
- 2020 21:26:50 +0000
-Subject: Re: [PATCH v3 3/6] mm: support THP migration to device private memory
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jerome Glisse" <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Alistair Popple" <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Zi Yan <ziy@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-References: <20201106005147.20113-1-rcampbell@nvidia.com>
- <20201106005147.20113-4-rcampbell@nvidia.com> <20201106080322.GE31341@lst.de>
-From:   Ralph Campbell <rcampbell@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <a7b8b90c-09b7-2009-0784-908b61f61ef2@nvidia.com>
-Date:   Fri, 6 Nov 2020 13:26:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Fri, 6 Nov 2020 18:29:25 -0500
+Received: from mga12.intel.com ([192.55.52.136]:55504 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728220AbgKFX3Z (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Nov 2020 18:29:25 -0500
+IronPort-SDR: as/5zFG6huIOUo21dE1SihoE0Cyb3X1Bj4kBPiWMGtA8n6NIK6lmZRQEE2EdZuCwasnaUJa8vq
+ O0t75kCctF6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9797"; a="148893598"
+X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
+   d="scan'208";a="148893598"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 15:29:25 -0800
+IronPort-SDR: rbUZpwuvk6xYCkoYTkH1Bt7ETdx8XmgGvmGGIOdL7uYGh08RC67YOXBkNPJElhbQggJOK0KJwk
+ uJGPtviVWExw==
+X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
+   d="scan'208";a="354907170"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 15:29:24 -0800
+From:   ira.weiny@intel.com
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: [PATCH V3 02/10] x86/fpu: Refactor arch_set_user_pkey_access() for PKS support
+Date:   Fri,  6 Nov 2020 15:29:00 -0800
+Message-Id: <20201106232908.364581-3-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
+In-Reply-To: <20201106232908.364581-1-ira.weiny@intel.com>
+References: <20201106232908.364581-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20201106080322.GE31341@lst.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1604698011; bh=sJlHFFmh1FwR1Swhc5FD4UAS7VszQVSWU413enTyHH4=;
-        h=Subject:To:CC:References:From:X-Nvconfidentiality:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-        b=D+Hb3S3IoeXUGY43+BDjeVkVQHFWtOWYZpKP/V1fcty+B82xJWfBYCbrNIRLcwd1N
-         xHNxqb4t8k2I+/J1kKnnLsF5xZkxtH+JOsq7sBETw85okpdAVkV2cTPaH+3yzHWUQV
-         0W2jqDyoUzaJGiP3EhfAPrA37NzlSLU284MbBQY8hK+AY5l7waP/BrPCk4U5cwfu4Q
-         wclHRUc9XPKRGZCTe+xikUB3QYpdfkmjsK9FPg9F2qGpeePz9bHplQ7R35oDaNt1jg
-         VQHbvDCCv9xArzhsLxgy1hTgi/8qcKTrJiwn4j7znBMrdvlFc6JKsA4ta7lEI7Yu/q
-         ldJ63eePyEAMQ==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Ira Weiny <ira.weiny@intel.com>
 
-On 11/6/20 12:03 AM, Christoph Hellwig wrote:
-> I hate the extra pin count magic here.  IMHO we really need to finish
-> off the series to get rid of the extra references on the ZONE_DEVICE
-> pages first.
+Define a helper, update_pkey_val(), which will be used to support both
+Protection Key User (PKU) and the new Protection Key for Supervisor
+(PKS) in subsequent patches.
 
-First, thanks for the review comments.
+Co-developed-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-I don't like the extra refcount either, that is why I tried to fix that up
-before resending this series. However, you didn't like me just fixing the
-refcount only for device private pages and I don't know the dax/pmem code
-and peer-to-peer PCIe uses of ZONE_DEVICE pages well enough to say how
-long it will take me to fix all the use cases.
-So I wanted to make progress on the THP migration code in the mean time.
+---
+Changes from RFC V3:
+	Per Dave Hansen
+		Update and add comments per Dave's review
+	Per Peter
+		Correct attribution
+---
+ arch/x86/include/asm/pkeys.h |  2 ++
+ arch/x86/kernel/fpu/xstate.c | 22 ++++------------------
+ arch/x86/mm/pkeys.c          | 23 +++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 18 deletions(-)
+
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index f9feba80894b..4526245b03e5 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -136,4 +136,6 @@ static inline int vma_pkey(struct vm_area_struct *vma)
+ 	return (vma->vm_flags & vma_pkey_mask) >> VM_PKEY_SHIFT;
+ }
+ 
++u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags);
++
+ #endif /*_ASM_X86_PKEYS_H */
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index a99afc70cc0a..a3bca3211eba 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -994,9 +994,7 @@ const void *get_xsave_field_ptr(int xfeature_nr)
+ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 		unsigned long init_val)
+ {
+-	u32 old_pkru;
+-	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
+-	u32 new_pkru_bits = 0;
++	u32 pkru;
+ 
+ 	/*
+ 	 * This check implies XSAVE support.  OSPKE only gets
+@@ -1012,21 +1010,9 @@ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 	 */
+ 	WARN_ON_ONCE(pkey >= arch_max_pkey());
+ 
+-	/* Set the bits we need in PKRU:  */
+-	if (init_val & PKEY_DISABLE_ACCESS)
+-		new_pkru_bits |= PKR_AD_BIT;
+-	if (init_val & PKEY_DISABLE_WRITE)
+-		new_pkru_bits |= PKR_WD_BIT;
+-
+-	/* Shift the bits in to the correct place in PKRU for pkey: */
+-	new_pkru_bits <<= pkey_shift;
+-
+-	/* Get old PKRU and mask off any old bits in place: */
+-	old_pkru = read_pkru();
+-	old_pkru &= ~((PKR_AD_BIT|PKR_WD_BIT) << pkey_shift);
+-
+-	/* Write old part along with new part: */
+-	write_pkru(old_pkru | new_pkru_bits);
++	pkru = read_pkru();
++	pkru = update_pkey_val(pkru, pkey, init_val);
++	write_pkru(pkru);
+ 
+ 	return 0;
+ }
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index f5efb4007e74..d1dfe743e79f 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -208,3 +208,26 @@ static __init int setup_init_pkru(char *opt)
+ 	return 1;
+ }
+ __setup("init_pkru=", setup_init_pkru);
++
++/*
++ * Replace disable bits for @pkey with values from @flags
++ *
++ * Kernel users use the same flags as user space:
++ *     PKEY_DISABLE_ACCESS
++ *     PKEY_DISABLE_WRITE
++ */
++u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags)
++{
++	int pkey_shift = pkey * PKR_BITS_PER_PKEY;
++
++	/*  Mask out old bit values */
++	pk_reg &= ~(((1 << PKR_BITS_PER_PKEY) - 1) << pkey_shift);
++
++	/*  Or in new values */
++	if (flags & PKEY_DISABLE_ACCESS)
++		pk_reg |= PKR_AD_BIT << pkey_shift;
++	if (flags & PKEY_DISABLE_WRITE)
++		pk_reg |= PKR_WD_BIT << pkey_shift;
++
++	return pk_reg;
++}
+-- 
+2.28.0.rc0.12.gb6a658bd00c9
 
