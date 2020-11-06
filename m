@@ -1,98 +1,124 @@
-Return-Path: <SRS0=iG10=EL=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=AyEC=EM=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77602C388F7
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Nov 2020 23:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A52C388F7
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 00:51:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E91F20728
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Nov 2020 23:24:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A2C8020782
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 00:51:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UsR3m19D"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="l1GP2Mqk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731060AbgKEXYp (ORCPT
+        id S1730895AbgKFAv4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Nov 2020 18:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726801AbgKEXYp (ORCPT
+        Thu, 5 Nov 2020 19:51:56 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2066 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729784AbgKFAvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Nov 2020 18:24:45 -0500
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677D2C0613D2
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Nov 2020 15:24:45 -0800 (PST)
-Received: by mail-qt1-x849.google.com with SMTP id i14so1933522qtq.18
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Nov 2020 15:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=AAeRP8KDuwhhbA84EVB6YgYC1HzIpzZ/9Y+Nd8qzbQE=;
-        b=UsR3m19DmC3T42tFi5Q5tDa0aQw7MuRG7UgVzQ+yssoGB7I250bHEnZaaGsA7Eu1fg
-         h6wsSdo50DgevBMJEyC7lunITjgWacw/II72KQJprap7ueBmdoNz2774O4ULOoE6otZi
-         Nxg6WITa1A+0LezgnDGxnQk1RBkDdb9ORWEgkIQylkpvRZ1IsVLF1NIkE11vqLlMRw63
-         nd7NciOK9dmcER+bZ3zu+xVtsA5waHN4c0pDYYRx1gm6i9r8TkkUD/HWMfesDZPR19+e
-         dyDZGrubiPU4s1LEzkPtWQBhgHCIb/mykAbExPuPwogiOTjls5+TX4crGQJi1B+M/rqV
-         uD4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=AAeRP8KDuwhhbA84EVB6YgYC1HzIpzZ/9Y+Nd8qzbQE=;
-        b=E6ZmbNElFCIRWQp1bQzWe3q5WE+RLEmZDSc2l/CRaKB7rMHa8Pzw/L6XrcdWeMj7U6
-         Lh+1d/oVPsM80dDQnVaHJcremKdhnRdhj8ptx5GFIcxwtBkuiSaY86fWLv9HftKH36HM
-         wdzLioFknZnWNX/qDp66W0295AdZAULkey4rMvr8UTHZyH4tJIKT2rZdaXgQUBxe6UEt
-         S0sHo9dOUsvXN++d08EqFqlLTHk8t4aG7yDX6/cCHJIcCXnkKiEL0de0ImWEoLZR+xrE
-         lXMw4RsCvRIUj1hBKH6f8Av+xlLJPg9b2ucO9q8qlBFHY8arJzBEGSF57/l+/VFGHBm3
-         tU0g==
-X-Gm-Message-State: AOAM533ZugheAsiB0Y4BcdJA3gGpUvQUplC2VvOFjKBvTjHIzWRnjyg1
-        dzgZDJqoFjjqVzIch8oTBFFZw3bpNvddd3AxV71JWg==
-X-Google-Smtp-Source: ABdhPJxfKMbHL6oNDZfMKBMswdyDwjBhbY0a2mgSIe9wMM5pQM7TN7VrdzAvbPb8Cxy5WMJ3wz3zVIOe9uvp2i93vKOLew==
-Sender: "brendanhiggins via sendgmr" 
-        <brendanhiggins@mactruck.svl.corp.google.com>
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:c634:6bff:fe71:d8d1])
- (user=brendanhiggins job=sendgmr) by 2002:a05:6214:12c4:: with SMTP id
- s4mr4712027qvv.33.1604618684577; Thu, 05 Nov 2020 15:24:44 -0800 (PST)
-Date:   Thu,  5 Nov 2020 15:24:40 -0800
-Message-Id: <20201105232440.1049635-1-brendanhiggins@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-Subject: [PATCH v1] kunit: tool: unmark test_data as binary blobs
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 5 Nov 2020 19:51:55 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fa49e2f0000>; Thu, 05 Nov 2020 16:51:59 -0800
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov
+ 2020 00:51:51 +0000
+Received: from rcampbell-dev.nvidia.com (10.124.1.5) by mail.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Fri, 6 Nov 2020 00:51:51 +0000
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Jason Gunthorpe" <jgg@nvidia.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Zi Yan <ziy@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Ralph Campbell" <rcampbell@nvidia.com>
+Subject: [PATCH v3 0/6] mm/hmm/nouveau: add THP migration to migrate_vma_*
+Date:   Thu, 5 Nov 2020 16:51:41 -0800
+Message-ID: <20201106005147.20113-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1604623919; bh=yd2V0Bj7e0BljktQG2A8aEh2H8lDRzFocecZDywzuvo=;
+        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+         X-NVConfidentiality:Content-Transfer-Encoding:Content-Type;
+        b=l1GP2MqkXumBnOLdZPkkI/rhR7a4QkhrOLUzQZ07kAYQ/Co7WXfjmo46mueuuYvZq
+         Br4aCN5s2HI1+/JMzxHxzk9kadPHc2pQPf3Rtj77uLEYEZzaxYsF5HJtLu7+RBGYln
+         kmNW1dk9VrCVI8cp6tvg2EiI4aEyYOfCHItqRY+fTSmi7KzwNWmS44k3KW56sW+MzW
+         o2huLaZevX2k/szf3mkftTbe/zpAKP3yluAPe9gWgMq1+UQwEo9MYmPmH9pM0Ish3f
+         NBf69WgnEPE5Plno3uUZkGtiOrkYQmWQEKVUyZjSs3433S3bzfsqF/n/H07IOMgK7k
+         vZ64sh9YOSrBA==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The tools/testing/kunit/test_data/ directory was marked as binary
-because some of the test_data files cause checkpatch warnings. Fix this
-by dropping the .gitattributes file.
+This series adds support for transparent huge page migration to
+migrate_vma_*() and adds nouveau SVM and HMM selftests as consumers.
+Earlier versions were posted previously [1] and [2].
 
-Fixes: afc63da64f1e ("kunit: kunit_parser: make parser more robust")
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- tools/testing/kunit/.gitattributes | 1 -
- 1 file changed, 1 deletion(-)
- delete mode 100644 tools/testing/kunit/.gitattributes
+The patches apply cleanly to the linux-mm 5.10.0-rc2 tree. There are a
+lot of other THP patches being posted. I don't think there are any
+semantic conflicts but there may be some merge conflicts depending on
+the order Andrew applies these.
 
-diff --git a/tools/testing/kunit/.gitattributes b/tools/testing/kunit/.gitattributes
-deleted file mode 100644
-index 5b7da1fc3b8f1..0000000000000
---- a/tools/testing/kunit/.gitattributes
-+++ /dev/null
-@@ -1 +0,0 @@
--test_data/* binary
+Changes in v3:
+Sent the patch ("mm/thp: fix __split_huge_pmd_locked() for migration PMD")
+as a separate patch from this series.
 
-base-commit: 4ef8451b332662d004df269d4cdeb7d9f31419b5
--- 
-2.29.1.341.ge80a0c044ae-goog
+Rebased to linux-mm 5.10.0-rc2.
+
+Changes in v2:
+Added splitting a THP midway in the migration process:
+i.e., in migrate_vma_pages().
+
+[1] https://lore.kernel.org/linux-mm/20200619215649.32297-1-rcampbell@nvidi=
+a.com
+[2] https://lore.kernel.org/linux-mm/20200902165830.5367-1-rcampbell@nvidia=
+.com
+
+Ralph Campbell (6):
+  mm/thp: add prep_transhuge_device_private_page()
+  mm/migrate: move migrate_vma_collect_skip()
+  mm: support THP migration to device private memory
+  mm/thp: add THP allocation helper
+  mm/hmm/test: add self tests for THP migration
+  nouveau: support THP migration to private memory
+
+ drivers/gpu/drm/nouveau/nouveau_dmem.c | 289 +++++++++++-----
+ drivers/gpu/drm/nouveau/nouveau_svm.c  |  11 +-
+ drivers/gpu/drm/nouveau/nouveau_svm.h  |   3 +-
+ include/linux/gfp.h                    |  10 +
+ include/linux/huge_mm.h                |  12 +
+ include/linux/memremap.h               |   9 +
+ include/linux/migrate.h                |   2 +
+ lib/test_hmm.c                         | 437 +++++++++++++++++++++----
+ lib/test_hmm_uapi.h                    |   3 +
+ mm/huge_memory.c                       | 147 +++++++--
+ mm/memcontrol.c                        |  25 +-
+ mm/memory.c                            |  10 +-
+ mm/memremap.c                          |   4 +-
+ mm/migrate.c                           | 429 +++++++++++++++++++-----
+ mm/rmap.c                              |   2 +-
+ tools/testing/selftests/vm/hmm-tests.c | 404 +++++++++++++++++++++++
+ 16 files changed, 1522 insertions(+), 275 deletions(-)
+
+--=20
+2.20.1
 
