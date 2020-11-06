@@ -6,22 +6,22 @@ X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1BDCC55178
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 08:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 483C5C55178
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 08:03:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90D162087D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 08:01:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E69A82087D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 08:03:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbgKFIBw (ORCPT
+        id S1726242AbgKFIDZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Nov 2020 03:01:52 -0500
-Received: from verein.lst.de ([213.95.11.211]:50484 "EHLO verein.lst.de"
+        Fri, 6 Nov 2020 03:03:25 -0500
+Received: from verein.lst.de ([213.95.11.211]:50499 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgKFIBv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 03:01:51 -0500
+        id S1725848AbgKFIDZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Nov 2020 03:03:25 -0500
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id A9C9068B05; Fri,  6 Nov 2020 09:01:47 +0100 (CET)
-Date:   Fri, 6 Nov 2020 09:01:47 +0100
+        id 0AA1868B05; Fri,  6 Nov 2020 09:03:23 +0100 (CET)
+Date:   Fri, 6 Nov 2020 09:03:22 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Ralph Campbell <rcampbell@nvidia.com>
 Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
@@ -37,37 +37,19 @@ Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
         Yang Shi <yang.shi@linux.alibaba.com>,
         Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 4/6] mm/thp: add THP allocation helper
-Message-ID: <20201106080147.GD31341@lst.de>
-References: <20201106005147.20113-1-rcampbell@nvidia.com> <20201106005147.20113-5-rcampbell@nvidia.com>
+Subject: Re: [PATCH v3 3/6] mm: support THP migration to device private
+ memory
+Message-ID: <20201106080322.GE31341@lst.de>
+References: <20201106005147.20113-1-rcampbell@nvidia.com> <20201106005147.20113-4-rcampbell@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201106005147.20113-5-rcampbell@nvidia.com>
+In-Reply-To: <20201106005147.20113-4-rcampbell@nvidia.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +extern struct page *alloc_transhugepage(struct vm_area_struct *vma,
-> +					unsigned long addr);
-
-No need for the extern.  And also here: do we actually need the stub,
-or can the caller make sure (using IS_ENABLED and similar) that the
-compiler knows the code is dead?
-
-> +struct page *alloc_transhugepage(struct vm_area_struct *vma,
-> +				 unsigned long haddr)
-> +{
-> +	gfp_t gfp;
-> +	struct page *page;
-> +
-> +	gfp = alloc_hugepage_direct_gfpmask(vma);
-> +	page = alloc_hugepage_vma(gfp, vma, haddr, HPAGE_PMD_ORDER);
-> +	if (page)
-> +		prep_transhuge_page(page);
-> +	return page;
-
-I think do_huge_pmd_anonymous_page should be switched to use this
-helper as well.
+I hate the extra pin count magic here.  IMHO we really need to finish
+off the series to get rid of the extra references on the ZONE_DEVICE
+pages first.
