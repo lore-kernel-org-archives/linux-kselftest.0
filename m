@@ -8,30 +8,30 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E9F8C388F7
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 00:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B353C56201
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 00:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2851420786
+	by mail.kernel.org (Postfix) with ESMTP id CA2062078E
 	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 00:52:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="jycxpJC/"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="oZL2f7tF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732859AbgKFAwG (ORCPT
+        id S1732843AbgKFAwG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 5 Nov 2020 19:52:06 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:9221 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732833AbgKFAwF (ORCPT
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:8446 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732838AbgKFAwG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Nov 2020 19:52:05 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fa49e330001>; Thu, 05 Nov 2020 16:52:03 -0800
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov
- 2020 00:51:59 +0000
+        Thu, 5 Nov 2020 19:52:06 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fa49e360006>; Thu, 05 Nov 2020 16:52:06 -0800
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Nov
+ 2020 00:52:00 +0000
 Received: from rcampbell-dev.nvidia.com (10.124.1.5) by mail.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Fri, 6 Nov 2020 00:51:59 +0000
+ Transport; Fri, 6 Nov 2020 00:52:00 +0000
 From:   Ralph Campbell <rcampbell@nvidia.com>
 To:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
@@ -47,9 +47,9 @@ CC:     Jerome Glisse <jglisse@redhat.com>,
         Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH v3 1/6] mm/thp: add prep_transhuge_device_private_page()
-Date:   Thu, 5 Nov 2020 16:51:42 -0800
-Message-ID: <20201106005147.20113-2-rcampbell@nvidia.com>
+Subject: [PATCH v3 4/6] mm/thp: add THP allocation helper
+Date:   Thu, 5 Nov 2020 16:51:45 -0800
+Message-ID: <20201106005147.20113-5-rcampbell@nvidia.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201106005147.20113-1-rcampbell@nvidia.com>
 References: <20201106005147.20113-1-rcampbell@nvidia.com>
@@ -58,75 +58,78 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1604623923; bh=MxvX11Do/3TUW7vYVdXjys2hT9iLLmhsTNuHLf5CCr8=;
+        t=1604623926; bh=gT6gepnrM1WtFwSGyIYxXIn+WYLudok2qxIca0Wj42k=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
          References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=jycxpJC/sIQZd6sCGvcrgobqobx/hb+2eYyacKc6TH4S0nfwyol+QFqcBb3W/gDPy
-         f6cAT+my0FZ/zM/BKJ2f5Npp4lo+QkW8SIlLXL0JNJmrUnqRFdBv/aeKUgaGG2uYId
-         t/H/ElW+D+WfTRyPAqlX5rUPMWlVAub+vwtrPjAo979gBgan5xECfXatoCNS6kPhMz
-         vFSjXJV5E5Ih2U4dUsypaiJB576mHrBc4XEUvG1j1u+z3UPYLk5m6JM3aJqzErWcGz
-         iwpZPWyEfrSYv2pKhQFhoH1r/8s0MvYggRMW6CcubxCYwKBwr2VKdHr/JCSiTlyC6P
-         UbTX+0jw2ODtA==
+        b=oZL2f7tFL6dXZy+k8i6jnnkaHUca7aBBFsVgDXAnb4xvEFYgpyFvCQ4YaxNbZ6XBq
+         Wh3SlS7/fv42muBRoi1mZaQOpgVO3BO8z/HeoEc9Toj7kpKD7QD4Pin5rIkU0Rz1WI
+         KNjgQYRTE2ltAGYmOTHDxGsM/jVB9zEcazwVpq0/aEz1cazc2NumdDnvTde16pxwlS
+         p5ws5rm7fIGbvfDlIrUloSZYuY2u3FCJ8SxzgbiwISqxujHl3S2LsCwwJt9A5Jiles
+         53AbVNbPVeFZNC8i9zbIt0/rsNliFLXQ1leUZ+aMu21sHMWwznYbxAhybb5rXHxd18
+         pPpFN+3TyGtNg==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a helper function to allow device drivers to create device private
-transparent huge pages. This is intended to help support device private
-THP migrations.
+Transparent huge page allocation policy is controlled by several sysfs
+variables. Rather than expose these to each device driver that needs to
+allocate THPs, provide a helper function.
 
 Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
 ---
- include/linux/huge_mm.h | 5 +++++
- mm/huge_memory.c        | 9 +++++++++
- 2 files changed, 14 insertions(+)
+ include/linux/gfp.h | 10 ++++++++++
+ mm/huge_memory.c    | 14 ++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index 0365aa97f8e7..3ec26ef27a93 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -184,6 +184,7 @@ extern unsigned long thp_get_unmapped_area(struct file =
-*filp,
- 		unsigned long flags);
-=20
- extern void prep_transhuge_page(struct page *page);
-+extern void prep_transhuge_device_private_page(struct page *page);
- extern void free_transhuge_page(struct page *page);
- bool is_transparent_hugepage(struct page *page);
-=20
-@@ -377,6 +378,10 @@ static inline bool transhuge_vma_suitable(struct vm_ar=
-ea_struct *vma,
-=20
- static inline void prep_transhuge_page(struct page *page) {}
-=20
-+static inline void prep_transhuge_device_private_page(struct page *page)
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index c603237e006c..242398c4b556 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -564,6 +564,16 @@ static inline struct page *alloc_pages(gfp_t gfp_mask,=
+ unsigned int order)
+ #define alloc_page(gfp_mask) alloc_pages(gfp_mask, 0)
+ #define alloc_page_vma(gfp_mask, vma, addr)			\
+ 	alloc_pages_vma(gfp_mask, 0, vma, addr, numa_node_id(), false)
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++extern struct page *alloc_transhugepage(struct vm_area_struct *vma,
++					unsigned long addr);
++#else
++static inline struct page *alloc_transhugepage(struct vm_area_struct *vma,
++						unsigned long addr)
 +{
++	return NULL;
 +}
-+
- static inline bool is_transparent_hugepage(struct page *page)
- {
- 	return false;
++#endif
+=20
+ extern unsigned long __get_free_pages(gfp_t gfp_mask, unsigned int order);
+ extern unsigned long get_zeroed_page(gfp_t gfp_mask);
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 08a183f6c3ab..b4141f12ff31 100644
+index a073e66d0ee2..c2c1d3e7c35f 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -498,6 +498,15 @@ void prep_transhuge_page(struct page *page)
- 	set_compound_page_dtor(page, TRANSHUGE_PAGE_DTOR);
+@@ -765,6 +765,20 @@ vm_fault_t do_huge_pmd_anonymous_page(struct vm_fault =
+*vmf)
+ 	return __do_huge_pmd_anonymous_page(vmf, page, gfp);
  }
 =20
-+void prep_transhuge_device_private_page(struct page *page)
++struct page *alloc_transhugepage(struct vm_area_struct *vma,
++				 unsigned long haddr)
 +{
-+	prep_compound_page(page, HPAGE_PMD_ORDER);
-+	prep_transhuge_page(page);
-+	/* Only the head page has a reference to the pgmap. */
-+	percpu_ref_put_many(page->pgmap->ref, HPAGE_PMD_NR - 1);
-+}
-+EXPORT_SYMBOL_GPL(prep_transhuge_device_private_page);
++	gfp_t gfp;
++	struct page *page;
 +
- bool is_transparent_hugepage(struct page *page)
- {
- 	if (!PageCompound(page))
++	gfp =3D alloc_hugepage_direct_gfpmask(vma);
++	page =3D alloc_hugepage_vma(gfp, vma, haddr, HPAGE_PMD_ORDER);
++	if (page)
++		prep_transhuge_page(page);
++	return page;
++}
++EXPORT_SYMBOL_GPL(alloc_transhugepage);
++
+ static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 		pmd_t *pmd, pfn_t pfn, pgprot_t prot, bool write,
+ 		pgtable_t pgtable)
 --=20
 2.20.1
 
