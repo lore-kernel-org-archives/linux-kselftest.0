@@ -7,51 +7,50 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7881C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A973EC55178
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:30:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94D2520867
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:30:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 718F42087E
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:30:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729091AbgKFXaP (ORCPT
+        id S1729224AbgKFX3d (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Nov 2020 18:30:15 -0500
-Received: from mga11.intel.com ([192.55.52.93]:33110 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728245AbgKFX3d (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 6 Nov 2020 18:29:33 -0500
-IronPort-SDR: HF5sF+Tsgce4BkFLuf12xuR7o/elVm0mfEmZ5D1873rykJJaB/PaDTyjm9VXVyO4Nn4pFbkWp0
- NkRTgyrcLfKQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9797"; a="166102923"
+Received: from mga09.intel.com ([134.134.136.24]:6380 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728270AbgKFX3a (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Nov 2020 18:29:30 -0500
+IronPort-SDR: /yvJyFZXWSbo4ztKRoumcSfsBQSM6IYXVkFvPvvtdwT236zipBm2FAwezbBMGOWuo4bToH8igS
+ 7JBNQ+Ea4u9g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9797"; a="169761067"
 X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
-   d="scan'208";a="166102923"
+   d="scan'208";a="169761067"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 15:29:32 -0800
-IronPort-SDR: 7OXTxCuiKkfwSFExCxTUeymmQTDe7INfh86kVHcjc1y9qrZLrZ/kkJqkRhOnu/5xZMA39DYe9E
- Dqmpyit1/jwA==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 15:29:29 -0800
+IronPort-SDR: 1ES4I5KGE9/iQYuHavLR3ZvLoW1cMW+esxCjx6rlsohqLFCcUWqfg0Pvf3vMvAgl1nEDHEOWnh
+ npZOhvWYt5jw==
 X-IronPort-AV: E=Sophos;i="5.77,457,1596524400"; 
-   d="scan'208";a="364338328"
+   d="scan'208";a="321757360"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 15:29:32 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2020 15:29:29 -0800
 From:   ira.weiny@intel.com
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
+Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Dan Williams <dan.j.williams@intel.com>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH V3 06/10] x86/entry: Preserve PKRS MSR across exceptions
-Date:   Fri,  6 Nov 2020 15:29:04 -0800
-Message-Id: <20201106232908.364581-7-ira.weiny@intel.com>
+Subject: [PATCH V3 04/10] x86/pks: Preserve the PKRS MSR on context switch
+Date:   Fri,  6 Nov 2020 15:29:02 -0800
+Message-Id: <20201106232908.364581-5-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20201106232908.364581-1-ira.weiny@intel.com>
 References: <20201106232908.364581-1-ira.weiny@intel.com>
@@ -63,237 +62,242 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The PKRS MSR is not managed by XSAVE.  It is preserved through a context
-switch but this support leaves exception handling code open to memory
-accesses during exceptions.
+The PKRS MSR is defined as a per-logical-processor register.  This
+isolates memory access by logical CPU.  Unfortunately, the MSR is not
+managed by XSAVE.  Therefore, tasks must save/restore the MSR value on
+context switch.
 
-2 possible places for preserving this state were considered,
-irqentry_state_t or pt_regs.[1]  pt_regs was much more complicated and
-was potentially fraught with unintended consequences.[2]
-irqentry_state_t was already an object being used in the exception
-handling and is straightforward.  It is also easy for any number of
-nested states to be tracked and eventually can be enhanced to store the
-reference counting required to support PKS through kmap reentry
+Define a saved PKRS value in the task struct, as well as a cached
+per-logical-processor MSR value which mirrors the MSR value of the
+current CPU.  Initialize all tasks with the default MSR value.  Then, on
+schedule in, check the saved task MSR vs the per-cpu value.  If
+different proceed to write the MSR.  If not avoid the overhead of the
+MSR write and continue.
 
-Preserve the current task's PKRS values in irqentry_state_t on exception
-entry and restoring them on exception exit.
+Follow on patches will update the saved PKRS as well as the MSR if
+needed.
 
-Each nested exception is further saved allowing for any number of levels
-of exception handling.
+Finally it should be noted that the underlying WRMSR(MSR_IA32_PKRS) is
+not serializing but still maintains ordering properties similar to
+WRPKRU.  The current SDM section on PKRS needs updating but should be
+the same as that of WRPKRU.  So to quote from the WRPKRU text:
 
-Peter and Thomas both suggested parts of the patch, IDT and NMI respectively.
+	WRPKRU will never execute transiently. Memory accesses affected
+	by PKRU register will not execute (even transiently) until all
+	prior executions of WRPKRU have completed execution and updated
+	the PKRU register.
 
-[1] https://lore.kernel.org/lkml/CALCETrVe1i5JdyzD_BcctxQJn+ZE3T38EFPgjxN1F577M36g+w@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/874kpxx4jf.fsf@nanos.tec.linutronix.de/#t
-
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Co-developed-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
+Changes from V2
+	Adjust for PKS enable being final patch.
+
 Changes from V1
-	remove redundant irq_state->pkrs
-		This value is only needed for the global tracking.  So
-		it should be included in that patch and not in this one.
+	Rebase to latest tip/master
+		Resolve conflicts with INIT_THREAD changes
 
-Changes from RFC V3
-	Standardize on 'irq_state' variable name
+Changes since RFC V3
 	Per Dave Hansen
-		irq_save_pkrs() -> irq_save_set_pkrs()
-	Rebased based on clean up patch by Thomas Gleixner
-		This includes moving irq_[save_set|restore]_pkrs() to
-		the core as well.
+		Update commit message
+		move saved_pkrs to be in a nicer place
+	Per Peter Zijlstra
+		Add Comment from Peter
+		Clean up white space
+		Update authorship
 ---
- arch/x86/entry/common.c             | 38 +++++++++++++++++++++++++++++
- arch/x86/include/asm/pkeys_common.h |  5 ++--
- arch/x86/mm/pkeys.c                 |  2 +-
- include/linux/entry-common.h        | 13 ++++++++++
- kernel/entry/common.c               | 14 +++++++++--
- 5 files changed, 67 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/msr-index.h    |  1 +
+ arch/x86/include/asm/pkeys_common.h | 20 +++++++++++++++++++
+ arch/x86/include/asm/processor.h    | 18 ++++++++++++++++-
+ arch/x86/kernel/process.c           | 26 ++++++++++++++++++++++++
+ arch/x86/mm/pkeys.c                 | 31 +++++++++++++++++++++++++++++
+ 5 files changed, 95 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
-index 87dea56a15d2..1b6a419a6fac 100644
---- a/arch/x86/entry/common.c
-+++ b/arch/x86/entry/common.c
-@@ -19,6 +19,7 @@
- #include <linux/nospec.h>
- #include <linux/syscalls.h>
- #include <linux/uaccess.h>
-+#include <linux/pkeys.h>
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 972a34d93505..ddb125e44408 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -754,6 +754,7 @@
  
- #ifdef CONFIG_XEN_PV
- #include <xen/xen-ops.h>
-@@ -209,6 +210,41 @@ SYSCALL_DEFINE0(ni_syscall)
- 	return -ENOSYS;
- }
+ #define MSR_IA32_TSC_DEADLINE		0x000006E0
  
-+#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+/*
-+ * PKRS is a per-logical-processor MSR which overlays additional protection for
-+ * pages which have been mapped with a protection key.
-+ *
-+ * The register is not maintained with XSAVE so we have to maintain the MSR
-+ * value in software during context switch and exception handling.
-+ *
-+ * Context switches save the MSR in the task struct thus taking that value to
-+ * other processors if necessary.
-+ *
-+ * To protect against exceptions having access to this memory we save the
-+ * current running value and set the PKRS value for the duration of the
-+ * exception.  Thus preventing exception handlers from having the elevated
-+ * access of the interrupted task.
-+ */
-+noinstr void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-+		return;
-+
-+	irq_state->thread_pkrs = current->thread.saved_pkrs;
-+	write_pkrs(INIT_PKRS_VALUE);
-+}
-+
-+noinstr void irq_restore_pkrs(irqentry_state_t *irq_state)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-+		return;
-+
-+	write_pkrs(irq_state->thread_pkrs);
-+	current->thread.saved_pkrs = irq_state->thread_pkrs;
-+}
-+#endif /* CONFIG_ARCH_HAS_SUPERVISOR_PKEYS */
-+
- #ifdef CONFIG_XEN_PV
- #ifndef CONFIG_PREEMPTION
- /*
-@@ -272,6 +308,8 @@ __visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
++#define MSR_IA32_PKRS			0x000006E1
  
- 	inhcall = get_and_clear_inhcall();
- 	if (inhcall && !WARN_ON_ONCE(irq_state.exit_rcu)) {
-+		/* Normally called by irqentry_exit, we must restore pkrs here */
-+		irq_restore_pkrs(&irq_state);
- 		instrumentation_begin();
- 		irqentry_exit_cond_resched();
- 		instrumentation_end();
+ #define MSR_TSX_FORCE_ABORT		0x0000010F
+ 
 diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
-index 801a75615209..11a95e6efd2d 100644
+index 737d916f476c..801a75615209 100644
 --- a/arch/x86/include/asm/pkeys_common.h
 +++ b/arch/x86/include/asm/pkeys_common.h
-@@ -27,9 +27,10 @@
- 			 PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15))
+@@ -12,4 +12,24 @@
+  */
+ #define PKR_AD_KEY(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
  
- #ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
--void write_pkrs(u32 new_pkrs);
-+DECLARE_PER_CPU(u32, pkrs_cache);
-+noinstr void write_pkrs(u32 new_pkrs);
- #else
--static inline void write_pkrs(u32 new_pkrs) { }
-+static __always_inline void write_pkrs(u32 new_pkrs) { }
- #endif
- 
++/*
++ * Define a default PKRS value for each task.
++ *
++ * Key 0 has no restriction.  All other keys are set to the most restrictive
++ * value which is access disabled (AD=1).
++ *
++ * NOTE: This needs to be a macro to be used as part of the INIT_THREAD macro.
++ */
++#define INIT_PKRS_VALUE (PKR_AD_KEY(1) | PKR_AD_KEY(2) | PKR_AD_KEY(3) | \
++			 PKR_AD_KEY(4) | PKR_AD_KEY(5) | PKR_AD_KEY(6) | \
++			 PKR_AD_KEY(7) | PKR_AD_KEY(8) | PKR_AD_KEY(9) | \
++			 PKR_AD_KEY(10) | PKR_AD_KEY(11) | PKR_AD_KEY(12) | \
++			 PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15))
++
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++void write_pkrs(u32 new_pkrs);
++#else
++static inline void write_pkrs(u32 new_pkrs) { }
++#endif
++
  #endif /*_ASM_X86_PKEYS_INTERNAL_H */
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 82a08b585818..e9c65368b0b2 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -18,6 +18,7 @@ struct vm86;
+ #include <asm/cpufeatures.h>
+ #include <asm/page.h>
+ #include <asm/pgtable_types.h>
++#include <asm/pkeys_common.h>
+ #include <asm/percpu.h>
+ #include <asm/msr.h>
+ #include <asm/desc_defs.h>
+@@ -520,6 +521,12 @@ struct thread_struct {
+ 	unsigned long		cr2;
+ 	unsigned long		trap_nr;
+ 	unsigned long		error_code;
++
++#ifdef	CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++	/* Saved Protection key register for supervisor mappings */
++	u32			saved_pkrs;
++#endif
++
+ #ifdef CONFIG_VM86
+ 	/* Virtual 86 mode info */
+ 	struct vm86		*vm86;
+@@ -785,7 +792,16 @@ static inline void spin_lock_prefetch(const void *x)
+ #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
+ 
+ #else
+-#define INIT_THREAD { }
++
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++#define INIT_THREAD_PKRS	.saved_pkrs = INIT_PKRS_VALUE
++#else
++#define INIT_THREAD_PKRS	0
++#endif
++
++#define INIT_THREAD  {						\
++	INIT_THREAD_PKRS,					\
++}
+ 
+ extern unsigned long KSTK_ESP(struct task_struct *task);
+ 
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index ba4593a913fa..aa2ae5292ff1 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -43,6 +43,7 @@
+ #include <asm/io_bitmap.h>
+ #include <asm/proto.h>
+ #include <asm/frame.h>
++#include <asm/pkeys_common.h>
+ 
+ #include "process.h"
+ 
+@@ -187,6 +188,27 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
++DECLARE_PER_CPU(u32, pkrs_cache);
++static inline void pks_init_task(struct task_struct *tsk)
++{
++	/* New tasks get the most restrictive PKRS value */
++	tsk->thread.saved_pkrs = INIT_PKRS_VALUE;
++}
++static inline void pks_sched_in(void)
++{
++	/*
++	 * PKRS is only temporarily changed during specific code paths.  Only a
++	 * preemption during these windows away from the default value would
++	 * require updating the MSR.  write_pkrs() handles this optimization.
++	 */
++	write_pkrs(current->thread.saved_pkrs);
++}
++#else
++static inline void pks_init_task(struct task_struct *tsk) { }
++static inline void pks_sched_in(void) { }
++#endif
++
+ void flush_thread(void)
+ {
+ 	struct task_struct *tsk = current;
+@@ -195,6 +217,8 @@ void flush_thread(void)
+ 	memset(tsk->thread.tls_array, 0, sizeof(tsk->thread.tls_array));
+ 
+ 	fpu__clear_all(&tsk->thread.fpu);
++
++	pks_init_task(tsk);
+ }
+ 
+ void disable_TSC(void)
+@@ -644,6 +668,8 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
+ 
+ 	if ((tifp ^ tifn) & _TIF_SLD)
+ 		switch_to_sld(tifn);
++
++	pks_sched_in();
+ }
+ 
+ /*
 diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index 76a62419c446..6892d4524868 100644
+index d1dfe743e79f..76a62419c446 100644
 --- a/arch/x86/mm/pkeys.c
 +++ b/arch/x86/mm/pkeys.c
-@@ -248,7 +248,7 @@ DEFINE_PER_CPU(u32, pkrs_cache);
-  *     until all prior executions of WRPKRU have completed execution
-  *     and updated the PKRU register.
-  */
--void write_pkrs(u32 new_pkrs)
-+noinstr void write_pkrs(u32 new_pkrs)
- {
- 	u32 *pkrs;
+@@ -231,3 +231,34 @@ u32 update_pkey_val(u32 pk_reg, int pkey, unsigned int flags)
  
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index 1193a70bcf1b..21eae007061d 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -348,6 +348,8 @@ void irqentry_exit_to_user_mode(struct pt_regs *regs);
- #ifndef irqentry_state
- /**
-  * struct irqentry_state - Opaque object for exception state storage
-+ * @thread_pkrs: Thread Supervisor Pkey value to be restored when exception is
-+ *               complete.
-  * @exit_rcu: Used exclusively in the irqentry_*() calls; signals whether the
-  *            exit path has to invoke rcu_irq_exit().
-  * @lockdep: Used exclusively in the irqentry_nmi_*() calls; ensures that
-@@ -362,6 +364,9 @@ void irqentry_exit_to_user_mode(struct pt_regs *regs);
-  * the maintenance of the irqentry_*() functions.
-  */
- typedef struct irqentry_state {
-+#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+	u32 thread_pkrs;
-+#endif
- 	union {
- 		bool	exit_rcu;
- 		bool	lockdep;
-@@ -369,6 +374,14 @@ typedef struct irqentry_state {
- } irqentry_state_t;
- #endif
- 
-+#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-+noinstr void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val);
-+noinstr void irq_restore_pkrs(irqentry_state_t *irq_state);
-+#else
-+static __always_inline void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val) { }
-+static __always_inline void irq_restore_pkrs(irqentry_state_t *irq_state) { }
-+#endif
-+
- /**
-  * irqentry_enter - Handle state tracking on ordinary interrupt entries
-  * @regs:	Pointer to pt_regs of interrupted context
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index 5ed9d45fb41b..3590f5bb5870 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -334,7 +334,7 @@ noinstr void irqentry_enter(struct pt_regs *regs, irqentry_state_t *irq_state)
- 		instrumentation_end();
- 
- 		irq_state->exit_rcu = true;
--		return;
-+		goto done;
- 	}
- 
- 	/*
-@@ -348,6 +348,9 @@ noinstr void irqentry_enter(struct pt_regs *regs, irqentry_state_t *irq_state)
- 	rcu_irq_enter_check_tick();
- 	trace_hardirqs_off_finish();
- 	instrumentation_end();
-+
-+done:
-+	irq_save_set_pkrs(irq_state, INIT_PKRS_VALUE);
+ 	return pk_reg;
  }
- 
- void irqentry_exit_cond_resched(void)
-@@ -369,7 +372,12 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t *irq_state)
- 	/* Check whether this returns to user mode */
- 	if (user_mode(regs)) {
- 		irqentry_exit_to_user_mode(regs);
--	} else if (!regs_irqs_disabled(regs)) {
++
++DEFINE_PER_CPU(u32, pkrs_cache);
++
++/**
++ * write_pkrs() optimizes MSR writes by maintaining a per cpu cache which can
++ * be checked quickly.
++ *
++ * It should also be noted that the underlying WRMSR(MSR_IA32_PKRS) is not
++ * serializing but still maintains ordering properties similar to WRPKRU.
++ * The current SDM section on PKRS needs updating but should be the same as
++ * that of WRPKRU.  So to quote from the WRPKRU text:
++ *
++ *     WRPKRU will never execute transiently. Memory accesses
++ *     affected by PKRU register will not execute (even transiently)
++ *     until all prior executions of WRPKRU have completed execution
++ *     and updated the PKRU register.
++ */
++void write_pkrs(u32 new_pkrs)
++{
++	u32 *pkrs;
++
++	if (!static_cpu_has(X86_FEATURE_PKS))
 +		return;
++
++	pkrs = get_cpu_ptr(&pkrs_cache);
++	if (*pkrs != new_pkrs) {
++		*pkrs = new_pkrs;
++		wrmsrl(MSR_IA32_PKRS, new_pkrs);
 +	}
-+
-+	irq_restore_pkrs(irq_state);
-+
-+	if (!regs_irqs_disabled(regs)) {
- 		/*
- 		 * If RCU was not watching on entry this needs to be done
- 		 * carefully and needs the same ordering of lockdep/tracing
-@@ -415,10 +423,12 @@ void noinstr irqentry_nmi_enter(struct pt_regs *regs, irqentry_state_t *irq_stat
- 	trace_hardirqs_off_finish();
- 	ftrace_nmi_enter();
- 	instrumentation_end();
-+	irq_save_set_pkrs(irq_state, INIT_PKRS_VALUE);
- }
- 
- void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t *irq_state)
- {
-+	irq_restore_pkrs(irq_state);
- 	instrumentation_begin();
- 	ftrace_nmi_exit();
- 	if (irq_state->lockdep) {
++	put_cpu_ptr(pkrs);
++}
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
