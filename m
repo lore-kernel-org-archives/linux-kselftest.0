@@ -1,72 +1,96 @@
-Return-Path: <SRS0=AyEC=EM=vger.kernel.org=linux-kselftest-owner@kernel.org>
+Return-Path: <SRS0=cHcc=EN=vger.kernel.org=linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39790C2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 733A7C388F7
+	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Nov 2020 04:09:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B96E220882
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Nov 2020 23:51:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604706684;
-	bh=L8n8O9tfeabKHa0EFaSGDW8SBUSR7cfgK3qCRIavVKI=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=O47kJf4dSXxj880SwVozVDOFP0jyxvPPPORMHXOJBuoJYA/aiZ/10PWCqEjcRGoBc
-	 o5s5JgVdAQqm/PhUXa1mWz+L7PWNVUokwJhdUBpxXAkJoWeDviOimuYPblA6RhRq4A
-	 326VY+Bk7rKG7du76fp+b7pSjM27ARYdIxg3XcTc=
+	by mail.kernel.org (Postfix) with ESMTP id 20FC120720
+	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Nov 2020 04:09:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qqrX9/Q9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726987AbgKFXvX (ORCPT
+        id S1727323AbgKGEJa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Nov 2020 18:51:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726880AbgKFXvW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Nov 2020 18:51:22 -0500
-Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.10-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604706682;
-        bh=L8n8O9tfeabKHa0EFaSGDW8SBUSR7cfgK3qCRIavVKI=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=KmD80jQ+5Yno3yar3u0ITTb+JEGuOxkUNSr1bA+XUiO6uzrtc5Zf/178e+hGPWY+B
-         9teQdy14usUCKG4Y46uB5Xwp9Is2vtpQtZ2o6FjRtlY5x3evnteoSFehN5TD0+2x0O
-         /abrtFOmplPTdhPFQKKp+VmpYL9/LADUlfNqE1GI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <cfea14f7-30aa-33ee-308f-36660272735e@linuxfoundation.org>
-References: <cfea14f7-30aa-33ee-308f-36660272735e@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <cfea14f7-30aa-33ee-308f-36660272735e@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.10-rc3
-X-PR-Tracked-Commit-Id: 7d764b685ee1bc73a9fa2b6cb4d42fa72b943145
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 03f0f5ad58479ba1374f10680fc836aa21abe8f9
-Message-Id: <160470668202.27031.4544984612764481388.pr-tracker-bot@kernel.org>
-Date:   Fri, 06 Nov 2020 23:51:22 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>
+        Fri, 6 Nov 2020 23:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbgKGEJa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Nov 2020 23:09:30 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B34C0613D2
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Nov 2020 20:09:30 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id l10so3680403lji.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Nov 2020 20:09:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BpAfVVjgmSK3TmddDXe5MIH+iN8xL47kEByfErGtVvs=;
+        b=qqrX9/Q9kWM5Hap5VqxZRuBzpk+TCPCwB2DK0d7bCQJv9e2ODwHzqawgp4Z1/BME0E
+         mc5bB22vycMiYxW6Lb3c3reutDclxHw7FfKhk4gijTycG+Rj3BJ/fpjvOlevLe7iPFXH
+         90eUKN6JH86AH6eu7zCKI3aNK5Iik6jzaNjDliUG5eXokIinJ4WKVao73VTUvO6RHJRN
+         Dh309SDDL4PyqEKGThRnB+qf/2HVMn6fCtYFOPRK5Oy9nbEhVTS5DQ4VGJ1D6vLvqmPn
+         PA0jTqyXpYzh7sVOs+/wwedE6j25cOPvKfS5aQ2hqYp9ZgAHIZE5+YMsK/iWoDxZRZ80
+         oclg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BpAfVVjgmSK3TmddDXe5MIH+iN8xL47kEByfErGtVvs=;
+        b=EnY8rJgjMaSTFBCLCHqDuHKPA5jp0zcjfiUiKMHBnUamRqGjQv+5y1X4N755KxE0+p
+         cVAzKNh9nQiw2Og8+hzHtSNwr4ql6YMEYDf/UHvH3NlpBTJUmYgCvsF6FXhzbxLrSK7k
+         4RmtEzYmXcwRdzCXOQn/c6pGVQPrD/+qMVRAlTuGKwFzDP9Jqur8oYZ3SZhqVjcLn1zF
+         7Guw8Ov7eatLHfldVRBa8yaZrmnyeBZdCFjXCSvCj04UgJzpcK+JPbwudVM6VmISvCmt
+         3IWhbARTJU6UI2L/m0r4zRe8h9YOrZfG0F9E4J8MP61mCjTrUmeEdJYH3XI4byr2+yMK
+         zd1Q==
+X-Gm-Message-State: AOAM533Vq9l6Du4XwKTTp7b443lHkAn0uBXgpp5sxmc/fzr9o0iiz0Bv
+        A+eZf0hPzS+SO+5PuGsdsiMmqW71hA872+u25v/Baw==
+X-Google-Smtp-Source: ABdhPJwquss92yG7I1ZRnnJ5suJ/Xcui705PIWdISDMrw0xVQ+ZekSp6zhR9hvvPcTCR4ttgp/64K3qiWWgZ8RMJlSk=
+X-Received: by 2002:a2e:93cf:: with SMTP id p15mr2053113ljh.141.1604722168145;
+ Fri, 06 Nov 2020 20:09:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20201105232440.1049635-1-brendanhiggins@google.com>
+In-Reply-To: <20201105232440.1049635-1-brendanhiggins@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 7 Nov 2020 12:09:16 +0800
+Message-ID: <CABVgOSnVj+EXZ13vgx7pj3fFJ7yx9xPYU39nuCP_v_fNYpN12w@mail.gmail.com>
+Subject: Re: [PATCH v1] kunit: tool: unmark test_data as binary blobs
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 6 Nov 2020 11:16:07 -0700:
+On Fri, Nov 6, 2020 at 7:24 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> The tools/testing/kunit/test_data/ directory was marked as binary
+> because some of the test_data files cause checkpatch warnings. Fix this
+> by dropping the .gitattributes file.
+>
+> Fixes: afc63da64f1e ("kunit: kunit_parser: make parser more robust")
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+Reviewed-by: David Gow <davidgow@google.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.10-rc3
+Thanks. I wasn't able to find any issues which required those files to
+be binary.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/03f0f5ad58479ba1374f10680fc836aa21abe8f9
+For the record, a link to the original issue, which appeared to be
+with whitespace (spaces before tabs) in git apply:
+https://lkml.org/lkml/2020/3/13/920
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+-- David
