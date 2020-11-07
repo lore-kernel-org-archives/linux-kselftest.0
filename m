@@ -4,24 +4,24 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C41C55178
-	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Nov 2020 15:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD37DC388F7
+	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Nov 2020 15:33:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2ABFA20719
-	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Nov 2020 15:33:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9170520719
+	for <linux-kselftest@archiver.kernel.org>; Sat,  7 Nov 2020 15:33:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgKGPdM (ORCPT
+        id S1728074AbgKGPdQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 7 Nov 2020 10:33:12 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:51956 "EHLO smtp.uniroma2.it"
+        Sat, 7 Nov 2020 10:33:16 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:51957 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726043AbgKGPdM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Nov 2020 10:33:12 -0500
+        id S1726094AbgKGPdP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 7 Nov 2020 10:33:15 -0500
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0A7FW8qe010493
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0A7FW8qc010493
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
         Sat, 7 Nov 2020 16:32:10 +0100
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
@@ -44,9 +44,9 @@ Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next,v2,3/5] seg6: add callbacks for customizing the creation/destruction of a behavior
-Date:   Sat,  7 Nov 2020 16:31:37 +0100
-Message-Id: <20201107153139.3552-4-andrea.mayer@uniroma2.it>
+Subject: [net-next,v2,1/5] vrf: add mac header for tunneled packets when sniffer is attached
+Date:   Sat,  7 Nov 2020 16:31:35 +0100
+Message-Id: <20201107153139.3552-2-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201107153139.3552-1-andrea.mayer@uniroma2.it>
 References: <20201107153139.3552-1-andrea.mayer@uniroma2.it>
@@ -58,133 +58,131 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We introduce two callbacks used for customizing the creation/destruction of
-a SRv6 behavior. Such callbacks are defined in the new struct
-seg6_local_lwtunnel_ops and hereafter we provide a brief description of
-them:
+Before this patch, a sniffer attached to a VRF used as the receiving
+interface of L3 tunneled packets detects them as malformed packets and
+it complains about that (i.e.: tcpdump shows bogus packets).
 
- - build_state(...): used for calling the custom constructor of the
-   behavior during its initialization phase and after all the attributes
-   have been parsed successfully;
+The reason is that a tunneled L3 packet does not carry any L2
+information and when the VRF is set as the receiving interface of a
+decapsulated L3 packet, no mac header is currently set or valid.
+Therefore, the purpose of this patch consists of adding a MAC header to
+any packet which is directly received on the VRF interface ONLY IF:
 
- - destroy_state(...): used for calling the custom destructor of the
-   behavior before it is completely destroyed.
+ i) a sniffer is attached on the VRF and ii) the mac header is not set.
+
+In this case, the mac address of the VRF is copied in both the
+destination and the source address of the ethernet header. The protocol
+type is set either to IPv4 or IPv6, depending on which L3 packet is
+received.
 
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- net/ipv6/seg6_local.c | 64 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ drivers/net/vrf.c | 78 +++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 72 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 63a82e2fdea9..4b0f155d641d 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -33,11 +33,23 @@
- 
- struct seg6_local_lwt;
- 
-+typedef int (*slwt_build_state_t)(struct seg6_local_lwt *slwt, const void *cfg,
-+				  struct netlink_ext_ack *extack);
-+typedef void (*slwt_destroy_state_t)(struct seg6_local_lwt *slwt);
-+
-+/* callbacks used for customizing the creation and destruction of a behavior */
-+struct seg6_local_lwtunnel_ops {
-+	slwt_build_state_t build_state;
-+	slwt_destroy_state_t destroy_state;
-+};
-+
- struct seg6_action_desc {
- 	int action;
- 	unsigned long attrs;
- 	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
- 	int static_headroom;
-+
-+	struct seg6_local_lwtunnel_ops slwt_ops;
- };
- 
- struct bpf_lwt_prog {
-@@ -1015,6 +1027,45 @@ static void destroy_attrs(struct seg6_local_lwt *slwt)
- 	__destroy_attrs(attrs, 0, SEG6_LOCAL_MAX + 1, slwt);
+diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
+index 60c1aadece89..26f2ed02a5c1 100644
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -1263,6 +1263,61 @@ static void vrf_ip6_input_dst(struct sk_buff *skb, struct net_device *vrf_dev,
+ 	skb_dst_set(skb, &rt6->dst);
  }
  
-+/* call the custom constructor of the behavior during its initialization phase
-+ * and after that all its attributes have been parsed successfully.
-+ */
-+static int
-+seg6_local_lwtunnel_build_state(struct seg6_local_lwt *slwt, const void *cfg,
-+				struct netlink_ext_ack *extack)
++static int vrf_prepare_mac_header(struct sk_buff *skb,
++				  struct net_device *vrf_dev, u16 proto)
 +{
-+	slwt_build_state_t build_func;
-+	struct seg6_action_desc *desc;
-+	int err = 0;
++	struct ethhdr *eth;
++	int err;
 +
-+	desc = slwt->desc;
-+	if (!desc)
-+		return -EINVAL;
++	/* in general, we do not know if there is enough space in the head of
++	 * the packet for hosting the mac header.
++	 */
++	err = skb_cow_head(skb, LL_RESERVED_SPACE(vrf_dev));
++	if (unlikely(err))
++		/* no space in the skb head */
++		return -ENOBUFS;
 +
-+	build_func = desc->slwt_ops.build_state;
-+	if (build_func)
-+		err = build_func(slwt, cfg, extack);
++	__skb_push(skb, ETH_HLEN);
++	eth = (struct ethhdr *)skb->data;
 +
-+	return err;
++	skb_reset_mac_header(skb);
++
++	/* we set the ethernet destination and the source addresses to the
++	 * address of the VRF device.
++	 */
++	ether_addr_copy(eth->h_dest, vrf_dev->dev_addr);
++	ether_addr_copy(eth->h_source, vrf_dev->dev_addr);
++	eth->h_proto = htons(proto);
++
++	/* the destination address of the Ethernet frame corresponds to the
++	 * address set on the VRF interface; therefore, the packet is intended
++	 * to be processed locally.
++	 */
++	skb->protocol = eth->h_proto;
++	skb->pkt_type = PACKET_HOST;
++
++	skb_postpush_rcsum(skb, skb->data, ETH_HLEN);
++
++	skb_pull_inline(skb, ETH_HLEN);
++
++	return 0;
 +}
 +
-+/* call the custom destructor of the behavior which is invoked before the
-+ * tunnel is going to be destroyed.
++/* prepare and add the mac header to the packet if it was not set previously.
++ * In this way, packet sniffers such as tcpdump can parse the packet correctly.
++ * If the mac header was already set, the original mac header is left
++ * untouched and the function returns immediately.
 + */
-+static void seg6_local_lwtunnel_destroy_state(struct seg6_local_lwt *slwt)
++static int vrf_add_mac_header_if_unset(struct sk_buff *skb,
++				       struct net_device *vrf_dev,
++				       u16 proto)
 +{
-+	slwt_destroy_state_t destroy_func;
-+	struct seg6_action_desc *desc;
++	if (skb_mac_header_was_set(skb))
++		return 0;
 +
-+	desc = slwt->desc;
-+	if (!desc)
-+		return;
-+
-+	destroy_func = desc->slwt_ops.destroy_state;
-+	if (destroy_func)
-+		destroy_func(slwt);
++	return vrf_prepare_mac_header(skb, vrf_dev, proto);
 +}
 +
- static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
+ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 				   struct sk_buff *skb)
  {
- 	struct seg6_action_param *param;
-@@ -1090,8 +1141,16 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
+@@ -1289,9 +1344,15 @@ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 		skb->skb_iif = vrf_dev->ifindex;
  
- 	err = parse_nla_action(tb, slwt);
- 	if (err < 0)
-+		/* In case of error, the parse_nla_action() takes care of
-+		 * releasing resources which have been acquired during the
-+		 * processing of attributes.
-+		 */
- 		goto out_free;
- 
-+	err = seg6_local_lwtunnel_build_state(slwt, cfg, extack);
-+	if (err < 0)
-+		goto free_attrs;
+ 		if (!list_empty(&vrf_dev->ptype_all)) {
+-			skb_push(skb, skb->mac_len);
+-			dev_queue_xmit_nit(skb, vrf_dev);
+-			skb_pull(skb, skb->mac_len);
++			int err;
 +
- 	newts->type = LWTUNNEL_ENCAP_SEG6_LOCAL;
- 	newts->flags = LWTUNNEL_STATE_INPUT_REDIRECT;
- 	newts->headroom = slwt->headroom;
-@@ -1100,6 +1159,9 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
++			err = vrf_add_mac_header_if_unset(skb, vrf_dev,
++							  ETH_P_IPV6);
++			if (likely(!err)) {
++				skb_push(skb, skb->mac_len);
++				dev_queue_xmit_nit(skb, vrf_dev);
++				skb_pull(skb, skb->mac_len);
++			}
+ 		}
  
- 	return 0;
+ 		IP6CB(skb)->flags |= IP6SKB_L3SLAVE;
+@@ -1334,9 +1395,14 @@ static struct sk_buff *vrf_ip_rcv(struct net_device *vrf_dev,
+ 	vrf_rx_stats(vrf_dev, skb->len);
  
-+free_attrs:
-+	destroy_attrs(slwt);
+ 	if (!list_empty(&vrf_dev->ptype_all)) {
+-		skb_push(skb, skb->mac_len);
+-		dev_queue_xmit_nit(skb, vrf_dev);
+-		skb_pull(skb, skb->mac_len);
++		int err;
 +
- out_free:
- 	kfree(newts);
- 	return err;
-@@ -1109,6 +1171,8 @@ static void seg6_local_destroy_state(struct lwtunnel_state *lwt)
- {
- 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
++		err = vrf_add_mac_header_if_unset(skb, vrf_dev, ETH_P_IP);
++		if (likely(!err)) {
++			skb_push(skb, skb->mac_len);
++			dev_queue_xmit_nit(skb, vrf_dev);
++			skb_pull(skb, skb->mac_len);
++		}
+ 	}
  
-+	seg6_local_lwtunnel_destroy_state(slwt);
-+
- 	destroy_attrs(slwt);
- 
- 	return;
+ 	skb = vrf_rcv_nfhook(NFPROTO_IPV4, NF_INET_PRE_ROUTING, skb, vrf_dev);
 -- 
 2.20.1
 
