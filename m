@@ -2,86 +2,124 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9755FC2D0A3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 02:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA892C4741F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 02:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B725207D3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 02:01:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6308A21D93
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 02:01:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729706AbgKJCBO (ORCPT
+        id S1731115AbgKJCB3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Nov 2020 21:01:14 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:42873 "EHLO
+        Mon, 9 Nov 2020 21:01:29 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:42889 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbgKJCBO (ORCPT
+        with ESMTP id S1730066AbgKJCBT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 21:01:14 -0500
-Received: from mail-pg1-f197.google.com ([209.85.215.197])
+        Mon, 9 Nov 2020 21:01:19 -0500
+Received: from mail-pg1-f199.google.com ([209.85.215.199])
         by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <po-hsu.lin@canonical.com>)
-        id 1kcIy8-0001sO-A1
-        for linux-kselftest@vger.kernel.org; Tue, 10 Nov 2020 02:01:12 +0000
-Received: by mail-pg1-f197.google.com with SMTP id q5so84851pgt.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2020 18:01:12 -0800 (PST)
+        id 1kcIyD-0001tM-Bx
+        for linux-kselftest@vger.kernel.org; Tue, 10 Nov 2020 02:01:17 +0000
+Received: by mail-pg1-f199.google.com with SMTP id a27so3759923pga.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Nov 2020 18:01:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RK2xra2umGqFG+SzI89RLBjV289wxSEZaa8bAGmNZH8=;
-        b=OKsXbswRE4bzbu0blgtVDrmY8sg1eJqtmuVo3JtuTZYs5VJ/gDIk62tqERQaILoxoP
-         /AYnub60Hhh0/WXON4Ge3IYudme3Wyd70v7B+BSwKvP74/uOI8TEiwdzcOGRQEmMp/2T
-         8K0CUNt9RTeZNc2yX62ke/z1egtuR/Bf/8Ct3zermSO3lOqSD0IKNyJraIB+aXHbxipx
-         skTPZvPYIECi4E8kF4yW2gaAcSCR+vhKqKYVTrhEe0Ry38Ng3OnIExLJwlbGaZrWldWX
-         WtQiNzZc8tyjvuKjV1dgIoL4xPR1QvwXqe8p7z0oqwdCbAc/ZuhXhVeSvRgCArfP5WKf
-         cOoA==
-X-Gm-Message-State: AOAM5317L7bUlrwZ9psWqWzeVLbcu+5XUeHqe/4J/Ft3eKQ7B+5bheDl
-        otH3oYORUysCUukpczBlxOPGvGz5E8ElYvqLsusFboaKYSUDv6tUGCaa/HYFExyT4I+OovImg8d
-        8mnvzEPfXF+rxV/+BaXOmCzUWGB/FPl6ntJ9Dg9miZI4i
-X-Received: by 2002:a63:4006:: with SMTP id n6mr14920444pga.171.1604973670943;
-        Mon, 09 Nov 2020 18:01:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxY3UB2LhbbRYn8No1bJ7jZB3fD3rnenjheE0iTW1dlEQcjHFmUi1r5RbodJAJDhdcKbtmrEg==
-X-Received: by 2002:a63:4006:: with SMTP id n6mr14920420pga.171.1604973670597;
-        Mon, 09 Nov 2020 18:01:10 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1Kx4/PLABbjYnKNkiHtBsxcWT2xciwp1tmLJYXsoWZU=;
+        b=FJ+tCAEaYGsF8uQ7FzVGTNxFKpsDJ1vVvwoL94F27otmEWjIFrIP3qbQaQn6BtZGAp
+         mZNxcWdON5TXGPhDb9lPZ/ztj4jPS4TN4RqVwSl5BH9/dMFKgtX+0I8YIc/dlBhAoewX
+         c9BILfGeJTDUY6wFI9Utiwp3jKBgReLv8RAH0vvs7RuAGEKU3MYxouWpl154v19uf+yn
+         ya9dkQnYWt7aU+UQSqde/MB7cxLgxnqA+CO5YVLsbbtWXUpVyAAYfJymcwMiy0O18uxp
+         lUk9uTJIDUQ/SzSgzae4rfSl85d7dnUJLKj/+5h/yR51xtG+0KM0QYfmOTpC8cYPXXl+
+         /bKA==
+X-Gm-Message-State: AOAM53062SnP/3qZ8jKT6DLnz5w+c8ZAiAxHMvqLfBnPrR74Hd6VXgOO
+        CfYBdgh5DlGFD/TitBE1oQdajegbbEo6QKZ1MCGZJ2wQWSOBV4vGKuq3lgOSOu1X6EDZhm6cNto
+        AqxUUWSgvu0RHZxQ9wdM1m1oN+dL9p143HLRA0l0HKgHG
+X-Received: by 2002:a63:6647:: with SMTP id a68mr14774506pgc.7.1604973676040;
+        Mon, 09 Nov 2020 18:01:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy0B3U5VvdSOcU/vErmbB0v844zQxLGn9Arj0dwJAMg7XIjfxQj5kQ++rMnRkGehRdOtJL9Jg==
+X-Received: by 2002:a63:6647:: with SMTP id a68mr14774484pgc.7.1604973675818;
+        Mon, 09 Nov 2020 18:01:15 -0800 (PST)
 Received: from localhost.localdomain (223-136-189-104.emome-ip.hinet.net. [223.136.189.104])
-        by smtp.gmail.com with ESMTPSA id c193sm11855552pfb.78.2020.11.09.18.01.08
+        by smtp.gmail.com with ESMTPSA id c193sm11855552pfb.78.2020.11.09.18.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 18:01:09 -0800 (PST)
+        Mon, 09 Nov 2020 18:01:15 -0800 (PST)
 From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
 To:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, kuba@kernel.org
 Cc:     davem@davemloft.net, skhan@linuxfoundation.org,
         po-hsu.lin@canonical.com
-Subject: [PATCHv2 0/2] selftests: pmtu.sh: improve the test result processing
-Date:   Tue, 10 Nov 2020 10:00:47 +0800
-Message-Id: <20201110020049.6705-1-po-hsu.lin@canonical.com>
+Subject: [PATCHv2 2/2] selftests: pmtu.sh: improve the test result processing
+Date:   Tue, 10 Nov 2020 10:00:49 +0800
+Message-Id: <20201110020049.6705-3-po-hsu.lin@canonical.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201110020049.6705-1-po-hsu.lin@canonical.com>
+References: <20201110020049.6705-1-po-hsu.lin@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pmtu.sh test script treats all non-zero return code as a failure,
-thus it will be marked as FAILED when some sub-test got skipped.
+This test will treat all non-zero return codes as failures, it will
+make the pmtu.sh test script being marked as FAILED when some
+sub-test got skipped.
 
-This patchset will:
-  1. Use the kselftest framework skip code $ksft_skip to replace the
-     hardcoded SKIP return code.
-  2. Improve the result processing, the test will be marked as PASSED
-     if nothing goes wrong and not all the tests were skipped.
+Improve the result processing by
+  * Only mark the whole test script as SKIP when all of the
+    sub-tests were skipped
+  * If the sub-tests were either passed or skipped, the overall
+    result will be PASS
+  * If any of them has failed with return code 1 or anything bad
+    happened (e.g. return code 127 for command not found), the
+    overall result will be FAIL
 
-Po-Hsu Lin (2):
-  selftests: pmtu.sh: use $ksft_skip for skipped return code
-  selftests: pmtu.sh: improve the test result processing
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/pmtu.sh | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
- tools/testing/selftests/net/pmtu.sh | 79 +++++++++++++++++++++----------------
- 1 file changed, 46 insertions(+), 33 deletions(-)
-
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index fb53987..464e31e 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -1652,7 +1652,19 @@ run_test() {
+ 	return $ret
+ 	)
+ 	ret=$?
+-	[ $ret -ne 0 ] && exitcode=1
++	case $ret in
++		0)
++			all_skipped=false
++			[ $exitcode=$ksft_skip ] && exitcode=0
++		;;
++		$ksft_skip)
++			[ $all_skipped = true ] && exitcode=$ksft_skip
++		;;
++		*)
++			all_skipped=false
++			exitcode=1
++		;;
++	esac
+ 
+ 	return $ret
+ }
+@@ -1786,6 +1798,7 @@ usage() {
+ #
+ exitcode=0
+ desc=0
++all_skipped=true
+ 
+ while getopts :ptv o
+ do
 -- 
 2.7.4
 
