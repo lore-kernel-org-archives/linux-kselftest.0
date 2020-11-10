@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC82BC5517A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 03:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C87CEC55ABD
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 04:01:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84BB420663
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 03:59:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C1162068D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 04:01:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="zeEQxgnz"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="BysPmYD5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387537AbgKJD7s (ORCPT
+        id S1733217AbgKJDze (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Nov 2020 22:59:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57946 "EHLO mail.kernel.org"
+        Mon, 9 Nov 2020 22:55:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56922 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731980AbgKJD4H (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:56:07 -0500
+        id S1733204AbgKJDzd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:55:33 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E20EC21D93;
-        Tue, 10 Nov 2020 03:56:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 87C38221F1;
+        Tue, 10 Nov 2020 03:55:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980566;
-        bh=PcodkDpP7V/CMTki9gtGulfrSYLM8ULRbc0zlvUMfq4=;
+        s=default; t=1604980532;
+        bh=K50d19qP/F886/2Ft2H5yb441enUZkoFfD7ULSsqUn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zeEQxgnzOcQOmDHWtHr3V0VNw8CZanRxlJqUrPxrG26G4TL/BMhF0tanit9J2bcvS
-         bLiXSTQ5OhedYyElhV185oWcR8N3YO6XjhDNPv/SuCZB8l8NCEyAnY5e2BBRCPf3Ux
-         JTWsePEKtWxkr5PlUf5/Ri1qU0i77eMmCNXcoiAI=
+        b=BysPmYD5g/ddyc8KkIv1e4eutt8XYEADvtPo9jneL0L7Jpbo4FVGGC8quYUn1rRik
+         d2y2FsvwQwu+8WTtROCYh1j+DfwMsxmNgi5BshRLwcKU6hmRZk/0H01Bd2vRDnOyEE
+         5z5Shn//5lrgdjG0XS4FSK9D2VR/1VlDfDXt3PiA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tommi Rantala <tommi.t.rantala@nokia.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 19/21] selftests: proc: fix warning: _GNU_SOURCE redefined
-Date:   Mon,  9 Nov 2020 22:55:39 -0500
-Message-Id: <20201110035541.424648-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 37/42] selftests: proc: fix warning: _GNU_SOURCE redefined
+Date:   Mon,  9 Nov 2020 22:54:35 -0500
+Message-Id: <20201110035440.424258-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201110035541.424648-1-sashal@kernel.org>
-References: <20201110035541.424648-1-sashal@kernel.org>
+In-Reply-To: <20201110035440.424258-1-sashal@kernel.org>
+References: <20201110035440.424258-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,7 +71,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 3 deletions(-)
 
 diff --git a/tools/testing/selftests/proc/proc-loadavg-001.c b/tools/testing/selftests/proc/proc-loadavg-001.c
-index fcff7047000da..8edaafc2b92fd 100644
+index 471e2aa280776..fb4fe9188806e 100644
 --- a/tools/testing/selftests/proc/proc-loadavg-001.c
 +++ b/tools/testing/selftests/proc/proc-loadavg-001.c
 @@ -14,7 +14,6 @@
@@ -83,7 +83,7 @@ index fcff7047000da..8edaafc2b92fd 100644
  #include <sched.h>
  #include <sys/types.h>
 diff --git a/tools/testing/selftests/proc/proc-self-syscall.c b/tools/testing/selftests/proc/proc-self-syscall.c
-index 5ab5f4810e43a..7b9018fad092a 100644
+index 9f6d000c02455..8511dcfe67c75 100644
 --- a/tools/testing/selftests/proc/proc-self-syscall.c
 +++ b/tools/testing/selftests/proc/proc-self-syscall.c
 @@ -13,7 +13,6 @@
