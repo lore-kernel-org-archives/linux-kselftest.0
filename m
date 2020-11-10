@@ -2,87 +2,65 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=0.6 required=3.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98089C4742C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Nov 2020 10:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 177CBC5519F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Nov 2020 10:46:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36F362227F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Nov 2020 10:35:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFDBC2223C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Nov 2020 10:45:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728586AbgKPJwM (ORCPT
+        id S1726884AbgKPKGS convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Nov 2020 04:52:12 -0500
-Received: from mga04.intel.com ([192.55.52.120]:26471 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728572AbgKPJwM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Nov 2020 04:52:12 -0500
-IronPort-SDR: M+WLh1fUPgsWpbxm0TrDo/sZS1/tVq2PKeDA26/wKkxBxi9u4DdI6MMOaFDNdMdNsD4tqNIsQs
- qvuIuU5smcQw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9806"; a="168146641"
-X-IronPort-AV: E=Sophos;i="5.77,482,1596524400"; 
-   d="scan'208";a="168146641"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 01:52:10 -0800
-IronPort-SDR: J+4O3QEsjsB2rZ2LCU9CBwJcLtZrMhowaL6Hkn2bd9mn1bOo+Mi+r+EO/Z2qZ2RBFV/uAmrGcC
- JPmq+Cf/Z3ew==
-X-IronPort-AV: E=Sophos;i="5.77,482,1596524400"; 
-   d="scan'208";a="329633501"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 01:52:07 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1kebC9-0072Lc-O8; Mon, 16 Nov 2020 11:53:09 +0200
-Date:   Mon, 16 Nov 2020 11:53:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Mark Brown <broonie@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>
-Subject: Re: [PATCH v4 6/6] lib/cmdline_kunit: Add a new test suite for
- cmdline API
-Message-ID: <20201116095309.GR4077@smile.fi.intel.com>
-References: <20201112180732.75589-1-andriy.shevchenko@linux.intel.com>
- <20201112180732.75589-6-andriy.shevchenko@linux.intel.com>
- <20201112191025.bd5df6a1f1f6b0419980da1a@linux-foundation.org>
+        Mon, 16 Nov 2020 05:06:18 -0500
+Received: from tigeramira.ro ([88.158.78.30]:57538 "EHLO mail.tigeramira.ro"
+        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1726902AbgKPKGR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Nov 2020 05:06:17 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 30005AFF905
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2020 16:47:59 +0200 (EET)
+Received: from mail.tigeramira.ro ([127.0.0.1])
+        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id AMpF0ni-MK7Z for <linux-kselftest@vger.kernel.org>;
+        Sat, 14 Nov 2020 16:47:58 +0200 (EET)
+Received: from mail.tigeramira.ro (localhost [127.0.0.1])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 9A3B2856EDA
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2020 21:47:41 +0200 (EET)
+Received: from [156.96.44.214] (unknown [192.168.12.254])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 928C4D3FF3A
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Nov 2020 17:10:07 +0200 (EET)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201112191025.bd5df6a1f1f6b0419980da1a@linux-foundation.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Corporate and Personal Loan/
+To:     linux-kselftest@vger.kernel.org
+From:   "Investment  Corporate" <financialcapability6@gmail.com>
+Date:   Tue, 10 Nov 2020 06:10:35 -0800
+Reply-To: hmurrah39@gmail.com
+Message-Id: <20201110151008.928C4D3FF3A@mail.tigeramira.ro>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 07:10:25PM -0800, Andrew Morton wrote:
-> On Thu, 12 Nov 2020 20:07:32 +0200 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > Test get_option() for a starter which is provided by cmdline.c.
-> > 
-> > ...
-> >
-> >  lib/cmdline_kunit.c | 98 +++++++++++++++++++++++++++++++++++++++++++++
-
-First of all, thanks for taking care of this!
-
-> The spectacular warning storm which this produces makes me wonder if
-> you sent the correct version?  I mean, the cmdline_test_values[]
-> definition wasn't even close.
-
-This now puzzles me, what happened. I will check my branches, because certainly
-I was not only compiled that, but actually run those test cases.
-
-There is warning about license, I'm going to address right now.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Hello linux-kselftest@vger.kernel.org
 
 
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+
+
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+
+
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
