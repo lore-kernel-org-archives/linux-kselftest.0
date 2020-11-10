@@ -7,43 +7,44 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 159C8C55ABD
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 04:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52930C55ABD
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 04:08:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4BAC20663
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 04:05:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC5BD206A1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Nov 2020 04:08:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcSBE3aU"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+dU/L50"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732146AbgKJDx6 (ORCPT
+        id S1731509AbgKJDxd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Nov 2020 22:53:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54538 "EHLO mail.kernel.org"
+        Mon, 9 Nov 2020 22:53:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732269AbgKJDx5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Nov 2020 22:53:57 -0500
+        id S1731769AbgKJDxd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Nov 2020 22:53:33 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3D82320731;
-        Tue, 10 Nov 2020 03:53:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 596BC20721;
+        Tue, 10 Nov 2020 03:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604980436;
-        bh=vggjhxlZ0nTVehZ6/y+P9Re4mUYV/sXpTjZQ/ky4jjs=;
+        s=default; t=1604980412;
+        bh=BzJ5fn01EUmgbhvM1Ni9TpmnHvKjX7Qmq6br3wANDC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hcSBE3aUyFVlBkLXt6UBZ5YLM9oimBvcHUC9txUZ4o3rLwTHYVQK39R/wjcwmhJiH
-         4z1Q5E1H6+igdU/zRzXhIhssM1/Zi68n+zl/gM+5UXKqXW+HzgbdFigbJb982ATy5J
-         DgUO0/5KS12wJKNsfuLZtVQd7WnyYNCGvM+QOETs=
+        b=L+dU/L50fLfdt16EXd2EMaur+hranZjsbMqQGl/wVMK8qlMsT2MLZoLESGZXeAwDf
+         R+8RsIN8PlilfVrdkRQFzVdNnEiNlWQtdP65gRMEMTI1M1r2D8Ll0UT+tYNq4kOTj5
+         h7eej0JRZGFVNXAoDiXhsvzLOlBrKTeJLYBD9XVk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Chen Minqiang <ptpt52@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 26/55] wireguard: selftests: check that route_me_harder packets use the right sk
-Date:   Mon,  9 Nov 2020 22:52:49 -0500
-Message-Id: <20201110035318.423757-26-sashal@kernel.org>
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.9 09/55] selftests/ftrace: check for do_sys_openat2 in user-memory test
+Date:   Mon,  9 Nov 2020 22:52:32 -0500
+Message-Id: <20201110035318.423757-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201110035318.423757-1-sashal@kernel.org>
 References: <20201110035318.423757-1-sashal@kernel.org>
@@ -55,62 +56,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit af8afcf1fdd5f365f70e2386c2d8c7a1abd853d7 ]
+[ Upstream commit e3e40312567087fbe6880f316cb2b0e1f3d8a82c ]
 
-If netfilter changes the packet mark, the packet is rerouted. The
-ip_route_me_harder family of functions fails to use the right sk, opting
-to instead use skb->sk, resulting in a routing loop when used with
-tunnels. With the next change fixing this issue in netfilter, test for
-the relevant condition inside our test suite, since wireguard was where
-the bug was discovered.
+More recent libc implementations are now using openat/openat2 system
+calls so also add do_sys_openat2 to the tracing so that the test
+passes on these systems because do_sys_open may not be called.
 
-Reported-by: Chen Minqiang <ptpt52@gmail.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Thanks to Masami Hiramatsu for the help on getting this fix to work
+correctly.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/wireguard/netns.sh           | 8 ++++++++
- tools/testing/selftests/wireguard/qemu/kernel.config | 2 ++
- 2 files changed, 10 insertions(+)
+ .../selftests/ftrace/test.d/kprobe/kprobe_args_user.tc        | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/wireguard/netns.sh b/tools/testing/selftests/wireguard/netns.sh
-index d77f4829f1e07..74c69b75f6f5a 100755
---- a/tools/testing/selftests/wireguard/netns.sh
-+++ b/tools/testing/selftests/wireguard/netns.sh
-@@ -316,6 +316,14 @@ pp sleep 3
- n2 ping -W 1 -c 1 192.168.241.1
- n1 wg set wg0 peer "$pub2" persistent-keepalive 0
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+index a30a9c07290d0..d25d01a197781 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_user.tc
+@@ -9,12 +9,16 @@ grep -A10 "fetcharg:" README | grep -q '\[u\]<offset>' || exit_unsupported
+ :;: "user-memory access syntax and ustring working on user memory";:
+ echo 'p:myevent do_sys_open path=+0($arg2):ustring path2=+u0($arg2):string' \
+ 	> kprobe_events
++echo 'p:myevent2 do_sys_openat2 path=+0($arg2):ustring path2=+u0($arg2):string' \
++	>> kprobe_events
  
-+# Test that sk_bound_dev_if works
-+n1 ping -I wg0 -c 1 -W 1 192.168.241.2
-+# What about when the mark changes and the packet must be rerouted?
-+n1 iptables -t mangle -I OUTPUT -j MARK --set-xmark 1
-+n1 ping -c 1 -W 1 192.168.241.2 # First the boring case
-+n1 ping -I wg0 -c 1 -W 1 192.168.241.2 # Then the sk_bound_dev_if case
-+n1 iptables -t mangle -D OUTPUT -j MARK --set-xmark 1
-+
- # Test that onion routing works, even when it loops
- n1 wg set wg0 peer "$pub3" allowed-ips 192.168.242.2/32 endpoint 192.168.241.2:5
- ip1 addr add 192.168.242.1/24 dev wg0
-diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
-index d531de13c95b0..4eecb432a66c1 100644
---- a/tools/testing/selftests/wireguard/qemu/kernel.config
-+++ b/tools/testing/selftests/wireguard/qemu/kernel.config
-@@ -18,10 +18,12 @@ CONFIG_NF_NAT=y
- CONFIG_NETFILTER_XTABLES=y
- CONFIG_NETFILTER_XT_NAT=y
- CONFIG_NETFILTER_XT_MATCH_LENGTH=y
-+CONFIG_NETFILTER_XT_MARK=y
- CONFIG_NF_CONNTRACK_IPV4=y
- CONFIG_NF_NAT_IPV4=y
- CONFIG_IP_NF_IPTABLES=y
- CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_MANGLE=y
- CONFIG_IP_NF_NAT=y
- CONFIG_IP_ADVANCED_ROUTER=y
- CONFIG_IP_MULTIPLE_TABLES=y
+ grep myevent kprobe_events | \
+ 	grep -q 'path=+0($arg2):ustring path2=+u0($arg2):string'
+ echo 1 > events/kprobes/myevent/enable
++echo 1 > events/kprobes/myevent2/enable
+ echo > /dev/null
+ echo 0 > events/kprobes/myevent/enable
++echo 0 > events/kprobes/myevent2/enable
+ 
+ grep myevent trace | grep -q 'path="/dev/null" path2="/dev/null"'
+ 
 -- 
 2.27.0
 
