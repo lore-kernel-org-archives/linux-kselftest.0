@@ -2,170 +2,86 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABEFBC5517A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:50:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA3AC56201
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 468F7208B3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:50:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="Ir3b4tGV";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fwIe3Zwi"
+	by mail.kernel.org (Postfix) with ESMTP id DC6B2208CA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbgKKUu5 (ORCPT
+        id S1726511AbgKKVer (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Nov 2020 15:50:57 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:35843 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725900AbgKKUu4 (ORCPT
+        Wed, 11 Nov 2020 16:34:47 -0500
+Received: from smtp-190f.mail.infomaniak.ch ([185.125.25.15]:60989 "EHLO
+        smtp-190f.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726513AbgKKVer (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 15:50:56 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 5A4B4B40;
-        Wed, 11 Nov 2020 15:40:41 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 11 Nov 2020 15:40:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=C1UmKosirAS8x
-        RBgjcrsjxki5ADf6IPDpymKmd+0TMI=; b=Ir3b4tGVCsZhn5bMAVwbtio4VFv/D
-        uvFcXmsU+FgU/MWp6ywhrcvjUy810sDC+0EMgLzlWYK9ffWlLljuGMBCCGM44IRk
-        P+TigjnK8WgpvVD19UDiSOYE1ou8Lp7hJCZ/7UeX7qcZDDo+cuxdxSDem2ft7RoG
-        PuwXGGzZLbzdDMCza1lb9Go3E2I0qunqYbv3kMaLMgmiPfE6cXDeKXRMAGB9m4hZ
-        E5xUC1dJavxz9tifS4M+2uzJnCMsSFx2jNAHV545RNGMXNaqSGv6ZLHoA2SG8Po1
-        gpdNWPzpPpBlb3iIgE6YTfdobD5YwFoo9vA3355/CW7WgGkBAqVJOr1bQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:reply-to:subject
-        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=C1UmKosirAS8xRBgjcrsjxki5ADf6IPDpymKmd+0TMI=; b=fwIe3Zwi
-        /hTa3Z5fKz8I7PeJm7uSJJICOcBJvxIP9yuRqJoiczmUYpqmsdH7XK5PZ4XGIPmS
-        T9S8fZmz6uH/UGu12BXR3jkogZDl/EBejFY9FIQ+uIEi0Bsvp6CEDEkQT5AwTxr4
-        h8lgPjYr+qYrVj6oObzC9hwT28PwpPXqrDHnql825AEpBZhiQW+aa3WEvlyMi7mr
-        LhKF9/2LAuugMNROu5EXDqfw2geQ/FkST+Njwl/ZUPtTCUtJB8a+DKB7JBPt9Tx1
-        G9qxsgleSYagSMpgT9Xo9aMDb8lYlBW55nfl02T2YFkymLp6viVlv9plDhvciRGc
-        dV5YHsCunzI87g==
-X-ME-Sender: <xms:SEysX5XlCZBK_ZjGlIk_wWW_RDx-TcIlosZergUfiSoTwAITej7rcw>
-    <xme:SEysX5m6zFtylql9yGWXGBHj5W-4g2IsUQY15IdxvvD6EchhN-WBOpuUHr4sWGZzY
-    4qEBCopw-901U2CAw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvtddgjeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
-    vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:SEysX1ZBPbDq8X-viBuVlCN7ZBSMGv69dwNbzezGbcT72y9vuKEISA>
-    <xmx:SEysX8WB8yZzK0iP2uKTbdIgG_HTciq7yxB6HG0axDoe3GCVF6nMfg>
-    <xmx:SEysXzkDJRCbkSVt05QTA8C2Xqh-DSG1A97XynL8gPPYMZJw86U3jQ>
-    <xmx:SEysX8fVpsnPCbFa8DyiHfqN7D5Tyah-MQvdd09aDCLirlkTvP-oS2BMTrk>
-Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 1C5A3328006D;
-        Wed, 11 Nov 2020 15:40:40 -0500 (EST)
-From:   Zi Yan <zi.yan@sent.com>
-To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yang Shi <shy828301@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
-Subject: [RFC PATCH 2/6] mm: memcg: make memcg huge page split support any order split.
-Date:   Wed, 11 Nov 2020 15:40:04 -0500
-Message-Id: <20201111204008.21332-3-zi.yan@sent.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201111204008.21332-1-zi.yan@sent.com>
-References: <20201111204008.21332-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Wed, 11 Nov 2020 16:34:47 -0500
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdKx0gBtzlhGL9;
+        Wed, 11 Nov 2020 22:34:45 +0100 (CET)
+Received: from localhost (unknown [94.23.54.103])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdKw4jtzzlh8T5;
+        Wed, 11 Nov 2020 22:34:44 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/9] Landlock fixes
+Date:   Wed, 11 Nov 2020 22:34:33 +0100
+Message-Id: <20201111213442.434639-1-mic@digikod.net>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+Hi,
 
-It reads thp_nr_pages and splits to provided new_nr. It prepares for
-upcoming changes to support split huge page to any lower order.
+This patch series fixes some issues and makes the Landlock filesystem
+access-control more consistent and deterministic when stacking multiple
+rulesets.  This is checked by current and new tests.  I also extended
+documentation and example to help users.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- include/linux/memcontrol.h | 5 +++--
- mm/huge_memory.c           | 2 +-
- mm/memcontrol.c            | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+This series can be applied on top of
+https://git.kernel.org/pub/scm/linux/kernel/git/jmorris/linux-security.git/log/?h=landlock_lsm
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 0f4dd7829fb2..b3bac79ceed6 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1105,7 +1105,7 @@ static inline void memcg_memory_event_mm(struct mm_st=
-ruct *mm,
- }
-=20
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--void mem_cgroup_split_huge_fixup(struct page *head);
-+void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_nr);
- #endif
-=20
- #else /* CONFIG_MEMCG */
-@@ -1451,7 +1451,8 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t=
- *pgdat, int order,
- 	return 0;
- }
-=20
--static inline void mem_cgroup_split_huge_fixup(struct page *head)
-+static inline void mem_cgroup_split_huge_fixup(struct page *head,
-+					       unsigned int new_nr)
- {
- }
-=20
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index c4fead5ead31..f599f5b9bf7f 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2429,7 +2429,7 @@ static void __split_huge_page(struct page *page, stru=
-ct list_head *list,
- 	lruvec =3D mem_cgroup_page_lruvec(head, pgdat);
-=20
- 	/* complete memcg works before add pages to LRU */
--	mem_cgroup_split_huge_fixup(head);
-+	mem_cgroup_split_huge_fixup(head, 1);
-=20
- 	if (PageAnon(head) && PageSwapCache(head)) {
- 		swp_entry_t entry =3D { .val =3D page_private(head) };
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 33f632689cee..e9705ba6bbcc 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3247,7 +3247,7 @@ void obj_cgroup_uncharge(struct obj_cgroup *objcg, si=
-ze_t size)
-  * Because tail pages are not marked as "used", set it. We're under
-  * pgdat->lru_lock and migration entries setup in all page mappings.
-  */
--void mem_cgroup_split_huge_fixup(struct page *head)
-+void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_nr)
- {
- 	struct mem_cgroup *memcg =3D page_memcg(head);
- 	int i;
-@@ -3255,7 +3255,7 @@ void mem_cgroup_split_huge_fixup(struct page *head)
- 	if (mem_cgroup_disabled())
- 		return;
-=20
--	for (i =3D 1; i < thp_nr_pages(head); i++) {
-+	for (i =3D new_nr; i < thp_nr_pages(head); i +=3D new_nr) {
- 		css_get(&memcg->css);
- 		head[i].memcg_data =3D (unsigned long)memcg;
- 	}
---=20
-2.28.0
+Regards,
+
+Mickaël Salaün (9):
+  landlock: Fix memory allocation error handling
+  landlock: Cosmetic fixes for filesystem management
+  landlock: Enforce deterministic interleaved path rules
+  landlock: Always intersect access rights
+  landlock: Add extra checks when inserting a rule
+  selftests/landlock: Extend layout1.inherit_superset
+  landlock: Clean up get_ruleset_from_fd()
+  landlock: Add help to enable Landlock as a stacked LSM
+  landlock: Extend documentation about limitations
+
+ Documentation/userspace-api/landlock.rst   |  17 +++
+ samples/landlock/sandboxer.c               |  21 +++-
+ security/landlock/Kconfig                  |   4 +-
+ security/landlock/fs.c                     |  67 +++++-----
+ security/landlock/object.c                 |   5 +-
+ security/landlock/ruleset.c                |  34 ++---
+ security/landlock/syscall.c                |  24 ++--
+ tools/testing/selftests/landlock/fs_test.c | 140 +++++++++++++++++++--
+ 8 files changed, 239 insertions(+), 73 deletions(-)
+
+
+base-commit: 96b3198c4025c11347651700b77e45a686d78553
+-- 
+2.29.2
 
