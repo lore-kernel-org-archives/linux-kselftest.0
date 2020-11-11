@@ -2,245 +2,183 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74648C61DD8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 945C3C4742C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Nov 2020 01:33:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3BD1C208FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:35:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26B1C20809
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Nov 2020 01:33:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="fB2B9OyX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727699AbgKKVfZ (ORCPT
+        id S1727935AbgKLBdl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Nov 2020 16:35:25 -0500
-Received: from smtp-8faf.mail.infomaniak.ch ([83.166.143.175]:47145 "EHLO
-        smtp-8faf.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726112AbgKKVev (ORCPT
+        Wed, 11 Nov 2020 20:33:41 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4540 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727944AbgKKXip (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 16:34:51 -0500
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdL05tD5zlhS6t;
-        Wed, 11 Nov 2020 22:34:48 +0100 (CET)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdL02mhLzlh8T4;
-        Wed, 11 Nov 2020 22:34:48 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v1 3/9] landlock: Enforce deterministic interleaved path rules
-Date:   Wed, 11 Nov 2020 22:34:36 +0100
-Message-Id: <20201111213442.434639-4-mic@digikod.net>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201111213442.434639-1-mic@digikod.net>
-References: <20201111213442.434639-1-mic@digikod.net>
+        Wed, 11 Nov 2020 18:38:45 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fac760c0000>; Wed, 11 Nov 2020 15:38:52 -0800
+Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 11 Nov
+ 2020 23:38:42 +0000
+Subject: Re: [PATCH v3 3/6] mm: support THP migration to device private memory
+To:     Christoph Hellwig <hch@lst.de>
+CC:     <linux-mm@kvack.org>, <nouveau@lists.freedesktop.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Jerome Glisse" <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Alistair Popple" <apopple@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Zi Yan <ziy@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+References: <20201106005147.20113-1-rcampbell@nvidia.com>
+ <20201106005147.20113-4-rcampbell@nvidia.com> <20201106080322.GE31341@lst.de>
+ <a7b8b90c-09b7-2009-0784-908b61f61ef2@nvidia.com>
+ <20201109091415.GC28918@lst.de>
+X-Nvconfidentiality: public
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <bbf1f0df-85f3-5887-050e-beb2aad750f2@nvidia.com>
+Date:   Wed, 11 Nov 2020 15:38:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201109091415.GC28918@lst.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1605137932; bh=zHO1ckq6uyaZrvKhQL36E2tHoAKHoONDfmePjxMsIDc=;
+        h=Subject:To:CC:References:X-Nvconfidentiality:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=fB2B9OyXqlGPArapba0ILYThcCs0SyHunJqcEM+ML7kCb9iwxoyGsJeu6vt+yDpaX
+         EDLrUhP0JcL9WartwY8C4pKPx02qX+XGOTyoXwhPtF+4FXoOuaTPUvURVBbJq907L6
+         Ut96f1x2GhYedjA/0MDIQp3c/yWMJGzDwCI6NTpZ3Mjvt9TyMDCM5/nEeKMMm+bIGY
+         jmlBFcGsPnom85VIjGsJES2VbDtDQNOX0DQZhlVkk3giLAy6xHx+T5sHYOOIFWhiy1
+         Ubh4cpVaElGixBRH6GJgYJKZQQyPT8z/JXak+c6r2xXPxACRmVTb54/dAaBzMo6jZn
+         RDK2gI0iO/Zrg==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To have consistent layered rules, granting access to a path implies that
-all accesses tied to inodes, from the requested file to the real root,
-must be checked.  Otherwise, stacked rules may result to overzealous
-restrictions.  By excluding the ability to add exceptions in the same
-layer (e.g. /a allowed, /a/b denied, and /a/b/c allowed), we get
-deterministic interleaved path rules.  This removes an optimization
-which could be replaced by a proper cache mechanism.  This also further
-simplifies and explain check_access_path_continue().
 
-Add a layout1.interleaved_masked_accesses test to check corner-case
-layered rule combinations.
+On 11/9/20 1:14 AM, Christoph Hellwig wrote:
+> On Fri, Nov 06, 2020 at 01:26:50PM -0800, Ralph Campbell wrote:
+>>
+>> On 11/6/20 12:03 AM, Christoph Hellwig wrote:
+>>> I hate the extra pin count magic here.  IMHO we really need to finish
+>>> off the series to get rid of the extra references on the ZONE_DEVICE
+>>> pages first.
+>>
+>> First, thanks for the review comments.
+>>
+>> I don't like the extra refcount either, that is why I tried to fix that up
+>> before resending this series. However, you didn't like me just fixing the
+>> refcount only for device private pages and I don't know the dax/pmem code
+>> and peer-to-peer PCIe uses of ZONE_DEVICE pages well enough to say how
+>> long it will take me to fix all the use cases.
+>> So I wanted to make progress on the THP migration code in the mean time.
+> 
+> I think P2P is pretty trivial, given that ZONE_DEVICE pages are used like
+> a normal memory allocator.  DAX is the interesting case, any specific
+> help that you need with that?
 
-Cc: James Morris <jmorris@namei.org>
-Cc: Jann Horn <jannh@google.com>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- security/landlock/fs.c                     | 38 +++++----
- tools/testing/selftests/landlock/fs_test.c | 95 ++++++++++++++++++++++
- 2 files changed, 115 insertions(+), 18 deletions(-)
+There are 4 types of ZONE_DEVICE struct pages:
+MEMORY_DEVICE_PRIVATE, MEMORY_DEVICE_FS_DAX, MEMORY_DEVICE_GENERIC, and
+MEMORY_DEVICE_PCI_P2PDMA.
 
-diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index 33fc7ae17c7f..2ca4dce1e9ed 100644
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -180,16 +180,24 @@ static bool check_access_path_continue(
- 			rcu_dereference(landlock_inode(inode)->object));
- 	rcu_read_unlock();
- 
--	/* Checks for matching layers. */
--	if (rule && (rule->layers | *layer_mask)) {
--		if ((rule->access & access_request) == access_request) {
--			*layer_mask &= ~rule->layers;
--			return true;
--		} else {
--			return false;
--		}
-+	if (!rule)
-+		/* Continues to walk if there is no rule for this inode. */
-+		return true;
-+	/*
-+	 * We must check all layers for each inode because we may encounter
-+	 * multiple different accesses from the same layer in a walk.  Each
-+	 * layer must at least allow the access request one time (i.e. with one
-+	 * inode).  This enables to have a deterministic behavior whatever
-+	 * inode is tagged within interleaved layers.
-+	 */
-+	if ((rule->access & access_request) == access_request) {
-+		/* Validates layers for which all accesses are allowed. */
-+		*layer_mask &= ~rule->layers;
-+		/* Continues to walk until all layers are validated. */
-+		return true;
- 	}
--	return true;
-+	/* Stops if a rule in the path don't allow all requested access. */
-+	return false;
- }
- 
- static int check_access_path(const struct landlock_ruleset *const domain,
-@@ -231,12 +239,6 @@ static int check_access_path(const struct landlock_ruleset *const domain,
- 				&layer_mask)) {
- 		struct dentry *parent_dentry;
- 
--		/* Stops when a rule from each layer granted access. */
--		if (layer_mask == 0) {
--			allowed = true;
--			break;
--		}
--
- jump_up:
- 		/*
- 		 * Does not work with orphaned/private mounts like overlayfs
-@@ -248,10 +250,10 @@ static int check_access_path(const struct landlock_ruleset *const domain,
- 				goto jump_up;
- 			} else {
- 				/*
--				 * Stops at the real root.  Denies access
--				 * because not all layers have granted access.
-+				 * Stops at the real root.  Denies access if
-+				 * not all layers granted access.
- 				 */
--				allowed = false;
-+				allowed = (layer_mask == 0);
- 				break;
- 			}
- 		}
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 8aed28081ec8..ade0ad8728d8 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -629,6 +629,101 @@ TEST_F(layout1, ruleset_overlap)
- 	EXPECT_EQ(0, close(open_fd));
- }
- 
-+TEST_F(layout1, interleaved_masked_accesses)
-+{
-+	/*
-+	 * Checks overly restrictive rules:
-+	 * layer 1: allows s1d1/s1d2/s1d3/file1
-+	 * layer 2: allows s1d1/s1d2/s1d3
-+	 *          denies s1d1/s1d2
-+	 * layer 3: allows s1d1
-+	 * layer 4: allows s1d1/s1d2
-+	 */
-+	const struct rule layer1[] = {
-+		/* Allows access to file1_s1d3 with the first layer. */
-+		{
-+			.path = file1_s1d3,
-+			.access = LANDLOCK_ACCESS_FS_READ_FILE,
-+		},
-+		{}
-+	};
-+	const struct rule layer2[] = {
-+		/* Start by granting access to file1_s1d3 with this rule... */
-+		{
-+			.path = dir_s1d3,
-+			.access = LANDLOCK_ACCESS_FS_READ_FILE,
-+		},
-+		/* ...but finally denies access to file1_s1d3. */
-+		{
-+			.path = dir_s1d2,
-+			.access = 0,
-+		},
-+		{}
-+	};
-+	const struct rule layer3[] = {
-+		/* Try to allows access to file1_s1d3. */
-+		{
-+			.path = dir_s1d1,
-+			.access = LANDLOCK_ACCESS_FS_READ_FILE,
-+		},
-+		{}
-+	};
-+	const struct rule layer4[] = {
-+		/* Try to bypass layer2. */
-+		{
-+			.path = dir_s1d2,
-+			.access = LANDLOCK_ACCESS_FS_READ_FILE,
-+		},
-+		{}
-+	};
-+	int open_fd, ruleset_fd;
-+
-+	ruleset_fd = create_ruleset(_metadata, ACCESS_RO, layer1);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	EXPECT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks that access is granted for file1_s1d3. */
-+	open_fd = open(file1_s1d3, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, open_fd);
-+	EXPECT_EQ(0, close(open_fd));
-+	ASSERT_EQ(-1, open(file2_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+
-+	ruleset_fd = create_ruleset(_metadata, ACCESS_RO, layer2);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	EXPECT_EQ(0, close(ruleset_fd));
-+
-+	/* Now, checks that access is denied for file1_s1d3. */
-+	ASSERT_EQ(-1, open(file1_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+	ASSERT_EQ(-1, open(file2_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+
-+	ruleset_fd = create_ruleset(_metadata, ACCESS_RO, layer3);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	EXPECT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks that access rights are unchanged with layer 3. */
-+	ASSERT_EQ(-1, open(file1_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+	ASSERT_EQ(-1, open(file2_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+
-+	ruleset_fd = create_ruleset(_metadata, ACCESS_RO, layer4);
-+	ASSERT_LE(0, ruleset_fd);
-+	enforce_ruleset(_metadata, ruleset_fd);
-+	EXPECT_EQ(0, close(ruleset_fd));
-+
-+	/* Checks that access rights are unchanged with layer 4. */
-+	ASSERT_EQ(-1, open(file1_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+	ASSERT_EQ(-1, open(file2_s1d3, O_RDONLY | O_CLOEXEC));
-+	ASSERT_EQ(EACCES, errno);
-+}
-+
- TEST_F(layout1, inherit_subset)
- {
- 	const struct rule rules[] = {
--- 
-2.29.2
+Currently, memremap_pages() allocates struct pages for a physical address range
+with a page_ref_count(page) of one and increments the pgmap->ref per CPU
+reference count by the number of pages created since each ZONE_DEVICE struct
+page has a pointer to the pgmap.
 
+The struct pages are not freed until memunmap_pages() is called which
+calls put_page() which calls put_dev_pagemap() which releases a reference to
+pgmap->ref. memunmap_pages() blocks waiting for pgmap->ref reference count
+to be zero. As far as I can tell, the put_page() in memunmap_pages() has to
+be the *last* put_page() (see MEMORY_DEVICE_PCI_P2PDMA).
+My RFC [1] breaks this put_page() -> put_dev_pagemap() connection so that
+the struct page reference count can go to zero and back to non-zero without
+changing the pgmap->ref reference count.
+
+Q1: Is that safe? Is there some code that depends on put_page() dropping
+the pgmap->ref reference count as part of memunmap_pages()?
+My testing of [1] seems OK but I'm sure there are lots of cases I didn't test.
+
+MEMORY_DEVICE_PCI_P2PDMA:
+Struct pages are created in pci_p2pdma_add_resource() and represent device
+memory accessible by PCIe bar address space. Memory is allocated with
+pci_alloc_p2pmem() based on a byte length but the gen_pool_alloc_owner()
+call will allocate memory in a minimum of PAGE_SIZE units.
+Reference counting is +1 per *allocation* on the pgmap->ref reference count.
+Note that this is not +1 per page which is what put_page() expects. So
+currently, a get_page()/put_page() works OK because the page reference count
+only goes 1->2 and 2->1. If it went to zero, the pgmap->ref reference count
+would be incorrect if the allocation size was greater than one page.
+
+I see pci_alloc_p2pmem() is called by nvme_alloc_sq_cmds() and
+pci_p2pmem_alloc_sgl() to create a command queue and a struct scatterlist *.
+Looks like sg_page(sg) returns the ZONE_DEVICE struct page of the scatterlist.
+There are a huge number of places sg_page() is called so it is hard to tell
+whether or not get_page()/put_page() is ever called on MEMORY_DEVICE_PCI_P2PDMA
+pages. pci_p2pmem_virt_to_bus() will return the physical address and I guess
+pfn_to_page(physaddr >> PAGE_SHIFT) could return the struct page.
+
+Since there is a clear allocation/free, pci_alloc_p2pmem() can probably be
+modified to increment/decrement the MEMORY_DEVICE_PCI_P2PDMA struct page
+reference count. Or maybe just leave it at one like it is now.
+
+MEMORY_DEVICE_GENERIC:
+Struct pages are created in dev_dax_probe() and represent non-volatile memory.
+The device can be mmap()'ed which calls dax_mmap() which sets
+vma->vm_flags | VM_HUGEPAGE.
+A CPU page fault will result in a PTE, PMD, or PUD sized page
+(but not compound) to be inserted by vmf_insert_mixed() which will call either
+insert_pfn() or insert_page().
+Neither insert_pfn() nor insert_page() increments the page reference count.
+Invalidations don't callback into the device driver so I don't see how page
+reference counts can be tracked without adding a mmu_interval_notifier.
+
+I think just leaving the page reference count at one is better than trying
+to use the mmu_interval_notifier or changing vmf_insert_mixed() and
+invalidations of pfn_t_devmap(pfn) to adjust the page reference count.
+
+MEMORY_DEVICE_PRIVATE:
+This case has the most core mm code having to specially check for
+is_device_private_page() and adjusting the expected reference count when the
+page isn't mapped by any process. There is a clear allocation and free so it
+can be changed to use a reference count of zero while free (see [2]).
+
+MEMORY_DEVICE_FS_DAX:
+Struct pages are created in pmem_attach_disk() and virtio_fs_setup_dax() with
+an initial reference count of one.
+The problem I see is that there are 3 states that are important:
+a) memory is free and not allocated to any file (page_ref_count() == 0).
+b) memory is allocated to a file and in the page cache (page_ref_count() == 1).
+c) some gup() or I/O has a reference even after calling unmap_mapping_pages()
+    (page_ref_count() > 1). ext4_break_layouts() basically waits until the
+    page_ref_count() == 1 with put_page() calling wake_up_var(&page->_refcount)
+    to wake up ext4_break_layouts().
+The current code doesn't seem to distinguish (a) and (b). If we want to use
+the 0->1 reference count to signal (c), then the page cache would have hold
+entries with a page_ref_count() == 0 which doesn't match the general page cache
+assumptions.
+
+Q2: So how should I resolve that?
+
+[1] https://lore.kernel.org/linux-mm/20201001181715.17416-1-rcampbell@nvidia.com
+[2] https://lore.kernel.org/linux-mm/20201012174540.17328-1-rcampbell@nvidia.com
