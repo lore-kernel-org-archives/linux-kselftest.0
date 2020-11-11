@@ -4,29 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2453DC388F9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D3EC388F9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:35:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DCA4D2151B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:35:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 744DA208FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 21:35:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727134AbgKKVe4 (ORCPT
+        id S1727202AbgKKVfI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Nov 2020 16:34:56 -0500
-Received: from smtp-42ad.mail.infomaniak.ch ([84.16.66.173]:55077 "EHLO
-        smtp-42ad.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727241AbgKKVe4 (ORCPT
+        Wed, 11 Nov 2020 16:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727267AbgKKVez (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 16:34:56 -0500
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdL40hbMzlhGL9;
-        Wed, 11 Nov 2020 22:34:52 +0100 (CET)
+        Wed, 11 Nov 2020 16:34:55 -0500
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [IPv6:2001:1600:4:17::42a8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C12C0617A7
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Nov 2020 13:34:55 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CWdL62XsJzlhbQT;
+        Wed, 11 Nov 2020 22:34:54 +0100 (CET)
 Received: from localhost (unknown [94.23.54.103])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdL364mJzlh8T4;
-        Wed, 11 Nov 2020 22:34:51 +0100 (CET)
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4CWdL60nM9zlh8T2;
+        Wed, 11 Nov 2020 22:34:54 +0100 (CET)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
         "Serge E . Hallyn" <serge@hallyn.com>
@@ -36,9 +39,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v1 6/9] selftests/landlock: Extend layout1.inherit_superset
-Date:   Wed, 11 Nov 2020 22:34:39 +0100
-Message-Id: <20201111213442.434639-7-mic@digikod.net>
+Subject: [PATCH v1 8/9] landlock: Add help to enable Landlock as a stacked LSM
+Date:   Wed, 11 Nov 2020 22:34:41 +0100
+Message-Id: <20201111213442.434639-9-mic@digikod.net>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201111213442.434639-1-mic@digikod.net>
 References: <20201111213442.434639-1-mic@digikod.net>
@@ -49,43 +52,82 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These additional checks test that layers are handled as expected in the
-superset use case, which complete the inherit_subset checks.
+When using make oldconfig with a previous configuration already
+including the CONFIG_LSM variable, no question is asked to update its
+content.
+
+Update the Kconfig help and add hints to the sample to help user
+understand the required configuration.
+
+This also cut long strings to fit in 100 columns.
 
 Cc: James Morris <jmorris@namei.org>
 Cc: Jann Horn <jannh@google.com>
 Cc: Serge E. Hallyn <serge@hallyn.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- tools/testing/selftests/landlock/fs_test.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ samples/landlock/sandboxer.c | 21 +++++++++++++++++++--
+ security/landlock/Kconfig    |  4 +++-
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 1885174b2770..c2f65034e4ee 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -907,6 +907,10 @@ TEST_F(layout1, inherit_superset)
- 	open_fd = open(dir_s1d3, O_RDONLY | O_DIRECTORY | O_CLOEXEC);
- 	ASSERT_LE(0, open_fd);
- 	ASSERT_EQ(0, close(open_fd));
-+	/* File access is allowed for file1_s1d3. */
-+	open_fd = open(file1_s1d3, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, open_fd);
-+	ASSERT_EQ(0, close(open_fd));
+diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
+index ee5ec1203cb7..127fb063c23a 100644
+--- a/samples/landlock/sandboxer.c
++++ b/samples/landlock/sandboxer.c
+@@ -169,7 +169,8 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 		fprintf(stderr, "usage: %s=\"...\" %s=\"...\" %s <cmd> [args]...\n\n",
+ 				ENV_FS_RO_NAME, ENV_FS_RW_NAME, argv[0]);
+ 		fprintf(stderr, "Launch a command in a restricted environment.\n\n");
+-		fprintf(stderr, "Environment variables containing paths, each separated by a colon:\n");
++		fprintf(stderr, "Environment variables containing paths, "
++				"each separated by a colon:\n");
+ 		fprintf(stderr, "* %s: list of paths allowed to be used in a read-only way.\n",
+ 				ENV_FS_RO_NAME);
+ 		fprintf(stderr, "* %s: list of paths allowed to be used in a read-write way.\n",
+@@ -185,6 +186,21 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 	ruleset_fd = landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
+ 	if (ruleset_fd < 0) {
+ 		perror("Failed to create a ruleset");
++		switch (errno) {
++		case ENOSYS:
++			fprintf(stderr, "Hint: Landlock is not supported by the current kernel. "
++					"To support it, build the kernel with "
++					"CONFIG_SECURITY_LANDLOCK=y and prepend "
++					"\"landlock,\" to the content of CONFIG_LSM.\n");
++			break;
++		case EOPNOTSUPP:
++			fprintf(stderr, "Hint: Landlock is currently disabled. "
++					"It can be enabled in the kernel configuration by "
++					"prepending \"landlock,\" to the content of CONFIG_LSM, "
++					"or at boot time by setting the same content to the "
++					"\"lsm\" kernel parameter.\n");
++			break;
++		}
+ 		return 1;
+ 	}
+ 	if (populate_ruleset(ENV_FS_RO_NAME, ruleset_fd,
+@@ -210,7 +226,8 @@ int main(const int argc, char *const argv[], char *const *const envp)
+ 	execvpe(cmd_path, cmd_argv, envp);
+ 	fprintf(stderr, "Failed to execute \"%s\": %s\n", cmd_path,
+ 			strerror(errno));
+-	fprintf(stderr, "Hint: access to the binary, the interpreter or shared libraries may be denied.\n");
++	fprintf(stderr, "Hint: access to the binary, the interpreter or "
++			"shared libraries may be denied.\n");
+ 	return 1;
  
- 	/* Now dir_s1d2, parent of dir_s1d3, gets a new rule tied to it. */
- 	add_path_beneath(_metadata, ruleset_fd, LANDLOCK_ACCESS_FS_READ_FILE |
-@@ -922,6 +926,10 @@ TEST_F(layout1, inherit_superset)
- 	open_fd = open(dir_s1d3, O_RDONLY | O_DIRECTORY | O_CLOEXEC);
- 	ASSERT_LE(0, open_fd);
- 	ASSERT_EQ(0, close(open_fd));
-+	/* File access is now denied for file1_s1d3. */
-+	open_fd = open(file1_s1d3, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(-1, open_fd);
-+	ASSERT_EQ(EACCES, errno);
- }
+ err_close_ruleset:
+diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
+index cbf88bb7fd97..43e5b0bb0706 100644
+--- a/security/landlock/Kconfig
++++ b/security/landlock/Kconfig
+@@ -16,4 +16,6 @@ config SECURITY_LANDLOCK
  
- TEST_F(layout1, max_layers)
+ 	  See Documentation/userspace-api/landlock.rst for further information.
+ 
+-	  If you are unsure how to answer this question, answer N.
++	  If you are unsure how to answer this question, answer N.  Otherwise, you
++	  should also prepend "landlock," to the content of CONFIG_LSM to enable
++	  Landlock at boot time.
 -- 
 2.29.2
 
