@@ -2,72 +2,73 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D325C56202
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB95EC388F9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:46:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B6AB208B3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:46:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41D84208B8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:46:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="VDFMUHUe";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WO7cVfVL"
+	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="ArZDMod3";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fO5Nrhfv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbgKKUqC (ORCPT
+        id S1727038AbgKKUqE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Nov 2020 15:46:02 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:41459 "EHLO
+        Wed, 11 Nov 2020 15:46:04 -0500
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:38003 "EHLO
         wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726884AbgKKUqC (ORCPT
+        by vger.kernel.org with ESMTP id S1726899AbgKKUqC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 11 Nov 2020 15:46:02 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 5B022B43;
+        by mailnew.west.internal (Postfix) with ESMTP id 51EADB2F;
         Wed, 11 Nov 2020 15:40:41 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
   by compute6.internal (MEProxy); Wed, 11 Nov 2020 15:40:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=e2DmXMYHMkbqy
-        Lg+bqDlVe/Knfvv9mMQFeJGw1T5RTk=; b=VDFMUHUegXKz8lI5ggnc/LZRtDOoo
-        4EcN06pcjMGbGGmm2696Z3q8HyQugMw4H/NEnKhaL4GN67y2E9LTsDm0LEmdFJF1
-        bHGSDFaUsA6uiEtw/ELZf3dagGtnuYV4+k3uoXLje7aHXJB7uLRQDVoe4xNWT4id
-        NWYv7+Fl7qMpixcMBqSWvSkz1o/8yxD5hOyskNn2+budKYAWQq5Yftmfu/LYSqyK
-        6SxHNW7CvHIJD+t/679n/pF/zXdDDDwxl0hE7xx80x4G6L2gUOPkmIN338tOiJY7
-        omH1Ag95o9zssQHhVO6s/0I1+Y+oa1GJCL7AvwcQU1qa8llp5Nbz6u7Xg==
+        :to:cc:subject:date:message-id:reply-to:mime-version
+        :content-transfer-encoding; s=fm2; bh=2sl0hzEO2/NiJTtpzxt0U3pBP+
+        C9s4dcDTT4dzafDPo=; b=ArZDMod3L9ZYYUSziIS9vaKt50TESpps3cLmeg9cG0
+        7RFLLYc2uxpPVSsLuqytAhBjqsOqMHo0zjS3HmWwrlUy7MwPnpNJcQFdyEyW52MR
+        hh0XmwvBSkPL8t/aqGulika0uVtWECwx6tuWexYIoEVxk0WblYzRqPWdN+SMqVBb
+        CN6BfJ53OXdFQFZt46/9v7XC5T+8AThGu18Xla/wVC2D0a45FCjnnW2sdGjkfBaP
+        Ve5jqXi2xFvU2236mGX4gDDYjzW9zgh7ll3eVu9DXr3Q/86AxZ/DAwWE2SjUm5C9
+        JiDCGA6qTudBRb2503yPvVwodkeseg1O0O1rWZbxQx8A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:reply-to:subject
-        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=e2DmXMYHMkbqyLg+bqDlVe/Knfvv9mMQFeJGw1T5RTk=; b=WO7cVfVL
-        Kf6OID8EvuIBRLlxwacD0XiqRBnjxV6zyv4sxMRsLI4AnFVWf/pXSod5W4b0tM46
-        ZPXCg2m23QPJrGhTmfp55myfP2ldMRBNq8SiAEjCr+OuksZxowHnZ1AqnwePGS47
-        G4TOJdyo7KTuFuV44vncUpgIy0RtE33UPbuv+fAbaMSAxna49v7WOJqPfGzKUMv0
-        l2zHUSng02djviihm+p7RPsY9UsssAxq3kRP3dMFC6caLQVwZUTvVUFX5kUBIJAn
-        oe8bMIfD0lsJgf0nV9dDcGrPGEP/ef77fhgMrx3LyBiQw8tZl8/llh+6P/z2tk8U
-        07xK3sXkd2UzgQ==
-X-ME-Sender: <xms:SEysX7lWCIPue_t_fhWUa--DJPOX75IwGmOYtXhTvBE4v1raGXzTvw>
-    <xme:SEysX-0--fBgax_pGJti0NHm-Nszc5uq71_Ew2NUqndZgx2zT5mDtD6oWmMZx8MYr
-    9W29Z1_YQ0EfOqofQ>
+        :message-id:mime-version:reply-to:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=2sl0hz
+        EO2/NiJTtpzxt0U3pBP+C9s4dcDTT4dzafDPo=; b=fO5NrhfvxbYIOoJbO3uzLL
+        2TfDImSoUqelLhT5J1WOHlHKi20wwXm1klVWQLaZgw25t+5et257/iTS9wVNdJeW
+        tIVvvAtvaylEI5ht5QrTrGwxkrDCjlD4RxE1c6SnUTg3cKlpqCtS/t8OYkF//TQx
+        9OPBj44o9hIUr/2oGimltmbOt69MWxpYIvDTNgRmI4lJ3tY7Twda1yJSltRbidv1
+        f3RRupFNhhgok/q6i2lVyPkEw7kCq/2ieMFf4CcFt/EKAurez3jB0ipzQj0+X7Uf
+        vxejILPZtBqsOMK+yKrGtfG/LujfSzS/JMNn2nA9hYIN9PaD64MqkmAYTBbHP3NA
+        ==
+X-ME-Sender: <xms:R0ysX62azZ03rJ0LDEQi_3o_MZMVvZipVPvLhKY5H3JL0kvdRKFOnQ>
+    <xme:R0ysX9Fl9M7DVKDsWN-lgrkQFbBcxCTTfL_Dq3T-utCm4Jg5VxmMFiJjMnk6mjxVk
+    9QPi1lG-D1TklMbqA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvtddgjeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
-    vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:SEysXxoRhQhEAHnR7kdxLogkrQHpQZw2BkxWthMBTUmL4y6ow6Qbng>
-    <xmx:SEysXzkQ4cLl5swJhSQeIJijPTqDeOP2F_dPmCNnJq3W5yOthO1OSw>
-    <xmx:SEysX53iNs38QEi1nw9vEqm3fc5z9px2Im19koZfczrumgDY7pzeZw>
-    <xmx:SEysXytWP6jSaQM24QOLUNcEUxCO4z_GPWbPLnLB4uZ8IXN0JmUB9rnjjQ4>
+    cujfgurhephffvufffkfforhgggfestdhqredtredttdenucfhrhhomhepkghiucgjrghn
+    uceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepgeegieehgf
+    effeffleefgeevueegvdffteffhefhkeevvddtjedvudeljeetvdegnecuffhomhgrihhn
+    pehkvghrnhgvlhdrohhrghdpihhnfhhrrgguvggrugdrohhrghenucfkphepuddvrdegie
+    druddtiedrudeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
+X-ME-Proxy: <xmx:R0ysXy54lcMwo_U0_3FLuD4fDau2haZm8RaKOSBbLfO-oGcLbitDfw>
+    <xmx:R0ysX73r6IPU5Bu8p718QtwSSrPIQ_W3-Mas5VEEYbp5_d5-5ZGVng>
+    <xmx:R0ysX9Hxd-LGVCu8_5yo2NTiPK8bjAw3p8oJ3AoXp3GFOyxmlVNP1A>
+    <xmx:SEysX1-acvPmjEts6HIFY_2A-63p8PQFRYP_SqpPieLMtufC6imkdnDr810>
 Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 61CD43280067;
-        Wed, 11 Nov 2020 15:40:40 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 833F3328006A;
+        Wed, 11 Nov 2020 15:40:39 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
 Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -79,12 +80,10 @@ Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
-Subject: [RFC PATCH 3/6] mm: page_owner: add support for splitting to any order in split page_owner.
-Date:   Wed, 11 Nov 2020 15:40:05 -0500
-Message-Id: <20201111204008.21332-4-zi.yan@sent.com>
+Subject: [RFC PATCH 0/6] Split huge pages to any lower order pages.
+Date:   Wed, 11 Nov 2020 15:40:02 -0500
+Message-Id: <20201111204008.21332-1-zi.yan@sent.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201111204008.21332-1-zi.yan@sent.com>
-References: <20201111204008.21332-1-zi.yan@sent.com>
 Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -94,102 +93,72 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-It adds a new_order parameter to set new page order in page owner.
-It prepares for upcoming changes to support split huge page to any lower
-order.
+Hi all,
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- include/linux/page_owner.h | 7 ++++---
- mm/huge_memory.c           | 2 +-
- mm/page_alloc.c            | 2 +-
- mm/page_owner.c            | 6 +++---
- 4 files changed, 9 insertions(+), 8 deletions(-)
+With Matthew's THP in pagecache patches[1], we will be able to handle any s=
+ize
+pagecache THPs, but currently split_huge_page can only split a THP to order=
+-0
+pages. This can easily erase the benefit of having pagecache THPs, when
+operations like truncate might want to keep pages larger than order-0. In
+response, here is the patches to add support for splitting a THP to any low=
+er
+order pages. In addition, this patchset prepares for my PUD THP patchset[2],
+since splitting a PUD THP to multiple PMD THPs can be handled by
+split_huge_page_to_list_to_order function added by this patchset, which red=
+uces
+a lot of redundant code without just replicating split_huge_page for PUD TH=
+P.
 
-diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-index 3468794f83d2..215cbb159568 100644
---- a/include/linux/page_owner.h
-+++ b/include/linux/page_owner.h
-@@ -31,10 +31,11 @@ static inline void set_page_owner(struct page *page,
- 		__set_page_owner(page, order, gfp_mask);
- }
-=20
--static inline void split_page_owner(struct page *page, unsigned int nr)
-+static inline void split_page_owner(struct page *page, unsigned int nr,
-+			unsigned int new_order)
- {
- 	if (static_branch_unlikely(&page_owner_inited))
--		__split_page_owner(page, nr);
-+		__split_page_owner(page, nr, new_order);
- }
- static inline void copy_page_owner(struct page *oldpage, struct page *newp=
-age)
- {
-@@ -60,7 +61,7 @@ static inline void set_page_owner(struct page *page,
- {
- }
- static inline void split_page_owner(struct page *page,
--			unsigned int order)
-+			unsigned int nr, unsigned int new_order)
- {
- }
- static inline void copy_page_owner(struct page *oldpage, struct page *newp=
-age)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index f599f5b9bf7f..8b7d771ee962 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2459,7 +2459,7 @@ static void __split_huge_page(struct page *page, stru=
-ct list_head *list,
-=20
- 	ClearPageCompound(head);
-=20
--	split_page_owner(head, nr);
-+	split_page_owner(head, nr, 1);
-=20
- 	/* See comment in __split_huge_page_tail() */
- 	if (PageAnon(head)) {
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index d77220615fd5..a9eead0e091a 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3284,7 +3284,7 @@ void split_page(struct page *page, unsigned int order)
-=20
- 	for (i =3D 1; i < (1 << order); i++)
- 		set_page_refcounted(page + i);
--	split_page_owner(page, 1 << order);
-+	split_page_owner(page, 1 << order, 1);
- }
- EXPORT_SYMBOL_GPL(split_page);
-=20
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index b735a8eafcdb..2b7f7e9056dc 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -204,7 +204,7 @@ void __set_page_owner_migrate_reason(struct page *page,=
- int reason)
- 	page_owner->last_migrate_reason =3D reason;
- }
-=20
--void __split_page_owner(struct page *page, unsigned int nr)
-+void __split_page_owner(struct page *page, unsigned int nr, unsigned int n=
-ew_order)
- {
- 	int i;
- 	struct page_ext *page_ext =3D lookup_page_ext(page);
-@@ -213,9 +213,9 @@ void __split_page_owner(struct page *page, unsigned int=
- nr)
- 	if (unlikely(!page_ext))
- 		return;
-=20
--	for (i =3D 0; i < nr; i++) {
-+	for (i =3D 0; i < nr; i +=3D (1 << new_order)) {
- 		page_owner =3D get_page_owner(page_ext);
--		page_owner->order =3D 0;
-+		page_owner->order =3D new_order;
- 		page_ext =3D page_ext_next(page_ext);
- 	}
- }
---=20
+The patchset is on top of Matthew's pagecache/next tree[3].
+
+To ease the tests of split_huge_page functions, I added a new debugfs inter=
+face
+at <debugfs>/split_huge_pages_in_range_pid, so developers can split THPs in=
+ a
+given range from a process with the given pid by writing
+"<pid>,<vaddr_start>,<vaddr_end>,<to_order>" to the interface. I also added=
+ a
+new test program to test 1) split PMD THPs, 2) split pagecache THPs to any =
+lower
+order, and 3) truncating a pagecache THP to a page with a lower order.
+
+Suggestions and comments are welcome. Thanks.
+
+
+[1] https://lore.kernel.org/linux-mm/20201029193405.29125-1-willy@infradead=
+.org/
+[2] https://lore.kernel.org/linux-mm/20200928175428.4110504-1-zi.yan@sent.c=
+om/
+[3] https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads=
+/next
+
+Zi Yan (6):
+  mm: huge_memory: add new debugfs interface to trigger split huge page
+    on any page range.
+  mm: memcg: make memcg huge page split support any order split.
+  mm: page_owner: add support for splitting to any order in split
+    page_owner.
+  mm: thp: add support for split huge page to any lower order pages.
+  mm: truncate: split thp to a non-zero order if possible.
+  mm: huge_memory: enable debugfs to split huge pages to any order.
+
+ include/linux/huge_mm.h                       |   8 +
+ include/linux/memcontrol.h                    |   5 +-
+ include/linux/page_owner.h                    |   7 +-
+ mm/huge_memory.c                              | 177 ++++++++++--
+ mm/internal.h                                 |   1 +
+ mm/memcontrol.c                               |   4 +-
+ mm/migrate.c                                  |   2 +-
+ mm/page_alloc.c                               |   2 +-
+ mm/page_owner.c                               |   6 +-
+ mm/swap.c                                     |   1 -
+ mm/truncate.c                                 |  22 +-
+ tools/testing/selftests/vm/Makefile           |   1 +
+ .../selftests/vm/split_huge_page_test.c       | 255 ++++++++++++++++++
+ 13 files changed, 453 insertions(+), 38 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/split_huge_page_test.c
+
+--
 2.28.0
 
