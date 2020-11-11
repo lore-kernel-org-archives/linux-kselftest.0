@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8931C388F9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABEFBC5517A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:50:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BF93208B3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:46:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 468F7208B3
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Nov 2020 20:50:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="tgYh9jFI";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iri+JizH"
+	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="Ir3b4tGV";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fwIe3Zwi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgKKUqU (ORCPT
+        id S1726150AbgKKUu5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Nov 2020 15:46:20 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:47293 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726890AbgKKUqD (ORCPT
+        Wed, 11 Nov 2020 15:50:57 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:35843 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725900AbgKKUu4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Nov 2020 15:46:03 -0500
+        Wed, 11 Nov 2020 15:50:56 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 32681A17;
-        Wed, 11 Nov 2020 15:40:42 -0500 (EST)
+        by mailnew.west.internal (Postfix) with ESMTP id 5A4B4B40;
+        Wed, 11 Nov 2020 15:40:41 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 11 Nov 2020 15:40:43 -0500
+  by compute6.internal (MEProxy); Wed, 11 Nov 2020 15:40:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
         :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=3tDLBowVRIwdz
-        IAbCVfBnGR6mqNvKC6lGI+I9eRGP1c=; b=tgYh9jFINu/CLM52sZOzJ3PyVhFcB
-        F+QMBFot3z1lIpdUSlvLbQzmo45w3X3WxHo0YYyFPLnNKR0A9ry0LcwX5q9kmpFr
-        tCtdsmx7trFjT6hNAslVM7bRZREBgI0ZXLLoKlGuNwvWar2DXNARDEUrb6I8C2b+
-        zCO7P6Syt3VmUa/16Lf2NDPcWD8jqCFXFQJ/93szTG2ceM67gKYLNHNwWoKbvNRg
-        OvdXMzCWj7YAwdv1MB/FELN+149Hj0Dx6TQOhdbRYU83WcUQEHOVJ9ObC8MUu4Jr
-        xhSm7VUm5AuJVIr8VRud1LTP8M4HqkFKSM4I8mHjxc1fRMn4DrpPR8lLA==
+        :mime-version:content-transfer-encoding; s=fm2; bh=C1UmKosirAS8x
+        RBgjcrsjxki5ADf6IPDpymKmd+0TMI=; b=Ir3b4tGVCsZhn5bMAVwbtio4VFv/D
+        uvFcXmsU+FgU/MWp6ywhrcvjUy810sDC+0EMgLzlWYK9ffWlLljuGMBCCGM44IRk
+        P+TigjnK8WgpvVD19UDiSOYE1ou8Lp7hJCZ/7UeX7qcZDDo+cuxdxSDem2ft7RoG
+        PuwXGGzZLbzdDMCza1lb9Go3E2I0qunqYbv3kMaLMgmiPfE6cXDeKXRMAGB9m4hZ
+        E5xUC1dJavxz9tifS4M+2uzJnCMsSFx2jNAHV545RNGMXNaqSGv6ZLHoA2SG8Po1
+        gpdNWPzpPpBlb3iIgE6YTfdobD5YwFoo9vA3355/CW7WgGkBAqVJOr1bQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:reply-to:subject
         :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=3tDLBowVRIwdzIAbCVfBnGR6mqNvKC6lGI+I9eRGP1c=; b=iri+JizH
-        HvHd8FyUbpHT/ZkIsS+0/aYycXg8HMpN7EM465b6RmbagT7hC+OD2JMv0D9TYuHi
-        03A8jIvoNH5EYIskaQgE8VQR1r/rGKse25soUj42Bg4gcyrgE0ouHwRcGehZMAKs
-        N6fzdgqbSzxoXhpcaGB8E4Oq4MBvyZ8uI5iu/uQ3mdtXaoZ9x+7FAySUV4a2KqHh
-        lMTz89MH4st/I611ycmkSqyMHem7GMbPiALOIEh6PTuurfZGDO50AtuGRJg6cufi
-        nh8MM2fECYHZq1r2tLG/LJlthaAeF24aAnKS3dSsfroq0t2KBxJ66yK4vWURY+VO
-        rZDxeuT7JiR3RA==
-X-ME-Sender: <xms:SUysX1T35r9ap5HK4Ls0uLafocUuQdLE9FI8COOxQva5xWACguWqvg>
-    <xme:SUysX-zi8lhDZ--kZs2pR-YZ2po0w5F6koilXY4sdPuluk0wlHOnm9FeePN7YqV5o
-    ifmSz0pD9QHF5Ra7A>
+        fm1; bh=C1UmKosirAS8xRBgjcrsjxki5ADf6IPDpymKmd+0TMI=; b=fwIe3Zwi
+        /hTa3Z5fKz8I7PeJm7uSJJICOcBJvxIP9yuRqJoiczmUYpqmsdH7XK5PZ4XGIPmS
+        T9S8fZmz6uH/UGu12BXR3jkogZDl/EBejFY9FIQ+uIEi0Bsvp6CEDEkQT5AwTxr4
+        h8lgPjYr+qYrVj6oObzC9hwT28PwpPXqrDHnql825AEpBZhiQW+aa3WEvlyMi7mr
+        LhKF9/2LAuugMNROu5EXDqfw2geQ/FkST+Njwl/ZUPtTCUtJB8a+DKB7JBPt9Tx1
+        G9qxsgleSYagSMpgT9Xo9aMDb8lYlBW55nfl02T2YFkymLp6viVlv9plDhvciRGc
+        dV5YHsCunzI87g==
+X-ME-Sender: <xms:SEysX5XlCZBK_ZjGlIk_wWW_RDx-TcIlosZergUfiSoTwAITej7rcw>
+    <xme:SEysX5m6zFtylql9yGWXGBHj5W-4g2IsUQY15IdxvvD6EchhN-WBOpuUHr4sWGZzY
+    4qEBCopw-901U2CAw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvtddgjeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -61,13 +61,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvtddgjeekucetufdoteggod
     dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
     vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
     hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:SUysX63-OuggDBnfzHq2fxyIitrORgohaj7sbuxwMgfXEIXeeDe3ag>
-    <xmx:SUysX9BJTfQylIJWkS1XylXBFnVAwJbZn8Rh8dp45c0hYJywU55s9w>
-    <xmx:SUysX-gRPR3wgg7mTjokgneAhL02vCBRnOn3jEqSClEqGG172DlVUQ>
-    <xmx:SUysXzbuK5QWM55Gm0Ao7ArGADGLvjvgQy1Pqpu5UUMCeVeL22hmWzWTnVU>
+X-ME-Proxy: <xmx:SEysX1ZBPbDq8X-viBuVlCN7ZBSMGv69dwNbzezGbcT72y9vuKEISA>
+    <xmx:SEysX8WB8yZzK0iP2uKTbdIgG_HTciq7yxB6HG0axDoe3GCVF6nMfg>
+    <xmx:SEysXzkDJRCbkSVt05QTA8C2Xqh-DSG1A97XynL8gPPYMZJw86U3jQ>
+    <xmx:SEysX8fVpsnPCbFa8DyiHfqN7D5Tyah-MQvdd09aDCLirlkTvP-oS2BMTrk>
 Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 3EDFA3280063;
-        Wed, 11 Nov 2020 15:40:41 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 1C5A3328006D;
+        Wed, 11 Nov 2020 15:40:40 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
 Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -79,9 +79,9 @@ Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
-Subject: [RFC PATCH 6/6] mm: huge_memory: enable debugfs to split huge pages to any order.
-Date:   Wed, 11 Nov 2020 15:40:08 -0500
-Message-Id: <20201111204008.21332-7-zi.yan@sent.com>
+Subject: [RFC PATCH 2/6] mm: memcg: make memcg huge page split support any order split.
+Date:   Wed, 11 Nov 2020 15:40:04 -0500
+Message-Id: <20201111204008.21332-3-zi.yan@sent.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201111204008.21332-1-zi.yan@sent.com>
 References: <20201111204008.21332-1-zi.yan@sent.com>
@@ -94,221 +94,78 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-It is used to test split_huge_page_to_list_to_order for pagecache THPs.
-Also add test cases for split_huge_page_to_list_to_order via both
-debugfs and truncating a file.
+It reads thp_nr_pages and splits to provided new_nr. It prepares for
+upcoming changes to support split huge page to any lower order.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
 ---
- mm/huge_memory.c                              |  13 +--
- .../selftests/vm/split_huge_page_test.c       | 102 +++++++++++++++++-
- 2 files changed, 105 insertions(+), 10 deletions(-)
+ include/linux/memcontrol.h | 5 +++--
+ mm/huge_memory.c           | 2 +-
+ mm/memcontrol.c            | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 88f50da40c9b..b7470607a08b 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2974,7 +2974,7 @@ static ssize_t split_huge_pages_in_range_pid_write(st=
-ruct file *file,
- 	static DEFINE_MUTEX(mutex);
- 	ssize_t ret;
- 	char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
--	int pid;
-+	int pid, to_order =3D 0;
- 	unsigned long vaddr_start, vaddr_end, addr;
- 	nodemask_t task_nodes;
- 	struct mm_struct *mm;
-@@ -2990,8 +2990,9 @@ static ssize_t split_huge_pages_in_range_pid_write(st=
-ruct file *file,
- 		goto out;
-=20
- 	input_buf[80] =3D '\0';
--	ret =3D sscanf(input_buf, "%d,%lx,%lx", &pid, &vaddr_start, &vaddr_end);
--	if (ret !=3D 3) {
-+	ret =3D sscanf(input_buf, "%d,%lx,%lx,%d", &pid, &vaddr_start, &vaddr_end=
-, &to_order);
-+	/* cannot split to order-1 THP, which is not possible */
-+	if ((ret !=3D 3 && ret !=3D 4) || to_order =3D=3D 1) {
- 		ret =3D -EINVAL;
- 		goto out;
- 	}
-@@ -2999,8 +3000,8 @@ static ssize_t split_huge_pages_in_range_pid_write(st=
-ruct file *file,
- 	vaddr_end &=3D PAGE_MASK;
-=20
- 	ret =3D strlen(input_buf);
--	pr_debug("split huge pages in pid: %d, vaddr: [%lx - %lx]\n",
--		 pid, vaddr_start, vaddr_end);
-+	pr_debug("split huge pages in pid: %d, vaddr: [%lx - %lx], to order: %d\n=
-",
-+		 pid, vaddr_start, vaddr_end, to_order);
-=20
- 	mm =3D find_mm_struct(pid, &task_nodes);
- 	if (IS_ERR(mm)) {
-@@ -3038,7 +3039,7 @@ static ssize_t split_huge_pages_in_range_pid_write(st=
-ruct file *file,
- 		addr +=3D page_size(page) - PAGE_SIZE;
-=20
- 		/* reset addr if split fails */
--		if (split_huge_page(page))
-+		if (split_huge_page_to_list_to_order(page, NULL, to_order))
- 			addr -=3D (page_size(page) - PAGE_SIZE);
-=20
- 		unlock_page(page);
-diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
-ing/selftests/vm/split_huge_page_test.c
-index c8a32ae9e13a..bcbc5a9d327c 100644
---- a/tools/testing/selftests/vm/split_huge_page_test.c
-+++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -16,6 +16,7 @@
- #include <sys/wait.h>
- #include <malloc.h>
- #include <stdbool.h>
-+#include <time.h>
-=20
- #define PAGE_4KB (4096UL)
- #define PAGE_2MB (512UL*PAGE_4KB)
-@@ -31,6 +32,7 @@
-=20
- #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages_in_range_pid"
- #define SMAP_PATH "/proc/self/smaps"
-+#define THP_FS_PATH "/mnt/thp_fs"
- #define INPUT_MAX 80
-=20
- static int write_file(const char *path, const char *buf, size_t buflen)
-@@ -50,13 +52,13 @@ static int write_file(const char *path, const char *buf=
-, size_t buflen)
- 	return (unsigned int) numwritten;
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 0f4dd7829fb2..b3bac79ceed6 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1105,7 +1105,7 @@ static inline void memcg_memory_event_mm(struct mm_st=
+ruct *mm,
  }
 =20
--static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
-d)
-+static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
-d, int order)
- {
- 	char input[INPUT_MAX];
- 	int ret;
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-void mem_cgroup_split_huge_fixup(struct page *head);
++void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_nr);
+ #endif
 =20
--	ret =3D snprintf(input, INPUT_MAX, "%d,%lx,%lx", pid, vaddr_start,
--			vaddr_end);
-+	ret =3D snprintf(input, INPUT_MAX, "%d,%lx,%lx,%d", pid, vaddr_start,
-+			vaddr_end, order);
- 	if (ret >=3D INPUT_MAX) {
- 		printf("%s: Debugfs input is too long\n", __func__);
- 		exit(EXIT_FAILURE);
-@@ -139,7 +141,7 @@ void split_pmd_thp(void)
- 	}
-=20
- 	/* split all possible huge pages */
--	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
-+	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len, 0);
-=20
- 	*one_page =3D 0;
-=20
-@@ -153,9 +155,101 @@ void split_pmd_thp(void)
- 	free(one_page);
- }
-=20
-+void create_pagecache_thp_and_fd(size_t fd_size, int *fd, char **addr)
-+{
-+	const char testfile[] =3D THP_FS_PATH "/test";
-+	size_t i;
-+	int dummy;
-+
-+	srand(time(NULL));
-+
-+	*fd =3D open(testfile, O_CREAT | O_RDWR, 0664);
-+
-+	for (i =3D 0; i < fd_size; i++) {
-+		unsigned char byte =3D rand();
-+
-+		write(*fd, &byte, sizeof(byte));
-+	}
-+	close(*fd);
-+	sync();
-+	*fd =3D open("/proc/sys/vm/drop_caches", O_WRONLY);
-+	if (*fd =3D=3D -1) {
-+		perror("open drop_caches");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (write(*fd, "3", 1) !=3D 1) {
-+		perror("write to drop_caches");
-+		exit(EXIT_FAILURE);
-+	}
-+	close(*fd);
-+
-+	*fd =3D open(testfile, O_RDWR);
-+
-+	*addr =3D mmap(NULL, fd_size, PROT_READ|PROT_WRITE, MAP_SHARED, *fd, 0);
-+	if (*addr =3D=3D (char *)-1) {
-+		perror("cannot mmap");
-+		exit(1);
-+	}
-+	madvise(*addr, fd_size, MADV_HUGEPAGE);
-+
-+	for (size_t i =3D 0; i < fd_size; i++)
-+		dummy +=3D *(*addr + i);
-+}
-+
-+void split_thp_in_pagecache_to_order(int order)
-+{
-+	int fd;
-+	char *addr;
-+	size_t fd_size =3D 2 * PAGE_2MB, i;
-+
-+	create_pagecache_thp_and_fd(fd_size, &fd, &addr);
-+
-+	printf("split %ld kB pagecache page to order %d ... ", fd_size >> 10, ord=
-er);
-+	write_debugfs(getpid(), (uint64_t)addr, (uint64_t)addr + fd_size, order);
-+
-+	for (i =3D 0; i < fd_size; i++)
-+		*(addr + i) =3D (char)i;
-+
-+	close(fd);
-+	printf("done\n");
-+}
-+
-+void truncate_thp_in_pagecache_to_order(int order)
-+{
-+	int fd;
-+	char *addr;
-+	size_t fd_size =3D 2 * PAGE_2MB, i;
-+
-+	create_pagecache_thp_and_fd(fd_size, &fd, &addr);
-+
-+	printf("truncate %ld kB pagecache page to size %lu kB ... ", fd_size >> 1=
-0, 4UL << order);
-+	ftruncate(fd, PAGE_4KB << order);
-+
-+	for (i =3D 0; i < (PAGE_4KB << order); i++)
-+		*(addr + i) =3D (char)i;
-+
-+	close(fd);
-+	printf("done\n");
-+}
-+
- int main(int argc, char **argv)
- {
-+	int i;
-+
-+	if (geteuid() !=3D 0) {
-+		printf("Please run the benchmark as root\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
- 	split_pmd_thp();
-=20
-+	for (i =3D 8; i >=3D 0; i--)
-+		if (i !=3D 1)
-+			split_thp_in_pagecache_to_order(i);
-+
-+	for (i =3D 8; i >=3D 0; i--)
-+		if (i !=3D 1)
-+			truncate_thp_in_pagecache_to_order(i);
-+
+ #else /* CONFIG_MEMCG */
+@@ -1451,7 +1451,8 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t=
+ *pgdat, int order,
  	return 0;
  }
+=20
+-static inline void mem_cgroup_split_huge_fixup(struct page *head)
++static inline void mem_cgroup_split_huge_fixup(struct page *head,
++					       unsigned int new_nr)
+ {
+ }
+=20
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index c4fead5ead31..f599f5b9bf7f 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2429,7 +2429,7 @@ static void __split_huge_page(struct page *page, stru=
+ct list_head *list,
+ 	lruvec =3D mem_cgroup_page_lruvec(head, pgdat);
+=20
+ 	/* complete memcg works before add pages to LRU */
+-	mem_cgroup_split_huge_fixup(head);
++	mem_cgroup_split_huge_fixup(head, 1);
+=20
+ 	if (PageAnon(head) && PageSwapCache(head)) {
+ 		swp_entry_t entry =3D { .val =3D page_private(head) };
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 33f632689cee..e9705ba6bbcc 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3247,7 +3247,7 @@ void obj_cgroup_uncharge(struct obj_cgroup *objcg, si=
+ze_t size)
+  * Because tail pages are not marked as "used", set it. We're under
+  * pgdat->lru_lock and migration entries setup in all page mappings.
+  */
+-void mem_cgroup_split_huge_fixup(struct page *head)
++void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_nr)
+ {
+ 	struct mem_cgroup *memcg =3D page_memcg(head);
+ 	int i;
+@@ -3255,7 +3255,7 @@ void mem_cgroup_split_huge_fixup(struct page *head)
+ 	if (mem_cgroup_disabled())
+ 		return;
+=20
+-	for (i =3D 1; i < thp_nr_pages(head); i++) {
++	for (i =3D new_nr; i < thp_nr_pages(head); i +=3D new_nr) {
+ 		css_get(&memcg->css);
+ 		head[i].memcg_data =3D (unsigned long)memcg;
+ 	}
 --=20
 2.28.0
 
