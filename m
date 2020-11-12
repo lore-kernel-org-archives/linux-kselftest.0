@@ -2,418 +2,376 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B855BC5519F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Nov 2020 20:53:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9556EC388F7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Nov 2020 22:01:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B23022246
-	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Nov 2020 20:53:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2754E21D7F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Nov 2020 22:01:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="DwQJh9X2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727203AbgKLUxS (ORCPT
+        id S1727249AbgKLWBc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 12 Nov 2020 15:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727196AbgKLUvz (ORCPT
+        Thu, 12 Nov 2020 17:01:32 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:9331 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727043AbgKLWBb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Nov 2020 15:51:55 -0500
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [IPv6:2001:1600:4:17::42aa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1581BC0613D4
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Nov 2020 12:51:54 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4CXDKz33vKzlhVP8;
-        Thu, 12 Nov 2020 21:51:51 +0100 (CET)
-Received: from localhost (unknown [94.23.54.103])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4CXDKy0v9Yzlh8T9;
-        Thu, 12 Nov 2020 21:51:50 +0100 (CET)
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jann Horn <jannh@google.com>, Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH v24 01/12] landlock: Add object management
-Date:   Thu, 12 Nov 2020 21:51:30 +0100
-Message-Id: <20201112205141.775752-2-mic@digikod.net>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201112205141.775752-1-mic@digikod.net>
-References: <20201112205141.775752-1-mic@digikod.net>
+        Thu, 12 Nov 2020 17:01:31 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fadb0b50000>; Thu, 12 Nov 2020 14:01:25 -0800
+Received: from rcampbell-dev.nvidia.com (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Nov
+ 2020 22:01:27 +0000
+Subject: Re: [RFC PATCH 4/6] mm: thp: add support for split huge page to any
+ lower order pages.
+To:     Zi Yan <ziy@nvidia.com>, <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>
+CC:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Nellans <dnellans@nvidia.com>
+References: <20201111204008.21332-1-zi.yan@sent.com>
+ <20201111204008.21332-5-zi.yan@sent.com>
+From:   Ralph Campbell <rcampbell@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <9b480b89-6a05-bdb7-c6ff-4518c008595a@nvidia.com>
+Date:   Thu, 12 Nov 2020 14:01:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201111204008.21332-5-zi.yan@sent.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1605218485; bh=MMTaC+DcUdwTYUH/7pUYvKJt2P76ewqnDoA1fCSqu7M=;
+        h=Subject:To:CC:References:From:X-Nvconfidentiality:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=DwQJh9X2TZieuWwXnFmr+kemO5EfKi5cefBbp8Hx7VNFU4cSWxXsKARdf1qphJlwM
+         MB3FumDGxnIIeVsoBaO2qcNAvcnmVvl4lazXz8SzxZMs4qzx1W6uGDdoLQic/gvh9M
+         9QSyu3mc2V3FuW/JQCaSEaB/54CEb8zvsjy/VftoR9+59AFDK7+D3PkkY7vSZ7gWG8
+         8tQ3vYjof9gnkd5ahsWoau0f24CJffsJqdHXugPySHXAl+Gc+6/LSqujlziBqefBsD
+         Hf6RCkBXq51JQtrf55nyZ2uM5BHKlRvCJtgHGiXvD2DBmGMzkWRNLntq1eH1Sn0QMG
+         TP9dbiNeYTIQg==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mickaël Salaün <mic@linux.microsoft.com>
 
-A Landlock object enables to identify a kernel object (e.g. an inode).
-A Landlock rule is a set of access rights allowed on an object.  Rules
-are grouped in rulesets that may be tied to a set of processes (i.e.
-subjects) to enforce a scoped access-control (i.e. a domain).
+On 11/11/20 12:40 PM, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> To split a THP to any lower order pages, we need to reform THPs on
+> subpages at given order and add page refcount based on the new page
+> order. Also we need to reinitialize page_deferred_list after removing
+> the page from the split_queue, otherwise a subsequent split will see
+> list corruption when checking the page_deferred_list again.
+> 
+> It has many uses, like minimizing the number of pages after
+> truncating a pagecache THP. For anonymous THPs, we can only split them
+> to order-0 like before until we add support for any size anonymous THPs.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+>   include/linux/huge_mm.h |  8 +++++
+>   mm/huge_memory.c        | 78 +++++++++++++++++++++++++++++------------
+>   mm/swap.c               |  1 -
+>   3 files changed, 63 insertions(+), 24 deletions(-)
+> 
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index 60a907a19f7d..9819cd9b4619 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -189,6 +189,8 @@ bool is_transparent_hugepage(struct page *page);
+>   
+>   bool can_split_huge_page(struct page *page, int *pextra_pins);
+>   int split_huge_page_to_list(struct page *page, struct list_head *list);
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +		unsigned int new_order);
+>   static inline int split_huge_page(struct page *page)
+>   {
+>   	return split_huge_page_to_list(page, NULL);
+> @@ -396,6 +398,12 @@ split_huge_page_to_list(struct page *page, struct list_head *list)
+>   {
+>   	return 0;
+>   }
+> +static inline int
+> +split_huge_page_to_order_to_list(struct page *page, struct list_head *list,
+> +		unsigned int new_order)
+> +{
+> +	return 0;
+> +}
+>   static inline int split_huge_page(struct page *page)
+>   {
+>   	return 0;
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 8b7d771ee962..88f50da40c9b 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2327,11 +2327,14 @@ void vma_adjust_trans_huge(struct vm_area_struct *vma,
+>   static void unmap_page(struct page *page)
+>   {
+>   	enum ttu_flags ttu_flags = TTU_IGNORE_MLOCK | TTU_IGNORE_ACCESS |
+> -		TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD;
+> +		TTU_RMAP_LOCKED;
+>   	bool unmap_success;
+>   
+>   	VM_BUG_ON_PAGE(!PageHead(page), page);
+>   
+> +	if (thp_order(page) >= HPAGE_PMD_ORDER)
+> +		ttu_flags |= TTU_SPLIT_HUGE_PMD;
+> +
+>   	if (PageAnon(page))
+>   		ttu_flags |= TTU_SPLIT_FREEZE;
+>   
+> @@ -2339,21 +2342,22 @@ static void unmap_page(struct page *page)
+>   	VM_BUG_ON_PAGE(!unmap_success, page);
+>   }
+>   
+> -static void remap_page(struct page *page, unsigned int nr)
+> +static void remap_page(struct page *page, unsigned int nr, unsigned int new_nr)
+>   {
+>   	int i;
 
-Because Landlock's goal is to empower any process (especially
-unprivileged ones) to sandbox themselves, we cannot rely on a
-system-wide object identification such as file extended attributes.
-Indeed, we need innocuous, composable and modular access-controls.
+Use unsigned int i?
+Maybe a blank line here and the {}'s around if/else aren't needed.
 
-The main challenge with these constraints is to identify kernel objects
-while this identification is useful (i.e. when a security policy makes
-use of this object).  But this identification data should be freed once
-no policy is using it.  This ephemeral tagging should not and may not be
-written in the filesystem.  We then need to manage the lifetime of a
-rule according to the lifetime of its objects.  To avoid a global lock,
-this implementation make use of RCU and counters to safely reference
-objects.
+> -	if (PageTransHuge(page)) {
+> +	if (thp_nr_pages(page) == nr) {
+>   		remove_migration_ptes(page, page, true);
+>   	} else {
+> -		for (i = 0; i < nr; i++)
+> +		for (i = 0; i < nr; i += new_nr)
+>   			remove_migration_ptes(page + i, page + i, true);
+>   	}
+>   }
+>   
+>   static void __split_huge_page_tail(struct page *head, int tail,
+> -		struct lruvec *lruvec, struct list_head *list)
+> +		struct lruvec *lruvec, struct list_head *list, unsigned int new_order)
+>   {
+>   	struct page *page_tail = head + tail;
+> +	unsigned long compound_head_flag = new_order ? (1L << PG_head) : 0;
+>   
+>   	VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
+>   
+> @@ -2377,6 +2381,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>   #ifdef CONFIG_64BIT
+>   			 (1L << PG_arch_2) |
+>   #endif
+> +			 compound_head_flag |
+>   			 (1L << PG_dirty)));
+>   
+>   	/* ->mapping in first tail page is compound_mapcount */
+> @@ -2395,10 +2400,15 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>   	 * which needs correct compound_head().
+>   	 */
+>   	clear_compound_head(page_tail);
+> +	if (new_order) {
+> +		prep_compound_page(page_tail, new_order);
+> +		thp_prep(page_tail);
+> +	}
+>   
+>   	/* Finally unfreeze refcount. Additional reference from page cache. */
+> -	page_ref_unfreeze(page_tail, 1 + (!PageAnon(head) ||
+> -					  PageSwapCache(head)));
+> +	page_ref_unfreeze(page_tail, 1 + ((!PageAnon(head) ||
+> +					   PageSwapCache(head)) ?
+> +						thp_nr_pages(page_tail) : 0));
+>   
+>   	if (page_is_young(head))
+>   		set_page_young(page_tail);
+> @@ -2416,7 +2426,7 @@ static void __split_huge_page_tail(struct page *head, int tail,
+>   }
+>   
+>   static void __split_huge_page(struct page *page, struct list_head *list,
+> -		pgoff_t end, unsigned long flags)
+> +		pgoff_t end, unsigned long flags, unsigned int new_order)
+>   {
+>   	struct page *head = compound_head(page);
+>   	pg_data_t *pgdat = page_pgdat(head);
+> @@ -2424,12 +2434,13 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>   	struct address_space *swap_cache = NULL;
+>   	unsigned long offset = 0;
+>   	unsigned int nr = thp_nr_pages(head);
+> +	unsigned int new_nr = 1 << new_order;
+>   	int i;
+>   
+>   	lruvec = mem_cgroup_page_lruvec(head, pgdat);
+>   
+>   	/* complete memcg works before add pages to LRU */
+> -	mem_cgroup_split_huge_fixup(head, 1);
+> +	mem_cgroup_split_huge_fixup(head, new_nr);
+>   
+>   	if (PageAnon(head) && PageSwapCache(head)) {
+>   		swp_entry_t entry = { .val = page_private(head) };
+> @@ -2439,14 +2450,14 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>   		xa_lock(&swap_cache->i_pages);
+>   	}
+>   
+> -	for (i = nr - 1; i >= 1; i--) {
+> -		__split_huge_page_tail(head, i, lruvec, list);
+> +	for (i = nr - new_nr; i >= new_nr; i -= new_nr) {
+> +		__split_huge_page_tail(head, i, lruvec, list, new_order);
+>   		/* Some pages can be beyond i_size: drop them from page cache */
+>   		if (head[i].index >= end) {
+>   			ClearPageDirty(head + i);
+>   			__delete_from_page_cache(head + i, NULL);
+>   			if (IS_ENABLED(CONFIG_SHMEM) && PageSwapBacked(head))
+> -				shmem_uncharge(head->mapping->host, 1);
+> +				shmem_uncharge(head->mapping->host, new_nr);
+>   			put_page(head + i);
+>   		} else if (!PageAnon(page)) {
+>   			__xa_store(&head->mapping->i_pages, head[i].index,
+> @@ -2457,28 +2468,31 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>   		}
+>   	}
+>   
+> -	ClearPageCompound(head);
+> +	if (!new_order)
+> +		ClearPageCompound(head);
+> +	else
+> +		set_compound_order(head, new_order);
+>   
+> -	split_page_owner(head, nr, 1);
+> +	split_page_owner(head, nr, new_nr);
 
-A following commit uses this generic object management for inodes.
+This needs to be "new_order" instead of "new_nr".
 
-Cc: James Morris <jmorris@namei.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Serge E. Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-Reviewed-by: Jann Horn <jannh@google.com>
----
+>   	/* See comment in __split_huge_page_tail() */
+>   	if (PageAnon(head)) {
+>   		/* Additional pin to swap cache */
+>   		if (PageSwapCache(head)) {
+> -			page_ref_add(head, 2);
+> +			page_ref_add(head, 1 + new_nr);
+>   			xa_unlock(&swap_cache->i_pages);
+>   		} else {
+>   			page_ref_inc(head);
+>   		}
+>   	} else {
+>   		/* Additional pin to page cache */
+> -		page_ref_add(head, 2);
+> +		page_ref_add(head, 1 + new_nr);
+>   		xa_unlock(&head->mapping->i_pages);
+>   	}
+>   
+>   	spin_unlock_irqrestore(&pgdat->lru_lock, flags);
+>   
+> -	remap_page(head, nr);
+> +	remap_page(head, nr, new_nr);
+>   
+>   	if (PageSwapCache(head)) {
+>   		swp_entry_t entry = { .val = page_private(head) };
+> @@ -2486,7 +2500,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+>   		split_swap_cluster(entry);
+>   	}
+>   
+> -	for (i = 0; i < nr; i++) {
+> +	for (i = 0; i < nr; i += new_nr) {
+>   		struct page *subpage = head + i;
+>   		if (subpage == page)
+>   			continue;
+> @@ -2620,21 +2634,39 @@ bool can_split_huge_page(struct page *page, int *pextra_pins)
+>    * us.
+>    */
+>   int split_huge_page_to_list(struct page *page, struct list_head *list)
+> +{
+> +	return split_huge_page_to_list_to_order(page, list, 0);
+> +}
+> +
+> +int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
+> +				     unsigned int new_order)
+>   {
+>   	struct page *head = compound_head(page);
+>   	struct pglist_data *pgdata = NODE_DATA(page_to_nid(head));
+>   	struct deferred_split *ds_queue = get_deferred_split_queue(head);
+> -	XA_STATE(xas, &head->mapping->i_pages, head->index);
+> +	/* reset xarray order to new order after split */
+> +	XA_STATE_ORDER(xas, &head->mapping->i_pages, head->index, new_order);
+>   	struct anon_vma *anon_vma = NULL;
+>   	struct address_space *mapping = NULL;
+>   	int count, mapcount, extra_pins, ret;
+>   	unsigned long flags;
+>   	pgoff_t end;
+>   
+> +	VM_BUG_ON(thp_order(head) <= new_order);
+>   	VM_BUG_ON_PAGE(is_huge_zero_page(head), head);
+>   	VM_BUG_ON_PAGE(!PageLocked(head), head);
+>   	VM_BUG_ON_PAGE(!PageCompound(head), head);
+>   
+> +	if (new_order == 1) {
+> +		WARN_ONCE(1, "Cannot split THP to order-1 (no order-1 THPs)");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (PageAnon(head) && new_order) {
+> +		WARN_ONCE(1, "Split anonymous THP to non-zero order not support");
+> +		return -EINVAL;
+> +	}
+> +
+>   	if (PageWriteback(head))
+>   		return -EBUSY;
+>   
+> @@ -2720,18 +2752,18 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>   	if (!mapcount && page_ref_freeze(head, 1 + extra_pins)) {
+>   		if (!list_empty(page_deferred_list(head))) {
+>   			ds_queue->split_queue_len--;
+> -			list_del(page_deferred_list(head));
+> +			list_del_init(page_deferred_list(head));
+>   		}
+>   		spin_unlock(&ds_queue->split_queue_lock);
+>   		if (mapping) {
+>   			if (PageSwapBacked(head))
+>   				__dec_lruvec_page_state(head, NR_SHMEM_THPS);
+> -			else
+> +			else if (!new_order)
+>   				__mod_lruvec_page_state(head, NR_FILE_THPS,
+>   						-thp_nr_pages(head));
+>   		}
+>   
+> -		__split_huge_page(page, list, end, flags);
+> +		__split_huge_page(page, list, end, flags, new_order);
+>   		ret = 0;
+>   	} else {
+>   		if (IS_ENABLED(CONFIG_DEBUG_VM) && mapcount) {
+> @@ -2746,7 +2778,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+>   fail:		if (mapping)
+>   			xas_unlock(&xas);
+>   		spin_unlock_irqrestore(&pgdata->lru_lock, flags);
+> -		remap_page(head, thp_nr_pages(head));
+> +		remap_page(head, thp_nr_pages(head), 0);
 
-Changes since v23:
-* Update landlock_create_object() to return error codes instead of NULL.
-  This help error handling in callers.
-* When using make oldconfig with a previous configuration already
-  including the CONFIG_LSM variable, no question is asked to update its
-  content.  Update the Kconfig help to warn about LSM stacking
-  configuration.
-* Constify variable (spotted by Vincent Dagonneau).
+Shouldn't this be "1" instead of zero?
+remap_page() takes new_nr.
 
-Changes since v22:
-* Fix spelling (spotted by Jann Horn).
-
-Changes since v21:
-* Update Kconfig help.
-* Clean up comments.
-
-Changes since v18:
-* Account objects to kmemcg.
-
-Changes since v14:
-* Simplify the object, rule and ruleset management at the expense of a
-  less aggressive memory freeing (contributed by Jann Horn, with
-  additional modifications):
-  - Remove object->list aggregating the rules tied to an object.
-  - Remove landlock_get_object(), landlock_drop_object(),
-    {get,put}_object_cleaner() and landlock_rule_is_disabled().
-  - Rewrite landlock_put_object() to use a more simple mechanism
-    (no tricky RCU).
-  - Replace enum landlock_object_type and landlock_release_object() with
-    landlock_object_underops->release()
-  - Adjust unions and Sparse annotations.
-  Cf. https://lore.kernel.org/lkml/CAG48ez21bEn0wL1bbmTiiu8j9jP5iEWtHOwz4tURUJ+ki0ydYw@mail.gmail.com/
-* Merge struct landlock_rule into landlock_ruleset_elem to simplify the
-  rule management.
-* Constify variables.
-* Improve kernel documentation.
-* Cosmetic variable renames.
-* Remove the "default" in the Kconfig (suggested by Jann Horn).
-* Only use refcount_inc() through getter helpers.
-* Update Kconfig description.
-
-Changes since v13:
-* New dedicated implementation, removing the need for eBPF.
-
-Previous changes:
-https://lore.kernel.org/lkml/20190721213116.23476-6-mic@digikod.net/
----
- MAINTAINERS                | 10 +++++
- security/Kconfig           |  1 +
- security/Makefile          |  2 +
- security/landlock/Kconfig  | 21 +++++++++
- security/landlock/Makefile |  3 ++
- security/landlock/object.c | 67 ++++++++++++++++++++++++++++
- security/landlock/object.h | 91 ++++++++++++++++++++++++++++++++++++++
- 7 files changed, 195 insertions(+)
- create mode 100644 security/landlock/Kconfig
- create mode 100644 security/landlock/Makefile
- create mode 100644 security/landlock/object.c
- create mode 100644 security/landlock/object.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3da6d8c154e4..33482cbe56e7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9826,6 +9826,16 @@ F:	net/core/sock_map.c
- F:	net/ipv4/tcp_bpf.c
- F:	net/ipv4/udp_bpf.c
- 
-+LANDLOCK SECURITY MODULE
-+M:	Mickaël Salaün <mic@digikod.net>
-+L:	linux-security-module@vger.kernel.org
-+S:	Supported
-+W:	https://landlock.io
-+T:	git https://github.com/landlock-lsm/linux.git
-+F:	security/landlock/
-+K:	landlock
-+K:	LANDLOCK
-+
- LANTIQ / INTEL Ethernet drivers
- M:	Hauke Mehrtens <hauke@hauke-m.de>
- L:	netdev@vger.kernel.org
-diff --git a/security/Kconfig b/security/Kconfig
-index 7561f6f99f1d..15a4342b5d01 100644
---- a/security/Kconfig
-+++ b/security/Kconfig
-@@ -238,6 +238,7 @@ source "security/loadpin/Kconfig"
- source "security/yama/Kconfig"
- source "security/safesetid/Kconfig"
- source "security/lockdown/Kconfig"
-+source "security/landlock/Kconfig"
- 
- source "security/integrity/Kconfig"
- 
-diff --git a/security/Makefile b/security/Makefile
-index 3baf435de541..c688f4907a1b 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -13,6 +13,7 @@ subdir-$(CONFIG_SECURITY_LOADPIN)	+= loadpin
- subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
- subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown
- subdir-$(CONFIG_BPF_LSM)		+= bpf
-+subdir-$(CONFIG_SECURITY_LANDLOCK)		+= landlock
- 
- # always enable default capabilities
- obj-y					+= commoncap.o
-@@ -32,6 +33,7 @@ obj-$(CONFIG_SECURITY_SAFESETID)       += safesetid/
- obj-$(CONFIG_SECURITY_LOCKDOWN_LSM)	+= lockdown/
- obj-$(CONFIG_CGROUPS)			+= device_cgroup.o
- obj-$(CONFIG_BPF_LSM)			+= bpf/
-+obj-$(CONFIG_SECURITY_LANDLOCK)	+= landlock/
- 
- # Object integrity file lists
- subdir-$(CONFIG_INTEGRITY)		+= integrity
-diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
-new file mode 100644
-index 000000000000..ea58e6208afa
---- /dev/null
-+++ b/security/landlock/Kconfig
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config SECURITY_LANDLOCK
-+	bool "Landlock support"
-+	depends on SECURITY
-+	select SECURITY_PATH
-+	help
-+	  Landlock is a safe sandboxing mechanism which enables processes to
-+	  restrict themselves (and their future children) by gradually
-+	  enforcing tailored access control policies.  A security policy is a
-+	  set of access rights (e.g. open a file in read-only, make a
-+	  directory, etc.) tied to a file hierarchy.  Such policy can be configured
-+	  and enforced by any processes for themselves thanks to dedicated system
-+	  calls: landlock_create_ruleset(), landlock_add_rule(), and
-+	  landlock_enforce_ruleset_current().
-+
-+	  See Documentation/userspace-api/landlock.rst for further information.
-+
-+	  If you are unsure how to answer this question, answer N.  Otherwise, you
-+	  should also prepend "landlock," to the content of CONFIG_LSM to enable
-+	  Landlock at boot time.
-diff --git a/security/landlock/Makefile b/security/landlock/Makefile
-new file mode 100644
-index 000000000000..cb6deefbf4c0
---- /dev/null
-+++ b/security/landlock/Makefile
-@@ -0,0 +1,3 @@
-+obj-$(CONFIG_SECURITY_LANDLOCK) := landlock.o
-+
-+landlock-y := object.o
-diff --git a/security/landlock/object.c b/security/landlock/object.c
-new file mode 100644
-index 000000000000..d674fdf9ff04
---- /dev/null
-+++ b/security/landlock/object.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Landlock LSM - Object management
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ */
-+
-+#include <linux/bug.h>
-+#include <linux/compiler_types.h>
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/rcupdate.h>
-+#include <linux/refcount.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+
-+#include "object.h"
-+
-+struct landlock_object *landlock_create_object(
-+		const struct landlock_object_underops *const underops,
-+		void *const underobj)
-+{
-+	struct landlock_object *new_object;
-+
-+	if (WARN_ON_ONCE(!underops || !underobj))
-+		return ERR_PTR(-ENOENT);
-+	new_object = kzalloc(sizeof(*new_object), GFP_KERNEL_ACCOUNT);
-+	if (!new_object)
-+		return ERR_PTR(-ENOMEM);
-+	refcount_set(&new_object->usage, 1);
-+	spin_lock_init(&new_object->lock);
-+	new_object->underops = underops;
-+	new_object->underobj = underobj;
-+	return new_object;
-+}
-+
-+/*
-+ * The caller must own the object (i.e. thanks to object->usage) to safely put
-+ * it.
-+ */
-+void landlock_put_object(struct landlock_object *const object)
-+{
-+	/*
-+	 * The call to @object->underops->release(object) might sleep, e.g.
-+	 * because of iput().
-+	 */
-+	might_sleep();
-+	if (!object)
-+		return;
-+
-+	/*
-+	 * If the @object's refcount cannot drop to zero, we can just decrement
-+	 * the refcount without holding a lock. Otherwise, the decrement must
-+	 * happen under @object->lock for synchronization with things like
-+	 * get_inode_object().
-+	 */
-+	if (refcount_dec_and_lock(&object->usage, &object->lock)) {
-+		__acquire(&object->lock);
-+		/*
-+		 * With @object->lock initially held, remove the reference from
-+		 * @object->underobj to @object (if it still exists).
-+		 */
-+		object->underops->release(object);
-+		kfree_rcu(object, rcu_free);
-+	}
-+}
-diff --git a/security/landlock/object.h b/security/landlock/object.h
-new file mode 100644
-index 000000000000..2809453347b9
---- /dev/null
-+++ b/security/landlock/object.h
-@@ -0,0 +1,91 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Landlock LSM - Object management
-+ *
-+ * Copyright © 2016-2020 Mickaël Salaün <mic@digikod.net>
-+ * Copyright © 2018-2020 ANSSI
-+ */
-+
-+#ifndef _SECURITY_LANDLOCK_OBJECT_H
-+#define _SECURITY_LANDLOCK_OBJECT_H
-+
-+#include <linux/compiler_types.h>
-+#include <linux/refcount.h>
-+#include <linux/spinlock.h>
-+
-+struct landlock_object;
-+
-+/**
-+ * struct landlock_object_underops - Operations on an underlying object
-+ */
-+struct landlock_object_underops {
-+	/**
-+	 * @release: Releases the underlying object (e.g. iput() for an inode).
-+	 */
-+	void (*release)(struct landlock_object *const object)
-+		__releases(object->lock);
-+};
-+
-+/**
-+ * struct landlock_object - Security blob tied to a kernel object
-+ *
-+ * The goal of this structure is to enable to tie a set of ephemeral access
-+ * rights (pertaining to different domains) to a kernel object (e.g an inode)
-+ * in a safe way.  This imply to handle concurrent use and modification.
-+ *
-+ * The lifetime of a &struct landlock_object depends of the rules referring to
-+ * it.
-+ */
-+struct landlock_object {
-+	/**
-+	 * @usage: This counter is used to tie an object to the rules matching
-+	 * it or to keep it alive while adding a new rule.  If this counter
-+	 * reaches zero, this struct must not be modified, but this counter can
-+	 * still be read from within an RCU read-side critical section.  When
-+	 * adding a new rule to an object with a usage counter of zero, we must
-+	 * wait until the pointer to this object is set to NULL (or recycled).
-+	 */
-+	refcount_t usage;
-+	/**
-+	 * @lock: Guards against concurrent modifications.  This lock might be
-+	 * held from the time @usage drops to zero until any weak references
-+	 * from @underobj to this object have been cleaned up.
-+	 *
-+	 * Lock ordering: inode->i_lock nests inside this.
-+	 */
-+	spinlock_t lock;
-+	/**
-+	 * @underobj: Used when cleaning up an object and to mark an object as
-+	 * tied to its underlying kernel structure.  This pointer is protected
-+	 * by @lock.  Cf. landlock_release_inodes() and release_inode().
-+	 */
-+	void *underobj;
-+	union {
-+		/**
-+		 * @rcu_free: Enables lockless use of @usage, @lock and
-+		 * @underobj from within an RCU read-side critical section.
-+		 * @rcu_free and @underops are only used by
-+		 * landlock_put_object().
-+		 */
-+		struct rcu_head rcu_free;
-+		/**
-+		 * @underops: Enables landlock_put_object() to release the
-+		 * underlying object (e.g. inode).
-+		 */
-+		const struct landlock_object_underops *underops;
-+	};
-+};
-+
-+struct landlock_object *landlock_create_object(
-+		const struct landlock_object_underops *const underops,
-+		void *const underobj);
-+
-+void landlock_put_object(struct landlock_object *const object);
-+
-+static inline void landlock_get_object(struct landlock_object *const object)
-+{
-+	if (object)
-+		refcount_inc(&object->usage);
-+}
-+
-+#endif /* _SECURITY_LANDLOCK_OBJECT_H */
--- 
-2.29.2
-
+>   		ret = -EBUSY;
+>   	}
+>   
+> diff --git a/mm/swap.c b/mm/swap.c
+> index 14c3bac607a6..6c33e6165597 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -983,7 +983,6 @@ void lru_add_page_tail(struct page *page, struct page *page_tail,
+>   		       struct lruvec *lruvec, struct list_head *list)
+>   {
+>   	VM_BUG_ON_PAGE(!PageHead(page), page);
+> -	VM_BUG_ON_PAGE(PageCompound(page_tail), page);
+>   	VM_BUG_ON_PAGE(PageLRU(page_tail), page);
+>   	lockdep_assert_held(&lruvec_pgdat(lruvec)->lru_lock);
+>   
+> 
