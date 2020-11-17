@@ -2,110 +2,82 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA09C64E8A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 13:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0AD5C64E90
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 13:22:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B663D2225B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 13:00:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 834D42465E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 13:22:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1f4sF+I"
+	dkim=pass (1024-bit key) header.d=alien8.de header.i=@alien8.de header.b="XQ8/EgQs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728518AbgKQM5H (ORCPT
+        id S1730401AbgKQNWp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Nov 2020 07:57:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53886 "EHLO mail.kernel.org"
+        Tue, 17 Nov 2020 08:22:45 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:33638 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728479AbgKQM5H (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 07:57:07 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1731181AbgKQNWm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 08:22:42 -0500
+Received: from zn.tnic (p200300ec2f101300ba25257689a011f5.dip0.t-ipconnect.de [IPv6:2003:ec:2f10:1300:ba25:2576:89a0:11f5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 85AC8223AB;
-        Tue, 17 Nov 2020 12:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605617826;
-        bh=ecl3zqv3yW55WTq1XhYOA7gOM0uGm5OnbMOmSxcNDzQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1f4sF+ISTuBm2dgRlzvuQElx5/uNuGERlaUlr8sFyFfetS5C1VH3GBqbknSMzRX8
-         g3gpP6oO/dw5dYH9p2fI/tO+FPBePxBNXV3MvACX9MujMB8PFUtpCb3lZAEY7SZtUp
-         VzHLyIY5czfdZpbzL46eh+cN4DT5cCogp/ZONBbk=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Aaron Lewis <aaronlewis@google.com>,
-        Alexander Graf <graf@amazon.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.9 08/21] selftests: kvm: Fix the segment descriptor layout to match the actual layout
-Date:   Tue, 17 Nov 2020 07:56:39 -0500
-Message-Id: <20201117125652.599614-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201117125652.599614-1-sashal@kernel.org>
-References: <20201117125652.599614-1-sashal@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 90B8B1EC03CE;
+        Tue, 17 Nov 2020 14:22:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1605619361;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=20A+JSZTq0uSGOoQCxJWr5HNHVawruXZylnMqKk1XtY=;
+        b=XQ8/EgQsrFEBFXODTFwizejrV6cmkUB4O9w3QoB2B8+AuClH7cWIrwjLeV8PagcEIdLsOY
+        LNIu2V/rAV3/7H87f7a4YFJq5x2+OjkG16LWCDLuHDcNhyCZldxBKmxmx8cf55Hu8gBGbC
+        uixEsZG7WCjsAJZ4t+3YSm5zgCWYNZk=
+Date:   Tue, 17 Nov 2020 14:22:41 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Jethro Beekman <jethro@fortanix.com>,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        asapek@google.com, cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
+        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
+        luto@kernel.org, nhorman@redhat.com, npmccallum@redhat.com,
+        puiterwijk@redhat.com, rientjes@google.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        yaozhangx@google.com, mikko.ylinen@intel.com
+Subject: Re: [PATCH v41 20/24] selftests/x86: Add a selftest for SGX
+Message-ID: <20201117132241.GE5719@zn.tnic>
+References: <20201112220135.165028-1-jarkko@kernel.org>
+ <20201112220135.165028-21-jarkko@kernel.org>
+ <e58ee564-597a-336e-53dc-7c4d172d51f5@linuxfoundation.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e58ee564-597a-336e-53dc-7c4d172d51f5@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Aaron Lewis <aaronlewis@google.com>
+On Mon, Nov 16, 2020 at 11:19:12AM -0700, Shuah Khan wrote:
+> Please keep the list sorted alphabetically as stated
+> in the comment above.
 
-[ Upstream commit df11f7dd5834146defa448acba097e8d7703cc42 ]
+Done.
 
-Fix the layout of 'struct desc64' to match the layout described in the
-SDM Vol 3, Chapter 3 "Protected-Mode Memory Management", section 3.4.5
-"Segment Descriptors", Figure 3-8 "Segment Descriptor".  The test added
-later in this series relies on this and crashes if this layout is not
-correct.
+> This should be KSFT_FAIL.
 
-Signed-off-by: Aaron Lewis <aaronlewis@google.com>
-Reviewed-by: Alexander Graf <graf@amazon.com>
-Message-Id: <20201012194716.3950330-2-aaronlewis@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/kvm/include/x86_64/processor.h | 2 +-
- tools/testing/selftests/kvm/lib/x86_64/processor.c     | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+and done.
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 82b7fe16a8242..0a65e7bb5249e 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -59,7 +59,7 @@ struct gpr64_regs {
- struct desc64 {
- 	uint16_t limit0;
- 	uint16_t base0;
--	unsigned base1:8, s:1, type:4, dpl:2, p:1;
-+	unsigned base1:8, type:4, s:1, dpl:2, p:1;
- 	unsigned limit1:4, avl:1, l:1, db:1, g:1, base2:8;
- 	uint32_t base3;
- 	uint32_t zero1;
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index f6eb34eaa0d22..1ccf6c9b3476d 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -392,11 +392,12 @@ static void kvm_seg_fill_gdt_64bit(struct kvm_vm *vm, struct kvm_segment *segp)
- 	desc->limit0 = segp->limit & 0xFFFF;
- 	desc->base0 = segp->base & 0xFFFF;
- 	desc->base1 = segp->base >> 16;
--	desc->s = segp->s;
- 	desc->type = segp->type;
-+	desc->s = segp->s;
- 	desc->dpl = segp->dpl;
- 	desc->p = segp->present;
- 	desc->limit1 = segp->limit >> 16;
-+	desc->avl = segp->avl;
- 	desc->l = segp->l;
- 	desc->db = segp->db;
- 	desc->g = segp->g;
+Thx.
+
 -- 
-2.27.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
