@@ -2,65 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.6 required=3.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A584C2D0E4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 12:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 680E2C83027
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 12:58:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C090F2222A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 12:24:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F8932225E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Nov 2020 12:58:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="KLPfys97"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbgKQMYg convert rfc822-to-8bit (ORCPT
+        id S1728748AbgKQM5u (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Nov 2020 07:24:36 -0500
-Received: from tigeramira.ro ([88.158.78.30]:30318 "EHLO mail.tigeramira.ro"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgKQMYg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 07:24:36 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 86EBDC0C066
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2020 19:04:22 +0200 (EET)
-Received: from mail.tigeramira.ro ([127.0.0.1])
-        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id xoCSnGfGK_wJ for <linux-kselftest@vger.kernel.org>;
-        Sat, 14 Nov 2020 19:04:20 +0200 (EET)
-Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id DC191C0CE0E
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Nov 2020 18:48:20 +0200 (EET)
-Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 0BE22998EC7
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Nov 2020 19:08:27 +0200 (EET)
-Content-Type: text/plain; charset="iso-8859-1"
+        Tue, 17 Nov 2020 07:57:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727188AbgKQM5u (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Nov 2020 07:57:50 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 109F02225E;
+        Tue, 17 Nov 2020 12:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605617869;
+        bh=yDBmillITIeh+0Z2HXRpHRFZQiN1aSNucR1lA1ape74=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KLPfys97DVdocAboGDPz1W+xMVmryVC/9I9nBD1p/3l9/B3BQhe6DVZGSlvFp/goP
+         CS1z4sqT8U0srSyeAHQvMVgGdjaaxwKWD9iX6H6NPKUXwuAKt2Yh8PgSi8TGoirE1v
+         0hS7uFxa2XX19tn8T+2M6bfwX9294pO3gvh2iK7c=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aaron Lewis <aaronlewis@google.com>,
+        Alexander Graf <graf@amazon.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 3/6] selftests: kvm: Fix the segment descriptor layout to match the actual layout
+Date:   Tue, 17 Nov 2020 07:57:40 -0500
+Message-Id: <20201117125743.599974-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201117125743.599974-1-sashal@kernel.org>
+References: <20201117125743.599974-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Corporate and Personal Loan::,
-To:     linux-kselftest@vger.kernel.org
-From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Fri, 13 Nov 2020 08:08:40 -0800
-Reply-To: hmurrah39@gmail.com
-Message-Id: <20201113170829.0BE22998EC7@mail.tigeramira.ro>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello linux-kselftest@vger.kernel.org
+From: Aaron Lewis <aaronlewis@google.com>
 
+[ Upstream commit df11f7dd5834146defa448acba097e8d7703cc42 ]
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+Fix the layout of 'struct desc64' to match the layout described in the
+SDM Vol 3, Chapter 3 "Protected-Mode Memory Management", section 3.4.5
+"Segment Descriptors", Figure 3-8 "Segment Descriptor".  The test added
+later in this series relies on this and crashes if this layout is not
+correct.
 
+Signed-off-by: Aaron Lewis <aaronlewis@google.com>
+Reviewed-by: Alexander Graf <graf@amazon.com>
+Message-Id: <20201012194716.3950330-2-aaronlewis@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kvm/include/x86.h | 2 +-
+ tools/testing/selftests/kvm/lib/x86.c     | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+diff --git a/tools/testing/selftests/kvm/include/x86.h b/tools/testing/selftests/kvm/include/x86.h
+index 42c3596815b83..a7667a613bbc7 100644
+--- a/tools/testing/selftests/kvm/include/x86.h
++++ b/tools/testing/selftests/kvm/include/x86.h
+@@ -59,7 +59,7 @@ enum x86_register {
+ struct desc64 {
+ 	uint16_t limit0;
+ 	uint16_t base0;
+-	unsigned base1:8, s:1, type:4, dpl:2, p:1;
++	unsigned base1:8, type:4, s:1, dpl:2, p:1;
+ 	unsigned limit1:4, avl:1, l:1, db:1, g:1, base2:8;
+ 	uint32_t base3;
+ 	uint32_t zero1;
+diff --git a/tools/testing/selftests/kvm/lib/x86.c b/tools/testing/selftests/kvm/lib/x86.c
+index 4d35eba73dc97..800fe36064f9a 100644
+--- a/tools/testing/selftests/kvm/lib/x86.c
++++ b/tools/testing/selftests/kvm/lib/x86.c
+@@ -449,11 +449,12 @@ static void kvm_seg_fill_gdt_64bit(struct kvm_vm *vm, struct kvm_segment *segp)
+ 	desc->limit0 = segp->limit & 0xFFFF;
+ 	desc->base0 = segp->base & 0xFFFF;
+ 	desc->base1 = segp->base >> 16;
+-	desc->s = segp->s;
+ 	desc->type = segp->type;
++	desc->s = segp->s;
+ 	desc->dpl = segp->dpl;
+ 	desc->p = segp->present;
+ 	desc->limit1 = segp->limit >> 16;
++	desc->avl = segp->avl;
+ 	desc->l = segp->l;
+ 	desc->db = segp->db;
+ 	desc->g = segp->g;
+-- 
+2.27.0
 
-
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
