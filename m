@@ -2,29 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87C89C6379F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Nov 2020 03:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49BCCC64E7B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Nov 2020 03:29:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4801D221EB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Nov 2020 03:29:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 188AF221EB
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Nov 2020 03:29:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727685AbgKRD3J (ORCPT
+        id S1727782AbgKRD3P (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Nov 2020 22:29:09 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55370 "EHLO
+        Tue, 17 Nov 2020 22:29:15 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55406 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbgKRD3I (ORCPT
+        with ESMTP id S1727764AbgKRD3P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Nov 2020 22:29:08 -0500
+        Tue, 17 Nov 2020 22:29:15 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: krisman)
-        with ESMTPSA id F387C1F44AB3
+        with ESMTPSA id EF08E1F44CAA
 From:   Gabriel Krisman Bertazi <krisman@collabora.com>
 To:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org
 Cc:     christian.brauner@ubuntu.com, peterz@infradead.org,
@@ -33,9 +32,9 @@ Cc:     christian.brauner@ubuntu.com, peterz@infradead.org,
         linux-kselftest@vger.kernel.org, x86@kernel.org, gofmanp@gmail.com,
         Gabriel Krisman Bertazi <krisman@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH v7 2/7] signal: Expose SYS_USER_DISPATCH si_code type
-Date:   Tue, 17 Nov 2020 22:28:35 -0500
-Message-Id: <20201118032840.3429268-3-krisman@collabora.com>
+Subject: [PATCH v7 4/7] entry: Support Syscall User Dispatch on common syscall entry
+Date:   Tue, 17 Nov 2020 22:28:37 -0500
+Message-Id: <20201118032840.3429268-5-krisman@collabora.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201118032840.3429268-1-krisman@collabora.com>
 References: <20201118032840.3429268-1-krisman@collabora.com>
@@ -45,45 +44,90 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SYS_USER_DISPATCH will be triggered when a syscall is sent to userspace
-by the Syscall User Dispatch mechanism.  This adjusts eventual
-BUILD_BUG_ON around the tree.
+Syscall User Dispatch (SUD) must take precedence over seccomp and
+ptrace, since the use case is emulation (it can be invoked with a
+different ABI) such that seccomp filtering by syscall number doesn't
+make sense in the first place.  In addition, either the syscall is
+dispatched back to userspace, in which case there is no resource for to
+trace, or the syscall will be executed, and seccomp/ptrace will execute
+next.
+
+Since SUD runs before tracepoints, it needs to be a SYSCALL_WORK_EXIT as
+well, just to prevent a trace exit event when dispatch was triggered.
+For that, the on_syscall_dispatch() examines context to skip the
+tracepoint, audit and other work.
 
 Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- arch/x86/kernel/signal_compat.c    | 2 +-
- include/uapi/asm-generic/siginfo.h | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-index a7f3e12cfbdb..d7b51870f16b 100644
---- a/arch/x86/kernel/signal_compat.c
-+++ b/arch/x86/kernel/signal_compat.c
-@@ -31,7 +31,7 @@ static inline void signal_compat_build_tests(void)
- 	BUILD_BUG_ON(NSIGBUS  != 5);
- 	BUILD_BUG_ON(NSIGTRAP != 5);
- 	BUILD_BUG_ON(NSIGCHLD != 6);
--	BUILD_BUG_ON(NSIGSYS  != 1);
-+	BUILD_BUG_ON(NSIGSYS  != 2);
- 
- 	/* This is part of the ABI and can never change in size: */
- 	BUILD_BUG_ON(sizeof(compat_siginfo_t) != 128);
-diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-index 7aacf9389010..d2597000407a 100644
---- a/include/uapi/asm-generic/siginfo.h
-+++ b/include/uapi/asm-generic/siginfo.h
-@@ -286,7 +286,8 @@ typedef struct siginfo {
-  * SIGSYS si_codes
-  */
- #define SYS_SECCOMP	1	/* seccomp triggered */
--#define NSIGSYS		1
-+#define SYS_USER_DISPATCH 2	/* syscall user dispatch triggered */
-+#define NSIGSYS		2
+---
+Changes since v6:
+  - Update do_syscall_intercept signature (Christian Brauner)
+  - Move it to before tracepoints
+  - Use SYSCALL_WORK flags
+---
+ include/linux/entry-common.h |  2 ++
+ kernel/entry/common.c        | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+index 49b26b216e4e..a6e98b4ba8e9 100644
+--- a/include/linux/entry-common.h
++++ b/include/linux/entry-common.h
+@@ -44,10 +44,12 @@
+ 				 SYSCALL_WORK_SYSCALL_TRACE |		\
+ 				 SYSCALL_WORK_SYSCALL_EMU |		\
+ 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
++				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
+ 				 ARCH_SYSCALL_WORK_ENTER)
+ #define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
+ 				 SYSCALL_WORK_SYSCALL_TRACE |		\
+ 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
++				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
+ 				 ARCH_SYSCALL_WORK_EXIT)
  
  /*
-  * SIGEMT si_codes
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 91e8fd50adf4..cef136fc7cb5 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -5,6 +5,8 @@
+ #include <linux/livepatch.h>
+ #include <linux/audit.h>
+ 
++#include "common.h"
++
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/syscalls.h>
+ 
+@@ -46,6 +48,16 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+ {
+ 	long ret = 0;
+ 
++	/*
++	 * Handle Syscall User Dispatch.  This must comes first, since
++	 * the ABI here can be something that doesn't make sense for
++	 * other syscall_work features.
++	 */
++	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
++		if (do_syscall_user_dispatch(regs))
++			return -1L;
++	}
++
+ 	/* Handle ptrace */
+ 	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
+ 		ret = arch_syscall_enter_tracehook(regs);
+@@ -230,6 +242,11 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
+ {
+ 	bool step;
+ 
++	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
++		if (on_syscall_dispatch())
++			return;
++	}
++
+ 	audit_syscall_exit(regs);
+ 
+ 	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
 -- 
 2.29.2
 
