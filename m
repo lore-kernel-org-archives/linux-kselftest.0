@@ -2,194 +2,130 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA8E1C63697
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71962C56201
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:42:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BE2022256
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:07:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 042A422264
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:42:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="FDLz6gJ+";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A1v6B0Ra"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKI9kb3S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728014AbgKSQGj (ORCPT
+        id S1727935AbgKSQly (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:06:39 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:59533 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727677AbgKSQGj (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:06:39 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 45ADFE24;
-        Thu, 19 Nov 2020 11:06:37 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 19 Nov 2020 11:06:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=BRsajNq/mgBRP
-        PZp1kutKtKmDBoBjDe/+SYMX/W0D0U=; b=FDLz6gJ+dO7knnH13FpyK8TQaxf+W
-        EYqy2fEmmEG/IteDYR+ZIaWGci0rTPS7vM/oetlWgX+QVU0g41WT/Ou2ffqfgZds
-        ExXBpCw6ptAB1Mv4f5aF2OSAUMj81CsSoglgZ0T20E3lklRHuCYdLCq0NkrFRvZp
-        OdS9XqWyKCz7c5NavdDtXD3/6k7dUVUgj7vkV2U/fbIKkKtzlMyULtYV2ZlEyOFJ
-        Sb+XcLsvN1GgHCf3lBhPst9rcYvLSCENpVfjqQTPcRYsevrcwAkqUTxopNNGhIUd
-        Ohx+5HQW3nR2lTGKpBnP43IGtby7KqJEybOujQ8++9bI9+r42SA4Y502w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:reply-to:subject
-        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=BRsajNq/mgBRPPZp1kutKtKmDBoBjDe/+SYMX/W0D0U=; b=A1v6B0Ra
-        SEHovgQKtdi3lWD/XaTW6wvMauUHvKQBSs8n2sQSI/HszBpuYS5deYD2sE0oQWGn
-        KhBTR2Dqw3hysWRElAx0QaGKqlUXZCO84PXqauI3oqyLZ0XBhhOsbzDz3qJie+QY
-        efBDx6pv1qWH3qgZMlR8EwUFjwwQpBDOZ1fLXi60k2UtzwUfAAIqKO8KvbFv3eUR
-        b5Hrvn8TctVtEfHd510qV1b+7ZMhXlpfgVSYsot+zeId0txzHerLBR6HS0bwL6Yz
-        uxByuDuCMR67r0e+lqMJfobqelQf8PtazJRoJIjQ0wRRKbdLcTVKwCLl4uOIXr4c
-        65Avdcmq85GcpA==
-X-ME-Sender: <xms:DJi2X0zN7U2C28TdcWbBCCS_GanCZNFjEpGFQtF2ASF_W0ZBjlCugg>
-    <xme:DJi2X4TNuEZlAx31A5FzaoV2Bska0i8prF6Ao3VLQAQDhb9CZP3hwNW2fVak5n-fI
-    3l_8hO5HTz19Gv58w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefjedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
-    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
-    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
-    vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:DJi2X2VxZArE5mCYUqNioVTdYR7A7duAXqQOdzS8P4BNTOg_fmohAg>
-    <xmx:DJi2XyhypA5-9Zd235FTOR7mculfMPqaPrHyJT7yQpzSfVq5mu-3aw>
-    <xmx:DJi2X2BPuCPtlL4tZtfjYe3tA1q4FSyvpdMuDdbEfEduHEz4YEUYVg>
-    <xmx:DJi2X655UQquyb_1b7JBd9BZaEtz8-88lcSQP_4-dl7tA2MyOHYdh5tQ6nE>
-Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
-        by mail.messagingengine.com (Postfix) with ESMTPA id D12EE3064AAE;
-        Thu, 19 Nov 2020 11:06:35 -0500 (EST)
-From:   Zi Yan <zi.yan@sent.com>
-To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yang Shi <shy828301@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH 1/7] XArray: Fix splitting to non-zero orders
-Date:   Thu, 19 Nov 2020 11:05:59 -0500
-Message-Id: <20201119160605.1272425-2-zi.yan@sent.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201119160605.1272425-1-zi.yan@sent.com>
-References: <20201119160605.1272425-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Thu, 19 Nov 2020 11:41:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52916 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728134AbgKSQlx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Nov 2020 11:41:53 -0500
+Received: from kernel.org (83-245-197-237.elisa-laajakaista.fi [83.245.197.237])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ADC0622264;
+        Thu, 19 Nov 2020 16:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605804112;
+        bh=a8DNh3KKaUy/3Z0QZ4V7Dwx43lhtI1TlCwUDoL5hZeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vKI9kb3ScOMKv2/vXY82ULiPASQ+9D3ThWZhtEfMbp5r6XCSu5ZmUj6YaXxMixlMu
+         Nn5OYo7Y/7FVaz6CWjYYndq0gHQ35zz++ZkRppGSdBrFkKrEA19e0lm96YYHBv0uak
+         x26WBeckLvnRyJGb9M09KY0tX/CTngPuz5x+YPSE=
+Date:   Thu, 19 Nov 2020 18:41:44 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-sgx@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
+        andriy.shevchenko@linux.intel.com, asapek@google.com,
+        cedric.xing@intel.com, chenalexchen@google.com,
+        conradparker@google.com, cyhanish@google.com,
+        dave.hansen@intel.com, haitao.huang@intel.com, kai.huang@intel.com,
+        kai.svahn@intel.com, kmoy@google.com, ludloff@google.com,
+        luto@kernel.org, nhorman@redhat.com, npmccallum@redhat.com,
+        puiterwijk@redhat.com, rientjes@google.com,
+        sean.j.christopherson@intel.com, tglx@linutronix.de,
+        yaozhangx@google.com, mikko.ylinen@intel.com
+Subject: Re: [PATCH] selftests/x86: Fix malformed src_offset initialization
+Message-ID: <20201119164144.GA77509@kernel.org>
+References: <20201117223630.17355-1-jarkko@kernel.org>
+ <20201118171900.GJ7472@zn.tnic>
+ <20201118175850.GA42022@kernel.org>
+ <20201118180450.GL7472@zn.tnic>
+ <20201118213755.GA62979@kernel.org>
+ <20201118215446.GO7472@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118215446.GO7472@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+On Wed, Nov 18, 2020 at 10:54:46PM +0100, Borislav Petkov wrote:
+> On Wed, Nov 18, 2020 at 11:37:55PM +0200, Jarkko Sakkinen wrote:
+> > Just checking that I got this right: you want me to port my anon inode
+> > changes from March to be applied on top of tip and send them?
+> 
+> Well, we need to somehow address the issue when some distros map /dev
+> noexec and that is conflicting with SGX due to it needing to mmap with
+> executable permissions but /dev/sgx_enclave is noexec...
+> 
+> I guess the first thing that needs figuring out is why are some distros
+> mounting /dev noexec.
+> 
+> I mean, you can always do the easiest thing: somewhere in the SGX
+> docs say that one of the steps towards running SGX enclaves on such
+> distros is for the admin to map /dev exec. However, does that have other
+> security implications which would make such exec mounting a security
+> hazard?
+> 
+> If so, then the SGX code would need changing...
+> 
+> Questions like those.
+> 
+> HTH.
 
-Splitting an order-4 entry into order-2 entries would leave the array
-containing pointers to 000040008000c000 instead of 000044448888cccc.
-This is a one-character fix, but enhance the test suite to check this
-case.
+OK I did re-read the whole thing:
 
-Reported-by: Zi Yan <ziy@nvidia.com>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- lib/test_xarray.c | 26 ++++++++++++++------------
- lib/xarray.c      |  4 ++--
- 2 files changed, 16 insertions(+), 14 deletions(-)
+https://lore.kernel.org/linux-sgx/20200331114432.7593-1-jarkko.sakkinen@linux.intel.com/
 
-diff --git a/lib/test_xarray.c b/lib/test_xarray.c
-index 8294f43f4981..8b1c318189ce 100644
---- a/lib/test_xarray.c
-+++ b/lib/test_xarray.c
-@@ -1530,24 +1530,24 @@ static noinline void check_store_range(struct xarra=
-y *xa)
-=20
- #ifdef CONFIG_XARRAY_MULTI
- static void check_split_1(struct xarray *xa, unsigned long index,
--							unsigned int order)
-+				unsigned int order, unsigned int new_order)
- {
--	XA_STATE(xas, xa, index);
--	void *entry;
--	unsigned int i =3D 0;
-+	XA_STATE_ORDER(xas, xa, index, new_order);
-+	unsigned int i;
-=20
- 	xa_store_order(xa, index, order, xa, GFP_KERNEL);
-=20
- 	xas_split_alloc(&xas, xa, order, GFP_KERNEL);
- 	xas_lock(&xas);
- 	xas_split(&xas, xa, order);
-+	for (i =3D 0; i < (1 << order); i +=3D (1 << new_order))
-+		__xa_store(xa, index + i, xa_mk_index(index + i), 0);
- 	xas_unlock(&xas);
-=20
--	xa_for_each(xa, index, entry) {
--		XA_BUG_ON(xa, entry !=3D xa);
--		i++;
-+	for (i =3D 0; i < (1 << order); i++) {
-+		unsigned int val =3D index + (i & ~((1 << new_order) - 1));
-+		XA_BUG_ON(xa, xa_load(xa, index + i) !=3D xa_mk_index(val));
- 	}
--	XA_BUG_ON(xa, i !=3D 1 << order);
-=20
- 	xa_set_mark(xa, index, XA_MARK_0);
- 	XA_BUG_ON(xa, !xa_get_mark(xa, index, XA_MARK_0));
-@@ -1557,14 +1557,16 @@ static void check_split_1(struct xarray *xa, unsign=
-ed long index,
-=20
- static noinline void check_split(struct xarray *xa)
- {
--	unsigned int order;
-+	unsigned int order, new_order;
-=20
- 	XA_BUG_ON(xa, !xa_empty(xa));
-=20
- 	for (order =3D 1; order < 2 * XA_CHUNK_SHIFT; order++) {
--		check_split_1(xa, 0, order);
--		check_split_1(xa, 1UL << order, order);
--		check_split_1(xa, 3UL << order, order);
-+		for (new_order =3D 0; new_order < order; new_order++) {
-+			check_split_1(xa, 0, order, new_order);
-+			check_split_1(xa, 1UL << order, order, new_order);
-+			check_split_1(xa, 3UL << order, order, new_order);
-+		}
- 	}
- }
- #else
-diff --git a/lib/xarray.c b/lib/xarray.c
-index fc70e37c4c17..74915ba018c4 100644
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -1012,7 +1012,7 @@ void xas_split_alloc(struct xa_state *xas, void *entr=
-y, unsigned int order,
-=20
- 	do {
- 		unsigned int i;
--		void *sibling;
-+		void *sibling =3D NULL;
- 		struct xa_node *node;
-=20
- 		node =3D kmem_cache_alloc(radix_tree_node_cachep, gfp);
-@@ -1022,7 +1022,7 @@ void xas_split_alloc(struct xa_state *xas, void *entr=
-y, unsigned int order,
- 		for (i =3D 0; i < XA_CHUNK_SIZE; i++) {
- 			if ((i & mask) =3D=3D 0) {
- 				RCU_INIT_POINTER(node->slots[i], entry);
--				sibling =3D xa_mk_sibling(0);
-+				sibling =3D xa_mk_sibling(i);
- 			} else {
- 				RCU_INIT_POINTER(node->slots[i], sibling);
- 			}
---=20
-2.28.0
+As Topi (the Debian developer who did this change) stated in the thread,
+the threat scenario is that someone could create executable files to
+/dev if it isn't noexec. It's not about the permissions of device files
+per se.
 
+The problem with anonymous inode is that LSM's cannot label it easily
+like you can a non-anonymous inode.
+
+There's a patch set for secure anonymous inodes but it hasn't landed yet
+and I think it would make the whole security model somewhat more
+complicated [1]. What I mean is that secure anonymous inodes would make
+sense in a context where anonymous inodes are used for other reasons to
+begin with.
+
+The route of using sgxfs was discarded because it results static
+permissions and is also quite big hammer for the purpose [2].
+
+In that thread there were two valid routes to move forward:
+
+1. You can always create a separate tmpfs and create enclave nodes
+   and even bind mount them (proposed by Andy) to /dev.
+2. It would be possible (given how Topi described the threat scenario)
+   implement "noexec_dev" mount option that would allow 'x' for dev's
+   but not for anything else (proposed by me).
+
+To summarize, I would not change the SGX code for this but apply either
+(1) and (2) when deploying SGX.
+
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+[1] https://lore.kernel.org/linux-security-module/20201011082936.4131726-1-lokeshgidra@google.com/
+[2] https://lore.kernel.org/linux-sgx/CALCETrWkaUS2RU61_4KoNhn3RkW-J+SWiCQTZ623wu4b7snJ0w@mail.gmail.com/
+
+/Jarkko
