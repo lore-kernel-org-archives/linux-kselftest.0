@@ -2,79 +2,175 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF08C63697
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 12:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 008DCC56201
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:06:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC83A246F1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 12:38:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A53C246E1
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:06:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="drrbmnTR"
+	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="xCI3YILo";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dWEJemL6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbgKSMic (ORCPT
+        id S1728000AbgKSQGj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Nov 2020 07:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727096AbgKSMib (ORCPT
+        Thu, 19 Nov 2020 11:06:39 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:41859 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727990AbgKSQGj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Nov 2020 07:38:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC88AC0613CF;
-        Thu, 19 Nov 2020 04:38:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EXnB16mLl4Y+IqQmV0xsRFSOkOPyaDc6osJseO3iLTI=; b=drrbmnTRqep/Do0FL85M9Uvcah
-        ThoUFK+/hVu6fq5mx7QmjXlr/llb5xABXDrf+Ch1e4pFCS+wBPGr+JhT5o0a/7cnltGgyez8wmMfS
-        yhh5G2fj/TTBExpJUgIDpU3Gkjg3XdS/ogMjpERgHx1tmrhCCCs2Al2hsFrRsdr8bMq7l2AWysDds
-        q4aaZ3EggGAR2St1Mukeq47OXdk0Kxb0id0GnZ2Rw6baevqicgqnFkpf1zTRzrjxrNwc2hLkW8WaA
-        afj9p4GZVPoQpJQbx8nvbW4ypTlILNsinOPaZjlhsVt0wmo27g35kCmLNiltfPa7xfLMbwJx6ByDW
-        rHmWa6MQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kfjCm-0001BQ-NF; Thu, 19 Nov 2020 12:38:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 17F8C3019CE;
-        Thu, 19 Nov 2020 13:38:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 035712C12590E; Thu, 19 Nov 2020 13:38:27 +0100 (CET)
-Date:   Thu, 19 Nov 2020 13:38:27 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org,
-        christian.brauner@ubuntu.com, willy@infradead.org,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        x86@kernel.org, gofmanp@gmail.com, kernel@collabora.com
-Subject: Re: [PATCH v7 0/7] Syscall User Dispatch
-Message-ID: <20201119123827.GL3121392@hirez.programming.kicks-ass.net>
-References: <20201118032840.3429268-1-krisman@collabora.com>
+        Thu, 19 Nov 2020 11:06:39 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 5E12FED5;
+        Thu, 19 Nov 2020 11:06:37 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 19 Nov 2020 11:06:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
+        :mime-version:content-transfer-encoding; s=fm2; bh=jekI5tMSgt2QD
+        NEmEebnlTl09MgC4oLm1jXTahZK9g8=; b=xCI3YILoNwMJ1q3mpREI968HKniUl
+        KJDnSdZzmgVVnjECKpH0wPvIbLnmzCkMphzUtMR+5cfiqfcM3tdtcgpeXb65wCiM
+        +urbVtIAJgLnh4DAo36h/KT2nPVhjyCmXMfW94sVucMb6gq14hB5feX/s1fV55IL
+        HvNWnWw9k8l/6oBlGLyAvt/RHInv5y8QDxe425V5nAVfsS6sTaaM0NGuYA/K4lm1
+        X5EIOb3NC+6B27XbyjE5qlwsVYSj/LwU18Z7V+ZwVGDSGUEoEgOmBXKUe0lzX2qY
+        IigGXIu4vHfIauHTQw1qnIsy/XsFbEr22aPH9sgE5nlh63K+48ca/462Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:reply-to:subject
+        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=jekI5tMSgt2QDNEmEebnlTl09MgC4oLm1jXTahZK9g8=; b=dWEJemL6
+        go/dlyGtVNcvQPCyNYEQ4yAE6bfsE+reEGbEUhp6yeoM5z3kgyGSEtZxebUWNw2n
+        oS0zkUppYyq+pWeh0WOmuhUSi+o5U4L6DNanYirO56FTtCLQKqteopJ9FMV0e8Mq
+        xYOqKCiqs26cw/s+nyawd38+64QErA6NQ2SYm61oV7ZFeN7VByBtLdu1iaHZ8h46
+        g1hfFE7el4ri55sbEkTcBip04TxyiMexaaLMZknsz2NzL2adjVRmufxJWpUfdxEO
+        ur5tYdjoPSiKb1SILXp5X8gLdP87QKduHxw2IeYOy8aH73SxKFI0hx+Gf+BhyZXA
+        ulQJHYSJPPSQzg==
+X-ME-Sender: <xms:DJi2X3hdRGEwMBbNlMIA8iBE6IzdKPog_la8q013Ru-Tb9Uke3j9ag>
+    <xme:DJi2X0C4q1gk_2_gKiKS617ps4Cv8WtgrkU1hfNTdzOOeQBMRusK0cP-XLju2wd9r
+    87rywqUxK3zqt5GVQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefjedgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
+    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
+    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
+    vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
+X-ME-Proxy: <xmx:DJi2X3FLB1siYoJDsYQW6l1O09NdjCiHPkHywzyEXyh0Hp7FET2yuw>
+    <xmx:DJi2X0QR8h6fOwHaKM2rpomuxqy5C0Q01f6NZINe8Ph0J6w0kMIJWQ>
+    <xmx:DJi2X0w2iMf4pwxoZXqG9N1rSJ-UYFzp1IcqCEhtWEp6Jph33Wymag>
+    <xmx:DJi2X5rz2GSuLNuioUrdp35uaYBXtLhBQ4L9OWE0_9TQpLDRp8niL9NjDPA>
+Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 686B03064AB4;
+        Thu, 19 Nov 2020 11:06:36 -0500 (EST)
+From:   Zi Yan <zi.yan@sent.com>
+To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yang Shi <shy828301@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
+Subject: [PATCH 3/7] mm: memcg: make memcg huge page split support any order split.
+Date:   Thu, 19 Nov 2020 11:06:01 -0500
+Message-Id: <20201119160605.1272425-4-zi.yan@sent.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201119160605.1272425-1-zi.yan@sent.com>
+References: <20201119160605.1272425-1-zi.yan@sent.com>
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201118032840.3429268-1-krisman@collabora.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 10:28:33PM -0500, Gabriel Krisman Bertazi wrote:
-> Gabriel Krisman Bertazi (7):
->   x86: vdso: Expose sigreturn address on vdso to the kernel
->   signal: Expose SYS_USER_DISPATCH si_code type
->   kernel: Implement selective syscall userspace redirection
->   entry: Support Syscall User Dispatch on common syscall entry
->   selftests: Add kselftest for syscall user dispatch
->   selftests: Add benchmark for syscall user dispatch
->   docs: Document Syscall User Dispatch
+From: Zi Yan <ziy@nvidia.com>
 
-Aside from the one little nit this looks good to me.
+It sets memcg information for the pages after the split. A new parameter
+new_order is added to tell the new page order, always 0 for now. It
+prepares for upcoming changes to support split huge page to any lower order.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Ralph Campbell <rcampbell@nvidia.com>
+Acked-by: Roman Gushchin <guro@fb.com>
+---
+ include/linux/memcontrol.h | 5 +++--
+ mm/huge_memory.c           | 2 +-
+ mm/memcontrol.c            | 6 +++---
+ 3 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index a8d5daf95988..39707feae505 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1062,7 +1062,7 @@ static inline void memcg_memory_event_mm(struct mm_st=
+ruct *mm,
+ }
+=20
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-void mem_cgroup_split_huge_fixup(struct page *head);
++void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_order=
+);
+ #endif
+=20
+ #else /* CONFIG_MEMCG */
+@@ -1396,7 +1396,8 @@ unsigned long mem_cgroup_soft_limit_reclaim(pg_data_t=
+ *pgdat, int order,
+ 	return 0;
+ }
+=20
+-static inline void mem_cgroup_split_huge_fixup(struct page *head)
++static inline void mem_cgroup_split_huge_fixup(struct page *head,
++					       unsigned int new_order)
+ {
+ }
+=20
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 88d8b7fce5d7..d7ab5cac5851 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2428,7 +2428,7 @@ static void __split_huge_page(struct page *page, stru=
+ct list_head *list,
+ 	lruvec =3D mem_cgroup_page_lruvec(head, pgdat);
+=20
+ 	/* complete memcg works before add pages to LRU */
+-	mem_cgroup_split_huge_fixup(head);
++	mem_cgroup_split_huge_fixup(head, 0);
+=20
+ 	if (PageAnon(head) && PageSwapCache(head)) {
+ 		swp_entry_t entry =3D { .val =3D page_private(head) };
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index de5869dd354d..4521ed3a51b7 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3223,15 +3223,15 @@ void obj_cgroup_uncharge(struct obj_cgroup *objcg, =
+size_t size)
+  * Because tail pages are not marked as "used", set it. We're under
+  * pgdat->lru_lock and migration entries setup in all page mappings.
+  */
+-void mem_cgroup_split_huge_fixup(struct page *head)
++void mem_cgroup_split_huge_fixup(struct page *head, unsigned int new_order)
+ {
+ 	struct mem_cgroup *memcg =3D page_memcg(head);
+-	int i;
++	int i, new_nr =3D 1 << new_order;
+=20
+ 	if (mem_cgroup_disabled())
+ 		return;
+=20
+-	for (i =3D 1; i < thp_nr_pages(head); i++) {
++	for (i =3D new_nr; i < thp_nr_pages(head); i +=3D new_nr) {
+ 		css_get(&memcg->css);
+ 		head[i].memcg_data =3D (unsigned long)memcg;
+ 	}
+--=20
+2.28.0
+
