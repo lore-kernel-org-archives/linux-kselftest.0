@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 808B7C6369E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA8E1C63697
 	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:07:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28A2E22253
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:07:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BE2022256
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Nov 2020 16:07:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="A09NhnlL";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QRnzrNRm"
+	dkim=pass (2048-bit key) header.d=sent.com header.i=@sent.com header.b="FDLz6gJ+";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A1v6B0Ra"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgKSQG5 (ORCPT
+        id S1728014AbgKSQGj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:06:57 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:43701 "EHLO
+        Thu, 19 Nov 2020 11:06:39 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:59533 "EHLO
         wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727991AbgKSQGj (ORCPT
+        by vger.kernel.org with ESMTP id S1727677AbgKSQGj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 19 Nov 2020 11:06:39 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id BDCADE96;
+        by mailnew.west.internal (Postfix) with ESMTP id 45ADFE24;
         Thu, 19 Nov 2020 11:06:37 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
   by compute6.internal (MEProxy); Thu, 19 Nov 2020 11:06:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
         :to:cc:subject:date:message-id:in-reply-to:references:reply-to
-        :mime-version:content-transfer-encoding; s=fm2; bh=mH0cmjCFFHawR
-        fu2fp7V1aZ23JKakX1bmunG/jk3ld4=; b=A09NhnlLth9AQs85DScDDR2MgWzXd
-        prjq6bmdlLKZn0ZEFWuts6n4+bz/y47V2XPGS3Vk9H9j3ulvm8a05iqHjewAF+Ba
-        ApGMO9A9xRDrPuJPLRb5r1WzBKuZNVdg8iE9d+OA2sQIbEgJees7HvU2kdS7X/VC
-        DPGdXnZqIB6qCL+GDOGDshFfj6jgh8lUxxg7vFA/659eEaDsol3Bl1qHAQ/KUePe
-        1kWch0bJYbkAy3YyF+n12VsmPEVr2SH8udGr4u/E0KFMDvJ8p2NbFnjAtPgFdDTK
-        mk0gwLGNYxz6btwntr5pFxbwEks136YS+6jRMcMdZgugNceXnXRcMwhTA==
+        :mime-version:content-transfer-encoding; s=fm2; bh=BRsajNq/mgBRP
+        PZp1kutKtKmDBoBjDe/+SYMX/W0D0U=; b=FDLz6gJ+dO7knnH13FpyK8TQaxf+W
+        EYqy2fEmmEG/IteDYR+ZIaWGci0rTPS7vM/oetlWgX+QVU0g41WT/Ou2ffqfgZds
+        ExXBpCw6ptAB1Mv4f5aF2OSAUMj81CsSoglgZ0T20E3lklRHuCYdLCq0NkrFRvZp
+        OdS9XqWyKCz7c5NavdDtXD3/6k7dUVUgj7vkV2U/fbIKkKtzlMyULtYV2ZlEyOFJ
+        Sb+XcLsvN1GgHCf3lBhPst9rcYvLSCENpVfjqQTPcRYsevrcwAkqUTxopNNGhIUd
+        Ohx+5HQW3nR2lTGKpBnP43IGtby7KqJEybOujQ8++9bI9+r42SA4Y502w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:reply-to:subject
         :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=mH0cmjCFFHawRfu2fp7V1aZ23JKakX1bmunG/jk3ld4=; b=QRnzrNRm
-        Rw+rqQrua0o+q4j5TfPTmPFEX1Zstcx3I14GeMFTvIj/F/5Xxf7bsGvb9w4GYN28
-        WXre3l7UJkoosap2LDoy6Mz6yDjtwzy9po60oxlGqKWZv9GbHPRdgZ7u7ZbUdZHo
-        1IVYWYxcAixjzs1hyaQFuVN0jwpjRZxSlAxL4+oGVibPFSS+ed1P0LlrbywS+EG3
-        xg2JJmTC/iErijvaDl3Sm4CPyErAtpv7V8wuz3KplTdkGnDGksllyDmISe+UimCg
-        193rI8sLPGNLJaSnRJq7jpuzW8JqLfnEEqC1Yxtdotwde4+s/YaRLdZT9fIToWwu
-        xr6S4Qdr5JXHjA==
-X-ME-Sender: <xms:DZi2X8NHZa9d3yL3s8khUouKYLBBhtK3pQrfzOLwz7m5n2xkI5fm1g>
-    <xme:DZi2Xy_cUjaQhC2ynAYag4-LZadPVp8kIMi1y6Ios3Q1tWhqrnLZmK2A1M2Ja-mrf
-    jMJTenYVfREKb3Itw>
+        fm1; bh=BRsajNq/mgBRPPZp1kutKtKmDBoBjDe/+SYMX/W0D0U=; b=A1v6B0Ra
+        SEHovgQKtdi3lWD/XaTW6wvMauUHvKQBSs8n2sQSI/HszBpuYS5deYD2sE0oQWGn
+        KhBTR2Dqw3hysWRElAx0QaGKqlUXZCO84PXqauI3oqyLZ0XBhhOsbzDz3qJie+QY
+        efBDx6pv1qWH3qgZMlR8EwUFjwwQpBDOZ1fLXi60k2UtzwUfAAIqKO8KvbFv3eUR
+        b5Hrvn8TctVtEfHd510qV1b+7ZMhXlpfgVSYsot+zeId0txzHerLBR6HS0bwL6Yz
+        uxByuDuCMR67r0e+lqMJfobqelQf8PtazJRoJIjQ0wRRKbdLcTVKwCLl4uOIXr4c
+        65Avdcmq85GcpA==
+X-ME-Sender: <xms:DJi2X0zN7U2C28TdcWbBCCS_GanCZNFjEpGFQtF2ASF_W0ZBjlCugg>
+    <xme:DJi2X4TNuEZlAx31A5FzaoV2Bska0i8prF6Ao3VLQAQDhb9CZP3hwNW2fVak5n-fI
+    3l_8hO5HTz19Gv58w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefjedgkeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -61,13 +61,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefjedgkeefucetufdoteggod
     dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedu
     vddrgeeirddutdeirdduieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
     hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:DZi2XzRSzke9wQVsWjpTufixSZT-MSwVXkQWCEhnQXPpX2heuq9ODg>
-    <xmx:DZi2X0skhxWsizIfYWMp7qE7KYi6LM5-fMvAJSh3nt_sbvBOKjNngA>
-    <xmx:DZi2X0eajVCCOMtXXbeXVtWrTQ6liv6iZojYMerqNexArecFHKPZag>
-    <xmx:DZi2X1VMu6dYUHHOXmmTzQrXnnXPXXe51xVTlg8CxsCtRH8xUMbssbeTd0w>
+X-ME-Proxy: <xmx:DJi2X2VxZArE5mCYUqNioVTdYR7A7duAXqQOdzS8P4BNTOg_fmohAg>
+    <xmx:DJi2XyhypA5-9Zd235FTOR7mculfMPqaPrHyJT7yQpzSfVq5mu-3aw>
+    <xmx:DJi2X2BPuCPtlL4tZtfjYe3tA1q4FSyvpdMuDdbEfEduHEz4YEUYVg>
+    <xmx:DJi2X655UQquyb_1b7JBd9BZaEtz8-88lcSQP_4-dl7tA2MyOHYdh5tQ6nE>
 Received: from nvrsysarch6.NVidia.COM (unknown [12.46.106.164])
-        by mail.messagingengine.com (Postfix) with ESMTPA id AD9AB3064AB5;
-        Thu, 19 Nov 2020 11:06:36 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id D12EE3064AAE;
+        Thu, 19 Nov 2020 11:06:35 -0500 (EST)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
@@ -79,9 +79,9 @@ Cc:     Roman Gushchin <guro@fb.com>,
         John Hubbard <jhubbard@nvidia.com>,
         Ralph Campbell <rcampbell@nvidia.com>,
         David Nellans <dnellans@nvidia.com>, Zi Yan <ziy@nvidia.com>
-Subject: [PATCH 4/7] mm: page_owner: add support for splitting to any order in split page_owner.
-Date:   Thu, 19 Nov 2020 11:06:02 -0500
-Message-Id: <20201119160605.1272425-5-zi.yan@sent.com>
+Subject: [PATCH 1/7] XArray: Fix splitting to non-zero orders
+Date:   Thu, 19 Nov 2020 11:05:59 -0500
+Message-Id: <20201119160605.1272425-2-zi.yan@sent.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201119160605.1272425-1-zi.yan@sent.com>
 References: <20201119160605.1272425-1-zi.yan@sent.com>
@@ -92,129 +92,104 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 
-It adds a new_order parameter to set new page order in page owner and
-uses old_order instead of nr to make the parameters look consistent.
-It prepares for upcoming changes to support split huge page to any
-lower order.
+Splitting an order-4 entry into order-2 entries would leave the array
+containing pointers to 000040008000c000 instead of 000044448888cccc.
+This is a one-character fix, but enhance the test suite to check this
+case.
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
+Reported-by: Zi Yan <ziy@nvidia.com>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/page_owner.h | 10 ++++++----
- mm/huge_memory.c           |  3 ++-
- mm/page_alloc.c            |  2 +-
- mm/page_owner.c            | 13 +++++++------
- 4 files changed, 16 insertions(+), 12 deletions(-)
+ lib/test_xarray.c | 26 ++++++++++++++------------
+ lib/xarray.c      |  4 ++--
+ 2 files changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-index 3468794f83d2..9caaed51403c 100644
---- a/include/linux/page_owner.h
-+++ b/include/linux/page_owner.h
-@@ -11,7 +11,8 @@ extern struct page_ext_operations page_owner_ops;
- extern void __reset_page_owner(struct page *page, unsigned int order);
- extern void __set_page_owner(struct page *page,
- 			unsigned int order, gfp_t gfp_mask);
--extern void __split_page_owner(struct page *page, unsigned int nr);
-+extern void __split_page_owner(struct page *page, unsigned int old_order,
-+			unsigned int new_order);
- extern void __copy_page_owner(struct page *oldpage, struct page *newpage);
- extern void __set_page_owner_migrate_reason(struct page *page, int reason);
- extern void __dump_page_owner(struct page *page);
-@@ -31,10 +32,11 @@ static inline void set_page_owner(struct page *page,
- 		__set_page_owner(page, order, gfp_mask);
- }
+diff --git a/lib/test_xarray.c b/lib/test_xarray.c
+index 8294f43f4981..8b1c318189ce 100644
+--- a/lib/test_xarray.c
++++ b/lib/test_xarray.c
+@@ -1530,24 +1530,24 @@ static noinline void check_store_range(struct xarra=
+y *xa)
 =20
--static inline void split_page_owner(struct page *page, unsigned int nr)
-+static inline void split_page_owner(struct page *page, unsigned int old_or=
-der,
-+			unsigned int new_order)
+ #ifdef CONFIG_XARRAY_MULTI
+ static void check_split_1(struct xarray *xa, unsigned long index,
+-							unsigned int order)
++				unsigned int order, unsigned int new_order)
  {
- 	if (static_branch_unlikely(&page_owner_inited))
--		__split_page_owner(page, nr);
-+		__split_page_owner(page, old_order, new_order);
- }
- static inline void copy_page_owner(struct page *oldpage, struct page *newp=
-age)
+-	XA_STATE(xas, xa, index);
+-	void *entry;
+-	unsigned int i =3D 0;
++	XA_STATE_ORDER(xas, xa, index, new_order);
++	unsigned int i;
+=20
+ 	xa_store_order(xa, index, order, xa, GFP_KERNEL);
+=20
+ 	xas_split_alloc(&xas, xa, order, GFP_KERNEL);
+ 	xas_lock(&xas);
+ 	xas_split(&xas, xa, order);
++	for (i =3D 0; i < (1 << order); i +=3D (1 << new_order))
++		__xa_store(xa, index + i, xa_mk_index(index + i), 0);
+ 	xas_unlock(&xas);
+=20
+-	xa_for_each(xa, index, entry) {
+-		XA_BUG_ON(xa, entry !=3D xa);
+-		i++;
++	for (i =3D 0; i < (1 << order); i++) {
++		unsigned int val =3D index + (i & ~((1 << new_order) - 1));
++		XA_BUG_ON(xa, xa_load(xa, index + i) !=3D xa_mk_index(val));
+ 	}
+-	XA_BUG_ON(xa, i !=3D 1 << order);
+=20
+ 	xa_set_mark(xa, index, XA_MARK_0);
+ 	XA_BUG_ON(xa, !xa_get_mark(xa, index, XA_MARK_0));
+@@ -1557,14 +1557,16 @@ static void check_split_1(struct xarray *xa, unsign=
+ed long index,
+=20
+ static noinline void check_split(struct xarray *xa)
  {
-@@ -60,7 +62,7 @@ static inline void set_page_owner(struct page *page,
- {
- }
- static inline void split_page_owner(struct page *page,
--			unsigned int order)
-+			unsigned int old_order, unsigned int new_order)
- {
- }
- static inline void copy_page_owner(struct page *oldpage, struct page *newp=
-age)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index d7ab5cac5851..aae7405a0989 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2422,6 +2422,7 @@ static void __split_huge_page(struct page *page, stru=
-ct list_head *list,
- 	struct lruvec *lruvec;
- 	struct address_space *swap_cache =3D NULL;
- 	unsigned long offset =3D 0;
-+	unsigned int order =3D thp_order(head);
- 	unsigned int nr =3D thp_nr_pages(head);
- 	int i;
+-	unsigned int order;
++	unsigned int order, new_order;
 =20
-@@ -2458,7 +2459,7 @@ static void __split_huge_page(struct page *page, stru=
-ct list_head *list,
+ 	XA_BUG_ON(xa, !xa_empty(xa));
 =20
- 	ClearPageCompound(head);
-=20
--	split_page_owner(head, nr);
-+	split_page_owner(head, order, 0);
-=20
- 	/* See comment in __split_huge_page_tail() */
- 	if (PageAnon(head)) {
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 63d8d8b72c10..414f26950190 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3297,7 +3297,7 @@ void split_page(struct page *page, unsigned int order)
-=20
- 	for (i =3D 1; i < (1 << order); i++)
- 		set_page_refcounted(page + i);
--	split_page_owner(page, 1 << order);
-+	split_page_owner(page, order, 0);
- }
- EXPORT_SYMBOL_GPL(split_page);
-=20
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index b735a8eafcdb..00a679a1230b 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -204,19 +204,20 @@ void __set_page_owner_migrate_reason(struct page *pag=
-e, int reason)
- 	page_owner->last_migrate_reason =3D reason;
- }
-=20
--void __split_page_owner(struct page *page, unsigned int nr)
-+void __split_page_owner(struct page *page, unsigned int old_order,
-+			unsigned int new_order)
- {
--	int i;
--	struct page_ext *page_ext =3D lookup_page_ext(page);
-+	int i, old_nr =3D 1 << old_order, new_nr =3D 1 << new_order;
-+	struct page_ext *page_ext;
- 	struct page_owner *page_owner;
-=20
- 	if (unlikely(!page_ext))
- 		return;
-=20
--	for (i =3D 0; i < nr; i++) {
-+	for (i =3D 0; i < old_nr; i +=3D new_nr) {
-+		page_ext =3D lookup_page_ext(page + i);
- 		page_owner =3D get_page_owner(page_ext);
--		page_owner->order =3D 0;
--		page_ext =3D page_ext_next(page_ext);
-+		page_owner->order =3D new_order;
+ 	for (order =3D 1; order < 2 * XA_CHUNK_SHIFT; order++) {
+-		check_split_1(xa, 0, order);
+-		check_split_1(xa, 1UL << order, order);
+-		check_split_1(xa, 3UL << order, order);
++		for (new_order =3D 0; new_order < order; new_order++) {
++			check_split_1(xa, 0, order, new_order);
++			check_split_1(xa, 1UL << order, order, new_order);
++			check_split_1(xa, 3UL << order, order, new_order);
++		}
  	}
  }
+ #else
+diff --git a/lib/xarray.c b/lib/xarray.c
+index fc70e37c4c17..74915ba018c4 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -1012,7 +1012,7 @@ void xas_split_alloc(struct xa_state *xas, void *entr=
+y, unsigned int order,
 =20
+ 	do {
+ 		unsigned int i;
+-		void *sibling;
++		void *sibling =3D NULL;
+ 		struct xa_node *node;
+=20
+ 		node =3D kmem_cache_alloc(radix_tree_node_cachep, gfp);
+@@ -1022,7 +1022,7 @@ void xas_split_alloc(struct xa_state *xas, void *entr=
+y, unsigned int order,
+ 		for (i =3D 0; i < XA_CHUNK_SIZE; i++) {
+ 			if ((i & mask) =3D=3D 0) {
+ 				RCU_INIT_POINTER(node->slots[i], entry);
+-				sibling =3D xa_mk_sibling(0);
++				sibling =3D xa_mk_sibling(i);
+ 			} else {
+ 				RCU_INIT_POINTER(node->slots[i], sibling);
+ 			}
 --=20
 2.28.0
 
