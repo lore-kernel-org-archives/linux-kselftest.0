@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0165C2D0E4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D6AFC6379D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:32:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 949F12078E
+	by mail.kernel.org (Postfix) with ESMTP id E37122078E
 	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:32:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728672AbgKWSa4 (ORCPT
+        id S1728339AbgKWSa5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Nov 2020 13:30:56 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:41913 "EHLO smtp.uniroma2.it"
+        Mon, 23 Nov 2020 13:30:57 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:41910 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729640AbgKWSaz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S1729621AbgKWSaz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 23 Nov 2020 13:30:55 -0500
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0ANITqgk016939
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0ANITqgf016939
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 23 Nov 2020 19:29:55 +0100
+        Mon, 23 Nov 2020 19:29:54 +0100
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next v3 6/8] seg6: add VRF support for SRv6 End.DT6 behavior
-Date:   Mon, 23 Nov 2020 19:28:54 +0100
-Message-Id: <20201123182857.4640-7-andrea.mayer@uniroma2.it>
+Subject: [net-next v3 1/8] vrf: add mac header for tunneled packets when sniffer is attached
+Date:   Mon, 23 Nov 2020 19:28:49 +0100
+Message-Id: <20201123182857.4640-2-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
 References: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
@@ -59,162 +59,132 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SRv6 End.DT6 is defined in the SRv6 Network Programming [1].
+Before this patch, a sniffer attached to a VRF used as the receiving
+interface of L3 tunneled packets detects them as malformed packets and
+it complains about that (i.e.: tcpdump shows bogus packets).
 
-The Linux kernel already offers an implementation of the SRv6
-End.DT6 behavior which permits IPv6 L3 VPNs over SRv6 networks. This
-implementation is not particularly suitable in contexts where we need to
-deploy IPv6 L3 VPNs among different tenants which share the same network
-address schemes. The underlying problem lies in the fact that the
-current version of DT6 (called legacy DT6 from now on) needs a complex
-configuration to be applied on routers which requires ad-hoc routes and
-routing policy rules to ensure the correct isolation of tenants.
+The reason is that a tunneled L3 packet does not carry any L2
+information and when the VRF is set as the receiving interface of a
+decapsulated L3 packet, no mac header is currently set or valid.
+Therefore, the purpose of this patch consists of adding a MAC header to
+any packet which is directly received on the VRF interface ONLY IF:
 
-Consequently, a new implementation of DT6 has been introduced with the
-aim of simplifying the construction of IPv6 L3 VPN services in the
-multi-tenant environment using SRv6 networks. To accomplish this task,
-we reused the same VRF infrastructure and SRv6 core components already
-exploited for implementing the SRv6 End.DT4 behavior.
+ i) a sniffer is attached on the VRF and ii) the mac header is not set.
 
-Currently the two End.DT6 implementations coexist seamlessly and can be
-used depending on the context and the user preferences. So, in order to
-support both versions of DT6 a new attribute (vrftable) has been
-introduced which allows us to differentiate the implementation of the
-behavior to be used.
-
-A SRv6 End.DT6 legacy behavior is still instantiated using a command
-like the following one:
-
- $ ip -6 route add 2001:db8::1 encap seg6local action End.DT6 table 100 dev eth0
-
-While to instantiate the SRv6 End.DT6 in VRF mode, the command is still
-pretty straight forward:
-
- $ ip -6 route add 2001:db8::1 encap seg6local action End.DT6 vrftable 100 dev eth0.
-
-Obviously as in the case of SRv6 End.DT4, the VRF strict_mode parameter
-must be set (net.vrf.strict_mode=1) and the VRF associated with table
-100 must exist.
-
-Please note that the instances of SRv6 End.DT6 legacy and End.DT6 VRF
-mode can coexist in the same system/configuration without problems.
-
-[1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
+In this case, the mac address of the VRF is copied in both the
+destination and the source address of the ethernet header. The protocol
+type is set either to IPv4 or IPv6, depending on which L3 packet is
+received.
 
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+Reviewed-by: David Ahern <dsahern@kernel.org>
 ---
- net/ipv6/seg6_local.c | 76 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ drivers/net/vrf.c | 78 +++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 72 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 117405985e6f..b257632f635e 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -497,6 +497,10 @@ static int __seg6_end_dt_vrf_build(struct seg6_local_lwt *slwt, const void *cfg,
- 		info->proto = htons(ETH_P_IP);
- 		info->hdrlen = sizeof(struct iphdr);
- 		break;
-+	case AF_INET6:
-+		info->proto = htons(ETH_P_IPV6);
-+		info->hdrlen = sizeof(struct ipv6hdr);
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -649,6 +653,47 @@ static int seg6_end_dt4_build(struct seg6_local_lwt *slwt, const void *cfg,
- {
- 	return __seg6_end_dt_vrf_build(slwt, cfg, AF_INET, extack);
+diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
+index f2793ffde191..51de12874717 100644
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -1309,6 +1309,61 @@ static void vrf_ip6_input_dst(struct sk_buff *skb, struct net_device *vrf_dev,
+ 	skb_dst_set(skb, &rt6->dst);
  }
-+
-+static enum
-+seg6_end_dt_mode seg6_end_dt6_parse_mode(struct seg6_local_lwt *slwt)
-+{
-+	unsigned long parsed_optattrs = slwt->parsed_optattrs;
-+	bool legacy, vrfmode;
-+
-+	legacy	= !!(parsed_optattrs & (1 << SEG6_LOCAL_TABLE));
-+	vrfmode	= !!(parsed_optattrs & (1 << SEG6_LOCAL_VRFTABLE));
-+
-+	if (!(legacy ^ vrfmode))
-+		/* both are absent or present: invalid DT6 mode */
-+		return DT_INVALID_MODE;
-+
-+	return legacy ? DT_LEGACY_MODE : DT_VRF_MODE;
-+}
-+
-+static enum seg6_end_dt_mode seg6_end_dt6_get_mode(struct seg6_local_lwt *slwt)
-+{
-+	struct seg6_end_dt_info *info = &slwt->dt_info;
-+
-+	return info->mode;
-+}
-+
-+static int seg6_end_dt6_build(struct seg6_local_lwt *slwt, const void *cfg,
-+			      struct netlink_ext_ack *extack)
-+{
-+	enum seg6_end_dt_mode mode = seg6_end_dt6_parse_mode(slwt);
-+	struct seg6_end_dt_info *info = &slwt->dt_info;
-+
-+	switch (mode) {
-+	case DT_LEGACY_MODE:
-+		info->mode = DT_LEGACY_MODE;
-+		return 0;
-+	case DT_VRF_MODE:
-+		return __seg6_end_dt_vrf_build(slwt, cfg, AF_INET6, extack);
-+	default:
-+		NL_SET_ERR_MSG(extack, "table or vrftable must be specified");
-+		return -EINVAL;
-+	}
-+}
- #endif
  
- static int input_action_end_dt6(struct sk_buff *skb,
-@@ -660,6 +705,28 @@ static int input_action_end_dt6(struct sk_buff *skb,
- 	if (!pskb_may_pull(skb, sizeof(struct ipv6hdr)))
- 		goto drop;
- 
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+	if (seg6_end_dt6_get_mode(slwt) == DT_LEGACY_MODE)
-+		goto legacy_mode;
++static int vrf_prepare_mac_header(struct sk_buff *skb,
++				  struct net_device *vrf_dev, u16 proto)
++{
++	struct ethhdr *eth;
++	int err;
 +
-+	/* DT6_VRF_MODE */
-+	skb = end_dt_vrf_core(skb, slwt);
-+	if (!skb)
-+		/* packet has been processed and consumed by the VRF */
-+		return 0;
-+
-+	if (IS_ERR(skb))
-+		return PTR_ERR(skb);
-+
-+	/* note: this time we do not need to specify the table because the VRF
-+	 * takes care of selecting the correct table.
++	/* in general, we do not know if there is enough space in the head of
++	 * the packet for hosting the mac header.
 +	 */
-+	seg6_lookup_any_nexthop(skb, NULL, 0, true);
++	err = skb_cow_head(skb, LL_RESERVED_SPACE(vrf_dev));
++	if (unlikely(err))
++		/* no space in the skb head */
++		return -ENOBUFS;
 +
-+	return dst_input(skb);
++	__skb_push(skb, ETH_HLEN);
++	eth = (struct ethhdr *)skb->data;
 +
-+legacy_mode:
-+#endif
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
++	skb_reset_mac_header(skb);
++
++	/* we set the ethernet destination and the source addresses to the
++	 * address of the VRF device.
++	 */
++	ether_addr_copy(eth->h_dest, vrf_dev->dev_addr);
++	ether_addr_copy(eth->h_source, vrf_dev->dev_addr);
++	eth->h_proto = htons(proto);
++
++	/* the destination address of the Ethernet frame corresponds to the
++	 * address set on the VRF interface; therefore, the packet is intended
++	 * to be processed locally.
++	 */
++	skb->protocol = eth->h_proto;
++	skb->pkt_type = PACKET_HOST;
++
++	skb_postpush_rcsum(skb, skb->data, ETH_HLEN);
++
++	skb_pull_inline(skb, ETH_HLEN);
++
++	return 0;
++}
++
++/* prepare and add the mac header to the packet if it was not set previously.
++ * In this way, packet sniffers such as tcpdump can parse the packet correctly.
++ * If the mac header was already set, the original mac header is left
++ * untouched and the function returns immediately.
++ */
++static int vrf_add_mac_header_if_unset(struct sk_buff *skb,
++				       struct net_device *vrf_dev,
++				       u16 proto)
++{
++	if (skb_mac_header_was_set(skb))
++		return 0;
++
++	return vrf_prepare_mac_header(skb, vrf_dev, proto);
++}
++
+ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 				   struct sk_buff *skb)
+ {
+@@ -1335,9 +1390,15 @@ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 		skb->skb_iif = vrf_dev->ifindex;
  
- 	seg6_lookup_any_nexthop(skb, NULL, slwt->table, true);
-@@ -851,7 +918,16 @@ static struct seg6_action_desc seg6_action_table[] = {
- 	},
- 	{
- 		.action		= SEG6_LOCAL_ACTION_END_DT6,
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+		.attrs		= 0,
-+		.optattrs	= (1 << SEG6_LOCAL_TABLE) |
-+				  (1 << SEG6_LOCAL_VRFTABLE),
-+		.slwt_ops	= {
-+					.build_state = seg6_end_dt6_build,
-+				  },
-+#else
- 		.attrs		= (1 << SEG6_LOCAL_TABLE),
-+#endif
- 		.input		= input_action_end_dt6,
- 	},
- 	{
+ 		if (!list_empty(&vrf_dev->ptype_all)) {
+-			skb_push(skb, skb->mac_len);
+-			dev_queue_xmit_nit(skb, vrf_dev);
+-			skb_pull(skb, skb->mac_len);
++			int err;
++
++			err = vrf_add_mac_header_if_unset(skb, vrf_dev,
++							  ETH_P_IPV6);
++			if (likely(!err)) {
++				skb_push(skb, skb->mac_len);
++				dev_queue_xmit_nit(skb, vrf_dev);
++				skb_pull(skb, skb->mac_len);
++			}
+ 		}
+ 
+ 		IP6CB(skb)->flags |= IP6SKB_L3SLAVE;
+@@ -1380,9 +1441,14 @@ static struct sk_buff *vrf_ip_rcv(struct net_device *vrf_dev,
+ 	vrf_rx_stats(vrf_dev, skb->len);
+ 
+ 	if (!list_empty(&vrf_dev->ptype_all)) {
+-		skb_push(skb, skb->mac_len);
+-		dev_queue_xmit_nit(skb, vrf_dev);
+-		skb_pull(skb, skb->mac_len);
++		int err;
++
++		err = vrf_add_mac_header_if_unset(skb, vrf_dev, ETH_P_IP);
++		if (likely(!err)) {
++			skb_push(skb, skb->mac_len);
++			dev_queue_xmit_nit(skb, vrf_dev);
++			skb_pull(skb, skb->mac_len);
++		}
+ 	}
+ 
+ 	skb = vrf_rcv_nfhook(NFPROTO_IPV4, NF_INET_PRE_ROUTING, skb, vrf_dev);
 -- 
 2.20.1
 
