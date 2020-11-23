@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93EB5C2D0E4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:30:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 288F1C63798
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:31:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4235520C56
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:30:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E192A2078E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Nov 2020 18:31:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729654AbgKWSax (ORCPT
+        id S1728829AbgKWSbA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Nov 2020 13:30:53 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:41906 "EHLO smtp.uniroma2.it"
+        Mon, 23 Nov 2020 13:31:00 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:41920 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729530AbgKWSax (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Nov 2020 13:30:53 -0500
+        id S1728631AbgKWSbA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 23 Nov 2020 13:31:00 -0500
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0ANITqgi016939
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0ANITqge016939
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 23 Nov 2020 19:29:55 +0100
+        Mon, 23 Nov 2020 19:29:53 +0100
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -45,12 +45,10 @@ Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next v3 4/8] seg6: add callbacks for customizing the creation/destruction of a behavior
-Date:   Mon, 23 Nov 2020 19:28:52 +0100
-Message-Id: <20201123182857.4640-5-andrea.mayer@uniroma2.it>
+Subject: [net-next v3 0/8] seg6: add support for SRv6 End.DT4/DT6 behavior
+Date:   Mon, 23 Nov 2020 19:28:48 +0100
+Message-Id: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
-References: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
@@ -59,118 +57,152 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We introduce two callbacks used for customizing the creation/destruction of
-a SRv6 behavior. Such callbacks are defined in the new struct
-seg6_local_lwtunnel_ops and hereafter we provide a brief description of
-them:
+This patchset provides support for the SRv6 End.DT4 and SRv6 End.DT6 (VRF mode)
+behavior.
 
- - build_state(...): used for calling the custom constructor of the
-   behavior during its initialization phase and after all the attributes
-   have been parsed successfully;
+The SRv6 End.DT4 is used to implement multi-tenant IPv4 L3 VPN. It decapsulates
+the received packets and performs IPv4 routing lookup in the routing table of
+the tenant. The SRv6 End.DT4 Linux implementation leverages a VRF device. The
+SRv6 End.DT4 is defined in the SRv6 Network Programming [1].
 
- - destroy_state(...): used for calling the custom destructor of the
-   behavior before it is completely destroyed.
+The Linux kernel already offers an implementation of the SRv6 End.DT6
+behavior which permits IPv6 L3 VPNs over SRv6 networks. This new
+implementation of DT6 is based on the same VRF infrastructure already
+exploited for implementing the SRv6 End.DT4 behavior. The aim of the new
+SRv6 End.DT6 in VRF mode consists in simplifying the construction of IPv6
+L3 VPN services in the multi-tenant environment.
+Currently, the two SRv6 End.DT6 implementations (legacy and VRF mode)
+coexist seamlessly and can be chosen according to the context and the user
+preferences.
 
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- net/ipv6/seg6_local.c | 49 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+- Patch 1 is needed to solve a pre-existing issue with tunneled packets
+  when a sniffer is attached;
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 3b5657c622a0..da5bf4167a52 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -33,6 +33,13 @@
- 
- struct seg6_local_lwt;
- 
-+/* callbacks used for customizing the creation and destruction of a behavior */
-+struct seg6_local_lwtunnel_ops {
-+	int (*build_state)(struct seg6_local_lwt *slwt, const void *cfg,
-+			   struct netlink_ext_ack *extack);
-+	void (*destroy_state)(struct seg6_local_lwt *slwt);
-+};
-+
- struct seg6_action_desc {
- 	int action;
- 	unsigned long attrs;
-@@ -53,6 +60,8 @@ struct seg6_action_desc {
- 
- 	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
- 	int static_headroom;
-+
-+	struct seg6_local_lwtunnel_ops slwt_ops;
- };
- 
- struct bpf_lwt_prog {
-@@ -1055,6 +1064,38 @@ static int parse_nla_optional_attrs(struct nlattr **attrs,
- 	return err;
- }
- 
-+/* call the custom constructor of the behavior during its initialization phase
-+ * and after that all its attributes have been parsed successfully.
-+ */
-+static int
-+seg6_local_lwtunnel_build_state(struct seg6_local_lwt *slwt, const void *cfg,
-+				struct netlink_ext_ack *extack)
-+{
-+	struct seg6_action_desc *desc = slwt->desc;
-+	struct seg6_local_lwtunnel_ops *ops;
-+
-+	ops = &desc->slwt_ops;
-+	if (!ops->build_state)
-+		return 0;
-+
-+	return ops->build_state(slwt, cfg, extack);
-+}
-+
-+/* call the custom destructor of the behavior which is invoked before the
-+ * tunnel is going to be destroyed.
-+ */
-+static void seg6_local_lwtunnel_destroy_state(struct seg6_local_lwt *slwt)
-+{
-+	struct seg6_action_desc *desc = slwt->desc;
-+	struct seg6_local_lwtunnel_ops *ops;
-+
-+	ops = &desc->slwt_ops;
-+	if (!ops->destroy_state)
-+		return;
-+
-+	ops->destroy_state(slwt);
-+}
-+
- static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
- {
- 	struct seg6_action_param *param;
-@@ -1154,6 +1195,10 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
- 	if (err < 0)
- 		goto out_free;
- 
-+	err = seg6_local_lwtunnel_build_state(slwt, cfg, extack);
-+	if (err < 0)
-+		goto out_destroy_attrs;
-+
- 	newts->type = LWTUNNEL_ENCAP_SEG6_LOCAL;
- 	newts->flags = LWTUNNEL_STATE_INPUT_REDIRECT;
- 	newts->headroom = slwt->headroom;
-@@ -1162,6 +1207,8 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
- 
- 	return 0;
- 
-+out_destroy_attrs:
-+	destroy_attrs(slwt);
- out_free:
- 	kfree(newts);
- 	return err;
-@@ -1171,6 +1218,8 @@ static void seg6_local_destroy_state(struct lwtunnel_state *lwt)
- {
- 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
- 
-+	seg6_local_lwtunnel_destroy_state(slwt);
-+
- 	destroy_attrs(slwt);
- 
- 	return;
+- Patch 2 improves the management of the seg6local attributes used by the
+  SRv6 behaviors;
+
+- Patch 3 adds support for optional attributes in SRv6 behaviors;
+
+- Patch 4 introduces two callbacks used for customizing the
+  creation/destruction of a SRv6 behavior;
+
+- Patch 5 is the core patch that adds support for the SRv6 End.DT4
+  behavior;
+
+- Patch 6 introduces the VRF support for SRv6 End.DT6 behavior;
+
+- Patch 7 adds the selftest for SRv6 End.DT4 behavior;
+
+- Patch 8 adds the selftest for SRv6 End.DT6 (VRF mode) behavior;
+
+- Patch 9 adds the vrftable attribute for End.DT4/DT6 behaviors in iproute2.
+
+I would like to thank David Ahern for his support during the development of
+this patchset.
+
+Comments, suggestions and improvements are very welcome!
+
+Thanks,
+Andrea Mayer
+
+v3
+ notes about the build bot:
+  - apparently the ',' (comma) in the subject prefix confused the build bot.
+    Removed the ',' in favor of ' ' (space). 
+    
+    Thanks to David Ahern and Konstantin Ryabitsev for shedding light on this
+    fact.
+    Thanks also to Nathan Chancellor for trying to build the patchset v2 by
+    simulating the bot issue.
+
+ add new patch for iproute2:
+  - [9/9] seg6: add support for vrftable attribute in End.DT4/DT6 behaviors
+
+ add new patch:
+  -  [8/9] selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
+
+ add new patch:
+  - [6/9] seg6: add VRF support for SRv6 End.DT6 behavior
+
+ add new patch:
+  - [3/9] seg6: add support for optional attributes in SRv6 behaviors
+
+ selftests: add selftest for the SRv6 End.DT4 behavior
+  - keep David Ahern's review tag since the code wasn't changed. Thanks to David  
+    Ahern for his review.
+
+ seg6: add support for the SRv6 End.DT4 behavior
+  - remove useless error in seg6_end_dt4_build();
+  - remove #ifdef/#endif stubs for DT4 when CONFIG_NET_L3_MASTER_DEV is not
+    defined;
+  - fix coding style.
+
+    Thanks to Jakub Kicinski for his review and for all his suggestions.
+
+ seg6: add callbacks for customizing the creation/destruction of a behavior
+  - remove typedef(s) slwt_{build/destroy}_state_t;
+  - fix coding style: remove empty lines, trivial comments and rename labels in
+    the seg6_local_build_state() function.
+    
+    Thanks to Jakub Kicinski for his review and for all his suggestions.
+
+ seg6: improve management of behavior attributes
+  - remove defensive programming approach in destroy_attr_srh(),
+    destroy_attr_bpf() and destroy_attrs();
+  - change the __destroy_attrs() function signature, renaming the 'end' argument    
+    'parsed_max'. Now, the __destroy_attrs() keeps only the 'parsed_max' and
+    'slwt' arguments.
+    
+    Thanks to Jakub Kicinski for his review and for all his suggestions.
+
+ vrf: add mac header for tunneled packets when sniffer is attached
+  - keep David Ahern's review tag since the code wasn't changed. 
+    
+    Thanks to Jakub Kicinski for pointing it out and David Ahern for his review.
+
+v2
+ no changes made: resubmitted after false build report.
+
+v1
+ improve comments;
+
+ add new patch 2/5 titled: seg6: improve management of behavior attributes
+
+ seg6: add support for the SRv6 End.DT4 behavior
+  - remove the inline keyword in the definition of fib6_config_get_net().
+
+ selftests: add selftest for the SRv6 End.DT4 behavior
+  - add check for the vrf sysctl
+
+[1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
+
+Andrea Mayer (8):
+  vrf: add mac header for tunneled packets when sniffer is attached
+  seg6: improve management of behavior attributes
+  seg6: add support for optional attributes in SRv6 behaviors
+  seg6: add callbacks for customizing the creation/destruction of a
+    behavior
+  seg6: add support for the SRv6 End.DT4 behavior
+  seg6: add VRF support for SRv6 End.DT6 behavior
+  selftests: add selftest for the SRv6 End.DT4 behavior
+  selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
+
+ drivers/net/vrf.c                             |  78 ++-
+ include/uapi/linux/seg6_local.h               |   1 +
+ net/ipv6/seg6_local.c                         | 593 +++++++++++++++++-
+ .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 494 +++++++++++++++
+ .../selftests/net/srv6_end_dt6_l3vpn_test.sh  | 502 +++++++++++++++
+ 5 files changed, 1649 insertions(+), 19 deletions(-)
+ create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+ create mode 100755 tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
+
+Paolo Lungaroni (1):
+  seg6: add support for vrftable attribute in End.DT4/DT6 behaviors
+
+ include/uapi/linux/seg6_local.h |  1 +
+ ip/iproute_lwtunnel.c           | 19 ++++++++++++++++---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
+
 -- 
 2.20.1
 
