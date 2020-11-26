@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D15D7C56201
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Nov 2020 18:51:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5703AC56201
+	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Nov 2020 00:19:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3BE0D20674
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Nov 2020 18:51:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEB9620872
+	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Nov 2020 00:19:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="a9BFTfaT";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="uhniSVlj"
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="DJUquUF7";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="YrZ+8z+I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731457AbgKYSvx (ORCPT
+        id S1726483AbgKZATK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 Nov 2020 13:51:53 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:34413 "EHLO smtp.uniroma2.it"
+        Wed, 25 Nov 2020 19:19:10 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:40649 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730989AbgKYSvw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Nov 2020 13:51:52 -0500
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0APIof21029257;
-        Wed, 25 Nov 2020 19:50:46 +0100
+        id S1725836AbgKZATK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Nov 2020 19:19:10 -0500
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0AQ0Hw06001304;
+        Thu, 26 Nov 2020 01:18:03 +0100
 Received: from lubuntu-18.04 (unknown [160.80.103.126])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id AFEE3120099;
-        Wed, 25 Nov 2020 19:50:36 +0100 (CET)
+        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 9AA07120061;
+        Thu, 26 Nov 2020 01:17:53 +0100 (CET)
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1606330237; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=ed201904; t=1606349874; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RI2z5auShChbvX++r2Eysg8y/Lw5LNxiLNrqt336ilY=;
-        b=a9BFTfaTFwoIPlEon8IwPMC8Zd4D2AYhXbCfhWgkLjDpooYa6+D8KnoBGoxtlHRRsDZKWN
-        e0jsV6ediANHCbDg==
+        bh=0qxJTzApCauRHmAmaMhIdC4ArfH2+Q87a2Y+1BiHmwQ=;
+        b=DJUquUF7hKq+oGCmbsp3YGHzNC9wbyPsMjxSc738y3rOvHWYhZWooXvAlTFf711Wv+TJ+U
+        jzz5smxZtDKq1NDQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1606330237; h=from:from:sender:reply-to:subject:subject:date:date:
+        t=1606349874; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RI2z5auShChbvX++r2Eysg8y/Lw5LNxiLNrqt336ilY=;
-        b=uhniSVljPrm5cmIiqWilJ6AKE101ATakXX/24p2Vj0OIT2PBRnLZHW6G1XgobI9SRFGSxJ
-        +d03TmH4kA+BfcZ5WuYfRXyqv9AH7AyXUX4xRu5uKKq+jdtedMIWcRSCsvvuQzkmb9ZbB8
-        s0+OQCDsnyFADSm+02aWGrRmWSdMoccCI+virAPvTQIYMttoTP3M+QH/DfDS10iZr7H9G+
-        ZDeDHUPSKOzUmnA+CHsNYOLYL7LqdTkDQW+x1DBeIhVKy/A0ayWu4u/FEexKTz0VzLD0q6
-        74Rz26bPBHpriYNHHF9vkiCQ0NXOpd1WEstbt2xtHHPts5qTX3mUCC2VKXwzyw==
-Date:   Wed, 25 Nov 2020 19:50:36 +0100
+        bh=0qxJTzApCauRHmAmaMhIdC4ArfH2+Q87a2Y+1BiHmwQ=;
+        b=YrZ+8z+I/p+SJMsZQbSXwkfnYcnqUTgq119p25LYU75iI3U2hwyc+UmvwVHTVIV1Wgsqo0
+        UJigkdtPxnzq97lL+m7quIPiEwlsZDK6XSaKKIg2tK54QETxObbmdnmcJGDDukMHhYFK6B
+        0Y7azsU6IOavlUzSiQ1xYwfb6fBH5vXImGn0ax7JlGLi3PHMZscY955qa9fyVmw2Q8lDCX
+        56BfuSQhYekaNIyk1Bwd+mtC8GvL+iOgAdEYlN+95QxUVD9utFErlyDBoEgi7JlNwQ2nTD
+        ME/BfxBZeTrHm0eE+EqBqsmmdNSTZVHoR2KSfYOYDAjM7AYrD2mbr+TeNFTmzA==
+Date:   Thu, 26 Nov 2020 01:17:53 +0100
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -72,13 +72,12 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [net-next v3 5/8] seg6: add support for the SRv6 End.DT4
+Subject: Re: [net-next v3 0/8] seg6: add support for SRv6 End.DT4/DT6
  behavior
-Message-Id: <20201125195036.4b5b5645ff32926ca83b1359@uniroma2.it>
-In-Reply-To: <20201124154017.4b1a905c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Message-Id: <20201126011753.e0170a51a4ae7451a6310828@uniroma2.it>
+In-Reply-To: <20201124154904.0699f4c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 References: <20201123182857.4640-1-andrea.mayer@uniroma2.it>
-        <20201123182857.4640-6-andrea.mayer@uniroma2.it>
-        <20201124154017.4b1a905c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20201124154904.0699f4c1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -90,45 +89,24 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Jakub,
-thanks for your review.
 
-On Tue, 24 Nov 2020 15:40:17 -0800
+On Tue, 24 Nov 2020 15:49:04 -0800
 Jakub Kicinski <kuba@kernel.org> wrote:
 
-> On Mon, 23 Nov 2020 19:28:53 +0100 Andrea Mayer wrote:
-> > +static int cmp_nla_vrftable(struct seg6_local_lwt *a, struct seg6_local_lwt *b)
-> > +{
-> > +	struct seg6_end_dt_info *info_a = seg6_possible_end_dt_info(a);
-> > +	struct seg6_end_dt_info *info_b = seg6_possible_end_dt_info(b);
-> > +
-> > +	if (IS_ERR(info_a) || IS_ERR(info_b))
-> > +		return 1;
+> LGTM! Please address the nit and repost without the iproute2 patch.
+
+Thanks for the review of the patchset.
+
+> Mixing the iproute2 patch in has confused patchwork:
 > 
-> Isn't this impossible? I thought cmp() can only be called on fully
-> created lwtunnels and if !CONFIG_NET_L3_MASTER_DEV the tunnel won't 
-> be created?
+> https://patchwork.kernel.org/project/netdevbpf/list/?series=389667&state=*
 > 
+> Note how it thinks that the iproute2 patch is part of the kernel
+> series. This build bot-y thing is pretty new. I'll add a suggestion 
+> to our process documentation not to mix patches.
 
-The function cmp_nla_vrftable() can be called only if the lwtunnel is created
-successfully.
+As discussed, I will resubmit the kernel patches and the iproute2 patch in two
+separate patchsets.
 
-A SRv6 behavior using a vrftable attribute can be successfully instantiated only
-if CONFIG_NET_L3_MASTER_DEV is set. Otherwise (CONFIG_NET_L3_MASTER_DEV not set),
-the function parse_nla_vrftable() returns an error (obtained from the
-seg6_possible_end_dt_info()) and tunnel creation fails.
-
-The pointer returned from seg6_possible_end_dt_info() depends on
-CONFIG_NET_L3_MASTER_DEV. I thought it would be reasonable to check its validity
-in functions that make explicit use of seg6_possible_end_dt_info() even in cases
-where this was not strictly necessary (i.e: cmp_nla_vrftable()).
-
-Therefore, it turns out to be an impossible case. I can remove these checks in
-the next v4.
-
-Thank you,
+Thank you all,
 Andrea
-
-> > +	if (info_a->vrf_table != info_b->vrf_table)
-> > +		return 1;
-> > +
-> > +	return 0;
