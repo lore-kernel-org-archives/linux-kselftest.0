@@ -2,135 +2,223 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDBAFC83011
-	for <linux-kselftest@archiver.kernel.org>; Sat, 28 Nov 2020 22:13:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC1CEC3E8C5
+	for <linux-kselftest@archiver.kernel.org>; Sun, 29 Nov 2020 15:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADD2022244
-	for <linux-kselftest@archiver.kernel.org>; Sat, 28 Nov 2020 22:13:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AB5E2085B
+	for <linux-kselftest@archiver.kernel.org>; Sun, 29 Nov 2020 15:54:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="isTAhbDa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387405AbgK1Vt5 (ORCPT
+        id S1727406AbgK2Pyj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 28 Nov 2020 16:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        Sun, 29 Nov 2020 10:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729811AbgK0TrT (ORCPT
+        with ESMTP id S1726669AbgK2Pyj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Nov 2020 14:47:19 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2718C061A52;
-        Fri, 27 Nov 2020 11:32:59 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 7F3451F4659F
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     luto@kernel.org, tglx@linutronix.de, keescook@chromium.org
-Cc:     gofmanp@gmail.com, christian.brauner@ubuntu.com,
-        peterz@infradead.org, willy@infradead.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v8 4/7] entry: Support Syscall User Dispatch on common syscall entry
-Date:   Fri, 27 Nov 2020 14:32:35 -0500
-Message-Id: <20201127193238.821364-5-krisman@collabora.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201127193238.821364-1-krisman@collabora.com>
-References: <20201127193238.821364-1-krisman@collabora.com>
+        Sun, 29 Nov 2020 10:54:39 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A76C0613CF
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Nov 2020 07:53:58 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id d20so15591313lfe.11
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Nov 2020 07:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3PuJ9ydxTViJxhC8bUeJS1Nnpydv/VEM9Wi1gMrMaBs=;
+        b=isTAhbDaUuUXk1VQ3ndJOQ/CuS5MKUiZU9CQF6PymdXpFUOWrtmdwQbOetQXqfuYcu
+         DN+OBA9qL3A9IiYDok2MOFG354WJgz9qAUvm/bYWWVPi9WyZ1PJ1lNfGjJRLoAZLO2Vg
+         uRTzD4pVG+cV2/ymy6+tsxqoVguJfYNDW/2RvIvgoZeWEzlw11EW3XkkvoYk35tVWwPn
+         HfZCQVeqGtpyFhpd4OUy9FJVmyQdiOL8EaFCqmL+9cNs+NvTNNL4303WZgB9szddFdV8
+         BfgLnmnM0DdbVQ1i8kfeHCJ1NEzilifWALzo17ajgIx/BZAN0Q0Iv6ejITAt4NtpIu5W
+         GSXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3PuJ9ydxTViJxhC8bUeJS1Nnpydv/VEM9Wi1gMrMaBs=;
+        b=ZycYqaOhy/uqMIxe5FIHJqlFgBVWJ3Ria6csqY7BnFfrKeip0+hohDYYPOMB1qQMCy
+         orM14xP93Rqv39CCaTZoIaMLCyFqAsHT57CjnvT6YuODk+hefaK5LWBUkeaI75Z8gOnH
+         Y2jPG2sXn8L284BnF+FyhWle9OYSh6LCvO0zxKSLBbDiGnjFHw9aTgXFITX0ymd3D7+z
+         k8b3Pyh0La14q+JtkhWVa4bgCqpPICjCd6ijKWi4Z+mDlsKNPbq/vPyuo1qycZgi0vw7
+         d8iJCESpIMefbGyUtprePBQYGtmPTkTLET0supsJqGwhsTej6/gh0LvL5GfMkO0D2uX+
+         9tKg==
+X-Gm-Message-State: AOAM5338rXIZQFu7ZYqFlHhewCKE5wPQAGgaFUvZv0oaCXn78DNeHksU
+        UYQTMFjWYI2FR+TdDTggdlKFfHNiT6UvsPH7kypp6w==
+X-Google-Smtp-Source: ABdhPJzudR+9Ib3gs3Y02i4BAQQW5kNsVm6Yid+szIpP/1AQJ9ils7ZN++n24NpQOPLTFTgkysS30jlcr9Wp5KFuvz0=
+X-Received: by 2002:ac2:43b1:: with SMTP id t17mr7446330lfl.385.1606665236632;
+ Sun, 29 Nov 2020 07:53:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201125092208.12544-1-rppt@kernel.org> <20201125092208.12544-8-rppt@kernel.org>
+In-Reply-To: <20201125092208.12544-8-rppt@kernel.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Sun, 29 Nov 2020 07:53:45 -0800
+Message-ID: <CALvZod4MoXod_YkbO+4k2=PS=xdMVbZa2HWWuUnMZ1G9hSr+Jw@mail.gmail.com>
+Subject: Re: [PATCH v12 07/10] secretmem: add memcg accounting
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-riscv@lists.infradead.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Syscall User Dispatch (SUD) must take precedence over seccomp and
-ptrace, since the use case is emulation (it can be invoked with a
-different ABI) such that seccomp filtering by syscall number doesn't
-make sense in the first place.  In addition, either the syscall is
-dispatched back to userspace, in which case there is no resource for to
-trace, or the syscall will be executed, and seccomp/ptrace will execute
-next.
+On Wed, Nov 25, 2020 at 1:51 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> From: Mike Rapoport <rppt@linux.ibm.com>
+>
+> Account memory consumed by secretmem to memcg. The accounting is updated
+> when the memory is actually allocated and freed.
+>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Acked-by: Roman Gushchin <guro@fb.com>
+> ---
+>  mm/filemap.c   |  3 ++-
+>  mm/secretmem.c | 36 +++++++++++++++++++++++++++++++++++-
+>  2 files changed, 37 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 249cf489f5df..cf7f1dc9f4b8 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -42,6 +42,7 @@
+>  #include <linux/psi.h>
+>  #include <linux/ramfs.h>
+>  #include <linux/page_idle.h>
+> +#include <linux/secretmem.h>
+>  #include "internal.h"
+>
+>  #define CREATE_TRACE_POINTS
+> @@ -844,7 +845,7 @@ static noinline int __add_to_page_cache_locked(struct page *page,
+>         page->mapping = mapping;
+>         page->index = offset;
+>
+> -       if (!huge) {
+> +       if (!huge && !page_is_secretmem(page)) {
+>                 error = mem_cgroup_charge(page, current->mm, gfp);
+>                 if (error)
+>                         goto error;
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 52a900a135a5..eb6628390444 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/memblock.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/secretmem.h>
+> +#include <linux/memcontrol.h>
+>  #include <linux/set_memory.h>
+>  #include <linux/sched/signal.h>
+>
+> @@ -44,6 +45,32 @@ struct secretmem_ctx {
+>
+>  static struct cma *secretmem_cma;
+>
+> +static int secretmem_account_pages(struct page *page, gfp_t gfp, int order)
+> +{
+> +       int err;
+> +
+> +       err = memcg_kmem_charge_page(page, gfp, order);
+> +       if (err)
+> +               return err;
+> +
+> +       /*
+> +        * seceremem caches are unreclaimable kernel allocations, so treat
+> +        * them as unreclaimable slab memory for VM statistics purposes
+> +        */
+> +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
+> +                           PAGE_SIZE << order);
 
-Since SUD runs before tracepoints, it needs to be a SYSCALL_WORK_EXIT as
-well, just to prevent a trace exit event when dispatch was triggered.
-For that, the on_syscall_dispatch() examines context to skip the
-tracepoint, audit and other work.
+Please use mod_lruvec_page_state() instead, so we get the memcg stats too.
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
-Changes since v6:
-  - Update do_syscall_intercept signature (Christian Brauner)
-  - Move it to before tracepoints
-  - Use SYSCALL_WORK flags
----
- include/linux/entry-common.h |  2 ++
- kernel/entry/common.c        | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+)
+BTW I think secretmem deserves a vmstat entry instead of overloading
+NR_SLAB_UNRECLAIMABLE_B.
 
-diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index 49b26b216e4e..a6e98b4ba8e9 100644
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -44,10 +44,12 @@
- 				 SYSCALL_WORK_SYSCALL_TRACE |		\
- 				 SYSCALL_WORK_SYSCALL_EMU |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
-+				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
- 				 ARCH_SYSCALL_WORK_ENTER)
- #define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
- 				 SYSCALL_WORK_SYSCALL_TRACE |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
-+				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
- 				 ARCH_SYSCALL_WORK_EXIT)
- 
- /*
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index f1b12dc32ff4..ec20aba3b890 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -6,6 +6,8 @@
- #include <linux/livepatch.h>
- #include <linux/audit.h>
- 
-+#include "common.h"
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/syscalls.h>
- 
-@@ -47,6 +49,16 @@ static long syscall_trace_enter(struct pt_regs *regs, long syscall,
- {
- 	long ret = 0;
- 
-+	/*
-+	 * Handle Syscall User Dispatch.  This must comes first, since
-+	 * the ABI here can be something that doesn't make sense for
-+	 * other syscall_work features.
-+	 */
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (do_syscall_user_dispatch(regs))
-+			return -1L;
-+	}
-+
- 	/* Handle ptrace */
- 	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
- 		ret = arch_syscall_enter_tracehook(regs);
-@@ -232,6 +244,11 @@ static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
- {
- 	bool step;
- 
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (on_syscall_dispatch())
-+			return;
-+	}
-+
- 	audit_syscall_exit(regs);
- 
- 	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
--- 
-2.29.2
-
+> +
+> +       return 0;
+> +}
+> +
+> +static void secretmem_unaccount_pages(struct page *page, int order)
+> +{
+> +
+> +       mod_node_page_state(page_pgdat(page), NR_SLAB_UNRECLAIMABLE_B,
+> +                           -PAGE_SIZE << order);
+> +       memcg_kmem_uncharge_page(page, order);
+> +}
+> +
+>  static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>  {
+>         unsigned long nr_pages = (1 << PMD_PAGE_ORDER);
+> @@ -56,10 +83,14 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>         if (!page)
+>                 return -ENOMEM;
+>
+> -       err = set_direct_map_invalid_noflush(page, nr_pages);
+> +       err = secretmem_account_pages(page, gfp, PMD_PAGE_ORDER);
+>         if (err)
+>                 goto err_cma_release;
+>
+> +       err = set_direct_map_invalid_noflush(page, nr_pages);
+> +       if (err)
+> +               goto err_memcg_uncharge;
+> +
+>         addr = (unsigned long)page_address(page);
+>         err = gen_pool_add(pool, addr, PMD_SIZE, NUMA_NO_NODE);
+>         if (err)
+> @@ -76,6 +107,8 @@ static int secretmem_pool_increase(struct secretmem_ctx *ctx, gfp_t gfp)
+>          * won't fail
+>          */
+>         set_direct_map_default_noflush(page, nr_pages);
+> +err_memcg_uncharge:
+> +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>  err_cma_release:
+>         cma_release(secretmem_cma, page, nr_pages);
+>         return err;
+> @@ -302,6 +335,7 @@ static void secretmem_cleanup_chunk(struct gen_pool *pool,
+>         int i;
+>
+>         set_direct_map_default_noflush(page, nr_pages);
+> +       secretmem_unaccount_pages(page, PMD_PAGE_ORDER);
+>
+>         for (i = 0; i < nr_pages; i++)
+>                 clear_highpage(page + i);
+> --
+> 2.28.0
+>
