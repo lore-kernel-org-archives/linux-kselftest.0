@@ -2,214 +2,177 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA36C64E7A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 19:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 674A9C83028
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 19:25:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42CC0208C3
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 19:01:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AX405Osz"
+	by mail.kernel.org (Postfix) with ESMTP id 3522521D7A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 19:25:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730164AbgLATAr (ORCPT
+        id S2392395AbgLATZN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Dec 2020 14:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        Tue, 1 Dec 2020 14:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbgLATAr (ORCPT
+        with ESMTP id S1731351AbgLATZD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Dec 2020 14:00:47 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EE1C0613D4
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Dec 2020 11:00:07 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id y9so2767376ilb.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Dec 2020 11:00:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5WiGFwgTdyvLFhngVWRsy4uz/nVfgxKZUAGEzNFkY80=;
-        b=AX405OszVeGEA2VJJpxsH/hn72j0e7jTzJhWLRs/b0RlYsxWA0D1/IdwNip05R1epM
-         J8egUwok7Bf0bJM/L5ik7nLoz3dL08HQu9bujrshPjJj5LoRh7tw+Jc6w+YqMQmal1cL
-         5WnunY2CJSWcBIgXAahiZA6rFjn12zm817D/nzl+I8TvmjgRr6TA0b7ivQfSWUJvISWz
-         Z9sUqd91oXPSFs2fMh2ZLxh0/MZv9qKG1egjj3QnCWbFiQBMT5szcu0An+wEn6HA491r
-         wFqrLJosGXP5eazDT1KtTy+Ia32vNuxYy4xB3ZhYzZgVBZws3uzdZ+A9K1JM88rDR9P6
-         Ibyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5WiGFwgTdyvLFhngVWRsy4uz/nVfgxKZUAGEzNFkY80=;
-        b=BdlG6yW1NgC4FpDeuywogW1rTEoevLjWS5RUFaZxRFO4s1bthzVBvzf0P0pswV1cVr
-         7BqSzHh79jWjjUzo2Lx3Bvw4nQ7/+zcD2CbSMw02pYtLXr/pozwWdlDXrxOZme3pfaL2
-         7iJIX18tW5iLuk9bz7YLCc5C26t444h+j1KVWBIsroSgTpRxzj5rEENwfrTvB4UtcUZd
-         6VhLhJY1MavO1ZDmm7JqXlSjK/ljpD8rqGHqTv2ImRr/zOplUcqtjbpX2ZkP2/ZNmUCs
-         iSSUP1yQl8xQHBj2MuOY/PC+hFgDXuaY8XerafafQLS2coKyrxQdzKow2u748nsw+8cO
-         Nqyg==
-X-Gm-Message-State: AOAM530cNaK1YZ0WNa4docc8IpHGzZVvjTacY/iwCAs09ANAJ40ZqjkO
-        yyfIQj4l9Ft0i09ZDIK8A4TajTHUxGeOpkOLNUylKw==
-X-Google-Smtp-Source: ABdhPJxmGG830IYXzUMXpFTTxu5CX/L/t5UT+1fCmZZZ4UmJ9S9qk+VJOtxjVoZs56Wmoi1sqnSSZvv6jSUZ3FaURGs=
-X-Received: by 2002:a05:6e02:128b:: with SMTP id y11mr4148745ilq.75.1606849206187;
- Tue, 01 Dec 2020 11:00:06 -0800 (PST)
+        Tue, 1 Dec 2020 14:25:03 -0500
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13334C061A4B
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Dec 2020 11:23:38 -0800 (PST)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ClsTN6FJ6zlhjDS;
+        Tue,  1 Dec 2020 20:23:36 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4ClsTM4GjVzlh8TJ;
+        Tue,  1 Dec 2020 20:23:35 +0100 (CET)
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Shuah Khan <shuah@kernel.org>,
+        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, x86@kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH v25 06/12] fs,security: Add sb_delete hook
+Date:   Tue,  1 Dec 2020 20:23:16 +0100
+Message-Id: <20201201192322.213239-7-mic@digikod.net>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201201192322.213239-1-mic@digikod.net>
+References: <20201201192322.213239-1-mic@digikod.net>
 MIME-Version: 1.0
-References: <20201130233242.78413-1-dlatypov@google.com> <20201130233242.78413-2-dlatypov@google.com>
- <CABVgOSmX3foOr6XJhQ_goYabFEg8qNYoQ+5O7JPRW=gLmh=OQA@mail.gmail.com>
-In-Reply-To: <CABVgOSmX3foOr6XJhQ_goYabFEg8qNYoQ+5O7JPRW=gLmh=OQA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 1 Dec 2020 10:59:54 -0800
-Message-ID: <CAGS_qxpW=Q=x8WAR3WWhtYnJc+K43kpDw680x+6go1cAjW6oUQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] kunit: tool: fix unit test so it can run from
- non-root dir
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 11:33 PM David Gow <davidgow@google.com> wrote:
->
-> On Tue, Dec 1, 2020 at 7:33 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > get_absolute_path() makes an attempt to allow for this.
-> > But that doesn't work as soon as os.chdir() gets called.
->
-> Can we explain why this doesn't work? It's because the test_data/
-> files are accessed with relative paths, so chdir breaks access to
-> them, right?
+From: Mickaël Salaün <mic@linux.microsoft.com>
 
-Correct.
-Because it actually returns a relative path.
+The sb_delete security hook is called when shutting down a superblock,
+which may be useful to release kernel objects tied to the superblock's
+lifetime (e.g. inodes).
 
-(I forgot that I called out that get_absolute_path() gives relative
-paths in the last patch, and not this one. I can update the commit
-desc if we want a v2 of this)
+This new hook is needed by Landlock to release (ephemerally) tagged
+struct inodes.  This comes from the unprivileged nature of Landlock
+described in the next commit.
 
->
-> >
-> > So make it so that os.chdir() does nothing to avoid this.
-> >
-> > Note: mock.patch.object() doesn't seem to work in setUpModule(), hence
-> > the introduction of a new base class instead.
-> >
-> > Fixes: 5578d008d9e0 ("kunit: tool: fix running kunit_tool from outside kernel tree")
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> I don't like this: disabling a real system call seems like overkill to
-> work around a path issue like this.
->
-> Wouldn't it be better to either:
-> (a) stop kunit_tool from needing to chdir entirely; or
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: James Morris <jmorris@namei.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Serge E. Hallyn <serge@hallyn.com>
+Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+Reviewed-by: Jann Horn <jannh@google.com>
+---
 
-a) is doable, but would require plumbing cwd=get_kernel_root_path() to
-all the subprocess calls to make, etc.
-I'm not sure fixing a internal test-only issue necessarily justifies
-taking that path instead of the easier "just add a chdir" we opted for
-in 5578d008d9e0 ("kunit: tool: fix running kunit_tool from outside
-kernel tree").
+Changes since v22:
+* Add Reviewed-by: Jann Horn <jannh@google.com>
 
-> (b) have get_absolute_path() / test_data_path() produce an absolute path.
->
-> The latter really seems like the most sensible approach: have the
-> script read its own path and read files relative to that.
+Changes since v17:
+* Initial patch to replace the direct call to landlock_release_inodes()
+  (requested by James Morris).
+  https://lore.kernel.org/lkml/alpine.LRH.2.21.2005150536440.7929@namei.org/
+---
+ fs/super.c                    | 1 +
+ include/linux/lsm_hook_defs.h | 1 +
+ include/linux/lsm_hooks.h     | 2 ++
+ include/linux/security.h      | 4 ++++
+ security/security.c           | 5 +++++
+ 5 files changed, 13 insertions(+)
 
-b) is not that simple, sadly.
+diff --git a/fs/super.c b/fs/super.c
+index 98bb0629ee10..751cad8c081f 100644
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -454,6 +454,7 @@ void generic_shutdown_super(struct super_block *sb)
+ 		evict_inodes(sb);
+ 		/* only nonzero refcount inodes can have marks */
+ 		fsnotify_sb_delete(sb);
++		security_sb_delete(sb);
+ 
+ 		if (sb->s_dio_done_wq) {
+ 			destroy_workqueue(sb->s_dio_done_wq);
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 32a940117e7a..1ba9b4dfecb3 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -59,6 +59,7 @@ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
+ LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
+ 	 struct fs_parameter *param)
+ LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
++LSM_HOOK(void, LSM_RET_VOID, sb_delete, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
+ LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
+ LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index ff0f03a45c56..dbfcec05a176 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -108,6 +108,8 @@
+  *	allocated.
+  *	@sb contains the super_block structure to be modified.
+  *	Return 0 if operation was successful.
++ * @sb_delete:
++ *	Release objects tied to a superblock (e.g. inodes).
+  * @sb_free_security:
+  *	Deallocate and clear the sb->s_security field.
+  *	@sb contains the super_block structure to be modified.
+diff --git a/include/linux/security.h b/include/linux/security.h
+index bc2725491560..a4603b62d444 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -287,6 +287,7 @@ void security_bprm_committed_creds(struct linux_binprm *bprm);
+ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
+ int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
+ int security_sb_alloc(struct super_block *sb);
++void security_sb_delete(struct super_block *sb);
+ void security_sb_free(struct super_block *sb);
+ void security_free_mnt_opts(void **mnt_opts);
+ int security_sb_eat_lsm_opts(char *options, void **mnt_opts);
+@@ -619,6 +620,9 @@ static inline int security_sb_alloc(struct super_block *sb)
+ 	return 0;
+ }
+ 
++static inline void security_sb_delete(struct super_block *sb)
++{ }
++
+ static inline void security_sb_free(struct super_block *sb)
+ { }
+ 
+diff --git a/security/security.c b/security/security.c
+index 4ffd6c3af9d7..4563e7a79216 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -899,6 +899,11 @@ int security_sb_alloc(struct super_block *sb)
+ 	return rc;
+ }
+ 
++void security_sb_delete(struct super_block *sb)
++{
++	call_void_hook(sb_delete, sb);
++}
++
+ void security_sb_free(struct super_block *sb)
+ {
+ 	call_void_hook(sb_free_security, sb);
+-- 
+2.29.2
 
-Say I invoke
-$ python3 kunit_tool_test.py
-then __file__ = kunit_tool_test.py.
-
-So __file__ is a relative path, but the code assumed it was an
-absolute one and any change of directory breaks things.
-Working around that would require something like caching the result of
-os.path.abspath(__file__) somewhere.
-
-I can see the point about not mocking out something like os.chdir().
-But on the other hand, do we have any other legitimate reason to call
-it besides that one place in kunit.py?
-If we do have something that relies on doing an os.chdir(), it should
-ideally notice that it didn't work and manifest in a unit test failure
-somehow.
-
-Alternatively, we could make get_kernel_root_path() return ""/None to
-avoid the chdir call.
-kunit.py:       if get_kernel_root_path():
-kunit.py:               os.chdir(get_kernel_root_path())
-
-There'd be no adverse affects atm for stubbing that out, and I don't forsee any.
-But if we want to be even safer, then perhaps we have
-
-def chdir_to_kernel_root():
-   ...
-
-and mock out just that func in the unit test?
-
->
-> Cheers,
-> -- David
->
->
-> >  tools/testing/kunit/kunit_tool_test.py | 15 +++++++++++----
-> >  1 file changed, 11 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> > index 3fbe1acd531a..9f1f1e1b772a 100755
-> > --- a/tools/testing/kunit/kunit_tool_test.py
-> > +++ b/tools/testing/kunit/kunit_tool_test.py
-> > @@ -32,7 +32,13 @@ def tearDownModule():
-> >  def get_absolute_path(path):
-> >         return os.path.join(os.path.dirname(__file__), path)
-> >
-> > -class KconfigTest(unittest.TestCase):
-> > +class KUnitTest(unittest.TestCase):
-> > +       """Contains common setup, like stopping main() from calling chdir."""
-> > +       def setUp(self):
-> > +               mock.patch.object(os, 'chdir').start()
-> > +               self.addCleanup(mock.patch.stopall)
-> > +
-> > +class KconfigTest(KUnitTest):
-> >
-> >         def test_is_subset_of(self):
-> >                 kconfig0 = kunit_config.Kconfig()
-> > @@ -88,7 +94,7 @@ class KconfigTest(unittest.TestCase):
-> >                 self.assertEqual(actual_kconfig.entries(),
-> >                                  expected_kconfig.entries())
-> >
-> > -class KUnitParserTest(unittest.TestCase):
-> > +class KUnitParserTest(KUnitTest):
-> >
-> >         def assertContains(self, needle, haystack):
-> >                 for line in haystack:
-> > @@ -250,7 +256,7 @@ class KUnitParserTest(unittest.TestCase):
-> >                                 result.status)
-> >                         self.assertEqual('kunit-resource-test', result.suites[0].name)
-> >
-> > -class KUnitJsonTest(unittest.TestCase):
-> > +class KUnitJsonTest(KUnitTest):
-> >
-> >         def _json_for(self, log_file):
-> >                 with(open(get_absolute_path(log_file))) as file:
-> > @@ -285,8 +291,9 @@ class StrContains(str):
-> >         def __eq__(self, other):
-> >                 return self in other
-> >
-> > -class KUnitMainTest(unittest.TestCase):
-> > +class KUnitMainTest(KUnitTest):
-> >         def setUp(self):
-> > +               super().setUp()
-> >                 path = get_absolute_path('test_data/test_is_test_passed-all_passed.log')
-> >                 with open(path) as file:
-> >                         all_passed_log = file.readlines()
-> > --
-> > 2.29.2.454.gaff20da3a2-goog
-> >
