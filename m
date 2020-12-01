@@ -2,214 +2,108 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1896C8301B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 12:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D7F5C64E7A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 12:49:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EA272084C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 12:11:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqagvTWu"
+	by mail.kernel.org (Postfix) with ESMTP id 482802084C
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Dec 2020 12:49:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730781AbgLAMKh (ORCPT
+        id S1727712AbgLAMtD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Dec 2020 07:10:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40534 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730755AbgLAMKh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Dec 2020 07:10:37 -0500
-Received: from mail.kernel.org (ip5f5ad5d9.dynamic.kabel-deutschland.de [95.90.213.217])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 66E8D221FD;
-        Tue,  1 Dec 2020 12:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606824555;
-        bh=CKU7nFOSsbN/XW/BnFcmO1V7GANr6/4MKPOejaVqscI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eqagvTWutTLcVFzb95Ciee9q0qDa5UFPbM5AAbFexOp5sfH7FAIDQn0oGeWvCXuev
-         TL7qtQMzvXDryh4IscT9uizp2JYQMu8M7zg6S2cpSqSmJfU9hbX12hd/de4h/liUaU
-         ksZGda6OQGzAGoKB9pYow+AqPj198CvdI0OsA+3E=
-Received: from mchehab by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kk4T2-00DGcs-P1; Tue, 01 Dec 2020 13:09:12 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Ben Segall <bsegall@google.com>,
-        Colin Cross <ccross@android.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Mel Gorman <mgorman@suse.de>, Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Gong <richard.gong@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Drewry <wad@chromium.org>, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH v5 00/16]Fix several bad kernel-doc markups
-Date:   Tue,  1 Dec 2020 13:08:53 +0100
-Message-Id: <cover.1606823973.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.28.0
+        Tue, 1 Dec 2020 07:49:03 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54714 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726202AbgLAMtD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Dec 2020 07:49:03 -0500
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxqtF9O8ZfOc0YAA--.55233S2;
+        Tue, 01 Dec 2020 20:47:57 +0800 (CST)
+From:   Xingxing Su <suxingxing@loongson.cn>
+To:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Mina Almasry <almasrymina@google.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest/vm: Fix build error
+Date:   Tue,  1 Dec 2020 20:47:56 +0800
+Message-Id: <1606826876-30656-1-git-send-email-suxingxing@loongson.cn>
+X-Mailer: git-send-email 2.1.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+X-CM-TRANSID: AQAAf9AxqtF9O8ZfOc0YAA--.55233S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1fJr4kAr1UKw4rCr1ftFb_yoW8XrWDp3
+        Za9w1DZrZ8CFW7K3W8W34UXa10grs2yFW0q3Z0qry7uwn8Xan2gr4IkFZ7Wry3uwsIqrW3
+        Aw1Ig3s3uw1qy3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xK
+        xwCY02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07brNVkUUUUU=
+X-CM-SenderInfo: pvx0x0xj0l0wo6or00hjvr0hdfq/1tbiAQARC13QvMs0YgADs0
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kernel-doc has always be limited to a probably bad documented
-rule:
+Only x86 and PowerPC implement the pkey-xxx.h, 
+and an error was reported when compiling protection_keys.c.
 
-The kernel-doc markups should appear *imediatelly before* the
-function or data structure that it documents.
+Add a Arch judgment to compile "protection_keys" in the Makefile.
 
-On other words, if a C file would contain something like this:
+If other arch implement this, add the arch name to the Makefile.
+eg:
+    ifneq (,$(findstring $(ARCH),powerpc mips ... ))
 
-	/**
-	 * foo - function foo
-	 * @args: foo args
-	 */
-	static inline void bar(int args);
+Following build errors:
+    pkey-helpers.h:93:2: error: #error Architecture not supported
+     #error Architecture not supported
+    pkey-helpers.h:96:20: error: ‘PKEY_DISABLE_ACCESS’ undeclared
+     #define PKEY_MASK (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+                        ^
+    protection_keys.c:218:45: error: ‘PKEY_DISABLE_WRITE’ undeclared
+     pkey_assert(flags & (PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE));
+                                                ^
 
-	/**
-	 * bar - function bar
-	 * @args: foo args
-	 */
-	static inline void foo(void *args);
+Signed-off-by: Xingxing Su <suxingxing@loongson.cn>
+---
+ tools/testing/selftests/vm/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
-The output (in ReST format) will be:
-
-	.. c:function:: void bar (int args)
-
-	   function foo
-
-	**Parameters**
-
-	``int args``
-	  foo args
-
-
-	.. c:function:: void foo (void *args)
-
-	   function bar
-
-	**Parameters**
-
-	``void *args``
-	  foo args
-
-Which is clearly a wrong result.  Before this changeset, 
-not even a warning is produced on such cases.
-
-As placing such markups just before the documented
-data is a common practice, on most cases this is fine.
-
-However, as patches touch things, identifiers may be
-renamed, and people may forget to update the kernel-doc
-markups to follow such changes.
-
-This has been happening for quite a while, as there are
-lots of files with kernel-doc problems.
-
-This series address those issues and add a file at the
-end that will enforce that the identifier will match the
-kernel-doc markup, avoiding this problem from
-keep happening as time goes by.
-
-This series is based on current upstream tree.
-
-@maintainers: feel free to pick the patches and
-apply them directly on your trees, as all patches on 
-this series are independent from the other ones.
-
---
-
-v5:
-  - The completion.h patch was replaced by another one which drops
-    an obsolete macro;
-  - Some typos got fixed and review tags got added;
-  - Dropped patches that were already merged at linux-next.
-
-v4:
-
-  - Patches got rebased and got some acks.
-
-Mauro Carvalho Chehab (16):
-  HSI: fix a kernel-doc markup
-  IB: fix kernel-doc markups
-  parport: fix a kernel-doc markup
-  rapidio: fix kernel-doc a markup
-  fs: fix kernel-doc markups
-  pstore/zone: fix a kernel-doc markup
-  completion: drop init_completion define
-  firmware: stratix10-svc: fix kernel-doc markups
-  connector: fix a kernel-doc markup
-  lib/crc7: fix a kernel-doc markup
-  memblock: fix kernel-doc markups
-  w1: fix a kernel-doc markup
-  sched: fix kernel-doc markup
-  selftests: kselftest_harness.h: partially fix kernel-doc markups
-  refcount.h: fix a kernel-doc markup
-  scripts: kernel-doc: validate kernel-doc markup with the actual names
-
- drivers/hsi/hsi_core.c                        |  2 +-
- drivers/infiniband/core/cm.c                  |  5 +-
- drivers/infiniband/core/cq.c                  |  4 +-
- drivers/infiniband/core/iwpm_util.h           |  2 +-
- drivers/infiniband/core/sa_query.c            |  3 +-
- drivers/infiniband/core/verbs.c               |  4 +-
- drivers/infiniband/sw/rdmavt/ah.c             |  2 +-
- drivers/infiniband/sw/rdmavt/mcast.c          | 12 ++--
- drivers/infiniband/sw/rdmavt/qp.c             |  8 +--
- drivers/infiniband/ulp/iser/iscsi_iser.c      |  2 +-
- .../infiniband/ulp/opa_vnic/opa_vnic_encap.h  |  2 +-
- .../ulp/opa_vnic/opa_vnic_vema_iface.c        |  2 +-
- drivers/infiniband/ulp/srpt/ib_srpt.h         |  2 +-
- drivers/parport/share.c                       |  2 +-
- drivers/rapidio/rio.c                         |  2 +-
- fs/dcache.c                                   | 72 +++++++++----------
- fs/inode.c                                    |  4 +-
- fs/pstore/zone.c                              |  2 +-
- fs/seq_file.c                                 |  5 +-
- fs/super.c                                    | 12 ++--
- include/linux/completion.h                    |  5 +-
- include/linux/connector.h                     |  2 +-
- .../firmware/intel/stratix10-svc-client.h     | 10 +--
- include/linux/memblock.h                      |  4 +-
- include/linux/parport.h                       | 31 ++++++++
- include/linux/refcount.h                      |  2 +-
- include/linux/w1.h                            |  2 +-
- include/rdma/ib_verbs.h                       | 11 +++
- kernel/sched/core.c                           | 16 ++---
- kernel/sched/fair.c                           |  2 +-
- lib/crc7.c                                    |  2 +-
- scripts/kernel-doc                            | 62 +++++++++++-----
- tools/testing/selftests/kselftest_harness.h   | 22 +++---
- 33 files changed, 197 insertions(+), 123 deletions(-)
-
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 30873b1..691893a 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -60,9 +60,13 @@ ifeq ($(CAN_BUILD_X86_64),1)
+ TEST_GEN_FILES += $(BINARIES_64)
+ endif
+ else
++
++ifneq (,$(findstring $(ARCH),powerpc))
+ TEST_GEN_FILES += protection_keys
+ endif
+ 
++endif
++
+ ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64))
+ TEST_GEN_FILES += va_128TBswitch
+ TEST_GEN_FILES += virtual_address_range
 -- 
-2.28.0
-
+1.8.3.1
 
