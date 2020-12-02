@@ -2,336 +2,197 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D2BBC64E90
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37D4CC64E7C
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:11:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0DB722240
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:09:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D52D82223C
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:11:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729986AbgLBNIh (ORCPT
+        id S1729945AbgLBNLJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 08:08:37 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:39944 "EHLO smtp.uniroma2.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727102AbgLBNIg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 08:08:36 -0500
-Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmV015624
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 2 Dec 2020 14:06:36 +0100
-From:   Andrea Mayer <andrea.mayer@uniroma2.it>
-To:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shrijeet Mukherjee <shrijeet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next v4 3/8] seg6: add support for optional attributes in SRv6 behaviors
-Date:   Wed,  2 Dec 2020 14:05:12 +0100
-Message-Id: <20201202130517.4967-4-andrea.mayer@uniroma2.it>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
-References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+        Wed, 2 Dec 2020 08:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727979AbgLBNLJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:11:09 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C88C0613CF
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 05:10:28 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id s9so3562055ljo.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 05:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i4Suf39GCGNNHp9xQ0t7Zvgxat9mlBC6lgDT1pUfxf8=;
+        b=FM8PTyPU6TQTdnznfVQtjDlCFBomkBLOza9aIVUNFobA4LQplmlPkVf91dS+rRDR4g
+         b0DRhOd8uTdbxwVj5LQDZJWGmFHP6gVqF8LzPbDTQlUPTjG5Ega8JUm46ZF8kTCRiTGy
+         E3HBlchayQ+Y+NEq03G2hLtfgXfYIhZWZD7fGTymaQiOnblWT6/AkrIlTUkv8Ukm9Sqn
+         SrPa3h7I7+i+2mWLWFP1PqW8Fmk8EumQcSbFvXWdT2lYsZsYf246ARFDmelfpz1M0aZT
+         GGlAhNPeiLBtONohGTwREA1bVCy0leHymUQyhcdmcVH9mJ5dZXrqoYAgi9+9sd6Ik7E/
+         wsjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i4Suf39GCGNNHp9xQ0t7Zvgxat9mlBC6lgDT1pUfxf8=;
+        b=JVN9gJDmJSxeezzEBmo17YEi8ItEEfK9MWLpooLiXN7mrtoVt6T7hqezNF147raKgX
+         lP9lW/hTVyB4KyERKbP6lrhA0fseQztoDTsJlcZI6dENcdGf2ehG5C8qTxb4duS1+npM
+         Gaqhe3XR42y+4Ucch+lYFPFvSKScrNWbRFIJVfuCN5U44WU4ah2DZ18KHUzVWZDHVqL9
+         NZ+pRlAiRvL1TpsY3wLP8C4nc78cZ5SpPhqjuzHckDDU128oeyVPioer7yksIhQW1Xib
+         uQCy4EeoCarrNbn67wZzirUuzKQIgCVGt6M76RnaHG/IdTqLLg5+8FV0YeUSYJkPGVrH
+         aLqw==
+X-Gm-Message-State: AOAM533HV+Ay+1GfJOaU8Ziqf7dugHHUhUKf1OLjenwcGDsuk7VKeZ1k
+        U5YWIFub6LgtHhKHYN7BesV/d8qrbSVlGQDoyJEGPQ==
+X-Google-Smtp-Source: ABdhPJwZgoE4OEOGPdzSUfpTzinfghQsk702UafbRLuHOuND43/IE/y0+KvW+rUJQDzBKSbq80ZI3CI72rNCNK5My3Y=
+X-Received: by 2002:a2e:9118:: with SMTP id m24mr1133847ljg.363.1606914626899;
+ Wed, 02 Dec 2020 05:10:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+References: <20201201071632.68471-1-98.arpi@gmail.com> <CAHp75VfV60sRAKkzvbEKW7UEZSiDmNVfd_kB-OOKZRk5MNMeDQ@mail.gmail.com>
+ <e10ef8d3-f22b-db10-3784-c94ee425af46@gmail.com> <20201202094408.GW4077@smile.fi.intel.com>
+ <CABVgOS=hrfma2Yq=h2vqOoH1Mz4xSyfDbgkM9EHvMFk=HJkcnQ@mail.gmail.com> <CAHp75VcSGJ-qVQf9SRj2rTME-_MZ2vM-HB_+LiRVgnkwn1TO=g@mail.gmail.com>
+In-Reply-To: <CAHp75VcSGJ-qVQf9SRj2rTME-_MZ2vM-HB_+LiRVgnkwn1TO=g@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 2 Dec 2020 21:10:14 +0800
+Message-ID: <CABVgOSmy4n_LGwDS7yWfoLftcQzxv6S+iXx9Y=OPcgG2gu0z1w@mail.gmail.com>
+Subject: Re: [PATCH v3] lib: Convert test_hexdump.c to KUnit
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Arpitha Raghunandan <98.arpi@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Before this patch, each SRv6 behavior specifies a set of required
-attributes that must be provided by the userspace application when such
-behavior is going to be instantiated. If at least one of the required
-attributes is not provided, the creation of the behavior fails.
+On Wed, Dec 2, 2020 at 8:21 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Dec 2, 2020 at 1:57 PM David Gow <davidgow@google.com> wrote:
+> > On Wed, Dec 2, 2020 at 6:06 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Wed, Dec 02, 2020 at 09:51:19AM +0530, Arpitha Raghunandan wrote:
+>
+> ...
+>
+> > > What I;m talking about is the output. How it will be implemented (using the
+> > > same variable or differently) is up to you. So the point is I want to see the
+> > > statistics of success/total at the end.
+> > >
+> > > I think this should be done in KUNIT rather than in the individual test cases.
+> >
+> > I tend to agree here that this really is something for KUnit. At the
+> > moment, the tools/testing/kunit/kunit.py script will parse the kernel
+> > log and generate these sorts of statistics. I know that needing to run
+> > it through a script might seem like a step backwards, but there's no
+> > formal place for statistics in the KTAP specification[1] being worked
+> > on to standardise kselftest/kunit output formats.
+>
+> Then it sucks. Fix specification (in a long term) and does it have a
+> comment style of messages that we can have this statistics printed
+> (but maybe not parsed)?
 
-The SRv6 behavior framework lacks a way to manage optional attributes.
-By definition, an optional attribute for a SRv6 behavior consists of an
-attribute which may or may not be provided by the userspace. Therefore,
-if an optional attribute is missing (and thus not supplied by the user)
-the creation of the behavior goes ahead without any issue.
+I should clarify: there's nothing in the spec which explicitly defines
+a place for such statistics (nor anything which requires them). There
+are "diagnostic" lines which are not parsed, and so it'd be possible
+to output statistics there. KUnit itself doesn't at present, but
+allows individual tests to log diagnostic lines which could be such
+statistics, particularly in cases like this where the full structure
+of the tests aren't quite exposed to the framework.
 
-This patch explicitly differentiates the required attributes from the
-optional attributes. In particular, each behavior can declare a set of
-required attributes and a set of optional ones.
 
-The semantic of the required attributes remains *totally* unaffected by
-this patch. The introduction of the optional attributes does NOT impact
-on the backward compatibility of the existing SRv6 behaviors.
 
-It is essential to note that if an (optional or required) attribute is
-supplied to a SRv6 behavior which does not expect it, the behavior
-simply discards such attribute without generating any error or warning.
-This operating mode remained unchanged both before and after the
-introduction of the optional attributes extension.
+> > Note that there are
+> > other parsers for TAP-like formats which are being used with KUnit
+> > results, so systems like LAVA could also sum up these statistics. It's
+> > also possible, as Arpitha alluded to, to have the test dump them out
+> > as a comment.
+>
+> Fine to me.
+>
+> > This won't actually work for this test as-is, though, as the KUnit
+> > version is running as a single giant test case (so KUnit believes that
+> > 1/1 tests have passed, rather than having any more-detailed
+> > statistics). It looks like there are a few ways to split it up a bit
+> > which would make it neater (a test each for the for() loops in
+> > test_hexdump_init() seems sensible to me), but at the moment, there's
+> > not really a way of programmatically generating test cases which KUnit
+> > then counts
+>
+> Fix it, please. We rely on this statistics pretty much.
 
-The optional attributes are one of the key components used to implement
-the SRv6 End.DT6 behavior based on the Virtual Routing and Forwarding
-(VRF) framework. The optional attributes make possible the coexistence
-of the already existing SRv6 End.DT6 implementation with the new SRv6
-End.DT6 VRF-based implementation without breaking any backward
-compatibility. Further details on the SRv6 End.DT6 behavior (VRF mode)
-are reported in subsequent patches.
+The hope is that the Parameterised Test feature will make this
+possible (though, as mentioned, there are a few other issues around
+then making those statistics available, but we should be able to work
+through those).
 
-From the userspace point of view, the support for optional attributes DO
-NOT require any changes to the userspace applications, i.e: iproute2
-unless new attributes (required or optional) are needed.
+It may be a silly question, but what is it that makes these statistics
+useful in this test? Maybe I'm misunderstanding something, but I'd've
+thought that the important things were whether or not _all_ tests had
+passed, and -- if not --- _which_ ones had failed. Is the count of
+failing cases within a test like this really that useful for
+debugging, or is it more for comparing against different versions?
+Either way, we'll try to make sure they're available.
 
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
----
- net/ipv6/seg6_local.c | 120 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 106 insertions(+), 14 deletions(-)
+> > The "Parameterised Tests"[2] work Arpitha has been working on ought to
+> > go some way to helping here, though it won't solve this completely in
+> > this initial version. The problem there is that parameterised tests
+> > are not reported individually in a way the kunit.py parser can report
+> > cleanly, yet, so it'll still only be counted as one test until that's
+> > changed (though, at least, that shouldn't require any test-specific
+> > work).
+> >
+> > My suggestion for the ultimate state of the test would be:
+> > - Split up the test into separate KUnit tests for the different
+> > "categories" of tests: (e.g., test_hexdump_set,
+> > test_hexdump_overflow_set_ascii, etc)
+> > - Replace the for loops in test_hexdump_init() with parameters, so
+> > that KUnit is aware of the original runs.
+> > - Once KUnit and the tooling supports it, these will be reported as
+> > subtests. (In the meantime, the results will be listed individually,
+> > commented out)
+>
+> I'm fine as long as we have this information printed to the user.
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index aef39eab9be2..3b5657c622a0 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -36,6 +36,21 @@ struct seg6_local_lwt;
- struct seg6_action_desc {
- 	int action;
- 	unsigned long attrs;
-+
-+	/* The optattrs field is used for specifying all the optional
-+	 * attributes supported by a specific behavior.
-+	 * It means that if one of these attributes is not provided in the
-+	 * netlink message during the behavior creation, no errors will be
-+	 * returned to the userspace.
-+	 *
-+	 * Each attribute can be only of two types (mutually exclusive):
-+	 * 1) required or 2) optional.
-+	 * Every user MUST obey to this rule! If you set an attribute as
-+	 * required the same attribute CANNOT be set as optional and vice
-+	 * versa.
-+	 */
-+	unsigned long optattrs;
-+
- 	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
- 	int static_headroom;
- };
-@@ -57,6 +72,10 @@ struct seg6_local_lwt {
- 
- 	int headroom;
- 	struct seg6_action_desc *desc;
-+	/* unlike the required attrs, we have to track the optional attributes
-+	 * that have been effectively parsed.
-+	 */
-+	unsigned long parsed_optattrs;
- };
- 
- static struct seg6_local_lwt *seg6_local_lwtunnel(struct lwtunnel_state *lwt)
-@@ -959,26 +978,26 @@ static struct seg6_action_param seg6_action_params[SEG6_LOCAL_MAX + 1] = {
- };
- 
- /* call the destroy() callback (if available) for each set attribute in
-- * @slwt, starting from the first attribute up to the @max_parsed (excluded)
-- * attribute.
-+ * @parsed_attrs, starting from the first attribute up to the @max_parsed
-+ * (excluded) attribute.
-  */
--static void __destroy_attrs(int max_parsed, struct seg6_local_lwt *slwt)
-+static void __destroy_attrs(unsigned long parsed_attrs, int max_parsed,
-+			    struct seg6_local_lwt *slwt)
- {
--	unsigned long attrs = slwt->desc->attrs;
- 	struct seg6_action_param *param;
- 	int i;
- 
- 	/* Every required seg6local attribute is identified by an ID which is
- 	 * encoded as a flag (i.e: 1 << ID) in the 'attrs' bitmask;
- 	 *
--	 * We scan the 'attrs' bitmask, starting from the first attribute
-+	 * We scan the 'parsed_attrs' bitmask, starting from the first attribute
- 	 * up to the @max_parsed (excluded) attribute.
- 	 * For each set attribute, we retrieve the corresponding destroy()
- 	 * callback. If the callback is not available, then we skip to the next
- 	 * attribute; otherwise, we call the destroy() callback.
- 	 */
- 	for (i = 0; i < max_parsed; ++i) {
--		if (!(attrs & (1 << i)))
-+		if (!(parsed_attrs & (1 << i)))
- 			continue;
- 
- 		param = &seg6_action_params[i];
-@@ -993,13 +1012,54 @@ static void __destroy_attrs(int max_parsed, struct seg6_local_lwt *slwt)
-  */
- static void destroy_attrs(struct seg6_local_lwt *slwt)
- {
--	__destroy_attrs(SEG6_LOCAL_MAX + 1, slwt);
-+	unsigned long attrs = slwt->desc->attrs | slwt->parsed_optattrs;
-+
-+	__destroy_attrs(attrs, SEG6_LOCAL_MAX + 1, slwt);
-+}
-+
-+static int parse_nla_optional_attrs(struct nlattr **attrs,
-+				    struct seg6_local_lwt *slwt)
-+{
-+	struct seg6_action_desc *desc = slwt->desc;
-+	unsigned long parsed_optattrs = 0;
-+	struct seg6_action_param *param;
-+	int err, i;
-+
-+	for (i = 0; i < SEG6_LOCAL_MAX + 1; ++i) {
-+		if (!(desc->optattrs & (1 << i)) || !attrs[i])
-+			continue;
-+
-+		/* once here, the i-th attribute is provided by the
-+		 * userspace AND it is identified optional as well.
-+		 */
-+		param = &seg6_action_params[i];
-+
-+		err = param->parse(attrs, slwt);
-+		if (err < 0)
-+			goto parse_optattrs_err;
-+
-+		/* current attribute has been correctly parsed */
-+		parsed_optattrs |= (1 << i);
-+	}
-+
-+	/* store in the tunnel state all the optional attributed successfully
-+	 * parsed.
-+	 */
-+	slwt->parsed_optattrs = parsed_optattrs;
-+
-+	return 0;
-+
-+parse_optattrs_err:
-+	__destroy_attrs(parsed_optattrs, i, slwt);
-+
-+	return err;
- }
- 
- static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
- {
- 	struct seg6_action_param *param;
- 	struct seg6_action_desc *desc;
-+	unsigned long invalid_attrs;
- 	int i, err;
- 
- 	desc = __get_action_desc(slwt->action);
-@@ -1012,6 +1072,26 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
- 	slwt->desc = desc;
- 	slwt->headroom += desc->static_headroom;
- 
-+	/* Forcing the desc->optattrs *set* and the desc->attrs *set* to be
-+	 * disjoined, this allow us to release acquired resources by optional
-+	 * attributes and by required attributes independently from each other
-+	 * without any interfarence.
-+	 * In other terms, we are sure that we do not release some the acquired
-+	 * resources twice.
-+	 *
-+	 * Note that if an attribute is configured both as required and as
-+	 * optional, it means that the user has messed something up in the
-+	 * seg6_action_table. Therefore, this check is required for SRv6
-+	 * behaviors to work properly.
-+	 */
-+	invalid_attrs = desc->attrs & desc->optattrs;
-+	if (invalid_attrs) {
-+		WARN_ONCE(1,
-+			  "An attribute cannot be both required AND optional");
-+		return -EINVAL;
-+	}
-+
-+	/* parse the required attributes */
- 	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
- 		if (desc->attrs & (1 << i)) {
- 			if (!attrs[i])
-@@ -1021,17 +1101,22 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
- 
- 			err = param->parse(attrs, slwt);
- 			if (err < 0)
--				goto parse_err;
-+				goto parse_attrs_err;
- 		}
- 	}
- 
-+	/* parse the optional attributes, if any */
-+	err = parse_nla_optional_attrs(attrs, slwt);
-+	if (err < 0)
-+		goto parse_attrs_err;
-+
- 	return 0;
- 
--parse_err:
-+parse_attrs_err:
- 	/* release any resource that may have been acquired during the i-1
- 	 * parse() operations.
- 	 */
--	__destroy_attrs(i, slwt);
-+	__destroy_attrs(desc->attrs, i, slwt);
- 
- 	return err;
- }
-@@ -1096,13 +1181,16 @@ static int seg6_local_fill_encap(struct sk_buff *skb,
- {
- 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
- 	struct seg6_action_param *param;
-+	unsigned long attrs;
- 	int i, err;
- 
- 	if (nla_put_u32(skb, SEG6_LOCAL_ACTION, slwt->action))
- 		return -EMSGSIZE;
- 
-+	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
-+
- 	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
--		if (slwt->desc->attrs & (1 << i)) {
-+		if (attrs & (1 << i)) {
- 			param = &seg6_action_params[i];
- 			err = param->put(skb, slwt);
- 			if (err < 0)
-@@ -1121,7 +1209,7 @@ static int seg6_local_get_encap_size(struct lwtunnel_state *lwt)
- 
- 	nlsize = nla_total_size(4); /* action */
- 
--	attrs = slwt->desc->attrs;
-+	attrs = slwt->desc->attrs | slwt->parsed_optattrs;
- 
- 	if (attrs & (1 << SEG6_LOCAL_SRH))
- 		nlsize += nla_total_size((slwt->srh->hdrlen + 1) << 3);
-@@ -1154,6 +1242,7 @@ static int seg6_local_cmp_encap(struct lwtunnel_state *a,
- {
- 	struct seg6_local_lwt *slwt_a, *slwt_b;
- 	struct seg6_action_param *param;
-+	unsigned long attrs_a, attrs_b;
- 	int i;
- 
- 	slwt_a = seg6_local_lwtunnel(a);
-@@ -1162,11 +1251,14 @@ static int seg6_local_cmp_encap(struct lwtunnel_state *a,
- 	if (slwt_a->action != slwt_b->action)
- 		return 1;
- 
--	if (slwt_a->desc->attrs != slwt_b->desc->attrs)
-+	attrs_a = slwt_a->desc->attrs | slwt_a->parsed_optattrs;
-+	attrs_b = slwt_b->desc->attrs | slwt_b->parsed_optattrs;
-+
-+	if (attrs_a != attrs_b)
- 		return 1;
- 
- 	for (i = 0; i < SEG6_LOCAL_MAX + 1; i++) {
--		if (slwt_a->desc->attrs & (1 << i)) {
-+		if (attrs_a & (1 << i)) {
- 			param = &seg6_action_params[i];
- 			if (param->cmp(slwt_a, slwt_b))
- 				return 1;
--- 
-2.20.1
+Okay -- Arpitha: does this seem like a sensible approach to you?
 
+If printing it to the kernel log is really essential, I'll have a look
+into how we can do that in KUnit.
+
+> > Of course, it'll take a while before all of those KUnit pieces are in
+> > place. I personally think that a good compromise would be to just do
+> > the first of these for now, which would make kunit_tool give at least
+> > a 4/4 rather than 1/1 result. Then, once the parameterised testing
+> > work is merged (and perhaps the tooling fixes are finished), the tests
+> > could be updated to take advantage of that.
+>
+> How can we guarantee it will be not forgotten?
+
+Thinking about it further, if we can get the parameterised testing
+stuff in 5.11 as planned, then any tooling/output fixes done later
+would automatically apply. Maybe rather than doing an intermediate
+version with just the first splitting up of tests, we try it with the
+current parameterised test patches, and we can possibly prototype some
+kernel-side statistics reporting which should work. To be honest,
+though, the subtest support on the kunit_tool side is likely to take
+quite a while, so it would be nice to have something (like statistics
+in the kernel log) which ameliorate the problem in the meantime.
+
+I'll have a bit of a play around with the test output and parsing code
+this week and see if there's a simple change that can get us most of
+the way there. I think something should be possible if the test uses
+the Parameterised testing feature.
+
+Cheers,
+-- David
