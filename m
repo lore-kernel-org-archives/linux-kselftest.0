@@ -7,23 +7,23 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBCF0C83013
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DE0C64E7C
 	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:09:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 967A82222F
+	by mail.kernel.org (Postfix) with ESMTP id 6538022241
 	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:09:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388707AbgLBNIn (ORCPT
+        id S1730139AbgLBNIi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 08:08:43 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:39957 "EHLO smtp.uniroma2.it"
+        Wed, 2 Dec 2020 08:08:38 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:39947 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387553AbgLBNIj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 08:08:39 -0500
+        id S1727531AbgLBNIh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:08:37 -0500
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmY015624
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmU015624
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 2 Dec 2020 14:06:36 +0100
+        Wed, 2 Dec 2020 14:06:35 +0100
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next v4 6/8] seg6: add VRF support for SRv6 End.DT6 behavior
-Date:   Wed,  2 Dec 2020 14:05:15 +0100
-Message-Id: <20201202130517.4967-7-andrea.mayer@uniroma2.it>
+Subject: [net-next v4 2/8] seg6: improve management of behavior attributes
+Date:   Wed,  2 Dec 2020 14:05:11 +0100
+Message-Id: <20201202130517.4967-3-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
 References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
@@ -59,162 +59,200 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SRv6 End.DT6 is defined in the SRv6 Network Programming [1].
+Depending on the attribute (i.e.: SEG6_LOCAL_SRH, SEG6_LOCAL_TABLE, etc),
+the parse() callback performs some validity checks on the provided input
+and updates the tunnel state (slwt) with the result of the parsing
+operation. However, an attribute may also need to reserve some additional
+resources (i.e.: memory or setting up an eBPF program) in the parse()
+callback to complete the parsing operation.
 
-The Linux kernel already offers an implementation of the SRv6
-End.DT6 behavior which permits IPv6 L3 VPNs over SRv6 networks. This
-implementation is not particularly suitable in contexts where we need to
-deploy IPv6 L3 VPNs among different tenants which share the same network
-address schemes. The underlying problem lies in the fact that the
-current version of DT6 (called legacy DT6 from now on) needs a complex
-configuration to be applied on routers which requires ad-hoc routes and
-routing policy rules to ensure the correct isolation of tenants.
+The parse() callbacks are invoked by the parse_nla_action() for each
+attribute belonging to a specific behavior. Given a behavior with N
+attributes, if the parsing of the i-th attribute fails, the
+parse_nla_action() returns immediately with an error. Nonetheless, the
+resources acquired during the parsing of the i-1 attributes are not freed
+by the parse_nla_action().
 
-Consequently, a new implementation of DT6 has been introduced with the
-aim of simplifying the construction of IPv6 L3 VPN services in the
-multi-tenant environment using SRv6 networks. To accomplish this task,
-we reused the same VRF infrastructure and SRv6 core components already
-exploited for implementing the SRv6 End.DT4 behavior.
+Attributes which acquire resources must release them *in an explicit way*
+in both the seg6_local_{build/destroy}_state(). However, adding a new
+attribute of this type requires changes to
+seg6_local_{build/destroy}_state() to release the resources correctly.
 
-Currently the two End.DT6 implementations coexist seamlessly and can be
-used depending on the context and the user preferences. So, in order to
-support both versions of DT6 a new attribute (vrftable) has been
-introduced which allows us to differentiate the implementation of the
-behavior to be used.
+The seg6local infrastructure still lacks a simple and structured way to
+release the resources acquired in the parse() operations.
 
-A SRv6 End.DT6 legacy behavior is still instantiated using a command
-like the following one:
+We introduced a new callback in the struct seg6_action_param named
+destroy(). This callback releases any resource which may have been acquired
+in the parse() counterpart. Each attribute may or may not implement the
+destroy() callback depending on whether it needs to free some acquired
+resources.
 
- $ ip -6 route add 2001:db8::1 encap seg6local action End.DT6 table 100 dev eth0
+The destroy() callback comes with several of advantages:
 
-While to instantiate the SRv6 End.DT6 in VRF mode, the command is still
-pretty straight forward:
+ 1) we can have many attributes as we want for a given behavior with no
+    need to explicitly free the taken resources;
 
- $ ip -6 route add 2001:db8::1 encap seg6local action End.DT6 vrftable 100 dev eth0.
+ 2) As in case of the seg6_local_build_state(), the
+    seg6_local_destroy_state() does not need to handle the release of
+    resources directly. Indeed, it calls the destroy_attrs() function which
+    is in charge of calling the destroy() callback for every set attribute.
+    We do not need to patch seg6_local_{build/destroy}_state() anymore as
+    we add new attributes;
 
-Obviously as in the case of SRv6 End.DT4, the VRF strict_mode parameter
-must be set (net.vrf.strict_mode=1) and the VRF associated with table
-100 must exist.
+ 3) the code is more readable and better structured. Indeed, all the
+    information needed to handle a given attribute are contained in only
+    one place;
 
-Please note that the instances of SRv6 End.DT6 legacy and End.DT6 VRF
-mode can coexist in the same system/configuration without problems.
-
-[1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
+ 4) it facilitates the integration with new features introduced in further
+    patches.
 
 Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- net/ipv6/seg6_local.c | 76 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+ net/ipv6/seg6_local.c | 80 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 70 insertions(+), 10 deletions(-)
 
 diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 24c2616c8c11..b07f7c1c82a4 100644
+index eba23279912d..aef39eab9be2 100644
 --- a/net/ipv6/seg6_local.c
 +++ b/net/ipv6/seg6_local.c
-@@ -497,6 +497,10 @@ static int __seg6_end_dt_vrf_build(struct seg6_local_lwt *slwt, const void *cfg,
- 		info->proto = htons(ETH_P_IP);
- 		info->hdrlen = sizeof(struct iphdr);
- 		break;
-+	case AF_INET6:
-+		info->proto = htons(ETH_P_IPV6);
-+		info->hdrlen = sizeof(struct ipv6hdr);
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -649,6 +653,47 @@ static int seg6_end_dt4_build(struct seg6_local_lwt *slwt, const void *cfg,
- {
- 	return __seg6_end_dt_vrf_build(slwt, cfg, AF_INET, extack);
+@@ -710,6 +710,11 @@ static int cmp_nla_srh(struct seg6_local_lwt *a, struct seg6_local_lwt *b)
+ 	return memcmp(a->srh, b->srh, len);
  }
-+
-+static enum
-+seg6_end_dt_mode seg6_end_dt6_parse_mode(struct seg6_local_lwt *slwt)
+ 
++static void destroy_attr_srh(struct seg6_local_lwt *slwt)
 +{
-+	unsigned long parsed_optattrs = slwt->parsed_optattrs;
-+	bool legacy, vrfmode;
-+
-+	legacy	= !!(parsed_optattrs & (1 << SEG6_LOCAL_TABLE));
-+	vrfmode	= !!(parsed_optattrs & (1 << SEG6_LOCAL_VRFTABLE));
-+
-+	if (!(legacy ^ vrfmode))
-+		/* both are absent or present: invalid DT6 mode */
-+		return DT_INVALID_MODE;
-+
-+	return legacy ? DT_LEGACY_MODE : DT_VRF_MODE;
++	kfree(slwt->srh);
 +}
 +
-+static enum seg6_end_dt_mode seg6_end_dt6_get_mode(struct seg6_local_lwt *slwt)
+ static int parse_nla_table(struct nlattr **attrs, struct seg6_local_lwt *slwt)
+ {
+ 	slwt->table = nla_get_u32(attrs[SEG6_LOCAL_TABLE]);
+@@ -901,16 +906,30 @@ static int cmp_nla_bpf(struct seg6_local_lwt *a, struct seg6_local_lwt *b)
+ 	return strcmp(a->bpf.name, b->bpf.name);
+ }
+ 
++static void destroy_attr_bpf(struct seg6_local_lwt *slwt)
 +{
-+	struct seg6_end_dt_info *info = &slwt->dt_info;
-+
-+	return info->mode;
++	kfree(slwt->bpf.name);
++	if (slwt->bpf.prog)
++		bpf_prog_put(slwt->bpf.prog);
 +}
 +
-+static int seg6_end_dt6_build(struct seg6_local_lwt *slwt, const void *cfg,
-+			      struct netlink_ext_ack *extack)
-+{
-+	enum seg6_end_dt_mode mode = seg6_end_dt6_parse_mode(slwt);
-+	struct seg6_end_dt_info *info = &slwt->dt_info;
+ struct seg6_action_param {
+ 	int (*parse)(struct nlattr **attrs, struct seg6_local_lwt *slwt);
+ 	int (*put)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
+ 	int (*cmp)(struct seg6_local_lwt *a, struct seg6_local_lwt *b);
 +
-+	switch (mode) {
-+	case DT_LEGACY_MODE:
-+		info->mode = DT_LEGACY_MODE;
-+		return 0;
-+	case DT_VRF_MODE:
-+		return __seg6_end_dt_vrf_build(slwt, cfg, AF_INET6, extack);
-+	default:
-+		NL_SET_ERR_MSG(extack, "table or vrftable must be specified");
-+		return -EINVAL;
++	/* optional destroy() callback useful for releasing resources which
++	 * have been previously acquired in the corresponding parse()
++	 * function.
++	 */
++	void (*destroy)(struct seg6_local_lwt *slwt);
+ };
+ 
+ static struct seg6_action_param seg6_action_params[SEG6_LOCAL_MAX + 1] = {
+ 	[SEG6_LOCAL_SRH]	= { .parse = parse_nla_srh,
+ 				    .put = put_nla_srh,
+-				    .cmp = cmp_nla_srh },
++				    .cmp = cmp_nla_srh,
++				    .destroy = destroy_attr_srh },
+ 
+ 	[SEG6_LOCAL_TABLE]	= { .parse = parse_nla_table,
+ 				    .put = put_nla_table,
+@@ -934,10 +953,49 @@ static struct seg6_action_param seg6_action_params[SEG6_LOCAL_MAX + 1] = {
+ 
+ 	[SEG6_LOCAL_BPF]	= { .parse = parse_nla_bpf,
+ 				    .put = put_nla_bpf,
+-				    .cmp = cmp_nla_bpf },
++				    .cmp = cmp_nla_bpf,
++				    .destroy = destroy_attr_bpf },
+ 
+ };
+ 
++/* call the destroy() callback (if available) for each set attribute in
++ * @slwt, starting from the first attribute up to the @max_parsed (excluded)
++ * attribute.
++ */
++static void __destroy_attrs(int max_parsed, struct seg6_local_lwt *slwt)
++{
++	unsigned long attrs = slwt->desc->attrs;
++	struct seg6_action_param *param;
++	int i;
++
++	/* Every required seg6local attribute is identified by an ID which is
++	 * encoded as a flag (i.e: 1 << ID) in the 'attrs' bitmask;
++	 *
++	 * We scan the 'attrs' bitmask, starting from the first attribute
++	 * up to the @max_parsed (excluded) attribute.
++	 * For each set attribute, we retrieve the corresponding destroy()
++	 * callback. If the callback is not available, then we skip to the next
++	 * attribute; otherwise, we call the destroy() callback.
++	 */
++	for (i = 0; i < max_parsed; ++i) {
++		if (!(attrs & (1 << i)))
++			continue;
++
++		param = &seg6_action_params[i];
++
++		if (param->destroy)
++			param->destroy(slwt);
 +	}
 +}
- #endif
++
++/* release all the resources that may have been acquired during parsing
++ * operations.
++ */
++static void destroy_attrs(struct seg6_local_lwt *slwt)
++{
++	__destroy_attrs(SEG6_LOCAL_MAX + 1, slwt);
++}
++
+ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
+ {
+ 	struct seg6_action_param *param;
+@@ -963,11 +1021,19 @@ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
  
- static int input_action_end_dt6(struct sk_buff *skb,
-@@ -660,6 +705,28 @@ static int input_action_end_dt6(struct sk_buff *skb,
- 	if (!pskb_may_pull(skb, sizeof(struct ipv6hdr)))
- 		goto drop;
+ 			err = param->parse(attrs, slwt);
+ 			if (err < 0)
+-				return err;
++				goto parse_err;
+ 		}
+ 	}
  
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+	if (seg6_end_dt6_get_mode(slwt) == DT_LEGACY_MODE)
-+		goto legacy_mode;
+ 	return 0;
 +
-+	/* DT6_VRF_MODE */
-+	skb = end_dt_vrf_core(skb, slwt);
-+	if (!skb)
-+		/* packet has been processed and consumed by the VRF */
-+		return 0;
-+
-+	if (IS_ERR(skb))
-+		return PTR_ERR(skb);
-+
-+	/* note: this time we do not need to specify the table because the VRF
-+	 * takes care of selecting the correct table.
++parse_err:
++	/* release any resource that may have been acquired during the i-1
++	 * parse() operations.
 +	 */
-+	seg6_lookup_any_nexthop(skb, NULL, 0, true);
++	__destroy_attrs(i, slwt);
 +
-+	return dst_input(skb);
-+
-+legacy_mode:
-+#endif
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
++	return err;
+ }
  
- 	seg6_lookup_any_nexthop(skb, NULL, slwt->table, true);
-@@ -851,7 +918,16 @@ static struct seg6_action_desc seg6_action_table[] = {
- 	},
- 	{
- 		.action		= SEG6_LOCAL_ACTION_END_DT6,
-+#ifdef CONFIG_NET_L3_MASTER_DEV
-+		.attrs		= 0,
-+		.optattrs	= (1 << SEG6_LOCAL_TABLE) |
-+				  (1 << SEG6_LOCAL_VRFTABLE),
-+		.slwt_ops	= {
-+					.build_state = seg6_end_dt6_build,
-+				  },
-+#else
- 		.attrs		= (1 << SEG6_LOCAL_TABLE),
-+#endif
- 		.input		= input_action_end_dt6,
- 	},
- 	{
+ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
+@@ -1012,7 +1078,6 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
+ 	return 0;
+ 
+ out_free:
+-	kfree(slwt->srh);
+ 	kfree(newts);
+ 	return err;
+ }
+@@ -1021,12 +1086,7 @@ static void seg6_local_destroy_state(struct lwtunnel_state *lwt)
+ {
+ 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
+ 
+-	kfree(slwt->srh);
+-
+-	if (slwt->desc->attrs & (1 << SEG6_LOCAL_BPF)) {
+-		kfree(slwt->bpf.name);
+-		bpf_prog_put(slwt->bpf.prog);
+-	}
++	destroy_attrs(slwt);
+ 
+ 	return;
+ }
 -- 
 2.20.1
 
