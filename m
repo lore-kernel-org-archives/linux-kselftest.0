@@ -2,108 +2,175 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC7B3C64E8A
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 12:51:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2A5FC64E7C
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:08:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A39C22240
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 12:51:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 657742222F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:08:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729884AbgLBMvW (ORCPT
+        id S1727728AbgLBNIg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 07:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727832AbgLBMvW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 07:51:22 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A33C0613CF;
-        Wed,  2 Dec 2020 04:50:41 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id o71so1506403ybc.2;
-        Wed, 02 Dec 2020 04:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wZOsnLsRD15EE78n8bQEf+aUkvjzCWrGeOD2j6m7n7M=;
-        b=Pz5K1LSqrNHi9j26JaHRbiUG9fIgZ88xbsQOpQuqNaY6to0gMZKA3gZJQkUb0wH5DZ
-         m49l97B/Sqo285TY12ocrdpvuF1+g3C5wyRcsbz5oUmKsqn2e3S3KkpISid+6Jy9TPZJ
-         Yhi5380lJNF1O7HhBn1xvlehBO23pu1N+bhGYtju8XUuq3mjQtYO7rQGT3bt/wyhJYu2
-         nmqwt7PmuQulhc96znbjOdtX+q3UrUnUYeqP4ZRdx3XdbsSwYDKeQGZVsWKY8+j3ePUW
-         6FnR5bBGkAJxjBXXLZqpT5MNdDiJQM0xvHspl+LDp7RWfzuVkEt8IC16/vlbOKXzJ2tq
-         tkiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wZOsnLsRD15EE78n8bQEf+aUkvjzCWrGeOD2j6m7n7M=;
-        b=CmnNCMK67ydFsLA9BbYpFkJWXZoCHcqteHJmXxia+CbPGuDS2zvdFQEn/hX9wCxOCH
-         bumwxa6Hh/jHeRw00dtgKM390Sq3yu4JhdJobYNit8kdoLZmVY2ck7oRpf5iuLF33Hnz
-         ZXUt97vkWxGzwvEmmqugNOBAeSQ+cBkzE2/gTT01f4hTqclQoQZIHxXtGusYWMeo9qUO
-         dS14rc6cU8FfkO6ytou2QlmCeYTKsprHENm0MtulM4LjADqcEls2Mh398WnHr9PMg+ud
-         d4+1J+6MQz643X3mu37CbBPRgSat9jGGTQMAtd640FRs9ueWx7KGAWXg2gvZj+hL6ucp
-         FH5g==
-X-Gm-Message-State: AOAM5303PgBxLJNP0G4Mgv/DpeBv/GmpWmkwiHFcLWzzqrtFbuXcQmb9
-        fxWr94Lfl+vrDcQUZXxLgSvLNMY+OPbFEl/yMZM=
-X-Google-Smtp-Source: ABdhPJz8aVFXdWixZUHiWQB00VKrKgXW70L2NcuTpGtmUg1BcqQkFiV8/vapf4IM/PFZ+z2SfEViZMUjxnQAlGcdtd8=
-X-Received: by 2002:a25:df55:: with SMTP id w82mr3065596ybg.135.1606913441319;
- Wed, 02 Dec 2020 04:50:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20201128193335.219395-1-masahiroy@kernel.org>
-In-Reply-To: <20201128193335.219395-1-masahiroy@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 2 Dec 2020 13:50:30 +0100
-Message-ID: <CANiq72=WanQ0sqL14D3Keu0hT3L5GXBSV-znU5C9hhC1gjs=wA@mail.gmail.com>
-Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Wed, 2 Dec 2020 08:08:36 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:39945 "EHLO smtp.uniroma2.it"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727240AbgLBNIg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:08:36 -0500
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmW015624
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 2 Dec 2020 14:06:36 +0100
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+        Shrijeet Mukherjee <shrijeet@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@cnit.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [net-next v4 4/8] seg6: add callbacks for customizing the creation/destruction of a behavior
+Date:   Wed,  2 Dec 2020 14:05:13 +0100
+Message-Id: <20201202130517.4967-5-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Nov 28, 2020 at 8:34 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Revert commit cebc04ba9aeb ("add CONFIG_ENABLE_MUST_CHECK").
->
-> A lot of warn_unused_result warnings existed in 2006, but until now
-> they have been fixed thanks to people doing allmodconfig tests.
->
-> Our goal is to always enable __must_check where appropriate, so this
-> CONFIG option is no longer needed.
->
-> I see a lot of defconfig (arch/*/configs/*_defconfig) files having:
->
->     # CONFIG_ENABLE_MUST_CHECK is not set
->
-> I did not touch them for now since it would be a big churn. If arch
-> maintainers want to clean them up, please go ahead.
->
-> While I was here, I also moved __must_check to compiler_attributes.h
-> from compiler_types.h
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+We introduce two callbacks used for customizing the creation/destruction of
+a SRv6 behavior. Such callbacks are defined in the new struct
+seg6_local_lwtunnel_ops and hereafter we provide a brief description of
+them:
 
-Picked this new version with the Acks etc., plus I moved it within
-compiler_attributes.h to keep it sorted (it's sorted by the second
-column, rather than the first).
+ - build_state(...): used for calling the custom constructor of the
+   behavior during its initialization phase and after all the attributes
+   have been parsed successfully;
 
-Thanks a lot!
+ - destroy_state(...): used for calling the custom destructor of the
+   behavior before it is completely destroyed.
 
-Cheers,
-Miguel
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ net/ipv6/seg6_local.c | 49 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index 3b5657c622a0..da5bf4167a52 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -33,6 +33,13 @@
+ 
+ struct seg6_local_lwt;
+ 
++/* callbacks used for customizing the creation and destruction of a behavior */
++struct seg6_local_lwtunnel_ops {
++	int (*build_state)(struct seg6_local_lwt *slwt, const void *cfg,
++			   struct netlink_ext_ack *extack);
++	void (*destroy_state)(struct seg6_local_lwt *slwt);
++};
++
+ struct seg6_action_desc {
+ 	int action;
+ 	unsigned long attrs;
+@@ -53,6 +60,8 @@ struct seg6_action_desc {
+ 
+ 	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
+ 	int static_headroom;
++
++	struct seg6_local_lwtunnel_ops slwt_ops;
+ };
+ 
+ struct bpf_lwt_prog {
+@@ -1055,6 +1064,38 @@ static int parse_nla_optional_attrs(struct nlattr **attrs,
+ 	return err;
+ }
+ 
++/* call the custom constructor of the behavior during its initialization phase
++ * and after that all its attributes have been parsed successfully.
++ */
++static int
++seg6_local_lwtunnel_build_state(struct seg6_local_lwt *slwt, const void *cfg,
++				struct netlink_ext_ack *extack)
++{
++	struct seg6_action_desc *desc = slwt->desc;
++	struct seg6_local_lwtunnel_ops *ops;
++
++	ops = &desc->slwt_ops;
++	if (!ops->build_state)
++		return 0;
++
++	return ops->build_state(slwt, cfg, extack);
++}
++
++/* call the custom destructor of the behavior which is invoked before the
++ * tunnel is going to be destroyed.
++ */
++static void seg6_local_lwtunnel_destroy_state(struct seg6_local_lwt *slwt)
++{
++	struct seg6_action_desc *desc = slwt->desc;
++	struct seg6_local_lwtunnel_ops *ops;
++
++	ops = &desc->slwt_ops;
++	if (!ops->destroy_state)
++		return;
++
++	ops->destroy_state(slwt);
++}
++
+ static int parse_nla_action(struct nlattr **attrs, struct seg6_local_lwt *slwt)
+ {
+ 	struct seg6_action_param *param;
+@@ -1154,6 +1195,10 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
+ 	if (err < 0)
+ 		goto out_free;
+ 
++	err = seg6_local_lwtunnel_build_state(slwt, cfg, extack);
++	if (err < 0)
++		goto out_destroy_attrs;
++
+ 	newts->type = LWTUNNEL_ENCAP_SEG6_LOCAL;
+ 	newts->flags = LWTUNNEL_STATE_INPUT_REDIRECT;
+ 	newts->headroom = slwt->headroom;
+@@ -1162,6 +1207,8 @@ static int seg6_local_build_state(struct net *net, struct nlattr *nla,
+ 
+ 	return 0;
+ 
++out_destroy_attrs:
++	destroy_attrs(slwt);
+ out_free:
+ 	kfree(newts);
+ 	return err;
+@@ -1171,6 +1218,8 @@ static void seg6_local_destroy_state(struct lwtunnel_state *lwt)
+ {
+ 	struct seg6_local_lwt *slwt = seg6_local_lwtunnel(lwt);
+ 
++	seg6_local_lwtunnel_destroy_state(slwt);
++
+ 	destroy_attrs(slwt);
+ 
+ 	return;
+-- 
+2.20.1
+
