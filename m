@@ -2,27 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6FC9C83017
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBCF0C83013
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:09:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A41122240
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:08:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 967A82222F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 13:09:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388775AbgLBNIo (ORCPT
+        id S2388707AbgLBNIn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 08:08:44 -0500
-Received: from smtp.uniroma2.it ([160.80.6.22]:39949 "EHLO smtp.uniroma2.it"
+        Wed, 2 Dec 2020 08:08:43 -0500
+Received: from smtp.uniroma2.it ([160.80.6.22]:39957 "EHLO smtp.uniroma2.it"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727691AbgLBNIk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 08:08:40 -0500
+        id S2387553AbgLBNIj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:08:39 -0500
 Received: from localhost.localdomain ([160.80.103.126])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmS015624
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 0B2D6XmY015624
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 2 Dec 2020 14:06:34 +0100
+        Wed, 2 Dec 2020 14:06:36 +0100
 From:   Andrea Mayer <andrea.mayer@uniroma2.it>
 To:     "David S. Miller" <davem@davemloft.net>,
         David Ahern <dsahern@kernel.org>,
@@ -44,10 +45,12 @@ Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Paolo Lungaroni <paolo.lungaroni@cnit.it>,
         Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
         Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: [net-next v4 0/8] seg6: add support for SRv6 End.DT4/DT6 behavior
-Date:   Wed,  2 Dec 2020 14:05:09 +0100
-Message-Id: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+Subject: [net-next v4 6/8] seg6: add VRF support for SRv6 End.DT6 behavior
+Date:   Wed,  2 Dec 2020 14:05:15 +0100
+Message-Id: <20201202130517.4967-7-andrea.mayer@uniroma2.it>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
+References: <20201202130517.4967-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
@@ -56,156 +59,162 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset provides support for the SRv6 End.DT4 and End.DT6 (VRF mode)
-behaviors.
+SRv6 End.DT6 is defined in the SRv6 Network Programming [1].
 
-The SRv6 End.DT4 behavior is used to implement multi-tenant IPv4 L3 VPNs. It
-decapsulates the received packets and performs IPv4 routing lookup in the
-routing table of the tenant. The SRv6 End.DT4 Linux implementation leverages a
-VRF device in order to force the routing lookup into the associated routing
-table.
-The SRv6 End.DT4 behavior is defined in the SRv6 Network Programming [1].
+The Linux kernel already offers an implementation of the SRv6
+End.DT6 behavior which permits IPv6 L3 VPNs over SRv6 networks. This
+implementation is not particularly suitable in contexts where we need to
+deploy IPv6 L3 VPNs among different tenants which share the same network
+address schemes. The underlying problem lies in the fact that the
+current version of DT6 (called legacy DT6 from now on) needs a complex
+configuration to be applied on routers which requires ad-hoc routes and
+routing policy rules to ensure the correct isolation of tenants.
 
-The Linux kernel already offers an implementation of the SRv6 End.DT6 behavior
-which allows us to set up IPv6 L3 VPNs over SRv6 networks. This new
-implementation of DT6 is based on the same VRF infrastructure already exploited
-for implementing the SRv6 End.DT4 behavior. The aim of the new SRv6 End.DT6 in
-VRF mode consists in simplifying the construction of IPv6 L3 VPN services in
-the multi-tenant environment.
-Currently, the two SRv6 End.DT6 implementations (legacy and VRF mode)
-coexist seamlessly and can be chosen according to the context and the user
-preferences.
+Consequently, a new implementation of DT6 has been introduced with the
+aim of simplifying the construction of IPv6 L3 VPN services in the
+multi-tenant environment using SRv6 networks. To accomplish this task,
+we reused the same VRF infrastructure and SRv6 core components already
+exploited for implementing the SRv6 End.DT4 behavior.
 
-- Patch 1 is needed to solve a pre-existing issue with tunneled packets
-  when a sniffer is attached;
+Currently the two End.DT6 implementations coexist seamlessly and can be
+used depending on the context and the user preferences. So, in order to
+support both versions of DT6 a new attribute (vrftable) has been
+introduced which allows us to differentiate the implementation of the
+behavior to be used.
 
-- Patch 2 improves the management of the seg6local attributes used by the
-  SRv6 behaviors;
+A SRv6 End.DT6 legacy behavior is still instantiated using a command
+like the following one:
 
-- Patch 3 adds support for optional attributes in SRv6 behaviors;
+ $ ip -6 route add 2001:db8::1 encap seg6local action End.DT6 table 100 dev eth0
 
-- Patch 4 introduces two callbacks used for customizing the
-  creation/destruction of a SRv6 behavior;
+While to instantiate the SRv6 End.DT6 in VRF mode, the command is still
+pretty straight forward:
 
-- Patch 5 is the core patch that adds support for the SRv6 End.DT4
-  behavior;
+ $ ip -6 route add 2001:db8::1 encap seg6local action End.DT6 vrftable 100 dev eth0.
 
-- Patch 6 introduces the VRF support for SRv6 End.DT6 behavior;
+Obviously as in the case of SRv6 End.DT4, the VRF strict_mode parameter
+must be set (net.vrf.strict_mode=1) and the VRF associated with table
+100 must exist.
 
-- Patch 7 adds the selftest for SRv6 End.DT4 behavior;
-
-- Patch 8 adds the selftest for SRv6 End.DT6 (VRF mode) behavior.
-
-Regarding iproute2, the support for the new "vrftable" attribute, required by
-both SRv6 End.DT4 and End.DT6 (VRF mode) behaviors, is provided in a different
-patchset that will follow shortly.
-
-I would like to thank David Ahern for his support during the development of
-this patchset.
-
-Comments, suggestions and improvements are very welcome!
-
-Thanks,
-Andrea Mayer
-
-v4
- seg6: add support for the SRv6 End.DT4 behavior
-  - remove IS_ERR() checks in cmp_nla_vrftable(), thanks to Jakub Kicinski.
-
- remove patch for iproute2:
-  - mixing the iproute2 patch with this patchset confused patchwork.
-
-v3
- notes about the build bot:
-  - apparently the ',' (comma) in the subject prefix confused the build bot.
-    Removed the ',' in favor of ' ' (space). 
-    
-    Thanks to David Ahern and Konstantin Ryabitsev for shedding light on this
-    fact.
-    Thanks also to Nathan Chancellor for trying to build the patchset v2 by
-    simulating the bot issue.
-
- add new patch for iproute2:
-  - [9/9] seg6: add support for vrftable attribute in End.DT4/DT6 behaviors
-
- add new patch:
-  -  [8/9] selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
-
- add new patch:
-  - [6/9] seg6: add VRF support for SRv6 End.DT6 behavior
-
- add new patch:
-  - [3/9] seg6: add support for optional attributes in SRv6 behaviors
-
- selftests: add selftest for the SRv6 End.DT4 behavior
-  - keep David Ahern's review tag since the code wasn't changed. Thanks to David  
-    Ahern for his review.
-
- seg6: add support for the SRv6 End.DT4 behavior
-  - remove useless error in seg6_end_dt4_build();
-  - remove #ifdef/#endif stubs for DT4 when CONFIG_NET_L3_MASTER_DEV is not
-    defined;
-  - fix coding style.
-
-    Thanks to Jakub Kicinski for his review and for all his suggestions.
-
- seg6: add callbacks for customizing the creation/destruction of a behavior
-  - remove typedef(s) slwt_{build/destroy}_state_t;
-  - fix coding style: remove empty lines, trivial comments and rename labels in
-    the seg6_local_build_state() function.
-    
-    Thanks to Jakub Kicinski for his review and for all his suggestions.
-
- seg6: improve management of behavior attributes
-  - remove defensive programming approach in destroy_attr_srh(),
-    destroy_attr_bpf() and destroy_attrs();
-  - change the __destroy_attrs() function signature, renaming the 'end' argument    
-    'parsed_max'. Now, the __destroy_attrs() keeps only the 'parsed_max' and
-    'slwt' arguments.
-    
-    Thanks to Jakub Kicinski for his review and for all his suggestions.
-
- vrf: add mac header for tunneled packets when sniffer is attached
-  - keep David Ahern's review tag since the code wasn't changed. 
-    
-    Thanks to Jakub Kicinski for pointing it out and David Ahern for his review.
-
-v2
- no changes made: resubmitted after false build report.
-
-v1
- improve comments;
-
- add new patch 2/5 titled: seg6: improve management of behavior attributes
-
- seg6: add support for the SRv6 End.DT4 behavior
-  - remove the inline keyword in the definition of fib6_config_get_net().
-
- selftests: add selftest for the SRv6 End.DT4 behavior
-  - add check for the vrf sysctl
+Please note that the instances of SRv6 End.DT6 legacy and End.DT6 VRF
+mode can coexist in the same system/configuration without problems.
 
 [1] https://tools.ietf.org/html/draft-ietf-spring-srv6-network-programming
 
-Andrea Mayer (8):
-  vrf: add mac header for tunneled packets when sniffer is attached
-  seg6: improve management of behavior attributes
-  seg6: add support for optional attributes in SRv6 behaviors
-  seg6: add callbacks for customizing the creation/destruction of a
-    behavior
-  seg6: add support for the SRv6 End.DT4 behavior
-  seg6: add VRF support for SRv6 End.DT6 behavior
-  selftests: add selftest for the SRv6 End.DT4 behavior
-  selftests: add selftest for the SRv6 End.DT6 (VRF) behavior
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+---
+ net/ipv6/seg6_local.c | 76 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
- drivers/net/vrf.c                             |  78 ++-
- include/uapi/linux/seg6_local.h               |   1 +
- net/ipv6/seg6_local.c                         | 590 +++++++++++++++++-
- .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 494 +++++++++++++++
- .../selftests/net/srv6_end_dt6_l3vpn_test.sh  | 502 +++++++++++++++
- 5 files changed, 1646 insertions(+), 19 deletions(-)
- create mode 100755 tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
- create mode 100755 tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
-
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index 24c2616c8c11..b07f7c1c82a4 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -497,6 +497,10 @@ static int __seg6_end_dt_vrf_build(struct seg6_local_lwt *slwt, const void *cfg,
+ 		info->proto = htons(ETH_P_IP);
+ 		info->hdrlen = sizeof(struct iphdr);
+ 		break;
++	case AF_INET6:
++		info->proto = htons(ETH_P_IPV6);
++		info->hdrlen = sizeof(struct ipv6hdr);
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -649,6 +653,47 @@ static int seg6_end_dt4_build(struct seg6_local_lwt *slwt, const void *cfg,
+ {
+ 	return __seg6_end_dt_vrf_build(slwt, cfg, AF_INET, extack);
+ }
++
++static enum
++seg6_end_dt_mode seg6_end_dt6_parse_mode(struct seg6_local_lwt *slwt)
++{
++	unsigned long parsed_optattrs = slwt->parsed_optattrs;
++	bool legacy, vrfmode;
++
++	legacy	= !!(parsed_optattrs & (1 << SEG6_LOCAL_TABLE));
++	vrfmode	= !!(parsed_optattrs & (1 << SEG6_LOCAL_VRFTABLE));
++
++	if (!(legacy ^ vrfmode))
++		/* both are absent or present: invalid DT6 mode */
++		return DT_INVALID_MODE;
++
++	return legacy ? DT_LEGACY_MODE : DT_VRF_MODE;
++}
++
++static enum seg6_end_dt_mode seg6_end_dt6_get_mode(struct seg6_local_lwt *slwt)
++{
++	struct seg6_end_dt_info *info = &slwt->dt_info;
++
++	return info->mode;
++}
++
++static int seg6_end_dt6_build(struct seg6_local_lwt *slwt, const void *cfg,
++			      struct netlink_ext_ack *extack)
++{
++	enum seg6_end_dt_mode mode = seg6_end_dt6_parse_mode(slwt);
++	struct seg6_end_dt_info *info = &slwt->dt_info;
++
++	switch (mode) {
++	case DT_LEGACY_MODE:
++		info->mode = DT_LEGACY_MODE;
++		return 0;
++	case DT_VRF_MODE:
++		return __seg6_end_dt_vrf_build(slwt, cfg, AF_INET6, extack);
++	default:
++		NL_SET_ERR_MSG(extack, "table or vrftable must be specified");
++		return -EINVAL;
++	}
++}
+ #endif
+ 
+ static int input_action_end_dt6(struct sk_buff *skb,
+@@ -660,6 +705,28 @@ static int input_action_end_dt6(struct sk_buff *skb,
+ 	if (!pskb_may_pull(skb, sizeof(struct ipv6hdr)))
+ 		goto drop;
+ 
++#ifdef CONFIG_NET_L3_MASTER_DEV
++	if (seg6_end_dt6_get_mode(slwt) == DT_LEGACY_MODE)
++		goto legacy_mode;
++
++	/* DT6_VRF_MODE */
++	skb = end_dt_vrf_core(skb, slwt);
++	if (!skb)
++		/* packet has been processed and consumed by the VRF */
++		return 0;
++
++	if (IS_ERR(skb))
++		return PTR_ERR(skb);
++
++	/* note: this time we do not need to specify the table because the VRF
++	 * takes care of selecting the correct table.
++	 */
++	seg6_lookup_any_nexthop(skb, NULL, 0, true);
++
++	return dst_input(skb);
++
++legacy_mode:
++#endif
+ 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
+ 
+ 	seg6_lookup_any_nexthop(skb, NULL, slwt->table, true);
+@@ -851,7 +918,16 @@ static struct seg6_action_desc seg6_action_table[] = {
+ 	},
+ 	{
+ 		.action		= SEG6_LOCAL_ACTION_END_DT6,
++#ifdef CONFIG_NET_L3_MASTER_DEV
++		.attrs		= 0,
++		.optattrs	= (1 << SEG6_LOCAL_TABLE) |
++				  (1 << SEG6_LOCAL_VRFTABLE),
++		.slwt_ops	= {
++					.build_state = seg6_end_dt6_build,
++				  },
++#else
+ 		.attrs		= (1 << SEG6_LOCAL_TABLE),
++#endif
+ 		.input		= input_action_end_dt6,
+ 	},
+ 	{
 -- 
 2.20.1
 
