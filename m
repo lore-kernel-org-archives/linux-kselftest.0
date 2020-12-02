@@ -2,112 +2,179 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC11C64E7B
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 18:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72595C71156
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 19:10:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63F3622201
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 18:02:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F5A822259
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Dec 2020 19:10:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgLBSCC (ORCPT
+        id S2389676AbgLBTJq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 13:02:02 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:53828 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727454AbgLBSCB (ORCPT
+        Wed, 2 Dec 2020 14:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389599AbgLBTJq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 13:02:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=PNgBCQ8XfFmn9D3DM+iYXdqG+oFaCFQKqsKGuaozXnM=; b=I/z1+NEbS5rhAEcJyNoJdYZjKX
-        GF2BGYAtWOziMnVigqzE1eUHMglwIZi+OmM1AakjZs+Hsd+bzWcf+PlXB/NIrTjj2GlCUoWYRDZcR
-        zPrHxLOH3/uzMbPUwi8F4aVw+xFx1S2W8X9T3V8IPnUoy56PN4haxXE8+yqphc/TCQmKcb8g8ZBDB
-        dFrTJvFFcAG2SkWwRdgs6sezejN5wBuhZoRuXG/ncxXX65UP6Ef8E3zQkSlkTF4IEVKC8dcAdHVlK
-        +xQADBoG7nV0lmFg7pnNxU24eHo65/Fy8AJIsfGoESJY8P6Q+68xlKurQ45l25yeVq2/CtZ28awXH
-        iDej8pIw==;
-Received: from s01060023bee90a7d.cg.shawcable.net ([24.64.145.4] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <logang@deltatee.com>)
-        id 1kkWRD-0003mr-EY; Wed, 02 Dec 2020 11:01:12 -0700
-To:     Christoph Hellwig <hch@lst.de>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Cc:     linux-mm@kvack.org, nouveau@lists.freedesktop.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Zi Yan <ziy@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-nvdimm@lists.01.org, linux-fsdevel@vger.kernel.org
-References: <20201106005147.20113-1-rcampbell@nvidia.com>
- <20201106005147.20113-4-rcampbell@nvidia.com> <20201106080322.GE31341@lst.de>
- <a7b8b90c-09b7-2009-0784-908b61f61ef2@nvidia.com>
- <20201109091415.GC28918@lst.de>
- <bbf1f0df-85f3-5887-050e-beb2aad750f2@nvidia.com>
- <20201202101426.GC7597@lst.de>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <7229bb21-7bf7-4989-e7cf-210834190693@deltatee.com>
-Date:   Wed, 2 Dec 2020 11:01:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-MIME-Version: 1.0
-In-Reply-To: <20201202101426.GC7597@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.145.4
-X-SA-Exim-Rcpt-To: linux-fsdevel@vger.kernel.org, linux-nvdimm@lists.01.org, dan.j.williams@intel.com, akpm@linux-foundation.org, shuah@kernel.org, bskeggs@redhat.com, yang.shi@linux.alibaba.com, kirill.shutemov@linux.intel.com, ziy@nvidia.com, bharata@linux.ibm.com, jgg@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com, jglisse@redhat.com, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, nouveau@lists.freedesktop.org, linux-mm@kvack.org, rcampbell@nvidia.com, hch@lst.de
-X-SA-Exim-Mail-From: logang@deltatee.com
-Subject: Re: [PATCH v3 3/6] mm: support THP migration to device private memory
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+        Wed, 2 Dec 2020 14:09:46 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855AC0617A7
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 11:09:05 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id m186so2959551ybm.22
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 11:09:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=d9ODsGy71UxS1scEvGTz4NCozRGDYn/BsJFydzZu0V0=;
+        b=dm5FdKlSIuxUi4iLenNKFWMujqwqankdTmdkODUJuiHoLawGQEiQYIlCsPA196Zy5s
+         rJ03obABD3u8Q3lABqlHBI08yEr3pL8Hwdv1f+NnXPVmFwdZn0VdbbpsxCKacL58cOsf
+         2K9qn3WjkeW/Vxhz6Z3LMNidcFYPXIh/q8TfQ8aBjP4Cgb+LmgppN4kyjCuo0Gp6ZZ9u
+         3fuLgKBkULfSfv42PD05FLsXvhPJGUSSex8Sk2qXGJgjhARC6jrne1bB09543UR464Kr
+         Y1nO8tsaSexhUXeMwgV8AVn9NlC53AwAtGqznDMKxTRRTr0hEuzel7fqh67UJxVi+Aw4
+         D8vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=d9ODsGy71UxS1scEvGTz4NCozRGDYn/BsJFydzZu0V0=;
+        b=sLrYrosf3D3DWBxAhT92DVMoindycQsXyLd8T6C+iAmev+2asHfe645PJydPWNtXfm
+         7Ap1TpBaf1scvR3BJ6Ev8mobIPR/AlShKVo+vmACaP4aldg2j04Hkk5qkL3T3Hks/2kO
+         EEBOoAm8usNQUVIFuLaPDiEuemg5Cyu15eDZpddI0/p1IlPzYvjwQHqnyj486ovyyDUh
+         s9m7s1RgpUs+gREE6kr1u3yAk/xw3TZTvdR+NZpwqkBUn/kHYnGWxPnxMBR4/xpvFcUY
+         1BeKAt+AlQbwplkcBG5AWrzxXtd/Nh2NCMibYwB6CJNvSO1bLubwIvQ7Zd5g5U/ReKQx
+         OqAg==
+X-Gm-Message-State: AOAM532HD+3pQZtIq8/ze6atatJxSKw4izNnuqxp7+YRNI80nLvqwjWJ
+        Id4vymBjafrDfCZCkHQOsBVPCvOq3DCNBw==
+X-Google-Smtp-Source: ABdhPJwmsBhISZbu0nVZxEfBTeDWYTD4iqql23LY1CiDCmUOfcfU0O8RYn2iUSu71C7BW1OylAiUFpjYE9ItZA==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a28c:fdff:fee3:28c6])
+ (user=dlatypov job=sendgmr) by 2002:a25:d251:: with SMTP id
+ j78mr5578186ybg.193.1606936145223; Wed, 02 Dec 2020 11:09:05 -0800 (PST)
+Date:   Wed,  2 Dec 2020 11:08:23 -0800
+In-Reply-To: <20201202190824.1309398-1-dlatypov@google.com>
+Message-Id: <20201202190824.1309398-3-dlatypov@google.com>
+Mime-Version: 1.0
+References: <20201202190824.1309398-1-dlatypov@google.com>
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+Subject: [PATCH v2 3/4] kunit: tool: use `with open()` in unit test
+From:   Daniel Latypov <dlatypov@google.com>
+To:     davidgow@google.com
+Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+The use of manual open() and .close() calls seems to be an attempt to
+keep the contents in scope.
+But Python doesn't restrict variables like that, so we can introduce new
+variables inside of a `with` and use them outside.
 
+Do so to make the code more Pythonic.
 
-On 2020-12-02 3:14 a.m., Christoph Hellwig wrote:>>
-MEMORY_DEVICE_PCI_P2PDMA:
->> Struct pages are created in pci_p2pdma_add_resource() and represent device
->> memory accessible by PCIe bar address space. Memory is allocated with
->> pci_alloc_p2pmem() based on a byte length but the gen_pool_alloc_owner()
->> call will allocate memory in a minimum of PAGE_SIZE units.
->> Reference counting is +1 per *allocation* on the pgmap->ref reference count.
->> Note that this is not +1 per page which is what put_page() expects. So
->> currently, a get_page()/put_page() works OK because the page reference count
->> only goes 1->2 and 2->1. If it went to zero, the pgmap->ref reference count
->> would be incorrect if the allocation size was greater than one page.
->>
->> I see pci_alloc_p2pmem() is called by nvme_alloc_sq_cmds() and
->> pci_p2pmem_alloc_sgl() to create a command queue and a struct scatterlist *.
->> Looks like sg_page(sg) returns the ZONE_DEVICE struct page of the scatterlist.
->> There are a huge number of places sg_page() is called so it is hard to tell
->> whether or not get_page()/put_page() is ever called on MEMORY_DEVICE_PCI_P2PDMA
->> pages.
-> 
-> Nothing should call get_page/put_page on them, as they are not treated
-> as refcountable memory.  More importantly nothing is allowed to keep
-> a reference longer than the time of the I/O.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_tool_test.py | 33 +++++++++++---------------
+ 1 file changed, 14 insertions(+), 19 deletions(-)
 
-Yes, right now this is safe, as Christoph notes there are no places
-where these should be got/put.
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 3a74e5612cf9..cf160914bc55 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -100,15 +100,14 @@ class KUnitParserTest(unittest.TestCase):
+ 	def test_output_isolated_correctly(self):
+ 		log_path = get_absolute_path(
+ 			'test_data/test_output_isolated_correctly.log')
+-		file = open(log_path)
+-		result = kunit_parser.isolate_kunit_output(file.readlines())
++		with open(log_path) as file:
++			result = kunit_parser.isolate_kunit_output(file.readlines())
+ 		self.assertContains('TAP version 14', result)
+ 		self.assertContains('	# Subtest: example', result)
+ 		self.assertContains('	1..2', result)
+ 		self.assertContains('	ok 1 - example_simple_test', result)
+ 		self.assertContains('	ok 2 - example_mock_test', result)
+ 		self.assertContains('ok 1 - example', result)
+-		file.close()
+ 
+ 	def test_output_with_prefix_isolated_correctly(self):
+ 		log_path = get_absolute_path(
+@@ -143,42 +142,39 @@ class KUnitParserTest(unittest.TestCase):
+ 	def test_parse_successful_test_log(self):
+ 		all_passed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-all_passed.log')
+-		file = open(all_passed_log)
+-		result = kunit_parser.parse_run_tests(file.readlines())
++		with open(all_passed_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.SUCCESS,
+ 			result.status)
+-		file.close()
+ 
+ 	def test_parse_failed_test_log(self):
+ 		failed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-failure.log')
+-		file = open(failed_log)
+-		result = kunit_parser.parse_run_tests(file.readlines())
++		with open(failed_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.FAILURE,
+ 			result.status)
+-		file.close()
+ 
+ 	def test_no_tests(self):
+ 		empty_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-no_tests_run.log')
+-		file = open(empty_log)
+-		result = kunit_parser.parse_run_tests(
+-			kunit_parser.isolate_kunit_output(file.readlines()))
++		with open(empty_log) as file:
++			result = kunit_parser.parse_run_tests(
++				kunit_parser.isolate_kunit_output(file.readlines()))
+ 		self.assertEqual(0, len(result.suites))
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.NO_TESTS,
+ 			result.status)
+-		file.close()
+ 
+ 	def test_no_kunit_output(self):
+ 		crash_log = get_absolute_path(
+ 			'test_data/test_insufficient_memory.log')
+-		file = open(crash_log)
+ 		print_mock = mock.patch('builtins.print').start()
+-		result = kunit_parser.parse_run_tests(
+-			kunit_parser.isolate_kunit_output(file.readlines()))
++		with open(crash_log) as file:
++			result = kunit_parser.parse_run_tests(
++				kunit_parser.isolate_kunit_output(file.readlines()))
+ 		print_mock.assert_any_call(StrContains('no tests run!'))
+ 		print_mock.stop()
+ 		file.close()
+@@ -186,12 +182,11 @@ class KUnitParserTest(unittest.TestCase):
+ 	def test_crashed_test(self):
+ 		crashed_log = get_absolute_path(
+ 			'test_data/test_is_test_passed-crash.log')
+-		file = open(crashed_log)
+-		result = kunit_parser.parse_run_tests(file.readlines())
++		with open(crashed_log) as file:
++			result = kunit_parser.parse_run_tests(file.readlines())
+ 		self.assertEqual(
+ 			kunit_parser.TestStatus.TEST_CRASHED,
+ 			result.status)
+-		file.close()
+ 
+ 	def test_ignores_prefix_printk_time(self):
+ 		prefix_log = get_absolute_path(
+-- 
+2.29.2.576.ga3fc446d84-goog
 
-But eventually we'll need to change how pci_alloc_p2pmem() works to take
-references on the actual pages and allow freeing individual pages,
-similar to what you suggest. This is one of the issues Jason pointed out
-in my last RFC to try to pass these pages through GUP.
-
-Logan
