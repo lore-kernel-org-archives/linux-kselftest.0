@@ -2,179 +2,93 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56E21C6369E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 01:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0C4C64E7C
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 03:06:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E28D920B80
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 01:34:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 270BD2222F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 03:06:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727055AbgLCBdp (ORCPT
+        id S1727777AbgLCDG2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 20:33:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50059 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726755AbgLCBdp (ORCPT
+        Wed, 2 Dec 2020 22:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727776AbgLCDG2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 20:33:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606959138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T+i4hgnbURlmHWFQ6sHh3xD+xz+pB56D5OvWJIuIZUg=;
-        b=UBIH/+ZuQ4dzQeZ9WD7xzGVMi5EQrgaHZdfkrn/c8ub5ATVLj7vaIgNPiYZYI9Xwq/x8ue
-        TaPVIXIgUtjrYjqAGeM1fpbTQY83U6nkb/b90ksZ/Eby/DnVeSdoJNUXHT2sAvD8YsmFbo
-        q4hMT5QC2TmoTmb9SGEhycNJVcRy8NE=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-434-2iIyuyj2Ot2Hm0Qm5qUVMw-1; Wed, 02 Dec 2020 20:32:16 -0500
-X-MC-Unique: 2iIyuyj2Ot2Hm0Qm5qUVMw-1
-Received: by mail-qk1-f197.google.com with SMTP id l7so633472qkl.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 17:32:16 -0800 (PST)
+        Wed, 2 Dec 2020 22:06:28 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E6FC061A4E
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 19:05:48 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id r24so568499lfm.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 19:05:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WjGqpET2Joyaoa7pzBRRAhyQfbOzaMh2Cn5V13dsplE=;
+        b=I+pPbRO5c82mvmvPX68U+/RmZLa6WAUb1BetR7a1l1k0/uZe8sCTrzeNyeq1dOCIoN
+         4wKCnXDzP6us8JTEPAqSkctAgAox+KlaWfH3bokxL2UzUPiKDe2JcXhumoRAPTjJazI1
+         tTQlG/age4OsofVWBzdTcKpfzibcVHbov3KMGthT2vAVBWeKXz+MYC+WFiQyfjU4KHl8
+         bE4D8BFDnu7w7HS6f4Znw3/X3tjJrk1oA0DnZgskez29UH42jFOAwslEfCGnYposIbWn
+         wWUCESvpJStwijIfI/FI0xE9cGd36BNXMIre3tNgmFop7TGf9NvNZqw8XOPi4BaKuE61
+         wkjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T+i4hgnbURlmHWFQ6sHh3xD+xz+pB56D5OvWJIuIZUg=;
-        b=QwQUPLwnTRn7vdkdwr5CqCFFd7Gi6WyuNfCvnNz1etGH+FwXjfwiIVkFVaJE19eyrT
-         hr45bUXSt8kygQBV3S+4S0hxB0IaE1BqD4tj/9mzKBXU0u/RBuOfwzce34WSMixLfY3J
-         H/jki+q1dvuT8IOw2Yp4tbYWJdbsKv15vNojXEtdwVHkDgAH889IVi6fKCY0Qf3bcoP6
-         vdIFSc178yfftWZp3K2D9LevC7Q8/WDGACI8ZEvl1sM8NnP5gT30l+XNbgURjSCxwBzW
-         4IuTp7OesXNcZmdmfcieP8+Gjr7sP8L6RSxaKRIvX/dui4SiEMXTevG/zj3mh5IknDBZ
-         5jkQ==
-X-Gm-Message-State: AOAM533Ow3GMJZ910dz5roVIlZUAILqi2iyQOq5oUCPRpPRRS4xXTNgR
-        6EBmp1ps0SiIwwNgLUsy44nBQAvX21VYhCm8Wu7lX9lnZUsH/jkQCilLsjmqtjq6vSoJ4JRpZuO
-        5dpaAuszXlf8iKu9xs3yKQDnsKvGy
-X-Received: by 2002:a0c:e583:: with SMTP id t3mr1117788qvm.42.1606959136166;
-        Wed, 02 Dec 2020 17:32:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzTRKK1oR4TGx3jghmRwEPH0SBs2kLQ15yxtOulZgmC1hCRslHbj2urqxef0p2YRznc+YWv2w==
-X-Received: by 2002:a0c:e583:: with SMTP id t3mr1117759qvm.42.1606959135831;
-        Wed, 02 Dec 2020 17:32:15 -0800 (PST)
-Received: from xz-x1 ([142.126.94.187])
-        by smtp.gmail.com with ESMTPSA id m8sm547711qkn.41.2020.12.02.17.32.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 17:32:15 -0800 (PST)
-Date:   Wed, 2 Dec 2020 20:32:13 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Alan Gilbert <dgilbert@redhat.com>,
-        Greg Thelen <gthelen@google.com>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] userfaultfd: selftests: make __{s,u}64 format specifiers
- portable
-Message-ID: <20201203013213.GE108496@xz-x1>
-References: <20201202211542.1121189-1-axelrasmussen@google.com>
- <20201202230954.GB108496@xz-x1>
- <CAJHvVch2LJa57-Si2prKa-S3VUPpu3jYxW+3-+tcLMgSXkB69w@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WjGqpET2Joyaoa7pzBRRAhyQfbOzaMh2Cn5V13dsplE=;
+        b=AL8WPFS7CmfpU09on8wvwyvd8/XimstvjLXvWHUJycf15bHtyrIj93vNpiCzaKDlCY
+         XIoJdO7Fue+KikjJtkE0bl11LGRpm5w7VfeEAKIYXiTyAk7evs2w2jGAI5fY/nYgvb0N
+         Y6Z9j+hYhwKwQ0yH9CHQ4NyvSgECqtmCzba5MxrUwqpiTsFclwEVuKncD3mg39CmwPGA
+         lSvnsIScKU9BQslofx+4gubbjBYLTv11OoMBtHOitkHkwDaFbXjlRt1iYm+4M2mTf7xD
+         KihkaGQzpl6tl4d58hImh8GuD6X5q+kysCGgedzwBh55uiprcObm179tmDa8kxf9WgFZ
+         yQiQ==
+X-Gm-Message-State: AOAM532HqrHlDFB4Z0rh2dOKndf5KkkgJtBs0hZvsLTDoLgFHe9iK5u6
+        DX7fzQp7CEAprFvyGUAxK1zL2IfuuWThniz8cooe8A==
+X-Google-Smtp-Source: ABdhPJx9+B/2Wz+X4W05KTZTghYz5A8vZdtxVvQbfTolC37irr33alvURfDzouHDIjdGl4Eyp/AZQA13tG3tovI4E2o=
+X-Received: by 2002:a05:6512:110a:: with SMTP id l10mr426142lfg.167.1606964746628;
+ Wed, 02 Dec 2020 19:05:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVch2LJa57-Si2prKa-S3VUPpu3jYxW+3-+tcLMgSXkB69w@mail.gmail.com>
+References: <20201202190824.1309398-1-dlatypov@google.com> <20201202190824.1309398-2-dlatypov@google.com>
+In-Reply-To: <20201202190824.1309398-2-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 3 Dec 2020 11:05:35 +0800
+Message-ID: <CABVgOSm=mrEwjTMy9TeGRwCnVqmEtJGiqSBiURQk7unfHYLH+g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] kunit: tool: stop using bare asserts in unit test
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 03:52:56PM -0800, Axel Rasmussen wrote:
-> On Wed, Dec 2, 2020 at 3:10 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > Hi, Axel,
-> >
-> > Looks mostly good to me, but a few nitpickings below.
-> >
-> > On Wed, Dec 02, 2020 at 01:15:42PM -0800, Axel Rasmussen wrote:
-> >
-> > [...]
-> >
-> > > +static void uffd_error(const char *message, __s64 code)
-> > > +{
-> > > +     fprintf(stderr, "%s: %" PRId64 "\n", message, (int64_t)code);
-> > > +     exit(1);
-> > > +}
-> >
-> > IMHO a macro that can take arbitrary parameters would be nicer, but if it
-> > satisfy our need, definitely ok too.
-> >
-> > [...]
-> >
-> > > @@ -340,7 +348,8 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
-> > >       prms.mode = wp ? UFFDIO_WRITEPROTECT_MODE_WP : 0;
-> > >
-> > >       if (ioctl(ufd, UFFDIO_WRITEPROTECT, &prms)) {
-> > > -             fprintf(stderr, "clear WP failed for address 0x%Lx\n", start);
-> > > +             fprintf(stderr, "clear WP failed for address 0x%" PRIx64 "\n",
-> > > +                     (uint64_t)start);
-> > >               exit(1);
-> >
-> > Is it intended to not use uffd_error() here?
-> 
-> Yes, this is intentional. This particular case prints the value in
-> hexadecimal, rather than decimal.
-> 
-> (Agree that uffd_error() could be made more general to cover cases
-> like this. I opted for the simplest thing which covers all but two
-> cases - this one, and one where we "return 1;" instead of "exit(1);" -
-> but I don't feel strongly.)
+On Thu, Dec 3, 2020 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Use self.assertEqual/assertNotEqual() instead.
+> Besides being more appropriate in a unit test, it'll also give a better
+> error message by show the unexpected values.
+>
+> Also
+> * Delete redundant check of exception types. self.assertRaises does this.
+> * s/kall/call. There's no reason to name it this way.
+>   * This is probably a misunderstanding from the docs which uses it
+>   since `mock.call` is in scope as `call`.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Actually it's as simple as:
+Looks good, thanks!
 
-#define  uffd_error(...)  do {                  \
-        fprintf(stderr, __VA_ARGS__);           \
-        fprintf(stderr, "\n");                  \
-        exit(1);                                \
-    } while (0)
+Reviewed-by: David Gow <davidgow@google.com>
 
-But it's okay, I think.
 
-> 
-> >
-> > >       }
-> > >  }
-> >
-> > [...]
-> >
-> > > @@ -979,26 +981,20 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
-> > >       if (ret) {
-> > >               /* real retval in ufdio_zeropage.zeropage */
-> > >               if (has_zeropage) {
-> > > -                     if (uffdio_zeropage.zeropage == -EEXIST) {
-> > > -                             fprintf(stderr, "UFFDIO_ZEROPAGE -EEXIST\n");
-> > > -                             exit(1);
-> > > -                     } else {
-> > > -                             fprintf(stderr, "UFFDIO_ZEROPAGE error %Ld\n",
-> > > -                                     uffdio_zeropage.zeropage);
-> > > -                             exit(1);
-> > > -                     }
-> > > +                     uffd_error(uffdio_zeropage.zeropage == -EEXIST ?
-> > > +                                              "UFFDIO_ZEROPAGE -EEXIST" :
-> > > +                                              "UFFDIO_ZEROPAGE error",
-> >
-> > Nit: The indents here are a bit odd..
-> 
-> This is what clang-format yields. Are you thinking it would be better
-> to line everything up with the ( in uffd_error( ?
-> 
-> Or, perhaps this case is a good reason to make uffd_error() a variadic
-> macro so we can insert "-EEXIST" || "error" with a "%s".
-
-Yes.  It fixes a build warning, so I think current patch is fine too.
-
-No matter whether you'd like a v2, please feel free to take:
-
-Acked-by: Peter Xu <peterx@redhat.com>
-
-Thanks,
-
--- 
-Peter Xu
-
+-- David
