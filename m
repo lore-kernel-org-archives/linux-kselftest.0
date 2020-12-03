@@ -2,68 +2,69 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02EB7C4361A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 22:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB41C1B087
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 22:34:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62563223C8
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 22:34:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C8B1223E8
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 22:34:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731734AbgLCWeJ (ORCPT
+        id S1731909AbgLCWed (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Dec 2020 17:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        Thu, 3 Dec 2020 17:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731884AbgLCWeJ (ORCPT
+        with ESMTP id S1727889AbgLCWec (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Dec 2020 17:34:09 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77159C08E9AA
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Dec 2020 14:32:29 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id b10so2307299pfo.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 14:32:29 -0800 (PST)
+        Thu, 3 Dec 2020 17:34:32 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECFAC09424D
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Dec 2020 14:32:33 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id z12so1920217pjn.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Dec 2020 14:32:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=Fuz2jWCqrF9IAKxP8k6Nya5ZGJecRF+RgzAZtQ1aguQ=;
-        b=mSKvNAn9sesScbpX87lSUu0mBqVCj8OIMbu7lykvRwzx5LshH7w3owEkRpyGpDXNcQ
-         DxM4WmkNEEvxJZxM9Go3uBMBj8ABlHamANuZOo15qRHaDbHylqGBDQEpLvYQoPF+GGGu
-         MfVvqgDftvy6DQaojUi43tAtX8XhMeId24Dy401VZ+WpA03KsgCjOCYjSWY8qu1yi584
-         q1jsmVzYfI82cYCJP0qMEL5XH2HIfyMvZE2hC1ajHGstl7xzn0iwfuwuLuRgariPBInW
-         YHktGRnAeDdeRREQp4P7QLY1f5FnfMuSUFRH0AXtLUet9I71rOEFUqNp/W6qXEfQPeEc
-         6lfw==
+        bh=kWu6dOTpWM5OEhpvvxAmGbYOm4nAgVI2rftl3/PRnJw=;
+        b=bb3TCC2gTuwqOzen2Ppu96SWrslPoHVYn9ghrkgyDWdZa8ILSfqc1wrojX1K3U73Vm
+         /r50dYf+je7pw5TDPJsRRIofKlxMtnczpH8DEEMxc6f6su/Fyvrp7310ABwpwthtbxgE
+         dh4dAzwHX13qe8zGtbSnnHi6cpCoUgASyqy3geEYFliW8AwCp60EvA42stwrZe0OTchB
+         rezZqwJ7yndm/Mp1sQBTLVS9ar/3tS182u7HiIA9p8vP+QbSBWyQU6kQHLD0gAFo6uvX
+         9eeQitIK+S2t+aMW9Zj+hkdgmLuAEnshhl1Xud18G3YOS6yU07NUYpNnGGRtmo3zQ5cZ
+         GsGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=Fuz2jWCqrF9IAKxP8k6Nya5ZGJecRF+RgzAZtQ1aguQ=;
-        b=lCF6HmpjL8GSNOzeeHGQiLuVnsIDkjkMN3XAK3Sho1Vjgbs8A+tDEbRPPe5tdHuiTm
-         X2x0GENLu6z9Zn0vW6yYyWC5uPFzc8xI2UT7yXpa51vWroVWo1zv1eKivlMkL3HSmfOh
-         YvkVhgUkcKFrl1BhVYNpLWaUAOS2QftjNgmRIeB70DPMI8qgBvL5QZ3zih6NdfrxZCPT
-         8QFtG/Dd+9DQEhYB2qMfTsGcGYNdzHyLRVibDs3fPv9G53L4/UxNEDsfhg6gwzG9Qk6j
-         b8GQ+2YltQKt3VJeepRy46pdxcG7AY63L3C5zh1JxzEr8kXmU/RAOvXZ7eLnKI2puUmd
-         TWGw==
-X-Gm-Message-State: AOAM533OylVsUFVwFNxtMZRM5J8Vg0DDI+9pi+o9vIBqFFW/lPfjieJh
-        mqCa4QIli4tD4hsBPyLitoc2yw==
-X-Google-Smtp-Source: ABdhPJx2WNV5k33+iBsSIbI9umTnQLWqfWRaWsln1Jxc6zjGtr+fhirdSbDdprGD/O3QhEedC5oQ8Q==
-X-Received: by 2002:a62:8f4e:0:b029:18b:bd18:75b7 with SMTP id n75-20020a628f4e0000b029018bbd1875b7mr970569pfd.48.1607034748209;
-        Thu, 03 Dec 2020 14:32:28 -0800 (PST)
+        bh=kWu6dOTpWM5OEhpvvxAmGbYOm4nAgVI2rftl3/PRnJw=;
+        b=p3h9mecqS+hxT3JwAS1zr5/bL4ztDe10ATxs8h3wZZz2olwEKpCPH85/fqBZ8NzRiI
+         yH7sH34jx4guayWH/feEMWYj02XSgaolT1igx2gpFB5iVshBI1Wjpyxnh7eKg+YE1scL
+         8fUPrzZDqtncshF29+kdDWoxTKMYqPANU5lyhoomgf8zmMLcxaJwHb53adKjltSo9cZj
+         kKfzNFPBslzyNvsx0OKztoP8E7LZDUH7Hm9OBOVw33lGo/HsamvH66JVia5pdiS9NFCh
+         6D85L6s0C+59K+pudQe4zxf9JLooYxXSjZRc7FAg9u6W7+aVXVQuFeHC6841ui1Z3HlO
+         YRGA==
+X-Gm-Message-State: AOAM532xgDf1gVynUZLlLlTzqzQBz1lQA54ZSnguC2+vwuHtPqJrvBi8
+        yaE2hS34dXVY4ADeICsqvxOVsA==
+X-Google-Smtp-Source: ABdhPJyss4HB0tRKuTdlmynwH8EalWY5UH5526iClcnKVeSXxYoDVLrUWDJ1cBtKdu4wdMbvN0OThQ==
+X-Received: by 2002:a17:902:758c:b029:da:a6e1:e06 with SMTP id j12-20020a170902758cb02900daa6e10e06mr1222353pll.67.1607034752937;
+        Thu, 03 Dec 2020 14:32:32 -0800 (PST)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id cq15sm332045pjb.27.2020.12.03.14.32.27
+        by smtp.gmail.com with ESMTPSA id g6sm305006pjd.3.2020.12.03.14.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 14:32:27 -0800 (PST)
-Subject: [PATCH v1 2/5] uapi: Add dm-user structure definition
-Date:   Thu,  3 Dec 2020 13:58:56 -0800
-Message-Id: <20201203215859.2719888-3-palmer@dabbelt.com>
+        Thu, 03 Dec 2020 14:32:32 -0800 (PST)
+Subject: [PATCH v1 5/5] MAINTAINERS: Add myself as a dm-user maintainer
+Date:   Thu,  3 Dec 2020 13:58:59 -0800
+Message-Id: <20201203215859.2719888-6-palmer@dabbelt.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
 In-Reply-To: <20201203215859.2719888-1-palmer@dabbelt.com>
 References: <20201203215859.2719888-1-palmer@dabbelt.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Cc:     corbet@lwn.net, song@kernel.org,
         Palmer Dabbelt <palmerdabbelt@google.com>, shuah@kernel.org,
@@ -78,96 +79,33 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Palmer Dabbelt <palmerdabbelt@google.com>
 
-dm-user is a device mapper target that allows a userspace process to
-handle each incoming BIO.  Communication with userspace consists of a
-stream of messages proxied over a misc device, the structure of each
-message is defined in this header.
+I'm not sure this is big enough to warrant an entry in the MAINTAINERS file,
+but I know it can be quite a bit of work to maintain something like this so I'm
+happy to sign up if that helps.
 
 Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
-
 ---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-As it currently stands this isn't really sufficient to be a stable user
-ABI.  These are probably best discussed in the context of the dm-user
-implementation, though, where they're largely called out as FIXMEs.
----
- include/uapi/linux/dm-user.h | 67 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 include/uapi/linux/dm-user.h
-
-diff --git a/include/uapi/linux/dm-user.h b/include/uapi/linux/dm-user.h
-new file mode 100644
-index 000000000000..1806109518f4
---- /dev/null
-+++ b/include/uapi/linux/dm-user.h
-@@ -0,0 +1,67 @@
-+/* SPDX-License-Identifier: LGPL-2.0+ WITH Linux-syscall-note */
-+/*
-+ * Copyright (C) 2020 Palmer Dabbelt <palmerdabbelt@google.com>
-+ */
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2daa6ee673f7..ab9d7746cfb4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5198,6 +5198,13 @@ W:	http://sources.redhat.com/cluster/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git
+ F:	fs/dlm/
+ 
++DM USER (Block Device in Userspace)
++M:	Palmer Dabbelt <palmerdabbelt@google.com>
++S:	Maintained
++F:	include/linux/dm-user.h
++F:	drivers/md/dm-user.c
++F:	tools/testing/selftests/dm-user/
 +
-+#ifndef _LINUX_DM_USER_H
-+#define _LINUX_DM_USER_H
-+
-+#include <linux/types.h>
-+
-+/*
-+ * dm-user proxies device mapper ops between the kernel and userspace.  It's
-+ * essentially just an RPC mechanism: all kernel calls create a request,
-+ * userspace handles that with a response.  Userspace obtains requests via
-+ * read() and provides responses via write().
-+ *
-+ * See Documentation/block/dm-user.rst for more information.
-+ */
-+
-+#define DM_USER_REQ_MAP_READ 0
-+#define DM_USER_REQ_MAP_WRITE 1
-+#define DM_USER_REQ_MAP_FLUSH 2
-+#define DM_USER_REQ_MAP_DISCARD 3
-+#define DM_USER_REQ_MAP_SECURE_ERASE 4
-+#define DM_USER_REQ_MAP_WRITE_SAME 5
-+#define DM_USER_REQ_MAP_WRITE_ZEROES 6
-+#define DM_USER_REQ_MAP_ZONE_OPEN 7
-+#define DM_USER_REQ_MAP_ZONE_CLOSE 8
-+#define DM_USER_REQ_MAP_ZONE_FINISH 9
-+#define DM_USER_REQ_MAP_ZONE_APPEND 10
-+#define DM_USER_REQ_MAP_ZONE_RESET 11
-+#define DM_USER_REQ_MAP_ZONE_RESET_ALL 12
-+
-+#define DM_USER_REQ_MAP_FLAG_FAILFAST_DEV 0x00001
-+#define DM_USER_REQ_MAP_FLAG_FAILFAST_TRANSPORT 0x00002
-+#define DM_USER_REQ_MAP_FLAG_FAILFAST_DRIVER 0x00004
-+#define DM_USER_REQ_MAP_FLAG_SYNC 0x00008
-+#define DM_USER_REQ_MAP_FLAG_META 0x00010
-+#define DM_USER_REQ_MAP_FLAG_PRIO 0x00020
-+#define DM_USER_REQ_MAP_FLAG_NOMERGE 0x00040
-+#define DM_USER_REQ_MAP_FLAG_IDLE 0x00080
-+#define DM_USER_REQ_MAP_FLAG_INTEGRITY 0x00100
-+#define DM_USER_REQ_MAP_FLAG_FUA 0x00200
-+#define DM_USER_REQ_MAP_FLAG_PREFLUSH 0x00400
-+#define DM_USER_REQ_MAP_FLAG_RAHEAD 0x00800
-+#define DM_USER_REQ_MAP_FLAG_BACKGROUND 0x01000
-+#define DM_USER_REQ_MAP_FLAG_NOWAIT 0x02000
-+#define DM_USER_REQ_MAP_FLAG_CGROUP_PUNT 0x04000
-+#define DM_USER_REQ_MAP_FLAG_NOUNMAP 0x08000
-+#define DM_USER_REQ_MAP_FLAG_HIPRI 0x10000
-+#define DM_USER_REQ_MAP_FLAG_DRV 0x20000
-+#define DM_USER_REQ_MAP_FLAG_SWAP 0x40000
-+
-+#define DM_USER_RESP_SUCCESS 0
-+#define DM_USER_RESP_ERROR 1
-+#define DM_USER_RESP_UNSUPPORTED 2
-+
-+struct dm_user_message {
-+	__u64 seq;
-+	__u64 type;
-+	__u64 flags;
-+	__u64 sector;
-+	__u64 len;
-+	__u8 buf[];
-+};
-+
-+#endif
+ DMA BUFFER SHARING FRAMEWORK
+ M:	Sumit Semwal <sumit.semwal@linaro.org>
+ M:	Christian König <christian.koenig@amd.com>
 -- 
 2.29.2.454.gaff20da3a2-goog
 
