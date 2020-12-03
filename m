@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D548C6369E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 03:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DDDC64E7C
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 03:07:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFC6222201
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 03:06:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3593821D91
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Dec 2020 03:07:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbgLCDGV (ORCPT
+        id S1727438AbgLCDHE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Dec 2020 22:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        Wed, 2 Dec 2020 22:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgLCDGV (ORCPT
+        with ESMTP id S1725965AbgLCDHE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Dec 2020 22:06:21 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE1C061A4D
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 19:05:35 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id u19so578381lfr.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 19:05:34 -0800 (PST)
+        Wed, 2 Dec 2020 22:07:04 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536C7C061A4F
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Dec 2020 19:06:18 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id s27so585746lfp.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Dec 2020 19:06:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fZfjFj0HnOPxDFc3+iS8mDidBdv6khuB8oFfMET/GKI=;
-        b=u66lDIvqTNO9kjjQ2rLurjG7k042fHc8I+LGB1GaopW0Wzq1fo68Lg3tYclhHdyyj+
-         P/b6j9/SPhuBsfvwZNf0XBrTUkAYj5pfUF6ENf+tlTqrpvqdXx7MCEz+QeLVVTPE8+7Q
-         oFgVPiC3gs7AonDTk2bMELyj8+2wuT/wxZGJMMD5xr1V/u+N16BlC2rYt38C3tbdRqOq
-         xtvqpT0kEoJLGU+Y8g+IyvUXsfOq/8QTSpUnr4fuBqiKiDQCQB6Us6Zo8pbKdKyUT3M9
-         JSBdb1ElHz23dZ0dhi8V1ZPsPRNbq9n+RbsQ0nGD5oToWIcR6VJNUh5BhQhVTR2T1A3Y
-         jlZA==
+        bh=iabHWxPKR0AIdSLCLpw/C98fo9E+QLOwHBUfijaTHQI=;
+        b=AUQsOHkBeiTCRFg84V/yDRz2/jWuR3J0fKxAp52o5M4SXIBufUW4si5duvf/GMoL1C
+         swixKu+RjjKlS6wWmi4ALcrumj1I3aXZdS3MNLe1WCmrWmDvWBzShKcYMihiWhfD/m6N
+         kMhh5OXRHnmsZXfwMXP9kMPMPmky/B5InN+Z7an/boun8bZWXBkBS5Xp8iH3BFKxlnO2
+         OFzLiyFIa7fykoAUXq1E1plqt4Ik2j1wNwUAAzhg7P0BKM1wibFomM5L6v97uI/U8AQl
+         aTtaFfU5eHGq9ATsbpKp41UUmEI4AtWOrmwXDBBXiGUlyFLutxxVot0xPwYyTmWlKAoN
+         SKgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fZfjFj0HnOPxDFc3+iS8mDidBdv6khuB8oFfMET/GKI=;
-        b=ai5W95RMJ1gqCCfkOk0L0jLeTRvnVxsWeuXxK+/Gcv4wCyJG0rAzFkfog6t8BnYpQy
-         7Kpdu7mC6lhBG6sfp00uLvVO0a1F7Z0O1jilRyXOu6Gc2d5mmpSdaiScGtmm/Gp8DFsj
-         jYxwNvDeYz3fdhZirpFVOwfR6RM8Cye+E4EJQp4mTctObiVa4Dx2ld5opoZcQ+OWjv25
-         AZHF8Fn56atqNEfXzqKdfzSZU5sGE50btXednxgCFWVyqE87OSN2KaJ6uX1DzAV0hTPM
-         TARA4En5zVBMSpuWXBOoUsSbT92zCfGCAGYYAvhY3+jmsxHiViq+lWSnoqKJ+wTFdtom
-         /KlQ==
-X-Gm-Message-State: AOAM532AtjrL1XwE5+3TwikZuDRYRPbonovyuYPdn0bZOSKIi93AOqgN
-        QxBW0mZXzgkEqi6dXUl1CMpjTm54Om8W2McW6Jd95g==
-X-Google-Smtp-Source: ABdhPJz3uwU3OoJjqR4+1l9Ui0xIUrD2q3MRpQ1iNbJ8+r/KWnAmLW7YkvTQKvIjA1nhCoGe/AGb1DFSfK1tv9zaaCo=
-X-Received: by 2002:a19:246:: with SMTP id 67mr420225lfc.234.1606964733349;
- Wed, 02 Dec 2020 19:05:33 -0800 (PST)
+        bh=iabHWxPKR0AIdSLCLpw/C98fo9E+QLOwHBUfijaTHQI=;
+        b=TUxiPnQKHgMnm/bzRko9fFs2Q3Om7/mi4hPJ0n3cWnChHk/adJHc2KEAHc7qbAnLJa
+         MJMQlZGVg2uZbF0XFT7V0UvnAa3I7l7/Sj/yk4R5c/b+XLqfbSS1aCISIfsu4xfNoxUy
+         xOLBjZW43KtItTuXaoBQNdTifjJxf7rv3TqV2JjcGL2OnGuaj7+0L+NuH8ukUiWOAaQa
+         JvZ/9knaQPh1KIEoDBCbNQALSOGu6+QdU8Jx6wlt48oJkpwAfYws1mR9/u4t1gJvMfS0
+         rFgQ5bXX/IlVs2sCtyHnDpb5WlvX1vX2zvxFzN5StfTn/s65yowUoMiWdGH4vT5Q9jjd
+         w7gA==
+X-Gm-Message-State: AOAM530npWQLexSQuhEePc5Lr7JN0I+1yVdz4B7IS9eqml7YhqkEN+pe
+        lwdUq68wPRKtOlcsK9MIRkMdQfaEaHCfwDwyERvbgw==
+X-Google-Smtp-Source: ABdhPJykgUoWnXraVCTndySD7LalvFP87smyvD+6cUr/lw5/huv1uwshhaw6Nrv3Vqyp1o0ghF0lO5Qq8V2d4oHcPfs=
+X-Received: by 2002:ac2:5102:: with SMTP id q2mr439864lfb.165.1606964776658;
+ Wed, 02 Dec 2020 19:06:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20201202190824.1309398-1-dlatypov@google.com>
-In-Reply-To: <20201202190824.1309398-1-dlatypov@google.com>
+References: <20201202190824.1309398-1-dlatypov@google.com> <20201202190824.1309398-3-dlatypov@google.com>
+In-Reply-To: <20201202190824.1309398-3-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 3 Dec 2020 11:05:21 +0800
-Message-ID: <CABVgOSnqhes_Lu+4BRq74get5D3ya3S6XxMLqFKamqahU5-RRA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] kunit: tool: fix unit test cleanup handling
+Date:   Thu, 3 Dec 2020 11:06:05 +0800
+Message-ID: <CABVgOSmiXDS=wGe0XPvr2BDqg+1be43TLFLE8fW79ZNPUYpNYQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] kunit: tool: use `with open()` in unit test
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -73,17 +73,16 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, Dec 3, 2020 at 3:09 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> * Stop leaking file objects.
-> * Use self.addCleanup() to ensure we call cleanup functions even if
-> setUp() fails.
-> * use mock.patch.stopall instead of more error-prone manual approach
+> The use of manual open() and .close() calls seems to be an attempt to
+> keep the contents in scope.
+> But Python doesn't restrict variables like that, so we can introduce new
+> variables inside of a `with` and use them outside.
+>
+> Do so to make the code more Pythonic.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-This patch hasn't changed since v1, right?
-
-It's still:
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
