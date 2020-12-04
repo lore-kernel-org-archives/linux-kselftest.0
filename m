@@ -2,178 +2,167 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91CF8C4361B
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Dec 2020 18:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA177C433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Dec 2020 20:36:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34B3822CB1
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Dec 2020 18:53:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84AE322C9C
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Dec 2020 20:36:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730416AbgLDSw0 (ORCPT
+        id S1726021AbgLDUgG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Dec 2020 13:52:26 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:55930 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727997AbgLDSw0 (ORCPT
+        Fri, 4 Dec 2020 15:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728582AbgLDUgG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Dec 2020 13:52:26 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4Ie35p085149;
-        Fri, 4 Dec 2020 18:50:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=qKvf4lzEo5tNiBSD+ta9N0URRH+/apH1S2WO9655a9k=;
- b=mhrID1qX18m6dww1exE6wPNTGZ74zSHcGO0t/+YT+rn9U/dRLYsOsXsJhtC53PztlUk1
- YPM3WZVMFIHWGMRzLgb77YnvtF1uaViSucME3JudNON5lvgd850Kb4rReWCAdilSjm4h
- es/SygkHshlhUkGLMSgL2JAM5VA0z5U7PTBEoFfANPSVK/Op/+gqa8DQbb1hEDQucidG
- +hTNRe2QTy5Hkd31LEkrKGg+UND/cy+VHEjtkWtCPiSMUUaZK2SB3Ce9Bx0p1udD/tmY
- Jwdd7WmTiGSdqIN5eNg+eO4K9laOSEmTTrykweFq4sqQrRy70J/lNBovmuhqM1xzyk4o ug== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 353dyr4pry-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 04 Dec 2020 18:50:57 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4IaIgY044683;
-        Fri, 4 Dec 2020 18:48:56 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 3540f3pntt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Dec 2020 18:48:56 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B4ImtZC006809;
-        Fri, 4 Dec 2020 18:48:55 GMT
-Received: from localhost.uk.oracle.com (/10.175.205.186)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 04 Dec 2020 10:48:55 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, yhs@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        rostedt@goodmis.org, mingo@redhat.com, haoluo@google.com,
-        jolsa@kernel.org, quentin@isovalent.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, shuah@kernel.org, lmb@cloudflare.com,
-        linux-kselftest@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 1/3] bpf: eliminate btf_module_mutex as RCU synchronization can be used
-Date:   Fri,  4 Dec 2020 18:48:34 +0000
-Message-Id: <1607107716-14135-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1607107716-14135-1-git-send-email-alan.maguire@oracle.com>
-References: <1607107716-14135-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9825 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=2 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012040106
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9825 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=2 lowpriorityscore=0 phishscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012040106
+        Fri, 4 Dec 2020 15:36:06 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD2DC061A4F
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Dec 2020 12:35:25 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id i184so8456733ybg.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Dec 2020 12:35:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=AnJeit01nF61jllgCw+jNN3EZnXYnoHf3OFvBuHNiIE=;
+        b=Q865+I+npgDxO5mvNz7nE0FFszUKiT1oj8XqaBePvExuhcuxk5iaxLW10s5HU4Lrb9
+         wu4fX/1igXukDWtsCu7dnMJkGlEroel7nceNG8FxOD/e666FSXT6UliuYkIM8jccC9e5
+         CzEvqEuM6aS8yQthD1G02jZ3bKUftXa/Ld3QT8mm0VtUHla15h/qGaDCi3Agd3s22nVW
+         zCamj1a1vSCOZTB+v7JZBu0M/5XfPMAQQ7wK5kuzx9nsJg8jDcIROEM4BfI5gpDwM3vv
+         Z1RFR8zSQcrSlyqPTjVr9c/M7eb1FPD90an14IUK5Vj/AAvsa7TwO06plQGM6rpUvAlP
+         GYJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=AnJeit01nF61jllgCw+jNN3EZnXYnoHf3OFvBuHNiIE=;
+        b=m8MudxczUpy7lqHOSw3sdsL/ytjv16yW3MaIHUgFpDM/FPfRfbVadOwSakoZ/HFd1F
+         XCNs3LLj6LLtP5u3T4znQ6ZDV2dRn8HZijPAmkvcWQCpvDHp4rDiAHww+0Xrc6Vdsm87
+         Pqk9YOBTvRFuvEJVtcj/AE9AcyMfCDP/OT+MZKUsSBqt1+Q+722nG06x2EHymJLtL0Ab
+         5qZaFh4pYrdmestX4+1b65WuPYpzi8CD5x60P64xQ4eXhJxm/z3q55C8zI0lgYg2s51A
+         ZgCHyIkj7WQs0wl+JmjsjmAxVsRekz6OaF9p5gzurYa2MqUsOA8jJl0rM59+biVrVtH7
+         fHVA==
+X-Gm-Message-State: AOAM530lreZDJElYFbe/fWmvSmgYfqYyGJjqUMhhGaPnLu+leQQJLdnD
+        +IqIlOeJWrDLQ7weIreHawtQf6jc/hzcOPpGNYVK
+X-Google-Smtp-Source: ABdhPJy6YTdTjZz5Hjir0b8leyA4lBtDy5pKId5K3dU4HmYu5w6p88bf0x2ctmEKd7bTpq8kTkFb8eq8fR2nNUn2x8R6
+Sender: "axelrasmussen via sendgmr" <axelrasmussen@ajr0.svl.corp.google.com>
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:f693:9fff:feef:c8f8])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:d895:: with SMTP id
+ p143mr503872ybg.91.1607114125017; Fri, 04 Dec 2020 12:35:25 -0800 (PST)
+Date:   Fri,  4 Dec 2020 12:34:43 -0800
+Message-Id: <20201204203443.2714693-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+Subject: [PATCH] userfaultfd: selftests: fix SIGSEGV if huge mmap fails
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        David Alan Gilbert <dgilbert@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-btf_module_mutex is used when manipulating the BTF module list.
-However we will wish to look up this list from BPF program context,
-and such contexts can include interrupt state where we cannot sleep
-due to a mutex_lock().  RCU usage here conforms quite closely
-to the example in the system call auditing example in
-Documentation/RCU/listRCU.rst ; and as such we can eliminate
-the lock and use list_del_rcu()/call_rcu() on module removal,
-and list_add_rcu() for module addition.
+The error handling in hugetlb_allocate_area() was incorrect for the
+hugetlb_shared test case.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Previously the behavior was:
+
+- mmap a hugetlb area
+  - If this fails, set the pointer to NULL, and carry on
+- mmap an alias of the same hugetlb fd
+  - If this fails, munmap the original area
+
+If the original mmap failed, it's likely the second one did too. If
+both failed, we'd blindly try to munmap a NULL pointer, causing a
+SIGSEGV. Instead, "goto fail" so we return before trying to mmap the
+alias.
+
+This issue can be hit "in real life" by forgetting to set
+/proc/sys/vm/nr_hugepages (leaving it at 0), and then trying to run the
+hugetlb_shared test.
+
+Another small improvement is, when the original mmap fails, don't just
+print "it failed": perror(), so we can see *why*. :)
+
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- kernel/bpf/btf.c | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 25 +++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 8d6bdb4..333f41c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5758,13 +5758,13 @@ bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- struct btf_module {
- 	struct list_head list;
-+	struct rcu_head	rcu;
- 	struct module *module;
- 	struct btf *btf;
- 	struct bin_attribute *sysfs_attr;
- };
- 
- static LIST_HEAD(btf_modules);
--static DEFINE_MUTEX(btf_module_mutex);
- 
- static ssize_t
- btf_module_read(struct file *file, struct kobject *kobj,
-@@ -5777,10 +5777,21 @@ struct btf_module {
- 	return len;
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 9b0912a01777..c4425597769a 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -206,19 +206,19 @@ static int hugetlb_release_pages(char *rel_area)
+ 	return ret;
  }
  
-+static void btf_module_free(struct rcu_head *rcu)
-+{
-+	struct btf_module *btf_mod = container_of(rcu, struct btf_module, rcu);
-+
-+	if (btf_mod->sysfs_attr)
-+		sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
-+	btf_put(btf_mod->btf);
-+	kfree(btf_mod->sysfs_attr);
-+	kfree(btf_mod);
-+}
-+
- static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			     void *module)
+-
+ static void hugetlb_allocate_area(void **alloc_area)
  {
--	struct btf_module *btf_mod, *tmp;
-+	struct btf_module *btf_mod;
- 	struct module *mod = module;
- 	struct btf *btf;
- 	int err = 0;
-@@ -5811,11 +5822,9 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			goto out;
- 		}
- 
--		mutex_lock(&btf_module_mutex);
- 		btf_mod->module = module;
- 		btf_mod->btf = btf;
--		list_add(&btf_mod->list, &btf_modules);
--		mutex_unlock(&btf_module_mutex);
-+		list_add_rcu(&btf_mod->list, &btf_modules);
- 
- 		if (IS_ENABLED(CONFIG_SYSFS)) {
- 			struct bin_attribute *attr;
-@@ -5845,20 +5854,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 
- 		break;
- 	case MODULE_STATE_GOING:
--		mutex_lock(&btf_module_mutex);
--		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-+		list_for_each_entry(btf_mod, &btf_modules, list) {
- 			if (btf_mod->module != module)
- 				continue;
- 
--			list_del(&btf_mod->list);
--			if (btf_mod->sysfs_attr)
--				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
--			btf_put(btf_mod->btf);
--			kfree(btf_mod->sysfs_attr);
--			kfree(btf_mod);
-+			list_del_rcu(&btf_mod->list);
-+			call_rcu(&btf_mod->rcu, btf_module_free);
- 			break;
- 		}
--		mutex_unlock(&btf_module_mutex);
- 		break;
+ 	void *area_alias = NULL;
+ 	char **alloc_area_alias;
++
+ 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+ 			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
+ 			   MAP_HUGETLB,
+ 			   huge_fd, *alloc_area == area_src ? 0 :
+ 			   nr_pages * page_size);
+ 	if (*alloc_area == MAP_FAILED) {
+-		fprintf(stderr, "mmap of hugetlbfs file failed\n");
+-		*alloc_area = NULL;
++		perror("mmap of hugetlbfs file failed");
++		goto fail;
  	}
- out:
+ 
+ 	if (map_shared) {
+@@ -227,14 +227,11 @@ static void hugetlb_allocate_area(void **alloc_area)
+ 				  huge_fd, *alloc_area == area_src ? 0 :
+ 				  nr_pages * page_size);
+ 		if (area_alias == MAP_FAILED) {
+-			if (munmap(*alloc_area, nr_pages * page_size) < 0) {
+-				perror("hugetlb munmap");
+-				exit(1);
+-			}
+-			*alloc_area = NULL;
+-			return;
++			perror("mmap of hugetlb file alias failed");
++			goto fail_munmap;
+ 		}
+ 	}
++
+ 	if (*alloc_area == area_src) {
+ 		huge_fd_off0 = *alloc_area;
+ 		alloc_area_alias = &area_src_alias;
+@@ -243,6 +240,16 @@ static void hugetlb_allocate_area(void **alloc_area)
+ 	}
+ 	if (area_alias)
+ 		*alloc_area_alias = area_alias;
++
++	return;
++
++fail_munmap:
++	if (munmap(*alloc_area, nr_pages * page_size) < 0) {
++		perror("hugetlb munmap");
++		exit(1);
++	}
++fail:
++	*alloc_area = NULL;
+ }
+ 
+ static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset)
 -- 
-1.8.3.1
+2.29.2.576.ga3fc446d84-goog
 
