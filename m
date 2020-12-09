@@ -2,63 +2,97 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32326C4361B
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Dec 2020 14:23:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD968C4361B
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Dec 2020 16:00:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E84B223B52
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Dec 2020 14:23:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D38C23B77
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Dec 2020 16:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbgLIOXO (ORCPT
+        id S1731454AbgLIQAs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Dec 2020 09:23:14 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60754 "EHLO mx2.suse.de"
+        Wed, 9 Dec 2020 11:00:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726435AbgLIOXO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Dec 2020 09:23:14 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1607523747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uiDomGRkuTSzGKant3Aykyu4NfcmJKpExuBm+U0wY6U=;
-        b=llU3BLB5UKPeWSLJXbXRWqQFNC9+04cq552hR+C0t0hncDH4zPxBV9Z7zAqopdJuNxisGD
-        vNt66K/Mr749w/ZCGLfwNzuZPbPgI7TT1T9wGl5mDu1HepWLhOnUkuuAMysZuNWEgMjW+f
-        rashFuxkMx2iToRRQG4GQEB8raa7qAA=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4FA27ACF4;
-        Wed,  9 Dec 2020 14:22:27 +0000 (UTC)
-Date:   Wed, 9 Dec 2020 15:22:26 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        shuah@kernel.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] MAINTAINERS: Add lib/test_scanf.c to VSPRINTF
-Message-ID: <X9DdovpUOTLmvn9y@alley>
-References: <20201130145800.19960-1-rf@opensource.cirrus.com>
- <20201130145800.19960-4-rf@opensource.cirrus.com>
+        id S1731418AbgLIQAs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Dec 2020 11:00:48 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607529607;
+        bh=nPYVPZb8lF5AdNA/ZSa58MqKVIKgV5e+WU4mYaQy1hY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=O4pqR+kgMVViT91hgn8Dhj5xDIqGJ9+wWNjcsRPwEA6FYVyMBE0VjqXJxL2eVKZtR
+         DXXIXD5/q8Nv66w7ut1Tnh9o4gz0R5RRqV43VYItyLwRjthnNqV2Z2d6fvKc4wii2w
+         DFHDua+6I6cMXi6Ql/hd8gL2K2Y0JaVYYxfcCa8Lw5WH0sQc8DkUaAkDxZfdYopJBo
+         hw4AKSSLNJ6WO5we5tC3rLmQ1Ybz38v4BxNjUMUVEL/O8gGSregRRIw2PlZf6KMaAd
+         5WEqiMsd3OhBJW6QbT2zM84lVD8an0SbyO1Pp4/Y+dzS5sKa5HuHFiJFETnfBzwRBT
+         hDEKH6TpofVXg==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201130145800.19960-4-rf@opensource.cirrus.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 0/5] selftests/bpf: xsk selftests
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160752960729.12976.12661383715171656742.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Dec 2020 16:00:07 +0000
+References: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
+In-Reply-To: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
+To:     Weqaar Janjua <weqaar.janjua@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, yhs@fb.com, magnus.karlsson@gmail.com,
+        bjorn.topel@intel.com, weqaar.a.janjua@intel.com, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 2020-11-30 14:58:00, Richard Fitzgerald wrote:
-> Adds the new scanf test to the VSPRINTF group.
+Hello:
+
+This series was applied to bpf/bpf-next.git (refs/heads/master):
+
+On Mon,  7 Dec 2020 21:53:28 +0000 you wrote:
+> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
 > 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> # Topology:
+> # ---------
+> #                 -----------
+> #               _ | Process | _
+> #              /  -----------  \
+> #             /        |        \
+> #            /         |         \
+> #      -----------     |     -----------
+> #      | Thread1 |     |     | Thread2 |
+> #      -----------     |     -----------
+> #           |          |          |
+> #      -----------     |     -----------
+> #      |  xskX   |     |     |  xskY   |
+> #      -----------     |     -----------
+> #           |          |          |
+> #      -----------     |     ----------
+> #      |  vethX  | --------- |  vethY |
+> #      -----------   peer    ----------
+> #           |          |          |
+> #      namespaceX      |     namespaceY
+> 
+> [...]
 
-I would prefer to squash this into the 2nd patch that adds the
-file. But anyway:
+Here is the summary with links:
+  - [bpf-next,v4,1/5] selftests/bpf: xsk selftests framework
+    https://git.kernel.org/bpf/bpf-next/c/a89052572ebb
+  - [bpf-next,v4,2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
+    https://git.kernel.org/bpf/bpf-next/c/facb7cb2e909
+  - [bpf-next,v4,3/5] selftests/bpf: xsk selftests - DRV POLL, NOPOLL
+    https://git.kernel.org/bpf/bpf-next/c/9103a8594d93
+  - [bpf-next,v4,4/5] selftests/bpf: xsk selftests - Socket Teardown - SKB, DRV
+    https://git.kernel.org/bpf/bpf-next/c/6674bf66560a
+  - [bpf-next,v4,5/5] selftests/bpf: xsk selftests - Bi-directional Sockets - SKB, DRV
+    https://git.kernel.org/bpf/bpf-next/c/7d20441eb05e
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Best Regards,
-Petr
+
