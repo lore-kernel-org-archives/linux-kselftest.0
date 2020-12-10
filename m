@@ -2,131 +2,99 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E882C4167B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 11:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D941EC433FE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 11:55:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E60CA23D67
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 11:52:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 814C123D67
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 11:55:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732970AbgLJLw3 (ORCPT
+        id S1729935AbgLJLzp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Dec 2020 06:52:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25947 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726788AbgLJLtv (ORCPT
+        Thu, 10 Dec 2020 06:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729321AbgLJLzp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 06:49:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607600905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nYPQDiAhm8hSh2USepS5FHexuq2b5Pq9ywrQrkIfNpo=;
-        b=Hyy25Z2afntXyb6wipTl2pKeT4dsSiYn6NS3NGjdNsfQ4JOD9UubNlfZaF9RelilOxBHp4
-        WFIRRvXMSSC7tG1Uyi+NWKO61E3Nkmry7gWTDll9qn5M4vqZ+0sbLGkrg/+4qc1SkyOR18
-        v4/WAFzv5yp5PutkRYnSq+Mpw3WXWGw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-53-33MaG1fsO1GvGYiXf2QGBw-1; Thu, 10 Dec 2020 06:48:24 -0500
-X-MC-Unique: 33MaG1fsO1GvGYiXf2QGBw-1
-Received: by mail-ed1-f69.google.com with SMTP id a9so2339420edy.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 03:48:24 -0800 (PST)
+        Thu, 10 Dec 2020 06:55:45 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AF3C0613CF;
+        Thu, 10 Dec 2020 03:55:04 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id a12so5172542wrv.8;
+        Thu, 10 Dec 2020 03:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CdxG881XmVcC+3BxAJE5RLPRTwKuGEBk/qTCPUmATks=;
+        b=BE3LGOddDLEk5ES4jCs2wfbqmVXp65l8oovj439lSBjoplOuce1Ge27ta+eNc/8zNg
+         GJXXcpqzYpj2HgDrizRnh4nBFUONs8/+NgtwuSYPFUeZTswc4aEh1kXTRxGsuTaiRjRh
+         DlXJOn9C9FtuKweaHzpxVLbNPBMzp6Pu3+DBdFYEsPpgbNnyZqGPx98ikXHdrz5a+X1j
+         U/RuBSvNNAKL4C1MdfrEBeTDKfH0AETmH0OYtTR+kDZvXH1ZWwvpF3qlxWSjJdTpR5sv
+         YgPL0AMkRRZVFoYj+h4X0w3IzWQkEnmjlXhbpyNk9pUqkDtD6zuFu4Umq2gy9FCwpudG
+         lioA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nYPQDiAhm8hSh2USepS5FHexuq2b5Pq9ywrQrkIfNpo=;
-        b=hRkRYv82ivHXs0IWVktEUVFgflP3vALzE3hNJHUUJSCOXOCoDBh1+fLhf+7oufcbaN
-         QxyYvEUI2QbNlZvFOXuUM0tDVH2rYh6/yEjn5MRwlx+tjUca6kj4aCE5d8Qin3rJWVdo
-         N0h2p8hkKG1LozcO4oa0/Xbdl+irXe37Vx5Q69U7Qo50oFDiHeZr16MOT0ibvqfqWP9M
-         A0uZMcEV5m+HdORGxQHi6EFBZFR7DtF2g+G8Khs8jfnJsDQoea+Q1IlLoKDdzDoxuvvN
-         /cnLL1tzz9qStvglxzhuJQxvTKxAcV30XxTRbSKqEQ8/OEYahcBXIFXouXLi5Pe0hWiz
-         QJlw==
-X-Gm-Message-State: AOAM531qG+0tG61Cu/xXh1NlaIYpfwnbNj8W5MW9JvEjZ5SkIedQn4xO
-        BfiUBb16+N1kIGOU//mVgebsR9rsX3l1ZEimArcLzXETQowAWeQmAC4xDnmxO4/YbHFzkAKyZ8T
-        SApfIfnIzfDE3iYPh2oF6L2faQ7HT
-X-Received: by 2002:a17:906:60c4:: with SMTP id f4mr5984862ejk.336.1607600903198;
-        Thu, 10 Dec 2020 03:48:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxQgXMt4toLvnNgD5Cb9xhVQ4EUd7Fk1QIvNq7IrqgtLyqfYak4c6SknAeDik9vCfyF8qAaQg==
-X-Received: by 2002:a17:906:60c4:: with SMTP id f4mr5984837ejk.336.1607600903022;
-        Thu, 10 Dec 2020 03:48:23 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.gmail.com with ESMTPSA id rk12sm4108614ejb.75.2020.12.10.03.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Dec 2020 03:48:22 -0800 (PST)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-To:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oliver Upton <oupton@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-References: <20201203171118.372391-1-mlevitsk@redhat.com>
- <20201203171118.372391-2-mlevitsk@redhat.com>
- <CAOQ_Qsj6THRPj2ta3PdOxUJeCj8KxPnLkWV8EGpvN_J=qUv74A@mail.gmail.com>
- <d3dd82950301517e47630cc86fa0e6dc84f63f90.camel@redhat.com>
- <87lfe82quh.fsf@nanos.tec.linutronix.de>
- <047afdde655350a6701803aa8ae739a8bd1c1c14.camel@redhat.com>
-Message-ID: <7c25e8c0-a7d4-8906-ae47-20714e6699fe@redhat.com>
-Date:   Thu, 10 Dec 2020 12:48:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        bh=CdxG881XmVcC+3BxAJE5RLPRTwKuGEBk/qTCPUmATks=;
+        b=dN26PV226kh9ZRwlZflfaWaHfPSILNOZmCkLNCh3JhtBkGzdCFWTJq6BlymM+iobua
+         UJzfy300F0j8CyKqqnlsN+vF5qr6idCNkeFN4G8JJApSEWfiTcozxcw4RZrKG6Lvh8z7
+         t62fYAL3UNLHvZTiAEwce/yu0PWVwJ7FzW4QYkzUl5pE9ottER0pWi9SU8GjwbSQACTx
+         rKdXLXMpzWtt8rg+TGFoyIPMRLZhRruw90h8GAYndRYiKNJC49FsRQMnFv//0gnHGgbx
+         kTsxyiwua6KNeLXncMJkvjqQSvnpIgnlc68VTwiKQd3UY78pBp6/qeL9lAJels/g7Q5T
+         MUYw==
+X-Gm-Message-State: AOAM533EpxSRcZRZyhHqZSN1Quxqe5KhFobjGv0DR/lVRBw09yTa4FRw
+        hpht/e6Issub8b0JfLyCy9kiUKyiCV1u9LHhAlg=
+X-Google-Smtp-Source: ABdhPJwkXJT4Mw2QMaX63UxXDVd9mFEzdnXeZ0jGYjnF0YJG/MhM8piq2MFCUq+t9VMFNfnbJGDKkg==
+X-Received: by 2002:a5d:4209:: with SMTP id n9mr7689169wrq.128.1607601303015;
+        Thu, 10 Dec 2020 03:55:03 -0800 (PST)
+Received: from kernel-dev.chello.ie ([80.111.136.190])
+        by smtp.gmail.com with ESMTPSA id a14sm69033wrn.3.2020.12.10.03.55.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 03:55:02 -0800 (PST)
+From:   Weqaar Janjua <weqaar.janjua@gmail.com>
+X-Google-Original-From: Weqaar Janjua <weqaar.a.janjua@intel.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, yhs@fb.com, magnus.karlsson@gmail.com,
+        bjorn.topel@intel.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+Subject: [PATCH bpf-next] selftests/bpf: xsk selftests - adding xdpxceiver to .gitignore
+Date:   Thu, 10 Dec 2020 11:54:35 +0000
+Message-Id: <20201210115435.3995-1-weqaar.a.janjua@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <047afdde655350a6701803aa8ae739a8bd1c1c14.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08/12/20 18:08, Maxim Levitsky wrote:
->> Even if you support TSCADJUST and let the guest write to it does not
->> change the per guest offset at all. TSCADJUST is per [v]CPU and adds on
->> top:
->>
->>      tscvcpu = tsc_host + guest_offset + TSC_ADJUST
->>
->> Scaling is just orthogonal and does not change any of this.
->
-> I agree with this, and I think that this is what we will end up doing.
-> Paulo, what do you think about this?
+This patch adds *xdpxceiver* to selftests/bpf/.gitignore
 
-Yes, you can have a VM ioctl that saves/restores cur_tsc_nsec and 
-cur_tsc_write.  The restore side would loop on all vcpus.
+Reported-by: Yonghong Song <yhs@fb.com>
+Suggested-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
+---
+ tools/testing/selftests/bpf/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-However, it is not so easy: 1) it would have to be usable only if 
-KVM_X86_QUIRK_TSC_HOST_ACCESS is false, 2) it would fail if 
-kvm->arch.nr_vcpus_matched_tsc == kvm->online_vcpus (which basically 
-means that userspace didn't mess up the TSC configuration).  If not, it 
-would return -EINVAL.
-
-Also, while at it let's burn and pour salt on the support for 
-KVM_SET_TSC_KHZ unless TSC scaling is supported, together with 
-vcpu->tsc_catchup and all the "tolerance" crap that is in 
-kvm_set_tsc_khz.  And initialize vcpu->arch.virtual_tsc_khz to 
-kvm->arch.last_tsc_khz before calling kvm_synchronize_tsc.
-
-Paolo
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 752d8edddc66..f5b7ef93618c 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -36,3 +36,4 @@ test_cpp
+ /runqslower
+ /bench
+ *.ko
++xdpxceiver
+-- 
+2.20.1
 
