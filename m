@@ -2,134 +2,131 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2915C4167B
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E73D3C433FE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:20:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80D6E23DB4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:12:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8983A23E54
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:20:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732741AbgLJXLw (ORCPT
+        id S2393549AbgLJXTU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Dec 2020 18:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        Thu, 10 Dec 2020 18:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733150AbgLJXKz (ORCPT
+        with ESMTP id S2393214AbgLJXTD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 18:10:55 -0500
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA224C0613CF
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:10:14 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id n142so6764703qkn.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PXNvDug05+aqIQUhCBBkkdcljepd619NYC6D67mJKng=;
-        b=KY8q1LTJ9v4+Mxdwf+O4dytJtldFCx/0lto4hGIoiFXYqFsj4/CY1XHGA1zAmQF79o
-         1WaHTHtpewLuZd7KKxgJ31nLTyBbJPaxmOR9/tBQ2WWe/iSfjdccrfudPDJyFNChMy9R
-         rYE711+SUPb2aGfyiJOvdK9YbrPFosBRQ6+CAr46RmnVdB0fhGWSv6R4dM00oSkRiStX
-         NsWy3TRqrgEH1Mx7ZoQr9YdPEPbcLbfWnTRsxfEjgRKdnLGkxjop97FkakXnNSKGVla4
-         EIA3XQbXd8m1NX8xmwZmVoNYiYPjgYdfT/CwxDcO4o9piUpE2KOXNFx5I9yC4Fvtw+uk
-         mowA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PXNvDug05+aqIQUhCBBkkdcljepd619NYC6D67mJKng=;
-        b=SNeFRP9se+RfBT5kiiud4NCuLcXjisi+uCpKMTF3mVFoSlyiUgFrDzRcDPPAXuQ/qg
-         DAfEwi82jIpa0TQO9zp06jDWsdLFbvI5cr/jfDNy2btuNPjlSGKCQvQmnB9ifmuAzYNu
-         lqxp3JkG7wQsbCmkUOh2cOqOxLOPtf9xSU5uBfSy+3RkBx0TcM1LPSHKwpYB+1mWZd8j
-         KbMk7f5fTbvckqE1alwb4J6A8Q2zGyCushf4E0ErKY6oWQPWuhHhr7AAn8Img5ffvjfL
-         QyXGKOYkdgnKOFNMq+mI3xbYsZxIWLqmy9ohQnr755vR08ioY00nQWnk2BulqVk6wJct
-         iH/w==
-X-Gm-Message-State: AOAM532Ye49OqjhtLTsHyUw1oSynEVlGRVdHfT3I0dwjLCT196YIrn06
-        XiTLVrEJYm1S9sbDVB962dTbL54o7IrBvw==
-X-Google-Smtp-Source: ABdhPJzkoueWD0AlxcjmFjs2RtuEeMZedVeaGvMk46SwGtDhKkyjijfQA0BNCJhJt73MRLy1+HnARQ==
-X-Received: by 2002:a05:620a:805:: with SMTP id s5mr12513205qks.80.1607641813528;
-        Thu, 10 Dec 2020 15:10:13 -0800 (PST)
-Received: from willemb.nyc.corp.google.com ([2620:0:1003:312:f693:9fff:fef4:3e8a])
-        by smtp.gmail.com with ESMTPSA id c68sm5033671qkb.17.2020.12.10.15.10.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 15:10:12 -0800 (PST)
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, kuba@kernel.org, keescook@chromium.org,
-        Willem de Bruijn <willemb@google.com>
-Subject: [PATCH] selftests/harness: pass variant to teardown
-Date:   Thu, 10 Dec 2020 18:10:10 -0500
-Message-Id: <20201210231010.420298-1-willemdebruijn.kernel@gmail.com>
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+        Thu, 10 Dec 2020 18:19:03 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1722C061285;
+        Thu, 10 Dec 2020 14:35:34 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607636890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fS6Q5Mzy8JmeMJ4Hud0TQwMZS+fqZnoguNO5e8v6TVs=;
+        b=QPVSgrSjXozmKT2n8R4x08cAnYxVSNVsEJIc2eOXdokOKwJWBs2OmryPk2gbH9m6ZOKoe8
+        e+FoOcRFR2pIFn5LvxJZAHjBjdUwn+McnauUHljGdaHlGQhHp7mcwOKFxgJnADdWgEa9+5
+        Wjwl0ZQnBnDjijvfKOKcoVnM9bGg8ZcJUDxLZMr40Tyep1mn50l2na3vzBcnlLIfSVGPHT
+        qd1Yig3bi9mFhuiQ3NybufG11BjowHHtfz+hoOB6XRlOCdjaFSoLIwD58Ra+5X0RLs4tmV
+        iV22mB1VyAas66wcX/Q3IA4GgfdryNM5nXZSiSOxGRiFKZEL9m0Hzvu7gx/57A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607636890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fS6Q5Mzy8JmeMJ4Hud0TQwMZS+fqZnoguNO5e8v6TVs=;
+        b=1mexZVqkZd9QyFLML/IjTcYSbIpLa2tYlJj+Jet5oFipyeOgV1RizLPTsRFrRHCrog9vOU
+        wBhOpA0OtkrUPIBA==
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+In-Reply-To: <20201210152618.GB23951@fuller.cnet>
+References: <20201203171118.372391-1-mlevitsk@redhat.com> <20201203171118.372391-2-mlevitsk@redhat.com> <20201207232920.GD27492@fuller.cnet> <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com> <87sg8g2sn4.fsf@nanos.tec.linutronix.de> <20201208181107.GA31442@fuller.cnet> <875z5c2db8.fsf@nanos.tec.linutronix.de> <20201209163434.GA22851@fuller.cnet> <87r1nyzogg.fsf@nanos.tec.linutronix.de> <20201210152618.GB23951@fuller.cnet>
+Date:   Thu, 10 Dec 2020 22:48:10 +0100
+Message-ID: <87zh2lib8l.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+On Thu, Dec 10 2020 at 12:26, Marcelo Tosatti wrote:
+> On Wed, Dec 09, 2020 at 09:58:23PM +0100, Thomas Gleixner wrote:
+>> Marcelo,
+>> 
+>> On Wed, Dec 09 2020 at 13:34, Marcelo Tosatti wrote:
+>> > On Tue, Dec 08, 2020 at 10:33:15PM +0100, Thomas Gleixner wrote:
+>> >> On Tue, Dec 08 2020 at 15:11, Marcelo Tosatti wrote:
+>> >> > max_cycles overflow. Sent a message to Maxim describing it.
+>> >> 
+>> >> Truly helpful. Why the hell did you not talk to me when you ran into
+>> >> that the first time?
+>> >
+>> > Because 
+>> >
+>> > 1) Users wanted CLOCK_BOOTTIME to stop counting while the VM 
+>> > is paused (so we wanted to stop guest clock when VM is paused anyway).
+>> 
+>> How is that supposed to work w/o the guest kernels help if you have to
+>> keep clock realtime up to date? 
+>
+> Upon VM resume, we notify NTP daemon in the guest to sync realtime
+> clock.
 
-FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as variant.
+Brilliant. What happens if there is no NTP daemon? What happens if the
+NTP daemon is not part of the virt orchestration magic and cannot be
+notified, then it will notice the time jump after the next update
+interval.
 
-In some cases, the variant will change the setup, such that expections
-also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
+What about correctness?
 
-The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
-right above.
+ALL CLOCK_* stop and resume when the VM is resumed at the point where
+they stopped.
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
+So up to the point where NTP catches up and corrects clock realtime and
+TAI other processes can observe that time jumped in the outside world,
+e.g. via a network packet or whatever, but there is no reason why time
+should have jumped outside vs. the local one.
 
----
+You really all live in a seperate universe creating your own rules how
+things which other people work hard on to get it correct can be screwed
+over.
 
-For one use of this see tentative
-tools/testing/selftests/filesystems/selectpoll.c kselftest at
-https://github.com/wdebruij/linux-next-mirror/commit/12b4d183ac9140c13606376bb5c6714673daf754
----
- tools/testing/selftests/kselftest_harness.h | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Of course this all is nowhere documented in detail. At least a quick
+search with about 10 different keyword combinations revealed absolutely
+nothing.
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index f19804df244c..6a27e79278e8 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -283,7 +283,9 @@
- #define FIXTURE_TEARDOWN(fixture_name) \
- 	void fixture_name##_teardown( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
--		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
-+		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
-+		const FIXTURE_VARIANT(fixture_name) \
-+			__attribute__((unused)) *variant)
- 
- /**
-  * FIXTURE_VARIANT(fixture_name) - Optionally called once per fixture
-@@ -298,9 +300,9 @@
-  *       ...
-  *     };
-  *
-- * Defines type of constant parameters provided to FIXTURE_SETUP() and TEST_F()
-- * as *variant*. Variants allow the same tests to be run with different
-- * arguments.
-+ * Defines type of constant parameters provided to FIXTURE_SETUP(), TEST_F() and
-+ * FIXTURE_TEARDOWN as *variant*. Variants allow the same tests to be run with
-+ * different arguments.
-  */
- #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
- 
-@@ -382,7 +384,7 @@
- 		if (!_metadata->passed) \
- 			return; \
- 		fixture_name##_##test_name(_metadata, &self, variant->data); \
--		fixture_name##_teardown(_metadata, &self); \
-+		fixture_name##_teardown(_metadata, &self, variant->data); \
- 	} \
- 	static struct __test_metadata \
- 		      _##fixture_name##_##test_name##_object = { \
--- 
-2.29.2.576.ga3fc446d84-goog
+This features first, correctness later frenzy is insane and it better
+stops now before you pile even more crap on the existing steaming pile
+of insanities.
+
+Thanks,
+
+        tglx
+
+
+
 
