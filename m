@@ -2,90 +2,130 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D38FC47434
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:08:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C4E0C2BB9A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:10:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05BAA23B85
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:08:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F6C52332A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Dec 2020 23:10:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394156AbgLJWbV (ORCPT
+        id S1732728AbgLJXJM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Dec 2020 17:31:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405113AbgLJWY2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Dec 2020 17:24:28 -0500
-X-Gm-Message-State: AOAM531Kw7hKXcB9hxZxRrASa74r5X5KalxbdNSwEI+4xW4hHRWyktOY
-        PE6gjrwCibLwccMiUrsjTFBLo6YhGzq01khJ1fB0kw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607637685;
-        bh=4yt8h1Q+CPGGcT2IO75cM/fN5M+tD+08bKTLE18FGBc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mMWvnIShKAgYdcX4PZb8dm3EICOtgYX6trNmFvewYP950g4nA7qZFUO3aspNqYyCV
-         W0nMO4Uiv0A2JNQScze/bR1D4r6sLp1z2j28hPPzB6E7JWlAXMkYdytq1ETss+zhBA
-         qpTcen55RpIcHCr5sRoWE1BCFgn6MvS1STdBvxgXl0DL5mOvmPpl3if8LgQIVj1rSI
-         lNTnmlAZYUI1R+GPk87at/QKlEDpe1actw0jFqS+cNmc5/RaP75d2h4fJpEFk31ILP
-         PlPRX0c1sUGmfWEbf2cNXeaSFee43sbhR7LQ+0dZdPlBxZqETopmAVlZJ5JbGveVVK
-         bG92QEYqTL55A==
-X-Google-Smtp-Source: ABdhPJzF2a9E+mCWo9M4tLmMpSz+6JMPjrTXsFPQMg/z71zkpXbGLbBH1iCVRxG8tDVwZozqBfsoJUXetLw8AUPWzi8=
-X-Received: by 2002:adf:e98c:: with SMTP id h12mr10402629wrm.75.1607637683968;
- Thu, 10 Dec 2020 14:01:23 -0800 (PST)
+        Thu, 10 Dec 2020 18:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730702AbgLJXIs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Dec 2020 18:08:48 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7965AC061793
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:08:06 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id s21so5601641pfu.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Dec 2020 15:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NP1eu7QDXdN/1YqCh4O4EOd9zppr5PbDxmIdIe+pjSA=;
+        b=M/rjtOioeYVZzIK8FwCBKkHp+QeF8hYz1G+VlryRD4DXSoqGqzINxzNRERmZ2zKjkN
+         G4XKbt6rByKu1z3AagYCYrpfhUZE9dFaTGczwhxQaydu5hEkpI8H6hRF6DNYIEK6KC8K
+         V1YvnEiyAfMzzOb7qp41HUk1EUeOYSiLXGhD0QNdqEKsK/RvpHLm8djQit+4qgDyM9sF
+         p0xa3z0WxKXbIsLg5rKpzYt1dCZg7ijMW49l4IyAEokVCJFEnw2JtaQytJWSy7AGS+mn
+         oiYw4+idWG7OXPXfX6vSSWL2Bk87ztUHGPcH4ksCEPKeHzVGa9L1FZi7fBdokel4uf4T
+         tp5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NP1eu7QDXdN/1YqCh4O4EOd9zppr5PbDxmIdIe+pjSA=;
+        b=cqXZhx3xVPRfcU/SjnGa1OAN34LJyQZiI2ghP63nFAd/h0phqhQ06YlvLRCkGvghut
+         DYwztMIaJLPvC7yNRgAogKZnk+ngsMWimljzcuQm9x8MspG2Ru03DC7hMmD8gd3yAPZi
+         QhoTSgT7XRSay7eKp2O+FXMVvmL/RMhNtxe1pkgqx+DOAAB8IJBKiAIepoG2g02+iyq7
+         xC19uVVbwO9Ybqj27kDkR9HCjfVFbioE++Q2CQ4ZVmn+gigYCpVwDpO2WtVt/xQDqlsk
+         Ei+Y+ug3OPQYyVVxTgjvgToEypfboZIYKY6rzFi8JcCPJWrK0NEw/+PySOw0CO96Z7Gi
+         tuEQ==
+X-Gm-Message-State: AOAM532VvUrY6cG+iWGnrMkfLnR+abx8pZhQrk3uAU9NP2rZLyuUKGDf
+        gREeG0LAhs/vQmm//BlktZ5ecXubkTgwUChTZT779g==
+X-Google-Smtp-Source: ABdhPJyPpYuGxS3UNNVMvIrUoOvYY0B9PyWYyBcfUUS6dyzMKocWIdKN/OXVIdGaZmMGNTMRO95SG0kFYXggpwyYwDw=
+X-Received: by 2002:a17:90b:1b05:: with SMTP id nu5mr9949695pjb.101.1607641685861;
+ Thu, 10 Dec 2020 15:08:05 -0800 (PST)
 MIME-Version: 1.0
-References: <9389c1198da174bcc9483d6ebf535405aa8bdb45.camel@redhat.com>
- <E4F263BE-6CAA-4152-8818-187D34D8D0FD@amacapital.net> <87360djqve.fsf@nanos.tec.linutronix.de>
-In-Reply-To: <87360djqve.fsf@nanos.tec.linutronix.de>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Thu, 10 Dec 2020 14:01:12 -0800
-X-Gmail-Original-Message-ID: <CALCETrXXH5GoaSZwSPy-JFxJ6iMMCj0A=yFFPuyutBh+1imCsQ@mail.gmail.com>
-Message-ID: <CALCETrXXH5GoaSZwSPy-JFxJ6iMMCj0A=yFFPuyutBh+1imCsQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jim Mattson <jmattson@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+References: <20201203221005.2813159-1-adelg@google.com>
+In-Reply-To: <20201203221005.2813159-1-adelg@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 10 Dec 2020 15:07:53 -0800
+Message-ID: <CAKwvOdk6=TgL+f2-WvE7tsK0rN1XQ+NdXmeJfDkLsa8xPmgipA@mail.gmail.com>
+Subject: Re: [PATCH] selftests: propagate CC to selftest submakes
+To:     Andrew Delgadillo <adelg@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Oliver Upton <oupton@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 1:25 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Thu, Dec 3, 2020 at 2:10 PM Andrew Delgadillo <adelg@google.com> wrote:
 >
-> Andy,
+> lib.mk defaults to gcc when CC is not set. When building selftests
+> as part of a kernel compilation, MAKEFLAGS is cleared to allow implicit
+> build rules to be used. This has the side-effect of clearing the CC
+> variable, which will cause selftests to be built with gcc regardless of
+> if we are using gcc or clang. To remedy this, propagate the CC variable
+> when clearing makeflags to ensure the correct compiler is used.
+>
+> Signed-off-by: Andrew Delgadillo <adelg@google.com>
+
+Hi Andrew, thanks for the patch. Can you walk me through how to build
+the selftests?
+
+Documentation/dev-tools/kselftest.rst says:
+$ make -C tools/testing/selftests
+
+And if I do:
+$ make CC=clang defconfig
+$ make CC=clang -C tools/testing/selftests -j
+
+I observe a spew of errors.  If I apply your patch and rerun the
+above, I see what looks like the same spew of errors.  Am I "holding
+it wrong" or could the docs use a refresh?
+
+> ---
+>  tools/testing/selftests/Makefile | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index d9c283503159..a4dd6d7e8276 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -90,10 +90,12 @@ FORCE_TARGETS ?=
+>
+>  # Clear LDFLAGS and MAKEFLAGS when implicit rules are missing.  This provides
+>  # implicit rules to sub-test Makefiles which avoids build failures in test
+> -# Makefile that don't have explicit build rules.
+> +# Makefile that don't have explicit build rules. Since lib.mk defaults to
+> +# using gcc for compilation when the CC variable is not set, we propagate the
+> +# CC variable so if clang is being used, selftests will build with clang.
+>  ifeq (,$(LINK.c))
+>  override LDFLAGS =
+> -override MAKEFLAGS =
+> +override MAKEFLAGS = CC=$(CC)
+>  endif
+>
+>  # Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
+> --
+> 2.29.2.576.ga3fc446d84-goog
 >
 
->
-> I'm still convinced that a notification about 'we take a nap' will be
-> more robust, less complex and more trivial to backport.
 
-What do you have in mind?  Suppose the host kernel sends the guest an
-interrupt on all vCPUs saying "I'm about to take a nap".  What happens
-if the guest is busy with IRQs off for a little bit?  Does the host
-guarantee the guest a certain about of time to try to get the
-interrupt delivered before allowing the host to enter S3?  How about
-if the host wants to reboot for a security fix -- how long is a guest
-allowed to delay the process?
-
-I'm sure this can all be made to work 99% of time, but I'm a bit
-concerned about that last 1%.
-
---Andy
+-- 
+Thanks,
+~Nick Desaulniers
