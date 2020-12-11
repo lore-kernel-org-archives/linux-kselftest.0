@@ -2,157 +2,212 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0BE2C4361B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Dec 2020 21:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 571CBC4361B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Dec 2020 21:52:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85CA822B47
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Dec 2020 21:33:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19E1423B31
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Dec 2020 21:52:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391739AbgLKU2c (ORCPT
+        id S2394740AbgLKVFw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Dec 2020 15:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389434AbgLKU2Y (ORCPT
+        Fri, 11 Dec 2020 16:05:52 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:37518 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392579AbgLKVFl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Dec 2020 15:28:24 -0500
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94CCC0613CF
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Dec 2020 12:27:43 -0800 (PST)
-Received: by mail-qt1-x843.google.com with SMTP id k4so7407349qtj.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Dec 2020 12:27:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qxQRcgZ57qjzJh7BvMLhV37MMlxNs43EUrF1vU/yGZU=;
-        b=nrurt71go8dURqiLI/e2i4djK7ea0xPI4EmUSTnhhQsdi3clEfJKra77IRz0wg6yUN
-         UmZtUcmexvGmbBIP1vU/F64/PR7ayXLawLHrEL6no6KluITNweWUcdErlUnFrRNclvhX
-         uFX/HT5Ss1pq0WRbDc1RpzOA5nz8nPSlMIgrB/+NaoNbykJlJC+o20NZXmSipI2VuXUq
-         FyLnQtqBJV4O0FddEE8D4/V2DuR/HdtsJ8CdoObOksUnlWN/cCPken9kLV9lPU6NJPGH
-         X82kStUmE6BZaZS+RT8NUmyI/5UiNHV7lAQv0OjtNucRhilbptk0SyAW32lH5Ukwibw9
-         xXWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qxQRcgZ57qjzJh7BvMLhV37MMlxNs43EUrF1vU/yGZU=;
-        b=QZcoAs50P7ENYKAVAotU2HeZBnd/47PuVM8bBH0/0Hjb60z8wzj7Hlf7YCeSCpxdOF
-         3SXBWXZBX+HixTr2g7+6eptOaoy5BFT2DRcc1xb85kKFtUIoOJd9ayKUeamCj1TsdwA3
-         cl/oCQte9hl9CAkBzjKNdhDyDRz1b0wcX3uGrDnSOjguuTDcRbUj40k5jSXPhBpZRYJW
-         7hiuh6LHxup7R+e3A954K6xRiFoiR88zb9rk9zxAuGeg186IYsAsi2zWt8Jexse5PfQI
-         CwK+ATMdqWYbx5hHKrRHja2PWRhA+q0+LTZetgW+uAD6lvZbjOAq32wEZLg7R19trO8Z
-         1DJg==
-X-Gm-Message-State: AOAM532Oo+LsvwS+QWwUYiW7JK6lWrxqRrfIZAAlo+Ir+iIQk1paeNsS
-        YYGAkJkIQGYHaRDuPaPTV0xyfXgqFPPb3s9sP2tBkw==
-X-Google-Smtp-Source: ABdhPJwKhJkjDBa/HBYQWBJavEqlSMqWfgTRJzP4rY1FNqLCK7OjrhsPb+JhGumknOwKFJu6fFFVYNlks6t97T4fAYU=
-X-Received: by 2002:ac8:5802:: with SMTP id g2mr17284210qtg.383.1607718462773;
- Fri, 11 Dec 2020 12:27:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20201203221005.2813159-1-adelg@google.com> <CAKwvOdk6=TgL+f2-WvE7tsK0rN1XQ+NdXmeJfDkLsa8xPmgipA@mail.gmail.com>
- <CAEHm+vHtMQtMThgE_BwpiBS5v0a61L_TW9vgKLaFTtcgg9HSgA@mail.gmail.com> <e78c3b86-78ab-2b2e-d8be-e9118d7d2392@linuxfoundation.org>
-In-Reply-To: <e78c3b86-78ab-2b2e-d8be-e9118d7d2392@linuxfoundation.org>
-From:   Andrew Delgadillo <adelg@google.com>
-Date:   Fri, 11 Dec 2020 12:27:31 -0800
-Message-ID: <CAEHm+vHXeuo6cPKOyCgCqLA1a8O8g9wgKVMi+4ifLN__BPVQbA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: propagate CC to selftest submakes
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+        Fri, 11 Dec 2020 16:05:41 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607720693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0fiMhIgezjMm4j4B451ig1YSH6sP5DgP4ssfWySwTGs=;
+        b=AQYRNJvcxXd/HlimRdNjo1jnET0BBogqtVB+Ri+UcW9mLEHO290gRs/+90RaLXritQJb2i
+        CODTbdo6SmBCi63OMkXnOeeSd6Ws1yDR9yzDddkR8t/LP9l/LrQ4eZdQbDRveb3SSL5aKZ
+        066p2LnvLEsWNLyOe8sbOqVESUlrFFr5ku8/BNydTbz3w03wsxadl/EE4B/8tC8lNDQK8y
+        8i8H3Q+qOVu9x95DBC9Gp2kUoNiFFchFz9UsxlV2K2vCIzKWSIQWz0MPjea6aJzZGUP4Aj
+        gtoARwkvi5g5dT/9gWudhqt23Y5P6qjwjW5+42mKJkZUDRZGfzljBwounMc6XA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607720693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0fiMhIgezjMm4j4B451ig1YSH6sP5DgP4ssfWySwTGs=;
+        b=7iQ5hCbTFwAguKL6g6/ZBi2aTwaGL2TT/9TwwH+bT3LyWirf3PdhADoyPYz5c4Tpsay7uw
+        r0JJjUFQ04wBM6AA==
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Borislav Petkov <bp@alien8.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Oliver Upton <oupton@google.com>,
+        "open list\:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] KVM: x86: implement KVM_{GET|SET}_TSC_STATE
+In-Reply-To: <20201211141822.GA67764@fuller.cnet>
+References: <05aaabedd4aac7d3bce81d338988108885a19d29.camel@redhat.com> <87sg8g2sn4.fsf@nanos.tec.linutronix.de> <20201208181107.GA31442@fuller.cnet> <875z5c2db8.fsf@nanos.tec.linutronix.de> <20201209163434.GA22851@fuller.cnet> <87r1nyzogg.fsf@nanos.tec.linutronix.de> <20201210152618.GB23951@fuller.cnet> <87zh2lib8l.fsf@nanos.tec.linutronix.de> <20201211002703.GA47016@fuller.cnet> <87v9d8h3lx.fsf@nanos.tec.linutronix.de> <20201211141822.GA67764@fuller.cnet>
+Date:   Fri, 11 Dec 2020 22:04:52 +0100
+Message-ID: <87k0togikr.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 4:31 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 12/10/20 5:10 PM, Andrew Delgadillo wrote:
-> > On Thu, Dec 10, 2020 at 3:08 PM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> >>
-> >> On Thu, Dec 3, 2020 at 2:10 PM Andrew Delgadillo <adelg@google.com> wrote:
-> >>>
-> >>> lib.mk defaults to gcc when CC is not set. When building selftests
-> >>> as part of a kernel compilation, MAKEFLAGS is cleared to allow implicit
-> >>> build rules to be used. This has the side-effect of clearing the CC
-> >>> variable, which will cause selftests to be built with gcc regardless of
-> >>> if we are using gcc or clang. To remedy this, propagate the CC variable
-> >>> when clearing makeflags to ensure the correct compiler is used.
-> >>>
-> >>> Signed-off-by: Andrew Delgadillo <adelg@google.com>
-> >>
-> >> Hi Andrew, thanks for the patch. Can you walk me through how to build
-> >> the selftests?
-> >>
-> >> Documentation/dev-tools/kselftest.rst says:
-> >> $ make -C tools/testing/selftests
-> >>
-> >> And if I do:
-> >> $ make CC=clang defconfig
-> >> $ make CC=clang -C tools/testing/selftests -j
-> >>
-> >> I observe a spew of errors.  If I apply your patch and rerun the
-> >> above, I see what looks like the same spew of errors.  Am I "holding
-> >> it wrong" or could the docs use a refresh?
-> >>
-> >
-> > Hi Nick, sure thing!
-> >
-> > I also see a slew of errors when building with make -C
-> > tools/testing/selftests. However, that is not the problem I am trying
-> > to solve. I believe we are seeing errors building that way because it
-> > is missing some make variables that are normally set up when building
-> > from the kernel's top level makefile.
-> >
->
-> Both options are supported and should work.
->
-> make -C tools/testing/selftests
-> make kselftest
->
-> That being said, I use gcc. Can you send the errors you are seeing?
-> It is possible, a few tests aren't building and need to be fixed
-> for clang and gcc.
-Most of the errors I saw, I was able to fix by installing the correct
-packages to get some missing headers, so in those cases nothing is
-broken about the tests. However, after that the errors still remaining
-look like so (I've done my best to deduplicate similar errors):
+On Fri, Dec 11 2020 at 11:18, Marcelo Tosatti wrote:
+> On Fri, Dec 11, 2020 at 02:30:34PM +0100, Thomas Gleixner wrote:
+> Unless you notify applications to invalidate their time reads,
+> i can't see a way to fix this.
 
-clone3_cap_checkpoint_restore.c: In function 'clone3_cap_checkpoint_restore':
-clone3_cap_checkpoint_restore.c:148:9: error: expected expression
-before 'return'
-   XFAIL(return, "Skipping all tests as non-root\n");
-         ^
-make[3]: *** [../lib.mk:139:
-/usr/local/google/home/adelg/projects/upstream/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore]
-Error 1
+This is just wrong. Suspend/resume handles that fine and the system is
+guaranteed to come back with time which is very close to the reality.
 
-memfd_test.c: In function 'test_seal_future_write':
-memfd_test.c:783:27: error: 'F_SEAL_FUTURE_WRITE' undeclared (first
-use in this function)
-  mfd_assert_add_seals(fd, F_SEAL_FUTURE_WRITE);
-                           ^
-memfd_test.c:783:27: note: each undeclared identifier is reported only
-once for each function it appears in
+And for suspend/resume everything from kernel to userspace can have a
+notification before suspend and post resume. So applications or those
+parts of the kernel which are e.g. time sensitive can prepare upfront
+for the disruption and mop up on resume.
 
-/usr/local/***/lib/../lib64/librt.so: undefined reference to
-`pthread_attr_setstacksize@GLIBC_2.2.5'
-collect2: error: ld returned 1 exit status
+> Therefore if you use VM migration in the first place, a certain amount of
+> timestamp accuracy error must be tolerated.
 
-There are also bpf selftest errors, but I know for a fact those are
-just an artifact of me not having llvm-readelf and other binaries in
-my PATH as I've compiled those successfully before.
+That's just because it was never designed in the right way. And you
+simply declared that all applications have to deal with that.
+
+Again, where is this documented? VMs are subject to migration whether
+the customer who pays for it wants it or not. None of the virt tool docs
+mentions that pausing a VM for a long time makes timekeeping go
+south.
+
+I still have no sensible explanation WHY time should not advance accross
+a migration. All you told me is that customers complained. Which
+customers? The ones running the hosts or the ones paying for the VM?
+
+It's all just decided by some folks to "fix" a problem with the pause/
+migration mechanism they designed instead of fixing the design fail.
+
+>> How can you even assume that this is correct?
 >
-> thanks,
-> -- Shuah
+> As noted above, even without a window of unsynchronized time (due to
+> delay for NTP to sync time), time reads can be stale.
+
+So with suspend/resume we have:
+
+app:
+   t = clock_gettime()
+        <---------------- tsuspend
+        <-----------------tresume
+        So t is now behind reality by tresume - tsuspend
+
+  packet -> check timestamp .... ooops recheck
+  t = clock_gettime()
+  and t and timestamp are in the same ballpark again
+
+Now with your thing:
+
+app:
+   t = clock_gettime()
+        <---------------- tpause
+        <-----------------tresume
+        So t is now behind reality by tresume - tpause
+
+  packet -> check timestamp .... ooops recheck
+  t = clock_gettime()
+  and t and timestamp are still apart by ~ (tresume - tpause)
+
+this persists until NTP kicks in, if and only if NTP is running.
+
+Can you spot the difference?
+
+>> It is exactly the same problem as we had many years ago with hardware
+>> clocks suddenly stopping to tick which caused quite some stuff to go
+>> belly up.
 >
+> Customers complained when it was 5 seconds off, now its 0.1ms (and
+> people seem happy).
+
+And because customers complained you decided to create a scenario which
+is completely different to all other scenarios and from a time keeping
+POV not making any sense at all.
+
+>> In a proper suspend/resume scenario CLOCK_REALTIME/TAI are advanced
+>> (with a certain degree of accuracy) to compensate for the sleep time, so
+>> the other end of a communication is at least in the same ballpark, but
+>> not 50 seconds off.
+>
+> Its 100ms off with migration, and can be reduced further (customers
+> complained about 5 seconds but seem happy with 0.1ms).
+
+What is 100ms? Guaranteed maximum migration time?
+
+CLOCK_REALTIME and CLOCK_TAI are off by the time the VM is paused and
+this state persists up to the point where NTP corrects it with a time
+jump.
+
+So if migration takes 5 seconds then CLOCK_REALTIME is not off by 100ms
+it's off by 5 seconds.
+
+CLOCK_MONOTONIC/BOOTTIME might be off by 100ms between pause and resume.
+
+> OK, makes sense, then reducing the 0.1ms window even further
+> is a useful thing to do. What would be an acceptable 
+> CLOCK_REALTIME accuracy error, on migration?
+
+Can you please explain how you can achive 0.1ms accuracy when migration
+time is more than that and guest TSC is just restored to the value at
+which it was stopped?
+
+Then ALL clocks including CLOCK_REALTIME and CLOCK_TAI continue from the
+point at which they were stopped. Ergo:
+
+      t(CLOCK_REALTIME) = t(REALITY) - t(STOPPED)
+
+CLOCK_REALTIME and CLOCK_TAI are global clocks and they have rules which
+have to be respected in order to make stuff work.
+
+CLOCK_MONOTONIC and CLOCK_BOOTTIME are local to a system (host, guests).
+So manipulating them is a completely different story albeit the kernel
+has explicit guarantees for the relationship between CLOCK_MONOTONIC,
+CLOCK_BOOTTIME and CLOCK_REALTIME/TAI
+
+If you could guarantee t(STOPPED) < 100ms and therefore
+
+   t(REALITY) - t(CLOCK_REALTIME) < 100ms
+
+under _all_ circumstances then we would not even have that discussion.
+
+Even < 1000ms might be acceptable. That's the margin of error which is
+also happening accross bare metal suspend/resume in the case that the
+sleep time has to be read from the RTC when TSC stops accross suspend.
+
+But suspend/resume is still substantially different because everything
+from kernel to userspace can have a notification before suspend. So
+applications or those parts of the kernel which are e.g. time sensitive
+can prepare upfront for the disruption. In your case, not at all. They
+just have to cope with the fallout. Brilliant.
+
+Your design or the lack of it just decides that everything has to cope
+with what you decided is the right thing to do and for how long it
+takes.
+
+Yes it "works" by some definition of works, but that does not mean it
+works correctly.
+
+Thanks,
+
+        tglx
