@@ -2,123 +2,233 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2393C433FE
-	for <linux-kselftest@archiver.kernel.org>; Sun, 13 Dec 2020 16:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 950DBC4361B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Dec 2020 16:43:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A17623380
-	for <linux-kselftest@archiver.kernel.org>; Sun, 13 Dec 2020 16:35:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B0DC2246B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Dec 2020 16:43:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405550AbgLMQeV (ORCPT
+        id S2406513AbgLNQnE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 13 Dec 2020 11:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        Mon, 14 Dec 2020 11:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437022AbgLMQda (ORCPT
+        with ESMTP id S1727024AbgLNQnD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Dec 2020 11:33:30 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81457C0613D3;
-        Sun, 13 Dec 2020 08:32:50 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id t13so13079331ybq.7;
-        Sun, 13 Dec 2020 08:32:50 -0800 (PST)
+        Mon, 14 Dec 2020 11:43:03 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5816C061793
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Dec 2020 08:42:23 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id t22so2992781pfl.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Dec 2020 08:42:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OOly9loxLYTvtE1Njo5WCf0TNy0xF1kl9c/YUhN9Ldg=;
-        b=CQnFeP/qKJ1PIVVbcikxlOyY0crNPCzCLu36oBQIVFV74Qm25kpqcvPED0RU69ffXH
-         uD6MhZB+lq4W+AwP/iSR1y65ptVYtL2M9m/31Fq2JJPuJWN6yPuvek6A5N6ax9r5UCRw
-         v0A7+nXAqDoI6u2QDgJS/P0XsGWZQKRj7ErAjJubTAV4bU8mufhSSkpu98ZVvUCjUmKH
-         m8l5+M1F6sAbrcTb0c9JMjQIhq3a3okT8zVEj/9CKQSUV3R07tDspVdX2gGqJCSVv6xy
-         7W5JptzuBD1Rtp0cr87thNuZ5gZd+z6n4BrWRFemSfSqlGvEaVbpoSKchAuRye9qKD9Z
-         moJA==
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:user-agent:mime-version;
+        bh=JezVwkcUvzbDeHvXSRBpUCVs/qIVAUJGi+DKg0XJKa8=;
+        b=mXy18jyh6x9Yg5x/9PYmMAfeBUgoUAzxkI+cBR3uyWjLrqttklGNM7KuVM/9iipOZe
+         VHQ9K2I6ui+Nj3uEYv48Btuq1yNGWExK39A4eceIf3RWrY/2FfHE34g5jtEc8X1z8u2r
+         FCxIyX3B7DGQVYCT+4BP9UO9+umtNa23eqJHtlW/q0zeoOKQ/0DxmMIvZ2fdRB8cWKAo
+         zQRJpywYzWIU73CiY+vAFhXTp0eLd9toXWU0aoQMAVANbcruQRWN692WWd5ZsRlqIU5b
+         r15VUxXEoJG0qsMjChSfzd0P5vjMRjzn+8aS5kXhxmo4ig7DhvGcszGEmfLFcFA9d9zv
+         eZNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OOly9loxLYTvtE1Njo5WCf0TNy0xF1kl9c/YUhN9Ldg=;
-        b=AIYSGmlfBWA3irA0NOc3iIS0v/cmJEJiSwOETpMqkK1mEnb+WblO9NijPDP8nmVsW+
-         vx1wd2iyARDDW06IchgdjBN6Q73YTYOtvaVR0g7EFeCm9DrvlBhSKytUV9f0ssGyAjCP
-         td10z4hBmOwU/ZpWMVScyI18oUahmrt9dUo2J1HyPfZzxTnlz3cxiso0549w5toJBgVL
-         0oksyKChiJnVQis/inMdC9PDWncuubZpUmAKQ2uqBDgBQjCaLTxSQrU69Q8TigDAwp3i
-         KPZY6SHtqrTp4sfFIYwI4nY4sxybGvHWQms3p11Qxu0DkPeLnOlWExBuhaFmIBh6+Zhv
-         jjJg==
-X-Gm-Message-State: AOAM531WQd28SJvN9Y4xpxoOdDP/G/gzi486s+WPDdmTbklRLxg+xPVk
-        QsKkbpliiVF9k74x1bVxnLdjIk+XCPhiXH3fWAiPCCTpzFQ=
-X-Google-Smtp-Source: ABdhPJzYbmOg9ijb/AZ8TKkK+fOnNQR1Y5LH6RzvAMw7yylGfsj/NGzlkqPYBT43q2CZBUVma+fLSh0qufHXXvXT9TQ=
-X-Received: by 2002:a25:40d:: with SMTP id 13mr32470818ybe.422.1607877169805;
- Sun, 13 Dec 2020 08:32:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20201128193335.219395-1-masahiroy@kernel.org> <20201212161831.GA28098@roeck-us.net>
- <CANiq72=e9Csgpcu3MdLGB77dL_QBn6PpqoG215YUHZLNCUGP0w@mail.gmail.com>
- <8f645b94-80e5-529c-7b6a-d9b8d8c9685e@roeck-us.net> <f5c2d237-1cc7-5a78-c87c-29b7db825f68@urlichs.de>
-In-Reply-To: <f5c2d237-1cc7-5a78-c87c-29b7db825f68@urlichs.de>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 13 Dec 2020 17:32:38 +0100
-Message-ID: <CANiq72kajFSgKmYW0tXUXNEQpMwBW7BsFSeqbMVDmXqBXDLh_A@mail.gmail.com>
-Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
-To:     Matthias Urlichs <matthias@urlichs.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
+         :mime-version;
+        bh=JezVwkcUvzbDeHvXSRBpUCVs/qIVAUJGi+DKg0XJKa8=;
+        b=a4Fw4Zs2HTegDDCU0o1+0qiJR9O7yOlMob+JcI2XrUdYX2O3hvKiTusQnc4OgQSqKu
+         afJ94dLJwc/lqnU+DbJOMV6iQ1wWZeCXP10YMSnTYWpRTkTzGr6MP3UiIEjz025C6TU1
+         isDGSgFX8HAbffhNVT+WQGAaqwFPlfPKXWzoW60Wq9pnDSSatfnQB1UoXl9stzipKw+3
+         fOf9Xjzbq0Cfqjgo1YO7rcSANslEmrQ4/QOGrqqhhPSyeot0rblKhD2xjL6X4HfoZefs
+         IyOikq9V0QFmmVtWIctS9AL4031zg/wcnPFsqqd9cwNGwIl3kc1/Zv3sRsX3Ro0YPLd7
+         lV7g==
+X-Gm-Message-State: AOAM533nLa4l9cIMlAaAREQQ5fT1TfVoPI2ZIunzfan4EkMNdtXEC8Te
+        J8uXyhTpCGvt2w2ol/8Cn6RcgbJykt3oeg==
+X-Google-Smtp-Source: ABdhPJzM/uVhPAKhk3NynN9yUtwSZCsn+2/4gY8gnVryTIoG815YrBdV7grCk4Reut9MNSIKbdcOIg==
+X-Received: by 2002:a62:3582:0:b029:19e:4935:bea2 with SMTP id c124-20020a6235820000b029019e4935bea2mr24381264pfa.34.1607964143127;
+        Mon, 14 Dec 2020 08:42:23 -0800 (PST)
+Received: from [192.168.1.9] ([171.61.231.84])
+        by smtp.gmail.com with ESMTPSA id u12sm19496373pfn.88.2020.12.14.08.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 08:42:22 -0800 (PST)
+Message-ID: <e479c654b6ca08057bf18a4e1c1d1ed3cdf8fdc8.camel@rajagiritech.edu.in>
+Subject: related to fixing  depreciated  api
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+        lkml <linux-kernel@vger.kernel.org>
+Date:   Mon, 14 Dec 2020 22:12:14 +0530
+Content-Type: multipart/mixed; boundary="=-b+EomzCa5T42UxINaR95"
+User-Agent: Evolution 3.38.1-2 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Dec 13, 2020 at 4:38 PM 'Matthias Urlichs' via Clang Built
-Linux <clang-built-linux@googlegroups.com> wrote:
->
-> If your change to a function breaks its callers, it's your job to fix
 
-No function has changed. This patch enables a warning (that for some
-reason is an error in the case of Guenter).
+--=-b+EomzCa5T42UxINaR95
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Even if this was a hard error, the same applies: the function hasn't
-changed. It just means callers never tested with
-`CONFIG_ENABLE_MUST_CHECK` for *years*.
+hello,
 
-> the callers proactively instead of waiting for "as they come" bug
-> reports. (Assuming, of course, that you know about the breakage. Which
-> you do when you tell us that the bad pattern can simply be grepped for.)
+i have worked on to  fix  depreciated api issue from
+tools/testing/selftests/intel_pstate/aerf.c
 
-No, *we don't know about the breakage*. The grep was for the
-particular function Guenter reported, and done to validate his
-concern.
+i met with the following error related...
 
-If you want to manually inspect every caller of every `__must_check`
-function, or to write a cocci patch or a clang-tidy check or similar
-(that would be obsolete as soon as `__must_check` is enabled), you are
-welcome to do so. But a much better usage of our time would be letting
-machines do their job.
+--------------x------------------x----------------->
+$pwd
+/home/jeffrin/UP/linux-kselftest/tools/testing/selftests/intel_pstate
+$make
+gcc  -Wall -D_GNU_SOURCE    aperf.c /home/jeffrin/UP/linux-
+kselftest/tools/testing/selftests/kselftest_harness.h
+/home/jeffrin/UP/linux-kselftest/tools/testing/selftests/kselftest.h -
+lm -o /home/jeffrin/UP/linux-
+kselftest/tools/testing/selftests/intel_pstate/aperf
+aperf.c: In function ‘main’:
+aperf.c:58:2: warning: ‘ftime’ is deprecated [-Wdeprecated-
+declarations]
+   58 |  ftime(&before);
+      |  ^~~~~
+In file included from aperf.c:9:
+/usr/include/x86_64-linux-gnu/sys/timeb.h:39:12: note: declared here
+   39 | extern int ftime (struct timeb *__timebuf)
+      |            ^~~~~
+aperf.c:67:2: warning: ‘ftime’ is deprecated [-Wdeprecated-
+declarations]
+   67 |  ftime(&after);
+      |  ^~~~~
+In file included from aperf.c:9:
+/usr/include/x86_64-linux-gnu/sys/timeb.h:39:12: note: declared here
+   39 | extern int ftime (struct timeb *__timebuf)
+      |            ^~~~~
+$
+----------------x---------------x---------------------->
 
-> If nothing else, that's far more efficient than [number_of_callers]
-> separate patches by other people who each need to find the offending
-> change, figure out what to change and/or who to report the problem to,
-> and so on until the fix lands in the kernel.
 
-This change is not in Linus' tree, it is on -next.
+from ftime manual  i found that it is depreciated...
 
-> Moreover, this wouldn't leave the kernel sources in a non-bisect-able
-> state during that time.
+This  function is deprecated, and will be removed in a future version
+of the GNU C library.  Use clock_gettime(2) instead.
 
-Again, the change is in -next. That is the point: to do integration
-testing and let the bots run against it.
 
-Cheers,
-Miguel
+now clock_gettime  gives  new data structure.
+
+ struct timespec {
+               time_t   tv_sec;        /* seconds */
+               long     tv_nsec;       /* nanoseconds */
+           };
+
+
+i worked on with the new data structure and some errors that came
+along.
+typical final output looks good but  values of runtime and typical
+frequency
+does not look normal during "sudo bash run.sh".
+
+output of "git diff" and  a  portion of output of   "sudo bash run.sh".
+is attached.
+
+
+
+-- 
+software engineer
+rajagiri school of engineering and technology - autonomous
+
+
+
+--=-b+EomzCa5T42UxINaR95
+Content-Disposition: attachment; filename="diff-or.txt"
+Content-Type: text/plain; name="diff-or.txt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2ludGVsX3BzdGF0ZS9hcGVyZi5j
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvaW50ZWxfcHN0YXRlL2FwZXJmLmMKaW5kZXggZjZj
+ZDAzYTg3NDkzLi43ZTM1ZTc4NzJmMTYgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRl
+c3RzL2ludGVsX3BzdGF0ZS9hcGVyZi5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2lu
+dGVsX3BzdGF0ZS9hcGVyZi5jCkBAIC02LDcgKzYsNyBAQAogI2luY2x1ZGUgPHN5cy90eXBlcy5o
+PgogI2luY2x1ZGUgPHN5cy9zdGF0Lmg+CiAjaW5jbHVkZSA8ZmNudGwuaD4KLSNpbmNsdWRlIDxz
+eXMvdGltZWIuaD4KKyNpbmNsdWRlIDx0aW1lLmg+CiAjaW5jbHVkZSA8c2NoZWQuaD4KICNpbmNs
+dWRlIDxlcnJuby5oPgogI2luY2x1ZGUgPHN0cmluZy5oPgpAQCAtMjIsMTAgKzIyLDEyIEBAIGlu
+dCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikgewogCWxvbmcgbG9uZyB0c2MsIG9sZF90c2Ms
+IG5ld190c2M7CiAJbG9uZyBsb25nIGFwZXJmLCBvbGRfYXBlcmYsIG5ld19hcGVyZjsKIAlsb25n
+IGxvbmcgbXBlcmYsIG9sZF9tcGVyZiwgbmV3X21wZXJmOwotCXN0cnVjdCB0aW1lYiBiZWZvcmUs
+IGFmdGVyOworCXN0cnVjdCB0aW1lc3BlYyBiZWZvcmUsIGFmdGVyOworICAgICAgICBjbG9ja2lk
+X3QgY2xraWQ7CiAJbG9uZyBsb25nIGludCBzdGFydCwgZmluaXNoLCB0b3RhbDsKIAljcHVfc2V0
+X3QgY3B1c2V0OwogCisKIAlpZiAoYXJnYyAhPSAyKSB7CiAJCXVzYWdlKGFyZ3ZbMF0pOwogCQly
+ZXR1cm4gMTsKQEAgLTQxLDYgKzQzLDEwIEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJn
+dikgewogCiAJc3ByaW50Zihtc3JfZmlsZV9uYW1lLCAiL2Rldi9jcHUvJWQvbXNyIiwgY3B1KTsK
+IAlmZCA9IG9wZW4obXNyX2ZpbGVfbmFtZSwgT19SRE9OTFkpOworICAgICAgICAjZGVmaW5lIENM
+T0NLRkQgMworICAgICAgICAjZGVmaW5lIEZEX1RPX0NMT0NLSUQoZmQpICAgKCh+KGNsb2NraWRf
+dCkgKGZkKSA8PCAzKSB8IENMT0NLRkQpCisgICAgICAgIGNsa2lkID0gRkRfVE9fQ0xPQ0tJRChm
+ZCk7CisKIAogCWlmIChmZCA9PSAtMSkgewogCQlwcmludGYoIi9kZXYvY3B1LyVkL21zcjogJXNc
+biIsIGNwdSwgc3RyZXJyb3IoZXJybm8pKTsKQEAgLTU1LDcgKzYxLDcgQEAgaW50IG1haW4oaW50
+IGFyZ2MsIGNoYXIgKiphcmd2KSB7CiAJCXJldHVybiAxOwogCX0KIAotCWZ0aW1lKCZiZWZvcmUp
+OworCWNsb2NrX2dldHRpbWUoY2xraWQsJmJlZm9yZSk7CiAJcHJlYWQoZmQsICZvbGRfdHNjLCAg
+c2l6ZW9mKG9sZF90c2MpLCAweDEwKTsKIAlwcmVhZChmZCwgJm9sZF9hcGVyZiwgIHNpemVvZihv
+bGRfbXBlcmYpLCAweGU3KTsKIAlwcmVhZChmZCwgJm9sZF9tcGVyZiwgIHNpemVvZihvbGRfYXBl
+cmYpLCAweGU4KTsKQEAgLTY0LDcgKzcwLDcgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiph
+cmd2KSB7CiAJCXNxcnQoaSk7CiAJfQogCi0JZnRpbWUoJmFmdGVyKTsKKwljbG9ja19nZXR0aW1l
+KGNsa2lkLCZhZnRlcik7CiAJcHJlYWQoZmQsICZuZXdfdHNjLCAgc2l6ZW9mKG5ld190c2MpLCAw
+eDEwKTsKIAlwcmVhZChmZCwgJm5ld19hcGVyZiwgIHNpemVvZihuZXdfbXBlcmYpLCAweGU3KTsK
+IAlwcmVhZChmZCwgJm5ld19tcGVyZiwgIHNpemVvZihuZXdfYXBlcmYpLCAweGU4KTsKQEAgLTcz
+LDExICs3OSwxMCBAQCBpbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpIHsKIAlhcGVyZiA9
+IG5ld19hcGVyZi1vbGRfYXBlcmY7CiAJbXBlcmYgPSBuZXdfbXBlcmYtb2xkX21wZXJmOwogCi0J
+c3RhcnQgPSBiZWZvcmUudGltZSoxMDAwICsgYmVmb3JlLm1pbGxpdG07Ci0JZmluaXNoID0gYWZ0
+ZXIudGltZSoxMDAwICsgYWZ0ZXIubWlsbGl0bTsKLQl0b3RhbCA9IGZpbmlzaCAtIHN0YXJ0Owot
+Ci0JcHJpbnRmKCJydW5UaW1lOiAlNC4yZlxuIiwgMS4wKnRvdGFsLzEwMDApOwotCXByaW50Zigi
+ZnJlcTogJTcuMGZcbiIsIHRzYyAvICgxLjAqYXBlcmYgLyAoMS4wICogbXBlcmYpKSAvIHRvdGFs
+KTsKKwlzdGFydCA9IGJlZm9yZS50dl9zZWMqMTAwMDAwMCArIGJlZm9yZS50dl9uc2VjOworCWZp
+bmlzaCA9IGFmdGVyLnR2X3NlYyoxMDAwMDAwICsgYWZ0ZXIudHZfbnNlYzsKKwl0b3RhbCA9IGZp
+bmlzaCAtIHN0YXJ0OyAKKwlwcmludGYoInJ1blRpbWU6ICU0LjJmXG4iLCAxLjAqdG90YWwvMTAw
+MDAwMCk7IAorCXByaW50ZigiZnJlcTogJTcuMGZcbiIsIHRzYyAvICgxLjAgKiBhcGVyZiAvMS4w
+ICogKG1wZXJmKSkgLyB0b3RhbCk7CiAJcmV0dXJuIDA7CiB9Cg==
+
+
+--=-b+EomzCa5T42UxINaR95
+Content-Disposition: attachment; filename="shot.txt"
+Content-Type: text/plain; name="shot.txt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+U2V0dGluZyBtYXhpbXVtIGZyZXF1ZW5jeSB0byA1MDAKbGF1bmNoaW5nIGFwZXJmIGxvYWQgb24g
+MApsYXVuY2hpbmcgYXBlcmYgbG9hZCBvbiAxCmxhdW5jaGluZyBhcGVyZiBsb2FkIG9uIDIKbGF1
+bmNoaW5nIGFwZXJmIGxvYWQgb24gMwpzbGVlcGluZyBmb3IgNSBzZWNvbmRzCndhaXRpbmcgZm9y
+IGpvYiBpZCA3NTIxCnJ1blRpbWU6IDAuMDAKZnJlcTogICAgIGluZgpydW5UaW1lOiAwLjAwCmZy
+ZXE6ICAgICBpbmYKcnVuVGltZTogMC4wMApmcmVxOiAgICAgaW5mCnJ1blRpbWU6IDAuMDAKZnJl
+cTogICAgIGluZgp3YWl0aW5nIGZvciBqb2IgaWQgNzUyMgp3YWl0aW5nIGZvciBqb2IgaWQgNzUy
+Mwp3YWl0aW5nIGZvciBqb2IgaWQgNzUyNApTZXR0aW5nIG1heGltdW0gZnJlcXVlbmN5IHRvIDQw
+MApsYXVuY2hpbmcgYXBlcmYgbG9hZCBvbiAwCmxhdW5jaGluZyBhcGVyZiBsb2FkIG9uIDEKbGF1
+bmNoaW5nIGFwZXJmIGxvYWQgb24gMgpsYXVuY2hpbmcgYXBlcmYgbG9hZCBvbiAzCnNsZWVwaW5n
+IGZvciA1IHNlY29uZHMKd2FpdGluZyBmb3Igam9iIGlkIDc1NDAKcnVuVGltZTogMC4wMApmcmVx
+OiAgICAgaW5mCnJ1blRpbWU6IDAuMDAKZnJlcTogICAgIGluZgpydW5UaW1lOiAwLjAwCmZyZXE6
+ICAgICBpbmYKd2FpdGluZyBmb3Igam9iIGlkIDc1NDEKcnVuVGltZTogMC4wMApmcmVxOiAgICAg
+aW5mCndhaXRpbmcgZm9yIGpvYiBpZCA3NTQyCndhaXRpbmcgZm9yIGpvYiBpZCA3NTQzCj09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpUaGUgbWFya2V0aW5nIGZyZXF1ZW5jeSBvZiB0aGUgY3B1IGlzIDIzMDAgTUh6
+ClRoZSBtYXhpbXVtIGZyZXF1ZW5jeSBvZiB0aGUgY3B1IGlzIDIzMDAgTUh6ClRoZSBtaW5pbXVt
+IGZyZXF1ZW5jeSBvZiB0aGUgY3B1IGlzIDQwMCBNSHoKVGFyZ2V0CSAgICAgIEFjdHVhbAkgICAg
+RGlmZmVyZW5jZQkgIE1TUigweDE5OSkJbWF4X3BlcmZfcGN0CjIzMDAJICAgICAgMjMwMAkgICAg
+MAkJICAweDQwMAkJMjMwMDAwCjIyMDAJICAgICAgMjIwMAkgICAgMAkJICAweDQwMAkJMjMwMDAw
+CjIxMDAJICAgICAgMjEwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjIwMDAJICAgICAgMjAwMAkg
+ICAgMAkJICAweDQwMAkJMjMwMDAwCjE5MDAJICAgICAgMTkwMAkgICAgMAkJICAweDQwMAkJMjMw
+MDAwCjE4MDAJICAgICAgMTgwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjE3MDAJICAgICAgMTcw
+MAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjE2MDAJICAgICAgMTYwMAkgICAgMAkJICAweDQwMAkJ
+MjMwMDAwCjE1MDAJICAgICAgMTUwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjE0MDAJICAgICAg
+MTQwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjEzMDAJICAgICAgMTMwMAkgICAgMAkJICAweDQw
+MAkJMjMwMDAwCjEyMDAJICAgICAgMTIwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjExMDAJICAg
+ICAgMTEwMAkgICAgMAkJICAweDQwMAkJMjMwMDAwCjEwMDAJICAgICAgOTk5CSAgICAtMQkJICAw
+eDQwMAkJMjMwMDAwCjkwMAkgICAgICA5MDAJICAgIDAJCSAgMHg0MDAJCTIzMDAwMAo4MDAJICAg
+ICAgODAwCSAgICAwCQkgIDB4NDAwCQkyMzAwMDAKNzAwCSAgICAgIDcwMAkgICAgMAkJICAweDQw
+MAkJMjMwMDAwCjYwMAkgICAgICA2MDAJICAgIDAJCSAgMHg0MDAJCTIzMDAwMAo1MDAJICAgICAg
+NTAwCSAgICAwCQkgIDB4NDAwCQkyMzAwMDAKNDAwCSAgICAgIDQwMAkgICAgMAkJICAw
+
+
+--=-b+EomzCa5T42UxINaR95--
+
