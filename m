@@ -2,113 +2,90 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CA27C2BB40
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Dec 2020 16:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4466C4361B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Dec 2020 20:25:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28EFF22510
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Dec 2020 16:43:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F4AA22515
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Dec 2020 20:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440308AbgLNQnf (ORCPT
+        id S2503173AbgLNUVy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Dec 2020 11:43:35 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4292 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726223AbgLNQn0 (ORCPT
+        Mon, 14 Dec 2020 15:21:54 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:36369 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503125AbgLNUVu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:43:26 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BEGXo0k127305;
-        Mon, 14 Dec 2020 11:42:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=qQNdKQTyRkYaixt4lWet7dFji2zr1UbmBbHsGgFbjNc=;
- b=HqU0mRzxzKuoAwzJy+w07PPqNtjQ5un6Gmka/g3gR6zw2rILhZKmlAkMz+QMiJVX/vMt
- ymMWJPF1L+Bu03iSBc7Y1I4DAYM1bFDO/XXBIiBHOit6pvnP5lkmAINLM3rAN70LtRg0
- pLq5mNRVT3DGp9Gc/y5wWCz6eBscUcgUl5erMGdC62F6bUA20E4IZq92xSa/maVt8Szd
- 666qOpxPCf83lf20q5ToCONnXhxBCihqQtmfxnfzFJeT2jHORswLn5Pv6LtJdh7FkZfH
- HWEDk3Ry1Zd0GDybcNSSmNoXYwDtOIJqcG2HLidecJoJtoaJ7YN5BIWVH5glW9bS4r2o DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35eaxv9yu6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Dec 2020 11:42:34 -0500
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BEGYjFF132023;
-        Mon, 14 Dec 2020 11:42:34 -0500
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 35eaxv9yt9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Dec 2020 11:42:33 -0500
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BEGavFl013299;
-        Mon, 14 Dec 2020 16:42:31 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 35cng8bgr6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Dec 2020 16:42:31 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BEGdwAY37683514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Dec 2020 16:39:58 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56CEEA405B;
-        Mon, 14 Dec 2020 16:39:58 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8201A4062;
-        Mon, 14 Dec 2020 16:39:55 +0000 (GMT)
-Received: from localhost.localdomain.com (unknown [9.85.75.77])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 14 Dec 2020 16:39:55 +0000 (GMT)
-From:   Harish <harish@linux.ibm.com>
-To:     shuah@kernel.org, akpm@linux-foundation.org,
-        sandipan@linux.ibm.com, jhubbard@nvidia.com, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, bgeffon@google.com,
-        almasrymina@google.com, suxingxing@loongson.cn
-Cc:     Harish <harish@linux.ibm.com>, linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/vm: Fix building protection keys test
-Date:   Mon, 14 Dec 2020 22:09:51 +0530
-Message-Id: <20201214163951.141399-1-harish@linux.ibm.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-14_09:2020-12-11,2020-12-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 clxscore=1011 mlxlogscore=999
- malwarescore=0 impostorscore=0 bulkscore=0 mlxscore=0 phishscore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012140114
+        Mon, 14 Dec 2020 15:21:50 -0500
+Received: from [192.188.8.81] (helo=ascalon)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kamal@canonical.com>)
+        id 1kouL3-0007W7-FK; Mon, 14 Dec 2020 20:20:57 +0000
+Received: from kamal by ascalon with local (Exim 4.90_1)
+        (envelope-from <kamal@ascalon>)
+        id 1kouL0-0001v1-Ls; Mon, 14 Dec 2020 12:20:54 -0800
+From:   Kamal Mostafa <kamal@canonical.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kamal Mostafa <kamal@canonical.com>, stable@vger.kernel.org
+Subject: [PATCH] selftests/bpf: clarify build error if no vmlinux
+Date:   Mon, 14 Dec 2020 12:20:48 -0800
+Message-Id: <20201214202049.7205-1-kamal@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The previous patch tries to include a arch check for powerpc using
-findstring, which prevents test from building on powerpc arch. Fix
-this with filtering using machine type.
+If Makefile cannot find any of the vmlinux's in its VMLINUX_BTF_PATHS list,
+it tries to run btftool incorrectly, with VMLINUX_BTF unset:
 
-Signed-off-by: Harish <harish@linux.ibm.com>
+    bpftool btf dump file $(VMLINUX_BTF) format c
+
+Such that the keyword 'format' is misinterpreted as the path to vmlinux.
+The resulting build error message is fairly cryptic:
+
+      GEN      vmlinux.h
+    Error: failed to load BTF from format: No such file or directory
+
+This patch makes the failure reason clearer by yielding this instead:
+
+    Makefile:...: *** cannot find a vmlinux for VMLINUX_BTF at any of
+    "{paths}".  Stop.
+
+Fixes: acbd06206bbb ("selftests/bpf: Add vmlinux.h selftest exercising tracing of syscalls")
+Cc: stable@vger.kernel.org # 5.7+
+Signed-off-by: Kamal Mostafa <kamal@canonical.com>
 ---
- tools/testing/selftests/vm/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 691893afc15d..0dc632cdbc73 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -61,7 +61,7 @@ TEST_GEN_FILES += $(BINARIES_64)
- endif
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 542768f5195b..93ed34ef6e3f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -196,6 +196,9 @@ $(BUILD_DIR)/libbpf $(BUILD_DIR)/bpftool $(BUILD_DIR)/resolve_btfids $(INCLUDE_D
+ $(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) | $(BPFTOOL) $(INCLUDE_DIR)
+ ifeq ($(VMLINUX_H),)
+ 	$(call msg,GEN,,$@)
++ifeq ($(VMLINUX_BTF),)
++$(error cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
++endif
+ 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
  else
- 
--ifneq (,$(findstring $(ARCH),powerpc))
-+ifneq (,$(filter $(MACHINE),ppc64 ppc64le))
- TEST_GEN_FILES += protection_keys
- endif
- 
+ 	$(call msg,CP,,$@)
 -- 
-2.26.2
+2.17.1
 
