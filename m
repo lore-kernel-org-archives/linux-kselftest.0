@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97255C3526A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 18:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A010FC2BB9A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 18:54:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7398123715
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 18:54:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7670323715
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 18:54:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730190AbgLQSyR (ORCPT
+        id S1730915AbgLQSy0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        Thu, 17 Dec 2020 13:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729161AbgLQSyK (ORCPT
+        with ESMTP id S1730876AbgLQSyZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:54:10 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB1FC0611CE
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 10:52:55 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id b9so20841060qtr.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 10:52:55 -0800 (PST)
+        Thu, 17 Dec 2020 13:54:25 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAE6C0619DD
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 10:53:04 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id 19so27384602qkm.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 10:53:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=viuX9mFc6Y6nLVnl1O/KvCl+LYXrPyDQnCgP/Za0iPk=;
-        b=VVz78QQqx7sFfCQ/j5Q78rQykQ4c2Otp0XtoORNMo61NdLSoSK1fAaic2Ls92NM+aE
-         LbPcwlpY1NseHvtd+DLy8yuDhjYYEB+cYX6CjrbIM3Kv+q5ieeDoVEGjPKnoxJfSmEIW
-         FX9s6OuKDB+NIicbye04czbd3+20gJn1o4E3ihZir/YZRe9eeqaxiS0hXVPL/oDfJJ84
-         qmhL23t1sU4DpOXKjuaMrymP8TnmKYaRxPkFVq5Go+wvdribN9foHMu97oAI0sbnsIT3
-         HmPSHf3+u3y6NtfD8MPW6I4TNYKxCxAmtwrY3CuYTyKWEDgXV9QJWQHcEqoJI6eNzyWq
-         v3bg==
+        bh=COwDysI4bZZEKCXTQQYU3uK6Y/IsqJ6hL7YDBk3cg/c=;
+        b=i7KuMhOyFcM+TyMj/X77dnuv0gWjob2WfM13WrvtO33cVvoh/4vOeACCtT/GpbiUNL
+         WO3cYvr/PjFoEbREscOUN33YZwSNmecJNT1hQZEwCrnE+LoCOsLd3GzPR/ekMxvxcxfe
+         kqt1qmz1bAXeIiqNlba5Jr0x++uAYRO12MC05X/E7DusvggUAxCZl7bmMdqGIH/EBYjy
+         qOeYnM9cHS2yK+r/tRFdPdSo1tUxlF7n+EwzXOQ36HGnec+7ByAT1kdBfWxH22M2MY+v
+         gfKGdjmZc4u1KqDuHwGN3NNZuUWdXLv/RbdNcWxp0Y9dsQDyPupyuS0RWe1BDfl/xiB5
+         m9Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=viuX9mFc6Y6nLVnl1O/KvCl+LYXrPyDQnCgP/Za0iPk=;
-        b=IayNRcLOce4DC9GhBKyr0AHuPilNJ+cFnwHjQcON2kG6c6dz5sV4+DVp4yKeHt1R4K
-         A3WzRiYQphttmM/5sSZaWBI6vpj+sBFAtdoZoygSUWIq1zOR96zfT5oyi8MSA2wqt3TC
-         6OePZac6JOwNfEcpASbcPeu6qAdvErBD5GOiNWaHq/fJ4w+sUY9ZBvYBfmN4y+cT9mUN
-         vhMoTaK3PSnFuW5crrxRUu4KO5L30oVpnaPBGBktp5dmbpii6Y8ikPNpBNri1QC2lgxJ
-         GR/ncD6NoK14ODLqb1+LquDPUtEXu8SNq320f8M/PWcbc/i/sESAL6/AyNU29YwYGSBQ
-         5Tog==
-X-Gm-Message-State: AOAM533hxtKbHBQ4R3sSwTgaUwJwFUCcdHaGWAWqkIZYmmXyc1r/HVzX
-        2PKco9dBHpCqgVQhsTHJk4UqTQ==
-X-Google-Smtp-Source: ABdhPJx6d4edswqxp8sOrVfO0BwH7R4ikTMieWBrf9/8ltVwjSEqtbN1CBbHHdBFZ4ldDeEwQ9GMkg==
-X-Received: by 2002:ac8:75c8:: with SMTP id z8mr169492qtq.256.1608231174446;
-        Thu, 17 Dec 2020 10:52:54 -0800 (PST)
+        bh=COwDysI4bZZEKCXTQQYU3uK6Y/IsqJ6hL7YDBk3cg/c=;
+        b=flZbtGq9PbwszuAIMb2xodMuCXckVWCVtF0rWbL+W6HPw1ngOdECAip6bfGGofJw6s
+         5Qe5P7ogWw9/YJjOzWzBAXCvVRJPxlCojAjz+HPw4T3C6F2N9/HIkArdnsyrNuqqHh7D
+         vru6gdO8e7EZE5mlXG5/5U8ng6Drte5C8hb7VAgFZPxd+r+kTFFPXBVA/L3lHE8OzdM/
+         /8UZob7qYhwL7CkLR5aZClEJLgKAxe9+brkyXQAfGl9qdGN5wUwewiW0CC6/E/xxcpMW
+         6zyhBriD5yu3QDivsC/YhdlqZDbleQDxFcc2WyYxBPXwfEL1s9JTJW3uYlpHxzJRDBS/
+         EI2w==
+X-Gm-Message-State: AOAM530qCIVrifuI73ADFysSlb0wvy8OGOUlIgJo3LauPoVKO++ZrbLf
+        GU0ifpSxIr3OAVtMWe1KXSPf3A==
+X-Google-Smtp-Source: ABdhPJzWxK7UMeCHrIoSiUT4ebH815ATLU90gFdXWdc76eFy1XhzXtvmWIRlIeGJ1QgQ1s2bBj8tEg==
+X-Received: by 2002:a37:a241:: with SMTP id l62mr691371qke.482.1608231183357;
+        Thu, 17 Dec 2020 10:53:03 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id m8sm4127434qkn.41.2020.12.17.10.52.52
+        by smtp.gmail.com with ESMTPSA id m8sm4127434qkn.41.2020.12.17.10.53.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:52:53 -0800 (PST)
+        Thu, 17 Dec 2020 10:53:02 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -68,9 +68,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 04/10] mm: honor PF_MEMALLOC_PIN for all movable pages
-Date:   Thu, 17 Dec 2020 13:52:37 -0500
-Message-Id: <20201217185243.3288048-5-pasha.tatashin@soleen.com>
+Subject: [PATCH v4 09/10] selftests/vm: test flag is broken
+Date:   Thu, 17 Dec 2020 13:52:42 -0500
+Message-Id: <20201217185243.3288048-10-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
 References: <20201217185243.3288048-1-pasha.tatashin@soleen.com>
@@ -80,149 +80,157 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PF_MEMALLOC_PIN is only honored for CMA pages, extend
-this flag to work for any allocations from ZONE_MOVABLE by removing
-__GFP_MOVABLE from gfp_mask when this flag is passed in the current
-context.
+In gup_test both gup_flags and test_flags use the same flags field.
+This is broken, because gup_flags can be passed as raw value (via -F hex),
+which can overwrite all the test flags.
 
-Add is_pinnable_page() to return true if page is in a pinnable page.
-A pinnable page is not in ZONE_MOVABLE and not of MIGRATE_CMA type.
+Farther, in the actual gup_test.c all the passed gup_flags are erased and
+unconditionally replaced with FOLL_WRITE.
+
+Which means that test_flags are ignored, and code like this always
+performs pin dump test:
+
+155  			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
+156  				nr = pin_user_pages(addr, nr, gup->flags,
+157  						    pages + i, NULL);
+158  			else
+159  				nr = get_user_pages(addr, nr, gup->flags,
+160  						    pages + i, NULL);
+161  			break;
+
+Add a new test_flags field, to allow raw gup_flags to work.
+Add a new subcommand for DUMP_USER_PAGES_TEST to specify that pin test
+should be performed.
+Remove  unconditional overwriting of gup_flags via FOLL_WRITE. But,
+preserve the previous behaviour where FOLL_WRITE was the default flag,
+and add a new option "-W" to unset FOLL_WRITE.
+
+With the fix, dump works like this:
+
+root@virtme:/# gup_test  -c
+---- page #0, starting from user virt addr: 0x7f8acb9e4000
+page:00000000d3d2ee27 refcount:2 mapcount:1 mapping:0000000000000000
+index:0x0 pfn:0x100bcf
+anon flags: 0x300000000080016(referenced|uptodate|lru|swapbacked)
+raw: 0300000000080016 ffffd0e204021608 ffffd0e208df2e88 ffff8ea04243ec61
+raw: 0000000000000000 0000000000000000 0000000200000000 0000000000000000
+page dumped because: gup_test: dump_pages() test
+DUMP_USER_PAGES_TEST: done
+
+root@virtme:/# gup_test  -c -p
+---- page #0, starting from user virt addr: 0x7fd19701b000
+page:00000000baed3c7d refcount:1025 mapcount:1 mapping:0000000000000000
+index:0x0 pfn:0x108008
+anon flags: 0x300000000080014(uptodate|lru|swapbacked)
+raw: 0300000000080014 ffffd0e204200188 ffffd0e205e09088 ffff8ea04243ee71
+raw: 0000000000000000 0000000000000000 0000040100000000 0000000000000000
+page dumped because: gup_test: dump_pages() test
+DUMP_USER_PAGES_TEST: done
+
+Refcount shows the difference between pin vs no-pin case.
+Also change type of nr from int to long, as it counts number of pages.
 
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- include/linux/mm.h       | 11 +++++++++++
- include/linux/sched/mm.h |  6 +++++-
- mm/hugetlb.c             |  2 +-
- mm/page_alloc.c          | 20 +++++++++-----------
- 4 files changed, 26 insertions(+), 13 deletions(-)
+ mm/gup_test.c                         |  9 +++------
+ mm/gup_test.h                         |  1 +
+ tools/testing/selftests/vm/gup_test.c | 11 +++++++++--
+ 3 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 5299b90a6c40..51b3090dd072 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1109,6 +1109,17 @@ static inline bool is_zone_device_page(const struct page *page)
- }
- #endif
- 
-+static inline bool is_zone_movable_page(const struct page *page)
-+{
-+	return page_zonenum(page) == ZONE_MOVABLE;
-+}
-+
-+/* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
-+static inline bool is_pinnable_page(struct page *page)
-+{
-+	return !is_zone_movable_page(page) && !is_migrate_cma_page(page);
-+}
-+
- #ifdef CONFIG_DEV_PAGEMAP_OPS
- void free_devmap_managed_page(struct page *page);
- DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index 5f4dd3274734..a55277b0d475 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -150,12 +150,13 @@ static inline bool in_vfork(struct task_struct *tsk)
-  * Applies per-task gfp context to the given allocation flags.
-  * PF_MEMALLOC_NOIO implies GFP_NOIO
-  * PF_MEMALLOC_NOFS implies GFP_NOFS
-+ * PF_MEMALLOC_PIN  implies !GFP_MOVABLE
-  */
- static inline gfp_t current_gfp_context(gfp_t flags)
+diff --git a/mm/gup_test.c b/mm/gup_test.c
+index e3cf78e5873e..24c70c5814ba 100644
+--- a/mm/gup_test.c
++++ b/mm/gup_test.c
+@@ -94,7 +94,7 @@ static int __gup_test_ioctl(unsigned int cmd,
  {
- 	unsigned int pflags = READ_ONCE(current->flags);
+ 	ktime_t start_time, end_time;
+ 	unsigned long i, nr_pages, addr, next;
+-	int nr;
++	long nr;
+ 	struct page **pages;
+ 	int ret = 0;
+ 	bool needs_mmap_lock =
+@@ -126,9 +126,6 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 			nr = (next - addr) / PAGE_SIZE;
+ 		}
  
--	if (unlikely(pflags & (PF_MEMALLOC_NOIO | PF_MEMALLOC_NOFS))) {
-+	if (unlikely(pflags & (PF_MEMALLOC_NOIO | PF_MEMALLOC_NOFS | PF_MEMALLOC_PIN))) {
- 		/*
- 		 * NOIO implies both NOIO and NOFS and it is a weaker context
- 		 * so always make sure it makes precedence
-@@ -164,6 +165,9 @@ static inline gfp_t current_gfp_context(gfp_t flags)
- 			flags &= ~(__GFP_IO | __GFP_FS);
- 		else if (pflags & PF_MEMALLOC_NOFS)
- 			flags &= ~__GFP_FS;
-+
-+		if (pflags & PF_MEMALLOC_PIN)
-+			flags &= ~__GFP_MOVABLE;
- 	}
- 	return flags;
- }
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 3f5ddac5de8a..958ef274db82 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1036,7 +1036,7 @@ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
- 	bool pin = !!(current->flags & PF_MEMALLOC_PIN);
- 
- 	list_for_each_entry(page, &h->hugepage_freelists[nid], lru) {
--		if (pin && is_migrate_cma_page(page))
-+		if (pin && !is_pinnable_page(page))
- 			continue;
- 
- 		if (PageHWPoison(page))
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c2dea9ad0e98..f83fa8cf3bb8 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3802,16 +3802,13 @@ alloc_flags_nofragment(struct zone *zone, gfp_t gfp_mask)
- 	return alloc_flags;
- }
- 
--static inline unsigned int current_alloc_flags(gfp_t gfp_mask,
--					unsigned int alloc_flags)
-+/* Must be called after current_gfp_context() which can change gfp_mask */
-+static inline unsigned int gpf_to_alloc_flags(gfp_t gfp_mask,
-+					      unsigned int alloc_flags)
- {
- #ifdef CONFIG_CMA
--	unsigned int pflags = current->flags;
+-		/* Filter out most gup flags: only allow a tiny subset here: */
+-		gup->flags &= FOLL_WRITE;
 -
--	if (!(pflags & PF_MEMALLOC_PIN) &&
--	    gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
-+	if (gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
- 		alloc_flags |= ALLOC_CMA;
--
- #endif
- 	return alloc_flags;
- }
-@@ -4467,7 +4464,7 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
- 	} else if (unlikely(rt_task(current)) && !in_interrupt())
- 		alloc_flags |= ALLOC_HARDER;
+ 		switch (cmd) {
+ 		case GUP_FAST_BENCHMARK:
+ 			nr = get_user_pages_fast(addr, nr, gup->flags,
+@@ -152,7 +149,7 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 					    pages + i, NULL);
+ 			break;
+ 		case DUMP_USER_PAGES_TEST:
+-			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
++			if (gup->test_flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
+ 				nr = pin_user_pages(addr, nr, gup->flags,
+ 						    pages + i, NULL);
+ 			else
+@@ -187,7 +184,7 @@ static int __gup_test_ioctl(unsigned int cmd,
  
--	alloc_flags = current_alloc_flags(gfp_mask, alloc_flags);
-+	alloc_flags = gpf_to_alloc_flags(gfp_mask, alloc_flags);
+ 	start_time = ktime_get();
  
- 	return alloc_flags;
- }
-@@ -4769,7 +4766,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+-	put_back_pages(cmd, pages, nr_pages, gup->flags);
++	put_back_pages(cmd, pages, nr_pages, gup->test_flags);
  
- 	reserve_flags = __gfp_pfmemalloc_flags(gfp_mask);
- 	if (reserve_flags)
--		alloc_flags = current_alloc_flags(gfp_mask, reserve_flags);
-+		alloc_flags = gpf_to_alloc_flags(gfp_mask, reserve_flags);
- 
+ 	end_time = ktime_get();
+ 	gup->put_delta_usec = ktime_us_delta(end_time, start_time);
+diff --git a/mm/gup_test.h b/mm/gup_test.h
+index 90a6713d50eb..b1b376b5d3b2 100644
+--- a/mm/gup_test.h
++++ b/mm/gup_test.h
+@@ -22,6 +22,7 @@ struct gup_test {
+ 	__u64 size;
+ 	__u32 nr_pages_per_call;
+ 	__u32 flags;
++	__u32 test_flags;
  	/*
- 	 * Reset the nodemask and zonelist iterators if memory policies can be
-@@ -4938,7 +4935,7 @@ static inline bool prepare_alloc_pages(gfp_t gfp_mask, unsigned int order,
- 	if (should_fail_alloc_page(gfp_mask, order))
- 		return false;
+ 	 * Each non-zero entry is the number of the page (1-based: first page is
+ 	 * page 1, so that zero entries mean "do nothing") from the .addr base.
+diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
+index 6c6336dd3b7f..42c71483729f 100644
+--- a/tools/testing/selftests/vm/gup_test.c
++++ b/tools/testing/selftests/vm/gup_test.c
+@@ -37,13 +37,13 @@ int main(int argc, char **argv)
+ {
+ 	struct gup_test gup = { 0 };
+ 	unsigned long size = 128 * MB;
+-	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 0;
++	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 1;
+ 	unsigned long cmd = GUP_FAST_BENCHMARK;
+ 	int flags = MAP_PRIVATE;
+ 	char *file = "/dev/zero";
+ 	char *p;
  
--	*alloc_flags = current_alloc_flags(gfp_mask, *alloc_flags);
-+	*alloc_flags = gpf_to_alloc_flags(gfp_mask, *alloc_flags);
- 
- 	/* Dirty zone balancing only done in the fast path */
- 	ac->spread_dirty_pages = (gfp_mask & __GFP_WRITE);
-@@ -4980,7 +4977,8 @@ __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
- 	 * Apply scoped allocation constraints. This is mainly about GFP_NOFS
- 	 * resp. GFP_NOIO which has to be inherited for all allocation requests
- 	 * from a particular context which has been marked by
--	 * memalloc_no{fs,io}_{save,restore}.
-+	 * memalloc_no{fs,io}_{save,restore}. And PF_MEMALLOC_PIN which ensures
-+	 * movable zones are not used during allocation.
- 	 */
- 	gfp_mask = current_gfp_context(gfp_mask);
- 	alloc_mask = gfp_mask;
+-	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwSH")) != -1) {
++	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHp")) != -1) {
+ 		switch (opt) {
+ 		case 'a':
+ 			cmd = PIN_FAST_BENCHMARK;
+@@ -65,6 +65,10 @@ int main(int argc, char **argv)
+ 			 */
+ 			gup.which_pages[0] = 1;
+ 			break;
++		case 'p':
++			/* works only with DUMP_USER_PAGES_TEST */
++			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
++			break;
+ 		case 'F':
+ 			/* strtol, so you can pass flags in hex form */
+ 			gup.flags = strtol(optarg, 0, 0);
+@@ -93,6 +97,9 @@ int main(int argc, char **argv)
+ 		case 'w':
+ 			write = 1;
+ 			break;
++		case 'W':
++			write = 0;
++			break;
+ 		case 'f':
+ 			file = optarg;
+ 			break;
 -- 
 2.25.1
 
