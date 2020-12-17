@@ -2,101 +2,175 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E69C2BBCF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 15:29:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E41AC4361B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 15:36:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A64732396F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 15:29:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA1322399A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Dec 2020 15:36:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729039AbgLQP3f (ORCPT
+        id S1727415AbgLQPgC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Dec 2020 10:29:35 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:46956 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbgLQP3d (ORCPT
+        Thu, 17 Dec 2020 10:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726012AbgLQPgC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Dec 2020 10:29:33 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1608218931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIcpuCdPdjtUIDDq5V1Kd6Nd1DvDsLvtJ/iV0ZcMRgA=;
-        b=3/uIVXk04WU6Kuue5KdK/PZzRT3PQRQci3lkMWxtnm0m12Qkt5QmdLW1qQQiqnAFp2hZp5
-        QzFq2fC1v1lLeWxspvs7ZktqDZYepiYqq++tBMgUhzKOe2wtg66cawjCw02bRBA1+2Djdc
-        4KqVMkPy5/ypITooF8IgTBcIQjsKSpTImchFsyfvoJm7nqCiKy3U5DR28Hag30uG9YGgov
-        RUvtLmBoVLaNPRF+SFiF/2wkaVq1oYPqBJmTNbWB4E7TQFmDGdSdnkPdaiSRXTI2qchLhb
-        YTBG4YlbqP+sIR9BHSNaYY0o6m7NSpXCZrdp1Gbc1GfXIGh0T78z8Dt66x3VyQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1608218931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIcpuCdPdjtUIDDq5V1Kd6Nd1DvDsLvtJ/iV0ZcMRgA=;
-        b=9yQmqCVKnv9+iECxfpPNtEbdep6NKjLzINPHlJVMXIR0uStpoRGsed4or02lEAiC+4QayK
-        TZlxdiWrObB1IHAQ==
-To:     ira.weiny@intel.com, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
+        Thu, 17 Dec 2020 10:36:02 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCD9C0617B0
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:35:21 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id b8so9345363plx.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Dec 2020 07:35:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=cF1lpVOfX+qqIliOA4fJEolSXJPbWdzTY82HZk7M6Ss=;
+        b=jmCoo2KfKiXBFPZ5Pu4hTHY3iB5JmJdEW2xDg11/qL0XDN1JfsdN7XyC2j8sEoH95y
+         GFMTYGr0oCS+l4J4pMyQxd8aZ/F75Twiay44FOIBLAxCIaB28JlAUo9Ib+wLBPNGhIB5
+         JZos5e7Irlc2WYQAdv2N/x8jYTVEVdXO+q3lEFoIwQJafSWpP75RiwxCcuG16exsWsl1
+         /xaldJycza+FyblXi0w7S8BUo7Flvd3XJQ13gxiBJ6wf0KNWX2NhU00LCXp3C5ufBfWG
+         twR6w2w9HVJM956l2GZbRuU5Uhi+JmF4wOm7e79KWTwg3krAg7CO6ep+OzxKH/X27pcp
+         D66A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=cF1lpVOfX+qqIliOA4fJEolSXJPbWdzTY82HZk7M6Ss=;
+        b=oIb7e07V42U7Md3wWdEWI1bHYQXCAOuSRC+x0ZEghdrCHpclvzwQn+GgiRY4WXn1Ms
+         ENS9HkIi/OD1v9+qfBT6oAzvD+nGBDXVKuqKZJoRadcuv71PBKkzr/DHT4wmggXlJ566
+         u/DqdCI5MMtKNGW2fCmVPwfmRqfwog8TdDLq5wMSri1VyUYRJRwCogXWD8cEUVOu11h7
+         Wq8/vy58qn/ojjKq/QKZjJY09aR/oURZRKf5mcyYhz3OmKgboQHIjqE2uecD7AEOFz+9
+         QmnUSDVRIOU5WBrdQ3zz5KZRiXLpiOepwGWTPQvOJGmn4YiP1xUqCi8JLttaGHiIfTIF
+         lxJA==
+X-Gm-Message-State: AOAM530/J6OrRfRoMh99xA/3oQM7Ef2zwphL3IEL43atviqfcXiuI0VH
+        5PV3r+ClClurK5q35+vVV57vlw==
+X-Google-Smtp-Source: ABdhPJxqYT8PU/t0P9GGyShWjJrS4X7K4WGiEwYmQMQu9GEUzGcTkb4Xv4/Y1sZVsWotkJYwFWmFsw==
+X-Received: by 2002:a17:902:64:b029:da:a9cf:4065 with SMTP id 91-20020a1709020064b02900daa9cf4065mr36533471pla.26.1608219321514;
+        Thu, 17 Dec 2020 07:35:21 -0800 (PST)
+Received: from ?IPv6:2601:646:c200:1ef2:9dc1:d988:a568:787a? ([2601:646:c200:1ef2:9dc1:d988:a568:787a])
+        by smtp.gmail.com with ESMTPSA id r123sm6059458pfr.68.2020.12.17.07.35.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Dec 2020 07:35:20 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH V3.1] entry: Pass irqentry_state_t by reference
+Date:   Thu, 17 Dec 2020 07:35:18 -0800
+Message-Id: <24F5DC49-1FB3-42CF-8323-B0B39D936F7F@amacapital.net>
+References: <20201217131924.GW3040@hirez.programming.kicks-ass.net>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
+        Weiny Ira <ira.weiny@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH V3 06/10] x86/entry: Preserve PKRS MSR across exceptions
-In-Reply-To: <20201106232908.364581-7-ira.weiny@intel.com>
-References: <20201106232908.364581-1-ira.weiny@intel.com> <20201106232908.364581-7-ira.weiny@intel.com>
-Date:   Thu, 17 Dec 2020 16:28:51 +0100
-Message-ID: <87y2hwqwng.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20201217131924.GW3040@hirez.programming.kicks-ass.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+X-Mailer: iPhone Mail (18B121)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 06 2020 at 15:29, ira weiny wrote:
-> +#ifdef CONFIG_ARCH_HAS_SUPERVISOR_PKEYS
-> +/*
-> + * PKRS is a per-logical-processor MSR which overlays additional protection for
-> + * pages which have been mapped with a protection key.
-> + *
-> + * The register is not maintained with XSAVE so we have to maintain the MSR
-> + * value in software during context switch and exception handling.
-> + *
-> + * Context switches save the MSR in the task struct thus taking that value to
-> + * other processors if necessary.
-> + *
-> + * To protect against exceptions having access to this memory we save the
-> + * current running value and set the PKRS value for the duration of the
-> + * exception.  Thus preventing exception handlers from having the elevated
-> + * access of the interrupted task.
-> + */
-> +noinstr void irq_save_set_pkrs(irqentry_state_t *irq_state, u32 val)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-> +		return;
-> +
-> +	irq_state->thread_pkrs = current->thread.saved_pkrs;
-> +	write_pkrs(INIT_PKRS_VALUE);
 
-Why is this noinstr? Just because it's called from a noinstr function?
+> On Dec 17, 2020, at 5:19 AM, Peter Zijlstra <peterz@infradead.org> wrote:
+>=20
+> =EF=BB=BFOn Thu, Dec 17, 2020 at 02:07:01PM +0100, Thomas Gleixner wrote:
+>>> On Fri, Dec 11 2020 at 14:14, Andy Lutomirski wrote:
+>>>> On Mon, Nov 23, 2020 at 10:10 PM <ira.weiny@intel.com> wrote:
+>>> After contemplating this for a bit, I think this isn't really the
+>>> right approach.  It *works*, but we've mostly just created a bit of an
+>>> unfortunate situation.  Our stack, on a (possibly nested) entry looks
+>>> like:
+>>>=20
+>>> previous frame (or empty if we came from usermode)
+>>> ---
+>>> SS
+>>> RSP
+>>> FLAGS
+>>> CS
+>>> RIP
+>>> rest of pt_regs
+>>>=20
+>>> C frame
+>>>=20
+>>> irqentry_state_t (maybe -- the compiler is within its rights to play
+>>> almost arbitrary games here)
+>>>=20
+>>> more C stuff
+>>>=20
+>>> So what we've accomplished is having two distinct arch register
+>>> regions, one called pt_regs and the other stuck in irqentry_state_t.
+>>> This is annoying because it means that, if we want to access this
+>>> thing without passing a pointer around or access it at all from outer
+>>> frames, we need to do something terrible with the unwinder, and we
+>>> don't want to go there.
+>>>=20
+>>> So I propose a somewhat different solution: lay out the stack like this.=
 
-Of course the function itself violates the noinstr constraints:
+>>>=20
+>>> SS
+>>> RSP
+>>> FLAGS
+>>> CS
+>>> RIP
+>>> rest of pt_regs
+>>> PKS
+>>> ^^^^^^^^ extended_pt_regs points here
+>>>=20
+>>> C frame
+>>> more C stuff
+>>> ...
+>>>=20
+>>> IOW we have:
+>>>=20
+>>> struct extended_pt_regs {
+>>>  bool rcu_whatever;
+>>>  other generic fields here;
+>>>  struct arch_extended_pt_regs arch_regs;
+>>>  struct pt_regs regs;
+>>> };
+>>>=20
+>>> and arch_extended_pt_regs has unsigned long pks;
+>>>=20
+>>> and instead of passing a pointer to irqentry_state_t to the generic
+>>> entry/exit code, we just pass a pt_regs pointer.
+>>=20
+>> While I agree vs. PKS which is architecture specific state and needed in
+>> other places e.g. #PF, I'm not convinced that sticking the existing
+>> state into the same area buys us anything more than an indirect access.
+>>=20
+>> Peter?
+>=20
+> Agreed; that immediately solves the confusion Ira had as well. While
+> extending pt_regs sounds scary, I think we've isolated our pt_regs
+> implementation from actual ABI pretty well, but of course, that would
+> need an audit. We don't want to leak this into signals for example.
+>=20
 
-  vmlinux.o: warning: objtool: write_pkrs()+0x36: call to do_trace_write_msr() leaves .noinstr.text section
+I=E2=80=99m okay with this.
 
-There is absolutely no reason to have this marked noinstr.
+My suggestion for having an extended pt_regs that contains pt_regs is to kee=
+p extensions like this invisible to unsuspecting parts of the kernel. In par=
+ticular, BPF seems to pass around struct pt_regs *, and I don=E2=80=99t know=
+ what the implications of effectively offsetting all the registers relative t=
+o the pointer would be.
 
-Thanks,
+Anything that actually broke the signal regs ABI should be noticed by the x8=
+6 selftests =E2=80=94 the tests read and write registers through ucontext.
 
-        tglx
+>=20
