@@ -2,94 +2,124 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A563C433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 19:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 664A6C433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 19:40:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3E2623104
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 19:32:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 340E722BE9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 19:40:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgLUTcV (ORCPT
+        id S1726196AbgLUTk6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Dec 2020 14:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726010AbgLUTcV (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Dec 2020 14:32:21 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26024C0613D3;
-        Mon, 21 Dec 2020 11:31:41 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id x203so2452139ooa.9;
-        Mon, 21 Dec 2020 11:31:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=22WfrYqwVdHV4R9eUfnFdyTLajoJ14FZuqG4/EZXiBg=;
-        b=hEivyO3LAqfRO7APVQNvlx80TFpDZAMkK9Tfh8FYVr3fN0r/Zk+/pTNRHJNqfX1Ct0
-         udvsyN91BPHDXD/1xV5fOmoQXDojvukiY7WDXkv2hJYxTCCluvIQXhBE1aRpleBk3uzE
-         VDbqoOyZB2Bv4dBgzgCt/hA/p+6aplEP1Vo+7xlN4cBMRUVlau+dGJhlfiEgpKRtA4cS
-         XUymUTFtgedYJDbbbYFoXaK4w8RWfQzQvhN6FHjkuebPSQdWz9/VN9yv7CXEJPuznwlC
-         0nFe7HJ2BD6vznil1FyQlsC2LNB3nbdHlxiuKWBJEDXu2cuSDqA0xLGqvjuHxU4sXU0Y
-         bQqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=22WfrYqwVdHV4R9eUfnFdyTLajoJ14FZuqG4/EZXiBg=;
-        b=lO8VC15vmbcSW9Z4vcRP7rllmQ89nxo63vVwGskLwjQhS+gNJ3Ii4KJ3WgVbVKeyx1
-         RbbMfxnPz68zQVbwR0ZeopaS60fSF9g74s9fTDa1n3zpyYxLtBA72Ry7H3nT2+myn/Ug
-         IFNDAcsu/94x100gxXrYHZZcRMlWKgvFP8+MXrN0U+r7GGdUEY8/e5ebHW03Hubfq8Gu
-         ZATLhmk9bz4hkO1ahlcYPmIG0KQPjwk6t+z8dClpSrPJa7UvCFrR1WPF7CKK+Qc0kenI
-         PdNmQvqIDQT6KvgFDSwBBArpsSdC5wwhffGVjgtV2qd6b4T2pXrFY72WMj4jTyjvri09
-         8aPQ==
-X-Gm-Message-State: AOAM532UmqYebJBlmmmdua0VnaOWBmHzlj7sYMaZWkuCOPGYU4S0mMpJ
-        UvJ8EG/K+NpBNxMGTqj/Y4bw0DaYcZqQFmYE5Z53y4gM
-X-Google-Smtp-Source: ABdhPJxcWxnUc+rwQRDI3Z0RTTF/LyrVAt5D2vgqWNNDeUaVA4VaKDcfByXRkjUfG6dWy5TDydUbKo8m1BZtu1WNZkM=
-X-Received: by 2002:a5b:949:: with SMTP id x9mr22811402ybq.33.1608558687798;
- Mon, 21 Dec 2020 05:51:27 -0800 (PST)
+        Mon, 21 Dec 2020 14:40:58 -0500
+Received: from mga07.intel.com ([134.134.136.100]:17892 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726190AbgLUTk5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Dec 2020 14:40:57 -0500
+IronPort-SDR: wFxzt4UKkEB2SV/H6lPRAQjMxymAJI+KQbLRrQj1syBRSDGOml4q8/E+FcOgoap5JyA3FXcRee
+ NnpSODX0UJTQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9842"; a="239858179"
+X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
+   d="scan'208";a="239858179"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 11:39:11 -0800
+IronPort-SDR: XhtXtfuhJPRfhR+ziFkK7TA6uVcY8k1BPGHDlB9qIKsp4ZiTe1rZuw2CRWM6hiwrgDq9xo6JVO
+ ay+DdyUMuvrg==
+X-IronPort-AV: E=Sophos;i="5.78,437,1599548400"; 
+   d="scan'208";a="416011232"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2020 11:39:09 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1krR2O-00GPKY-4E; Mon, 21 Dec 2020 21:40:08 +0200
+Date:   Mon, 21 Dec 2020 21:40:08 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     brendanhiggins@google.com, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: kunit stopped working
+Message-ID: <20201221194008.GA4077@smile.fi.intel.com>
+References: <20201221144302.GR4077@smile.fi.intel.com>
+ <20201221144510.GS4077@smile.fi.intel.com>
+ <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
+ <20201221192757.GZ4077@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20201128193335.219395-1-masahiroy@kernel.org> <20201212161831.GA28098@roeck-us.net>
- <CANiq72=e9Csgpcu3MdLGB77dL_QBn6PpqoG215YUHZLNCUGP0w@mail.gmail.com>
- <8f645b94-80e5-529c-7b6a-d9b8d8c9685e@roeck-us.net> <CANiq72kML=UmMLyKcorYwOhp2oqjfz7_+JN=EmPp05AapHbFSg@mail.gmail.com>
- <X9YwXZvjSWANm4wR@kroah.com> <CANiq72=UzRTkh6bcNSjE-kSgBJYX12+zQUYphZ1GcY-7kNxaLA@mail.gmail.com>
- <CAK7LNARXa1CQSFJjcqN7Y_8dZ1CSGqjoeox3oGAS_3=4QrHs9g@mail.gmail.com> <55261f67-deb5-4089-5548-62bc091016ec@roeck-us.net>
-In-Reply-To: <55261f67-deb5-4089-5548-62bc091016ec@roeck-us.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 21 Dec 2020 14:51:17 +0100
-Message-ID: <CANiq72mQ=5JpMh1OZfJo6dypF0KHSUp9Umd_5qwATxEMgO5OmQ@mail.gmail.com>
-Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201221192757.GZ4077@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 11:02 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 12/20/20 10:18 PM, Masahiro Yamada wrote:
-> With a change like this, I'd have expected that there is a coccinelle
-> script or similar to ensure that claims made in the commit message
-> are true.
++Cc people from culprit commit
 
-It is only a warning -- the compiler already tells us what is wrong.
+On Mon, Dec 21, 2020 at 09:27:57PM +0200, Andy Shevchenko wrote:
+> On Mon, Dec 21, 2020 at 11:37:44AM -0700, Shuah Khan wrote:
+> > On 12/21/20 7:45 AM, Andy Shevchenko wrote:
+> > > On Mon, Dec 21, 2020 at 04:43:02PM +0200, Andy Shevchenko wrote:
+> > > > Hi!
+> > > > 
+> > > > For last few weeks KUnit stopped working. Any insight?
+> > > > 
+> > > > P.S. I guess no need to tell that my kernel on which I run tests has not been
+> > > > changed as well as command line for wrapper:
+> > > > 
+> > > > 	tools/testing/kunit/kunit.py run --build_dir ~/$OUT_DIR
+> > > 
+> > > Current output (expected 18 tests to be run from several modules):
+> > > 
+> > > $ tools/testing/kunit/kunit.py run --build_dir ~/$OUT_DIR
+> > > [16:42:24] Configuring KUnit Kernel ...
+> > > [16:42:24] Building KUnit Kernel ...
+> > > [16:42:28] Starting KUnit Kernel ...
+> > > [ERROR] no tests run!
+> > > [16:42:28] ============================================================
+> > > [16:42:28] Testing complete. 0 tests run. 0 failed. 0 crashed.
+> > > [16:42:28] Elapsed time: 3.563s total, 0.002s configuring, 3.441s building, 0.000s running
+> 
+> > Please give more details on which repo you are using and the what's
+> > the top commit.
+> 
+> v5.10 - OK
+> 
+> [21:24:14] Testing complete. 14 tests run. 0 failed. 0 crashed.
+> 
+> Linux Next 20201221 - Not OK.
+> 
+> I'm expecting that v5.11-rc1 will be broken.
 
-Cheers,
-Miguel
+Luckily it's easy to bisect:
+
+# bad: [3b45c156c48f6fa078789df83c3174f96d01ecb8] defconfig: remove everything that is not needed for netboot
+# good: [2c85ebc57b3e1817b6ce1a6b703928e113a90442] Linux 5.10
+# good: [2cffa11e2aa76a0560c890f057858b68fe744d03] Merge tag 'irq-core-2020-12-15' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+# bad: [9805529ec544ea7a82d891d5239a8ebd3dbb2a3e] Merge tag 'arm-soc-dt-5.11' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+# bad: [ac7ac4618cf25e0d5cd8eba83d5f600084b65b9a] Merge tag 'for-5.11/block-2020-12-14' of git://git.kernel.dk/linux-block
+# good: [8958b2491104d7f254cff0698505392582dbc13a] mm: fix some spelling mistakes in comments
+# good: [6febd8bef36e64fc1f4aaff1f6302be5c653ad64] Merge branch 'signal-for-v5.11' of git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace
+# bad: [8312f41f08edc641aa927d31fb71319694ae9c42] Merge tag 'mips_5.11' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux
+# bad: [ca5b877b6ccc7b989614f3f541e9a1fe2ff7f75a] Merge tag 'selinux-pr-20201214' of git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux
+# good: [157807123c94acc8dcddd08a2335bd0173c5d68d] Merge tag 'asm-generic-mmu-context-5.11' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
+# good: [7194850efa47c8dac6e805087dd23c7b03af019d] Merge tag 'linux-kselftest-next-5.11-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+# bad: [d3eb52113d162cc88975fbd03c9e6f9cf2f8a771] Merge tag 'printk-for-5.11' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux
+# good: [5e60366d56c630e32befce7ef05c569e04391ca3] Merge tag 'fallthrough-fixes-clang-5.11-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux
+# bad: [5f3b8d398601055f29f32986a94d55955cd48f09] Merge branch 'for-5.11-null-console' into for-linus
+# bad: [3cffa06aeef7ece30f6b5ac0ea51f264e8fea4d0] printk/console: Allow to disable console output by using console="" or console=null
+# bad: [757055ae8dedf5333af17b3b5b4b70ba9bc9da4e] init/console: Use ttynull as a fallback when there is no console
+# first bad commit: [757055ae8dedf5333af17b3b5b4b70ba9bc9da4e] init/console: Use ttynull as a fallback when there is no console
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
