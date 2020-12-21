@@ -2,65 +2,108 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A905AC433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 15:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB90C433E9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 18:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8021922C7E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 15:22:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D35122CB1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 18:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725777AbgLUPWJ (ORCPT
+        id S1726235AbgLUSJF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Dec 2020 10:22:09 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53728 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbgLUPWJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Dec 2020 10:22:09 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1608564082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8zTMTGAKBseQvmQ41uSQjgUk4Eslqf5zZLakwbeM3kI=;
-        b=WRbifkiATxQUCmvnYYoDdxGbpQ6sbNaWJHDEfhda/0rSWg1dn1KX1n6UOHf369yKlNgaho
-        MCjf5JCp05zENv6BI6DbtPjA/Ti3BA2AN9GLZxc5J7sHxSEI5uv3R88mLi4oM4VpkTItUd
-        0Ayz/QCAp3TEuaGl8HcXpVsvBetHR+U=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4641CAE63;
-        Mon, 21 Dec 2020 15:21:22 +0000 (UTC)
-Date:   Mon, 21 Dec 2020 16:21:21 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     rostedt@goodmis.org, sergey.senozhatsky@gmail.com,
-        shuah@kernel.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] lib: test_scanf: Add tests for sscanf number
- conversion
-Message-ID: <X+C9cVWKLeZZXs7w@alley>
-References: <20201217180057.23786-1-rf@opensource.cirrus.com>
- <20201217180057.23786-3-rf@opensource.cirrus.com>
+        Mon, 21 Dec 2020 13:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725924AbgLUSJF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 21 Dec 2020 13:09:05 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3601EC0613D3;
+        Mon, 21 Dec 2020 10:08:25 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id b24so9628917otj.0;
+        Mon, 21 Dec 2020 10:08:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mHgLaGHkyXcabO8xIkwlWJDr0MLBnIf8/qlkiv3QkXo=;
+        b=F1s3IZItQhZW8oKY8yQAFhMb+5YpQSaWkdzriG2F1JWsUb8om7K0UcjMwvEToL3a8X
+         vPB/icFWCy3T7WJ2+UaDJlBHkeU8xx3cwO/ZQdZ+XhfiGCcRjnlwavdFlACH+szE6Xdr
+         2J/YXkVXHD1ghNJm7VBM0OZf+4J6O4Scu5uPRxvV4hzEiD8fKqP7E1hidDSO8MMpn5jX
+         GhZhDq0dYQcIjJOjXs1eSktSFHugLxz9zJM3KlIupNe2UY1m6L5AErmaW1KaWIaVv+dP
+         oFfmbitNFCQ1KQH0muFAqoRKjTt35L5jRMwlLBMv3emwPuhHmwmHgUgGx7sB5IvW3uz1
+         xHvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mHgLaGHkyXcabO8xIkwlWJDr0MLBnIf8/qlkiv3QkXo=;
+        b=Bu3MOtwdYJz4E0locNmI5M2A8RaDNR7Op6pCiLoFe2umTReBX9lXtLy6xeRoR6PdrV
+         i979fmNQ4edfQOBn28zmwMsNcQazBv/bVoYCp7ZGOaanBU5Aou+7RZshXUPT0wx9VOov
+         ecxbV2wTvcJBRi+I5KI02/7eGMLL6y6gMYtySRF1810Bjc7ph0vsp9OrUBUMMJIwEQ3C
+         EY6IAkinKqS7Ytk8mUqQ/ClTf+x43LwWuZFVoZq9YC1xfVNG4E07cvgzoledBHVtbeiF
+         BZZwuXC6xIJB4BVVYS4NtEk23b+V2d6O0Tau7yfPkP49dCqvSPwMtr14ihPAreFZ+mFk
+         DAJg==
+X-Gm-Message-State: AOAM53211WRgRAblV/9e+SZOkUpzLIOsrCYZQ9YZJvONpp9QMuR2D3ND
+        AFCbfnv0akNSfN/mKLdhCxlgj84blBfaBIft/d8qPFjN
+X-Google-Smtp-Source: ABdhPJyHPXD2WoRee0gLQTCh8E0/Ceo8vhSHe7ZKLTkLXezBU+vPi6psE0EHYE1zYhtBw5l7l2aL3OvVEYweBA+zdHM=
+X-Received: by 2002:a25:40d:: with SMTP id 13mr23258507ybe.422.1608558675780;
+ Mon, 21 Dec 2020 05:51:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201217180057.23786-3-rf@opensource.cirrus.com>
+References: <20201128193335.219395-1-masahiroy@kernel.org> <20201212161831.GA28098@roeck-us.net>
+ <CANiq72=e9Csgpcu3MdLGB77dL_QBn6PpqoG215YUHZLNCUGP0w@mail.gmail.com>
+ <8f645b94-80e5-529c-7b6a-d9b8d8c9685e@roeck-us.net> <CANiq72kML=UmMLyKcorYwOhp2oqjfz7_+JN=EmPp05AapHbFSg@mail.gmail.com>
+ <X9YwXZvjSWANm4wR@kroah.com> <CANiq72=UzRTkh6bcNSjE-kSgBJYX12+zQUYphZ1GcY-7kNxaLA@mail.gmail.com>
+ <CAK7LNARXa1CQSFJjcqN7Y_8dZ1CSGqjoeox3oGAS_3=4QrHs9g@mail.gmail.com>
+In-Reply-To: <CAK7LNARXa1CQSFJjcqN7Y_8dZ1CSGqjoeox3oGAS_3=4QrHs9g@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 21 Dec 2020 14:51:05 +0100
+Message-ID: <CANiq72m5_mc=Cq1gkMtO6UTo+x91aE7+UBDYJQLazmTh4RbntA@mail.gmail.com>
+Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 2020-12-17 18:00:56, Richard Fitzgerald wrote:
-> Adds test_sscanf to test various number conversion cases, as
-> number conversion was previously broken.
-> 
-> This also tests the simple_strtoxxx() functions exported from
-> vsprintf.c.
-> 
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+On Mon, Dec 21, 2020 at 7:20 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Sorry for the delay.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+No problem!
 
-Best Regards,
-Petr
+> Now I sent out the fix for lantiq_etop.c
+>
+> https://lore.kernel.org/patchwork/patch/1355595/
+
+I saw it, thanks for the Cc!
+
+> The reason of the complication was
+> I was trying to merge the following patch in the same development cycle:
+> https://patchwork.kernel.org/project/linux-kbuild/patch/20201117104736.24997-1-olaf@aepfle.de/
+
+Ah, then that explains why Guenter's had an error instead of a warning.
+
+> Tomorrow's linux-next should be OK
+> and, you can send my patch in this merge window.
+
+Thanks!
+
+Cheers,
+Miguel
