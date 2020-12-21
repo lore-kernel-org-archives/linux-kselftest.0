@@ -2,108 +2,109 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BB90C433E9
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 18:09:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61E4DC4332B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 18:38:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D35122CB1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 18:09:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 306A123103
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Dec 2020 18:38:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726235AbgLUSJF (ORCPT
+        id S1726307AbgLUSi2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Dec 2020 13:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        Mon, 21 Dec 2020 13:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725924AbgLUSJF (ORCPT
+        with ESMTP id S1725785AbgLUSi1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Dec 2020 13:09:05 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3601EC0613D3;
-        Mon, 21 Dec 2020 10:08:25 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id b24so9628917otj.0;
-        Mon, 21 Dec 2020 10:08:25 -0800 (PST)
+        Mon, 21 Dec 2020 13:38:27 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC62C0611C5
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Dec 2020 10:37:47 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id y5so9728203iow.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Dec 2020 10:37:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mHgLaGHkyXcabO8xIkwlWJDr0MLBnIf8/qlkiv3QkXo=;
-        b=F1s3IZItQhZW8oKY8yQAFhMb+5YpQSaWkdzriG2F1JWsUb8om7K0UcjMwvEToL3a8X
-         vPB/icFWCy3T7WJ2+UaDJlBHkeU8xx3cwO/ZQdZ+XhfiGCcRjnlwavdFlACH+szE6Xdr
-         2J/YXkVXHD1ghNJm7VBM0OZf+4J6O4Scu5uPRxvV4hzEiD8fKqP7E1hidDSO8MMpn5jX
-         GhZhDq0dYQcIjJOjXs1eSktSFHugLxz9zJM3KlIupNe2UY1m6L5AErmaW1KaWIaVv+dP
-         oFfmbitNFCQ1KQH0muFAqoRKjTt35L5jRMwlLBMv3emwPuhHmwmHgUgGx7sB5IvW3uz1
-         xHvQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ke00+sAaFKkeduiGcal2II6nKBm42LPXHyddS/muDEQ=;
+        b=G7fsaFig/DFljtn5p26bOvwUMWDifoheK4lKy+CMb1ZFBoPWocHgz594Wv8wi0F9Jp
+         zkAqnobCxFAMPqLrd1B/CFRib3g6p9YM8tEkDz8Rl4KVguTfPqQlMWNmg/Nkp4t0jAmg
+         J00yCEFgePWBOwJzkE5hTJCbe7hD2okl05Kps=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mHgLaGHkyXcabO8xIkwlWJDr0MLBnIf8/qlkiv3QkXo=;
-        b=Bu3MOtwdYJz4E0locNmI5M2A8RaDNR7Op6pCiLoFe2umTReBX9lXtLy6xeRoR6PdrV
-         i979fmNQ4edfQOBn28zmwMsNcQazBv/bVoYCp7ZGOaanBU5Aou+7RZshXUPT0wx9VOov
-         ecxbV2wTvcJBRi+I5KI02/7eGMLL6y6gMYtySRF1810Bjc7ph0vsp9OrUBUMMJIwEQ3C
-         EY6IAkinKqS7Ytk8mUqQ/ClTf+x43LwWuZFVoZq9YC1xfVNG4E07cvgzoledBHVtbeiF
-         BZZwuXC6xIJB4BVVYS4NtEk23b+V2d6O0Tau7yfPkP49dCqvSPwMtr14ihPAreFZ+mFk
-         DAJg==
-X-Gm-Message-State: AOAM53211WRgRAblV/9e+SZOkUpzLIOsrCYZQ9YZJvONpp9QMuR2D3ND
-        AFCbfnv0akNSfN/mKLdhCxlgj84blBfaBIft/d8qPFjN
-X-Google-Smtp-Source: ABdhPJyHPXD2WoRee0gLQTCh8E0/Ceo8vhSHe7ZKLTkLXezBU+vPi6psE0EHYE1zYhtBw5l7l2aL3OvVEYweBA+zdHM=
-X-Received: by 2002:a25:40d:: with SMTP id 13mr23258507ybe.422.1608558675780;
- Mon, 21 Dec 2020 05:51:15 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ke00+sAaFKkeduiGcal2II6nKBm42LPXHyddS/muDEQ=;
+        b=ri4MR1kj6yx5RwyGH7CHSRU/C/WV5B5hDr6DyC/cNEGsVCqY/SkWmX7vQNk4lnpRGq
+         f0Hd9AWwOIvIF2ak7VZm7DhHU9EaUvKRs6lyliJM3ef/gNfSF/qc6F7IBXPNPdt3g/Yx
+         IDqAthEd69pi+S053lXCKLpWMGjs5FE3fUr1MOdFJJIu2xRq9AmZnGwS246Vl6CBHYsW
+         3Ei9/znA7RPYBNZ83QQiYWjZQMQKU4dL8UjQyQ60+3uXqqFkvM+vhcbYxkpoGh8qSVpd
+         RdzYqut6hjd8MpjZLvU1m7PK2Hx6PXUFnX598+ndehvKPzNbw1aDfo6EBQe+CEsQ7k46
+         Cn8w==
+X-Gm-Message-State: AOAM530HCBKey9832AOfTxJv809jf0XQSu8WGusM0NKbwshk54ridsAv
+        0cIl7MeTec67diauoloqYvaTuQ==
+X-Google-Smtp-Source: ABdhPJznuPZsJiFos5cD2/p2DqfDlBdezQs6HE3aX1yBCJxClA2z7gtzMYqEUy/Fxj7MbkJfmjydRw==
+X-Received: by 2002:a6b:7108:: with SMTP id q8mr15091862iog.204.1608575866710;
+        Mon, 21 Dec 2020 10:37:46 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id z18sm13168153ilb.26.2020.12.21.10.37.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Dec 2020 10:37:45 -0800 (PST)
+Subject: Re: kunit stopped working
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201221144302.GR4077@smile.fi.intel.com>
+ <20201221144510.GS4077@smile.fi.intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2d4b8148-48ca-290f-1d66-33e302e7571d@linuxfoundation.org>
+Date:   Mon, 21 Dec 2020 11:37:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <20201128193335.219395-1-masahiroy@kernel.org> <20201212161831.GA28098@roeck-us.net>
- <CANiq72=e9Csgpcu3MdLGB77dL_QBn6PpqoG215YUHZLNCUGP0w@mail.gmail.com>
- <8f645b94-80e5-529c-7b6a-d9b8d8c9685e@roeck-us.net> <CANiq72kML=UmMLyKcorYwOhp2oqjfz7_+JN=EmPp05AapHbFSg@mail.gmail.com>
- <X9YwXZvjSWANm4wR@kroah.com> <CANiq72=UzRTkh6bcNSjE-kSgBJYX12+zQUYphZ1GcY-7kNxaLA@mail.gmail.com>
- <CAK7LNARXa1CQSFJjcqN7Y_8dZ1CSGqjoeox3oGAS_3=4QrHs9g@mail.gmail.com>
-In-Reply-To: <CAK7LNARXa1CQSFJjcqN7Y_8dZ1CSGqjoeox3oGAS_3=4QrHs9g@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 21 Dec 2020 14:51:05 +0100
-Message-ID: <CANiq72m5_mc=Cq1gkMtO6UTo+x91aE7+UBDYJQLazmTh4RbntA@mail.gmail.com>
-Subject: Re: [PATCH v3] Compiler Attributes: remove CONFIG_ENABLE_MUST_CHECK
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201221144510.GS4077@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 21, 2020 at 7:20 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Sorry for the delay.
+On 12/21/20 7:45 AM, Andy Shevchenko wrote:
+> On Mon, Dec 21, 2020 at 04:43:02PM +0200, Andy Shevchenko wrote:
+>> Hi!
+>>
+>> For last few weeks KUnit stopped working. Any insight?
+>>
+>> P.S. I guess no need to tell that my kernel on which I run tests has not been
+>> changed as well as command line for wrapper:
+>>
+>> 	tools/testing/kunit/kunit.py run --build_dir ~/$OUT_DIR
+> 
+> Current output (expected 18 tests to be run from several modules):
+> 
+> $ tools/testing/kunit/kunit.py run --build_dir ~/$OUT_DIR
+> [16:42:24] Configuring KUnit Kernel ...
+> [16:42:24] Building KUnit Kernel ...
+> [16:42:28] Starting KUnit Kernel ...
+> [ERROR] no tests run!
+> [16:42:28] ============================================================
+> [16:42:28] Testing complete. 0 tests run. 0 failed. 0 crashed.
+> [16:42:28] Elapsed time: 3.563s total, 0.002s configuring, 3.441s building, 0.000s running
+> 
+> 
+> 
 
-No problem!
+Hi Andy,
 
-> Now I sent out the fix for lantiq_etop.c
->
-> https://lore.kernel.org/patchwork/patch/1355595/
+Please give more details on which repo you are using and the what's
+the top commit.
 
-I saw it, thanks for the Cc!
-
-> The reason of the complication was
-> I was trying to merge the following patch in the same development cycle:
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20201117104736.24997-1-olaf@aepfle.de/
-
-Ah, then that explains why Guenter's had an error instead of a warning.
-
-> Tomorrow's linux-next should be OK
-> and, you can send my patch in this merge window.
-
-Thanks!
-
-Cheers,
-Miguel
+thanks,
+-- Shuah
