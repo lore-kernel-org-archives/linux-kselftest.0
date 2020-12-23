@@ -5,44 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A50C43381
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 02:24:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D732AC43332
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 02:31:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96BFB22AAF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 02:24:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3DFA22257
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 02:31:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730093AbgLWCX5 (ORCPT
+        id S1730869AbgLWCah (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Dec 2020 21:23:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52738 "EHLO mail.kernel.org"
+        Tue, 22 Dec 2020 21:30:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730087AbgLWCX4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:23:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0167F22285;
-        Wed, 23 Dec 2020 02:23:39 +0000 (UTC)
+        id S1730530AbgLWCZd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Dec 2020 21:25:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 89DA422A83;
+        Wed, 23 Dec 2020 02:24:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608690220;
+        s=k20201202; t=1608690292;
         bh=ZyApZxQZVk6sKMiHL/zzmD4bkGQiWvE7rBwr+GXas2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cuw0XGTecvubsokO9T7vXKAaO1qt0x3vnhrwDcPQdegsPuy0/j7LntzYB9q22/fTH
-         ocDLKPLydXBjpp82q/vtuialyN2eJh7Gf+uKKkOfXmMAwOCFUQEe9+K+LNbtmbUKJn
-         HsQS3qneSDmVwrn8fp4d9+j+WRoinztpzjlIsEZl3LRf+crES4JM//3mG6/VCo0pfJ
-         H09QptVJTQtTjZbhOeuHmC5PMDum7fsmro65Z+MS/+g62W2LEm8nmjnKXlYp7+D2hU
-         Ut0KK4fEeQnvdW4q7dFy3K3azSQFCHpQiRJJy248MSD+J632WbUlhW99qEALuErkQc
-         3Eaxc41p2Zsgw==
+        b=siy6Ki7eM8zFoKooFvJbxW7q2qzR8eASz63TsySEIF682qPKCovV6FZml1fnHv8zM
+         6GAZV4/AEXgDVg0von/AMukc2hHm5CIY0pg9luw1z8N7CEon7sKGgUfKvwMlsUzaur
+         uAGx8yCRuoBgr9Zh2gW0cLFFMsyFijU2+9Fm8eJNsKMg7d7c/iaT93lytXewIPVCzW
+         Y5Sphx26Mnm8eEyrZfm3NVEcf/Tb2PLN3bzz5SkmNeWuTnFeWx8tXN7/x/8KNNHPw+
+         bW2vEErrTXoVwPO/ejy/CQQFLK3d3NZvJeRGjToau+1PErfVHRrE3FA5LvPcjV6YmO
+         4H70rM0yaSzOw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@suse.de>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 38/66] selftests/x86/fsgsbase: Fix GS == 1, 2, and 3 tests
-Date:   Tue, 22 Dec 2020 21:22:24 -0500
-Message-Id: <20201223022253.2793452-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 29/48] selftests/x86/fsgsbase: Fix GS == 1, 2, and 3 tests
+Date:   Tue, 22 Dec 2020 21:23:57 -0500
+Message-Id: <20201223022417.2794032-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223022253.2793452-1-sashal@kernel.org>
-References: <20201223022253.2793452-1-sashal@kernel.org>
+In-Reply-To: <20201223022417.2794032-1-sashal@kernel.org>
+References: <20201223022417.2794032-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
