@@ -2,66 +2,177 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 711A4C433E0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 07:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEBC7C433E9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 16:02:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CA4A20759
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 07:50:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBF0422202
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 16:02:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgLWHtv (ORCPT
+        id S1728465AbgLWQCY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Dec 2020 02:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727179AbgLWHtv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Dec 2020 02:49:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126BDC0613D3;
-        Tue, 22 Dec 2020 23:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VJA2Gqy8jGT0RgzTT5UVlJfq4XprQm8NpWSKksAaoTw=; b=Y2KK7HRkXqg1VLN9ubpTwYDI0w
-        Ep+SKigC5jwe2uB1UnUMz3uOsrVasAiYXZUzP9QprSSBjPJVqSZvomAb9NqBq8/VzqcNEclwAUs/a
-        9DpG7xDpanTsGh1QSz6ldIcRgzZwLujXZ+nZ/jcAJSf48gFxTkatMqAmJmc2aOcQMSVzk2xyxf/9+
-        tGNvyc4LINYaZpwmksQKJ4Mnlp6k069qYALw9MkYmOSKZVWgpS4Mesca9CJVr2T0TaIpy6LcqkJTl
-        9gjBt/ayYYok4M0W0gqXj+mKdlMVIPkSK6Ni3DTGAUivYygjDnO58CGjHXQgH7OiKrcppizSGoHq+
-        xahlPh9g==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kryt8-00046B-Vc; Wed, 23 Dec 2020 07:48:52 +0000
-Date:   Wed, 23 Dec 2020 07:48:50 +0000
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     snitzer@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        josef@toxicpanda.com, bvanassche@acm.org, corbet@lwn.net,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        song@kernel.org, dm-devel@redhat.com,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org, agk@redhat.com,
-        michael.christie@oracle.com
-Subject: Re: [PATCH v1 0/5] dm: dm-user: New target that proxies BIOs to
- userspace
-Message-ID: <20201223074850.GA15369@infradead.org>
-References: <20201222143616.GB12885@redhat.com>
- <mhng-26d96d8e-77aa-415b-a8ee-518a0e91b6ef@palmerdabbelt-glaptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-26d96d8e-77aa-415b-a8ee-518a0e91b6ef@palmerdabbelt-glaptop>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+        Wed, 23 Dec 2020 11:02:24 -0500
+Received: from mga03.intel.com ([134.134.136.65]:51477 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728421AbgLWQCX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 23 Dec 2020 11:02:23 -0500
+IronPort-SDR: t6n7CF+SbtZu1Il8qkPopvGUP5qkyTYu1Bxx+xUar4O0/hGpCHi2tj9cSuuJiHxTJNCacEIgRW
+ iUqsS++SmHsg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9844"; a="176130532"
+X-IronPort-AV: E=Sophos;i="5.78,441,1599548400"; 
+   d="scan'208";a="176130532"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2020 08:01:42 -0800
+IronPort-SDR: NgGIVCZ9caVTBX6CI/hQAb3UKswkGndWj0MAsGfGCNhlBRlIwACEqCq1zNt0Wo2SS/5B5LuPZF
+ tAgnQte2g6EQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,441,1599548400"; 
+   d="scan'208";a="458028061"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Dec 2020 08:01:41 -0800
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, luto@kernel.org, tglx@linutronix.de, mingo@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, jing2.liu@intel.com,
+        ravi.v.shankar@intel.com, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 20/21] x86/fpu/xstate: Support dynamic user state in the signal handling path
+Date:   Wed, 23 Dec 2020 07:57:16 -0800
+Message-Id: <20201223155717.19556-21-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201223155717.19556-1-chang.seok.bae@intel.com>
+References: <20201223155717.19556-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Entering a signal handler, the kernel saves the XSAVE buffer. The dynamic
+user state is better to be saved only when used. fpu->state_mask can help
+to exclude unused states.
 
-FYI, a few years ago I spent some time helping a customer to prepare
-their block device in userspace using fuse code for upstreaming, but
-at some point they abandoned the project.  But if for some reason we
-don't want to use nbd I think a driver using the fuse infrastructure
-would be the next logical choice.
+Returning from a signal handler, XRSTOR re-initializes the excluded state
+components.
+
+Add a test case to verify in the signal handler that the signal frame
+excludes AMX data when the signaled thread has initialized AMX state.
+
+No functional change until the kernel supports the dynamic user states.
+
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
+Changes from v1:
+* Made it revertible (moved close to the end of the series).
+* Included the test case.
+---
+ arch/x86/include/asm/fpu/internal.h |  2 +-
+ tools/testing/selftests/x86/amx.c   | 66 +++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/fpu/internal.h b/arch/x86/include/asm/fpu/internal.h
+index 5eba9a466249..202874bb79da 100644
+--- a/arch/x86/include/asm/fpu/internal.h
++++ b/arch/x86/include/asm/fpu/internal.h
+@@ -369,7 +369,7 @@ static inline void copy_kernel_to_xregs(struct xregs_state *xstate, u64 mask)
+  */
+ static inline int copy_xregs_to_user(struct xregs_state __user *buf)
+ {
+-	u64 mask = xfeatures_mask_user();
++	u64 mask = current->thread.fpu.state_mask;
+ 	u32 lmask = mask;
+ 	u32 hmask = mask >> 32;
+ 	int err;
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index f4ecdfd27ae9..a7386b886532 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -650,6 +650,71 @@ static void test_ptrace(void)
+ 	test_tile_state_write(ptracee_loads_tiles);
+ }
+ 
++/* Signal handling test */
++
++static int sigtrapped;
++struct tile_data sig_tiles, sighdl_tiles;
++
++static void handle_sigtrap(int sig, siginfo_t *info, void *ctx_void)
++{
++	ucontext_t *uctxt = (ucontext_t *)ctx_void;
++	struct xsave_data xdata;
++	struct tile_config cfg;
++	struct tile_data tiles;
++	u64 header;
++
++	header = __get_xsave_xstate_bv((void *)uctxt->uc_mcontext.fpregs);
++
++	if (header & (1 << XFEATURE_XTILE_DATA))
++		printf("[FAIL]\ttile data was written in sigframe\n");
++	else
++		printf("[OK]\ttile data was skipped in sigframe\n");
++
++	set_tilecfg(&cfg);
++	load_tilecfg(&cfg);
++	init_xdata(&xdata);
++
++	make_tiles(&tiles);
++	copy_tiles_to_xdata(&xdata, &tiles);
++	restore_xdata(&xdata);
++
++	save_xdata(&xdata);
++	if (compare_xdata_tiles(&xdata, &tiles))
++		err(1, "tile load file");
++
++	printf("\tsignal handler: load tile data\n");
++
++	sigtrapped = sig;
++}
++
++static void test_signal_handling(void)
++{
++	struct xsave_data xdata = { 0 };
++	struct tile_data tiles = { 0 };
++
++	sethandler(SIGTRAP, handle_sigtrap, 0);
++	sigtrapped = 0;
++
++	printf("[RUN]\tCheck tile state management in handling signal\n");
++
++	printf("\tbefore signal: initial tile data state\n");
++
++	raise(SIGTRAP);
++
++	if (sigtrapped == 0)
++		err(1, "sigtrap");
++
++	save_xdata(&xdata);
++	if (compare_xdata_tiles(&xdata, &tiles)) {
++		printf("[FAIL]\ttile data was not loaded at sigreturn\n");
++		nerrs++;
++	} else {
++		printf("[OK]\ttile data was re-initialized at sigreturn\n");
++	}
++
++	clearhandler(SIGTRAP);
++}
++
+ int main(void)
+ {
+ 	/* Check hardware availability at first */
+@@ -672,6 +737,7 @@ int main(void)
+ 	test_fork();
+ 	test_context_switch();
+ 	test_ptrace();
++	test_signal_handling();
+ 
+ 	return nerrs ? 1 : 0;
+ }
+-- 
+2.17.1
+
