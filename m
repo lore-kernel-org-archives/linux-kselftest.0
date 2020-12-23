@@ -2,116 +2,66 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35EE8C4361A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 03:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 711A4C433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 07:50:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16E79207B5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 03:09:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CA4A20759
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Dec 2020 07:50:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731599AbgLWDJ3 (ORCPT
+        id S1727794AbgLWHtv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Dec 2020 22:09:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728134AbgLWCSi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Dec 2020 21:18:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C979A23370;
-        Wed, 23 Dec 2020 02:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608689846;
-        bh=NY+pm1T3bmTqsuWanFH+J/5JcBxQGzGFCy4Cz8k3620=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=crLmU7PIG+4azxHQdOaWKjNontzbGQyxSWUKTAjVPVD+KVakQcSlPZC1F/ZCPUIsl
-         furjMYih6Lhq+rlnNkjyjYbgbpINW2leFoisSwpNZ3RgwTdwfJG7odCivKFkyOyiMa
-         Dy42/vTglGIxFsEzHdFVxQDIqf/nmFHIPxgkHQXm6hame9omy77nNpRBT8+qrwCH2z
-         vP2vNEbPEgD3by14YdwWKnGrU4woIYyuI+sr5wu/jBaT7lz4UymqffqkD37uYiQaZD
-         IU4mPISF4qyhNGL4bokjBmB67r+3S3i1Y3xyc4tG7HqFwlk6dNVqcvih9sk0x6JH5i
-         JHh38al8Wvk1g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 046/217] torture: Prevent jitter processes from delaying failed run
-Date:   Tue, 22 Dec 2020 21:13:35 -0500
-Message-Id: <20201223021626.2790791-46-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201223021626.2790791-1-sashal@kernel.org>
-References: <20201223021626.2790791-1-sashal@kernel.org>
+        Wed, 23 Dec 2020 02:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727179AbgLWHtv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 23 Dec 2020 02:49:51 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126BDC0613D3;
+        Tue, 22 Dec 2020 23:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VJA2Gqy8jGT0RgzTT5UVlJfq4XprQm8NpWSKksAaoTw=; b=Y2KK7HRkXqg1VLN9ubpTwYDI0w
+        Ep+SKigC5jwe2uB1UnUMz3uOsrVasAiYXZUzP9QprSSBjPJVqSZvomAb9NqBq8/VzqcNEclwAUs/a
+        9DpG7xDpanTsGh1QSz6ldIcRgzZwLujXZ+nZ/jcAJSf48gFxTkatMqAmJmc2aOcQMSVzk2xyxf/9+
+        tGNvyc4LINYaZpwmksQKJ4Mnlp6k069qYALw9MkYmOSKZVWgpS4Mesca9CJVr2T0TaIpy6LcqkJTl
+        9gjBt/ayYYok4M0W0gqXj+mKdlMVIPkSK6Ni3DTGAUivYygjDnO58CGjHXQgH7OiKrcppizSGoHq+
+        xahlPh9g==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kryt8-00046B-Vc; Wed, 23 Dec 2020 07:48:52 +0000
+Date:   Wed, 23 Dec 2020 07:48:50 +0000
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     snitzer@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        josef@toxicpanda.com, bvanassche@acm.org, corbet@lwn.net,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        song@kernel.org, dm-devel@redhat.com,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org, agk@redhat.com,
+        michael.christie@oracle.com
+Subject: Re: [PATCH v1 0/5] dm: dm-user: New target that proxies BIOs to
+ userspace
+Message-ID: <20201223074850.GA15369@infradead.org>
+References: <20201222143616.GB12885@redhat.com>
+ <mhng-26d96d8e-77aa-415b-a8ee-518a0e91b6ef@palmerdabbelt-glaptop>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mhng-26d96d8e-77aa-415b-a8ee-518a0e91b6ef@palmerdabbelt-glaptop>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
 
-[ Upstream commit c64659ef29e3901be0900ec6fb0485fa3dbdcfd8 ]
-
-Even when the kernel panics and qemu dies, runs with jitter enabled will
-continue uselessly until the jitter.sh processes terminate.  This can
-be annoying if a planned one-hour run instead dies during boot.
-
-This commit therefore kills the jitter.sh processes when the run ends
-more than one minute prior to the termination time specified by the
-kvm.sh --duration argument or its default.
-
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../selftests/rcutorture/bin/kvm-test-1-run.sh     | 14 ++++++++++++++
- tools/testing/selftests/rcutorture/bin/kvm.sh      |  5 ++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-index 6dc2b49b85ea0..6544a289a5832 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-@@ -223,6 +223,20 @@ do
- 				echo "ps -fp $killpid" >> $resdir/Warnings 2>&1
- 				ps -fp $killpid >> $resdir/Warnings 2>&1
- 			fi
-+			# Reduce probability of PID reuse by allowing a one-minute buffer
-+			if test $((kruntime + 60)) -lt $seconds && test -s "$resdir/../jitter_pids"
-+			then
-+				awk < "$resdir/../jitter_pids" '
-+				NF > 0 {
-+					pidlist = pidlist " " $1;
-+					n++;
-+				}
-+				END {
-+					if (n > 0) {
-+						print "kill " pidlist;
-+					}
-+				}' | sh
-+			fi
- 		else
- 			echo ' ---' `date`: "Kernel done"
- 		fi
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 6eb1d3f6524d5..5ad3882563ce6 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -459,8 +459,11 @@ function dump(first, pastlast, batchnum)
- 	print "if test -n \"$needqemurun\""
- 	print "then"
- 	print "\techo ---- Starting kernels. `date` | tee -a " rd "log";
--	for (j = 0; j < njitter; j++)
-+	print "\techo > " rd "jitter_pids"
-+	for (j = 0; j < njitter; j++) {
- 		print "\tjitter.sh " j " " dur " " ja[2] " " ja[3] "&"
-+		print "\techo $! >> " rd "jitter_pids"
-+	}
- 	print "\twait"
- 	print "\techo ---- All kernel runs complete. `date` | tee -a " rd "log";
- 	print "else"
--- 
-2.27.0
-
+FYI, a few years ago I spent some time helping a customer to prepare
+their block device in userspace using fuse code for upstreaming, but
+at some point they abandoned the project.  But if for some reason we
+don't want to use nbd I think a driver using the fuse infrastructure
+would be the next logical choice.
