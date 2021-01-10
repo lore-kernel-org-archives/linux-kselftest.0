@@ -2,69 +2,82 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B98F7C4332D
-	for <linux-kselftest@archiver.kernel.org>; Sat,  9 Jan 2021 01:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEFBDC433DB
+	for <linux-kselftest@archiver.kernel.org>; Sun, 10 Jan 2021 08:39:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC5323AAA
-	for <linux-kselftest@archiver.kernel.org>; Sat,  9 Jan 2021 01:21:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8519E2395A
+	for <linux-kselftest@archiver.kernel.org>; Sun, 10 Jan 2021 08:39:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbhAIBVm (ORCPT
+        id S1726543AbhAJIja (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 8 Jan 2021 20:21:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36900 "EHLO mail.kernel.org"
+        Sun, 10 Jan 2021 03:39:30 -0500
+Received: from correo.us.es ([193.147.175.20]:38738 "EHLO mail.us.es"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725877AbhAIBVm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jan 2021 20:21:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id CAC5D23AAA;
-        Sat,  9 Jan 2021 01:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610155261;
-        bh=WVjRRUCW/OP4Qg8uW8TFFxhREg5Zs84hORUyHlFnrtE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=U5/vxs6ekC6QAn6r5Lcf78jkNa50M4019uEpqLWISI3d9hUmSuBoMYP89jIUzw0Na
-         /P+QRzoNkKlUYMrZ03vzdApaPv/oYsNbQJgO5FS3dbHGt6n80gxWMNBYDOLxHGiYYp
-         cW33JVqwRQWxLA48M4x21qzsZEn2j01KhQ+deHwcEOPGcwrC5jQHpcrtumWulNkpna
-         xRGUSN8KpQC184lJ6UJ2Ky5VXJWll9sYKhbFFPVJTfHH6g55+NTtsvLYi0pSOvgA4Y
-         lh6nKOWyY0iT/DDP+tbnWr5vfcKbeFwfLtJCjRT88pb7ckBmfKyJYm0wQhtue5EI5X
-         MFw31ed/Xf2gQ==
-Subject: Re: [GIT PULL] KUnit update for Linux 5.11-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <7410da21-2442-1bb9-1dc9-0ec79483e9d3@linuxfoundation.org>
-References: <7410da21-2442-1bb9-1dc9-0ec79483e9d3@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7410da21-2442-1bb9-1dc9-0ec79483e9d3@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.11-rc3
-X-PR-Tracked-Commit-Id: 65a4e5299739abe0888cda0938d21f8ea3b5c606
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 263da3330f6c0e4af603ec62f291e43eb3001f7b
-Message-Id: <161015526178.8938.9637776178639980491.pr-tracker-bot@kernel.org>
-Date:   Sat, 09 Jan 2021 01:21:01 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+        id S1726447AbhAJIja (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 10 Jan 2021 03:39:30 -0500
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 0C864D2AE1
+        for <linux-kselftest@vger.kernel.org>; Sun, 10 Jan 2021 09:38:07 +0100 (CET)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id F2A8BDA793
+        for <linux-kselftest@vger.kernel.org>; Sun, 10 Jan 2021 09:38:06 +0100 (CET)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id E7E6DDA78E; Sun, 10 Jan 2021 09:38:06 +0100 (CET)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id A38F6DA730;
+        Sun, 10 Jan 2021 09:38:04 +0100 (CET)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Sun, 10 Jan 2021 09:38:04 +0100 (CET)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 74006426CC84;
+        Sun, 10 Jan 2021 09:38:04 +0100 (CET)
+Date:   Sun, 10 Jan 2021 09:38:46 +0100
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     20210104110723.43564-1-yiche@redhat.com
+Cc:     Chen Yi <yiche@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Leo <liuhangbin@gmail.com>
+Subject: Re: [PATCH] selftests: netfilter: Pass family parameter "-f" to
+ conntrack tool
+Message-ID: <20210110083846.GA28611@salvia>
+References: <20210105153120.42710-1-yiche@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210105153120.42710-1-yiche@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 8 Jan 2021 11:57:56 -0700:
+On Tue, Jan 05, 2021 at 11:31:20PM +0800, Chen Yi wrote:
+> Fix nft_conntrack_helper.sh false fail report:
+> 
+> 1) Conntrack tool need "-f ipv6" parameter to show out ipv6 traffic items.
+> 
+> 2) Sleep 1 second after background nc send packet, to make sure check
+> is after this statement executed.
+> 
+> False report:
+> FAIL: ns1-lkjUemYw did not show attached helper ip set via ruleset
+> PASS: ns1-lkjUemYw connection on port 2121 has ftp helper attached
+> ...
+> 
+> After fix:
+> PASS: ns1-2hUniwU2 connection on port 2121 has ftp helper attached
+> PASS: ns2-2hUniwU2 connection on port 2121 has ftp helper attached
+> ...
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.11-rc3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/263da3330f6c0e4af603ec62f291e43eb3001f7b
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Applied.
