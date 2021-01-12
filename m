@@ -2,103 +2,176 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1735C433E6
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 14:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4880C4332B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 14:57:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81DA223121
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 14:03:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9799723107
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 14:57:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728605AbhALOCy (ORCPT
+        id S2389090AbhALO4y (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Jan 2021 09:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728327AbhALOCx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 09:02:53 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B4CC0617A5
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 06:01:31 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id h16so2409337edt.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 06:01:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x0YUj1+zjl+/xGU2slFlAP8CkLypp1CdWTvlwp1GroY=;
-        b=I/9wyV1A3JsKrGZjPBsUfMhP4rl+e+p0AXnUvthIkVW5rIGUCd3nER7MS38cM9xtEa
-         oJ7N098+ITPAOTtOn/9A6l05RZVXGMmFdt3QLjvfCDxiOXLIvZaa/0gPBtP1tV84W3Bz
-         sce1BPEb2sYrwMR83wNMRX4wZLZ9GdB8ztujvwg6PL83v9t8sV/XNHlC5F84IssFds7o
-         XNL7uFWPVjnGo8fJhTy/yk+qscito/aEXYyJGTMUo3q+WScfg35YJ0ZiBmKhd9+J81mp
-         emob1lSxntMDSRHQ7c8Ec96ZIMv0H9GCV1AeULAdTaBG/rao6r6bpEEhCVub3+Z2sgGM
-         076Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=x0YUj1+zjl+/xGU2slFlAP8CkLypp1CdWTvlwp1GroY=;
-        b=JppKyHhJlZRW/Eg7d7Z/PL6U9AYmTeiA4GXmvur46rSLlGYQy/XuohrVjTfgW8Za2c
-         2OrO6Jx6pR59EtSG0QCyfA87UJfuLtjk/v39leNo0xjVw1U8GArdjPKRzx+ILm9HYzkd
-         mGC5qrluk7Pnn+DKezypsL0Ys3NJ1Ff+rAR85qYy65r3oa0g23v53+36l/6sZEiYFcqH
-         J4HBYLJQwdGnL44KtQUXtczdecACXJRc+6GE6JtxwItnGbP6Oe8hOi9dzuN8ntq3PsE/
-         N1B2BfPyrwQcY+3AZmZazoXnZV/3IsivqgwMPr3OZGl6aUarEEmape/4bjYWqbtZZQYt
-         WyEA==
-X-Gm-Message-State: AOAM530NmM23I44R6fQ6XaYrT5EKl259ywM9kclV0YE0hg/RsCeQnhSs
-        j9z6Sham3NoWOIKoUqPuuk/vhg==
-X-Google-Smtp-Source: ABdhPJyXw0Kj8q+RBw0xlDBiAfkrYa6nduRBvyDUPnzluIebbL9pnbrvbwlHWfGZmGNnlUN42X1p4w==
-X-Received: by 2002:aa7:c253:: with SMTP id y19mr3471449edo.179.1610460090237;
-        Tue, 12 Jan 2021 06:01:30 -0800 (PST)
-Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id t19sm1227846ejc.62.2021.01.12.06.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 06:01:29 -0800 (PST)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     bpf@vger.kernel.org
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 4/5] selftests/bpf: Fix installation of urandom_read
-Date:   Tue, 12 Jan 2021 14:59:59 +0100
-Message-Id: <20210112135959.649075-5-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210112135959.649075-1-jean-philippe@linaro.org>
-References: <20210112135959.649075-1-jean-philippe@linaro.org>
+        Tue, 12 Jan 2021 09:56:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725901AbhALO4x (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Jan 2021 09:56:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 41C3D23135
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 14:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610463372;
+        bh=qme/Mg8GwGx197LNmKM/I8ea4z8PwVO+XEsx8eGoIzA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=alNY+VjmDFGHqReI69N1lfH/vDZnLe+IUsBT8m2MV7/oMWmQ6bbNRmcQBMN+pElTM
+         JMN1n9ig/mu5H8/tb+3D/aRSSU11TuoSRwagwF7EtpXKFEIR2tyq6MFu82vwhB3fkg
+         cleDumE5IBrXgpXs7Ypf2L2kVEZpd9eWF0TlzcALpPeK/DAB30u3Qr6y87GGyKEMpT
+         G4qzNgdsM1C+M20Y0OSDliJVklIy7+DKQJanJw7KGYt48F+EU3hiuvcJlaaKmGiSIU
+         SDgVRk4YydGqrqx/9RYGuJmmVmdCnBVENJmNrHxmjIg0X6+vktU3NbjaxMVBAmWx6+
+         XMWAHRW9fpSPw==
+Received: by mail-lf1-f47.google.com with SMTP id o10so3726984lfl.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 06:56:12 -0800 (PST)
+X-Gm-Message-State: AOAM531ePb/hQMy9qT9rJZgY4fBP+gOgyr10gRUNpJ+7PbuSY/np4QFU
+        +WjdCFR+OTmqPZY3FfmKyWHkdjyY6X2DT3xp4fU4IA==
+X-Google-Smtp-Source: ABdhPJxJB67nGjoVEE0nPESefr34kA2uyVpLEIopKGpL9JurD2jiOnMs8cjpg/eh/Cx5cFsSygdjU/lPZ5ghdhhRPRI=
+X-Received: by 2002:a19:810:: with SMTP id 16mr2418512lfi.233.1610463370437;
+ Tue, 12 Jan 2021 06:56:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210112091545.10535-1-gilad.reti@gmail.com>
+In-Reply-To: <20210112091545.10535-1-gilad.reti@gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 12 Jan 2021 15:55:59 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ69serkHRymzDEAcQ-_KAdHA+RxP4qpAwzGmppWUxYeQQ@mail.gmail.com>
+Message-ID: <CACYkzJ69serkHRymzDEAcQ-_KAdHA+RxP4qpAwzGmppWUxYeQQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: add verifier test for PTR_TO_MEM spill
+To:     Gilad Reti <gilad.reti@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For out-of-tree builds, $(TEST_CUSTOM_PROGS) require the $(OUTPUT)
-prefix, otherwise the kselftest lib doesn't know how to install them:
+On Tue, Jan 12, 2021 at 10:16 AM Gilad Reti <gilad.reti@gmail.com> wrote:
+>
+> Add test to check that the verifier is able to recognize spilling of
+> PTR_TO_MEM registers.
+>
 
-rsync: [sender] link_stat "tools/testing/selftests/bpf/urandom_read" failed: No such file or directory (2)
+It would be nice to have some explanation of what the test does to
+recognize the spilling of the PTR_TO_MEM registers in the commit
+log as well.
 
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
----
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Would it be possible to augment an existing test_progs
+program like tools/testing/selftests/bpf/progs/test_ringbuf.c to test
+this functionality?
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 046848c508d1..bffb4ad59a3d 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -82,7 +82,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
- 	xdpxceiver
- 
--TEST_CUSTOM_PROGS = urandom_read
-+TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
- 
- # Emit succinct information message describing current building step
- # $1 - generic step name (e.g., CC, LINK, etc);
--- 
-2.30.0
 
+
+> The patch was partially contibuted by CyberArk Software, Inc.
+>
+> Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/test_verifier.c   | 12 +++++++-
+>  .../selftests/bpf/verifier/spill_fill.c       | 30 +++++++++++++++++++
+>  2 files changed, 41 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+> index 777a81404fdb..f8569f04064b 100644
+> --- a/tools/testing/selftests/bpf/test_verifier.c
+> +++ b/tools/testing/selftests/bpf/test_verifier.c
+> @@ -50,7 +50,7 @@
+>  #define MAX_INSNS      BPF_MAXINSNS
+>  #define MAX_TEST_INSNS 1000000
+>  #define MAX_FIXUPS     8
+> -#define MAX_NR_MAPS    20
+> +#define MAX_NR_MAPS    21
+>  #define MAX_TEST_RUNS  8
+>  #define POINTER_VALUE  0xcafe4all
+>  #define TEST_DATA_LEN  64
+> @@ -87,6 +87,7 @@ struct bpf_test {
+>         int fixup_sk_storage_map[MAX_FIXUPS];
+>         int fixup_map_event_output[MAX_FIXUPS];
+>         int fixup_map_reuseport_array[MAX_FIXUPS];
+> +       int fixup_map_ringbuf[MAX_FIXUPS];
+>         const char *errstr;
+>         const char *errstr_unpriv;
+>         uint32_t insn_processed;
+> @@ -640,6 +641,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+>         int *fixup_sk_storage_map = test->fixup_sk_storage_map;
+>         int *fixup_map_event_output = test->fixup_map_event_output;
+>         int *fixup_map_reuseport_array = test->fixup_map_reuseport_array;
+> +       int *fixup_map_ringbuf = test->fixup_map_ringbuf;
+>
+>         if (test->fill_helper) {
+>                 test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
+> @@ -817,6 +819,14 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+>                         fixup_map_reuseport_array++;
+>                 } while (*fixup_map_reuseport_array);
+>         }
+> +       if (*fixup_map_ringbuf) {
+> +               map_fds[20] = create_map(BPF_MAP_TYPE_RINGBUF, 0,
+> +                                          0, 4096);
+> +               do {
+> +                       prog[*fixup_map_ringbuf].imm = map_fds[20];
+> +                       fixup_map_ringbuf++;
+> +               } while (*fixup_map_ringbuf);
+> +       }
+>  }
+>
+>  struct libcap {
+> diff --git a/tools/testing/selftests/bpf/verifier/spill_fill.c b/tools/testing/selftests/bpf/verifier/spill_fill.c
+> index 45d43bf82f26..1833b6c730dd 100644
+> --- a/tools/testing/selftests/bpf/verifier/spill_fill.c
+> +++ b/tools/testing/selftests/bpf/verifier/spill_fill.c
+> @@ -28,6 +28,36 @@
+>         .result = ACCEPT,
+>         .result_unpriv = ACCEPT,
+>  },
+> +{
+> +       "check valid spill/fill, ptr to mem",
+> +       .insns = {
+> +       /* reserve 8 byte ringbuf memory */
+> +       BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+> +       BPF_LD_MAP_FD(BPF_REG_1, 0),
+> +       BPF_MOV64_IMM(BPF_REG_2, 8),
+> +       BPF_MOV64_IMM(BPF_REG_3, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_reserve),
+> +       /* store a pointer to the reserved memory in R6 */
+> +       BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
+> +       /* check whether the reservation was successful */
+> +       BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
+> +       /* spill R6(mem) into the stack */
+> +       BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, -8),
+> +       /* fill it back in R7 */
+> +       BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, -8),
+> +       /* should be able to access *(R7) = 0 */
+> +       BPF_ST_MEM(BPF_DW, BPF_REG_7, 0, 0),
+> +       /* submit the reserved rungbuf memory */
+> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_7),
+> +       BPF_MOV64_IMM(BPF_REG_2, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_submit),
+> +       BPF_MOV64_IMM(BPF_REG_0, 0),
+> +       BPF_EXIT_INSN(),
+> +       },
+> +       .fixup_map_ringbuf = { 1 },
+> +       .result = ACCEPT,
+> +       .result_unpriv = ACCEPT,
+> +},
+>  {
+>         "check corrupted spill/fill",
+>         .insns = {
+> --
+> 2.27.0
+>
