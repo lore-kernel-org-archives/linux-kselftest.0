@@ -8,62 +8,61 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9511C4332D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC75BC43332
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:46:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B679D23125
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:45:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C56C23123
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388348AbhALVok (ORCPT
+        id S1732892AbhALVoC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Jan 2021 16:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        Tue, 12 Jan 2021 16:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393417AbhALVoi (ORCPT
+        with ESMTP id S1733146AbhALVn6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 16:44:38 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB96BC061388
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:43:08 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id v138so9497pfc.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:43:08 -0800 (PST)
+        Tue, 12 Jan 2021 16:43:58 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92121C0617BE
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:43:03 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id x64so67307yba.23
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:43:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=UHsuR0nT6WMKQM9ik4lrOBWRDrvI9ZwQXAwKkOZ8kqc=;
-        b=BMYO4dcCRRU3SxaNie389dAXHwFZMZzJc/V1PZFvn3DdeB5RRUVrRXfTnE0KtKsnMw
-         KHVJBXK+GaDN+AkXKvYmBbzBm+nPIpDNyF50MB1nbN5J6IvAakiMimZYQti3qtsfhbLt
-         xCos/m9DFAZlaxd3vPnXYwQI88tGXzM6UCGyY58vOSQGw1Eaq1BWU5uV5BapJ84jdB9p
-         8PSuQvv+PLt1RruS1eTgUefWNpfbb+UvBovVB5zNfxqRb04JTX6vuaQ2x9XxFaG+p6Cz
-         TMtWtZv5TuoitvOeUkLEMcBmijEiCmffLNtPbLbFNvelxBwETuYq8NVT90w1p+SCVMDw
-         loQQ==
+        bh=QesXjU8b1dHyvLy/TubleiHBc9h4FBDuAQnl/uZ5MtQ=;
+        b=kbYf2CU35PRWQho9pYs5dH+xvLWBEOhB+l+RXMA6rL2UwKnFHlFdPahz6Et8cbS4EO
+         AApERsLHBYn9nyVPLvgrdkoJjNZlfWR/PF9MBgTvs6eH4PYfZM89O/LR8R8stzy4YyHu
+         /AwOKH3pkP3F6epxE0ZzhzkQpgq+UnOHiIJqYgFz7VZvjFCnxiV02ndnxyRkgJdQQTVx
+         ngPiLN97VsnKkQUa+0tXlawzxFHfFTKnpFlubO17fDagV1Mj1Nl8EJeAkeF7ARrKmnmZ
+         IEIwVzjZhSTTJLeCW/lxoWf83OFoR57KhuZrYCUUr5lU945ysFpiUJwNd2Hho1zApzJ9
+         dcJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=UHsuR0nT6WMKQM9ik4lrOBWRDrvI9ZwQXAwKkOZ8kqc=;
-        b=kdz4K3MB77u2UgGWAfUXVNAoHsIFs2RPSnhGEUkwbi0YW038gx9+2kACxAqoAVGav+
-         caXiFR9+Hy9boo2doDhOxAL6kVDxAXwXt4hROMhszSYe8NodRwuDWD5GeXlPQH91Rj/E
-         fcVbgW3MMRd+HRpY4toIaWKr+iuDRsB29krhHDIy5sWqFFLUXfUNR+h9ML1DCLr9tUIA
-         v9MJN8l2Vrp9/SRjXCarx14Ird95402us3k45ml2zRtji5eombn3P8VolTo3SjYGeVc0
-         Q/nMXLhMEi1eSX1GmeTGockaW/vszvfimqPLALa7HI/AvgFhbW7hd0RG9pcZ9UTfDcci
-         hGjg==
-X-Gm-Message-State: AOAM532HtAjndC9gNJcylYHXHX4KtvhdU6f475pLkaeWsTnOqSF8hcIp
-        JaBoG5Xc7bdTdq6Uqxo162hhuN5DRcRH
-X-Google-Smtp-Source: ABdhPJywxoluJaA07dfgiDeqhNcKe09bdzGRc1m/DJsxyWyap1Jl2Jmji+KUelZUFdVMmbXgh8xiY601jFYH
+        bh=QesXjU8b1dHyvLy/TubleiHBc9h4FBDuAQnl/uZ5MtQ=;
+        b=tgJUd/GUKYN8qhIPYoYoRClJHA08/Fi+fx0swdEhHFf/q+PQYI1qAqoOXkAirB02k7
+         Yczup4YPbNoSz7y1zeOUePT1QvtfZQY/VKUN0WYzvZpXtl40vFuGGyYU16RLpGoaK2ry
+         xTfO3rec4cOi2L4olfCyb8ByMeB5IXzXV1uuR/L+nODOzvj/CSZxukvl9QUhTUjY7IL8
+         gWaICM7DaZlLgBf8ZzcwKNCtzVcpPVj6EiJjKUt3KMh8P/bOHS7GK/RUkt21z86Am8Kt
+         nluYnAnfzM/9XcV8bpJTik0ek3+UQBA4bygWt7ehZStkiEw/BPPzGMXanNe3hPl2v+KQ
+         mgiA==
+X-Gm-Message-State: AOAM530knhoAo27RcWqjp3nXRW5EyWBFnDizAq/eTwOJzGSD+9h7LSwk
+        eZL/e5LFvlRFxqRkF+A9ezqdbOOJHYdM
+X-Google-Smtp-Source: ABdhPJxM/RMdfYC4s6KuwnYuG2v9RBQprCahhsWA2zJ3lBz3mnKteeAAsA6CHiFsY/USr4csAyrs9HlEMIg8
 Sender: "bgardon via sendgmr" <bgardon@bgardon.sea.corp.google.com>
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:f693:9fff:fef4:a293])
- (user=bgardon job=sendgmr) by 2002:a17:903:22c9:b029:dc:9b7f:bd13 with SMTP
- id y9-20020a17090322c9b02900dc9b7fbd13mr1337579plg.67.1610487788350; Tue, 12
- Jan 2021 13:43:08 -0800 (PST)
-Date:   Tue, 12 Jan 2021 13:42:53 -0800
+ (user=bgardon job=sendgmr) by 2002:a25:1241:: with SMTP id
+ 62mr2347892ybs.366.1610487782652; Tue, 12 Jan 2021 13:43:02 -0800 (PST)
+Date:   Tue, 12 Jan 2021 13:42:50 -0800
 In-Reply-To: <20210112214253.463999-1-bgardon@google.com>
-Message-Id: <20210112214253.463999-7-bgardon@google.com>
+Message-Id: <20210112214253.463999-4-bgardon@google.com>
 Mime-Version: 1.0
 References: <20210112214253.463999-1-bgardon@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH 6/6] KVM: selftests: Add memslot modification stress test
+Subject: [PATCH 3/6] KVM: selftests: Convert iterations to int in dirty_log_perf_test
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -79,265 +78,126 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a memslot modification stress test in which a memslot is repeatedly
-created and removed while vCPUs access memory in another memslot. Most
-userspaces do not create or remove memslots on running VMs which makes
-it hard to test races in adding and removing memslots without a
-dedicated test. Adding and removing a memslot also has the effect of
-tearing down the entire paging structure, which leads to more page
-faults and pressure on the page fault handling path than a one-and-done
-memory population test.
+In order to add an iteration -1 to indicate that the memory population
+phase has not yet completed, convert the interations counters to ints.
+
+No functional change intended.
 
 Reviewed-by: Jacob Xu <jacobhxu@google.com>
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../kvm/memslot_modification_stress_test.c    | 211 ++++++++++++++++++
- 3 files changed, 213 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/memslot_modification_stress_test.c
+ .../selftests/kvm/dirty_log_perf_test.c       | 26 +++++++++----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index ce8f4ad39684..5a9aebfd5e01 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -29,5 +29,6 @@
- /dirty_log_test
- /dirty_log_perf_test
- /kvm_create_max_vcpus
-+/memslot_modification_stress_test
- /set_memory_region_test
- /steal_time
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index fe41c6a0fa67..df208dc4f2ed 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -63,6 +63,7 @@ TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += dirty_log_perf_test
- TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-+TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
- TEST_GEN_PROGS_x86_64 += set_memory_region_test
- TEST_GEN_PROGS_x86_64 += steal_time
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 15a9c45bdb5f..3875f22d7283 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -28,8 +28,8 @@ static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
+ /* Host variables */
+ static u64 dirty_log_manual_caps;
+ static bool host_quit;
+-static uint64_t iteration;
+-static uint64_t vcpu_last_completed_iteration[KVM_MAX_VCPUS];
++static int iteration;
++static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
  
-diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-new file mode 100644
-index 000000000000..cae1b90cb63f
---- /dev/null
-+++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-@@ -0,0 +1,211 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KVM memslot modification stress test
-+ * Adapted from demand_paging_test.c
-+ *
-+ * Copyright (C) 2018, Red Hat, Inc.
-+ * Copyright (C) 2020, Google, Inc.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_name */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include <asm/unistd.h>
-+#include <time.h>
-+#include <poll.h>
-+#include <pthread.h>
-+#include <linux/bitmap.h>
-+#include <linux/bitops.h>
-+#include <linux/userfaultfd.h>
-+
-+#include "perf_test_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "guest_modes.h"
-+
-+#define DUMMY_MEMSLOT_INDEX 7
-+
-+#define DEFAULT_MEMSLOT_MODIFICATION_ITERATIONS 10
-+
-+
-+static int nr_vcpus = 1;
-+static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
-+
-+static bool run_vcpus = true;
-+
-+static void *vcpu_worker(void *data)
-+{
-+	int ret;
-+	struct perf_test_vcpu_args *vcpu_args =
-+		(struct perf_test_vcpu_args *)data;
-+	int vcpu_id = vcpu_args->vcpu_id;
-+	struct kvm_vm *vm = perf_test_args.vm;
-+	struct kvm_run *run;
-+
-+	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
-+	run = vcpu_state(vm, vcpu_id);
-+
-+	/* Let the guest access its memory until a stop signal is received */
-+	while (READ_ONCE(run_vcpus)) {
-+		ret = _vcpu_run(vm, vcpu_id);
-+		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-+
-+		if (get_ucall(vm, vcpu_id, NULL) == UCALL_SYNC)
-+			continue;
-+
-+		TEST_ASSERT(false,
-+			    "Invalid guest sync status: exit_reason=%s\n",
-+			    exit_reason_str(run->exit_reason));
-+	}
-+
-+	return NULL;
-+}
-+
-+struct memslot_antagonist_args {
-+	struct kvm_vm *vm;
-+	useconds_t delay;
-+	uint64_t nr_modifications;
-+};
-+
-+static void add_remove_memslot(struct kvm_vm *vm, useconds_t delay,
-+			      uint64_t nr_modifications, uint64_t gpa)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_modifications; i++) {
-+		usleep(delay);
-+		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, gpa,
-+					    DUMMY_MEMSLOT_INDEX, 1, 0);
-+
-+		vm_mem_region_delete(vm, DUMMY_MEMSLOT_INDEX);
-+	}
-+}
-+
-+struct test_params {
-+	useconds_t memslot_modification_delay;
-+	uint64_t nr_memslot_modifications;
-+	bool partition_vcpu_memory_access;
-+};
-+
-+static void run_test(enum vm_guest_mode mode, void *arg)
-+{
-+	struct test_params *p = arg;
-+	pthread_t *vcpu_threads;
-+	struct kvm_vm *vm;
-+	int vcpu_id;
-+
-+	vm = perf_test_create_vm(mode, nr_vcpus, guest_percpu_mem_size);
-+
-+	perf_test_args.wr_fract = 1;
-+
-+	vcpu_threads = malloc(nr_vcpus * sizeof(*vcpu_threads));
-+	TEST_ASSERT(vcpu_threads, "Memory allocation failed");
-+
-+	perf_test_setup_vcpus(vm, nr_vcpus, guest_percpu_mem_size,
-+			      p->partition_vcpu_memory_access);
-+
-+	/* Export the shared variables to the guest */
-+	sync_global_to_guest(vm, perf_test_args);
-+
-+	pr_info("Finished creating vCPUs\n");
-+
-+	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++)
-+		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
-+			       &perf_test_args.vcpu_args[vcpu_id]);
-+
-+	pr_info("Started all vCPUs\n");
-+
-+	add_remove_memslot(vm, p->memslot_modification_delay,
-+			   p->nr_memslot_modifications,
-+			   guest_test_phys_mem +
-+			   (guest_percpu_mem_size * nr_vcpus) +
-+			   perf_test_args.host_page_size +
-+			   perf_test_args.guest_page_size);
-+
-+	run_vcpus = false;
-+
-+	/* Wait for the vcpu threads to quit */
-+	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++)
-+		pthread_join(vcpu_threads[vcpu_id], NULL);
-+
-+	pr_info("All vCPU threads joined\n");
-+
-+	ucall_uninit(vm);
-+	kvm_vm_free(vm);
-+
-+	free(vcpu_threads);
-+}
-+
-+static void help(char *name)
-+{
-+	puts("");
-+	printf("usage: %s [-h] [-m mode] [-d delay_usec]\n"
-+	       "          [-b memory] [-v vcpus] [-o] [-i iterations]\n", name);
-+	guest_modes_help();
-+	printf(" -d: add a delay between each iteration of adding and\n"
-+	       "     deleting a memslot in usec.\n");
-+	printf(" -b: specify the size of the memory region which should be\n"
-+	       "     accessed by each vCPU. e.g. 10M or 3G.\n"
-+	       "     Default: 1G\n");
-+	printf(" -v: specify the number of vCPUs to run.\n");
-+	printf(" -o: Overlap guest memory accesses instead of partitioning\n"
-+	       "     them into a separate region of memory for each vCPU.\n");
-+	printf(" -i: specify the number of iterations of adding and removing\n"
-+	       "     a memslot.\n"
-+	       "     Default: %d\n", DEFAULT_MEMSLOT_MODIFICATION_ITERATIONS);
-+	puts("");
-+	exit(0);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-+	int opt;
-+	struct test_params p = {
-+		.memslot_modification_delay = 0,
-+		.nr_memslot_modifications =
-+			DEFAULT_MEMSLOT_MODIFICATION_ITERATIONS,
-+		.partition_vcpu_memory_access = true
-+	};
-+
-+	guest_modes_append_default();
-+
-+	while ((opt = getopt(argc, argv, "hm:d:b:v:oi:")) != -1) {
-+		switch (opt) {
-+		case 'm':
-+			guest_modes_cmdline(optarg);
-+			break;
-+		case 'd':
-+			p.memslot_modification_delay = strtoul(optarg, NULL, 0);
-+			TEST_ASSERT(p.memslot_modification_delay >= 0,
-+				    "A negative delay is not supported.");
-+			break;
-+		case 'b':
-+			guest_percpu_mem_size = parse_size(optarg);
-+			break;
-+		case 'v':
-+			nr_vcpus = atoi(optarg);
-+			TEST_ASSERT(nr_vcpus > 0 && nr_vcpus <= max_vcpus,
-+				    "Invalid number of vcpus, must be between 1 and %d",
-+				    max_vcpus);
-+			break;
-+		case 'o':
-+			p.partition_vcpu_memory_access = false;
-+			break;
-+		case 'i':
-+			p.nr_memslot_modifications = atoi(optarg);
-+			break;
-+		case 'h':
-+		default:
-+			help(argv[0]);
-+			break;
-+		}
-+	}
-+
-+	for_each_guest_mode(run_test, &p);
-+
-+	return 0;
-+}
+ static void *vcpu_worker(void *data)
+ {
+@@ -48,7 +48,7 @@ static void *vcpu_worker(void *data)
+ 	run = vcpu_state(vm, vcpu_id);
+ 
+ 	while (!READ_ONCE(host_quit)) {
+-		uint64_t current_iteration = READ_ONCE(iteration);
++		int current_iteration = READ_ONCE(iteration);
+ 
+ 		clock_gettime(CLOCK_MONOTONIC, &start);
+ 		ret = _vcpu_run(vm, vcpu_id);
+@@ -61,17 +61,17 @@ static void *vcpu_worker(void *data)
+ 
+ 		pr_debug("Got sync event from vCPU %d\n", vcpu_id);
+ 		vcpu_last_completed_iteration[vcpu_id] = current_iteration;
+-		pr_debug("vCPU %d updated last completed iteration to %lu\n",
++		pr_debug("vCPU %d updated last completed iteration to %d\n",
+ 			 vcpu_id, vcpu_last_completed_iteration[vcpu_id]);
+ 
+ 		if (current_iteration) {
+ 			pages_count += vcpu_args->pages;
+ 			total = timespec_add(total, ts_diff);
+-			pr_debug("vCPU %d iteration %lu dirty memory time: %ld.%.9lds\n",
++			pr_debug("vCPU %d iteration %d dirty memory time: %ld.%.9lds\n",
+ 				vcpu_id, current_iteration, ts_diff.tv_sec,
+ 				ts_diff.tv_nsec);
+ 		} else {
+-			pr_debug("vCPU %d iteration %lu populate memory time: %ld.%.9lds\n",
++			pr_debug("vCPU %d iteration %d populate memory time: %ld.%.9lds\n",
+ 				vcpu_id, current_iteration, ts_diff.tv_sec,
+ 				ts_diff.tv_nsec);
+ 		}
+@@ -81,7 +81,7 @@ static void *vcpu_worker(void *data)
+ 	}
+ 
+ 	avg = timespec_div(total, vcpu_last_completed_iteration[vcpu_id]);
+-	pr_debug("\nvCPU %d dirtied 0x%lx pages over %lu iterations in %ld.%.9lds. (Avg %ld.%.9lds/iteration)\n",
++	pr_debug("\nvCPU %d dirtied 0x%lx pages over %d iterations in %ld.%.9lds. (Avg %ld.%.9lds/iteration)\n",
+ 		vcpu_id, pages_count, vcpu_last_completed_iteration[vcpu_id],
+ 		total.tv_sec, total.tv_nsec, avg.tv_sec, avg.tv_nsec);
+ 
+@@ -144,7 +144,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	}
+ 
+ 	/* Allow the vCPU to populate memory */
+-	pr_debug("Starting iteration %lu - Populating\n", iteration);
++	pr_debug("Starting iteration %d - Populating\n", iteration);
+ 	while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id]) != iteration)
+ 		;
+ 
+@@ -168,7 +168,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		clock_gettime(CLOCK_MONOTONIC, &start);
+ 		iteration++;
+ 
+-		pr_debug("Starting iteration %lu\n", iteration);
++		pr_debug("Starting iteration %d\n", iteration);
+ 		for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+ 			while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
+ 			       != iteration)
+@@ -177,7 +177,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 		ts_diff = timespec_elapsed(start);
+ 		vcpu_dirty_total = timespec_add(vcpu_dirty_total, ts_diff);
+-		pr_info("Iteration %lu dirty memory time: %ld.%.9lds\n",
++		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
+ 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+ 		clock_gettime(CLOCK_MONOTONIC, &start);
+@@ -186,7 +186,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		ts_diff = timespec_elapsed(start);
+ 		get_dirty_log_total = timespec_add(get_dirty_log_total,
+ 						   ts_diff);
+-		pr_info("Iteration %lu get dirty log time: %ld.%.9lds\n",
++		pr_info("Iteration %d get dirty log time: %ld.%.9lds\n",
+ 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+ 		if (dirty_log_manual_caps) {
+@@ -197,7 +197,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 			ts_diff = timespec_elapsed(start);
+ 			clear_dirty_log_total = timespec_add(clear_dirty_log_total,
+ 							     ts_diff);
+-			pr_info("Iteration %lu clear dirty log time: %ld.%.9lds\n",
++			pr_info("Iteration %d clear dirty log time: %ld.%.9lds\n",
+ 				iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 		}
+ 	}
+@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
+ 	while ((opt = getopt(argc, argv, "hi:p:m:b:f:v:")) != -1) {
+ 		switch (opt) {
+ 		case 'i':
+-			p.iterations = strtol(optarg, NULL, 10);
++			p.iterations = atoi(optarg);
+ 			break;
+ 		case 'p':
+ 			p.phys_offset = strtoull(optarg, NULL, 0);
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
