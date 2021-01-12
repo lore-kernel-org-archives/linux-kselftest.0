@@ -2,65 +2,68 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64622C4332E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:44:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C770C43333
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:44:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3EF5C23123
+	by mail.kernel.org (Postfix) with ESMTP id 06BD523123
 	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jan 2021 21:44:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388342AbhALVoD (ORCPT
+        id S2390785AbhALVoX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Jan 2021 16:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        Tue, 12 Jan 2021 16:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732602AbhALVn6 (ORCPT
+        with ESMTP id S2388554AbhALVoW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jan 2021 16:43:58 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B787C0617AA
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:42:58 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id m1so79871qvp.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:42:58 -0800 (PST)
+        Tue, 12 Jan 2021 16:44:22 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C6EC0617BB
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:43:01 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id hg11so2311242pjb.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jan 2021 13:43:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=U+CbYhEX3bk6CbEgkAzVDMsXIsxbjmYTO8NB12RiUfg=;
-        b=ZYv6sEPqBHAArWWsUp2QL2JuEOAXcxNJ/TbleUpNix3Zom4HvsFXD6eBgs0/JiuL8S
-         RcC1e//0CvYuIWl8eVu13IUXE/CsevnVnke/u6pKoUh8iiHXOER4VvVQafnlPnmlAft8
-         IPP4Z4TjBYoZLIA6As9ZWQ3/6zwgdW1r/QykaNd0NxkuFhTYSFysEDk58A8TKx8oCI+4
-         niiR71NrYJaivrHtLYhDIPWFeH4AHZhSo8YIrSKNB19Oq8kd94F/lH+OGNbCfTSoPYIe
-         fJ8FVeeiInuJ3Tlo0Ydy1IEQ4MNRWlX3hErJuv9pGKd75FQd+Htl2xNJa6mB45RXHbDK
-         5RGQ==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=9D60d6a+RHIMvsjgK7MdID+ZQQq9agXyNVhU1xi0rGw=;
+        b=EBPyU4IxquAka6tndKBXi38jGYe9Wc5xSLXCMEuPUAMfc8ERikwZ7Q+5Vaine1yj/s
+         Y94PrhvabXm92lZISmP5lLjXeQDYdfAs7G/6TwGny2haIsc7ifisvoH3ZVgsIao+e0VC
+         ISI+5uZlG5oW/Q+z+GUDj2EXQmC8KPkyDdz+xoh/vppfLBZ0+YXkP/p7jN02Aq6M/C7s
+         AFkBrgvhtyP4AtWcZPtuJuX2dbEtnb5hgqWYTZgHx1bbkMyQF3jQWImrbkzeQGeXKtjq
+         i17XuZWixCsIt1YWWVafD70Pyc3ilK7b1o1bttscqEtXtupV2dQMg2X5k2qSX5kkNHnJ
+         5+/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=U+CbYhEX3bk6CbEgkAzVDMsXIsxbjmYTO8NB12RiUfg=;
-        b=RW/IecmB8ywlsrgakqgk+bxqmkbVo0ZQpvA49pjGNHb1E0GEmpHsrVIjrf7B0AMb7F
-         4owqfrSQ77n2WaydVdPVIM+61ebrABYcYZ62UTqUCO6G44XK1DxMh018NVT5po2q6qg2
-         PcpAk9xbKaSu7/JjbsXu5GX278bGugxAuziH++uWhcVcW4iOH7ermJ8lq914QCddqjBj
-         ruUwnWn7drG2MC3kzHvcZbrf6QCSH/CAhokob5FPD7K1d0TyJ4ryWHtfRuAv/Bv2E4PC
-         ZRwb23z5nWoIIqluiN8yl0zNR5gc6l12nUs39vo7d1cDXqFusumFcUHZvTwI2yzZKJyd
-         Ae6w==
-X-Gm-Message-State: AOAM530s37Lk6342judpRtDnR5Vdsmz1CuThxwgZzPJLJa6W1DbQJaEB
-        i4MYFfSjV94UmwTdhiwninaVTxJOJX49
-X-Google-Smtp-Source: ABdhPJwcwZH2KZ2pN7t1zlwuuRyYOL6A378R4xORgoSVJhlmFt3unwT0CSROZTnrTQpMBKu6C2QJNlR2YppO
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=9D60d6a+RHIMvsjgK7MdID+ZQQq9agXyNVhU1xi0rGw=;
+        b=SBoiV296iD+w2cZ6e/FWOV9yoS6Gl9U1o/QXiBfimK6lxfvpuSKFOVE4qWmQN3kxuv
+         RU74jFI/l/XbwrYXnT4ss0H8lnqyE/Gvn2H8Qb93tQNFHSAcvhLeGp9jz0hYCu7II7HL
+         ijJyDd9AEQHvhLXKzfQhwcvm2iFi7wVshdXHTYSm8LD2sQ/bVrwhr/bdQQfcLm2+K7Uf
+         exWZNjK27VHbjEUFIxZk3Z3954jRpG3MSeYQFDseMN6J7E8/JIMKe2Jx/ApqRcV/7WLT
+         Z0FwlXuTluCycRPXEv4Ruhgntq4rx5Olhrre3DghkSA0ygPf/UfQE7q9xy5++Exja9jH
+         RZJw==
+X-Gm-Message-State: AOAM530yN4w5xe+GZC6Ch6yOk5BEprYz6JYgZiP3e/tI71iZVzI9psxk
+        MkBU1yGWJn4w7bxYXW6ipk/lNvEt7/uL
+X-Google-Smtp-Source: ABdhPJwDLHr7pwodvdrqC9F2QqiLJrBgP+QmgVRLQ9SkvNlPoxHoXuPwjuoAGKu3nulYpXd7GoIetAD+BhmY
 Sender: "bgardon via sendgmr" <bgardon@bgardon.sea.corp.google.com>
 X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:f693:9fff:fef4:a293])
- (user=bgardon job=sendgmr) by 2002:a0c:da87:: with SMTP id
- z7mr1679434qvj.41.1610487777488; Tue, 12 Jan 2021 13:42:57 -0800 (PST)
-Date:   Tue, 12 Jan 2021 13:42:47 -0800
-Message-Id: <20210112214253.463999-1-bgardon@google.com>
+ (user=bgardon job=sendgmr) by 2002:a17:902:ba84:b029:dc:f27:dd4e with SMTP id
+ k4-20020a170902ba84b02900dc0f27dd4emr943795pls.61.1610487780931; Tue, 12 Jan
+ 2021 13:43:00 -0800 (PST)
+Date:   Tue, 12 Jan 2021 13:42:49 -0800
+In-Reply-To: <20210112214253.463999-1-bgardon@google.com>
+Message-Id: <20210112214253.463999-3-bgardon@google.com>
 Mime-Version: 1.0
+References: <20210112214253.463999-1-bgardon@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH 0/6] KVM: selftests: Perf test cleanups and memslot
- modification test
+Subject: [PATCH 2/6] KVM: selftests: Avoid flooding debug log while populating memory
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -76,63 +79,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series contains a few cleanups that didn't make it into previous
-series, including some cosmetic changes and small bug fixes. The series
-also lays the groundwork for a memslot modification test which stresses
-the memslot update and page fault code paths in an attempt to expose races.
+Peter Xu pointed out that a log message printed while waiting for the
+memory population phase of the dirty_log_perf_test will flood the debug
+logs as there is no delay after printing the message. Since the message
+does not provide much value anyway, remove it.
 
-Tested: dirty_log_perf_test, memslot_modification_stress_test, and
-	demand_paging_test were run, with all the patches in this series
-	applied, on an Intel Skylake machine.
+Reviewed-by: Jacob Xu <jacobhxu@google.com>
 
-	echo Y > /sys/module/kvm/parameters/tdp_mmu; \
-	./memslot_modification_stress_test -i 1000 -v 64 -b 1G; \
-	./memslot_modification_stress_test -i 1000 -v 64 -b 64M -o; \
-	./dirty_log_perf_test -v 64 -b 1G; \
-	./dirty_log_perf_test -v 64 -b 64M -o; \
-	./demand_paging_test -v 64 -b 1G; \
-	./demand_paging_test -v 64 -b 64M -o; \
-	echo N > /sys/module/kvm/parameters/tdp_mmu; \
-	./memslot_modification_stress_test -i 1000 -v 64 -b 1G; \
-	./memslot_modification_stress_test -i 1000 -v 64 -b 64M -o; \
-	./dirty_log_perf_test -v 64 -b 1G; \
-	./dirty_log_perf_test -v 64 -b 64M -o; \
-	./demand_paging_test -v 64 -b 1G; \
-	./demand_paging_test -v 64 -b 64M -o
+Signed-off-by: Ben Gardon <bgardon@google.com>
+---
+ tools/testing/selftests/kvm/dirty_log_perf_test.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-	The tests behaved as expected, and fixed the problem of the
-	population stage being skipped in dirty_log_perf_test. This can be
-	seen in the output, with the population stage taking about the time
-	dirty pass 1 took and dirty pass 1 falling closer to the times for
-	the other passes.
-
-Note that when running these tests, the -o option causes the test to take
-much longer as the work each vCPU must do increases proportional to the
-number of vCPUs.
-
-You can view this series in Gerrit at:
-https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/7216
-
-Ben Gardon (6):
-  KVM: selftests: Rename timespec_diff_now to timespec_elapsed
-  KVM: selftests: Avoid flooding debug log while populating memory
-  KVM: selftests: Convert iterations to int in dirty_log_perf_test
-  KVM: selftests: Fix population stage in dirty_log_perf_test
-  KVM: selftests: Add option to overlap vCPU memory access
-  KVM: selftests: Add memslot modification stress test
-
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/demand_paging_test.c        |  40 +++-
- .../selftests/kvm/dirty_log_perf_test.c       |  72 +++---
- .../selftests/kvm/include/perf_test_util.h    |   4 +-
- .../testing/selftests/kvm/include/test_util.h |   2 +-
- .../selftests/kvm/lib/perf_test_util.c        |  25 ++-
- tools/testing/selftests/kvm/lib/test_util.c   |   2 +-
- .../kvm/memslot_modification_stress_test.c    | 211 ++++++++++++++++++
- 9 files changed, 307 insertions(+), 51 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/memslot_modification_stress_test.c
-
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 16efe6589b43..15a9c45bdb5f 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -146,8 +146,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	/* Allow the vCPU to populate memory */
+ 	pr_debug("Starting iteration %lu - Populating\n", iteration);
+ 	while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id]) != iteration)
+-		pr_debug("Waiting for vcpu_last_completed_iteration == %lu\n",
+-			iteration);
++		;
+ 
+ 	ts_diff = timespec_elapsed(start);
+ 	pr_info("Populate memory time: %ld.%.9lds\n",
+@@ -171,9 +170,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 		pr_debug("Starting iteration %lu\n", iteration);
+ 		for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+-			while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id]) != iteration)
+-				pr_debug("Waiting for vCPU %d vcpu_last_completed_iteration == %lu\n",
+-					 vcpu_id, iteration);
++			while (READ_ONCE(vcpu_last_completed_iteration[vcpu_id])
++			       != iteration)
++				;
+ 		}
+ 
+ 		ts_diff = timespec_elapsed(start);
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
