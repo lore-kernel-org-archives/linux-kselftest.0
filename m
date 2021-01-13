@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0158C433DB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Jan 2021 16:36:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FADEC43381
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Jan 2021 16:36:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C7A3235F9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Jan 2021 16:36:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7577235F9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Jan 2021 16:36:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbhAMQgN (ORCPT
+        id S1727720AbhAMQgO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Jan 2021 11:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        Wed, 13 Jan 2021 11:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727630AbhAMQgM (ORCPT
+        with ESMTP id S1727713AbhAMQgO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 11:36:12 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D65C0617A3
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:55 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id e18so3917809ejt.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:55 -0800 (PST)
+        Wed, 13 Jan 2021 11:36:14 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00261C0617A7
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:57 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id b9so4025911ejy.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jan 2021 08:34:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ortZEFtRxUHru0nbidQWEmOXybckovOr5wRf4WEJjFM=;
-        b=a8++npUHoFCwDIM5u6xxezEiajVUXj9kNbUL7gaHw8elD+3ybFg/9Fp2aDjy6UsXnu
-         qo1mWCj7GY0ddbZyrWDHtUOpPrldMvEMxFGKIw55sZk93tnLSyCrwnTn+JJ8Bs8NilUc
-         9n7R5GK1UQCF2f+BlMJX4KnA8U9biEqOaTAoNjbOeWjQQDnjJRorUu3El+/PB/rLDYre
-         V06JGLLOiym+BF4912W6EVw12y1LaEz2LcPZ04yGXUjfW9fxBhEv0lW8OBQHcjZ06aCn
-         lgqSW1xrQsvR7VxUXQ/RgAgGfbaAE01ieNKdIzJDwgnq03JrYOYzey8S0ypxpUpRBRBL
-         tYtA==
+        bh=BdIvDbIaLfjihhRkhU5/HCzUvJ+o4x5+Y+DliwVMXI0=;
+        b=hxRotWBElbEIKPd54uMcTCedGp59nZYVMAeKuPhfY7dKVGEI7lk+k5HRAf5JslUYyd
+         vbFiqyIDHgKPfPUZde154fNm1GroSTz8+gqXxs5MAldGUsy0d8r25SRnnRBp51FUx4lS
+         hjStaBFfh2SmbOxvuJRjGvgs1HRwxB6hsd1LMie5HvPVBJ8vI5LkFdC3avjtmtZtcccy
+         RHWn8tbkEOMWD+W/7LHYCJ6fT0y6JvlSBsLY3cFI9YAakurrVZSPB3M9/o8u0PDNOKf5
+         S+fVjAY3aO2aqeSfdjuNPnwhhFsaOqqI2Z12SRuFv262uPbmwGRGZUbzQqE/5GbZmhpY
+         QxyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ortZEFtRxUHru0nbidQWEmOXybckovOr5wRf4WEJjFM=;
-        b=Mj2oxHfChByzryCT6ss2mJKkv1wvYZAPo91Jo2YyM8Mq0fLYAlxZO92c/1989pA8Qf
-         SIzgj0Hsv7JHoNCMN7FNcuOVaAe25456VuZX50hGBBUe7RtOPJd28G6ZSwocYCWozKuR
-         S01dXphiLRBIXBuf0Uu3E4UkTBTG/JbtxOxq+w5Sr8iRkR2vqodDuvIgEAP+9morAHCy
-         W912wjf3MU/zulGECTvvzNT9whAWTdIqqCf76UCzd5W2ywJT67DHDHxBjoX6S7H9djpO
-         BP1SkuIOelcPkWXke0IgkVUMeKwMylxZGFrz6CmqSudooa5cdvzJut952/8PxLq/5mgN
-         FIPw==
-X-Gm-Message-State: AOAM530QyJoyugVoNyHLmGCnsg853dfjihbIussZ35Hkv0NKR8Nn95B5
-        NUZQWYZVdfgGoF0zb6w+yn5fQg==
-X-Google-Smtp-Source: ABdhPJwbHL5+zAlZGGQxHuywH889qbeJnoolUcK2Rkj5UHFlOgiSCITdApr8ZZqV51Qn0RUa0v/3JA==
-X-Received: by 2002:a17:906:3553:: with SMTP id s19mr2112447eja.95.1610555694454;
-        Wed, 13 Jan 2021 08:34:54 -0800 (PST)
+        bh=BdIvDbIaLfjihhRkhU5/HCzUvJ+o4x5+Y+DliwVMXI0=;
+        b=AeE3W5HfjfVNe4QCM8DkP7/CvI4T07YKREhnzLowXVkbtxWpZP8h8VRmH/Zgx27Jnt
+         6zJuTweDZsTXFauGzCli/2VXHSXyEH+yYvUYsG3BloSmv8PaPD2XMAtHHOjaYjTjZszq
+         1D7mu5frweM6w4k9uQGQ3ELFYzJ8E6vUATn2RleB3kQr5atJxiH8LeBhAdM0Mhdu8i6w
+         nRFrCeJXXtcTAJ4QqbD6meJOznIXspFw5jovga0trBbO2vMzQlFX/2kGf//SDUtrNlvf
+         OpkGjsa6JLWviuF8n+f45mvYMDh6uRrTyvQ+0gFyiDwMcJtadxDdEMmMCP1/c2Ne68+N
+         isJQ==
+X-Gm-Message-State: AOAM5308EixpZeyS370nQ3MiEDrpQCMAQnlocxPIzFnhir6hm44omJYi
+        ZGr5EGu8m1IiFxP/jVXC2ubVAA==
+X-Google-Smtp-Source: ABdhPJxIw5d98gY4xn2J6ZKW1T8RtHRaZ491RfwnxHENsukkA29IZJ+h0+kfMYsI2X45CmHKcS+J8Q==
+X-Received: by 2002:a17:906:bc9b:: with SMTP id lv27mr2079635ejb.505.1610555696700;
+        Wed, 13 Jan 2021 08:34:56 -0800 (PST)
 Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id g25sm923943ejf.15.2021.01.13.08.34.53
+        by smtp.gmail.com with ESMTPSA id g25sm923943ejf.15.2021.01.13.08.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 08:34:53 -0800 (PST)
+        Wed, 13 Jan 2021 08:34:56 -0800 (PST)
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     bpf@vger.kernel.org
 Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
@@ -64,9 +64,9 @@ Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         linux-kselftest@vger.kernel.org,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v2 3/5] selftests/bpf: Move generated test files to $(TEST_GEN_FILES)
-Date:   Wed, 13 Jan 2021 17:33:18 +0100
-Message-Id: <20210113163319.1516382-4-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Install btf_dump test cases
+Date:   Wed, 13 Jan 2021 17:33:20 +0100
+Message-Id: <20210113163319.1516382-6-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210113163319.1516382-1-jean-philippe@linaro.org>
 References: <20210113163319.1516382-1-jean-philippe@linaro.org>
@@ -76,35 +76,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-During an out-of-tree build, attempting to install the $(TEST_FILES)
-into the $(OUTPUT) directory fails, because the objects were already
-generated into $(OUTPUT):
+The btf_dump test cannot access the original source files for comparison
+when running the selftests out of tree, causing several failures:
 
-rsync: [sender] link_stat "tools/testing/selftests/bpf/test_lwt_ip_encap.o" failed: No such file or directory (2)
-rsync: [sender] link_stat "tools/testing/selftests/bpf/test_tc_edt.o" failed: No such file or directory (2)
+awk: btf_dump_test_case_syntax.c: No such file or directory
+...
 
-Use $(TEST_GEN_FILES) instead.
+Add those files to $(TEST_FILES) to have "make install" pick them up.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/testing/selftests/bpf/Makefile | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 92888eed89f3..67cdf858f01f 100644
+index 0fafdc022ac3..7f8667ad113e 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -44,10 +44,9 @@ ifneq ($(BPF_GCC),)
- TEST_GEN_PROGS += test_progs-bpf_gcc
- endif
+@@ -46,7 +46,8 @@ endif
  
--TEST_GEN_FILES =
--TEST_FILES = test_lwt_ip_encap.o \
--	test_tc_edt.o \
--	xsk_prereqs.sh
-+TEST_GEN_FILES = test_lwt_ip_encap.o \
-+	test_tc_edt.o
-+TEST_FILES = xsk_prereqs.sh
+ TEST_GEN_FILES = test_lwt_ip_encap.o \
+ 	test_tc_edt.o
+-TEST_FILES = xsk_prereqs.sh
++TEST_FILES = xsk_prereqs.sh \
++	$(wildcard progs/btf_dump_test_case_*.c)
  
  # Order correspond to 'make run_tests' order
  TEST_PROGS := test_kmod.sh \
