@@ -2,101 +2,199 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B96D9C433E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 04:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F9FC4332E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 08:07:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8165D238E5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 04:03:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39D3B239EB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 08:07:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725902AbhANEDO (ORCPT
+        id S1728316AbhANIGr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Jan 2021 23:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbhANEDN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jan 2021 23:03:13 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BBFC061575;
-        Wed, 13 Jan 2021 20:02:33 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id o19so6136256lfo.1;
-        Wed, 13 Jan 2021 20:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9zbOPoIi8TSOltOZ0lasCpcW26irh6vW30Vtu7ZvdrI=;
-        b=G9sHLPMOqgptKAZS7dyKhCRBvPXAF/JLHLzc5XarOLYayClSxWpLZP/mp068zjZle2
-         aJcguZB3t6UBWMYVPEYMNyp1HuNMOcXIDpUSuTUWmVo4L6RZiayW+HEMgtMkuQloc+wE
-         el14WFuLdU8mz6IJwsjhjIGkQ5DhPnEdUdQf0Jde00BtZQkjscj1PFJPUG8tSAvJ9T6N
-         nuiivM3yqX/7Md0SPfFxmk/A/n9ZKMvYw1kMCvdvM5yJsBBWMieL22QlpHT1SX7LJ0HL
-         XcKEXc4diPe5SIc3wn46C8a0NUUGlEBsKABT8FyrsQhPGDhaIa+BOxyKuP6DA6rdI5Tu
-         j4dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9zbOPoIi8TSOltOZ0lasCpcW26irh6vW30Vtu7ZvdrI=;
-        b=LhcVK+QsFFM5pbvvZ8XajRrdWSUwCgGgIW4cnMdWdKNm/ivVJvDuC/TfVBYcx/5FVg
-         Fxa+H8SP2BNpakaRvCxcUOo1FdsBmTL0WHi7UQgMxDmyhVEw0PRIFlWbe2TeSeIQ6r+t
-         NNCy2FYiuENIp/f6ZHIQ5Jg1ThgHXhORqUmzhxAq+cNHQ2/QdxBPFrJq/FfbS9lMawmz
-         0oYWJgpffyMm5903SYk0OTE0ZTXyJmRWO9oc6hX5l7GAL2gWNpij80IbmYBzS+wie32J
-         5I212uKjSK7bIdXdFqNkVgGHqmTVC1+W2lFGiDj/yu/eimCYfq3fFYMA1kh5Scf6K4wD
-         xtmA==
-X-Gm-Message-State: AOAM533r6mo2XiR62WwIxrHo89gpZyA1kHzpVJLyq3aKZMt1UjVxyCT7
-        Lhjf9aB1Z2GNn8q8kDR/lO3+7rulIIDGnPcFMQw=
-X-Google-Smtp-Source: ABdhPJzyqXQ9gidEN7na/gmJki+J0SdAv0wEhwst9rBKLK8u89tJETmG4Y1lxAZjEgtbBVxwY1gtFE8zlMwJs71GVKc=
-X-Received: by 2002:ac2:43c1:: with SMTP id u1mr2488353lfl.38.1610596951899;
- Wed, 13 Jan 2021 20:02:31 -0800 (PST)
+        Thu, 14 Jan 2021 03:06:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59010 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728117AbhANIGX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 Jan 2021 03:06:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 498F923A21;
+        Thu, 14 Jan 2021 08:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610611500;
+        bh=lsHLlzifMdLeh1RjXgXq4YH0nFTVQMHUlzqRL8ytCbM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BVoPSYZeaO3+EqGZlYd47ZQh+7h2gGRbGYiMnF7O3RGWiop/ZL4bULR6Tj537YLtL
+         2uQRwbluVqEq4qyA7NJbCKAzUoBTwGoKhuPHGPUcgQwbhoyvbNUNru0VrpbR+kEYT+
+         hjKwjdupWkFlnmXj8Z0bVnSBQWq+o4z6OqCq2higqpK4jSZ7XOv8tF3DAicmp6zZCQ
+         eMj0t0MkxZsTPtWKAVe0F4tpTTyNkC/Zsf/TVsgRK89Ijkwutcax5Oa0NVnatprl/z
+         J6gxWLBrkLV0fx3dKG2MHKWIKs+NMxwHhgbyQa/qKu9wP4zNH6dURNHDphm3grayND
+         BtvwYA3/U7C7Q==
+Received: by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kzxco-00EQ6m-5l; Thu, 14 Jan 2021 09:04:58 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 10/16] selftests: kselftest_harness.h: partially fix kernel-doc markups
+Date:   Thu, 14 Jan 2021 09:04:46 +0100
+Message-Id: <8383758160fdb4fcbb2ac56beeb874ca6dffc6b9.1610610937.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <cover.1610610937.git.mchehab+huawei@kernel.org>
+References: <cover.1610610937.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-References: <20210113053810.13518-1-gilad.reti@gmail.com> <CACYkzJ5o7QBR1stFTqxGJv2gbS0qsVKZW6BJ3iBUagy5_S+N0w@mail.gmail.com>
-In-Reply-To: <CACYkzJ5o7QBR1stFTqxGJv2gbS0qsVKZW6BJ3iBUagy5_S+N0w@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 13 Jan 2021 20:02:20 -0800
-Message-ID: <CAADnVQKF=bEzc6UjaSCAyE6dUXsYRXcQe4qBBBczyr75HyVL8A@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: support PTR_TO_MEM{,_OR_NULL} register spilling
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Gilad Reti <gilad.reti@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 2:29 PM KP Singh <kpsingh@kernel.org> wrote:
->
-> On Wed, Jan 13, 2021 at 6:38 AM Gilad Reti <gilad.reti@gmail.com> wrote:
-> >
-> > Add support for pointer to mem register spilling, to allow the verifier
-> > to track pointers to valid memory addresses. Such pointers are returned
-> > for example by a successful call of the bpf_ringbuf_reserve helper.
-> >
-> > The patch was partially contributed by CyberArk Software, Inc.
-> >
-> > Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
-> > Suggested-by: Yonghong Song <yhs@fb.com>
-> > Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
->
-> Acked-by: KP Singh <kpsingh@kernel.org>
+The kernel-doc markups on this file are weird: they don't
+follow what's specified at:
 
-It's a border line feature vs fix.
-Since the patch is trivial and it addresses a real problem I've
-applied to the bpf tree.
-Thanks!
+	Documentation/doc-guide/kernel-doc.rst
+
+In particular, markups should use this format:
+        identifier - description
+
+and not this:
+	identifier(args)
+
+The way the definitions are inside this file cause the
+parser to completely miss the identifier name of each
+function.
+
+This prevents improving the script to do some needed validation
+tests.
+
+Address this part. Yet, furter changes are needed in order
+for it to fully follow the specs.
+
+Acked-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 26 ++++++++++++---------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index edce85420d19..ae0f0f33b2a6 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -79,7 +79,7 @@
+ #endif
+ 
+ /**
+- * TH_LOG(fmt, ...)
++ * TH_LOG()
+  *
+  * @fmt: format string
+  * @...: optional arguments
+@@ -113,12 +113,16 @@
+ 			__FILE__, __LINE__, _metadata->name, ##__VA_ARGS__)
+ 
+ /**
+- * SKIP(statement, fmt, ...)
++ * SKIP()
+  *
+  * @statement: statement to run after reporting SKIP
+  * @fmt: format string
+  * @...: optional arguments
+  *
++ * .. code-block:: c
++ *
++ *     SKIP(statement, fmt, ...);
++ *
+  * This forces a "pass" after reporting why something is being skipped
+  * and runs "statement", which is usually "return" or "goto skip".
+  */
+@@ -136,7 +140,7 @@
+ } while (0)
+ 
+ /**
+- * TEST(test_name) - Defines the test function and creates the registration
++ * TEST() - Defines the test function and creates the registration
+  * stub
+  *
+  * @test_name: test name
+@@ -155,7 +159,7 @@
+ #define TEST(test_name) __TEST_IMPL(test_name, -1)
+ 
+ /**
+- * TEST_SIGNAL(test_name, signal)
++ * TEST_SIGNAL()
+  *
+  * @test_name: test name
+  * @signal: signal number
+@@ -195,7 +199,7 @@
+ 		struct __test_metadata __attribute__((unused)) *_metadata)
+ 
+ /**
+- * FIXTURE_DATA(datatype_name) - Wraps the struct name so we have one less
++ * FIXTURE_DATA() - Wraps the struct name so we have one less
+  * argument to pass around
+  *
+  * @datatype_name: datatype name
+@@ -212,7 +216,7 @@
+ #define FIXTURE_DATA(datatype_name) struct _test_data_##datatype_name
+ 
+ /**
+- * FIXTURE(fixture_name) - Called once per fixture to setup the data and
++ * FIXTURE() - Called once per fixture to setup the data and
+  * register
+  *
+  * @fixture_name: fixture name
+@@ -239,7 +243,7 @@
+ 	FIXTURE_DATA(fixture_name)
+ 
+ /**
+- * FIXTURE_SETUP(fixture_name) - Prepares the setup function for the fixture.
++ * FIXTURE_SETUP() - Prepares the setup function for the fixture.
+  * *_metadata* is included so that EXPECT_* and ASSERT_* work correctly.
+  *
+  * @fixture_name: fixture name
+@@ -265,7 +269,7 @@
+ 			__attribute__((unused)) *variant)
+ 
+ /**
+- * FIXTURE_TEARDOWN(fixture_name)
++ * FIXTURE_TEARDOWN()
+  * *_metadata* is included so that EXPECT_* and ASSERT_* work correctly.
+  *
+  * @fixture_name: fixture name
+@@ -286,7 +290,7 @@
+ 		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
+ 
+ /**
+- * FIXTURE_VARIANT(fixture_name) - Optionally called once per fixture
++ * FIXTURE_VARIANT() - Optionally called once per fixture
+  * to declare fixture variant
+  *
+  * @fixture_name: fixture name
+@@ -305,7 +309,7 @@
+ #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
+ 
+ /**
+- * FIXTURE_VARIANT_ADD(fixture_name, variant_name) - Called once per fixture
++ * FIXTURE_VARIANT_ADD() - Called once per fixture
+  * variant to setup and register the data
+  *
+  * @fixture_name: fixture name
+@@ -339,7 +343,7 @@
+ 		_##fixture_name##_##variant_name##_variant =
+ 
+ /**
+- * TEST_F(fixture_name, test_name) - Emits test registration and helpers for
++ * TEST_F() - Emits test registration and helpers for
+  * fixture-based test cases
+  *
+  * @fixture_name: fixture name
+-- 
+2.29.2
+
