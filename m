@@ -2,246 +2,100 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EC0FC4360C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 08:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81081C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 15:05:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11719239EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 08:07:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F85F23A6C
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 15:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbhANIGq (ORCPT
+        id S1729126AbhANPFQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Jan 2021 03:06:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728130AbhANIGX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jan 2021 03:06:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AFD9323A58;
-        Thu, 14 Jan 2021 08:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610611500;
-        bh=KzRA72DJ8FelN5FRPnISDXzhJWHYX6V5D7cnrrYqmns=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nOm4NqCaUWLg4HTBDeJeoBxDK1hE6KD6kwIaS5QUdGE5d95M0LOuBe17UH6ZhtxWj
-         2SIokKCq5OrWbc/QTRPFACCsP/28F9IHn5ydVSMGUJC9s2jP+tMN80H9tSZ77bm3FC
-         VuJGlQICCzi4qz/Gjt5ZVImWz1CaQcpPOemSSW2UY1plhyCBX0ffc8ZreB8SYwreWG
-         a2Wjqa/k8fmoxGbUlaKINA7quVFVGZDOIEdybff/MtPHwEQKCte3px4suSSxEJzxPs
-         ZezS17i65C2hxskblSDd8TCCCI/NNP1qdJmjaooHey/QEueJfY+BWtlFyEGbMsiuzC
-         o3DjiUV3zELfQ==
-Received: by mail.kernel.org with local (Exim 4.94)
-        (envelope-from <mchehab@kernel.org>)
-        id 1kzxcn-00EQ6N-K6; Thu, 14 Jan 2021 09:04:57 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Richard Gong <richard.gong@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Will Drewry <wad@chromium.org>,
-        Ying Xue <ying.xue@windriver.com>,
-        dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: [PATCH v6 00/16] Fix several bad kernel-doc markups
-Date:   Thu, 14 Jan 2021 09:04:36 +0100
-Message-Id: <cover.1610610937.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Thu, 14 Jan 2021 10:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729103AbhANPFP (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 14 Jan 2021 10:05:15 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241CAC061575
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:04:35 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id by1so2235732ejc.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 07:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NcbbwuTIw0XOxXbx1OMAv/zQ0f55cTFOH0Nbkr3v9jQ=;
+        b=yEQItAvigUbfYWEhi52aXuHAPZ6tuAT+qCXXEz38nS35ib8OcfO7+gDDF4v51PSdqO
+         yK6DXZVx+k8ENzwUIBM3pCe8Qm5RXLMR99pctX2BGhzzUafnl2uPG9GR5xhVL5+iqTK6
+         psk+q8hQ2VVxs1H+G6MVFLuMxpX5BkoJoyngpGmNxk6jWom4qSIxmJMywtK5LW+OehTn
+         UoMfUhx+FUVFS0hHg91ARMaZMgJodjBwEVItDiQaF9Yd19jROYtqMzANthaPc1a39tmu
+         C7iDgYdZ9RgcNAwyDDxoJ56VIfbn0G8cL1pEgiN0QBjCgtrB08+wDIFoHccqiGHTuDbR
+         wJgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NcbbwuTIw0XOxXbx1OMAv/zQ0f55cTFOH0Nbkr3v9jQ=;
+        b=raeZAk8gJJjz/R+tqlk+VtOQlH0g2KjidtHH4CmM38dETJhvrD1J59qlFWo1USP2LW
+         7qny8MJQY7zgewrTd5NMmYy0ZLzVybu2W4nsHcoAU7u47szOywBHsWz8rpkyosPe/kXu
+         eeCT4wiGCj4bwWPTgLPPD2t4s63DXEqnKdBlzH6vFaX3S8YvONpIxRGf9DKPGnc5Hp7I
+         G1GcxlB8541AZ3JCKyAHOMBS135runuIgyDOFWaj2MtvkaRZAB4a/QikxOo+f6KUoQuK
+         el9gjl2+FlIUn1gRNw3DcT3gYkOF7FAx0foCXS2K6fYzrdPpH7O1OtOKIorpoFmUs/H/
+         KGEQ==
+X-Gm-Message-State: AOAM531nVG/qk5slF3ULiUz2XiT8S7wnOuPVmAjvAySZbSv/ALBD2qTu
+        IgEF8Cy/DQeUr1Oje3eQGwdEwY9x3e2PZ2SLkkicKw==
+X-Google-Smtp-Source: ABdhPJzfhHY7ArHTAP1cnKCI9FVF1ePtOXIVFPGTJb4hX8UeuqKZq4J5eTmoMo9wmuacHVDMDI66XIwVLCYvcqL1JVQ=
+X-Received: by 2002:a17:906:19c3:: with SMTP id h3mr5543469ejd.429.1610636673865;
+ Thu, 14 Jan 2021 07:04:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20210107025731.226017-1-warthog618@gmail.com> <20210107025731.226017-2-warthog618@gmail.com>
+In-Reply-To: <20210107025731.226017-2-warthog618@gmail.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 14 Jan 2021 16:04:23 +0100
+Message-ID: <CAMpxmJX151+boZkX8SJ7s66GFOfcRvBAvGVTs96Ce2J4ETmFpg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] selftests: gpio: rework and simplify test implementation
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Bamvor Jian Zhang <bamv2005@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jon,
-
-This series have three parts:
-
-1)  10 remaining fixup patches from the series I sent back on Dec, 1st:
-
-   parport: fix a kernel-doc markup
-   rapidio: fix kernel-doc a markup
-   fs: fix kernel-doc markups
-   pstore/zone: fix a kernel-doc markup
-   firmware: stratix10-svc: fix kernel-doc markups
-   connector: fix a kernel-doc markup
-   lib/crc7: fix a kernel-doc markup
-   memblock: fix kernel-doc markups
-   w1: fix a kernel-doc markup
-   selftests: kselftest_harness.h: partially fix kernel-doc markups
-
-2) The patch adding the new check to ensure that the kernel-doc
-   markup will be used for the right declaration;
-
-3) 5 additional patches, produced against next-20210114 with new
-   problems detected after the original series: 
-
- net: tip: fix a couple kernel-doc markups
- net: cfg80211: fix a kerneldoc markup
- reset: core: fix a kernel-doc markup
- drm: drm_crc: fix a kernel-doc markup
- platform/surface: aggregator: fix a kernel-doc markup
-
-It probably makes sense to merge at least the first 11 patches
-via the doc tree, as they should apply cleanly there, and
-having the last 5 patches merged via each maintainer's tree.
-
--
-
-Kernel-doc has always be limited to a probably bad documented
-rule:
-
-The kernel-doc markups should appear *imediatelly before* the
-function or data structure that it documents.
-
-On other words, if a C file would contain something like this:
-
-	/**
-	 * foo - function foo
-	 * @args: foo args
-	 */
-	static inline void bar(int args);
-
-	/**
-	 * bar - function bar
-	 * @args: foo args
-	 */
-	static inline void foo(void *args);
+On Thu, Jan 7, 2021 at 3:58 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> The GPIO mockup selftests are overly complicated with separate
+> implementations of the tests for sysfs and cdev uAPI, and with the cdev
+> implementation being dependent on tools/gpio and libmount.
+>
+> Rework the test implementation to provide a common test suite with a
+> simplified pluggable uAPI interface.  The cdev implementation utilises
+> the GPIO uAPI directly to remove the dependence on tools/gpio.
+> The simplified uAPI interface removes the need for any file system mount
+> checks in C, and so removes the dependence on libmount.
+>
+> The rework also fixes the sysfs test implementation which has been broken
+> since the device created in the multiple gpiochip case was split into
+> separate devices.
+>
+> Fixes: commit 8a39f597bcfd ("gpio: mockup: rework device probing")
+> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 
-The output (in ReST format) will be:
+The C part looks good to me. For the shell part I would probably do a
+couple things differently but since we don't really have a coding
+style for shell scripts in the kernel, I don't want to block these
+patches, so:
 
-	.. c:function:: void bar (int args)
-
-	   function foo
-
-	**Parameters**
-
-	``int args``
-	  foo args
-
-
-	.. c:function:: void foo (void *args)
-
-	   function bar
-
-	**Parameters**
-
-	``void *args``
-	  foo args
-
-Which is clearly a wrong result.  Before this changeset, 
-not even a warning is produced on such cases.
-
-As placing such markups just before the documented
-data is a common practice, on most cases this is fine.
-
-However, as patches touch things, identifiers may be
-renamed, and people may forget to update the kernel-doc
-markups to follow such changes.
-
-This has been happening for quite a while, as there are
-lots of files with kernel-doc problems.
-
-This series address those issues and add a file at the
-end that will enforce that the identifier will match the
-kernel-doc markup, avoiding this problem from
-keep happening as time goes by.
-
-This series is based on current upstream tree.
-
-@maintainers: feel free to pick the patches and
-apply them directly on your trees, as all patches on 
-this series are independent from the other ones.
-
---
-
-v6:
-  - rebased on the top of next-20210114 and added a few extra fixes
-
-v5:
-  - The completion.h patch was replaced by another one which drops
-    an obsolete macro;
-  - Some typos got fixed and review tags got added;
-  - Dropped patches that were already merged at linux-next.
-
-v4:
-
-  - Patches got rebased and got some acks.
-
-Mauro Carvalho Chehab (16):
-  parport: fix a kernel-doc markup
-  rapidio: fix kernel-doc a markup
-  fs: fix kernel-doc markups
-  pstore/zone: fix a kernel-doc markup
-  firmware: stratix10-svc: fix kernel-doc markups
-  connector: fix a kernel-doc markup
-  lib/crc7: fix a kernel-doc markup
-  memblock: fix kernel-doc markups
-  w1: fix a kernel-doc markup
-  selftests: kselftest_harness.h: partially fix kernel-doc markups
-  scripts: kernel-doc: validate kernel-doc markup with the actual names
-  net: tip: fix a couple kernel-doc markups
-  net: cfg80211: fix a kerneldoc markup
-  reset: core: fix a kernel-doc markup
-  drm: drm_crc: fix a kernel-doc markup
-  platform/surface: aggregator: fix a kernel-doc markup
-
- drivers/parport/share.c                       |  2 +-
- .../surface/aggregator/ssh_request_layer.c    |  2 +-
- drivers/rapidio/rio.c                         |  2 +-
- drivers/reset/core.c                          |  4 +-
- fs/dcache.c                                   | 73 ++++++++++---------
- fs/inode.c                                    |  4 +-
- fs/pstore/zone.c                              |  2 +-
- fs/seq_file.c                                 |  5 +-
- fs/super.c                                    | 12 +--
- include/drm/drm_crtc.h                        |  2 +-
- include/linux/connector.h                     |  2 +-
- .../firmware/intel/stratix10-svc-client.h     | 10 +--
- include/linux/memblock.h                      |  4 +-
- include/linux/parport.h                       | 31 ++++++++
- include/linux/w1.h                            |  2 +-
- include/net/cfg80211.h                        |  2 +-
- lib/crc7.c                                    |  2 +-
- net/tipc/link.c                               |  2 +-
- net/tipc/node.c                               |  2 +-
- scripts/kernel-doc                            | 62 ++++++++++++----
- tools/testing/selftests/kselftest_harness.h   | 26 ++++---
- 21 files changed, 160 insertions(+), 93 deletions(-)
-
--- 
-2.29.2
-
-
+Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
