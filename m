@@ -2,153 +2,157 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B6DC433E9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 19:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D9AC433E6
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 20:53:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9473A23A58
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 19:07:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A525523877
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jan 2021 20:53:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbhANTH4 (ORCPT
+        id S1726049AbhANUxY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Jan 2021 14:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        Thu, 14 Jan 2021 15:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbhANTHz (ORCPT
+        with ESMTP id S1725772AbhANUxY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jan 2021 14:07:55 -0500
-X-Greylist: delayed 393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jan 2021 11:07:10 PST
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5CDC0613C1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 11:07:10 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DGtsd3prKzMqNmw;
-        Thu, 14 Jan 2021 19:59:49 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DGtsb4TJWzlh8T8;
-        Thu, 14 Jan 2021 19:59:47 +0100 (CET)
-Subject: Re: [PATCH v26 11/12] samples/landlock: Add a sandbox manager example
-To:     Jann Horn <jannh@google.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20201209192839.1396820-1-mic@digikod.net>
- <20201209192839.1396820-12-mic@digikod.net>
- <CAG48ez2yQNvcCrmCCBZKy_cxoZzNgremxWMia1YHsgaj4edqrA@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <f3ca5fb2-64c6-b525-0f16-5353f1f7eddb@digikod.net>
-Date:   Thu, 14 Jan 2021 19:59:57 +0100
-User-Agent: 
+        Thu, 14 Jan 2021 15:53:24 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9745CC061575
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 12:52:43 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id q25so6484811otn.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jan 2021 12:52:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=WMRVmV5maA7pUe5nDzLek/XXxNjHWhNj+CjmLV41vcA=;
+        b=Jmjlv5d1UWTL0j3rIlEuXsEEDkB2v+tPtwKeqtBtCr4Q9IzYG/sM5pEm7K4sZki1cV
+         nSO77MCo9ebaBhIkeT8RRKHdvb52Ej+RzKFSMU8QuM5Jf/YB0KA1+SXxHklV9WWgwFJv
+         igCKELnB5exaKusRy3Iw9/ffN4vS7AE16IDt0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=WMRVmV5maA7pUe5nDzLek/XXxNjHWhNj+CjmLV41vcA=;
+        b=svG5NqQbLSBqrmOGMLDHcM/NH2wpNwWjtNEs/lqeJ0SrxT/wKAeIvzCecwcxJ2hv6f
+         36RliHJhXkz28wks2blHWpaEXUKnzHXS0vNjAN+onFIBdPRNVSqzLGAnnsK77i1L57lt
+         BYN+sSFXEXIT4b8nygf6bclJlCGbOcyO7Hp4yEkNP0Ksw/v4SShkgunke46jRTCXh9/B
+         pk4vjF5WSk2yESMM1ZSiHIslCktGjzjFes2Xa1ZUq+X9l4KQeG4xoJpbMPgRwQKifnOS
+         5EfZBB5qYWIHv/nGPwL20JlzjFEmxbmXTJWaPAw9x+jGq+K23/37peUHDkQx5LkQcHAK
+         HjDQ==
+X-Gm-Message-State: AOAM531/83pogU1pg34HW3Dv9eOidDyiNINGvM2nIGOwggTAaBBZ3swm
+        EnaJm3LTIv/92n1s3AEMLwO+IMTxzMpMtA==
+X-Google-Smtp-Source: ABdhPJwlSnSrE+ja7Jt3eFQnXVCVcATiFtvR+TKHwF9bwkcqrgJkIJUeo0xy9D9ox1PfAWOfCojd1A==
+X-Received: by 2002:a9d:7746:: with SMTP id t6mr6119012otl.349.1610657562985;
+        Thu, 14 Jan 2021 12:52:42 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 65sm1282557otp.35.2021.01.14.12.52.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jan 2021 12:52:42 -0800 (PST)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes for Linux 5.11-rc4
+Message-ID: <e60bdae0-2df1-9401-a8e0-3949884a7db0@linuxfoundation.org>
+Date:   Thu, 14 Jan 2021 13:52:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez2yQNvcCrmCCBZKy_cxoZzNgremxWMia1YHsgaj4edqrA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/mixed;
+ boundary="------------C4F8C71A66D473BE00FD780B"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This is a multi-part message in MIME format.
+--------------C4F8C71A66D473BE00FD780B
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 14/01/2021 04:21, Jann Horn wrote:
-> On Wed, Dec 9, 2020 at 8:29 PM Mickaël Salaün <mic@digikod.net> wrote:
->> Add a basic sandbox tool to launch a command which can only access a
->> whitelist of file hierarchies in a read-only or read-write way.
-> 
-> I have to admit that I didn't really look at this closely before
-> because it's just sample code... but I guess I should. You can add
-> 
-> Reviewed-by: Jann Horn <jannh@google.com>
-> 
-> if you fix the following nits:
+Hi Linus,
 
-OK, I will!
+Please pull the following Kselftest fixes update for Linux 5.11-rc4
 
-> 
-> [...]
->> diff --git a/samples/Kconfig b/samples/Kconfig
-> [...]
->> +config SAMPLE_LANDLOCK
->> +       bool "Build Landlock sample code"
->> +       depends on HEADERS_INSTALL
->> +       help
->> +         Build a simple Landlock sandbox manager able to launch a process
->> +         restricted by a user-defined filesystem access control.
-> 
-> nit: s/filesystem access control/filesystem access control policy/
-> 
-> [...]
->> diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
-> [...]
->> +/*
->> + * Simple Landlock sandbox manager able to launch a process restricted by a
->> + * user-defined filesystem access control.
-> 
-> nit: s/filesystem access control/filesystem access control policy/
-> 
-> [...]
->> +int main(const int argc, char *const argv[], char *const *const envp)
->> +{
-> [...]
->> +       if (argc < 2) {
-> [...]
->> +               fprintf(stderr, "* %s: list of paths allowed to be used in a read-only way.\n",
->> +                               ENV_FS_RO_NAME);
->> +               fprintf(stderr, "* %s: list of paths allowed to be used in a read-write way.\n",
->> +                               ENV_FS_RO_NAME);
-> 
-> s/ENV_FS_RO_NAME/ENV_FS_RW_NAME/
-> 
->> +               fprintf(stderr, "\nexample:\n"
->> +                               "%s=\"/bin:/lib:/usr:/proc:/etc:/dev/urandom\" "
->> +                               "%s=\"/dev/null:/dev/full:/dev/zero:/dev/pts:/tmp\" "
->> +                               "%s bash -i\n",
->> +                               ENV_FS_RO_NAME, ENV_FS_RW_NAME, argv[0]);
->> +               return 1;
->> +       }
->> +
->> +       ruleset_fd = landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
->> +       if (ruleset_fd < 0) {
->> +               perror("Failed to create a ruleset");
->> +               switch (errno) {
-> 
-> (Just as a note: In theory perror() can change the value of errno, as
-> far as I know - so AFAIK you'd theoretically have to do something
-> like:
-> 
-> int errno_ = errno;
-> perror("...");
-> switch (errno_) {
->  ...
-> }
+This Kselftest fixes update for Linux 5.11-rc4 consists of one single
+fix to skip BPF selftests by default. BPF selftests have a hard
+dependency on cutting edge versions of tools in the BPF ecosystem
+including LLVM.
 
-Indeed :)
+Skipping BPF allows by default will make it easier for users interested
+in running kselftest as a whole. Users can include BPF in Kselftest
+build by via SKIP_TARGETS variable.
 
-> 
-> I'll almost certainly work fine as-is in practice though.)
-> 
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit e71ba9452f0b5b2e8dc8aa5445198cd9214a6a62:
+
+   Linux 5.11-rc2 (2021-01-03 15:55:30 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-fixes-5.11-rc4
+
+for you to fetch changes up to 7a6eb7c34a78498742b5f82543b7a68c1c443329:
+
+   selftests: Skip BPF seftests by default (2021-01-04 09:27:20 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-5.11-rc4
+
+This Kselftest fixes update for Linux 5.11-rc4 consists of one single
+fix to skip BPF selftests by default. BPF selftests have a hard
+dependency on cutting edge versions of tools in the BPF ecosystem
+including LLVM.
+
+Skipping BPF allows by default will make it easier for users interested
+in running kselftest as a whole. Users can include BPF in Kselftest
+build by via SKIP_TARGETS variable.
+
+----------------------------------------------------------------
+Mark Brown (1):
+       selftests: Skip BPF seftests by default
+
+  tools/testing/selftests/Makefile | 6 ++++--
+  1 file changed, 4 insertions(+), 2 deletions(-)
+
+----------------------------------------------------------------
+
+--------------C4F8C71A66D473BE00FD780B
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-5.11-rc4.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-fixes-5.11-rc4.diff"
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index afbab4aeef3c..8a917cb4426a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -77,8 +77,10 @@ TARGETS += zram
+ TARGETS_HOTPLUG = cpu-hotplug
+ TARGETS_HOTPLUG += memory-hotplug
+ 
+-# User can optionally provide a TARGETS skiplist.
+-SKIP_TARGETS ?=
++# User can optionally provide a TARGETS skiplist.  By default we skip
++# BPF since it has cutting edge build time dependencies which require
++# more effort to install.
++SKIP_TARGETS ?= bpf
+ ifneq ($(SKIP_TARGETS),)
+ 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
+ 	override TARGETS := $(TMP)
+
+--------------C4F8C71A66D473BE00FD780B--
