@@ -5,198 +5,337 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3560DC433DB
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 16:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07EC5C433DB
+	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 22:22:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AD7622516
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 16:19:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD62E224B0
+	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 22:22:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729588AbhAQQT5 (ORCPT
+        id S1730408AbhAQWWD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 17 Jan 2021 11:19:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52837 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729382AbhAQQTz (ORCPT
+        Sun, 17 Jan 2021 17:22:03 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:55106 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730366AbhAQWVs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jan 2021 11:19:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610900307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pd4vHRZ+JWsMgYXJ+/MXzVJZ5dZGqNEtTkFAu8s+Zps=;
-        b=Z+tYm7j4G4Jm9zkVWWnB+j84GfLRzpYXY5pBumBX4IlfSpqVi31yCye4No8meGPS+70jA+
-        69LwMZ3Xz/6f5HU7ptGe/ThogpCZvWQ65MinbnfmazuW9M4+Q6mpwYrLWJioC1DUKgA7z9
-        26NLUljT9qoe5gectsmP4whsewZpgAc=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-240-721M2c7hPrGcp0jUz-hD0g-1; Sun, 17 Jan 2021 11:18:25 -0500
-X-MC-Unique: 721M2c7hPrGcp0jUz-hD0g-1
-Received: by mail-qk1-f200.google.com with SMTP id w204so14481901qka.18
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Jan 2021 08:18:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pd4vHRZ+JWsMgYXJ+/MXzVJZ5dZGqNEtTkFAu8s+Zps=;
-        b=dX9BJz6zB4w0NOMQhqPlmApqiRWbPPtBZkycWQTKlKZxTDp4vLPVMjXCtYZo+HE0yY
-         kn2C+aEQd7kTfiT/qv3iS0ChcAws2DeqFKJrssUiJDD9iuDFVBAClk1wu8YRSX+nKfdK
-         +nfUEPKs/4xICxEkqNe4SoJ9u53G2fs1mheoG50rta57p1ux5rwaJZ6eZFOpVGNEI/fU
-         RF+dojVvE/FX5i+N8hfyIDcYfmZPknbF2Xa+oycDm0Qu3Wdyo1CdaqateJYpeT33MiAT
-         Ma08zmBSsMUrcGXut+Q0iBwJDVOvEdf0cEMEZG3i2xt40ZTEGJKMrVShLgiXfa3LGTlH
-         DjYQ==
-X-Gm-Message-State: AOAM5337m7UVVPmSv0LnKbYihCf9Q734EUrYic7MhPDDke+AfudGLu0A
-        iOFQP4YuaUFviRIKD6SC7+u+XBZmlMpiZGfiqdTKjNv8bryEuMO+hmuy0BCD6nNwcqQWh0DbwJQ
-        /rHrX5TUrW6q2E+uymLHOfwLQEoS9
-X-Received: by 2002:ac8:6b0a:: with SMTP id w10mr19764229qts.224.1610900303863;
-        Sun, 17 Jan 2021 08:18:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+kM1gexsua9DwpZxib3OZs35p/m5WmKtlUfgtMEYDw+N6CMDgeXGQk41qH5EeAy8ZFkJePQ==
-X-Received: by 2002:ac8:6b0a:: with SMTP id w10mr19764160qts.224.1610900302190;
-        Sun, 17 Jan 2021 08:18:22 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id i17sm8617874qtg.77.2021.01.17.08.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jan 2021 08:18:21 -0800 (PST)
-From:   trix@redhat.com
-To:     shuah@kernel.org, mdf@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-fpga@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH v3] selftests: drivers: fpga: A test for interrupt support
-Date:   Sun, 17 Jan 2021 08:18:15 -0800
-Message-Id: <20210117161815.514078-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 17 Jan 2021 17:21:48 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMKo8H075267;
+        Sun, 17 Jan 2021 22:20:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=aVLOHaoBygqp0kGdrn1OdqwsPVrpETXymT4FNLNKUF0=;
+ b=pdXcSMkSNGmow881DUP6CJ7LIbt+03zQBA3dkJ5BbS7ML8spgf9+AF5q+imRg0ZH6CAD
+ f/yQb9FGbCM44I3dOcSjLr53QIQ+XdaKekr++ryI839CdY7yXdS5wFtvhr01qykk3mpE
+ kP43SM8hxd2JzpEKbOUCvJifR90vt7/nfDTjKTDChQY2hlTOHKUu0NbButQDHnYDx0Ov
+ TSlrZKojtkjboaoZ/ghzHy8cM/H+eWb8+qM3ONXWKYqPt4uCDTDQFQoSePBMIUgBWRHd
+ eqQ+fsd5ukB6IYgy6xBkB5+plqqlAfRqQGOWMcXI3fsyQECs0FlIt9JxjckPImcc8VXr kg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 363r3kjvrh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 17 Jan 2021 22:20:50 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMKnIc075485;
+        Sun, 17 Jan 2021 22:20:49 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 3649wnyxuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 17 Jan 2021 22:20:49 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 10HMKgvM028303;
+        Sun, 17 Jan 2021 22:20:42 GMT
+Received: from localhost.localdomain (/95.45.14.174)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 17 Jan 2021 14:20:42 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
+        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 4/4] selftests/bpf: add dump type data tests to btf dump tests
+Date:   Sun, 17 Jan 2021 22:16:04 +0000
+Message-Id: <1610921764-7526-5-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
+References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 phishscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101170140
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101170140
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Test various type data dumping operations by comparing expected
+format with the dumped string; an snprintf-style printf function
+is used to record the string dumped.
 
-Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
-an expected result.
-
-Tested on vf device 0xbcc1
-
-Sample run with
- # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
- ...
- TAP version 13
- 1..1
- # selftests: drivers/fpga: intr
- # TAP version 13
- # 1..1
- # # Starting 1 tests from 1 test cases.
- # #  RUN           global.afu_intr ...
- # #            OK  global.afu_intr
- # ok 1 global.afu_intr
- # # PASSED: 1 / 1 tests passed.
- # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
- ok 1 selftests: drivers/fpga: intr
-
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
-v1: Convert to kselftest_harness.h framework
-v2: reverse xmas tree variables
----
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
- tools/testing/selftests/drivers/fpga/config   |  1 +
- tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
- create mode 100644 tools/testing/selftests/drivers/fpga/config
- create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 233 ++++++++++++++++++++++
+ 1 file changed, 233 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index de610a06cb5c..7ed3ce58d95e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6973,6 +6973,7 @@ F:	Documentation/driver-api/fpga/
- F:	Documentation/fpga/
- F:	drivers/fpga/
- F:	include/linux/fpga/
-+F:	tools/testing/selftests/drivers/fpga/
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index c60091e..262561f4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -232,6 +232,237 @@ void test_btf_dump_incremental(void)
+ 	btf__free(btf);
+ }
  
- FPGA SECURITY MANAGER DRIVERS
- M:	Russ Weight <russell.h.weight@intel.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index afbab4aeef3c..aad4763ec348 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-+TARGETS += drivers/fpga
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
-new file mode 100644
-index 000000000000..eba35c405d5b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -I../../../../../usr/include/
-+CFLAGS += -I../../../../../include/uapi/
++#define STRSIZE				2048
++#define	EXPECTED_STRSIZE		256
 +
-+TEST_GEN_PROGS := intr
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
-new file mode 100644
-index 000000000000..e2111b81d8d7
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/config
-@@ -0,0 +1 @@
-+CONFIG_FPGA_DFL_AFU=m
-diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
-new file mode 100644
-index 000000000000..927dcc757f0b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/fpga/intr.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <sys/fcntl.h>
-+#include <sys/ioctl.h>
-+#include <linux/fpga-dfl.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+TEST(afu_intr)
++void btf_dump_snprintf(void *ctx, const char *fmt, va_list args)
 +{
-+	struct dfl_fpga_port_info port_info;
-+	uint32_t irq_num = UINT32_MAX;
-+	int devfd, status;
++	char *s = ctx, new[STRSIZE];
 +
-+	devfd = open("/dev/dfl-port.0", O_RDONLY);
-+	if (devfd < 0)
-+		SKIP(0, "no fpga afu device 0");
-+	/*
-+	 * From fpga-dl.h :
-+	 * Currently hardware supports up to 1 irq.
-+	 * Return: 0 on success, -errno on failure.
-+	 */
-+	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
-+	ASSERT_EQ(0, status) {
-+		TH_LOG("ioctl() failed to get the number irqs");
-+	}
-+	ASSERT_LT(irq_num, 256) {
-+		TH_LOG("unexpeced number of irqs");
-+	}
-+	close(devfd);
++	vsnprintf(new, STRSIZE, fmt, args);
++	strncat(s, new, STRSIZE);
++	vfprintf(ctx, fmt, args);
 +}
 +
-+TEST_HARNESS_MAIN
++/* skip "enum "/"struct " prefixes */
++#define SKIP_PREFIX(_typestr, _prefix)					\
++	do {								\
++		if (strstr(_typestr, _prefix) == _typestr)		\
++			_typestr += strlen(_prefix) + 1;		\
++	} while (0)
++
++int btf_dump_data(struct btf *btf, struct btf_dump *d,
++		  char *ptrtype, __u64 flags, void *ptr,
++		  char *str, char *expectedval)
++{
++	struct btf_dump_emit_type_data_opts opts = { 0 };
++	int ret = 0, cmp;
++	__s32 type_id;
++
++	opts.sz = sizeof(opts);
++	opts.compact = true;
++	if (flags & BTF_F_NONAME)
++		opts.noname = true;
++	if (flags & BTF_F_ZERO)
++		opts.zero = true;
++	SKIP_PREFIX(ptrtype, "enum");
++	SKIP_PREFIX(ptrtype, "struct");
++	SKIP_PREFIX(ptrtype, "union");
++	type_id = btf__find_by_name(btf, ptrtype);
++	if (CHECK(type_id <= 0, "find type id",
++		  "no '%s' in BTF: %d\n", ptrtype, type_id)) {
++		ret = -ENOENT;
++		goto err;
++	}
++	str[0] = '\0';
++	ret = btf_dump__emit_type_data(d, type_id, &opts, ptr);
++	if (CHECK(ret < 0, "btf_dump__emit_type_data",
++		  "failed: %d\n", ret))
++		goto err;
++
++	cmp = strncmp(str, expectedval, EXPECTED_STRSIZE);
++	if (CHECK(cmp, "ensure expected/actual match",
++		  "'%s' does not match expected '%s': %d\n",
++		  str, expectedval, cmp))
++		ret = -EFAULT;
++
++err:
++	if (ret)
++		btf_dump__free(d);
++	return ret;
++}
++
++#define TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _flags, _expected, ...)	\
++	do {								\
++		char _expectedval[EXPECTED_STRSIZE] = _expected;	\
++		char __ptrtype[64] = #_type;				\
++		char *_ptrtype = (char *)__ptrtype;			\
++		static _type _ptrdata = __VA_ARGS__;			\
++		void *_ptr = &_ptrdata;					\
++									\
++		if (btf_dump_data(_b, _d, _ptrtype, _flags, _ptr,	\
++				  _str, _expectedval))			\
++			return;						\
++	} while (0)
++
++/* Use where expected data string matches its stringified declaration */
++#define TEST_BTF_DUMP_DATA_C(_b, _d, _str, _type, _opts, ...)		\
++	TEST_BTF_DUMP_DATA(_b, _d, _str, _type, _opts,			\
++			   "(" #_type ")" #__VA_ARGS__,	__VA_ARGS__)
++
++void test_btf_dump_data(void)
++{
++	struct btf *btf = libbpf_find_kernel_btf();
++	char str[STRSIZE];
++	struct btf_dump_opts opts = { .ctx = str };
++	struct btf_dump *d;
++
++	if (CHECK(!btf, "get kernel BTF", "no kernel BTF found"))
++		return;
++
++	d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
++
++	if (CHECK(!d, "new dump", "could not create BTF dump"))
++		return;
++
++	/* Verify type display for various types. */
++
++	/* simple int */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, int, 0, 1234);
++	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME, "1234", 1234);
++
++	/* zero value should be printed at toplevel */
++	TEST_BTF_DUMP_DATA(btf, d, str, int, 0, "(int)0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME, "0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_ZERO, "(int)0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME | BTF_F_ZERO,
++			   "0", 0);
++	TEST_BTF_DUMP_DATA_C(btf, d, str, int, 0, -4567);
++	TEST_BTF_DUMP_DATA(btf, d, str, int, BTF_F_NONAME, "-4567", -4567);
++
++	/* simple char */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, char, 0, 100);
++	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_NONAME, "100", 100);
++	/* zero value should be printed at toplevel */
++	TEST_BTF_DUMP_DATA(btf, d, str, char, 0, "(char)0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_NONAME, "0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_ZERO, "(char)0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, char, BTF_F_NONAME | BTF_F_ZERO,
++			   "0", 0);
++
++	/* simple typedef */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, uint64_t, 0, 100);
++	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_NONAME, "1", 1);
++	/* zero value should be printed at toplevel */
++	TEST_BTF_DUMP_DATA(btf, d, str, u64, 0, "(u64)0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_NONAME, "0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_ZERO, "(u64)0", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, u64, BTF_F_NONAME | BTF_F_ZERO,
++			   "0", 0);
++
++	/* typedef struct */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, atomic_t, 0, {.counter = (int)1,});
++	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_NONAME, "{1,}",
++			   {.counter = 1,});
++	/* typedef with 0 value should be printed at toplevel */
++	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, 0, "(atomic_t){}",
++			   {.counter = 0,});
++	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_NONAME, "{}",
++			   {.counter = 0,});
++	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_ZERO,
++			   "(atomic_t){.counter = (int)0,}",
++			   {.counter = 0,});
++	TEST_BTF_DUMP_DATA(btf, d, str, atomic_t, BTF_F_NONAME | BTF_F_ZERO,
++			   "{0,}", {.counter = 0,});
++	/* enum where enum value does (and does not) exist */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, enum bpf_cmd, 0, BPF_MAP_CREATE);
++	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, 0,
++			   "(enum bpf_cmd)BPF_MAP_CREATE", 0);
++	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, BTF_F_NONAME,
++			   "BPF_MAP_CREATE",
++			   BPF_MAP_CREATE);
++	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd,
++			   BTF_F_NONAME | BTF_F_ZERO,
++			   "BPF_MAP_CREATE", 0);
++
++	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, BTF_F_ZERO,
++			   "(enum bpf_cmd)BPF_MAP_CREATE",
++			   BPF_MAP_CREATE);
++	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd,
++			   BTF_F_NONAME | BTF_F_ZERO,
++			   "BPF_MAP_CREATE", BPF_MAP_CREATE);
++	TEST_BTF_DUMP_DATA_C(btf, d, str, enum bpf_cmd, 0, 2000);
++	TEST_BTF_DUMP_DATA(btf, d, str, enum bpf_cmd, BTF_F_NONAME,
++			   "2000", 2000);
++
++	/* simple struct */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, struct btf_enum, 0,
++			     {.name_off = (__u32)3,.val = (__s32)-1,});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_NONAME,
++			   "{3,-1,}",
++			   { .name_off = 3, .val = -1,});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_NONAME, "{-1,}",
++			   { .name_off = 0, .val = -1,});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum,
++			   BTF_F_NONAME | BTF_F_ZERO,
++			   "{0,-1,}",
++			   { .name_off = 0, .val = -1,});
++	/* empty struct should be printed */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, 0,
++			   "(struct btf_enum){}",
++			   { .name_off = 0, .val = 0,});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_NONAME, "{}",
++			   { .name_off = 0, .val = 0,});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct btf_enum, BTF_F_ZERO,
++			   "(struct btf_enum){.name_off = (__u32)0,.val = (__s32)0,}",
++			   { .name_off = 0, .val = 0,});
++
++	/* struct with pointers */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
++			   "(struct list_head){.next = (struct list_head *)0x1,}",
++			   { .next = (struct list_head *)1 });
++	/* NULL pointer should not be displayed */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct list_head, 0,
++			   "(struct list_head){}",
++			   { .next = (struct list_head *)0 });
++	/* struct with char array */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
++			   "(struct bpf_prog_info){.name = (char[])['f','o','o',],}",
++			   { .name = "foo",});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, BTF_F_NONAME,
++			   "{['f','o','o',],}",
++			   {.name = "foo",});
++	/* leading null char means do not display string */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
++			   "(struct bpf_prog_info){}",
++			   {.name = {'\0', 'f', 'o', 'o'}});
++	/* handle non-printable characters */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_prog_info, 0,
++			   "(struct bpf_prog_info){.name = (char[])[1,2,3,],}",
++			   { .name = {1, 2, 3, 0}});
++
++	/* struct with non-char array */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, 0,
++			   "(struct __sk_buff){.cb = (__u32[])[1,2,3,4,5,],}",
++			   { .cb = {1, 2, 3, 4, 5,},});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, BTF_F_NONAME,
++			   "{[1,2,3,4,5,],}",
++			   { .cb = { 1, 2, 3, 4, 5},});
++	/* For non-char, arrays, show non-zero values only */
++	TEST_BTF_DUMP_DATA(btf, d, str, struct __sk_buff, 0,
++			   "(struct __sk_buff){.cb = (__u32[])[1,],}",
++			   { .cb = { 0, 0, 1, 0, 0},});
++
++	/* struct with bitfields */
++	TEST_BTF_DUMP_DATA_C(btf, d, str, struct bpf_insn, 0,
++		{.code = (__u8)1,.dst_reg = (__u8)0x2,.src_reg = (__u8)0x3,.off = (__s16)4,.imm = (__s32)5,});
++	TEST_BTF_DUMP_DATA(btf, d, str, struct bpf_insn, BTF_F_NONAME,
++			   "{1,0x2,0x3,4,5,}",
++			   { .code = 1, .dst_reg = 0x2, .src_reg = 0x3, .off = 4,
++			     .imm = 5,});
++}
++
++
+ void test_btf_dump() {
+ 	int i;
+ 
+@@ -245,4 +476,6 @@ void test_btf_dump() {
+ 	}
+ 	if (test__start_subtest("btf_dump: incremental"))
+ 		test_btf_dump_incremental();
++	if (test__start_subtest("btf_dump: data"))
++		test_btf_dump_data();
+ }
 -- 
-2.27.0
+1.8.3.1
 
