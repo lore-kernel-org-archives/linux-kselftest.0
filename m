@@ -2,127 +2,105 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD550C433DB
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 22:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29D7EC433DB
+	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 23:55:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E3FC2247F
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 22:26:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E96722076E
+	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Jan 2021 23:55:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728455AbhAQW0A (ORCPT
+        id S1728669AbhAQXzZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 17 Jan 2021 17:26:00 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:33016 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730277AbhAQWXa (ORCPT
+        Sun, 17 Jan 2021 18:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbhAQXzY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jan 2021 17:23:30 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMMXWl189253;
-        Sun, 17 Jan 2021 22:22:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=g6eUC0AZE2t/y3Z9jca9TL3vndYBoHLh6eAFxSYY+RE=;
- b=D1Z2nUzCOsjRjzmhGUSC9X7Y4hTV0nuSuYwaog2hZtfHNue5fuR5LW/mUWc84gQGWkvw
- mdBE/Pi3ORPKAms6bTkqbKrSkp0ZfcPDGXWeunIEdU4MrGo8N3n56TZb0ZTts8y+rQ7F
- 0ombTomkM2hcO+6cayTlNufjm/YaL9wYOFkiODZFGZ8wKnnaQrHPY7X208sSX7NZAoCh
- l/nZyyD293/FQSMe0ksXkT1JTpZmhVPLg5lO0+zQDYKRZHVM5Q3Xb4BRMJBlQG6WsIt1
- parmaH68NMyf2rKqWHYtZ1pDH9OAZ+jsAM9f/bb76iO2Z+7d6dj3wSFwii2BidgV1uMM uA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 363xyhj8g2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 17 Jan 2021 22:22:33 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 10HMBJRt092429;
-        Sun, 17 Jan 2021 22:20:32 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 364a2u5ytd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 17 Jan 2021 22:20:32 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 10HMKVFb011654;
-        Sun, 17 Jan 2021 22:20:31 GMT
-Received: from localhost.localdomain (/95.45.14.174)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 17 Jan 2021 14:20:30 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
-        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 1/4] libbpf: add btf_has_size() and btf_int() inlines
-Date:   Sun, 17 Jan 2021 22:16:01 +0000
-Message-Id: <1610921764-7526-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
-References: <1610921764-7526-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101170139
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9867 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101170140
+        Sun, 17 Jan 2021 18:55:24 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B3AC061573;
+        Sun, 17 Jan 2021 15:54:44 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id s15so7661214plr.9;
+        Sun, 17 Jan 2021 15:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LmlVmr5QZIAuFyhAzTMtvc0ZpiTTs7C1V/Whdgh2hgY=;
+        b=NSDhOJH1IF0DMEv9C6jyJuFO25nj0Tc3RYbK7HP/Vfwt6QN8Nh92s1aJIc8byDsixl
+         1DoO23LH7OtXeCle5o6ochEmi8aWZOuHibBD7rNCeXqP26Pr0wxv2eWcth9/+KXpN1u4
+         w53+hlkr5jjSu+mRPOekDg74fpFiVE+0EBfBdyHWml58afKSjnQWaTr2TjrkULMSmp69
+         ORD6Nl3ryWGzFNLaoAIRbTY5vjoKZ9Txh1h155ocdBgbfJuqbHaFKVReGG4M3SQgEllN
+         9Iy1eHLNt9IO7Ajxwl/4fpl0MEmzo1YaSXrqXStLdbXwAqqkvaSzQk9OJr7Z+6eEzOLO
+         fogw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LmlVmr5QZIAuFyhAzTMtvc0ZpiTTs7C1V/Whdgh2hgY=;
+        b=U9UsbZpY11PoOTdPE3kebznHCLiTnciRFUp4KpNYCBfHgm4lki3qYa1SfCHVTvE4ri
+         MHZkl212BDa//qMBRU+prq/ZIUvTJvOwxuWjQyghzYRsbefcGhhrz83UFOGt0VqGjqdd
+         4tTdOn0QbnlklEA2Np7z/5/S12w494/vHZO3mc4YlnVe+7dKj5z1ZCcqMsXO4ujgFqmq
+         Pr78jwkk+fcRa9R18fR3GV8Is1+OTf+m50Cvmgs2WJr40CmxXAktIYP1YDyEOCGKvvXr
+         KEvsU1jNPjvDEneI67h+fzzqdc6H6+sEmh5eSlp7fx3spGJT58/0M6KJF20GtdhjTP81
+         E+8Q==
+X-Gm-Message-State: AOAM530cgLgy7I+ESVK99Jp5ROJ/y6o+WW2+5GJftS0huVy++qHvIMKh
+        IBQR6EgAQTCsy+SddFGKsXnQmsClc+A=
+X-Google-Smtp-Source: ABdhPJxOwST6O0eP6JbE8aOvb/Gk7fiF9noRUF63dyqYx3BwAhYIx8PTQveV0TD5wbMfO62e4OWw2g==
+X-Received: by 2002:a17:90a:8e84:: with SMTP id f4mr23427129pjo.129.1610927683402;
+        Sun, 17 Jan 2021 15:54:43 -0800 (PST)
+Received: from sol (106-69-181-154.dyn.iinet.net.au. [106.69.181.154])
+        by smtp.gmail.com with ESMTPSA id t6sm14245537pjg.49.2021.01.17.15.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jan 2021 15:54:42 -0800 (PST)
+Date:   Mon, 18 Jan 2021 07:54:37 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bgolaszewski@baylibre.com,
+        linus.walleij@linaro.org, shuah@kernel.org, bamv2005@gmail.com
+Subject: Re: [PATCH v2 1/7] selftests: gpio: rework and simplify test
+ implementation
+Message-ID: <20210117235437.GA6841@sol>
+References: <20210107025731.226017-1-warthog618@gmail.com>
+ <20210107025731.226017-2-warthog618@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210107025731.226017-2-warthog618@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-BTF type data dumping will use them in later patches, and they
-are useful generally when handling BTF data.
+On Thu, Jan 07, 2021 at 10:57:25AM +0800, Kent Gibson wrote:
+> The GPIO mockup selftests are overly complicated with separate
+> implementations of the tests for sysfs and cdev uAPI, and with the cdev
+> implementation being dependent on tools/gpio and libmount.
+> 
+> Rework the test implementation to provide a common test suite with a
+> simplified pluggable uAPI interface.  The cdev implementation utilises
+> the GPIO uAPI directly to remove the dependence on tools/gpio.
+> The simplified uAPI interface removes the need for any file system mount
+> checks in C, and so removes the dependence on libmount.
+> 
+> The rework also fixes the sysfs test implementation which has been broken
+> since the device created in the multiple gpiochip case was split into
+> separate devices.
+> 
+> Fixes: commit 8a39f597bcfd ("gpio: mockup: rework device probing")
+> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/lib/bpf/btf.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Just a note that the 'commit' should be removed from the Fixes tag.
 
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 1237bcd..0c48f2e 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -294,6 +294,20 @@ static inline bool btf_is_datasec(const struct btf_type *t)
- 	return btf_kind(t) == BTF_KIND_DATASEC;
- }
- 
-+static inline bool btf_has_size(const struct btf_type *t)
-+{
-+	switch (BTF_INFO_KIND(t->info)) {
-+	case BTF_KIND_INT:
-+	case BTF_KIND_STRUCT:
-+	case BTF_KIND_UNION:
-+	case BTF_KIND_ENUM:
-+	case BTF_KIND_DATASEC:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static inline __u8 btf_int_encoding(const struct btf_type *t)
- {
- 	return BTF_INT_ENCODING(*(__u32 *)(t + 1));
-@@ -309,6 +323,11 @@ static inline __u8 btf_int_bits(const struct btf_type *t)
- 	return BTF_INT_BITS(*(__u32 *)(t + 1));
- }
- 
-+static inline __u32 btf_int(const struct btf_type *t)
-+{
-+	return *(__u32 *)(t + 1);
-+}
-+
- static inline struct btf_array *btf_array(const struct btf_type *t)
- {
- 	return (struct btf_array *)(t + 1);
--- 
-1.8.3.1
+That will be fixed in v3.
 
+The patches have been reviewed from the gpio side - any feedback from the
+selftest side?
+
+Cheers,
+Kent.
