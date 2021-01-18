@@ -4,76 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4960DC433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Jan 2021 11:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD460C433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Jan 2021 13:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02B12222B3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Jan 2021 11:20:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F3F42065E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Jan 2021 13:34:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390018AbhARLUE (ORCPT
+        id S1730501AbhARNea (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 18 Jan 2021 06:20:04 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:40262 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388594AbhARLTq (ORCPT
+        Mon, 18 Jan 2021 08:34:30 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:53275 "EHLO
+        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390795AbhARNeQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Jan 2021 06:19:46 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1l1SYo-0002Lb-DA; Mon, 18 Jan 2021 11:19:02 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests: forwarding: Fix spelling mistake "succeded" -> "succeeded"
-Date:   Mon, 18 Jan 2021 11:19:02 +0000
-Message-Id: <20210118111902.71096-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.29.2
+        Mon, 18 Jan 2021 08:34:16 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0UM8ExIN_1610976801;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UM8ExIN_1610976801)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 18 Jan 2021 21:33:21 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, haitao.huang@intel.com,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] selftests/x86: Simplify the code of getting vdso base address in sgx
+Date:   Mon, 18 Jan 2021 21:33:21 +0800
+Message-Id: <20210118133321.98655-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.3.ge56e4f7
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+The base address of vDSO can be obtained through the library function
+`getauxval()`, so use `getauxval(AT_SYSINFO_EHDR)` instead of a custom
+implementation to simplify the code.
 
-There are two spelling mistakes in check_fail messages. Fix them.
-
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- tools/testing/selftests/net/forwarding/tc_chains.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/sgx/main.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/tc_chains.sh b/tools/testing/selftests/net/forwarding/tc_chains.sh
-index 2934fb5ed2a2..b95de0463ebd 100755
---- a/tools/testing/selftests/net/forwarding/tc_chains.sh
-+++ b/tools/testing/selftests/net/forwarding/tc_chains.sh
-@@ -136,7 +136,7 @@ template_filter_fits()
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 724cec700926..365d01dea67b 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -15,6 +15,7 @@
+ #include <sys/stat.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
++#include <sys/auxv.h>
+ #include "defines.h"
+ #include "main.h"
+ #include "../kselftest.h"
+@@ -28,24 +29,6 @@ struct vdso_symtab {
+ 	Elf64_Word *elf_hashtab;
+ };
  
- 	tc filter add dev $h2 ingress protocol ip pref 1 handle 1102 \
- 		flower src_mac $h2mac action drop &> /dev/null
--	check_fail $? "Incorrectly succeded to insert filter which does not template"
-+	check_fail $? "Incorrectly succeeded to insert filter which does not template"
+-static void *vdso_get_base_addr(char *envp[])
+-{
+-	Elf64_auxv_t *auxv;
+-	int i;
+-
+-	for (i = 0; envp[i]; i++)
+-		;
+-
+-	auxv = (Elf64_auxv_t *)&envp[i + 1];
+-
+-	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
+-		if (auxv[i].a_type == AT_SYSINFO_EHDR)
+-			return (void *)auxv[i].a_un.a_val;
+-	}
+-
+-	return NULL;
+-}
+-
+ static Elf64_Dyn *vdso_get_dyntab(void *addr)
+ {
+ 	Elf64_Ehdr *ehdr = addr;
+@@ -162,7 +145,7 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
+ 	return 0;
+ }
  
- 	tc filter add dev $h2 ingress chain 1 protocol ip pref 1 handle 1101 \
- 		flower src_mac $h2mac action drop
-@@ -144,7 +144,7 @@ template_filter_fits()
+-int main(int argc, char *argv[], char *envp[])
++int main(int argc, char *argv[])
+ {
+ 	struct sgx_enclave_run run;
+ 	struct vdso_symtab symtab;
+@@ -203,7 +186,8 @@ int main(int argc, char *argv[], char *envp[])
+ 	memset(&run, 0, sizeof(run));
+ 	run.tcs = encl.encl_base;
  
- 	tc filter add dev $h2 ingress chain 1 protocol ip pref 1 handle 1102 \
- 		flower dst_mac $h2mac action drop &> /dev/null
--	check_fail $? "Incorrectly succeded to insert filter which does not template"
-+	check_fail $? "Incorrectly succeeded to insert filter which does not template"
+-	addr = vdso_get_base_addr(envp);
++	/* Get vDSO base address */
++	addr = (void *)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
+ 	if (!addr)
+ 		goto err;
  
- 	tc filter del dev $h2 ingress chain 1 protocol ip pref 1 handle 1102 \
- 		flower &> /dev/null
 -- 
-2.29.2
+2.19.1.3.ge56e4f7
 
