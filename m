@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0AA9C433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 05:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10561C4332D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 05:21:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9217322ADF
+	by mail.kernel.org (Postfix) with ESMTP id E6F6D229C6
 	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 05:21:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732222AbhASEpM (ORCPT
+        id S1732113AbhASEpJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 18 Jan 2021 23:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        Mon, 18 Jan 2021 23:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732773AbhASElt (ORCPT
+        with ESMTP id S1732196AbhASElP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Jan 2021 23:41:49 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C61C0617A6
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jan 2021 20:39:36 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id z9so2973151qtv.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jan 2021 20:39:36 -0800 (PST)
+        Mon, 18 Jan 2021 23:41:15 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19D2C061798
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jan 2021 20:39:29 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id l7so8596734qvt.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jan 2021 20:39:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=FjN+we3a/4BMKfp2FRLzct/HukxeBsArEgb5Xvx6VvM=;
-        b=T9ylunAntNqXbYouxPdl8dwV99Sb9aRtUlMsbQ3DW0BpmaX5STOjlICi/P/1VX+iSq
-         kt/svqsK3J2GxzSqX5lXoqQmJP2+iNbWmPvkjVmaEHcFs6N8FiZXFLjD6tG8yc/d1266
-         7kGqVnRQrD7dBZfp3UmZt8oaOBRYD5OlqK6E62Jx0AqsVal4ivecdWSKp+8msVVQ7ac+
-         QPWCIOrOcBrSu2OHSILBYgFoCOoOq6CT0rIdYlEIlekGYvCa2Tn+1uWe+Y7t8pTMidFn
-         WJ8rdhf71pe6Dl/7axwWPboK1r+EjkCTArUW2fpNBvq0NZp/xfZl5MRUEZi2s8WQ8ldf
-         0iVw==
+        bh=7oxdaXWQX29hwz7R/VrrKTQHl4SI28hIR1L5XEUCKOA=;
+        b=CisU0t3fl4xmfyY87XOfxLtj450Nd708c1ynn1IoyYlXBwWMvwhzRJpvOZiqZTwMaP
+         CVBFK603TgA0mADDKTIIBGJ6FDuGRtmo/Lu5KcrrIcWtYKwrJv2ZdXyKLIuoDapvwJkE
+         OX9uFQ1EbYPxIeRR/qTiDxYZECisTaiAtDKKZBkyNhKDPmAlG/fQOb7FAce35BdJSCRS
+         GehklK8vmiKUlr4hOEClMdz/Qa0WteiCT0rxwRnShxxHIXXm7QTNjs9HVTYsnMH4HXWE
+         7IZ2tEASGt58jGfYkszgEnB9cvUP9TGWdkPti27GRcXX0/kwNYafvEkS6SV8H1Tu/7jv
+         muHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FjN+we3a/4BMKfp2FRLzct/HukxeBsArEgb5Xvx6VvM=;
-        b=gP8LqsmkyCT7Ww1+a/ox+IimmbPZ0XWL+cHMasXmj3HGd4bapQMD0lYfsuyU7WpcrJ
-         rWI6mto7duiyckMdOHFxbaAaDIfouFKdDm6snk+EvpUhdr9GNV7MkvSwfOksOyiXDI6V
-         j3StLpeyivPgW+s1Um2bJegmumrPn7KMrkKnUsbx//Re5YR3aanIqEKreUMGfW+EWjQL
-         vDCgQa7XEaAJQG/LXI3e8PdXB+XVQFP+vaBSVWDLsH8Ywf25/myVPCNmjIoeK3TF0Otb
-         82Te3+GtLeO4LFpksZCRTa3LtChfvkwHDcG6mggsC+Z0yguSvHmN5rSvpY9rWm89S79V
-         wcvg==
-X-Gm-Message-State: AOAM5337A9//QpPngMDnWyYBrjZqzwuMnySuxu0hff+No0BHnp1pyvA8
-        J1Mbbl0jKUSuKblWL5gINOpC+A==
-X-Google-Smtp-Source: ABdhPJwv/MB7KhqSh2I2lnS9blqr0Aoc1I8RzA6d5NHQd3cXRN2dgkMdOi+5gZaNcp5Ro/P8Wu0Nvw==
-X-Received: by 2002:ac8:5509:: with SMTP id j9mr2643575qtq.284.1611031175343;
-        Mon, 18 Jan 2021 20:39:35 -0800 (PST)
+        bh=7oxdaXWQX29hwz7R/VrrKTQHl4SI28hIR1L5XEUCKOA=;
+        b=c+GNl7RPMpGs6QSfweWqVSlTbFvT91XiodXckRTcy9ciG8h9njtAOzZoykj6DlMzax
+         77CVEdM+v6ljSkOSx0/uWHK+xnd0jAentjFlmnpFO6XbgeUVixfCepheIG4CcpgHy1mk
+         18s5RBIU1S78ciBJwsmr8TC6hheA6TQNjO9Uy8Em6ayADpjSC+NQM2Dq23Pcd0GBrwmA
+         22+Zl+iY4Ieo/ekAgtaZRdr8fGrN8/NPB4mf3WuzwpwGb2NuGIu6wArD25+0U+PPwEWC
+         YzgjcRnCYow762M36oJlHxCjB5m8ZOjtp7X8zFKN07/psZCWL54po1Rq4WEcsKQlFhiZ
+         +SgA==
+X-Gm-Message-State: AOAM532QdugQHSfgmcSPCnz/YqO8xP44frdJqIZ7Yoe1TUmMRxWKQTn8
+        JoJdrtYKmfN5hQIYQ26FwN8F9w==
+X-Google-Smtp-Source: ABdhPJwz1H5FDnk2YJ4D2l5yuVm4xHJyF9OLImM+QG8ZTlvu/JhfG6PvzhBIlwiJzgQjKKl9n3afUg==
+X-Received: by 2002:ad4:580f:: with SMTP id dd15mr2903841qvb.40.1611031168997;
+        Mon, 18 Jan 2021 20:39:28 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id z20sm11934536qkz.37.2021.01.18.20.39.33
+        by smtp.gmail.com with ESMTPSA id z20sm11934536qkz.37.2021.01.18.20.39.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 20:39:34 -0800 (PST)
+        Mon, 18 Jan 2021 20:39:28 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -68,9 +68,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 08/14] mm/gup: do not allow zero page for pinned pages
-Date:   Mon, 18 Jan 2021 23:39:14 -0500
-Message-Id: <20210119043920.155044-9-pasha.tatashin@soleen.com>
+Subject: [PATCH v5 04/14] mm/gup: check for isolation errors
+Date:   Mon, 18 Jan 2021 23:39:10 -0500
+Message-Id: <20210119043920.155044-5-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210119043920.155044-1-pasha.tatashin@soleen.com>
 References: <20210119043920.155044-1-pasha.tatashin@soleen.com>
@@ -80,39 +80,123 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Zero page should not be used for long term pinned pages. Once pages
-are pinned their physical addresses cannot changed until they are unpinned.
+It is still possible that we pin movable CMA pages if there are isolation
+errors and cma_page_list stays empty when we check again.
 
-Guarantee to always return real pages when they are pinned by adding
-FOLL_WRITE.
+Check for isolation errors, and return success only when there are no
+isolation errors, and cma_page_list is empty after checking.
+
+Because isolation errors are transient, we retry indefinitely.
 
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
 ---
- mm/gup.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ mm/gup.c | 60 ++++++++++++++++++++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 26 deletions(-)
 
 diff --git a/mm/gup.c b/mm/gup.c
-index 857b273e32ac..9a817652f501 100644
+index 88ce41f41543..7ecca2d66dff 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -1668,8 +1668,16 @@ static long __gup_longterm_locked(struct mm_struct *mm,
- 	unsigned long flags = 0;
- 	long rc;
+@@ -1555,8 +1555,8 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 					struct vm_area_struct **vmas,
+ 					unsigned int gup_flags)
+ {
+-	unsigned long i;
+-	bool drain_allow = true;
++	unsigned long i, isolation_error_count;
++	bool drain_allow;
+ 	LIST_HEAD(cma_page_list);
+ 	long ret = nr_pages;
+ 	struct page *prev_head, *head;
+@@ -1567,6 +1567,8 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
  
--	if (gup_flags & FOLL_LONGTERM)
-+	if (gup_flags & FOLL_LONGTERM) {
-+		/*
-+		 * We are long term pinning pages and their PA's should not
-+		 * change until unpinned. Without FOLL_WRITE we might get zero
-+		 * page which we do not want. Force creating normal
-+		 * pages by adding FOLL_WRITE.
-+		 */
-+		gup_flags |= FOLL_WRITE;
- 		flags = memalloc_pin_save();
-+	}
+ check_again:
+ 	prev_head = NULL;
++	isolation_error_count = 0;
++	drain_allow = true;
+ 	for (i = 0; i < nr_pages; i++) {
+ 		head = compound_head(pages[i]);
+ 		if (head == prev_head)
+@@ -1578,25 +1580,35 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 		 * of the CMA zone if possible.
+ 		 */
+ 		if (is_migrate_cma_page(head)) {
+-			if (PageHuge(head))
+-				isolate_huge_page(head, &cma_page_list);
+-			else {
++			if (PageHuge(head)) {
++				if (!isolate_huge_page(head, &cma_page_list))
++					isolation_error_count++;
++			} else {
+ 				if (!PageLRU(head) && drain_allow) {
+ 					lru_add_drain_all();
+ 					drain_allow = false;
+ 				}
  
- 	rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas, NULL,
- 				     gup_flags);
+-				if (!isolate_lru_page(head)) {
+-					list_add_tail(&head->lru, &cma_page_list);
+-					mod_node_page_state(page_pgdat(head),
+-							    NR_ISOLATED_ANON +
+-							    page_is_file_lru(head),
+-							    thp_nr_pages(head));
++				if (isolate_lru_page(head)) {
++					isolation_error_count++;
++					continue;
+ 				}
++				list_add_tail(&head->lru, &cma_page_list);
++				mod_node_page_state(page_pgdat(head),
++						    NR_ISOLATED_ANON +
++						    page_is_file_lru(head),
++						    thp_nr_pages(head));
+ 			}
+ 		}
+ 	}
+ 
++	/*
++	 * If list is empty, and no isolation errors, means that all pages are
++	 * in the correct zone.
++	 */
++	if (list_empty(&cma_page_list) && !isolation_error_count)
++		return ret;
++
+ 	if (!list_empty(&cma_page_list)) {
+ 		/*
+ 		 * drop the above get_user_pages reference.
+@@ -1616,23 +1628,19 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
+ 			return ret > 0 ? -ENOMEM : ret;
+ 		}
+ 
+-		/*
+-		 * We did migrate all the pages, Try to get the page references
+-		 * again migrating any new CMA pages which we failed to isolate
+-		 * earlier.
+-		 */
+-		ret = __get_user_pages_locked(mm, start, nr_pages,
+-						   pages, vmas, NULL,
+-						   gup_flags);
+-
+-		if (ret > 0) {
+-			nr_pages = ret;
+-			drain_allow = true;
+-			goto check_again;
+-		}
++		/* We unpinned pages before migration, pin them again */
++		ret = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
++					      NULL, gup_flags);
++		if (ret <= 0)
++			return ret;
++		nr_pages = ret;
+ 	}
+ 
+-	return ret;
++	/*
++	 * check again because pages were unpinned, and we also might have
++	 * had isolation errors and need more pages to migrate.
++	 */
++	goto check_again;
+ }
+ #else
+ static long check_and_migrate_cma_pages(struct mm_struct *mm,
 -- 
 2.25.1
 
