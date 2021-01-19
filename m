@@ -2,65 +2,65 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76AFDC433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 18:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 053A5C433DB
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 18:42:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4549520706
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 18:36:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBAE422E00
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 18:42:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392241AbhASSgS (ORCPT
+        id S2388263AbhASSbU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jan 2021 13:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        Tue, 19 Jan 2021 13:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391416AbhASSfn (ORCPT
+        with ESMTP id S2387688AbhASS3Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:35:43 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CA5C061573
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:35:03 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ox12so5637477ejb.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:35:03 -0800 (PST)
+        Tue, 19 Jan 2021 13:29:16 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911B9C061757
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:28:22 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id s11so15437923edd.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:28:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ct+vcUpxOjScIL+qAWZyF8knx6gxVliNtyQsEHsrnBQ=;
-        b=BZe8awveFMq5GincJDNVuax+pU2IN/5C9pNKCNqUs9yROKpwZH1EZi26i4cskhGgts
-         LII0hwEUCFrmUnS9VhpzvWJaH/THjYoCLkOL5y59cRy9Pi8y8m7cle0ouKhiR+qVd48Y
-         1oSq4GGmA983vt0d8xpUHcVPHW/ai9FuZwTL9vqIiU/gHm3IA5IuUXBOm5GA/XKdEobF
-         rwKxMX2jZR+kjWjBjA/ZQh/tFExxv01CpNHBLazxFhAIQGrcXcvtxWNt0O385H6icruS
-         pNEIfHrArsdVfXtKXjZp7ImGEY3/7TOtRniIqG5iFaGU2sjo1pdfb/EbSos1zRgaftyp
-         PqTw==
+        bh=TEivdsLh035xUwd80O8uoWTflxLp0NXnOA1sF8M3+78=;
+        b=MZzAE+lcoJitaKLsjfwICAcGqTemrfvFhimcvi4oG08ftrrRPeijQsl1WSuCgpj5pH
+         KYQSqhemslpy00yUaKBzaldVVL8J5PGb9ucoc8nklBVBOXd/T4RjDFyngbFiJTo99Ho6
+         5yib6gLuXqtlWtbUkyKMxeKBB9Og3upzBSrJvp+OAmN7cSMR1IvqmISSnMyj8P6ZLD8A
+         GWPSxWq/E6CLhQzK57oQNnKIBhXja+5g3NGQ58PhNaOSXLDFggCh9PWeD3IaOlgFqoio
+         8jsxGA+NsKalohFP96bDgXGgHmSaXtiVxI6/OvZ5jPJift1+w1ja1OD6l2F40X3QVeZB
+         sJxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ct+vcUpxOjScIL+qAWZyF8knx6gxVliNtyQsEHsrnBQ=;
-        b=CGb+28HbBOfR7nHnK7q9Kd33AXK3lfxhzj4ep3sDFoNQo8Jc1enbyEHVLUK1aZRO8V
-         u94pL4+zNtCdBa4mAqIJVnQX8i8cMncE+84goVPAKW2rb37PjoM10cwle3cc4iyqLlqV
-         rSPOR0rACwBz2C5sz7jtesyGRVGj6XO4+s2qjuDMQ+QKL4MQo8wN3qFCqOhQtfGfA8rc
-         36ArU24vnCdd8A1COMpisww/Tye4zXFvYBWzWsTHPIOtmjYs1MAZdW4uBwPl+9y4QLHd
-         EVnPNyQWh/a/x1euV+O4Voyv7Zn3XeeKdGewuSgJeulCdDZ/P8aMzeX579Prtrpi0A8k
-         lBoQ==
-X-Gm-Message-State: AOAM533nBgjvJRDN1U70clYCKKS/gIHyMI7maaSX2lbCPswJLlFTvpj1
-        Xdm3zPwp4NoTl7SehNdFTPhr0PoJre2LpcoQibUDdA==
-X-Google-Smtp-Source: ABdhPJxq2+sfTG3ORVXYvyp4uAxt4hNSEd/oukNuDPHO3IHBTF8PXk9SD4PxTgPj0Ma3BgJmPR49bmjsQLfU4aQP2Oc=
-X-Received: by 2002:a17:906:cedd:: with SMTP id si29mr4046472ejb.426.1611081302258;
- Tue, 19 Jan 2021 10:35:02 -0800 (PST)
+        bh=TEivdsLh035xUwd80O8uoWTflxLp0NXnOA1sF8M3+78=;
+        b=IIUGP3HoyB98XqvzWnDFy9YHFBOHb2G0EW5FuJ0G09wBB5KnqVg5vG8jQlP2RdqWG5
+         W+iRxgD42uG0HJv//xdxkyzBWB8lB3aDZVJ4cffn61cRAcmcZxEwX6rHggbGIKhy0jcE
+         DdNRrZULYx6GpecvgNvWXYLZOq6i/YVs9HGyPAxyIy8716o7KJKm4jG8ZSGr30F72qvZ
+         wgZFyVjuq7g+spi13QZJb8x0rjcCAQiyxtKR6t8Yiat1j9TSO8tRUu84MWEDNAaWrWoY
+         9r9X8cO9IImQcwntAU4+whU84935To2mFEURrsopncBD490tcMd2jRjbAZp8iWktXBPC
+         ooIw==
+X-Gm-Message-State: AOAM5328EejDzNQ5FS6SN0SLhkFYEdJcLRTOkNKgtqx5tu/b7sEdNlfz
+        keX5HyzN3RncMqlV5PyAvkqpGnUViRYOWZWGINo7jQ==
+X-Google-Smtp-Source: ABdhPJyIsCE/h8KXnasJlCc79A7cfT2d9l0qv5z4TSIJoVr5CTAM59t6fXq9KkFRvgJmTJyeyJLvPxOfWc7tngLckm4=
+X-Received: by 2002:a05:6402:5246:: with SMTP id t6mr4448005edd.62.1611080901331;
+ Tue, 19 Jan 2021 10:28:21 -0800 (PST)
 MIME-Version: 1.0
 References: <20210119043920.155044-1-pasha.tatashin@soleen.com>
- <20210119043920.155044-9-pasha.tatashin@soleen.com> <20210119183013.GB4605@ziepe.ca>
-In-Reply-To: <20210119183013.GB4605@ziepe.ca>
+ <20210119043920.155044-5-pasha.tatashin@soleen.com> <20210119182200.GZ4605@ziepe.ca>
+In-Reply-To: <20210119182200.GZ4605@ziepe.ca>
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-Date:   Tue, 19 Jan 2021 13:34:26 -0500
-Message-ID: <CA+CK2bBKbht34Hkg9YvhwYAiAjd3NMd_+Eir9wfx+07V-Y2TTA@mail.gmail.com>
-Subject: Re: [PATCH v5 08/14] mm/gup: do not allow zero page for pinned pages
+Date:   Tue, 19 Jan 2021 13:27:45 -0500
+Message-ID: <CA+CK2bDwFuwgNa3mYHTvBJWYTM+gLaeKS4TBYCjqWzag3kEagw@mail.gmail.com>
+Subject: Re: [PATCH v5 04/14] mm/gup: check for isolation errors
 To:     Jason Gunthorpe <jgg@ziepe.ca>
 Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -87,29 +87,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 1:30 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Mon, Jan 18, 2021 at 11:39:14PM -0500, Pavel Tatashin wrote:
-> > Zero page should not be used for long term pinned pages. Once pages
-> > are pinned their physical addresses cannot changed until they are unpinned.
-> >
-> > Guarantee to always return real pages when they are pinned by adding
-> > FOLL_WRITE.
-> >
-> > Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> >  mm/gup.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> No, this will definitely break things
+> This should have a fixme too, this is a bug.
 
-What will break
+OK
 
 >
-> Why does the zero page have to be movable?
+> The patch looks OK, but I keep feeling this logic is all really
+> overcomplicated...
 
-It is not even about being movable, we can't cow pinned pages returned
-by GUP call, how can we use zero page for that?
+I agree, I have a simplification patch for this logic, check out patch 12/14.
 
 >
-> Jason
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+Thank you for your review.
+
+Pasha
