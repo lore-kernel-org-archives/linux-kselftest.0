@@ -2,120 +2,115 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFC53C433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 18:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 824B5C4332E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 20:08:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E72822E00
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 18:49:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CF0123119
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jan 2021 20:08:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387730AbhASStF (ORCPT
+        id S1728613AbhASUHl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jan 2021 13:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        Tue, 19 Jan 2021 15:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404355AbhASSF7 (ORCPT
+        with ESMTP id S2392228AbhASUGP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:05:59 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2573AC061575
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:05:14 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id b64so22728237qkc.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 10:05:14 -0800 (PST)
+        Tue, 19 Jan 2021 15:06:15 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD04BC0613CF
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 12:05:35 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id m6so12976134pfk.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 12:05:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
+        d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=VdWMG/uGCJ43g2jyUu+cOqHYdfz8BVsdLX4Jg//Lvgk=;
-        b=j05GmtUhLQZqMespMujz2B04lEC5T+G/IfPEWSLg9vszMTM84+Zwtv7YEyyGBOnOMD
-         YZC13ZpoqFi0CBqzxMyMLz5MGzx9rrfUGkf8WoTmWLe+XPRMAlK9wStYfMqqlkPknPAq
-         yGDvTKn7uo+pfQGH7wmxQgS0VxVr6WuRqwgAHe+hR8rmQgHR51984f46IM/N2BUDhuUS
-         YJMag/9hIm93ON0T4gX5kXGSFdmvo91YglWHnbp2mCOm7C6wA5Cg0t+d33mCD3gJD5CY
-         VLG4PZoRo65ssQgEKGnjk49NqZBmRBjXDP1dFdICMM9Iv1Yj7cOvkh0ctNhWEORsk4bd
-         7Mqg==
+        bh=dEsHTOhzjzO6o9rD2N5DWat/JJ7Q/inxXOWFBgJvDTI=;
+        b=K+bN7LxeDH9XpNlaRCisKxW2aaVCwJe4CNdTG6tvSMlY1NKYzVqi/c0D296XP5aKcQ
+         vUnMolIDkQbec9Fxty0H5C7DMbnEja+e8mtAWtjuIXBlC69TJ+lZ2jBFF0EUm3YF4y4+
+         mscHktxp4ZgF386MBk+ktfaMNkksLFDDCZPRSOlxx5FvNGZWrtkyH/zYAi+8i0kUhjHe
+         6avmHs3Ff9t4FL8Mc3UN62O8S71aW3FfzgZEP2LTpvtvC4PL/6cQ7eI+u+8CsLOkNf4w
+         zAwWWTe55Wff5axBTrbbA7IsfG91LIvnbel6MIKkmqYhg3Q1NbbsuvTpn2lpi71QiCCd
+         qZIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=VdWMG/uGCJ43g2jyUu+cOqHYdfz8BVsdLX4Jg//Lvgk=;
-        b=RxRx0k+G2bvK0NdLOGMfFh+bVnN+8G6y7O7tKeKP/SD0HGj19TaiUad1SNULjfdMRK
-         5Lyzh/5C9RhEyVx2Iil/b+Mi1t28foKoTrTB7WWML+tmVXXQqCCNhuB/C3/jboWT0Zcz
-         37ojNfiUTxeLu9owcGYjf+tscv5mYYpPJgcinXPP330b9w8/goxtcHP30Iax8t6dNY+e
-         LoEo4WaGpr69V6r35gq1kb5obdnGmJgf7SQqdZDyrFeOtm22ye5VheSky+UVcs0gO1CB
-         viCeMq5C+6LlHCe0T4Ta4KTRAapeB+u5mmKbKvGSpwD11Lpp3z2cxJshbJ4dRZL6qVeM
-         SrCA==
-X-Gm-Message-State: AOAM531SyRzGDCZPhL4MjT9/IekTq4oBkBIHuwvxZWriko4UoQeBBNq2
-        +S69JSYRihvb/lrFC4CiPeOfjA==
-X-Google-Smtp-Source: ABdhPJx7MA8sBMbEtUSV41m+37ci8w0m1RGlrZnwqu/7wxd6/5Vt3/6VIuQwvxqlLT6y5Ik3JcwCyA==
-X-Received: by 2002:a37:a50c:: with SMTP id o12mr5590816qke.98.1611079513428;
-        Tue, 19 Jan 2021 10:05:13 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id o5sm12802873qti.47.2021.01.19.10.05.12
+        bh=dEsHTOhzjzO6o9rD2N5DWat/JJ7Q/inxXOWFBgJvDTI=;
+        b=Zcc8TctUoe3/1oM/oRamHAngHmLFKYhEdvB6g9/Yr/QXkBh4Bxd+i6JIY+OCFBXre5
+         3fayLRoDUNzcJelReh/G1GFaoAAjlsxGsVZZWfYBnz3fZ1ZmzqpOIioNbjOL1A/O91in
+         azn7uMdAKFLwPPwqMWiSZ3LvxeS/V6FU4ATD5fAvLsLYv3yRMbNGeciY+0WVz2Km8i/z
+         N09KvxwXrND3MADAiAKg09U1y29Gvz4wd59+Z+QI7n+AQIIRibOGpBAgnANYc5fOsg6x
+         +P7sWFAlO9mntof1p/PJ0hcxweXBQSQmMUB5MYaeEg5yYD09O3lnRAfg1kzAQNzV+p4z
+         msqA==
+X-Gm-Message-State: AOAM532Ux+/1KtffOk+7lD52zJBJd088F3zA28y3vpbi7zhTULR39t/J
+        5TcDbCq8xfRFe/DaVrBNaVlRAw==
+X-Google-Smtp-Source: ABdhPJxmIAjwqUXjXQNHFrRcsGx95boV03xzh9T8vnt0imRm6wf7NGD39Q/j7y43K/NTXLpdtIKPXw==
+X-Received: by 2002:a62:a508:0:b029:1ba:621:ff29 with SMTP id v8-20020a62a5080000b02901ba0621ff29mr2692033pfm.44.1611086734975;
+        Tue, 19 Jan 2021 12:05:34 -0800 (PST)
+Received: from google.com ([2620:15c:f:10:1ea0:b8ff:fe73:50f5])
+        by smtp.gmail.com with ESMTPSA id a9sm19613789pfn.178.2021.01.19.12.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 10:05:13 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1l1vNQ-003pFv-F7; Tue, 19 Jan 2021 14:05:12 -0400
-Date:   Tue, 19 Jan 2021 14:05:12 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, vbabka@suse.cz, mhocko@suse.com,
-        david@redhat.com, osalvador@suse.de, dan.j.williams@intel.com,
-        sashal@kernel.org, tyhicks@linux.microsoft.com,
-        iamjoonsoo.kim@lge.com, mike.kravetz@oracle.com,
-        rostedt@goodmis.org, mingo@redhat.com, peterz@infradead.org,
-        mgorman@suse.de, willy@infradead.org, rientjes@google.com,
-        jhubbard@nvidia.com, linux-doc@vger.kernel.org,
-        ira.weiny@intel.com, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 02/14] mm/gup: check every subpage of a compound page
- during isolation
-Message-ID: <20210119180512.GY4605@ziepe.ca>
-References: <20210119043920.155044-1-pasha.tatashin@soleen.com>
- <20210119043920.155044-3-pasha.tatashin@soleen.com>
+        Tue, 19 Jan 2021 12:05:34 -0800 (PST)
+Date:   Tue, 19 Jan 2021 12:05:27 -0800
+From:   Sean Christopherson <seanjc@google.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, haitao.huang@intel.com,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH] x86/sgx: Allows ioctl PROVISION to execute before CREATE
+Message-ID: <YAc7h3zQR06eWPhZ@google.com>
+References: <20210118133335.98907-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210119043920.155044-3-pasha.tatashin@soleen.com>
+In-Reply-To: <20210118133335.98907-1-tianjia.zhang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 11:39:08PM -0500, Pavel Tatashin wrote:
-> When pages are isolated in check_and_migrate_movable_pages() we skip
-> compound number of pages at a time. However, as Jason noted, it is
-> not necessary correct that pages[i] corresponds to the pages that
-> we skipped. This is because it is possible that the addresses in
-> this range had split_huge_pmd()/split_huge_pud(), and these functions
-> do not update the compound page metadata.
+On Mon, Jan 18, 2021, Tianjia Zhang wrote:
+> In function sgx_encl_create(), the logic of directly assigning
+> value to attributes_mask determines that the call to
+> SGX_IOC_ENCLAVE_PROVISION must be after the command of
+> SGX_IOC_ENCLAVE_CREATE. If change this assignment statement to
+> or operation, the PROVISION command can be executed earlier and
+> more flexibly.
 > 
-> The problem can be reproduced if something like this occurs:
+> Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/ioctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 1. User faulted huge pages.
-> 2. split_huge_pmd() was called for some reason
-> 3. User has unmapped some sub-pages in the range
-> 4. User tries to longterm pin the addresses.
+> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+> index f45957c05f69..0ca3fc238bc2 100644
+> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> @@ -108,7 +108,7 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
+>  	encl->base = secs->base;
+>  	encl->size = secs->size;
+>  	encl->attributes = secs->attributes;
+> -	encl->attributes_mask = SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
+> +	encl->attributes_mask |= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
+
+Alternatively, move the existing code to sgx_open()?  Initializing the field
+when the encl object is allocated feels more correct.
+
+>  	/* Set only after completion, as encl->lock has not been taken. */
+>  	set_bit(SGX_ENCL_CREATED, &encl->flags);
+> -- 
+> 2.19.1.3.ge56e4f7
 > 
-> The resulting pages[i] might end-up having pages which are not compound
-> size page aligned.
-> 
-> Fixes: aa712399c1e8 ("mm/gup: speed up check_and_migrate_cma_pages() on huge page")
-> 
-> Reported-by: Jason Gunthorpe <jgg@nvidia.com>
-
-No new line after fixes
-
-> Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
->  mm/gup.c | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
-
-Looks good
-
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Thanks,
-Jason
