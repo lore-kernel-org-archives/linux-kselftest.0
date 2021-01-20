@@ -2,111 +2,136 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D846C433DB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 14:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F250C433DB
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 14:51:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39AD423380
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 14:51:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4149F23380
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 14:51:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733055AbhATOvZ (ORCPT
+        id S1733210AbhATOvo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 20 Jan 2021 09:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389599AbhATOaP (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 09:30:15 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CA0C0613CF
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 06:29:33 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id bx12so11981593edb.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jan 2021 06:29:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aWKyefarMbYIm9jBTqpiNhh/6bAejOIVblFl9gQry+g=;
-        b=hBG5Ou0+aFLFtMuylp824skZ3YhwWPOzMPQdaY4BvFxy9bB80kYsRcBjcdtUjxaXVP
-         CsPfqCtighWVowwnBb+hg+kemkOdx9nwUspExzovcd38OMWJDsXLfTc54Wbt6tSIe2ax
-         ETqrU1ivUmJMLtMpGJbfj+vg6KISY2kF6n61a3YTQ4GacMaMVo2ZOGPSJK9ulTPFocob
-         KSjeVtDkQlfDeAWUypUAXnZKOASD4PayXH5XSOCvsQ+qNysWynFwXILGR6TKrLQHrcUN
-         ucwW11P780+wH+Qmbvv7kQMqw6A4J7/ZvL9RWjIaBBz9U0nMJ2gSRD6egPM8VUPlhdRM
-         LZmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aWKyefarMbYIm9jBTqpiNhh/6bAejOIVblFl9gQry+g=;
-        b=FzZ4R+JyiDIKc07Mat1a3faWhTqwlPoTx58IFVsTwQ2uR1berNQoUZKgECkvCv6O0V
-         +fJUW7aLMrENtxsJLskpd9s3a4SB5e05ynEKh+y1kW61AOua5Q7o7cWdwf/gLJOReVuA
-         kco+RmLPnQnvhVI666pzt5ocJ+xVxBo5hPyNnUt9054eW46hgoryuIIZ+JNf1ohQ40yV
-         BDsAvlWq/754Tagz3rKD9Pjaj82LBXoriHbaaX2AQzBJVR695DSyHuXR0UCxSzc1XQbM
-         ozZqsIGv+CnEutYX9Ar/93qMJRSrWTNzBinpVYQfHPaxim2s9qAeB7zUbThH+d5mKHx7
-         pzfw==
-X-Gm-Message-State: AOAM5332Ovx28sEp4nJNwvcOXEb3M7Y1d8G04+kjL1LiaNtSymYKJLYh
-        QAGSnkrdK0AGGdb6t6cOt+WzrZrl9qoaytzAnm10Lg==
-X-Google-Smtp-Source: ABdhPJwze6NV/ha3BievmTANJDfno2T0aPGGSxEhsUs5hyBy6ils0rshJXhBgBEdw1VCARcVcYQzhHidUQdPuFxOACE=
-X-Received: by 2002:a50:934a:: with SMTP id n10mr7450794eda.26.1611152972587;
- Wed, 20 Jan 2021 06:29:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120014333.222547-1-pasha.tatashin@soleen.com>
- <20210120014333.222547-11-pasha.tatashin@soleen.com> <20210120132223.GH4605@ziepe.ca>
-In-Reply-To: <20210120132223.GH4605@ziepe.ca>
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-Date:   Wed, 20 Jan 2021 09:28:56 -0500
-Message-ID: <CA+CK2bAcbLzWTC3b=FqtSODG2ZWEK56AoWAQKnPWbJTzn3w6+g@mail.gmail.com>
-Subject: Re: [PATCH v6 10/14] memory-hotplug.rst: add a note about
- ZONE_MOVABLE and page pinning
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Wed, 20 Jan 2021 09:51:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41436 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390597AbhATOfk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Jan 2021 09:35:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E0AF23329;
+        Wed, 20 Jan 2021 14:34:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611153299;
+        bh=iFdLpwpKeZkJepwYerrVF40vWRJ3GSqvzjorTDnVdD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ll53owdsB6m2x9i4robbS/FM07EzmKvW/7Iy/ycMt5rkzITycq9dnrnFdP+AL4q1P
+         cK+Clib06xz7LXRK9hzzM5GaP7fI7s3urYUPLNHkohZRf8DGauG3MiE4vtW/VU/B/6
+         e7xH/jQf/ZJlJ3uNK4QWDsACg6SQOcDKunvFaxU8pyfksjeDclo08iukFItIDqve6w
+         xA5binXJ584bFr5CpU+YcBfqp8WLH6Bvw4T+HnF+h8Sw2C18hFqSpFjmSaDDPmB1aD
+         F6pIoNgn0XkCzGxitIzuR0R1ekQPGnNtnoTUJrhekjhch9cznVHIOeR9m0FzHnT+Pg
+         nfMh51c56T6iw==
+Date:   Wed, 20 Jan 2021 16:34:53 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, mike.kravetz@oracle.com,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Shuah Khan <shuah@kernel.org>, haitao.huang@intel.com,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH] selftests/x86: Simplify the code of getting vdso base
+ address in sgx
+Message-ID: <YAg/jfoCdE0GanNQ@kernel.org>
+References: <20210118133321.98655-1-tianjia.zhang@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210118133321.98655-1-tianjia.zhang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 8:22 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Tue, Jan 19, 2021 at 08:43:29PM -0500, Pavel Tatashin wrote:
-> > +.. note::
-> > +   Techniques that rely on long-term pinnings of memory (especially, RDMA and
-> > +   vfio) are fundamentally problematic with ZONE_MOVABLE and, therefore, memory
-> > +   hot remove. Pinned pages cannot reside on ZONE_MOVABLE, to guarantee that
-> > +   memory can still get hot removed - be aware that pinning can fail even if
-> > +   there is plenty of free memory in ZONE_MOVABLE. In addition, using
-> > +   ZONE_MOVABLE might make page pinning more expensive, because pages have to be
-> > +   migrated off that zone first.
->
-> Just to point out, if anyone is using RDMA/etc with hotplug memory,
-> this series is likekly going to be a major regression for those users.
+On Mon, Jan 18, 2021 at 09:33:21PM +0800, Tianjia Zhang wrote:
+> The base address of vDSO can be obtained through the library function
+> `getauxval()`, so use `getauxval(AT_SYSINFO_EHDR)` instead of a custom
+> implementation to simplify the code.
+> 
+> Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-Right: one is because we now prohibit pinning any pages in a movable
-zone, second reason is because we now check every page during
-migration that fixes an existing bug.
+- Remove reported-by, as there is no regression.
+- Please write to the long description what the commit does.
+  It's lacking that. I.e. instead of passive form: "Obtain the
+  base address...".
 
+/Jarkko
 
->
-> Jason
+> ---
+>  tools/testing/selftests/sgx/main.c | 24 ++++--------------------
+>  1 file changed, 4 insertions(+), 20 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+> index 724cec700926..365d01dea67b 100644
+> --- a/tools/testing/selftests/sgx/main.c
+> +++ b/tools/testing/selftests/sgx/main.c
+> @@ -15,6 +15,7 @@
+>  #include <sys/stat.h>
+>  #include <sys/time.h>
+>  #include <sys/types.h>
+> +#include <sys/auxv.h>
+>  #include "defines.h"
+>  #include "main.h"
+>  #include "../kselftest.h"
+> @@ -28,24 +29,6 @@ struct vdso_symtab {
+>  	Elf64_Word *elf_hashtab;
+>  };
+>  
+> -static void *vdso_get_base_addr(char *envp[])
+> -{
+> -	Elf64_auxv_t *auxv;
+> -	int i;
+> -
+> -	for (i = 0; envp[i]; i++)
+> -		;
+> -
+> -	auxv = (Elf64_auxv_t *)&envp[i + 1];
+> -
+> -	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
+> -		if (auxv[i].a_type == AT_SYSINFO_EHDR)
+> -			return (void *)auxv[i].a_un.a_val;
+> -	}
+> -
+> -	return NULL;
+> -}
+> -
+>  static Elf64_Dyn *vdso_get_dyntab(void *addr)
+>  {
+>  	Elf64_Ehdr *ehdr = addr;
+> @@ -162,7 +145,7 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
+>  	return 0;
+>  }
+>  
+> -int main(int argc, char *argv[], char *envp[])
+> +int main(int argc, char *argv[])
+>  {
+>  	struct sgx_enclave_run run;
+>  	struct vdso_symtab symtab;
+> @@ -203,7 +186,8 @@ int main(int argc, char *argv[], char *envp[])
+>  	memset(&run, 0, sizeof(run));
+>  	run.tcs = encl.encl_base;
+>  
+> -	addr = vdso_get_base_addr(envp);
+> +	/* Get vDSO base address */
+> +	addr = (void *)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
+>  	if (!addr)
+>  		goto err;
+>  
+> -- 
+> 2.19.1.3.ge56e4f7
+> 
+> 
