@@ -2,75 +2,108 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C25C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36DBEC433E0
 	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 01:51:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C416B224B1
+	by mail.kernel.org (Postfix) with ESMTP id E9FF22250E
 	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 01:51:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731083AbhATBvC (ORCPT
+        id S1730805AbhATBvF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jan 2021 20:51:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53144 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731104AbhATBuv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jan 2021 20:50:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7B2AD2251D;
-        Wed, 20 Jan 2021 01:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611107410;
-        bh=GNj2MIJf8RtOcX7Wh6NXVAF3Lf0JF12Jnse9VPAkcDs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Rb2mol4m5NZ+U3dN4EUK7Go5NCK9xRzM18VU/O7lvnqeyRglvo+5AMTf3dF1VYRLM
-         oqVjiotUxbyoYR6XElxxHl5hqwFTOFUWcRfvsu6VO3A/3QQpipu4ebsuZEun6RYS0A
-         yyZC9wfHWYunKxx35lx8lZXGVHCzDiRuzWz1bbXt1FlUSYGt07zAzmDJElmOHm180C
-         ChsIcTvqK23IyNdvUvaolBBipNoaYr0jvJ6SamutLzpegUXt2ZTiDzwjnH5NVDLDGs
-         o2T9qtV0wfiXDG8RRsHEdUCmXBGMl35SwQpnoWes/+EM1A6HgVDaxKurHOL5GQDngw
-         QMV7WLaHiZaBw==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 19 Jan 2021 20:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731095AbhATBpb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Jan 2021 20:45:31 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDDCC0617BB
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 17:43:54 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id z6so8219591qtn.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jan 2021 17:43:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=BKUj/6ZsJWAx+ypUtR8qlYsn81/heEPy52GNTY6EKsg=;
+        b=oDhucAFFl5fFLBbUP6N7kYGPCWSid4rOxZEuV/K3xSEXxC+4t38NIYKbPweeJkN8y5
+         0GqeWh662ZXEMhO81KR9IWGunuueM9R+TVXGrAKGPQY3/OpzYHXKsc7+IsWTeXUJKmhW
+         uCG28rVcS09zX6wS2pt3JMesiEscQKi02L5+KN1POzu7GF4y+nKX4qWMxy1R5xDNYUux
+         XxfepHhMK2sKBzZ2a3Xe6hIlNRm677mF9W9S7S81+wMhl/djsa2IRYo+fPYOibYFCU5b
+         5/0FVlix0iE3DR+ayWoKmNXjF1/tlD0e0i/LSC1K1Cn50CPVGOxvVf3iObZ7fjoxUtI1
+         kw3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BKUj/6ZsJWAx+ypUtR8qlYsn81/heEPy52GNTY6EKsg=;
+        b=mU0RTs3mUl6viYqZmNJpHpj7uVouVxtk4tTXUayxUukVawnf//qYCyqZ2rZJs4A24M
+         L9ZEpNK8OoBH8DlawwVNH6/IXGsHLj3X8mYnrtpi0MA7ustavn4JcGl294RltYhl6hBe
+         slFPpdDSobLRkxrUE3XzxWPDJMN0JRj7mD+UYQcnSim1YH+vQNoI8hy6jg1z/WzwaPjY
+         Vzg9Jg6JpMcR3edFfNkb+U6Om5/P6EgFE6PAJNq4q65cHOZBx0a2qHBVatvVmmM6EGJg
+         FXUTwOUCSoICzdAfOJwWVc3O+8c0y2eNN9nuVv8yJhTYeGtRN06Tiu7Kg6NrHiFezVDR
+         UpgA==
+X-Gm-Message-State: AOAM532cn4lUVCUJVgXBLjvg0vAmGf9idX7lNRzvzYiIf95d4FLw73sx
+        2miBhwkJxPOqgmVZA9CMDBKQMg==
+X-Google-Smtp-Source: ABdhPJwGbcj3jYzIBgMMxo+ssO/F9JFenmluHPBNAtzaOONj3R/BAwlfKcVGPIBE5qq3N+6LdmcxGQ==
+X-Received: by 2002:aed:3aa8:: with SMTP id o37mr6814179qte.239.1611107033730;
+        Tue, 19 Jan 2021 17:43:53 -0800 (PST)
+Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
+        by smtp.gmail.com with ESMTPSA id a9sm391871qkk.39.2021.01.19.17.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 17:43:53 -0800 (PST)
+From:   Pavel Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
+        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
+        dan.j.williams@intel.com, sashal@kernel.org,
+        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
+        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
+        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
+        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
+        linux-doc@vger.kernel.org, ira.weiny@intel.com,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v6 11/14] mm/gup: change index type to long as it counts pages
+Date:   Tue, 19 Jan 2021 20:43:30 -0500
+Message-Id: <20210120014333.222547-12-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210120014333.222547-1-pasha.tatashin@soleen.com>
+References: <20210120014333.222547-1-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] selftests: forwarding: Fix spelling mistake "succeded"
- -> "succeeded"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161110741047.23772.11114014464496090991.git-patchwork-notify@kernel.org>
-Date:   Wed, 20 Jan 2021 01:50:10 +0000
-References: <20210118111902.71096-1-colin.king@canonical.com>
-In-Reply-To: <20210118111902.71096-1-colin.king@canonical.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+In __get_user_pages_locked() i counts number of pages which should be
+long, as long is used in all other places to contain number of pages, and
+32-bit becomes increasingly small for handling page count proportional
+values.
 
-This patch was applied to netdev/net-next.git (refs/heads/master):
+Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+---
+ mm/gup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, 18 Jan 2021 11:19:02 +0000 you wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There are two spelling mistakes in check_fail messages. Fix them.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  tools/testing/selftests/net/forwarding/tc_chains.sh | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-Here is the summary with links:
-  - [next] selftests: forwarding: Fix spelling mistake "succeded" -> "succeeded"
-    https://git.kernel.org/netdev/net-next/c/eaaf61122865
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/mm/gup.c b/mm/gup.c
+index 668795e5a816..c7abd5b37150 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1479,7 +1479,7 @@ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
+ {
+ 	struct vm_area_struct *vma;
+ 	unsigned long vm_flags;
+-	int i;
++	long i;
+ 
+ 	/* calculate required read or write permissions.
+ 	 * If FOLL_FORCE is set, we only require the "MAY" flags.
+-- 
+2.25.1
 
