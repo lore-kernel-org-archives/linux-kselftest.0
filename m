@@ -2,192 +2,118 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D313C433DB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 18:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1843C433DB
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 19:26:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E714233FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 18:18:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A363233FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jan 2021 19:26:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404281AbhATSNX (ORCPT
+        id S1732511AbhATT0Z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 20 Jan 2021 13:13:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391406AbhATSHQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jan 2021 13:07:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C46FD23122;
-        Wed, 20 Jan 2021 18:06:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611165995;
-        bh=yaiGaY9CsCce4ziujW0DI0CJqQEDns2mxFIXWr5A2d8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eZ5X0CQgaT+uie3JXh7KjvrBoH+7Ekdr3l2OhBzSFotcM4YEP/XAGrsPARQKDfMza
-         O23UyQ5LxQtwX2nPQBId5SpFWhAlofCSfidz/10Pqs2LpopcecwmdQuW5+ZlK01aoj
-         V53wFKvBVddXgrCi2fEdvdIexeRrr1Hm7PTIx+putCNvAXfV49I2UxOyjruCgBoAUl
-         yT+3Fc4L4TwJl+BFqtlVxkSh1kOfIfU6o9UY4nXP1PfIkmI/FdGDzObQAz05r+26Bz
-         uuBjD0LmqGZ7CJUbGaf1oa/oIPkk1QXY+v4njtTO2ei8FVjUeH6wfKvTHEsj4Bq9JC
-         KSp34b58SuuvQ==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [PATCH v15 01/11] mm: add definition of PMD_PAGE_ORDER
-Date:   Wed, 20 Jan 2021 20:06:02 +0200
-Message-Id: <20210120180612.1058-2-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210120180612.1058-1-rppt@kernel.org>
-References: <20210120180612.1058-1-rppt@kernel.org>
+        Wed, 20 Jan 2021 14:26:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436467AbhATTZw (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 20 Jan 2021 14:25:52 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83CC061757;
+        Wed, 20 Jan 2021 11:25:09 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id j3so7705900ljb.9;
+        Wed, 20 Jan 2021 11:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=puPe6u5eGjzcnpW6TMCNyyzNjrLc2snw2qd9AmS3wOs=;
+        b=SzZzHfAXPXi9k0Xc82ayuWcOl+5o9MCFSQ4b6b2hLQ0M3w6RGfSWN/dwCKd+2weeWj
+         tP1eAb3Fsn6/0N7TQNyl7CKMZ8NJAsQrJeLBXVkXj41XO4w+NV4PRGb2htkNOP3QH98o
+         9OnvbGjgu/QkW9hZrrizR8LuC4F6199aHwSJeglg4LSjJlnbNoybBIv5XWM4ynnqC4Y+
+         F2lND5oHtYmU0qpu5cdaZdr9eaG6RZYSsSERG2pPcSRFFRTSbYzvY8XB7aihrUduGuid
+         1zTkKpuyL8sRCxObqwqXcbQGGqCkc9Q9NcKRhg+Fkk5BKq2lkzOSgb3hwvknM6V22r7J
+         RIZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=puPe6u5eGjzcnpW6TMCNyyzNjrLc2snw2qd9AmS3wOs=;
+        b=V61W8023ZR554XfvuVid4er9soCagjnsNDrwevbTBPLKDsebxuYI5Ymuk3noX+l5XX
+         us5tzzsYDGPMBt7raMuxQvCabopg8SW5YlVt/htXYsnkeljbUlGNVtxS0D8b610X5Hgi
+         iFsv5dj+whVQN1RaCZPE/1qWhe74qC85VrSAh8J7n4M+F1BdP4GZ6W9LlF8fMhiWJtKs
+         7by3Wx939KL5wNCFSar3sqDw1Ay7ZK/ItcLZWvg4QFPhwORWw1QKmOecqqQtRk9Kuidm
+         rpy1Mq/XCb1tD03hXoMmsexAXBMfqWJEgMmd/0pMTYDF3ghdZlF0dc9zGpEvnBQSa/8/
+         oB6A==
+X-Gm-Message-State: AOAM530b85ICuSn+yUmd7D3hLrIPNXGisZjYosx9TAtaoK9/xewX6nvt
+        nVLdmT93u3v6Hce+NKIaLCuBDA11wwwy8UgQP3WzjgWR
+X-Google-Smtp-Source: ABdhPJzT1oUxuE5392bHQf83WMKzKnsEbmAiuaOs1PYZRsjtysNd0GsvPlvmPhJchyQ4EiR8Lu0VIBhKjsysdaptuI8=
+X-Received: by 2002:a2e:9dc1:: with SMTP id x1mr4838130ljj.32.1611170707741;
+ Wed, 20 Jan 2021 11:25:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210120140350.883-1-angkery@163.com>
+In-Reply-To: <20210120140350.883-1-angkery@163.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 20 Jan 2021 11:24:56 -0800
+Message-ID: <CAADnVQK0RiGYRnzdLRvSQRwTdyCOr1nBqZaNz7YR9gvyXu82fg@mail.gmail.com>
+Subject: Re: [PATCH] selftest/bpf: fix typo
+To:     angkery <angkery@163.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Junlin Yang <yangjunlin@yulong.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+On Wed, Jan 20, 2021 at 6:22 AM angkery <angkery@163.com> wrote:
+>
+> From: Junlin Yang <yangjunlin@yulong.com>
+>
+> Change 'exeeds' to 'exceeds'.
+>
+> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
 
-The definition of PMD_PAGE_ORDER denoting the number of base pages in the
-second-level leaf page is already used by DAX and maybe handy in other
-cases as well.
+The patch didn't reach patchwork.
+Please reduce cc list and resubmit to bpf@vger only.
+Also pls mention [PATCH bpf-next] in the subject.
 
-Several architectures already have definition of PMD_ORDER as the size of
-second level page table, so to avoid conflict with these definitions use
-PMD_PAGE_ORDER name and update DAX respectively.
-
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christopher Lameter <cl@linux.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: Will Deacon <will@kernel.org>
-Cc: Hagen Paul Pfeifer <hagen@jauu.net>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
----
- fs/dax.c                | 11 ++++-------
- include/linux/pgtable.h |  3 +++
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/fs/dax.c b/fs/dax.c
-index 26d5dcd2d69e..0f109eb16196 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -49,9 +49,6 @@ static inline unsigned int pe_order(enum page_entry_size pe_size)
- #define PG_PMD_COLOUR	((PMD_SIZE >> PAGE_SHIFT) - 1)
- #define PG_PMD_NR	(PMD_SIZE >> PAGE_SHIFT)
- 
--/* The order of a PMD entry */
--#define PMD_ORDER	(PMD_SHIFT - PAGE_SHIFT)
--
- static wait_queue_head_t wait_table[DAX_WAIT_TABLE_ENTRIES];
- 
- static int __init init_dax_wait_table(void)
-@@ -98,7 +95,7 @@ static bool dax_is_locked(void *entry)
- static unsigned int dax_entry_order(void *entry)
- {
- 	if (xa_to_value(entry) & DAX_PMD)
--		return PMD_ORDER;
-+		return PMD_PAGE_ORDER;
- 	return 0;
- }
- 
-@@ -1470,7 +1467,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
- {
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct address_space *mapping = vma->vm_file->f_mapping;
--	XA_STATE_ORDER(xas, &mapping->i_pages, vmf->pgoff, PMD_ORDER);
-+	XA_STATE_ORDER(xas, &mapping->i_pages, vmf->pgoff, PMD_PAGE_ORDER);
- 	unsigned long pmd_addr = vmf->address & PMD_MASK;
- 	bool write = vmf->flags & FAULT_FLAG_WRITE;
- 	bool sync;
-@@ -1529,7 +1526,7 @@ static vm_fault_t dax_iomap_pmd_fault(struct vm_fault *vmf, pfn_t *pfnp,
- 	 * entry is already in the array, for instance), it will return
- 	 * VM_FAULT_FALLBACK.
- 	 */
--	entry = grab_mapping_entry(&xas, mapping, PMD_ORDER);
-+	entry = grab_mapping_entry(&xas, mapping, PMD_PAGE_ORDER);
- 	if (xa_is_internal(entry)) {
- 		result = xa_to_internal(entry);
- 		goto fallback;
-@@ -1695,7 +1692,7 @@ dax_insert_pfn_mkwrite(struct vm_fault *vmf, pfn_t pfn, unsigned int order)
- 	if (order == 0)
- 		ret = vmf_insert_mixed_mkwrite(vmf->vma, vmf->address, pfn);
- #ifdef CONFIG_FS_DAX_PMD
--	else if (order == PMD_ORDER)
-+	else if (order == PMD_PAGE_ORDER)
- 		ret = vmf_insert_pfn_pmd(vmf, pfn, FAULT_FLAG_WRITE);
- #endif
- 	else
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 8fcdfa52eb4b..ea5c4102c23e 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -28,6 +28,9 @@
- #define USER_PGTABLES_CEILING	0UL
- #endif
- 
-+/* Number of base pages in a second level leaf page */
-+#define PMD_PAGE_ORDER	(PMD_SHIFT - PAGE_SHIFT)
-+
- /*
-  * A page table page can be thought of an array like this: pXd_t[PTRS_PER_PxD]
-  *
--- 
-2.28.0
-
+> ---
+>  tools/testing/selftests/bpf/prog_tests/btf.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+> index 8ae97e2..ea008d0 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+> @@ -914,7 +914,7 @@ struct btf_raw_test {
+>         .err_str = "Member exceeds struct_size",
+>  },
+>
+> -/* Test member exeeds the size of struct
+> +/* Test member exceeds the size of struct
+>   *
+>   * struct A {
+>   *     int m;
+> @@ -948,7 +948,7 @@ struct btf_raw_test {
+>         .err_str = "Member exceeds struct_size",
+>  },
+>
+> -/* Test member exeeds the size of struct
+> +/* Test member exceeds the size of struct
+>   *
+>   * struct A {
+>   *     int m;
+> --
+> 1.9.1
+>
+>
