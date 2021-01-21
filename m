@@ -2,72 +2,51 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA278C433DB
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Jan 2021 22:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05674C433DB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Jan 2021 22:47:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E562239EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Jan 2021 22:19:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B86EE23381
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Jan 2021 22:47:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbhAUWTP (ORCPT
+        id S1726866AbhAUWrT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Jan 2021 17:19:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43992 "EHLO mail.kernel.org"
+        Thu, 21 Jan 2021 17:47:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47282 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726532AbhAUWTJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jan 2021 17:19:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D0758221E5;
-        Thu, 21 Jan 2021 22:18:25 +0000 (UTC)
+        id S1726583AbhAUWrP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Jan 2021 17:47:15 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C867F23A61;
+        Thu, 21 Jan 2021 22:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1611267509;
-        bh=C4dNckswBVNDyf2CcklXwX5nrVZ+eQe+hIEyF3+YQjk=;
+        s=korg; t=1611269188;
+        bh=96Z526pBbuqUE3z3L6f5CHO9G46NkdGHX9wOnkYrw4o=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=wclvfHCCnk3OQn3T9dNFgIqWJA2vvE7RYSj7NeWYJEKVz1L0iiylb1mOqI2b9AvuI
-         K1JzZ0X26tTsjYx4KuOOb2TTAsAkOewOabuejMeC/A1Q8o0XKeQzHcJW4SRX29gzfx
-         qcSKSeI4H0IyI5So7BuOgFoGnIj4CN15OjvLZIJs=
-Date:   Thu, 21 Jan 2021 14:18:24 -0800
+        b=FE+TJQtgLz9AxfV9MtnIhD3VwHTBtqYreaWHiScdgFDyz6n9wbVOgT2mEmSFbIygR
+         4CbK9MItXsgMkSQTaTZcTt2MIJiGWdOHDxZwNUK4xv4aP9XCRpfbNikb7cwSqidx+O
+         jO82+MkbvdL6lGQGjFROcRNzMsB/tuy24+FKhUV8=
+Date:   Thu, 21 Jan 2021 14:46:27 -0800
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v16 00/11] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-Id: <20210121141824.787013e7f39d168a5e945183@linux-foundation.org>
-In-Reply-To: <20210121122723.3446-1-rppt@kernel.org>
-References: <20210121122723.3446-1-rppt@kernel.org>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        haitao.huang@intel.com, Kai Huang <kai.huang@intel.com>,
+        x86@kernel.org, linux-sgx@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH] mm: Optimizing error condition detection in
+ do_mprotect_pkey()
+Message-Id: <20210121144627.64a60437fe97786596f389d0@linux-foundation.org>
+In-Reply-To: <YAg+QHhczqtTZt4Z@kernel.org>
+References: <20210118133310.98375-1-tianjia.zhang@linux.alibaba.com>
+        <YAg+QHhczqtTZt4Z@kernel.org>
 X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -76,11 +55,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 21 Jan 2021 14:27:12 +0200 Mike Rapoport <rppt@kernel.org> wrote:
+On Wed, 20 Jan 2021 16:29:20 +0200 Jarkko Sakkinen <jarkko@kernel.org> wrote:
 
-> @Andrew, this is based on v5.11-rc4-mmots-2021-01-19-13-54 with secretmem
-> patches dropped from there, I can rebase whatever way you prefer.
+> 
+> 
+> On Mon, Jan 18, 2021 at 09:33:10PM +0800, Tianjia Zhang wrote:
+> > Obviously, the error variable detection of the if statement is
+> > for the mprotect callback function, so it is also put into the
+> > scope of calling callbck.
+> > 
+> > Reported-by: Jia Zhang <zhang.jia@linux.alibaba.com>
+> > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> 
+> No fixes tag, no description what this commit does. Nothing
+> makes sense to me.
 
-Thanks.  I merged this version.
+It's a little cleanup.  Makes the flow at this site consistent with the
+other places where this function handles errors.  I added a bit to the
+changelog mentioning this.
 
-Silently, to avoid spraying out all those emails again ;)
+
