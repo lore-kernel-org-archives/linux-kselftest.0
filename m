@@ -2,199 +2,117 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3E35C433E0
-	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Jan 2021 04:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A8B1C433E0
+	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Jan 2021 06:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7607E22C9F
-	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Jan 2021 04:25:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6368C22C9F
+	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Jan 2021 06:30:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbhAXEYx (ORCPT
+        id S1726192AbhAXG34 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 23 Jan 2021 23:24:53 -0500
-Received: from mail-pf1-f177.google.com ([209.85.210.177]:44417 "EHLO
-        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726223AbhAXEYw (ORCPT
+        Sun, 24 Jan 2021 01:29:56 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:50844 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726054AbhAXG3z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 Jan 2021 23:24:52 -0500
-Received: by mail-pf1-f177.google.com with SMTP id t29so6389743pfg.11;
-        Sat, 23 Jan 2021 20:24:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vJjehByYClNPkMjmMUzJUZGHRUSf5Lho6X2FcregUXE=;
-        b=PdfSAh+EcCw4K+kRLhfslQaNCofx2SY0/iydb2Jk38ZYqTFJdGhi3lr2uCaMv9ARNw
-         u0snHTy1uFsF9aIaBVYZn/TyyqVvm7ywa1XwNhdjzrYz9SGZZzXxHVSsKmlWamFvniII
-         dJ3+kovNloJ+PVkraWLjcrf/1yUwXICng2Wd8cOAPozOIKLyXvSYyJ4wWgR84h2ur67H
-         yp4MGjKT+4UdZ/mukmt2J1Nk7b32+pJH90OkdFXVM505x+jrRtk24WuJnlwtPjcrj46e
-         3ZTtzGdJ9uWdKr7XGZNiKGVo1FVHoyObWVWHlEV7dPEYmg2y9FmIz98KSLxGqTAxJLFB
-         4Cpw==
-X-Gm-Message-State: AOAM532aV5ag3CbV+BiS7G8V6qiOSpExOz1iXMIiytnzd4r6oHKh0+jZ
-        O/l14cIeOuJ1WGQxPCNcCOU=
-X-Google-Smtp-Source: ABdhPJzNwjKEWsdoOZgLIwoylgr9wmRusOGH5Vc+NPJhCqXflejYLOTe+kH3r/1eX7HtmRdBSe/rDw==
-X-Received: by 2002:a62:8c85:0:b029:1bd:5441:6cb8 with SMTP id m127-20020a628c850000b02901bd54416cb8mr4332555pfd.29.1611462251284;
-        Sat, 23 Jan 2021 20:24:11 -0800 (PST)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id bv21sm13709361pjb.1.2021.01.23.20.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jan 2021 20:24:10 -0800 (PST)
-Date:   Sat, 23 Jan 2021 20:24:09 -0800
-From:   Moritz Fischer <mdf@kernel.org>
-To:     trix@redhat.com
-Cc:     shuah@kernel.org, mdf@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v3] selftests: drivers: fpga: A test for interrupt support
-Message-ID: <YAz2aaHnQ8brCl6q@epycbox.lan>
-References: <20210117161815.514078-1-trix@redhat.com>
+        Sun, 24 Jan 2021 01:29:55 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UMfTHu-_1611469748;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UMfTHu-_1611469748)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 24 Jan 2021 14:29:08 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3 1/5] selftests/x86: Simplify the code to get vdso base address in sgx
+Date:   Sun, 24 Jan 2021 14:29:03 +0800
+Message-Id: <20210124062907.88229-2-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.3.ge56e4f7
+In-Reply-To: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
+References: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210117161815.514078-1-trix@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Tom,
+This patch uses the library function `getauxval(AT_SYSINFO_EHDR)`
+instead of the custom function `vdso_get_base_addr` to obtain the
+base address of vDSO, which will simplify the code implementation.
 
-On Sun, Jan 17, 2021 at 08:18:15AM -0800, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Check that the ioctl DFL_FPGA_PORT_ERR_GET_IRQ_NUM returns
-> an expected result.
-> 
-> Tested on vf device 0xbcc1
-> 
-> Sample run with
->  # make -C tools/testing/selftests TARGETS=drivers/fpga run_tests
->  ...
->  TAP version 13
->  1..1
->  # selftests: drivers/fpga: intr
->  # TAP version 13
->  # 1..1
->  # # Starting 1 tests from 1 test cases.
->  # #  RUN           global.afu_intr ...
->  # #            OK  global.afu_intr
->  # ok 1 global.afu_intr
->  # # PASSED: 1 / 1 tests passed.
->  # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->  ok 1 selftests: drivers/fpga: intr
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
-> v1: Convert to kselftest_harness.h framework
-> v2: reverse xmas tree variables
-> ---
->  MAINTAINERS                                   |  1 +
->  tools/testing/selftests/Makefile              |  1 +
->  tools/testing/selftests/drivers/fpga/Makefile |  7 ++++
->  tools/testing/selftests/drivers/fpga/config   |  1 +
->  tools/testing/selftests/drivers/fpga/intr.c   | 36 +++++++++++++++++++
->  5 files changed, 46 insertions(+)
->  create mode 100644 tools/testing/selftests/drivers/fpga/Makefile
->  create mode 100644 tools/testing/selftests/drivers/fpga/config
->  create mode 100644 tools/testing/selftests/drivers/fpga/intr.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index de610a06cb5c..7ed3ce58d95e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6973,6 +6973,7 @@ F:	Documentation/driver-api/fpga/
->  F:	Documentation/fpga/
->  F:	drivers/fpga/
->  F:	include/linux/fpga/
-> +F:	tools/testing/selftests/drivers/fpga/
->  
->  FPGA SECURITY MANAGER DRIVERS
->  M:	Russ Weight <russell.h.weight@intel.com>
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index afbab4aeef3c..aad4763ec348 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -9,6 +9,7 @@ TARGETS += core
->  TARGETS += cpufreq
->  TARGETS += cpu-hotplug
->  TARGETS += drivers/dma-buf
-> +TARGETS += drivers/fpga
->  TARGETS += efivarfs
->  TARGETS += exec
->  TARGETS += filesystems
-> diff --git a/tools/testing/selftests/drivers/fpga/Makefile b/tools/testing/selftests/drivers/fpga/Makefile
-> new file mode 100644
-> index 000000000000..eba35c405d5b
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/fpga/Makefile
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +CFLAGS += -I../../../../../usr/include/
-> +CFLAGS += -I../../../../../include/uapi/
-> +
-> +TEST_GEN_PROGS := intr
-> +
-> +include ../../lib.mk
-> diff --git a/tools/testing/selftests/drivers/fpga/config b/tools/testing/selftests/drivers/fpga/config
-> new file mode 100644
-> index 000000000000..e2111b81d8d7
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/fpga/config
-> @@ -0,0 +1 @@
-> +CONFIG_FPGA_DFL_AFU=m
-> diff --git a/tools/testing/selftests/drivers/fpga/intr.c b/tools/testing/selftests/drivers/fpga/intr.c
-> new file mode 100644
-> index 000000000000..927dcc757f0b
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/fpga/intr.c
-> @@ -0,0 +1,36 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <stdint.h>
-> +#include <string.h>
-> +#include <sys/fcntl.h>
-> +#include <sys/ioctl.h>
-> +#include <linux/fpga-dfl.h>
-> +
-> +#include "../../kselftest_harness.h"
-> +
-> +TEST(afu_intr)
-> +{
-> +	struct dfl_fpga_port_info port_info;
-> +	uint32_t irq_num = UINT32_MAX;
-> +	int devfd, status;
-> +
-> +	devfd = open("/dev/dfl-port.0", O_RDONLY);
-> +	if (devfd < 0)
-> +		SKIP(0, "no fpga afu device 0");
-> +	/*
-> +	 * From fpga-dl.h :
-> +	 * Currently hardware supports up to 1 irq.
-> +	 * Return: 0 on success, -errno on failure.
-> +	 */
-> +	status = ioctl(devfd, DFL_FPGA_PORT_ERR_GET_IRQ_NUM, &irq_num);
-> +	ASSERT_EQ(0, status) {
-> +		TH_LOG("ioctl() failed to get the number irqs");
-> +	}
-> +	ASSERT_LT(irq_num, 256) {
-> +		TH_LOG("unexpeced number of irqs");
-> +	}
-> +	close(devfd);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> -- 
-> 2.27.0
-> 
-Looks good to me, from FPGA perspective, needs Acked-by from Shua, though.
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ tools/testing/selftests/sgx/main.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
-Also, this does not apply to linux-next, or for-5.12 or char-misc-next,
-so I'm confused :)
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 724cec700926..365d01dea67b 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -15,6 +15,7 @@
+ #include <sys/stat.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
++#include <sys/auxv.h>
+ #include "defines.h"
+ #include "main.h"
+ #include "../kselftest.h"
+@@ -28,24 +29,6 @@ struct vdso_symtab {
+ 	Elf64_Word *elf_hashtab;
+ };
+ 
+-static void *vdso_get_base_addr(char *envp[])
+-{
+-	Elf64_auxv_t *auxv;
+-	int i;
+-
+-	for (i = 0; envp[i]; i++)
+-		;
+-
+-	auxv = (Elf64_auxv_t *)&envp[i + 1];
+-
+-	for (i = 0; auxv[i].a_type != AT_NULL; i++) {
+-		if (auxv[i].a_type == AT_SYSINFO_EHDR)
+-			return (void *)auxv[i].a_un.a_val;
+-	}
+-
+-	return NULL;
+-}
+-
+ static Elf64_Dyn *vdso_get_dyntab(void *addr)
+ {
+ 	Elf64_Ehdr *ehdr = addr;
+@@ -162,7 +145,7 @@ static int user_handler(long rdi, long rsi, long rdx, long ursp, long r8, long r
+ 	return 0;
+ }
+ 
+-int main(int argc, char *argv[], char *envp[])
++int main(int argc, char *argv[])
+ {
+ 	struct sgx_enclave_run run;
+ 	struct vdso_symtab symtab;
+@@ -203,7 +186,8 @@ int main(int argc, char *argv[], char *envp[])
+ 	memset(&run, 0, sizeof(run));
+ 	run.tcs = encl.encl_base;
+ 
+-	addr = vdso_get_base_addr(envp);
++	/* Get vDSO base address */
++	addr = (void *)(uintptr_t)getauxval(AT_SYSINFO_EHDR);
+ 	if (!addr)
+ 		goto err;
+ 
+-- 
+2.19.1.3.ge56e4f7
 
-Once that's sorted, feel free to add
-
-Acked-by: Moritz Fischer <mdf@kernel.org>
-
-- Moritz
