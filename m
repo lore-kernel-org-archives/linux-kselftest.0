@@ -2,29 +2,29 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 370FBC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D544EC43331
 	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Jan 2021 06:30:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0460022CA2
+	by mail.kernel.org (Postfix) with ESMTP id A9E482311B
 	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Jan 2021 06:30:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbhAXGaQ (ORCPT
+        id S1726451AbhAXGaF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 24 Jan 2021 01:30:16 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:13536 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726526AbhAXGaO (ORCPT
+        Sun, 24 Jan 2021 01:30:05 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:50047 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726092AbhAXGaE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Jan 2021 01:30:14 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UMfTHuJ_1611469750;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UMfTHuJ_1611469750)
+        Sun, 24 Jan 2021 01:30:04 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UMfz8v3_1611469747;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UMfz8v3_1611469747)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 24 Jan 2021 14:29:10 +0800
+          Sun, 24 Jan 2021 14:29:08 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Jarkko Sakkinen <jarkko@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -36,46 +36,40 @@ To:     Jarkko Sakkinen <jarkko@kernel.org>,
         linux-kernel@vger.kernel.org,
         Jia Zhang <zhang.jia@linux.alibaba.com>
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v3 5/5] x86/sgx: Remove redundant if conditions in sgx_encl_create
-Date:   Sun, 24 Jan 2021 14:29:07 +0800
-Message-Id: <20210124062907.88229-6-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3 0/5] Some optimizations related to sgx
+Date:   Sun, 24 Jan 2021 14:29:02 +0800
+Message-Id: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.3.ge56e4f7
-In-Reply-To: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
-References: <20210124062907.88229-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In this scenario, there is no case where va_page is NULL, and
-the error has been checked. The if condition statement here is
-redundant, so remove the condition detection.
+This is an optimization of a set of sgx-related codes, each of which
+is independent of the patch. Because the second and third patches have
+conflicting dependencies, these patches are put together.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- arch/x86/kernel/cpu/sgx/ioctl.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+v3 changes:
+  * split free_cnt count and spin lock optimization into two patches
 
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index 1c6ecf9fbeff..b0b829f1b761 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -66,9 +66,11 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
- 	va_page = sgx_encl_grow(encl);
- 	if (IS_ERR(va_page))
- 		return PTR_ERR(va_page);
--	else if (va_page)
--		list_add(&va_page->list, &encl->va_pages);
--	/* else the tail page of the VA page list had free slots. */
-+
-+	if (WARN_ONCE(!va_page, "non-empty VA page list before ECREATE"))
-+		return -EIO;
-+
-+	list_add(&va_page->list, &encl->va_pages);
- 
- 	/* The extra page goes to SECS. */
- 	encl_size = secs->size + PAGE_SIZE;
+v2 changes:
+  * review suggested changes
+
+Tianjia Zhang (5):
+  selftests/x86: Simplify the code to get vdso base address in sgx
+  x86/sgx: Optimize the locking range in sgx_sanitize_section()
+  x86/sgx: Optimize the free_cnt count in sgx_epc_section
+  x86/sgx: Allows ioctl PROVISION to execute before CREATE
+  x86/sgx: Remove redundant if conditions in sgx_encl_create
+
+ arch/x86/kernel/cpu/sgx/driver.c   |  1 +
+ arch/x86/kernel/cpu/sgx/ioctl.c    |  9 +++++----
+ arch/x86/kernel/cpu/sgx/main.c     | 13 +++++--------
+ tools/testing/selftests/sgx/main.c | 24 ++++--------------------
+ 4 files changed, 15 insertions(+), 32 deletions(-)
+
 -- 
 2.19.1.3.ge56e4f7
 
