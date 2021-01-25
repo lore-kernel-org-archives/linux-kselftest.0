@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D64AC433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 010B4C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:44:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 521602255F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:43:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CABD52255F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732340AbhAYUmi (ORCPT
+        id S1731802AbhAYUnm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 25 Jan 2021 15:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        Mon, 25 Jan 2021 15:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731973AbhAYTvD (ORCPT
+        with ESMTP id S1732189AbhAYTuz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 14:51:03 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF57C061353
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:04 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id p5so6757171qvs.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:04 -0800 (PST)
+        Mon, 25 Jan 2021 14:50:55 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06429C061222
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:11 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id x81so10855447qkb.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=BhWP1P8Q7i9lD0EGpT6UypXh912bl/nwbH5yu3+aADs=;
-        b=R90VZ3vGcrRYvZbgV7azLdKs09oOeO1Lk8KPeEtI0CYo+B4Bw6mPEKxqL5eg56jNc9
-         ZDrbez70bMDtoC6Od7HL0ftNoMEQ3peg7mRtVWsgG325a5PlRlbmKT7RHgvkhtOhId4d
-         7dYEeW1LvOtO3oZjif6bi5MbAEz9No5RYl4KG4ubdRNqV0/tlyNZMriVg+YWst3j+WTZ
-         PjO8GSotud/xnvOzQkGUVD0179zez9cw1bfDMJSQuTSACrGxlrSUyp4iYu0Ps2hw+Zuv
-         dQq7Ilb7K8Fa+eF8jxWDHJeEvOyhu0eMMUe1CmjKngGzlok/qZkPzNDWJsDq0udh+T7i
-         vr8w==
+        bh=z/iYHqVeCyWybAIwBASO/JRh5H6y4Wucaqn9XTIErdQ=;
+        b=ggxWFJx1XNRIPR+VPqKxFscBPx27Vie4AlDDaPRS0mTDqH54+IBnC1q4/B/aQgVuDi
+         bQy/G19+TUuwriBvOR3qKylUfMo8aEA/sssA638vsok6rLz29eNdH0tzpRF9FZDTm6kX
+         ZsdNcrXEc2WtBcqRjG7i1UuM/BBdeNi5zMLDut663oqjTUQgWKlhgDWc+pPfNnMxcFXm
+         MjAdHpC+E6DmvxGDfoGxz8OL0j4Me4jtxqBMlcaTW4Qf/OzbN0ovx1DD0h+fCBpfgNHe
+         BIg25RJ3G4qs8V+VRvGN/b3dhnUFlfr+IUa9j+QLE+WIUZR8QUyTTEGUz3p7BPxl+vnk
+         HlFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BhWP1P8Q7i9lD0EGpT6UypXh912bl/nwbH5yu3+aADs=;
-        b=I3Mn/Gvv92zDZgwJxyFcxl6SeX+jHCwj2dKiObd7f6PSWiYEBG6FDOUgDGFVLmvLa3
-         phxBvVoTG3uGjDUR8abRgk+nN6jwYvE7XedEDS+T0Cv2slZhd4XSAWmYjfSAma1i//l9
-         8StYs113Uc49CTDsUIn8eP4qvDN3NBxBB8SfZEhrC+GN7AGZfdMwTAEfeAUWULWU4wjp
-         WGwZq1sFano/6/rW0yp2ycshrDf1D3HSy2v00vHaAmqUiMUcl2eMJ9tBs7d/Ejx2dEVn
-         IPcOYHYeGvnEdqGhUA9Gh9qDPdwP347FBTsBrHnVAvHifBYAeapttyagVnZ5msgsMuZB
-         WSyQ==
-X-Gm-Message-State: AOAM531hBPU8uAt6WQ8/TkD0FuVnYhw9Ho5XuneqLM1tiPbwOa4dV8IU
-        1NX7kSrU9y/JLdqIs9lScoJq4g==
-X-Google-Smtp-Source: ABdhPJy3QWGRlhCdTJ6t8Bl2AWaYHX6rqsFzWzOohroOr2+KwZLFlfWsdO5+EVfO+/raYzXEIL5oIA==
-X-Received: by 2002:a0c:c688:: with SMTP id d8mr2432312qvj.8.1611604083512;
-        Mon, 25 Jan 2021 11:48:03 -0800 (PST)
+        bh=z/iYHqVeCyWybAIwBASO/JRh5H6y4Wucaqn9XTIErdQ=;
+        b=Do+iBW6/fB/5/MaAzCnHamv8u27LcU3jOaYlDyUAd/x8S5fr05OyfK2hD0MuYFVgMS
+         LoOKYZv/6+izpU+gl0aOydf95Sy+HCx8qh4UayfIOIY50BUW/nCB+InWaBOC6V2FwvtW
+         QvWvPuO3k232eA5TXA/TsXf0cV3hDCX8O+8VjklrK1loRzku/aX1PkmHk83KGC4KbZdJ
+         rDKysgq+O3OJTUGtNLE/X/1edQJJPBmYm0U3z8F0s3gHerYDBIjPs410cVPdcWVDkvIG
+         vFKG7up8G38Uq7U5OltaWwEktPc5EsI+Nc2FWaypbkDP+VPgGngUtCHExqn+vKlfaBoG
+         ck2g==
+X-Gm-Message-State: AOAM5300JA3QuIkxFitF6+tHPfhn0Co6n65YpS/4v6VdVEecaYqYiqpg
+        s/qrIsxn65v5E8TCofWH1YYCoQ==
+X-Google-Smtp-Source: ABdhPJwHb2z3O87rhiHdk/7Xsu4L+A54QJcA/Onlzvq9WKtDY2/7cQjQseTRCIMa3SSoFW5xmC91oA==
+X-Received: by 2002:a05:620a:13ae:: with SMTP id m14mr2317266qki.35.1611604090257;
+        Mon, 25 Jan 2021 11:48:10 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.48.01
+        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.48.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 11:48:02 -0800 (PST)
+        Mon, 25 Jan 2021 11:48:09 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -68,9 +68,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v8 06/14] mm: apply per-task gfp constraints in fast path
-Date:   Mon, 25 Jan 2021 14:47:43 -0500
-Message-Id: <20210125194751.1275316-7-pasha.tatashin@soleen.com>
+Subject: [PATCH v8 10/14] memory-hotplug.rst: add a note about ZONE_MOVABLE and page pinning
+Date:   Mon, 25 Jan 2021 14:47:47 -0500
+Message-Id: <20210125194751.1275316-11-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
 References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
@@ -80,66 +80,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Function current_gfp_context() is called after fast path. However, soon we
-will add more constraints which will also limit zones based on context.
-Move this call into fast path, and apply the correct constraints for all
-allocations.
+Document the special handling of page pinning when ZONE_MOVABLE present.
 
-Also update .reclaim_idx based on value returned by current_gfp_context()
-because it soon will modify the allowed zones.
-
-Note:
-With this patch we will do one extra current->flags load during fast path,
-but we already load current->flags in fast-path:
-
-__alloc_pages_nodemask()
- prepare_alloc_pages()
-  current_alloc_flags(gfp_mask, *alloc_flags);
-
-Later, when we add the zone constrain logic to current_gfp_context() we
-will be able to remove current->flags load from current_alloc_flags, and
-therefore return fast-path to the current performance level.
-
-Suggested-by: Michal Hocko <mhocko@kernel.org>
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
 Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- mm/page_alloc.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ Documentation/admin-guide/mm/memory-hotplug.rst | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index f92d7c810953..c93e801a45e9 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4981,6 +4981,13 @@ __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
- 	}
+diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
+index 5c4432c96c4b..c6618f99f765 100644
+--- a/Documentation/admin-guide/mm/memory-hotplug.rst
++++ b/Documentation/admin-guide/mm/memory-hotplug.rst
+@@ -357,6 +357,15 @@ creates ZONE_MOVABLE as following.
+    Unfortunately, there is no information to show which memory block belongs
+    to ZONE_MOVABLE. This is TBD.
  
- 	gfp_mask &= gfp_allowed_mask;
-+	/*
-+	 * Apply scoped allocation constraints. This is mainly about GFP_NOFS
-+	 * resp. GFP_NOIO which has to be inherited for all allocation requests
-+	 * from a particular context which has been marked by
-+	 * memalloc_no{fs,io}_{save,restore}.
-+	 */
-+	gfp_mask = current_gfp_context(gfp_mask);
- 	alloc_mask = gfp_mask;
- 	if (!prepare_alloc_pages(gfp_mask, order, preferred_nid, nodemask, &ac, &alloc_mask, &alloc_flags))
- 		return NULL;
-@@ -4996,13 +5003,7 @@ __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
- 	if (likely(page))
- 		goto out;
++.. note::
++   Techniques that rely on long-term pinnings of memory (especially, RDMA and
++   vfio) are fundamentally problematic with ZONE_MOVABLE and, therefore, memory
++   hot remove. Pinned pages cannot reside on ZONE_MOVABLE, to guarantee that
++   memory can still get hot removed - be aware that pinning can fail even if
++   there is plenty of free memory in ZONE_MOVABLE. In addition, using
++   ZONE_MOVABLE might make page pinning more expensive, because pages have to be
++   migrated off that zone first.
++
+ .. _memory_hotplug_how_to_offline_memory:
  
--	/*
--	 * Apply scoped allocation constraints. This is mainly about GFP_NOFS
--	 * resp. GFP_NOIO which has to be inherited for all allocation requests
--	 * from a particular context which has been marked by
--	 * memalloc_no{fs,io}_{save,restore}.
--	 */
--	alloc_mask = current_gfp_context(gfp_mask);
-+	alloc_mask = gfp_mask;
- 	ac.spread_dirty_pages = false;
- 
- 	/*
+ How to offline memory
 -- 
 2.25.1
 
