@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD20C433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 377D6C433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:49:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF9C1224DF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:49:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE82A224DF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Jan 2021 20:49:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732096AbhAYUny (ORCPT
+        id S1731793AbhAYUns (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 25 Jan 2021 15:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        Mon, 25 Jan 2021 15:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731905AbhAYTtf (ORCPT
+        with ESMTP id S1732172AbhAYTui (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 14:49:35 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99CCC06178B
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:47:57 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id x81so10854754qkb.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:47:57 -0800 (PST)
+        Mon, 25 Jan 2021 14:50:38 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC8FC061351
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:02 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id o18so10564091qtp.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jan 2021 11:48:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=/BFgBC6QAZDKdqJwclIw/UFhagKoK9nwCvAO/0D2vSo=;
-        b=CmdxkXZULQNoAHH3ACXza+mPWBw4TkEUp5gdwo9v367G5ivVreRo2jfDKVnAfklKCZ
-         lj/PfZNwM9XMAgMXUnM98CEkHtoOECGI2Y0fu0q1xxQ0NEIxll/TMuaZo65GQpW2XHyU
-         rIrv4ioZ4SPXFX6hExoeutaJaFN6Zu0xoA3DImi6eVCWWNdMmGSBi/p3ICAR+yl+WaeJ
-         R3+LncgUE2Ls+wUl0QzLu91lk0bsnXlR1jdnsIdi+99JwLhK0a83VrLiaiiVKZqdSbG3
-         1xmIOxMMElDpTxuj70785Z55JdnBzrgS5LSZRWHM+jZ0kX/7mCQz37JfMpZxQ6ziTejt
-         Y3tA==
+        bh=erDKiXAtt/ZfDNNFCFxfMe9eST86O7VxkIZqpHHCdMo=;
+        b=gXzBEYM45h44JmTh+SOS1KqJ1znNfWJdkHIooP65qs8VDI0rCPGi5a6NwsG4j/pCNh
+         /2/dc+XTJVBSZrZCNDbuwaGzREMMmuImcnaeIEbB+Q02AmkENedC7dJkYmFjnqVp+Myv
+         DHV05lsECVIBoPoj5Vso7Cfy4F9qn/Jl9/+Kfo/Td4bLGSjaGbivdep/zGt7PiizKxbR
+         gstHnSIHGaFghCA2orssPKJIZ4UdhRzPKHjSS85B3h5LpTQ/Fj1sFh2m0eCI1sdpOOJG
+         BeeMpZ92z2aU8mtDFN3zjna36X77bHpBNPnq1mLUSe0IcOM7v7LCaye3DaZPNqFvcs2y
+         G0ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/BFgBC6QAZDKdqJwclIw/UFhagKoK9nwCvAO/0D2vSo=;
-        b=XicfGgf3kzwLbAFEHlI/pP1B1ONWyV1Hj114tU0nxpNP5RDVN4OA/7vPNTU6lTSBE3
-         O6K1viTRRAlr97bQqxg3wfZASbdz/kNEI0gzeoa8V6Kfud3E1lRJ1lZuJiX059qZaBgB
-         YCxHjPfRvKpuovy8ADoN4wZppB4FOS3tuCkcU/QwMu3lmLCK5OQsLfChBIV9PYaCI655
-         6gtyKS07m79lr0rrXRFwp5QGAREpA8+ejWb28mj9vUsaDHlktJCxRNvM4m/R0i+qAO+l
-         +zyLpwX1Ci9SIAvHFgPYYJxnJXfR6cKazZbm6hak1CqGbeMXmaLmZ1We+MvCaquvq3UI
-         7TWQ==
-X-Gm-Message-State: AOAM531kTtbI5o1l73qGV8yoIuvP8Pix+gtma8O6yO5mXRFQF3O91kcz
-        kRw/o/yNovCaTh3Ujaf0CDouhA==
-X-Google-Smtp-Source: ABdhPJz+Q8gL0GZ9W1lsgErCnpY5WXm31yZTxCvb9A79URsfZ1Q6xwrI2e5Q2K0QFJueffLs1BietQ==
-X-Received: by 2002:a37:d58:: with SMTP id 85mr2382064qkn.280.1611604076921;
-        Mon, 25 Jan 2021 11:47:56 -0800 (PST)
+        bh=erDKiXAtt/ZfDNNFCFxfMe9eST86O7VxkIZqpHHCdMo=;
+        b=MXbLD42afAshDGI1MI7qDJo7/SuEvBWMRS59vlGED5J/4kJaosUpnsv55MhlfjRxVn
+         bJYsIxYvTXTIOQ0n6QqmuGcYfR/j7Jx87g3ka46oBRLiaoqdPXxnx7X4ThQNgjZIxbvx
+         Kg8elM0j66W9GtKitswTK1FfTmc8hfrO7zsBEx3WPINQvUj0hDqtiqMbopoNYU5puxwu
+         uJ7HS9ATNjgDUmfeaOgv1UXWJXZOFfhsXNJNnRfFGMrTECwuXQNQN43Fe8CRSDWQrj/e
+         p4MXGGt8weD1PfqM1OitgIjLiMU0RtyQW3BMhFiSPRe3/VulK0dmL1PhsdR23TRmk7Ql
+         9faA==
+X-Gm-Message-State: AOAM530LnYoOWftc9onRFxiNYsO5UtMDPjIe5KzVLrdZeOo6oB717Ix2
+        4U26SmLQrb4+JZhUod+1vNz5rQ==
+X-Google-Smtp-Source: ABdhPJwbOUzBr/56M0RmyAQ+ZsDl4fcJihGJYA2TsdytVsQeYtM4XvDXE+uslGEnRTypRVtMn1fUjw==
+X-Received: by 2002:aed:3661:: with SMTP id e88mr2018577qtb.243.1611604081880;
+        Mon, 25 Jan 2021 11:48:01 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.47.55
+        by smtp.gmail.com with ESMTPSA id c12sm12121569qtq.76.2021.01.25.11.48.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 11:47:56 -0800 (PST)
+        Mon, 25 Jan 2021 11:48:01 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -68,9 +68,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v8 02/14] mm/gup: check every subpage of a compound page during isolation
-Date:   Mon, 25 Jan 2021 14:47:39 -0500
-Message-Id: <20210125194751.1275316-3-pasha.tatashin@soleen.com>
+Subject: [PATCH v8 05/14] mm cma: rename PF_MEMALLOC_NOCMA to PF_MEMALLOC_PIN
+Date:   Mon, 25 Jan 2021 14:47:42 -0500
+Message-Id: <20210125194751.1275316-6-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
 References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
@@ -80,78 +80,141 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When pages are isolated in check_and_migrate_movable_pages() we skip
-compound number of pages at a time. However, as Jason noted, it is
-not necessary correct that pages[i] corresponds to the pages that
-we skipped. This is because it is possible that the addresses in
-this range had split_huge_pmd()/split_huge_pud(), and these functions
-do not update the compound page metadata.
+PF_MEMALLOC_NOCMA is used ot guarantee that the allocator will not return
+pages that might belong to CMA region. This is currently used for long
+term gup to make sure that such pins are not going to be done on any CMA
+pages.
 
-The problem can be reproduced if something like this occurs:
+When PF_MEMALLOC_NOCMA has been introduced we haven't realized that it is
+focusing on CMA pages too much and that there is larger class of pages that
+need the same treatment. MOVABLE zone cannot contain any long term pins as
+well so it makes sense to reuse and redefine this flag for that usecase as
+well. Rename the flag to PF_MEMALLOC_PIN which defines an allocation
+context which can only get pages suitable for long-term pins.
 
-1. User faulted huge pages.
-2. split_huge_pmd() was called for some reason
-3. User has unmapped some sub-pages in the range
-4. User tries to longterm pin the addresses.
+Also re-name:
+memalloc_nocma_save()/memalloc_nocma_restore
+to
+memalloc_pin_save()/memalloc_pin_restore()
+and make the new functions common.
 
-The resulting pages[i] might end-up having pages which are not compound
-size page aligned.
-
-Fixes: aa712399c1e8 ("mm/gup: speed up check_and_migrate_cma_pages() on huge page")
-Reported-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- mm/gup.c | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ include/linux/sched.h    |  2 +-
+ include/linux/sched/mm.h | 21 +++++----------------
+ mm/gup.c                 |  4 ++--
+ mm/hugetlb.c             |  4 ++--
+ mm/page_alloc.c          |  4 ++--
+ 5 files changed, 12 insertions(+), 23 deletions(-)
 
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index e47a3823f408..f90a27611926 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1576,7 +1576,7 @@ extern struct pid *cad_pid;
+ #define PF_SWAPWRITE		0x00800000	/* Allowed to write to swap */
+ #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
+ #define PF_MCE_EARLY		0x08000000      /* Early kill for mce process policy */
+-#define PF_MEMALLOC_NOCMA	0x10000000	/* All allocation request will have _GFP_MOVABLE cleared */
++#define PF_MEMALLOC_PIN		0x10000000	/* Allocation context constrained to zones which allow long term pinning. */
+ #define PF_FREEZER_SKIP		0x40000000	/* Freezer should not count it as freezable */
+ #define PF_SUSPEND_TASK		0x80000000      /* This thread called freeze_processes() and should not be frozen */
+ 
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 1ae08b8462a4..5f4dd3274734 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -270,29 +270,18 @@ static inline void memalloc_noreclaim_restore(unsigned int flags)
+ 	current->flags = (current->flags & ~PF_MEMALLOC) | flags;
+ }
+ 
+-#ifdef CONFIG_CMA
+-static inline unsigned int memalloc_nocma_save(void)
++static inline unsigned int memalloc_pin_save(void)
+ {
+-	unsigned int flags = current->flags & PF_MEMALLOC_NOCMA;
++	unsigned int flags = current->flags & PF_MEMALLOC_PIN;
+ 
+-	current->flags |= PF_MEMALLOC_NOCMA;
++	current->flags |= PF_MEMALLOC_PIN;
+ 	return flags;
+ }
+ 
+-static inline void memalloc_nocma_restore(unsigned int flags)
++static inline void memalloc_pin_restore(unsigned int flags)
+ {
+-	current->flags = (current->flags & ~PF_MEMALLOC_NOCMA) | flags;
++	current->flags = (current->flags & ~PF_MEMALLOC_PIN) | flags;
+ }
+-#else
+-static inline unsigned int memalloc_nocma_save(void)
+-{
+-	return 0;
+-}
+-
+-static inline void memalloc_nocma_restore(unsigned int flags)
+-{
+-}
+-#endif
+ 
+ #ifdef CONFIG_MEMCG
+ DECLARE_PER_CPU(struct mem_cgroup *, int_active_memcg);
 diff --git a/mm/gup.c b/mm/gup.c
-index 24f25b1e9103..16f10d5a9eb6 100644
+index 7ecca2d66dff..857b273e32ac 100644
 --- a/mm/gup.c
 +++ b/mm/gup.c
-@@ -1556,26 +1556,23 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 					unsigned int gup_flags)
- {
- 	unsigned long i;
--	unsigned long step;
- 	bool drain_allow = true;
- 	bool migrate_allow = true;
- 	LIST_HEAD(cma_page_list);
- 	long ret = nr_pages;
-+	struct page *prev_head, *head;
- 	struct migration_target_control mtc = {
- 		.nid = NUMA_NO_NODE,
- 		.gfp_mask = GFP_USER | __GFP_NOWARN,
- 	};
+@@ -1669,7 +1669,7 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 	long rc;
  
- check_again:
--	for (i = 0; i < nr_pages;) {
--
--		struct page *head = compound_head(pages[i]);
--
--		/*
--		 * gup may start from a tail page. Advance step by the left
--		 * part.
--		 */
--		step = compound_nr(head) - (pages[i] - head);
-+	prev_head = NULL;
-+	for (i = 0; i < nr_pages; i++) {
-+		head = compound_head(pages[i]);
-+		if (head == prev_head)
-+			continue;
-+		prev_head = head;
- 		/*
- 		 * If we get a page from the CMA zone, since we are going to
- 		 * be pinning these entries, we might as well move them out
-@@ -1599,8 +1596,6 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 				}
- 			}
- 		}
--
--		i += step;
+ 	if (gup_flags & FOLL_LONGTERM)
+-		flags = memalloc_nocma_save();
++		flags = memalloc_pin_save();
+ 
+ 	rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas, NULL,
+ 				     gup_flags);
+@@ -1678,7 +1678,7 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 		if (rc > 0)
+ 			rc = check_and_migrate_cma_pages(mm, start, rc, pages,
+ 							 vmas, gup_flags);
+-		memalloc_nocma_restore(flags);
++		memalloc_pin_restore(flags);
  	}
+ 	return rc;
+ }
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a6bad1f686c5..2d79e515a7a3 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1049,10 +1049,10 @@ static void enqueue_huge_page(struct hstate *h, struct page *page)
+ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
+ {
+ 	struct page *page;
+-	bool nocma = !!(current->flags & PF_MEMALLOC_NOCMA);
++	bool pin = !!(current->flags & PF_MEMALLOC_PIN);
  
- 	if (!list_empty(&cma_page_list)) {
+ 	list_for_each_entry(page, &h->hugepage_freelists[nid], lru) {
+-		if (nocma && is_migrate_cma_page(page))
++		if (pin && is_migrate_cma_page(page))
+ 			continue;
+ 
+ 		if (PageHWPoison(page))
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index b031a5ae0bd5..f92d7c810953 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3813,8 +3813,8 @@ static inline unsigned int current_alloc_flags(gfp_t gfp_mask,
+ #ifdef CONFIG_CMA
+ 	unsigned int pflags = current->flags;
+ 
+-	if (!(pflags & PF_MEMALLOC_NOCMA) &&
+-			gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
++	if (!(pflags & PF_MEMALLOC_PIN) &&
++	    gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
+ 		alloc_flags |= ALLOC_CMA;
+ 
+ #endif
 -- 
 2.25.1
 
