@@ -2,103 +2,256 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3EBCC433E6
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Jan 2021 19:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 524F9C4332D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Jan 2021 04:49:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 896A522EBD
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Jan 2021 19:09:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13E6E2071C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Jan 2021 04:49:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730670AbhAZF6R (ORCPT
+        id S239532AbhA0EpW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:58:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39526 "EHLO mail.kernel.org"
+        Tue, 26 Jan 2021 23:45:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49248 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728015AbhAYMqX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:46:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 433DE229EF;
-        Mon, 25 Jan 2021 12:45:38 +0000 (UTC)
+        id S2392546AbhA0BnV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Jan 2021 20:43:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AB5B1206A4;
+        Wed, 27 Jan 2021 01:42:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611578740;
-        bh=56tdACcGGHFZFmeBO08RKmJkzc4zo0dNrypPmbndIvE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ELK6YOHuJmo+Zj67jVaKWqSYNUu9XLe/QuKcN06FLPeeDWAVm/KtFxMcH3iXXgwh4
-         9cJVZp2/iBnjGto6GUvby/wMrYKlHbvazXwQEchiOcJ6WrRyVwiqzT1PAUlR+12F3c
-         cAKsjT5XPq4omzuUCtXLDy6mt98opSLzdPDlNfKuTMeBS9BNQmrnOPHlbXzBw/PxeQ
-         TQzQuWcFlAEFnlXDsVTD95oljHl1253XO0zMWfgnrK4+DpLKMdvw13/ctqyKxSIAk7
-         gxWnboyIFHrkbCkmSqJTLNj22GgmrAFA8nuRkiiuUaC9mtgKDOFiknfpO8xHnDRE6u
-         23ElbZ+qGaVig==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: [RFC 0/3] kunit vs structleak
-Date:   Mon, 25 Jan 2021 13:45:25 +0100
-Message-Id: <20210125124533.101339-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        s=k20201202; t=1611711760;
+        bh=oZMJJcJ0nMRqlk9Me0tYJaKWhDt6yRiNOVPiEcNIk2g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D7nJ9ALmlwk+oJIflEiPfap4ULEIMpsxE3DQ35mvKJimAzZIOL56iNrPSerk/b054
+         g2jQ2r4HjB+r+vd2vP2bZWll9NTXvAxag8vFWz/97X4v3zYvZ1cJDcCH64w7tZRG3g
+         bLGIJWeU5wEKMSFMemf4ovpZFziHZXvylO+Ortej4mCEmuBB+7qxFa2AUsTIbDAJTY
+         nAjDTyqRoH7xFBrozPVcgku25mF/objiS0IOa6tDZJC/y5Ag1XvbleJ+aZ497Z+DtW
+         SUm3uuGI+ij2D+9Ct8tmEvRTMapG621P63R5SAY81yMTGa1IVv/PUjby0AMcGjR3RS
+         Hdhpdu2X4dGrg==
+Date:   Tue, 26 Jan 2021 17:42:38 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Bongsu Jeon <bongsu.jeon2@gmail.com>
+Cc:     shuah@kernel.org, krzk@kernel.org, netdev@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-kselftest@vger.kernel.org,
+        Bongsu Jeon <bongsu.jeon@samsung.com>
+Subject: Re: [PATCH net-next v3 1/2] nfc: Add a virtual nci device driver
+Message-ID: <20210126174238.16d9691a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210123092425.11434-2-bongsu.jeon@samsung.com>
+References: <20210123092425.11434-1-bongsu.jeon@samsung.com>
+        <20210123092425.11434-2-bongsu.jeon@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Sat, 23 Jan 2021 18:24:24 +0900 Bongsu Jeon wrote:
+> From: Bongsu Jeon <bongsu.jeon@samsung.com>
+> 
+> NCI virtual device simulates a NCI device to the user. It can be used to
+> validate the NCI module and applications. This driver supports
+> communication between the virtual NCI device and NCI module.
+> 
+> Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
 
-I ran into a couple of problems with kunit tests taking too much stack
-space, sometimes dangerously so. These the the three instances that
-cause an increase over the warning limit of some architectures:
+> +static bool virtual_ncidev_check_enabled(void)
+> +{
+> +	bool ret = true;
+> +
+> +	mutex_lock(&nci_mutex);
+> +	if (state != virtual_ncidev_enabled)
+> +		ret = false;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return ret;
 
-lib/bitfield_kunit.c:93:1: error: the frame size of 7440 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-drivers/base/test/property-entry-test.c:481:1: error: the frame size of 2640 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-drivers/thunderbolt/test.c:1529:1: error: the frame size of 1176 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
 
-Ideally there should be a way to rewrite the kunit infrastructure
-that avoids the explosion of stack data when the structleak plugin
-is used.
+This can be simplified like:
 
-A rather drastic measure would be to use Kconfig logic to make
-the two options mutually exclusive. This would clearly work, but
-is probably not needed.
+	bool ret;
 
-As a simpler workaround, this disables the plugin for the three
-files in which the excessive stack usage was observed.
+	mutex_lock()
+	ret = state == virtual_ncidev_enabled;
+	mutex_unlock()
 
-      Arnd
+	return ret;
 
-Arnd Bergmann (3):
-  bitfield: build kunit tests without structleak plugin
-  drivers/base: build kunit tests without structleak plugin
-  thunderbolt: build kunit tests without structleak plugin
 
- drivers/base/test/Makefile   | 1 +
- drivers/thunderbolt/Makefile | 1 +
- lib/Makefile                 | 1 +
- 3 files changed, 3 insertions(+)
+> +}
+> +
+> +static int virtual_nci_open(struct nci_dev *ndev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int virtual_nci_close(struct nci_dev *ndev)
+> +{
+> +	mutex_lock(&nci_mutex);
+> +	if (send_buff)
+> +		kfree_skb(send_buff);
 
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Vitor Massaru Iha <vitor@massaru.org>
-Cc: linux-hardening@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Cc: linux-kernel@vger.kernel.org
--- 
-2.29.2
+kfree_skb() handles NULL, no need for the if, you can always call
+kfree_skb() here
 
+> +	send_buff = NULL;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtual_nci_send(struct nci_dev *ndev, struct sk_buff *skb)
+> +{
+> +	if (virtual_ncidev_check_enabled() == false)
+> +		return 0;
+
+Shouldn't you check this _under_ the lock below? 
+
+Otherwise there is a small window between check and use of send_buff
+
+> +	mutex_lock(&nci_mutex);
+> +	if (send_buff) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -1;
+> +	}
+> +	send_buff = skb_copy(skb, GFP_KERNEL);
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct nci_ops virtual_nci_ops = {
+> +	.open = virtual_nci_open,
+> +	.close = virtual_nci_close,
+> +	.send = virtual_nci_send
+> +};
+> +
+> +static ssize_t virtual_ncidev_read(struct file *file, char __user *buf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	size_t actual_len;
+> +
+> +	mutex_lock(&nci_mutex);
+> +	if (!send_buff) {
+> +		mutex_unlock(&nci_mutex);
+> +		return 0;
+> +	}
+> +
+> +	actual_len = min_t(size_t, count, send_buff->len);
+> +
+> +	if (copy_to_user(buf, send_buff->data, actual_len)) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -EFAULT;
+> +	}
+> +
+> +	skb_pull(send_buff, actual_len);
+> +	if (send_buff->len == 0) {
+> +		consume_skb(send_buff);
+> +		send_buff = NULL;
+> +	}
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return actual_len;
+> +}
+> +
+> +static ssize_t virtual_ncidev_write(struct file *file,
+> +				    const char __user *buf,
+> +				    size_t count, loff_t *ppos)
+> +{
+> +	struct sk_buff *skb;
+> +
+> +	skb = alloc_skb(count, GFP_KERNEL);
+> +	if (!skb)
+> +		return -ENOMEM;
+> +
+> +	if (copy_from_user(skb_put(skb, count), buf, count)) {
+> +		kfree_skb(skb);
+> +		return -EFAULT;
+> +	}
+> +
+> +	nci_recv_frame(ndev, skb);
+> +	return count;
+> +}
+> +
+> +static int virtual_ncidev_open(struct inode *inode, struct file *file)
+> +{
+> +	int ret = 0;
+> +
+> +	mutex_lock(&nci_mutex);
+> +	if (state != virtual_ncidev_disabled) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -EBUSY;
+> +	}
+> +
+> +	ndev = nci_allocate_device(&virtual_nci_ops, VIRTUAL_NFC_PROTOCOLS,
+> +				   0, 0);
+> +	if (!ndev) {
+> +		mutex_unlock(&nci_mutex);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ret = nci_register_device(ndev);
+> +	if (ret < 0) {
+> +		nci_free_device(ndev);
+> +		mutex_unlock(&nci_mutex);
+> +		return ret;
+> +	}
+> +	state = virtual_ncidev_enabled;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static int virtual_ncidev_close(struct inode *inode, struct file *file)
+> +{
+> +	mutex_lock(&nci_mutex);
+> +
+> +	if (state == virtual_ncidev_enabled) {
+> +		state = virtual_ncidev_disabling;
+> +		mutex_unlock(&nci_mutex);
+> +
+> +		nci_unregister_device(ndev);
+> +		nci_free_device(ndev);
+> +
+> +		mutex_lock(&nci_mutex);
+> +	}
+> +
+> +	state = virtual_ncidev_disabled;
+> +	mutex_unlock(&nci_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static long virtual_ncidev_ioctl(struct file *flip, unsigned int cmd,
+> +				 unsigned long arg)
+> +{
+> +	if (cmd == IOCTL_GET_NCIDEV_IDX) {
+> +		struct nfc_dev *nfc_dev = ndev->nfc_dev;
+> +		void __user *p = (void __user *)arg;
+> +
+> +		if (copy_to_user(p, &nfc_dev->idx, sizeof(nfc_dev->idx)))
+> +			return -EFAULT;
+> +	} else {
+> +		return -ENOTTY;
+> +	}
+> +
+> +	return 0;
+
+Please flip the condition and return early. I think I suggested this
+already:
+
+{
+	struct nfc_dev *nfc_dev = ndev->nfc_dev;
+	void __user *p = (void __user *)arg;		
+
+	if (cmd != IOCTL_GET_NCIDEV_IDX)
+		return -ENOTTY;
+
+	if (copy_to_user(p, &nfc_dev->idx, sizeof(nfc_dev->idx)))
+		return -EFAULT;
+
+	return 0;
