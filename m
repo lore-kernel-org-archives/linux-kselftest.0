@@ -2,50 +2,84 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D9DC43381
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Jan 2021 16:25:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF102C433E9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Jan 2021 21:07:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B8E764E07
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Jan 2021 16:25:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A540664DE5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Jan 2021 21:07:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbhA1QYr (ORCPT
+        id S231263AbhA1VGy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Jan 2021 11:24:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53964 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231634AbhA1QYq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Jan 2021 11:24:46 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611851039; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WWmcYeElb62qutT0Kcoo6xDCdrj66eelF83EHgFDfB4=;
-        b=ZJlUD8pQK2nIX/Cnj1UyvowYIjPxyyZKq5kI8NYKzxJt5tEqE9314CXd37wDkUTpPEa6Vf
-        YEZQtVEmaZg8j88rldXEzhTt3tU4zmyFht8LR4yeM3dwIAsKI4509bn1BlnRgtEZNO+G8l
-        DXrH4A5dU/j38+v0Vo5e/8cwta9YIu0=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A6C7DAC41;
-        Thu, 28 Jan 2021 16:23:59 +0000 (UTC)
-Date:   Thu, 28 Jan 2021 17:23:58 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
+        Thu, 28 Jan 2021 16:06:54 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60816 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231392AbhA1VGo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Jan 2021 16:06:44 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10SL1dJf127066;
+        Thu, 28 Jan 2021 16:05:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=bpUTcXPeXWH0uCpR0CReuSqLBN7qKOd8RBfv7PAKG14=;
+ b=cgL4eeLInzOWENu3PUE8gW1uebW9ootUk9Cacy40GwqzTQAH7KOmGHlmRcO+gPDUjj8U
+ Ng8GA3Fi25GHsaCyIq8H+HQGpXWxvdbZgbr0KJOaaYsL0PUK876/2Puau7XeJTQCl4ZF
+ HqSzSURQMQLdj5pTQMeGVFnsNPLlCu4ZTsK/E4Df1N2bRndbeu6D7oid4Wmpf4UhhFKC
+ 5ohg2Jqb3Vz3a6ntiK5SjP38X1Gjkba8HCL8MVWE7N8kOEdjSKlWLU1BxfjjO05lS+Mv
+ Mdr+jdbupdB+frROL90k0GdYDEwzmPr0b6BmHf0aO51cF/o6+s5+hm+XhdWCvQkxwU7T ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36c3d3aa6m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jan 2021 16:05:15 -0500
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10SL2rJ7131704;
+        Thu, 28 Jan 2021 16:05:14 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36c3d3aa5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jan 2021 16:05:14 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10SKqhG1019569;
+        Thu, 28 Jan 2021 21:05:12 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma03dal.us.ibm.com with ESMTP id 368be9t6w1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jan 2021 21:05:12 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10SL5B3Y11862404
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Jan 2021 21:05:11 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2882F7805C;
+        Thu, 28 Jan 2021 21:05:11 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2EFAE78068;
+        Thu, 28 Jan 2021 21:05:04 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.133.159])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 28 Jan 2021 21:05:03 +0000 (GMT)
+Message-ID: <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Elena Reshetova <elena.reshetova@intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
         "Kirill A. Shutemov" <kirill@shutemov.name>,
         Matthew Wilcox <willy@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -67,59 +101,63 @@ Cc:     Mike Rapoport <rppt@kernel.org>,
         linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
         x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
- direct map fragmentation
-Message-ID: <YBLlHpJj0sjzrxFv@dhcp22.suse.cz>
+Date:   Thu, 28 Jan 2021 13:05:02 -0800
+In-Reply-To: <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
 References: <20210121122723.3446-1-rppt@kernel.org>
- <20210121122723.3446-8-rppt@kernel.org>
- <20210126114657.GL827@dhcp22.suse.cz>
- <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
- <20210126120823.GM827@dhcp22.suse.cz>
- <20210128092259.GB242749@kernel.org>
- <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
- <alpine.DEB.2.22.394.2101281326360.10563@www.lameter.com>
- <YBLA7sEKn01HXd/U@dhcp22.suse.cz>
- <alpine.DEB.2.22.394.2101281549390.11861@www.lameter.com>
+         <20210121122723.3446-8-rppt@kernel.org>
+         <20210126114657.GL827@dhcp22.suse.cz>
+         <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+         <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
+         <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2101281549390.11861@www.lameter.com>
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-28_12:2021-01-28,2021-01-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 mlxlogscore=911
+ impostorscore=0 priorityscore=1501 adultscore=0 phishscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101280099
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 28-01-21 15:56:36, Cristopher Lameter wrote:
-> On Thu, 28 Jan 2021, Michal Hocko wrote:
+On Thu, 2021-01-28 at 14:01 +0100, Michal Hocko wrote:
+> On Thu 28-01-21 11:22:59, Mike Rapoport wrote:
+[...]
+> > I like the idea to have a pool as an optimization rather than a
+> > hard requirement but I don't see why would it need a careful access
+> > control. As the direct map fragmentation is not necessarily
+> > degrades the performance (and even sometimes it actually improves
+> > it) and even then the degradation is small, trying a PMD_ORDER
+> > allocation for a pool and then falling back to 4K page may be just
+> > fine.
 > 
-> > > > If you kill the allocating process then yes, it would work, but your
-> > > > process might be the very last to be selected.
-> > >
-> > > OOMs are different if you have a "constrained allocation". In that case it
-> > > is the fault of the process who wanted memory with certain conditions.
-> > > That memory is not available. General memory is available though. In that
-> > > case the allocating process is killed.
-> >
-> > I do not see this implementation would do anything like that. Neither
-> > anything like that implemented in the oom killer. Constrained
-> > allocations (cpusets/memcg/mempolicy) only do restrict their selection
-> > to processes which belong to the same domain. So I am not really sure
-> > what you are referring to. The is only a global knob to _always_ kill
-> > the allocating process on OOM.
-> 
-> Constrained allocations refer to allocations where the NUMA nodes are
-> restricted or something else does not allow the use of arbitrary memory.
-> The OOM killer changes its behavior.
+> Well, as soon as this is a scarce resource then an access control
+> seems like a first thing to think of. Maybe it is not really
+> necessary but then this should be really justified.
 
-Yes as described in the above paragraph.
+The control for the resource is effectively the rlimit today.  I don't
+think dividing the world into people who can and can't use secret
+memory would be useful since the design is to be usable for anyone who
+might have a secret to keep; it would become like the kvm group
+permissions: something which is theoretically an access control but
+which in practise is given to everyone on the system.
 
-> In the past we fell back to killing the calling process.
+> I am also still not sure why this whole thing is not just a
+> ramdisk/ramfs which happens to unmap its pages from the direct
+> map. Wouldn't that be a much more easier model to work with? You
+> would get an access control for free as well.
 
-Yeah, but this is no longer the case since 6f48d0ebd907a (more than 10
-years ago.
+The original API was a memfd which does have this access control as
+well.  However, the decision was made after much discussion to go with
+a new system call instead.  Obviously the API choice could be revisited
+but do you have anything to add over the previous discussion, or is
+this just to get your access control?
 
-Anyway this is not really important because if you want to kill the
-allocating task because there is no chance the fault can succed then
-there is a SIGBUS as already mentioned.
--- 
-Michal Hocko
-SUSE Labs
+James
+
+
