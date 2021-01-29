@@ -2,132 +2,158 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1653FC433DB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 03:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC498C433E0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 04:52:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D21B064DFD
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 03:08:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6B6464DFF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 04:52:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbhA2DH5 (ORCPT
+        id S231887AbhA2EwG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Jan 2021 22:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        Thu, 28 Jan 2021 23:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbhA2DGi (ORCPT
+        with ESMTP id S231332AbhA2Ev7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Jan 2021 22:06:38 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B33C061786
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:21 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id f63so5312223pfa.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:20 -0800 (PST)
+        Thu, 28 Jan 2021 23:51:59 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB5C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 20:51:18 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b2so10764647lfq.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 20:51:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zTNb1lTIEVQ6SY+1PM+jItpjx6YB2483ibK9X9oBYPQ=;
-        b=z1kwyFNg5hSYRi20ZvZ8wuUsM10FJZoI8McYKRlownqrb/9vwSuD19hHoANIKl9o7S
-         NM3r0rFYtS7BoYRIxUKv2hJYefP+6PduFPKe6sNVWE7NJvVoSFSo+oGB5ds50UhCUA9V
-         SyK9daFDnwbPsOxmmmogF/izeRWdoG3OgCQ6k0DmEgOaW1qa9ZwCI/06RZVukTBn91KD
-         jWkK57VznZPmUOrJGfJnxT8iH5+1O3xSd8qHCSqHOszD3n07tm6upXSk82uB3LtU1IAy
-         N+1l7G24LEncO+U+I1O4bg5Gt8C/bhkcHAaGe6YPBKuBSfvXS+AFhnzu9hoyFu2QqGYg
-         S+4g==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aeTD92Zxp6kMBRHbnsNWj8wflOE/h037UXyPsCPMjdI=;
+        b=tz2Ql4rhaR/3jodhyqwXpqVKiUTqkbTGyoivTEFWpDhi9c9rHfqHzSPzhcJP5NVaeJ
+         yEe+ia7Ghe1jZYpKX8Vv3nvCyeWxQUuP2K1gQHa5ZV1WfUVmv5lJXKosV0kIFMD75OXb
+         sT7dxTFBCdM3f2utXM9ozb7DNzI+9AILRi4NVD/2is3A0N3v7zjnrQBmO7KS+ZJZW1AC
+         Z4ugnvFSMBC6l1ypeHC3X5+hxJ6fbBmTvvTPSJG3RW2NsaEX50a+yrfaPxOsuSJJanWn
+         3HnsHCMYPcjdQxfG6BBMe/Nc2amuAkdyX8an4iCA9BNtauMbUCeVNnCpBFyWT7f+t9RT
+         hyOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zTNb1lTIEVQ6SY+1PM+jItpjx6YB2483ibK9X9oBYPQ=;
-        b=SXf9LDyvgxNHXNBM5k+0toMITni93/DVlNXQ4pE123r9PlN2r5v6NfvUobmkgg860j
-         doqALWLgKQeA4cJ1zqxc+kJNIh3gvGG+POdjTFnATW+8NCyT+Qw4cu2IAG8MyAiwGiKh
-         ztSn4+DS8bMvVmU+nckfti9EiJ9RajlFDNTcTaeHoZhe7oZeygKfJBwr5CO7Jwu4u7K3
-         0Ceq7BpEky0mfX/ZIqlQKhnmFzBTrBOACHf+uKhEobd2qcVfq+71K7nQoba4+3lyPKpB
-         8otrRncUK5WXMSLHAOSdO8hbMuS3nL5/CAg/oJquOIVFMJmIieig34ywkxcf5/y2gzQP
-         EirQ==
-X-Gm-Message-State: AOAM5318R2pDHF+Ery3RwC9uQ/MLIreq5hJgJazEhqGlhm7SkdGYdSgq
-        VW11JFo8Sl6vA0tElIsy8jKFoQ==
-X-Google-Smtp-Source: ABdhPJxgU85/WQXQ6xIZh5kol/FeQ53pYxb2sLTuRnfE+yO6MQ1sib5AHGRb02vCaC8rjeUx7mU2rw==
-X-Received: by 2002:a63:f404:: with SMTP id g4mr2518687pgi.114.1611889520497;
-        Thu, 28 Jan 2021 19:05:20 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id y75sm6854496pfg.119.2021.01.28.19.05.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jan 2021 19:05:19 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Brian Starkey <brian.starkey@arm.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/5] kselftests: dmabuf-heaps: Softly fail if don't find a vgem device
-Date:   Fri, 29 Jan 2021 03:05:12 +0000
-Message-Id: <20210129030514.1231773-3-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210129030514.1231773-1-john.stultz@linaro.org>
-References: <20210129030514.1231773-1-john.stultz@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aeTD92Zxp6kMBRHbnsNWj8wflOE/h037UXyPsCPMjdI=;
+        b=VtN546irXBnvM9S2u86pAH/ZRcUzmpiNl9k/dL8yvQg9MCHDxMTlOb/4teP9l9t3Ix
+         qdsGVIrDeaMa4SaGxnU3DbWFGJWmRg5IHjNM/Da5oczf0HPoSl/+vdH/mXhDVAnSxKSL
+         ppSITan0rrQhKzvzFdxuUR9avAgzqwFWoAVoX6FBeUQ314CUo0Lsc9nXIvB5rGE9Ke+B
+         Sm0AajvgYJiTlcFrUVpsPUNewLmPAvT+bFwzGCCSEHYSNIZ0yYYZVz4D6dpwUR+oK0gn
+         H1Bo3gXT4lxBPzD5x1KLrb6UNiYDseiNDpRkHPWoAU87LKBBz6JbwOVIHAHG6WBv/4pT
+         KtzA==
+X-Gm-Message-State: AOAM531KiZPtXhQqftmNUfeN2q2PO87j9FQfCKYHxPx5TcNo45B4Zd4l
+        t7Nv9CU56v6DD6DpIm8NUKNlJL9Tj7cVMiogHzrsUA==
+X-Google-Smtp-Source: ABdhPJyUjrPkPerF+yFxgaoSnEmHiyWD9jkfLyS0RJlUkWRl9u6G4OuMtkvFI/mwjF6TJTSbm4XpmtbJOrgWq77YyS8=
+X-Received: by 2002:a19:4801:: with SMTP id v1mr1184621lfa.628.1611895875040;
+ Thu, 28 Jan 2021 20:51:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210129022555.2411999-1-dlatypov@google.com>
+In-Reply-To: <20210129022555.2411999-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 29 Jan 2021 12:51:03 +0800
+Message-ID: <CABVgOSmaSz5jNkVTihCg3LbWg+6HGDPoQqjqNZ9_boOfUj_LkA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: don't show `1 == 1` in failed assertion messages
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While testing against a vgem device is helpful for testing importing
-they aren't always configured in, so don't make it a fatal failure.
+On Fri, Jan 29, 2021 at 10:26 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Currently, given something (fairly dystopian) like
+> > KUNIT_EXPECT_EQ(test, 2 + 2, 5)
+>
+> KUnit will prints a failure message like this.
+> >  Expected 2 + 2 == 5, but
+> >      2 + 2 == 4
+> >      5 == 5
+>
+> With this patch, the output just becomes
+> >  Expected 2 + 2 == 5, but
+> >      2 + 2 == 4
+>
+> This patch is slightly hacky, but it's quite common* to compare an
+> expression to a literal integer value, so this can make KUnit less
+> chatty in many cases. (This patch also fixes variants like
+> KUNIT_EXPECT_GT, LE, et al.).
+>
+> It also allocates an additional string briefly, but given this only
+> happens on test failures, it doesn't seem too bad a tradeoff.
+> Also, in most cases it'll realize the lengths are unequal and bail out
+> before the allocation.
+>
+> We could save the result of the formatted string to avoid wasting this
+> extra work, but it felt cleaner to leave it as-is.
+>
+> Edge case: for something silly and unrealistic like
+> > KUNIT_EXPECT_EQ(test, 4, 5);
+>
+> It'll generate this message with a trailing "but"
+> >  Expected 2 + 2 == 5, but
+> >  <next line of normal output>
 
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Brian Starkey <brian.starkey@arm.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Laura Abbott <labbott@kernel.org>
-Cc: Hridya Valsaraju <hridya@google.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: Daniel Mentz <danielmentz@google.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
- .../testing/selftests/dmabuf-heaps/dmabuf-heap.c  | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+I assume this is supposed to say "Expected 4 == 5" here.
+(I tested it to make sure, and that's what it did here.)
 
-diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-index 46f6759a8acc..8cedd539c7fb 100644
---- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-+++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-@@ -184,15 +184,14 @@ static int test_alloc_and_import(char *heap_name)
- 	if (importer_fd < 0) {
- 		ret = importer_fd;
- 		printf("Failed to open vgem\n");
--		goto out;
--	}
--
--	ret = import_vgem_fd(importer_fd, dmabuf_fd, &handle);
--	if (ret < 0) {
--		printf("Failed to import buffer\n");
--		goto out;
-+	} else {
-+		ret = import_vgem_fd(importer_fd, dmabuf_fd, &handle);
-+		if (ret < 0) {
-+			printf("Failed to import buffer\n");
-+			goto out;
-+		}
-+		printf("import passed\n");
- 	}
--	printf("import passed\n");
- 
- 	ret = dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
- 	if (ret < 0) {
--- 
-2.25.1
+Personally, I'd ideally like to get rid of the ", but", or even add a
+"but 4 != 5" style second line. Particularly in case the next line in
+the output might be confused for the rest of a sentence.
 
+That being said, this is a pretty silly edge case: I'd be worried if
+we ever saw that case in an actual submitted test. People might see it
+a bit while debugging, though: particularly if they're using
+KUNIT_EXPECT_EQ(test, 1, 2) as a way of forcing a test to fail. (I've
+done this while testing tooling, for instance.)
+
+>
+> It didn't feel worth adding a check up-front to see if both sides are
+> literals to handle this better.
+>
+> *A quick grep suggests 100+ comparisons to an integer literal as the
+> right hand side.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+
+I tested this, and it works well: the results are definitely more
+human readable. I could see it making things slightly more complicated
+for people who wanted to automatically parse assertion errors, but
+no-one is doing that, and the extra complexity is pretty minimal
+anyway.
+
+One thing which might be worth doing is expanding this to
+KUNIT_EXPECT_STREQ() and/or KUNIT_EXPECT_PTR_EQ(). These have slightly
+more complicated formatting (quotes, leading 0s, etc), though.
+Comparing pointer literals is pretty unlikely to show up, though, so I
+don't think it's as important. (I thought that maybe the KASAN shadow
+memory tests might use them, but a quick look didn't reveal any.)
+
+For the record, this is what STREQ()/PTR_EQ()/ failures with literals look like:
+# example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:31
+Expected "abc" == "abd", but
+    "abc" == abc
+    "abd" == abd
+# example_simple_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:33
+Expected 0x124 == 0x1234, but
+    0x124 == 0000000000000124
+    0x1234 == 0000000000001234
+
+Either way, though, this is:
+
+Tested-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
