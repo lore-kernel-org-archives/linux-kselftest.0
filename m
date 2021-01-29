@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA83AC433DB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 03:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1653FC433DB
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 03:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A07064DFB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 03:07:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D21B064DFD
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jan 2021 03:08:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbhA2DHD (ORCPT
+        id S231736AbhA2DH5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Jan 2021 22:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        Thu, 28 Jan 2021 22:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbhA2DGl (ORCPT
+        with ESMTP id S231733AbhA2DGi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Jan 2021 22:06:41 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FD7C061797
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:24 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id jx18so5570101pjb.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:24 -0800 (PST)
+        Thu, 28 Jan 2021 22:06:38 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B33C061786
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:21 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id f63so5312223pfa.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Jan 2021 19:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wpJLS1/K6quxDCtF6ZEY+ZhZmpb559yflYmJJ80BQbw=;
-        b=cZnqhzUWTkKR+GwYZalkxCsk9v9+2TUHpqGdSzHbuzov/fz1EkYstH68r/3oEpBW4B
-         j9HutROkJfo28jDndi/gV5EZvIxT/IvLYHbyAhy042zJll0UXIyFaTtdkdfm1pWRZToD
-         qJNtH2kDgXuipk6oJauJVzId5wPVjtS8ROisYKCY1doPKQ9nTPjmC/4IvcnlCRc1KC1n
-         DRsJbcQ++faIJpPy/nlSw9IvR5qTxi4nXUkmJxV83pOPbfv1Elfk36n3a5eGRn6K7uKN
-         hS8uxtEET+0pZuiSShr41z6L8+dxqy/ZVQzp55rFqyS8L8K8IXZDJV1eEsX2o3LQGuP7
-         ENuA==
+        bh=zTNb1lTIEVQ6SY+1PM+jItpjx6YB2483ibK9X9oBYPQ=;
+        b=z1kwyFNg5hSYRi20ZvZ8wuUsM10FJZoI8McYKRlownqrb/9vwSuD19hHoANIKl9o7S
+         NM3r0rFYtS7BoYRIxUKv2hJYefP+6PduFPKe6sNVWE7NJvVoSFSo+oGB5ds50UhCUA9V
+         SyK9daFDnwbPsOxmmmogF/izeRWdoG3OgCQ6k0DmEgOaW1qa9ZwCI/06RZVukTBn91KD
+         jWkK57VznZPmUOrJGfJnxT8iH5+1O3xSd8qHCSqHOszD3n07tm6upXSk82uB3LtU1IAy
+         N+1l7G24LEncO+U+I1O4bg5Gt8C/bhkcHAaGe6YPBKuBSfvXS+AFhnzu9hoyFu2QqGYg
+         S+4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wpJLS1/K6quxDCtF6ZEY+ZhZmpb559yflYmJJ80BQbw=;
-        b=HBgVpN9+dqhYZhcJ+PHgWLoevYTYn7PEsCltRPZuF3rQF8HlTe9pGuSUneV2dKqGWB
-         uSuWRDpVxfHv/TPKyl4YkXaa7Pehc5kOgOwJkq9cKX7rJIXkiMh3S2eCOTJvNgA4MupA
-         b9yMxzVKjePKX0AAixNlf2DYQT05zKxlpqPpCFG+W8HwrphywzCYBfDypKtN4Yatqxnx
-         ZIiYUsDGLo9o6OKoV3lV0JTmKEZAYxvvM9IggVRthIh7qzcxjXBAoAEM41Yja+e7iI0o
-         R6NbsdoxY3VvfP9tEhbceWNEiuk/uPgo7xUWB4RrYsL6wYWu13QgvSw7d6PuoDVudtXp
-         0K9w==
-X-Gm-Message-State: AOAM532JTYVw7gtnpUTcv7dEfmIWvX3KMLuh1OJr0K66jTJeKCQGxfKc
-        7IYDJKD31DL/5YDxnWa+uclaZA==
-X-Google-Smtp-Source: ABdhPJy2aymxhZ7yZWwAmLLNyftYCwd61PtfrChhA2K/S/ZWzs+EOTzqXZihvePJ3BjBNSZPTK19KA==
-X-Received: by 2002:a17:90a:8e82:: with SMTP id f2mr2405873pjo.234.1611889523668;
-        Thu, 28 Jan 2021 19:05:23 -0800 (PST)
+        bh=zTNb1lTIEVQ6SY+1PM+jItpjx6YB2483ibK9X9oBYPQ=;
+        b=SXf9LDyvgxNHXNBM5k+0toMITni93/DVlNXQ4pE123r9PlN2r5v6NfvUobmkgg860j
+         doqALWLgKQeA4cJ1zqxc+kJNIh3gvGG+POdjTFnATW+8NCyT+Qw4cu2IAG8MyAiwGiKh
+         ztSn4+DS8bMvVmU+nckfti9EiJ9RajlFDNTcTaeHoZhe7oZeygKfJBwr5CO7Jwu4u7K3
+         0Ceq7BpEky0mfX/ZIqlQKhnmFzBTrBOACHf+uKhEobd2qcVfq+71K7nQoba4+3lyPKpB
+         8otrRncUK5WXMSLHAOSdO8hbMuS3nL5/CAg/oJquOIVFMJmIieig34ywkxcf5/y2gzQP
+         EirQ==
+X-Gm-Message-State: AOAM5318R2pDHF+Ery3RwC9uQ/MLIreq5hJgJazEhqGlhm7SkdGYdSgq
+        VW11JFo8Sl6vA0tElIsy8jKFoQ==
+X-Google-Smtp-Source: ABdhPJxgU85/WQXQ6xIZh5kol/FeQ53pYxb2sLTuRnfE+yO6MQ1sib5AHGRb02vCaC8rjeUx7mU2rw==
+X-Received: by 2002:a63:f404:: with SMTP id g4mr2518687pgi.114.1611889520497;
+        Thu, 28 Jan 2021 19:05:20 -0800 (PST)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id y75sm6854496pfg.119.2021.01.28.19.05.22
+        by smtp.gmail.com with ESMTPSA id y75sm6854496pfg.119.2021.01.28.19.05.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Jan 2021 19:05:22 -0800 (PST)
+        Thu, 28 Jan 2021 19:05:19 -0800 (PST)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -70,9 +70,9 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Daniel Mentz <danielmentz@google.com>,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 5/5] kselftests: dmabuf-heaps: Add extra checking that allocated buffers are zeroed
-Date:   Fri, 29 Jan 2021 03:05:14 +0000
-Message-Id: <20210129030514.1231773-5-john.stultz@linaro.org>
+Subject: [PATCH 3/5] kselftests: dmabuf-heaps: Softly fail if don't find a vgem device
+Date:   Fri, 29 Jan 2021 03:05:12 +0000
+Message-Id: <20210129030514.1231773-3-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210129030514.1231773-1-john.stultz@linaro.org>
 References: <20210129030514.1231773-1-john.stultz@linaro.org>
@@ -82,15 +82,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a check to validate that buffers allocated from the heaps
-are properly zeroed before being given to userland.
-
-It is done by allocating a number of buffers, and filling them
-with a nonzero pattern, then closing and reallocating more
-buffers and checking that they are all properly zeroed.
-
-This is helpful to validate any cached buffers are zeroed
-before being given back out.
+While testing against a vgem device is helpful for testing importing
+they aren't always configured in, so don't make it a fatal failure.
 
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: Brian Starkey <brian.starkey@arm.com>
@@ -105,113 +98,36 @@ Cc: dri-devel@lists.freedesktop.org
 Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- .../selftests/dmabuf-heaps/dmabuf-heap.c      | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
+ .../testing/selftests/dmabuf-heaps/dmabuf-heap.c  | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-index d179d81e2355..29af27acd40e 100644
+index 46f6759a8acc..8cedd539c7fb 100644
 --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
 +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-@@ -218,6 +218,84 @@ static int test_alloc_and_import(char *heap_name)
- 	return ret;
- }
- 
-+static int test_alloc_zeroed(char *heap_name, size_t size)
-+{
-+	int heap_fd = -1, dmabuf_fd[32];
-+	int i, j, ret;
-+	void *p = NULL;
-+	char *c;
-+
-+	printf("  Testing alloced %ldk buffers are zeroed:  ", size / 1024);
-+	heap_fd = dmabuf_heap_open(heap_name);
-+	if (heap_fd < 0)
-+		return -1;
-+
-+	/* Allocate and fill a bunch of buffers */
-+	for (i = 0; i < 32; i++) {
-+		ret = dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]);
+@@ -184,15 +184,14 @@ static int test_alloc_and_import(char *heap_name)
+ 	if (importer_fd < 0) {
+ 		ret = importer_fd;
+ 		printf("Failed to open vgem\n");
+-		goto out;
+-	}
+-
+-	ret = import_vgem_fd(importer_fd, dmabuf_fd, &handle);
+-	if (ret < 0) {
+-		printf("Failed to import buffer\n");
+-		goto out;
++	} else {
++		ret = import_vgem_fd(importer_fd, dmabuf_fd, &handle);
 +		if (ret < 0) {
-+			printf("FAIL (Allocation (%i) failed)\n", i);
++			printf("Failed to import buffer\n");
 +			goto out;
 +		}
-+		/* mmap and fill with simple pattern */
-+		p = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, dmabuf_fd[i], 0);
-+		if (p == MAP_FAILED) {
-+			printf("FAIL (mmap() failed!)\n");
-+			ret = -1;
-+			goto out;
-+		}
-+		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
-+		memset(p, 0xff, size);
-+		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
-+		munmap(p, size);
-+	}
-+	/* close them all */
-+	for (i = 0; i < 32; i++)
-+		close(dmabuf_fd[i]);
-+
-+	/* Allocate and validate all buffers are zeroed */
-+	for (i = 0; i < 32; i++) {
-+		ret = dmabuf_heap_alloc(heap_fd, size, 0, &dmabuf_fd[i]);
-+		if (ret < 0) {
-+			printf("FAIL (Allocation (%i) failed)\n", i);
-+			goto out;
-+		}
-+
-+		/* mmap and validate everything is zero */
-+		p = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, dmabuf_fd[i], 0);
-+		if (p == MAP_FAILED) {
-+			printf("FAIL (mmap() failed!)\n");
-+			ret = -1;
-+			goto out;
-+		}
-+		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_START);
-+		c = (char *)p;
-+		for (j = 0; j < size; j++) {
-+			if (c[j] != 0) {
-+				printf("FAIL (Allocated buffer not zeroed @ %i)\n", j);
-+				break;
-+			}
-+		}
-+		dmabuf_sync(dmabuf_fd[i], DMA_BUF_SYNC_END);
-+		munmap(p, size);
-+	}
-+	/* close them all */
-+	for (i = 0; i < 32; i++)
-+		close(dmabuf_fd[i]);
-+
-+	close(heap_fd);
-+	printf("OK\n");
-+	return 0;
-+
-+out:
-+	while (i > 0) {
-+		close(dmabuf_fd[i]);
-+		i--;
-+	}
-+	close(heap_fd);
-+	return ret;
-+}
-+
- /* Test the ioctl version compatibility w/ a smaller structure then expected */
- static int dmabuf_heap_alloc_older(int fd, size_t len, unsigned int flags,
- 				   int *dmabuf_fd)
-@@ -386,6 +464,14 @@ int main(void)
- 		if (ret)
- 			break;
++		printf("import passed\n");
+ 	}
+-	printf("import passed\n");
  
-+		ret = test_alloc_zeroed(dir->d_name, 4 * 1024);
-+		if (ret)
-+			break;
-+
-+		ret = test_alloc_zeroed(dir->d_name, ONE_MEG);
-+		if (ret)
-+			break;
-+
- 		ret = test_alloc_compat(dir->d_name);
- 		if (ret)
- 			break;
+ 	ret = dmabuf_sync(dmabuf_fd, DMA_BUF_SYNC_START);
+ 	if (ret < 0) {
 -- 
 2.25.1
 
