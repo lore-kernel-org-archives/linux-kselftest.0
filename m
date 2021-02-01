@@ -2,144 +2,181 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 786B3C433E6
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Feb 2021 15:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B86B4C433E9
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Feb 2021 16:58:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CF3164E46
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Feb 2021 15:45:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69D9064EC1
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Feb 2021 16:58:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbhBAPpL (ORCPT
+        id S231816AbhBAQ6K (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Feb 2021 10:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbhBAPjx (ORCPT
+        Mon, 1 Feb 2021 11:58:10 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8474 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231751AbhBAQ6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Feb 2021 10:39:53 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B325FC061794
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Feb 2021 07:38:35 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id t63so16610346qkc.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Feb 2021 07:38:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=gHgQfTRvar1lIU9rNG4Q491ak9Bif38ih9mdt5Czeeg=;
-        b=GC0toNm7BcOudNaj/YC9Axvt6fvOsNdbAgmE+JWdR4Yqwzf8ZdFKCSD1pQp2UfohPX
-         r8MUgPpT6yf730PLmk6gqtmgfXJLOK76d5rXXg1ZQPkAFLKtPfHnJfgRoc3jcePAJ4dp
-         t/KLt/MRx0UeJYXqOCsCs/zQ2HiuDGgXv9WrpGiMYf2Nnhn0I9kBeJ08PAxtZaWI/DZ2
-         FKOezf6LfwHVxcsKl0XZJ9sARneq2SogUqa3oQQKOg4MvKr8H6ZCZwM55OFzBePS4PMj
-         f4m1JsPU1WuDnzrsay1xk5cXQ61jqWJKq7Boc9vkZgTnRAMZ9YKN0SbWk46CXMB0B4u9
-         tDcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gHgQfTRvar1lIU9rNG4Q491ak9Bif38ih9mdt5Czeeg=;
-        b=cAG4k7lr8s66CfR+jOiYPUkhlnCJTwdbOGoHOETA9lGSfA9iHwjHfuiKfRNLz1bI4d
-         mPhpPI9lxjOHrY+Z4fk42FC1SdpCKI3MNsg8Iv6LUhIqwhr9SMShxEuZ9/ujC9/AWkJB
-         9aVUBRi14jqKANswWxx1SGity+ct6VqnvYdomzfm6nQFIrQ3lTNZof3LURDCo3hhse5y
-         igJ7dPv0Cwcf69ZTnjZXncx7NpUBaeVGAI91F7oCFuIMNiF65U934baPKTWJC7S0eb2H
-         yItpf5PMsLyMbXgKWJ4tjVrFRBAPntYM5RSTG2ujKUK8QXM58TBXncdmfL7AAurqSVKp
-         YjAg==
-X-Gm-Message-State: AOAM532CKwWAcflSjnl3mZLxFP6L+fUKVbghy8aAymb8jOTIgO4lkdqO
-        ZQ2z4GP/UYiBaJnLSZxdShVJQQ==
-X-Google-Smtp-Source: ABdhPJzYTS+4AOTbPpreXVUkljPmej3SQM2H6+2t7UJhXKvne6cS5DqT4JyjPRt9T7SRhMlU4kFuQw==
-X-Received: by 2002:a37:6206:: with SMTP id w6mr16479068qkb.102.1612193914954;
-        Mon, 01 Feb 2021 07:38:34 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id 22sm14853307qke.123.2021.02.01.07.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 07:38:34 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
-        dan.j.williams@intel.com, sashal@kernel.org,
-        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
-        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
-        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
-        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
-        linux-doc@vger.kernel.org, ira.weiny@intel.com,
-        linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v9 03/14] mm/gup: return an error on migration failure
-Date:   Mon,  1 Feb 2021 10:38:16 -0500
-Message-Id: <20210201153827.444374-4-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210201153827.444374-1-pasha.tatashin@soleen.com>
-References: <20210201153827.444374-1-pasha.tatashin@soleen.com>
+        Mon, 1 Feb 2021 11:58:02 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 111GglEJ113096;
+        Mon, 1 Feb 2021 11:56:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=wT7a/liLBSfcD7N/UPbkV3RD/KslWeh4NLQG5EPJ7nQ=;
+ b=kXkBzChwTSaNHsMVY+LTYccolmWv+mZ3ZGn7eEUUvVLxfBBPI8zUta1XvW7g70uLasS9
+ d0kJKgQu1dnLNQXDFjIopZmB9sTHhJDP3oPSyrFyYZArItFkrYbc0fnPmsfx4LaO19/B
+ gS3Uixq/pAGwHT/prSDU8KzbQN5/ynJ+Ukn891aJzwdQslDSjiXbXsHV4bYfJjVJ8WEF
+ At5mCisx5yq+hfISjZTWjkCnERXf9VUD7yAJaJeyECDFSM3fRjdUzxLOBdyJJ3y9Vl6d
+ Qu5S+5LmA7rR1AuPmGiirOyAgBqXBXMd37MobQIK9K4Qmw9U2wP/9xPBaN10moKzV8Pu Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36en3vs16b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 11:56:31 -0500
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 111GgxhQ114162;
+        Mon, 1 Feb 2021 11:56:30 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36en3vs155-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 11:56:30 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 111GfuSI009246;
+        Mon, 1 Feb 2021 16:56:28 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 36eheka7ga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 Feb 2021 16:56:28 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 111GuRjN23003516
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 1 Feb 2021 16:56:27 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 692A278063;
+        Mon,  1 Feb 2021 16:56:27 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5CD187806B;
+        Mon,  1 Feb 2021 16:56:20 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.85.153.205])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  1 Feb 2021 16:56:20 +0000 (GMT)
+Message-ID: <6de6b9f9c2d28eecc494e7db6ffbedc262317e11.camel@linux.ibm.com>
+Subject: Re: [PATCH v16 07/11] secretmem: use PMD-size pages to amortize
+ direct map fragmentation
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Date:   Mon, 01 Feb 2021 08:56:19 -0800
+In-Reply-To: <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
+References: <20210121122723.3446-1-rppt@kernel.org>
+         <20210121122723.3446-8-rppt@kernel.org>
+         <20210126114657.GL827@dhcp22.suse.cz>
+         <303f348d-e494-e386-d1f5-14505b5da254@redhat.com>
+         <20210126120823.GM827@dhcp22.suse.cz> <20210128092259.GB242749@kernel.org>
+         <YBK1kqL7JA7NePBQ@dhcp22.suse.cz>
+         <73738cda43236b5ac2714e228af362b67a712f5d.camel@linux.ibm.com>
+         <YBPF8ETGBHUzxaZR@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-01_06:2021-01-29,2021-02-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxlogscore=818 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102010084
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When migration failure occurs, we still pin pages, which means
-that we may pin CMA movable pages which should never be the case.
+On Fri, 2021-01-29 at 09:23 +0100, Michal Hocko wrote:
+> On Thu 28-01-21 13:05:02, James Bottomley wrote:
+> > Obviously the API choice could be revisited
+> > but do you have anything to add over the previous discussion, or is
+> > this just to get your access control?
+> 
+> Well, access control is certainly one thing which I still believe is
+> missing. But if there is a general agreement that the direct map
+> manipulation is not that critical then this will become much less of
+> a problem of course.
 
-Instead return an error without pinning pages when migration failure
-happens.
+The secret memory is a scarce resource but it's not a facility that
+should only be available to some users.
 
-No need to retry migrating, because migrate_pages() already retries
-10 times.
+> It all boils down whether secret memory is a scarce resource. With
+> the existing implementation it really is. It is effectivelly
+> repeating same design errors as hugetlb did. And look now, we have a
+> subtle and convoluted reservation code to track mmap requests and we
+> have a cgroup controller to, guess what, have at least some control
+> over distribution if the preallocated pool. See where am I coming
+> from?
 
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
----
- mm/gup.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+I'm fairly sure rlimit is the correct way to control this.  The
+subtlety in both rlimit and memcg tracking comes from deciding to
+account under an existing category rather than having our own new one. 
+People don't like new stuff in accounting because it requires
+modifications to everything in userspace.  Accounting under and
+existing limit keeps userspace the same but leads to endless arguments
+about which limit it should be under.  It took us several patch set
+iterations to get to a fragile consensus on this which you're now
+disrupting for reasons you're not making clear.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 16f10d5a9eb6..88ce41f41543 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1557,7 +1557,6 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- {
- 	unsigned long i;
- 	bool drain_allow = true;
--	bool migrate_allow = true;
- 	LIST_HEAD(cma_page_list);
- 	long ret = nr_pages;
- 	struct page *prev_head, *head;
-@@ -1608,17 +1607,15 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 			for (i = 0; i < nr_pages; i++)
- 				put_page(pages[i]);
- 
--		if (migrate_pages(&cma_page_list, alloc_migration_target, NULL,
--			(unsigned long)&mtc, MIGRATE_SYNC, MR_CONTIG_RANGE)) {
--			/*
--			 * some of the pages failed migration. Do get_user_pages
--			 * without migration.
--			 */
--			migrate_allow = false;
--
-+		ret = migrate_pages(&cma_page_list, alloc_migration_target,
-+				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
-+				    MR_CONTIG_RANGE);
-+		if (ret) {
- 			if (!list_empty(&cma_page_list))
- 				putback_movable_pages(&cma_page_list);
-+			return ret > 0 ? -ENOMEM : ret;
- 		}
-+
- 		/*
- 		 * We did migrate all the pages, Try to get the page references
- 		 * again migrating any new CMA pages which we failed to isolate
-@@ -1628,7 +1625,7 @@ static long check_and_migrate_cma_pages(struct mm_struct *mm,
- 						   pages, vmas, NULL,
- 						   gup_flags);
- 
--		if ((ret > 0) && migrate_allow) {
-+		if (ret > 0) {
- 			nr_pages = ret;
- 			drain_allow = true;
- 			goto check_again;
--- 
-2.25.1
+> If the secret memory is more in line with mlock without any imposed
+> limit (other than available memory) in the end then, sure, using the
+> same access control as mlock sounds reasonable. Btw. if this is
+> really just a more restrictive mlock then is there any reason to not
+> hook this into the existing mlock infrastructure (e.g.
+> MCL_EXCLUSIVE)? Implications would be that direct map would be
+> handled on instantiation/tear down paths, migration would deal with
+> the same (if possible). Other than that it would be mlock like.
+
+In the very first patch set we proposed a mmap flag to do this.  Under
+detailed probing it emerged that this suffers from several design
+problems: the KVM people want VMM to be able to remove the secret
+memory range from the process; there may be situations where sharing is
+useful and some people want to be able to seal the operations.  All of
+this ended up convincing everyone that a file descriptor based approach
+was better than a mmap one.
+
+James
+
 
