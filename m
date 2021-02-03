@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F05EC433E6
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 18:13:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF138C4332D
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 18:13:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5E5164F8C
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 18:13:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A92C64F8C
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 18:13:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbhBCSNU (ORCPT
+        id S232530AbhBCSNe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Feb 2021 13:13:20 -0500
+        Wed, 3 Feb 2021 13:13:34 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbhBCSNC (ORCPT
+        with ESMTP id S232788AbhBCSNX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 13:13:02 -0500
+        Wed, 3 Feb 2021 13:13:23 -0500
 Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B3AC061797
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:12:13 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id e7so106227ile.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:12:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246E0C061788
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Feb 2021 10:12:23 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id z18so98060ile.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Feb 2021 10:12:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=21sYp4CUQOlK2ImbPHkhn1yuZ3PO6WQHxDIabv9nFSU=;
-        b=a/J9XR4fYFo21GZtTtRafEkGGqUjKVgmZ02h6PT8krbADl2du6F3QbsjhpPGn+//uR
-         kYSdvlIoHShsW0o60cQ8l5h/x52JjyUVcRblQSCoJCX16IAPQiDaYAdFJK6ZrAlZdvLL
-         CcalE3AAU6twCgFVXY22uTfEz6EiclrX8uwfM=
+        bh=sMW3CNRkXAOc9KAd8J07IhXCHX6Qv+SqEQtIsx8ACMQ=;
+        b=b9fnxMS19FGFawMAjOPzOEcoC4JgrqxWgH8K2OX2hwQqH1l4SDSpNNoUUstpJzf4G9
+         KY0hONkplnyMToYmcCauhew9EeN5GPuDVyaOF5DrLuEUVQ2Ne4S7nr4yk7QUfbHjUjhC
+         jJLnBv8suG996FrIsQO9a86ihkZy+BQnf4FxE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=21sYp4CUQOlK2ImbPHkhn1yuZ3PO6WQHxDIabv9nFSU=;
-        b=Rck6UCQcfSrNgAELv9vttuj1Qa7/1NSnikQ704aoaUXetOpVyW+l3pTElS+hjy0Go6
-         8kpcyF85i/1SKHddOSa8btwaqtC+5dDG0N5el38RMJCKl/vNFVOLulZ10P/m2cLJJj1x
-         M+y/PCIvlc14HZWcVIlY9Y5iWl1BLsiRqibkb7ujyrD42er//BanLnQWYqHmsjUjI7kH
-         4wYmy9edfgP6M/HzBTswSbylKFGhZYmAXCO2VzLLKa46EIAwHM0m+BR0o6FRWccKM/0p
-         lIXs3zA3PAdkD/Da3KRflFWKzF4b7wzn8ofZrrJpfVfBxEivHqKeRA8/rVq/PB6Y1wLx
-         CR+Q==
-X-Gm-Message-State: AOAM531reuV9h8ieJg/gs/Z7zzGOtQNJwCdfSrNRrBlYTToTS8nwD2yu
-        V9XeorIvDHcZqhhvv55JesAZ2w==
-X-Google-Smtp-Source: ABdhPJxgtPPDuGMtnmHbwj0HIGYLXw7KoEebt/ahk62mO2prc+ckUOJJFz4Vn0JVYWWrk4Oqcd0cug==
-X-Received: by 2002:a05:6e02:216f:: with SMTP id s15mr3610702ilv.81.1612375933021;
-        Wed, 03 Feb 2021 10:12:13 -0800 (PST)
+        bh=sMW3CNRkXAOc9KAd8J07IhXCHX6Qv+SqEQtIsx8ACMQ=;
+        b=KrgGHFHmVZ8BK8tPnQRiYG1UL14G048I8KvRRSHEQi5gmDopfRgNyCQRQaotFjesTg
+         YBCF5qC22fWz2Vh1Y9lAsOLa47yhvVZ/VNhxoKkw5AJJL0nJtMqLArqw/Tp2fKs9ZrZd
+         1iPnDlPhJ79Kr50oTurJXmDratFr8p7EDBD2ppKU9VFbLaQmJAew7BDmiNDooIHuIB3+
+         ehDsAUkEQ7a7fBRkB7EDL1jw53kdecJBbnmq0wi13KhqGTbUwrtZ21biLytwGr37mEyw
+         oLW4WFrYestpE+cxJPOSqmIG4ky1DEmksEsonogqj7z2PIyAOuh4vnb2YEPIcwRg1kCA
+         p5vw==
+X-Gm-Message-State: AOAM532Dw49kBKHTAsNmT5LP2pddLUeLs7IISbsIugVhTgq088uFiaXA
+        voupzj8C8gIVjWCG+R1foyMDLw==
+X-Google-Smtp-Source: ABdhPJxjrtfT1+6QN/5yrKNnuIvDVPU5UrlfJEcRxt7l04gm+3ENjo/Y9yfHqeiCNcK9Ib3TtZNR/Q==
+X-Received: by 2002:a92:650b:: with SMTP id z11mr3627266ilb.84.1612375942658;
+        Wed, 03 Feb 2021 10:12:22 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h21sm399684iob.30.2021.02.03.10.12.11
+        by smtp.gmail.com with ESMTPSA id h21sm399684iob.30.2021.02.03.10.12.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 10:12:12 -0800 (PST)
+        Wed, 03 Feb 2021 10:12:22 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     corbet@lwn.net, gregkh@linuxfoundation.org, peterz@infradead.org,
         keescook@chromium.org, rafael@kernel.org, lenb@kernel.org,
@@ -63,9 +63,9 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org,
         devel@driverdev.osuosl.org
-Subject: [PATCH v3 1/7] seqnum_ops: Introduce Sequence Number Ops
-Date:   Wed,  3 Feb 2021 11:11:57 -0700
-Message-Id: <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
+Subject: [PATCH v3 5/7] drivers/staging/rtl8723bs: convert event_seq to use seqnum_ops
+Date:   Wed,  3 Feb 2021 11:12:01 -0700
+Message-Id: <1dffcc128b59ed991f9fb9f5064a05741c282f26.1612314468.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1612314468.git.skhan@linuxfoundation.org>
 References: <cover.1612314468.git.skhan@linuxfoundation.org>
@@ -75,427 +75,193 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sequence Number api provides interfaces for unsigned atomic up counters.
+Sequence Number api provides interfaces for unsigned atomic up counters
+leveraging atomic_t and atomic64_t ops underneath. Convert it to use
+seqnum_ops.
 
-There are a number of atomic_t usages in the kernel where atomic_t api
-is used for counting sequence numbers and other statistical counters.
-Several of these usages, convert atomic_read() and atomic_inc_return()
-return values to unsigned. Introducing sequence number ops supports
-these use-cases with a standard core-api.
-
-Sequence Number ops provide interfaces to initialize, increment and get
-the sequence number. These ops also check for overflow and log message to
-indicate when overflow occurs.
+event_seq atomic_t variables are atomic counters. Convert them to use
+seqnum_ops.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- Documentation/core-api/index.rst      |   1 +
- Documentation/core-api/seqnum_ops.rst |  53 ++++++++++
- MAINTAINERS                           |   7 ++
- include/linux/seqnum_ops.h            | 129 +++++++++++++++++++++++++
- lib/Kconfig                           |   9 ++
- lib/Makefile                          |   1 +
- lib/test_seqnum_ops.c                 | 133 ++++++++++++++++++++++++++
- 7 files changed, 333 insertions(+)
- create mode 100644 Documentation/core-api/seqnum_ops.rst
- create mode 100644 include/linux/seqnum_ops.h
- create mode 100644 lib/test_seqnum_ops.c
+ drivers/staging/rtl8723bs/core/rtw_cmd.c      |  3 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 33 +++++++++++++------
+ drivers/staging/rtl8723bs/include/rtw_cmd.h   |  3 +-
+ .../staging/rtl8723bs/include/rtw_mlme_ext.h  |  3 +-
+ 4 files changed, 29 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-index f1c9d20bd42d..adc8b1ae2acf 100644
---- a/Documentation/core-api/index.rst
-+++ b/Documentation/core-api/index.rst
-@@ -54,6 +54,7 @@ How Linux keeps everything from happening at the same time.  See
-    :maxdepth: 1
- 
-    refcount-vs-atomic
-+   seqnum_ops
-    irq/index
-    local_ops
-    padata
-diff --git a/Documentation/core-api/seqnum_ops.rst b/Documentation/core-api/seqnum_ops.rst
-new file mode 100644
-index 000000000000..ed4eba394799
---- /dev/null
-+++ b/Documentation/core-api/seqnum_ops.rst
-@@ -0,0 +1,53 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: <isonum.txt>
-+
-+.. _seqnum_ops:
-+
-+==========================
-+Sequence Number Operations
-+==========================
-+
-+:Author: Shuah Khan
-+:Copyright: |copy| 2021, The Linux Foundation
-+:Copyright: |copy| 2021, Shuah Khan <skhan@linuxfoundation.org>
-+
-+Sequence Number api provides interfaces for unsigned up counters.
-+
-+Sequence Number Ops
-+===================
-+
-+seqnum32 and seqnum64 types support implementing unsigned up counters. ::
-+
-+        struct seqnum32 { u32 seqnum; };
-+        struct seqnum64 { u64 seqnum; };
-+
-+Initializers
-+------------
-+
-+Interfaces for initializing sequence numbers. ::
-+
-+        #define SEQNUM_INIT(i)    { .seqnum = i }
-+        seqnum32_init(seqnum, val)
-+        seqnum64_init(seqnum, val)
-+
-+Increment interface
-+-------------------
-+
-+Increments sequence number and returns the new value. Checks for overflow
-+conditions and logs message when overflow occurs. This check is intended
-+to help catch cases where overflow could lead to problems. ::
-+
-+        seqnum32_inc(seqnum): Calls atomic_inc_return(seqnum).
-+        seqnum64_inc(seqnum): Calls atomic64_inc_return(seqnum).
-+
-+Return/get value interface
-+--------------------------
-+
-+Returns sequence number value. ::
-+
-+        seqnum32_get() - return seqnum value.
-+        seqnum64_get() - return seqnum value.
-+
-+.. warning::
-+        seqnum32 wraps around to INT_MIN when it overflows.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cc1e6a5ee6e6..f9fe1438a8cd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16235,6 +16235,13 @@ S:	Maintained
- F:	Documentation/fb/sm712fb.rst
- F:	drivers/video/fbdev/sm712*
- 
-+SEQNUM OPS
-+M:	Shuah Khan <skhan@linuxfoundation.org>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	include/linux/seqnum_ops.h
-+F:	lib/test_seqnum_ops.c
-+
- SIMPLE FIRMWARE INTERFACE (SFI)
- S:	Obsolete
- W:	http://simplefirmware.org/
-diff --git a/include/linux/seqnum_ops.h b/include/linux/seqnum_ops.h
-new file mode 100644
-index 000000000000..e8d8481445d3
---- /dev/null
-+++ b/include/linux/seqnum_ops.h
-@@ -0,0 +1,129 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * seqnum_ops.h - Interfaces for unsigned atomic sequential up counters.
-+ *
-+ * Copyright (c) 2021 Shuah Khan <skhan@linuxfoundation.org>
-+ * Copyright (c) 2021 The Linux Foundation
-+ *
-+ * Sequence Number functions provide support for unsgined atomic up
-+ * counters.
-+ *
-+ * The interface provides:
-+ * seqnumu32 & seqnumu64 functions:
-+ *	initialization
-+ *	increment and return
-+ *
-+ * seqnumu32 and seqnumu64 functions leverage/use atomic*_t ops to
-+ * implement support for unsigned atomic up counters.
-+ *
-+ * Reference and API guide:
-+ *	Documentation/core-api/seqnum_ops.rst for more information.
-+ */
-+
-+#ifndef __LINUX_SEQNUM_OPS_H
-+#define __LINUX_SEQNUM_OPS_H
-+
-+#include <linux/atomic.h>
-+
-+/**
-+ * struct seqnum32 - Sequence number atomic counter
-+ * @seqnum: atomic_t
-+ *
-+ **/
-+struct seqnum32 {
-+	u32 seqnum;
-+};
-+
-+#define SEQNUM_INIT(i)		{ .seqnum = i }
-+
-+/*
-+ * seqnum32_init() - initialize seqnum value
-+ * @seq: struct seqnum32 pointer
-+ *
-+ */
-+static inline void seqnum32_init(struct seqnum32 *seq, u32 val)
-+{
-+	seq->seqnum = val;
-+}
-+
-+/*
-+ * seqnum32_inc() - increment seqnum value and return the new value
-+ * @seq: struct seqnum32 pointer
-+ *
-+ * Return u32
-+ */
-+static inline u32 seqnum32_inc(struct seqnum32 *seq)
-+{
-+	atomic_t val = ATOMIC_INIT(seq->seqnum);
-+
-+	seq->seqnum = (u32) atomic_inc_return(&val);
-+	if (seq->seqnum >= UINT_MAX)
-+		pr_info("Sequence Number overflow %u detected\n",
-+			seq->seqnum);
-+	return seq->seqnum;
-+}
-+
-+/*
-+ * seqnum32_get() - get seqnum value
-+ * @seq: struct seqnum32 pointer
-+ *
-+ * Return u32
-+ */
-+static inline u32 seqnum32_get(struct seqnum32 *seq)
-+{
-+	return seq->seqnum;
-+}
-+
-+/*
-+ * struct seqnum64 - Sequential/Statistical atomic counter
-+ * @seq: atomic64_t
-+ *
-+ */
-+struct seqnum64 {
-+	u64 seqnum;
-+};
-+
-+/* Add to a global include/vdso/limits.h and fix all other UINT64_MAX
-+ * duplicate defines?
-+ */
-+#define SEQ_UINT64_MAX	((u64)(~((u64) 0)))	/* 0xFFFFFFFFFFFFFFFF */
-+
-+/*
-+ * seqnum64_init() - initialize seqnum value
-+ * @seq: struct seqnum64 pointer
-+ *
-+ */
-+static inline void seqnum64_init(struct seqnum64 *seq, u64 val)
-+{
-+	seq->seqnum = val;
-+}
-+
-+/*
-+ * seqnum64_inc() - increment seqnum value and return the new value
-+ * @seq: struct seqnum64 pointer
-+ *
-+ * Return u64
-+ */
-+static inline u64 seqnum64_inc(struct seqnum64 *seq)
-+{
-+	atomic64_t val = ATOMIC_INIT(seq->seqnum);
-+
-+	seq->seqnum = (u64) atomic64_inc_return(&val);
-+	if (seq->seqnum >= SEQ_UINT64_MAX)
-+		pr_info("Sequence Number overflow %llu detected\n",
-+			seq->seqnum);
-+	return seq->seqnum;
-+}
-+
-+/*
-+ * seqnum64_get() - get seqnum value
-+ * @seq: struct seqnum64 pointer
-+ *
-+ * Return u64
-+ */
-+static inline u64 seqnum64_get(struct seqnum64 *seq)
-+{
-+	return (u64) seq->seqnum;
-+}
-+
-+#endif /* __LINUX_SEQNUM_OPS_H */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 46806332a8cc..518de7d34606 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -663,6 +663,15 @@ config OBJAGG
- config STRING_SELFTEST
- 	tristate "Test string functions"
- 
-+config TEST_SEQNUM_OPS
-+	tristate "Test Sequence Number Ops API"
-+	help
-+	   A test module for Sequence Number Ops API. A corresponding
-+	   selftest can be used to test the Seqnum Ops API. Select this
-+	   for testing Sequence Number Ops API.
-+
-+	   See Documentation/core-api/seqnum_ops.rst
-+
- endmenu
- 
- config GENERIC_IOREMAP
-diff --git a/lib/Makefile b/lib/Makefile
-index afeff05fa8c5..917686063cb3 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -101,6 +101,7 @@ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
- obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
- obj-$(CONFIG_TEST_HMM) += test_hmm.o
- obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
-+obj-$(CONFIG_TEST_SEQNUM_OPS) += test_seqnum_ops.o
- 
- #
- # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
-diff --git a/lib/test_seqnum_ops.c b/lib/test_seqnum_ops.c
-new file mode 100644
-index 000000000000..173278314f26
---- /dev/null
-+++ b/lib/test_seqnum_ops.c
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * test_seqnum_ops.c - Kernel module for testing Seqnum API
-+ *
-+ * Copyright (c) 2021 Shuah Khan <skhan@linuxfoundation.org>
-+ * Copyright (c) 2021 The Linux Foundation
-+ *
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/module.h>
+diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+index 3fe79169a811..4db737cd748e 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
++++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
+@@ -10,6 +10,7 @@
+ #include <rtw_debug.h>
+ #include <hal_btcoex.h>
+ #include <linux/jiffies.h>
 +#include <linux/seqnum_ops.h>
+ 
+ static struct _cmd_callback rtw_cmd_callback[] = {
+ 	{GEN_CMD_CODE(_Read_MACREG), NULL}, /*0*/
+@@ -207,7 +208,7 @@ static void c2h_wk_callback(_workitem * work);
+ int rtw_init_evt_priv(struct evt_priv *pevtpriv)
+ {
+ 	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
+-	atomic_set(&pevtpriv->event_seq, 0);
++	seqnum32_init(&pevtpriv->event_seq, 0);
+ 	pevtpriv->evt_done_cnt = 0;
+ 
+ 	_init_workitem(&pevtpriv->c2h_wk, c2h_wk_callback, NULL);
+diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+index fa4b0259c5ae..46e7f487a5ba 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
++++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
+@@ -11,6 +11,7 @@
+ #include <rtw_wifi_regd.h>
+ #include <hal_btcoex.h>
+ #include <linux/kernel.h>
++#include <linux/seqnum_ops.h>
+ #include <asm/unaligned.h>
+ 
+ static struct mlme_handler mlme_sta_tbl[] = {
+@@ -281,7 +282,7 @@ static void init_mlme_ext_priv_value(struct adapter *padapter)
+ 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+ 	struct mlme_ext_info *pmlmeinfo = &pmlmeext->mlmext_info;
+ 
+-	atomic_set(&pmlmeext->event_seq, 0);
++	seqnum32_init(&pmlmeext->event_seq, 0);
+ 	pmlmeext->mgnt_seq = 0;/* reset to zero when disconnect at client mode */
+ 	pmlmeext->sa_query_seq = 0;
+ 	pmlmeext->mgnt_80211w_IPN = 0;
+@@ -5049,7 +5050,9 @@ void report_survey_event(struct adapter *padapter, union recv_frame *precv_frame
+ 	pc2h_evt_hdr = (struct C2HEvent_Header *)(pevtcmd);
+ 	pc2h_evt_hdr->len = sizeof(struct survey_event);
+ 	pc2h_evt_hdr->ID = GEN_EVT_CODE(_Survey);
+-	pc2h_evt_hdr->seq = atomic_inc_return(&pmlmeext->event_seq);
 +
-+static inline void
-+test_seqnum32_result(char *msg, u32 start, u32 end, u32 expected)
-+{
-+	pr_info("%s: %u to %u - %s\n",
-+		msg, start, end,
-+		((expected == end) ? "PASS" : "FAIL"));
-+}
++	/* seq is unsigned int seq:8 */
++	pc2h_evt_hdr->seq = seqnum32_inc(&pmlmeext->event_seq);
+ 
+ 	psurvey_evt = (struct survey_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
+ 
+@@ -5102,7 +5105,9 @@ void report_surveydone_event(struct adapter *padapter)
+ 	pc2h_evt_hdr = (struct C2HEvent_Header *)(pevtcmd);
+ 	pc2h_evt_hdr->len = sizeof(struct surveydone_event);
+ 	pc2h_evt_hdr->ID = GEN_EVT_CODE(_SurveyDone);
+-	pc2h_evt_hdr->seq = atomic_inc_return(&pmlmeext->event_seq);
 +
++	/* seq is unsigned int seq:8 */
++	pc2h_evt_hdr->seq = seqnum32_inc(&pmlmeext->event_seq);
+ 
+ 	psurveydone_evt = (struct surveydone_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
+ 	psurveydone_evt->bss_cnt = pmlmeext->sitesurvey_res.bss_cnt;
+@@ -5149,7 +5154,9 @@ void report_join_res(struct adapter *padapter, int res)
+ 	pc2h_evt_hdr = (struct C2HEvent_Header *)(pevtcmd);
+ 	pc2h_evt_hdr->len = sizeof(struct joinbss_event);
+ 	pc2h_evt_hdr->ID = GEN_EVT_CODE(_JoinBss);
+-	pc2h_evt_hdr->seq = atomic_inc_return(&pmlmeext->event_seq);
 +
-+static void test_seqnum32(void)
-+{
-+	u32 start_val = 0;
-+	struct seqnum32 seq = SEQNUM_INIT(start_val);
-+	u32 end_val;
++	/* seq is unsigned int seq:8 */
++	pc2h_evt_hdr->seq = seqnum32_inc(&pmlmeext->event_seq);
+ 
+ 	pjoinbss_evt = (struct joinbss_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
+ 	memcpy((unsigned char *)(&(pjoinbss_evt->network.network)), &(pmlmeinfo->network), sizeof(struct wlan_bssid_ex));
+@@ -5200,7 +5207,9 @@ void report_wmm_edca_update(struct adapter *padapter)
+ 	pc2h_evt_hdr = (struct C2HEvent_Header *)(pevtcmd);
+ 	pc2h_evt_hdr->len = sizeof(struct wmm_event);
+ 	pc2h_evt_hdr->ID = GEN_EVT_CODE(_WMM);
+-	pc2h_evt_hdr->seq = atomic_inc_return(&pmlmeext->event_seq);
 +
-+	end_val = seqnum32_inc(&seq);
-+	test_seqnum32_result("Test increment",
-+			     start_val, end_val, start_val+1);
++	/* seq is unsigned int seq:8 */
++	pc2h_evt_hdr->seq = seqnum32_inc(&pmlmeext->event_seq);
+ 
+ 	pwmm_event = (struct wmm_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
+ 	pwmm_event->wmm = 0;
+@@ -5247,7 +5256,9 @@ void report_del_sta_event(struct adapter *padapter, unsigned char *MacAddr, unsi
+ 	pc2h_evt_hdr = (struct C2HEvent_Header *)(pevtcmd);
+ 	pc2h_evt_hdr->len = sizeof(struct stadel_event);
+ 	pc2h_evt_hdr->ID = GEN_EVT_CODE(_DelSTA);
+-	pc2h_evt_hdr->seq = atomic_inc_return(&pmlmeext->event_seq);
 +
-+	/* Initialize sequence number to 0 */
-+	seqnum32_init(&seq, 0);
-+	end_val = seqnum32_inc(&seq);
-+	/* If seqnum32_init() works correctly end_val should be 1 */
-+	test_seqnum32_result("Test init", start_val, end_val, 1);
++	/* seq is unsigned int seq:8 */
++	pc2h_evt_hdr->seq = seqnum32_inc(&pmlmeext->event_seq);
+ 
+ 	pdel_sta_evt = (struct stadel_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
+ 	memcpy((unsigned char *)(&(pdel_sta_evt->macaddr)), MacAddr, ETH_ALEN);
+@@ -5300,7 +5311,9 @@ void report_add_sta_event(struct adapter *padapter, unsigned char *MacAddr, int
+ 	pc2h_evt_hdr = (struct C2HEvent_Header *)(pevtcmd);
+ 	pc2h_evt_hdr->len = sizeof(struct stassoc_event);
+ 	pc2h_evt_hdr->ID = GEN_EVT_CODE(_AddSTA);
+-	pc2h_evt_hdr->seq = atomic_inc_return(&pmlmeext->event_seq);
 +
-+	/* seqnum32_get() test for seqnum value == 1 */
-+	start_val = end_val = seqnum32_get(&seq);
-+	test_seqnum32_result("Test get", start_val, end_val, 1);
-+}
-+
-+static void test_seqnum32_overflow(u32 val)
-+{
-+	u32 start_val;
-+	struct seqnum32 seq;
-+	u32 end_val;
-+
-+	pr_info("Test with start_val UINT_MAX-1 + %u\n", val);
-+	start_val = UINT_MAX-1 + val;
-+	seqnum32_init(&seq, start_val);
-+	end_val = seqnum32_inc(&seq);
-+	test_seqnum32_result("Test UINT_MAX limit compare with (val+1)",
-+			     start_val, end_val, start_val+1);
-+	test_seqnum32_result("Test UINT_MAX limit compare with (UINT_MAX)",
-+			     start_val, end_val, UINT_MAX+val);
-+}
-+
-+static inline void
-+test_seqnum64_result(char *msg, u64 start, u64 end, u64 expected)
-+{
-+	pr_info("%s: %llu to %llu - %s\n",
-+		msg, start, end,
-+		((expected == end) ? "PASS" : "FAIL"));
-+}
-+
-+static void test_seqnum64(void)
-+{
-+	u64 start_val = 0;
-+	struct seqnum64 seq = SEQNUM_INIT(start_val);
-+	u64 end_val;
-+
-+	end_val = seqnum64_inc(&seq);
-+	test_seqnum64_result("Test increment",
-+			     start_val, end_val, start_val+1);
-+
-+	/* Initialize sequence number to 0 */
-+	seqnum64_init(&seq, start_val);
-+	end_val = seqnum64_inc(&seq);
-+
-+	/* if seqnum642_init() works correctly end_val should be 1 */
-+	test_seqnum64_result("Test init", start_val, end_val, 1);
-+	/* seqnum64_get() test for seqnum value == 1 */
-+	start_val = end_val = seqnum64_get(&seq);
-+	test_seqnum64_result("Test get", start_val, end_val, 1);
-+}
-+
-+static void test_seqnum64_overflow(u64 val)
-+{
-+	u64 start_val;
-+	struct seqnum64 seq;
-+	u64 end_val;
-+
-+	pr_info("Test with start_val SEQ_UINT64_MAX-1 + %llu\n", val);
-+	start_val = SEQ_UINT64_MAX-1 + val;
-+	seqnum64_init(&seq, start_val);
-+	end_val = seqnum64_inc(&seq);
-+	test_seqnum64_result("Test UINT64_MAX limit compare with (val+1)",
-+			     start_val, end_val, start_val+1);
-+	test_seqnum64_result("Test UINT64_MAX limit compare with (UINT64_MAX)",
-+			     start_val, end_val, SEQ_UINT64_MAX+val);
-+}
-+
-+static int __init test_seqnum_ops_init(void)
-+{
-+	pr_info("Start seqnum32_*() interfaces test\n");
-+	test_seqnum32();
-+	test_seqnum32_overflow(0);
-+	test_seqnum32_overflow(5);
-+	pr_info("End seqnum32_*() interfaces test\n\n");
-+
-+	pr_info("Start seqnum64_*() interfaces test\n");
-+	test_seqnum64();
-+	test_seqnum64_overflow(0);
-+	test_seqnum64_overflow(5);
-+	pr_info("End seqnum64_*() interfaces test\n\n");
-+
-+	return 0;
-+}
-+
-+module_init(test_seqnum_ops_init);
-+
-+static void __exit test_seqnum_ops_exit(void)
-+{
-+	pr_info("exiting.\n");
-+}
-+
-+module_exit(test_seqnum_ops_exit);
-+
-+MODULE_AUTHOR("Shuah Khan <skhan@linuxfoundation.org>");
-+MODULE_LICENSE("GPL v2");
++	/* seq is unsigned int seq:8 */
++	pc2h_evt_hdr->seq = seqnum32_inc(&pmlmeext->event_seq);
+ 
+ 	padd_sta_evt = (struct stassoc_event *)(pevtcmd + sizeof(struct C2HEvent_Header));
+ 	memcpy((unsigned char *)(&(padd_sta_evt->macaddr)), MacAddr, ETH_ALEN);
+@@ -6616,10 +6629,10 @@ u8 mlme_evt_hdl(struct adapter *padapter, unsigned char *pbuf)
+ 
+ 	#ifdef CHECK_EVENT_SEQ
+ 	/*  checking event sequence... */
+-	if (evt_seq != (atomic_read(&pevt_priv->event_seq) & 0x7f)) {
++	if (evt_seq != (seqnum32_get(&pevt_priv->event_seq) & 0x7f)) {
+ 		RT_TRACE(_module_rtl871x_cmd_c_, _drv_info_,
+ 			 ("Event Seq Error! %d vs %d\n", (evt_seq & 0x7f),
+-			  (atomic_read(&pevt_priv->event_seq) & 0x7f)));
++			  (seqnum32_get(&pevt_priv->event_seq) & 0x7f)));
+ 
+ 		pevt_priv->event_seq = (evt_seq+1)&0x7f;
+ 
+@@ -6643,7 +6656,7 @@ u8 mlme_evt_hdl(struct adapter *padapter, unsigned char *pbuf)
+ 
+ 	}
+ 
+-	atomic_inc(&pevt_priv->event_seq);
++	seqnum32_inc(&pevt_priv->event_seq);
+ 
+ 	peventbuf += 2;
+ 
+diff --git a/drivers/staging/rtl8723bs/include/rtw_cmd.h b/drivers/staging/rtl8723bs/include/rtw_cmd.h
+index 56c77bc7ca81..cc0ea649388b 100644
+--- a/drivers/staging/rtl8723bs/include/rtw_cmd.h
++++ b/drivers/staging/rtl8723bs/include/rtw_cmd.h
+@@ -8,6 +8,7 @@
+ #define __RTW_CMD_H_
+ 
+ #include <linux/completion.h>
++#include <linux/seqnum_ops.h>
+ 
+ #define C2H_MEM_SZ (16*1024)
+ 
+@@ -62,7 +63,7 @@
+ 		struct rtw_cbuf *c2h_queue;
+ 		#define C2H_QUEUE_MAX_LEN 10
+ 
+-		atomic_t event_seq;
++		struct seqnum32 event_seq;
+ 		u8 *evt_buf;	/* shall be non-paged, and 4 bytes aligned */
+ 		u8 *evt_allocated_buf;
+ 		u32 evt_done_cnt;
+diff --git a/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h b/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h
+index 1567831caf91..537813c00670 100644
+--- a/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h
++++ b/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h
+@@ -7,6 +7,7 @@
+ #ifndef __RTW_MLME_EXT_H_
+ #define __RTW_MLME_EXT_H_
+ 
++#include <linux/seqnum_ops.h>
+ 
+ /* 	Commented by Albert 20101105 */
+ /* 	Increase the SURVEY_TO value from 100 to 150  (100ms to 150ms) */
+@@ -461,7 +462,7 @@ struct p2p_oper_class_map {
+ struct mlme_ext_priv {
+ 	struct adapter	*padapter;
+ 	u8 mlmeext_init;
+-	atomic_t		event_seq;
++	struct seqnum32	event_seq;
+ 	u16 mgnt_seq;
+ 	u16 sa_query_seq;
+ 	u64 mgnt_80211w_IPN;
 -- 
 2.27.0
 
