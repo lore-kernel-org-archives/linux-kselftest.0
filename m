@@ -2,96 +2,77 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 115E5C433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Feb 2021 22:06:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8A9CC433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 08:40:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D52A464F7C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Feb 2021 22:06:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95E0864E46
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 08:40:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbhBBWFp (ORCPT
+        id S232992AbhBCIkT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Feb 2021 17:05:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59588 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232210AbhBBWF3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Feb 2021 17:05:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69F0A64E49;
-        Tue,  2 Feb 2021 22:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612303488;
-        bh=e5pFrteIM567WP9mxMZoVgdTDDSwB786q9VxRr9pF5o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h4ybi0GbPZE6jcKtQegiaCx/EBEn+9Rto6opz6DTm0DV192Xb9Zy4YrHQtnzqLw4W
-         DCGo2HjE+O6moseVupjH76mVDu0rzPfe97zjhMkrGSG4JEZuyVvqoCmIQ1wqlB/ECK
-         H1Cg8b0JRd/VRz5FJZddfZpw2O3uFjRbr1TPgM7P9ujU8JQlKfF0hn4RFabKhdlrgn
-         nFqyiwK1PsJNahzoDvFpf5/s20NwNKcyk/aK73YPlfCcC/cC3UGxBOD+aJm0a6lkdq
-         QL66ox3hW1ePHwD7KFWwZh8TrLplMxveuVFAKGP0TRB+HDZZ5VIRIMEya0z/LEqrYJ
-         SEqR4AkkVxDJA==
-Date:   Wed, 3 Feb 2021 00:04:41 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Subject: Re: [PATCH v4 5/5] x86/sgx: Remove redundant if conditions in
- sgx_encl_create
-Message-ID: <YBnMeT32niwOW0K2@kernel.org>
-References: <20210201132653.35690-1-tianjia.zhang@linux.alibaba.com>
- <20210201132653.35690-6-tianjia.zhang@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210201132653.35690-6-tianjia.zhang@linux.alibaba.com>
+        Wed, 3 Feb 2021 03:40:19 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:60398 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232983AbhBCIkG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Feb 2021 03:40:06 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf_IsYRpgSJQCAA--.3171S2;
+        Wed, 03 Feb 2021 16:39:08 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: breakpoints: Fix wrong argument of ptrace() when single step
+Date:   Wed,  3 Feb 2021 16:39:07 +0800
+Message-Id: <1612341547-22225-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxf_IsYRpgSJQCAA--.3171S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1kWFWUCFWrur18Cw1xKrg_yoWkXrX_uF
+        WfXw4kuFWkWryvy3W5Ww13JrW8Ja13uF4Iqr42qF93Jw4jkrWDtaykCF1kAFyxW3yYg39F
+        y3W8CrW3ur15JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7AYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_GFyl42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU0qQ6PUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 09:26:53PM +0800, Tianjia Zhang wrote:
-> In this scenario, there is no case where va_page is NULL, and
-> the error has been checked. The if condition statement here is
+According to the error message, the first argument of ptrace() should be
+PTRACE_SINGLESTEP instead of PTRACE_CONT when ptrace single step.
 
-if-condition, i.e. dash missing
+Fixes: f43365ee17f8 ("selftests: arm64: add test for unaligned/inexact watchpoint handling")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/testing/selftests/breakpoints/breakpoint_test_arm64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> redundant, so remove the condition detection.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  arch/x86/kernel/cpu/sgx/ioctl.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> index 1c6ecf9fbeff..719c21cca569 100644
-> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -66,9 +66,10 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
->  	va_page = sgx_encl_grow(encl);
->  	if (IS_ERR(va_page))
->  		return PTR_ERR(va_page);
-> -	else if (va_page)
-> -		list_add(&va_page->list, &encl->va_pages);
-> -	/* else the tail page of the VA page list had free slots. */
-> +	if (!va_page)
-> +		return -EIO;
-> +
-> +	list_add(&va_page->list, &encl->va_pages);
->  
->  	/* The extra page goes to SECS. */
->  	encl_size = secs->size + PAGE_SIZE;
-> -- 
-> 2.19.1.3.ge56e4f7
-> 
-> 
+diff --git a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+index ad41ea6..2f4d4d6 100644
+--- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
++++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
+@@ -143,7 +143,7 @@ static bool run_test(int wr_size, int wp_size, int wr, int wp)
+ 	if (!set_watchpoint(pid, wp_size, wp))
+ 		return false;
+ 
+-	if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
++	if (ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL) < 0) {
+ 		ksft_print_msg(
+ 			"ptrace(PTRACE_SINGLESTEP) failed: %s\n",
+ 			strerror(errno));
+-- 
+2.1.0
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-/Jarkko
