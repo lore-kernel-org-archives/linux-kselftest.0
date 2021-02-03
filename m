@@ -2,131 +2,120 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3BBC433DB
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 16:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19840C433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 16:51:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D7DE64F86
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 16:50:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D38E764F84
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Feb 2021 16:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbhBCQuZ (ORCPT
+        id S231197AbhBCQva (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Feb 2021 11:50:25 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:33876 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbhBCQuY (ORCPT
+        Wed, 3 Feb 2021 11:51:30 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:31774 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231135AbhBCQv3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Feb 2021 11:50:24 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 113Gcwgs157095;
-        Wed, 3 Feb 2021 16:48:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
- cc : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=7PpAYVzyIqIJ+B85/c1uwsNEo+c61KKpGfHeJdunKKY=;
- b=ayVRKQaMadiGFbxDog4vECX5QTZSO8bYUT/djkAaoJhoSsyiGnz9ZR7oaWd3bCCSjxcJ
- s7is/Z/gPjcGm82/sdCMlMdrnUZu7SH5RfI+DKZVwRsSrbNEvrjjCoG8wrjXmc/T6VO5
- jwAaaCss/qDAdIfjpwVjs7N4rJSBIBxFNxwQwCUofBJwG+rI+YKLC2vmcanmolPprp6G
- hesG19ptDvetV4+wlW4ngXUQuxfB7m1HtDWsmWAQ534gOyhC3uXFDcnJHAa63Q0xp3I1
- q+VQvtN+QW9AW1xW2oSYNaWcf23t7JNGwC77GWb6OSQlB0pJHHTjXxEd6QnmdInqGQMO xQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 36cydm11y5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Feb 2021 16:48:53 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 113Gf4BX168170;
-        Wed, 3 Feb 2021 16:46:51 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 36dhc1chvx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Feb 2021 16:46:51 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 113GkeAR006957;
-        Wed, 3 Feb 2021 16:46:41 GMT
-Received: from [10.175.189.55] (/10.175.189.55)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 03 Feb 2021 08:46:40 -0800
-Subject: Re: [PATCH v8 02/14] mm/gup: check every subpage of a compound page
- during isolation
-From:   Joao Martins <joao.m.martins@oracle.com>
-To:     Pavel Tatashin <pasha.tatashin@soleen.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-kselftest@vger.kernel.org, James Morris <jmorris@namei.org>
-References: <20210125194751.1275316-1-pasha.tatashin@soleen.com>
- <20210125194751.1275316-3-pasha.tatashin@soleen.com>
- <05a66361-214c-2afe-22e4-12862ea1e4e2@oracle.com>
- <CA+CK2bBSJ7T=jsukntQGqO0DoWE_MnhDwtHv-6rfXAPvznKh0Q@mail.gmail.com>
- <ce96a71d-845b-b8d2-92d3-fc7336a765c5@oracle.com>
-Message-ID: <9f021b82-8618-3cd4-28df-1d6a9bd749cf@oracle.com>
-Date:   Wed, 3 Feb 2021 16:46:32 +0000
+        Wed, 3 Feb 2021 11:51:29 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 113GfaGk001351;
+        Wed, 3 Feb 2021 10:50:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=uVWPaUAEkQl2q9gPD+VtCUXeC+LPB+fA8dWpPP4F8/A=;
+ b=Wz20qnGe6oHlkpuLvZFR2Cl2IqgSy4BGMlsulM2Ae9nHp4AVWp8cOHcnWcu2uClaJeFM
+ B13xN8vXyY6+fX6FPybGoOY3zkiw4HcpQIqP8lAOB/xh/Ix3YO8cy067uZJgDuHeVkl/
+ hdUkIO0wpbvJ3yca0xzsYoqnH4RoavZBUDzBicu673b/NxQKIsqDtqyvxZK/vToCpUP9
+ z2vq2GyW9YsgT+qPUd4bfUUCVJuQjUozlc/SYVYY24K3g5v9LYuG5Qe7KI6706+JgCOt
+ PTYn2iClsY8rgmVlypQ/i3fzp5eZ+MvIo0F0x0zuplcXw6+7yMMbDHQnwdu9Md0K8Pqr lQ== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 36d5r6dfr1-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 03 Feb 2021 10:50:15 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Wed, 3 Feb 2021
+ 16:50:13 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
+ Transport; Wed, 3 Feb 2021 16:50:13 +0000
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.44])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2C7AD11CC;
+        Wed,  3 Feb 2021 16:50:13 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
+        <sergey.senozhatsky@gmail.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux@rasmusvillemoes.dk>,
+        <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v4 4/4] selftests: lib: Add wrapper script for test_scanf
+Date:   Wed, 3 Feb 2021 16:50:09 +0000
+Message-ID: <20210203165009.6299-4-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210203165009.6299-1-rf@opensource.cirrus.com>
+References: <20210203165009.6299-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <ce96a71d-845b-b8d2-92d3-fc7336a765c5@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-IMR: 1
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9884 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 suspectscore=0
- spamscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 suspectscore=0 bulkscore=0 impostorscore=0 clxscore=1015
+ mlxlogscore=884 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2102030100
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9884 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 clxscore=1015
- spamscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102030100
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/3/21 3:32 PM, Joao Martins wrote:
-> On 2/3/21 2:51 PM, Pavel Tatashin wrote:
->> On Wed, Feb 3, 2021 at 8:23 AM Joao Martins <joao.m.martins@oracle.com> wrote:
->>> On 1/25/21 7:47 PM, Pavel Tatashin wrote:
->>> for compound pages but when !is_transparent_hugepage(head) or just PageHuge(head) like:
->>>
->>> +               if (!is_transparent_hugepage(head) && PageCompound(page))
->>> +                       i += (compound_nr(head) - (pages[i] - head));
->>>
->>> Or making specific to hugetlbfs:
->>>
->>> +               if (PageHuge(head))
->>> +                       i += (compound_nr(head) - (pages[i] - head));
->>
->> Yes, this is reasonable optimization. I will submit a follow up patch
->> against linux-next.
+Adds a wrapper shell script for the test_scanf module.
 
-Realized it late, but the previous step was already broken. And I inherited its brokeness,
-when copy-pasting the deleted chunk:
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+---
+ tools/testing/selftests/lib/Makefile | 2 +-
+ tools/testing/selftests/lib/config   | 1 +
+ tools/testing/selftests/lib/scanf.sh | 4 ++++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/lib/scanf.sh
 
-The @step should be capped at the remaining pages to iterate:
+diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
+index a105f094676e..ee71fc99d5b5 100644
+--- a/tools/testing/selftests/lib/Makefile
++++ b/tools/testing/selftests/lib/Makefile
+@@ -4,6 +4,6 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
+ 
+-TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
++TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
+index b80ee3f6e265..776c8c42e78d 100644
+--- a/tools/testing/selftests/lib/config
++++ b/tools/testing/selftests/lib/config
+@@ -1,4 +1,5 @@
+ CONFIG_TEST_PRINTF=m
++CONFIG_TEST_SCANTF=m
+ CONFIG_TEST_BITMAP=m
+ CONFIG_PRIME_NUMBERS=m
+ CONFIG_TEST_STRSCPY=m
+diff --git a/tools/testing/selftests/lib/scanf.sh b/tools/testing/selftests/lib/scanf.sh
+new file mode 100755
+index 000000000000..b59b8ba561c3
+--- /dev/null
++++ b/tools/testing/selftests/lib/scanf.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Tests the scanf infrastructure using test_scanf kernel module.
++$(dirname $0)/../kselftest/module.sh "scanf" test_scanf
+-- 
+2.20.1
 
-	i += min(nr_pages - i, compound_nr(head) - (pages[i] - head));
-
-  Joao
