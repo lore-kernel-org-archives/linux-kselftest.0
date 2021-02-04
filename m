@@ -2,64 +2,67 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E54C433E6
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 22:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D609EC433E9
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 22:55:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B52AF64E3F
+	by mail.kernel.org (Postfix) with ESMTP id 95A9264FAC
 	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 22:55:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhBDWzh (ORCPT
+        id S229969AbhBDWzm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 4 Feb 2021 17:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        Thu, 4 Feb 2021 17:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhBDWzf (ORCPT
+        with ESMTP id S229983AbhBDWzj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Feb 2021 17:55:35 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E35C061786
-        for <linux-kselftest@vger.kernel.org>; Thu,  4 Feb 2021 14:54:55 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id h16so3802234qta.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Feb 2021 14:54:55 -0800 (PST)
+        Thu, 4 Feb 2021 17:55:39 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10B7C06178C
+        for <linux-kselftest@vger.kernel.org>; Thu,  4 Feb 2021 14:54:58 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id nm1so2902222pjb.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Feb 2021 14:54:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=B1fuVHR3Zm74HBXCgPjs+FlgnRSSGT3DuI6nT8/jWe8=;
-        b=cWIIGDYLfadnus6i1GGkf2KwFh4vu9RRcUrcxoHW005TGNfOF05BYSyVWTpAI1taZ/
-         IBKfitdlWe4XrhwQ1OkhPLhEtbaF6EzuaIdmHeAC6h2I4110mkFQsDBoitEjFDm58gnj
-         LURCQmMJIG4QG+9PGufR3KBqqi7xsAsoEpJ5FDK/4WW8Cw3ztqH0jon4YmULEo153Ms7
-         C74+0hTFegbWCIbYLQNjcT8zbiAm1AYlVor0423Y85088NY8uMLjSxJTjQU9nI8np95a
-         R7iMgjMJv4j4Zk2yJf1pxkVuOYGay9Q3kIVO96FAsQBbXQ9W2pbmsSMPLW70MPtRbdpM
-         /MKQ==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=M0j63Y+dGrapku6v2TeatocmD7eQzHpeOBCsoHcCmr8=;
+        b=ZTYXSsgggGJz5jGj8p6Ols2kXiqqWJ7Hf1B/onFHGGkZxzizQdPOQQv7QnZXz7i57R
+         f59xM0Pb19jW1IkNItgm1FtQ1HzlPWrizu/VriIAAWZ+R4UW/MqRMKGmAGByCJKdCcMW
+         YWY9i+HbzqrS1Mw3QwvE6eRFZHJqrMpiZJmNKtVbQDdbaI2ceY7dE6bSe5R9nO0Y/W90
+         L6D2d/KnrPj/2Qj1NOmWZzUulbybc4a06iqPmnsvmpC7SMW21WE4UAePOGjjcdGknwsB
+         T664uNXsY8Qje7+o/NfqkwBfK7cHq8heh2tep/KhoKV2aAjryzhG/GZZsRjeipovKgnq
+         lYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=B1fuVHR3Zm74HBXCgPjs+FlgnRSSGT3DuI6nT8/jWe8=;
-        b=IALz9gv1avUH/6KEyDVrteWU+1N5l04ByDCMHAkdR0htkIwEl/yxGKe51jJ+ROpfO9
-         5/JUi11dfgZF+QGHLp4BiSkkO7NdfUJjFT3ruLGTr7S4GLpDieiO1v2Gcb2bl1PaRKMi
-         uX8xYKA2J+IaPIWiupqsTEiJQkpAJD4bovEm6EO/I163KWY7SbSueXiCHBynOP/NIyaN
-         7jYBAsiDMP9xHhqYsIVy83Svz55c+sMljXWaLuoLAZminy8403U7S61dWAVVNpNoQdx1
-         gmivPPrXUci2y1jZJAajhqgPFwvzHwj5jZjAdmvau5gFR/Tlob5RiOB9UyRPqt1I07YT
-         tdVg==
-X-Gm-Message-State: AOAM532iJYCA+aj+7xJWvgYTHZrV9xFp1eLv4XnThWWjI+ZpDbpkPCEV
-        O6jmuPRFdejjmmZT3au80T3GxM+vzS5vzQ==
-X-Google-Smtp-Source: ABdhPJyj4dZTivbA2mv/icChL04lGA9XqXu69pF0p4QFdHKEl7Hqm3M3X2AnOPO2rHfTU9njuG7WL58Ph1Ci4g==
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=M0j63Y+dGrapku6v2TeatocmD7eQzHpeOBCsoHcCmr8=;
+        b=ZEIbLrZuRj6J7m4O+hGjE1yWgLpacKqKLJPLX84OSFADHPDI1e7Ep4d0V7EZzVv+py
+         6LNbvI84J4wlcgebs4b620iybOa3SGU34DuQC7KBwRSbCMfC2CMfB2psLgdNZTNCvjgp
+         tUFLB0L6/lnUUO3HLFak+x77qJHnYsz/gBREEPlWRWyarjzeTQ4bXH8mbUtMahYQC84Z
+         uhdStQ/9dbOR1o1LikH4C+ICnvNl5nfIC/m68lf1ZO4r0S7Q/4V7Rs4q40W4q5ECRUGj
+         2j0v644SRsnFYJFQnEAyife0lPuFZlMIlj7XPs49+KsMlVe1WPMuzns5wp1Xyg806hIC
+         OAmw==
+X-Gm-Message-State: AOAM531QeI1/w2Yg+f8cuATncoaDdsM/KlgErGbR8obLDtckfcuQgN3q
+        JUbRBfBeBHeMhHcG0u+WC+YXh0+J024FiA==
+X-Google-Smtp-Source: ABdhPJzGDJJb99I4uPs0OtacvEjb+GqAyjJeAQCifyLhXhsh82fYNZkotlFKA2eeDEt/b2U2ya+6tJl85WcLUA==
 Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:bd7a:7717:5b5b:de27])
- (user=dlatypov job=sendgmr) by 2002:a05:6214:192d:: with SMTP id
- es13mr1841289qvb.9.1612479294611; Thu, 04 Feb 2021 14:54:54 -0800 (PST)
-Date:   Thu,  4 Feb 2021 14:54:45 -0800
-Message-Id: <20210204225448.1393741-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:aa8a:: with SMTP id
+ l10mr1274505pjq.86.1612479298500; Thu, 04 Feb 2021 14:54:58 -0800 (PST)
+Date:   Thu,  4 Feb 2021 14:54:47 -0800
+In-Reply-To: <20210204225448.1393741-1-dlatypov@google.com>
+Message-Id: <20210204225448.1393741-3-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20210204225448.1393741-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v3 0/3] kunit: support running subsets of test suites from kunit.py
+Subject: [PATCH v3 2/3] kunit: tool: add support for filtering suites by glob
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -69,55 +72,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When using `kunit.py run` to run tests, users must populate a
-`kunitconfig` file to select the options the tests are hidden behind and
-all their dependencies.
+This allows running different subsets of tests, e.g.
 
-The patch [1] to allow specifying a path to kunitconfig promises to make
-this nicer as we can have checked in files corresponding to different
-sets of tests.
+$ ./tools/testing/kunit/kunit.py build
+$ ./tools/testing/kunit/kunit.py exec 'list*'
+$ ./tools/testing/kunit/kunit.py exec 'kunit*'
 
-But it's still annoying 
-1) when trying to run a subet of tests
-2) when you want to run tests that don't have such a pre-existing
-kunitconfig and selecting all the necessary options is tricky.
+This passes the "kunit_filter.glob" commandline option to the UML
+kernel, which currently only supports filtering by suite name.
 
-This patch series aims to alleviate both:
-1) `kunit.py run 'my-suite-*'`
-I.e. use my current kunitconfig, but just run suites that match this glob
-2) `kunit.py run --alltests 'my-suite-*'`
-I.e. use allyesconfig so I don't have to worry about writing a
-kunitconfig at all.
-
-See the first commit message for more details and discussion about
-future work.
-
-This patch series also includes a bugfix for a latent bug that can't be
-triggered right now but has worse consequences as a result of the
-changes needed to plumb in this suite name glob.
-
-[1] https://lore.kernel.org/linux-kselftest/20210201205514.3943096-1-dlatypov@google.com/
-
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
-v1 -> v2:
-  Fix free of `suites` subarray in suite_set.
-  Found by Dan Carpenter and kernel test robot.
-v2 -> v3:
-  Add MODULE_PARM_DESC() for kunit.filter_glob.
+ tools/testing/kunit/kunit.py        | 21 ++++++++++++++++-----
+ tools/testing/kunit/kunit_kernel.py |  4 +++-
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
-Daniel Latypov (3):
-  kunit: add kunit.filter_glob cmdline option to filter suites
-  kunit: tool: add support for filtering suites by glob
-  kunit: tool: fix unintentional statefulness in run_kernel()
-
- lib/kunit/Kconfig                   |  1 +
- lib/kunit/executor.c                | 93 ++++++++++++++++++++++++++---
- tools/testing/kunit/kunit.py        | 21 +++++--
- tools/testing/kunit/kunit_kernel.py |  6 +-
- 4 files changed, 106 insertions(+), 15 deletions(-)
-
-
-base-commit: 88bb507a74ea7d75fa49edd421eaa710a7d80598
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index e808a47c839b..a15ee33bb1f5 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -28,12 +28,12 @@ KunitBuildRequest = namedtuple('KunitBuildRequest',
+ 			       ['jobs', 'build_dir', 'alltests',
+ 				'make_options'])
+ KunitExecRequest = namedtuple('KunitExecRequest',
+-			      ['timeout', 'build_dir', 'alltests'])
++			      ['timeout', 'build_dir', 'alltests', 'filter_glob'])
+ KunitParseRequest = namedtuple('KunitParseRequest',
+ 			       ['raw_output', 'input_data', 'build_dir', 'json'])
+ KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
+-					   'build_dir', 'alltests', 'json',
+-					   'make_options'])
++					   'build_dir', 'alltests', 'filter_glob',
++					   'json', 'make_options'])
+ 
+ KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
+ 
+@@ -93,6 +93,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	test_start = time.time()
+ 	result = linux.run_kernel(
+ 		timeout=None if request.alltests else request.timeout,
++                filter_glob=request.filter_glob,
+ 		build_dir=request.build_dir)
+ 
+ 	test_end = time.time()
+@@ -149,7 +150,7 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 		return build_result
+ 
+ 	exec_request = KunitExecRequest(request.timeout, request.build_dir,
+-					request.alltests)
++					request.alltests, request.filter_glob)
+ 	exec_result = exec_tests(linux, exec_request)
+ 	if exec_result.status != KunitStatus.SUCCESS:
+ 		return exec_result
+@@ -197,6 +198,14 @@ def add_exec_opts(parser) -> None:
+ 			    type=int,
+ 			    default=300,
+ 			    metavar='timeout')
++	parser.add_argument('filter_glob',
++			    help='maximum number of seconds to allow for all tests '
++			    'to run. This does not include time taken to build the '
++			    'tests.',
++			    type=str,
++			    nargs='?',
++			    default='',
++			    metavar='filter_glob')
+ 
+ def add_parse_opts(parser) -> None:
+ 	parser.add_argument('--raw_output', help='don\'t format output from kernel',
+@@ -263,6 +272,7 @@ def main(argv, linux=None):
+ 				       cli_args.jobs,
+ 				       cli_args.build_dir,
+ 				       cli_args.alltests,
++				       cli_args.filter_glob,
+ 				       cli_args.json,
+ 				       cli_args.make_options)
+ 		result = run_tests(linux, request)
+@@ -304,7 +314,8 @@ def main(argv, linux=None):
+ 
+ 		exec_request = KunitExecRequest(cli_args.timeout,
+ 						cli_args.build_dir,
+-						cli_args.alltests)
++						cli_args.alltests,
++						cli_args.filter_glob)
+ 		exec_result = exec_tests(linux, exec_request)
+ 		parse_request = KunitParseRequest(cli_args.raw_output,
+ 						  exec_result.result,
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 2076a5a2d060..71b1942f5ccd 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -199,8 +199,10 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return self.validate_config(build_dir)
+ 
+-	def run_kernel(self, args=[], build_dir='', timeout=None) -> Iterator[str]:
++	def run_kernel(self, args=[], build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
+ 		args.extend(['mem=1G', 'console=tty'])
++		if filter_glob:
++			args.append('kunit.filter_glob='+filter_glob)
+ 		self._ops.linux_bin(args, timeout, build_dir)
+ 		outfile = get_outfile_path(build_dir)
+ 		subprocess.call(['stty', 'sane'])
 -- 
 2.30.0.478.g8a0d178c01-goog
 
