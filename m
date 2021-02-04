@@ -2,124 +2,133 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40142C433E6
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 16:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56456C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 17:33:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 057B264E41
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 16:37:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2248064DF8
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Feb 2021 17:33:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237000AbhBDQgP (ORCPT
+        id S237893AbhBDRdq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 4 Feb 2021 11:36:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35628 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237152AbhBDQgM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Feb 2021 11:36:12 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612456515; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uUjLyiqQ4utGC6qodHBCUygl1CqqAiXa12iI219baz4=;
-        b=BNQK06tY3c6oPYMlrJUmoOwDwyyuPLcT9wQsvkuONAATKRqnR6IKOx+plLp6ZPu7Tjh+oM
-        2GiRxiAGJIETGsPK6Ffz+bkfC6h3+8wavXQt32yxXI/Mr8HjGkyCyPuy3TP58vz2svmjp0
-        dG61c+c0ct2JNcbGNyyZLJRbiQMCBEI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C6C29AD87;
-        Thu,  4 Feb 2021 16:35:15 +0000 (UTC)
-Date:   Thu, 4 Feb 2021 17:35:15 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>, rostedt@goodmis.org,
-        sergey.senozhatsky@gmail.com, linux@rasmusvillemoes.dk,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
- widths in vsscanf
-Message-ID: <YBwiQ+l6yqs+g+rr@alley>
-References: <20210203165009.6299-1-rf@opensource.cirrus.com>
- <20210203165009.6299-2-rf@opensource.cirrus.com>
- <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
+        Thu, 4 Feb 2021 12:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238463AbhBDRbn (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 4 Feb 2021 12:31:43 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EEEC06178A
+        for <linux-kselftest@vger.kernel.org>; Thu,  4 Feb 2021 09:30:56 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id g7so3333319iln.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Feb 2021 09:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VO9O5fHDcDBQf/ZBVRiifFCMZr4KKcLpXohcqAwfJfw=;
+        b=PTyvYIIk4fx541qK7FIyXAPIRQ4c21phaOdZmS/a4cTt3NEbs6xsEdIYtjPOPolPGq
+         b+y1nB31fVwZr1JooPhTYrsGfF8SUrDbrkYv1mc/ApTnmdIdWixTveqLeqsM87JhPfxW
+         8KT7ewa5wJHdtIPv+6Z+lY2FBK1SLowB3Rc55KB2hbfNdrwaE8MXMt2LCxAgb2RSF9zo
+         7gECLq73dRUmaMhvSnhffz4nTt87Yu+x/ttUm1i3GtOrMvjPrxMs7Y078F4cSeNYKdKn
+         ysgrSvUfO2Uga5aL9pvmmOb9rdvRVJnE5xG/b1dkfQdArGaMMFKM91Xpn693qeIbWLe7
+         dW1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VO9O5fHDcDBQf/ZBVRiifFCMZr4KKcLpXohcqAwfJfw=;
+        b=A7l02PCF8JI29TgwzBsrgigbY8qGl/+xeiSVadamqoFuj6uXi4Rzhpa0+t7MGp2hy/
+         NGiR6CWSuE51EJDNQQrEnRIGd+Q+fTUiZx3PPDbd18/8ZHWZHnzZEijlZyqz+KWXkz90
+         lKEd9C+g+oWrEa7LMOkmxvRlKd80/GqCwENCj1r+t+mJlRnpBauk76+NIdAp1d66GmmY
+         77R+ZvZN8W0N8zI/QW+Kp/C7TF5zCoBpy7Q3DNj8q8jdyqQdy1zicDhgPBerZ45Kxd91
+         0EeIbWDmcfHnPcdVgljI7/vG1VP5nyMhqR81GPerBDmogSEDbidaIKaiLgkJR7CJ7TpA
+         +I0A==
+X-Gm-Message-State: AOAM532SAZbaoB4B1t8Qsb9eEjWT39+J3Ar/Q8NyfPLysaslU9s5Z2tB
+        e9T0MOevucd1Ca0+SfjdHP+U57Q9rmWBSxblKInQoUj0bqw=
+X-Google-Smtp-Source: ABdhPJwkS28tebuC5lDvwBQ1SfugJjKZ+rvXGDuqSjIJnd5LVZFwEWNyv+2MyxNZtCs7BRaZ05FdLtILKE87EsodbfQ=
+X-Received: by 2002:a92:dd82:: with SMTP id g2mr178595iln.194.1612459855230;
+ Thu, 04 Feb 2021 09:30:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
+References: <20210203234116.839819-2-dlatypov@google.com> <20210204071100.GB2696@kadam>
+In-Reply-To: <20210204071100.GB2696@kadam>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 4 Feb 2021 09:30:43 -0800
+Message-ID: <CAGS_qxpOWG_chZEAtKFPPbcfet=ZQYeo9_3k5tHSj4WHCfMToA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kunit: add kunit.filter_glob cmdline option to filter suites
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, lkp@intel.com,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
-> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
-> > The existing code attempted to handle numbers by doing a strto[u]l(),
-> > ignoring the field width, and then repeatedly dividing to extract the
-> > field out of the full converted value. If the string contains a run of
-> > valid digits longer than will fit in a long or long long, this would
-> > overflow and no amount of dividing can recover the correct value.
+On Wed, Feb 3, 2021 at 11:13 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> Hi Daniel,
+>
+> url:    https://github.com/0day-ci/linux/commits/Daniel-Latypov/kunit-support-running-subsets-of-test-suites-from/20210204-074405
+> base:   88bb507a74ea7d75fa49edd421eaa710a7d80598
+> config: x86_64-randconfig-m001-20210202 (attached as .config)
+> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+> smatch warnings:
+> lib/kunit/executor.c:110 kunit_run_all_tests() error: double free of 'suite_set.start'
+>
+> vim +110 lib/kunit/executor.c
+>
+> 8c0d884986ba22 Brendan Higgins 2020-08-04   96  int kunit_run_all_tests(void)
+> aac35468ca20a3 Alan Maguire    2020-08-04   97  {
+> aac35468ca20a3 Alan Maguire    2020-08-04   98          struct kunit_suite * const * const *suites;
+> aac35468ca20a3 Alan Maguire    2020-08-04   99
+> d5554dd78a454b Daniel Latypov  2021-02-03  100          struct suite_set suite_set = kunit_filter_suites();
+> 45dcbb6f5ef78b Brendan Higgins 2020-08-04  101
+> d5554dd78a454b Daniel Latypov  2021-02-03  102          kunit_print_tap_header(&suite_set);
+> d5554dd78a454b Daniel Latypov  2021-02-03  103
+> d5554dd78a454b Daniel Latypov  2021-02-03  104          for (suites = suite_set.start; suites < suite_set.end; suites++)
+> aac35468ca20a3 Alan Maguire    2020-08-04  105                  __kunit_test_suites_init(*suites);
+> aac35468ca20a3 Alan Maguire    2020-08-04  106
+> d5554dd78a454b Daniel Latypov  2021-02-03  107          if (filter_glob) { /* a copy was made of each array */
+> d5554dd78a454b Daniel Latypov  2021-02-03  108                  for (suites = suite_set.start; suites < suite_set.end; suites++)
+>                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^
+> This will free "suite_set.start" will in the first iteration through the
+> loop
 
-> ...
-> 
-> > +	for (; max_chars > 0; max_chars--) {
-> 
-> Less fragile is to write
-> 
-> 	while (max_chars--)
+Ah, the loop is supposed to contain `kfree(*suites)`.
+I'll fix the patch and resend.
 
-Except that the original was more obvious at least for me.
-I always prefer more readable code when the compiler might do
-the optimization easily. But this is my personal taste.
-I am fine with both variants.
+I'm not familiar with conventions but it feels like adding Reported-by
+on the amended patch would almost imply the report suggested the need
+for the ability to filter suites.
+So I'll add an informal attribution in the cover letter.
 
-> 
-> This allows max_char to be an unsigned type.
-> 
-> Moreover...
-> 
-> > +	return _parse_integer_limit(s, base, p, INT_MAX);
-> 
-> You have inconsistency with INT_MAX vs, size_t above.
+Thanks!
 
-Ah, this was on my request. INT_MAX is already used on many other
-locations in vsnprintf() for this purpose.
-
-An alternative is to fix all the other locations. We would need to
-check if it is really safe. Well, I do not want to force Richard
-to fix this historical mess. He already put a lot lot of effort
-into fixing this long term issue.
-
-...
-
-> > -	unsigned long long result;
-> > +	const char *cp;
-> > +	unsigned long long result = 0ULL;
-> >  	unsigned int rv;
-> >  
-> > -	cp = _parse_integer_fixup_radix(cp, &base);
-> > -	rv = _parse_integer(cp, base, &result);
-> 
-> > +	if (max_chars == 0) {
-> > +		cp = startp;
-> > +		goto out;
-> > +	}
-> 
-> It's redundant if I'm not mistaken.
-
-Also this is more obvious and less error prone from my POV.
-But I agree that it is redundant. I am not sure if this
-function is used in some fast paths.
-
-Again I am fine with both variants.
-
-> > +	cp = _parse_integer_fixup_radix(startp, &base);
-> > +	if ((cp - startp) >= max_chars) {
-> > +		cp = startp + max_chars;
-> > +		goto out;
-> > +	}
-> 
-> This will be exactly the same, no?
-
-Best Regards,
-Petr
+>
+> d5554dd78a454b Daniel Latypov  2021-02-03  109                          kfree(suites);
+> d5554dd78a454b Daniel Latypov  2021-02-03 @110                  kfree(suite_set.start);
+>                                                                       ^^^^^^^^^^^^^^^
+> and then double free it.
+>
+> d5554dd78a454b Daniel Latypov  2021-02-03  111          }
+> d5554dd78a454b Daniel Latypov  2021-02-03  112
+> aac35468ca20a3 Alan Maguire    2020-08-04  113          return 0;
+> aac35468ca20a3 Alan Maguire    2020-08-04  114  }
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
