@@ -2,96 +2,101 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AB79C433E0
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 02:36:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B3B2C433E0
+	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 02:38:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E242C65024
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 02:36:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B80A64FEF
+	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 02:38:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbhBFCfL (ORCPT
+        id S231355AbhBFCh6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Feb 2021 21:35:11 -0500
-Received: from mga17.intel.com ([192.55.52.151]:63121 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230179AbhBFCco (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:32:44 -0500
-IronPort-SDR: e82Z/HV77K0RwfvWAG1RxHw8KWJc44XrZkABKWI/8Qi2A6VwXqcaydkpdflxmRzZ2eAdLmreIL
- u/0TNtR5WM+g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9886"; a="161249243"
-X-IronPort-AV: E=Sophos;i="5.81,156,1610438400"; 
-   d="scan'208";a="161249243"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 14:16:23 -0800
-IronPort-SDR: NRaIsHFlw3uFgHarMm4gK9o7SP+5teoIs0kpMxEdiegNa2O3M7s2Wf+xkk6NnQ8XS9giwlZgWq
- Vu92meHKWIDA==
-X-IronPort-AV: E=Sophos;i="5.81,156,1610438400"; 
-   d="scan'208";a="394033953"
-Received: from agluck-desk2.sc.intel.com (HELO agluck-desk2.amr.corp.intel.com) ([10.3.52.146])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2021 14:16:23 -0800
-Date:   Fri, 5 Feb 2021 14:16:21 -0800
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, corbet@lwn.net,
-        peterz@infradead.org, keescook@chromium.org, rafael@kernel.org,
-        lenb@kernel.org, james.morse@arm.com, bp@alien8.de,
-        devel@driverdev.osuosl.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] seqnum_ops: Introduce Sequence Number Ops
-Message-ID: <20210205221621.GA74059@agluck-desk2.amr.corp.intel.com>
-References: <cover.1612314468.git.skhan@linuxfoundation.org>
- <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
- <YB0WzBnLd+OcpxEE@kroah.com>
- <2fe15f90-2e33-d018-0d5d-cabe3846ed98@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2fe15f90-2e33-d018-0d5d-cabe3846ed98@linuxfoundation.org>
+        Fri, 5 Feb 2021 21:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231214AbhBFCfo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:35:44 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B4EC08ED8F
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 15:53:09 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id q37so6228708qvf.14
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 15:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=PlLvWoFhODO77w3ySrXmuuL5rJilH/MWtzg1pEDHD8w=;
+        b=JJKJgboeEwzxTaXxx/Y72B6j1XTrlBMj6s2nfEKuv8ndl6+MugSjSiMoE9qr7IZ1VG
+         juAdNNPQJeggx3Id04EbFlKX2Nuz6TeSO3xvLSoLQFEDJ6lxs0fCJLBg0ksb7lWpnHc8
+         FElOgdQPVutn/y11DQ/SNqp/6NG++Rmn0wYP/ZXr2OcSMClPzv5Wr9eccbgGVNsEUy/z
+         v6L/hZ/3nlHRseHq6t5qgth+HYzUODolngqx9n6/agITdMVxcTDWOGMpz27tbuOCeniX
+         qJupal0tEBKEIR4ZI8BkoDEnY/lA80MI7z+OW+Qu0Jxav/nUL1Z+EmOHBvePEUpOn69h
+         wSVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=PlLvWoFhODO77w3ySrXmuuL5rJilH/MWtzg1pEDHD8w=;
+        b=JJw3vFyPhGScgVLb8WQS1WqGjRn/io2RQ+6fHmwXhIbxS1jQX4lKHvz+lVhlQR2Qq6
+         HJRWdY7w0Qofuk2D7tgRPVlTdf4iJ80c7Ewk+Qje8KSPMm7Bk776Sy60LrQM4D2hHEak
+         xCH4U4GD5dt6Q9ShBofvC1P/l5ECOkU3uMA8/T78I/1SRNZxh91skZakFPjcq1KlQj8L
+         DoIsMz6GWnol990tvAeCHiw9byuwWQhB67gfSs3+zPq4POiwMCX2R1AejWy3l7GCuz4N
+         QDy2u2VyjQ0wg/h8AgbuptYJ5NqluAfX7tSXTvmyQB6mKblc+nUPV1fO4Eo9175AYQVz
+         r1qg==
+X-Gm-Message-State: AOAM533YToU/pUAkL2iSG73vbznnBda8NZrp43pNw4u9wWm+7BSFUzM2
+        4y8icSEyepXByCoIX6BESVlEBtoTsGpoHg==
+X-Google-Smtp-Source: ABdhPJwzCp+US9JJsnl1rBEeytyUhiYnpXlctiBEL2qaUvUkFr+i4rqQM3Sq1hx+QHRXccPLre1fGb3NIxu9Lw==
+Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:a8b1:128a:69fa:86fb])
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:1348:: with SMTP id
+ b8mr6970824qvw.26.1612569188987; Fri, 05 Feb 2021 15:53:08 -0800 (PST)
+Date:   Fri,  5 Feb 2021 15:53:00 -0800
+Message-Id: <20210205235302.2022784-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [PATCH v2 0/2] kunit: fail tests on UBSAN errors
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     alan.maguire@oracle.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 01:03:18PM -0700, Shuah Khan wrote:
-> On 2/5/21 2:58 AM, Greg KH wrote:
-> > On Wed, Feb 03, 2021 at 11:11:57AM -0700, Shuah Khan wrote:
-> > > +static inline u32 seqnum32_inc(struct seqnum32 *seq)
-> > > +{
-> > > +	atomic_t val = ATOMIC_INIT(seq->seqnum);
-> > > +
-> > > +	seq->seqnum = (u32) atomic_inc_return(&val);
-> > > +	if (seq->seqnum >= UINT_MAX)
-> > > +		pr_info("Sequence Number overflow %u detected\n",
-> > > +			seq->seqnum);
-> > > +	return seq->seqnum;
-> > 
-> > As Peter points out, this is doing doing what you think it is doing :(
-> > 
-> > Why do you not just have seq->seqnum be a real atomic variable?  Trying
-> > to switch to/from one like this does not work as there is no
-> > "atomic-ness" happening here at all.
-> > 
-> 
-> Yes. This is sloppy on my part. As Peter and Rafael also pointed. I have
-> to start paying more attention to my inner voice.
+v1 by Uriel is here: [1].
+Since it's been a while, I've dropped the Reviewed-By's.
 
-What's the end goal with this sequence number type?
+It depended on commit 83c4e7a0363b ("KUnit: KASAN Integration") which
+hadn't been merged yet, so that caused some kerfuffle with applying them
+previously and the series was reverted.
 
-Apart from the functional issues with this code already pointed
-out, it doesn't seem overly useful to just print the *value* of
-the sequence number when it hits the max value.  It might be
-more helpful if each instance had a seq->name field that is
-used here to tell the user *which* user of sequence numbers
-had seen the wrap arounnd.
+This revives the series but makes the kunit_fail_current_test() function
+take a format string and logs the file and line number of the failing
+code, addressing Alan Maguire's comments on the previous version.
 
-But that just begs the question of what should users of sequence
-numbers do when wrap around occurs? Any user that can run through
-sequence numbers at greater than 10 Hz is going to cause a problem
-for systems that stay running for years.
+As a result, the patch that makes UBSAN errors was tweaked slightly to
+include an error message.
 
-Maybe you should force users to code for wraparound by initializing
-to something like 0xffffff00 so that they all get a wraparound event
-quickly, rather than slowly, (same as was done with jiffies)?
+[1] https://lore.kernel.org/linux-kselftest/20200806174326.3577537-1-urielguajardojr@gmail.com/
+
+Uriel Guajardo (2):
+  kunit: support failure from dynamic analysis tools
+  kunit: ubsan integration
+
+ include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+ lib/kunit/test.c         | 36 ++++++++++++++++++++++++++++++++----
+ lib/ubsan.c              |  3 +++
+ 3 files changed, 65 insertions(+), 4 deletions(-)
+ create mode 100644 include/kunit/test-bug.h
+
+
+base-commit: 1e0d27fce010b0a4a9e595506b6ede75934c31be
+-- 
+2.30.0.478.g8a0d178c01-goog
+
