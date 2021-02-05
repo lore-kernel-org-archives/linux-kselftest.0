@@ -2,111 +2,206 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C56BFC43331
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 03:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA227C433E0
+	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 03:22:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4B2664F99
-	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 03:17:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9BAE664F9B
+	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 03:22:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbhBFDP5 (ORCPT
+        id S229727AbhBFCbd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Feb 2021 22:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        Fri, 5 Feb 2021 21:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbhBFDMr (ORCPT
+        with ESMTP id S229596AbhBFCbD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 22:12:47 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315F8C06174A
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 19:12:31 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id z3so2011990vsn.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 19:12:31 -0800 (PST)
+        Fri, 5 Feb 2021 21:31:03 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB596C08ED8D
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 15:52:07 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id o21so4241921pgn.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 15:52:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NsLsTSGcpqtzuUbk3YX89NPog3YmrVsNBJTPMwBGe2g=;
-        b=XtIOXJZQ3fM6FwkYsovu1TIs3/qQqZ8j7DL5iQwBKXozfzGW7le7+1sf9c/LK8Ooaz
-         70FIQ7MPpfc4r/jY2WWtIPWFwdo+Yf038f8XIocRg3S/ryVLabJzJgtOyGjHNNIa2wye
-         eiKjxYOzQXmkKqybE1YXNgpZsvNbEs/RScat3A+fvZeux6BR5c6Iq9q8m1IIuTdgQtsZ
-         AnOx8I8cfN8w+WKvLb3Cea1evx1345aK1h8niq+pq4VZzstx7jx0U0VPIKs9yTf2+uLY
-         EUx+3FI5aykeMQ4fpmGpPXtqJFQJaCtUkn0P89l0hK5mm/jPXvR6tyGbl38HcdAhbqQX
-         DyJQ==
+        bh=tplZjrhwK0og+HFPZBrvcmGmXMT8WcYpGq1c6sxH3EY=;
+        b=KKCagEzOnD3Ka8smtOSqfKaA6rCUwXFITgiZYNG+ObMNW6Bso8UfB4em9Yau++4euI
+         ZPQsJEaOSY1LXpVMZqzO/ypoczSA7F1NrJdmbUTxECIVlBVH+AVxLgIrK+8Z4RrOE7Ia
+         3c8mC1xxm+hGFqqhvakpbltxPGVAFkFW+PB+tcuWDgwVi3JndM+ezUkGNRqPvbgymrQ7
+         9i6Hp+iV1ToEDxjbdO6pQ6ymIJpTCywYFbEJwkspaq/2veRMiE88QEjO+V3A7Ex3/wii
+         HDxz4qa10yYtTXvh7jSEcFWv+yI0xws1Fx4UvbAaDKwmBH50i67rDJ1st7noBp7BnS6g
+         h0tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NsLsTSGcpqtzuUbk3YX89NPog3YmrVsNBJTPMwBGe2g=;
-        b=PCtmj9Qhk9ZnUk4k+swM41ycyEMrhMLCVbvKF/MgkXTh8MkmXpGHr1RwmygXXmlYqI
-         6hQQjuL0aGp5xRb+7B6DsTFeYh0axjT0m5BtFK8MnlPcR8UZQCGqFl8rRNo6d9V4hazu
-         omTh8dj1kAgMLLlVZxkxqCYbbsU5RgZRXBw7kYEGc3p+tlt1cM7/G7SVu4/fbqmcI5/o
-         wxfUMLdUwNH+fptb20/9ThHOggpRjxUKc8xESziSCgg5H16SbsIGi4TSlZtKA+MTdPla
-         7ilV6l8n6Tmuc+lm20bpRaHw9I5roMKbdCful/c09X8KSTbdKramPWcsX6as1UDM8cWn
-         C4Yw==
-X-Gm-Message-State: AOAM5318BMKzHlLJQ3nN5AqABq0plnvi1JIkq8t9goVSbCU/TflzNC2d
-        maWl77iMBE3frCW5z98h86FkJI1seyc=
-X-Google-Smtp-Source: ABdhPJzNZqErgv3u8x09+xDgylWmQYA/qZHAEoixMNhqBI2XdHNrrDTd01ZcMELL73MVvV0apdBb7w==
-X-Received: by 2002:a05:6102:199:: with SMTP id r25mr5710001vsq.5.1612581149892;
-        Fri, 05 Feb 2021 19:12:29 -0800 (PST)
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
-        by smtp.gmail.com with ESMTPSA id a70sm1266459vki.16.2021.02.05.19.12.28
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Feb 2021 19:12:28 -0800 (PST)
-Received: by mail-ua1-f50.google.com with SMTP id i3so2808621uai.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 19:12:28 -0800 (PST)
-X-Received: by 2002:a9f:2a8e:: with SMTP id z14mr5289156uai.122.1612581148246;
- Fri, 05 Feb 2021 19:12:28 -0800 (PST)
+        bh=tplZjrhwK0og+HFPZBrvcmGmXMT8WcYpGq1c6sxH3EY=;
+        b=FzrkFf0ZhjmJPg3saum9sS7nZpahJuvIQ1mlOGJ/XxorWhqlQTjsO68dI15gWN2KZj
+         xsoPlG9f0tJGsIc5aYrLfrSf0YR+ndc4lY1q7CYW2YR6ByAUFx4sDMIoBaSB5muh/uf9
+         MuRPKEvZMqqELGB/ou288sUTiG+6T1oAScOQJYkFjV9QH3RVfd/+CDCS6uU4mpzGFjEW
+         ou8Zw+14Bmq/F3MnZNuitYczlXSXoxzVPY+eHVpkZBqsgcQ1g3eLEN6HztnD1/WBJu4i
+         EuB6QPWNKn6BMANO+7pHb1Ax9pMTv+AWqCdXFif6zwGJvatDizzORTjwk8o0zQSBrPbW
+         pdLg==
+X-Gm-Message-State: AOAM531LHJRPtu/8eZjRCdeda5BfefmaZXuiRAcythvHfmf7xMTxAh3y
+        m53tTRSB55CFgnXW11b5W1/nyR8dNxHtx/sOaqyony6saFaOeA==
+X-Google-Smtp-Source: ABdhPJw9J0CiEg95zh8/XJVPfZuPthlj4aQGsTz5Tv3pfIrnQVYiEk0Uqf37sdmOsN1dLryXfclPx2yU0oK9/xjlKLw=
+X-Received: by 2002:a65:4184:: with SMTP id a4mr6848425pgq.384.1612569127259;
+ Fri, 05 Feb 2021 15:52:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20201210231010.420298-1-willemdebruijn.kernel@gmail.com> <202012111013.46FEA48C@keescook>
-In-Reply-To: <202012111013.46FEA48C@keescook>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 5 Feb 2021 22:11:52 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSdVS5Q7mw-of93T3=501J-PO_eXuNzRKwFg4vUd6xUvZg@mail.gmail.com>
-Message-ID: <CA+FuTSdVS5Q7mw-of93T3=501J-PO_eXuNzRKwFg4vUd6xUvZg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/harness: pass variant to teardown
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+References: <20210204225448.1393741-1-dlatypov@google.com>
+In-Reply-To: <20210204225448.1393741-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 5 Feb 2021 15:51:56 -0800
+Message-ID: <CAFd5g448GebW-zYwRzfCkJqx-7VZZOa_7dfSuqX_pAJLk4+CyQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] kunit: support running subsets of test suites from kunit.py
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kees Cook <keescook@chromium.org>
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 1:15 PM Kees Cook <keescook@chromium.org> wrote:
+On Thu, Feb 4, 2021 at 2:54 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Thu, Dec 10, 2020 at 06:10:10PM -0500, Willem de Bruijn wrote:
-> > From: Willem de Bruijn <willemb@google.com>
-> >
-> > FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as variant.
-> >
-> > In some cases, the variant will change the setup, such that expections
-> > also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
-> >
-> > The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
-> > right above.
-> >
-> > Signed-off-by: Willem de Bruijn <willemb@google.com>
+> When using `kunit.py run` to run tests, users must populate a
+> `kunitconfig` file to select the options the tests are hidden behind and
+> all their dependencies.
 >
-> Thanks! This was on my TODO list. :)
+> The patch [1] to allow specifying a path to kunitconfig promises to make
+> this nicer as we can have checked in files corresponding to different
+> sets of tests.
 >
-> Acked-by: Kees Cook <keescook@chromium.org>
+> But it's still annoying
+> 1) when trying to run a subet of tests
+> 2) when you want to run tests that don't have such a pre-existing
+> kunitconfig and selecting all the necessary options is tricky.
+>
+> This patch series aims to alleviate both:
+> 1) `kunit.py run 'my-suite-*'`
+> I.e. use my current kunitconfig, but just run suites that match this glob
+> 2) `kunit.py run --alltests 'my-suite-*'`
+> I.e. use allyesconfig so I don't have to worry about writing a
+> kunitconfig at all.
+>
+> See the first commit message for more details and discussion about
+> future work.
+>
+> This patch series also includes a bugfix for a latent bug that can't be
+> triggered right now but has worse consequences as a result of the
+> changes needed to plumb in this suite name glob.
+>
+> [1] https://lore.kernel.org/linux-kselftest/20210201205514.3943096-1-dlatypov@google.com/
 
-Is this patch staged to be merged as is? Should I resubmit it?
+I tried applying this series on top of several of your other patches
+over the past cycle and running the kunit_tool unit tests
+(kunit_tool_test.py) and I got several failures:
 
-Same question for another slightly older (2020-11-23) kselftest patch:
+======================================================================
+FAIL: test_exec_builddir (__main__.KUnitMainTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit_tool_test.py", line 417, in test_exec_builddir
+    self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir,
+timeout=300)
+  File "/usr/lib/python3.8/unittest/mock.py", line 925, in
+assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 913, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: run_kernel(build_dir='.kunit', timeout=300)
+Actual: run_kernel(timeout=300, filter_glob='', build_dir='.kunit')
 
-    tools/testing: add kselftest shell helper library
-    https://patchwork.kernel.org/project/linux-kselftest/patch/20201123162508.585279-1-willemdebruijn.kernel@gmail.com/
+======================================================================
+FAIL: test_exec_passes_args_pass (__main__.KUnitMainTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit_tool_test.py", line 337, in
+test_exec_passes_args_pass
+    self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit',
+timeout=300)
+  File "/usr/lib/python3.8/unittest/mock.py", line 925, in
+assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 913, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: run_kernel(build_dir='.kunit', timeout=300)
+Actual: run_kernel(timeout=300, filter_glob='', build_dir='.kunit')
 
-Thanks,
+======================================================================
+FAIL: test_exec_timeout (__main__.KUnitMainTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit_tool_test.py", line 385, in test_exec_timeout
+    self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='.kunit',
+timeout=timeout)
+  File "/usr/lib/python3.8/unittest/mock.py", line 925, in
+assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 913, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: run_kernel(build_dir='.kunit', timeout=3453)
+Actual: run_kernel(timeout=3453, filter_glob='', build_dir='.kunit')
 
-  Willem
+======================================================================
+FAIL: test_run_builddir (__main__.KUnitMainTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit_tool_test.py", line 400, in test_run_builddir
+    self.linux_source_mock.run_kernel.assert_called_once_with(
+  File "/usr/lib/python3.8/unittest/mock.py", line 925, in
+assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 913, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: run_kernel(build_dir='.kunit', timeout=300)
+Actual: run_kernel(timeout=300, filter_glob='', build_dir='.kunit')
+
+======================================================================
+FAIL: test_run_passes_args_pass (__main__.KUnitMainTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit_tool_test.py", line 344, in
+test_run_passes_args_pass
+    self.linux_source_mock.run_kernel.assert_called_once_with(
+  File "/usr/lib/python3.8/unittest/mock.py", line 925, in
+assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 913, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: run_kernel(build_dir='.kunit', timeout=300)
+Actual: run_kernel(timeout=300, filter_glob='', build_dir='.kunit')
+
+======================================================================
+FAIL: test_run_timeout (__main__.KUnitMainTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/testing/kunit/kunit_tool_test.py", line 392, in test_run_timeout
+    self.linux_source_mock.run_kernel.assert_called_once_with(
+  File "/usr/lib/python3.8/unittest/mock.py", line 925, in
+assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+  File "/usr/lib/python3.8/unittest/mock.py", line 913, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: run_kernel(build_dir='.kunit', timeout=3453)
+Actual: run_kernel(timeout=3453, filter_glob='', build_dir='.kunit')
+
+----------------------------------------------------------------------
+Ran 37 tests in 0.082s
+
+FAILED (failures=6)
