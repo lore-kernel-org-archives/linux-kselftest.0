@@ -2,97 +2,73 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 097DEC433E9
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 22:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFF20C433DB
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 23:24:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF1B764F51
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 22:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A375A64FEA
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 23:24:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbhBEWb6 (ORCPT
+        id S230368AbhBEXXu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:31:58 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:22678 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232453AbhBEORD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:17:03 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-51-InJ3Dwu4O4qYU7J-rkKpYw-1; Fri, 05 Feb 2021 15:23:47 +0000
-X-MC-Unique: InJ3Dwu4O4qYU7J-rkKpYw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 5 Feb 2021 15:23:46 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 5 Feb 2021 15:23:46 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-CC:     Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Shuah Khan <shuah@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
-Subject: RE: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field widths
- in vsscanf
-Thread-Topic: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field
- widths in vsscanf
-Thread-Index: AQHW+76k9HEDtLN2E0S7ghaNw2D2r6pJrWNA
-Date:   Fri, 5 Feb 2021 15:23:46 +0000
-Message-ID: <82696a371fe447c2b201fc812e5a4560@AcuMS.aculab.com>
-References: <20210203165009.6299-1-rf@opensource.cirrus.com>
- <20210203165009.6299-2-rf@opensource.cirrus.com>
- <YBr9c44Dvq1ZNrEa@smile.fi.intel.com> <YBwiQ+l6yqs+g+rr@alley>
- <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
- <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
-In-Reply-To: <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 5 Feb 2021 18:23:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51030 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230395AbhBEJ7T (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 5 Feb 2021 04:59:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F3AD64E2C;
+        Fri,  5 Feb 2021 09:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612519118;
+        bh=nV/rbqwWRF8qM4CIyf4ANBmKaUDGONxRBkHMpb/7CR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=suxX5FVBS+WooJ8axVdYhFfyaX4TTMrJP9y6L6NxvLOb22YUJK1w1qsAyy6vSL1p8
+         WC4DhmtWEfw/bFhWsVLHvEUUYJ6kMLxYk8dbBMSsn+7qONou9MHKzqST1PRylbUKQs
+         Jg9D26ueFHg0n4uFtR7jbEz/yFPmQaDGgHJf8PHU=
+Date:   Fri, 5 Feb 2021 10:58:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     corbet@lwn.net, peterz@infradead.org, keescook@chromium.org,
+        rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, devel@driverdev.osuosl.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/7] seqnum_ops: Introduce Sequence Number Ops
+Message-ID: <YB0WzBnLd+OcpxEE@kroah.com>
+References: <cover.1612314468.git.skhan@linuxfoundation.org>
+ <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RnJvbTogQW5keSBTaGV2Y2hlbmtvDQo+IFNlbnQ6IDA1IEZlYnJ1YXJ5IDIwMjEgMTI6NTENCj4g
-DQo+IE9uIEZyaSwgRmViIDUsIDIwMjEgYXQgMTozNSBQTSBSaWNoYXJkIEZpdHpnZXJhbGQNCj4g
-PHJmQG9wZW5zb3VyY2UuY2lycnVzLmNvbT4gd3JvdGU6DQo+ID4gT24gMDQvMDIvMjAyMSAxNjoz
-NSwgUGV0ciBNbGFkZWsgd3JvdGU6DQo+ID4gPiBPbiBXZWQgMjAyMS0wMi0wMyAyMTo0NTo1NSwg
-QW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPiA+ID4+IE9uIFdlZCwgRmViIDAzLCAyMDIxIGF0IDA0
-OjUwOjA3UE0gKzAwMDAsIFJpY2hhcmQgRml0emdlcmFsZCB3cm90ZToNCj4gDQo+IC4uLg0KPiAN
-Cj4gPiA+Pj4gKyAgIGZvciAoOyBtYXhfY2hhcnMgPiAwOyBtYXhfY2hhcnMtLSkgew0KPiA+ID4+
-DQo+ID4gPj4gTGVzcyBmcmFnaWxlIGlzIHRvIHdyaXRlDQo+ID4gPj4NCj4gPiA+PiAgICAgIHdo
-aWxlIChtYXhfY2hhcnMtLSkNCj4gPiA+DQo+ID4gPiBFeGNlcHQgdGhhdCB0aGUgb3JpZ2luYWwg
-d2FzIG1vcmUgb2J2aW91cyBhdCBsZWFzdCBmb3IgbWUuDQo+ID4gPiBJIGFsd2F5cyBwcmVmZXIg
-bW9yZSByZWFkYWJsZSBjb2RlIHdoZW4gdGhlIGNvbXBpbGVyIG1pZ2h0IGRvDQo+ID4gPiB0aGUg
-b3B0aW1pemF0aW9uIGVhc2lseS4gQnV0IHRoaXMgaXMgbXkgcGVyc29uYWwgdGFzdGUuDQo+ID4g
-PiBJIGFtIGZpbmUgd2l0aCBib3RoIHZhcmlhbnRzLg0KPiANCj4gSSAqc2xpZ2h0bHkqIHByZWZl
-ciB3aGlsZS1sb29wICppbiB0aGlzIGNhc2UqIGR1ZSB0byBsZXNzIGNoYXJhY3RlcnMNCj4gdG8g
-cGFyc2UgdG8gdW5kZXJzdGFuZCB0aGUgbG9naWMuDQoNClRoZSB0d28gbG9vcHMgYXJlIGFsc28g
-aGF2ZSBkaWZmZXJlbnQgdmFsdWVzIGZvciAnbWF4X2NoYXJzJw0KaW5zaWRlIHRoZSBsb29wIGJv
-ZHkuDQoNCklmICdtYXhfY2hhcnMnIGlzIGtub3duIHRvIGJlIG5vbi16ZXJvIHRoZSBkbyAuLi4g
-d2hpbGUgKC0tbWF4X2NoYXJzKTsNCmxvb3Agd2lsbCBwcm9iYWJsZSBnZW5lcmF0ZSBiZXR0ZXIg
-Y29kZS4NCkJ1dCB0aGVyZSBpcyBubyBhY2NvdW50aW5nIGZvciBqdXN0IGhvdyBvZGQgc29tZSBk
-ZWNpc2lvbnMgZ2NjDQptYWtlcyBhcmUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Wed, Feb 03, 2021 at 11:11:57AM -0700, Shuah Khan wrote:
+> +static inline u32 seqnum32_inc(struct seqnum32 *seq)
+> +{
+> +	atomic_t val = ATOMIC_INIT(seq->seqnum);
+> +
+> +	seq->seqnum = (u32) atomic_inc_return(&val);
+> +	if (seq->seqnum >= UINT_MAX)
+> +		pr_info("Sequence Number overflow %u detected\n",
+> +			seq->seqnum);
+> +	return seq->seqnum;
 
+As Peter points out, this is doing doing what you think it is doing :(
+
+Why do you not just have seq->seqnum be a real atomic variable?  Trying
+to switch to/from one like this does not work as there is no
+"atomic-ness" happening here at all.
+
+Oh, and checkpatch should have complained about the extra ' ' in your
+cast :)
+
+thanks,
+
+greg k-h
