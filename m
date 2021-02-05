@@ -2,193 +2,126 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42EAFC43333
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 22:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA95C433DB
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 22:32:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13ECF64F9F
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 22:19:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9D4364F06
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Feb 2021 22:32:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbhBEWTC (ORCPT
+        id S231489AbhBEWbs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
+        Fri, 5 Feb 2021 17:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbhBEOdB (ORCPT
+        with ESMTP id S232440AbhBEOQ3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:33:01 -0500
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B77C061225
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 08:10:37 -0800 (PST)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DXJRw6S0qzMqPtr;
-        Fri,  5 Feb 2021 15:57:32 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4DXJRs4xvlzlh8TC;
-        Fri,  5 Feb 2021 15:57:29 +0100 (CET)
-Subject: Re: [PATCH v28 06/12] fs,security: Add sb_delete hook
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@linux.microsoft.com>
-References: <20210202162710.657398-1-mic@digikod.net>
- <20210202162710.657398-7-mic@digikod.net>
- <20210205142143.GA18451@mail.hallyn.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Message-ID: <92e6a8a6-19da-0b1f-c1cf-01dc0af61299@digikod.net>
-Date:   Fri, 5 Feb 2021 15:57:37 +0100
-User-Agent: 
+        Fri, 5 Feb 2021 09:16:29 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47652C061D7E;
+        Fri,  5 Feb 2021 07:53:58 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id r38so4791802pgk.13;
+        Fri, 05 Feb 2021 07:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XJ8JRC4RZfaxmRw/0lEclo4P/KAgqGyqHXZ05JIOI3M=;
+        b=J8FTKg3oxadh25ZrACs14MQalo3icWehTJnEhLYyWPPcSX/LiPDIalkW/cO4lCrNAT
+         4IoFo37RVxXBMgrG1rPQxp3Ctq9cNoLGdD4x9jPkJApNC4r6rQWvv9jFUVvSt4ihd3Fj
+         l/ENCvfqKQeTmnd63aSEKiyRQPNW/ISRNqrEwlbuIaUVbLvRATHhuxHKL5GjPCb0GXdE
+         +WcZdpw1WMp4zUkv+2BwPl9SndqHi0fpOthVfXVI3ks6IrlAWS1DCuJ12xFptxu6+Afu
+         G1upsVSeBFcn/4aI9FscB6CHhepoZU/qclLJ/x8uGCVdUAn3Gu3hEdn1QblJVzQnuFMb
+         pmYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XJ8JRC4RZfaxmRw/0lEclo4P/KAgqGyqHXZ05JIOI3M=;
+        b=n+jWdOLlSUslM8szQW2cNvjgiZAnuFl224rFuwCrzSciWSp/8FVJz5vkryRanytfyc
+         ZmxinvgGQ+YIAfqJeUOyagePn1/Z/muK3YhwNfgKIIxar996agLTcVtojHT+IMzxPpug
+         TyAvJSFQ/gYEC5nXMx+zKCO1vUGninAnPFRCJcm6ygVyazTidEqZ+p3cz7l9A7O3srpq
+         gJnziDLr6gre8EjmXdFgNq1ZiMFRwQVns1BL63BtiOSHZVuv4LmcfC3JIElk1Ms1Mgas
+         tZmPlcof53VCUEOlYL1z7ISy07IKL82DRT0GnOiyGUdLfiTuxVKL7gYGimrbBjYMOj43
+         XIOA==
+X-Gm-Message-State: AOAM533vPYoIjyV+0qTS1ZpOC1kzr7LRQp9oesVPitcE+YDClfHFJdDX
+        5Z2b5k6Sp/QlZ+Dc7Ac/ePfdxFQOwRudFHvJz9w3pZSQ5I7f9lSZ
+X-Google-Smtp-Source: ABdhPJy3LPmeJMIT8h+mAN9cczpdiWaolqfleKmjgkwES8vFca5LztJtvQ4GjKeV5jIgxsSJHVHUm7gCm09yqrJnc+k=
+X-Received: by 2002:a62:445:0:b029:19c:162b:bbef with SMTP id
+ 66-20020a6204450000b029019c162bbbefmr5351712pfe.40.1612540437831; Fri, 05 Feb
+ 2021 07:53:57 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210205142143.GA18451@mail.hallyn.com>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210203165009.6299-1-rf@opensource.cirrus.com>
+ <20210203165009.6299-2-rf@opensource.cirrus.com> <YBr9c44Dvq1ZNrEa@smile.fi.intel.com>
+ <YBwiQ+l6yqs+g+rr@alley> <5bfefab6-7a1b-6f5f-319c-8897dbb79a5b@opensource.cirrus.com>
+ <CAHp75VcARyR4YvnWoVk1gnR8v7u_YJPnV0x3Mbe7iLMrvpbSAQ@mail.gmail.com> <82696a371fe447c2b201fc812e5a4560@AcuMS.aculab.com>
+In-Reply-To: <82696a371fe447c2b201fc812e5a4560@AcuMS.aculab.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 5 Feb 2021 17:53:41 +0200
+Message-ID: <CAHp75VcwTg1e=apHuOzCNmpK9c6LuZ_BLDZvq9BpaTC8Rcgguw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] lib: vsprintf: Fix handling of number field widths
+ in vsscanf
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Shuah Khan <shuah@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, Feb 5, 2021 at 5:23 PM David Laight <David.Laight@aculab.com> wrote:
+> From: Andy Shevchenko
+> > Sent: 05 February 2021 12:51
+> > On Fri, Feb 5, 2021 at 1:35 PM Richard Fitzgerald
+> > <rf@opensource.cirrus.com> wrote:
+> > > On 04/02/2021 16:35, Petr Mladek wrote:
+> > > > On Wed 2021-02-03 21:45:55, Andy Shevchenko wrote:
+> > > >> On Wed, Feb 03, 2021 at 04:50:07PM +0000, Richard Fitzgerald wrote:
+> >
+> > ...
+> >
+> > > >>> +   for (; max_chars > 0; max_chars--) {
+> > > >>
+> > > >> Less fragile is to write
+> > > >>
+> > > >>      while (max_chars--)
+> > > >
+> > > > Except that the original was more obvious at least for me.
+> > > > I always prefer more readable code when the compiler might do
+> > > > the optimization easily. But this is my personal taste.
+> > > > I am fine with both variants.
+> >
+> > I *slightly* prefer while-loop *in this case* due to less characters
+> > to parse to understand the logic.
+>
+> The two loops are also have different values for 'max_chars'
+> inside the loop body.
 
-On 05/02/2021 15:21, Serge E. Hallyn wrote:
-> On Tue, Feb 02, 2021 at 05:27:04PM +0100, Mickaël Salaün wrote:
->> From: Mickaël Salaün <mic@linux.microsoft.com>
->>
->> The sb_delete security hook is called when shutting down a superblock,
->> which may be useful to release kernel objects tied to the superblock's
->> lifetime (e.g. inodes).
->>
->> This new hook is needed by Landlock to release (ephemerally) tagged
->> struct inodes.  This comes from the unprivileged nature of Landlock
->> described in the next commit.
->>
->> Cc: Al Viro <viro@zeniv.linux.org.uk>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Serge E. Hallyn <serge@hallyn.com>
-> 
-> One note below, but
-> 
-> Acked-by: Serge Hallyn <serge@hallyn.com>
-> 
->> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
->> Reviewed-by: Jann Horn <jannh@google.com>
->> ---
->>
->> Changes since v22:
->> * Add Reviewed-by: Jann Horn <jannh@google.com>
->>
->> Changes since v17:
->> * Initial patch to replace the direct call to landlock_release_inodes()
->>   (requested by James Morris).
->>   https://lore.kernel.org/lkml/alpine.LRH.2.21.2005150536440.7929@namei.org/
->> ---
->>  fs/super.c                    | 1 +
->>  include/linux/lsm_hook_defs.h | 1 +
->>  include/linux/lsm_hooks.h     | 2 ++
->>  include/linux/security.h      | 4 ++++
->>  security/security.c           | 5 +++++
->>  5 files changed, 13 insertions(+)
->>
->> diff --git a/fs/super.c b/fs/super.c
->> index 2c6cdea2ab2d..c3c5178cde65 100644
->> --- a/fs/super.c
->> +++ b/fs/super.c
->> @@ -454,6 +454,7 @@ void generic_shutdown_super(struct super_block *sb)
->>  		evict_inodes(sb);
->>  		/* only nonzero refcount inodes can have marks */
->>  		fsnotify_sb_delete(sb);
->> +		security_sb_delete(sb);
->>  
->>  		if (sb->s_dio_done_wq) {
->>  			destroy_workqueue(sb->s_dio_done_wq);
->> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
->> index 7aaa753b8608..32472b3849bc 100644
->> --- a/include/linux/lsm_hook_defs.h
->> +++ b/include/linux/lsm_hook_defs.h
->> @@ -59,6 +59,7 @@ LSM_HOOK(int, 0, fs_context_dup, struct fs_context *fc,
->>  LSM_HOOK(int, -ENOPARAM, fs_context_parse_param, struct fs_context *fc,
->>  	 struct fs_parameter *param)
->>  LSM_HOOK(int, 0, sb_alloc_security, struct super_block *sb)
->> +LSM_HOOK(void, LSM_RET_VOID, sb_delete, struct super_block *sb)
->>  LSM_HOOK(void, LSM_RET_VOID, sb_free_security, struct super_block *sb)
->>  LSM_HOOK(void, LSM_RET_VOID, sb_free_mnt_opts, void *mnt_opts)
->>  LSM_HOOK(int, 0, sb_eat_lsm_opts, char *orig, void **mnt_opts)
->> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
->> index 970106d98306..e339b201f79b 100644
->> --- a/include/linux/lsm_hooks.h
->> +++ b/include/linux/lsm_hooks.h
->> @@ -108,6 +108,8 @@
->>   *	allocated.
->>   *	@sb contains the super_block structure to be modified.
->>   *	Return 0 if operation was successful.
->> + * @sb_delete:
->> + *	Release objects tied to a superblock (e.g. inodes).
-> 
-> It's customary here to add the line detailing the @sb argument.
+off-by-one to be precise.
 
-What about "@sb contains the super_block structure being released."?
+> If 'max_chars' is known to be non-zero the do ... while (--max_chars);
+> loop will probable generate better code.
 
-> 
->>   * @sb_free_security:
->>   *	Deallocate and clear the sb->s_security field.
->>   *	@sb contains the super_block structure to be modified.
->> diff --git a/include/linux/security.h b/include/linux/security.h
->> index c35ea0ffccd9..c41a94e29b62 100644
->> --- a/include/linux/security.h
->> +++ b/include/linux/security.h
->> @@ -288,6 +288,7 @@ void security_bprm_committed_creds(struct linux_binprm *bprm);
->>  int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc);
->>  int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param);
->>  int security_sb_alloc(struct super_block *sb);
->> +void security_sb_delete(struct super_block *sb);
->>  void security_sb_free(struct super_block *sb);
->>  void security_free_mnt_opts(void **mnt_opts);
->>  int security_sb_eat_lsm_opts(char *options, void **mnt_opts);
->> @@ -620,6 +621,9 @@ static inline int security_sb_alloc(struct super_block *sb)
->>  	return 0;
->>  }
->>  
->> +static inline void security_sb_delete(struct super_block *sb)
->> +{ }
->> +
->>  static inline void security_sb_free(struct super_block *sb)
->>  { }
->>  
->> diff --git a/security/security.c b/security/security.c
->> index 9f979d4afe6c..1b4a73b2549a 100644
->> --- a/security/security.c
->> +++ b/security/security.c
->> @@ -900,6 +900,11 @@ int security_sb_alloc(struct super_block *sb)
->>  	return rc;
->>  }
->>  
->> +void security_sb_delete(struct super_block *sb)
->> +{
->> +	call_void_hook(sb_delete, sb);
->> +}
->> +
->>  void security_sb_free(struct super_block *sb)
->>  {
->>  	call_void_hook(sb_free_security, sb);
->> -- 
->> 2.30.0
+What?! while (--x)  and while(x--) are equivalent.
+
+> But there is no accounting for just how odd some decisions gcc
+> makes are.
+
+Why should we care about the compiler bugs here?
+
+-- 
+With Best Regards,
+Andy Shevchenko
