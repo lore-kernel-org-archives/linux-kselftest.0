@@ -2,81 +2,111 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B128BC4332D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C56BFC43331
 	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 03:17:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BDD964EEC
+	by mail.kernel.org (Postfix) with ESMTP id A4B2664F99
 	for <linux-kselftest@archiver.kernel.org>; Sat,  6 Feb 2021 03:17:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbhBFDPn (ORCPT
+        id S231951AbhBFDP5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Feb 2021 22:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        Fri, 5 Feb 2021 22:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbhBFCzl (ORCPT
+        with ESMTP id S229934AbhBFDMr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:55:41 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4235C08ED7C
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 15:30:12 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id j12so5322889pfj.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 15:30:12 -0800 (PST)
+        Fri, 5 Feb 2021 22:12:47 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315F8C06174A
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Feb 2021 19:12:31 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id z3so2011990vsn.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 19:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uuoZTsAa+emkzSEvsXs+jp0cxHIStdgFTDYBF0y1Zlk=;
-        b=NTIMc7RAPHbP2GpsLMJKNE5NEpWhtHXYXweLonU3exUG9mrQEI/lgsYuES3XleG1bw
-         H6l9w+gwvYXrJF9ZdVktEQ92iXFmxPl7DlrKnwyWveIQepKjR9bN+Vy3ttJ3hySBk81O
-         rAm4TA41vyNkj0TbmBwixq5dcD9Yy3rcB0acNEHGaEUKLGknNLr8H2i8iXBSNO2b/BA0
-         7BJWJDcsvBH1q/hqQmEkDDdX5LcARAtnYDyqEY+/BzQyEnwzulTCY6QnfdRYdGyxI1gb
-         ah9yPJDUuPoymKa9QFv2SZSgFiDk44WDGNvONTcu7vOC8b2ASSvpNWsqp88S0rTNpTs5
-         JEKg==
+        bh=NsLsTSGcpqtzuUbk3YX89NPog3YmrVsNBJTPMwBGe2g=;
+        b=XtIOXJZQ3fM6FwkYsovu1TIs3/qQqZ8j7DL5iQwBKXozfzGW7le7+1sf9c/LK8Ooaz
+         70FIQ7MPpfc4r/jY2WWtIPWFwdo+Yf038f8XIocRg3S/ryVLabJzJgtOyGjHNNIa2wye
+         eiKjxYOzQXmkKqybE1YXNgpZsvNbEs/RScat3A+fvZeux6BR5c6Iq9q8m1IIuTdgQtsZ
+         AnOx8I8cfN8w+WKvLb3Cea1evx1345aK1h8niq+pq4VZzstx7jx0U0VPIKs9yTf2+uLY
+         EUx+3FI5aykeMQ4fpmGpPXtqJFQJaCtUkn0P89l0hK5mm/jPXvR6tyGbl38HcdAhbqQX
+         DyJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uuoZTsAa+emkzSEvsXs+jp0cxHIStdgFTDYBF0y1Zlk=;
-        b=WyOQReGBv6WbJluZ5p52YoSfy+BJ6XEt48rN6TvMsDHN0YOmiwQA+Z+I2wNSFN86/d
-         1NGJ4A4v9TmszzdljRP4SoU73G52LRYehKjLGhkNxAJp9Wu5uwEoMRaZ0Hjx3N1CHOCf
-         HbO+uXTZBl6WrHu7LP1Dn+xng3MhbF1hri2kMEGdF5kbyb5x48xii76puXyB6zFJhQQx
-         NQ5tSoC5I5EbimnbENrzODDEK4i59ihoUQXtf7og5O/4tXzqxRGDQp/Z/qqszr67HXJU
-         wT5xXlO2a21vHkAwdq/7w3auRXv/yesXx1WdpQxA4ULK5S1BNm7uCBAbTgpsASGkwJ8M
-         7wGA==
-X-Gm-Message-State: AOAM530Mr1f59bZsh8KuhzIl5QWOksWZ+Fx/PcQlVnyVpddLVx7AvyXC
-        IFBL2e6hctGW2JjsgcIHn1twiJzaynrqnaJFPe/cZg==
-X-Google-Smtp-Source: ABdhPJz7fjyjm3zP1E+EhYMfal+dyUbCIoiAkSjxIRFTTVzV+vtyVuFOVRJZrajRJRodu6bhYCLn4XUNuyE+29+NJQs=
-X-Received: by 2002:a65:4184:: with SMTP id a4mr6772997pgq.384.1612567812337;
- Fri, 05 Feb 2021 15:30:12 -0800 (PST)
+        bh=NsLsTSGcpqtzuUbk3YX89NPog3YmrVsNBJTPMwBGe2g=;
+        b=PCtmj9Qhk9ZnUk4k+swM41ycyEMrhMLCVbvKF/MgkXTh8MkmXpGHr1RwmygXXmlYqI
+         6hQQjuL0aGp5xRb+7B6DsTFeYh0axjT0m5BtFK8MnlPcR8UZQCGqFl8rRNo6d9V4hazu
+         omTh8dj1kAgMLLlVZxkxqCYbbsU5RgZRXBw7kYEGc3p+tlt1cM7/G7SVu4/fbqmcI5/o
+         wxfUMLdUwNH+fptb20/9ThHOggpRjxUKc8xESziSCgg5H16SbsIGi4TSlZtKA+MTdPla
+         7ilV6l8n6Tmuc+lm20bpRaHw9I5roMKbdCful/c09X8KSTbdKramPWcsX6as1UDM8cWn
+         C4Yw==
+X-Gm-Message-State: AOAM5318BMKzHlLJQ3nN5AqABq0plnvi1JIkq8t9goVSbCU/TflzNC2d
+        maWl77iMBE3frCW5z98h86FkJI1seyc=
+X-Google-Smtp-Source: ABdhPJzNZqErgv3u8x09+xDgylWmQYA/qZHAEoixMNhqBI2XdHNrrDTd01ZcMELL73MVvV0apdBb7w==
+X-Received: by 2002:a05:6102:199:: with SMTP id r25mr5710001vsq.5.1612581149892;
+        Fri, 05 Feb 2021 19:12:29 -0800 (PST)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id a70sm1266459vki.16.2021.02.05.19.12.28
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Feb 2021 19:12:28 -0800 (PST)
+Received: by mail-ua1-f50.google.com with SMTP id i3so2808621uai.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Feb 2021 19:12:28 -0800 (PST)
+X-Received: by 2002:a9f:2a8e:: with SMTP id z14mr5289156uai.122.1612581148246;
+ Fri, 05 Feb 2021 19:12:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20210119235226.93280-1-dlatypov@google.com>
-In-Reply-To: <20210119235226.93280-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 5 Feb 2021 15:30:01 -0800
-Message-ID: <CAFd5g44PkcWQG9SQdkUFjV_pttJr==6+R14w5NBOifK_hwDStw@mail.gmail.com>
-Subject: Re: [PATCH] KUnit: Docs: make start.rst example Kconfig follow style.rst
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+References: <20201210231010.420298-1-willemdebruijn.kernel@gmail.com> <202012111013.46FEA48C@keescook>
+In-Reply-To: <202012111013.46FEA48C@keescook>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 5 Feb 2021 22:11:52 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSdVS5Q7mw-of93T3=501J-PO_eXuNzRKwFg4vUd6xUvZg@mail.gmail.com>
+Message-ID: <CA+FuTSdVS5Q7mw-of93T3=501J-PO_eXuNzRKwFg4vUd6xUvZg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/harness: pass variant to teardown
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Jakub Kicinski <kuba@kernel.org>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 3:52 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Dec 11, 2020 at 1:15 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> The primary change is that we want to encourage people to respect
-> KUNIT_ALL_TESTS to make it easy to run all the relevant tests for a
-> given config.
+> On Thu, Dec 10, 2020 at 06:10:10PM -0500, Willem de Bruijn wrote:
+> > From: Willem de Bruijn <willemb@google.com>
+> >
+> > FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as variant.
+> >
+> > In some cases, the variant will change the setup, such that expections
+> > also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
+> >
+> > The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
+> > right above.
+> >
+> > Signed-off-by: Willem de Bruijn <willemb@google.com>
 >
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Thanks! This was on my TODO list. :)
+>
+> Acked-by: Kees Cook <keescook@chromium.org>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Is this patch staged to be merged as is? Should I resubmit it?
+
+Same question for another slightly older (2020-11-23) kselftest patch:
+
+    tools/testing: add kselftest shell helper library
+    https://patchwork.kernel.org/project/linux-kselftest/patch/20201123162508.585279-1-willemdebruijn.kernel@gmail.com/
+
+Thanks,
+
+  Willem
