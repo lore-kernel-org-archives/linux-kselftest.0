@@ -2,107 +2,179 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79580C433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 09:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E9F1C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 09:31:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35B2964E7A
-	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 09:12:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C94AF64E85
+	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 09:31:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhBHJMH (ORCPT
+        id S231388AbhBHJbH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Feb 2021 04:12:07 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12488 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbhBHJJu (ORCPT
+        Mon, 8 Feb 2021 04:31:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26789 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231579AbhBHJ3E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 04:09:50 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DZ0Xf2sm8zjL4s;
-        Mon,  8 Feb 2021 17:07:30 +0800 (CST)
-Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 8 Feb 2021 17:08:45 +0800
-From:   Yanan Wang <wangyanan55@huawei.com>
-To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        "Andrew Jones" <drjones@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
-        Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH 1/2] KVM: selftests: Add a macro to get string of vm_mem_backing_src_type
-Date:   Mon, 8 Feb 2021 17:08:40 +0800
-Message-ID: <20210208090841.333724-2-wangyanan55@huawei.com>
-X-Mailer: git-send-email 2.8.4.windows.1
-In-Reply-To: <20210208090841.333724-1-wangyanan55@huawei.com>
-References: <20210208090841.333724-1-wangyanan55@huawei.com>
+        Mon, 8 Feb 2021 04:29:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612776456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dgUd+2G1OxW5XPBZGlc3z4gNM80hK8Gpg3YPMpWSREs=;
+        b=WOE/LplJn/hGVf7nGElyOmmsYJpBXmZQ1+/wrQ8XGnxccHhjkbtP5DOQKV7kWZKXvrtm9S
+        bB20+qMKqE3o1Doz+gyjxINBHi0qWGLc0Bdoh6s/f8AzpxR+tJq8X7z/C+CoNJ2duYGJVK
+        Hjdy7zRduKgEjcqYndWddzyU9Z8OY/A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-304-wOalByIhNImBr91I-hxz5g-1; Mon, 08 Feb 2021 04:27:32 -0500
+X-MC-Unique: wOalByIhNImBr91I-hxz5g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EAF41934101;
+        Mon,  8 Feb 2021 09:27:27 +0000 (UTC)
+Received: from [10.36.113.240] (ovpn-113-240.ams2.redhat.com [10.36.113.240])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 80D2660C05;
+        Mon,  8 Feb 2021 09:27:19 +0000 (UTC)
+Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to
+ create "secret" memory areas
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+References: <20210208084920.2884-1-rppt@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat GmbH
+Message-ID: <4996348d-5710-d77d-bb14-d84e370b4a5c@redhat.com>
+Date:   Mon, 8 Feb 2021 10:27:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.187.128]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20210208084920.2884-1-rppt@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a macro to get string of the backing source memory type, so that
-application can add choices for source types in the help() function,
-and users can specify which type to use for testing.
+On 08.02.21 09:49, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> Hi,
+> 
+> @Andrew, this is based on v5.11-rc5-mmotm-2021-01-27-23-30, with secretmem
+> and related patches dropped from there, I can rebase whatever way you
+> prefer.
+> 
+> This is an implementation of "secret" mappings backed by a file descriptor.
+> 
+> The file descriptor backing secret memory mappings is created using a
+> dedicated memfd_secret system call The desired protection mode for the
+> memory is configured using flags parameter of the system call. The mmap()
+> of the file descriptor created with memfd_secret() will create a "secret"
+> memory mapping. The pages in that mapping will be marked as not present in
+> the direct map and will be present only in the page table of the owning mm.
+> 
+> Although normally Linux userspace mappings are protected from other users,
+> such secret mappings are useful for environments where a hostile tenant is
+> trying to trick the kernel into giving them access to other tenants
+> mappings.
+> 
+> Additionally, in the future the secret mappings may be used as a mean to
+> protect guest memory in a virtual machine host.
+> 
+> For demonstration of secret memory usage we've created a userspace library
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/jejb/secret-memory-preloader.git
+> 
+> that does two things: the first is act as a preloader for openssl to
+> redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+> keys get automatically protected this way and the other thing it does is
+> expose the API to the user who needs it. We anticipate that a lot of the
+> use cases would be like the openssl one: many toolkits that deal with
+> secret keys already have special handling for the memory to try to give
+> them greater protection, so this would simply be pluggable into the
+> toolkits without any need for user application modification.
+> 
+> Hiding secret memory mappings behind an anonymous file allows usage of
+> the page cache for tracking pages allocated for the "secret" mappings as
+> well as using address_space_operations for e.g. page migration callbacks.
+> 
+> The anonymous file may be also used implicitly, like hugetlb files, to
+> implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+> ABIs in the future.
+> 
+> Removing of the pages from the direct map may cause its fragmentation on
+> architectures that use large pages to map the physical memory which affects
+> the system performance. However, the original Kconfig text for
+> CONFIG_DIRECT_GBPAGES said that gigabyte pages in the direct map "... can
+> improve the kernel's performance a tiny bit ..." (commit 00d1c5e05736
+> ("x86: add gbpages switches")) and the recent report [1] showed that "...
+> although 1G mappings are a good default choice, there is no compelling
+> evidence that it must be the only choice". Hence, it is sufficient to have
+> secretmem disabled by default with the ability of a system administrator to
+> enable it at boot time.
+> 
+> In addition, there is also a long term goal to improve management of the
+> direct map.
 
-Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
----
- tools/testing/selftests/kvm/include/kvm_util.h | 3 +++
- tools/testing/selftests/kvm/lib/kvm_util.c     | 8 ++++++++
- 2 files changed, 11 insertions(+)
+Some questions (and request to document the answers) as we now allow to 
+have unmovable allocations all over the place and I don't see a single 
+comment regarding that in the cover letter:
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 5cbb861525ed..f5fc29dc9ee6 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -69,7 +69,9 @@ enum vm_guest_mode {
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
- 
- #define vm_guest_mode_string(m) vm_guest_mode_string[m]
-+#define vm_mem_backing_src_type_string(s) vm_mem_backing_src_type_string[s]
- extern const char * const vm_guest_mode_string[];
-+extern const char * const vm_mem_backing_src_type_string[];
- 
- struct vm_guest_mode_params {
- 	unsigned int pa_bits;
-@@ -83,6 +85,7 @@ enum vm_mem_backing_src_type {
- 	VM_MEM_SRC_ANONYMOUS,
- 	VM_MEM_SRC_ANONYMOUS_THP,
- 	VM_MEM_SRC_ANONYMOUS_HUGETLB,
-+	NUM_VM_BACKING_SRC_TYPES,
- };
- 
- int kvm_check_cap(long cap);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index fa5a90e6c6f0..a9b651c7f866 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -165,6 +165,14 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
- _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
- 	       "Missing new mode params?");
- 
-+const char * const vm_mem_backing_src_type_string[] = {
-+	"VM_MEM_SRC_ANONYMOUS        ",
-+	"VM_MEM_SRC_ANONYMOUS_THP    ",
-+	"VM_MEM_SRC_ANONYMOUS_HUGETLB",
-+};
-+_Static_assert(sizeof(vm_mem_backing_src_type_string)/sizeof(char *) == NUM_VM_BACKING_SRC_TYPES,
-+	       "Missing new source type strings?");
-+
- /*
-  * VM Create
-  *
+1. How will the issue of plenty of unmovable allocations for user space 
+be tackled in the future?
+
+2. How has this issue been documented? E.g., interaction with 
+ZONE_MOVABLE and CMA, alloc_conig_range()/alloc_contig_pages?.
+
+3. How are the plans to support migration in the future and which 
+interface changes will be required? (Michal mentioned some good points 
+to make this configurable via the interface, we should plan ahead and 
+document)
+
+Thanks!
+
 -- 
-2.23.0
+Thanks,
+
+David / dhildenb
 
