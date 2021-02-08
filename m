@@ -2,373 +2,244 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B3B3C433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 03:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF4F8C433E6
+	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 08:52:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01B0C64E88
-	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 03:56:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F5BC64E3F
+	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 08:52:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbhBHD4S (ORCPT
+        id S230436AbhBHIwT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 7 Feb 2021 22:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhBHD4R (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 7 Feb 2021 22:56:17 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB11C06174A;
-        Sun,  7 Feb 2021 19:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=r5e0pP3lJ6oc8hBEATfesxmMHxx1NyuwyNkkdpPRZS0=; b=rpKYMsoFiCzLmEQ2Dvo4qBjVyl
-        t61Uuhp0KMj3ILsCvBeXtxoklLp7JJ2p7h6fkLvu2auv0bqoV9OnAoRK1DM74Z4vWvsLyW9c2SLwP
-        yL78Ap7DKAKUg0mtrx7ys2YbEXhuW/+C2sZ4kgbsMatwdGyXlsx2zL5kuTclcx9q4kT2pJhIOueK5
-        5lm5IGrupPAzuLcwXCNpWFZK/R5MRVZtJIZWssW5tA1DExmvMJ8VrjLCU43dGoVqD1WksAw9eVToj
-        KUxhs/ENkjJDhr6WtV7xdYt7/I2LK39hxC9RwMD1tmOZvUyGSz3jbeWZ8/RokMx6tcHNK4l1BOV6w
-        qpuezpeA==;
-Received: from [2601:1c0:6280:3f0::b879]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l8xeA-0005yg-37; Mon, 08 Feb 2021 03:55:34 +0000
-Subject: Re: [PATCH v3 1/7] seqnum_ops: Introduce Sequence Number Ops
-To:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net,
-        gregkh@linuxfoundation.org, peterz@infradead.org,
-        keescook@chromium.org, rafael@kernel.org, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de
-Cc:     devel@driverdev.osuosl.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <cover.1612314468.git.skhan@linuxfoundation.org>
- <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <8f64e963-e0d6-e9a2-41c3-206bed440cde@infradead.org>
-Date:   Sun, 7 Feb 2021 19:55:28 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+        Mon, 8 Feb 2021 03:52:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41896 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229891AbhBHIuS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Feb 2021 03:50:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5436264E40;
+        Mon,  8 Feb 2021 08:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612774176;
+        bh=wqI54+c/0wiSdDkhbqtVU15aSFrneEuHrQo30yJJfOA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CM/y7NyGxHGzTwxAfbGZvOt3f1Sm1SjTMAgOVRDrUs4b3iIiJDCrQuOV1qFvZS3AM
+         6iDUG999RVPytEdVqOOpI8W6KVDKB3ggGttBMuwtpglgfcTUGA18Q4RoWKsRhlh9gx
+         memwEr/F0Wysgs/7Xrzh4Gw+6yHcRJ/CDxcHF4h6I87fjESF4Piql+wTJj9lvJ81OL
+         qmUprkN0Mzh0V7pa6UFO6OA7apk/H3Kuv9REp4d21rI3F/+bw3fmizYPT6sJLaRZpz
+         /Q1/SRF9IVA0WQPPzq17mV5gJTM2zScX2S9ZDgxfWRF3/1OVMhwIOveN2bSaTKfOt9
+         nzWaHkXPNMgNQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org
+Subject: [PATCH v17 00/10] mm: introduce memfd_secret system call to create "secret" memory areas
+Date:   Mon,  8 Feb 2021 10:49:10 +0200
+Message-Id: <20210208084920.2884-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <23f6347a7bb9f902babe7351f71b23644035673d.1612314468.git.skhan@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi--
-Comments are inline.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-On 2/3/21 10:11 AM, Shuah Khan wrote:
-> Sequence Number api provides interfaces for unsigned atomic up counters.
-> 
-> There are a number of atomic_t usages in the kernel where atomic_t api
-> is used for counting sequence numbers and other statistical counters.
-> Several of these usages, convert atomic_read() and atomic_inc_return()
-> return values to unsigned. Introducing sequence number ops supports
-> these use-cases with a standard core-api.
-> 
-> Sequence Number ops provide interfaces to initialize, increment and get
-> the sequence number. These ops also check for overflow and log message to
-> indicate when overflow occurs.
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  Documentation/core-api/index.rst      |   1 +
->  Documentation/core-api/seqnum_ops.rst |  53 ++++++++++
->  MAINTAINERS                           |   7 ++
->  include/linux/seqnum_ops.h            | 129 +++++++++++++++++++++++++
->  lib/Kconfig                           |   9 ++
->  lib/Makefile                          |   1 +
->  lib/test_seqnum_ops.c                 | 133 ++++++++++++++++++++++++++
->  7 files changed, 333 insertions(+)
->  create mode 100644 Documentation/core-api/seqnum_ops.rst
->  create mode 100644 include/linux/seqnum_ops.h
->  create mode 100644 lib/test_seqnum_ops.c
+Hi,
 
+@Andrew, this is based on v5.11-rc5-mmotm-2021-01-27-23-30, with secretmem
+and related patches dropped from there, I can rebase whatever way you
+prefer.
 
-> diff --git a/Documentation/core-api/seqnum_ops.rst b/Documentation/core-api/seqnum_ops.rst
-> new file mode 100644
-> index 000000000000..ed4eba394799
-> --- /dev/null
-> +++ b/Documentation/core-api/seqnum_ops.rst
-> @@ -0,0 +1,53 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. include:: <isonum.txt>
-> +
-> +.. _seqnum_ops:
-> +
-> +==========================
-> +Sequence Number Operations
-> +==========================
-> +
-> +:Author: Shuah Khan
-> +:Copyright: |copy| 2021, The Linux Foundation
-> +:Copyright: |copy| 2021, Shuah Khan <skhan@linuxfoundation.org>
-> +
-> +Sequence Number api provides interfaces for unsigned up counters.
+This is an implementation of "secret" mappings backed by a file descriptor.
 
-                   API
+The file descriptor backing secret memory mappings is created using a
+dedicated memfd_secret system call The desired protection mode for the
+memory is configured using flags parameter of the system call. The mmap()
+of the file descriptor created with memfd_secret() will create a "secret"
+memory mapping. The pages in that mapping will be marked as not present in
+the direct map and will be present only in the page table of the owning mm.
 
-> +
-> +Sequence Number Ops
-> +===================
-> +
-> +seqnum32 and seqnum64 types support implementing unsigned up counters. ::
-> +
-> +        struct seqnum32 { u32 seqnum; };
-> +        struct seqnum64 { u64 seqnum; };
-> +
-> +Initializers
-> +------------
-> +
-> +Interfaces for initializing sequence numbers. ::
-> +
-> +        #define SEQNUM_INIT(i)    { .seqnum = i }
-> +        seqnum32_init(seqnum, val)
-> +        seqnum64_init(seqnum, val)
-> +
-> +Increment interface
-> +-------------------
-> +
-> +Increments sequence number and returns the new value. Checks for overflow
-> +conditions and logs message when overflow occurs. This check is intended
-> +to help catch cases where overflow could lead to problems. ::
-> +
-> +        seqnum32_inc(seqnum): Calls atomic_inc_return(seqnum).
-> +        seqnum64_inc(seqnum): Calls atomic64_inc_return(seqnum).
-> +
-> +Return/get value interface
-> +--------------------------
-> +
-> +Returns sequence number value. ::
-> +
-> +        seqnum32_get() - return seqnum value.
-> +        seqnum64_get() - return seqnum value.
-> +
-> +.. warning::
-> +        seqnum32 wraps around to INT_MIN when it overflows.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cc1e6a5ee6e6..f9fe1438a8cd 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16235,6 +16235,13 @@ S:	Maintained
->  F:	Documentation/fb/sm712fb.rst
->  F:	drivers/video/fbdev/sm712*
->  
-> +SEQNUM OPS
-> +M:	Shuah Khan <skhan@linuxfoundation.org>
-> +L:	linux-kernel@vger.kernel.org
-> +S:	Maintained
-> +F:	include/linux/seqnum_ops.h
-> +F:	lib/test_seqnum_ops.c
-> +
->  SIMPLE FIRMWARE INTERFACE (SFI)
->  S:	Obsolete
->  W:	http://simplefirmware.org/
-> diff --git a/include/linux/seqnum_ops.h b/include/linux/seqnum_ops.h
-> new file mode 100644
-> index 000000000000..e8d8481445d3
-> --- /dev/null
-> +++ b/include/linux/seqnum_ops.h
-> @@ -0,0 +1,129 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * seqnum_ops.h - Interfaces for unsigned atomic sequential up counters.
-> + *
-> + * Copyright (c) 2021 Shuah Khan <skhan@linuxfoundation.org>
-> + * Copyright (c) 2021 The Linux Foundation
-> + *
-> + * Sequence Number functions provide support for unsgined atomic up
+Although normally Linux userspace mappings are protected from other users,
+such secret mappings are useful for environments where a hostile tenant is
+trying to trick the kernel into giving them access to other tenants
+mappings.
 
-                                                    unsigned
+Additionally, in the future the secret mappings may be used as a mean to
+protect guest memory in a virtual machine host.
 
-> + * counters.
-> + *
-> + * The interface provides:
-> + * seqnumu32 & seqnumu64 functions:
-> + *	initialization
-> + *	increment and return
-> + *
-> + * seqnumu32 and seqnumu64 functions leverage/use atomic*_t ops to
-> + * implement support for unsigned atomic up counters.
-> + *
-> + * Reference and API guide:
-> + *	Documentation/core-api/seqnum_ops.rst for more information.
-> + */
-> +
-> +#ifndef __LINUX_SEQNUM_OPS_H
-> +#define __LINUX_SEQNUM_OPS_H
-> +
-> +#include <linux/atomic.h>
-> +
-> +/**
-> + * struct seqnum32 - Sequence number atomic counter
-> + * @seqnum: atomic_t
-> + *
-> + **/
-> +struct seqnum32 {
-> +	u32 seqnum;
-> +};
-> +
-> +#define SEQNUM_INIT(i)		{ .seqnum = i }
-> +
-> +/*
-> + * seqnum32_init() - initialize seqnum value
-> + * @seq: struct seqnum32 pointer
-> + *
-> + */
-> +static inline void seqnum32_init(struct seqnum32 *seq, u32 val)
-> +{
-> +	seq->seqnum = val;
-> +}
-> +
-> +/*
-> + * seqnum32_inc() - increment seqnum value and return the new value
-> + * @seq: struct seqnum32 pointer
-> + *
-> + * Return u32
+For demonstration of secret memory usage we've created a userspace library
 
-It would be good to convert that to kernel-doc notation.
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/secret-memory-preloader.git
 
-> + */
-> +static inline u32 seqnum32_inc(struct seqnum32 *seq)
-> +{
-> +	atomic_t val = ATOMIC_INIT(seq->seqnum);
-> +
-> +	seq->seqnum = (u32) atomic_inc_return(&val);
-> +	if (seq->seqnum >= UINT_MAX)
-> +		pr_info("Sequence Number overflow %u detected\n",
-> +			seq->seqnum);
-> +	return seq->seqnum;
-> +}
-> +
-> +/*
-> + * seqnum32_get() - get seqnum value
-> + * @seq: struct seqnum32 pointer
-> + *
-> + * Return u32
-> + */
-> +static inline u32 seqnum32_get(struct seqnum32 *seq)
-> +{
-> +	return seq->seqnum;
-> +}
-> +
-> +/*
-> + * struct seqnum64 - Sequential/Statistical atomic counter
-> + * @seq: atomic64_t
-> + *
-> + */
-> +struct seqnum64 {
-> +	u64 seqnum;
-> +};
-> +
-> +/* Add to a global include/vdso/limits.h and fix all other UINT64_MAX
-> + * duplicate defines?
-> + */
-> +#define SEQ_UINT64_MAX	((u64)(~((u64) 0)))	/* 0xFFFFFFFFFFFFFFFF */
-> +
-> +/*
-> + * seqnum64_init() - initialize seqnum value
-> + * @seq: struct seqnum64 pointer
-> + *
-> + */
+that does two things: the first is act as a preloader for openssl to
+redirect all the OPENSSL_malloc calls to secret memory meaning any secret
+keys get automatically protected this way and the other thing it does is
+expose the API to the user who needs it. We anticipate that a lot of the
+use cases would be like the openssl one: many toolkits that deal with
+secret keys already have special handling for the memory to try to give
+them greater protection, so this would simply be pluggable into the
+toolkits without any need for user application modification.
 
-and kernel-doc there also.
+Hiding secret memory mappings behind an anonymous file allows usage of
+the page cache for tracking pages allocated for the "secret" mappings as
+well as using address_space_operations for e.g. page migration callbacks.
 
-> +static inline void seqnum64_init(struct seqnum64 *seq, u64 val)
-> +{
-> +	seq->seqnum = val;
-> +}
-> +
-> +/*
-> + * seqnum64_inc() - increment seqnum value and return the new value
-> + * @seq: struct seqnum64 pointer
-> + *
-> + * Return u64
-> + */
-> +static inline u64 seqnum64_inc(struct seqnum64 *seq)
-> +{
-> +	atomic64_t val = ATOMIC_INIT(seq->seqnum);
-> +
-> +	seq->seqnum = (u64) atomic64_inc_return(&val);
-> +	if (seq->seqnum >= SEQ_UINT64_MAX)
-> +		pr_info("Sequence Number overflow %llu detected\n",
-> +			seq->seqnum);
-> +	return seq->seqnum;
-> +}
-> +
-> +/*
-> + * seqnum64_get() - get seqnum value
-> + * @seq: struct seqnum64 pointer
-> + *
-> + * Return u64
-> + */
-> +static inline u64 seqnum64_get(struct seqnum64 *seq)
-> +{
-> +	return (u64) seq->seqnum;
-> +}
-> +
-> +#endif /* __LINUX_SEQNUM_OPS_H */
+The anonymous file may be also used implicitly, like hugetlb files, to
+implement mmap(MAP_SECRET) and use the secret memory areas with "native" mm
+ABIs in the future.
 
+Removing of the pages from the direct map may cause its fragmentation on
+architectures that use large pages to map the physical memory which affects
+the system performance. However, the original Kconfig text for
+CONFIG_DIRECT_GBPAGES said that gigabyte pages in the direct map "... can
+improve the kernel's performance a tiny bit ..." (commit 00d1c5e05736
+("x86: add gbpages switches")) and the recent report [1] showed that "...
+although 1G mappings are a good default choice, there is no compelling
+evidence that it must be the only choice". Hence, it is sufficient to have
+secretmem disabled by default with the ability of a system administrator to
+enable it at boot time.
 
-> diff --git a/lib/test_seqnum_ops.c b/lib/test_seqnum_ops.c
-> new file mode 100644
-> index 000000000000..173278314f26
-> --- /dev/null
-> +++ b/lib/test_seqnum_ops.c
-> @@ -0,0 +1,133 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * test_seqnum_ops.c - Kernel module for testing Seqnum API
-> + *
-> + * Copyright (c) 2021 Shuah Khan <skhan@linuxfoundation.org>
-> + * Copyright (c) 2021 The Linux Foundation
-> + *
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/module.h>
-> +#include <linux/seqnum_ops.h>
-> +
->
-...
+In addition, there is also a long term goal to improve management of the
+direct map.
 
-> +static void test_seqnum64(void)
-> +{
-> +	u64 start_val = 0;
-> +	struct seqnum64 seq = SEQNUM_INIT(start_val);
-> +	u64 end_val;
-> +
-> +	end_val = seqnum64_inc(&seq);
-> +	test_seqnum64_result("Test increment",
-> +			     start_val, end_val, start_val+1);
-> +
-> +	/* Initialize sequence number to 0 */
-> +	seqnum64_init(&seq, start_val);
-> +	end_val = seqnum64_inc(&seq);
-> +
-> +	/* if seqnum642_init() works correctly end_val should be 1 */
+[1] https://lore.kernel.org/linux-mm/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com/
 
-	      seqnum64_init()
-AFAICT.
+v17:
+* Remove pool of large pages backing secretmem allocations, per Michal Hocko
+* Add secretmem pages to unevictable LRU, per Michal Hocko
+* Use GFP_HIGHUSER as secretmem mapping mask, per Michal Hocko
+* Make secretmem an opt-in feature that is disabled by default
+ 
+v16:
+* Fix memory leak intorduced in v15
+* Clean the data left from previous page user before handing the page to
+  the userspace
 
-> +	test_seqnum64_result("Test init", start_val, end_val, 1);
-> +	/* seqnum64_get() test for seqnum value == 1 */
-> +	start_val = end_val = seqnum64_get(&seq);
-> +	test_seqnum64_result("Test get", start_val, end_val, 1);
-> +}
-> +
+v15: https://lore.kernel.org/lkml/20210120180612.1058-1-rppt@kernel.org
+* Add riscv/Kconfig update to disable set_memory operations for nommu
+  builds (patch 3)
+* Update the code around add_to_page_cache() per Matthew's comments
+  (patches 6,7)
+* Add fixups for build/checkpatch errors discovered by CI systems
 
+v14: https://lore.kernel.org/lkml/20201203062949.5484-1-rppt@kernel.org
+* Finally s/mod_node_page_state/mod_lruvec_page_state/
+
+v13: https://lore.kernel.org/lkml/20201201074559.27742-1-rppt@kernel.org
+* Added Reviewed-by, thanks Catalin and David
+* s/mod_node_page_state/mod_lruvec_page_state/ as Shakeel suggested
+
+Older history:
+v12: https://lore.kernel.org/lkml/20201125092208.12544-1-rppt@kernel.org
+v11: https://lore.kernel.org/lkml/20201124092556.12009-1-rppt@kernel.org
+v10: https://lore.kernel.org/lkml/20201123095432.5860-1-rppt@kernel.org
+v9: https://lore.kernel.org/lkml/20201117162932.13649-1-rppt@kernel.org
+v8: https://lore.kernel.org/lkml/20201110151444.20662-1-rppt@kernel.org
+v7: https://lore.kernel.org/lkml/20201026083752.13267-1-rppt@kernel.org
+v6: https://lore.kernel.org/lkml/20200924132904.1391-1-rppt@kernel.org
+v5: https://lore.kernel.org/lkml/20200916073539.3552-1-rppt@kernel.org
+v4: https://lore.kernel.org/lkml/20200818141554.13945-1-rppt@kernel.org
+v3: https://lore.kernel.org/lkml/20200804095035.18778-1-rppt@kernel.org
+v2: https://lore.kernel.org/lkml/20200727162935.31714-1-rppt@kernel.org
+v1: https://lore.kernel.org/lkml/20200720092435.17469-1-rppt@kernel.org
+rfc-v2: https://lore.kernel.org/lkml/20200706172051.19465-1-rppt@kernel.org/
+rfc-v1: https://lore.kernel.org/lkml/20200130162340.GA14232@rapoport-lnx/
+rfc-v0: https://lore.kernel.org/lkml/1572171452-7958-1-git-send-email-rppt@kernel.org/
+
+Arnd Bergmann (1):
+  arm64: kfence: fix header inclusion
+
+Mike Rapoport (9):
+  mm: add definition of PMD_PAGE_ORDER
+  mmap: make mlock_future_check() global
+  riscv/Kconfig: make direct map manipulation options depend on MMU
+  set_memory: allow set_direct_map_*_noflush() for multiple pages
+  set_memory: allow querying whether set_direct_map_*() is actually enabled
+  mm: introduce memfd_secret system call to create "secret" memory areas
+  PM: hibernate: disable when there are active secretmem users
+  arch, mm: wire up memfd_secret system call where relevant
+  secretmem: test: add basic selftest for memfd_secret(2)
+
+ arch/arm64/include/asm/Kbuild             |   1 -
+ arch/arm64/include/asm/cacheflush.h       |   6 -
+ arch/arm64/include/asm/kfence.h           |   2 +-
+ arch/arm64/include/asm/set_memory.h       |  17 ++
+ arch/arm64/include/uapi/asm/unistd.h      |   1 +
+ arch/arm64/kernel/machine_kexec.c         |   1 +
+ arch/arm64/mm/mmu.c                       |   6 +-
+ arch/arm64/mm/pageattr.c                  |  23 +-
+ arch/riscv/Kconfig                        |   4 +-
+ arch/riscv/include/asm/set_memory.h       |   4 +-
+ arch/riscv/include/asm/unistd.h           |   1 +
+ arch/riscv/mm/pageattr.c                  |   8 +-
+ arch/x86/entry/syscalls/syscall_32.tbl    |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+ arch/x86/include/asm/set_memory.h         |   4 +-
+ arch/x86/mm/pat/set_memory.c              |   8 +-
+ fs/dax.c                                  |  11 +-
+ include/linux/pgtable.h                   |   3 +
+ include/linux/secretmem.h                 |  30 +++
+ include/linux/set_memory.h                |  16 +-
+ include/linux/syscalls.h                  |   1 +
+ include/uapi/asm-generic/unistd.h         |   6 +-
+ include/uapi/linux/magic.h                |   1 +
+ kernel/power/hibernate.c                  |   5 +-
+ kernel/power/snapshot.c                   |   4 +-
+ kernel/sys_ni.c                           |   2 +
+ mm/Kconfig                                |   3 +
+ mm/Makefile                               |   1 +
+ mm/gup.c                                  |  10 +
+ mm/internal.h                             |   3 +
+ mm/mlock.c                                |   3 +-
+ mm/mmap.c                                 |   5 +-
+ mm/secretmem.c                            | 261 +++++++++++++++++++
+ mm/vmalloc.c                              |   5 +-
+ scripts/checksyscalls.sh                  |   4 +
+ tools/testing/selftests/vm/.gitignore     |   1 +
+ tools/testing/selftests/vm/Makefile       |   3 +-
+ tools/testing/selftests/vm/memfd_secret.c | 296 ++++++++++++++++++++++
+ tools/testing/selftests/vm/run_vmtests    |  17 ++
+ 39 files changed, 726 insertions(+), 53 deletions(-)
+ create mode 100644 arch/arm64/include/asm/set_memory.h
+ create mode 100644 include/linux/secretmem.h
+ create mode 100644 mm/secretmem.c
+ create mode 100644 tools/testing/selftests/vm/memfd_secret.c
 
 -- 
-~Randy
+2.28.0
 
