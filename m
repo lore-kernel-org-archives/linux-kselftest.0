@@ -2,134 +2,121 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 825FBC433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 13:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A954C433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 14:05:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EED764E60
-	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 13:44:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50FA764E7C
+	for <linux-kselftest@archiver.kernel.org>; Mon,  8 Feb 2021 14:05:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbhBHNoR (ORCPT
+        id S231509AbhBHOFD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 8 Feb 2021 08:44:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58304 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231391AbhBHNm1 (ORCPT
+        Mon, 8 Feb 2021 09:05:03 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:9324 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232400AbhBHODQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Feb 2021 08:42:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612791660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nIUUbNNEsbNY0qQ2TGTcojBdZ5jjYwt4zGR/YnTj+ow=;
-        b=KjIR+1bFrSfGCuc4MjpjrVFYPVg6asVqPBW7yGJKosn77Zf5F3MwQDAt3lkIyCl52MDEwr
-        D1ZRt3+ftfMEaFrV/6Vc+/MSGvjcQZnyMyOM6cgoyDR6B+z4H/pvTodEOKeuQ9eG9LPJMX
-        83DfaqI0wJ8Ou94/Abc4knappknl6OM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-144-Ransb7rrNHyz0DdVU9VPKA-1; Mon, 08 Feb 2021 08:40:56 -0500
-X-MC-Unique: Ransb7rrNHyz0DdVU9VPKA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EA297107ACC7;
-        Mon,  8 Feb 2021 13:40:51 +0000 (UTC)
-Received: from [10.36.113.240] (ovpn-113-240.ams2.redhat.com [10.36.113.240])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A34BC60C5B;
-        Mon,  8 Feb 2021 13:40:43 +0000 (UTC)
-Subject: Re: [PATCH v17 08/10] PM: hibernate: disable when there are active
- secretmem users
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-References: <20210208084920.2884-1-rppt@kernel.org>
- <20210208084920.2884-9-rppt@kernel.org> <YCEP/bmqm0DsvCYN@dhcp22.suse.cz>
- <38c0cad4-ac55-28e4-81c6-4e0414f0620a@redhat.com>
- <YCEXwUYepeQvEWTf@dhcp22.suse.cz>
- <a488a0bb-def5-0249-99e2-4643787cef69@redhat.com>
- <YCEZAWOv63KYglJZ@dhcp22.suse.cz>
- <770690dc-634a-78dd-0772-3aba1a3beba8@redhat.com>
- <21f4e742-1aab-f8ba-f0e7-40faa6d6c0bb@redhat.com>
- <5db6ac46-d4e1-3c68-22a0-94f2ecde8801@redhat.com>
- <YCEr1JS8k/nDbcVR@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat GmbH
-Message-ID: <f822a203-f7ec-8b97-b88d-1bf6bffa93d8@redhat.com>
-Date:   Mon, 8 Feb 2021 14:40:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Mon, 8 Feb 2021 09:03:16 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 118Dv56D010374;
+        Mon, 8 Feb 2021 08:02:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=4y/KMCv5Ll+ZgNu/hBLzOZq3keYHvT4kV6J7Uxtt17E=;
+ b=PAfWsvLeasA48rPQULNCH6f1BenyHSGJbSHVqJd3cNCRB2RGh/ZrJF7uIPpHxwVccwi7
+ 4gmXuB9H/BirJBLlypiZSh9zT2HzGfTI6/6F6ssGqkNIfsOs+j74L5/6brsidnVhhdtp
+ HCd2LHimWJjn3ZFJZTpfQFJ+uWj3/uaWY6GsNldoQVlZ2Ya3DpmTBUuOLyl/NRZjbSfm
+ 3UvtoNje1Johe9FDCKNbLCBQ25aw+RhhN76ZUm4gS5URvoY2GGLU6nsyKL4FtdJjPFO5
+ jcjuEFQyOLnNw87fXaonIUV3WPeW7RIoZHJKuZudBJeHZQantkUBkAlFhlTSFDqE2xRW 1Q== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 36jdac99p4-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 08 Feb 2021 08:02:00 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Mon, 8 Feb 2021
+ 14:01:59 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1913.5 via Frontend
+ Transport; Mon, 8 Feb 2021 14:01:59 +0000
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.64.240])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B14AB11CC;
+        Mon,  8 Feb 2021 14:01:58 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
+        <sergey.senozhatsky@gmail.com>,
+        <andriy.shevchenko@linux.intel.com>, <linux@rasmusvillemoes.dk>,
+        <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v5 4/4] selftests: lib: Add wrapper script for test_scanf
+Date:   Mon, 8 Feb 2021 14:01:54 +0000
+Message-ID: <20210208140154.10964-4-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210208140154.10964-1-rf@opensource.cirrus.com>
+References: <20210208140154.10964-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <YCEr1JS8k/nDbcVR@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=925 phishscore=0
+ clxscore=1015 priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102080095
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08.02.21 13:17, Michal Hocko wrote:
-> On Mon 08-02-21 12:26:31, David Hildenbrand wrote:
-> [...]
->> My F33 system happily hibernates to disk, even with an application that
->> succeeded in din doing an mlockall().
->>
->> And it somewhat makes sense. Even my freshly-booted, idle F33 has
->>
->> $ cat /proc/meminfo  | grep lock
->> Mlocked:            4860 kB
->>
->> So, stopping to hibernate with mlocked memory would essentially prohibit any
->> modern Linux distro to hibernate ever.
-> 
-> My system seems to be completely fine without mlocked memory. It would
-> be interesting to see who mlocks memory on your system and check whether
-> the expectated mlock semantic really works for those. This should be
-> documented at least.
+Adds a wrapper shell script for the test_scanf module.
 
-I checked some other installations (Ubuntu, RHEL), and they also show no 
-sign of Mlock. My notebook (F33) and desktop (F33) both have mlocked 
-memory. Either related to F33 or due to some software (e.g., kerberos).
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ tools/testing/selftests/lib/Makefile | 2 +-
+ tools/testing/selftests/lib/config   | 1 +
+ tools/testing/selftests/lib/scanf.sh | 4 ++++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/lib/scanf.sh
 
+diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
+index a105f094676e..ee71fc99d5b5 100644
+--- a/tools/testing/selftests/lib/Makefile
++++ b/tools/testing/selftests/lib/Makefile
+@@ -4,6 +4,6 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
+ 
+-TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
++TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
+index b80ee3f6e265..776c8c42e78d 100644
+--- a/tools/testing/selftests/lib/config
++++ b/tools/testing/selftests/lib/config
+@@ -1,4 +1,5 @@
+ CONFIG_TEST_PRINTF=m
++CONFIG_TEST_SCANTF=m
+ CONFIG_TEST_BITMAP=m
+ CONFIG_PRIME_NUMBERS=m
+ CONFIG_TEST_STRSCPY=m
+diff --git a/tools/testing/selftests/lib/scanf.sh b/tools/testing/selftests/lib/scanf.sh
+new file mode 100755
+index 000000000000..b59b8ba561c3
+--- /dev/null
++++ b/tools/testing/selftests/lib/scanf.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Tests the scanf infrastructure using test_scanf kernel module.
++$(dirname $0)/../kselftest/module.sh "scanf" test_scanf
 -- 
-Thanks,
-
-David / dhildenb
+2.20.1
 
