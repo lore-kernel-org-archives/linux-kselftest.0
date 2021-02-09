@@ -2,121 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B8B9C433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 23:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD7BC433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 23:46:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC96064DEE
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 23:46:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBA2764E3E
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 23:46:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbhBIXqQ (ORCPT
+        id S234194AbhBIXqW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 9 Feb 2021 18:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        Tue, 9 Feb 2021 18:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbhBIWR2 (ORCPT
+        with ESMTP id S234199AbhBIWRy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 17:17:28 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB6AC0698E3
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:15:00 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id bg11so84865plb.16
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:15:00 -0800 (PST)
+        Tue, 9 Feb 2021 17:17:54 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46607C061788
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:14:57 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id m1so41991qvp.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:14:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=t77+PuCigeZOcF53sLtwu0Du9UKFrCGhrRKsmy3L6C4=;
-        b=d9ikACbu6qy1ulW0wSWsHA6FQSQ6KWZ9q7y0tI23lcp6zqywGVCwUy0PyUQBPNGOUn
-         CTStJYZAFnTmq0LaDsVYpUnGVtQBXFm5fYzBp+Ut7OGHBhjKhMbr6GWtlCpwWV4HNDMZ
-         CR7vd1Cf8gvgh1gnBNj2M+QG3tWnuECEnY+5dEp6r8T5piVNqLYdVC1pt7wJV0wV0BKM
-         8eFD2qcB347FBqOweh8LWCkLU3OJ3nR+Z5mn/eK3G/ay5NAQd91a9nd9i1AChe2Dw7mM
-         deGqu0MMXhbfdQHAeGmRbbhz2AZnODTeVU6uikVsKvI29/KwDXZJjH3Yg5IyCmZcAkLk
-         kcvw==
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=tHzagjGXNPuISlrYDgBoG4oBntJ3U4L6LA9+/1TvcMM=;
+        b=eCF1+XPVXmXXaI4fnLU1x7QL8R6qK2JNMWmlE2E62fRh1zTbhVtYHZj08JTzIqJ4PK
+         8iUfuF7ufpcCB7JhZSyh3JYJ8Djz95SyqrVAMqVWmIe0mz6ki+oSRh9ZxSBwUGPd4wOI
+         vzYq4ne15W5p0HA/9KS9h+YZF/J500SeX5+ulB2qPLksWvD2TyL5bl3zw1aFvyyWn2MS
+         3nRj4rhMIR/2JsmcbOKFxTemUEXojiox9b1ciw3AWuVRyBeXeYy2B+Lb99xZGooS5rzO
+         TwIlexBz0HelhQc60To56Q3eGlteuA6urOlfaBtWG+J5C10UWpCra+6nuFlarR7BKyDP
+         eB2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=t77+PuCigeZOcF53sLtwu0Du9UKFrCGhrRKsmy3L6C4=;
-        b=qvJrjPxQvPTbuLxMnfCgE84XNxBjHi/e+qSON7/+2kdvmM8bvQlvJrJPPVFJAt2Bk3
-         8hjSAqQR9Hz1+cQy5T8kRYG2LYfIOsEtV1gMTTwdwxSR/W6Vfy6jLef0/DyrxSU3ZPuG
-         Qt5InykqnceRS88NCQ3rwWci2a6rOZK6FlcxIT9eXzlwEdFEsXlTYyg91rN0BsSX//Ht
-         1qI028xjoxNIgJ2kNDr9vrlbpxj0L+bvI2OhxalOh/5pPXmwiJpKQ4YOkAr9gURFt2V6
-         IwdSfj5WmVCn1u7hkMACTQQKwXOG+VHHfVHDyM+zaPCVKU3Idr6htXpXYoz5byU071qa
-         pkAw==
-X-Gm-Message-State: AOAM531TFizmwut4Un+T3xiz+4ZHXSzYHzCeWxAVN4BVFCnWXb3xP7Zi
-        AHHItAd0WEpKWsX5pfe1aynpcXEXxX13NQ==
-X-Google-Smtp-Source: ABdhPJz6rbJFwUFn+s86ByXOsu1A/32Yea+7KK7JKMRSyX1h8XuZLwh6YV1us28bzRRXCk6ELNJKSF0ZkhSgOg==
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=tHzagjGXNPuISlrYDgBoG4oBntJ3U4L6LA9+/1TvcMM=;
+        b=BHQMnSf+v794E7ZXd1lA8pblRgaufbUwMj2AHk+CTPM/6imd+5KN2XJjtQICS8E6nq
+         0D8iBeVmIBJ37wVTmgrc9eFPDIoGqaUZsmijAm4DBW2x4iaXt5wmklDwXCk6GhhNH5k6
+         MAiI3fNslKKy6zV1u9i8ajw60TTzKgC0MXPVODaqA7xckTLWqlQTix76L9m4kFVFcj0q
+         3HSLpTB+W1HJtp4QqYgxSyuhKYdGurzNRXsw4YEOzGnBVYwR1i+llSjxBo2+DDJdKz7S
+         w6S8dmjC3nFKw/NDQwkOm+YYy0ebHHODyYivv/JB4Eh2DWkaY+9HUaRaGAhTbBlUcXQD
+         TQ2A==
+X-Gm-Message-State: AOAM531Lwv5nw+SlN49cIGby6KNOPFcijvu4veMDOu9fF2+E7wlaahec
+        6a3BGan2FbU4keK3867KM4ve7484UeRLIA==
+X-Google-Smtp-Source: ABdhPJxJ4VTOHMNM5P/K4n8751sRWqretvq2TSUKAFdhSNAerNSAqTaGPw0DXxQkdni7LFsqvrIJS9WrxYAu3Q==
 Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
 X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7dd9:967f:92f4:2aae])
- (user=dlatypov job=sendgmr) by 2002:a63:4084:: with SMTP id
- n126mr124475pga.80.1612908900146; Tue, 09 Feb 2021 14:15:00 -0800 (PST)
-Date:   Tue,  9 Feb 2021 14:14:43 -0800
-In-Reply-To: <20210209221443.78812-1-dlatypov@google.com>
-Message-Id: <20210209221443.78812-3-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:1ca:: with SMTP id
+ c10mr13380525qvt.44.1612908895933; Tue, 09 Feb 2021 14:14:55 -0800 (PST)
+Date:   Tue,  9 Feb 2021 14:14:41 -0800
+Message-Id: <20210209221443.78812-1-dlatypov@google.com>
 Mime-Version: 1.0
-References: <20210209221443.78812-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v3 2/2] kunit: ubsan integration
+Subject: [PATCH v3 0/2] kunit: fail tests on UBSAN errors
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com
 Cc:     davidgow@google.com, alan.maguire@oracle.com,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Uriel Guajardo <urielguajardo@google.com>,
         Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Uriel Guajardo <urielguajardo@google.com>
+v1 by Uriel is here: [1].
+Since it's been a while, I've dropped the Reviewed-By's.
 
-Integrates UBSAN into the KUnit testing framework. It fails KUnit tests
-whenever it reports undefined behavior.
+It depended on commit 83c4e7a0363b ("KUnit: KASAN Integration") which
+hadn't been merged yet, so that caused some kerfuffle with applying them
+previously and the series was reverted.
 
-When CONFIG_KUNIT=n, nothing is printed or even formatted, so this has
-no behavioral impact outside of tests.
+This revives the series but makes the kunit_fail_current_test() function
+take a format string and logs the file and line number of the failing
+code, addressing Alan Maguire's comments on the previous version.
 
-kunit_fail_current_test() effectively does a pr_err() as well, so
-there's some slight duplication, but it also ensures an error is
-recorded in the debugfs entry for the running KUnit test.
+As a result, the patch that makes UBSAN errors was tweaked slightly to
+include an error message.
 
-Print a shorter version of the message to make it less spammy.
+v2 -> v3:
+  Fix kunit_fail_current_test() so it works w/ CONFIG_KUNIT=m
+  s/_/__ on the helper func to match others in test.c
 
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- lib/ubsan.c | 3 +++
- 1 file changed, 3 insertions(+)
+[1] https://lore.kernel.org/linux-kselftest/20200806174326.3577537-1-urielguajardojr@gmail.com/
 
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index bec38c64d6a6..1ec7d6f1fe63 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -14,6 +14,7 @@
- #include <linux/types.h>
- #include <linux/sched.h>
- #include <linux/uaccess.h>
-+#include <kunit/test-bug.h>
- 
- #include "ubsan.h"
- 
-@@ -141,6 +142,8 @@ static void ubsan_prologue(struct source_location *loc, const char *reason)
- 		"========================================\n");
- 	pr_err("UBSAN: %s in %s:%d:%d\n", reason, loc->file_name,
- 		loc->line & LINE_MASK, loc->column & COLUMN_MASK);
-+
-+	kunit_fail_current_test("%s in %s", reason, loc->file_name);
- }
- 
- static void ubsan_epilogue(void)
+Uriel Guajardo (2):
+  kunit: support failure from dynamic analysis tools
+  kunit: ubsan integration
+
+ include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+ lib/kunit/test.c         | 37 +++++++++++++++++++++++++++++++++----
+ lib/ubsan.c              |  3 +++
+ 3 files changed, 66 insertions(+), 4 deletions(-)
+ create mode 100644 include/kunit/test-bug.h
+
+
+base-commit: 1e0d27fce010b0a4a9e595506b6ede75934c31be
 -- 
 2.30.0.478.g8a0d178c01-goog
 
