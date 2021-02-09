@@ -2,129 +2,270 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BA9CC433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 21:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8485C433DB
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 22:24:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D0E264E8A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 21:22:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 896DE64E6B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 22:24:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbhBIVV1 (ORCPT
+        id S233509AbhBIWYC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 9 Feb 2021 16:21:27 -0500
-Received: from mx2.suse.de ([195.135.220.15]:47834 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233733AbhBIUqB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 15:46:01 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1612901312; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=utBmzEHnMldk+xybu3FUHQ/4GijdaViYwt5S9/fMX5g=;
-        b=TjFv3w1m/0Glle7o/mpLcPWsTy958OLjFP0MF4y2grgkrogeIq5dCnnfB5BszcW5ggUnqY
-        LL4MV1a1lL2B5WOEu6FaOYZ3DET/TzX9b1n3q4/VP0Y/08QiHTyolRop/Pd6AqhLXBScSy
-        PBnAIDa+ir2IADhVPtKtqxwjkXo403U=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id AC40AADF0;
-        Tue,  9 Feb 2021 20:08:32 +0000 (UTC)
-Date:   Tue, 9 Feb 2021 21:08:31 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org
-Subject: Re: [PATCH v17 00/10] mm: introduce memfd_secret system call to
- create "secret" memory areas
-Message-ID: <YCLrv86O0ZoKhfN0@dhcp22.suse.cz>
-References: <20210208211326.GV242749@kernel.org>
- <1F6A73CF-158A-4261-AA6C-1F5C77F4F326@redhat.com>
- <YCJO8zLq8YkXGy8B@dhcp22.suse.cz>
- <662b5871-b461-0896-697f-5e903c23d7b9@redhat.com>
- <YCJbmR11ikrWKaU8@dhcp22.suse.cz>
- <c1e5e7b6-3360-ddc4-2ff5-0e79515ee23a@redhat.com>
- <YCKNMqu8/g0OofqU@dhcp22.suse.cz>
- <8cbfe2c3-cfc6-72e0-bab1-852f80e20684@redhat.com>
+        Tue, 9 Feb 2021 17:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233513AbhBIWJD (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 9 Feb 2021 17:09:03 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F504C08EC31
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:08:06 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id y15so4864ilj.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f0pHLlu/e9Ji08EtxhI+DoyRZvZ2qnwkgDOAZruINtU=;
+        b=pILTqTfPpv+v1vpw08F9CXsSgqLpVJi20yTHeD+DQ/+M+3iw3u3o644wc8NiOs2208
+         A3hi8Ec3q/nCg3Cqc1byayrLJ+g/5eqn9WxBqiqAw+moO99Dqwa4SkJk9+1aJeZSNAog
+         FJ1sQmWv93mJzMHCWpVa75MvuH0VohrEsLSWj7IhDXZQsQoDHI6uZcLfsK1RJ1rukds3
+         ZPbzP1k5by3ejqt1ecKjWZn9Xe8StmzdpMFkkiF2YkRwZS5gbJx2Jr2YSiKLrelhBR5W
+         ntahirvEVjqQBv6HYFyJYr1VTwEaDSY6yeGMPOKgeZyJZmjtWr/1EKPo0IZKpqrb1ktU
+         /XzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f0pHLlu/e9Ji08EtxhI+DoyRZvZ2qnwkgDOAZruINtU=;
+        b=Ny76Lem03WcEAkKyyZfDsn+BWAFQkwyWr/Kg18LFu2nGr6MbTs1RuVcd5oHGxxTqEm
+         /yMepmCms/3fi50WCkYnlXp85DJJQwcihJojVASerhmBYRFqi8jStE1ELQ9+xpVLz6iH
+         oADhMiK1UQZF3UHBhzD/usLfQIfPozwHBjHYNeNFI1WglQN8WKJ5sOhn/9ZhgUVn7loH
+         i5j/M9lJzn/dMS7HxaNo7t47ItWIlz9/0jVqNPjSFcXUheItIezx5kMGpLRCXzBeYTKf
+         LH60WHAl+m+2jCE0bA3daiduE5AXEKbnhefQAgwg++iH78LyeJPyHGp3miAjBkFMDQOS
+         3QJw==
+X-Gm-Message-State: AOAM530RPdPJq2h57+Ng36RDiFEgLxi9Bok41+d2O0hCKZIv6F/HWTZp
+        Tx2XhYMJJM2SIJ/dnC3y/nUhWN+zbhzXadsP6fLlZA==
+X-Google-Smtp-Source: ABdhPJx1Kip0arZ1nRiflMu1rj0oPZ1UXoscVOPm/qCxIiBdZCDKHLxsyL+vJm2sPpZevvBpcYwKguMHBOSfaT1Op3Y=
+X-Received: by 2002:a05:6e02:5c6:: with SMTP id l6mr152127ils.136.1612908485751;
+ Tue, 09 Feb 2021 14:08:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8cbfe2c3-cfc6-72e0-bab1-852f80e20684@redhat.com>
+References: <20210205235302.2022784-1-dlatypov@google.com> <20210205235302.2022784-2-dlatypov@google.com>
+ <alpine.LRH.2.23.451.2102091717001.1783@localhost>
+In-Reply-To: <alpine.LRH.2.23.451.2102091717001.1783@localhost>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 9 Feb 2021 14:07:53 -0800
+Message-ID: <CAGS_qxoRt+yibVgVBoMGp+GpVt9TSKuyyk08vfcSyQeTyAgN+A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kunit: support failure from dynamic analysis tools
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Uriel Guajardo <urielguajardo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 09-02-21 17:17:22, David Hildenbrand wrote:
-> On 09.02.21 14:25, Michal Hocko wrote:
-> > On Tue 09-02-21 11:23:35, David Hildenbrand wrote:
-> > [...]
-> > > I am constantly trying to fight for making more stuff MOVABLE instead of
-> > > going into the other direction (e.g., because it's easier to implement,
-> > > which feels like the wrong direction).
-> > > 
-> > > Maybe I am the only person that really cares about ZONE_MOVABLE these days
-> > > :) I can't stop such new stuff from popping up, so at least I want it to be
-> > > documented.
-> > 
-> > MOVABLE zone is certainly an important thing to keep working. And there
-> > is still quite a lot of work on the way. But as I've said this is more
-> > of a outlier than a norm. On the other hand movable zone is kinda hard
-> > requirement for a lot of application and it is to be expected that
-> > many features will be less than 100% compatible.  Some usecases even
-> > impossible. That's why I am arguing that we should have a central
-> > document where the movable zone is documented with all the potential
-> > problems we have encountered over time and explicitly state which
-> > features are fully/partially incompatible.
-> > 
-> 
-> I'll send a mail during the next weeks to gather current restrictions to
-> document them (and include my brain dump). We might see more excessive use
-> of ZONE_MOVABLE in the future and as history told us, of CMA as well. We
-> really should start documenting/caring.
+On Tue, Feb 9, 2021 at 9:26 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> On Fri, 5 Feb 2021, Daniel Latypov wrote:
+>
+> > From: Uriel Guajardo <urielguajardo@google.com>
+> >
+> > Add a kunit_fail_current_test() function to fail the currently running
+> > test, if any, with an error message.
+> >
+> > This is largely intended for dynamic analysis tools like UBSAN and for
+> > fakes.
+> > E.g. say I had a fake ops struct for testing and I wanted my `free`
+> > function to complain if it was called with an invalid argument, or
+> > caught a double-free. Most return void and have no normal means of
+> > signalling failure (e.g. super_operations, iommu_ops, etc.).
+> >
+> > Key points:
+> > * Always update current->kunit_test so anyone can use it.
+> >   * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it for
+> >   CONFIG_KASAN=y
+> >
+> > * Create a new header <kunit/test-bug.h> so non-test code doesn't have
+> > to include all of <kunit/test.h> (e.g. lib/ubsan.c)
+> >
+> > * Forward the file and line number to make it easier to track down
+> > failures
+> >
+>
+> Thanks for doing this!
+>
+> > * Declare it as a function for nice __printf() warnings about mismatched
+> > format strings even when KUnit is not enabled.
+> >
+>
+> One thing I _think_ this assumes is that KUnit is builtin;
+> don't we need an
 
-Excellent! Thanks a lot. I will do my best to help reviewing that.
+Ah, you're correct.
+Also going to rename it to have two _ to match other functions used in
+macros like __kunit_test_suites_init.
 
-> @Mike, it would be sufficient for me if one of your patches at least mention
-> the situation in the description like
-> 
-> "Please note that secretmem currently behaves much more like long-term GUP
-> instead of mlocked memory; secretmem is unmovable memory directly
-> consumed/controlled by user space. secretmem cannot be placed onto
-> ZONE_MOVABLE/CMA.
+I had been having some recent issues with getting QEMU to work on my
+machine so I hadn't tested it before.
+Somehow I've finally fixed it and can now say that it works w/
+CONFIG_KUNIT=m after making the change
 
-Sounds good to me.
+# modprobe kunit
+# modprobe kunit-example-test
+[   27.689840]     # Subtest: example
+[   27.689994]     1..1
+[   27.692337]     # example_simple_test: initializing
+[   27.692862]     # example_simple_test:
+lib/kunit/kunit-example-test.c:31: example failure message: 42
+[   27.693158]     not ok 1 - example_simple_test
+[   27.693654] not ok 1 - example
 
--- 
-Michal Hocko
-SUSE Labs
+
+
+>
+> EXPORT_SYMBOL_GPL(_kunit_fail_current_test);
+>
+> ?
+>
+> Without it, if an analysis tool (or indeed if KUnit) is built
+> as a module, it won't be possible to use this functionality.
+>
+> > Example output from kunit_fail_current_test("message"):
+> > [15:19:34] [FAILED] example_simple_test
+> > [15:19:34]     # example_simple_test: initializing
+> > [15:19:34]     # example_simple_test: lib/kunit/kunit-example-test.c:24: message
+> > [15:19:34]     not ok 1 - example_simple_test
+> >
+> > Co-developed-by: Daniel Latypov <dlatypov@google.com>
+> > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+> >  include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+> >  lib/kunit/test.c         | 36 ++++++++++++++++++++++++++++++++----
+> >  2 files changed, 62 insertions(+), 4 deletions(-)
+> >  create mode 100644 include/kunit/test-bug.h
+> >
+> > diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+> > new file mode 100644
+> > index 000000000000..4963ed52c2df
+> > --- /dev/null
+> > +++ b/include/kunit/test-bug.h
+> > @@ -0,0 +1,30 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * KUnit API allowing dynamic analysis tools to interact with KUnit tests
+> > + *
+> > + * Copyright (C) 2020, Google LLC.
+>
+> nit; might want to update copyright year.
+>
+> > + * Author: Uriel Guajardo <urielguajardo@google.com>
+> > + */
+> > +
+> > +#ifndef _KUNIT_TEST_BUG_H
+> > +#define _KUNIT_TEST_BUG_H
+> > +
+> > +#define kunit_fail_current_test(fmt, ...) \
+> > +     _kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+> > +
+> > +#if IS_ENABLED(CONFIG_KUNIT)
+> > +
+> > +extern __printf(3, 4) void _kunit_fail_current_test(const char *file, int line,
+> > +                                                 const char *fmt, ...);
+> > +
+> > +#else
+> > +
+> > +static __printf(3, 4) void _kunit_fail_current_test(const char *file, int line,
+> > +                                                 const char *fmt, ...)
+> > +{
+> > +}
+> > +
+> > +#endif
+> > +
+> > +
+> > +#endif /* _KUNIT_TEST_BUG_H */
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index ec9494e914ef..7b16aae0ccae 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -7,6 +7,7 @@
+> >   */
+> >
+> >  #include <kunit/test.h>
+> > +#include <kunit/test-bug.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/kref.h>
+> >  #include <linux/sched/debug.h>
+> > @@ -16,6 +17,37 @@
+> >  #include "string-stream.h"
+> >  #include "try-catch-impl.h"
+> >
+> > +/*
+> > + * Fail the current test and print an error message to the log.
+> > + */
+> > +void _kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
+> > +{
+> > +     va_list args;
+> > +     int len;
+> > +     char *buffer;
+> > +
+> > +     if (!current->kunit_test)
+> > +             return;
+> > +
+> > +     kunit_set_failure(current->kunit_test);
+> > +
+> > +     /* kunit_err() only accepts literals, so evaluate the args first. */
+> > +     va_start(args, fmt);
+> > +     len = vsnprintf(NULL, 0, fmt, args) + 1;
+> > +     va_end(args);
+> > +
+> > +     buffer = kunit_kmalloc(current->kunit_test, len, GFP_KERNEL);
+> > +     if (!buffer)
+> > +             return;
+> > +
+> > +     va_start(args, fmt);
+> > +     vsnprintf(buffer, len, fmt, args);
+> > +     va_end(args);
+> > +
+> > +     kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
+> > +     kunit_kfree(current->kunit_test, buffer);
+> > +}
+> > +
+> >  /*
+> >   * Append formatted message to log, size of which is limited to
+> >   * KUNIT_LOG_SIZE bytes (including null terminating byte).
+> > @@ -273,9 +305,7 @@ static void kunit_try_run_case(void *data)
+> >       struct kunit_suite *suite = ctx->suite;
+> >       struct kunit_case *test_case = ctx->test_case;
+> >
+> > -#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
+> >       current->kunit_test = test;
+> > -#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
+> >
+> >       /*
+> >        * kunit_run_case_internal may encounter a fatal error; if it does,
+> > @@ -624,9 +654,7 @@ void kunit_cleanup(struct kunit *test)
+> >               spin_unlock(&test->lock);
+> >               kunit_remove_resource(test, res);
+> >       }
+> > -#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
+> >       current->kunit_test = NULL;
+> > -#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
+> >  }
+> >  EXPORT_SYMBOL_GPL(kunit_cleanup);
+> >
+> > --
+> > 2.30.0.478.g8a0d178c01-goog
+> >
+> >
