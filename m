@@ -2,106 +2,126 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD7BC433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 23:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DEA3C433E6
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Feb 2021 00:38:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBA2764E3E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Feb 2021 23:46:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEC8864E53
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Feb 2021 00:38:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbhBIXqW (ORCPT
+        id S233691AbhBJAh2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 9 Feb 2021 18:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        Tue, 9 Feb 2021 19:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbhBIWRy (ORCPT
+        with ESMTP id S233764AbhBJAdx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Feb 2021 17:17:54 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46607C061788
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 14:14:57 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id m1so41991qvp.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 14:14:57 -0800 (PST)
+        Tue, 9 Feb 2021 19:33:53 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE623C061756
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Feb 2021 16:33:12 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id 8so234483plc.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Feb 2021 16:33:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=tHzagjGXNPuISlrYDgBoG4oBntJ3U4L6LA9+/1TvcMM=;
-        b=eCF1+XPVXmXXaI4fnLU1x7QL8R6qK2JNMWmlE2E62fRh1zTbhVtYHZj08JTzIqJ4PK
-         8iUfuF7ufpcCB7JhZSyh3JYJ8Djz95SyqrVAMqVWmIe0mz6ki+oSRh9ZxSBwUGPd4wOI
-         vzYq4ne15W5p0HA/9KS9h+YZF/J500SeX5+ulB2qPLksWvD2TyL5bl3zw1aFvyyWn2MS
-         3nRj4rhMIR/2JsmcbOKFxTemUEXojiox9b1ciw3AWuVRyBeXeYy2B+Lb99xZGooS5rzO
-         TwIlexBz0HelhQc60To56Q3eGlteuA6urOlfaBtWG+J5C10UWpCra+6nuFlarR7BKyDP
-         eB2w==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W9BJoRdCc8YZnOo7oaJ+mST3GsJkGFlQgGwy1YFljFo=;
+        b=QaMnQciGBp+PwMsVjqHJq1hNWlQ7kaL1APi3yZbWKY3k5Twk/UGPUmX7LfAqVmQ+bx
+         0j7SCOROogYatOy05lCNrI3Bx10ArTee6SMJFPXAlLXxqVlmDVLiW5eTpUGreId95J5E
+         Ng9orIM39lQ8Ml+G8VY8H8j7ACYZ5+Rvh1tMU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=tHzagjGXNPuISlrYDgBoG4oBntJ3U4L6LA9+/1TvcMM=;
-        b=BHQMnSf+v794E7ZXd1lA8pblRgaufbUwMj2AHk+CTPM/6imd+5KN2XJjtQICS8E6nq
-         0D8iBeVmIBJ37wVTmgrc9eFPDIoGqaUZsmijAm4DBW2x4iaXt5wmklDwXCk6GhhNH5k6
-         MAiI3fNslKKy6zV1u9i8ajw60TTzKgC0MXPVODaqA7xckTLWqlQTix76L9m4kFVFcj0q
-         3HSLpTB+W1HJtp4QqYgxSyuhKYdGurzNRXsw4YEOzGnBVYwR1i+llSjxBo2+DDJdKz7S
-         w6S8dmjC3nFKw/NDQwkOm+YYy0ebHHODyYivv/JB4Eh2DWkaY+9HUaRaGAhTbBlUcXQD
-         TQ2A==
-X-Gm-Message-State: AOAM531Lwv5nw+SlN49cIGby6KNOPFcijvu4veMDOu9fF2+E7wlaahec
-        6a3BGan2FbU4keK3867KM4ve7484UeRLIA==
-X-Google-Smtp-Source: ABdhPJxJ4VTOHMNM5P/K4n8751sRWqretvq2TSUKAFdhSNAerNSAqTaGPw0DXxQkdni7LFsqvrIJS9WrxYAu3Q==
-Sender: "dlatypov via sendgmr" <dlatypov@dlatypov.svl.corp.google.com>
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:7dd9:967f:92f4:2aae])
- (user=dlatypov job=sendgmr) by 2002:a05:6214:1ca:: with SMTP id
- c10mr13380525qvt.44.1612908895933; Tue, 09 Feb 2021 14:14:55 -0800 (PST)
-Date:   Tue,  9 Feb 2021 14:14:41 -0800
-Message-Id: <20210209221443.78812-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v3 0/2] kunit: fail tests on UBSAN errors
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com
-Cc:     davidgow@google.com, alan.maguire@oracle.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W9BJoRdCc8YZnOo7oaJ+mST3GsJkGFlQgGwy1YFljFo=;
+        b=USCfD+34adoRuynx1jl9XKjys22trhpPXPz09Qu7LIVgPtLSlMEkJEg7It7HFa0Opn
+         KO+L5n2NxfvBBM/xOHx5G2MXF7SbPUaQK4azhSsDLKOY4r00ImO8QjqAv3Er1bLBadG3
+         5fhv0tcSG4Xx6VT6Nag+CUBv6jQCjKue/B6/Q5blugKev4i7KfHf+K2P8s9z2WkZwpAn
+         dJ5h7yQz+MKnln0HE8BXb+LjHI+bB4Pdu10XPZEscKqPJ8BGTu6rtbtT1jNU7pMeN+qT
+         qw2mTSjOWL4h4eY5+bQuwNDs9oJ8rWqUD62HLFvITFG0H0CG7EUEYVZ5n7Ug0aJitImy
+         8tJg==
+X-Gm-Message-State: AOAM532jOEu7I6Awa0HB1xMPjC3DxbNAVULaDYrld0WE3Bo7efh+jdpH
+        QV0y5GU6WnfYp77leMLeX1IJyXAxF85/3g==
+X-Google-Smtp-Source: ABdhPJx6ORN//J1stbfWGHNujgSBkXvMha9uuYPOQCCAGGQdZIn3a45ciNO1XqWRaiA3FwTI7a00aQ==
+X-Received: by 2002:a17:90a:5403:: with SMTP id z3mr495324pjh.198.1612917192393;
+        Tue, 09 Feb 2021 16:33:12 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n142sm97479pfd.82.2021.02.09.16.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 16:33:11 -0800 (PST)
+Date:   Tue, 9 Feb 2021 16:33:10 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Seth Forshee <seth.forshee@canonical.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/seccomp: Accept any valid fd in
+ user_notification_addfd
+Message-ID: <202102091632.D5E0100A@keescook>
+References: <20210128161721.99150-1-seth.forshee@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210128161721.99150-1-seth.forshee@canonical.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-v1 by Uriel is here: [1].
-Since it's been a while, I've dropped the Reviewed-By's.
+On Thu, Jan 28, 2021 at 10:17:21AM -0600, Seth Forshee wrote:
+> This test expects fds to have specific values, which works fine
+> when the test is run standalone. However, the kselftest runner
+> consumes a couple of extra fds for redirection when running
+> tests, so the test fails when run via kselftest.
+> 
+> Change the test to pass on any valid fd number.
+> 
+> Signed-off-by: Seth Forshee <seth.forshee@canonical.com>
 
-It depended on commit 83c4e7a0363b ("KUnit: KASAN Integration") which
-hadn't been merged yet, so that caused some kerfuffle with applying them
-previously and the series was reverted.
+Thanks!
 
-This revives the series but makes the kunit_fail_current_test() function
-take a format string and logs the file and line number of the failing
-code, addressing Alan Maguire's comments on the previous version.
+Acked-by: Kees Cook <keescook@chromium.org>
 
-As a result, the patch that makes UBSAN errors was tweaked slightly to
-include an error message.
+I'll snag this if Shuah doesn't first. :)
 
-v2 -> v3:
-  Fix kunit_fail_current_test() so it works w/ CONFIG_KUNIT=m
-  s/_/__ on the helper func to match others in test.c
+-Kees
 
-[1] https://lore.kernel.org/linux-kselftest/20200806174326.3577537-1-urielguajardojr@gmail.com/
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 26c72f2b61b1..9338df6f4ca8 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -4019,18 +4019,14 @@ TEST(user_notification_addfd)
+>  
+>  	/* Verify we can set an arbitrary remote fd */
+>  	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD, &addfd);
+> -	/*
+> -	 * The child has fds 0(stdin), 1(stdout), 2(stderr), 3(memfd),
+> -	 * 4(listener), so the newly allocated fd should be 5.
+> -	 */
+> -	EXPECT_EQ(fd, 5);
+> +	EXPECT_GE(fd, 0);
+>  	EXPECT_EQ(filecmp(getpid(), pid, memfd, fd), 0);
+>  
+>  	/* Verify we can set an arbitrary remote fd with large size */
+>  	memset(&big, 0x0, sizeof(big));
+>  	big.addfd = addfd;
+>  	fd = ioctl(listener, SECCOMP_IOCTL_NOTIF_ADDFD_BIG, &big);
+> -	EXPECT_EQ(fd, 6);
+> +	EXPECT_GE(fd, 0);
+>  
+>  	/* Verify we can set a specific remote fd */
+>  	addfd.newfd = 42;
+> -- 
+> 2.29.2
+> 
 
-Uriel Guajardo (2):
-  kunit: support failure from dynamic analysis tools
-  kunit: ubsan integration
-
- include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
- lib/kunit/test.c         | 37 +++++++++++++++++++++++++++++++++----
- lib/ubsan.c              |  3 +++
- 3 files changed, 66 insertions(+), 4 deletions(-)
- create mode 100644 include/kunit/test-bug.h
-
-
-base-commit: 1e0d27fce010b0a4a9e595506b6ede75934c31be
 -- 
-2.30.0.478.g8a0d178c01-goog
-
+Kees Cook
