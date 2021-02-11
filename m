@@ -2,279 +2,328 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09843C433E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 16:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1BCCC433DB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 20:59:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C856864EC1
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 16:33:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B95964E35
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 20:59:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbhBKQcZ (ORCPT
+        id S229544AbhBKU7Z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Feb 2021 11:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        Thu, 11 Feb 2021 15:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbhBKQaO (ORCPT
+        with ESMTP id S229553AbhBKU7X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Feb 2021 11:30:14 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913A9C061A31
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:50 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id f17so2424190qkl.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:50 -0800 (PST)
+        Thu, 11 Feb 2021 15:59:23 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB24C061574
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 12:58:43 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id m17so7167713ioy.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 12:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=Ca95TMJT4ShVUsz7drjIPNjU47Yiarr1AByU+uGNnGI=;
-        b=UAEKzaBmpdpGJPDTslvYbeTKzc+Cl8dL29/mrc5M0LH+FkS1LQVSlP395GOW8df8ix
-         2gIduDePZ+27EXjens+EPL19sNzgU0NEWkJ/yCGxwqbDfmy+MNlP+GlPPBOpYWWfqz7R
-         wErE9uN+IJZseCuQHcPMn0XO7fHkiFBOX2b63/yKYcZTy+dtK1HvQNXMYPuXjwqdXaGj
-         KOWDk/JyDst2nrRfkQl+aWd53zVTfts1PszjNSzUOR0MrFDxAry/IgjYczLYRsSJaHyB
-         dhiqh1/yntx7YtScWKu/MfEtoXp55u5RySm0PWUzwJiLMMPbXx17IkvQ8BjK5yiCNC0b
-         h4Qw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=elQYs+CRXIUFdDZB9CGMtfOprXMD+hm3lRs8yHOI0LA=;
+        b=okWuQ3wA1SEGnMAhPUpBmEag/3+8gkpbLKpSw3cSONQDEP5aFC3EA1MOtaaZ/THUyt
+         IjUZuniBofMCvYCpy9tCzsdHNmQ2rw1/9k9sZhsslkY8yDXwnBSxKF1nfE41WG0/zQIn
+         WIh5UHW+XyvpFwPkL/3YYnoV6N/oukqmrFStpIK4Ox2MH8A49WtEpI3FiEnYC+gxyL25
+         ADpYrB35N37xQKXfGywu3vGqObItzfthVNkIanlugZYXxMJsAbbnRdA5G+CNYtdOrJNT
+         HSf/VTBvTKp2As62gfR1z9qR6qicPg5dGDwSHvQnC7wYSuxz7blL6rsqRlOSxxj0e5bm
+         sG0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ca95TMJT4ShVUsz7drjIPNjU47Yiarr1AByU+uGNnGI=;
-        b=NDOkpBYnL+JxhBilnIZI5svVccxerjgDPq3ZOwF190BlNwDu8WoNWHmdhJw4d/vFLe
-         shbBVCwm5zH1NZvaxLXlfOgW+LM5NgIgvq1W06Ww/k3C+iYHmgrYze2MS5Q5eV0KbZHF
-         odavWT4SeeebD/z60hz57/oA/tvK7twlHQ+fkYiVF2nWVVqR5CRZ3LqwQSfO+BfXflQQ
-         lEPf4LPP2rh3gwk48BsNPn4eDegxgyjUQ9c9ovRHPG8221YGmvfANfzuK4Rhrw0teux6
-         a+ZOJWvaK72lPZzhtFEXBqcohnHxRwQfNLYXvASp6Zr80TOnwLklX8cjeAcz07yY7oME
-         nBoA==
-X-Gm-Message-State: AOAM531sdvt763CmRBpmZlc4YVCtj9teOCeTqBdyXT3W4Ry7smXq1fkB
-        cc6F0p//Grirk0Wmc1pGmMhHgQ==
-X-Google-Smtp-Source: ABdhPJwZIK99uXBH+5f+4PTL9HxSVwQu7nbwQqYusHIJqDDQiVz1HIHw9tUUE4Phj0PG69wIFw8dRw==
-X-Received: by 2002:a37:49c4:: with SMTP id w187mr8918667qka.444.1613060689820;
-        Thu, 11 Feb 2021 08:24:49 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id i23sm3831778qtq.42.2021.02.11.08.24.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 08:24:49 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
-        dan.j.williams@intel.com, sashal@kernel.org,
-        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
-        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
-        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
-        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
-        linux-doc@vger.kernel.org, ira.weiny@intel.com,
-        linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v10 13/14] selftests/vm: gup_test: fix test flag
-Date:   Thu, 11 Feb 2021 11:24:26 -0500
-Message-Id: <20210211162427.618913-14-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210211162427.618913-1-pasha.tatashin@soleen.com>
-References: <20210211162427.618913-1-pasha.tatashin@soleen.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=elQYs+CRXIUFdDZB9CGMtfOprXMD+hm3lRs8yHOI0LA=;
+        b=JB/suJKJrpBSjsdKNVOt68cQme7NOJWfnldpkIDF1mocqx6gCG88cJDgPEZT23Dvw3
+         /0WI/L3AhKs9amcebRHsrheIEFq+upX+IJV4NpXhEln1Dkts0D7JGTA/25BsBP/jn5LX
+         49CblpgvbW7xuIKoNMDj1vjF386SrqG4oNtyPDEp6CoGVbFZvnp+qn/InfrbHPezLft5
+         +D8VcN7urkiS4D0twO+Jn1KxCcAHNkOgMmjbCdKdLfrlSWv8wM253U6Q4RqPhwqrufTC
+         SkMfuzSeiIjpSgmvMmC3E7AVZbbo/WvTICeGmy8O/ZZj+4+2QXaUiIeeywDJMODORSgZ
+         3D9w==
+X-Gm-Message-State: AOAM533M3k6vzrJ8z/u4jdMxBfv7qozD1mupEtdW4QT7TZ5U2FdHVLJI
+        mJX1RAOpySfKhX83q2CCkKdSYAA6MjKoBnVuqrLO4w==
+X-Google-Smtp-Source: ABdhPJytUcaehM/1YkNREeQ0c+ExZL1f5iry/sBr3PPsfl+gsjnHXfn6v9eY7u4X+W18f+/4WkfYKgwat5ww2gBaPPw=
+X-Received: by 2002:a6b:f112:: with SMTP id e18mr6772051iog.57.1613077122916;
+ Thu, 11 Feb 2021 12:58:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210209221443.78812-1-dlatypov@google.com> <20210209221443.78812-2-dlatypov@google.com>
+ <CABVgOS=j=23J55jqT=84AhzvBxwZSR-POMOndZxAo1JCyvBLtA@mail.gmail.com> <alpine.LRH.2.23.451.2102111524210.10553@localhost>
+In-Reply-To: <alpine.LRH.2.23.451.2102111524210.10553@localhost>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 11 Feb 2021 12:58:31 -0800
+Message-ID: <CAGS_qxpwLbeYiFxL58aKbrU0sgjMq1HCnmoZMhFhXETRSrhV7g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] kunit: support failure from dynamic analysis tools
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Uriel Guajardo <urielguajardo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In gup_test both gup_flags and test_flags use the same flags field.
-This is broken.
+On Thu, Feb 11, 2021 at 7:40 AM Alan Maguire <alan.maguire@oracle.com> wrot=
+e:
+>
+> On Thu, 11 Feb 2021, David Gow wrote:
+>
+> > On Wed, Feb 10, 2021 at 6:14 AM Daniel Latypov <dlatypov@google.com> wr=
+ote:
+> > >
+> > > From: Uriel Guajardo <urielguajardo@google.com>
+> > >
+> > > Add a kunit_fail_current_test() function to fail the currently runnin=
+g
+> > > test, if any, with an error message.
+> > >
+> > > This is largely intended for dynamic analysis tools like UBSAN and fo=
+r
+> > > fakes.
+> > > E.g. say I had a fake ops struct for testing and I wanted my `free`
+> > > function to complain if it was called with an invalid argument, or
+> > > caught a double-free. Most return void and have no normal means of
+> > > signalling failure (e.g. super_operations, iommu_ops, etc.).
+> > >
+> > > Key points:
+> > > * Always update current->kunit_test so anyone can use it.
+> > >   * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it =
+for
+> > >   CONFIG_KASAN=3Dy
+> > >
+> > > * Create a new header <kunit/test-bug.h> so non-test code doesn't hav=
+e
+> > > to include all of <kunit/test.h> (e.g. lib/ubsan.c)
+> > >
+> > > * Forward the file and line number to make it easier to track down
+> > > failures
+> > >
+> > > * Declare the helper function for nice __printf() warnings about mism=
+atched
+> > > format strings even when KUnit is not enabled.
+> > >
+> > > Example output from kunit_fail_current_test("message"):
+> > > [15:19:34] [FAILED] example_simple_test
+> > > [15:19:34]     # example_simple_test: initializing
+> > > [15:19:34]     # example_simple_test: lib/kunit/kunit-example-test.c:=
+24: message
+> > > [15:19:34]     not ok 1 - example_simple_test
+> > >
+> > > Co-developed-by: Daniel Latypov <dlatypov@google.com>
+> > > Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> > >  include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
+> > >  lib/kunit/test.c         | 37 +++++++++++++++++++++++++++++++++----
+> > >  2 files changed, 63 insertions(+), 4 deletions(-)
+> > >  create mode 100644 include/kunit/test-bug.h
+> > >
+> > > diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+> > > new file mode 100644
+> > > index 000000000000..18b1034ec43a
+> > > --- /dev/null
+> > > +++ b/include/kunit/test-bug.h
+> > > @@ -0,0 +1,30 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +/*
+> > > + * KUnit API allowing dynamic analysis tools to interact with KUnit =
+tests
+> > > + *
+> > > + * Copyright (C) 2020, Google LLC.
+> > > + * Author: Uriel Guajardo <urielguajardo@google.com>
+> > > + */
+> > > +
+> > > +#ifndef _KUNIT_TEST_BUG_H
+> > > +#define _KUNIT_TEST_BUG_H
+> > > +
+> > > +#define kunit_fail_current_test(fmt, ...) \
+> > > +       __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARG=
+S__)
+> > > +
+> > > +#if IS_ENABLED(CONFIG_KUNIT)
+> >
+> > As the kernel test robot has pointed out on the second patch, this
+> > probably should be IS_BUILTIN(), otherwise this won't build if KUnit
+> > is a module, and the code calling it isn't.
+> >
+> > This does mean that things like UBSAN integration won't work if KUnit
+> > is a module, which is a shame.
+> >
+> > (It's worth noting that the KASAN integration worked around this by
+> > only calling inline functions, which would therefore be built-in even
+> > if the rest of KUnit was built as a module. I don't think it's quite
+> > as convenient to do that here, though.)
+> >
+>
+> Right, static inline'ing __kunit_fail_current_test() seems problematic
+> because it calls other exported functions; more below....
+>
+> > > +
+> > > +extern __printf(3, 4) void __kunit_fail_current_test(const char *fil=
+e, int line,
+> > > +                                                   const char *fmt, =
+...);
+> > > +
+> > > +#else
+> > > +
+> > > +static __printf(3, 4) void __kunit_fail_current_test(const char *fil=
+e, int line,
+> > > +                                                   const char *fmt, =
+...)
+> > > +{
+> > > +}
+> > > +
+> > > +#endif
+> > > +
+> > > +
+> > > +#endif /* _KUNIT_TEST_BUG_H */
+> > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > > index ec9494e914ef..5794059505cf 100644
+> > > --- a/lib/kunit/test.c
+> > > +++ b/lib/kunit/test.c
+> > > @@ -7,6 +7,7 @@
+> > >   */
+> > >
+> > >  #include <kunit/test.h>
+> > > +#include <kunit/test-bug.h>
+> > >  #include <linux/kernel.h>
+> > >  #include <linux/kref.h>
+> > >  #include <linux/sched/debug.h>
+> > > @@ -16,6 +17,38 @@
+> > >  #include "string-stream.h"
+> > >  #include "try-catch-impl.h"
+> > >
+> > > +/*
+> > > + * Fail the current test and print an error message to the log.
+> > > + */
+> > > +void __kunit_fail_current_test(const char *file, int line, const cha=
+r *fmt, ...)
+> > > +{
+> > > +       va_list args;
+> > > +       int len;
+> > > +       char *buffer;
+> > > +
+> > > +       if (!current->kunit_test)
+> > > +               return;
+> > > +
+> > > +       kunit_set_failure(current->kunit_test);
+> > > +
+>
+> currently kunit_set_failure() is static, but it could be inlined I
+> suspect.
+>
+> > > +       /* kunit_err() only accepts literals, so evaluate the args fi=
+rst. */
+> > > +       va_start(args, fmt);
+> > > +       len =3D vsnprintf(NULL, 0, fmt, args) + 1;
+> > > +       va_end(args);
+> > > +
+> > > +       buffer =3D kunit_kmalloc(current->kunit_test, len, GFP_KERNEL=
+);
+>
+> kunit_kmalloc()/kunit_kfree() are exported also, but we could probably
+> dodge allocation with a static buffer.  In fact since we end up
+> using an on-stack buffer for logging in kunit_log_append(), it might make
 
-Farther, in the actual gup_test.c all the passed gup_flags are erased and
-unconditionally replaced with FOLL_WRITE.
+Ah, right there's those as well.
 
-Which means that test_flags are ignored, and code like this always
-performs pin dump test:
+I originally had it on the stack, but the fact we use an on-stack
+buffer is why I switched over.
 
-155  			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
-156  				nr = pin_user_pages(addr, nr, gup->flags,
-157  						    pages + i, NULL);
-158  			else
-159  				nr = get_user_pages(addr, nr, gup->flags,
-160  						    pages + i, NULL);
-161  			break;
+I originally had it as a macro as you do now but liked the __printf()
+annotation to be closer* to the user's code and now down through
+several layers of macros (kunit_fail_current_test =3D> kunit_err =3D>
+kunit_printk =3D> kunit_log =3D> printk).
+And then having it on the stack and then calling into
+kunit_log_append() would (naively) use up 2 *KUNIT_LOG_SIZE stack
+space.
 
-Add a new test_flags field, to allow raw gup_flags to work.
-Add a new subcommand for DUMP_USER_PAGES_TEST to specify that pin test
-should be performed.
-Remove  unconditional overwriting of gup_flags via FOLL_WRITE. But,
-preserve the previous behaviour where FOLL_WRITE was the default flag,
-and add a new option "-W" to unset FOLL_WRITE.
+So only a minor concern, and so I like the simpler def using a macro
+given the messiness.
+(But we'd give up the __printf checking when compiling w/o KUnit,
+which is a bit sad)
 
-Rename flags with gup_flags.
+*E.g. if one misuses kunit_err(), we get this message which is
+understandable, but a bit more noisy than I'd prefer.
+../include/linux/kern_levels.h:5:18: warning: format =E2=80=98%d=E2=80=99 e=
+xpects
+argument of type =E2=80=98int=E2=80=99, but argument 3 has type =E2=80=98ch=
+ar *=E2=80=99 [-Wformat=3D]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+../include/kunit/test.h:621:10: note: in definition of macro =E2=80=98kunit=
+_log=E2=80=99
+  621 |   printk(lvl fmt, ##__VA_ARGS__);    \
+      |          ^~~
+../include/kunit/test.h:662:2: note: in expansion of macro =E2=80=98kunit_p=
+rintk=E2=80=99
+  662 |  kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+      |  ^~~~~~~~~~~~
+../include/linux/kern_levels.h:11:18: note: in expansion of macro =E2=80=98=
+KERN_SOH=E2=80=99
+   11 | #define KERN_ERR KERN_SOH "3" /* error conditions */
+      |                  ^~~~~~~~
+../include/kunit/test.h:662:15: note: in expansion of macro =E2=80=98KERN_E=
+RR=E2=80=99
+  662 |  kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
+      |               ^~~~~~~~
+../lib/kunit/kunit-example-test.c:30:2: note: in expansion of macro =E2=80=
+=98kunit_err=E2=80=99
+   30 |  kunit_err(test, "invalid format string: %d", "hi");
+      |  ^~~~~~~~~
 
-With the fix, dump works like this:
 
-root@virtme:/# gup_test  -c
----- page #0, starting from user virt addr: 0x7f8acb9e4000
-page:00000000d3d2ee27 refcount:2 mapcount:1 mapping:0000000000000000
-index:0x0 pfn:0x100bcf
-anon flags: 0x300000000080016(referenced|uptodate|lru|swapbacked)
-raw: 0300000000080016 ffffd0e204021608 ffffd0e208df2e88 ffff8ea04243ec61
-raw: 0000000000000000 0000000000000000 0000000200000000 0000000000000000
-page dumped because: gup_test: dump_pages() test
-DUMP_USER_PAGES_TEST: done
+> sense to #define __kunit_fail_current_test() instead, i.e.
+>
+> #define __kunit_fail_current_test(file, line, fmt, ...)         \
+>         do {                                                    \
+>                 kunit_set_failure(current->kunit_test);         \
+>                 kunit_err(current->kunit_test, "%s:%d: " fmt,   \
+>                           ##__VA_ARGS__);                       \
+>         } while (0)
+>
+> > > +       if (!buffer)
+> > > +               return;
+> > > +
+> > > +       va_start(args, fmt);
+> > > +       vsnprintf(buffer, len, fmt, args);
+> > > +       va_end(args);
+> > > +
+> > > +       kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffe=
+r);
+>
+> To get kunit_err() to work, we'd need to "static inline"
+> kunit_log_append().  It's not a trivial function, but on the plus
+> side it doesn't call any other exported kunit functions AFAICT.
+>
+> So while any of the above suggestions aren't intended to block
+> Daniel's work, does the above seem reasonable for a follow-up
+> series to get UBSAN working with module-based KUnit? Thanks!
 
-root@virtme:/# gup_test  -c -p
----- page #0, starting from user virt addr: 0x7fd19701b000
-page:00000000baed3c7d refcount:1025 mapcount:1 mapping:0000000000000000
-index:0x0 pfn:0x108008
-anon flags: 0x300000000080014(uptodate|lru|swapbacked)
-raw: 0300000000080014 ffffd0e204200188 ffffd0e205e09088 ffff8ea04243ee71
-raw: 0000000000000000 0000000000000000 0000040100000000 0000000000000000
-page dumped because: gup_test: dump_pages() test
-DUMP_USER_PAGES_TEST: done
+Ack, so sounds like we'd want to go ahead with making it only work w/
+CONFIG_KUNIT=3Dy?
 
-Refcount shows the difference between pin vs no-pin case.
-Also change type of nr from int to long, as it counts number of pages.
+I can simplify it down into a macro since the __printf() bit isn't too
+big of a deal.
+And then it'd let us only depend on kunit_log_append(), making it
+easier to get CONFIG_KUNIT=3Dm working.
 
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
----
- mm/gup_test.c                         | 23 ++++++++++-------------
- mm/gup_test.h                         |  3 ++-
- tools/testing/selftests/vm/gup_test.c | 15 +++++++++++----
- 3 files changed, 23 insertions(+), 18 deletions(-)
+Thanks both for digging into this!
+I saw KTR's email and was dreading having to dig into what the
+smallest needed change would be.
 
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index e3cf78e5873e..a6ed1c877679 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -94,7 +94,7 @@ static int __gup_test_ioctl(unsigned int cmd,
- {
- 	ktime_t start_time, end_time;
- 	unsigned long i, nr_pages, addr, next;
--	int nr;
-+	long nr;
- 	struct page **pages;
- 	int ret = 0;
- 	bool needs_mmap_lock =
-@@ -126,37 +126,34 @@ static int __gup_test_ioctl(unsigned int cmd,
- 			nr = (next - addr) / PAGE_SIZE;
- 		}
- 
--		/* Filter out most gup flags: only allow a tiny subset here: */
--		gup->flags &= FOLL_WRITE;
--
- 		switch (cmd) {
- 		case GUP_FAST_BENCHMARK:
--			nr = get_user_pages_fast(addr, nr, gup->flags,
-+			nr = get_user_pages_fast(addr, nr, gup->gup_flags,
- 						 pages + i);
- 			break;
- 		case GUP_BASIC_TEST:
--			nr = get_user_pages(addr, nr, gup->flags, pages + i,
-+			nr = get_user_pages(addr, nr, gup->gup_flags, pages + i,
- 					    NULL);
- 			break;
- 		case PIN_FAST_BENCHMARK:
--			nr = pin_user_pages_fast(addr, nr, gup->flags,
-+			nr = pin_user_pages_fast(addr, nr, gup->gup_flags,
- 						 pages + i);
- 			break;
- 		case PIN_BASIC_TEST:
--			nr = pin_user_pages(addr, nr, gup->flags, pages + i,
-+			nr = pin_user_pages(addr, nr, gup->gup_flags, pages + i,
- 					    NULL);
- 			break;
- 		case PIN_LONGTERM_BENCHMARK:
- 			nr = pin_user_pages(addr, nr,
--					    gup->flags | FOLL_LONGTERM,
-+					    gup->gup_flags | FOLL_LONGTERM,
- 					    pages + i, NULL);
- 			break;
- 		case DUMP_USER_PAGES_TEST:
--			if (gup->flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
--				nr = pin_user_pages(addr, nr, gup->flags,
-+			if (gup->test_flags & GUP_TEST_FLAG_DUMP_PAGES_USE_PIN)
-+				nr = pin_user_pages(addr, nr, gup->gup_flags,
- 						    pages + i, NULL);
- 			else
--				nr = get_user_pages(addr, nr, gup->flags,
-+				nr = get_user_pages(addr, nr, gup->gup_flags,
- 						    pages + i, NULL);
- 			break;
- 		default:
-@@ -187,7 +184,7 @@ static int __gup_test_ioctl(unsigned int cmd,
- 
- 	start_time = ktime_get();
- 
--	put_back_pages(cmd, pages, nr_pages, gup->flags);
-+	put_back_pages(cmd, pages, nr_pages, gup->test_flags);
- 
- 	end_time = ktime_get();
- 	gup->put_delta_usec = ktime_us_delta(end_time, start_time);
-diff --git a/mm/gup_test.h b/mm/gup_test.h
-index 90a6713d50eb..887ac1d5f5bc 100644
---- a/mm/gup_test.h
-+++ b/mm/gup_test.h
-@@ -21,7 +21,8 @@ struct gup_test {
- 	__u64 addr;
- 	__u64 size;
- 	__u32 nr_pages_per_call;
--	__u32 flags;
-+	__u32 gup_flags;
-+	__u32 test_flags;
- 	/*
- 	 * Each non-zero entry is the number of the page (1-based: first page is
- 	 * page 1, so that zero entries mean "do nothing") from the .addr base.
-diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-index 6c6336dd3b7f..943cc2608dc2 100644
---- a/tools/testing/selftests/vm/gup_test.c
-+++ b/tools/testing/selftests/vm/gup_test.c
-@@ -37,13 +37,13 @@ int main(int argc, char **argv)
- {
- 	struct gup_test gup = { 0 };
- 	unsigned long size = 128 * MB;
--	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 0;
-+	int i, fd, filed, opt, nr_pages = 1, thp = -1, repeats = 1, write = 1;
- 	unsigned long cmd = GUP_FAST_BENCHMARK;
- 	int flags = MAP_PRIVATE;
- 	char *file = "/dev/zero";
- 	char *p;
- 
--	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwSH")) != -1) {
-+	while ((opt = getopt(argc, argv, "m:r:n:F:f:abctTLUuwWSHp")) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			cmd = PIN_FAST_BENCHMARK;
-@@ -65,9 +65,13 @@ int main(int argc, char **argv)
- 			 */
- 			gup.which_pages[0] = 1;
- 			break;
-+		case 'p':
-+			/* works only with DUMP_USER_PAGES_TEST */
-+			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
-+			break;
- 		case 'F':
- 			/* strtol, so you can pass flags in hex form */
--			gup.flags = strtol(optarg, 0, 0);
-+			gup.gup_flags = strtol(optarg, 0, 0);
- 			break;
- 		case 'm':
- 			size = atoi(optarg) * MB;
-@@ -93,6 +97,9 @@ int main(int argc, char **argv)
- 		case 'w':
- 			write = 1;
- 			break;
-+		case 'W':
-+			write = 0;
-+			break;
- 		case 'f':
- 			file = optarg;
- 			break;
-@@ -140,7 +147,7 @@ int main(int argc, char **argv)
- 
- 	gup.nr_pages_per_call = nr_pages;
- 	if (write)
--		gup.flags |= FOLL_WRITE;
-+		gup.gup_flags |= FOLL_WRITE;
- 
- 	fd = open("/sys/kernel/debug/gup_test", O_RDWR);
- 	if (fd == -1) {
--- 
-2.25.1
-
+>
+> Alan
