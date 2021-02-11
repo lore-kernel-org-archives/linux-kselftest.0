@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B14EBC433DB
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 16:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FCECC4332D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 16:30:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7FECB64E95
+	by mail.kernel.org (Postfix) with ESMTP id F1B05601FD
 	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Feb 2021 16:30:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbhBKQaH (ORCPT
+        id S231838AbhBKQaK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Feb 2021 11:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
+        Thu, 11 Feb 2021 11:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbhBKQ1j (ORCPT
+        with ESMTP id S231913AbhBKQ1e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Feb 2021 11:27:39 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0198CC061A27
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:46 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id n28so4528168qtv.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:45 -0800 (PST)
+        Thu, 11 Feb 2021 11:27:34 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD2C0611C1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:42 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id ew18so2814764qvb.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Feb 2021 08:24:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=1y8YVJPfrTUIiLzCoLZfzLsb38Z+1ZQwX7g2yPLqtWE=;
-        b=BMZBD7oFx42XW1Uk/eIT+ek2yqmO2Unwl542eAk9EtAij5sF54ALjQ+UxIzV6fseqn
-         9KHoTP/AkRo/I9nUl/bckx72sPe9TsPWqhTnETapUUtoMI91yr0quP6I2g4jL9ElIwQI
-         qlZT7xirvXSEQOXrLZ8Glpk4Dt2Y6sD2Vo7KfitLgkUuUXK0jU1Rhp+kNsDhVjc8oyTr
-         UatAl1MdhuE/8fWIVU9acVXddvE7Yvu1P1HbnVuDAEZ3oRvBX5RSCzPGZplfL9STagRw
-         YC3vR6mguTAhApUEkxNsXoKWoXBOMgXWuvtlZNOD+cHwfHFMlDheS5Kyw2acUXRC6opX
-         Y2aA==
+        bh=vFtb7b0TLXam2e0aSgOj3DDhIq1OSPT7SAwjt/JgMSo=;
+        b=GuSLnZfP8wJEXP3BvQ+7AnENrHoKxCqomT/DlUEKn8z/43ED1ocN+7Rjb5Xy9YLI7D
+         PMvihL04KPGberT/PXD29PCzYnmUf7r2qu0nc4+uowMSJ9tRymgKYkn4hJqQO1LjJHij
+         lcIjjVMuc1ZyVKAHY2hfAcvmVkzLB0S1h9/6IMFOB1vegIEKnqRuwjIE3fQzUnFQgys9
+         xIYUEH37orhL0JpDvprzfPSs6GL9vUyWtVc0Sy7x7+6uFB88Bgr+W+xwf3Usp2TwVZ8l
+         FwOGshdMCz44xib67tlBOu0DEu0P3Nwd8uyzATPsdk4ZQtVN1B618BcB+SKvt4r6rqdQ
+         5qvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1y8YVJPfrTUIiLzCoLZfzLsb38Z+1ZQwX7g2yPLqtWE=;
-        b=W5eB/bH+3a2BORjqW53N+wNj3qYxIpb97t/0xpi4H1OPz4FWLhIgEaKMzO6MfZ03Qc
-         5h8c9YsxpnfVxW4092s7EWQbhJCRk+aChVcXuXBYBzhYZxDWV/7T9XrlEmJgzcryvpv1
-         /rHD78Xj6lTC7Kl6Uw+PYfG/lTU0noW9zOBJCAkQQ2vGLB+5g27th4LR1TFwFlfN5/oQ
-         JD2F39mZ7XvlLu4BGeQRFeOd4eTruVQWsu/wcl0wwhRTupWXAdN4ddnLMxX9tsaqbNSL
-         IEtVDtTK8+LJ6PxYZlG2FuAosTnuGbE5b8GYyUkjrm6CEgUmhOhatnwTt3pUEcvFXGxX
-         EqIQ==
-X-Gm-Message-State: AOAM5330uleiE+vACwXB5vX464++59oNZ6PJAFq5AiQbYf+RCT0fH+tU
-        O9T2iwCjTdopTW24Kmy0zgkPJg==
-X-Google-Smtp-Source: ABdhPJywW3R49OtwqHgSlgYoPuSklhjeeJfwnn3touZTrtXT9dvY7n8wJc0mz/T1j2uyZvz6BoDYwg==
-X-Received: by 2002:ac8:4d43:: with SMTP id x3mr8211573qtv.17.1613060685225;
-        Thu, 11 Feb 2021 08:24:45 -0800 (PST)
+        bh=vFtb7b0TLXam2e0aSgOj3DDhIq1OSPT7SAwjt/JgMSo=;
+        b=T/xg8omQAXQuTQI6E4p394RS39GrtIceP4J2Go/GmgFB2HO2mZuzRg3WjtKdeOhLXK
+         96ExfuNqqhkltq4a24XORW/8+bsenul4KI1BOjeDtAlMEJrtLyCLR9pr5xD4RjeSdkf9
+         yWSYX/rwEAibaPsJ9Po8keSuiR+oIBbqhUydCLZqvrRXdb5ZEI5hvjAVKsmM+ZjDB4CK
+         5R4ggOViz8hhkFhU6HQb+wHzB5dPM6rP9AGlHyD8XEWeGlpdbyW+hIKld400y+9J67mS
+         ryloI28EBvooYZ52XU2GZxBlYU4XdbAcZEJv9YiYdPY/9C1b6L1Tbo70qudX4j2EYjNg
+         nzwA==
+X-Gm-Message-State: AOAM533U6fniDmfEKpfX8fmN6Jbv0WuJmsdJYgO4KY+17GjFhOLrcNox
+        kPuFTDYQaq9JjVDKIV58a4H14Q==
+X-Google-Smtp-Source: ABdhPJyDv3BizAlWiHVEhqxZDYR768wuEmVRtyBG373FDXh51pcNa96wloLfU8fidQTqpajQEDtbIQ==
+X-Received: by 2002:a0c:b66c:: with SMTP id q44mr8438487qvf.3.1613060682040;
+        Thu, 11 Feb 2021 08:24:42 -0800 (PST)
 Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id i23sm3831778qtq.42.2021.02.11.08.24.43
+        by smtp.gmail.com with ESMTPSA id i23sm3831778qtq.42.2021.02.11.08.24.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 08:24:44 -0800 (PST)
+        Thu, 11 Feb 2021 08:24:41 -0800 (PST)
 From:   Pavel Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
@@ -68,9 +68,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
         linux-doc@vger.kernel.org, ira.weiny@intel.com,
         linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v10 10/14] memory-hotplug.rst: add a note about ZONE_MOVABLE and page pinning
-Date:   Thu, 11 Feb 2021 11:24:23 -0500
-Message-Id: <20210211162427.618913-11-pasha.tatashin@soleen.com>
+Subject: [PATCH v10 08/14] mm/gup: do not migrate zero page
+Date:   Thu, 11 Feb 2021 11:24:21 -0500
+Message-Id: <20210211162427.618913-9-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210211162427.618913-1-pasha.tatashin@soleen.com>
 References: <20210211162427.618913-1-pasha.tatashin@soleen.com>
@@ -80,35 +80,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Document the special handling of page pinning when ZONE_MOVABLE present.
+On some platforms ZERO_PAGE(0) might end-up in a movable zone. Do not
+migrate zero page in gup during longterm pinning as migration of zero page
+is not allowed.
+
+For example, in x86 QEMU with 16G of memory and kernelcore=5G parameter, I
+see the following:
+
+Boot#1: zero_pfn  0x48a8d zero_pfn zone: ZONE_DMA32
+Boot#2: zero_pfn 0x20168d zero_pfn zone: ZONE_MOVABLE
+
+On x86, empty_zero_page is declared in .bss and depending on the loader
+may end up in different physical locations during boots.
+
+Also, move is_zero_pfn() my_zero_pfn() functions under CONFIG_MMU, because
+zero_pfn that they are using is declared in memory.c which is compiled
+with CONFIG_MMU.
 
 Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
 ---
- Documentation/admin-guide/mm/memory-hotplug.rst | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/mm.h      |  3 ++-
+ include/linux/mmzone.h  |  4 ++++
+ include/linux/pgtable.h | 12 ++++++++++++
+ 3 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
-index 5307f90738aa..05d51d2d8beb 100644
---- a/Documentation/admin-guide/mm/memory-hotplug.rst
-+++ b/Documentation/admin-guide/mm/memory-hotplug.rst
-@@ -357,6 +357,15 @@ creates ZONE_MOVABLE as following.
-    Unfortunately, there is no information to show which memory block belongs
-    to ZONE_MOVABLE. This is TBD.
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9a31b2298c1d..9ea4b9305ae5 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1131,7 +1131,8 @@ static inline bool is_zone_movable_page(const struct page *page)
+ #ifdef CONFIG_MIGRATION
+ static inline bool is_pinnable_page(struct page *page)
+ {
+-	return !is_zone_movable_page(page) && !is_migrate_cma_page(page);
++	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
++		is_zero_pfn(page_to_pfn(page));
+ }
+ #else
+ static inline bool is_pinnable_page(struct page *page)
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 47946cec7584..66132f8f051e 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -427,6 +427,10 @@ enum zone_type {
+ 	 *    techniques might use alloc_contig_range() to hide previously
+ 	 *    exposed pages from the buddy again (e.g., to implement some sort
+ 	 *    of memory unplug in virtio-mem).
++	 * 6. ZERO_PAGE(0), kernelcore/movablecore setups might create
++	 *    situations where ZERO_PAGE(0) which is allocated differently
++	 *    on different platforms may end up in a movable zone. ZERO_PAGE(0)
++	 *    cannot be migrated.
+ 	 *
+ 	 * In general, no unmovable allocations that degrade memory offlining
+ 	 * should end up in ZONE_MOVABLE. Allocators (like alloc_contig_range())
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index cdfc4e9f253e..9a218d7eed06 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1107,6 +1107,7 @@ extern void untrack_pfn(struct vm_area_struct *vma, unsigned long pfn,
+ extern void untrack_pfn_moved(struct vm_area_struct *vma);
+ #endif
  
-+.. note::
-+   Techniques that rely on long-term pinnings of memory (especially, RDMA and
-+   vfio) are fundamentally problematic with ZONE_MOVABLE and, therefore, memory
-+   hot remove. Pinned pages cannot reside on ZONE_MOVABLE, to guarantee that
-+   memory can still get hot removed - be aware that pinning can fail even if
-+   there is plenty of free memory in ZONE_MOVABLE. In addition, using
-+   ZONE_MOVABLE might make page pinning more expensive, because pages have to be
-+   migrated off that zone first.
++#ifdef CONFIG_MMU
+ #ifdef __HAVE_COLOR_ZERO_PAGE
+ static inline int is_zero_pfn(unsigned long pfn)
+ {
+@@ -1130,6 +1131,17 @@ static inline unsigned long my_zero_pfn(unsigned long addr)
+ 	return zero_pfn;
+ }
+ #endif
++#else
++static inline int is_zero_pfn(unsigned long pfn)
++{
++	return 0;
++}
 +
- .. _memory_hotplug_how_to_offline_memory:
++static inline unsigned long my_zero_pfn(unsigned long addr)
++{
++	return 0;
++}
++#endif /* CONFIG_MMU */
  
- How to offline memory
+ #ifdef CONFIG_MMU
+ 
 -- 
 2.25.1
 
