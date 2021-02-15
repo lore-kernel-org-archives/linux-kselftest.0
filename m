@@ -2,241 +2,316 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6D19C433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Feb 2021 16:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C28F8C433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Feb 2021 16:47:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8799E64DF4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Feb 2021 16:24:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 859B364E0F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Feb 2021 16:47:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbhBOQX5 (ORCPT
+        id S231966AbhBOQrV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Feb 2021 11:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbhBOQRR (ORCPT
+        Mon, 15 Feb 2021 11:47:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52324 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231136AbhBOQp1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Feb 2021 11:17:17 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC57C0611C2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 08:14:03 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id q85so6795582qke.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 08:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=9+I2YL20vIMEn1f1+NRTujbux5LnqLr6dmxmUUzNGH0=;
-        b=ijhTSwggny9zK7iGkfL/pEpINleDTxUH8QkHc3vNFgmZf7pNeYhLn1vpVAqDj82yTY
-         Pngejcnd3Qll93X/xq2NUk/YAGn6fwXnaqqpuReOBib62p8jCnjntqRjktqjRlg9OdLi
-         unkFxxOjiu21ne+04lgRMbkUZVsvT1Pv2d9+9t1WfCj8/ZkigNEmhKBYz8s97Y6ROz11
-         EhstXfzvFI+K8Vvt8BfARWVXSL7nAbxBA5RqRVMQ/P0Q0Yk2oEZVqWF6XP09pXSteh41
-         Y1499ZiokKAB6MfoYidyLgDpB+gBssFPE0zmQwXZxF0LjyaiRy3zJi013uMo0Zi/f/cM
-         2WDw==
+        Mon, 15 Feb 2021 11:45:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613407439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p32yrhYZRIgR/WiILityRbY8UJL08Kbup6w2UNC6/nE=;
+        b=CRKigEV9LOxTWbuu50VAJj5e0w4k2FMrw02kNPDUWoUy1IYkC4m5c9hNcmW3BRGhrpwWw9
+        dIeEzlX6geZd6uqvwugJQa9hpsZeo3rmbnt1CaKt3pnx5EqYYabq9dcw8XF/xNznGg/0ST
+        Aq6mhIH7EDBuAsEStHJeL2m5JRmNxjE=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-392-n5MpYhRXMn2Wazs1JS_-GA-1; Mon, 15 Feb 2021 11:43:58 -0500
+X-MC-Unique: n5MpYhRXMn2Wazs1JS_-GA-1
+Received: by mail-ej1-f70.google.com with SMTP id hx26so4775303ejc.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Feb 2021 08:43:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9+I2YL20vIMEn1f1+NRTujbux5LnqLr6dmxmUUzNGH0=;
-        b=VonHZyP4OKUKPfTQVHn3ZUrO5JebNPwid3uNxVFbWJzJhsiQC/aPyx0m/f6EGFx5VN
-         jhAUIFsG/+3UUXI+CaaFnJ1uNQJouwgy8Z2KVINQgGgDPj7p17SrnkohqdSwje3JOqU9
-         V0yQKfNU3//fQ+T0joMZv4C5Rum9y4nG6Yes6x/c8diKsnxaxtc6hhoc+CjmCPej2lo3
-         7P8TJSGAMBykDAudV9XPBNmuOGukrWpZLIpRMB6fl6Z30JTDlkmGDPX7P9O9Rl1+ckes
-         4LIF6EnWSAzRqC1bhsYnD2POud9lNmwiBav+oQJ8qLV5jU8FUdenCSrTUILWBCqoMCqw
-         DaLA==
-X-Gm-Message-State: AOAM531P+8NyZvnxzVt0r+uIiaJuP4xVXCYsrjN/lOoxa+gv3k5/ofsv
-        PlWx9d0OG/yHfP7rJOmZwXP9SQ==
-X-Google-Smtp-Source: ABdhPJxjYsrqF0x2VMI4WuuO6FsfHdYQnfEarAwQ8bLXxiaeNi4N4rKzMcr4vBsB0q8RoXJPfwP/Fg==
-X-Received: by 2002:a37:bd84:: with SMTP id n126mr15359454qkf.54.1613405642887;
-        Mon, 15 Feb 2021 08:14:02 -0800 (PST)
-Received: from localhost.localdomain (c-73-69-118-222.hsd1.nh.comcast.net. [73.69.118.222])
-        by smtp.gmail.com with ESMTPSA id u7sm10909213qta.75.2021.02.15.08.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 08:14:02 -0800 (PST)
-From:   Pavel Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, vbabka@suse.cz,
-        mhocko@suse.com, david@redhat.com, osalvador@suse.de,
-        dan.j.williams@intel.com, sashal@kernel.org,
-        tyhicks@linux.microsoft.com, iamjoonsoo.kim@lge.com,
-        mike.kravetz@oracle.com, rostedt@goodmis.org, mingo@redhat.com,
-        jgg@ziepe.ca, peterz@infradead.org, mgorman@suse.de,
-        willy@infradead.org, rientjes@google.com, jhubbard@nvidia.com,
-        linux-doc@vger.kernel.org, ira.weiny@intel.com,
-        linux-kselftest@vger.kernel.org, jmorris@namei.org
-Subject: [PATCH v11 07/14] mm: honor PF_MEMALLOC_PIN for all movable pages
-Date:   Mon, 15 Feb 2021 11:13:42 -0500
-Message-Id: <20210215161349.246722-8-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210215161349.246722-1-pasha.tatashin@soleen.com>
-References: <20210215161349.246722-1-pasha.tatashin@soleen.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=p32yrhYZRIgR/WiILityRbY8UJL08Kbup6w2UNC6/nE=;
+        b=AuRuc1BzrPqqdEDHamSo1OZlu9KP3/gR2Vi2oPn14P4c6GyXz5Zma7rk3x89J8jBJu
+         jKsVfv2Fryr56g8AoDn2AES0SZbT6//q/QDFD0K1kB3AxdF7SgbBGCMocRargOQ3LIBa
+         SflpkXUz4scmOkYyFCTkKoRBVwcD9RhFNvdWbjyGkQpIFAVJiT9tZh07X+f8Zy8163TN
+         GX6IhR4A+lT+gZ/isovvOH9WxpPO/6IcqU3aeD7fU/C4ZuXS+XV2W2sjgSDQetQdcJN5
+         +8JLlsffhFSAx2IflCYg9Ms1YMqSgE92clPkGgTbpZL2P3FGHPSP/oG5OuKXxiWttxPy
+         QbRQ==
+X-Gm-Message-State: AOAM533m44ZXk1l0DzThdnPQqdNgsI0bPo6jLi3o53mD7CFtt5Xxokng
+        xdABQ/oRJSJ/sObB4ir8szXjxHRiNBM5kYZ7cFq9ftb/Clo39zsuyn6E/QFFY5bS2bqCF2GGYu4
+        OhsVeH+TQjYXDUuqKjKiA1HvEkD0A
+X-Received: by 2002:a17:906:7e42:: with SMTP id z2mr16456537ejr.177.1613407437121;
+        Mon, 15 Feb 2021 08:43:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy0PMAkrdMEdn6cfe/LUrnCCNoBVh4opo9+Wo0JLvvGKilfm04bnEdmdjBW+wfCrSzmIA9meA==
+X-Received: by 2002:a17:906:7e42:: with SMTP id z2mr16456504ejr.177.1613407436909;
+        Mon, 15 Feb 2021 08:43:56 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id di27sm10429178edb.21.2021.02.15.08.43.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Feb 2021 08:43:56 -0800 (PST)
+Subject: Re: [PATCH] selftests: kvm: add hardware_disable test
+To:     Marc Orr <marcorr@google.com>, ikalvarado@google.com,
+        huah@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, brijesh.singh@amd.com,
+        Thomas.Lendacky@amd.com, jmattson@google.com
+References: <20210213001452.1719001-1-marcorr@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <c4bf9adb-e816-4532-4a8f-24242d31b55b@redhat.com>
+Date:   Mon, 15 Feb 2021 17:43:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210213001452.1719001-1-marcorr@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PF_MEMALLOC_PIN is only honored for CMA pages, extend
-this flag to work for any allocations from ZONE_MOVABLE by removing
-__GFP_MOVABLE from gfp_mask when this flag is passed in the current
-context.
+On 13/02/21 01:14, Marc Orr wrote:
+> From: Ignacio Alvarado <ikalvarado@google.com>
+> 
+> This test launches 512 VMs in serial and kills them after a random
+> amount of time.
+> 
+> The test was original written to exercise KVM user notifiers in
+> the context of1650b4ebc99d:
+> - KVM: Disable irq while unregistering user notifier
+> - https://lore.kernel.org/kvm/CACXrx53vkO=HKfwWwk+fVpvxcNjPrYmtDZ10qWxFvVX_PTGp3g@mail.gmail.com/
+> 
+> Recently, this test piqued my interest because it proved useful to
+> for AMD SNP in exercising the "in-use" pages, described in APM section
+> 15.36.12, "Running SNP-Active Virtual Machines".
+> 
+> To run the test, first compile:
+> $ make "CPPFLAGS=-static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive" \
+>      -C tools/testing/selftests/kvm/
+> 
+> Then, copy the test over to a machine with the kernel and run:
+> $ ./hardware_disable_test
 
-Add is_pinnable_page() to return true if page is in a pinnable page.
-A pinnable page is not in ZONE_MOVABLE and not of MIGRATE_CMA type.
+Queued, but these two paragraphs do not belong in an upstream commit 
+message.  Thanks!
 
-Signed-off-by: Pavel Tatashin <pasha.tatashin@soleen.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
- include/linux/mm.h       | 18 ++++++++++++++++++
- include/linux/sched/mm.h |  6 +++++-
- mm/hugetlb.c             |  2 +-
- mm/page_alloc.c          | 20 +++++++++-----------
- 4 files changed, 33 insertions(+), 13 deletions(-)
+Paolo
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index ecdf8a8cd6ae..7f56d8d62148 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1116,6 +1116,11 @@ static inline bool is_zone_device_page(const struct page *page)
- }
- #endif
- 
-+static inline bool is_zone_movable_page(const struct page *page)
-+{
-+	return page_zonenum(page) == ZONE_MOVABLE;
-+}
-+
- #ifdef CONFIG_DEV_PAGEMAP_OPS
- void free_devmap_managed_page(struct page *page);
- DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
-@@ -1487,6 +1492,19 @@ static inline unsigned long page_to_section(const struct page *page)
- }
- #endif
- 
-+/* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
-+#ifdef CONFIG_MIGRATION
-+static inline bool is_pinnable_page(struct page *page)
-+{
-+	return !is_zone_movable_page(page) && !is_migrate_cma_page(page);
-+}
-+#else
-+static inline bool is_pinnable_page(struct page *page)
-+{
-+	return true;
-+}
-+#endif
-+
- static inline void set_page_zone(struct page *page, enum zone_type zone)
- {
- 	page->flags &= ~(ZONES_MASK << ZONES_PGSHIFT);
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index 5f4dd3274734..a55277b0d475 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -150,12 +150,13 @@ static inline bool in_vfork(struct task_struct *tsk)
-  * Applies per-task gfp context to the given allocation flags.
-  * PF_MEMALLOC_NOIO implies GFP_NOIO
-  * PF_MEMALLOC_NOFS implies GFP_NOFS
-+ * PF_MEMALLOC_PIN  implies !GFP_MOVABLE
-  */
- static inline gfp_t current_gfp_context(gfp_t flags)
- {
- 	unsigned int pflags = READ_ONCE(current->flags);
- 
--	if (unlikely(pflags & (PF_MEMALLOC_NOIO | PF_MEMALLOC_NOFS))) {
-+	if (unlikely(pflags & (PF_MEMALLOC_NOIO | PF_MEMALLOC_NOFS | PF_MEMALLOC_PIN))) {
- 		/*
- 		 * NOIO implies both NOIO and NOFS and it is a weaker context
- 		 * so always make sure it makes precedence
-@@ -164,6 +165,9 @@ static inline gfp_t current_gfp_context(gfp_t flags)
- 			flags &= ~(__GFP_IO | __GFP_FS);
- 		else if (pflags & PF_MEMALLOC_NOFS)
- 			flags &= ~__GFP_FS;
-+
-+		if (pflags & PF_MEMALLOC_PIN)
-+			flags &= ~__GFP_MOVABLE;
- 	}
- 	return flags;
- }
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 861de87daf07..d1bcf5ed8df2 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1052,7 +1052,7 @@ static struct page *dequeue_huge_page_node_exact(struct hstate *h, int nid)
- 	bool pin = !!(current->flags & PF_MEMALLOC_PIN);
- 
- 	list_for_each_entry(page, &h->hugepage_freelists[nid], lru) {
--		if (pin && is_migrate_cma_page(page))
-+		if (pin && !is_pinnable_page(page))
- 			continue;
- 
- 		if (PageHWPoison(page))
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index f6058e8f3105..ed38a3ccb9eb 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3807,16 +3807,13 @@ alloc_flags_nofragment(struct zone *zone, gfp_t gfp_mask)
- 	return alloc_flags;
- }
- 
--static inline unsigned int current_alloc_flags(gfp_t gfp_mask,
--					unsigned int alloc_flags)
-+/* Must be called after current_gfp_context() which can change gfp_mask */
-+static inline unsigned int gfp_to_alloc_flags_cma(gfp_t gfp_mask,
-+						  unsigned int alloc_flags)
- {
- #ifdef CONFIG_CMA
--	unsigned int pflags = current->flags;
--
--	if (!(pflags & PF_MEMALLOC_PIN) &&
--	    gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
-+	if (gfp_migratetype(gfp_mask) == MIGRATE_MOVABLE)
- 		alloc_flags |= ALLOC_CMA;
--
- #endif
- 	return alloc_flags;
- }
-@@ -4472,7 +4469,7 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
- 	} else if (unlikely(rt_task(current)) && !in_interrupt())
- 		alloc_flags |= ALLOC_HARDER;
- 
--	alloc_flags = current_alloc_flags(gfp_mask, alloc_flags);
-+	alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, alloc_flags);
- 
- 	return alloc_flags;
- }
-@@ -4774,7 +4771,7 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
- 
- 	reserve_flags = __gfp_pfmemalloc_flags(gfp_mask);
- 	if (reserve_flags)
--		alloc_flags = current_alloc_flags(gfp_mask, reserve_flags);
-+		alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, reserve_flags);
- 
- 	/*
- 	 * Reset the nodemask and zonelist iterators if memory policies can be
-@@ -4943,7 +4940,7 @@ static inline bool prepare_alloc_pages(gfp_t gfp_mask, unsigned int order,
- 	if (should_fail_alloc_page(gfp_mask, order))
- 		return false;
- 
--	*alloc_flags = current_alloc_flags(gfp_mask, *alloc_flags);
-+	*alloc_flags = gfp_to_alloc_flags_cma(gfp_mask, *alloc_flags);
- 
- 	/* Dirty zone balancing only done in the fast path */
- 	ac->spread_dirty_pages = (gfp_mask & __GFP_WRITE);
-@@ -4985,7 +4982,8 @@ __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
- 	 * Apply scoped allocation constraints. This is mainly about GFP_NOFS
- 	 * resp. GFP_NOIO which has to be inherited for all allocation requests
- 	 * from a particular context which has been marked by
--	 * memalloc_no{fs,io}_{save,restore}.
-+	 * memalloc_no{fs,io}_{save,restore}. And PF_MEMALLOC_PIN which ensures
-+	 * movable zones are not used during allocation.
- 	 */
- 	gfp_mask = current_gfp_context(gfp_mask);
- 	alloc_mask = gfp_mask;
--- 
-2.25.1
+> Signed-off-by: Ignacio Alvarado <ikalvarado@google.com>
+> Signed-off-by: Marc Orr <marcorr@google.com>
+> ---
+>   tools/testing/selftests/kvm/.gitignore        |   1 +
+>   tools/testing/selftests/kvm/Makefile          |   1 +
+>   .../selftests/kvm/hardware_disable_test.c     | 165 ++++++++++++++++++
+>   3 files changed, 167 insertions(+)
+>   create mode 100644 tools/testing/selftests/kvm/hardware_disable_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index ce8f4ad39684..d631e111441a 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -28,6 +28,7 @@
+>   /demand_paging_test
+>   /dirty_log_test
+>   /dirty_log_perf_test
+> +/hardware_disable_test
+>   /kvm_create_max_vcpus
+>   /set_memory_region_test
+>   /steal_time
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index fe41c6a0fa67..c1c403d878f6 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -62,6 +62,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
+>   TEST_GEN_PROGS_x86_64 += demand_paging_test
+>   TEST_GEN_PROGS_x86_64 += dirty_log_test
+>   TEST_GEN_PROGS_x86_64 += dirty_log_perf_test
+> +TEST_GEN_PROGS_x86_64 += hardware_disable_test
+>   TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
+>   TEST_GEN_PROGS_x86_64 += set_memory_region_test
+>   TEST_GEN_PROGS_x86_64 += steal_time
+> diff --git a/tools/testing/selftests/kvm/hardware_disable_test.c b/tools/testing/selftests/kvm/hardware_disable_test.c
+> new file mode 100644
+> index 000000000000..2f2eeb8a1d86
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/hardware_disable_test.c
+> @@ -0,0 +1,165 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * This test is intended to reproduce a crash that happens when
+> + * kvm_arch_hardware_disable is called and it attempts to unregister the user
+> + * return notifiers.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +
+> +#include <fcntl.h>
+> +#include <pthread.h>
+> +#include <semaphore.h>
+> +#include <stdint.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <sys/wait.h>
+> +
+> +#include <test_util.h>
+> +
+> +#include "kvm_util.h"
+> +
+> +#define VCPU_NUM 4
+> +#define SLEEPING_THREAD_NUM (1 << 4)
+> +#define FORK_NUM (1ULL << 9)
+> +#define DELAY_US_MAX 2000
+> +#define GUEST_CODE_PIO_PORT 4
+> +
+> +sem_t *sem;
+> +
+> +/* Arguments for the pthreads */
+> +struct payload {
+> +	struct kvm_vm *vm;
+> +	uint32_t index;
+> +};
+> +
+> +static void guest_code(void)
+> +{
+> +	for (;;)
+> +		;  /* Some busy work */
+> +	printf("Should not be reached.\n");
+> +}
+> +
+> +static void *run_vcpu(void *arg)
+> +{
+> +	struct payload *payload = (struct payload *)arg;
+> +	struct kvm_run *state = vcpu_state(payload->vm, payload->index);
+> +
+> +	vcpu_run(payload->vm, payload->index);
+> +
+> +	TEST_ASSERT(false, "%s: exited with reason %d: %s\n",
+> +		    __func__, state->exit_reason,
+> +		    exit_reason_str(state->exit_reason));
+> +	pthread_exit(NULL);
+> +}
+> +
+> +static void *sleeping_thread(void *arg)
+> +{
+> +	int fd;
+> +
+> +	while (true) {
+> +		fd = open("/dev/null", O_RDWR);
+> +		close(fd);
+> +	}
+> +	TEST_ASSERT(false, "%s: exited\n", __func__);
+> +	pthread_exit(NULL);
+> +}
+> +
+> +static inline void check_create_thread(pthread_t *thread, pthread_attr_t *attr,
+> +				       void *(*f)(void *), void *arg)
+> +{
+> +	int r;
+> +
+> +	r = pthread_create(thread, attr, f, arg);
+> +	TEST_ASSERT(r == 0, "%s: failed to create thread", __func__);
+> +}
+> +
+> +static inline void check_set_affinity(pthread_t thread, cpu_set_t *cpu_set)
+> +{
+> +	int r;
+> +
+> +	r = pthread_setaffinity_np(thread, sizeof(cpu_set_t), cpu_set);
+> +	TEST_ASSERT(r == 0, "%s: failed set affinity", __func__);
+> +}
+> +
+> +static inline void check_join(pthread_t thread, void **retval)
+> +{
+> +	int r;
+> +
+> +	r = pthread_join(thread, retval);
+> +	TEST_ASSERT(r == 0, "%s: failed to join thread", __func__);
+> +}
+> +
+> +static void run_test(uint32_t run)
+> +{
+> +	struct kvm_vm *vm;
+> +	cpu_set_t cpu_set;
+> +	pthread_t threads[VCPU_NUM];
+> +	pthread_t throw_away;
+> +	struct payload payloads[VCPU_NUM];
+> +	void *b;
+> +	uint32_t i, j;
+> +
+> +	CPU_ZERO(&cpu_set);
+> +	for (i = 0; i < VCPU_NUM; i++)
+> +		CPU_SET(i, &cpu_set);
+> +
+> +	vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+> +	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
+> +	vm_create_irqchip(vm);
+> +
+> +	fprintf(stderr, "%s: [%d] start vcpus\n", __func__, run);
+> +	for (i = 0; i < VCPU_NUM; ++i) {
+> +		vm_vcpu_add_default(vm, i, guest_code);
+> +		payloads[i].vm = vm;
+> +		payloads[i].index = i;
+> +
+> +		check_create_thread(&threads[i], NULL, run_vcpu,
+> +				    (void *)&payloads[i]);
+> +		check_set_affinity(threads[i], &cpu_set);
+> +
+> +		for (j = 0; j < SLEEPING_THREAD_NUM; ++j) {
+> +			check_create_thread(&throw_away, NULL, sleeping_thread,
+> +					    (void *)NULL);
+> +			check_set_affinity(throw_away, &cpu_set);
+> +		}
+> +	}
+> +	fprintf(stderr, "%s: [%d] all threads launched\n", __func__, run);
+> +	sem_post(sem);
+> +	for (i = 0; i < VCPU_NUM; ++i)
+> +		check_join(threads[i], &b);
+> +	/* Should not be reached */
+> +	TEST_ASSERT(false, "%s: [%d] child escaped the ninja\n", __func__, run);
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	uint32_t i;
+> +	int s, r;
+> +	pid_t pid;
+> +
+> +	sem = sem_open("vm_sem", O_CREAT | O_EXCL, 0644, 0);
+> +	sem_unlink("vm_sem");
+> +
+> +	for (i = 0; i < FORK_NUM; ++i) {
+> +		pid = fork();
+> +		TEST_ASSERT(pid >= 0, "%s: unable to fork", __func__);
+> +		if (pid == 0)
+> +			run_test(i); /* This function always exits */
+> +
+> +		fprintf(stderr, "%s: [%d] waiting semaphore\n", __func__, i);
+> +		sem_wait(sem);
+> +		r = (rand() % DELAY_US_MAX) + 1;
+> +		fprintf(stderr, "%s: [%d] waiting %dus\n", __func__, i, r);
+> +		usleep(r);
+> +		r = waitpid(pid, &s, WNOHANG);
+> +		TEST_ASSERT(r != pid,
+> +			    "%s: [%d] child exited unexpectedly status: [%d]",
+> +			    __func__, i, s);
+> +		fprintf(stderr, "%s: [%d] killing child\n", __func__, i);
+> +		kill(pid, SIGKILL);
+> +	}
+> +
+> +	sem_destroy(sem);
+> +	exit(0);
+> +}
+> 
 
