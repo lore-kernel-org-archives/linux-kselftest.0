@@ -2,102 +2,234 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6630EC433E9
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Feb 2021 15:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40952C433DB
+	for <linux-kselftest@archiver.kernel.org>; Sun, 21 Feb 2021 15:52:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 310C564E60
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Feb 2021 15:35:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F328864EF1
+	for <linux-kselftest@archiver.kernel.org>; Sun, 21 Feb 2021 15:52:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbhBSPfH (ORCPT
+        id S229926AbhBUPwG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Feb 2021 10:35:07 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:51598 "EHLO mail.hallyn.com"
+        Sun, 21 Feb 2021 10:52:06 -0500
+Received: from mout.gmx.net ([212.227.17.22]:60717 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229824AbhBSPfE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Feb 2021 10:35:04 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 679722BF; Fri, 19 Feb 2021 09:34:14 -0600 (CST)
-Date:   Fri, 19 Feb 2021 09:34:14 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Jeff Dike <jdike@addtoit.com>,
+        id S229663AbhBUPwG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 21 Feb 2021 10:52:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1613922599;
+        bh=Bbi8D9zimrBxrToyY2cmCuzduWBv7NSyYLuDnJH9sAo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=e2CQYgvDFsIWTTa+5nOrljkJjJ/IaUUr7dfBxKEewpRP273HL5xLU7zbBWXg9H/Kh
+         CyWbeg7tkUMr0A/6COgWTvAGMpFtM/NSjdYAyrWQGb0XVhlpYX4Eccgvrjb04C/ROG
+         hzGlZkAbFJCbKoBvq/Zby2HrDMCuW2HEaWURAudc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([83.52.229.153]) by mail.gmx.net
+ (mrgmx105 [212.227.17.174]) with ESMTPSA (Nemesis) id
+ 1MQ5vc-1lR8go2wUq-00M85s; Sun, 21 Feb 2021 16:49:58 +0100
+From:   John Wood <john.wood@gmx.com>
+To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Dagonneau <vincent.dagonneau@ssi.gouv.fr>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, x86@kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v28 07/12] landlock: Support filesystem access-control
-Message-ID: <20210219153414.GA18061@mail.hallyn.com>
-References: <20210202162710.657398-1-mic@digikod.net>
- <20210202162710.657398-8-mic@digikod.net>
- <20210210193624.GA29893@mail.hallyn.com>
- <aeba97b6-37cd-4870-0a40-3e7aa84ebd36@digikod.net>
+        James Morris <jmorris@namei.org>, Shuah Khan <shuah@kernel.org>
+Cc:     John Wood <john.wood@gmx.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/8] Fork brute force attack mitigation
+Date:   Sun, 21 Feb 2021 16:49:11 +0100
+Message-Id: <20210221154919.68050-1-john.wood@gmx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aeba97b6-37cd-4870-0a40-3e7aa84ebd36@digikod.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:OhAf9XvO+sZYfuIy60MlI1jlL30B6+bmI4NFG9TAaaqwkmcMkdm
+ S3GLYv+QOvuXyVkf27DRvsH+0L8iMQdmmtTYTm3YCB5QBxRXZ51pO08O9H7ag3UfDOgmhxs
+ IKTQrbdPt1J6Ca8Uqmud3O6KRKpsioYXmE7tG7P6U337GlPI8tpFTHs7ctEiS+Kzhs5fI4X
+ kzn5Dnhj6EPNPxLhkyvJg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DZMiibCW060=:3tj82Nk20Etv0D/iyR3ot3
+ Ij4L9Afd6/Z4dbMrhEqAb82q0cldoS4PnhesJ4zzUbOORCq1H5U+P26FnE5fr0Fk4uKecjIFY
+ 7QTOAGkvMQHdpttSU4RPLnDnBwgGbBZ0Rcifx4wpByLGbxeX9MNCT4eicDsnl676moQpHu0OZ
+ JKw63APKRIz1J+VY3o4w7OGW3RfBykrNpO4An2VtE7EP17HKu3YrxfOADM7ZzcoRKdfPmk1Mf
+ 0QPo57td9WDYsSZBG+KETxZy4mSP9vGr5sz4y1mIaqjp1RG4419UzZB8dC7uRiV7c6gE2D9f0
+ LWlIcyl2O/7QDXM41kmq6J8JfAWWm1UxuV7g03YwHS6J5hBYAQTlr9iAq6FxuHsHZx5KS4Eas
+ 8v0OdUj66xNlD0pwk43GqhkrNR45atmCujXatdMZwPMMlkppDKeVOKrx+ae7YY09tKMOWyECx
+ rqCVvIrQT3ZImcuhvljPthHBYsoMyByoze4XlSe4MNxxKvtF8u5+X81UCabTD+FLrMUUB+mcy
+ EDmKSmyta7Ef5mjmMXce0Rd03fNgB/CGTqB4bMS+MtFnUHZ+UeQ1Up7jyinvwY3zD7lbdJEYf
+ mb6nNbYJhTQhZ6/LdDpeqn1QhNNJL621aYCwQu91Ynhi4pJXjlWCMvcjXyLs2p8QaByyUlnhx
+ F8+F379ioZsagDTRIiD6/lYfCt1z1uXRD3RLbWxPGwSiT90CuyuLsArfnqofmCZc/KUFB7wZ2
+ Re6Qv/5XG3gOy6sgjH8bjqQ+rSb9xo7LjnTHcIVwjbikLcuBLYCmasZymYVw6erUSZgZDyitf
+ WVIJU6VaYKRiuUjYxInIcm2ElNZcfA0+EZAHQ/1yV4MtBRZpl2pmg0evacOInmHI9hT6qgNr2
+ hx9uxBCh66IrW+ZR9xqQ==
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 09:17:25PM +0100, Mickaël Salaün wrote:
-> 
-> On 10/02/2021 20:36, Serge E. Hallyn wrote:
-> > On Tue, Feb 02, 2021 at 05:27:05PM +0100, Mickaël Salaün wrote:
-> >> From: Mickaël Salaün <mic@linux.microsoft.com>
-> >>
-> >> Thanks to the Landlock objects and ruleset, it is possible to identify
-> >> inodes according to a process's domain.  To enable an unprivileged
-> > 
-> > This throws me off a bit.  "identify inodes according to a process's domain".
-> > What exactly does it mean?  "identify" how ?
-> 
-> A domain is a set of rules (i.e. layers of rulesets) enforced on a set
-> of threads. Inodes are tagged per domain (i.e. not system-wide) and
-> actions are restricted thanks to these tags, which form rules. It means
-> that the created access-controls are scoped to a set of threads.
+Attacks against vulnerable userspace applications with the purpose to brea=
+k
+ASLR or bypass canaries traditionally use some level of brute force with
+the help of the fork system call. This is possible since when creating a
+new process using fork its memory contents are the same as those of the
+parent process (the process that called the fork system call). So, the
+attacker can test the memory infinite times to find the correct memory
+values or the correct memory addresses without worrying about crashing the
+application.
 
-Thanks, that's helpful.  To me it would be much clearer if you used the word
-'tagged' :
+Based on the above scenario it would be nice to have this detected and
+mitigated, and this is the goal of this patch serie. Specifically the
+following attacks are expected to be detected:
 
-  Using the Landlock objects and ruleset, it is possible to tag inodes
-  according to a process's domain.
+1.- Launching (fork()/exec()) a setuid/setgid process repeatedly until a
+    desirable memory layout is got (e.g. Stack Clash).
+2.- Connecting to an exec()ing network daemon (e.g. xinetd) repeatedly
+    until a desirable memory layout is got (e.g. what CTFs do for simple
+    network service).
+3.- Launching processes without exec() (e.g. Android Zygote) and exposing
+    state to attack a sibling.
+4.- Connecting to a fork()ing network daemon (e.g. apache) repeatedly unti=
+l
+    the previously shared memory layout of all the other children is
+    exposed (e.g. kind of related to HeartBleed).
 
-> >> process to express a file hierarchy, it first needs to open a directory
-> >> (or a file) and pass this file descriptor to the kernel through
-> >> landlock_add_rule(2).  When checking if a file access request is
-> >> allowed, we walk from the requested dentry to the real root, following
-> >> the different mount layers.  The access to each "tagged" inodes are
-> >> collected according to their rule layer level, and ANDed to create
-> >> access to the requested file hierarchy.  This makes possible to identify
-> >> a lot of files without tagging every inodes nor modifying the
-> >> filesystem, while still following the view and understanding the user
-> >> has from the filesystem.
-> >>
-> >> Add a new ARCH_EPHEMERAL_INODES for UML because it currently does not
-> >> keep the same struct inodes for the same inodes whereas these inodes are
-> >> in use.
-> > 
-> > -serge
-> > 
+In each case, a privilege boundary has been crossed:
+
+Case 1: setuid/setgid process
+Case 2: network to local
+Case 3: privilege changes
+Case 4: network to local
+
+So, what will really be detected are fork/exec brute force attacks that
+cross any of the commented bounds.
+
+The implementation details and comparison against other existing
+implementations can be found in the "Documentation" patch.
+
+This v3 version has changed a lot from the v2. Basically the application
+crash period is now compute on an on-going basis using an exponential
+moving average (EMA), a detection of a brute force attack through the
+"execve" system call has been added and the crossing of the commented
+privilege bounds are taken into account. Also, the fine tune has also been
+removed and now, all this kind of attacks are detected without
+administrator intervention.
+
+In the v2 version Kees Cook suggested to study if the statistical data
+shared by all the fork hierarchy processes can be tracked in some other
+way. Specifically the question was if this info can be hold by the family
+hierarchy of the mm struct. After studying this hierarchy I think it is no=
+t
+suitable for the Brute LSM since they are totally copied on fork() and in
+this case we want that they are shared. So I leave this road.
+
+So, knowing all this information I will explain now the different patches:
+
+The 1/8 patch defines a new LSM hook to get the fatal signal of a task.
+This will be useful during the attack detection phase.
+
+The 2/8 patch defines a new LSM and manages the statistical data shared by
+all the fork hierarchy processes.
+
+The 3/8 patch detects a fork/exec brute force attack.
+
+The 4/8 patch narrows the detection taken into account the privilege
+boundary crossing.
+
+The 5/8 patch mitigates a brute force attack.
+
+The 6/8 patch adds self-tests to validate the Brute LSM expectations.
+
+The 7/8 patch adds the documentation to explain this implementation.
+
+The 8/8 patch updates the maintainers file.
+
+This patch serie is a task of the KSPP [1] and can also be accessed from m=
+y
+github tree [2] in the "brute_v3" branch.
+
+[1] https://github.com/KSPP/linux/issues/39
+[2] https://github.com/johwood/linux/
+
+The previous versions can be found in:
+
+https://lore.kernel.org/kernel-hardening/20200910202107.3799376-1-keescook=
+@chromium.org/
+https://lore.kernel.org/kernel-hardening/20201025134540.3770-1-john.wood@g=
+mx.com/
+
+Changelog RFC -> v2
+=2D------------------
+- Rename this feature with a more suitable name (Jann Horn, Kees Cook).
+- Convert the code to an LSM (Kees Cook).
+- Add locking  to avoid data races (Jann Horn).
+- Add a new LSM hook to get the fatal signal of a task (Jann Horn, Kees
+  Cook).
+- Add the last crashes timestamps list to avoid false positives in the
+  attack detection (Jann Horn).
+- Use "period" instead of "rate" (Jann Horn).
+- Other minor changes suggested (Jann Horn, Kees Cook).
+
+Changelog v2 -> v3
+=2D-----------------
+- Compute the application crash period on an on-going basis (Kees Cook).
+- Detect a brute force attack through the execve system call (Kees Cook).
+- Detect an slow brute force attack (Randy Dunlap).
+- Fine tuning the detection taken into account privilege boundary crossing
+  (Kees Cook).
+- Taken into account only fatal signals delivered by the kernel (Kees
+  Cook).
+- Remove the sysctl attributes to fine tuning the detection (Kees Cook).
+- Remove the prctls to allow per process enabling/disabling (Kees Cook).
+- Improve the documentation (Kees Cook).
+- Fix some typos in the documentation (Randy Dunlap).
+- Add self-test to validate the expectations (Kees Cook).
+
+John Wood (8):
+  security: Add LSM hook at the point where a task gets a fatal signal
+  security/brute: Define a LSM and manage statistical data
+  securtiy/brute: Detect a brute force attack
+  security/brute: Fine tuning the attack detection
+  security/brute: Mitigate a brute force attack
+  selftests/brute: Add tests for the Brute LSM
+  Documentation: Add documentation for the Brute LSM
+  MAINTAINERS: Add a new entry for the Brute LSM
+
+ Documentation/admin-guide/LSM/Brute.rst  |  224 +++++
+ Documentation/admin-guide/LSM/index.rst  |    1 +
+ MAINTAINERS                              |    7 +
+ include/linux/lsm_hook_defs.h            |    1 +
+ include/linux/lsm_hooks.h                |    4 +
+ include/linux/security.h                 |    4 +
+ kernel/signal.c                          |    1 +
+ security/Kconfig                         |   11 +-
+ security/Makefile                        |    4 +
+ security/brute/Kconfig                   |   13 +
+ security/brute/Makefile                  |    2 +
+ security/brute/brute.c                   | 1102 ++++++++++++++++++++++
+ security/security.c                      |    5 +
+ tools/testing/selftests/Makefile         |    1 +
+ tools/testing/selftests/brute/.gitignore |    2 +
+ tools/testing/selftests/brute/Makefile   |    5 +
+ tools/testing/selftests/brute/config     |    1 +
+ tools/testing/selftests/brute/exec.c     |   44 +
+ tools/testing/selftests/brute/test.c     |  507 ++++++++++
+ tools/testing/selftests/brute/test.sh    |  226 +++++
+ 20 files changed, 2160 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/Brute.rst
+ create mode 100644 security/brute/Kconfig
+ create mode 100644 security/brute/Makefile
+ create mode 100644 security/brute/brute.c
+ create mode 100644 tools/testing/selftests/brute/.gitignore
+ create mode 100644 tools/testing/selftests/brute/Makefile
+ create mode 100644 tools/testing/selftests/brute/config
+ create mode 100644 tools/testing/selftests/brute/exec.c
+ create mode 100644 tools/testing/selftests/brute/test.c
+ create mode 100755 tools/testing/selftests/brute/test.sh
+
+=2D-
+2.25.1
+
