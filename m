@@ -2,123 +2,155 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5374FC433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Feb 2021 06:31:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D747AC433E6
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Feb 2021 18:17:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04AB664DB1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Feb 2021 06:31:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F76464E61
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Feb 2021 18:17:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbhBWGbW (ORCPT
+        id S233902AbhBWSQl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Feb 2021 01:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbhBWGaa (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Feb 2021 01:30:30 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B0FC061574
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Feb 2021 22:29:49 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id u8so15937149ior.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Feb 2021 22:29:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ItTDB5sUANcyO8fzgqNMRbwBdT6LStcOgI5johhBaiQ=;
-        b=qNWMc3Bc3SqnhF+1KqKzKgCcUbmRrLa1UOoDnDh1VnIjYmUTkBYKRve+SnuAARSM6g
-         ufkJpKfaiz1W+f0uE54KIo24fbQDDKCoqqFprm6gZdTJn7z+0e0A9W0LVSR7He8FENai
-         7dhY8RSfYjO9RMp+xXfI0i5dmpNp0lNU2DGto0xwXu3eXdpEcKxYIhnhUZcg6LOd1Ubb
-         Q3GVttUMKSTU6LLFpxg3CEsfM2yS4edVVEuKjjlHUhqhQnIfII5UmczfbxmHPMgIAHH9
-         IFJxDcM2qFihSYadlTVmSmVo1ewBOG18GgANm88hoCMVQ2Yez11OTeoAGnPHhdP9CL7a
-         t4LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ItTDB5sUANcyO8fzgqNMRbwBdT6LStcOgI5johhBaiQ=;
-        b=EQTmVPELNkoOapCn3yneLNIC1wneBYVIDjV7fIMn/KQnbBAheyKGqPzlrZdYBN+BwU
-         bkRiN068180tAdBFtguPQ9ooWeqJozwkc1YP30UA9n19PxvWok9KSmxcod5DRRMjh2en
-         u9W3wVR2zOWhhYK+SR3hE3sn5o7spLMqmxB218sU5EaHZs6qsq7RUlA61N5Dkg0m+Na9
-         RtvUILs890JmrkyVGqfEPg0p27UhEoEjcBaU41KWaHd1i0HqU7EntrQDsnBvygPWoE6t
-         oC0A8iUoOm9AdtUj63yWV1yGV3FugAp+uHBWNlEbGtRbcFnDP/TCjGZDKfGpYWSIUAcH
-         TXtA==
-X-Gm-Message-State: AOAM530OUXRJErv9hex6a4d4cW5Zg87mHRmLBFcCz9dl2SkLr/IqkkgF
-        /29jRVcitMo/mepV16HXzL2YWgSCZuxasorkXIs8DQ==
-X-Google-Smtp-Source: ABdhPJxaLayWuRU1U/pWVgzYANX6AkcP3C3TScz3s5HpCqlQKTd2NQ17OMd4EYpXNR6z9kXrNAVaVWmm1L6+Xmt+t+g=
-X-Received: by 2002:a5d:9c4e:: with SMTP id 14mr17998159iof.57.1614061788952;
- Mon, 22 Feb 2021 22:29:48 -0800 (PST)
+        Tue, 23 Feb 2021 13:16:41 -0500
+Received: from mout.gmx.net ([212.227.15.19]:49423 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233907AbhBWSQR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Feb 2021 13:16:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1614104057;
+        bh=UWN3l183zAbiXXQl5Z1FP79kj4fY8vt9bxdy1C023fE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=RwdP2vo09Qi6yabb1To6m8GrDpYMCrB9Toz8jPhUmaGzm2NF/CJpAr+fO4FkW6UjQ
+         sSkQC/QiP6gDhhjy91h8xsZ/5YIedpcHVQhCXMTv/vGRB7XbB0y8uhngFmcvMTo1HY
+         q0unAtaYO+aRTwu3lKu6QA3nWsJM5yo8P5wSC6qc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ubuntu ([83.52.229.153]) by mail.gmx.net (mrgmx004
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MmULr-1leuOO2oWf-00iTJH; Tue, 23
+ Feb 2021 19:14:17 +0100
+Date:   Tue, 23 Feb 2021 19:13:57 +0100
+From:   John Wood <john.wood@gmx.com>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        James Morris <jmorris@namei.org>, Shuah Khan <shuah@kernel.org>
+Cc:     John Wood <john.wood@gmx.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 3/8] securtiy/brute: Detect a brute force attack
+Message-ID: <20210223181357.GA3068@ubuntu>
+References: <20210221154919.68050-1-john.wood@gmx.com>
+ <20210221154919.68050-4-john.wood@gmx.com>
+ <085f8f05-243e-fbf0-3f9c-ea011511a296@infradead.org>
 MIME-Version: 1.0
-References: <20210223054930.2345555-1-davidgow@google.com>
-In-Reply-To: <20210223054930.2345555-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 22 Feb 2021 22:29:37 -0800
-Message-ID: <CAGS_qxpr+-0Kk2ijH5uo_tSbQODN9hJpEedW0A_SK2rBW9ZbFQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Fix a python tuple typing error
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <085f8f05-243e-fbf0-3f9c-ea011511a296@infradead.org>
+X-Provags-ID: V03:K1:ju0O4S8Nvdn1JuYpx180LYXiBWGpIoiYfkvATFebYMFGyfsTHd9
+ wRuTsXxl4cu79Pht/Vpfew+2jDvQYKv5iUww/OxpFxO6Oy7oVj13CRoP4wzlOw4xwz8Y5xW
+ EV9QLuqoaF7IpDYK0VQf+2Hi29tNzGfTXyrRtfMJ+VHp9d8v+MSrFpBSqlYxp80wKpa8D6C
+ PpBaMCipfTcEh6OPnkTJg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3q+pBoAH1js=:XR39Nzb2x6fGQ/6FFW3zzi
+ Raj2QUKGSNrAnWBTl55EaeZ1FAEaBNFiymAR3DARDcdjHtXDc7MIYW3hdPP2bo/i2u0EES61F
+ 9NtsbISe79UKtCt+N05uJN1Jj/88oJ3KkWVYsHu7dotTKBpSEYBCVlxcFOLPZh3V8uRpWC+js
+ z7UqeD9HfVM+rTCnLJ+N0Du3YMEbVWFnibChC88csO8+qSXSWI8Dza/GbTZAtEeGzU+iPmJ7z
+ E+NzoGw87POsGI2iqlOpObfjATGvlXzkYfSiosJym0t89OTroKOd+jqBGQbfWmpT/ml0HEodo
+ 3m9AC7sPvKRAvk2solGx9x10TF4sa2290yObfJZ2wjoCvMb+ytx3NXZoTerIa3IspleSjeojc
+ gYwa9mNScd1Tt8mzItla7bIEaB2U+J+WuOkgjuffDTL5fg7AF85x5AAsfoFMA9nWCKDGJ9RZV
+ czw8n7SfEqF6+a3gJ2bIKybk2U2I46Adh3I5JxpyPGh1tQz41e/I89PsTzhBhlD9CdvaTKnnD
+ JuKIQUK8MhsAi+8jqBSwJ64rJ4nkTUl0xaQOepAvmRf3pJzPKJ5U1Wc250wLk1VAJIknA6NYx
+ RY8f3TMnEU4JsRUqx5jX0RcbhbNM5IcRbk7qIFKxB+0oKgKC94asTvVS6flNDlNPEmpvt2A8Q
+ gRAllOR73bp9psFz4pAuW5pp4wUF5Yd6MqUbCS7UgojyzF3moz+H248gDVNY/pLCh9AjhxX04
+ 9lI5wVTR3Q1JOkrJ3yRm3KmYuZJ4McTThk2Yj2bAquYSFEPDTeos5Ts6yj24IkEgDYA+QOu88
+ D2rXeCkbRTJEGMzEa7ACchjgimJVFIYF3CZAhF3WfqLgTyHDyAWZMdh9TILAeQH/73t7+I58G
+ oUFu7WyG0wdon7UHw00Q==
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 9:49 PM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> The first argument to namedtuple() should match the name of the type,
-> which wasn't the case for KconfigEntryBase.
->
-> Fixing this is enough to make mypy show no python typing errors again.
+Hi,
 
-Ah, this is something apparently only newer versions of mypy detect.
-On 0.782 I didn't see it, but after pip install --upgrade to 0.812, I
-see the error.
-
-While I'm here, I also upgraded my pytype install and checked.
-It's happy w/ or w/o this patch.
-
-So while this is in some sense an error only mypy cares about, this
-fix does make the code more stylistically correct and should
-definitely go in.
-
+On Sun, Feb 21, 2021 at 06:25:51PM -0800, Randy Dunlap wrote:
+> Hi--
 >
-> Fixes 97752c39bd ("kunit: kunit_tool: Allow .kunitconfig to disable config items")
-> Signed-off-by: David Gow <davidgow@google.com>
+> On 2/21/21 7:49 AM, John Wood wrote:
+> >
+> > +/**
+> > + * print_fork_attack_running() - Warn about a fork brute force attack=
+.
+> > + */
+> > +static inline void print_fork_attack_running(void)
+> > +{
+> > +	pr_warn("Fork brute force attack detected [%s]\n", current->comm);
+> > +}
+>
+> Do these pr_warn() calls need to be rate-limited so that they don't
+> flood the kernel log?
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+I think it is not necessary since when a brute force attack through the fo=
+rk
+system call is detected, a fork warning appears only once. Then, all the
+offending tasks involved in the attack are killed. But if the parent try t=
+o run
+again the same app already killed, a new crash will trigger a brute force =
+attack
+through the execve system call, then this parent is killed, and a new warn=
+ing
+message appears. Now, the parent and childs are killed, the attacks are
+mitigated and only a few messages (one or two) have been shown in the kern=
+el
+log.
 
-> ---
->  tools/testing/kunit/kunit_config.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+John Wood
+
+> > +/**
+> > + * print_exec_attack_running() - Warn about an exec brute force attac=
+k.
+> > + * @stats: Statistical data shared by all the fork hierarchy processe=
+s.
+> > + *
+> > + * The statistical data shared by all the fork hierarchy processes ca=
+nnot be
+> > + * NULL.
+> > + *
+> > + * Before showing the process name it is mandatory to find a process =
+that holds
+> > + * a pointer to the exec statistics.
+> > + *
+> > + * Context: Must be called with tasklist_lock and brute_stats_ptr_loc=
+k held.
+> > + */
+> > +static void print_exec_attack_running(const struct brute_stats *stats=
+)
+> > +{
+> > +	struct task_struct *p;
+> > +	struct brute_stats **p_stats;
+> > +	bool found =3D false;
+> > +
+> > +	for_each_process(p) {
+> > +		p_stats =3D brute_stats_ptr(p);
+> > +		if (*p_stats =3D=3D stats) {
+> > +			found =3D true;
+> > +			break;
+> > +		}
+> >  	}
+> > +
+> > +	if (WARN(!found, "No exec process\n"))
+> > +		return;
+> > +
+> > +	pr_warn("Exec brute force attack detected [%s]\n", p->comm);
+> > +}
 >
-> diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-> index 0b550cbd667d..1e2683dcc0e7 100644
-> --- a/tools/testing/kunit/kunit_config.py
-> +++ b/tools/testing/kunit/kunit_config.py
-> @@ -13,7 +13,7 @@ from typing import List, Set
->  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
->  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
 >
-> -KconfigEntryBase = collections.namedtuple('KconfigEntry', ['name', 'value'])
-> +KconfigEntryBase = collections.namedtuple('KconfigEntryBase', ['name', 'value'])
->
->  class KconfigEntry(KconfigEntryBase):
->
+> thanks.
 > --
-> 2.30.0.617.g56c4b15f3c-goog
+> ~Randy
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20210223054930.2345555-1-davidgow%40google.com.
