@@ -2,64 +2,67 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9592C433E9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 02:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06916C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 02:16:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7021164F03
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 02:15:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C735764EC8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 02:16:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235942AbhBYCPf (ORCPT
+        id S236694AbhBYCQE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Feb 2021 21:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        Wed, 24 Feb 2021 21:16:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235527AbhBYCP1 (ORCPT
+        with ESMTP id S236345AbhBYCQC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Feb 2021 21:15:27 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B0DC061756
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Feb 2021 18:14:41 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id f127so4368186ybf.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Feb 2021 18:14:41 -0800 (PST)
+        Wed, 24 Feb 2021 21:16:02 -0500
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E375C06178B
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Feb 2021 18:14:45 -0800 (PST)
+Received: by mail-qt1-x849.google.com with SMTP id k17so3088346qtm.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Feb 2021 18:14:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=d7qjpU8XKEfBqlMiCyPh8nFPbvWh1eJ63+H3QFuie5Y=;
-        b=UMLqTstxNUBx26sg6GLN6yLQPAjd2tgC7PtHCBbHKD4iSU1KIibkTuyxM4iqtkGaCg
-         Ir5emR92f/9DRcZXi+gQ01lXg0qFQy1IjrPYgogIJyIzp/E/dzz+RuR4G4xHh4rpFSjE
-         KxRt4gnRJ0ElbEoeuEI1i3RJ0Svq53VVxRgipBXKZ7oUcdEIDkZjEmqnhG9Z4/by8xpb
-         uhmiPiMYSHUi2h34aYQdi73+ZbPCms3CJAaw/DEiQB5utN3e7pP0npwWSMuGcu0Q1DRK
-         IL8TaM0PNMCbmKdnu6yJ9/5IVHqXEzbuNYDLaEagmMRZl+VZ3N6UNqlAJRaP1ZOfpxl3
-         RCPw==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=us3C43DDKNe3vmD9vgqgm0NwVPFkKr8bUz8YjvFEJ68=;
+        b=azgcrjBFGpIKHs9mxItadu7KNGX0xu18yRBYBSTtzn10N/qHaP7iMaiGNC6TyUinsH
+         rb2tllixM92p5m+B5NgoMFtXPvjZI8o1xwoTvKVPXKHy1M6zYf6sKExD/BXKQH3fzCh8
+         LFqhrL0Geo1ardkbKKRN/9vEiMKhfliNXskKF+jT5eO1CUAyNRSPW6KoCXpEpsZAeFe4
+         xN2WhiwXQgMxRfnQVFbiHs2iKlqa9tIwBVqTukBZ17FeYY3sk3LEBnfgvrZczbxshuya
+         Lw2XGBbiJWWFlyMNJRsphvWzZEtLQ+3NSxdfBmMv47Kschp49h+MyyqiExfLJCpBmLj+
+         ugaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=d7qjpU8XKEfBqlMiCyPh8nFPbvWh1eJ63+H3QFuie5Y=;
-        b=g0hdyqqy7hQHRxnnRk+i8RhrOFiqhtCHq2gNj+H2R8HCGweHCgusDjbQLN9T+BeIrP
-         1D18Me7GO6llzIrCHzU7qTxUQvPSTim0clP22fqcxkFwVVJI9PWwqWB03xKGL8sBAmr8
-         LBH56ijp5VXVWwMJxBOFHnURrp9nhwlZ4E/N4PP8TK+BE7U77M6iMu3ZwBSk8kGN5NwK
-         D4tbIkAgAZseuORQnETzkyitvskeI54iVaGy5PJVubYBqLLGj2qyKQXeGzmaF0NOZuGx
-         Glz9yJWCMbSbKGzEQkC8Ul5edAEDwDwgtLXQ6qgK8u/xgwKMFVwcs/3jYudJtclf6gVo
-         CLsA==
-X-Gm-Message-State: AOAM532Cd9Hv13CBlshOSiahJkzqXJmjqxRekDjcnO7GxMnPzka9gYse
-        mrQtE1XBtc2N+0fsCL9nsyTTiPwE/BDtQzJ8GYYj
-X-Google-Smtp-Source: ABdhPJw98ig0Yji2QsABXFSreCF+ogXsubw5CFDtC6GaaoOwFYEUFPOQp0YULt8aO2A/kWa9cWqMeli63FZEp52R2m/7
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=us3C43DDKNe3vmD9vgqgm0NwVPFkKr8bUz8YjvFEJ68=;
+        b=hlmOKbucjyKSEXtGP0E36hNcsc0Suy816IDjEL13uA5Gns0QQiKk4lR6Ab4fFh9dlv
+         eDzfKTtYyoXpK/iyblaFbd919kSPEBP0baxLbwVpkTM2sCw7Ld11X39+5k4kp0ly3p3h
+         PvQhtLwZjDbolKaehN9qddXS0L2Vp5BsZhOs7tAZ4pMgvFeRKGNgCj58B7FYuCbhwVWn
+         xmyiIJukUfIpRJe7GOLGcKnzgDpv7ixrylp+Yx8i2B2If5A+egZv50v6FR2QmsURdsIx
+         QSu6SSZB7vV/VcYmNNjaaJ+oECNhkdd1Ns8qMXZVN/90x1Q6naNobDFf9jgNYlqVVqgM
+         oGoA==
+X-Gm-Message-State: AOAM533F5xQOcXNR/zp0maSxC+P8jU1rN7M0AtSzkoE4IE0HW9Ybw83S
+        z9zh9aH59wY+yP9MV6EunwQfzFhIn6AWdOMfEnlR
+X-Google-Smtp-Source: ABdhPJydO3y5DVIx8aI+4cvq389VtWeuFRi8HvtBqAFhsL4dc3FHyt3DUtvBG34/zGlnmXM6v+kW4HrqI9UrE9mMR2CR
 Sender: "axelrasmussen via sendgmr" <axelrasmussen@ajr0.svl.corp.google.com>
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:a5fd:f848:2fdf:4651])
- (user=axelrasmussen job=sendgmr) by 2002:a25:8112:: with SMTP id
- o18mr902059ybk.208.1614219280483; Wed, 24 Feb 2021 18:14:40 -0800 (PST)
-Date:   Wed, 24 Feb 2021 18:14:15 -0800
-Message-Id: <20210225021420.2290912-1-axelrasmussen@google.com>
+ (user=axelrasmussen job=sendgmr) by 2002:ad4:58c3:: with SMTP id
+ dh3mr682909qvb.27.1614219284205; Wed, 24 Feb 2021 18:14:44 -0800 (PST)
+Date:   Wed, 24 Feb 2021 18:14:17 -0800
+In-Reply-To: <20210225021420.2290912-1-axelrasmussen@google.com>
+Message-Id: <20210225021420.2290912-3-axelrasmussen@google.com>
 Mime-Version: 1.0
+References: <20210225021420.2290912-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
-Subject: [PATCH 0/5] userfaultfd: support minor fault handling for shmem
+Subject: [PATCH 2/5] userfaultfd/selftests: use memfd_create for shmem test type
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -85,59 +88,100 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Base
-====
+This is a preparatory commit. In the future, we want to be able to setup
+alias mappings for area_src and area_dst in the shmem test, like we do
+in the hugetlb_shared test. With a VMA obtained via
+mmap(MAP_ANONYMOUS | MAP_SHARED), it isn't clear how to do this.
 
-This series is based on top of my series which adds minor fault handling for
-hugetlbfs [1]. (And, therefore, it is based on linux-next/akpm and Peter Xu's
-series for disabling huge pmd sharing as well.)
+So, mmap() with an fd, so we can create alias mappings. Use memfd_create
+instead of actually passing in a tmpfs path like hugetlb does, since
+it's more convenient / simpler to run, and works just as well.
 
-[1] https://lore.kernel.org/patchwork/cover/1384095/
+Future commits will:
 
-Overview
-========
+1. Setup the alias mappings.
+2. Extend our tests to actually take advantage of this, to test new
+   userfaultfd behavior being introduced in this series.
 
-See my original series linked above for a detailed overview of minor fault
-handling in general. The feature in this series works exactly like the
-hugetblfs version (from userspace's perspective).
+Also, a small fix in the area we're changing: when the hugetlb setup
+fails in main(), pass in the right argv[] so we actually print out the
+hugetlb file path.
 
-I'm sending this as a separate series because:
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 35 ++++++++++++++++++++----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
 
-- The original minor fault handling series has been through several rounds of
-  review and seems close to being merged, so it seems reasonable to start
-  looking at this next step.
-
-- shmem is different enough that this series may require some additional work
-  before it's ready, and I don't want to delay the original series
-  unnecessarily by bundling them together.
-
-Use Case
-========
-
-In some cases it is useful to have VM memory backed by tmpfs instead of
-hugetlbfs. So, this feature will be used to support the same VM live migration
-use case described in my original series.
-
-Additionally, Android folks (Lokesh Gidra <lokeshgidra@google.com>) hope to
-optimize the Android JVM garbage collector using this feature (a paper
-describing a somewhat similar approach: https://arxiv.org/pdf/1902.04738.pdf).
-
-Axel Rasmussen (5):
-  userfaultfd: support minor fault handling for shmem
-  userfaultfd/selftests: use memfd_create for shmem test type
-  userfaultfd/selftests: create alias mappings in the shmem test
-  userfaultfd/selftests: reinitialize test context in each test
-  userfaultfd/selftests: exercise minor fault handling shmem support
-
- fs/userfaultfd.c                         |   6 +-
- include/linux/shmem_fs.h                 |  26 +-
- include/uapi/linux/userfaultfd.h         |   4 +-
- mm/memory.c                              |   8 +-
- mm/shmem.c                               |  88 +++----
- mm/userfaultfd.c                         |  27 +-
- tools/testing/selftests/vm/userfaultfd.c | 322 +++++++++++++++--------
- 7 files changed, 293 insertions(+), 188 deletions(-)
-
---
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index f5ab5e0312e7..859398efb4fe 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -85,6 +85,7 @@ static bool test_uffdio_wp = false;
+ static bool test_uffdio_minor = false;
+ 
+ static bool map_shared;
++static int shm_fd;
+ static int huge_fd;
+ static char *huge_fd_off0;
+ static unsigned long long *count_verify;
+@@ -297,12 +298,20 @@ static int shmem_release_pages(char *rel_area)
+ 
+ static void shmem_allocate_area(void **alloc_area)
+ {
++	unsigned long offset =
++		alloc_area == (void **)&area_src ? 0 : nr_pages * page_size;
++
+ 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+-			   MAP_ANONYMOUS | MAP_SHARED, -1, 0);
++			   MAP_SHARED, shm_fd, offset);
+ 	if (*alloc_area == MAP_FAILED) {
+-		fprintf(stderr, "shared memory mmap failed\n");
+-		*alloc_area = NULL;
++		perror("mmap of memfd failed");
++		goto fail;
+ 	}
++
++	return;
++
++fail:
++	*alloc_area = NULL;
+ }
+ 
+ struct uffd_test_ops {
+@@ -1672,15 +1681,31 @@ int main(int argc, char **argv)
+ 			usage();
+ 		huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
+ 		if (huge_fd < 0) {
+-			fprintf(stderr, "Open of %s failed", argv[3]);
++			fprintf(stderr, "Open of %s failed", argv[4]);
+ 			perror("open");
+ 			exit(1);
+ 		}
+ 		if (ftruncate(huge_fd, 0)) {
+-			fprintf(stderr, "ftruncate %s to size 0 failed", argv[3]);
++			fprintf(stderr, "ftruncate %s to size 0 failed", argv[4]);
+ 			perror("ftruncate");
+ 			exit(1);
+ 		}
++	} else if (test_type == TEST_SHMEM) {
++		shm_fd = memfd_create(argv[0], 0);
++		if (shm_fd < 0) {
++			perror("memfd_create");
++			exit(1);
++		}
++		if (ftruncate(shm_fd, nr_pages * page_size * 2)) {
++			perror("ftruncate");
++			exit(1);
++		}
++		if (fallocate(shm_fd,
++			      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
++			      nr_pages * page_size * 2)) {
++			perror("fallocate");
++			exit(1);
++		}
+ 	}
+ 	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+ 	       nr_pages, nr_pages_per_cpu);
+-- 
 2.30.0.617.g56c4b15f3c-goog
 
