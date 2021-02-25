@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C056C4332D
-	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 06:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C00C433E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 06:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3AC864EC4
+	by mail.kernel.org (Postfix) with ESMTP id 0B13564EF1
 	for <linux-kselftest@archiver.kernel.org>; Thu, 25 Feb 2021 06:00:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbhBYGAn (ORCPT
+        id S235383AbhBYGAp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 25 Feb 2021 01:00:43 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:13376 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235106AbhBYGAk (ORCPT
+        Thu, 25 Feb 2021 01:00:45 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13084 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235332AbhBYGAl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Feb 2021 01:00:40 -0500
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DmMXT2w2pz7q4Z;
-        Thu, 25 Feb 2021 13:58:17 +0800 (CST)
+        Thu, 25 Feb 2021 01:00:41 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DmMXY70z6z16CZs;
+        Thu, 25 Feb 2021 13:58:21 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 25 Feb 2021 13:59:44 +0800
+ 14.3.498.0; Thu, 25 Feb 2021 13:59:48 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -40,9 +40,9 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>,
         Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         "Yanan Wang" <wangyanan55@huawei.com>
-Subject: [RFC PATCH v2 2/7] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
-Date:   Thu, 25 Feb 2021 13:59:35 +0800
-Message-ID: <20210225055940.18748-3-wangyanan55@huawei.com>
+Subject: [RFC PATCH v2 5/7] KVM: selftests: List all hugetlb src types specified with page sizes
+Date:   Thu, 25 Feb 2021 13:59:38 +0800
+Message-ID: <20210225055940.18748-6-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210225055940.18748-1-wangyanan55@huawei.com>
 References: <20210225055940.18748-1-wangyanan55@huawei.com>
@@ -54,155 +54,166 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
-also shield possiable impact of NTP, which can provide more robustness.
+With VM_MEM_SRC_ANONYMOUS_HUGETLB, we currently can only use system
+default hugetlb pages to back the testing guest memory. In order to
+add flexibility, now list all the known hugetlb backing src types with
+different page sizes, so that we can specify use of hugetlb pages of the
+exact granularity that we want. And as all the known hugetlb page sizes
+are listed, it's appropriate for all architectures.
+
+Besides, the helper get_backing_src_pagesz() is added to get the
+granularity of different backing src types(anonumous, thp, hugetlb).
 
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 ---
- tools/testing/selftests/kvm/demand_paging_test.c  |  8 ++++----
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 14 +++++++-------
- tools/testing/selftests/kvm/lib/test_util.c       |  2 +-
- tools/testing/selftests/kvm/steal_time.c          |  4 ++--
- 4 files changed, 14 insertions(+), 14 deletions(-)
+ .../testing/selftests/kvm/include/test_util.h | 19 ++++++-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  2 +-
+ tools/testing/selftests/kvm/lib/test_util.c   | 56 +++++++++++++++----
+ 3 files changed, 63 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 5f7a229c3af1..efbf0c1e9130 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -53,7 +53,7 @@ static void *vcpu_worker(void *data)
- 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
- 	run = vcpu_state(vm, vcpu_id);
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index ef24c76ba89a..be5d08bcdca7 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -70,16 +70,31 @@ struct timespec timespec_div(struct timespec ts, int divisor);
+ enum vm_mem_backing_src_type {
+ 	VM_MEM_SRC_ANONYMOUS,
+ 	VM_MEM_SRC_ANONYMOUS_THP,
+-	VM_MEM_SRC_ANONYMOUS_HUGETLB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
++	NUM_SRC_TYPES,
+ };
  
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ struct vm_mem_backing_src_alias {
+ 	const char *name;
+-	enum vm_mem_backing_src_type type;
++	uint32_t flag;
+ };
  
- 	/* Let the guest access its memory */
- 	ret = _vcpu_run(vm, vcpu_id);
-@@ -86,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
- 	copy.len = perf_test_args.host_page_size;
- 	copy.mode = 0;
+ bool thp_configured(void);
+ size_t get_trans_hugepagesz(void);
++const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
++size_t get_backing_src_pagesz(uint32_t i);
+ void backing_src_help(void);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
  
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	r = ioctl(uffd, UFFDIO_COPY, &copy);
- 	if (r == -1) {
-@@ -123,7 +123,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 	struct timespec start;
- 	struct timespec ts_diff;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	while (!quit_uffd_thread) {
- 		struct uffd_msg msg;
- 		struct pollfd pollfd[2];
-@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 
- 	pr_info("Finished creating vCPUs and starting uffd threads\n");
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 04a2641261be..6cff4ccf9525 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -50,7 +50,7 @@ static void *vcpu_worker(void *data)
- 	while (!READ_ONCE(host_quit)) {
- 		int current_iteration = READ_ONCE(iteration);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		ret = _vcpu_run(vm, vcpu_id);
- 		ts_diff = timespec_elapsed(start);
- 
-@@ -141,7 +141,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	iteration = 0;
- 	host_quit = false;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		vcpu_last_completed_iteration[vcpu_id] = -1;
- 
-@@ -162,7 +162,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 	/* Enable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX,
- 				KVM_MEM_LOG_DIRTY_PAGES);
- 	ts_diff = timespec_elapsed(start);
-@@ -174,7 +174,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		 * Incrementing the iteration number will start the vCPUs
- 		 * dirtying memory again.
- 		 */
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		iteration++;
- 
- 		pr_debug("Starting iteration %d\n", iteration);
-@@ -189,7 +189,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		kvm_vm_get_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap);
- 
- 		ts_diff = timespec_elapsed(start);
-@@ -199,7 +199,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 		if (dirty_log_manual_caps) {
--			clock_gettime(CLOCK_MONOTONIC, &start);
-+			clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 			kvm_vm_clear_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap, 0,
- 					       host_num_pages);
- 
-@@ -212,7 +212,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	}
- 
- 	/* Disable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX, 0);
- 	ts_diff = timespec_elapsed(start);
- 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index cc22c4ab7d67..b91c8e3a7ee1 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -757,7 +757,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	region->mmap_start = mmap(NULL, region->mmap_size,
+ 				  PROT_READ | PROT_WRITE,
+ 				  MAP_PRIVATE | MAP_ANONYMOUS
+-				  | (src_type == VM_MEM_SRC_ANONYMOUS_HUGETLB ? MAP_HUGETLB : 0),
++				  | vm_mem_backing_src_alias(src_type)->flag,
+ 				  -1, 0);
+ 	TEST_ASSERT(region->mmap_start != MAP_FAILED,
+ 		    "test_malloc failed, mmap_start: %p errno: %i",
 diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 906c955384e2..c7c0627c6842 100644
+index f2d133f76c67..6780aa058f35 100644
 --- a/tools/testing/selftests/kvm/lib/test_util.c
 +++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -89,7 +89,7 @@ struct timespec timespec_elapsed(struct timespec start)
- {
- 	struct timespec end;
+@@ -11,6 +11,7 @@
+ #include <stdlib.h>
+ #include <time.h>
+ #include <sys/stat.h>
++#include <linux/mman.h>
+ #include "linux/kernel.h"
  
--	clock_gettime(CLOCK_MONOTONIC, &end);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
- 	return timespec_sub(end, start);
+ #include "test_util.h"
+@@ -112,12 +113,6 @@ void print_skip(const char *fmt, ...)
+ 	puts(", skipping test");
  }
  
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index fcc840088c91..5bc582d3f2a2 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -237,11 +237,11 @@ static void *do_steal_time(void *arg)
+-const struct vm_mem_backing_src_alias backing_src_aliases[] = {
+-	{"anonymous", VM_MEM_SRC_ANONYMOUS,},
+-	{"anonymous_thp", VM_MEM_SRC_ANONYMOUS_THP,},
+-	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
+-};
+-
+ bool thp_configured(void)
  {
- 	struct timespec ts, stop;
+ 	int ret;
+@@ -153,22 +148,61 @@ size_t get_trans_hugepagesz(void)
+ 	return size;
+ }
  
--	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
++const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
++{
++	static const struct vm_mem_backing_src_alias aliases[] = {
++		{ "anonymous",               0                            },
++		{ "anonymous_thp",           0                            },
++		{ "anonymous_hugetlb_16kb",  MAP_HUGETLB | MAP_HUGE_16KB  },
++		{ "anonymous_hugetlb_64kb",  MAP_HUGETLB | MAP_HUGE_64KB  },
++		{ "anonymous_hugetlb_512kb", MAP_HUGETLB | MAP_HUGE_512KB },
++		{ "anonymous_hugetlb_1mb",   MAP_HUGETLB | MAP_HUGE_1MB   },
++		{ "anonymous_hugetlb_2mb",   MAP_HUGETLB | MAP_HUGE_2MB   },
++		{ "anonymous_hugetlb_8mb",   MAP_HUGETLB | MAP_HUGE_8MB   },
++		{ "anonymous_hugetlb_16mb",  MAP_HUGETLB | MAP_HUGE_16MB  },
++		{ "anonymous_hugetlb_32mb",  MAP_HUGETLB | MAP_HUGE_32MB  },
++		{ "anonymous_hugetlb_256mb", MAP_HUGETLB | MAP_HUGE_256MB },
++		{ "anonymous_hugetlb_512mb", MAP_HUGETLB | MAP_HUGE_512MB },
++		{ "anonymous_hugetlb_1gb",   MAP_HUGETLB | MAP_HUGE_1GB   },
++		{ "anonymous_hugetlb_2gb",   MAP_HUGETLB | MAP_HUGE_2GB   },
++		{ "anonymous_hugetlb_16gb",  MAP_HUGETLB | MAP_HUGE_16GB  },
++	};
++	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
++		       "Missing new backing src types?");
++
++	TEST_ASSERT(i < NUM_SRC_TYPES, "Backing src type ID %d too big", i);
++
++	return aliases + i;
++}
++
++size_t get_backing_src_pagesz(uint32_t i)
++{
++	uint32_t flag = vm_mem_backing_src_alias(i)->flag;
++
++	if (i == VM_MEM_SRC_ANONYMOUS)
++		return getpagesize();
++	if (i == VM_MEM_SRC_ANONYMOUS_THP)
++		return get_trans_hugepagesz();
++
++	return 1ULL << (flag >> HUGETLB_FLAG_ENCODE_SHIFT);
++}
++
+ void backing_src_help(void)
+ {
+ 	int i;
  
- 	while (1) {
--		clock_gettime(CLOCK_MONOTONIC, &ts);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
- 			break;
- 	}
+ 	printf("Available backing src types:\n");
+-	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
+-		printf("\t%s\n", backing_src_aliases[i].name);
++	for (i = 0; i < NUM_SRC_TYPES; i++)
++		printf("\t%s\n", vm_mem_backing_src_alias(i)->name);
+ }
+ 
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
+-		if (!strcmp(type_name, backing_src_aliases[i].name))
+-			return backing_src_aliases[i].type;
++	for (i = 0; i < NUM_SRC_TYPES; i++)
++		if (!strcmp(type_name, vm_mem_backing_src_alias(i)->name))
++			return i;
+ 
+ 	backing_src_help();
+ 	TEST_FAIL("Unknown backing src type: %s", type_name);
 -- 
 2.19.1
 
