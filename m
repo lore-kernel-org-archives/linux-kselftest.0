@@ -3,30 +3,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D347C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E04AC433E6
 	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16A1F64E31
+	by mail.kernel.org (Postfix) with ESMTP id 7A02F60234
 	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbhCAHBY (ORCPT
+        id S232250AbhCAHBZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Mar 2021 02:01:24 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13026 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbhCAHBR (ORCPT
+        Mon, 1 Mar 2021 02:01:25 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:12958 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232167AbhCAHBR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 1 Mar 2021 02:01:17 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Dprfx4tPJzMgNW;
-        Mon,  1 Mar 2021 14:57:29 +0800 (CST)
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Dprgc5BCnzjShq;
+        Mon,  1 Mar 2021 14:58:04 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 1 Mar 2021 14:59:28 +0800
+ 14.3.498.0; Mon, 1 Mar 2021 14:59:18 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -45,12 +45,10 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
         <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v3 7/8] KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
-Date:   Mon, 1 Mar 2021 14:59:15 +0800
-Message-ID: <20210301065916.11484-8-wangyanan55@huawei.com>
+Subject: [RFC PATCH v3 0/7] KVM: selftests: some improvement and a new test for kvm page table
+Date:   Mon, 1 Mar 2021 14:59:08 +0800
+Message-ID: <20210301065916.11484-1-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
-In-Reply-To: <20210301065916.11484-1-wangyanan55@huawei.com>
-References: <20210301065916.11484-1-wangyanan55@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.174.187.128]
@@ -59,79 +57,101 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
-we have to get the transparent hugepage size for HVA alignment. With the
-new helpers, we can use get_backing_src_pagesz() to check whether THP is
-configured and then get the exact configured hugepage size.
+Hi,
+This v3 series can mainly include two parts.
+Based on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
+Links of v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
+Links of v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
 
-As different architectures may have different THP page sizes configured,
-this can get the accurate THP page sizes on any platform.
+In the first part, all the known hugetlb backing src types specified
+with different hugepage sizes are listed, so that we can specify use
+of hugetlb source of the exact granularity that we want, instead of
+the system default ones. And as all the known hugetlb page sizes are
+listed, it's appropriate for all architectures. Besides, a helper that
+can get granularity of different backing src types(anonumous/thp/hugetlb)
+is added, so that we can use the accurate backing src granularity for
+kinds of alignment or guest memory accessing of vcpus.
 
-Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+In the second part, a new test is added:
+This test is added to serve as a performance tester and a bug reproducer
+for kvm page table code (GPA->HPA mappings), it gives guidance for the
+people trying to make some improvement for kvm. And the following explains
+what we can exactly do through this test.
+
+The function guest_code() can cover the conditions where a single vcpu or
+multiple vcpus access guest pages within the same memory region, in three
+VM stages(before dirty logging, during dirty logging, after dirty logging).
+Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
+memory region can be specified by users, which means normal page mappings
+or block mappings can be chosen by users to be created in the test.
+
+If ANONYMOUS memory is specified, kvm will create normal page mappings
+for the tested memory region before dirty logging, and update attributes
+of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
+memory is specified, kvm will create block mappings for the tested memory
+region before dirty logging, and split the blcok mappings into normal page
+mappings during dirty logging, and coalesce the page mappings back into
+block mappings after dirty logging is stopped.
+
+So in summary, as a performance tester, this test can present the
+performance of kvm creating/updating normal page mappings, or the
+performance of kvm creating/splitting/recovering block mappings,
+through execution time.
+
+When we need to coalesce the page mappings back to block mappings after
+dirty logging is stopped, we have to firstly invalidate *all* the TLB
+entries for the page mappings right before installation of the block entry,
+because a TLB conflict abort error could occur if we can't invalidate the
+TLB entries fully. We have hit this TLB conflict twice on aarch64 software
+implementation and fixed it. As this test can imulate process from dirty
+logging enabled to dirty logging stopped of a VM with block mappings,
+so it can also reproduce this TLB conflict abort due to inadequate TLB
+invalidation when coalescing tables.
+
+Links about the TLB conflict abort:
+https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
+
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 28 +++++++---------------
- 1 file changed, 9 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index b91c8e3a7ee1..b29402f9f00c 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -18,7 +18,6 @@
- #include <unistd.h>
- #include <linux/kernel.h>
- 
--#define KVM_UTIL_PGS_PER_HUGEPG 512
- #define KVM_UTIL_MIN_PFN	2
- 
- /* Aligns x up to the next multiple of size. Size must be a power of 2. */
-@@ -686,7 +685,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- {
- 	int ret;
- 	struct userspace_mem_region *region;
--	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
-+	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
- 	size_t alignment;
- 
- 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
-@@ -748,7 +747,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- #endif
- 
- 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
--		alignment = max(huge_page_size, alignment);
-+		alignment = max(backing_src_pagesz, alignment);
- 
- 	/* Add enough memory to align up if necessary */
- 	if (alignment > 1)
-@@ -767,22 +766,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->host_mem = align(region->mmap_start, alignment);
- 
- 	/* As needed perform madvise */
--	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
--		struct stat statbuf;
--
--		ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
--		TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
--			    "stat /sys/kernel/mm/transparent_hugepage");
--
--		TEST_ASSERT(ret == 0 || src_type != VM_MEM_SRC_ANONYMOUS_THP,
--			    "VM_MEM_SRC_ANONYMOUS_THP requires THP to be configured in the host kernel");
--
--		if (ret == 0) {
--			ret = madvise(region->host_mem, npages * vm->page_size,
--				      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
--			TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %x",
--				    region->host_mem, npages * vm->page_size, src_type);
--		}
-+	if ((src_type == VM_MEM_SRC_ANONYMOUS ||
-+	     src_type == VM_MEM_SRC_ANONYMOUS_THP) && thp_configured()) {
-+		ret = madvise(region->host_mem, npages * vm->page_size,
-+			      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
-+		TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %s",
-+			    region->host_mem, npages * vm->page_size,
-+			    vm_mem_backing_src_alias(src_type)->name);
- 	}
- 
- 	region->unused_phy_pages = sparsebit_alloc();
+Change logs:
+
+v2->v3:
+- Add tags of Suggested-by, Reviewed-by in the patches
+- Add a generic micro to get hugetlb page sizes
+- Some changes for suggestions about v2 series
+
+v1->v2:
+- Add a patch to sync header files
+- Add helpers to get granularity of different backing src types
+- Some changes for suggestions about v1 series
+
+---
+
+Yanan Wang (7):
+  tools headers: sync headers of asm-generic/hugetlb_encode.h
+  tools headers: Add a macro to get HUGETLB page sizes for mmap
+  KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+  KVM: selftests: Make a generic helper to get vm guest mode strings
+  KVM: selftests: Add a helper to get system configured THP page size
+  KVM: selftests: List all hugetlb src types specified with page sizes
+  KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+  KVM: selftests: Add a test for kvm page table code
+
+ include/uapi/linux/mman.h                     |   2 +
+ tools/include/asm-generic/hugetlb_encode.h    |   3 +
+ tools/include/uapi/linux/mman.h               |   2 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/demand_paging_test.c        |   8 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
+ .../testing/selftests/kvm/include/test_util.h |  21 +-
+ .../selftests/kvm/kvm_page_table_test.c       | 476 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  59 ++-
+ tools/testing/selftests/kvm/lib/test_util.c   |  92 +++-
+ tools/testing/selftests/kvm/steal_time.c      |   4 +-
+ 12 files changed, 628 insertions(+), 60 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c 
+
 -- 
-2.23.0
+2.19.1
 
