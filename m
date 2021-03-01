@@ -2,137 +2,160 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84561C433E9
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6902C433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 09:57:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BD7964E41
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:02:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 582DB64E40
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 09:57:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbhCAHBm (ORCPT
+        id S234313AbhCAJ5S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Mar 2021 02:01:42 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12656 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbhCAHBg (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Mar 2021 02:01:36 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Dprfs0cxlzlR8Z;
-        Mon,  1 Mar 2021 14:57:25 +0800 (CST)
-Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 1 Mar 2021 14:59:24 +0800
-From:   Yanan Wang <wangyanan55@huawei.com>
-To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
-        <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v3 4/8] KVM: selftests: Make a generic helper to get vm guest mode strings
-Date:   Mon, 1 Mar 2021 14:59:12 +0800
-Message-ID: <20210301065916.11484-5-wangyanan55@huawei.com>
-X-Mailer: git-send-email 2.8.4.windows.1
-In-Reply-To: <20210301065916.11484-1-wangyanan55@huawei.com>
-References: <20210301065916.11484-1-wangyanan55@huawei.com>
+        Mon, 1 Mar 2021 04:57:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52000 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234187AbhCAJz3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 1 Mar 2021 04:55:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B7B8664E3F;
+        Mon,  1 Mar 2021 09:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614592489;
+        bh=465DNft04Sr+n7THeMGvd9oDfHYZ8L7VeCWhsS06AJk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nqPJUJ02LQ3pRRnvmJx1bF44xq3zfmOEPgSJ4SZuh0tQo4LOvO4qQHSlureSP05a5
+         KJNw6LdlHipHfLjFocNIYbkF7gkZyMvr7k7OswgMFxPTju51mqneNn3Ub6DF+/qn51
+         8FzKJf77EsduYvsqyL5sNW9HvfvC2NA3qcEsr9by6sf74L7xNbE7d9VEAlSM8XRKF3
+         Jvo5rd0BiOL2B92WrKaQQDFhFaRVb553ryb0o4kED0WeaSeCucgAfcuZ6AOMlGhVPt
+         WmVw94r//zN1nsa3ndv1zoSj8cbarj5bfwtT9ZaMWsgDBqyt/B53sqPcQL6Ap0NLj3
+         R9iLcqoo/Dfdg==
+Date:   Mon, 1 Mar 2021 11:54:29 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH] selftests/sgx: fix EINIT failure dueto
+ SGX_INVALID_SIGNATURE
+Message-ID: <YDy51R2Wva7s+k/x@kernel.org>
+References: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.187.128]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For generality and conciseness, make an API which can be used in all
-kvm libs and selftests to get vm guest mode strings. And the index i
-is checked in the API in case of possiable faults.
+On Mon, Mar 01, 2021 at 01:18:36PM +0800, Tianjia Zhang wrote:
+> q2 is not always 384-byte length. Sometimes it only has 383-byte.
 
-Reviewed-by: Andrew Jones <drjones@redhat.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
----
- .../testing/selftests/kvm/include/kvm_util.h  |  4 +--
- tools/testing/selftests/kvm/lib/kvm_util.c    | 29 ++++++++++++-------
- 2 files changed, 19 insertions(+), 14 deletions(-)
+What does determine this?
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 2d7eb6989e83..f52a7492f47f 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -68,9 +68,6 @@ enum vm_guest_mode {
- #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
- 
--#define vm_guest_mode_string(m) vm_guest_mode_string[m]
--extern const char * const vm_guest_mode_string[];
--
- struct vm_guest_mode_params {
- 	unsigned int pa_bits;
- 	unsigned int va_bits;
-@@ -84,6 +81,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap);
- int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
- 		    struct kvm_enable_cap *cap);
- void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
-+const char *vm_guest_mode_string(uint32_t i);
- 
- struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
- void kvm_vm_free(struct kvm_vm *vmp);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index d787cb802b4a..cc22c4ab7d67 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -141,17 +141,24 @@ static void vm_open(struct kvm_vm *vm, int perm)
- 		"rc: %i errno: %i", vm->fd, errno);
- }
- 
--const char * const vm_guest_mode_string[] = {
--	"PA-bits:52,  VA-bits:48,  4K pages",
--	"PA-bits:52,  VA-bits:48, 64K pages",
--	"PA-bits:48,  VA-bits:48,  4K pages",
--	"PA-bits:48,  VA-bits:48, 64K pages",
--	"PA-bits:40,  VA-bits:48,  4K pages",
--	"PA-bits:40,  VA-bits:48, 64K pages",
--	"PA-bits:ANY, VA-bits:48,  4K pages",
--};
--_Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
--	       "Missing new mode strings?");
-+const char *vm_guest_mode_string(uint32_t i)
-+{
-+	static const char * const strings[] = {
-+		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
-+		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
-+		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
-+		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
-+		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
-+		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
-+		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
-+	};
-+	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
-+		       "Missing new mode strings?");
-+
-+	TEST_ASSERT(i < NUM_VM_MODES, "Guest mode ID %d too big", i);
-+
-+	return strings[i];
-+}
- 
- const struct vm_guest_mode_params vm_guest_mode_params[] = {
- 	{ 52, 48,  0x1000, 12 },
--- 
-2.23.0
+> In this case, the valid portion of q2 is reordered reversely for
+> little endian order, and the remaining portion is filled with zero.
 
+I'm presuming that you want to say "In this case, q2 needs to be reversed because...".
+
+I'm lacking these details:
+
+1. Why the length of Q2 can vary?
+2. Why reversing the bytes is the correct measure to counter-measure
+   this variation?
+
+/Jarkko
+
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
+>  1 file changed, 21 insertions(+), 20 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> index dee7a3d6c5a5..92bbc5a15c39 100644
+> --- a/tools/testing/selftests/sgx/sigstruct.c
+> +++ b/tools/testing/selftests/sgx/sigstruct.c
+> @@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
+>  	return true;
+>  }
+>  
+> +static void reverse_bytes(void *data, int length)
+> +{
+> +	int i = 0;
+> +	int j = length - 1;
+> +	uint8_t temp;
+> +	uint8_t *ptr = data;
+> +
+> +	while (i < j) {
+> +		temp = ptr[i];
+> +		ptr[i] = ptr[j];
+> +		ptr[j] = temp;
+> +		i++;
+> +		j--;
+> +	}
+> +}
+> +
+>  static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
+>  		      uint8_t *q2)
+>  {
+>  	struct q1q2_ctx ctx;
+> +	int len;
+>  
+>  	if (!alloc_q1q2_ctx(s, m, &ctx)) {
+>  		fprintf(stderr, "Not enough memory for Q1Q2 calculation\n");
+> @@ -89,8 +106,10 @@ static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
+>  		goto out;
+>  	}
+>  
+> -	BN_bn2bin(ctx.q1, q1);
+> -	BN_bn2bin(ctx.q2, q2);
+> +	len = BN_bn2bin(ctx.q1, q1);
+> +	reverse_bytes(q1, len);
+> +	len = BN_bn2bin(ctx.q2, q2);
+> +	reverse_bytes(q2, len);
+>  
+>  	free_q1q2_ctx(&ctx);
+>  	return true;
+> @@ -152,22 +171,6 @@ static RSA *gen_sign_key(void)
+>  	return key;
+>  }
+>  
+> -static void reverse_bytes(void *data, int length)
+> -{
+> -	int i = 0;
+> -	int j = length - 1;
+> -	uint8_t temp;
+> -	uint8_t *ptr = data;
+> -
+> -	while (i < j) {
+> -		temp = ptr[i];
+> -		ptr[i] = ptr[j];
+> -		ptr[j] = temp;
+> -		i++;
+> -		j--;
+> -	}
+> -}
+> -
+>  enum mrtags {
+>  	MRECREATE = 0x0045544145524345,
+>  	MREADD = 0x0000000044444145,
+> @@ -367,8 +370,6 @@ bool encl_measure(struct encl *encl)
+>  	/* BE -> LE */
+>  	reverse_bytes(sigstruct->signature, SGX_MODULUS_SIZE);
+>  	reverse_bytes(sigstruct->modulus, SGX_MODULUS_SIZE);
+> -	reverse_bytes(sigstruct->q1, SGX_MODULUS_SIZE);
+> -	reverse_bytes(sigstruct->q2, SGX_MODULUS_SIZE);
+>  
+>  	EVP_MD_CTX_destroy(ctx);
+>  	RSA_free(key);
+> -- 
+> 2.19.1.3.ge56e4f7
+> 
+> 
