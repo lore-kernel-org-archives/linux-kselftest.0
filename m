@@ -4,134 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F359C433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 05:19:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA602C433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1DA0A64E04
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 05:19:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64EEB60234
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbhCAFTV (ORCPT
+        id S232195AbhCAHBT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Mar 2021 00:19:21 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:53026 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233439AbhCAFTV (ORCPT
+        Mon, 1 Mar 2021 02:01:19 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12657 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232221AbhCAHBQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Mar 2021 00:19:21 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UPtRs.4_1614575916;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UPtRs.4_1614575916)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 01 Mar 2021 13:18:36 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Mon, 1 Mar 2021 02:01:16 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Dprfs03gwzlR8S;
+        Mon,  1 Mar 2021 14:57:25 +0800 (CST)
+Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 1 Mar 2021 14:59:21 +0800
+From:   Yanan Wang <wangyanan55@huawei.com>
+To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        "Sean Christopherson" <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jia Zhang <zhang.jia@linux.alibaba.com>
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH] selftests/sgx: fix EINIT failure dueto SGX_INVALID_SIGNATURE
-Date:   Mon,  1 Mar 2021 13:18:36 +0800
-Message-Id: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.3.ge56e4f7
+        <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
+        <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
+Subject: [RFC PATCH v3 2/8] tools headers: Add a macro to get HUGETLB page sizes for mmap
+Date:   Mon, 1 Mar 2021 14:59:10 +0800
+Message-ID: <20210301065916.11484-3-wangyanan55@huawei.com>
+X-Mailer: git-send-email 2.8.4.windows.1
+In-Reply-To: <20210301065916.11484-1-wangyanan55@huawei.com>
+References: <20210301065916.11484-1-wangyanan55@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.174.187.128]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-q2 is not always 384-byte length. Sometimes it only has 383-byte.
-In this case, the valid portion of q2 is reordered reversely for
-little endian order, and the remaining portion is filled with zero.
+We know that if a system supports multiple hugetlb page sizes,
+the desired hugetlb page size can be specified in bits [26:31]
+of the flag arguments. The value in these 6 bits will be the
+shift of each hugetlb page size.
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+So add a macro to get the page size shift and then calculate the
+corresponding hugetlb page size, using flag x.
+
+Cc: Ben Gardon <bgardon@google.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Suggested-by: Ben Gardon <bgardon@google.com>
+Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 ---
- tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
- 1 file changed, 21 insertions(+), 20 deletions(-)
+ include/uapi/linux/mman.h       | 2 ++
+ tools/include/uapi/linux/mman.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index dee7a3d6c5a5..92bbc5a15c39 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
- 	return true;
- }
+diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
+index f55bc680b5b0..8bd41128a0ee 100644
+--- a/include/uapi/linux/mman.h
++++ b/include/uapi/linux/mman.h
+@@ -41,4 +41,6 @@
+ #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+ #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
  
-+static void reverse_bytes(void *data, int length)
-+{
-+	int i = 0;
-+	int j = length - 1;
-+	uint8_t temp;
-+	uint8_t *ptr = data;
++#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
 +
-+	while (i < j) {
-+		temp = ptr[i];
-+		ptr[i] = ptr[j];
-+		ptr[j] = temp;
-+		i++;
-+		j--;
-+	}
-+}
+ #endif /* _UAPI_LINUX_MMAN_H */
+diff --git a/tools/include/uapi/linux/mman.h b/tools/include/uapi/linux/mman.h
+index f55bc680b5b0..8bd41128a0ee 100644
+--- a/tools/include/uapi/linux/mman.h
++++ b/tools/include/uapi/linux/mman.h
+@@ -41,4 +41,6 @@
+ #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+ #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
+ 
++#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
 +
- static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
- 		      uint8_t *q2)
- {
- 	struct q1q2_ctx ctx;
-+	int len;
- 
- 	if (!alloc_q1q2_ctx(s, m, &ctx)) {
- 		fprintf(stderr, "Not enough memory for Q1Q2 calculation\n");
-@@ -89,8 +106,10 @@ static bool calc_q1q2(const uint8_t *s, const uint8_t *m, uint8_t *q1,
- 		goto out;
- 	}
- 
--	BN_bn2bin(ctx.q1, q1);
--	BN_bn2bin(ctx.q2, q2);
-+	len = BN_bn2bin(ctx.q1, q1);
-+	reverse_bytes(q1, len);
-+	len = BN_bn2bin(ctx.q2, q2);
-+	reverse_bytes(q2, len);
- 
- 	free_q1q2_ctx(&ctx);
- 	return true;
-@@ -152,22 +171,6 @@ static RSA *gen_sign_key(void)
- 	return key;
- }
- 
--static void reverse_bytes(void *data, int length)
--{
--	int i = 0;
--	int j = length - 1;
--	uint8_t temp;
--	uint8_t *ptr = data;
--
--	while (i < j) {
--		temp = ptr[i];
--		ptr[i] = ptr[j];
--		ptr[j] = temp;
--		i++;
--		j--;
--	}
--}
--
- enum mrtags {
- 	MRECREATE = 0x0045544145524345,
- 	MREADD = 0x0000000044444145,
-@@ -367,8 +370,6 @@ bool encl_measure(struct encl *encl)
- 	/* BE -> LE */
- 	reverse_bytes(sigstruct->signature, SGX_MODULUS_SIZE);
- 	reverse_bytes(sigstruct->modulus, SGX_MODULUS_SIZE);
--	reverse_bytes(sigstruct->q1, SGX_MODULUS_SIZE);
--	reverse_bytes(sigstruct->q2, SGX_MODULUS_SIZE);
- 
- 	EVP_MD_CTX_destroy(ctx);
- 	RSA_free(key);
+ #endif /* _UAPI_LINUX_MMAN_H */
 -- 
-2.19.1.3.ge56e4f7
+2.23.0
 
