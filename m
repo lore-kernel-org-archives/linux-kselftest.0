@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 536B2C433E6
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D347C433E9
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A9FD64E31
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16A1F64E31
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Mar 2021 07:01:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbhCAHBX (ORCPT
+        id S232245AbhCAHBY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Mar 2021 02:01:23 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:13394 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbhCAHBR (ORCPT
+        Mon, 1 Mar 2021 02:01:24 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:13026 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229882AbhCAHBR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 1 Mar 2021 02:01:17 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Dprgk03yFzjSjg;
-        Mon,  1 Mar 2021 14:58:10 +0800 (CST)
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Dprfx4tPJzMgNW;
+        Mon,  1 Mar 2021 14:57:29 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 1 Mar 2021 14:59:22 +0800
+ 14.3.498.0; Mon, 1 Mar 2021 14:59:28 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -45,9 +45,9 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
         <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v3 3/8] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
-Date:   Mon, 1 Mar 2021 14:59:11 +0800
-Message-ID: <20210301065916.11484-4-wangyanan55@huawei.com>
+Subject: [RFC PATCH v3 7/8] KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+Date:   Mon, 1 Mar 2021 14:59:15 +0800
+Message-ID: <20210301065916.11484-8-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210301065916.11484-1-wangyanan55@huawei.com>
 References: <20210301065916.11484-1-wangyanan55@huawei.com>
@@ -59,156 +59,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
-also shield possiable impact of NTP, which can provide more robustness.
+With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
+we have to get the transparent hugepage size for HVA alignment. With the
+new helpers, we can use get_backing_src_pagesz() to check whether THP is
+configured and then get the exact configured hugepage size.
 
-Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+As different architectures may have different THP page sizes configured,
+this can get the accurate THP page sizes on any platform.
+
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 ---
- tools/testing/selftests/kvm/demand_paging_test.c  |  8 ++++----
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 14 +++++++-------
- tools/testing/selftests/kvm/lib/test_util.c       |  2 +-
- tools/testing/selftests/kvm/steal_time.c          |  4 ++--
- 4 files changed, 14 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kvm/lib/kvm_util.c | 28 +++++++---------------
+ 1 file changed, 9 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 5f7a229c3af1..efbf0c1e9130 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -53,7 +53,7 @@ static void *vcpu_worker(void *data)
- 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
- 	run = vcpu_state(vm, vcpu_id);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index b91c8e3a7ee1..b29402f9f00c 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -18,7 +18,6 @@
+ #include <unistd.h>
+ #include <linux/kernel.h>
  
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+-#define KVM_UTIL_PGS_PER_HUGEPG 512
+ #define KVM_UTIL_MIN_PFN	2
  
- 	/* Let the guest access its memory */
- 	ret = _vcpu_run(vm, vcpu_id);
-@@ -86,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
- 	copy.len = perf_test_args.host_page_size;
- 	copy.mode = 0;
+ /* Aligns x up to the next multiple of size. Size must be a power of 2. */
+@@ -686,7 +685,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ {
+ 	int ret;
+ 	struct userspace_mem_region *region;
+-	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
++	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
+ 	size_t alignment;
  
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
+@@ -748,7 +747,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ #endif
  
- 	r = ioctl(uffd, UFFDIO_COPY, &copy);
- 	if (r == -1) {
-@@ -123,7 +123,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 	struct timespec start;
- 	struct timespec ts_diff;
+ 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+-		alignment = max(huge_page_size, alignment);
++		alignment = max(backing_src_pagesz, alignment);
  
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	while (!quit_uffd_thread) {
- 		struct uffd_msg msg;
- 		struct pollfd pollfd[2];
-@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	/* Add enough memory to align up if necessary */
+ 	if (alignment > 1)
+@@ -767,22 +766,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	region->host_mem = align(region->mmap_start, alignment);
  
- 	pr_info("Finished creating vCPUs and starting uffd threads\n");
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 04a2641261be..6cff4ccf9525 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -50,7 +50,7 @@ static void *vcpu_worker(void *data)
- 	while (!READ_ONCE(host_quit)) {
- 		int current_iteration = READ_ONCE(iteration);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		ret = _vcpu_run(vm, vcpu_id);
- 		ts_diff = timespec_elapsed(start);
- 
-@@ -141,7 +141,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	iteration = 0;
- 	host_quit = false;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		vcpu_last_completed_iteration[vcpu_id] = -1;
- 
-@@ -162,7 +162,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 	/* Enable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX,
- 				KVM_MEM_LOG_DIRTY_PAGES);
- 	ts_diff = timespec_elapsed(start);
-@@ -174,7 +174,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		 * Incrementing the iteration number will start the vCPUs
- 		 * dirtying memory again.
- 		 */
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		iteration++;
- 
- 		pr_debug("Starting iteration %d\n", iteration);
-@@ -189,7 +189,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		kvm_vm_get_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap);
- 
- 		ts_diff = timespec_elapsed(start);
-@@ -199,7 +199,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 		if (dirty_log_manual_caps) {
--			clock_gettime(CLOCK_MONOTONIC, &start);
-+			clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 			kvm_vm_clear_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap, 0,
- 					       host_num_pages);
- 
-@@ -212,7 +212,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	/* As needed perform madvise */
+-	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
+-		struct stat statbuf;
+-
+-		ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
+-		TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
+-			    "stat /sys/kernel/mm/transparent_hugepage");
+-
+-		TEST_ASSERT(ret == 0 || src_type != VM_MEM_SRC_ANONYMOUS_THP,
+-			    "VM_MEM_SRC_ANONYMOUS_THP requires THP to be configured in the host kernel");
+-
+-		if (ret == 0) {
+-			ret = madvise(region->host_mem, npages * vm->page_size,
+-				      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
+-			TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %x",
+-				    region->host_mem, npages * vm->page_size, src_type);
+-		}
++	if ((src_type == VM_MEM_SRC_ANONYMOUS ||
++	     src_type == VM_MEM_SRC_ANONYMOUS_THP) && thp_configured()) {
++		ret = madvise(region->host_mem, npages * vm->page_size,
++			      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
++		TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %s",
++			    region->host_mem, npages * vm->page_size,
++			    vm_mem_backing_src_alias(src_type)->name);
  	}
  
- 	/* Disable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX, 0);
- 	ts_diff = timespec_elapsed(start);
- 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 906c955384e2..c7c0627c6842 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -89,7 +89,7 @@ struct timespec timespec_elapsed(struct timespec start)
- {
- 	struct timespec end;
- 
--	clock_gettime(CLOCK_MONOTONIC, &end);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
- 	return timespec_sub(end, start);
- }
- 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index fcc840088c91..5bc582d3f2a2 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -237,11 +237,11 @@ static void *do_steal_time(void *arg)
- {
- 	struct timespec ts, stop;
- 
--	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
- 
- 	while (1) {
--		clock_gettime(CLOCK_MONOTONIC, &ts);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
- 			break;
- 	}
+ 	region->unused_phy_pages = sparsebit_alloc();
 -- 
 2.23.0
 
