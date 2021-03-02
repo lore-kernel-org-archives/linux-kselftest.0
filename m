@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3EA8C433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B208BC433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:48:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8916D64F21
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:48:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7458564F0D
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:48:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573172AbhCBQpz (ORCPT
+        id S1573237AbhCBQp7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Mar 2021 11:45:55 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:13838 "EHLO
+        Tue, 2 Mar 2021 11:45:59 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:13837 "EHLO
         szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350927AbhCBM7O (ORCPT
+        with ESMTP id S1350922AbhCBM7T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Mar 2021 07:59:14 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DqcZk2wKFz7sRB;
-        Tue,  2 Mar 2021 20:56:30 +0800 (CST)
+        Tue, 2 Mar 2021 07:59:19 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DqcZd42PGz7sRY;
+        Tue,  2 Mar 2021 20:56:25 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 2 Mar 2021 20:58:01 +0800
+ 14.3.498.0; Tue, 2 Mar 2021 20:57:56 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -45,9 +45,9 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
         <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v4 6/9] KVM: selftests: Add a helper to get system default hugetlb page size
-Date:   Tue, 2 Mar 2021 20:57:48 +0800
-Message-ID: <20210302125751.19080-7-wangyanan55@huawei.com>
+Subject: [RFC PATCH v4 2/9] tools headers: Add a macro to get HUGETLB page sizes for mmap
+Date:   Tue, 2 Mar 2021 20:57:44 +0800
+Message-ID: <20210302125751.19080-3-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210302125751.19080-1-wangyanan55@huawei.com>
 References: <20210302125751.19080-1-wangyanan55@huawei.com>
@@ -59,71 +59,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If HUGETLB is configured in the host kernel, then we can know the system
-default hugetlb page size through *cat /proc/meminfo*. Otherwise, we will
-not see the information of hugetlb pages in file /proc/meminfo if it's not
-configured. So add a helper to determine whether HUGETLB is configured and
-then get the default page size by reading /proc/meminfo.
+We know that if a system supports multiple hugetlb page sizes,
+the desired hugetlb page size can be specified in bits [26:31]
+of the flag arguments. The value in these 6 bits will be the
+shift of each hugetlb page size.
 
-This helper can be useful when a program wants to use the default hugetlb
-pages of the system and doesn't know the default page size.
+So add a macro to get the page size shift and then calculate the
+corresponding hugetlb page size, using flag x.
 
+Cc: Ben Gardon <bgardon@google.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Suggested-by: Ben Gardon <bgardon@google.com>
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
 ---
- .../testing/selftests/kvm/include/test_util.h |  1 +
- tools/testing/selftests/kvm/lib/test_util.c   | 27 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ include/uapi/linux/mman.h       | 2 ++
+ tools/include/uapi/linux/mman.h | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index ef24c76ba89a..e087174eefe5 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -80,6 +80,7 @@ struct vm_mem_backing_src_alias {
+diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
+index f55bc680b5b0..8bd41128a0ee 100644
+--- a/include/uapi/linux/mman.h
++++ b/include/uapi/linux/mman.h
+@@ -41,4 +41,6 @@
+ #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+ #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
  
- bool thp_configured(void);
- size_t get_trans_hugepagesz(void);
-+size_t get_def_hugetlb_pagesz(void);
- void backing_src_help(void);
- enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
++#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
++
+ #endif /* _UAPI_LINUX_MMAN_H */
+diff --git a/tools/include/uapi/linux/mman.h b/tools/include/uapi/linux/mman.h
+index f55bc680b5b0..8bd41128a0ee 100644
+--- a/tools/include/uapi/linux/mman.h
++++ b/tools/include/uapi/linux/mman.h
+@@ -41,4 +41,6 @@
+ #define MAP_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
+ #define MAP_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
  
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index f2d133f76c67..80d68dbd72d2 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -153,6 +153,33 @@ size_t get_trans_hugepagesz(void)
- 	return size;
- }
- 
-+size_t get_def_hugetlb_pagesz(void)
-+{
-+	char buf[64];
-+	const char *tag = "Hugepagesize:";
-+	FILE *f;
++#define MAP_HUGE_PAGE_SIZE(x) (1 << ((x >> MAP_HUGE_SHIFT) & MAP_HUGE_MASK))
 +
-+	f = fopen("/proc/meminfo", "r");
-+	TEST_ASSERT(f != NULL, "Error in opening /proc/meminfo: %d", errno);
-+
-+	while (fgets(buf, sizeof(buf), f) != NULL) {
-+		if (strstr(buf, tag) == buf) {
-+			fclose(f);
-+			return strtoull(buf + strlen(tag), NULL, 10) << 10;
-+		}
-+	}
-+
-+	if (feof(f)) {
-+		fclose(f);
-+		TEST_FAIL("HUGETLB is not configured in host kernel");
-+	} else {
-+		fclose(f);
-+		TEST_FAIL("Error in reading /proc/meminfo: %d", errno);
-+	}
-+
-+	return 0;
-+}
-+
- void backing_src_help(void)
- {
- 	int i;
+ #endif /* _UAPI_LINUX_MMAN_H */
 -- 
 2.23.0
 
