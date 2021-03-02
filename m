@@ -2,481 +2,126 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5994CC43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75E69C4332E
 	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:47:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2048364F27
+	by mail.kernel.org (Postfix) with ESMTP id 5157F64F0D
 	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:47:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351555AbhCBQlc (ORCPT
+        id S1382776AbhCBQmr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Mar 2021 11:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239257AbhCBADT (ORCPT
+        Tue, 2 Mar 2021 11:42:47 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:46778 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347484AbhCBFSC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Mar 2021 19:03:19 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E059FC061221
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Mar 2021 16:01:45 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id p136so20822152ybc.21
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Mar 2021 16:01:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=/0nvQXiTSNnELkxemnMOwYnxgNbtX6qanxURPmXUgOc=;
-        b=nZbBey6SU/Nwf4pBuR1BjceoWR3Ay8UCWRn44GbRUBn0OLkddGxnPLlpcQMsm/MYD9
-         W4Kcp/AJi4339FF3c57tGpSnBorUtzNlmY8jx6IOEeU38ZcZOehpi/W34X/54sX7X33C
-         umQX158SlDUlphDGZUiSH8K04vt981MIRTiFRevMcWvR6B/9dmIdJwm1+ccL4mHbZgWO
-         GJaXfKFdG6xjplPOEztVkr0GjIn23Fcbqaayibgt7JFGqnzp1oW2CbsQ7DaDFBTdvNE4
-         7irW8ZsqLi06MLZY55nClIhIw/AnHRFkEgbsWVBamkSop0tJyR86fd7StM71LOgeIEzz
-         MLXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=/0nvQXiTSNnELkxemnMOwYnxgNbtX6qanxURPmXUgOc=;
-        b=E4ZSkxvHYuBDmhud8rKO/BMSyu8B0A/YhYQqOf8N8FyExnc7/MBHEAZDjAADirtVCp
-         1CMEz9ivXk/LCIUqJ4FRXbD2z22MxXYuouGGdjxkcPo++B3mkl4MOuQzn1k4me/Pe2bA
-         x22ryDeJ2QP9LeWLqfd4MReQ/LYOQwWaiQGd8hzPHP5Pt/xRg1c8vbTwTq1WaY7XZiIK
-         IbkIwtfTUlDIzdRRYRypSwFwCxEFAhDfu13g07RAp+9IIpYeEnSH5u+QEN1An6L5T563
-         hw8HchXLYSU+ebqED1G5J+eAOEkPUJrFPE8KyqQ3hhsb8DYqKgkFnAmrb6kaXCBXbocO
-         C+jA==
-X-Gm-Message-State: AOAM533VFCtzi9LREAcCSJ2ci5IpgQp/TJw3Pg9suUVqzMLGJMlUs0Wg
-        a6oEcwrROUrORo8uDUm/WnWJ4oxD9+DYQS6MGN0F
-X-Google-Smtp-Source: ABdhPJzYaFj+BvuEcV9JsZ/4+8GOWQ8Y9K0378dugEDB53uXYSUMUVUgl2XFgEjydyM5VrAstKEoyXQiOt1F3homYpTP
-Sender: "axelrasmussen via sendgmr" <axelrasmussen@ajr0.svl.corp.google.com>
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:1998:8165:ca50:ab8d])
- (user=axelrasmussen job=sendgmr) by 2002:a25:d650:: with SMTP id
- n77mr27823692ybg.69.1614643305085; Mon, 01 Mar 2021 16:01:45 -0800 (PST)
-Date:   Mon,  1 Mar 2021 16:01:32 -0800
-In-Reply-To: <20210302000133.272579-1-axelrasmussen@google.com>
-Message-Id: <20210302000133.272579-5-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20210302000133.272579-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
-Subject: [PATCH v2 4/5] userfaultfd/selftests: reinitialize test context in
- each test
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
-        Shuah Khan <shuah@kernel.org>, Wang Qing <wangqing@vivo.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michel Lespinasse <walken@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 2 Mar 2021 00:18:02 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UQ33OCN_1614661612;
+Received: from B-455UMD6M-2027.local(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0UQ33OCN_1614661612)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 02 Mar 2021 13:06:53 +0800
+Subject: Re: [PATCH] selftests/sgx: fix EINIT failure dueto
+ SGX_INVALID_SIGNATURE
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+References: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
+ <YDy51R2Wva7s+k/x@kernel.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <3bcdcf04-4bed-ed95-84b6-790675f18240@linux.alibaba.com>
+Date:   Tue, 2 Mar 2021 13:06:52 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <YDy51R2Wva7s+k/x@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, the context (fds, mmap-ed areas, etc.) are global. Each test
-mutates this state in some way, in some cases really "clobbering it"
-(e.g., the events test mremap-ing area_dst over the top of area_src, or
-the minor faults tests overwriting the count_verify values in the test
-areas). We run the tests in a particular order, each test is careful to
-make the right assumptions about its starting state, etc.
 
-But, this is fragile. It's better for a test's success or failure to not
-depend on what some other prior test case did to the global state.
 
-To that end, clear and reinitialize the test context at the start of
-each test case, so whatever prior test cases did doesn't affect future
-tests.
+On 3/1/21 5:54 PM, Jarkko Sakkinen wrote:
+> On Mon, Mar 01, 2021 at 01:18:36PM +0800, Tianjia Zhang wrote:
+>> q2 is not always 384-byte length. Sometimes it only has 383-byte.
+> 
+> What does determine this?
+> 
+>> In this case, the valid portion of q2 is reordered reversely for
+>> little endian order, and the remaining portion is filled with zero.
+> 
+> I'm presuming that you want to say "In this case, q2 needs to be reversed because...".
+> 
+> I'm lacking these details:
+> 
+> 1. Why the length of Q2 can vary?
+> 2. Why reversing the bytes is the correct measure to counter-measure
+>     this variation?
+> 
+> /Jarkko
+> 
 
-This is particularly relevant to this series because the events test's
-mremap of area_dst screws up assumptions the minor fault test was
-relying on. This wasn't a problem for hugetlb, as we don't mremap in
-that case.
+When use openssl to generate a key instead of using the built-in 
+sign_key.pem, there is a probability that will encounter this problem.
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 249 ++++++++++++++---------
- 1 file changed, 151 insertions(+), 98 deletions(-)
+Here is a problematic key I encountered. The calculated q1 and q2 of 
+this key are both 383 bytes, If the length is not processed, the 
+hardware signature will fail.
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 4a18590fe0f8..5183ddb3080d 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -89,7 +89,8 @@ static int shm_fd;
- static int huge_fd;
- static char *huge_fd_off0;
- static unsigned long long *count_verify;
--static int uffd, uffd_flags, finished, *pipefd;
-+static int uffd = -1;
-+static int uffd_flags, finished, *pipefd;
- static char *area_src, *area_src_alias, *area_dst, *area_dst_alias;
- static char *zeropage;
- pthread_attr_t attr;
-@@ -376,6 +377,146 @@ static struct uffd_test_ops hugetlb_uffd_test_ops = {
- 
- static struct uffd_test_ops *uffd_test_ops;
- 
-+static int userfaultfd_open(uint64_t *features)
-+{
-+	struct uffdio_api uffdio_api;
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-+	if (uffd < 0) {
-+		fprintf(stderr,
-+			"userfaultfd syscall not available in this kernel\n");
-+		return 1;
-+	}
-+	uffd_flags = fcntl(uffd, F_GETFD, NULL);
-+
-+	uffdio_api.api = UFFD_API;
-+	uffdio_api.features = *features;
-+	if (ioctl(uffd, UFFDIO_API, &uffdio_api)) {
-+		fprintf(stderr, "UFFDIO_API failed.\nPlease make sure to "
-+			"run with either root or ptrace capability.\n");
-+		return 1;
-+	}
-+	if (uffdio_api.api != UFFD_API) {
-+		fprintf(stderr, "UFFDIO_API error: %" PRIu64 "\n",
-+			(uint64_t)uffdio_api.api);
-+		return 1;
-+	}
-+
-+	*features = uffdio_api.features;
-+	return 0;
-+}
-+
-+static int uffd_test_ctx_init_ext(uint64_t *features)
-+{
-+	unsigned long nr, cpu;
-+
-+	uffd_test_ops->allocate_area((void **)&area_src);
-+	if (!area_src)
-+		return 1;
-+	uffd_test_ops->allocate_area((void **)&area_dst);
-+	if (!area_dst)
-+		return 1;
-+
-+	if (uffd_test_ops->release_pages(area_src))
-+		return 1;
-+
-+	if (uffd_test_ops->release_pages(area_dst))
-+		return 1;
-+
-+	if (userfaultfd_open(features))
-+		return 1;
-+
-+	count_verify = malloc(nr_pages * sizeof(unsigned long long));
-+	if (!count_verify) {
-+		perror("count_verify");
-+		return 1;
-+	}
-+
-+	for (nr = 0; nr < nr_pages; nr++) {
-+		*area_mutex(area_src, nr) =
-+			(pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
-+		count_verify[nr] = *area_count(area_src, nr) = 1;
-+		/*
-+		 * In the transition between 255 to 256, powerpc will
-+		 * read out of order in my_bcmp and see both bytes as
-+		 * zero, so leave a placeholder below always non-zero
-+		 * after the count, to avoid my_bcmp to trigger false
-+		 * positives.
-+		 */
-+		*(area_count(area_src, nr) + 1) = 1;
-+	}
-+
-+	pipefd = malloc(sizeof(int) * nr_cpus * 2);
-+	if (!pipefd) {
-+		perror("pipefd");
-+		return 1;
-+	}
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		if (pipe2(&pipefd[cpu * 2], O_CLOEXEC | O_NONBLOCK)) {
-+			perror("pipe");
-+			return 1;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static inline int uffd_test_ctx_init(uint64_t features)
-+{
-+	return uffd_test_ctx_init_ext(&features);
-+}
-+
-+static inline int munmap_area(void **area)
-+{
-+	if (*area) {
-+		if (munmap(*area, nr_pages * page_size)) {
-+			perror("munmap");
-+			return 1;
-+		}
-+	}
-+
-+	*area = NULL;
-+	return 0;
-+}
-+
-+static int uffd_test_ctx_clear(void)
-+{
-+	int ret = 0;
-+	size_t i;
-+
-+	if (pipefd) {
-+		for (i = 0; i < nr_cpus * 2; ++i) {
-+			if (close(pipefd[i])) {
-+				perror("close pipefd");
-+				ret = 1;
-+			}
-+		}
-+		free(pipefd);
-+		pipefd = NULL;
-+	}
-+
-+	if (count_verify) {
-+		free(count_verify);
-+		count_verify = NULL;
-+	}
-+
-+	if (uffd != -1) {
-+		if (close(uffd)) {
-+			perror("close uffd");
-+			ret = 1;
-+		}
-+		uffd = -1;
-+	}
-+
-+	huge_fd_off0 = NULL;
-+	ret |= munmap_area((void **)&area_src);
-+	ret |= munmap_area((void **)&area_src_alias);
-+	ret |= munmap_area((void **)&area_dst);
-+	ret |= munmap_area((void **)&area_dst_alias);
-+
-+	return ret;
-+}
-+
- static int my_bcmp(char *str1, char *str2, size_t n)
- {
- 	unsigned long i;
-@@ -859,40 +1000,6 @@ static int stress(struct uffd_stats *uffd_stats)
- 	return 0;
- }
- 
--static int userfaultfd_open_ext(uint64_t *features)
--{
--	struct uffdio_api uffdio_api;
--
--	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
--	if (uffd < 0) {
--		fprintf(stderr,
--			"userfaultfd syscall not available in this kernel\n");
--		return 1;
--	}
--	uffd_flags = fcntl(uffd, F_GETFD, NULL);
--
--	uffdio_api.api = UFFD_API;
--	uffdio_api.features = *features;
--	if (ioctl(uffd, UFFDIO_API, &uffdio_api)) {
--		fprintf(stderr, "UFFDIO_API failed.\nPlease make sure to "
--			"run with either root or ptrace capability.\n");
--		return 1;
--	}
--	if (uffdio_api.api != UFFD_API) {
--		fprintf(stderr, "UFFDIO_API error: %" PRIu64 "\n",
--			(uint64_t)uffdio_api.api);
--		return 1;
--	}
--
--	*features = uffdio_api.features;
--	return 0;
--}
--
--static int userfaultfd_open(uint64_t features)
--{
--	return userfaultfd_open_ext(&features);
--}
--
- sigjmp_buf jbuf, *sigbuf;
- 
- static void sighndl(int sig, siginfo_t *siginfo, void *ptr)
-@@ -1010,6 +1117,8 @@ static int faulting_process(int signal_test)
- 		perror("mremap");
- 		exit(1);
- 	}
-+	/* Reset area_src since we just clobbered it */
-+	area_src = NULL;
- 
- 	for (; nr < nr_pages; nr++) {
- 		count = *area_count(area_dst, nr);
-@@ -1113,11 +1222,9 @@ static int userfaultfd_zeropage_test(void)
- 	printf("testing UFFDIO_ZEROPAGE: ");
- 	fflush(stdout);
- 
--	if (uffd_test_ops->release_pages(area_dst))
-+	if (uffd_test_ctx_clear() || uffd_test_ctx_init(0))
- 		return 1;
- 
--	if (userfaultfd_open(0))
--		return 1;
- 	uffdio_register.range.start = (unsigned long) area_dst;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-@@ -1143,7 +1250,6 @@ static int userfaultfd_zeropage_test(void)
- 		}
- 	}
- 
--	close(uffd);
- 	printf("done.\n");
- 	return 0;
- }
-@@ -1161,13 +1267,11 @@ static int userfaultfd_events_test(void)
- 	printf("testing events (fork, remap, remove): ");
- 	fflush(stdout);
- 
--	if (uffd_test_ops->release_pages(area_dst))
--		return 1;
--
- 	features = UFFD_FEATURE_EVENT_FORK | UFFD_FEATURE_EVENT_REMAP |
- 		UFFD_FEATURE_EVENT_REMOVE;
--	if (userfaultfd_open(features))
-+	if (uffd_test_ctx_clear() || uffd_test_ctx_init(features))
- 		return 1;
-+
- 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
- 
- 	uffdio_register.range.start = (unsigned long) area_dst;
-@@ -1213,8 +1317,6 @@ static int userfaultfd_events_test(void)
- 	if (pthread_join(uffd_mon, NULL))
- 		return 1;
- 
--	close(uffd);
--
- 	uffd_stats_report(&stats, 1);
- 
- 	return stats.missing_faults != nr_pages;
-@@ -1234,12 +1336,10 @@ static int userfaultfd_sig_test(void)
- 	printf("testing signal delivery: ");
- 	fflush(stdout);
- 
--	if (uffd_test_ops->release_pages(area_dst))
--		return 1;
--
- 	features = UFFD_FEATURE_EVENT_FORK|UFFD_FEATURE_SIGBUS;
--	if (userfaultfd_open(features))
-+	if (uffd_test_ctx_clear() || uffd_test_ctx_init(features))
- 		return 1;
-+
- 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
- 
- 	uffdio_register.range.start = (unsigned long) area_dst;
-@@ -1297,7 +1397,6 @@ static int userfaultfd_sig_test(void)
- 	if (userfaults)
- 		fprintf(stderr, "Signal test failed, userfaults: %ld\n",
- 			userfaults);
--	close(uffd);
- 	return userfaults != 0;
- }
- 
-@@ -1319,10 +1418,7 @@ static int userfaultfd_minor_test(void)
- 	printf("testing minor faults: ");
- 	fflush(stdout);
- 
--	if (uffd_test_ops->release_pages(area_dst))
--		return 1;
--
--	if (userfaultfd_open_ext(&features))
-+	if (uffd_test_ctx_clear() || uffd_test_ctx_init_ext(&features))
- 		return 1;
- 	/* If kernel reports the feature isn't supported, skip the test. */
- 	if (!(features & UFFD_FEATURE_MINOR_HUGETLBFS)) {
-@@ -1390,8 +1486,6 @@ static int userfaultfd_minor_test(void)
- 	if (pthread_join(uffd_mon, NULL))
- 		return 1;
- 
--	close(uffd);
--
- 	uffd_stats_report(&stats, 1);
- 
- 	return stats.missing_faults != 0 || stats.minor_faults != nr_pages;
-@@ -1403,52 +1497,12 @@ static int userfaultfd_stress(void)
- 	char *tmp_area;
- 	unsigned long nr;
- 	struct uffdio_register uffdio_register;
--	unsigned long cpu;
- 	int err;
- 	struct uffd_stats uffd_stats[nr_cpus];
- 
--	uffd_test_ops->allocate_area((void **)&area_src);
--	if (!area_src)
--		return 1;
--	uffd_test_ops->allocate_area((void **)&area_dst);
--	if (!area_dst)
--		return 1;
--
--	if (userfaultfd_open(0))
-+	if (uffd_test_ctx_init(0))
- 		return 1;
- 
--	count_verify = malloc(nr_pages * sizeof(unsigned long long));
--	if (!count_verify) {
--		perror("count_verify");
--		return 1;
--	}
--
--	for (nr = 0; nr < nr_pages; nr++) {
--		*area_mutex(area_src, nr) = (pthread_mutex_t)
--			PTHREAD_MUTEX_INITIALIZER;
--		count_verify[nr] = *area_count(area_src, nr) = 1;
--		/*
--		 * In the transition between 255 to 256, powerpc will
--		 * read out of order in my_bcmp and see both bytes as
--		 * zero, so leave a placeholder below always non-zero
--		 * after the count, to avoid my_bcmp to trigger false
--		 * positives.
--		 */
--		*(area_count(area_src, nr) + 1) = 1;
--	}
--
--	pipefd = malloc(sizeof(int) * nr_cpus * 2);
--	if (!pipefd) {
--		perror("pipefd");
--		return 1;
--	}
--	for (cpu = 0; cpu < nr_cpus; cpu++) {
--		if (pipe2(&pipefd[cpu*2], O_CLOEXEC | O_NONBLOCK)) {
--			perror("pipe");
--			return 1;
--		}
--	}
--
- 	if (posix_memalign(&area, page_size, page_size)) {
- 		fprintf(stderr, "out of memory\n");
- 		return 1;
-@@ -1593,7 +1647,6 @@ static int userfaultfd_stress(void)
- 	if (err)
- 		return err;
- 
--	close(uffd);
- 	return userfaultfd_zeropage_test() || userfaultfd_sig_test()
- 		|| userfaultfd_events_test() || userfaultfd_minor_test();
- }
--- 
-2.30.1.766.gb4fecdf3b7-goog
+-----BEGIN RSA PRIVATE KEY-----
+MIIG4gIBAAKCAYEAnWxc9HyjCuLWtFVKm0xrkHimyeTEdx7LJpRzm07M/gLFxqwV
+bFEFL1SdK912H8S0yRKGzCTqrEa0AKaBhIzw19OgW1jIQx9+ybENnIYh4O+YGwKH
+ngTAw5Xfuw8iaPeLe3Pujg4h7ePI4cx6C98KM2tDHb0GeN35wM/2AxaWmuwMGosv
+kbNN2EN9zQVLIkaUtCJHH8UlfZ+QQVO32Mij46wO4O4783Hgr7PUmI7LCkk31vBT
+fzPch6LSgBy6UvtvBfJWo+t/Rk5aGm90JchY4+H1/23vwpkmKhRazBDbUeHVcX7f
+ytwJkmODIjbiapB6gf0AxQooIwJaqdRKddn/BB/IAkanG0m6COuvgP2Z9256U262
+GvEWf+IHY2/DmoivAcc/koYHrRjNgcak8nPq9iTE4R9jPFj41+2r5k3AycCGlt75
+HdYP1oZ/F0nTKp8yGOsf61DXaQLXPnPyjQunKGjBQONJb7Kj/8TOJjSuh7cdRqRP
+OXGZPwOEkhKU4QwtAgEDAoIBgGjy6KL9wgdB5Hg43GeIR7WlxIaYgvoUh28NomeJ
+3f6sg9nIDkg2A3TjE3KTpBUtzdthrzLDRx2EeABvAQMIoI/iaueQhYIU/zEgs72u
+wUCfurysWmlYgIJj6ny0wZtPslJNSbQJa/PtMJaIUV0/XCJHghPTWaXpUSs1Tqy5
+ubydXWcHdQvM3pAs/oiuMhbZuHgW2hUuGP5qYCuNJTswbUJytJX0J/ehQHUijbsJ
+3LGGJTn1jP936FpsjFVofDdSSPgwF5a8TgxtIHNK8cuXq2gyblmo7afszujVJhib
+VqbYtL9UYwg/oibI+hFGxMGgDUqQlZg9E7/1QnMNRsubm7sWBO+hTA+fdwVY7+zh
+CtOLb7XDbHWF1+k+DDd2m4SibyBr7zsHkIO9DoDwHWvCSW+SICcfdTeCmxGPYfeZ
+P8QDxWj25zjS8e93/zgyMuiQY8T6AEajFU0VIZfhoHKeOYs8Vg3T30z+SwSVsTLl
+DDFq2PHkYg7dG14n3iFa0DXckwKBwQDOmlmLVVIVPQcDreS2sLkO/a44zzIyFwvA
+eItWkBWSF/1nY8Nh0dDw7Hn8QRMHoxC4pLjTxsGMLD9f5YAXZueRcjOuhnDfalpB
+5M11A9QKQFB0ar/viq5Kyl6Jxv3PFdkszaRcwmxCdhjv/OL4kxfZ1gEvqeZLPLh5
+fWdyNQrXBhbGrfmDQfs/d+yMmHzvJJ7rO9VXKHhqMU1QkjQFh7AjOj6PI58oEE8F
+eND4d+0Y5Mi4F+1jvBvshNbjcgPFjnMCgcEAww/Ztnu4Hm2iadEkvbQeuJiiQCFZ
+FJ7kDFwWUJfDxYTI6xyH3KrFZ0mSDAuoQH1V2X9njOfI9uY3nVrgLQmt2gyM7E5E
+JHAtPwF6KKg1r90CTl7Tex2kVzqWhnbchH8vJFe0XThCpQce0GGV2D1k9POTdsZN
+HdhXxBkxgLLWTLTHsr6kxVepr9qTtmYJ3qH9hjhKKjO/CzHXig9N25agtFQBnQHb
+VCTkc2tzYWUvJLIPI7XOv2nURULgfJhYyrLfAoHBAIm8O7I44WN+BK0emHnLJgn+
+dCXfdswPXSr7B48KuQwP/kTtLOvhNfXy+/2At1pstdBt0I0vK7LIKj/uVWTvRQuh
+d8mu9epG5taYiPitOAbVivhHKp+xyYcxlFvZ/ooOkMiJGD3W8tb5ZfVTQfsMupE5
+Vh/GmYd90FD+RPbOBzoEDy8epleBUipP8whlqJ9tv0d9OOTFpZwg3jW2zVkFIBd8
+KbTCahq1igOl4KWlSLtDMHq6nkJ9Z/MDOez2rS5e9wKBwQCCCpEkUnq+88Gb4MMp
+Ir8luxbVa5C4ae1dkrmLD9fZAzCcva/ocdjvhmFdXRrVqOPmVO+zRTCkmXpo50Ae
+BnPmswidiYLC9XN/VlFwcCPKk1be6eJSE8Lk0bmu+ehYVMoYOng+JYHDWhSK67k6
+05ijTQz52Yi+kDqCu3ZVzI7dzdp3KcMuOnEf5w0kRAaUa/5ZetwcIn9cy+UGtN6S
+ZGsi4qu+ATziw0L3nPeWQ3TDIV9tI98qRo2Dger9uuXcdz8CgcA1J+UJh7WX9kT4
+OBIKkb1TftyT2LZyzBh2LcrueUIU3gka8IqI6X/B9lB6WTLCtuBGWZZLRAuuuWlL
+nEm2TuTtU0Ir7/3lnZ/Fmc5/Ams4cGfxl1oXdiXoARSLR6HdvIIBZ8GdUqISR1M1
+IMMQtRIWomsRCfN0IUvgi0bTUkE5dZp8UFThZp22CahWgEq5h63pNF0K8hHdEyWb
+aaMCoAFhIcU4UBUDUxREyY7y1eUCWKAl0B4xEvJoxolbYyTvQB4=
+-----END RSA PRIVATE KEY-----
+
+good luck!
+
+Tianjia
 
