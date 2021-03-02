@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25627C433E6
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:47:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC1E0C433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:48:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E998964F0D
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:47:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA8AD64F21
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:48:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449408AbhCBQpl (ORCPT
+        id S1449399AbhCBQpa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Mar 2021 11:45:41 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13040 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350919AbhCBM7L (ORCPT
+        Tue, 2 Mar 2021 11:45:30 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:13836 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350920AbhCBM7K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Mar 2021 07:59:11 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DqcZ11GsMzMhCS;
-        Tue,  2 Mar 2021 20:55:53 +0800 (CST)
+        Tue, 2 Mar 2021 07:59:10 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DqcZd3ckZz7sRV;
+        Tue,  2 Mar 2021 20:56:25 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 2 Mar 2021 20:57:53 +0800
+ 14.3.498.0; Tue, 2 Mar 2021 20:57:58 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -45,10 +45,12 @@ CC:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
         <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v4 0/9] KVM: selftests: some improvement and a new test for kvm page table
-Date:   Tue, 2 Mar 2021 20:57:42 +0800
-Message-ID: <20210302125751.19080-1-wangyanan55@huawei.com>
+Subject: [RFC PATCH v4 4/9] KVM: selftests: Make a generic helper to get vm guest mode strings
+Date:   Tue, 2 Mar 2021 20:57:46 +0800
+Message-ID: <20210302125751.19080-5-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
+In-Reply-To: <20210302125751.19080-1-wangyanan55@huawei.com>
+References: <20210302125751.19080-1-wangyanan55@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.174.187.128]
@@ -57,107 +59,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-This v4 series can mainly include two parts.
-Based on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
-Links of v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
-Links of v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
-Links of v3: https://lore.kernel.org/lkml/20210301065916.11484-1-wangyanan55@huawei.com/
+For generality and conciseness, make an API which can be used in all
+kvm libs and selftests to get vm guest mode strings. And the index i
+is checked in the API in case of possiable faults.
 
-In the first part, all the known hugetlb backing src types specified
-with different hugepage sizes are listed, so that we can specify use
-of hugetlb source of the exact granularity that we want, instead of
-the system default ones. And as all the known hugetlb page sizes are
-listed, it's appropriate for all architectures. Besides, a helper that
-can get granularity of different backing src types(anonumous/thp/hugetlb)
-is added, so that we can use the accurate backing src granularity for
-kinds of alignment or guest memory accessing of vcpus.
-
-In the second part, a new test is added:
-This test is added to serve as a performance tester and a bug reproducer
-for kvm page table code (GPA->HPA mappings), it gives guidance for the
-people trying to make some improvement for kvm. And the following explains
-what we can exactly do through this test.
-
-The function guest_code() can cover the conditions where a single vcpu or
-multiple vcpus access guest pages within the same memory region, in three
-VM stages(before dirty logging, during dirty logging, after dirty logging).
-Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
-memory region can be specified by users, which means normal page mappings
-or block mappings can be chosen by users to be created in the test.
-
-If ANONYMOUS memory is specified, kvm will create normal page mappings
-for the tested memory region before dirty logging, and update attributes
-of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
-memory is specified, kvm will create block mappings for the tested memory
-region before dirty logging, and split the blcok mappings into normal page
-mappings during dirty logging, and coalesce the page mappings back into
-block mappings after dirty logging is stopped.
-
-So in summary, as a performance tester, this test can present the
-performance of kvm creating/updating normal page mappings, or the
-performance of kvm creating/splitting/recovering block mappings,
-through execution time.
-
-When we need to coalesce the page mappings back to block mappings after
-dirty logging is stopped, we have to firstly invalidate *all* the TLB
-entries for the page mappings right before installation of the block entry,
-because a TLB conflict abort error could occur if we can't invalidate the
-TLB entries fully. We have hit this TLB conflict twice on aarch64 software
-implementation and fixed it. As this test can imulate process from dirty
-logging enabled to dirty logging stopped of a VM with block mappings,
-so it can also reproduce this TLB conflict abort due to inadequate TLB
-invalidation when coalescing tables.
-
-Links about the TLB conflict abort:
-https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
-
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+Reviewed-by: Andrew Jones <drjones@redhat.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
 ---
+ .../testing/selftests/kvm/include/kvm_util.h  |  4 +--
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 29 ++++++++++++-------
+ 2 files changed, 19 insertions(+), 14 deletions(-)
 
-Change logs:
-
-v3->v4:
-- Add a helper to get system default hugetlb page size
-- Add tags of Reviewed-by of Ben in the patches
-
-v2->v3:
-- Add tags of Suggested-by, Reviewed-by in the patches
-- Add a generic micro to get hugetlb page sizes
-- Some changes for suggestions about v2 series
-
-v1->v2:
-- Add a patch to sync header files
-- Add helpers to get granularity of different backing src types
-- Some changes for suggestions about v1 series
-
----
-
-Yanan Wang (9):
-  tools headers: sync headers of asm-generic/hugetlb_encode.h
-  tools headers: Add a macro to get HUGETLB page sizes for mmap
-  KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
-  KVM: selftests: Make a generic helper to get vm guest mode strings
-  KVM: selftests: Add a helper to get system configured THP page size
-  KVM: selftests: Add a helper to get system default hugetlb page size
-  KVM: selftests: List all hugetlb src types specified with page sizes
-  KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
-  KVM: selftests: Add a test for kvm page table code
-
- include/uapi/linux/mman.h                     |   2 +
- tools/include/asm-generic/hugetlb_encode.h    |   3 +
- tools/include/uapi/linux/mman.h               |   2 +
- tools/testing/selftests/kvm/Makefile          |   3 +
- .../selftests/kvm/demand_paging_test.c        |   8 +-
- .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
- .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
- .../testing/selftests/kvm/include/test_util.h |  21 +-
- .../selftests/kvm/kvm_page_table_test.c       | 476 ++++++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  59 ++-
- tools/testing/selftests/kvm/lib/test_util.c   | 122 ++++-
- tools/testing/selftests/kvm/steal_time.c      |   4 +-
- 12 files changed, 659 insertions(+), 59 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
-
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index 2d7eb6989e83..f52a7492f47f 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -68,9 +68,6 @@ enum vm_guest_mode {
+ #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
+ #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
+ 
+-#define vm_guest_mode_string(m) vm_guest_mode_string[m]
+-extern const char * const vm_guest_mode_string[];
+-
+ struct vm_guest_mode_params {
+ 	unsigned int pa_bits;
+ 	unsigned int va_bits;
+@@ -84,6 +81,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap);
+ int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
+ 		    struct kvm_enable_cap *cap);
+ void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
++const char *vm_guest_mode_string(uint32_t i);
+ 
+ struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
+ void kvm_vm_free(struct kvm_vm *vmp);
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index d787cb802b4a..cc22c4ab7d67 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -141,17 +141,24 @@ static void vm_open(struct kvm_vm *vm, int perm)
+ 		"rc: %i errno: %i", vm->fd, errno);
+ }
+ 
+-const char * const vm_guest_mode_string[] = {
+-	"PA-bits:52,  VA-bits:48,  4K pages",
+-	"PA-bits:52,  VA-bits:48, 64K pages",
+-	"PA-bits:48,  VA-bits:48,  4K pages",
+-	"PA-bits:48,  VA-bits:48, 64K pages",
+-	"PA-bits:40,  VA-bits:48,  4K pages",
+-	"PA-bits:40,  VA-bits:48, 64K pages",
+-	"PA-bits:ANY, VA-bits:48,  4K pages",
+-};
+-_Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
+-	       "Missing new mode strings?");
++const char *vm_guest_mode_string(uint32_t i)
++{
++	static const char * const strings[] = {
++		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
++		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
++		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
++		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
++		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
++		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
++		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
++	};
++	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
++		       "Missing new mode strings?");
++
++	TEST_ASSERT(i < NUM_VM_MODES, "Guest mode ID %d too big", i);
++
++	return strings[i];
++}
+ 
+ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ 	{ 52, 48,  0x1000, 12 },
 -- 
-2.19.1
+2.23.0
 
