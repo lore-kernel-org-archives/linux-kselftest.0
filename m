@@ -2,137 +2,123 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 540FBC433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FB3C433DB
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:49:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22C6064F11
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:49:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8F0B64F0D
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Mar 2021 16:49:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579215AbhCBQqT (ORCPT
+        id S1579229AbhCBQq2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Mar 2021 11:46:19 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:13842 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351008AbhCBNDj (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Mar 2021 08:03:39 -0500
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DqcZk4DfQz7sRT;
-        Tue,  2 Mar 2021 20:56:30 +0800 (CST)
-Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 2 Mar 2021 20:58:04 +0800
-From:   Yanan Wang <wangyanan55@huawei.com>
-To:     <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Tue, 2 Mar 2021 11:46:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38500 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351217AbhCBNtZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Mar 2021 08:49:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F3B7D60C41;
+        Tue,  2 Mar 2021 13:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614692863;
+        bh=1QT9Jo+ZtFYdSbb6Zn/Pha/R/xZ7LYXPosLrCrzMQcU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hSh8R9umiFJRz+GUvZwTd2thTzX9ClmlXqz8aglezu0NoxCyoRi87nCzNRsFAz5h5
+         xHpje6dLGhNJ/bzyC+yvU0Reo+7x3tm2NBVX0n6ytmmyL4US6+irCTb3wkPT9yy9io
+         ZLGwKsrL9Lkklekkd7u9FdxyC4WvXS7NsaATpNMns1vzXOI/prFyywA0mN4nCPiR8s
+         Wa8KXA5q4FOOiHiPNsQcTFijayStjXeGLv55MeypRFbLFMSZOTz3OT2gcHGdrYdGgl
+         spb554fomGDxD5ibG9F7ByYgXNRMdHLaDmUYrIa51EpL0Z5WuY+CXePaJYC6eQPDwO
+         RXg2g1yztMugA==
+Date:   Tue, 2 Mar 2021 15:47:24 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        <wanghaibin.wang@huawei.com>, <yezengruan@huawei.com>,
-        <yuzenghui@huawei.com>, Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v4 8/9] KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
-Date:   Tue, 2 Mar 2021 20:57:50 +0800
-Message-ID: <20210302125751.19080-9-wangyanan55@huawei.com>
-X-Mailer: git-send-email 2.8.4.windows.1
-In-Reply-To: <20210302125751.19080-1-wangyanan55@huawei.com>
-References: <20210302125751.19080-1-wangyanan55@huawei.com>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, X86 ML <x86@kernel.org>,
+        linux-sgx@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jia Zhang <zhang.jia@linux.alibaba.com>
+Subject: Re: [PATCH] selftests/sgx: fix EINIT failure dueto
+ SGX_INVALID_SIGNATURE
+Message-ID: <YD5B7P++T6jLoWBR@kernel.org>
+References: <20210301051836.30738-1-tianjia.zhang@linux.alibaba.com>
+ <YDy51R2Wva7s+k/x@kernel.org>
+ <3bcdcf04-4bed-ed95-84b6-790675f18240@linux.alibaba.com>
+ <CALCETrVn_inXAULfsPrCXeHUTBet+KnL1XsxuiaR+jgG1uTJNg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.187.128]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrVn_inXAULfsPrCXeHUTBet+KnL1XsxuiaR+jgG1uTJNg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
-we have to get the transparent hugepage size for HVA alignment. With the
-new helpers, we can use get_backing_src_pagesz() to check whether THP is
-configured and then get the exact configured hugepage size.
+On Mon, Mar 01, 2021 at 09:54:37PM -0800, Andy Lutomirski wrote:
+> On Mon, Mar 1, 2021 at 9:06 PM Tianjia Zhang
+> <tianjia.zhang@linux.alibaba.com> wrote:
+> >
+> >
+> >
+> > On 3/1/21 5:54 PM, Jarkko Sakkinen wrote:
+> > > On Mon, Mar 01, 2021 at 01:18:36PM +0800, Tianjia Zhang wrote:
+> > >> q2 is not always 384-byte length. Sometimes it only has 383-byte.
+> > >
+> > > What does determine this?
+> > >
+> > >> In this case, the valid portion of q2 is reordered reversely for
+> > >> little endian order, and the remaining portion is filled with zero.
+> > >
+> > > I'm presuming that you want to say "In this case, q2 needs to be reversed because...".
+> > >
+> > > I'm lacking these details:
+> > >
+> > > 1. Why the length of Q2 can vary?
+> > > 2. Why reversing the bytes is the correct measure to counter-measure
+> > >     this variation?
+> > >
+> > > /Jarkko
+> > >
+> >
+> > When use openssl to generate a key instead of using the built-in
+> > sign_key.pem, there is a probability that will encounter this problem.
+> >
+> > Here is a problematic key I encountered. The calculated q1 and q2 of
+> > this key are both 383 bytes, If the length is not processed, the
+> > hardware signature will fail.
+> 
+> Presumably the issue is that some keys have parameters that have
+> enough leading 0 bits to be effectively shorter.  The openssl API
+> (and, sadly, a bunch  of the ASN.1 stuff) treats these parameters as
+> variable-size integers.
 
-As different architectures may have different THP page sizes configured,
-this can get the accurate THP page sizes on any platform.
+But the test uses a static key. It used to generate a key on fly but
+in some of the last versions I replaced key generation with a static
+key:
 
-Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
----
- tools/testing/selftests/kvm/lib/kvm_util.c | 28 +++++++---------------
- 1 file changed, 9 insertions(+), 19 deletions(-)
+static RSA *gen_sign_key(void)
+{
+	unsigned long sign_key_length;
+	BIO *bio;
+	RSA *key;
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index b91c8e3a7ee1..b29402f9f00c 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -18,7 +18,6 @@
- #include <unistd.h>
- #include <linux/kernel.h>
- 
--#define KVM_UTIL_PGS_PER_HUGEPG 512
- #define KVM_UTIL_MIN_PFN	2
- 
- /* Aligns x up to the next multiple of size. Size must be a power of 2. */
-@@ -686,7 +685,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- {
- 	int ret;
- 	struct userspace_mem_region *region;
--	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
-+	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
- 	size_t alignment;
- 
- 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
-@@ -748,7 +747,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- #endif
- 
- 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
--		alignment = max(huge_page_size, alignment);
-+		alignment = max(backing_src_pagesz, alignment);
- 
- 	/* Add enough memory to align up if necessary */
- 	if (alignment > 1)
-@@ -767,22 +766,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->host_mem = align(region->mmap_start, alignment);
- 
- 	/* As needed perform madvise */
--	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
--		struct stat statbuf;
--
--		ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
--		TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
--			    "stat /sys/kernel/mm/transparent_hugepage");
--
--		TEST_ASSERT(ret == 0 || src_type != VM_MEM_SRC_ANONYMOUS_THP,
--			    "VM_MEM_SRC_ANONYMOUS_THP requires THP to be configured in the host kernel");
--
--		if (ret == 0) {
--			ret = madvise(region->host_mem, npages * vm->page_size,
--				      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
--			TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %x",
--				    region->host_mem, npages * vm->page_size, src_type);
--		}
-+	if ((src_type == VM_MEM_SRC_ANONYMOUS ||
-+	     src_type == VM_MEM_SRC_ANONYMOUS_THP) && thp_configured()) {
-+		ret = madvise(region->host_mem, npages * vm->page_size,
-+			      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
-+		TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %s",
-+			    region->host_mem, npages * vm->page_size,
-+			    vm_mem_backing_src_alias(src_type)->name);
- 	}
- 
- 	region->unused_phy_pages = sparsebit_alloc();
--- 
-2.23.0
+	sign_key_length = (unsigned long)&sign_key_end -
+			  (unsigned long)&sign_key;
 
+	bio = BIO_new_mem_buf(&sign_key, sign_key_length);
+	if (!bio)
+		return NULL;
+
+	key = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
+	BIO_free(bio);
+
+	return key;
+}
+
+/Jarkko
