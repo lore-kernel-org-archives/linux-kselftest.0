@@ -2,605 +2,324 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C13A6C433E9
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 00:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D34AC43331
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 00:58:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 945C264E76
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 00:58:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45C0B64E76
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 00:58:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbhCDA5x (ORCPT
+        id S235844AbhCDA5z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:57:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346415AbhCCQ0Q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Mar 2021 11:26:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C5A364F07;
-        Wed,  3 Mar 2021 16:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614788617;
-        bh=WdLa9ZZxuBADbujeOJu0bHGHXitkk2itr8spRdpuWI0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P6UUIOPV22xfLrEOpt2xzhSw2pBYX/MTwSR02KL1KZxSKAdLTws3cJJfK3tjOv2Z3
-         J+nCzLR68Z01Hr8nuBKdWXN0s8Z2L17LN9mKeUyj3D7PTZgsL5EGPHq/eUV13tLU81
-         Mm9izr6C8t9K9McyBqXxdYRjuwCv6MixmsYZf/VqX3j86IvWiSmVWp5S1v0l8Nl+yo
-         HYepR7KuWlGjv37kGdhOIEhxfuk9Iz2hX9LC777+unKK2UAUIW8b5KGPt25s3+v1Xm
-         THCiq70xRX7f3GQeGuk6Exg9OckMLXjV5qCus1KWUKUH/usZ3KizczFODWOSxR2VPN
-         Mn12rHvUvVMmg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christopher Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Wed, 3 Mar 2021 19:57:55 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41886 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453053AbhCDAnj (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Mar 2021 19:43:39 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id CD7D11F46027
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org,
-        x86@kernel.org, Hagen Paul Pfeifer <hagen@jauu.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [PATCH v18 6/9] mm: introduce memfd_secret system call to create "secret" memory areas
-Date:   Wed,  3 Mar 2021 18:22:06 +0200
-Message-Id: <20210303162209.8609-7-rppt@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210303162209.8609-1-rppt@kernel.org>
-References: <20210303162209.8609-1-rppt@kernel.org>
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        joel@joelfernandes.org, malteskarupke@fastmail.fm,
+        linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [RFC PATCH v2 00/13] Add futex2 syscall
+Date:   Wed,  3 Mar 2021 21:42:06 -0300
+Message-Id: <20210304004219.134051-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Hi,
 
-Introduce "memfd_secret" system call with the ability to create memory
-areas visible only in the context of the owning process and not mapped not
-only to other processes but in the kernel page tables as well.
+This patch series introduces the futex2 syscalls.
 
-The secretmem feature is off by default and the user must explicitly enable
-it at the boot time.
+* What happened to the current futex()?
 
-Once secretmem is enabled, the user will be able to create a file
-descriptor using the memfd_secret() system call. The memory areas created
-by mmap() calls from this file descriptor will be unmapped from the kernel
-direct map and they will be only mapped in the page table of the processes
-that have access to the file descriptor.
+For some years now, developers have been trying to add new features to
+futex, but maintainers have been reluctant to accept then, given the
+multiplexed interface full of legacy features and tricky to do big
+changes. Some problems that people tried to address with patchsets are:
+NUMA-awareness[0], smaller sized futexes[1], wait on multiple futexes[2].
+NUMA, for instance, just doesn't fit the current API in a reasonable
+way. Considering that, it's not possible to merge new features into the
+current futex.
 
-The file descriptor based memory has several advantages over the
-"traditional" mm interfaces, such as mlock(), mprotect(), madvise(). File
-descriptor approach allows explict and controlled sharing of the memory
-areas, it allows to seal the operations. Besides, file descriptor based
-memory paves the way for VMMs to remove the secret memory range from the
-userpace hipervisor process, for instance QEMU. Andy Lutomirski says:
+ ** The NUMA problem
 
-  "Getting fd-backed memory into a guest will take some possibly major work
-   in the kernel, but getting vma-backed memory into a guest without
-   mapping it in the host user address space seems much, much worse."
+ At the current implementation, all futex kernel side infrastructure is
+ stored on a single node. Given that, all futex() calls issued by
+ processors that aren't located on that node will have a memory access
+ penalty when doing it.
 
-memfd_secret() is made a dedicated system call rather than an extention to
-memfd_create() because it's purpose is to allow the user to create more
-secure memory mappings rather than to simply allow file based access to the
-memory. Nowadays a new system call cost is negligible while it is way
-simpler for userspace to deal with a clear-cut system calls than with a
-multiplexer or an overloaded syscall. Moreover, the initial implementation
-of memfd_secret() is completely distinct from memfd_create() so there is no
-much sense in overloading memfd_create() to begin with. If there will be a
-need for code sharing between these implementation it can be easily
-achieved without a need to adjust user visible APIs.
+ ** The 32bit sized futex problem
 
-The secret memory remains accessible in the process context using uaccess
-primitives, but it is not exposed to the kernel otherwise; secret memory
-areas are removed from the direct map and functions in the
-follow_page()/get_user_page() family will refuse to return a page that
-belongs to the secret memory area.
+ Embedded systems or anything with memory constrains would benefit of
+ using smaller sizes for the futex userspace integer. Also, a mutex
+ implementation can be done using just three values, so 8 bits is enough
+ for various scenarios.
 
-Once there will be a use case that will require exposing secretmem to the
-kernel it will be an opt-in request in the system call flags so that user
-would have to decide what data can be exposed to the kernel.
+ ** The wait on multiple problem
 
-Removing of the pages from the direct map may cause its fragmentation on
-architectures that use large pages to map the physical memory which affects
-the system performance. However, the original Kconfig text for
-CONFIG_DIRECT_GBPAGES said that gigabyte pages in the direct map "... can
-improve the kernel's performance a tiny bit ..." (commit 00d1c5e05736
-("x86: add gbpages switches")) and the recent report [1] showed that "...
-although 1G mappings are a good default choice, there is no compelling
-evidence that it must be the only choice". Hence, it is sufficient to have
-secretmem disabled by default with the ability of a system administrator to
-enable it at boot time.
+ The use case lies in the Wine implementation of the Windows NT interface
+ WaitMultipleObjects. This Windows API function allows a thread to sleep
+ waiting on the first of a set of event sources (mutexes, timers, signal,
+ console input, etc) to signal.  Considering this is a primitive
+ synchronization operation for Windows applications, being able to quickly
+ signal events on the producer side, and quickly go to sleep on the
+ consumer side is essential for good performance of those running over Wine.
 
-Pages in the secretmem regions are unevictable and unmovable to avoid
-accidental exposure of the sensitive data via swap or during page
-migration.
+[0] https://lore.kernel.org/lkml/20160505204230.932454245@linutronix.de/
+[1] https://lore.kernel.org/lkml/20191221155659.3159-2-malteskarupke@web.de/
+[2] https://lore.kernel.org/lkml/20200213214525.183689-1-andrealmeid@collabora.com/
 
-Since the secretmem mappings are locked in memory they cannot exceed
-RLIMIT_MEMLOCK. Since these mappings are already locked independently from
-mlock(), an attempt to mlock()/munlock() secretmem range would fail and
-mlockall()/munlockall() will ignore secretmem mappings.
+* The solution
 
-However, unlike mlock()ed memory, secretmem currently behaves more like
-long-term GUP: secretmem mappings are unmovable mappings directly consumed
-by user space. With default limits, there is no excessive use of secretmem
-and it poses no real problem in combination with ZONE_MOVABLE/CMA, but in
-the future this should be addressed to allow balanced use of large amounts
-of secretmem along with ZONE_MOVABLE/CMA.
+As proposed by Peter Zijlstra and Florian Weimer[3], a new interface
+is required to solve this, which must be designed with those features in
+mind. futex2() is that interface. As opposed to the current multiplexed
+interface, the new one should have one syscall per operation. This will
+allow the maintainability of the API if it gets extended, and will help
+users with type checking of arguments.
 
-A page that was a part of the secret memory area is cleared when it is
-freed to ensure the data is not exposed to the next user of that page.
+In particular, the new interface is extended to support the ability to
+wait on any of a list of futexes at a time, which could be seen as a
+vectored extension of the FUTEX_WAIT semantics.
 
-The following example demonstrates creation of a secret mapping (error
-handling is omitted):
+[3] https://lore.kernel.org/lkml/20200303120050.GC2596@hirez.programming.kicks-ass.net/
 
-	fd = memfd_secret(0);
-	ftruncate(fd, MAP_SIZE);
-	ptr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
-		   MAP_SHARED, fd, 0);
+* The interface
 
-[1] https://lore.kernel.org/linux-mm/213b4567-46ce-f116-9cdf-bbd0c884eb3c@linux.intel.com/
+The new interface can be seen in details in the following patches, but
+this is a high level summary of what the interface can do:
 
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Acked-by: Hagen Paul Pfeifer <hagen@jauu.net>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christopher Lameter <cl@linux.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Elena Reshetova <elena.reshetova@intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: James Bottomley <jejb@linux.ibm.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tycho Andersen <tycho@tycho.ws>
-Cc: Will Deacon <will@kernel.org>
----
- include/linux/secretmem.h  |  24 ++++
- include/uapi/linux/magic.h |   1 +
- kernel/sys_ni.c            |   2 +
- mm/Kconfig                 |   3 +
- mm/Makefile                |   1 +
- mm/gup.c                   |  10 ++
- mm/mlock.c                 |   3 +-
- mm/secretmem.c             | 246 +++++++++++++++++++++++++++++++++++++
- 8 files changed, 289 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/secretmem.h
- create mode 100644 mm/secretmem.c
+ - Supports wake/wait semantics, as in futex()
+ - Supports requeue operations, similarly as FUTEX_CMP_REQUEUE, but with
+   individual flags for each address
+ - Supports waiting for a vector of futexes, using a new syscall named
+   futex_waitv()
+ - Supports variable sized futexes (8bits, 16bits and 32bits)
+ - Supports NUMA-awareness operations, where the user can specify on
+   which memory node would like to operate
 
-diff --git a/include/linux/secretmem.h b/include/linux/secretmem.h
-new file mode 100644
-index 000000000000..70e7db9f94fe
---- /dev/null
-+++ b/include/linux/secretmem.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _LINUX_SECRETMEM_H
-+#define _LINUX_SECRETMEM_H
-+
-+#ifdef CONFIG_SECRETMEM
-+
-+bool vma_is_secretmem(struct vm_area_struct *vma);
-+bool page_is_secretmem(struct page *page);
-+
-+#else
-+
-+static inline bool vma_is_secretmem(struct vm_area_struct *vma)
-+{
-+	return false;
-+}
-+
-+static inline bool page_is_secretmem(struct page *page)
-+{
-+	return false;
-+}
-+
-+#endif /* CONFIG_SECRETMEM */
-+
-+#endif /* _LINUX_SECRETMEM_H */
-diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-index f3956fc11de6..35687dcb1a42 100644
---- a/include/uapi/linux/magic.h
-+++ b/include/uapi/linux/magic.h
-@@ -97,5 +97,6 @@
- #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
- #define Z3FOLD_MAGIC		0x33
- #define PPC_CMM_MAGIC		0xc7571590
-+#define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
- 
- #endif /* __LINUX_MAGIC_H__ */
-diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index 19aa806890d5..e9a2011ee4a2 100644
---- a/kernel/sys_ni.c
-+++ b/kernel/sys_ni.c
-@@ -352,6 +352,8 @@ COND_SYSCALL(pkey_mprotect);
- COND_SYSCALL(pkey_alloc);
- COND_SYSCALL(pkey_free);
- 
-+/* memfd_secret */
-+COND_SYSCALL(memfd_secret);
- 
- /*
-  * Architecture specific weak syscall entries.
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 24c045b24b95..5f8243442f66 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -872,4 +872,7 @@ config MAPPING_DIRTY_HELPERS
- config KMAP_LOCAL
- 	bool
- 
-+config SECRETMEM
-+	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
-+
- endmenu
-diff --git a/mm/Makefile b/mm/Makefile
-index 72227b24a616..b2a564eec27f 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -120,3 +120,4 @@ obj-$(CONFIG_MEMFD_CREATE) += memfd.o
- obj-$(CONFIG_MAPPING_DIRTY_HELPERS) += mapping_dirty_helpers.o
- obj-$(CONFIG_PTDUMP_CORE) += ptdump.o
- obj-$(CONFIG_PAGE_REPORTING) += page_reporting.o
-+obj-$(CONFIG_SECRETMEM) += secretmem.o
-diff --git a/mm/gup.c b/mm/gup.c
-index e40579624f10..ecadc80934b2 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -10,6 +10,7 @@
- #include <linux/rmap.h>
- #include <linux/swap.h>
- #include <linux/swapops.h>
-+#include <linux/secretmem.h>
- 
- #include <linux/sched/signal.h>
- #include <linux/rwsem.h>
-@@ -758,6 +759,9 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- 	struct follow_page_context ctx = { NULL };
- 	struct page *page;
- 
-+	if (vma_is_secretmem(vma))
-+		return NULL;
-+
- 	page = follow_page_mask(vma, address, foll_flags, &ctx);
- 	if (ctx.pgmap)
- 		put_dev_pagemap(ctx.pgmap);
-@@ -891,6 +895,9 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- 	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
- 		return -EOPNOTSUPP;
- 
-+	if (vma_is_secretmem(vma))
-+		return -EFAULT;
-+
- 	if (write) {
- 		if (!(vm_flags & VM_WRITE)) {
- 			if (!(gup_flags & FOLL_FORCE))
-@@ -2030,6 +2037,9 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
- 		VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
- 		page = pte_page(pte);
- 
-+		if (page_is_secretmem(page))
-+			goto pte_unmap;
-+
- 		head = try_grab_compound_head(page, 1, flags);
- 		if (!head)
- 			goto pte_unmap;
-diff --git a/mm/mlock.c b/mm/mlock.c
-index f8f8cc32d03d..188711c72b67 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -23,6 +23,7 @@
- #include <linux/hugetlb.h>
- #include <linux/memcontrol.h>
- #include <linux/mm_inline.h>
-+#include <linux/secretmem.h>
- 
- #include "internal.h"
- 
-@@ -503,7 +504,7 @@ static int mlock_fixup(struct vm_area_struct *vma, struct vm_area_struct **prev,
- 
- 	if (newflags == vma->vm_flags || (vma->vm_flags & VM_SPECIAL) ||
- 	    is_vm_hugetlb_page(vma) || vma == get_gate_vma(current->mm) ||
--	    vma_is_dax(vma))
-+	    vma_is_dax(vma) || vma_is_secretmem(vma))
- 		/* don't set VM_LOCKED or VM_LOCKONFAULT and don't count */
- 		goto out;
- 
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-new file mode 100644
-index 000000000000..fa6738e860c2
---- /dev/null
-+++ b/mm/secretmem.c
-@@ -0,0 +1,246 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright IBM Corporation, 2021
-+ *
-+ * Author: Mike Rapoport <rppt@linux.ibm.com>
-+ */
-+
-+#include <linux/mm.h>
-+#include <linux/fs.h>
-+#include <linux/swap.h>
-+#include <linux/mount.h>
-+#include <linux/memfd.h>
-+#include <linux/bitops.h>
-+#include <linux/printk.h>
-+#include <linux/pagemap.h>
-+#include <linux/syscalls.h>
-+#include <linux/pseudo_fs.h>
-+#include <linux/secretmem.h>
-+#include <linux/set_memory.h>
-+#include <linux/sched/signal.h>
-+
-+#include <uapi/linux/magic.h>
-+
-+#include <asm/tlbflush.h>
-+
-+#include "internal.h"
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt) "secretmem: " fmt
-+
-+/*
-+ * Define mode and flag masks to allow validation of the system call
-+ * parameters.
-+ */
-+#define SECRETMEM_MODE_MASK	(0x0)
-+#define SECRETMEM_FLAGS_MASK	SECRETMEM_MODE_MASK
-+
-+static bool secretmem_enable __ro_after_init;
-+module_param_named(enable, secretmem_enable, bool, 0400);
-+MODULE_PARM_DESC(secretmem_enable,
-+		 "Enable secretmem and memfd_secret(2) system call");
-+
-+static vm_fault_t secretmem_fault(struct vm_fault *vmf)
-+{
-+	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
-+	struct inode *inode = file_inode(vmf->vma->vm_file);
-+	pgoff_t offset = vmf->pgoff;
-+	gfp_t gfp = vmf->gfp_mask;
-+	unsigned long addr;
-+	struct page *page;
-+	int err;
-+
-+	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-+		return vmf_error(-EINVAL);
-+
-+retry:
-+	page = find_lock_page(mapping, offset);
-+	if (!page) {
-+		page = alloc_page(gfp | __GFP_ZERO);
-+		if (!page)
-+			return VM_FAULT_OOM;
-+
-+		err = set_direct_map_invalid_noflush(page, 1);
-+		if (err) {
-+			put_page(page);
-+			return vmf_error(err);
-+		}
-+
-+		__SetPageUptodate(page);
-+		err = add_to_page_cache_lru(page, mapping, offset, gfp);
-+		if (unlikely(err)) {
-+			put_page(page);
-+			/*
-+			 * If a split of large page was required, it
-+			 * already happened when we marked the page invalid
-+			 * which guarantees that this call won't fail
-+			 */
-+			set_direct_map_default_noflush(page, 1);
-+			if (err == -EEXIST)
-+				goto retry;
-+
-+			return vmf_error(err);
-+		}
-+
-+		addr = (unsigned long)page_address(page);
-+		flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
-+	}
-+
-+	vmf->page = page;
-+	return VM_FAULT_LOCKED;
-+}
-+
-+static const struct vm_operations_struct secretmem_vm_ops = {
-+	.fault = secretmem_fault,
-+};
-+
-+static int secretmem_mmap(struct file *file, struct vm_area_struct *vma)
-+{
-+	unsigned long len = vma->vm_end - vma->vm_start;
-+
-+	if ((vma->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
-+		return -EINVAL;
-+
-+	if (mlock_future_check(vma->vm_mm, vma->vm_flags | VM_LOCKED, len))
-+		return -EAGAIN;
-+
-+	vma->vm_flags |= VM_LOCKED | VM_DONTDUMP;
-+	vma->vm_ops = &secretmem_vm_ops;
-+
-+	return 0;
-+}
-+
-+bool vma_is_secretmem(struct vm_area_struct *vma)
-+{
-+	return vma->vm_ops == &secretmem_vm_ops;
-+}
-+
-+static const struct file_operations secretmem_fops = {
-+	.mmap		= secretmem_mmap,
-+};
-+
-+static bool secretmem_isolate_page(struct page *page, isolate_mode_t mode)
-+{
-+	return false;
-+}
-+
-+static int secretmem_migratepage(struct address_space *mapping,
-+				 struct page *newpage, struct page *page,
-+				 enum migrate_mode mode)
-+{
-+	return -EBUSY;
-+}
-+
-+static void secretmem_freepage(struct page *page)
-+{
-+	set_direct_map_default_noflush(page, 1);
-+	clear_highpage(page);
-+}
-+
-+static const struct address_space_operations secretmem_aops = {
-+	.freepage	= secretmem_freepage,
-+	.migratepage	= secretmem_migratepage,
-+	.isolate_page	= secretmem_isolate_page,
-+};
-+
-+bool page_is_secretmem(struct page *page)
-+{
-+	struct address_space *mapping = page_mapping(page);
-+
-+	if (!mapping)
-+		return false;
-+
-+	return mapping->a_ops == &secretmem_aops;
-+}
-+
-+static struct vfsmount *secretmem_mnt;
-+
-+static struct file *secretmem_file_create(unsigned long flags)
-+{
-+	struct file *file = ERR_PTR(-ENOMEM);
-+	struct inode *inode;
-+
-+	inode = alloc_anon_inode(secretmem_mnt->mnt_sb);
-+	if (IS_ERR(inode))
-+		return ERR_CAST(inode);
-+
-+	file = alloc_file_pseudo(inode, secretmem_mnt, "secretmem",
-+				 O_RDWR, &secretmem_fops);
-+	if (IS_ERR(file))
-+		goto err_free_inode;
-+
-+	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
-+	mapping_set_unevictable(inode->i_mapping);
-+
-+	inode->i_mapping->a_ops = &secretmem_aops;
-+
-+	/* pretend we are a normal file with zero size */
-+	inode->i_mode |= S_IFREG;
-+	inode->i_size = 0;
-+
-+	return file;
-+
-+err_free_inode:
-+	iput(inode);
-+	return file;
-+}
-+
-+SYSCALL_DEFINE1(memfd_secret, unsigned long, flags)
-+{
-+	struct file *file;
-+	int fd, err;
-+
-+	/* make sure local flags do not confict with global fcntl.h */
-+	BUILD_BUG_ON(SECRETMEM_FLAGS_MASK & O_CLOEXEC);
-+
-+	if (!secretmem_enable)
-+		return -ENOSYS;
-+
-+	if (flags & ~(SECRETMEM_FLAGS_MASK | O_CLOEXEC))
-+		return -EINVAL;
-+
-+	fd = get_unused_fd_flags(flags & O_CLOEXEC);
-+	if (fd < 0)
-+		return fd;
-+
-+	file = secretmem_file_create(flags);
-+	if (IS_ERR(file)) {
-+		err = PTR_ERR(file);
-+		goto err_put_fd;
-+	}
-+
-+	file->f_flags |= O_LARGEFILE;
-+
-+	fd_install(fd, file);
-+	return fd;
-+
-+err_put_fd:
-+	put_unused_fd(fd);
-+	return err;
-+}
-+
-+static int secretmem_init_fs_context(struct fs_context *fc)
-+{
-+	return init_pseudo(fc, SECRETMEM_MAGIC) ? 0 : -ENOMEM;
-+}
-+
-+static struct file_system_type secretmem_fs = {
-+	.name		= "secretmem",
-+	.init_fs_context = secretmem_init_fs_context,
-+	.kill_sb	= kill_anon_super,
-+};
-+
-+static int secretmem_init(void)
-+{
-+	int ret = 0;
-+
-+	if (!secretmem_enable)
-+		return ret;
-+
-+	secretmem_mnt = kern_mount(&secretmem_fs);
-+	if (IS_ERR(secretmem_mnt))
-+		ret = PTR_ERR(secretmem_mnt);
-+
-+	return ret;
-+}
-+fs_initcall(secretmem_init);
+* Implementation
+
+The internal implementation follows a similar design to the original futex.
+Given that we want to replicate the same external behavior of current
+futex, this should be somewhat expected. For some functions, like the
+init and the code to get a shared key, I literally copied code and
+comments from kernel/futex.c. I decided to do so instead of exposing the
+original function as a public function since in that way we can freely
+modify our implementation if required, without any impact on old futex.
+Also, the comments precisely describes the details and corner cases of
+the implementation.
+
+Each patch contains a brief description of implementation, but patch 6
+"docs: locking: futex2: Add documentation" adds a more complete document
+about it.
+
+* The patchset
+
+This patchset can be also found at my git tree:
+
+https://gitlab.collabora.com/tonyk/linux/-/tree/futex2-dev
+
+  - Patch 1: Implements wait/wake, and the basics foundations of futex2
+
+  - Patches 2-4: Implement the remaining features (shared, waitv, requeue).
+
+  - Patch 5:  Adds the x86_x32 ABI handling. I kept it in a separated
+    patch since I'm not sure if x86_x32 is still a thing, or if it should
+    return -ENOSYS.
+
+  - Patch 6: Add a documentation file which details the interface and
+    the internal implementation.
+
+  - Patches 7-13: Selftests for all operations along with perf
+    support for futex2.
+
+  - Patch 14: While working on porting glibc for futex2, I found out
+    that there's a futex_wake() call at the user thread exit path, if
+    that thread was created with clone(..., CLONE_CHILD_SETTID, ...). In
+    order to make pthreads work with futex2, it was required to add
+    this patch. Note that this is more a proof-of-concept of what we
+    will need to do in future, rather than part of the interface and
+    shouldn't be merged as it is.
+
+* Testing:
+
+This patchset provides selftests for each operation and their flags.
+Along with that, the following work was done:
+
+ ** Stability
+
+ To stress the interface in "real world scenarios":
+
+ - glibc[4]: nptl's low level locking was modified to use futex2 API
+   (except for robust and PI things). All relevant nptl/ tests passed.
+
+ - Wine[5]: Proton/Wine was modified in order to use futex2() for the
+   emulation of Windows NT sync mechanisms based on futex, called "fsync".
+   Triple-A games with huge CPU's loads and tons of parallel jobs worked
+   as expected when compared with the previous FUTEX_WAIT_MULTIPLE
+   implementation at futex(). Some games issue 42k futex2() calls
+   per second.
+
+ - Full GNU/Linux distro: I installed the modified glibc in my host
+   machine, so all pthread's programs would use futex2(). After tweaking
+   systemd[6] to allow futex2() calls at seccomp, everything worked as
+   expected (web browsers do some syscall sandboxing and need some
+   configuration as well).
+
+ - perf: The perf benchmarks tests can also be used to stress the
+   interface, and they can be found in this patchset.
+
+ ** Performance
+
+ - For comparing futex() and futex2() performance, I used the artificial
+   benchmarks implemented at perf (wake, wake-parallel, hash and
+   requeue). The setup was 200 runs for each test and using 8, 80, 800,
+   8000 for the number of threads, Note that for this test, I'm not using
+   patch 14 ("kernel: Enable waitpid() for futex2") , for reasons explained
+   at "The patchset" section.
+
+ - For the first three ones, I measured an average of 4% gain in
+   performance. This is not a big step, but it shows that the new
+   interface is at least comparable in performance with the current one.
+
+ - For requeue, I measured an average of 21% decrease in performance
+   compared to the original futex implementation. This is expected given
+   the new design with individual flags. The performance trade-offs are
+   explained at patch 4 ("futex2: Implement requeue operation").
+
+[4] https://gitlab.collabora.com/tonyk/glibc/-/tree/futex2
+[5] https://gitlab.collabora.com/tonyk/wine/-/tree/proton_5.13
+[6] https://gitlab.collabora.com/tonyk/systemd
+
+* FAQ
+
+ ** "Where's the code for NUMA and FUTEX_8/16?"
+
+ The current code is already complex enough to take some time for
+ review, so I believe it's better to split that work out to a future
+ iteration of this patchset. Besides that, this RFC is the core part of the
+ infrastructure, and the following features will not pose big design
+ changes to it, the work will be more about wiring up the flags and
+ modifying some functions.
+
+ ** "And what's about FUTEX_64?"
+
+ By supporting 64 bit futexes, the kernel structure for futex would
+ need to have a 64 bit field for the value, and that could defeat one of
+ the purposes of having different sized futexes in the first place:
+ supporting smaller ones to decrease memory usage. This might be
+ something that could be disabled for 32bit archs (and even for
+ CONFIG_BASE_SMALL).
+
+ Which use case would benefit for FUTEX_64? Does it worth the trade-offs?
+
+ ** "Where's the PI/robust stuff?"
+
+ As said by Peter Zijlstra at [3], all those new features are related to
+ the "simple" futex interface, that doesn't use PI or robust. Do we want
+ to have this complexity at futex2() and if so, should it be part of
+ this patchset or can it be future work?
+
+Thanks,
+	André
+
+* Changelog
+
+Changes from v1:
+- Unified futex_set_timer_and_wait and __futex_wait code
+- Dropped _carefull from linked list function calls
+- Fixed typos on docs patch
+- uAPI flags are now added as features are introduced, instead of all flags
+  in patch 1
+- Removed struct futex_single_waiter in favor of an anon struct
+v1: https://lore.kernel.org/lkml/20210215152404.250281-1-andrealmeid@collabora.com/
+
+
+André Almeida (13):
+  futex2: Implement wait and wake functions
+  futex2: Add support for shared futexes
+  futex2: Implement vectorized wait
+  futex2: Implement requeue operation
+  futex2: Add compatibility entry point for x86_x32 ABI
+  docs: locking: futex2: Add documentation
+  selftests: futex2: Add wake/wait test
+  selftests: futex2: Add timeout test
+  selftests: futex2: Add wouldblock test
+  selftests: futex2: Add waitv test
+  selftests: futex2: Add requeue test
+  perf bench: Add futex2 benchmark tests
+  kernel: Enable waitpid() for futex2
+
+ Documentation/locking/futex2.rst              |  198 +++
+ Documentation/locking/index.rst               |    1 +
+ MAINTAINERS                                   |    2 +-
+ arch/arm/tools/syscall.tbl                    |    4 +
+ arch/arm64/include/asm/unistd.h               |    2 +-
+ arch/arm64/include/asm/unistd32.h             |    8 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |    4 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |    4 +
+ fs/inode.c                                    |    1 +
+ include/linux/compat.h                        |   23 +
+ include/linux/fs.h                            |    1 +
+ include/linux/syscalls.h                      |   18 +
+ include/uapi/asm-generic/unistd.h             |   14 +-
+ include/uapi/linux/futex.h                    |   31 +
+ init/Kconfig                                  |    7 +
+ kernel/Makefile                               |    1 +
+ kernel/fork.c                                 |    2 +
+ kernel/futex2.c                               | 1239 +++++++++++++++++
+ kernel/sys_ni.c                               |    6 +
+ tools/arch/x86/include/asm/unistd_64.h        |   12 +
+ tools/include/uapi/asm-generic/unistd.h       |   11 +-
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |    4 +
+ tools/perf/bench/bench.h                      |    4 +
+ tools/perf/bench/futex-hash.c                 |   24 +-
+ tools/perf/bench/futex-requeue.c              |   57 +-
+ tools/perf/bench/futex-wake-parallel.c        |   41 +-
+ tools/perf/bench/futex-wake.c                 |   37 +-
+ tools/perf/bench/futex.h                      |   47 +
+ tools/perf/builtin-bench.c                    |   18 +-
+ .../selftests/futex/functional/.gitignore     |    3 +
+ .../selftests/futex/functional/Makefile       |    8 +-
+ .../futex/functional/futex2_requeue.c         |  164 +++
+ .../selftests/futex/functional/futex2_wait.c  |  209 +++
+ .../selftests/futex/functional/futex2_waitv.c |  157 +++
+ .../futex/functional/futex_wait_timeout.c     |   58 +-
+ .../futex/functional/futex_wait_wouldblock.c  |   33 +-
+ .../testing/selftests/futex/functional/run.sh |    6 +
+ .../selftests/futex/include/futex2test.h      |  121 ++
+ 38 files changed, 2527 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/locking/futex2.rst
+ create mode 100644 kernel/futex2.c
+ create mode 100644 tools/testing/selftests/futex/functional/futex2_requeue.c
+ create mode 100644 tools/testing/selftests/futex/functional/futex2_wait.c
+ create mode 100644 tools/testing/selftests/futex/functional/futex2_waitv.c
+ create mode 100644 tools/testing/selftests/futex/include/futex2test.h
+
 -- 
-2.28.0
+2.30.1
 
