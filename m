@@ -2,426 +2,100 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E613C4361B
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 00:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BF99C433DB
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 04:37:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A0F864EBD
-	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 00:58:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E76764EF8
+	for <linux-kselftest@archiver.kernel.org>; Thu,  4 Mar 2021 04:37:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhCDA6B (ORCPT
+        id S233167AbhCDEg4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 3 Mar 2021 19:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        Wed, 3 Mar 2021 23:36:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453069AbhCDAoZ (ORCPT
+        with ESMTP id S233173AbhCDEgi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Mar 2021 19:44:25 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A221C061763;
-        Wed,  3 Mar 2021 16:43:37 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 9E6631F46029
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        pgriffais@valvesoftware.com, z.figura12@gmail.com,
-        joel@joelfernandes.org, malteskarupke@fastmail.fm,
-        linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [RFC PATCH v2 07/13] selftests: futex2: Add wake/wait test
-Date:   Wed,  3 Mar 2021 21:42:13 -0300
-Message-Id: <20210304004219.134051-8-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210304004219.134051-1-andrealmeid@collabora.com>
-References: <20210304004219.134051-1-andrealmeid@collabora.com>
+        Wed, 3 Mar 2021 23:36:38 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E21C061574;
+        Wed,  3 Mar 2021 20:35:58 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id d11so18787303qtx.9;
+        Wed, 03 Mar 2021 20:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y5ZDSbOSmDJWCd8UPozkSUVXTXAnLCAZLMFl/S0V2rA=;
+        b=Nxsy4/8ZuQmZjbjQyS3MOZOjxVgdPNHFGnoZzPpck42X11cegW7QFCcAicctguL7sz
+         nFgECtIiMEykoWQDNDlfsEpEYhDbyHYP2BuGrFRd28ynL5ZDAkoUUfDj8r7eQ1k0Qz59
+         fxVeaeKHCi+O+2qDkX6W807O+MmtS5P3GMjqwh/RRjCRGriy8i1F+F75AgimI7Qfb+H3
+         4jESFV4jbmh5g8M+sZqPtY/KbA9RbV6OVMLquhBRKBr+DeL/IohI9xzJ62jaBFcTv83n
+         u5+i7thSvgLMd5pWhobahweA9f1q+x6DtYYKQTnRnxO4Vu23Wspbr5/SsVxgOgbBHKls
+         eVfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y5ZDSbOSmDJWCd8UPozkSUVXTXAnLCAZLMFl/S0V2rA=;
+        b=iDc8IdjNwwnI7r4v5ObICqTUTt0mbuWHjVi4ZfCulkdbJxLhPNniEf/sM2S3xLLDrJ
+         4I732NDI9SkhnzNmMHWFeEa8+E5TqqWG14M1k8oZro9cvRx65g91GQDfrsHB6j3kjoDa
+         gp8vNa9L7364/m4BoupZhOl8ngkLpol7MlCHIx4K4hKU2VcO7Cg3YwLRqaO10ydU0D5f
+         KcyqelPBIa0yLqBZ1JJiiR0crHLH4e9IeZ9QDePUbdU/v4J03K2UETdFsWZob6x7BJRV
+         PzhPjkTnrfvNWD4a+5p0GNhpcQj6AnUnt3Ohj1qK/eMU/A0zpNmjClswGgqBhA/6IUmR
+         yPKA==
+X-Gm-Message-State: AOAM530hJ7wCpwC2W9c7kjZstJH201gnr9mH0V9Q5FHdmnXTbnqD7jPX
+        EXnaC8VUOnU0ZLC6d2z5e9KKRfKTd9d+f7wC
+X-Google-Smtp-Source: ABdhPJyDa4e4BhcLLnLxEyPyyX3AvqaL5olVUOhU2RWEcEQQ5Qf3l6Ht4QKRHiE/2h6mr5gp7pxvVA==
+X-Received: by 2002:ac8:740a:: with SMTP id p10mr2426052qtq.273.1614832557787;
+        Wed, 03 Mar 2021 20:35:57 -0800 (PST)
+Received: from smtp.gmail.com ([2804:14c:73:9e91:8b8:81b4:5ef9:821d])
+        by smtp.gmail.com with ESMTPSA id g74sm15468421qke.3.2021.03.03.20.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 20:35:57 -0800 (PST)
+Date:   Thu, 4 Mar 2021 01:35:54 -0300
+From:   Lucas Stankus <lucas.p.stankus@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] kunit: fix checkpatch warning
+Message-ID: <20210304043554.jysk6qms4h4hue4i@smtp.gmail.com>
+References: <20210303020350.4sahuojkqnkcxquf@smtp.gmail.com>
+ <CAFd5g47rjt7i7JXWsYarqX_dShHiqSg8StKb7KCqOye3=eyZDg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFd5g47rjt7i7JXWsYarqX_dShHiqSg8StKb7KCqOye3=eyZDg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple file to test wake/wait mechanism using futex2 interface.
-Test three scenarios: using a common local int variable as private
-futex, a shm futex as shared futex and a file-backed shared memory as a
-shared futex. This should test all branches of futex_get_key().
+On Wed, Mar 03, 2021 at 12:56:05PM -0800, Brendan Higgins wrote:
+> Did you change anything other than fixing the Signed-off-by that Shuah
+> requested?
 
-Create helper files so more tests can evaluate futex2. While 32bit ABIs
-from glibc aren't yet able to use 64 bit sized time variables, add a
-temporary workaround that implements the required types and calls the
-appropriated syscalls, since futex2 doesn't supports 32 bit sized time.
+No, I only fixed the Signed-off-by warning.
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
- .../selftests/futex/functional/.gitignore     |   1 +
- .../selftests/futex/functional/Makefile       |   6 +-
- .../selftests/futex/functional/futex2_wait.c  | 209 ++++++++++++++++++
- .../testing/selftests/futex/functional/run.sh |   3 +
- .../selftests/futex/include/futex2test.h      |  79 +++++++
- 5 files changed, 296 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/futex/functional/futex2_wait.c
- create mode 100644 tools/testing/selftests/futex/include/futex2test.h
+> Generally when you make a small change after receiving a Reviewed-by
+> (especially one so small as here), you are supposed to include the
+> Reviewed-by with the other git commit message footers directly below
+> the "Signed-off-by". Please remember to do so in the future.
+> 
+> Also, when you make a change to a patch and send out a subsequent
+> revision, it is best practice to make note explaining the changes you
+> made since the last revision in the "comment section" [1] of the
+> git-diff, right after the three dashes and before the change log as
+> you can see in this example [2] (note that everything after
+> "Signed-off-by: David Gow <davidgow@google.com>\n ---" and before
+> "tools/testing/kunit/configs/broken_on_uml.config | 2 ++" is discarded
+> by git am).
 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index 0efcd494daab..d61f1df94360 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -6,3 +6,4 @@ futex_wait_private_mapped_file
- futex_wait_timeout
- futex_wait_uninitialized_heap
- futex_wait_wouldblock
-+futex2_wait
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 23207829ec75..9b334f190759 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -1,10 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
--INCLUDES := -I../include -I../../
-+INCLUDES := -I../include -I../../ -I../../../../../usr/include/
- CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
- LDLIBS := -lpthread -lrt
- 
- HEADERS := \
- 	../include/futextest.h \
-+	../include/futex2test.h \
- 	../include/atomic.h \
- 	../include/logging.h
- TEST_GEN_FILES := \
-@@ -14,7 +15,8 @@ TEST_GEN_FILES := \
- 	futex_requeue_pi_signal_restart \
- 	futex_requeue_pi_mismatched_ops \
- 	futex_wait_uninitialized_heap \
--	futex_wait_private_mapped_file
-+	futex_wait_private_mapped_file \
-+	futex2_wait
- 
- TEST_PROGS := run.sh
- 
-diff --git a/tools/testing/selftests/futex/functional/futex2_wait.c b/tools/testing/selftests/futex/functional/futex2_wait.c
-new file mode 100644
-index 000000000000..4b5416585c79
---- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex2_wait.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/******************************************************************************
-+ *
-+ *   Copyright Collabora Ltd., 2021
-+ *
-+ * DESCRIPTION
-+ *	Test wait/wake mechanism of futex2, using 32bit sized futexes.
-+ *
-+ * AUTHOR
-+ *	André Almeida <andrealmeid@collabora.com>
-+ *
-+ * HISTORY
-+ *      2021-Feb-5: Initial version by André <andrealmeid@collabora.com>
-+ *
-+ *****************************************************************************/
-+
-+#include <errno.h>
-+#include <error.h>
-+#include <getopt.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <pthread.h>
-+#include <sys/shm.h>
-+#include <sys/mman.h>
-+#include <fcntl.h>
-+#include <string.h>
-+#include "futex2test.h"
-+#include "logging.h"
-+
-+#define TEST_NAME "futex2-wait"
-+#define timeout_ns  30000000
-+#define WAKE_WAIT_US 10000
-+#define SHM_PATH "futex2_shm_file"
-+futex_t *f1;
-+
-+void usage(char *prog)
-+{
-+	printf("Usage: %s\n", prog);
-+	printf("  -c	Use color\n");
-+	printf("  -h	Display this help message\n");
-+	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
-+	       VQUIET, VCRITICAL, VINFO);
-+}
-+
-+void *waiterfn(void *arg)
-+{
-+	struct timespec64 to64;
-+	unsigned int flags = 0;
-+
-+	if (arg)
-+		flags = *((unsigned int *) arg);
-+
-+	/* setting absolute timeout for futex2 */
-+	if (gettime64(CLOCK_MONOTONIC, &to64))
-+		error("gettime64 failed\n", errno);
-+
-+	to64.tv_nsec += timeout_ns;
-+
-+	if (to64.tv_nsec >= 1000000000) {
-+		to64.tv_sec++;
-+		to64.tv_nsec -= 1000000000;
-+	}
-+
-+	if (futex2_wait(f1, *f1, FUTEX_32 | flags, &to64))
-+		printf("waiter failed errno %d\n", errno);
-+
-+	return NULL;
-+}
-+
-+void *waitershm(void *arg)
-+{
-+	futex2_wait(arg, 0, FUTEX_32 | FUTEX_SHARED_FLAG, NULL);
-+
-+	return NULL;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	pthread_t waiter;
-+	unsigned int flags = FUTEX_SHARED_FLAG;
-+	int res, ret = RET_PASS;
-+	int c;
-+	futex_t f_private = 0;
-+
-+	f1 = &f_private;
-+
-+	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-+		switch (c) {
-+		case 'c':
-+			log_color(1);
-+			break;
-+		case 'h':
-+			usage(basename(argv[0]));
-+			exit(0);
-+		case 'v':
-+			log_verbosity(atoi(optarg));
-+			break;
-+		default:
-+			usage(basename(argv[0]));
-+			exit(1);
-+		}
-+	}
-+
-+	ksft_print_header();
-+	ksft_set_plan(3);
-+	ksft_print_msg("%s: Test FUTEX2_WAIT\n",
-+		       basename(argv[0]));
-+
-+	/* Testing a private futex */
-+	info("Calling private futex2_wait on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+
-+	if (pthread_create(&waiter, NULL, waiterfn, NULL))
-+		error("pthread_create failed\n", errno);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	info("Calling private futex2_wake on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+	res = futex2_wake(f1, 1, FUTEX_32);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_wake private returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex2_wake private succeeds\n");
-+	}
-+
-+	int shm_id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0666);
-+
-+	if (shm_id < 0) {
-+		perror("shmget");
-+		exit(1);
-+	}
-+
-+	/* Testing an anon page shared memory */
-+	unsigned int *shared_data = shmat(shm_id, NULL, 0);
-+
-+	*shared_data = 0;
-+	f1 = shared_data;
-+
-+	info("Calling shared futex2_wait on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+
-+	if (pthread_create(&waiter, NULL, waiterfn, &flags))
-+		error("pthread_create failed\n", errno);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	info("Calling shared futex2_wake on f1: %u @ %p with val=%u\n", *f1, f1, *f1);
-+	res = futex2_wake(f1, 1, FUTEX_32 | FUTEX_SHARED_FLAG);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_wake shared (shmget) returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex2_wake shared (shmget) succeeds\n");
-+	}
-+
-+	shmdt(shared_data);
-+
-+	/* Testing a file backed shared memory */
-+	void *shm;
-+	int fd, pid;
-+
-+	f_private = 0;
-+
-+	fd = open(SHM_PATH, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-+	if (fd < 0) {
-+		perror("open");
-+		exit(1);
-+	}
-+
-+	res = ftruncate(fd, sizeof(f_private));
-+	if (res) {
-+		perror("ftruncate");
-+		exit(1);
-+	}
-+
-+	shm = mmap(NULL, sizeof(f_private), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (shm == MAP_FAILED) {
-+		perror("mmap");
-+		exit(1);
-+	}
-+
-+	memcpy(shm, &f_private, sizeof(f_private));
-+
-+	pthread_create(&waiter, NULL, waitershm, shm);
-+
-+	usleep(WAKE_WAIT_US);
-+
-+	res = futex2_wake(shm, 1, FUTEX_32 | FUTEX_SHARED_FLAG);
-+	if (res != 1) {
-+		ksft_test_result_fail("futex2_wake shared (mmap) returned: %d %s\n",
-+				      res ? errno : res,
-+				      res ? strerror(errno) : "");
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex2_wake shared (mmap) succeeds\n");
-+	}
-+
-+	munmap(shm, sizeof(f_private));
-+
-+	remove(SHM_PATH);
-+
-+	ksft_print_cnts();
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 1acb6ace1680..3730159c865a 100755
---- a/tools/testing/selftests/futex/functional/run.sh
-+++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -73,3 +73,6 @@ echo
- echo
- ./futex_wait_uninitialized_heap $COLOR
- ./futex_wait_private_mapped_file $COLOR
-+
-+echo
-+./futex2_wait $COLOR
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/testing/selftests/futex/include/futex2test.h
-new file mode 100644
-index 000000000000..e724d56b917e
---- /dev/null
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -0,0 +1,79 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/******************************************************************************
-+ *
-+ *   Copyright Collabora Ltd., 2021
-+ *
-+ * DESCRIPTION
-+ *	Futex2 library addons for old futex library
-+ *
-+ * AUTHOR
-+ *	André Almeida <andrealmeid@collabora.com>
-+ *
-+ * HISTORY
-+ *      2021-Feb-5: Initial version by André <andrealmeid@collabora.com>
-+ *
-+ *****************************************************************************/
-+#include "futextest.h"
-+#include <stdio.h>
-+
-+#define NSEC_PER_SEC	1000000000L
-+
-+#ifndef FUTEX_8
-+# define FUTEX_8	0
-+#endif
-+#ifndef FUTEX_16
-+# define FUTEX_16	1
-+#endif
-+#ifndef FUTEX_32
-+# define FUTEX_32	2
-+#endif
-+
-+/*
-+ * - Y2038 section for 32-bit applications -
-+ *
-+ * Remove this when glibc is ready for y2038. Then, always compile with
-+ * `-DTIME_BITS=64` or `-D__USE_TIME_BITS64`. glibc will provide both
-+ * timespec64 and clock_gettime64 so we won't need to define here.
-+ */
-+#if defined(__i386__) || __TIMESIZE == 32
-+# define NR_gettime __NR_clock_gettime64
-+#else
-+# define NR_gettime __NR_clock_gettime
-+#endif
-+
-+struct timespec64 {
-+	long long tv_sec;	/* seconds */
-+	long long tv_nsec;	/* nanoseconds */
-+};
-+
-+int gettime64(clock_t clockid, struct timespec64 *tv)
-+{
-+	return syscall(NR_gettime, clockid, tv);
-+}
-+/*
-+ * - End of Y2038 section -
-+ */
-+
-+/**
-+ * futex2_wait - If (*uaddr == val), wait at uaddr until timo
-+ * @uaddr: User address to wait on
-+ * @val:   Expected value at uaddr, return if is not equal
-+ * @flags: Operation flags
-+ * @timo:  Optional timeout for operation
-+ */
-+static inline int futex2_wait(volatile void *uaddr, unsigned long val,
-+			      unsigned long flags, struct timespec64 *timo)
-+{
-+	return syscall(__NR_futex_wait, uaddr, val, flags, timo);
-+}
-+
-+/**
-+ * futex2_wake - Wake a number of waiters at uaddr
-+ * @uaddr: Address to wake
-+ * @nr:    Number of waiters to wake
-+ * @flags: Operation flags
-+ */
-+static inline int futex2_wake(volatile void *uaddr, unsigned int nr, unsigned long flags)
-+{
-+	return syscall(__NR_futex_wake, uaddr, nr, flags);
-+}
--- 
-2.30.1
-
+Sorry for the incovenience regarding best practices, I'll keep that
+noted for further contributions.
