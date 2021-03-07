@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5013C43619
-	for <linux-kselftest@archiver.kernel.org>; Sun,  7 Mar 2021 14:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2C5C43142
+	for <linux-kselftest@archiver.kernel.org>; Sun,  7 Mar 2021 14:56:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EF5E65127
-	for <linux-kselftest@archiver.kernel.org>; Sun,  7 Mar 2021 14:56:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3408065111
+	for <linux-kselftest@archiver.kernel.org>; Sun,  7 Mar 2021 14:56:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbhCGOzc (ORCPT
+        id S231821AbhCGOzb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 7 Mar 2021 09:55:32 -0500
+        Sun, 7 Mar 2021 09:55:31 -0500
 Received: from mga17.intel.com ([192.55.52.151]:5870 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231628AbhCGOzL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S231631AbhCGOzL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 7 Mar 2021 09:55:11 -0500
-IronPort-SDR: nAIio8LPdJQ+Xc0FnprLrQDj5GjfOia9LfJgY17WdJi5Vh/sLUegp5M9mCZuU589NFIthmbNVU
- GPj6/FWxlxIQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167813504"
+IronPort-SDR: yHA3RAof9jhyaNCJ1wcbywRXRgyMAscn3OiRdujassW2RfoPdauNqgKd5peHTCFQWT1s7PonSM
+ qcVHZoQb7bnQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9916"; a="167813506"
 X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="167813504"
+   d="scan'208";a="167813506"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2021 06:55:10 -0800
-IronPort-SDR: cB+5P7EjPXKCd78D/K80UnrQC6oSynr2yO74FTMBbK2lCe4xr4f66wpi/RizngvR5/+Eitx6CV
- huQgDOWds6NA==
+IronPort-SDR: /jt6fYrmSu3+qmN9DxWd4Ra9OOGZ9qeY6mP1hJ0LimT2T9W4g3ZZj2HFMuY/7IR3ne0Jz0JkPJ
+ wWDcDo0DAULw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,230,1610438400"; 
-   d="scan'208";a="437189137"
+   d="scan'208";a="437189144"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by FMSMGA003.fm.intel.com with ESMTP; 07 Mar 2021 06:55:10 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -41,9 +41,9 @@ To:     "Shuah Khan" <shuah@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
         Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v5 17/21] selftests/resctrl: Skip the test if requested resctrl feature is not supported
-Date:   Sun,  7 Mar 2021 14:54:58 +0000
-Message-Id: <20210307145502.2916364-18-fenghua.yu@intel.com>
+Subject: [PATCH v5 19/21] selftests/resctrl: Fix incorrect parsing of iMC counters
+Date:   Sun,  7 Mar 2021 14:55:00 +0000
+Message-Id: <20210307145502.2916364-20-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210307145502.2916364-1-fenghua.yu@intel.com>
 References: <20210307145502.2916364-1-fenghua.yu@intel.com>
@@ -53,133 +53,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There could be two reasons why a resctrl feature might not be enabled on
-the platform
-1. H/W might not support the feature
-2. Even if the H/W supports it, the user might have disabled the feature
-   through kernel command line arguments
+iMC (Integrated Memory Controller) counters are usually at
+"/sys/bus/event_source/devices/" and are named as "uncore_imc_<n>".
+num_of_imcs() function tries to count number of such iMC counters so that
+it could appropriately initialize required number of perf_attr structures
+that could be used to read these iMC counters.
 
-Hence, any resctrl unit test (like cmt, cat, mbm and mba) before starting
-the test will first check if the feature is enabled on the platform or not.
-If the feature isn't enabled, then the test returns with an error status.
-For example, if MBA isn't supported on a platform and if the user tries to
-run MBA, the output will look like this
+num_of_imcs() function assumes that all the directories under this path
+that start with "uncore_imc" are iMC counters. But, on some systems there
+could be directories named as "uncore_imc_free_running" which aren't iMC
+counters. Trying to read from such directories will result in "not found
+file" errors and MBM/MBA tests will fail.
 
-ok mounting resctrl to "/sys/fs/resctrl"
-not ok MBA: schemata change
+Hence, fix the logic in num_of_imcs() such that it looks at the first
+character after "uncore_imc_" to check if it's a numerical digit or not. If
+it's a digit then the directory represents an iMC counter, else, skip the
+directory.
 
-But, not supporting a feature isn't a test failure. So, instead of treating
-it as an error, use the SKIP directive of the TAP protocol. With the
-change, the output will look as below
-
-ok MBA # SKIP Hardware does not support MBA or MBA is disabled
-
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Reported-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c    |  3 ---
- tools/testing/selftests/resctrl/mba_test.c    |  3 ---
- tools/testing/selftests/resctrl/mbm_test.c    |  3 ---
- .../testing/selftests/resctrl/resctrl_tests.c | 23 +++++++++++++++++++
- 4 files changed, 23 insertions(+), 9 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_val.c | 22 +++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 58f075aa0423..2e531ef0e7e4 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -111,9 +111,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	if (ret)
- 		return ret;
- 
--	if (!validate_resctrl_feature_request("cat"))
--		return -1;
--
- 	/* Get default cbm mask for L3/L2 cache */
- 	ret = get_cbm_mask(cache_type, cbm_mask);
- 	if (ret)
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index fd66a831062c..205f09235b06 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -158,9 +158,6 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd)
- 
- 	remove(RESULT_FILE_NAME);
- 
--	if (!validate_resctrl_feature_request("mba"))
--		return -1;
--
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 44a89e0267eb..01f72d4e68a6 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -131,9 +131,6 @@ int mbm_bw_change(int span, int cpu_no, char *bw_report, char **benchmark_cmd)
- 
- 	remove(RESULT_FILE_NAME);
- 
--	if (!validate_resctrl_feature_request("mbm"))
--		return -1;
--
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index f9d00ecbeedb..fa4c5f5075dd 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -60,6 +60,12 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
- 	int res;
- 
- 	ksft_print_msg("Starting MBM BW change ...\n");
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 48bcd5fd7d79..de99d398ebfb 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -221,8 +221,8 @@ static int read_from_imc_dir(char *imc_dir, int count)
+  */
+ static int num_of_imcs(void)
+ {
++	char imc_dir[512], *temp;
+ 	unsigned int count = 0;
+-	char imc_dir[512];
+ 	struct dirent *ep;
+ 	int ret;
+ 	DIR *dp;
+@@ -230,7 +230,25 @@ static int num_of_imcs(void)
+ 	dp = opendir(DYN_PMU_PATH);
+ 	if (dp) {
+ 		while ((ep = readdir(dp))) {
+-			if (strstr(ep->d_name, UNCORE_IMC)) {
++			temp = strstr(ep->d_name, UNCORE_IMC);
++			if (!temp)
++				continue;
 +
-+	if (!validate_resctrl_feature_request("mbm")) {
-+		ksft_test_result_skip("Hardware does not support MBM or MBM is disabled\n");
-+		return;
-+	}
++			/*
++			 * imc counters are named as "uncore_imc_<n>", hence
++			 * increment the pointer to point to <n>. Note that
++			 * sizeof(UNCORE_IMC) would count for null character as
++			 * well and hence the last underscore character in
++			 * uncore_imc'_' need not be counted.
++			 */
++			temp = temp + sizeof(UNCORE_IMC);
 +
- 	if (!has_ben)
- 		sprintf(benchmark_cmd[5], "%s", MBA_STR);
- 	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
-@@ -73,6 +79,12 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
- 	int res;
- 
- 	ksft_print_msg("Starting MBA Schemata change ...\n");
-+
-+	if (!validate_resctrl_feature_request("mba")) {
-+		ksft_test_result_skip("Hardware does not support MBA or MBA is disabled\n");
-+		return;
-+	}
-+
- 	if (!has_ben)
- 		sprintf(benchmark_cmd[1], "%d", span);
- 	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
-@@ -85,6 +97,11 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
- 	int res;
- 
- 	ksft_print_msg("Starting CMT test ...\n");
-+	if (!validate_resctrl_feature_request("cmt")) {
-+		ksft_test_result_skip("Hardware does not support CMT or CMT is disabled\n");
-+		return;
-+	}
-+
- 	if (!has_ben)
- 		sprintf(benchmark_cmd[5], "%s", "cmt");
- 	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
-@@ -97,6 +114,12 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- 	int res;
- 
- 	ksft_print_msg("Starting CAT test ...\n");
-+
-+	if (!validate_resctrl_feature_request("cat")) {
-+		ksft_test_result_skip("Hardware does not support CAT or CAT is disabled\n");
-+		return;
-+	}
-+
- 	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
- 	ksft_test_result(!res, "CAT: test\n");
- 	cat_test_cleanup();
++			/*
++			 * Some directories under "DYN_PMU_PATH" could have
++			 * names like "uncore_imc_free_running", hence, check if
++			 * first character is a numerical digit or not.
++			 */
++			if (temp[0] >= '0' && temp[0] <= '9') {
+ 				sprintf(imc_dir, "%s/%s/", DYN_PMU_PATH,
+ 					ep->d_name);
+ 				ret = read_from_imc_dir(imc_dir, count);
 -- 
 2.30.1
 
