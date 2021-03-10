@@ -2,467 +2,1043 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.5 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 917A1C433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Mar 2021 22:59:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C75C7C4332B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Mar 2021 00:31:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EE4D650FD
-	for <linux-kselftest@archiver.kernel.org>; Tue,  9 Mar 2021 22:59:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92DE265132
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Mar 2021 00:31:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbhCIW7N (ORCPT
+        id S231382AbhCJAbQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 9 Mar 2021 17:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        Tue, 9 Mar 2021 19:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbhCIW6n (ORCPT
+        with ESMTP id S231358AbhCJAan (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Mar 2021 17:58:43 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE70DC061760
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Mar 2021 14:58:42 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id gv10so3146758pjb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Mar 2021 14:58:42 -0800 (PST)
+        Tue, 9 Mar 2021 19:30:43 -0500
+Received: from mail-io1-xd49.google.com (mail-io1-xd49.google.com [IPv6:2607:f8b0:4864:20::d49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97690C061760
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Mar 2021 16:30:43 -0800 (PST)
+Received: by mail-io1-xd49.google.com with SMTP id m3so11661922ioy.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Mar 2021 16:30:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=/cJV9gQpnp4s+QLxYg/mqVxJ5ZFeSex6Wt0SL0TwuVo=;
-        b=ac006AMNgMKa4TK679PsSiE+TnvBCoFWdrukR9WBTK4IrvAVcrt8NE+AwpBVKjHQ7P
-         5jBygjG/IOMoO3KF8+wA18kCCsbc0RkoOrXCtuzGLArYq6Juel9oHP35bhaQNpQEeit3
-         SAKYtLsqUy3qy69y0cS8BdNvVEB/wJWzyO64e3FG6LshLCZ5pFtGfSqc7KkAjJYFCL4l
-         lDMvLPjak9RZ7ovcfghOXoVTnpfMq1CnxeCCOQB3Rlx88SExgd6SAHIzj3Qa0OX240QE
-         cK2Axs01XQ2o09RTeJQvoCGaZlHsXbIdrgrvipt08DiLL0r8qlxsMkYhba0pSkkkcoqq
-         866A==
+        bh=w4HWO7BOc3rd93ENppTFarD1eUekczKbOeXBNH9YdnE=;
+        b=ehzWMPESd1qEKYF5eIXAG8PO252zJXS5nxBQ6cL/dgn9nfrMa9XztHs6xQqzzmZRw1
+         /vmJRDYFspuSWYNONt84tXe5Gu+XWSVpDS5/o/G8289D8bznR36qNIukjdSFnR236v6F
+         lDW/d7rA405/eDJ1BDISM/F9ADuZhJCFV1zXwIKusXv5B03qHthdli8Qh8dqfE5iPUgH
+         yf5v22t4HjFjfXnEYc8htmJBikGzI8CaWUSpNy0ECW/4vcqBKw8OO7hmsGF9RQIDx64m
+         AUoIkz2MzIRG1fX85vhR9PCuMa+7RriKV/y9qtBeP8FIOHqqyYJTe7ySReBhXJalb+S6
+         pgng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=/cJV9gQpnp4s+QLxYg/mqVxJ5ZFeSex6Wt0SL0TwuVo=;
-        b=BBmYAXzMsg1EgkCLbk5VsQfFND3tPDMpHcYPADtLD2mL9gcz3SioM2f2jmbhgp0wi+
-         FI/lZx4B76+VIWA4SDaagO2ISBC22T7iPh9RoYmGLwd6V+sub+h/hVgVYmql5gR/wPVP
-         7tJ0qC2oyPweOsO76R8YAldONmHQzaTBGvsIKjfokyFu9+D+OBskgLCGGubyFvV9z65z
-         Z1qvizuUfNF6hqTcWmXjOMISGPYeRk0F3NiMnNo14ALJ6EyfAq9j6P+G2ppIKuPD+AqC
-         9/QRBzGtyfXWcxPViC0Bo6p8SxpogZtx5MKpl6SZLngq0AKcfNWcdMBYl7FYBtQS7dYp
-         9zZA==
-X-Gm-Message-State: AOAM53258FUZCXpWxE+RVl+JDtDwsnIRbHTXhZZFTfCiuy/2J3+w6YeY
-        lEKGUDMVLhI/7z1KFZs8k9MFVttySpCtvcJ6uLzF
-X-Google-Smtp-Source: ABdhPJwSp2RARR2u7SYScNmDbxQkf48XQnaoG4hNhl43KDW+dosua/6lJzzDjbrT1nbZ9g5u1RMIV4GXE0mG3Ou98bFW
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:573:f2b7:2799:1d93])
- (user=axelrasmussen job=sendgmr) by 2002:a65:428b:: with SMTP id
- j11mr91045pgp.47.1615330722184; Tue, 09 Mar 2021 14:58:42 -0800 (PST)
-Date:   Tue,  9 Mar 2021 14:58:30 -0800
-In-Reply-To: <04697A35-AEC7-43F1-8462-1CD39648544A@nvidia.com>
-Message-Id: <20210309225830.2988269-1-axelrasmussen@google.com>
+        bh=w4HWO7BOc3rd93ENppTFarD1eUekczKbOeXBNH9YdnE=;
+        b=rJ6wc6LFYzn5P7br2IXR3NYyiDtoGScgl5DNCdelrZ5vgM2FiHmib4qiVomqG9nIFQ
+         6OggIP22v1yqeYPcWm7GFSs9Vr+9jfB2bWFOASx0oA2CfuUvk0AqWyXianWFtSg5hfYc
+         YPbAryRnfXbWpZTH6Oc+hAO+ENybHuaDxnzK4XiP+AwVXs5qrLlav+DLkhl3igso5Rb2
+         +shioVHFDvAU5UTph6Zwm5YIBvd+kUefswqCXEnp3KxqCLgAYd9jvq3F9NcHyFuG2HtT
+         dCP2GwljEFJ+WUzi7GUYcboWcnA7zyzBnrsnMj2nNBfOFJLSOiNkKRWK4YnebL7sZP1P
+         iDcA==
+X-Gm-Message-State: AOAM530oVH2I8ta+DCPszAOfbMakEtGwltaTiK3RpW81KldQLT+7yG7j
+        zZmSwLYg9lianXSSh+wpteLUmgtqp8qMJlsVkg==
+X-Google-Smtp-Source: ABdhPJyRIDsfQsiUcP3akPSY+zemsgHPSz3ZV8SsEBVLSILX/2HwE0zgNRlxmwAlt7ilcx04LhvjxO/9BTJT4PSeEg==
+X-Received: from jingzhangos.c.googlers.com ([fda3:e722:ac3:10:2b:ff92:c0a8:513])
+ (user=jingzhangos job=sendgmr) by 2002:a5d:8c8f:: with SMTP id
+ g15mr603463ion.162.1615336243044; Tue, 09 Mar 2021 16:30:43 -0800 (PST)
+Date:   Wed, 10 Mar 2021 00:30:21 +0000
+In-Reply-To: <20210310003024.2026253-1-jingzhangos@google.com>
+Message-Id: <20210310003024.2026253-2-jingzhangos@google.com>
 Mime-Version: 1.0
-References: <04697A35-AEC7-43F1-8462-1CD39648544A@nvidia.com>
+References: <20210310003024.2026253-1-jingzhangos@google.com>
 X-Mailer: git-send-email 2.30.1.766.gb4fecdf3b7-goog
-Subject: [PATCH v2.5] userfaultfd: support minor fault handling for shmem
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Shaohua Li <shli@fb.com>,
-        Shuah Khan <shuah@kernel.org>, Wang Qing <wangqing@vivo.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Brian Geffon <bgeffon@google.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+Subject: [RFC PATCH 1/4] KVM: stats: Separate statistics name strings from
+ debugfs code
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
         David Rientjes <rientjes@google.com>,
-        Michel Lespinasse <walken@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Oliver Upton <oupton@google.com>, Zi Yan <ziy@nvidia.com>
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Modify the userfaultfd register API to allow registering shmem VMAs in
-minor mode. Modify the shmem mcopy implementation to support
-UFFDIO_CONTINUE in order to resolve such faults.
+Prepare the statistics name strings for supporting binary format
+aggregated statistics data retrieval.
 
-Combine the shmem mcopy handler functions into a single
-shmem_mcopy_atomic_pte, which takes a mode parameter. This matches how
-the hugetlbfs implementation is structured, and lets us remove a good
-chunk of boilerplate.
+No functional change intended.
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Signed-off-by: Jing Zhang <jingzhangos@google.com>
 ---
- fs/userfaultfd.c                 |  6 +-
- include/linux/shmem_fs.h         | 26 ++++-----
- include/uapi/linux/userfaultfd.h |  4 +-
- mm/memory.c                      |  8 ++-
- mm/shmem.c                       | 94 +++++++++++++++-----------------
- mm/userfaultfd.c                 | 27 ++++-----
- 6 files changed, 81 insertions(+), 84 deletions(-)
+ arch/arm64/kvm/guest.c    |  47 ++++--
+ arch/mips/kvm/mips.c      | 114 ++++++++++----
+ arch/powerpc/kvm/book3s.c | 107 +++++++++----
+ arch/powerpc/kvm/booke.c  |  84 +++++++---
+ arch/s390/kvm/kvm-s390.c  | 320 ++++++++++++++++++++++++++------------
+ arch/x86/kvm/x86.c        | 127 ++++++++++-----
+ include/linux/kvm_host.h  |  31 +++-
+ 7 files changed, 589 insertions(+), 241 deletions(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 14f92285d04f..9f3b8684cf3c 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1267,8 +1267,7 @@ static inline bool vma_can_userfault(struct vm_area_struct *vma,
- 	}
-
- 	if (vm_flags & VM_UFFD_MINOR) {
--		/* FIXME: Add minor fault interception for shmem. */
--		if (!is_vm_hugetlb_page(vma))
-+		if (!(is_vm_hugetlb_page(vma) || vma_is_shmem(vma)))
- 			return false;
- 	}
-
-@@ -1941,7 +1940,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- 	/* report all available features and ioctls to userland */
- 	uffdio_api.features = UFFD_API_FEATURES;
- #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
--	uffdio_api.features &= ~UFFD_FEATURE_MINOR_HUGETLBFS;
-+	uffdio_api.features &=
-+		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
+diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+index 9bbd30e62799..fb3aafe76b52 100644
+--- a/arch/arm64/kvm/guest.c
++++ b/arch/arm64/kvm/guest.c
+@@ -28,19 +28,42 @@
+ 
+ #include "trace.h"
+ 
++const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"remote_tlb_flush",
++};
++static_assert(sizeof(kvm_vm_stat_strings) ==
++		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
++
++const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"halt_successful_poll",
++	"halt_attempted_poll",
++	"halt_poll_success_ns",
++	"halt_poll_fail_ns",
++	"halt_poll_invalid",
++	"halt_wakeup",
++	"hvc_exit_stat",
++	"wfe_exit_stat",
++	"wfi_exit_stat",
++	"mmio_exit_user",
++	"mmio_exit_kernel",
++	"exits",
++};
++static_assert(sizeof(kvm_vcpu_stat_strings) ==
++		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
++
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
+-	VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
+-	VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
+-	VCPU_STAT("mmio_exit_user", mmio_exit_user),
+-	VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
+-	VCPU_STAT("exits", exits),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT(halt_successful_poll),
++	VCPU_STAT(halt_attempted_poll),
++	VCPU_STAT(halt_poll_invalid),
++	VCPU_STAT(halt_wakeup),
++	VCPU_STAT(hvc_exit_stat),
++	VCPU_STAT(wfe_exit_stat),
++	VCPU_STAT(wfi_exit_stat),
++	VCPU_STAT(mmio_exit_user),
++	VCPU_STAT(mmio_exit_kernel),
++	VCPU_STAT(exits),
++	VCPU_STAT(halt_poll_success_ns),
++	VCPU_STAT(halt_poll_fail_ns),
+ 	{ NULL }
+ };
+ 
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 3d6a7f5827b1..8b9cbd9d6205 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -39,44 +39,92 @@
+ #define VECTORSPACING 0x100	/* for EI/VI mode */
  #endif
- 	uffdio_api.ioctls = UFFD_API_IOCTLS;
- 	ret = -EFAULT;
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index d82b6f396588..f0919c3722e7 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -9,6 +9,7 @@
- #include <linux/percpu_counter.h>
- #include <linux/xattr.h>
- #include <linux/fs_parser.h>
-+#include <linux/userfaultfd_k.h>
-
- /* inode in-kernel data */
-
-@@ -122,21 +123,16 @@ static inline bool shmem_file(struct file *file)
- extern bool shmem_charge(struct inode *inode, long pages);
- extern void shmem_uncharge(struct inode *inode, long pages);
-
-+#ifdef CONFIG_USERFAULTFD
- #ifdef CONFIG_SHMEM
--extern int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
--				  struct vm_area_struct *dst_vma,
--				  unsigned long dst_addr,
--				  unsigned long src_addr,
--				  struct page **pagep);
--extern int shmem_mfill_zeropage_pte(struct mm_struct *dst_mm,
--				    pmd_t *dst_pmd,
--				    struct vm_area_struct *dst_vma,
--				    unsigned long dst_addr);
--#else
--#define shmem_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma, dst_addr, \
--			       src_addr, pagep)        ({ BUG(); 0; })
--#define shmem_mfill_zeropage_pte(dst_mm, dst_pmd, dst_vma, \
--				 dst_addr)      ({ BUG(); 0; })
--#endif
-+int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+			   struct vm_area_struct *dst_vma,
-+			   unsigned long dst_addr, unsigned long src_addr,
-+			   enum mcopy_atomic_mode mode, struct page **pagep);
-+#else /* !CONFIG_SHMEM */
-+#define shmem_mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr, \
-+			       src_addr, mode, pagep)        ({ BUG(); 0; })
-+#endif /* CONFIG_SHMEM */
-+#endif /* CONFIG_USERFAULTFD */
-
+ 
++const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"remote_tlb_flush",
++};
++static_assert(sizeof(kvm_vm_stat_strings) ==
++		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
++
++const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"wait",
++	"cache",
++	"signal",
++	"interrupt",
++	"cop_unusable",
++	"tlbmod",
++	"tlbmiss_ld",
++	"tlbmiss_st",
++	"addrerr_st",
++	"addrerr_ld",
++	"syscall",
++	"resvd_inst",
++	"break_inst",
++	"trap_inst",
++	"msa_fpe",
++	"fpe",
++	"msa_disabled",
++	"flush_dcache",
++#ifdef CONFIG_KVM_MIPS_VZ
++	"vz_gpsi",
++	"vz_gsfc",
++	"vz_hc",
++	"vz_grr",
++	"vz_gva",
++	"vz_ghfc",
++	"vz_gpa",
++	"vz_resvd",
++#ifdef CONFIG_CPU_LOONGSON64
++	"vz_cpucfg",
++#endif
++#endif
++	"halt_successful_poll",
++	"halt_attempted_poll",
++	"halt_poll_success_ns",
++	"halt_poll_fail_ns",
++	"halt_poll_invalid",
++	"halt_wakeup",
++};
++static_assert(sizeof(kvm_vcpu_stat_strings) ==
++		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
++
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("wait", wait_exits),
+-	VCPU_STAT("cache", cache_exits),
+-	VCPU_STAT("signal", signal_exits),
+-	VCPU_STAT("interrupt", int_exits),
+-	VCPU_STAT("cop_unusable", cop_unusable_exits),
+-	VCPU_STAT("tlbmod", tlbmod_exits),
+-	VCPU_STAT("tlbmiss_ld", tlbmiss_ld_exits),
+-	VCPU_STAT("tlbmiss_st", tlbmiss_st_exits),
+-	VCPU_STAT("addrerr_st", addrerr_st_exits),
+-	VCPU_STAT("addrerr_ld", addrerr_ld_exits),
+-	VCPU_STAT("syscall", syscall_exits),
+-	VCPU_STAT("resvd_inst", resvd_inst_exits),
+-	VCPU_STAT("break_inst", break_inst_exits),
+-	VCPU_STAT("trap_inst", trap_inst_exits),
+-	VCPU_STAT("msa_fpe", msa_fpe_exits),
+-	VCPU_STAT("fpe", fpe_exits),
+-	VCPU_STAT("msa_disabled", msa_disabled_exits),
+-	VCPU_STAT("flush_dcache", flush_dcache_exits),
++	VCPU_STAT(wait_exits),
++	VCPU_STAT(cache_exits),
++	VCPU_STAT(signal_exits),
++	VCPU_STAT(int_exits),
++	VCPU_STAT(cop_unusable_exits),
++	VCPU_STAT(tlbmod_exits),
++	VCPU_STAT(tlbmiss_ld_exits),
++	VCPU_STAT(tlbmiss_st_exits),
++	VCPU_STAT(addrerr_st_exits),
++	VCPU_STAT(addrerr_ld_exits),
++	VCPU_STAT(syscall_exits),
++	VCPU_STAT(resvd_inst_exits),
++	VCPU_STAT(break_inst_exits),
++	VCPU_STAT(trap_inst_exits),
++	VCPU_STAT(msa_fpe_exits),
++	VCPU_STAT(fpe_exits),
++	VCPU_STAT(msa_disabled_exits),
++	VCPU_STAT(flush_dcache_exits),
+ #ifdef CONFIG_KVM_MIPS_VZ
+-	VCPU_STAT("vz_gpsi", vz_gpsi_exits),
+-	VCPU_STAT("vz_gsfc", vz_gsfc_exits),
+-	VCPU_STAT("vz_hc", vz_hc_exits),
+-	VCPU_STAT("vz_grr", vz_grr_exits),
+-	VCPU_STAT("vz_gva", vz_gva_exits),
+-	VCPU_STAT("vz_ghfc", vz_ghfc_exits),
+-	VCPU_STAT("vz_gpa", vz_gpa_exits),
+-	VCPU_STAT("vz_resvd", vz_resvd_exits),
++	VCPU_STAT(vz_gpsi_exits),
++	VCPU_STAT(vz_gsfc_exits),
++	VCPU_STAT(vz_hc_exits),
++	VCPU_STAT(vz_grr_exits),
++	VCPU_STAT(vz_gva_exits),
++	VCPU_STAT(vz_ghfc_exits),
++	VCPU_STAT(vz_gpa_exits),
++	VCPU_STAT(vz_resvd_exits),
+ #ifdef CONFIG_CPU_LOONGSON64
+-	VCPU_STAT("vz_cpucfg", vz_cpucfg_exits),
++	VCPU_STAT(vz_cpucfg_exits),
  #endif
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index bafbeb1a2624..47d9790d863d 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -31,7 +31,8 @@
- 			   UFFD_FEATURE_MISSING_SHMEM |		\
- 			   UFFD_FEATURE_SIGBUS |		\
- 			   UFFD_FEATURE_THREAD_ID |		\
--			   UFFD_FEATURE_MINOR_HUGETLBFS)
-+			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
-+			   UFFD_FEATURE_MINOR_SHMEM)
- #define UFFD_API_IOCTLS				\
- 	((__u64)1 << _UFFDIO_REGISTER |		\
- 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-@@ -196,6 +197,7 @@ struct uffdio_api {
- #define UFFD_FEATURE_SIGBUS			(1<<7)
- #define UFFD_FEATURE_THREAD_ID			(1<<8)
- #define UFFD_FEATURE_MINOR_HUGETLBFS		(1<<9)
-+#define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
- 	__u64 features;
-
- 	__u64 ioctls;
-diff --git a/mm/memory.c b/mm/memory.c
-index c8e357627318..a1e5ff55027e 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3929,9 +3929,11 @@ static vm_fault_t do_read_fault(struct vm_fault *vmf)
- 	 * something).
- 	 */
- 	if (vma->vm_ops->map_pages && fault_around_bytes >> PAGE_SHIFT > 1) {
--		ret = do_fault_around(vmf);
--		if (ret)
--			return ret;
-+		if (likely(!userfaultfd_minor(vmf->vma))) {
-+			ret = do_fault_around(vmf);
-+			if (ret)
-+				return ret;
-+		}
- 	}
-
- 	ret = __do_fault(vmf);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index b2db4ed0fbc7..ef8c9f5e92fc 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -77,7 +77,6 @@ static struct vfsmount *shm_mnt;
- #include <linux/syscalls.h>
- #include <linux/fcntl.h>
- #include <uapi/linux/memfd.h>
--#include <linux/userfaultfd_k.h>
- #include <linux/rmap.h>
- #include <linux/uuid.h>
-
-@@ -1785,8 +1784,8 @@ static int shmem_swapin_page(struct inode *inode, pgoff_t index,
-  * vm. If we swap it in we mark it dirty since we also free the swap
-  * entry since a page cannot live in both the swap and page cache.
-  *
-- * vmf and fault_type are only supplied by shmem_fault:
-- * otherwise they are NULL.
-+ * vma, vmf, and fault_type are only supplied by shmem_fault: otherwise they
-+ * are NULL.
-  */
- static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
- 	struct page **pagep, enum sgp_type sgp, gfp_t gfp,
-@@ -1830,6 +1829,12 @@ static int shmem_getpage_gfp(struct inode *inode, pgoff_t index,
- 		return error;
- 	}
-
-+	if (page && vma && userfaultfd_minor(vma)) {
-+		unlock_page(page);
-+		*fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
-+		return 0;
+ #endif
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
++	VCPU_STAT(halt_successful_poll),
++	VCPU_STAT(halt_attempted_poll),
++	VCPU_STAT(halt_poll_invalid),
++	VCPU_STAT(halt_wakeup),
++	VCPU_STAT(halt_poll_success_ns),
++	VCPU_STAT(halt_poll_fail_ns),
+ 	{NULL}
+ };
+ 
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index 44bf567b6589..22dd5a804468 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -36,38 +36,87 @@
+ #include "book3s.h"
+ #include "trace.h"
+ 
++const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"remote_tlb_flush",
++	"largepages_2M",
++	"largepages_1G",
++};
++static_assert(sizeof(kvm_vm_stat_strings) ==
++		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
++
++const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"exits",
++	"mmio",
++	"sig",
++	"light",
++	"itlb_real_miss",
++	"itlb_virt_miss",
++	"dtlb_real_miss",
++	"dtlb_virt_miss",
++	"sysc",
++	"isi",
++	"dsi",
++	"inst_emu",
++	"dec",
++	"ext_intr",
++	"halt_poll_success_ns",
++	"halt_poll_fail_ns",
++	"halt_wait_ns",
++	"halt_successful_poll",
++	"halt_attempted_poll",
++	"halt_successful_wait",
++	"halt_poll_invalid",
++	"halt_wakeup",
++	"dbell",
++	"gdbell",
++	"ld",
++	"st",
++	"pf_storage",
++	"pf_instruc",
++	"sp_storage",
++	"sp_instruc",
++	"queue_intr",
++	"ld_slow",
++	"st_slow",
++	"pthru_all",
++	"pthru_host",
++	"pthru_bad_aff",
++};
++static_assert(sizeof(kvm_vcpu_stat_strings) ==
++		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
++
+ /* #define EXIT_DEBUG */
+ 
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("exits", sum_exits),
+-	VCPU_STAT("mmio", mmio_exits),
+-	VCPU_STAT("sig", signal_exits),
+-	VCPU_STAT("sysc", syscall_exits),
+-	VCPU_STAT("inst_emu", emulated_inst_exits),
+-	VCPU_STAT("dec", dec_exits),
+-	VCPU_STAT("ext_intr", ext_intr_exits),
+-	VCPU_STAT("queue_intr", queue_intr),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+-	VCPU_STAT("halt_wait_ns", halt_wait_ns),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_successful_wait", halt_successful_wait),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("pf_storage", pf_storage),
+-	VCPU_STAT("sp_storage", sp_storage),
+-	VCPU_STAT("pf_instruc", pf_instruc),
+-	VCPU_STAT("sp_instruc", sp_instruc),
+-	VCPU_STAT("ld", ld),
+-	VCPU_STAT("ld_slow", ld_slow),
+-	VCPU_STAT("st", st),
+-	VCPU_STAT("st_slow", st_slow),
+-	VCPU_STAT("pthru_all", pthru_all),
+-	VCPU_STAT("pthru_host", pthru_host),
+-	VCPU_STAT("pthru_bad_aff", pthru_bad_aff),
+-	VM_STAT("largepages_2M", num_2M_pages, .mode = 0444),
+-	VM_STAT("largepages_1G", num_1G_pages, .mode = 0444),
++	VCPU_STAT(sum_exits),
++	VCPU_STAT(mmio_exits),
++	VCPU_STAT(signal_exits),
++	VCPU_STAT(syscall_exits),
++	VCPU_STAT(emulated_inst_exits),
++	VCPU_STAT(dec_exits),
++	VCPU_STAT(ext_intr_exits),
++	VCPU_STAT(queue_intr),
++	VCPU_STAT(halt_poll_success_ns),
++	VCPU_STAT(halt_poll_fail_ns),
++	VCPU_STAT(halt_wait_ns),
++	VCPU_STAT(halt_successful_poll),
++	VCPU_STAT(halt_attempted_poll),
++	VCPU_STAT(halt_successful_wait),
++	VCPU_STAT(halt_poll_invalid),
++	VCPU_STAT(halt_wakeup),
++	VCPU_STAT(pf_storage),
++	VCPU_STAT(sp_storage),
++	VCPU_STAT(pf_instruc),
++	VCPU_STAT(sp_instruc),
++	VCPU_STAT(ld),
++	VCPU_STAT(ld_slow),
++	VCPU_STAT(st),
++	VCPU_STAT(st_slow),
++	VCPU_STAT(pthru_all),
++	VCPU_STAT(pthru_host),
++	VCPU_STAT(pthru_bad_aff),
++	VM_STAT(num_2M_pages, .mode = 0444),
++	VM_STAT(num_1G_pages, .mode = 0444),
+ 	{ NULL }
+ };
+ 
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index f38ae3e54b37..faa830f8178b 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -35,28 +35,70 @@
+ 
+ unsigned long kvmppc_booke_handlers;
+ 
++const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"remote_tlb_flush",
++	"largepages_2M",
++	"largepages_1G",
++};
++static_assert(sizeof(kvm_vm_stat_strings) ==
++		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
++
++const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"exits",
++	"mmio",
++	"sig",
++	"light",
++	"itlb_real_miss",
++	"itlb_virt_miss",
++	"dtlb_real_miss",
++	"dtlb_virt_miss",
++	"sysc",
++	"isi",
++	"dsi",
++	"inst_emu",
++	"dec",
++	"ext_intr",
++	"halt_poll_success_ns",
++	"halt_poll_fail_ns",
++	"halt_wait_ns",
++	"halt_successful_poll",
++	"halt_attempted_poll",
++	"halt_successful_wait",
++	"halt_poll_invalid",
++	"halt_wakeup",
++	"dbell",
++	"gdbell",
++	"ld",
++	"st",
++	"pthru_all",
++	"pthru_host",
++	"pthru_bad_aff",
++};
++static_assert(sizeof(kvm_vcpu_stat_strings) ==
++		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
++
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("mmio", mmio_exits),
+-	VCPU_STAT("sig", signal_exits),
+-	VCPU_STAT("itlb_r", itlb_real_miss_exits),
+-	VCPU_STAT("itlb_v", itlb_virt_miss_exits),
+-	VCPU_STAT("dtlb_r", dtlb_real_miss_exits),
+-	VCPU_STAT("dtlb_v", dtlb_virt_miss_exits),
+-	VCPU_STAT("sysc", syscall_exits),
+-	VCPU_STAT("isi", isi_exits),
+-	VCPU_STAT("dsi", dsi_exits),
+-	VCPU_STAT("inst_emu", emulated_inst_exits),
+-	VCPU_STAT("dec", dec_exits),
+-	VCPU_STAT("ext_intr", ext_intr_exits),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("doorbell", dbell_exits),
+-	VCPU_STAT("guest doorbell", gdbell_exits),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+-	VM_STAT("remote_tlb_flush", remote_tlb_flush),
++	VCPU_STAT(mmio_exits),
++	VCPU_STAT(signal_exits),
++	VCPU_STAT(itlb_real_miss_exits),
++	VCPU_STAT(itlb_virt_miss_exits),
++	VCPU_STAT(dtlb_real_miss_exits),
++	VCPU_STAT(dtlb_virt_miss_exits),
++	VCPU_STAT(syscall_exits),
++	VCPU_STAT(isi_exits),
++	VCPU_STAT(dsi_exits),
++	VCPU_STAT(emulated_inst_exits),
++	VCPU_STAT(dec_exits),
++	VCPU_STAT(ext_intr_exits),
++	VCPU_STAT(halt_successful_poll),
++	VCPU_STAT(halt_attempted_poll),
++	VCPU_STAT(halt_poll_invalid),
++	VCPU_STAT(halt_wakeup),
++	VCPU_STAT(dbell_exits),
++	VCPU_STAT(gdbell_exits),
++	VCPU_STAT(halt_poll_success_ns),
++	VCPU_STAT(halt_poll_fail_ns),
++	VM_STAT(remote_tlb_flush),
+ 	{ NULL }
+ };
+ 
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index dbafd057ca6a..cefec8c1e87a 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -57,110 +57,224 @@
+ #define VCPU_IRQS_MAX_BUF (sizeof(struct kvm_s390_irq) * \
+ 			   (KVM_MAX_VCPUS + LOCAL_IRQS))
+ 
++const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"inject_io",
++	"inject_float_mchk",
++	"inject_pfault_done",
++	"inject_service_signal",
++	"inject_virtio",
++	"remote_tlb_flush",
++};
++static_assert(sizeof(kvm_vm_stat_strings) ==
++		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
++
++const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"userspace_handled",
++	"exit_null",
++	"exit_external_request",
++	"exit_io_request",
++	"exit_external_interrupt",
++	"exit_stop_request",
++	"exit_validity",
++	"exit_instruction",
++	"exit_pei",
++	"halt_successful_poll",
++	"halt_attempted_poll",
++	"halt_poll_invalid",
++	"halt_no_poll_steal",
++	"halt_wakeup",
++	"halt_poll_success_ns",
++	"halt_poll_fail_ns",
++	"instruction_lctlg",
++	"instruction_lctl",
++	"instruction_stctl",
++	"instruction_stctg",
++	"exit_program_interruption",
++	"exit_instr_and_program_int",
++	"exit_operation_exception",
++	"deliver_ckc",
++	"deliver_cputm",
++	"deliver_external_call",
++	"deliver_emergency_signal",
++	"deliver_service_signal",
++	"deliver_virtio",
++	"deliver_stop_signal",
++	"deliver_prefix_signal",
++	"deliver_restart_signal",
++	"deliver_program",
++	"deliver_io",
++	"deliver_machine_check",
++	"exit_wait_state",
++	"inject_ckc",
++	"inject_cputm",
++	"inject_external_call",
++	"inject_emergency_signal",
++	"inject_mchk",
++	"inject_pfault_init",
++	"inject_program",
++	"inject_restart",
++	"inject_set_prefix",
++	"inject_stop_signal",
++	"instruction_epsw",
++	"instruction_gs",
++	"instruction_io_other",
++	"instruction_lpsw",
++	"instruction_lpswe",
++	"instruction_pfmf",
++	"instruction_ptff",
++	"instruction_sck",
++	"instruction_sckpf",
++	"instruction_stidp",
++	"instruction_spx",
++	"instruction_stpx",
++	"instruction_stap",
++	"instruction_iske",
++	"instruction_ri",
++	"instruction_rrbe",
++	"instruction_sske",
++	"instruction_ipte_interlock",
++	"instruction_stsi",
++	"instruction_stfl",
++	"instruction_tb",
++	"instruction_tpi",
++	"instruction_tprot",
++	"instruction_tsch",
++	"instruction_sie",
++	"instruction_essa",
++	"instruction_sthyi",
++	"instruction_sigp_sense",
++	"instruction_sigp_sense_running",
++	"instruction_sigp_external_call",
++	"instruction_sigp_emergency",
++	"instruction_sigp_cond_emergency",
++	"instruction_sigp_start",
++	"instruction_sigp_stop",
++	"instruction_sigp_stop_store_status",
++	"instruction_sigp_store_status",
++	"instruction_sigp_store_adtl_status",
++	"instruction_sigp_set_arch",
++	"instruction_sigp_set_prefix",
++	"instruction_sigp_restart",
++	"instruction_sigp_init_cpu_reset",
++	"instruction_sigp_cpu_reset",
++	"instruction_sigp_unknown",
++	"instruction_diag_10",
++	"instruction_diag_44",
++	"instruction_diag_9c",
++	"diag_9c_ignored",
++	"instruction_diag_258",
++	"instruction_diag_308",
++	"instruction_diag_500",
++	"instruction_diag_other",
++	"pfault_sync",
++};
++static_assert(sizeof(kvm_vcpu_stat_strings) ==
++		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
++
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("userspace_handled", exit_userspace),
+-	VCPU_STAT("exit_null", exit_null),
+-	VCPU_STAT("pfault_sync", pfault_sync),
+-	VCPU_STAT("exit_validity", exit_validity),
+-	VCPU_STAT("exit_stop_request", exit_stop_request),
+-	VCPU_STAT("exit_external_request", exit_external_request),
+-	VCPU_STAT("exit_io_request", exit_io_request),
+-	VCPU_STAT("exit_external_interrupt", exit_external_interrupt),
+-	VCPU_STAT("exit_instruction", exit_instruction),
+-	VCPU_STAT("exit_pei", exit_pei),
+-	VCPU_STAT("exit_program_interruption", exit_program_interruption),
+-	VCPU_STAT("exit_instr_and_program_int", exit_instr_and_program),
+-	VCPU_STAT("exit_operation_exception", exit_operation_exception),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_no_poll_steal", halt_no_poll_steal),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+-	VCPU_STAT("instruction_lctlg", instruction_lctlg),
+-	VCPU_STAT("instruction_lctl", instruction_lctl),
+-	VCPU_STAT("instruction_stctl", instruction_stctl),
+-	VCPU_STAT("instruction_stctg", instruction_stctg),
+-	VCPU_STAT("deliver_ckc", deliver_ckc),
+-	VCPU_STAT("deliver_cputm", deliver_cputm),
+-	VCPU_STAT("deliver_emergency_signal", deliver_emergency_signal),
+-	VCPU_STAT("deliver_external_call", deliver_external_call),
+-	VCPU_STAT("deliver_service_signal", deliver_service_signal),
+-	VCPU_STAT("deliver_virtio", deliver_virtio),
+-	VCPU_STAT("deliver_stop_signal", deliver_stop_signal),
+-	VCPU_STAT("deliver_prefix_signal", deliver_prefix_signal),
+-	VCPU_STAT("deliver_restart_signal", deliver_restart_signal),
+-	VCPU_STAT("deliver_program", deliver_program),
+-	VCPU_STAT("deliver_io", deliver_io),
+-	VCPU_STAT("deliver_machine_check", deliver_machine_check),
+-	VCPU_STAT("exit_wait_state", exit_wait_state),
+-	VCPU_STAT("inject_ckc", inject_ckc),
+-	VCPU_STAT("inject_cputm", inject_cputm),
+-	VCPU_STAT("inject_external_call", inject_external_call),
+-	VM_STAT("inject_float_mchk", inject_float_mchk),
+-	VCPU_STAT("inject_emergency_signal", inject_emergency_signal),
+-	VM_STAT("inject_io", inject_io),
+-	VCPU_STAT("inject_mchk", inject_mchk),
+-	VM_STAT("inject_pfault_done", inject_pfault_done),
+-	VCPU_STAT("inject_program", inject_program),
+-	VCPU_STAT("inject_restart", inject_restart),
+-	VM_STAT("inject_service_signal", inject_service_signal),
+-	VCPU_STAT("inject_set_prefix", inject_set_prefix),
+-	VCPU_STAT("inject_stop_signal", inject_stop_signal),
+-	VCPU_STAT("inject_pfault_init", inject_pfault_init),
+-	VM_STAT("inject_virtio", inject_virtio),
+-	VCPU_STAT("instruction_epsw", instruction_epsw),
+-	VCPU_STAT("instruction_gs", instruction_gs),
+-	VCPU_STAT("instruction_io_other", instruction_io_other),
+-	VCPU_STAT("instruction_lpsw", instruction_lpsw),
+-	VCPU_STAT("instruction_lpswe", instruction_lpswe),
+-	VCPU_STAT("instruction_pfmf", instruction_pfmf),
+-	VCPU_STAT("instruction_ptff", instruction_ptff),
+-	VCPU_STAT("instruction_stidp", instruction_stidp),
+-	VCPU_STAT("instruction_sck", instruction_sck),
+-	VCPU_STAT("instruction_sckpf", instruction_sckpf),
+-	VCPU_STAT("instruction_spx", instruction_spx),
+-	VCPU_STAT("instruction_stpx", instruction_stpx),
+-	VCPU_STAT("instruction_stap", instruction_stap),
+-	VCPU_STAT("instruction_iske", instruction_iske),
+-	VCPU_STAT("instruction_ri", instruction_ri),
+-	VCPU_STAT("instruction_rrbe", instruction_rrbe),
+-	VCPU_STAT("instruction_sske", instruction_sske),
+-	VCPU_STAT("instruction_ipte_interlock", instruction_ipte_interlock),
+-	VCPU_STAT("instruction_essa", instruction_essa),
+-	VCPU_STAT("instruction_stsi", instruction_stsi),
+-	VCPU_STAT("instruction_stfl", instruction_stfl),
+-	VCPU_STAT("instruction_tb", instruction_tb),
+-	VCPU_STAT("instruction_tpi", instruction_tpi),
+-	VCPU_STAT("instruction_tprot", instruction_tprot),
+-	VCPU_STAT("instruction_tsch", instruction_tsch),
+-	VCPU_STAT("instruction_sthyi", instruction_sthyi),
+-	VCPU_STAT("instruction_sie", instruction_sie),
+-	VCPU_STAT("instruction_sigp_sense", instruction_sigp_sense),
+-	VCPU_STAT("instruction_sigp_sense_running", instruction_sigp_sense_running),
+-	VCPU_STAT("instruction_sigp_external_call", instruction_sigp_external_call),
+-	VCPU_STAT("instruction_sigp_emergency", instruction_sigp_emergency),
+-	VCPU_STAT("instruction_sigp_cond_emergency", instruction_sigp_cond_emergency),
+-	VCPU_STAT("instruction_sigp_start", instruction_sigp_start),
+-	VCPU_STAT("instruction_sigp_stop", instruction_sigp_stop),
+-	VCPU_STAT("instruction_sigp_stop_store_status", instruction_sigp_stop_store_status),
+-	VCPU_STAT("instruction_sigp_store_status", instruction_sigp_store_status),
+-	VCPU_STAT("instruction_sigp_store_adtl_status", instruction_sigp_store_adtl_status),
+-	VCPU_STAT("instruction_sigp_set_arch", instruction_sigp_arch),
+-	VCPU_STAT("instruction_sigp_set_prefix", instruction_sigp_prefix),
+-	VCPU_STAT("instruction_sigp_restart", instruction_sigp_restart),
+-	VCPU_STAT("instruction_sigp_cpu_reset", instruction_sigp_cpu_reset),
+-	VCPU_STAT("instruction_sigp_init_cpu_reset", instruction_sigp_init_cpu_reset),
+-	VCPU_STAT("instruction_sigp_unknown", instruction_sigp_unknown),
+-	VCPU_STAT("instruction_diag_10", diagnose_10),
+-	VCPU_STAT("instruction_diag_44", diagnose_44),
+-	VCPU_STAT("instruction_diag_9c", diagnose_9c),
+-	VCPU_STAT("diag_9c_ignored", diagnose_9c_ignored),
+-	VCPU_STAT("instruction_diag_258", diagnose_258),
+-	VCPU_STAT("instruction_diag_308", diagnose_308),
+-	VCPU_STAT("instruction_diag_500", diagnose_500),
+-	VCPU_STAT("instruction_diag_other", diagnose_other),
++	VCPU_STAT(exit_userspace),
++	VCPU_STAT(exit_null),
++	VCPU_STAT(pfault_sync),
++	VCPU_STAT(exit_validity),
++	VCPU_STAT(exit_stop_request),
++	VCPU_STAT(exit_external_request),
++	VCPU_STAT(exit_io_request),
++	VCPU_STAT(exit_external_interrupt),
++	VCPU_STAT(exit_instruction),
++	VCPU_STAT(exit_pei),
++	VCPU_STAT(exit_program_interruption),
++	VCPU_STAT(exit_instr_and_program),
++	VCPU_STAT(exit_operation_exception),
++	VCPU_STAT(halt_successful_poll),
++	VCPU_STAT(halt_attempted_poll),
++	VCPU_STAT(halt_poll_invalid),
++	VCPU_STAT(halt_no_poll_steal),
++	VCPU_STAT(halt_wakeup),
++	VCPU_STAT(halt_poll_success_ns),
++	VCPU_STAT(halt_poll_fail_ns),
++	VCPU_STAT(instruction_lctlg),
++	VCPU_STAT(instruction_lctl),
++	VCPU_STAT(instruction_stctl),
++	VCPU_STAT(instruction_stctg),
++	VCPU_STAT(deliver_ckc),
++	VCPU_STAT(deliver_cputm),
++	VCPU_STAT(deliver_emergency_signal),
++	VCPU_STAT(deliver_external_call),
++	VCPU_STAT(deliver_service_signal),
++	VCPU_STAT(deliver_virtio),
++	VCPU_STAT(deliver_stop_signal),
++	VCPU_STAT(deliver_prefix_signal),
++	VCPU_STAT(deliver_restart_signal),
++	VCPU_STAT(deliver_program),
++	VCPU_STAT(deliver_io),
++	VCPU_STAT(deliver_machine_check),
++	VCPU_STAT(exit_wait_state),
++	VCPU_STAT(inject_ckc),
++	VCPU_STAT(inject_cputm),
++	VCPU_STAT(inject_external_call),
++	VM_STAT(inject_float_mchk),
++	VCPU_STAT(inject_emergency_signal),
++	VM_STAT(inject_io),
++	VCPU_STAT(inject_mchk),
++	VM_STAT(inject_pfault_done),
++	VCPU_STAT(inject_program),
++	VCPU_STAT(inject_restart),
++	VM_STAT(inject_service_signal),
++	VCPU_STAT(inject_set_prefix),
++	VCPU_STAT(inject_stop_signal),
++	VCPU_STAT(inject_pfault_init),
++	VM_STAT(inject_virtio),
++	VCPU_STAT(instruction_epsw),
++	VCPU_STAT(instruction_gs),
++	VCPU_STAT(instruction_io_other),
++	VCPU_STAT(instruction_lpsw),
++	VCPU_STAT(instruction_lpswe),
++	VCPU_STAT(instruction_pfmf),
++	VCPU_STAT(instruction_ptff),
++	VCPU_STAT(instruction_stidp),
++	VCPU_STAT(instruction_sck),
++	VCPU_STAT(instruction_sckpf),
++	VCPU_STAT(instruction_spx),
++	VCPU_STAT(instruction_stpx),
++	VCPU_STAT(instruction_stap),
++	VCPU_STAT(instruction_iske),
++	VCPU_STAT(instruction_ri),
++	VCPU_STAT(instruction_rrbe),
++	VCPU_STAT(instruction_sske),
++	VCPU_STAT(instruction_ipte_interlock),
++	VCPU_STAT(instruction_essa),
++	VCPU_STAT(instruction_stsi),
++	VCPU_STAT(instruction_stfl),
++	VCPU_STAT(instruction_tb),
++	VCPU_STAT(instruction_tpi),
++	VCPU_STAT(instruction_tprot),
++	VCPU_STAT(instruction_tsch),
++	VCPU_STAT(instruction_sthyi),
++	VCPU_STAT(instruction_sie),
++	VCPU_STAT(instruction_sigp_sense),
++	VCPU_STAT(instruction_sigp_sense_running),
++	VCPU_STAT(instruction_sigp_external_call),
++	VCPU_STAT(instruction_sigp_emergency),
++	VCPU_STAT(instruction_sigp_cond_emergency),
++	VCPU_STAT(instruction_sigp_start),
++	VCPU_STAT(instruction_sigp_stop),
++	VCPU_STAT(instruction_sigp_stop_store_status),
++	VCPU_STAT(instruction_sigp_store_status),
++	VCPU_STAT(instruction_sigp_store_adtl_status),
++	VCPU_STAT(instruction_sigp_arch),
++	VCPU_STAT(instruction_sigp_prefix),
++	VCPU_STAT(instruction_sigp_restart),
++	VCPU_STAT(instruction_sigp_cpu_reset),
++	VCPU_STAT(instruction_sigp_init_cpu_reset),
++	VCPU_STAT(instruction_sigp_unknown),
++	VCPU_STAT(diagnose_10),
++	VCPU_STAT(diagnose_44),
++	VCPU_STAT(diagnose_9c),
++	VCPU_STAT(diagnose_9c_ignored),
++	VCPU_STAT(diagnose_258),
++	VCPU_STAT(diagnose_308),
++	VCPU_STAT(diagnose_500),
++	VCPU_STAT(diagnose_other),
+ 	{ NULL }
+ };
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 46b0e52671bb..e0b02a29c760 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -216,46 +216,95 @@ EXPORT_SYMBOL_GPL(host_xss);
+ u64 __read_mostly supported_xss;
+ EXPORT_SYMBOL_GPL(supported_xss);
+ 
++const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"mmu_shadow_zapped",
++	"mmu_pte_write",
++	"mmu_pde_zapped",
++	"mmu_flooded",
++	"mmu_recycled",
++	"mmu_cache_miss",
++	"mmu_unsync",
++	"remote_tlb_flush",
++	"largepages",
++	"nx_largepages_splitted",
++	"max_mmu_page_hash_collisions",
++};
++static_assert(sizeof(kvm_vm_stat_strings) ==
++		VM_STAT_COUNT * KVM_STATS_NAME_LEN);
++
++const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN] = {
++	"pf_fixed",
++	"pf_guest",
++	"tlb_flush",
++	"invlpg",
++	"exits",
++	"io_exits",
++	"mmio_exits",
++	"signal_exits",
++	"irq_window",
++	"nmi_window",
++	"l1d_flush",
++	"halt_exits",
++	"halt_successful_poll",
++	"halt_attempted_poll",
++	"halt_poll_invalid",
++	"halt_wakeup",
++	"request_irq",
++	"irq_exits",
++	"host_state_reload",
++	"fpu_reload",
++	"insn_emulation",
++	"insn_emulation_fail",
++	"hypercalls",
++	"irq_injections",
++	"nmi_injections",
++	"req_event",
++	"halt_poll_success_ns",
++	"halt_poll_fail_ns",
++};
++static_assert(sizeof(kvm_vcpu_stat_strings) ==
++		VCPU_STAT_COUNT * KVM_STATS_NAME_LEN);
++
+ struct kvm_stats_debugfs_item debugfs_entries[] = {
+-	VCPU_STAT("pf_fixed", pf_fixed),
+-	VCPU_STAT("pf_guest", pf_guest),
+-	VCPU_STAT("tlb_flush", tlb_flush),
+-	VCPU_STAT("invlpg", invlpg),
+-	VCPU_STAT("exits", exits),
+-	VCPU_STAT("io_exits", io_exits),
+-	VCPU_STAT("mmio_exits", mmio_exits),
+-	VCPU_STAT("signal_exits", signal_exits),
+-	VCPU_STAT("irq_window", irq_window_exits),
+-	VCPU_STAT("nmi_window", nmi_window_exits),
+-	VCPU_STAT("halt_exits", halt_exits),
+-	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+-	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+-	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+-	VCPU_STAT("halt_wakeup", halt_wakeup),
+-	VCPU_STAT("hypercalls", hypercalls),
+-	VCPU_STAT("request_irq", request_irq_exits),
+-	VCPU_STAT("irq_exits", irq_exits),
+-	VCPU_STAT("host_state_reload", host_state_reload),
+-	VCPU_STAT("fpu_reload", fpu_reload),
+-	VCPU_STAT("insn_emulation", insn_emulation),
+-	VCPU_STAT("insn_emulation_fail", insn_emulation_fail),
+-	VCPU_STAT("irq_injections", irq_injections),
+-	VCPU_STAT("nmi_injections", nmi_injections),
+-	VCPU_STAT("req_event", req_event),
+-	VCPU_STAT("l1d_flush", l1d_flush),
+-	VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+-	VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+-	VM_STAT("mmu_shadow_zapped", mmu_shadow_zapped),
+-	VM_STAT("mmu_pte_write", mmu_pte_write),
+-	VM_STAT("mmu_pde_zapped", mmu_pde_zapped),
+-	VM_STAT("mmu_flooded", mmu_flooded),
+-	VM_STAT("mmu_recycled", mmu_recycled),
+-	VM_STAT("mmu_cache_miss", mmu_cache_miss),
+-	VM_STAT("mmu_unsync", mmu_unsync),
+-	VM_STAT("remote_tlb_flush", remote_tlb_flush),
+-	VM_STAT("largepages", lpages, .mode = 0444),
+-	VM_STAT("nx_largepages_splitted", nx_lpage_splits, .mode = 0444),
+-	VM_STAT("max_mmu_page_hash_collisions", max_mmu_page_hash_collisions),
++	VCPU_STAT(pf_fixed),
++	VCPU_STAT(pf_guest),
++	VCPU_STAT(tlb_flush),
++	VCPU_STAT(invlpg),
++	VCPU_STAT(exits),
++	VCPU_STAT(io_exits),
++	VCPU_STAT(mmio_exits),
++	VCPU_STAT(signal_exits),
++	VCPU_STAT(irq_window_exits),
++	VCPU_STAT(nmi_window_exits),
++	VCPU_STAT(halt_exits),
++	VCPU_STAT(halt_successful_poll),
++	VCPU_STAT(halt_attempted_poll),
++	VCPU_STAT(halt_poll_invalid),
++	VCPU_STAT(halt_wakeup),
++	VCPU_STAT(hypercalls),
++	VCPU_STAT(request_irq_exits),
++	VCPU_STAT(irq_exits),
++	VCPU_STAT(host_state_reload),
++	VCPU_STAT(fpu_reload),
++	VCPU_STAT(insn_emulation),
++	VCPU_STAT(insn_emulation_fail),
++	VCPU_STAT(irq_injections),
++	VCPU_STAT(nmi_injections),
++	VCPU_STAT(req_event),
++	VCPU_STAT(l1d_flush),
++	VCPU_STAT(halt_poll_success_ns),
++	VCPU_STAT(halt_poll_fail_ns),
++	VM_STAT(mmu_shadow_zapped),
++	VM_STAT(mmu_pte_write),
++	VM_STAT(mmu_pde_zapped),
++	VM_STAT(mmu_flooded),
++	VM_STAT(mmu_recycled),
++	VM_STAT(mmu_cache_miss),
++	VM_STAT(mmu_unsync),
++	VM_STAT(remote_tlb_flush),
++	VM_STAT(lpages, .mode = 0444),
++	VM_STAT(nx_lpage_splits, .mode = 0444),
++	VM_STAT(max_mmu_page_hash_collisions),
+ 	{ NULL }
+ };
+ 
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 1b65e7204344..1ea297458306 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1162,6 +1162,18 @@ static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
+ 	return kvm_is_error_hva(hva);
+ }
+ 
++#define VM_STAT_COUNT		(sizeof(struct kvm_vm_stat)/sizeof(ulong))
++#define VCPU_STAT_COUNT		(sizeof(struct kvm_vcpu_stat)/sizeof(u64))
++#define KVM_STATS_NAME_LEN	32
++
++/* Make sure it is synced with fields in struct kvm_vm_stat. */
++extern const char kvm_vm_stat_strings[][KVM_STATS_NAME_LEN];
++/* Make sure it is synced with fields in struct kvm_vcpu_stat. */
++extern const char kvm_vcpu_stat_strings[][KVM_STATS_NAME_LEN];
++
++#define VM_STAT_NAME(id)        (kvm_vm_stat_strings[id])
++#define VCPU_STAT_NAME(id)      (kvm_vcpu_stat_strings[id])
++
+ enum kvm_stat_kind {
+ 	KVM_STAT_VM,
+ 	KVM_STAT_VCPU,
+@@ -1182,10 +1194,21 @@ struct kvm_stats_debugfs_item {
+ #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
+ 	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
+ 
+-#define VM_STAT(n, x, ...) 							\
+-	{ n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
+-#define VCPU_STAT(n, x, ...)							\
+-	{ n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
++#define VM_STAT(x, ...)                                                        \
++	{                                                                      \
++		VM_STAT_NAME(offsetof(struct kvm_vm_stat, x)/sizeof(ulong)),   \
++		offsetof(struct kvm, stat.x),                                  \
++		KVM_STAT_VM,                                                   \
++		## __VA_ARGS__                                                 \
 +	}
 +
- 	if (page)
- 		hindex = page->index;
- 	if (page && sgp == SGP_WRITE)
-@@ -2354,14 +2359,13 @@ static struct inode *shmem_get_inode(struct super_block *sb, const struct inode
- 	return inode;
- }
-
--static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
--				  pmd_t *dst_pmd,
--				  struct vm_area_struct *dst_vma,
--				  unsigned long dst_addr,
--				  unsigned long src_addr,
--				  bool zeropage,
--				  struct page **pagep)
-+#ifdef CONFIG_USERFAULTFD
-+int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+			   struct vm_area_struct *dst_vma,
-+			   unsigned long dst_addr, unsigned long src_addr,
-+			   enum mcopy_atomic_mode mode, struct page **pagep)
- {
-+	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
- 	struct inode *inode = file_inode(dst_vma->vm_file);
- 	struct shmem_inode_info *info = SHMEM_I(inode);
- 	struct address_space *mapping = inode->i_mapping;
-@@ -2378,12 +2382,17 @@ static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	if (!shmem_inode_acct_block(inode, 1))
- 		goto out;
-
--	if (!*pagep) {
-+	if (is_continue) {
-+		ret = -EFAULT;
-+		page = find_lock_page(mapping, pgoff);
-+		if (!page)
-+			goto out_unacct_blocks;
-+	} else if (!*pagep) {
- 		page = shmem_alloc_page(gfp, info, pgoff);
- 		if (!page)
- 			goto out_unacct_blocks;
-
--		if (!zeropage) {	/* mcopy_atomic */
-+		if (mode == MCOPY_ATOMIC_NORMAL) {	/* mcopy_atomic */
- 			page_kaddr = kmap_atomic(page);
- 			ret = copy_from_user(page_kaddr,
- 					     (const void __user *)src_addr,
-@@ -2397,7 +2406,7 @@ static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 				/* don't free the page */
- 				return -ENOENT;
- 			}
--		} else {		/* mfill_zeropage_atomic */
-+		} else {		/* zeropage */
- 			clear_highpage(page);
- 		}
- 	} else {
-@@ -2405,10 +2414,13 @@ static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 		*pagep = NULL;
- 	}
-
--	VM_BUG_ON(PageLocked(page) || PageSwapBacked(page));
--	__SetPageLocked(page);
--	__SetPageSwapBacked(page);
--	__SetPageUptodate(page);
-+	if (!is_continue) {
-+		VM_BUG_ON(PageSwapBacked(page));
-+		VM_BUG_ON(PageLocked(page));
-+		__SetPageLocked(page);
-+		__SetPageSwapBacked(page);
-+		__SetPageUptodate(page);
++#define VCPU_STAT(x, ...)                                                      \
++	{                                                                      \
++		VCPU_STAT_NAME(offsetof(struct kvm_vcpu_stat, x)/sizeof(u64)), \
++		offsetof(struct kvm_vcpu, stat.x),                             \
++		KVM_STAT_VCPU,                                                 \
++		## __VA_ARGS__                                                 \
 +	}
-
- 	ret = -EFAULT;
- 	offset = linear_page_index(dst_vma, dst_addr);
-@@ -2416,10 +2428,13 @@ static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	if (unlikely(offset >= max_off))
- 		goto out_release;
-
--	ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
--				      gfp & GFP_RECLAIM_MASK, dst_mm);
--	if (ret)
--		goto out_release;
-+	/* If page wasn't already in the page cache, add it. */
-+	if (!is_continue) {
-+		ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
-+					      gfp & GFP_RECLAIM_MASK, dst_mm);
-+		if (ret)
-+			goto out_release;
-+	}
-
- 	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
- 	if (dst_vma->vm_flags & VM_WRITE)
-@@ -2446,13 +2461,15 @@ static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	if (!pte_none(*dst_pte))
- 		goto out_release_unlock;
-
--	lru_cache_add(page);
-+	if (!is_continue) {
-+		lru_cache_add(page);
-
--	spin_lock_irq(&info->lock);
--	info->alloced++;
--	inode->i_blocks += BLOCKS_PER_PAGE;
--	shmem_recalc_inode(inode);
--	spin_unlock_irq(&info->lock);
-+		spin_lock_irq(&info->lock);
-+		info->alloced++;
-+		inode->i_blocks += BLOCKS_PER_PAGE;
-+		shmem_recalc_inode(inode);
-+		spin_unlock_irq(&info->lock);
-+	}
-
- 	inc_mm_counter(dst_mm, mm_counter_file(page));
- 	page_add_file_rmap(page, false);
-@@ -2476,28 +2493,7 @@ static int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	shmem_inode_unacct_blocks(inode, 1);
- 	goto out;
- }
--
--int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm,
--			   pmd_t *dst_pmd,
--			   struct vm_area_struct *dst_vma,
--			   unsigned long dst_addr,
--			   unsigned long src_addr,
--			   struct page **pagep)
--{
--	return shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
--				      dst_addr, src_addr, false, pagep);
--}
--
--int shmem_mfill_zeropage_pte(struct mm_struct *dst_mm,
--			     pmd_t *dst_pmd,
--			     struct vm_area_struct *dst_vma,
--			     unsigned long dst_addr)
--{
--	struct page *page = NULL;
--
--	return shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
--				      dst_addr, 0, true, &page);
--}
-+#endif /* CONFIG_USERFAULTFD */
-
- #ifdef CONFIG_TMPFS
- static const struct inode_operations shmem_symlink_inode_operations;
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index ce6cb4760d2c..6cd7ab531aec 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -415,7 +415,7 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 						unsigned long dst_addr,
- 						unsigned long src_addr,
- 						struct page **page,
--						bool zeropage,
-+						enum mcopy_atomic_mode mode,
- 						bool wp_copy)
- {
- 	ssize_t err;
-@@ -431,22 +431,24 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 	 * and not in the radix tree.
- 	 */
- 	if (!(dst_vma->vm_flags & VM_SHARED)) {
--		if (!zeropage)
-+		switch (mode) {
-+		case MCOPY_ATOMIC_NORMAL:
- 			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
- 					       dst_addr, src_addr, page,
- 					       wp_copy);
--		else
-+			break;
-+		case MCOPY_ATOMIC_ZEROPAGE:
- 			err = mfill_zeropage_pte(dst_mm, dst_pmd,
- 						 dst_vma, dst_addr);
-+			break;
-+		case MCOPY_ATOMIC_CONTINUE:
-+			err = -EINVAL;
-+			break;
-+		}
- 	} else {
- 		VM_WARN_ON_ONCE(wp_copy);
--		if (!zeropage)
--			err = shmem_mcopy_atomic_pte(dst_mm, dst_pmd,
--						     dst_vma, dst_addr,
--						     src_addr, page);
--		else
--			err = shmem_mfill_zeropage_pte(dst_mm, dst_pmd,
--						       dst_vma, dst_addr);
-+		err = shmem_mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-+					     src_addr, mode, page);
- 	}
-
- 	return err;
-@@ -467,7 +469,6 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 	long copied;
- 	struct page *page;
- 	bool wp_copy;
--	bool zeropage = (mcopy_mode == MCOPY_ATOMIC_ZEROPAGE);
-
- 	/*
- 	 * Sanitize the command parameters:
-@@ -530,7 +531,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
-
- 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
- 		goto out_unlock;
--	if (mcopy_mode == MCOPY_ATOMIC_CONTINUE)
-+	if (!vma_is_shmem(dst_vma) && mcopy_mode == MCOPY_ATOMIC_CONTINUE)
- 		goto out_unlock;
-
- 	/*
-@@ -578,7 +579,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 		BUG_ON(pmd_trans_huge(*dst_pmd));
-
- 		err = mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
--				       src_addr, &page, zeropage, wp_copy);
-+				       src_addr, &page, mcopy_mode, wp_copy);
- 		cond_resched();
-
- 		if (unlikely(err == -ENOENT)) {
---
+ 
+ extern struct kvm_stats_debugfs_item debugfs_entries[];
+ extern struct dentry *kvm_debugfs_dir;
+-- 
 2.30.1.766.gb4fecdf3b7-goog
 
