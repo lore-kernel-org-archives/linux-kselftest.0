@@ -2,229 +2,198 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFCD8C433E0
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Mar 2021 15:24:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C95CC433DB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Mar 2021 15:53:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8EA7C64FEC
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Mar 2021 15:24:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA94E64FE0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 Mar 2021 15:53:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbhCKPXq (ORCPT
+        id S234179AbhCKPw7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234218AbhCKPXX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:23:23 -0500
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763FBC061574
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Mar 2021 07:23:23 -0800 (PST)
-Received: by mail-qv1-xf4a.google.com with SMTP id d15so15332042qvn.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Mar 2021 07:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Uo+jdzDkstwte4rd5KP1ZCWjSQcfZaf7ZJhZWXy2RKs=;
-        b=oU2FmmZy1hcNiNWsHS5LxlTOzAWKO8wzT9oIwklSSFU8vic4F9LLZemwiu5iaPJ7kb
-         0r5jphxrIlJMeTC9Q4pBCp0fvcx87DYKidbdpH/6FWR7AjA4wefUB7SG5d+iWlyj8KqP
-         vxD2QcLXsAjKKQy7xzfraTFyWvRpk5FfsdJnWZEaXqATSC9zORoiaJM6aRlr4jUqFPng
-         ziaGRRqHDdgUSCfoQVaL1guOfsuy0CpchIqafwrjcXghFqfTWMaOzLo0CXWAc6pIMLKo
-         dtG9x5xh86R0tUGmwFhGedtf/RUzFWLAe3jXDiF/rMBAYgzKZJAdTNRPbfd8IeeLQRrT
-         Jjyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Uo+jdzDkstwte4rd5KP1ZCWjSQcfZaf7ZJhZWXy2RKs=;
-        b=pnm1mjwQsW2rt+mCbHXi/TSohjFwqeTo5SibHeMZ3UgCRjf0IRjgI85t4zHkL6lY/0
-         enYHk8X46K+0u8yd3/+2CIcfXVYOsg1ZG3f3ThsBy+myjI5nTwix3vp0rlZuQnhI1vs/
-         5KXIvkybCibqy9Thu3nTHZlZEiFdbKlQpBgiMhz9y3QFL3d0BJBc8rIKKPzfJfr9I6ED
-         6oYiclLDItgXTv4HcqMAQDdILIgTATcmmcxHjJ8XEF7HEHuJHFBNTY3mWwelmsVrs14A
-         Be97YxkrFOMyYZNhYYhozKF/suqin69F+3fQpcnLVFWTEdSWFQdTl0GpSseDKem3KhmW
-         KLkQ==
-X-Gm-Message-State: AOAM533lZkHNG6Fl9m2jIIkWG7EQYp/mka3HPrs6k2Y59qjxPivkP+pd
-        LTJI9WJqZTg8LJpUz+K9zV2tqSJpyyeKzA==
-X-Google-Smtp-Source: ABdhPJy1zi+D10F+EaOLwJkcGaJWbsWc2A4cgtaoxCxs+Xt42a/9UWmbeAIBXnObyqjj6bb+TiMDj9xPxP6ZNQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:d84c:1a92:8f6c:2d41])
- (user=dlatypov job=sendgmr) by 2002:a05:6214:242f:: with SMTP id
- gy15mr8169011qvb.17.1615476202686; Thu, 11 Mar 2021 07:23:22 -0800 (PST)
-Date:   Thu, 11 Mar 2021 07:23:13 -0800
-In-Reply-To: <20210311152314.3814916-1-dlatypov@google.com>
-Message-Id: <20210311152314.3814916-2-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20210311152314.3814916-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-Subject: [PATCH v4 1/2] kunit: support failure from dynamic analysis tools
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com
-Cc:     davidgow@google.com, alan.maguire@oracle.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Uriel Guajardo <urielguajardo@google.com>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 11 Mar 2021 10:52:59 -0500
+Received: from mail-eopbgr770088.outbound.protection.outlook.com ([40.107.77.88]:45495
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233943AbhCKPwd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 11 Mar 2021 10:52:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Br4FhzLL2M2CKKYo2vzwkZ/sHDnei/zJIII1UD4jprqypGu+avLXgog1bnFK9HwTVlqlUbCxxfxi0ilQYzLRkuHnEVwk0By7YswpjJD8Ase1vuNps9JOnFHsfN4k7oqhuChAmg25MG+13aBHt+birf4txwuW7DeBNTyn4HfYKe86h2MUjjZsx234E81P9g4m1NnIB5pOSVrw3W6X+wsgpON1VoylkBIWRU05uozlgSJoOahKmDsuwDCslVSg+z+y7fOgHKXmSZIUtPD1U6AgAW1aLxNNOj3ZOTDljpmNDpvAUacmnFtykQbAsGmB4pqA/naFiEW3qIKh1Ax6iJ5fQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gQBqN8/Hjka9Q9Y9C2ifg8Vk0pcyecrhhHNnWBzmUIg=;
+ b=dx3KyHGTw5tbTvJhPeyV1uN3KsPPVQJBln1kWOpVCxFJmOV+TgYLi+R8DiZaZwUJt5wcDXpg8VedI2brnBFqORuB12X/CHv8a+GgcIxCVJTC7voIzf0krg2nP5XYVEZfyUyMsFJwewJYYv7ny8lhQNgpBE/iWjWXR7UBstWkQRwxk+8Fz0PSc4gedqJgTH9QY2UG8Wo77VydGhlwQcOU5m+6FjX1NRx+fIfGoRmjWZOkpF5fnskVlng2/98E3tiwOjCRHTi4vuqcluHf/e65oTwIwDlxqbOaoSz+Z9rUGYTf7gu7LrXCISfFXOCtQ0fqHerIfrsIxz6EarD0vY1O9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gQBqN8/Hjka9Q9Y9C2ifg8Vk0pcyecrhhHNnWBzmUIg=;
+ b=VhJQnZSly/Lu75FNjpDKSPuSDdCblCE9UKImSlE3Mh/3WQF+ODg6B6/AWg9CGR6vGA5PELUdOL6Y9BA1NdEWFwgZdsdrJigihJWQEQ8JgIGi+sjo2GcBVhLdMxA1xVkI0xAtsa/FcSAW2BwyXEnorWXgNf+DnSZ2dfNk7tpOzxvIy78hhRT8NVRgDvK83nQ3eH2+Df6mNIk+QgQUl/uJZheACgFEaueEuFpbV6xA0a/SSLl/zEgkIsWY5q+PE7uhu7gPmXdnVlX1dQRXgAEeQKUIX8INAbyPz7N/B8CE10LsHM+lVrI1EuCLsbCvBDuoEP/CcBTG7WXTTpC/uW9gHA==
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by MN2PR12MB4798.namprd12.prod.outlook.com (2603:10b6:208:3d::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.21; Thu, 11 Mar
+ 2021 15:52:31 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a1b1:5d8:47d7:4b60]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::a1b1:5d8:47d7:4b60%7]) with mapi id 15.20.3912.031; Thu, 11 Mar 2021
+ 15:52:31 +0000
+From:   "Zi Yan" <ziy@nvidia.com>
+To:     "Yang Shi" <shy828301@gmail.com>
+Cc:     "Linux MM" <linux-mm@kvack.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Shuah Khan" <shuah@kernel.org>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        "Sandipan Das" <sandipan@linux.ibm.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        "Mika Penttila" <mika.penttila@nextfour.com>
+Subject: Re: [PATCH v2] mm: huge_memory: a new debugfs interface for splitting
+ THP tests.
+Date:   Thu, 11 Mar 2021 10:52:25 -0500
+X-Mailer: MailMate (1.14r5757)
+Message-ID: <A3A1CBF3-B5D2-4CF2-97D6-9BC12E82BEAE@nvidia.com>
+In-Reply-To: <CAHbLzkqaGqW8_dmR=PBojEVFGU+FfUm2Y+Rhu0Ay8aP1cAChdA@mail.gmail.com>
+References: <20210310153544.434160-1-zi.yan@sent.com>
+ <CAHbLzkqaGqW8_dmR=PBojEVFGU+FfUm2Y+Rhu0Ay8aP1cAChdA@mail.gmail.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_C7BC74D9-ECED-4338-B45D-2E12B37F2167_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Originating-IP: [216.228.112.22]
+X-ClientProxiedBy: BL1PR13CA0271.namprd13.prod.outlook.com
+ (2603:10b6:208:2bc::6) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.2.49.51] (216.228.112.22) by BL1PR13CA0271.namprd13.prod.outlook.com (2603:10b6:208:2bc::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.10 via Frontend Transport; Thu, 11 Mar 2021 15:52:28 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 28cfe522-c927-4f86-4833-08d8e4a5ada3
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4798:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR12MB47981BB9E8881AE6A46A669AC2909@MN2PR12MB4798.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2LOHb5gCH8fFTSX2B2PQxTV46tRnwB3F+sAFH23Em/0CEx8Zvq2Ks33/Nu98R8CExhF5cBqNrsqiFyRejSDonznFGxladZbIUvVWxg46R09fQjEUN3H0FiwofYI5paYljObvrVnqz0vfqff9eLrQzfDnvPpbLkFYLJVCIFCvPO26vmJirEOi3kpu1b3/txyT/SSzeg0rmOZlP2L9U50EDQfivButuygmx363qcGc7mn/hJkDzDRgISuUN0gKUawAaT0wFhn2k6VTNoWjrvNmjnB7TMQQ/jKX8MKlGdILg4xjLq8UmRf0d54s6r1mFpCsa/RQIMpIdt7KzJTmewmvxZ3NQBGRccuNjdJUtOFgQAr3xdZZRN3PMrAMDa4s/JHZvqdMXS2N04vZ3G+QuplCd+nRw0dhpqUGtITFPjUgkCOiNvJ08S7FK2KMXawKmg5UKY3mL6gAZSVSpP0YhPUy7zk0895bZ/N8AgLixL9a4nmZyGohQ/l/efcOHuXoo1wn+QQQRlJ5DMOnJ1uamSUA7Tr6SNFuDOSxmydlNDWxdQDTyo30kXfFxlaedCXgBhsG8rIL8NrE7eoI9b51D4DNSnegnNxB9SaSiivuircjs1QNpAYctLfeCWs28V/yLO21
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(83380400001)(66556008)(5660300002)(8676002)(53546011)(66476007)(54906003)(8936002)(86362001)(2616005)(26005)(2906002)(6486002)(186003)(16526019)(36756003)(956004)(235185007)(316002)(6666004)(66946007)(33964004)(16576012)(478600001)(7416002)(33656002)(4326008)(6916009)(14583001)(45980500001)(72826003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?c2YzSWk4anloRXU2STRQc201bWFCYS9lTVp4VmdVcG40Wm91MnIvVFc3MEhW?=
+ =?utf-8?B?aVJyekE4K0Y0Q0txOUs4S1hnR2lCM3ZidGFHUnpMUXpGVFBCRE1FaXVxR1B6?=
+ =?utf-8?B?SDZGNnQwdE1ZSk1iN2ZYUDFIWlhiMHVmVFlvS3FJQ0xLMmtZUDBOR1J0bFR3?=
+ =?utf-8?B?aWY1MXhDdnlscWIzSGlVanNoc2tLcGdQMVVuRGQxTHd3dGpMTUo5UEpLUkxI?=
+ =?utf-8?B?RjFGTXQrQmtEOTNCdXlDdndpUXdFOFEyUjN0ai9FR3JEYzZxV3J6QjVaY215?=
+ =?utf-8?B?cUpBVzVzSUR4M2h0WlJnR2hGOFV3SlVrSDU2aFlxMCtwWU9OQzg1azJQTUVX?=
+ =?utf-8?B?U09kaW5qdGJrSkxDL1VteTdQM2MraDM0aWFKOGN4MEM0OUVqY3JSLzdoWEhB?=
+ =?utf-8?B?U1BNRjRnSkZUSnFJQzRtOUZvYUQwN3RJTDBEa2VtYU9oS2NwdDhXcG5PQitH?=
+ =?utf-8?B?TXBlY3p0TlBGVkxPekJ1K3c4T0JUK0pXSnNZZEhtRitPRkExZ1QwVmZNNVZV?=
+ =?utf-8?B?UnNUY0pReUZJNEZzMmx6RklQamZWdDlzTXV4NXVaV1pKSVl3YWtSVTMzL0F4?=
+ =?utf-8?B?YXhGdFFZQWtnNWVXWmdwbCtBbUtxbUNWUU1INmJPaUE4emlFSmVLcHJFR0NC?=
+ =?utf-8?B?cFBlaGxsYThVZGMwM0NacEc5amVBc3FpWjBmRnFyZHFQM3duS0pNdmducHY2?=
+ =?utf-8?B?Y1AyWEtFeWVYRnByb3RZTC9QSVdGQzJtTGcvR0xOMEZyVXB5NWZDZ1VWdDFJ?=
+ =?utf-8?B?WkhoWkU0QUxHcEoxdG1MSTRiNkVXdlJWTFlzQnpiWU9Zbmp5ay81d2NQZ2RV?=
+ =?utf-8?B?aExIZDQ1ZWI0QUNpK0hSWXZhMWppY240cG90VDVhbUV0Vzl4d0tqYVRGM1My?=
+ =?utf-8?B?dG93TkRLb2ZZcFcxZDJFd0IwRklUNk9kRkhDL3NtVW93aHdHbXkwaDN5MEFX?=
+ =?utf-8?B?V2V6UWZDUzJaaUN0Z3B3eSswaExSWXhaZCt5RGZxVUZtc0RhYS9XdHZwSFZn?=
+ =?utf-8?B?eWVHSkhFZkh5R1R4TzloeUxKek9qWkhEY0dPcWhxWUdTbmZ3RUp1R0hYYkN0?=
+ =?utf-8?B?bWRDbnI0TVlDWEVYTHpmYXBYdWR1MkFzeEFhbG1KWThlaUoyVE0rOGlaMXF0?=
+ =?utf-8?B?VldSVU5uUWFydVpNS3NPMWlqZm5BVnkrSVM1NmdlQkdiS0ZtYmZKTE5FYXdz?=
+ =?utf-8?B?Z0dTWDRwRFNUenVqQVJERnlzbjJVOG1xYUxMY3NXa1IwVERacEtUS2NmTXkz?=
+ =?utf-8?B?a0wreDRVSk5DR1NkaEl3OWdtZFNSM2hPS3o3c1dqWWFXTjl3MHRsTFdTVzV2?=
+ =?utf-8?B?L1NHbFY2ZkFmWnpRQ3ZJSS9lVlZtMkw4eFVkcGdiMXQvQXhTa3ZwWC8yNktS?=
+ =?utf-8?B?Wm01N0Z2dElqb29vTUJtMFErSFJERWVVaHgyUVRWTjl1K29XSTFQMWc2TUtR?=
+ =?utf-8?B?ZE9jb2ozSlFUNDVMcDA5ZkVqS3ZsNURoNms5ODNvbTVkcG5DZXFUZkJoWlNU?=
+ =?utf-8?B?OGtYYVI1aDZoZzZKUnd1THg2WlhBdzNCUHU4QWtLVTNURlFXc0FiK3JXZ1dB?=
+ =?utf-8?B?NWlMdkNyS3MwNHNFK3ZYdHB0Vm94cmE2Tm1DczQ5VGM2UEF0V0NuMThlSlgw?=
+ =?utf-8?B?NHdBWEJ6eG1aeFZRSk1ObXV5MGtPRlR6RDMwR3NtV3d0M05GYWRKenVkcm9p?=
+ =?utf-8?B?elZuaDA1RW82L0x0bUdMKy9qcnQvaHZsMStrWUpZaWZVRFhkOS9JM0djZjJZ?=
+ =?utf-8?Q?NHZX+YT0lw0Uw0WFuIUVIJ+zGKbli++dwCp1kSZ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28cfe522-c927-4f86-4833-08d8e4a5ada3
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2021 15:52:31.0289
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OW4mVRLvEbqPQMZiGzxdnyhlTN8FMP1QRXKHRdGFCTook+1GkHY411q8itwEDq3m
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4798
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Uriel Guajardo <urielguajardo@google.com>
+--=_MailMate_C7BC74D9-ECED-4338-B45D-2E12B37F2167_=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a kunit_fail_current_test() function to fail the currently running
-test, if any, with an error message.
+On 10 Mar 2021, at 20:12, Yang Shi wrote:
 
-This is largely intended for dynamic analysis tools like UBSAN and for
-fakes.
-E.g. say I had a fake ops struct for testing and I wanted my `free`
-function to complain if it was called with an invalid argument, or
-caught a double-free. Most return void and have no normal means of
-signalling failure (e.g. super_operations, iommu_ops, etc.).
+> On Wed, Mar 10, 2021 at 7:36 AM Zi Yan <zi.yan@sent.com> wrote:
+>>
+>> From: Zi Yan <ziy@nvidia.com>
+>>
+>> We do not have a direct user interface of splitting the compound page
+>> backing a THP and there is no need unless we want to expose the THP
+>> implementation details to users. Adding an interface for debugging.
+>>
+>> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
+>> <debugfs>/split_huge_pages_in_range_pid, THPs within the given virtual=
 
-Key points:
-* Always update current->kunit_test so anyone can use it.
-  * commit 83c4e7a0363b ("KUnit: KASAN Integration") only updated it for
-  CONFIG_KASAN=y
+>
+> Can we reuse the existing split_huge_page knob instead of creating a ne=
+w one?
+>
+> Two knobs for splitting huge pages on debugging purpose seem
+> overkilling to me IMHO. I'm wondering if we could check if a special
+> value (e.g. 1 or -1) is written then split all THPs as split_huge_page
+> knob does?
+>
+> I don't think this interface is used widely so the risk should be very
+> low for breaking userspace.
 
-* Create a new header <kunit/test-bug.h> so non-test code doesn't have
-to include all of <kunit/test.h> (e.g. lib/ubsan.c)
+Thanks for the suggestion.
 
-* Forward the file and line number to make it easier to track down
-failures
+I prefer a separate interface to keep input handling simpler. I am also
+planning to enhance this interface later to enable splitting huge pages
+to any lower order when Matthew Wilcox=E2=80=99s large page in page cache=
+ gets in,
+so it is better to keep it separate from existing split_huge_pages.
 
-* Declare the helper function for nice __printf() warnings about mismatched
-format strings even when KUnit is not enabled.
+=E2=80=94
+Best Regards,
+Yan Zi
 
-Example output from kunit_fail_current_test("message"):
-[15:19:34] [FAILED] example_simple_test
-[15:19:34]     # example_simple_test: initializing
-[15:19:34]     # example_simple_test: lib/kunit/kunit-example-test.c:24: message
-[15:19:34]     not ok 1 - example_simple_test
+--=_MailMate_C7BC74D9-ECED-4338-B45D-2E12B37F2167_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
 
-Co-developed-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Signed-off-by: Uriel Guajardo <urielguajardo@google.com>
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
----
- include/kunit/test-bug.h | 30 ++++++++++++++++++++++++++++++
- lib/kunit/test.c         | 39 +++++++++++++++++++++++++++++++++++----
- 2 files changed, 65 insertions(+), 4 deletions(-)
- create mode 100644 include/kunit/test-bug.h
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-new file mode 100644
-index 000000000000..e88b74a4fd85
---- /dev/null
-+++ b/include/kunit/test-bug.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit API allowing dynamic analysis tools to interact with KUnit tests
-+ *
-+ * Copyright (C) 2020, Google LLC.
-+ * Author: Uriel Guajardo <urielguajardo@google.com>
-+ */
-+
-+#ifndef _KUNIT_TEST_BUG_H
-+#define _KUNIT_TEST_BUG_H
-+
-+#define kunit_fail_current_test(fmt, ...) \
-+	__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
-+
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+
-+extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
-+						    const char *fmt, ...);
-+
-+#else
-+
-+static __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
-+						    const char *fmt, ...)
-+{
-+}
-+
-+#endif
-+
-+
-+#endif /* _KUNIT_TEST_BUG_H */
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index ec9494e914ef..2f6cc0123232 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <kunit/test.h>
-+#include <kunit/test-bug.h>
- #include <linux/kernel.h>
- #include <linux/kref.h>
- #include <linux/sched/debug.h>
-@@ -16,6 +17,40 @@
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+/*
-+ * Fail the current test and print an error message to the log.
-+ */
-+void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
-+{
-+	va_list args;
-+	int len;
-+	char *buffer;
-+
-+	if (!current->kunit_test)
-+		return;
-+
-+	kunit_set_failure(current->kunit_test);
-+
-+	/* kunit_err() only accepts literals, so evaluate the args first. */
-+	va_start(args, fmt);
-+	len = vsnprintf(NULL, 0, fmt, args) + 1;
-+	va_end(args);
-+
-+	buffer = kunit_kmalloc(current->kunit_test, len, GFP_KERNEL);
-+	if (!buffer)
-+		return;
-+
-+	va_start(args, fmt);
-+	vsnprintf(buffer, len, fmt, args);
-+	va_end(args);
-+
-+	kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
-+	kunit_kfree(current->kunit_test, buffer);
-+}
-+EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
-+#endif
-+
- /*
-  * Append formatted message to log, size of which is limited to
-  * KUNIT_LOG_SIZE bytes (including null terminating byte).
-@@ -273,9 +308,7 @@ static void kunit_try_run_case(void *data)
- 	struct kunit_suite *suite = ctx->suite;
- 	struct kunit_case *test_case = ctx->test_case;
- 
--#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
- 	current->kunit_test = test;
--#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT) */
- 
- 	/*
- 	 * kunit_run_case_internal may encounter a fatal error; if it does,
-@@ -624,9 +657,7 @@ void kunit_cleanup(struct kunit *test)
- 		spin_unlock(&test->lock);
- 		kunit_remove_resource(test, res);
- 	}
--#if (IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT))
- 	current->kunit_test = NULL;
--#endif /* IS_ENABLED(CONFIG_KASAN) && IS_ENABLED(CONFIG_KUNIT)*/
- }
- EXPORT_SYMBOL_GPL(kunit_cleanup);
- 
--- 
-2.31.0.rc2.261.g7f71774620-goog
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmBKPLkPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqK/4QP/1dxavX0w0G8RD5iVNwQfkVgpLAkZDXieitV
+8AdDwks47bew/sDhj7CC4TrdESB3+kPMFDE9Bwon/bpj7j6TDU9oWUYknLjnIKwY
+slML3JTh/0Sv/17vkcHpE77ZIPv/GI+Vs5y+7Et1TXNpA58BV7N2gB7GpbymDqvL
+97idRka5nIUsi7ISTojMZz+zZ272LELkgffIJZzNBCO7l23w06yUWZ0AL7GN7AFm
+TJFESftRYm2eZOwwBlkpE2pzoyAsBS9w9QantpS+zLgd+f0118zzrPkUVlwMAn+w
+ZRWIg29RJGtQuG3aE4ODOvbUSf8P7L355hbTKeE6QdPPwC9qz3JpUayC5krWPstq
+J0BO2CNI/in+qKA0ONg8mH7ae83LqqRzzjfu5maMDZQoT/WCBz13U2rJ54tH++Yn
+TFzudCSSMsryvyK28jjLgiw8APLS24LPIORKJq6cplRHyOOKO5pT6BP4TIWsvzox
+XU9cSqfp6aOT6DVFCNKhdoOTGJN+i1/V4ToLjogikGVf7TV2kDqVAeZ7DV93jxof
+hDBkUXUYz5zNq4E8zTQ+0coTyfIcvNjQ4ziVQpkmQ4B/Ch5uo8+M861KjNzzfnKl
+m2M607vrJXU0RqdcE2O+/yotBxQ4y3ok0qHDIYT6QOPePX3WdVEU9YRHd+cvVJdX
+Pf7pzkjK
+=c6PJ
+-----END PGP SIGNATURE-----
 
+--=_MailMate_C7BC74D9-ECED-4338-B45D-2E12B37F2167_=--
