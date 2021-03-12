@@ -2,154 +2,292 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0129CC433E6
-	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Mar 2021 18:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E809CC433DB
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Mar 2021 19:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD54C64F47
-	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Mar 2021 18:11:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AAE4764F80
+	for <linux-kselftest@archiver.kernel.org>; Fri, 12 Mar 2021 19:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbhCLSLY (ORCPT
+        id S234167AbhCLTIk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 12 Mar 2021 13:11:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21204 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231906AbhCLSLR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Mar 2021 13:11:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1615572677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SQXRSD89A8xhrCuxpBydg6Y3MyKh1PtNusEjHfIcj18=;
-        b=bX2tgC6SGJS1FhnxL+ShdpbV0pLyAO9+FUIdqKoG98EqAFtJNab07mbizgtZniFZMTxfVe
-        yB3hiKnqXlPvJlqxRaWDIrxbtUgP3uC1ngCJHX7eueW1w6Vhr9+MV7xoZFQ+2Ix0NctftV
-        Et2RnuCBjO75v8YPGSuTU4nb8KEoCF0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-10-rqm6utqPNQuzX_rM-wl6sA-1; Fri, 12 Mar 2021 13:11:15 -0500
-X-MC-Unique: rqm6utqPNQuzX_rM-wl6sA-1
-Received: by mail-wr1-f71.google.com with SMTP id i5so11513491wrp.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Mar 2021 10:11:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SQXRSD89A8xhrCuxpBydg6Y3MyKh1PtNusEjHfIcj18=;
-        b=Hci9vwWlx+RvpyMNIax0AnROKex1ztoAFS5Wpz9FRL4WXQAmcjD/TRYnXaU1u/YYrJ
-         OeF+2Dsi0UIe53nLjNP0irlh6GeUY3eLapaWX9N4oz0YfYzIEysK0e/AmIzjFpN6u8Kw
-         ku9MbUVVIgJmVkb8ZONlOIoBQeYK/NYBHXNznEu3wb+EJ0VW7mLLWwIxiv36U8QRf4S7
-         EcGdpBEfNATEbGgeB5HJUKtWOHiE3b2mRYC7HwrzwQSGmSZLlL5FUkR5Ys8U+WACvFef
-         WhFEsUvTqLFUKrB6Hn0qDshD+bYjmEnvj4C+Pm1AEYErvfr9mwYSyZngdLQrNRs1WRbZ
-         aPvg==
-X-Gm-Message-State: AOAM533ofQmE6ArNoiWXBbpq2BPcu+qic0SM4xR97xC2UB+1bpI07aQ4
-        DnzUikpw1eJRkcl7BuuWUShpnz0zWxArJuINZWjoAoIwrCag5qLELLg3343Nx00Gc5CUUkbW+6l
-        NLnoi3bFGmId/1fhfSLhDJsX5yzap
-X-Received: by 2002:a1c:498b:: with SMTP id w133mr14755139wma.134.1615572673384;
-        Fri, 12 Mar 2021 10:11:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx2aInA1bidlltyWIjYrqBjK+SGizjJOOZcscWT2RiFNd2X/0uEYFLiJqfA7xaEL8hELymOZw==
-X-Received: by 2002:a1c:498b:: with SMTP id w133mr14755105wma.134.1615572673180;
-        Fri, 12 Mar 2021 10:11:13 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id y8sm2934326wmi.46.2021.03.12.10.11.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Mar 2021 10:11:12 -0800 (PST)
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
-        Linux MIPS <linux-mips@vger.kernel.org>,
-        KVM PPC <kvm-ppc@vger.kernel.org>,
-        Linux S390 <linux-s390@vger.kernel.org>,
-        Linux kselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-References: <20210310003024.2026253-1-jingzhangos@google.com>
- <20210310003024.2026253-4-jingzhangos@google.com>
- <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
- <CAAdAUtjj52+cAhD4KUzAaqrMSJXHD0g=ecQNG-a92Mqn3BCxiQ@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
- in binary format
-Message-ID: <ac7462de-1531-5428-5dca-4e3dfb897000@redhat.com>
-Date:   Fri, 12 Mar 2021 19:11:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <CAAdAUtjj52+cAhD4KUzAaqrMSJXHD0g=ecQNG-a92Mqn3BCxiQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Fri, 12 Mar 2021 14:08:40 -0500
+Received: from mail-dm6nam10on2048.outbound.protection.outlook.com ([40.107.93.48]:43361
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234107AbhCLTId (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Mar 2021 14:08:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CSfZyu5M7tbRt62GFNqYHv02CJiiLYVYg1/uTO0GtxBbaO79OT62uwXnjCdGbPAIjQhkjPKg4Ye5BseF7bvA9P6bQojUwUbs1swQDT9g24CQkwO3MMPsVmSCOZr2HEFVQ/tkj2CewMxpMxOqIWa9M3T8zCJBazLf2L0cHNfqkseHGuSCxQmLmzcqTAdzCCo890j7bIKxpmb2FVCvOHu2+gbe/MROOuYebP4AxHSAFKAllDBdKu37ALrz0mB3jiaoGtI6syxGaMyFX2CppoMJxOOyMDQQWlCkpdTZj72hKqlY7U5oWpLIFxo4Ot9lWTE1mkKxMKKUSzG1IcAePrpbUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IG6s0ovuJeMbsQDAecKbHN4gShOUwn/gevZRoUsRxUg=;
+ b=UVzpdrespNCn9EDownH0S+LivKyDx42HENUwDA/W/rbPJziJfoh2ptJrbsSOsHXgdXnQqggTjjeEX38tgtdhuC0ciD92jkq7IG1xQapdrg3+mM09IAa6BYogxOxYjkDyqNyyij9C/9BgHcqZY2i9n2rnbX3s/n8vlQ7/UDH4fdSy+8T9fjKxrdaiJDOOvZmSpLT6oOURTKUmwK4apzWIQxrjK86TzgQVU6+PNsBwCb0alJwE6XQTTFlGEzmlxk0kflFIHK9t7Xwkoc3b4hb7wXPopQ6UcvneNVUsEjjJ4eRPQbOM+z1OmFIAP+J1saVRzbR9ZNHXdlYKQSNoINVPHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IG6s0ovuJeMbsQDAecKbHN4gShOUwn/gevZRoUsRxUg=;
+ b=4CwDscGKgjCdgNBcNBGRYr26/51mW98P1GURLGVSzuhWLHHR4p4gJQFjBNeGd09FR84rn8PZU35x/SYss0b2zcPnWyX8EtTHC7nrauYzYEoNGiev4ZFTisl3UWxC9fJhoJyXHeWd6/u53mEQFAZuH/QhesAACYr1oJIb71buRBg=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from SN1PR12MB2560.namprd12.prod.outlook.com (2603:10b6:802:26::19)
+ by SA0PR12MB4527.namprd12.prod.outlook.com (2603:10b6:806:73::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31; Fri, 12 Mar
+ 2021 19:08:32 +0000
+Received: from SN1PR12MB2560.namprd12.prod.outlook.com
+ ([fe80::20cf:9ae4:26fb:47b7]) by SN1PR12MB2560.namprd12.prod.outlook.com
+ ([fe80::20cf:9ae4:26fb:47b7%7]) with mapi id 15.20.3933.032; Fri, 12 Mar 2021
+ 19:08:32 +0000
+Subject: RE: [PATCH v5 02/21] selftests/resctrl: Fix compilation issues for
+ global variables
+To:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20210307145502.2916364-1-fenghua.yu@intel.com>
+ <20210307145502.2916364-3-fenghua.yu@intel.com>
+From:   Babu Moger <babu.moger@amd.com>
+Message-ID: <bf2efac2-99bf-5b58-8952-db9291a1eae1@amd.com>
+Date:   Fri, 12 Mar 2021 13:08:31 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20210307145502.2916364-3-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [165.204.77.1]
+X-ClientProxiedBy: SN1PR12CA0056.namprd12.prod.outlook.com
+ (2603:10b6:802:20::27) To SN1PR12MB2560.namprd12.prod.outlook.com
+ (2603:10b6:802:26::19)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.236.31.136] (165.204.77.1) by SN1PR12CA0056.namprd12.prod.outlook.com (2603:10b6:802:20::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend Transport; Fri, 12 Mar 2021 19:08:31 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: d8a7cc6c-1bb6-45b3-9663-08d8e58a3a46
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4527:
+X-Microsoft-Antispam-PRVS: <SA0PR12MB45273C55F91C19D7587101FF956F9@SA0PR12MB4527.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:50;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +2mCF348GY7EecaiTdQO0ROvIxeO8R58z+nrkL4BPaIQi2V2r11Qvzrw62MWKkMt8f0u1ouobfdw+vOeVYFXVg94tSTeEheTqVQ7wd6rpK1FfNEpTQ7e+Sma3xt4wuU8BFERKa8m+g8DIlp7A58oN7UGMjku1xx5JBmsmNjlVKn7lj2NC2BzFpFqtLU0Pxo8a2RNfJ3CypKaPgMLKnK2R5OxYiMYV4oIIRE4y9uMi+jyui/8DgNFp1lJ8Y3RePqVAQvVdO1CzDCLNnUMvJ3Mkeq5uNVIVv+ylwcaQvHMTHJ9tvA/6JkhBmtGPH/B5gCgXyXmaMI+7+83ikvDlbvqsi+fKSTUj+sOF5puNvcJm5Z5cIsqU5aBBLKoC0qZMfN0Mq4AyRI+HuqCB0TJPdqTmKfkAtEkUy+I4KKtXxWI1YGbudclOg2mDgN2/fsfpcWuEtXBHNfnm0MHvLShxikqHA0lzxntjNM0Gt0vHDXAfzdjMBzJzYvS4HxZ0wnJSuX1BQETyKGbBlzRJmytfKuVG9QYF2KIgdmuMI4OYAbMfeQvPuiJBlQ0TLwDK1Av/ZgRx/kc9PmU0+QDQBssigjnq/htrtxvMdysY1ifDrT6at5OxiNqKYp03F+32di9wVWwX4dlzVVpnTBobsVJhJgbJQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2560.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(376002)(396003)(136003)(39860400002)(36756003)(2616005)(66946007)(8936002)(4326008)(478600001)(2906002)(66476007)(186003)(26005)(83380400001)(54906003)(66556008)(52116002)(6486002)(8676002)(31686004)(44832011)(53546011)(86362001)(31696002)(316002)(16526019)(956004)(5660300002)(110136005)(16576012)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?mpm07Mf2uZz92YBxsxUclcl0AqaiyIU0xJZkbPC0c2aCWMmOGd/y8DRm?=
+ =?Windows-1252?Q?gKGX4xluEqalUgZRsmdIQ/x81ykIgW6vrvQA7cCdLzz8KNbklD1Rq4YO?=
+ =?Windows-1252?Q?m61IX0/hCIRMYdbqxNo1L2XxxK9GSOA7l+5Ryvvru47fTVLl7nKqyIOw?=
+ =?Windows-1252?Q?jUoaSKsQBMt1d8mSBupSyNj3d7ZMmaGsneaF7deBxHrpggQpHIv54uu8?=
+ =?Windows-1252?Q?Ev0UKpHFm9QqkvYUXcLay3DOj8V97K9OUdwkiHDvoHyWb34X5JIWQsDU?=
+ =?Windows-1252?Q?6yShHH36jFa/hsFeyF2BA/IUs8EGD2nh5itYLcNEigsTT8Ph00y7pwM0?=
+ =?Windows-1252?Q?NCwKPck8Cl9HwR5ZYyreqjvOYP0lvaEXBiM4kffiq9AbKdx+e4QIMmXH?=
+ =?Windows-1252?Q?/dkO9msZYoTNQM+Vu+zKtvNyX7aLwLvxaNGoaAid49k15L4ie9ea38k7?=
+ =?Windows-1252?Q?NQlUB3JuKbTMmVos0p8eUY4v+lfnTT+/uso/7TNIhwP4G73yzVv9hjOJ?=
+ =?Windows-1252?Q?7kyNSPpW43YlHnuEZWmoeltXQD+Oezk5nQy84oXqVXLZaLM2+aQjVCjP?=
+ =?Windows-1252?Q?4reR4JxQZP7SEh2N/FsRtt+JVYRWqwHDPHbCVaWOEdcDrbfY+YLyZHqw?=
+ =?Windows-1252?Q?VWG51IdDr007zOtfnIUi9cgHny8bsm2T5NiXVOC1V+t/1LoHeTqUVROT?=
+ =?Windows-1252?Q?qX8Qagh+WLkmQJkGrmzJLucKvsIEbW75T3LvF6RH3Lib0S23Ner6POra?=
+ =?Windows-1252?Q?/HqmbL1bcT88XWzmeXpRcZZx9P7p75qeTPlRlMkxSb3Oe5eZXUk+pFZz?=
+ =?Windows-1252?Q?8TIgZW6i0MrW8MNj3GLl5uir0sOOgEMxgjDvag/totwsbX5dh+fgTBFK?=
+ =?Windows-1252?Q?YRV2AeHclBKER7E+/V7AEMfqlR8XU7rniSplFOwTOEsI90RscQM91gQq?=
+ =?Windows-1252?Q?6F46x6oM8uo5GADcfOYuco3F5j5u+CbZ+jCxCxLcAHkHe5tNllabVAcE?=
+ =?Windows-1252?Q?8TeLv/FPHW12CZp5QITvUPsVQenJO/MPMjz1KQQ6tqSaq/hS1vfocDuC?=
+ =?Windows-1252?Q?GSRMO2bjFuMLgzIYwo1vKA9K9BTQjVR4LqcIWkqnlfQTZLnMWaG7zBjV?=
+ =?Windows-1252?Q?2dLrml7HQ7FAIacXzRUW1pwyxM1ccoF3lr/6hWziUNLDMc9AAM6y4DqG?=
+ =?Windows-1252?Q?HrG4oeaCi/wotn5UliTbeFnkCVsUT5tYEGCZrGs3jst5Ly35cBCgh97V?=
+ =?Windows-1252?Q?sHEIJg/co4i5DY8Hf2hU3zZs0Yea5AYGr1yKBh/1NvleLpYRp+DDPK/+?=
+ =?Windows-1252?Q?nydhYVeH8Yz64S3VWLpLIJ9fSAkeDiSirWQRWw5znT88sQlVLQmfOFVn?=
+ =?Windows-1252?Q?tF4QuG22mYKMwYYRxHjerUnQtGzBylAXojcXVgpSVjR4CtkV3cmtVXRT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8a7cc6c-1bb6-45b3-9663-08d8e58a3a46
+X-MS-Exchange-CrossTenant-AuthSource: SN1PR12MB2560.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2021 19:08:32.2715
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rt09a9mZd0PeGbYep7mcXBaQ/kOZN3gPpqyMzIEbBCdcDZHY2aJwODRQLjK1dvkq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4527
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/03/21 22:41, Jing Zhang wrote:
->> I would prefer a completely different interface, where you have a file
->> descriptor that can be created and associated to a vCPU or VM (or even
->> to /dev/kvm).  Having a file descriptor is important because the fd can
->> be passed to a less-privileged process that takes care of gathering the
->> metrics
-> Separate file descriptor solution is very tempting. We are still considering it
-> seriously. Our biggest concern is that the metrics gathering/handling process
-> is not necessary running on the same node as the one file descriptor belongs to.
-> It scales better to pass metrics data directly than to pass file descriptors.
 
-If you want to pass metrics data directly, you can just read the file 
-descriptor from your VMM, just like you're using the ioctls now. 
-However the file descriptor also allows a privilege-separated same-host 
-interface.
 
->> 4 bytes flags (always zero)
->> 4 bytes number of statistics
->> 4 bytes offset of the first stat description
->> 4 bytes offset of the first stat value
->> stat descriptions:
->>    - 4 bytes for the type (for now always zero: uint64_t)
->>    - 4 bytes for the flags (for now always zero)
->>    - length of name
->>    - name
->> statistics in 64-bit format
+> -----Original Message-----
+> From: Fenghua Yu <fenghua.yu@intel.com>
+> Sent: Sunday, March 7, 2021 8:55 AM
+> To: Shuah Khan <shuah@kernel.org>; Tony Luck <tony.luck@intel.com>;
+> Reinette Chatre <reinette.chatre@intel.com>; Moger, Babu
+> <Babu.Moger@amd.com>
+> Cc: linux-kselftest <linux-kselftest@vger.kernel.org>; linux-kernel <linux-
+> kernel@vger.kernel.org>; Fenghua Yu <fenghua.yu@intel.com>
+> Subject: [PATCH v5 02/21] selftests/resctrl: Fix compilation issues for global
+> variables
 > 
-> The binary format presented above is very flexible. I understand why it is
-> organized this way.
-> In our situation, the metrics data could be pulled periodically as short as
-> half second. They are used by different kinds of monitors/triggers/alerts.
-> To enhance efficiency and reduce traffic caused by metrics passing, we
-> treat all metrics info/data as two kinds. One is immutable information,
-> which doesn't change in a given system boot. The other is mutable
-> data (statistics data), which is pulled/transferred periodically at a high
-> frequency.
+> Reinette reported following compilation issue on Fedora 32, gcc version
+> 10.1.1
+> 
+> /usr/bin/ld: cqm_test.o:<src_dir>/cqm_test.c:22: multiple definition of
+> `cache_size'; cat_test.o:<src_dir>/cat_test.c:23: first defined here
+> 
+> The same issue is reported for long_mask, cbm_mask, count_of_bits etc
+> variables as well. Compiler isn't happy because these variables are
+> defined globally in two .c files namely cqm_test.c and cat_test.c and
+> the compiler during compilation finds that the variable is already
+> defined (multiple definition error).
+> 
+> Taking a closer look at the usage of these variables reveals that these
+> variables are used only locally to functions such as cqm_resctrl_val()
 
-The format allows to place the values before the descriptions.  So you 
-could use pread to only read the first part of the file descriptor, and 
-the file_operations implementation would then skip the work of building 
-the immutable data.  It doesn't have to be implemented from the
-beginning like that, but the above format supports it.
+%s/ locally to functions/locally in two functions
 
-Paolo
+> (defined in cqm_test.c) and cat_perf_miss_val() (defined in cat_test.c).
+> These variables are not shared between those functions. So, there is no
+> need for these variables to be global. Hence, fix this issue by making
+> them static variables.
+> 
+> Reported-by: Reinette Chatre <reinette.chatre@intel.com>
+> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> ---
+> Change Log:
+> v5:
+> - Define long_mask, cbm_mask, count_of_bits etc as static variables
+>   (Shuah).
+> - Split this patch into patch 2 and 3 (Shuah).
+> 
+>  tools/testing/selftests/resctrl/cat_test.c  | 10 +++++-----
+>  tools/testing/selftests/resctrl/cqm_test.c  | 10 +++++-----
+>  tools/testing/selftests/resctrl/resctrl.h   |  2 +-
+>  tools/testing/selftests/resctrl/resctrlfs.c | 10 +++++-----
+>  4 files changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c
+> b/tools/testing/selftests/resctrl/cat_test.c
+> index 5da43767b973..bdeeb5772592 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -17,10 +17,10 @@
+>  #define MAX_DIFF_PERCENT	4
+>  #define MAX_DIFF		1000000
+> 
+> -int count_of_bits;
+> -char cbm_mask[256];
+> -unsigned long long_mask;
+> -unsigned long cache_size;
+> +static int count_of_bits;
+> +static char cbm_mask[256];
+> +static unsigned long long_mask;
+> +static unsigned long cache_size;
+> 
+>  /*
+>   * Change schemata. Write schemata to specified
+> @@ -136,7 +136,7 @@ int cat_perf_miss_val(int cpu_no, int n, char
+> *cache_type)
+>  		return -1;
+> 
+>  	/* Get default cbm mask for L3/L2 cache */
+> -	ret = get_cbm_mask(cache_type);
+> +	ret = get_cbm_mask(cache_type, cbm_mask);
+>  	if (ret)
+>  		return ret;
+> 
+> diff --git a/tools/testing/selftests/resctrl/cqm_test.c
+> b/tools/testing/selftests/resctrl/cqm_test.c
+> index 5e7308ac63be..de33d1c0466e 100644
+> --- a/tools/testing/selftests/resctrl/cqm_test.c
+> +++ b/tools/testing/selftests/resctrl/cqm_test.c
+> @@ -16,10 +16,10 @@
+>  #define MAX_DIFF		2000000
+>  #define MAX_DIFF_PERCENT	15
+> 
+> -int count_of_bits;
+> -char cbm_mask[256];
+> -unsigned long long_mask;
+> -unsigned long cache_size;
+> +static int count_of_bits;
+> +static char cbm_mask[256];
+> +static unsigned long long_mask;
+> +static unsigned long cache_size;
+> 
+>  static int cqm_setup(int num, ...)
+>  {
+> @@ -125,7 +125,7 @@ int cqm_resctrl_val(int cpu_no, int n, char
+> **benchmark_cmd)
+>  	if (!validate_resctrl_feature_request("cqm"))
+>  		return -1;
+> 
+> -	ret = get_cbm_mask("L3");
+> +	ret = get_cbm_mask("L3", cbm_mask);
+>  	if (ret)
+>  		return ret;
+> 
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h
+> b/tools/testing/selftests/resctrl/resctrl.h
+> index 39bf59c6b9c5..959c71e39bdc 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -92,7 +92,7 @@ void tests_cleanup(void);
+>  void mbm_test_cleanup(void);
+>  int mba_schemata_change(int cpu_no, char *bw_report, char
+> **benchmark_cmd);
+>  void mba_test_cleanup(void);
+> -int get_cbm_mask(char *cache_type);
+> +int get_cbm_mask(char *cache_type, char *cbm_mask);
+>  int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
+>  void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+>  int cat_val(struct resctrl_val_param *param);
+> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c
+> b/tools/testing/selftests/resctrl/resctrlfs.c
+> index 19c0ec4045a4..2a16100c9c3f 100644
+> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> @@ -49,8 +49,6 @@ static int find_resctrl_mount(char *buffer)
+>  	return -ENOENT;
+>  }
+> 
+> -char cbm_mask[256];
+> -
+>  /*
+>   * remount_resctrlfs - Remount resctrl FS at /sys/fs/resctrl
+>   * @mum_resctrlfs:	Should the resctrl FS be remounted?
+> @@ -205,16 +203,18 @@ int get_cache_size(int cpu_no, char *cache_type,
+> unsigned long *cache_size)
+>  /*
+>   * get_cbm_mask - Get cbm mask for given cache
+>   * @cache_type:	Cache level L2/L3
+> - *
+> - * Mask is stored in cbm_mask which is global variable.
+> + * @cbm_mask:	cbm_mask returned as a string
+>   *
+>   * Return: = 0 on success, < 0 on failure.
+>   */
+> -int get_cbm_mask(char *cache_type)
+> +int get_cbm_mask(char *cache_type, char *cbm_mask)
+>  {
+>  	char cbm_mask_path[1024];
+>  	FILE *fp;
+> 
+> +	if (!cbm_mask)
+> +		return -1;
+
+Can cbm_mask be NULL? I see it is statically allocated.
+Or should this be if (!(*cbm_mask))? Or did I miss something.
+
+> +
+>  	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH,
+> cache_type);
+> 
+>  	fp = fopen(cbm_mask_path, "r");
+> --
+> 2.30.1
 
