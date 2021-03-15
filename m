@@ -2,659 +2,179 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C629C433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 20:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA89BC433E6
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 22:32:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5952764EFC
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 20:35:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC59464F4D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 22:32:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbhCOUei (ORCPT
+        id S232392AbhCOWba (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Mar 2021 16:34:38 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:38921 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232324AbhCOUeP (ORCPT
+        Mon, 15 Mar 2021 18:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232840AbhCOWb3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Mar 2021 16:34:15 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 31300580849;
-        Mon, 15 Mar 2021 16:34:14 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 15 Mar 2021 16:34:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
-        :to:cc:subject:date:message-id:reply-to:mime-version
-        :content-transfer-encoding; s=fm3; bh=16txU7jDWDkd7nBjkBzI1dYu+E
-        8KzUpsBnXT+LnoISQ=; b=w/OuNAgcBqY2Z76qkA4+kzx7YyIJ/JiavklNjZzCMA
-        N+6qDfY5En7Tca71VHAsImxMnlSE4CmP5BAyGpe7p0KiI+2XGdg4s6DQI0SED35L
-        TCms2grjS3zfzNmJT/pXvcNPFvwqTQuhlj80trUSxv5mKHb/5CkjjkBj56DIVPlp
-        vc1LCpNKIlpBS8qtU8DBDdUlgvul15uqbjF+43s9VZ0Wm1sRFqs2MLP7Nar8mqeQ
-        nv1sdIRa3iIqsvbps9rJGcSTuwWb4rsVV2BwYRMK1zkubqoW6/90VYkxsET/RWvb
-        XYY319bExP0Jq2Emm/g8RQZSzhEalNM/G3A19NKiO+1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:reply-to:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=16txU7
-        jDWDkd7nBjkBzI1dYu+E8KzUpsBnXT+LnoISQ=; b=apZkFibWlGi4cHz4KHTqnf
-        X1FHIAqZb7hJM6UpUrDQk18A4xWXOxFOtOeKjJAR+dCrr9d9A/hUmrj/zhVX2o8h
-        uFwO9e70vnFBUjTzh24uLeck4ueQdNLHJTfdt9L2CCSLCKd48AXc51GYJUZsb4m0
-        mL8RFKpbq5x0Rh4ApuCF6kAp1pWFXnf6Dqry57tT5Nw2DR8Lbo44jc52tzEB8Ugo
-        FbRmAkXg7tUkdLTf0u+FRNp6ZAijkoD1JIE9WLyNyVB5Fti59j6I/tAC6irdDSYE
-        p3EKAZaCrk7Jm9bhLLZFvqjxHkM1hqvsss/sosvRFfU3PTt36uRb/CX8wSdiFg3A
-        ==
-X-ME-Sender: <xms:xMRPYPb8puSIKtcUhV7fxzUCOj6K8Iq0-nX2iKmP2mAZ6UZmPQCznw>
-    <xme:xMRPYOU5nFHL057BNY2qTjkOQ1bU34iGkgX3MkWe7jteUJsknTdoLDRCblFtyjTSr
-    0lB-cI1_H9pt5Lslw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledruddvledgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvffufffkofhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggr
-    nhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeeltedvtd
-    dvtddtteffvdekhefftdejhfektdehffejhedvjeeukeetudekudefffenucfkphepvddt
-    ledriedrjedurddvudefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
-X-ME-Proxy: <xmx:xMRPYO1ZybHRWHWisjxu9x5WGNlXAcgCCl6p2Fum4LkrxbVa2XSl-Q>
-    <xmx:xMRPYNYkrcfRoLrYPSvyu9QRJmTeluaJ2egoEi6pPVzOtZEgIAGlVA>
-    <xmx:xMRPYJr8FyzfKbmno325a9Y4lYm52Mkpf8UYtgB29FGNMyx2Tn9E_Q>
-    <xmx:xsRPYPGFlafrtWJBxhffbuomTduvYlsUT5T979cbQgDNl8cJLCXbdQ>
-Received: from Threadripper.local (209-6-71-213.s2259.c3-0.abr-cbr1.sbo-abr.ma.cable.rcncustomer.com [209.6.71.213])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 82BB61080067;
-        Mon, 15 Mar 2021 16:34:12 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mika Penttila <mika.penttila@nextfour.com>,
-        Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v4 1/2] mm: huge_memory: a new debugfs interface for splitting THP tests.
-Date:   Mon, 15 Mar 2021 16:33:48 -0400
-Message-Id: <20210315203349.171760-1-zi.yan@sent.com>
-X-Mailer: git-send-email 2.30.1
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Mon, 15 Mar 2021 18:31:29 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84D0C06175F
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Mar 2021 15:31:28 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id u20so18170294lja.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Mar 2021 15:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t48JfE/I+ydsOOfkocl4ExwOYD4Cwrny9/Xf4iuVVeE=;
+        b=YzOHwW9gU+2CCoT9hKyxcZQ9g6o779atEw1QSJLPBRAVTj7Gc0vDffISoB/Cd9mLvk
+         keJsigpwHmgy2X42PpmONt7PB65J85QkeCx9fHcaIGkNovhredA86swM4cAXZwH+PSi8
+         lRrPBaNDuKAYAs9HX13mcFnjNF4HVRXNtJQ97EfCuIjTjC3+fdoJesfZFgSy75Qsy3h5
+         3KMoc/MoTsK7c1+mpTCTSVgVngYK9wFNZHp/tgw8qVex1AQ+P9QYvrUzbu9XpmNTz0v7
+         2GyGh2j9ZBeGQ8E+jCJEwyRovr3E+WurRkyCDBICw0iCS9XJ4oKdl+9A7ZLiVshUP9R/
+         VTaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t48JfE/I+ydsOOfkocl4ExwOYD4Cwrny9/Xf4iuVVeE=;
+        b=qFpgvsTqO9O3WFV4GbRShCWCLks0PnVax/Caj0Yr52m2No5SaHg3L1Skz7+ZU6KNbP
+         ETld/oH4Rqc0P9iJFZFaA4BLxge81o8ckr35/yS1RrU1U0076yw2EQFs5TW3ZNoxnwiX
+         PO/xDGUkCqdhcORfuf8XbdeMyXKsUq03nup+f/YXo9lgiDk61jzlhN9vdwR5lqsjthbP
+         b0PB0E+0ehqnuCCIzYFTw1Ls7X/T7/VjKVwr0IDrQkjQEh9hZsS3bppwDBe3Yspc9rfh
+         PCAKHH57trOVmJ8WxxHL9Mcn/3WSb6LwlV0hUL+u2CveyasVPE+vGT+IHWD46hjpkTch
+         jVEw==
+X-Gm-Message-State: AOAM531BYur7zdPmR4WuiPD+umaG+Ki2RLJR2q+Y6pzVRxu2t9fbWIO5
+        G5mbuVCWC8CYS45CWqzoXO3N4QNqzKxvLI6IAX51xg==
+X-Google-Smtp-Source: ABdhPJxjr/et45iqQeRMTErI0LQhEQm42DqVbpHRSpcjhEUlWFO96pLBoZaf9saYhs4q/r0gUqfHvBityBsZA51vteE=
+X-Received: by 2002:a2e:988f:: with SMTP id b15mr751964ljj.394.1615847486669;
+ Mon, 15 Mar 2021 15:31:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20210310003024.2026253-1-jingzhangos@google.com>
+ <20210310003024.2026253-4-jingzhangos@google.com> <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+In-Reply-To: <bb03107c-a413-50da-e228-d338dd471fb3@redhat.com>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Mon, 15 Mar 2021 17:31:15 -0500
+Message-ID: <CAAdAUth0J6z7fFpOkkmzKc83Bj+MST-jhsZ0uU0iYdRcE_-gMA@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] KVM: stats: Add ioctl commands to pull statistics
+ in binary format
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVM ARM <kvmarm@lists.cs.columbia.edu>,
+        Linux MIPS <linux-mips@vger.kernel.org>,
+        KVM PPC <kvm-ppc@vger.kernel.org>,
+        Linux S390 <linux-s390@vger.kernel.org>,
+        Linux kselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+Hi Paolo,
 
-We did not have a direct user interface of splitting the compound page
-backing a THP and there is no need unless we want to expose the THP
-implementation details to users. Make <debugfs>/split_huge_pages accept
-a new command to do that.
-
-By writing "<pid>,<vaddr_start>,<vaddr_end>" to
-<debugfs>/split_huge_pages, THPs within the given virtual address range
-from the process with the given pid are split. It is used to test
-split_huge_page function. In addition, a selftest program is added to
-tools/testing/selftests/vm to utilize the interface by splitting
-PMD THPs and PTE-mapped THPs.
-
-This does not change the old behavior, i.e., writing 1 to the interface
-to split all THPs in the system.
-
-Changelog:
-
-From v3:
-1. Factored out split huge pages in the given pid code to a separate
-   function.
-2. Added the missing put_page for not split pages.
-3. pr_debug -> pr_info, make reading results simpler.
-
-From v2:
-
-1. Reused existing <debugfs>/split_huge_pages interface. (suggested by
-   Yang Shi)
-
-From v1:
-
-1. Removed unnecessary calling to vma_migratable, spotted by kernel test
-   robot <lkp@intel.com>.
-2. Dropped the use of find_mm_struct and code it directly, since there
-   is no need for the permission check in that function and the function
-   is only available when migration is on.
-3. Added some comments in the selftest program to clarify how PTE-mapped
-   THPs are formed.
-
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- mm/huge_memory.c                              | 136 +++++++-
- tools/testing/selftests/vm/.gitignore         |   1 +
- tools/testing/selftests/vm/Makefile           |   1 +
- .../selftests/vm/split_huge_page_test.c       | 313 ++++++++++++++++++
- 4 files changed, 444 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/vm/split_huge_page_test.c
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index bff92dea5ab3..3bfee54e2cd0 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -7,6 +7,7 @@
-=20
- #include <linux/mm.h>
- #include <linux/sched.h>
-+#include <linux/sched/mm.h>
- #include <linux/sched/coredump.h>
- #include <linux/sched/numa_balancing.h>
- #include <linux/highmem.h>
-@@ -2922,16 +2923,14 @@ static struct shrinker deferred_split_shrinker =3D {
- };
-=20
- #ifdef CONFIG_DEBUG_FS
--static int split_huge_pages_set(void *data, u64 val)
-+static void split_huge_pages_all(void)
- {
- 	struct zone *zone;
- 	struct page *page;
- 	unsigned long pfn, max_zone_pfn;
- 	unsigned long total =3D 0, split =3D 0;
-=20
--	if (val !=3D 1)
--		return -EINVAL;
--
-+	pr_info("Split all THPs\n");
- 	for_each_populated_zone(zone) {
- 		max_zone_pfn =3D zone_end_pfn(zone);
- 		for (pfn =3D zone->zone_start_pfn; pfn < max_zone_pfn; pfn++) {
-@@ -2959,11 +2958,134 @@ static int split_huge_pages_set(void *data, u64 va=
-l)
- 	}
-=20
- 	pr_info("%lu of %lu THP split\n", split, total);
-+}
-=20
--	return 0;
-+static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
-+				unsigned long vaddr_end)
-+{
-+	int ret =3D 0;
-+	struct task_struct *task;
-+	struct mm_struct *mm;
-+	unsigned long total =3D 0, split =3D 0;
-+	unsigned long addr;
-+
-+	vaddr_start &=3D PAGE_MASK;
-+	vaddr_end &=3D PAGE_MASK;
-+
-+	/* Find the task_struct from pid */
-+	rcu_read_lock();
-+	task =3D find_task_by_vpid(pid);
-+	if (!task) {
-+		rcu_read_unlock();
-+		ret =3D -ESRCH;
-+		goto out;
-+	}
-+	get_task_struct(task);
-+	rcu_read_unlock();
-+
-+	/* Find the mm_struct */
-+	mm =3D get_task_mm(task);
-+	put_task_struct(task);
-+
-+	if (!mm) {
-+		ret =3D -EINVAL;
-+		goto out;
-+	}
-+
-+	pr_info("Split huge pages in pid: %d, vaddr: [0x%lx - 0x%lx]\n",
-+		 pid, vaddr_start, vaddr_end);
-+
-+	mmap_read_lock(mm);
-+	/*
-+	 * always increase addr by PAGE_SIZE, since we could have a PTE page
-+	 * table filled with PTE-mapped THPs, each of which is distinct.
-+	 */
-+	for (addr =3D vaddr_start; addr < vaddr_end; addr +=3D PAGE_SIZE) {
-+		struct vm_area_struct *vma =3D find_vma(mm, addr);
-+		unsigned int follflags;
-+		struct page *page;
-+
-+		if (!vma || addr < vma->vm_start)
-+			break;
-+
-+		/* FOLL_DUMP to ignore special (like zero) pages */
-+		follflags =3D FOLL_GET | FOLL_DUMP;
-+		page =3D follow_page(vma, addr, follflags);
-+
-+		if (IS_ERR(page))
-+			break;
-+		if (!page)
-+			break;
-+
-+		if (!is_transparent_hugepage(page))
-+			goto next;
-+
-+		total++;
-+		if (!can_split_huge_page(compound_head(page), NULL))
-+			goto next;
-+
-+		if (!trylock_page(page))
-+			goto next;
-+
-+		if (!split_huge_page(page))
-+			split++;
-+
-+		unlock_page(page);
-+next:
-+		put_page(page);
-+	}
-+	mmap_read_unlock(mm);
-+	mmput(mm);
-+
-+	pr_info("%lu of %lu THP split\n", split, total);
-+
-+out:
-+	return ret;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(split_huge_pages_fops, NULL, split_huge_pages_set,
--		"%llu\n");
-+
-+static ssize_t split_huge_pages_write(struct file *file, const char __user=
- *buf,
-+				size_t count, loff_t *ppops)
-+{
-+	static DEFINE_MUTEX(mutex);
-+	ssize_t ret;
-+	char input_buf[80]; /* hold pid, start_vaddr, end_vaddr */
-+	int pid;
-+	unsigned long vaddr_start, vaddr_end;
-+
-+	ret =3D mutex_lock_interruptible(&mutex);
-+	if (ret)
-+		return ret;
-+
-+	ret =3D -EFAULT;
-+
-+	memset(input_buf, 0, 80);
-+	if (copy_from_user(input_buf, buf, min_t(size_t, count, 80)))
-+		goto out;
-+
-+	input_buf[79] =3D '\0';
-+	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
-d);
-+	if (ret =3D=3D 1 && pid =3D=3D 1) {
-+		split_huge_pages_all();
-+		ret =3D strlen(input_buf);
-+		goto out;
-+	} else if (ret !=3D 3) {
-+		ret =3D -EINVAL;
-+		goto out;
-+	}
-+
-+	if (!split_huge_pages_pid(pid, vaddr_start, vaddr_end))
-+		ret =3D strlen(input_buf);
-+out:
-+	mutex_unlock(&mutex);
-+	return ret;
-+
-+}
-+
-+static const struct file_operations split_huge_pages_fops =3D {
-+	.owner	 =3D THIS_MODULE,
-+	.write	 =3D split_huge_pages_write,
-+	.llseek  =3D no_llseek,
-+};
-=20
- static int __init split_huge_pages_debugfs(void)
- {
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftest=
-s/vm/.gitignore
-index 9a35c3f6a557..1f651e85ed60 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -22,3 +22,4 @@ map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
- local_config.*
-+split_huge_page_test
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/=
-vm/Makefile
-index d42115e4284d..4cbc91d6869f 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -42,6 +42,7 @@ TEST_GEN_FILES +=3D on-fault-limit
- TEST_GEN_FILES +=3D thuge-gen
- TEST_GEN_FILES +=3D transhuge-stress
- TEST_GEN_FILES +=3D userfaultfd
-+TEST_GEN_FILES +=3D split_huge_page_test
-=20
- ifeq ($(MACHINE),x86_64)
- CAN_BUILD_I386 :=3D $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bi=
-t_program.c -m32)
-diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
-ing/selftests/vm/split_huge_page_test.c
-new file mode 100644
-index 000000000000..9f33ddbb3182
---- /dev/null
-+++ b/tools/testing/selftests/vm/split_huge_page_test.c
-@@ -0,0 +1,313 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A test of splitting PMD THPs and PTE-mapped THPs from a specified virtu=
-al
-+ * address range in a process via <debugfs>/split_huge_pages interface.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <inttypes.h>
-+#include <string.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <malloc.h>
-+#include <stdbool.h>
-+
-+uint64_t pagesize;
-+unsigned int pageshift;
-+uint64_t pmd_pagesize;
-+
-+#define PMD_SIZE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
-+#define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
-+#define SMAP_PATH "/proc/self/smaps"
-+#define INPUT_MAX 80
-+
-+#define PFN_MASK     ((1UL<<55)-1)
-+#define KPF_THP      (1UL<<22)
-+
-+int is_backed_by_thp(char *vaddr, int pagemap_file, int kpageflags_file)
-+{
-+	uint64_t paddr;
-+	uint64_t page_flags;
-+
-+	if (pagemap_file) {
-+		pread(pagemap_file, &paddr, sizeof(paddr),
-+			((long)vaddr >> pageshift) * sizeof(paddr));
-+
-+		if (kpageflags_file) {
-+			pread(kpageflags_file, &page_flags, sizeof(page_flags),
-+				(paddr & PFN_MASK) * sizeof(page_flags));
-+
-+			return !!(page_flags & KPF_THP);
-+		}
-+	}
-+	return 0;
-+}
-+
-+
-+static uint64_t read_pmd_pagesize(void)
-+{
-+	int fd;
-+	char buf[20];
-+	ssize_t num_read;
-+
-+	fd =3D open(PMD_SIZE_PATH, O_RDONLY);
-+	if (fd =3D=3D -1) {
-+		perror("Open hpage_pmd_size failed");
-+		exit(EXIT_FAILURE);
-+	}
-+	num_read =3D read(fd, buf, 19);
-+	if (num_read < 1) {
-+		close(fd);
-+		perror("Read hpage_pmd_size failed");
-+		exit(EXIT_FAILURE);
-+	}
-+	buf[num_read] =3D '\0';
-+	close(fd);
-+
-+	return strtoul(buf, NULL, 10);
-+}
-+
-+static int write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	int fd;
-+	ssize_t numwritten;
-+
-+	fd =3D open(path, O_WRONLY);
-+	if (fd =3D=3D -1)
-+		return 0;
-+
-+	numwritten =3D write(fd, buf, buflen - 1);
-+	close(fd);
-+	if (numwritten < 1)
-+		return 0;
-+
-+	return (unsigned int) numwritten;
-+}
-+
-+static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
-d)
-+{
-+	char input[INPUT_MAX];
-+	int ret;
-+
-+	ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
-+			vaddr_end);
-+	if (ret >=3D INPUT_MAX) {
-+		printf("%s: Debugfs input is too long\n", __func__);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (!write_file(SPLIT_DEBUGFS, input, ret + 1)) {
-+		perror(SPLIT_DEBUGFS);
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
-+#define MAX_LINE_LENGTH 500
-+
-+static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
-+{
-+	while (fgets(buf, MAX_LINE_LENGTH, fp) !=3D NULL) {
-+		if (!strncmp(buf, pattern, strlen(pattern)))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+static uint64_t check_huge(void *addr)
-+{
-+	uint64_t thp =3D 0;
-+	int ret;
-+	FILE *fp;
-+	char buffer[MAX_LINE_LENGTH];
-+	char addr_pattern[MAX_LINE_LENGTH];
-+
-+	ret =3D snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-+		       (unsigned long) addr);
-+	if (ret >=3D MAX_LINE_LENGTH) {
-+		printf("%s: Pattern is too long\n", __func__);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+
-+	fp =3D fopen(SMAP_PATH, "r");
-+	if (!fp) {
-+		printf("%s: Failed to open file %s\n", __func__, SMAP_PATH);
-+		exit(EXIT_FAILURE);
-+	}
-+	if (!check_for_pattern(fp, addr_pattern, buffer))
-+		goto err_out;
-+
-+	/*
-+	 * Fetch the AnonHugePages: in the same block and check the number of
-+	 * hugepages.
-+	 */
-+	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
-+		goto err_out;
-+
-+	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) !=3D 1) {
-+		printf("Reading smap error\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+err_out:
-+	fclose(fp);
-+	return thp;
-+}
-+
-+void split_pmd_thp(void)
-+{
-+	char *one_page;
-+	size_t len =3D 4 * pmd_pagesize;
-+	uint64_t thp_size;
-+	size_t i;
-+
-+	one_page =3D memalign(pmd_pagesize, len);
-+
-+	madvise(one_page, len, MADV_HUGEPAGE);
-+
-+	for (i =3D 0; i < len; i++)
-+		one_page[i] =3D (char)i;
-+
-+	thp_size =3D check_huge(one_page);
-+	if (!thp_size) {
-+		printf("No THP is allocatd");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* split all THPs */
-+	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
-+
-+	for (i =3D 0; i < len; i++)
-+		if (one_page[i] !=3D (char)i) {
-+			printf("%ld byte corrupted\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+
-+
-+	thp_size =3D check_huge(one_page);
-+	if (thp_size) {
-+		printf("Still %ld kB AnonHugePages not split\n", thp_size);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("Split huge pages successful\n");
-+	free(one_page);
-+}
-+
-+void split_pte_mapped_thp(void)
-+{
-+	char *one_page, *pte_mapped, *pte_mapped2;
-+	size_t len =3D 4 * pmd_pagesize;
-+	uint64_t thp_size;
-+	size_t i;
-+	const char *pagemap_template =3D "/proc/%d/pagemap";
-+	const char *kpageflags_proc =3D "/proc/kpageflags";
-+	char pagemap_proc[255];
-+	int pagemap_fd;
-+	int kpageflags_fd;
-+
-+	if (snprintf(pagemap_proc, 255, pagemap_template, getpid()) < 0) {
-+		perror("get pagemap proc error");
-+		exit(EXIT_FAILURE);
-+	}
-+	pagemap_fd =3D open(pagemap_proc, O_RDONLY);
-+
-+	if (pagemap_fd =3D=3D -1) {
-+		perror("read pagemap:");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	kpageflags_fd =3D open(kpageflags_proc, O_RDONLY);
-+
-+	if (kpageflags_fd =3D=3D -1) {
-+		perror("read kpageflags:");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	one_page =3D mmap((void *)(1UL << 30), len, PROT_READ | PROT_WRITE,
-+			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+
-+	madvise(one_page, len, MADV_HUGEPAGE);
-+
-+	for (i =3D 0; i < len; i++)
-+		one_page[i] =3D (char)i;
-+
-+	thp_size =3D check_huge(one_page);
-+	if (!thp_size) {
-+		printf("No THP is allocatd");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* remap the first pagesize of first THP */
-+	pte_mapped =3D mremap(one_page, pagesize, pagesize, MREMAP_MAYMOVE);
-+
-+	/* remap the Nth pagesize of Nth THP */
-+	for (i =3D 1; i < 4; i++) {
-+		pte_mapped2 =3D mremap(one_page + pmd_pagesize * i + pagesize * i,
-+				     pagesize, pagesize,
-+				     MREMAP_MAYMOVE|MREMAP_FIXED,
-+				     pte_mapped + pagesize * i);
-+		if (pte_mapped2 =3D=3D (char *)-1) {
-+			perror("mremap failed");
-+			exit(EXIT_FAILURE);
-+		}
-+	}
-+
-+	/* smap does not show THPs after mremap, use kpageflags instead */
-+	thp_size =3D 0;
-+	for (i =3D 0; i < pagesize * 4; i++)
-+		if (i % pagesize =3D=3D 0 &&
-+		    is_backed_by_thp(&pte_mapped[i], pagemap_fd, kpageflags_fd))
-+			thp_size++;
-+
-+	if (thp_size !=3D 4) {
-+		printf("Some THPs are missing during mremap\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* split all remapped THPs */
-+	write_debugfs(getpid(), (uint64_t)pte_mapped,
-+		      (uint64_t)pte_mapped + pagesize * 4);
-+
-+	/* smap does not show THPs after mremap, use kpageflags instead */
-+	thp_size =3D 0;
-+	for (i =3D 0; i < pagesize * 4; i++) {
-+		if (pte_mapped[i] !=3D (char)i) {
-+			printf("%ld byte corrupted\n", i);
-+			exit(EXIT_FAILURE);
-+		}
-+		if (i % pagesize =3D=3D 0 &&
-+		    is_backed_by_thp(&pte_mapped[i], pagemap_fd, kpageflags_fd))
-+			thp_size++;
-+	}
-+
-+	if (thp_size) {
-+		printf("Still %ld THPs not split\n", thp_size);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	printf("Split PTE-mapped huge pages successful\n");
-+	munmap(one_page, len);
-+	close(pagemap_fd);
-+	close(kpageflags_fd);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (geteuid() !=3D 0) {
-+		printf("Please run the benchmark as root\n");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	pagesize =3D getpagesize();
-+	pageshift =3D ffs(pagesize) - 1;
-+	pmd_pagesize =3D read_pmd_pagesize();
-+
-+	split_pmd_thp();
-+	split_pte_mapped_thp();
-+
-+	return 0;
-+}
---=20
-2.30.1
-
+On Wed, Mar 10, 2021 at 8:55 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 10/03/21 01:30, Jing Zhang wrote:
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 383df23514b9..87dd62516c8b 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -3464,6 +3464,51 @@ static long kvm_vcpu_ioctl(struct file *filp,
+> >               r = kvm_arch_vcpu_ioctl_set_fpu(vcpu, fpu);
+> >               break;
+> >       }
+> > +     case KVM_STATS_GET_INFO: {
+> > +             struct kvm_stats_info stats_info;
+> > +
+> > +             r = -EFAULT;
+> > +             stats_info.num_stats = VCPU_STAT_COUNT;
+> > +             if (copy_to_user(argp, &stats_info, sizeof(stats_info)))
+> > +                     goto out;
+> > +             r = 0;
+> > +             break;
+> > +     }
+> > +     case KVM_STATS_GET_NAMES: {
+> > +             struct kvm_stats_names stats_names;
+> > +
+> > +             r = -EFAULT;
+> > +             if (copy_from_user(&stats_names, argp, sizeof(stats_names)))
+> > +                     goto out;
+> > +             r = -EINVAL;
+> > +             if (stats_names.size < VCPU_STAT_COUNT * KVM_STATS_NAME_LEN)
+> > +                     goto out;
+> > +
+> > +             r = -EFAULT;
+> > +             if (copy_to_user(argp + sizeof(stats_names),
+> > +                             kvm_vcpu_stat_strings,
+> > +                             VCPU_STAT_COUNT * KVM_STATS_NAME_LEN))
+>
+> The only reason to separate the strings in patch 1 is to pass them here.
+>   But this is a poor API because it imposes a limit on the length of the
+> statistics, and makes that length part of the binary interface.
+>
+> I would prefer a completely different interface, where you have a file
+> descriptor that can be created and associated to a vCPU or VM (or even
+> to /dev/kvm).  Having a file descriptor is important because the fd can
+We are considering about how to create the file descriptor. It might be risky
+to create an extra fd for every vCPU. It will easily hit the fd limit for the
+process or the system for machines running a ton of small VMs.
+Looks like creating an extra file descriptor for every VM is a better option.
+And then we can check per vCPU stats through Ioctl of this VM fd by
+passing the vCPU index.
+What do you think?
+> be passed to a less-privileged process that takes care of gathering the
+> metrics
+>
+> The result of reading the file descriptor could be either ASCII or
+> binary.  IMO the real cost lies in opening and reading a multitude of
+> files rather than in the ASCII<->binary conversion.
+>
+> The format could be one of the following:
+>
+> * binary:
+>
+> 4 bytes flags (always zero)
+> 4 bytes number of statistics
+> 4 bytes offset of the first stat description
+> 4 bytes offset of the first stat value
+> stat descriptions:
+>    - 4 bytes for the type (for now always zero: uint64_t)
+>    - 4 bytes for the flags (for now always zero)
+>    - length of name
+>    - name
+> statistics in 64-bit format
+>
+> * text:
+>
+> stat1_name uint64 123
+> stat2_name uint64 456
+> ...
+>
+> What do you think?
+>
+> Paolo
+>
