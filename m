@@ -2,306 +2,114 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF96BC433E0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 11:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE4AC433E6
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 12:08:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7847264EDD
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 11:49:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E754064EE2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 12:08:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbhCOLtO (ORCPT
+        id S230169AbhCOMIA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Mar 2021 07:49:14 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45452 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229807AbhCOLso (ORCPT
+        Mon, 15 Mar 2021 08:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229870AbhCOMHr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Mar 2021 07:48:44 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12FBX7J4024632;
-        Mon, 15 Mar 2021 07:48:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=zymoGMQOrpEhA1PqgoaM0mJ4+2ravUjUzFQVn4TXh4c=;
- b=VjiKmlf1s4ShbGtn2GOlkooyMzRmouySy8e6ivNEuuxbK5m0DOPbnDXtsaPXLrPFNcDk
- JwQIX5oNNCx9Zyb5p9R9ZUHc0E1uZL55nYTO9VNpaII7zZWI/oWTXfQ09bVuLGyufEXZ
- eYtlQz41gyZ4z1QFPUpCfFCxmU/TJ1V1sTfSYL3C1yIzjsmHxUWAPrzf6+ofl/rgTZqk
- sDTSC/ruizdZy76JMrVxgHOXVoTx2U0J4lWLYN3okX7p9UrCciUySZj7yncL1hQ+cDCL
- 2iVkN9PKP9f0pl67IEKRT6ldI29Uzn9/PwhLZ8fVbO9lnwD70TExcga8GC+b5qDK+0r4 Dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 379sx915us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Mar 2021 07:48:39 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12FBXGFN025265;
-        Mon, 15 Mar 2021 07:48:39 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 379sx915ua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Mar 2021 07:48:38 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12FBgk4v011093;
-        Mon, 15 Mar 2021 11:48:37 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 378n18htkh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Mar 2021 11:48:37 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12FBmHuL24707480
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Mar 2021 11:48:17 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF70552067;
-        Mon, 15 Mar 2021 11:48:33 +0000 (GMT)
-Received: from pratiks-thinkpad.ibmuc.com (unknown [9.85.95.254])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9503B5204E;
-        Mon, 15 Mar 2021 11:48:31 +0000 (GMT)
-From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
-To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, shuah@kernel.org,
-        ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com,
-        psampat@linux.ibm.com
-Subject: [RFC 1/2] cpuidle: Extract IPI based and timer based wakeup latency from idle states
-Date:   Mon, 15 Mar 2021 17:18:26 +0530
-Message-Id: <20210315114827.46036-2-psampat@linux.ibm.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210315114827.46036-1-psampat@linux.ibm.com>
-References: <20210315114827.46036-1-psampat@linux.ibm.com>
+        Mon, 15 Mar 2021 08:07:47 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97206C06175F
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Mar 2021 05:07:46 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 18so56379135lff.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Mar 2021 05:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xcBEaoMgOUg6Oq+1NZ62LHPAUIVElSEob3K7B1GsgBA=;
+        b=fnukcSh6bz8KDNhtKbz34zCgeiqi2Wit0RLRnJO2jCJzPRTPlNg7l1ilMm5hOIYhgZ
+         4yFTgcNbi2hqFx01FWQwquRN5uLKXA/yb+J+PjomR69PnmiK4oG33+3c010SeyqY3b1V
+         Tj14GcgJ/xu+TmpjZDPgR48G+e1seHknp2rQPkBt1l9vOBwZUmaypRcFcwwVe11oUPrd
+         p2jR4PGu8G5H+noyCy8uUsmt2m4alcAI8kpq7Xv/8GztX8H/BcbPSY1CqtUxhsAYJpnr
+         0zoc3x3RZzudcIrlR6bKHnNcchzny8xqNiNxrPv5AO9oG3NvemR4g1kuDiKqmRnUuhtZ
+         F9KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xcBEaoMgOUg6Oq+1NZ62LHPAUIVElSEob3K7B1GsgBA=;
+        b=MO478uXWjz7DuOlyKiBWMoUHoN4j6gtYNyStNBSTa8N4Jx5ZFmG4+CC0UJlGrw3Slv
+         WpWmlm59L4E7FJMBDXQO107iX4TvryfIKLtBBiDuBxhmfYWt+VBoacTjmpGZJhFef86C
+         Rr+HeuRD6xji1+ykvjCGviV7YALlDmobIMeBPT0fl3ih12eJ66KzHrWHlXmDo+SVCaWv
+         osfyVhYt8bBA3tqG37pLjkzeXHA1Z8jP87uEkDh/XVNs05NqK+hpmDj+laD+dfSyvX3A
+         M1Y6QhBiV+RexjRb1zY7iOj793McJgYKsNlV8q97ce6Szbg5sADwJccGqLSP+kLB8Gvl
+         ozlg==
+X-Gm-Message-State: AOAM532LCmaohvoN7NzJ2rS4p9o1JvtrMrHcDY6Q0ESB/S5FxsFtaeBr
+        yaxKidYkX8VC47eDY9wuBgmh9w==
+X-Google-Smtp-Source: ABdhPJx7lPgJ8wy+Ez31fyuhgQCC28oY7wc9fb7gDEwMPYVgovdXw1VtMnh+D+uQSvEDn+jgeySKuQ==
+X-Received: by 2002:ac2:5d52:: with SMTP id w18mr7553649lfd.28.1615810065040;
+        Mon, 15 Mar 2021 05:07:45 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id y14sm2639094lfl.165.2021.03.15.05.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Mar 2021 05:07:44 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 7EFB910246E; Mon, 15 Mar 2021 15:07:48 +0300 (+03)
+Date:   Mon, 15 Mar 2021 15:07:48 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mika Penttila <mika.penttila@nextfour.com>
+Subject: Re: [PATCH v3] mm: huge_memory: a new debugfs interface for
+ splitting THP tests.
+Message-ID: <20210315120748.nuw5vk6grmfacact@box>
+References: <20210312005712.116888-1-zi.yan@sent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-15_03:2021-03-15,2021-03-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
- phishscore=0 spamscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103150081
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210312005712.116888-1-zi.yan@sent.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a mechanism to fire directed IPIs from a specified source CPU
-to a specified target CPU and measure the difference in time incurred on
-wakeup.
+On Thu, Mar 11, 2021 at 07:57:12PM -0500, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> We do not have a direct user interface of splitting the compound page
+> backing a THP
 
-Also, introduce a mechanism to queue a HR timer on a specified CPU and
-subsequently measure the time taken to wakeup the CPU.
+But we do. You expand it.
 
-Finally define a simple debugfs interface to control the knobs to fire
-the IPI and Timer events on specified CPU and view their incurred idle
-wakeup latencies.
+> and there is no need unless we want to expose the THP
+> implementation details to users. Make <debugfs>/split_huge_pages accept
+> a new command to do that.
+> 
+> By writing "<pid>,<vaddr_start>,<vaddr_end>" to
+> <debugfs>/split_huge_pages, THPs within the given virtual address range
+> from the process with the given pid are split. It is used to test
+> split_huge_page function. In addition, a selftest program is added to
+> tools/testing/selftests/vm to utilize the interface by splitting
+> PMD THPs and PTE-mapped THPs.
+> 
 
-Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
----
- drivers/cpuidle/Makefile               |   1 +
- drivers/cpuidle/test-cpuidle_latency.c | 157 +++++++++++++++++++++++++
- lib/Kconfig.debug                      |  10 ++
- 3 files changed, 168 insertions(+)
- create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+Okay, makes sense.
 
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index 26bbc5e74123..3b4ee06a9164 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -8,6 +8,7 @@ obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
- obj-$(CONFIG_DT_IDLE_STATES)		  += dt_idle_states.o
- obj-$(CONFIG_ARCH_HAS_CPU_RELAX)	  += poll_state.o
- obj-$(CONFIG_HALTPOLL_CPUIDLE)		  += cpuidle-haltpoll.o
-+obj-$(CONFIG_IDLE_LATENCY_SELFTEST)	  += test-cpuidle_latency.o
- 
- ##################################################################################
- # ARM SoC drivers
-diff --git a/drivers/cpuidle/test-cpuidle_latency.c b/drivers/cpuidle/test-cpuidle_latency.c
-new file mode 100644
-index 000000000000..f138011ac225
---- /dev/null
-+++ b/drivers/cpuidle/test-cpuidle_latency.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Module-based API test facility for cpuidle latency using IPIs and timers
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+/*
-+ * IPI based wakeup latencies
-+ * Measure time taken for a CPU to wakeup on a IPI sent from another CPU
-+ * The latency measured also includes the latency of sending the IPI
-+ */
-+struct latency {
-+	unsigned int src_cpu;
-+	unsigned int dest_cpu;
-+	ktime_t time_start;
-+	ktime_t time_end;
-+	u64 latency_ns;
-+} ipi_wakeup;
-+
-+static void measure_latency(void *info)
-+{
-+	struct latency *v;
-+	ktime_t time_diff;
-+
-+	v = (struct latency *)info;
-+	v->time_end = ktime_get();
-+	time_diff = ktime_sub(v->time_end, v->time_start);
-+	v->latency_ns = ktime_to_ns(time_diff);
-+}
-+
-+void run_smp_call_function_test(unsigned int cpu)
-+{
-+	ipi_wakeup.src_cpu = smp_processor_id();
-+	ipi_wakeup.dest_cpu = cpu;
-+	ipi_wakeup.time_start = ktime_get();
-+	smp_call_function_single(cpu, measure_latency, &ipi_wakeup, 1);
-+}
-+
-+/*
-+ * Timer based wakeup latencies
-+ * Measure time taken for a CPU to wakeup on a timer being armed and fired
-+ */
-+struct timer_data {
-+	unsigned int src_cpu;
-+	u64 timeout;
-+	ktime_t time_start;
-+	ktime_t time_end;
-+	struct hrtimer timer;
-+	u64 timeout_diff_ns;
-+} timer_wakeup;
-+
-+static enum hrtimer_restart timer_called(struct hrtimer *hrtimer)
-+{
-+	struct timer_data *w;
-+	ktime_t time_diff;
-+
-+	w = container_of(hrtimer, struct timer_data, timer);
-+	w->time_end = ktime_get();
-+
-+	time_diff = ktime_sub(w->time_end, w->time_start);
-+	time_diff = ktime_sub(time_diff, ns_to_ktime(w->timeout));
-+	w->timeout_diff_ns = ktime_to_ns(time_diff);
-+	return HRTIMER_NORESTART;
-+}
-+
-+static void run_timer_test(unsigned int ns)
-+{
-+	hrtimer_init(&timer_wakeup.timer, CLOCK_MONOTONIC,
-+		     HRTIMER_MODE_REL);
-+	timer_wakeup.timer.function = timer_called;
-+	timer_wakeup.src_cpu = smp_processor_id();
-+	timer_wakeup.timeout = ns;
-+	timer_wakeup.time_start = ktime_get();
-+
-+	hrtimer_start(&timer_wakeup.timer, ns_to_ktime(ns),
-+		      HRTIMER_MODE_REL_PINNED);
-+}
-+
-+static struct dentry *dir;
-+
-+static int cpu_read_op(void *data, u64 *dest_cpu)
-+{
-+	*dest_cpu = ipi_wakeup.dest_cpu;
-+	return 0;
-+}
-+
-+static int cpu_write_op(void *data, u64 value)
-+{
-+	run_smp_call_function_test(value);
-+	return 0;
-+}
-+DEFINE_SIMPLE_ATTRIBUTE(ipi_ops, cpu_read_op, cpu_write_op, "%llu\n");
-+
-+static int timeout_read_op(void *data, u64 *timeout)
-+{
-+	*timeout = timer_wakeup.timeout;
-+	return 0;
-+}
-+
-+static int timeout_write_op(void *data, u64 value)
-+{
-+	run_timer_test(value);
-+	return 0;
-+}
-+DEFINE_SIMPLE_ATTRIBUTE(timeout_ops, timeout_read_op, timeout_write_op, "%llu\n");
-+
-+static int __init latency_init(void)
-+{
-+	struct dentry *temp;
-+
-+	dir = debugfs_create_dir("latency_test", 0);
-+	if (!dir) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/latency_test\n");
-+		return -1;
-+	}
-+	temp = debugfs_create_file("ipi_cpu_dest",
-+				   0666,
-+				   dir,
-+				   NULL,
-+				   &ipi_ops);
-+	if (!temp) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/ipi_cpu_dest\n");
-+		return -1;
-+	}
-+	debugfs_create_u64("ipi_latency_ns", 0444, dir, &ipi_wakeup.latency_ns);
-+	debugfs_create_u32("ipi_cpu_src", 0444, dir, &ipi_wakeup.src_cpu);
-+
-+	temp = debugfs_create_file("timeout_expected_ns",
-+				   0666,
-+				   dir,
-+				   NULL,
-+				   &timeout_ops);
-+	if (!temp) {
-+		pr_alert("latency_test: failed to create /sys/kernel/debug/timeout_expected_ns\n");
-+		return -1;
-+	}
-+	debugfs_create_u64("timeout_diff_ns", 0444, dir, &timer_wakeup.timeout_diff_ns);
-+	debugfs_create_u32("timeout_cpu_src", 0444, dir, &timer_wakeup.src_cpu);
-+	pr_info("Latency Test module loaded\n");
-+	return 0;
-+}
-+
-+static void __exit latency_cleanup(void)
-+{
-+	pr_info("Cleaning up Latency Test module.\n");
-+	debugfs_remove_recursive(dir);
-+}
-+
-+module_init(latency_init);
-+module_exit(latency_cleanup);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("IBM Corporation");
-+MODULE_DESCRIPTION("Measuring idle latency for IPIs and Timers");
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 7937265ef879..3d6baea16913 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1467,6 +1467,16 @@ config DEBUG_KOBJECT
- 	  If you say Y here, some extra kobject debugging messages will be sent
- 	  to the syslog.
- 
-+config IDLE_LATENCY_SELFTEST
-+	tristate "Cpuidle latency selftests"
-+	depends on CPU_IDLE
-+	help
-+	  This option provides a kernel module that runs tests using the IPI and
-+	  timers to measure latency.
-+
-+	  Say M if you want these self tests to build as a module.
-+	  Say N if you are unsure.
-+
- config DEBUG_KOBJECT_RELEASE
- 	bool "kobject release debugging"
- 	depends on DEBUG_OBJECTS_TIMERS
+But it doesn't cover non-mapped THPs. tmpfs may have file backed by THP
+that mapped nowhere. Do we want to cover this case too?
+
+Maybe have PID:<pid>,<vaddr_start>,<vaddr_end> and
+FILE:<path>,<off_start>,<off_end> ?
+
 -- 
-2.17.1
-
+ Kirill A. Shutemov
