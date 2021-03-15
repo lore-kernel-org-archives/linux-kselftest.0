@@ -7,60 +7,61 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33DC6C433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 07:51:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE4AC433E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 08:08:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0D0064E67
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 07:51:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 59A2A64E38
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Mar 2021 08:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbhCOHue (ORCPT
+        id S230150AbhCOIIZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Mar 2021 03:50:34 -0400
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:56681 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230260AbhCOHuP (ORCPT
+        Mon, 15 Mar 2021 04:08:25 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:55787 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229924AbhCOIHx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Mar 2021 03:50:15 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0URx1vzQ_1615794607;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0URx1vzQ_1615794607)
+        Mon, 15 Mar 2021 04:07:53 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0URxYg3w_1615795656;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0URxYg3w_1615795656)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 15 Mar 2021 15:50:13 +0800
+          Mon, 15 Mar 2021 16:07:51 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     john.stultz@linaro.org
+Cc:     tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] tools/testing/selftests/vm/: fix warning comparing pointer to 0
-Date:   Mon, 15 Mar 2021 15:50:06 +0800
-Message-Id: <1615794606-114484-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] selftests: timers: remove unneeded semicolon
+Date:   Mon, 15 Mar 2021 16:07:35 +0800
+Message-Id: <1615795655-5560-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following coccicheck warning:
+Fix the following coccicheck warnings:
 
-./tools/testing/selftests/vm/map_populate.c:82:16-17: WARNING comparing
-pointer to 0.
+./tools/testing/selftests/timers/inconsistency-check.c:75:2-3: Unneeded
+semicolon.
 
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- tools/testing/selftests/vm/map_populate.c | 2 +-
+ tools/testing/selftests/timers/inconsistency-check.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/map_populate.c b/tools/testing/selftests/vm/map_populate.c
-index 6b8aeaa..fb11b9e 100644
---- a/tools/testing/selftests/vm/map_populate.c
-+++ b/tools/testing/selftests/vm/map_populate.c
-@@ -79,7 +79,7 @@ int main(int argc, char **argv)
- 	unsigned long *smap;
+diff --git a/tools/testing/selftests/timers/inconsistency-check.c b/tools/testing/selftests/timers/inconsistency-check.c
+index 022d3ff..e6756d9 100644
+--- a/tools/testing/selftests/timers/inconsistency-check.c
++++ b/tools/testing/selftests/timers/inconsistency-check.c
+@@ -72,7 +72,7 @@ char *clockstring(int clockid)
+ 		return "CLOCK_BOOTTIME_ALARM";
+ 	case CLOCK_TAI:
+ 		return "CLOCK_TAI";
+-	};
++	}
+ 	return "UNKNOWN_CLOCKID";
+ }
  
- 	ftmp = tmpfile();
--	BUG_ON(ftmp == 0, "tmpfile()");
-+	BUG_ON(!ftmp, "tmpfile()");
- 
- 	ret = ftruncate(fileno(ftmp), MMAP_SZ);
- 	BUG_ON(ret, "ftruncate()");
 -- 
 1.8.3.1
 
