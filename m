@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F89C4160E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 02:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 820B6C2BA83
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 02:25:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6626D64FB6
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 02:25:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51D7964F40
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 02:25:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbhCQCZF (ORCPT
+        id S231189AbhCQCZI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Mar 2021 22:25:05 -0400
-Received: from mga01.intel.com ([192.55.52.88]:55653 "EHLO mga01.intel.com"
+        Tue, 16 Mar 2021 22:25:08 -0400
+Received: from mga01.intel.com ([192.55.52.88]:55651 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230464AbhCQCYg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Mar 2021 22:24:36 -0400
-IronPort-SDR: j7BJskKbx5syTaRopnO6XqJx4vgcxNujdmi2y+T+BFcRRsju/uA0ejCQmnjaOcJNvQCGKIOb92
- NUpcBXSoSPHQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209328721"
+        id S230473AbhCQCYh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Mar 2021 22:24:37 -0400
+IronPort-SDR: Mg3cQk5YX/m+Fp/NTDaQqb+6WZJk/3wP1PbESv0nEf27FD5RSEky81/EBBoS/11Vc7DUimhPw4
+ fWZdaRXnQ0OA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209328723"
 X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="209328721"
+   d="scan'208";a="209328723"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 19:24:34 -0700
-IronPort-SDR: JwA1GPzqCVw5brevRPuPjw0ErIFdvolvI9MiXHVsp4dHJyG+V26yGowz89gvNcZyXCzfmVUt6K
- 6J8ntjgNLvLQ==
+IronPort-SDR: N8Ph0fm6O1SYs14tyyvo67YPGtFxvE31MOFKCKc+KWMH8hF+pxo24EQlPK6EkmQZzte+OZDzAs
+ oM5PsfRDqH5w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
-   d="scan'208";a="440290292"
+   d="scan'208";a="440290300"
 Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
   by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2021 19:24:34 -0700
 From:   Fenghua Yu <fenghua.yu@intel.com>
@@ -41,10 +41,11 @@ To:     "Shuah Khan" <shuah@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
         "Ravi V Shankar" <ravi.v.shankar@intel.com>
 Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v6 18/21] selftests/resctrl: Fix unmount resctrl FS
-Date:   Wed, 17 Mar 2021 02:22:52 +0000
-Message-Id: <20210317022255.2536745-19-fenghua.yu@intel.com>
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v6 20/21] selftests/resctrl: Fix checking for < 0 for unsigned values
+Date:   Wed, 17 Mar 2021 02:22:54 +0000
+Message-Id: <20210317022255.2536745-21-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210317022255.2536745-1-fenghua.yu@intel.com>
 References: <20210317022255.2536745-1-fenghua.yu@intel.com>
@@ -54,61 +55,134 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-umount_resctrlfs() directly attempts to unmount resctrl file system without
-checking if resctrl FS is already mounted or not. It returns 0 on success
-and on failure it prints an error message and returns an error status.
-Calling umount_resctrlfs() when resctrl FS isn't mounted will return an
-error status.
+Dan reported following static checker warnings
 
-There could be situations where-in the caller might not know if resctrl
-FS is already mounted or not and the caller might still want to unmount
-resctrl FS if it's already mounted (For example during teardown).
+tools/testing/selftests/resctrl/resctrl_val.c:545 measure_vals()
+warn: 'bw_imc' unsigned <= 0
 
-To support above use cases, change umount_resctrlfs() such that it now
-first checks if resctrl FS is already mounted or not and unmounts resctrl
-FS only if it's already mounted.
+tools/testing/selftests/resctrl/resctrl_val.c:549 measure_vals()
+warn: 'bw_resc_end' unsigned <= 0
 
-unmount resctrl FS upon exit. For example, running only mba test on a
-Broadwell (BDW) machine (MBA isn't supported on BDW CPU).
+These warnings are reported because
+1. measure_vals() declares 'bw_imc' and 'bw_resc_end' as unsigned long
+   variables
+2. Return value of get_mem_bw_imc() and get_mem_bw_resctrl() are assigned
+   to 'bw_imc' and 'bw_resc_end' respectively
+3. The returned values are checked for <= 0 to see if the calls failed
 
-This happens because validate_resctrl_feature_request() would mount resctrl
-FS to check if mba is enabled on the platform or not and finds that the H/W
-doesn't support mba and hence will return false to run_mba_test(). This in
-turn makes the main() function return without unmounting resctrl FS.
+Checking for < 0 for an unsigned value doesn't make any sense.
 
+Fix this issue by changing the implementation of get_mem_bw_imc() and
+get_mem_bw_resctrl() such that they now accept reference to a variable
+and set the variable appropriately upon success and return 0, else return
+< 0 on error.
+
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Tested-by: Babu Moger <babu.moger@amd.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl_tests.c | 2 ++
- tools/testing/selftests/resctrl/resctrlfs.c     | 3 +++
- 2 files changed, 5 insertions(+)
+ tools/testing/selftests/resctrl/resctrl_val.c | 41 +++++++++++--------
+ 1 file changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index fb246bc41f47..f51b5fc066a3 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -253,5 +253,7 @@ int main(int argc, char **argv)
- 	if (cat_test)
- 		run_cat_test(cpu_no, no_of_bits);
- 
-+	umount_resctrlfs();
-+
- 	return ksft_exit_pass();
- }
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 26563175acf6..ade5f2b8b843 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -82,6 +82,9 @@ int remount_resctrlfs(bool mum_resctrlfs)
- 
- int umount_resctrlfs(void)
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 20d457c47ded..95224345c78e 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -300,9 +300,9 @@ static int initialize_mem_bw_imc(void)
+  * Memory B/W utilized by a process on a socket can be calculated using
+  * iMC counters. Perf events are used to read these counters.
+  *
+- * Return: >= 0 on success. < 0 on failure.
++ * Return: = 0 on success. < 0 on failure.
+  */
+-static float get_mem_bw_imc(int cpu_no, char *bw_report)
++static int get_mem_bw_imc(int cpu_no, char *bw_report, float *bw_imc)
  {
-+	if (find_resctrl_mount(NULL))
-+		return 0;
-+
- 	if (umount(RESCTRL_PATH)) {
- 		perror("# Unable to umount resctrl");
+ 	float reads, writes, of_mul_read, of_mul_write;
+ 	int imc, j, ret;
+@@ -373,13 +373,18 @@ static float get_mem_bw_imc(int cpu_no, char *bw_report)
+ 		close(imc_counters_config[imc][WRITE].fd);
+ 	}
  
+-	if (strcmp(bw_report, "reads") == 0)
+-		return reads;
++	if (strcmp(bw_report, "reads") == 0) {
++		*bw_imc = reads;
++		return 0;
++	}
+ 
+-	if (strcmp(bw_report, "writes") == 0)
+-		return writes;
++	if (strcmp(bw_report, "writes") == 0) {
++		*bw_imc = writes;
++		return 0;
++	}
+ 
+-	return (reads + writes);
++	*bw_imc = reads + writes;
++	return 0;
+ }
+ 
+ void set_mbm_path(const char *ctrlgrp, const char *mongrp, int resource_id)
+@@ -438,9 +443,8 @@ static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
+  * 1. If con_mon grp is given, then read from it
+  * 2. If con_mon grp is not given, then read from root con_mon grp
+  */
+-static unsigned long get_mem_bw_resctrl(void)
++static int get_mem_bw_resctrl(unsigned long *mbm_total)
+ {
+-	unsigned long mbm_total = 0;
+ 	FILE *fp;
+ 
+ 	fp = fopen(mbm_total_path, "r");
+@@ -449,7 +453,7 @@ static unsigned long get_mem_bw_resctrl(void)
+ 
+ 		return -1;
+ 	}
+-	if (fscanf(fp, "%lu", &mbm_total) <= 0) {
++	if (fscanf(fp, "%lu", mbm_total) <= 0) {
+ 		perror("Could not get mbm local bytes");
+ 		fclose(fp);
+ 
+@@ -457,7 +461,7 @@ static unsigned long get_mem_bw_resctrl(void)
+ 	}
+ 	fclose(fp);
+ 
+-	return mbm_total;
++	return 0;
+ }
+ 
+ pid_t bm_pid, ppid;
+@@ -549,7 +553,8 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ static int
+ measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
+ {
+-	unsigned long bw_imc, bw_resc, bw_resc_end;
++	unsigned long bw_resc, bw_resc_end;
++	float bw_imc;
+ 	int ret;
+ 
+ 	/*
+@@ -559,13 +564,13 @@ measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
+ 	 * Compare the two values to validate resctrl value.
+ 	 * It takes 1sec to measure the data.
+ 	 */
+-	bw_imc = get_mem_bw_imc(param->cpu_no, param->bw_report);
+-	if (bw_imc <= 0)
+-		return bw_imc;
++	ret = get_mem_bw_imc(param->cpu_no, param->bw_report, &bw_imc);
++	if (ret < 0)
++		return ret;
+ 
+-	bw_resc_end = get_mem_bw_resctrl();
+-	if (bw_resc_end <= 0)
+-		return bw_resc_end;
++	ret = get_mem_bw_resctrl(&bw_resc_end);
++	if (ret < 0)
++		return ret;
+ 
+ 	bw_resc = (bw_resc_end - *bw_resc_start) / MB;
+ 	ret = print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
 -- 
 2.31.0
 
