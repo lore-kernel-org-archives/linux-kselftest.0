@@ -2,82 +2,88 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDD77C46461
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 00:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 455FFC433E0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 02:25:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8E5864FD2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 00:59:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0916F64F9B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Mar 2021 02:25:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbhCQA6s (ORCPT
+        id S230372AbhCQCY7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Mar 2021 20:58:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36002 "EHLO mail.kernel.org"
+        Tue, 16 Mar 2021 22:24:59 -0400
+Received: from mga01.intel.com ([192.55.52.88]:55651 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231386AbhCQA5p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Mar 2021 20:57:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E626E64FE3;
-        Wed, 17 Mar 2021 00:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615942659;
-        bh=loSHwK2MBX8jk4o2QA+i+HmRZZgkfxNoedrsqCKiIZ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WRCB2a5JyblMnXMCZAB9jcifpWCSQqKTT0mPp5RC1WyP2OiK5KvTD6PtLa8f9XrtY
-         fRdLgcTmhmYkF1zs1ooZpD4qktFMkDPFb0pyYaxf7JkOY8a4olCC+Kc6Wrv1Gn43FT
-         0hRfkNapG7e0FGP3pgISGhKznRLAg72pEWWMaglO2ObSayLtVHfrFkzst4ESPEvH+P
-         Ex2LFfVt1I79dUy4P+OeuyBv8luSHsItc6Q1AUDzpFU8hc3AHq6KkaXhJmMt8a2QHr
-         D69DHO0NoXAUGZhh+3R/MjBC9ZS1U11coGTLFKnqnDKWoQu30tdgmMiVtmrM+dDsB8
-         jp11C5OhqxzBA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 37/54] kselftest: arm64: Fix exit code of sve-ptrace
-Date:   Tue, 16 Mar 2021 20:56:36 -0400
-Message-Id: <20210317005654.724862-37-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210317005654.724862-1-sashal@kernel.org>
-References: <20210317005654.724862-1-sashal@kernel.org>
+        id S230447AbhCQCYf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 16 Mar 2021 22:24:35 -0400
+IronPort-SDR: N8ppl0hGNdrUAP2OLH2LMBJKvMTXfUEahyyp3vxXIo8hIf7l2Nbqn3Up/T7dTa9gTm6znPIvx4
+ mVjyUzALNPMw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9925"; a="209328714"
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="209328714"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2021 19:24:34 -0700
+IronPort-SDR: wrNnEvXtVwQ+iCpcWNMKOUAJPTPK0TKperYPaQMJxc0PeWjS0QovA9RrrxAIvm4olMV9ZtfBFx
+ 6+8RyIosB7aQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,254,1610438400"; 
+   d="scan'208";a="440290266"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2021 19:24:34 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Shuah Khan" <shuah@kernel.org>, "Tony Luck" <tony.luck@intel.com>,
+        "Reinette Chatre" <reinette.chatre@intel.com>,
+        "Babu Moger" <babu.moger@amd.com>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>
+Cc:     "linux-kselftest" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v6 10/21] selftests/resctrl: Fix a printed message
+Date:   Wed, 17 Mar 2021 02:22:44 +0000
+Message-Id: <20210317022255.2536745-11-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210317022255.2536745-1-fenghua.yu@intel.com>
+References: <20210317022255.2536745-1-fenghua.yu@intel.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Reinette Chatre <reinette.chatre@intel.com>
 
-[ Upstream commit 07e644885bf6727a48db109fad053cb43f3c9859 ]
+Add a missing newline to the printed help text to improve readability.
 
-We track if sve-ptrace encountered a failure in a variable but don't
-actually use that value when we exit the program, do so.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20210309190304.39169-1-broonie@kernel.org
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Tested-by: Babu Moger <babu.moger@amd.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Change Log:
+v5:
+- Remove the "notok" fix part because the API change fixes it already.
 
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index b2282be6f938..612d3899614a 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -332,5 +332,5 @@ int main(void)
- 
- 	ksft_print_cnts();
- 
--	return 0;
-+	return ret;
- }
+ tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index ccc1d6987cc6..355bd28b996a 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -37,8 +37,8 @@ void detect_amd(void)
+ static void cmd_help(void)
+ {
+ 	printf("usage: resctrl_tests [-h] [-b \"benchmark_cmd [options]\"] [-t test list] [-n no_of_bits]\n");
+-	printf("\t-b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CMT");
+-	printf("\t default benchmark is builtin fill_buf\n");
++	printf("\t-b benchmark_cmd [options]: run specified benchmark for MBM, MBA and CMT\n");
++	printf("\t   default benchmark is builtin fill_buf\n");
+ 	printf("\t-t test list: run tests specified in the test list, ");
+ 	printf("e.g. -t mbm, mba, cmt, cat\n");
+ 	printf("\t-n no_of_bits: run cache tests using specified no of bits in cache bit mask\n");
 -- 
-2.30.1
+2.31.0
 
