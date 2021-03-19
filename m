@@ -4,28 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D62DBC433E1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3DC9C433E2
 	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 16:54:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B3AE961963
+	by mail.kernel.org (Postfix) with ESMTP id DA82E61987
 	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 16:54:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbhCSQyF (ORCPT
+        id S230063AbhCSQyH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Mar 2021 12:54:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:56802 "EHLO foss.arm.com"
+        Fri, 19 Mar 2021 12:54:07 -0400
+Received: from foss.arm.com ([217.140.110.172]:56850 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230051AbhCSQxo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:53:44 -0400
+        id S229936AbhCSQxv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 12:53:51 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49F52ED1;
-        Fri, 19 Mar 2021 09:53:44 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72AAEED1;
+        Fri, 19 Mar 2021 09:53:51 -0700 (PDT)
 Received: from e104803-lin.cambridge.arm.com (e104803-lin.cambridge.arm.com [10.1.197.64])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B68E03F70D;
-        Fri, 19 Mar 2021 09:53:42 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39D0A3F70D;
+        Fri, 19 Mar 2021 09:53:50 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -34,13 +34,10 @@ Cc:     Amit Daniel Kachhap <amit.kachhap@arm.com>,
         Mark Brown <broonie@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH 01/11] kselftest/arm64: mte: Fix compilation with native compiler
-Date:   Fri, 19 Mar 2021 16:53:24 +0000
-Message-Id: <20210319165334.29213-2-andre.przywara@arm.com>
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 06/11] kselftest/arm64: mte: Fix MTE feature detection
+Date:   Fri, 19 Mar 2021 16:53:29 +0000
+Message-Id: <20210319165334.29213-7-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
 References: <20210319165334.29213-1-andre.przywara@arm.com>
@@ -48,44 +45,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The mte selftest Makefile contains a check for GCC, to add the memtag
--march flag to the compiler options. This check fails if the compiler
-is not explicitly specified, so reverts to the standard "cc", in which
-case --version doesn't mention the "gcc" string we match against:
-$ cc --version | head -n 1
-cc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0
+To check whether the CPU and kernel support the MTE features we want
+to test, we use an (emulated) CPU ID register read. However we only
+check against a very particular feature version (0b0010), even though
+the ARM ARM promises ID register features to be backwards compatible.
 
-This will not add the -march switch to the command line, so compilation
-fails:
-mte_helper.S: Assembler messages:
-mte_helper.S:25: Error: selected processor does not support `irg x0,x0,xzr'
-mte_helper.S:38: Error: selected processor does not support `gmi x1,x0,xzr'
-...
+While this could be fixed by using ">=" instead of "==", we should
+actually use the explicit HWCAP2_MTE hardware capability, exposed by the
+kernel via the ELF auxiliary vectors.
 
-Actually clang accepts the same -march option as well, so we can just
-drop this check and add this unconditionally to the command line, to avoid
-any future issues with this check altogether (gcc actually prints
-basename(argv[0]) when called with --version).
+That moves this responsibility to the kernel, and fixes running the
+tests on machines with FEAT_MTE3 capability.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 ---
- tools/testing/selftests/arm64/mte/Makefile | 2 --
- 1 file changed, 2 deletions(-)
+ tools/testing/selftests/arm64/mte/mte_common_util.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/mte/Makefile b/tools/testing/selftests/arm64/mte/Makefile
-index 0b3af552632a..df15d44aeb8d 100644
---- a/tools/testing/selftests/arm64/mte/Makefile
-+++ b/tools/testing/selftests/arm64/mte/Makefile
-@@ -6,9 +6,7 @@ SRCS := $(filter-out mte_common_util.c,$(wildcard *.c))
- PROGS := $(patsubst %.c,%,$(SRCS))
+diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
+index 4e887dad762d..aa8a8a6b8b6d 100644
+--- a/tools/testing/selftests/arm64/mte/mte_common_util.c
++++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
+@@ -291,22 +291,13 @@ int mte_switch_mode(int mte_option, unsigned long incl_mask)
+ 	return 0;
+ }
  
- #Add mte compiler option
--ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep gcc),)
- CFLAGS += -march=armv8.5-a+memtag
--endif
+-#define ID_AA64PFR1_MTE_SHIFT		8
+-#define ID_AA64PFR1_MTE			2
+-
+ int mte_default_setup(void)
+ {
+-	unsigned long hwcaps = getauxval(AT_HWCAP);
++	unsigned long hwcaps2 = getauxval(AT_HWCAP2);
+ 	unsigned long en = 0;
+ 	int ret;
  
- #check if the compiler works well
- mte_cc_support := $(shell if ($(CC) $(CFLAGS) -E -x c /dev/null -o /dev/null 2>&1) then echo "1"; fi)
+-	if (!(hwcaps & HWCAP_CPUID)) {
+-		ksft_print_msg("FAIL: CPUID registers unavailable\n");
+-		return KSFT_FAIL;
+-	}
+-	/* Read ID_AA64PFR1_EL1 register */
+-	asm volatile("mrs %0, id_aa64pfr1_el1" : "=r"(hwcaps) : : "memory");
+-	if (((hwcaps >> ID_AA64PFR1_MTE_SHIFT) & MT_TAG_MASK) != ID_AA64PFR1_MTE) {
++	if (!(hwcaps2 & HWCAP2_MTE)) {
+ 		ksft_print_msg("FAIL: MTE features unavailable\n");
+ 		return KSFT_SKIP;
+ 	}
 -- 
 2.17.5
 
