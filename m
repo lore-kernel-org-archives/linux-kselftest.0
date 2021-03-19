@@ -2,76 +2,91 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1D5FC433EC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 16:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25634C433C1
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 17:13:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B49D61984
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 16:54:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4D236196F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 17:13:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbhCSQyH (ORCPT
+        id S229949AbhCSRNZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Mar 2021 12:54:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:56860 "EHLO foss.arm.com"
+        Fri, 19 Mar 2021 13:13:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230092AbhCSQxx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:53:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC71F101E;
-        Fri, 19 Mar 2021 09:53:52 -0700 (PDT)
-Received: from e104803-lin.cambridge.arm.com (e104803-lin.cambridge.arm.com [10.1.197.64])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A41BB3F70D;
-        Fri, 19 Mar 2021 09:53:51 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Will Deacon <will@kernel.org>,
+        id S230047AbhCSRNA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 13:13:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B09B36191E;
+        Fri, 19 Mar 2021 17:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616173980;
+        bh=uDhMMbrq9my6cPt0LQ0nvw3mts2ZTsfmJd5fIsqnNUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CQuP/rkNNhpR6bBvaP9CzRE66yWr6NfTvEZRFougZJ8n6q0S0bKXAKZeY+3ltkwnB
+         MnzJj7R6BsJmUnW3Fm46Hac8yMqerFdOPkF58lGUqmLYFGrczvRKQg9mNK8sFsURlO
+         cG0OovaHjv/Pg97DnWZWca+67FeMrMSz7DsNWcQNBcRMY0uHOyePHnzOsLoD7TU0om
+         aL9vbDNCdYpZtBqLWxz00toIasUP7cL684U2PkUgOCb0nyH2WHH0cKgOTLbT95jnoi
+         jTSr/eayK6tn3LBphwJUEOjAGH9nz3vJFGApa6+nkJVY99BUH4UKgt9p1X/EvISdxg
+         iiBvbWbRfEZRQ==
+Date:   Fri, 19 Mar 2021 17:12:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Mark Brown <broonie@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 07/11] kselftest/arm64: mte: Use cross-compiler if specified
-Date:   Fri, 19 Mar 2021 16:53:30 +0000
-Message-Id: <20210319165334.29213-8-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.17.5
-In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
+        linux-kselftest@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH 00/11] kselftest/arm64: mte: Fix feature detection and
+ compilation
+Message-ID: <20210319171256.GJ5619@sirena.org.uk>
 References: <20210319165334.29213-1-andre.przywara@arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LQAwcd5tHl0Qlnzi"
+Content-Disposition: inline
+In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
+X-Cookie: No purchase necessary.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-At the moment we either need to provide CC explicitly, or use a native
-machine to get the ARM64 MTE selftest compiled.
 
-It seems useful to use the same (cross-)compiler as we use for the
-kernel, so copy the recipe we use in the pauth selftest.
+--LQAwcd5tHl0Qlnzi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- tools/testing/selftests/arm64/mte/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+On Fri, Mar 19, 2021 at 04:53:23PM +0000, Andre Przywara wrote:
+> When trying to run the arm64 MTE (Memory Tagging Extension) selftests
+> on a model with the new FEAT_MTE3 capability, the MTE feature detection
+> failed, because it was overzealously checking for one exact feature
+> version only (0b0010). Trying to fix that (patch 06/11) led me into the
+> rabbit hole of userland tool compilation, which triggered patches
 
-diff --git a/tools/testing/selftests/arm64/mte/Makefile b/tools/testing/selftests/arm64/mte/Makefile
-index 90aadd86fa0d..fa282e5f2069 100644
---- a/tools/testing/selftests/arm64/mte/Makefile
-+++ b/tools/testing/selftests/arm64/mte/Makefile
-@@ -1,6 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (C) 2020 ARM Limited
- 
-+# preserve CC value from top level Makefile
-+ifeq ($(CC),cc)
-+CC := $(CROSS_COMPILE)gcc
-+endif
-+
- CFLAGS += -std=gnu99 -I. -pthread
- LDFLAGS += -pthread
- SRCS := $(filter-out mte_common_util.c,$(wildcard *.c))
--- 
-2.17.5
+Reviewed-by: Mark Brown <broone@kernel.org>
 
+--LQAwcd5tHl0Qlnzi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBU25cACgkQJNaLcl1U
+h9CEdwf3YoRRl30t3x5bn0WGArLP2mi6Ooy91v0UBGn8SFscluaqqoT/iW0j+fo9
+XgYlbrtm3Ebom03v+noCm5DxfhoKHv6WY2Zia1esAcx6DR6Jug+A2L0bThyv0F/Q
+KwSMs/u8hoonRB3D/TObp1bQBolcrQpxpMq1uuAqLp4Ri25OgEFhpeCs6r1ZLRrh
+SGGcQ2/5At6EBSOY1QOD4S9x9HIA9bzwy4x+67913KMMlmG81QXDSg6H1z8QhqgJ
+3fwkumsCXNHlWxUNSnekBWMfgXaqiCHj3rr+HnHf98i8r4tpwiZiCb1PhzBoVv/x
+6ALw7xjE/RT9etfrnZN2/1krg+TO
+=jCOF
+-----END PGP SIGNATURE-----
+
+--LQAwcd5tHl0Qlnzi--
