@@ -4,28 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38E4AC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68148C433E8
 	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 16:54:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2281D6198C
+	by mail.kernel.org (Postfix) with ESMTP id 502F76198F
 	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Mar 2021 16:54:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbhCSQyG (ORCPT
+        id S230092AbhCSQyI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Mar 2021 12:54:06 -0400
-Received: from foss.arm.com ([217.140.110.172]:56814 "EHLO foss.arm.com"
+        Fri, 19 Mar 2021 12:54:08 -0400
+Received: from foss.arm.com ([217.140.110.172]:56878 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230055AbhCSQxr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:53:47 -0400
+        id S230107AbhCSQx4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Mar 2021 12:53:56 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2D351063;
-        Fri, 19 Mar 2021 09:53:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14F84ED1;
+        Fri, 19 Mar 2021 09:53:56 -0700 (PDT)
 Received: from e104803-lin.cambridge.arm.com (e104803-lin.cambridge.arm.com [10.1.197.64])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B0743F70D;
-        Fri, 19 Mar 2021 09:53:44 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81C113F70D;
+        Fri, 19 Mar 2021 09:53:54 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Will Deacon <will@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -34,10 +34,13 @@ Cc:     Amit Daniel Kachhap <amit.kachhap@arm.com>,
         Mark Brown <broonie@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 02/11] kselftest/arm64: mte: Fix pthread linking
-Date:   Fri, 19 Mar 2021 16:53:25 +0000
-Message-Id: <20210319165334.29213-3-andre.przywara@arm.com>
+        linux-kselftest@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH 09/11] kselftest/arm64: mte: Makefile: Fix clang compilation
+Date:   Fri, 19 Mar 2021 16:53:32 +0000
+Message-Id: <20210319165334.29213-10-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20210319165334.29213-1-andre.przywara@arm.com>
 References: <20210319165334.29213-1-andre.przywara@arm.com>
@@ -45,39 +48,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The GCC manual suggests to use -pthread, when linking with the PThread
-library, also to add this switch to both the compilation and linking
-stages.
+When clang finds a header file on the command line, it wants to
+precompile that, which would end up in a separate output file.
+Specifying -o on that same command line collides with that effort, so
+the compiler complains:
 
-Do as the manual says, to fix compilation with Ubuntu's 20.04 toolchain,
-which was getting -lpthread too early on the command line:
-------------
-/usr/bin/ld: /tmp/cc5zbo2A.o: in function `execute_test':
-tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c:86:
-	undefined reference to `pthread_create'
-/usr/bin/ld: tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c:90:
-	undefined reference to `pthread_join'
-------------
+clang: error: cannot specify -o when generating multiple output files
+
+Since we are not really after a precompiled header, just drop the header
+file from the command line, by removing it from the list of source
+files in the Makefile.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- tools/testing/selftests/arm64/mte/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/arm64/mte/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/arm64/mte/Makefile b/tools/testing/selftests/arm64/mte/Makefile
-index df15d44aeb8d..90aadd86fa0d 100644
+index e0d43cea3cd1..409e3e53d00a 100644
 --- a/tools/testing/selftests/arm64/mte/Makefile
 +++ b/tools/testing/selftests/arm64/mte/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (C) 2020 ARM Limited
+@@ -32,5 +32,5 @@ endif
+ include ../../lib.mk
  
--CFLAGS += -std=gnu99 -I. -lpthread
-+CFLAGS += -std=gnu99 -I. -pthread
-+LDFLAGS += -pthread
- SRCS := $(filter-out mte_common_util.c,$(wildcard *.c))
- PROGS := $(patsubst %.c,%,$(SRCS))
- 
+ ifeq ($(mte_cc_support),1)
+-$(TEST_GEN_PROGS): mte_common_util.c mte_common_util.h mte_helper.S
++$(TEST_GEN_PROGS): mte_common_util.c mte_helper.S
+ endif
 -- 
 2.17.5
 
