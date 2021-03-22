@@ -2,225 +2,378 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD30CC433DB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Mar 2021 18:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CE9DC433C1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Mar 2021 20:07:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C70D61990
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Mar 2021 18:33:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E4956198E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Mar 2021 20:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbhCVSdT (ORCPT
+        id S231551AbhCVUHM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 22 Mar 2021 14:33:19 -0400
-Received: from mout.gmx.net ([212.227.17.21]:53159 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231734AbhCVSc6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 14:32:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1616437935;
-        bh=a9Q8Zcnw/xf9sXWdpvtkD22X/toBDzx5VCNMGPqEsao=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=V+IEsbsg7pA8J46v3DI+dAtmCtV6lBWVzlRyw8QPDa9OwVA/xsKrEHq/ZG0KrPkHo
-         sDyi4LRHH2WuE1Y2Cs4A+qs3QVtSFQ8S7LqSf9t/vtvSoPk1iqTy5TpnCVG0bGhcWp
-         2W6e0vm15HHS1YDUsbcuaBwvhHpYVVrsZeZDPTmo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ubuntu ([83.52.229.153]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MiJVG-1lujlJ04dK-00fUtT; Mon, 22
- Mar 2021 19:32:15 +0100
-Date:   Mon, 22 Mar 2021 19:32:01 +0100
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     John Wood <john.wood@gmx.com>, Jann Horn <jannh@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
+        Mon, 22 Mar 2021 16:07:12 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:45689 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230358AbhCVUGg (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Mar 2021 16:06:36 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 209AA5803A5;
+        Mon, 22 Mar 2021 16:06:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 22 Mar 2021 16:06:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
+        :mime-version:content-transfer-encoding; s=fm3; bh=ajlXTX+VE3P76
+        p/4QePv4HubnvF0lqkwv8RBMLkCfPo=; b=hboJOUx8lU1hJbQC1Q9cdibozTvhF
+        l5nm9BV7BK5rhC4KrtO3APm+HauI42sONlVg5in1GaSyMOknMAskcYqhx37dScri
+        Wn8SfE+hLApkjYsfkIN/XUikhvvQE8B3jE8Txt3367yjBOeNqKIU8L0lPa1WvvS/
+        F2HOpHH0bYiDDnugFzfmCAZ961GU8gWeYOFwbBhj3bvUGfKY6vN1hR6uO91ar/fs
+        uQDnaeAFuF2ffuO7G3bW7NksIhT/1lm+F2KhRfCHEvUueBDuA/GrIYIyF/ROngeC
+        la0TREUVWb7g2JZjQTpWXsgRgiDS0kmDfrYuj5/HNLHl9eWyNrSERIaMA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:reply-to:subject
+        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; bh=ajlXTX+VE3P76p/4QePv4HubnvF0lqkwv8RBMLkCfPo=; b=M8ebOeEh
+        5gaFIYWVVCnxv5JOOpU3FAxzPVlyqIrwjTaoQYinTEH2LXSREYHThfXUH95fOqFW
+        jLT4kA7vpsSSnGq3F2HolsWSr033du3JO2+J2z/9mER/7q6Gj6jwxSvz6JcVpG0l
+        MPxfORsugD/MnytE9NNDvyODHPBYudLfQmjoK2osGM4qQvp/RERskRvoyDt/pPCG
+        vU/wVdvk2T3UGx7rsfMdxIxc1II2XPfzpdc/cm9MwyYFl1NIIXJPwpMCBlsSlxNT
+        78WH9H6rAm50ryA/T4fj9BSX9ozPQCIO6Dof98szeyaoCJpN/9V6+/+B2eQnmwpG
+        kDH7WFujWJyjKA==
+X-ME-Sender: <xms:xfhYYAgbeQyS4YeELoAahhyvTAgTKRWz4YGX14a1BgIu09hcgx0Vbg>
+    <xme:xfhYYKjc2n7yf8a2O8pMoUmjmKsGPqCWEX69kbU2yEdM2OaVAXnUuXWeeVM6wb7yH
+    n89y4iK0j4kKJHQXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudeggedgudeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvffufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
+    jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeeije
+    euvdeuudeuhfeghfehieeuvdetvdeugfeigeevteeuieeuhedtgeduheefleenucfkphep
+    vddtledriedrjedurddvudefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
+X-ME-Proxy: <xmx:xfhYYIKgZPUv9DmEmnIHaYJksHo16PaEH83cVSgtfMPrFdrwipPhXg>
+    <xmx:xfhYYBF94Zvcgxyv-aXEy5c9aQnhWWhh2hQxmHZQFiTJcS4bngeFug>
+    <xmx:xfhYYETORFWbsQrRIyUJM7lHppFhgC-n-Eq_GYy58nTh17nLjWR--A>
+    <xmx:xvhYYKxnavL9oi6sZyYcuaBJXlc7wN9I--eCwtuUK8rom7t9D7K60w>
+Received: from Threadripper.local (209-6-71-213.s2259.c3-0.abr-cbr1.sbo-abr.ma.cable.rcncustomer.com [209.6.71.213])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 0BF2C1080066;
+        Mon, 22 Mar 2021 16:06:29 -0400 (EDT)
+From:   Zi Yan <zi.yan@sent.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: Re: [PATCH v6 3/8] securtiy/brute: Detect a brute force attack
-Message-ID: <20210322183201.GA3401@ubuntu>
-References: <20210307113031.11671-1-john.wood@gmx.com>
- <20210307113031.11671-4-john.wood@gmx.com>
- <202103171902.E6F55172@keescook>
- <20210321150118.GA3403@ubuntu>
- <202103211128.B59FEB91F@keescook>
+        John Hubbard <jhubbard@nvidia.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mika Penttila <mika.penttila@nextfour.com>,
+        Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v6 2/2] mm: huge_memory: debugfs for file-backed THP split.
+Date:   Mon, 22 Mar 2021 16:05:47 -0400
+Message-Id: <20210322200547.68587-2-zi.yan@sent.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210322200547.68587-1-zi.yan@sent.com>
+References: <20210322200547.68587-1-zi.yan@sent.com>
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202103211128.B59FEB91F@keescook>
-X-Provags-ID: V03:K1:v1YYfDM4ZzWgD2iLohzBa4hvx/dVZggni7kZwkchp3kHU/01//I
- C2Oinu1rDKAQRRiEUgF2Twqs7C5KvD2CLs+AE4WG8sDVw+pbeuEceyAXjiafm4H3xvuAW6v
- H+I9Ko1qx6aJ2dKurmRWhGY9pM3sAkkiCr499DVfuESAbJfwK3tvBqsO+pWwkiPQvhgkIEq
- /B095FfHE6Enpr+2ol5yg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qUJ7roGywfk=:fBRjjkvxFOsWRm92sDEG5J
- fZol4nE3DxEHkCEFoKKpPv1BUPhVSQTV9rjS9X/WIKJ1CAke7JXqq+aRTMXlet4aJmmJ0wUwv
- 2EZqyktEQFCYKhV4aZRJ/7qUtY/6EAO0XiRqaOQJT9PUkDMBpeh+gNGwgjGxto1sLd/dJJOjF
- HXI3gPzyAJStb+Z2shGg3618w6cPoFCXMQp0fzvV/iAH/6oxWVjtOA5MPrQ7Fgp9cCy3Y0Qye
- maOcQmLkB1GkFjH20Dzixc+iZYQAu38ZntB+FyXv3Oc6UvUoxfuR8SkUfym8FbAowtdW99UbK
- lmKPJpkftX/qN8uBj/FjA7dH9QMETEoFSssd2bVl+fhvZxOlfRMI/GYWAOUyPuxrrmeIVvRUq
- QII1NMqHh8yVFC+7ZR/Gij5q/jt0CdN+tQs65IeQGJNHuqmzzQGChx//PWqcuLEEHf7MJPGcT
- dvNwwpEgnzc8SnGA8Su9F/5DFkHghwP9NKQ3GCEsWCTJhRK5GIzC5xtl43AdBQZvskMLQBZq/
- 5c5yo15l5INHhsRb3vz0qjLGbwPvKgyAJ+yzQ0Z8piLhnzpdCfcXHUmH2INAsIhqCvcpCkT+y
- 5nLdiGwJeLg3Rlaqd/rubsD30ZoPE70sSKXFF5lgC/WOobuPPuMyFiE9TKvtVsk5YKvBGjr4J
- Q0OFra46huJKsYXjBWd1ZqwpqQmbx56FFXqmUfXZuHIzzs5JAsjn3PZfv+jeeO7NT1uSzZPU8
- gtCMj6nNFM5XlpoRct1c28iubp0Z/wpLGZz+Qy5uVKxUF4X5cCU6KgUcQzLaHF51LjAcNo6sV
- lv1WvrC6ZnS8rr6M30fJCT6TGccaeT9uznqDAXSNeVaJJ1LQsS7ZmAdD10nF9W9flE/Te1Ve6
- dxMbxvJPHRpC/J+lKN9g==
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+From: Zi Yan <ziy@nvidia.com>
 
-On Sun, Mar 21, 2021 at 11:45:59AM -0700, Kees Cook wrote:
-> On Sun, Mar 21, 2021 at 04:01:18PM +0100, John Wood wrote:
-> > On Wed, Mar 17, 2021 at 07:57:10PM -0700, Kees Cook wrote:
-> > > On Sun, Mar 07, 2021 at 12:30:26PM +0100, John Wood wrote:
-> > Sorry, but I try to understand how to use locking properly without luc=
-k.
-> >
-> > I have read (and tried to understand):
-> >    tools/memory-model/Documentation/simple.txt
-> >    tools/memory-model/Documentation/ordering.txt
-> >    tools/memory-model/Documentation/recipes.txt
-> >    Documentation/memory-barriers.txt
-> >
-> > And I don't find the responses that I need. I'm not saying they aren't
-> > there but I don't see them. So my questions:
-> >
-> > If in the above function makes sense to use locking, and it is called =
-from
-> > the brute_task_fatal_signal hook, then, all the functions that are cal=
-led
-> > from this hook need locking (more than one process can access stats at=
- the
-> > same time).
-> >
-> > So, as you point, how it is possible and safe to read jiffies and faul=
-ts
-> > (and I think period even though you not mention it) using READ_ONCE() =
-but
-> > without holding brute_stats::lock? I'm very confused.
->
-> There are, I think, 3 considerations:
->
-> - is "stats", itself, a valid allocation in kernel memory? This is the
->   "lifetime" management of the structure: it will only stay allocated as
->   long as there is a task still alive that is attached to it. The use of
->   refcount_t on task creation/death should entirely solve this issue, so
->   that all the other places where you access "stats", the memory will be
->   valid. AFAICT, this one is fine: you're doing all the correct lifetime
->   management.
->
-> - changing a task's stats pointer: this is related to lifetime
->   management, but it, I think, entirely solved by the existing
->   refcounting. (And isn't helped by holding stats->lock since this is
->   about stats itself being a valid pointer.) Again, I think this is all
->   correct already in your existing code (due to the implicit locking of
->   "current"). Perhaps I've missed something here, but I guess we'll see!
+Further extend <debugfs>/split_huge_pages to accept
+"<path>,<off_start>,<off_end>" for file-backed THP split tests since
+tmpfs may have file backed by THP that mapped nowhere.
 
-My only concern now is the following case:
+Update selftest program to test file-backed THP split too.
 
-One process crashes with a fatal signal. Then, its stats are updated. Then
-we get the exec stats (the stats of the task that calls exec). At the same
-time another CPU frees this same stats. Now, if the first process writes
-to the exec stats we get a "use after free" bug.
+Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+---
+ mm/huge_memory.c                              | 91 ++++++++++++++++++-
+ .../selftests/vm/split_huge_page_test.c       | 79 +++++++++++++++-
+ 2 files changed, 164 insertions(+), 6 deletions(-)
 
-If this scenario is possible, we would need to protect all the section
-inside the task_fatal_signal hook that deals with the exec stats. I think
-that here a global lock is necessary and also, protect the write of the
-pointer to stats struct in the task_free hook.
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index b653255a548e..d3b20e101df2 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3055,6 +3055,65 @@ static int split_huge_pages_pid(int pid, unsigned lo=
+ng vaddr_start,
+ 	return ret;
+ }
+=20
++static int split_huge_pages_in_file(const char *file_path, pgoff_t off_sta=
+rt,
++				pgoff_t off_end)
++{
++	struct filename *file;
++	struct file *candidate;
++	struct address_space *mapping;
++	int ret =3D -EINVAL;
++	pgoff_t off_cur;
++	unsigned long total =3D 0, split =3D 0;
++
++	file =3D getname_kernel(file_path);
++	if (IS_ERR(file))
++		return ret;
++
++	candidate =3D file_open_name(file, O_RDONLY, 0);
++	if (IS_ERR(candidate))
++		goto out;
++
++	pr_info("split file-backed THPs in file: %s, offset: [0x%lx - 0x%lx]\n",
++		 file_path, off_start, off_end);
++
++	mapping =3D candidate->f_mapping;
++
++	for (off_cur =3D off_start; off_cur < off_end;) {
++		struct page *fpage =3D pagecache_get_page(mapping, off_cur,
++						FGP_ENTRY | FGP_HEAD, 0);
++
++		if (xa_is_value(fpage) || !fpage) {
++			off_cur +=3D PAGE_SIZE;
++			continue;
++		}
++
++		if (!is_transparent_hugepage(fpage)) {
++			off_cur +=3D PAGE_SIZE;
++			goto next;
++		}
++		total++;
++		off_cur =3D fpage->index + thp_size(fpage);
++
++		if (!trylock_page(fpage))
++			goto next;
++
++		if (!split_huge_page(fpage))
++			split++;
++
++		unlock_page(fpage);
++next:
++		put_page(fpage);
++	}
++
++	filp_close(candidate, NULL);
++	ret =3D 0;
++
++	pr_info("%lu of %lu file-backed THP split\n", split, total);
++out:
++	putname(file);
++	return ret;
++}
++
+ #define MAX_INPUT_BUF_SZ 255
+=20
+ static ssize_t split_huge_pages_write(struct file *file, const char __user=
+ *buf,
+@@ -3062,7 +3121,8 @@ static ssize_t split_huge_pages_write(struct file *fi=
+le, const char __user *buf,
+ {
+ 	static DEFINE_MUTEX(split_debug_mutex);
+ 	ssize_t ret;
+-	char input_buf[MAX_INPUT_BUF_SZ]; /* hold pid, start_vaddr, end_vaddr */
++	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
++	char input_buf[MAX_INPUT_BUF_SZ];
+ 	int pid;
+ 	unsigned long vaddr_start, vaddr_end;
+=20
+@@ -3077,6 +3137,35 @@ static ssize_t split_huge_pages_write(struct file *f=
+ile, const char __user *buf,
+ 		goto out;
+=20
+ 	input_buf[MAX_INPUT_BUF_SZ - 1] =3D '\0';
++
++	if (input_buf[0] =3D=3D '/') {
++		char *tok;
++		char *buf =3D input_buf;
++		char file_path[MAX_INPUT_BUF_SZ];
++		pgoff_t off_start =3D 0, off_end =3D 0;
++		size_t input_len =3D strlen(input_buf);
++
++		tok =3D strsep(&buf, ",");
++		if (tok) {
++			strncpy(file_path, tok, MAX_INPUT_BUF_SZ);
++		} else {
++			ret =3D -EINVAL;
++			goto out;
++		}
++
++		ret =3D sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
++		if (ret !=3D 2) {
++			pr_info("ret: %ld\n", ret);
++			ret =3D -EINVAL;
++			goto out;
++		}
++		ret =3D split_huge_pages_in_file(file_path, off_start, off_end);
++		if (!ret)
++			ret =3D input_len;
++
++		goto out;
++	}
++
+ 	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
+d);
+ 	if (ret =3D=3D 1 && pid =3D=3D 1) {
+ 		split_huge_pages_all();
+diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
+ing/selftests/vm/split_huge_page_test.c
+index 2c0c18e60c57..ebdf2d738978 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
++++ b/tools/testing/selftests/vm/split_huge_page_test.c
+@@ -7,11 +7,13 @@
+ #define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdarg.h>
+ #include <unistd.h>
+ #include <inttypes.h>
+ #include <string.h>
+ #include <fcntl.h>
+ #include <sys/mman.h>
++#include <sys/mount.h>
+ #include <malloc.h>
+ #include <stdbool.h>
+=20
+@@ -24,6 +26,9 @@ uint64_t pmd_pagesize;
+ #define SMAP_PATH "/proc/self/smaps"
+ #define INPUT_MAX 80
+=20
++#define PID_FMT "%d,0x%lx,0x%lx"
++#define PATH_FMT "%s,0x%lx,0x%lx"
++
+ #define PFN_MASK     ((1UL<<55)-1)
+ #define KPF_THP      (1UL<<22)
+=20
+@@ -87,13 +92,16 @@ static int write_file(const char *path, const char *buf=
+, size_t buflen)
+ 	return (unsigned int) numwritten;
+ }
+=20
+-static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
+d)
++static void write_debugfs(const char *fmt, ...)
+ {
+ 	char input[INPUT_MAX];
+ 	int ret;
++	va_list argp;
++
++	va_start(argp, fmt);
++	ret =3D vsnprintf(input, INPUT_MAX, fmt, argp);
++	va_end(argp);
+=20
+-	ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
+-			vaddr_end);
+ 	if (ret >=3D INPUT_MAX) {
+ 		printf("%s: Debugfs input is too long\n", __func__);
+ 		exit(EXIT_FAILURE);
+@@ -183,7 +191,8 @@ void split_pmd_thp(void)
+ 	}
+=20
+ 	/* split all THPs */
+-	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
++	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
++		(uint64_t)one_page + len);
+=20
+ 	for (i =3D 0; i < len; i++)
+ 		if (one_page[i] !=3D (char)i) {
+@@ -274,7 +283,7 @@ void split_pte_mapped_thp(void)
+ 	}
+=20
+ 	/* split all remapped THPs */
+-	write_debugfs(getpid(), (uint64_t)pte_mapped,
++	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
+ 		      (uint64_t)pte_mapped + pagesize * 4);
+=20
+ 	/* smap does not show THPs after mremap, use kpageflags instead */
+@@ -300,6 +309,65 @@ void split_pte_mapped_thp(void)
+ 	close(kpageflags_fd);
+ }
+=20
++void split_file_backed_thp(void)
++{
++	int status;
++	int fd;
++	ssize_t num_written;
++	char tmpfs_template[] =3D "/tmp/thp_split_XXXXXX";
++	const char *tmpfs_loc =3D mkdtemp(tmpfs_template);
++	char testfile[INPUT_MAX];
++
++	status =3D mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=3Dalways,size=3D4m=
+");
++
++	if (status) {
++		printf("Unable to create a tmpfs for testing\n");
++		exit(EXIT_FAILURE);
++	}
++
++	status =3D snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
++	if (status >=3D INPUT_MAX) {
++		printf("Fail to create file-backed THP split testing file\n");
++		goto cleanup;
++	}
++
++	fd =3D open(testfile, O_CREAT|O_WRONLY);
++	if (fd =3D=3D -1) {
++		perror("Cannot open testing file\n");
++		goto cleanup;
++	}
++
++	/* write something to the file, so a file-backed THP can be allocated */
++	num_written =3D write(fd, tmpfs_loc, sizeof(tmpfs_loc));
++	close(fd);
++
++	if (num_written < 1) {
++		printf("Fail to write data to testing file\n");
++		goto cleanup;
++	}
++
++	/* split the file-backed THP */
++	write_debugfs(PATH_FMT, testfile, 0, 1024);
++
++	status =3D unlink(testfile);
++	if (status)
++		perror("Cannot remove testing file\n");
++
++cleanup:
++	status =3D umount(tmpfs_loc);
++	if (status) {
++		printf("Unable to umount %s\n", tmpfs_loc);
++		exit(EXIT_FAILURE);
++	}
++	status =3D rmdir(tmpfs_loc);
++	if (status) {
++		perror("cannot remove tmp dir");
++		exit(EXIT_FAILURE);
++	}
++
++	printf("file-backed THP split test done, please check dmesg for more info=
+rmation\n");
++}
++
+ int main(int argc, char **argv)
+ {
+ 	if (geteuid() !=3D 0) {
+@@ -313,6 +381,7 @@ int main(int argc, char **argv)
+=20
+ 	split_pmd_thp();
+ 	split_pte_mapped_thp();
++	split_file_backed_thp();
+=20
+ 	return 0;
+ }
+--=20
+2.30.2
 
-Moreover, I can see another scenario:
-
-The first CPU gets the exec stats when a task fails with a fatal signal.
-The second CPU exec()ve after exec()ve over the same task from we get the
-exec stats with the first CPU. This second CPU resets the stats at the sam=
-e
-time that the first CPU updates the same stats. I think we also need lock
-here.
-
-Am I right? Are these paths possible?
-
->
-> - are the values in stats getting written by multiple writers, or read
->   during a write, etc?
->
-> This last one is the core of what I think could be improved here:
->
-> To keep the writes serialized, you (correctly) perform locking in the
-> writers. This is fine.
->
-> There is also locking in the readers, which I think is not needed.
-> AFAICT, READ_ONCE() (with WRITE_ONCE() in the writers) is sufficient for
-> the readers here.
->
-> > IIUC (during the reading of the documentation) READ_ONCE and WRITE_ONC=
-E only
-> > guarantees that a variable loaded with WRITE_ONCE can be read safely w=
-ith
-> > READ_ONCE avoiding tearing, etc. So, I see these functions like a form=
- of
-> > guarantee atomicity in variables.
->
-> Right -- from what I can see about how you're reading the statistics, I
-> don't see a way to have the values get confused (assuming locked writes
-> and READ/WRITE_ONCE()).
->
-> > Another question. Is it also safe to use WRITE_ONCE without holding th=
-e lock?
-> > Or this is only appliable to read operations?
->
-> No -- you'll still want the writer locked since you update multiple fiel=
-ds
-> in stats during a write, so you could miss increments, or interleave
-> count vs jiffies writes, etc. But the WRITE_ONCE() makes sure that the
-> READ_ONCE() readers will see a stable value (as I understand it), and
-> in the order they were written.
->
-> > Any light on this will help me to do the best job in the next patches.=
- If
-> > somebody can point me to the right direction it would be greatly appre=
-ciated.
-> >
-> > Is there any documentation for newbies regarding this theme? I'm stuck=
-.
-> > I have also read the documentation about spinlocks, semaphores, mutex,=
- etc..
-> > but nothing clears me the concept expose.
-> >
-> > Apologies if this question has been answered in the past. But the sear=
-ch in
-> > the mailing list has not been lucky.
->
-> It's a complex subject! Here are some other docs that might help:
->
-> tools/memory-model/Documentation/explanation.txt
-> Documentation/core-api/refcount-vs-atomic.rst
->
-> or they may melt your brain further! :) I know mine is always mushy
-> after reading them.
->
-> > Thanks for your time and patience.
->
-> You're welcome; and thank you for your work on this! I've wanted a robus=
-t
-> brute force mitigation in the kernel for a long time. :)
->
-
-Thank you very much for this great explanation and mentorship. Now this
-subject is more clear to me. It's a pleasure to me to work on this.
-
-Again, thanks for your help.
-John Wood
