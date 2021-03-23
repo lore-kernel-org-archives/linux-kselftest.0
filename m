@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A49C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AD39C433E0
 	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Mar 2021 13:54:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DAD0619AB
+	by mail.kernel.org (Postfix) with ESMTP id 44946619B2
 	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Mar 2021 13:54:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbhCWNxf (ORCPT
+        id S231683AbhCWNxe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Mar 2021 09:53:35 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14451 "EHLO
+        Tue, 23 Mar 2021 09:53:34 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14074 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbhCWNxJ (ORCPT
+        with ESMTP id S231600AbhCWNxF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Mar 2021 09:53:09 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F4Xnr5gSpzwQFR;
-        Tue, 23 Mar 2021 21:50:56 +0800 (CST)
+        Tue, 23 Mar 2021 09:53:05 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F4XnD4JDLzPkDC;
+        Tue, 23 Mar 2021 21:50:24 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 23 Mar 2021 21:52:47 +0800
+ 14.3.498.0; Tue, 23 Mar 2021 21:52:44 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -43,9 +43,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [RFC PATCH v5 09/10] KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
-Date:   Tue, 23 Mar 2021 21:52:30 +0800
-Message-ID: <20210323135231.24948-10-wangyanan55@huawei.com>
+Subject: [RFC PATCH v5 07/10] KVM: selftests: Add a helper to get system default hugetlb page size
+Date:   Tue, 23 Mar 2021 21:52:28 +0800
+Message-ID: <20210323135231.24948-8-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210323135231.24948-1-wangyanan55@huawei.com>
 References: <20210323135231.24948-1-wangyanan55@huawei.com>
@@ -57,81 +57,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
-we have to get the transparent hugepage size for HVA alignment. With the
-new helpers, we can use get_backing_src_pagesz() to check whether THP is
-configured and then get the exact configured hugepage size.
+If HUGETLB is configured in the host kernel, then we can know the system
+default hugetlb page size through *cat /proc/meminfo*. Otherwise, we will
+not see the information of hugetlb pages in file /proc/meminfo if it's not
+configured. So add a helper to determine whether HUGETLB is configured and
+then get the default page size by reading /proc/meminfo.
 
-As different architectures may have different THP page sizes configured,
-this can get the accurate THP page sizes on any platform.
+This helper can be useful when a program wants to use the default hugetlb
+pages of the system and doesn't know the default page size.
 
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
 Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 28 +++++++---------------
- 1 file changed, 9 insertions(+), 19 deletions(-)
+ .../testing/selftests/kvm/include/test_util.h |  1 +
+ tools/testing/selftests/kvm/lib/test_util.c   | 25 +++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 3506174c2053..c7a2228deaf3 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -18,7 +18,6 @@
- #include <unistd.h>
- #include <linux/kernel.h>
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index ef24c76ba89a..e087174eefe5 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -80,6 +80,7 @@ struct vm_mem_backing_src_alias {
  
--#define KVM_UTIL_PGS_PER_HUGEPG 512
- #define KVM_UTIL_MIN_PFN	2
+ bool thp_configured(void);
+ size_t get_trans_hugepagesz(void);
++size_t get_def_hugetlb_pagesz(void);
+ void backing_src_help(void);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
  
- static int vcpu_mmap_sz(void);
-@@ -688,7 +687,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index efc1a7782de0..665724ccab97 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -146,6 +146,31 @@ size_t get_trans_hugepagesz(void)
+ 	return size;
+ }
+ 
++size_t get_def_hugetlb_pagesz(void)
++{
++	char buf[64];
++	const char *tag = "Hugepagesize:";
++	FILE *f;
++
++	f = fopen("/proc/meminfo", "r");
++	TEST_ASSERT(f != NULL, "Error in opening /proc/meminfo");
++
++	while (fgets(buf, sizeof(buf), f) != NULL) {
++		if (strstr(buf, tag) == buf) {
++			fclose(f);
++			return strtoull(buf + strlen(tag), NULL, 10) << 10;
++		}
++	}
++
++	if (feof(f))
++		TEST_FAIL("HUGETLB is not configured in host kernel");
++	else
++		TEST_FAIL("Error in reading /proc/meminfo");
++
++	fclose(f);
++	return 0;
++}
++
+ void backing_src_help(void)
  {
- 	int ret;
- 	struct userspace_mem_region *region;
--	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
-+	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
- 	size_t alignment;
- 
- 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
-@@ -750,7 +749,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- #endif
- 
- 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
--		alignment = max(huge_page_size, alignment);
-+		alignment = max(backing_src_pagesz, alignment);
- 
- 	/* Add enough memory to align up if necessary */
- 	if (alignment > 1)
-@@ -769,22 +768,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->host_mem = align(region->mmap_start, alignment);
- 
- 	/* As needed perform madvise */
--	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
--		struct stat statbuf;
--
--		ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
--		TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
--			    "stat /sys/kernel/mm/transparent_hugepage");
--
--		TEST_ASSERT(ret == 0 || src_type != VM_MEM_SRC_ANONYMOUS_THP,
--			    "VM_MEM_SRC_ANONYMOUS_THP requires THP to be configured in the host kernel");
--
--		if (ret == 0) {
--			ret = madvise(region->host_mem, npages * vm->page_size,
--				      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
--			TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %x",
--				    region->host_mem, npages * vm->page_size, src_type);
--		}
-+	if ((src_type == VM_MEM_SRC_ANONYMOUS ||
-+	     src_type == VM_MEM_SRC_ANONYMOUS_THP) && thp_configured()) {
-+		ret = madvise(region->host_mem, npages * vm->page_size,
-+			      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
-+		TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %s",
-+			    region->host_mem, npages * vm->page_size,
-+			    vm_mem_backing_src_alias(src_type)->name);
- 	}
- 
- 	region->unused_phy_pages = sparsebit_alloc();
+ 	int i;
 -- 
 2.19.1
 
