@@ -4,26 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD108C433DB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Mar 2021 03:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2BB7C433C1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Mar 2021 03:41:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7083C619AB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Mar 2021 03:41:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A023F619AC
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Mar 2021 03:41:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbhCWDkl (ORCPT
+        id S229665AbhCWDlN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 22 Mar 2021 23:40:41 -0400
-Received: from mail-m17637.qiye.163.com ([59.111.176.37]:35510 "EHLO
+        Mon, 22 Mar 2021 23:41:13 -0400
+Received: from mail-m17637.qiye.163.com ([59.111.176.37]:38484 "EHLO
         mail-m17637.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbhCWDkT (ORCPT
+        with ESMTP id S229761AbhCWDlI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Mar 2021 23:40:19 -0400
+        Mon, 22 Mar 2021 23:41:08 -0400
 Received: from wanjb-virtual-machine.localdomain (unknown [36.152.145.182])
-        by mail-m17637.qiye.163.com (Hmail) with ESMTPA id E36D6980608;
-        Tue, 23 Mar 2021 11:39:54 +0800 (CST)
+        by mail-m17637.qiye.163.com (Hmail) with ESMTPA id B6C0C9801A4;
+        Tue, 23 Mar 2021 11:34:32 +0800 (CST)
 From:   Wan Jiabing <wanjiabing@vivo.com>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -33,43 +33,43 @@ To:     Michael Ellerman <mpe@ellerman.id.au>,
         linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     kael_w@yeah.net
-Subject: [PATCH] tools: testing: pthread.h is included twice
-Date:   Tue, 23 Mar 2021 11:39:36 +0800
-Message-Id: <20210323033938.285388-1-wanjiabing@vivo.com>
+Subject: [PATCH] tools: testing: Remove duplicate include of sched.h
+Date:   Tue, 23 Mar 2021 11:34:11 +0800
+Message-Id: <20210323033413.284420-1-wanjiabing@vivo.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQkgZS09DSEMfQxlLVkpNSk1PTEtDS0hMSEhVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        oVCBIfWUFZTxlIGh4aTBhPGBlMVkpNSk1PTEtPQ09MSkNVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
         FZT0tIVUpKS0hKQ1VLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MSI6Nio4HT8RKDpJFQMKNCwr
-        E1YwCRBVSlVKTUpNT0xLQ0tPQ09PVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
-        TVVKTklVSk9OVUpDSVlXWQgBWUFKTENKNwY+
-X-HM-Tid: 0a785d2b0006d992kuwse36d6980608
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PjI6MTo*Ij8UKDosMwMZMRIS
+        Ax8KCjFVSlVKTUpNT0xLT0NOS0tKVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
+        TVVKTklVSk9OVUpDSVlXWQgBWUFKTEJONwY+
+X-HM-Tid: 0a785d262682d992kuwsb6c0c9801a4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-pthread.h has been included at line 17.
-So we remove the duplicate one at line 20.
+sched.h has been included at line 33.
+So we remove the duplicate one at line 36.
 
 Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 ---
- tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c | 1 -
+ tools/testing/selftests/powerpc/mm/tlbie_test.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c b/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
-index e2a0c07e8362..9ef37a9836ac 100644
---- a/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-vmx-unavail.c
-@@ -17,7 +17,6 @@
+diff --git a/tools/testing/selftests/powerpc/mm/tlbie_test.c b/tools/testing/selftests/powerpc/mm/tlbie_test.c
+index f85a0938ab25..48344a74b212 100644
+--- a/tools/testing/selftests/powerpc/mm/tlbie_test.c
++++ b/tools/testing/selftests/powerpc/mm/tlbie_test.c
+@@ -33,7 +33,6 @@
+ #include <sched.h>
+ #include <time.h>
+ #include <stdarg.h>
+-#include <sched.h>
  #include <pthread.h>
- #include <sys/mman.h>
- #include <unistd.h>
--#include <pthread.h>
- 
- #include "tm.h"
- #include "utils.h"
+ #include <signal.h>
+ #include <sys/prctl.h>
 -- 
 2.25.1
 
