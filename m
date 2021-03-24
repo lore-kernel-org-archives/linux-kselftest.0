@@ -5,63 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC02C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BD66C433E6
 	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Mar 2021 11:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02328619FF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Mar 2021 11:26:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CFAA61A17
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Mar 2021 11:26:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234987AbhCXLZg (ORCPT
+        id S235103AbhCXLZl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Mar 2021 07:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        Wed, 24 Mar 2021 07:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbhCXLZ0 (ORCPT
+        with ESMTP id S234844AbhCXLZa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Mar 2021 07:25:26 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DA1C061763
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:26 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id v13so930006wrs.21
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:26 -0700 (PDT)
+        Wed, 24 Mar 2021 07:25:30 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0ABC0613DE
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:30 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id l63so944793qtd.23
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=3/AI1hI3URzVJhSImUodjFuCeBbn3a274zCrbDQNsz8=;
-        b=nYXjrHCePsgAK8BPD+DnHKGQq7GtEjrFuE9gHmxBFFLFRWvLGEXGjuBJLOFRh1dsM7
-         ZtSxLGbqif1878vnrwTKmhd472kUNwV0Xjdv/Rdxq6AHVX+LZfw/gwbVs+vUx9hBw2o5
-         NbOEqyyA1TFdBt0IR3aBtx8zmQPkUFi7uf3qHmjQQhx2e/erDxAMQ/K7Rmi4W5bJIzw7
-         R/eiQ5K0tV9qI36DooN2DKajMOGeekMgASJQ16S/IYx5cqaKNyqHqDK6QMhV7vhMWlhy
-         bt4bAM/uanGAX6LjUPmh9VW1J5+KbuHEXii5LF2+2OZd6nAjLN6HESTC7r/8WxYGGfV0
-         YyGA==
+        bh=LX/BpTku7Mw/ygEVGiq+Ue/R3uDPIzOnmcdooJRuOrg=;
+        b=HP/OpHnG2ZFFfMhsPxHanxNPNbRGbkkO9H9OzCxJvjy/Tt+raDo9BOU3aIH06rF9sA
+         toWjQ3xNR1eG0jWW0kzIQZorkb7pg7WxYyOstU0ZVSi9+Wg4qFdjMRjTTkrnEv5SKH2/
+         wgQx94I8UDcETmS8OAsXbELYY3L7gFLf7RS/cSBUJrIGM5OhKt0yHfhKEtOSusmod4PQ
+         69QlRiJVVmUz1NAQ7uO+/2qlpTMcbX1U7ZDqQK1V0icEvK6bQop5EhVfupRcgI6oE+cc
+         qAS2+NXPmM5zs36n6+ifmNA+OV0knc2vFWCC5ScE3bLeDQoHsIYDXZ/2EBAIp+ClFeAO
+         yDSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=3/AI1hI3URzVJhSImUodjFuCeBbn3a274zCrbDQNsz8=;
-        b=VqCevZcy9KPKk42xXwX1qa5VOPhdea8jNicemnVXIsyX3wLaHPvAdwAZlp1xP2dirP
-         9BuXz8Zhmqi3issrdatrxe6duhRlKuTuLopkLV7g/keXzdRLHlfViQvYZes7+LuBcasT
-         YDG6g+lNc4Rh7wd8IXEc2lfeVM411zckRIAw778whwO6EY1F4frnbVWHIA1a3rT5aTx/
-         8vjOqeH04eR8QVhlpvCDORejmBj7pMI5qZLylWsOFVdV0RFpj+iZ80KgeLDfTWR969Z+
-         l6QFbHDmOHL39vTaj5UAkAee2P3y1KTrJzzRdul0NnWkjHlEqgD+FZ4A93eQby0bCjul
-         zBKQ==
-X-Gm-Message-State: AOAM530M33FMLyqA7v94vCUaKp445e4KqQCPftn83yhvTwrLVCDyeYak
-        IvnZwtq008g6Kww00FhCKbhny4nf3Q==
-X-Google-Smtp-Source: ABdhPJzC1uVnnqF8Li3pJXrgtkV7ERbfbmCjHEARswnFkMMYg7bWmwwmsIPqsg3Cw/2+2Xbh4Z6dhHhGjQ==
+        bh=LX/BpTku7Mw/ygEVGiq+Ue/R3uDPIzOnmcdooJRuOrg=;
+        b=X8Kews8AkZ+mVa3K+/SBqyIGw4p8w32Eq77N0AkeSG/T1h0cydvBH5PVZ5kYAnKeOk
+         hUXhLLoXRS+zzsanv2Yw8zl40CfS/t7WXbEISwVUHVyKOd/MqNKgTy3nrKM5w0kVmmEO
+         VHGu88+dyplrh8+p57UA0L6B6VK62IZzstIfbuicDWT3KETyOwbFKorlkPcVCOZFmOgq
+         SLKR3sHGPBMreeGyMoGvQHLCRIpsDUl1/yvanHlFIBL2Lcwpzp921QMt5slC+5POBAg8
+         01tsG8osY6OKmvPQKbfOyMeVIpHZz0duBv1X/hlXEpgpL0sXnixjHGo2lOxZS+7r+xYw
+         iCxg==
+X-Gm-Message-State: AOAM533qJ4ww9qM6M5VBTIj1AmkseMg2qT5zmHJeuOfVL3xLEcB3M/om
+        tKyW+Ycr9/IKgoo6SvFqblkndH5B+w==
+X-Google-Smtp-Source: ABdhPJymE5f6div96+zRGYVKESwRGTt8KpfjhJI/DuvO09EJRIG57AT8Ms+lMfsGLO9T6B6eOEXEf63QpA==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:6489:b3f0:4af:af0])
- (user=elver job=sendgmr) by 2002:a5d:4903:: with SMTP id x3mr2936933wrq.143.1616585124744;
- Wed, 24 Mar 2021 04:25:24 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 12:24:54 +0100
+ (user=elver job=sendgmr) by 2002:a0c:a5a5:: with SMTP id z34mr2625271qvz.4.1616585129586;
+ Wed, 24 Mar 2021 04:25:29 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 12:24:56 +0100
 In-Reply-To: <20210324112503.623833-1-elver@google.com>
-Message-Id: <20210324112503.623833-3-elver@google.com>
+Message-Id: <20210324112503.623833-5-elver@google.com>
 Mime-Version: 1.0
 References: <20210324112503.623833-1-elver@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 02/11] perf: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
+Subject: [PATCH v3 04/11] perf: Add support for event removal on exec
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, peterz@infradead.org,
         alexander.shishkin@linux.intel.com, acme@kernel.org,
@@ -79,59 +79,142 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As with other ioctls (such as PERF_EVENT_IOC_{ENABLE,DISABLE}), fix up
-handling of PERF_EVENT_IOC_MODIFY_ATTRIBUTES to also apply to children.
+Adds bit perf_event_attr::remove_on_exec, to support removing an event
+from a task on exec.
 
-Link: https://lkml.kernel.org/r/YBqVaY8aTMYtoUnX@hirez.programming.kicks-ass.net
-Suggested-by: Dmitry Vyukov <dvyukov@google.com>
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+This option supports the case where an event is supposed to be
+process-wide only, and should not propagate beyond exec, to limit
+monitoring to the original process image only.
+
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- kernel/events/core.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+v3:
+* Rework based on Peter's "perf: Rework perf_event_exit_event()" added
+  to the beginning of the series. Intermediate attempts between v2 and
+  this v3 can be found here:
+	  https://lkml.kernel.org/r/YFm6aakSRlF2nWtu@elver.google.com
 
+v2:
+* Add patch to series.
+---
+ include/uapi/linux/perf_event.h |  3 +-
+ kernel/events/core.c            | 70 +++++++++++++++++++++++++++++----
+ 2 files changed, 64 insertions(+), 9 deletions(-)
+
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index 813efb65fea8..8c5b9f5ad63f 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -390,7 +390,8 @@ struct perf_event_attr {
+ 				text_poke      :  1, /* include text poke events */
+ 				build_id       :  1, /* use build id in mmap2 events */
+ 				inherit_thread :  1, /* children only inherit if cloned with CLONE_THREAD */
+-				__reserved_1   : 28;
++				remove_on_exec :  1, /* event is removed from task on exec */
++				__reserved_1   : 27;
+ 
+ 	union {
+ 		__u32		wakeup_events;	  /* wakeup every n events */
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 57de8d436efd..37d106837962 100644
+index 224cbcf6125a..b6434697c516 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -3199,16 +3199,36 @@ static int perf_event_modify_breakpoint(struct perf_event *bp,
- static int perf_event_modify_attr(struct perf_event *event,
- 				  struct perf_event_attr *attr)
- {
-+	int (*func)(struct perf_event *, struct perf_event_attr *);
-+	struct perf_event *child;
-+	int err;
-+
- 	if (event->attr.type != attr->type)
- 		return -EINVAL;
- 
- 	switch (event->attr.type) {
- 	case PERF_TYPE_BREAKPOINT:
--		return perf_event_modify_breakpoint(event, attr);
-+		func = perf_event_modify_breakpoint;
-+		break;
- 	default:
- 		/* Place holder for future additions. */
- 		return -EOPNOTSUPP;
- 	}
-+
-+	WARN_ON_ONCE(event->ctx->parent_ctx);
-+
-+	mutex_lock(&event->child_mutex);
-+	err = func(event, attr);
-+	if (err)
-+		goto out;
-+	list_for_each_entry(child, &event->child_list, child_list) {
-+		err = func(child, attr);
-+		if (err)
-+			goto out;
-+	}
-+out:
-+	mutex_unlock(&event->child_mutex);
-+	return err;
+@@ -4247,6 +4247,57 @@ static void perf_event_enable_on_exec(int ctxn)
+ 		put_ctx(clone_ctx);
  }
  
- static void ctx_sched_out(struct perf_event_context *ctx,
++static void perf_remove_from_owner(struct perf_event *event);
++static void perf_event_exit_event(struct perf_event *event,
++				  struct perf_event_context *ctx);
++
++/*
++ * Removes all events from the current task that have been marked
++ * remove-on-exec, and feeds their values back to parent events.
++ */
++static void perf_event_remove_on_exec(int ctxn)
++{
++	struct perf_event_context *ctx, *clone_ctx = NULL;
++	struct perf_event *event, *next;
++	LIST_HEAD(free_list);
++	unsigned long flags;
++	bool modified = false;
++
++	ctx = perf_pin_task_context(current, ctxn);
++	if (!ctx)
++		return;
++
++	mutex_lock(&ctx->mutex);
++
++	if (WARN_ON_ONCE(ctx->task != current))
++		goto unlock;
++
++	list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
++		if (!event->attr.remove_on_exec)
++			continue;
++
++		if (!is_kernel_event(event))
++			perf_remove_from_owner(event);
++
++		modified = true;
++
++		perf_event_exit_event(event, ctx);
++	}
++
++	raw_spin_lock_irqsave(&ctx->lock, flags);
++	if (modified)
++		clone_ctx = unclone_ctx(ctx);
++	--ctx->pin_count;
++	raw_spin_unlock_irqrestore(&ctx->lock, flags);
++
++unlock:
++	mutex_unlock(&ctx->mutex);
++
++	put_ctx(ctx);
++	if (clone_ctx)
++		put_ctx(clone_ctx);
++}
++
+ struct perf_read_data {
+ 	struct perf_event *event;
+ 	bool group;
+@@ -7559,18 +7610,18 @@ void perf_event_exec(void)
+ 	struct perf_event_context *ctx;
+ 	int ctxn;
+ 
+-	rcu_read_lock();
+ 	for_each_task_context_nr(ctxn) {
+-		ctx = current->perf_event_ctxp[ctxn];
+-		if (!ctx)
+-			continue;
+-
+ 		perf_event_enable_on_exec(ctxn);
++		perf_event_remove_on_exec(ctxn);
+ 
+-		perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL,
+-				   true);
++		rcu_read_lock();
++		ctx = rcu_dereference(current->perf_event_ctxp[ctxn]);
++		if (ctx) {
++			perf_iterate_ctx(ctx, perf_event_addr_filters_exec,
++					 NULL, true);
++		}
++		rcu_read_unlock();
+ 	}
+-	rcu_read_unlock();
+ }
+ 
+ struct remote_output {
+@@ -11652,6 +11703,9 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
+ 	if (!attr->inherit && attr->inherit_thread)
+ 		return -EINVAL;
+ 
++	if (attr->remove_on_exec && attr->enable_on_exec)
++		return -EINVAL;
++
+ out:
+ 	return ret;
+ 
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
