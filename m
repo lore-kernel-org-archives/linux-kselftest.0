@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BD66C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D09EC433E1
 	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Mar 2021 11:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CFAA61A17
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Mar 2021 11:26:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB7B761A06
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Mar 2021 11:26:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbhCXLZl (ORCPT
+        id S234941AbhCXLZf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Mar 2021 07:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
+        Wed, 24 Mar 2021 07:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234844AbhCXLZa (ORCPT
+        with ESMTP id S234785AbhCXLZX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Mar 2021 07:25:30 -0400
+        Wed, 24 Mar 2021 07:25:23 -0400
 Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0ABC0613DE
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:30 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id l63so944793qtd.23
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FE9C0613E0
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:22 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id m11so949529qtx.19
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Mar 2021 04:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=LX/BpTku7Mw/ygEVGiq+Ue/R3uDPIzOnmcdooJRuOrg=;
-        b=HP/OpHnG2ZFFfMhsPxHanxNPNbRGbkkO9H9OzCxJvjy/Tt+raDo9BOU3aIH06rF9sA
-         toWjQ3xNR1eG0jWW0kzIQZorkb7pg7WxYyOstU0ZVSi9+Wg4qFdjMRjTTkrnEv5SKH2/
-         wgQx94I8UDcETmS8OAsXbELYY3L7gFLf7RS/cSBUJrIGM5OhKt0yHfhKEtOSusmod4PQ
-         69QlRiJVVmUz1NAQ7uO+/2qlpTMcbX1U7ZDqQK1V0icEvK6bQop5EhVfupRcgI6oE+cc
-         qAS2+NXPmM5zs36n6+ifmNA+OV0knc2vFWCC5ScE3bLeDQoHsIYDXZ/2EBAIp+ClFeAO
-         yDSQ==
+        bh=0RXOU0urSfzaqeg4UkeG1NpS6f1gTiG8ooIM498Ibs0=;
+        b=kJMYNK+Qd6ykljLIZNr67k8BhtR56dZhQsDHHItFF+pfhvMGIgcGT9cmeBfakIAf2O
+         0MXHisaZcCUic9Ix2/1N8PAwcpZJDJGJcbQEOcl/e53pvYkkKuIF9TPkp2khsT8pKNE3
+         yw6oAN+AJ9xpMXGyFDrgFKEDF2goDMDCXUXKTiomUdbydmUnZtoqaIn3wDBvTvN1MVWu
+         MLpRv2KGvz70vcNeLp3So2som/I9KDiDcSyTj2o9ndsqMuc+GtSAA//fmsqXydPn8Tbm
+         hhgU7OMetS/LQOPjFUdv5RUGOe6lyOMELS9u/3Yu+wVuDL6EkFxQmz6n0DeQ4q5KCxmA
+         uorQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=LX/BpTku7Mw/ygEVGiq+Ue/R3uDPIzOnmcdooJRuOrg=;
-        b=X8Kews8AkZ+mVa3K+/SBqyIGw4p8w32Eq77N0AkeSG/T1h0cydvBH5PVZ5kYAnKeOk
-         hUXhLLoXRS+zzsanv2Yw8zl40CfS/t7WXbEISwVUHVyKOd/MqNKgTy3nrKM5w0kVmmEO
-         VHGu88+dyplrh8+p57UA0L6B6VK62IZzstIfbuicDWT3KETyOwbFKorlkPcVCOZFmOgq
-         SLKR3sHGPBMreeGyMoGvQHLCRIpsDUl1/yvanHlFIBL2Lcwpzp921QMt5slC+5POBAg8
-         01tsG8osY6OKmvPQKbfOyMeVIpHZz0duBv1X/hlXEpgpL0sXnixjHGo2lOxZS+7r+xYw
-         iCxg==
-X-Gm-Message-State: AOAM533qJ4ww9qM6M5VBTIj1AmkseMg2qT5zmHJeuOfVL3xLEcB3M/om
-        tKyW+Ycr9/IKgoo6SvFqblkndH5B+w==
-X-Google-Smtp-Source: ABdhPJymE5f6div96+zRGYVKESwRGTt8KpfjhJI/DuvO09EJRIG57AT8Ms+lMfsGLO9T6B6eOEXEf63QpA==
+        bh=0RXOU0urSfzaqeg4UkeG1NpS6f1gTiG8ooIM498Ibs0=;
+        b=mLxQC47+ArEoDm9wocng5iDzxJ2v6kvKcBnbIV/3GE7i8pC/ldsKjBMl4Vm9jSg4Gr
+         wrJc/h8NqjXDR8Cb3k5cNLt5OYgkApF9YPBMnLJg6CdlKeULnDOs2FqX8xzeT3kuPB5Z
+         G52unY4SQgCxZCxhOFBhxrPZBpo8Kp11ASZ+SuHPHhTsNLfge95hAogCbJetrzykGHgv
+         4hXvodNoM6cqti6jKfvwksfNKHJ48pOmjMQr43sMtl2YX+TsW2FIBY+NbgEq0ornxE20
+         tPxgSHKeDQX9mUmuCpJ+Zix75HwcPdbA8/IgSSW0llxt0gekv4UDZgYOpmh1hD/tuD8n
+         UsXQ==
+X-Gm-Message-State: AOAM532Rcz9oN+fU2c24w4byQrR8i4Jmo3I103Z/dPyZFzrL4XfdLbuE
+        mP7KUuQmeHpFvfLrLBtcBN654C4MVw==
+X-Google-Smtp-Source: ABdhPJyip3c6qviQdf+0FymIqQFjShQSv7Cmfc1xZ1cF1dE6ezBM65QUdZMr/yTqedmW6Wh2xlhTw9gfjw==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:6489:b3f0:4af:af0])
- (user=elver job=sendgmr) by 2002:a0c:a5a5:: with SMTP id z34mr2625271qvz.4.1616585129586;
- Wed, 24 Mar 2021 04:25:29 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 12:24:56 +0100
+ (user=elver job=sendgmr) by 2002:a0c:d7ca:: with SMTP id g10mr2503240qvj.16.1616585122040;
+ Wed, 24 Mar 2021 04:25:22 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 12:24:53 +0100
 In-Reply-To: <20210324112503.623833-1-elver@google.com>
-Message-Id: <20210324112503.623833-5-elver@google.com>
+Message-Id: <20210324112503.623833-2-elver@google.com>
 Mime-Version: 1.0
 References: <20210324112503.623833-1-elver@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 04/11] perf: Add support for event removal on exec
+Subject: [PATCH v3 01/11] perf: Rework perf_event_exit_event()
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, peterz@infradead.org,
         alexander.shishkin@linux.intel.com, acme@kernel.org,
@@ -79,142 +79,268 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adds bit perf_event_attr::remove_on_exec, to support removing an event
-from a task on exec.
+From: Peter Zijlstra <peterz@infradead.org>
 
-This option supports the case where an event is supposed to be
-process-wide only, and should not propagate beyond exec, to limit
-monitoring to the original process image only.
+Make perf_event_exit_event() more robust, such that we can use it from
+other contexts. Specifically the up and coming remove_on_exec.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+For this to work we need to address a few issues. Remove_on_exec will
+not destroy the entire context, so we cannot rely on TASK_TOMBSTONE to
+disable event_function_call() and we thus have to use
+perf_remove_from_context().
+
+When using perf_remove_from_context(), there's two races to consider.
+The first is against close(), where we can have concurrent tear-down
+of the event. The second is against child_list iteration, which should
+not find a half baked event.
+
+To address this, teach perf_remove_from_context() to special case
+!ctx->is_active and about DETACH_CHILD.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v3:
-* Rework based on Peter's "perf: Rework perf_event_exit_event()" added
-  to the beginning of the series. Intermediate attempts between v2 and
-  this v3 can be found here:
-	  https://lkml.kernel.org/r/YFm6aakSRlF2nWtu@elver.google.com
-
-v2:
-* Add patch to series.
+* New dependency for series:
+  https://lkml.kernel.org/r/YFn/I3aKF+TOjGcl@hirez.programming.kicks-ass.net
 ---
- include/uapi/linux/perf_event.h |  3 +-
- kernel/events/core.c            | 70 +++++++++++++++++++++++++++++----
- 2 files changed, 64 insertions(+), 9 deletions(-)
+ include/linux/perf_event.h |   1 +
+ kernel/events/core.c       | 142 +++++++++++++++++++++----------------
+ 2 files changed, 80 insertions(+), 63 deletions(-)
 
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index 813efb65fea8..8c5b9f5ad63f 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -390,7 +390,8 @@ struct perf_event_attr {
- 				text_poke      :  1, /* include text poke events */
- 				build_id       :  1, /* use build id in mmap2 events */
- 				inherit_thread :  1, /* children only inherit if cloned with CLONE_THREAD */
--				__reserved_1   : 28;
-+				remove_on_exec :  1, /* event is removed from task on exec */
-+				__reserved_1   : 27;
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 3f7f89ea5e51..3d478abf411c 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -607,6 +607,7 @@ struct swevent_hlist {
+ #define PERF_ATTACH_TASK_DATA	0x08
+ #define PERF_ATTACH_ITRACE	0x10
+ #define PERF_ATTACH_SCHED_CB	0x20
++#define PERF_ATTACH_CHILD	0x40
  
- 	union {
- 		__u32		wakeup_events;	  /* wakeup every n events */
+ struct perf_cgroup;
+ struct perf_buffer;
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 224cbcf6125a..b6434697c516 100644
+index 03db40f6cba9..57de8d436efd 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
-@@ -4247,6 +4247,57 @@ static void perf_event_enable_on_exec(int ctxn)
- 		put_ctx(clone_ctx);
+@@ -2204,6 +2204,26 @@ static void perf_group_detach(struct perf_event *event)
+ 	perf_event__header_size(leader);
  }
  
-+static void perf_remove_from_owner(struct perf_event *event);
-+static void perf_event_exit_event(struct perf_event *event,
-+				  struct perf_event_context *ctx);
++static void sync_child_event(struct perf_event *child_event);
 +
-+/*
-+ * Removes all events from the current task that have been marked
-+ * remove-on-exec, and feeds their values back to parent events.
-+ */
-+static void perf_event_remove_on_exec(int ctxn)
++static void perf_child_detach(struct perf_event *event)
 +{
-+	struct perf_event_context *ctx, *clone_ctx = NULL;
-+	struct perf_event *event, *next;
-+	LIST_HEAD(free_list);
-+	unsigned long flags;
-+	bool modified = false;
++	struct perf_event *parent_event = event->parent;
 +
-+	ctx = perf_pin_task_context(current, ctxn);
-+	if (!ctx)
++	if (!(event->attach_state & PERF_ATTACH_CHILD))
 +		return;
 +
-+	mutex_lock(&ctx->mutex);
++	event->attach_state &= ~PERF_ATTACH_CHILD;
 +
-+	if (WARN_ON_ONCE(ctx->task != current))
-+		goto unlock;
++	if (WARN_ON_ONCE(!parent_event))
++		return;
 +
-+	list_for_each_entry_safe(event, next, &ctx->event_list, event_entry) {
-+		if (!event->attr.remove_on_exec)
-+			continue;
++	lockdep_assert_held(&parent_event->child_mutex);
 +
-+		if (!is_kernel_event(event))
-+			perf_remove_from_owner(event);
-+
-+		modified = true;
-+
-+		perf_event_exit_event(event, ctx);
-+	}
-+
-+	raw_spin_lock_irqsave(&ctx->lock, flags);
-+	if (modified)
-+		clone_ctx = unclone_ctx(ctx);
-+	--ctx->pin_count;
-+	raw_spin_unlock_irqrestore(&ctx->lock, flags);
-+
-+unlock:
-+	mutex_unlock(&ctx->mutex);
-+
-+	put_ctx(ctx);
-+	if (clone_ctx)
-+		put_ctx(clone_ctx);
++	sync_child_event(event);
++	list_del_init(&event->child_list);
 +}
 +
- struct perf_read_data {
- 	struct perf_event *event;
- 	bool group;
-@@ -7559,18 +7610,18 @@ void perf_event_exec(void)
- 	struct perf_event_context *ctx;
- 	int ctxn;
- 
--	rcu_read_lock();
- 	for_each_task_context_nr(ctxn) {
--		ctx = current->perf_event_ctxp[ctxn];
--		if (!ctx)
--			continue;
--
- 		perf_event_enable_on_exec(ctxn);
-+		perf_event_remove_on_exec(ctxn);
- 
--		perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL,
--				   true);
-+		rcu_read_lock();
-+		ctx = rcu_dereference(current->perf_event_ctxp[ctxn]);
-+		if (ctx) {
-+			perf_iterate_ctx(ctx, perf_event_addr_filters_exec,
-+					 NULL, true);
-+		}
-+		rcu_read_unlock();
- 	}
--	rcu_read_unlock();
+ static bool is_orphaned_event(struct perf_event *event)
+ {
+ 	return event->state == PERF_EVENT_STATE_DEAD;
+@@ -2311,6 +2331,7 @@ group_sched_out(struct perf_event *group_event,
  }
  
- struct remote_output {
-@@ -11652,6 +11703,9 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 	if (!attr->inherit && attr->inherit_thread)
- 		return -EINVAL;
+ #define DETACH_GROUP	0x01UL
++#define DETACH_CHILD	0x02UL
  
-+	if (attr->remove_on_exec && attr->enable_on_exec)
-+		return -EINVAL;
+ /*
+  * Cross CPU call to remove a performance event
+@@ -2334,6 +2355,8 @@ __perf_remove_from_context(struct perf_event *event,
+ 	event_sched_out(event, cpuctx, ctx);
+ 	if (flags & DETACH_GROUP)
+ 		perf_group_detach(event);
++	if (flags & DETACH_CHILD)
++		perf_child_detach(event);
+ 	list_del_event(event, ctx);
+ 
+ 	if (!ctx->nr_events && ctx->is_active) {
+@@ -2362,25 +2385,21 @@ static void perf_remove_from_context(struct perf_event *event, unsigned long fla
+ 
+ 	lockdep_assert_held(&ctx->mutex);
+ 
+-	event_function_call(event, __perf_remove_from_context, (void *)flags);
+-
+ 	/*
+-	 * The above event_function_call() can NO-OP when it hits
+-	 * TASK_TOMBSTONE. In that case we must already have been detached
+-	 * from the context (by perf_event_exit_event()) but the grouping
+-	 * might still be in-tact.
++	 * Because of perf_event_exit_task(), perf_remove_from_context() ought
++	 * to work in the face of TASK_TOMBSTONE, unlike every other
++	 * event_function_call() user.
+ 	 */
+-	WARN_ON_ONCE(event->attach_state & PERF_ATTACH_CONTEXT);
+-	if ((flags & DETACH_GROUP) &&
+-	    (event->attach_state & PERF_ATTACH_GROUP)) {
+-		/*
+-		 * Since in that case we cannot possibly be scheduled, simply
+-		 * detach now.
+-		 */
+-		raw_spin_lock_irq(&ctx->lock);
+-		perf_group_detach(event);
++	raw_spin_lock_irq(&ctx->lock);
++	if (!ctx->is_active) {
++		__perf_remove_from_context(event, __get_cpu_context(ctx),
++					   ctx, (void *)flags);
+ 		raw_spin_unlock_irq(&ctx->lock);
++		return;
+ 	}
++	raw_spin_unlock_irq(&ctx->lock);
 +
- out:
- 	return ret;
++	event_function_call(event, __perf_remove_from_context, (void *)flags);
+ }
  
+ /*
+@@ -12373,14 +12392,17 @@ void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)
+ }
+ EXPORT_SYMBOL_GPL(perf_pmu_migrate_context);
+ 
+-static void sync_child_event(struct perf_event *child_event,
+-			       struct task_struct *child)
++static void sync_child_event(struct perf_event *child_event)
+ {
+ 	struct perf_event *parent_event = child_event->parent;
+ 	u64 child_val;
+ 
+-	if (child_event->attr.inherit_stat)
+-		perf_event_read_event(child_event, child);
++	if (child_event->attr.inherit_stat) {
++		struct task_struct *task = child_event->ctx->task;
++
++		if (task)
++			perf_event_read_event(child_event, task);
++	}
+ 
+ 	child_val = perf_event_count(child_event);
+ 
+@@ -12395,60 +12417,53 @@ static void sync_child_event(struct perf_event *child_event,
+ }
+ 
+ static void
+-perf_event_exit_event(struct perf_event *child_event,
+-		      struct perf_event_context *child_ctx,
+-		      struct task_struct *child)
++perf_event_exit_event(struct perf_event *event, struct perf_event_context *ctx)
+ {
+-	struct perf_event *parent_event = child_event->parent;
++	struct perf_event *parent_event = event->parent;
++	unsigned long detach_flags = 0;
+ 
+-	/*
+-	 * Do not destroy the 'original' grouping; because of the context
+-	 * switch optimization the original events could've ended up in a
+-	 * random child task.
+-	 *
+-	 * If we were to destroy the original group, all group related
+-	 * operations would cease to function properly after this random
+-	 * child dies.
+-	 *
+-	 * Do destroy all inherited groups, we don't care about those
+-	 * and being thorough is better.
+-	 */
+-	raw_spin_lock_irq(&child_ctx->lock);
+-	WARN_ON_ONCE(child_ctx->is_active);
++	if (parent_event) {
++		/*
++		 * Do not destroy the 'original' grouping; because of the
++		 * context switch optimization the original events could've
++		 * ended up in a random child task.
++		 *
++		 * If we were to destroy the original group, all group related
++		 * operations would cease to function properly after this
++		 * random child dies.
++		 *
++		 * Do destroy all inherited groups, we don't care about those
++		 * and being thorough is better.
++		 */
++		detach_flags = DETACH_GROUP | DETACH_CHILD;
++		mutex_lock(&parent_event->child_mutex);
++	}
+ 
+-	if (parent_event)
+-		perf_group_detach(child_event);
+-	list_del_event(child_event, child_ctx);
+-	perf_event_set_state(child_event, PERF_EVENT_STATE_EXIT); /* is_event_hup() */
+-	raw_spin_unlock_irq(&child_ctx->lock);
++	perf_remove_from_context(event, detach_flags);
++
++	raw_spin_lock_irq(&ctx->lock);
++	if (event->state > PERF_EVENT_STATE_EXIT)
++		perf_event_set_state(event, PERF_EVENT_STATE_EXIT);
++	raw_spin_unlock_irq(&ctx->lock);
+ 
+ 	/*
+-	 * Parent events are governed by their filedesc, retain them.
++	 * Child events can be freed.
+ 	 */
+-	if (!parent_event) {
+-		perf_event_wakeup(child_event);
++	if (parent_event) {
++		mutex_unlock(&parent_event->child_mutex);
++		/*
++		 * Kick perf_poll() for is_event_hup();
++		 */
++		perf_event_wakeup(parent_event);
++		free_event(event);
++		put_event(parent_event);
+ 		return;
+ 	}
+-	/*
+-	 * Child events can be cleaned up.
+-	 */
+-
+-	sync_child_event(child_event, child);
+ 
+ 	/*
+-	 * Remove this event from the parent's list
+-	 */
+-	WARN_ON_ONCE(parent_event->ctx->parent_ctx);
+-	mutex_lock(&parent_event->child_mutex);
+-	list_del_init(&child_event->child_list);
+-	mutex_unlock(&parent_event->child_mutex);
+-
+-	/*
+-	 * Kick perf_poll() for is_event_hup().
++	 * Parent events are governed by their filedesc, retain them.
+ 	 */
+-	perf_event_wakeup(parent_event);
+-	free_event(child_event);
+-	put_event(parent_event);
++	perf_event_wakeup(event);
+ }
+ 
+ static void perf_event_exit_task_context(struct task_struct *child, int ctxn)
+@@ -12505,7 +12520,7 @@ static void perf_event_exit_task_context(struct task_struct *child, int ctxn)
+ 	perf_event_task(child, child_ctx, 0);
+ 
+ 	list_for_each_entry_safe(child_event, next, &child_ctx->event_list, event_entry)
+-		perf_event_exit_event(child_event, child_ctx, child);
++		perf_event_exit_event(child_event, child_ctx);
+ 
+ 	mutex_unlock(&child_ctx->mutex);
+ 
+@@ -12765,6 +12780,7 @@ inherit_event(struct perf_event *parent_event,
+ 	 */
+ 	raw_spin_lock_irqsave(&child_ctx->lock, flags);
+ 	add_event_to_ctx(child_event, child_ctx);
++	child_event->attach_state |= PERF_ATTACH_CHILD;
+ 	raw_spin_unlock_irqrestore(&child_ctx->lock, flags);
+ 
+ 	/*
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
