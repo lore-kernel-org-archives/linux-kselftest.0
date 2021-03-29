@@ -2,179 +2,135 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C64C433C1
-	for <linux-kselftest@archiver.kernel.org>; Sun, 28 Mar 2021 16:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03E62C433C1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 01:26:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62C5E61981
-	for <linux-kselftest@archiver.kernel.org>; Sun, 28 Mar 2021 16:13:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9CD361948
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 01:26:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbhC1QNG (ORCPT
+        id S230167AbhC2B0M (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 28 Mar 2021 12:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
+        Sun, 28 Mar 2021 21:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbhC1QMu (ORCPT
+        with ESMTP id S230413AbhC2B0G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Mar 2021 12:12:50 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6ADC061756;
-        Sun, 28 Mar 2021 09:12:50 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id x27so5365142qvd.2;
-        Sun, 28 Mar 2021 09:12:50 -0700 (PDT)
+        Sun, 28 Mar 2021 21:26:06 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135FFC061574;
+        Sun, 28 Mar 2021 18:26:06 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id kr3-20020a17090b4903b02900c096fc01deso5145987pjb.4;
+        Sun, 28 Mar 2021 18:26:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qXmHrbHu9PXmGzGPke8kvh2otPX8784lz/uhZrxhb0s=;
-        b=SEBiMH8veeK98mZf/ElkiXuyU7wccCcwyKk+TvsrFcw7we9IBJCXRgxGwVu7rkPSZE
-         OAHrd4Aho7MsoRmIdtW8l4hzLciFeadbbnukGTKgAachM8ivlB5Ea458Z5JgEMdYNwdu
-         VDlVph5VD05RLGKl8bsl+UlX5F/JvDEALgCFoSkM7Dsr3SGreKJ1qQqw5yk+Cc1oojaF
-         0YeNsaYWTpAXv0TPSd5DTqq+Ix4b7DWKw7lm3RFMYNRf/NGiN+neYscnLtm2kCt8xrjB
-         evkvFziVq9PpthKnG3sv313lZvuGOjGg0AONzWr6V5JPUhyd5OVSWYoz9lW+SMm8Imck
-         Sckg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=D2qDTN7silotp2//OnN3/0i2DnrKYAYRXZS1eDoRb7Q=;
+        b=XobvU2uNpiHXgiqr20IGZVGwVnLsirMFL+2eoeCGHVygqUKiA8jdIzKWn8ZjGiJOnH
+         SkwzmKUiFguztt2b8nX3+//w8eSgQD6MAFC56xs+zHws0Xt/iscQfl7BxIsVS7049qYW
+         98SDzALrFGk1dHUS2Uz5AQul1daKjZl1S0WK/i7UsLJ5M9qugVCPisgizndFt82/lzX4
+         Ty1aBWMIVw2Gqgr3OGCpjvFKCwomm5zLlZk4HKz0q9NafFDh5onokMsXhoaaQd4JEKvz
+         maC/l8QAEN4VrJvAfc6dn12zdwro4ql332/Twzg0PlcgHw+bSH75eG8CWb8r1d045TZi
+         IeTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qXmHrbHu9PXmGzGPke8kvh2otPX8784lz/uhZrxhb0s=;
-        b=RyDY06X71m7jCEnQRe2lIsr8j8BPWdO0vU5W2PUCjaxHrJrjNsjsvm82ojY4tMi3V1
-         f8JR9S2eMEt0YZfiu9EksCZajxVEd0yAc9gVnC35NC+Off+sPvLVHY3pz17/m41180Fx
-         j6nY+0/+FU0sQq/CrLHCieIoRZmVMwNdo7BDSOObMlMx/HxHHDm3tVNQjRLedDDfcMGl
-         p4pZn+jhXZ+Nq5y1zcMSdirMB8oW/rKVU72Hw8lQXUTeXUE/z3CsHFp4U+FYXPlJCMRX
-         xjMkqIwgt0IYD1LQWXkHmVX2nfIFt8/NSf4UifyHrdjXL6omkrvS9H1aApxPPr2l0ere
-         ofhg==
-X-Gm-Message-State: AOAM5305lNIZZ7P6j+sZrnSu6W5MoOR22+2n6Wm8anvgNbvB7/H+1apY
-        MiB2rAzN1ARtBFu43cDATew=
-X-Google-Smtp-Source: ABdhPJzqwZ5fFfYMfRCqam1gLDp2CihG/fofezRvoS8Klq8XMjPuVoohYQqPTPlB63wsjus335SJxw==
-X-Received: by 2002:a0c:e8c5:: with SMTP id m5mr21535174qvo.13.1616947969594;
-        Sun, 28 Mar 2021 09:12:49 -0700 (PDT)
-Received: from localhost.localdomain ([179.218.4.27])
-        by smtp.gmail.com with ESMTPSA id o7sm11275232qkb.104.2021.03.28.09.12.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=D2qDTN7silotp2//OnN3/0i2DnrKYAYRXZS1eDoRb7Q=;
+        b=pymkGGTlnBfG+ma+/Rnb90PdOP1ROiQxl12KvBPTjovTrsh8JnzKU0aVjCeAkd+OcD
+         S9+2APGdNaIWSdnpUwj0lyaa+U1tZFvqLmNBhyUcH1Zj5n8cdyWAU6llpES28O1YSDzW
+         ASP9YMXNxZ6vMJRBZZY0jzdwOaauOOnP6FtM5bgIE5MhsusoElunu/gAAWlUpexN0wE+
+         w+C71N4mQYn4vtf47XdD1O+dxoKoXGUaZbMfOiFQXSMBkz1dYJZDXlDARuQciZZo/hCw
+         C/J9qQh6Z4BC5fuiUpfXraQPfsaKc9mfvhTVdaBgDob2Dqfww8Vpd0A7T9iF6z83aRrQ
+         j5fQ==
+X-Gm-Message-State: AOAM531wYJOUWkby9uivKCQjwZb/RiAsHw4nSvtaJ02E92uVW6zaHNdV
+        G2fYpuM+X2b5EdCXJfuit3s=
+X-Google-Smtp-Source: ABdhPJxjxzFXOqkBT6dy5DhXM8Uzx3EwHv1iP1Tibnt6sgZd+CfXJJggAP+Ef0IC0A65OPpzuSG5DQ==
+X-Received: by 2002:a17:90a:cb8c:: with SMTP id a12mr24654662pju.35.1616981165633;
+        Sun, 28 Mar 2021 18:26:05 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:400::5:1b8f])
+        by smtp.gmail.com with ESMTPSA id w79sm15674455pfc.87.2021.03.28.18.26.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Mar 2021 09:12:49 -0700 (PDT)
-From:   Pedro Tammela <pctammela@gmail.com>
-X-Google-Original-From: Pedro Tammela <pctammela@mojatatu.com>
-Cc:     Pedro Tammela <pctammela@mojatatu.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Sun, 28 Mar 2021 18:26:05 -0700 (PDT)
+Date:   Sun, 28 Mar 2021 18:26:02 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+        brouer@redhat.com, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Yang Li <yang.lee@linux.alibaba.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next] libbpf: Add '_wait()' and '_nowait()' macros for 'bpf_ring_buffer__poll()'
-Date:   Sun, 28 Mar 2021 13:10:32 -0300
-Message-Id: <20210328161055.257504-3-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210328161055.257504-1-pctammela@mojatatu.com>
-References: <20210328161055.257504-1-pctammela@mojatatu.com>
+Subject: Re: [PATCH bpf-next 5/5] libbpf: add selftests for TC-BPF API
+Message-ID: <20210329012602.4zzysn2ewbarbn3d@ast-mbp>
+References: <20210325120020.236504-1-memxor@gmail.com>
+ <20210325120020.236504-6-memxor@gmail.com>
+ <20210327021534.pjfjctcdczj7facs@ast-mbp>
+ <87h7kwaao3.fsf@toke.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <87h7kwaao3.fsf@toke.dk>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-'bpf_ring_buffer__poll()' abstracts the polling method, so abstract the
-constants that make the implementation don't wait or wait indefinetly
-for data.
+On Sat, Mar 27, 2021 at 04:17:16PM +0100, Toke Høiland-Jørgensen wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> 
+> > On Thu, Mar 25, 2021 at 05:30:03PM +0530, Kumar Kartikeya Dwivedi wrote:
+> >> This adds some basic tests for the low level bpf_tc_* API and its
+> >> bpf_program__attach_tc_* wrapper on top.
+> >
+> > *_block() apis from patch 3 and 4 are not covered by this selftest.
+> > Why were they added ? And how were they tested?
+> >
+> > Pls trim your cc. bpf@vger and netdev@vger would have been enough.
+> >
+> > My main concern with this set is that it adds netlink apis to libbpf while
+> > we already agreed to split xdp manipulation pieces out of libbpf.
+> > It would be odd to add tc apis now only to split them later.
+> 
+> We're not removing the ability to attach an XDP program via netlink from
+> libxdp, though. This is the equivalent for TC: the minimum support to
+> attach a program, and if you want to do more, you pull in another
+> library or roll your own.
+> 
+> I'm fine with cutting out more stuff and making this even more minimal
+> (e.g., remove the block stuff and only support attach/detach on ifaces),
+> but we figured we'd err on the side of including too much and getting
+> some feedback from others on which bits are the essential ones to keep,
+> and which can be dropped.
 
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- tools/lib/bpf/libbpf.h                                 | 3 +++
- tools/testing/selftests/bpf/benchs/bench_ringbufs.c    | 2 +-
- tools/testing/selftests/bpf/prog_tests/ringbuf.c       | 6 +++---
- tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c | 4 ++--
- 4 files changed, 9 insertions(+), 6 deletions(-)
+This is up to you. I'm trying to understand the motivation for *_block() apis.
+I'm not taking a stance for/against them.
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index f500621d28e5..3817d84f91c6 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -540,6 +540,9 @@ LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms);
- LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
- LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
- 
-+#define ring_buffer__poll_wait(rb) ring_buffer__poll(rb, -1)
-+#define ring_buffer__poll_nowait(rb) ring_buffer__poll(rb, 0)
-+
- /* Perf buffer APIs */
- struct perf_buffer;
- 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-index bde6c9d4cbd4..82db2cc9bab3 100644
---- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-@@ -191,7 +191,7 @@ static void *ringbuf_libbpf_consumer(void *input)
- {
- 	struct ringbuf_libbpf_ctx *ctx = &ringbuf_libbpf_ctx;
- 
--	while (ring_buffer__poll(ctx->ringbuf, -1) >= 0) {
-+	while (ring_buffer__poll_wait(ctx->ringbuf) >= 0) {
- 		if (args.back2back)
- 			bufs_trigger_batch();
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-index fddbc5db5d6a..321c646a0685 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -121,7 +121,7 @@ void test_ringbuf(void)
- 	      3L * rec_sz, skel->bss->prod_pos);
- 
- 	/* poll for samples */
--	err = ring_buffer__poll(ringbuf, -1);
-+	err = ring_buffer__poll_wait(ringbuf);
- 
- 	/* -EDONE is used as an indicator that we are done */
- 	if (CHECK(err != -EDONE, "err_done", "done err: %d\n", err))
-@@ -130,7 +130,7 @@ void test_ringbuf(void)
- 	CHECK(cnt != 2, "cnt", "exp %d samples, got %d\n", 2, cnt);
- 
- 	/* we expect extra polling to return nothing */
--	err = ring_buffer__poll(ringbuf, 0);
-+	err = ring_buffer__poll_nowait(ringbuf);
- 	if (CHECK(err != 0, "extra_samples", "poll result: %d\n", err))
- 		goto cleanup;
- 	cnt = atomic_xchg(&sample_cnt, 0);
-@@ -148,7 +148,7 @@ void test_ringbuf(void)
- 	CHECK(skel->bss->cons_pos != 3 * rec_sz,
- 	      "err_cons_pos", "exp %ld, got %ld\n",
- 	      3L * rec_sz, skel->bss->cons_pos);
--	err = ring_buffer__poll(ringbuf, -1);
-+	err = ring_buffer__poll_wait(ringbuf);
- 	CHECK(err <= 0, "poll_err", "err %d\n", err);
- 	cnt = atomic_xchg(&sample_cnt, 0);
- 	CHECK(cnt != 2, "cnt", "exp %d samples, got %d\n", 2, cnt);
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-index d37161e59bb2..65ba0a3472f1 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_multi.c
-@@ -80,12 +80,12 @@ void test_ringbuf_multi(void)
- 	syscall(__NR_getpgid);
- 
- 	/* poll for samples, should get 2 ringbufs back */
--	err = ring_buffer__poll(ringbuf, -1);
-+	err = ring_buffer__poll_wait(ringbuf);
- 	if (CHECK(err != 2, "poll_res", "expected 2 records, got %d\n", err))
- 		goto cleanup;
- 
- 	/* expect extra polling to return nothing */
--	err = ring_buffer__poll(ringbuf, 0);
-+	err = ring_buffer__poll_nowait(ringbuf);
- 	if (CHECK(err < 0, "extra_samples", "poll result: %d\n", err))
- 		goto cleanup;
- 
--- 
-2.25.1
+> > I think it's better to start with new library for tc/xdp and have
+> > libbpf as a dependency on that new lib.
+> > For example we can add it as subdir in tools/lib/bpf/.
+> 
+> I agree for the higher-level stuff (though I'm not sure what that would
+> be for TC), but right now TC programs are the only ones that cannot be
+> attached by libbpf, which is annoying; that's what we're trying to fix.
 
+Sure. I wasn't saying that there is no place for these APIs in libbpf+.
+Just that existing libbpf is already became a kitchen sink of features
+that users are not going to use like static linking.
+tc-api was a straw that broke the camel's back.
+I think we must move static linking and skeleton out of libbpf before
+the next release.
