@@ -2,147 +2,320 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3980C432C3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 22:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC1EBC433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 22:51:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B993C619C7
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 22:23:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72DB761959
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 22:51:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbhC2WXk (ORCPT
+        id S231163AbhC2Wuz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 29 Mar 2021 18:23:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46638 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232231AbhC2WWr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 18:22:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED86C61990;
-        Mon, 29 Mar 2021 22:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617056566;
-        bh=/JKknKtVqxMq6jenW9+EWbjPr116+LJbh6wrHDKv9Qg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tYA0wc8StPLSpfyDYPaVgAEEflCUk3vuAZ9qYaocIFTokQQXN6qdj+uM4eL0tth0f
-         lc87MJ84KfPN9Z45FOEf3wCfQWQpXXZUUbZXCiozKD6qwG3zaetlQJ7CeVET2NYB5Y
-         EdoxFITH+2CmXlka3FKYAeZ8Z8TewCCLE9mKGg1akqRpKR/m+TmFeb2si7mcbBCWjQ
-         maUejES7sy7hvR6AStqwc2hhZQYiS5uxenbBFhqxEVyudrzVdsXS9TuMRXNdj74kPs
-         mymCPsAWUsj53RATxzPItxBZ0+6jnQZi3bhWjYHI/lrJYofAaBObhkp5n5B2xTH6aO
-         YKZedh8kqP8VA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 20/33] kselftest/arm64: sve: Do not use non-canonical FFR register value
-Date:   Mon, 29 Mar 2021 18:22:08 -0400
-Message-Id: <20210329222222.2382987-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210329222222.2382987-1-sashal@kernel.org>
-References: <20210329222222.2382987-1-sashal@kernel.org>
+        Mon, 29 Mar 2021 18:50:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37304 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230522AbhC2Wut (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 29 Mar 2021 18:50:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617058248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EEp/AWms1iQPM6gX6QYU8HGZGwUHBY8T+uSbGj6gOv0=;
+        b=R/YbcfjzfF++vgHKMAppi64gVfxm9bsgPobTnU8f29Gg30FEmbnfCrGNqTidgCWPOGizrA
+        EXPmIo2+k0QkyoQKCcfYpGl+kMvxY0iMLYXhTT22N14ZWHsumbeGgcpPTt9lbnn/0ek7Co
+        fExntP9MbOD2mQ2fYAyhz++/74ABf5g=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-291-Noz6nZ_CPQGgO0N5ZHLEXg-1; Mon, 29 Mar 2021 18:50:46 -0400
+X-MC-Unique: Noz6nZ_CPQGgO0N5ZHLEXg-1
+Received: by mail-qt1-f198.google.com with SMTP id f26so8521309qtq.17
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Mar 2021 15:50:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EEp/AWms1iQPM6gX6QYU8HGZGwUHBY8T+uSbGj6gOv0=;
+        b=PYsD6QctUXBaMWBwav6uSZ2H7gEY/ARhJy+eJ4iW2SoYpstnXqueHAyJC2+o8hfITl
+         /AOKWU0OwCcob43qCuVx/PMI8U1XRLj6VQEwBYbJtxVYiw9xdRlqL4QCtuWvCCxxiRjb
+         Sc3R/aoMUklNAVGm2MfaMU6xl5KzvrMnyuytPLb1txZKMRPbv8DDNmQsDbrW59O/fKKE
+         h+N/Lf6L2sbkAJi27rc2vC09SKSkx1y4bCWQaPyzOcXPviCVLIZMGHESPgQP1zVn0POb
+         zss688ZU+HMuJUUo/vmjqnwgeA2yXq2qF3VW9cNTIghpm46MGgfuWX67je5M8uc/CSPK
+         +QvA==
+X-Gm-Message-State: AOAM531Q4dtokY1jfIKqtoJaNiICRC8fKgBczl1QuGsARH/AYHqhOMd0
+        AYJ6OPaSQXVdlenrBIbkV1+6f6g+jKbiToQsn9ii4xekf7Yu0I29XeloaiP+BI8v7wmJpS9417d
+        GiUWHXVAefrW4w3n3R/oeMl4OwTZu
+X-Received: by 2002:a37:9802:: with SMTP id a2mr28987593qke.473.1617058245968;
+        Mon, 29 Mar 2021 15:50:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw4TtfFGH5PtBrvRg+7tdRAACaWWJA5uxnJt87xc9spU6EsS47neLYRetUlyAwN4AL62ZnzNg==
+X-Received: by 2002:a37:9802:: with SMTP id a2mr28987571qke.473.1617058245571;
+        Mon, 29 Mar 2021 15:50:45 -0700 (PDT)
+Received: from xz-x1 (bras-base-toroon474qw-grc-82-174-91-135-175.dsl.bell.ca. [174.91.135.175])
+        by smtp.gmail.com with ESMTPSA id n2sm11458357qta.61.2021.03.29.15.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 15:50:44 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 18:50:42 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v2] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTNUE behavior
+Message-ID: <20210329225042.GF429942@xz-x1>
+References: <20210329200659.65971-1-axelrasmussen@google.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210329200659.65971-1-axelrasmussen@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+On Mon, Mar 29, 2021 at 01:06:59PM -0700, Axel Rasmussen wrote:
+> Previously, we shared too much of the code with COPY and ZEROPAGE, so we
+> manipulated things in various invalid ways:
+> 
+> - Previously, we unconditionally called shmem_inode_acct_block. In the
+>   continue case, we're looking up an existing page which would have been
+>   accounted for properly when it was allocated. So doing it twice
+>   results in double-counting, and eventually leaking.
+> 
+> - Previously, we made the pte writable whenever the VMA was writable.
+>   However, for continue, consider this case:
+> 
+>   1. A tmpfs file was created
+>   2. The non-UFFD-registered side mmap()-s with MAP_SHARED
+>   3. The UFFD-registered side mmap()-s with MAP_PRIVATE
+> 
+>   In this case, even though the UFFD-registered VMA may be writable, we
+>   still want CoW behavior. So, check for this case and don't make the
+>   pte writable.
+> 
+> - The offset / max_off checking doesn't necessarily hurt anything, but
+>   it's not needed in the CONTINUE case, so skip it.
+> 
+> - Previously, we unconditionally called ClearPageDirty() in the error
+>   path. In the continue case though, since this is an existing page, it
+>   might have already been dirty before we started touching it. So,
+>   remember whether or not it was dirty before we set_page_dirty(), and
+>   only clear the bit if it wasn't dirty before.
+> 
+> - Previously, we unconditionally removed the page from the page cache in
+>   the error path. But in the continue case, we didn't add it - it was
+>   already there because the page is present in some second
+>   (non-UFFD-registered) mapping. So, removing it is invalid.
+> 
+> Because the error handling issues are easy to exercise in the selftest,
+> make a small modification there to do so.
+> 
+> Finally, refactor shmem_mcopy_atomic_pte a bit. By this point, we've
+> added a lot of "if (!is_continue)"-s everywhere. It's cleaner to just
+> check for that mode first thing, and then "goto" down to where the parts
+> we actually want are. This leaves the code in between cleaner.
+> 
+> Changes since v1:
+> - Refactor to skip ahead with goto, instead of adding several more
+>   "if (!is_continue)".
+> - Fix unconditional ClearPageDirty().
+> - Don't pte_mkwrite() when is_continue && !VM_SHARED.
+> 
+> Fixes: 00da60b9d0a0 ("userfaultfd: support minor fault handling for shmem")
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  mm/shmem.c                               | 67 ++++++++++++++----------
+>  tools/testing/selftests/vm/userfaultfd.c | 12 +++++
+>  2 files changed, 51 insertions(+), 28 deletions(-)
+> 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index d2e0e81b7d2e..8ab1f1f29987 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2378,17 +2378,22 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  	pte_t _dst_pte, *dst_pte;
+>  	int ret;
+>  	pgoff_t offset, max_off;
+> -
+> -	ret = -ENOMEM;
+> -	if (!shmem_inode_acct_block(inode, 1))
+> -		goto out;
+> +	int writable;
+> +	bool was_dirty;
+>  
+>  	if (is_continue) {
+>  		ret = -EFAULT;
+>  		page = find_lock_page(mapping, pgoff);
+>  		if (!page)
+> -			goto out_unacct_blocks;
+> -	} else if (!*pagep) {
+> +			goto out;
+> +		goto install_ptes;
+> +	}
+> +
+> +	ret = -ENOMEM;
+> +	if (!shmem_inode_acct_block(inode, 1))
+> +		goto out;
+> +
+> +	if (!*pagep) {
+>  		page = shmem_alloc_page(gfp, info, pgoff);
+>  		if (!page)
+>  			goto out_unacct_blocks;
+> @@ -2415,13 +2420,11 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  		*pagep = NULL;
+>  	}
+>  
+> -	if (!is_continue) {
+> -		VM_BUG_ON(PageSwapBacked(page));
+> -		VM_BUG_ON(PageLocked(page));
+> -		__SetPageLocked(page);
+> -		__SetPageSwapBacked(page);
+> -		__SetPageUptodate(page);
+> -	}
+> +	VM_BUG_ON(PageSwapBacked(page));
+> +	VM_BUG_ON(PageLocked(page));
+> +	__SetPageLocked(page);
+> +	__SetPageSwapBacked(page);
+> +	__SetPageUptodate(page);
+>  
+>  	ret = -EFAULT;
+>  	offset = linear_page_index(dst_vma, dst_addr);
+> @@ -2429,16 +2432,18 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  	if (unlikely(offset >= max_off))
+>  		goto out_release;
+>  
+> -	/* If page wasn't already in the page cache, add it. */
+> -	if (!is_continue) {
+> -		ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
+> -					      gfp & GFP_RECLAIM_MASK, dst_mm);
+> -		if (ret)
+> -			goto out_release;
+> -	}
+> +	ret = shmem_add_to_page_cache(page, mapping, pgoff, NULL,
+> +				      gfp & GFP_RECLAIM_MASK, dst_mm);
+> +	if (ret)
+> +		goto out_release;
+>  
+> +install_ptes:
+>  	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
+> -	if (dst_vma->vm_flags & VM_WRITE)
+> +	/* For CONTINUE on a non-shared VMA, don't pte_mkwrite for CoW. */
+> +	writable = is_continue && !(dst_vma->vm_flags & VM_SHARED)
+> +		? 0
+> +		: dst_vma->vm_flags & VM_WRITE;
+> +	if (writable)
+>  		_dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
+>  	else {
+>  		/*
+> @@ -2448,15 +2453,18 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  		 * unconditionally before unlock_page(), but doing it
+>  		 * only if VM_WRITE is not set is faster.
+>  		 */
+> +		was_dirty = PageDirty(page);
+>  		set_page_dirty(page);
+>  	}
+>  
+>  	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
+>  
+> -	ret = -EFAULT;
+> -	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> -	if (unlikely(offset >= max_off))
+> -		goto out_release_unlock;
+> +	if (!is_continue) {
+> +		ret = -EFAULT;
+> +		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+> +		if (unlikely(offset >= max_off))
+> +			goto out_release_unlock;
+> +	}
 
-[ Upstream commit 7011d72588d16a9e5f5d85acbc8b10019809599c ]
+I think you're right, but I won't touch this code explicitly since the new code
+slightly affects readability, while skipping it won't save a lot of cpu cycles.
+No strong opinion though.
 
-The "First Fault Register" (FFR) is an SVE register that mimics a
-predicate register, but clears bits when a load or store fails to handle
-an element of a vector. The supposed usage scenario is to initialise
-this register (using SETFFR), then *read* it later on to learn about
-elements that failed to load or store. Explicit writes to this register
-using the WRFFR instruction are only supposed to *restore* values
-previously read from the register (for context-switching only).
-As the manual describes, this register holds only certain values, it:
-"... contains a monotonic predicate value, in which starting from bit 0
-there are zero or more 1 bits, followed only by 0 bits in any remaining
-bit positions."
-Any other value is UNPREDICTABLE and is not supposed to be "restored"
-into the register.
+>  
+>  	ret = -EEXIST;
+>  	if (!pte_none(*dst_pte))
+> @@ -2485,13 +2493,16 @@ int shmem_mcopy_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  	return ret;
+>  out_release_unlock:
+>  	pte_unmap_unlock(dst_pte, ptl);
+> -	ClearPageDirty(page);
+> -	delete_from_page_cache(page);
+> +	if (!was_dirty)
+> +		ClearPageDirty(page);
 
-The SVE test currently tries to write a signature pattern into the
-register, which is *not* a canonical FFR value. Apparently the existing
-setups treat UNPREDICTABLE as "read-as-written", but a new
-implementation actually only stores canonical values. As a consequence,
-the sve-test fails immediately when comparing the FFR value:
------------
- # ./sve-test
-Vector length:  128 bits
-PID:    207
-Mismatch: PID=207, iteration=0, reg=48
-        Expected [cf00]
-        Got      [0f00]
-Aborted
------------
+It could be using a random was_dirty from stack, does not seem right.
 
-Fix this by only populating the FFR with proper canonical values.
-Effectively the requirement described above limits us to 17 unique
-values over 16 bits worth of FFR, so we condense our signature down to 4
-bits (2 bits from the PID, 2 bits from the generation) and generate the
-canonical pattern from it. Any bits describing elements above the
-minimum 128 bit are set to 0.
+Maybe simply drop this ClearPageDirty()?  I'm not sure whether the page free
+code will complain, but if not I think an extra dirty bit is better than losing
+one, as the latter corrupts data while the former happens anyways, not to
+mention this is an error path.  Maybe acceptable?
 
-This aligns the FFR usage to the architecture and fixes the test on
-microarchitectures implementing FFR in a more restricted way.
+> +	if (!is_continue)
+> +		delete_from_page_cache(page);
+>  out_release:
+>  	unlock_page(page);
+>  	put_page(page);
+>  out_unacct_blocks:
+> -	shmem_inode_unacct_blocks(inode, 1);
+> +	if (!is_continue)
+> +		shmem_inode_unacct_blocks(inode, 1);
+>  	goto out;
+>  }
+>  #endif /* CONFIG_USERFAULTFD */
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index f6c86b036d0f..d8541a59dae5 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -485,6 +485,7 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
+>  static void continue_range(int ufd, __u64 start, __u64 len)
+>  {
+>  	struct uffdio_continue req;
+> +	int ret;
+>  
+>  	req.range.start = start;
+>  	req.range.len = len;
+> @@ -493,6 +494,17 @@ static void continue_range(int ufd, __u64 start, __u64 len)
+>  	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
+>  		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
+>  		    (uint64_t)start);
+> +
+> +	/*
+> +	 * Error handling within the kernel for continue is subtly different
+> +	 * from copy or zeropage, so it may be a source of bugs. Trigger an
+> +	 * error (-EEXIST) on purpose, to verify doing so doesn't cause a BUG.
+> +	 */
+> +	req.mapped = 0;
+> +	ret = ioctl(ufd, UFFDIO_CONTINUE, &req);
+> +	if (ret >= 0 || req.mapped != -EEXIST)
+> +		err("failed to exercise UFFDIO_CONTINUE error handling, ret=%d, mapped=%" PRId64,
+> +		    ret, req.mapped);
+>  }
+>  
+>  static void *locking_thread(void *arg)
+> -- 
+> 2.31.0.291.g576ba9dcdaf-goog
+> 
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviwed-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20210319120128.29452-1-andre.przywara@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/arm64/fp/sve-test.S | 22 ++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index f95074c9b48b..07f14e279a90 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -284,16 +284,28 @@ endfunction
- // Set up test pattern in the FFR
- // x0: pid
- // x2: generation
-+//
-+// We need to generate a canonical FFR value, which consists of a number of
-+// low "1" bits, followed by a number of zeros. This gives us 17 unique values
-+// per 16 bits of FFR, so we create a 4 bit signature out of the PID and
-+// generation, and use that as the initial number of ones in the pattern.
-+// We fill the upper lanes of FFR with zeros.
- // Beware: corrupts P0.
- function setup_ffr
- 	mov	x4, x30
- 
--	bl	pattern
-+	and	w0, w0, #0x3
-+	bfi	w0, w2, #2, #2
-+	mov	w1, #1
-+	lsl	w1, w1, w0
-+	sub	w1, w1, #1
-+
- 	ldr	x0, =ffrref
--	ldr	x1, =scratch
--	rdvl	x2, #1
--	lsr	x2, x2, #3
--	bl	memcpy
-+	strh	w1, [x0], 2
-+	rdvl	x1, #1
-+	lsr	x1, x1, #3
-+	sub	x1, x1, #2
-+	bl	memclr
- 
- 	mov	x0, #0
- 	ldr	x1, =ffrref
 -- 
-2.30.1
+Peter Xu
 
