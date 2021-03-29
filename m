@@ -2,122 +2,380 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1C0DC433E1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 14:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C7DC433DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 15:40:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B530561989
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 14:33:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AD9361964
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Mar 2021 15:40:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbhC2Ocp (ORCPT
+        id S230323AbhC2PkE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 29 Mar 2021 10:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbhC2Ocb (ORCPT
+        Mon, 29 Mar 2021 11:40:04 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50825 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230167AbhC2Pjh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Mar 2021 10:32:31 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3E0C061762
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Mar 2021 07:32:31 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 68-20020a9d0f4a0000b02901b663e6258dso12410868ott.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Mar 2021 07:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6pd5+1lyxF0IpfUFm+C/Q0BotbJ7mj/8xSGsdykFryU=;
-        b=WOGPfNiBH1rBOn7rKEj2te7OWuckEUpvJ+NQWbuqa1LLPtC8ni5+XceiDdRhii9Ezo
-         M3ZPxxLkR1FXKmahCW23aHCLAWw+1OTM6ecK7JG1myf3fkFFkHbKy3NxP5RvTvpov7Y9
-         EsByzRGNkr3bhxp3Sv7v6YCoNu0qTBw+quXgG6uVUGQ8KuWIX4x/qiDMmEaufKVIHUXm
-         6yyKWYP37AglSKbupam4uq5h1Nmct7LqgHslu+LbupQAHibZM9OqxzCSknm9Ae0xDYpl
-         o0BLDukK5niYeGEuiSDb/YFoa+1gQZhKm0HpxsyBbqblfmPZjrQumWmzZOKLO9gjRBmK
-         Nx5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6pd5+1lyxF0IpfUFm+C/Q0BotbJ7mj/8xSGsdykFryU=;
-        b=tdcxVR/peSPoH6N4Fm6zgPOuk0FI/e43roOTcwv474M2zrqKsBXPYWRiKvjmgQkcfO
-         frjkepS0SVX1UsS7AuLVgGmEbkwqfn9+k65QHgfw5pjZa0JEr1erIxsJ4pSxUyalHdEX
-         ALePwH/hQY1RGikqFLbYMGgUK0BBvU8yfyq4h53/jS2ZIyXegCUKaAD4ZrbvFuVs5fka
-         zKbkTvAs0CXY6gpSotd9DrLPL02oaDBO9RSc8UUphGIHGb66zq4xtIa2ayIxe4VaEWYn
-         ICWUF3rCzTQFM4Cc0FwJ+xGolpF43YKXWc+Vd6vK9c/POL4H3XzTK6jc3N1QaZomd42H
-         e38w==
-X-Gm-Message-State: AOAM533DwLIJFsaoN1+r2nGnnnFUwmNBGtEfsgDGTqbHJTkxqmp/RSXZ
-        A5wBxIaiBNK5FUWmORTTPZ5neQFW4XcH44co6eBg7w==
-X-Google-Smtp-Source: ABdhPJxXlJbzmAzqT33taumiK8BdMN/OkVmDMWa6AP1XrX+5I2Yys/7Pp8HpnlAdCIy2hzJQig2Zesc70wVcHKDSdNI=
-X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr23773028otq.251.1617028350375;
- Mon, 29 Mar 2021 07:32:30 -0700 (PDT)
+        Mon, 29 Mar 2021 11:39:37 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7F07F58059D;
+        Mon, 29 Mar 2021 11:39:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 29 Mar 2021 11:39:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
+        :mime-version:content-transfer-encoding; s=fm3; bh=B02kY17mfGts1
+        USvLJhcoqNJjZkeReodTLssTpl/N5g=; b=Iw4w28g95lN7V/tI8MaqHVxn7i+Z0
+        qHMI/Q2kjpVqPA1DKnWj1f11Z0+ctnHkBt/0zTFuxvlyCiOnhHeYvw7vnOJPkHa+
+        Zq+HeQHwnfBAjo7g2IKzPvSuOrFgRLS0xFrB869yCJwV+S5auuQJUVPvmo9dL4eE
+        lXmYVgh1NjeFRBLlag+oR0ds/fPbcit7mIw9XZnq7EcEm29W5p/ZWN4i8wUckcgA
+        iSSqNgzFpUBAe4BAp0FKUBjW2/IYEzKUK8NXgjPfJmlHx9pfT6Ntj8tcocAa6Ekj
+        Wr7bCKoDKA/tksY1+ZrswipFHq8EGNhk5ZRXF0a4MOswv6uVykDk/wjzw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:reply-to:subject
+        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; bh=B02kY17mfGts1USvLJhcoqNJjZkeReodTLssTpl/N5g=; b=gQzFiKZE
+        QKfoJOrJhLc0/KB440VMCjyMo5OVxZpc41SU7WVVMqplm5ZEan5Kf2Qx1oetW4fy
+        grZHIYHxL7JvgA44tRbtKyi6m481ezkKhmcoHoHj4VGWXTVpMdKgbTpA3GtKp0n9
+        99bAD2gpMU8173F83C/oCwpDYBAWgzQGDvFzXFJKiA0qXGluLK9VSzINMPmgoF+l
+        kiTPfkbegYRdn4es+JeUOB9EB62TtGTp8F50NmAZy2ih7f7Ca07kdTG4AC2d5Vx/
+        BcaUwfiZkMYil26GsrWuMyFmfWjD6w1Rp5DPKw4+fADPQQDfv+NTGiM2lIQfpbKi
+        nwt35YQqbp13Ag==
+X-ME-Sender: <xms:t_RhYEcIqFOmLGP2FpcZf2t7zUmQxW-t1I_HT7muaiiZhQ___NrDRQ>
+    <xme:t_RhYGNsZRGeHHwu6Im1kxi0ejABKDLsSODsQAitfguFsY0TTzOMLKkoGfhRGOYlq
+    n9JxpguM1Rt3Ie3HA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudehkedgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
+    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
+    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecukfhppedv
+    tdelrdeirdejuddrvddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpeiiihdrhigrnhesshgvnhhtrdgtohhm
+X-ME-Proxy: <xmx:t_RhYFhwNESfGdadaIu59bra6jzdoR7khkD3Ebknbd_3ItIzKZVILg>
+    <xmx:t_RhYJ9RRk1BOA5IdR1X2q_CrWOGjI9R3k02996jlFZxry3nCE7X3w>
+    <xmx:t_RhYAtfHXFTE8w3ZoMWZ6FDXDem8P3hfGCsjL0IXKRVcBSUdZVTxA>
+    <xmx:uPRhYBnKlbQxS-EOyPx4TJfzEzq8KfljNKR91RlLvy9geXc0KoV86A>
+Received: from Threadripper.local (209-6-71-213.s2259.c3-0.abr-cbr1.sbo-abr.ma.cable.rcncustomer.com [209.6.71.213])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 588B6240065;
+        Mon, 29 Mar 2021 11:39:35 -0400 (EDT)
+From:   Zi Yan <zi.yan@sent.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mika Penttila <mika.penttila@nextfour.com>,
+        David Rientjes <rientjes@google.com>, Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v7 2/2] mm: huge_memory: debugfs for file-backed THP split.
+Date:   Mon, 29 Mar 2021 11:39:32 -0400
+Message-Id: <20210329153932.134510-2-zi.yan@sent.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210329153932.134510-1-zi.yan@sent.com>
+References: <20210329153932.134510-1-zi.yan@sent.com>
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-References: <20210324112503.623833-1-elver@google.com> <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com> <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
- <20210329142705.GA24849@redhat.com>
-In-Reply-To: <20210329142705.GA24849@redhat.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 29 Mar 2021 16:32:18 +0200
-Message-ID: <CANpmjNN4kiGiuSSm2g0empgKo3DW-UJ=eNDB6sv1bpypD13vqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 29 Mar 2021 at 16:27, Oleg Nesterov <oleg@redhat.com> wrote:
-> On 03/29, Peter Zijlstra wrote:
-> >
-> > On Thu, Mar 25, 2021 at 09:14:39AM +0100, Marco Elver wrote:
-> > > @@ -6395,6 +6395,13 @@ static void perf_sigtrap(struct perf_event *event)
-> > >  {
-> > >     struct kernel_siginfo info;
-> > >
-> > > +   /*
-> > > +    * This irq_work can race with an exiting task; bail out if sighand has
-> > > +    * already been released in release_task().
-> > > +    */
-> > > +   if (!current->sighand)
-> > > +           return;
->
-> This is racy. If "current" has already passed exit_notify(), current->parent
-> can do release_task() and destroy current->sighand right after the check.
->
-> > Urgh.. I'm not entirely sure that check is correct, but I always forget
-> > the rules with signal. It could be we ought to be testing PF_EXISTING
-> > instead.
->
-> Agreed, PF_EXISTING check makes more sense in any case, the exiting task
-> can't receive the signal anyway.
+From: Zi Yan <ziy@nvidia.com>
 
-Thanks for confirming. I'll switch to just checking PF_EXITING
-(PF_EXISTING does not exist :-)).
+Further extend <debugfs>/split_huge_pages to accept
+"<path>,<off_start>,<off_end>" for file-backed THP split tests since
+tmpfs may have file backed by THP that mapped nowhere.
 
-Thanks,
--- Marco
+Update selftest program to test file-backed THP split too.
+
+Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+---
+ mm/huge_memory.c                              | 91 ++++++++++++++++++-
+ .../selftests/vm/split_huge_page_test.c       | 81 ++++++++++++++++-
+ 2 files changed, 166 insertions(+), 6 deletions(-)
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1bcab247aea8..ca47f5a317f3 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3062,6 +3062,66 @@ static int split_huge_pages_pid(int pid, unsigned lo=
+ng vaddr_start,
+ 	return ret;
+ }
+=20
++static int split_huge_pages_in_file(const char *file_path, pgoff_t off_sta=
+rt,
++				pgoff_t off_end)
++{
++	struct filename *file;
++	struct file *candidate;
++	struct address_space *mapping;
++	int ret =3D -EINVAL;
++	pgoff_t off_cur;
++	unsigned long total =3D 0, split =3D 0;
++
++	file =3D getname_kernel(file_path);
++	if (IS_ERR(file))
++		return ret;
++
++	candidate =3D file_open_name(file, O_RDONLY, 0);
++	if (IS_ERR(candidate))
++		goto out;
++
++	pr_debug("split file-backed THPs in file: %s, offset: [0x%lx - 0x%lx]\n",
++		 file_path, off_start, off_end);
++
++	mapping =3D candidate->f_mapping;
++
++	for (off_cur =3D off_start; off_cur < off_end;) {
++		struct page *fpage =3D pagecache_get_page(mapping, off_cur,
++						FGP_ENTRY | FGP_HEAD, 0);
++
++		if (xa_is_value(fpage) || !fpage) {
++			off_cur +=3D PAGE_SIZE;
++			continue;
++		}
++
++		if (!is_transparent_hugepage(fpage)) {
++			off_cur +=3D PAGE_SIZE;
++			goto next;
++		}
++		total++;
++		off_cur =3D fpage->index + thp_size(fpage);
++
++		if (!trylock_page(fpage))
++			goto next;
++
++		if (!split_huge_page(fpage))
++			split++;
++
++		unlock_page(fpage);
++next:
++		put_page(fpage);
++		cond_resched();
++	}
++
++	filp_close(candidate, NULL);
++	ret =3D 0;
++
++	pr_debug("%lu of %lu file-backed THP split\n", split, total);
++out:
++	putname(file);
++	return ret;
++}
++
+ #define MAX_INPUT_BUF_SZ 255
+=20
+ static ssize_t split_huge_pages_write(struct file *file, const char __user=
+ *buf,
+@@ -3069,7 +3129,8 @@ static ssize_t split_huge_pages_write(struct file *fi=
+le, const char __user *buf,
+ {
+ 	static DEFINE_MUTEX(split_debug_mutex);
+ 	ssize_t ret;
+-	char input_buf[MAX_INPUT_BUF_SZ]; /* hold pid, start_vaddr, end_vaddr */
++	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
++	char input_buf[MAX_INPUT_BUF_SZ];
+ 	int pid;
+ 	unsigned long vaddr_start, vaddr_end;
+=20
+@@ -3084,6 +3145,34 @@ static ssize_t split_huge_pages_write(struct file *f=
+ile, const char __user *buf,
+ 		goto out;
+=20
+ 	input_buf[MAX_INPUT_BUF_SZ - 1] =3D '\0';
++
++	if (input_buf[0] =3D=3D '/') {
++		char *tok;
++		char *buf =3D input_buf;
++		char file_path[MAX_INPUT_BUF_SZ];
++		pgoff_t off_start =3D 0, off_end =3D 0;
++		size_t input_len =3D strlen(input_buf);
++
++		tok =3D strsep(&buf, ",");
++		if (tok) {
++			strncpy(file_path, tok, MAX_INPUT_BUF_SZ);
++		} else {
++			ret =3D -EINVAL;
++			goto out;
++		}
++
++		ret =3D sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
++		if (ret !=3D 2) {
++			ret =3D -EINVAL;
++			goto out;
++		}
++		ret =3D split_huge_pages_in_file(file_path, off_start, off_end);
++		if (!ret)
++			ret =3D input_len;
++
++		goto out;
++	}
++
+ 	ret =3D sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_en=
+d);
+ 	if (ret =3D=3D 1 && pid =3D=3D 1) {
+ 		split_huge_pages_all();
+diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/test=
+ing/selftests/vm/split_huge_page_test.c
+index 2c0c18e60c57..845a63cdb052 100644
+--- a/tools/testing/selftests/vm/split_huge_page_test.c
++++ b/tools/testing/selftests/vm/split_huge_page_test.c
+@@ -7,11 +7,13 @@
+ #define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdarg.h>
+ #include <unistd.h>
+ #include <inttypes.h>
+ #include <string.h>
+ #include <fcntl.h>
+ #include <sys/mman.h>
++#include <sys/mount.h>
+ #include <malloc.h>
+ #include <stdbool.h>
+=20
+@@ -24,6 +26,9 @@ uint64_t pmd_pagesize;
+ #define SMAP_PATH "/proc/self/smaps"
+ #define INPUT_MAX 80
+=20
++#define PID_FMT "%d,0x%lx,0x%lx"
++#define PATH_FMT "%s,0x%lx,0x%lx"
++
+ #define PFN_MASK     ((1UL<<55)-1)
+ #define KPF_THP      (1UL<<22)
+=20
+@@ -87,13 +92,16 @@ static int write_file(const char *path, const char *buf=
+, size_t buflen)
+ 	return (unsigned int) numwritten;
+ }
+=20
+-static void write_debugfs(int pid, uint64_t vaddr_start, uint64_t vaddr_en=
+d)
++static void write_debugfs(const char *fmt, ...)
+ {
+ 	char input[INPUT_MAX];
+ 	int ret;
++	va_list argp;
++
++	va_start(argp, fmt);
++	ret =3D vsnprintf(input, INPUT_MAX, fmt, argp);
++	va_end(argp);
+=20
+-	ret =3D snprintf(input, INPUT_MAX, "%d,0x%lx,0x%lx", pid, vaddr_start,
+-			vaddr_end);
+ 	if (ret >=3D INPUT_MAX) {
+ 		printf("%s: Debugfs input is too long\n", __func__);
+ 		exit(EXIT_FAILURE);
+@@ -183,7 +191,8 @@ void split_pmd_thp(void)
+ 	}
+=20
+ 	/* split all THPs */
+-	write_debugfs(getpid(), (uint64_t)one_page, (uint64_t)one_page + len);
++	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
++		(uint64_t)one_page + len);
+=20
+ 	for (i =3D 0; i < len; i++)
+ 		if (one_page[i] !=3D (char)i) {
+@@ -274,7 +283,7 @@ void split_pte_mapped_thp(void)
+ 	}
+=20
+ 	/* split all remapped THPs */
+-	write_debugfs(getpid(), (uint64_t)pte_mapped,
++	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
+ 		      (uint64_t)pte_mapped + pagesize * 4);
+=20
+ 	/* smap does not show THPs after mremap, use kpageflags instead */
+@@ -300,6 +309,67 @@ void split_pte_mapped_thp(void)
+ 	close(kpageflags_fd);
+ }
+=20
++void split_file_backed_thp(void)
++{
++	int status;
++	int fd;
++	ssize_t num_written;
++	char tmpfs_template[] =3D "/tmp/thp_split_XXXXXX";
++	const char *tmpfs_loc =3D mkdtemp(tmpfs_template);
++	char testfile[INPUT_MAX];
++
++	printf("Please enable pr_debug in split_huge_pages_in_file() if you need =
+more info.\n");
++
++	status =3D mount("tmpfs", tmpfs_loc, "tmpfs", 0, "huge=3Dalways,size=3D4m=
+");
++
++	if (status) {
++		printf("Unable to create a tmpfs for testing\n");
++		exit(EXIT_FAILURE);
++	}
++
++	status =3D snprintf(testfile, INPUT_MAX, "%s/thp_file", tmpfs_loc);
++	if (status >=3D INPUT_MAX) {
++		printf("Fail to create file-backed THP split testing file\n");
++		goto cleanup;
++	}
++
++	fd =3D open(testfile, O_CREAT|O_WRONLY);
++	if (fd =3D=3D -1) {
++		perror("Cannot open testing file\n");
++		goto cleanup;
++	}
++
++	/* write something to the file, so a file-backed THP can be allocated */
++	num_written =3D write(fd, tmpfs_loc, sizeof(tmpfs_loc));
++	close(fd);
++
++	if (num_written < 1) {
++		printf("Fail to write data to testing file\n");
++		goto cleanup;
++	}
++
++	/* split the file-backed THP */
++	write_debugfs(PATH_FMT, testfile, 0, 1024);
++
++	status =3D unlink(testfile);
++	if (status)
++		perror("Cannot remove testing file\n");
++
++cleanup:
++	status =3D umount(tmpfs_loc);
++	if (status) {
++		printf("Unable to umount %s\n", tmpfs_loc);
++		exit(EXIT_FAILURE);
++	}
++	status =3D rmdir(tmpfs_loc);
++	if (status) {
++		perror("cannot remove tmp dir");
++		exit(EXIT_FAILURE);
++	}
++
++	printf("file-backed THP split test done, please check dmesg for more info=
+rmation\n");
++}
++
+ int main(int argc, char **argv)
+ {
+ 	if (geteuid() !=3D 0) {
+@@ -313,6 +383,7 @@ int main(int argc, char **argv)
+=20
+ 	split_pmd_thp();
+ 	split_pte_mapped_thp();
++	split_file_backed_thp();
+=20
+ 	return 0;
+ }
+--=20
+2.30.2
+
