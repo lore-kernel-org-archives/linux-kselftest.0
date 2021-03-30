@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AE91C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D22D7C433E3
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 142A561983
+	by mail.kernel.org (Postfix) with ESMTP id 9E9B161983
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbhC3IJt (ORCPT
+        id S231547AbhC3IJt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 30 Mar 2021 04:09:49 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14959 "EHLO
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14960 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbhC3IJR (ORCPT
+        with ESMTP id S231404AbhC3IJR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 30 Mar 2021 04:09:17 -0400
 Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F8hqy5YJ4zyNHZ;
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F8hqy600DzyNJ8;
         Tue, 30 Mar 2021 16:07:10 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 30 Mar 2021 16:09:07 +0800
+ 14.3.498.0; Tue, 30 Mar 2021 16:09:04 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -43,9 +43,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [PATCH v6 06/10] KVM: selftests: Add a helper to get system configured THP page size
-Date:   Tue, 30 Mar 2021 16:08:52 +0800
-Message-ID: <20210330080856.14940-7-wangyanan55@huawei.com>
+Subject: [PATCH v6 04/10] KVM: selftests: Print the errno besides error-string in TEST_ASSERT
+Date:   Tue, 30 Mar 2021 16:08:50 +0800
+Message-ID: <20210330080856.14940-5-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
 References: <20210330080856.14940-1-wangyanan55@huawei.com>
@@ -57,85 +57,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If we want to have some tests about transparent hugepages, the system
-configured THP hugepage size should better be known by the tests, which
-can be used for kinds of alignment or guest memory accessing of vcpus...
-So it makes sense to add a helper to get the transparent hugepage size.
+Print the errno besides error-string in TEST_ASSERT in the format of
+"errno=%d - %s" will explicitly indicate that the string is an error
+information. Besides, the errno is easier to be used for debugging
+than the error-string.
 
-With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
-we now stat /sys/kernel/mm/transparent_hugepage to check whether THP is
-configured in the host kernel before madvise(). Based on this, we can also
-read file /sys/kernel/mm/transparent_hugepage/hpage_pmd_size to get THP
-hugepage size.
-
+Suggested-by: Andrew Jones <drjones@redhat.com>
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
 Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- .../testing/selftests/kvm/include/test_util.h |  2 ++
- tools/testing/selftests/kvm/lib/test_util.c   | 29 +++++++++++++++++++
- 2 files changed, 31 insertions(+)
+ tools/testing/selftests/kvm/lib/assert.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index b7f41399f22c..ef24c76ba89a 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -78,6 +78,8 @@ struct vm_mem_backing_src_alias {
- 	enum vm_mem_backing_src_type type;
- };
+diff --git a/tools/testing/selftests/kvm/lib/assert.c b/tools/testing/selftests/kvm/lib/assert.c
+index 5ebbd0d6b472..71ade6100fd3 100644
+--- a/tools/testing/selftests/kvm/lib/assert.c
++++ b/tools/testing/selftests/kvm/lib/assert.c
+@@ -71,9 +71,9 @@ test_assert(bool exp, const char *exp_str,
  
-+bool thp_configured(void);
-+size_t get_trans_hugepagesz(void);
- void backing_src_help(void);
- enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
- 
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index c7c0627c6842..efc1a7782de0 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -10,6 +10,7 @@
- #include <limits.h>
- #include <stdlib.h>
- #include <time.h>
-+#include <sys/stat.h>
- #include "linux/kernel.h"
- 
- #include "test_util.h"
-@@ -117,6 +118,34 @@ const struct vm_mem_backing_src_alias backing_src_aliases[] = {
- 	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
- };
- 
-+bool thp_configured(void)
-+{
-+	int ret;
-+	struct stat statbuf;
-+
-+	ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
-+	TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
-+		    "Error in stating /sys/kernel/mm/transparent_hugepage");
-+
-+	return ret == 0;
-+}
-+
-+size_t get_trans_hugepagesz(void)
-+{
-+	size_t size;
-+	FILE *f;
-+
-+	TEST_ASSERT(thp_configured(), "THP is not configured in host kernel");
-+
-+	f = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
-+	TEST_ASSERT(f != NULL, "Error in opening transparent_hugepage/hpage_pmd_size");
-+
-+	fscanf(f, "%ld", &size);
-+	fclose(f);
-+
-+	return size;
-+}
-+
- void backing_src_help(void)
- {
- 	int i;
+ 		fprintf(stderr, "==== Test Assertion Failure ====\n"
+ 			"  %s:%u: %s\n"
+-			"  pid=%d tid=%d - %s\n",
++			"  pid=%d tid=%d errno=%d - %s\n",
+ 			file, line, exp_str, getpid(), _gettid(),
+-			strerror(errno));
++			errno, strerror(errno));
+ 		test_dump_stack();
+ 		if (fmt) {
+ 			fputs("  ", stderr);
 -- 
 2.19.1
 
