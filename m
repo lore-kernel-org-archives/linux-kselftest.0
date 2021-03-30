@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 346E8C433E8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CBAFC433C1
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC16161996
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11F0661985
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhC3IJt (ORCPT
+        id S231574AbhC3IJv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Mar 2021 04:09:49 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14961 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbhC3IJS (ORCPT
+        Tue, 30 Mar 2021 04:09:51 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:14196 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231337AbhC3IJW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 04:09:18 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F8hqy6PQNzyNJ7;
-        Tue, 30 Mar 2021 16:07:10 +0800 (CST)
+        Tue, 30 Mar 2021 04:09:22 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8hqQ4dLvzmcCr;
+        Tue, 30 Mar 2021 16:06:42 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 30 Mar 2021 16:09:06 +0800
+ 14.3.498.0; Tue, 30 Mar 2021 16:09:12 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -43,9 +43,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [PATCH v6 05/10] KVM: selftests: Make a generic helper to get vm guest mode strings
-Date:   Tue, 30 Mar 2021 16:08:51 +0800
-Message-ID: <20210330080856.14940-6-wangyanan55@huawei.com>
+Subject: [PATCH v6 09/10] KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+Date:   Tue, 30 Mar 2021 16:08:55 +0800
+Message-ID: <20210330080856.14940-10-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
 References: <20210330080856.14940-1-wangyanan55@huawei.com>
@@ -57,81 +57,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For generality and conciseness, make an API which can be used in all
-kvm libs and selftests to get vm guest mode strings. And the index i
-is checked in the API in case of possiable faults.
+With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
+we have to get the transparent hugepage size for HVA alignment. With the
+new helpers, we can use get_backing_src_pagesz() to check whether THP is
+configured and then get the exact configured hugepage size.
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
+As different architectures may have different THP page sizes configured,
+this can get the accurate THP page sizes on any platform.
+
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
 Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  4 +--
- tools/testing/selftests/kvm/lib/kvm_util.c    | 29 ++++++++++++-------
- 2 files changed, 19 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kvm/lib/kvm_util.c | 28 +++++++---------------
+ 1 file changed, 9 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 2d7eb6989e83..f52a7492f47f 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -68,9 +68,6 @@ enum vm_guest_mode {
- #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
- #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
- 
--#define vm_guest_mode_string(m) vm_guest_mode_string[m]
--extern const char * const vm_guest_mode_string[];
--
- struct vm_guest_mode_params {
- 	unsigned int pa_bits;
- 	unsigned int va_bits;
-@@ -84,6 +81,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap);
- int vcpu_enable_cap(struct kvm_vm *vm, uint32_t vcpu_id,
- 		    struct kvm_enable_cap *cap);
- void vm_enable_dirty_ring(struct kvm_vm *vm, uint32_t ring_size);
-+const char *vm_guest_mode_string(uint32_t i);
- 
- struct kvm_vm *vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm);
- void kvm_vm_free(struct kvm_vm *vmp);
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index e5fbf16f725b..2ea837fe03af 100644
+index 3506174c2053..c7a2228deaf3 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -143,17 +143,24 @@ static void vm_open(struct kvm_vm *vm, int perm)
- 		"rc: %i errno: %i", vm->fd, errno);
- }
+@@ -18,7 +18,6 @@
+ #include <unistd.h>
+ #include <linux/kernel.h>
  
--const char * const vm_guest_mode_string[] = {
--	"PA-bits:52,  VA-bits:48,  4K pages",
--	"PA-bits:52,  VA-bits:48, 64K pages",
--	"PA-bits:48,  VA-bits:48,  4K pages",
--	"PA-bits:48,  VA-bits:48, 64K pages",
--	"PA-bits:40,  VA-bits:48,  4K pages",
--	"PA-bits:40,  VA-bits:48, 64K pages",
--	"PA-bits:ANY, VA-bits:48,  4K pages",
--};
--_Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
--	       "Missing new mode strings?");
-+const char *vm_guest_mode_string(uint32_t i)
-+{
-+	static const char * const strings[] = {
-+		[VM_MODE_P52V48_4K]	= "PA-bits:52,  VA-bits:48,  4K pages",
-+		[VM_MODE_P52V48_64K]	= "PA-bits:52,  VA-bits:48, 64K pages",
-+		[VM_MODE_P48V48_4K]	= "PA-bits:48,  VA-bits:48,  4K pages",
-+		[VM_MODE_P48V48_64K]	= "PA-bits:48,  VA-bits:48, 64K pages",
-+		[VM_MODE_P40V48_4K]	= "PA-bits:40,  VA-bits:48,  4K pages",
-+		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
-+		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
-+	};
-+	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
-+		       "Missing new mode strings?");
-+
-+	TEST_ASSERT(i < NUM_VM_MODES, "Guest mode ID %d too big", i);
-+
-+	return strings[i];
-+}
+-#define KVM_UTIL_PGS_PER_HUGEPG 512
+ #define KVM_UTIL_MIN_PFN	2
  
- const struct vm_guest_mode_params vm_guest_mode_params[] = {
- 	{ 52, 48,  0x1000, 12 },
+ static int vcpu_mmap_sz(void);
+@@ -688,7 +687,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ {
+ 	int ret;
+ 	struct userspace_mem_region *region;
+-	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
++	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
+ 	size_t alignment;
+ 
+ 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
+@@ -750,7 +749,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ #endif
+ 
+ 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+-		alignment = max(huge_page_size, alignment);
++		alignment = max(backing_src_pagesz, alignment);
+ 
+ 	/* Add enough memory to align up if necessary */
+ 	if (alignment > 1)
+@@ -769,22 +768,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	region->host_mem = align(region->mmap_start, alignment);
+ 
+ 	/* As needed perform madvise */
+-	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
+-		struct stat statbuf;
+-
+-		ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
+-		TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
+-			    "stat /sys/kernel/mm/transparent_hugepage");
+-
+-		TEST_ASSERT(ret == 0 || src_type != VM_MEM_SRC_ANONYMOUS_THP,
+-			    "VM_MEM_SRC_ANONYMOUS_THP requires THP to be configured in the host kernel");
+-
+-		if (ret == 0) {
+-			ret = madvise(region->host_mem, npages * vm->page_size,
+-				      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
+-			TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %x",
+-				    region->host_mem, npages * vm->page_size, src_type);
+-		}
++	if ((src_type == VM_MEM_SRC_ANONYMOUS ||
++	     src_type == VM_MEM_SRC_ANONYMOUS_THP) && thp_configured()) {
++		ret = madvise(region->host_mem, npages * vm->page_size,
++			      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
++		TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %s",
++			    region->host_mem, npages * vm->page_size,
++			    vm_mem_backing_src_alias(src_type)->name);
+ 	}
+ 
+ 	region->unused_phy_pages = sparsebit_alloc();
 -- 
 2.19.1
 
