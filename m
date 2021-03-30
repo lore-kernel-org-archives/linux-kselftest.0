@@ -2,117 +2,213 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F77FC433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 07:08:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F78C433DB
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:09:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16DF1619AB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 07:08:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2736161985
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:09:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhC3HII (ORCPT
+        id S231379AbhC3IJN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Mar 2021 03:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbhC3HIB (ORCPT
+        Tue, 30 Mar 2021 04:09:13 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:15102 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231337AbhC3IJM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 03:08:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB916C061762;
-        Tue, 30 Mar 2021 00:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=X166VgoQn02EMb3f8ykwCC49d3dYou3bLIcu1kP5us0=; b=mEIz6zmnoSAw3j1Qd+Moj7BPqA
-        o1FPHvH8HA4uTXQgWju4LxdFzthKOCG4xQqrL5iK/DtsvNE48oHsIcpR4rDrTiLBm3iiBRrTlZTBN
-        CC8MY7tkotNFjxLmxv93ek4JzPSVR8fsaIhcAiUNmewBwq2a5sb9LM+WhRuum7nv4oxK/QaW/WVyX
-        PlfPdvhdFBiscnR/2IR8k05yLYzcxvS1h5uzsDwpA+Tr+RKs2MYbGuJT5frmJkmdcb0PPABLW7sem
-        +RW8E4axAPeY1QUxI69MN73T2kthyGMY+UiChulnX3Ic4YzdxLYFtMSFNCb/eT2TnJD6dbNbkURhT
-        GNOoFsZQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lR8Qa-002ddk-BT; Tue, 30 Mar 2021 07:04:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3363307001;
-        Tue, 30 Mar 2021 09:04:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BBF922B960A7F; Tue, 30 Mar 2021 09:04:36 +0200 (CEST)
-Date:   Tue, 30 Mar 2021 09:04:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        Tue, 30 Mar 2021 04:09:12 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8hqs5767z19JqD;
+        Tue, 30 Mar 2021 16:07:05 +0800 (CST)
+Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 30 Mar 2021 16:09:03 +0800
+From:   Yanan Wang <wangyanan55@huawei.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Xu <peterx@redhat.com>, "Ingo Molnar" <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-Message-ID: <YGLNhKnx4wR38XpE@hirez.programming.kicks-ass.net>
-References: <20210324112503.623833-1-elver@google.com>
- <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com>
- <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
- <20210329142705.GA24849@redhat.com>
- <CANpmjNN4kiGiuSSm2g0empgKo3DW-UJ=eNDB6sv1bpypD13vqQ@mail.gmail.com>
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
+        Yanan Wang <wangyanan55@huawei.com>
+Subject: [PATCH v6 03/10] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+Date:   Tue, 30 Mar 2021 16:08:49 +0800
+Message-ID: <20210330080856.14940-4-wangyanan55@huawei.com>
+X-Mailer: git-send-email 2.8.4.windows.1
+In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
+References: <20210330080856.14940-1-wangyanan55@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNN4kiGiuSSm2g0empgKo3DW-UJ=eNDB6sv1bpypD13vqQ@mail.gmail.com>
+Content-Type: text/plain
+X-Originating-IP: [10.174.187.128]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 04:32:18PM +0200, Marco Elver wrote:
-> On Mon, 29 Mar 2021 at 16:27, Oleg Nesterov <oleg@redhat.com> wrote:
-> > On 03/29, Peter Zijlstra wrote:
-> > >
-> > > On Thu, Mar 25, 2021 at 09:14:39AM +0100, Marco Elver wrote:
-> > > > @@ -6395,6 +6395,13 @@ static void perf_sigtrap(struct perf_event *event)
-> > > >  {
-> > > >     struct kernel_siginfo info;
-> > > >
-> > > > +   /*
-> > > > +    * This irq_work can race with an exiting task; bail out if sighand has
-> > > > +    * already been released in release_task().
-> > > > +    */
-> > > > +   if (!current->sighand)
-> > > > +           return;
-> >
-> > This is racy. If "current" has already passed exit_notify(), current->parent
-> > can do release_task() and destroy current->sighand right after the check.
-> >
-> > > Urgh.. I'm not entirely sure that check is correct, but I always forget
-> > > the rules with signal. It could be we ought to be testing PF_EXISTING
-> > > instead.
-> >
-> > Agreed, PF_EXISTING check makes more sense in any case, the exiting task
-> > can't receive the signal anyway.
-> 
-> Thanks for confirming. I'll switch to just checking PF_EXITING
-> (PF_EXISTING does not exist :-)).
+In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
+also shield possiable impact of NTP, which can provide more robustness.
 
-Indeed! Typing be hard :-)
+Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+Reviewed-by: Andrew Jones <drjones@redhat.com>
+---
+ tools/testing/selftests/kvm/demand_paging_test.c  |  8 ++++----
+ tools/testing/selftests/kvm/dirty_log_perf_test.c | 14 +++++++-------
+ tools/testing/selftests/kvm/lib/test_util.c       |  2 +-
+ tools/testing/selftests/kvm/steal_time.c          |  4 ++--
+ 4 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+index 5f7a229c3af1..efbf0c1e9130 100644
+--- a/tools/testing/selftests/kvm/demand_paging_test.c
++++ b/tools/testing/selftests/kvm/demand_paging_test.c
+@@ -53,7 +53,7 @@ static void *vcpu_worker(void *data)
+ 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
+ 	run = vcpu_state(vm, vcpu_id);
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 
+ 	/* Let the guest access its memory */
+ 	ret = _vcpu_run(vm, vcpu_id);
+@@ -86,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
+ 	copy.len = perf_test_args.host_page_size;
+ 	copy.mode = 0;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 
+ 	r = ioctl(uffd, UFFDIO_COPY, &copy);
+ 	if (r == -1) {
+@@ -123,7 +123,7 @@ static void *uffd_handler_thread_fn(void *arg)
+ 	struct timespec start;
+ 	struct timespec ts_diff;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	while (!quit_uffd_thread) {
+ 		struct uffd_msg msg;
+ 		struct pollfd pollfd[2];
+@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 	pr_info("Finished creating vCPUs and starting uffd threads\n");
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 
+ 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+ 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 04a2641261be..6cff4ccf9525 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -50,7 +50,7 @@ static void *vcpu_worker(void *data)
+ 	while (!READ_ONCE(host_quit)) {
+ 		int current_iteration = READ_ONCE(iteration);
+ 
+-		clock_gettime(CLOCK_MONOTONIC, &start);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 		ret = _vcpu_run(vm, vcpu_id);
+ 		ts_diff = timespec_elapsed(start);
+ 
+@@ -141,7 +141,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	iteration = 0;
+ 	host_quit = false;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
+ 		vcpu_last_completed_iteration[vcpu_id] = -1;
+ 
+@@ -162,7 +162,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+ 	/* Enable dirty logging */
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX,
+ 				KVM_MEM_LOG_DIRTY_PAGES);
+ 	ts_diff = timespec_elapsed(start);
+@@ -174,7 +174,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		 * Incrementing the iteration number will start the vCPUs
+ 		 * dirtying memory again.
+ 		 */
+-		clock_gettime(CLOCK_MONOTONIC, &start);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 		iteration++;
+ 
+ 		pr_debug("Starting iteration %d\n", iteration);
+@@ -189,7 +189,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
+ 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+-		clock_gettime(CLOCK_MONOTONIC, &start);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 		kvm_vm_get_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap);
+ 
+ 		ts_diff = timespec_elapsed(start);
+@@ -199,7 +199,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
+ 
+ 		if (dirty_log_manual_caps) {
+-			clock_gettime(CLOCK_MONOTONIC, &start);
++			clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 			kvm_vm_clear_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap, 0,
+ 					       host_num_pages);
+ 
+@@ -212,7 +212,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	}
+ 
+ 	/* Disable dirty logging */
+-	clock_gettime(CLOCK_MONOTONIC, &start);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+ 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX, 0);
+ 	ts_diff = timespec_elapsed(start);
+ 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 906c955384e2..c7c0627c6842 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -89,7 +89,7 @@ struct timespec timespec_elapsed(struct timespec start)
+ {
+ 	struct timespec end;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &end);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+ 	return timespec_sub(end, start);
+ }
+ 
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index fcc840088c91..5bc582d3f2a2 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -237,11 +237,11 @@ static void *do_steal_time(void *arg)
+ {
+ 	struct timespec ts, stop;
+ 
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
++	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+ 	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
+ 
+ 	while (1) {
+-		clock_gettime(CLOCK_MONOTONIC, &ts);
++		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+ 		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
+ 			break;
+ 	}
+-- 
+2.19.1
+
