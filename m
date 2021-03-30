@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 057ABC433C1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AE91C433E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95F58600EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 142A561983
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbhC3IJr (ORCPT
+        id S231534AbhC3IJt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Mar 2021 04:09:47 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15104 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbhC3IJN (ORCPT
+        Tue, 30 Mar 2021 04:09:49 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14959 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231246AbhC3IJR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 04:09:13 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8hqs4Htrz19Jq2;
-        Tue, 30 Mar 2021 16:07:05 +0800 (CST)
+        Tue, 30 Mar 2021 04:09:17 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F8hqy5YJ4zyNHZ;
+        Tue, 30 Mar 2021 16:07:10 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 30 Mar 2021 16:08:59 +0800
+ 14.3.498.0; Tue, 30 Mar 2021 16:09:07 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -43,9 +43,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [PATCH v6 01/10] tools/headers: sync headers of asm-generic/hugetlb_encode.h
-Date:   Tue, 30 Mar 2021 16:08:47 +0800
-Message-ID: <20210330080856.14940-2-wangyanan55@huawei.com>
+Subject: [PATCH v6 06/10] KVM: selftests: Add a helper to get system configured THP page size
+Date:   Tue, 30 Mar 2021 16:08:52 +0800
+Message-ID: <20210330080856.14940-7-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
 References: <20210330080856.14940-1-wangyanan55@huawei.com>
@@ -57,43 +57,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch syncs contents of tools/include/asm-generic/hugetlb_encode.h
-and include/uapi/asm-generic/hugetlb_encode.h. Arch powerpc supports 16KB
-hugepages and ARM64 supports 32MB/512MB hugepages. The corresponding mmap
-flags have already been added in include/uapi/asm-generic/hugetlb_encode.h,
-but not tools/include/asm-generic/hugetlb_encode.h.
+If we want to have some tests about transparent hugepages, the system
+configured THP hugepage size should better be known by the tests, which
+can be used for kinds of alignment or guest memory accessing of vcpus...
+So it makes sense to add a helper to get the transparent hugepage size.
 
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
+we now stat /sys/kernel/mm/transparent_hugepage to check whether THP is
+configured in the host kernel before madvise(). Based on this, we can also
+read file /sys/kernel/mm/transparent_hugepage/hpage_pmd_size to get THP
+hugepage size.
+
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
 Reviewed-by: Ben Gardon <bgardon@google.com>
+Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- tools/include/asm-generic/hugetlb_encode.h | 3 +++
- 1 file changed, 3 insertions(+)
+ .../testing/selftests/kvm/include/test_util.h |  2 ++
+ tools/testing/selftests/kvm/lib/test_util.c   | 29 +++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-diff --git a/tools/include/asm-generic/hugetlb_encode.h b/tools/include/asm-generic/hugetlb_encode.h
-index e4732d3c2998..4f3d5aaa11f5 100644
---- a/tools/include/asm-generic/hugetlb_encode.h
-+++ b/tools/include/asm-generic/hugetlb_encode.h
-@@ -20,13 +20,16 @@
- #define HUGETLB_FLAG_ENCODE_SHIFT	26
- #define HUGETLB_FLAG_ENCODE_MASK	0x3f
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index b7f41399f22c..ef24c76ba89a 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -78,6 +78,8 @@ struct vm_mem_backing_src_alias {
+ 	enum vm_mem_backing_src_type type;
+ };
  
-+#define HUGETLB_FLAG_ENCODE_16KB	(14 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_64KB	(16 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_512KB	(19 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_1MB		(20 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_2MB		(21 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_8MB		(23 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_16MB	(24 << HUGETLB_FLAG_ENCODE_SHIFT)
-+#define HUGETLB_FLAG_ENCODE_32MB	(25 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_256MB	(28 << HUGETLB_FLAG_ENCODE_SHIFT)
-+#define HUGETLB_FLAG_ENCODE_512MB	(29 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_1GB		(30 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_2GB		(31 << HUGETLB_FLAG_ENCODE_SHIFT)
- #define HUGETLB_FLAG_ENCODE_16GB	(34 << HUGETLB_FLAG_ENCODE_SHIFT)
++bool thp_configured(void);
++size_t get_trans_hugepagesz(void);
+ void backing_src_help(void);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index c7c0627c6842..efc1a7782de0 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -10,6 +10,7 @@
+ #include <limits.h>
+ #include <stdlib.h>
+ #include <time.h>
++#include <sys/stat.h>
+ #include "linux/kernel.h"
+ 
+ #include "test_util.h"
+@@ -117,6 +118,34 @@ const struct vm_mem_backing_src_alias backing_src_aliases[] = {
+ 	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
+ };
+ 
++bool thp_configured(void)
++{
++	int ret;
++	struct stat statbuf;
++
++	ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
++	TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
++		    "Error in stating /sys/kernel/mm/transparent_hugepage");
++
++	return ret == 0;
++}
++
++size_t get_trans_hugepagesz(void)
++{
++	size_t size;
++	FILE *f;
++
++	TEST_ASSERT(thp_configured(), "THP is not configured in host kernel");
++
++	f = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
++	TEST_ASSERT(f != NULL, "Error in opening transparent_hugepage/hpage_pmd_size");
++
++	fscanf(f, "%ld", &size);
++	fclose(f);
++
++	return size;
++}
++
+ void backing_src_help(void)
+ {
+ 	int i;
 -- 
 2.19.1
 
