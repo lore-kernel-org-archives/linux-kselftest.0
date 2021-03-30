@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1110DC433E0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 18:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA54C433E1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 19:00:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6CFA617ED
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 18:59:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7238619D3
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 19:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbhC3S7I (ORCPT
+        id S233025AbhC3S7m (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Mar 2021 14:59:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25607 "EHLO
+        Tue, 30 Mar 2021 14:59:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21777 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232969AbhC3S67 (ORCPT
+        by vger.kernel.org with ESMTP id S232953AbhC3S7L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 14:58:59 -0400
+        Tue, 30 Mar 2021 14:59:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617130738;
+        s=mimecast20190719; t=1617130750;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aPc+rabAZpzxBvkEBQsdws4dCgLq8Pb5mtjSkAQD3So=;
-        b=ciGiYcZwJuzQN0RQJQzvG0GXSNDLa0GLDZ4sUC0LXJ8GPhXYC43CU2vjvEWHy6fxEqVobl
-        MAR6g6eYg50MxxL19SzJeAdNUgmT0HQdouboPZgq+goUTRHUmykAalElgTbpdTJxCvZArs
-        q8z5fIjDyg80wYgeajOGqkQv/iYjen8=
+        bh=84Zr99k/BLMEUkVeh+jVwwXBIWqAlip0+t5vxhNu95E=;
+        b=d+KyKqUL06jb2RaMNVBUQ1VpDv87vpDxv9bmyyKrom5xeZ31IDrOti19/GIVitehErdpgn
+        z/UN3qef2D1+HSLb7tkI2ggmqMzNJWuT1r19Bd4gb4UYp/eK+6vuq9KXuw6a3N6PAxtq7J
+        bWwMondrPp76a31wlMlM6rdE1oedN3c=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-gAWCBbpRMLS2c762orwA8w-1; Tue, 30 Mar 2021 14:58:57 -0400
-X-MC-Unique: gAWCBbpRMLS2c762orwA8w-1
+ us-mta-78-mqI_QNfmOumQG9reoZ_7yA-1; Tue, 30 Mar 2021 14:59:08 -0400
+X-MC-Unique: mqI_QNfmOumQG9reoZ_7yA-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5CD2B8030A1;
-        Tue, 30 Mar 2021 18:58:55 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3D5F911E3;
+        Tue, 30 Mar 2021 18:59:06 +0000 (UTC)
 Received: from localhost.localdomain.com (ovpn-112-41.ams2.redhat.com [10.36.112.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CEF819C44;
-        Tue, 30 Mar 2021 18:58:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 826F019C44;
+        Tue, 30 Mar 2021 18:59:02 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -55,9 +55,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Alexander Graf <graf@amazon.com>,
         Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/4] kvm: cpuid: adjust the returned nent field of kvm_cpuid2 for KVM_GET_SUPPORTED_CPUID and KVM_GET_EMULATED_CPUID
-Date:   Tue, 30 Mar 2021 20:58:38 +0200
-Message-Id: <20210330185841.44792-2-eesposit@redhat.com>
+Subject: [PATCH 3/4] selftests: add kvm_get_emulated_cpuid
+Date:   Tue, 30 Mar 2021 20:58:40 +0200
+Message-Id: <20210330185841.44792-4-eesposit@redhat.com>
 In-Reply-To: <20210330185841.44792-1-eesposit@redhat.com>
 References: <20210330185841.44792-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -67,39 +67,71 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Calling the kvm KVM_GET_[SUPPORTED/EMULATED]_CPUID ioctl requires
-a nent field inside the kvm_cpuid2 struct to be big enough to contain
-all entries that will be set by kvm.
-Therefore if the nent field is too high, kvm will adjust it to the
-right value. If too low, -E2BIG is returned.
-
-However, when filling the entries do_cpuid_func() requires an
-additional entry, so if the right nent is known in advance,
-giving the exact number of entries won't work because it has to be increased
-by one.
+As the similar kvm_get_supported_cpuid, allocates and gets
+the struct kvm_cpuid2 filled with emulated features.
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- arch/x86/kvm/cpuid.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../selftests/kvm/include/x86_64/processor.h  |  1 +
+ .../selftests/kvm/lib/x86_64/processor.c      | 33 +++++++++++++++++++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 6bd2f8b830e4..5412b48b9103 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -975,6 +975,12 @@ int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 0b30b4e15c38..ae1b9530e187 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -353,6 +353,7 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid,
+ struct kvm_msr_list *kvm_get_msr_index_list(void);
+ uint64_t kvm_get_feature_msr(uint64_t msr_index);
+ struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
++struct kvm_cpuid2 *kvm_get_emulated_cpuid(void);
  
- 	if (cpuid->nent < 1)
- 		return -E2BIG;
-+
-+	/* if there are X entries, we need to allocate at least X+1
-+	 * entries but return the actual number of entries
-+	 */
-+	cpuid->nent++;
-+
- 	if (cpuid->nent > KVM_MAX_CPUID_ENTRIES)
- 		cpuid->nent = KVM_MAX_CPUID_ENTRIES;
+ struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vm *vm, uint32_t vcpuid);
+ void vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index e676fe40bfe6..2ea14421bdfe 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -669,6 +669,39 @@ struct kvm_cpuid2 *kvm_get_supported_cpuid(void)
+ 	return cpuid;
+ }
  
++/*
++ * KVM Emulated CPUID Get
++ *
++ * Input Args: None
++ *
++ * Output Args:
++ *
++ * Return: The emulated KVM CPUID
++ *
++ * Get the guest CPUID emulated by KVM.
++ */
++struct kvm_cpuid2 *kvm_get_emulated_cpuid(void)
++{
++	static struct kvm_cpuid2 *cpuid;
++	int ret;
++	int kvm_fd;
++
++	if (cpuid)
++		return cpuid;
++
++	cpuid = allocate_kvm_cpuid2();
++	kvm_fd = open(KVM_DEV_PATH, O_RDONLY);
++	if (kvm_fd < 0)
++		exit(KSFT_SKIP);
++
++	ret = ioctl(kvm_fd, KVM_GET_EMULATED_CPUID, cpuid);
++	TEST_ASSERT(ret == 0, "KVM_GET_EMULATED_CPUID failed %d %d\n",
++		    ret, errno);
++
++	close(kvm_fd);
++	return cpuid;
++}
++
+ /*
+  * KVM Get MSR
+  *
 -- 
 2.30.2
 
