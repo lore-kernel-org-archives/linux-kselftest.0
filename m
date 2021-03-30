@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CBAFC433C1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BB11C433EB
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11F0661985
+	by mail.kernel.org (Postfix) with ESMTP id 6E6A861996
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:10:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbhC3IJv (ORCPT
+        id S231591AbhC3IJw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Mar 2021 04:09:51 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:14196 "EHLO
+        Tue, 30 Mar 2021 04:09:52 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:14198 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhC3IJW (ORCPT
+        with ESMTP id S231508AbhC3IJV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 04:09:22 -0400
+        Tue, 30 Mar 2021 04:09:21 -0400
 Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8hqQ4dLvzmcCr;
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8hqQ523VzmcCv;
         Tue, 30 Mar 2021 16:06:42 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 30 Mar 2021 16:09:12 +0800
+ 14.3.498.0; Tue, 30 Mar 2021 16:09:10 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -43,9 +43,9 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [PATCH v6 09/10] KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
-Date:   Tue, 30 Mar 2021 16:08:55 +0800
-Message-ID: <20210330080856.14940-10-wangyanan55@huawei.com>
+Subject: [PATCH v6 08/10] KVM: selftests: List all hugetlb src types specified with page sizes
+Date:   Tue, 30 Mar 2021 16:08:54 +0800
+Message-ID: <20210330080856.14940-9-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
 In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
 References: <20210330080856.14940-1-wangyanan55@huawei.com>
@@ -57,81 +57,221 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With VM_MEM_SRC_ANONYMOUS_THP specified in vm_userspace_mem_region_add(),
-we have to get the transparent hugepage size for HVA alignment. With the
-new helpers, we can use get_backing_src_pagesz() to check whether THP is
-configured and then get the exact configured hugepage size.
+With VM_MEM_SRC_ANONYMOUS_HUGETLB, we currently can only use system
+default hugetlb pages to back the testing guest memory. In order to
+add flexibility, now list all the known hugetlb backing src types with
+different page sizes, so that we can specify use of hugetlb pages of the
+exact granularity that we want. And as all the known hugetlb page sizes
+are listed, it's appropriate for all architectures.
 
-As different architectures may have different THP page sizes configured,
-this can get the accurate THP page sizes on any platform.
+Besides, the helper get_backing_src_pagesz() is added to get the
+granularity of different backing src types(anonumous, thp, hugetlb).
 
+Suggested-by: Ben Gardon <bgardon@google.com>
 Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
 Reviewed-by: Andrew Jones <drjones@redhat.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 28 +++++++---------------
- 1 file changed, 9 insertions(+), 19 deletions(-)
+ .../testing/selftests/kvm/include/test_util.h |  18 ++-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   2 +-
+ tools/testing/selftests/kvm/lib/test_util.c   | 109 ++++++++++++++++--
+ 3 files changed, 116 insertions(+), 13 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index e087174eefe5..fade3130eb01 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -71,16 +71,32 @@ enum vm_mem_backing_src_type {
+ 	VM_MEM_SRC_ANONYMOUS,
+ 	VM_MEM_SRC_ANONYMOUS_THP,
+ 	VM_MEM_SRC_ANONYMOUS_HUGETLB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
++	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
++	NUM_SRC_TYPES,
+ };
+ 
+ struct vm_mem_backing_src_alias {
+ 	const char *name;
+-	enum vm_mem_backing_src_type type;
++	uint32_t flag;
+ };
+ 
+ bool thp_configured(void);
+ size_t get_trans_hugepagesz(void);
+ size_t get_def_hugetlb_pagesz(void);
++const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
++size_t get_backing_src_pagesz(uint32_t i);
+ void backing_src_help(void);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
+ 
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 3506174c2053..c7a2228deaf3 100644
+index 2ea837fe03af..3506174c2053 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -18,7 +18,6 @@
- #include <unistd.h>
- #include <linux/kernel.h>
+@@ -759,7 +759,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	region->mmap_start = mmap(NULL, region->mmap_size,
+ 				  PROT_READ | PROT_WRITE,
+ 				  MAP_PRIVATE | MAP_ANONYMOUS
+-				  | (src_type == VM_MEM_SRC_ANONYMOUS_HUGETLB ? MAP_HUGETLB : 0),
++				  | vm_mem_backing_src_alias(src_type)->flag,
+ 				  -1, 0);
+ 	TEST_ASSERT(region->mmap_start != MAP_FAILED,
+ 		    "test_malloc failed, mmap_start: %p errno: %i",
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 665724ccab97..205408bffa38 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -11,6 +11,7 @@
+ #include <stdlib.h>
+ #include <time.h>
+ #include <sys/stat.h>
++#include <linux/mman.h>
+ #include "linux/kernel.h"
  
--#define KVM_UTIL_PGS_PER_HUGEPG 512
- #define KVM_UTIL_MIN_PFN	2
+ #include "test_util.h"
+@@ -112,12 +113,6 @@ void print_skip(const char *fmt, ...)
+ 	puts(", skipping test");
+ }
  
- static int vcpu_mmap_sz(void);
-@@ -688,7 +687,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+-const struct vm_mem_backing_src_alias backing_src_aliases[] = {
+-	{"anonymous", VM_MEM_SRC_ANONYMOUS,},
+-	{"anonymous_thp", VM_MEM_SRC_ANONYMOUS_THP,},
+-	{"anonymous_hugetlb", VM_MEM_SRC_ANONYMOUS_HUGETLB,},
+-};
+-
+ bool thp_configured(void)
  {
  	int ret;
- 	struct userspace_mem_region *region;
--	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
-+	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
- 	size_t alignment;
+@@ -171,22 +166,114 @@ size_t get_def_hugetlb_pagesz(void)
+ 	return 0;
+ }
  
- 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
-@@ -750,7 +749,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- #endif
++const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
++{
++	static const struct vm_mem_backing_src_alias aliases[] = {
++		[VM_MEM_SRC_ANONYMOUS] = {
++			.name = "anonymous",
++			.flag = 0,
++		},
++		[VM_MEM_SRC_ANONYMOUS_THP] = {
++			.name = "anonymous_thp",
++			.flag = 0,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB] = {
++			.name = "anonymous_hugetlb",
++			.flag = MAP_HUGETLB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB] = {
++			.name = "anonymous_hugetlb_16kb",
++			.flag = MAP_HUGETLB | MAP_HUGE_16KB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB] = {
++			.name = "anonymous_hugetlb_64kb",
++			.flag = MAP_HUGETLB | MAP_HUGE_64KB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB] = {
++			.name = "anonymous_hugetlb_512kb",
++			.flag = MAP_HUGETLB | MAP_HUGE_512KB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB] = {
++			.name = "anonymous_hugetlb_1mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_1MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB] = {
++			.name = "anonymous_hugetlb_2mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_2MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB] = {
++			.name = "anonymous_hugetlb_8mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_8MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB] = {
++			.name = "anonymous_hugetlb_16mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_16MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB] = {
++			.name = "anonymous_hugetlb_32mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_32MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB] = {
++			.name = "anonymous_hugetlb_256mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_256MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB] = {
++			.name = "anonymous_hugetlb_512mb",
++			.flag = MAP_HUGETLB | MAP_HUGE_512MB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB] = {
++			.name = "anonymous_hugetlb_1gb",
++			.flag = MAP_HUGETLB | MAP_HUGE_1GB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB] = {
++			.name = "anonymous_hugetlb_2gb",
++			.flag = MAP_HUGETLB | MAP_HUGE_2GB,
++		},
++		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB] = {
++			.name = "anonymous_hugetlb_16gb",
++			.flag = MAP_HUGETLB | MAP_HUGE_16GB,
++		},
++	};
++	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
++		       "Missing new backing src types?");
++
++	TEST_ASSERT(i < NUM_SRC_TYPES, "Backing src type ID %d too big", i);
++
++	return &aliases[i];
++}
++
++size_t get_backing_src_pagesz(uint32_t i)
++{
++	uint32_t flag = vm_mem_backing_src_alias(i)->flag;
++
++	switch (i) {
++	case VM_MEM_SRC_ANONYMOUS:
++		return getpagesize();
++	case VM_MEM_SRC_ANONYMOUS_THP:
++		return get_trans_hugepagesz();
++	case VM_MEM_SRC_ANONYMOUS_HUGETLB:
++		return get_def_hugetlb_pagesz();
++	default:
++		return MAP_HUGE_PAGE_SIZE(flag);
++	}
++}
++
+ void backing_src_help(void)
+ {
+ 	int i;
  
- 	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
--		alignment = max(huge_page_size, alignment);
-+		alignment = max(backing_src_pagesz, alignment);
+ 	printf("Available backing src types:\n");
+-	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
+-		printf("\t%s\n", backing_src_aliases[i].name);
++	for (i = 0; i < NUM_SRC_TYPES; i++)
++		printf("\t%s\n", vm_mem_backing_src_alias(i)->name);
+ }
  
- 	/* Add enough memory to align up if necessary */
- 	if (alignment > 1)
-@@ -769,22 +768,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->host_mem = align(region->mmap_start, alignment);
+ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
+ {
+ 	int i;
  
- 	/* As needed perform madvise */
--	if (src_type == VM_MEM_SRC_ANONYMOUS || src_type == VM_MEM_SRC_ANONYMOUS_THP) {
--		struct stat statbuf;
--
--		ret = stat("/sys/kernel/mm/transparent_hugepage", &statbuf);
--		TEST_ASSERT(ret == 0 || (ret == -1 && errno == ENOENT),
--			    "stat /sys/kernel/mm/transparent_hugepage");
--
--		TEST_ASSERT(ret == 0 || src_type != VM_MEM_SRC_ANONYMOUS_THP,
--			    "VM_MEM_SRC_ANONYMOUS_THP requires THP to be configured in the host kernel");
--
--		if (ret == 0) {
--			ret = madvise(region->host_mem, npages * vm->page_size,
--				      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
--			TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %x",
--				    region->host_mem, npages * vm->page_size, src_type);
--		}
-+	if ((src_type == VM_MEM_SRC_ANONYMOUS ||
-+	     src_type == VM_MEM_SRC_ANONYMOUS_THP) && thp_configured()) {
-+		ret = madvise(region->host_mem, npages * vm->page_size,
-+			      src_type == VM_MEM_SRC_ANONYMOUS ? MADV_NOHUGEPAGE : MADV_HUGEPAGE);
-+		TEST_ASSERT(ret == 0, "madvise failed, addr: %p length: 0x%lx src_type: %s",
-+			    region->host_mem, npages * vm->page_size,
-+			    vm_mem_backing_src_alias(src_type)->name);
- 	}
+-	for (i = 0; i < ARRAY_SIZE(backing_src_aliases); i++)
+-		if (!strcmp(type_name, backing_src_aliases[i].name))
+-			return backing_src_aliases[i].type;
++	for (i = 0; i < NUM_SRC_TYPES; i++)
++		if (!strcmp(type_name, vm_mem_backing_src_alias(i)->name))
++			return i;
  
- 	region->unused_phy_pages = sparsebit_alloc();
+ 	backing_src_help();
+ 	TEST_FAIL("Unknown backing src type: %s", type_name);
 -- 
 2.19.1
 
