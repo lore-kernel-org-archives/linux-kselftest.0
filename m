@@ -3,30 +3,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57F78C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C64C433C1
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:09:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2736161985
+	by mail.kernel.org (Postfix) with ESMTP id 9888D6198F
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 08:09:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbhC3IJN (ORCPT
+        id S231340AbhC3IJN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 30 Mar 2021 04:09:13 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:15102 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhC3IJM (ORCPT
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14958 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229633AbhC3IJI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 04:09:12 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F8hqs5767z19JqD;
-        Tue, 30 Mar 2021 16:07:05 +0800 (CST)
+        Tue, 30 Mar 2021 04:09:08 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F8hqm4qfxzyNHw;
+        Tue, 30 Mar 2021 16:07:00 +0800 (CST)
 Received: from DESKTOP-TMVL5KK.china.huawei.com (10.174.187.128) by
  DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 30 Mar 2021 16:09:03 +0800
+ 14.3.498.0; Tue, 30 Mar 2021 16:08:58 +0800
 From:   Yanan Wang <wangyanan55@huawei.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>, <kvm@vger.kernel.org>,
@@ -43,12 +43,10 @@ CC:     Ben Gardon <bgardon@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         <wanghaibin.wang@huawei.com>, <yuzenghui@huawei.com>,
         Yanan Wang <wangyanan55@huawei.com>
-Subject: [PATCH v6 03/10] KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
-Date:   Tue, 30 Mar 2021 16:08:49 +0800
-Message-ID: <20210330080856.14940-4-wangyanan55@huawei.com>
+Subject: [PATCH v6 00/10] KVM: selftests: some improvement and a new test for kvm page table
+Date:   Tue, 30 Mar 2021 16:08:46 +0800
+Message-ID: <20210330080856.14940-1-wangyanan55@huawei.com>
 X-Mailer: git-send-email 2.8.4.windows.1
-In-Reply-To: <20210330080856.14940-1-wangyanan55@huawei.com>
-References: <20210330080856.14940-1-wangyanan55@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.174.187.128]
@@ -57,158 +55,123 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In addition to function of CLOCK_MONOTONIC, flag CLOCK_MONOTONIC_RAW can
-also shield possiable impact of NTP, which can provide more robustness.
+Hi,
+This v6 series can mainly include two parts.
+Rebased on kvm queue branch: https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=queue
 
-Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Yanan Wang <wangyanan55@huawei.com>
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: Andrew Jones <drjones@redhat.com>
+In the first part, all the known hugetlb backing src types specified
+with different hugepage sizes are listed, so that we can specify use
+of hugetlb source of the exact granularity that we want, instead of
+the system default ones. And as all the known hugetlb page sizes are
+listed, it's appropriate for all architectures. Besides, a helper that
+can get granularity of different backing src types(anonumous/thp/hugetlb)
+is added, so that we can use the accurate backing src granularity for
+kinds of alignment or guest memory accessing of vcpus.
+
+In the second part, a new test is added:
+This test is added to serve as a performance tester and a bug reproducer
+for kvm page table code (GPA->HPA mappings), it gives guidance for the
+people trying to make some improvement for kvm. And the following explains
+what we can exactly do through this test.
+
+The function guest_code() can cover the conditions where a single vcpu or
+multiple vcpus access guest pages within the same memory region, in three
+VM stages(before dirty logging, during dirty logging, after dirty logging).
+Besides, the backing src memory type(ANONYMOUS/THP/HUGETLB) of the tested
+memory region can be specified by users, which means normal page mappings
+or block mappings can be chosen by users to be created in the test.
+
+If ANONYMOUS memory is specified, kvm will create normal page mappings
+for the tested memory region before dirty logging, and update attributes
+of the page mappings from RO to RW during dirty logging. If THP/HUGETLB
+memory is specified, kvm will create block mappings for the tested memory
+region before dirty logging, and split the blcok mappings into normal page
+mappings during dirty logging, and coalesce the page mappings back into
+block mappings after dirty logging is stopped.
+
+So in summary, as a performance tester, this test can present the
+performance of kvm creating/updating normal page mappings, or the
+performance of kvm creating/splitting/recovering block mappings,
+through execution time.
+
+When we need to coalesce the page mappings back to block mappings after
+dirty logging is stopped, we have to firstly invalidate *all* the TLB
+entries for the page mappings right before installation of the block entry,
+because a TLB conflict abort error could occur if we can't invalidate the
+TLB entries fully. We have hit this TLB conflict twice on aarch64 software
+implementation and fixed it. As this test can imulate process from dirty
+logging enabled to dirty logging stopped of a VM with block mappings,
+so it can also reproduce this TLB conflict abort due to inadequate TLB
+invalidation when coalescing tables.
+
+Links about the TLB conflict abort:
+https://lore.kernel.org/lkml/20201201201034.116760-3-wangyanan55@huawei.com/
+
 ---
- tools/testing/selftests/kvm/demand_paging_test.c  |  8 ++++----
- tools/testing/selftests/kvm/dirty_log_perf_test.c | 14 +++++++-------
- tools/testing/selftests/kvm/lib/test_util.c       |  2 +-
- tools/testing/selftests/kvm/steal_time.c          |  4 ++--
- 4 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 5f7a229c3af1..efbf0c1e9130 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -53,7 +53,7 @@ static void *vcpu_worker(void *data)
- 	vcpu_args_set(vm, vcpu_id, 1, vcpu_id);
- 	run = vcpu_state(vm, vcpu_id);
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	/* Let the guest access its memory */
- 	ret = _vcpu_run(vm, vcpu_id);
-@@ -86,7 +86,7 @@ static int handle_uffd_page_request(int uffd, uint64_t addr)
- 	copy.len = perf_test_args.host_page_size;
- 	copy.mode = 0;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	r = ioctl(uffd, UFFDIO_COPY, &copy);
- 	if (r == -1) {
-@@ -123,7 +123,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 	struct timespec start;
- 	struct timespec ts_diff;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	while (!quit_uffd_thread) {
- 		struct uffd_msg msg;
- 		struct pollfd pollfd[2];
-@@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 
- 	pr_info("Finished creating vCPUs and starting uffd threads\n");
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 04a2641261be..6cff4ccf9525 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -50,7 +50,7 @@ static void *vcpu_worker(void *data)
- 	while (!READ_ONCE(host_quit)) {
- 		int current_iteration = READ_ONCE(iteration);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		ret = _vcpu_run(vm, vcpu_id);
- 		ts_diff = timespec_elapsed(start);
- 
-@@ -141,7 +141,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	iteration = 0;
- 	host_quit = false;
- 
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	for (vcpu_id = 0; vcpu_id < nr_vcpus; vcpu_id++) {
- 		vcpu_last_completed_iteration[vcpu_id] = -1;
- 
-@@ -162,7 +162,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 	/* Enable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX,
- 				KVM_MEM_LOG_DIRTY_PAGES);
- 	ts_diff = timespec_elapsed(start);
-@@ -174,7 +174,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		 * Incrementing the iteration number will start the vCPUs
- 		 * dirtying memory again.
- 		 */
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		iteration++;
- 
- 		pr_debug("Starting iteration %d\n", iteration);
-@@ -189,7 +189,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
--		clock_gettime(CLOCK_MONOTONIC, &start);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 		kvm_vm_get_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap);
- 
- 		ts_diff = timespec_elapsed(start);
-@@ -199,7 +199,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 		if (dirty_log_manual_caps) {
--			clock_gettime(CLOCK_MONOTONIC, &start);
-+			clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 			kvm_vm_clear_dirty_log(vm, PERF_TEST_MEM_SLOT_INDEX, bmap, 0,
- 					       host_num_pages);
- 
-@@ -212,7 +212,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	}
- 
- 	/* Disable dirty logging */
--	clock_gettime(CLOCK_MONOTONIC, &start);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
- 	vm_mem_region_set_flags(vm, PERF_TEST_MEM_SLOT_INDEX, 0);
- 	ts_diff = timespec_elapsed(start);
- 	pr_info("Disabling dirty logging time: %ld.%.9lds\n",
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 906c955384e2..c7c0627c6842 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -89,7 +89,7 @@ struct timespec timespec_elapsed(struct timespec start)
- {
- 	struct timespec end;
- 
--	clock_gettime(CLOCK_MONOTONIC, &end);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
- 	return timespec_sub(end, start);
- }
- 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index fcc840088c91..5bc582d3f2a2 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -237,11 +237,11 @@ static void *do_steal_time(void *arg)
- {
- 	struct timespec ts, stop;
- 
--	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 	stop = timespec_add_ns(ts, MIN_RUN_DELAY_NS);
- 
- 	while (1) {
--		clock_gettime(CLOCK_MONOTONIC, &ts);
-+		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
- 		if (timespec_to_ns(timespec_sub(ts, stop)) >= 0)
- 			break;
- 	}
+Change logs:
+
+v5->v6:
+- Address Andrew Jones's comments for v5 series
+- Add Andrew Jones's R-b tags in some patches
+- Rebased on newest kvm/queue tree
+- v5: https://lore.kernel.org/lkml/20210323135231.24948-1-wangyanan55@huawei.com/
+
+v4->v5:
+- Use synchronization(sem_wait) for time measurement
+- Add a new patch about TEST_ASSERT(patch 4)
+- Address Andrew Jones's comments for v4 series
+- Add Andrew Jones's R-b tags in some patches
+- v4: https://lore.kernel.org/lkml/20210302125751.19080-1-wangyanan55@huawei.com/
+
+v3->v4:
+- Add a helper to get system default hugetlb page size
+- Add tags of Reviewed-by of Ben in the patches
+- v3: https://lore.kernel.org/lkml/20210301065916.11484-1-wangyanan55@huawei.com/
+
+v2->v3:
+- Add tags of Suggested-by, Reviewed-by in the patches
+- Add a generic micro to get hugetlb page sizes
+- Some changes for suggestions about v2 series
+- v2: https://lore.kernel.org/lkml/20210225055940.18748-1-wangyanan55@huawei.com/
+
+v1->v2:
+- Add a patch to sync header files
+- Add helpers to get granularity of different backing src types
+- Some changes for suggestions about v1 series
+- v1: https://lore.kernel.org/lkml/20210208090841.333724-1-wangyanan55@huawei.com/
+
+---
+
+Yanan Wang (10):
+  tools headers: sync headers of asm-generic/hugetlb_encode.h
+  mm/hugetlb: Add a macro to get HUGETLB page sizes for mmap
+  KVM: selftests: Use flag CLOCK_MONOTONIC_RAW for timing
+  KVM: selftests: Print the errno besides error-string in TEST_ASSERT
+  KVM: selftests: Make a generic helper to get vm guest mode strings
+  KVM: selftests: Add a helper to get system configured THP page size
+  KVM: selftests: Add a helper to get system default hugetlb page size
+  KVM: selftests: List all hugetlb src types specified with page sizes
+  KVM: selftests: Adapt vm_userspace_mem_region_add to new helpers
+  KVM: selftests: Add a test for kvm page table code
+
+ include/uapi/linux/mman.h                     |   2 +
+ tools/include/asm-generic/hugetlb_encode.h    |   3 +
+ tools/include/uapi/linux/mman.h               |   2 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../selftests/kvm/demand_paging_test.c        |   8 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  14 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |   4 +-
+ .../testing/selftests/kvm/include/test_util.h |  21 +-
+ .../selftests/kvm/kvm_page_table_test.c       | 506 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/assert.c      |   4 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  59 +-
+ tools/testing/selftests/kvm/lib/test_util.c   | 163 +++++-
+ tools/testing/selftests/kvm/steal_time.c      |   4 +-
+ 14 files changed, 733 insertions(+), 61 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_page_table_test.c
+
 -- 
-2.19.1
+2.23.0
 
