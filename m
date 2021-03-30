@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2650FC433C1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51614C433E1
 	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 10:47:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E203D6199A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 10:47:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B722619AA
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Mar 2021 10:47:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbhC3KrY (ORCPT
+        id S231602AbhC3KrX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Mar 2021 06:47:24 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:41108 "EHLO
+        Tue, 30 Mar 2021 06:47:23 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:24478 "EHLO
         mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231370AbhC3Kq7 (ORCPT
+        by vger.kernel.org with ESMTP id S230303AbhC3Kqx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Mar 2021 06:46:59 -0400
+        Tue, 30 Mar 2021 06:46:53 -0400
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12UAg2NH020739;
-        Tue, 30 Mar 2021 05:46:08 -0500
+        by mx0b-001ae601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12UAg2NJ020739;
+        Tue, 30 Mar 2021 05:46:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=be7gahKOHkuRaNoGKguDexXs3BpP7vM9QCY/E9w655k=;
- b=B+0giYs4sXwTukL/zPnY6u2/3etJTKd7FXnuJuL2FtGAtkA/Zi/wS6gtHp8JXaRGLs8L
- QJy015G6HSlidJS0/blMbiu3Oze9YMIVYotEFjKKx1FRp1pSsbe9h9LTpHCsljuPRmFe
- Ak6EkFpYIU7hq+kJKf1I73dlxWTxPOlRE8BK9rn8BDnr6hD45kr7KVJJ5/9KwavNRp9l
- D0nwjshCOMyshZMHnoYgswhNuHJEaiBI5pT/FI7LK54KhatqQJt4aLjNMOcnJplAqlu6
- qP4OWnQWcIoS3o4pCxl1kcmJZhWubft6xviarltQ2OewH2n8+afBOclLW/SUlZIokexk dQ== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=pURXyEbufO34s3H/mKKyt6oXSIaLkoflKS02BSTQm1A=;
+ b=N5DdH6fX1YEOFYtlgP8MQxAPw5qfyYX+remDp48Op3PtRmbbrScHndtiKYKB35wysaJG
+ F5T+YaEtafOVcdzpqbQUDfwYbnH20s1cHmifAqSdNc+y4ZiO+kvcEgM29g0Z7K5xJFSW
+ Dm2bzPzWL7KDTrNou1eHfvAEH1ZhOv81SSvjLn+93fYBZbRfRTqFysT2y/2xCETWXllI
+ TiPakXtOpZ9RaPm7a0WOPkPI24hL+YmOqQUjUUY4oXuIxEG2aaOaNIL97pNSGBO5ShKB
+ HTI+ap4/4whExtBuGuDm74Y1i0LqVvOzy0mJTcd10FeK7VgT/Oh3HkWvHgP7E9c2ivQ0 aQ== 
 Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 37kfhx1ed8-1
+        by mx0b-001ae601.pphosted.com with ESMTP id 37kfhx1edf-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 30 Mar 2021 05:46:08 -0500
+        Tue, 30 Mar 2021 05:46:19 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 30 Mar
- 2021 11:46:06 +0100
+ 2021 11:46:17 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Tue, 30 Mar 2021 11:46:06 +0100
+ Transport; Tue, 30 Mar 2021 11:46:17 +0100
 Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.138])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7077211D6;
-        Tue, 30 Mar 2021 10:46:00 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0258C11D6;
+        Tue, 30 Mar 2021 10:46:16 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
         <sergey.senozhatsky@gmail.com>,
@@ -55,17 +55,19 @@ To:     <pmladek@suse.com>, <rostedt@goodmis.org>,
 CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH v8 1/4] lib: vsprintf: scanf: Negative number must have field width > 1
-Date:   Tue, 30 Mar 2021 11:45:55 +0100
-Message-ID: <20210330104558.16481-1-rf@opensource.cirrus.com>
+Subject: [PATCH v8 4/4] selftests: lib: Add wrapper script for test_scanf
+Date:   Tue, 30 Mar 2021 11:45:58 +0100
+Message-ID: <20210330104558.16481-4-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210330104558.16481-1-rf@opensource.cirrus.com>
+References: <20210330104558.16481-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: 2C0J9MvZYOrwOKzf3SQbpi1CRS_fUTN-
-X-Proofpoint-ORIG-GUID: 2C0J9MvZYOrwOKzf3SQbpi1CRS_fUTN-
+X-Proofpoint-GUID: shuAdcURx0wruSmnMpx5VIkXLiZClyl6
+X-Proofpoint-ORIG-GUID: shuAdcURx0wruSmnMpx5VIkXLiZClyl6
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 clxscore=1015
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=596
+ malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999
  suspectscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103250000
  definitions=main-2103300076
@@ -73,40 +75,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If a signed number field starts with a '-' the field width must be > 1,
-or unlimited, to allow at least one digit after the '-'.
-
-This patch adds a check for this. If a signed field starts with '-'
-and field_width == 1 the scanf will quit.
-
-It is ok for a signed number field to have a field width of 1 if it
-starts with a digit. In that case the single digit can be converted.
+Adds a wrapper shell script for the test_scanf module.
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- lib/vsprintf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Changed since v6:
+Fixed typo in tools/testing/selftests/lib/config:
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 41ddc353ebb8..f78651e9b030 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -3466,8 +3466,12 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
- 		str = skip_spaces(str);
+	-CONFIG_TEST_SCANTF=m
+	+CONFIG_TEST_SCANF=m
+
+As this is a trivial change I have kept Petr Mladek's Reviewed-by and
+Andy Shevchenko's ack.
+---
+ tools/testing/selftests/lib/Makefile | 2 +-
+ tools/testing/selftests/lib/config   | 1 +
+ tools/testing/selftests/lib/scanf.sh | 4 ++++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/lib/scanf.sh
+
+diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
+index a105f094676e..ee71fc99d5b5 100644
+--- a/tools/testing/selftests/lib/Makefile
++++ b/tools/testing/selftests/lib/Makefile
+@@ -4,6 +4,6 @@
+ # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+ all:
  
- 		digit = *str;
--		if (is_sign && digit == '-')
-+		if (is_sign && digit == '-') {
-+			if (field_width == 1)
-+				break;
-+
- 			digit = *(str + 1);
-+		}
+-TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh strscpy.sh
++TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
  
- 		if (!digit
- 		    || (base == 16 && !isxdigit(digit))
+ include ../lib.mk
+diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
+index b80ee3f6e265..645839b50b0a 100644
+--- a/tools/testing/selftests/lib/config
++++ b/tools/testing/selftests/lib/config
+@@ -1,4 +1,5 @@
+ CONFIG_TEST_PRINTF=m
++CONFIG_TEST_SCANF=m
+ CONFIG_TEST_BITMAP=m
+ CONFIG_PRIME_NUMBERS=m
+ CONFIG_TEST_STRSCPY=m
+diff --git a/tools/testing/selftests/lib/scanf.sh b/tools/testing/selftests/lib/scanf.sh
+new file mode 100755
+index 000000000000..b59b8ba561c3
+--- /dev/null
++++ b/tools/testing/selftests/lib/scanf.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Tests the scanf infrastructure using test_scanf kernel module.
++$(dirname $0)/../kselftest/module.sh "scanf" test_scanf
 -- 
 2.20.1
 
