@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC512C43611
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 19:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E67C4361B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 19:15:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C74B561075
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 19:15:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2887061057
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 19:15:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbhCaTOp (ORCPT
+        id S235986AbhCaTOq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 31 Mar 2021 15:14:45 -0400
+        Wed, 31 Mar 2021 15:14:46 -0400
 Received: from mga12.intel.com ([192.55.52.136]:51675 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235071AbhCaTOS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 15:14:18 -0400
-IronPort-SDR: I7FsLRxJyhFpLXFSgbR6dUrX6EkQSj+YYdbSR1s43r3e1hja6KG1kpzraLyBFYtg0MlnQB72DL
- xaH9tMdBzNPA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9940"; a="171490606"
+        id S235205AbhCaTOU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 31 Mar 2021 15:14:20 -0400
+IronPort-SDR: 13l5yCSUSa49xcacdNew7eFZCleSrAnZbShh12NyS72hi6JW1avhiUPa7J2Oa+2pIxH5UvMNOs
+ YcL9P2ltxjKQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9940"; a="171490619"
 X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
-   d="scan'208";a="171490606"
+   d="scan'208";a="171490619"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 12:14:18 -0700
-IronPort-SDR: YIUMPilsVwhW1NiIvFp/vPcEZfTqHx1jz8UVgdCI34evD+lCCqhSLjqSJPFyQ63hOAiOKJiFdl
- 2kDXREDSMQIg==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 12:14:20 -0700
+IronPort-SDR: JkU84B66zZpAcXI/v04F3IGdywiPXk5XQoo+rWf0jLIWXQfa0+Hnr1yghVpGQvFrmE8roN/Kvd
+ oDas3Iu6ArBQ==
 X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
-   d="scan'208";a="610625390"
+   d="scan'208";a="610625404"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 12:14:18 -0700
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2021 12:14:20 -0700
 From:   ira.weiny@intel.com
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
 Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
         Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH V5 04/10] x86/pks: Add PKS defines and Kconfig options
-Date:   Wed, 31 Mar 2021 12:13:59 -0700
-Message-Id: <20210331191405.341999-5-ira.weiny@intel.com>
+        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V5 06/10] x86/fault: Adjust WARN_ON for PKey fault
+Date:   Wed, 31 Mar 2021 12:14:01 -0700
+Message-Id: <20210331191405.341999-7-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20210331191405.341999-1-ira.weiny@intel.com>
 References: <20210331191405.341999-1-ira.weiny@intel.com>
@@ -58,128 +58,52 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Protection Keys for Supervisor pages (PKS) enables fast, hardware thread
-specific, manipulation of permission restrictions on supervisor page
-mappings.  It uses the same mechanism of Protection Keys as those on
-User mappings but applies that mechanism to supervisor mappings using a
-supervisor specific MSR.
+Previously if a Protection key fault occurred it indicated something
+very wrong because user page mappings are not supposed to be in the
+kernel address space.
 
-Kernel users can define domains of page mappings which have an extra
-level of protection beyond those specified in the supervisor page table
-entries.
+Now PKey faults may happen on kernel mappings if the feature is enabled.
 
-Define the PKS CPU feature bits.
+Remove the warning in the fault path and allow the oops to occur without
+extra debugging if PKS is enabled.
 
-Add the Kconfig ARCH_HAS_SUPERVISOR_PKEYS to indicate to consumers that
-an architecture supports pkeys.
-
-Introduce ARCH_ENABLE_SUPERVISOR_PKEYS to allow kernel users to specify
-to the arch that they wish to use the supervisor key support if
-ARCH_HAS_SUPERVISOR_PKEYS is available.  ARCH_ENABLE_SUPERVISOR_PKEYS
-remains off until the first use case sets it.
-
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
-Changes from V3:
-	From Dan
-		Clean up commit message
-		Add ARCH_ENABLE_SUPERVISOR_PKEYS option so we don't have
-		the overhead of PKS unless there is a user
-	Clean up commit message grammar
-
-Changes from V2
-	New patch for V3:  Split this off from the enable patch to be
-	able to create cleaner bisectability
+Changes from V4:
+	From Sean Christopherson
+		Clean up commit message and comment
+		Change cpu_feature_enabled to be in WARN_ON check
 ---
- arch/x86/Kconfig                            | 1 +
- arch/x86/include/asm/cpufeatures.h          | 1 +
- arch/x86/include/asm/disabled-features.h    | 8 +++++++-
- arch/x86/include/uapi/asm/processor-flags.h | 2 ++
- mm/Kconfig                                  | 4 ++++
- 5 files changed, 15 insertions(+), 1 deletion(-)
+ arch/x86/mm/fault.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2792879d398e..5e3a7c2bc342 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1870,6 +1870,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
- 	depends on X86_64 && (CPU_SUP_INTEL || CPU_SUP_AMD)
- 	select ARCH_USES_HIGH_VMA_FLAGS
- 	select ARCH_HAS_PKEYS
-+	select ARCH_HAS_SUPERVISOR_PKEYS
- 	help
- 	  Memory Protection Keys provides a mechanism for enforcing
- 	  page-based protections, but without requiring modification of the
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index cc96e26d69f7..83ed73407417 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -359,6 +359,7 @@
- #define X86_FEATURE_MOVDIR64B		(16*32+28) /* MOVDIR64B instruction */
- #define X86_FEATURE_ENQCMD		(16*32+29) /* ENQCMD and ENQCMDS instructions */
- #define X86_FEATURE_SGX_LC		(16*32+30) /* Software Guard Extensions Launch Control */
-+#define X86_FEATURE_PKS			(16*32+31) /* Protection Keys for Supervisor pages */
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index a73347e2cdfc..c32d01803e26 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1141,11 +1141,15 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
+ 		   unsigned long address)
+ {
+ 	/*
+-	 * Protection keys exceptions only happen on user pages.  We
+-	 * have no user pages in the kernel portion of the address
+-	 * space, so do not expect them here.
++	 * X86_PF_PK (Protection key exceptions) may occur on kernel addresses
++	 * when PKS (PKeys Supervisor) are enabled.
++	 *
++	 * If PKS is not enabled an exception should only happen on user pages.
++	 * Because, we have no user pages in the kernel portion of the address
++	 * space something must have gone very wrong and we should WARN.
+ 	 */
+-	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
++	WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS) &&
++		     (hw_error_code & X86_PF_PK));
  
- /* AMD-defined CPU features, CPUID level 0x80000007 (EBX), word 17 */
- #define X86_FEATURE_OVERFLOW_RECOV	(17*32+ 0) /* MCA overflow recovery support */
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index b7dd944dc867..fd09ae852c04 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -44,6 +44,12 @@
- # define DISABLE_OSPKE		(1<<(X86_FEATURE_OSPKE & 31))
- #endif /* CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS */
- 
-+#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
-+# define DISABLE_PKS		0
-+#else
-+# define DISABLE_PKS		(1<<(X86_FEATURE_PKS & 31))
-+#endif
-+
- #ifdef CONFIG_X86_5LEVEL
- # define DISABLE_LA57	0
- #else
-@@ -88,7 +94,7 @@
- #define DISABLED_MASK14	0
- #define DISABLED_MASK15	0
- #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
--			 DISABLE_ENQCMD)
-+			 DISABLE_ENQCMD|DISABLE_PKS)
- #define DISABLED_MASK17	0
- #define DISABLED_MASK18	0
- #define DISABLED_MASK19	0
-diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/include/uapi/asm/processor-flags.h
-index bcba3c643e63..191c574b2390 100644
---- a/arch/x86/include/uapi/asm/processor-flags.h
-+++ b/arch/x86/include/uapi/asm/processor-flags.h
-@@ -130,6 +130,8 @@
- #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
- #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
- #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
-+#define X86_CR4_PKS_BIT		24 /* enable Protection Keys for Supervisor */
-+#define X86_CR4_PKS		_BITUL(X86_CR4_PKS_BIT)
- 
- /*
-  * x86-64 Task Priority Register, CR8
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 24c045b24b95..c7d1fc780358 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -808,6 +808,10 @@ config ARCH_USES_HIGH_VMA_FLAGS
- 	bool
- config ARCH_HAS_PKEYS
- 	bool
-+config ARCH_HAS_SUPERVISOR_PKEYS
-+	bool
-+config ARCH_ENABLE_SUPERVISOR_PKEYS
-+	bool
- 
- config PERCPU_STATS
- 	bool "Collect percpu memory statistics"
+ #ifdef CONFIG_X86_32
+ 	/*
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
