@@ -2,104 +2,136 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62E88C433ED
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A56F6C43460
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:34:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22C19619A7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:34:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AB4C619F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:28:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbhCaMdd (ORCPT
+        id S235597AbhCaM1p (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 31 Mar 2021 08:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235410AbhCaMdL (ORCPT
+        Wed, 31 Mar 2021 08:27:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59802 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235602AbhCaM1V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 08:33:11 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7115C06174A
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Mar 2021 05:33:10 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so18738589oty.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Mar 2021 05:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G2AUmQQuU10DnwHLe3j88zasAy4fwJf13uqVDHeKF6c=;
-        b=dMoq/sx5t1QGdWz5mTYVbtcbABRgM77PzP4Pt01l7AzVneg2FZGmwBCFUhIPg13pZ0
-         R619RV7rjyIwhw5y6lVdlrOdBwndHm4XiOVOHkGdmfWiebKt0dk4gJkSv+ZqujYccdk1
-         /Y9YUnUSj7EaYfCx4xSDb8WZXyAwY2BQYjCLWh/2BQ7A8YdPpd0RTCwD0ajhFfvFREy6
-         8KaYkaqq+Obvx6/ePJpZLkWM8F7nHI2VRFTELT4G7dijwVkjF7wjpCvxPW6gxRuAnniL
-         UURsS9hiUCAws+mhBJ1hPy3MFGmAiuLzrd7NwoGC1DlVfrl/kvwiEwz4DVaEIK/NAQyY
-         B5lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G2AUmQQuU10DnwHLe3j88zasAy4fwJf13uqVDHeKF6c=;
-        b=tRN7DhHX5/4i4pdc8wF1GSIptEyroQY4Q0N5SpQbo8SnqMKxm/R+Qg/OfZDOqDGyUu
-         VT/T166/HOUWnWATty4N6LuNrD3GHsRat12nMFninzX1DroHDPUPbO9qnU8lUBp7lydo
-         djLaohG/V8CsvH07Bx3kIIcmOZitTtdtJ38dmAl0os9P0jPQnPE1YaLBrNXJxCfNte64
-         DnZ1g1GrFuNE9QMHrh48Bt+XZr1zZetYAMa7knnC9rXk50+Kb4y1nafVfxgRitKeeXBz
-         sQ/tmGPU5aw0LY+cXM5bGMiK4ckQAWf1PWWa5OHIwhyQMf9Z+BHy6eWJuoFY1qCsEgHZ
-         q5LQ==
-X-Gm-Message-State: AOAM531mjbpu9BqImuRfQzVe0ggrUaUWRc5/yF7bt85piGlWu7b1lVyb
-        G2UndSTUyl/xTFceCZGCzuhfLzmYTJ5RU9lIRsewMw==
-X-Google-Smtp-Source: ABdhPJx6YDqVXlG9dIvGvuotdIeqBs0jLh1oYI6fps8tuotAwF3xJLdVe9L4RGLJ/HPVeJgnUb4aEQgH994pcSTpmPk=
-X-Received: by 2002:a9d:5508:: with SMTP id l8mr2553279oth.233.1617193990006;
- Wed, 31 Mar 2021 05:33:10 -0700 (PDT)
+        Wed, 31 Mar 2021 08:27:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617193640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=84Zr99k/BLMEUkVeh+jVwwXBIWqAlip0+t5vxhNu95E=;
+        b=HxJ2OwMFUk/7DaByTEvPVZq95XGycifbw6Ad6Lby0Tt8mAhAaEUf3cjyWh+XIJpCCLhlK9
+        QqiRbOan5WKu3kzRGArUp1o3a9+tll92ak+EeY38eZM6slvrumF7XkImaasoXX89UeS+Js
+        UQcoyR7h0A64TldFJwBv3+MFMk2rjgQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-546-E4dZ0kmjPO2WW_uPQgnKZQ-1; Wed, 31 Mar 2021 08:27:16 -0400
+X-MC-Unique: E4dZ0kmjPO2WW_uPQgnKZQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9B35192296A;
+        Wed, 31 Mar 2021 12:27:14 +0000 (UTC)
+Received: from localhost.localdomain.com (ovpn-114-218.ams2.redhat.com [10.36.114.218])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A23CB1906D;
+        Wed, 31 Mar 2021 12:27:10 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 3/4] selftests: add kvm_get_emulated_cpuid
+Date:   Wed, 31 Mar 2021 14:26:48 +0200
+Message-Id: <20210331122649.38323-4-eesposit@redhat.com>
+In-Reply-To: <20210331122649.38323-1-eesposit@redhat.com>
+References: <20210331122649.38323-1-eesposit@redhat.com>
 MIME-Version: 1.0
-References: <20210324112503.623833-1-elver@google.com> <20210324112503.623833-7-elver@google.com>
- <YFxGb+QHEumZB6G8@elver.google.com> <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
-In-Reply-To: <YGHC7V3bbCxhRWTK@hirez.programming.kicks-ass.net>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 31 Mar 2021 14:32:58 +0200
-Message-ID: <CANpmjNOPJNhJ2L7cxrvf__tCZpy=+T1nBotKmzr2xMJypd-oJQ@mail.gmail.com>
-Subject: Re: [PATCH v3 06/11] perf: Add support for SIGTRAP on perf events
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Matt Morehouse <mascasa@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Ian Rogers <irogers@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 29 Mar 2021 at 14:07, Peter Zijlstra <peterz@infradead.org> wrote:
+As the similar kvm_get_supported_cpuid, allocates and gets
+the struct kvm_cpuid2 filled with emulated features.
 
-> (and we might already have a problem on some architectures where there
-> can be significant time between these due to not having
-> arch_irq_work_raise(), so ideally we ought to double check current in
-> your case)
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ .../selftests/kvm/include/x86_64/processor.h  |  1 +
+ .../selftests/kvm/lib/x86_64/processor.c      | 33 +++++++++++++++++++
+ 2 files changed, 34 insertions(+)
 
-I missed this bit -- just to verify: here we want to check that
-event->ctx->task == current, in case the the irq_work runs when the
-current task has already been replaced. Correct?
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 0b30b4e15c38..ae1b9530e187 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -353,6 +353,7 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid,
+ struct kvm_msr_list *kvm_get_msr_index_list(void);
+ uint64_t kvm_get_feature_msr(uint64_t msr_index);
+ struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
++struct kvm_cpuid2 *kvm_get_emulated_cpuid(void);
+ 
+ struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vm *vm, uint32_t vcpuid);
+ void vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index e676fe40bfe6..2ea14421bdfe 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -669,6 +669,39 @@ struct kvm_cpuid2 *kvm_get_supported_cpuid(void)
+ 	return cpuid;
+ }
+ 
++/*
++ * KVM Emulated CPUID Get
++ *
++ * Input Args: None
++ *
++ * Output Args:
++ *
++ * Return: The emulated KVM CPUID
++ *
++ * Get the guest CPUID emulated by KVM.
++ */
++struct kvm_cpuid2 *kvm_get_emulated_cpuid(void)
++{
++	static struct kvm_cpuid2 *cpuid;
++	int ret;
++	int kvm_fd;
++
++	if (cpuid)
++		return cpuid;
++
++	cpuid = allocate_kvm_cpuid2();
++	kvm_fd = open(KVM_DEV_PATH, O_RDONLY);
++	if (kvm_fd < 0)
++		exit(KSFT_SKIP);
++
++	ret = ioctl(kvm_fd, KVM_GET_EMULATED_CPUID, cpuid);
++	TEST_ASSERT(ret == 0, "KVM_GET_EMULATED_CPUID failed %d %d\n",
++		    ret, errno);
++
++	close(kvm_fd);
++	return cpuid;
++}
++
+ /*
+  * KVM Get MSR
+  *
+-- 
+2.30.2
 
-Thanks,
--- Marco
