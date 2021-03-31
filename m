@@ -2,314 +2,122 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C95B0C43460
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9467BC433B4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:55:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 803E3619F0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:28:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57FC961959
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 12:55:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbhCaM1n (ORCPT
+        id S235537AbhCaMyn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 31 Mar 2021 08:27:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55853 "EHLO
+        Wed, 31 Mar 2021 08:54:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24445 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235612AbhCaM1X (ORCPT
+        by vger.kernel.org with ESMTP id S235675AbhCaMyR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 08:27:23 -0400
+        Wed, 31 Mar 2021 08:54:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617193643;
+        s=mimecast20190719; t=1617195257;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=itn+F0wrkTdQRWycNhJ05JzYQFTWPNUkJ9gEZhV9Vpw=;
-        b=R3ZuCG3KN9UgkEDVJOr7etPQ9jP0YQ+w8ncEPlmKpuDDSn0RULS9MG9rP4a8hl69vALAzI
-        jePzjNDLPD0/CtA9WZdn2PSXZqVon3bjHewu4kyd42RZOcahsUfbq0lW3HphdyDbmAbD4w
-        8S3RAmL4ZL46B8QZ3UFPN/2IiLIQXmY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-496-hfcYHE1sP3auFvMrPehOXQ-1; Wed, 31 Mar 2021 08:27:21 -0400
-X-MC-Unique: hfcYHE1sP3auFvMrPehOXQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 77A7096E543;
-        Wed, 31 Mar 2021 12:27:19 +0000 (UTC)
-Received: from localhost.localdomain.com (ovpn-114-218.ams2.redhat.com [10.36.114.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 738D651C39;
-        Wed, 31 Mar 2021 12:27:15 +0000 (UTC)
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Alexander Graf <graf@amazon.com>,
-        Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] selftests: kvm: add get_emulated_cpuid test
-Date:   Wed, 31 Mar 2021 14:26:49 +0200
-Message-Id: <20210331122649.38323-5-eesposit@redhat.com>
-In-Reply-To: <20210331122649.38323-1-eesposit@redhat.com>
-References: <20210331122649.38323-1-eesposit@redhat.com>
+        bh=BLVqguYYRqWS+fkpiZrnYWlDg4Em6ZwexNgxX0lsnu4=;
+        b=H8RavXFVBwHwcMCLYL+w7w5HA8GwqCDwN0UWs8+titAW1NYzoE8V8+P3ndQRHGgPvJxviJ
+        eyuw3IgvxPULNWW9++nk8q0Eb4KM2LKwYJuTbw4yVZy4njiulPUkL7JejYzbulGn5II+iQ
+        XKBuDL+dnurIQw5/HEX3kusHddJYqh0=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-499-Q2OE_ICXNuCZ05vGWxprcA-1; Wed, 31 Mar 2021 08:54:14 -0400
+X-MC-Unique: Q2OE_ICXNuCZ05vGWxprcA-1
+Received: by mail-qt1-f197.google.com with SMTP id w2so1078423qts.18
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Mar 2021 05:54:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BLVqguYYRqWS+fkpiZrnYWlDg4Em6ZwexNgxX0lsnu4=;
+        b=JitdPrTiWCfvkeEFi98IXjGISnbNXvwHV8vtr++vYa+IF5r5ROvQBKm0V9uxQQlNaH
+         WfL+wAVy6zXOKYLo/kF8JVRkqmuIOcDGhs6NejSLO18lOxj/OEW23sFmpTaCzDUI6YOO
+         Vha9aEiBh3xsjmFeLi9sHC1jPZqZl+lqjd2KlmSXHL/OwM5MmWz/Qfk6Z5gYA9EF9i55
+         DvSJbp28fK6yaHcRkNU5WERY6UVccGpJiNlm1FWHx69FRtxJZ2WhpWDcImtEpzdceGWA
+         tgpGdWehcaJUNgxH4fdFmtibzyMPT/1KP6GsCnztRbh2wM/mXC/texfi5jl5ENksmHqm
+         X2Bg==
+X-Gm-Message-State: AOAM531bhHVu8PTcZZk7f2VC0YiTxhWZzfSlGhFI357kn0AmgCamNPnk
+        dZeq3kR8ukWmM77kYyPG26Q/bcRBhjlFPFR7IlwOGfsV8Pe288KgaYeYYsjtaRJ+IWyWdFI931d
+        uPPWG/0ywNhCoJsZDvdwC99OqlgbI
+X-Received: by 2002:a05:622a:48d:: with SMTP id p13mr2279120qtx.21.1617195253823;
+        Wed, 31 Mar 2021 05:54:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyUI7wPo7TLqkGMdpy3kH1M1sXi6ovrIE72FbmoqiknBlD6P60sY1MhBQ3ElvmViqcwOGvUsQ==
+X-Received: by 2002:a05:622a:48d:: with SMTP id p13mr2279090qtx.21.1617195253556;
+        Wed, 31 Mar 2021 05:54:13 -0700 (PDT)
+Received: from xz-x1 (bras-base-toroon474qw-grc-82-174-91-135-175.dsl.bell.ca. [174.91.135.175])
+        by smtp.gmail.com with ESMTPSA id a19sm1330189qkl.126.2021.03.31.05.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 05:54:12 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 08:54:09 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Shaohua Li <shli@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wang Qing <wangqing@vivo.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org, Brian Geffon <bgeffon@google.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michel Lespinasse <walken@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v3] userfaultfd/shmem: fix MCOPY_ATOMIC_CONTNUE behavior
+Message-ID: <20210331125409.GL429942@xz-x1>
+References: <20210329234131.304999-1-axelrasmussen@google.com>
+ <20210330205519.GK429942@xz-x1>
+ <CAJHvVcikF9MJepyvf6riVKZEUxQvV1QMdoQoN5Kirs0TLcn-Dg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVcikF9MJepyvf6riVKZEUxQvV1QMdoQoN5Kirs0TLcn-Dg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce a new selftest for the KVM_GET_EMULATED_CPUID
-ioctl. Since the behavior and functionality is similar to
-get_cpuid_test, the test checks:
+Axel,
 
-1) checks for corner case in the nent field of the struct kvm_cpuid2.
-2) sets and gets it as cpuid from the guest VM
+On Tue, Mar 30, 2021 at 04:30:13PM -0700, Axel Rasmussen wrote:
+> Yes, a refactor like that is promising. It's hard to say for certain
+> without actually looking at the result - I'll spend some time tomorrow
+> on a few options, and send along the cleanest version I come up with.
 
-Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/x86_64/get_emulated_cpuid.c | 198 ++++++++++++++++++
- 3 files changed, 200 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/get_emulated_cpuid.c
+Before you move onto a new version...  See this commit:
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 7bd7e776c266..f1523f3bfd04 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -8,6 +8,7 @@
- /x86_64/debug_regs
- /x86_64/evmcs_test
- /x86_64/get_cpuid_test
-+x86_64/get_emulated_cpuid
- /x86_64/get_msr_index_features
- /x86_64/kvm_pv_test
- /x86_64/hyperv_clock
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 67eebb53235f..0d8d3bd5a7c7 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -40,6 +40,7 @@ LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_ha
- 
- TEST_GEN_PROGS_x86_64 = x86_64/cr4_cpuid_sync_test
- TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
-+TEST_GEN_PROGS_x86_64 += x86_64/get_emulated_cpuid
- TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
- TEST_GEN_PROGS_x86_64 += x86_64/get_cpuid_test
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
-diff --git a/tools/testing/selftests/kvm/x86_64/get_emulated_cpuid.c b/tools/testing/selftests/kvm/x86_64/get_emulated_cpuid.c
-new file mode 100644
-index 000000000000..79fdbf4a1df1
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/get_emulated_cpuid.c
-@@ -0,0 +1,198 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021, Red Hat Inc.
-+ *
-+ * Generic tests for KVM CPUID set/get ioctls
-+ */
-+#include <asm/kvm_para.h>
-+#include <linux/kvm_para.h>
-+#include <stdint.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+
-+#define VCPU_ID 0
-+#define MAX_NENT 1000
-+
-+/* CPUIDs known to differ */
-+struct {
-+	u32 function;
-+	u32 index;
-+} mangled_cpuids[] = {
-+	{.function = 0xd, .index = 0},
-+};
-+
-+static void guest_main(void)
-+{
-+
-+}
-+
-+static bool is_cpuid_mangled(struct kvm_cpuid_entry2 *entrie)
-+{
-+	int i;
-+
-+	for (i = 0; i < sizeof(mangled_cpuids); i++) {
-+		if (mangled_cpuids[i].function == entrie->function &&
-+		    mangled_cpuids[i].index == entrie->index)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void check_cpuid(struct kvm_cpuid2 *cpuid, struct kvm_cpuid_entry2 *entrie)
-+{
-+	int i;
-+
-+	for (i = 0; i < cpuid->nent; i++) {
-+		if (cpuid->entries[i].function == entrie->function &&
-+		    cpuid->entries[i].index == entrie->index) {
-+			if (is_cpuid_mangled(entrie))
-+				return;
-+
-+			TEST_ASSERT(cpuid->entries[i].eax == entrie->eax &&
-+				    cpuid->entries[i].ebx == entrie->ebx &&
-+				    cpuid->entries[i].ecx == entrie->ecx &&
-+				    cpuid->entries[i].edx == entrie->edx,
-+				    "CPUID 0x%x.%x differ: 0x%x:0x%x:0x%x:0x%x vs 0x%x:0x%x:0x%x:0x%x",
-+				    entrie->function, entrie->index,
-+				    cpuid->entries[i].eax, cpuid->entries[i].ebx,
-+				    cpuid->entries[i].ecx, cpuid->entries[i].edx,
-+				    entrie->eax, entrie->ebx, entrie->ecx, entrie->edx);
-+			return;
-+		}
-+	}
-+
-+	TEST_ASSERT(false, "CPUID 0x%x.%x not found", entrie->function, entrie->index);
-+}
-+
-+static void compare_cpuids(struct kvm_cpuid2 *cpuid1,
-+						   struct kvm_cpuid2 *cpuid2)
-+{
-+	int i;
-+
-+	for (i = 0; i < cpuid1->nent; i++)
-+		check_cpuid(cpuid2, &cpuid1->entries[i]);
-+
-+	for (i = 0; i < cpuid2->nent; i++)
-+		check_cpuid(cpuid1, &cpuid2->entries[i]);
-+}
-+
-+struct kvm_cpuid2 *vcpu_alloc_cpuid(struct kvm_vm *vm, vm_vaddr_t *p_gva, struct kvm_cpuid2 *cpuid)
-+{
-+	int size = sizeof(*cpuid) + cpuid->nent * sizeof(cpuid->entries[0]);
-+	vm_vaddr_t gva = vm_vaddr_alloc(vm, size,
-+					getpagesize(), 0, 0);
-+	struct kvm_cpuid2 *guest_cpuids = addr_gva2hva(vm, gva);
-+
-+	memcpy(guest_cpuids, cpuid, size);
-+
-+	*p_gva = gva;
-+	return guest_cpuids;
-+}
-+
-+static struct kvm_cpuid2 *alloc_custom_kvm_cpuid2(int nent)
-+{
-+	struct kvm_cpuid2 *cpuid;
-+	size_t size;
-+
-+	size = sizeof(*cpuid);
-+	size += nent * sizeof(struct kvm_cpuid_entry2);
-+	cpuid = calloc(1, size);
-+	if (!cpuid) {
-+		perror("malloc");
-+		abort();
-+	}
-+
-+	cpuid->nent = nent;
-+
-+	return cpuid;
-+}
-+
-+static void clean_entries_kvm_cpuid2(struct kvm_cpuid2 *cpuid, int nent)
-+{
-+	size_t size;
-+	int old_nent;
-+
-+	size = sizeof(*cpuid);
-+	size += nent * sizeof(struct kvm_cpuid_entry2);
-+
-+	old_nent = cpuid->nent;
-+	memset(cpuid, 0, size);
-+	cpuid->nent = old_nent;
-+}
-+
-+static void test_emulated_entries(struct kvm_vm *vm)
-+{
-+	int res, right_nent;
-+	struct kvm_cpuid2 *cpuid;
-+
-+	cpuid = alloc_custom_kvm_cpuid2(MAX_NENT);
-+
-+	/* 0 nent, return E2BIG */
-+	cpuid->nent = 0;
-+	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
-+	TEST_ASSERT(res == -1 && errno == E2BIG,
-+				"KVM_GET_EMULATED_CPUID should fail E2BIG with nent=0");
-+	clean_entries_kvm_cpuid2(cpuid, MAX_NENT);
-+
-+	/* high nent, set the entries and adjust */
-+	cpuid->nent = MAX_NENT;
-+	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
-+	TEST_ASSERT(res == 0,
-+			"KVM_GET_EMULATED_CPUID should not fail with nent > actual nent");
-+	right_nent = cpuid->nent;
-+	clean_entries_kvm_cpuid2(cpuid, MAX_NENT);
-+
-+	/* high nent, set the entries and adjust */
-+	cpuid->nent++;
-+	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
-+	TEST_ASSERT(res == 0,
-+			"KVM_GET_EMULATED_CPUID should not fail with nent > actual nent");
-+	TEST_ASSERT(right_nent == cpuid->nent,
-+				"KVM_GET_EMULATED_CPUID nent should be always the same");
-+	clean_entries_kvm_cpuid2(cpuid, MAX_NENT);
-+
-+	/* low nent, return E2BIG */
-+	if (right_nent > 1) {
-+		cpuid->nent = 1;
-+		res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
-+		TEST_ASSERT(res == -1 && errno == E2BIG,
-+					"KVM_GET_EMULATED_CPUID should fail with nent=1");
-+		clean_entries_kvm_cpuid2(cpuid, MAX_NENT);
-+	}
-+
-+	/* exact nent */
-+	cpuid->nent = right_nent;
-+	res = _kvm_ioctl(vm, KVM_GET_EMULATED_CPUID, cpuid);
-+	TEST_ASSERT(res == 0,
-+			"KVM_GET_EMULATED_CPUID should not fail with nent == actual nent");
-+	TEST_ASSERT(cpuid->nent == right_nent,
-+			"KVM_GET_EMULATED_CPUID should be invaried when nent is exact");
-+	clean_entries_kvm_cpuid2(cpuid, MAX_NENT);
-+
-+	free(cpuid);
-+}
-+
-+int main(void)
-+{
-+	struct kvm_cpuid2 *emul_cpuid, *cpuid2;
-+	struct kvm_vm *vm;
-+
-+	if (!kvm_check_cap(KVM_CAP_EXT_EMUL_CPUID)) {
-+		print_skip("KVM_GET_EMULATED_CPUID not available");
-+		return 0;
-+	}
-+
-+	vm = vm_create_default(VCPU_ID, 0, guest_main);
-+
-+	emul_cpuid = kvm_get_emulated_cpuid();
-+	vcpu_set_cpuid(vm, VCPU_ID, emul_cpuid);
-+	cpuid2 = vcpu_get_cpuid(vm, VCPU_ID);
-+
-+	test_emulated_entries(vm);
-+	compare_cpuids(emul_cpuid, cpuid2);
-+
-+	kvm_vm_free(vm);
-+}
+5b51072e97d5 ("userfaultfd: shmem: allocate anonymous memory for MAP_PRIVATE shmem", 2018-11-30)
+
+I found it when I was thinking why not move the whole continue logic directly
+into mfill_atomic_pte(), if we can have the pte installation helper, because
+that's all we need.
+
+So previously I got the semantics a bit mixed up: for private shmem mappings,
+UFFDIO_COPY won't fill in page cache at all, but it's all private.  We keep the
+page cache empty even after UFFDIO_COPY for a private mapping.
+
+UFFDIO_CONTINUE is slightly different, since we _know_ the page cache is
+there..  So I'm thinking maybe you need to handle the continue request in
+mfill_atomic_pte() before the VM_SHARED check so as to cover both cases.
+
 -- 
-2.30.2
+Peter Xu
 
