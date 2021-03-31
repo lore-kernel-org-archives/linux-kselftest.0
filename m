@@ -2,122 +2,195 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4603C433E0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 06:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D40C433E2
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 07:22:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B7EA619DA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 06:59:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5188B619E4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 Mar 2021 07:22:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233851AbhCaG6j (ORCPT
+        id S234032AbhCaHVc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 31 Mar 2021 02:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233822AbhCaG62 (ORCPT
+        Wed, 31 Mar 2021 03:21:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49407 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234034AbhCaHVR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Mar 2021 02:58:28 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B18C061574;
-        Tue, 30 Mar 2021 23:58:27 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id j2so20089906ybj.8;
-        Tue, 30 Mar 2021 23:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d0Y8mGGB6DjgCAiNywpkqHwFV0rhGv7lRh5z1AofPlM=;
-        b=DZfh0/Vc6AvS2La89J/pGyAwN9RUfDiFcbBLsX+LwpzlSjryriFnOUnprkIlIoGnhb
-         B8pWfg4TD6jkReyHOylJtlGuHChpqtlYxD4t4sUvd5o8CdTki/FYasBH77vUlW2XEe9N
-         IX2V4vx8MykZTOub6BLyIp5ZRmtfxoQtX1Av1CmSegYTRDpP0do81E10QelywKH6jOMf
-         ZBAB59PVjITCLy9XB4Y5DdgzPz6C0UHI1lfyFEWR0paR5M4DIJ/XbaDdK6/cmI9AfgO3
-         zC2YwKcUL/vY0icGJa/fdj524hoiL2clq0TfuU5OdBT3oE1Lj7UCN/TQiqBy9RUSEDEH
-         W5gQ==
+        Wed, 31 Mar 2021 03:21:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617175276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TiW3s6POuiBtrk66pwAu3NhlizCTRO+r/CxAonDvxF8=;
+        b=STkOkzFiqbPHGwNfLFJM0Z2FsOsDXTQptK8sAQQLhPWf+V0OZu+w9LHsKgyxAPg5TduLTc
+        i2E6+nOb5ERZp+uPe2/tUIUM5qRnvLKS71JeXTl/XL3AV1A7dFvWBITJ9Ztm/aaVeOvOOX
+        7pp+4TXvi6hBy2tYlF5lZqbTGEc7+OA=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-70-5suplRdCPH25XTlM3Ympxg-1; Wed, 31 Mar 2021 03:21:14 -0400
+X-MC-Unique: 5suplRdCPH25XTlM3Ympxg-1
+Received: by mail-ed1-f71.google.com with SMTP id v27so640094edx.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Mar 2021 00:21:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d0Y8mGGB6DjgCAiNywpkqHwFV0rhGv7lRh5z1AofPlM=;
-        b=UxScSvt5uLJaCMPs9Or8DQdr+Ml6oROpI1fAKDDlxMAvYY91IuJfZRKBQS3SqjUV44
-         I2dtMQyvcu5eC0+JJh/WixYA738IyqDHg3h7Ow9CDq1fIReRJr+kBpYea/ICFOB5Ns2z
-         kc/sBDFi4FH/Kx+Pr7GGl8pfjUm8H0q+5301mwhm+HydJzPhbc7viMBQxAy40iYYJX5e
-         5Yx8G3/o82dsrUHj8rlY1HbVfniah0+UjutsWzkMzog21eiYmgws2idXq8kKEEU6Xyfv
-         ldm+sVCGIUAWQxpoBPevcr5uDJdC4o/+GegeTAoxkRjXsWtBVgych5VDv36hdEEf+m4Q
-         u75A==
-X-Gm-Message-State: AOAM530nIkTExNzzTsVQ22gFcs1wxfh5QWhNgnUeG9p2Zl1ZvHJnEjRl
-        2D0nUZ4g+iHaEWDa/34IEhV73b/m0XNNYaE6lUM=
-X-Google-Smtp-Source: ABdhPJzYeA5Fhdxsa9swwh7FR5tI7eMDAx+d8sb8A8qUVlYtVDdyVbvKw2rZ/Zv4ZY35tkq+EcRTUOlGm49kIPGYOeU=
-X-Received: by 2002:a25:becd:: with SMTP id k13mr2603933ybm.459.1617173907341;
- Tue, 30 Mar 2021 23:58:27 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TiW3s6POuiBtrk66pwAu3NhlizCTRO+r/CxAonDvxF8=;
+        b=ElrXEMOO07Psy6vsFr4CzQHYf9MUOSFo7dCPFLQ0Yp1N+oJA82b+DFnjoxfM764IPx
+         GbytkSrMqzSwRqbw6RmHvSFS2/RO6a682t/Tzg7kM4+1duL4DhfmGhbCNDAdr8bfVaMY
+         0rZiDiwtpsAGIfU2DWGj2+LBS1sxuc/uzHWppH1rSLxGX3NeyTDUWMXMN08dpclnXyXk
+         BTZeopOBRJW8/hvpQKnEoHcOrfy8dOzCza8FZebX3hH5y/MLgd9eYTSSpNUbp62DuJcU
+         ROcSyej3vZmqrUDHsFvD2gwChrKWij25oijPlHFSW8bb87TzZY+gb9YMytjvXc9t3PWB
+         vt+w==
+X-Gm-Message-State: AOAM5306jpXxzVREfQEHBixjjchRRwZSl73asguf23Dl0G9fotKcLlFG
+        I1tKmL0BO3Hd0fglkbv/oKB9pMG0+5ap5ImOSuwQmTbJ3skg6a6mNvhJxPJsw8kHJRSTqs95cfg
+        mRmTTxQUZTrVDQyYGaqDt14yuYGRo7hZuQIsuggzH7ZQVc8JFQ1lT3utOjfD/o10nXUNakkBxQt
+        XP4b2X
+X-Received: by 2002:aa7:c88e:: with SMTP id p14mr1915441eds.119.1617175273346;
+        Wed, 31 Mar 2021 00:21:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxwOtUMcLcAd9P6nCkRIJO4s2Udkyqh4y7phmUPuSIFRQtTdU6xxywBbPo3oVrvHX/7u38Zsg==
+X-Received: by 2002:aa7:c88e:: with SMTP id p14mr1915403eds.119.1617175273039;
+        Wed, 31 Mar 2021 00:21:13 -0700 (PDT)
+Received: from localhost.localdomain ([194.230.155.154])
+        by smtp.gmail.com with ESMTPSA id s11sm838337edt.27.2021.03.31.00.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Mar 2021 00:21:12 -0700 (PDT)
+Subject: Re: [PATCH 1/4] kvm: cpuid: adjust the returned nent field of
+ kvm_cpuid2 for KVM_GET_SUPPORTED_CPUID and KVM_GET_EMULATED_CPUID
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        Andrew Jones <drjones@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20210330185841.44792-1-eesposit@redhat.com>
+ <20210330185841.44792-2-eesposit@redhat.com> <YGPmDbO++agqdqQL@google.com>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Message-ID: <1be7c716-8160-926e-6d76-fb15b4adc066@redhat.com>
+Date:   Wed, 31 Mar 2021 09:21:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210328161055.257504-1-pctammela@mojatatu.com> <20210328161055.257504-2-pctammela@mojatatu.com>
-In-Reply-To: <20210328161055.257504-2-pctammela@mojatatu.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 30 Mar 2021 23:58:16 -0700
-Message-ID: <CAEf4BzZ5hZ+ca-S3cBWmkEtsB4nvQhzR5EA5+Q6En0m+N8um4w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: check flags in 'bpf_ringbuf_discard()' and 'bpf_ringbuf_submit()'
-To:     Pedro Tammela <pctammela@gmail.com>
-Cc:     Pedro Tammela <pctammela@mojatatu.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YGPmDbO++agqdqQL@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 28, 2021 at 9:12 AM Pedro Tammela <pctammela@gmail.com> wrote:
->
-> The current code only checks flags in 'bpf_ringbuf_output()'.
->
-> Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-> ---
->  include/uapi/linux/bpf.h       |  8 ++++----
->  kernel/bpf/ringbuf.c           | 13 +++++++++++--
->  tools/include/uapi/linux/bpf.h |  8 ++++----
->  3 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 100cb2e4c104..232b5e5dd045 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -4073,7 +4073,7 @@ union bpf_attr {
->   *             Valid pointer with *size* bytes of memory available; NULL,
->   *             otherwise.
->   *
-> - * void bpf_ringbuf_submit(void *data, u64 flags)
-> + * int bpf_ringbuf_submit(void *data, u64 flags)
->   *     Description
->   *             Submit reserved ring buffer sample, pointed to by *data*.
->   *             If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
-> @@ -4083,9 +4083,9 @@ union bpf_attr {
->   *             If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
->   *             of new data availability is sent unconditionally.
->   *     Return
-> - *             Nothing. Always succeeds.
 
-bpf_ringbuf_submit/bpf_ringbuf_commit has to alway succeed. That's an
-explicit and strict rule, which BPF verifier relies on. We cannot bail
-out due to unknown flags, because then ringbuf sample won't ever be
-submitted and will block all the subsequent samples.
 
-> + *             0 on success, or a negative error in case of failure.
->   *
+On 31/03/2021 05:01, Sean Christopherson wrote:
+> On Tue, Mar 30, 2021, Emanuele Giuseppe Esposito wrote:
+>> Calling the kvm KVM_GET_[SUPPORTED/EMULATED]_CPUID ioctl requires
+>> a nent field inside the kvm_cpuid2 struct to be big enough to contain
+>> all entries that will be set by kvm.
+>> Therefore if the nent field is too high, kvm will adjust it to the
+>> right value. If too low, -E2BIG is returned.
+>>
+>> However, when filling the entries do_cpuid_func() requires an
+>> additional entry, so if the right nent is known in advance,
+>> giving the exact number of entries won't work because it has to be increased
+>> by one.
+>>
+>> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+>> ---
+>>   arch/x86/kvm/cpuid.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>> index 6bd2f8b830e4..5412b48b9103 100644
+>> --- a/arch/x86/kvm/cpuid.c
+>> +++ b/arch/x86/kvm/cpuid.c
+>> @@ -975,6 +975,12 @@ int kvm_dev_ioctl_get_cpuid(struct kvm_cpuid2 *cpuid,
+>>   
+>>   	if (cpuid->nent < 1)
+>>   		return -E2BIG;
+>> +
+>> +	/* if there are X entries, we need to allocate at least X+1
+>> +	 * entries but return the actual number of entries
+>> +	 */
+>> +	cpuid->nent++;
+> 
+> I don't see how this can be correct.
+> 
+> If this bonus entry really is needed, then won't that be reflected in array.nent?
+> I.e won't KVM overrun the userspace buffer?
+> 
+> If it's not reflected in array.nent, that would imply there's an off-by-one check
+> somewhere, or KVM is creating an entry that it doesn't copy to userspace.  The
+> former seems unlikely as there are literally only two checks against maxnent,
+> and they both look correct (famous last words...).
+> 
+> KVM does decrement array->nent in one specific case (CPUID.0xD.2..64), i.e. a
+> false positive is theoretically possible, but that carries a WARN and requires a
+> kernel or CPU bug as well.  And fudging nent for that case would still break
+> normal use cases due to the overrun problem.
+> 
+> What am I missing?
 
-[...]
+(Maybe I should have put this series as RFC)
+
+The problem I see and noticed while doing the KVM_GET_EMULATED_CPUID 
+selftest is the following: assume there are 3 kvm emulated entries, and 
+the user sets cpuid->nent = 3. This should work because kvm sets 3 
+array->entries[], and copies them to user space.
+
+However, when the 3rd entry is populated inside kvm (array->entries[2]), 
+array->nent is increased once more (do_host_cpuid and 
+__do_cpuid_func_emulated). At that point, the loop in 
+kvm_dev_ioctl_get_cpuid and get_cpuid_func can potentially iterate once 
+more, going into the
+
+if (array->nent >= array->maxnent)
+	return -E2BIG;
+
+in __do_cpuid_func_emulated and do_host_cpuid, returning the error. I 
+agree that we need that check there because the following code tries to 
+access the array entry at array->nent index, but from what I understand 
+that access can be potentially useless because it might just jump to the 
+default entry in the switch statement and not set the entry, leaving 
+array->nent to 3. Therefore with 3 kvm entries, the user would need to 
+set cpuid->nent = 4 in order to work, even though only 3 entries are set.
+
+There is no user space overflow because kvm uses array.nent in 
+kvm_dev_ioctl_get_cpuid to specify how many entries to copy to the user.
+My fix simply pre-increments the nent field on behalf of user space, so 
+that an additional allocation is performed just in case but if not 
+filled, it will not be copied to userspace.
+
+Of course any better solution is very welcome :)
+
+If you are wondering how a user can know in advance the exact number of 
+nentries, the only way is to initially invoke the ioctl with cpuid->nent 
+= 1000 or simply KVM_MAX_CPUID_ENTRIES, and kvm will not only set the 
+entries but also adjust the nent field. In my case it was returning 3, 
+but without this fix a successive KVM_GET_EMULATED_CPUID ioctl with nent 
+= 3 would just return -E2BIG.
+
+Thank you,
+Emanuele
+
+> 
+>> +
+>>   	if (cpuid->nent > KVM_MAX_CPUID_ENTRIES)
+>>   		cpuid->nent = KVM_MAX_CPUID_ENTRIES;
+>>   
+>> -- 
+>> 2.30.2
+>>
+> 
+
