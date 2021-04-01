@@ -2,189 +2,260 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 496B5C43616
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Apr 2021 22:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC7CC433ED
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Apr 2021 22:58:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29A736105A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Apr 2021 22:13:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79767610FC
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Apr 2021 22:58:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236048AbhDAWNy (ORCPT
+        id S235689AbhDAW6h (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Apr 2021 18:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236115AbhDAWNc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Apr 2021 18:13:32 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E12C0613A9
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Apr 2021 15:13:30 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bt4so1847987pjb.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Apr 2021 15:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Gl97oxPIVXZYcwzInna88mJV+71EBUvsRwHZJgUDTHE=;
-        b=cjEHKO3ZTN3Ma1U7kUNTQIY3BEyXWR5Oiq3b1Ab399l4RaoR1D9Xfj7jh6gn8uHBc5
-         QKViE6iqhBpPP2P5EXXz7dFbfY3p8MmA7Jm5AlM8/D9y/MsBQcFarAjVOYPx0vfWbuj1
-         wk6jz/SWx7LmdwRz1IcgUz/6sRonpSFR7ttts=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Gl97oxPIVXZYcwzInna88mJV+71EBUvsRwHZJgUDTHE=;
-        b=YK8GuPVT27om4WbmKqi3iauDXzK+5JjoaYsig5rYYBH0/6Q5SzytYC03GWldIGBfG1
-         EMDWGKoPBr9pEDwHOPdrwqW+e6NfevtBqwKQkiFJGJUAHmcj8UelP9gX2YWoQqsoJXdF
-         cVXFSf/XdW6jt9M85a7oVIu1yQhHqyTJ7zHVFK36wXcwKR3M2dg+IgaOb7q3ZdOzNK7a
-         x3TuJ4d72DCSKHyjg/mHYNxYLLgYMAIUKvBlj9XFqS9p0+v7+tlXS7oqFPnILBEfG4Y1
-         kNkf/pYnTT67rHIvHsNjOY6bNHIosmulmcBU6iJDMroKQjeD49tb6AGzMHuq1bh7Z3IQ
-         0stQ==
-X-Gm-Message-State: AOAM533VuTw1inNPLkjdhwn8mvXUS6cVrX2yzgfGdXGnGkitNMCa+hSX
-        q1kPz2VVB/haOWQfYUWDfLn0nA==
-X-Google-Smtp-Source: ABdhPJy9ADuU0excc/0DZGu3CanfDu/XK6zyd+laHOepTuQ25LQdKdnPsZqD7XioexndWEgyKYLoXw==
-X-Received: by 2002:a17:902:8f8d:b029:e7:4a2f:1950 with SMTP id z13-20020a1709028f8db02900e74a2f1950mr9634785plo.77.1617315209867;
-        Thu, 01 Apr 2021 15:13:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y68sm7022290pgy.5.2021.04.01.15.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 15:13:28 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Christoph Hellwig <hch@lst.de>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, Michal Hocko <mhocko@suse.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Adam Nichols <adam@grimm-co.com>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v4 1/3] lkdtm/heap: Add vmalloc linear overflow test
-Date:   Thu,  1 Apr 2021 15:13:18 -0700
-Message-Id: <20210401221320.2717732-2-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210401221320.2717732-1-keescook@chromium.org>
-References: <20210401221320.2717732-1-keescook@chromium.org>
+        Thu, 1 Apr 2021 18:58:37 -0400
+Received: from mga04.intel.com ([192.55.52.120]:11530 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235119AbhDAW6h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 1 Apr 2021 18:58:37 -0400
+IronPort-SDR: 6qxxvLmIOyRf3Uug9icysVHVMkBKDO3Rvx5Gp7wjowq7SuOA9032GbJK7I6Ievnp0eWer5etjE
+ XCdBe+/1gpnQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="190117097"
+X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
+   d="scan'208";a="190117097"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:36 -0700
+IronPort-SDR: q7L/L0FdeHJkJjMr0bbb57D+5sc7T5IRlhocoGooatCKHSZsDt/ujInWpA7FHz/2wy6kowF9Hq
+ pQlIFNNOC/Cg==
+X-IronPort-AV: E=Sophos;i="5.81,296,1610438400"; 
+   d="scan'208";a="611092339"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2021 15:58:36 -0700
+From:   ira.weiny@intel.com
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V6 01/10] x86/pkeys: Create pkeys_common.h
+Date:   Thu,  1 Apr 2021 15:58:24 -0700
+Message-Id: <20210401225833.566238-2-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
+In-Reply-To: <20210401225833.566238-1-ira.weiny@intel.com>
+References: <20210401225833.566238-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; g=970fea1dfc54675cf92960ed316cdea27f2a2b55; i=zAev4cjW2dHa2AXn2sZrbiZj58xWVMf9s1WNriwUPTo=; m=qJGeBnIdFmEfwvhoT9HcMsaZ+R0eVHz0QfuZfXAAVFA=; p=jblLmhd9kg9taPt5qJwEBeZbhf2U5OVB9wDFfWdvEwc=
-X-Patch-Sig: m=pgp; i=keescook@chromium.org; s=0x0x8972F4DFDC6DC026; b=iQIzBAABCgAdFiEEpcP2jyKd1g9yPm4TiXL039xtwCYFAmBmRX4ACgkQiXL039xtwCZE+hAAnIT uar89s8tk5F3KllVHos+dD9cu+MxDd8FCSDc61glKeq3AnFikTxoWcqrMRrZ/9bWse2ECMyXcUr2G ysUtjKS1/0RP3B2HvYQGOIaO/wQlNkz+55Tmpg/LjiUClRc1uHo27W/0Eo+MeSq54RpUE068a/df/ KIfZpK5b2kv9CZaIk75ZoMiaZ7v+gXmHhijoDN1CrE0K9OfopKWNCLA3f1bkPoStdaA+NHn6PK9Mo mYXcaOEMWLEtcte1ycFNdGEbsSt5O0uMsWUJRI5/fH6NDdWAReHY4CVTImbMDE7S3a+WkYU/nl5wk //eufaod6uCp7vYgXHvnI1DvVOpP7S7uzvDjvx4rL7r7aAWU3vPdbdntw6NXEchs8JnjAZ4BTLXz4 rEC6x4CcxYx6qoT9wgAgHTWSfhMsjCI13Crr4RLZzGLw9oToL60IEoS/2mlwG/+8DgJpKpdwbZqS4 Ka1j23mSyZksyTlOHM6HifEw1QX9rlB41FXJsVAjQIL/lyx/YAW/sUDccJKR3wqmZuesnTD+RbFZ0 4hlR0Q3INkv8RBBg/+lPd8hb9QwftkOxkGMQV0xqsYC81lN3IS+kAxNdgurRWeQzsOTMML37DD60G P9zP81gb39t43FvyY/LDuT2RKBAHd3ffyG2pbPP3v95Y1LhDRICP60gpJ/j+FQ6I=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Similar to the existing slab overflow and stack exhaustion tests, add
-VMALLOC_LINEAR_OVERFLOW (and rename the slab test SLAB_LINEAR_OVERFLOW).
+From: Ira Weiny <ira.weiny@intel.com>
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Protection Keys User (PKU) and Protection Keys Supervisor (PKS) work in
+similar fashions and can share common defines.  Specifically PKS and PKU
+each have:
+
+	1. A single control register
+	2. The same number of keys
+	3. The same number of bits in the register per key
+	4. Access and Write disable in the same bit locations
+
+Given the above, share all the macros that synthesize and manipulate
+register values between the two features.  Unlike PKU the PKS
+definitions are needed in both pgtable.h and pkeys.h.  Create a common
+header for those 2 headers to share. The alternative, including
+pgtable.h in pkeys.h, triggers complex header dependencies.
+
+Share these defines by moving them into a new header, change their names
+to reflect the common use, and include the header where needed.
+
+Also while editing the code remove the use of 'we' from comments being
+touched.
+
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+
 ---
- drivers/misc/lkdtm/core.c               |  3 ++-
- drivers/misc/lkdtm/heap.c               | 21 ++++++++++++++++++++-
- drivers/misc/lkdtm/lkdtm.h              |  3 ++-
- tools/testing/selftests/lkdtm/tests.txt |  3 ++-
- 4 files changed, 26 insertions(+), 4 deletions(-)
+NOTE: The initialization of init_pkru_value cause checkpatch errors
+because of the space after the '(' in the macros.  Leave this as is
+because it is more readable in this format.  And it was existing code.
 
-diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-index b2aff4d87c01..c3a5ad21b3d2 100644
---- a/drivers/misc/lkdtm/core.c
-+++ b/drivers/misc/lkdtm/core.c
-@@ -119,7 +119,8 @@ static const struct crashtype crashtypes[] = {
- 	CRASHTYPE(UNALIGNED_LOAD_STORE_WRITE),
- 	CRASHTYPE(FORTIFY_OBJECT),
- 	CRASHTYPE(FORTIFY_SUBOBJECT),
--	CRASHTYPE(OVERWRITE_ALLOCATION),
-+	CRASHTYPE(SLAB_LINEAR_OVERFLOW),
-+	CRASHTYPE(VMALLOC_LINEAR_OVERFLOW),
- 	CRASHTYPE(WRITE_AFTER_FREE),
- 	CRASHTYPE(READ_AFTER_FREE),
- 	CRASHTYPE(WRITE_BUDDY_AFTER_FREE),
-diff --git a/drivers/misc/lkdtm/heap.c b/drivers/misc/lkdtm/heap.c
-index 1323bc16f113..5d491c22e09a 100644
---- a/drivers/misc/lkdtm/heap.c
-+++ b/drivers/misc/lkdtm/heap.c
-@@ -5,18 +5,37 @@
-  */
- #include "lkdtm.h"
- #include <linux/slab.h>
-+#include <linux/vmalloc.h>
- #include <linux/sched.h>
+---
+Changes from V5:
+	Remove 'we' from code comments
+
+Changes from V3:
+	From Dan Williams
+		Fix guard macro names
+		Reword commit message.
+
+Changes from RFC V3
+	Per Dave Hansen
+		Update commit message
+		Add comment to PKR_AD_KEY macro
+---
+ arch/x86/include/asm/pgtable.h      | 18 +++++++-----------
+ arch/x86/include/asm/pkeys.h        |  2 ++
+ arch/x86/include/asm/pkeys_common.h | 15 +++++++++++++++
+ arch/x86/kernel/fpu/xstate.c        | 10 +++++-----
+ arch/x86/mm/pkeys.c                 | 14 ++++++--------
+ 5 files changed, 35 insertions(+), 24 deletions(-)
+ create mode 100644 arch/x86/include/asm/pkeys_common.h
+
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index a02c67291cfc..53bbde334193 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1360,9 +1360,7 @@ static inline pmd_t pmd_swp_clear_uffd_wp(pmd_t pmd)
+ }
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_WP */
  
- static struct kmem_cache *double_free_cache;
- static struct kmem_cache *a_cache;
- static struct kmem_cache *b_cache;
+-#define PKRU_AD_BIT 0x1
+-#define PKRU_WD_BIT 0x2
+-#define PKRU_BITS_PER_PKEY 2
++#include <asm/pkeys_common.h>
  
-+/*
-+ * If there aren't guard pages, it's likely that a consecutive allocation will
-+ * let us overflow into the second allocation without overwriting something real.
-+ */
-+void lkdtm_VMALLOC_LINEAR_OVERFLOW(void)
-+{
-+	char *one, *two;
-+
-+	one = vzalloc(PAGE_SIZE);
-+	two = vzalloc(PAGE_SIZE);
-+
-+	pr_info("Attempting vmalloc linear overflow ...\n");
-+	memset(one, 0xAA, PAGE_SIZE + 1);
-+
-+	vfree(two);
-+	vfree(one);
-+}
-+
- /*
-  * This tries to stay within the next largest power-of-2 kmalloc cache
-  * to avoid actually overwriting anything important if it's not detected
-  * correctly.
-  */
--void lkdtm_OVERWRITE_ALLOCATION(void)
-+void lkdtm_SLAB_LINEAR_OVERFLOW(void)
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+ extern u32 init_pkru_value;
+@@ -1372,18 +1370,16 @@ extern u32 init_pkru_value;
+ 
+ static inline bool __pkru_allows_read(u32 pkru, u16 pkey)
  {
- 	size_t len = 1020;
- 	u32 *data = kmalloc(len, GFP_KERNEL);
-diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-index 5ae48c64df24..5a852d0beee0 100644
---- a/drivers/misc/lkdtm/lkdtm.h
-+++ b/drivers/misc/lkdtm/lkdtm.h
-@@ -38,7 +38,8 @@ void lkdtm_FORTIFY_SUBOBJECT(void);
- /* heap.c */
- void __init lkdtm_heap_init(void);
- void __exit lkdtm_heap_exit(void);
--void lkdtm_OVERWRITE_ALLOCATION(void);
-+void lkdtm_VMALLOC_LINEAR_OVERFLOW(void);
-+void lkdtm_SLAB_LINEAR_OVERFLOW(void);
- void lkdtm_WRITE_AFTER_FREE(void);
- void lkdtm_READ_AFTER_FREE(void);
- void lkdtm_WRITE_BUDDY_AFTER_FREE(void);
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 11ef159be0fd..322a1d2439e3 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -15,7 +15,8 @@ UNSET_SMEP CR4 bits went missing
- DOUBLE_FAULT
- CORRUPT_PAC
- UNALIGNED_LOAD_STORE_WRITE
--#OVERWRITE_ALLOCATION Corrupts memory on failure
-+VMALLOC_LINEAR_OVERFLOW
-+SLAB_LINEAR_OVERFLOW
- #WRITE_AFTER_FREE Corrupts memory on failure
- READ_AFTER_FREE
- #WRITE_BUDDY_AFTER_FREE Corrupts memory on failure
+-	int pkru_pkey_bits = pkey * PKRU_BITS_PER_PKEY;
+-	return !(pkru & (PKRU_AD_BIT << pkru_pkey_bits));
++	int pkru_pkey_bits = pkey * PKR_BITS_PER_PKEY;
++
++	return !(pkru & (PKR_AD_BIT << pkru_pkey_bits));
+ }
+ 
+ static inline bool __pkru_allows_write(u32 pkru, u16 pkey)
+ {
+-	int pkru_pkey_bits = pkey * PKRU_BITS_PER_PKEY;
+-	/*
+-	 * Access-disable disables writes too so we need to check
+-	 * both bits here.
+-	 */
+-	return !(pkru & ((PKRU_AD_BIT|PKRU_WD_BIT) << pkru_pkey_bits));
++	int pkru_pkey_bits = pkey * PKR_BITS_PER_PKEY;
++	/* Access-disable disables writes too so check both bits here. */
++	return !(pkru & ((PKR_AD_BIT|PKR_WD_BIT) << pkru_pkey_bits));
+ }
+ 
+ static inline u16 pte_flags_pkey(unsigned long pte_flags)
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index 2ff9b98812b7..f9feba80894b 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_X86_PKEYS_H
+ #define _ASM_X86_PKEYS_H
+ 
++#include <asm/pkeys_common.h>
++
+ #define ARCH_DEFAULT_PKEY	0
+ 
+ /*
+diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
+new file mode 100644
+index 000000000000..e40b0ced733f
+--- /dev/null
++++ b/arch/x86/include/asm/pkeys_common.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_PKEYS_COMMON_H
++#define _ASM_X86_PKEYS_COMMON_H
++
++#define PKR_AD_BIT 0x1
++#define PKR_WD_BIT 0x2
++#define PKR_BITS_PER_PKEY 2
++
++/*
++ * Generate an Access-Disable mask for the given pkey.  Several of these can be
++ * OR'd together to generate pkey register values.
++ */
++#define PKR_AD_KEY(pkey)	(PKR_AD_BIT << ((pkey) * PKR_BITS_PER_PKEY))
++
++#endif /*_ASM_X86_PKEYS_COMMON_H */
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 683749b80ae2..406ad78e1969 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -995,7 +995,7 @@ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 		unsigned long init_val)
+ {
+ 	u32 old_pkru;
+-	int pkey_shift = (pkey * PKRU_BITS_PER_PKEY);
++	int pkey_shift = (pkey * PKR_BITS_PER_PKEY);
+ 	u32 new_pkru_bits = 0;
+ 
+ 	/*
+@@ -1012,18 +1012,18 @@ int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 	 */
+ 	WARN_ON_ONCE(pkey >= arch_max_pkey());
+ 
+-	/* Set the bits we need in PKRU:  */
++	/* Set the bits needed in PKRU:  */
+ 	if (init_val & PKEY_DISABLE_ACCESS)
+-		new_pkru_bits |= PKRU_AD_BIT;
++		new_pkru_bits |= PKR_AD_BIT;
+ 	if (init_val & PKEY_DISABLE_WRITE)
+-		new_pkru_bits |= PKRU_WD_BIT;
++		new_pkru_bits |= PKR_WD_BIT;
+ 
+ 	/* Shift the bits in to the correct place in PKRU for pkey: */
+ 	new_pkru_bits <<= pkey_shift;
+ 
+ 	/* Get old PKRU and mask off any old bits in place: */
+ 	old_pkru = read_pkru();
+-	old_pkru &= ~((PKRU_AD_BIT|PKRU_WD_BIT) << pkey_shift);
++	old_pkru &= ~((PKR_AD_BIT|PKR_WD_BIT) << pkey_shift);
+ 
+ 	/* Write old part along with new part: */
+ 	write_pkru(old_pkru | new_pkru_bits);
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index 8873ed1438a9..f5efb4007e74 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -111,19 +111,17 @@ int __arch_override_mprotect_pkey(struct vm_area_struct *vma, int prot, int pkey
+ 	return vma_pkey(vma);
+ }
+ 
+-#define PKRU_AD_KEY(pkey)	(PKRU_AD_BIT << ((pkey) * PKRU_BITS_PER_PKEY))
+-
+ /*
+  * Make the default PKRU value (at execve() time) as restrictive
+  * as possible.  This ensures that any threads clone()'d early
+  * in the process's lifetime will not accidentally get access
+  * to data which is pkey-protected later on.
+  */
+-u32 init_pkru_value = PKRU_AD_KEY( 1) | PKRU_AD_KEY( 2) | PKRU_AD_KEY( 3) |
+-		      PKRU_AD_KEY( 4) | PKRU_AD_KEY( 5) | PKRU_AD_KEY( 6) |
+-		      PKRU_AD_KEY( 7) | PKRU_AD_KEY( 8) | PKRU_AD_KEY( 9) |
+-		      PKRU_AD_KEY(10) | PKRU_AD_KEY(11) | PKRU_AD_KEY(12) |
+-		      PKRU_AD_KEY(13) | PKRU_AD_KEY(14) | PKRU_AD_KEY(15);
++u32 init_pkru_value = PKR_AD_KEY( 1) | PKR_AD_KEY( 2) | PKR_AD_KEY( 3) |
++		      PKR_AD_KEY( 4) | PKR_AD_KEY( 5) | PKR_AD_KEY( 6) |
++		      PKR_AD_KEY( 7) | PKR_AD_KEY( 8) | PKR_AD_KEY( 9) |
++		      PKR_AD_KEY(10) | PKR_AD_KEY(11) | PKR_AD_KEY(12) |
++		      PKR_AD_KEY(13) | PKR_AD_KEY(14) | PKR_AD_KEY(15);
+ 
+ /*
+  * Called from the FPU code when creating a fresh set of FPU
+@@ -173,7 +171,7 @@ static ssize_t init_pkru_write_file(struct file *file,
+ 	 * up immediately if someone attempts to disable access
+ 	 * or writes to pkey 0.
+ 	 */
+-	if (new_init_pkru & (PKRU_AD_BIT|PKRU_WD_BIT))
++	if (new_init_pkru & (PKR_AD_BIT|PKR_WD_BIT))
+ 		return -EINVAL;
+ 
+ 	WRITE_ONCE(init_pkru_value, new_init_pkru);
 -- 
-2.25.1
+2.28.0.rc0.12.gb6a658bd00c9
 
