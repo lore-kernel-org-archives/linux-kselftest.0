@@ -2,85 +2,79 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F15C43460
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Apr 2021 08:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AFCFC43460
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Apr 2021 09:17:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B1DD613C4
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Apr 2021 08:38:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAA3C6120E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Apr 2021 09:17:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350165AbhDNIif (ORCPT
+        id S232769AbhDNJR4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Apr 2021 04:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350157AbhDNIi0 (ORCPT
+        Wed, 14 Apr 2021 05:17:56 -0400
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:34318 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232715AbhDNJR4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:38:26 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D11C061574;
-        Wed, 14 Apr 2021 01:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HOtc4Cl5BmOPZRqmjAtE1IxvnshDfxYTlqGmfr7o1nE=; b=BwF4H/P2hb8LfuzoAdXv9Wp9Es
-        BNHces+QXuyLvlSJ5+FSQeScHQtEIfqpgbDaVqFy7Ge+lgMWEMFs6Whl9ajZcc+K2LuviMV6+dpPd
-        dtZgw7fnI43BKmv19Ub7B7Jo9Qv03hRa5F6v+sBVyZnbWWoQ3qnkgiHS4L+T7J+WtD91ErdItBcVf
-        bcuHuN0gguJ7qEvj0lUhVLamEsNtiPr5+rI3uocgNqvt116V4I9FjypnB2OGtVUZhfkxKA1LlzO3m
-        Fs+tsvcT3QeclXBiRwzyE4cejhBDdMC2h27by3aAdEAdonNbOnSUhk4zJ30llp6d5bhCjfGNxpVp8
-        4qbJzL+Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lWb1w-00C0Hf-DL; Wed, 14 Apr 2021 08:37:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A5236300033;
-        Wed, 14 Apr 2021 10:37:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 60B7D203CF7DB; Wed, 14 Apr 2021 10:37:46 +0200 (CEST)
-Date:   Wed, 14 Apr 2021 10:37:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     alexander.shishkin@linux.intel.com, acme@kernel.org,
-        mingo@redhat.com, jolsa@redhat.com, mark.rutland@arm.com,
-        namhyung@kernel.org, tglx@linutronix.de, glider@google.com,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, christian@brauner.io,
-        dvyukov@google.com, jannh@google.com, axboe@kernel.dk,
-        mascasa@google.com, pcc@google.com, irogers@google.com,
-        oleg@redhat.com, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 00/10] Add support for synchronous signals on perf
- events
-Message-ID: <YHap2v/pQJlFVE3W@hirez.programming.kicks-ass.net>
-References: <20210408103605.1676875-1-elver@google.com>
+        Wed, 14 Apr 2021 05:17:56 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UVXq4Eo_1618391853;
+Received: from admindeMacBook-Pro-2.local(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0UVXq4Eo_1618391853)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 14 Apr 2021 17:17:34 +0800
+Subject: Re: [PATCH v3] selftests/mincore: get readahead size for
+ check_file_mmap()
+To:     =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org,
+        James Wang <jnwang@linux.alibaba.com>
+References: <20210403063800.56278-1-jefflexu@linux.alibaba.com>
+ <20210412034622.59737-1-jefflexu@linux.alibaba.com>
+ <a582e59cdca782125929a88318eeebd24c7fda8f.camel@collabora.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+Message-ID: <bb013423-f9b7-6fcb-944b-fb7a9b27dc4b@linux.alibaba.com>
+Date:   Wed, 14 Apr 2021 17:17:33 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210408103605.1676875-1-elver@google.com>
+In-Reply-To: <a582e59cdca782125929a88318eeebd24c7fda8f.camel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 12:35:55PM +0200, Marco Elver wrote:
-> Marco Elver (9):
->   perf: Apply PERF_EVENT_IOC_MODIFY_ATTRIBUTES to children
->   perf: Support only inheriting events if cloned with CLONE_THREAD
->   perf: Add support for event removal on exec
->   signal: Introduce TRAP_PERF si_code and si_perf to siginfo
->   perf: Add support for SIGTRAP on perf events
->   selftests/perf_events: Add kselftest for process-wide sigtrap handling
->   selftests/perf_events: Add kselftest for remove_on_exec
 
-Thanks!, I've picked up the above 8 patches. Arnaldo, do you want to
-carry the last 2 patches or are you fine with me taking them as well?
 
->   tools headers uapi: Sync tools/include/uapi/linux/perf_event.h
->   perf test: Add basic stress test for sigtrap handling
+On 4/12/21 3:15 PM, Ricardo Cañuelo wrote:
+> Hi Jeffle,
+> 
+> Thanks for the patch.
+> 
+> On Mon, 2021-04-12 at 11:46 +0800, Jeffle Xu wrote:
+>> -	i = FILE_SIZE / 2 / page_size + 1;
+>> +	i = file_size / 2 / page_size + 1;
+>>  	while (i < vec_size && vec[i]) {
+>>  		ra_pages++;
+>>  		i++;
+> 
+> One minor nit: now that you know the readahead size exactly, this could check
+> that only the readahead window has been loaded and that anything beyond that is
+> still not populated.
+
+Thanks for reviewing. Yes it is. I can add this if the readahead
+algorithm on this issue (touching the first page) is relatively stable,
+since the readahead algorithm is not a ABI. Though selftest itself is
+closely coupled with kernel.
+
+> 
+> Acked-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+> 
+
+-- 
+Thanks,
+Jeffle
