@@ -2,1027 +2,360 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D00DC43460
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 15:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D141BC433ED
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 15:57:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4A0E613BB
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 15:20:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1175611AC
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 15:57:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234438AbhDOPUv (ORCPT
+        id S234093AbhDOP56 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Apr 2021 11:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236959AbhDOPUT (ORCPT
+        Thu, 15 Apr 2021 11:57:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232769AbhDOP54 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Apr 2021 11:20:19 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE115C061377
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 08:17:48 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e187so2905563yba.15
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 08:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=fCJMDCUkECLfp63xeGmZWAqAva+4TURc2g0u3qOya1g=;
-        b=hgir0LzAcd/bam+AEzUd7MPIvjSTu3r/VHZqNqH2zGuz3g4p0j223eVCujFYEaWFve
-         uhmxGvT7FgZTJEy9CQRkIASMJYAWsVGNE43sT/c02Qbxgb/EqgoWOAui+9sNo5suJ3E8
-         UskS57LTjcWHu6JYhR/0zkqJLrwPpQdGvZeACzfZjVtySkb1MduVGRzEQngCo4An1Qm7
-         3fyd55k4g0wRm6i4+JVcXKet3aX0t7OpXVsRAcX1hmqvROd7TW4m76uRuTrZXYCaZh4D
-         fiDL9l9p9eIn+WXY4t6dVNN3SGA3mXz0s2pRBqVamyZS9RiTTA8wTJulV54oGNnS6E8d
-         sMew==
+        Thu, 15 Apr 2021 11:57:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1618502253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+LsS0ftAjENjqdx8EBjDPwi/OUCdobBCtVY48zTQ40w=;
+        b=MBocAMNt8NtX1v8n3wYr6HV7/T++rhu9i/SnIKXWkAoKl0koWtJZfVwG9UuM6vIZjoQIPr
+        0BUfO59gmbDVz3n1v0dVNqY6Tr0C4bCWzBb3IRLOKi0tuqUZX2at6AP4rPf2z/uRVU2J3C
+        fWyjBj8nTIuGcOJJu5jc+8NVQbUoQb0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-555-LabgAD7_NEiTR5j1pgxaLg-1; Thu, 15 Apr 2021 11:57:31 -0400
+X-MC-Unique: LabgAD7_NEiTR5j1pgxaLg-1
+Received: by mail-ej1-f72.google.com with SMTP id d16-20020a1709066410b0290373cd3ce7e6so1101632ejm.14
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 08:57:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=fCJMDCUkECLfp63xeGmZWAqAva+4TURc2g0u3qOya1g=;
-        b=LyvkgUy5ct3qWbF4HScNLTEpRi9ciV2E2OUebz1c9ug4RCCjJtY9H5wIfzazhprbN0
-         mlJlj3KZEvDeEOidCDH4lgWhMCO9jRUlVPaiFde/Sph0DRkAcmrjYj5GFiRHdmwZy7X+
-         RpYrqpJSYmY6Kcsf+qfMpGRJgqpk08ZlKnloW0wWcVYcxThHVufWzQpOEq1QJFFnDve3
-         5Pb71v9ba07gWf6PFt84zVAdp8waQpdud1sy+6RQHkTnWqCofKRidGLdU9UVQTH4cYPD
-         KI5xa7m4PC+eoP2YC2iuj3HNRt6AmVdKGPb66H9ZijQz5VkvA4g7uzcNBLJTaaS2uew6
-         SJ5A==
-X-Gm-Message-State: AOAM532iCJfOzVJa+b7NoNwZBZZDtxvvroyU5nwixuj9/1cVkoNvpkb5
-        Dx/Wwtm2udYZzGx7TEYcG8nIuhKBOIl7tLMXUA==
-X-Google-Smtp-Source: ABdhPJzr7gZ2tkQdCymzdtPbZx5IBC7nEO/V59Rshve/UFsOwldv/f7snuCeA/dJwN+zYkRiY2QTHB18sHI63FdkYg==
-X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a25:38c6:: with SMTP id
- f189mr5257064yba.183.1618499867791; Thu, 15 Apr 2021 08:17:47 -0700 (PDT)
-Date:   Thu, 15 Apr 2021 15:17:39 +0000
-In-Reply-To: <20210415151741.1607806-1-jingzhangos@google.com>
-Message-Id: <20210415151741.1607806-3-jingzhangos@google.com>
-Mime-Version: 1.0
-References: <20210415151741.1607806-1-jingzhangos@google.com>
-X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
-Subject: [PATCH v2 2/4] KVM: stats: Add fd-based API to read binary stats data
-From:   Jing Zhang <jingzhangos@google.com>
-To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     Jing Zhang <jingzhangos@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=+LsS0ftAjENjqdx8EBjDPwi/OUCdobBCtVY48zTQ40w=;
+        b=nyThsPGIkOExg971/1vWrMULCqCRAvPJpVb5VqBEFCGFnTuBneovxUNu5UfgVMROhu
+         bqnoHLsOYPLiNjC0KcwSUgB8FpjaxvOz0Yf5eZT9aNI1tafN6dLHGzN4mGH3VR5xFvcs
+         A6NwXpEtxxjjyCRC7CdO8D4DqtxrR2xeIGhY3w/0p1Fw2xL79tWYJOYvuKCG4NEMfK1g
+         UVsSuq03vdrqnI83a9FIwK0Ml3q2rnalrx3FHUYZpgB/FUxnPi/tMy0nMZRy8l4URCno
+         4dj2b/Kfyq8gYXO7gpgsIfFOw2EGmtseOCOw8erlyTe/pd2OcJvDrMLAaf9QqBEABVPV
+         9WYQ==
+X-Gm-Message-State: AOAM530rQ6DEImAt2OYUMiJ6w8zB2yR0egKrvd8FSe6j72L0Ov9yJhIK
+        wRFUuSXJiIzXZsSNeBJAl66xfOh3ncrU7vs0II6dZmYlsCzNN+5RA2xaDZNNTp6ZsqGbp+l1v7u
+        3RwTCm3YNFA/5DoRh6DZItR0XjNmy
+X-Received: by 2002:a17:906:7e53:: with SMTP id z19mr4151987ejr.422.1618502249508;
+        Thu, 15 Apr 2021 08:57:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx4N2v3zSfzaI8sojkPWLL/T2oIA/OEpL4yra5qcFBBjmH+et1M12PxSwhPmxWTUWs5xHO7Jw==
+X-Received: by 2002:a17:906:7e53:: with SMTP id z19mr4151940ejr.422.1618502249016;
+        Thu, 15 Apr 2021 08:57:29 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id qt10sm2285687ejb.34.2021.04.15.08.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Apr 2021 08:57:28 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 5AEE91806B3; Thu, 15 Apr 2021 17:57:27 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 3/5] libbpf: add low level TC-BPF API
+In-Reply-To: <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
+References: <20210325120020.236504-4-memxor@gmail.com>
+ <CAEf4Bzbz9OQ_vfqyenurPV7XRVpK=zcvktwH2Dvj-9kUGL1e7w@mail.gmail.com>
+ <20210328080648.oorx2no2j6zslejk@apollo>
+ <CAEf4BzaMsixmrrgGv6Qr68Ytq8k9W+WP6m4Vdb1wDhDFBKStgw@mail.gmail.com>
+ <48b99ccc-8ef6-4ba9-00f9-d7e71ae4fb5d@iogearbox.net>
+ <20210331094400.ldznoctli6fljz64@apollo>
+ <5d59b5ee-a21e-1860-e2e5-d03f89306fd8@iogearbox.net>
+ <20210402152743.dbadpgcmrgjt4eca@apollo>
+ <CAADnVQ+wqrEnOGd8E1yp+1WTAx8ZcAx3HUjJs6ipPd0eKmOrgA@mail.gmail.com>
+ <20210402190806.nhcgappm3iocvd3d@apollo>
+ <20210403174721.vg4wle327wvossgl@ast-mbp>
+ <CAEf4Bzaeu4apgEtwS_3q1iPuURjPXMs9H43cYUtJSmjPMU5M9A@mail.gmail.com>
+ <87blar4ti7.fsf@toke.dk>
+ <CAEf4BzaOJ-WD3A13B2uCrsE2yrctAL8QtJ8TuXHLeP+tm98pbA@mail.gmail.com>
+ <874kg9m8t1.fsf@toke.dk>
+ <CAEf4BzaEkzPeAXqmm5aEdQxnCkrqJTHcSu7afnV11+697KgZTQ@mail.gmail.com>
+ <87wnt4jx8m.fsf@toke.dk>
+ <CAEf4Bzbb0ECMjhAvD-1wpp3qJJcrpgKr_=ONN4ZQmuNUgYrH4A@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 15 Apr 2021 17:57:27 +0200
+Message-ID: <87v98nilqw.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Provides a file descriptor per VM to read VM stats info/data.
-Provides a file descriptor per vCPU to read vCPU stats info/data.
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Signed-off-by: Jing Zhang <jingzhangos@google.com>
----
- arch/arm64/kvm/guest.c    |  30 +++++
- arch/mips/kvm/mips.c      |  55 ++++++++++
- arch/powerpc/kvm/book3s.c |  56 ++++++++++
- arch/powerpc/kvm/booke.c  |  49 +++++++++
- arch/s390/kvm/kvm-s390.c  | 121 +++++++++++++++++++++
- arch/x86/kvm/x86.c        |  57 ++++++++++
- include/linux/kvm_host.h  | 127 +++++++++++++++++++++-
- include/uapi/linux/kvm.h  |  48 ++++++++
- virt/kvm/kvm_main.c       | 223 ++++++++++++++++++++++++++++++++++++++
- 9 files changed, 764 insertions(+), 2 deletions(-)
+> On Wed, Apr 14, 2021 at 3:51 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>
+>> > On Wed, Apr 14, 2021 at 3:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke=
+@redhat.com> wrote:
+>> >>
+>> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>> >>
+>> >> > On Tue, Apr 6, 2021 at 3:06 AM Toke H=C3=B8iland-J=C3=B8rgensen <to=
+ke@redhat.com> wrote:
+>> >> >>
+>> >> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>> >> >>
+>> >> >> > On Sat, Apr 3, 2021 at 10:47 AM Alexei Starovoitov
+>> >> >> > <alexei.starovoitov@gmail.com> wrote:
+>> >> >> >>
+>> >> >> >> On Sat, Apr 03, 2021 at 12:38:06AM +0530, Kumar Kartikeya Dwive=
+di wrote:
+>> >> >> >> > On Sat, Apr 03, 2021 at 12:02:14AM IST, Alexei Starovoitov wr=
+ote:
+>> >> >> >> > > On Fri, Apr 2, 2021 at 8:27 AM Kumar Kartikeya Dwivedi <mem=
+xor@gmail.com> wrote:
+>> >> >> >> > > > [...]
+>> >> >> >> > >
+>> >> >> >> > > All of these things are messy because of tc legacy. bpf tri=
+ed to follow tc style
+>> >> >> >> > > with cls and act distinction and it didn't quite work. cls =
+with
+>> >> >> >> > > direct-action is the only
+>> >> >> >> > > thing that became mainstream while tc style attach wasn't r=
+eally addressed.
+>> >> >> >> > > There were several incidents where tc had tens of thousands=
+ of progs attached
+>> >> >> >> > > because of this attach/query/index weirdness described abov=
+e.
+>> >> >> >> > > I think the only way to address this properly is to introdu=
+ce bpf_link style of
+>> >> >> >> > > attaching to tc. Such bpf_link would support ingress/egress=
+ only.
+>> >> >> >> > > direction-action will be implied. There won't be any index =
+and query
+>> >> >> >> > > will be obvious.
+>> >> >> >> >
+>> >> >> >> > Note that we already have bpf_link support working (without s=
+upport for pinning
+>> >> >> >> > ofcourse) in a limited way. The ifindex, protocol, parent_id,=
+ priority, handle,
+>> >> >> >> > chain_index tuple uniquely identifies a filter, so we stash t=
+his in the bpf_link
+>> >> >> >> > and are able to operate on the exact filter during release.
+>> >> >> >>
+>> >> >> >> Except they're not unique. The library can stash them, but some=
+thing else
+>> >> >> >> doing detach via iproute2 or their own netlink calls will detac=
+h the prog.
+>> >> >> >> This other app can attach to the same spot a different prog and=
+ now
+>> >> >> >> bpf_link__destroy will be detaching somebody else prog.
+>> >> >> >>
+>> >> >> >> > > So I would like to propose to take this patch set a step fu=
+rther from
+>> >> >> >> > > what Daniel said:
+>> >> >> >> > > int bpf_tc_attach(prog_fd, ifindex, {INGRESS,EGRESS}):
+>> >> >> >> > > and make this proposed api to return FD.
+>> >> >> >> > > To detach from tc ingress/egress just close(fd).
+>> >> >> >> >
+>> >> >> >> > You mean adding an fd-based TC API to the kernel?
+>> >> >> >>
+>> >> >> >> yes.
+>> >> >> >
+>> >> >> > I'm totally for bpf_link-based TC attachment.
+>> >> >> >
+>> >> >> > But I think *also* having "legacy" netlink-based APIs will allow
+>> >> >> > applications to handle older kernels in a much nicer way without=
+ extra
+>> >> >> > dependency on iproute2. We have a similar situation with kprobe,=
+ where
+>> >> >> > currently libbpf only supports "modern" fd-based attachment, but=
+ users
+>> >> >> > periodically ask questions and struggle to figure out issues on =
+older
+>> >> >> > kernels that don't support new APIs.
+>> >> >>
+>> >> >> +1; I am OK with adding a new bpf_link-based way to attach TC prog=
+rams,
+>> >> >> but we still need to support the netlink API in libbpf.
+>> >> >>
+>> >> >> > So I think we'd have to support legacy TC APIs, but I agree with
+>> >> >> > Alexei and Daniel that we should keep it to the simplest and most
+>> >> >> > straightforward API of supporting direction-action attachments a=
+nd
+>> >> >> > setting up qdisc transparently (if I'm getting all the terminolo=
+gy
+>> >> >> > right, after reading Quentin's blog post). That coincidentally s=
+hould
+>> >> >> > probably match how bpf_link-based TC API will look like, so all =
+that
+>> >> >> > can be abstracted behind a single bpf_link__attach_tc() API as w=
+ell,
+>> >> >> > right? That's the plan for dealing with kprobe right now, btw. L=
+ibbpf
+>> >> >> > will detect the best available API and transparently fall back (=
+maybe
+>> >> >> > with some warning for awareness, due to inherent downsides of le=
+gacy
+>> >> >> > APIs: no auto-cleanup being the most prominent one).
+>> >> >>
+>> >> >> Yup, SGTM: Expose both in the low-level API (in bpf.c), and make t=
+he
+>> >> >> high-level API auto-detect. That way users can also still use the
+>> >> >> netlink attach function if they don't want the fd-based auto-close
+>> >> >> behaviour of bpf_link.
+>> >> >
+>> >> > So I thought a bit more about this, and it feels like the right move
+>> >> > would be to expose only higher-level TC BPF API behind bpf_link. It
+>> >> > will keep the API complexity and amount of APIs that libbpf will ha=
+ve
+>> >> > to support to the minimum, and will keep the API itself simple:
+>> >> > direct-attach with the minimum amount of input arguments. By not
+>> >> > exposing low-level APIs we also table the whole bpf_tc_cls_attach_id
+>> >> > design discussion, as we now can keep as much info as needed inside
+>> >> > bpf_link_tc (which will embed bpf_link internally as well) to suppo=
+rt
+>> >> > detachment and possibly some additional querying, if needed.
+>> >>
+>> >> But then there would be no way for the caller to explicitly select a
+>> >> mechanism? I.e., if I write a BPF program using this mechanism target=
+ing
+>> >> a 5.12 kernel, I'll get netlink attachment, which can stick around wh=
+en
+>> >> I do bpf_link__disconnect(). But then if the kernel gets upgraded to
+>> >> support bpf_link for TC programs I'll suddenly transparently get
+>> >> bpf_link and the attachments will go away unless I pin them. This
+>> >> seems... less than ideal?
+>> >
+>> > That's what we are doing with bpf_program__attach_kprobe(), though.
+>> > And so far I've only seen people (privately) saying how good it would
+>> > be to have bpf_link-based TC APIs, doesn't seem like anyone with a
+>> > realistic use case prefers the current APIs. So I suspect it's not
+>> > going to be a problem in practice. But at least I'd start there and
+>> > see how people are using it and if they need anything else.
+>>
+>> *sigh* - I really wish you would stop arbitrarily declaring your own use
+>> cases "realistic" and mine (implied) "unrealistic". Makes it really hard
+>> to have a productive discussion...
+>
+> Well (sigh?..), this wasn't my intention, sorry you read it this way.
+> But we had similar discussions when I was adding bpf_link-based XDP
+> attach APIs.
 
-diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-index cc5b1e2fdbd0..6286a9011002 100644
---- a/arch/arm64/kvm/guest.c
-+++ b/arch/arm64/kvm/guest.c
-@@ -28,6 +28,36 @@
- 
- #include "trace.h"
- 
-+struct _kvm_stats_desc kvm_vm_stats_desc[] = {
-+	STATS_VM_COMMON,
-+};
-+
-+struct _kvm_stats_header kvm_vm_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vm_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vm_stats_desc),
-+};
-+
-+struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-+	STATS_VCPU_COMMON,
-+	STATS_DESC_COUNTER("hvc_exit_stat"),
-+	STATS_DESC_COUNTER("wfe_exit_stat"),
-+	STATS_DESC_COUNTER("wfi_exit_stat"),
-+	STATS_DESC_COUNTER("mmio_exit_user"),
-+	STATS_DESC_COUNTER("mmio_exit_kernel"),
-+	STATS_DESC_COUNTER("exits"),
-+};
-+
-+struct _kvm_stats_header kvm_vcpu_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vcpu_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vcpu_stats_desc),
-+};
-+
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
- 	VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index d78820777de1..3073886d37f9 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -39,6 +39,61 @@
- #define VECTORSPACING 0x100	/* for EI/VI mode */
- #endif
- 
-+struct _kvm_stats_desc kvm_vm_stats_desc[] = {
-+	STATS_VM_COMMON,
-+};
-+
-+struct _kvm_stats_header kvm_vm_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vm_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vm_stats_desc),
-+};
-+
-+struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-+	STATS_VCPU_COMMON,
-+	STATS_DESC_COUNTER("wait_exits"),
-+	STATS_DESC_COUNTER("cache_exits"),
-+	STATS_DESC_COUNTER("signal_exits"),
-+	STATS_DESC_COUNTER("int_exits"),
-+	STATS_DESC_COUNTER("cop_unusable_exits"),
-+	STATS_DESC_COUNTER("tlbmod_exits"),
-+	STATS_DESC_COUNTER("tlbmiss_ld_exits"),
-+	STATS_DESC_COUNTER("tlbmiss_st_exits"),
-+	STATS_DESC_COUNTER("addrerr_st_exits"),
-+	STATS_DESC_COUNTER("addrerr_ld_exits"),
-+	STATS_DESC_COUNTER("syscall_exits"),
-+	STATS_DESC_COUNTER("resvd_inst_exits"),
-+	STATS_DESC_COUNTER("break_inst_exits"),
-+	STATS_DESC_COUNTER("trap_inst_exits"),
-+	STATS_DESC_COUNTER("msa_fpe_exits"),
-+	STATS_DESC_COUNTER("fpe_exits"),
-+	STATS_DESC_COUNTER("msa_disabled_exits"),
-+	STATS_DESC_COUNTER("flush_dcache_exits"),
-+#ifdef CONFIG_KVM_MIPS_VZ
-+	STATS_DESC_COUNTER("vz_gpsi_exits"),
-+	STATS_DESC_COUNTER("vz_gsfc_exits"),
-+	STATS_DESC_COUNTER("vz_hc_exits"),
-+	STATS_DESC_COUNTER("vz_grr_exits"),
-+	STATS_DESC_COUNTER("vz_gva_exits"),
-+	STATS_DESC_COUNTER("vz_ghfc_exits"),
-+	STATS_DESC_COUNTER("vz_gpa_exits"),
-+	STATS_DESC_COUNTER("vz_resvd_exits"),
-+#ifdef CONFIG_CPU_LOONGSON64
-+	STATS_DESC_COUNTER("vz_cpucfg_exits"),
-+#endif
-+#endif
-+};
-+
-+struct _kvm_stats_header kvm_vcpu_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vcpu_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vcpu_stats_desc),
-+};
-+
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	VCPU_STAT("wait", wait_exits),
- 	VCPU_STAT("cache", cache_exits),
-diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-index d799029f2e55..7c24ad66fa38 100644
---- a/arch/powerpc/kvm/book3s.c
-+++ b/arch/powerpc/kvm/book3s.c
-@@ -38,6 +38,62 @@
- 
- /* #define EXIT_DEBUG */
- 
-+struct _kvm_stats_desc kvm_vm_stats_desc[] = {
-+	STATS_VM_COMMON,
-+	STATS_DESC_ICOUNTER("num_2M_pages"),
-+	STATS_DESC_ICOUNTER("num_1G_pages"),
-+};
-+
-+struct _kvm_stats_header kvm_vm_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vm_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vm_stats_desc),
-+};
-+
-+struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-+	STATS_VCPU_COMMON,
-+	STATS_DESC_COUNTER("sum_exits"),
-+	STATS_DESC_COUNTER("mmio_exits"),
-+	STATS_DESC_COUNTER("signal_exits"),
-+	STATS_DESC_COUNTER("light_exits"),
-+	STATS_DESC_COUNTER("itlb_real_miss_exits"),
-+	STATS_DESC_COUNTER("itlb_virt_miss_exits"),
-+	STATS_DESC_COUNTER("dtlb_real_miss_exits"),
-+	STATS_DESC_COUNTER("dtlb_virt_miss_exits"),
-+	STATS_DESC_COUNTER("syscall_exits"),
-+	STATS_DESC_COUNTER("isi_exits"),
-+	STATS_DESC_COUNTER("dsi_exits"),
-+	STATS_DESC_COUNTER("emulated_inst_exits"),
-+	STATS_DESC_COUNTER("dec_exits"),
-+	STATS_DESC_COUNTER("ext_intr_exits"),
-+	STATS_DESC_TIME_NSEC("halt_wait_ns"),
-+	STATS_DESC_COUNTER("halt_successful_wait"),
-+	STATS_DESC_COUNTER("dbell_exits"),
-+	STATS_DESC_COUNTER("gdbell_exits"),
-+	STATS_DESC_COUNTER("ld"),
-+	STATS_DESC_COUNTER("st"),
-+	STATS_DESC_COUNTER("pf_storage"),
-+	STATS_DESC_COUNTER("pf_instruc"),
-+	STATS_DESC_COUNTER("sp_storage"),
-+	STATS_DESC_COUNTER("sp_instruc"),
-+	STATS_DESC_COUNTER("queue_intr"),
-+	STATS_DESC_COUNTER("ld_slow"),
-+	STATS_DESC_COUNTER("st_slow"),
-+	STATS_DESC_COUNTER("pthru_all"),
-+	STATS_DESC_COUNTER("pthru_host"),
-+	STATS_DESC_COUNTER("pthru_bad_aff"),
-+};
-+
-+struct _kvm_stats_header kvm_vcpu_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vcpu_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vcpu_stats_desc),
-+};
-+
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	VCPU_STAT("exits", sum_exits),
- 	VCPU_STAT("mmio", mmio_exits),
-diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
-index 07fdd7a1254a..e9ffcf0f022d 100644
---- a/arch/powerpc/kvm/booke.c
-+++ b/arch/powerpc/kvm/booke.c
-@@ -36,6 +36,55 @@
- 
- unsigned long kvmppc_booke_handlers;
- 
-+struct _kvm_stats_desc kvm_vm_stats_desc[] = {
-+	STATS_VM_COMMON,
-+	STATS_DESC_ICOUNTER("num_2M_pages",),
-+	STATS_DESC_ICOUNTER("num_1G_pages",),
-+};
-+
-+struct _kvm_stats_header kvm_vm_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vm_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vm_stats_desc),
-+};
-+
-+struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-+	STATS_VCPU_COMMON,
-+	STATS_DESC_COUNTER("sum_exits"),
-+	STATS_DESC_COUNTER("mmio_exits"),
-+	STATS_DESC_COUNTER("signal_exits"),
-+	STATS_DESC_COUNTER("light_exits"),
-+	STATS_DESC_COUNTER("itlb_real_miss_exits"),
-+	STATS_DESC_COUNTER("itlb_virt_miss_exits"),
-+	STATS_DESC_COUNTER("dtlb_real_miss_exits"),
-+	STATS_DESC_COUNTER("dtlb_virt_miss_exits"),
-+	STATS_DESC_COUNTER("syscall_exits"),
-+	STATS_DESC_COUNTER("isi_exits"),
-+	STATS_DESC_COUNTER("dsi_exits"),
-+	STATS_DESC_COUNTER("emulated_inst_exits"),
-+	STATS_DESC_COUNTER("dec_exits"),
-+	STATS_DESC_COUNTER("ext_intr_exits"),
-+	STATS_DESC_TIME_NSEC("halt_wait_ns"),
-+	STATS_DESC_COUNTER("halt_successful_wait"),
-+	STATS_DESC_COUNTER("dbell_exits"),
-+	STATS_DESC_COUNTER("gdbell_exits"),
-+	STATS_DESC_COUNTER("ld"),
-+	STATS_DESC_COUNTER("st"),
-+	STATS_DESC_COUNTER("pthru_all"),
-+	STATS_DESC_COUNTER("pthru_host"),
-+	STATS_DESC_COUNTER("pthru_bad_aff"),
-+};
-+
-+struct _kvm_stats_header kvm_vcpu_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vcpu_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vcpu_stats_desc),
-+};
-+
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	VCPU_STAT("mmio", mmio_exits),
- 	VCPU_STAT("sig", signal_exits),
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 14399985b7de..c34620e6886f 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -58,6 +58,127 @@
- #define VCPU_IRQS_MAX_BUF (sizeof(struct kvm_s390_irq) * \
- 			   (KVM_MAX_VCPUS + LOCAL_IRQS))
- 
-+struct _kvm_stats_desc kvm_vm_stats_desc[] = {
-+	STATS_VM_COMMON,
-+	STATS_DESC_COUNTER("inject_io"),
-+	STATS_DESC_COUNTER("inject_float_mchk"),
-+	STATS_DESC_COUNTER("inject_pfault_done"),
-+	STATS_DESC_COUNTER("inject_service_signal"),
-+	STATS_DESC_COUNTER("inject_virtio"),
-+};
-+
-+struct _kvm_stats_header kvm_vm_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vm_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vm_stats_desc),
-+};
-+
-+struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-+	STATS_VCPU_COMMON,
-+	STATS_DESC_COUNTER("exit_userspace"),
-+	STATS_DESC_COUNTER("exit_null"),
-+	STATS_DESC_COUNTER("exit_external_request"),
-+	STATS_DESC_COUNTER("exit_io_request"),
-+	STATS_DESC_COUNTER("exit_external_interrupt"),
-+	STATS_DESC_COUNTER("exit_stop_request"),
-+	STATS_DESC_COUNTER("exit_validity"),
-+	STATS_DESC_COUNTER("exit_instruction"),
-+	STATS_DESC_COUNTER("exit_pei"),
-+	STATS_DESC_COUNTER("halt_no_poll_steal"),
-+	STATS_DESC_COUNTER("instruction_lctl"),
-+	STATS_DESC_COUNTER("instruction_lctlg"),
-+	STATS_DESC_COUNTER("instruction_stctl"),
-+	STATS_DESC_COUNTER("instruction_stctg"),
-+	STATS_DESC_COUNTER("exit_program_interruption"),
-+	STATS_DESC_COUNTER("exit_instr_and_program"),
-+	STATS_DESC_COUNTER("exit_operation_exception"),
-+	STATS_DESC_COUNTER("deliver_ckc"),
-+	STATS_DESC_COUNTER("deliver_cputm"),
-+	STATS_DESC_COUNTER("deliver_external_call"),
-+	STATS_DESC_COUNTER("deliver_emergency_signal"),
-+	STATS_DESC_COUNTER("deliver_service_signal"),
-+	STATS_DESC_COUNTER("deliver_virtio"),
-+	STATS_DESC_COUNTER("deliver_stop_signal"),
-+	STATS_DESC_COUNTER("deliver_prefix_signal"),
-+	STATS_DESC_COUNTER("deliver_restart_signal"),
-+	STATS_DESC_COUNTER("deliver_program"),
-+	STATS_DESC_COUNTER("deliver_io"),
-+	STATS_DESC_COUNTER("deliver_machine_check"),
-+	STATS_DESC_COUNTER("exit_wait_state"),
-+	STATS_DESC_COUNTER("inject_ckc"),
-+	STATS_DESC_COUNTER("inject_cputm"),
-+	STATS_DESC_COUNTER("inject_external_call"),
-+	STATS_DESC_COUNTER("inject_emergency_signal"),
-+	STATS_DESC_COUNTER("inject_mchk"),
-+	STATS_DESC_COUNTER("inject_pfault_init"),
-+	STATS_DESC_COUNTER("inject_program"),
-+	STATS_DESC_COUNTER("inject_restart"),
-+	STATS_DESC_COUNTER("inject_set_prefix"),
-+	STATS_DESC_COUNTER("inject_stop_signal"),
-+	STATS_DESC_COUNTER("instruction_epsw"),
-+	STATS_DESC_COUNTER("instruction_gs"),
-+	STATS_DESC_COUNTER("instruction_io_other"),
-+	STATS_DESC_COUNTER("instruction_lpsw"),
-+	STATS_DESC_COUNTER("instruction_lpswe"),
-+	STATS_DESC_COUNTER("instruction_pfmf"),
-+	STATS_DESC_COUNTER("instruction_ptff"),
-+	STATS_DESC_COUNTER("instruction_sck"),
-+	STATS_DESC_COUNTER("instruction_sckpf"),
-+	STATS_DESC_COUNTER("instruction_stidp"),
-+	STATS_DESC_COUNTER("instruction_spx"),
-+	STATS_DESC_COUNTER("instruction_stpx"),
-+	STATS_DESC_COUNTER("instruction_stap"),
-+	STATS_DESC_COUNTER("instruction_iske"),
-+	STATS_DESC_COUNTER("instruction_ri"),
-+	STATS_DESC_COUNTER("instruction_rrbe"),
-+	STATS_DESC_COUNTER("instruction_sske"),
-+	STATS_DESC_COUNTER("instruction_ipte_interlock"),
-+	STATS_DESC_COUNTER("instruction_stsi"),
-+	STATS_DESC_COUNTER("instruction_stfl"),
-+	STATS_DESC_COUNTER("instruction_tb"),
-+	STATS_DESC_COUNTER("instruction_tpi"),
-+	STATS_DESC_COUNTER("instruction_tprot"),
-+	STATS_DESC_COUNTER("instruction_tsch"),
-+	STATS_DESC_COUNTER("instruction_sie"),
-+	STATS_DESC_COUNTER("instruction_essa"),
-+	STATS_DESC_COUNTER("instruction_sthyi"),
-+	STATS_DESC_COUNTER("instruction_sigp_sense"),
-+	STATS_DESC_COUNTER("instruction_sigp_sense_running"),
-+	STATS_DESC_COUNTER("instruction_sigp_external_call"),
-+	STATS_DESC_COUNTER("instruction_sigp_emergency"),
-+	STATS_DESC_COUNTER("instruction_sigp_cond_emergency"),
-+	STATS_DESC_COUNTER("instruction_sigp_start"),
-+	STATS_DESC_COUNTER("instruction_sigp_stop"),
-+	STATS_DESC_COUNTER("instruction_sigp_stop_store_status"),
-+	STATS_DESC_COUNTER("instruction_sigp_store_status"),
-+	STATS_DESC_COUNTER("instruction_sigp_store_adtl_status"),
-+	STATS_DESC_COUNTER("instruction_sigp_arch"),
-+	STATS_DESC_COUNTER("instruction_sigp_prefix"),
-+	STATS_DESC_COUNTER("instruction_sigp_restart"),
-+	STATS_DESC_COUNTER("instruction_sigp_init_cpu_reset"),
-+	STATS_DESC_COUNTER("instruction_sigp_cpu_reset"),
-+	STATS_DESC_COUNTER("instruction_sigp_unknown"),
-+	STATS_DESC_COUNTER("diagnose_10"),
-+	STATS_DESC_COUNTER("diagnose_44"),
-+	STATS_DESC_COUNTER("diagnose_9c"),
-+	STATS_DESC_COUNTER("diagnose_9c_ignored"),
-+	STATS_DESC_COUNTER("diagnose_258"),
-+	STATS_DESC_COUNTER("diagnose_308"),
-+	STATS_DESC_COUNTER("diagnose_500"),
-+	STATS_DESC_COUNTER("diagnose_other"),
-+	STATS_DESC_COUNTER("pfault_sync"),
-+};
-+
-+struct _kvm_stats_header kvm_vcpu_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vcpu_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vcpu_stats_desc),
-+};
-+
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	VCPU_STAT("userspace_handled", exit_userspace),
- 	VCPU_STAT("exit_null", exit_null),
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5d5d4806e93b..04becbb441ee 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -216,6 +216,63 @@ EXPORT_SYMBOL_GPL(host_xss);
- u64 __read_mostly supported_xss;
- EXPORT_SYMBOL_GPL(supported_xss);
- 
-+struct _kvm_stats_desc kvm_vm_stats_desc[] = {
-+	STATS_VM_COMMON,
-+	STATS_DESC_COUNTER("mmu_shadow_zapped"),
-+	STATS_DESC_COUNTER("mmu_pte_write"),
-+	STATS_DESC_COUNTER("mmu_pde_zapped"),
-+	STATS_DESC_COUNTER("mmu_flooded"),
-+	STATS_DESC_COUNTER("mmu_recycled"),
-+	STATS_DESC_COUNTER("mmu_cache_miss"),
-+	STATS_DESC_ICOUNTER("mmu_unsync"),
-+	STATS_DESC_ICOUNTER("largepages"),
-+	STATS_DESC_ICOUNTER("nx_largepages_splits"),
-+	STATS_DESC_ICOUNTER("max_mmu_page_hash_collisions"),
-+};
-+
-+struct _kvm_stats_header kvm_vm_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = ARRAY_SIZE(kvm_vm_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vm_stats_desc),
-+};
-+
-+struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
-+	STATS_VCPU_COMMON,
-+	STATS_DESC_COUNTER("pf_fixed"),
-+	STATS_DESC_COUNTER("pf_guest"),
-+	STATS_DESC_COUNTER("tlb_flush"),
-+	STATS_DESC_COUNTER("invlpg"),
-+	STATS_DESC_COUNTER("exits"),
-+	STATS_DESC_COUNTER("io_exits"),
-+	STATS_DESC_COUNTER("mmio_exits"),
-+	STATS_DESC_COUNTER("signal_exits"),
-+	STATS_DESC_COUNTER("irq_window_exits"),
-+	STATS_DESC_COUNTER("nmi_window_exits"),
-+	STATS_DESC_COUNTER("l1d_flush"),
-+	STATS_DESC_COUNTER("halt_exits"),
-+	STATS_DESC_COUNTER("request_irq_exits"),
-+	STATS_DESC_COUNTER("irq_exits"),
-+	STATS_DESC_COUNTER("host_state_reload"),
-+	STATS_DESC_COUNTER("fpu_reload"),
-+	STATS_DESC_COUNTER("insn_emulation"),
-+	STATS_DESC_COUNTER("insn_emulation_fail"),
-+	STATS_DESC_COUNTER("hypercalls"),
-+	STATS_DESC_COUNTER("irq_injections"),
-+	STATS_DESC_COUNTER("nmi_injections"),
-+	STATS_DESC_COUNTER("req_event"),
-+	STATS_DESC_COUNTER("nested_run"),
-+};
-+
-+struct _kvm_stats_header kvm_vcpu_stats_header = {
-+	.name_size = KVM_STATS_NAME_LEN,
-+	.count = sizeof(kvm_vcpu_stats_desc),
-+	.desc_offset = sizeof(struct kvm_stats_header),
-+	.data_offset = sizeof(struct kvm_stats_header) +
-+		sizeof(kvm_vcpu_stats_desc),
-+};
-+
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	VCPU_STAT("pf_fixed", pf_fixed),
- 	VCPU_STAT("pf_guest", pf_guest),
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 53428b01224e..f909195710db 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1188,12 +1188,25 @@ struct kvm_stats_debugfs_item {
- 	int mode;
- };
- 
-+struct _kvm_stats_header {
-+	__u32 name_size;
-+	__u32 count;
-+	__u32 desc_offset;
-+	__u32 data_offset;
-+};
-+
-+#define KVM_STATS_NAME_LEN	32
-+struct _kvm_stats_desc {
-+	struct kvm_stats_desc desc;
-+	char name[KVM_STATS_NAME_LEN];
-+};
-+
- #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
- 	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
- 
--#define VM_STAT(n, x, ...) 							\
-+#define VM_STAT(n, x, ...) 						       \
- 	{ n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
--#define VCPU_STAT(n, x, ...)							\
-+#define VCPU_STAT(n, x, ...)						       \
- 	{ n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
- #define VM_STAT_COM(n, x, ...) 						       \
- 	{ n, offsetof(struct kvm, stat.common.x), KVM_STAT_VM, ## __VA_ARGS__ }
-@@ -1201,8 +1214,118 @@ struct kvm_stats_debugfs_item {
- 	{ n, offsetof(struct kvm_vcpu, stat.common.x),			       \
- 	  KVM_STAT_VCPU, ## __VA_ARGS__ }
- 
-+#define STATS_DESC(name, type, unit, scale, exponent)			       \
-+	{								       \
-+		{type | unit | scale, exponent, 1}, name,		       \
-+	}
-+#define STATS_DESC_CUMULATIVE(name, unit, scale, exponent)		       \
-+	STATS_DESC(name, KVM_STATS_TYPE_CUMULATIVE, unit, scale, exponent)
-+#define STATS_DESC_INSTANT(name, unit, scale, exponent)			       \
-+	STATS_DESC(name, KVM_STATS_TYPE_INSTANT, unit, scale, exponent)
-+
-+// Cumulative counter
-+#define STATS_DESC_COUNTER(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_NONE,		       \
-+		KVM_STATS_SCALE_POW10, 0)
-+// Instantaneous counter
-+#define STATS_DESC_ICOUNTER(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_NONE,			       \
-+		KVM_STATS_SCALE_POW10, 0)
-+
-+// Cumulative clock cycles
-+#define STATS_DESC_CYCLE(name)						       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_CYCLES,		       \
-+		KVM_STATS_SCALE_POW10, 0)
-+// Instantaneous clock cycles
-+#define STATS_DESC_ICYCLE(name)						       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_CYCLES,			       \
-+		KVM_STATS_SCALE_POW10, 0)
-+
-+// Cumulative memory size in Byte
-+#define STATS_DESC_SIZE_BYTE(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_SCALE_POW2, 0)
-+// Cumulative memory size in KiByte
-+#define STATS_DESC_SIZE_KBYTE(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_SCALE_POW2, 10)
-+// Cumulative memory size in MiByte
-+#define STATS_DESC_SIZE_MBYTE(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_SCALE_POW2, 20)
-+// Cumulative memory size in GiByte
-+#define STATS_DESC_SIZE_GBYTE(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_BYTES,		       \
-+		KVM_STATS_SCALE_POW2, 30)
-+
-+// Instantaneous memory size in Byte
-+#define STATS_DESC_ISIZE_BYTE(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_BYTES,			       \
-+		KVM_STATS_SCALE_POW2, 0)
-+// Instantaneous memory size in KiByte
-+#define STATS_DESC_ISIZE_KBYTE(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_BYTES,			       \
-+		KVM_STATS_SCALE_POW2, 10)
-+// Instantaneous memory size in MiByte
-+#define STATS_DESC_ISIZE_MBYTE(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_BYTES,			       \
-+		KVM_STATS_SCALE_POW2, 20)
-+// Instantaneous memory size in GiByte
-+#define STATS_DESC_ISIZE_GBYTE(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_BYTES,			       \
-+		KVM_STATS_SCALE_POW2, 30)
-+
-+// Cumulative time in second
-+#define STATS_DESC_TIME_SEC(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, 0)
-+// Cumulative time in millisecond
-+#define STATS_DESC_TIME_MSEC(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, -3)
-+// Cumulative time in microsecond
-+#define STATS_DESC_TIME_USEC(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, -6)
-+// Cumulative time in nanosecond
-+#define STATS_DESC_TIME_NSEC(name)					       \
-+	STATS_DESC_CUMULATIVE(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, -9)
-+
-+// Instantaneous time in second
-+#define STATS_DESC_ITIME_SEC(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, 0)
-+// Instantaneous time in millisecond
-+#define STATS_DESC_ITIME_MSEC(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, -3)
-+// Instantaneous time in microsecond
-+#define STATS_DESC_ITIME_USEC(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, -6)
-+// Instantaneous time in nanosecond
-+#define STATS_DESC_ITIME_NSEC(name)					       \
-+	STATS_DESC_INSTANT(name, KVM_STATS_UNIT_SECONDS,		       \
-+		KVM_STATS_SCALE_POW10, -9)
-+
-+#define STATS_VM_COMMON							       \
-+	STATS_DESC_COUNTER("remote_tlb_flush")
-+
-+#define STATS_VCPU_COMMON						       \
-+	STATS_DESC_COUNTER("halt_successful_poll"),			       \
-+	STATS_DESC_COUNTER("halt_attempted_poll"),			       \
-+	STATS_DESC_COUNTER("halt_poll_invalid"),			       \
-+	STATS_DESC_COUNTER("halt_wakeup"),				       \
-+	STATS_DESC_TIME_NSEC("halt_poll_success_ns"),			       \
-+	STATS_DESC_TIME_NSEC("halt_poll_fail_ns")
-+
- extern struct kvm_stats_debugfs_item debugfs_entries[];
- extern struct dentry *kvm_debugfs_dir;
-+extern struct _kvm_stats_header kvm_vm_stats_header;
-+extern struct _kvm_stats_header kvm_vcpu_stats_header;
-+extern struct _kvm_stats_desc kvm_vm_stats_desc[];
-+extern struct _kvm_stats_desc kvm_vcpu_stats_desc[];
- 
- #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
- static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 424b12658923..d60f4ca8d4fe 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1079,6 +1079,7 @@ struct kvm_ppc_resize_hpt {
- #define KVM_CAP_X86_BUS_LOCK_EXIT 193
- #define KVM_CAP_PPC_DAWR1 194
- #define KVM_CAP_VM_COPY_ENC_CONTEXT_FROM 195
-+#define KVM_CAP_STATS_BINARY_FD 196
- 
- #ifdef KVM_CAP_IRQ_ROUTING
- 
-@@ -1854,4 +1855,51 @@ struct kvm_dirty_gfn {
- #define KVM_BUS_LOCK_DETECTION_OFF             (1 << 0)
- #define KVM_BUS_LOCK_DETECTION_EXIT            (1 << 1)
- 
-+#define KVM_STATS_ID_MAXLEN		64
-+struct kvm_stats_header {
-+	char id[KVM_STATS_ID_MAXLEN];
-+	__u32 name_size;
-+	__u32 count;
-+	__u32 desc_offset;
-+	__u32 data_offset;
-+};
-+
-+#define KVM_STATS_TYPE_SHIFT		0
-+#define KVM_STATS_TYPE_MASK		(0xF << KVM_STATS_TYPE_SHIFT)
-+#define KVM_STATS_TYPE_CUMULATIVE	(0x0 << KVM_STATS_TYPE_SHIFT)
-+#define KVM_STATS_TYPE_INSTANT		(0x1 << KVM_STATS_TYPE_SHIFT)
-+#define KVM_STATS_TYPE_MAX		KVM_STATS_TYPE_INSTANT
-+
-+#define KVM_STATS_UNIT_SHIFT		4
-+#define KVM_STATS_UNIT_MASK		(0xF << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_NONE		(0x0 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_BYTES		(0x1 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_SECONDS		(0x2 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_CYCLES		(0x3 << KVM_STATS_UNIT_SHIFT)
-+#define KVM_STATS_UNIT_MAX		KVM_STATS_UNIT_CYCLES
-+
-+#define KVM_STATS_SCALE_SHIFT		8
-+#define KVM_STATS_SCALE_MASK		(0xF << KVM_STATS_SCALE_SHIFT)
-+#define KVM_STATS_SCALE_POW10		(0x0 << KVM_STATS_SCALE_SHIFT)
-+#define KVM_STATS_SCALE_POW2		(0x1 << KVM_STATS_SCALE_SHIFT)
-+#define KVM_STATS_SCALE_MAX		KVM_STATS_SCALE_POW2
-+struct kvm_stats_desc {
-+	__u32 flags;
-+	__s16 exponent;
-+	__u16 size;
-+	__u32 unused1;
-+	__u32 unused2;
-+	char name[0];
-+};
-+
-+struct kvm_vm_stats_data {
-+	unsigned long value[0];
-+};
-+
-+struct kvm_vcpu_stats_data {
-+	__u64 value[0];
-+};
-+
-+#define KVM_STATS_GETFD  _IOR(KVMIO,  0xcc, struct kvm_stats_header)
-+
- #endif /* __LINUX_KVM_H */
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 2c4205ccf3dd..a16018aca696 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3277,6 +3277,115 @@ static int kvm_vcpu_ioctl_set_sigmask(struct kvm_vcpu *vcpu, sigset_t *sigset)
- 	return 0;
- }
- 
-+static ssize_t kvm_vcpu_stats_read(struct file *file, char __user *user_buffer,
-+			      size_t size, loff_t *offset)
-+{
-+	char id[KVM_STATS_ID_MAXLEN];
-+	struct kvm_vcpu *vcpu = file->private_data;
-+	ssize_t copylen, len, remain = size;
-+	size_t size_header, size_desc, size_stats;
-+	loff_t pos = *offset;
-+	char __user *dest = user_buffer;
-+	void *src;
-+
-+	snprintf(id, sizeof(id), "kvm-%d/vcpu-%d",
-+			task_pid_nr(current), vcpu->vcpu_id);
-+	size_header = sizeof(kvm_vcpu_stats_header);
-+	size_desc =
-+		kvm_vcpu_stats_header.count * sizeof(struct _kvm_stats_desc);
-+	size_stats = sizeof(vcpu->stat);
-+
-+	len = sizeof(id) + size_header + size_desc + size_stats - pos;
-+	len = min(len, remain);
-+	if (len <= 0)
-+		return 0;
-+	remain = len;
-+
-+	// Copy kvm vcpu stats header id string
-+	copylen = sizeof(id) - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)id + pos;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+	// Copy kvm vcpu stats header
-+	copylen = sizeof(id) + size_header - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)&kvm_vcpu_stats_header;
-+		src += pos - sizeof(id);
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+	// Copy kvm vcpu stats descriptors
-+	copylen = kvm_vcpu_stats_header.desc_offset + size_desc - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)&kvm_vcpu_stats_desc;
-+		src += pos - kvm_vcpu_stats_header.desc_offset;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+	// Copy kvm vcpu stats values
-+	copylen = kvm_vcpu_stats_header.data_offset + size_stats - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)&vcpu->stat;
-+		src += pos - kvm_vcpu_stats_header.data_offset;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+
-+	*offset = pos;
-+	return len;
-+}
-+
-+static struct file_operations kvm_vcpu_stats_fops = {
-+	.read = kvm_vcpu_stats_read,
-+	.llseek = noop_llseek,
-+};
-+
-+static int kvm_vcpu_ioctl_get_statsfd(struct kvm_vcpu *vcpu)
-+{
-+	int error, fd;
-+	struct file *file;
-+	char name[15 + ITOA_MAX_LEN + 1];
-+
-+	snprintf(name, sizeof(name), "kvm-vcpu-stats:%d", vcpu->vcpu_id);
-+
-+	error = get_unused_fd_flags(O_CLOEXEC);
-+	if (error < 0)
-+		return error;
-+	fd = error;
-+
-+	file = anon_inode_getfile(name, &kvm_vcpu_stats_fops, vcpu, O_RDONLY);
-+	if (IS_ERR(file)) {
-+		error = PTR_ERR(file);
-+		goto err_put_unused_fd;
-+	}
-+	file->f_mode |= FMODE_PREAD;
-+	fd_install(fd, file);
-+
-+	return fd;
-+
-+err_put_unused_fd:
-+	put_unused_fd(fd);
-+	return error;
-+}
-+
- static long kvm_vcpu_ioctl(struct file *filp,
- 			   unsigned int ioctl, unsigned long arg)
- {
-@@ -3474,6 +3583,10 @@ static long kvm_vcpu_ioctl(struct file *filp,
- 		r = kvm_arch_vcpu_ioctl_set_fpu(vcpu, fpu);
- 		break;
- 	}
-+	case KVM_STATS_GETFD: {
-+		r = kvm_vcpu_ioctl_get_statsfd(vcpu);
-+		break;
-+	}
- 	default:
- 		r = kvm_arch_vcpu_ioctl(filp, ioctl, arg);
- 	}
-@@ -3732,6 +3845,8 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
- #else
- 		return 0;
- #endif
-+	case KVM_CAP_STATS_BINARY_FD:
-+		return 1;
- 	default:
- 		break;
- 	}
-@@ -3835,6 +3950,111 @@ static int kvm_vm_ioctl_enable_cap_generic(struct kvm *kvm,
- 	}
- }
- 
-+static ssize_t kvm_vm_stats_read(struct file *file, char __user *user_buffer,
-+			      size_t size, loff_t *offset)
-+{
-+	char id[KVM_STATS_ID_MAXLEN];
-+	struct kvm *kvm = file->private_data;
-+	ssize_t copylen, len, remain = size;
-+	size_t size_header, size_desc, size_stats;
-+	loff_t pos = *offset;
-+	char __user *dest = user_buffer;
-+	void *src;
-+
-+	snprintf(id, sizeof(id), "kvm-%d", task_pid_nr(current));
-+	size_header = sizeof(kvm_vm_stats_header);
-+	size_desc = kvm_vm_stats_header.count * sizeof(struct _kvm_stats_desc);
-+	size_stats = sizeof(kvm->stat);
-+
-+	len = sizeof(id) + size_header + size_desc + size_stats - pos;
-+	len = min(len, remain);
-+	if (len <= 0)
-+		return 0;
-+	remain = len;
-+
-+	// Copy kvm vm stats header id string
-+	copylen = sizeof(id) - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)id + pos;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+	// Copy kvm vm stats header
-+	copylen = sizeof(id) + size_header - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)&kvm_vm_stats_header;
-+		src += pos - sizeof(id);
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+	// Copy kvm vm stats descriptors
-+	copylen = kvm_vm_stats_header.desc_offset + size_desc - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)&kvm_vm_stats_desc;
-+		src += pos - kvm_vm_stats_header.desc_offset;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+	// Copy kvm vm stats values
-+	copylen = kvm_vm_stats_header.data_offset + size_stats - pos;
-+	copylen = min(copylen, remain);
-+	if (copylen > 0) {
-+		src = (void *)&kvm->stat;
-+		src += pos - kvm_vm_stats_header.data_offset;
-+		if (copy_to_user(dest, src, copylen))
-+			return -EFAULT;
-+		remain -= copylen;
-+		pos += copylen;
-+		dest += copylen;
-+	}
-+
-+	*offset = pos;
-+	return len;
-+}
-+
-+static struct file_operations kvm_vm_stats_fops = {
-+	.read = kvm_vm_stats_read,
-+	.llseek = noop_llseek,
-+};
-+
-+static int kvm_vm_ioctl_get_statsfd(struct kvm *kvm)
-+{
-+	int error, fd;
-+	struct file *file;
-+
-+	error = get_unused_fd_flags(O_CLOEXEC);
-+	if (error < 0)
-+		return error;
-+	fd = error;
-+
-+	file = anon_inode_getfile("kvm-vm-stats",
-+			&kvm_vm_stats_fops, kvm, O_RDONLY);
-+	if (IS_ERR(file)) {
-+		error = PTR_ERR(file);
-+		goto err_put_unused_fd;
-+	}
-+	file->f_mode |= FMODE_PREAD;
-+	fd_install(fd, file);
-+
-+	return fd;
-+
-+err_put_unused_fd:
-+	put_unused_fd(fd);
-+	return error;
-+}
-+
- static long kvm_vm_ioctl(struct file *filp,
- 			   unsigned int ioctl, unsigned long arg)
- {
-@@ -4017,6 +4237,9 @@ static long kvm_vm_ioctl(struct file *filp,
- 	case KVM_RESET_DIRTY_RINGS:
- 		r = kvm_vm_ioctl_reset_dirty_pages(kvm);
- 		break;
-+	case KVM_STATS_GETFD:
-+		r = kvm_vm_ioctl_get_statsfd(kvm);
-+		break;
- 	default:
- 		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
- 	}
--- 
-2.31.1.295.g9ea45b61b8-goog
+Great, thank you! And yeah, we did discuss exactly this before, which is
+where my mental sigh came from - I feel like we already covered this
+ground and that I'm just being dismissed with "that is not a real use
+case". But OK, I'll give it another shot, see below.
+
+> And guess what, now I see that samples/bpf/whatever_xdp is switched to
+> bpf_link-based XDP, because that makes everything simpler and more
+> reliable. What I also know is that in production we ran into multiple
+> issues with anything that doesn't auto-detach on process exit/crash
+> (unless pinned explicitly, of course). And that people that are trying
+> to use TC right now are saying how having bpf_link-based TC APIs would
+> make everything *simpler* and *safer*. So I don't know... I understand
+> it might be convenient in some cases to not care about a lifetime of
+> BPF programs you are attaching, but then there are usually explicit
+> and intentional ways to achieve at least similar behavior with safety
+> by default.
+>
+> So I guess call me unconvinced (yet? still?). Give it another shot,
+> though.
+
+I'm not arguing against adding bpf_link support, and I'm even fine with
+making it the default. As you say, there are plenty of use cases where
+the bpf_link semantics make sense, and the XDP programs in samples all
+fall in this category. So sure, let's add this support and make this
+convenient to use.
+
+But there are also use cases where the BPF program lifetime absolutely
+shouldn't follow that of the userspace application. This includes both
+applications that don't have a long-running daemon at all (like a
+firewall that just loads a ruleset at boot; xdp-filter is such an
+application in the BPF world, but I'm sure there are others). And
+daemons that use BPF as a data path and want the packets to keep flowing
+even when they restart, like Cilium as Daniel mentioned.
+
+So the latter category of applications need their BPF programs to be
+permanently attached to the interface. And sure, this can sorta be done
+by pinning the bpf_link; but not really, because then:
+
+- You incur a new dependency on bpffs, so you have to make sure that is
+  mounted and that you can get at the particular fs instance you're
+  using; the latter is especially painful if you switch namespaces.
+
+- Your BPF program lifetime is no longer tied to the interface, so you
+  have to deal with garbage collecting your pinned files somehow. This
+  is especially painful if you don't have a daemon.
+
+Together, these issues make bpf_link a much less compelling proposition,
+to the point where it's no longer the better API for these use cases,
+IMO. And I know that because I had to work around just these issues with
+bpf_link for xdp-tools.
+
+But I'm not even asking for the netlink API to be the default, I'm
+fine with bpf_link being the default and encouraged API. I'm just asking
+for a way to make it *possible* to select which attach mode I want.
+Either by a flag to bpf_program__attach_tc(), or by exposing the
+low-level bpf_tc_cls_*() netlink functions, like we do for XDP.
+
+>> >> If we expose the low-level API I can elect to just use this if I know=
+ I
+>> >> want netlink behaviour, but if bpf_program__attach_tc() is the only A=
+PI
+>> >> available it would at least need a flag to enforce one mode or the ot=
+her
+>> >> (I can see someone wanting to enforce kernel bpf_link semantics as we=
+ll,
+>> >> so a flag for either mode seems reasonable?).
+>> >
+>> > Sophisticated enough users can also do feature detection to know if
+>> > it's going to work or not.
+>>
+>> Sure, but that won't help if there's no API to pick the attach mode they
+>> want.
+>
+> I'm not intending to allow legacy kprobe APIs to be "chosen", for
+> instance. Because I'm convinced it's a bad API that no one should use
+> if they can use an FD-based one.
+
+I'd tend to agree with you for the tracing APIs, actually. But a
+BPF-based data plane is different, as I tried to explain above.
+
+> It might be a different case for TC, who knows. I'd just start with
+> safer APIs and then evaluate whether there is a real demand for less
+> safe ones. It's just some minor refactoring and exposing more APIs,
+> when/if we need them.
+
+There you go again with the "real demand" argument. How can I read this
+in any other way than that you don't consider my use case "real" (as you
+just assured me above was not the case)? What do you consider "real
+demand"?
+
+-Toke
 
