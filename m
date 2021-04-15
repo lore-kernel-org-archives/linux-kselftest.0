@@ -8,61 +8,61 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE6D8C43460
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 18:48:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDA63C43603
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 18:48:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 92A7D610F7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 18:48:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5F3261152
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Apr 2021 18:48:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbhDOSst (ORCPT
+        id S234906AbhDOSsw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Apr 2021 14:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        Thu, 15 Apr 2021 14:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbhDOSs1 (ORCPT
+        with ESMTP id S234739AbhDOSsg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Apr 2021 14:48:27 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB0C061350
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 11:47:51 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id c4so3467757ybp.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 11:47:51 -0700 (PDT)
+        Thu, 15 Apr 2021 14:48:36 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83B8C06135A
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 11:47:54 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id r14so2279797ybm.18
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Apr 2021 11:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=NPeuLMJJBun5hHaf/B7onZQg8F0X8wxMw6hgTnGDv34=;
-        b=vw7MzmYeICCDTRNei7JjvxvzICXL2ZYuT4Nz6yv4/CUGud49o5WkaiMtGUEKjESiNe
-         eqeLwt7B9gk5riuJjePaDEIXzryk7b0Mbr38Nkkl820E/HvvH22SX0pF+lA4xhjX6ow5
-         dUJYx0Oe3tM0v7Bmsk7r6IDlffnGRxKlJ3WgwXPU6L2juztGfnlihgY7sNzUe1s96oO9
-         qOaQs+JmiNApmOMt/72KEifjhtqmiTyp1mTvmMhfqYyC/qbuvzaYjU9gPDKDBcXGswrT
-         y/LDRGxE6+iRNjY/2a/jM03q6ztRO1tvKZoMDEzSvPoYumCoj9FTQglvUy8NQBlEogtN
-         jxEg==
+        bh=+mbkINT23NQwVcWMsgi99GnmaMWJZnHq8mB1mAGG8Zs=;
+        b=ZSlsp82JSr/sNFPR79ahcdPAjv0rihKZQF6PIsWd45K/weHiX1ENhXFh51YnUA2Rw9
+         Cf6i4yiopIGKsJ9Io1LLgzWYIpQU3svVu0S2TpyRpxWmh/yMDP7UtSNwzZx0C5U3UAqC
+         Z6E3ktux4DnPEkfRFlkMUEEn1H1QP8/ik02060vWHBETna33faXZjivothMZB/7SGBBu
+         SQ1gIZidNmOdKBJn2TK5AJptQIVaopKlOHzLC0U6o4UQHK7xk+vV6WQueAaIv9EsulVK
+         OzbjzWVO+uW7/1rtb88UpcT47O2BHQ8qMQdkfFYpH3mHCvAfPTIkiDBT2zzdE+g/bJVD
+         ir7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=NPeuLMJJBun5hHaf/B7onZQg8F0X8wxMw6hgTnGDv34=;
-        b=YyT1B4ixJ2TZdpzZRJQTH4u/O4aSyUPFtyAyXyI0/SUZemPs0xc2Q05zH0enM6VZ9A
-         i6HppJQ2/LSlmzYdSuygTW7rzokUGPjvbYagrW0xrYq993rEXNyOm5YO3ZwtvIlcTZv8
-         hHEgDJ3yQtzvfb1vZ4iCOgCa0dhMw7OB0xhJ+Pwi98cUkSj/VngR5dYx0g62DGC+tneN
-         wyzTcrSQ/U9GdfILtaNL60lzJYUlOrZWDwwb1hZNcPO7heLP/ecEnQJXSakBgNnyPyRH
-         3m578fBAZ0oFfND0nQjCRC620DpmiJzHZyqYosjz7hJv3R3+2vZJ2FgY2nw8F/a+tSAg
-         15Zg==
-X-Gm-Message-State: AOAM530nnmjy+m9x6eg7EKLKAvYIxNxCArCVSCiqAr9jvE1hri2DG65L
-        bGIkldWmjzWqFSHYr1f+mYuGWjYPOkXx27fjPkN7
-X-Google-Smtp-Source: ABdhPJxlGnER12EmP/f0nSlgabsWu4do5d+gV2zBolHTH9XXwXG+B3xbsjG4QJWdVxfVM57Q/xab/269EvD9Wg67ANQ7
+        bh=+mbkINT23NQwVcWMsgi99GnmaMWJZnHq8mB1mAGG8Zs=;
+        b=D451G24zpKqmza3puxttkGsCDzo6fLU6Iqu+yVEg4ao4sfi57oeDqEZpyhcXU7ACA6
+         Xgi9u9kdQBw6YhBLu81Ue4RAAMpxvPnMUPt/5bHsTeclNfG2ODjAIljks1hxHec4ixzE
+         mdWVJ134v5MB0918y4vureS+iYozPp2/i4jhoSi2xgjgTPaqX1IQ2pu6UNByB3m/jfaT
+         taIzBXJkB8Nq6QxC4UQsyg8e6P49OZ/JmRsSlAqa3mUoscij+VbBZlNW2hkiFUTL//Xt
+         Kk0I8aVpapcTs9k9ugLtX4aWgtPzMAhfzbPHaUXm20HAUrgqo3ms0lISMVHXE2fXbjFr
+         KLaA==
+X-Gm-Message-State: AOAM532lhofP9be8QW3ROOsFIqBdhcU2DZSJS28klWQGxJRJTrvm1Ib8
+        kouiFF97LhQ5nxHvJi6t4FTMucEhnjQ+YLB4Mw1z
+X-Google-Smtp-Source: ABdhPJzv4jhznq25ngxQoq/BpT5VWQhGf+uQvv1ACnHJKpTks7p3GEdhu7K8vM8cl3EK9bQTI0aiOa9XQ+0ELLk97csJ
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:21b1:6e5c:b371:7e3])
- (user=axelrasmussen job=sendgmr) by 2002:a25:3056:: with SMTP id
- w83mr6539422ybw.381.1618512470669; Thu, 15 Apr 2021 11:47:50 -0700 (PDT)
-Date:   Thu, 15 Apr 2021 11:47:30 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a25:2412:: with SMTP id
+ k18mr6986707ybk.436.1618512474171; Thu, 15 Apr 2021 11:47:54 -0700 (PDT)
+Date:   Thu, 15 Apr 2021 11:47:32 -0700
 In-Reply-To: <20210415184732.3410521-1-axelrasmussen@google.com>
-Message-Id: <20210415184732.3410521-9-axelrasmussen@google.com>
+Message-Id: <20210415184732.3410521-11-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20210415184732.3410521-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
-Subject: [PATCH v3 08/10] userfaultfd/selftests: exercise minor fault handling
- shmem support
+Subject: [PATCH v3 10/10] userfaultfd: update documentation to mention shmem
+ minor faults
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -89,82 +89,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Enable test_uffdio_minor for test_type == TEST_SHMEM, and modify the
-test slightly to pass in / check for the right feature flags.
+Generally, the documentation we wrote for hugetlbfs-based minor faults
+still all applies. The only missing piece is to mention the new feature
+flag which indicates that the kernel supports this for shmem as well.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 29 ++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ Documentation/admin-guide/mm/userfaultfd.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 3fbc69f513dc..a7ecc9993439 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -474,6 +474,7 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- static void continue_range(int ufd, __u64 start, __u64 len)
- {
- 	struct uffdio_continue req;
-+	int ret;
+diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+index 3aa38e8b8361..6528036093e1 100644
+--- a/Documentation/admin-guide/mm/userfaultfd.rst
++++ b/Documentation/admin-guide/mm/userfaultfd.rst
+@@ -77,7 +77,8 @@ events, except page fault notifications, may be generated:
  
- 	req.range.start = start;
- 	req.range.len = len;
-@@ -482,6 +483,17 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
- 		    (uint64_t)start);
-+
-+	/*
-+	 * Error handling within the kernel for continue is subtly different
-+	 * from copy or zeropage, so it may be a source of bugs. Trigger an
-+	 * error (-EEXIST) on purpose, to verify doing so doesn't cause a BUG.
-+	 */
-+	req.mapped = 0;
-+	ret = ioctl(ufd, UFFDIO_CONTINUE, &req);
-+	if (ret >= 0 || req.mapped != -EEXIST)
-+		err("failed to exercise UFFDIO_CONTINUE error handling, ret=%d, mapped=%" PRId64,
-+		    ret, (int64_t) req.mapped);
- }
+ - ``UFFD_FEATURE_MINOR_HUGETLBFS`` indicates that the kernel supports
+   ``UFFDIO_REGISTER_MODE_MINOR`` registration for hugetlbfs virtual memory
+-  areas.
++  areas. ``UFFD_FEATURE_MINOR_SHMEM`` is the analogous feature indicating
++  support for shmem virtual memory areas.
  
- static void *locking_thread(void *arg)
-@@ -1182,7 +1194,7 @@ static int userfaultfd_minor_test(void)
- 	void *expected_page;
- 	char c;
- 	struct uffd_stats stats = { 0 };
--	uint64_t features = UFFD_FEATURE_MINOR_HUGETLBFS;
-+	uint64_t req_features, features_out;
- 
- 	if (!test_uffdio_minor)
- 		return 0;
-@@ -1190,9 +1202,17 @@ static int userfaultfd_minor_test(void)
- 	printf("testing minor faults: ");
- 	fflush(stdout);
- 
--	uffd_test_ctx_init_ext(&features);
--	/* If kernel reports the feature isn't supported, skip the test. */
--	if (!(features & UFFD_FEATURE_MINOR_HUGETLBFS)) {
-+	if (test_type == TEST_HUGETLB)
-+		req_features = UFFD_FEATURE_MINOR_HUGETLBFS;
-+	else if (test_type == TEST_SHMEM)
-+		req_features = UFFD_FEATURE_MINOR_SHMEM;
-+	else
-+		return 1;
-+
-+	features_out = req_features;
-+	uffd_test_ctx_init_ext(&features_out);
-+	/* If kernel reports required features aren't supported, skip test. */
-+	if ((features_out & req_features) != req_features) {
- 		printf("skipping test due to lack of feature support\n");
- 		fflush(stdout);
- 		return 0;
-@@ -1426,6 +1446,7 @@ static void set_test_type(const char *type)
- 		map_shared = true;
- 		test_type = TEST_SHMEM;
- 		uffd_test_ops = &shmem_uffd_test_ops;
-+		test_uffdio_minor = true;
- 	} else {
- 		err("Unknown test type: %s", type);
- 	}
+ The userland application should set the feature flags it intends to use
+ when invoking the ``UFFDIO_API`` ioctl, to request that those features be
 -- 
 2.31.1.368.gbe11c130af-goog
 
