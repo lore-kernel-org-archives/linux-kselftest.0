@@ -2,151 +2,80 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27931C433B4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 23:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B5F5C433ED
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 23:20:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05599613FB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 23:16:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2398661401
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 23:20:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239592AbhD0XRM (ORCPT
+        id S239285AbhD0XVF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Apr 2021 19:17:12 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37100 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238879AbhD0XRL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Apr 2021 19:17:11 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 5D2FF1F426C6
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel@collabora.com, krisman@collabora.com,
-        pgriffais@valvesoftware.com, z.figura12@gmail.com,
-        joel@joelfernandes.org, malteskarupke@fastmail.fm,
-        linux-api@vger.kernel.org, fweimer@redhat.com,
-        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
-        Peter Oskolkov <posk@posk.io>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v3 13/13] kernel: Enable waitpid() for futex2
-Date:   Tue, 27 Apr 2021 20:12:48 -0300
-Message-Id: <20210427231248.220501-14-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210427231248.220501-1-andrealmeid@collabora.com>
-References: <20210427231248.220501-1-andrealmeid@collabora.com>
+        Tue, 27 Apr 2021 19:21:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235423AbhD0XUx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 27 Apr 2021 19:20:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9D342613B0;
+        Tue, 27 Apr 2021 23:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619565609;
+        bh=b8tLAU7dKdLUGC3UB2siG9xZir71vQRt1mbCzMXntNw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Dh383S4mgHTB3Mb8KcDXZCcXoa46nU45fIIcR3NOc7UeMbFU/1md2VaJTGGAJ3P0h
+         HngJ6Ype7yAwVgVtwLq4+U1kFHKH0e2WjCC7yNKiZXz0oLvKJ55/eesLIq/CYTKD3V
+         QJWX0rJyAQJJ+eg3/BqtD8xEwtO36U732v1Qa28sfvhpfxjXjX8m15YMhB753lFbvq
+         e2fMf0MP3PLTBB1w/OZYZ0YAubwjQL0XAhNe+TpjaM6JBYA+GN0jfjFCBZMG/wIOn7
+         pyZjlYTkKYJdyzocPUyuii+Za3cERVXZOI1eg8UpRmft95vFaB7yrTIO0ffHKHOIe/
+         iSJQDG9ne8aHw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 0/2] add batched ops for percpu array
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161956560959.15012.15996853487160339552.git-patchwork-notify@kernel.org>
+Date:   Tue, 27 Apr 2021 23:20:09 +0000
+References: <20210424214510.806627-1-pctammela@mojatatu.com>
+In-Reply-To: <20210424214510.806627-1-pctammela@mojatatu.com>
+To:     Pedro Tammela <pctammela@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        pctammela@mojatatu.com, david.verbeiren@tessares.net,
+        matthieu.baerts@tessares.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To make pthreads works as expected if they are using futex2, wake
-clear_child_tid with futex2 as well. This is make applications that uses
-waitpid() (and clone(CLONE_CHILD_SETTID)) wake while waiting for the
-child to terminate. Given that apps should not mix futex() and futex2(),
-any correct app will trigger a harmless noop wakeup on the interface
-that it isn't using.
+Hello:
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
+This series was applied to bpf/bpf-next.git (refs/heads/master):
 
-This commit is here for the intend to show what we need to do in order
-to get a full NPTL working on top of futex2. It should be merged after
-we talk to glibc folks on the details around the futex_wait() side. For
-instance, we could use this as an opportunity to use private futexes or
-8bit sized futexes, but both sides need to use the exactly same flags.
----
- include/linux/syscalls.h |  2 ++
- kernel/fork.c            |  2 ++
- kernel/futex2.c          | 30 ++++++++++++++++++------------
- 3 files changed, 22 insertions(+), 12 deletions(-)
+On Sat, 24 Apr 2021 18:45:08 -0300 you wrote:
+> This patchset introduces batched operations for the per-cpu variant of
+> the array map.
+> 
+> Also updates the batch ops test for arrays.
+> 
+> v4 -> v5:
+> - Revert removal of percpu macros
+> 
+> [...]
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index d5a485cf52c4..59655c9317e6 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1315,6 +1315,8 @@ int ksys_ipc(unsigned int call, int first, unsigned long second,
- 	unsigned long third, void __user * ptr, long fifth);
- int compat_ksys_ipc(u32 call, int first, int second,
- 	u32 third, u32 ptr, u32 fifth);
-+long ksys_futex_wake(void __user *uaddr, unsigned long nr_wake,
-+		     unsigned int flags);
- 
- /*
-  * The following kernel syscall equivalents are just wrappers to fs-internal
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 426cd0c51f9e..9f99273b161b 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1316,6 +1316,8 @@ static void mm_release(struct task_struct *tsk, struct mm_struct *mm)
- 			put_user(0, tsk->clear_child_tid);
- 			do_futex(tsk->clear_child_tid, FUTEX_WAKE,
- 					1, NULL, NULL, 0, 0);
-+			ksys_futex_wake(tsk->clear_child_tid, 1,
-+					FUTEX_32 | FUTEX_SHARED_FLAG);
- 		}
- 		tsk->clear_child_tid = NULL;
- 	}
-diff --git a/kernel/futex2.c b/kernel/futex2.c
-index 321472593e6f..901edf41d558 100644
---- a/kernel/futex2.c
-+++ b/kernel/futex2.c
-@@ -937,18 +937,8 @@ static inline bool futex_match(struct futex_key key1, struct futex_key key2)
- 		key1.offset == key2.offset);
- }
- 
--/**
-- * sys_futex_wake - Wake a number of futexes waiting on an address
-- * @uaddr:   Address of futex to be woken up
-- * @nr_wake: Number of futexes waiting in uaddr to be woken up
-- * @flags:   Flags for size and shared
-- *
-- * Wake `nr_wake` threads waiting at uaddr.
-- *
-- * Returns the number of woken threads on success, error code otherwise.
-- */
--SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
--		unsigned int, flags)
-+long ksys_futex_wake(void __user *uaddr, unsigned long nr_wake,
-+		     unsigned int flags)
- {
- 	bool shared = (flags & FUTEX_SHARED_FLAG) ? true : false;
- 	unsigned int size = flags & FUTEX_SIZE_MASK;
-@@ -985,6 +975,22 @@ SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
- 	return ret;
- }
- 
-+/**
-+ * sys_futex_wake - Wake a number of futexes waiting on an address
-+ * @uaddr:   Address of futex to be woken up
-+ * @nr_wake: Number of futexes waiting in uaddr to be woken up
-+ * @flags:   Flags for size and shared
-+ *
-+ * Wake `nr_wake` threads waiting at uaddr.
-+ *
-+ * Returns the number of woken threads on success, error code otherwise.
-+ */
-+SYSCALL_DEFINE3(futex_wake, void __user *, uaddr, unsigned int, nr_wake,
-+		unsigned int, flags)
-+{
-+	return ksys_futex_wake(uaddr, nr_wake, flags);
-+}
-+
- static void futex_double_unlock(struct futex_bucket *b1, struct futex_bucket *b2)
- {
- 	spin_unlock(&b1->lock);
--- 
-2.31.1
+Here is the summary with links:
+  - [bpf-next,v5,1/2] bpf: add batched ops support for percpu array
+    https://git.kernel.org/bpf/bpf-next/c/f008d732ab18
+  - [bpf-next,v5,2/2] bpf: selftests: update array map tests for per-cpu batched ops
+    https://git.kernel.org/bpf/bpf-next/c/3733bfbbdd28
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
