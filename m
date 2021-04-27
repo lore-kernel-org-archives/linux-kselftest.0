@@ -8,61 +8,61 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6905EC43462
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 22:53:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC5A9C433B4
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 22:53:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4531C611ED
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 22:53:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EA7D611ED
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Apr 2021 22:53:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239468AbhD0Wxy (ORCPT
+        id S239483AbhD0WyA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Apr 2021 18:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        Tue, 27 Apr 2021 18:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239452AbhD0Wxx (ORCPT
+        with ESMTP id S237144AbhD0Wx7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Apr 2021 18:53:53 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0ADC06138C
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 15:53:07 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 7-20020a5b01070000b02904ed6442e5f6so16211807ybx.23
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 15:53:07 -0700 (PDT)
+        Tue, 27 Apr 2021 18:53:59 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E7CC061574
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 15:53:12 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id p8-20020a17090a74c8b02901558c0dbcd5so4355067pjl.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Apr 2021 15:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=RRWLcA4U8+e/XOHvkZswRCx0YI32rbruxBRpXWbXmCs=;
-        b=okG18pV2cHje7Vas2xHrgpMSRzPJeLI9iRNJPNE0FPrPp6Klcqy7/1Swk9FhXFy3Qb
-         tJpEyh/CfyzSMCfu+ZiCoWyeiRSKT3APXIJisybUxKCfMpzvt07y/CRA5np6G5JapEpB
-         IUI6hMM0aN7/n1yjIYUXs9pj5LHPpMC/9gDy2s4fGjKSH94J6JXZvHYcGTjVJ0ktYWkq
-         1gR8Oy0hwQTr9EXyrrp0TO9YsOE8GFBDMrUmb73xr9K7a7VeRuC2Vo+NbSMC+Jz2Elej
-         wemHAx8m2OCf16Mzand+AzUNOPgoC4hkLUjk9Kez5uNslnMgycE0zkqOGfIF4GhASWCT
-         0Yvw==
+        bh=u1gk9aiwDmv6+SRZ0ft4k2Rli22/pgCpQ8yAo+qVnNA=;
+        b=WhttcOh6OlYlGtQYO3hqYvxXeiYuKV+rWQSt5GADJGax/zVklA+4aVWY6Vth1HSH3X
+         jwqi4xlCmJmF2uk4C3mUlO9dXP5GKLMafa/YYpnFpCz7vDawNizmXlGB6yjOLRbWnnjs
+         zUKKD0pPXPMq+GNf9mgcyCiC+JYB1W0gdtCctKXlHEeJk0mX+xU28z2b6gRtk8Yu85nl
+         2JjUUN+ND3iO+ubDxIVQYc87lZwqiydAQ90ZMWi5SimqntNNm/EZWf8oo0PfH30L05ai
+         eXKCJjGA7iP4ZQy64cNZRCZh9nqI8vq5hUhkIc2nfyfHUBlBdiVJlltPIDFueWEmrOik
+         S4mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=RRWLcA4U8+e/XOHvkZswRCx0YI32rbruxBRpXWbXmCs=;
-        b=YFq7IctrN88dkqHYxCBIr3cgi5BWrVu5xql06m6bj/fMpk2rypZqe0ExZXNbUayuPK
-         fFLgmvVK3OC4uzRKzfysyCwfXMG0IcTtPaXd2a4uAP+Zs7mrbtsblW/SS1xvl4EIEk5+
-         r4ChWThX4bLIL0Rzb6AM+52MXCbGfdTamVevKa4oH60Q9z7DxSS7TNFqawvnJqh5iRLd
-         3Vbe/NiMAcrHnaPdnz5ZUq1PLtnKeE4gi3yjshtpP6E4S40h1aK8jFFQi9F+EqK5hr1t
-         Bz8n4qxcLCccC8NzFEQ3jx0Td1yXillgZ7SuZ6vF/Admg2PHLbj38mK4fEdsvWzhiSnU
-         WCHA==
-X-Gm-Message-State: AOAM530ctOuKuDrSp9fa2p4LV3g9BAYtqluSVqmi/vTlqL4sb62hII2M
-        /3YYGFtO1dJgmX2bMI9lIsSP7lkgesmI6fTWc2d4
-X-Google-Smtp-Source: ABdhPJzDsCZYem6SJI6F68LBLgPVRrD7LYUqb4Kv0yx1mHkS1m/coZ3723JWgl0BgYOQPFBBRglbFBkLq324+VmTx7i4
+        bh=u1gk9aiwDmv6+SRZ0ft4k2Rli22/pgCpQ8yAo+qVnNA=;
+        b=WcaRBi088EvetXQSABOfk+U1T0dpxN3fiWKeehxcT9uTlFA1Tp4VGRu0gssOYKGiK2
+         gw53ln8VxzkQeZCUlDvdvclfj1x9Nuc/jgsg2WP1JHwyRxFQwkTAmLlZqnVvGkT5uNHL
+         yo7GWI+U3ssfCzm3bSF98+Hd4RRFFZ4flj2SiisurK7RXsOzD5XtmW7/DZBfogkhfi8i
+         QxlkwgYmivyIOi8hnY/ERvSzaVNo9rnC8E3QYNscOZYp0jYW4TvGMmD8mF+KJiw6s/q4
+         xUW8CU5hLPZYCLKnutbygLfSa+j2pIF+/e6TYt/r8+z6NhEeo45hdmAXnFslm0kIZUn8
+         LyyQ==
+X-Gm-Message-State: AOAM531/iev4YJxkO6nmPwEUe5lFKqQPWXNIi24A6NyK4oY20ejz2h2+
+        LFysz0wKPsphqBdxkLDv0uaRtVkmaHiDxX7bGaQr
+X-Google-Smtp-Source: ABdhPJwiDFSleswhpJEUOz8lD3obBc43FvS6xslLfDjp1Gi5RYfDgRHiZ7zkrRDES+WQD/M44l98muWb/GGEwvLSrFN1
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:c423:570b:b823:c33e])
- (user=axelrasmussen job=sendgmr) by 2002:a25:8682:: with SMTP id
- z2mr12874549ybk.325.1619563986815; Tue, 27 Apr 2021 15:53:06 -0700 (PDT)
-Date:   Tue, 27 Apr 2021 15:52:44 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a0c:fcc8:: with SMTP id
+ i8mr14211207qvq.31.1619563981243; Tue, 27 Apr 2021 15:53:01 -0700 (PDT)
+Date:   Tue, 27 Apr 2021 15:52:41 -0700
 In-Reply-To: <20210427225244.4326-1-axelrasmussen@google.com>
-Message-Id: <20210427225244.4326-11-axelrasmussen@google.com>
+Message-Id: <20210427225244.4326-8-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20210427225244.4326-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-Subject: [PATCH v5 10/10] userfaultfd/selftests: exercise minor fault handling
- shmem support
+Subject: [PATCH v5 07/10] userfaultfd/selftests: use memfd_create for shmem
+ test type
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -89,82 +89,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Enable test_uffdio_minor for test_type == TEST_SHMEM, and modify the
-test slightly to pass in / check for the right feature flags.
+This is a preparatory commit. In the future, we want to be able to setup
+alias mappings for area_src and area_dst in the shmem test, like we do
+in the hugetlb_shared test. With a VMA obtained via
+mmap(MAP_ANONYMOUS | MAP_SHARED), it isn't clear how to do this.
 
+So, mmap() with an fd, so we can create alias mappings. Use memfd_create
+instead of actually passing in a tmpfs path like hugetlb does, since
+it's more convenient / simpler to run, and works just as well.
+
+Future commits will:
+
+1. Setup the alias mappings.
+2. Extend our tests to actually take advantage of this, to test new
+   userfaultfd behavior being introduced in this series.
+
+Also, a small fix in the area we're changing: when the hugetlb setup
+fails in main(), pass in the right argv[] so we actually print out the
+hugetlb file path.
+
+Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 29 ++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 3fbc69f513dc..a7ecc9993439 100644
+index 6339aeaeeff8..fc40831f818f 100644
 --- a/tools/testing/selftests/vm/userfaultfd.c
 +++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -474,6 +474,7 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- static void continue_range(int ufd, __u64 start, __u64 len)
+@@ -85,6 +85,7 @@ static bool test_uffdio_wp = false;
+ static bool test_uffdio_minor = false;
+ 
+ static bool map_shared;
++static int shm_fd;
+ static int huge_fd;
+ static char *huge_fd_off0;
+ static unsigned long long *count_verify;
+@@ -277,8 +278,11 @@ static void shmem_release_pages(char *rel_area)
+ 
+ static void shmem_allocate_area(void **alloc_area)
  {
- 	struct uffdio_continue req;
-+	int ret;
- 
- 	req.range.start = start;
- 	req.range.len = len;
-@@ -482,6 +483,17 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
- 		    (uint64_t)start);
++	unsigned long offset =
++		alloc_area == (void **)&area_src ? 0 : nr_pages * page_size;
 +
-+	/*
-+	 * Error handling within the kernel for continue is subtly different
-+	 * from copy or zeropage, so it may be a source of bugs. Trigger an
-+	 * error (-EEXIST) on purpose, to verify doing so doesn't cause a BUG.
-+	 */
-+	req.mapped = 0;
-+	ret = ioctl(ufd, UFFDIO_CONTINUE, &req);
-+	if (ret >= 0 || req.mapped != -EEXIST)
-+		err("failed to exercise UFFDIO_CONTINUE error handling, ret=%d, mapped=%" PRId64,
-+		    ret, (int64_t) req.mapped);
+ 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+-			   MAP_ANONYMOUS | MAP_SHARED, -1, 0);
++			   MAP_SHARED, shm_fd, offset);
+ 	if (*alloc_area == MAP_FAILED)
+ 		err("mmap of memfd failed");
  }
- 
- static void *locking_thread(void *arg)
-@@ -1182,7 +1194,7 @@ static int userfaultfd_minor_test(void)
- 	void *expected_page;
- 	char c;
- 	struct uffd_stats stats = { 0 };
--	uint64_t features = UFFD_FEATURE_MINOR_HUGETLBFS;
-+	uint64_t req_features, features_out;
- 
- 	if (!test_uffdio_minor)
- 		return 0;
-@@ -1190,9 +1202,17 @@ static int userfaultfd_minor_test(void)
- 	printf("testing minor faults: ");
- 	fflush(stdout);
- 
--	uffd_test_ctx_init_ext(&features);
--	/* If kernel reports the feature isn't supported, skip the test. */
--	if (!(features & UFFD_FEATURE_MINOR_HUGETLBFS)) {
-+	if (test_type == TEST_HUGETLB)
-+		req_features = UFFD_FEATURE_MINOR_HUGETLBFS;
-+	else if (test_type == TEST_SHMEM)
-+		req_features = UFFD_FEATURE_MINOR_SHMEM;
-+	else
-+		return 1;
-+
-+	features_out = req_features;
-+	uffd_test_ctx_init_ext(&features_out);
-+	/* If kernel reports required features aren't supported, skip test. */
-+	if ((features_out & req_features) != req_features) {
- 		printf("skipping test due to lack of feature support\n");
- 		fflush(stdout);
- 		return 0;
-@@ -1426,6 +1446,7 @@ static void set_test_type(const char *type)
- 		map_shared = true;
- 		test_type = TEST_SHMEM;
- 		uffd_test_ops = &shmem_uffd_test_ops;
-+		test_uffdio_minor = true;
- 	} else {
- 		err("Unknown test type: %s", type);
+@@ -1448,6 +1452,16 @@ int main(int argc, char **argv)
+ 			err("Open of %s failed", argv[4]);
+ 		if (ftruncate(huge_fd, 0))
+ 			err("ftruncate %s to size 0 failed", argv[4]);
++	} else if (test_type == TEST_SHMEM) {
++		shm_fd = memfd_create(argv[0], 0);
++		if (shm_fd < 0)
++			err("memfd_create");
++		if (ftruncate(shm_fd, nr_pages * page_size * 2))
++			err("ftruncate");
++		if (fallocate(shm_fd,
++			      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE, 0,
++			      nr_pages * page_size * 2))
++			err("fallocate");
  	}
+ 	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+ 	       nr_pages, nr_pages_per_cpu);
 -- 
 2.31.1.498.g6c1eba8ee3d-goog
 
