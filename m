@@ -8,61 +8,61 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 679C3C43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C233C43600
 	for <linux-kselftest@archiver.kernel.org>; Mon,  3 May 2021 18:08:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33A6C61283
+	by mail.kernel.org (Postfix) with ESMTP id 6341A613BA
 	for <linux-kselftest@archiver.kernel.org>; Mon,  3 May 2021 18:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbhECSJP (ORCPT
+        id S231964AbhECSJQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 May 2021 14:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
+        Mon, 3 May 2021 14:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbhECSJA (ORCPT
+        with ESMTP id S231995AbhECSJB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 May 2021 14:09:00 -0400
+        Mon, 3 May 2021 14:09:01 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088FDC06134D
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 May 2021 11:07:55 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v12-20020a25848c0000b02904f30b36aebfso8834741ybk.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 May 2021 11:07:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF5BC061352
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 May 2021 11:07:58 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j63-20020a25d2420000b02904d9818b80e8so4278189ybg.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 May 2021 11:07:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=AiJiKYjwSKz3YxlxFSckEn8zOf3uLPV5kjYbENKZphQ=;
-        b=Qc38F5NEAHlR4PJqurW9Fn/35siI7B5/TFr+xY4RKuarShtU6D17askUe5rIyJNlvR
-         KIddBuYHXdKF17ADt7roESMhdAd7S6zKEA2KdFPRLm6Rig6WwmXNYPq/0XawRxxZ3s9d
-         FHBGx7jNV4Z5SPzx7CEfXdWnVkX+JqF2JpwtAh8yt8Ba3lVPZ4jyXe4V/Wz7OVSlIsj1
-         0CtIh6JznDm2RSkpsFpphDNLaUXCiPpQhxp+/xrvaJuTLEQpMaaQYfgRu1q+ZPxiw5CD
-         VuR1GYO9qkw7PjFevzYuYE0hXaFpRvRAnBFYJOcjOsKC6NNtW77JMIEMxZTPb6Ruhup3
-         boGg==
+        bh=DoWXx87b+Num+Reqv5sSHd1wfcUc2x8Dquy/B9+1IoU=;
+        b=nvwXd3Q7vwLtpi5zok2xV+bzBipiCzcjLFfLaLjrW3LnM2BxxbcRTwblxJc2oN8Nsj
+         k9449XsNR7OXw68xhaizvXpCfBzb5QfIg3A6TRWZi7/5lg9FTL3cHLk3FOvP/X0ZV0Is
+         onU3vCJUkeqyL4f/kSilwcEhU95cN5Ud2/M7kRjXHAGJT5zoatWaSYmiRU1dZLLqIrHP
+         J3tLvtFtiYW82BuflVjKfw9mtaPXfyBk2ouzNWsdlJj/KkTgLRS+wwn9pU1EnP5nqIry
+         hGIYPD3PVyvS3WmKXKbOVxUgXehclcwOqRNYhvSF8K4yp9IUT7EEcH3Dxt/7Jvwdr0g4
+         hfDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=AiJiKYjwSKz3YxlxFSckEn8zOf3uLPV5kjYbENKZphQ=;
-        b=Xcta1r9N/OgthedmuAszyLhzHmOgkJznjn7zROFIh5ecpHqB/62tKvcNrvaXJYpLXf
-         d2PNs1rjL24KlGmZRyzA8ZusKfm611dJm50y8pWyQULyzd79hNRrFzWCJKUQSiqjRdp5
-         uXAQCt7zMidGpZg0pcLT+3lSAMefilgxDsoA7FNl0CY9WvnThy769rX9eXi109d4tUcs
-         eovlascbNuOxcppuY1mNkpZPGyoKp9a8/GMClWASTQGBj9aWMDN1g4Ap7nIX30hv09Jy
-         /ditXEzaGQ2FgE4Bj60mq+pId+cbO2iZRBkBFwkX0ROxcNwm1maxYl6h6vPI0PkH8xv/
-         UvFg==
-X-Gm-Message-State: AOAM532qSa2iGaK/OngEpc9GxisrrE86t7r5gkahaf72mNmEGEQRQaNB
-        cBTxRF+SGzE8PFAj/SMboEKs5ZZs6TxZ/IHAQAlO
-X-Google-Smtp-Source: ABdhPJyRZZ1YDoRpiiiH56Kae8DUQPfQZxFN1pQ+5qUM7NThcqZKeA+2bSBX+3eoVJj15C64lUb3rVSesG8+qCAitYNf
+        bh=DoWXx87b+Num+Reqv5sSHd1wfcUc2x8Dquy/B9+1IoU=;
+        b=pK2I1Zk2Ddy3DXXHV1FDdOqDtuGwogJ9GodYMzBsillb/otq+vPxnvFlQeMcgv/K+c
+         jjCBZu6xagTPvdvChes9fK1Vnoey6ZNTFr4jHGLmhVPEdtm/1UGf/Eb2EYTbhvaF93cM
+         hy5RvM+3NcV4jMF9aILQsm//HFsICzmjnuoUyST/eOU0YEuEscCoXagGIwXIR/O1U7YX
+         QdMTRFDXc1EuMaNtvvUFGDZQqjLFJorkano7ZYX8T6GbV9JGPNpwlI0jkNF6K7be5v5k
+         HGqZyL68bNWximuO9wqikqhKz8lSH26qPHeMAO/SW367CdSm+p8JN3E7CQvoa+ZcLulH
+         mHZQ==
+X-Gm-Message-State: AOAM5322h38garp4TzzOU7FdHhpSYvm3bMP0KS2CnLJsuhD/afQi88uT
+        JRnjYtMx060Ncni9kludT/Fd6sEXzTc12HtLyLgc
+X-Google-Smtp-Source: ABdhPJwuU013RuhBQO/T92u+GOekQFViLlft8ynCR7Gl8N6K8mV5+xEqVTnMsrhevMFtXctpx6HhHAvJdQpR6qe5zVCL
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:3d79:e69a:a4f9:ef0])
- (user=axelrasmussen job=sendgmr) by 2002:a25:cac7:: with SMTP id
- a190mr27666541ybg.144.1620065274199; Mon, 03 May 2021 11:07:54 -0700 (PDT)
-Date:   Mon,  3 May 2021 11:07:33 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a25:880f:: with SMTP id
+ c15mr28912270ybl.373.1620065278099; Mon, 03 May 2021 11:07:58 -0700 (PDT)
+Date:   Mon,  3 May 2021 11:07:35 -0700
 In-Reply-To: <20210503180737.2487560-1-axelrasmussen@google.com>
-Message-Id: <20210503180737.2487560-7-axelrasmussen@google.com>
+Message-Id: <20210503180737.2487560-9-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20210503180737.2487560-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
-Subject: [PATCH v6 06/10] userfaultfd/shmem: modify shmem_mfill_atomic_pte to
- use install_pte()
+Subject: [PATCH v6 08/10] userfaultfd/selftests: create alias mappings in the
+ shmem test
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrea Arcangeli <aarcange@redhat.com>,
@@ -89,192 +89,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In a previous commit, we added the mfill_atomic_install_pte() helper.
-This helper does the job of setting up PTEs for an existing page, to map
-it into a given VMA. It deals with both the anon and shmem cases, as
-well as the shared and private cases.
+Previously, we just allocated two shm areas: area_src and area_dst. With
+this commit, change this so we also allocate area_src_alias, and
+area_dst_alias.
 
-In other words, shmem_mfill_atomic_pte() duplicates a case it already
-handles. So, expose it, and let shmem_mfill_atomic_pte() use it
-directly, to reduce code duplication.
+area_*_alias and area_* (respectively) point to the same underlying
+physical pages, but are different VMAs. In a future commit in this
+series, we'll leverage this setup to exercise minor fault handling
+support for shmem, just like we do in the hugetlb_shared test.
 
-This requires that we refactor shmem_mfill_atomic_pte() a bit:
-
-Instead of doing accounting (shmem_recalc_inode() et al) part-way
-through the PTE setup, do it afterward. This frees up
-mfill_atomic_install_pte() from having to care about this accounting,
-and means we don't need to e.g. shmem_uncharge() in the error path.
-
-A side effect is this switches shmem_mfill_atomic_pte() to use
-lru_cache_add_inactive_or_unevictable() instead of just lru_cache_add().
-This wrapper does some extra accounting in an exceptional case, if
-appropriate, so it's actually the more correct thing to use.
-
+Reviewed-by: Peter Xu <peterx@redhat.com>
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- include/linux/userfaultfd_k.h |  5 +++
- mm/shmem.c                    | 58 ++++++++---------------------------
- mm/userfaultfd.c              | 17 ++++------
- 3 files changed, 23 insertions(+), 57 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 794d1538b8ba..331d2ccf0bcc 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -53,6 +53,11 @@ enum mcopy_atomic_mode {
- 	MCOPY_ATOMIC_CONTINUE,
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index fc40831f818f..1f65c4ab7994 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -278,13 +278,29 @@ static void shmem_release_pages(char *rel_area)
+ 
+ static void shmem_allocate_area(void **alloc_area)
+ {
+-	unsigned long offset =
+-		alloc_area == (void **)&area_src ? 0 : nr_pages * page_size;
++	void *area_alias = NULL;
++	bool is_src = alloc_area == (void **)&area_src;
++	unsigned long offset = is_src ? 0 : nr_pages * page_size;
+ 
+ 	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
+ 			   MAP_SHARED, shm_fd, offset);
+ 	if (*alloc_area == MAP_FAILED)
+ 		err("mmap of memfd failed");
++
++	area_alias = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
++			  MAP_SHARED, shm_fd, offset);
++	if (area_alias == MAP_FAILED)
++		err("mmap of memfd alias failed");
++
++	if (is_src)
++		area_src_alias = area_alias;
++	else
++		area_dst_alias = area_alias;
++}
++
++static void shmem_alias_mapping(__u64 *start, size_t len, unsigned long offset)
++{
++	*start = (unsigned long)area_dst_alias + offset;
+ }
+ 
+ struct uffd_test_ops {
+@@ -314,7 +330,7 @@ static struct uffd_test_ops shmem_uffd_test_ops = {
+ 	.expected_ioctls = SHMEM_EXPECTED_IOCTLS,
+ 	.allocate_area	= shmem_allocate_area,
+ 	.release_pages	= shmem_release_pages,
+-	.alias_mapping = noop_alias_mapping,
++	.alias_mapping = shmem_alias_mapping,
  };
  
-+extern int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+				    struct vm_area_struct *dst_vma,
-+				    unsigned long dst_addr, struct page *page,
-+				    bool newly_allocated, bool wp_copy);
-+
- extern ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
- 			    unsigned long src_start, unsigned long len,
- 			    bool *mmap_changing, __u64 mode);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index e361f1d81c8d..2e9f56c83489 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2378,14 +2378,11 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	struct address_space *mapping = inode->i_mapping;
- 	gfp_t gfp = mapping_gfp_mask(mapping);
- 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
--	spinlock_t *ptl;
- 	void *page_kaddr;
- 	struct page *page;
--	pte_t _dst_pte, *dst_pte;
- 	int ret;
- 	pgoff_t max_off;
- 
--	ret = -ENOMEM;
- 	if (!shmem_inode_acct_block(inode, 1)) {
- 		/*
- 		 * We may have got a page, returned -ENOENT triggering a retry,
-@@ -2396,10 +2393,11 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 			put_page(*pagep);
- 			*pagep = NULL;
- 		}
--		goto out;
-+		return -ENOMEM;
- 	}
- 
- 	if (!*pagep) {
-+		ret = -ENOMEM;
- 		page = shmem_alloc_page(gfp, info, pgoff);
- 		if (!page)
- 			goto out_unacct_blocks;
-@@ -2414,9 +2412,9 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 			/* fallback to copy_from_user outside mmap_lock */
- 			if (unlikely(ret)) {
- 				*pagep = page;
--				shmem_inode_unacct_blocks(inode, 1);
-+				ret = -ENOENT;
- 				/* don't free the page */
--				return -ENOENT;
-+				goto out_unacct_blocks;
- 			}
- 		} else {		/* ZEROPAGE */
- 			clear_highpage(page);
-@@ -2442,32 +2440,10 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	if (ret)
- 		goto out_release;
- 
--	_dst_pte = mk_pte(page, dst_vma->vm_page_prot);
--	if (dst_vma->vm_flags & VM_WRITE)
--		_dst_pte = pte_mkwrite(pte_mkdirty(_dst_pte));
--	else {
--		/*
--		 * We don't set the pte dirty if the vma has no
--		 * VM_WRITE permission, so mark the page dirty or it
--		 * could be freed from under us. We could do it
--		 * unconditionally before unlock_page(), but doing it
--		 * only if VM_WRITE is not set is faster.
--		 */
--		set_page_dirty(page);
--	}
--
--	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
--
--	ret = -EFAULT;
--	max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
--	if (unlikely(pgoff >= max_off))
--		goto out_release_unlock;
--
--	ret = -EEXIST;
--	if (!pte_none(*dst_pte))
--		goto out_release_unlock;
--
--	lru_cache_add(page);
-+	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-+				       page, true, false);
-+	if (ret)
-+		goto out_delete_from_cache;
- 
- 	spin_lock_irq(&info->lock);
- 	info->alloced++;
-@@ -2475,27 +2451,17 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 	shmem_recalc_inode(inode);
- 	spin_unlock_irq(&info->lock);
- 
--	inc_mm_counter(dst_mm, mm_counter_file(page));
--	page_add_file_rmap(page, false);
--	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
--
--	/* No need to invalidate - it was non-present before */
--	update_mmu_cache(dst_vma, dst_addr, dst_pte);
--	pte_unmap_unlock(dst_pte, ptl);
-+	SetPageDirty(page);
- 	unlock_page(page);
--	ret = 0;
--out:
--	return ret;
--out_release_unlock:
--	pte_unmap_unlock(dst_pte, ptl);
--	ClearPageDirty(page);
-+	return 0;
-+out_delete_from_cache:
- 	delete_from_page_cache(page);
- out_release:
- 	unlock_page(page);
- 	put_page(page);
- out_unacct_blocks:
- 	shmem_inode_unacct_blocks(inode, 1);
--	goto out;
-+	return ret;
- }
- #endif /* CONFIG_USERFAULTFD */
- 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index d1ac73a0d2a9..5508f7d9e2dc 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -51,18 +51,13 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
- /*
-  * Install PTEs, to map dst_addr (within dst_vma) to page.
-  *
-- * This function handles MCOPY_ATOMIC_CONTINUE (which is always file-backed),
-- * whether or not dst_vma is VM_SHARED. It also handles the more general
-- * MCOPY_ATOMIC_NORMAL case, when dst_vma is *not* VM_SHARED (it may be file
-- * backed, or not).
-- *
-- * Note that MCOPY_ATOMIC_NORMAL for a VM_SHARED dst_vma is handled by
-- * shmem_mcopy_atomic_pte instead.
-+ * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
-+ * and anon, and for both shared and private VMAs.
-  */
--static int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
--				    struct vm_area_struct *dst_vma,
--				    unsigned long dst_addr, struct page *page,
--				    bool newly_allocated, bool wp_copy)
-+int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+			     struct vm_area_struct *dst_vma,
-+			     unsigned long dst_addr, struct page *page,
-+			     bool newly_allocated, bool wp_copy)
- {
- 	int ret;
- 	pte_t _dst_pte, *dst_pte;
+ static struct uffd_test_ops hugetlb_uffd_test_ops = {
 -- 
 2.31.1.527.g47e6f16901-goog
 
