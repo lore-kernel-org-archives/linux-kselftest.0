@@ -4,44 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E72D2C4161D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CC4BC43470
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:57:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC30B613F6
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:55:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26FE1613FC
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:57:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbhEEQz5 (ORCPT
+        id S235310AbhEEQ56 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 May 2021 12:55:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60436 "EHLO mail.kernel.org"
+        Wed, 5 May 2021 12:57:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42904 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235931AbhEEQwa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 May 2021 12:52:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DE62B6197C;
-        Wed,  5 May 2021 16:38:05 +0000 (UTC)
+        id S236717AbhEEQyq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 May 2021 12:54:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EE096197D;
+        Wed,  5 May 2021 16:38:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232687;
-        bh=JghHOZ/QVxtM6PX80Rval0YJBlOJPo9HT4NMQynXkL8=;
+        s=k20201202; t=1620232722;
+        bh=UWpbrYskpnh6yjz5JX5jnlSxDsV2p+ybcsR7Fj3BBc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m/QRNR5bAxxv2GtvEDM2SRlWxn2oo1ioU5UnrIlpm5QEnL7R+tmdkoNB+5uFRkPAM
-         YBBh9TiSyAao8ZS1oWmq9A3ry2S2L2QF+t/dDw+DCS4mArYEpI+LGqbxylCVmzPc6s
-         S0YBvvp8vADAt47nNr4irXUmo2r1GynYU4z0PBYuVYXfTDJQNl+T8Mmr27yXavmWoi
-         qgV3/jKP9XyIaKHFubPDugV8Ij718fKMm+H4Wi9/QcHi7sfAWCIaIgOjs3TXBb3Kv2
-         DiZmH0M4rryTOHsygYcDyKSs7eYrgsuvuMgyotqPotK414WhxfAuckMHBHAn97dV9J
-         heVIKivYImi7Q==
+        b=C9dFVgi/f26//h5+iO/PYEMUcmOJbK0r/hqQAW//CC3vV/qbyHtf73EFfbniG+Nqc
+         AFOVmFoZgo4m459gDFVyg/ltIoeU+K5Lb8ZhAD2KNgehbbVSSWVRgbLBvH4CZmRb7Q
+         fDcviMqhumtWcvso3DlI1Io6TWOS3azkFg19pLhhwk9poPO/hYfQmOV/3F7tK/xM8e
+         3hgJVbAfvR/USGm0fwkzxKakvEvYudP+Y4B5K7DenFBz97Bgze5Q8xYn0yHXT//Vm7
+         ASoRd0c6QzJrW9IYxhkkexCO+WbBsWMRbLxX/keTaIJCTAktJHofZCN52DdAxGLz70
+         M/ZlKr0JOoj5A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.10 53/85] selftests: Set CC to clang in lib.mk if LLVM is set
-Date:   Wed,  5 May 2021 12:36:16 -0400
-Message-Id: <20210505163648.3462507-53-sashal@kernel.org>
+Cc:     Petr Machata <petrm@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 77/85] selftests: mlxsw: Increase the tolerance of backlog buildup
+Date:   Wed,  5 May 2021 12:36:40 -0400
+Message-Id: <20210505163648.3462507-77-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210505163648.3462507-1-sashal@kernel.org>
 References: <20210505163648.3462507-1-sashal@kernel.org>
@@ -53,40 +52,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit 26e6dd1072763cd5696b75994c03982dde952ad9 ]
+[ Upstream commit dda7f4fa55839baeb72ae040aeaf9ccf89d3e416 ]
 
-selftests/bpf/Makefile includes lib.mk. With the following command
-  make -j60 LLVM=1 LLVM_IAS=1  <=== compile kernel
-  make -j60 -C tools/testing/selftests/bpf LLVM=1 LLVM_IAS=1 V=1
-some files are still compiled with gcc. This patch
-fixed lib.mk issue which sets CC to gcc in all cases.
+The intention behind this test is to make sure that qdisc limit is
+correctly projected to the HW. However, first, due to rounding in the
+qdisc, and then in the driver, the number cannot actually be accurate. And
+second, the approach to testing this is to oversubscribe the port with
+traffic generated on the same switch. The actual backlog size therefore
+fluctuates.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210413153413.3027426-1-yhs@fb.com
+In practice, this test proved to be noisier than the rest, and spuriously
+fails every now and then. Increase the tolerance to 10 % to avoid these
+issues.
+
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Acked-by: Jiri Pirko <jiri@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/lib.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index a5ce26d548e4..9a41d8bb9ff1 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -1,6 +1,10 @@
- # This mimics the top-level Makefile. We do it explicitly here so that this
- # Makefile can operate with or without the kbuild infrastructure.
-+ifneq ($(LLVM),)
-+CC := clang
-+else
- CC := $(CROSS_COMPILE)gcc
-+endif
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh
+index b0cb1aaffdda..33ddd01689be 100644
+--- a/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/sch_red_core.sh
+@@ -507,8 +507,8 @@ do_red_test()
+ 	check_err $? "backlog $backlog / $limit Got $pct% marked packets, expected == 0."
+ 	local diff=$((limit - backlog))
+ 	pct=$((100 * diff / limit))
+-	((0 <= pct && pct <= 5))
+-	check_err $? "backlog $backlog / $limit expected <= 5% distance"
++	((0 <= pct && pct <= 10))
++	check_err $? "backlog $backlog / $limit expected <= 10% distance"
+ 	log_test "TC $((vlan - 10)): RED backlog > limit"
  
- ifeq (0,$(MAKELEVEL))
-     ifeq ($(OUTPUT),)
+ 	stop_traffic
 -- 
 2.30.2
 
