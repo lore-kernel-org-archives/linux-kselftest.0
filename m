@@ -2,91 +2,119 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF19C43616
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 17:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE4F0C433ED
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 17:51:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7805661073
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 17:21:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F510611ED
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 17:51:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240954AbhEERWI (ORCPT
+        id S235166AbhEERwF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 May 2021 13:22:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60668 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235633AbhEERDS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 May 2021 13:03:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EBCFC613ED;
-        Wed,  5 May 2021 16:41:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232908;
-        bh=dlOQSC78x4g5c0BLYLlpldav7b47UGfJuU1ricOzpn0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XsP032MOEP0MQnlRdOypiEnBvBCQl6fBcOEo4SwCku/Ohvzit3GhH2njN9LiDZLDk
-         uJuMZBwcJ8l4Kw2Qp2WOv5KiHqCoXo5QByzoxBh4lJohDgPpWAKZqazdxO+T7p+u8D
-         CvwJNWh0DyNrQEjyM6HG4x50+P3paMnG/YNgCMLL/nZ/MgAUTEWQrg1QVD7lx+s/W1
-         ERngaYok29x1VS5YPjp06By8JJh2lPspbX++0ohUO1ETu5W4fauNr0tfaxZyRDz08T
-         OEHWhfxlIyBqUVGgJ09LAp53TSx34p6E4+41lkLyUhka6hTjCYUfORjZwCeRCcz4zQ
-         c1pMnfjbv/6wQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.9 13/22] selftests: Set CC to clang in lib.mk if LLVM is set
-Date:   Wed,  5 May 2021 12:41:20 -0400
-Message-Id: <20210505164129.3464277-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505164129.3464277-1-sashal@kernel.org>
-References: <20210505164129.3464277-1-sashal@kernel.org>
+        Wed, 5 May 2021 13:52:05 -0400
+Received: from conssluserg-01.nifty.com ([210.131.2.80]:52091 "EHLO
+        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235138AbhEERvh (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 May 2021 13:51:37 -0400
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 145Ho7xR027133;
+        Thu, 6 May 2021 02:50:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 145Ho7xR027133
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1620237007;
+        bh=jvguRX8pqZ4XJCYrxdDcZZ1jIBmYyFi1DYiU2rFpI+Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=g8v3452gN8HaY+3KgC7mg7IEMQEerT886lesiQ1r8/d0W1p4gS6kMxU8C9A/AgNsc
+         4BqbErAbLtcOu/6o4aQd6nH+hNpSzMarCyqxdV6c+502rITlc8wHMIjEF/g5SnrqTn
+         5Lu+vBoxlC0O5LS7DrQfhTyudOyP5URKBYS2EPTUaxGNJzvAjW+FHIFA5buPeP9itZ
+         1SbdmcqgX23H+/1g0Yj9WmLTXKIcOUr4I9iAwMHg4oSlVsMM/CU+6Dzyr5zL2qJSH8
+         sD48jJq2vZKch0zuYbexhyEioo1Zfg/1aBYyv20rTNZLOTiGMMoQtUPVGuDMmicqGg
+         iSg69+xvxX+Dg==
+X-Nifty-SrcIP: [209.85.216.46]
+Received: by mail-pj1-f46.google.com with SMTP id gj14so1231987pjb.5;
+        Wed, 05 May 2021 10:50:07 -0700 (PDT)
+X-Gm-Message-State: AOAM533qZoZhWSjvsN8NPC2DfuR77N+87QqjuuDm8KasFqHwWAaBSnig
+        PXP4XAy+JXYnJPLQlqplLX9VJZSMFM6j6vrtOwE=
+X-Google-Smtp-Source: ABdhPJwOlYfRNDTIvaamvhcY4mlQDjji6m4TpH8m4X/qsM5m/Jz/mF2aR5QVqUmET8K1YE+Ov90kjSkFJG3e6YThBA0=
+X-Received: by 2002:a17:902:32b:b029:ee:fa93:9551 with SMTP id
+ 40-20020a170902032bb02900eefa939551mr216769pld.47.1620237006584; Wed, 05 May
+ 2021 10:50:06 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20210424114841.394239-1-masahiroy@kernel.org> <2f8ccc46-16a1-e0fe-7cb0-0912295153ee@tessares.net>
+In-Reply-To: <2f8ccc46-16a1-e0fe-7cb0-0912295153ee@tessares.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 6 May 2021 02:49:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASz11t3YQ509CYbpLDFOmo7eJkT78KKQjCqLR-FKKLZnA@mail.gmail.com>
+Message-ID: <CAK7LNASz11t3YQ509CYbpLDFOmo7eJkT78KKQjCqLR-FKKLZnA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: replace LANG=C with LC_ALL=C
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthias Maennich <maennich@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, mptcp@lists.01.org,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+On Tue, Apr 27, 2021 at 4:30 AM Matthieu Baerts
+<matthieu.baerts@tessares.net> wrote:
+>
+> Hi,
+>
+> Thank you for the patch!
+>
+> On 24/04/2021 13:48, Masahiro Yamada wrote:
+> > LANG gives a weak default to each LC_* in case it is not explicitly
+> > defined. LC_ALL, if set, overrides all other LC_* variables.
+> >
+> >   LANG  <  LC_CTYPE, LC_COLLATE, LC_MONETARY, LC_NUMERIC, ...  <  LC_ALL
+> >
+> > This is why documentation such as [1] suggests to set LC_ALL in build
+> > scripts to get the deterministic result.
+> >
+> > LANG=C is not strong enough to override LC_* that may be set by end
+> > users.
+> >
+> > [1]: https://reproducible-builds.org/docs/locales/
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  arch/powerpc/boot/wrapper                          | 2 +-
+> >  scripts/nsdeps                                     | 2 +-
+> >  scripts/recordmcount.pl                            | 2 +-
+> >  scripts/setlocalversion                            | 2 +-
+> >  scripts/tags.sh                                    | 2 +-
+> >  tools/testing/selftests/net/mptcp/mptcp_connect.sh | 2 +-
+>
+> Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net> (mptcp)
+>
+> Cheers,
+> Matt
+> --
+> Tessares | Belgium | Hybrid Access Solutions
+> www.tessares.net
 
-[ Upstream commit 26e6dd1072763cd5696b75994c03982dde952ad9 ]
 
-selftests/bpf/Makefile includes lib.mk. With the following command
-  make -j60 LLVM=1 LLVM_IAS=1  <=== compile kernel
-  make -j60 -C tools/testing/selftests/bpf LLVM=1 LLVM_IAS=1 V=1
-some files are still compiled with gcc. This patch
-fixed lib.mk issue which sets CC to gcc in all cases.
+Applied to linux-kbuild.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210413153413.3027426-1-yhs@fb.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/lib.mk | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 50a93f5f13d6..d8fa6c72b7ca 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -1,6 +1,10 @@
- # This mimics the top-level Makefile. We do it explicitly here so that this
- # Makefile can operate with or without the kbuild infrastructure.
-+ifneq ($(LLVM),)
-+CC := clang
-+else
- CC := $(CROSS_COMPILE)gcc
-+endif
- 
- define RUN_TESTS
- 	@for TEST in $(TEST_PROGS); do \
 -- 
-2.30.2
-
+Best Regards
+Masahiro Yamada
