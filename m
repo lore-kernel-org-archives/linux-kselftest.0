@@ -7,40 +7,41 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE1F7C43462
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49D9BC43603
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3A18613C3
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:46:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D03561402
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 May 2021 16:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbhEEQrB (ORCPT
+        id S234450AbhEEQrC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 May 2021 12:47:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39568 "EHLO mail.kernel.org"
+        Wed, 5 May 2021 12:47:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50342 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234935AbhEEQnJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 May 2021 12:43:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79C6A616EC;
-        Wed,  5 May 2021 16:34:54 +0000 (UTC)
+        id S235879AbhEEQpK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 May 2021 12:45:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 880A361436;
+        Wed,  5 May 2021 16:35:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232495;
-        bh=IjQ16PaiznQ+DmnopLdAcuaE4WZWyIOLV2kE1mYF6KM=;
+        s=k20201202; t=1620232554;
+        bh=JghHOZ/QVxtM6PX80Rval0YJBlOJPo9HT4NMQynXkL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bGVTDQ5owRSMZRLf446ePHSSuriH3edY5nxxx0rTmscJus52AmluUywBDUF/lx+aj
-         Ym5pWfwwQhaPBECD2QHQkht4fadNExvokSkS8AZZ6FzQxqhJcUDhUGSa71QLky+UKh
-         uekF9z6UawNKPadB8Gq22a3CrG8A96MC4k5d5gguH50EtacBzwvRqwvLlX0OBAS3hG
-         sHyeThWyhi6Ox6CA4oAFtTF9239y9gzF98OcDqdy8QGSyQY2yqD4uQJs7r92bQm+rE
-         Jkf1icdEYfrrpJPHkaky55JFO4sMsutDD5OaFrEoS2EyoXM8Vzh5iOzFZCrk0Y13XE
-         FLiTTB2eclRaA==
+        b=hOzbbJgFrD2XQtM9ZKs3EQdLjbNHd+pdoEWQQM5JVONI9vh6JIBWhXYSRzNiWjqKv
+         bfDyaLB9Kj5tX5uVkSdceYzJZpvevC5NiUgwqn97otxe6PD7kRMpQmhkRw9dlkb4Vq
+         o2R6IXZ2+xVMcSYvZhXgmsyu47vSoRwVjK7e10mUrwJgI95IqwtG6IDY9/srtOhVpZ
+         cpOepsbtMiXllfG6qNejlZvJQgax8eCwL/V0/e6YJlIH0zWt+NrZ5vgkRIzGM6EzZ+
+         vbuUIu4u1m7ovIQT97fMq4u8NR6Y79gAdkdILzImg1gs73njMbeSCk9gNjKjiACsJ8
+         u8S+w9LDZfOZg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Russell Currey <ruscur@russell.cc>, Daniel Axtens <dja@axtens.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 029/104] selftests/powerpc: Fix L1D flushing tests for Power10
-Date:   Wed,  5 May 2021 12:32:58 -0400
-Message-Id: <20210505163413.3461611-29-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.11 069/104] selftests: Set CC to clang in lib.mk if LLVM is set
+Date:   Wed,  5 May 2021 12:33:38 -0400
+Message-Id: <20210505163413.3461611-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210505163413.3461611-1-sashal@kernel.org>
 References: <20210505163413.3461611-1-sashal@kernel.org>
@@ -52,80 +53,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Russell Currey <ruscur@russell.cc>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit 3a72c94ebfb1f171eba0715998010678a09ec796 ]
+[ Upstream commit 26e6dd1072763cd5696b75994c03982dde952ad9 ]
 
-The rfi_flush and entry_flush selftests work by using the PM_LD_MISS_L1
-perf event to count L1D misses.  The value of this event has changed
-over time:
+selftests/bpf/Makefile includes lib.mk. With the following command
+  make -j60 LLVM=1 LLVM_IAS=1  <=== compile kernel
+  make -j60 -C tools/testing/selftests/bpf LLVM=1 LLVM_IAS=1 V=1
+some files are still compiled with gcc. This patch
+fixed lib.mk issue which sets CC to gcc in all cases.
 
-- Power7 uses 0x400f0
-- Power8 and Power9 use both 0x400f0 and 0x3e054
-- Power10 uses only 0x3e054
-
-Rather than relying on raw values, configure perf to count L1D read
-misses in the most explicit way available.
-
-This fixes the selftests to work on systems without 0x400f0 as
-PM_LD_MISS_L1, and should change no behaviour for systems that the tests
-already worked on.
-
-The only potential downside is that referring to a specific perf event
-requires PMU support implemented in the kernel for that platform.
-
-Signed-off-by: Russell Currey <ruscur@russell.cc>
-Acked-by: Daniel Axtens <dja@axtens.net>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20210223070227.2916871-1-ruscur@russell.cc
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210413153413.3027426-1-yhs@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/powerpc/security/entry_flush.c | 2 +-
- tools/testing/selftests/powerpc/security/flush_utils.h | 4 ++++
- tools/testing/selftests/powerpc/security/rfi_flush.c   | 2 +-
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ tools/testing/selftests/lib.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/powerpc/security/entry_flush.c b/tools/testing/selftests/powerpc/security/entry_flush.c
-index 78cf914fa321..68ce377b205e 100644
---- a/tools/testing/selftests/powerpc/security/entry_flush.c
-+++ b/tools/testing/selftests/powerpc/security/entry_flush.c
-@@ -53,7 +53,7 @@ int entry_flush_test(void)
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index a5ce26d548e4..9a41d8bb9ff1 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -1,6 +1,10 @@
+ # This mimics the top-level Makefile. We do it explicitly here so that this
+ # Makefile can operate with or without the kbuild infrastructure.
++ifneq ($(LLVM),)
++CC := clang
++else
+ CC := $(CROSS_COMPILE)gcc
++endif
  
- 	entry_flush = entry_flush_orig;
- 
--	fd = perf_event_open_counter(PERF_TYPE_RAW, /* L1d miss */ 0x400f0, -1);
-+	fd = perf_event_open_counter(PERF_TYPE_HW_CACHE, PERF_L1D_READ_MISS_CONFIG, -1);
- 	FAIL_IF(fd < 0);
- 
- 	p = (char *)memalign(zero_size, CACHELINE_SIZE);
-diff --git a/tools/testing/selftests/powerpc/security/flush_utils.h b/tools/testing/selftests/powerpc/security/flush_utils.h
-index 07a5eb301466..7a3d60292916 100644
---- a/tools/testing/selftests/powerpc/security/flush_utils.h
-+++ b/tools/testing/selftests/powerpc/security/flush_utils.h
-@@ -9,6 +9,10 @@
- 
- #define CACHELINE_SIZE 128
- 
-+#define PERF_L1D_READ_MISS_CONFIG	((PERF_COUNT_HW_CACHE_L1D) | 		\
-+					(PERF_COUNT_HW_CACHE_OP_READ << 8) |	\
-+					(PERF_COUNT_HW_CACHE_RESULT_MISS << 16))
-+
- void syscall_loop(char *p, unsigned long iterations,
- 		  unsigned long zero_size);
- 
-diff --git a/tools/testing/selftests/powerpc/security/rfi_flush.c b/tools/testing/selftests/powerpc/security/rfi_flush.c
-index 7565fd786640..f73484a6470f 100644
---- a/tools/testing/selftests/powerpc/security/rfi_flush.c
-+++ b/tools/testing/selftests/powerpc/security/rfi_flush.c
-@@ -54,7 +54,7 @@ int rfi_flush_test(void)
- 
- 	rfi_flush = rfi_flush_orig;
- 
--	fd = perf_event_open_counter(PERF_TYPE_RAW, /* L1d miss */ 0x400f0, -1);
-+	fd = perf_event_open_counter(PERF_TYPE_HW_CACHE, PERF_L1D_READ_MISS_CONFIG, -1);
- 	FAIL_IF(fd < 0);
- 
- 	p = (char *)memalign(zero_size, CACHELINE_SIZE);
+ ifeq (0,$(MAKELEVEL))
+     ifeq ($(OUTPUT),)
 -- 
 2.30.2
 
