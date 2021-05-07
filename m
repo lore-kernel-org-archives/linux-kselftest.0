@@ -2,135 +2,166 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-6.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2947C433ED
-	for <linux-kselftest@archiver.kernel.org>; Fri,  7 May 2021 21:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C912C433ED
+	for <linux-kselftest@archiver.kernel.org>; Fri,  7 May 2021 23:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E7A161469
-	for <linux-kselftest@archiver.kernel.org>; Fri,  7 May 2021 21:31:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A25761430
+	for <linux-kselftest@archiver.kernel.org>; Fri,  7 May 2021 23:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbhEGVcm (ORCPT
+        id S230185AbhEGX67 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 7 May 2021 17:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        Fri, 7 May 2021 19:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbhEGVcj (ORCPT
+        with ESMTP id S230089AbhEGX67 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 May 2021 17:32:39 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E8C061343
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 May 2021 14:31:38 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id v1-20020a05620a1221b02902ea88445e01so4041671qkj.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 May 2021 14:31:38 -0700 (PDT)
+        Fri, 7 May 2021 19:58:59 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0874AC061763
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 May 2021 16:57:59 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id t21so6068280plo.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 May 2021 16:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=OULdAB7SkAEJ6rQEHGBEyfNQUuilr1kpehp6Rww8NCA=;
-        b=me5mS3gfsyZF7xaGkikl8wftRuuZ2OGeAKpzgUbMG/qsFra0W0N8S1KODa6Y6brGSh
-         WNnA7TmrDbCabXXI8LZ5E41NAN5pNRNwDSUZcEdq9LoeDSlPWHxFqM8DDjmyngwqFJeb
-         Qd/LsL1B+87lenOTJVGd3dIFeR0hJAb6m7yKHz6Ff7KNudGql7/B2VGuog25apXTCqnk
-         701ebfMb4CuF1CVSuYBrBOpouUpboiIkW/Fa+1bvRVzIg/Yjla8YBFB+UgXkVowK+lcK
-         uST+GIeh4l9btt3gkyCzCyIkikPepD0zoahHPGO1sj2aTXavSt3B/+TB7zhSWhIRlPsO
-         +bEA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2iQQvEB0+fCpb/rAB5HWawShZb8qZlIcaFuxaSL0oes=;
+        b=EqhSZy45d2y8OQQwraWGhlD9n54vClwPwSn7UuK9xZviJIBJseEIUX0aF36GebrTNP
+         3Y9esEq2VEVMdpYAd+09juu7yIqSSNYhNNt+rVs1po+n6QlJ3kc6cbxhUV5wUfFprLGx
+         TjvIY1CeOIbcMr4b7WQIEnR9bfI+n///RODlA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=OULdAB7SkAEJ6rQEHGBEyfNQUuilr1kpehp6Rww8NCA=;
-        b=OwrMabYTuExGXdWYxZ3oU0gDpFm4K5J8oD1F/fpNG/JssUqckA0n/mJEWmqXtS7Er9
-         zwTEzhh6CysBBpwLNo4D70Tqthq8Jz3RG9rUJmIgw6E/pJZpexoG1YDplFDFotZSu5OT
-         PKHwyVuRRXiARpswZOk54QcCzdSld3LPHYREgDjvmDzaCGIXeA6c7C5wOF+AJYSZ6qFe
-         X2ysx4ztcXMTQFZ1bUfPHo2KjrK0sIut1UD246Dae481Z8WMsTSDtsn6xDNk+PdtkptT
-         URKVENyG4fzQtrpLEDB5WXPWSQJ99/khjkmQk7HAYxkaj8U/VKX1zCw4qaPigOhc9xlv
-         yk1w==
-X-Gm-Message-State: AOAM530Ni2a8Oh8ZwIBPTA4nszbZF1OeDzMMy14hUWMF5LYo4Re5AGxN
-        xvNYPvyTCkRojiAiYgH8dlPTMj5XR2gyvBzBvqozZA==
-X-Google-Smtp-Source: ABdhPJwd63PkgSe6ku7lXnqxyN58PmTRRyHarAj8aC3AIuHh7xaK+l2IwwFYYBvTOCikWgPsZmwm0YSUR1eyHN7JtT9K1Q==
-X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:8b7:10d:a11b:ba0c])
- (user=brendanhiggins job=sendgmr) by 2002:a0c:e54c:: with SMTP id
- n12mr11957692qvm.25.1620423097425; Fri, 07 May 2021 14:31:37 -0700 (PDT)
-Date:   Fri,  7 May 2021 14:31:10 -0700
-In-Reply-To: <20210507213110.155492-1-brendanhiggins@google.com>
-Message-Id: <20210507213110.155492-5-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20210507213110.155492-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
-Subject: [PATCH v1 4/4] Documentation: kunit: document support for QEMU in kunit_tool
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     shuah@kernel.org, davidgow@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, sboyd@kernel.org, keescook@chromium.org,
-        frowand.list@gmail.com, dlatypov@google.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2iQQvEB0+fCpb/rAB5HWawShZb8qZlIcaFuxaSL0oes=;
+        b=swxMDas/jiOZiGuUJRTuRKHIya3Puvrduhdm7VPfkQRH5r7gO745cXHEToiZ+rBuqX
+         o6D93J4h5oqfVjqRNORC3dtlZmzYePgqUrYcfbe1eeECKx8DAjRefigEbYkJZN1dcLu9
+         99orpVRd7Ekd7WcoN8AE7kezVfwc1n7SpT1EOtp3DoEddMgJMpY8M8FudQ7Z38qciMal
+         qHFbGyQVDCEVa6zzbV5QHCRhmErJgPhQsRF7nnyLQQSbksLj3PQoSHwNgXouZNfCyk/I
+         VXTgl3r+k7fOhwh1A/kYgUs8v7zKUFhL+u4yR2xsNJqSK0KsyRjwTmpj0hlmMzPvrcl7
+         EGZQ==
+X-Gm-Message-State: AOAM532llfi3K9eDUSAriKVxq3MIwGIXTW8VvNwbqcFpEwf4e4JFY59j
+        Qe3hrZDu0dDeGNhi7n4pDlFP/g==
+X-Google-Smtp-Source: ABdhPJwW5et97Z//abVIXmo2gBu5V8/Vzg230KpxBawys34RoMW6n/H4x7d7dTWApKrw1+7V8ZstIg==
+X-Received: by 2002:a17:902:ff09:b029:ed:3b29:ff43 with SMTP id f9-20020a170902ff09b02900ed3b29ff43mr12583115plj.14.1620431878548;
+        Fri, 07 May 2021 16:57:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ha14sm5011198pjb.40.2021.05.07.16.57.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 May 2021 16:57:56 -0700 (PDT)
+Date:   Fri, 7 May 2021 16:57:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christopher Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, Will Deacon <will@kernel.org>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v18 0/9] mm: introduce memfd_secret system call to create
+ "secret" memory areas
+Message-ID: <202105071620.E834B1FA92@keescook>
+References: <20210303162209.8609-1-rppt@kernel.org>
+ <20210505120806.abfd4ee657ccabf2f221a0eb@linux-foundation.org>
+ <de27bfae0f4fdcbb0bb4ad17ec5aeffcd774c44b.camel@linux.ibm.com>
+ <202105060916.ECDEC21@keescook>
+ <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e1953a1412fad06a9f7988a280d2d9a74ab0464.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Document QEMU support, what it does, and how to use it in kunit_tool.
+On Thu, May 06, 2021 at 11:47:47AM -0700, James Bottomley wrote:
+> On Thu, 2021-05-06 at 10:33 -0700, Kees Cook wrote:
+> > On Thu, May 06, 2021 at 08:26:41AM -0700, James Bottomley wrote:
+> [...]
+> > > > I think that a very complete description of the threats which
+> > > > this feature addresses would be helpful.  
+> > > 
+> > > It's designed to protect against three different threats:
+> > > 
+> > >    1. Detection of user secret memory mismanagement
+> > 
+> > I would say "cross-process secret userspace memory exposures" (via a
+> > number of common interfaces by blocking it at the GUP level).
+> > 
+> > >    2. significant protection against privilege escalation
+> > 
+> > I don't see how this series protects against privilege escalation.
+> > (It protects against exfiltration.) Maybe you mean include this in
+> > the first bullet point (i.e. "cross-process secret userspace memory
+> > exposures, even in the face of privileged processes")?
+> 
+> It doesn't prevent privilege escalation from happening in the first
+> place, but once the escalation has happened it protects against
+> exfiltration by the newly minted root attacker.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/usage.rst | 37 +++++++++++++++++++++----
- 1 file changed, 31 insertions(+), 6 deletions(-)
+So, after thinking a bit more about this, I don't think there is
+protection here against privileged execution. This feature kind of helps
+against cross-process read/write attempts, but it doesn't help with
+sufficiently privileged (i.e. ptraced) execution, since we can just ask
+the process itself to do the reading:
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 650f99590df57..b74bd7c87cc20 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -612,14 +612,39 @@ only things to be aware of when doing so.
- The biggest impediment will likely be that certain KUnit features and
- infrastructure may not support your target environment. For example, at this
- time the KUnit Wrapper (``tools/testing/kunit/kunit.py``) does not work outside
--of UML. Unfortunately, there is no way around this. Using UML (or even just a
--particular architecture) allows us to make a lot of assumptions that make it
--possible to do things which might otherwise be impossible.
-+of UML and QEMU. Unfortunately, there is no way around this. Using UML and QEMU
-+(or even just a particular architecture) allows us to make a lot of assumptions
-+that make it possible to do things which might otherwise be impossible.
- 
- Nevertheless, all core KUnit framework features are fully supported on all
--architectures, and using them is straightforward: all you need to do is to take
--your kunitconfig, your Kconfig options for the tests you would like to run, and
--merge them into whatever config your are using for your platform. That's it!
-+architectures, and using them is straightforward: Most popular architectures
-+are supported directly in the KUnit Wrapper via QEMU.  Currently, supported
-+architectures on QEMU include:
-+
-+*   i386
-+*   x86_64
-+*   arm
-+*   arm64
-+*   alpha
-+*   powerpc
-+*   riscv
-+*   s390
-+*   sparc
-+
-+In order to run KUnit tests on one of these architectures via QEMU with the
-+KUnit wrapper, all you need to do is specify the flags ``--arch`` and
-+``--cross_compile`` when invoking the KUnit Wrapper. For example, we could run
-+the default KUnit tests on ARM in the following manner (assuming we have an ARM
-+toolchain installed):
-+
-+.. code-block:: bash
-+
-+	tools/testing/kunit/kunit.py run --timeout=60 --jobs=12 --arch=arm --cross_compile=arm-linux-gnueabihf-
-+
-+Alternatively, if you want to run your tests on real hardware or in some other
-+emulation environment, all you need to do is to take your kunitconfig, your
-+Kconfig options for the tests you would like to run, and merge them into
-+whatever config your are using for your platform. That's it!
- 
- For example, let's say you have the following kunitconfig:
- 
+$ gdb ./memfd_secret
+...
+ready: 0x7ffff7ffb000
+Breakpoint 1, ...
+(gdb) compile code unsigned long addr = 0x7ffff7ffb000UL; printf("%016lx\n", *((unsigned long *)addr));
+55555555555555555
+
+And since process_vm_readv() requires PTRACE_ATTACH, there's very little
+difference in effort between process_vm_readv() and the above.
+
+So, what other paths through GUP exist that aren't covered by
+PTRACE_ATTACH? And if none, then should this actually just be done by
+setting the process undumpable? (This is already what things like gnupg
+do.)
+
+So, the user-space side of this doesn't seem to really help. The kernel
+side protection is interesting for kernel read/write flaws, though, in
+the sense that the process is likely not being attacked from "current",
+so a kernel-side attack would need to either walk the page tables and
+create new ones, or spawn a new userspace process to do the ptracing.
+
+So, while I like the idea of this stuff, and I see how it provides
+certain coverages, I'm curious to learn more about the threat model to
+make sure it's actually providing meaningful hurdles to attacks.
+
 -- 
-2.31.1.607.g51e8a6a459-goog
-
+Kees Cook
