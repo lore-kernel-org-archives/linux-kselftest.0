@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA51C43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E7A1C43618
 	for <linux-kselftest@archiver.kernel.org>; Wed, 12 May 2021 23:10:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C178613EB
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 May 2021 23:10:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D209613F6
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 May 2021 23:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347163AbhELXEg (ORCPT
+        id S1346905AbhELXEN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 May 2021 19:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        Wed, 12 May 2021 19:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390040AbhELVtW (ORCPT
+        with ESMTP id S1389993AbhELVtT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 May 2021 17:49:22 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AC8C06121A
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 May 2021 14:45:16 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id 1-20020aed31010000b029019d1c685840so16700881qtg.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 May 2021 14:45:16 -0700 (PDT)
+        Wed, 12 May 2021 17:49:19 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C632C061262
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 May 2021 14:45:12 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id a7-20020a5b00070000b02904ed415d9d84so29467654ybp.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 May 2021 14:45:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=L2NNDNh+hgASTvjB+YiQroB4OhnVKpDdWzCu7PeehzQ=;
-        b=f/jWqQ9KrReYTTcLlSByNRew6FCsKM1EvpOY6NccUCKPvBGo/JQ4Zxqp+Y9qdFB990
-         +ppzycm59zMkwaQn5JB3+WQrWFuHIUB51D/IExtH3kHfqQy7KV4xRmUfSvB5zMyym+5G
-         TLlMSt8evZA5NNZagdBNH9Qf04w+rO/dsWryvqWKU6DKDptYEPlTI0XBk7J8ppG5Jxho
-         p9ur6H3WcWjXmfJo0OsUqOPujxxTfEZBCyrkWgpZeGut4UQVgKVfweicGfBXTBbSaKFD
-         9LxR/mFKzVoks3DH8wdXU7A3Pj/Uk55aP9AZ387d1ryZA3jEYsk07gR7lV4mV2jNWFvL
-         5RoQ==
+        bh=SSP4iK7kQof7O+I0mY5Yx7zKhq95LDgOK3FrtnCssfc=;
+        b=WYmdCGITKjUOQQSZswfLUeNGLxUkRHPTAVYlSBsC9FXawghwF25YW7fD6LHQiXpZoV
+         Y/zUoelCiLBKEj1zL/r1oV6g+hJZxnrDqVYXrIPkBw86ysHxuA+lMCwOvdAeXFr6uu2H
+         GxDmEcEEMUmKNaq0FbXVHhNu5yAFr9e2WjRYnBXtYzhpbLgxLXKEYkFew3g3PAF0RTpY
+         knBGHyGcISUKVmt6pZdhaWt8iYuJG5J3Jue6SOxF4rzEbfg0jc1AT0jaQdWvBxZwN+DW
+         hrRX90XUub3WRf7M3yYCGJzePD8d7PKwDuycNVqd+QS5krQVpGJSphRvW+9EqaSp3A5j
+         GQ7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=L2NNDNh+hgASTvjB+YiQroB4OhnVKpDdWzCu7PeehzQ=;
-        b=MNOU47T3VEmifuY7Pj19cRILJp3VG+73Mf5kR7/v0dTE03ehHRuGASwtETxxa+D4iH
-         fx/ulV7e8d7NK+mmoXj8qLtCarVTTIfHGzDUx1E/Hlzjy3FF6UV9zn1vEHF2cJ2pA+Fv
-         3hnFJ1lSlZBifAt5uVo5N7W2ABjr4pKpL+BoqthOGYAW3hzQgDEKMa7Hh9X+0vmBrlQh
-         gE8Pptwsljl7yRWQdY8imFFh5bnbWWUcYrm5XMxKtzJyqePvlP4padeuBT2PtorA8gG0
-         M2j42IOQyZFrZXCxVMJFMbp+RPbv+nMR+AgBWVs98PFhSCbN2qeUPBAR7SYssf6yldUy
-         vSPg==
-X-Gm-Message-State: AOAM5314yItv7LuU1huCHgJG2W9PLHFmQkMxaro5DQucUpQIcXcLdN3+
-        om1Dt4sRF38ixFS3ha5MQSSmhblRPs7LcMW/YR5S
-X-Google-Smtp-Source: ABdhPJwmZd1tQ0tXLXGE1m4mOZ8nKprfTo961VKDRhbFhsEOZfmfNUk6cuiyjbyK+g36JmjmfxxYDg5OhcHVQXYya+QJ
+        bh=SSP4iK7kQof7O+I0mY5Yx7zKhq95LDgOK3FrtnCssfc=;
+        b=BKRTyl7c7f55CgRbgppkoomUYIEdvABcK9jt340o+qnV5JEQmrcFQuWyMwdz1qp6zE
+         JiixHkNgPgq3eREm5agnqrHxZQ/6vNEuK0TwcqPskCKZ6yt44iGlItdLdc4sGlzqnXvQ
+         6dFgYdu2rXKzTDtUjPlid8LvUsurqso6W6Mfzfc9M/lTVJQ1uSdr0sTKQksxEIeWNxHS
+         EpbfqceEokcRm2U3SaVsnvOR0f4Yw4bItOeF6vdgr8hPaSOxSZMo/p7lXu/hoYEWS3S9
+         ElInvegUvOkNKTe6z6JdMjbIFErnkAEYsKdtQh6MMMbXrT+62Xc/RtM79pBlrwqRdhUd
+         vS2A==
+X-Gm-Message-State: AOAM531uzbSFGPvaeeTTMRqgyqSMfDrv+Hylgsngw6xHSJlg75UzsH6Y
+        Vz778aga6VpP2dk5e/Dc6PwqEccNceoY3iRjE8Iw
+X-Google-Smtp-Source: ABdhPJwqmFAoNNkGc7hecA9VlWtADbzv/7DZGn54W2mNkU4f/bU+2cysakOIUeg/gBZANgkKjybDmotUdnpfozeZDGqZ
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:29e5:10fc:1128:b0c0])
- (user=axelrasmussen job=sendgmr) by 2002:a0c:aa44:: with SMTP id
- e4mr37564404qvb.41.1620855915420; Wed, 12 May 2021 14:45:15 -0700 (PDT)
-Date:   Wed, 12 May 2021 14:45:02 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a25:9bc6:: with SMTP id
+ w6mr51455382ybo.159.1620855911479; Wed, 12 May 2021 14:45:11 -0700 (PDT)
+Date:   Wed, 12 May 2021 14:45:00 -0700
 In-Reply-To: <20210512214502.2047008-1-axelrasmussen@google.com>
-Message-Id: <20210512214502.2047008-6-axelrasmussen@google.com>
+Message-Id: <20210512214502.2047008-4-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20210512214502.2047008-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
-Subject: [PATCH 5/5] KVM: selftests: add shared hugetlbfs backing source type
+Subject: [PATCH 3/5] KVM: selftests: create alias mappings when using shared memory
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Aaron Lewis <aaronlewis@google.com>,
         Alexander Graf <graf@amazon.com>,
@@ -84,103 +84,124 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This lets us run the demand paging test on top of a shared
-hugetlbfs-backed area. The "shared" is key, as this allows us to
-exercise userfaultfd minor faults on hugetlbfs.
+When a memory region is added with a src_type specifying that it should
+use some kind of shared memory, also create an alias mapping to the same
+underlying physical pages.
+
+And, add an API so tests can get access to these alias addresses.
+Basically, for a guest physical address, let us look up the analogous
+host *alias* address.
+
+In a future commit, we'll modify the demand paging test to take
+advantage of this to exercise UFFD minor faults. The idea is, we
+pre-fault the underlying pages *via the alias*. When the *guest*
+faults, it gets a "minor" fault (PTEs don't exist yet, but a page is
+already in the page cache). Then, the userfaultfd theads can handle the
+fault: they could potentially modify the underlying memory *via the
+alias* if they wanted to, and then they install the PTEs and let the
+guest carry on via a UFFDIO_CONTINUE ioctl.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/kvm/demand_paging_test.c |  6 ++++--
- tools/testing/selftests/kvm/include/test_util.h  | 10 ++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c       |  9 +++++++--
- tools/testing/selftests/kvm/lib/test_util.c      |  6 ++++++
- 4 files changed, 27 insertions(+), 4 deletions(-)
+ .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 50 +++++++++++++++++++
+ .../selftests/kvm/lib/kvm_util_internal.h     |  2 +
+ 3 files changed, 53 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index ff29aaea3120..32942c9e0376 100644
---- a/tools/testing/selftests/kvm/demand_paging_test.c
-+++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -502,8 +502,10 @@ int main(int argc, char *argv[])
- 		}
- 	}
+diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+index a8f022794ce3..0624f25a6803 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util.h
++++ b/tools/testing/selftests/kvm/include/kvm_util.h
+@@ -146,6 +146,7 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
+ void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa);
+ void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva);
+ vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva);
++void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa);
  
--	TEST_ASSERT(p.uffd_mode != UFFDIO_REGISTER_MODE_MINOR || p.src_type == VM_MEM_SRC_SHMEM,
--		    "userfaultfd MINOR mode requires shared memory; pick a different -t");
-+	if (p.uffd_mode == UFFDIO_REGISTER_MODE_MINOR &&
-+	    !backing_src_is_shared(p.src_type)) {
-+		TEST_FAIL("userfaultfd MINOR mode requires shared memory; pick a different -t");
-+	}
- 
- 	for_each_guest_mode(run_test, &p);
- 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index 7377f00469ef..852d6d2cc285 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -85,9 +85,19 @@ enum vm_mem_backing_src_type {
- 	VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB,
- 	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
- 	VM_MEM_SRC_SHMEM,
-+	VM_MEM_SRC_SHARED_HUGETLB,
- 	NUM_SRC_TYPES,
- };
- 
-+/*
-+ * Whether or not the given source type is shared memory (as opposed to
-+ * anonymous).
-+ */
-+static inline bool backing_src_is_shared(enum vm_mem_backing_src_type t)
-+{
-+	return t == VM_MEM_SRC_SHMEM || t == VM_MEM_SRC_SHARED_HUGETLB;
-+}
-+
- struct vm_mem_backing_src_alias {
- 	const char *name;
- 	uint32_t flag;
+ /*
+  * Address Guest Virtual to Guest Physical
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 838d58633f7e..fed02153c919 100644
+index 6fbe124e0e16..838d58633f7e 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -756,8 +756,13 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 		region->mmap_size += alignment;
+@@ -809,6 +809,19 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
  
- 	region->fd = -1;
--	if (src_type == VM_MEM_SRC_SHMEM) {
--		region->fd = memfd_create("kvm_selftest", MFD_CLOEXEC);
-+	if (backing_src_is_shared(src_type)) {
-+		int memfd_flags = MFD_CLOEXEC;
+ 	/* Add to linked-list of memory regions. */
+ 	list_add(&region->list, &vm->userspace_mem_regions);
 +
-+		if (src_type == VM_MEM_SRC_SHARED_HUGETLB)
-+			memfd_flags |= MFD_HUGETLB;
++	/* If shared memory, create an alias. */
++	if (region->fd >= 0) {
++		region->mmap_alias = mmap(NULL, region->mmap_size,
++					  PROT_READ | PROT_WRITE,
++					  vm_mem_backing_src_alias(src_type)->flag,
++					  region->fd, 0);
++		TEST_ASSERT(region->mmap_alias != MAP_FAILED,
++			    "mmap of alias failed, errno: %i", errno);
 +
-+		region->fd = memfd_create("kvm_selftest", memfd_flags);
- 		TEST_ASSERT(region->fd != -1,
- 			    "memfd_create failed, errno: %i", errno);
++		/* Align host alias address */
++		region->host_alias = align(region->mmap_alias, alignment);
++	}
+ }
  
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index c7a265da5090..65fb8b43782c 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -240,6 +240,11 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
- 			.name = "shmem",
- 			.flag = MAP_SHARED,
- 		},
-+		[VM_MEM_SRC_SHARED_HUGETLB] = {
-+			.name = "shared_hugetlb",
-+			/* No MAP_HUGETLB, we use MFD_HUGETLB instead. */
-+			.flag = MAP_SHARED,
-+		},
- 	};
- 	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
- 		       "Missing new backing src types?");
-@@ -262,6 +267,7 @@ size_t get_backing_src_pagesz(uint32_t i)
- 	case VM_MEM_SRC_ANONYMOUS_THP:
- 		return get_trans_hugepagesz();
- 	case VM_MEM_SRC_ANONYMOUS_HUGETLB:
-+	case VM_MEM_SRC_SHARED_HUGETLB:
- 		return get_def_hugetlb_pagesz();
- 	default:
- 		return MAP_HUGE_PAGE_SIZE(flag);
+ /*
+@@ -1237,6 +1250,43 @@ vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva)
+ 	return -1;
+ }
+ 
++/*
++ * Address VM physical to Host Virtual *alias*.
++ *
++ * Input Args:
++ *   vm - Virtual Machine
++ *   gpa - VM physical address
++ *
++ * Output Args: None
++ *
++ * Return:
++ *   Equivalent address within the host virtual *alias* area, or NULL
++ *   (without failing the test) if the guest memory is not shared (so
++ *   no alias exists).
++ *
++ * When vm_create() and related functions are called with a shared memory
++ * src_type, we also create a writable, shared alias mapping of the
++ * underlying guest memory. This allows the host to manipulate guest memory,
++ * e.g. to implement demand paging.
++ */
++void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa)
++{
++	struct userspace_mem_region *region;
++
++	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
++		if (!region->host_alias)
++			continue;
++
++		if ((gpa >= region->region.guest_phys_addr)
++			&& (gpa <= (region->region.guest_phys_addr
++				+ region->region.memory_size - 1)))
++			return (void *) ((uintptr_t) region->host_alias
++				+ (gpa - region->region.guest_phys_addr));
++	}
++
++	return NULL;
++}
++
+ /*
+  * VM Create IRQ Chip
+  *
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util_internal.h b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+index 91ce1b5d480b..a25af33d4a9c 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util_internal.h
++++ b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
+@@ -16,7 +16,9 @@ struct userspace_mem_region {
+ 	int fd;
+ 	off_t offset;
+ 	void *host_mem;
++	void *host_alias;
+ 	void *mmap_start;
++	void *mmap_alias;
+ 	size_t mmap_size;
+ 	struct list_head list;
+ };
 -- 
 2.31.1.607.g51e8a6a459-goog
 
