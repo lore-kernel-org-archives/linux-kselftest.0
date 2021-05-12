@@ -2,93 +2,101 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
+	DATE_IN_FUTURE_12_24,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0918C433ED
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 May 2021 09:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C10A5C433B4
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 May 2021 12:30:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A5D361927
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 May 2021 09:47:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 958DF6191D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 May 2021 12:30:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhEKJs7 (ORCPT
+        id S231510AbhEKMbf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 May 2021 05:48:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55622 "EHLO mail.kernel.org"
+        Tue, 11 May 2021 08:31:35 -0400
+Received: from mga14.intel.com ([192.55.52.115]:23526 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230434AbhEKJs7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 May 2021 05:48:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8D7F61621;
-        Tue, 11 May 2021 09:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620726473;
-        bh=xYgRdmVqmN+Qwy470JI7HiWW0iQYsCOHangiosFnU/4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YISHGm7jPoPIEH8aOWfK0E3VYmra2q6AcdXhV3HdCs9bReM8puaPPfBOmfNimhjO5
-         5TP5fSjuQHjADaB0Czo6gtkPtKC0VPW+rr0oZkJuRThHK7lZztwQhn0DbeawxT/Q17
-         Uy/9ky4+JTExTXKTZ+DRNwil8q53v+HV7leHf+GvvfHfYqppACOl/GvTwjxm426w+K
-         dNqfFZhswZjRKF4MWgy86qovtvTb1AGKv6asmT1tWG6cSaV2/1FnRLoBM64lxq2yne
-         veV3V+ULtk6DVX2PZ353KOLm9FPE9tGuKhiPj5vtZuUcg915O8s3/jdG9K0pW92Xv4
-         bGIzTf7iaQjPA==
-Date:   Tue, 11 May 2021 12:47:45 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH resend v2 3/5] MAINTAINERS: add
- tools/testing/selftests/vm/ to MEMORY MANAGEMENT
-Message-ID: <YJpSwfKo4PSb14U6@kernel.org>
-References: <20210511081534.3507-1-david@redhat.com>
- <20210511081534.3507-4-david@redhat.com>
+        id S230225AbhEKMbe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 May 2021 08:31:34 -0400
+IronPort-SDR: CvsD45L9PuIr9SJD+hpXmTpC498oL5h+Diw2b5r324ektfrmS9fJ9DcNydyfTbu7uKgZGxOJ2B
+ rPifdYLvgSgw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="199108946"
+X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
+   d="scan'208";a="199108946"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 05:30:28 -0700
+IronPort-SDR: LSSDBtLdcphiCsXB/4quGD+UMacuYngM3MvfRNb4+AkMb2XnYUyoQ61Y+0Fmg5ds/XySGXAQHA
+ JYDZEo5ljoDw==
+X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
+   d="scan'208";a="436634148"
+Received: from duan-client-optiplex-7080.bj.intel.com ([10.238.156.114])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 05:30:26 -0700
+From:   Zhenzhong Duan <zhenzhong.duan@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com, shuah@kernel.org,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>
+Subject: [PATCH] selftests: kvm: Fix a potential elf loading issue
+Date:   Wed, 12 May 2021 12:31:07 +0800
+Message-Id: <20210512043107.30076-2-zhenzhong.duan@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210512043107.30076-1-zhenzhong.duan@intel.com>
+References: <20210512043107.30076-1-zhenzhong.duan@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210511081534.3507-4-david@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 11, 2021 at 10:15:32AM +0200, David Hildenbrand wrote:
-> MEMORY MANAGEMENT seems to be a good fit.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+vm_vaddr_alloc() setup GVA to GPA mapping page by page, then GPA may not be
+continuous if same memslot is used for data and page table allocation.
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+kvm_vm_elf_load() expects a continuous memory of GPA or else it need to
+read file data page by page. Fix it by adding a check in vm_vaddr_alloc()
+to ensure memory is allocated in a whole if same memslot is used for data
+and page table.
 
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9450e052f1b1..cd267d218e08 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11566,6 +11566,7 @@ F:	include/linux/mm.h
->  F:	include/linux/mmzone.h
->  F:	include/linux/vmalloc.h
->  F:	mm/
-> +F:	tools/testing/selftests/vm/
->  
->  MEMORY TECHNOLOGY DEVICES (MTD)
->  M:	Miquel Raynal <miquel.raynal@bootlin.com>
-> -- 
-> 2.30.2
-> 
-> 
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+---
+ tools/testing/selftests/kvm/lib/kvm_util.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 159f4d62241d..6118a2f8906e 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1097,9 +1097,14 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+ 			  uint32_t data_memslot, uint32_t pgd_memslot)
+ {
+ 	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
++	vm_paddr_t paddr_start = 0;
+ 
+ 	virt_pgd_alloc(vm, pgd_memslot);
+ 
++	if (data_memslot == pgd_memslot)
++		paddr_start = vm_phy_pages_alloc(vm, pages,
++				KVM_UTIL_MIN_PFN * vm->page_size, data_memslot);
++
+ 	/*
+ 	 * Find an unused range of virtual page addresses of at least
+ 	 * pages in length.
+@@ -1111,8 +1116,12 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+ 		pages--, vaddr += vm->page_size) {
+ 		vm_paddr_t paddr;
+ 
+-		paddr = vm_phy_page_alloc(vm,
+-				KVM_UTIL_MIN_PFN * vm->page_size, data_memslot);
++		if (paddr_start) {
++			paddr = paddr_start;
++			paddr_start += vm->page_size;
++		} else
++			paddr = vm_phy_page_alloc(vm,
++					KVM_UTIL_MIN_PFN * vm->page_size, data_memslot);
+ 
+ 		virt_pg_map(vm, vaddr, paddr, pgd_memslot);
+ 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
