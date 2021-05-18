@@ -2,145 +2,153 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5E55C433ED
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 May 2021 20:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B34D2C433B4
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 May 2021 20:09:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B128F6108D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 May 2021 20:07:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9883E61074
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 May 2021 20:09:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351983AbhERUIh (ORCPT
+        id S1352130AbhERUKv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 May 2021 16:08:37 -0400
-Received: from mga17.intel.com ([192.55.52.151]:15798 "EHLO mga17.intel.com"
+        Tue, 18 May 2021 16:10:51 -0400
+Received: from mga12.intel.com ([192.55.52.136]:15754 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232377AbhERUIg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 May 2021 16:08:36 -0400
-IronPort-SDR: 28vornXhaiRvCI6fNyQbmQzCB5gLsLlgEvpTe1Zcm72MMAWryOcHtjNqV1L9NUItrMUAg2SYwN
- TNi4TAUAfhqw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="181086085"
+        id S1352102AbhERUKi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 May 2021 16:10:38 -0400
+IronPort-SDR: 9huY8Zvhy3/tNAuN0Xvs7GxnmAKbc86oZWERgTVi/cAiv5XJOIaTDJ9qpvaD0H+gCR26ipN6i1
+ H0mdmVOf+WVg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="180411924"
 X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
-   d="scan'208";a="181086085"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 13:07:18 -0700
-IronPort-SDR: 8q7naH9q2EARr2Rc3CCYtIkYtCRSsVB8z+M4OQIkW3EPg5koHNgJqDne4Wg2bQpZ9IoJgUaNbo
- q6Cri0sDs4vQ==
+   d="scan'208";a="180411924"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 13:08:53 -0700
+IronPort-SDR: aZ787fBbkXxSb4U7Oa4YD08Hm9TwIROW959K/6dLV698am9hcH/Qk2KQ9hc0lCgizyNLYwkgB4
+ A5SOkI+YMC9A==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,310,1613462400"; 
-   d="scan'208";a="439268002"
-Received: from rchatre-mobl3.amr.corp.intel.com (HELO [10.212.164.215]) ([10.212.164.215])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2021 13:07:17 -0700
-Subject: Re: [PATCH v5 2/2] selftests/sgx: Migrate to kselftest harness
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20210512215323.420639-1-jarkko@kernel.org>
- <20210512215323.420639-2-jarkko@kernel.org>
- <3b920525-694c-a8e4-93f5-7b1a3f9ad009@intel.com>
- <YKP+CavM21klDHH8@kernel.org> <YKQcH2/5ENIp2Bps@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-Message-ID: <16d7588e-a44c-90c1-44be-3a9cca1dc913@intel.com>
-Date:   Tue, 18 May 2021 13:07:16 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <YKQcH2/5ENIp2Bps@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+   d="scan'208";a="394993623"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.175])
+  by orsmga006.jf.intel.com with ESMTP; 18 May 2021 13:08:53 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@suse.de, tglx@linutronix.de, mingo@kernel.org, luto@kernel.org,
+        x86@kernel.org
+Cc:     len.brown@intel.com, dave.hansen@intel.com, hjl.tools@gmail.com,
+        Dave.Martin@arm.com, jannh@google.com, mpe@ellerman.id.au,
+        carlos@redhat.com, tony.luck@intel.com, ravi.v.shankar@intel.com,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH v9 4/6] selftest/sigaltstack: Use the AT_MINSIGSTKSZ aux vector if available
+Date:   Tue, 18 May 2021 13:03:18 -0700
+Message-Id: <20210518200320.17239-5-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210518200320.17239-1-chang.seok.bae@intel.com>
+References: <20210518200320.17239-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkko,
+The SIGSTKSZ constant may not represent enough stack size in some
+architectures as the hardware state size grows.
 
-On 5/18/2021 12:57 PM, Jarkko Sakkinen wrote:
-> On Tue, May 18, 2021 at 08:49:00PM +0300, Jarkko Sakkinen wrote:
->> On Mon, May 17, 2021 at 10:03:42AM -0700, Reinette Chatre wrote:
->>> Hi Jarkko,
->>>
->>> On 5/12/2021 2:53 PM, Jarkko Sakkinen wrote:
->>>> Migrate to kselftest harness. Use a fixture test with enclave initialized
->>>> and de-initialized for each of the existing three tests, in other words:
->>>>
->>>> 1. One FIXTURE() for managing the enclave life-cycle.
->>>> 2. Three TEST_F()'s, one for each test case.
->>>>
->>>> This gives a leaps better reporting than before. Here's an example
->>>> transcript:
->>>>
->>>> TAP version 13
->>>> 1..3
->>>>
->>>> ok 1 enclave.unclobbered_vdso
->>>>
->>>> ok 2 enclave.clobbered_vdso
->>>>
->>>> ok 3 enclave.clobbered_vdso_and_user_function
->>>>
->>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>> ---
->>>>
->>>> v5:
->>>> * Use TH_LOG() for printing enclave address ranges instead of printf(),
->>>>     based on Reinette's remark.
->>>
->>> Thank you for considering my feedback. The motivation for my comment was to
->>> consider how this test output will be parsed. If these tests will have their
->>> output parsed by automated systems then it needs to conform to the TAP13
->>> format as supported by kselftest.
->>>
->>> In your latest version the output printed during a successful test has been
->>> changed, using TH_LOG() as you noted. From what I can tell this is the only
->>> output addressed - failing tests continue to print error messages (perror,
->>> fprintf) without consideration of how they will be parsed. My apologies, I
->>> am not a kselftest expert to know what the best way for this integration is.
->>>
->>> Reinette
->>
->> It's a valid question, yes.
->>
->> The problem is that only main.c can use kselftest macros because
->> kselftest_harness.h pulls
->>
->> static int test_harness_run(int __attribute__((unused)) argc,
->> 			    char __attribute__((unused)) **argv)
->>
->> which will not end up having a call site (because there's no
->> "TEST_HARNESS_MAIN").
->>
->> The whole logging thing in kselftest harness is a bit ambiguous.
->> Namely:
->>
->> 1. There's a macro TH_LOG() defined in kselftest_harness.h, which
->>     "internally" uses fprintf().
->> 2. There's an inline function ksft_print_msg() in kselftest.h
->>     using vsprintf().
->>
->> To add to that, kselftest_harness.h internally prints by using
->> ksft_print_msg(), and provides TH_LOG(), which does not use
->> ksft_print_msg().
->>
->> I don't really get the logic in all this.
-> 
-> I tried to split TH_LOG() as separate entity but it's not possible, as the
-> macros access a static variable called '_metadata'.
-> 
-> I'm not exactly sure how to proceed from this, if we want to make logging
-> consistent.
-> 
-> I would personally suggest to leave the error messages intact in load.c,
-> because there is no way to make them consistent, except by removing them.
+Use getauxval(AT_MINSIGSTKSZ) to increase the stack size.
 
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v5:
+* Added as a new patch.
+---
+ tools/testing/selftests/sigaltstack/sas.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-It is not clear to me why ksft_print_msg() cannot be used but an 
-alternative to it may be to just prefix all existing diagnostic messages 
-with "# ".
-
-Reinette
+diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+index 8934a3766d20..c53b070755b6 100644
+--- a/tools/testing/selftests/sigaltstack/sas.c
++++ b/tools/testing/selftests/sigaltstack/sas.c
+@@ -17,6 +17,7 @@
+ #include <string.h>
+ #include <assert.h>
+ #include <errno.h>
++#include <sys/auxv.h>
+ 
+ #include "../kselftest.h"
+ 
+@@ -24,6 +25,11 @@
+ #define SS_AUTODISARM  (1U << 31)
+ #endif
+ 
++#ifndef AT_MINSIGSTKSZ
++#define AT_MINSIGSTKSZ	51
++#endif
++
++static unsigned int stack_size;
+ static void *sstack, *ustack;
+ static ucontext_t uc, sc;
+ static const char *msg = "[OK]\tStack preserved";
+@@ -47,7 +53,7 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+ #endif
+ 
+ 	if (sp < (unsigned long)sstack ||
+-			sp >= (unsigned long)sstack + SIGSTKSZ) {
++			sp >= (unsigned long)sstack + stack_size) {
+ 		ksft_exit_fail_msg("SP is not on sigaltstack\n");
+ 	}
+ 	/* put some data on stack. other sighandler will try to overwrite it */
+@@ -108,6 +114,10 @@ int main(void)
+ 	stack_t stk;
+ 	int err;
+ 
++	/* Make sure more than the required minimum. */
++	stack_size = getauxval(AT_MINSIGSTKSZ) + SIGSTKSZ;
++	ksft_print_msg("[NOTE]\tthe stack size is %lu\n", stack_size);
++
+ 	ksft_print_header();
+ 	ksft_set_plan(3);
+ 
+@@ -117,7 +127,7 @@ int main(void)
+ 	sigaction(SIGUSR1, &act, NULL);
+ 	act.sa_sigaction = my_usr2;
+ 	sigaction(SIGUSR2, &act, NULL);
+-	sstack = mmap(NULL, SIGSTKSZ, PROT_READ | PROT_WRITE,
++	sstack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+ 		      MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+ 	if (sstack == MAP_FAILED) {
+ 		ksft_exit_fail_msg("mmap() - %s\n", strerror(errno));
+@@ -139,7 +149,7 @@ int main(void)
+ 	}
+ 
+ 	stk.ss_sp = sstack;
+-	stk.ss_size = SIGSTKSZ;
++	stk.ss_size = stack_size;
+ 	stk.ss_flags = SS_ONSTACK | SS_AUTODISARM;
+ 	err = sigaltstack(&stk, NULL);
+ 	if (err) {
+@@ -161,7 +171,7 @@ int main(void)
+ 		}
+ 	}
+ 
+-	ustack = mmap(NULL, SIGSTKSZ, PROT_READ | PROT_WRITE,
++	ustack = mmap(NULL, stack_size, PROT_READ | PROT_WRITE,
+ 		      MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
+ 	if (ustack == MAP_FAILED) {
+ 		ksft_exit_fail_msg("mmap() - %s\n", strerror(errno));
+@@ -170,7 +180,7 @@ int main(void)
+ 	getcontext(&uc);
+ 	uc.uc_link = NULL;
+ 	uc.uc_stack.ss_sp = ustack;
+-	uc.uc_stack.ss_size = SIGSTKSZ;
++	uc.uc_stack.ss_size = stack_size;
+ 	makecontext(&uc, switch_fn, 0);
+ 	raise(SIGUSR1);
+ 
+-- 
+2.17.1
 
