@@ -5,64 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFBCAC43460
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 May 2021 20:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B842FC433ED
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 May 2021 20:04:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94A27611C2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 May 2021 20:04:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 983FF611C2
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 May 2021 20:04:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbhESUFk (ORCPT
+        id S232987AbhESUFm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 May 2021 16:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        Wed, 19 May 2021 16:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232858AbhESUFZ (ORCPT
+        with ESMTP id S232861AbhESUFZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 19 May 2021 16:05:25 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BC1C0613ED
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 13:04:04 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id u7-20020a259b470000b02904dca50820c2so19422560ybo.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 13:04:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9920C061349
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 13:04:00 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e138-20020a25e7900000b029050df4b648fcso13313041ybh.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 May 2021 13:04:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=MjsFjVBl/FxOvPsR75EG0eCugTJDkb3SkVrZ8fG721M=;
-        b=spQmodnH3l9aCJPUDO3n5Znh2ZyIosaGKET15ANW77RodOarCKRMYdd4ZTT5Dgoc2k
-         Q4gX08tS5MxCuv/Rv2D9zK6mx0pptSUfomMvtiC0DKBscF7RNhNAJ8qBYhuNbU+KJzGD
-         9Di8fjJ16HT2NQ7g9Mylhd9Q4vBdD04+fGgLLFo0eDjpvWSuFHBCTuvHG5j7p7MiEgcB
-         nlHhRoPl/wldjZApTsit3FNusyqwxSfZqMO5YBm/DF1cpfS5jB5ral14SuCmUiyYDllQ
-         geaoVtg8aJuRrdHrE/1M/XsAjWrP2HqnJiPQ1zWuJIASN//juooGnCdv0WEiCYw1hQUJ
-         KtmQ==
+        bh=+vH9NHuZobMNOBjiXwWKSpovgFGP7trM8WRzRJ/VRx4=;
+        b=q8ppyhS5xrnmYCkA0DF/PWE6zwOmQ8XfGoSUSXC+uHfRxBj7Tjq6PR1g9Y4in96e+w
+         hW/Acm5ZWWGlteimLk6FW3+3936AwCaO8eFDI0qudA3fGQ8YacDePz45fJsQdSMbSFnQ
+         YnCpG7jC/fDysXx31BkV2fk5/NRPwdTAp0fFgSVNm3lG0875H2pigLIOPNCqdtSdl+eF
+         i9WUnuc1r74WlNBWZ6fyD+uYLVuHMGw1DZDE1qXcLoAIuLESnXAAWz6DnLZgC+K576ui
+         LG9fW+RBBpzWboPy+8mP1q1eFL4LjxOt7YN1lw5yFLYO8S0x/VSEECzyq2f8ul+kCWX8
+         ZWcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=MjsFjVBl/FxOvPsR75EG0eCugTJDkb3SkVrZ8fG721M=;
-        b=WvvcfZ81ngR1/9zoHCUEA5ccD+wkpH2bClFWx7FQyAfF1VnNHLijgD0BLfGNbgFHzw
-         F5t5MWKCoknSGTCB55rSW5EqUSaxeHedRn6ghCgI7lpLYDDUqKDBgohNjy8BZsVl77BZ
-         Aku4UF1cno6mmWrPd4Yd7NfKQ5JHG774sjYKHCHmvb8Iteg7J3jFlMOLDCWQzFjkJchP
-         L6i+8bdwCDMrluTL94oESBEYu9yN9InjIEzZqjPHzpa0TFoCQqChJZ4jqkYdxKcEdB2f
-         Kp0/tHnyhaETEkRJgNUOm1yptanbzv9NlG/4vCNF7aNRki+as1GQLjHU5Obc6AbXsWaa
-         0h3Q==
-X-Gm-Message-State: AOAM532Jz8KTtgUIkFLeP93AdtlyHHCa9g2srmw2Cqb+b+0OsVV1gtxu
-        Hh3huxlGu0vWhp1ESXni5ZWIRQObh5M0lb57DYPi
-X-Google-Smtp-Source: ABdhPJyHafljVkGdPjHHgSggwuGn/ncrKGDKCpO+1vhol0lzIU/n68KHpG5rQ7OquxgzaK0ZG9K7PUW6jHEH8izmySIR
+        bh=+vH9NHuZobMNOBjiXwWKSpovgFGP7trM8WRzRJ/VRx4=;
+        b=aadIKtscxDmPgzgy3iB8fSxU4SahoiEuXj8OGwfVARi0GPTVNceA6QlakmvOD2NCyN
+         Qt3ZTLpuotRpSNnSCbHD6Wiz95S7gA3aG3ucfPnJHgZxngRckxFe/pRobyiKsjNf8LDk
+         jE/7nQw/iUhYvYj1QVVJqlJ55lBIJAiGyk92bk5gaghFudX4DHDXhAA9KLW7NdndbNT2
+         Mpy+ICA+3ff5BKpCxCzp/6+GRajxfIrQIPidkJ8lCudZM6+4DixSgd4D7Qy0fLX3N9ZT
+         d1pYPDb620uLobhOgtwGm0/8kyKycx2ykYMuDu12vTT9luHpvL2Pgw1WHwUaTwXocxD6
+         c0iA==
+X-Gm-Message-State: AOAM531lGFSutbeIccsEKgHGGQm1v+Mu5i84maw4b/CiGmedgS7aHq9/
+        uaKTIpF0ktpBK+NfC62qNmdNDNNTlQViN30cW/zQ
+X-Google-Smtp-Source: ABdhPJwHYMyECmpSr3A5TbsZ6+n3J2NfFGIPiB9M6tWP02nSuwwmyrOmuhOgsH9zzCmbtmWH3vxPPlUV2uyLZ9xQWh4N
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:7eb5:10bb:834a:d5ec])
- (user=axelrasmussen job=sendgmr) by 2002:a25:ec02:: with SMTP id
- j2mr2058895ybh.248.1621454643850; Wed, 19 May 2021 13:04:03 -0700 (PDT)
-Date:   Wed, 19 May 2021 13:03:37 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a5b:7c5:: with SMTP id
+ t5mr1874753ybq.190.1621454640072; Wed, 19 May 2021 13:04:00 -0700 (PDT)
+Date:   Wed, 19 May 2021 13:03:35 -0700
 In-Reply-To: <20210519200339.829146-1-axelrasmussen@google.com>
-Message-Id: <20210519200339.829146-9-axelrasmussen@google.com>
+Message-Id: <20210519200339.829146-7-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20210519200339.829146-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-Subject: [PATCH v2 08/10] KVM: selftests: create alias mappings when using
- shared memory
+Subject: [PATCH v2 06/10] KVM: selftests: refactor vm_mem_backing_src_type flags
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Aaron Lewis <aaronlewis@google.com>,
         Alexander Graf <graf@amazon.com>,
@@ -85,126 +84,137 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a memory region is added with a src_type specifying that it should
-use some kind of shared memory, also create an alias mapping to the same
-underlying physical pages.
+Each struct vm_mem_backing_src_alias has a flags field, which denotes
+the flags used to mmap() an area of that type. Previously, this field
+never included MAP_PRIVATE | MAP_ANONYMOUS, because
+vm_userspace_mem_region_add assumed that *all* types would always use
+those flags, and so it hardcoded them.
 
-And, add an API so tests can get access to these alias addresses.
-Basically, for a guest physical address, let us look up the analogous
-host *alias* address.
+In a follow-up commit, we'll add a new type: shmem. Areas of this type
+must not have MAP_PRIVATE | MAP_ANONYMOUS, and instead they must have
+MAP_SHARED.
 
-In a future commit, we'll modify the demand paging test to take
-advantage of this to exercise UFFD minor faults. The idea is, we
-pre-fault the underlying pages *via the alias*. When the *guest*
-faults, it gets a "minor" fault (PTEs don't exist yet, but a page is
-already in the page cache). Then, the userfaultfd theads can handle the
-fault: they could potentially modify the underlying memory *via the
-alias* if they wanted to, and then they install the PTEs and let the
-guest carry on via a UFFDIO_CONTINUE ioctl.
+So, refactor things. Make it so that the flags field of
+struct vm_mem_backing_src_alias really is a complete set of flags, and
+don't add in any extras in vm_userspace_mem_region_add. This will let us
+easily tack on shmem.
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    | 51 +++++++++++++++++++
- .../selftests/kvm/lib/kvm_util_internal.h     |  2 +
- 3 files changed, 54 insertions(+)
+ tools/testing/selftests/kvm/lib/kvm_util.c  |  5 ++-
+ tools/testing/selftests/kvm/lib/test_util.c | 35 +++++++++++----------
+ 2 files changed, 21 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index a8f022794ce3..0624f25a6803 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -146,6 +146,7 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa);
- void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva);
- vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva);
-+void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa);
- 
- /*
-  * Address Guest Virtual to Guest Physical
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index e4a8d0c43c5e..0b88d1bbc1e0 100644
+index 0d6ddee429b9..bc405785ac8b 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -811,6 +811,19 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+@@ -759,9 +759,8 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
  
- 	/* Add to linked-list of memory regions. */
- 	list_add(&region->list, &vm->userspace_mem_regions);
-+
-+	/* If shared memory, create an alias. */
-+	if (region->fd >= 0) {
-+		region->mmap_alias = mmap(NULL, region->mmap_size,
-+					  PROT_READ | PROT_WRITE,
-+					  vm_mem_backing_src_alias(src_type)->flag,
-+					  region->fd, 0);
-+		TEST_ASSERT(region->mmap_alias != MAP_FAILED,
-+			    "mmap of alias failed, errno: %i", errno);
-+
-+		/* Align host alias address */
-+		region->host_alias = align(region->mmap_alias, alignment);
-+	}
- }
+ 	region->mmap_start = mmap(NULL, region->mmap_size,
+ 				  PROT_READ | PROT_WRITE,
+-				  MAP_PRIVATE | MAP_ANONYMOUS
+-				  | vm_mem_backing_src_alias(src_type)->flag,
+-				  -1, 0);
++				  vm_mem_backing_src_alias(src_type)->flag,
++				  region->fd, 0);
+ 	TEST_ASSERT(region->mmap_start != MAP_FAILED,
+ 		    "test_malloc failed, mmap_start: %p errno: %i",
+ 		    region->mmap_start, errno);
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 63d2bc7d757b..06ddde068736 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -168,70 +168,73 @@ size_t get_def_hugetlb_pagesz(void)
  
- /*
-@@ -1239,6 +1252,44 @@ vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva)
- 	return -1;
- }
- 
-+/*
-+ * Address VM physical to Host Virtual *alias*.
-+ *
-+ * Input Args:
-+ *   vm - Virtual Machine
-+ *   gpa - VM physical address
-+ *
-+ * Output Args: None
-+ *
-+ * Return:
-+ *   Equivalent address within the host virtual *alias* area, or NULL
-+ *   (without failing the test) if the guest memory is not shared (so
-+ *   no alias exists).
-+ *
-+ * When vm_create() and related functions are called with a shared memory
-+ * src_type, we also create a writable, shared alias mapping of the
-+ * underlying guest memory. This allows the host to manipulate guest memory
-+ * without mapping that memory in the guest's address space. And, for
-+ * userfaultfd-based demand paging, we can do so without triggering userfaults.
-+ */
-+void *addr_gpa2alias(struct kvm_vm *vm, vm_paddr_t gpa)
-+{
-+	struct userspace_mem_region *region;
+ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
+ {
++	static const int anon_flags = MAP_PRIVATE | MAP_ANONYMOUS;
++	static const int anon_huge_flags = anon_flags | MAP_HUGETLB;
 +
-+	list_for_each_entry(region, &vm->userspace_mem_regions, list) {
-+		if (!region->host_alias)
-+			continue;
-+
-+		if ((gpa >= region->region.guest_phys_addr)
-+			&& (gpa <= (region->region.guest_phys_addr
-+				+ region->region.memory_size - 1)))
-+			return (void *) ((uintptr_t) region->host_alias
-+				+ (gpa - region->region.guest_phys_addr));
-+	}
-+
-+	return NULL;
-+}
-+
- /*
-  * VM Create IRQ Chip
-  *
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util_internal.h b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
-index 91ce1b5d480b..a25af33d4a9c 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util_internal.h
-+++ b/tools/testing/selftests/kvm/lib/kvm_util_internal.h
-@@ -16,7 +16,9 @@ struct userspace_mem_region {
- 	int fd;
- 	off_t offset;
- 	void *host_mem;
-+	void *host_alias;
- 	void *mmap_start;
-+	void *mmap_alias;
- 	size_t mmap_size;
- 	struct list_head list;
- };
+ 	static const struct vm_mem_backing_src_alias aliases[] = {
+ 		[VM_MEM_SRC_ANONYMOUS] = {
+ 			.name = "anonymous",
+-			.flag = 0,
++			.flag = anon_flags,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_THP] = {
+ 			.name = "anonymous_thp",
+-			.flag = 0,
++			.flag = anon_flags,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB] = {
+ 			.name = "anonymous_hugetlb",
+-			.flag = MAP_HUGETLB,
++			.flag = anon_huge_flags,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16KB] = {
+ 			.name = "anonymous_hugetlb_16kb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_16KB,
++			.flag = anon_huge_flags | MAP_HUGE_16KB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_64KB] = {
+ 			.name = "anonymous_hugetlb_64kb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_64KB,
++			.flag = anon_huge_flags | MAP_HUGE_64KB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512KB] = {
+ 			.name = "anonymous_hugetlb_512kb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_512KB,
++			.flag = anon_huge_flags | MAP_HUGE_512KB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1MB] = {
+ 			.name = "anonymous_hugetlb_1mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_1MB,
++			.flag = anon_huge_flags | MAP_HUGE_1MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2MB] = {
+ 			.name = "anonymous_hugetlb_2mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_2MB,
++			.flag = anon_huge_flags | MAP_HUGE_2MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_8MB] = {
+ 			.name = "anonymous_hugetlb_8mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_8MB,
++			.flag = anon_huge_flags | MAP_HUGE_8MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16MB] = {
+ 			.name = "anonymous_hugetlb_16mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_16MB,
++			.flag = anon_huge_flags | MAP_HUGE_16MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_32MB] = {
+ 			.name = "anonymous_hugetlb_32mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_32MB,
++			.flag = anon_huge_flags | MAP_HUGE_32MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_256MB] = {
+ 			.name = "anonymous_hugetlb_256mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_256MB,
++			.flag = anon_huge_flags | MAP_HUGE_256MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_512MB] = {
+ 			.name = "anonymous_hugetlb_512mb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_512MB,
++			.flag = anon_huge_flags | MAP_HUGE_512MB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_1GB] = {
+ 			.name = "anonymous_hugetlb_1gb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_1GB,
++			.flag = anon_huge_flags | MAP_HUGE_1GB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_2GB] = {
+ 			.name = "anonymous_hugetlb_2gb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_2GB,
++			.flag = anon_huge_flags | MAP_HUGE_2GB,
+ 		},
+ 		[VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB] = {
+ 			.name = "anonymous_hugetlb_16gb",
+-			.flag = MAP_HUGETLB | MAP_HUGE_16GB,
++			.flag = anon_huge_flags | MAP_HUGE_16GB,
+ 		},
+ 	};
+ 	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
 -- 
 2.31.1.751.gd2f1c929bd-goog
 
