@@ -2,79 +2,55 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5046BC47080
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Jun 2021 00:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5737BC47083
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Jun 2021 08:57:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30921613BC
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Jun 2021 00:00:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B5FB613D7
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Jun 2021 08:57:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbhFBABq (ORCPT
+        id S232934AbhFBI66 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Jun 2021 20:01:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54920 "EHLO mail.kernel.org"
+        Wed, 2 Jun 2021 04:58:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235213AbhFBABq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Jun 2021 20:01:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4AD0F613AE;
-        Wed,  2 Jun 2021 00:00:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622592004;
-        bh=eQ6Fp0dEwGHmiZDqLfsGa4lQFLr/JX9opQed8/5ImNA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=i3Zz6zZfvUSDsTFSmXDkCrzCmXnsC5/sueIAy9Ol9Pl0zvVjPtiu/0P/8OYNyi54F
-         ayzZhIu7NKt/HC136K1MRdrqSby8Yx57yjfpnoILiACKREkTBFtwUL6wiSFUPq1op2
-         qYk3aZxzIhrB9nZgd/fV5fH/A+1GjGX8P3paVU31XGQH0PP/2awzmOsn1QVRiKp4ui
-         +9zSeiujRsdWZpgA7gSYVBWbBXHjW/r7WNgdQ7EaZbuxnGl5fZI/mX3k2Pdoi66lqJ
-         UuMzQQwdNQqJqrxgrrGVgSm91/WqAGemXWflGAknxxRGb7Os98eG1xfw10oJ6LJEjk
-         GeTiKh4Uy+YZg==
-Content-Type: text/plain; charset="utf-8"
+        id S231462AbhFBI65 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Jun 2021 04:58:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EB82B613D5;
+        Wed,  2 Jun 2021 08:57:12 +0000 (UTC)
+Date:   Wed, 2 Jun 2021 10:57:10 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        akpm@linux-foundation.org,
+        Alexey Gladkov <gladkov.alexey@gmail.com>
+Subject: Re: [PATCH] proc: Add .gitignore for proc-subset-pid selftest
+Message-ID: <20210602085710.kp26wquy6anwy5kd@wittgenstein>
+References: <20210601164305.11776-1-dmatlack@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/3] net/sched: act_vlan: Fix modify to allow 0
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162259200425.18494.7708189927860051377.git-patchwork-notify@kernel.org>
-Date:   Wed, 02 Jun 2021 00:00:04 +0000
-References: <20210601123052.3887-1-boris.sukholitko@broadcom.com>
-In-Reply-To: <20210601123052.3887-1-boris.sukholitko@broadcom.com>
-To:     Boris Sukholitko <boris.sukholitko@broadcom.com>
-Cc:     netdev@vger.kernel.org, jhs@mojatatu.com, jiri@resnulli.us,
-        xiyou.wangcong@gmail.com, davem@davemloft.net,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        ilya.lifshits@broadcom.com, shmulik.ladkani@gmail.com,
-        kuba@kernel.org, dcaratti@redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210601164305.11776-1-dmatlack@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (refs/heads/master):
-
-On Tue,  1 Jun 2021 15:30:49 +0300 you wrote:
-> Currently vlan modification action checks existence of vlan priority by
-> comparing it to 0. Therefore it is impossible to modify existing vlan
-> tag to have priority 0.
+On Tue, Jun 01, 2021 at 04:43:05PM +0000, David Matlack wrote:
+> This new selftest needs an entry in the .gitignore file otherwise git
+> will try to track the binary.
 > 
-> For example, the following tc command will change the vlan id but will
-> not affect vlan priority:
-> 
-> [...]
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
 
-Here is the summary with links:
-  - [net-next,v4,1/3] net/sched: act_vlan: Fix modify to allow 0
-    https://git.kernel.org/netdev/net-next/c/9c5eee0afca0
-  - [net-next,v4,2/3] net/sched: act_vlan: No dump for unset priority
-    https://git.kernel.org/netdev/net-next/c/8323b20f1d76
-  - [net-next,v4,3/3] net/sched: act_vlan: Test priority 0 modification
-    https://git.kernel.org/netdev/net-next/c/8fd52b1f923c
+Could use a
+Cc: stable@kernel.org
+link but Shuah might be able to fix this when applying.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Otherwise looks good,
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
