@@ -2,56 +2,52 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4923C47082
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E867C4743D
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C862661406
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0651161406
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbhFENU1 (ORCPT
+        id S230149AbhFENU1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Sat, 5 Jun 2021 09:20:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35038 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230050AbhFENU0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S230075AbhFENU0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Sat, 5 Jun 2021 09:20:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B7676140C;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD8806141D;
         Sat,  5 Jun 2021 13:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1622899117;
-        bh=oJLjhT+Bdkuogp9lcH0/DqQMHssScmlrFluWHGdXmSs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KfRX9ZYH+GSgzlTzpxjctPEmvJkfTKXl+Y+RucBzSz4WBnbvAWthrJ/curB8ax41d
-         0RamzCUbuHW+hNvsvxFRNLKpwhOj6yb5j+G4AvESC4L/Ra8OFvHySvf0In/pjnoYho
-         eY0513uUzhTlAd81LYiZhM6d2eqjTpr7yOp0/3DCmJ+GuyAF6WqO8Qm1KuhLNbxF9b
-         yJTI8f1KZmiDb5cy+VNqUfelbe5X2IHFBMjmYFqyjzC6dFH+JcvuqE43jlUMhFuRed
-         3tc3s4M5VtPfikIOxkkQLqaG0CgwsjLGBqPIdOsXSEfmrN3+1RgsbpsRRxwHBsB0s5
-         0vEzE1EocfgEA==
+        bh=8FIU5oloXIxFQPT5Oqu0wljdU17rOWDA/tyl1oWHeBs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eJSFRn4i9jgpaqksRoDa4HR9CyDcTZQqs/SJj44o4mZQosdQI8Tt1sjn8HATY8GKT
+         ZBPMHFSRcwxX3cU8zaYAzwoDRsG2Bm1DiaI7l16M6YOEgPAnixrdKFFvqQAi9YCvpI
+         UZkz1sQ0hnS7xfICFJoqUcGgrI2dg23S/HPjLNVOc5tRA4va620scixyN2CFt6ecxH
+         ennIRq2sbMPRPfOo3DgiLvx2MqEQ+9aZO/Z3dn2EpMBmzfAl8hZZRXSHQYy3KGDpJk
+         BLKPAt4oUl2gsqDpidP8w31ib5UNktlc02blQXhsIq0OeJSoG9Zf6SHcCdWQbzSh0d
+         NaVhjBUri6x1w==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lpWCB-008GEU-71; Sat, 05 Jun 2021 15:18:35 +0200
+        id 1lpWCB-008GFN-SZ; Sat, 05 Jun 2021 15:18:35 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     "Jonathan Corbet" <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Date:   Sat,  5 Jun 2021 15:17:59 +0200
-Message-Id: <cover.1622898327.git.mchehab+huawei@kernel.org>
+        Brendan Higgins <brendanhiggins@google.com>,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 14/34] docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+Date:   Sat,  5 Jun 2021 15:18:13 +0200
+Message-Id: <a3ad84108a5b254e545f88e58d411f5fe2e25c7e.1622898327.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1622898327.git.mchehab+huawei@kernel.org>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -59,153 +55,137 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As discussed at:
-	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+The :doc:`foo` tag is auto-generated via automarkup.py.
+So, use the filename at the sources, instead of :doc:`foo`.
 
-It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
-automarkup.py extension should handle it automatically, on most cases.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/dev-tools/kunit/faq.rst   |  2 +-
+ Documentation/dev-tools/kunit/index.rst | 14 +++++++-------
+ Documentation/dev-tools/kunit/start.rst |  6 +++---
+ Documentation/dev-tools/kunit/tips.rst  |  5 +++--
+ Documentation/dev-tools/kunit/usage.rst |  8 +++++---
+ 5 files changed, 19 insertions(+), 16 deletions(-)
 
-There are a couple of exceptions to this rule:
-
-1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-
-It should also be noticed that automarkup.py has currently an issue:
-if one use a markup like:
-
-	Documentation/dev-tools/kunit/api/test.rst
-	  - documents all of the standard testing API excluding mocking
-	    or mocking related features.
-
-or, even:
-
-	Documentation/dev-tools/kunit/api/test.rst
-	    documents all of the standard testing API excluding mocking
-	    or mocking related features.
-	
-The automarkup.py will simply ignore it. Not sure why. This patch series
-avoid the above patterns (which is present only on 4 files), but it would be
-nice to have a followup patch fixing the issue at automarkup.py.
-
-On this series:
-
-Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
-as there it uses :file:`foo` to refer to some Documentation/ files;
-
-Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
-into a list, carefully avoiding the 
-
-Patch 3 converts the cross-references at the media documentation, also
-avoiding the automarkup.py bug;
-
-Patches 4-34 convert the other occurrences via a replace script. They were
-manually edited, in order to honour 80-columns where possible.
-
-I did a diff between the Sphinx 2.4.4 output before and after this patch
-series in order to double-check that all converted Documentation/ 
-references will produce <a href=<foo>.rst>foo title</a> tags.
-
-Mauro Carvalho Chehab (34):
-  docs: devices.rst: better reference documentation docs
-  docs: dev-tools: kunit: don't use a table for docs name
-  media: docs: */media/index.rst: don't use ReST doc:`foo`
-  media: userspace-api: avoid using ReST :doc:`foo` markup
-  media: driver-api: drivers: avoid using ReST :doc:`foo` markup
-  media: admin-guide: avoid using ReST :doc:`foo` markup
-  docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
-  docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
-  docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
-  docs: block: biodoc.rst: avoid using ReSt :doc:`foo` markup
-  docs: bpf: bpf_lsm.rst: avoid using ReSt :doc:`foo` markup
-  docs: core-api: avoid using ReSt :doc:`foo` markup
-  docs: dev-tools: testing-overview.rst: avoid using ReSt :doc:`foo`
-    markup
-  docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
-  docs: devicetree: bindings: submitting-patches.rst: avoid using ReSt
-    :doc:`foo` markup
-  docs: doc-guide: avoid using ReSt :doc:`foo` markup
-  docs: driver-api: avoid using ReSt :doc:`foo` markup
-  docs: driver-api: gpio: using-gpio.rst: avoid using ReSt :doc:`foo`
-    markup
-  docs: driver-api: surface_aggregator: avoid using ReSt :doc:`foo`
-    markup
-  docs: driver-api: usb: avoid using ReSt :doc:`foo` markup
-  docs: firmware-guide: acpi: avoid using ReSt :doc:`foo` markup
-  docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
-  docs: i2c: avoid using ReSt :doc:`foo` markup
-  docs: kernel-hacking: hacking.rst: avoid using ReSt :doc:`foo` markup
-  docs: networking: devlink: avoid using ReSt :doc:`foo` markup
-  docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReSt :doc:`foo`
-    markup
-  docs: PCI: pci.rst: avoid using ReSt :doc:`foo` markup
-  docs: process: submitting-patches.rst: avoid using ReSt :doc:`foo`
-    markup
-  docs: security: landlock.rst: avoid using ReSt :doc:`foo` markup
-  docs: trace: coresight: coresight.rst: avoid using ReSt :doc:`foo`
-    markup
-  docs: trace: ftrace.rst: avoid using ReSt :doc:`foo` markup
-  docs: userspace-api: landlock.rst: avoid using ReSt :doc:`foo` markup
-  docs: virt: kvm: s390-pv-boot.rst: avoid using ReSt :doc:`foo` markup
-  docs: x86: avoid using ReSt :doc:`foo` markup
-
- .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
- Documentation/PCI/pci.rst                     |  6 +--
- .../special-register-buffer-data-sampling.rst |  3 +-
- Documentation/admin-guide/media/bt8xx.rst     | 15 ++++----
- Documentation/admin-guide/media/bttv.rst      | 21 ++++++-----
- Documentation/admin-guide/media/index.rst     | 12 +++---
- Documentation/admin-guide/media/saa7134.rst   |  3 +-
- Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
- Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
- Documentation/admin-guide/sysctl/abi.rst      |  2 +-
- Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
- Documentation/block/biodoc.rst                |  2 +-
- Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
- .../core-api/bus-virt-phys-mapping.rst        |  2 +-
- Documentation/core-api/dma-api.rst            |  5 ++-
- Documentation/core-api/dma-isa-lpc.rst        |  2 +-
- Documentation/core-api/index.rst              |  4 +-
- Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
- Documentation/dev-tools/kunit/faq.rst         |  2 +-
- Documentation/dev-tools/kunit/index.rst       | 14 +++----
- Documentation/dev-tools/kunit/start.rst       |  6 +--
- Documentation/dev-tools/kunit/tips.rst        |  5 ++-
- Documentation/dev-tools/kunit/usage.rst       |  8 ++--
- Documentation/dev-tools/testing-overview.rst  | 16 ++++----
- .../bindings/submitting-patches.rst           | 11 +++---
- Documentation/doc-guide/contributing.rst      |  8 ++--
- Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
- Documentation/driver-api/ioctl.rst            |  2 +-
- .../driver-api/media/drivers/bttv-devel.rst   |  2 +-
- Documentation/driver-api/media/index.rst      | 10 +++--
- Documentation/driver-api/pm/devices.rst       |  8 ++--
- .../surface_aggregator/clients/index.rst      |  3 +-
- .../surface_aggregator/internal.rst           | 15 ++++----
- .../surface_aggregator/overview.rst           |  6 ++-
- Documentation/driver-api/usb/dma.rst          |  6 +--
- .../acpi/dsd/data-node-references.rst         |  3 +-
- .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
- .../firmware-guide/acpi/enumeration.rst       |  7 ++--
- Documentation/hwmon/adm1177.rst               |  3 +-
- Documentation/i2c/instantiating-devices.rst   |  2 +-
- Documentation/i2c/old-module-parameters.rst   |  3 +-
- Documentation/i2c/smbus-protocol.rst          |  4 +-
- Documentation/kernel-hacking/hacking.rst      |  4 +-
- .../networking/devlink/devlink-region.rst     |  2 +-
- .../networking/devlink/devlink-trap.rst       |  4 +-
- Documentation/process/submitting-patches.rst  | 32 ++++++++--------
- Documentation/security/landlock.rst           |  3 +-
- Documentation/trace/coresight/coresight.rst   |  8 ++--
- Documentation/trace/ftrace.rst                |  2 +-
- Documentation/userspace-api/landlock.rst      | 11 +++---
- .../userspace-api/media/glossary.rst          |  2 +-
- Documentation/userspace-api/media/index.rst   | 12 +++---
- Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
- Documentation/x86/boot.rst                    |  4 +-
- Documentation/x86/mtrr.rst                    |  2 +-
- 55 files changed, 217 insertions(+), 183 deletions(-)
-
+diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
+index 8d5029ad210a..5c6555d020f3 100644
+--- a/Documentation/dev-tools/kunit/faq.rst
++++ b/Documentation/dev-tools/kunit/faq.rst
+@@ -97,7 +97,7 @@ things to try.
+    modules will automatically execute associated tests when loaded. Test results
+    can be collected from ``/sys/kernel/debug/kunit/<test suite>/results``, and
+    can be parsed with ``kunit.py parse``. For more details, see "KUnit on
+-   non-UML architectures" in :doc:`usage`.
++   non-UML architectures" in Documentation/dev-tools/kunit/usage.rst.
+ 
+ If none of the above tricks help, you are always welcome to email any issues to
+ kunit-dev@googlegroups.com.
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index 848478838347..25d92a9a05ea 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -36,7 +36,7 @@ To make running these tests (and reading the results) easier, KUnit offers
+ results. This provides a quick way of running KUnit tests during development,
+ without requiring a virtual machine or separate hardware.
+ 
+-Get started now: :doc:`start`
++Get started now: Documentation/dev-tools/kunit/start.rst
+ 
+ Why KUnit?
+ ==========
+@@ -88,9 +88,9 @@ it takes to read their test log?
+ How do I use it?
+ ================
+ 
+-*   :doc:`start` - for new users of KUnit
+-*   :doc:`tips` - for short examples of best practices
+-*   :doc:`usage` - for a more detailed explanation of KUnit features
+-*   :doc:`api/index` - for the list of KUnit APIs used for testing
+-*   :doc:`kunit-tool` - for more information on the kunit_tool helper script
+-*   :doc:`faq` - for answers to some common questions about KUnit
++*   Documentation/dev-tools/kunit/start.rst - for new users of KUnit
++*   Documentation/dev-tools/kunit/tips.rst - for short examples of best practices
++*   Documentation/dev-tools/kunit/usage.rst - for a more detailed explanation of KUnit features
++*   Documentation/dev-tools/kunit/api/index.rst - for the list of KUnit APIs used for testing
++*   Documentation/dev-tools/kunit/kunit-tool.rst - for more information on the kunit_tool helper script
++*   Documentation/dev-tools/kunit/faq.rst - for answers to some common questions about KUnit
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 0e65cabe08eb..ee21e482a0de 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -21,7 +21,7 @@ The wrapper can be run with:
+ 	./tools/testing/kunit/kunit.py run
+ 
+ For more information on this wrapper (also called kunit_tool) check out the
+-:doc:`kunit-tool` page.
++Documentation/dev-tools/kunit/kunit-tool.rst page.
+ 
+ Creating a .kunitconfig
+ -----------------------
+@@ -234,7 +234,7 @@ Congrats! You just wrote your first KUnit test!
+ 
+ Next Steps
+ ==========
+-*   Check out the :doc:`tips` page for tips on
++*   Check out the Documentation/dev-tools/kunit/tips.rst page for tips on
+     writing idiomatic KUnit tests.
+-*   Optional: see the :doc:`usage` page for a more
++*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
+     in-depth explanation of KUnit.
+diff --git a/Documentation/dev-tools/kunit/tips.rst b/Documentation/dev-tools/kunit/tips.rst
+index 8d8c238f7f79..492d2ded2f5a 100644
+--- a/Documentation/dev-tools/kunit/tips.rst
++++ b/Documentation/dev-tools/kunit/tips.rst
+@@ -125,7 +125,8 @@ Here's a slightly in-depth example of how one could implement "mocking":
+ 
+ 
+ Note: here we're able to get away with using ``test->priv``, but if you wanted
+-something more flexible you could use a named ``kunit_resource``, see :doc:`api/test`.
++something more flexible you could use a named ``kunit_resource``, see
++Documentation/dev-tools/kunit/api/test.rst.
+ 
+ Failing the current test
+ ------------------------
+@@ -185,5 +186,5 @@ Alternatively, one can take full control over the error message by using ``KUNIT
+ 
+ Next Steps
+ ==========
+-*   Optional: see the :doc:`usage` page for a more
++*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
+     in-depth explanation of KUnit.
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 650f99590df5..3ee7ab91f712 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -10,7 +10,7 @@ understand it. This guide assumes a working knowledge of the Linux kernel and
+ some basic knowledge of testing.
+ 
+ For a high level introduction to KUnit, including setting up KUnit for your
+-project, see :doc:`start`.
++project, see Documentation/dev-tools/kunit/start.rst.
+ 
+ Organization of this document
+ =============================
+@@ -99,7 +99,8 @@ violated; however, the test will continue running, potentially trying other
+ expectations until the test case ends or is otherwise terminated. This is as
+ opposed to *assertions* which are discussed later.
+ 
+-To learn about more expectations supported by KUnit, see :doc:`api/test`.
++To learn about more expectations supported by KUnit, see
++Documentation/dev-tools/kunit/api/test.rst.
+ 
+ .. note::
+    A single test case should be pretty short, pretty easy to understand,
+@@ -216,7 +217,8 @@ test suite in a special linker section so that it can be run by KUnit either
+ after late_init, or when the test module is loaded (depending on whether the
+ test was built in or not).
+ 
+-For more information on these types of things see the :doc:`api/test`.
++For more information on these types of things see the
++Documentation/dev-tools/kunit/api/test.rst.
+ 
+ Common Patterns
+ ===============
 -- 
 2.31.1
-
 
