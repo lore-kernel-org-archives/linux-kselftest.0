@@ -2,190 +2,128 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F93C48BC2
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 15:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B22A7C47082
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 15:44:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 474CE613EF
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 15:27:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9855E613EF
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Jun 2021 15:44:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbhFEP3l (ORCPT
+        id S229931AbhFEPqg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 5 Jun 2021 11:29:41 -0400
-Received: from mout.gmx.net ([212.227.15.18]:42997 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229930AbhFEP3k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Jun 2021 11:29:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1622906786;
-        bh=V+/W+fEoSiOjB3w8FDJE2wQ1DNe8mLPtzk6quPwutvo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=iojLmS3oTN1DZsuRR/9kSaXZCGZfZFJdGoPfE4LYE35NzhqE+PH0i8QWuoSoO3ig4
-         0JngVPtJQX19ChfEqfqd/uYPbTfQMIgFOXT9yfcsDzgp5iQWkZ6M5rdwdgYtppmBQ+
-         AgsMyUCQsUzlrWcQ2uUUGoVQflciOPKlRo41cXxA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([83.52.228.41]) by mail.gmx.net
- (mrgmx005 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1MxUnz-1lQzxz0ynB-00xwA9; Sat, 05 Jun 2021 17:26:26 +0200
-From:   John Wood <john.wood@gmx.com>
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     John Wood <john.wood@gmx.com>, Andi Kleen <ak@linux.intel.com>,
-        valdis.kletnieks@vt.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com
-Subject: [PATCH v8 1/8] security: Add LSM hook at the point where a task gets a fatal signal
-Date:   Sat,  5 Jun 2021 17:03:58 +0200
-Message-Id: <20210605150405.6936-2-john.wood@gmx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210605150405.6936-1-john.wood@gmx.com>
-References: <20210605150405.6936-1-john.wood@gmx.com>
+        Sat, 5 Jun 2021 11:46:36 -0400
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:36446 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229930AbhFEPqf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 5 Jun 2021 11:46:35 -0400
+Received: by mail-wm1-f45.google.com with SMTP id n17-20020a7bc5d10000b0290169edfadac9so9675688wmk.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 05 Jun 2021 08:44:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=clvSa+JvU6uBZ+o4YWIoUVY1T/E/2QPROQXufQI5L34=;
+        b=T0g+7NMfdg+/GWUIM/XuSqgrwASyZbRCGDGVNvTo3QwR7HHSOvoJeV5wwnhAYyEu8p
+         lNCqV8yQ7QZXDNGNVrsstpm1xDzeS/IWZMneJbjVR+IHlGfredBoI6hFBgUpSnP1+rcw
+         lPRPTiKnOkt32MhcYup1zoHo6FabIXls9uVdcH8vAJ++OGYRgSsDqb5sCZYbbDgOHYI6
+         h1BMPdgCtpaVHpGaoFHrUaKGqsD5sauVVUh/AxjDkxobKYd+46Q+iYA+e4fO2kSeqB1k
+         trU0dGYNFBnEOSl22Uu/TgW1U4k+IVbgIlUDqqcX5K/6JMdMM/BI2Kmydu2ehZunaF0u
+         ESWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=clvSa+JvU6uBZ+o4YWIoUVY1T/E/2QPROQXufQI5L34=;
+        b=ApqCgb5Snko0I3BoS4cYSbQl5ulbiagwDWw7DMh3lF+AB7M2SMYd+Oexmp3Nb7vKkr
+         IwucgFb7ccehLfNvHqN8np0WjPLmEHsxu5tXJxnfZChJ+h90aJW90R8GJse2vMaM4RHs
+         dj61JbxODchnFtxy5P6AtzbK4J0VQt7984EW+Z8XmA5HzsgoSqbThvbNSregs8dKwif7
+         c2EwW1invxJD1qrauCZ2a+Tz4Vhre4OD2189qGIm6xJk1Up5jwTJpEw0w6VBFdhoRp7+
+         nlgOHs+Zx2lIZdAogp7yIyGT9fObsT1Ey0bFvZG7fsbiYThH0GEdTL2Y/l94wri7Ia5w
+         yO6g==
+X-Gm-Message-State: AOAM530L/WE+qIe3aGjHXUJNwS18mE7v5HAeSUGdOpdeY+GdvARiyUTo
+        m8ze+85hXrevkKrbH/d8yAeY1alxMyJXthOBhPAvMg==
+X-Google-Smtp-Source: ABdhPJw4Dw/ErnZ+CAGXFG16Mr96Iq3PCkOCpBV8t6JOv8RyD39fk8GHFGJiW0cDt6C2hHns9FgdWJ5t4GAeTvXvhxo=
+X-Received: by 2002:a1c:1dd3:: with SMTP id d202mr8688712wmd.78.1622907813308;
+ Sat, 05 Jun 2021 08:43:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AXIG8C6g+ihrnMi0Z4HkpARpgiKyCwVIo4zDsrAYAVY7GlNoZU6
- 7O/98xMjJRXPp5Qat/wXAqITJjdc3Cg9KVDUkv9jMTAC4TmaJiwFSk+4T6TOSiObnjiNVug
- 5nZhRlb2yHN0s2og2Qe+i3xYhvcGTiItAt6TDApjVwCMOjKleIr60AAiwo95nL9p1fVQ/6I
- S8e6Adp97nN0pqVcqVFpQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+rmuCovomkA=:ToTPjaCqTPRANlpKwgY+BI
- Td9B1Od85sW7rN2BHlZx0S9yGMlNrRoNPYKw30EdwZpFQCw0MJ1R0CK7jNGYsnXyO/JWmtABx
- BP8IkODttWs14kSIcSCNKNy4q9JWsUjjZTaSYWrXwi64xsSYLhWaaddKFpk8MUuuvSv9uqJAX
- E/hUUtc0B9GArMYdIA78pHLTWuSIdCh8Q6yZFjSzqfSAR3zBStXRTFgc6GEb7llc9k4u8FD+R
- XtlGDWysWOLPvtgnghV5DjcNE6AUKsVR7/3NR/PDlkpUufHxi09Ppq7iL9YoFl0WE5upzqFIj
- q2ZzkVHB18mUQ06x7p6IFopYkvLGrVWFazETXmveEJbPqu/5Xu7Riy03cOUfz3v11HrIzMpMz
- +aIux0EuCwEfa60cVU4z8Nv7Zm4W7JsHaheyBhL6dxdOf/4gr4Hgajen8Eh3d8F6FbVSPOsxt
- s6Uybc/P9ER94vsN5/ev4rT+BM0jb2diW8cHTOUaV3rYTpxStwxWfbvo2PowP9gpvZVXNz+hx
- TSva2yUeepFKks37O8PHbO7IArxS+MAlRplA68Dn18k9iGuaEofOOzhOSpZcTTyMvillCS1iM
- xqv87MAi6Ut/ohkzwdAmStfNxUwBmvnY7nV9e8iChfcxFcplTo9Rx6RldUnyeSImra4jB7Vzx
- RpXyAAGqsDguITO8wNAo58W2qV5VbIh+W+g4Bv/8q+pxIopd3BEaf7KRG3D8XZq/xwcthsF6j
- wqyLd1NJlM3kM3uZl0ZVlHGMTBb4M37rkjQU5DqMJuu5YsZffDQO5e6ZNnBtcnt+pa8zge1yT
- auceOueO8F+cLAD8VsMsN/Y5wu6H3S0/kPvI24SydTLiJRY6XYuHqkDh2qVoyPCJnfkeGgDa7
- l+JKO2UYiadlnCcOEv/DRYUnCcD3MQAWGmIgoIUXbLesQfwXrIwoUVlqfxVLY+/2X5KxnltMR
- lU21EnKuEaYy41oQ7lvgOfWYYsSQ4i/w/egMQ05Hi30jVL3FoXlaWlI9UMRBTcs13VMp4M3JP
- cpn10EqaCybbccD3nURqqCVccxWiBfvbdBPp/8NvdtR7Uibubz38DMLWBhCZoPwm+Cn4J4NwY
- 1+oTCRz76ExaLmdSmDYJMKJUpA2ai+aDo4z
+References: <cover.1622898327.git.mchehab+huawei@kernel.org> <08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab+huawei@kernel.org>
+In-Reply-To: <08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab+huawei@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 5 Jun 2021 23:43:22 +0800
+Message-ID: <CABVgOSmheB_f5gNc_zyuDHrwdRs_x_osutorJbLUMGpRRU4nzA@mail.gmail.com>
+Subject: Re: [PATCH 02/34] docs: dev-tools: kunit: don't use a table for docs name
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a security hook that allows a LSM to be notified when a task gets a
-fatal signal. This patch is a previous step on the way to compute the
-task crash period by the "brute" LSM (linux security module to detect
-and mitigate fork brute force attack against vulnerable userspace
-processes).
+On Sat, Jun 5, 2021 at 9:18 PM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> We'll be replacing :doc:`foo` references to
+> Documentation/foo.rst. Yet, here it happens inside a table.
+> Doing a search-and-replace would break it.
+>
+> Yet, as there's no good reason to use a table there,
+> let's just convert it into a list.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
 
-Signed-off-by: John Wood <john.wood@gmx.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-=2D--
- include/linux/lsm_hook_defs.h | 1 +
- include/linux/lsm_hooks.h     | 4 ++++
- include/linux/security.h      | 4 ++++
- kernel/signal.c               | 1 +
- security/security.c           | 5 +++++
- 5 files changed, 15 insertions(+)
+While I personally quite like the look of the table when rendered by
+Sphinx, I think the list is much more readable as plain-text, so this
+is okay by me.
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 04c01794de83..e28468e84300 100644
-=2D-- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -225,6 +225,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigne=
-d long arg2,
- 	 unsigned long arg3, unsigned long arg4, unsigned long arg5)
- LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
- 	 struct inode *inode)
-+LSM_HOOK(void, LSM_RET_VOID, task_fatal_signal, const kernel_siginfo_t *s=
-iginfo)
- LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
- LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
- 	 u32 *secid)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 5c4c5c0602cb..fc8bef0f15d9 100644
-=2D-- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -799,6 +799,10 @@
-  *	security attributes, e.g. for /proc/pid inodes.
-  *	@p contains the task_struct for the task.
-  *	@inode contains the inode structure for the inode.
-+ * @task_fatal_signal:
-+ *	This hook allows security modules to be notified when a task gets a
-+ *	fatal signal.
-+ *	@siginfo contains the signal information.
-  *
-  * Security hooks for Netlink messaging.
-  *
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 06f7c50ce77f..609c76c6c764 100644
-=2D-- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -433,6 +433,7 @@ int security_task_kill(struct task_struct *p, struct k=
-ernel_siginfo *info,
- int security_task_prctl(int option, unsigned long arg2, unsigned long arg=
-3,
- 			unsigned long arg4, unsigned long arg5);
- void security_task_to_inode(struct task_struct *p, struct inode *inode);
-+void security_task_fatal_signal(const kernel_siginfo_t *siginfo);
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
- void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
- int security_msg_msg_alloc(struct msg_msg *msg);
-@@ -1183,6 +1184,9 @@ static inline int security_task_prctl(int option, un=
-signed long arg2,
- static inline void security_task_to_inode(struct task_struct *p, struct i=
-node *inode)
- { }
+That being said, a definition list[1] seems like it should be better
+still, though I can't get it to work with the kernel's Sphinx
+configuration, so let's stick with this for now. (Given we've only got
+one page of documentation here, the whole thing doesn't matter much
+anyway.)
 
-+static inline void security_task_fatal_signal(const kernel_siginfo_t *sig=
-info)
-+{ }
-+
- static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
- 					  short flag)
- {
-diff --git a/kernel/signal.c b/kernel/signal.c
-index f7c6ffcbd044..4380763b3d8d 100644
-=2D-- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2804,6 +2804,7 @@ bool get_signal(struct ksignal *ksig)
- 		/*
- 		 * Anything else is fatal, maybe with a core dump.
- 		 */
-+		security_task_fatal_signal(&ksig->info);
- 		current->flags |=3D PF_SIGNALED;
+Reviewed-by: David Gow <davidgow@google.com>
 
- 		if (sig_kernel_coredump(signr)) {
-diff --git a/security/security.c b/security/security.c
-index b38155b2de83..208e3e7d4284 100644
-=2D-- a/security/security.c
-+++ b/security/security.c
-@@ -1891,6 +1891,11 @@ void security_task_to_inode(struct task_struct *p, =
-struct inode *inode)
- 	call_void_hook(task_to_inode, p, inode);
- }
+Cheers,
+-- David
 
-+void security_task_fatal_signal(const kernel_siginfo_t *siginfo)
-+{
-+	call_void_hook(task_fatal_signal, siginfo);
-+}
-+
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
- {
- 	return call_int_hook(ipc_permission, 0, ipcp, flag);
-=2D-
-2.25.1
+[1] https://rest-sphinx-memo.readthedocs.io/en/latest/ReST.html#definition-list
 
+
+>  Documentation/dev-tools/kunit/api/index.rst | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+> index 9b9bffe5d41a..b33ad72bcf0b 100644
+> --- a/Documentation/dev-tools/kunit/api/index.rst
+> +++ b/Documentation/dev-tools/kunit/api/index.rst
+> @@ -10,7 +10,7 @@ API Reference
+>  This section documents the KUnit kernel testing API. It is divided into the
+>  following sections:
+>
+> -================================= ==============================================
+> -:doc:`test`                       documents all of the standard testing API
+> -                                  excluding mocking or mocking related features.
+> -================================= ==============================================
+> +Documentation/dev-tools/kunit/api/test.rst
+> +
+> + - documents all of the standard testing API excluding mocking
+> +   or mocking related features.
+> --
+> 2.31.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/08ac283ac5bdc2664255a7ad34514e50d3ed85d8.1622898327.git.mchehab%2Bhuawei%40kernel.org.
