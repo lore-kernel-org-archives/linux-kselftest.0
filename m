@@ -2,86 +2,307 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MISSING_SUBJECT,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8507C47082
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Jun 2021 16:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE82C4743D
+	for <linux-kselftest@archiver.kernel.org>; Sun,  6 Jun 2021 19:19:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D0C16136D
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Jun 2021 16:35:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05B4B61429
+	for <linux-kselftest@archiver.kernel.org>; Sun,  6 Jun 2021 19:19:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbhFGQhW (ORCPT
+        id S229894AbhFFTVf convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Jun 2021 12:37:22 -0400
-Received: from mga11.intel.com ([192.55.52.93]:36380 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231217AbhFGQhR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:37:17 -0400
-IronPort-SDR: MpFVcGBs585a0sMDz9G67pKbeZQaLcYDy+Knt4b9q2sR8F+mw0K07cFPWvo4zz/6EOGWu0I9Qt
- CUmTWoBbX3Ew==
-X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="201636687"
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="201636687"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 09:35:26 -0700
-IronPort-SDR: gGHkq0JA9XxW08rmIHn0Yozoin8bhHh51CRsA+vUv/Gtkpqib6IDZfyfn/QmddtWIFah/Ie8xS
- krPnFy0JLezg==
-X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
-   d="scan'208";a="637329904"
-Received: from rchatre-mobl3.amr.corp.intel.com (HELO [10.209.69.116]) ([10.209.69.116])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 09:35:26 -0700
-Subject: Re: [PATCH v7 2/4] selftests/sgx: Migrate to kselftest harness
-To:     Jarkko Sakkinen <jarkko@kernel.org>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20210526124740.16783-1-jarkko@kernel.org>
- <20210526124740.16783-2-jarkko@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-Message-ID: <da0c7ded-3fec-9b30-8955-7a2525dc1f22@intel.com>
-Date:   Mon, 7 Jun 2021 09:35:25 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Sun, 6 Jun 2021 15:21:35 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:50320 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229573AbhFFTVf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 6 Jun 2021 15:21:35 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B96A1FDC5;
+        Sun,  6 Jun 2021 19:19:43 +0000 (UTC)
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id EF78F118DD;
+        Sun,  6 Jun 2021 19:19:37 +0000 (UTC)
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id sZX8LckfvWBBXgAALh3uQQ
+        (envelope-from <dave@stgolabs.net>); Sun, 06 Jun 2021 19:19:37 +0000
+Date:   Sun, 6 Jun 2021 12:19:32 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     =?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        kernel@collabora.com, krisman@collabora.com,
+        pgriffais@valvesoftware.com, z.figura12@gmail.com,
+        joel@joelfernandes.org, malteskarupke@fastmail.fm,
+        linux-api@vger.kernel.org, fweimer@redhat.com,
+        libc-alpha@sourceware.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, acme@kernel.org, corbet@lwn.net,
+        Peter Oskolkov <posk@posk.io>,
+        Andrey Semashev <andrey.semashev@gmail.com>,
+        mtk.manpages@gmail.com
+Message-ID: <20210606191932.osytlsvsnks2cxwa@offworld>
 MIME-Version: 1.0
-In-Reply-To: <20210526124740.16783-2-jarkko@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkko,
+Bcc:
+Subject: Re: [PATCH v4 07/15] docs: locking: futex2: Add documentation
+Reply-To:
+In-Reply-To: <20210603195924.361327-8-andrealmeid@collabora.com>
 
-On 5/26/2021 5:47 AM, Jarkko Sakkinen wrote:
+On Thu, 03 Jun 2021, Andrï¿½ Almeida wrote:
 
-...
+>Add a new documentation file specifying both userspace API and internal
+>implementation details of futex2 syscalls.
 
-> -	exit(KSFT_PASS);
-> +static inline int encl_call(const void *in, void *out, struct sgx_enclave_run *run, bool clobbered)
-> +{
-> +	void *in2 = (void *)in;
-> +	int ret;
->   
-> -err:
-> -	encl_delete(&encl);
-> -	exit(KSFT_FAIL);
-> +	if (clobbered)
-> +		ret = vdso_sgx_enter_enclave((unsigned long)in2, (unsigned long)out, 0,
-> +					     EENTER, 0, 0, run);
-> +	else
-> +		ret = sgx_enter_enclave(in2, out, 0, EENTER, NULL, NULL, run);
-> +
-> +	return ret;
-> +}
+I think equally important would be to provide a manpage for each new
+syscall you are introducing, and keep mkt in the loop as in the past he
+extensively documented and improved futex manpages, and overall has a
+lot of experience with dealing with kernel interfaces.
 
-I find this change unnecessary because it is very specific to the 
-current test cases and limiting future test cases. From what I 
-understand it attempts to create a generic "call into the enclave" 
-wrapper but in doing so it constrains the call to use only two 
-registers, assuming there will always and only be just an "in" and "out" 
-parameter needed.
+Thanks,
+Davidlohr
 
-Reinette
+>
+>Signed-off-by: André Almeida <andrealmeid@collabora.com>
+>---
+> Documentation/locking/futex2.rst | 198 +++++++++++++++++++++++++++++++
+> Documentation/locking/index.rst  |   1 +
+> 2 files changed, 199 insertions(+)
+> create mode 100644 Documentation/locking/futex2.rst
+>
+>diff --git a/Documentation/locking/futex2.rst b/Documentation/locking/futex2.rst
+>new file mode 100644
+>index 000000000000..2f74d7c97a55
+>--- /dev/null
+>+++ b/Documentation/locking/futex2.rst
+>@@ -0,0 +1,198 @@
+>+.. SPDX-License-Identifier: GPL-2.0
+>+
+>+======
+>+futex2
+>+======
+>+
+>+:Author: André Almeida <andrealmeid@collabora.com>
+>+
+>+futex, or fast user mutex, is a set of syscalls to allow userspace to create
+>+performant synchronization mechanisms, such as mutexes, semaphores and
+>+conditional variables in userspace. C standard libraries, like glibc, uses it
+>+as a means to implement more high level interfaces like pthreads.
+>+
+>+The interface
+>+=============
+>+
+>+uAPI functions
+>+--------------
+>+
+>+.. kernel-doc:: kernel/futex2.c
+>+   :identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv sys_futex_requeue
+>+
+>+uAPI structures
+>+---------------
+>+
+>+.. kernel-doc:: include/uapi/linux/futex.h
+>+
+>+The ``flag`` argument
+>+---------------------
+>+
+>+The flag is used to specify the size of the futex word
+>+(FUTEX_[8, 16, 32, 64]). It's mandatory to define one, since there's no
+>+default size.
+>+
+>+By default, the timeout uses a monotonic clock, but can be used as a realtime
+>+one by using the FUTEX_REALTIME_CLOCK flag.
+>+
+>+By default, futexes are of the private type, that means that this user address
+>+will be accessed by threads that share the same memory region. This allows for
+>+some internal optimizations, so they are faster. However, if the address needs
+>+to be shared with different processes (like using ``mmap()`` or ``shm()``), they
+>+need to be defined as shared and the flag FUTEX_SHARED_FLAG is used to set that.
+>+
+>+By default, the operation has no NUMA-awareness, meaning that the user can't
+>+choose the memory node where the kernel side futex data will be stored. The
+>+user can choose the node where it wants to operate by setting the
+>+FUTEX_NUMA_FLAG and using the following structure (where X can be 8, 16, 32 or
+>+64)::
+>+
+>+ struct futexX_numa {
+>+         __uX value;
+>+         __sX hint;
+>+ };
+>+
+>+This structure should be passed at the ``void *uaddr`` of futex functions. The
+>+address of the structure will be used to be waited on/waken on, and the
+>+``value`` will be compared to ``val`` as usual. The ``hint`` member is used to
+>+define which node the futex will use. When waiting, the futex will be
+>+registered on a kernel-side table stored on that node; when waking, the futex
+>+will be searched for on that given table. That means that there's no redundancy
+>+between tables, and the wrong ``hint`` value will lead to undesired behavior.
+>+Userspace is responsible for dealing with node migrations issues that may
+>+occur. ``hint`` can range from [0, MAX_NUMA_NODES), for specifying a node, or
+>+-1, to use the same node the current process is using.
+>+
+>+When not using FUTEX_NUMA_FLAG on a NUMA system, the futex will be stored on a
+>+global table on allocated on the first node.
+>+
+>+The ``timo`` argument
+>+---------------------
+>+
+>+As per the Y2038 work done in the kernel, new interfaces shouldn't add timeout
+>+options known to be buggy. Given that, ``timo`` should be a 64-bit timeout at
+>+all platforms, using an absolute timeout value.
+>+
+>+Implementation
+>+==============
+>+
+>+The internal implementation follows a similar design to the original futex.
+>+Given that we want to replicate the same external behavior of current futex,
+>+this should be somewhat expected.
+>+
+>+Waiting
+>+-------
+>+
+>+For the wait operations, they are all treated as if you want to wait on N
+>+futexes, so the path for futex_wait and futex_waitv is the basically the same.
+>+For both syscalls, the first step is to prepare an internal list for the list
+>+of futexes to wait for (using struct futexv_head). For futex_wait() calls, this
+>+list will have a single object.
+>+
+>+We have a hash table, where waiters register themselves before sleeping. Then
+>+the wake function checks this table looking for waiters at uaddr.  The hash
+>+bucket to be used is determined by a struct futex_key, that stores information
+>+to uniquely identify an address from a given process. Given the huge address
+>+space, there'll be hash collisions, so we store information to be later used on
+>+collision treatment.
+>+
+>+First, for every futex we want to wait on, we check if (``*uaddr == val``).
+>+This check is done holding the bucket lock, so we are correctly serialized with
+>+any futex_wake() calls. If any waiter fails the check above, we dequeue all
+>+futexes. The check (``*uaddr == val``) can fail for two reasons:
+>+
+>+- The values are different, and we return -EAGAIN. However, if while
+>+  dequeueing we found that some futexes were awakened, we prioritize this
+>+  and return success.
+>+
+>+- When trying to access the user address, we do so with page faults
+>+  disabled because we are holding a bucket's spin lock (and can't sleep
+>+  while holding a spin lock). If there's an error, it might be a page
+>+  fault, or an invalid address. We release the lock, dequeue everyone
+>+  (because it's illegal to sleep while there are futexes enqueued, we
+>+  could lose wakeups) and try again with page fault enabled. If we
+>+  succeed, this means that the address is valid, but we need to do
+>+  all the work again. For serialization reasons, we need to have the
+>+  spin lock when getting the user value. Additionally, for shared
+>+  futexes, we also need to recalculate the hash, since the underlying
+>+  mapping mechanisms could have changed when dealing with page fault.
+>+  If, even with page fault enabled, we can't access the address, it
+>+  means it's an invalid user address, and we return -EFAULT. For this
+>+  case, we prioritize the error, even if some futexes were awaken.
+>+
+>+If the check is OK, they are enqueued on a linked list in our bucket, and
+>+proceed to the next one. If all waiters succeed, we put the thread to sleep
+>+until a futex_wake() call, timeout expires or we get a signal. After waking up,
+>+we dequeue everyone, and check if some futex was awakened. This dequeue is done
+>+by iteratively walking at each element of struct futex_head list.
+>+
+>+All enqueuing/dequeuing operations requires to hold the bucket lock, to avoid
+>+racing while modifying the list.
+>+
+>+Waking
+>+------
+>+
+>+We get the bucket that's storing the waiters at uaddr, and wake the required
+>+number of waiters, checking for hash collision.
+>+
+>+There's an optimization that makes futex_wake() not take the bucket lock if
+>+there's no one to be woken on that bucket. It checks an atomic counter that each
+>+bucket has, if it says 0, then the syscall exits. In order for this to work, the
+>+waiter thread increases it before taking the lock, so the wake thread will
+>+correctly see that there's someone waiting and will continue the path to take
+>+the bucket lock. To get the correct serialization, the waiter issues a memory
+>+barrier after increasing the bucket counter and the waker issues a memory
+>+barrier before checking it.
+>+
+>+Requeuing
+>+---------
+>+
+>+The requeue path first checks for each struct futex_requeue and their flags.
+>+Then, it will compare the expected value with the one at uaddr1::uaddr.
+>+Following the same serialization explained at Waking_, we increase the atomic
+>+counter for the bucket of uaddr2 before taking the lock. We need to have both
+>+buckets locks at same time so we don't race with other futex operation. To
+>+ensure the locks are taken in the same order for all threads (and thus avoiding
+>+deadlocks), every requeue operation takes the "smaller" bucket first, when
+>+comparing both addresses.
+>+
+>+If the compare with user value succeeds, we proceed by waking ``nr_wake``
+>+futexes, and then requeuing ``nr_requeue`` from bucket of uaddr1 to the uaddr2.
+>+This consists in a simple list deletion/addition and replacing the old futex key
+>+with the new one.
+>+
+>+Futex keys
+>+----------
+>+
+>+There are two types of futexes: private and shared ones. The private are futexes
+>+meant to be used by threads that share the same memory space, are easier to be
+>+uniquely identified and thus can have some performance optimization. The
+>+elements for identifying one are: the start address of the page where the
+>+address is, the address offset within the page and the current->mm pointer.
+>+
+>+Now, for uniquely identifying a shared futex:
+>+
+>+- If the page containing the user address is an anonymous page, we can
+>+  just use the same data used for private futexes (the start address of
+>+  the page, the address offset within the page and the current->mm
+>+  pointer); that will be enough for uniquely identifying such futex. We
+>+  also set one bit at the key to differentiate if a private futex is
+>+  used on the same address (mixing shared and private calls does not
+>+  work).
+>+
+>+- If the page is file-backed, current->mm maybe isn't the same one for
+>+  every user of this futex, so we need to use other data: the
+>+  page->index, a UUID for the struct inode and the offset within the
+>+  page.
+>+
+>+Note that members of futex_key don't have any particular meaning after they
+>+are part of the struct - they are just bytes to identify a futex.  Given that,
+>+we don't need to use a particular name or type that matches the original data,
+>+we only need to care about the bitsize of each component and make both private
+>+and shared fit in the same memory space.
+>+
+>+Source code documentation
+>+=========================
+>+
+>+.. kernel-doc:: kernel/futex2.c
+>+   :no-identifiers: sys_futex_wait sys_futex_wake sys_futex_waitv sys_futex_requeue
+>diff --git a/Documentation/locking/index.rst b/Documentation/locking/index.rst
+>index 7003bd5aeff4..9bf03c7fa1ec 100644
+>--- a/Documentation/locking/index.rst
+>+++ b/Documentation/locking/index.rst
+>@@ -24,6 +24,7 @@ locking
+>     percpu-rw-semaphore
+>     robust-futexes
+>     robust-futex-ABI
+>+    futex2
+>
+> .. only::  subproject and html
+>
+>--
+>2.31.1
+>
