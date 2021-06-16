@@ -2,74 +2,91 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B6B1C48BE6
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 20:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA385C48BE5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 20:36:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D714613B9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 20:00:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F21061076
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 20:36:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbhFPUCK (ORCPT
+        id S233526AbhFPUjF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Jun 2021 16:02:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57106 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230146AbhFPUCK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 16:02:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C758361375;
-        Wed, 16 Jun 2021 20:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623873603;
-        bh=lm0WYNCndKvOklR07/CaUQFMLUeOI6X+WniQwv9dQyA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=aA4ahwgraVlwr4qLT7bBUvMnuT46fFgsRVYaScSxEO62cqcnpTIW4VOOtbKZF9NMi
-         l+Cw0Vh/DtOWUtcBr6KItzPDb6akSFV5LSAIiMepznzNvqdvMdFSHhFM6tObGiU5+C
-         SUvlqPABLk7pnUrGZ2HxVCdjSEXgLS9LvNaBf+qHmFiv+FyJN9ZePu+Bywe6CeN6B1
-         vX+Z0dLEDLPLf9bH4LOZUxxueamvsJ5btIpveaaOf5JK29ESCygznUwWFOG1d+uiOV
-         MxfjvcwCSTFG8FAm1Studf+WYsf2GXROJNQQp/rJ6hc1XIOKhWVAKbuSFcdB6PEncf
-         1odnuZfFklQAQ==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Jun 2021 16:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233522AbhFPUjF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Jun 2021 16:39:05 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A13C06175F
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:36:58 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id k15so3160840pfp.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Jun 2021 13:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/iyaCYOVFTgGt+uLyKcOuwMWraHntMrfp9c4Wvuygsw=;
+        b=ozk9b/x9ThmBWrjEaelNW21eP5a7iRJdlV2CCTgf37kQf96+3dtQlK8fT5gDAJUGD6
+         DoqqU7iPY42js1IrnSrZAs51SNZuE4YSBqwhCxLJqI0SUQbSmx0EocnWZal25Y2uLaeX
+         y8FlJ2epoAYw8VrTJ6c+mPu0L0TXgM6AbaiAlF3dUaO+oLja5SbAZ860YmGZ08ORSYW8
+         /Yxsv4BONI8sHpeOSt+G/UHUfbJA2nGZYzZFtoxiGnj2N/jSJkYdrVPKaXKK6zPKlzFK
+         nIKVKwGUESHVozEVHgVuoh0FX58K/8UmjfspgpbSLXKOzp3ETt7SlylUjuG+xWOLzVZR
+         YmnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/iyaCYOVFTgGt+uLyKcOuwMWraHntMrfp9c4Wvuygsw=;
+        b=d7N/uHedoMoTFmImh5xq2JWsZtGPOOeJRG0urxmshb00Q4rwavQa9/SCn42TDqGwiK
+         UOzaEOTvkYZEPuJ7VYiibqGRoC/EgooIItgi1qn+Zfg/zi/PPfGPQptfiKvPRst+rZ3n
+         mV5Wmc9eGNedEzUL6e8NLH27RkJFmSMoADyxCsQjyP9BK4gLRd26b6KEmrpfTxy5vOT3
+         3Dux04iXvpkcRoMsuW77GLXQChYOiXne3fNs+MLIyqYqtTlqDs0TRWAQl5LZfzUgdF3x
+         Gr646eJmoAJb3XmHFUZMWydEu7aDYSIVj7fqp5pYM6g1RmJfIawES+wqeNjiBOuXckWb
+         VWKg==
+X-Gm-Message-State: AOAM531Su3U7LKs2S7jwGzxvoC0ih6u/zgzfwPJz0oLqC1iYi5djV+qq
+        CPdA5QGyvtGhEZ8Ml1K99QFLoYNbqTxjEhbBBNrfIQ==
+X-Google-Smtp-Source: ABdhPJxjnJLJ8Cv1ZHYaqWXR3wF9ISnILfK3oF+Xc3ZEJKCH7abCZfLs1EX3lq0+oyQVuxYpRaebxpvKs51I4p7cy18=
+X-Received: by 2002:a63:485a:: with SMTP id x26mr1427134pgk.159.1623875817786;
+ Wed, 16 Jun 2021 13:36:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net: veth: make test compatible with dash
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162387360376.18083.3181295447841103753.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Jun 2021 20:00:03 +0000
-References: <YMoEqdpCIQN209ty@xps-13-7390>
-In-Reply-To: <YMoEqdpCIQN209ty@xps-13-7390>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20210522044241.2763088-1-davidgow@google.com> <20210522044241.2763088-2-davidgow@google.com>
+In-Reply-To: <20210522044241.2763088-2-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 16 Jun 2021 13:36:46 -0700
+Message-ID: <CAFd5g44-zP7VWwBMxSMv=PNPQWNHB-y90kQ4E8WVqs2mWCE2dQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kunit: Move default config from arch/um -> tools/testing/kunit
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jonathan Corbet <corbet@lwn.net>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Fri, May 21, 2021 at 9:43 PM David Gow <davidgow@google.com> wrote:
+>
+> The default .kunitconfig file is currently kept in
+> arch/um/configs/kunit_defconfig, but -- with the impending QEMU patch
+> -- will no-longer be exclusively used for UML-based kernels.
+>
+> Move it alongside the other KUnit configs in
+> tools/testing/kunit/configs, and give it a name which matches the
+> existing all_tests.config and broken_on_uml.config files.
+>
+> Also update the Getting Started documentation to point to the new file.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-This patch was applied to netdev/net.git (refs/heads/master):
-
-On Wed, 16 Jun 2021 16:03:21 +0200 you wrote:
-> veth.sh is a shell script that uses /bin/sh; some distro (Ubuntu for
-> example) use dash as /bin/sh and in this case the test reports the
-> following error:
-> 
->  # ./veth.sh: 21: local: -r: bad variable name
->  # ./veth.sh: 21: local: -r: bad variable name
-> 
-> [...]
-
-Here is the summary with links:
-  - selftests: net: veth: make test compatible with dash
-    https://git.kernel.org/netdev/net/c/0fd158b89b50
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
