@@ -2,106 +2,89 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5166C48BE5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 06:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0D7FC48BE5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 06:27:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72B82613C2
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 06:13:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AACAF61432
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Jun 2021 06:27:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhFPGPh (ORCPT
+        id S231560AbhFPG3x (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Jun 2021 02:15:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36656 "EHLO mail.kernel.org"
+        Wed, 16 Jun 2021 02:29:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59584 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhFPGPg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:15:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B68061369;
-        Wed, 16 Jun 2021 06:13:29 +0000 (UTC)
+        id S231281AbhFPG3x (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Jun 2021 02:29:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B31C7613C2;
+        Wed, 16 Jun 2021 06:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623824011;
-        bh=VaE0S1kf77O5EbvMHJFmsXcTIFViX82c9LKFOtIeQLc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U5DXn7x7P8VwcFuJj/NuGjAlN6uazR2O2iUk41SK0I4HCcgGWxMDFpDgVHxDSMk02
-         VEbozYODhbClLFSplS9whycdKRm6ICigFH1YsskeexaKJU4emxiFVSf4EPtej5HjiK
-         jdHDRX3CkZTiVgtomUdKUHBZ19MgwvFyakkvhD2XpEf8EoNyMj3jHlFDHahKEJzB/7
-         3jrDTKthRxz5wLVe94TXVVGNNs/joHbvoWafZN1ABWUN9gc9qVXb/qwds0hXM74x6a
-         Eyr7xagmo1c8Cpc4bQES3Cp9jqz7fQwgk1RO03SdVpq4hW62jZqsFua3JKvSpA1otH
-         SMp4ZrP1nVy4Q==
-Date:   Wed, 16 Jun 2021 08:13:26 +0200
+        s=k20201202; t=1623824867;
+        bh=0D3LAev4kCUmKrz9qs1KQpeWtZ5Y0DsGWhPtBA+LVLw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GCSQlGVpcBqwzrTv4ajvjMbv0G996eSfe3WXBDL+kcDHLtXeln2q0Si4IqIN5tuV6
+         jlxVQk/vIgkgSkxALeq1ERqT1ZCCvKfXZrINMC+OIUsna8+1wRPAO9VyTwWjzx0ERt
+         nq5Ctb/rqheNRa2sKp1tD4SUofXIEvAG5WfJ+NERsyeGik9dnoimc61pn/o62uUDpu
+         OtWUSFzgVNVgzHS2noRhDv8BPY7l5QRoPJ4LOyrYwxfVfb0X0JzxtBmu33LqeFUSgt
+         jnUO+bDhXD19Ma0FjDom/kZN9m047iHu3rKO1N+Udb4q1kYstHBxoQQy+wAyrKzexq
+         nN8Kku8ItRqdQ==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1ltP1d-004kIP-Ul; Wed, 16 Jun 2021 08:27:45 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 14/34] docs: dev-tools: kunit: avoid using ReST
- :doc:`foo` markup
-Message-ID: <20210616081326.39a73ad0@coco.lan>
-In-Reply-To: <20210616080034.335f3e75@coco.lan>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-        <a3ad84108a5b254e545f88e58d411f5fe2e25c7e.1622898327.git.mchehab+huawei@kernel.org>
-        <CABVgOSnz_94ZO2Sa8Vf70eV_tf0gksDBUhZXYXX1VS=qFR=zPw@mail.gmail.com>
-        <20210616080034.335f3e75@coco.lan>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 02/29] docs: dev-tools: kunit: don't use a table for docs name
+Date:   Wed, 16 Jun 2021 08:27:17 +0200
+Message-Id: <07d3a8ccafbb6345d6e78fb090290859e84361a1.1623824363.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1623824363.git.mchehab+huawei@kernel.org>
+References: <cover.1623824363.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Em Wed, 16 Jun 2021 08:00:34 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+We'll be replacing :doc:`foo` references to
+Documentation/foo.rst. Yet, here it happens inside a table.
+Doing a search-and-replace would break it.
 
-> Em Sat, 5 Jun 2021 23:44:41 +0800
-> David Gow <davidgow@google.com> escreveu:
-> 
-> > On Sat, Jun 5, 2021 at 9:18 PM Mauro Carvalho Chehab
-> > <mchehab+huawei@kernel.org> wrote:
-> > >
-> > > The :doc:`foo` tag is auto-generated via automarkup.py.
-> > > So, use the filename at the sources, instead of :doc:`foo`.
-> > >
-> > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > > ---  
-> > 
-> > This is much better, thanks! Do note that there's a merge conflict
-> > (and another :doc:`` tag which needs updating) in the kunit-fixes
-> > branch:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit-fixes&id=11dbc62a73a7da9f3697e8ce83d07503c11dcabb
-> 
-> Ok, thanks for the warning. I'm folding the enclosed patch:
+Yet, as there's no good reason to use a table there,
+let's just convert it into a list.
 
-Err... ended adding a wrong diff there...
+Reviewed-by: David Gow <davidgow@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/dev-tools/kunit/api/index.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I guess I'm missing my morning dosage of caffeine ;-)
+diff --git a/Documentation/dev-tools/kunit/api/index.rst b/Documentation/dev-tools/kunit/api/index.rst
+index 9b9bffe5d41a..b33ad72bcf0b 100644
+--- a/Documentation/dev-tools/kunit/api/index.rst
++++ b/Documentation/dev-tools/kunit/api/index.rst
+@@ -10,7 +10,7 @@ API Reference
+ This section documents the KUnit kernel testing API. It is divided into the
+ following sections:
+ 
+-================================= ==============================================
+-:doc:`test`                       documents all of the standard testing API
+-                                  excluding mocking or mocking related features.
+-================================= ==============================================
++Documentation/dev-tools/kunit/api/test.rst
++
++ - documents all of the standard testing API excluding mocking
++   or mocking related features.
+-- 
+2.31.1
 
-The diff I appended is this one:
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index ee21e482a0de..63ef7b625c13 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -236,5 +236,5 @@ Next Steps
- ==========
- *   Check out the Documentation/dev-tools/kunit/tips.rst page for tips on
-     writing idiomatic KUnit tests.
--*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
-+*   Optional: see the :doc:`usage` page for a more
-     in-depth explanation of KUnit.
-
-It basically reverts a change in order to avoid merge conflicts at
-linux-next when this patch gets merged via docs-next.
-
-I'll submit later a followup patch against 5.14-rc1.
-
-Thanks,
-Mauro
