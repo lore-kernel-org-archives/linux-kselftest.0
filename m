@@ -2,122 +2,134 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88C69C2B9F4
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 07:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 315D3C49361
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 11:24:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B03A61166
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 07:46:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EF9E613DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 11:24:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhFQHsy (ORCPT
+        id S232585AbhFQL0I (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Jun 2021 03:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbhFQHsx (ORCPT
+        Thu, 17 Jun 2021 07:26:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48024 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232583AbhFQL0H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Jun 2021 03:48:53 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ED7C061574;
-        Thu, 17 Jun 2021 00:46:46 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id p21so4011140qtw.6;
-        Thu, 17 Jun 2021 00:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MnXTO/R9SYASJnegiIJxwe88I6hev7rMEEpPxN1h0Vo=;
-        b=RW6nOfIfejwctXIEtUP37HAzZTn55Wq0WwCeAUTpSFTNrXoxNsFSOGzxBOEsL63nRP
-         8gNvN/QTu/0GkAYvOKzN4108BHyhZbPE4tIWQ6Hm03OVOAmqVYRg9Gt07Us+x+ZeQULY
-         1FAclID2Uoad86/13Z9GJHUJSxgTu9hrq+XP+X1u4iSoUGbHjdp29pm68rqPvvq2dCUu
-         y6fN3A7Z2Lx2uw7GcpN+AUKDsjct0qgBdlrniuXkGwBDEQBUSerYeLHo+WGOxjJ6EpUt
-         jeumKSQXb72vVjamqeJ8h/x5+reqHQtgjw+KR8vLw6l/XUUNh+4hvh/8ANDbtJ+GCH/y
-         fMwQ==
+        Thu, 17 Jun 2021 07:26:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623929039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QeoOEjtdTbZHikE6qVHZkIHtsqJ8oL1MWdn59al3yJU=;
+        b=XGKmgrD9SdsvuqXyHckDF65SGfXEPwJ125BX1n4lHcOoaqG+LyEyDrWbkLn15O25hTs+zA
+        Ry8WKDAN1u0N5G+qRGtigyVkIpIurf4wTcON/NDHRjhUTJsjV/Wd09MaJHz8Xs8t78z+6k
+        97yHwykTT+NYLqjmiqSSqwIHnutLnc0=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-16-BJjf2sYqPcKx5qcWEXMgww-1; Thu, 17 Jun 2021 07:23:58 -0400
+X-MC-Unique: BJjf2sYqPcKx5qcWEXMgww-1
+Received: by mail-ed1-f71.google.com with SMTP id g13-20020a056402090db02903935a4cb74fso1330718edz.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 04:23:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MnXTO/R9SYASJnegiIJxwe88I6hev7rMEEpPxN1h0Vo=;
-        b=j0zMZL8feHt8eDzO1fFNSC1a+BHNZ+q/IWeDzrzmxoTIj9ouKnZY1Zt7MUIkv5Yx6/
-         r17+IBTTYDahaBWGFaXBMElaUzaInzJVJOSeLhL4sAAAICiSp8VjWlBubfv4Qs29ZV+u
-         kpHHZlQ5tw/i06HjdKZVWObhfKd+lCYqY8juUoSLzl5ABygCFbI15/ukL/iMWhZNCwM9
-         7kLellutwb5q9n1mZex00/LAnJ4dLiCz15iOVb4l7ozcfhapOsWTYU2XJffM3G6h1oga
-         TzbqpWmDsRmXAfWO87qJ3BYNYEGIFhtBvi63RO1NZ6gMxZHQX3NYcVtXr+F3Wsk86d0u
-         9CJA==
-X-Gm-Message-State: AOAM533qrUjEizt5Z7fNZg/S4iJbcPqcanUhlTtmNrs+k5772SlE2m8q
-        oTGggVgvB7I4eLeQTM+oqig=
-X-Google-Smtp-Source: ABdhPJwqduBY52CnMg0dGDImsxPovS8sVypwtisrCrPp+CRUF96sWHf/0TOcpocu/Z6//SQ8mQdXmw==
-X-Received: by 2002:ac8:718b:: with SMTP id w11mr3889943qto.354.1623916005794;
-        Thu, 17 Jun 2021 00:46:45 -0700 (PDT)
-Received: from localhost.localdomain (ec2-35-169-212-159.compute-1.amazonaws.com. [35.169.212.159])
-        by smtp.gmail.com with ESMTPSA id v32sm2814990qtc.95.2021.06.17.00.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 00:46:45 -0700 (PDT)
-From:   SeongJae Park <sj38.park@gmail.com>
-X-Google-Original-From: SeongJae Park <sjpark@amazon.de>
-To:     brendanhiggins@google.com
-Cc:     dlatypov@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH v2] kunit: tool: Assert the version requirement
-Date:   Thu, 17 Jun 2021 07:46:38 +0000
-Message-Id: <20210617074638.16583-1-sjpark@amazon.de>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210617073937.16281-1-sjpark@amazon.de>
-References: <20210617073937.16281-1-sjpark@amazon.de>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QeoOEjtdTbZHikE6qVHZkIHtsqJ8oL1MWdn59al3yJU=;
+        b=dkg5QpkrIfjU4oIBolsMEbB4gcimrD14Dw5PM+wLbHQ5lVFtzX6F0RfwdM9+xCAOcD
+         IfTrKH61m5L7iMxNvuryE0J1W0ZBV6HLgeAlQT7AptVK+1UGq8MXaV/gZ569FoWTPCaH
+         oyY+zM1YhKhwjOjUhzOoHSccxui/PO3DDpatV9tr7jLB/dvWscJ1XCd6MjHMku5bp/VR
+         LbPdJ/r72RJD0tx+A7hBZScNIkkbTzdNGQOc7iwo8xDW8MszJiq6nHSVgV9y55ubHClN
+         sJCYPbmxZFBlJytxbUt5qxIQwgcaZJmv9aKTPIEvf4ckjykkYB7eAaUjF20EcgjQgkze
+         N2sA==
+X-Gm-Message-State: AOAM530ZmPnt0apzRGjWi1Gxl12ndRlF3ggu4rJ3Wqkkc7aoM7iLmfXg
+        XbO/fSyzNEumIoOKbrPWH7sCAXPDjelzxEu3d76srebXk/VULmJUaGn4P6vXz53u4TKDqLmRGln
+        OzUjsLk5gf/x/7L1pt3+r5XZMlA1J
+X-Received: by 2002:a05:6402:268f:: with SMTP id w15mr5799066edd.228.1623928793194;
+        Thu, 17 Jun 2021 04:19:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzc8lc8kbfFsQbKsVnuEADgPqEmYVAvmC/1IvjtxjrXOO4gKYpFUgt0NPkDolV15GoZuo9rTg==
+X-Received: by 2002:a05:6402:268f:: with SMTP id w15mr5799027edd.228.1623928793011;
+        Thu, 17 Jun 2021 04:19:53 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id e18sm3537900ejh.64.2021.06.17.04.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Jun 2021 04:19:52 -0700 (PDT)
+Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
+ statistics interface
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+References: <20210617044146.2667540-1-jingzhangos@google.com>
+ <20210617044146.2667540-4-jingzhangos@google.com>
+ <YMrmqOxDWJ2/8sfD@kroah.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <be506135-5bc3-31bd-1b20-063f01f41df1@redhat.com>
+Date:   Thu, 17 Jun 2021 13:19:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <YMrmqOxDWJ2/8sfD@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 87c9c1631788 ("kunit: tool: add support for QEMU") on the 'next'
-tree adds 'from __future__ import annotations' in 'kunit_kernel.py'.
-Because it is supported on only >=3.7 Python, people using older Python
-will get below error:
+On 17/06/21 08:07, Greg KH wrote:
+>> The statistics data itself could be read out by userspace telemetry
+>> periodically without any extra parsing or setup effort.
+> Do you have a pointer to userspace code that can do such a thing that
+> others can use?  We do not like adding apis to the kernel without at
+> least seeing the user of those apis, especially for complex things like
+> this.
+> 
+> Ideally you would include some library code in the kernel tree itself
+> that everyone can use for this for their own programs.  You have
+> provided a test which is great, but how do we know it works for "real"
+> usages?
 
-    Traceback (most recent call last):
-      File "./tools/testing/kunit/kunit.py", line 20, in <module>
-        import kunit_kernel
-      File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 9
-        from __future__ import annotations
-        ^
-    SyntaxError: future feature annotations is not defined
+I am pretty sure that Google is using this internally, but we are also 
+going to work on QEMU and Libvirt support for this.
 
-This commit adds a version assertion in 'kunit.py', so that people get
-more explicit error message like below:
+As for the rest, thanks for the review---I'll let Jing act on it and 
+only add my own remarks in a couple places.
 
-    Traceback (most recent call last):
-      File "./tools/testing/kunit/kunit.py", line 15, in <module>
-        assert sys.version_info >= (3, 7), "Python version is too old"
-    AssertionError: Python version is too old
-
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
-Acked-by: Daniel Latypov <dlatypov@google.com>
----
-
-Changes from v1
-- Add assertion failure message (Daniel Latypov)
-- Add Acked-by: Daniel Latypov <dlatypov@google.com>
-
- tools/testing/kunit/kunit.py | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index be8d8d4a4e08..6276ce0c0196 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -12,6 +12,8 @@ import sys
- import os
- import time
- 
-+assert sys.version_info >= (3, 7), "Python version is too old"
-+
- from collections import namedtuple
- from enum import Enum, auto
- 
--- 
-2.17.1
+Paolo
 
