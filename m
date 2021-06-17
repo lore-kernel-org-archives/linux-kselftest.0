@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 315D3C49361
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 11:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E32C2B9F4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 11:32:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EF9E613DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 11:24:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2E96613F9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Jun 2021 11:32:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbhFQL0I (ORCPT
+        id S232298AbhFQLfC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Jun 2021 07:26:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48024 "EHLO
+        Thu, 17 Jun 2021 07:35:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31440 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232583AbhFQL0H (ORCPT
+        by vger.kernel.org with ESMTP id S231948AbhFQLfC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Jun 2021 07:26:07 -0400
+        Thu, 17 Jun 2021 07:35:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623929039;
+        s=mimecast20190719; t=1623929573;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QeoOEjtdTbZHikE6qVHZkIHtsqJ8oL1MWdn59al3yJU=;
-        b=XGKmgrD9SdsvuqXyHckDF65SGfXEPwJ125BX1n4lHcOoaqG+LyEyDrWbkLn15O25hTs+zA
-        Ry8WKDAN1u0N5G+qRGtigyVkIpIurf4wTcON/NDHRjhUTJsjV/Wd09MaJHz8Xs8t78z+6k
-        97yHwykTT+NYLqjmiqSSqwIHnutLnc0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-16-BJjf2sYqPcKx5qcWEXMgww-1; Thu, 17 Jun 2021 07:23:58 -0400
-X-MC-Unique: BJjf2sYqPcKx5qcWEXMgww-1
-Received: by mail-ed1-f71.google.com with SMTP id g13-20020a056402090db02903935a4cb74fso1330718edz.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 04:23:57 -0700 (PDT)
+        bh=KwQqoYgcuee30cxqMSNTKwW1ocgA4MOYfQQA575EikA=;
+        b=QYV9RRZYU9m7sK7aScnuKKBX+9ReOfAx3tgUQSIhRI4SWGHMLRQWjS7HqVsGmdcqDaPnRG
+        lDsKKcHOLoJX2Nf7bmvD94SMMyRfxSrYMFFi/T+86c/Z6R4htw/v8Ia7eVC6Bd8X4HookP
+        mRs46CgAn6lBVYuFozbyXr8WzlVDuuY=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-229-JUPMei7vP1eIkn2l7GzJ_w-1; Thu, 17 Jun 2021 07:32:52 -0400
+X-MC-Unique: JUPMei7vP1eIkn2l7GzJ_w-1
+Received: by mail-ej1-f70.google.com with SMTP id gv42-20020a1709072beab02903eab8e33118so2026341ejc.19
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Jun 2021 04:32:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=QeoOEjtdTbZHikE6qVHZkIHtsqJ8oL1MWdn59al3yJU=;
-        b=dkg5QpkrIfjU4oIBolsMEbB4gcimrD14Dw5PM+wLbHQ5lVFtzX6F0RfwdM9+xCAOcD
-         IfTrKH61m5L7iMxNvuryE0J1W0ZBV6HLgeAlQT7AptVK+1UGq8MXaV/gZ569FoWTPCaH
-         oyY+zM1YhKhwjOjUhzOoHSccxui/PO3DDpatV9tr7jLB/dvWscJ1XCd6MjHMku5bp/VR
-         LbPdJ/r72RJD0tx+A7hBZScNIkkbTzdNGQOc7iwo8xDW8MszJiq6nHSVgV9y55ubHClN
-         sJCYPbmxZFBlJytxbUt5qxIQwgcaZJmv9aKTPIEvf4ckjykkYB7eAaUjF20EcgjQgkze
-         N2sA==
-X-Gm-Message-State: AOAM530ZmPnt0apzRGjWi1Gxl12ndRlF3ggu4rJ3Wqkkc7aoM7iLmfXg
-        XbO/fSyzNEumIoOKbrPWH7sCAXPDjelzxEu3d76srebXk/VULmJUaGn4P6vXz53u4TKDqLmRGln
-        OzUjsLk5gf/x/7L1pt3+r5XZMlA1J
-X-Received: by 2002:a05:6402:268f:: with SMTP id w15mr5799066edd.228.1623928793194;
-        Thu, 17 Jun 2021 04:19:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzc8lc8kbfFsQbKsVnuEADgPqEmYVAvmC/1IvjtxjrXOO4gKYpFUgt0NPkDolV15GoZuo9rTg==
-X-Received: by 2002:a05:6402:268f:: with SMTP id w15mr5799027edd.228.1623928793011;
-        Thu, 17 Jun 2021 04:19:53 -0700 (PDT)
+        bh=KwQqoYgcuee30cxqMSNTKwW1ocgA4MOYfQQA575EikA=;
+        b=E3ARcoZaCn56N9jpED4gpuWcVKLqupwQdYaQgQY2pwuaZjd+j7fJYuTbW1gmYC+Z2a
+         B1PF5MVvUC5eeRA6NzA6KWQayxhbxUR0vQ7Sz2pMn/kthALDgBwzy8SXq59uoEqdfBOY
+         Oze/8Jq/u2rmBvlogJ1b/0C+Vwj1pm44aKpuGO9OH/TxSb9E+803mpK7nXEr81rPrXhB
+         iKI5YAGVJQlL4GTdJ2gCufbRIzSamtaD+HXFv8XevdLD5BH2fYMC3LCCdWPtW2wbDg3q
+         RZBdianHzARJUGOiyzY6m86Mr4noXBrIDwBeV9OTgE1cIm1ds3aF+Xd+Su7OgmIqd21b
+         XFQQ==
+X-Gm-Message-State: AOAM530nHTf7RLPwQg5VJr8cs0kEXTWtZ/GkGk34vQ0X92rgvKRAmQrR
+        zAGdj1JciZdPVxOKKjy9sckJtRjMP4VA61pyZl2Oi9PSNQWLbGpviKpjkrReUetLtD/OFjbTeH1
+        31yKSabvGPX0JphsvCZ3wjK1T2N0p
+X-Received: by 2002:a17:906:b24a:: with SMTP id ce10mr4692504ejb.83.1623929364978;
+        Thu, 17 Jun 2021 04:29:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQxoLzPkjG7qTF6pnm47FJcTyBPVefQu9Gb2o8Ewl83hG/K5uvahTR/5zWHNZRrxu3APLVbA==
+X-Received: by 2002:a17:906:b24a:: with SMTP id ce10mr4692477ejb.83.1623929364822;
+        Thu, 17 Jun 2021 04:29:24 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id e18sm3537900ejh.64.2021.06.17.04.19.51
+        by smtp.gmail.com with ESMTPSA id du16sm3512028ejc.42.2021.06.17.04.29.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 04:19:52 -0700 (PDT)
+        Thu, 17 Jun 2021 04:29:24 -0700 (PDT)
 Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
  statistics interface
 To:     Greg KH <gregkh@linuxfoundation.org>,
@@ -97,14 +97,14 @@ Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         Fuad Tabba <tabba@google.com>
 References: <20210617044146.2667540-1-jingzhangos@google.com>
  <20210617044146.2667540-4-jingzhangos@google.com>
- <YMrmqOxDWJ2/8sfD@kroah.com>
+ <YMrkGZzPrt0jA1iP@kroah.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <be506135-5bc3-31bd-1b20-063f01f41df1@redhat.com>
-Date:   Thu, 17 Jun 2021 13:19:50 +0200
+Message-ID: <0d959828-da89-bceb-f7cc-35622a60c431@redhat.com>
+Date:   Thu, 17 Jun 2021 13:29:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <YMrmqOxDWJ2/8sfD@kroah.com>
+In-Reply-To: <YMrkGZzPrt0jA1iP@kroah.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -112,24 +112,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/06/21 08:07, Greg KH wrote:
->> The statistics data itself could be read out by userspace telemetry
->> periodically without any extra parsing or setup effort.
-> Do you have a pointer to userspace code that can do such a thing that
-> others can use?  We do not like adding apis to the kernel without at
-> least seeing the user of those apis, especially for complex things like
-> this.
+On 17/06/21 07:56, Greg KH wrote:
+> On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
+>> +	struct kvm_stats_desc {
+>> +		__u32 flags;
+>> +		__s16 exponent;
+>> +		__u16 size;
+>> +		__u32 offset;
+>> +		__u32 unused;
+>> +		char name[0];
+>> +	};
 > 
-> Ideally you would include some library code in the kernel tree itself
-> that everyone can use for this for their own programs.  You have
-> provided a test which is great, but how do we know it works for "real"
-> usages?
+> <snip>
+> 
+>> +The ``unused`` fields are reserved for future support for other types of
+>> +statistics data, like log/linear histogram.
+> 
+> you HAVE to set unused to 0 for now, otherwise userspace does not know
+> it is unused, right?
 
-I am pretty sure that Google is using this internally, but we are also 
-going to work on QEMU and Libvirt support for this.
+Jing, I think you planned to use it with other flags that are unused for 
+now?  But please do check that it's zero in the testcase.
 
-As for the rest, thanks for the review---I'll let Jing act on it and 
-only add my own remarks in a couple places.
+> It is not a pointer, it is the data itself.
+> 
+>> +string starts at the end of ``struct kvm_stats_desc``.
+>> +The maximum length (including trailing '\0') is indicated by ``name_size``
+>> +in ``struct kvm_stats_header``.
+> 
+> I thought we were replacing [0] arrays with [], are you sure you should
+> be declaring this as [0]?  Same for all structures in this document (and
+> code).
+
+In C code [0] is a bit more flexible than [].  I think in this 
+particular case [] won't work due to how the structures are declared. 
+In the documentation [] is certainly clearer.
 
 Paolo
 
