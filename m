@@ -2,63 +2,92 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7AF1C48BDF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Jun 2021 21:41:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39A70C48BDF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Jun 2021 22:04:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C232D61284
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Jun 2021 21:41:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F67561279
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Jun 2021 22:04:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbhFRVoB (ORCPT
+        id S233715AbhFRWGe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Jun 2021 17:44:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60950 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234615AbhFRVoA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Jun 2021 17:44:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C3686121D;
-        Fri, 18 Jun 2021 21:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624052510;
-        bh=tRXqw30J35AbDfbBfYc98TsOMc5DEf0x24g3SIImSPc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B4umn21QmkhEmVUXhRyOfZX7zAYzp6ED+kiDMywq0Tn2sQnKrERJUsahnBl4Ct/+c
-         RgqCKyCUN0qot95DQga/LSbzqwJwtewHhIB5638G9yoM2tT91IFqZQsE7ngNQhz+i2
-         shbi5vBnyPyOZemwUr8V25FrVIRwQtdHEgb1aNxCyiUNq3s3gvzf491b+T/j3xkw2+
-         Lh7ZTOjdLXGw6z0WD7mKiuN8zdN2ASaNUOF5x/zdC9V0N9kVc/bmKnKrZSpgtlyOJ0
-         96h/musBsY8sSbsd3P1EGXQqcHvd6bTeoptMSRjLUbbMrj81JX4z5w3McEirL/wQ50
-         c7Vuv/Fp441Cg==
-Date:   Fri, 18 Jun 2021 14:41:49 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Seth Forshee <seth.forshee@canonical.com>
+        Fri, 18 Jun 2021 18:06:34 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39934 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234045AbhFRWGa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Jun 2021 18:06:30 -0400
+Received: from mail-oi1-f197.google.com ([209.85.167.197])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <seth.forshee@canonical.com>)
+        id 1luMb5-0006CP-1O
+        for linux-kselftest@vger.kernel.org; Fri, 18 Jun 2021 22:04:19 +0000
+Received: by mail-oi1-f197.google.com with SMTP id a8-20020aca1a080000b029021d9ff07a80so3418332oia.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Jun 2021 15:04:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aq0a1ZzhEowcsGM4Ha6B4ggHKmP/83PVuQLh/mwbb0s=;
+        b=HL+igfelift04B5KORtHy1McYv0K9se2EQ4C3lGsMf47v7OvMibCNxGSAu9cg2S8Ut
+         l7YbsPWlT+pElEf3hLyTJmczBadWNCAaP4eAclqG4W+AJhIpzqRNg+ikN1ag9WRY9SOB
+         likVDFfvxq7LrsxwQEXrnJTd2qGrGLJorh1eB0xMdVKFKc41fDoAw2/qrOuB+9qvWbHa
+         sal2TjkfxoksFBTQJJx+ykDSSFLHlAhQ+OrHnHegxm9KjC3Q5pjHbN7OkwaHt4JH3QhJ
+         URWbbTk0ZinndZ73SZ+usHQnJFGBi5h2MwqdUKi2OF9NKFGChdnlV5N2WZ9uJ1HcOqux
+         PJ6Q==
+X-Gm-Message-State: AOAM530k78eSxFzrpRHHMdcrLrDmY/p52Al2NLFoenN7E3QI/iXGLx/S
+        1L2/37C9ig9wMHryZyLD8zt4lgy7dhk4vaIP70w7Sv4E2jPpCI3ntrSpwFC+Dq8nBD80q8Cs5bm
+        laONgNIeNbDeJk5Mk5LEQ2FhiJMQWW4bik9et4hPgOhk/zA==
+X-Received: by 2002:a05:6830:1bcb:: with SMTP id v11mr11602653ota.251.1624053858035;
+        Fri, 18 Jun 2021 15:04:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1bahtyGa53x41WidzwyFgCcVxW+PsY5lEFKzqLLxQJsRyXgTP+B21L5nf31XFlHQryWU42Q==
+X-Received: by 2002:a05:6830:1bcb:: with SMTP id v11mr11602630ota.251.1624053857818;
+        Fri, 18 Jun 2021 15:04:17 -0700 (PDT)
+Received: from localhost ([2605:a601:ac0f:820:44f9:bfd8:94bd:f2e3])
+        by smtp.gmail.com with ESMTPSA id y13sm2355582ots.47.2021.06.18.15.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Jun 2021 15:04:17 -0700 (PDT)
+Date:   Fri, 18 Jun 2021 17:04:16 -0500
+From:   Seth Forshee <seth.forshee@canonical.com>
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/tls: don't change cipher type in
- bidirectional test
-Message-ID: <20210618144149.35192fcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210618204532.257773-1-seth.forshee@canonical.com>
+Subject: Re: [PATCH] selftests/tls: don't change cipher type in bidirectional
+ test
+Message-ID: <YM0YYNrkihtExlTR@ubuntu-x1>
 References: <20210618204532.257773-1-seth.forshee@canonical.com>
+ <20210618144149.35192fcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210618144149.35192fcc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 18 Jun 2021 15:45:32 -0500 Seth Forshee wrote:
-> The bidirectional test attempts to change the cipher to
-> TLS_CIPHER_AES_GCM_128. The test fixture setup will have already set
-> the cipher to be tested, and if it was different than the one set by
-> the bidir test setsockopt() will fail on account of having different
-> ciphers for rx and tx, causing the test to fail.
+On Fri, Jun 18, 2021 at 02:41:49PM -0700, Jakub Kicinski wrote:
+> On Fri, 18 Jun 2021 15:45:32 -0500 Seth Forshee wrote:
+> > The bidirectional test attempts to change the cipher to
+> > TLS_CIPHER_AES_GCM_128. The test fixture setup will have already set
+> > the cipher to be tested, and if it was different than the one set by
+> > the bidir test setsockopt() will fail on account of having different
+> > ciphers for rx and tx, causing the test to fail.
+> 
+> It's setting it up in the opposite direction, TLS is uni-directional.
+> I've posted this earlier:
 
-It's setting it up in the opposite direction, TLS is uni-directional.
-I've posted this earlier:
+Ah, so it is, I missed that detail.
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20210618202504.1435179-2-kuba@kernel.org/
+> https://patchwork.kernel.org/project/netdevbpf/patch/20210618202504.1435179-2-kuba@kernel.org/
+> 
+> Sorry for not CCing you.
 
-Sorry for not CCing you.
+No worries.
+
+Thanks,
+Seth
