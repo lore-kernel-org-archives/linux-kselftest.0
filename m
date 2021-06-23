@@ -2,113 +2,104 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2108C49EAF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Jun 2021 20:39:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EE7FC49EB9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Jun 2021 20:39:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDC2B611C1
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Jun 2021 20:39:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CB62610C7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Jun 2021 20:39:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbhFWUmJ (ORCPT
+        id S230015AbhFWUmL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Jun 2021 16:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        Wed, 23 Jun 2021 16:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbhFWUmG (ORCPT
+        with ESMTP id S229945AbhFWUmG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 23 Jun 2021 16:42:06 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA3EC061760
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB1EC0617A8
         for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 13:39:48 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id t32so3298306pfg.2
+Received: by mail-pj1-x102c.google.com with SMTP id k5so2187588pjj.1
         for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 13:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lnn9jp/s32hmkbL+/fflp0AYulLa8VCq66U0jv/eDes=;
-        b=C1YmvtJB6ygrlO6e3yWlLKjc6iRwUSJaKCLlk6vJQ46k0QV+mgo5ZXBkqnx1ETI7Bo
-         0ImQPtsKOnj13rIVcLAnUm4f4mWTuB9d6UG69Ymk9JjWlge3TjqC4Q1y3alDooeS3+2r
-         vThLKpEt8iYquBxfy1ZwtfJBPAXkp9aG2u5k0=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=weOFYHnAt9XHzyijtFN46zZa/bge4PQn7pFxvS+uscM=;
+        b=PINKBfWpr3gvTyJ0eFnAv65n6MifZbR/apDoNhNeYQq+pb7Y+nHfI6/29jpyhKRsrA
+         kSmtPGNKM36+xWmlgXqHNtUo2kVWovxkLqFL92N+B8M0nbpRfCD32Nat5OMJ3EJp3QwV
+         KrPvrHdngyt40imWa1hgx+IPHVy1nFGR4oZAI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Lnn9jp/s32hmkbL+/fflp0AYulLa8VCq66U0jv/eDes=;
-        b=RGhcHrzDS2+2oMwwCA7nbD5myFAgG3WieBSswHEVezrVC6VFh4uuBR0s1IXDOGqnnV
-         YiuPHsjT/401V3BNZu0TM8sG1x5BBZxK8zQ8t7Qu4m4w+egIRvDVeLCShGyLQHbRKF5O
-         vB+4dg901XMUKCdcp5q3hUW+Rd1wic3lOeoZlcVw8WnoqRlg9ArRjiK49fxMCuwiojZY
-         XrwEgkvn9aF9sdqHCzbf8kwfqWy4ym3T1JzM3nukBp3kYs8SSuRhi+hZHzH8qBh3YB2y
-         OYHBpp2yLEHhV2RRhI0ownlu17f+cxGFsrzW6aRNn/sp1EuPHshPJQNYwuTof+1kqzH1
-         aNQA==
-X-Gm-Message-State: AOAM532TN0h143n1OIB40sKKsr9RCB0jQyzHkN1JtIm1AL4iGEDXRlvm
-        u99mEkPlkFXJd2gDw57cDKF0WQ==
-X-Google-Smtp-Source: ABdhPJy25JF5LfPlvMzjiFU6YxFBAIl/9LluZtx9nqJMnVqSL0stDwYx7dEMGfPl3SHI7ZOODjCkFw==
-X-Received: by 2002:aa7:8254:0:b029:2ed:b41:fefc with SMTP id e20-20020aa782540000b02902ed0b41fefcmr1498913pfn.42.1624480788262;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=weOFYHnAt9XHzyijtFN46zZa/bge4PQn7pFxvS+uscM=;
+        b=FMDvhpVD3pJZk1sZqRnlZ8yXtXt+kyCqCyKJx7MbQP1GRv+CGHXeofR/sE+DRBIIbc
+         IZcNhDIJhLxctxWT9nZWThcNNZIChs6uY/qWjtEzuIhzLfTwO3hgfObvkKvgFWYPgAF5
+         aHyBBgPdYKXJi5pXj5RqXec0+WD1onDnjbzlnbKSna2yawxnSGKpoT3E8wb/6DY8oCqh
+         HpLEYiiXyOAFe3I2OMRcXdnhi1ZKZFGt8QZLelwU/C1/NHqx3lVskEeXG41xtnEbzxuE
+         Nc0sU9sCu5sdWrPV/OAQ8YzyXXCZvoWmZWVyfyO6RnEt+WYwns5HzpWgp3mh2M2+HAVh
+         CysA==
+X-Gm-Message-State: AOAM531N6cEfnPZCHNcU3g4/eq28MqWB7aExbYu+xYgeUw22FZVJafhr
+        aV3uO260oPr9b+wWaFvUs+TimA==
+X-Google-Smtp-Source: ABdhPJx1ypcWLUnUHJBbnBIjhX9m3ZNAxwtdnMUAu2WOpDwAvnSgoGuRx7tr0mmBARqaMdXFPQlhRQ==
+X-Received: by 2002:a17:902:c789:b029:110:4933:71ce with SMTP id w9-20020a170902c789b0290110493371cemr1194211pla.56.1624480788561;
         Wed, 23 Jun 2021 13:39:48 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 92sm6294061pjv.29.2021.06.23.13.39.45
+        by smtp.gmail.com with ESMTPSA id f5sm640523pfe.79.2021.06.23.13.39.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 23 Jun 2021 13:39:45 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
         Guillaume Tucker <guillaume.tucker@collabora.com>,
         David Laight <David.Laight@ACULAB.COM>,
         Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
         kernelci@groups.io, linux-kselftest@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Subject: [PATCH 0/9] LKDTM: Improvements for kernelci.org
-Date:   Wed, 23 Jun 2021 13:39:27 -0700
-Message-Id: <20210623203936.3151093-1-keescook@chromium.org>
+Subject: [PATCH 4/9] lkdtm/bugs: XFAIL UNALIGNED_LOAD_STORE_WRITE
+Date:   Wed, 23 Jun 2021 13:39:31 -0700
+Message-Id: <20210623203936.3151093-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210623203936.3151093-1-keescook@chromium.org>
+References: <20210623203936.3151093-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1469; h=from:subject; bh=zEuv0J1e6Ce2pKHimEyiAaIYYKWtyU0Hog/oTewgJ2Q=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBg05wFChS5JDlFBZpH8NNFzZZUwtqUxgF7CN0I4TwO T784QdeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYNOcBQAKCRCJcvTf3G3AJkcxEA CluTxSMcPooRUNQtu6ITHy4aTzsPHZRIHL4Ygd6kjyDQO3ldSlcQafSvdwQdU9mmcXXkKfA4FU2E9Q VUiby+2TjqiTHS7GoDzvduYDAiJ2qTPK9eKfipp6zcwyrZEfXmFV0l1CBZIuab7G5uKq67+Nqx+j0G gAihVQFVrIDuP2xqSolSgSDZ4HDV7qRcpcOz4dp86mvfQyvp/vjTodFTYpSQaUWb54m9CKgmerG/Ki cw1JyjSGPQBCXev0rY4IyRn0WyUFzfa1DKIZnRMI6+up9iNTR1pKOCeqaP7q4+rHpJs9yCm40WlT8A AhF7CDUWj6J/ocghjGEByr+ObzUm/F5ip+eGRHPubl8oavMB2pBKov2vM+v6LTcJQkKMz82OFHU7P8 SLKxRr9PO5BSHuwCr80Ju0BqWRDohcjP3xK2j9hqvhzFCEhoIew9IDYZtAo1iqEAY5G5FA3m336cFW hc/U9lDeHJSo9RedWBRcTz8zLAQTYsnRz4QTdORHzmHhfc8VRVdQ5+HgYJqk4sSEt6JqKmH06zys0y L4zXmsaU4uuKIzVWtX89R1xPRARgF1FDUy4hFicEfL6TR7hpGzMdxcsv7jdn7CQUfbcgmrwkN01S9O 0SfggbzjvFahUpHkHC1b849WPAa/AinczkLUw1s9B21RYzD335XtCKHTAEjg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=821; h=from:subject; bh=Ug1zxBYqfqGVjk6HZPE+S2IQ++k8iErOOapO5olSeEg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBg05wGnJvmDSLi1MPOx05nkNSD/27SmvDUPYKaSZ+b ABK1bYKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYNOcBgAKCRCJcvTf3G3AJhiJEA Ciux3+IGOay7Jw49WbIkgIv0TxSZgcO90q+vD3qxYri5Kve5Gl362F2aW0FCOlOtxfzOnGmC53o+vL mnCazUpoqn0dW/Y15W4dfOo+HoN5/Afr2nMEj2cwPYh7e2v3kQ2/JK4gaqP9mMDegUGCvWynQbQq54 md3YCttGo14SuaAMF9Wgo60xgxde5gIvQadm2WfvXU0BLyeZBBQb/iHJb8A06PBRzIBP06Nu+NmVVS 4gjNsMrbg6ltVcNDZ67UJ4sjzuFEP2hO+bd3d6/D/d7os59xJd11AHlpBYfk1gCBMC4wl/ZHgbOsaY ew49zKobbo1qt1K8F7Yct3U3IZZ9e2Ny/XCdM/rQMR0KlGYK/LXREO8mEubV2DBQzQidihoy2cFwBk 5gEjXn+w2QmsY5GXkuCXxsRXVw90q9IyT0Qt6kyJ44vqmTKpUFpcarqthBP1/2nXx243B73YaVCB12 6nd+koQb1m5NQNvzwZ8i/jObt5py/ucSDlpCVQ/PCl3NUt9sRB0S8MRNKXxgEJuNMGGs/BUSoYK5AE 51LAiLpudvJPuDuLgHUfzx1Ig+tAVem+P/7WoryLM/rDXtXqsXoyyHzBPcZGczV6nPm7xCwdkviySP adfzxjhgaQrqToXPyTkus9c6NYZDhVyUcK6oihTYUAjfRzEQc+F7f3grbaNA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a bunch of LKDTM clean-ups to improve and expand testing,
-given feedback from testing at kernelci.org. Adds a few new tests as
-well.
+When built under CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS, this test is
+expected to fail (i.e. not trip an exception).
 
-(If a pull-request is preferred, please let me know.)
+Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/misc/lkdtm/bugs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks!
-
--Kees
-
-Kees Cook (9):
-  selftests/lkdtm: Avoid needing explicit sub-shell
-  selftests/lkdtm: Fix expected text for CR4 pinning
-  selftests/lkdtm: Fix expected text for free poison
-  lkdtm/bugs: XFAIL UNALIGNED_LOAD_STORE_WRITE
-  lkdtm/heap: Add vmalloc linear overflow test
-  lkdtm: Enable DOUBLE_FAULT on all architectures
-  lkdtm: Add CONFIG hints in errors where possible
-  selftests/lkdtm: Enable various testable CONFIGs
-  lkdtm/heap: Add init_on_alloc tests
-
- drivers/misc/lkdtm/bugs.c                     | 11 ++-
- drivers/misc/lkdtm/cfi.c                      |  3 +-
- drivers/misc/lkdtm/core.c                     | 58 ++++++++++-
- drivers/misc/lkdtm/fortify.c                  |  3 +-
- drivers/misc/lkdtm/heap.c                     | 97 ++++++++++++++++++-
- drivers/misc/lkdtm/lkdtm.h                    | 46 ++++++++-
- drivers/misc/lkdtm/stackleak.c                |  4 +-
- drivers/misc/lkdtm/usercopy.c                 |  7 +-
- tools/testing/selftests/lkdtm/config          |  7 ++
- tools/testing/selftests/lkdtm/run.sh          | 12 ++-
- .../testing/selftests/lkdtm/stack-entropy.sh  |  1 +
- tools/testing/selftests/lkdtm/tests.txt       | 11 ++-
- 12 files changed, 236 insertions(+), 24 deletions(-)
-
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index 0e8254d0cf0b..9ff02bdf3153 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -161,6 +161,9 @@ void lkdtm_UNALIGNED_LOAD_STORE_WRITE(void)
+ 	if (*p == 0)
+ 		val = 0x87654321;
+ 	*p = val;
++
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
++		pr_err("XFAIL: arch has CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS\n");
+ }
+ 
+ void lkdtm_SOFTLOCKUP(void)
 -- 
 2.30.2
 
