@@ -2,105 +2,102 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BBEDC48BC2
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Jun 2021 00:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 865EDC49EA6
+	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Jun 2021 07:21:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E3CB61374
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Jun 2021 00:40:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E3B4613ED
+	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Jun 2021 07:21:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbhFXAnA (ORCPT
+        id S231480AbhFXHXi convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Jun 2021 20:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbhFXAnA (ORCPT
+        Thu, 24 Jun 2021 03:23:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:57939 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231434AbhFXHXh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Jun 2021 20:43:00 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7C7C061756
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 17:40:41 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id b2so3018479oiy.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Jun 2021 17:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8aXNnJPgzFasgRQ/3SZjZxHB/iETrErIxFti8LCKPuw=;
-        b=WaocPTyfDGVh9mLxAuyWMDCc0iZt0OY5B0UMEUpVasi85XWfRxg82NX3/0H4ZjKXcQ
-         NPJRoYB3S6TQOiiz5UzaWct2FYfX+sIa91Zic1jKpg4IuGww7HWKxLGQ3uBfqtWa11AF
-         QTHorlW9bTAWxgOJVcE8Q895b8vrbq/x/8Vos=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8aXNnJPgzFasgRQ/3SZjZxHB/iETrErIxFti8LCKPuw=;
-        b=OfFX7fCQReuZ6gNYsOcSz29MwWI7o/pSB/ZffzosgNXhsq+ybr5HPiZhQfniumH06C
-         fKgKVBl8jSY0nG6iAx1Ric1yVWFNMxwLZfbrmWpmcXVBHCupQrcc2EfLl1B7cO0DQorW
-         w3Em+mvYC57A8tZeV3NXANskhMVg6cHZGSVr4iSCuObX4NcA4/OaB2MXP6fQEAvYhHFQ
-         ZJ/iRxlamFZE/U1faiMtFcc0kemFixHRuOrdEQobpSGPhz0xBT1QNuWvCdkaniOkZgiA
-         N2628EJm+1BgDmRJGgzjMqHSPn1ycf6C1cyZyDKzWMZ+22syapWn+LuC0D9w7vn2q7c0
-         2jhA==
-X-Gm-Message-State: AOAM533QcTYsGnSYjcXLid2dRKG9dok1wUBFnu+cXLY+crrmX6DwVbaf
-        i8JkrgaVgrRfsbFmJPs2IEWkyA==
-X-Google-Smtp-Source: ABdhPJySlB33W2z668j7Dkn6kxnqb+RezaTEux7Oz+cmN+pHAbGFZE2M5Nyvs0HY/kx97yoNlisVXA==
-X-Received: by 2002:a05:6808:4c2:: with SMTP id a2mr5108035oie.73.1624495240315;
-        Wed, 23 Jun 2021 17:40:40 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c11sm290426oot.25.2021.06.23.17.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jun 2021 17:40:39 -0700 (PDT)
-Subject: Re: [PATCH] selftests/sgx: remove checks for file execute permissions
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, tim.gardner@canonical.com,
-        jarkko@kernel.org, shuah@kernel.org, linux-sgx@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210621190556.4B5DCBB1@viggo.jf.intel.com>
- <121f7215-f11d-2533-b736-9f18516c3220@intel.com>
- <1f46324e-2cbe-f4a7-65d5-24b22a8b36b1@intel.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a3c10daf-6531-5b09-c6fd-77ae02afdce0@linuxfoundation.org>
-Date:   Wed, 23 Jun 2021 18:40:38 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 24 Jun 2021 03:23:37 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mtapsc-5-gGbqqVa_MamySoR60Cs1mA-1; Thu, 24 Jun 2021 08:21:16 +0100
+X-MC-Unique: gGbqqVa_MamySoR60Cs1mA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 24 Jun
+ 2021 08:21:15 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Thu, 24 Jun 2021 08:21:15 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>
+CC:     'Guillaume Tucker' <guillaume.tucker@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Thread-Topic: [PATCH v2] selftests/lkdtm: Use /bin/sh not $SHELL
+Thread-Index: AQHXaCznpjkpNTpwjEW+kA8o/GdKZashmKhggAAdGgCAABKuUIAAWbwAgACepjA=
+Date:   Thu, 24 Jun 2021 07:21:15 +0000
+Message-ID: <a05d4cd3366e4047ba42663738e12198@AcuMS.aculab.com>
+References: <20210619025834.2505201-1-keescook@chromium.org>
+ <e958209b-8621-57ca-01d6-2e76b05dab4c@collabora.com>
+ <42f26361db6f481e980ac349bf0079ef@AcuMS.aculab.com>
+ <202106230917.FE2F587@keescook>
+ <76a575d1364a47458d27c76c65b673b6@AcuMS.aculab.com>
+ <202106231231.9B858B95A@keescook>
+In-Reply-To: <202106231231.9B858B95A@keescook>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <1f46324e-2cbe-f4a7-65d5-24b22a8b36b1@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/21/21 3:18 PM, Dave Hansen wrote:
-> On 6/21/21 2:08 PM, Reinette Chatre wrote:
->>
->> Thank you very much for fixing this. With this applied the SGX tests are
->> able to run again on my system.
->>
->> Tested-by: Reinette Chatre <reinette.chatre@intel.com>
->>
->> I think it is missing a "Signed-off-by".
+From: Kees Cook
+> Sent: 23 June 2021 23:47
 > 
-> Right you are.  I think I've done this twice in a row for one-off
-> patches.  Sheesh.
+> On Wed, Jun 23, 2021 at 04:27:47PM +0000, David Laight wrote:
+...
+> > You can probably even do:
+> >
+> > echo "$test" | /bin/sh -c cat >$TRIGGER || true
+> >
+> > (moving the redirect to the outer shell).
 > 
-> Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Actually, it looks like the "write" is already happening in the exec'd
+> process, so this can just be:
 > 
-> If anyone wants a resend with this included, please let me know.
+> echo "$test" | cat >$TRIGGER || true
 > 
+> But it still can't be:
+> 
+> echo "$test" >$TRIGGER
+> 
+> which is what I had over-engineered a solution to. :)
 
-Thanks to b4/patchwork - no need to resend. I have the signed-off-by
-in the downloaded patch.
+That one fails because echo is the shell builtin.
+But:
+	/bin/echo "$test" >$TRIGGER
+should be fine.
 
-Thank you all. Now applied to linux-kselftest next for 5.14-rc1
+Quite where the original came from I not sure I want to find out.
 
--- Shuah
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
