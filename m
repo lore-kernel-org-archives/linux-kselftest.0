@@ -2,221 +2,163 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5A1C49EA7
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Jun 2021 09:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B7BCC2B9F4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Jun 2021 10:52:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 779F56141C
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Jun 2021 09:25:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0280A61451
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Jun 2021 10:52:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbhFYJ1X (ORCPT
+        id S229573AbhFYKyu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Jun 2021 05:27:23 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:33456 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231526AbhFYJ1J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Jun 2021 05:27:09 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DC2CF1A045A;
-        Fri, 25 Jun 2021 11:24:46 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 754451A16CD;
-        Fri, 25 Jun 2021 11:24:46 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 783E4183ACDC;
-        Fri, 25 Jun 2021 17:24:44 +0800 (+08)
-From:   Yangbo Lu <yangbo.lu@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     Yangbo Lu <yangbo.lu@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
-        Richard Cochran <richardcochran@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rui Sousa <rui.sousa@nxp.com>,
-        Sebastien Laveze <sebastien.laveze@nxp.com>
-Subject: [net-next, v4, 10/11] selftests/net: timestamping: support binding PHC
-Date:   Fri, 25 Jun 2021 17:35:12 +0800
-Message-Id: <20210625093513.38524-11-yangbo.lu@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210625093513.38524-1-yangbo.lu@nxp.com>
-References: <20210625093513.38524-1-yangbo.lu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        Fri, 25 Jun 2021 06:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229458AbhFYKyu (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 25 Jun 2021 06:54:50 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB079C061760
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jun 2021 03:52:28 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id v11-20020a4a8c4b0000b029024be8350c45so2404205ooj.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Jun 2021 03:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MHkVJi5PUgd4dGkz/e/ZMJIraqqu+hSTTUd8BwkusHs=;
+        b=ENM+I6bst47g6xp0fxa3wu1HXqWJrJUkjYCHBFgG+0/DP5W/uyjzlNBQhsDH2+cLEK
+         4rtiUKRBvDC3Qmwa1En4rPnjnGyxG9DNyWhCu8u85yBB9+aRO+48WBREtJqcX0r8eSh+
+         035BZJb5tjCPHIia06lG+YZys+es+yDgcQjrHtqbaa9+xYO+WgQ42GJeI40lwH0OC1dh
+         gUrfv45YS+ZdmxSWl9LiYepcEbq/crdhksx4v1+Uuu/uz1kAjk8fcLsNkCYXv9FMozGL
+         7TofufL/ECZqzaEfeHfTvvDCTmIuejXIoDBi/dGc7XVWVa74w8TrJ5bHmmPraU+iRtaU
+         JXKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MHkVJi5PUgd4dGkz/e/ZMJIraqqu+hSTTUd8BwkusHs=;
+        b=K33g+dTC6IzvnKHXH32GylucgednoHrDo530CJ1JDQ5qtomcwQA9UN9vS3W8s4Mfv1
+         z65MtketrRpWyFvJyl1z6BcUElk+2q+Kb20lV7fd+6+WUrjXWR9Z0t+/84XlzOaWLG6r
+         /P8/5j9kh+07vhgJ6SFZ1ACyIIGcPEFZ20Ewk0kRgtebHrL3QzPt2jf8+xMe7DLVFShX
+         uxYRelN+T6nXezw7fKe+QOy52JPMlxg+Sd/GleV0OcgTt8l1EkjLF34w6ZUB0X6a3aK4
+         wQ5tWOPkD+Ldilo69kShQ//MMoozpGaidG6SUfhWsz3+nAkY+nKRt54Ak3ATPFFn3pn6
+         5PVw==
+X-Gm-Message-State: AOAM530EFp4pjiiM2dy1rh3VXTMnq2bT3TUEfa2s/M/yV/bf7+caxpr/
+        pXaWA56/VW8srf7bWPIwjS176q65xNhYRBzvtMQ0LA==
+X-Google-Smtp-Source: ABdhPJwQvR7nr/9k9nUvttiDTU6+VyHuKlXbHY7w2j8RwsPiDhordBvFljONCyEjoOkwdD6o6W7gDCGMCToeD0QXfVk=
+X-Received: by 2002:a4a:9406:: with SMTP id h6mr8636435ooi.36.1624618347906;
+ Fri, 25 Jun 2021 03:52:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210625065815.322131-1-davidgow@google.com> <20210625065815.322131-3-davidgow@google.com>
+In-Reply-To: <20210625065815.322131-3-davidgow@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 25 Jun 2021 12:52:16 +0200
+Message-ID: <CANpmjNOA8rRzdt-AXsshVff3909TXBx=hHVUkfqX55677EnJFg@mail.gmail.com>
+Subject: Re: [PATCH kunit-fixes v5 3/4] kunit: test: Add example tests which
+ are always skipped
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Support binding PHC of PTP vclock for timestamping.
+On Fri, 25 Jun 2021 at 08:58, David Gow <davidgow@google.com> wrote:
+>
+> Add two new tests to the example test suite, both of which are always
+> skipped. This is used as an example for how to write tests which are
+> skipped, and to demonstrate the difference between kunit_skip() and
+> kunit_mark_skipped().
+>
+> Note that these tests are enabled by default, so a default run of KUnit
+> will have two skipped tests.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> Reviewed-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-Signed-off-by: Yangbo Lu <yangbo.lu@nxp.com>
----
-Changes for v3:
-	- Added this patch.
-Changes for v4:
-	- Fixed checkpatch.
----
- tools/testing/selftests/net/timestamping.c | 62 +++++++++++++++-------
- 1 file changed, 43 insertions(+), 19 deletions(-)
+Reviewed-by: Marco Elver <elver@google.com>
 
-diff --git a/tools/testing/selftests/net/timestamping.c b/tools/testing/selftests/net/timestamping.c
-index 21091be70688..be8032632073 100644
---- a/tools/testing/selftests/net/timestamping.c
-+++ b/tools/testing/selftests/net/timestamping.c
-@@ -43,11 +43,19 @@
- # define SO_TIMESTAMPNS 35
- #endif
- 
-+#ifndef SOF_TIMESTAMPING_BIND_PHC
-+#define SOF_TIMESTAMPING_BIND_PHC (1 << 15)
-+struct so_timestamping {
-+	int flags;
-+	int bind_phc;
-+};
-+#endif
-+
- static void usage(const char *error)
- {
- 	if (error)
- 		printf("invalid option: %s\n", error);
--	printf("timestamping interface option*\n\n"
-+	printf("timestamping <interface> [bind_phc_index] [option]*\n\n"
- 	       "Options:\n"
- 	       "  IP_MULTICAST_LOOP - looping outgoing multicasts\n"
- 	       "  SO_TIMESTAMP - normal software time stamping, ms resolution\n"
-@@ -58,6 +66,7 @@ static void usage(const char *error)
- 	       "  SOF_TIMESTAMPING_RX_SOFTWARE - software fallback for incoming packets\n"
- 	       "  SOF_TIMESTAMPING_SOFTWARE - request reporting of software time stamps\n"
- 	       "  SOF_TIMESTAMPING_RAW_HARDWARE - request reporting of raw HW time stamps\n"
-+	       "  SOF_TIMESTAMPING_BIND_PHC - request to bind a PHC of PTP vclock\n"
- 	       "  SIOCGSTAMP - check last socket time stamp\n"
- 	       "  SIOCGSTAMPNS - more accurate socket time stamp\n"
- 	       "  PTPV2 - use PTPv2 messages\n");
-@@ -311,7 +320,6 @@ static void recvpacket(int sock, int recvmsg_flags,
- 
- int main(int argc, char **argv)
- {
--	int so_timestamping_flags = 0;
- 	int so_timestamp = 0;
- 	int so_timestampns = 0;
- 	int siocgstamp = 0;
-@@ -325,6 +333,8 @@ int main(int argc, char **argv)
- 	struct ifreq device;
- 	struct ifreq hwtstamp;
- 	struct hwtstamp_config hwconfig, hwconfig_requested;
-+	struct so_timestamping so_timestamping_get = { 0, -1 };
-+	struct so_timestamping so_timestamping = { 0, -1 };
- 	struct sockaddr_in addr;
- 	struct ip_mreq imr;
- 	struct in_addr iaddr;
-@@ -342,7 +352,12 @@ int main(int argc, char **argv)
- 		exit(1);
- 	}
- 
--	for (i = 2; i < argc; i++) {
-+	if (argc >= 3 && sscanf(argv[2], "%d", &so_timestamping.bind_phc) == 1)
-+		val = 3;
-+	else
-+		val = 2;
-+
-+	for (i = val; i < argc; i++) {
- 		if (!strcasecmp(argv[i], "SO_TIMESTAMP"))
- 			so_timestamp = 1;
- 		else if (!strcasecmp(argv[i], "SO_TIMESTAMPNS"))
-@@ -356,17 +371,19 @@ int main(int argc, char **argv)
- 		else if (!strcasecmp(argv[i], "PTPV2"))
- 			ptpv2 = 1;
- 		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_TX_HARDWARE"))
--			so_timestamping_flags |= SOF_TIMESTAMPING_TX_HARDWARE;
-+			so_timestamping.flags |= SOF_TIMESTAMPING_TX_HARDWARE;
- 		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_TX_SOFTWARE"))
--			so_timestamping_flags |= SOF_TIMESTAMPING_TX_SOFTWARE;
-+			so_timestamping.flags |= SOF_TIMESTAMPING_TX_SOFTWARE;
- 		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_RX_HARDWARE"))
--			so_timestamping_flags |= SOF_TIMESTAMPING_RX_HARDWARE;
-+			so_timestamping.flags |= SOF_TIMESTAMPING_RX_HARDWARE;
- 		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_RX_SOFTWARE"))
--			so_timestamping_flags |= SOF_TIMESTAMPING_RX_SOFTWARE;
-+			so_timestamping.flags |= SOF_TIMESTAMPING_RX_SOFTWARE;
- 		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_SOFTWARE"))
--			so_timestamping_flags |= SOF_TIMESTAMPING_SOFTWARE;
-+			so_timestamping.flags |= SOF_TIMESTAMPING_SOFTWARE;
- 		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_RAW_HARDWARE"))
--			so_timestamping_flags |= SOF_TIMESTAMPING_RAW_HARDWARE;
-+			so_timestamping.flags |= SOF_TIMESTAMPING_RAW_HARDWARE;
-+		else if (!strcasecmp(argv[i], "SOF_TIMESTAMPING_BIND_PHC"))
-+			so_timestamping.flags |= SOF_TIMESTAMPING_BIND_PHC;
- 		else
- 			usage(argv[i]);
- 	}
-@@ -385,10 +402,10 @@ int main(int argc, char **argv)
- 	hwtstamp.ifr_data = (void *)&hwconfig;
- 	memset(&hwconfig, 0, sizeof(hwconfig));
- 	hwconfig.tx_type =
--		(so_timestamping_flags & SOF_TIMESTAMPING_TX_HARDWARE) ?
-+		(so_timestamping.flags & SOF_TIMESTAMPING_TX_HARDWARE) ?
- 		HWTSTAMP_TX_ON : HWTSTAMP_TX_OFF;
- 	hwconfig.rx_filter =
--		(so_timestamping_flags & SOF_TIMESTAMPING_RX_HARDWARE) ?
-+		(so_timestamping.flags & SOF_TIMESTAMPING_RX_HARDWARE) ?
- 		ptpv2 ? HWTSTAMP_FILTER_PTP_V2_L4_SYNC :
- 		HWTSTAMP_FILTER_PTP_V1_L4_SYNC : HWTSTAMP_FILTER_NONE;
- 	hwconfig_requested = hwconfig;
-@@ -413,6 +430,9 @@ int main(int argc, char **argv)
- 		 sizeof(struct sockaddr_in)) < 0)
- 		bail("bind");
- 
-+	if (setsockopt(sock, SOL_SOCKET, SO_BINDTODEVICE, interface, if_len))
-+		bail("bind device");
-+
- 	/* set multicast group for outgoing packets */
- 	inet_aton("224.0.1.130", &iaddr); /* alternate PTP domain 1 */
- 	addr.sin_addr = iaddr;
-@@ -444,10 +464,10 @@ int main(int argc, char **argv)
- 			   &enabled, sizeof(enabled)) < 0)
- 		bail("setsockopt SO_TIMESTAMPNS");
- 
--	if (so_timestamping_flags &&
-+	if (so_timestamping.flags &&
- 		setsockopt(sock, SOL_SOCKET, SO_TIMESTAMPING,
--			   &so_timestamping_flags,
--			   sizeof(so_timestamping_flags)) < 0)
-+			   &so_timestamping,
-+			   sizeof(so_timestamping)) < 0)
- 		bail("setsockopt SO_TIMESTAMPING");
- 
- 	/* request IP_PKTINFO for debugging purposes */
-@@ -468,14 +488,18 @@ int main(int argc, char **argv)
- 	else
- 		printf("SO_TIMESTAMPNS %d\n", val);
- 
--	if (getsockopt(sock, SOL_SOCKET, SO_TIMESTAMPING, &val, &len) < 0) {
-+	len = sizeof(so_timestamping_get);
-+	if (getsockopt(sock, SOL_SOCKET, SO_TIMESTAMPING, &so_timestamping_get,
-+		       &len) < 0) {
- 		printf("%s: %s\n", "getsockopt SO_TIMESTAMPING",
- 		       strerror(errno));
- 	} else {
--		printf("SO_TIMESTAMPING %d\n", val);
--		if (val != so_timestamping_flags)
--			printf("   not the expected value %d\n",
--			       so_timestamping_flags);
-+		printf("SO_TIMESTAMPING flags %d, bind phc %d\n",
-+		       so_timestamping_get.flags, so_timestamping_get.bind_phc);
-+		if (so_timestamping_get.flags != so_timestamping.flags ||
-+		    so_timestamping_get.bind_phc != so_timestamping.bind_phc)
-+			printf("   not expected, flags %d, bind phc %d\n",
-+			       so_timestamping.flags, so_timestamping.bind_phc);
- 	}
- 
- 	/* send packets forever every five seconds */
--- 
-2.25.1
 
+> ---
+>
+> No changes since v4:
+> https://lore.kernel.org/linux-kselftest/20210611070802.1318911-3-davidgow@google.com/
+>
+> No changes since v3:
+> https://lore.kernel.org/linux-kselftest/20210608065111.610297-1-davidgow@google.com/
+>
+> No changes since v2:
+> https://lore.kernel.org/linux-kselftest/20210528075932.347154-3-davidgow@google.com/
+>
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20210526081112.3652290-3-davidgow@google.com/
+> - These tests are now part of the example test suite.
+> - Use kunit_info() instead of kunit_log(KERN_INFO, ...)
+> - Use KUNIT_FAIL() to assert the test is not executing for skip_test
+>
+>  lib/kunit/kunit-example-test.c | 31 +++++++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+> index be1164ecc476..51099b0ca29c 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -40,6 +40,35 @@ static int example_test_init(struct kunit *test)
+>         return 0;
+>  }
+>
+> +/*
+> + * This test should always be skipped.
+> + */
+> +static void example_skip_test(struct kunit *test)
+> +{
+> +       /* This line should run */
+> +       kunit_info(test, "You should not see a line below.");
+> +
+> +       /* Skip (and abort) the test */
+> +       kunit_skip(test, "this test should be skipped");
+> +
+> +       /* This line should not execute */
+> +       KUNIT_FAIL(test, "You should not see this line.");
+> +}
+> +
+> +/*
+> + * This test should always be marked skipped.
+> + */
+> +static void example_mark_skipped_test(struct kunit *test)
+> +{
+> +       /* This line should run */
+> +       kunit_info(test, "You should see a line below.");
+> +
+> +       /* Skip (but do not abort) the test */
+> +       kunit_mark_skipped(test, "this test should be skipped");
+> +
+> +       /* This line should run */
+> +       kunit_info(test, "You should see this line.");
+> +}
+>  /*
+>   * Here we make a list of all the test cases we want to add to the test suite
+>   * below.
+> @@ -52,6 +81,8 @@ static struct kunit_case example_test_cases[] = {
+>          * test suite.
+>          */
+>         KUNIT_CASE(example_simple_test),
+> +       KUNIT_CASE(example_skip_test),
+> +       KUNIT_CASE(example_mark_skipped_test),
+>         {}
+>  };
+>
+> --
+> 2.32.0.93.g670b81a890-goog
+>
