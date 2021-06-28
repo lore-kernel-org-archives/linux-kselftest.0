@@ -2,80 +2,160 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9092C48BC2
-	for <linux-kselftest@archiver.kernel.org>; Sun, 27 Jun 2021 15:36:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E776CC48BC2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Jun 2021 01:42:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB6286142B
-	for <linux-kselftest@archiver.kernel.org>; Sun, 27 Jun 2021 15:36:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAB4E61A36
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Jun 2021 01:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbhF0PiW (ORCPT
+        id S231706AbhF1Boe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 27 Jun 2021 11:38:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230225AbhF0PiW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Jun 2021 11:38:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 99A2761416;
-        Sun, 27 Jun 2021 15:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624808158;
-        bh=IIp2MobQeg2HLnqt1w3NF2LefNGWMGP642ajbW5iJsw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d9aDm0u1a6hcYOGA7nqttUUmwaq0nMSviQPJI/KAccL/6m58Inrw71sbcL9GU2Ggc
-         /+QwHFZysKpuw3vh8fS0uPSlsBBPg+3do+YKclveXTf0wfHHMtXigXSJbNOTPfkvpX
-         VLb9GnZtJfGZbarYBHS7CXOkJEC0crOyFUEIZQB8=
-Date:   Sun, 27 Jun 2021 17:35:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthew Wilcox <willy@infradead.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Roberto Sassu <roberto.sassu@huawei.com>, zohar@linux.ibm.com,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 03/12] digest_lists: Basic definitions
-Message-ID: <YNia23bDCGRZ74OG@kroah.com>
-References: <20210625165614.2284243-1-roberto.sassu@huawei.com>
- <20210625165614.2284243-4-roberto.sassu@huawei.com>
- <YNhYu3BXh7f9GkVk@kroah.com>
- <YNiX7nyQIS/eg+VC@casper.infradead.org>
+        Sun, 27 Jun 2021 21:44:34 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5802 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231678AbhF1Boe (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 27 Jun 2021 21:44:34 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GCqw246HfzXk6j;
+        Mon, 28 Jun 2021 09:36:50 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 28 Jun 2021 09:42:07 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 28 Jun
+ 2021 09:42:06 +0800
+Subject: Re: [PATCH net-next v2 1/2] selftests/ptr_ring: add benchmark
+ application for ptr_ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <brouer@redhat.com>, <paulmck@kernel.org>,
+        <peterz@infradead.org>, <will@kernel.org>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+References: <1624591136-6647-1-git-send-email-linyunsheng@huawei.com>
+ <1624591136-6647-2-git-send-email-linyunsheng@huawei.com>
+ <ff47ed0b-332d-2772-d6e1-8277ac602c8c@redhat.com>
+ <3ba4a6f1-2e1e-8c1a-6f47-5d182f05d1cd@huawei.com>
+ <20210627020746-mutt-send-email-mst@kernel.org>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <684b4448-6102-dd62-d3e5-97170468683d@huawei.com>
+Date:   Mon, 28 Jun 2021 09:42:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YNiX7nyQIS/eg+VC@casper.infradead.org>
+In-Reply-To: <20210627020746-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme718-chm.china.huawei.com (10.1.199.114) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jun 27, 2021 at 04:23:26PM +0100, Matthew Wilcox wrote:
-> On Sun, Jun 27, 2021 at 12:53:47PM +0200, Greg KH wrote:
-> > > +enum ops { DIGEST_LIST_ADD, DIGEST_LIST_DEL, DIGEST_LIST_OP__LAST };
-> > > +
-> > 
-> > For enums you export to userspace, you need to specify the values so
-> > that all compilers get them right.
+On 2021/6/27 14:09, Michael S. Tsirkin wrote:
+> On Fri, Jun 25, 2021 at 11:52:16AM +0800, Yunsheng Lin wrote:
+>> On 2021/6/25 11:36, Jason Wang wrote:
+>>>
+>>> 在 2021/6/25 上午11:18, Yunsheng Lin 写道:
+>>>> Currently ptr_ring selftest is embedded within the virtio
+>>>> selftest, which involves some specific virtio operation,
+>>>> such as notifying and kicking.
+>>>>
+>>>> As ptr_ring has been used by various subsystems, it deserves
+>>>> it's owner's selftest in order to benchmark different usecase
+>>>> of ptr_ring, such as page pool and pfifo_fast qdisc.
+>>>>
+>>>> So add a simple application to benchmark ptr_ring performance.
+>>>> Currently two test mode is supported:
+>>>> Mode 0: Both enqueuing and dequeuing is done in a single thread,
+>>>>          it is called simple test mode in the test app.
+>>>> Mode 1: Enqueuing and dequeuing is done in different thread
+>>>>          concurrently, also known as SPSC(single-producer/
+>>>>          single-consumer) test.
+>>>>
+>>>> The multi-producer/single-consumer test for pfifo_fast case is
+>>>> not added yet, which can be added if using CAS atomic operation
+>>>> to enable lockless multi-producer is proved to be better than
+>>>> using r->producer_lock.
+>>>>
+>>>> Only supported on x86 and arm64 for now.
+>>>>
+>>>> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+>>>> ---
+>>>>   MAINTAINERS                                      |   5 +
+>>>>   tools/testing/selftests/ptr_ring/Makefile        |   6 +
+>>>>   tools/testing/selftests/ptr_ring/ptr_ring_test.c | 249 +++++++++++++++++++++++
+>>>>   tools/testing/selftests/ptr_ring/ptr_ring_test.h | 150 ++++++++++++++
+>>>>   4 files changed, 410 insertions(+)
+>>>
+>>>
+>>> Why can't you simply reuse tools/virtio/ringtest?
+>>
+>> The main reason is stated in the commit log:
+>> "Currently ptr_ring selftest is embedded within the virtio
+>> selftest, which involves some specific virtio operation,
+>> such as notifying and kicking.
+>>
+>> As ptr_ring has been used by various subsystems, it deserves
+>> it's owner's selftest in order to benchmark different usecase
+>> of ptr_ring, such as page pool and pfifo_fast qdisc."
+>>
+>> More specificly in tools/virtio/ringtest/main.c and
+>> tools/virtio/ringtest/ptr_ring.c, there are a lot of operation
+>> related to virtio usecase, such as start_guest(), start_host(),
+>> poll_used(), notify() or kick() ....., so it makes more sense
+>> to add a generic selftest for ptr ring as it is not only used
+>> by virtio now.
 > 
-> I've never heard that rule before.  Where does it come from?
-> https://en.cppreference.com/w/c/language/enum
-> says:
 > 
->   If enumeration-constant is not followed by = constant-expression,
->   its value is the value one greater than the value of the previous
->   enumerator in the same enumeration. The value of the first enumerator
->   (if it does not use = constant-expression) is zero.
+> Okay that answers why you didn't just run main.c
+> but why not add a new test under tools/virtio/ringtest/
+> reusing the rest of infrastructure that you currently copied?
+
+Actually, my first attempt was to reuse the infrastructure in
+tools/virtio/ or tools/virtio/ringtest/, and neither of them
+was able to be compiled in the latest kernel.
+
+And then I read through the code to try fixing the compile error,
+I found that the testcase under tools/virtio/ is coupled deeply
+to virtio as explained above, which was difficult to read for
+someone who is not fimiliar with virtio.
+
+So I searched for how testing is supposed to be added in the kernel,
+it seems it is more common to add the testing in tools/testing or
+tools/testing/selftest, and ptr ring is not only used by virtio now,
+so it seems more appropriate to add a sperate testing for virtio by
+instinct.
+
+Most of tools/virtio/ is to do testing related to virtio testing, IMHO,
+most of them are better to be in tools/testing/selftest. Even if most of
+virtio testing is moved to tools/testing/selftest, I think it makes more
+sense to decouple the virtio testing to ptr_ring testing too if we can
+find some mechanism to share the abstract infrastructure in ptr_ring_test.h
+for both virtio and ptr_ring testing.
+
+
+> 
+>>
+>>>
+>>> Thanks
+>>>
+>>>
+>>> .
+>>>
+> 
+> 
+> .
 > 
 
-I thought it was in the Documentation/driver-api/ioctl.rst file, but I
-can't find it right now.  Maybe it was something that Arnd said?
-
-Arnd, is this still an issue?  For some reason I thought it was always
-good to have uapi .h enums be explicit as to the value in them,
-otherwise some C compilers might produce other values if they were not
-specified?
-
-thanks,
-
-greg k-h
