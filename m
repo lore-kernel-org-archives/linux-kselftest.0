@@ -2,31 +2,35 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71C67C11F68
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4B31C11F6A
 	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Jun 2021 22:58:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BC0761452
+	by mail.kernel.org (Postfix) with ESMTP id CDE1961449
 	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Jun 2021 22:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbhF3XA6 (ORCPT
+        id S232604AbhF3XA6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 30 Jun 2021 19:00:58 -0400
-Received: from smtp-190f.mail.infomaniak.ch ([185.125.25.15]:53243 "EHLO
-        smtp-190f.mail.infomaniak.ch" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232604AbhF3XA6 (ORCPT
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232797AbhF3XA6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 30 Jun 2021 19:00:58 -0400
-X-Greylist: delayed 545 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Jun 2021 19:00:57 EDT
+X-Greylist: delayed 546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Jun 2021 15:58:28 PDT
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA038C0617A8
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Jun 2021 15:58:28 -0700 (PDT)
 Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4GFc3M5JwzzMqHN1;
-        Thu,  1 Jul 2021 00:49:19 +0200 (CEST)
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4GFc3S3wLKzMqJH1;
+        Thu,  1 Jul 2021 00:49:24 +0200 (CEST)
 Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4GFc3L6dnnzlh8mg;
-        Thu,  1 Jul 2021 00:49:18 +0200 (CEST)
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4GFc3S1S1zzlh8ms;
+        Thu,  1 Jul 2021 00:49:24 +0200 (CEST)
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Al Viro <viro@zeniv.linux.org.uk>,
         James Morris <jmorris@namei.org>,
@@ -37,11 +41,14 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Kees Cook <keescook@chromium.org>,
         Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v1 0/4] Landlock filesystem caching
-Date:   Thu,  1 Jul 2021 00:48:52 +0200
-Message-Id: <20210630224856.1313928-1-mic@digikod.net>
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH v1 3/4] selftests/landlock: Work in a temporary directory
+Date:   Thu,  1 Jul 2021 00:48:55 +0200
+Message-Id: <20210630224856.1313928-4-mic@digikod.net>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210630224856.1313928-1-mic@digikod.net>
+References: <20210630224856.1313928-1-mic@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,59 +56,158 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+From: Mickaël Salaün <mic@linux.microsoft.com>
 
-The goal of this patch series is to reduce the performance impact of
-walking through a lot of files while being landlocked.  Indeed, because
-of the unprivileged nature of Landlock, each file access implies to
-check access granted to each directory of the path, which slows down
-open time.
+To be able to test the current working directory, run all tests in a
+temporary directory instead of in its parent directory.  This is
+required for the following commit.
 
-Currently, openat(2) calls spend more than 22% of their time in
-hook_file_open().  The performance impact for a common worth case
-scenario is significantly reduced thanks to this patch series,
-theoretically going from O(n) with n as the depth of a path, to O(1)
-(cf. benchmarks in the caching patch).
+Cc: James Morris <jmorris@namei.org>
+Cc: Jann Horn <jannh@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Serge Hallyn <serge@hallyn.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+Link: https://lore.kernel.org/r/20210630224856.1313928-4-mic@digikod.net
+---
+ tools/testing/selftests/landlock/fs_test.c | 65 ++++++++++++----------
+ 1 file changed, 35 insertions(+), 30 deletions(-)
 
-This series adds a new security hook (resolve_path_at) and uses it to
-implement access caching in Landlock.  I'm planning to build on top of
-that for other improvements (using task's working directory and task's
-root directory) but that will require other hook changes.
-
-This new hook is also a first step to be able to securely restrict file
-descriptors used for path resolution (e.g. dirfd in openat2).
-
-Caching may be difficult to get right especially for security checks.  I
-extended the current tests and I'm still working on new ones.  If you
-have test/attack scenarios, please share them.  I would really
-appreciate constructive reviews for these critical changes.  This series
-can be applied on top of v5.13 .
-
-Regards,
-
-Mickaël Salaün (4):
-  fs,security: Add resolve_path_at() hook
-  landlock: Add filesystem rule caching
-  selftests/landlock: Work in a temporary directory
-  selftests/landlock: Check all possible intermediate directories
-
- fs/namei.c                                 |   9 +
- include/linux/lsm_hook_defs.h              |   2 +
- include/linux/lsm_hooks.h                  |   8 +
- include/linux/security.h                   |   9 +
- security/landlock/cache.h                  |  77 +++++++
- security/landlock/cred.c                   |  15 +-
- security/landlock/cred.h                   |  20 +-
- security/landlock/fs.c                     | 224 +++++++++++++++++++--
- security/landlock/fs.h                     |  29 +++
- security/landlock/setup.c                  |   2 +
- security/security.c                        |   6 +
- tools/testing/selftests/landlock/fs_test.c | 205 ++++++++++++++-----
- 12 files changed, 544 insertions(+), 62 deletions(-)
- create mode 100644 security/landlock/cache.h
-
-
-base-commit: 62fb9874f5da54fdb243003b386128037319b219
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 10c9a1e4ebd9..403c8255311f 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -23,31 +23,31 @@
+ #include "common.h"
+ 
+ #define TMP_DIR		"tmp"
+-#define BINARY_PATH	"./true"
++#define BINARY_PATH	"../true"
+ 
+ /* Paths (sibling number and depth) */
+-static const char dir_s1d1[] = TMP_DIR "/s1d1";
+-static const char file1_s1d1[] = TMP_DIR "/s1d1/f1";
+-static const char file2_s1d1[] = TMP_DIR "/s1d1/f2";
+-static const char dir_s1d2[] = TMP_DIR "/s1d1/s1d2";
+-static const char file1_s1d2[] = TMP_DIR "/s1d1/s1d2/f1";
+-static const char file2_s1d2[] = TMP_DIR "/s1d1/s1d2/f2";
+-static const char dir_s1d3[] = TMP_DIR "/s1d1/s1d2/s1d3";
+-static const char file1_s1d3[] = TMP_DIR "/s1d1/s1d2/s1d3/f1";
+-static const char file2_s1d3[] = TMP_DIR "/s1d1/s1d2/s1d3/f2";
+-
+-static const char dir_s2d1[] = TMP_DIR "/s2d1";
+-static const char file1_s2d1[] = TMP_DIR "/s2d1/f1";
+-static const char dir_s2d2[] = TMP_DIR "/s2d1/s2d2";
+-static const char file1_s2d2[] = TMP_DIR "/s2d1/s2d2/f1";
+-static const char dir_s2d3[] = TMP_DIR "/s2d1/s2d2/s2d3";
+-static const char file1_s2d3[] = TMP_DIR "/s2d1/s2d2/s2d3/f1";
+-static const char file2_s2d3[] = TMP_DIR "/s2d1/s2d2/s2d3/f2";
+-
+-static const char dir_s3d1[] = TMP_DIR "/s3d1";
++static const char dir_s1d1[] = "./s1d1";
++static const char file1_s1d1[] = "./s1d1/f1";
++static const char file2_s1d1[] = "./s1d1/f2";
++static const char dir_s1d2[] = "./s1d1/s1d2";
++static const char file1_s1d2[] = "./s1d1/s1d2/f1";
++static const char file2_s1d2[] = "./s1d1/s1d2/f2";
++static const char dir_s1d3[] = "./s1d1/s1d2/s1d3";
++static const char file1_s1d3[] = "./s1d1/s1d2/s1d3/f1";
++static const char file2_s1d3[] = "./s1d1/s1d2/s1d3/f2";
++
++static const char dir_s2d1[] = "./s2d1";
++static const char file1_s2d1[] = "./s2d1/f1";
++static const char dir_s2d2[] = "./s2d1/s2d2";
++static const char file1_s2d2[] = "./s2d1/s2d2/f1";
++static const char dir_s2d3[] = "./s2d1/s2d2/s2d3";
++static const char file1_s2d3[] = "./s2d1/s2d2/s2d3/f1";
++static const char file2_s2d3[] = "./s2d1/s2d2/s2d3/f2";
++
++static const char dir_s3d1[] = "./s3d1";
+ /* dir_s3d2 is a mount point. */
+-static const char dir_s3d2[] = TMP_DIR "/s3d1/s3d2";
+-static const char dir_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3";
++static const char dir_s3d2[] = "./s3d1/s3d2";
++static const char dir_s3d3[] = "./s3d1/s3d2/s3d3";
+ 
+ /*
+  * layout1 hierarchy:
+@@ -140,11 +140,12 @@ static int remove_path(const char *const path)
+ 		walker[i] = '\0';
+ 		ret = rmdir(walker);
+ 		if (ret) {
+-			if (errno != ENOTEMPTY && errno != EBUSY)
++			if (errno != ENOTEMPTY && errno != EBUSY
++					&& errno != EINVAL)
+ 				err = errno;
+ 			goto out;
+ 		}
+-		if (strcmp(walker, TMP_DIR) == 0)
++		if (strcmp(walker, ".") == 0)
+ 			goto out;
+ 	}
+ 
+@@ -168,10 +169,14 @@ static void prepare_layout(struct __test_metadata *const _metadata)
+ 	ASSERT_EQ(0, mount("tmp", TMP_DIR, "tmpfs", 0, "size=4m,mode=700"));
+ 	ASSERT_EQ(0, mount(NULL, TMP_DIR, NULL, MS_PRIVATE | MS_REC, NULL));
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
++
++	ASSERT_EQ(0, chdir(TMP_DIR));
+ }
+ 
+ static void cleanup_layout(struct __test_metadata *const _metadata)
+ {
++	EXPECT_EQ(0, chdir(".."));
++
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+ 	EXPECT_EQ(0, umount(TMP_DIR));
+ 	clear_cap(_metadata, CAP_SYS_ADMIN);
+@@ -1370,7 +1375,7 @@ static void test_relative_path(struct __test_metadata *const _metadata,
+ 	 */
+ 	const struct rule layer1_base[] = {
+ 		{
+-			.path = TMP_DIR,
++			.path = ".",
+ 			.access = ACCESS_RO,
+ 		},
+ 		{}
+@@ -2095,8 +2100,8 @@ FIXTURE_TEARDOWN(layout1_bind)
+ 	cleanup_layout(_metadata);
+ }
+ 
+-static const char bind_dir_s1d3[] = TMP_DIR "/s2d1/s2d2/s1d3";
+-static const char bind_file1_s1d3[] = TMP_DIR "/s2d1/s2d2/s1d3/f1";
++static const char bind_dir_s1d3[] = "./s2d1/s2d2/s1d3";
++static const char bind_file1_s1d3[] = "./s2d1/s2d2/s1d3/f1";
+ 
+ /*
+  * layout1_bind hierarchy:
+@@ -2282,7 +2287,7 @@ TEST_F_FORK(layout1_bind, same_content_same_file)
+ 	ASSERT_EQ(EACCES, test_open(bind_file1_s1d3, O_WRONLY));
+ }
+ 
+-#define LOWER_BASE	TMP_DIR "/lower"
++#define LOWER_BASE	"./lower"
+ #define LOWER_DATA	LOWER_BASE "/data"
+ static const char lower_fl1[] = LOWER_DATA "/fl1";
+ static const char lower_dl1[] = LOWER_DATA "/dl1";
+@@ -2309,7 +2314,7 @@ static const char (*lower_sub_files[])[] = {
+ 	NULL
+ };
+ 
+-#define UPPER_BASE	TMP_DIR "/upper"
++#define UPPER_BASE	"./upper"
+ #define UPPER_DATA	UPPER_BASE "/data"
+ #define UPPER_WORK	UPPER_BASE "/work"
+ static const char upper_fu1[] = UPPER_DATA "/fu1";
+@@ -2337,7 +2342,7 @@ static const char (*upper_sub_files[])[] = {
+ 	NULL
+ };
+ 
+-#define MERGE_BASE	TMP_DIR "/merge"
++#define MERGE_BASE	"./merge"
+ #define MERGE_DATA	MERGE_BASE "/data"
+ static const char merge_fl1[] = MERGE_DATA "/fl1";
+ static const char merge_dl1[] = MERGE_DATA "/dl1";
 -- 
 2.32.0
 
