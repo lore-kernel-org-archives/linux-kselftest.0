@@ -2,138 +2,117 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82976C11F67
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 12:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5618DC11F64
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 14:59:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A29061407
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 12:27:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FDA1613BC
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 14:59:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbhGAM3x (ORCPT
+        id S233282AbhGAPCV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Jul 2021 08:29:53 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:9442 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbhGAM3w (ORCPT
+        Thu, 1 Jul 2021 11:02:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57657 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233265AbhGAPCV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jul 2021 08:29:52 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GFy7W35R8zZpSZ;
-        Thu,  1 Jul 2021 20:24:07 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Jul 2021 20:27:14 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Jul 2021 20:27:14 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <jasowang@redhat.com>,
-        <mst@redhat.com>
-CC:     <brouer@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
-Subject: [PATCH net-next v3 2/3] ptr_ring: move r->queue[] clearing after r->consumer_head updating
-Date:   Thu, 1 Jul 2021 20:26:41 +0800
-Message-ID: <1625142402-64945-3-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
-References: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
+        Thu, 1 Jul 2021 11:02:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625151590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e4QZ42Wn/bTx6wK6v1D/8yVG9mJGX11j52pQnpcYUjg=;
+        b=Qno5Dr+FRmYJOUwKn5yU+t8kAR5fFFelO1GVuOFP5TRe0d6aNo1NWdMtIq5GZBuaMWDUm1
+        3XGWWgIFYFN5htT1Ltu1B87AEgveeh3i4CRJfanWmZzZ3y8IZyxT8X8NichP8oWj8QjD8F
+        Sbezt4KVSqtRQGuZ9XQ50smLn+8hsNQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-4-q-sDt7PiPQieJKQKZ-2I-A-1; Thu, 01 Jul 2021 10:59:49 -0400
+X-MC-Unique: q-sDt7PiPQieJKQKZ-2I-A-1
+Received: by mail-wr1-f70.google.com with SMTP id j1-20020adfb3010000b02901232ed22e14so2689811wrd.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Jul 2021 07:59:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e4QZ42Wn/bTx6wK6v1D/8yVG9mJGX11j52pQnpcYUjg=;
+        b=JJO0BYjQNGsobyuH/HQs1CuZ8GmLIuro4iZN2rC/+/nTVS0jXeKU1lDth3SvouOf71
+         2QmEXfYMtbltEqFW1sVnM//2x9xzT/kz203QAh1yDLYssagEmRB5bn+ZCavbzE/QR8hH
+         L1g9OCzaD44jaZaZlvLNhR3dufI+MzwaaQ9pmUNfQO/NQ8e+uvViFE+dZytIRuwO5iuT
+         UVFBdcK2EYdx+HNQyYEGFWr4S0lBORzQcfyW2p8fnc8wJo8N9FfABRsjto7vrURCeydx
+         Ga52SVORX4ilWqBlSdksFDLU2ipnCeQfXSMFWwnAW1dSqRNUzSUduveHPXRKZceXKg91
+         IwHQ==
+X-Gm-Message-State: AOAM5314wZ1q+W+ZF9O5todR4Ia7BuSGncg5ie0EBSaRd0jN8KdyJnsm
+        ojdhLuzlRy1OMfilNBnS1ucwYXDK3eOU2Roi7OgckR7tIC/6Ivo8BmlXzv5Sq4eAhGCD/fy4OSc
+        Kyqf/l3mAh1lVF+/eoVUlPdDYopY4
+X-Received: by 2002:adf:a18a:: with SMTP id u10mr87212wru.254.1625151588074;
+        Thu, 01 Jul 2021 07:59:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJylQNdi0eKL98y1ZKO47m1WjhsyL6LGJE1e0Qjmk6CcaysPiibCLFaSgwpslGmXs2sDfpn7CQ==
+X-Received: by 2002:adf:a18a:: with SMTP id u10mr87194wru.254.1625151587908;
+        Thu, 01 Jul 2021 07:59:47 -0700 (PDT)
+Received: from pc-32.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
+        by smtp.gmail.com with ESMTPSA id f13sm157913wrt.86.2021.07.01.07.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jul 2021 07:59:45 -0700 (PDT)
+Date:   Thu, 1 Jul 2021 16:59:43 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        David Ahern <dsahern@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/4] selftests: forwarding: Test redirecting gre
+ or ipip packets to Ethernet
+Message-ID: <20210701145943.GA3933@pc-32.home>
+References: <cover.1625056665.git.gnault@redhat.com>
+ <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
+ <YN1Wxm0mOFFhbuTl@shredder>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YN1Wxm0mOFFhbuTl@shredder>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently r->queue[] clearing is done before r->consumer_head
-updating, which makes the __ptr_ring_empty() returning false
-positive result(the ring is non-empty, but __ptr_ring_empty()
-suggest that it is empty) if the checking is done after the
-r->queue clearing and before the consumer_head moving forward.
+On Thu, Jul 01, 2021 at 08:46:46AM +0300, Ido Schimmel wrote:
+> On Wed, Jun 30, 2021 at 02:51:38PM +0200, Guillaume Nault wrote:
+> > diff --git a/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
+> > new file mode 100644
+> > index 000000000000..4c0bf2d7328a
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
+> > @@ -0,0 +1,267 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +# A chain of 4 nodes connected with veth pairs.
+> > +# Each node lives in its own network namespace.
+> 
+> Hi,
+> 
+> The tests under tools/testing/selftests/net/forwarding/ are meant to use
+> VRFs as lightweight namespaces. This allows us to run the tests on both
+> physical switches with loopback cables and veth pairs, thereby
+> validating both the hardware and software datapaths.
+> 
+> See tools/testing/selftests/net/forwarding/README
 
-Move the r->queue[] clearing after consumer_head moving forward
-to avoid the above case.
+It wasn't clear to me that net/forwarding was _only_ for VRF-based
+tests.
 
-As a side effect of above change, a consumer_head checking is
-avoided for the likely case, and it has noticeable performance
-improvement when it is tested using the ptr_ring_test selftest
-added in the previous patch.
+> If the tests cannot be converted to VRFs, then I suggest moving them to
+> tools/testing/selftests/net/
 
-Tested using the "perf stat -r 1000 ./ptr_ring_test -s 1000 -m 1
--N 100000000", comparing the elapsed time:
+I first tried to write this selftest using VRFs, but there were some
+problems that made me switch to namespaces (I don't remember precisely
+which ones, probably virtual tunnel devices in collect_md mode).
 
- arch     unpatched           patched       improvement
-arm64    2.087205 sec       1.888224 sec      +9.5%
- X86      2.6538 sec         2.5422 sec       +4.2%
-
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
-V3: adjust the title and comment log according to disscusion in
-    V2, and update performance data using "perf stat -r".
-V2: Add performance data.
----
- include/linux/ptr_ring.h | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/ptr_ring.h b/include/linux/ptr_ring.h
-index 808f9d3..db9c282 100644
---- a/include/linux/ptr_ring.h
-+++ b/include/linux/ptr_ring.h
-@@ -261,8 +261,7 @@ static inline void __ptr_ring_discard_one(struct ptr_ring *r)
- 	/* Note: we must keep consumer_head valid at all times for __ptr_ring_empty
- 	 * to work correctly.
- 	 */
--	int consumer_head = r->consumer_head;
--	int head = consumer_head++;
-+	int consumer_head = r->consumer_head + 1;
- 
- 	/* Once we have processed enough entries invalidate them in
- 	 * the ring all at once so producer can reuse their space in the ring.
-@@ -271,19 +270,27 @@ static inline void __ptr_ring_discard_one(struct ptr_ring *r)
- 	 */
- 	if (unlikely(consumer_head - r->consumer_tail >= r->batch ||
- 		     consumer_head >= r->size)) {
-+		int tail = r->consumer_tail;
-+
-+		if (unlikely(consumer_head >= r->size)) {
-+			r->consumer_tail = 0;
-+			WRITE_ONCE(r->consumer_head, 0);
-+		} else {
-+			r->consumer_tail = consumer_head;
-+			WRITE_ONCE(r->consumer_head, consumer_head);
-+		}
-+
- 		/* Zero out entries in the reverse order: this way we touch the
- 		 * cache line that producer might currently be reading the last;
- 		 * producer won't make progress and touch other cache lines
- 		 * besides the first one until we write out all entries.
- 		 */
--		while (likely(head >= r->consumer_tail))
--			r->queue[head--] = NULL;
--		r->consumer_tail = consumer_head;
--	}
--	if (unlikely(consumer_head >= r->size)) {
--		consumer_head = 0;
--		r->consumer_tail = 0;
-+		while (likely(--consumer_head >= tail))
-+			r->queue[consumer_head] = NULL;
-+
-+		return;
- 	}
-+
- 	/* matching READ_ONCE in __ptr_ring_empty for lockless tests */
- 	WRITE_ONCE(r->consumer_head, consumer_head);
- }
--- 
-2.7.4
+I'll give VRF another try. And if I can't get to a satisfying solution,
+I'll move the selftest under net/.
 
