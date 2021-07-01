@@ -2,190 +2,488 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FD4C11F64
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 05:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE91C11F64
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 12:27:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E26661483
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 05:46:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 749E5613FE
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jul 2021 12:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbhGAFtW (ORCPT
+        id S236426AbhGAM3w (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Jul 2021 01:49:22 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:57009 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229777AbhGAFtV (ORCPT
+        Thu, 1 Jul 2021 08:29:52 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:13049 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236407AbhGAM3w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jul 2021 01:49:21 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4F0523200914;
-        Thu,  1 Jul 2021 01:46:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 01 Jul 2021 01:46:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=2R5Ejh
-        vo7xrZ1UcgrwCjSHU0obIANFpgAR/43OEHuRI=; b=So7uwteeBfZq8oFMkbv3VE
-        3Yg3nxvJeVSlSKSuUFYQ99vyi2bmnVsQVAJOrFJpzhjwR6hzX4lCus1MMTlh4lK2
-        G1SgO6NmaUCTLi057NQ9MbVL4fY7LGelcskp4r7FLLdsZkvEZnYSflrg8aTs/h4w
-        DHmTuhqb6A1e+/QvWGz+uKQ3T0wMApnFqPhD93HU2xGLLXBZZEqWH15A0D2wSpaX
-        cGJm7plxhxz8ITAYLsRmEWZgWQJcdkPeh18/wIUrtNcmFY/QdyojHYaczDe0WPzR
-        bX/QVsiJfSW2sdL5VonjqFAJt/P78dNphiqW1kZQtI55CdIs6RBT2XNv286lrOwQ
-        ==
-X-ME-Sender: <xms:ylbdYLOdFbxpSsRgkZS2X_H_hqdFiQr2_HKVgzXUvFvGe0UFltkzzg>
-    <xme:ylbdYF8T3WPxVmVve1GMzdA5--YJ14xapwNKUM1MYXVACQrVR-z1YGExOUXOHEgZt
-    yRkDvoZ1QAHs8A>
-X-ME-Received: <xmr:ylbdYKTxfFmxCT_HL5f7UTdV31EdU10eGUb5kc1VOewNaFW9eE8U-Ae-ox7Uf8pmJ6u6N4RFh1EhVaKoJ9ZA1NV30glI9g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeeihedgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
-    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:ylbdYPumX5uu9il_gNIDhcGn35DwZP7Rk99M5zzruhNLNXL4DPidoQ>
-    <xmx:ylbdYDdfZ-38LklA5avrWDjLD2tGsOa20VD3RIxnzwDDVo6Od4RsIA>
-    <xmx:ylbdYL2QKe6HrJ9g9GfiohjqCn2ziW1pdFIyRHG35K-8BausVUbSzw>
-    <xmx:ylbdYK7vITnO-eFx1voJeB3S-ylq4cf-T4iVIa6cqZIr6O0YiAHysw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jul 2021 01:46:49 -0400 (EDT)
-Date:   Thu, 1 Jul 2021 08:46:46 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        David Ahern <dsahern@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/4] selftests: forwarding: Test redirecting gre
- or ipip packets to Ethernet
-Message-ID: <YN1Wxm0mOFFhbuTl@shredder>
-References: <cover.1625056665.git.gnault@redhat.com>
- <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
+        Thu, 1 Jul 2021 08:29:52 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GFy7W34K8zZjZl;
+        Thu,  1 Jul 2021 20:24:07 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Jul 2021 20:27:14 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Jul 2021 20:27:14 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <jasowang@redhat.com>,
+        <mst@redhat.com>
+CC:     <brouer@redhat.com>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>, <shuah@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linuxarm@openeuler.org>
+Subject: [PATCH net-next v3 1/3] selftests/ptr_ring: add benchmark application for ptr_ring
+Date:   Thu, 1 Jul 2021 20:26:40 +0800
+Message-ID: <1625142402-64945-2-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
+References: <1625142402-64945-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a4e63cd3cde3c71cfc422a7f0f5e9bc76c0c1f5.1625056665.git.gnault@redhat.com>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 02:51:38PM +0200, Guillaume Nault wrote:
-> diff --git a/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
-> new file mode 100644
-> index 000000000000..4c0bf2d7328a
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/forwarding/topo_nschain_lib.sh
-> @@ -0,0 +1,267 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# A chain of 4 nodes connected with veth pairs.
-> +# Each node lives in its own network namespace.
+Currently ptr_ring selftest is embedded within the virtio
+selftest, which involves some specific virtio operation,
+such as notifying and kicking.
 
-Hi,
+As ptr_ring has been used by various subsystems, it deserves
+it's owner selftest in order to benchmark different usecase
+of ptr_ring, such as page pool and pfifo_fast qdisc.
 
-The tests under tools/testing/selftests/net/forwarding/ are meant to use
-VRFs as lightweight namespaces. This allows us to run the tests on both
-physical switches with loopback cables and veth pairs, thereby
-validating both the hardware and software datapaths.
+So add a simple application to benchmark ptr_ring performance.
+Currently two test mode is supported:
+Mode 0: Both producing and consuming is done in a single thread,
+        it is called simple test mode in the test app.
+Mode 1: Producing and consuming is done in different thread
+        concurrently, also known as SPSC(single-producer/
+        single-consumer) test.
 
-See tools/testing/selftests/net/forwarding/README
+The multi-producer/single-consumer test for pfifo_fast case is
+not added yet, which can be added if using CAS atomic operation
+to enable lockless multi-producer is proved to be better than
+using r->producer_lock.
 
-If the tests cannot be converted to VRFs, then I suggest moving them to
-tools/testing/selftests/net/
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+---
+V3: Remove timestamp sampling, use standard C library as much
+    as possible.
+---
+ MAINTAINERS                                      |   5 +
+ tools/testing/selftests/ptr_ring/Makefile        |   6 +
+ tools/testing/selftests/ptr_ring/ptr_ring_test.c | 224 +++++++++++++++++++++++
+ tools/testing/selftests/ptr_ring/ptr_ring_test.h | 130 +++++++++++++
+ 4 files changed, 365 insertions(+)
+ create mode 100644 tools/testing/selftests/ptr_ring/Makefile
+ create mode 100644 tools/testing/selftests/ptr_ring/ptr_ring_test.c
+ create mode 100644 tools/testing/selftests/ptr_ring/ptr_ring_test.h
 
-> +# Each veth interface has an IPv4 and an IPv6 address. A host route provides
-> +# connectivity to the adjacent node. This base network only allows nodes to
-> +# communicate with their immediate neighbours.
-> +#
-> +# The two nodes at the extremities of the chain also have 4 host IPs on their
-> +# loopback device:
-> +#   * An IPv4 address, routed as is to the adjacent router.
-> +#   * An IPv4 address, routed over MPLS to the adjacent router.
-> +#   * An IPv6 address, routed as is to the adjacent router.
-> +#   * An IPv6 address, routed over MPLS to the adjacent router.
-> +#
-> +# This topology doesn't define how RTA and RTB handle these packets: users of
-> +# this script are responsible for the plumbing between RTA and RTB.
-> +#
-> +# As each veth connects two different namespaces, their MAC and IP addresses
-> +# are defined depending on the local and remote namespaces. For example
-> +# veth-h1-rta, which sits in H1 and links to RTA, has MAC address
-> +# 00:00:5e:00:53:1a, IPv4 192.0.2.0x1a and IPv6 2001:db8::1a, where "1a" means
-> +# that it's in H1 and links to RTA (the rest of each address is always built
-> +# from a IANA documentation prefix).
-> +#
-> +# Routed addresses in H1 and H2 on the other hand encode the routing type (with
-> +# or without MPLS encapsulation) and the namespace the address resides in. For
-> +# example H2 has 198.51.100.2 and 2001:db8::1:2, that are routed as is through
-> +# RTB. It also has 198.51.100.0x12 and 2001:db8::1:12, that are routed through
-> +# RTB with MPLS encapsulation.
-> +#
-> +# For clarity, the prefixes used for host IPs are different from the ones used
-> +# on the veths.
-> +#
-> +# The MPLS labels follow a similar principle: the first digit represents the
-> +# IP version of the encapsulated packet ("4" for IPv4, "6" for IPv6), the
-> +# second digit represents the destination host ("1" for H1, "2" for H2).
-> +#
-> +# +----------------------------------------------------+
-> +# |                    Host 1 (H1)                     |
-> +# |                                                    |
-> +# |   lo                                               |
-> +# |     198.51.100.1    (for plain IPv4)               |
-> +# |     2001:db8::1:1   (for plain IPv6)               |
-> +# |     198.51.100.0x11 (for IPv4 over MPLS, label 42) |
-> +# |     2001:db8::1:11  (for IPv6 over MPLS, label 62) |
-> +# |                                                    |
-> +# | + veth-h1-rta                                      |
-> +# | |   192.0.2.0x1a                                   |
-> +# | |   2001:db8::1a                                   |
-> +# +-|--------------------------------------------------+
-> +#   |
-> +# +-|--------------------+
-> +# | |  Router A (RTA)    |
-> +# | |                    |
-> +# | + veth-rta-h1        |
-> +# |     192.0.2.0xa1     |
-> +# |     2001:db8::a1     |
-> +# |                      |
-> +# | + veth-rta-rtb       |
-> +# | |   192.0.2.0xab     |
-> +# | |   2001:db8::ab     |
-> +# +-|--------------------+
-> +#   |
-> +# +-|--------------------+
-> +# | |  Router B (RTB)    |
-> +# | |                    |
-> +# | + veth-rtb-rta       |
-> +# |     192.0.2.0xba     |
-> +# |     2001:db8::ba     |
-> +# |                      |
-> +# | + veth-rtb-h2        |
-> +# | |   192.0.2.0xb2     |
-> +# | |   2001:db8::b2     |
-> +# +-|--------------------+
-> +#   |
-> +# +-|--------------------------------------------------+
-> +# | |                  Host 2 (H2)                     |
-> +# | |                                                  |
-> +# | + veth-h2-rtb                                      |
-> +# |     192.0.2.0x2b                                   |
-> +# |     2001:db8::2b                                   |
-> +# |                                                    |
-> +# |   lo                                               |
-> +# |     198.51.100.2    (for plain IPv4)               |
-> +# |     2001:db8::1:2   (for plain IPv6)               |
-> +# |     198.51.100.0x12 (for IPv4 over MPLS, label 41) |
-> +# |     2001:db8::1:12  (for IPv6 over MPLS, label 61) |
-> +# +----------------------------------------------------+
-> +#
-> +# This topology can be used for testing different routing or switching
-> +# scenarios, as H1 and H2 are pre-configured for sending different kinds of
-> +# packets (IPv4, IPv6, with or without MPLS encapsulation), which RTA and RTB
-> +# can easily match and process according to the forwarding mechanism to test.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cc375fd..1227022 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14847,6 +14847,11 @@ F:	drivers/net/phy/dp83640*
+ F:	drivers/ptp/*
+ F:	include/linux/ptp_cl*
+ 
++PTR RING BENCHMARK
++M:	Yunsheng Lin <linyunsheng@huawei.com>
++L:	netdev@vger.kernel.org
++F:	tools/testing/selftests/ptr_ring/
++
+ PTRACE SUPPORT
+ M:	Oleg Nesterov <oleg@redhat.com>
+ S:	Maintained
+diff --git a/tools/testing/selftests/ptr_ring/Makefile b/tools/testing/selftests/ptr_ring/Makefile
+new file mode 100644
+index 0000000..346dea9
+--- /dev/null
++++ b/tools/testing/selftests/ptr_ring/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++LDLIBS = -lpthread
++
++TEST_GEN_PROGS := ptr_ring_test
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/ptr_ring/ptr_ring_test.c b/tools/testing/selftests/ptr_ring/ptr_ring_test.c
+new file mode 100644
+index 0000000..4a5312f
+--- /dev/null
++++ b/tools/testing/selftests/ptr_ring/ptr_ring_test.c
+@@ -0,0 +1,224 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2021 HiSilicon Limited.
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <errno.h>
++#include <malloc.h>
++#include <stdbool.h>
++
++#include "ptr_ring_test.h"
++#include "../../../../include/linux/ptr_ring.h"
++
++#define MIN_RING_SIZE	2
++#define MAX_RING_SIZE	10000000
++
++static struct ptr_ring ring ____cacheline_aligned_in_smp;
++
++struct worker_info {
++	pthread_t tid;
++	int test_count;
++	bool error;
++};
++
++static void *produce_worker(void *arg)
++{
++	struct worker_info *info = arg;
++	unsigned long i = 0;
++	int ret;
++
++	while (++i <= info->test_count) {
++		while (__ptr_ring_full(&ring))
++			cpu_relax();
++
++		ret = __ptr_ring_produce(&ring, (void *)i);
++		if (ret) {
++			fprintf(stderr, "produce failed: %d\n", ret);
++			info->error = true;
++			return NULL;
++		}
++	}
++
++	info->error = false;
++
++	return NULL;
++}
++
++static void *consume_worker(void *arg)
++{
++	struct worker_info *info = arg;
++	unsigned long i = 0;
++	int *ptr;
++
++	while (++i <= info->test_count) {
++		while (__ptr_ring_empty(&ring))
++			cpu_relax();
++
++		ptr = __ptr_ring_consume(&ring);
++		if ((unsigned long)ptr != i) {
++			fprintf(stderr, "consumer failed, ptr: %lu, i: %lu\n",
++				(unsigned long)ptr, i);
++			info->error = true;
++			return NULL;
++		}
++	}
++
++	if (!__ptr_ring_empty(&ring)) {
++		fprintf(stderr, "ring should be empty, test failed\n");
++		info->error = true;
++		return NULL;
++	}
++
++	info->error = false;
++	return NULL;
++}
++
++/* test case for single producer single consumer */
++static void spsc_test(int size, int count)
++{
++	struct worker_info producer, consumer;
++	pthread_attr_t attr;
++	void *res;
++	int ret;
++
++	ret = ptr_ring_init(&ring, size, 0);
++	if (ret) {
++		fprintf(stderr, "init failed: %d\n", ret);
++		return;
++	}
++
++	producer.test_count = count;
++	consumer.test_count = count;
++
++	ret = pthread_attr_init(&attr);
++	if (ret) {
++		fprintf(stderr, "pthread attr init failed: %d\n", ret);
++		goto out;
++	}
++
++	ret = pthread_create(&producer.tid, &attr,
++			     produce_worker, &producer);
++	if (ret) {
++		fprintf(stderr, "create producer thread failed: %d\n", ret);
++		goto out;
++	}
++
++	ret = pthread_create(&consumer.tid, &attr,
++			     consume_worker, &consumer);
++	if (ret) {
++		fprintf(stderr, "create consumer thread failed: %d\n", ret);
++		goto out;
++	}
++
++	ret = pthread_join(producer.tid, &res);
++	if (ret) {
++		fprintf(stderr, "join producer thread failed: %d\n", ret);
++		goto out;
++	}
++
++	ret = pthread_join(consumer.tid, &res);
++	if (ret) {
++		fprintf(stderr, "join consumer thread failed: %d\n", ret);
++		goto out;
++	}
++
++	if (producer.error || consumer.error) {
++		fprintf(stderr, "spsc test failed\n");
++		goto out;
++	}
++
++	printf("ptr_ring(size:%d) perf spsc test produced/comsumed %d items, finished\n",
++	       size, count);
++out:
++	ptr_ring_cleanup(&ring, NULL);
++}
++
++static void simple_test(int size, int count)
++{
++	struct timeval start, end;
++	int i = 0;
++	int *ptr;
++	int ret;
++
++	ret = ptr_ring_init(&ring, size, 0);
++	if (ret) {
++		fprintf(stderr, "init failed: %d\n", ret);
++		return;
++	}
++
++	while (++i <= count) {
++		ret = __ptr_ring_produce(&ring, &count);
++		if (ret) {
++			fprintf(stderr, "produce failed: %d\n", ret);
++			goto out;
++		}
++
++		ptr = __ptr_ring_consume(&ring);
++		if (ptr != &count)  {
++			fprintf(stderr, "consume failed: %p\n", ptr);
++			goto out;
++		}
++	}
++
++	printf("ptr_ring(size:%d) perf simple test produced/consumed %d items, finished\n",
++	       size, count);
++
++out:
++	ptr_ring_cleanup(&ring, NULL);
++}
++
++int main(int argc, char *argv[])
++{
++	int count = 1000000;
++	int size = 1000;
++	int mode = 0;
++	int opt;
++
++	while ((opt = getopt(argc, argv, "N:s:m:h")) != -1) {
++		switch (opt) {
++		case 'N':
++			count = atoi(optarg);
++			break;
++		case 's':
++			size = atoi(optarg);
++			break;
++		case 'm':
++			mode = atoi(optarg);
++			break;
++		case 'h':
++			printf("usage: ptr_ring_test [-N COUNT] [-s RING_SIZE] [-m TEST_MODE]\n");
++			return 0;
++		default:
++			return -1;
++		}
++	}
++
++	if (count <= 0) {
++		fprintf(stderr, "invalid test count, must be > 0\n");
++		return -1;
++	}
++
++	if (size < MIN_RING_SIZE || size > MAX_RING_SIZE) {
++		fprintf(stderr, "invalid ring size, must be in %d-%d\n",
++			MIN_RING_SIZE, MAX_RING_SIZE);
++		return -1;
++	}
++
++	switch (mode) {
++	case 0:
++		simple_test(size, count);
++		break;
++	case 1:
++		spsc_test(size, count);
++		break;
++	default:
++		fprintf(stderr, "invalid test mode\n");
++		return -1;
++	}
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/ptr_ring/ptr_ring_test.h b/tools/testing/selftests/ptr_ring/ptr_ring_test.h
+new file mode 100644
+index 0000000..32bfefb
+--- /dev/null
++++ b/tools/testing/selftests/ptr_ring/ptr_ring_test.h
+@@ -0,0 +1,130 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _TEST_PTR_RING_TEST_H
++#define _TEST_PTR_RING_TEST_H
++
++#include <assert.h>
++#include <stdatomic.h>
++#include <pthread.h>
++
++/* Assuming the cache line size is 64 for most cpu,
++ * change it accordingly if the running cpu has different
++ * cache line size in order to get more accurate result.
++ */
++#define SMP_CACHE_BYTES	64
++
++#define cpu_relax()	sched_yield()
++#define smp_release()	atomic_thread_fence(memory_order_release)
++#define smp_acquire()	atomic_thread_fence(memory_order_acquire)
++#define smp_wmb()	smp_release()
++#define smp_store_release(p, v)	\
++		atomic_store_explicit(p, v, memory_order_release)
++
++#define READ_ONCE(x)		(*(volatile typeof(x) *)&(x))
++#define WRITE_ONCE(x, val)	((*(volatile typeof(x) *)&(x)) = (val))
++#define cache_line_size		SMP_CACHE_BYTES
++#define unlikely(x)		(__builtin_expect(!!(x), 0))
++#define likely(x)		(__builtin_expect(!!(x), 1))
++#define ALIGN(x, a)		(((x) + (a) - 1) / (a) * (a))
++#define SIZE_MAX		(~(size_t)0)
++#define KMALLOC_MAX_SIZE	SIZE_MAX
++#define spinlock_t		pthread_spinlock_t
++#define gfp_t			int
++#define __GFP_ZERO		0x1
++
++#define ____cacheline_aligned_in_smp \
++		__attribute__((aligned(SMP_CACHE_BYTES)))
++
++static inline void *kmalloc(unsigned int size, gfp_t gfp)
++{
++	void *p;
++
++	p = memalign(64, size);
++	if (!p)
++		return p;
++
++	if (gfp & __GFP_ZERO)
++		memset(p, 0, size);
++
++	return p;
++}
++
++static inline void *kzalloc(unsigned int size, gfp_t flags)
++{
++	return kmalloc(size, flags | __GFP_ZERO);
++}
++
++static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
++{
++	if (size != 0 && n > SIZE_MAX / size)
++		return NULL;
++	return kmalloc(n * size, flags);
++}
++
++static inline void *kcalloc(size_t n, size_t size, gfp_t flags)
++{
++	return kmalloc_array(n, size, flags | __GFP_ZERO);
++}
++
++static inline void kfree(void *p)
++{
++	free(p);
++}
++
++#define kvmalloc_array		kmalloc_array
++#define kvfree			kfree
++
++static inline void spin_lock_init(spinlock_t *lock)
++{
++	int r = pthread_spin_init(lock, 0);
++
++	assert(!r);
++}
++
++static inline void spin_lock(spinlock_t *lock)
++{
++	int ret = pthread_spin_lock(lock);
++
++	assert(!ret);
++}
++
++static inline void spin_unlock(spinlock_t *lock)
++{
++	int ret = pthread_spin_unlock(lock);
++
++	assert(!ret);
++}
++
++static inline void spin_lock_bh(spinlock_t *lock)
++{
++	spin_lock(lock);
++}
++
++static inline void spin_unlock_bh(spinlock_t *lock)
++{
++	spin_unlock(lock);
++}
++
++static inline void spin_lock_irq(spinlock_t *lock)
++{
++	spin_lock(lock);
++}
++
++static inline void spin_unlock_irq(spinlock_t *lock)
++{
++	spin_unlock(lock);
++}
++
++static inline void spin_lock_irqsave(spinlock_t *lock,
++				     unsigned long f)
++{
++	spin_lock(lock);
++}
++
++static inline void spin_unlock_irqrestore(spinlock_t *lock,
++					  unsigned long f)
++{
++	spin_unlock(lock);
++}
++
++#endif
+-- 
+2.7.4
+
