@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FF99C07E9C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84C30C07E96
 	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jul 2021 10:09:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79366619A1
+	by mail.kernel.org (Postfix) with ESMTP id 593F361879
 	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jul 2021 10:09:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbhGFKMg (ORCPT
+        id S231260AbhGFKMf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jul 2021 06:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        Tue, 6 Jul 2021 06:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbhGFKMf (ORCPT
+        with ESMTP id S231225AbhGFKMf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 6 Jul 2021 06:12:35 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF22BC06175F
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB658C061762
         for <linux-kselftest@vger.kernel.org>; Tue,  6 Jul 2021 03:09:56 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:fd03:2275:4427:8d01])
-        by albert.telenet-ops.be with bizsmtp
-        id Rm9u250082pudom06m9ujs; Tue, 06 Jul 2021 12:09:54 +0200
+        by laurent.telenet-ops.be with bizsmtp
+        id Rm9u250052pudom01m9u5w; Tue, 06 Jul 2021 12:09:54 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1m0i1Z-007CxI-Lf; Tue, 06 Jul 2021 12:09:53 +0200
+        id 1m0i1Z-007CxH-Ii; Tue, 06 Jul 2021 12:09:53 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1m0i1Z-00FxWm-2v; Tue, 06 Jul 2021 12:09:53 +0200
+        id 1m0i1Z-00FxWi-1g; Tue, 06 Jul 2021 12:09:53 +0200
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
 To:     Trent Piepho <tpiepho@gmail.com>,
         Colin Ian King <colin.king@canonical.com>,
@@ -44,62 +44,51 @@ To:     Trent Piepho <tpiepho@gmail.com>,
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH 1/2] math: Make RATIONAL tristate
-Date:   Tue,  6 Jul 2021 12:09:44 +0200
-Message-Id: <20210706100945.3803694-2-geert@linux-m68k.org>
+Subject: [PATCH 0/2] math: RATIONAL and RATIONAL_KUNIT_TEST improvements
+Date:   Tue,  6 Jul 2021 12:09:43 +0200
+Message-Id: <20210706100945.3803694-1-geert@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210706100945.3803694-1-geert@linux-m68k.org>
-References: <20210706100945.3803694-1-geert@linux-m68k.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All but one symbols that select RATIONAL are tristate, but RATIONAL
-itself is bool.  Change it to tristate, so the rational fractions
-support code can be modular if no builtin code relies on it.
+	Hi all,
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-Exposed by commit b6c75c4afceb8bc0 ("lib/math/rational: add Kunit test
-cases") and CONFIG_KUNIT_ALL_TESTS=m.
+This patch series makes the RATIONAL symbol tristate, so it is not
+forced builtin if all users are modular, and makes the
+RATIONAL_KUNIT_TEST depend on RATIONAL, to avoid enabling RATIONAL if
+there are no real users.
 
-v2:
-  - Drop compile-testing and help text.
----
+Changes compared to v1:
+  - Drop compile-testing and help text for RATIONAL.
+  - Make RATIONAL_KUNIT_TEST depend on RATIONAL.
+
+Thanks for your comments!
+
+[1] https://lore.kernel.org/r/20210705114633.1500710-1-geert@linux-m68k.org/
+
+Geert Uytterhoeven (2):
+  math: Make RATIONAL tristate
+  math: RATIONAL_KUNIT_TEST should depend on RATIONAL instead of
+    selecting it
+
+ lib/Kconfig.debug   | 3 +--
  lib/math/Kconfig    | 2 +-
  lib/math/rational.c | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/lib/math/Kconfig b/lib/math/Kconfig
-index f19bc9734fa7cc4b..0634b428d0cb7f86 100644
---- a/lib/math/Kconfig
-+++ b/lib/math/Kconfig
-@@ -14,4 +14,4 @@ config PRIME_NUMBERS
- 	  If unsure, say N.
- 
- config RATIONAL
--	bool
-+	tristate
-diff --git a/lib/math/rational.c b/lib/math/rational.c
-index c0ab51d8fbb98d17..ec59d426ea638b0f 100644
---- a/lib/math/rational.c
-+++ b/lib/math/rational.c
-@@ -13,6 +13,7 @@
- #include <linux/export.h>
- #include <linux/minmax.h>
- #include <linux/limits.h>
-+#include <linux/module.h>
- 
- /*
-  * calculate best rational approximation for a given fraction
-@@ -106,3 +107,5 @@ void rational_best_approximation(
- }
- 
- EXPORT_SYMBOL(rational_best_approximation);
-+
-+MODULE_LICENSE("GPL v2");
 -- 
 2.25.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
