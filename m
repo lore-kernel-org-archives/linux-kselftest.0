@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24CF8C07E9B
-	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Jul 2021 02:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A30CCC07E9B
+	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Jul 2021 02:42:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DB7061407
-	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Jul 2021 02:40:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85236613C5
+	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Jul 2021 02:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbhGJCm5 (ORCPT
+        id S235353AbhGJCpR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Jul 2021 22:42:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60628 "EHLO mail.kernel.org"
+        Fri, 9 Jul 2021 22:45:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235231AbhGJClm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:41:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED4A1613BE;
-        Sat, 10 Jul 2021 02:38:56 +0000 (UTC)
+        id S235370AbhGJCnq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:43:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50EBF613D4;
+        Sat, 10 Jul 2021 02:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625884737;
+        s=k20201202; t=1625884775;
         bh=nrRvggJviXFfdy9LsU0DWs5Wxc2DOv6ikzovAtFzfGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=niYLsVpJ5/5/9Ufm7f5xudvGUXpEgEivJdfjwk6mHG4cdpr77zjU91GQKmqjZMCDD
-         W7CGfTvf+A5U/+9Duej4fsfGswrRgGi0TVlH2q60GnOAzt6pCnMY3e8tr9HuBbbPTq
-         N152wOTVxpnEh4KsPV49dGoM8U7F3kfJB7PpUGaHO7PNLy6Wjf2+GV8lV0m2yBp22s
-         J3ekLono9Np+34wC3fUJrGS8KniPaMVvJe0LAl647WBdRLKBy1BPejQ7BpiCAFKZyE
-         Hyg9QPCPOfaq65t+fVZKelXSndDmxi02cRK5A6um98rWRNFHpO1jg8ODdyS3gPwnGT
-         55o5nIgzAOQ0A==
+        b=pnjG+NfDbYFObQa0CBncRNhpifGTDHh/caLicI9tNruaOAGYTUWEYw0DmNV0SysJF
+         EK2LYlC84V1GEDDhjzljUydKFa98KDCBauctvY8H0H50r3z4I7VRfq7xtsmZ0Kpcm0
+         fh5YCCLVPnoQq/TFP7VGRwlN26bN0Sj2+KPopu0cvk2+NsPZkx0O5KHMm9VLYNn54F
+         MxgiS4ymaTlVHJdMW8sBo6caSR2OyY+2uL4Bbhg+i5U6iwhbka7/svAw74+hndouce
+         abrLXQ5l1E1rL7q6S7hN4YZ9ORUJ4/VIFLcSNucN/nGlHV7NePaeM0XyEjmWcSjc78
+         ZmyA+fBV8XZ6g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
@@ -39,12 +39,12 @@ Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 16/26] selftests/powerpc: Fix "no_handler" EBB selftest
-Date:   Fri,  9 Jul 2021 22:35:54 -0400
-Message-Id: <20210710023604.3172486-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 14/23] selftests/powerpc: Fix "no_handler" EBB selftest
+Date:   Fri,  9 Jul 2021 22:39:03 -0400
+Message-Id: <20210710023912.3172972-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710023604.3172486-1-sashal@kernel.org>
-References: <20210710023604.3172486-1-sashal@kernel.org>
+In-Reply-To: <20210710023912.3172972-1-sashal@kernel.org>
+References: <20210710023912.3172972-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
