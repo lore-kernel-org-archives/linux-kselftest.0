@@ -5,30 +5,31 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 155B5C11F67
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 07:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CED6C07E99
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 08:09:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1FE661603
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 07:23:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5860A61627
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 08:09:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241881AbhGLH0H (ORCPT
+        id S1344755AbhGLILw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Jul 2021 03:26:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32988 "EHLO mail.kernel.org"
+        Mon, 12 Jul 2021 04:11:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343855AbhGLHYW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jul 2021 03:24:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D30D661404;
-        Mon, 12 Jul 2021 07:21:16 +0000 (UTC)
+        id S1353516AbhGLICa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Jul 2021 04:02:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F7E661C2A;
+        Mon, 12 Jul 2021 07:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626074477;
+        s=korg; t=1626076526;
         bh=DUgcB785XMcpeEq5Yt6WrbqQKAkHFMhqCwGsYbSv/5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpNaDoHxGVSTdPcnP1QZ9Xgj/BG/oGLNAwW1i5ID9Eg5u4RcpRVI/9r3zr0ldoJe9
-         6pGcOxDzaXACdV79bUqSw4iZsVmdmO75MzVRIuSRWKc1XhfYAqET8zihddcP51SepG
-         Zo9vbDmL5ZOVpHFIsc/ehxpAKJep4wN/8Lw9zoWQ=
+        b=j1JcJUUppr/RVlqpnOfe9P7XznUTQqUi48uoe52fe1H/TgAiuFXnaaHeKMJK/J8FG
+         IPVuPSxTkfi1WgKgPmo7Bj3bVBmIbjFrnHnmkuP8lBrR9FnG7gLmXgHFMJa+dEy6UE
+         cCCeX/2KEBkFHurA4zASY1nas+8jGAzghDUTw+1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.12 594/700] selftests: splice: Adjust for handler fallback removal
-Date:   Mon, 12 Jul 2021 08:11:17 +0200
-Message-Id: <20210712061039.156072267@linuxfoundation.org>
+Subject: [PATCH 5.13 681/800] selftests: splice: Adjust for handler fallback removal
+Date:   Mon, 12 Jul 2021 08:11:44 +0200
+Message-Id: <20210712061039.314181276@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210712060924.797321836@linuxfoundation.org>
-References: <20210712060924.797321836@linuxfoundation.org>
+In-Reply-To: <20210712060912.995381202@linuxfoundation.org>
+References: <20210712060912.995381202@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
