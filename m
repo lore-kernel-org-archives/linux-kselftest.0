@@ -5,30 +5,30 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02037C07E9C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 07:11:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F146DC07E9E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 07:13:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E43BA61361
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 07:11:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAA2E61106
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jul 2021 07:13:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239362AbhGLHNy (ORCPT
+        id S242693AbhGLHQc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Jul 2021 03:13:54 -0400
-Received: from mga06.intel.com ([134.134.136.31]:3898 "EHLO mga06.intel.com"
+        Mon, 12 Jul 2021 03:16:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27441 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242426AbhGLHMI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jul 2021 03:12:08 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10042"; a="271046575"
+        id S240471AbhGLHPj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Jul 2021 03:15:39 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10042"; a="209975955"
 X-IronPort-AV: E=Sophos;i="5.84,232,1620716400"; 
-   d="scan'208";a="271046575"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 00:09:19 -0700
+   d="scan'208";a="209975955"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 00:12:51 -0700
 X-IronPort-AV: E=Sophos;i="5.84,232,1620716400"; 
-   d="scan'208";a="459091754"
+   d="scan'208";a="501901343"
 Received: from xshen14-linux.bj.intel.com ([10.238.155.105])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 00:09:16 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2021 00:12:48 -0700
 From:   Xiaochen Shen <xiaochen.shen@intel.com>
 To:     stable@vger.kernel.org, gregkh@linuxfoundation.org,
         sashal@kernel.org
@@ -36,12 +36,12 @@ Cc:     shuah@kernel.org, tony.luck@intel.com, fenghua.yu@intel.com,
         reinette.chatre@intel.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, pei.p.jia@intel.com,
         xiaochen.shen@intel.com
-Subject: [PATCH 5.10] selftests/resctrl: Fix incorrect parsing of option "-t"
-Date:   Mon, 12 Jul 2021 15:51:50 +0800
-Message-Id: <1626076310-576-1-git-send-email-xiaochen.shen@intel.com>
+Subject: [PATCH 5.12] selftests/resctrl: Fix incorrect parsing of option "-t"
+Date:   Mon, 12 Jul 2021 15:55:23 +0800
+Message-Id: <1626076523-924-1-git-send-email-xiaochen.shen@intel.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <162600876912955@kroah.com>
-References: <162600876912955@kroah.com>
+In-Reply-To: <16260087708135@kroah.com>
+References: <16260087708135@kroah.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
