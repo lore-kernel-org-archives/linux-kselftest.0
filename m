@@ -2,108 +2,91 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FA4C07E96
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Jul 2021 16:09:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41646C636CA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jul 2021 00:37:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EA1E61103
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Jul 2021 16:09:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EF07613F0
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jul 2021 00:37:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhGOQMd (ORCPT
+        id S232533AbhGPAkW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Jul 2021 12:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
+        Thu, 15 Jul 2021 20:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhGOQMd (ORCPT
+        with ESMTP id S232462AbhGPAkW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Jul 2021 12:12:33 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A92C06175F
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jul 2021 09:09:40 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id v26so7077682iom.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jul 2021 09:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QAfALqs51WvThC5Hz7W9r8szif6l/jmmKFnr+uD8jrY=;
-        b=bBIe3Tnv4rMT9xetAaOr9rGjv5VSSCeKssmFD1rCDDsH31qhlwLDrv1ThRHNLdkaN0
-         0HflA1YmprSlqcD2TWBPdhYq65rw+oeRg1Z2KzX4N/bTnc5AdQIFPkoLAwtFalfYv6Ij
-         HPb5Ye8CKZPD7VpK4bi5JyC0CTq0FGMkQppdpN9TtGu5PgNZXTJDQrU+nSNc3TLop1pa
-         UHreTFguEhpKAxHeNggVfhnb2VmD3HTxdfikhuN2u9W1vlv7Btn0iegwUvz7M5QLDHm0
-         4OO/8R3jdPmz+izbhVbOsoGGxlEZludONqhUUvbBg0482ucyGIioA2oU06iiOPuacKMo
-         BvWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QAfALqs51WvThC5Hz7W9r8szif6l/jmmKFnr+uD8jrY=;
-        b=XgP0eDnXceiFtqjTJ930awqD5oRtVHScAqoDKax5mzC7YG4eHzJuu5GUqfMyTuVYH4
-         CaVPwEoBhsqwrCK1hgjyFbMa6xjZ3TzHHe1TwB12L3A9yNDTHQ95vGxwKfv1f2ZERnMy
-         j8ys4ZL6Yi8ydkURMwuWebp3nFUmCCfYcnTdLMNlPpSAaXYhrqUInrjC3mzZImTgFoDf
-         NHlvgYZiXQaAXa9i6Te5FcexuWH7Wuq/rgI5w1TsaFaoowkQEANGbci/xZJaBEX0i7Ck
-         5yvsvp9AqT5GRkyuhMSIecz/d9L2qAI73Ym2fV8hjGdha6E5Hmo6rfvsvScF7zNTzLnR
-         hWpA==
-X-Gm-Message-State: AOAM530B2NFbMHexROOoXP9KSVpLjExIjuR/QEHD6/ZqD5Yqwo5Dto9G
-        pGnEzUgF1oAbkHXxaEL2ohjpSqsbLLLmf8A7k2tIug==
-X-Google-Smtp-Source: ABdhPJy1eLNmmf94QFLMJGGSva19cd6SJrv459Q6Itvj+7XMru5j7nO+Btog11fdlbx6MX8awXjgJxAyi61dm0Bpv0M=
-X-Received: by 2002:a05:6602:3342:: with SMTP id c2mr3586974ioz.126.1626365379421;
- Thu, 15 Jul 2021 09:09:39 -0700 (PDT)
+        Thu, 15 Jul 2021 20:40:22 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208D0C061762
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jul 2021 17:37:28 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D3274806B5;
+        Fri, 16 Jul 2021 12:37:25 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1626395845;
+        bh=68gvUVrMgDWcYm5Vk9ECjsxj2GI5s4rQAgjRIsKQKvg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Nt1GmSPplfHMvM1UepuAgakcvZr+UHZsNvonK6BZWTxna1DMyaI3bKd/kbfVUbBPy
+         QPq1NpP4dDCPftUiRvjKoQIk+/niSv815vSCQMK746fFKchVgFMReeFuoe8u4xtbON
+         VxYIRL8QAT+LCUsv3bddifUNA62CWIS+s3nKHBlrlNurq4w0Jf7iHXn+WnV7MnBOK3
+         9rZpfxemEpfSc38DnctVMcgkKKO2eMHboExgf6sgQONJh3Hsx84CBPIinQ2UiomvVv
+         Zwg3wad9pteuF7Z8Ee8tMn6zPa4bLguKsprmFZkao/p8VPecvBZuXs7Yy224JokRqZ
+         iVPNU5CJFia3g==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60f0d4c50000>; Fri, 16 Jul 2021 12:37:25 +1200
+Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
+        by pat.atlnz.lc (Postfix) with ESMTP id A711113EE58;
+        Fri, 16 Jul 2021 12:37:25 +1200 (NZST)
+Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
+        id A1CD22428E7; Fri, 16 Jul 2021 12:37:25 +1200 (NZST)
+From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+To:     pablo@netfilter.org
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Subject: [PATCH 0/3] Add RFC-7597 Section 5.1 PSID support
+Date:   Fri, 16 Jul 2021 12:27:39 +1200
+Message-Id: <20210716002742.31078-1-Cole.Dishington@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210705103959.GG18022@breakpoint.cc>
+References: <20210705103959.GG18022@breakpoint.cc>
 MIME-Version: 1.0
-References: <20210714231506.886386-1-dlatypov@google.com> <CABVgOS=b6+KXp8LP5tAoaFev6yDX4gjrD1i9vBv58Y7JkO_E1A@mail.gmail.com>
-In-Reply-To: <CABVgOS=b6+KXp8LP5tAoaFev6yDX4gjrD1i9vBv58Y7JkO_E1A@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 15 Jul 2021 09:09:27 -0700
-Message-ID: <CAGS_qxrrC0S+jE=RW2WeTq3jgw-STnFFb8cG=gyE2Nj+2MxDLg@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: add --kernel_args to allow setting module params
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=Sr3uF8G0 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=e_q4qTt1xDgA:10 a=UaPN0VJYGzK_QuBb5qYA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 14, 2021 at 11:14 PM David Gow <davidgow@google.com> wrote:
->
-> On Thu, Jul 15, 2021 at 7:15 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > kunit.py currently does not make it possible for users to specify module
-> > parameters (/kernel arguments more generally) unless one directly tweaks
-> > the kunit.py code itself.
-> >
-> > This hasn't mattered much so far, but this would make it easier to port
-> > existing tests that expose module parameters over to KUnit and/or let
-> > current KUnit tests take advantage of them.
-> >
-> > Tested using an kunit internal parameter:
-> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit \
-> >     --kernel_args=kunit.filter_glob=kunit_status
-> > ...
-> > Testing complete. 2 tests run. 0 failed. 0 crashed. 0 skipped.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
->
-> Thanks! This is probably overdue: while I still think we want to avoid
-> this being necessary for most uses, it definitely was a gap in
-> kunit_tool functionality.
->
-> I tested this and it worked fine, but did cause several of the
-> kunit_tool_tests to fail, largely due to there being changes to the
-> arguments of run_kernel(). Those should just require the associated
-> tests to be updated.
+Thanks for your time reviewing!
 
-Oops, completely forgot about kunit_tool_test.py. Sent out a v3.
-I also went and added a test case to make sure the flag can be
-repeated and gets plumbed through properly.
+Changes in v4:
+- Handle special case of no offset bits (a=3D0 / A=3D2^16).
 
->
-> -- David
+Cole Dishington (3):
+  net: netfilter: Add RFC-7597 Section 5.1 PSID support xtables API
+  net: netfilter: Add RFC-7597 Section 5.1 PSID support
+  selftests: netfilter: Add RFC-7597 Section 5.1 PSID selftests
+
+ include/uapi/linux/netfilter/nf_nat.h         |   3 +-
+ net/netfilter/nf_nat_core.c                   |  39 +++-
+ net/netfilter/nf_nat_masquerade.c             |  20 +-
+ net/netfilter/xt_MASQUERADE.c                 |  44 ++++-
+ .../netfilter/nat_masquerade_psid.sh          | 182 ++++++++++++++++++
+ 5 files changed, 276 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/netfilter/nat_masquerade_psid=
+.sh
+
+--=20
+2.32.0
+
