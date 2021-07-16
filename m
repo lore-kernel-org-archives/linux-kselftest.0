@@ -2,206 +2,296 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 256D7C12002
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jul 2021 22:47:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A954DC12002
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jul 2021 23:03:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3489613E8
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jul 2021 22:47:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C27C6109E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jul 2021 23:03:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbhGPWup (ORCPT
+        id S232154AbhGPXGF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 16 Jul 2021 18:50:45 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:11790 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232532AbhGPWuk (ORCPT
+        Fri, 16 Jul 2021 19:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230227AbhGPXGF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jul 2021 18:50:40 -0400
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GMgMDH018473;
-        Fri, 16 Jul 2021 22:47:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=OPGYRZbLbvgxjBvp1yPnTyrAZTPmMfZi+IkyAmqF8v4=;
- b=Vrlck8ghH8AP1YL5fy/lWOXQpdF7cGD5btOBwni4eP3gsa+r0EbOn3Madklv+2MH8H9m
- o26k85qBO5IRdi1zIemqJWcjr9U5nd4UKbUWPlj7MO6fM6+9RtB6l5Egb2ytuee3KMaH
- 8VtiBcGoWCtuPQVXff9NVsNnM0iTUT5Y7kt1Cj0pLksjS5ekC6hWWkucX2FM2xtCoEGN
- 10VwBAi1QbpIrsMRNkmDoZTIWqCzKXsA/r9E/jpkSXOYNFo60z+Z3sZ26PJuZb/K6Hsl
- kfsIWL2q+ZF2ItOnVrE8ihjy/hncEMCN7UIkn5MOv/PaUts9EpLX0BTGvfu+lsnA/Hha Vg== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2020-01-29;
- bh=OPGYRZbLbvgxjBvp1yPnTyrAZTPmMfZi+IkyAmqF8v4=;
- b=kA0JM9RPwPdxX+VUGEE2osx3BJ40N4Gh6adB5hffLOgn4JJYud7wzfZB1Td8U8HhwBLO
- j+EMd38UCUq/+6VLdBiZv4M6yDUngEMlQcFkPs4g70hwcxSlXQxG7w+qul7o3Y8iBxoB
- E/bFg7mCk2TVVnBE62QXqh5KGo75iuzbfrdpzhlx+vu8jG2oVy1PSBrpn4SaxNaQmdkz
- a4CWl16iVUlw5JQu+1EgAeflQvKohQMHohaJLX1UL7icZKmTj1Seaz2RM+jWB+j/d1lP
- 01xKYIF5NiD8GSuRItiBoo0jYSj5HWBJDp7/86d9rZsnWVFS2DXaxlC2vmueUQbOD+tB tw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39tw31aa8n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 22:47:17 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16GMdvoW186463;
-        Fri, 16 Jul 2021 22:47:16 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2171.outbound.protection.outlook.com [104.47.56.171])
-        by userp3020.oracle.com with ESMTP id 39twqrx9ec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 22:47:16 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fvym68ZXhPdKtKKBLd5iCX8bLswpkzKAa6tublu+rJ/4/bzgVfakng1/OjCPjmY177H/ZTPyyWlDVwWJ9KiatsRuhkwKoQfH4hVgZnKqdnsIef1JxKBWFtLKyfioU3OruOrVmf4sXwma7qzreAVcJtOfQ4/8c7yh+PRjsLlrYENhTujl6hmIK/gPqGi7T6ndVpZHEpuRel5y/ifBdWNtIJV3dgdu7muOJ7xFEkUTUyGBmC96NIyqb+QYqO588p0YL2J94158XwTKowhRCIaJ0tNw+b5/QY67Lt1XN3WO0Lujo354Lgp43XvL8VS+mDIYEYmgXO6QS4VA014YxVEi9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OPGYRZbLbvgxjBvp1yPnTyrAZTPmMfZi+IkyAmqF8v4=;
- b=J0DoUmv46jRrJkKf9P14bA/8tUll3ZrHnb2BDx3lYlVXvWG2YZpZxeSk7MZdvlrzNOlTjnO+cvI8Ejx22FR7oqvW4+POfwW9hzF+5yGXRPJLbFPErSQEpkUlATipbrNzyLUPEUHJucHqgoflUCMFODY73XaZ95AQDmb9WLLcABgQHPOIqxLGdmtkt7ElgrnZkVa9ULtB5wIZdr/ya/vBGDW2t1N3KGOx009+9uCips0jUfAgaDn5+/1YkowDazCY4pVqs3KTMfx+49bLadWqcWIUT0klG/iQbsa083Ewijvsss+5Tk1zdoLA2CXKVQYVAn18qrQFnzFBSL3Xwo8hPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 16 Jul 2021 19:06:05 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F42DC06175F
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jul 2021 16:03:09 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id r18so1356811iot.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jul 2021 16:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OPGYRZbLbvgxjBvp1yPnTyrAZTPmMfZi+IkyAmqF8v4=;
- b=X++7TM8kw1YbPmzMYNyyXYnA7I/HJkwrT1Xa/0oHDClHVjIIJId3yI/61ya60d1YSseIgKGp5ZT+yHytjbdmzn5C18/lO4GHCZiWmqhaZVlTeNk6Iih8PrJV2bmveLfvxKGAAnA8I4cvKoKC83VSOizZWR9m+gF4VxzOIADgWmQ=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by BLAPR10MB5378.namprd10.prod.outlook.com (2603:10b6:208:328::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Fri, 16 Jul
- 2021 22:47:14 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.026; Fri, 16 Jul 2021
- 22:47:14 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
-        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 2/3] libbpf: fix compilation errors on ppc64le for btf dump typed data
-Date:   Fri, 16 Jul 2021 23:46:56 +0100
-Message-Id: <1626475617-25984-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1626475617-25984-1-git-send-email-alan.maguire@oracle.com>
-References: <1626475617-25984-1-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: AM4PR0501CA0058.eurprd05.prod.outlook.com
- (2603:10a6:200:68::26) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=9jrSo/8w4ZCyJI243w1I54Is0297tr4Ud/P9+xiX6eE=;
+        b=SsH/xAX97+mE4HIlPmRWMrsSaKYL7CnI25zlXncZ/Joe8TDagLltXlI/nbzs0EdBK+
+         /69OsEZ1gUKkf1Pe32AKN2h/7gp9LZ7YaYIVno84Hc7uiPgsPjvidrMKyi6LcfJ4lB4h
+         6g1XEouAuZ0Tb5xhxjXyflZKISIow2oNJUHPE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=9jrSo/8w4ZCyJI243w1I54Is0297tr4Ud/P9+xiX6eE=;
+        b=pUVYRRzXxt8YM6O7thCiCcJc+Mi/LIhloxxhc3N6et/9pu3VY/bYRuYDZWmHG9UTD1
+         gvFM68Kew64PYvSfBAMP5+8mh6M4xNfHXokPnPEKWa77a/ro9iunUfT38FVeyAK1dAJN
+         NN+yMQcE2nMEWOs3W6+Y+3UQcs5xzuYqg2knFgwPhpNlYfieXSzEWRc5kcQ4LL44dz00
+         bvH1WnapZhdWVx7qCnRkhNylZbzDUw/kYgd+3chEOceJuTOkLUu+Fe6o0cWWihsOCLQ9
+         84Ly0uKOjdFfH2rACKVLyYubtgAObYjO0sapsX77csoLPBY6FzB9XRFXbL8cYmLmmLLM
+         Q3Cg==
+X-Gm-Message-State: AOAM532FZjcSG7i8SKKJaaKN1mA2A3h+nViP/wehIHKGQ3Ti3peVQ26k
+        0tn1FlgfBhsxkoYoTajTl2CRcYhkBwE2yg==
+X-Google-Smtp-Source: ABdhPJz/uXbJmFOka0AfPkhR3l74/AAI6WqOujq8+f6egYKl60jtIhEYlQSd1pnv1uM+qSvDFVtgxw==
+X-Received: by 2002:a6b:db18:: with SMTP id t24mr9340306ioc.163.1626476588913;
+        Fri, 16 Jul 2021 16:03:08 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id j13sm1209421ila.38.2021.07.16.16.03.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jul 2021 16:03:08 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit update for Linux 5.14-rc2
+Message-ID: <9d9ebe39-8860-4d1a-2489-e6a1a1f0cbbb@linuxfoundation.org>
+Date:   Fri, 16 Jul 2021 17:03:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.uk.oracle.com (95.45.14.174) by AM4PR0501CA0058.eurprd05.prod.outlook.com (2603:10a6:200:68::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Fri, 16 Jul 2021 22:47:12 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ae4df6ce-cbbb-4075-3703-08d948aba7d2
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5378:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BLAPR10MB5378B60C740DB42988D57B38EF119@BLAPR10MB5378.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iwql+Gl/ASsR8kiHFoblWzXrsUG29jGBFHhec7IC7CyfomjIzJSjijUhLQS+dBZZoIaTcwIjG38s6QiD8qw2MY5X1nkL3GxiqVr/01vx7xpUh23VbGI8fqKxSZttH3LJX0os681xCLNZPMfDuGXAqVaapJ1rwQ9/WRdimdd/c1eMTyRg+xgB6PQf4TP9mSXE/5dB4ScsN0D1C7HLIrgf753o+Qo89dYOJCw6BgEYDGhy3nNKDCKmydMQJ7WmhHGDTiQa3CNRIKeZvQDi/BcM4P+ljT2EHWakpSMKTIZy7Ujj678Kx5C5+LNyFUdo+hvL1lF+o6ZAS4YzfmiotVS3ErSw1MziKSZ6xVj/B/4s3qAcL0i8HiBsjIpcB6tYbkqHFY/gETaRYqaD1N7oaMqHcvEYQuxjglo9RKYenRtIpmdvmEOQxqcB8t+ycFS50Vlyg8HShQNVbxBbC39Svb5vre9T4Zi5VjFcWPTYz865MRV4jUNGW/qA3guShAGoIyMdX1UrSSt18Bv8TibRKrIGvIbMYZOxKdirtPYOX1MKJZX7LLsoACzBQWC5eF1KlSK6YhVBj3aWWjz0hn3QDZkjg0WkXmzSVxDbeSGy3IV1vpMRfIHvjPf0Vm3gjWkX51E9RVJWwrtWP0Pxy1C9+yPbFGf0s33EPFsPRh3n81EfPArCpCWqaepgFj9nZmy5QR8mbd7U58nvRsYYtJbIWUCezw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(366004)(376002)(396003)(136003)(39860400002)(83380400001)(2906002)(6486002)(8936002)(36756003)(107886003)(6666004)(4326008)(5660300002)(316002)(44832011)(86362001)(38100700002)(478600001)(38350700002)(2616005)(7696005)(956004)(52116002)(8676002)(186003)(26005)(7416002)(66946007)(66556008)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MNsc2FaWMtt1nCU+Zg7C3zNcx735NL0H/SA7qOJLgxCkb+99kxP3XgRZ/qkV?=
- =?us-ascii?Q?20u8xJmr7iQxqyUKbZAmVyfs5ZSUM1ywtAmay1y/awRPA2sEcabbdT5406fk?=
- =?us-ascii?Q?G37/uL2SUeAGKLFJbNt2vvCrBsIcVQ7rQ5NUuHUkH7hTUdhLtLzwtlwTb9kL?=
- =?us-ascii?Q?T5VhXnH8uThY/igmLdh13iA9qdM5RrbVsQV+cEse+w5W0RXcxC1EHZNwjrg6?=
- =?us-ascii?Q?tJtJMf+/zEzoEFIT2F99PqKdJZ2EL+aENeqDmsrTCUOqF227F42UWVqkiyDz?=
- =?us-ascii?Q?sntRw0cHA3sT1YCOoHexyLPM8wEzcKZLFOGiHzhHsvpLZZdrr7RFegR1mcGS?=
- =?us-ascii?Q?V2VPgdcQ8IptdHPVBbzaFuU3nSlrbkXVUWDQT7iYjKVjwYjDeBbQClbXQ2Uq?=
- =?us-ascii?Q?Wqj2ZpYYXZvUdYcOg19JqTyLcdHK4Gs/hJXfoTbVm+KGEmYxOs/QXLQoMEqB?=
- =?us-ascii?Q?4g7DuA8NafnTiFZd6Kt0fhoQrf2ifcA1zOPlNvKC3+JzqQaPbPTlHIjgiGoW?=
- =?us-ascii?Q?VWypUBX/EHVGzmwQ+avR45wrTvdGrAXq0dZVOj6Wk8gIIcyHhuq3ZzUQPXOx?=
- =?us-ascii?Q?r/AzpORPY7RL64miShTchN7UwoI1qjjsHmihKfk/28Um/+i0emIKidz+hZ7Z?=
- =?us-ascii?Q?VNQj8e+FVbm3aJCovJ7L2Q2PgVOJpUPnHSN6pQ4MWbCt5HDYx5bElErk3DNq?=
- =?us-ascii?Q?IPeRaxtV/Bl5P3THjH6/bYKUvkNIIAQD0NjC4wBHJFRc69SB4y9Mh7JGTfWn?=
- =?us-ascii?Q?z6If2ZoWirG2wT8V7icoY5KrEiCRc4GC36fPHlVPqKS154yaI8wgwDD+jAn2?=
- =?us-ascii?Q?3kAjNoUyMVPKzQPfLprYPG6WUMGfwXqXhYv+IuI5XI+DiiLonFP2ceVynLv6?=
- =?us-ascii?Q?S14JUMzUW2Y05qL4RsNaPVo4mG2XFVMvAwBo+txqrC+xjpW0+pik3yr/GCi9?=
- =?us-ascii?Q?fwBOnjqVuZPnEX9lROCVRU9LjODPEifNIBG9Hk+2HnU6eVAsLtQEgtGJ4RKO?=
- =?us-ascii?Q?OyW/owL6FBQvEy/Q9jxIumuZF1+948nPO5G3Iwy7U47XpMi8Ggwi+dgf5Dpl?=
- =?us-ascii?Q?1xlVfndOrA+fQ21jLzl/eCu6FdeMXMraiCJXasEJFIES4pVbUaYI9qnLN5BD?=
- =?us-ascii?Q?DcgAc4CbQngzOlm8NufPUfO4T1dA28vXHzrTHgy8NeHJ91OJGvWg/LG69odL?=
- =?us-ascii?Q?ndvG/U/GohwPWeSJuPU/70ICsjmSUr9QAgDva7Ultnqv728djlHoZGeruG23?=
- =?us-ascii?Q?RzE4dfqzfiCkHm7N6l5JPcYQd8ejx9ET5uZKCusGgQ8t03552DXmkdwQ07LQ?=
- =?us-ascii?Q?i5B2dyqjTe1VDKGswYUZ0xlq?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae4df6ce-cbbb-4075-3703-08d948aba7d2
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2021 22:47:14.3806
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tYN76g9iq+qHligNcBGRg8EuGd5QL7oOTyfbzjrasQz2rfG+G6zrLVwhUJSXHE9q4nztAeELUQ4m0bpReUXD8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5378
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10047 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
- adultscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107160145
-X-Proofpoint-GUID: sMz9LGtBvGNgX9sPzKeXxc5SELJyURGE
-X-Proofpoint-ORIG-GUID: sMz9LGtBvGNgX9sPzKeXxc5SELJyURGE
+Content-Type: multipart/mixed;
+ boundary="------------1A7C8D7B520404FE15E7C549"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Andrii reports:
+This is a multi-part message in MIME format.
+--------------1A7C8D7B520404FE15E7C549
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-"ppc64le arch doesn't like the %lld:
+Hi Linus,
 
- In file included from btf_dump.c:22:
-btf_dump.c: In function 'btf_dump_type_data_check_overflow':
-libbpf_internal.h:111:22: error: format '%lld' expects argument of
-type 'long long int', but argument 3 has type '__s64' {aka 'long int'}
-[-Werror=format=]
-  111 |  libbpf_print(level, "libbpf: " fmt, ##__VA_ARGS__); \
-      |                      ^~~~~~~~~~
-libbpf_internal.h:114:27: note: in expansion of macro '__pr'
-  114 | #define pr_warn(fmt, ...) __pr(LIBBPF_WARN, fmt, ##__VA_ARGS__)
-      |                           ^~~~
-btf_dump.c:1992:3: note: in expansion of macro 'pr_warn'
- 1992 |   pr_warn("unexpected size [%lld] for id [%u]\n",
-      |   ^~~~~~~
-btf_dump.c:1992:32: note: format string is defined here
- 1992 |   pr_warn("unexpected size [%lld] for id [%u]\n",
-      |                             ~~~^
-      |                                |
-      |                                long long int
-      |                             %ld
+Please pull the following KUnit fixes update for Linux 5,14-rc2
 
-Cast to size_t and use %zu."
+This KUnit fixes update for Linux 5.14-rc2 consists of fixes to kunit
+tool and documentation:
 
-Reported-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/lib/bpf/btf_dump.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-- asserts on older python versions.
+-- fixes to misleading error messages when TAP header format is
+    incorrect or when file is missing.
+-- fixes documentation dropping obsolete information about uml_abort
+    coverage.
+-- removing unnecessary annotations
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 814a538..e5fbfb8 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2011,8 +2011,8 @@ static int btf_dump_type_data_check_overflow(struct btf_dump *d,
- 	__s64 size = btf__resolve_size(d->btf, id);
+diff is attached.
+
+Thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+
+   Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.14-rc2
+
+for you to fetch changes up to df4b0807ca1a62822342d404b863eff933d15762:
+
+   kunit: tool: Assert the version requirement (2021-07-12 14:02:32 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-5.14-rc2
+
+This KUnit fixes update for Linux 5.14-rc2 consists of fixes to kunit
+tool and documentation:
+
+-- asserts on older python versions.
+-- fixes to misleading error messages when TAP header format is
+    incorrect or when file is missing.
+-- fixes documentation dropping obsolete information about uml_abort
+    coverage.
+-- removing unnecessary annotations
+
+----------------------------------------------------------------
+Daniel Latypov (2):
+       Documentation: kunit: drop obsolete note about uml_abort for coverage
+       kunit: tool: remove unnecessary "annotations" import
+
+Rae Moar (1):
+       kunit: tool: Fix error messages for cases of no tests and wrong TAP header
+
+SeongJae Park (1):
+       kunit: tool: Assert the version requirement
+
+  Documentation/dev-tools/kunit/running_tips.rst           | 14 +-------------
+  tools/testing/kunit/kunit.py                             |  2 ++
+  tools/testing/kunit/kunit_kernel.py                      |  6 ++----
+  tools/testing/kunit/kunit_parser.py                      |  6 ++++--
+  tools/testing/kunit/kunit_tool_test.py                   | 16 +++++++++++++---
+  ...og => test_is_test_passed-no_tests_run_no_header.log} |  0
+  .../test_is_test_passed-no_tests_run_with_header.log     |  2 ++
+  7 files changed, 24 insertions(+), 22 deletions(-)
+  rename tools/testing/kunit/test_data/{test_is_test_passed-no_tests_run.log => test_is_test_passed-no_tests_run_no_header.log} (100%)
+  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
+----------------------------------------------------------------
+
+--------------1A7C8D7B520404FE15E7C549
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-5.14-rc2.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-5.14-rc2.diff"
+
+diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+index 7d99386cf94a..d1626d548fa5 100644
+--- a/Documentation/dev-tools/kunit/running_tips.rst
++++ b/Documentation/dev-tools/kunit/running_tips.rst
+@@ -86,19 +86,7 @@ Generating code coverage reports under UML
+ .. note::
+ 	TODO(brendanhiggins@google.com): There are various issues with UML and
+ 	versions of gcc 7 and up. You're likely to run into missing ``.gcda``
+-	files or compile errors. We know one `faulty GCC commit
+-	<https://github.com/gcc-mirror/gcc/commit/8c9434c2f9358b8b8bad2c1990edf10a21645f9d>`_
+-	but not how we'd go about getting this fixed. The compile errors still
+-	need some investigation.
+-
+-.. note::
+-	TODO(brendanhiggins@google.com): for recent versions of Linux
+-	(5.10-5.12, maybe earlier), there's a bug with gcov counters not being
+-	flushed in UML. This translates to very low (<1%) reported coverage. This is
+-	related to the above issue and can be worked around by replacing the
+-	one call to ``uml_abort()`` (it's in ``os_dump_core()``) with a plain
+-	``exit()``.
+-
++	files or compile errors.
  
- 	if (size < 0 || size >= INT_MAX) {
--		pr_warn("unexpected size [%lld] for id [%u]\n",
--			size, id);
-+		pr_warn("unexpected size [%zu] for id [%u]\n",
-+			(size_t)size, id);
- 		return -EINVAL;
- 	}
+ This is different from the "normal" way of getting coverage information that is
+ documented in Documentation/dev-tools/gcov.rst.
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index be8d8d4a4e08..6276ce0c0196 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -12,6 +12,8 @@ import sys
+ import os
+ import time
  
--- 
-1.8.3.1
++assert sys.version_info >= (3, 7), "Python version is too old"
++
+ from collections import namedtuple
+ from enum import Enum, auto
+ 
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 90bc007f1f93..2c6f916ccbaf 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -6,15 +6,13 @@
+ # Author: Felix Guo <felixguoxiuping@gmail.com>
+ # Author: Brendan Higgins <brendanhiggins@google.com>
+ 
+-from __future__ import annotations
+ import importlib.util
+ import logging
+ import subprocess
+ import os
+ import shutil
+ import signal
+-from typing import Iterator
+-from typing import Optional
++from typing import Iterator, Optional, Tuple
+ 
+ from contextlib import ExitStack
+ 
+@@ -208,7 +206,7 @@ def get_source_tree_ops(arch: str, cross_compile: Optional[str]) -> LinuxSourceT
+ 		raise ConfigError(arch + ' is not a valid arch')
+ 
+ def get_source_tree_ops_from_qemu_config(config_path: str,
+-					 cross_compile: Optional[str]) -> tuple[
++					 cross_compile: Optional[str]) -> Tuple[
+ 							 str, LinuxSourceTreeOperations]:
+ 	# The module name/path has very little to do with where the actual file
+ 	# exists (I learned this through experimentation and could not find it
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index c3c524b79db8..b88db3f51dc5 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -338,9 +338,11 @@ def bubble_up_suite_errors(test_suites: Iterable[TestSuite]) -> TestStatus:
+ def parse_test_result(lines: LineStream) -> TestResult:
+ 	consume_non_diagnostic(lines)
+ 	if not lines or not parse_tap_header(lines):
+-		return TestResult(TestStatus.NO_TESTS, [], lines)
++		return TestResult(TestStatus.FAILURE_TO_PARSE_TESTS, [], lines)
+ 	expected_test_suite_num = parse_test_plan(lines)
+-	if not expected_test_suite_num:
++	if expected_test_suite_num == 0:
++		return TestResult(TestStatus.NO_TESTS, [], lines)
++	elif expected_test_suite_num is None:
+ 		return TestResult(TestStatus.FAILURE_TO_PARSE_TESTS, [], lines)
+ 	test_suites = []
+ 	for i in range(1, expected_test_suite_num + 1):
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index bdae0e5f6197..75045aa0f8a1 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -157,8 +157,18 @@ class KUnitParserTest(unittest.TestCase):
+ 			kunit_parser.TestStatus.FAILURE,
+ 			result.status)
+ 
++	def test_no_header(self):
++		empty_log = test_data_path('test_is_test_passed-no_tests_run_no_header.log')
++		with open(empty_log) as file:
++			result = kunit_parser.parse_run_tests(
++				kunit_parser.extract_tap_lines(file.readlines()))
++		self.assertEqual(0, len(result.suites))
++		self.assertEqual(
++			kunit_parser.TestStatus.FAILURE_TO_PARSE_TESTS,
++			result.status)
++
+ 	def test_no_tests(self):
+-		empty_log = test_data_path('test_is_test_passed-no_tests_run.log')
++		empty_log = test_data_path('test_is_test_passed-no_tests_run_with_header.log')
+ 		with open(empty_log) as file:
+ 			result = kunit_parser.parse_run_tests(
+ 				kunit_parser.extract_tap_lines(file.readlines()))
+@@ -173,7 +183,7 @@ class KUnitParserTest(unittest.TestCase):
+ 		with open(crash_log) as file:
+ 			result = kunit_parser.parse_run_tests(
+ 				kunit_parser.extract_tap_lines(file.readlines()))
+-		print_mock.assert_any_call(StrContains('no tests run!'))
++		print_mock.assert_any_call(StrContains('could not parse test results!'))
+ 		print_mock.stop()
+ 		file.close()
+ 
+@@ -309,7 +319,7 @@ class KUnitJsonTest(unittest.TestCase):
+ 			result["sub_groups"][1]["test_cases"][0])
+ 
+ 	def test_no_tests_json(self):
+-		result = self._json_for('test_is_test_passed-no_tests_run.log')
++		result = self._json_for('test_is_test_passed-no_tests_run_with_header.log')
+ 		self.assertEqual(0, len(result['sub_groups']))
+ 
+ class StrContains(str):
+diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_no_header.log
+similarity index 100%
+rename from tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log
+rename to tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_no_header.log
+diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
+new file mode 100644
+index 000000000000..5f48ee659d40
+--- /dev/null
++++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_run_with_header.log
+@@ -0,0 +1,2 @@
++TAP version 14
++1..0
 
+--------------1A7C8D7B520404FE15E7C549--
