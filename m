@@ -2,66 +2,219 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17441C636C9
-	for <linux-kselftest@archiver.kernel.org>; Sat, 17 Jul 2021 19:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 494FBC636CA
+	for <linux-kselftest@archiver.kernel.org>; Sat, 17 Jul 2021 23:48:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2D9361164
-	for <linux-kselftest@archiver.kernel.org>; Sat, 17 Jul 2021 19:53:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F1CC61108
+	for <linux-kselftest@archiver.kernel.org>; Sat, 17 Jul 2021 23:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235271AbhGQT4d (ORCPT
+        id S231197AbhGQXvM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 17 Jul 2021 15:56:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235133AbhGQT4c (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Jul 2021 15:56:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E966960FDB;
-        Sat, 17 Jul 2021 19:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626551616;
-        bh=AgBnn9OYYkTHpOM4uyS/maxhHtXhguSJBbj0XznMWOM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Tggic2QjSGflMlKNAr91jsf/9GJE+46edjb9hZYFumG07aISWZc1C3KAcpsrbcBWa
-         1OmqqqTYmCCFN8UlGTqaIkLpt53lBVYHBhIU14q+v1nMP5DcPbj16Ku5yDMyrsPl7z
-         RFQjXfrzfOnWECq6HfhwwjHZpeDAJmG/5vgQKekY+lpI+bgEyKfwVMmBraHNJMYILq
-         JuKDo4PEIzS3Mj/OTIj9x5I4EpXp2fpUKGKbJxkFdNv3ZKTyTK8on1YHzeuVpSoP48
-         g4TkEjwpYATHEpTk8MNaiPSuiaX/uoaADXClLbOjUpcDxwSTeJLES0RhMjYc13Q5BF
-         AWOgd+xVhWMDw==
-Subject: Re: [GIT PULL] KUnit update for Linux 5.14-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <9d9ebe39-8860-4d1a-2489-e6a1a1f0cbbb@linuxfoundation.org>
-References: <9d9ebe39-8860-4d1a-2489-e6a1a1f0cbbb@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <9d9ebe39-8860-4d1a-2489-e6a1a1f0cbbb@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.14-rc2
-X-PR-Tracked-Commit-Id: df4b0807ca1a62822342d404b863eff933d15762
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ccbb22b9ab86a050584804b84007e0365242b034
-Message-Id: <162655161589.18489.1139723975789923044.pr-tracker-bot@kernel.org>
-Date:   Sat, 17 Jul 2021 19:53:35 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Sat, 17 Jul 2021 19:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231207AbhGQXvM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 17 Jul 2021 19:51:12 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB20C061762;
+        Sat, 17 Jul 2021 16:48:15 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 384AE1F41384
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <shuah@kernel.org>, ~lkcamp/patches@lists.sr.ht,
+        nfraprado@collabora.com, leandro.ribeiro@collabora.com,
+        Vitor Massaru Iha <vitor@massaru.org>, lucmaga@gmail.com,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        tales.aparecida@gmail.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH v5 0/1] lib: Convert UUID runtime test to KUnit
+Date:   Sat, 17 Jul 2021 20:47:57 -0300
+Message-Id: <20210717234758.46598-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 16 Jul 2021 17:03:07 -0600:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.14-rc2
+This patch converts existing UUID runtime test to use KUnit framework.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ccbb22b9ab86a050584804b84007e0365242b034
+Below, there's a comparison between the old output format and the new
+one. Keep in mind that even if KUnit seems very verbose, this is the
+corner case where _every_ test has failed.
 
-Thank you!
+* This is how the current output looks like in success:
+
+  test_uuid: all 18 tests passed
+
+* And when it fails:
+
+  test_uuid: conversion test #1 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #2 failed on LE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #2 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: conversion test #3 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #4 failed on BE data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: cmp test #4 actual data: 'c33f4995-3701-450e-9fbf-206a2e98e576'
+  test_uuid: conversion test #5 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #6 failed on LE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #6 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: conversion test #7 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #8 failed on BE data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: cmp test #8 actual data: '64b4371c-77c1-48f9-8221-29f054fc023b'
+  test_uuid: conversion test #9 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #10 failed on LE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #10 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: conversion test #11 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #12 failed on BE data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: cmp test #12 actual data: '0cb4ddff-a545-4401-9d06-688af53e7f84'
+  test_uuid: negative test #13 passed on wrong LE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
+  test_uuid: negative test #14 passed on wrong BE data: 'c33f4995-3701-450e-9fbf206a2e98e576 '
+  test_uuid: negative test #15 passed on wrong LE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
+  test_uuid: negative test #16 passed on wrong BE data: '64b4371c-77c1-48f9-8221-29f054XX023b'
+  test_uuid: negative test #17 passed on wrong LE data: '0cb4ddff-a545-4401-9d06-688af53e'
+  test_uuid: negative test #18 passed on wrong BE data: '0cb4ddff-a545-4401-9d06-688af53e'
+  test_uuid: failed 18 out of 18 tests
+
+
+* Now, here's how it looks like with KUnit:
+
+  ======== [PASSED] uuid ========
+  [PASSED] uuid_correct_be
+  [PASSED] uuid_correct_le
+  [PASSED] uuid_wrong_be
+  [PASSED] uuid_wrong_le
+
+* And if every test fail with KUnit:
+
+  ======== [FAILED] uuid ========
+  [FAILED] uuid_correct_be
+      # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+      Expected uuid_parse(data->uuid, &be) == 1, but
+          uuid_parse(data->uuid, &be) == 0
+  
+  failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
+      # uuid_correct_be: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
+      # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+      Expected uuid_parse(data->uuid, &be) == 1, but
+          uuid_parse(data->uuid, &be) == 0
+  
+  failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
+      # uuid_correct_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+      # uuid_correct_be: ASSERTION FAILED at lib/test_uuid.c:57
+      Expected uuid_parse(data->uuid, &be) == 1, but
+          uuid_parse(data->uuid, &be) == 0
+  
+  failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
+      # uuid_correct_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+      not ok 1 - uuid_correct_be
+  
+  [FAILED] uuid_correct_le
+      # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+      Expected guid_parse(data->uuid, &le) == 1, but
+          guid_parse(data->uuid, &le) == 0
+  
+  failed to parse 'c33f4995-3701-450e-9fbf-206a2e98e576'
+      # uuid_correct_le: not ok 1 - c33f4995-3701-450e-9fbf-206a2e98e576
+      # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+      Expected guid_parse(data->uuid, &le) == 1, but
+          guid_parse(data->uuid, &le) == 0
+  
+  failed to parse '64b4371c-77c1-48f9-8221-29f054fc023b'
+      # uuid_correct_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054fc023b
+      # uuid_correct_le: ASSERTION FAILED at lib/test_uuid.c:46
+      Expected guid_parse(data->uuid, &le) == 1, but
+          guid_parse(data->uuid, &le) == 0
+  
+  failed to parse '0cb4ddff-a545-4401-9d06-688af53e7f84'
+      # uuid_correct_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e7f84
+      not ok 2 - uuid_correct_le
+  
+  [FAILED] uuid_wrong_be
+      # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+      Expected uuid_parse(*data, &be) == 0, but
+          uuid_parse(*data, &be) == -22
+  
+  parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
+      # uuid_wrong_be: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+      # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+      Expected uuid_parse(*data, &be) == 0, but
+          uuid_parse(*data, &be) == -22
+  
+  parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
+      # uuid_wrong_be: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+      # uuid_wrong_be: ASSERTION FAILED at lib/test_uuid.c:77
+      Expected uuid_parse(*data, &be) == 0, but
+          uuid_parse(*data, &be) == -22
+  
+  parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
+      # uuid_wrong_be: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+      not ok 3 - uuid_wrong_be
+  
+  [FAILED] uuid_wrong_le
+      # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+      Expected guid_parse(*data, &le) == 0, but
+          guid_parse(*data, &le) == -22
+  
+  parsing of 'c33f4995-3701-450e-9fbf206a2e98e576 ' should've failed
+      # uuid_wrong_le: not ok 1 - c33f4995-3701-450e-9fbf206a2e98e576
+      # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+      Expected guid_parse(*data, &le) == 0, but
+          guid_parse(*data, &le) == -22
+  
+  parsing of '64b4371c-77c1-48f9-8221-29f054XX023b' should've failed
+      # uuid_wrong_le: not ok 2 - 64b4371c-77c1-48f9-8221-29f054XX023b
+      # uuid_wrong_le: ASSERTION FAILED at lib/test_uuid.c:68
+      Expected guid_parse(*data, &le) == 0, but
+          guid_parse(*data, &le) == -22
+  
+  parsing of '0cb4ddff-a545-4401-9d06-688af53e' should've failed
+      # uuid_wrong_le: not ok 3 - 0cb4ddff-a545-4401-9d06-688af53e
+      not ok 4 - uuid_wrong_le
+
+Changes from v4:
+ - Add reviewed-by
+v4: https://lore.kernel.org/lkml/20210621133148.9226-1-andrealmeid@collabora.com/
+
+Changes from v3:
+ - Drop unnecessary casts and braces.
+ - Simplify Kconfig entry
+v3: https://lore.kernel.org/lkml/20210610163959.71634-1-andrealmeid@collabora.com/
+
+Changes from v2:
+ - Clarify in commit message the new test cases setup
+v2: https://lore.kernel.org/lkml/20210609233730.164082-1-andrealmeid@collabora.com/
+
+Changes from v1:
+ - Test suite name: uuid_test -> uuid
+ - Config name: TEST_UUID -> UUID_KUNIT_TEST
+ - Config entry in the Kconfig file left where it is
+ - Converted tests to use _MSG variant
+v1: https://lore.kernel.org/lkml/20210605215215.171165-1-andrealmeid@collabora.com/
+
+André Almeida (1):
+  lib: Convert UUID runtime test to KUnit
+
+ lib/Kconfig.debug |   8 ++-
+ lib/Makefile      |   2 +-
+ lib/test_uuid.c   | 137 +++++++++++++++++++---------------------------
+ 3 files changed, 64 insertions(+), 83 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.32.0
+
