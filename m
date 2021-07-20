@@ -2,203 +2,220 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E77BC07E95
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Jul 2021 23:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4551C07E95
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jul 2021 09:16:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 222C261107
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Jul 2021 23:58:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3653610F7
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jul 2021 09:16:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242002AbhGSXNQ (ORCPT
+        id S234366AbhGTIfs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 19 Jul 2021 19:13:16 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:36278 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1388658AbhGSVBV (ORCPT
+        Tue, 20 Jul 2021 04:35:48 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:47794 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232246AbhGTIeS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jul 2021 17:01:21 -0400
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16JLbDWK025503;
-        Mon, 19 Jul 2021 21:41:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
+        Tue, 20 Jul 2021 04:34:18 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16K9CIcU010269;
+        Tue, 20 Jul 2021 09:14:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
- b=BMCQAcGi+XpIOfDFzuQKvvGSLfBRX8LfHhbyOuwmqFHtpdP//eH7nmV8hJhjHJtMB5JU
- vXd+LimhMUyGteYelOjWU+H9PcYXgx6aM0TTrSae/mnmq5VW77qgsy8DP+GzWtHdsYLc
- Xa6dsViCPr46WBx2XvolJTh+4wD3lBgkuR9OlnZLRyWcJ6FhDLdIVmuEeo5JEzbclykw
- 9SLtgjbe1dJJHAj1lVvPu1mEgnm345ODBpHPnfkqhDbiC3GTK8x2p65MZnkl0BzLVssB
- 7wM3QDaRPlhrW4jrHYvISURtv4J98MSRW/K75GzNSCDD246mFeLtrmqRhWbEyS6sK7FY hg== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
+ bh=Foc0GOAo+GPaVqP1pYscO0GE6mWGHXrpR2pZCFT46oM=;
+ b=PVcw1kElTcmryC8TjWDoARGKpt3acb84SLyNjfkhvMwfAZzUSkZzdiRXMu4Oh1xCkNEN
+ c9QQjpdKBdi7jbbO/dooW9EhkOcvwWTpuK5VUuZ6lGxIDPyqQlsRMEOs6p4ISuuiRW51
+ ruCFILNqbnJ8J0tJIA9fmXoRTaRuL2zkEucK2i8XjvlMKPnFYzN/gBz39/hLq73l+x8O
+ xWBMdP+eS3Tzwv6rTnaJ3MELFtkSTqLBuv43D5gEjWLsyvFzyq+Eozq6u0OER4qcwW9R
+ pMIcTINGUc3yYlW/gTiA/zybjWmnKOjyPtOvdveXAt3Qm30gO2+OwU8QImupwQFbkN7t Jw== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : content-type :
  mime-version; s=corp-2020-01-29;
- bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
- b=Xl7fr0iXldH4xO8PVuM88NGJz8b1XinDRkgpfWy8TF+rMtcCh5XKjjxOmuhlHGBpZaid
- GCbB8ePMZt2Ap8/iwKN9yrJmxzm4JjhkGHZINBllxuVWCq66k2vo+bcZ2s75G6HdRbur
- DGZ/X26URPuEakA929VT1juFKNztpDnLuThCO9NDo0/OjnT5yU1GfVfSqgMCl3+W9hyV
- Y7CrVuhAavzhmFCBHW+4qwZZJNIB7HxLJIkZZ+5K3tmtSdq2xKIpssNsl9Kt+vLPXjqp
- Nqci0w/ynSacLOE2cJ8OKWlvdWGkAjLTmlUB8leb/Uc7SyQMjoQbexwbhDntKLtn4clL /w== 
+ bh=Foc0GOAo+GPaVqP1pYscO0GE6mWGHXrpR2pZCFT46oM=;
+ b=gnCVYmOVbFX5qMug6jTE9PY1nmGPmCOvQcwH2QAk2hMg7rXo3hEQ8mp91xgPOdMbQ9At
+ CYQ1Cuq3eBrYV1/TjekIaTI5BUQF9U5eNsIAKEybkB/KUQZ2GuKInZdp8Mj+9MwkXe/T
+ 2nLuRHytArNRLSFVPWNZGWWCnv/BEgK/rW4s1KVn+OHV+mr4r0xULtSYws9fUHS3r6h1
+ lQAckUjjRS8X/qqPj5xYi+JjrdGtZCC8sQygeOEdlV/MxrAYaqL5VxSjoKqCAJPj53YQ
+ zLs4wjKl4JWkS0N3gp2mwK5zDL8kCpkHT52z4a81xTWjRmyDSV+cOkhzd1TwxPtmtOlL mg== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39w83csa85-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 39w9hft67y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jul 2021 21:41:42 +0000
+        Tue, 20 Jul 2021 09:14:38 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16JLePb4085089;
-        Mon, 19 Jul 2021 21:41:40 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
-        by userp3030.oracle.com with ESMTP id 39umaxsubt-1
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16K9ASaR079337;
+        Tue, 20 Jul 2021 09:14:36 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
+        by userp3030.oracle.com with ESMTP id 39umayv3fw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jul 2021 21:41:40 +0000
+        Tue, 20 Jul 2021 09:14:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kEi2u7Aww2Q+Fa1dnH8D/e4CpBhSwPcIfD4ljJPhMg+C4yX0XfaMpGn5X3RflblxxRYI68OOpqsofclcVPsFpKQwRErcmH7sZitTwQLDEL8MhLB4S7bfmxRA1o2F7h8Fb4hmHJzsiCd0VNk+6kmQEs1I/3iZ3mWoVjrudHdOzjht1EIvxRQFTY+Npl+Fj9Sfsjs7VPZ8aoud3B90x/FuQbXBxaXkEkn1Xldjlmv3YybS4+AvNqnsRDXHEOcoK69l1LJEkI52HEdplrrIVcWOQ8vP+3yekAcvgQNASK0I1rcgK7ZW5KAONzbzrHPQwGVBP5DP+PXVqoyjbIAK3Vs22g==
+ b=IOxWvcQbV/OdFmeQnQ2rK2ah3xwx4tDde8DogvIEEgvEQ5Hiwz8L4ITA6hhDEDKu7zzPqxsPWv9/Er/IJmGFJACNPymgcrC82a6Civdr88bW2sqTBmoRoXus6MBp9Ck7fNpviCxbwyszWlXy71ywXkB95Pwx9yS1p2ScaE156rkWRH3WCemJlLC0aK3vzEXK3DatMmkEloFDgC/7MVs0+UwHbqblP2GYapWshXx/a51LAa3VpYdJfWbp5Noq2HHQHqfkVDO2ibMndCggJI/YxhmVIoCHLMW4ch8p2UOAtFgUEZTM1nu7R3flEI/ck8npw3eDZJKaa5V7kLT9GjB6qA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
- b=dPyn4A4C2ykjRC/Ps7VDL59d5X8OY6uXP0VAe9wQMFR5V5wDgcdTEGWT4c1pZ3C6DiuFP7lTBKC1m4+QVpUIaCKrKa2nY9fhG3MpWtJLgiOIqASkQ7wu1eb5e4NcN6P5IkOppnOstMgS47Tb6TfmWx1awGm0Kdk32D1jSQSl7t//fv0u0MKxn8XbxXWNjCpmUCSvZErmL0m861iE3sIg/KBUjsLSNxn0EQtSWJCThaqC8m36dHr35RMFvC2SrJt8/f9B0DylkW3GWO0rbtmx4DrcBnXWIUQVP/SuIQtAAmSDkHIFG4cfZi4BwRFBPG7YmVEW4W3kSE4jTWBnz9wsLA==
+ bh=Foc0GOAo+GPaVqP1pYscO0GE6mWGHXrpR2pZCFT46oM=;
+ b=KFGEgrFIO5ynJC5ZAW919q4p6wt59HtK68Tw5rUccK0l/zdqwma9MmX1b6dIteNJ/BaClTDslkn7FJrtVVCdJegazgqGc5EBn2yQV2wGJ8E1hN6XZtVWEfqRgeM5WHkpqsirzE1FYR3RrbwyB9/yUej9ksURBoPUg8ILKZ7MVp4mYM9pcIhCQAMta+SSapxAXk1qBl4xJUP/N1SrrK1iK/fQiDLYMEPrB97tuqdNYRxp2cBsGCSh3jYTTeNDeXMdUQ1g2ShtfZxRJB0MXMJArfo3WHtQDi6IkqQJNJiSNMnl3oprV68IBEdvjXrlApb68Tgr/x3zO2vnjewz6EMX2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
- b=zpox5IXwoYnZrF8keaanMUYST4ZEVsIG0mqSJUS7Nug38liHvmBqmWJlS7B7TGnwleY3e88KCU9z9gm+G+r2FpDDS4bNaPuV9t8iK1N5RNXGArEs/LV6yefB4yGJ5+SM8hVYUPGuj3FOvNNSHjnWtl6HLrJ5cmURoe+UmlN+QTI=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
+ bh=Foc0GOAo+GPaVqP1pYscO0GE6mWGHXrpR2pZCFT46oM=;
+ b=fdGFTrJ+r0KdPr7tpBSR4Yj1rEFjh30rI05BwrxNR6fjwimvHikHCW88wKM1afkd+8uAIpSEud7bNYaE/8VCrnZhXcGALHLWntPUinP9IwbOlgiYF0JjZyItOpi3uQSG237KkEQBwj9xwH0NWZfx7326KM2cVxPOwbYdvublENI=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=oracle.com;
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by MN2PR10MB3312.namprd10.prod.outlook.com (2603:10b6:208:126::24) with
+ by MN2PR10MB3693.namprd10.prod.outlook.com (2603:10b6:208:111::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.24; Mon, 19 Jul
- 2021 21:41:38 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Tue, 20 Jul
+ 2021 09:14:32 +0000
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.033; Mon, 19 Jul 2021
- 21:41:38 +0000
+ ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.034; Tue, 20 Jul 2021
+ 09:14:32 +0000
+Date:   Tue, 20 Jul 2021 10:13:48 +0100 (IST)
 From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
-        shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf-next 2/3] selftests/bpf: add __int128-specific tests for typed data dump
-Date:   Mon, 19 Jul 2021 22:41:28 +0100
-Message-Id: <1626730889-5658-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com>
-References: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: DU2PR04CA0278.eurprd04.prod.outlook.com
- (2603:10a6:10:28c::13) To BLAPR10MB5267.namprd10.prod.outlook.com
+X-X-Sender: alan@localhost
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+cc:     Alan Maguire <alan.maguire@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Bill Wendling <morbo@google.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/3] libbpf: avoid use of __int128 in typed dump
+ display
+In-Reply-To: <CAEf4BzYUf_zgmJQ_3z=oYAiGOypYsAhvoaePQMB34P==4EOLbg@mail.gmail.com>
+Message-ID: <alpine.LRH.2.23.451.2107201002170.11590@localhost>
+References: <1626730889-5658-1-git-send-email-alan.maguire@oracle.com> <1626730889-5658-2-git-send-email-alan.maguire@oracle.com> <CAEf4BzYUf_zgmJQ_3z=oYAiGOypYsAhvoaePQMB34P==4EOLbg@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+X-ClientProxiedBy: DBBPR09CA0013.eurprd09.prod.outlook.com
+ (2603:10a6:10:c0::25) To BLAPR10MB5267.namprd10.prod.outlook.com
  (2603:10b6:208:30e::22)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (95.45.14.174) by DU2PR04CA0278.eurprd04.prod.outlook.com (2603:10a6:10:28c::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Mon, 19 Jul 2021 21:41:37 +0000
+Received: from localhost.localdomain (2001:bb6:18f3:2e58:2fc8:ca6f:4a81:b0d) by DBBPR09CA0013.eurprd09.prod.outlook.com (2603:10a6:10:c0::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Tue, 20 Jul 2021 09:14:31 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4064da92-87f4-4ac2-7976-08d94afdfd32
-X-MS-TrafficTypeDiagnostic: MN2PR10MB3312:
+X-MS-Office365-Filtering-Correlation-Id: db39df0c-4e96-442f-266e-08d94b5ec94e
+X-MS-TrafficTypeDiagnostic: MN2PR10MB3693:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MN2PR10MB331259DAF0EF6EF2810244E5EFE19@MN2PR10MB3312.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
+X-Microsoft-Antispam-PRVS: <MN2PR10MB3693E2E05021AC89839F743AEFE29@MN2PR10MB3693.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: snZmDOsXUTl12IaF0KgeZbhgkXAofaUF9fBZAdfXDaxgruSFLQEmT1ED93ptf3NLbYr9mIuU4ap9WoiFAj9KuwkkjlJRzffMOCLIbYOlNnPfSCRkBPyIbsvqNTELed+s8NFEeXFc9qs1i9ly1c02iIoFQHrcCy7PNIIwSPslkNOVISi1OYHZWAaPdOCzmw1LxGih5cktkHNpDiPpSga91KCkFZm/fXMohlckx287zAaW0wczVYRJYU3Ziq+vttF9sa514prdw8r2jWvnWY8HqUGBeQWdx/HDWHMV9KEAvcoYzz+OJEqDod2J6Ioja6DvzuVwY6Q22sESb064jHk4lHoyuIW42YaZoOMd44xK0CJ6NEPWrq+QoUEMr3tqRF54VCCh34mg3I6Qn6jVN06Sz4H9yyTr2Nscy9bQ4N8BA7DqvNYTZgfsKGKA7vXyjQq1ZP5VSk7BkyXmofvF7SgWNJ353JrmFwHNmamMZ4Ch6Yl8JTnaIUGtb/RyUBYoFA69dCrAmR6Nq6BYOaa6qsTe4efMel6vLeI4NK60kb0vn1TO5eg0Z+1+6r65znKQIOUvRdHJW9lsdihagw3LlcJwDhxYuhC+spnuH2DmYG24dUX6ml3qVD+DLstBeNnKDAPUUCKvNEe9VoXYyAO6eaqedAA9sv/pCcPl0DXf2kSrw7nZInlL27NDE3djLrswUIGyGhDZnkWJtymqhKa88Ff50g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(508600001)(316002)(2616005)(956004)(36756003)(6506007)(186003)(44832011)(38100700002)(107886003)(38350700002)(86362001)(6486002)(8936002)(66476007)(8676002)(6666004)(5660300002)(4326008)(2906002)(52116002)(7416002)(66946007)(26005)(66556008)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Rd4Xk5owqwdDlNq9OJlyUk9YC1uEy8zdsT70HR+7xynM+oBD1hjV6LVcCm8IaZfUqP4HQ6pPxgsdTyWgSBcygAct1qxR2UTFxs0ecvUlS+IJu8RYKh/an+sdn8zBg4hHfAutxpv2BM31uTtsbAQYvWn/GEn1LgbVYhQcxSBZZJCDMXmfgJBspQ/Mm+8FH5Z+prmLQWhQaC1kE/pVOC+D/bFUEDnX/9NK4iRfHb1aCkNeYFqApwK85VmKCKrfJexkv7mMVS/qY7UjfBc1/HLIFNbM93wzJJILFFDk4SYlwGbsYJfQEOwvdMgeK6if6LX6H+puk5+YmYAgJtQ9tuHosxoZDv9cNPmGsZ/0rlE0sYYwdyMAPvxr7i1UoRSM0wGi4k5N8ubH/bPy4SjKs8+2U+5u0HTOoL13p+tIljcChGBXTyvXCy2MVa7j7FHPNXfF2JDQclGtmu1RSZvOna6IajBXXfbbOGBMVM6qTEXV/6FJtkGSNB9h+cebGy3YMLhF44pP/nQNH7c9kEbcpukfX01AKlKxUWXurf9AMPs2LjQ6aR6ap4MHmAgayD5iyM9dB0ExQrm0E2kvFHJoZc6fR6Urppd2ROVCenJ3Zv+7kGxDHiIAlZ2dqMia3T8ugKAv78ZsyuHyxwFJvFnVH8E73g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(136003)(39860400002)(366004)(376002)(346002)(9686003)(66946007)(6512007)(478600001)(9576002)(6666004)(66556008)(52116002)(8936002)(44832011)(38100700002)(4326008)(53546011)(33716001)(66476007)(5660300002)(7416002)(186003)(316002)(2906002)(86362001)(8676002)(6506007)(6486002)(6916009)(54906003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gAcLoLMChrxmmWYR/CwI7SuBh8wkS1z8sYtJAkGrsF8GsXsxMy7PJiMu/DzY?=
- =?us-ascii?Q?+v0cWNdfryujSenWhUtlY4MlGRa2/b6mTVhyZnlrwS5SuDlAuEa0d4dGrcxT?=
- =?us-ascii?Q?hpW+S2jE9IzO8FR/hwBWrbEREVKz4QXuLC5OMHc1MP/ZbLAH8FXFoIT0R6cc?=
- =?us-ascii?Q?7YeWJlPZNlzkKYCfSE5jODugrrnDA0Ec6aGs+dnIdbMj8utOhZ5a9h13i80t?=
- =?us-ascii?Q?BwAW8XhImqd9NBK3aNcIzzLUKGS+zlkXdeLnj5uwchV7qK+Kuno1iZG/nMvA?=
- =?us-ascii?Q?4V0pMFzbxEY9EKKDtDF+jF3Ruak2lHlBbxMGWQCxaneIoM4SHd3cK8quFl5d?=
- =?us-ascii?Q?qAmg16MA8T8R3OzETUm+B4CJXJEnI+zDm+CCMhdlSHGrEyRqGDmwMbhhe4nO?=
- =?us-ascii?Q?VPojMzWa6KgeMT9yTU9urMt+YKRHLEpJBD3muNyvbPyAZ7v+VgRWXlnaJj9m?=
- =?us-ascii?Q?TCk2qYjCYTTO5SPeWFXUD8/7+cILcQIJJF6pPDAD2KSQ7YiwnOHGrc1rwna3?=
- =?us-ascii?Q?H6aAXBgq85tL54lhpKKuA8SMTq5j7US6vJzIja9SGz/BibDEfO/ymLRgbgS0?=
- =?us-ascii?Q?qOY+81rjhMB67z2/ZPhGN5zqVswO7oXt5fSIPAJJN8cOu2Pudpr/tC7Q6MAr?=
- =?us-ascii?Q?FetGAde4eQvFaqUl9lkrL1LkaTPtNBGhs6PK0AJ/x5tJaACoS9+vtCOIfxLm?=
- =?us-ascii?Q?S1pRlUBAXjd8mPbm/ESwFPRQAs4E4hCN2le1PI7DB7ja72ysQPSsYFnDxkHO?=
- =?us-ascii?Q?Ei46FR1MEoiemMbLe5Y1Loe6g+tbzFDlRO6bi4UbF06/tzHnW1OSG/RnuLF5?=
- =?us-ascii?Q?eu5EPC/jgcCNdWoGVlPohxMkLa6eOT4pBybpWypPER7NH216aqadFFESyhrA?=
- =?us-ascii?Q?Y4VloyL5PlB/LJlP2Xfl/ne7YV9VcmJM4K2gm794MmHw059OAcdQbCSJP1s4?=
- =?us-ascii?Q?dcpyR9zW6IzmpEr78fNhAirFQ2C1DBzbSZ7sVyU3SLWEW59NARrErIUHdLpF?=
- =?us-ascii?Q?1RP62RZRcTn7ewLnvsJCfS56G+GBhGKbqjPYkHfoZIrFQfIAu7dkyc09bcuj?=
- =?us-ascii?Q?tJl1+pHy0swGhmj6RB24z5lu1yPGWAvVxXf5nuEdM8TfuGgKh1nh7NCbwp0r?=
- =?us-ascii?Q?uz0x33zpYvgJim7fMbyjHFtvVqMaBoh2HMAxEf1voieTr90lF5991/kkbUxt?=
- =?us-ascii?Q?+/0IyUCr9+3K3VBZL7ClQ/y9bxZjhs/GqzmmVi/JD3eNMZ6v19CdBoXxIQMv?=
- =?us-ascii?Q?jvsg6CETStQvEFbKS0dSxZqKaLThnjParM50wZ74U6opmPnXLHpg5Dh+cne7?=
- =?us-ascii?Q?l2bi/NxA9gWonlEPGkc3lc25?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BvAGb6WME0MH6qI8xNFtK9fIM6nobrl4mSyh/3aVpmhSVxqMyhvuxI178HWX?=
+ =?us-ascii?Q?KS3WBp1Z2dYuqSmAwAOnmMPkG0CnhYerUOzmVS8WiaRRsvRrZsgCekp6FFLo?=
+ =?us-ascii?Q?dJJhrIqvm5rEAEil3sYxVmc/W374J7z7cMPQTa4q+TQdmOYAdka5PfakpAQq?=
+ =?us-ascii?Q?QaNM2DUEYFG5Y3WjlwKRh5qDZTkaHFiCHS+FolpMrPWxuj58dzFses0pAQH/?=
+ =?us-ascii?Q?YQutz+j2+/dVGQ2sGheTrGlfCb2Hzt5KoBS+AUCCUEIOHQlNpLgHYHhM5/gr?=
+ =?us-ascii?Q?EVpCwboUMvOst6rx0R66SDy2R0afEgMlQX1g3aeEV0Unx7plQOy9Akpxcf7/?=
+ =?us-ascii?Q?pz2gjfMnhYI5bUqpmSSiaU3jWu9D4U9kpHazgU7ZvAxyh/a3U/oiI2uBbXi0?=
+ =?us-ascii?Q?FNENN6snxH7BfKZ/oQX+8V6PdiOajD3bVyBKSIWpIiLV/FWzv9JW2cAZlpE8?=
+ =?us-ascii?Q?1Eh5PKiDtZ/ZuGxo/Jg/UBHLMPCWEyu2o8zJ2KQ4wTc/eKlzZ2IWtNkGVX7z?=
+ =?us-ascii?Q?Xy7lDCLUg39dkHjRFnpQSk9MhW5maY8j3ubID09J1xp+SqbaQx/GfSsTcshz?=
+ =?us-ascii?Q?wJ6rS1I2C659BTSVdGa67hhEbP3eKFlO72Rt+AkNuzxMmFngXiTESzvUlDU6?=
+ =?us-ascii?Q?xkp6dhyg84suYFY68ZeH4dPvqA2hij+Mzgzsjhs4j5eTkkoKPPf1pbrW4Y0Q?=
+ =?us-ascii?Q?Mq/ROBq7bxh1NhlJMXgDLkJ8R/MtOGvYuP3Y8+S5zhYw8x7pERhkrBWgeJdI?=
+ =?us-ascii?Q?pLxEZ8UAhFOlQDTrlu3SLqo5ozfaIyN9RgRB4od6YY0aPV7Mrr2AXP37WGIt?=
+ =?us-ascii?Q?ViRJdorjWM4ucWy2zakM/78zZUarhN0Dy12JVjBEY7DERAZgFesrtgFyiMMV?=
+ =?us-ascii?Q?9AIbVS28FTfuBCDBksEjQMl3n/i3tTV35Lw1cVt8ycpfESQtGrHNU3UXCiVA?=
+ =?us-ascii?Q?5edef9lj3vS2PnmSu3kmfxj/P9bXYQ7YUVbh7txU38wtRR0qJV9B/uNqXbS+?=
+ =?us-ascii?Q?MBnvYinIYLE+pL1SfGki+WXpN6L9Jh94nkIM3CTKs/oFaaWSM2ZoV7trdgUu?=
+ =?us-ascii?Q?r9nMIJiidGpsSWSPv+dJiG5yfsDkoI3D0lcrZ56Ozs30v39aaxapmTzyvGf9?=
+ =?us-ascii?Q?QpHmtrgq3Wb3Q4otXwGuP22ui8Mh8kevFI3sP7ug9ghwK1FD02dMItqhIhzE?=
+ =?us-ascii?Q?x/bbFDh4Ta4/VL92oHQ1r7IA+R2o5SAV5ZJQiFrUteduOzBvBVp65gMDG9JF?=
+ =?us-ascii?Q?a4rfRE/kBaBwEqgLKPD4j9qCD97UGaAU041tzRsTKESdfc+qGiqMROY116+x?=
+ =?us-ascii?Q?TxeqWxTyFDkWtgFCn8uoQU0emJ1emRte7FvBRw4HsLxZfeRjqWT4sZshkkhF?=
+ =?us-ascii?Q?IWuX97RGlylc7ycPkf/QE7MY5Jd0?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4064da92-87f4-4ac2-7976-08d94afdfd32
+X-MS-Exchange-CrossTenant-Network-Message-Id: db39df0c-4e96-442f-266e-08d94b5ec94e
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2021 21:41:38.6114
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2021 09:14:32.8336
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aSjXJ30NbkaWrzYL2e9H+yPIxfr/2RWjIGU9ru6UVeoR4YELnnsaZtXVeSH8+KkYtJZ3kiRlviNMYA1wkE/gnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3312
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZYUNKzw/2hOfiyZE/aNuOVZ4qBiJdUQhVkZ1yoFiCet+EVq2oEt4LccMEg23zPiHDb1Kzc7VapyiAnRZgE771w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3693
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10050 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 spamscore=0
  mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2107190124
-X-Proofpoint-GUID: 3308haAD8-puiMAUPnM87A0EnkZSqaxu
-X-Proofpoint-ORIG-GUID: 3308haAD8-puiMAUPnM87A0EnkZSqaxu
+ definitions=main-2107200056
+X-Proofpoint-GUID: 6vcK5WiWu5BLyJGRGRLhbZe8dEfCGAPJ
+X-Proofpoint-ORIG-GUID: 6vcK5WiWu5BLyJGRGRLhbZe8dEfCGAPJ
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests for __int128 display for platforms that support it.
-__int128s are dumped as hex values.
+On Mon, 19 Jul 2021, Andrii Nakryiko wrote:
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> On Mon, Jul 19, 2021 at 2:41 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > __int128 is not supported for some 32-bit platforms (arm and i386).
+> > __int128 was used in carrying out computations on bitfields which
+> > aid display, but the same calculations could be done with __u64
+> > with the small effect of not supporting 128-bit bitfields.
+> >
+> > With these changes, a big-endian issue with casting 128-bit integers
+> > to 64-bit for enum bitfields is solved also, as we now use 64-bit
+> > integers for bitfield calculations.
+> >
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> > ---
+> 
+> Changes look good to me, thanks. But they didn't appear in patchworks
+> yet so I can't easily test and apply them. It might be because of
+> patchworks delay or due to a very long CC list. Try trimming the cc
+> list down and re-submit?
+>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index 0b4ba53..52ccf0c 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -327,6 +327,14 @@ static int btf_dump_data(struct btf *btf, struct btf_dump *d,
- static void test_btf_dump_int_data(struct btf *btf, struct btf_dump *d,
- 				   char *str)
- {
-+#ifdef __SIZEOF_INT128__
-+	__int128 i = 0xffffffffffffffff;
-+
-+	/* this dance is required because we cannot directly initialize
-+	 * a 128-bit value to anything larger than a 64-bit value.
-+	 */
-+	i = (i << 64) | (i - 1);
-+#endif
- 	/* simple int */
- 	TEST_BTF_DUMP_DATA_C(btf, d, NULL, str, int, BTF_F_COMPACT, 1234);
- 	TEST_BTF_DUMP_DATA(btf, d, NULL, str, int, BTF_F_COMPACT | BTF_F_NONAME,
-@@ -348,6 +356,15 @@ static void test_btf_dump_int_data(struct btf *btf, struct btf_dump *d,
- 	TEST_BTF_DUMP_DATA(btf, d, NULL, str, int, 0, "(int)-4567", -4567);
+Done, looks like the v2 with the trimmed cc list made it into patchwork 
+this time.
  
- 	TEST_BTF_DUMP_DATA_OVER(btf, d, NULL, str, int, sizeof(int)-1, "", 1);
-+
-+#ifdef __SIZEOF_INT128__
-+	TEST_BTF_DUMP_DATA(btf, d, NULL, str, __int128, BTF_F_COMPACT,
-+			   "(__int128)0xffffffffffffffff",
-+			   0xffffffffffffffff);
-+	ASSERT_OK(btf_dump_data(btf, d, "__int128", NULL, 0, &i, 16, str,
-+				"(__int128)0xfffffffffffffffffffffffffffffffe"),
-+		  "dump __int128");
-+#endif
- }
- 
- static void test_btf_dump_float_data(struct btf *btf, struct btf_dump *d,
--- 
-1.8.3.1
+> Also, while I agree that supporting 128-bit bitfields isn't important,
+> I wonder if we should warn/error on that (instead of shifting by
+> negative amount and reporting some garbage value), what do you think?
+> Is there one place in the code where we can error out early if the
+> type actually has bitfield with > 64 bits? I'd prefer to keep
+> btf_dump_bitfield_get_data() itself non-failing though.
+> 
 
+Sorry, I missed the last part and made that function fail since
+it's probably the easiest place to capture too-large bitfields.
+I renamed it to btf_dump_get_bitfield_value() to match
+btf_dump_get_enum_value() which as a similar function signature
+(return int, pass in a pointer to the value we want to retrieve).
+
+We can't localize bitfield size checking to 
+btf_dump_type_data_check_zero() because - depending on flags -
+the associated checks might not be carried out.  So duplication
+of bitfield size checks between the zero checking and bitfield/enum 
+bitfield display seems inevitable, and that being the case, the
+extra error checking required around btf_dump_get_bitfield_value()
+seems to be required.
+
+I might be missing a better approach here of course; let me know what you 
+think. Thanks again!
+
+Alan
