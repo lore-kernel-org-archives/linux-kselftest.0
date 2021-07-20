@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64333C07E95
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jul 2021 14:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 694A3C07E9B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jul 2021 14:27:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A06361164
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jul 2021 14:26:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54282611CE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jul 2021 14:27:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239820AbhGTNqI (ORCPT
+        id S239833AbhGTNqL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Jul 2021 09:46:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46620 "EHLO
+        Tue, 20 Jul 2021 09:46:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22559 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239963AbhGTNjZ (ORCPT
+        by vger.kernel.org with ESMTP id S240052AbhGTNjs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jul 2021 09:39:25 -0400
+        Tue, 20 Jul 2021 09:39:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626790803;
+        s=mimecast20190719; t=1626790822;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=OSD1ueZb/8AiWAEOmohDX/0RCpwXdDXZ8clzlRhUsiQ=;
-        b=QuVHR451Ket+QFl+wWHXkBiRdokasp9F0fl2iX9myJsbFAyZAjtv93bwhaxJF9phb2P1XU
-        rVd3ZLq/FUtPV7ZTulCMAkPzZrsAB5+5IuxJyYUOzww9xtWNd7dSlhfKdiLG0DBgNArTdz
-        S9h2Ye/xdGKW7FkUc2e6yYqc2X+++8o=
+        bh=HnHnB+rHkpfXclwaG6mW8kEj4fMYZUnHJrCjI3fhKPQ=;
+        b=hZM88r2DXeF1qXdJL3sH2UjvNXo7dlvhQR2UApyUIvG8DQlddEMFFmdAdA1IUjBzurv5YD
+        /kjq84vtfEhzYtenyNKqq5NM95PxDl1doQdrKvG6DmgwlXO20+GL3Scaxb7PKC/bnumuLt
+        XktaEUe8h6s7+SGyi1UHJXmObsNCo+0=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-573-AsULK73wOU-E_MuqCx3YSg-1; Tue, 20 Jul 2021 10:19:59 -0400
-X-MC-Unique: AsULK73wOU-E_MuqCx3YSg-1
+ us-mta-592-aWvaNLbPNRCwTtiixgJHuw-1; Tue, 20 Jul 2021 10:20:21 -0400
+X-MC-Unique: aWvaNLbPNRCwTtiixgJHuw-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6BDA1005E6A;
-        Tue, 20 Jul 2021 14:19:56 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 31E1291275;
+        Tue, 20 Jul 2021 14:20:19 +0000 (UTC)
 Received: from llong.com (ovpn-116-153.rdu2.redhat.com [10.10.116.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E44219C87;
-        Tue, 20 Jul 2021 14:19:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CAB7369A;
+        Tue, 20 Jul 2021 14:20:04 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -55,9 +55,9 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 4/9] cgroup/cpuset: Enable event notification when partition become invalid
-Date:   Tue, 20 Jul 2021 10:18:29 -0400
-Message-Id: <20210720141834.10624-5-longman@redhat.com>
+Subject: [PATCH v3 7/9] cgroup/cpuset: Allow non-top parent partition root to distribute out all CPUs
+Date:   Tue, 20 Jul 2021 10:18:32 -0400
+Message-Id: <20210720141834.10624-8-longman@redhat.com>
 In-Reply-To: <20210720141834.10624-1-longman@redhat.com>
 References: <20210720141834.10624-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
@@ -65,168 +65,226 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A valid cpuset partition can become invalid if all its CPUs are offlined
-or somehow removed. This can happen through external events without
-"cpuset.cpus.partition" being touched at all.
+Currently, a parent partition root cannot distribute all its CPUs to
+child partition roots with no CPUs left. However in some use cases,
+a management application may want to create a parent partition root as
+a management unit with no task associated with it and has all its CPUs
+distributed to various child partition roots dynamically according to
+their needs. Leaving a cpu in the parent partition root in such a case is
+now a waste.
 
-Users that rely on the property of a partition being present do not
-currently have a simple way to get such an event notified other than
-constant periodic polling which is both inefficient and cumbersome.
+To accommodate such use cases, a parent partition root can now have
+all its CPUs distributed to its child partition roots as long as:
+ 1) it is not the top cpuset; and
+ 2) there is no task directly associated with the parent.
 
-To make life easier for those users, event notification is now enabled
-for "cpuset.cpus.partition" when it goes into or out of an invalid
-partition state.
+Once an empty parent partition root is formed, no new task can be moved
+into it.
 
-Suggested-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 49 ++++++++++++++++++++++++++++++++----------
- 1 file changed, 38 insertions(+), 11 deletions(-)
+ kernel/cgroup/cpuset.c | 90 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 63 insertions(+), 27 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 04a6951abe2a..2e34fc5b76f0 100644
+index 60562346ecc1..d4d0c091a0d3 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -160,6 +160,9 @@ struct cpuset {
- 	 */
- 	int use_parent_ecpus;
- 	int child_ecpus_count;
-+
-+	/* Handle for cpuset.cpus.partition */
-+	struct cgroup_file partition_file;
- };
- 
- /*
-@@ -263,6 +266,19 @@ static inline int is_partition_root(const struct cpuset *cs)
- 	return cs->partition_root_state > 0;
+@@ -284,6 +284,11 @@ static inline void notify_partition_change(struct cpuset *cs,
+ 	cgroup_file_notify(&cs->partition_file);
  }
  
-+/*
-+ * Send notification event of partition_root_state change when going into
-+ * or out of PRS_ERROR which may be due to an external event like hotplug.
-+ */
-+static inline void notify_partition_change(struct cpuset *cs,
-+					   int old_prs, int new_prs)
++static inline int cpuset_has_tasks(const struct cpuset *cs)
 +{
-+	if ((old_prs == new_prs) ||
-+	   ((old_prs != PRS_ERROR) && (new_prs != PRS_ERROR)))
-+		return;
-+	cgroup_file_notify(&cs->partition_file);
++	return cs->css.cgroup->nr_populated_csets;
 +}
 +
  static struct cpuset top_cpuset = {
  	.flags = ((1 << CS_ONLINE) | (1 << CS_CPU_EXCLUSIVE) |
  		  (1 << CS_MEM_EXCLUSIVE)),
-@@ -1148,7 +1164,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 	struct cpuset *parent = parent_cs(cpuset);
- 	int adding;	/* Moving cpus from effective_cpus to subparts_cpus */
- 	int deleting;	/* Moving cpus from subparts_cpus to effective_cpus */
--	int new_prs;
-+	int old_prs, new_prs;
- 	bool part_error = false;	/* Partition error? */
+@@ -1191,22 +1196,32 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+ 	if ((cmd != partcmd_update) && css_has_online_children(&cpuset->css))
+ 		return -EBUSY;
  
- 	percpu_rwsem_assert_held(&cpuset_rwsem);
-@@ -1184,7 +1200,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+-	/*
+-	 * Enabling partition root is not allowed if not all the CPUs
+-	 * can be granted from parent's effective_cpus or at least one
+-	 * CPU will be left after that.
+-	 */
+-	if ((cmd == partcmd_enable) &&
+-	   (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus) ||
+-	     cpumask_equal(cpuset->cpus_allowed, parent->effective_cpus)))
+-		return -EINVAL;
+-
+ 	/*
  	 * A cpumask update cannot make parent's effective_cpus become empty.
  	 */
  	adding = deleting = false;
--	new_prs = cpuset->partition_root_state;
-+	old_prs = new_prs = cpuset->partition_root_state;
+ 	old_prs = new_prs = cpuset->partition_root_state;
  	if (cmd == partcmd_enable) {
++		bool parent_is_top_cpuset = !parent_cs(parent);
++		bool no_cpu_in_parent = cpumask_equal(cpuset->cpus_allowed,
++						      parent->effective_cpus);
++		/*
++		 * Enabling partition root is not allowed if not all the CPUs
++		 * can be granted from parent's effective_cpus. If the parent
++		 * is the top cpuset, at least one CPU must be left after that.
++		 */
++		if (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus) ||
++		    (parent_is_top_cpuset && no_cpu_in_parent))
++			return -EINVAL;
++
++		/*
++		 * A non-top parent can be left with no CPU as long as there
++		 * is no task directly associated with the parent. For such
++		 * a parent, no new task can be moved into it.
++		 */
++		if (no_cpu_in_parent && cpuset_has_tasks(parent))
++			return -EINVAL;
++
  		cpumask_copy(tmp->addmask, cpuset->cpus_allowed);
  		adding = true;
-@@ -1274,7 +1290,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 				       parent->subparts_cpus);
+ 	} else if (cmd == partcmd_disable) {
+@@ -1237,9 +1252,10 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+ 		adding = cpumask_andnot(tmp->addmask, tmp->addmask,
+ 					parent->subparts_cpus);
+ 		/*
+-		 * Return error if parent's effective_cpus could become empty.
++		 * Return error if parent's effective_cpus could become empty
++		 * and there are tasks in the parent.
+ 		 */
+-		if (adding &&
++		if (adding && cpuset_has_tasks(parent) &&
+ 		    cpumask_equal(parent->effective_cpus, tmp->addmask)) {
+ 			if (!deleting)
+ 				return -EINVAL;
+@@ -1255,12 +1271,13 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+ 		}
+ 
+ 		/*
+-		 * Return error if effective_cpus becomes empty or any CPU
+-		 * distributed to child partitions is deleted.
++		 * Return error if effective_cpus becomes empty with tasks
++		 * or any CPU distributed to child partitions is deleted.
+ 		 */
+ 		if (deleting &&
+ 		   (cpumask_intersects(tmp->delmask, cpuset->subparts_cpus) ||
+-		    cpumask_equal(tmp->delmask, cpuset->effective_cpus)))
++		   (cpumask_equal(tmp->delmask, cpuset->effective_cpus) &&
++		    cpuset_has_tasks(cpuset))))
+ 			return -EBUSY;
+ 	} else {
+ 		/*
+@@ -1281,7 +1298,8 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+ 				     parent->effective_cpus);
+ 		part_error = (is_partition_root(cpuset) &&
+ 			      !parent->nr_subparts_cpus) ||
+-			     cpumask_equal(tmp->addmask, parent->effective_cpus);
++			     (cpumask_equal(tmp->addmask, parent->effective_cpus) &&
++			      cpuset_has_tasks(parent));
  	}
  
--	if (!adding && !deleting && (new_prs == cpuset->partition_root_state))
-+	if (!adding && !deleting && (new_prs == old_prs))
- 		return 0;
+ 	if (cmd == partcmd_update) {
+@@ -1388,9 +1406,15 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
+ 
+ 		/*
+ 		 * If it becomes empty, inherit the effective mask of the
+-		 * parent, which is guaranteed to have some CPUs.
++		 * parent, which is guaranteed to have some CPUs unless
++		 * it is a partition root that has explicitly distributed
++		 * out all its CPUs.
+ 		 */
+ 		if (is_in_v2_mode() && cpumask_empty(tmp->new_cpus)) {
++			if (is_partition_root(cp) &&
++			    cpumask_equal(cp->cpus_allowed, cp->subparts_cpus))
++				goto update_parent_subparts;
++
+ 			cpumask_copy(tmp->new_cpus, parent->effective_cpus);
+ 			if (!cp->use_parent_ecpus) {
+ 				cp->use_parent_ecpus = true;
+@@ -1412,6 +1436,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
+ 			continue;
+ 		}
+ 
++update_parent_subparts:
+ 		/*
+ 		 * update_parent_subparts_cpumask() should have been called
+ 		 * for cs already in update_cpumask(). We should also call
+@@ -1482,7 +1507,8 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
+ 			 */
+ 			cpumask_andnot(cp->effective_cpus, cp->effective_cpus,
+ 				       cp->subparts_cpus);
+-			WARN_ON_ONCE(cpumask_empty(cp->effective_cpus));
++			WARN_ON_ONCE(cpumask_empty(cp->effective_cpus) &&
++				     cpuset_has_tasks(cp));
+ 		}
+ 
+ 		if (new_prs != old_prs)
+@@ -1816,7 +1842,7 @@ static void update_nodemasks_hier(struct cpuset *cs, nodemask_t *new_mems)
+ 		cp->effective_mems = *new_mems;
+ 		spin_unlock_irq(&callback_lock);
+ 
+-		WARN_ON(!is_in_v2_mode() &&
++		WARN_ON_ONCE(!is_in_v2_mode() &&
+ 			!nodes_equal(cp->mems_allowed, cp->effective_mems));
+ 
+ 		update_tasks_nodemask(cp);
+@@ -2231,6 +2257,13 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+ 	    (cpumask_empty(cs->cpus_allowed) || nodes_empty(cs->mems_allowed)))
+ 		goto out_unlock;
+ 
++	/*
++	 * On default hierarchy, task cannot be moved to a cpuset with empty
++	 * effective cpus.
++	 */
++	if (is_in_v2_mode() && cpumask_empty(cs->effective_cpus))
++		goto out_unlock;
++
+ 	cgroup_taskset_for_each(task, css, tset) {
+ 		ret = task_can_attach(task, cs->cpus_allowed);
+ 		if (ret)
+@@ -3098,7 +3131,8 @@ hotplug_update_tasks(struct cpuset *cs,
+ 		     struct cpumask *new_cpus, nodemask_t *new_mems,
+ 		     bool cpus_updated, bool mems_updated)
+ {
+-	if (cpumask_empty(new_cpus))
++	/* A partition root is allowed to have empty effective cpus */
++	if (cpumask_empty(new_cpus) && !is_partition_root(cs))
+ 		cpumask_copy(new_cpus, parent_cs(cs)->effective_cpus);
+ 	if (nodes_empty(*new_mems))
+ 		*new_mems = parent_cs(cs)->effective_mems;
+@@ -3167,22 +3201,24 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
  
  	/*
-@@ -1302,9 +1318,11 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 
- 	parent->nr_subparts_cpus = cpumask_weight(parent->subparts_cpus);
- 
--	if (cpuset->partition_root_state != new_prs)
-+	if (old_prs != new_prs)
- 		cpuset->partition_root_state = new_prs;
-+
- 	spin_unlock_irq(&callback_lock);
-+	notify_partition_change(cpuset, old_prs, new_prs);
- 
- 	return cmd == partcmd_update;
- }
-@@ -1326,7 +1344,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 	struct cpuset *cp;
- 	struct cgroup_subsys_state *pos_css;
- 	bool need_rebuild_sched_domains = false;
--	int new_prs;
-+	int old_prs, new_prs;
- 
- 	rcu_read_lock();
- 	cpuset_for_each_descendant_pre(cp, pos_css, cs) {
-@@ -1366,8 +1384,8 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 		 * update_tasks_cpumask() again for tasks in the parent
- 		 * cpuset if the parent's subparts_cpus changes.
- 		 */
--		new_prs = cp->partition_root_state;
--		if ((cp != cs) && new_prs) {
-+		old_prs = new_prs = cp->partition_root_state;
-+		if ((cp != cs) && old_prs) {
- 			switch (parent->partition_root_state) {
- 			case PRS_DISABLED:
- 				/*
-@@ -1438,10 +1456,11 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 			}
- 		}
- 
--		if (new_prs != cp->partition_root_state)
-+		if (new_prs != old_prs)
- 			cp->partition_root_state = new_prs;
- 
- 		spin_unlock_irq(&callback_lock);
-+		notify_partition_change(cp, old_prs, new_prs);
- 
- 		WARN_ON(!is_in_v2_mode() &&
- 			!cpumask_equal(cp->cpus_allowed, cp->effective_cpus));
-@@ -2023,6 +2042,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		spin_lock_irq(&callback_lock);
- 		cs->partition_root_state = new_prs;
- 		spin_unlock_irq(&callback_lock);
-+		notify_partition_change(cs, old_prs, new_prs);
+ 	 * In the unlikely event that a partition root has empty
+-	 * effective_cpus, we will have to force any child partitions,
+-	 * if present, to become invalid by setting nr_subparts_cpus to 0
+-	 * without causing itself to become invalid.
++	 * effective_cpus with tasks, we will have to force any child
++	 * partitions, if present, to become invalid by setting
++	 * nr_subparts_cpus to 0 without causing itself to become invalid.
+ 	 */
+ 	if (is_partition_root(cs) && cs->nr_subparts_cpus &&
+-	    cpumask_empty(&new_cpus)) {
++	    cpumask_empty(&new_cpus) && cpuset_has_tasks(cs)) {
+ 		cs->nr_subparts_cpus = 0;
+ 		cpumask_clear(cs->subparts_cpus);
+ 		compute_effective_cpumask(&new_cpus, cs, parent);
  	}
  
- 	free_cpumasks(NULL, &tmpmask);
-@@ -2708,6 +2728,7 @@ static struct cftype dfl_files[] = {
- 		.write = sched_partition_write,
- 		.private = FILE_PARTITION_ROOT,
- 		.flags = CFTYPE_NOT_ON_ROOT,
-+		.file_offset = offsetof(struct cpuset, partition_file),
- 	},
- 
- 	{
-@@ -3103,11 +3124,17 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 		 */
- 		if ((parent->partition_root_state == PRS_ERROR) ||
- 		     cpumask_empty(&new_cpus)) {
-+			int old_prs;
-+
- 			update_parent_subparts_cpumask(cs, partcmd_disable,
- 						       NULL, tmp);
--			spin_lock_irq(&callback_lock);
--			cs->partition_root_state = PRS_ERROR;
--			spin_unlock_irq(&callback_lock);
-+			old_prs = cs->partition_root_state;
-+			if (old_prs != PRS_ERROR) {
-+				spin_lock_irq(&callback_lock);
-+				cs->partition_root_state = PRS_ERROR;
-+				spin_unlock_irq(&callback_lock);
-+				notify_partition_change(cs, old_prs, PRS_ERROR);
-+			}
- 		}
- 		cpuset_force_rebuild();
- 	}
+ 	/*
+-	 * If empty effective_cpus or zero nr_subparts_cpus or its parent
+-	 * becomes erroneous, we have to transition it to the erroneous state.
++	 * If empty effective_cpus with tasks or zero nr_subparts_cpus or
++	 * its parent becomes erroneous, we have to transition it to the
++	 * erroneous state.
+ 	 */
+-	if (is_partition_root(cs) && (cpumask_empty(&new_cpus) ||
++	if (is_partition_root(cs) &&
++	   ((cpumask_empty(&new_cpus) && cpuset_has_tasks(cs)) ||
+ 	    (parent->partition_root_state == PRS_ERROR) ||
+ 	    !parent->nr_subparts_cpus)) {
+ 		int old_prs;
 -- 
 2.18.1
 
