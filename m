@@ -2,83 +2,112 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72A8EC63797
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Jul 2021 09:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BADDC4338F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Jul 2021 22:19:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6124161249
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Jul 2021 09:57:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A53560EB4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Jul 2021 22:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbhGVJRJ (ORCPT
+        id S232397AbhGVVig (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 22 Jul 2021 05:17:09 -0400
-Received: from mailout1.secunet.com ([62.96.220.44]:50110 "EHLO
-        mailout1.secunet.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbhGVJRE (ORCPT
+        Thu, 22 Jul 2021 17:38:36 -0400
+Received: from mail-pl1-f171.google.com ([209.85.214.171]:39742 "EHLO
+        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232375AbhGVVif (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Jul 2021 05:17:04 -0400
-X-Greylist: delayed 537 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Jul 2021 05:17:04 EDT
-Received: from cas-essen-02.secunet.de (unknown [10.53.40.202])
-        by mailout1.secunet.com (Postfix) with ESMTP id 0890080005A;
-        Thu, 22 Jul 2021 11:48:41 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 22 Jul 2021 11:48:40 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 22 Jul
- 2021 11:48:40 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 3C7333180B27; Thu, 22 Jul 2021 11:48:40 +0200 (CEST)
-Date:   Thu, 22 Jul 2021 11:48:40 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Dmitry Safonov <dima@arista.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>, <netdev@vger.kernel.org>,
-        <stable@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 0/2] xfrm/compat: Fix xfrm_spdattr_type_t copying
-Message-ID: <20210722094840.GD893739@gauss3.secunet.de>
-References: <20210717150222.416329-1-dima@arista.com>
+        Thu, 22 Jul 2021 17:38:35 -0400
+Received: by mail-pl1-f171.google.com with SMTP id e5so996870pla.6;
+        Thu, 22 Jul 2021 15:19:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lWYwLLr1F+wEohZcNxTrxT9x/1X4krqlfhkjTKwn5LU=;
+        b=Zw5P5x4B2pcmiuvW4R7oJVCjTwx72gcEgkCCMUOy5gKQ80kuskDFmKGvfeUGP/6Ufx
+         P+odj9q3IHgbF16n45gtEGoLT7M6u0EibME0h7ty7yyUL533IY3mkojcsNjNyvM/suKQ
+         VIr3AxPM0YMMMNLDZR4R76d30xvukAiArdGkS3p1HO5ZcOMYQ4MMvHtAUx2oLhfx6P4k
+         b2Nl/XnTW/jlgmryoZ1NctDWkRNTuAXy/ehpZzc3BSX04PxFzIJ0pfAxyR8b/oaUuU6l
+         /wr8GC5wvRQqcH06ZdoDCIIPvIvSiG3hH61mKzVpbwNudIlmerO0eVLrLOFN4m6FmeUY
+         xkoQ==
+X-Gm-Message-State: AOAM530Sv1GhZQIjLRz8FKGpKUZkRUA856e6HXyucw/tLsX9gRK8p47t
+        F3FiVPZEKXiNdP2oC2ORq3A=
+X-Google-Smtp-Source: ABdhPJyUsy0ro4YtJRuFm4vTMWqvS3mmCKFzmHMvFVjaECINrpaZu6M8QdvGu3PqOECaJ4mkPhFXWg==
+X-Received: by 2002:a63:449:: with SMTP id 70mr2067429pge.174.1626992349448;
+        Thu, 22 Jul 2021 15:19:09 -0700 (PDT)
+Received: from localhost ([191.96.121.239])
+        by smtp.gmail.com with ESMTPSA id q31sm8997884pjh.13.2021.07.22.15.19.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jul 2021 15:19:08 -0700 (PDT)
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     gregkh@linuxfoundation.org, tj@kernel.org, shuah@kernel.org,
+        akpm@linux-foundation.org, rafael@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, andriin@fb.com,
+        daniel@iogearbox.net, atenart@kernel.org, alobakin@pm.me,
+        weiwan@google.com, ap420073@gmail.com
+Cc:     jeyu@kernel.org, ngupta@vflare.org,
+        sergey.senozhatsky.work@gmail.com, minchan@kernel.org,
+        mcgrof@kernel.org, axboe@kernel.dk, mbenes@suse.com,
+        jpoimboe@redhat.com, tglx@linutronix.de, keescook@chromium.org,
+        jikos@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kernel/module: add documentation for try_module_get()
+Date:   Thu, 22 Jul 2021 15:19:05 -0700
+Message-Id: <20210722221905.1718213-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210717150222.416329-1-dima@arista.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 17, 2021 at 04:02:20PM +0100, Dmitry Safonov wrote:
-> Here is the fix for both 32=>64 and 64=>32 bit translators and a
-> selftest that reproduced the issue.
-> 
-> Big thanks to YueHaibing for fuzzing and reporting the issue,
-> I really appreciate it!
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: YueHaibing <yuehaibing@huawei.com>
-> Cc: netdev@vger.kernel.org
-> 
-> Dmitry Safonov (2):
->   net/xfrm/compat: Copy xfrm_spdattr_type_t atributes
->   selftests/net/ipsec: Add test for xfrm_spdattr_type_t
-> 
->  net/xfrm/xfrm_compat.c              |  49 ++++++++-
->  tools/testing/selftests/net/ipsec.c | 165 +++++++++++++++++++++++++++-
->  2 files changed, 207 insertions(+), 7 deletions(-)
+There is quite a bit of tribal knowledge around proper use of
+try_module_get() and that it must be used only in a context which
+can ensure the module won't be gone during the operation. Document
+this little bit of tribal knowledge.
 
-Series applied, thanks Dmitry!
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/kernel/module.c b/kernel/module.c
+index ed13917ea5f3..0d609647a54d 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -1066,6 +1066,28 @@ void __module_get(struct module *module)
+ }
+ EXPORT_SYMBOL(__module_get);
+ 
++/**
++ * try_module_get - yields to module removal and bumps reference count otherwise
++ * @module: the module we should check for
++ *
++ * This can be used to check if userspace has requested to remove a module,
++ * and if so let the caller give up. Otherwise it takes a reference count to
++ * ensure a request from userspace to remove the module cannot happen.
++ *
++ * Care must be taken to ensure the module cannot be removed during
++ * try_module_get(). This can be done by having another entity other than the
++ * module itself increment the module reference count, or through some other
++ * means which gaurantees the module could not be removed during an operation.
++ * An example of this later case is using this call in a sysfs file which the
++ * module created. The sysfs store / read file operation is ensured to exist
++ * and still be present by kernfs's active reference. If a sysfs file operation
++ * is being run, the module which created it must still exist as the module is
++ * in charge of removal of the sysfs file.
++ *
++ * The real value to try_module_get() is the module_is_live() check which
++ * ensures this the caller of try_module_get() can yields to userspace module
++ * removal requests and fail whatever it was about to process.
++ */
+ bool try_module_get(struct module *module)
+ {
+ 	bool ret = true;
+-- 
+2.30.2
+
