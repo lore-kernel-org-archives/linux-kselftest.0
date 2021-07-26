@@ -2,408 +2,190 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F658C4320E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Jul 2021 16:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DF40C4338F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Jul 2021 18:41:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22B2460F5E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Jul 2021 16:41:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 258D260F59
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Jul 2021 18:41:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbhGZQBK (ORCPT
+        id S231575AbhGZSAy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Jul 2021 12:01:10 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3490 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239967AbhGZP7F (ORCPT
+        Mon, 26 Jul 2021 14:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229901AbhGZSAx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jul 2021 11:59:05 -0400
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GYQQ80yMKz6G9Ny;
-        Tue, 27 Jul 2021 00:30:24 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 26 Jul 2021 18:39:31 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
-        <mchehab+huawei@kernel.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH v2 06/12] diglim: Interfaces - digest_list_add, digest_list_del
-Date:   Mon, 26 Jul 2021 18:36:54 +0200
-Message-ID: <20210726163700.2092768-7-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-References: <20210726163700.2092768-1-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+        Mon, 26 Jul 2021 14:00:53 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FA8C061760
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 11:41:22 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id g14-20020a17090a4b0eb029017395ea5199so1100995pjh.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 11:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iEmiK8Z2pf1Smw+rofDrwaZXK2WpNJEBwftoW1LRiJo=;
+        b=FYQIip9d4viByvDmbXAF3NaBRNWa3pbSBKRHDqmiOKEXS/NX2SxDWrm/ptdtS4h7UG
+         79WMEe1q7yHzPmMz/hHisngDjdF3IOjk68nffGqGyVRopv3NykusOYdU+mq1HZ4XHuQ/
+         K49l6ZRa/kISjgt0DiwDu6SYaomjmzzXiOc+ZVRJuLb3dRZlPSsu4V9PSYNlID+50g1R
+         a1fJq0D8DUhXAn1vaGxI4OgqrJqbsuibpsKgk+vPfA5dcMiYKNV5e2VWTue4a1Pqo/Gp
+         Dm/bWehxUQ6vQwYPpvqJ5qJHloPNGZ6qFhIZvQezoQ2z9JpDak6SZgLYcm4GszUk5bmB
+         RKCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iEmiK8Z2pf1Smw+rofDrwaZXK2WpNJEBwftoW1LRiJo=;
+        b=D5/MdVdzRcGWDXMd34umcrr648lIRMYoUL5twwngDlgcGHlQ5ok+HnIlhb0Bk4CmS1
+         RLDdmPBqTm52n7PzqCrXQ8Ym80QP6ey2wTH9scbmns1r7id1eDnCqoAimNP4xDUX1fHa
+         YF4ohVXDS/hAPB07YRwg2RPCuGgPVmPNAtObCm/YfUw0oTuKi8IRf/6jSxAm7zvW01oI
+         1BCC4Zc+ejoZj3eUiXjdtOMO4yt3hapDG5vlfjXLMUKQMAbVUARjudeYy7hz7/MtbaM6
+         umhrp1VDftZ8zeN60YM/b6S64DpC1CN3ylhWBV/eAiXQpott9TRXxNFBpiKOiAZL9MBr
+         ItKA==
+X-Gm-Message-State: AOAM533JehCoHIRSiVMcPBIuFFDXyCS1bWJL6Lq99OOEt/1Exxan2bvl
+        TlC1AetviXAvccI8+qRqic2K4QgHn9uFrm5u9n/h+04B6aaT+svOVvlHDFqaZ6DC+truDG+jnSB
+        0d+a1P5pihBNCiMTOztRIyV6vs2aTHVr/6duon/Ep+JlayApyFx9wxmXfOpqaY9ILEl/XNP9DOi
+        5tZrm+5Eeh
+X-Google-Smtp-Source: ABdhPJwhyw2nDMfdUBXFrDmSb5jH2sLfPxtEUlcwhkFsZvtG0pnBJ5f7eIcUAw0aasQ0PV8e/dbbCXMyJSv055Nd
+X-Received: from nehir.kir.corp.google.com ([2620:15c:29:204:e222:115f:790c:cd0f])
+ (user=erdemaktas job=sendgmr) by 2002:a17:90a:7789:: with SMTP id
+ v9mr19208144pjk.159.1627324881416; Mon, 26 Jul 2021 11:41:21 -0700 (PDT)
+Date:   Mon, 26 Jul 2021 11:37:53 -0700
+Message-Id: <20210726183816.1343022-1-erdemaktas@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.432.gabb21c7263-goog
+Subject: [RFC PATCH 0/4] TDX KVM selftests
+From:   Erdem Aktas <erdemaktas@google.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     erdemaktas@google.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        David Matlack <dmatlack@google.com>,
+        Like Xu <like.xu@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce <securityfs>/integrity/diglim/digest_list_add, which can be used
-to upload a digest list and add the digests to the hash table; passed data
-are interpreted as file path if the first byte is / or as the digest list
-itself otherwise. ima_measure_critical_data() is called to calculate the
-digest of the digest list and eventually, if an appropriate rule is set in
-the IMA policy, to measure it.
+TDX stands for Trust Domain Extensions which isolates VMs from the
+virtual-machine manager (VMM)/hypervisor and any other software on the
+platform.
 
-Also introduce <securityfs>/integrity/diglim/digest_list_del, which can be
-used to upload a digest list and delete the digests from the hash table;
-data are interpreted in the same way as described for digest_list_add.
+Intel has recently submitted a set of RFC patches for KVM support for
+TDX and more information can be found on the latest TDX Support 
+Patches: https://lkml.org/lkml/2021/7/2/558
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .../security/diglim/implementation.rst        |   9 +
- MAINTAINERS                                   |   1 +
- include/linux/kernel_read_file.h              |   1 +
- security/integrity/diglim/Makefile            |   2 +-
- security/integrity/diglim/diglim.h            |   2 +
- security/integrity/diglim/fs.c                | 239 ++++++++++++++++++
- security/integrity/integrity.h                |   4 +
- 7 files changed, 257 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/diglim/fs.c
+Due to the nature of the confidential computing environment that TDX
+provides, it is very difficult to verify/test the KVM support. TDX
+requires UEFI and the guest kernel to be enlightened which are all under
+development.
 
-diff --git a/Documentation/security/diglim/implementation.rst b/Documentation/security/diglim/implementation.rst
-index 9d679567a037..fc0cd8810a80 100644
---- a/Documentation/security/diglim/implementation.rst
-+++ b/Documentation/security/diglim/implementation.rst
-@@ -244,3 +244,12 @@ back when one of the steps fails.
- 
- #. digest_list_parse() deletes the struct digest_list_item on unsuccessful
-    add or successful delete.
-+
-+
-+Interfaces
-+----------
-+
-+This section introduces the interfaces in
-+``<securityfs>/integrity/diglim`` necessary to interact with DIGLIM.
-+
-+.. kernel-doc:: security/integrity/diglim/fs.c
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 77c3613c600a..0672128fae7f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5464,6 +5464,7 @@ F:	Documentation/security/diglim/introduction.rst
- F:	include/linux/diglim.h
- F:	include/uapi/linux/diglim.h
- F:	security/integrity/diglim/diglim.h
-+F:	security/integrity/diglim/fs.c
- F:	security/integrity/diglim/methods.c
- F:	security/integrity/diglim/parser.c
- 
-diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
-index 575ffa1031d3..636ecdfdc616 100644
---- a/include/linux/kernel_read_file.h
-+++ b/include/linux/kernel_read_file.h
-@@ -14,6 +14,7 @@
- 	id(KEXEC_INITRAMFS, kexec-initramfs)	\
- 	id(POLICY, security-policy)		\
- 	id(X509_CERTIFICATE, x509-certificate)	\
-+	id(DIGEST_LIST, digest-list)	\
- 	id(MAX_ID, )
- 
- #define __fid_enumify(ENUM, dummy) READING_ ## ENUM,
-diff --git a/security/integrity/diglim/Makefile b/security/integrity/diglim/Makefile
-index 34e4e154fff3..ac345afdf5dd 100644
---- a/security/integrity/diglim/Makefile
-+++ b/security/integrity/diglim/Makefile
-@@ -5,4 +5,4 @@
- 
- obj-$(CONFIG_DIGLIM) += diglim.o
- 
--diglim-y := methods.o parser.o
-+diglim-y := methods.o parser.o fs.o
-diff --git a/security/integrity/diglim/diglim.h b/security/integrity/diglim/diglim.h
-index 3adc218a0325..819703175eda 100644
---- a/security/integrity/diglim/diglim.h
-+++ b/security/integrity/diglim/diglim.h
-@@ -22,6 +22,8 @@
- #include <linux/hash_info.h>
- #include <linux/diglim.h>
- 
-+#include "../integrity.h"
-+
- #define MAX_DIGEST_SIZE 64
- #define HASH_BITS 10
- #define DIGLIM_HTABLE_SIZE (1 << HASH_BITS)
-diff --git a/security/integrity/diglim/fs.c b/security/integrity/diglim/fs.c
-new file mode 100644
-index 000000000000..07a0d75a0e33
---- /dev/null
-+++ b/security/integrity/diglim/fs.c
-@@ -0,0 +1,239 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2005,2006,2007,2008 IBM Corporation
-+ * Copyright (C) 2017-2021 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Functions for the interfaces exposed in securityfs.
-+ */
-+
-+#include <linux/fcntl.h>
-+#include <linux/kernel_read_file.h>
-+#include <linux/slab.h>
-+#include <linux/init.h>
-+#include <linux/seq_file.h>
-+#include <linux/rculist.h>
-+#include <linux/rcupdate.h>
-+#include <linux/parser.h>
-+#include <linux/vmalloc.h>
-+#include <linux/namei.h>
-+#include <linux/ima.h>
-+
-+#include "diglim.h"
-+
-+#define MAX_DIGEST_LIST_SIZE (64 * 1024 * 1024 - 1)
-+
-+static struct dentry *diglim_dir;
-+/**
-+ * DOC: digest_list_add
-+ *
-+ * digest_list_add can be used to upload a digest list and add the digests
-+ * to the hash table; passed data are interpreted as file path if the first
-+ * byte is ``/`` or as the digest list itself otherwise.
-+ *
-+ * ima_measure_critical_data() is called to calculate the digest of the
-+ * digest list and eventually, if an appropriate rule is set in the IMA
-+ * policy, to measure it.
-+ */
-+static struct dentry *digest_list_add_dentry;
-+/**
-+ * DOC: digest_list_del
-+ *
-+ * digest_list_del can be used to upload a digest list and delete the
-+ * digests from the hash table; data are interpreted in the same way as
-+ * described for digest_list_add.
-+ */
-+static struct dentry *digest_list_del_dentry;
-+char digest_label[NAME_MAX + 1];
-+
-+/*
-+ * digest_list_read: read and parse the digest list from the path
-+ */
-+static ssize_t digest_list_read(char *path, enum ops op)
-+{
-+	void *data = NULL;
-+	char *datap;
-+	size_t size;
-+	u8 actions = 0;
-+	struct file *file;
-+	char event_name[NAME_MAX + 9 + 1];
-+	u8 digest[IMA_MAX_DIGEST_SIZE] = { 0 };
-+	enum hash_algo algo;
-+	int rc, pathlen = strlen(path);
-+
-+	/* Remove \n. */
-+	datap = path;
-+	strsep(&datap, "\n");
-+
-+	file = filp_open(path, O_RDONLY, 0);
-+	if (IS_ERR(file)) {
-+		pr_err("unable to open file: %s (%ld)", path, PTR_ERR(file));
-+		return PTR_ERR(file);
-+	}
-+
-+	rc = kernel_read_file(file, 0, &data, INT_MAX, NULL,
-+			      READING_DIGEST_LIST);
-+	if (rc < 0) {
-+		pr_err("unable to read file: %s (%d)", path, rc);
-+		goto out;
-+	}
-+
-+	size = rc;
-+
-+	snprintf(event_name, sizeof(event_name), "%s_file_%s",
-+		 op == DIGEST_LIST_ADD ? "add" : "del",
-+		 file_dentry(file)->d_name.name);
-+
-+	rc = ima_measure_critical_data("diglim", event_name, data, size, false,
-+				       digest, sizeof(digest));
-+	if (rc < 0 && rc != -EEXIST)
-+		goto out_vfree;
-+
-+	algo = ima_get_current_hash_algo();
-+
-+	if (!rc || rc == -EEXIST)
-+		actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
-+
-+	rc = digest_list_parse(size, data, op, actions, digest, algo, "");
-+	if (rc < 0)
-+		pr_err("unable to upload digest list %s (%d)\n", path, rc);
-+out_vfree:
-+	vfree(data);
-+out:
-+	fput(file);
-+
-+	if (rc < 0)
-+		return rc;
-+
-+	return pathlen;
-+}
-+
-+/*
-+ * digest_list_write: write the digest list path or the digest list itself
-+ */
-+static ssize_t digest_list_write(struct file *file, const char __user *buf,
-+				 size_t datalen, loff_t *ppos)
-+{
-+	char *data;
-+	ssize_t result;
-+	enum ops op = DIGEST_LIST_ADD;
-+	struct dentry *dentry = file_dentry(file);
-+	u8 digest[IMA_MAX_DIGEST_SIZE];
-+	char event_name[NAME_MAX + 11 + 1];
-+	enum hash_algo algo;
-+	u8 actions = 0;
-+
-+	/* No partial writes. */
-+	result = -EINVAL;
-+	if (*ppos != 0)
-+		goto out;
-+
-+	result = -EFBIG;
-+	if (datalen > MAX_DIGEST_LIST_SIZE)
-+		goto out;
-+
-+	data = memdup_user_nul(buf, datalen);
-+	if (IS_ERR(data)) {
-+		result = PTR_ERR(data);
-+		goto out;
-+	}
-+
-+	if (dentry == digest_list_del_dentry)
-+		op = DIGEST_LIST_DEL;
-+
-+	result = -EPERM;
-+
-+	if (data[0] == '/') {
-+		result = digest_list_read(data, op);
-+	} else {
-+		snprintf(event_name, sizeof(event_name), "%s_buffer_%s",
-+			 op == DIGEST_LIST_ADD ? "add" : "del", digest_label);
-+
-+		result = ima_measure_critical_data("diglim", event_name, data,
-+						   datalen, false, digest,
-+						   sizeof(digest));
-+		if (result < 0 && result != -EEXIST) {
-+			pr_err("failed to measure buffer digest (%ld)\n",
-+			       result);
-+			goto out_kfree;
-+		}
-+
-+		algo = ima_get_current_hash_algo();
-+
-+		if (!result || result == -EEXIST)
-+			actions |= (1 << COMPACT_ACTION_IMA_MEASURED);
-+
-+		result = digest_list_parse(datalen, data, op, actions, digest,
-+					   algo, "");
-+		if (result != datalen) {
-+			pr_err("unable to upload generated digest list\n");
-+			result = -EINVAL;
-+		}
-+	}
-+out_kfree:
-+	kfree(data);
-+out:
-+	return result;
-+}
-+
-+static unsigned long flags;
-+
-+/*
-+ * digest_list_open: sequentialize access to the add/del files
-+ */
-+static int digest_list_open(struct inode *inode, struct file *filp)
-+{
-+	if ((filp->f_flags & O_ACCMODE) != O_WRONLY)
-+		return -EACCES;
-+
-+	if (test_and_set_bit(0, &flags))
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+
-+/*
-+ * digest_list_release - release the add/del files
-+ */
-+static int digest_list_release(struct inode *inode, struct file *file)
-+{
-+	clear_bit(0, &flags);
-+	return 0;
-+}
-+
-+static const struct file_operations digest_list_upload_ops = {
-+	.open = digest_list_open,
-+	.write = digest_list_write,
-+	.read = seq_read,
-+	.release = digest_list_release,
-+	.llseek = generic_file_llseek,
-+};
-+
-+static int __init diglim_fs_init(void)
-+{
-+	diglim_dir = securityfs_create_dir("diglim", integrity_dir);
-+	if (IS_ERR(diglim_dir))
-+		return -1;
-+
-+	digest_list_add_dentry = securityfs_create_file("digest_list_add", 0200,
-+						diglim_dir, NULL,
-+						&digest_list_upload_ops);
-+	if (IS_ERR(digest_list_add_dentry))
-+		goto out;
-+
-+	digest_list_del_dentry = securityfs_create_file("digest_list_del", 0200,
-+						diglim_dir, NULL,
-+						&digest_list_upload_ops);
-+	if (IS_ERR(digest_list_del_dentry))
-+		goto out;
-+
-+	return 0;
-+out:
-+	securityfs_remove(digest_list_del_dentry);
-+	securityfs_remove(digest_list_add_dentry);
-+	securityfs_remove(diglim_dir);
-+	return -1;
-+}
-+
-+late_initcall(diglim_fs_init);
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 547425c20e11..ac45e1599c2d 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -6,6 +6,9 @@
-  * Mimi Zohar <zohar@us.ibm.com>
-  */
- 
-+#ifndef __INTEGRITY_H
-+#define __INTEGRITY_H
-+
- #ifdef pr_fmt
- #undef pr_fmt
- #endif
-@@ -283,3 +286,4 @@ static inline void __init add_to_platform_keyring(const char *source,
- {
- }
- #endif
-+#endif /*__INTEGRITY_H*/
+We are working on a set of selftests to close this gap and be able to
+verify the KVM functionality to support TDX lifecycle and GHCI [1]
+interface.
+
+We are looking for any feedback on:
+- Patch series itself
+- Any suggestion on how we should approach testing TDX functionality.
+Does selftests seems reasonable or should we switch to using KVM
+unit tests. I would be happy to get some perspective on how KVM unit
+tests can help us more.
+- Any test case or scenario that we should add.
+- Anything else I have not thought of yet.
+
+Current patch series provide the following capabilities:
+
+- Provide helper functions to create a TD (Trusted Domain) using the KVM
+  ioctls
+- Provide helper functions to create a guest image that can include any
+  testing code
+- Provide helper functions and wrapper functions to write testing code
+  using GHCI interface
+- Add a test case that verifies TDX life cycle 
+- Add a test case that verifies TDX GHCI port IO 
+
+TODOs:
+- Use existing function to create page tables dynamically 
+  (ie __virt_pg_map())
+- Remove arbitrary defined magic numbers for data structure offsets
+- Add TDVMCALL for error reporting
+- Add additional test cases as some listed below
+- Add #VE handlers to help testing more complicated test cases
+
+Other test cases that we are planning to add:
+(with credit to sagis@google.com)
+
+VM call interface        Input                        Output                Result
+GetTdVmCallInfo          R12=0                        None                VMCALL_SUCCESS
+MapGPA                   Map private page (GPA.S=0)                       VMCALL_SUCCESS
+MapGPA                   Map shared page (GPA.S=1)                        VMCALL_SUCCESS
+MapGPA                   Map already private page as private              VMCALL_INVALID_OPERAND
+MapGPA                   Map already shared page as shared                VMCALL_INVALID_OPERAND
+GetQuote                        
+ReportFatalError                        
+SetupEventNotifyInterrupt   Valid interrupt value (32:255)                 VMCALL_SUCCESS
+SetupEventNotifyInterrupt   Invalid value (>255)                          VMCALL_INVALID_OPERAND
+Instruction.CPUID        R12(EAX)=1, R13(ECX)=0       EBX[8:15]=0x8        
+                                                      EBX[16:23]=X        
+                                                      EBX[24:31]=vcpu_id        
+                                                      ECX[0]=1        
+                                                      ECX[12]=Y        
+Instruction.CPUID       R12(EAX)=1, R13(ECX)=4                            VMCALL_INVALID_OPERAND
+VE.RequestMMIO                        
+Instruction.HLT                                                           VMCALL_SUCCESS
+Instruction.IO          Read/Write 1/2/4 bytes                            VMCALL_SUCCESS
+Instruction.IO          Read/Write 3 bytes                                VMCALL_INVALID_OPERAND
+Instruction.RDMSR       Accessible register           R11=msr_value       VMCALL_SUCCESS
+                        Inaccessible register                             VMCALL_INVALID_OPERAND
+Instruction.RDMSR       Accessible register                               VMCALL_SUCCESS
+                        Inaccessible register                             VMCALL_INVALID_OPERAND
+INSTRUCTION.PCONFIG                        
+
+[1] Intel TDX Guest-Hypervisor Communication Interface
+    https://software.intel.com/content/dam/develop/external/us/en/documents/intel-tdx-guest-hypervisor-communication-interface.pdf
+
+
+Erdem Aktas (4):
+  KVM: selftests: Add support for creating non-default type VMs
+  KVM: selftest: Add helper functions to create TDX VMs
+  KVM: selftest: Adding TDX life cycle test.
+  KVM: selftest: Adding test case for TDX port IO
+
+ tools/testing/selftests/kvm/Makefile          |   6 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |   1 +
+ .../selftests/kvm/include/x86_64/processor.h  |   5 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  29 +-
+ .../selftests/kvm/lib/x86_64/processor.c      |  23 ++
+ tools/testing/selftests/kvm/lib/x86_64/tdx.h  | 220 ++++++++++++
+ .../selftests/kvm/lib/x86_64/tdx_lib.c        | 314 ++++++++++++++++++
+ .../selftests/kvm/x86_64/tdx_vm_tests.c       | 209 ++++++++++++
+ 8 files changed, 800 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+
 -- 
-2.25.1
+2.32.0.432.gabb21c7263-goog
 
