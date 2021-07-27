@@ -2,204 +2,128 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CF07C4320A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 00:14:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34453C4320A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 03:12:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74F1F60F94
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 00:14:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 174FC6101E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 03:12:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234515AbhGZXde (ORCPT
+        id S234699AbhG0CcC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Jul 2021 19:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbhGZXdc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jul 2021 19:33:32 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E11C061757
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:56 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d1so6433883pll.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c6M50SO0f7wufQ/jujQ208p4BlTANnLL9cUbaQYum9w=;
-        b=omBSBExB2QKPiZorevGKFTuwV9TNcLpvqJ4xPshh6zimiZC9doVPDYbGCbeVXqkVOL
-         8G6dew7JsYhvjqzkHmI4RgHlOEp9P4IKF1U8hQ4xQYbdgmrNtXG2DwVc0EE1IuXjc1Kn
-         cpLwXGtX+axw4/4U06XzkZ0p+p7QUNjZWNWfKL4LSt/3mmFWqqDUn5Xvnhv6xztZ3OB3
-         zlsfP/rvvm/CPTpZAPYpxfHqQ/j/gz5hPlEfLKFzdNDDr55TBuX5N+92EFwV2OXX01BR
-         FjC8pR1aoBXEpMIiiO6uhULRcxhIo/SlOtqsqs3CgWsFOKUZQbdDA8OdDv2PxPHRlvK1
-         /dig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c6M50SO0f7wufQ/jujQ208p4BlTANnLL9cUbaQYum9w=;
-        b=dnIZIFTwuBRno0asPbQS81opCT0WHpTpnyqUEOqOh0P/BgLspS+/+LCZTt5fmIdg6T
-         BMGwzbyxZADBrrafPRAcL/Awj6pai/QrhqfqGPTyERkOoYZoWqVrjaJdZjWErOT0tcTw
-         NngvDLqwBCl1e9jOVaAeH+fpvF1h7Fz+Orb1atPBAObi30I7XOfmL+KAQ5q7iwrOzuQt
-         xj7kpeXzIgUVm5pS2lFX3JfAdv92bCZ2gISdOTtblFGSCX6Wxa2cZEW1eALfQuA72Q2C
-         MsTPxlhBzn/FRAUX34IGfy4GixYbIwoqUxJeq/K4/DG3UAY6hrP7DXeJecNPHwfCoFXo
-         HiwA==
-X-Gm-Message-State: AOAM530qpX0r0bxyPlwi37RnIsDrNkfAbQYbHUEVhRSLBlttZMJZ2lTb
-        nd75L013f+xKARMQC26ykb8nRA==
-X-Google-Smtp-Source: ABdhPJyyfyYfDKR+2Yf7LTqdmG+mduU/eFFAMV3vTn4HO23ZIiy0uVf4soy6PslMjRXCQXqFIbg0ng==
-X-Received: by 2002:a17:90b:11d4:: with SMTP id gv20mr1492539pjb.87.1627344836488;
-        Mon, 26 Jul 2021 17:13:56 -0700 (PDT)
-Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
-        by smtp.gmail.com with ESMTPSA id k1sm1079452pga.70.2021.07.26.17.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 17:13:56 -0700 (PDT)
-From:   Jiang Wang <jiang.wang@bytedance.com>
-To:     netdev@vger.kernel.org
-Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
-        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 4/5] selftest/bpf: change udp to inet in some function names
-Date:   Tue, 27 Jul 2021 00:12:51 +0000
-Message-Id: <20210727001252.1287673-5-jiang.wang@bytedance.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210727001252.1287673-1-jiang.wang@bytedance.com>
-References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
+        Mon, 26 Jul 2021 22:32:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234422AbhG0CcC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Jul 2021 22:32:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C728160FF4;
+        Tue, 27 Jul 2021 03:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627355550;
+        bh=byJUzmas4bh9ocUTUqQ3pGJIs/Wyhxir7SmarkwejNE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b1eh/9iTqMQ/kk0G/DkQOprlmWqOxRA9cL0zaKqHq/Kda7JxuusEznA/OZtph6Flq
+         460LpqjN8rehK7qEOvFHfP2Yj5gAKzIcxFrNECEaVhwySvVxCa7+i0DXura37+uRL8
+         uXh1/IR6C/xeDBe4pfXghM0FVmFY4GZrirJqHIytRsIrFUBTfo/MaqdJi47TCkZp2+
+         PNzLa4gpXYojn0b84lGyhsNSGpQwlxcgsvmwKMPsanltQVvmfcvy3pXmBrCx5gB5Fr
+         Q8QErSe72StMxcAUs6w1OcmfT3IW/3YXJxaCIovXz36P0vJnHDugqDAvgsVhk3NGHS
+         8lHuimkLrfzjA==
+Date:   Tue, 27 Jul 2021 06:12:27 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-sgx@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/sgx: Fix Q1 and Q2 calculation in
+ sigstruct.c
+Message-ID: <20210727031227.tx2gqx2qg3mg4522@kernel.org>
+References: <20210705050922.63710-1-jarkko@kernel.org>
+ <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be6227d1-728a-c658-f962-380c28afc926@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is to prepare for adding new unix stream tests.
-Mostly renames, also pass the socket types as an argument.
+On Fri, Jul 23, 2021 at 01:53:06PM -0600, Shuah Khan wrote:
+> On 7/4/21 11:09 PM, Jarkko Sakkinen wrote:
+> > From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > 
+> > Q1 and Q2 are numbers with *maximum* length of 384 bytes. If the calculated
+> > length of Q1 and Q2 is less than 384 bytes, things will go wrong.
+> > 
+> > E.g. if Q2 is 383 bytes, then
+> > 
+> > 1. The bytes of q2 are copied to sigstruct->q2 in calc_q1q2().
+> > 2. The entire sigstruct->q2 is reversed, which results it being
+> >     256 * Q2, given that the last byte of sigstruct->q2 is added
+> >     to before the bytes given by calc_q1q2().
+> > 
+> > Either change in key or measurement can trigger the bug. E.g. an unmeasured
+> > heap could cause a devastating change in Q1 or Q2.
+> > 
+> > Reverse exactly the bytes of Q1 and Q2 in calc_q1q2() before returning to
+> > the caller.
+> > 
+> > Fixes: dedde2634570 ("selftests/sgx: Trigger the reclaimer in the selftests")
+> > Link: https://lore.kernel.org/linux-sgx/20210301051836.30738-1-tianjia.zhang@linux.alibaba.com/
+> > Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > The original patch did a bad job explaining the code change but it
+> > turned out making sense. I wrote a new description.
+> > 
+> > v2:
+> > - Added a fixes tag.
+> >   tools/testing/selftests/sgx/sigstruct.c | 41 +++++++++++++------------
+> >   1 file changed, 21 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > index dee7a3d6c5a5..92bbc5a15c39 100644
+> > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > @@ -55,10 +55,27 @@ static bool alloc_q1q2_ctx(const uint8_t *s, const uint8_t *m,
+> >   	return true;
+> >   }
+> > +static void reverse_bytes(void *data, int length)
+> > +{
+> > +	int i = 0;
+> > +	int j = length - 1;
+> > +	uint8_t temp;
+> > +	uint8_t *ptr = data;
+> > +
+> > +	while (i < j) {
+> > +		temp = ptr[i];
+> > +		ptr[i] = ptr[j];
+> > +		ptr[j] = temp;
+> > +		i++;
+> > +		j--;
+> > +	}
+> > +}
+> 
+> I was just about apply this one and noticed this reverse_bytes().
+> Aren't there byteswap functions you could call instead of writing
+> your own?
 
-Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>.
----
- .../selftests/bpf/prog_tests/sockmap_listen.c | 30 +++++++++++--------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+Sorry for latency, just came from two week leave.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 7a976d432..07ed8081f 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1692,14 +1692,14 @@ static void test_reuseport(struct test_sockmap_listen *skel,
- 	}
- }
+glibc does provide bswap for 16, 32, 64 bit numbers but nothing better.
  
--static int udp_socketpair(int family, int *s, int *c)
-+static int inet_socketpair(int family, int type, int *s, int *c)
- {
- 	struct sockaddr_storage addr;
- 	socklen_t len;
- 	int p0, c0;
- 	int err;
+I have no idea if libssl has such function. Since the test code already
+uses this function, and it works, and it's not a newly added function in
+this patch, I would consider keeping it.
  
--	p0 = socket_loopback(family, SOCK_DGRAM | SOCK_NONBLOCK);
-+	p0 = socket_loopback(family, type | SOCK_NONBLOCK);
- 	if (p0 < 0)
- 		return p0;
- 
-@@ -1708,7 +1708,7 @@ static int udp_socketpair(int family, int *s, int *c)
- 	if (err)
- 		goto close_peer0;
- 
--	c0 = xsocket(family, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	c0 = xsocket(family, type | SOCK_NONBLOCK, 0);
- 	if (c0 < 0) {
- 		err = c0;
- 		goto close_peer0;
-@@ -1747,10 +1747,10 @@ static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
- 
- 	zero_verdict_count(verd_mapfd);
- 
--	err = udp_socketpair(family, &p0, &c0);
-+	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
- 	if (err)
- 		return;
--	err = udp_socketpair(family, &p1, &c1);
-+	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
- 	if (err)
- 		goto close_cli0;
- 
-@@ -1825,7 +1825,7 @@ static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map
- 	udp_skb_redir_to_connected(skel, map, family);
- }
- 
--static void udp_unix_redir_to_connected(int family, int sock_mapfd,
-+static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
- 					int verd_mapfd, enum redir_mode mode)
- {
- 	const char *log_prefix = redir_mode_str(mode);
-@@ -1843,7 +1843,7 @@ static void udp_unix_redir_to_connected(int family, int sock_mapfd,
- 		return;
- 	c0 = sfd[0], p0 = sfd[1];
- 
--	err = udp_socketpair(family, &p1, &c1);
-+	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
- 	if (err)
- 		goto close;
- 
-@@ -1897,14 +1897,16 @@ static void udp_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 		return;
- 
- 	skel->bss->test_ingress = false;
--	udp_unix_redir_to_connected(family, sock_map, verdict_map, REDIR_EGRESS);
-+	inet_unix_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
-+				    REDIR_EGRESS);
- 	skel->bss->test_ingress = true;
--	udp_unix_redir_to_connected(family, sock_map, verdict_map, REDIR_INGRESS);
-+	inet_unix_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
-+				    REDIR_INGRESS);
- 
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
- 
--static void unix_udp_redir_to_connected(int family, int sock_mapfd,
-+static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
- 					int verd_mapfd, enum redir_mode mode)
- {
- 	const char *log_prefix = redir_mode_str(mode);
-@@ -1917,7 +1919,7 @@ static void unix_udp_redir_to_connected(int family, int sock_mapfd,
- 
- 	zero_verdict_count(verd_mapfd);
- 
--	err = udp_socketpair(family, &p0, &c0);
-+	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
- 	if (err)
- 		return;
- 
-@@ -1972,9 +1974,11 @@ static void unix_udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 		return;
- 
- 	skel->bss->test_ingress = false;
--	unix_udp_redir_to_connected(family, sock_map, verdict_map, REDIR_EGRESS);
-+	unix_inet_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
-+				     REDIR_EGRESS);
- 	skel->bss->test_ingress = true;
--	unix_udp_redir_to_connected(family, sock_map, verdict_map, REDIR_INGRESS);
-+	unix_inet_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
-+				     REDIR_INGRESS);
- 
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
--- 
-2.20.1
+> thanks,
+> -- Shuah
 
+/Jarkko
