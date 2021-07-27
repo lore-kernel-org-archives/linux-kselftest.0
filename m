@@ -2,62 +2,61 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 798BAC432BE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 00:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2867C43216
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 00:13:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FECC60524
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 00:13:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93F8060524
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jul 2021 00:13:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbhGZXd0 (ORCPT
+        id S234347AbhGZXd2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Jul 2021 19:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        Mon, 26 Jul 2021 19:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbhGZXdW (ORCPT
+        with ESMTP id S234377AbhGZXd1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jul 2021 19:33:22 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A366C061764
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:50 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id pf12-20020a17090b1d8cb0290175c085e7a5so1568086pjb.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:50 -0700 (PDT)
+        Mon, 26 Jul 2021 19:33:27 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF35C061764
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:54 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id b6so15276651pji.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jul 2021 17:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6v2cO07pZaqjXfgdg+SOPKEU9Efn8uqVDDElKkkvBL8=;
-        b=IMqRiqtDaOhyQ7vgbqqpSVwSm9yU1bSfki5L0pKGwM90wqrvrJkjwoOE98PqEXB5Uf
-         51+IIYX/GSxmwY3cXyuW1w2/6Ikjq816h46SWBtxSTQmbYdDmgJiymOzUd7uVEbFhM9N
-         TTwkp8Hqw3qRvThYZWCumIXC1zaKgVFtrhxuU/oI1748IpyZn9+5gWAE8GVrwag8zwGH
-         EBwC4Tnc4Iej3wjuLKq8DReSs/dI8PIcy8YyXSdj6Vvp+LycsbmcXx8emcU6BxFBjuRb
-         9TCuYMOWZeKtpfC+pQITa0Am+FDsZAp0BkvWFugI6gVvRJ/Ew9TacznbNOaUMqP87UNG
-         zWMA==
+        bh=H8KgAJIkqSeG/hKZeeo63HZDWfcmzz7HUI7sYt9dwKU=;
+        b=C+RhA7ziN1zDjtNR5+EWOcd/bjdRj04Spii1eQKtWinQJJ3cPwHJ5PMQGFIk1k6V/X
+         /OG3RhKw083oQqwms2GGh+IGNokqmQvlpQryIcvnNxViHjBQ3JG9/ggT6U2f1JeztaC7
+         PhnA0NYnNdKdjxvUjVsBBKcYDy1RFuPwLdHeXSJRtkf9N6+W2UqxcKhiKmrWw9usjUjn
+         0zjntieDPS7WgWaNlj6ixS7f/jZg+dQzEpDZXFQ6DN3kgXCdtrX6uAfIjSTbo8WYh0tA
+         0GNhcmxd3RqR4ofhzUqka4PMQ336tiNOH6x7dwoSqSXW6e2YCZlByhLSJxh/3jyiAbjW
+         49YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6v2cO07pZaqjXfgdg+SOPKEU9Efn8uqVDDElKkkvBL8=;
-        b=SYCxcmkScQHGb6nhV9AUuKNsZBatNq5rwsC7j0BMbjvVx4ndmSG2SCHn/VnNg0+pig
-         n8tsll3+HwUxuRkpDB2m5kFPQIOM26EI1jluqTCSDVHEgB7HPvtrUJqH3MHAfNrqMfdR
-         pDPC9A3VHCZri7/EkAbXQlqT/R78mSbgd1vvZBxCG6stmfK1yabusMV3je3t6BylSbLu
-         aFBwEA5QW0sSDLrJ3MXXMuF0Hb1L8TeQ9D65wg3TP1qc/eNu20M9+EXSEh3kuLpJWqCT
-         MFZ4t7J5RKDHBskzGdXrScZQfPVj7Uy+4CcWt8A1qjlattMOvSbTAnjgfsItq+r9FZCT
-         XJbw==
-X-Gm-Message-State: AOAM5307OsQv5WIBdMd68lIwzk5QAKCkjLONuDkDBRiN4vSp5Rn2QJaA
-        RdBPTF7/9edL4RpeBnKmr17t7g==
-X-Google-Smtp-Source: ABdhPJy7v/+l+Q65PPCJv9H5V2CblYT0wQEcsMbsqcDd5CgMx18SLjs3xQkAUniZZJO4vk3IoDfXuw==
-X-Received: by 2002:a63:e841:: with SMTP id a1mr20737703pgk.197.1627344829709;
-        Mon, 26 Jul 2021 17:13:49 -0700 (PDT)
+        bh=H8KgAJIkqSeG/hKZeeo63HZDWfcmzz7HUI7sYt9dwKU=;
+        b=QgOsykPYiaKEBb6w/qb2Ki2RZ4sY7oEoF+9hVVckbItZ2rLiqXna1sTDk9a2W9QzdL
+         U74agKAEHBgipcgHrWrIfpanhrbu0N64KFqv5owUXC+MWhlep9V7h4mSj/UPOQFF1NUu
+         ytPlIwnEii1HlQ+bBuC/1VBwMjeCPnLeRQSupLjWGIfmHaObDrkGPXQ/ZqgBBtJsnMwm
+         oYWy/b8ftmrvt/YhzBX90QV2fAzvKBGg9VQENEZxGlhC7yuSe3qpruHeQbSJ9ia/3La0
+         j2n46h15Pexywq0l9o+KO8knQms8dhiAZAHcWjNAbTuJnDC2VogNYqkdHm/UaNSbsbBC
+         8ihA==
+X-Gm-Message-State: AOAM531hmgIkZtPCL3t/3kMw3K2SRQzMH/kNb+NME+tJvb98DXbTxts+
+        uXVegJtPXYNRSf+o6+8fGFEOOA==
+X-Google-Smtp-Source: ABdhPJy0qtMofanpMrj7StC17d15Tex6Rg7PpBZKhRx0uLrez5+EamqiCFlDgTM0GIGin3nNRVdEUg==
+X-Received: by 2002:a17:90a:9f91:: with SMTP id o17mr1459607pjp.29.1627344834176;
+        Mon, 26 Jul 2021 17:13:54 -0700 (PDT)
 Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
-        by smtp.gmail.com with ESMTPSA id k1sm1079452pga.70.2021.07.26.17.13.48
+        by smtp.gmail.com with ESMTPSA id k1sm1079452pga.70.2021.07.26.17.13.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 17:13:49 -0700 (PDT)
+        Mon, 26 Jul 2021 17:13:53 -0700 (PDT)
 From:   Jiang Wang <jiang.wang@bytedance.com>
 To:     netdev@vger.kernel.org
 Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
@@ -76,9 +75,9 @@ Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 1/5] af_unix: add read_sock for stream socket types
-Date:   Tue, 27 Jul 2021 00:12:48 +0000
-Message-Id: <20210727001252.1287673-2-jiang.wang@bytedance.com>
+Subject: [PATCH bpf-next v1 3/5] selftest/bpf: add tests for sockmap with unix stream type.
+Date:   Tue, 27 Jul 2021 00:12:50 +0000
+Message-Id: <20210727001252.1287673-4-jiang.wang@bytedance.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210727001252.1287673-1-jiang.wang@bytedance.com>
 References: <20210727001252.1287673-1-jiang.wang@bytedance.com>
@@ -88,53 +87,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To support sockmap for af_unix stream type, implement
-read_sock, which is similar to the read_sock for unix
-dgram sockets.
+Add two tests for unix stream to unix stream redirection
+in sockmap tests.
 
 Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
 Reviewed-by: Cong Wang <cong.wang@bytedance.com>.
 ---
- net/unix/af_unix.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 89927678c..32eeb4a6a 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -672,6 +672,8 @@ static int unix_dgram_sendmsg(struct socket *, struct msghdr *, size_t);
- static int unix_dgram_recvmsg(struct socket *, struct msghdr *, size_t, int);
- static int unix_read_sock(struct sock *sk, read_descriptor_t *desc,
- 			  sk_read_actor_t recv_actor);
-+static int unix_stream_read_sock(struct sock *sk, read_descriptor_t *desc,
-+				 sk_read_actor_t recv_actor);
- static int unix_dgram_connect(struct socket *, struct sockaddr *,
- 			      int, int);
- static int unix_seqpacket_sendmsg(struct socket *, struct msghdr *, size_t);
-@@ -725,6 +727,7 @@ static const struct proto_ops unix_stream_ops = {
- 	.shutdown =	unix_shutdown,
- 	.sendmsg =	unix_stream_sendmsg,
- 	.recvmsg =	unix_stream_recvmsg,
-+	.read_sock =	unix_stream_read_sock,
- 	.mmap =		sock_no_mmap,
- 	.sendpage =	unix_stream_sendpage,
- 	.splice_read =	unix_stream_splice_read,
-@@ -2311,6 +2314,15 @@ struct unix_stream_read_state {
- 	unsigned int splice_flags;
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index a9f1bf9d5..7a976d432 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -2020,11 +2020,13 @@ void test_sockmap_listen(void)
+ 	run_tests(skel, skel->maps.sock_map, AF_INET);
+ 	run_tests(skel, skel->maps.sock_map, AF_INET6);
+ 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
++	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
  
-+static int unix_stream_read_sock(struct sock *sk, read_descriptor_t *desc,
-+				 sk_read_actor_t recv_actor)
-+{
-+	if (unlikely(sk->sk_state != TCP_ESTABLISHED))
-+		return -EINVAL;
-+
-+	return unix_read_sock(sk, desc, recv_actor);
-+}
-+
- static int unix_stream_read_generic(struct unix_stream_read_state *state,
- 				    bool freezable)
- {
+ 	skel->bss->test_sockmap = false;
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET);
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
+ 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
++	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
+ 
+ 	test_sockmap_listen__destroy(skel);
+ }
 -- 
 2.20.1
 
