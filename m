@@ -2,38 +2,32 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7816C4338F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 10:20:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08B13C4338F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 10:46:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A09F260F9D
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 10:20:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D876160F9E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 10:46:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbhG1KUr (ORCPT
+        id S233125AbhG1Kqi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jul 2021 06:20:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41402 "EHLO mail.kernel.org"
+        Wed, 28 Jul 2021 06:46:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:54964 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229574AbhG1KUr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 06:20:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 73AC760524;
-        Wed, 28 Jul 2021 10:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627467645;
-        bh=iaMJUzIxUBOuPqcrzKGYUTf3+HhWvUvyGdH2QoA/lqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RZivgsZd3pDs+JeDyDwtEXYIAzedRbzriRsmrOFL8iPqtzYKx5t7OXEjBW9J+VqdH
-         Onzsi6FxB2V2ofj0+GJyEgFHx8Tb6p6TX8Ds0omfR3BlP0GDezynABYSxuiv2zMt1+
-         8FGWQ/Faa7j/0HHM3nk75mc/rBt/yjjFc7xPhrqONEqbIlGnOyuk6BkWz3eMMIKPAB
-         G+cUPkm//g8EteLvK2RrzjGBiez4IkBnQpF9ne5bio97a/B8Bt43SA7bQMdDtk6O91
-         +90TMulO8DHn1cIRn50bJsSEzwXZdIE7npuVCJxMprLyPTYZAnDlEUg96FGZg1ZgL6
-         wRkOD1QTiOnvQ==
-Date:   Wed, 28 Jul 2021 11:20:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dave Martin <Dave.Martin@arm.com>
+        id S232736AbhG1Kqh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 06:46:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A9D131B;
+        Wed, 28 Jul 2021 03:46:33 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 334AB3F73D;
+        Wed, 28 Jul 2021 03:46:32 -0700 (PDT)
+Date:   Wed, 28 Jul 2021 11:45:11 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -41,61 +35,45 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v1 1/3] kselftest/arm64: Provide a helper binary and
  "library" for SVE RDVL
-Message-ID: <20210728102035.GB4670@sirena.org.uk>
+Message-ID: <20210728104511.GD1724@arm.com>
 References: <20210727180649.12943-1-broonie@kernel.org>
  <20210727180649.12943-2-broonie@kernel.org>
  <20210728094117.GA1724@arm.com>
+ <20210728102035.GB4670@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MvEh5MSbieV/1Yst"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210728094117.GA1724@arm.com>
-X-Cookie: Vini, vidi, Linux!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210728102035.GB4670@sirena.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, Jul 28, 2021 at 11:20:35AM +0100, Mark Brown wrote:
+> On Wed, Jul 28, 2021 at 10:41:30AM +0100, Dave Martin wrote:
+> > On Tue, Jul 27, 2021 at 07:06:47PM +0100, Mark Brown wrote:
+> > > SVE provides an instruction RDVL which reports the currently configured
+> > > vector length. In order to validate that our vector length configuration
+> > > interfaces are working correctly without having to build the C code for
+> 
+> > > +.globl rdvl_sve
+> > > +rdvl_sve:
+> > > +	rdvl	x0, #1
+> > > +	ret
+> > 
+> > This works, but can we use an ACLE intrinsic for this?  I'm pretty GCC
+> > and LLVM have been up to date with that stuff for some time, though
+> > you'd have to check with the compiler folks.
+> 
+> If we put SVE into C source files we need to build the C code with SVE
+> support enabled, I felt it was safer to avoid any possibility that we
+> might get some interference with the tests due to interactions with SVE
+> code generated by the compiler.  It should be fine, but it's even easier
+> to not have to think about it at all.
 
---MvEh5MSbieV/1Yst
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Good point, stick with the out-of-line asm in that case.
 
-On Wed, Jul 28, 2021 at 10:41:30AM +0100, Dave Martin wrote:
-> On Tue, Jul 27, 2021 at 07:06:47PM +0100, Mark Brown wrote:
-> > SVE provides an instruction RDVL which reports the currently configured
-> > vector length. In order to validate that our vector length configuration
-> > interfaces are working correctly without having to build the C code for
+(Also saves having to find out about the intrinsics!)
 
-> > +.globl rdvl_sve
-> > +rdvl_sve:
-> > +	rdvl	x0, #1
-> > +	ret
->=20
-> This works, but can we use an ACLE intrinsic for this?  I'm pretty GCC
-> and LLVM have been up to date with that stuff for some time, though
-> you'd have to check with the compiler folks.
-
-If we put SVE into C source files we need to build the C code with SVE
-support enabled, I felt it was safer to avoid any possibility that we
-might get some interference with the tests due to interactions with SVE
-code generated by the compiler.  It should be fine, but it's even easier
-to not have to think about it at all.
-
---MvEh5MSbieV/1Yst
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEBL3MACgkQJNaLcl1U
-h9AClQf/ckHQsXPvvMFR0BnsJvyGxt/+7KXS75+TqZ0VoM3m2JaVOxnFtGaOcOY/
-IfvVOpWsfvtzljRN9Dpmbc0ClWSf1F6ZtlWrT/XjX3S5kvakBdxXyiHgfpxg92PC
-ztxIeVEqTQEJ/46HFAPyIyzxABM6u/tdL5CJkYBl5OoJ/EN0RmpJAYMbUs11Habh
-Z2qtpCf4mzhz44jIBFpego9tiJVvQshY1jAdZSjnIWV/TXFLWj4cWhlH7q5houYb
-vz4Ip8rpWSXXW6vP7Tdg5Mw9sNNxWKZou+N+OG3JJ0DqG9aYLWCXIEKmfYedhSZl
-GtYqvn4kMmTfAi8fdZwkSuLA5MKKeA==
-=arev
------END PGP SIGNATURE-----
-
---MvEh5MSbieV/1Yst--
+Cheers
+---Dave
