@@ -2,192 +2,163 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CAAC4338F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 13:47:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BBFCC4338F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 13:52:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C918C60F45
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 13:47:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44A6260F45
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jul 2021 13:52:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236653AbhG1NrE (ORCPT
+        id S236469AbhG1Nus (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jul 2021 09:47:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:56780 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236868AbhG1Npn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jul 2021 09:45:43 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55FA831B;
-        Wed, 28 Jul 2021 06:45:28 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C9FE3F70D;
-        Wed, 28 Jul 2021 06:45:27 -0700 (PDT)
-Date:   Wed, 28 Jul 2021 14:44:07 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] kselftest/arm64: Add tests for SVE vector
- configuration
-Message-ID: <20210728134405.GF1724@arm.com>
-References: <20210727180649.12943-1-broonie@kernel.org>
- <20210727180649.12943-4-broonie@kernel.org>
- <20210728094158.GC1724@arm.com>
- <20210728125918.GD4670@sirena.org.uk>
+        Wed, 28 Jul 2021 09:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237362AbhG1Ntv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Jul 2021 09:49:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5344C061757;
+        Wed, 28 Jul 2021 06:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5gAFhq7uxpygosvYi5fsP8TKJ4+Xv342mlFirtLR2YU=; b=fJQUuozmRpR8MormyH8buz5xzx
+        /+ROEeWNCEWYdzKhhXlPEfaaa4AZj9YFiIdXYUsv2WmOzIyBBtLtk+WgdXGyRYHPT3USV7SruHk1D
+        irJQTziFyhJcmijEKzvtEoWgZbW8pJBx7xr33C5qcdt2r/XixHBv72RlHXu4kHn5u02+uBYjuEWX8
+        Uw5YmkDgSlh5XgxVFqWDa5AWNpa7gVI3umnucUiV3JmQUymFdIdY0NtjBW/+0QTioCVjUVInaS2/d
+        6BSmeaIukdbwTt1d6t5V0ha/5W+sgC2s+aZtPRNPsfMnGNWrN2g29hTzTkVHydV4AS4L/U8guWXC6
+        QSJMpWcg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m8jvj-000pwG-NP; Wed, 28 Jul 2021 13:49:03 +0000
+Date:   Wed, 28 Jul 2021 06:49:03 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andriin@fb.com" <andriin@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "atenart@kernel.org" <atenart@kernel.org>,
+        "alobakin@pm.me" <alobakin@pm.me>,
+        "weiwan@google.com" <weiwan@google.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "ngupta@vflare.org" <ngupta@vflare.org>,
+        "sergey.senozhatsky.work@gmail.com" 
+        <sergey.senozhatsky.work@gmail.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "mbenes@suse.com" <mbenes@suse.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kernel/module: add documentation for try_module_get()
+Message-ID: <YQFgTxz62G+3Lc8G@bombadil.infradead.org>
+References: <20210722221905.1718213-1-mcgrof@kernel.org>
+ <dbf27fa2f8864e1d91f7015249b1a5f1@AcuMS.aculab.com>
+ <YQBCvKgH481C7o1c@bombadil.infradead.org>
+ <YQBGemOIF4sp/ges@kroah.com>
+ <YQBN2/K4Ne5orgzS@bombadil.infradead.org>
+ <YQBSutZfhqfTzKQa@kroah.com>
+ <YQByfUaDaXCUqrlo@bombadil.infradead.org>
+ <6054c136290346d581e276abbb2e3ff1@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210728125918.GD4670@sirena.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <6054c136290346d581e276abbb2e3ff1@AcuMS.aculab.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 01:59:18PM +0100, Mark Brown wrote:
-> On Wed, Jul 28, 2021 at 10:41:58AM +0100, Dave Martin wrote:
-> > On Tue, Jul 27, 2021 at 07:06:49PM +0100, Mark Brown wrote:
+On Wed, Jul 28, 2021 at 08:28:11AM +0000, David Laight wrote:
+> ...
+> > sysfs files are safe to use try_module_get() because once they are
+> > active a removal of the file cannot happen, and so removal will wait.
 > 
-> > > We provide interfaces for configuring the SVE vector length seen by
-> > > processes using prctl and also via /proc for configuring the default
-> > > values. Provide tests that exercise all these interfaces and verify that
-> > > they take effect as expected, though at present no test fully enumerates
-> > > all the possible vector lengths.
+> I doubt it.
+
+But that is what happens.
+
+> If the module_remove() function removes sysfs nodes then (something
+> like) this has to happen.
 > 
-> > Does "at present" mean that this test doesn't do it either?
+> 1) rmmod (or similar) tries to remove the module.
+> 2) The reference count is zero so the remove is allowed.
+> 3) Something tries to access a sysfs node in the module.
+> 3a) If sysfs knew the nodes were in a module it could use
+>     try_module_get() to ensure the module wasn't being unloaded.
+>     Failure would cause the sysfs access to fail.
+>     But I'm not sure it does,
+
+
+It does, if a sysfs file had a try_module_get() it would fail as the
+module is going.
+
+>     and in any case it doesn't help.
+
+Not clear how from your example.
+
+> 3b) The sysfs thread calls into the module code and waits on a mutex.
+
+If try_module_get() is used on the syfs files, the deadlock is escaped if
+used on remove.
+
+> 3c) The rmmod thread gets around to calling into sysfs to remove the nodes.
 > 
-> > (It doesn't seem to try every VL, unless I've missed something?  Is this
-> > planned?)
+> At this point we hit the standard 'deregistering a callback' issue.
+> Exactly the same issue affects removal of per-device sysfs node
+> from a driver's .remove function.
 > 
-> Nothing currently does it, and nor does this patch.  Planned is a strong
-> term but yes, ideally we should probe all the VLs.
+> Typically this is solved by making the deregister routing sleep
+> until all the callbacks have completed.
 > 
-> > > +#include <stddef.h>
-> > > +#include <stdio.h>
-> > > +#include <stdlib.h>
-> > 
-> > Not used? ^
-> 
-> We call exit() which is declared in stdlib.h.
+> So this would require functions like sysfs_remove_group() and
+> hwmon_device_unregister() to be allowed to sleep
 
-Ignore me, I confused exit() with _exit().
+Both can.
 
-> > > +#define MIN_VL 16
-> 
-> > <asm/sigcontext.h> has SVE_MIN_VL.  Maybe we can use that everywhere
-> > these days?
-> 
-> I partly wanted the vector type neutral name, and I'm considering
-> modifying the sysfs ABI file to define 0 as a valid vector length for
-> consistency with accepting -1 as the maximum since SME doesn't have any
-> architected guarantees as to which particular vector lengths are defined.
+Both kernfs_find_and_get_ns() and kernfs_remove_by_name_ns() call
+mutex_lock(), they certainly can sleep.
 
-I see what you mean, but it is more than mere coincidence that this is
-the same value as SVE_MIN_VL.
+hwmon_device_unregister() calls device_del() which also holds a mutex.
 
-You could view SVE as defining the base architecture which SME then
-extends.
+> and not be
+> called with any locks (of any kind) held that the callback
+> functions acquire.
 
-Perhaps
+Not sure why you think this is a requirement.
 
-#define ARCH_MIN_VL SVE_MIN_VL	/* architectural minimim VL */
+> The module reference count is irrelevant.
 
-would be neutral enough.  Anyway, I won't lose sleep over it.
+To be clear, there were concerns that there were races here which would
+make things murky on sysfs operations and module removal (null
+deferences when accessing back the gendisk->private_data) however a
+a new selftest driver for sysfs [0], and error injections to allow us to
+test and verify all these things I just said are true. If you'd like
+to extend the tests to include something you might be concerned about
+and want to try, please send me a patch against my tree [1].
 
-> > > +/* Verify that we can write a minimum value and have it take effect */
-> > > +void proc_write_min(struct vec_data *data)
-> 
-> > Could be proc_write_check_min() (though the "check" is a bit more
-> > redundant here; from "write" it's clear that this function actually
-> > does something nontrivial).
-> 
-> TBH I'm not sure people will be excssively confused by the idea that a
-> test would validate the values it was trying to read or write were
-> accurate.
+[0] https://lkml.kernel.org/r/20210703004632.621662-1-mcgrof@kernel.org
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210701-sysfs-fix-races-v2
 
-It's not 100% clear that this is a test until one has read all the way
-to the end of the file.  But now that I understand the pattern here I
-wouldn't be too concerned, and the comment accurately describes what the
-function does.
-
-> 
-> > > +/* Can we read back a VL from prctl? */
-> > 
-> > It's certainly possible.
-> 
-> The comment is describing what the test is verifying.
-
-Ignore that, I somehow read the comment as something like
-
-	[TODO] Can we read back a VL via ptrace?
-
-which is not what the comment says.
-
-> > Since this would test different kernel paths from getting the child
-> > itself to do RVDL / PR_SVE_GET_VL, it would be a different test though.
-> > I think this diff is still good, but beefing up the ptrace tests to do
-> > the appropriate checks would be good too (if we don't have that already).
-> 
-> Yes, the ptrace stuff could have a bit more coverage.
-> 
-> > > +	proc_write_min,
-> > > +	proc_write_max,
-> 
-> > Can we also check what happens when writing unsupported values here?
-> 
-> We could.
-> 
-> > If this patch is more about establishing the framework, these could be
-> > TODOs for now.
-> 
-> It definitely feels like something we can do incrementally.
-
-Is it worth committing a TODO list somewhere?  There's always the
-possibility that someone else gets interested and contributes some tests
-for us; otherwise, at least it makes it harder to forget them.
-
-> > Can we be a good citizen and restore sve_default_vector_length to its
-> > original value?
-> 
-> We do that in the tests that fiddle with the default vector length, it
-> seems useful to keep it at a value different from min and max as much as
-> possible to increase the chance that we notice a failure to set things.
-
-Ah right, I hadn't understood that proc_read_default() reads the default
-and then the subsequent tests write it back.
-
-This might be a bit clearer if the setup code was clearly separate from
-the tests, but so long as the ordering requirements are clearly
-documented that seems reasonably OK.
-
-In:
-
-> +test_type tests[] = {
-> +	/*
-> +	 * The default/min/max tests must be first to provide data for
-> +	 * other tests.
-> +	 */
-> +	proc_read_default,
-> +	proc_write_min,
-> +	proc_write_max,
-
-can you also comment that proc_read_default needs to come first among
-these?
-
-> +
-> +	prctl_get,
-> +	prctl_set,
-> +	prctl_set_no_child,
-> +	prctl_set_for_child,
-> +	prctl_set_onexec,
-> +};
-
-[...]
-
-Cheers
----Dave
+  Luis
