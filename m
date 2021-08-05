@@ -2,102 +2,104 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C75ADC4320A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Aug 2021 06:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E30B1C4338F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Aug 2021 10:05:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A2A260F41
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Aug 2021 06:52:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBB4960EB9
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Aug 2021 10:05:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbhHEGwe (ORCPT
+        id S240034AbhHEKGB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Aug 2021 02:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbhHEGwe (ORCPT
+        Thu, 5 Aug 2021 06:06:01 -0400
+Received: from esa11.hc1455-7.c3s2.iphmx.com ([207.54.90.137]:47900 "EHLO
+        esa11.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234156AbhHEKGA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Aug 2021 02:52:34 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C1CC0613C1;
-        Wed,  4 Aug 2021 23:52:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l19so6690011pjz.0;
-        Wed, 04 Aug 2021 23:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GlmMJcvsNL7r2fqrc4Rymp5aSqY0XLGbpUjwdzjt8TE=;
-        b=s4jwRYLozfAWXk3CdFQRL+6GIY85SN+v/QOTmDuaxwPo39Q711NlDvjCbBcbulWsLj
-         7NiQhtHqqRRe29Xi1RBJD3UjJ5cbPyWJipn3Pwrny3d8dRd8MgVY3Qz61l6zSAGfDXOF
-         /ZLk+ROT9+dyKdzKgvCBvUCRWH0Mcq1LKoopZrMjXPrBpjxUJGfs+DBAhH7EWywMVeCQ
-         Otz9QF3U3tev21aAlCWh9wGLHsivMRe/DH4+Hhm+a+r2c7JoqeECGkq+L8o7WbZZyA1u
-         rfnqC/IEpAS5vpw7CnC9dXkUnoPKt+1uVlNb1Kaup8QZ+QNn7bFb5HQFLtUuklaLpDaK
-         v6jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GlmMJcvsNL7r2fqrc4Rymp5aSqY0XLGbpUjwdzjt8TE=;
-        b=B2FWc82d+afgDFvjDtyfcB+hTZ0U0oNbBn0jDoejSsUbIX6fkx7XAVEr1sVXA971/K
-         rkM9OniYJeKdRp03hWFNVZgFWA14AF866miZn6V/1o8OGpQGqJLO6LVjqZ/LrAAmPAoI
-         qUBXxfgdxdL0S6Hl1JLjYBQZ98yIyh66UkR9J0tcd9BOUTiaez7VmjnDuGU5/zu6UrIl
-         HKvBxJT80tV8nzBqgyc+NZr7kWYuaYbLjBeV9vRrUyT1PN/nHyfMmm5OA+RkVdC3sSP4
-         q1RZCYVKfCGU2iTElczivQn/rNYixdQtacQLTRyfddU5Q3EG3AG3lMaLLKRRqH9m5oVh
-         EUBw==
-X-Gm-Message-State: AOAM530EAukknpg+NoL9xQceW6ZZvqOq6jxJQ3J3otWzAZdUwyNQEjCV
-        Tk7TOYjJtGm1Pdt3uGNnRCA=
-X-Google-Smtp-Source: ABdhPJyxRn4WdhDjQJdsYQc6bC6ojEMmWOv6W9V6kigMMmMlKBLxxYaU6M0/n8LxQ0lpTosPugc5vQ==
-X-Received: by 2002:aa7:8d10:0:b029:303:8d17:7b8d with SMTP id j16-20020aa78d100000b02903038d177b8dmr3690606pfe.26.1628146339294;
-        Wed, 04 Aug 2021 23:52:19 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i18sm6623194pgb.83.2021.08.04.23.52.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 23:52:18 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yong.yiran@zte.com.cn
-To:     mpe@ellerman.id.au
-Cc:     benh@kernel.crashing.org, paulus@samba.org, shuah@kernel.org,
-        yong.yiran@zte.com.cn, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] powerpc/tm: remove duplicate include in tm-poison.c
-Date:   Wed,  4 Aug 2021 23:52:55 -0700
-Message-Id: <20210805065255.628170-1-yong.yiran@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 5 Aug 2021 06:06:00 -0400
+X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Aug 2021 06:06:00 EDT
+IronPort-SDR: vaamKXEsIZb88hJ8qX91HpxT9PZILJS5Hc+vlrHxW/ZZNwyhH7VBYLYs3Z4bpG3yrGhepiOEcw
+ hYu4RVjcsbjqlVR7OtJnb6Hfi/QN5xW69OdlGJI/UJS2cYX67VOYMLLIOoEpKkAqSrtDfqnem5
+ TrdtBq2ZdxAf3lr4+o7d+2uazDOaOy8UtfkFCG6L9kxORjTdraWUajNszH9bYSk9mTfY0O2g5K
+ 4aQM60EGbnFqt0IEBU4KxrRHQaam+3055klT7tGW0CsSCJ49ficgSvVtKXLSDIOHHFHD+IPjIj
+ pgstRPoZBizyX47Ldhoy1arh
+X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="18797132"
+X-IronPort-AV: E=Sophos;i="5.84,296,1620658800"; 
+   d="scan'208";a="18797132"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 05 Aug 2021 18:58:35 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 66430EB380;
+        Thu,  5 Aug 2021 18:58:34 +0900 (JST)
+Received: from yto-om2.fujitsu.com (yto-om2.o.css.fujitsu.com [10.128.89.163])
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id B9B1EE37C2;
+        Thu,  5 Aug 2021 18:58:33 +0900 (JST)
+Received: from localhost.localdomain (luna3.soft.fujitsu.com [10.124.196.199])
+        by yto-om2.fujitsu.com (Postfix) with ESMTP id 96071400C23C5;
+        Thu,  5 Aug 2021 18:58:33 +0900 (JST)
+From:   Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
+To:     keescook@chromium.org, linux-kselftest@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        misono.tomohiro@jp.fujitsu.com
+Subject: [PATCH] selftest/lkdtm: Skip stack-entropy test if lkdtm is not available
+Date:   Thu,  5 Aug 2021 19:12:36 +0900
+Message-Id: <20210805101236.1140381-1-misono.tomohiro@jp.fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: yong yiran <yong.yiran@zte.com.cn>
+Exit with return code 4 if lkdtm is not available like other tests
+in order to properly skip the test.
 
-'inttypes.h' included in 'tm-poison.c' is duplicated.
-Remove all but the first include of inttypes.h from tm-poison.c.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: yong yiran <yong.yiran@zte.com.cn>
+Signed-off-by: Misono Tomohiro <misono.tomohiro@jp.fujitsu.com>
 ---
- tools/testing/selftests/powerpc/tm/tm-poison.c | 1 -
- 1 file changed, 1 deletion(-)
+I saw the same problem reported here (on 5.14-rc4):
+https://lore.kernel.org/lkml/2836f48a-d4e2-7f00-f06c-9f556fbd6332@linuxfoundation.org/
 
-diff --git a/tools/testing/selftests/powerpc/tm/tm-poison.c b/tools/testing/selftests/powerpc/tm/tm-poison.c
-index 29e5f26af7b9..27c083a03d1f 100644
---- a/tools/testing/selftests/powerpc/tm/tm-poison.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-poison.c
-@@ -20,7 +20,6 @@
- #include <sched.h>
- #include <sys/types.h>
- #include <signal.h>
--#include <inttypes.h>
+ tools/testing/selftests/lkdtm/stack-entropy.sh | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/lkdtm/stack-entropy.sh b/tools/testing/selftests/lkdtm/stack-entropy.sh
+index 1b4d95d575f8..14fedeef762e 100755
+--- a/tools/testing/selftests/lkdtm/stack-entropy.sh
++++ b/tools/testing/selftests/lkdtm/stack-entropy.sh
+@@ -4,13 +4,27 @@
+ # Measure kernel stack entropy by sampling via LKDTM's REPORT_STACK test.
+ set -e
+ samples="${1:-1000}"
++TRIGGER=/sys/kernel/debug/provoke-crash/DIRECT
++KSELFTEST_SKIP_TEST=4
++
++# Verify we have LKDTM available in the kernel.
++if [ ! -r $TRIGGER ] ; then
++	/sbin/modprobe -q lkdtm || true
++	if [ ! -r $TRIGGER ] ; then
++		echo "Cannot find $TRIGGER (missing CONFIG_LKDTM?)"
++	else
++		echo "Cannot write $TRIGGER (need to run as root?)"
++	fi
++	# Skip this test
++	exit $KSELFTEST_SKIP_TEST
++fi
  
- #include "tm.h"
- 
+ # Capture dmesg continuously since it may fill up depending on sample size.
+ log=$(mktemp -t stack-entropy-XXXXXX)
+ dmesg --follow >"$log" & pid=$!
+ report=-1
+ for i in $(seq 1 $samples); do
+-        echo "REPORT_STACK" >/sys/kernel/debug/provoke-crash/DIRECT
++        echo "REPORT_STACK" > $TRIGGER
+ 	if [ -t 1 ]; then
+ 		percent=$(( 100 * $i / $samples ))
+ 		if [ "$percent" -ne "$report" ]; then
 -- 
-2.25.1
+2.31.1
 
