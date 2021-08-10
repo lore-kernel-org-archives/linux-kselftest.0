@@ -2,91 +2,134 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6995C4338F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Aug 2021 11:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8A21C4338F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Aug 2021 14:05:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1DA560F56
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Aug 2021 11:27:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C885160FDA
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Aug 2021 14:05:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbhHJL2I (ORCPT
+        id S233175AbhHJOFb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Aug 2021 07:28:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48544 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229967AbhHJL2I (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Aug 2021 07:28:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 18E5E60C51;
-        Tue, 10 Aug 2021 11:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628594866;
-        bh=YD3mk7wVBKr+345hMQBi3IBiMgz7hrlLy6ovY3z2l7M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aTELFQUPYx5v/4wwaaSZGFLAIyYKIQuZp8UwWzyJ2eEkUUdBsp7j5BL+iX8f47USr
-         HIAdWYcKQugtIeOHcBJxTYrcW7DENtDmswzMjuGKzZmG3EpNLEo3WgUkW6b73aE+IF
-         ChLULpt/2/QMvBT9ODrH2K9jMKkGiaaNuOdPgoSE=
-Date:   Tue, 10 Aug 2021 13:27:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     SeongJae Park <sj38.park@gmail.com>
-Cc:     akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org, SeongJae Park <sjpark@amazon.de>
-Subject: Re: [PATCH] selftests/damon/debugfs_attrs: Add missing execute
- permission
-Message-ID: <YRJisBs9AunccCD4@kroah.com>
-References: <20210806004226.47nyd%akpm@linux-foundation.org>
- <20210810112050.22225-1-sj38.park@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210810112050.22225-1-sj38.park@gmail.com>
+        Tue, 10 Aug 2021 10:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231716AbhHJOFa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Aug 2021 10:05:30 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD1CC0613D3;
+        Tue, 10 Aug 2021 07:05:08 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id t66so22463310qkb.0;
+        Tue, 10 Aug 2021 07:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=69ttibL9r/y/UWLlZYU/dvsb3ho1ANknfZxnaYGPTwI=;
+        b=CJZ46BLJKnKEPx3cNCoHnWylR/I1OCHvD++LG8z/DMex1/4d+1A5f1CfvcHPy2wK4r
+         R622cmamRDdsO4mGcnQoNAj9Q0LMoMZfgFxZZaWxzI/W90bILN3Y9VVSN4aZx50f4vWg
+         5aPb1+qHnWx3hCLc4aGngBdN2u8kB/dX1ptZrmDYlTmH6y2nMRePBNv/oG5kq3YU/PNB
+         OfCpTN0Peu5eTutsHPnRi7T7lXqc8B1db5CszlRIJB5VBPmMnGGDdvZqGjaX4bDfe8qB
+         uNKcbOaIlqJy6uUpO0JtHlAjfbURLu40soWgZAo0Mse2SbdGMGBTUggjnj4CQ6CsmxW7
+         54Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=69ttibL9r/y/UWLlZYU/dvsb3ho1ANknfZxnaYGPTwI=;
+        b=LjINQinXnIAmaMi9CfV3lztg7jkj3Abm9+wOrxxyJSAXlsB4YmhAwIj+d5T78ctqd3
+         HpohW1g9cytu7eyBgLevLx7qh5CBnCgW6lxiq/Ao3XKNByaK2P4mg6NcNu9BPO5uM38g
+         nlxhxAPXRqApnZHbJBl2Kr/Ig76NvFm/bwk6394iK0migm4fW5gsI0wD1/GQoIgqTBSC
+         m2/hu5ta3rQ+o9T7XYFTd9pEpErbsWKIlbR20K5/I7bP7Xl0gHbihPNxhp6LYKhsuj5e
+         x251BkpP/lWW3bh6SNc+lRW6wjZUqMbqhFgPNEbfdOGVFkzLDQ3BRk6CcDyXSemapGCJ
+         yz5g==
+X-Gm-Message-State: AOAM531NioVVMwF6mNWD5MbfiR9AG5y+P4m2Ys5NqUoMlhack3eByWFO
+        5QiGEs72uiN+faxCMCqiBgA=
+X-Google-Smtp-Source: ABdhPJyLfXRzzkVHFRBzfNXlHKPiNcE1TAgx4z07mJFqt2Z9gYK7jqeeTX2fpWAe5zueSTcPsX8irA==
+X-Received: by 2002:a05:620a:1998:: with SMTP id bm24mr28464979qkb.171.1628604307930;
+        Tue, 10 Aug 2021 07:05:07 -0700 (PDT)
+Received: from localhost.localdomain (ec2-35-169-212-159.compute-1.amazonaws.com. [35.169.212.159])
+        by smtp.gmail.com with ESMTPSA id e6sm4223390qtw.35.2021.08.10.07.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 07:05:07 -0700 (PDT)
+From:   SeongJae Park <sj38.park@gmail.com>
+To:     shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        SeongJae Park <sjpark@amazon.de>
+Subject: [PATCH] selftests/kselftest/runner/run_one(): Allow running non-executable files
+Date:   Tue, 10 Aug 2021 14:04:59 +0000
+Message-Id: <20210810140459.23990-1-sj38.park@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 11:20:50AM +0000, SeongJae Park wrote:
-> From: SeongJae Park <sjpark@amazon.de>
-> 
-> Commit 04edafbc0c07 ("mm/damon: add user space selftests") of
-> linux-mm[1] gives no execute permission to 'debugfs_attrs.sh' file.
-> This results in a DAMON selftest failure as below:
-> 
->     $ make -C tools/testing/selftests/damon run_tests
->     make: Entering directory '/home/sjpark/linux/tools/testing/selftests/damon'
->     TAP version 13
->     1..1
->     # selftests: damon: debugfs_attrs.sh
->     # Warning: file debugfs_attrs.sh is not executable, correct this.
->     not ok 1 selftests: damon: debugfs_attrs.sh
->     make: Leaving directory '/home/sjpark/linux/tools/testing/selftests/damon'
-> 
-> To solve the problem, this commit adds the execute permission for
-> 'debugfs_attrs.sh' file.
-> 
-> [1] https://github.com/hnaz/linux-mm/commit/04edafbc0c07
-> 
-> Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> ---
->  tools/testing/selftests/damon/debugfs_attrs.sh | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
-> 
-> diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-> old mode 100644
-> new mode 100755
-> -- 
-> 2.17.1
-> 
+From: SeongJae Park <sjpark@amazon.de>
 
-Why not fix the tools to execute the file properly as changing the mode
-of a file does not work well with all tools that we use (i.e. patch
-files.)
+When running a test program, 'run_one()' checks if the program has the
+execution permission and fails if it doesn't.  However, it's easy to
+mistakenly missing the permission, as some common tools like 'diff'
+don't support the permission change well[1].  Compared to that, making
+mistakes in the test program's path would only rare, as those are
+explicitly listed in 'TEST_PROGS'.  Therefore, it might make more sense
+to resolve the situation on our own and run the program.
 
-thanks,
+For the reason, this commit makes the test program runner function to
+still print the warning message but run the program after giving the
+execution permission in the case.  To make nothing corrupted, it also
+restores the permission after running it.
 
-greg k-h
+[1] https://lore.kernel.org/mm-commits/YRJisBs9AunccCD4@kroah.com/
+
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+ tools/testing/selftests/kselftest/runner.sh | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index cc9c846585f0..2eb31e945709 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -65,15 +65,16 @@ run_one()
+ 
+ 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
+ 	echo "# $TEST_HDR_MSG"
+-	if [ ! -x "$TEST" ]; then
+-		echo -n "# Warning: file $TEST is "
+-		if [ ! -e "$TEST" ]; then
+-			echo "missing!"
+-		else
+-			echo "not executable, correct this."
+-		fi
++	if [ ! -e "$TEST" ]; then
++		echo "# Warning: file $TEST is missing!"
+ 		echo "not ok $test_num $TEST_HDR_MSG"
+ 	else
++		permission_added="false"
++		if [ ! -x "$TEST" ]; then
++			echo "# Warning: file $TEST is not executable"
++			chmod u+x "$TEST"
++			permission_added="true"
++		fi
+ 		cd `dirname $TEST` > /dev/null
+ 		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
+ 			tap_prefix >&4) 3>&1) |
+@@ -88,6 +89,9 @@ run_one()
+ 		else
+ 			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
+ 		fi)
++		if [ "$permission_added" = "true" ]; then
++			chmod u-x "$TEST"
++		fi
+ 		cd - >/dev/null
+ 	fi
+ }
+-- 
+2.17.1
+
