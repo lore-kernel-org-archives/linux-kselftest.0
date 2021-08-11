@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B78CC4338F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 12:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0C00C43216
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 12:32:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DC8661058
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 12:31:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 945686108C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 12:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbhHKMba (ORCPT
+        id S229839AbhHKMch (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Aug 2021 08:31:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43739 "EHLO
+        Wed, 11 Aug 2021 08:32:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38060 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230242AbhHKMbM (ORCPT
+        by vger.kernel.org with ESMTP id S229685AbhHKMcW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:31:12 -0400
+        Wed, 11 Aug 2021 08:32:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628685048;
+        s=mimecast20190719; t=1628685118;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4e6sjxP1xMCtgKIkc/C7Ht738Uh5NYfem9ykOOCFrHo=;
-        b=Ary+uH/D/YBSoN8vjgBwvPbAiHeqQ2UhFGeRqpeiCg9GqNLk++Cnv5MLYwnpOyBe+gsTGq
-        C+t+LvmnRZ6sYqiIv2MUdnyRfoNNr02o1UIPoq3SVQKCZ6Vnj0M+XSeXInzIv6u6nIpmoc
-        Z3Wt1+RHPfPlvwrytc7gKhuUU+zkslU=
+        bh=B3KINp9sJXHMx11mNGO2VKuCz+lk1/b/SrY8FybMbTQ=;
+        b=ZZQ93Bi2ZCqoKcurQhFFgFrICvN1CtKMVjXj+NT7SRkOIoLmB6ji1hu3E41fJZPgbssBiD
+        kQfpVAffogC7MrWox6M4XLSen3FjC/Cf8/fBxiygIFXRbeQuoeQlu+tCJ9fFGToWerQk4o
+        pYDA5+BwA7b+IJgQgBxo+8GdB3AaBTE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-559-vy3N7G0qPJ-MzSfqhPkfZQ-1; Wed, 11 Aug 2021 08:30:45 -0400
-X-MC-Unique: vy3N7G0qPJ-MzSfqhPkfZQ-1
+ us-mta-26-fwJw_Al-OcqEIO14FfxxRQ-1; Wed, 11 Aug 2021 08:29:44 -0400
+X-MC-Unique: fwJw_Al-OcqEIO14FfxxRQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DAD40801A92;
-        Wed, 11 Aug 2021 12:30:41 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0E7F6192D788;
+        Wed, 11 Aug 2021 12:29:42 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.35.206.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EAFB95D9C6;
-        Wed, 11 Aug 2021 12:30:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CDF45D9C6;
+        Wed, 11 Aug 2021 12:29:35 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Kieran Bingham <kbingham@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Kieran Bingham <kbingham@kernel.org>,
         linux-doc@vger.kernel.org (open list:DOCUMENTATION),
         Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
-Date:   Wed, 11 Aug 2021 15:29:27 +0300
-Message-Id: <20210811122927.900604-7-mlevitsk@redhat.com>
+Subject: [PATCH v3 1/6] KVM: SVM: split svm_handle_invalid_exit
+Date:   Wed, 11 Aug 2021 15:29:22 +0300
+Message-Id: <20210811122927.900604-2-mlevitsk@redhat.com>
 In-Reply-To: <20210811122927.900604-1-mlevitsk@redhat.com>
 References: <20210811122927.900604-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -79,93 +79,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Modify debug_regs test to create a pending interrupt
-and see that it is blocked when single stepping is done
-with KVM_GUESTDBG_BLOCKIRQ
+Split the check for having a vmexit handler to svm_check_exit_valid,
+and make svm_handle_invalid_exit only handle a vmexit that is
+already not valid.
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- .../testing/selftests/kvm/x86_64/debug_regs.c | 24 ++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ arch/x86/kvm/svm/svm.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-index 6097a8283377..5f078db1bcba 100644
---- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
-+++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-@@ -8,12 +8,15 @@
- #include <string.h>
- #include "kvm_util.h"
- #include "processor.h"
-+#include "apic.h"
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 7b58e445a967..e45259177009 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3236,12 +3236,14 @@ static void dump_vmcb(struct kvm_vcpu *vcpu)
+ 	       "excp_to:", save->last_excp_to);
+ }
  
- #define VCPU_ID 0
- 
- #define DR6_BD		(1 << 13)
- #define DR7_GD		(1 << 13)
- 
-+#define IRQ_VECTOR 0xAA
-+
- /* For testing data access debug BP */
- uint32_t guest_value;
- 
-@@ -21,6 +24,11 @@ extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
- 
- static void guest_code(void)
+-static int svm_handle_invalid_exit(struct kvm_vcpu *vcpu, u64 exit_code)
++static bool svm_check_exit_valid(struct kvm_vcpu *vcpu, u64 exit_code)
  {
-+	/* Create a pending interrupt on current vCPU */
-+	x2apic_enable();
-+	x2apic_write_reg(APIC_ICR, APIC_DEST_SELF | APIC_INT_ASSERT |
-+			 APIC_DM_FIXED | IRQ_VECTOR);
-+
- 	/*
- 	 * Software BP tests.
- 	 *
-@@ -38,12 +46,19 @@ static void guest_code(void)
- 		     "mov %%rax,%0;\n\t write_data:"
- 		     : "=m" (guest_value) : : "rax");
+-	if (exit_code < ARRAY_SIZE(svm_exit_handlers) &&
+-	    svm_exit_handlers[exit_code])
+-		return 0;
++	return (exit_code < ARRAY_SIZE(svm_exit_handlers) &&
++		svm_exit_handlers[exit_code]);
++}
  
--	/* Single step test, covers 2 basic instructions and 2 emulated */
-+	/*
-+	 * Single step test, covers 2 basic instructions and 2 emulated
-+	 *
-+	 * Enable interrupts during the single stepping to see that
-+	 * pending interrupt we raised is not handled due to KVM_GUESTDBG_BLOCKIRQ
-+	 */
- 	asm volatile("ss_start: "
-+		     "sti\n\t"
- 		     "xor %%eax,%%eax\n\t"
- 		     "cpuid\n\t"
- 		     "movl $0x1a0,%%ecx\n\t"
- 		     "rdmsr\n\t"
-+		     "cli\n\t"
- 		     : : : "eax", "ebx", "ecx", "edx");
++static int svm_handle_invalid_exit(struct kvm_vcpu *vcpu, u64 exit_code)
++{
+ 	vcpu_unimpl(vcpu, "svm: unexpected exit reason 0x%llx\n", exit_code);
+ 	dump_vmcb(vcpu);
+ 	vcpu->run->exit_reason = KVM_EXIT_INTERNAL_ERROR;
+@@ -3249,14 +3251,13 @@ static int svm_handle_invalid_exit(struct kvm_vcpu *vcpu, u64 exit_code)
+ 	vcpu->run->internal.ndata = 2;
+ 	vcpu->run->internal.data[0] = exit_code;
+ 	vcpu->run->internal.data[1] = vcpu->arch.last_vmentry_cpu;
+-
+-	return -EINVAL;
++	return 0;
+ }
  
- 	/* DR6.BD test */
-@@ -72,11 +87,13 @@ int main(void)
- 	uint64_t cmd;
- 	int i;
- 	/* Instruction lengths starting at ss_start */
--	int ss_size[4] = {
-+	int ss_size[6] = {
-+		1,		/* sti*/
- 		2,		/* xor */
- 		2,		/* cpuid */
- 		5,		/* mov */
- 		2,		/* rdmsr */
-+		1,		/* cli */
- 	};
+ int svm_invoke_exit_handler(struct kvm_vcpu *vcpu, u64 exit_code)
+ {
+-	if (svm_handle_invalid_exit(vcpu, exit_code))
+-		return 0;
++	if (!svm_check_exit_valid(vcpu, exit_code))
++		return svm_handle_invalid_exit(vcpu, exit_code);
  
- 	if (!kvm_check_cap(KVM_CAP_SET_GUEST_DEBUG)) {
-@@ -154,7 +171,8 @@ int main(void)
- 	for (i = 0; i < (sizeof(ss_size) / sizeof(ss_size[0])); i++) {
- 		target_rip += ss_size[i];
- 		CLEAR_DEBUG();
--		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP;
-+		debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_SINGLESTEP |
-+				KVM_GUESTDBG_BLOCKIRQ;
- 		debug.arch.debugreg[7] = 0x00000400;
- 		APPLY_DEBUG();
- 		vcpu_run(vm, VCPU_ID);
+ #ifdef CONFIG_RETPOLINE
+ 	if (exit_code == SVM_EXIT_MSR)
 -- 
 2.26.3
 
