@@ -2,133 +2,176 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0C00C43216
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 12:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87613C4338F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 13:10:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 945686108C
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 12:32:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67B4760D07
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Aug 2021 13:10:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbhHKMch (ORCPT
+        id S230398AbhHKNLO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Aug 2021 08:32:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38060 "EHLO
+        Wed, 11 Aug 2021 09:11:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34049 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229685AbhHKMcW (ORCPT
+        by vger.kernel.org with ESMTP id S230177AbhHKNLN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:32:22 -0400
+        Wed, 11 Aug 2021 09:11:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628685118;
+        s=mimecast20190719; t=1628687449;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=B3KINp9sJXHMx11mNGO2VKuCz+lk1/b/SrY8FybMbTQ=;
-        b=ZZQ93Bi2ZCqoKcurQhFFgFrICvN1CtKMVjXj+NT7SRkOIoLmB6ji1hu3E41fJZPgbssBiD
-        kQfpVAffogC7MrWox6M4XLSen3FjC/Cf8/fBxiygIFXRbeQuoeQlu+tCJ9fFGToWerQk4o
-        pYDA5+BwA7b+IJgQgBxo+8GdB3AaBTE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-26-fwJw_Al-OcqEIO14FfxxRQ-1; Wed, 11 Aug 2021 08:29:44 -0400
-X-MC-Unique: fwJw_Al-OcqEIO14FfxxRQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0E7F6192D788;
-        Wed, 11 Aug 2021 12:29:42 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.35.206.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CDF45D9C6;
-        Wed, 11 Aug 2021 12:29:35 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
+        bh=H8sWpMxpIZDBmpCGl8ZAafxxVgEbTAfN82/liA2rLIM=;
+        b=OJLSK2uA8RLZWckwNdu7wc+6Kp1CgzcTB0IYh7bqJOA+Qmm2jTeACwTwTaDPOqaMu/9b46
+        /tLS+a7v2Bo3HYhU6vU7Kr18W4lO8RUzufu/E9qO7eFZtIJaVh1xa9X4F/0MysOk3kA+bx
+        yvtb3x7knT7YGy5LU+90HZUq9VLdIWk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-361-ZtmvKlYGPViGBkgY3yC4Dg-1; Wed, 11 Aug 2021 09:10:48 -0400
+X-MC-Unique: ZtmvKlYGPViGBkgY3yC4Dg-1
+Received: by mail-ed1-f72.google.com with SMTP id e3-20020a50ec830000b02903be5be2fc73so1154780edr.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Aug 2021 06:10:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H8sWpMxpIZDBmpCGl8ZAafxxVgEbTAfN82/liA2rLIM=;
+        b=olA7D9Zc/b2fbX2b69Zr+C2Byk74LsODIFd3Ox1cnhjoKZ9GOW8wdwnoaxFt6b7MJi
+         +7Pl/+uMM/uW7MLDfzmqRHAp7rYC9TYXqH2SVXDXQ1vzP5voqv0h2zybT2gPegmKhws0
+         04t0qinVqu1RE2CJTsC+FvvoRdHmdlcfPokj+C2+lX9q2DwX3YMGcnUtvZZYbgjHuBnx
+         t+5DWOZ4fKx3GvYF34KvB4fa5NEzhkLU6x9EfvzBKp0JyHA2UfSuVsPtxMyBxHojp36M
+         Lb1/PoBAwoyf3ncORQv/a+2GqWN69jxt1xZ5uAkcsxRft0q3//7tQUBhgXuurE7xTc6B
+         3zhA==
+X-Gm-Message-State: AOAM533XakL8AfvEMsPn6NtAYNyUj0utsmOqPSDaVHm32mzY9KiJp4F3
+        OEd/lZYwIlRf8rorAUsFjL6eb+zYLAS6/1t7v1Y8MpykQXjacxEq4fjbGHQS2m31nhzIXjFoDTW
+        zHdRTByf2/iQJgQd4Bt0ad1SITwQn
+X-Received: by 2002:a17:907:9602:: with SMTP id gb2mr3636077ejc.354.1628687446285;
+        Wed, 11 Aug 2021 06:10:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyFPjH6U5yQfTCMV1bM5Bqc+L0/4ww4/tZsl0Q75Sik3+sIXSUET2NDh+BgQ9F4aGHgJZzQcg==
+X-Received: by 2002:a17:907:9602:: with SMTP id gb2mr3636035ejc.354.1628687445979;
+        Wed, 11 Aug 2021 06:10:45 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.gmail.com with ESMTPSA id f15sm8159390ejt.75.2021.08.11.06.10.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Aug 2021 06:10:45 -0700 (PDT)
+Subject: Re: [PATCH v3 0/6] KVM: my debug patch queue
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
 Cc:     Kieran Bingham <kbingham@kernel.org>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Andrew Jones <drjones@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Sean Christopherson <seanjc@google.com>,
         Ingo Molnar <mingo@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
         Johannes Berg <johannes.berg@intel.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
         Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Joerg Roedel <joro@8bytes.org>,
         Yang Weijiang <weijiang.yang@intel.com>,
         linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v3 1/6] KVM: SVM: split svm_handle_invalid_exit
-Date:   Wed, 11 Aug 2021 15:29:22 +0300
-Message-Id: <20210811122927.900604-2-mlevitsk@redhat.com>
-In-Reply-To: <20210811122927.900604-1-mlevitsk@redhat.com>
 References: <20210811122927.900604-1-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <1646763f-9f92-bb67-f358-9b17c8000b12@redhat.com>
+Date:   Wed, 11 Aug 2021 15:10:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20210811122927.900604-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Split the check for having a vmexit handler to svm_check_exit_valid,
-and make svm_handle_invalid_exit only handle a vmexit that is
-already not valid.
+On 11/08/21 14:29, Maxim Levitsky wrote:
+> Hi!
+> 
+> I would like to publish two debug features which were needed for other stuff
+> I work on.
+> 
+> One is the reworked lx-symbols script which now actually works on at least
+> gdb 9.1 (gdb 9.2 was reported to fail to load the debug symbols from the kernel
+> for some reason, not related to this patch) and upstream qemu.
+> 
+> The other feature is the ability to trap all guest exceptions (on SVM for now)
+> and see them in kvmtrace prior to potential merge to double/triple fault.
+> 
+> This can be very useful and I already had to manually patch KVM a few
+> times for this.
+> I will, once time permits, implement this feature on Intel as well.
+> 
+> V2:
+> 
+>   * Some more refactoring and workarounds for lx-symbols script
+> 
+>   * added KVM_GUESTDBG_BLOCKIRQ flag to enable 'block interrupts on
+>     single step' together with KVM_CAP_SET_GUEST_DEBUG2 capability
+>     to indicate which guest debug flags are supported.
+> 
+>     This is a replacement for unconditional block of interrupts on single
+>     step that was done in previous version of this patch set.
+>     Patches to qemu to use that feature will be sent soon.
+> 
+>   * Reworked the the 'intercept all exceptions for debug' feature according
+>     to the review feedback:
+> 
+>     - renamed the parameter that enables the feature and
+>       moved it to common kvm module.
+>       (only SVM part is currently implemented though)
+> 
+>     - disable the feature for SEV guests as was suggested during the review
+>     - made the vmexit table const again, as was suggested in the review as well.
+> 
+> V3:
+>   * Modified a selftest to cover the KVM_GUESTDBG_BLOCKIRQ
+>   * Rebased on kvm/queue
+> 
+> Best regards,
+>          Maxim Levitsky
+> 
+> Maxim Levitsky (6):
+>    KVM: SVM: split svm_handle_invalid_exit
+>    KVM: x86: add force_intercept_exceptions_mask
+>    KVM: SVM: implement force_intercept_exceptions_mask
+>    scripts/gdb: rework lx-symbols gdb script
+>    KVM: x86: implement KVM_GUESTDBG_BLOCKIRQ
+>    KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
+> 
+>   Documentation/virt/kvm/api.rst                |   1 +
+>   arch/x86/include/asm/kvm_host.h               |   5 +-
+>   arch/x86/include/uapi/asm/kvm.h               |   1 +
+>   arch/x86/kvm/svm/svm.c                        |  87 +++++++-
+>   arch/x86/kvm/svm/svm.h                        |   6 +-
+>   arch/x86/kvm/x86.c                            |  12 +-
+>   arch/x86/kvm/x86.h                            |   2 +
+>   kernel/module.c                               |   8 +-
+>   scripts/gdb/linux/symbols.py                  | 203 ++++++++++++------
+>   .../testing/selftests/kvm/x86_64/debug_regs.c |  24 ++-
+>   10 files changed, 266 insertions(+), 83 deletions(-)
+> 
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/svm/svm.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+Queued 1-5-6.
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 7b58e445a967..e45259177009 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3236,12 +3236,14 @@ static void dump_vmcb(struct kvm_vcpu *vcpu)
- 	       "excp_to:", save->last_excp_to);
- }
- 
--static int svm_handle_invalid_exit(struct kvm_vcpu *vcpu, u64 exit_code)
-+static bool svm_check_exit_valid(struct kvm_vcpu *vcpu, u64 exit_code)
- {
--	if (exit_code < ARRAY_SIZE(svm_exit_handlers) &&
--	    svm_exit_handlers[exit_code])
--		return 0;
-+	return (exit_code < ARRAY_SIZE(svm_exit_handlers) &&
-+		svm_exit_handlers[exit_code]);
-+}
- 
-+static int svm_handle_invalid_exit(struct kvm_vcpu *vcpu, u64 exit_code)
-+{
- 	vcpu_unimpl(vcpu, "svm: unexpected exit reason 0x%llx\n", exit_code);
- 	dump_vmcb(vcpu);
- 	vcpu->run->exit_reason = KVM_EXIT_INTERNAL_ERROR;
-@@ -3249,14 +3251,13 @@ static int svm_handle_invalid_exit(struct kvm_vcpu *vcpu, u64 exit_code)
- 	vcpu->run->internal.ndata = 2;
- 	vcpu->run->internal.data[0] = exit_code;
- 	vcpu->run->internal.data[1] = vcpu->arch.last_vmentry_cpu;
--
--	return -EINVAL;
-+	return 0;
- }
- 
- int svm_invoke_exit_handler(struct kvm_vcpu *vcpu, u64 exit_code)
- {
--	if (svm_handle_invalid_exit(vcpu, exit_code))
--		return 0;
-+	if (!svm_check_exit_valid(vcpu, exit_code))
-+		return svm_handle_invalid_exit(vcpu, exit_code);
- 
- #ifdef CONFIG_RETPOLINE
- 	if (exit_code == SVM_EXIT_MSR)
--- 
-2.26.3
+For patches 2 and 3, please add VMX support too.
+
+For patch 4, it's not KVM :) so please submit it separately.
+
+Paolo
 
