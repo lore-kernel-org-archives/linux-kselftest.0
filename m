@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81137C4338F
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80572C4320A
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C82160F21
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6831A60E9B
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238811AbhHNRlo (ORCPT
+        id S238803AbhHNRl5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 14 Aug 2021 13:41:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51384 "EHLO
+        Sat, 14 Aug 2021 13:41:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36054 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233212AbhHNRlo (ORCPT
+        by vger.kernel.org with ESMTP id S238869AbhHNRls (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 14 Aug 2021 13:41:44 -0400
+        Sat, 14 Aug 2021 13:41:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628962874;
+        s=mimecast20190719; t=1628962879;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=S/27zO2jNZB6YHStofzFjSmTX0cZBNRgUk+CUXiaBjg=;
-        b=N2+B5F9KRfKF8XW5cTNMxrEK8PWEfaKR9exJdAXKr7XgOdkcfmOW6/pPgOdBfzftdHKWGu
-        BYy+RDZx5n3UbNvvH5jp6jv4TIfFR240wpGyUgRMPblLderj6PPn/8FmSYY/0gdDzk3w+G
-        jeO/fiK3+H/4USLqSOsMsw06IHxr/Ek=
+         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
+        bh=4yRsTh9EdVKAqHAWzU6qjD4UdtAIhyDlZrJEq8gJpiM=;
+        b=i/ygjPER+X51WVjNnS+arMY9TZizl9G8QKwsR0q9i0kinjeHrrDssFsPlAX++V7aufxRni
+        syr8+0wfVwhftjFzyJzB+lgt14pTMwskd2REkuDyVsRkegfykNXax9ikJ/d3XOuQdN3KpM
+        UcihZaj0n3Kn8FFK3PQDVgbTF75pIoo=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-524-fmMW-tygPuCf3WEyvYCEsA-1; Sat, 14 Aug 2021 13:41:13 -0400
-X-MC-Unique: fmMW-tygPuCf3WEyvYCEsA-1
+ us-mta-462-Zq0tzinfMFyMnANbWMijmg-1; Sat, 14 Aug 2021 13:41:18 -0400
+X-MC-Unique: Zq0tzinfMFyMnANbWMijmg-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D080E8799EB;
-        Sat, 14 Aug 2021 17:41:11 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4C362801B3C;
+        Sat, 14 Aug 2021 17:41:16 +0000 (UTC)
 Received: from llong.com (unknown [10.22.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 325A6105C89F;
-        Sat, 14 Aug 2021 17:41:02 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28BD810016F4;
+        Sat, 14 Aug 2021 17:41:14 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -54,75 +55,142 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH-cgroup v5 0/6] cgroup/cpuset: Add new cpuset partition type & empty effecitve cpus
-Date:   Sat, 14 Aug 2021 13:38:42 -0400
-Message-Id: <20210814173848.11540-1-longman@redhat.com>
+Subject: [PATCH v5 2/6] cgroup/cpuset: Show invalid partition reason string
+Date:   Sat, 14 Aug 2021 13:38:44 -0400
+Message-Id: <20210814173848.11540-3-longman@redhat.com>
+In-Reply-To: <20210814173848.11540-1-longman@redhat.com>
+References: <20210814173848.11540-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-v5:
- - Rebased to the latest for-5.15 branch of cgroup git tree and drop the
-   1st v4 patch as it has been merged.
- - Update patch 1 to always allow changing partition root back to member
-   even if it invalidates child partitions undeneath it.
- - Adjust the empty effective cpu partition patch to not allow 0 effective
-   cpu for terminal partition which will make it invalid).
- - Add a new patch to enable reading of cpuset.cpus.partition to display
-   the reason that causes invalid partition.
- - Adjust the documentation and testing patch accordingly.
+There are a number of different reasons which can cause a partition to
+become invalid. A user seeing an invalid partition may not know exactly
+why. To help user to get a better understanding of the underlying reason,
+The cpuset.cpus.partition control file, when read, will now report the
+reason why a partition become invalid. When a partition does become
+invalid, reading the control file will show "root invalid (<reason>)"
+where <reason> is a string that describes why the partition is invalid.
 
-v4:
- - Rebased to the for-5.15 branch of cgroup git tree and dropped the
-   first 3 patches of v3 series which have been merged.
- - Beside prohibiting violation of cpu exclusivity rule, allow arbitrary
-   changes to cpuset.cpus of a partition root and force the partition root
-   to become invalid in case any of the partition root constraints
-   are violated. The documentation file and self test are modified
-   accordingly.
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/cgroup/cpuset.c | 46 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 43 insertions(+), 3 deletions(-)
 
-This patchset makes four enhancements to the cpuset v2 code.
-
- Patch 1: Properly handle partition root tree and make partition
- invalid in case changes to cpuset.cpus violate any of the partition
- root constraints.
-
- Patch 2: Enable the "cpuset.cpus.partition" file to show the reason
- that causes invalid partition like "root invalid (No cpu available
- due to hotplug)".
-
- Patch 3: Add a new partition state "isolated" to create a partition
- root without load balancing. This is for handling intermitten workloads
- that have a strict low latency requirement.
-
- Patch 4: Allow partition roots that are not the top cpuset to distribute
- all its cpus to child partitions as long as there is no task associated
- with that partition root. This allows more flexibility for middleware
- to manage multiple partitions.
-
-Patch 5 updates the cgroup-v2.rst file accordingly. Patch 6 adds a new
-cpuset test to test the new cpuset partition code.
-
-Waiman Long (6):
-  cgroup/cpuset: Properly transition to invalid partition
-  cgroup/cpuset: Show invalid partition reason string
-  cgroup/cpuset: Add a new isolated cpus.partition type
-  cgroup/cpuset: Allow non-top parent partition to distribute out all
-    CPUs
-  cgroup/cpuset: Update description of cpuset.cpus.partition in
-    cgroup-v2.rst
-  kselftest/cgroup: Add cpuset v2 partition root state test
-
- Documentation/admin-guide/cgroup-v2.rst       | 116 +--
- kernel/cgroup/cpuset.c                        | 347 ++++++---
- tools/testing/selftests/cgroup/Makefile       |   5 +-
- .../selftests/cgroup/test_cpuset_prs.sh       | 663 ++++++++++++++++++
- tools/testing/selftests/cgroup/wait_inotify.c |  86 +++
- 5 files changed, 1068 insertions(+), 149 deletions(-)
- create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
- create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 7705950ad70b..5fec3c96465c 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -78,6 +78,24 @@ struct fmeter {
+ 	spinlock_t lock;	/* guards read or write of above */
+ };
+ 
++/*
++ * Invalid partition error code
++ */
++enum prs_errcode {
++	PERR_NONE = 0,
++	PERR_INVCPUS,
++	PERR_NOCPUS,
++	PERR_PARENT,
++	PERR_HOTPLUG,
++};
++
++static const char * const perr_strings[] = {
++	[PERR_INVCPUS] = "Invalid change to cpuset.cpus",
++	[PERR_PARENT]  = "Parent is no longer a partition root",
++	[PERR_NOCPUS]  = "Parent unable to distribute cpu downstream",
++	[PERR_HOTPLUG] = "No cpu available due to hotplug",
++};
++
+ struct cpuset {
+ 	struct cgroup_subsys_state css;
+ 
+@@ -163,6 +181,9 @@ struct cpuset {
+ 
+ 	/* Handle for cpuset.cpus.partition */
+ 	struct cgroup_file partition_file;
++
++	/* Invalid partiton error code, not lock protected */
++	enum prs_errcode prs_err;
+ };
+ 
+ /*
+@@ -272,8 +293,13 @@ static inline int is_partition_root(const struct cpuset *cs)
+ static inline void notify_partition_change(struct cpuset *cs,
+ 					   int old_prs, int new_prs)
+ {
+-	if (old_prs != new_prs)
+-		cgroup_file_notify(&cs->partition_file);
++	if (old_prs == new_prs)
++		return;
++	cgroup_file_notify(&cs->partition_file);
++
++	/* Reset prs_err if not invalid */
++	if (new_prs != PRS_ERROR)
++		WRITE_ONCE(cs->prs_err, PERR_NONE);
+ }
+ 
+ static struct cpuset top_cpuset = {
+@@ -1243,6 +1269,8 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+ 					      cpu_active_mask))
+ 				part_error = true;
+ 			cpumask_copy(tmp->addmask, parent->effective_cpus);
++			if ((READ_ONCE(cpuset->prs_err) == PERR_NONE) && part_error)
++				WRITE_ONCE(cpuset->prs_err, PERR_INVCPUS);
+ 		}
+ 	} else {
+ 		/*
+@@ -1264,6 +1292,8 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
+ 		part_error = (is_partition_root(cpuset) &&
+ 			      !parent->nr_subparts_cpus) ||
+ 			     cpumask_equal(tmp->addmask, parent->effective_cpus);
++		if (is_partition_root(cpuset) && part_error)
++			WRITE_ONCE(cpuset->prs_err, PERR_NOCPUS);
+ 	}
+ 
+ 	if (cmd == partcmd_update) {
+@@ -1427,6 +1457,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
+ 				 * When parent is invalid, it has to be too.
+ 				 */
+ 				new_prs = PRS_ERROR;
++				WRITE_ONCE(cp->prs_err, PERR_PARENT);
+ 				break;
+ 			}
+ 		}
+@@ -2551,6 +2582,7 @@ static s64 cpuset_read_s64(struct cgroup_subsys_state *css, struct cftype *cft)
+ static int sched_partition_show(struct seq_file *seq, void *v)
+ {
+ 	struct cpuset *cs = css_cs(seq_css(seq));
++	const char *err;
+ 
+ 	switch (cs->partition_root_state) {
+ 	case PRS_ENABLED:
+@@ -2560,7 +2592,11 @@ static int sched_partition_show(struct seq_file *seq, void *v)
+ 		seq_puts(seq, "member\n");
+ 		break;
+ 	case PRS_ERROR:
+-		seq_puts(seq, "root invalid\n");
++		err = perr_strings[READ_ONCE(cs->prs_err)];
++		if (err)
++			seq_printf(seq, "root invalid (%s)\n", err);
++		else
++			seq_puts(seq, "root invalid\n");
+ 		break;
+ 	}
+ 	return 0;
+@@ -3160,6 +3196,10 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
+ 			spin_lock_irq(&callback_lock);
+ 			cs->partition_root_state = PRS_ERROR;
+ 			spin_unlock_irq(&callback_lock);
++			if (parent->partition_root_state == PRS_ERROR)
++				WRITE_ONCE(cs->prs_err, PERR_PARENT);
++			else
++				WRITE_ONCE(cs->prs_err, PERR_HOTPLUG);
+ 			notify_partition_change(cs, old_prs, PRS_ERROR);
+ 		}
+ 		cpuset_force_rebuild();
 -- 
 2.18.1
 
