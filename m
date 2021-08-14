@@ -2,65 +2,141 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 459ECC4338F
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 01:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1CE7C4338F
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 04:28:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25AC160C3E
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 01:12:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEC2560E96
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 04:28:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236211AbhHNBMz (ORCPT
+        id S230220AbhHNE2c (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 13 Aug 2021 21:12:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59334 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236038AbhHNBMz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Aug 2021 21:12:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 32E8A6109D;
-        Sat, 14 Aug 2021 01:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628903548;
-        bh=jCtPAJRypDQBzXlmJwDbG2/A5Fb/1o9M5CDasKbqzEc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=p+MAKuY61nj5Jx4XA4ktaBoNKAn2iWsEGnrNBct5kVRW9AeOij6vP+fJulzd/cPdN
-         2sb8/CDZqeCB0n8XUHyjGRre7gsPZSIoaPQfChgB+nztPU3L8x+BTNd2MXOEzESjEe
-         WZZDxd0+/aTLv+vx6eOmxDss4K/6HUMVfRhA8t2t+ksrTxI3sUO6RfhXMcznKb0wN4
-         DCW50stYV+HJ5l4Fxmtj6KSdA721r5Ae8kysFBdIoQtT6GcoM4m6XwTU4qJt0i8LCx
-         LRK2XIZAwQ4WGU0X+71lSI71AvHmzKPgVDREZbJcB1v3qqQd44UwYXZJI0v/9idLXX
-         AvPvwq7jTxgkQ==
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.14-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <f27686fd-6fb5-a906-b2d0-1e07cdf83594@linuxfoundation.org>
-References: <f27686fd-6fb5-a906-b2d0-1e07cdf83594@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <f27686fd-6fb5-a906-b2d0-1e07cdf83594@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.14-rc6
-X-PR-Tracked-Commit-Id: 567c39047dbee341244fe3bf79fea24ee0897ff9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a83ed2257774071e2d821ec361954782a7c01f8f
-Message-Id: <162890354817.25277.15076177438444208700.pr-tracker-bot@kernel.org>
-Date:   Sat, 14 Aug 2021 01:12:28 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Sat, 14 Aug 2021 00:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229670AbhHNE2b (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 14 Aug 2021 00:28:31 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAC8C0617AD
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Aug 2021 21:28:03 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id a5so14577187plh.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Aug 2021 21:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98Zw1c+cW5zD1PWqvSDU2uTGAumLzHONU8NOH1AIF5I=;
+        b=Q+n9F+W0iE4jTCL7Mvp/I7AUBl/CYg8DmsQPZ4i6rESsU+NiRwyMPe1ELQzycWiJ8T
+         iggFvHBQbvcCOT6Sua9JJFxeOEd3LtZTdAKpsa4WRUlg7zpCdxLRuqsUlzrS6po9rGfz
+         jXLRF2llxEaxYAf7qGq82p826zRhYLSXo7jzpsFzjGSRy9XakD7ilP5FAmc0ytA/or+0
+         ayZMEL5jOexlgyz9V90nQKpWTqfag//EM49J8A25fBmcfop3KI74YPmFKqU9on4aARwR
+         DwPvMrogbTwjkq67njC4A4Srh9Ct0YAM81FkIadcCcwJ3oOCwbuo0W1MCLLozxCTDrkG
+         +0Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=98Zw1c+cW5zD1PWqvSDU2uTGAumLzHONU8NOH1AIF5I=;
+        b=HBWIu8aOGaN1tpn/R0b6L/ysdM45y59sYpZQfgCTQngQaHWO+ipGTfILHnTWWxy7xH
+         WJDPnMHyGbUWAN7NfXOoAtsNBa937oMy4w5eWr3XJqc8kd6KFDN0qczNzAA2djdYTHmx
+         zaqLH6RyflGs/zyBK6fSeCxPUusfYGQBaubh1C2KF25FsUxHl0GE1OpTUOV8CE/cb61l
+         EjzDDYiXm88cfKgISphxiZYlycXhBhyDwXvCbeoxG2EGdY1Kn15sxdrxla4NfbfitPwp
+         5dUzbTC6p9Lquh7ovBQzzgZXQGh+Ag/d0K+Od/oD8ozdCGMHxzmsBdMEPvsVnyjo3DIw
+         CwgA==
+X-Gm-Message-State: AOAM530+zwzGnB7j/HIA/cOT8KTO+kGoMI3BgSAAPA2oKsT17wgVxTKg
+        fAurYsfYP7Tf4tTZlBQIICdIMA==
+X-Google-Smtp-Source: ABdhPJy0AfUvyfScZ2ucRHa6sdvW6SPNRE1ZDCUTnaKBo7EpZklVX/JTPRSeVA0q0AspMMzlCRwnmA==
+X-Received: by 2002:a62:5291:0:b029:397:6587:1af6 with SMTP id g139-20020a6252910000b029039765871af6mr5497726pfb.47.1628915282938;
+        Fri, 13 Aug 2021 21:28:02 -0700 (PDT)
+Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
+        by smtp.gmail.com with ESMTPSA id q21sm4420492pgk.71.2021.08.13.21.28.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 21:28:02 -0700 (PDT)
+From:   Jiang Wang <jiang.wang@bytedance.com>
+To:     netdev@vger.kernel.org
+Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
+        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Rao Shoaib <rao.shoaib@oracle.com>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v6 0/5] sockmap: add sockmap support for unix stream socket
+Date:   Sat, 14 Aug 2021 04:27:45 +0000
+Message-Id: <20210814042754.3351268-1-jiang.wang@bytedance.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 13 Aug 2021 14:28:50 -0600:
+This patch series add support for unix stream type
+for sockmap. Sockmap already supports TCP, UDP,
+unix dgram types. The unix stream support is similar
+to unix dgram.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.14-rc6
+Also add selftests for unix stream type in sockmap tests.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a83ed2257774071e2d821ec361954782a7c01f8f
 
-Thank you!
+Jiang Wang (5):
+  af_unix: add read_sock for stream socket types
+  af_unix: add unix_stream_proto for sockmap
+  selftest/bpf: add tests for sockmap with unix stream type.
+  selftest/bpf: change udp to inet in some function names
+  selftest/bpf: add new tests in sockmap for unix stream to tcp.
 
+ include/net/af_unix.h                         |  8 +-
+ net/unix/af_unix.c                            | 91 +++++++++++++++---
+ net/unix/unix_bpf.c                           | 93 ++++++++++++++-----
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 48 ++++++----
+ 4 files changed, 187 insertions(+), 53 deletions(-)
+
+v1 -> v2 :
+ - Call unhash in shutdown.
+ - Clean up unix_create1 a bit.
+ - Return -ENOTCONN if socket is not connected.
+
+v2 -> v3 :
+ - check for stream type in update_proto
+ - remove intermediate variable in __unix_stream_recvmsg
+ - fix compile warning in unix_stream_recvmsg
+
+v3 -> v4 :
+ - remove sk_is_unix_stream, just check TCP_ESTABLISHED for UNIX sockets.
+ - add READ_ONCE in unix_dgram_recvmsg
+ - remove type check in unix_stream_bpf_update_proto
+
+v4 -> v5 :
+ - add two missing READ_ONCE for sk_prot.
+
+v5 -> v6 :
+ - fix READ_ONCE by reading to a local variable first.
+
+For the series:
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+
+Also rebased on bpf-next
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.20.1
+
