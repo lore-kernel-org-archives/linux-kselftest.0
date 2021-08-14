@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB687C4320E
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8FECC43216
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A654260F9F
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D092860E9B
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 17:41:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238895AbhHNRmC (ORCPT
+        id S238920AbhHNRmG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 14 Aug 2021 13:42:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28946 "EHLO
+        Sat, 14 Aug 2021 13:42:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:44073 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238920AbhHNRlz (ORCPT
+        by vger.kernel.org with ESMTP id S238913AbhHNRlz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sat, 14 Aug 2021 13:41:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628962885;
+        s=mimecast20190719; t=1628962883;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=QJPO2HU5uJUFHj6f1j+HuYMopx4Bs0G4yXuHOyLGq7k=;
-        b=iKXXET5Uc+SXtY2Y0jR6X0ZcfJkhDzmsY7JmrAthix2OtbnpP6ZANb4JSttSoFoBONZ4Wp
-        dK9Gq+2V9lwVoJCfkFjKO+0vS13tuhOqGCD84F7bbfy7IijLYKHY2ck7kz74iO+ul9lkUg
-        gVkKS/w/IagFPyKrZcxcTDZczyS5lyI=
+        bh=4wV7V3qeD9YcjdJFq5SbCoDMmsCijaAxtKzqeyOb8Uo=;
+        b=R6eoBkV9oed4aCxJYLuXJ9gHbtebKpVuzBZbQa9hLTefDJwb1MmxEMO7alwAbXuhu58URQ
+        rzF8CdJFe96+JcsinM47WHctoeVsJEQTeMYqaAqoDo3tGBdpWSM+PDzbHe4MEaMMZFNSUW
+        FiW0zC+MQGc8RYp9cLssJFGrB61frk0=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-312-eQr1BxuFN4m-VKXaTtCHVw-1; Sat, 14 Aug 2021 13:41:23 -0400
-X-MC-Unique: eQr1BxuFN4m-VKXaTtCHVw-1
+ us-mta-123-qbvDlX_YPiewq-11W8l3gw-1; Sat, 14 Aug 2021 13:41:20 -0400
+X-MC-Unique: qbvDlX_YPiewq-11W8l3gw-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1924C107ACF5;
-        Sat, 14 Aug 2021 17:41:22 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 398888799E0;
+        Sat, 14 Aug 2021 17:41:18 +0000 (UTC)
 Received: from llong.com (unknown [10.22.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 524FC10016F4;
-        Sat, 14 Aug 2021 17:41:20 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 706D61036D14;
+        Sat, 14 Aug 2021 17:41:16 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -55,9 +55,9 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 5/6] cgroup/cpuset: Update description of cpuset.cpus.partition in cgroup-v2.rst
-Date:   Sat, 14 Aug 2021 13:38:47 -0400
-Message-Id: <20210814173848.11540-6-longman@redhat.com>
+Subject: [PATCH v5 3/6] cgroup/cpuset: Add a new isolated cpus.partition type
+Date:   Sat, 14 Aug 2021 13:38:45 -0400
+Message-Id: <20210814173848.11540-4-longman@redhat.com>
 In-Reply-To: <20210814173848.11540-1-longman@redhat.com>
 References: <20210814173848.11540-1-longman@redhat.com>
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
@@ -65,164 +65,179 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update Documentation/admin-guide/cgroup-v2.rst on the newly introduced
-"isolated" cpuset partition type as well as the ability to create
-non-top cpuset partition with no cpu allocated to it.
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=TBD
+
+commit 994fb794cb252edd124a46ca0994e37a4726a100
+Author: Waiman Long <longman@redhat.com>
+Date:   Sat, 19 Jun 2021 13:28:19 -0400
+
+    cgroup/cpuset: Add a new isolated cpus.partition type
+
+    Cpuset v1 uses the sched_load_balance control file to determine if load
+    balancing should be enabled.  Cpuset v2 gets rid of sched_load_balance
+    as its use may require disabling load balancing at cgroup root.
+
+    For workloads that require very low latency like DPDK, the latency
+    jitters caused by periodic load balancing may exceed the desired
+    latency limit.
+
+    When cpuset v2 is in use, the only way to avoid this latency cost is to
+    use the "isolcpus=" kernel boot option to isolate a set of CPUs. After
+    the kernel boot, however, there is no way to add or remove CPUs from
+    this isolated set. For workloads that are more dynamic in nature, that
+    means users have to provision enough CPUs for the worst case situation
+    resulting in excess idle CPUs.
+
+    To address this issue for cpuset v2, a new cpuset.cpus.partition type
+    "isolated" is added which allows the creation of a cpuset partition
+    without load balancing. This will allow system administrators to
+    dynamically adjust the size of isolated partition to the current need
+    of the workload without rebooting the system.
+
+    Signed-off-by: Waiman Long <longman@redhat.com>
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst | 116 +++++++++++++++---------
- 1 file changed, 71 insertions(+), 45 deletions(-)
+ kernel/cgroup/cpuset.c | 48 +++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 43 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index babbe04c8d37..9ad52f74fb12 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2091,8 +2091,9 @@ Cpuset Interface Files
- 	It accepts only the following input values when written to.
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 5fec3c96465c..d7b3eb024b84 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -193,6 +193,8 @@ struct cpuset {
+  *
+  *   1 - partition root
+  *
++ *   2 - partition root without load balancing (isolated)
++ *
+  *  -1 - invalid partition root
+  *       None of the cpus in cpus_allowed can be put into the parent's
+  *       subparts_cpus. In this case, the cpuset is not a real partition
+@@ -202,6 +204,7 @@ struct cpuset {
+  */
+ #define PRS_DISABLED		0
+ #define PRS_ENABLED		1
++#define PRS_ISOLATED		2
+ #define PRS_ERROR		-1
  
- 	  ========	================================
--	  "root"	a partition root
--	  "member"	a non-root member of a partition
-+	  "member"	Non-root member of a partition
-+	  "root"	Partition root
-+	  "isolated"	Partition root without load balancing
- 	  ========	================================
+ /*
+@@ -1298,17 +1301,22 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
  
- 	When set to be a partition root, the current cgroup is the
-@@ -2101,64 +2102,89 @@ Cpuset Interface Files
- 	partition roots themselves and their descendants.  The root
- 	cgroup is always a partition root.
+ 	if (cmd == partcmd_update) {
+ 		/*
+-		 * Check for possible transition between PRS_ENABLED
+-		 * and PRS_ERROR.
++		 * Check for possible transition between PRS_ERROR and
++		 * PRS_ENABLED/PRS_ISOLATED.
+ 		 */
+ 		switch (cpuset->partition_root_state) {
+ 		case PRS_ENABLED:
++		case PRS_ISOLATED:
+ 			if (part_error)
+ 				new_prs = PRS_ERROR;
+ 			break;
+ 		case PRS_ERROR:
+-			if (!part_error)
++			if (part_error)
++				break;
++			if (is_sched_load_balance(cpuset))
+ 				new_prs = PRS_ENABLED;
++			else
++				new_prs = PRS_ISOLATED;
+ 			break;
+ 		}
+ 	}
+@@ -1443,6 +1451,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
+ 				break;
  
--	There are constraints on where a partition root can be set.
--	It can only be set in a cgroup if all the following conditions
--	are true.
-+	When set to "isolated", the CPUs in that partition root will
-+	be in an isolated state without any load balancing from the
-+	scheduler.  Tasks in such a partition must be explicitly bound
-+	to each individual CPU.
-+
-+	There are constraints on where a partition root can be set
-+	("root" or "isolated").  It can only be set in a cgroup if all
-+	the following conditions are true.
+ 			case PRS_ENABLED:
++			case PRS_ISOLATED:
+ 				if (update_parent_subparts_cpumask(cp, partcmd_update, NULL, tmp))
+ 					update_tasks_cpumask(parent);
+ 				/*
+@@ -1468,7 +1477,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
  
- 	1) The "cpuset.cpus" is not empty and the list of CPUs are
- 	   exclusive, i.e. they are not shared by any of its siblings.
- 	2) The parent cgroup is a partition root.
--	3) The "cpuset.cpus" is also a proper subset of the parent's
-+	3) The "cpuset.cpus" is a subset of the parent's
- 	   "cpuset.cpus.effective".
- 	4) There is no child cgroups with cpuset enabled.  This is for
- 	   eliminating corner cases that have to be handled if such a
- 	   condition is allowed.
+ 		spin_lock_irq(&callback_lock);
  
--	Setting it to partition root will take the CPUs away from the
--	effective CPUs of the parent cgroup.  Once it is set, this
-+	Setting it to a partition root will take the CPUs away from
-+	the effective CPUs of the parent cgroup.  Once it is set, this
- 	file cannot be reverted back to "member" if there are any child
- 	cgroups with cpuset enabled.
+-		if (cp->nr_subparts_cpus && (new_prs != PRS_ENABLED)) {
++		if (cp->nr_subparts_cpus && (new_prs <= 0)) {
+ 			/*
+ 			 * Put all active subparts_cpus back to effective_cpus.
+ 			 */
+@@ -2007,6 +2016,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	int err, old_prs = cs->partition_root_state;
+ 	struct cpuset *parent = parent_cs(cs);
+ 	struct tmpmasks tmpmask;
++	bool sched_domain_rebuilt = false;
  
--	A parent partition cannot distribute all its CPUs to its
--	child partitions.  There must be at least one cpu left in the
--	parent partition.
--
--	Once becoming a partition root, changes to "cpuset.cpus" is
--	generally allowed as long as the first condition above is true,
--	the change will not take away all the CPUs from the parent
--	partition and the new "cpuset.cpus" value is a superset of its
--	children's "cpuset.cpus" values.
--
--	Sometimes, external factors like changes to ancestors'
--	"cpuset.cpus" or cpu hotplug can cause the state of the partition
--	root to change.  On read, the "cpuset.sched.partition" file
--	can show the following values.
--
--	  ==============	==============================
--	  "member"		Non-root member of a partition
--	  "root"		Partition root
--	  "root invalid"	Invalid partition root
--	  ==============	==============================
--
--	It is a partition root if the first 2 partition root conditions
--	above are true and at least one CPU from "cpuset.cpus" is
--	granted by the parent cgroup.
--
--	A partition root can become invalid if none of CPUs requested
--	in "cpuset.cpus" can be granted by the parent cgroup or the
--	parent cgroup is no longer a partition root itself.  In this
--	case, it is not a real partition even though the restriction
--	of the first partition root condition above will still apply.
-+	A parent partition may distribute all its CPUs to its child
-+	partitions as long as it is not the root cgroup and there is no
-+	task directly associated with that parent partition.  Otherwise,
-+	there must be at least one cpu left in the parent partition.
-+	A new task cannot be moved to a partition root with no effective
-+	cpu.
+ 	if (old_prs == new_prs)
+ 		return 0;
+@@ -2041,6 +2051,22 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
+ 			goto out;
+ 		}
 +
-+	Once becoming a partition root, changes to "cpuset.cpus"
-+	is generally allowed as long as the first condition above
-+	(cpu exclusivity rule) is true.
-+
-+	Sometimes, changes to "cpuset.cpus" or cpu hotplug may cause
-+	the state of the partition root to become invalid when the
-+	other constraints of partition root are violated.  Therefore,
-+	it is recommended that users should always set "cpuset.cpus"
-+	to the proper value first before enabling partition.  In case
-+	"cpuset.cpus" has to be modified after partition is enabled,
-+	users should check the state of "cpuset.cpus.partition" after
-+	making change to it to make sure that the partition is still
-+	valid.
-+
-+	On read, the "cpuset.cpus.partition" file can show the following
-+	values.
-+
-+	  ======================	==============================
-+	  "member"			Non-root member of a partition
-+	  "root"			Partition root
-+	  "isolated"			Partition root without load balancing
-+	  "root invalid (<reason>)"	Invalid partition root
-+	  ======================	==============================
-+
-+	A partition root becomes invalid if all the CPUs requested in
-+	"cpuset.cpus" become unavailable.  This can happen if all the
-+	CPUs have been offlined, or the state of an ancestor partition
-+	root become invalid. "<reason>" is a string that describes why
-+	the partition becomes invalid.
-+
-+	An invalid partition is not a real partition even though the
-+	restriction of the cpu exclusivity rule will still apply.
- 	The cpu affinity of all the tasks in the cgroup will then be
- 	associated with CPUs in the nearest ancestor partition.
++		if (new_prs == PRS_ISOLATED) {
++			/*
++			 * Disable the load balance flag should not return an
++			 * error unless the system is running out of memory.
++			 */
++			update_flag(CS_SCHED_LOAD_BALANCE, cs, 0);
++			sched_domain_rebuilt = true;
++		}
++	} else if (old_prs && new_prs) {
++		/*
++		 * A change in load balance state only, no change in cpumasks.
++		 */
++		update_flag(CS_SCHED_LOAD_BALANCE, cs, (new_prs != PRS_ISOLATED));
++		err = 0;
++		goto out;	/* Sched domain is rebuilt in update_flag() */
+ 	} else {
+ 		/*
+ 		 * Switch back to member is always allowed even if it
+@@ -2073,6 +2099,12 @@ static int update_prstate(struct cpuset *cs, int new_prs)
  
--	An invalid partition root can be transitioned back to a
--	real partition root if at least one of the requested CPUs
--	can now be granted by its parent.  In this case, the cpu
--	affinity of all the tasks in the formerly invalid partition
--	will be associated to the CPUs of the newly formed partition.
--	Changing the partition state of an invalid partition root to
--	"member" is always allowed even if child cpusets are present.
-+	In the special case of a parent partition competing with a child
-+	partition for the only CPU left, the parent partition wins and
-+	the child partition becomes invalid.
+ 		/* Turning off CS_CPU_EXCLUSIVE will not return error */
+ 		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
 +
-+	An invalid partition root can be transitioned back to a real
-+	partition root if at least one of the requested CPUs become
-+	available again. In this case, the cpu affinity of all the tasks
-+	in the formerly invalid partition will be associated to the CPUs
-+	of the newly formed partition.	Changing the partition state of
-+	an invalid partition root to "member" is always allowed even if
-+	child cpusets are present. However changing a partition root back
-+	to member will not be allowed if child partitions are present.
-+
-+	Poll and inotify events are triggered whenever the state
-+	of "cpuset.cpus.partition" changes.  That includes changes
-+	caused by write to "cpuset.cpus.partition" and cpu hotplug.
-+	This will allow an user space agent to monitor changes caused
-+	by hotplug events.
++		if (!is_sched_load_balance(cs)) {
++			/* Make sure load balance is on */
++			update_flag(CS_SCHED_LOAD_BALANCE, cs, 1);
++			sched_domain_rebuilt = true;
++		}
+ 	}
  
+ 	/*
+@@ -2085,7 +2117,8 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	if (parent->child_ecpus_count)
+ 		update_sibling_cpumasks(parent, cs, &tmpmask);
  
- Device controller
+-	rebuild_sched_domains_locked();
++	if (!sched_domain_rebuilt)
++		rebuild_sched_domains_locked();
+ out:
+ 	if (!err) {
+ 		spin_lock_irq(&callback_lock);
+@@ -2588,6 +2621,9 @@ static int sched_partition_show(struct seq_file *seq, void *v)
+ 	case PRS_ENABLED:
+ 		seq_puts(seq, "root\n");
+ 		break;
++	case PRS_ISOLATED:
++		seq_puts(seq, "isolated\n");
++		break;
+ 	case PRS_DISABLED:
+ 		seq_puts(seq, "member\n");
+ 		break;
+@@ -2618,6 +2654,8 @@ static ssize_t sched_partition_write(struct kernfs_open_file *of, char *buf,
+ 		val = PRS_ENABLED;
+ 	else if (!strcmp(buf, "member"))
+ 		val = PRS_DISABLED;
++	else if (!strcmp(buf, "isolated"))
++		val = PRS_ISOLATED;
+ 	else
+ 		return -EINVAL;
+ 
 -- 
 2.18.1
 
