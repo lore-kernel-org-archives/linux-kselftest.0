@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15561C432BE
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 21:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4710C432BE
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 21:19:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0A5060F51
-	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 21:18:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D17AC60F46
+	for <linux-kselftest@archiver.kernel.org>; Sat, 14 Aug 2021 21:19:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbhHNVS7 (ORCPT
+        id S234528AbhHNVT1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 14 Aug 2021 17:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        Sat, 14 Aug 2021 17:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbhHNVSi (ORCPT
+        with ESMTP id S233844AbhHNVSu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 14 Aug 2021 17:18:38 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21D3C0612AC;
-        Sat, 14 Aug 2021 14:18:06 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id u15so865452plg.13;
-        Sat, 14 Aug 2021 14:18:06 -0700 (PDT)
+        Sat, 14 Aug 2021 17:18:50 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98E4C061764;
+        Sat, 14 Aug 2021 14:18:21 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id w13-20020a17090aea0db029017897a5f7bcso21217050pjy.5;
+        Sat, 14 Aug 2021 14:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=yVk4rfFwKtI+nZlF1wG+Xa1jTWegY7TnqFeFUCsMRjo=;
-        b=O59g2zYWLDAbW/HowGp96VnWY8nCocJKhRS1A7q0yWULedTf9hRnEPTBZjs9MyA+gK
-         C9qOSVAnsdyUVlCwgHxRKmHTuD2LSNIk21r0wVfr0zMN4iE2Ngv79PR5V/2wJKC1Y86Z
-         EePoYiPiMT7Bu0PRjrfQOm4yMPDzCMoHCBK3wOPlzSvCinmTxegd3JZHQCD5IoIXZf/e
-         g2m+5HEh+1FI4MAjbrvGhnOsrqP57/iuwTB7Nd+kxORjNwTw4Bo95NQA7nw2lTdYTJ9K
-         TBPyr8gBSpCkbyFGC/fYRz6h6Kure7a9V6mSIQUXN6OhK2hkNimK5iqHAOulS1dVlJKX
-         5yuA==
+        bh=sverjDP63IoSntKNuERhqfRzdBkA3dl2eGd0ICNUnRU=;
+        b=Gq10zaJZIGn3kuHslpZUZf8pQSeAhY1c941jxVn/zpk4QfAJlMiGjNQhe+NOKmUigt
+         5V+SQi5FrPwhys4UPPxCC+gkZAoa4vcbn23BBqTJEeKWh+U0boDfeSaNHOpR6wWZla08
+         I1diVYIVl6uCtXmK4q+k4BRRnA+7VQos8nLS//RqDfwdSiJ7Jz2U9SwO94uysZoQH6rE
+         TAmhGIp+DHDOimr/sZAuWXhR+tBo3TraltGDqHg/gTKso6yjIfLKdEYf4NBzuQgGxZS9
+         7nOSISfI5d/EtPxz0yMjavOX8Hqel90G7czdBWHbs4XT5XMCMIBSjCOANTvhrQSqzvKy
+         8dvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yVk4rfFwKtI+nZlF1wG+Xa1jTWegY7TnqFeFUCsMRjo=;
-        b=qrZ/UB9btJzKgy1lkyicR3fENj7lMcGoMYDoYV1OuVqRBTNV8zyI6x6vJBsfOwsEZU
-         y8KWY7QxZq53OTlxiij/lLVOWsMjHiR131h557ToP+eZ39MagGj84g6IZ6YdtTlmF6H7
-         JJiribWRtl8loIF0eM2jt6BcE56fwhrbtehs4QR+u+qUGFDAThDG0SXZ0Jh00Rm5DPFF
-         zz4f25MGkJRSrHLdfaB/T2PXd1sKuo+hPoqV4ddpoOYnBC1z6gBdfFGqmbt+wTmBv12L
-         4r82fD1BVyismJrWqXiowJ7VFRHPxLdrS2iuK701Y7XhCnj3Wj1AD9BN5HGAF2kA9M7w
-         LQRA==
-X-Gm-Message-State: AOAM530yO6pVZGWwgFYirK+17IzKEqkEooE7ADyHJqT5ahjFtxavrJL9
-        1OIaDF2LbqutcWkQZRVNiD4=
-X-Google-Smtp-Source: ABdhPJzURz0CmMkY+pgKxUckqz5ulzsVmX1l1qYfLzAiEcKI6nWqbuTL+f+grbfnWDsVUsQGI1/deA==
-X-Received: by 2002:a63:f959:: with SMTP id q25mr8420380pgk.52.1628975886202;
-        Sat, 14 Aug 2021 14:18:06 -0700 (PDT)
+        bh=sverjDP63IoSntKNuERhqfRzdBkA3dl2eGd0ICNUnRU=;
+        b=En8X+pT2XmUtHzlsGANTdUnyx4uWJO2Xq23Cht8SCIT6lqU2KOw9hgZwD8EXVKacd5
+         uXn63Na/FtrKfO5FUgNKTCdI9/TNdojz0JDn4XJEjGQ886VN3I7NH4z1ns7yTYtCAF01
+         rTRKMhfm3G5TrgjUzXWyzApB6FcvsNolBwtTAhWMsxaIMbjV7JZnFT38i2+FZxQ2Ba/t
+         ykQr5CpOHNbiVmqkjnm2JEnJvckkY1fdSB+WqspE2U81MTLEBhNd5KaDO0gck3OkA0ds
+         3GPdITJNDpI7LqxJzL5wKKhS5qscIWkYoGuF2wPHfMFp4Cck9DFHUX4btI6ZuiyO9OmK
+         OZew==
+X-Gm-Message-State: AOAM533iRKZr64Ds1TyCOTRe5kqphx2i739WU8zVbRqBOSi6+GncYU2d
+        zfTmRW04XT8kLlszkcuhwgg=
+X-Google-Smtp-Source: ABdhPJxg6ZM85zZxjblfPm5Pl9T5tXKVV50PE85xGJqJOB+2fFI8ZsXD9qWXA0FcOboIYEWAINCheQ==
+X-Received: by 2002:a63:f749:: with SMTP id f9mr8319514pgk.77.1628975901115;
+        Sat, 14 Aug 2021 14:18:21 -0700 (PDT)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id k197sm6575967pfd.190.2021.08.14.14.18.05
+        by smtp.gmail.com with ESMTPSA id gl12sm2294338pjb.40.2021.08.14.14.18.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Aug 2021 14:18:05 -0700 (PDT)
+        Sat, 14 Aug 2021 14:18:20 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -109,9 +109,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 06/17] cpumask: use find_first_and_bit()
-Date:   Sat, 14 Aug 2021 14:17:02 -0700
-Message-Id: <20210814211713.180533-7-yury.norov@gmail.com>
+Subject: [PATCH 08/17] tools: sync tools/bitmap with mother linux
+Date:   Sat, 14 Aug 2021 14:17:04 -0700
+Message-Id: <20210814211713.180533-9-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210814211713.180533-1-yury.norov@gmail.com>
 References: <20210814211713.180533-1-yury.norov@gmail.com>
@@ -121,77 +121,220 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now we have an efficient implementation for find_first_and_bit(),
-so switch cpumask to use it where appropriate.
+Remove tools/include/asm-generic/bitops/find.h and copy
+include/linux/bitmap.h to tools. find_*_le() functions are not copied
+because not needed in tools.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- include/linux/cpumask.h | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+ MAINTAINERS                                   |  2 +-
+ tools/include/asm-generic/bitops.h            |  1 -
+ tools/include/linux/bitmap.h                  |  7 +-
+ .../{asm-generic/bitops => linux}/find.h      | 81 +++++++++++++++++--
+ tools/lib/find_bit.c                          | 20 +++++
+ 5 files changed, 100 insertions(+), 11 deletions(-)
+ rename tools/include/{asm-generic/bitops => linux}/find.h (63%)
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index f3689a52bfd0..4a03f6636e6c 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -123,6 +123,12 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
- 	return 0;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9b62293f7b72..b033083dbb42 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3277,8 +3277,8 @@ F:	lib/bitmap.c
+ F:	lib/find_bit.c
+ F:	lib/find_bit_benchmark.c
+ F:	lib/test_bitmap.c
+-F:	tools/include/asm-generic/bitops/find.h
+ F:	tools/include/linux/bitmap.h
++F:	tools/include/linux/find.h
+ F:	tools/lib/bitmap.c
+ F:	tools/lib/find_bit.c
+ 
+diff --git a/tools/include/asm-generic/bitops.h b/tools/include/asm-generic/bitops.h
+index 5d2ab38965cc..9ab313e93555 100644
+--- a/tools/include/asm-generic/bitops.h
++++ b/tools/include/asm-generic/bitops.h
+@@ -18,7 +18,6 @@
+ #include <asm-generic/bitops/fls.h>
+ #include <asm-generic/bitops/__fls.h>
+ #include <asm-generic/bitops/fls64.h>
+-#include <asm-generic/bitops/find.h>
+ 
+ #ifndef _TOOLS_LINUX_BITOPS_H_
+ #error only <linux/bitops.h> can be included directly
+diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
+index 9d959bc24859..13d90b574970 100644
+--- a/tools/include/linux/bitmap.h
++++ b/tools/include/linux/bitmap.h
+@@ -1,9 +1,10 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _PERF_BITOPS_H
+-#define _PERF_BITOPS_H
++#ifndef _TOOLS_LINUX_BITMAP_H
++#define _TOOLS_LINUX_BITMAP_H
+ 
+ #include <string.h>
+ #include <linux/bitops.h>
++#include <linux/find.h>
+ #include <stdlib.h>
+ #include <linux/kernel.h>
+ 
+@@ -181,4 +182,4 @@ static inline int bitmap_intersects(const unsigned long *src1,
+ 		return __bitmap_intersects(src1, src2, nbits);
  }
  
-+static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
-+					     const struct cpumask *srcp2)
-+{
-+	return 0;
-+}
+-#endif /* _PERF_BITOPS_H */
++#endif /* _TOOLS_LINUX_BITMAP_H */
+diff --git a/tools/include/asm-generic/bitops/find.h b/tools/include/linux/find.h
+similarity index 63%
+rename from tools/include/asm-generic/bitops/find.h
+rename to tools/include/linux/find.h
+index 6481fd11012a..47e2bd6c5174 100644
+--- a/tools/include/asm-generic/bitops/find.h
++++ b/tools/include/linux/find.h
+@@ -1,11 +1,19 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _TOOLS_LINUX_ASM_GENERIC_BITOPS_FIND_H_
+-#define _TOOLS_LINUX_ASM_GENERIC_BITOPS_FIND_H_
++#ifndef _TOOLS_LINUX_FIND_H_
++#define _TOOLS_LINUX_FIND_H_
 +
- static inline unsigned int cpumask_last(const struct cpumask *srcp)
- {
- 	return 0;
-@@ -167,7 +173,7 @@ static inline unsigned int cpumask_local_spread(unsigned int i, int node)
- 
- static inline int cpumask_any_and_distribute(const struct cpumask *src1p,
- 					     const struct cpumask *src2p) {
--	return cpumask_next_and(-1, src1p, src2p);
-+	return cpumask_first_and(src1p, src2p);
- }
- 
- static inline int cpumask_any_distribute(const struct cpumask *srcp)
-@@ -195,6 +201,19 @@ static inline unsigned int cpumask_first(const struct cpumask *srcp)
- 	return find_first_bit(cpumask_bits(srcp), nr_cpumask_bits);
- }
- 
-+/**
-+ * cpumask_first_and - return the first cpu from *srcp1 & *srcp2
-+ * @src1p: the first input
-+ * @src2p: the second input
-+ *
-+ * Returns >= nr_cpu_ids if no cpus set in both.  See also cpumask_next_and().
-+ */
-+static inline
-+unsigned int cpumask_first_and(const struct cpumask *srcp1, const struct cpumask *srcp2)
-+{
-+	return find_first_and_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cpumask_bits);
-+}
++#ifndef _TOOLS_LINUX_BITMAP_H
++#error tools: only <linux/bitmap.h> can be included directly
++#endif
 +
- /**
-  * cpumask_last - get the last CPU in a cpumask
-  * @srcp:	- the cpumask pointer
-@@ -585,15 +604,6 @@ static inline void cpumask_copy(struct cpumask *dstp,
-  */
- #define cpumask_any(srcp) cpumask_first(srcp)
++#include <linux/bitops.h>
  
--/**
-- * cpumask_first_and - return the first cpu from *srcp1 & *srcp2
-- * @src1p: the first input
-- * @src2p: the second input
-- *
-- * Returns >= nr_cpu_ids if no cpus set in both.  See also cpumask_next_and().
-- */
--#define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
+ extern unsigned long _find_next_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long nbits,
+ 		unsigned long start, unsigned long invert, unsigned long le);
+ extern unsigned long _find_first_bit(const unsigned long *addr, unsigned long size);
++extern unsigned long _find_first_and_bit(const unsigned long *addr1,
++					 const unsigned long *addr2, unsigned long size);
+ extern unsigned long _find_first_zero_bit(const unsigned long *addr, unsigned long size);
+ extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long size);
+ 
+@@ -96,7 +104,6 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+ #endif
+ 
+ #ifndef find_first_bit
 -
  /**
-  * cpumask_any_and - pick a "random" cpu from *mask1 & *mask2
-  * @mask1: the first input cpumask
+  * find_first_bit - find the first set bit in a memory region
+  * @addr: The address to start the search at
+@@ -116,11 +123,34 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+ 
+ 	return _find_first_bit(addr, size);
+ }
++#endif
++
++#ifndef find_first_and_bit
++/**
++ * find_first_and_bit - find the first set bit in both memory regions
++ * @addr1: The first address to base the search on
++ * @addr2: The second address to base the search on
++ * @size: The bitmap size in bits
++ *
++ * Returns the bit number for the next set bit
++ * If no bits are set, returns @size.
++ */
++static inline
++unsigned long find_first_and_bit(const unsigned long *addr1,
++				 const unsigned long *addr2,
++				 unsigned long size)
++{
++	if (small_const_nbits(size)) {
++		unsigned long val = *addr1 & *addr2 & GENMASK(size - 1, 0);
+ 
+-#endif /* find_first_bit */
++		return val ? __ffs(val) : size;
++	}
+ 
+-#ifndef find_first_zero_bit
++	return _find_first_and_bit(addr1, addr2, size);
++}
++#endif
+ 
++#ifndef find_first_zero_bit
+ /**
+  * find_first_zero_bit - find the first cleared bit in a memory region
+  * @addr: The address to start the search at
+@@ -142,4 +172,43 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ }
+ #endif
+ 
+-#endif /*_TOOLS_LINUX_ASM_GENERIC_BITOPS_FIND_H_ */
++#ifndef find_last_bit
++/**
++ * find_last_bit - find the last set bit in a memory region
++ * @addr: The address to start the search at
++ * @size: The number of bits to search
++ *
++ * Returns the bit number of the last set bit, or size.
++ */
++static inline
++unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
++{
++	if (small_const_nbits(size)) {
++		unsigned long val = *addr & GENMASK(size - 1, 0);
++
++		return val ? __fls(val) : size;
++	}
++
++	return _find_last_bit(addr, size);
++}
++#endif
++
++/**
++ * find_next_clump8 - find next 8-bit clump with set bits in a memory region
++ * @clump: location to store copy of found clump
++ * @addr: address to base the search on
++ * @size: bitmap size in number of bits
++ * @offset: bit offset at which to start searching
++ *
++ * Returns the bit offset for the next set clump; the found clump value is
++ * copied to the location pointed by @clump. If no bits are set, returns @size.
++ */
++extern unsigned long find_next_clump8(unsigned long *clump,
++				      const unsigned long *addr,
++				      unsigned long size, unsigned long offset);
++
++#define find_first_clump8(clump, bits, size) \
++	find_next_clump8((clump), (bits), (size), 0)
++
++
++#endif /*__LINUX_FIND_H_ */
+diff --git a/tools/lib/find_bit.c b/tools/lib/find_bit.c
+index 109aa7ffcf97..ba4b8d94e004 100644
+--- a/tools/lib/find_bit.c
++++ b/tools/lib/find_bit.c
+@@ -96,6 +96,26 @@ unsigned long _find_first_bit(const unsigned long *addr, unsigned long size)
+ }
+ #endif
+ 
++#ifndef find_first_and_bit
++/*
++ * Find the first set bit in two memory regions.
++ */
++unsigned long _find_first_and_bit(const unsigned long *addr1,
++				  const unsigned long *addr2,
++				  unsigned long size)
++{
++	unsigned long idx, val;
++
++	for (idx = 0; idx * BITS_PER_LONG < size; idx++) {
++		val = addr1[idx] & addr2[idx];
++		if (val)
++			return min(idx * BITS_PER_LONG + __ffs(val), size);
++	}
++
++	return size;
++}
++#endif
++
+ #ifndef find_first_zero_bit
+ /*
+  * Find the first cleared bit in a memory region.
 -- 
 2.30.2
 
