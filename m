@@ -6,66 +6,66 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10750C432BE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20CBFC00143
 	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Aug 2021 13:28:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC33760F35
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Aug 2021 13:28:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C5BD60F5E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Aug 2021 13:28:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236398AbhHQN33 (ORCPT
+        id S240057AbhHQN33 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 17 Aug 2021 09:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239905AbhHQN3K (ORCPT
+        with ESMTP id S239933AbhHQN3Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Aug 2021 09:29:10 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2258FC061764;
-        Tue, 17 Aug 2021 06:28:37 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u21-20020a17090a8915b02901782c36f543so5130942pjn.4;
-        Tue, 17 Aug 2021 06:28:37 -0700 (PDT)
+        Tue, 17 Aug 2021 09:29:16 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B88AC061764;
+        Tue, 17 Aug 2021 06:28:43 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id n5so11560461pjt.4;
+        Tue, 17 Aug 2021 06:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wcNwkyqHnyOxur4uTjpp7x91gvUF6Xp/CC0LQ31yEz8=;
-        b=Fes/h8guWo1SeIPktXNitT1SK2PYt3hOT4+ySFUpvR+oqczLSlhvtvC4bAGUj2vsvr
-         vVq0DW+d5aRrdYIq+uSPhqx96S5RPbCM1jxctb+RxVy+pwFWxyQ3Fex18JBgTSZB39Mz
-         GMlaoX3nhUsO9HFWYgWtNlsV9EIwDuttIu7lgrDHIATYwAq8S/zk0wS/lrMptOAYdmNV
-         SqxIxQlVloDNvJ0pUTKBsQXq4fADQKwlK8Ft07EuLnNW2/GzXIh2ibERchlnnll6RIn1
-         BBUy9AmMKgVeECwQ/o4JCKg5C4h/6mZo+qthUxSdaOS+9qvA45VtivPH49SeqH38naRb
-         ISKw==
+        bh=mDYDzAJgI3Yi2xQjA7+jur2uQaZxHW2DQmLX7dH4FJA=;
+        b=ZRfwhdThkpHil8wPYbDEHSMqGHAjaU05qSU1QcZwvJqnvFT86ZH4tSOFBhmWxUxpJ4
+         M2A2WDV2LJsXFowLtBJ/IC5eLUgGABrwMaMcuMelH1h1gjzVcJ3988n596IjuCiOdgO8
+         4N6iXxmnqInZiMYnPJ+37t4PCGhgX9JfUcktZ9Z3zS68DFn8sYsGZml838yRXOxI0ZJZ
+         FKqhMhKnpSiyEvCoyVoYWyhfYPs6Rc4GJxB05CXe6hATkizB2LpylovUYcszWzYNczRb
+         nR0i4xU3uYWRmxwS6cnQLVII1EqE/x045U/Im1e+EHVfVcgh3SJgMosmdg9JJTf0Fh7h
+         Z0Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wcNwkyqHnyOxur4uTjpp7x91gvUF6Xp/CC0LQ31yEz8=;
-        b=WWhw0gN0uvoxtUQtvW/ECmfxRvbft0Gc3JWuWb5HQlVxr8T/PrgUZOsb0Ka74S+9Ti
-         Zqe/qpROBd0EHMguVi/JYlZv+tKVDU8KG8NbKSYLvdG518y8GUkZVBYwzh0eWLgx7AkO
-         tefrbTEBM0CnHd2CPtCciwJl3mUgc0fWwifW0wi6jOxiMYFrNzxj8FloWH5iqbbX/QSZ
-         Yze87dSWB5Ww7L4OK0FVJ/dc8qd/1XQ/SLvpR67TZlBGJphsT9KMdkcLCXZy7G9Cs+lR
-         HqUW6ypBxnG4BbMtl2E9jjpjPtZvc7TfJeXuTeNY/BKnfhnz1qL8pMy6amPNWN8w5RpY
-         nrqQ==
-X-Gm-Message-State: AOAM532HxMO5ejk6+cochcPdnHiw2vyrIPYUk7A0uGkvrNs4wyuBd9+V
-        1p/8SAeCElTocvwxp9cSLqQ=
-X-Google-Smtp-Source: ABdhPJwDBkQ7wJ9HiGwi6g8wNAJnIXwdCjS5r+Xud+k7+V56KidoBT3/L2TVcvKde/Twutti806/Yg==
-X-Received: by 2002:a05:6a00:8c7:b029:3a1:119b:736 with SMTP id s7-20020a056a0008c7b02903a1119b0736mr3780009pfu.52.1629206916759;
-        Tue, 17 Aug 2021 06:28:36 -0700 (PDT)
+        bh=mDYDzAJgI3Yi2xQjA7+jur2uQaZxHW2DQmLX7dH4FJA=;
+        b=n9gb7T1NdPPs3CW0gx7Bh1rpzGfNDFu2dyJ3VZdWP4FwuwN/py1227SLAuymg4Fwjg
+         +laTZPdagqOI4hS5J67zObPPl5ZIfbWiMXv+RB8Z9HAuERfSW7+2Z0PhRuEVeSI5V2Wy
+         wjajMQYn4VCDZf+ui4lvzu/WVKvCaLnnXClFoXc2MxXU2afatvvsxAaB5XgdKZ3UCFxJ
+         qyfXpa1k6scZos57X7eVA85LoL+AcFZU87poGD/KYbknwVnuae/5b2BxNDJsQiy5T508
+         EWyZOlPPyk/IzjvwnG9/s6uD6OhiEoTVkuLzsJXl7FUPDCoqpxq3atp4u7NQabdoJ0CA
+         NZQQ==
+X-Gm-Message-State: AOAM533TE3nCnw0y04Kt4Qvt8qA0qRjNhX8eqKKVGGq5H9kpjpo9ckju
+        tNcbg7UnwMqsbCaiZPWRces=
+X-Google-Smtp-Source: ABdhPJyxp1rkPoXeG1+USxftO2aGlLEy3fWxCsE4QPFrhEpsvASwGV5LDchuDdsQmVV0Hdz0cEm8LQ==
+X-Received: by 2002:a63:20f:: with SMTP id 15mr3439266pgc.319.1629206922822;
+        Tue, 17 Aug 2021 06:28:42 -0700 (PDT)
 Received: from ubuntu.localdomain ([182.226.226.37])
-        by smtp.gmail.com with ESMTPSA id j6sm2791577pfi.220.2021.08.17.06.28.34
+        by smtp.gmail.com with ESMTPSA id j6sm2791577pfi.220.2021.08.17.06.28.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 06:28:36 -0700 (PDT)
+        Tue, 17 Aug 2021 06:28:42 -0700 (PDT)
 From:   bongsu.jeon2@gmail.com
 To:     shuah@kernel.org, krzysztof.kozlowski@canonical.com
 Cc:     netdev@vger.kernel.org, linux-nfc@lists.01.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Bongsu Jeon <bongsu.jeon@samsung.com>
-Subject: [PATCH v2 net-next 1/8] nfc: virtual_ncidev: Use wait queue instead of polling
-Date:   Tue, 17 Aug 2021 06:28:11 -0700
-Message-Id: <20210817132818.8275-2-bongsu.jeon2@gmail.com>
+Subject: [PATCH v2 net-next 3/8] selftests: nci: Fix the typo
+Date:   Tue, 17 Aug 2021 06:28:13 -0700
+Message-Id: <20210817132818.8275-4-bongsu.jeon2@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
 References: <20210817132818.8275-1-bongsu.jeon2@gmail.com>
@@ -77,57 +77,93 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Bongsu Jeon <bongsu.jeon@samsung.com>
 
-In previous version, the user level virtual device application that used
-this driver should have the polling scheme to read a NCI frame.
-To remove this polling scheme, use Wait Queue.
+Fix typo: rep_len -> resp_len
 
 Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
 ---
- drivers/nfc/virtual_ncidev.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nci/nci_dev.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/nfc/virtual_ncidev.c b/drivers/nfc/virtual_ncidev.c
-index 2ee0ec4bb739..221fa3bb8705 100644
---- a/drivers/nfc/virtual_ncidev.c
-+++ b/drivers/nfc/virtual_ncidev.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/miscdevice.h>
- #include <linux/mutex.h>
-+#include <linux/wait.h>
- #include <net/nfc/nci_core.h>
+diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
+index 34e76c7fa1fe..b4d85eeb5fd1 100644
+--- a/tools/testing/selftests/nci/nci_dev.c
++++ b/tools/testing/selftests/nci/nci_dev.c
+@@ -158,7 +158,7 @@ static int get_family_id(int sd, __u32 pid)
+ 		char buf[512];
+ 	} ans;
+ 	struct nlattr *na;
+-	int rep_len;
++	int resp_len;
+ 	__u16 id;
+ 	int rc;
  
- enum virtual_ncidev_mode {
-@@ -27,6 +28,7 @@ enum virtual_ncidev_mode {
- 				 NFC_PROTO_ISO15693_MASK)
+@@ -167,10 +167,10 @@ static int get_family_id(int sd, __u32 pid)
+ 	if (rc < 0)
+ 		return 0;
  
- static enum virtual_ncidev_mode state;
-+static DECLARE_WAIT_QUEUE_HEAD(wq);
- static struct miscdevice miscdev;
- static struct sk_buff *send_buff;
- static struct nci_dev *ndev;
-@@ -61,6 +63,7 @@ static int virtual_nci_send(struct nci_dev *ndev, struct sk_buff *skb)
+-	rep_len = recv(sd, &ans, sizeof(ans), 0);
++	resp_len = recv(sd, &ans, sizeof(ans), 0);
+ 
+-	if (ans.n.nlmsg_type == NLMSG_ERROR || rep_len < 0 ||
+-	    !NLMSG_OK(&ans.n, rep_len))
++	if (ans.n.nlmsg_type == NLMSG_ERROR || resp_len < 0 ||
++	    !NLMSG_OK(&ans.n, resp_len))
+ 		return 0;
+ 
+ 	na = (struct nlattr *)GENLMSG_DATA(&ans);
+@@ -194,7 +194,7 @@ static int send_cmd_with_idx(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
+ 
+ static int get_nci_devid(int sd, __u16 fid, __u32 pid, int dev_id, struct msgtemplate *msg)
+ {
+-	int rc, rep_len;
++	int rc, resp_len;
+ 
+ 	rc = send_cmd_with_idx(sd, fid, pid, NFC_CMD_GET_DEVICE, dev_id);
+ 	if (rc < 0) {
+@@ -202,14 +202,14 @@ static int get_nci_devid(int sd, __u16 fid, __u32 pid, int dev_id, struct msgtem
+ 		goto error;
  	}
- 	send_buff = skb_copy(skb, GFP_KERNEL);
- 	mutex_unlock(&nci_mutex);
-+	wake_up_interruptible(&wq);
  
- 	return 0;
+-	rep_len = recv(sd, msg, sizeof(*msg), 0);
+-	if (rep_len < 0) {
++	resp_len = recv(sd, msg, sizeof(*msg), 0);
++	if (resp_len < 0) {
+ 		rc = -2;
+ 		goto error;
+ 	}
+ 
+ 	if (msg->n.nlmsg_type == NLMSG_ERROR ||
+-	    !NLMSG_OK(&msg->n, rep_len)) {
++	    !NLMSG_OK(&msg->n, resp_len)) {
+ 		rc = -3;
+ 		goto error;
+ 	}
+@@ -222,21 +222,21 @@ static int get_nci_devid(int sd, __u16 fid, __u32 pid, int dev_id, struct msgtem
+ static __u8 get_dev_enable_state(struct msgtemplate *msg)
+ {
+ 	struct nlattr *na;
+-	int rep_len;
++	int resp_len;
+ 	int len;
+ 
+-	rep_len = GENLMSG_PAYLOAD(&msg->n);
++	resp_len = GENLMSG_PAYLOAD(&msg->n);
+ 	na = (struct nlattr *)GENLMSG_DATA(msg);
+ 	len = 0;
+ 
+-	while (len < rep_len) {
++	while (len < resp_len) {
+ 		len += NLA_ALIGN(na->nla_len);
+ 		if (na->nla_type == NFC_ATTR_DEVICE_POWERED)
+ 			return *(char *)NLA_DATA(na);
+ 		na = (struct nlattr *)(GENLMSG_DATA(msg) + len);
+ 	}
+ 
+-	return rep_len;
++	return resp_len;
  }
-@@ -77,9 +80,11 @@ static ssize_t virtual_ncidev_read(struct file *file, char __user *buf,
- 	size_t actual_len;
  
- 	mutex_lock(&nci_mutex);
--	if (!send_buff) {
-+	while (!send_buff) {
- 		mutex_unlock(&nci_mutex);
--		return 0;
-+		if (wait_event_interruptible(wq, send_buff))
-+			return -EFAULT;
-+		mutex_lock(&nci_mutex);
- 	}
- 
- 	actual_len = min_t(size_t, count, send_buff->len);
+ FIXTURE(NCI) {
 -- 
 2.32.0
 
