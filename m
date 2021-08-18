@@ -2,105 +2,117 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92985C4338F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Aug 2021 17:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C7A4C432BE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Aug 2021 17:49:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EF0A6104F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Aug 2021 17:49:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BD8B610CF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Aug 2021 17:49:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbhHRRto (ORCPT
+        id S231402AbhHRRto (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 18 Aug 2021 13:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbhHRRtj (ORCPT
+        with ESMTP id S231422AbhHRRtj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 18 Aug 2021 13:49:39 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F2AC061764
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B80C06179A
         for <linux-kselftest@vger.kernel.org>; Wed, 18 Aug 2021 10:48:59 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n12so2281629plf.4
+Received: by mail-pf1-x42d.google.com with SMTP id j187so2900537pfg.4
         for <linux-kselftest@vger.kernel.org>; Wed, 18 Aug 2021 10:48:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dThvG95AKYmfSVzdJA3a/UDQFTluWlf22praOUB+Zbs=;
-        b=GeAO1B69Z4+Uupb9HeH1oibnV20CQgb3KyeBWoRXciRWMBhVqVxED2Omhwl1Ikbqk5
-         ogkokoXt330CYDu6kfp0mNUhKoTO7gRPKHr54vU8qIRGMs6HfbdD4VrnZbCVckevrJ61
-         M39NrYJSbwCT2JKeZzREvu5joH4pdBpfDDdT0=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9VAhCQA3MkM6rsCTMJO3M3k3MNEZtb/Tb2JXEPR3wc8=;
+        b=SNCXq/5oc+O/tePHpiIlGQK1Jx7CqAUD8e5IdHI683aauQpDfGujbae9TjWFhkU046
+         rLBkgjvQvx/rHbQXy9+zJe3cKrHceKrSA2AvGMxpnpE5p7VwcgX7ak86HeWswH40YbTw
+         G64ACPxE1o2scPWySFI7B8j/z0C8bzgR+gr6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dThvG95AKYmfSVzdJA3a/UDQFTluWlf22praOUB+Zbs=;
-        b=rpo9DlkWj/hcSrytaoiPjk6KicyK9xQUF3PG9/dPCa4Nh42b3YpvdVqMpgVXjEc1rX
-         wb8gbU1E2gCvciwEpixiva9OmwDiVTAjldMJA/r/khI3YCcSFmYz+KGffhzE+ql99imt
-         xfBK7Ai37LBDzQ2uoWACJDHUZtl2hSKDUMAmEDFXv962x0tr0GAIuM+NlEHBttGPnlVe
-         c4w1RiEs3S7lzgb5USKZensfV+b+4EeaPrL5yt3vyXTmAXHJQM524t2JM2r1PqVuCxtW
-         IDzkhYvM27XlEh4L+ZwfI2BOWOmuAFdm3nbVQGFa6U3NdnZ0QZjHDzHf8f1og2/e23tv
-         oB7g==
-X-Gm-Message-State: AOAM532ehxYBTtDALa2W74Nw5God287olNo5D5KWqjjm649kef5c4gMp
-        mmy3IXTzzqprAMSdoYjjdgttODI5dt1tIw==
-X-Google-Smtp-Source: ABdhPJyFmosvGWap4JktyDPy6Mr+eSFnZ2PVT9WyhAMwyE445kte5IuHCw/qUBZBBS05bBCREpDc9w==
-X-Received: by 2002:a17:902:e889:b0:12d:a686:394a with SMTP id w9-20020a170902e88900b0012da686394amr8201851plg.57.1629308938627;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9VAhCQA3MkM6rsCTMJO3M3k3MNEZtb/Tb2JXEPR3wc8=;
+        b=ehaQksgw8X0NkyhE1aTGCFx1aUNOum+KD/RWNdbQlYtcCSAa7ovTZua8Bhsnj83PBy
+         JukoK9l1xlG62l5CElOcnkA6Xi2iuN+a2m9ytdYpDYcQxiELoFbV2HjjBhIg6jpEkaeA
+         GzF3gHu5IEn19r+z5vYyxJh+tJr+eNnXdEW0u3LadlZ9aWoKRkmOeB5NYpuYOKu5jbe/
+         P/N25Zj8pWnuSm1Eh2oHVdrIwZB40K1mfvSwIbPL2n08Xolmfd1JEjwI15x6FXshUlkG
+         dPi27J4EWJL5ntD+c3cggUgBcMMmYLkuTAOr0z86P2wsyRIOK8G3owqrOWM5oKR+kZ4v
+         UzdQ==
+X-Gm-Message-State: AOAM533hEHXw3Ovhy7z69NpUhT/kI9FXCf2tv0mseiC5kt3NFBBvYLwx
+        mQVY6GSABUayovM+eIQwhJtpJA==
+X-Google-Smtp-Source: ABdhPJzWo9rtC4QhANM5t54ZDvpGyVJ01qR9Trm8ucGnt71I36aBkBxsezedVbtcTSSr5oPNubf9dQ==
+X-Received: by 2002:a63:ed50:: with SMTP id m16mr9989573pgk.231.1629308938931;
         Wed, 18 Aug 2021 10:48:58 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b10sm400241pfi.122.2021.08.18.10.48.57
+        by smtp.gmail.com with ESMTPSA id q13sm5784525pjq.10.2021.08.18.10.48.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 18 Aug 2021 10:48:58 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
         Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        kernelci@groups.io, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 0/4] LKDTM: Various CI improvements
-Date:   Wed, 18 Aug 2021 10:48:51 -0700
-Message-Id: <20210818174855.2307828-1-keescook@chromium.org>
+        linux-kernel@vger.kernel.org, kernelci@groups.io,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 4/4] lkdtm/heap: Avoid __alloc_size hint warning for VMALLOC_LINEAR_OVERFLOW
+Date:   Wed, 18 Aug 2021 10:48:55 -0700
+Message-Id: <20210818174855.2307828-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210818174855.2307828-1-keescook@chromium.org>
+References: <20210818174855.2307828-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1054; h=from:subject; bh=lfjpPjSL9u6+AD94ZIbB3QoMIRRZ/G7Ezz9D5Ay+kGI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHUgFCPW16E1lQcohGZyFYf0zfIHGTn0zdlBOG4Ge +kf5dIuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYR1IBQAKCRCJcvTf3G3AJlh+D/ 94pNcZKwGyNKZDKJOKFk/rJ2BSys9Mg2gwox+65o48wNqzpbqsVzEfsRE1sh/8y8jPPgcUXyjEUmGT KBwnqQRXV+/166xl7aoDpHdjaoz2UWwTyJp0XjNO+uuAKwNI9EYSCRzKRe2wtkMNJkd8yoMDw2hD+A QNQm3egBv0PrDkdJ33VAjpjG73r5BSGrCZB78bc8ZLzjmrkBCutQZUqBNdZ+wmD+hKzslTmuKQ8HKF aZWrNCLWjgDVE9cp/rBtpJI4zQSscGth/hm6C03bEpNLZR9qynYx/opFDkEc373tJUxLXWSSoLC0J5 eoQOsfRk+E58Afh88dsCz+mDmYKxZ7mbKESTRMinTfGwfW2i0diSM857HcfIr78fuh+64X4RAlHEe/ k9sRxX/o/YMrzBw4K0BvelY9bm/nedA7N0hB013/41qciunLBEVTc+Gs0MD9eq20ckDwjhT9CBRqVm A+iF1Az57MiVMeoVXmaVBhlgS9pRcK9grjeAQ+WNlHSJ59jfgfiCTaX7ZzP11sSjrBMPqWHl7LEbYh zFN7Lp3Q02aMkX6Mev3iaWaJDXlCgTi/luNKwvIGSzfj/WFL5beUjeGHgiam4VUzGJmkqWauA01QyK oEK7F0MvMgtkHLPsS6kiZ8WUzwNh5dGRa9Ztz1Yenc3GlRQqBKi+K0dOsPIw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1433; h=from:subject; bh=hEHwsjZSD/SYU1VoaQ5mTXOJ9xQG9V/0cWsn/qe6UfM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHUgGBUS/d6eL8MtIKgEouR7CqPpSrnry2WnQbOoB MJRkKMuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYR1IBgAKCRCJcvTf3G3AJq2QEA CYtjA8ExIWPk7JvqRI/61/kE99RMnZcDBn7KzqjP0m7JW5yqwlWBUMIz+ye1hV21EL2F5arOPH8BvR 3V9TjF+7swg9wtnWeIWdkurG6SE0wnSv9XECt+FpJzNKxsa9TsUw9OzP94iXOX0lhLJtiS5hbbDzvm 1xWlOJh9WnUVQVNHoQ0SWthtBbKyUGXh/xmr3ASedX9L6Ue100evlIwHgSaY4HK18yKW2oxesg9vRq 2nfod7QFT4T2wsrMrNBcPKnaillIzxm4xYIHVZ64iXPKFsSoxJAppeZ25QJS8u431AEsh7QC1vzUHN mYYvmqS5lBlfI4JWTTS2kh/l+646Yw6u2XmBhYm/auAnyQo6Y7uDXi4YZ0qxInN+fMocEm6/SG2Ts0 q+eQTj7eahrc7dPrq34ZqReM3Anssp+dl3jbBZ4qlHzyoL8i4QUkwHKBalsUDUu0AXanwZvIuUpVRE Xspwci5AKkP3cZFW92NW3seSikRnhZFP+SnAUf9FouV5pMfGgDfGEtAe+KcNGwOiaWjjArhEqeIHzt fiQFAZHI6CJUhJ+OdyXbeFfQfR/d0PG0GUn67vyUiVMF6oqs24HnZ7vRHm5paxs7yDRBfvhx+RD1sk 77kNe3nsroN6hhYbzbAgtAbYjR89fEwFvL1eLnnR4NI6p2wq7155My+YT1IA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Greg,
+Once __alloc_size hints have been added, the compiler will (correctly!)
+see this as an overflow. We are, however, trying to test for this
+condition at run-time (not compile-time), so work around it with a
+volatile int offset.
 
-Can you please pull these LKDTM changes for drivers/misc? I forgot
-to flush this queue of enhancements earlier. :) Here's what I've got
-built up, mostly tweaks for kernelCI, configs, consolidation. This also
-includes the __alloc_size hint adjustment I'd sent earlier, now fixed
-with a better comment.
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/misc/lkdtm/heap.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Thanks!
-
--Kees
-
-Kees Cook (4):
-  lkdtm/bugs: Add ARRAY_BOUNDS to selftests
-  lkdtm/fortify: Consolidate FORTIFY_SOURCE tests
-  lkdtm: Add kernel version to failure hints
-  lkdtm/heap: Avoid __alloc_size hint warning for
-    VMALLOC_LINEAR_OVERFLOW
-
- drivers/misc/lkdtm/bugs.c               | 51 +-----------------------
- drivers/misc/lkdtm/core.c               |  4 +-
- drivers/misc/lkdtm/fortify.c            | 53 +++++++++++++++++++++++++
- drivers/misc/lkdtm/heap.c               |  9 ++++-
- drivers/misc/lkdtm/lkdtm.h              | 24 ++++++-----
- tools/testing/selftests/lkdtm/config    |  2 +
- tools/testing/selftests/lkdtm/tests.txt |  3 ++
- 7 files changed, 83 insertions(+), 63 deletions(-)
-
+diff --git a/drivers/misc/lkdtm/heap.c b/drivers/misc/lkdtm/heap.c
+index 3d9aae5821a0..8a92f5a800fa 100644
+--- a/drivers/misc/lkdtm/heap.c
++++ b/drivers/misc/lkdtm/heap.c
+@@ -12,6 +12,13 @@ static struct kmem_cache *double_free_cache;
+ static struct kmem_cache *a_cache;
+ static struct kmem_cache *b_cache;
+ 
++/*
++ * Using volatile here means the compiler cannot ever make assumptions
++ * about this value. This means compile-time length checks involving
++ * this variable cannot be performed; only run-time checks.
++ */
++static volatile int __offset = 1;
++
+ /*
+  * If there aren't guard pages, it's likely that a consecutive allocation will
+  * let us overflow into the second allocation without overwriting something real.
+@@ -24,7 +31,7 @@ void lkdtm_VMALLOC_LINEAR_OVERFLOW(void)
+ 	two = vzalloc(PAGE_SIZE);
+ 
+ 	pr_info("Attempting vmalloc linear overflow ...\n");
+-	memset(one, 0xAA, PAGE_SIZE + 1);
++	memset(one, 0xAA, PAGE_SIZE + __offset);
+ 
+ 	vfree(two);
+ 	vfree(one);
 -- 
 2.30.2
 
