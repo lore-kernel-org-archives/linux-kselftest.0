@@ -2,134 +2,141 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 733C4C4320E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Aug 2021 07:27:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F7DC4338F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Aug 2021 15:10:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59F59610D2
-	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Aug 2021 07:27:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CE7460F11
+	for <linux-kselftest@archiver.kernel.org>; Thu, 19 Aug 2021 15:10:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbhHSH1s (ORCPT
+        id S238460AbhHSPLO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 19 Aug 2021 03:27:48 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:12272 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232003AbhHSH1p (ORCPT
+        Thu, 19 Aug 2021 11:11:14 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:49282 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239990AbhHSPLN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Aug 2021 03:27:45 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AoxiJsquheJHX+6qQyiJgOSgW7skDktV00zEX?=
- =?us-ascii?q?/kB9WHVpmszxra6TdZMgpHnJYVcqKQgdcL+7WJVoLUmxyXcx2/h1AV7AZniAhI?=
- =?us-ascii?q?LLFvAA0WKK+VSJcEeSygce79YFT0EUMrzN5DZB4voSmDPIcerI3uP3jZyAtKPP?=
- =?us-ascii?q?yWt3VwF2Z+VF5wd9MAySFUp7X2B9dOEEPavZ9sxavCChZHhSSsy6A0MOV+/Fq8?=
- =?us-ascii?q?aOu4nhZXc9dmQawTjLnTW186T7DhTd+h8fVglEybAk/XOAsyGR3NTaj82G?=
-X-IronPort-AV: E=Sophos;i="5.84,334,1620662400"; 
-   d="scan'208";a="113116166"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 19 Aug 2021 15:27:05 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id 2557C4D0D4BE;
-        Thu, 19 Aug 2021 15:27:02 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 19 Aug 2021 15:27:02 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Thu, 19 Aug 2021 15:27:01 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <philip.li@intel.com>, <yifeix.zhu@intel.com>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH 2/3] selftests/bpf: add default bpftool built by selftests to PATH
-Date:   Thu, 19 Aug 2021 15:24:30 +0800
-Message-ID: <20210819072431.21966-2-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210819072431.21966-1-lizhijian@cn.fujitsu.com>
-References: <20210819072431.21966-1-lizhijian@cn.fujitsu.com>
+        Thu, 19 Aug 2021 11:11:13 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52]:58660)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mGjgh-000qyp-A5; Thu, 19 Aug 2021 09:10:35 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:53670 helo=email.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1mGjgf-00B3f5-1i; Thu, 19 Aug 2021 09:10:34 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     "Ma\, XinjianX" <xinjianx.ma@intel.com>,
+        "linux-kselftest\@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        lkp <lkp@intel.com>,
+        "akpm\@linux-foundation.org" <akpm@linux-foundation.org>,
+        "axboe\@kernel.dk" <axboe@kernel.dk>,
+        "christian.brauner\@ubuntu.com" <christian.brauner@ubuntu.com>,
+        "containers\@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "jannh\@google.com" <jannh@google.com>,
+        "keescook\@chromium.org" <keescook@chromium.org>,
+        "kernel-hardening\@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm\@kvack.org" <linux-mm@kvack.org>,
+        "oleg\@redhat.com" <oleg@redhat.com>,
+        "torvalds\@linux-foundation.org" <torvalds@linux-foundation.org>
+References: <d650b7794e264d5f8aa107644cc9784f@intel.com>
+        <87a6lgysxp.fsf@disp2133>
+        <20210818131117.x7omzb2wkjq7le3s@example.org>
+Date:   Thu, 19 Aug 2021 10:10:26 -0500
+In-Reply-To: <20210818131117.x7omzb2wkjq7le3s@example.org> (Alexey Gladkov's
+        message of "Wed, 18 Aug 2021 15:11:17 +0200")
+Message-ID: <87o89ttqql.fsf@disp2133>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 2557C4D0D4BE.A019E
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+Content-Type: text/plain
+X-XM-SPF: eid=1mGjgf-00B3f5-1i;;;mid=<87o89ttqql.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+FJyKRYLudFvOu6Oz0NG+8QSd5IgBNsjA=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [PATCH v11 5/9] Reimplement RLIMIT_MSGQUEUE on top of ucounts
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For 'make run_tests':
-selftests will build bpftool into tools/testing/selftests/bpf/tools/sbin/bpftool
-by default.
+Alexey Gladkov <legion@kernel.org> writes:
 
-==================
-root@lkp-skl-d01 /opt/rootfs/v5.14-rc4# make -C tools/testing/selftests/bpf run_tests
-make: Entering directory '/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf'
-  MKDIR    include
-  MKDIR    libbpf
-  MKDIR    bpftool
-[...]
-  GEN     /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/profiler.skel.h
-  CC      /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/prog.o
-  GEN     /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/pid_iter.skel.h
-  CC      /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/pids.o
-  LINK    /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/bpftool
-  INSTALL bpftool
-  GEN      vmlinux.h
-[...]
- # test_feature_dev_json (test_bpftool.TestBpftool) ... ERROR
- # test_feature_kernel (test_bpftool.TestBpftool) ... ERROR
- # test_feature_kernel_full (test_bpftool.TestBpftool) ... ERROR
- # test_feature_kernel_full_vs_not_full (test_bpftool.TestBpftool) ... ERROR
- # test_feature_macros (test_bpftool.TestBpftool) ... Error: bug: failed to retrieve CAP_BPF status: Invalid argument
- # ERROR
- #
- # ======================================================================
- # ERROR: test_feature_dev_json (test_bpftool.TestBpftool)
- # ----------------------------------------------------------------------
- # Traceback (most recent call last):
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 57, in wrapper
- #     return f(*args, iface, **kwargs)
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 82, in test_feature_dev_json
- #     res = bpftool_json(["feature", "probe", "dev", iface])
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 42, in bpftool_json
- #     res = _bpftool(args)
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
- #     return subprocess.check_output(_args)
- #   File "/usr/lib/python3.7/subprocess.py", line 395, in check_output
- #     **kwargs).stdout
- #   File "/usr/lib/python3.7/subprocess.py", line 487, in run
- #     output=stdout, stderr=stderr)
- # subprocess.CalledProcessError: Command '['bpftool', '-j', 'feature', 'probe', 'dev', 'dummy0']' returned non-zero exit status 255.
- #
-==================
+> On Tue, Aug 17, 2021 at 10:47:14AM -0500, Eric W. Biederman wrote:
+>> "Ma, XinjianX" <xinjianx.ma@intel.com> writes:
+>> 
+>> > Hi Alexey,
+>> >
+>> > When lkp team run kernel selftests, we found after these series of patches, testcase mqueue: mq_perf_tests
+>> > in kselftest failed with following message.
+>> 
+>> Which kernel was this run against?
+>> 
+>> Where can the mq_perf_tests that you ran and had problems with be found?
+>> 
+>> During your run were you using user namespaces as part of your test
+>> environment?
+>> 
+>> The error message too many files corresponds to the error code EMFILES
+>> which is the error code that is returned when the rlimit is reached.
+>> 
+>> One possibility is that your test environment was run in a user
+>> namespace and so you wound up limited by rlimit of the user who created
+>> the user namespace at the point of user namespace creation. 
+>> 
+>> At this point if you can give us enough information to look into this
+>> and attempt to reproduce it that would be appreciated.
+>
+> I was able to reproduce it on master without using user namespace.
+> I suspect that the maximum value is not assigned here [1]:
+>
+> set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MSGQUEUE, task_rlimit(&init_task, RLIMIT_MSGQUEUE));
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/fork.c#n832
 
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/bpf/test_bpftool.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+The rlimits for init_task are set to INIT_RLIMITS.
+In INIT_RLIMITS RLIMIT_MSGQUEUE is set to MQ_MAX_BYTES
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
-index 66690778e36d..6b7ba19be1d0 100755
---- a/tools/testing/selftests/bpf/test_bpftool.sh
-+++ b/tools/testing/selftests/bpf/test_bpftool.sh
-@@ -2,4 +2,9 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (c) 2020 SUSE LLC.
+So that definitely means that as the code is current constructed the
+rlimit can not be effectively raised.
+
+So it looks like we are just silly and preventing the initial rlimits
+from being raised.
+
+So we probably want to do something like:
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index bc94b2cc5995..557ce0083ba3 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -825,13 +825,13 @@ void __init fork_init(void)
+ 	init_task.signal->rlim[RLIMIT_SIGPENDING] =
+ 		init_task.signal->rlim[RLIMIT_NPROC];
  
-+SCRIPT_DIR=$(dirname $(realpath $0))
-+
-+# 'make -C tools/testing/selftests/bpf' will install to BPFTOOL_INSTALL_PATH
-+BPFTOOL_INSTALL_PATH="$SCRIPT_DIR"/tools/sbin
-+export PATH=$BPFTOOL_INSTALL_PATH:$PATH
- python3 -m unittest -v test_bpftool.TestBpftool
--- 
-2.32.0
++	/* For non-rlimit ucounts make their default limit max_threads/2 */
+ 	for (i = 0; i < MAX_PER_NAMESPACE_UCOUNTS; i++)
+ 		init_user_ns.ucount_max[i] = max_threads/2;
+ 
+-	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_NPROC, task_rlimit(&init_task, RLIMIT_NPROC));
+-	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MSGQUEUE, task_rlimit(&init_task, RLIMIT_MSGQUEUE));
+-	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_SIGPENDING, task_rlimit(&init_task, RLIMIT_SIGPENDING));
+-	set_rlimit_ucount_max(&init_user_ns, UCOUNT_RLIMIT_MEMLOCK, task_rlimit(&init_task, RLIMIT_MEMLOCK));
++	/* In init_user_ns default rlimit to be the only limit */
++	for (; i < UCOUNT_COUNTS; i++)
++		set_rlimit_ucount_max(&init_user_ns, i, RLIMIT_INFINITY);
+ 
+ #ifdef CONFIG_VMAP_STACK
+ 	cpuhp_setup_state(CPUHP_BP_PREPARE_DYN, "fork:vm_stack_cache",
 
 
-
+Eric
