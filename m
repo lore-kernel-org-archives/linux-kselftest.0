@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80147C43214
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB9F4C19F31
 	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Aug 2021 14:30:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6745F6124B
+	by mail.kernel.org (Postfix) with ESMTP id B4DF66124B
 	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Aug 2021 14:30:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbhHUOax (ORCPT
+        id S234275AbhHUOax (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Sat, 21 Aug 2021 10:30:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45824 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:45880 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231732AbhHUOav (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Aug 2021 10:30:51 -0400
+        id S233548AbhHUOaw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 21 Aug 2021 10:30:52 -0400
 Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8E1866125F;
-        Sat, 21 Aug 2021 14:30:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44D8D6124D;
+        Sat, 21 Aug 2021 14:30:13 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.94.2)
         (envelope-from <rostedt@goodmis.org>)
-        id 1mHS0h-004woe-IZ; Sat, 21 Aug 2021 10:30:11 -0400
-Message-ID: <20210821143011.404503867@goodmis.org>
+        id 1mHS0h-004wpk-Us; Sat, 21 Aug 2021 10:30:11 -0400
+Message-ID: <20210821143011.791361948@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 21 Aug 2021 10:29:08 -0400
+Date:   Sat, 21 Aug 2021 10:29:10 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
@@ -41,8 +41,8 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [for-next][PATCH 4/6] selftests/ftrace: Add test case to test adding and removing of event
- probe
+Subject: [for-next][PATCH 6/6] selftests/ftrace: Add selftest for testing duplicate eprobes and
+ kprobes
 References: <20210821142904.655644298@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,11 +52,11 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-Add a test case that adds an event probe, makes sure that it works, and
-then removes it.
+Add a selftest that makes sure that eprobes and kprobes can not be created
+with the same group and name as existing events.
 
-Link: https://lore.kernel.org/linux-kselftest/20210819152825.526931866@goodmis.org/
-Link: https://lkml.kernel.org/r/20210820204742.274591200@goodmis.org
+Link: https://lore.kernel.org/linux-kselftest/20210819152825.715290342@goodmis.org/
+Link: https://lkml.kernel.org/r/20210820204742.653288346@goodmis.org
 
 Cc: "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>
 Cc: Tom Zanussi <zanussi@kernel.org>
@@ -66,54 +66,52 @@ Cc: linux-kselftest@vger.kernel.org
 Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- .../test.d/dynevent/add_remove_eprobe.tc      | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+ .../ftrace/test.d/dynevent/test_duplicates.tc | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
 new file mode 100644
-index 000000000000..25a3da4eaa44
+index 000000000000..db522577ff78
 --- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
-@@ -0,0 +1,40 @@
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+@@ -0,0 +1,38 @@
 +#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
-+# description: Generic dynamic event - add/remove eprobe events
-+# requires: dynamic_events events/syscalls/sys_enter_openat "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
++# description: Generic dynamic event - check if duplicate events are caught
++# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
 +
 +echo 0 > events/enable
 +
++HAVE_KPROBES=0
++
++if [ -f kprobe_events ]; then
++	HAVE_KPROBES=1
++fi
++
 +clear_dynamic_events
 +
-+SYSTEM="syscalls"
-+EVENT="sys_enter_openat"
-+FIELD="filename"
-+EPROBE="eprobe_open"
++# first create dynamic events for eprobes and kprobes.
 +
-+echo "e:$EPROBE $SYSTEM/$EVENT file=+0(\$filename):ustring" >> dynamic_events
++echo 'e:egroup/eevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
 +
-+grep -q "$EPROBE" dynamic_events
-+test -d events/eprobes/$EPROBE
++# Test eprobe for same eprobe, existing kprobe and existing event
++! echo 'e:egroup/eevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
++! echo 'e:syscalls/sys_enter_open syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
 +
-+echo 1 > events/eprobes/$EPROBE/enable
-+ls
-+echo 0 > events/eprobes/$EPROBE/enable
++if [ $HAVE_KPROBES -eq 1 ]; then
++    echo 'p:kgroup/kevent vfs_open file=+0($arg2)' >> dynamic_events
++    ! echo 'e:kgroup/kevent syscalls/sys_enter_openat file=+0($filename):ustring' >> dynamic_events
 +
-+content=`grep '^ *ls-' trace | grep 'file='`
-+nocontent=`grep '^ *ls-' trace | grep 'file=' | grep -v -e '"/' -e '"."'` || true
++# Test kprobe for same kprobe, existing eprobe and existing event
++    ! echo 'p:kgroup/kevent vfs_open file=+0($arg2)' >> dynamic_events
++    ! echo 'p:egroup/eevent vfs_open file=+0($arg2)' >> dynamic_events
++    ! echo 'p:syscalls/sys_enter_open vfs_open file=+0($arg2)' >> dynamic_events
 +
-+if [ -z "$content" ]; then
-+	exit_fail
++    echo '-:kgroup/kevent' >> dynamic_events
 +fi
 +
-+if [ ! -z "$nocontent" ]; then
-+	exit_fail
-+fi
-+
-+echo "-:$EPROBE" >> dynamic_events
-+
-+! grep -q "$EPROBE" dynamic_events
-+! test -d events/eprobes/$EPROBE
++echo '-:egroup/eevent' >> dynamic_events
 +
 +clear_trace
 -- 
