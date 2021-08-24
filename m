@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52B13C4320A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Aug 2021 21:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EC39C43216
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Aug 2021 21:35:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36237613AD
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Aug 2021 21:35:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21CB261374
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Aug 2021 21:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbhHXVg3 (ORCPT
+        id S237240AbhHXVgb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Aug 2021 17:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        Tue, 24 Aug 2021 17:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbhHXVgT (ORCPT
+        with ESMTP id S235388AbhHXVgP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Aug 2021 17:36:19 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2BBC0617A8;
-        Tue, 24 Aug 2021 14:35:34 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id me10so18846182ejb.11;
-        Tue, 24 Aug 2021 14:35:34 -0700 (PDT)
+        Tue, 24 Aug 2021 17:36:15 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35131C0613D9;
+        Tue, 24 Aug 2021 14:35:30 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id lc21so14801895ejc.7;
+        Tue, 24 Aug 2021 14:35:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rH4bYGauaxv2Wl+jiZaPd02GWdhR4IMZOZfUFE7drY0=;
-        b=MWO7txWzOK+UA7qYaeB0ByfyroreBfP5IoTlKFGUWageT3HiILxZxtvz0OtmnuZq5N
-         b/HUGHnhyElFkfuSmlPd6LhciErcOlh/4EWNqwiYBXY3eb91OXeUV4ZNyFUayypW2pTW
-         KnDgNLk9/IZi7bygKl6p8WrpCqtioV+13geeytH4/U9/L61HJY0EdkKFRYlJV2PfhVG4
-         bYdX+aa0A3RWlP7ZBpHfG3TAFutkyT8xKCFlLBEN7f8OE0Q1DT7i86OYNIzps3iDY3Nh
-         YphheMSppTlCHVU69/xxnANkk1WZ2V5NpXAnxFiuKtfXnV+ails3XLFvYtdOehhtv7ar
-         6vPw==
+        bh=Ct0HD70NBHwAB9BiqsIbwqqYlCQQO3kZsUrrZx21vQA=;
+        b=q1LyY04Q+z09IYx+Tt23jG4iId5YHMG3BWfG4/Eq71DIk86YFduy6ib3UMhiK1zuTB
+         kqTNAUWArg93o6D0MmWBPv+X011ncyL6nCxwpTltAt+wL1B11SGVkmOrU8kGI4GI5nIB
+         P5a0cp1+1yJql4VP6/g/NdlsdgGMJlDajNgAFE4jEioMPWW3fffugVR6+64zVjF5bNyo
+         4cpScRM13Y8hJZmn9adPw8XTpHrgX2ds4U9nCOawnuipizbGRUaUFEkh3UD4YdZKsTfl
+         hA4PT5LTQ5vlg6EiyvjgskzIALXO4bOykiPvctL+jCaAqgaLrViTiIlz2bSRqTRwX7MA
+         KMng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rH4bYGauaxv2Wl+jiZaPd02GWdhR4IMZOZfUFE7drY0=;
-        b=uBIYuWDrwYX/ejkWjIOorfKbFCMoP3mrOAmJl0xKXWqSMRv4eVW3phWJ48k4hfHurl
-         I3vH1FPFSeGXWNkLpNJxMc8ueAWPwTOn7JKctHx7aE7II9sq5LD7zDAVJXLSIpCbhzJp
-         UiYJl1K29+LZXfinaPb7tB0FRxLd+xJsedzx6MF7l+jopVpzMEfthFtrilimYXoYmaAS
-         1CeTZaEiLjz2DaNsJqJ3/VNIPWwp9UHLdHCUl1BiGeEYHbtTXg/TTTHIY9KyY5jvuqHh
-         hIwR4vwpa9kC07MxnyitNr5s9ulXYspyCBu8MGIG+G7vbA+kj8w84K3kQ0rbJ+rq/kGh
-         9Okg==
-X-Gm-Message-State: AOAM530qGOoCPtItt1VZOd8NCaQ4E5Wy3H76KwchziiE4mqMJgQ7sPMW
-        uKu1iCqatCr0tN3Oxm5TLeA=
-X-Google-Smtp-Source: ABdhPJznRja0rsYkh10d5kdpNeqHjeMPeBMFgYdTO5pZTJuljEJfr1aDNsVRZQGwleqza+aX8ra4+A==
-X-Received: by 2002:a17:906:378f:: with SMTP id n15mr16338909ejc.467.1629840932724;
-        Tue, 24 Aug 2021 14:35:32 -0700 (PDT)
+        bh=Ct0HD70NBHwAB9BiqsIbwqqYlCQQO3kZsUrrZx21vQA=;
+        b=T5uAMtEmdlZqm07PFEo1jI6WsWVAaBft96VSVEJyHc9zgeYDm5n4YJwS1q+QfOuxOy
+         6kraAxwJg8QJ/LKjMCEDb/8bx59k8EYr1wAgtW/ON8RRHtv7yXxtmee4Nqk6J/Lte7k7
+         lwsEqfTyOv981tDifRoTmtOMYNUVCUMqy4wSEPBZoSqIUXhl8fyuYvT2Kdh2kn1F7pbh
+         Nwt+3FTnCSzDl91HkxmUXEgxgXZBXYrOIJLoGVJwPNa3/tm4Pn+UGAc54SziZmWXwLb8
+         qqa+cvMjKLaRaTiAtpGqh7Sud4fNlElCDUY6aissDSlkc/B3EP1BXD9XiAwxjQ1OCmbf
+         H7XA==
+X-Gm-Message-State: AOAM531E1KrM0uixNvSiW3ZcnGFI/Oe+g3WHIHAnNMG0CLZbifakQEn1
+        reXw0DrCanZopHe+3sySGAg=
+X-Google-Smtp-Source: ABdhPJy0FLTX6qq23VzmxQi4NC6NiWluW3KbxIUj/+0H13gA6vYVMtMXNA8SyBEzE0S3bjSDbMY7CQ==
+X-Received: by 2002:a17:906:1dd6:: with SMTP id v22mr36555630ejh.226.1629840928821;
+        Tue, 24 Aug 2021 14:35:28 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:241e:502:1d80:ed0a:7326:fbac:b4c])
-        by smtp.gmail.com with ESMTPSA id d16sm12348357edu.8.2021.08.24.14.35.30
+        by smtp.gmail.com with ESMTPSA id d16sm12348357edu.8.2021.08.24.14.35.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 14:35:32 -0700 (PDT)
+        Tue, 24 Aug 2021 14:35:28 -0700 (PDT)
 From:   Leonard Crestez <cdleonard@gmail.com>
 To:     Dmitry Safonov <0x7f454c46@gmail.com>,
         David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -76,9 +76,9 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         Menglong Dong <dong.menglong@zte.com.cn>,
         netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFCv3 05/15] tcp: authopt: Add crypto initialization
-Date:   Wed, 25 Aug 2021 00:34:38 +0300
-Message-Id: <abb720b34b9eef1cc52ef68017334e27a2af83c6.1629840814.git.cdleonard@gmail.com>
+Subject: [RFCv3 03/15] selftests: Initial tcp_authopt test module
+Date:   Wed, 25 Aug 2021 00:34:36 +0300
+Message-Id: <4ea197b5370cbdaac0086f1d94af8a5f4e27a901.1629840814.git.cdleonard@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1629840814.git.cdleonard@gmail.com>
 References: <cover.1629840814.git.cdleonard@gmail.com>
@@ -88,299 +88,133 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The crypto_shash API is used in order to compute packet signatures. The
-API comes with several unfortunate limitations:
+This test suite is written as a standalone python3 package using
+dependencies such as scapy.
 
-1) Allocating a crypto_shash can sleep and must be done in user context.
-2) Packet signatures must be computed in softirq context
-3) Packet signatures use dynamic "traffic keys" which require exclusive
-access to crypto_shash for crypto_setkey.
+The run.sh script wrapper called from kselftest infrastructure uses
+"tox" to generate an isolated virtual environment just for running these
+tests. The run.sh wrapper can be called from anywhere and does not rely
+on kselftest infrastructure.
 
-The solution is to allocate one crypto_shash for each possible cpu for
-each algorithm at setsockopt time. The per-cpu tfm is then borrowed from
-softirq context, signatures are computed and the tfm is returned.
-
-The pool for each algorithm is reference counted, initialized at
-setsockopt time and released in tcp_authopt_key_info's rcu callback
+The python3 and tox packages be installed manually but not any other
+dependencies
 
 Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 ---
- include/net/tcp_authopt.h |   3 +
- net/ipv4/tcp_authopt.c    | 177 +++++++++++++++++++++++++++++++++++++-
- 2 files changed, 178 insertions(+), 2 deletions(-)
+ tools/testing/selftests/tcp_authopt/Makefile    |  5 +++++
+ tools/testing/selftests/tcp_authopt/README.rst  | 15 +++++++++++++++
+ tools/testing/selftests/tcp_authopt/config      |  6 ++++++
+ tools/testing/selftests/tcp_authopt/run.sh      | 11 +++++++++++
+ tools/testing/selftests/tcp_authopt/setup.cfg   | 17 +++++++++++++++++
+ tools/testing/selftests/tcp_authopt/setup.py    |  5 +++++
+ .../tcp_authopt/tcp_authopt_test/__init__.py    |  0
+ 7 files changed, 59 insertions(+)
+ create mode 100644 tools/testing/selftests/tcp_authopt/Makefile
+ create mode 100644 tools/testing/selftests/tcp_authopt/README.rst
+ create mode 100644 tools/testing/selftests/tcp_authopt/config
+ create mode 100755 tools/testing/selftests/tcp_authopt/run.sh
+ create mode 100644 tools/testing/selftests/tcp_authopt/setup.cfg
+ create mode 100644 tools/testing/selftests/tcp_authopt/setup.py
+ create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/__init__.py
 
-diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
-index b4277112b506..c9ee2059b442 100644
---- a/include/net/tcp_authopt.h
-+++ b/include/net/tcp_authopt.h
-@@ -2,10 +2,12 @@
- #ifndef _LINUX_TCP_AUTHOPT_H
- #define _LINUX_TCP_AUTHOPT_H
- 
- #include <uapi/linux/tcp.h>
- 
-+struct tcp_authopt_alg_imp;
+diff --git a/tools/testing/selftests/tcp_authopt/Makefile b/tools/testing/selftests/tcp_authopt/Makefile
+new file mode 100644
+index 000000000000..391412071875
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++include ../lib.mk
 +
- /**
-  * struct tcp_authopt_key_info - Representation of a Master Key Tuple as per RFC5925
-  *
-  * Key structure lifetime is only protected by RCU so readers needs to hold a
-  * single rcu_read_lock until they're done with the key.
-@@ -20,10 +22,11 @@ struct tcp_authopt_key_info {
- 	u8 send_id, recv_id;
- 	u8 alg_id;
- 	u8 keylen;
- 	u8 key[TCP_AUTHOPT_MAXKEYLEN];
- 	struct sockaddr_storage addr;
-+	struct tcp_authopt_alg_imp *alg;
- };
- 
- /**
-  * struct tcp_authopt_info - Per-socket information regarding tcp_authopt
-  *
-diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-index f6dddc5775ff..ce560bd88903 100644
---- a/net/ipv4/tcp_authopt.c
-+++ b/net/ipv4/tcp_authopt.c
-@@ -4,10 +4,161 @@
- #include <net/tcp.h>
- #include <net/tcp_authopt.h>
- #include <crypto/hash.h>
- #include <trace/events/tcp.h>
- 
-+/* All current algorithms have a mac length of 12 but crypto API digestsize can be larger */
-+#define TCP_AUTHOPT_MAXMACBUF	20
-+#define TCP_AUTHOPT_MAX_TRAFFIC_KEY_LEN	20
++TEST_PROGS += ./run.sh
++TEST_FILES := setup.py setup.cfg tcp_authopt_test
+diff --git a/tools/testing/selftests/tcp_authopt/README.rst b/tools/testing/selftests/tcp_authopt/README.rst
+new file mode 100644
+index 000000000000..e9e4acc0a22a
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/README.rst
+@@ -0,0 +1,15 @@
++=========================================
++Tests for linux TCP Authentication Option
++=========================================
 +
-+struct tcp_authopt_alg_imp {
-+	/* Name of algorithm in crypto-api */
-+	const char *alg_name;
-+	/* One of the TCP_AUTHOPT_ALG_* constants from uapi */
-+	u8 alg_id;
-+	/* Length of traffic key */
-+	u8 traffic_key_len;
-+	/* Length of mac in TCP option */
-+	u8 maclen;
++Test suite is written in python3 using pytest and scapy. The test suite is
++mostly self-contained as a python package.
 +
-+	/* shared crypto_shash */
-+	spinlock_t lock;
-+	int ref_cnt;
-+	struct crypto_shash *tfm;
-+};
++The recommended way to run this is the included `run.sh` script as root, this
++will automatically create a virtual environment with the correct dependencies
++using `tox`.
 +
-+static struct tcp_authopt_alg_imp tcp_authopt_alg_list[] = {
-+	{
-+		.alg_id = TCP_AUTHOPT_ALG_HMAC_SHA_1_96,
-+		.alg_name = "hmac(sha1)",
-+		.traffic_key_len = 20,
-+		.maclen = 12,
-+		.lock = __SPIN_LOCK_UNLOCKED(tcp_authopt_alg_list[0].lock),
-+	},
-+	{
-+		.alg_id = TCP_AUTHOPT_ALG_AES_128_CMAC_96,
-+		.alg_name = "cmac(aes)",
-+		.traffic_key_len = 16,
-+		.maclen = 12,
-+		.lock = __SPIN_LOCK_UNLOCKED(tcp_authopt_alg_list[1].lock),
-+	},
-+};
++An old separate version can be found here: https://github.com/cdleonard/tcp-authopt-test
 +
-+/* get a pointer to the tcp_authopt_alg instance or NULL if id invalid */
-+static inline struct tcp_authopt_alg_imp *tcp_authopt_alg_get(int alg_num)
-+{
-+	if (alg_num <= 0 || alg_num > 2)
-+		return NULL;
-+	return &tcp_authopt_alg_list[alg_num - 1];
-+}
++Integration with kselftest infrastructure is minimal: when in doubt just run
++this separately.
+diff --git a/tools/testing/selftests/tcp_authopt/config b/tools/testing/selftests/tcp_authopt/config
+new file mode 100644
+index 000000000000..0d4e5d47fa72
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/config
+@@ -0,0 +1,6 @@
++# RFC5925 TCP Authentication Option and all algorithms
++CONFIG_TCP_AUTHOPT=y
++CONFIG_CRYPTO_SHA1=M
++CONFIG_CRYPTO_HMAC=M
++CONFIG_CRYPTO_AES=M
++CONFIG_CRYPTO_CMAC=M
+diff --git a/tools/testing/selftests/tcp_authopt/run.sh b/tools/testing/selftests/tcp_authopt/run.sh
+new file mode 100755
+index 000000000000..192ae094e3be
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/run.sh
+@@ -0,0 +1,11 @@
++#! /bin/bash
 +
-+/* Mark an algorithm as in-use from user context */
-+static int tcp_authopt_alg_require(struct tcp_authopt_alg_imp *alg)
-+{
-+	struct crypto_shash *tfm = NULL;
-+	bool need_init = false;
++if ! command -v tox >/dev/null; then
++	echo >&2 "error: please install the python tox package"
++	exit 1
++fi
++if [[ $(id -u) -ne 0 ]]; then
++	echo >&2 "warning: running as non-root user is unlikely to work"
++fi
++cd "$(dirname "${BASH_SOURCE[0]}")"
++exec tox "$@"
+diff --git a/tools/testing/selftests/tcp_authopt/setup.cfg b/tools/testing/selftests/tcp_authopt/setup.cfg
+new file mode 100644
+index 000000000000..373c5632b0a2
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/setup.cfg
+@@ -0,0 +1,17 @@
++[options]
++install_requires=
++    cryptography
++    nsenter
++    pre-commit
++    pytest
++    scapy
 +
-+	might_sleep();
++[tox:tox]
++envlist = py3
 +
-+	/* If we're the first user then we need to initialize shash but we might lose the race. */
-+	spin_lock_bh(&alg->lock);
-+	WARN_ON(alg->ref_cnt < 0);
-+	if (alg->ref_cnt == 0)
-+		need_init = true;
-+	else
-+		++alg->ref_cnt;
-+	spin_unlock_bh(&alg->lock);
++[testenv]
++commands = pytest {posargs}
 +
-+	/* Already initialized */
-+	if (!need_init)
-+		return 0;
++[metadata]
++name = tcp-authopt-test
++version = 0.1
+diff --git a/tools/testing/selftests/tcp_authopt/setup.py b/tools/testing/selftests/tcp_authopt/setup.py
+new file mode 100644
+index 000000000000..d5e50aa1ca5e
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/setup.py
+@@ -0,0 +1,5 @@
++#! /usr/bin/env python3
 +
-+	tfm = crypto_alloc_shash(alg->alg_name, 0, 0);
-+	if (IS_ERR(tfm))
-+		return PTR_ERR(tfm);
++from setuptools import setup
 +
-+	spin_lock_bh(&alg->lock);
-+	if (alg->ref_cnt == 0)
-+		/* race won */
-+		alg->tfm = tfm;
-+	else
-+		/* race lost, free tfm later */
-+		need_init = false;
-+	++alg->ref_cnt;
-+	spin_unlock_bh(&alg->lock);
-+
-+	if (!need_init)
-+		crypto_free_shash(tfm);
-+	else
-+		pr_info("initialized tcp-ao %s", alg->alg_name);
-+
-+	return 0;
-+}
-+
-+static void tcp_authopt_alg_release(struct tcp_authopt_alg_imp *alg)
-+{
-+	struct crypto_shash *tfm_to_free = NULL;
-+
-+	spin_lock_bh(&alg->lock);
-+	--alg->ref_cnt;
-+	WARN_ON(alg->ref_cnt < 0);
-+	if (alg->ref_cnt == 0) {
-+		tfm_to_free = alg->tfm;
-+		alg->tfm = NULL;
-+	}
-+	spin_unlock_bh(&alg->lock);
-+
-+	if (tfm_to_free) {
-+		pr_info("released tcp-ao %s", alg->alg_name);
-+		crypto_free_shash(tfm_to_free);
-+	}
-+}
-+
-+/* increase reference count on an algorithm that is already in use */
-+static void tcp_authopt_alg_incref(struct tcp_authopt_alg_imp *alg)
-+{
-+	spin_lock_bh(&alg->lock);
-+	WARN_ON(alg->ref_cnt <= 0);
-+	++alg->ref_cnt;
-+	spin_unlock_bh(&alg->lock);
-+}
-+
-+static struct crypto_shash *tcp_authopt_alg_get_tfm(struct tcp_authopt_alg_imp *alg)
-+{
-+	spin_lock_bh(&alg->lock);
-+	WARN_ON(alg->ref_cnt < 0);
-+	return alg->tfm;
-+}
-+
-+static void tcp_authopt_alg_put_tfm(struct tcp_authopt_alg_imp *alg, struct crypto_shash *tfm)
-+{
-+	WARN_ON(tfm != alg->tfm);
-+	spin_unlock_bh(&alg->lock);
-+}
-+
-+static struct crypto_shash *tcp_authopt_get_kdf_shash(struct tcp_authopt_key_info *key)
-+{
-+	return tcp_authopt_alg_get_tfm(key->alg);
-+}
-+
-+static void tcp_authopt_put_kdf_shash(struct tcp_authopt_key_info *key,
-+				      struct crypto_shash *tfm)
-+{
-+	return tcp_authopt_alg_put_tfm(key->alg, tfm);
-+}
-+
-+static struct crypto_shash *tcp_authopt_get_mac_shash(struct tcp_authopt_key_info *key)
-+{
-+	return tcp_authopt_alg_get_tfm(key->alg);
-+}
-+
-+static void tcp_authopt_put_mac_shash(struct tcp_authopt_key_info *key,
-+				      struct crypto_shash *tfm)
-+{
-+	return tcp_authopt_alg_put_tfm(key->alg, tfm);
-+}
-+
- /* checks that ipv4 or ipv6 addr matches. */
- static bool ipvx_addr_match(struct sockaddr_storage *a1,
- 			    struct sockaddr_storage *a2)
- {
- 	if (a1->ss_family != a2->ss_family)
-@@ -118,17 +269,25 @@ int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
- 	opt->flags = info->flags & TCP_AUTHOPT_KNOWN_FLAGS;
- 
- 	return 0;
- }
- 
-+static void tcp_authopt_key_free_rcu(struct rcu_head *rcu)
-+{
-+	struct tcp_authopt_key_info *key = container_of(rcu, struct tcp_authopt_key_info, rcu);
-+
-+	tcp_authopt_alg_release(key->alg);
-+	kfree(key);
-+}
-+
- static void tcp_authopt_key_del(struct sock *sk,
- 				struct tcp_authopt_info *info,
- 				struct tcp_authopt_key_info *key)
- {
- 	hlist_del_rcu(&key->node);
- 	atomic_sub(sizeof(*key), &sk->sk_omem_alloc);
--	kfree_rcu(key, rcu);
-+	call_rcu(&key->rcu, tcp_authopt_key_free_rcu);
- }
- 
- /* free info and keys but don't touch tp->authopt_info */
- static void __tcp_authopt_info_free(struct sock *sk, struct tcp_authopt_info *info)
- {
-@@ -160,10 +319,12 @@ void tcp_authopt_clear(struct sock *sk)
- int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- {
- 	struct tcp_authopt_key opt;
- 	struct tcp_authopt_info *info;
- 	struct tcp_authopt_key_info *key_info;
-+	struct tcp_authopt_alg_imp *alg;
-+	int err;
- 
- 	sock_owned_by_me(sk);
- 
- 	/* If userspace optlen is too short fill the rest with zeros */
- 	if (optlen > sizeof(opt))
-@@ -199,23 +360,35 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 	/* Initialize tcp_authopt_info if not already set */
- 	info = __tcp_authopt_info_get_or_create(sk);
- 	if (IS_ERR(info))
- 		return PTR_ERR(info);
- 
-+	/* check the algorithm */
-+	alg = tcp_authopt_alg_get(opt.alg);
-+	if (!alg)
-+		return -EINVAL;
-+	WARN_ON(alg->alg_id != opt.alg);
-+	err = tcp_authopt_alg_require(alg);
-+	if (err)
-+		return err;
-+
- 	/* If an old key exists with exact ID then remove and replace.
- 	 * RCU-protected readers might observe both and pick any.
- 	 */
- 	key_info = tcp_authopt_key_lookup_exact(sk, info, &opt);
- 	if (key_info)
- 		tcp_authopt_key_del(sk, info, key_info);
- 	key_info = sock_kmalloc(sk, sizeof(*key_info), GFP_KERNEL | __GFP_ZERO);
--	if (!key_info)
-+	if (!key_info) {
-+		tcp_authopt_alg_release(alg);
- 		return -ENOMEM;
-+	}
- 	key_info->flags = opt.flags & TCP_AUTHOPT_KEY_KNOWN_FLAGS;
- 	key_info->send_id = opt.send_id;
- 	key_info->recv_id = opt.recv_id;
- 	key_info->alg_id = opt.alg;
-+	key_info->alg = alg;
- 	key_info->keylen = opt.keylen;
- 	memcpy(key_info->key, opt.key, opt.keylen);
- 	memcpy(&key_info->addr, &opt.addr, sizeof(key_info->addr));
- 	hlist_add_head_rcu(&key_info->node, &info->head);
- 
++setup()
+diff --git a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/__init__.py b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/__init__.py
+new file mode 100644
+index 000000000000..e69de29bb2d1
 -- 
 2.25.1
 
