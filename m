@@ -2,78 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE277C4338F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Aug 2021 01:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AEE1C4338F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Aug 2021 03:21:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FA8461248
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Aug 2021 01:49:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AE3D61212
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Aug 2021 03:21:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbhHYBt5 (ORCPT
+        id S237810AbhHYDWH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Aug 2021 21:49:57 -0400
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:60378 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229800AbhHYBt5 (ORCPT
+        Tue, 24 Aug 2021 23:22:07 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45986
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237739AbhHYDWG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Aug 2021 21:49:57 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UlgvsCb_1629856150;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0UlgvsCb_1629856150)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 25 Aug 2021 09:49:11 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     shuah@kernel.org
-Cc:     cyphar@cyphar.com, christian.brauner@ubuntu.com,
-        baolin.wang@linux.alibaba.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests: openat2: Fix testing failure for O_LARGEFILE flag
-Date:   Wed, 25 Aug 2021 09:49:04 +0800
-Message-Id: <c37fb567a848ec4a5b21ff515f423b9fe2acde14.1629855952.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Tue, 24 Aug 2021 23:22:06 -0400
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 86464407A0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Aug 2021 03:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1629861674;
+        bh=bubKe1V2wVnyhV9MMzcO3LsuU+2HkzzeQ/usUihXRL4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=pNK5/VUbe8Zo5NVmRDNXnLvbxS6+TDoeocuhytiPuOPSTnH+EtAC+l4dMQ+6uBahA
+         d6mgRGg6g0KzUhJsmyXt/+mi07hDCvElqnSYRgcuDDe/0F18G4jUKYeQxzHACrS0nm
+         ItwPsP+cyOXbAJhd5bn22PB4mYrVwmO9gdW8wr3zpBmiWsNI0dX/oieLFDCeQonKoZ
+         HZ17s66ylUNCu4JUbjdlRMQA+Mong1/e69m4IRUFhEpEsk0+dOm6KiEEA4AP8xPwgK
+         2e2TBROrye5c+F8TyYROZ7sIB8PtXrpzdxT+o061zpps6MIpHU0vIziYp3Pny9VHBh
+         dGuoRmTCHy7Bw==
+Received: by mail-pf1-f197.google.com with SMTP id b10-20020a056a0002ca00b003e1bfef6c57so11109587pft.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Aug 2021 20:21:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bubKe1V2wVnyhV9MMzcO3LsuU+2HkzzeQ/usUihXRL4=;
+        b=CoN+5rp2X+a0E3Ngzx71KBSkii/CH4RpdMhO8ECdo4nyhBxMuizkYsQKp10KdsTXVa
+         YAFpZmYhUJUJujyjq4jg17YTkiuVhhLIuFVTGVbvh651mWvPMXR82a0B4g/0bya9OCsh
+         vmN/KYGuewAFdhyFMDzsHnP/lKhK1uetcdDDC9N5TWAWMiw04BcATsqrg1fDc++G8bfo
+         W38GpJpOuQajdJ0hdDHcmKoLeuSdTkQwRffichIJhJRgdRPf84X8jCSTrVglgYv0LwpA
+         QzdT/akAF0cUMvKz//c3UMTOyXRm5cZMJWaLMc6r17f7+dZ/o+dwZ6//s7qEyDKKFaZJ
+         /t3Q==
+X-Gm-Message-State: AOAM533UO+djspW5vm1SOPxqVHpsD1uUpNIJaW4C3mGZjHJD/qf3l27c
+        BidMcI4PUe7odISgO9xD3ukdbLBt0FlJYqLtv4Iq187f8sQRycCO2YUyQ3AiQ4N819g4M6iZhCi
+        epOMomXFN3HpbePj2Sk+zgOT6/qNx3NbnJ7mWluHvd/N8DYtniOAsBBHE2dEK
+X-Received: by 2002:a65:494e:: with SMTP id q14mr40030659pgs.314.1629861672698;
+        Tue, 24 Aug 2021 20:21:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxhWn0jS2YhuUhIxgZx+PjfbGWTVTBIIjMe7EFktPXwyVRjO7xHttqYBJgkFKlGl1VfvTS2JVhsyO4eOepp7Jw=
+X-Received: by 2002:a65:494e:: with SMTP id q14mr40030623pgs.314.1629861672376;
+ Tue, 24 Aug 2021 20:21:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210823085854.40216-1-po-hsu.lin@canonical.com> <YSSemxg1JQRdqxsP@shredder>
+In-Reply-To: <YSSemxg1JQRdqxsP@shredder>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Wed, 25 Aug 2021 11:21:13 +0800
+Message-ID: <CAMy_GT9xMGsX2dqDRhq=2LPf4OZLc3j1YLCYKOVZACKhPyTu8Q@mail.gmail.com>
+Subject: Re: [PATCH] selftests/net: Use kselftest skip code for skipped tests
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>, petrm@nvidia.co,
+        oleksandr.mazur@plvision.eu, idosch@nvidia.com, jiri@nvidia.com,
+        nikolay@nvidia.com, gnault@redhat.com, simon.horman@netronome.com,
+        baowen.zheng@corigine.com, danieller@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running the openat2 test suite on ARM64 platform, we got below failure,
-since the definition of the O_LARGEFILE is different on ARM64. So we can
-set the correct O_LARGEFILE definition on ARM64 to fix this issue.
+On Tue, Aug 24, 2021 at 3:24 PM Ido Schimmel <idosch@idosch.org> wrote:
+>
+> On Mon, Aug 23, 2021 at 04:58:54PM +0800, Po-Hsu Lin wrote:
+> > There are several test cases in the net directory are still using
+> > exit 0 or exit 1 when they need to be skipped. Use kselftest
+> > framework skip code instead so it can help us to distinguish the
+> > return status.
+> >
+> > Criterion to filter out what should be fixed in net directory:
+> >   grep -r "exit [01]" -B1 | grep -i skip
+> >
+> > This change might cause some false-positives if people are running
+> > these test scripts directly and only checking their return codes,
+> > which will change from 0 to 4. However I think the impact should be
+> > small as most of our scripts here are already using this skip code.
+> > And there will be no such issue if running them with the kselftest
+> > framework.
+> >
+> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+> Tested-by: Ido Schimmel <idosch@nvidia.com>
 
-"openat2 unexpectedly returned # 3['.../tools/testing/selftests/openat2']
-with 208000 (!= 208000)
-not ok 102 openat2 with incompatible flags (O_PATH | O_LARGEFILE) fails
-with -22 (Invalid argument)"
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-Changes from v1:
- - Add reviewed and acked tags from Aleksa and Christian.
- - Add failure logs in the commit log.
----
- tools/testing/selftests/openat2/openat2_test.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
-index d7ec1e7..1bddbe9 100644
---- a/tools/testing/selftests/openat2/openat2_test.c
-+++ b/tools/testing/selftests/openat2/openat2_test.c
-@@ -22,7 +22,11 @@
-  * XXX: This is wrong on {mips, parisc, powerpc, sparc}.
-  */
- #undef	O_LARGEFILE
-+#ifdef __aarch64__
-+#define	O_LARGEFILE 0x20000
-+#else
- #define	O_LARGEFILE 0x8000
-+#endif
- 
- struct open_how_ext {
- 	struct open_how inner;
--- 
-1.8.3.1
-
+Thank you for the test and the review!
+PHLin
