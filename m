@@ -5,65 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58D79C432BE
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Sep 2021 20:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DBB5C43216
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Sep 2021 20:31:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E2E86101B
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Sep 2021 20:30:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2697F610A1
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Sep 2021 20:31:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbhIAUbh (ORCPT
+        id S242123AbhIAUbz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Sep 2021 16:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        Wed, 1 Sep 2021 16:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbhIAUbg (ORCPT
+        with ESMTP id S231820AbhIAUbl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Sep 2021 16:31:36 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A0BC061760
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Sep 2021 13:30:39 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b9-20020a5b07890000b0290558245b7eabso696099ybq.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Sep 2021 13:30:39 -0700 (PDT)
+        Wed, 1 Sep 2021 16:31:41 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9407C061796
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Sep 2021 13:30:43 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id e6-20020ac84e46000000b0029baad9aaa0so829293qtw.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Sep 2021 13:30:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=kixEwIb9gqW04gwAAeUnH/ecCVyWuRkL9QSYK7iSzQk=;
-        b=vI3cqGN3v2ltfEVTsw8l2uRo5chArr25iXsE02pKsVchqSHX3JFwdJCKj6AY7eXama
-         mND0TI9aNvGKRlJ+u0ATyJo6zfv/z91nwaLKErTznJjazUVaGT690x3Hmpk6XHnLBa+G
-         JH7Io8acVqTGgPK08MIOcCpnPO2aUCiyEmdAi5l4jpwbS0fKi7N0RrQ9sVfanRlND87X
-         hXjn2TmotG9V4F+x55ib2PCSGt8vDrvWR7zm2oYT/36lcg0kO7CFioODoVr/MEbRD7FG
-         AVHD0fYrsuTMVYH20bQZwQJedG/CM2LYbmTU0fBZDFoW11qYPntlj/PQlpJuSqJL+y88
-         65Hg==
+        bh=ldLSFjRoxMWlt0z49+aeceHGSPi4XGtx99N0OsyVmLE=;
+        b=BuHas1hm2XV6S0WdY0vNJtMNKqcbhhJlqEs2KKd8pR2ZtVSZyXdrExnzC9yAzti+6M
+         zsB0cZ6yGgy/LCmNQnoE9irvXv0l/kef17MuyVLZuyUIXQLsQAVBMnkjctlzTiQS2gFl
+         nNVPpGt/BljIuuR8Np2F3JcMLpOT4q13le7u3t9xGN/31GLNQRRtmxFcq3gYSrgx4SpD
+         JLqZCUeYueQLMr1QYaYrnsCaSoHnKr/g+VU1g+qoQeBj0TaKLOTWsdjiTXJZ47hEuUNE
+         YXZcuSxN1X/sa6HR56VO6THXVndPm08u7aBj1ZanEP006m9Dcu8OtsWgR2jBGDkZu34R
+         vcrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=kixEwIb9gqW04gwAAeUnH/ecCVyWuRkL9QSYK7iSzQk=;
-        b=tugfA74ChvKz9JLYkoo5pa7d7fqPIBrkYly5wZMD7c+a5xaUv/ovA8wxTkGymM3kn5
-         Wi+uX6pSt14YDk4pT8kNwtUOUAKOiBn8u8sTpiZUSTyRjHOkh0HdsbaP/yCZGqawFttO
-         WuybfSt97hy7eHJo0FLnhWWDfYj99l+g4VSqg9nZJ0CNntaDWOJnoMr2r14BSq3wlo9D
-         fbH5iONL+ATIuJZdamHWm2pmRnnwWEPZdDYSPamVItct7TccBtU3FEQAU5lBQWqE9Ufw
-         5bx8gVI0ZUCFF8Qi464rzx9fK+L3XNJ/mXzg1V/jY07k3CRYOCVcsv3WgDJmcbpMViT7
-         z6jg==
-X-Gm-Message-State: AOAM5311N0a1eoG0UHpABqGq9iq577akO0azDkiwIWX6CzIRw3oyJQ6a
-        gPoi20htK50c+Mi4kxoW6yFuE9zeJwM=
-X-Google-Smtp-Source: ABdhPJxOy0/3eJr4hrzQ/lo98CzNq7Zzsb3SLqOc/F5UhI3VQK6ru+OrtaCwLB3GIsnL+0WVfa3UVtPABkI=
+        bh=ldLSFjRoxMWlt0z49+aeceHGSPi4XGtx99N0OsyVmLE=;
+        b=V8vjYrh/LenrvN7lrqdyRPUWKgeIuhaRWVDNexp9DaLaECQPyk9M5z+A67TM3R2gBJ
+         TnvyXCPavshFPsH+PCu+54EQTeRm7noPE/X/vBUwkViBt0HRgaMjkAZn4Lf0b5UhAays
+         EeMgVyhJyOEXckmg3LmkPdK2/q+t/8u8miTvilUeXh26M4StW4wv9fulretB0fUc5hgR
+         Tg3I2kscWA4K+josfA3Y/9PAhOJQRO5WL3OlXiEKhaKcIpxQkSDYRZLTA6Jr7xPQ9J4t
+         oUtd6PdC4kLW6EAke9uBtv5nZqJ6XC9P2DL+edjBGnNKIseKAFeoxtZKlMxw8lBUV/jZ
+         DnvA==
+X-Gm-Message-State: AOAM531o3ExdXozf+eVfKrNIDGUm58nDj2T+n53n7h6lb9/uB9DakwfK
+        c+JgzKAzWmg7wI87MqF709/fZZJj84M=
+X-Google-Smtp-Source: ABdhPJzwgN7oneIBzjWgEYG1ij6WsGK4rMhOwP5dDZ6ynvgYB+9os0mc0YRgyTvPGpS3N44mYcHSnTxodu4=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:9935:5a5e:c7b6:e649])
- (user=seanjc job=sendgmr) by 2002:a25:9c01:: with SMTP id c1mr1791237ybo.228.1630528238358;
- Wed, 01 Sep 2021 13:30:38 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6214:92b:: with SMTP id
+ dk11mr1719346qvb.46.1630528242737; Wed, 01 Sep 2021 13:30:42 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  1 Sep 2021 13:30:26 -0700
+Date:   Wed,  1 Sep 2021 13:30:28 -0700
 In-Reply-To: <20210901203030.1292304-1-seanjc@google.com>
-Message-Id: <20210901203030.1292304-2-seanjc@google.com>
+Message-Id: <20210901203030.1292304-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20210901203030.1292304-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
-Subject: [PATCH v3 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
- on xfer to KVM guest
+Subject: [PATCH v3 3/5] tools: Move x86 syscall number fallbacks to .../uapi/
 From:   Sean Christopherson <seanjc@google.com>
 To:     Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -95,72 +94,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Invoke rseq's NOTIFY_RESUME handler when processing the flag prior to
-transferring to a KVM guest, which is roughly equivalent to an exit to
-userspace and processes many of the same pending actions.  While the task
-cannot be in an rseq critical section as the KVM path is reachable only
-by via ioctl(KVM_RUN), the side effects that apply to rseq outside of a
-critical section still apply, e.g. the current CPU needs to be updated if
-the task is migrated.
+Move unistd_{32,64}.h from x86/include/asm to x86/include/uapi/asm so
+that tools/selftests that install kernel headers, e.g. KVM selftests, can
+include non-uapi tools headers, e.g. to get 'struct list_head', without
+effectively overriding the installed non-tool uapi headers.
 
-Clearing TIF_NOTIFY_RESUME without informing rseq can lead to segfaults
-and other badness in userspace VMMs that use rseq in combination with KVM,
-e.g. due to the CPU ID being stale after task migration.
+Swapping KVM's search order, e.g. to search the kernel headers before
+tool headers, is not a viable option as doing results in linux/type.h and
+other core headers getting pulled from the kernel headers, which do not
+have the kernel-internal typedefs that are used through tools, including
+many files outside of selftests/kvm's control.
 
-Fixes: 72c3c0fe54a3 ("x86/kvm: Use generic xfer to guest work function")
-Reported-by: Peter Foley <pefoley@google.com>
-Bisected-by: Doug Evans <dje@google.com>
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Shakeel Butt <shakeelb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
+Prior to commit cec07f53c398 ("perf tools: Move syscall number fallbacks
+from perf-sys.h to tools/arch/x86/include/asm/"), the handcoded numbers
+were actual fallbacks, i.e. overriding unistd_{32,64}.h from the kernel
+headers was unintentional.
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- kernel/entry/kvm.c |  4 +++-
- kernel/rseq.c      | 14 +++++++++++---
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ tools/arch/x86/include/{ => uapi}/asm/unistd_32.h | 0
+ tools/arch/x86/include/{ => uapi}/asm/unistd_64.h | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_32.h (100%)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_64.h (100%)
 
-diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-index 49972ee99aff..049fd06b4c3d 100644
---- a/kernel/entry/kvm.c
-+++ b/kernel/entry/kvm.c
-@@ -19,8 +19,10 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
- 		if (ti_work & _TIF_NEED_RESCHED)
- 			schedule();
- 
--		if (ti_work & _TIF_NOTIFY_RESUME)
-+		if (ti_work & _TIF_NOTIFY_RESUME) {
- 			tracehook_notify_resume(NULL);
-+			rseq_handle_notify_resume(NULL, NULL);
-+		}
- 
- 		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
- 		if (ret)
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index 35f7bd0fced0..6d45ac3dae7f 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -282,9 +282,17 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
- 
- 	if (unlikely(t->flags & PF_EXITING))
- 		return;
--	ret = rseq_ip_fixup(regs);
--	if (unlikely(ret < 0))
--		goto error;
-+
-+	/*
-+	 * regs is NULL if and only if the caller is in a syscall path.  Skip
-+	 * fixup and leave rseq_cs as is so that rseq_sycall() will detect and
-+	 * kill a misbehaving userspace on debug kernels.
-+	 */
-+	if (regs) {
-+		ret = rseq_ip_fixup(regs);
-+		if (unlikely(ret < 0))
-+			goto error;
-+	}
- 	if (unlikely(rseq_update_cpu_id(t)))
- 		goto error;
- 	return;
+diff --git a/tools/arch/x86/include/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
+similarity index 100%
+rename from tools/arch/x86/include/asm/unistd_32.h
+rename to tools/arch/x86/include/uapi/asm/unistd_32.h
+diff --git a/tools/arch/x86/include/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
+similarity index 100%
+rename from tools/arch/x86/include/asm/unistd_64.h
+rename to tools/arch/x86/include/uapi/asm/unistd_64.h
 -- 
 2.33.0.153.gba50c8fa24-goog
 
