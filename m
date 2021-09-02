@@ -4,179 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD9B1C432BE
-	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Sep 2021 02:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5572DC432BE
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Sep 2021 08:41:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FA8761058
-	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Sep 2021 02:38:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3542861051
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Sep 2021 08:41:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243149AbhIBCjp (ORCPT
+        id S243655AbhIBImq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Sep 2021 22:39:45 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:20166 "EHLO
+        Thu, 2 Sep 2021 04:42:46 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:35308 "EHLO
         heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229679AbhIBCjp (ORCPT
+        with ESMTP id S233362AbhIBImq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Sep 2021 22:39:45 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ACnhFdqnc9qvsChO4108gGFt1/GDpDfLE3DAb?=
- =?us-ascii?q?v31ZSRFFG/Fxl6iV8sjzsiWE7Ar5OUtQ/uxoV5PhfZqxz/JICOoqTNKftWvdyQ?=
- =?us-ascii?q?iVxehZhOOIqVDd8kbFl9K1u50OT0EHMqyTMbFlt7eA3CCIV8Yn3MKc8L2lwcPX?=
- =?us-ascii?q?z3JWRwlsbK16hj0JczqzIwlnQhVcH5olGN657spDnTCpfnMadYCVHX8ANtKz3+?=
- =?us-ascii?q?Hjpdb3ZwIcHR475E2rhTOs0rTzFB+VxVM/flp0sNEfzVQ=3D?=
+        Thu, 2 Sep 2021 04:42:46 -0400
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Avw/ria3LZLj8maIxy2eP8gqjBIAkLtp133Aq?=
+ =?us-ascii?q?2lEZdPUMSL38qyiv9M516faGskd0ZJhAo6H5BEDuewK+yXcY2+Qs1NSZLXLbUQ?=
+ =?us-ascii?q?mTXeNfBOLZqlWKcREWndQy6U4USchD4arLbGSS4/yX3ODyKadG/DDOytHPuQ7x?=
+ =?us-ascii?q?9QYVcT1X?=
 X-IronPort-AV: E=Sophos;i="5.84,371,1620662400"; 
-   d="scan'208";a="113878573"
+   d="scan'208";a="113896117"
 Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 02 Sep 2021 10:38:46 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id 548204D0D9DA;
-        Thu,  2 Sep 2021 10:38:45 +0800 (CST)
+  by heian.cn.fujitsu.com with ESMTP; 02 Sep 2021 16:41:46 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 8B52F4D0D9DC;
+        Thu,  2 Sep 2021 16:41:45 +0800 (CST)
 Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 2 Sep 2021 10:38:39 +0800
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 2 Sep 2021 16:41:40 +0800
 Received: from localhost.localdomain (10.167.225.141) by
  G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Thu, 2 Sep 2021 10:38:39 +0800
+ id 15.0.1497.23 via Frontend Transport; Thu, 2 Sep 2021 16:41:39 +0800
 From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <chris.hyser@oracle.com>, <peterz@infradead.org>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+To:     <bamv2005@gmail.com>, <shuah@kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC:     <linux-kernel@vger.kernel.org>,
         Li Zhijian <lizhijian@cn.fujitsu.com>,
         Philip Li <philip.li@intel.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH] kselftests/sched: cleanup the child processes
-Date:   Thu, 2 Sep 2021 10:43:33 +0800
-Message-ID: <20210902024333.75983-1-lizhijian@cn.fujitsu.com>
+Subject: [PATCH] selftests/gpio: Fix gpio compiling error
+Date:   Thu, 2 Sep 2021 16:46:35 +0800
+Message-ID: <20210902084635.103622-1-lizhijian@cn.fujitsu.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: 548204D0D9DA.AD129
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: 8B52F4D0D9DC.AECA9
 X-yoursite-MailScanner: Found to be clean
 X-yoursite-MailScanner-From: lizhijian@fujitsu.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously, 'make -C sched run_tests' will block forever when it occurs
-something wrong where the *selftests framework* is waiting for its child
-processes to exit.
+[root@iaas-rpma gpio]# make
+gcc     gpio-mockup-cdev.c  -o /home/lizhijian/linux/tools/testing/selftests/gpio/gpio-mockup-cdev
+gpio-mockup-cdev.c: In function ‘request_line_v2’:
+gpio-mockup-cdev.c:24:30: error: storage size of ‘req’ isn’t known
+   24 |  struct gpio_v2_line_request req;
+      |                              ^~~
+gpio-mockup-cdev.c:32:14: error: ‘GPIO_V2_LINE_FLAG_OUTPUT’ undeclared (first use in this function); did you mean ‘GPIOLINE_FLAG_IS_OUT’?
+   32 |  if (flags & GPIO_V2_LINE_FLAG_OUTPUT) {
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~
 
-[root@iaas-rpma sched]# ./cs_prctl_test
-
- ## Create a thread/process/process group hiearchy
-Not a core sched system
-tid=74985, / tgid=74985 / pgid=74985: ffffffffffffffff
-Not a core sched system
-    tid=74986, / tgid=74986 / pgid=74985: ffffffffffffffff
-Not a core sched system
-        tid=74988, / tgid=74986 / pgid=74985: ffffffffffffffff
-Not a core sched system
-        tid=74989, / tgid=74986 / pgid=74985: ffffffffffffffff
-Not a core sched system
-        tid=74990, / tgid=74986 / pgid=74985: ffffffffffffffff
-Not a core sched system
-    tid=74987, / tgid=74987 / pgid=74985: ffffffffffffffff
-Not a core sched system
-        tid=74991, / tgid=74987 / pgid=74985: ffffffffffffffff
-Not a core sched system
-        tid=74992, / tgid=74987 / pgid=74985: ffffffffffffffff
-Not a core sched system
-        tid=74993, / tgid=74987 / pgid=74985: ffffffffffffffff
-
-Not a core sched system
-(268) FAILED: get_cs_cookie(0) == 0
-
- ## Set a cookie on entire process group
--1 = prctl(62, 1, 0, 2, 0)
-core_sched create failed -- PGID: Invalid argument
-(cs_prctl_test.c:272) -
-[root@iaas-rpma sched]# ps
-    PID TTY          TIME CMD
-   4605 pts/2    00:00:00 bash
-  74986 pts/2    00:00:00 cs_prctl_test
-  74987 pts/2    00:00:00 cs_prctl_test
-  74999 pts/2    00:00:00 ps
+Search headers from linux tree like others, such as sched
 
 CC: Philip Li <philip.li@intel.com>
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 ---
- tools/testing/selftests/sched/cs_prctl_test.c | 28 ++++++++++++-------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ tools/testing/selftests/gpio/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 63fe6521c56d..1829383715c6 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -64,6 +64,17 @@ enum pid_type {PIDTYPE_PID = 0, PIDTYPE_TGID, PIDTYPE_PGID};
+diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+index 39f2bbe8dd3d..42ea7d2aa844 100644
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -3,5 +3,6 @@
+ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+ TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev
++CFLAGS += -I../../../../usr/include
  
- const int THREAD_CLONE_FLAGS = CLONE_THREAD | CLONE_SIGHAND | CLONE_FS | CLONE_VM | CLONE_FILES;
- 
-+struct child_args {
-+	int num_threads;
-+	int pfd[2];
-+	int cpid;
-+	int thr_tids[MAX_THREADS];
-+};
-+
-+static struct child_args procs[MAX_PROCESSES];
-+static int num_processes = 2;
-+static int need_cleanup = 0;
-+
- static int _prctl(int option, unsigned long arg2, unsigned long arg3, unsigned long arg4,
- 		  unsigned long arg5)
- {
-@@ -80,8 +91,14 @@ static int _prctl(int option, unsigned long arg2, unsigned long arg3, unsigned l
- #define handle_error(msg) __handle_error(__FILE__, __LINE__, msg)
- static void __handle_error(char *fn, int ln, char *msg)
- {
-+	int pidx;
- 	printf("(%s:%d) - ", fn, ln);
- 	perror(msg);
-+	if (need_cleanup) {
-+		for (pidx = 0; pidx < num_processes; ++pidx)
-+			kill(procs[pidx].cpid, 15);
-+		need_cleanup = 0;
-+	}
- 	exit(EXIT_FAILURE);
- }
- 
-@@ -108,13 +125,6 @@ static unsigned long get_cs_cookie(int pid)
- 	return cookie;
- }
- 
--struct child_args {
--	int num_threads;
--	int pfd[2];
--	int cpid;
--	int thr_tids[MAX_THREADS];
--};
--
- static int child_func_thread(void __attribute__((unused))*arg)
- {
- 	while (1)
-@@ -214,10 +224,7 @@ void _validate(int line, int val, char *msg)
- 
- int main(int argc, char *argv[])
- {
--	struct child_args procs[MAX_PROCESSES];
--
- 	int keypress = 0;
--	int num_processes = 2;
- 	int num_threads = 3;
- 	int delay = 0;
- 	int res = 0;
-@@ -264,6 +271,7 @@ int main(int argc, char *argv[])
- 
- 	printf("\n## Create a thread/process/process group hiearchy\n");
- 	create_processes(num_processes, num_threads, procs);
-+	need_cleanup = 1;
- 	disp_processes(num_processes, procs);
- 	validate(get_cs_cookie(0) == 0);
- 
+ include ../lib.mk
 -- 
 2.31.1
 
