@@ -2,260 +2,183 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83B28C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Sep 2021 15:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4076DC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Sep 2021 16:14:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D30A61106
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Sep 2021 15:30:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22586610E7
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Sep 2021 16:14:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349739AbhICPbW (ORCPT
+        id S1349937AbhICQPL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Sep 2021 11:31:22 -0400
-Received: from mga14.intel.com ([192.55.52.115]:5963 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349719AbhICPbU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Sep 2021 11:31:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10096"; a="219150081"
-X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
-   d="scan'208";a="219150081"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 08:30:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
-   d="scan'208";a="500491565"
-Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Sep 2021 08:30:13 -0700
-From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
-To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message to get SyncE status
-Date:   Fri,  3 Sep 2021 17:14:35 +0200
-Message-Id: <20210903151436.529478-2-maciej.machnikowski@intel.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210903151436.529478-1-maciej.machnikowski@intel.com>
-References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 3 Sep 2021 12:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349936AbhICQPL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Sep 2021 12:15:11 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BABC061575
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Sep 2021 09:14:11 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id y185-20020a3764c20000b02903d2c78226ceso6323820qkb.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Sep 2021 09:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=M6ta55C5YrTiWpJmRXkscLbV8qDYp7HoT3jJ6wg8fKI=;
+        b=JMhBqnd8AJEbyTVh+/OD0W9I+YhqfjmIJiyFfl6RyNSqhBCGkFjYt2FvjsgRkwCdQF
+         D+H+YMexFArgRpval3MhGlLM11t50kFSok9v8VRevgc988OF/fM9C0yss5onTZDJGFn9
+         vWNgxVEF6qBMIYr5qamQcDSVsNRBZfVUrf6Hfe+8/Q007XoAjBoquGHFuQ0K287IuoRP
+         LtKf/HMh3+KN73qlCprG9FvVFca/yoDftSdfgV0upNRCSaPr7I8ya6q+EosR6D1XZ/4w
+         IpAOHtvAWPJ0Sl6U639yuArOSzzvdYZ86y7qfqo/h0TbjxfALNTtM6YzrSNUoIXvjRKz
+         VWEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=M6ta55C5YrTiWpJmRXkscLbV8qDYp7HoT3jJ6wg8fKI=;
+        b=SSRRHOWbJWqPPOxeZkiqdjxVKnkRb9466UcncgAxsujxuWUBjkDGdvzlivf9HWe+FR
+         T2mKLvmMrlxK61+HjI+Jdb8IZougSBlKQ8d+ppK2quHgraBbDtNUlWPlAcexi0Fr7TLR
+         MMWghlp/60koJOx+2nl+bpLQEoLyRs1PFKhhfkY03aNSPCSi6X59ZVJVU3zWxCNeJjUC
+         CFqSLq/obPNXU5U9cBTk+Gy4eNC8COCVElpchHm6lAhc9l2gUA2+b0pRyTEkpVDYAeGQ
+         eZDOEsp/GgZOoVUZkR0W7CSFjXog1VPk6wg3xwDWAGleoPTJAyBMfUXXTo7KSWenBXhq
+         z9TQ==
+X-Gm-Message-State: AOAM531f5vSsJhbkYhuVpk+s+dSl2nWmSHxfuFwi+cIHt97i73BYBmo7
+        ixaZLe5toCButpII65ixJ3HcUuWluMzqkA==
+X-Google-Smtp-Source: ABdhPJyhy9kIgP9BQY4I4hoOAicE1VyjpnSlpawr29BJjQNMqgNZx01vITsQM5Xj+ykD8wQvDu+jmDzNSaklOw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:4791:26fa:5a8a:1c2a])
+ (user=dlatypov job=sendgmr) by 2002:a05:6214:268e:: with SMTP id
+ gm14mr4477617qvb.51.1630685650225; Fri, 03 Sep 2021 09:14:10 -0700 (PDT)
+Date:   Fri,  3 Sep 2021 09:14:05 -0700
+Message-Id: <20210903161405.1861312-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
+Subject: [PATCH] kunit: tool: better handling of quasi-bool args (--json, --raw_output)
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series introduces basic interface for reading the Ethernet
-Equipment Clock (EEC) state on a SyncE capable device. This state gives
-information about the state of EEC. This interface is required to
-implement Synchronization Status Messaging on upper layers.
+Problem:
 
-Initial implementation returns SyncE EEC state and flags attributes.
-The only flag currently implemented is the EEC_SRC_PORT. When it's set
-the EEC is synchronized to the recovered clock recovered from the
-current port.
+What does this do?
+$ kunit.py run --json
+Well, it runs all the tests and prints test results out as JSON.
 
-SyncE EEC state read needs to be implemented as a ndo_get_eec_state
-function.
+And next is
+$ kunit.py run my-test-suite --json
+This runs just `my-test-suite` and prints results out as JSON.
 
-Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
+But what about?
+$ kunit.py run --json my-test-suite
+This runs all the tests and stores the json results in a "my-test-suite"
+file.
+
+Why:
+--json, and now --raw_output are actually string flags. They just have a
+default value. --json in particular takes the name of an output file.
+
+It was intended that you'd do
+$ kunit.py run --json=my_output_file my-test-suite
+if you ever wanted to specify the value.
+
+Workaround:
+It doesn't seem like there's a way to make
+https://docs.python.org/3/library/argparse.html only accept arg values
+after a '='.
+
+I believe that `--json` should "just work" regardless of where it is.
+So this patch automatically rewrites a bare `--json` to `--json=stdout`.
+
+That makes the examples above work the same way.
+Add a regression test that can catch this for --raw_output.
+
+Fixes: 6a499c9c42d0 ("kunit: tool: make --raw_output support only showing kunit output")
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- include/linux/netdevice.h      |  6 +++
- include/uapi/linux/if_link.h   | 31 +++++++++++++++
- include/uapi/linux/rtnetlink.h |  3 ++
- net/core/rtnetlink.c           | 71 ++++++++++++++++++++++++++++++++++
- security/selinux/nlmsgtab.c    |  3 +-
- 5 files changed, 113 insertions(+), 1 deletion(-)
+ tools/testing/kunit/kunit.py           | 24 ++++++++++++++++++++++--
+ tools/testing/kunit/kunit_tool_test.py |  8 ++++++++
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 7c41593c1d6a..de78b8ed903c 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1344,6 +1344,8 @@ struct netdev_net_notifier {
-  *	The caller must be under RCU read context.
-  * int (*ndo_fill_forward_path)(struct net_device_path_ctx *ctx, struct net_device_path *path);
-  *     Get the forwarding path to reach the real device from the HW destination address
-+ * int (*ndo_get_synce_state)(struct net_device *dev, struct if_eec_state_msg *state)
-+ *	Get state of physical layer frequency syntonization (SyncE)
-  */
- struct net_device_ops {
- 	int			(*ndo_init)(struct net_device *dev);
-@@ -1563,6 +1565,10 @@ struct net_device_ops {
- 	struct net_device *	(*ndo_get_peer_dev)(struct net_device *dev);
- 	int                     (*ndo_fill_forward_path)(struct net_device_path_ctx *ctx,
-                                                          struct net_device_path *path);
-+	int			(*ndo_get_eec_state)(struct net_device *dev,
-+						     enum if_eec_state *state,
-+						     u32 *eec_flags,
-+						     struct netlink_ext_ack *extack);
- };
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 5a931456e718..95d62020e4f2 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -16,7 +16,7 @@ assert sys.version_info >= (3, 7), "Python version is too old"
  
- /**
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index eebd3894fe89..78a8a5af8cd8 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -1273,4 +1273,35 @@ enum {
+ from collections import namedtuple
+ from enum import Enum, auto
+-from typing import Iterable
++from typing import Iterable, Sequence
  
- #define IFLA_MCTP_MAX (__IFLA_MCTP_MAX - 1)
+ import kunit_config
+ import kunit_json
+@@ -186,6 +186,26 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 				exec_result.elapsed_time))
+ 	return parse_result
  
-+/* SyncE section */
-+
-+enum if_eec_state {
-+	IF_EEC_STATE_INVALID = 0,
-+	IF_EEC_STATE_FREERUN,
-+	IF_EEC_STATE_LOCKACQ,
-+	IF_EEC_STATE_LOCKREC,
-+	IF_EEC_STATE_LOCKED,
-+	IF_EEC_STATE_HOLDOVER,
-+	IF_EEC_STATE_OPEN_LOOP,
-+	__IF_EEC_STATE_MAX,
-+};
-+
-+#define IF_EEC_STATE_MAX	(__IF_EEC_STATE_MAX - 1)
-+#define EEC_SRC_PORT		(1 << 0) /* recovered clock from the port is
-+					  * currently the source for the EEC
-+					  */
-+
-+struct if_eec_state_msg {
-+	__u32 ifindex;
-+};
-+
-+enum {
-+	IFLA_EEC_UNSPEC,
-+	IFLA_EEC_STATE,
-+	IFLA_EEC_FLAGS,
-+	__IFLA_EEC_MAX,
-+};
-+
-+#define IFLA_EEC_MAX (__IFLA_EEC_MAX - 1)
-+
- #endif /* _UAPI_LINUX_IF_LINK_H */
-diff --git a/include/uapi/linux/rtnetlink.h b/include/uapi/linux/rtnetlink.h
-index 5888492a5257..642ac18a09d9 100644
---- a/include/uapi/linux/rtnetlink.h
-+++ b/include/uapi/linux/rtnetlink.h
-@@ -185,6 +185,9 @@ enum {
- 	RTM_GETNEXTHOPBUCKET,
- #define RTM_GETNEXTHOPBUCKET	RTM_GETNEXTHOPBUCKET
- 
-+	RTM_GETEECSTATE = 120,
-+#define RTM_GETEECSTATE	RTM_GETEECSTATE
-+
- 	__RTM_MAX,
- #define RTM_MAX		(((__RTM_MAX + 3) & ~3) - 1)
- };
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index 972c8cb303a5..11d4e96d3371 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -5468,6 +5468,75 @@ static int rtnl_stats_dump(struct sk_buff *skb, struct netlink_callback *cb)
- 	return skb->len;
- }
- 
-+static int rtnl_fill_eec_state(struct sk_buff *skb, struct net_device *dev,
-+			       u32 portid, u32 seq, struct netlink_callback *cb,
-+			       int flags, struct netlink_ext_ack *extack)
-+{
-+	const struct net_device_ops *ops = dev->netdev_ops;
-+	struct if_eec_state_msg *state_msg;
-+	enum if_eec_state state;
-+	struct nlmsghdr *nlh;
-+	u32 eec_flags;
-+	int err;
-+
-+	ASSERT_RTNL();
-+
-+	if (!ops->ndo_get_eec_state)
-+		return -EOPNOTSUPP;
-+
-+	err = ops->ndo_get_eec_state(dev, &state, &eec_flags, extack);
-+	if (err)
-+		return err;
-+
-+	nlh = nlmsg_put(skb, portid, seq, RTM_GETEECSTATE, sizeof(*state_msg),
-+			flags);
-+	if (!nlh)
-+		return -EMSGSIZE;
-+
-+	state_msg = nlmsg_data(nlh);
-+	state_msg->ifindex = dev->ifindex;
-+
-+	if (nla_put(skb, IFLA_EEC_STATE, sizeof(state), &state) ||
-+	    nla_put_u32(skb, IFLA_EEC_FLAGS, eec_flags))
-+		return -EMSGSIZE;
-+
-+	nlmsg_end(skb, nlh);
-+	return 0;
++# Problem:
++# $ kunit.py run --json
++# works as one would expect and prints the parsed test results as JSON.
++# $ kunit.py run --json suite_name
++# would *not* pass suite_name as the filter_glob and print as json.
++# argparse will consider it to be another way of writing
++# $ kunit.py run --json=suite_name
++# i.e. it would run all tests, and dump the json to a `suite_name` file.
++# So we hackily automatically rewrite --json => --json=stdout
++pseudo_bool_flag_defaults = {
++		'--json': 'stdout',
++		'--raw_output': 'kunit',
 +}
++def massage_argv(argv: Sequence[str]) -> Sequence[str]:
++	def massage_arg(arg: str) -> str:
++		if arg not in pseudo_bool_flag_defaults:
++			return arg
++		return  f'{arg}={pseudo_bool_flag_defaults[arg]}'
++	return map(massage_arg, argv)
 +
-+static int rtnl_eec_state_get(struct sk_buff *skb, struct nlmsghdr *nlh,
-+			      struct netlink_ext_ack *extack)
-+{
-+	struct net *net = sock_net(skb->sk);
-+	struct if_eec_state_msg *state;
-+	struct net_device *dev;
-+	struct sk_buff *nskb;
-+	int err;
-+
-+	state = nlmsg_data(nlh);
-+	if (state->ifindex > 0)
-+		dev = __dev_get_by_index(net, state->ifindex);
-+	else
-+		return -EINVAL;
-+
-+	if (!dev)
-+		return -ENODEV;
-+
-+	nskb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	if (!nskb)
-+		return -ENOBUFS;
-+
-+	err = rtnl_fill_eec_state(nskb, dev, NETLINK_CB(skb).portid,
-+				  nlh->nlmsg_seq, NULL, nlh->nlmsg_flags,
-+				  extack);
-+	if (err < 0)
-+		kfree_skb(nskb);
-+	else
-+		err = rtnl_unicast(nskb, net, NETLINK_CB(skb).portid);
-+
-+	return err;
-+}
-+
- /* Process one rtnetlink message. */
+ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--build_dir',
+ 			    help='As in the make command, it specifies the build '
+@@ -303,7 +323,7 @@ def main(argv, linux=None):
+ 				  help='Specifies the file to read results from.',
+ 				  type=str, nargs='?', metavar='input_file')
  
- static int rtnetlink_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
-@@ -5693,4 +5762,6 @@ void __init rtnetlink_init(void)
+-	cli_args = parser.parse_args(argv)
++	cli_args = parser.parse_args(massage_argv(argv))
  
- 	rtnl_register(PF_UNSPEC, RTM_GETSTATS, rtnl_stats_get, rtnl_stats_dump,
- 		      0);
+ 	if get_kernel_root_path():
+ 		os.chdir(get_kernel_root_path())
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 619c4554cbff..1edcc8373b4e 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -408,6 +408,14 @@ class KUnitMainTest(unittest.TestCase):
+ 			self.assertNotEqual(call, mock.call(StrContains('Testing complete.')))
+ 			self.assertNotEqual(call, mock.call(StrContains(' 0 tests run')))
+ 
++	def test_run_raw_output_does_not_take_positional_args(self):
++		# --raw_output is a string flag, but we don't want it to consume
++		# any positional arguments, only ones after an '='
++		self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
++		kunit.main(['run', '--raw_output', 'filter_glob'], self.linux_source_mock)
++		self.linux_source_mock.run_kernel.assert_called_once_with(
++			args=None, build_dir='.kunit', filter_glob='filter_glob', timeout=300)
 +
-+	rtnl_register(PF_UNSPEC, RTM_GETEECSTATE, rtnl_eec_state_get, NULL, 0);
- }
-diff --git a/security/selinux/nlmsgtab.c b/security/selinux/nlmsgtab.c
-index d59276f48d4f..0e2d84d6045f 100644
---- a/security/selinux/nlmsgtab.c
-+++ b/security/selinux/nlmsgtab.c
-@@ -91,6 +91,7 @@ static const struct nlmsg_perm nlmsg_route_perms[] =
- 	{ RTM_NEWNEXTHOPBUCKET,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
- 	{ RTM_DELNEXTHOPBUCKET,	NETLINK_ROUTE_SOCKET__NLMSG_WRITE },
- 	{ RTM_GETNEXTHOPBUCKET,	NETLINK_ROUTE_SOCKET__NLMSG_READ  },
-+	{ RTM_GETEECSTATE,	NETLINK_ROUTE_SOCKET__NLMSG_READ  },
- };
- 
- static const struct nlmsg_perm nlmsg_tcpdiag_perms[] =
-@@ -174,7 +175,7 @@ int selinux_nlmsg_lookup(u16 sclass, u16 nlmsg_type, u32 *perm)
- 		 * structures at the top of this file with the new mappings
- 		 * before updating the BUILD_BUG_ON() macro!
- 		 */
--		BUILD_BUG_ON(RTM_MAX != (RTM_NEWNEXTHOPBUCKET + 3));
-+		BUILD_BUG_ON(RTM_MAX != (RTM_GETEECSTATE + 3));
- 		err = nlmsg_perm(nlmsg_type, perm, nlmsg_route_perms,
- 				 sizeof(nlmsg_route_perms));
- 		break;
+ 	def test_exec_timeout(self):
+ 		timeout = 3453
+ 		kunit.main(['exec', '--timeout', str(timeout)], self.linux_source_mock)
+
+base-commit: a9c9a6f741cdaa2fa9ba24a790db8d07295761e3
 -- 
-2.26.3
+2.33.0.153.gba50c8fa24-goog
 
