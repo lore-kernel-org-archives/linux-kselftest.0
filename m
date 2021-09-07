@@ -2,184 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBBF0C433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Sep 2021 10:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5CDC43219
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Sep 2021 14:38:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B82C9610F8
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Sep 2021 10:27:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26237610E9
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Sep 2021 14:38:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbhIGK2U (ORCPT
+        id S243140AbhIGOjn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Sep 2021 06:28:20 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28918 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232704AbhIGK2T (ORCPT
+        Tue, 7 Sep 2021 10:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237377AbhIGOjn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Sep 2021 06:28:19 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 187A3m2L185757;
-        Tue, 7 Sep 2021 06:26:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=hYpyRO2QO5ja5Cllzf8va+62OtNtrJ0wjhk/TKUrqBU=;
- b=lqljPIH9KkHLCT5Gy9MA1vnTJpL77bCWCQMx6vCmsf6B9Zk2GP3CAD2sfsVFVssDJz9M
- fFXgGV2micqcmDP/3sFKttO6SYNQkIDnWmAsBXdOF9RUKeXMf4v7sCKgcEW3IkoU3uW2
- IcI88dFyGHRbBX0jOnxMvryELM2RfSqs1FX9Hvc/Axe3MemXMVm2vg5xoc/i52Uhuiwa
- SgN/CJLnKwG+KyAfwSCs168JlmIbw7dmUai13Zj1+BYDCb94tlkwic0YdhOENeA0aFYW
- uE9hIQ08mBAJs6rpr9CuyuATEN0EUv7yOSjzHrqS8Zpd8BBQIJlzFVO2yG6w4hvpXoWP 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ax46mkead-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Sep 2021 06:26:57 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 187AOmS5107878;
-        Tue, 7 Sep 2021 06:26:57 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ax46mke9v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Sep 2021 06:26:57 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 187AEAd8029636;
-        Tue, 7 Sep 2021 10:26:54 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3av02jcp1u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Sep 2021 10:26:54 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 187AMaxK58458602
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Sep 2021 10:22:36 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 03CBB11C04C;
-        Tue,  7 Sep 2021 10:26:52 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A7A711C052;
-        Tue,  7 Sep 2021 10:26:51 +0000 (GMT)
-Received: from sig-9-145-45-184.uk.ibm.com (unknown [9.145.45.184])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Sep 2021 10:26:51 +0000 (GMT)
-Message-ID: <bdfabd343bdec7e27ff92bc0145d813011227f8f.camel@linux.ibm.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix build of task_pt_regs
- test for arm64
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, dxu@dxuuu.xyz,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 07 Sep 2021 12:26:51 +0200
-In-Reply-To: <20210906163635.302307-1-jean-philippe@linaro.org>
-References: <20210906163635.302307-1-jean-philippe@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NdwkWpoL10Iv5cFaVpCDIFWyiMRxnxyd
-X-Proofpoint-ORIG-GUID: Xelaojuf83pH6u9f-0x7i0Bnu_kwGOQ0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 7 Sep 2021 10:39:43 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD58EC0613D9
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Sep 2021 07:38:36 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id j16so8335081pfc.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Sep 2021 07:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qhhCof7Bxt7WkPbfZU7ElxFgFbYJKUpmBYIoqT3FQG0=;
+        b=dDM249O1jyYEP+sPZcNiaaYYByaEMpzFEK/dirlDIZo1llr4qtiA9AwONG4gfWFxuh
+         GI+LHZeQL/xeGEQ7Yfkgt3/vvEePqhDwrmKdVjtWDvjOavLauOARfD2emyCkCFDIZ3e5
+         RZJODDFiVIiw9T1gza4f7jn3IWawg1iNUGGJLjWdnuO+yJ9asXLrHQr2+tGWyM13pjym
+         1+byStjxJrGiqSwx/wJlrs7mmw75bxC4tAQmD1XUWS2Kmf6OB7eQm5ViyURea6XHmtW+
+         mck5xXQNXvsw8NgSA/A4XmTbdZUQ2dwVHhPiE7RfQH0O5+QpGIXptx+UdEU6zgDpgmg+
+         vWmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qhhCof7Bxt7WkPbfZU7ElxFgFbYJKUpmBYIoqT3FQG0=;
+        b=ohqiwgLiG54zKmEF/8MpElWloIqvHPJGU7VkOD+3kdlT0uIaHM4c8gNhXzVpNlrJU7
+         nxX1/gOpgS6oSt5Gh+ny9Uxe3PKS86CCV0vKmoNoxFiCVCCpy2Mqz9ktTkUVsc0A4waI
+         m6IPNGmAgQDmAxzpjp+Q1s0GzkzSWuMGWT+HWdQ58Dg2CLp32L9B/t7/j8sQgIExoi5p
+         F6Sj9A+yUR2nQ/8LmNpGWgX9r6DmmCiytC3F2BXuwEzGVOLMHl3gj+rSq5gG/PiWXoO/
+         wuhMjxsI1S1R54bJETSAH5pWUpnhJv1kEYx1/CddMWAMd5LeV8i9fGGlmdqVhqmJkty/
+         zYCw==
+X-Gm-Message-State: AOAM532Bp5u3vPtd03iwofpoTq2vKOojLgs2KwMJi0Q6CW0gmhBRNWUq
+        9PnyOKKT1ETQJsiJlzhn+N5Uqg==
+X-Google-Smtp-Source: ABdhPJzl5tT+vIOlvAuqK2CqdOtw1QALWHjYejAcBedH1JDRDyFV2NrE6Q9L+J99MDm/UGDNVHbaHA==
+X-Received: by 2002:a63:c10b:: with SMTP id w11mr17484810pgf.228.1631025516087;
+        Tue, 07 Sep 2021 07:38:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j6sm13428682pgq.0.2021.09.07.07.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Sep 2021 07:38:35 -0700 (PDT)
+Date:   Tue, 7 Sep 2021 14:38:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        shuah <shuah@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
+ on xfer to KVM guest
+Message-ID: <YTd5Z91j9N2LuuIr@google.com>
+References: <20210818001210.4073390-1-seanjc@google.com>
+ <20210818001210.4073390-2-seanjc@google.com>
+ <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+ <YR7tzZ98XC6OV2vu@google.com>
+ <1872633041.20290.1629485463253.JavaMail.zimbra@efficios.com>
+ <425456d3-4772-2a1b-9cf3-a5b750b95c2e@redhat.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-07_03:2021-09-07,2021-09-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1011
- malwarescore=0 mlxlogscore=999 suspectscore=0 phishscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2108310000 definitions=main-2109070067
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <425456d3-4772-2a1b-9cf3-a5b750b95c2e@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2021-09-06 at 17:36 +0100, Jean-Philippe Brucker wrote:
-> struct pt_regs is not exported to userspace on all archs. arm64 and
-> s390
-> export "user_pt_regs" instead, which causes build failure at the
-> moment:
+On Mon, Sep 06, 2021, Paolo Bonzini wrote:
+> On 20/08/21 20:51, Mathieu Desnoyers wrote:
+> > > Ah, or is it the case that rseq_cs is non-NULL if and only if userspace is in an
+> > > rseq critical section, and because syscalls in critical sections are illegal, by
+> > > definition clearing rseq_cs is a nop unless userspace is misbehaving.
+> > Not quite, as I described above. But we want it to stay set so the CONFIG_DEBUG_RSEQ
+> > code executed when returning from ioctl to userspace will be able to validate that
+> > it is not nested within a rseq critical section.
+> > 
+> > > If that's true, what about explicitly checking that at NOTIFY_RESUME?  Or is it
+> > > not worth the extra code to detect an error that will likely be caught anyways?
+> > The error will indeed already be caught on return from ioctl to userspace, so I
+> > don't see any added value in duplicating this check.
 > 
->   progs/test_task_pt_regs.c:8:16: error: variable has incomplete type
-> 'struct pt_regs'
->   struct pt_regs current_regs = {};
-> 
-> Instead of using pt_regs from ptrace.h, use the larger kernel struct
-> from vmlinux.h directly. Since the test runner task_pt_regs.c does not
-> have access to the kernel struct definition, copy it into a char array.
-> 
-> Fixes: 576d47bb1a92 ("bpf: selftests: Add bpf_task_pt_regs() selftest")
-> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> ---
-> v2: Work on struct pt_regs from vmlinux.h
-> v1:
-> https://lore.kernel.org/bpf/20210902090925.2010528-1-jean-philippe@linaro.org/
-> ---
->  .../selftests/bpf/prog_tests/task_pt_regs.c   |  1 -
->  .../selftests/bpf/progs/test_task_pt_regs.c   | 19 +++++++++++++------
->  2 files changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> index 53f0e0fa1a53..37c20b5ffa70 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
-> @@ -1,7 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #define _GNU_SOURCE
->  #include <test_progs.h>
-> -#include <linux/ptrace.h>
->  #include "test_task_pt_regs.skel.h"
->  
->  void test_task_pt_regs(void)
-> diff --git a/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> b/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> index 6c059f1cfa1b..e6cb09259408 100644
-> --- a/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> +++ b/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
-> @@ -1,12 +1,17 @@
->  // SPDX-License-Identifier: GPL-2.0
->  
-> -#include <linux/ptrace.h>
-> -#include <linux/bpf.h>
-> +#include "vmlinux.h"
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
->  
-> -struct pt_regs current_regs = {};
-> -struct pt_regs ctx_regs = {};
-> +#define PT_REGS_SIZE sizeof(struct pt_regs)
-> +
-> +/*
-> + * The kernel struct pt_regs isn't exported in its entirety to
-> userspace.
-> + * Pass it as an array to task_pt_regs.c
-> + */
-> +char current_regs[PT_REGS_SIZE] = {};
-> +char ctx_regs[PT_REGS_SIZE] = {};
->  int uprobe_res = 0;
->  
->  SEC("uprobe/trigger_func")
-> @@ -17,8 +22,10 @@ int handle_uprobe(struct pt_regs *ctx)
->  
->         current = bpf_get_current_task_btf();
->         regs = (struct pt_regs *) bpf_task_pt_regs(current);
-> -       __builtin_memcpy(&current_regs, regs, sizeof(*regs));
-> -       __builtin_memcpy(&ctx_regs, ctx, sizeof(*ctx));
-> +       if (bpf_probe_read_kernel(current_regs, PT_REGS_SIZE, regs))
-> +               return 0;
-> +       if (bpf_probe_read_kernel(ctx_regs, PT_REGS_SIZE, ctx))
-> +               return 0;
->  
->         /* Prove that uprobe was run */
->         uprobe_res = 1;
+> Sean, can you send a v2 (even for this patch only would be okay)?
 
-I've tested this patch on s390 and it does indeed fix the build issue.
-Thanks!
+Made it all the way to v3 while you were out :-)
 
-Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-
+https://lkml.kernel.org/r/20210901203030.1292304-1-seanjc@google.com
