@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DC8DC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF388C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 755756126A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAEB161214
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240828AbhIIMkw (ORCPT
+        id S1348120AbhIIMkx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:40:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38910 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 08:40:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353008AbhIIMdh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:33:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9456D6136A;
-        Thu,  9 Sep 2021 11:53:25 +0000 (UTC)
+        id S1354570AbhIIMfe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:35:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 90FE061B7B;
+        Thu,  9 Sep 2021 11:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188406;
-        bh=35mbzRvU6JfJ7yvh2CXrenvC6BWUwLp9YJcEV3nMwhw=;
+        s=k20201202; t=1631188440;
+        bh=dgA2bjkut6BuI9XLFUBRe3fFm4qK8av891uWGjEfc7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=INgbKlQsnZQ6uX41DDDeMN9xgLfIgPrjZVvubig5oKhI0EZJMz6bbAizA9LaDR2+i
-         UVcucFE+HcbxG2t2X/lilzOY3XC2rNm/h5knVsHME0dT2/a6n/UdF0OlR8GKC7zbgo
-         WX6NBpQiNODhIY2fETdNbNAUo3B6+yjJ+TvrB7nmtJ7hdTykqqF6YKm4ufWoA56QpS
-         9Rt6NSCi1i16Q5OwpjyABBZQyfQiHGHAuvqOs+HIQT2mlO72ohUQk7RaKiA0YkOMMr
-         cp3NTYg5xb0pEg445Gh/xU2fVYkMImt9vthz/h/s7oDae5svWMjoZ79R366hvyjEd4
-         /gXylCIAfE5Jg==
+        b=dkgvWux+qL0QBI0wHhaoJX1ejjCCtFRVpYHH2LefFA/LVIYFuOAyj/0qu2Cqm3NOQ
+         ej5SNkmXUWDZXlYXUd4xWUtEMESiobfU7y7rAIzdLMCg/1HCQ7r1S46RlFtL+jvBEu
+         4dkjcbdKCec+1D9MWRR/x+M6o6qfRrr5QOmBPFjpgxyHbFs04rDcKwU069LKacyUbG
+         dLh6oshvTI+lhCym0BLwVimcHZv1FNxQ/FJaBRn2AXntHOsmtovlud3HzBcwjL3LCb
+         KcwvpcKKceYA35JLApyRnEtjhKUxYgL4FHpxex2jCLWWqXzqmViE8XaJumOGMftH+j
+         cfzdZzD2jfxVQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jussi Maki <joamaki@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 099/176] selftests/bpf: Fix xdp_tx.c prog section name
-Date:   Thu,  9 Sep 2021 07:50:01 -0400
-Message-Id: <20210909115118.146181-99-sashal@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 125/176] kselftest/arm64: mte: Fix misleading output when skipping tests
+Date:   Thu,  9 Sep 2021 07:50:27 -0400
+Message-Id: <20210909115118.146181-125-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -53,50 +53,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jussi Maki <joamaki@gmail.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 95413846cca37f20000dd095cf6d91f8777129d7 ]
+[ Upstream commit 83e5dcbece4ea67ec3ad94b897e2844184802fd7 ]
 
-The program type cannot be deduced from 'tx' which causes an invalid
-argument error when trying to load xdp_tx.o using the skeleton.
-Rename the section name to "xdp" so that libbpf can deduce the type.
+When skipping the tests due to a lack of system support for MTE we
+currently print a message saying FAIL which makes it look like the test
+failed even though the test did actually report KSFT_SKIP, creating some
+confusion. Change the error message to say SKIP instead so things are
+clearer.
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210731055738.16820-7-joamaki@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20210819172902.56211-1-broonie@kernel.org
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/xdp_tx.c   | 2 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/arm64/mte/mte_common_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_tx.c b/tools/testing/selftests/bpf/progs/xdp_tx.c
-index 94e6c2b281cb..5f725c720e00 100644
---- a/tools/testing/selftests/bpf/progs/xdp_tx.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_tx.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
+index 70665ba88cbb..2703bd628d06 100644
+--- a/tools/testing/selftests/arm64/mte/mte_common_util.c
++++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
+@@ -285,7 +285,7 @@ int mte_default_setup(void)
+ 	int ret;
  
--SEC("tx")
-+SEC("xdp")
- int xdp_tx(struct xdp_md *xdp)
- {
- 	return XDP_TX;
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index ba8ffcdaac30..995278e684b6 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -108,7 +108,7 @@ ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
- ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
- 
- ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
--ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec tx
-+ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
- ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
- 
- trap cleanup EXIT
+ 	if (!(hwcaps2 & HWCAP2_MTE)) {
+-		ksft_print_msg("FAIL: MTE features unavailable\n");
++		ksft_print_msg("SKIP: MTE features unavailable\n");
+ 		return KSFT_SKIP;
+ 	}
+ 	/* Get current mte mode */
 -- 
 2.30.2
 
