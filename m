@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9407CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 13:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D88A2C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 13:13:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D32261167
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 13:02:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B90BB60F6C
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 13:13:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355997AbhIINDy (ORCPT
+        id S1353859AbhIINOL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:03:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59100 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 09:14:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43766 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354775AbhIIM5p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:57:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A06FF6326B;
-        Thu,  9 Sep 2021 11:58:41 +0000 (UTC)
+        id S1355911AbhIINDp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:03:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FB9F6140F;
+        Thu,  9 Sep 2021 11:59:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188722;
-        bh=wtYZpUR5UUmcBvfskmay22fPqc54pjkmo3kW35NdeoE=;
+        s=k20201202; t=1631188799;
+        bh=dhMsRfuZVwhSZ56t3qLAGsartIx3boKk4d89WZH9zXc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iyuv7Glcz+hA7DDAHfjXod6Q5aaO0Cx8p8o0hfEsgTjCKfKFQIuzlOQpLDhojnr4e
-         mTxcc7FsBTU4xiUmCghZGQqz2d5VvLKPZxgFfAjDhz3MMPaNx3lGCfcB9TAdZ64eGG
-         Rz31opYr2JNNybAQoI65xB+FDRV/f96Nsf70UNt4v5pww39n2uExGW/FEDtr9/1CiS
-         itilsa9G6/rmPjwVHkCgEcQde6khY79Bt47sKURGa8XCEX2nbhZScrWecA08e+TUkP
-         NfDHhhAR3FBCQ6P2si+7Vrp5gPwdZ+0Af5qfqoCAjuITK2/tsTBT/mCZd54TEs4vZh
-         XobCcqAHReZmg==
+        b=VVSFnYlWQ/ucppI5Xs1VEv9Ejd+8fgDTJvqE7EhKO9X6Sueu0kY9jhNN3jQ6ySZtC
+         1a6XgVi/LmlfLMZGxom5h4MPGG6o/jJAeIKqsJJPrUF44R8YU4UiZnQyiD43pnotwX
+         9Vcw5FV2YsatdGG+2DUwSiYqlJxfps3DvweDShZXVoFwhgwEmcPX9jwUgOg8+Mo2GA
+         OoLv/OU+2H3lvkO8wlqEuxqA4UDQqHCICYCUBY71hh6jT8MAAdbLpCAjrB2qtgzmKJ
+         rvU06lbtRlX4QdYso11E3t4k8ByKpMupcO96WtO6GVliGGlfe2d3BBOLqdzNIi8Kyj
+         LSWO+niYMi2kw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
@@ -41,12 +41,12 @@ Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 61/74] selftests/bpf: Enlarge select() timeout for test_maps
-Date:   Thu,  9 Sep 2021 07:57:13 -0400
-Message-Id: <20210909115726.149004-61-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 47/59] selftests/bpf: Enlarge select() timeout for test_maps
+Date:   Thu,  9 Sep 2021 07:58:48 -0400
+Message-Id: <20210909115900.149795-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
-References: <20210909115726.149004-1-sashal@kernel.org>
+In-Reply-To: <20210909115900.149795-1-sashal@kernel.org>
+References: <20210909115900.149795-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -92,10 +92,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 4e202217fae1..87ba89df9802 100644
+index 96c6238a4a1f..3f503ad37a2b 100644
 --- a/tools/testing/selftests/bpf/test_maps.c
 +++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -796,7 +796,7 @@ static void test_sockmap(int tasks, void *data)
+@@ -730,7 +730,7 @@ static void test_sockmap(int tasks, void *data)
  
  		FD_ZERO(&w);
  		FD_SET(sfd[3], &w);
