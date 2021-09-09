@@ -7,40 +7,41 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1F78C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7914BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5E856115A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 668256115B
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352853AbhIIMXM (ORCPT
+        id S1352891AbhIIMXP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:23:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56842 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 08:23:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348508AbhIIMRX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:17:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 35B0461A80;
-        Thu,  9 Sep 2021 11:49:54 +0000 (UTC)
+        id S1348186AbhIIMRd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:17:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39B6661A84;
+        Thu,  9 Sep 2021 11:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188195;
-        bh=EBbZEKk1Q8+0/FK1lc9ndXo46blG1XTr/+ky+ipJG2Y=;
+        s=k20201202; t=1631188199;
+        bh=AfyNKaF0xtWhgKji+tagvSCdhOnS9R1W6yf+rMj9Wis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rQhPNBLf1FPtzcTEqP2uv3mEH63TWXNUp9y0tHBtGQki3QsMgvPYAmaJ1vtnR8rCE
-         Q7yrJ4m5qO3j9YSmCuQ57I4RznVAUFjUL0XOnRCpkxuU2MbyjYbP1wQuLIRs95sOF2
-         VLrGxoihCx60DiI0TxZ1J/jARQSH8igOoNTGQ6lzX7yfGZsioAk7c05NJURr1eW0xm
-         d9UrgjZxKj4vPusLfrZkRdTlegaDn9PspNC/eVbM6pZzyO3pVsIClBzFqRpAmMLs/D
-         Q/8USLWSJrUehghO7xhjw4ycX9NUF4l1hkmUvF+131oHQWSu6aT4c257/XqexKmya9
-         lCpG8NNRy//2A==
+        b=uCAu2qwrHygfxXjmLQJ6h2aMe0l4xUm+1LbSlFoK6T9O+46xGOcJW/StDyqO+NbEM
+         xi73h+5mRx6/FBGMWz7HLtfs2qOhNyqVbnLyAm3ts5TGCZEevJGsaNl4iaCUOdgCIb
+         1As29oUtmT9ZIWZG6d/JhkBgTKRBLcvYzgSzouabQVAEHOyJf3RtyxbU+tWz6QdgFj
+         jdYL+RInNotMKkzegefJbUNzwZWd2i/g2wygQgL2YHlD+5fP1KcGTYRndvhtfQlOHu
+         BA0YUqrrTEepLODvVp9tYZBWVjVlLjOUSkRd/gyFyHXYX5faWAsjskWShDChJObbm+
+         sfKYHE/CeBmCQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bongsu Jeon <bongsu.jeon@samsung.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 154/219] selftests: nci: Fix the code for next nlattr offset
-Date:   Thu,  9 Sep 2021 07:45:30 -0400
-Message-Id: <20210909114635.143983-154-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 157/219] kselftest/arm64: mte: Fix misleading output when skipping tests
+Date:   Thu,  9 Sep 2021 07:45:33 -0400
+Message-Id: <20210909114635.143983-157-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -52,35 +53,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Bongsu Jeon <bongsu.jeon@samsung.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 78a7b2a8a0fa31f63ac16ac13601db6ed8259dfc ]
+[ Upstream commit 83e5dcbece4ea67ec3ad94b897e2844184802fd7 ]
 
-nlattr could have a padding for 4 bytes alignment. So next nla's offset
-should be calculated with a padding.
+When skipping the tests due to a lack of system support for MTE we
+currently print a message saying FAIL which makes it look like the test
+failed even though the test did actually report KSFT_SKIP, creating some
+confusion. Change the error message to say SKIP instead so things are
+clearer.
 
-Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20210819172902.56211-1-broonie@kernel.org
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/nci/nci_dev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/arm64/mte/mte_common_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index 57b505cb1561..9687100f15ea 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -113,8 +113,8 @@ static int send_cmd_mt_nla(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
- 		if (nla_len > 0)
- 			memcpy(NLA_DATA(na), nla_data[cnt], nla_len[cnt]);
+diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
+index f50ac31920d1..0328a1e08f65 100644
+--- a/tools/testing/selftests/arm64/mte/mte_common_util.c
++++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
+@@ -298,7 +298,7 @@ int mte_default_setup(void)
+ 	int ret;
  
--		msg.n.nlmsg_len += NLMSG_ALIGN(na->nla_len);
--		prv_len = na->nla_len;
-+		prv_len = NLA_ALIGN(nla_len[cnt]) + NLA_HDRLEN;
-+		msg.n.nlmsg_len += prv_len;
+ 	if (!(hwcaps2 & HWCAP2_MTE)) {
+-		ksft_print_msg("FAIL: MTE features unavailable\n");
++		ksft_print_msg("SKIP: MTE features unavailable\n");
+ 		return KSFT_SKIP;
  	}
- 
- 	buf = (char *)&msg;
+ 	/* Get current mte mode */
 -- 
 2.30.2
 
