@@ -2,46 +2,45 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-24.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FEDFC433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A623EC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EB4961167
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90A3561100
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:39:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351348AbhIIMkz (ORCPT
+        id S1352976AbhIIMky (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:40:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46164 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 08:40:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353524AbhIIMfh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:35:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C73CF61B7E;
-        Thu,  9 Sep 2021 11:54:00 +0000 (UTC)
+        id S1354563AbhIIMfe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:35:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 44033611B0;
+        Thu,  9 Sep 2021 11:53:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188441;
-        bh=n94kMwFHUMe+HkJMYWMwz/mNrdLxyfQDhWM2x1S7TPk=;
+        s=k20201202; t=1631188435;
+        bh=NyYDkBj2exwUxrdJ3yy0kdAm2cAfu+ZrmkTsZjwhJdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e4rIVat1jUdSAfcbznFhU4iaQpLTNzNmyuy0MgwsCIrhZuaZormEhvsNI2w41IXeP
-         WqVRBeycErFpAh/qWKKP6uAzOQ4Beyljq4Wf2TvW/kw8k3OdJx4m36Iqxsm3wE9w5N
-         3FHIGe8JAYJqFwaJD6R3GbO+nhoyymQyZROQ8Q6V2YexTQjH6k/vWtfn59yHW1TpgR
-         3euZxCcVKtMFXdgdnG9WNJ+wq/MG/hvMQY8tv/mGgMzWu6BZ1ooZicG8PrXM0ZMNU5
-         pe4LHdW2U5VGt3Nky0YyjHQumd5FNjALX/EOhS5FLJ0UfpLuXQcujKLUnbap2nnHOI
-         zltDOxR9weQnw==
+        b=PjFkI9OImF76NPOJ6w1rPqpMsSB2XYjyR7nZlY3K4J26TiVAnE8eV4ZnEt9nxXKi7
+         EzceLvhnJZRSz52lxY1UDKF9ic+6TRv6nailyE0mNTDsWXTEmpa4g/2A+R1CG4bkVF
+         ry9jXIr2s0iDVVlEnoGTGjULJGTrMEmmhZ9gGkTdGMAGPwbcSCtS+bL+KBsgyDzmSq
+         FVv09OsRTT5TGFy0HmRSGbDnWbOTvEtx8HmKmtyOOvnOPVO9hHyXc1PGg86JzKx5fP
+         VOaudL4/mIbXEA4XeY7w5Okz+yWOGdpZ/q9ETZMeUrtRAazl9gfdy1jrKlfehXStOq
+         /YjYS6NsF+1MQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 126/176] kselftest/arm64: pac: Fix skipping of tests on systems without PAC
-Date:   Thu,  9 Sep 2021 07:50:28 -0400
-Message-Id: <20210909115118.146181-126-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 121/176] selftests/bpf: Fix flaky send_signal test
+Date:   Thu,  9 Sep 2021 07:50:23 -0400
+Message-Id: <20210909115118.146181-121-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -53,62 +52,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit 0c69bd2ca6ee20064dde7853cd749284e053a874 ]
+[ Upstream commit b16ac5bf732a5e23d164cf908ec7742d6a6120d3 ]
 
-The PAC tests check to see if the system supports the relevant PAC features
-but instead of skipping the tests if they can't be executed they fail the
-tests which makes things look like they're not working when they are.
+libbpf CI has reported send_signal test is flaky although
+I am not able to reproduce it in my local environment.
+But I am able to reproduce with on-demand libbpf CI ([1]).
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20210819165723.43903-1-broonie@kernel.org
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Through code analysis, the following is possible reason.
+The failed subtest runs bpf program in softirq environment.
+Since bpf_send_signal() only sends to a fork of "test_progs"
+process. If the underlying current task is
+not "test_progs", bpf_send_signal() will not be triggered
+and the subtest will fail.
+
+To reduce the chances where the underlying process is not
+the intended one, this patch boosted scheduling priority to
+-20 (highest allowed by setpriority() call). And I did
+10 runs with on-demand libbpf CI with this patch and I
+didn't observe any failures.
+
+ [1] https://github.com/libbpf/libbpf/actions/workflows/ondemand.yml
+
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210817190923.3186725-1-yhs@fb.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/pauth/pac.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/send_signal.c       | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-index 592fe538506e..b743daa772f5 100644
---- a/tools/testing/selftests/arm64/pauth/pac.c
-+++ b/tools/testing/selftests/arm64/pauth/pac.c
-@@ -25,13 +25,15 @@
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
- 	/* data key instructions are not in NOP space. This prevents a SIGILL */ \
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
-+	if (!(hwcaps & HWCAP_PACA))					\
-+		SKIP(return, "PAUTH not enabled"); \
- } while (0)
- #define ASSERT_GENERIC_PAUTH_ENABLED() \
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
- 	/* generic key instructions are not in NOP space. This prevents a SIGILL */ \
--	ASSERT_NE(0, hwcaps & HWCAP_PACG) TH_LOG("Generic PAUTH not enabled"); \
-+	if (!(hwcaps & HWCAP_PACG)) \
-+		SKIP(return, "Generic PAUTH not enabled");	\
- } while (0)
+diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+index 7043e6ded0e6..75b72c751772 100644
+--- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
++++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include <sys/time.h>
++#include <sys/resource.h>
+ #include "test_send_signal_kern.skel.h"
  
- void sign_specific(struct signatures *sign, size_t val)
-@@ -256,7 +258,7 @@ TEST(single_thread_different_keys)
- 	unsigned long hwcaps = getauxval(AT_HWCAP);
+ static volatile int sigusr1_received = 0;
+@@ -41,12 +43,23 @@ static void test_send_signal_common(struct perf_event_attr *attr,
+ 	}
  
- 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	ASSERT_PAUTH_ENABLED();
- 	if (!(hwcaps & HWCAP_PACG)) {
- 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
- 		nkeys = NKEYS - 1;
-@@ -299,7 +301,7 @@ TEST(exec_changed_keys)
- 	unsigned long hwcaps = getauxval(AT_HWCAP);
+ 	if (pid == 0) {
++		int old_prio;
++
+ 		/* install signal handler and notify parent */
+ 		signal(SIGUSR1, sigusr1_handler);
  
- 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	ASSERT_PAUTH_ENABLED();
- 	if (!(hwcaps & HWCAP_PACG)) {
- 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
- 		nkeys = NKEYS - 1;
+ 		close(pipe_c2p[0]); /* close read */
+ 		close(pipe_p2c[1]); /* close write */
+ 
++		/* boost with a high priority so we got a higher chance
++		 * that if an interrupt happens, the underlying task
++		 * is this process.
++		 */
++		errno = 0;
++		old_prio = getpriority(PRIO_PROCESS, 0);
++		ASSERT_OK(errno, "getpriority");
++		ASSERT_OK(setpriority(PRIO_PROCESS, 0, -20), "setpriority");
++
+ 		/* notify parent signal handler is installed */
+ 		CHECK(write(pipe_c2p[1], buf, 1) != 1, "pipe_write", "err %d\n", -errno);
+ 
+@@ -62,6 +75,9 @@ static void test_send_signal_common(struct perf_event_attr *attr,
+ 		/* wait for parent notification and exit */
+ 		CHECK(read(pipe_p2c[0], buf, 1) != 1, "pipe_read", "err %d\n", -errno);
+ 
++		/* restore the old priority */
++		ASSERT_OK(setpriority(PRIO_PROCESS, 0, old_prio), "setpriority");
++
+ 		close(pipe_c2p[1]);
+ 		close(pipe_p2c[0]);
+ 		exit(0);
 -- 
 2.30.2
 
