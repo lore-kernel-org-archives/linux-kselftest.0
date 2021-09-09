@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C772C4332F
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F30C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:56:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4820461C45
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:55:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF7756321B
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:56:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbhIIL4v (ORCPT
+        id S1343946AbhIIL5R (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 07:56:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34544 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 07:57:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34520 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244637AbhIILyj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 07:54:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 40797613A4;
-        Thu,  9 Sep 2021 11:44:58 +0000 (UTC)
+        id S244530AbhIILyi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:54:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DBCD6139F;
+        Thu,  9 Sep 2021 11:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187899;
-        bh=n94kMwFHUMe+HkJMYWMwz/mNrdLxyfQDhWM2x1S7TPk=;
+        s=k20201202; t=1631187897;
+        bh=AfyNKaF0xtWhgKji+tagvSCdhOnS9R1W6yf+rMj9Wis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D8zS34ztJd1h4RqzJxDNKj5tDRzWMEZvV7+WsvAfGiS7U/VVM0hbVtxRACp87Ccd9
-         Lg12UmY7VFrzmweHCiYgYkNul0Wbyq1N7riwWAUX8ZIV2Y34cgySBXUz7MNwYdaTZ/
-         ZrJCSixPX8AzaHR6q2ZxKsSgkNb9g7NmUjmfcS/Up7q/pPBDo1ihiY58H+2dmmkYxs
-         f8Lpw07DQ28r4fk4Nuk+ioB1mBRsk4qhkyM0euD4dYOggOaDc8iBqsHGeo4rty2M2r
-         TY7KL/WNCbUGArEG1Ovr63v/RFh3UxFb0Cg0x/hMdSzRR8hmsuoXo2x5gD7HnmoPrT
-         5aoyUWk4qBkBw==
+        b=sPupzZHUzG9M5hd0m4dc6VbcR/hcvigNFPhABImd5L77r0Y/EzKDAA2fOafVvskJJ
+         1UdUlDT7n1nK7UnmKBNxNsRatPwMRGflYAHwObTSdGyrZhBejM3e2hTWoCQklxSyHl
+         WJS7FEeFxyvIHEo5B2bwyLSZzQ3nNB3HiI62N/EB9nrris2ifikExBKRl4Hr4dmqjf
+         Ck8q/lNuBrz3l5ErdzOPYQgIjxOX8PcakgkWPvAbjHOsLR2lWogpfG53ZP7XfVfXww
+         5kWqol6LTrBgVMucL3pqle2rtsOzyu9h2SM7cUY7qrqQ2ccyb/LiaaKuwry5pwqGT4
+         CSCPBV+71PluQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -39,9 +39,9 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 178/252] kselftest/arm64: pac: Fix skipping of tests on systems without PAC
-Date:   Thu,  9 Sep 2021 07:39:52 -0400
-Message-Id: <20210909114106.141462-178-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.14 177/252] kselftest/arm64: mte: Fix misleading output when skipping tests
+Date:   Thu,  9 Sep 2021 07:39:51 -0400
+Message-Id: <20210909114106.141462-177-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
 References: <20210909114106.141462-1-sashal@kernel.org>
@@ -55,60 +55,35 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 0c69bd2ca6ee20064dde7853cd749284e053a874 ]
+[ Upstream commit 83e5dcbece4ea67ec3ad94b897e2844184802fd7 ]
 
-The PAC tests check to see if the system supports the relevant PAC features
-but instead of skipping the tests if they can't be executed they fail the
-tests which makes things look like they're not working when they are.
+When skipping the tests due to a lack of system support for MTE we
+currently print a message saying FAIL which makes it look like the test
+failed even though the test did actually report KSFT_SKIP, creating some
+confusion. Change the error message to say SKIP instead so things are
+clearer.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20210819165723.43903-1-broonie@kernel.org
+Link: https://lore.kernel.org/r/20210819172902.56211-1-broonie@kernel.org
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/pauth/pac.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ tools/testing/selftests/arm64/mte/mte_common_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
-index 592fe538506e..b743daa772f5 100644
---- a/tools/testing/selftests/arm64/pauth/pac.c
-+++ b/tools/testing/selftests/arm64/pauth/pac.c
-@@ -25,13 +25,15 @@
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
- 	/* data key instructions are not in NOP space. This prevents a SIGILL */ \
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
-+	if (!(hwcaps & HWCAP_PACA))					\
-+		SKIP(return, "PAUTH not enabled"); \
- } while (0)
- #define ASSERT_GENERIC_PAUTH_ENABLED() \
- do { \
- 	unsigned long hwcaps = getauxval(AT_HWCAP); \
- 	/* generic key instructions are not in NOP space. This prevents a SIGILL */ \
--	ASSERT_NE(0, hwcaps & HWCAP_PACG) TH_LOG("Generic PAUTH not enabled"); \
-+	if (!(hwcaps & HWCAP_PACG)) \
-+		SKIP(return, "Generic PAUTH not enabled");	\
- } while (0)
+diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
+index f50ac31920d1..0328a1e08f65 100644
+--- a/tools/testing/selftests/arm64/mte/mte_common_util.c
++++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
+@@ -298,7 +298,7 @@ int mte_default_setup(void)
+ 	int ret;
  
- void sign_specific(struct signatures *sign, size_t val)
-@@ -256,7 +258,7 @@ TEST(single_thread_different_keys)
- 	unsigned long hwcaps = getauxval(AT_HWCAP);
- 
- 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	ASSERT_PAUTH_ENABLED();
- 	if (!(hwcaps & HWCAP_PACG)) {
- 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
- 		nkeys = NKEYS - 1;
-@@ -299,7 +301,7 @@ TEST(exec_changed_keys)
- 	unsigned long hwcaps = getauxval(AT_HWCAP);
- 
- 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
--	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
-+	ASSERT_PAUTH_ENABLED();
- 	if (!(hwcaps & HWCAP_PACG)) {
- 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
- 		nkeys = NKEYS - 1;
+ 	if (!(hwcaps2 & HWCAP2_MTE)) {
+-		ksft_print_msg("FAIL: MTE features unavailable\n");
++		ksft_print_msg("SKIP: MTE features unavailable\n");
+ 		return KSFT_SKIP;
+ 	}
+ 	/* Get current mte mode */
 -- 
 2.30.2
 
