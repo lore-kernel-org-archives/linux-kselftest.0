@@ -2,101 +2,171 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE24DC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 13:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3836BC433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 15:23:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FF216120F
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 13:44:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1328B6113A
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 15:23:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243663AbhIINpe (ORCPT
+        id S236918AbhIIPYN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:45:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40982 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352669AbhIIMrH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:47:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 738D26321B;
-        Thu,  9 Sep 2021 11:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188581;
-        bh=aPWGOzrcJUYBnY4fOgV8kDgDENBwRy9fv9+g8i3ZX9Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QGps9I30m1iyGT1yEM5x47hbm745o2DVilx8dCtRQ6Ob4V3QnGZaL3DwRUDBM6qFk
-         5I974nxMzWI0k/ARPxNrQd3ask4YmZW4z5+4jVq0i8JCZKsnWdBa3Blv26MawSbukL
-         oRKZ6XlW/y8PnKwupiitnqBFxGgd9WRBst6gIZfpijP+Fd9812wOyp9r56x5y1OSdR
-         dJeEr5pl4qOfRD0IHMKa+8FkgSNZZLGwrsbQUe82WXgHzKy38svVtKhn8Lvv3XYidt
-         l15uZFpadTpEoiVNTgO56suX0dg8gJNF7FlhDNFN+zzwGD1PLoovXyE9U4j41ghKb/
-         xpnGy8T5kfngg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jussi Maki <joamaki@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 058/109] selftests/bpf: Fix xdp_tx.c prog section name
-Date:   Thu,  9 Sep 2021 07:54:15 -0400
-Message-Id: <20210909115507.147917-58-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115507.147917-1-sashal@kernel.org>
-References: <20210909115507.147917-1-sashal@kernel.org>
+        Thu, 9 Sep 2021 11:24:13 -0400
+Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:59723 "EHLO
+        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236865AbhIIPYH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 11:24:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1631200977;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=/62tsyL2E1/xK7osPvmgAeiFEDXec4QXMpUsVth13hg=;
+        b=QWk758cpZTH2ABXEULc7ICYmexTxyxgEvrT378ml1dER5WjaD87kYexavxTkfFSc
+        a/x4IK8NZpIAoweUlkwmzSXyNaYNtf+GsnCUfBS/7LkkYawoCGfHBCzkVWjgU7F5SGf
+        6Q2b0R4ZllIRdKEMbvn0PJDtY+n8nylNfoVK9980=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1631200977;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=/62tsyL2E1/xK7osPvmgAeiFEDXec4QXMpUsVth13hg=;
+        b=UG2qaeY6wP2jH1oHEJISOlx3vm4Sh0+aDj+hNzy5QCUc9JSdZDgkjVCVcXZNxtAV
+        9BkEcnJUJB3rGHnhO+qPCt9Rxp0gem/ZBIUVGziDlO9GpIF1cXjET4C8R+ZTH5PiTYl
+        JE8YZfE6A7lb09oRg8HJFhRRVLsziHq8KlA9tbl0=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20210909
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017bcb27a095-3fa09b23-571d-4ce4-b120-33f6e7ec779f-000000@email.amazonses.com>
+Date:   Thu, 9 Sep 2021 15:22:57 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.09.09-54.240.8.97
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jussi Maki <joamaki@gmail.com>
+## Build
+* kernel: 5.14.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: f7f581157d1c8a2f14bef2739dd34135c9e6b233
+* git describe: next-20210909
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210909
 
-[ Upstream commit 95413846cca37f20000dd095cf6d91f8777129d7 ]
+## Regressions (compared to next-20210907)
+* qemu-arm64-mte, kselftest-timers
+  - timers.rtcpie
 
-The program type cannot be deduced from 'tx' which causes an invalid
-argument error when trying to load xdp_tx.o using the skeleton.
-Rename the section name to "xdp" so that libbpf can deduce the type.
+* x15, kselftest-rtc
+  - rtc.rtctest
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210731055738.16820-7-joamaki@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/progs/xdp_tx.c   | 2 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_tx.c b/tools/testing/selftests/bpf/progs/xdp_tx.c
-index 57912e7c94b0..9ed477776eca 100644
---- a/tools/testing/selftests/bpf/progs/xdp_tx.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_tx.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include "bpf_helpers.h"
- 
--SEC("tx")
-+SEC("xdp")
- int xdp_tx(struct xdp_md *xdp)
- {
- 	return XDP_TX;
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index ba8ffcdaac30..995278e684b6 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -108,7 +108,7 @@ ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
- ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
- 
- ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
--ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec tx
-+ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
- ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
- 
- trap cleanup EXIT
--- 
-2.30.2
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+
+## Fixes (compared to next-20210907)
+* hi6220-hikey, kselftest-rtc
+  - rtc.rtctest
+
+* qemu-arm64-gic-version3, kselftest-timers
+  - timers.rtcpie
+
+* qemu_arm, kselftest-pidfd
+  - pidfd.pidfd_test
+
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+
+## Test result summary
+total: 6381, pass: 3846, fail: 617, skip: 1918, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
