@@ -7,40 +7,41 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78DD7C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B03DEC4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D8D06115A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91D8E61179
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352878AbhIIMXN (ORCPT
+        id S1352841AbhIIMXQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:23:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56862 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 08:23:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57534 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348681AbhIIMRZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:17:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6904D61279;
-        Thu,  9 Sep 2021 11:49:55 +0000 (UTC)
+        id S1350182AbhIIMR7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:17:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C76B6128C;
+        Thu,  9 Sep 2021 11:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188196;
-        bh=qEiAm24eqpsL2TxBMKk2BMy+kt0VnPszMUVXtFF6ej0=;
+        s=k20201202; t=1631188200;
+        bh=n94kMwFHUMe+HkJMYWMwz/mNrdLxyfQDhWM2x1S7TPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpJJoGcYR837gy/TTKeM4siLN6K4mr/BpmcsjkRB17pYeR9ZShmJsej1UfkEMRlQL
-         QGggT1z8Q9GW8BORxQTGfrSjVoX5Kg4KJGtuiL15jQaxjd04vsc/gUx4mSyQ1Fd4Hc
-         JA3HgWtS6CyTqyJFdrFa0JJAREi9YlwmQ39mA6vVZOah1bLYFoGyp/0bRhcUUK9km9
-         6Y++qX7lmeg0ocIDpROs7G1jCmBaZZXAzOwHRIX19EhgnF+rihgplxURLQHKKz0c+o
-         H7m/53YbFQ5v3XcfhXd3TFA+xS5TnU+VSzX+YOlO+ki/9pfGZItJv+rLF/zTTnCjf0
-         j+HQPOxm/vKyQ==
+        b=kz6vSgWUBrb9kZTnxAFTqc2zadE0DF7hS5d1vUpwlnqTrfShngSXvw9cj0rccSU3m
+         zQcu6HhxT/kzyoZOGt89gm51lkdF7K+1m/jj599jG3Jz5xZkRzQOzmEFysPebr0Jfg
+         qsdPv6lsa56l0otBiy3524mNdVBBc28e3EsnkdEvGUj40Amd41kpdiQtvRSKwB5VM8
+         tGTNvoern3IUHFXj5N+YHSQfmpCSwZGAcg4scfplTXNbOW/JpxmuWkH/LR3KtvAphp
+         U79YRm1N0/gdr9RyudDTa/IYvH/uJD4i0y+Sygrtr3G4q17SA6qixKJtr28Y68kTvb
+         inWbDW2MrQavg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bongsu Jeon <bongsu.jeon@samsung.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 155/219] selftests: nci: Fix the wrong condition
-Date:   Thu,  9 Sep 2021 07:45:31 -0400
-Message-Id: <20210909114635.143983-155-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 158/219] kselftest/arm64: pac: Fix skipping of tests on systems without PAC
+Date:   Thu,  9 Sep 2021 07:45:34 -0400
+Message-Id: <20210909114635.143983-158-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
 References: <20210909114635.143983-1-sashal@kernel.org>
@@ -52,32 +53,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Bongsu Jeon <bongsu.jeon@samsung.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 1d5b8d01db98abb8c176838fad73287366874582 ]
+[ Upstream commit 0c69bd2ca6ee20064dde7853cd749284e053a874 ]
 
-memcpy should be executed only in case nla_len's value is greater than 0.
+The PAC tests check to see if the system supports the relevant PAC features
+but instead of skipping the tests if they can't be executed they fail the
+tests which makes things look like they're not working when they are.
 
-Signed-off-by: Bongsu Jeon <bongsu.jeon@samsung.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20210819165723.43903-1-broonie@kernel.org
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/nci/nci_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/arm64/pauth/pac.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index 9687100f15ea..acd4125ff39f 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -110,7 +110,7 @@ static int send_cmd_mt_nla(int sd, __u16 nlmsg_type, __u32 nlmsg_pid,
- 		na->nla_type = nla_type[cnt];
- 		na->nla_len = nla_len[cnt] + NLA_HDRLEN;
+diff --git a/tools/testing/selftests/arm64/pauth/pac.c b/tools/testing/selftests/arm64/pauth/pac.c
+index 592fe538506e..b743daa772f5 100644
+--- a/tools/testing/selftests/arm64/pauth/pac.c
++++ b/tools/testing/selftests/arm64/pauth/pac.c
+@@ -25,13 +25,15 @@
+ do { \
+ 	unsigned long hwcaps = getauxval(AT_HWCAP); \
+ 	/* data key instructions are not in NOP space. This prevents a SIGILL */ \
+-	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled"); \
++	if (!(hwcaps & HWCAP_PACA))					\
++		SKIP(return, "PAUTH not enabled"); \
+ } while (0)
+ #define ASSERT_GENERIC_PAUTH_ENABLED() \
+ do { \
+ 	unsigned long hwcaps = getauxval(AT_HWCAP); \
+ 	/* generic key instructions are not in NOP space. This prevents a SIGILL */ \
+-	ASSERT_NE(0, hwcaps & HWCAP_PACG) TH_LOG("Generic PAUTH not enabled"); \
++	if (!(hwcaps & HWCAP_PACG)) \
++		SKIP(return, "Generic PAUTH not enabled");	\
+ } while (0)
  
--		if (nla_len > 0)
-+		if (nla_len[cnt] > 0)
- 			memcpy(NLA_DATA(na), nla_data[cnt], nla_len[cnt]);
+ void sign_specific(struct signatures *sign, size_t val)
+@@ -256,7 +258,7 @@ TEST(single_thread_different_keys)
+ 	unsigned long hwcaps = getauxval(AT_HWCAP);
  
- 		prv_len = NLA_ALIGN(nla_len[cnt]) + NLA_HDRLEN;
+ 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
+-	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
++	ASSERT_PAUTH_ENABLED();
+ 	if (!(hwcaps & HWCAP_PACG)) {
+ 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
+ 		nkeys = NKEYS - 1;
+@@ -299,7 +301,7 @@ TEST(exec_changed_keys)
+ 	unsigned long hwcaps = getauxval(AT_HWCAP);
+ 
+ 	/* generic and data key instructions are not in NOP space. This prevents a SIGILL */
+-	ASSERT_NE(0, hwcaps & HWCAP_PACA) TH_LOG("PAUTH not enabled");
++	ASSERT_PAUTH_ENABLED();
+ 	if (!(hwcaps & HWCAP_PACG)) {
+ 		TH_LOG("WARNING: Generic PAUTH not enabled. Skipping generic key checks");
+ 		nkeys = NKEYS - 1;
 -- 
 2.30.2
 
