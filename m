@@ -7,41 +7,43 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F30C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25555C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:59:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF7756321B
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:56:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DAB063299
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Sep 2021 11:59:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343946AbhIIL5R (ORCPT
+        id S242024AbhIIMAu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Sep 2021 07:57:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34520 "EHLO mail.kernel.org"
+        Thu, 9 Sep 2021 08:00:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34230 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244530AbhIILyi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Sep 2021 07:54:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DBCD6139F;
-        Thu,  9 Sep 2021 11:44:56 +0000 (UTC)
+        id S242198AbhIIL6K (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:58:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1BCA561406;
+        Thu,  9 Sep 2021 11:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187897;
-        bh=AfyNKaF0xtWhgKji+tagvSCdhOnS9R1W6yf+rMj9Wis=;
+        s=k20201202; t=1631187940;
+        bh=gQpAEeu5aNjYvHIz708CrDFt+f3jTZ55tZHXEwVeicU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sPupzZHUzG9M5hd0m4dc6VbcR/hcvigNFPhABImd5L77r0Y/EzKDAA2fOafVvskJJ
-         1UdUlDT7n1nK7UnmKBNxNsRatPwMRGflYAHwObTSdGyrZhBejM3e2hTWoCQklxSyHl
-         WJS7FEeFxyvIHEo5B2bwyLSZzQ3nNB3HiI62N/EB9nrris2ifikExBKRl4Hr4dmqjf
-         Ck8q/lNuBrz3l5ErdzOPYQgIjxOX8PcakgkWPvAbjHOsLR2lWogpfG53ZP7XfVfXww
-         5kWqol6LTrBgVMucL3pqle2rtsOzyu9h2SM7cUY7qrqQ2ccyb/LiaaKuwry5pwqGT4
-         CSCPBV+71PluQ==
+        b=MdQdpqFwTL8YmV/UwUC0D84VhV8G26lqrJVhSxxljmLAQa4ivIC4AX2EUhZ115tgg
+         d26TwZLoz+DcsAHN5iUJyFNHduM/8gZ+YtXjIHT+YIrNKBAyHX0nmxkJvW8fc+vMqY
+         Rar0tmf72nJjSLV60KmX4Mi6fnRgCd9OwXCoXhpOWu70js7xcA2Bg80GzrcL3fyZF9
+         MoEw3XLmj3T3/uSTimo4GPDnX1ihh3/SSAaCV8eO4XCzRCmfMk75FWz3olhs4vphuI
+         cBIOR+8fyy5qD5gbiodFIDMSePK98fnVacvcRvt4iSagbfL8H2bk9DxEpoZI4kyNml
+         PiThGdRbs98Ig==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        kernel test robot <lkp@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 177/252] kselftest/arm64: mte: Fix misleading output when skipping tests
-Date:   Thu,  9 Sep 2021 07:39:51 -0400
-Message-Id: <20210909114106.141462-177-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 210/252] selftests/bpf: Enlarge select() timeout for test_maps
+Date:   Thu,  9 Sep 2021 07:40:24 -0400
+Message-Id: <20210909114106.141462-210-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
 References: <20210909114106.141462-1-sashal@kernel.org>
@@ -53,37 +55,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-[ Upstream commit 83e5dcbece4ea67ec3ad94b897e2844184802fd7 ]
+[ Upstream commit 2d82d73da35b72b53fe0d96350a2b8d929d07e42 ]
 
-When skipping the tests due to a lack of system support for MTE we
-currently print a message saying FAIL which makes it look like the test
-failed even though the test did actually report KSFT_SKIP, creating some
-confusion. Change the error message to say SKIP instead so things are
-clearer.
+0Day robot observed that it's easily timeout on a heavy load host.
+-------------------
+ # selftests: bpf: test_maps
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 100 tasks to 'test_hashmap'
+ # Fork 100 tasks to 'test_hashmap_percpu'
+ # Fork 100 tasks to 'test_hashmap_sizes'
+ # Fork 100 tasks to 'test_hashmap_walk'
+ # Fork 100 tasks to 'test_arraymap'
+ # Fork 100 tasks to 'test_arraymap_percpu'
+ # Failed sockmap unexpected timeout
+ not ok 3 selftests: bpf: test_maps # exit=1
+ # selftests: bpf: test_lru_map
+ # nr_cpus:8
+-------------------
+Since this test will be scheduled by 0Day to a random host that could have
+only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20210819172902.56211-1-broonie@kernel.org
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
+and knew 10S is likely enough, but i still perfer to a larger value 30.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20210820015556.23276-2-lizhijian@cn.fujitsu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/mte/mte_common_util.c | 2 +-
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-index f50ac31920d1..0328a1e08f65 100644
---- a/tools/testing/selftests/arm64/mte/mte_common_util.c
-+++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-@@ -298,7 +298,7 @@ int mte_default_setup(void)
- 	int ret;
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 30cbf5d98f7d..de58a3070eea 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -985,7 +985,7 @@ static void test_sockmap(unsigned int tasks, void *data)
  
- 	if (!(hwcaps2 & HWCAP2_MTE)) {
--		ksft_print_msg("FAIL: MTE features unavailable\n");
-+		ksft_print_msg("SKIP: MTE features unavailable\n");
- 		return KSFT_SKIP;
- 	}
- 	/* Get current mte mode */
+ 		FD_ZERO(&w);
+ 		FD_SET(sfd[3], &w);
+-		to.tv_sec = 1;
++		to.tv_sec = 30;
+ 		to.tv_usec = 0;
+ 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
+ 		if (s == -1) {
 -- 
 2.30.2
 
