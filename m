@@ -2,116 +2,101 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE3CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Sep 2021 22:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 469D8C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Sep 2021 08:50:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4F22611F2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Sep 2021 22:21:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 203A960FC1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Sep 2021 08:50:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbhIJWWl (ORCPT
+        id S238046AbhIMIwN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Sep 2021 18:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234744AbhIJWWl (ORCPT
+        Mon, 13 Sep 2021 04:52:13 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:52817 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235987AbhIMIwN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Sep 2021 18:22:41 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3CC061756
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 15:21:29 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w29so3886701wra.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Sep 2021 15:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O957Ri/0BgbMSrPbxQY/9ULVJYFNDqjXyqmF7WgsPVo=;
-        b=LhvJ5TKap96EqV9/pPcDlP3U58e7yk7wFss4ufzPsVIj5y2XJbPcKaAlOvABrLGrKd
-         CmDE5YasEk5QfA+RKiPigj25VuDR6UuHnzRiCaYoq+K0CAG8NYbyGBvY8ej0MZc8VM7X
-         IxjGId1hnLBYpgGrJP2zj7WaRkX53sDTuAv8EZablEdPkv7j/ZX2sQbAhjfrrTuIKkMp
-         otLhkNMkkgX8sTYHW3wEYAlI2gN62tAFfyVtrmgD1uoCzfIzo0Qx2YR61X0F79pJztA5
-         9gKzxU93MSzBFOTyjkUAUPWifDmGlbnN2B2trk8LX+nkdqmcv1PHt2Y1Ihu9OOAtu9C1
-         xZzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O957Ri/0BgbMSrPbxQY/9ULVJYFNDqjXyqmF7WgsPVo=;
-        b=iL9v0tx96UCvA9Eq36H5mAO6A6+7LdxKNF4HTMpPY2/J0o9c87FZV6mvz1iGk3C+X3
-         LlCNDnUGQlZM6r70yXIrQ7Ej36EcpTgVy8V/GOxu0thuV8Su+bY+uYEcVjKGcxepKatl
-         JP0kluXLnkOMQroq3zMGVLd6C9zEZxd4BVALsqXmFRLwp4nfemJITbu3W8hSF1/OOWNe
-         K+Ygc/lIL6X7iiLH9bFWkoV8wGjqX/AT9FRqEzc16kmtbuAia3ryo+G2HHBqGmHl6QWX
-         bw4ui+dRDsFlTRT9qnTZOZOdiQPlALG4EgcjjXz7LezjsAdcjpfvzftOIUjGuxyzsuKX
-         QlwQ==
-X-Gm-Message-State: AOAM5304RnYlKFNHGQkGXhp8krJy0PZBVjFt71aYfExAy+4xrdOwsUMG
-        sE6ZsPAsPJhhB29KXhweLGfJNPKUtvNyfEK/xX4vl3dge7wjSQ==
-X-Google-Smtp-Source: ABdhPJwPCI1BFrQljr8CVIaPm/HOKh9tjiswuqnbA3ltFmsMfJOsLlLTxXucgARNDednGBrthMujWF+g5kzitLnlR20=
-X-Received: by 2002:a05:6000:124b:: with SMTP id j11mr2646wrx.147.1631312487842;
- Fri, 10 Sep 2021 15:21:27 -0700 (PDT)
+        Mon, 13 Sep 2021 04:52:13 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B658D580B05;
+        Mon, 13 Sep 2021 04:50:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 13 Sep 2021 04:50:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=oEBMjG
+        HbxkehBrxFgJqADlnGq31HX2RE4tw3YGcGOxo=; b=f35bXpQY4Dkcqm2P7Tp3sF
+        uumChSSx8jFh7qOKyLaxeRTr5e0PSckEp04xgcGNXxkxo4AXRXZeFmCoXwSoS8zz
+        ps5NQYIakD6Owa0YnOvN89SO75qvV1qQEzEP233A380UH2+jdxA0iUHv/q98oslE
+        wcvd+rn1QtAZvPk/G7NxK25CrK/ivKKTR/ybuQYEmGlMYMBEqugBi0IPuSRieYBn
+        tQVMZ0hzLKK5x36ORsDFEbTiKI1zIhfuAC6RV4g2/QRRFPNGDkqX3UtDih5krgLm
+        o28yvTFXn5W/iOGBryVWdSWM3Ne2aoAWqBq9Nm5uWQGCa81yQZ/NpTBMba1fygeg
+        ==
+X-ME-Sender: <xms:7xA_YRDbnwoIwg1Mkok3tynI4u6_OZb2oZANpU-hMY04g1FcCDMcHg>
+    <xme:7xA_YfjBlj_R4JgSeJ_J4oEtCbVeYIf4UN2G_EYZtte6XV9g2r8GE3vG6J2rvNcPR
+    t5FouFOJPXkDf0>
+X-ME-Received: <xmr:7xA_Ycm-dV0Z4DqdBDA44yjluaAo9IRItj0kgiIJzxSwuJQ2NLLD9HaWuvc4odd4srNbfKa0wGNCo7KZVD41fmhBZSMOMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudegjedgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedtffekkeefudffveegueejffejhfetgfeuuefgvedtieehudeuueekhfduheel
+    teenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:7xA_Ybw9uggka_pKgpmH_Ezv20W9TEz1eM9dqYTKIblStIMy018Z0Q>
+    <xmx:7xA_YWT1VjigWlHdo9Atx-hTkQxxmDMQvLhEvhOaJmgVULCEGOWyBg>
+    <xmx:7xA_YebvlI4FxCy66gU5jxA7JHZ1C_tW5Y-n3jImh_csP77blIGwFA>
+    <xmx:8RA_YSbIfpC1B94dnYQ_r5KoDOw950dNMBzVAhXwys3VXemZ0CrDKQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Sep 2021 04:50:55 -0400 (EDT)
+Date:   Mon, 13 Sep 2021 11:50:51 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "abyagowi@fb.com" <abyagowi@fb.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Saeed Mahameed <saeed@kernel.org>,
+        Michael Chan <michael.chan@broadcom.com>
+Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Message-ID: <YT8Q6yWQGt0/B2iy@shredder>
+References: <PH0PR11MB4951623918C9BA8769C10E50EAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210906113925.1ce63ac7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB49511F2017F48BBAAB2A065CEAD29@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210906180124.33ff49ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB495152B03F32A5A17EDB2F6CEAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210907075509.0b3cb353@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB49512C265E090FC8741D8510EAD39@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210907124730.33852895@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <PH0PR11MB495169997552152891A69B57EAD49@PH0PR11MB4951.namprd11.prod.outlook.com>
+ <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-References: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
-In-Reply-To: <6A72EAE4-A0F7-4CD2-89BB-36A8F4A7D321@internode.on.net>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 11 Sep 2021 06:21:16 +0800
-Message-ID: <CABVgOSkHoVcRQLGVTZZ1andSY4UHqoRwLdyiTHh9KTQ4m3av9w@mail.gmail.com>
-Subject: Re: After KUnit update for Linux 5.15-rc1 - unable to share VFAT
- filesystem via samba
-To:     Arthur Marsh <arthur.marsh@internode.on.net>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210908092115.191fdc28@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 10, 2021 at 8:02 PM Arthur Marsh
-<arthur.marsh@internode.on.net> wrote:
->
->
->  Hi, I have been sharing an old VFAT formatted hard disk on one pc to
-> another using Samba and sometime after kernel 5.14.0 it stopped working (apparently no longer being shared as the mount.smbfs command
-> on the client failed with error -13 yet mount.smbfs still worked for
-> ext3 filesytems shared from the same machine which had the VFAT
-> filesystem).
->  The only error I saw on the machine with the VFAT formatted hard disk
-> was the output of the mount command had truncated the name of the
-> mount to only include the first 4 characters of the base name of the
-> mount point.
->  e.g. when VFAT filesystem was mounted on /mnt/victoria, the output of
-> the mount command showed the filesytem mounted on /mnt/vict
->
+On Wed, Sep 08, 2021 at 09:21:15AM -0700, Jakub Kicinski wrote:
+> Mumble, mumble. Ido, Florian - any devices within your purview which
+> would support SyncE? 
 
-I can't reproduce this on my machine (which is openSUSE Tumbleweed
-with their "vanilla" 5.14 kernel package on x86_64, mounting a FAT16
-filesystem).
-
-# mount /dev/sda1 /mnt/victoria
-# mount | grep vic
-/dev/sda1 on /mnt/victoria type vfat
-(rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro)
-# uname -a
-Linux patpat 5.14.0-1-vanilla #1 SMP Mon Aug 30 07:01:36 UTC 2021
-(dc06e24) x86_64 x86_64 x86_64 GNU/Linux
-
-I can try it again on an older i386 machine, but I doubt that'd change
-things: this doesn't smell architecture-specific to me.
-
-This seems a lot more like it's something to do with /proc/mounts or
-similar, rather than a FAT specific issue (and, unless something
-really strange has happened with the CONFIG_FAT_DEFAULT_CODEPAGE
-config option, which I doubt), this change shouldn't affect anything
-at all when KUnit isn't enabled and used. I suspect it just shows up
-in the bisect because it's basically the only change in fs/fat for a
-while.
-
-The bisect against the whole kernel tree seems likely to be of more use.
-
--- David
+Sorry for the delay, was AFK. I remember SyncE being mentioned a few
+times in the past, so it is likely that we will be requested to add
+SyncE support in mlxsw in the future. I will try to solicit feedback
+from colleagues more familiar with the subject and provide it here next
+week.
