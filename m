@@ -2,162 +2,91 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 263D3C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 20:31:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B84A6C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 21:28:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E89861131
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 20:31:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9653B60FBF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 21:28:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbhIOUcs (ORCPT
+        id S232273AbhIOV3b (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 15 Sep 2021 16:32:48 -0400
-Received: from mga07.intel.com ([134.134.136.100]:13818 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232088AbhIOUch (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Sep 2021 16:32:37 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10108"; a="286109377"
-X-IronPort-AV: E=Sophos;i="5.85,296,1624345200"; 
-   d="scan'208";a="286109377"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2021 13:31:16 -0700
-X-IronPort-AV: E=Sophos;i="5.85,296,1624345200"; 
-   d="scan'208";a="545092796"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2021 13:31:16 -0700
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     linux-sgx@vger.kernel.org, jarkko@kernel.org, shuah@kernel.org
-Cc:     seanjc@google.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Wed, 15 Sep 2021 17:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232258AbhIOV3a (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Sep 2021 17:29:30 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A20C061575
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Sep 2021 14:28:11 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id n128so5366433iod.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Sep 2021 14:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FDA4AbD60SFQgHVVfmZC7gzxpvrFiSmOOYbTULWaLEg=;
+        b=Qjzr/Msnp4BvPg/qNnrI0V1bBRyfDQKd5QFJi4DBTQ5AhuP2EdO4J2mlMt6YLgC0QI
+         MRPmRnmVkIodrj9Qy5xs0GHL/Lcfs38Gjqdn+Bhq1Yy3qXebQxzmtSB1YHgovlkTfjJK
+         sr93BTNkDWmEB76iRgnmV4JYn31QbCTDCi7nU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FDA4AbD60SFQgHVVfmZC7gzxpvrFiSmOOYbTULWaLEg=;
+        b=3NO/ItdOAs5DNyDZFVxaZ8XlztqiNtPPaN/AibfOxCQex/IWh3CdTQ3Gi0JBpwTwmM
+         xAK0lYSI0/AqgMOPpH1hZ9xOJyD/BalInV+S/4gbhacNUWRZqZZeDFR1O10yJUV6OsAN
+         S6p86w5Y/n2ZNMSJIbd1M5tha0HTAc3aBy+r+hnnSkFW7r7k7nWmnmXwkW+IXku9UvG2
+         RogS4BG/Tj7DPIc9wAiV/i/RNrRjxHTBVLitvJpoPdTyeEZ0TcgnleD0VQjX8R5aywWi
+         Oy94OZHU4jyVVDFv4iah0RCRUOWWX3yfpWcJQBCEEK4EAf35As1W5QpmVroFiM9oBpEg
+         0nmg==
+X-Gm-Message-State: AOAM532QhtIkGwpbhaXDP96nGaQKeJQ6tNiXQytsb264BIMGRFR4HAu0
+        N5++Css/14HPJ/Ytp/tCcgajeQ==
+X-Google-Smtp-Source: ABdhPJw7MApHWV4jaw0J0zFKmXPFTdcnTqBXPZ1RmVMFUrAhVKKMFiD7J9ZQNHlpVEP9I8Sc5YDgMA==
+X-Received: by 2002:a05:6638:1606:: with SMTP id x6mr1766871jas.25.1631741291173;
+        Wed, 15 Sep 2021 14:28:11 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id f2sm622884ioz.14.2021.09.15.14.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Sep 2021 14:28:10 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     pbonzini@redhat.com, shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/14] selftests/sgx: Enable multiple thread support
-Date:   Wed, 15 Sep 2021 13:31:03 -0700
-Message-Id: <7b413966289d22f043762b3d20e30cb6ded936e3.1631731214.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1631731214.git.reinette.chatre@intel.com>
-References: <cover.1631731214.git.reinette.chatre@intel.com>
+Subject: [PATCH 0/4] selftests: kvm: fscanf warn fixes and cleanups 
+Date:   Wed, 15 Sep 2021 15:28:05 -0600
+Message-Id: <cover.1631737524.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Each thread executing in an enclave is associated with a Thread Control
-Structure (TCS). The test enclave contains two hardcoded TCS. Each TCS
-contains meta-data used by the hardware to save and restore thread specific
-information when entering/exiting the enclave.
+This patch series fixes fscanf() ignoring return value warnings.
+Consolidates get_run_delay() duplicate defines moving it to
+common library.
 
-The two TCS structures within the test enclave share their SSA (State Save
-Area) resulting in the threads clobbering each other's data. Fix this by
-providing each TCS their own SSA area.
+Shuah Khan (4):
+  selftests:kvm: fix get_warnings_count() ignoring fscanf() return warn
+  selftests:kvm: fix get_trans_hugepagesz() ignoring fscanf() return
+    warn
+  selftests: kvm: move get_run_delay() into lib/test_util
+  selftests: kvm: fix get_run_delay() ignoring fscanf() return warn
 
-Additionally, there is an 8K stack space and its address is
-computed from the enclave entry point which is correctly done for
-TCS #1 that starts on the first address inside the enclave but
-results in out of bounds memory when entering as TCS #2. Split 8K
-stack space into two separate pages with offset symbol between to ensure
-the current enclave entry calculation can continue to be used for both threads.
+ .../testing/selftests/kvm/include/test_util.h |  3 +++
+ tools/testing/selftests/kvm/lib/test_util.c   | 22 ++++++++++++++++++-
+ tools/testing/selftests/kvm/steal_time.c      | 16 --------------
+ .../selftests/kvm/x86_64/mmio_warning_test.c  |  3 ++-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    | 15 -------------
+ 5 files changed, 26 insertions(+), 33 deletions(-)
 
-While using the enclave with multiple threads requires these fixes the
-impact is not apparent because every test up to this point enters the
-enclave from the first TCS.
-
-More detail about the stack fix:
--------------------------------
-Before this change the test enclave (test_encl) looks as follows:
-
-.tcs (2 pages):
-(page 1) TCS #1
-(page 2) TCS #2
-
-.text (1 page)
-One page of code
-
-.data (5 pages)
-(page 1) encl_buffer
-(page 2) encl_buffer
-(page 3) SSA
-(page 4 and 5) STACK
-encl_stack:
-
-As shown above there is a symbol, encl_stack, that points to the end of the
-.data segment (pointing to the end of page 5 in .data) which is also the end
-of the enclave.
-
-The enclave entry code computes the stack address by adding encl_stack to the
-pointer to the TCS that entered the enclave. When entering at TCS #1 the
-stack is computed correctly but when entering at TCS #2 the stack pointer
-would point to one page beyond the end of the enclave and a #PF would
-result when TCS #2 attempts to enter the enclave.
-
-The fix involves moving the encl_stack symbol between the two stack pages.
-Doing so enables the stack address computation in the entry code to compute
-the correct stack address for each TCS.
-
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
- .../selftests/sgx/test_encl_bootstrap.S       | 21 ++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
-index 5d5680d4ea39..82fb0dfcbd23 100644
---- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
-+++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
-@@ -12,7 +12,7 @@
- 
- 	.fill	1, 8, 0			# STATE (set by CPU)
- 	.fill	1, 8, 0			# FLAGS
--	.quad	encl_ssa		# OSSA
-+	.quad	encl_ssa_tcs1		# OSSA
- 	.fill	1, 4, 0			# CSSA (set by CPU)
- 	.fill	1, 4, 1			# NSSA
- 	.quad	encl_entry		# OENTRY
-@@ -23,10 +23,10 @@
- 	.fill	1, 4, 0xFFFFFFFF	# GSLIMIT
- 	.fill	4024, 1, 0		# Reserved
- 
--	# Identical to the previous TCS.
-+	# TCS2
- 	.fill	1, 8, 0			# STATE (set by CPU)
- 	.fill	1, 8, 0			# FLAGS
--	.quad	encl_ssa		# OSSA
-+	.quad	encl_ssa_tcs2		# OSSA
- 	.fill	1, 4, 0			# CSSA (set by CPU)
- 	.fill	1, 4, 1			# NSSA
- 	.quad	encl_entry		# OENTRY
-@@ -40,8 +40,9 @@
- 	.text
- 
- encl_entry:
--	# RBX contains the base address for TCS, which is also the first address
--	# inside the enclave. By adding the value of le_stack_end to it, we get
-+	# RBX contains the base address for TCS, which is the first address
-+	# inside the enclave for TCS #1 and one page into the enclave for
-+	# TCS #2. By adding the value of encl_stack to it, we get
- 	# the absolute address for the stack.
- 	lea	(encl_stack)(%rbx), %rax
- 	xchg	%rsp, %rax
-@@ -81,9 +82,15 @@ encl_entry:
- 
- 	.section ".data", "aw"
- 
--encl_ssa:
-+encl_ssa_tcs1:
-+	.space 4096
-+encl_ssa_tcs2:
- 	.space 4096
- 
- 	.balign 4096
--	.space 8192
-+	# Stack of TCS #1
-+	.space 4096
- encl_stack:
-+	.balign 4096
-+	# Stack of TCS #2
-+	.space 4096
 -- 
-2.25.1
+2.30.2
 
