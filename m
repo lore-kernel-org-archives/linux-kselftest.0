@@ -7,102 +7,116 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A10C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 13:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CA98C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 16:32:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D19461250
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 13:46:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 161FE61246
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Sep 2021 16:32:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbhIONrh (ORCPT
+        id S229910AbhIOQeL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 15 Sep 2021 09:47:37 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:30343 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235132AbhIONrg (ORCPT
+        Wed, 15 Sep 2021 12:34:11 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3824 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229841AbhIOQeJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Sep 2021 09:47:36 -0400
-IronPort-Data: =?us-ascii?q?A9a23=3AtWDvGaDDLm2aBRVW/9/hw5YqxClBgxIJ4g17XOL?=
- =?us-ascii?q?fB1a502gn1mFVmmJNWTuDPK6PajT8KYpxbdzn90tQvpGAx9UxeLYW3SszFioV8?=
- =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkExcwmj/3auK49SgliPnTLlbBILW?=
- =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
- =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
- =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9TiieJntJwwdNlu4GyS?=
- =?us-ascii?q?BsyI+vHn+F1vxxwSngiYPcapuebSZS4mYnJp6HcSFPowO1GDUcqMIle8eFyaUl?=
- =?us-ascii?q?W9f0cKShLahGrhuSqzbb9Qe5p7uw4LNTiPKsct2tmwDWfCuwpKbjHQqPX9Zpb0?=
- =?us-ascii?q?S02i8RmA/nTfYwaZCBpYRCGZAdAUn8TCZQjjKKrnXT7fSFVs069u6U6+S7QwRZ?=
- =?us-ascii?q?33byrN8DaEuFm7+09cl2w/zqApjqmREpBcoH39NZMyVr07senoM8xcNh6+GWEy?=
- =?us-ascii?q?8NX?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Ae0leOquSnvIn14NmhJkB/vdS7skDStV00zEX?=
- =?us-ascii?q?/kB9WHVpm62j5qSTdZEguCMc5wx+ZJheo7q90cW7IE80lqQFhLX5X43SPzUO0V?=
- =?us-ascii?q?HARO5fBODZsl/d8kPFltJ15ONJdqhSLJnKB0FmsMCS2mKFOudl7N6Z0K3Av4vj?=
- =?us-ascii?q?80s=3D?=
-X-IronPort-AV: E=Sophos;i="5.85,295,1624291200"; 
-   d="scan'208";a="114524604"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 15 Sep 2021 21:46:15 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id C9BFF4D0DC6F;
-        Wed, 15 Sep 2021 21:46:14 +0800 (CST)
-Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 15 Sep 2021 21:46:14 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.225.141) by
- G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 15 Sep 2021 21:46:13 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] selftests: be sure to make khdr before other targets
-Date:   Wed, 15 Sep 2021 21:45:54 +0800
-Message-ID: <20210915134554.19581-1-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.33.0
+        Wed, 15 Sep 2021 12:34:09 -0400
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H8m0q4x9Mz67gjm;
+        Thu, 16 Sep 2021 00:30:35 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Wed, 15 Sep 2021 18:32:46 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <gregkh@linuxfoundation.org>,
+        <mchehab+huawei@kernel.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH 1/9] ima: Introduce new hook DIGEST_LIST_CHECK
+Date:   Wed, 15 Sep 2021 18:31:37 +0200
+Message-ID: <20210915163145.1046505-2-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210915163145.1046505-1-roberto.sassu@huawei.com>
+References: <20210915163145.1046505-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: C9BFF4D0DC6F.A110C
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-LKP/0Day reported some building errors about kvm, and errors message
-are not always same:
-- lib/x86_64/processor.c:1083:31: error: ‘KVM_CAP_NESTED_STATE’ undeclared
-(first use in this function); did you mean ‘KVM_CAP_PIT_STATE2’?
-- lib/test_util.c:189:30: error: ‘MAP_HUGE_16KB’ undeclared (first use
-in this function); did you mean ‘MAP_HUGE_16GB’?
+Introduce a new hook called DIGEST_LIST_CHECK to measure and appraise files
+read by the kernel with type READING_DIGEST_LIST. Files with this type are:
+- digest lists directly read by the kernel
+- executables of digest list parsers
+- files read by the parsers (including digest lists)
 
-Although kvm relies on the khdr, they still be built in parallel when -j
-is specified. In this case, it will cause compiling errors.
+Typical rules with the new hook are:
+- measure func=DIGEST_LIST_CHECK pcr=11
+- appraise func=DIGEST_LIST_CHECK appraise_type=imasig|modsig
 
-Here we mark target khdr as NOTPARALLEL to make it be always built
-first.
-
-CC: Philip Li <philip.li@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- tools/testing/selftests/lib.mk | 1 +
- 1 file changed, 1 insertion(+)
+ security/integrity/ima/ima.h        | 1 +
+ security/integrity/ima/ima_main.c   | 3 ++-
+ security/integrity/ima/ima_policy.c | 3 +++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 7ee911355328..5074b01f2a29 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
- # When local build is done, headers are installed in the default
- # INSTALL_HDR_PATH usr/include.
- .PHONY: khdr
-+.NOTPARALLEL:
- khdr:
- ifndef KSFT_KHDR_INSTALL_DONE
- ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index be965a8715e4..d01ca3566aec 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -202,6 +202,7 @@ static inline unsigned int ima_hash_key(u8 *digest)
+ 	hook(KEY_CHECK, key)				\
+ 	hook(CRITICAL_DATA, critical_data)		\
+ 	hook(SETXATTR_CHECK, setxattr_check)		\
++	hook(DIGEST_LIST_CHECK, digest_list)		\
+ 	hook(MAX_CHECK, none)
+ 
+ #define __ima_hook_enumify(ENUM, str)	ENUM,
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 26a709207ca3..d33765c7aaa7 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -723,7 +723,8 @@ const int read_idmap[READING_MAX_ID] = {
+ 	[READING_MODULE] = MODULE_CHECK,
+ 	[READING_KEXEC_IMAGE] = KEXEC_KERNEL_CHECK,
+ 	[READING_KEXEC_INITRAMFS] = KEXEC_INITRAMFS_CHECK,
+-	[READING_POLICY] = POLICY_CHECK
++	[READING_POLICY] = POLICY_CHECK,
++	[READING_DIGEST_LIST] = DIGEST_LIST_CHECK
+ };
+ 
+ /**
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 761ae5b63735..8d6f5d85dfa4 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -1222,6 +1222,7 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+ 	case MODULE_CHECK:
+ 	case KEXEC_KERNEL_CHECK:
+ 	case KEXEC_INITRAMFS_CHECK:
++	case DIGEST_LIST_CHECK:
+ 		if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
+ 				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
+ 				     IMA_INMASK | IMA_EUID | IMA_PCR |
+@@ -1446,6 +1447,8 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+ 				entry->func = CRITICAL_DATA;
+ 			else if (strcmp(args[0].from, "SETXATTR_CHECK") == 0)
+ 				entry->func = SETXATTR_CHECK;
++			else if (strcmp(args[0].from, "DIGEST_LIST_CHECK") == 0)
++				entry->func = DIGEST_LIST_CHECK;
+ 			else
+ 				result = -EINVAL;
+ 			if (!result)
 -- 
-2.33.0
-
-
+2.25.1
 
