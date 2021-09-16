@@ -2,95 +2,143 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8EB7C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 16:04:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4001BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 16:22:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CC5961241
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 16:04:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 268CA619EA
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 16:22:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240570AbhIPQFc (ORCPT
+        id S240718AbhIPQXt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Sep 2021 12:05:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44584 "EHLO mail.kernel.org"
+        Thu, 16 Sep 2021 12:23:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240533AbhIPQF3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 12:05:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E4DE461250;
-        Thu, 16 Sep 2021 16:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1631808248;
-        bh=9iClfcn2FvwaNTaQw0Bk6+vBHtIgyJFO+KgfvpvKnfs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IHM0ZYK0VFfD2hEzfeTOHxHVKderwdgdFaN4IxALXmMoeRGdHRiZd2zPxUO6oToCI
-         XshWFx7TwsLWTMEepJLpTQ/fdJCAD5c1s6CkjqJRj9hn8Lgj+kmN8pOy5s9xvV7grN
-         ZaprO3LSz6LorPJwWQGVDtwYu0VgpDjvbGwLO5us=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: [PATCH 5.10 016/306] selftests/ftrace: Fix requirement check of README file
-Date:   Thu, 16 Sep 2021 17:56:01 +0200
-Message-Id: <20210916155754.482921785@linuxfoundation.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210916155753.903069397@linuxfoundation.org>
-References: <20210916155753.903069397@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S241602AbhIPQVu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 12:21:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 390CA6142A;
+        Thu, 16 Sep 2021 16:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631808909;
+        bh=hdXYr5+Jn6SgmJ/m5Ma7DClQAoZf6w3aXYAdXsVTmzc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=MDucwDB+7b1cPokcWpY4ZmNnFn0nTILjk8M0+EsNxxFULxMvCRbAYlM/f1S5+wMm6
+         eOEYL8W+fqjs2Z8yxIGFbproVUVQ9lC+aLpFNaNFNvYhqtzdIniE9aoKSk6N8Y5UDk
+         /DFBnohxBDmCil5mx0ylzvcj33YZI5ROUr1k1E3pwZPVBfJ+Y6jCPvMnb3/fEodRwj
+         9dAaYosimyPfQarV+6H53m7KDuAftiI09lyuQFL67p2atT7znGL5klWB1sSISIbMhn
+         V6E6nEojnIzHdRu1GyKCqsD9M8ZHirvFc+2pb/9x/sFYAqmFND8tpJ0Q2k644kq5A/
+         v1jgqqg2RVXtw==
+Message-ID: <a5e299138611104928efc7ad1b26c36131ba445f.camel@kernel.org>
+Subject: Re: [PATCH 00/14] selftests/sgx: Oversubscription, page permission,
+ thread entry
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        linux-sgx@vger.kernel.org, shuah@kernel.org
+Cc:     seanjc@google.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Date:   Thu, 16 Sep 2021 19:15:07 +0300
+In-Reply-To: <cover.1631731214.git.reinette.chatre@intel.com>
+References: <cover.1631731214.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Steven Rostedt (VMware) <rostedt@goodmis.org>
+On Wed, 2021-09-15 at 13:30 -0700, Reinette Chatre wrote:
+> Hi Everybody,
+>=20
+> This series consists out of outstanding SGX selftests changes, rebased
+> and gathered in a single series that is more easily merged for testing
+> and development, and a few more changes added to expand the existing test=
+s.
+>=20
+> The outstanding SGX selftest changes included in this series that have al=
+ready
+> been submitted separately are:
+>=20
+> * An almost two year old patch fixing a benign linker warning that is sti=
+ll
+>   present today:
+>   https://lore.kernel.org/linux-sgx/20191017030340.18301-2-sean.j.christo=
+pherson@intel.com/
+>   The original patch is added intact and not all email addresses
+>   within are valid.
+>=20
+> * Latest (v4) of Jarkko Sakkinen's series to add an oversubscription test=
+:
+>   https://lore.kernel.org/linux-sgx/20210809093127.76264-1-jarkko@kernel.=
+org/
+>=20
+> * Latest (v2) of Jarkko Sakkinen's patch that provides provide per-op
+>   parameter structs for the test enclave:
+>   https://lore.kernel.org/linux-sgx/20210812224645.90280-1-jarkko@kernel.=
+org/
+>=20
+> The reason why most of these patches are outstanding is that they depend
+> on a kernel change that is still under discussion. Decision to wait in:
+> https://lore.kernel.org/linux-sgx/f8674dac5579a8a424de1565f7ffa2b5bf2f8e3=
+6.camel@kernel.org/
+> The original patch for this kernel dependency continues to be included in
+> this series as a placeholder until the ongoing discussions are concluded.
+>=20
+> The new changes introduced in this series builds on Jarkko's outstanding
+> SGX selftest changes and adds new tests for page permissions, exception
+> handling, and thread entry.
+>=20
+> Reinette
+>=20
+> Jarkko Sakkinen (9):
+>   x86/sgx: Add /sys/kernel/debug/x86/sgx_total_mem
+>   selftests/sgx: Assign source for each segment
+>   selftests/sgx: Make data measurement for an enclave segment optional
+>   selftests/sgx: Create a heap for the test enclave
+>   selftests/sgx: Dump segments and /proc/self/maps only on failure
+>   selftests/sgx: Encpsulate the test enclave creation
+>   selftests/sgx: Move setup_test_encl() to each TEST_F()
+>   selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed
+>   selftests/sgx: Provide per-op parameter structs for the test enclave
+>=20
+> Reinette Chatre (4):
+>   selftests/sgx: Rename test properties in preparation for more enclave
+>     tests
+>   selftests/sgx: Add page permission and exception test
+>   selftests/sgx: Enable multiple thread support
+>   selftests/sgx: Add test for multiple TCS entry
+> Sean Christopherson (1):
+>   selftests/x86/sgx: Fix a benign linker warning
+>=20
+>  Documentation/x86/sgx.rst                     |   6 +
+>  arch/x86/kernel/cpu/sgx/main.c                |  10 +-
+>  tools/testing/selftests/sgx/Makefile          |   2 +-
+>  tools/testing/selftests/sgx/defines.h         |  33 +-
+>  tools/testing/selftests/sgx/load.c            |  40 +-
+>  tools/testing/selftests/sgx/main.c            | 341 +++++++++++++++---
+>  tools/testing/selftests/sgx/main.h            |   7 +-
+>  tools/testing/selftests/sgx/sigstruct.c       |  12 +-
+>  tools/testing/selftests/sgx/test_encl.c       |  60 ++-
+>  .../selftests/sgx/test_encl_bootstrap.S       |  21 +-
+>  10 files changed, 445 insertions(+), 87 deletions(-)
+>=20
 
-commit 210f9df02611cbe641ced3239122b270fd907d86 upstream.
+One test that would be also nice to have at some point would
+be vepc test. It's not exceptionally hard to ramp up KVM:
 
-The selftest for ftrace checks some features by checking if the README has
-text that states the feature is supported by that kernel. Unfortunately,
-this check gives false positives because it many not be checked if there's
-spaces in the string to check. This is due to the compare between the
-required variable with the ":README" string stripped, because neither has
-quotes around them.
+https://lwn.net/Articles/658511/
 
-Link: https://lkml.kernel.org/r/20210820204742.087177341@goodmis.org
+Hmm... perhaps this type of kselftest should be part of the
+series that Paolo is upstreaming because otherwise we are
+dependent on non-upstream QEMU to test those changes.
 
-Cc: "Tzvetomir Stoyanov" <tz.stoyanov@gmail.com>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org
-Fixes: 1b8eec510ba64 ("selftests/ftrace: Support ":README" suffix for requires")
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/testing/selftests/ftrace/test.d/functions |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looking back, this would have been already good idea to ramp
+up when the original KVM-SGX series was upstreamed because not
+that many have motivation to self-compile QEMU (I did but thinking
+about potential larger coverage).
 
---- a/tools/testing/selftests/ftrace/test.d/functions
-+++ b/tools/testing/selftests/ftrace/test.d/functions
-@@ -115,7 +115,7 @@ check_requires() { # Check required file
-                 echo "Required tracer $t is not configured."
-                 exit_unsupported
-             fi
--        elif [ $r != $i ]; then
-+        elif [ "$r" != "$i" ]; then
-             if ! grep -Fq "$r" README ; then
-                 echo "Required feature pattern \"$r\" is not in README."
-                 exit_unsupported
-
-
+/Jarkko
