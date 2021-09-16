@@ -5,30 +5,30 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E5DC43217
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 16:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD560C4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 17:09:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 442A761AAB
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 16:29:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B518560EFF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Sep 2021 17:09:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241045AbhIPQaf (ORCPT
+        id S1349702AbhIPRLM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Sep 2021 12:30:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38206 "EHLO mail.kernel.org"
+        Thu, 16 Sep 2021 13:11:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37020 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241027AbhIPQ1s (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Sep 2021 12:27:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ED2B0615E0;
-        Thu, 16 Sep 2021 16:17:43 +0000 (UTC)
+        id S1345629AbhIPRJL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Sep 2021 13:09:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EFC760F48;
+        Thu, 16 Sep 2021 16:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1631809064;
+        s=korg; t=1631810211;
         bh=9iClfcn2FvwaNTaQw0Bk6+vBHtIgyJFO+KgfvpvKnfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OlVi2f22f+i5A9+8LmoVOx9ZNI4a03VtmEFrsahq/LpSY/axWp+N8hdGaAtaN5rxt
-         56HqZ8XvK4FNQqm7ncyo1ss2dZYnc1LVeXx+nuHIXOYdNHMmcJZjh9sOZKQv0kMG50
-         AZvC8oRmzO/HEmvcbqrmAKcVlRsnL1liGUruSejg=
+        b=mkvff/uM0mf4YEwvoTnsJ2kEgBqLEVdBmM8EJyIAM6TfGgQzakM+AcPhaNp4zA9w3
+         2ZeAubO1p0gVX+2yTcNqQ9a2N8ehefpN+nXLse60LSb+/btpKhaXOfPz84Sbk+BehZ
+         OEzR4hmS3B7YIEQmgLe1+H5MmGEFBSiXbRWFPEVs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,12 +40,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
         "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: [PATCH 5.13 018/380] selftests/ftrace: Fix requirement check of README file
-Date:   Thu, 16 Sep 2021 17:56:15 +0200
-Message-Id: <20210916155804.589461544@linuxfoundation.org>
+Subject: [PATCH 5.14 025/432] selftests/ftrace: Fix requirement check of README file
+Date:   Thu, 16 Sep 2021 17:56:14 +0200
+Message-Id: <20210916155811.673567257@linuxfoundation.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210916155803.966362085@linuxfoundation.org>
-References: <20210916155803.966362085@linuxfoundation.org>
+In-Reply-To: <20210916155810.813340753@linuxfoundation.org>
+References: <20210916155810.813340753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
