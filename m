@@ -8,60 +8,61 @@ X-Spam-Status: No, score=-26.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 479EEC433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Sep 2021 06:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0DBDC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Sep 2021 06:11:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 358A860EE5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Sep 2021 06:11:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D31D611CA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Sep 2021 06:11:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245064AbhIQGM5 (ORCPT
+        id S245199AbhIQGNG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Sep 2021 02:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        Fri, 17 Sep 2021 02:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245046AbhIQGMu (ORCPT
+        with ESMTP id S245125AbhIQGM7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Sep 2021 02:12:50 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AE1C0613E0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:28 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id w10-20020a0cb54a000000b0037a9848b92fso87653441qvd.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:28 -0700 (PDT)
+        Fri, 17 Sep 2021 02:12:59 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7426C0613D3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:37 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id x11-20020ac86b4b000000b00299d7592d31so86546488qts.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Sep 2021 23:11:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TXG48xSRlx8rIgQW++hQT3j5R9gwaLAhcS6CZziLHmQ=;
-        b=WmhloRtjGIK9ydAlJ6OHR1E2w5RjxR8VBTPhCI/O0xak8DgT2MO76zuYYPl24VmGPp
-         yse5VSvtdAU2msUdkpYQOJUnKSnFyFST5EPn8fCafk6yZQ46FNdPLWKTSBR3+zxtOBW7
-         sNbBXeRo0RHv8ziNHdSoGEpUFFISJxxpYhiy+2MVKGbzGc7jYpxOV8tLAcwl+rv4VK8Q
-         OMGMl9rnWCFAnIkBzs5nVhwMf8z+PicX1CD1YvIz5WrRHo6Ylwov8F5oYotxfS+1/LEt
-         DKN9SHB8jZeMVVnMBsn1ODzNyalQkI/zxfzf3xRkXWq64KC757pRykt/gdw+TEESPIrZ
-         Su1w==
+        bh=zwfeLGWcGDafTQfqNliurZp8teU/yYhkf3GW28JYz+0=;
+        b=XM1DlrAUXX2ajvUBnMZhB99NjvFhfz+ZGq/7y3SKrZpGYit5SzYCLoZx+1fd1Pg2OM
+         CE/DbVbB2zZOnd5RWwlYnvAIN/0FZuFvCYMAI3FUkH9+/WHs5czJ0XzDCRQOpbNttkDV
+         rzNjCdkEp3wvo4sWkksIcRpcsW3Lpa4/N4OeJL02V5hrqG39IyQJLBkSwhLLcjvNJf1P
+         J33Z8VNQpjjPrqBYeac07pb5MmLB0B8MJ5t+DBo6UEAJOnLuMozpyMAijqsFw2f6JbS1
+         kjf8/RoduSl/18uPTMCiFBlHPGodsfgn0U2c6pVB8BmGNGic9LVrNxfbRPmKqI20Z1nX
+         qACA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TXG48xSRlx8rIgQW++hQT3j5R9gwaLAhcS6CZziLHmQ=;
-        b=1n3a9Dq2Bq7wk8PlTRMitq+bKj4vB2tHsWYtk7wmi2WBUJxAaNBSAXzogzkxI1rb7m
-         pDd67nr82l5S3k/8xVtmNJ8Wxc7/re4hysDAay98F2v0yD+BQRwjJHbwuZO8LFy61Tav
-         6XBrnJZq7ANqNTZIiE1X3duSR/mYnIF4aKrE2TsBYWVtnjEUN+IENqSFNI6j/j2RIx0I
-         QuE2L7pltZliTbJOm7lTqNHpGoIHaC9skJyIe9iPpWOcYJsCllbU46Rry8Dq/5VidTyV
-         313H0fMgB3+dp+YY6AvkmEeKZkMZPOfYLLioiFvNUIAzlkjz2wED5lmWYPcUagYzl72J
-         fiSg==
-X-Gm-Message-State: AOAM531dwxBenUjDgcJICpk5TVNQlJPB5MRB0szf48OIzPTyCqLpZFpH
-        xKs/55s5oIie9aAZt8u55OJtOxKKcCqNHr7Y0nko6g==
-X-Google-Smtp-Source: ABdhPJypn4hhdPHmNfweWLWHauxWHrVoQvMZsHWsDKioZ9IeJPJspxqNCPwjtYoY9xvXJMChe6ahFtlZ1gOXKE6/5Xximw==
+        bh=zwfeLGWcGDafTQfqNliurZp8teU/yYhkf3GW28JYz+0=;
+        b=T1aKvt/OqFdkBJz+0wbiLpYKuk4TMqqDBi1Vy6Xi0hGfoveiuTFgmTtEHAWR01tFlH
+         ZQtZ+JhvpG6pEdd2n7T39yT0fX4sVdLPohIJFxS/hOZ7Upw0y7JxVOMPZ6gT+zYv4plC
+         HXGvbDnUwtM+8oewPrd/c9eGAZw/+72BNdHva6Z9Nu1hJtCutZMQ6EXSGJ0+CO8vGhSP
+         Pu1oYw3OaJQrUqosGlgDktgW2KlbRITiuUuLkkUFKP9Kdzdpxs10kVQ7QcBCtYw/sUnd
+         PkD2pNtK8ZNyAsACulm6moaYQV1jaQo/8OfLKR1iXuuK/Q9bLk+NAvnFUgdzSGPaOMdk
+         tLow==
+X-Gm-Message-State: AOAM531axxzKvD3gh355djBzeBE7kwEoV+70QPXuTyvvXfFFszjsU7Pi
+        RGZ+/4bJ/C7Kj+2DXKQF01O8Cz74e8F0AvbVIKX2xA==
+X-Google-Smtp-Source: ABdhPJx6RzYNzo1jNBe3N3oA2ojvmyemjqyjcW1MLw7H9/OVIjCsIqeL5PNY5fZLW55/k0Aj9lw0rd78dTvNRFgK+Smr+Q==
 X-Received: from mactruck.svl.corp.google.com ([2620:15c:2cb:201:4845:43ba:3ff5:2de1])
- (user=brendanhiggins job=sendgmr) by 2002:a25:ca08:: with SMTP id
- a8mr11249514ybg.231.1631859087755; Thu, 16 Sep 2021 23:11:27 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 23:10:59 -0700
+ (user=brendanhiggins job=sendgmr) by 2002:a25:4655:: with SMTP id
+ t82mr11189168yba.289.1631859096878; Thu, 16 Sep 2021 23:11:36 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 23:11:03 -0700
 In-Reply-To: <20210917061104.2680133-1-brendanhiggins@google.com>
-Message-Id: <20210917061104.2680133-2-brendanhiggins@google.com>
+Message-Id: <20210917061104.2680133-6-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20210917061104.2680133-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v1 1/6] gcc-plugins/structleak: add makefile var for disabling structleak
+Subject: [PATCH v1 5/6] mmc: sdhci-of-aspeed: build kunit tests without
+ structleak plugin
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     shuah@kernel.org, davidgow@google.com, arnd@arndb.de,
         keescook@chromium.org, rafael@kernel.org, jic23@kernel.org,
@@ -80,30 +81,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KUnit and structleak don't play nice, so add a makefile variable for
-enabling structleak when it complains.
+The structleak plugin causes the stack frame size to grow immensely when
+used with KUnit.
 
-Co-developed-by: Kees Cook <keescook@chromium.org>
+Turn it off.
+
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- scripts/Makefile.gcc-plugins | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/mmc/host/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
-index 952e46876329a..4aad284800355 100644
---- a/scripts/Makefile.gcc-plugins
-+++ b/scripts/Makefile.gcc-plugins
-@@ -19,6 +19,10 @@ gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF)		\
- 		+= -fplugin-arg-structleak_plugin-byref
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL)	\
- 		+= -fplugin-arg-structleak_plugin-byref-all
-+ifdef CONFIG_GCC_PLUGIN_STRUCTLEAK
-+    DISABLE_STRUCTLEAK_PLUGIN += -fplugin-arg-structleak_plugin-disable
-+endif
-+export DISABLE_STRUCTLEAK_PLUGIN
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
- 		+= -DSTRUCTLEAK_PLUGIN
- 
+diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
+index 14004cc09aaad..2ab083931f8fd 100644
+--- a/drivers/mmc/host/Makefile
++++ b/drivers/mmc/host/Makefile
+@@ -85,6 +85,7 @@ obj-$(CONFIG_MMC_SDHCI_DOVE)		+= sdhci-dove.o
+ obj-$(CONFIG_MMC_SDHCI_TEGRA)		+= sdhci-tegra.o
+ obj-$(CONFIG_MMC_SDHCI_OF_ARASAN)	+= sdhci-of-arasan.o
+ obj-$(CONFIG_MMC_SDHCI_OF_ASPEED)	+= sdhci-of-aspeed.o
++CFLAGS_sdhci-of-aspeed.o		+= $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_MMC_SDHCI_OF_AT91)		+= sdhci-of-at91.o
+ obj-$(CONFIG_MMC_SDHCI_OF_ESDHC)	+= sdhci-of-esdhc.o
+ obj-$(CONFIG_MMC_SDHCI_OF_HLWD)		+= sdhci-of-hlwd.o
 -- 
 2.33.0.464.g1972c5931b-goog
 
