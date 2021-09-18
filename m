@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F437C433F5
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Sep 2021 05:05:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 477DEC43217
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Sep 2021 05:06:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A56161244
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Sep 2021 05:05:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 300F961284
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Sep 2021 05:06:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243276AbhIRFHC (ORCPT
+        id S243123AbhIRFIN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 18 Sep 2021 01:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
+        Sat, 18 Sep 2021 01:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239424AbhIRFGf (ORCPT
+        with ESMTP id S237812AbhIRFGe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Sep 2021 01:06:35 -0400
+        Sat, 18 Sep 2021 01:06:34 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6112FC06175F;
-        Fri, 17 Sep 2021 22:05:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C690C06175F;
+        Fri, 17 Sep 2021 22:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=dzQDmz7xxO3VvMmtTJfTfYGp1BzfMy8nL3YIn6nOqbs=; b=gvGn0YcA46T57LAqEUumG8T74w
-        WeB6iIfuYPDSkZuRgbl+utpyBEm6OIYDCFFxhLma9zmcJSxoHdkIuJqTBBk1xzu5tmLxlvELfn1h7
-        cDMVlGGNFHx/MU861wddSshlZ9gyN7TjIvEIqwxMkFieZ8cikaCJljbgSwPeOVIYNRfPH4KZewEuR
-        TVa9Wv8BJ7Yao/1K8zubeUf0TmClCyPJIWsBhibpMrpeDfvlFcublaIozWAtFn6jpkmpSz0+gt2wi
-        6VFNzVWB6ZG4Iyqbfx4BrvkBZK6UrL08NTIY2vEW20ov9dIGCLD+iEMGkEPkqSdV0nKoKRwTP61m7
-        lZeGrq3w==;
+        bh=w925P6ItKF9rs87b7yDYFnpWVAY11Rt3apCJxCqDXyQ=; b=ZQ6fiW0YAVh21GrE+PLOko0KTR
+        1gUJkd/ycRpagDzFKji3CIgEgvCyiPdx2M1yYra9IgiS5/oLomOcV/nbvGxdet+xn5DTiDIxSwbBz
+        zKjH2+bILCOx/G93NGgszpi5dU0sbYngJUby+kJerJHSas0JetLWLFBRB/2IliHYOR3OAZ8r3ohzL
+        P3Sp63TAmfdfTYuwjVqjnDt6UuPv4o6p6B1iuvUH7VLmwDiamOvTj0fvd5IJdalYCxrwMmNAXX4MG
+        hmzPOHd/b3jF1SJVREXrETLHGxi8BMet6/FH8DghewTQ9ZzRRGmzkX2+FxLmpts+zTvU5aiYwIfjE
+        bpz7J1kw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mRSWe-00FP4S-VY; Sat, 18 Sep 2021 05:04:33 +0000
+        id 1mRSWf-00FP4i-FZ; Sat, 18 Sep 2021 05:04:33 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     tj@kernel.org, gregkh@linuxfoundation.org,
         akpm@linux-foundation.org, minchan@kernel.org, jeyu@kernel.org,
@@ -62,9 +62,9 @@ Cc:     rdunlap@infradead.org, rafael@kernel.org, masahiroy@kernel.org,
         linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
         linux-kernel@vger.kernel.org, copyleft-next@lists.fedorahosted.org
-Subject: [PATCH v7 04/12] kernfs: add initial failure injection support
-Date:   Fri, 17 Sep 2021 22:04:22 -0700
-Message-Id: <20210918050430.3671227-5-mcgrof@kernel.org>
+Subject: [PATCH v7 12/12] zram: use ATTRIBUTE_GROUPS to fix sysfs deadlock module removal
+Date:   Fri, 17 Sep 2021 22:04:30 -0700
+Message-Id: <20210918050430.3671227-13-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210918050430.3671227-1-mcgrof@kernel.org>
 References: <20210918050430.3671227-1-mcgrof@kernel.org>
@@ -75,398 +75,154 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds initial failure injection support to kernfs. We start
-off with debug knobs which when enabled allow test drivers, such as
-test_sysfs, to then make use of these to try to force certain
-difficult races to take place with a high degree of certainty.
+The ATTRIBUTE_GROUPS is typically used to avoid boiler plate
+code which is used in many drivers. Embracing ATTRIBUTE_GROUPS was
+long due on the zram driver, however a recent fix for sysfs allows
+users of ATTRIBUTE_GROUPS to also associate a module to the group
+attribute.
 
-This only adds runtime code *iff* the new bool CONFIG_FAIL_KERNFS_KNOBS is
-enabled in your kernel. If you don't have this enabled this provides
-no new functional. When CONFIG_FAIL_KERNFS_KNOBS is disabled the new
-routine kernfs_debug_should_wait() ends up being transformed to if
-(false), and so the compiler should optimize these out as dead code
-producing no new effective binary changes.
+In zram's case this also means it allows us to fix a race which triggers
+a deadlock on the zram driver. This deadlock happens when a sysfs attribute
+use a lock also used on module removal. This happens when for instance a
+sysfs file on a driver is used, then at the same time we have module
+removal call trigger. The module removal call code holds a lock, and then
+the sysfs file entry waits for the same lock. While holding the lock the
+module removal tries to remove the sysfs entries, but these cannot be
+removed yet as one is waiting for a lock. This won't complete as the lock
+is already held. Likewise module removal cannot complete, and so we
+deadlock.
 
-We start off with enabling failure injections in kernfs by allowing us to
-alter the way kernfs_fop_write_iter() behaves. We allow for the routine
-kernfs_fop_write_iter() to wait for a certain condition in the kernel to
-occur, after which it will sleep a predefined amount of time. This lets
-kernfs users to time exactly when it want kernfs_fop_write_iter() to
-complete, allowing for developing race conditions and test for correctness
-in kernfs.
+Sysfs fixes this when the group attributes have a module associated to
+it, sysfs will *try* to get a refcount to the module when a shared
+lock is used, prior to mucking with a sysfs attribute. If this fails we
+just give up right away.
 
-You'd boot with this enabled on your kernel command line:
+This deadlock was first reported with the zram driver, a sketch of how
+this can happen follows:
 
-fail_kernfs_fop_write_iter=1,100,0,1
+CPU A                              CPU B
+                                   whatever_store()
+module_unload
+  mutex_lock(foo)
+                                   mutex_lock(foo)
+   del_gendisk(zram->disk);
+     device_del()
+       device_remove_groups()
 
-The values are <interval,probability,size,times>, we don't care for
-size, so for now we ignore it. The above ensures a failure will trigger
-only once.
+In this situation whatever_store() is waiting for the mutex foo to
+become unlocked, but that won't happen until module removal is complete.
+But module removal won't complete until the sysfs file being poked
+completes which is waiting for a lock already held.
 
-*How* we allow for this routine to change behaviour is left to knobs we
-expose under debugfs:
+This issue can be reproduced easily on the zram driver as follows:
 
- # ls -1 /sys/kernel/debug/kernfs/config_fail_kernfs_fop_write_iter/
-wait_after_active
-wait_after_mutex
-wait_at_start
-wait_before_mutex
+Loop 1 on one terminal:
 
-A debugfs entry also exists to allow us to sleep a configurabler amount
-of time after the completion:
+while true;
+	do modprobe zram;
+	modprobe -r zram;
+done
 
-/sys/kernel/debug/kernfs/sleep_after_wait_ms
+Loop 2 on a second terminal:
+while true; do
+	echo 1024 >  /sys/block/zram0/disksize;
+	echo 1 > /sys/block/zram0/reset;
+done
 
-These two sets of knobs allow us to construct races and demonstrate
-how the kernfs active reference should suffice to project against
-races.
+Without this patch we end up in a deadlock, and the following
+stack trace is produced which hints to us what the issue was:
 
-Enabling CONFIG_FAULT_INJECTION_DEBUG_FS enables us to configure the
-differnt fault injection parametres for the new fail_kernfs_fop_write_iter
-fault injection at run time:
+INFO: task bash:888 blocked for more than 120 seconds.
+      Tainted: G            E 5.12.0-rc1-next-20210304+ #4
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:bash            state:D stack:    0 pid:  888 ppid: 887 flags:<etc>
+Call Trace:
+ __schedule+0x2e4/0x900
+ schedule+0x46/0xb0
+ schedule_preempt_disabled+0xa/0x10
+ __mutex_lock.constprop.0+0x2c3/0x490
+ ? _kstrtoull+0x35/0xd0
+ reset_store+0x6c/0x160 [zram]
+ kernfs_fop_write_iter+0x124/0x1b0
+ new_sync_write+0x11c/0x1b0
+ vfs_write+0x1c2/0x260
+ ksys_write+0x5f/0xe0
+ do_syscall_64+0x33/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f34f2c3df33
+RSP: 002b:00007ffe751df6e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f34f2c3df33
+RDX: 0000000000000002 RSI: 0000561ccb06ec10 RDI: 0000000000000001
+RBP: 0000561ccb06ec10 R08: 000000000000000a R09: 0000000000000001
+R10: 0000561ccb157590 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007f34f2d0e6a0 R14: 0000000000000002 R15: 00007f34f2d0e8a0
+INFO: task modprobe:1104 can't die for more than 120 seconds.
+task:modprobe        state:D stack:    0 pid: 1104 ppid: 916 flags:<etc>
+Call Trace:
+ __schedule+0x2e4/0x900
+ schedule+0x46/0xb0
+ __kernfs_remove.part.0+0x228/0x2b0
+ ? finish_wait+0x80/0x80
+ kernfs_remove_by_name_ns+0x50/0x90
+ remove_files+0x2b/0x60
+ sysfs_remove_group+0x38/0x80
+ sysfs_remove_groups+0x29/0x40
+ device_remove_attrs+0x4a/0x80
+ device_del+0x183/0x3e0
+ ? mutex_lock+0xe/0x30
+ del_gendisk+0x27a/0x2d0
+ zram_remove+0x8a/0xb0 [zram]
+ ? hot_remove_store+0xf0/0xf0 [zram]
+ zram_remove_cb+0xd/0x10 [zram]
+ idr_for_each+0x5e/0xd0
+ destroy_devices+0x39/0x6f [zram]
+ __do_sys_delete_module+0x190/0x2a0
+ do_syscall_64+0x33/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f32adf727d7
+RSP: 002b:00007ffc08bb38a8 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
+RAX: ffffffffffffffda RBX: 000055eea23cbb10 RCX: 00007f32adf727d7
+RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055eea23cbb78
+RBP: 000055eea23cbb10 R08: 0000000000000000 R09: 0000000000000000
+R10: 00007f32adfe5ac0 R11: 0000000000000206 R12: 000055eea23cbb78
+R13: 0000000000000000 R14: 0000000000000000 R15: 000055eea23cbc20
 
-ls -1 /sys/kernel/debug/kernfs/fail_kernfs_fop_write_iter/
-interval
-probability
-space
-task-filter
-times
-verbose
-verbose_ratelimit_burst
-verbose_ratelimit_interval_ms
+[0] https://lkml.kernel.org/r/20210401235925.GR4332@42.do-not-panic.com
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- .../fault-injection/fault-injection.rst       | 22 +++++
- MAINTAINERS                                   |  2 +-
- fs/kernfs/Makefile                            |  1 +
- fs/kernfs/failure-injection.c                 | 91 +++++++++++++++++++
- fs/kernfs/file.c                              | 13 +++
- fs/kernfs/kernfs-internal.h                   | 72 +++++++++++++++
- include/linux/kernfs.h                        |  5 +
- lib/Kconfig.debug                             | 10 ++
- 8 files changed, 215 insertions(+), 1 deletion(-)
- create mode 100644 fs/kernfs/failure-injection.c
+ drivers/block/zram/zram_drv.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/fault-injection/fault-injection.rst b/Documentation/fault-injection/fault-injection.rst
-index 4a25c5eb6f07..d4d34b082f47 100644
---- a/Documentation/fault-injection/fault-injection.rst
-+++ b/Documentation/fault-injection/fault-injection.rst
-@@ -28,6 +28,28 @@ Available fault injection capabilities
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index b26abcb955cc..60a55ae8cd91 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1902,14 +1902,7 @@ static struct attribute *zram_disk_attrs[] = {
+ 	NULL,
+ };
  
-   injects kernel RPC client and server failures.
+-static const struct attribute_group zram_disk_attr_group = {
+-	.attrs = zram_disk_attrs,
+-};
+-
+-static const struct attribute_group *zram_disk_attr_groups[] = {
+-	&zram_disk_attr_group,
+-	NULL,
+-};
++ATTRIBUTE_GROUPS(zram_disk);
  
-+- fail_kernfs_fop_write_iter
-+
-+  Allows for failures to be enabled inside kernfs_fop_write_iter(). Enabling
-+  this does not immediately enable any errors to occur. You must configure
-+  how you want this routine to fail or change behaviour by using the debugfs
-+  knobs for it:
-+
-+  # ls -1 /sys/kernel/debug/kernfs/config_fail_kernfs_fop_write_iter/
-+  wait_after_active
-+  wait_after_mutex
-+  wait_at_start
-+  wait_before_mutex
-+
-+  You can also configure how long to sleep after a wait under
-+
-+  /sys/kernel/debug/kernfs/sleep_after_wait_ms
-+
-+  If you enable CONFIG_FAULT_INJECTION_DEBUG_FS the fail_add_disk failure
-+  injection parameters are placed under:
-+
-+  /sys/kernel/debug/kernfs/fail_kernfs_fop_write_iter/
-+
- - fail_make_request
+ /*
+  * Allocate and initialize new zram device. the function returns
+@@ -1981,7 +1974,7 @@ static int zram_add(void)
+ 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
  
-   injects disk IO errors on devices permitted by setting
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 28a34384f541..acdbf91058d5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10341,7 +10341,7 @@ M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- M:	Tejun Heo <tj@kernel.org>
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
--F:	fs/kernfs/
-+F:	fs/kernfs/*
- F:	include/linux/kernfs.h
+ 	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
+-	device_add_disk(NULL, zram->disk, zram_disk_attr_groups);
++	device_add_disk(NULL, zram->disk, zram_disk_groups);
  
- KEXEC
-diff --git a/fs/kernfs/Makefile b/fs/kernfs/Makefile
-index 4ca54ff54c98..bc5b32ca39f9 100644
---- a/fs/kernfs/Makefile
-+++ b/fs/kernfs/Makefile
-@@ -4,3 +4,4 @@
- #
+ 	strlcpy(zram->compressor, default_compressor, sizeof(zram->compressor));
  
- obj-y		:= mount.o inode.o dir.o file.o symlink.o
-+obj-$(CONFIG_FAIL_KERNFS_KNOBS)    += failure-injection.o
-diff --git a/fs/kernfs/failure-injection.c b/fs/kernfs/failure-injection.c
-new file mode 100644
-index 000000000000..4130d202c13b
---- /dev/null
-+++ b/fs/kernfs/failure-injection.c
-@@ -0,0 +1,91 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/fault-inject.h>
-+#include <linux/delay.h>
-+
-+#include "kernfs-internal.h"
-+
-+static DECLARE_FAULT_ATTR(fail_kernfs_fop_write_iter);
-+struct kernfs_config_fail kernfs_config_fail;
-+
-+#define kernfs_config_fail(when) \
-+	kernfs_config_fail.kernfs_fop_write_iter_fail.wait_ ## when
-+
-+#define kernfs_config_fail(when) \
-+	kernfs_config_fail.kernfs_fop_write_iter_fail.wait_ ## when
-+
-+static int __init setup_fail_kernfs_fop_write_iter(char *str)
-+{
-+	return setup_fault_attr(&fail_kernfs_fop_write_iter, str);
-+}
-+
-+__setup("fail_kernfs_fop_write_iter=", setup_fail_kernfs_fop_write_iter);
-+
-+struct dentry *kernfs_debugfs_root;
-+struct dentry *config_fail_kernfs_fop_write_iter;
-+
-+static int __init kernfs_init_failure_injection(void)
-+{
-+	kernfs_config_fail.sleep_after_wait_ms = 100;
-+	kernfs_debugfs_root = debugfs_create_dir("kernfs", NULL);
-+
-+	fault_create_debugfs_attr("fail_kernfs_fop_write_iter",
-+				  kernfs_debugfs_root, &fail_kernfs_fop_write_iter);
-+
-+	config_fail_kernfs_fop_write_iter =
-+		debugfs_create_dir("config_fail_kernfs_fop_write_iter",
-+				   kernfs_debugfs_root);
-+
-+	debugfs_create_u32("sleep_after_wait_ms", 0600,
-+			   kernfs_debugfs_root,
-+			   &kernfs_config_fail.sleep_after_wait_ms);
-+
-+	debugfs_create_bool("wait_at_start", 0600,
-+			    config_fail_kernfs_fop_write_iter,
-+			    &kernfs_config_fail(at_start));
-+	debugfs_create_bool("wait_before_mutex", 0600,
-+			    config_fail_kernfs_fop_write_iter,
-+			    &kernfs_config_fail(before_mutex));
-+	debugfs_create_bool("wait_after_mutex", 0600,
-+			    config_fail_kernfs_fop_write_iter,
-+			    &kernfs_config_fail(after_mutex));
-+	debugfs_create_bool("wait_after_active", 0600,
-+			    config_fail_kernfs_fop_write_iter,
-+			    &kernfs_config_fail(after_active));
-+	return 0;
-+}
-+late_initcall(kernfs_init_failure_injection);
-+
-+int __kernfs_debug_should_wait_kernfs_fop_write_iter(bool evaluate)
-+{
-+	if (!evaluate)
-+		return 0;
-+
-+	return should_fail(&fail_kernfs_fop_write_iter, 0);
-+}
-+
-+DECLARE_COMPLETION(kernfs_debug_wait_completion);
-+EXPORT_SYMBOL_NS_GPL(kernfs_debug_wait_completion, KERNFS_DEBUG_PRIVATE);
-+
-+void kernfs_debug_wait(void)
-+{
-+	unsigned long timeout;
-+
-+	timeout = wait_for_completion_timeout(&kernfs_debug_wait_completion,
-+					      msecs_to_jiffies(3000));
-+	if (!timeout)
-+		pr_info("%s waiting for kernfs_debug_wait_completion timed out\n",
-+			__func__);
-+	else
-+		pr_info("%s received completion with time left on timeout %u ms\n",
-+			__func__, jiffies_to_msecs(timeout));
-+
-+	/**
-+	 * The goal is wait for an event, and *then* once we have
-+	 * reached it, the other side will try to do something which
-+	 * it thinks will break. So we must give it some time to do
-+	 * that. The amount of time is configurable.
-+	 */
-+	msleep(kernfs_config_fail.sleep_after_wait_ms);
-+	pr_info("%s ended\n", __func__);
-+}
-diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
-index 60e2a86c535e..4479c6580333 100644
---- a/fs/kernfs/file.c
-+++ b/fs/kernfs/file.c
-@@ -259,6 +259,9 @@ static ssize_t kernfs_fop_write_iter(struct kiocb *iocb, struct iov_iter *iter)
- 	const struct kernfs_ops *ops;
- 	char *buf;
- 
-+	if (kernfs_debug_should_wait(kernfs_fop_write_iter, at_start))
-+		kernfs_debug_wait();
-+
- 	if (of->atomic_write_len) {
- 		if (len > of->atomic_write_len)
- 			return -E2BIG;
-@@ -280,17 +283,27 @@ static ssize_t kernfs_fop_write_iter(struct kiocb *iocb, struct iov_iter *iter)
- 	}
- 	buf[len] = '\0';	/* guarantee string termination */
- 
-+	if (kernfs_debug_should_wait(kernfs_fop_write_iter, before_mutex))
-+		kernfs_debug_wait();
-+
- 	/*
- 	 * @of->mutex nests outside active ref and is used both to ensure that
- 	 * the ops aren't called concurrently for the same open file.
- 	 */
- 	mutex_lock(&of->mutex);
-+
-+	if (kernfs_debug_should_wait(kernfs_fop_write_iter, after_mutex))
-+		kernfs_debug_wait();
-+
- 	if (!kernfs_get_active(of->kn)) {
- 		mutex_unlock(&of->mutex);
- 		len = -ENODEV;
- 		goto out_free;
- 	}
- 
-+	if (kernfs_debug_should_wait(kernfs_fop_write_iter, after_active))
-+		kernfs_debug_wait();
-+
- 	ops = kernfs_ops(of->kn);
- 	if (ops->write)
- 		len = ops->write(of, buf, len, iocb->ki_pos);
-diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
-index f9cc912c31e1..9e3abf597e2d 100644
---- a/fs/kernfs/kernfs-internal.h
-+++ b/fs/kernfs/kernfs-internal.h
-@@ -18,6 +18,7 @@
- 
- #include <linux/kernfs.h>
- #include <linux/fs_context.h>
-+#include <linux/stringify.h>
- 
- struct kernfs_iattrs {
- 	kuid_t			ia_uid;
-@@ -147,4 +148,75 @@ void kernfs_drain_open_files(struct kernfs_node *kn);
-  */
- extern const struct inode_operations kernfs_symlink_iops;
- 
-+/*
-+ * failure-injection.c
-+ */
-+#ifdef CONFIG_FAIL_KERNFS_KNOBS
-+
-+/**
-+ * struct kernfs_fop_write_iter_fail - how kernfs_fop_write_iter_fail fails
-+ *
-+ * This lets you configure what part of kernfs_fop_write_iter() should behave
-+ * in a specific way to allow userspace to capture possible failures in
-+ * kernfs. The wait knobs are allowed to let you design capture possible
-+ * race conditions which would otherwise be difficult to reproduce. A
-+ * secondary driver would tell kernfs's wait completion when it is done.
-+ *
-+ * The point to the wait completion failure injection tests are to confirm
-+ * that the kernfs active refcount suffice to ensure other objects in other
-+ * layers are also gauranteed to exist, even they are opaque to kernfs. This
-+ * includes kobjects, devices, and other objects built on top of this, like
-+ * the block layer when using sysfs block device attributes.
-+ *
-+ * @wait_at_start: waits for completion from a third party at the start of
-+ *	the routine.
-+ * @wait_before_mutex: waits for completion from a third party before we
-+ *	are allowed to continue before the of->mutex is held.
-+ * @wait_after_mutex: waits for completion from a third party after we
-+ *	have held the of->mutex.
-+ * @wait_after_active: waits for completion from a thid party after we
-+ *	have refcounted the struct kernfs_node.
-+ */
-+struct kernfs_fop_write_iter_fail {
-+	bool wait_at_start;
-+	bool wait_before_mutex;
-+	bool wait_after_mutex;
-+	bool wait_after_active;
-+};
-+
-+/**
-+ * struct kernfs_config_fail - kernfs configuration for failure injection
-+ *
-+ * You can kernfs failure injection on boot, and in particular we currently
-+ * only support failures for kernfs_fop_write_iter(). However, we don't
-+ * want to always enable errors on this call when failure injection is enabled
-+ * as this routine is used by many parts of the kernel for proper functionality.
-+ * The compromise we make is we let userspace start enabling which parts it
-+ * wants to fail after boot, if and only if failure injection has been enabled.
-+ *
-+ * @kernfs_fop_write_iter_fail: configuration for how we want to allow
-+ *	for failure injection on kernfs_fop_write_iter()
-+ * @sleep_after_wait_ms: how many ms to wait after completion is received.
-+ */
-+struct kernfs_config_fail {
-+	struct kernfs_fop_write_iter_fail kernfs_fop_write_iter_fail;
-+	u32 sleep_after_wait_ms;
-+};
-+
-+extern struct kernfs_config_fail kernfs_config_fail;
-+
-+#define __kernfs_config_wait_var(func, when) \
-+	(kernfs_config_fail.  func  ## _fail.wait_  ## when)
-+#define __kernfs_debug_should_wait_func_name(func) __kernfs_debug_should_wait_## func
-+
-+#define kernfs_debug_should_wait(func, when) \
-+	__kernfs_debug_should_wait_func_name(func)(__kernfs_config_wait_var(func, when))
-+int __kernfs_debug_should_wait_kernfs_fop_write_iter(bool evaluate);
-+void kernfs_debug_wait(void);
-+#else
-+static inline void kernfs_init_failure_injection(void) {}
-+#define kernfs_debug_should_wait(func, when) (false)
-+static inline void kernfs_debug_wait(void) {}
-+#endif
-+
- #endif	/* __KERNFS_INTERNAL_H */
-diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
-index 3ccce6f24548..cd968ee2b503 100644
---- a/include/linux/kernfs.h
-+++ b/include/linux/kernfs.h
-@@ -411,6 +411,11 @@ void kernfs_init(void);
- 
- struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
- 						   u64 id);
-+
-+#ifdef CONFIG_FAIL_KERNFS_KNOBS
-+extern struct completion kernfs_debug_wait_completion;
-+#endif
-+
- #else	/* CONFIG_KERNFS */
- 
- static inline enum kernfs_node_type kernfs_type(struct kernfs_node *kn)
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ae19bf1a21b8..a29b7d398c4e 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1902,6 +1902,16 @@ config FAULT_INJECTION_USERCOPY
- 	  Provides fault-injection capability to inject failures
- 	  in usercopy functions (copy_from_user(), get_user(), ...).
- 
-+config FAIL_KERNFS_KNOBS
-+	bool "Fault-injection support in kernfs"
-+	depends on FAULT_INJECTION
-+	help
-+	  Provide fault-injection capability for kernfs. This only enables
-+	  the error injection functionality. To use it you must configure which
-+	  which path you want to trigger on error on using debugfs under
-+	  /sys/kernel/debug/kernfs/config_fail_kernfs_fop_write_iter/. By
-+	  default all of these are disabled.
-+
- config FAIL_MAKE_REQUEST
- 	bool "Fault-injection capability for disk IO"
- 	depends on FAULT_INJECTION && BLOCK
 -- 
 2.30.2
 
