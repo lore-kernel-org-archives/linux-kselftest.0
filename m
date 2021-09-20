@@ -7,201 +7,275 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A24E0C4332F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81651C433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8820F60240
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6852160F21
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbhITCkm (ORCPT
+        id S234335AbhITCkr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 19 Sep 2021 22:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
+        Sun, 19 Sep 2021 22:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbhITCkk (ORCPT
+        with ESMTP id S231825AbhITCkk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 19 Sep 2021 22:40:40 -0400
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABCDC0613CF
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C547FC061574
         for <linux-kselftest@vger.kernel.org>; Sun, 19 Sep 2021 19:39:13 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3B5A184488;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 633A5891B1;
         Mon, 20 Sep 2021 14:39:10 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1632105550;
-        bh=m7dLi6wssF5Em/aR7obvsPDW5F90WMzEEIa2g7SXvW8=;
+        bh=0867I5ZH7+vBNdejan79ZPgS1azMprtE519yWlRFo+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cWUTN9fB3DiebkbjSxkx9HCROjbAl/RyntMQsoAYUGpsdw/dplWNxQa5106H/ZfZ2
-         lEidL1rkAJaCzpu5Fy2ZGeIGfq70bzLMsIxvSh+AjZpEzvehXIEI+QhmZw8vvYYDop
-         Cr1E2rKbjtVU8i+jjfBUpfi7mgCtByROPNcgEUrq+f05sLtmINeDT4kIPzAxPG9q4/
-         zXMVZfU1X5A6mcwf6N/m7u9ucvH7kGvB8hFYXAgy8HYilYij/K3mIeieXAc7np4utC
-         Z60war5pLSMdTcWIvde1BduWVZ6FvJC4JDdpTzoL4bDOQ70Kjpc+3jykrraZLyiFJs
-         piTFcmOLUGLbw==
+        b=b8p5TwsF6KEZIEy40j9DLJDVaKyhNB3IalB21pB0o5fI2/FFQ7Lud59UJse7Ed9PL
+         RLXuLFCPQmuBZ6AYe78mRlz2pa3X2pjaSA7RajB+nVrmH/z5m3qdPh8/Sc//9c7HH7
+         TEd0xj2/F+k2Moid/+yxqUjG0kdstLuvXWN+0VkNECccm086WrMFCAXXrKJzxZ6qt0
+         5GCcAqiZ0y2+Rvujekov2AkG2sfreQIg48Y+JisPMDTbk19Fv9PL0hGHgaJMCYc2iJ
+         wysPZAxsPbCP6qkUhvO9KDpzAX+dBtLXbpilq4mNwC81cljGX61x+N/Oe5sVEbWE1m
+         WXhoXUlYJeFBg==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6147f44e0001>; Mon, 20 Sep 2021 14:39:10 +1200
+        id <B6147f44e0003>; Mon, 20 Sep 2021 14:39:10 +1200
 Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
-        by pat.atlnz.lc (Postfix) with ESMTP id DC71713EE8E;
+        by pat.atlnz.lc (Postfix) with ESMTP id E7AE413EEA7;
         Mon, 20 Sep 2021 14:39:09 +1200 (NZST)
 Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
-        id D99E4242876; Mon, 20 Sep 2021 14:39:09 +1200 (NZST)
+        id E5F9C24285E; Mon, 20 Sep 2021 14:39:09 +1200 (NZST)
 From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
 To:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
         davem@davemloft.net, kuba@kernel.org, shuah@kernel.org
 Cc:     linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         coreteam@netfilter.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>,
-        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
-        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
-        Blair Steven <blair.steven@alliedtelesis.co.nz>
-Subject: [RESEND PATCH net-next v7 1/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support xtables API
-Date:   Mon, 20 Sep 2021 14:38:04 +1200
-Message-Id: <20210920023806.19954-2-Cole.Dishington@alliedtelesis.co.nz>
+        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Subject: [RESEND PATCH net-next v7 3/3] selftests: netfilter: Add RFC-7597 Section 5.1 PSID selftests
+Date:   Mon, 20 Sep 2021 14:38:06 +1200
+Message-Id: <20210920023806.19954-4-Cole.Dishington@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210920023806.19954-1-Cole.Dishington@alliedtelesis.co.nz>
 References: <20210920023806.19954-1-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=FtN7AFjq c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=7QKq2e-ADPsA:10 a=3HDBlxybAAAA:8 a=mhPBjSskWxd-kjGSbREA:9 a=laEoCiVfU_Unz3mSdgXN:22
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=FtN7AFjq c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=7QKq2e-ADPsA:10 a=sF_rvDO487Xu6NHlfHgA:9
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add support for revision 2 of xtables masquerade extension.
+Add selftests for masquerading into a smaller subset of ports defined by
+PSID.
 
-Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
-Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
-Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
 Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
 ---
- include/uapi/linux/netfilter/nf_nat.h |  3 +-
- net/netfilter/xt_MASQUERADE.c         | 44 ++++++++++++++++++++++++---
- 2 files changed, 41 insertions(+), 6 deletions(-)
+ .../netfilter/nat_masquerade_psid.sh          | 182 ++++++++++++++++++
+ 1 file changed, 182 insertions(+)
+ create mode 100644 tools/testing/selftests/netfilter/nat_masquerade_psid=
+.sh
 
-diff --git a/include/uapi/linux/netfilter/nf_nat.h b/include/uapi/linux/n=
-etfilter/nf_nat.h
-index a64586e77b24..660e53ffdb57 100644
---- a/include/uapi/linux/netfilter/nf_nat.h
-+++ b/include/uapi/linux/netfilter/nf_nat.h
-@@ -12,6 +12,7 @@
- #define NF_NAT_RANGE_PROTO_RANDOM_FULLY		(1 << 4)
- #define NF_NAT_RANGE_PROTO_OFFSET		(1 << 5)
- #define NF_NAT_RANGE_NETMAP			(1 << 6)
-+#define NF_NAT_RANGE_PSID			(1 << 7)
-=20
- #define NF_NAT_RANGE_PROTO_RANDOM_ALL		\
- 	(NF_NAT_RANGE_PROTO_RANDOM | NF_NAT_RANGE_PROTO_RANDOM_FULLY)
-@@ -20,7 +21,7 @@
- 	(NF_NAT_RANGE_MAP_IPS | NF_NAT_RANGE_PROTO_SPECIFIED |	\
- 	 NF_NAT_RANGE_PROTO_RANDOM | NF_NAT_RANGE_PERSISTENT |	\
- 	 NF_NAT_RANGE_PROTO_RANDOM_FULLY | NF_NAT_RANGE_PROTO_OFFSET | \
--	 NF_NAT_RANGE_NETMAP)
-+	 NF_NAT_RANGE_NETMAP | NF_NAT_RANGE_PSID)
-=20
- struct nf_nat_ipv4_range {
- 	unsigned int			flags;
-diff --git a/net/netfilter/xt_MASQUERADE.c b/net/netfilter/xt_MASQUERADE.=
-c
-index eae05c178336..dc6870ca2b71 100644
---- a/net/netfilter/xt_MASQUERADE.c
-+++ b/net/netfilter/xt_MASQUERADE.c
-@@ -16,7 +16,7 @@ MODULE_AUTHOR("Netfilter Core Team <coreteam@netfilter.=
-org>");
- MODULE_DESCRIPTION("Xtables: automatic-address SNAT");
-=20
- /* FIXME: Multiple targets. --RR */
--static int masquerade_tg_check(const struct xt_tgchk_param *par)
-+static int masquerade_tg_check_v0(const struct xt_tgchk_param *par)
- {
- 	const struct nf_nat_ipv4_multi_range_compat *mr =3D par->targinfo;
-=20
-@@ -31,8 +31,19 @@ static int masquerade_tg_check(const struct xt_tgchk_p=
-aram *par)
- 	return nf_ct_netns_get(par->net, par->family);
- }
-=20
-+static int masquerade_tg_check_v1(const struct xt_tgchk_param *par)
-+{
-+	const struct nf_nat_range2 *range =3D par->targinfo;
+diff --git a/tools/testing/selftests/netfilter/nat_masquerade_psid.sh b/t=
+ools/testing/selftests/netfilter/nat_masquerade_psid.sh
+new file mode 100644
+index 000000000000..56c1b509caf6
+--- /dev/null
++++ b/tools/testing/selftests/netfilter/nat_masquerade_psid.sh
+@@ -0,0 +1,182 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# <:copyright-gpl
++# Copyright (C) 2021 Allied Telesis Labs NZ
++#
++# check that NAT can masquerade using PSID defined ranges.
++#
++# Setup is:
++#
++# nsclient1(veth0) -> (veth1)nsrouter(veth2) -> (veth0)nsclient2
++# Setup a nat masquerade rule with psid defined ranges.
++#
 +
-+	if (range->flags & NF_NAT_RANGE_MAP_IPS) {
-+		pr_debug("bad MAP_IPS.\n");
-+		return -EINVAL;
-+	}
-+	return nf_ct_netns_get(par->net, par->family);
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=3D4
++ret=3D0
++ns_all=3D"nsclient1 nsrouter nsclient2"
++
++readonly infile=3D"$(mktemp)"
++readonly outfile=3D"$(mktemp)"
++readonly datalen=3D32
++readonly server_port=3D8080
++
++conntrack -V > /dev/null 2>&1
++if [ $? -ne 0 ];then
++	echo "SKIP: Could not run test without conntrack tool"
++	exit $ksft_skip
++fi
++
++iptables --version > /dev/null 2>&1
++if [ $? -ne 0 ];then
++	echo "SKIP: Could not run test without iptables tool"
++	exit $ksft_skip
++fi
++
++ip -Version > /dev/null 2>&1
++if [ $? -ne 0 ];then
++	echo "SKIP: Could not run test without ip tool"
++	exit $ksft_skip
++fi
++
++ipv4() {
++	echo -n 192.168.$1.$2
 +}
 +
- static unsigned int
--masquerade_tg(struct sk_buff *skb, const struct xt_action_param *par)
-+masquerade_tg_v0(struct sk_buff *skb, const struct xt_action_param *par)
- {
- 	struct nf_nat_range2 range;
- 	const struct nf_nat_ipv4_multi_range_compat *mr;
-@@ -46,6 +57,15 @@ masquerade_tg(struct sk_buff *skb, const struct xt_act=
-ion_param *par)
- 				      xt_out(par));
- }
-=20
-+static unsigned int
-+masquerade_tg_v1(struct sk_buff *skb, const struct xt_action_param *par)
-+{
-+	const struct nf_nat_range2 *range =3D par->targinfo;
++cleanup() {
++	for n in $ns_all; do ip netns del $n;done
 +
-+	return nf_nat_masquerade_ipv4(skb, xt_hooknum(par), range,
-+				      xt_out(par));
++	if [ -f "${outfile}" ]; then
++		rm "$outfile"
++	fi
++	if [ -f "${infile}" ]; then
++		rm "$infile"
++	fi
 +}
 +
- static void masquerade_tg_destroy(const struct xt_tgdtor_param *par)
- {
- 	nf_ct_netns_put(par->net, par->family);
-@@ -73,6 +93,7 @@ static struct xt_target masquerade_tg_reg[] __read_most=
-ly =3D {
- 	{
- #if IS_ENABLED(CONFIG_IPV6)
- 		.name		=3D "MASQUERADE",
-+		.revision	=3D 0,
- 		.family		=3D NFPROTO_IPV6,
- 		.target		=3D masquerade_tg6,
- 		.targetsize	=3D sizeof(struct nf_nat_range),
-@@ -84,15 +105,28 @@ static struct xt_target masquerade_tg_reg[] __read_m=
-ostly =3D {
- 	}, {
- #endif
- 		.name		=3D "MASQUERADE",
-+		.revision	=3D 0,
- 		.family		=3D NFPROTO_IPV4,
--		.target		=3D masquerade_tg,
-+		.target		=3D masquerade_tg_v0,
- 		.targetsize	=3D sizeof(struct nf_nat_ipv4_multi_range_compat),
- 		.table		=3D "nat",
- 		.hooks		=3D 1 << NF_INET_POST_ROUTING,
--		.checkentry	=3D masquerade_tg_check,
-+		.checkentry	=3D masquerade_tg_check_v0,
- 		.destroy	=3D masquerade_tg_destroy,
- 		.me		=3D THIS_MODULE,
--	}
-+	},
-+	{
-+		.name		=3D "MASQUERADE",
-+		.revision	=3D 1,
-+		.family		=3D NFPROTO_IPV4,
-+		.target		=3D masquerade_tg_v1,
-+		.targetsize	=3D sizeof(struct nf_nat_range2),
-+		.table		=3D "nat",
-+		.hooks		=3D 1 << NF_INET_POST_ROUTING,
-+		.checkentry	=3D masquerade_tg_check_v1,
-+		.destroy	=3D masquerade_tg_destroy,
-+		.me		=3D THIS_MODULE,
-+	},
- };
-=20
- static int __init masquerade_tg_init(void)
++server_listen() {
++	ip netns exec nsclient2 nc -l -p "$server_port" > "$outfile" &
++	server_pid=3D$!
++	sleep 0.2
++}
++
++client_connect() {
++	ip netns exec nsclient1 timeout 2 nc -w 1 -p "$port" $(ipv4 2 2) "$serv=
+er_port" < $infile
++}
++
++verify_data() {
++	local _ret=3D0
++	wait "$server_pid"
++	cmp "$infile" "$outfile" 2>/dev/null
++	_ret=3D$?
++	rm "$outfile"
++	return $_ret
++}
++
++test_service() {
++	server_listen
++	client_connect
++	verify_data
++}
++
++check_connection() {
++	local _ret=3D0
++	entry=3D$(ip netns exec nsrouter conntrack -p tcp --sport $port -L 2>&1=
+)
++	entry=3D${entry##*sport=3D8080 dport=3D}
++	entry=3D${entry%% *}
++
++	if [[ "x$(( ($entry & $psid_mask) / $two_power_j ))" !=3D "x$psid" ]]; =
+then
++		_ret=3D1
++		echo "Failed psid mask check for $offset_len:$psid:$psid_length with p=
+ort $entry"
++	fi
++
++	if [[ "x$_ret" =3D "x0" ]] &&
++	   [[ "x$offset_mask" !=3D "x0" -a "x$(( ($entry & $offset_mask) ))" =3D=
+=3D "x0" ]]; then
++		_ret=3D1
++		echo "Failed offset mask check for $offset_len:$psid:$psid_length with=
+ port $entry"
++	fi
++	return $_ret
++}
++
++run_test() {
++	ip netns exec nsrouter iptables -A FORWARD -i veth1 -j ACCEPT
++	ip netns exec nsrouter iptables -P FORWARD DROP
++	ip netns exec nsrouter iptables -A FORWARD -m state --state ESTABLISHED=
+,RELATED -j ACCEPT
++	ip netns exec nsrouter iptables -t nat --new psid
++	ip netns exec nsrouter iptables -t nat --insert psid -j MASQUERADE \
++		--psid $offset_len:$psid:$psid_length
++	ip netns exec nsrouter iptables -t nat -I POSTROUTING -o veth2 -j psid
++
++	# calculate psid mask
++	offset=3D$(( 1 << (16 - $offset_len) ))
++	two_power_j=3D$(( $offset / (1 << $psid_length) ))
++	offset_mask=3D$(( ( (1 << $offset_len) - 1 ) << (16 - $offset_len) ))
++	psid_mask=3D$(( ( (1 << $psid_length) - 1) * $two_power_j ))
++
++	# Create file
++	dd if=3D/dev/urandom of=3D"${infile}" bs=3D"${datalen}" count=3D1 >/dev=
+/null 2>&1
++
++	# Test multiple ports
++	for p in 1 2 3 4 5; do
++		port=3D1080$p
++
++		test_service
++		if [ $? -ne 0 ]; then
++			ret=3D1
++			break
++		fi
++
++		check_connection
++		if [ $? -ne 0 ]; then
++			ret=3D1
++			break
++		fi
++	done
++
++	# tidy up test rules
++	ip netns exec nsrouter iptables -F
++	ip netns exec nsrouter iptables -t nat -F
++	ip netns exec nsrouter iptables -t nat -X psid
++}
++
++for n in $ns_all; do
++	ip netns add $n
++	ip -net $n link set lo up
++done
++
++for i in 1 2; do
++	ip link add veth0 netns nsclient$i type veth peer name veth$i netns nsr=
+outer
++
++	ip -net nsclient$i link set veth0 up
++	ip -net nsclient$i addr add $(ipv4 $i 2)/24 dev veth0
++
++	ip -net nsrouter link set veth$i up
++	ip -net nsrouter addr add $(ipv4 $i 1)/24 dev veth$i
++done
++
++ip -net nsclient1 route add default via $(ipv4 1 1)
++ip -net nsclient2 route add default via $(ipv4 2 1)
++
++ip netns exec nsrouter sysctl -q net.ipv4.conf.all.forwarding=3D1
++
++offset_len=3D0
++psid_length=3D8
++for psid in 0 52; do
++	run_test
++	if [ $? -ne 0 ]; then
++		break
++	fi
++done
++
++offset_len=3D6
++psid_length=3D8
++for psid in 0 52; do
++	run_test
++	if [ $? -ne 0 ]; then
++		break
++	fi
++done
++
++cleanup
++exit $ret
 --=20
 2.33.0
 
