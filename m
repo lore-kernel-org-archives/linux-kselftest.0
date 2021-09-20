@@ -2,83 +2,214 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 518C1C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C7FEC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19B0460F70
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3BBFE60F70
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Sep 2021 02:39:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbhITCkj (ORCPT
+        id S234208AbhITCkk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 19 Sep 2021 22:40:39 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40066 "EHLO
+        Sun, 19 Sep 2021 22:40:40 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40083 "EHLO
         gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbhITCkj (ORCPT
+        with ESMTP id S231614AbhITCkj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 19 Sep 2021 22:40:39 -0400
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 36C9483651;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5166B891B0;
         Mon, 20 Sep 2021 14:39:10 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1632105550;
-        bh=2tBCxU7JOtj953QJ0/jqjqh9rtygww4o1cyb5ZL3qK0=;
-        h=From:To:Cc:Subject:Date;
-        b=xa6kqeMrDkEo1xW71Q9MTnfBJDKuHzMwIwd2eEuwr5G0SK9jgFqJs1cr/vUAEfaC4
-         vwMOsEfM7Cxyi7Sddh8tFhEiLvmYfkpXOnYsgcVtttxnHktEY3tMiUL4EMs5bGfjdm
-         EG5gg7hqDA/UE2939XW+nqmZ10J4VweNNx+HhQxoAZJrmNfMf2ZAq181Lnk1MXilHc
-         7ePEbt9XqfXkhy4x2vY4TH8WTvO1LvxxLUTCJ67an+3rXAjxDkOqdRygB4I9pBM6oj
-         s89B5nRMRc10pEhVjRmOqAIqAMLJjQaK4UhdIkYUI6cDRo4TQwuYYab+OunNN8JoD0
-         AFHjTSCdA0UCg==
+        bh=dWxRduUq5chdWxWVj/YluWMt+oQ4/tK8DFJrz3LEsz8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hfXSNMwEzrLacgbVRv3jSxPvYue9ZfbwzJZxfw8QX51G3ZgYnsRbG8J4eqvtGmgzj
+         ErE8HhEkiZDLqbGFmYYBB7Nu6SLpbeUxk0nv+ChZcsL99N6k7m01cJr1g7WWaV4no0
+         AFEiemuCSBW6wtcZHt7Wkfx2E7LHp/aTZQCY/nd0W1Gc8hXIU7iVd/5KxwG/Ijeg6y
+         QelA+YIhWpN0IaPXj3y1Wfo7lZTa3rFuAf6gjfkjb1bp8WqMcK1FMa1u9JknzX35Fb
+         le5uSyiHzvxP5NxnCZA2EyEPJK2anX5AVqyraOWsXH2h2LpLkQje1/gyyETOJfSL3Y
+         MELAsiniKdPog==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6147f44e0000>; Mon, 20 Sep 2021 14:39:10 +1200
+        id <B6147f44e0002>; Mon, 20 Sep 2021 14:39:10 +1200
 Received: from coled-dl.ws.atlnz.lc (coled-dl.ws.atlnz.lc [10.33.25.26])
-        by pat.atlnz.lc (Postfix) with ESMTP id DB2E613EE3F;
+        by pat.atlnz.lc (Postfix) with ESMTP id E147613EEA3;
         Mon, 20 Sep 2021 14:39:09 +1200 (NZST)
 Received: by coled-dl.ws.atlnz.lc (Postfix, from userid 1801)
-        id D3C1D24285E; Mon, 20 Sep 2021 14:39:09 +1200 (NZST)
+        id DF67824285E; Mon, 20 Sep 2021 14:39:09 +1200 (NZST)
 From:   Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
 To:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
         davem@davemloft.net, kuba@kernel.org, shuah@kernel.org
 Cc:     linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         coreteam@netfilter.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
-Subject: [RESEND PATCH net-next v7 0/3] Add RFC-7597 Section 5.1 PSID support
-Date:   Mon, 20 Sep 2021 14:38:03 +1200
-Message-Id: <20210920023806.19954-1-Cole.Dishington@alliedtelesis.co.nz>
+        Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>,
+        Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>,
+        Scott Parlane <scott.parlane@alliedtelesis.co.nz>,
+        Blair Steven <blair.steven@alliedtelesis.co.nz>
+Subject: [RESEND PATCH net-next v7 2/3] net: netfilter: Add RFC-7597 Section 5.1 PSID support
+Date:   Mon, 20 Sep 2021 14:38:05 +1200
+Message-Id: <20210920023806.19954-3-Cole.Dishington@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210920023806.19954-1-Cole.Dishington@alliedtelesis.co.nz>
+References: <20210920023806.19954-1-Cole.Dishington@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=FtN7AFjq c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=7QKq2e-ADPsA:10 a=iXia_AmJyaINQBOU7VYA:9
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=FtN7AFjq c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=7QKq2e-ADPsA:10 a=xOT0nC9th1TpZTiSAT0A:9
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Resend to add v7 to subject to detect cover letter in patchwork.
+Adds support for masquerading into a smaller subset of ports -
+defined by the PSID values from RFC-7597 Section 5.1. This is part of
+the support for MAP-E and Lightweight 4over6, which allows multiple
+devices to share an IPv4 address by splitting the L4 port / id into
+ranges.
 
-Cole Dishington (3):
-  net: netfilter: Add RFC-7597 Section 5.1 PSID support xtables API
-  net: netfilter: Add RFC-7597 Section 5.1 PSID support
-  selftests: netfilter: Add RFC-7597 Section 5.1 PSID selftests
+Co-developed-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Signed-off-by: Anthony Lineham <anthony.lineham@alliedtelesis.co.nz>
+Co-developed-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Scott Parlane <scott.parlane@alliedtelesis.co.nz>
+Signed-off-by: Blair Steven <blair.steven@alliedtelesis.co.nz>
+Signed-off-by: Cole Dishington <Cole.Dishington@alliedtelesis.co.nz>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+---
+ net/netfilter/nf_nat_core.c       | 39 +++++++++++++++++++++++++++----
+ net/netfilter/nf_nat_masquerade.c | 27 +++++++++++++++++++--
+ 2 files changed, 60 insertions(+), 6 deletions(-)
 
- include/uapi/linux/netfilter/nf_nat.h         |   3 +-
- net/netfilter/nf_nat_core.c                   |  39 +++-
- net/netfilter/nf_nat_masquerade.c             |  27 ++-
- net/netfilter/xt_MASQUERADE.c                 |  44 ++++-
- .../netfilter/nat_masquerade_psid.sh          | 182 ++++++++++++++++++
- 5 files changed, 283 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/netfilter/nat_masquerade_psid=
-.sh
-
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index b7c3c902290f..c0fb9f3a8c54 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -232,13 +232,36 @@ static bool nf_nat_inet_in_range(const struct nf_co=
+nntrack_tuple *t,
+ static bool l4proto_in_range(const struct nf_conntrack_tuple *tuple,
+ 			     enum nf_nat_manip_type maniptype,
+ 			     const union nf_conntrack_man_proto *min,
+-			     const union nf_conntrack_man_proto *max)
++			     const union nf_conntrack_man_proto *max,
++			     const union nf_conntrack_man_proto *base,
++			     bool is_psid)
+ {
+ 	__be16 port;
++	u16 psid, psid_mask, offset_mask;
++
++	/* In this case we are in PSID mode, avoid checking all ranges by compu=
+ting bitmasks */
++	if (is_psid) {
++		u32 power_j =3D ntohs(max->all) - ntohs(min->all) + 1;
++		u32 offset =3D ntohs(base->all);
++		u16 power_a;
++
++		if (offset =3D=3D 0)
++			offset =3D 1 << 16;
++
++		power_a =3D (1 << 16) / offset;
++		offset_mask =3D (power_a - 1) * offset;
++		psid_mask =3D ((offset / power_j) << 1) - 1;
++		psid =3D ntohs(min->all) & psid_mask;
++	}
+=20
+ 	switch (tuple->dst.protonum) {
+ 	case IPPROTO_ICMP:
+ 	case IPPROTO_ICMPV6:
++		if (is_psid) {
++			return (offset_mask =3D=3D 0 ||
++				(ntohs(tuple->src.u.icmp.id) & offset_mask) !=3D 0) &&
++				((ntohs(tuple->src.u.icmp.id) & psid_mask) =3D=3D psid);
++		}
+ 		return ntohs(tuple->src.u.icmp.id) >=3D ntohs(min->icmp.id) &&
+ 		       ntohs(tuple->src.u.icmp.id) <=3D ntohs(max->icmp.id);
+ 	case IPPROTO_GRE: /* all fall though */
+@@ -252,6 +275,10 @@ static bool l4proto_in_range(const struct nf_conntra=
+ck_tuple *tuple,
+ 		else
+ 			port =3D tuple->dst.u.all;
+=20
++		if (is_psid) {
++			return (offset_mask =3D=3D 0 || (ntohs(port) & offset_mask) !=3D 0) &=
+&
++				((ntohs(port) & psid_mask) =3D=3D psid);
++		}
+ 		return ntohs(port) >=3D ntohs(min->all) &&
+ 		       ntohs(port) <=3D ntohs(max->all);
+ 	default:
+@@ -276,7 +303,8 @@ static int in_range(const struct nf_conntrack_tuple *=
+tuple,
+ 		return 1;
+=20
+ 	return l4proto_in_range(tuple, NF_NAT_MANIP_SRC,
+-				&range->min_proto, &range->max_proto);
++				&range->min_proto, &range->max_proto, &range->base_proto,
++				range->flags & NF_NAT_RANGE_PSID);
+ }
+=20
+ static inline int
+@@ -569,8 +597,11 @@ get_unique_tuple(struct nf_conntrack_tuple *tuple,
+ 		if (range->flags & NF_NAT_RANGE_PROTO_SPECIFIED) {
+ 			if (!(range->flags & NF_NAT_RANGE_PROTO_OFFSET) &&
+ 			    l4proto_in_range(tuple, maniptype,
+-			          &range->min_proto,
+-			          &range->max_proto) &&
++				  &range->min_proto,
++				  &range->max_proto,
++				  &range->base_proto,
++				  range->flags &
++				  NF_NAT_RANGE_PSID) &&
+ 			    (range->min_proto.all =3D=3D range->max_proto.all ||
+ 			     !nf_nat_used_tuple(tuple, ct)))
+ 				return;
+diff --git a/net/netfilter/nf_nat_masquerade.c b/net/netfilter/nf_nat_mas=
+querade.c
+index 8e8a65d46345..19a4754cda76 100644
+--- a/net/netfilter/nf_nat_masquerade.c
++++ b/net/netfilter/nf_nat_masquerade.c
+@@ -55,8 +55,31 @@ nf_nat_masquerade_ipv4(struct sk_buff *skb, unsigned i=
+nt hooknum,
+ 	newrange.flags       =3D range->flags | NF_NAT_RANGE_MAP_IPS;
+ 	newrange.min_addr.ip =3D newsrc;
+ 	newrange.max_addr.ip =3D newsrc;
+-	newrange.min_proto   =3D range->min_proto;
+-	newrange.max_proto   =3D range->max_proto;
++
++	if (range->flags & NF_NAT_RANGE_PSID) {
++		u16 base =3D ntohs(range->base_proto.all);
++		u16 min =3D  ntohs(range->min_proto.all);
++		u16 off =3D 0;
++
++		/* xtables should stop base > 2^15 by enforcement of
++		 * 0 <=3D offset_len < 16 argument, with offset_len=3D0
++		 * as a special case inwhich base=3D0.
++		 */
++		if (WARN_ON_ONCE(base > (1 << 15)))
++			return NF_DROP;
++
++		/* If offset=3D0, port range is in one contiguous block */
++		if (base)
++			off =3D prandom_u32_max(((1 << 16) / base) - 1);
++
++		newrange.min_proto.all   =3D htons(min + base * off);
++		newrange.max_proto.all   =3D htons(ntohs(newrange.min_proto.all) + nto=
+hs(range->max_proto.all) - min);
++		newrange.base_proto      =3D range->base_proto;
++		newrange.flags           =3D newrange.flags | NF_NAT_RANGE_PROTO_SPECI=
+FIED;
++	} else {
++		newrange.min_proto       =3D range->min_proto;
++		newrange.max_proto       =3D range->max_proto;
++	}
+=20
+ 	/* Hand modified range to generic setup. */
+ 	return nf_nat_setup_info(ct, &newrange, NF_NAT_MANIP_SRC);
 --=20
 2.33.0
 
