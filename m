@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47209C4167D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 16:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E2E9C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 16:17:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 349F661268
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 16:17:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B4CC61100
+	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 16:17:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbhIUQSp (ORCPT
+        id S234688AbhIUQS4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 21 Sep 2021 12:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        Tue, 21 Sep 2021 12:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbhIUQS3 (ORCPT
+        with ESMTP id S234502AbhIUQSh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Sep 2021 12:18:29 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17085C061757;
-        Tue, 21 Sep 2021 09:17:00 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id co2so29797493edb.8;
-        Tue, 21 Sep 2021 09:17:00 -0700 (PDT)
+        Tue, 21 Sep 2021 12:18:37 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC18C061574;
+        Tue, 21 Sep 2021 09:17:09 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id v24so76388058eda.3;
+        Tue, 21 Sep 2021 09:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pvjovdmDUdp4zPrJ2B/xrAzrYj6YQrDNCw62XXqkzzs=;
-        b=PWXkxbnNsfhU7VVymCc1dTqaqotQkeZTLoiU2VuufhHUNLxl3qFNjrhe6BqsUzCZxa
-         GqJxxHipwwTDZpf2lMd3wm4EKY6GvKlBjlNbGLi7tglSywIHkjDsR3vRuWD72NV9xB57
-         lBDCnZ/avxqh0m+CZVZiN4dNLJXUTWlm5yceOtu4zZn+yQhdTdPonGhiK6B0TTuKtXTL
-         I2DuNWPbFOLZBmTG1u8b0fUzyhAKO+4sTcO0hCY0nHAlMRGIczqqWRH/nnCsQ44wRyF/
-         2L5GynyH9pGZ7O6yHv+7h14zM2SAfYegKZ8lPNit96L1+dL41ZSFY/r6j62riPJKAPGG
-         KBvg==
+        bh=6bd81ZzhYWDXtU8irtzbLufy7NFGe2+2aZRj+xbH9LY=;
+        b=Bvtk6TkusVu/JWbLJTdW36xaH1wfyAtjW3rrmH0cNlnOzLvadqo4frlCxmlr28T65L
+         TeK5PDJLIubWVndww7v5yJDnz3fGOaBw9f2T4//w/wk9UnKpKDkiiDRXq438SQ6deqQY
+         YbextJuw7ppg4gvXx7Qo73u5IOvqDzmTNpgwgWyDFe8+NMvTe5Br6gxRWQx6NKSVVqeH
+         Wjm+gMeHFO+7DYkd/JUfSw6C0xAabhcLj01lEWI9LTGo7yE0TmLzJ81UUmt03+wNuSWh
+         TFDGgD4GO80EibVJKvulN43kfhTcYcstt/EG91iTqmflaY7QE+eEzn8ZDVoYSmjooD2g
+         vikw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pvjovdmDUdp4zPrJ2B/xrAzrYj6YQrDNCw62XXqkzzs=;
-        b=uhPqKCR+E2XHMF/31kXKSdY8AFr8z99PkcEfC24YaolBB29KWFclDrp50fpLo9gbbs
-         pMi3ly7ON9a9EDQJH9y3Y0yS6hKmJQlXoZ9eJw0KaBmzcjL4Vydnh2PIaY71XD2Rqs91
-         te+FuCUW4cpakD+B9+dD0cpXIllbhzPgC3X8IeuiHsE+rCBzSrLuBV/RQDvQ+R5N1p6c
-         9c35XerWCFD9hDhBLYu4sA2PyIRYwWyNqLee04a5+BqSdR4r0hyOwDaNQigp32bPJzWX
-         PC06oXN71zetl02HinGbAJ4LWQYXY5q/lhgy6F9bSjeU+DaKBmTxw8KFWyCyoak3aTr1
-         ALog==
-X-Gm-Message-State: AOAM533cyWcMufm8a7cz0uzR+QDaENyM5q76PbAhgt4CapAPn4qnm97f
-        5I1StC2gmRxLCOHU7iPM0Og=
-X-Google-Smtp-Source: ABdhPJzmGhxUxkYtY5sWwuqlRBvyrcXJwCQ0EauQmG6L/P9shHvy+gefKtTiYgZmvQoUJ0RXMM0etQ==
-X-Received: by 2002:a17:906:f0d4:: with SMTP id dk20mr36279570ejb.199.1632240920503;
-        Tue, 21 Sep 2021 09:15:20 -0700 (PDT)
+        bh=6bd81ZzhYWDXtU8irtzbLufy7NFGe2+2aZRj+xbH9LY=;
+        b=6J5HJAmIQkGeH6tXkXzyZ35bWs7aXuvSv2mgLrv5mxFOX6NVddl56B4+mk/oHymfSG
+         WzN/eb6DbHkqI180HWb50uv6nh1cVgC4tJsH7UYKNKimvzcgoQrCtTWh7OQTyn1zOqZT
+         12NCrnoOh8SP+sfZIhRs7Gb8fHLOXp099hd2zSzOf46N4OHW9jmvaQ+1aV6RXzQVBBSv
+         utfxkB6sinzuUw9YqdroIEYU9Ip0whVDJaJ9K01x3Vo3yfeR00GqV6am4BR1CgKHgZF3
+         pMs5w55+zXfeq0dBgqeaN/udczVkapf+awudbbJA6r5d9ujZSdGtukx38PRmA0vCB/UV
+         EsKQ==
+X-Gm-Message-State: AOAM531xdQSULS6yeg5hdgIsphu90UEWr1Ts3MnpuPMaC3l+lzSyj4Fj
+        VFku2dD4MfpIlZL74bBzZ7A=
+X-Google-Smtp-Source: ABdhPJzR5UVUBua/yTJy+sxqbTjGVDhg8IUpSZuhT9ZOGZlfmKlasoJUJaWZ7q8A3//H7K5W3Eo4HQ==
+X-Received: by 2002:a05:6402:411:: with SMTP id q17mr36360205edv.35.1632240942701;
+        Tue, 21 Sep 2021 09:15:42 -0700 (PDT)
 Received: from pinky.lan ([2a04:241e:502:1df0:b065:9bdf:4016:277])
-        by smtp.gmail.com with ESMTPSA id kx17sm7674075ejc.51.2021.09.21.09.15.18
+        by smtp.gmail.com with ESMTPSA id kx17sm7674075ejc.51.2021.09.21.09.15.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Sep 2021 09:15:20 -0700 (PDT)
+        Tue, 21 Sep 2021 09:15:42 -0700 (PDT)
 From:   Leonard Crestez <cdleonard@gmail.com>
 To:     Dmitry Safonov <0x7f454c46@gmail.com>,
         David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -76,9 +76,9 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         Menglong Dong <dong.menglong@zte.com.cn>,
         netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/19] selftests: Initial tcp_authopt test module
-Date:   Tue, 21 Sep 2021 19:14:46 +0300
-Message-Id: <d3ccd0293fca61d5e6b12b375135057cde189c14.1632240523.git.cdleonard@gmail.com>
+Subject: [PATCH 15/19] selftests: Initial tcp_authopt support for nettest
+Date:   Tue, 21 Sep 2021 19:14:58 +0300
+Message-Id: <f5478f17eaf8430fe5a0f798d23c06c6090037cd.1632240523.git.cdleonard@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1632240523.git.cdleonard@gmail.com>
 References: <cover.1632240523.git.cdleonard@gmail.com>
@@ -88,185 +88,129 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test suite is written as a standalone python3 package using
-dependencies such as scapy.
-
-The run.sh script wrapper called from kselftest infrastructure uses
-"tox" to generate an isolated virtual environment just for running these
-tests. The run.sh wrapper can be called from anywhere and does not rely
-on kselftest infrastructure.
-
-The python3 and tox packages be installed manually but not any other
-dependencies
+Add support for configuring TCP Authentication Option. Only a single key
+with default options.
 
 Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 ---
- tools/testing/selftests/tcp_authopt/Makefile  |  5 +++
- .../testing/selftests/tcp_authopt/README.rst  | 15 +++++++
- tools/testing/selftests/tcp_authopt/config    |  6 +++
- .../selftests/tcp_authopt/requirements.txt    | 40 +++++++++++++++++++
- tools/testing/selftests/tcp_authopt/run.sh    | 15 +++++++
- tools/testing/selftests/tcp_authopt/setup.cfg | 17 ++++++++
- tools/testing/selftests/tcp_authopt/setup.py  |  5 +++
- .../tcp_authopt/tcp_authopt_test/__init__.py  |  0
- 8 files changed, 103 insertions(+)
- create mode 100644 tools/testing/selftests/tcp_authopt/Makefile
- create mode 100644 tools/testing/selftests/tcp_authopt/README.rst
- create mode 100644 tools/testing/selftests/tcp_authopt/config
- create mode 100644 tools/testing/selftests/tcp_authopt/requirements.txt
- create mode 100755 tools/testing/selftests/tcp_authopt/run.sh
- create mode 100644 tools/testing/selftests/tcp_authopt/setup.cfg
- create mode 100644 tools/testing/selftests/tcp_authopt/setup.py
- create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/__init__.py
+ tools/testing/selftests/net/nettest.c | 34 ++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tcp_authopt/Makefile b/tools/testing/selftests/tcp_authopt/Makefile
-new file mode 100644
-index 000000000000..391412071875
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../lib.mk
+diff --git a/tools/testing/selftests/net/nettest.c b/tools/testing/selftests/net/nettest.c
+index bd6288302094..f04c6af79129 100644
+--- a/tools/testing/selftests/net/nettest.c
++++ b/tools/testing/selftests/net/nettest.c
+@@ -100,10 +100,12 @@ struct sock_args {
+ 		struct sockaddr_in v4;
+ 		struct sockaddr_in6 v6;
+ 	} md5_prefix;
+ 	unsigned int prefix_len;
+ 
++	const char *authopt_password;
 +
-+TEST_PROGS += ./run.sh
-+TEST_FILES := setup.py setup.cfg tcp_authopt_test
-diff --git a/tools/testing/selftests/tcp_authopt/README.rst b/tools/testing/selftests/tcp_authopt/README.rst
-new file mode 100644
-index 000000000000..e9e4acc0a22a
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/README.rst
-@@ -0,0 +1,15 @@
-+=========================================
-+Tests for linux TCP Authentication Option
-+=========================================
+ 	/* expected addresses and device index for connection */
+ 	const char *expected_dev;
+ 	const char *expected_server_dev;
+ 	int expected_ifindex;
+ 
+@@ -250,10 +252,27 @@ static int switch_ns(const char *ns)
+ 	close(fd);
+ 
+ 	return ret;
+ }
+ 
++static int tcp_set_authopt(int sd, struct sock_args *args)
++{
++	struct tcp_authopt_key key;
++	int rc;
 +
-+Test suite is written in python3 using pytest and scapy. The test suite is
-+mostly self-contained as a python package.
++	memset(&key, 0, sizeof(key));
++	strcpy((char *)key.key, args->authopt_password);
++	key.keylen = strlen(args->authopt_password);
++	key.alg = TCP_AUTHOPT_ALG_HMAC_SHA_1_96;
 +
-+The recommended way to run this is the included `run.sh` script as root, this
-+will automatically create a virtual environment with the correct dependencies
-+using `tox`.
++	rc = setsockopt(sd, IPPROTO_TCP, TCP_AUTHOPT_KEY, &key, sizeof(key));
++	if (rc < 0)
++		log_err_errno("setsockopt(TCP_AUTHOPT_KEY)");
 +
-+An old separate version can be found here: https://github.com/cdleonard/tcp-authopt-test
++	return rc;
++}
 +
-+Integration with kselftest infrastructure is minimal: when in doubt just run
-+this separately.
-diff --git a/tools/testing/selftests/tcp_authopt/config b/tools/testing/selftests/tcp_authopt/config
-new file mode 100644
-index 000000000000..0d4e5d47fa72
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/config
-@@ -0,0 +1,6 @@
-+# RFC5925 TCP Authentication Option and all algorithms
-+CONFIG_TCP_AUTHOPT=y
-+CONFIG_CRYPTO_SHA1=M
-+CONFIG_CRYPTO_HMAC=M
-+CONFIG_CRYPTO_AES=M
-+CONFIG_CRYPTO_CMAC=M
-diff --git a/tools/testing/selftests/tcp_authopt/requirements.txt b/tools/testing/selftests/tcp_authopt/requirements.txt
-new file mode 100644
-index 000000000000..e30c8d12cf2e
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/requirements.txt
-@@ -0,0 +1,40 @@
-+#
-+# This file is autogenerated by pip-compile with python 3.8
-+# To update, run:
-+#
-+#    pip-compile
-+#
-+argparse==1.4.0
-+    # via nsenter
-+attrs==21.2.0
-+    # via pytest
-+cffi==1.14.6
-+    # via cryptography
-+contextlib2==21.6.0
-+    # via nsenter
-+cryptography==3.4.8
-+    # via tcp-authopt-test (setup.py)
-+iniconfig==1.1.1
-+    # via pytest
-+nsenter==0.2
-+    # via tcp-authopt-test (setup.py)
-+packaging==21.0
-+    # via pytest
-+pathlib==1.0.1
-+    # via nsenter
-+pluggy==0.13.1
-+    # via pytest
-+py==1.10.0
-+    # via pytest
-+pycparser==2.20
-+    # via cffi
-+pyparsing==2.4.7
-+    # via packaging
-+pytest==6.2.4
-+    # via tcp-authopt-test (setup.py)
-+scapy==2.4.5
-+    # via tcp-authopt-test (setup.py)
-+toml==0.10.2
-+    # via pytest
-+waiting==1.4.1
-+    # via tcp-authopt-test (setup.py)
-diff --git a/tools/testing/selftests/tcp_authopt/run.sh b/tools/testing/selftests/tcp_authopt/run.sh
-new file mode 100755
-index 000000000000..b3448d678aa2
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/run.sh
-@@ -0,0 +1,15 @@
-+#! /bin/bash
-+#
-+# Create virtualenv using tox and run pytest
-+# Accepts all args that pytest does
-+#
+ static int tcp_md5sig(int sd, void *addr, socklen_t alen, struct sock_args *args)
+ {
+ 	int keylen = strlen(args->password);
+ 	struct tcp_md5sig md5sig = {};
+ 	int opt = TCP_MD5SIG;
+@@ -1508,10 +1527,15 @@ static int do_server(struct sock_args *args, int ipc_fd)
+ 	if (args->password && tcp_md5_remote(lsd, args)) {
+ 		close(lsd);
+ 		goto err_exit;
+ 	}
+ 
++	if (args->authopt_password && tcp_set_authopt(lsd, args)) {
++		close(lsd);
++		goto err_exit;
++	}
 +
-+if ! command -v tox >/dev/null; then
-+	echo >&2 "error: please install the python tox package"
-+	exit 1
-+fi
-+if [[ $(id -u) -ne 0 ]]; then
-+	echo >&2 "warning: running as non-root user is unlikely to work"
-+fi
-+cd "$(dirname "${BASH_SOURCE[0]}")"
-+exec tox -- -s --log-cli-level=DEBUG "$@"
-diff --git a/tools/testing/selftests/tcp_authopt/setup.cfg b/tools/testing/selftests/tcp_authopt/setup.cfg
-new file mode 100644
-index 000000000000..258dfffab9a3
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/setup.cfg
-@@ -0,0 +1,17 @@
-+[options]
-+install_requires=
-+    cryptography
-+    nsenter
-+    pytest
-+    scapy
-+    waiting
+ 	ipc_write(ipc_fd, 1);
+ 	while (1) {
+ 		log_msg("waiting for client connection.\n");
+ 		FD_ZERO(&rfds);
+ 		FD_SET(lsd, &rfds);
+@@ -1630,10 +1654,13 @@ static int connectsock(void *addr, socklen_t alen, struct sock_args *args)
+ 		goto out;
+ 
+ 	if (args->password && tcp_md5sig(sd, addr, alen, args))
+ 		goto err;
+ 
++	if (args->authopt_password && tcp_set_authopt(sd, args))
++		goto err;
 +
-+[tox:tox]
-+envlist = py3
-+
-+[testenv]
-+commands = pytest {posargs}
-+
-+[metadata]
-+name = tcp-authopt-test
-+version = 0.1
-diff --git a/tools/testing/selftests/tcp_authopt/setup.py b/tools/testing/selftests/tcp_authopt/setup.py
-new file mode 100644
-index 000000000000..d5e50aa1ca5e
---- /dev/null
-+++ b/tools/testing/selftests/tcp_authopt/setup.py
-@@ -0,0 +1,5 @@
-+#! /usr/bin/env python3
-+
-+from setuptools import setup
-+
-+setup()
-diff --git a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/__init__.py b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/__init__.py
-new file mode 100644
-index 000000000000..e69de29bb2d1
+ 	if (args->bind_test_only)
+ 		goto out;
+ 
+ 	if (connect(sd, addr, alen) < 0) {
+ 		if (errno != EINPROGRESS) {
+@@ -1819,11 +1846,11 @@ static int ipc_parent(int cpid, int fd, struct sock_args *args)
+ 
+ 	wait(&status);
+ 	return client_status;
+ }
+ 
+-#define GETOPT_STR  "sr:l:c:p:t:g:P:DRn:M:X:m:d:I:BN:O:SCi6xL:0:1:2:3:Fbq"
++#define GETOPT_STR  "sr:l:c:p:t:g:P:DRn:M:X:m:A:d:I:BN:O:SCi6xL:0:1:2:3:Fbq"
+ 
+ static void print_usage(char *prog)
+ {
+ 	printf(
+ 	"usage: %s OPTS\n"
+@@ -1856,10 +1883,12 @@ static void print_usage(char *prog)
+ 	"    -n num        number of times to send message\n"
+ 	"\n"
+ 	"    -M password   use MD5 sum protection\n"
+ 	"    -X password   MD5 password for client mode\n"
+ 	"    -m prefix/len prefix and length to use for MD5 key\n"
++	"    -A password   use RFC5925 TCP Authentication option\n"
++	"\n"
+ 	"    -g grp        multicast group (e.g., 239.1.1.1)\n"
+ 	"    -i            interactive mode (default is echo and terminate)\n"
+ 	"\n"
+ 	"    -0 addr       Expected local address\n"
+ 	"    -1 addr       Expected remote address\n"
+@@ -1970,10 +1999,13 @@ int main(int argc, char *argv[])
+ 			args.client_pw = optarg;
+ 			break;
+ 		case 'm':
+ 			args.md5_prefix_str = optarg;
+ 			break;
++		case 'A':
++			args.authopt_password = optarg;
++			break;
+ 		case 'S':
+ 			args.use_setsockopt = 1;
+ 			break;
+ 		case 'C':
+ 			args.use_cmsg = 1;
 -- 
 2.25.1
 
