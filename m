@@ -2,128 +2,164 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97DD1C4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 03:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73A4AC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 13:16:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EECE60FA0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 03:17:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5306C611CE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Sep 2021 13:16:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbhIUDTF (ORCPT
+        id S231658AbhIUNR3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Sep 2021 23:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350402AbhIUC2a (ORCPT
+        Tue, 21 Sep 2021 09:17:29 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:44627 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232842AbhIUNR3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Sep 2021 22:28:30 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58A0C0F3447;
-        Mon, 20 Sep 2021 12:22:38 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id n13-20020a17090a4e0d00b0017946980d8dso185553pjh.5;
-        Mon, 20 Sep 2021 12:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JRnq/4c87bKbiNxvafGN4wtXqF6Tb113NW1CCy3N52o=;
-        b=dP4iFexr0a+J311K54uCPdaewF9LzVRZkY/aDH2dPD9xGtZMHeZBij8v6wTihEifkg
-         bIk6GbffogctONMlgfddQ0fGCNpmpMWipeajx9Kyn00jXWS5Lh89zABYQjixzMBZ+eaL
-         Z57MjvIXj5H4kS2oNAwGRXtw/nv8xi3stLkDBC0ZBQ8vdA44wM0qv9TgId7KYVrQFIIj
-         r9NHcIiUB87XojT59VuOwo9LjdF4v5XE5loPh5rx3Uuhui2pBXa+MAb9l6U3Wrz/18ZN
-         8IPl4GNh1/xWGwqjOGo2nh7ySRJNyY6KBJST84Cnz0eSywHu1cHrx+2hzcPKYFzGH1NN
-         eH2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JRnq/4c87bKbiNxvafGN4wtXqF6Tb113NW1CCy3N52o=;
-        b=3khiVuJWR+X38WAjkjDZnEngn962KSBLcBfmTMMWQ8sCZYLRvEw+4wdLQEGHLsiUZ0
-         UiUC2twcSzfUk5fCviZ22BEZk+drnYitOgKnJKpKdO3RxgEE1Qw0zoeI2iIRTKscbsN3
-         ul1di0HiE16Dd4mMfRCH8Isrzul91CkBFeU1viY9DIlVX9GpWSuN+CVKhjSF5IL7FRTw
-         gUpmK2UvsgM5oeGWfYGQcytlW9PjocRezBZcyvCo4EJPERdkMnX+NSMZboQpuudo7fXZ
-         /cVYuQuwQQg3H/on74ivxj3Iu+kfdL/GqNbcc8t0CMQRJRFGMNIMq5JwEsyD1+pG3BiO
-         tpQg==
-X-Gm-Message-State: AOAM530Cn/ufB9mOgQ3jDPr0Csg7BD3yMyO/Kb/mc/bcry0GnZC2Pfvn
-        lzXIgcdIJbLKVCGqCJM2aRM=
-X-Google-Smtp-Source: ABdhPJx7yMc6cu+sDCU/f0AwOhQkBHekSPHI+esLDq4+Bgpc7/NHJVGEMkfUVFWiJyicLFaEpDz9wg==
-X-Received: by 2002:a17:902:6b8a:b029:12d:3f99:9e5e with SMTP id p10-20020a1709026b8ab029012d3f999e5emr24030103plk.66.1632165758222;
-        Mon, 20 Sep 2021 12:22:38 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:9d4d])
-        by smtp.gmail.com with ESMTPSA id c23sm16287436pgb.74.2021.09.20.12.22.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 12:22:37 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 20 Sep 2021 09:22:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        minchan@kernel.org, jeyu@kernel.org, shuah@kernel.org,
-        rdunlap@infradead.org, rafael@kernel.org, masahiroy@kernel.org,
-        ndesaulniers@google.com, yzaikin@google.com, nathan@kernel.org,
-        ojeda@kernel.org, penguin-kernel@i-love.sakura.ne.jp,
-        vitor@massaru.org, elver@google.com, jarkko@kernel.org,
-        glider@google.com, rf@opensource.cirrus.com,
-        stephen@networkplumber.org, David.Laight@aculab.com,
-        bvanassche@acm.org, jolsa@kernel.org,
-        andriy.shevchenko@linux.intel.com, trishalfonso@google.com,
-        andreyknvl@gmail.com, jikos@kernel.org, mbenes@suse.com,
-        ngupta@vflare.org, sergey.senozhatsky.work@gmail.com,
-        reinette.chatre@intel.com, fenghua.yu@intel.com, bp@alien8.de,
-        x86@kernel.org, hpa@zytor.com, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, daniel.vetter@ffwll.ch, bhelgaas@google.com,
-        kw@linux.com, dan.j.williams@intel.com, senozhatsky@chromium.org,
-        hch@lst.de, joe@perches.com, hkallweit1@gmail.com, axboe@kernel.dk,
-        jpoimboe@redhat.com, tglx@linutronix.de, keescook@chromium.org,
-        rostedt@goodmis.org, peterz@infradead.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, copyleft-next@lists.fedorahosted.org
-Subject: Re: [PATCH v7 09/12] sysfs: fix deadlock race with module removal
-Message-ID: <YUjfeGuSVVq84iHc@mtj.duckdns.org>
-References: <20210918050430.3671227-1-mcgrof@kernel.org>
- <20210918050430.3671227-10-mcgrof@kernel.org>
- <YUjKjLzqpcxjRyit@slm.duckdns.org>
- <YUjdytEDkCughtSz@bombadil.infradead.org>
+        Tue, 21 Sep 2021 09:17:29 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailout.west.internal (Postfix) with ESMTP id 76F333200495;
+        Tue, 21 Sep 2021 09:16:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 21 Sep 2021 09:16:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=2gpvT6
+        gYfhZrqxZ3BpEQR8xTPmX4u9XRLQLIUgpM+2o=; b=OQqQ0O8ddAfsMqNIvX61El
+        J9shfRvIVW+9uYqPJcVWMlPOGcOdcAqiB0hT5jWLyV7Q3fZFzNpI+CGFK8+t686T
+        evkcXwzMNaYP5bA258sKxIrGXczucPBnujEwL3MK37pRm3Kalm4OGHJXUtV8OYeB
+        6zt45nRgtcA2aLVjRCSh57f5VRC6aYZHhL5ActwK4NxgdEUTY7hYBii6bD+6TkYP
+        FBUpM/XT/oNDiyDz/ymRMhH5NQlOreb7ePGjxaqTX7zCT0ccw5/5ERnzZbqGTo2k
+        wSfcejS/CdE90m9P/HkJM7n9eS2I6UPkG26SvWnqyUnSOJRQ7/Wt0nDEiCsnIjAw
+        ==
+X-ME-Sender: <xms:D9tJYYnyYOq4HL_9vh1AJLNlaq1of_fGkoU59sZfXGE3KDi0BZopyQ>
+    <xme:D9tJYX12cJHM6u6-33ivaHGinSamyMXFZi5jorlOViwLbwIPu6Ye5rD0bVDaye-jB
+    iiKo58UWnbctMk>
+X-ME-Received: <xmr:D9tJYWoZ849Jsju22Ldhj_z9bC7MqlNrhU6XnZZCk7RP04NMXaMaMsVOWITbJSYghTl7udrLngkyOh9iJ7Q5XTsJoLXxUg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeigedgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpeduveetjeegkeevtdffudethedvveejjeeuueekueeitdefvdfhhfelgfehveef
+    hfenucffohhmrghinheprhgvnhgvshgrshdrtghomhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:D9tJYUl68lHSO-qdwzlA-A2W6gxP5eANoayhg4NrY9Pgx4aPLUB4Dg>
+    <xmx:D9tJYW1rqwNSpsyseQ_9k1V5IkExKYozaJv_ZwYMMF-XVJXVik6_0Q>
+    <xmx:D9tJYbtH46GwLefakG_MHY2kI-poyJXGbpS_1jPjjRSyUa_znUb5ng>
+    <xmx:ENtJYQoMBDYxJcuepNdAq4TZDcE-Hq7VucFXNiAFJ_ZfLV_Prk4TZw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Sep 2021 09:15:58 -0400 (EDT)
+Date:   Tue, 21 Sep 2021 16:15:55 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Maciej Machnikowski <maciej.machnikowski@intel.com>
+Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] rtnetlink: Add new RTM_GETEECSTATE message
+ to get SyncE status
+Message-ID: <YUnbCzBOPP9hWQ5c@shredder>
+References: <20210903151436.529478-1-maciej.machnikowski@intel.com>
+ <20210903151436.529478-2-maciej.machnikowski@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YUjdytEDkCughtSz@bombadil.infradead.org>
+In-Reply-To: <20210903151436.529478-2-maciej.machnikowski@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Fri, Sep 03, 2021 at 05:14:35PM +0200, Maciej Machnikowski wrote:
+> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+> index eebd3894fe89..78a8a5af8cd8 100644
+> --- a/include/uapi/linux/if_link.h
+> +++ b/include/uapi/linux/if_link.h
+> @@ -1273,4 +1273,35 @@ enum {
+>  
+>  #define IFLA_MCTP_MAX (__IFLA_MCTP_MAX - 1)
+>  
+> +/* SyncE section */
+> +
+> +enum if_eec_state {
+> +	IF_EEC_STATE_INVALID = 0,
+> +	IF_EEC_STATE_FREERUN,
+> +	IF_EEC_STATE_LOCKACQ,
+> +	IF_EEC_STATE_LOCKREC,
+> +	IF_EEC_STATE_LOCKED,
+> +	IF_EEC_STATE_HOLDOVER,
+> +	IF_EEC_STATE_OPEN_LOOP,
+> +	__IF_EEC_STATE_MAX,
 
-On Mon, Sep 20, 2021 at 12:15:22PM -0700, Luis Chamberlain wrote:
-> > I find this explanation odd because there's no real equivalent to locking
-> > the module (as opposed to try locking) 
-> 
-> Actually there is, __module_get() but I suspect some of these users are
-> probably incorrect and should be be moved to try. The documentation
+Can you document these states? I'm not clear on what LOCKACQ, LOCKREC
+and OPEN_LOOP mean. I also don't see ice using them and it's not really
+a good practice to add new uAPI without any current users.
 
-__module_get() is just getting an extra ref when the caller already
-has one (or more). It can't be used to freshly acquire a new
-reference. There is no equivalence between the relationship between
-try_module_get() and __module_get() and the one between spin_trylock()
-and spin_lock().
+From v1 I understand that these states were copied from commit
+797d3186544f ("ptp: ptp_clockmatrix: Add wait_for_sys_apll_dpll_lock.")
+from Renesas.
 
-> Right, the reason I mention the alternative is that we technically don't
-> need to use try in this case since during a kernfs op it is implied the
-> module will be pinned, but we have further motivations to use a try
+Figure 11 in the following PDF describes the states, but it seems
+specific to the particular device and probably shouldn't be exposed to
+user space as-is:
+https://www.renesas.com/us/en/document/dst/8a34041-datasheet
 
-I'm confused. If the module is already pinned, why are we getting an
-extra reference? Also, I don't understand how this has that much to do
-with preventing ddoses. I mean, it does cut down the duration of one
-operation but the eventual gating is through whoever acquiring the
-initial reference through try_module_get(), which again is the *only*
-way to acquire a fresh reference.
+I have a few questions about this being a per-netdev attribute:
 
-Thanks.
+1. My understanding is that in the multi-port adapter you are working
+with you have a single EEC that is used to set the Tx frequency of all
+the ports. Is that correct?
 
--- 
-tejun
+2. Assuming the above is correct, is it possible that one port is in
+LOCKED state and another (for some reason) is in HOLDOVER state? If yes,
+then I agree about this being a per-netdev attribute. The interface can
+also be extended with another attribute specifying the HOLDOVER reason.
+For example, netdev being down.
+
+Regardless, I agree with previous comments made about this belonging in
+ethtool rather than rtnetlink.
+
+> +};
+> +
+> +#define IF_EEC_STATE_MAX	(__IF_EEC_STATE_MAX - 1)
+> +#define EEC_SRC_PORT		(1 << 0) /* recovered clock from the port is
+> +					  * currently the source for the EEC
+> +					  */
+
+I'm not sure about this one. If we are going to expose this as a
+per-netdev attribute (see more below), any reason it can't be added as
+another state (e.g., IF_EEC_STATE_LOCKED_SRC)?
+
+IIUC, in the common case of a simple NE the source of the EEC is always
+one of the ports, but in the case of a PRC the source is most likely
+external (e.g., GPS).
+
+If so, I think we need a way to represent the EEC as a separate object
+with the ability to set its source and report it via the same interface.
+I'm unclear on how exactly an external source looks like, but for the
+netdev case maybe something like this:
+
+devlink clock show [ dev clock CLOCK ]
+devlink clock set DEV clock CLOCK [ { src_type SRC_TYPE } ]
+SRC_TYPE : = { port DEV/PORT_INDEX }
+
+The only source type above is 'port' with the ability to set the
+relevant port, but more can be added. Obviously, 'devlink clock show'
+will give you the current source in addition to other information such
+as frequency difference with respect to the input frequency.
+
+Finally, can you share more info about the relation to the PHC? My
+understanding is that one of the primary use cases for SyncE is to drive
+all the PHCs in the network using the same frequency. How do you imagine
+this configuration is going to look like? Can the above interface be
+extended for that?
+
+All of the above might be complete nonsense as I'm still trying to wrap
+my head around the subject.
+
+Thanks for working on this
