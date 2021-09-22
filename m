@@ -2,139 +2,163 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB14C4167B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Sep 2021 20:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C00CEC433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Sep 2021 21:51:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F032611C6
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Sep 2021 20:55:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94E8E60FE8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Sep 2021 21:51:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238008AbhIVU5J (ORCPT
+        id S238197AbhIVVx3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Sep 2021 16:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237827AbhIVU5A (ORCPT
+        Wed, 22 Sep 2021 17:53:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47030 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238066AbhIVVx2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Sep 2021 16:57:00 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AEEC061760
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Sep 2021 13:55:30 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id i13so4250943ilm.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Sep 2021 13:55:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aW7ecSqbhvxt64O8aRVTZrLeEfv4TrofY/NqSmwmjHw=;
-        b=DmJdXNCE0Nwcny13XuvXj5QJZWat2PFmP5CPAJfHFH7Q58HPTBwXGfOqlWV+8UWn6a
-         0iSCRzDWeqahYzCSxROnGBaXNJEECxbay1jRcMai2r4ckP9VJc14nBtHIaOle3YrUGCX
-         kTV5DcjeE9Mf0f7u1m+YhEDzqR7tDTXA8xgSB/di5CgOnuaOx5L3H7mO/CND50iDNq8x
-         Yspu5AMci3sXRtVPdGZidivUlISiIWfEkrkILlfYOxK1WKJPzTqPIS32rT1PPKfL3l+T
-         3L4U4Xj+1G636vd2t1gMi0qQJweUVmBXeaap/L4wvcgwPZ+qqYg6rn0+PUZ7Rl87Z8hH
-         uI0A==
+        Wed, 22 Sep 2021 17:53:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632347518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rYJ9XhtNZb7A4dQeqrhtvVfcVr5NXd1mHuE3OMC2z7c=;
+        b=QKv8vqENFYjgXtuVmB8FLQRmh2+ms/+RBwVJ8WhfsMjJA/rmDYGJFcZ6fBQAiWTOjKX8pg
+        9L/n468WVv6sZEbfyA0uSCUFbGuC4/5cGvE0EO/77SGQEw4aqzYrNNrDTu2ihGjmmW6+KO
+        ZhqHLIVoFTDeqnhADcVk//OAskwcsWo=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-492-qR6opTRXMQeYjuAeYGM4XA-1; Wed, 22 Sep 2021 17:51:57 -0400
+X-MC-Unique: qR6opTRXMQeYjuAeYGM4XA-1
+Received: by mail-qk1-f200.google.com with SMTP id c27-20020a05620a165b00b003d3817c7c23so12761584qko.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Sep 2021 14:51:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aW7ecSqbhvxt64O8aRVTZrLeEfv4TrofY/NqSmwmjHw=;
-        b=R5usWPpjARksx9reFdyHkH9TVDRJS/zsnFzhTRpawLNBZbMOt4kmbZNrYgp4RvA3H/
-         QjB4NVea/Q3pr1VNHS1ZfwvaMCr3BHN8n//9Idij4OYlcHP5prflj20Fbj57RDXvmTn0
-         +6kdq/O8wadb7i5+0wgBYqq0AmOd7UBcra68F0yw6RwxHSDVzNcgU4dRwK/eJELZRgbi
-         j6HgH/nR26oKudkkU5VwDrZVgadFJ4oQOvESYzzC5uFIJ4tRqapEgZR3mYma1QsXmeCY
-         q0a5SSKzEIkmptREL9ZcdiFzI8Q+jYETJedfa1Hun06Lt/nTn2weBrzhR/9evhr5JJfV
-         CWMg==
-X-Gm-Message-State: AOAM533eN14Zk//M51z6TYOKp6X/gJzQT2vzSHsjxKbc6hwu3QUHhUrC
-        i7qOtQrFB6KV11+x8ib7V5yPCvTKHn/RIZ/5Yud09A==
-X-Google-Smtp-Source: ABdhPJzJ6nlzdCA9XqAxn2VzCOP46m3faMrD4uuSH/bEsyFxe4U4fP2ZKPRkTcIZA3nHbrHwqw4kohVKUHsNhN2aFKQ=
-X-Received: by 2002:a92:db0b:: with SMTP id b11mr774872iln.275.1632344129664;
- Wed, 22 Sep 2021 13:55:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210921163323.944352-1-axelrasmussen@google.com>
- <YUoaDr2wsW8wtk5Z@t490s> <CAJHvVcj68inRrpmw0pJq9qFc20JzG8+s7b31HkXQcsLcAJN_0Q@mail.gmail.com>
- <YUowr6phZU4v7dds@t490s> <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
- <YUp438W5p5VHL1Ch@t490s> <CAJHvVciZc0mpcw8OSPk71YsVzCTajY+ikymcD3+zBJKsZynYkg@mail.gmail.com>
- <YUtoyNic4Jxfv9f7@t490s>
-In-Reply-To: <YUtoyNic4Jxfv9f7@t490s>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 22 Sep 2021 13:54:53 -0700
-Message-ID: <CAJHvVcg6PRCK_JcYEhRqq2vPyypnc+ySOtLhtFf5GrcQjimsJQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] userfaultfd/selftests: fix feature support detection
-To:     Peter Xu <peterx@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rYJ9XhtNZb7A4dQeqrhtvVfcVr5NXd1mHuE3OMC2z7c=;
+        b=04kw3Y811HzmhTwLsdk3FFhqsUc65erUHqJ0uXG6yy9Z3FUETdQz2bSKjlGb9fOmth
+         IhxoCpi4drMeM2ntEI3/WcJAgmAOY3DX5wL8HghMMrwKyoVLqs9LMTUOn8i2/xOfLFet
+         qx+k3Y94k//iI7DfEH+QfFxdKRnE7XWzxw9I7wE1m6jpftVkQcMSAhSLgVzx/StQY4b2
+         I1MKFxBSpq1BgT5FajbfNUz9/iLwteg5v55evq4HVMUXVYDLOaFLbR2o5lgqTmjT8ivK
+         JsFg+bgrR83qKUEyqUdaYP/fHRaMaBnQRiRCdPLHgFu6tP1cCgDHEv0ASKoZCmDBpVzL
+         UX4w==
+X-Gm-Message-State: AOAM530zUh8QBfxaN/Yy5V++bUsZDYfoIfea/PxnlCpEgigmpyEhw+RZ
+        dIY4q0L8/qFwRXAH9zpR/yVsA8xQzGnfCovlAyVebSvxmV1sX7hI8PyvS0O6ZvHeri6L9eJHXD1
+        5ZJ0aI4F9P+YkI9prLNVpBrjs+xBd
+X-Received: by 2002:a0c:f58b:: with SMTP id k11mr1146253qvm.66.1632347516593;
+        Wed, 22 Sep 2021 14:51:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy2vehWnx2IYD6qD1pTYUcyYrhr0SdnzxB6e0brzMk0zVjUL48IEuBmj1CjOE805HOCWLgE9g==
+X-Received: by 2002:a0c:f58b:: with SMTP id k11mr1146239qvm.66.1632347516309;
+        Wed, 22 Sep 2021 14:51:56 -0700 (PDT)
+Received: from t490s ([2607:fea8:56a2:9100::d3ec])
+        by smtp.gmail.com with ESMTPSA id l13sm2742962qkp.97.2021.09.22.14.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Sep 2021 14:51:55 -0700 (PDT)
+Date:   Wed, 22 Sep 2021 17:51:54 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
         Linuxkselftest <linux-kselftest@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 1/3] userfaultfd/selftests: fix feature support detection
+Message-ID: <YUulep3+YADkwlUu@t490s>
+References: <20210921163323.944352-1-axelrasmussen@google.com>
+ <YUoaDr2wsW8wtk5Z@t490s>
+ <CAJHvVcj68inRrpmw0pJq9qFc20JzG8+s7b31HkXQcsLcAJN_0Q@mail.gmail.com>
+ <YUowr6phZU4v7dds@t490s>
+ <CAJHvVcgz18qU9vjPimOhJ5YswfJnLN0tQGfsgjCh6M7ckvhfgA@mail.gmail.com>
+ <YUp438W5p5VHL1Ch@t490s>
+ <CAJHvVciZc0mpcw8OSPk71YsVzCTajY+ikymcD3+zBJKsZynYkg@mail.gmail.com>
+ <YUtoyNic4Jxfv9f7@t490s>
+ <CAJHvVcg6PRCK_JcYEhRqq2vPyypnc+ySOtLhtFf5GrcQjimsJQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVcg6PRCK_JcYEhRqq2vPyypnc+ySOtLhtFf5GrcQjimsJQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 22, 2021 at 10:33 AM Peter Xu <peterx@redhat.com> wrote:
->
-> Hello, Axel,
->
-> On Wed, Sep 22, 2021 at 10:04:03AM -0700, Axel Rasmussen wrote:
-> > Thanks for discussing the design Peter. I have some ideas which might
-> > make for a nicer v2; I'll massage the code a bit and see what I can
-> > come up with.
->
-> Sure thing.  Note again that as I don't have a strong opinion on that, feel
-> free to keep it.  However if you provide v2, I'll read.
->
-> [off-topic below]
->
-> Another thing I probably have forgot but need your confirmation is, when you
-> worked on uffd minor mode, did you explicitly disable thp, or is it allowed?
+On Wed, Sep 22, 2021 at 01:54:53PM -0700, Axel Rasmussen wrote:
+> On Wed, Sep 22, 2021 at 10:33 AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > Hello, Axel,
+> >
+> > On Wed, Sep 22, 2021 at 10:04:03AM -0700, Axel Rasmussen wrote:
+> > > Thanks for discussing the design Peter. I have some ideas which might
+> > > make for a nicer v2; I'll massage the code a bit and see what I can
+> > > come up with.
+> >
+> > Sure thing.  Note again that as I don't have a strong opinion on that, feel
+> > free to keep it.  However if you provide v2, I'll read.
+> >
+> > [off-topic below]
+> >
+> > Another thing I probably have forgot but need your confirmation is, when you
+> > worked on uffd minor mode, did you explicitly disable thp, or is it allowed?
+> 
+> I gave a more detailed answer in the other thread, but: currently it
+> is allowed, but this was a bug / oversight on my part. :) THP collapse
+> can break the guarantees minor fault registration is trying to
+> provide.
 
-I gave a more detailed answer in the other thread, but: currently it
-is allowed, but this was a bug / oversight on my part. :) THP collapse
-can break the guarantees minor fault registration is trying to
-provide.
+I've replied there:
 
-I think your approach of checking the VMA flags *in
-retract_page_tables specifically* is correct, and a similar thing
-should be done for minor registered VMAs too.
+https://lore.kernel.org/linux-mm/YUueOUfoamxOvEyO@t490s/
 
->
-> When I'm reworking the uffd-wp series, I noticed that commit e1e267c7928f
-> ("khugepaged: skip collapse if uffd-wp detected", 2020-04-07) was actually
-> awkward and not efficient, as we can simply lookup the vma flags for detecting
-> uffd-wp enablement.  I'm preparing a patch for it to do it by checking vmas
-> (and that patch will also pave the way for file-backed).
->
-> Then I noticed we need similar thing for minor mode?
->
-> I think the answer is yes, but I didn't see any code that explicitly handled
-> thp for minor mode, do you remember?
->
-> To be explicit, what if in mcontinue_atomic_pte() we get a shmem_getpage() call
-> with a thp returned?  Will minor mode break?
+We can try to keep the discussion unified there regarding this.
 
-Ah so this I am not quite as sure about.
+> But there's another scenario: what if the collapse happened well
+> before registration happened?
 
-The issue I was describing in the other thread was more about THP
-collapse racing with UFFDIO_CONTINUE. E.g., collapsing after
-registration has happened, but before faults have been resolved.
+Maybe yes, but my understanding of the current uffd-minor scenario tells me
+that this is fine too.  Meanwhile I actually have another idea regarding minor
+mode, please continue reading.
 
-But there's another scenario: what if the collapse happened well
-before registration happened? I *think* the existing code deals with
-THPs correctly in that case, but then again I don't think our selftest
-really covers this case, and it's not something I've tested in
-production either (to work around the other bug, we currently
-MADV_NOHUGEPAGE the area until after VM demand paging completes, and
-the UFFD registration is removed), so I am not super confident this is
-the case.
+Firstly, let me try to re-cap on how minor mode is used in your production
+systems: I believe there should have two processes A and B, if A is the main
+process, B could be the migration process.  B migrates pages in the background,
+while A so far should have been stopped and never ran.  When we want to start
+A, we should register A with uffd-minor upon the whole range (note: I think so
+far A does not have any pgtable mapped within uffd-minor range).  Then any page
+access of A should kick B and asking "whether it is the latest page", if yes
+then UFFDIO_CONTINUE, if no then B modifies the page, plus UFFDIO_CONTINUE
+afterwards.  Am I right above?
 
->
-> I plan to post the khugepaged patch soon and I plan to cover minor mode too
-> there, but I'm not sure whether that's enough, as the thp can be there from the
-> 1st day I think, but I could have missed something.
->
-> --
-> Peter Xu
->
+So if that's the case, then A should have no page table at all.
+
+Then, is that a problem if the shmem file that A maps contains huge thps?  I
+think no - because UFFDIO_CONTINUE will only install small pages.
+
+Let me know if I'm understanding it right above; I'll be happy to be corrected.
+
+Actually besides this scenario, I'm also thinking of another scenario of using
+minor fault in a single process - that's mostly what QEMU is doing right now,
+as QEMU has the vcpu threads and migration thread sharing a single mm/pgtable.
+So I think it'll be great to have a new madvise(MADV_ZAP) which will tear down
+all the file-backed memory pgtables of a specific range.  I think it'll suite
+perfectly for the minor fault use case, and it can be used for other things
+too.  Let me know what you think about this idea, and whether that'll help in
+your case too (e.g., if you worry a current process A mapped huge shmem thp
+somewhere, we can use madvise(MADV_ZAP) to drop it).
+
+> I *think* the existing code deals with THPs correctly in that case, but then
+> again I don't think our selftest really covers this case, and it's not
+> something I've tested in production either (to work around the other bug, we
+> currently MADV_NOHUGEPAGE the area until after VM demand paging completes,
+> and the UFFD registration is removed), so I am not super confident this is
+> the case.
+
+In all cases, enhancing the test program will always be welcomed.
+
+Thanks,
+
+-- 
+Peter Xu
+
