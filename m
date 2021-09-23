@@ -2,177 +2,154 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7B5BC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Sep 2021 16:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E898AC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Sep 2021 22:24:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE5A861263
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Sep 2021 16:54:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D023C6124B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Sep 2021 22:24:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242363AbhIWQ40 (ORCPT
+        id S243464AbhIWWZn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Sep 2021 12:56:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33181 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242239AbhIWQ4O (ORCPT
+        Thu, 23 Sep 2021 18:25:43 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37578 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243436AbhIWWZf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Sep 2021 12:56:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632416082;
+        Thu, 23 Sep 2021 18:25:35 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1632435841;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0ReSgcM8F/l+G5HcK9Mo9o/CQ02oO2R9Ng8Sr4/ITM4=;
-        b=HfWutbeU4gg+xxX/Chvgb7Y5MPixcVBCxrsxmbloiYRz2qIOEQM5soArd9goJlwxKKAuA1
-        PMzCUfbEYO5pGJX757xnWLjWHAjyqbUa6aqMCKtRijFfc0jhS6sfRhKk46+dWCwRT17iwc
-        bNoph+x5LsYS5xlkdqYNscFgufoBIbM=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-392-4xK00uLoN3O8Lvijng_dng-1; Thu, 23 Sep 2021 12:54:39 -0400
-X-MC-Unique: 4xK00uLoN3O8Lvijng_dng-1
-Received: by mail-ed1-f70.google.com with SMTP id h6-20020a50c386000000b003da01adc065so7342798edf.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Sep 2021 09:54:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0ReSgcM8F/l+G5HcK9Mo9o/CQ02oO2R9Ng8Sr4/ITM4=;
-        b=pqa9euzqwGr6pFUSro4GAVVXPOCb3uEpvu396tbETV1rP/ePS9pzVv/mLIcyhxq8Tw
-         WPh/kjZ3mO3ArtzUQQQmX7bIrcp0aXgWxOr6ZUYqjjoiVboTHCmvcCVgRCXQux9h8W0B
-         5wlYrcnViQeM2+5ZV6CimzcMFqtLZnQR+q7CVHUXHyBA0n3itHYbLNCt0ng1sjP9avIl
-         rgBiK1GPh4Inn2wELPj5Xlk/ZsIwhA1EeaP4wvgRBKtR/AyQX+WHrY7lEuAMxI8CnCx9
-         QIjQtUBPjM2hRCJND+1ALnNrUfPfgeb412PLqzMtnrdMrD/Bk0du2VB6hO1+8N4FZPfy
-         9ojA==
-X-Gm-Message-State: AOAM530WZLGyoneMPPwnELq4H/lcIFK4YFfP2iDDGZtppDLXMBhZt+Pf
-        ATRfOUlNTXTv0vkakC/QMhr+On6UuR0/w3AlX7XA77v2RqyL+Lu54lBNHiwLwDzhWhjQqH2cBjc
-        kvmnmA6yep7ty0/Iege6BGIoevxFE
-X-Received: by 2002:a17:906:584:: with SMTP id 4mr6200631ejn.56.1632416077494;
-        Thu, 23 Sep 2021 09:54:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy5UQAxIm6jvDAIEJygeGZF/ewJKdpHxU6OT5aGqbBA5SNslschMbR9eHuS7enkJEmOlKUxtw==
-X-Received: by 2002:a17:906:584:: with SMTP id 4mr6200592ejn.56.1632416077261;
-        Thu, 23 Sep 2021 09:54:37 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id b13sm4046822ede.97.2021.09.23.09.54.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Sep 2021 09:54:36 -0700 (PDT)
-Subject: Re: [PATCH 00/14] nSVM fixes and optional features
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, Bandan Das <bsd@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Wanpeng Li <wanpengli@tencent.com>
-References: <20210914154825.104886-1-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <d04eb3d1-9f0c-3b2c-c78f-0f377caadcfc@redhat.com>
-Date:   Thu, 23 Sep 2021 18:54:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        bh=6Matoo2OIfdawfGuu3j6hbf2m+pvAyOqko4uRRDDqJ0=;
+        b=N9ssRTZGMxorWOBqZEIQ9Tt2vNTC5I8aj19BMSE9Xssk0QWWtT/+0NICD6ssXGkA5FR8ds
+        7HwcthwHMm5PC2Ku+n2v00I8mpZkiSVyBlEP9litACd8ROqGfpHbiBNt7rpSxNEqPlEYoy
+        0WAbbsoSaHa38BXkXdMOEyhZcgpZeu/OVVG86ipRvJudoV8qZrOLuOHhnH4J38TdHWYzTm
+        k2wC7mCPI2oPu5BiSuRDTc1c4YPpiojnhbSVvtiUjxhC8qtgZkHBzuLSFi9C4zMHQXQui+
+        44GBHIIVFKD1k02kDBFfUkrxVzbrvQND6Rs33SPZqSweYAPfS01ntNPARWGLOg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1632435841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Matoo2OIfdawfGuu3j6hbf2m+pvAyOqko4uRRDDqJ0=;
+        b=/7ConpvTXAvFWy6BmvzoZaT07ZxWDyhnP2mIpX3mCcpKyA1zbHQBf+ebCtIwiiVEMqZdvP
+        uR9Iu/xxODMvHjBw==
+To:     Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org
+Cc:     Sohil Mehta <sohil.mehta@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christian Brauner <christian@brauner.io>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Randy E Witt <randy.e.witt@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Ramesh Thomas <ramesh.thomas@intel.com>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 03/13] x86/cpu: Enumerate User Interrupts support
+In-Reply-To: <20210913200132.3396598-4-sohil.mehta@intel.com>
+References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+ <20210913200132.3396598-4-sohil.mehta@intel.com>
+Date:   Fri, 24 Sep 2021 00:24:00 +0200
+Message-ID: <87lf3nexrz.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <20210914154825.104886-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 14/09/21 17:48, Maxim Levitsky wrote:
-> Those are few patches I was working on lately, all somewhat related
-> to the two CVEs that I found recently.
-> 
-> First 7 patches fix various minor bugs that relate to these CVEs.
-> 
-> The rest of the patches implement various optional SVM features,
-> some of which the guest could enable anyway due to incorrect
-> checking of virt_ext field.
-> 
-> Last patch is somewhat an RFC, I would like to hear your opinion
-> on that.
-> 
-> I also implemented nested TSC scaling while at it.
-> 
-> As for other optional SVM features here is my summary of few features
-> I took a look at:
-> 
-> X86_FEATURE_DECODEASSISTS:
->     this feature should make it easier
->     for the L1 to emulate an instruction on MMIO access, by not
->     needing to read the guest memory but rather using the instruction
->     bytes that the CPU already fetched.
-> 
->     The challenge of implementing this is that we sometimes inject
->     #PF and #NPT syntenically and in those cases we must be sure
->     we set the correct instruction bytes.
-> 
->     Also this feature adds assists for MOV CR/DR, INTn, and INVLPG,
->     which aren't that interesting but must be supported as well to
->     expose this feature to the nested guest.
-> 
-> X86_FEATURE_VGIF
->     Might allow the L2 to run the L3 a bit faster, but due to crazy complex
->     logic we already have around int_ctl and vgif probably not worth it.
-> 
-> X86_FEATURE_VMCBCLEAN
->     Should just be enabled, because otherwise L1 doesn't even attempt
->     to set the clean bits. But we need to know if we can take an
->     advantage of these bits first.
-> 
-> X86_FEATURE_FLUSHBYASID
-> X86_FEATURE_AVIC
->     These two features would be very good to enable, but that
->     would require lots of work, and will be done eventually.
-> 
-> There are few more nested SVM features that I didn't yet had a
-> chance to take a look at.
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> Maxim Levitsky (14):
->    KVM: x86: nSVM: restore int_vector in svm_clear_vintr
->    KVM: x86: selftests: test simultaneous uses of V_IRQ from L1 and L0
->    KVM: x86: nSVM: test eax for 4K alignment for GP errata workaround
->    KVM: x86: nSVM: don't copy pause related settings
->    KVM: x86: nSVM: don't copy virt_ext from vmcb12
->    KVM: x86: SVM: don't set VMLOAD/VMSAVE intercepts on vCPU reset
->    KVM: x86: SVM: add warning for CVE-2021-3656
->    KVM: x86: SVM: add module param to control LBR virtualization
->    KVM: x86: nSVM: correctly virtualize LBR msrs when L2 is running
->    KVM: x86: nSVM: implement nested LBR virtualization
->    KVM: x86: nSVM: implement nested VMLOAD/VMSAVE
->    KVM: x86: SVM: add module param to control TSC scaling
->    KVM: x86: nSVM: implement nested TSC scaling
->    KVM: x86: nSVM: support PAUSE filter threshold and count
-> 
->   arch/x86/kvm/svm/nested.c                     | 105 +++++++--
->   arch/x86/kvm/svm/svm.c                        | 218 +++++++++++++++---
->   arch/x86/kvm/svm/svm.h                        |  20 +-
->   arch/x86/kvm/vmx/vmx.c                        |   1 +
->   arch/x86/kvm/x86.c                            |   1 +
->   tools/testing/selftests/kvm/.gitignore        |   1 +
->   tools/testing/selftests/kvm/Makefile          |   1 +
->   .../selftests/kvm/x86_64/svm_int_ctl_test.c   | 128 ++++++++++
->   8 files changed, 427 insertions(+), 48 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c
-> 
+On Mon, Sep 13 2021 at 13:01, Sohil Mehta wrote:
+> SENDUIPI is a special ring-3 instruction that makes a supervisor mode
+> memory access to the UPID and UITT memory. Currently, KPTI needs to be
+> off for User IPIs to work.  Processors that support user interrupts are
+> not affected by Meltdown so the auto mode of KPTI will default to off.
+>
+> Users who want to force enable KPTI will need to wait for a later
+> version of this patch series that is compatible with KPTI. We need to
+> allocate the UPID and UITT structures from a special memory region that
+> has supervisor access but it is mapped into userspace. The plan is to
+> implement a mechanism similar to LDT.
 
-Queued more patches, with 9-10-11-14 left now.
+Seriously?
 
-Paolo
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
+This SOB chain is invalid. Ditto in several other patches.
+
+>  
+> +config X86_USER_INTERRUPTS
+> +	bool "User Interrupts (UINTR)"
+> +	depends on X86_LOCAL_APIC && X86_64
+
+X86_64 does not work w/o LOCAL_APIC so this dependency is pointless.
+
+> +	depends on CPU_SUP_INTEL
+> +	help
+> +	  User Interrupts are events that can be delivered directly to
+> +	  userspace without a transition through the kernel. The interrupts
+> +	  could be generated by another userspace application, kernel or a
+> +	  device.
+> +
+> +	  Refer, Documentation/x86/user-interrupts.rst for details.
+
+"Refer, Documentation..." is not a sentence.
+
+>  
+> +/* User Interrupt interface */
+> +#define MSR_IA32_UINTR_RR		0x985
+> +#define MSR_IA32_UINTR_HANDLER		0x986
+> +#define MSR_IA32_UINTR_STACKADJUST	0x987
+> +#define MSR_IA32_UINTR_MISC		0x988	/* 39:32-UINV, 31:0-UITTSZ */
+
+Bah, these tail comments are crap. Please define proper masks/shift
+constants for this instead of using magic numbers in the code.
+
+> +static __always_inline void setup_uintr(struct cpuinfo_x86 *c)
+
+This has to be always inline because it's performance critical or what?
+
+> +{
+> +	/* check the boot processor, plus compile options for UINTR. */
+
+Sentences start with uppercase letters.
+
+> +	if (!cpu_feature_enabled(X86_FEATURE_UINTR))
+> +		goto disable_uintr;
+> +
+> +	/* checks the current processor's cpuid bits: */
+> +	if (!cpu_has(c, X86_FEATURE_UINTR))
+> +		goto disable_uintr;
+> +
+> +	/*
+> +	 * User Interrupts currently doesn't support PTI. For processors that
+> +	 * support User interrupts PTI in auto mode will default to off.  Need
+> +	 * this check only for users who have force enabled PTI.
+> +	 */
+> +	if (boot_cpu_has(X86_FEATURE_PTI)) {
+> +		pr_info_once("x86: User Interrupts (UINTR) not enabled. Please disable PTI using 'nopti' kernel parameter\n");
+
+That message does not make sense. The admin has explicitly added 'pti'
+to the kernel command line on a CPU which is not affected. So why would
+he now have to add 'nopti' ?
+
+Thanks,
+
+        tglx
