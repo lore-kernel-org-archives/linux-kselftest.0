@@ -2,165 +2,211 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94BACC433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Sep 2021 00:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0C3EC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Sep 2021 08:17:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B93C6113D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Sep 2021 00:29:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9BE006054F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Sep 2021 08:17:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbhI0Aar (ORCPT
+        id S233392AbhI0IS7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 26 Sep 2021 20:30:47 -0400
-Received: from a8-97.smtp-out.amazonses.com ([54.240.8.97]:37013 "EHLO
-        a8-97.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232113AbhI0Aar (ORCPT
+        Mon, 27 Sep 2021 04:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233381AbhI0IS7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Sep 2021 20:30:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1632702549;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=VrCAw0M2TSCOPJ2yqB+ST2keDACLKH38LqHD83yCNRc=;
-        b=hEqjOOTqGUfDh6K0SdaDWdwOKpIPjdD5xk5ENNHSrUv75QaAq/V4q7EMPqCdfoS0
-        zs6jowcEbcuepIEXwL93KNvkiuULcoGx8To1FEifQLREc0AHBT2yFGbSpmiSfFVyQMV
-        qkXgvvCaSOou2beIsJVicakGig56cQCHD623UuX8=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1632702549;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=VrCAw0M2TSCOPJ2yqB+ST2keDACLKH38LqHD83yCNRc=;
-        b=cf0gF7/7E5SYIc6Q7jjtACfw+9b7YiAot3+9O6Quoy2McNgirVGYkhpAJoqdwy2q
-        dLY5olrXZYJFb0nhrR/Qj7k45SgRQho6VPPZ+YvTQ5ahczuf2Kmn8mGgbu8N/kQAQMb
-        SwyP59etfV9wmIXZkUH5sEiuZDSrz1teIm0yIFy4=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20210923
+        Mon, 27 Sep 2021 04:18:59 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3945C061575
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Sep 2021 01:17:21 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id t189so24547699oie.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Sep 2021 01:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4FoCYB0R53oYzBihqJ0jC7V9Vzxsrx6Am9iqfRfp7sI=;
+        b=Xd+AnOxfDiFYeiOcZueBZXexoumw2PhRlFDAY4hLoG/UsDCNYvOv0Eo69YkjloOP9Z
+         I7ouOJf+nhKWGDppjph7ngafcimWznTToLKCHlwXYcZTupOLZY+nGHFijPxeVl3Hgv15
+         Y6ryiE5CQhyGL+ccvnjVqkICgt1/GjRPv69F0feQVsQGXpL7kFte20u0CoGQhuHDXmLw
+         HRGxo9nzaMTI8BLBHMx+U5ooOxWOnY2kfjfYiRR/qcBN44j6ENhjDOV5KNJtFP8utSVQ
+         f3FCm5uZOCWRtzZ50FJKJftekarJ3LljNmw3A0mWH47TLRsHWFt4Gebui0WPrsyIAz3y
+         RA/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4FoCYB0R53oYzBihqJ0jC7V9Vzxsrx6Am9iqfRfp7sI=;
+        b=aMyFV+kKLjkw1he6AL7mRJ8hWUyh/Xr/hmxSEyDZ0FxeuF1DUSj6Glp4GP4YsPL1kX
+         eEfZC5ZjwWqaYvGASqfJtqnELqT3ITkOzGQDA2D+KHC5WRQvB5l+9tsyejEBu84L/wkR
+         eOvr5HIUuvfJv2Jyz0zBXdDFlEiI7i8n/X8sATg+WDr2w7B9nNQ2xe8u7qpVhvAn43M1
+         9y2KU0294AIJ89MJ/tw2ECUUdtvNjneeUcOk9K2siREx9FImxKBNPY79wse8uO1dm9kh
+         J5OLwMMyKTPoiVuKZHU1zr8x7E5/kmc5cA0MLFLYA+3L9fQGg/KYAAlxpoW2Ojqn74OY
+         ZRZw==
+X-Gm-Message-State: AOAM533r/z41YzeJ26+2xwJ8te6/BseUJYJftYn53mNA6CA0yussKBPm
+        LQMv13HsrnZFg8wdYFVr+iGrcuc0rkaPFoKjz9BxCcOsjqA=
+X-Google-Smtp-Source: ABdhPJzcAoxej7VfJZs6Tn5ZhaWxOvPVbzTJM/rOc3miUaWr4129ddSP/2dCrWczbItE6fEqv2M3WYjETIE9OnvxI3E=
+X-Received: by 2002:aca:db06:: with SMTP id s6mr11005425oig.70.1632730640739;
+ Mon, 27 Sep 2021 01:17:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017c24a7cca8-4999c0b3-3cb0-4333-a5a4-65d62dc8cd49-000000@email.amazonses.com>
-Date:   Mon, 27 Sep 2021 00:29:09 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.09.27-54.240.8.97
+References: <20210926223322.848641-1-isabellabdoamaral@usp.br> <20210926223322.848641-4-isabellabdoamaral@usp.br>
+In-Reply-To: <20210926223322.848641-4-isabellabdoamaral@usp.br>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 27 Sep 2021 10:17:09 +0200
+Message-ID: <CANpmjNN4z9YsD=KjGjgdXsQbKD68RGh5bu-AEX6FeryZ2GdXCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] test_hash.c: split test_hash_init
+To:     Isabella Basso <isabellabdoamaral@usp.br>
+Cc:     geert@linux-m68k.org, ferreiraenzoa@gmail.com,
+        augusto.duraes33@gmail.com, brendanhiggins@google.com,
+        dlatypov@google.com, davidgow@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, ~lkcamp/patches@lists.sr.ht,
+        rodrigosiqueiramelo@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: bc5aa70f26995791074a00da8b57ead3a9c1a646
-* git describe: next-20210923
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20210923
+On Mon, 27 Sept 2021 at 00:33, 'Isabella Basso' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> Split up test_hash_init so that it calls each test more explicitly
+> insofar it is possible without rewriting the entire file. This aims at
+> improving readability.
+>
+> Split tests performed on string_or as they don't interfere with those
+> performed in hash_or. Also separate pr_info calls about skipped tests as
+> they're not part of the tests themselves, but only warn about
+> (un)defined arch-specific hash functions.
+>
+> Changes since v1:
+> - As suggested by David Gow:
+>   1. Rename arch-specific test functions.
+>   2. Remove spare whitespace changes.
+> - As suggested by Marco Elver:
+>   1. Add struct for carrying test variables.
 
-## Regressions (compared to next-20210915)
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
+Did the patches get mixed up? The struct doesn't appear to be introduced here.
 
-* qemu_i386, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-* qemu_x86_64, kselftest-x86
-  - x86.iopl_64
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20210915)
-* qemu-arm64-gic-version2, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
-
-* qemu-arm64-mte, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-
-## Test result summary
-total: 3678, pass: 1997, fail: 324, skip: 1357, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Tested-by: David Gow <davidgow@google.com>
+> Signed-off-by: Isabella Basso <isabellabdoamaral@usp.br>
+> ---
+>  lib/test_hash.c | 66 ++++++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 54 insertions(+), 12 deletions(-)
+>
+> diff --git a/lib/test_hash.c b/lib/test_hash.c
+> index 08fe63776c4f..db9dd18b4e8b 100644
+> --- a/lib/test_hash.c
+> +++ b/lib/test_hash.c
+> @@ -153,11 +153,39 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+>
+>  #define SIZE 256       /* Run time is cubic in SIZE */
+>
+> -static int __init
+> -test_hash_init(void)
+> +static int __init test_string_or(void)
+>  {
+>         char buf[SIZE+1];
+> -       u32 string_or = 0, hash_or[2][33] = { { 0, } };
+> +       u32 string_or = 0;
+> +       int i, j;
+> +
+> +       fill_buf(buf, SIZE, 1);
+> +
+> +       /* Test every possible non-empty substring in the buffer. */
+> +       for (j = SIZE; j > 0; --j) {
+> +               buf[j] = '\0';
+> +
+> +               for (i = 0; i <= j; i++) {
+> +                       u32 h0 = full_name_hash(buf+i, buf+i, j-i);
+> +
+> +                       string_or |= h0;
+> +               } /* i */
+> +       } /* j */
+> +
+> +       /* The OR of all the hash values should cover all the bits */
+> +       if (~string_or) {
+> +               pr_err("OR of all string hash results = %#x != %#x",
+> +                      string_or, -1u);
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int __init test_hash_or(void)
+> +{
+> +       char buf[SIZE+1];
+> +       u32 hash_or[2][33] = { { 0, } };
+>         unsigned tests = 0;
+>         unsigned long long h64 = 0;
+>         int i, j;
+> @@ -187,7 +215,6 @@ test_hash_init(void)
+>                                 return -EINVAL;
+>                         }
+>
+> -                       string_or |= h0;
+>                         h64 = h64 << 32 | h0;   /* For use with hash_64 */
+>                         if (!test_int_hash(h64, hash_or))
+>                                 return -EINVAL;
+> @@ -195,12 +222,6 @@ test_hash_init(void)
+>                 } /* i */
+>         } /* j */
+>
+> -       /* The OR of all the hash values should cover all the bits */
+> -       if (~string_or) {
+> -               pr_err("OR of all string hash results = %#x != %#x",
+> -                       string_or, -1u);
+> -               return -EINVAL;
+> -       }
+>         if (~hash_or[0][0]) {
+>                 pr_err("OR of all __hash_32 results = %#x != %#x",
+>                         hash_or[0][0], -1u);
+> @@ -232,6 +253,13 @@ test_hash_init(void)
+>                 }
+>         }
+>
+> +       pr_notice("%u tests passed.", tests);
+> +
+> +       return 0;
+> +}
+> +
+> +static void __init notice_skipped_tests(void)
+> +{
+>         /* Issue notices about skipped tests. */
+>  #ifdef HAVE_ARCH__HASH_32
+>  #if HAVE_ARCH__HASH_32 != 1
+> @@ -247,10 +275,24 @@ test_hash_init(void)
+>  #else
+>         pr_info("hash_64() has no arch implementation to test.");
+>  #endif
+> +}
+>
+> -       pr_notice("%u tests passed.", tests);
+> +static int __init
+> +test_hash_init(void)
+> +{
+> +       int ret;
+>
+> -       return 0;
+> +       ret = test_string_or();
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       ret = test_hash_or();
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       notice_skipped_tests();
+> +
+> +       return ret;
+>  }
+>
+>  static void __exit test_hash_exit(void)
+> --
+> 2.33.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20210926223322.848641-4-isabellabdoamaral%40usp.br.
