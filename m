@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5812BC433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECE0FC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:59:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42A36613A0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:57:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D37B06113E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:59:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238984AbhI1F6y (ORCPT
+        id S239274AbhI1GAx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Sep 2021 01:58:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48784 "EHLO mail.kernel.org"
+        Tue, 28 Sep 2021 02:00:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239221AbhI1F6J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Sep 2021 01:58:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CE834611F2;
-        Tue, 28 Sep 2021 05:56:26 +0000 (UTC)
+        id S239092AbhI1F73 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 Sep 2021 01:59:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DF5C61371;
+        Tue, 28 Sep 2021 05:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632808587;
-        bh=AhcoqVexCUMOfiSsDCMCrTVxJO2sFJcDKPAO9WoKXSA=;
+        s=k20201202; t=1632808616;
+        bh=ngnFhTU/JETqR764UoXSOx79JXyoqcpvWMouzvqyaTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aBU55OTh7ExlviP/bzAmhEXMmJbkLXv4p2BizcYkejwcQnrUY0WN/pXCE4zlN908K
-         YnNyqyptty9UioTqxrsWKKLASRGx2FrSGpX9F1QFYNj/QH5IgdXwQNvOQLnXecuq0Y
-         z4hfR3ra6qr8rZAqyzvHfYuoR4EZWotKq09L0X/YSMlpOrjfOyBxhiI0xjBBCZh8p/
-         Y8Uu5D7+IPNZvA3lnwhyStTooTIabVN+EglPvSiVNNxQnQ5Q+MrTFnaLMVzWbTMj+S
-         HoEIZeg7PQz30KHxS8RJ//0aAXkmGEu5cJtHw5wwPIjJCBiqxoi7RqzvUTMw2p3sMQ
-         Ni/JdX1SXU14A==
+        b=OkB3tmP7rV8ukbS7lECWAZgDg5bgrmLYK0R+3BzaOm15Da67QodTGg90ZkNhZ5bGQ
+         MyVwzxOeLAkDaH9PQnbXiVNyAET6TA1RehzZDyIlIoRSAhnzpBCRKHX0UNx1F4VOrD
+         RuSIkUAMjpgzqYFlfP5L2Pb7D+Hj8098KT+3LDQqpSv+xl414pxJJsGY2iDCYxIGYy
+         0dVRiocpHVNPygjniUZKi0T3jOkwCJAMZkrdl158cMpovKm53E4/rk3JNdvfArmrz7
+         uOzeO3nBpvKc9XK1PcEU5qdsq5SgcbcYNrQTjJoCD3qJ+/vWsHc9Vv3+Ey01RhrSo7
+         yD/Kww5AdjDtQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        bgardon@google.com, drjones@redhat.com, wangyanan55@huawei.com,
-        axelrasmussen@google.com, dwmw@amazon.co.uk, seanjc@google.com,
-        joao.m.martins@oracle.com, yangyingliang@huawei.com,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 26/40] selftests: kvm: move get_run_delay() into lib/test_util
-Date:   Tue, 28 Sep 2021 01:55:10 -0400
-Message-Id: <20210928055524.172051-26-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 15/23] selftests: be sure to make khdr before other targets
+Date:   Tue, 28 Sep 2021 01:56:36 -0400
+Message-Id: <20210928055645.172544-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928055524.172051-1-sashal@kernel.org>
-References: <20210928055524.172051-1-sashal@kernel.org>
+In-Reply-To: <20210928055645.172544-1-sashal@kernel.org>
+References: <20210928055645.172544-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -50,132 +50,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-[ Upstream commit 20175d5eac5bb94a7a3719ef275337fc9abf26ac ]
+[ Upstream commit 8914a7a247e065438a0ec86a58c1c359223d2c9e ]
 
-get_run_delay() is defined static in xen_shinfo_test and steal_time test.
-Move it to lib and remove code duplication.
+LKP/0Day reported some building errors about kvm, and errors message
+are not always same:
+- lib/x86_64/processor.c:1083:31: error: ‘KVM_CAP_NESTED_STATE’ undeclared
+(first use in this function); did you mean ‘KVM_CAP_PIT_STATE2’?
+- lib/test_util.c:189:30: error: ‘MAP_HUGE_16KB’ undeclared (first use
+in this function); did you mean ‘MAP_HUGE_16GB’?
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+Although kvm relies on the khdr, they still be built in parallel when -j
+is specified. In this case, it will cause compiling errors.
+
+Here we mark target khdr as NOTPARALLEL to make it be always built
+first.
+
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/include/test_util.h   |  1 +
- tools/testing/selftests/kvm/lib/test_util.c       | 15 +++++++++++++++
- tools/testing/selftests/kvm/steal_time.c          | 15 ---------------
- .../selftests/kvm/x86_64/xen_shinfo_test.c        | 15 ---------------
- 4 files changed, 16 insertions(+), 30 deletions(-)
+ tools/testing/selftests/lib.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index d79be15dd3d2..c7409b9b4e5b 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -102,6 +102,7 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
- size_t get_backing_src_pagesz(uint32_t i);
- void backing_src_help(void);
- enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
-+long get_run_delay(void);
- 
- /*
-  * Whether or not the given source type is shared memory (as opposed to
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 938cd423643e..f80dd38a38b2 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -11,6 +11,7 @@
- #include <stdlib.h>
- #include <time.h>
- #include <sys/stat.h>
-+#include <sys/syscall.h>
- #include <linux/mman.h>
- #include "linux/kernel.h"
- 
-@@ -303,3 +304,17 @@ enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name)
- 	TEST_FAIL("Unknown backing src type: %s", type_name);
- 	return -1;
- }
-+
-+long get_run_delay(void)
-+{
-+	char path[64];
-+	long val[2];
-+	FILE *fp;
-+
-+	sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
-+	fp = fopen(path, "r");
-+	fscanf(fp, "%ld %ld ", &val[0], &val[1]);
-+	fclose(fp);
-+
-+	return val[1];
-+}
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index ecec30865a74..51fe95a5c36a 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -10,7 +10,6 @@
- #include <sched.h>
- #include <pthread.h>
- #include <linux/kernel.h>
--#include <sys/syscall.h>
- #include <asm/kvm.h>
- #include <asm/kvm_para.h>
- 
-@@ -217,20 +216,6 @@ static void steal_time_dump(struct kvm_vm *vm, uint32_t vcpuid)
- 
- #endif
- 
--static long get_run_delay(void)
--{
--	char path[64];
--	long val[2];
--	FILE *fp;
--
--	sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
--	fp = fopen(path, "r");
--	fscanf(fp, "%ld %ld ", &val[0], &val[1]);
--	fclose(fp);
--
--	return val[1];
--}
--
- static void *do_steal_time(void *arg)
- {
- 	struct timespec ts, stop;
-diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-index 117bf49a3d79..eda0d2a51224 100644
---- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-@@ -14,7 +14,6 @@
- #include <stdint.h>
- #include <time.h>
- #include <sched.h>
--#include <sys/syscall.h>
- 
- #define VCPU_ID		5
- 
-@@ -98,20 +97,6 @@ static void guest_code(void)
- 	GUEST_DONE();
- }
- 
--static long get_run_delay(void)
--{
--        char path[64];
--        long val[2];
--        FILE *fp;
--
--        sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
--        fp = fopen(path, "r");
--        fscanf(fp, "%ld %ld ", &val[0], &val[1]);
--        fclose(fp);
--
--        return val[1];
--}
--
- static int cmp_timespec(struct timespec *a, struct timespec *b)
- {
- 	if (a->tv_sec > b->tv_sec)
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 0af84ad48aa7..b7217b5251f5 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -48,6 +48,7 @@ ARCH		?= $(SUBARCH)
+ # When local build is done, headers are installed in the default
+ # INSTALL_HDR_PATH usr/include.
+ .PHONY: khdr
++.NOTPARALLEL:
+ khdr:
+ ifndef KSFT_KHDR_INSTALL_DONE
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
 -- 
 2.33.0
 
