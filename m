@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54448C43217
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F473C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:57:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3AEBF613A2
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:57:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AA0161262
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Sep 2021 05:57:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239214AbhI1F6m (ORCPT
+        id S239218AbhI1F6m (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 28 Sep 2021 01:58:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48780 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:48798 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239215AbhI1F6J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Sep 2021 01:58:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DF0E0611CB;
-        Tue, 28 Sep 2021 05:56:17 +0000 (UTC)
+        id S239123AbhI1F6K (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 Sep 2021 01:58:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F684611C7;
+        Tue, 28 Sep 2021 05:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632808578;
-        bh=+x5DM1+xm3njE8PIoyCw1m19Ri0dQg1tG4CzgXS8NxM=;
+        s=k20201202; t=1632808591;
+        bh=Xaf80vQCf6Z2EysDRr0wcPFN4faFcp6DJPtAaB5DD8I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k36MSbF11X0do/ooyn6Bn4MluLDACzWTWcNcbhtz23Zses9dOdozLbXzQ7F1rmQMk
-         dAJXzQ6hpx+V2X8pPKMENjwpd/7wZj77fNjmm5DEVglFOV8oASF5gk02k5AlQtLPwr
-         liSf03M7O1SZxA8/OzfEIUOfCHi1vcN6lnapehPZxrBsVDZq+X8mAfPQImJc0AkkxA
-         z3KRErshnzyBaip7TKqODXEevGGFFI1kXfI8vzfxsF6LMN5Du8lUlGI+cVEve3oeow
-         VFtaSyefxZS8veURWCmnCDjTfFFC8Ce8Pl72aE0PcrU4pz/V8DYlO3ru/9H4T7dnbp
-         6CV6pbVxwktgA==
+        b=kNm/TkAvtC27dfnr69HAD35qBTCRyMkUFa/7w3IwO0o4XL14ukK3b/NSdyLdL7PBA
+         pgtBrl8LPVq7QbOmdGuaBYF71PUwImFzQwcE8pAxYKL7CGyvLWVTYGejKh8IeAOXoy
+         rgygs27hhwJm8GUNPpuztTM84aAUISlJU9SSSoAvA2/1IxoipOXYQr3yB5Qb8bfsyt
+         RGhVcEeRoG0ixDt2yqO33DPYZDXOXScuWnza77A87ADdAjjjNKIqof8FC/UAFh786R
+         jyFCppgatKNOnrhHK4Flac1QTjuzFsyZYO0QgP5luOM1DnF5YUUuaN/W6fhp5PtVFX
+         s241LCpSLElIQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        bgardon@google.com, wangyanan55@huawei.com,
+        bgardon@google.com, drjones@redhat.com, wangyanan55@huawei.com,
         axelrasmussen@google.com, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 25/40] selftests:kvm: fix get_trans_hugepagesz() ignoring fscanf() return warn
-Date:   Tue, 28 Sep 2021 01:55:09 -0400
-Message-Id: <20210928055524.172051-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.14 27/40] selftests: kvm: fix get_run_delay() ignoring fscanf() return warn
+Date:   Tue, 28 Sep 2021 01:55:11 -0400
+Message-Id: <20210928055524.172051-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210928055524.172051-1-sashal@kernel.org>
 References: <20210928055524.172051-1-sashal@kernel.org>
@@ -52,46 +52,68 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 3a4f0cc693cd3d80e66a255f0bff0e2c0461eef1 ]
+[ Upstream commit f5013d412a43662b63f3d5f3a804d63213acd471 ]
 
-Fix get_trans_hugepagesz() to check fscanf() return value to get rid
-of the following warning:
+Fix get_run_delay() to check fscanf() return value to get rid of the
+following warning. When fscanf() fails return MIN_RUN_DELAY_NS from
+get_run_delay(). Move MIN_RUN_DELAY_NS from steal_time.c to test_util.h
+so get_run_delay() and steal_time.c can use it.
 
-lib/test_util.c: In function ‘get_trans_hugepagesz’:
-lib/test_util.c:138:2: warning: ignoring return value of ‘fscanf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
-  138 |  fscanf(f, "%ld", &size);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
+lib/test_util.c: In function ‘get_run_delay’:
+lib/test_util.c:316:2: warning: ignoring return value of ‘fscanf’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  316 |  fscanf(fp, "%ld %ld ", &val[0], &val[1]);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/lib/test_util.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/include/test_util.h | 2 ++
+ tools/testing/selftests/kvm/lib/test_util.c     | 4 +++-
+ tools/testing/selftests/kvm/steal_time.c        | 1 -
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index c7409b9b4e5b..451fed5ce8e7 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -95,6 +95,8 @@ struct vm_mem_backing_src_alias {
+ 	uint32_t flag;
+ };
+ 
++#define MIN_RUN_DELAY_NS	200000UL
++
+ bool thp_configured(void);
+ size_t get_trans_hugepagesz(void);
+ size_t get_def_hugetlb_pagesz(void);
 diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index af1031fed97f..938cd423643e 100644
+index f80dd38a38b2..a9107bfae402 100644
 --- a/tools/testing/selftests/kvm/lib/test_util.c
 +++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -129,13 +129,16 @@ size_t get_trans_hugepagesz(void)
- {
- 	size_t size;
- 	FILE *f;
-+	int ret;
+@@ -313,7 +313,9 @@ long get_run_delay(void)
  
- 	TEST_ASSERT(thp_configured(), "THP is not configured in host kernel");
+ 	sprintf(path, "/proc/%ld/schedstat", syscall(SYS_gettid));
+ 	fp = fopen(path, "r");
+-	fscanf(fp, "%ld %ld ", &val[0], &val[1]);
++	/* Return MIN_RUN_DELAY_NS upon failure just to be safe */
++	if (fscanf(fp, "%ld %ld ", &val[0], &val[1]) < 2)
++		val[1] = MIN_RUN_DELAY_NS;
+ 	fclose(fp);
  
- 	f = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
- 	TEST_ASSERT(f != NULL, "Error in opening transparent_hugepage/hpage_pmd_size");
+ 	return val[1];
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index 51fe95a5c36a..2172d65b85e4 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -19,7 +19,6 @@
  
--	fscanf(f, "%ld", &size);
-+	ret = fscanf(f, "%ld", &size);
-+	ret = fscanf(f, "%ld", &size);
-+	TEST_ASSERT(ret < 1, "Error reading transparent_hugepage/hpage_pmd_size");
- 	fclose(f);
+ #define NR_VCPUS		4
+ #define ST_GPA_BASE		(1 << 30)
+-#define MIN_RUN_DELAY_NS	200000UL
  
- 	return size;
+ static void *st_gva[NR_VCPUS];
+ static uint64_t guest_stolen_time[NR_VCPUS];
 -- 
 2.33.0
 
