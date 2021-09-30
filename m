@@ -2,187 +2,162 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EFD8C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Sep 2021 22:58:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 012C0C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Sep 2021 23:05:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4AF0D61A50
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Sep 2021 22:58:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1A4961A62
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Sep 2021 23:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235396AbhI3XAF (ORCPT
+        id S230184AbhI3XHJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Sep 2021 19:00:05 -0400
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:40888 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348921AbhI3XAC (ORCPT
+        Thu, 30 Sep 2021 19:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230180AbhI3XHJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Sep 2021 19:00:02 -0400
-Received: by mail-lf1-f46.google.com with SMTP id b15so31326655lfe.7;
-        Thu, 30 Sep 2021 15:58:18 -0700 (PDT)
+        Thu, 30 Sep 2021 19:07:09 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E17C06176C
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Sep 2021 16:05:23 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id a131-20020a1c7f89000000b0030d4c90fa87so227894wmd.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Sep 2021 16:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/0ppBwTzFJyZU29k8NnFVLUpHHN0JjRi2ilKWlfGyr0=;
+        b=m2W5aSaVDKwfE3FNc+9wDnzbsnXUemJv1W/XOL/bODteZ54AjfeknMIk0XJmaHIXGk
+         IiFldHCpDiSZXB27lktyzl2WdQPvYj3GRqi8aPca+9ZHwQcJmIG5J8FJN0hoAhaVb1k+
+         naiQmaAMU4RBS1xtI88TWO0YEWcBcRQd9Uginpojd5BDJeMmA9NjJbdeQxKK2sCfQSUn
+         5MChR5QLV+mKB60e4Q1RLjzDCuDr7HZm1GjYr8l2nOhDnuTm40eF28v517eCMIhPqBYk
+         ZV6hrXHgC/yExiT/3vMJd8W88pibHT05YG3ZLzzvsXjQF9wswSfYciSVljvHFrnhA0ZX
+         0qEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XyaNvh9Xs6AkDGl/pcn1sfY9JyqCtB/i0b3ibbUEjPU=;
-        b=dWqMuUqkRrK6htRz3LMLeJzisXgwrZsCZuI7aS//dKPSNb9eFu4DVsqJr43k/XO3vG
-         6lhHTMzGMaz/7lrReHe4o3eT1nk1WaadvzcRhwCM1FArnv0/IvfOd+u8vzm8sPXpDxCW
-         2Wn66oXGiaFbZZiiElTmbzlg7T3VyTmKu2KAAESoWiBjo4tNIBhCHh3J59LNuTuZNYel
-         IBMvm9nvEEXTjI/TmPNdWyUyJR2VJFKySIhcwhfE7BzLcxe91OetrEoLJNN8ye6BgzhE
-         x5A3CF4ODdgkZw+jRea4dXLhMgujUyvf3ceB9cyNZCNHODvvkHCieD0HdBtZwFd5CLD1
-         gFxQ==
-X-Gm-Message-State: AOAM531czLgECHirXnN+SGI5xr+zcWz3XCbL7m4uZeWEiZoP4sGJF03+
-        E5Iqg1aizKAQG9JLMUFzj6PJr8+BtXnHFjkqGnU=
-X-Google-Smtp-Source: ABdhPJy5CVwrSpfRhPw00RtBuvbmvtiTNsnmpjnMCPQ6mTw1yTZs90kdBTwdZwETe3ArmExmBZzDAcGFyzLu0CyxgVI=
-X-Received: by 2002:a2e:1609:: with SMTP id w9mr5346671ljd.90.1633042697541;
- Thu, 30 Sep 2021 15:58:17 -0700 (PDT)
+        bh=/0ppBwTzFJyZU29k8NnFVLUpHHN0JjRi2ilKWlfGyr0=;
+        b=4AyMuAvtMOvEBbOSiiAOR0zGefTtIQicbC6PebBaWfS8ZTsYhojOY+BLHZAOTmljVw
+         di5HCliGf/zLdanX7iyOLA7HGMw/S/m6Zle8Tywd/w6cyudDHNWU2qTeEVjlqi0jlGfr
+         Uxe/ZWjIxQbb9dMbf/LgbcuBE8mVxXMKhi6AXZFMBd25+CDUa7mdQjtasjjpgNJT/wrD
+         uD+6D8tRx5IazwncmRrIXUu6cJFUVSrMRO/FjPu91K6prtNC7qDxKw2ZcGAzxCJCLvct
+         f3eqaraFUGKkiS3T5r98nvcZOK7prPu8oiw7HrUnpmSOyb7TFLP5ewKnudbawJ/DIYGm
+         QRfA==
+X-Gm-Message-State: AOAM5319Yzmwwu7IAawqzgzYqicQkBDGqBE75KWxd7XhKmHXyNCAH2lt
+        32vBpUL/aQzN8qAO1fYtW8QLbde4+wCzWXAWFbHSrA==
+X-Google-Smtp-Source: ABdhPJyQKGxZL9U7h8OsHsmjGbjG2xDqezB1BjC2QfAaVsqTUNY3IYI2VzP39BmKu96VSzdwhdlAS9X09q/4zRwh8Fw=
+X-Received: by 2002:a7b:c453:: with SMTP id l19mr1390669wmi.7.1633043121905;
+ Thu, 30 Sep 2021 16:05:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210915195306.612966-1-kaleshsingh@google.com> <CAC_TJvdv7sT-FmD1S-ZHnpAGvFR=1WBc6jEKBm+q5Wpp6S34PQ@mail.gmail.com>
-In-Reply-To: <CAC_TJvdv7sT-FmD1S-ZHnpAGvFR=1WBc6jEKBm+q5Wpp6S34PQ@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 30 Sep 2021 15:58:06 -0700
-Message-ID: <CAM9d7ciQC1sV8hOOsgHVLxk7sze_Qp_dBqBkK_FrtVhZ0=AzZQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] tracing: Extend histogram triggers expression parsing
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+References: <20210930222048.1692635-1-dlatypov@google.com> <20210930222048.1692635-5-dlatypov@google.com>
+In-Reply-To: <20210930222048.1692635-5-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 1 Oct 2021 07:05:10 +0800
+Message-ID: <CABVgOS=SVHSrnTaa0hYsyn8KV_A7FCTaAmDx5ST6Jb2k4TXWSg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] kunit: tool: support running each suite/test separately
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Kalesh,
-
-On Wed, Sep 15, 2021 at 1:09 PM Kalesh Singh <kaleshsingh@google.com> wrote:
+On Fri, Oct 1, 2021 at 6:21 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Wed, Sep 15, 2021 at 12:53 PM Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > The frequency of the rss_stat trace event is known to be of the same
-> > magnitude as that of the sched_switch event on Android devices. This can
-> > cause flooding of the trace buffer with rss_stat traces leading to a
-> > decreased trace buffer capacity and loss of data.
-> >
-> > If it is not necessary to monitor very small changes in rss (as is the
-> > case in Android) then the rss_stat tracepoint can be throttled to only
-> > emit the event once there is a large enough change in the rss size.
-> > The original patch that introduced the rss_stat tracepoint also proposed
-> > a fixed throttling mechanism that only emits the rss_stat event
-> > when the rss size crosses a 512KB boundary. It was concluded that more
-> > generic support for this type of filtering/throttling was need, so that
-> > it can be applied to any trace event. [1]
-> >
-> > From the discussion in [1], histogram triggers seemed the most likely
-> > candidate to support this type of throttling. For instance to achieve the
-> > same throttling as was proposed in [1]:
-> >
-> >   (1) Create a histogram variable to save the 512KB bucket of the rss size
-> >   (2) Use the onchange handler to generate a synthetic event when the
-> >       rss size bucket changes.
-> >
-> > The only missing pieces to support such a hist trigger are:
-> >   (1) Support for setting a hist variable to a specific value -- to set
-> >       the bucket size / granularity.
-> >   (2) Support for division arithmetic operation -- to determine the
-> >       corresponding bucket for an rss size.
-> >
-> > This series extends histogram trigger expressions to:
-> >   (1) Allow assigning numeric literals to hist variable (eg. x=1234)
-> >       and using literals directly in expressions (eg. x=size/1234)
-> >   (2) Support division and multiplication in hist expressions.
-> >       (eg. a=$x/$y*z); and
-> >   (3) Fixes expression parsing for non-associative operators: subtraction
-> >       and division. (eg. 8-4-2 should be 2 not 6)
-> >
-> > The rss_stat event can then be throttled using histogram triggers as
-> > below:
-> >
-> >   # Create a synthetic event to monitor instead of the high frequency
-> >   # rss_stat event
-> >   echo 'rss_stat_throttled unsigned int mm_id; unsigned int curr;
-> >          int member; long size' >> tracing/synthetic_events
-> >
-> >   # Create a hist trigger that emits the synthetic rss_stat_throttled
-> >   # event only when the rss size crosses a 512KB boundary.
-> >   echo 'hist:keys=common_pid:bucket=size/0x80000:onchange($bucket)
-> >               .rss_stat_throttled(mm_id,curr,member,size)'
-> >         >> events/kmem/rss_stat/trigger
-> >
+> The new --run_isolated flag makes the tool boot the kernel once per
+> suite or test, preventing leftover state from one suite to impact the
+> other. This can be useful as a starting point to debugging test
+> hermeticity issues.
 >
-> Sorry, I have a clerical mistake here. The above key should be:
-> s/keys=common_pid/keys=keys=mm_id,member
+> Note: it takes a lot longer, so people should not use it normally.
 >
-> The rss size is specific to the mm struct's member not the pid.
-> The results below were captured with the correct key so no changes there.
+> Consider the following very simplified example:
 >
-> >  ------ Test Results ------
-> > Histograms can also be used to evaluate the effectiveness of this
-> > throttling by noting the Total Hits on each trigger:
-> >
-> >   echo 'hist:keys=common_pid' >> events/sched/sched_switch/trigger
-> >   echo 'hist:keys=common_pid' >> events/kmem/rss_stat/trigger
-> >   echo 'hist:keys=common_pid'
-> >            >> events/synthetic/rss_stat_throttled/trigger
-> >
-> > Allowing the above example (512KB granularity) run for 5 minutes on
-> > an arm64 device with 5.10 kernel:
-> >
-> >    sched_switch      : total hits = 147153
-> >    rss_stat          : total hits =  38863
-> >    rss_stat_throttled: total hits =   2409
-> >
-> > The synthetic rss_stat_throttled event is ~16x less frequent than the
-> > rss_stat event when using a 512KB granularity.
-> >
-> >
-> > The results are more pronounced when rss size is changing at a higher
-> > rate in small increments. For instance the following results were obtained
-> > by recording the hits on the above events for a run of Android's
-> > lmkd_unit_test [2], which continually forks processes that map anonymous
-> > memory until there is an oom kill:
-> >
-> >    sched_switch      : total hits =  148832
-> >    rss_stat          : total hits = 4754802
-> >    rss_stat_throttled: total hits =   96214
-> >
-> > In this stress this, the  synthetic rss_stat_throttled event is ~50x less
-> > frequent than the rss_stat event when using a 512KB granularity.
-> >
-> >
-> > [1] https://lore.kernel.org/lkml/20190903200905.198642-1-joel@joelfernandes.org/
-> > [2] https://cs.android.com/android/platform/superproject/+/master:system/memory/lmkd/tests/lmkd_test.cpp
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+>   bool disable_something_for_test = false;
+>   void function_being_tested() {
+>     ...
+>     if (disable_something_for_test) return;
+>     ...
+>   }
+>
+>   static void test_before(struct kunit *test)
+>   {
+>     disable_something_for_test = true;
+>     function_being_tested();
+>     /* oops, we forgot to reset it back to false */
+>   }
+>
+>   static void test_after(struct kunit *test)
+>   {
+>     /* oops, now "fixing" test_before can cause test_after to fail! */
+>     function_being_tested();
+>   }
+>
+> Presented like this, the issues are obvious, but it gets a lot more
+> complicated to track down as the amount of test setup and helper
+> functions increases.
+>
+> Another use case is memory corruption. It might not be surfaced as a
+> failure/crash in the test case or suite that caused it. I've noticed in
+> kunit's own unit tests, the 3rd suite after might be the one to finally
+> crash after an out-of-bounds write, for example.
+>
+> Example usage:
+>
+> Per suite:
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=suite
+> ...
+> Starting KUnit Kernel (1/7)...
+> ============================================================
+> ======== [PASSED] kunit_executor_test ========
+> ....
+> Testing complete. 5 tests run. 0 failed. 0 crashed. 0 skipped.
+> Starting KUnit Kernel (2/7)...
+> ============================================================
+> ======== [PASSED] kunit-try-catch-test ========
+> ...
+>
+> Per test:
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=test
+> Starting KUnit Kernel (1/23)...
+> ============================================================
+> ======== [PASSED] kunit_executor_test ========
+> [PASSED] parse_filter_test
+> ============================================================
+> Testing complete. 1 tests run. 0 failed. 0 crashed. 0 skipped.
+> Starting KUnit Kernel (2/23)...
+> ============================================================
+> ======== [PASSED] kunit_executor_test ========
+> [PASSED] filter_subsuite_test
+> ...
+>
+> It works with filters as well:
+> $ ./tools/testing/kunit/kunit.py run --kunitconfig=lib/kunit --run_isolated=suite example
+> ...
+> Starting KUnit Kernel (1/1)...
+> ============================================================
+> ======== [PASSED] example ========
+> ...
+>
+> It also handles test filters, '*.*skip*' runs these 3 tests:
+>   kunit_status.kunit_status_mark_skipped_test
+>   example.example_skip_test
+>   example.example_mark_skipped_test
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> ---
 
-Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+Thanks -- this version works for me.
 
-Thanks,
-Namhyung
+I think the requirement that test and suite names contain neither full
+stops nor spaces is a reasonable one. There aren't any current tests
+which would break it, as far as I know.
 
-
-> >
-> > Kalesh Singh (5):
-> >   tracing: Add support for creating hist trigger variables from literal
-> >   tracing: Add division and multiplication support for hist triggers
-> >   tracing: Fix operator precedence for hist triggers expression
-> >   tracing/selftests: Add tests for hist trigger expression parsing
-> >   tracing/histogram: Document expression arithmetic and constants
-> >
-> >  Documentation/trace/histogram.rst             |  14 +
-> >  kernel/trace/trace_events_hist.c              | 318 +++++++++++++++---
-> >  .../testing/selftests/ftrace/test.d/functions |   4 +-
-> >  .../trigger/trigger-hist-expressions.tc       |  73 ++++
-> >  4 files changed, 357 insertions(+), 52 deletions(-)
-> >  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
-> >
-> >
-> > base-commit: 3ca706c189db861b2ca2019a0901b94050ca49d8
-> > --
-> > 2.33.0.309.g3052b89438-goog
-> >
+Cheers,
+-- David
