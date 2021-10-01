@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16FE7C433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E816C43217
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F24CC61A63
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 135E661A80
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352413AbhJAIVF (ORCPT
+        id S1352442AbhJAIVG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 1 Oct 2021 04:21:05 -0400
-Received: from pi.codeconstruct.com.au ([203.29.241.158]:33716 "EHLO
+        Fri, 1 Oct 2021 04:21:06 -0400
+Received: from pi.codeconstruct.com.au ([203.29.241.158]:33750 "EHLO
         codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352324AbhJAIVF (ORCPT
+        with ESMTP id S1352296AbhJAIVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 1 Oct 2021 04:21:05 -0400
 Received: by codeconstruct.com.au (Postfix, from userid 10000)
-        id CF82420272; Fri,  1 Oct 2021 16:19:14 +0800 (AWST)
+        id D17E121467; Fri,  1 Oct 2021 16:19:15 +0800 (AWST)
 From:   Jeremy Kerr <jk@codeconstruct.com.au>
 To:     netdev@vger.kernel.org
 Cc:     Matt Johnston <matt@codeconstruct.com.au>,
@@ -25,9 +25,9 @@ Cc:     Matt Johnston <matt@codeconstruct.com.au>,
         Jakub Kicinski <kuba@kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 1/5] mctp: Add initial test structure and fragmentation test
-Date:   Fri,  1 Oct 2021 16:18:40 +0800
-Message-Id: <20211001081844.3408786-2-jk@codeconstruct.com.au>
+Subject: [PATCH net-next 4/5] mctp: Add route input to socket tests
+Date:   Fri,  1 Oct 2021 16:18:43 +0800
+Message-Id: <20211001081844.3408786-5-jk@codeconstruct.com.au>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211001081844.3408786-1-jk@codeconstruct.com.au>
 References: <20211001081844.3408786-1-jk@codeconstruct.com.au>
@@ -37,264 +37,166 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This change adds the first kunit test for the mctp subsystem, and an
-initial test for the fragmentation path.
-
-We're adding tests under a new net/mctp/test/ directory.
+Add a few tests for single-packet route inputs, testing the
+mctp_route_input function.
 
 Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 ---
- net/mctp/Kconfig           |   5 +
- net/mctp/route.c           |   5 +
- net/mctp/test/route-test.c | 206 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 216 insertions(+)
- create mode 100644 net/mctp/test/route-test.c
+ net/mctp/test/route-test.c | 131 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 131 insertions(+)
 
-diff --git a/net/mctp/Kconfig b/net/mctp/Kconfig
-index 2cdf3d0a28c9..15267a5043d9 100644
---- a/net/mctp/Kconfig
-+++ b/net/mctp/Kconfig
-@@ -11,3 +11,8 @@ menuconfig MCTP
- 	  This option enables core MCTP support. For communicating with other
- 	  devices, you'll want to enable a driver for a specific hardware
- 	  channel.
-+
-+config MCTP_TEST
-+        tristate "MCTP core tests" if !KUNIT_ALL_TESTS
-+        depends on MCTP && KUNIT
-+        default KUNIT_ALL_TESTS
-diff --git a/net/mctp/route.c b/net/mctp/route.c
-index 9bea232cf250..b7e4e6281806 100644
---- a/net/mctp/route.c
-+++ b/net/mctp/route.c
-@@ -11,6 +11,7 @@
-  */
- 
- #include <linux/idr.h>
-+#include <linux/kconfig.h>
- #include <linux/mctp.h>
- #include <linux/netdevice.h>
- #include <linux/rtnetlink.h>
-@@ -1275,3 +1276,7 @@ void __exit mctp_routes_exit(void)
- 	rtnl_unregister(PF_MCTP, RTM_GETROUTE);
- 	dev_remove_pack(&mctp_packet_type);
- }
-+
-+#if IS_ENABLED(CONFIG_MCTP_TEST)
-+#include "test/route-test.c"
-+#endif
 diff --git a/net/mctp/test/route-test.c b/net/mctp/test/route-test.c
-new file mode 100644
-index 000000000000..cf3b51183613
---- /dev/null
+index ee0422bf24ce..efb621317ec5 100644
+--- a/net/mctp/test/route-test.c
 +++ b/net/mctp/test/route-test.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <kunit/test.h>
-+
-+struct mctp_test_route {
-+	struct mctp_route	rt;
-+	struct sk_buff_head	pkts;
-+};
-+
-+static int mctp_test_route_output(struct mctp_route *rt, struct sk_buff *skb)
-+{
-+	struct mctp_test_route *test_rt = container_of(rt, struct mctp_test_route, rt);
-+
-+	skb_queue_tail(&test_rt->pkts, skb);
-+
-+	return 0;
-+}
-+
-+/* local version of mctp_route_alloc() */
-+static struct mctp_test_route *mctp_route_test_alloc(void)
-+{
-+	struct mctp_test_route *rt;
-+
-+	rt = kzalloc(sizeof(*rt), GFP_KERNEL);
-+	if (!rt)
-+		return NULL;
-+
-+	INIT_LIST_HEAD(&rt->rt.list);
-+	refcount_set(&rt->rt.refs, 1);
-+	rt->rt.output = mctp_test_route_output;
-+
-+	skb_queue_head_init(&rt->pkts);
-+
-+	return rt;
-+}
-+
-+static struct mctp_test_route *mctp_test_create_route(struct net *net,
-+						      mctp_eid_t eid,
-+						      unsigned int mtu)
-+{
-+	struct mctp_test_route *rt;
-+
-+	rt = mctp_route_test_alloc();
-+	if (!rt)
-+		return NULL;
-+
-+	rt->rt.min = eid;
-+	rt->rt.max = eid;
-+	rt->rt.mtu = mtu;
-+	rt->rt.type = RTN_UNSPEC;
-+	rt->rt.dev = NULL; /* somewhat illegal, but fine for current tests */
-+
-+	list_add_rcu(&rt->rt.list, &net->mctp.routes);
-+
-+	return rt;
-+}
-+
-+static void mctp_test_route_destroy(struct mctp_test_route *rt)
-+{
-+	rtnl_lock();
-+	list_del_rcu(&rt->rt.list);
-+	rtnl_unlock();
-+
-+	skb_queue_purge(&rt->pkts);
-+
-+	kfree_rcu(&rt->rt, rcu);
-+}
-+
-+static struct sk_buff *mctp_test_create_skb(struct mctp_hdr *hdr,
-+					    unsigned int data_len)
+@@ -94,6 +94,26 @@ static struct sk_buff *mctp_test_create_skb(const struct mctp_hdr *hdr,
+ 	return skb;
+ }
+ 
++static struct sk_buff *__mctp_test_create_skb_data(const struct mctp_hdr *hdr,
++						   const void *data,
++						   size_t data_len)
 +{
 +	size_t hdr_len = sizeof(*hdr);
 +	struct sk_buff *skb;
-+	unsigned int i;
-+	u8 *buf;
 +
 +	skb = alloc_skb(hdr_len + data_len, GFP_KERNEL);
 +	if (!skb)
 +		return NULL;
 +
 +	memcpy(skb_put(skb, hdr_len), hdr, hdr_len);
-+
-+	buf = skb_put(skb, data_len);
-+	for (i = 0; i < data_len; i++)
-+		buf[i] = i & 0xff;
++	memcpy(skb_put(skb, data_len), data, data_len);
 +
 +	return skb;
 +}
 +
-+struct mctp_frag_test {
-+	unsigned int mtu;
-+	unsigned int msgsize;
-+	unsigned int n_frags;
++#define mctp_test_create_skb_data(h, d) \
++	__mctp_test_create_skb_data(h, d, sizeof(*d))
++
+ struct mctp_frag_test {
+ 	unsigned int mtu;
+ 	unsigned int msgsize;
+@@ -253,9 +273,120 @@ static void mctp_rx_input_test_to_desc(const struct mctp_rx_input_test *t,
+ KUNIT_ARRAY_PARAM(mctp_rx_input, mctp_rx_input_tests,
+ 		  mctp_rx_input_test_to_desc);
+ 
++/* set up a local dev, route on EID 8, and a socket listening on type 0 */
++static void __mctp_route_test_init(struct kunit *test,
++				   struct mctp_test_dev **devp,
++				   struct mctp_test_route **rtp,
++				   struct socket **sockp)
++{
++	struct sockaddr_mctp addr;
++	struct mctp_test_route *rt;
++	struct mctp_test_dev *dev;
++	struct socket *sock;
++	int rc;
++
++	dev = mctp_test_create_dev();
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
++
++	rt = mctp_test_create_route(&init_net, dev->mdev, 8, 68);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rt);
++
++	rc = sock_create_kern(&init_net, AF_MCTP, SOCK_DGRAM, 0, &sock);
++	KUNIT_ASSERT_EQ(test, rc, 0);
++
++	addr.smctp_family = AF_MCTP;
++	addr.smctp_network = MCTP_NET_ANY;
++	addr.smctp_addr.s_addr = 8;
++	addr.smctp_type = 0;
++	rc = kernel_bind(sock, (struct sockaddr *)&addr, sizeof(addr));
++	KUNIT_ASSERT_EQ(test, rc, 0);
++
++	*rtp = rt;
++	*devp = dev;
++	*sockp = sock;
++}
++
++static void __mctp_route_test_fini(struct mctp_test_dev *dev,
++				   struct mctp_test_route *rt,
++				   struct socket *sock)
++{
++	sock_release(sock);
++	mctp_test_route_destroy(rt);
++	mctp_test_destroy_dev(dev);
++}
++
++struct mctp_route_input_sk_test {
++	struct mctp_hdr hdr;
++	u8 type;
++	bool deliver;
 +};
 +
-+static void mctp_test_fragment(struct kunit *test)
++static void mctp_test_route_input_sk(struct kunit *test)
 +{
-+	const struct mctp_frag_test *params;
-+	int rc, i, n, mtu, msgsize;
++	const struct mctp_route_input_sk_test *params;
++	struct sk_buff *skb, *skb2;
 +	struct mctp_test_route *rt;
-+	struct sk_buff *skb;
-+	struct mctp_hdr hdr;
-+	u8 seq;
++	struct mctp_test_dev *dev;
++	struct socket *sock;
++	int rc;
 +
 +	params = test->param_value;
-+	mtu = params->mtu;
-+	msgsize = params->msgsize;
 +
-+	hdr.ver = 1;
-+	hdr.src = 8;
-+	hdr.dest = 10;
-+	hdr.flags_seq_tag = MCTP_HDR_FLAG_TO;
++	__mctp_route_test_init(test, &dev, &rt, &sock);
 +
-+	skb = mctp_test_create_skb(&hdr, msgsize);
-+	KUNIT_ASSERT_TRUE(test, skb);
++	skb = mctp_test_create_skb_data(&params->hdr, &params->type);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, skb);
 +
-+	rt = mctp_test_create_route(&init_net, 10, mtu);
-+	KUNIT_ASSERT_TRUE(test, rt);
++	skb->dev = dev->ndev;
++	__mctp_cb(skb);
 +
-+	rc = mctp_do_fragment_route(&rt->rt, skb, mtu, MCTP_TAG_OWNER);
-+	KUNIT_EXPECT_FALSE(test, rc);
++	rc = mctp_route_input(&rt->rt, skb);
 +
-+	n = rt->pkts.qlen;
++	if (params->deliver) {
++		KUNIT_EXPECT_EQ(test, rc, 0);
 +
-+	KUNIT_EXPECT_EQ(test, n, params->n_frags);
++		skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
++		KUNIT_EXPECT_NOT_ERR_OR_NULL(test, skb2);
++		KUNIT_EXPECT_EQ(test, skb->len, 1);
 +
-+	for (i = 0;; i++) {
-+		struct mctp_hdr *hdr2;
-+		struct sk_buff *skb2;
-+		u8 tag_mask, seq2;
-+		bool first, last;
++		skb_free_datagram(sock->sk, skb2);
 +
-+		first = i == 0;
-+		last = i == (n - 1);
-+
-+		skb2 = skb_dequeue(&rt->pkts);
-+
-+		if (!skb2)
-+			break;
-+
-+		hdr2 = mctp_hdr(skb2);
-+
-+		tag_mask = MCTP_HDR_TAG_MASK | MCTP_HDR_FLAG_TO;
-+
-+		KUNIT_EXPECT_EQ(test, hdr2->ver, hdr.ver);
-+		KUNIT_EXPECT_EQ(test, hdr2->src, hdr.src);
-+		KUNIT_EXPECT_EQ(test, hdr2->dest, hdr.dest);
-+		KUNIT_EXPECT_EQ(test, hdr2->flags_seq_tag & tag_mask,
-+				hdr.flags_seq_tag & tag_mask);
-+
-+		KUNIT_EXPECT_EQ(test,
-+				!!(hdr2->flags_seq_tag & MCTP_HDR_FLAG_SOM), first);
-+		KUNIT_EXPECT_EQ(test,
-+				!!(hdr2->flags_seq_tag & MCTP_HDR_FLAG_EOM), last);
-+
-+		seq2 = (hdr2->flags_seq_tag >> MCTP_HDR_SEQ_SHIFT) &
-+			MCTP_HDR_SEQ_MASK;
-+
-+		if (first) {
-+			seq = seq2;
-+		} else {
-+			seq++;
-+			KUNIT_EXPECT_EQ(test, seq2, seq & MCTP_HDR_SEQ_MASK);
-+		}
-+
-+		if (!last)
-+			KUNIT_EXPECT_EQ(test, skb2->len, mtu);
-+		else
-+			KUNIT_EXPECT_LE(test, skb2->len, mtu);
-+
-+		kfree_skb(skb2);
++	} else {
++		KUNIT_EXPECT_NE(test, rc, 0);
++		skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
++		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
 +	}
 +
-+	mctp_test_route_destroy(rt);
++	__mctp_route_test_fini(dev, rt, sock);
 +}
 +
-+static const struct mctp_frag_test mctp_frag_tests[] = {
-+	{.mtu = 68, .msgsize = 63, .n_frags = 1},
-+	{.mtu = 68, .msgsize = 64, .n_frags = 1},
-+	{.mtu = 68, .msgsize = 65, .n_frags = 2},
-+	{.mtu = 68, .msgsize = 66, .n_frags = 2},
-+	{.mtu = 68, .msgsize = 127, .n_frags = 2},
-+	{.mtu = 68, .msgsize = 128, .n_frags = 2},
-+	{.mtu = 68, .msgsize = 129, .n_frags = 3},
-+	{.mtu = 68, .msgsize = 130, .n_frags = 3},
++#define FL_S	(MCTP_HDR_FLAG_SOM)
++#define FL_E	(MCTP_HDR_FLAG_EOM)
++#define FL_T	(MCTP_HDR_FLAG_TO)
++
++static const struct mctp_route_input_sk_test mctp_route_input_sk_tests[] = {
++	{ .hdr = RX_HDR(1, 10, 8, FL_S | FL_E | FL_T), .type = 0, .deliver = true },
++	{ .hdr = RX_HDR(1, 10, 8, FL_S | FL_E | FL_T), .type = 1, .deliver = false },
++	{ .hdr = RX_HDR(1, 10, 8, FL_S | FL_E), .type = 0, .deliver = false },
++	{ .hdr = RX_HDR(1, 10, 8, FL_E | FL_T), .type = 0, .deliver = false },
++	{ .hdr = RX_HDR(1, 10, 8, FL_T), .type = 0, .deliver = false },
++	{ .hdr = RX_HDR(1, 10, 8, 0), .type = 0, .deliver = false },
 +};
 +
-+static void mctp_frag_test_to_desc(const struct mctp_frag_test *t, char *desc)
++static void mctp_route_input_sk_to_desc(const struct mctp_route_input_sk_test *t,
++					char *desc)
 +{
-+	sprintf(desc, "mtu %d len %d -> %d frags",
-+		t->msgsize, t->mtu, t->n_frags);
++	sprintf(desc, "{%x,%x,%x,%x} type %d", t->hdr.ver, t->hdr.src,
++		t->hdr.dest, t->hdr.flags_seq_tag, t->type);
 +}
 +
-+KUNIT_ARRAY_PARAM(mctp_frag, mctp_frag_tests, mctp_frag_test_to_desc);
++KUNIT_ARRAY_PARAM(mctp_route_input_sk, mctp_route_input_sk_tests,
++		  mctp_route_input_sk_to_desc);
 +
-+static struct kunit_case mctp_test_cases[] = {
-+	KUNIT_CASE_PARAM(mctp_test_fragment, mctp_frag_gen_params),
-+	{}
-+};
-+
-+static struct kunit_suite mctp_test_suite = {
-+	.name = "mctp",
-+	.test_cases = mctp_test_cases,
-+};
-+
-+kunit_test_suite(mctp_test_suite);
+ static struct kunit_case mctp_test_cases[] = {
+ 	KUNIT_CASE_PARAM(mctp_test_fragment, mctp_frag_gen_params),
+ 	KUNIT_CASE_PARAM(mctp_test_rx_input, mctp_rx_input_gen_params),
++	KUNIT_CASE_PARAM(mctp_test_route_input_sk, mctp_route_input_sk_gen_params),
+ 	{}
+ };
+ 
 -- 
 2.33.0
 
