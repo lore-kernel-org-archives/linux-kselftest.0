@@ -2,112 +2,169 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A646C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B58C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D65C61A89
-	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71D0361A82
+	for <linux-kselftest@archiver.kernel.org>; Fri,  1 Oct 2021 08:19:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352142AbhJAIUv (ORCPT
+        id S1352399AbhJAIVF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 1 Oct 2021 04:20:51 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:48808 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbhJAIUt (ORCPT
+        Fri, 1 Oct 2021 04:21:05 -0400
+Received: from pi.codeconstruct.com.au ([203.29.241.158]:33730 "EHLO
+        codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231222AbhJAIVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Oct 2021 04:20:49 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 6A8331C0B80; Fri,  1 Oct 2021 10:19:04 +0200 (CEST)
-Date:   Fri, 1 Oct 2021 10:19:03 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Sohil Mehta <sohil.mehta@intel.com>
-Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
-Message-ID: <20211001081903.GA18962@amd>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
+        Fri, 1 Oct 2021 04:21:05 -0400
+Received: by codeconstruct.com.au (Postfix, from userid 10000)
+        id 76F4721465; Fri,  1 Oct 2021 16:19:15 +0800 (AWST)
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     netdev@vger.kernel.org
+Cc:     Matt Johnston <matt@codeconstruct.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 3/5] mctp: Add packet rx tests
+Date:   Fri,  1 Oct 2021 16:18:42 +0800
+Message-Id: <20211001081844.3408786-4-jk@codeconstruct.com.au>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211001081844.3408786-1-jk@codeconstruct.com.au>
+References: <20211001081844.3408786-1-jk@codeconstruct.com.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="WIyZ46R2i8wDzkSu"
-Content-Disposition: inline
-In-Reply-To: <20210913200132.3396598-1-sohil.mehta@intel.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add a few tests for the initial packet ingress through
+mctp_pkttype_receive function; mainly packet header sanity checks. Full
+input routing checks will be added as a separate change.
 
---WIyZ46R2i8wDzkSu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+---
+ net/mctp/test/route-test.c | 67 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 64 insertions(+), 3 deletions(-)
 
-Hi!
+diff --git a/net/mctp/test/route-test.c b/net/mctp/test/route-test.c
+index cf3b51183613..ee0422bf24ce 100644
+--- a/net/mctp/test/route-test.c
++++ b/net/mctp/test/route-test.c
+@@ -2,6 +2,8 @@
+ 
+ #include <kunit/test.h>
+ 
++#include "utils.h"
++
+ struct mctp_test_route {
+ 	struct mctp_route	rt;
+ 	struct sk_buff_head	pkts;
+@@ -35,6 +37,7 @@ static struct mctp_test_route *mctp_route_test_alloc(void)
+ }
+ 
+ static struct mctp_test_route *mctp_test_create_route(struct net *net,
++						      struct mctp_dev *dev,
+ 						      mctp_eid_t eid,
+ 						      unsigned int mtu)
+ {
+@@ -48,7 +51,9 @@ static struct mctp_test_route *mctp_test_create_route(struct net *net,
+ 	rt->rt.max = eid;
+ 	rt->rt.mtu = mtu;
+ 	rt->rt.type = RTN_UNSPEC;
+-	rt->rt.dev = NULL; /* somewhat illegal, but fine for current tests */
++	if (dev)
++		mctp_dev_hold(dev);
++	rt->rt.dev = dev;
+ 
+ 	list_add_rcu(&rt->rt.list, &net->mctp.routes);
+ 
+@@ -62,11 +67,13 @@ static void mctp_test_route_destroy(struct mctp_test_route *rt)
+ 	rtnl_unlock();
+ 
+ 	skb_queue_purge(&rt->pkts);
++	if (rt->rt.dev)
++		mctp_dev_put(rt->rt.dev);
+ 
+ 	kfree_rcu(&rt->rt, rcu);
+ }
+ 
+-static struct sk_buff *mctp_test_create_skb(struct mctp_hdr *hdr,
++static struct sk_buff *mctp_test_create_skb(const struct mctp_hdr *hdr,
+ 					    unsigned int data_len)
+ {
+ 	size_t hdr_len = sizeof(*hdr);
+@@ -114,7 +121,7 @@ static void mctp_test_fragment(struct kunit *test)
+ 	skb = mctp_test_create_skb(&hdr, msgsize);
+ 	KUNIT_ASSERT_TRUE(test, skb);
+ 
+-	rt = mctp_test_create_route(&init_net, 10, mtu);
++	rt = mctp_test_create_route(&init_net, NULL, 10, mtu);
+ 	KUNIT_ASSERT_TRUE(test, rt);
+ 
+ 	rc = mctp_do_fragment_route(&rt->rt, skb, mtu, MCTP_TAG_OWNER);
+@@ -193,8 +200,62 @@ static void mctp_frag_test_to_desc(const struct mctp_frag_test *t, char *desc)
+ 
+ KUNIT_ARRAY_PARAM(mctp_frag, mctp_frag_tests, mctp_frag_test_to_desc);
+ 
++struct mctp_rx_input_test {
++	struct mctp_hdr hdr;
++	bool input;
++};
++
++static void mctp_test_rx_input(struct kunit *test)
++{
++	const struct mctp_rx_input_test *params;
++	struct mctp_test_route *rt;
++	struct mctp_test_dev *dev;
++	struct sk_buff *skb;
++
++	params = test->param_value;
++
++	dev = mctp_test_create_dev();
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
++
++	rt = mctp_test_create_route(&init_net, dev->mdev, 8, 68);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rt);
++
++	skb = mctp_test_create_skb(&params->hdr, 1);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, skb);
++
++	__mctp_cb(skb);
++
++	mctp_pkttype_receive(skb, dev->ndev, &mctp_packet_type, NULL);
++
++	KUNIT_EXPECT_EQ(test, !!rt->pkts.qlen, params->input);
++
++	mctp_test_route_destroy(rt);
++	mctp_test_destroy_dev(dev);
++}
++
++#define RX_HDR(_ver, _src, _dest, _fst) \
++	{ .ver = _ver, .src = _src, .dest = _dest, .flags_seq_tag = _fst }
++
++/* we have a route for EID 8 only */
++static const struct mctp_rx_input_test mctp_rx_input_tests[] = {
++	{ .hdr = RX_HDR(1, 10, 8, 0), .input = true },
++	{ .hdr = RX_HDR(1, 10, 9, 0), .input = false }, /* no input route */
++	{ .hdr = RX_HDR(2, 10, 8, 0), .input = false }, /* invalid version */
++};
++
++static void mctp_rx_input_test_to_desc(const struct mctp_rx_input_test *t,
++				       char *desc)
++{
++	sprintf(desc, "{%x,%x,%x,%x}", t->hdr.ver, t->hdr.src, t->hdr.dest,
++		t->hdr.flags_seq_tag);
++}
++
++KUNIT_ARRAY_PARAM(mctp_rx_input, mctp_rx_input_tests,
++		  mctp_rx_input_test_to_desc);
++
+ static struct kunit_case mctp_test_cases[] = {
+ 	KUNIT_CASE_PARAM(mctp_test_fragment, mctp_frag_gen_params),
++	KUNIT_CASE_PARAM(mctp_test_rx_input, mctp_rx_input_gen_params),
+ 	{}
+ };
+ 
+-- 
+2.33.0
 
-> Instructions
-> ------------
-> senduipi <index> - send a user IPI to a target task based on the UITT ind=
-ex.
->=20
-> clui - Mask user interrupts by clearing UIF (User Interrupt Flag).
->=20
-> stui - Unmask user interrupts by setting UIF.
->=20
-> testui - Test current value of UIF.
->=20
-> uiret - return from a user interrupt handler.
-
-Are other CPU vendors allowed to implement compatible instructions?
-
-If not, we should probably have VDSO entries so kernel can abstract
-differences between CPUs.
-
-> Untrusted processes
-> -------------------
-> The current implementation expects only trusted and cooperating processes=
- to
-> communicate using user interrupts. Coordination is expected between proce=
-sses
-> for a connection teardown. In situations where coordination doesn't happen
-> (say, due to abrupt process exit), the kernel would end up keeping shared
-> resources (like UPID) allocated to avoid faults.
-
-Keeping resources allocated after process exit is a no-no.
-
-Best regards,
-								Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---WIyZ46R2i8wDzkSu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmFWxHcACgkQMOfwapXb+vJxvwCfT//NrkD3M2U42/1DYnf87idv
-hk0AoJONzceoKozw6x+bt0MVUuWLOpzR
-=eUmo
------END PGP SIGNATURE-----
-
---WIyZ46R2i8wDzkSu--
