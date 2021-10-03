@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75D1DC433EF
-	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Oct 2021 03:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB465C43219
+	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Oct 2021 03:17:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D36C61164
-	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Oct 2021 03:17:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3D5C61AA9
+	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Oct 2021 03:17:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbhJCDTJ (ORCPT
+        id S229654AbhJCDTM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 2 Oct 2021 23:19:09 -0400
-Received: from pi.codeconstruct.com.au ([203.29.241.158]:34344 "EHLO
+        Sat, 2 Oct 2021 23:19:12 -0400
+Received: from pi.codeconstruct.com.au ([203.29.241.158]:34378 "EHLO
         codeconstruct.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhJCDTG (ORCPT
+        with ESMTP id S229612AbhJCDTI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Oct 2021 23:19:06 -0400
+        Sat, 2 Oct 2021 23:19:08 -0400
 Received: by codeconstruct.com.au (Postfix, from userid 10000)
-        id E416B21491; Sun,  3 Oct 2021 11:17:18 +0800 (AWST)
+        id EB253214E5; Sun,  3 Oct 2021 11:17:19 +0800 (AWST)
 From:   Jeremy Kerr <jk@codeconstruct.com.au>
 To:     netdev@vger.kernel.org
 Cc:     Matt Johnston <matt@codeconstruct.com.au>,
@@ -25,9 +25,9 @@ Cc:     Matt Johnston <matt@codeconstruct.com.au>,
         Jakub Kicinski <kuba@kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2 2/5] mctp: Add test utils
-Date:   Sun,  3 Oct 2021 11:17:05 +0800
-Message-Id: <20211003031708.132096-3-jk@codeconstruct.com.au>
+Subject: [PATCH net-next v2 5/5] mctp: Add input reassembly tests
+Date:   Sun,  3 Oct 2021 11:17:08 +0800
+Message-Id: <20211003031708.132096-6-jk@codeconstruct.com.au>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211003031708.132096-1-jk@codeconstruct.com.au>
 References: <20211003031708.132096-1-jk@codeconstruct.com.au>
@@ -37,130 +37,167 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new object for shared test utilities
+Add multi-packet route input tests, for message reassembly. These will
+feed packets to be received by a bound socket, or dropped.
 
 Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 
 ---
-v2: defer mdev initialisation until after netdev register
+v2:
+ - strict route ref checking
 ---
- net/mctp/Makefile     |  3 ++
- net/mctp/test/utils.c | 67 +++++++++++++++++++++++++++++++++++++++++++
- net/mctp/test/utils.h | 20 +++++++++++++
- 3 files changed, 90 insertions(+)
- create mode 100644 net/mctp/test/utils.c
- create mode 100644 net/mctp/test/utils.h
+ net/mctp/test/route-test.c | 134 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
 
-diff --git a/net/mctp/Makefile b/net/mctp/Makefile
-index 0171333384d7..6cd55233e685 100644
---- a/net/mctp/Makefile
-+++ b/net/mctp/Makefile
-@@ -1,3 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_MCTP) += mctp.o
- mctp-objs := af_mctp.o device.o route.o neigh.o
-+
-+# tests
-+obj-$(CONFIG_MCTP_TEST) += test/utils.o
-diff --git a/net/mctp/test/utils.c b/net/mctp/test/utils.c
-new file mode 100644
-index 000000000000..cc6b8803aa9d
---- /dev/null
-+++ b/net/mctp/test/utils.c
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/netdevice.h>
-+#include <linux/mctp.h>
-+#include <linux/if_arp.h>
-+
-+#include <net/mctpdevice.h>
-+#include <net/pkt_sched.h>
-+
-+#include "utils.h"
-+
-+static netdev_tx_t mctp_test_dev_tx(struct sk_buff *skb,
-+				    struct net_device *ndev)
-+{
-+	kfree(skb);
-+	return NETDEV_TX_OK;
-+}
-+
-+static const struct net_device_ops mctp_test_netdev_ops = {
-+	.ndo_start_xmit = mctp_test_dev_tx,
+diff --git a/net/mctp/test/route-test.c b/net/mctp/test/route-test.c
+index a8254daeeb96..36fac3daf86a 100644
+--- a/net/mctp/test/route-test.c
++++ b/net/mctp/test/route-test.c
+@@ -395,10 +395,144 @@ static void mctp_route_input_sk_to_desc(const struct mctp_route_input_sk_test *t
+ KUNIT_ARRAY_PARAM(mctp_route_input_sk, mctp_route_input_sk_tests,
+ 		  mctp_route_input_sk_to_desc);
+ 
++struct mctp_route_input_sk_reasm_test {
++	const char *name;
++	struct mctp_hdr hdrs[4];
++	int n_hdrs;
++	int rx_len;
 +};
 +
-+static void mctp_test_dev_setup(struct net_device *ndev)
++static void mctp_test_route_input_sk_reasm(struct kunit *test)
 +{
-+	ndev->type = ARPHRD_MCTP;
-+	ndev->mtu = MCTP_DEV_TEST_MTU;
-+	ndev->hard_header_len = 0;
-+	ndev->addr_len = 0;
-+	ndev->tx_queue_len = DEFAULT_TX_QUEUE_LEN;
-+	ndev->flags = IFF_NOARP;
-+	ndev->netdev_ops = &mctp_test_netdev_ops;
-+	ndev->needs_free_netdev = true;
-+}
-+
-+struct mctp_test_dev *mctp_test_create_dev(void)
-+{
++	const struct mctp_route_input_sk_reasm_test *params;
++	struct sk_buff *skb, *skb2;
++	struct mctp_test_route *rt;
 +	struct mctp_test_dev *dev;
-+	struct net_device *ndev;
-+	int rc;
++	struct socket *sock;
++	int i, rc;
++	u8 c;
 +
-+	ndev = alloc_netdev(sizeof(*dev), "mctptest%d", NET_NAME_ENUM,
-+			    mctp_test_dev_setup);
-+	if (!ndev)
-+		return NULL;
++	params = test->param_value;
 +
-+	dev = netdev_priv(ndev);
-+	dev->ndev = ndev;
++	__mctp_route_test_init(test, &dev, &rt, &sock);
 +
-+	rc = register_netdev(ndev);
-+	if (rc) {
-+		free_netdev(ndev);
-+		return NULL;
++	for (i = 0; i < params->n_hdrs; i++) {
++		c = i;
++		skb = mctp_test_create_skb_data(&params->hdrs[i], &c);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, skb);
++
++		skb->dev = dev->ndev;
++		__mctp_cb(skb);
++
++		rc = mctp_route_input(&rt->rt, skb);
 +	}
 +
-+	rcu_read_lock();
-+	dev->mdev = __mctp_dev_get(ndev);
-+	mctp_dev_hold(dev->mdev);
-+	rcu_read_unlock();
++	skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
 +
-+	return dev;
++	if (params->rx_len) {
++		KUNIT_EXPECT_NOT_ERR_OR_NULL(test, skb2);
++		KUNIT_EXPECT_EQ(test, skb2->len, params->rx_len);
++		skb_free_datagram(sock->sk, skb2);
++
++	} else {
++		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
++	}
++
++	__mctp_route_test_fini(test, dev, rt, sock);
 +}
 +
-+void mctp_test_destroy_dev(struct mctp_test_dev *dev)
-+{
-+	mctp_dev_put(dev->mdev);
-+	unregister_netdev(dev->ndev);
-+}
-diff --git a/net/mctp/test/utils.h b/net/mctp/test/utils.h
-new file mode 100644
-index 000000000000..df6aa1c03440
---- /dev/null
-+++ b/net/mctp/test/utils.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++#define RX_FRAG(f, s) RX_HDR(1, 10, 8, FL_T | (f) | ((s) << MCTP_HDR_SEQ_SHIFT))
 +
-+#ifndef __NET_MCTP_TEST_UTILS_H
-+#define __NET_MCTP_TEST_UTILS_H
-+
-+#include <kunit/test.h>
-+
-+#define MCTP_DEV_TEST_MTU	68
-+
-+struct mctp_test_dev {
-+	struct net_device *ndev;
-+	struct mctp_dev *mdev;
++static const struct mctp_route_input_sk_reasm_test mctp_route_input_sk_reasm_tests[] = {
++	{
++		.name = "single packet",
++		.hdrs = {
++			RX_FRAG(FL_S | FL_E, 0),
++		},
++		.n_hdrs = 1,
++		.rx_len = 1,
++	},
++	{
++		.name = "single packet, offset seq",
++		.hdrs = {
++			RX_FRAG(FL_S | FL_E, 1),
++		},
++		.n_hdrs = 1,
++		.rx_len = 1,
++	},
++	{
++		.name = "start & end packets",
++		.hdrs = {
++			RX_FRAG(FL_S, 0),
++			RX_FRAG(FL_E, 1),
++		},
++		.n_hdrs = 2,
++		.rx_len = 2,
++	},
++	{
++		.name = "start & end packets, offset seq",
++		.hdrs = {
++			RX_FRAG(FL_S, 1),
++			RX_FRAG(FL_E, 2),
++		},
++		.n_hdrs = 2,
++		.rx_len = 2,
++	},
++	{
++		.name = "start & end packets, out of order",
++		.hdrs = {
++			RX_FRAG(FL_E, 1),
++			RX_FRAG(FL_S, 0),
++		},
++		.n_hdrs = 2,
++		.rx_len = 0,
++	},
++	{
++		.name = "start, middle & end packets",
++		.hdrs = {
++			RX_FRAG(FL_S, 0),
++			RX_FRAG(0,    1),
++			RX_FRAG(FL_E, 2),
++		},
++		.n_hdrs = 3,
++		.rx_len = 3,
++	},
++	{
++		.name = "missing seq",
++		.hdrs = {
++			RX_FRAG(FL_S, 0),
++			RX_FRAG(FL_E, 2),
++		},
++		.n_hdrs = 2,
++		.rx_len = 0,
++	},
++	{
++		.name = "seq wrap",
++		.hdrs = {
++			RX_FRAG(FL_S, 3),
++			RX_FRAG(FL_E, 0),
++		},
++		.n_hdrs = 2,
++		.rx_len = 2,
++	},
 +};
 +
-+struct mctp_test_dev;
++static void mctp_route_input_sk_reasm_to_desc(
++				const struct mctp_route_input_sk_reasm_test *t,
++				char *desc)
++{
++	sprintf(desc, "%s", t->name);
++}
 +
-+struct mctp_test_dev *mctp_test_create_dev(void);
-+void mctp_test_destroy_dev(struct mctp_test_dev *dev);
++KUNIT_ARRAY_PARAM(mctp_route_input_sk_reasm, mctp_route_input_sk_reasm_tests,
++		  mctp_route_input_sk_reasm_to_desc);
 +
-+#endif /* __NET_MCTP_TEST_UTILS_H */
+ static struct kunit_case mctp_test_cases[] = {
+ 	KUNIT_CASE_PARAM(mctp_test_fragment, mctp_frag_gen_params),
+ 	KUNIT_CASE_PARAM(mctp_test_rx_input, mctp_rx_input_gen_params),
+ 	KUNIT_CASE_PARAM(mctp_test_route_input_sk, mctp_route_input_sk_gen_params),
++	KUNIT_CASE_PARAM(mctp_test_route_input_sk_reasm,
++			 mctp_route_input_sk_reasm_gen_params),
+ 	{}
+ };
+ 
 -- 
 2.33.0
 
