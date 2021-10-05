@@ -2,161 +2,168 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD88C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Oct 2021 22:27:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03DC0C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Oct 2021 23:45:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13E646113E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Oct 2021 22:27:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C827961251
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Oct 2021 23:45:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbhJEW3n (ORCPT
+        id S231582AbhJEXrj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Oct 2021 18:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbhJEW3m (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Oct 2021 18:29:42 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63D1C061749
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Oct 2021 15:27:51 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id x11-20020a17090a970b00b0019fba1d883dso542948pjo.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Oct 2021 15:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=o49cNReT7tbfFW4OkGuUsna7W/I8mcpECmrtMrISc18=;
-        b=Vxl/bf+LUXZC1//yKKpG9OYg0qf5nGN2uy9H995MvZr27pbAnrcs/IusJVn7bevmGl
-         lRhar8aAR3BQ6JjR7xfadGcRbfCkr+s8OrApuB88P3N9mdEcO0s/ug3JRjSk7aWZtcXC
-         TZdE5pNclMlQ6174hiy4cOsoTu5ZT4WHuWYlfip4GnjZb3BvBZg8t6hKTXlK4GSeSxKv
-         nH4lVAfvgW/RX+738gkk2W91EO57rXPlblGvLYB6P5P7yMiUKUv8w/4ObO9CnU88pQO2
-         ADuwkTMXbZy4v2QXP8cFkMg4SvfozGVDys7krlO+dTCAUN1nKu7v2+4c57r6LlslZSJ6
-         PsXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=o49cNReT7tbfFW4OkGuUsna7W/I8mcpECmrtMrISc18=;
-        b=I094rayLZngchH8fdSUwDyjOMs+RVAZrIIM1VDYlzqexFqdNNyloANj/HSAuhQNZbn
-         Mx8kW+a9W5i+phYln1Y85PbAZkl3ldNA+0BY9ZzNvEx25rlqN/xy70ihdBKDoyfJ9nP7
-         hxkYe3JA42TpvoC7nHyOpIZXf9CvwVx0ODPmn1euu6y5eiVl/RKXdMGlbpbxTxsnnqaE
-         XKIy+arSu+DDK2IU7sesRf0zrc1PoNv904OjwaSoZev5WJQTRb9yXxQKraaJIcTTn1Cb
-         pgcHWHCxgKGpBkmVxyYxXXe9JLDLPEf8RUxnxFuWZkb17Dewh1gDiUam8vKVBrIJFxEs
-         RxLg==
-X-Gm-Message-State: AOAM532N5dznx03L1qw1FRQo61O78quugn0AT6/olFd0aDWB3CXZA0cw
-        g5ZdhGgRvwVdWm8ZWQnyb+zuX4QZNQ==
-X-Google-Smtp-Source: ABdhPJzbzhJQMhlmNALwq8tGwon8ljqHAnXSC6vZyy7SapyV65Y9SnCSQz+1SuSxo4rCKpETTMZCCfi60g==
-X-Received: from adelg-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:d1f])
- (user=adelg job=sendgmr) by 2002:a62:5fc6:0:b0:44c:591a:5bf6 with SMTP id
- t189-20020a625fc6000000b0044c591a5bf6mr15037342pfb.36.1633472871291; Tue, 05
- Oct 2021 15:27:51 -0700 (PDT)
-Date:   Tue,  5 Oct 2021 22:27:39 +0000
-Message-Id: <20211005222739.2491124-1-adelg@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.800.g4c38ced690-goog
-Subject: [PATCH v2] selftests: Include directories of header files
-From:   Andrew Delgadilo <adelg@google.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, gthelen@google.com,
-        Andrew Delgadillo <adelg@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 5 Oct 2021 19:47:39 -0400
+Received: from mail-bn8nam11hn2240.outbound.protection.outlook.com ([52.100.171.240]:62688
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231373AbhJEXri (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 Oct 2021 19:47:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h2djrroHjmDfeAYuizppqHyqO2nB+uVBNelmNBsrno1fA0WO8a9l2qswOGvWJ5VOKD1gtpi9wPE6ObT80YjOABwKj5+GioASMp7qN84sEHkYfFtLcj1Utlw+b745yqmYOkvYBkRX53+KFrYIK/omQ+1zoL55TvYWxkjk0Taou/HaZE6ilpCSsgaYyL+3PSPgNaCrjFArZ7S7Dh2SZ59Sy9L3MTbGIpiIWxOtPi5n2//Etl0XN0wElvqXZhqZhhGBW3PKqsLLWhX6PgUSauVsVaayDX0ELxgLEDA1dxtLch0dMks3dIlRdOEZf6zVqPDTGg1dwjzhzsUZ9IJ//VBHZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C61ZZ4VSDTm7gNgNtaN72QQgAXlZ5VHkw4OEdGMeqv8=;
+ b=A5atAxXAs1S6VvkXEcuOQ46/8CNr1u8HeRQG1GPB65Oq6uclfFjafrBeg4TC8RVn9WoMFr3tk7Q5LOZ8UBjeLlM2BPbk5LTr5d5DkLKyrgZJKJFzghzCtiBnYHt7fAtRPgskn0je4vuRWVhrk/p/R6xywlZYUUS0rP55nesxEykwIoxUCdY0h6r7/BWdYFbLATjBWC8Dy3/SrIwfTqVu8b2SfIAi6NHHm0HZIIfSawhQ5/PBcLoNW5X1rbx+4BZC174OviEIPI8JVQiaeTmXxQTUDYFBy+4NkDiMLxKU8N/PoUm4YbSPUT0q2lLVcKY8c1W32fMb3HVX3CebPShDEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C61ZZ4VSDTm7gNgNtaN72QQgAXlZ5VHkw4OEdGMeqv8=;
+ b=Tl2c0peJGsNiy270hRTaURSn+1dcSN9QiPhqxCP1UHcW/5Irxs6UJ+Ian0FjsQj3pxTfG9xSaUbOjwPSAx6JhNCvX+1E09TykC2uOzMVW4cZDWYkiJ99Ax7hxFwRonFjVbOuf3kO1oSjyBrV4M1BvE2RyGMbCisHYtvPRwI/WGk=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from CH2PR12MB4133.namprd12.prod.outlook.com (2603:10b6:610:7a::13)
+ by CH2PR12MB3925.namprd12.prod.outlook.com (2603:10b6:610:21::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.22; Tue, 5 Oct
+ 2021 23:45:44 +0000
+Received: from CH2PR12MB4133.namprd12.prod.outlook.com
+ ([fe80::59b0:c983:56:ec27]) by CH2PR12MB4133.namprd12.prod.outlook.com
+ ([fe80::59b0:c983:56:ec27%5]) with mapi id 15.20.4587.018; Tue, 5 Oct 2021
+ 23:45:44 +0000
+From:   Michael Roth <michael.roth@amd.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Subject: [RFC 09/16] KVM: selftests: account for error code in #VC exception frame
+Date:   Tue,  5 Oct 2021 18:44:52 -0500
+Message-Id: <20211005234459.430873-10-michael.roth@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211005234459.430873-1-michael.roth@amd.com>
+References: <20211005234459.430873-1-michael.roth@amd.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SN7PR04CA0151.namprd04.prod.outlook.com
+ (2603:10b6:806:125::6) To CH2PR12MB4133.namprd12.prod.outlook.com
+ (2603:10b6:610:7a::13)
+MIME-Version: 1.0
+Received: from localhost (165.204.77.1) by SN7PR04CA0151.namprd04.prod.outlook.com (2603:10b6:806:125::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.14 via Frontend Transport; Tue, 5 Oct 2021 23:45:43 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 59b60367-c8c6-4636-19ed-08d9885a3efe
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3925:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3925968D1C1B22F66668C5B095AF9@CH2PR12MB3925.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?sO1XJlv2ZUJMsmv5w+AYNzB+8zLgjZkH/LFQnjXxhi4+ELt60mmy9dckzITL?=
+ =?us-ascii?Q?IFSfqDVx0WJrVhgc8cBkBjVfgIHIAae5lrxnw6F65EN0TewsP2c2S8JTLz29?=
+ =?us-ascii?Q?8MGONNSNu8IwrzB5jLWlfYRZFvXXfaohF0BAdknqvw0ODsLk0V9AycJ3yYbA?=
+ =?us-ascii?Q?7047taQ6uiMV9Xc8iCjQvyjoHq5b6KIY+ZMZRjByT6fvTL+vsduvcPIKRToI?=
+ =?us-ascii?Q?7xc84YHwzsmDXzIsOQHisTDCHIpx8yTvWEFsIL2cb6f0zxnsMpcVjowmsBhf?=
+ =?us-ascii?Q?bvd3c6BYd9NDFnE2wUFsgHm/xlYSTshrDks9xXSywkTm4zadAdzDYZEIxCf2?=
+ =?us-ascii?Q?MaekIx5IpMutUJiZ7lTaEFn8tZ3MX2+HS21NFUEM2YPuV/KJ8ZyxJA21qOpB?=
+ =?us-ascii?Q?zbcW75enba7NbPMGljH6fodiCgTay9qwyuJlDntug2CFCcIdCwwNGvGKBOhC?=
+ =?us-ascii?Q?ybT7bSMSUfDk1uLMaSQPapWM3ra2YZ9+1MvDVbfW+HiikxnGtqNAt1o5pPDL?=
+ =?us-ascii?Q?OrnfFqcVGy1awPX0pyqpuR61dXEY71PNvynA2eRMQlbc+BP1YlmWivD5uMPu?=
+ =?us-ascii?Q?CSSR7nXYsxZG869/yKVFfaDY9XF0bUMrl8bPn7Lm04B1Bz2Cb4gWkaGEh6mO?=
+ =?us-ascii?Q?sPkXjypSP85gynsR9Ubx7XcDB0SMg0e8AWf/FeT4mWst5ySdJrnsHO+LWwrz?=
+ =?us-ascii?Q?o7z5pGjYwHF7HSMx8+I6psMcA8XZNkXT73I4sr57dtFSSP1hTB+D1f/NTzcu?=
+ =?us-ascii?Q?afwlj7EFaET4Lh2krcNtUEVQST/RrfIisT+ovsXLK2VXuBSJvn6Qnlu+4l/Z?=
+ =?us-ascii?Q?y8XEG2CCNnqlu8+FwR7VNdY18OTNsDmp2pHcMr5Mnr1wZSlsqFvjhH5LEZYE?=
+ =?us-ascii?Q?CvWJqfhrhbpATcyjmgAe7c3XigYzZSQMzpmJnBjEgtf/StsHoLwTypOCYamD?=
+ =?us-ascii?Q?92t/XZ65chHSTeRQzB8EUWP1j51wPJGIorgo/wSvv5l8YE3ahZemsAWfhxZb?=
+ =?us-ascii?Q?ZorT4cuy26n7kzqFSNLepz6pEPq8ErnaCjT1BeO7fdSalNg=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:CH2PR12MB4133.namprd12.prod.outlook.com;PTR:;CAT:OSPM;SFS:(4636009)(366004)(8936002)(5660300002)(6486002)(6666004)(6916009)(316002)(4744005)(8676002)(44832011)(26005)(54906003)(66946007)(38350700002)(66556008)(66476007)(83380400001)(38100700002)(52116002)(956004)(508600001)(36756003)(7416002)(86362001)(2616005)(15650500001)(4326008)(1076003)(6496006)(186003)(2906002)(23200700001);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?frxBVqEK30Y06cCXLNNWqFkoEwUrOYavQQy+H+bsn3ifFuDU32XDL9VwvEGn?=
+ =?us-ascii?Q?dB1h+2ZtjqQ/fG4dv4ZEEZo4Xrc32qOGl6XLdg65nmtxxe92iZWBxnxku+/q?=
+ =?us-ascii?Q?h8cdeeCyO8l0adeqqA4yxvdQ8wRxLrzMF7DjgnRtewCZApdtS1SLpg82uIww?=
+ =?us-ascii?Q?kKVJlP25kTi1Kl/CQrokexgeh7Jp4lJedhRx4Wf4fOi0uM1zY9vBAj6XARqm?=
+ =?us-ascii?Q?PIHV3s8O4x9H+ZQ/6TjsdKyfk3yZNsg2S+Xr4qweA/MQ62/BUuURYwzlsBTq?=
+ =?us-ascii?Q?WEMVqMhKyZa+MuErocuC0ptabI/pvoKWPZ3+W7vwPf94arolR7dwzKx5XAnc?=
+ =?us-ascii?Q?41Lxl/ApN1mAMgLVDQFbodM1Mv9TNj6pOXwMYg8+eV3kEWdspAi+oTgDCmUH?=
+ =?us-ascii?Q?D8L6bjPLfO3YpBlYycY+AHmi+quUuUI+X9oueFTYNA+qky7Ccvgq7NGjrq4m?=
+ =?us-ascii?Q?ud4gRkwoshJYUu/IVWCrL6oWVf9AwKrVbVL6OxLPVpoie/Gfnb4P0DGAtiJG?=
+ =?us-ascii?Q?7mfctucQ/saIu5D39BPIke26RSc5lSrHUGJ/mXGZOEhOTAO9BY1SqHtCbWtV?=
+ =?us-ascii?Q?RcAJop3pVb45waW/sb+TxMKvyeeDoAvmB2eYO5wAHe4HsEFJ19wfCtrRBgob?=
+ =?us-ascii?Q?e7jOkjgSI0YPFKg0x16XMGhqVNZsmcq7hKA0C82u0fZ15bxXyLO7U9HwNwmb?=
+ =?us-ascii?Q?+x1K//8sSpfx0TBsFFuPoyycQ+UTyuiD2N8/2QawUMEvr9r4PNIMcfc5jF3f?=
+ =?us-ascii?Q?oq5Rl8bgUes9P9lGYHCdmLsUEuGZjoVzHtKHRo2Tel3/JxN15mj+4bvqjZii?=
+ =?us-ascii?Q?kgOl/0SNYvy/2NyIJKtJDRINzV/Nz3Wv55CHxJLdpDeqyZueOb708Fx1mEll?=
+ =?us-ascii?Q?7yStmeDkGeSrW7AcRp3JFgmF5BvT7/9X1mgmjQqSXczMJyeEIzA1ZOCXXppy?=
+ =?us-ascii?Q?+/L0iEf5Q6KsKz2tPtdogqz9cBVwRvz2JzsxAyF104LAEJf6TnjsUMbq0oF3?=
+ =?us-ascii?Q?uEBotipvY8uYk4Kpjyx3YeqnABVmHpB/iopl++K5NoWLbafS3GASlfGC4+ww?=
+ =?us-ascii?Q?VFEW0ygNgCt4wOwfTkjmjSnLuiM8cvUKgRH9b98S7mHlMnruQze4JguVieLm?=
+ =?us-ascii?Q?ZVxmrVFNyoJ9g/msakAe906xrHPuMB5HE1eQu9zTSaHrYEPWUsxyTRnkE3Hc?=
+ =?us-ascii?Q?iJi58Y+cIjLYBxo9+1ZS3/scx2jupKIEGdC8DLs8vtnrJyMXZbiUnLMTuUvz?=
+ =?us-ascii?Q?zURyshxVJu+frY3EgG2avf0UZ6iSzKGh+77Z4Q3aAVmIA2xQf5XBtHwi19I1?=
+ =?us-ascii?Q?J/xdMFFJnbRAYsFSnkux6c5Z?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59b60367-c8c6-4636-19ed-08d9885a3efe
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4133.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2021 23:45:44.0107
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MQgY8zaWn4qpn3AT90WxB2l58I7bq9eLMo/lL0pPQAXRSSQ+V9ldXePdvgPNSgEbLtRmhzUXLHYUcP1/fVMfPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3925
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrew Delgadillo <adelg@google.com>
+Exception 29 (#VC) pushes an error_code parameter on the stack. Update
+the exception list to reflect this.
 
-clang complains about using -o when one specifies header files on the
-commandline. An example can be seen when building the futex selftests:
-
-$ make -C tools/testing/selftests TARGETS=futex
-clang -Wall   -g -O2 -Wall -D_GNU_SOURCE -pthread -I../include \
--I../../ -I../../../../../usr/include/ -I/kselftest/usr/include \
-futex_wait_timeout.c ../include/futextest.h ../include/atomic.h \
-../include/logging.h -lpthread -lrt -o \
-tools/testing/selftests/futex/functional/futex_wait_timeout
-clang: error: cannot specify -o when generating multiple output files
-
-To fix this, instead of specifying the headers explicitliy, we include
-(with -I) their directories. Note that -I does not work with files, only
-directories [1,2]
-
-There are still errors when building with clang, but this patch does a
-way with one class of those errors.
-
-Tested: No new errors when building with LLVM=0/1. In fact, clang no
-longer errors out with "cannot specify -o ..." anymore.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/Directory-Options.html#Directory-Options
-[2] https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-i-dir
-
-Suggested-by: gthelen@google.com
-Signed-off-by: Andrew Delgadillo <adelg@google.com>
+Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
-Changes since v1:
-- Instead of removing the headers from the cmdline altogether, include
-  their directories.
-- Add more detail to the tested tag.
-- Add missing Suggested-By tag from original patch.
+ tools/testing/selftests/kvm/lib/x86_64/handlers.S | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- tools/testing/selftests/filesystems/binderfs/Makefile | 4 ++--
- tools/testing/selftests/lib.mk                        | 5 ++++-
- tools/testing/selftests/x86/Makefile                  | 4 ++--
- 3 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/filesystems/binderfs/Makefile b/tools/testing/selftests/filesystems/binderfs/Makefile
-index 8af25ae96049..e2f09acb15b4 100644
---- a/tools/testing/selftests/filesystems/binderfs/Makefile
-+++ b/tools/testing/selftests/filesystems/binderfs/Makefile
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/handlers.S b/tools/testing/selftests/kvm/lib/x86_64/handlers.S
+index 7629819734af..19715a58f5d2 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/handlers.S
++++ b/tools/testing/selftests/kvm/lib/x86_64/handlers.S
+@@ -76,6 +76,8 @@ idt_handler_code:
+ 	HANDLERS has_error=1 from=10 to=14
+ 	HANDLERS has_error=0 from=15 to=16
+ 	HANDLERS has_error=1 from=17 to=17
+-	HANDLERS has_error=0 from=18 to=255
++	HANDLERS has_error=0 from=18 to=28
++	HANDLERS has_error=1 from=29 to=29
++	HANDLERS has_error=0 from=30 to=255
  
--CFLAGS += -I../../../../../usr/include/ -pthread
-+CFLAGS += -I../../../../../usr/include/ -I$(selfdir) -pthread
- TEST_GEN_PROGS := binderfs_test
- 
--binderfs_test: binderfs_test.c ../../kselftest.h ../../kselftest_harness.h
-+binderfs_test: binderfs_test.c
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index fa2ac0e56b43..0edf2a421771 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -137,12 +137,15 @@ COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
- LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
- endif
- 
-+
- # Selftest makefiles can override those targets by setting
- # OVERRIDE_TARGETS = 1.
- ifeq ($(OVERRIDE_TARGETS),)
- LOCAL_HDRS := $(selfdir)/kselftest_harness.h $(selfdir)/kselftest.h
- $(OUTPUT)/%:%.c $(LOCAL_HDRS)
--	$(LINK.c) $(filter-out $(LOCAL_HDRS),$^) $(LDLIBS) -o $@
-+	$(LINK.c) $(filter-out %.h,$^) \
-+		$(addprefix -I,$(dir $(filter %.h,$^))) \
-+			$(LDLIBS) -o $@
- 
- $(OUTPUT)/%.o:%.S
- 	$(COMPILE.S) $^ -o $@
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index b4142cd1c5c2..f794d431f289 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -72,10 +72,10 @@ all_64: $(BINARIES_64)
- EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
- 
- $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
--	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
-+	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h,$^) $(addprefix -I,$(dir $(filter %.h,$^))) -lrt -ldl -lm
- 
- $(BINARIES_64): $(OUTPUT)/%_64: %.c helpers.h
--	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
-+	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(filter-out %.h,$^) $(addprefix -I,$(dir $(filter %.h,$^))) -lrt -ldl
- 
- # x86_64 users should be encouraged to install 32-bit libraries
- ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
+ .section        .note.GNU-stack, "", %progbits
 -- 
-2.33.0.800.g4c38ced690-goog
+2.25.1
 
