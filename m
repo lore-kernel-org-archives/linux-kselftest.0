@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1767C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E78CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:05:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 880D661056
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:05:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 166DA60EE5
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:05:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242299AbhJGPHQ (ORCPT
+        id S242310AbhJGPHW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Oct 2021 11:07:16 -0400
-Received: from mga11.intel.com ([192.55.52.93]:55497 "EHLO mga11.intel.com"
+        Thu, 7 Oct 2021 11:07:22 -0400
+Received: from mga11.intel.com ([192.55.52.93]:55509 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242290AbhJGPHQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 11:07:16 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="223671745"
+        id S242309AbhJGPHW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 11:07:22 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="223671781"
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="223671745"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:03:41 -0700
+   d="scan'208";a="223671781"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:03:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="522625855"
+   d="scan'208";a="715183567"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 07 Oct 2021 08:03:36 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 07 Oct 2021 08:03:41 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 26EA23DB; Thu,  7 Oct 2021 18:03:43 +0300 (EEST)
+        id 4C989561; Thu,  7 Oct 2021 18:03:43 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Brendan Higgins <brendanhiggins@google.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -44,9 +44,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Subject: [PATCH v3 4/7] list.h: Replace kernel.h with the necessary inclusions
-Date:   Thu,  7 Oct 2021 18:03:36 +0300
-Message-Id: <20211007150339.28910-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 7/7] media: entity: Replace kernel.h with the necessary inclusions
+Date:   Thu,  7 Oct 2021 18:03:39 +0300
+Message-Id: <20211007150339.28910-8-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211007150339.28910-1-andriy.shevchenko@linux.intel.com>
 References: <20211007150339.28910-1-andriy.shevchenko@linux.intel.com>
@@ -63,29 +63,26 @@ Replace kernel.h inclusion with the list of what is really being used.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/list.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/media/media-entity.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/list.h b/include/linux/list.h
-index f2af4b4aa4e9..5dc679b373da 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -2,11 +2,13 @@
- #ifndef _LINUX_LIST_H
- #define _LINUX_LIST_H
+diff --git a/include/media/media-entity.h b/include/media/media-entity.h
+index 09737b47881f..fea489f03d57 100644
+--- a/include/media/media-entity.h
++++ b/include/media/media-entity.h
+@@ -13,10 +13,11 @@
  
+ #include <linux/bitmap.h>
+ #include <linux/bug.h>
 +#include <linux/container_of.h>
-+#include <linux/const.h>
- #include <linux/types.h>
- #include <linux/stddef.h>
- #include <linux/poison.h>
--#include <linux/const.h>
+ #include <linux/fwnode.h>
 -#include <linux/kernel.h>
-+
-+#include <asm/barrier.h>
+ #include <linux/list.h>
+ #include <linux/media.h>
++#include <linux/types.h>
  
- /*
-  * Circular doubly linked list implementation.
+ /* Enums used internally at the media controller to represent graphs */
+ 
 -- 
 2.33.0
 
