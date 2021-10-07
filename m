@@ -2,87 +2,89 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A263EC433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D1D4C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:54:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88B3A61245
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:44:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D59B61139
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Oct 2021 15:54:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242492AbhJGPqM (ORCPT
+        id S240912AbhJGP4h (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Oct 2021 11:46:12 -0400
-Received: from mga06.intel.com ([134.134.136.31]:45046 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242407AbhJGPqL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Oct 2021 11:46:11 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="287168772"
-X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="287168772"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 08:44:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="568676724"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Oct 2021 08:44:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7595A554; Thu,  7 Oct 2021 18:44:10 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thu, 7 Oct 2021 11:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232589AbhJGP4h (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Oct 2021 11:56:37 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733AFC061570;
+        Thu,  7 Oct 2021 08:54:43 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w11so3636339ilv.6;
+        Thu, 07 Oct 2021 08:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gEeeOHW2XScEPt9l9T7cyjA12nlEqvYFpEPTjeOlhtk=;
+        b=GozB4eJgGzxuSljp5CgF97+YvAQZiobXsfKatDDQ3SRdjV2w8zl+tdKbRMUkZ11WcY
+         BmsMIF92hW1T1Jdh5lxRyNQ66QsBegrZZ+oA2TEwHuVAddzl1effAhfw7pZD6aiBsE7x
+         +vZf8T3375mHEuNkUinYCN5zcXtkNNTr81FAmSWvrZ0eGcy7NuSWVsgZVXjoOM6/OHMo
+         ZkHWT4MKtp4InKxaDfwpGg8drLeh4nWQ05eDCw/Xb3d33+ARxwS4ZjH9btiE6vbM1u4R
+         KIFemT4+ChWkJl+rH2yst3brWqM8DyXlwFZhQBiXMaSZnRU7AAACPOd02GJNDpnuaEUC
+         8w+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gEeeOHW2XScEPt9l9T7cyjA12nlEqvYFpEPTjeOlhtk=;
+        b=6Wg4W+kldb2yjvWcKvV5yX/J9ooxvqQxb+UKCd+xy8oQMOqK+R6PczdYou+BF3YNuB
+         7r9hV3MxycFYBL2xHQ/tz2cbRZdjBrokvAIm7TuXD3H71Rppid/asIFdGAjCRVyRA4KR
+         Iu8lItPY5qMJ/rZcf8EP2r+4YMZEKFnijVi0wdz6Hh9q9M+C3Fe1NLf3iHC5jaJomwCa
+         sHdGBQB3dRgE23JTe6Kh0EsdTHNZRku6+SMZOcQKIxE6Vz6kKOrxeaSlSNBVVqoh/Vks
+         d/vTB9zukai8LQtdwZKy+sWL4mAVcxg3vGDFiaDxt7biIzrG5K4oGvdnjSkNWCf56FGX
+         t9ig==
+X-Gm-Message-State: AOAM532kFbUOrwApz91X8kgXmvwBIxZFaiUxzuM9Zgcv9LjJz/W1/hrm
+        qLceJCC68qf9eXs9fmRJCFEWJfTnHP0mTdUkOJg=
+X-Google-Smtp-Source: ABdhPJzmi9FW2Opfs1nIzYmaM2A75n805ZIic6DitSDDSrvjWB4ocsStnK68m9Da+iZyOmOC4GLILSc2WVwn06BgL78=
+X-Received: by 2002:a05:6e02:1d86:: with SMTP id h6mr3917519ila.5.1633622082893;
+ Thu, 07 Oct 2021 08:54:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com> <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20211007154407.29746-3-andriy.shevchenko@linux.intel.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 7 Oct 2021 17:54:32 +0200
+Message-ID: <CANiq72=pCQgwHe5u2nS_RkGBnRLdcw2v=vk-8eNDeAP9ygO0SQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] kernel.h: Split out container_of() and
+ typeof_member() macros
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        jic23@kernel.org, linux@rasmusvillemoes.dk,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v4 6/7] plist: Replace kernel.h with the necessary inclusions
-Date:   Thu,  7 Oct 2021 18:44:06 +0300
-Message-Id: <20211007154407.29746-7-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
-References: <20211007154407.29746-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
+On Thu, Oct 7, 2021 at 5:44 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> +#define typeof_member(T, m)    typeof(((T*)0)->m)
 
-Replace kernel.h inclusion with the list of what is really being used.
+Is the patch missing the removal from the other place?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/plist.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/plist.h b/include/linux/plist.h
-index 66bab1bca35c..0f352c1d3c80 100644
---- a/include/linux/plist.h
-+++ b/include/linux/plist.h
-@@ -73,8 +73,11 @@
- #ifndef _LINUX_PLIST_H_
- #define _LINUX_PLIST_H_
- 
--#include <linux/kernel.h>
-+#include <linux/container_of.h>
- #include <linux/list.h>
-+#include <linux/types.h>
-+
-+#include <asm/bug.h>
- 
- struct plist_head {
- 	struct list_head node_list;
--- 
-2.33.0
-
+Cheers,
+Miguel
