@@ -2,97 +2,91 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD830C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Oct 2021 13:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB4CEC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Oct 2021 13:20:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A537E60F35
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Oct 2021 13:18:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7E6E60F3A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Oct 2021 13:20:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbhJKNUW (ORCPT
+        id S235241AbhJKNWd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Oct 2021 09:20:22 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3963 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbhJKNUW (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Oct 2021 09:20:22 -0400
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HSfRh3S3Lz67YMc;
-        Mon, 11 Oct 2021 21:15:28 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 11 Oct 2021 15:18:20 +0200
-Received: from localhost (10.52.122.204) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
- 2021 14:18:19 +0100
-Date:   Mon, 11 Oct 2021 14:18:01 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mon, 11 Oct 2021 09:22:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51652 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231392AbhJKNWc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Oct 2021 09:22:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 06794603E9;
+        Mon, 11 Oct 2021 13:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633958432;
+        bh=LBwIwOty85QDOC3THb1be6KrVEGV3fYy4H3zIBQBU5k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WJ2cHs1QRCeIJ2LGAvHTzYXBLr1ecLna04Cj6YsPJ1hWKrdhe7GQccic+Mw/1BNmp
+         9/6vqBIFPejBBCbyWb/KQd4q3zzOWhBL0Yg+U5iWViggVFrUNbdfUkuuOgNtvOpRYH
+         LtlTubMFLVOXg78CzQN2ZrVXBAkTXLHt2trPS1pDZs3ubJH+acA+ThmhSR5fC1F/ht
+         NlVtFoK54bPrkoP/fs+sUdfDmIVCYi7RCFE/SjNL193VofWH8Ea9qiAgD5ACQIIC/L
+         hR0NfQQT9R5vO+7Ws88tF1PzVWtReRPwWBzPwYZat+WjMB/0OK0J/y752CcdwYZKC7
+         aRHhn7orIBYxg==
+Date:   Mon, 11 Oct 2021 14:20:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        "Alan Hayward" <alan.hayward@arm.com>,
+        Alan Hayward <alan.hayward@arm.com>,
         Luis Machado <luis.machado@arm.com>,
-        "Salil Akerkar" <Salil.Akerkar@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v1 08/38] arm64/sve: Track vector lengths for tasks in
- an array
-Message-ID: <20211011141801.0000224a@Huawei.com>
-In-Reply-To: <YWQ4qDmu8Yyiwm5C@sirena.org.uk>
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 12/38] arm64/sme: Provide ABI documentation for SME
+Message-ID: <YWQ6HpO2Wvl007ku@sirena.org.uk>
 References: <20210930181144.10029-1-broonie@kernel.org>
-        <20210930181144.10029-9-broonie@kernel.org>
-        <20211011112057.00007b90@Huawei.com>
-        <YWQ4qDmu8Yyiwm5C@sirena.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+ <20210930181144.10029-13-broonie@kernel.org>
+ <20211011120507.00000c13@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.52.122.204]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cXjaZWrSpNaeo2og"
+Content-Disposition: inline
+In-Reply-To: <20211011120507.00000c13@Huawei.com>
+X-Cookie: Your ignorance cramps my conversation.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 11 Oct 2021 14:14:16 +0100
-Mark Brown <broonie@kernel.org> wrote:
 
-> On Mon, Oct 11, 2021 at 11:20:57AM +0100, Jonathan Cameron wrote:
-> > Mark Brown <broonie@kernel.org> wrote:  
-> 
-> > > As for SVE we will track a per task SME vector length for tasks. Convert
-> > > the existing storage for the vector length into an array and update
-> > > fpsimd_flush_task() to initialise this in a function.  
-> 
-> > I'm clearly having a trivial comment day.  Given reduction in indenting
-> > it would be nice perhaps to reformat comments to take that into account.  
-> 
-> Again I'll have done this to make it clearer that things are just being
-> moved about - as a reviewer I do find things like that very helpful.
-> 
-> > I'm also unconvinced the trivial wrappers are worthwhile.  (maybe you drop
-> > those later?)  
-> 
-> They do hide what we're doing from the rest of the series which makes
-> the whole thing a lot easier to work with, especially if we change what
-> data structures we use or there's some debate as to the names of the
-> constants.  A bunch of them directly map onto existing trivial wrappers
-> too, there's been some stylistic preference for that.
-> 
-> If people want to remove the wrappers I'd propose leaving them for now
-> then adding a patch afterwards which removes them, or at least waiting
-> until we've got very firm agreement from Catalin and Will on the data
-> structures and constants.
-> 
+--cXjaZWrSpNaeo2og
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Makes sense.
+On Mon, Oct 11, 2021 at 12:05:07PM +0100, Jonathan Cameron wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-J
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
+
+> A few more editorial bits to add to what Alan pointed out.
+
+I think I updated everything, thanks.  Please delete unneeded context
+=66rom mails when replying.  Doing this makes it much easier to find your
+reply in the message, helping ensure it won't be missed by people
+scrolling through the irrelevant quoted material.
+
+--cXjaZWrSpNaeo2og
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFkOh0ACgkQJNaLcl1U
+h9A5dQf/XSX4FOdThios8/yo/cAdumDle0nKTbZgMz/jVLXUszLkigJl5TFI9BlW
+DhDjSxC4QoCflpXx0gPQbInZ41NWS2L46y0o9bUrs+j+YKAaGVkygMkazhFPT3v8
+4N58y+ELjeQEmqlwKnhg6iW/GRPZqYjF2Yf/n8UsDCbHIV6NqCJA+FybADYU2Vqo
+E2mFaRScZ8SVcmL0KVXdM9TGmi1CA/l4onjGDgTyu8dTADW9G+D89UooOu/mhEHk
+wujYTSvvNRpcYeAZ6NFUXcFsdOF6I8lDQ+qxEApye1i6CzLvkEh54rErYroWW/Dx
+KGCraFdZ0dVWvZoFoMO4fk5VA28nEA==
+=222A
+-----END PGP SIGNATURE-----
+
+--cXjaZWrSpNaeo2og--
