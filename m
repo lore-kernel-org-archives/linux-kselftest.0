@@ -2,134 +2,172 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0A75C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 12:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFB27C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 15:16:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9565A61208
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 12:35:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C316760F46
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 15:16:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbhJUMhp (ORCPT
+        id S231764AbhJUPS3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Oct 2021 08:37:45 -0400
-Received: from mail-eopbgr1310094.outbound.protection.outlook.com ([40.107.131.94]:37758
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230190AbhJUMhp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 08:37:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c+lgdYpcL61s4wlV+dWOmbSaGvhQGakLa2sGEYUAZPiH5PgYRGb6sXBRRpMlhD4Vf0S5y7uUqXKxP3CnIq5J7CLDJ1ySM31KGFRr+4l8E6QEVb6k1zdbi7zW8swx/lfq6DeIjNfX2yZv3BbQsn7L3iCCeICGBOGxJymQt6u2xY2qHhku97BBvrQwcl+IplHVbjNrngN7iomx1cXh4Bms1dRg1RtdybATv2S3Y9l3pKyUPNMYtej6aYC60pW/VSiGSeYuGChE8ZO/WtDhoQO2vE/PUw3h1JVviOKPCs3as9Qu9C1rCvp1JmnbNDkYLRt8q7HPcYKvx21iE6tsmlpPrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Hqe39zCCZywYr8XLxF6+Tbp1aTmzVX0iqo1z3vYufk=;
- b=bpfApcawhL9hZu6PvxPrdDhmVbDQ08+YQutbw584pExAQIDPjSJKYH7nubzFLZN8xIxZtZuAKXlVpenaXd+AFCtCSksIOpbSW6AUR1j/GzI8E3Od8n2rLWAIlzaOje5ZhOdo4kbSZF+h83NViT3hYDA+nPsudZ7tcTZvlbg16ZEAfBop9lTsyOBReI6lS8l63VBoKROzNM+Nufiq6AcpHZSvRNCwW069s6ovaAlnP7o4UfQjwBOXSW86+pvDqj8c929biyZp5JoW0dGP55DrVHbmmcsNo3VvuM68/0FHy5EF5RvrcaL7jhD6e02poVuX65izqeeAM0QKkCnv621EzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8Hqe39zCCZywYr8XLxF6+Tbp1aTmzVX0iqo1z3vYufk=;
- b=J7PxOduijybYM8LzXQmKPVyUWnLuCfw0eON5/aWIeylq05BFh5RAjzcC9i1aRMenqIakoUMJTRRtxK9x0pQc0HcvpIHcNsKsexesbb8w5GK3pPtqroyX3a38UvEDgK6/5JXzQN9osLQaJaCzkiuOK/FhnoUuFxzd9GXTQzJpKMg=
-Authentication-Results: linux-foundation.org; dkim=none (message not signed)
- header.d=none;linux-foundation.org; dmarc=none action=none
- header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SG2PR06MB3046.apcprd06.prod.outlook.com (2603:1096:4:6d::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4628.15; Thu, 21 Oct 2021 12:35:26 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::fc12:4e1b:cc77:6c0]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::fc12:4e1b:cc77:6c0%6]) with mapi id 15.20.4628.018; Thu, 21 Oct 2021
- 12:35:26 +0000
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] selftests: vm: Remove duplicated include in hugepage-mremap
-Date:   Thu, 21 Oct 2021 08:29:44 -0400
-Message-Id: <20211021122944.8857-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.20.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HKAPR04CA0005.apcprd04.prod.outlook.com
- (2603:1096:203:d0::15) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Thu, 21 Oct 2021 11:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231839AbhJUPST (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Oct 2021 11:18:19 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA73DC061243
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 08:16:03 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id d198-20020a1c1dcf000000b00322f53b9b89so73350wmd.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 08:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wPEEI/42En9uKSJ0rR6svxJibQPpLgl3/xd+Q1CAzs4=;
+        b=ArwVTh3EaIjsFaD/Zbzk2v9QkwA3pWqH34r8L0lMMOpk5RFI4xI5zowgC5WNu3NqO5
+         1kyrUBKSFJi7H2zK6/4d5xiODpuHqkWpcmN4WOp0LS6RRGmtvOpZ9JCaxt8m2Cz714ai
+         QDV0et2cSifjt23YweKmZ8SMST9HKxMXkJCDk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wPEEI/42En9uKSJ0rR6svxJibQPpLgl3/xd+Q1CAzs4=;
+        b=fWMw7N5gT/CXbxcanzQLre7n5zPX4ZSvM4VujKrkQOvNKMZTUZVTyEVWXUAB2rJ84j
+         3w5wnkdr53TyRWBtG59MyAYN9LOm5E2ESlPgxKIOhtxphlmPQF3Rxro736OZ3tY8PObM
+         fXCDA1ipZ2g5rknT5XeaHLODgomdZfAlTppposWCkEYEkf8tmit5FaBLO7sh8Ealw9U8
+         q5sdcGSa3yq1ZLjoGxVVGMhtpCKm7ILPwRMoPZzojf2IN6F/QQfvoJRpbvTMZbhn71dd
+         yHg/88ckXDp9sRaBMT5yPpIbwql1QRznz26IAjdL3p6YP8PhvrSiWodzfFwErU4ULMef
+         S0zw==
+X-Gm-Message-State: AOAM530k0k7EhAd8iY11dzeV/2xi6IaefE6zmHProjMZy9ZCk72n+mZc
+        r0WIhpqEMPNFlZdb9ijo1qYvXQ==
+X-Google-Smtp-Source: ABdhPJydPjkzgQW2iWvviw52oqi+ooJKj874Q5kNQJaDXzYi3gfB4tnn05PuwBzIoPhuvzR9ZiHLVQ==
+X-Received: by 2002:a7b:c30c:: with SMTP id k12mr22015678wmj.38.1634829362115;
+        Thu, 21 Oct 2021 08:16:02 -0700 (PDT)
+Received: from altair.lan (7.2.6.0.8.8.2.4.4.c.c.f.b.1.5.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:451b:fcc4:4288:627])
+        by smtp.googlemail.com with ESMTPSA id z1sm5098562wrt.94.2021.10.21.08.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 08:16:01 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 3/3] selftests: bpf: test RENAME_EXCHANGE and RENAME_NOREPLACE on bpffs
+Date:   Thu, 21 Oct 2021 16:15:28 +0100
+Message-Id: <20211021151528.116818-4-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211021151528.116818-1-lmb@cloudflare.com>
+References: <20211021151528.116818-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Received: from localhost.localdomain (203.90.234.87) by HKAPR04CA0005.apcprd04.prod.outlook.com (2603:1096:203:d0::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.18 via Frontend Transport; Thu, 21 Oct 2021 12:35:25 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 749b3e10-8708-43c8-02d0-08d9948f4209
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3046:
-X-Microsoft-Antispam-PRVS: <SG2PR06MB304688F172FBDB5A73EB5A26ABBF9@SG2PR06MB3046.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:324;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WFhqd8dTArR8BlbWdzPoiMjANjT3Gz6WQZMAOwgYbWLOyXHv6iqySHaAOY+F9gxsySP7ce66N8O4UP9J58TEl1U72bXvKVKrKLILwtHdY3KdZI+tvPypcwLP3w27U3PZfSsHMmCih/L1mhFGKhUvVmnhN+jveIGiKYBxnHu6uq8WkMCX8Y9L/eX6vhD8h/yCiJGph59u+pKvBwnr5ANHsgi+sPbn/PcS67Z4Ume8rpkuAXfl+oqFQbeg6FHuyZgkSBTvdxJD2C3ZMGuI0B5pBAUSUtiWXrntBNzgVpVRSp+AVtS6gU/hf2QQiHDeDmd1h88jVtjF6Zkm2BVed5Y0Dsd+eeUfNTxoHJYEbaleGvnn2gzo2SYSNdWQzQIJWVWiPD0u33KWH/U1gpzYxk2RchrvhuiByDUcaEhdFNCLtkwofJI/GXZk5dBhiGlZoC8ygQPkDeiay6JEquZF5U39FZ1lHqdP2K4+Sfg+/6/qu7EKycbp6yISiccndxCr7PMDmUCcMQ7zUVfcJqbhBcz+CDym3mXZmfOEU2AE98KJG0FKEjmD53wQy9t7wr9PdzKgocDzTkkgEWp9slPLP1Sk3Om+7czizA7hK2UVBEHjGx4Ir0LQcCAxXWaIrcZovFY0jrwwtQAigNug/Yu0CDuzy7P9uj5Snfquc/LwT+rmeqSWTTHH44pWeyBvfX3TbG1kdqsuBZyVs6JHlsChqrcYfQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(2906002)(66556008)(66476007)(6512007)(508600001)(66946007)(107886003)(38100700002)(2616005)(4326008)(38350700002)(6666004)(1076003)(6506007)(6486002)(26005)(110136005)(52116002)(186003)(86362001)(4744005)(956004)(36756003)(8676002)(316002)(83380400001)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?30WA/ywxCAOj5bB+rRBls+mZ3Hw9ZdruvWZJ9Bs/p9fLiehVa4LueXzEvyQw?=
- =?us-ascii?Q?q+2ZHvadYHb2rLVRfc4mn2rugc0rVwF76qqI3zZwL6PeGXqK35GeiOBPbgGK?=
- =?us-ascii?Q?iDaLyqYV/oQq8S22MR4rnDPgpm1IIbImrSy5xb6elziWOkE1IkxNp9AkyVKo?=
- =?us-ascii?Q?WVrgeXRvXs59fsGlmreh6tpjPpTVnsv2YR8z6gIUAeuWHkMjFLj2hHUDoArx?=
- =?us-ascii?Q?bjz8ypyzGpAdzxFIIi5o6JbXjUUc/lAYi+SaStrvXLVjDVh4oNqU2O+knEY4?=
- =?us-ascii?Q?PzDoQ3LmoTz7LzwgE64OiEC7pM1GkJg7BkM1kvK3JIZ0t9zQe3F97C/KjfeC?=
- =?us-ascii?Q?dikvZ1sgn6WpwB5Plx68+VM3k7oIQ0/bRUOldic7iBnkb4QqoA9vutEXCTFU?=
- =?us-ascii?Q?0oKtfNHGges51LyurjJ7FS6MmS/DpDjCqe1E4StE/GB2VLE9LJx7ej+XVmTJ?=
- =?us-ascii?Q?C7sPb7IgXG3BgTEiJR0NnWvUW52KcnvDQApPmVXo0qNeLJjhiI7rqHgjEV6X?=
- =?us-ascii?Q?5K5+HUVoM7lzT9AtHlpz5rzYkR6RnYccoeJQNKA1TwTYZ1KLrkxrF87ZvZVq?=
- =?us-ascii?Q?NxQOGHx0mxxaGEOqOG6rrbo4ayFqpWSb5A80u7aZfcHbFhJhIy6uAytQg/KP?=
- =?us-ascii?Q?uoDW7XgbOS2rYvXEmyMAMVy5wOq6KZNb4axNay1rpZwfT+WOYk5iRX/E/agE?=
- =?us-ascii?Q?XoXiVIG9uj0MFThwywgpY/q0KnW7s3vY5+1pYdSEjG5qsY6A1jL84dThGhVY?=
- =?us-ascii?Q?Ct78gu2a0aISna/aE0pgD93ddaU5F2TCrnpubYKuF05xTN6AyBnxI8K2lmiy?=
- =?us-ascii?Q?ZoYp1dtC0SnDHZE51r/sQ0Co0T6p4EQYEDQ2TWHFJgq2DVrBGw7Itf0OWVWw?=
- =?us-ascii?Q?EEDk4ViFaW//10InMm6KQF+uELLHxpHfvXb4aKkDn7UWdO5BoB6g5hmROsuP?=
- =?us-ascii?Q?lHFmZ1AEjyiQm5YYlBZBIWLd2zPe/Mwb8h0MFMiOwfVv3r8CF03MfAb4fNrC?=
- =?us-ascii?Q?Sm0aPmKDroyWnGLXluqF5+wdZ596cjAboxhQkTXqLJLgyShvXoDASkj17yOu?=
- =?us-ascii?Q?I5xKf7FIrKUivBJ2HWkS1HISY9917xh82g4hvg2vm3M0JJy8f9ugONjO91Uq?=
- =?us-ascii?Q?3D0YwqN8+xL4wZzrA0W2FcdNBWuFPhw0zCtQPp8hy0JmRX5KhRSRykcyfgxL?=
- =?us-ascii?Q?Mtnig/uSZRzN9V3RohcImxMHVhsUvqrVLR0RsuXXYZ8yxUjr4Pulj8GZUNXP?=
- =?us-ascii?Q?lDEn32LWvD5DnPsmCVah+RyAp6lsHkpEuCRXmMf7IfRau/3YmgM+IwFhBO6x?=
- =?us-ascii?Q?K7Ib/fLeeZy403XEbITRZiG9zG4p/JAYZ/PaCVM5rqnKpM5LlpQufDu5wpLa?=
- =?us-ascii?Q?nuACrKjKt4N3Zdq6gdq8bQtGNBYUB5ECMGdzpKqiz16giQaF3TUCHMcOUFaK?=
- =?us-ascii?Q?zPhc5g6rkwQ=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 749b3e10-8708-43c8-02d0-08d9948f4209
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2021 12:35:26.1765
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 11126903@vivo.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3046
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix following checkinclude.pl warning:
-./tools/testing/selftests/vm/hugepage-mremap.c: fcntl.h is included
-more than once.
+Add tests to exercise the behaviour of RENAME_EXCHANGE and RENAME_NOREPLACE
+on bpffs. The former checks that after an exchange the inode of two
+directories has changed. The latter checks that the source still exists
+after a failed rename.
 
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- tools/testing/selftests/vm/hugepage-mremap.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../selftests/bpf/prog_tests/test_bpffs.c     | 65 ++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/hugepage-mremap.c b/tools/testing/selftests/vm/hugepage-mremap.c
-index 8bc117b12f78..257df94697a5 100644
---- a/tools/testing/selftests/vm/hugepage-mremap.c
-+++ b/tools/testing/selftests/vm/hugepage-mremap.c
-@@ -12,7 +12,6 @@
- #include <stdio.h>
- #include <unistd.h>
- #include <sys/mman.h>
--#include <fcntl.h>
- #include <errno.h>
- #include <fcntl.h> /* Definition of O_* constants */
- #include <sys/syscall.h> /* Definition of SYS_* constants */
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+index 533e3f3a459a..d29ebfeef9c5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+ #define _GNU_SOURCE
++#include <stdio.h>
+ #include <sched.h>
+ #include <sys/mount.h>
+ #include <sys/stat.h>
+@@ -29,7 +30,8 @@ static int read_iter(char *file)
+ 
+ static int fn(void)
+ {
+-	int err;
++	struct stat a, b, c;
++	int err, map;
+ 
+ 	err = unshare(CLONE_NEWNS);
+ 	if (!ASSERT_OK(err, "unshare"))
+@@ -67,6 +69,67 @@ static int fn(void)
+ 	err = read_iter(TDIR "/fs2/progs.debug");
+ 	if (!ASSERT_OK(err, "reading " TDIR "/fs2/progs.debug"))
+ 		goto out;
++
++	err = mkdir(TDIR "/fs1/a", 0777);
++	if (!ASSERT_OK(err, "creating " TDIR "/fs1/a"))
++		goto out;
++	err = mkdir(TDIR "/fs1/a/1", 0777);
++	if (!ASSERT_OK(err, "creating " TDIR "/fs1/a/1"))
++		goto out;
++	err = mkdir(TDIR "/fs1/b", 0777);
++	if (!ASSERT_OK(err, "creating " TDIR "/fs1/b"))
++		goto out;
++
++	map = bpf_create_map(BPF_MAP_TYPE_ARRAY, 4, 4, 1, 0);
++	if (!ASSERT_GT(map, 0, "create_map(ARRAY)"))
++		goto out;
++	err = bpf_obj_pin(map, TDIR "/fs1/c");
++	if (!ASSERT_OK(err, "pin map"))
++		goto out;
++	close(map);
++
++	/* Check that RENAME_EXCHANGE works for directories. */
++	err = stat(TDIR "/fs1/a", &a);
++	if (!ASSERT_OK(err, "stat(" TDIR "/fs1/a)"))
++		goto out;
++	err = renameat2(0, TDIR "/fs1/a", 0, TDIR "/fs1/b", RENAME_EXCHANGE);
++	if (!ASSERT_OK(err, "renameat2(/fs1/a, /fs1/b, RENAME_EXCHANGE)"))
++		goto out;
++	err = stat(TDIR "/fs1/b", &b);
++	if (!ASSERT_OK(err, "stat(" TDIR "/fs1/b)"))
++		goto out;
++	if (!ASSERT_EQ(a.st_ino, b.st_ino, "b should have a's inode"))
++		goto out;
++	err = access(TDIR "/fs1/b/1", F_OK);
++	if (!ASSERT_OK(err, "access(" TDIR "/fs1/b/1)"))
++		goto out;
++
++	/* Check that RENAME_EXCHANGE works for mixed file types. */
++	err = stat(TDIR "/fs1/c", &c);
++	if (!ASSERT_OK(err, "stat(" TDIR "/fs1/map)"))
++		goto out;
++	err = renameat2(0, TDIR "/fs1/c", 0, TDIR "/fs1/b", RENAME_EXCHANGE);
++	if (!ASSERT_OK(err, "renameat2(/fs1/c, /fs1/b, RENAME_EXCHANGE)"))
++		goto out;
++	err = stat(TDIR "/fs1/b", &b);
++	if (!ASSERT_OK(err, "stat(" TDIR "/fs1/b)"))
++		goto out;
++	if (!ASSERT_EQ(c.st_ino, b.st_ino, "b should have c's inode"))
++		goto out;
++	err = access(TDIR "/fs1/c/1", F_OK);
++	if (!ASSERT_OK(err, "access(" TDIR "/fs1/c/1)"))
++		goto out;
++
++	/* Check that RENAME_NOREPLACE works. */
++	err = renameat2(0, TDIR "/fs1/b", 0, TDIR "/fs1/a", RENAME_NOREPLACE);
++	if (!ASSERT_ERR(err, "renameat2(RENAME_NOREPLACE)")) {
++		err = -EINVAL;
++		goto out;
++	}
++	err = access(TDIR "/fs1/b", F_OK);
++	if (!ASSERT_OK(err, "access(" TDIR "/fs1/b)"))
++		goto out;
++
+ out:
+ 	umount(TDIR "/fs1");
+ 	umount(TDIR "/fs2");
 -- 
-2.20.1
+2.32.0
 
