@@ -2,138 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2776FC4332F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 15:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B32FC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 15:20:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C16061052
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 15:16:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 455FA6112D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Oct 2021 15:20:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbhJUPSa (ORCPT
+        id S231533AbhJUPWp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Oct 2021 11:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbhJUPSS (ORCPT
+        Thu, 21 Oct 2021 11:22:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38681 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231624AbhJUPWk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Oct 2021 11:18:18 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72097C061231
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 08:16:02 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d13so7496wrf.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 08:16:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=r3QcDl+qrCs7DfRcj3nDkgEldBtCcz4guF3zRxr4yw0=;
-        b=og8TLQCkdYW+NTgs03kMNvaz85gbJZg01RThVaPc9dwl+VDpWo6GQ80zhvw97gozGW
-         /ThwmKTl7rcmU4ax2Ak+CNU8sdByHuVjxOOD6MeUCDsw44kWshPNXlvzS1uO4s4lZcGb
-         9Zp4gZ9IO2XlC3e9KEMticcIkxx81rUt0Cn2w=
+        Thu, 21 Oct 2021 11:22:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634829624;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NOe3cFJFILZdz8eTftQ7v5VvvEiNDk+j+1cks9VzhR8=;
+        b=gSUpt0qVyEqu5fMwP4yRL/fyocdkTnasCkqYpPipU1lBSu6OjX5hGTfWFw6YLaF3sc3dIn
+        FjHW+TPS5nrxUfJy7jwX9MtsX8bb3KKafxfrsdSMTpI9hrPLk/TBPsZuNgAUDE0il1g9gO
+        dvsU1bcoleZjNRMMjly5HQPxULi42Co=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-305-m_RcGpL6OaS7WhykrPEhXg-1; Thu, 21 Oct 2021 11:20:23 -0400
+X-MC-Unique: m_RcGpL6OaS7WhykrPEhXg-1
+Received: by mail-ed1-f72.google.com with SMTP id z1-20020a05640235c100b003dcf0fbfbd8so722651edc.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Oct 2021 08:20:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=r3QcDl+qrCs7DfRcj3nDkgEldBtCcz4guF3zRxr4yw0=;
-        b=L1Cq6TUXuOuWq2YpbDe+vHihwdQlR5EbvFwouhtiSxByo3fVaCA6bcOZ0ZKy8aE/P9
-         NV0d1bO8ZR2kLD/w4iikSHNoUe6znsGLnJQhYitTtX5wk9HIBJp57pkB1kJ+ccV5tWhA
-         b3aYi5d0zNm4uiBQcuj7WL7S4WsIrkudGXJ/UnnP9IiNX3gcjHOwHLqal0YutA/Dq5FU
-         5rqnzNwNYpupGq0e7mOp/NjnyC0kKiHYJlBHq6ZI38uSx/kuthm3eLvdjhPJo6RdvbWt
-         wrnKC4Xz2SqVgXV5AziZI7eJrxyyfAu2zhRE6IQPysorblqogfIZSSCkE3CnOOFk705G
-         3itw==
-X-Gm-Message-State: AOAM531zcB0U3pLBJfpa5xfrKWILp/WTeR42rxbjqqap2wnU3DBBxR3r
-        JhW1KGAVdMpy3+2OpfQavEpSvQ==
-X-Google-Smtp-Source: ABdhPJyBjBioVdWACxdF2OFHo6mJ7WSHI3iwB7rn3GgXXX+lutNDfML5XgLhY7C35UZMHI5B2m7H+w==
-X-Received: by 2002:a5d:524b:: with SMTP id k11mr2472685wrc.259.1634829360154;
-        Thu, 21 Oct 2021 08:16:00 -0700 (PDT)
-Received: from altair.lan (7.2.6.0.8.8.2.4.4.c.c.f.b.1.5.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:451b:fcc4:4288:627])
-        by smtp.googlemail.com with ESMTPSA id z1sm5098562wrt.94.2021.10.21.08.15.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 08:15:59 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/3] selftests: bpf: convert test_bpffs to ASSERT macros
-Date:   Thu, 21 Oct 2021 16:15:27 +0100
-Message-Id: <20211021151528.116818-3-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211021151528.116818-1-lmb@cloudflare.com>
-References: <20211021151528.116818-1-lmb@cloudflare.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NOe3cFJFILZdz8eTftQ7v5VvvEiNDk+j+1cks9VzhR8=;
+        b=u/tn+cVgYh91dMSiQL2jA+EsFJOsAKxILFgaLuOQoEZcAOwzWqcQQm4XD6WEzrZ5DH
+         ePW2kRQN/+NF+MlaRXq+/QMvpMZDRgM5btI237aZJYO6vZZiFjnJ8mKJiJSTgBdTReQ/
+         eoFZwvXvhmWWEb66hOjhh0988MKjy/ijb2TrIc+4CHMjib277r2SQ1VlW0980/gZuaaM
+         abTez9XKMZIC/RiQ4rhxKQyMKupWKRXgXKL/lpaX4kgxOJktWnORSjywvs5asSYQc1m4
+         fJ5rTXFkmXSvORrf/UjjjfqW+eaji9pxpxysaCmsdxkv7wLZm4ejSokq6n/gG9/eKe/L
+         3Jiw==
+X-Gm-Message-State: AOAM530zSNLb14ND1++PH0lKwF5Wj2Quw25eCU0ngayEX+OqPjIA94Oa
+        kWpgUUQJDrqsL1KgTdSTD6rXR+Am51q8yUPpmOqlFuz125qXgwoc4RKoCivvlmLIpdVE6E+UrZq
+        3EGPiQjAgZDP+Bg2qxNCJG9RnFShD
+X-Received: by 2002:a17:906:2310:: with SMTP id l16mr8121390eja.118.1634829621441;
+        Thu, 21 Oct 2021 08:20:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjeZqyJXsmAoXhDVP1zKKfZ0Y7fUe4znDsFRJP/2IiYcz3JF2glaBceal0TUeS55/ECM+NVA==
+X-Received: by 2002:a17:906:2310:: with SMTP id l16mr8121368eja.118.1634829621264;
+        Thu, 21 Oct 2021 08:20:21 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.gmail.com with ESMTPSA id a1sm3008008edu.43.2021.10.21.08.20.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Oct 2021 08:20:20 -0700 (PDT)
+Message-ID: <811ec8ba-433e-b167-6a60-cf3b5ceabb63@redhat.com>
+Date:   Thu, 21 Oct 2021 17:20:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [RFC 01/16] KVM: selftests: move vm_phy_pages_alloc() earlier in
+ file
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>,
+        Mingwei Zhang <mizhang@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Steve Rutherford <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+References: <20211005234459.430873-1-michael.roth@amd.com>
+ <20211005234459.430873-2-michael.roth@amd.com>
+ <CAL715WK2toExGW7GGWGQyzhqBijMEhQfhamyb9_eZkrU=+LKnQ@mail.gmail.com>
+ <20211021034529.gwv3hz5xhomtvnu7@amd.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211021034529.gwv3hz5xhomtvnu7@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove usage of deprecated CHECK macros.
+On 21/10/21 05:45, Michael Roth wrote:
+>> Why move the function implementation? Maybe just adding a declaration
+>> at the top of kvm_util.c should suffice.
+> At least from working on other projects I'd gotten the impression that
+> forward function declarations should be avoided if they can be solved by
+> moving the function above the caller. Certainly don't mind taking your
+> suggestion and dropping this patch if that's not the case here though.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/test_bpffs.c     | 22 +++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+I don't mind moving the code, so the patch is fine.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
-index 172c999e523c..533e3f3a459a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
-@@ -29,43 +29,43 @@ static int read_iter(char *file)
- 
- static int fn(void)
- {
--	int err, duration = 0;
-+	int err;
- 
- 	err = unshare(CLONE_NEWNS);
--	if (CHECK(err, "unshare", "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "unshare"))
- 		goto out;
- 
- 	err = mount("", "/", "", MS_REC | MS_PRIVATE, NULL);
--	if (CHECK(err, "mount /", "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "mount /"))
- 		goto out;
- 
- 	err = umount(TDIR);
--	if (CHECK(err, "umount " TDIR, "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "umount " TDIR))
- 		goto out;
- 
- 	err = mount("none", TDIR, "tmpfs", 0, NULL);
--	if (CHECK(err, "mount", "mount root failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "mount tmpfs"))
- 		goto out;
- 
- 	err = mkdir(TDIR "/fs1", 0777);
--	if (CHECK(err, "mkdir "TDIR"/fs1", "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "mkdir " TDIR "/fs1"))
- 		goto out;
- 	err = mkdir(TDIR "/fs2", 0777);
--	if (CHECK(err, "mkdir "TDIR"/fs2", "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "mkdir " TDIR "/fs2"))
- 		goto out;
- 
- 	err = mount("bpf", TDIR "/fs1", "bpf", 0, NULL);
--	if (CHECK(err, "mount bpffs "TDIR"/fs1", "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "mount bpffs " TDIR "/fs1"))
- 		goto out;
- 	err = mount("bpf", TDIR "/fs2", "bpf", 0, NULL);
--	if (CHECK(err, "mount bpffs " TDIR "/fs2", "failed: %d\n", errno))
-+	if (!ASSERT_OK(err, "mount bpffs " TDIR "/fs2"))
- 		goto out;
- 
- 	err = read_iter(TDIR "/fs1/maps.debug");
--	if (CHECK(err, "reading " TDIR "/fs1/maps.debug", "failed\n"))
-+	if (!ASSERT_OK(err, "reading " TDIR "/fs1/maps.debug"))
- 		goto out;
- 	err = read_iter(TDIR "/fs2/progs.debug");
--	if (CHECK(err, "reading " TDIR "/fs2/progs.debug", "failed\n"))
-+	if (!ASSERT_OK(err, "reading " TDIR "/fs2/progs.debug"))
- 		goto out;
- out:
- 	umount(TDIR "/fs1");
--- 
-2.32.0
+Paolo
 
