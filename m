@@ -2,797 +2,197 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35BCBC4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Oct 2021 12:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E394C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Oct 2021 12:43:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1BCA060F39
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Oct 2021 12:25:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3034E60EDF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Oct 2021 12:43:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbhJZM1l (ORCPT
+        id S235809AbhJZMpo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 26 Oct 2021 08:27:41 -0400
-Received: from mga04.intel.com ([192.55.52.120]:8650 "EHLO mga04.intel.com"
+        Tue, 26 Oct 2021 08:45:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231228AbhJZM1k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Oct 2021 08:27:40 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="228647492"
-X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
-   d="scan'208";a="228647492"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 05:25:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
-   d="scan'208";a="486160696"
-Received: from davehans-spike.ostc.intel.com (HELO localhost.localdomain) ([10.165.28.105])
-  by orsmga007.jf.intel.com with ESMTP; 26 Oct 2021 05:25:04 -0700
-Subject: [PATCH 1/2] selftest/x86/amx: Test cases for AMX state management
-To:     dave.hansen@intel.com
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        chang.seok.bae@intel.com, tglx@linutronix.de, x86@kernel.org,
+        id S235791AbhJZMpo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Oct 2021 08:45:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2CA4F60F39;
+        Tue, 26 Oct 2021 12:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635252200;
+        bh=YBc8Em5aUfRy4S1XWYzleN8bqGvlhMEwzsJsr5FHZgE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hk0OKeyyuA7z30tq4mnnLwUA/7RwBEpM8Z6pze3MEa/coy292optjdVFL+ZgFOKEx
+         XJnqi+Qegm5O4SxAqMaNnW6IPjgBklgqBshc92/HzWf+OKKoPuuebdiuoVCTgEIIZP
+         xmVtDmDRuppwwQ6AGS/VBMsuRnjfVrldtchXp2dtLtGzSvr3xJTCuvL0YyzfxJOgY6
+         f1iISu4u9KNNUmBKAjaTCC7ibFpoaFfmRquY1M6p9lZnFqwNk6HiOqoGQIFKLHEmI7
+         aGki21GL9hF2+Ae1C0tbcU4/9c6WQ6XVafjMHDspxbzdK+9ILag9EMHZwOo4tr9szq
+         3Dj71IfqCx3Dg==
+Date:   Tue, 26 Oct 2021 21:43:11 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-Date:   Tue, 26 Oct 2021 05:25:24 -0700
-References: <20211026122523.AFB99C1F@davehans-spike.ostc.intel.com>
-In-Reply-To: <20211026122523.AFB99C1F@davehans-spike.ostc.intel.com>
-Message-Id: <20211026122524.7BEDAA95@davehans-spike.ostc.intel.com>
+Subject: Re: [PATCH v4 7/8] tracing/selftests: Add tests for hist trigger
+ expression parsing
+Message-Id: <20211026214311.583c728d90d41778c38201dd@kernel.org>
+In-Reply-To: <20211025200852.3002369-8-kaleshsingh@google.com>
+References: <20211025200852.3002369-1-kaleshsingh@google.com>
+        <20211025200852.3002369-8-kaleshsingh@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Kalesh,
 
-From: Chang S. Bae <chang.seok.bae@intel.com>
+On Mon, 25 Oct 2021 13:08:39 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-AMX TILEDATA is a very large XSAVE feature.  It could have caused
-nasty space XSAVE buffer space waste in two places:
- * Signal stacks
- * Kernel task_struct->fpu buffers
+> Add tests for the parsing of hist trigger expressions; and to
+> validate expression evaluation.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> 
+> Changes in v3:
+>   - Remove .sym-offset error check tests
+> 
+> Changes in v2:
+>   - Add Namhyung's Reviewed-by
+>   - Update comment to clarify err_pos in "Too many subexpressions" test
+> 
+> 
+>  .../testing/selftests/ftrace/test.d/functions |  4 +-
+>  .../trigger/trigger-hist-expressions.tc       | 72 +++++++++++++++++++
+>  2 files changed, 74 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/functions b/tools/testing/selftests/ftrace/test.d/functions
+> index 000fd05e84b1..1855a63559ad 100644
+> --- a/tools/testing/selftests/ftrace/test.d/functions
+> +++ b/tools/testing/selftests/ftrace/test.d/functions
+> @@ -16,13 +16,13 @@ reset_tracer() { # reset the current tracer
+>  
+>  reset_trigger_file() {
+>      # remove action triggers first
+> -    grep -H ':on[^:]*(' $@ |
+> +    grep -H ':on[^:]*(' $@ | tac |
+>      while read line; do
+>          cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+>  	file=`echo $line | cut -f1 -d:`
+>  	echo "!$cmd" >> $file
+>      done
+> -    grep -Hv ^# $@ |
+> +    grep -Hv ^# $@ | tac |
+>      while read line; do
+>          cmd=`echo $line | cut -f2- -d: | cut -f1 -d"["`
+>  	file=`echo $line | cut -f1 -d:`
 
-To avoid this waste, neither of these buffers have AMX state by
-default.  The non-default features are called "dynamic" features.
+If this update has any meaning, please make a separate patch for this part.
 
-There is an arch_prctl(ARCH_REQ_XCOMP_PERM) which allows a task
-to declare that it wants to use AMX or other "dynamic" XSAVE
-features.  This arch_prctl() ensures that sufficient sigaltstack
-space is available before it will succeed.  It also expands the
-task_struct buffer.
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+> new file mode 100644
+> index 000000000000..e715641c54d3
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-expressions.tc
+> @@ -0,0 +1,72 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: event trigger - test histogram expression parsing
+> +# requires: set_event events/sched/sched_process_fork/trigger events/sched/sched_process_fork/hist error_log
 
-Functions of this test:
- * Test arch_prctl(ARCH_REQ_XCOMP_PERM).  Ensure that it checks for
-   proper sigaltstack sizing and that the sizing is enforced for
-   future sigaltstack calls.
- * Ensure that ARCH_REQ_XCOMP_PERM is inherited across fork()
- * Ensure that TILEDATA use before the prctl() is fatal
- * Ensure that TILEDATA is cleared across fork()
+Hmm, are there any way to check the running kernel supports this feature?
+Because the latest version of the kselftest is expected to run on the old stable
+kernel for testing, the testcase should check whether the kernel supports this
+testing feature or not. (That's why the requires tag supports README pattern check)
 
-Note: Generally, compiler support is needed to do something with
-AMX.  Instead, directly load AMX state from userspace with a
-plain XSAVE.  Do not depend on the compiler.
+So, at first if you didn't update the <tracefs>/README, please update it first
+to show the new syntax is supported, and add "SOME-PATTERN":README to the
+requires tag.
 
- [ dhansen: bunches of cleanups ]
+Thank you,
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
+> +
+> +
+> +fail() { #msg
+> +    echo $1
+> +    exit_fail
+> +}
+> +
+> +get_hist_var() { #var_name hist_path
+> +    hist_output=`grep -m1 "$1: " $2`
+> +    hitcount=`echo $hist_output | awk '{ for (i=1; i<=NF; ++i) { if ($i ~ "hitcount:") print $(i+1)} }'`
+> +    var_sum=`echo $hist_output | awk '{ for (i=1; i<=NF; ++i) { if ($i ~ "'$1':") print $(i+1)} }'`
+> +    var_val=$(( var_sum / hitcount ))
+> +    echo $var_val
+> +}
+> +
+> +test_hist_expr() { # test_name expression expected_val
+> +    reset_trigger
+> +
+> +    echo "Test hist trigger expressions - $1"
+> +
+> +    echo "hist:keys=common_pid:x=$2" > events/sched/sched_process_fork/trigger
+> +    echo 'hist:keys=common_pid:vals=$x' >> events/sched/sched_process_fork/trigger
+> +    for i in `seq 1 10` ; do ( echo "forked" > /dev/null); done
+> +
+> +    actual=`get_hist_var x events/sched/sched_process_fork/hist`
+> +
+> +    if [ $actual != $3 ]; then
+> +        fail "Failed hist trigger expression evaluation: Expression: $2 Expected: $3, Actual: $actual"
+> +    fi
+> +
+> +    reset_trigger
+> +}
+> +
+> +check_error() { # test_name command-with-error-pos-by-^
+> +    reset_trigger
+> +
+> +    echo "Test hist trigger expressions - $1"
+> +    ftrace_errlog_check 'hist:sched:sched_process_fork' "$2" 'events/sched/sched_process_fork/trigger'
+> +
+> +    reset_trigger
+> +}
+> +
+> +test_hist_expr "Variable assignment" "123" "123"
+> +
+> +test_hist_expr "Subtraction not associative" "16-8-4-2" "2"
+> +
+> +test_hist_expr "Division not associative" "64/8/4/2" "1"
+> +
+> +test_hist_expr "Same precedence operators (+,-) evaluated left to right" "16-8+4+2" "14"
+> +
+> +test_hist_expr "Same precedence operators (*,/) evaluated left to right" "4*3/2*2" "12"
+> +
+> +test_hist_expr "Multiplication evaluated before addition/subtraction" "4+3*2-2" "8"
+> +
+> +test_hist_expr "Division evaluated before addition/subtraction" "4+6/2-2" "5"
+> +
+> +# Division by zero returns -1
+> +test_hist_expr "Handles division by zero" "3/0" "-1"
+> +
+> +# err pos for "too many subexpressions" is dependent on where
+> +# the last subexpression was detected. This can vary depending
+> +# on how the expression tree was generated.
+> +check_error "Too many subexpressions" 'hist:keys=common_pid:x=32+^10*3/20-4'
+> +check_error "Too many subexpressions" 'hist:keys=common_pid:x=^1+2+3+4+5'
+> +
+> +check_error "Unary minus not supported in subexpression" 'hist:keys=common_pid:x=-(^1)+2'
+> +
+> +exit 0
+> -- 
+> 2.33.0.1079.g6e70778dc9-goog
+> 
 
----
 
- b/tools/testing/selftests/x86/Makefile |    2 
- b/tools/testing/selftests/x86/amx.c    |  697 +++++++++++++++++++++++++++++++++
- 2 files changed, 698 insertions(+), 1 deletion(-)
-
-diff -puN /dev/null tools/testing/selftests/x86/amx.c
---- /dev/null	2021-10-02 19:44:55.430567491 -0700
-+++ b/tools/testing/selftests/x86/amx.c	2021-10-15 13:56:39.829901810 -0700
-@@ -0,0 +1,697 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <err.h>
-+#include <errno.h>
-+#include <setjmp.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdbool.h>
-+#include <unistd.h>
-+#include <x86intrin.h>
-+
-+#include <linux/futex.h>
-+
-+#include <sys/auxv.h>
-+#include <sys/mman.h>
-+#include <sys/shm.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+
-+#ifndef __x86_64__
-+# error This test is 64-bit only
-+#endif
-+
-+#define XSAVE_HDR_OFFSET	512
-+#define XSAVE_HDR_SIZE		64
-+
-+struct xsave_buffer {
-+	union {
-+		struct {
-+			char legacy[XSAVE_HDR_OFFSET];
-+			char header[XSAVE_HDR_SIZE];
-+			char extended[0];
-+		};
-+		char bytes[0];
-+	};
-+};
-+
-+static inline uint64_t xgetbv(uint32_t index)
-+{
-+	uint32_t eax, edx;
-+
-+	asm volatile("xgetbv;"
-+		     : "=a" (eax), "=d" (edx)
-+		     : "c" (index));
-+	return eax + ((uint64_t)edx << 32);
-+}
-+
-+static inline void cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
-+{
-+	asm volatile("cpuid;"
-+		     : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
-+		     : "0" (*eax), "2" (*ecx));
-+}
-+
-+static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile("xsave (%%rdi)"
-+		     : : "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi)
-+		     : "memory");
-+}
-+
-+static inline void xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile("xrstor (%%rdi)"
-+		     : : "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
-+}
-+
-+/* err() exits and will not return */
-+#define fatal_error(msg, ...)	err(1, "[FAIL]\t" msg, ##__VA_ARGS__)
-+
-+static void sethandler(int sig, void (*handler)(int, siginfo_t *, void *),
-+		       int flags)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handler;
-+	sa.sa_flags = SA_SIGINFO | flags;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		fatal_error("sigaction");
-+}
-+
-+static void clearhandler(int sig)
-+{
-+	struct sigaction sa;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_handler = SIG_DFL;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(sig, &sa, 0))
-+		fatal_error("sigaction");
-+}
-+
-+#define XFEATURE_XTILECFG	17
-+#define XFEATURE_XTILEDATA	18
-+#define XFEATURE_MASK_XTILECFG	(1 << XFEATURE_XTILECFG)
-+#define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
-+#define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
-+
-+#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
-+#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
-+static inline void check_cpuid_xsave(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	/*
-+	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
-+	 * support for the XSAVE feature set, including
-+	 * XGETBV.
-+	 */
-+	eax = 1;
-+	ecx = 0;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
-+		fatal_error("cpuid: no CPU xsave support");
-+	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
-+		fatal_error("cpuid: no OS xsave support");
-+}
-+
-+static uint32_t xbuf_size;
-+
-+static struct {
-+	uint32_t xbuf_offset;
-+	uint32_t size;
-+} xtiledata;
-+
-+#define CPUID_LEAF_XSTATE		0xd
-+#define CPUID_SUBLEAF_XSTATE_USER	0x0
-+#define TILE_CPUID			0x1d
-+#define TILE_PALETTE_ID			0x1
-+
-+static void check_cpuid_xtiledata(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	eax = CPUID_LEAF_XSTATE;
-+	ecx = CPUID_SUBLEAF_XSTATE_USER;
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+
-+	/*
-+	 * EBX enumerates the size (in bytes) required by the XSAVE
-+	 * instruction for an XSAVE area containing all the user state
-+	 * components corresponding to bits currently set in XCR0.
-+	 *
-+	 * Stash that off so it can be used to allocate buffers later.
-+	 */
-+	xbuf_size = ebx;
-+
-+	eax = CPUID_LEAF_XSTATE;
-+	ecx = XFEATURE_XTILEDATA;
-+
-+	cpuid(&eax, &ebx, &ecx, &edx);
-+	/*
-+	 * eax: XTILEDATA state component size
-+	 * ebx: XTILEDATA state component offset in user buffer
-+	 */
-+	if (!eax || !ebx)
-+		fatal_error("xstate cpuid: invalid tile data size/offset: %d/%d",
-+				eax, ebx);
-+
-+	xtiledata.size	      = eax;
-+	xtiledata.xbuf_offset = ebx;
-+}
-+
-+/* The helpers for managing XSAVE buffer and tile states: */
-+
-+struct xsave_buffer *alloc_xbuf(void)
-+{
-+	struct xsave_buffer *xbuf;
-+
-+	/* XSAVE buffer should be 64B-aligned. */
-+	xbuf = aligned_alloc(64, xbuf_size);
-+	if (!xbuf)
-+		fatal_error("aligned_alloc()");
-+	return xbuf;
-+}
-+
-+static inline void clear_xstate_header(struct xsave_buffer *buffer)
-+{
-+	memset(&buffer->header, 0, sizeof(buffer->header));
-+}
-+
-+static inline uint64_t get_xstatebv(struct xsave_buffer *buffer)
-+{
-+	/* XSTATE_BV is at the beginning of the header: */
-+	return *(uint64_t *)&buffer->header;
-+}
-+
-+static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
-+{
-+	/* XSTATE_BV is at the beginning of the header: */
-+	*(uint64_t *)(&buffer->header) = bv;
-+}
-+
-+static void set_rand_tiledata(struct xsave_buffer *xbuf)
-+{
-+	int *ptr = (int *)&xbuf->bytes[xtiledata.xbuf_offset];
-+	int data;
-+	int i;
-+
-+	/*
-+	 * Ensure that 'data' is never 0.  This ensures that
-+	 * the registers are never in their initial configuration
-+	 * and thus never tracked as being in the init state.
-+	 */
-+	data = rand() | 1;
-+
-+	for (i = 0; i < xtiledata.size / sizeof(int); i++, ptr++)
-+		*ptr = data;
-+}
-+
-+struct xsave_buffer *stashed_xsave;
-+
-+static void init_stashed_xsave(void)
-+{
-+	stashed_xsave = alloc_xbuf();
-+	if (!stashed_xsave)
-+		fatal_error("failed to allocate stashed_xsave\n");
-+	clear_xstate_header(stashed_xsave);
-+}
-+
-+static void free_stashed_xsave(void)
-+{
-+	free(stashed_xsave);
-+}
-+
-+/* See 'struct _fpx_sw_bytes' at sigcontext.h */
-+#define SW_BYTES_OFFSET		464
-+/* N.B. The struct's field name varies so read from the offset. */
-+#define SW_BYTES_BV_OFFSET	(SW_BYTES_OFFSET + 8)
-+
-+static inline struct _fpx_sw_bytes *get_fpx_sw_bytes(void *buffer)
-+{
-+	return (struct _fpx_sw_bytes *)(buffer + SW_BYTES_OFFSET);
-+}
-+
-+static inline uint64_t get_fpx_sw_bytes_features(void *buffer)
-+{
-+	return *(uint64_t *)(buffer + SW_BYTES_BV_OFFSET);
-+}
-+
-+/* Work around printf() being unsafe in signals: */
-+#define SIGNAL_BUF_LEN 1000
-+char signal_message_buffer[SIGNAL_BUF_LEN];
-+void sig_print(char *msg)
-+{
-+	int left = SIGNAL_BUF_LEN - strlen(signal_message_buffer) - 1;
-+
-+	strncat(signal_message_buffer, msg, left);
-+}
-+
-+static volatile bool noperm_signaled;
-+static int noperm_errs;
-+
-+/*
-+ * Signal handler for when AMX is used but
-+ * permission has not been obtained.
-+ */
-+static void handle_noperm(int sig, siginfo_t *si, void *ctx_void)
-+{
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
-+	void *xbuf = ctx->uc_mcontext.fpregs;
-+	struct _fpx_sw_bytes *sw_bytes;
-+	uint64_t features;
-+
-+	/* Reset the signal message buffer: */
-+	signal_message_buffer[0] = '\0';
-+	sig_print("\tAt SIGILL handler,\n");
-+
-+	if (si->si_code != ILL_ILLOPC) {
-+		noperm_errs++;
-+		sig_print("[FAIL]\tInvalid signal code.\n");
-+	} else {
-+		sig_print("[OK]\tValid signal code (ILL_ILLOPC).\n");
-+	}
-+
-+	sw_bytes = get_fpx_sw_bytes(xbuf);
-+	/*
-+	 * Without permission, the signal XSAVE buffer should not
-+	 * have room for AMX register state (aka. xtiledata).
-+	 * Check that the size does not overlap with where xtiledata
-+	 * will reside.
-+	 *
-+	 * This also implies that no state components *PAST*
-+	 * XTILEDATA (features >=19) can be present in the buffer.
-+	 */
-+	if (sw_bytes->xstate_size <= xtiledata.xbuf_offset) {
-+		sig_print("[OK]\tValid xstate size\n");
-+	} else {
-+		noperm_errs++;
-+		sig_print("[FAIL]\tInvalid xstate size\n");
-+	}
-+
-+	features = get_fpx_sw_bytes_features(xbuf);
-+	/*
-+	 * Without permission, the XTILEDATA feature
-+	 * bit should not be set.
-+	 */
-+	if ((features & XFEATURE_MASK_XTILEDATA) == 0) {
-+		sig_print("[OK]\tValid xstate mask\n");
-+	} else {
-+		noperm_errs++;
-+		sig_print("[FAIL]\tInvalid xstate mask\n");
-+	}
-+
-+	noperm_signaled = true;
-+	ctx->uc_mcontext.gregs[REG_RIP] += 3; /* Skip the faulting XRSTOR */
-+}
-+
-+/* Return true if XRSTOR is successful; otherwise, false. */
-+static inline bool xrstor_safe(struct xsave_buffer *xbuf, uint64_t mask)
-+{
-+	noperm_signaled = false;
-+	xrstor(xbuf, mask);
-+
-+	/* Print any messages produced by the signal code: */
-+	printf("%s", signal_message_buffer);
-+	/*
-+	 * Reset the buffer to make sure any future printing
-+	 * only outputs new messages:
-+	 */
-+	signal_message_buffer[0] = '\0';
-+
-+	if (noperm_errs)
-+		fatal_error("saw %d errors in noperm signal handler\n", noperm_errs);
-+
-+	return !noperm_signaled;
-+}
-+
-+/*
-+ * Use XRSTOR to populate the XTILEDATA registers with
-+ * random data.
-+ *
-+ * Return true if successful; otherwise, false.
-+ */
-+static inline bool load_rand_tiledata(struct xsave_buffer *xbuf)
-+{
-+	clear_xstate_header(xbuf);
-+	set_xstatebv(xbuf, XFEATURE_MASK_XTILEDATA);
-+	set_rand_tiledata(xbuf);
-+	return xrstor_safe(xbuf, XFEATURE_MASK_XTILEDATA);
-+}
-+
-+/* Return XTILEDATA to its initial configuration. */
-+static inline void init_xtiledata(void)
-+{
-+	clear_xstate_header(stashed_xsave);
-+	xrstor_safe(stashed_xsave, XFEATURE_MASK_XTILEDATA);
-+}
-+
-+enum expected_result { FAIL_EXPECTED, SUCCESS_EXPECTED };
-+
-+/* arch_prctl() and sigaltstack() test */
-+
-+#define ARCH_GET_XCOMP_PERM	0x1022
-+#define ARCH_REQ_XCOMP_PERM	0x1023
-+
-+static void req_xtiledata_perm(void)
-+{
-+	syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
-+}
-+
-+static void validate_req_xcomp_perm(enum expected_result exp)
-+{
-+	unsigned long bitmask;
-+	long rc;
-+
-+	rc = syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_PERM, XFEATURE_XTILEDATA);
-+	if (exp == FAIL_EXPECTED) {
-+		if (rc) {
-+			printf("[OK]\tARCH_REQ_XCOMP_PERM saw expected failure..\n");
-+			return;
-+		}
-+
-+		fatal_error("ARCH_REQ_XCOMP_PERM saw unexpected success.\n");
-+	} else if (rc) {
-+		fatal_error("ARCH_REQ_XCOMP_PERM saw unexpected failure.\n");
-+	}
-+
-+	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_PERM, &bitmask);
-+	if (rc) {
-+		fatal_error("prctl(ARCH_GET_XCOMP_PERM) error: %ld", rc);
-+	} else if (bitmask & XFEATURE_MASK_XTILE) {
-+		printf("\tARCH_REQ_XCOMP_PERM is successful.\n");
-+	}
-+}
-+
-+static void validate_xcomp_perm(enum expected_result exp)
-+{
-+	bool load_success = load_rand_tiledata(stashed_xsave);
-+
-+	if (exp == FAIL_EXPECTED) {
-+		if (load_success) {
-+			noperm_errs++;
-+			printf("[FAIL]\tLoad tiledata succeeded.\n");
-+		} else {
-+			printf("[OK]\tLoad tiledata failed.\n");
-+		}
-+	} else if (exp == SUCCESS_EXPECTED) {
-+		if (load_success) {
-+			printf("[OK]\tLoad tiledata succeeded.\n");
-+		} else {
-+			noperm_errs++;
-+			printf("[FAIL]\tLoad tiledata failed.\n");
-+		}
-+	}
-+}
-+
-+#ifndef AT_MINSIGSTKSZ
-+#  define AT_MINSIGSTKSZ	51
-+#endif
-+
-+static void *alloc_altstack(unsigned int size)
-+{
-+	void *altstack;
-+
-+	altstack = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-+
-+	if (altstack == MAP_FAILED)
-+		fatal_error("mmap() for altstack");
-+
-+	return altstack;
-+}
-+
-+static void setup_altstack(void *addr, unsigned long size, enum expected_result exp)
-+{
-+	stack_t ss;
-+	int rc;
-+
-+	memset(&ss, 0, sizeof(ss));
-+	ss.ss_size = size;
-+	ss.ss_sp = addr;
-+
-+	rc = sigaltstack(&ss, NULL);
-+
-+	if (exp == FAIL_EXPECTED) {
-+		if (rc) {
-+			printf("[OK]\tsigaltstack() failed.\n");
-+		} else {
-+			fatal_error("sigaltstack() succeeded unexpectedly.\n");
-+		}
-+	} else if (rc) {
-+		fatal_error("sigaltstack()");
-+	}
-+}
-+
-+static void test_dynamic_sigaltstack(void)
-+{
-+	unsigned int small_size, enough_size;
-+	unsigned long minsigstksz;
-+	void *altstack;
-+
-+	minsigstksz = getauxval(AT_MINSIGSTKSZ);
-+	printf("\tAT_MINSIGSTKSZ = %lu\n", minsigstksz);
-+	/*
-+	 * getauxval() itself can return 0 for failure or
-+	 * success.  But, in this case, AT_MINSIGSTKSZ
-+	 * will always return a >=0 value if implemented.
-+	 * Just check for 0.
-+	 */
-+	if (minsigstksz == 0) {
-+		printf("no support for AT_MINSIGSTKSZ, skipping sigaltstack tests\n");
-+		return;
-+	}
-+
-+	enough_size = minsigstksz * 2;
-+
-+	altstack = alloc_altstack(enough_size);
-+	printf("\tAllocate memory for altstack (%u bytes).\n", enough_size);
-+
-+	/*
-+	 * Try setup_altstack() with a size which can not fit
-+	 * XTILEDATA.  ARCH_REQ_XCOMP_PERM should fail.
-+	 */
-+	small_size = minsigstksz - xtiledata.size;
-+	printf("\tAfter sigaltstack() with small size (%u bytes).\n", small_size);
-+	setup_altstack(altstack, small_size, SUCCESS_EXPECTED);
-+	validate_req_xcomp_perm(FAIL_EXPECTED);
-+
-+	/*
-+	 * Try setup_altstack() with a size derived from
-+	 * AT_MINSIGSTKSZ.  It should be more than large enough
-+	 * and thus ARCH_REQ_XCOMP_PERM should succeed.
-+	 */
-+	printf("\tAfter sigaltstack() with enough size (%u bytes).\n", enough_size);
-+	setup_altstack(altstack, enough_size, SUCCESS_EXPECTED);
-+	validate_req_xcomp_perm(SUCCESS_EXPECTED);
-+
-+	/*
-+	 * Try to coerce setup_altstack() to again accept a
-+	 * too-small altstack.  This ensures that big-enough
-+	 * sigaltstacks can not shrink to a too-small value
-+	 * once XTILEDATA permission is established.
-+	 */
-+	printf("\tThen, sigaltstack() with small size (%u bytes).\n", small_size);
-+	setup_altstack(altstack, small_size, FAIL_EXPECTED);
-+}
-+
-+static void test_dynamic_state(void)
-+{
-+	pid_t parent, child, grandchild;
-+
-+	parent = fork();
-+	if (parent < 0) {
-+		/* fork() failed */
-+		fatal_error("fork");
-+	} else if (parent > 0) {
-+		int status;
-+		/* fork() succeeded.  Now in the parent. */
-+
-+		wait(&status);
-+		if (!WIFEXITED(status) || WEXITSTATUS(status))
-+			fatal_error("arch_prctl test parent exit");
-+		return;
-+	}
-+	/* fork() succeeded.  Now in the child . */
-+
-+	printf("[RUN]\tCheck ARCH_REQ_XCOMP_PERM around process fork() and sigaltack() test.\n");
-+
-+	printf("\tFork a child.\n");
-+	child = fork();
-+	if (child < 0) {
-+		fatal_error("fork");
-+	} else if (child > 0) {
-+		int status;
-+
-+		wait(&status);
-+		if (!WIFEXITED(status) || WEXITSTATUS(status))
-+			fatal_error("arch_prctl test child exit");
-+		_exit(0);
-+	}
-+
-+	/*
-+	 * The permission request should fail without an
-+	 * XTILEDATA-compatible signal stack
-+	 */
-+	printf("\tTest XCOMP_PERM at child.\n");
-+	validate_xcomp_perm(FAIL_EXPECTED);
-+
-+	/*
-+	 * Set up an XTILEDATA-compatible signal stack and
-+	 * also obtain permission to populate XTILEDATA.
-+	 */
-+	printf("\tTest dynamic sigaltstack at child:\n");
-+	test_dynamic_sigaltstack();
-+
-+	/* Ensure that XTILEDATA can be populated. */
-+	printf("\tTest XCOMP_PERM again at child.\n");
-+	validate_xcomp_perm(SUCCESS_EXPECTED);
-+
-+	printf("\tFork a grandchild.\n");
-+	grandchild = fork();
-+	if (grandchild < 0) {
-+		/* fork() failed */
-+		fatal_error("fork");
-+	} else if (!grandchild) {
-+		/* fork() succeeded.  Now in the (grand)child. */
-+		printf("\tTest XCOMP_PERM at grandchild.\n");
-+
-+		/*
-+		 * Ensure that the grandchild inherited
-+		 * permission and a compatible sigaltstack:
-+		 */
-+		validate_xcomp_perm(SUCCESS_EXPECTED);
-+	} else {
-+		int status;
-+		/* fork() succeeded.  Now in the parent. */
-+
-+		wait(&status);
-+		if (!WIFEXITED(status) || WEXITSTATUS(status))
-+			fatal_error("fork test grandchild");
-+	}
-+
-+	_exit(0);
-+}
-+
-+/*
-+ * Save current register state and compare it to @xbuf1.'
-+ *
-+ * Returns false if @xbuf1 matches the registers.
-+ * Returns true  if @xbuf1 differs from the registers.
-+ */
-+static inline bool __validate_tiledata_regs(struct xsave_buffer *xbuf1)
-+{
-+	struct xsave_buffer *xbuf2;
-+	int ret;
-+
-+	xbuf2 = alloc_xbuf();
-+	if (!xbuf2)
-+		fatal_error("failed to allocate XSAVE buffer\n");
-+
-+	xsave(xbuf2, XFEATURE_MASK_XTILEDATA);
-+	ret = memcmp(&xbuf1->bytes[xtiledata.xbuf_offset],
-+		     &xbuf2->bytes[xtiledata.xbuf_offset],
-+		     xtiledata.size);
-+
-+	free(xbuf2);
-+
-+	if (ret == 0)
-+		return false;
-+	return true;
-+}
-+
-+static inline void validate_tiledata_regs_same(struct xsave_buffer *xbuf)
-+{
-+	int ret = __validate_tiledata_regs(xbuf);
-+
-+	if (ret != 0)
-+		fatal_error("TILEDATA registers changed");
-+}
-+
-+static inline void validate_tiledata_regs_changed(struct xsave_buffer *xbuf)
-+{
-+	int ret = __validate_tiledata_regs(xbuf);
-+
-+	if (ret == 0)
-+		fatal_error("TILEDATA registers did not change");
-+}
-+
-+/* tiledata inheritance test */
-+
-+static void test_fork(void)
-+{
-+	pid_t child, grandchild;
-+
-+	child = fork();
-+	if (child < 0) {
-+		/* fork() failed */
-+		fatal_error("fork");
-+	} else if (child > 0) {
-+		/* fork() succeeded.  Now in the parent. */
-+		int status;
-+
-+		wait(&status);
-+		if (!WIFEXITED(status) || WEXITSTATUS(status))
-+			fatal_error("fork test child");
-+		return;
-+	}
-+	/* fork() succeeded.  Now in the child. */
-+	printf("[RUN]\tCheck tile data inheritance.\n\tBefore fork(), load tiledata\n");
-+
-+	load_rand_tiledata(stashed_xsave);
-+
-+	grandchild = fork();
-+	if (grandchild < 0) {
-+		/* fork() failed */
-+		fatal_error("fork");
-+	} else if (grandchild > 0) {
-+		/* fork() succeeded.  Still in the first child. */
-+		int status;
-+
-+		wait(&status);
-+		if (!WIFEXITED(status) || WEXITSTATUS(status))
-+			fatal_error("fork test grand child");
-+		_exit(0);
-+	}
-+	/* fork() succeeded.  Now in the (grand)child. */
-+
-+	/*
-+	 * TILEDATA registers are not preserved across fork().
-+	 * Ensure that their value has changed:
-+	 */
-+	validate_tiledata_regs_changed(stashed_xsave);
-+
-+	_exit(0);
-+}
-+
-+int main(void)
-+{
-+	/* Check hardware availability at first */
-+	check_cpuid_xsave();
-+	check_cpuid_xtiledata();
-+
-+	init_stashed_xsave();
-+	sethandler(SIGILL, handle_noperm, 0);
-+
-+	test_dynamic_state();
-+
-+	/* Request permission for the following tests */
-+	req_xtiledata_perm();
-+
-+	test_fork();
-+
-+	clearhandler(SIGILL);
-+	free_stashed_xsave();
-+
-+	return 0;
-+}
-diff -puN tools/testing/selftests/x86/Makefile~amx-selftest-1_3-selftest-x86-amx-Test-cases-for-the-AMX-state-management tools/testing/selftests/x86/Makefile
---- a/tools/testing/selftests/x86/Makefile~amx-selftest-1_3-selftest-x86-amx-Test-cases-for-the-AMX-state-management	2021-10-15 13:56:39.829901810 -0700
-+++ b/tools/testing/selftests/x86/Makefile	2021-10-15 13:56:39.829901810 -0700
-@@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
- TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
--			corrupt_xstate_header
-+			corrupt_xstate_header amx
- # Some selftests require 32bit support enabled also on 64bit systems
- TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
- 
-_
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
