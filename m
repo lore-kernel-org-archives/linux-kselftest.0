@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57825C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Oct 2021 18:50:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5760CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Oct 2021 18:50:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30C2E610A6
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Oct 2021 18:50:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E6A8610C8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Oct 2021 18:50:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243659AbhJ0SxV (ORCPT
+        id S237061AbhJ0SxX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 Oct 2021 14:53:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32784 "EHLO mail.kernel.org"
+        Wed, 27 Oct 2021 14:53:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243641AbhJ0SxR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Oct 2021 14:53:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D55A161039;
-        Wed, 27 Oct 2021 18:50:48 +0000 (UTC)
+        id S243650AbhJ0SxW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Oct 2021 14:53:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 999FC610CA;
+        Wed, 27 Oct 2021 18:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635360651;
-        bh=qhtTr4UVem5MOe9PpuK1p/QBIMMfANGWH8VkqH1Nrn0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RzsUSaoyLPdK/PCd7HOW92rxpLyoIEIPMK1MNKhY0iDtUfVWtFfx6pQGVptJrtloj
-         DXgWQB/ulvcoGXPcxqSkUy8taJR1Eno9wsMli0snuulpr60w0oBtGQSOJRbAIamQzZ
-         Tgiix2vQEuoZO6wdX1LwtZx0MFM2v1e1lSNWvUyjW8Qy4aNCbCpFlCLzZLdVGwawGd
-         NEEmiUiWz1IfTMqBHG/V32yRqRmnDj8eW81SgqizavYdHIHowCN11OanK4daB8YgNx
-         anzPKzUIcFH9+0AmrmFmzsX+rCplesDTPYtciTI4PDCCQG4Hplc982cYdsYObENJJ4
-         G1LpMgRzqpVxQ==
+        s=k20201202; t=1635360657;
+        bh=OgWFl0NcJl1hoVw9TFF3mgC+KMbr8tQx7r2olhnm1Bk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fYLLc0oNj43wnVhVp/8VOjaoFbMP2Llbn1u57WBraDl8mBvAoxnaVhi6FCDKM1xh2
+         5EOs3OoYhhanJYl+q2ZV3m5YFJzueiE2AMHVby+9WrrpyNsgGJaVPO64I1TnSAm3tr
+         7+JBRe6Dy2PMKGqqtMvd6X/Uoutqb6n0i/jVWR+ar473lUrgaLsxu0zWS2Wbz4qnWm
+         N+g0qIA7RLQ2D19TXb0/cHAhrHyoAnGkFJrheuxEr8djyisBniilO4qi37W02vRS8W
+         yAs+AWJ2soxeXj9zGEWdPRmnOP9+91hwRomkx7P59IK6ul1dzD3uAUKm39tRucB7Jb
+         rPPu4rYJAnQQA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,245 +39,222 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v5 00/38] arm64/sme: Initial support for the Scalable Matrix Extension
-Date:   Wed, 27 Oct 2021 19:43:46 +0100
-Message-Id: <20211027184424.166237-1-broonie@kernel.org>
+Subject: [PATCH v5 02/38] arm64/sve: Generalise vector length configuration prctl() for SME
+Date:   Wed, 27 Oct 2021 19:43:48 +0100
+Message-Id: <20211027184424.166237-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211027184424.166237-1-broonie@kernel.org>
+References: <20211027184424.166237-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12526; h=from:subject; bh=qhtTr4UVem5MOe9PpuK1p/QBIMMfANGWH8VkqH1Nrn0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBheZ3mPPAaou1CzG8jA3rUkcVIdAP5eBKXv9a3A8Ef dbsylOuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXmd5gAKCRAk1otyXVSH0G1YB/ 9OZUTAbYptlQXdSHdXjXUiRRFXRHSaBMxMTXHavzifEr+1rvN3YtAxI6JC49IX+M8zrWyqrmLuPgmQ VmgW1L4/YpnVHXtwAFe7gLRtBGyMTGpkVdx32FPOsNb41P9Ork3WPtKM/7mQWSBe2Q+szrX4s8TqdP kecKK5c/y71fKuxgznoGYI44gY12i8lOA6h/To89bhq2HV8vn/mVOszCNNQg/qz9JRBty04yONwLmI NMCOUwwfQDD9KGcSQLFKbU1TAOx/v3rzI88bNbqmj2EjpVybl+dtR+ACb3OLu6dhjqRLko4aJYbORP Us5q+3bTLb+eDt0qiBSv8/lC4rlke+
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7467; h=from:subject; bh=OgWFl0NcJl1hoVw9TFF3mgC+KMbr8tQx7r2olhnm1Bk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBheZ3ov+c3McP/EjETtxm+6z0SK3JZUrSVm7opTkPn 8XANy0eJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYXmd6AAKCRAk1otyXVSH0CTwB/ 458pwpjkOYd4YXKNnJ6jbpIY6PxwT5Uk/bw6KZtQj8IPozAeiLT7FROTGJUcThCoOC+C2HWFLrQ5SE CSdzDKUu/XUoHeFlDFpAa5STCg4c0A3Mi6ai1W+RPOWDCJAldZ/ASiM4cLL9x1Dsa9sPgFbq95acRH WjfFVUVThhkB6boE/vUSug/V/hwei9eWcb0tKETU8QNFEY3ZUQcyqri/lYr+mR5pIJmIhwj22szhVy fpMyG36tDmkjQnK0AoKkKw0gV4FN2S0CAsUdhnq8HLX64X+f88TqCjjmyvLy0vmwrj8HUnkzsKuR0C LlnnnMun+uIpjEKrRi3tcCyEmt/VwT
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series provides initial support for the ARMv9 Scalable Matrix
-Extension (SME).  SME takes the approach used for vectors in SVE and
-extends this to provide architectural support for matrix operations.  A
-more detailed overview can be found in [1].
+In preparation for adding SME support update the bulk of the implementation
+for the vector length configuration prctl() calls to be independent of
+vector type.
 
-For the kernel SME can be thought of as a series of features which are
-intended to be used together by applications but operate mostly
-orthogonally:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/include/asm/fpsimd.h |  6 ++---
+ arch/arm64/kernel/fpsimd.c      | 47 ++++++++++++++++++---------------
+ arch/arm64/kernel/ptrace.c      |  4 +--
+ arch/arm64/kvm/reset.c          |  8 +++---
+ 4 files changed, 34 insertions(+), 31 deletions(-)
 
- - The ZA matrix register.
- - Streaming mode, in which ZA can be accessed and a subset of SVE
-   features are available.
- - A second vector length, used for streaming mode SVE and ZA and
-   controlled using a similar interface to that for SVE.
- - TPIDR2, a new userspace controllable system register intended for use
-   by the C library for storing context related to the ZA ABI.
-
-A substantial part of the series is dedicated to refactoring the
-existing SVE support so that we don't need to duplicate code for
-handling vector lengths and the SVE registers, this involves creating an
-array of vector types and making the users take the vector type as a
-parameter.  I'm not 100% happy with this but wasn't able to come up with
-anything better, duplicating code definitely felt like a bad idea so
-this felt like the least bad thing.  If this approach makes sense to
-people it might make sense to split this off into a separate series
-and/or merge it while the rest is pending review to try to make things a
-little more digestable, the series is very large so it'd probably make
-things easier to digest if some of the preparatory refactoring could be
-merged before the rest is ready.
-
-One feature of the architecture of particular note is that switching
-to and from streaming mode may change the size of and invalidate the
-contents of the SVE registers, and when in streaming mode the FFR is not
-accessible.  This complicates aspects of the ABI like signal handling
-and ptrace.
-
-This initial implementation is mainly intended to get the ABI in place,
-there are several areas which will be worked on going forwards - some of
-these will be blockers, others could be handled in followup serieses:
-
- - KVM is not currently supported and we depend on !KVM, this is
-   obviously not good - in hopefully the next version I will add support
-   for coexisting with KVM and then in a subsequent series implement
-   support for use of SME by KVM guests.
- - It is likely some build configurations have issues, I've not fully
-   checked this yet.  In general testing is still ongoing, I anticipate
-   finding and fixing some issues in the implementation.
- - No support is currently provided for scheduler control of SME or SME
-   applications, given the size of the SME register state the context
-   switch overhead may be noticable so this may be needed especially for
-   real time applications.  Similar concerns already exist for larger
-   SVE vector lengths but are amplified for SME, particularly as the
-   vector length increases.
- - There has been no work on optimising the performance of anything the
-   kernel does.
-
-It is not expected that any systems will be encountered that support SME
-but not SVE, SME is an ARMv9 feature and SVE is mandatory for ARMv9.
-The code attempts to handle any such systems that are encountered but
-this hasn't been tested extensively.
-
-Due to dependencies on changes already upstreamed this series is based
-on a merge of for-next/kselftest and for-next/sve in the arm64 tree.
-
-v5:
- - Rebase onto currently merged SVE and kselftest patches.
- - Add support for the FA64 option, introduced in the recently published
-   EAC1 update to the specification.
- - Pull in test program for the syscall ABI previously sent separately
-   with some revisions and add coverage for the SME ABI.
- - Fix checking for options with 1 bit fields in ID_AA64SMFR0_EL1.
- - Minor fixes and clarifications to the ABI documentation.
-v4:
- - Rebase onto merged patches.
- - Remove an uneeded NULL check in vec_proc_do_default_vl().
- - Include patch to factor out utility routines in kselftests written in
-   assembler.
- - Specify -ffreestanding when building TPIDR2 test.
-v3:
- - Skip FFR rather than predicate registers in sve_flush_live().
- - Don't assume a bool is all zeros in sve_flush_live() as per AAPCS.
- - Don't redundantly specify a zero index when clearing FFR.
-v2:
- - Fix several issues with !SME and !SVE configurations.
- - Preserve TPIDR2 when creating a new thread/process unless
-   CLONE_SETTLS is set.
- - Report traps due to using features in an invalid mode as SIGILL.
- - Spell out streaming mode behaviour in SVE ABI documentation more
-   directly.
- - Document TPIDR2 in the ABI document.
- - Use SMSTART and SMSTOP rather than read/modify/write sequences.
- - Rework logic for exiting streaming mode on syscall.
- - Don't needlessly initialise SVCR on access trap.
- - Always restore SME VL for userspace if SME traps are disabled.
- - Only yield to encourage preemption every 128 iterations in za-test,
-   otherwise do a getpid(), and validate SVCR after syscall.
- - Leave streaming mode disabled except when reading the vector length
-   in za-test, and disable ZA after detecting a mismatch.
- - Add SME support to vlset.
- - Clarifications and typo fixes in comments.
- - Move sme_alloc() forward declaration back a patch.
-
-[1] https://community.arm.com/developer/ip-products/processors/b/processors-ip-blog/posts/scalable-matrix-extension-armv9-a-architecture
-
-Mark Brown (38):
-  arm64/sve: Make sysctl interface for SVE reusable by SME
-  arm64/sve: Generalise vector length configuration prctl() for SME
-  arm64/sve: Minor clarification of ABI documentation
-  kselftest/arm64: Parameterise ptrace vector length information
-  kselftest/arm64: Allow signal tests to trigger from a function
-  kselftest/arm64: Add a test program to exercise the syscall ABI
-  tools/nolibc: Implement gettid()
-  arm64: Document boot requirements for FEAT_SME_FA64
-  arm64: cpufeature: Add has_feature_flag() match function
-  arm64/sme: Provide ABI documentation for SME
-  arm64/sme: System register and exception syndrome definitions
-  arm64/sme: Define macros for manually encoding SME instructions
-  arm64/sme: Early CPU setup for SME
-  arm64/sme: Basic enumeration support
-  arm64/sme: Identify supported SME vector lengths at boot
-  arm64/sme: Implement sysctl to set the default vector length
-  arm64/sme: Implement vector length configuration prctl()s
-  arm64/sme: Implement support for TPIDR2
-  arm64/sme: Implement SVCR context switching
-  arm64/sme: Implement streaming SVE context switching
-  arm64/sme: Implement ZA context switching
-  arm64/sme: Implement traps and syscall handling for SME
-  arm64/sme: Implement streaming SVE signal handling
-  arm64/sme: Implement ZA signal handling
-  arm64/sme: Implement ptrace support for streaming mode SVE registers
-  arm64/sme: Add ptrace support for ZA
-  arm64/sme: Disable streaming mode and ZA when flushing CPU state
-  arm64/sme: Save and restore streaming mode over EFI runtime calls
-  arm64/sme: Provide Kconfig for SME
-  kselftest/arm64: sme: Add streaming SME support to vlset
-  kselftest/arm64: Add tests for TPIDR2
-  kselftest/arm64: Extend vector configuration API tests to cover SME
-  kselftest/arm64: sme: Provide streaming mode SVE stress test
-  kselftest/arm64: Add stress test for SME ZA context switching
-  kselftest/arm64: signal: Add SME signal handling tests
-  kselftest/arm64: Add streaming SVE to SVE ptrace tests
-  kselftest/arm64: Add coverage for the ZA ptrace interface
-  kselftest/arm64: Add SME support to syscall ABI test
-
- Documentation/arm64/booting.rst               |  10 +
- Documentation/arm64/elf_hwcaps.rst            |  33 +
- Documentation/arm64/index.rst                 |   1 +
- Documentation/arm64/sme.rst                   | 430 ++++++++++++
- Documentation/arm64/sve.rst                   |  72 +-
- arch/arm64/Kconfig                            |  11 +
- arch/arm64/include/asm/cpu.h                  |   4 +
- arch/arm64/include/asm/cpufeature.h           |  24 +
- arch/arm64/include/asm/el2_setup.h            |  45 ++
- arch/arm64/include/asm/esr.h                  |  13 +-
- arch/arm64/include/asm/exception.h            |   1 +
- arch/arm64/include/asm/fpsimd.h               | 112 ++-
- arch/arm64/include/asm/fpsimdmacros.h         |  77 +++
- arch/arm64/include/asm/hwcap.h                |   8 +
- arch/arm64/include/asm/kvm_arm.h              |   1 +
- arch/arm64/include/asm/processor.h            |  18 +-
- arch/arm64/include/asm/sysreg.h               |  58 ++
- arch/arm64/include/asm/thread_info.h          |   2 +
- arch/arm64/include/uapi/asm/hwcap.h           |   8 +
- arch/arm64/include/uapi/asm/ptrace.h          |  69 +-
- arch/arm64/include/uapi/asm/sigcontext.h      |  55 +-
- arch/arm64/kernel/cpufeature.c                | 130 ++++
- arch/arm64/kernel/cpuinfo.c                   |  13 +
- arch/arm64/kernel/entry-common.c              |  10 +
- arch/arm64/kernel/entry-fpsimd.S              |  31 +
- arch/arm64/kernel/fpsimd.c                    | 641 ++++++++++++++++--
- arch/arm64/kernel/process.c                   |  28 +-
- arch/arm64/kernel/ptrace.c                    | 358 ++++++++--
- arch/arm64/kernel/signal.c                    | 187 ++++-
- arch/arm64/kernel/syscall.c                   |  43 +-
- arch/arm64/kernel/traps.c                     |   1 +
- arch/arm64/kvm/fpsimd.c                       |   3 +-
- arch/arm64/kvm/reset.c                        |   8 +-
- arch/arm64/tools/cpucaps                      |   2 +
- include/uapi/linux/elf.h                      |   2 +
- include/uapi/linux/prctl.h                    |   9 +
- kernel/sys.c                                  |  12 +
- tools/include/nolibc/nolibc.h                 |  18 +
- tools/testing/selftests/arm64/Makefile        |   2 +-
- tools/testing/selftests/arm64/abi/.gitignore  |   2 +
- tools/testing/selftests/arm64/abi/Makefile    |  15 +
- .../selftests/arm64/abi/syscall-abi-asm.S     | 307 +++++++++
- .../testing/selftests/arm64/abi/syscall-abi.c | 485 +++++++++++++
- tools/testing/selftests/arm64/abi/tpidr2.c    | 298 ++++++++
- tools/testing/selftests/arm64/fp/.gitignore   |   4 +
- tools/testing/selftests/arm64/fp/Makefile     |  12 +-
- tools/testing/selftests/arm64/fp/rdvl-sme.c   |  14 +
- tools/testing/selftests/arm64/fp/rdvl.S       |  16 +
- tools/testing/selftests/arm64/fp/rdvl.h       |   1 +
- tools/testing/selftests/arm64/fp/ssve-stress  |  59 ++
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 230 ++++---
- tools/testing/selftests/arm64/fp/sve-test.S   |  30 +
- tools/testing/selftests/arm64/fp/vec-syscfg.c |  10 +
- tools/testing/selftests/arm64/fp/vlset.c      |  10 +-
- tools/testing/selftests/arm64/fp/za-ptrace.c  | 353 ++++++++++
- tools/testing/selftests/arm64/fp/za-stress    |  59 ++
- tools/testing/selftests/arm64/fp/za-test.S    | 431 ++++++++++++
- .../testing/selftests/arm64/signal/.gitignore |   2 +
- .../selftests/arm64/signal/test_signals.h     |   2 +
- .../arm64/signal/test_signals_utils.c         |   5 +-
- .../testcases/fake_sigreturn_sme_change_vl.c  |  92 +++
- .../arm64/signal/testcases/sme_trap_za.c      |  36 +
- .../selftests/arm64/signal/testcases/sme_vl.c |  70 ++
- .../arm64/signal/testcases/ssve_regs.c        | 129 ++++
- 64 files changed, 4974 insertions(+), 248 deletions(-)
- create mode 100644 Documentation/arm64/sme.rst
- create mode 100644 tools/testing/selftests/arm64/abi/.gitignore
- create mode 100644 tools/testing/selftests/arm64/abi/Makefile
- create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi-asm.S
- create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi.c
- create mode 100644 tools/testing/selftests/arm64/abi/tpidr2.c
- create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sme.c
- create mode 100644 tools/testing/selftests/arm64/fp/ssve-stress
- create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
- create mode 100644 tools/testing/selftests/arm64/fp/za-stress
- create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_vl.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-
-
-base-commit: be4221f75622617bc17e085d8ff109225e24a31b
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index dbb4b30a5648..cb24385e3632 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -51,8 +51,8 @@ extern void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *state,
+ extern void fpsimd_flush_task_state(struct task_struct *target);
+ extern void fpsimd_save_and_flush_cpu_state(void);
+ 
+-/* Maximum VL that SVE VL-agnostic software can transparently support */
+-#define SVE_VL_ARCH_MAX 0x100
++/* Maximum VL that SVE/SME VL-agnostic software can transparently support */
++#define VL_ARCH_MAX 0x100
+ 
+ /* Offset of FFR in the SVE register dump */
+ static inline size_t sve_ffr_offset(int vl)
+@@ -122,7 +122,7 @@ extern void fpsimd_sync_to_sve(struct task_struct *task);
+ extern void sve_sync_to_fpsimd(struct task_struct *task);
+ extern void sve_sync_from_fpsimd_zeropad(struct task_struct *task);
+ 
+-extern int sve_set_vector_length(struct task_struct *task,
++extern int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 				 unsigned long vl, unsigned long flags);
+ 
+ extern int sve_set_current_vl(unsigned long arg);
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 23e575c4e580..4a98cc3b1df1 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -632,7 +632,7 @@ void sve_sync_from_fpsimd_zeropad(struct task_struct *task)
+ 	__fpsimd_to_sve(sst, fst, vq);
+ }
+ 
+-int sve_set_vector_length(struct task_struct *task,
++int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 			  unsigned long vl, unsigned long flags)
+ {
+ 	if (flags & ~(unsigned long)(PR_SVE_VL_INHERIT |
+@@ -643,33 +643,35 @@ int sve_set_vector_length(struct task_struct *task,
+ 		return -EINVAL;
+ 
+ 	/*
+-	 * Clamp to the maximum vector length that VL-agnostic SVE code can
+-	 * work with.  A flag may be assigned in the future to allow setting
+-	 * of larger vector lengths without confusing older software.
++	 * Clamp to the maximum vector length that VL-agnostic code
++	 * can work with.  A flag may be assigned in the future to
++	 * allow setting of larger vector lengths without confusing
++	 * older software.
+ 	 */
+-	if (vl > SVE_VL_ARCH_MAX)
+-		vl = SVE_VL_ARCH_MAX;
++	if (vl > VL_ARCH_MAX)
++		vl = VL_ARCH_MAX;
+ 
+-	vl = find_supported_vector_length(ARM64_VEC_SVE, vl);
++	vl = find_supported_vector_length(type, vl);
+ 
+ 	if (flags & (PR_SVE_VL_INHERIT |
+ 		     PR_SVE_SET_VL_ONEXEC))
+-		task_set_sve_vl_onexec(task, vl);
++		task_set_vl_onexec(task, type, vl);
+ 	else
+ 		/* Reset VL to system default on next exec: */
+-		task_set_sve_vl_onexec(task, 0);
++		task_set_vl_onexec(task, type, 0);
+ 
+ 	/* Only actually set the VL if not deferred: */
+ 	if (flags & PR_SVE_SET_VL_ONEXEC)
+ 		goto out;
+ 
+-	if (vl == task_get_sve_vl(task))
++	if (vl == task_get_vl(task, type))
+ 		goto out;
+ 
+ 	/*
+ 	 * To ensure the FPSIMD bits of the SVE vector registers are preserved,
+ 	 * write any live register state back to task_struct, and convert to a
+-	 * non-SVE thread.
++	 * regular FPSIMD thread.  Since the vector length can only be changed
++	 * with a syscall we can't be in streaming mode while reconfiguring.
+ 	 */
+ 	if (task == current) {
+ 		get_cpu_fpsimd_context();
+@@ -690,10 +692,10 @@ int sve_set_vector_length(struct task_struct *task,
+ 	 */
+ 	sve_free(task);
+ 
+-	task_set_sve_vl(task, vl);
++	task_set_vl(task, type, vl);
+ 
+ out:
+-	update_tsk_thread_flag(task, TIF_SVE_VL_INHERIT,
++	update_tsk_thread_flag(task, vec_vl_inherit_flag(type),
+ 			       flags & PR_SVE_VL_INHERIT);
+ 
+ 	return 0;
+@@ -701,20 +703,21 @@ int sve_set_vector_length(struct task_struct *task,
+ 
+ /*
+  * Encode the current vector length and flags for return.
+- * This is only required for prctl(): ptrace has separate fields
++ * This is only required for prctl(): ptrace has separate fields.
++ * SVE and SME use the same bits for _ONEXEC and _INHERIT.
+  *
+- * flags are as for sve_set_vector_length().
++ * flags are as for vec_set_vector_length().
+  */
+-static int sve_prctl_status(unsigned long flags)
++static int vec_prctl_status(enum vec_type type, unsigned long flags)
+ {
+ 	int ret;
+ 
+ 	if (flags & PR_SVE_SET_VL_ONEXEC)
+-		ret = task_get_sve_vl_onexec(current);
++		ret = task_get_vl_onexec(current, type);
+ 	else
+-		ret = task_get_sve_vl(current);
++		ret = task_get_vl(current, type);
+ 
+-	if (test_thread_flag(TIF_SVE_VL_INHERIT))
++	if (test_thread_flag(vec_vl_inherit_flag(type)))
+ 		ret |= PR_SVE_VL_INHERIT;
+ 
+ 	return ret;
+@@ -732,11 +735,11 @@ int sve_set_current_vl(unsigned long arg)
+ 	if (!system_supports_sve() || is_compat_task())
+ 		return -EINVAL;
+ 
+-	ret = sve_set_vector_length(current, vl, flags);
++	ret = vec_set_vector_length(current, ARM64_VEC_SVE, vl, flags);
+ 	if (ret)
+ 		return ret;
+ 
+-	return sve_prctl_status(flags);
++	return vec_prctl_status(ARM64_VEC_SVE, flags);
+ }
+ 
+ /* PR_SVE_GET_VL */
+@@ -745,7 +748,7 @@ int sve_get_current_vl(void)
+ 	if (!system_supports_sve() || is_compat_task())
+ 		return -EINVAL;
+ 
+-	return sve_prctl_status(0);
++	return vec_prctl_status(ARM64_VEC_SVE, 0);
+ }
+ 
+ static void vec_probe_vqs(struct vl_info *info,
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 88a9034fb9b5..716dde289446 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -812,9 +812,9 @@ static int sve_set(struct task_struct *target,
+ 
+ 	/*
+ 	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
+-	 * sve_set_vector_length(), which will also validate them for us:
++	 * vec_set_vector_length(), which will also validate them for us:
+ 	 */
+-	ret = sve_set_vector_length(target, header.vl,
++	ret = vec_set_vector_length(target, ARM64_VEC_SVE, header.vl,
+ 		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
+ 	if (ret)
+ 		goto out;
+diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
+index 09cd30a9aafb..0f6741c80226 100644
+--- a/arch/arm64/kvm/reset.c
++++ b/arch/arm64/kvm/reset.c
+@@ -52,10 +52,10 @@ int kvm_arm_init_sve(void)
+ 		 * The get_sve_reg()/set_sve_reg() ioctl interface will need
+ 		 * to be extended with multiple register slice support in
+ 		 * order to support vector lengths greater than
+-		 * SVE_VL_ARCH_MAX:
++		 * VL_ARCH_MAX:
+ 		 */
+-		if (WARN_ON(kvm_sve_max_vl > SVE_VL_ARCH_MAX))
+-			kvm_sve_max_vl = SVE_VL_ARCH_MAX;
++		if (WARN_ON(kvm_sve_max_vl > VL_ARCH_MAX))
++			kvm_sve_max_vl = VL_ARCH_MAX;
+ 
+ 		/*
+ 		 * Don't even try to make use of vector lengths that
+@@ -103,7 +103,7 @@ static int kvm_vcpu_finalize_sve(struct kvm_vcpu *vcpu)
+ 	 * set_sve_vls().  Double-check here just to be sure:
+ 	 */
+ 	if (WARN_ON(!sve_vl_valid(vl) || vl > sve_max_virtualisable_vl() ||
+-		    vl > SVE_VL_ARCH_MAX))
++		    vl > VL_ARCH_MAX))
+ 		return -EIO;
+ 
+ 	buf = kzalloc(SVE_SIG_REGS_SIZE(sve_vq_from_vl(vl)), GFP_KERNEL);
 -- 
 2.30.2
 
