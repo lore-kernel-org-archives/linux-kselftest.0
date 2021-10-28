@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF62DC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E9AC4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CEB83610EA
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1756F6108F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbhJ1Uj7 (ORCPT
+        id S231307AbhJ1UkA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Oct 2021 16:39:59 -0400
-Received: from mga14.intel.com ([192.55.52.115]:25707 "EHLO mga14.intel.com"
+        Thu, 28 Oct 2021 16:40:00 -0400
+Received: from mga02.intel.com ([134.134.136.20]:2684 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230380AbhJ1Uj6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S230421AbhJ1Uj6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 28 Oct 2021 16:39:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="230775396"
+X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="217692545"
 X-IronPort-AV: E=Sophos;i="5.87,190,1631602800"; 
-   d="scan'208";a="230775396"
+   d="scan'208";a="217692545"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:30 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:30 -0700
 X-IronPort-AV: E=Sophos;i="5.87,190,1631602800"; 
-   d="scan'208";a="498562989"
+   d="scan'208";a="498562994"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:29 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -29,114 +29,102 @@ To:     jarkko@kernel.org, linux-sgx@vger.kernel.org, shuah@kernel.org,
         dave.hansen@linux.intel.com
 Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 00/15] selftests/sgx: Oversubscription, page permission, thread entry
-Date:   Thu, 28 Oct 2021 13:37:25 -0700
-Message-Id: <cover.1635447301.git.reinette.chatre@intel.com>
+Subject: [PATCH V2 05/15] selftests/sgx: Make data measurement for an enclave segment optional
+Date:   Thu, 28 Oct 2021 13:37:30 -0700
+Message-Id: <af89f43ff1c18b5262b9b9bb7a041338553f6a23.1635447301.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1635447301.git.reinette.chatre@intel.com>
+References: <cover.1635447301.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-V1 available at:
-https://lore.kernel.org/lkml/cover.1631731214.git.reinette.chatre@intel.com/
+From: Jarkko Sakkinen <jarkko@kernel.org>
 
+For a heap makes sense to leave its contents "unmeasured" in the SGX
+enclave build process, meaning that they won't contribute to the
+cryptographic signature (a RSA-3072 signed SHA56 hash) of the enclave.
+
+Enclaves are signed blobs where the signature is calculated both from
+page data and also from "structural properties" of the pages.  For
+instance a page offset of *every* page added to the enclave is hashed.
+
+For data, this is optional, not least because hashing a page has a
+significant contribution to the enclave load time. Thus, where there is
+no reason to hash, do not. The SGX ioctl interface supports this with
+SGX_PAGE_MEASURE flag. Only when the flag is *set*, data is measured.
+
+Add seg->measure boolean flag to struct encl_segment. Only when the
+flag is set, include the segment data to the signature (represented
+by SIGSTRUCT architectural structure).
+
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+---
 Changes since V1:
+- Add signature from Dave.
 
-- Biggest change: The non-kselftest placeholder patches included in this series
-  that the kselftest work depends on are still being discussed elsewhere
-  (link below) but has changed significantly since the first submission,
-  warranting an update to the kselftest patches that depend on it.
-  Jarkko: I made significant modifications to your
-  "selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed"
-  that you may want to look at.
-- Improve cover letter and changelogs (Dave).
-- Add Jarkko and Dave's signatures where obtained (Jarkko and Dave).
-- Fix Cedric's signature in patch 1 (Jarkko and Cedric).
-- Improve the loop locating the data segment (Jarkko).
-- Update placeholder patches that makes the amount of SGX memory available to
-  latest version (v8). Previously this dependency consisted out of one
-  patch, now it spans two.
+ tools/testing/selftests/sgx/load.c      | 6 +++++-
+ tools/testing/selftests/sgx/main.h      | 1 +
+ tools/testing/selftests/sgx/sigstruct.c | 6 ++++--
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
-Hi Everybody,
-
-This series consists out of outstanding SGX selftests changes, rebased
-and gathered in a single series that can easily be merged for testing
-and development, and a few more changes added to expand the existing tests.
-
-The outstanding SGX selftest changes included in this series that have already
-been submitted separately are:
-
-* A more than two year old patch fixing a benign linker warning that is still
-  present today:
-  https://lore.kernel.org/linux-sgx/20191017030340.18301-2-sean.j.christopherson@intel.com/
-  The original patch is added intact and not all email addresses
-  within are valid.
-
-* Latest (v4) of Jarkko Sakkinen's series to add an oversubscription test:
-  https://lore.kernel.org/linux-sgx/20210809093127.76264-1-jarkko@kernel.org/
-
-* Latest (v2) of Jarkko Sakkinen's patch that provides per-op
-  parameter structs for the test enclave:
-  https://lore.kernel.org/linux-sgx/20210812224645.90280-1-jarkko@kernel.org/
-
-The reason why most of these patches are outstanding is that they depend
-on a kernel change that is still under discussion. Decision to wait in:
-https://lore.kernel.org/linux-sgx/f8674dac5579a8a424de1565f7ffa2b5bf2f8e36.camel@kernel.org/
-The latest patches (v8) for this dependency is included in
-this series as a placeholder until the ongoing discussions are concluded:
-https://lore.kernel.org/lkml/20211018135744.45527-1-jarkko@kernel.org/
-https://lore.kernel.org/lkml/20211018135744.45527-2-jarkko@kernel.org/
-
-The new changes introduced in this series builds on Jarkko's outstanding
-SGX selftest changes and adds new tests for page permissions, exception
-handling, and thread entry.
-
-Building and running enclaves is painful and traditionally requires a
-big software stack. This adds features like threads to the SGX selftests
-which are traditionally implemented in that big software stack. This
-helps test SGX kernel support with only code from the kernel tree.
-
-Reinette
-
-Jarkko Sakkinen (10):
-  x86/sgx: Rename fallback labels in sgx_init()
-  x86/sgx: Add an attribute for the amount of SGX memory in a NUMA node
-  selftests/sgx: Assign source for each segment
-  selftests/sgx: Make data measurement for an enclave segment optional
-  selftests/sgx: Create a heap for the test enclave
-  selftests/sgx: Dump segments and /proc/self/maps only on failure
-  selftests/sgx: Encpsulate the test enclave creation
-  selftests/sgx: Move setup_test_encl() to each TEST_F()
-  selftests/sgx: Add a new kselftest: unclobbered_vdso_oversubscribed
-  selftests/sgx: Provide per-op parameter structs for the test enclave
-
-Reinette Chatre (4):
-  selftests/sgx: Rename test properties in preparation for more enclave
-    tests
-  selftests/sgx: Add page permission and exception test
-  selftests/sgx: Enable multiple thread support
-  selftests/sgx: Add test for multiple TCS entry
-
-Sean Christopherson (1):
-  selftests/x86/sgx: Fix a benign linker warning
-
- Documentation/ABI/stable/sysfs-devices-node   |   7 +
- arch/x86/kernel/cpu/sgx/main.c                |  97 ++++-
- arch/x86/kernel/cpu/sgx/sgx.h                 |   2 +
- tools/testing/selftests/sgx/Makefile          |   2 +-
- tools/testing/selftests/sgx/defines.h         |  33 +-
- tools/testing/selftests/sgx/load.c            |  40 +-
- tools/testing/selftests/sgx/main.c            | 396 ++++++++++++++++--
- tools/testing/selftests/sgx/main.h            |   7 +-
- tools/testing/selftests/sgx/sigstruct.c       |  12 +-
- tools/testing/selftests/sgx/test_encl.c       |  60 ++-
- .../selftests/sgx/test_encl_bootstrap.S       |  21 +-
- 11 files changed, 585 insertions(+), 92 deletions(-)
-
-base-commit: 7d2a07b769330c34b4deabeed939325c77a7ec2f
-
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index 5605474aab73..f1be78984c50 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -111,7 +111,10 @@ static bool encl_ioc_add_pages(struct encl *encl, struct encl_segment *seg)
+ 	ioc.offset = seg->offset;
+ 	ioc.length = seg->size;
+ 	ioc.secinfo = (unsigned long)&secinfo;
+-	ioc.flags = SGX_PAGE_MEASURE;
++	if (seg->measure)
++		ioc.flags = SGX_PAGE_MEASURE;
++	else
++		ioc.flags = 0;
+ 
+ 	rc = ioctl(encl->fd, SGX_IOC_ENCLAVE_ADD_PAGES, &ioc);
+ 	if (rc < 0) {
+@@ -230,6 +233,7 @@ bool encl_load(const char *path, struct encl *encl)
+ 		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+ 		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
+ 		seg->src = encl->src + seg->offset;
++		seg->measure = true;
+ 
+ 		j++;
+ 	}
+diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+index 452d11dc4889..aebc69e7cdc8 100644
+--- a/tools/testing/selftests/sgx/main.h
++++ b/tools/testing/selftests/sgx/main.h
+@@ -12,6 +12,7 @@ struct encl_segment {
+ 	size_t size;
+ 	unsigned int prot;
+ 	unsigned int flags;
++	bool measure;
+ };
+ 
+ struct encl {
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+index 202a96fd81bf..50c5ab1aa6fa 100644
+--- a/tools/testing/selftests/sgx/sigstruct.c
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -296,8 +296,10 @@ static bool mrenclave_segment(EVP_MD_CTX *ctx, struct encl *encl,
+ 		if (!mrenclave_eadd(ctx, seg->offset + offset, seg->flags))
+ 			return false;
+ 
+-		if (!mrenclave_eextend(ctx, seg->offset + offset, seg->src + offset))
+-			return false;
++		if (seg->measure) {
++			if (!mrenclave_eextend(ctx, seg->offset + offset, seg->src + offset))
++				return false;
++		}
+ 	}
+ 
+ 	return true;
 -- 
 2.25.1
 
