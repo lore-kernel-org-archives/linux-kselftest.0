@@ -2,208 +2,230 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B26C4321E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67AADC433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:36:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 362AB610FC
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:32:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44F87610FC
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:36:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbhJ1Wee (ORCPT
+        id S231298AbhJ1WjA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Oct 2021 18:34:34 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:55144 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231364AbhJ1Wed (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 18:34:33 -0400
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4HgKrs5y37zDyPn;
-        Thu, 28 Oct 2021 15:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1635459950; bh=fRbWeg0VhXGbHg4OzaUU8qpRKtcZaEQ6UnBfb2UHhpA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eaqjLgAxTE6JW6iLiIfrKKsfCdSkafjuMdGG0CVSS3VSC/5nH/TR5t+AJ8s/O3R9j
-         5oPqKHbAZ8utdjBDk4smH4IdWsTc9q5c2XxP27lTXldYE3UT2XWqI7yTpOy99BGzKa
-         rvVjdMPLma5JTIuDfwVGKO/TqAZ/gEfbJ6DojNhk=
-X-Riseup-User-ID: 65619DD55AF8BB7BC503F5AFCB4D82A37753925142B240EF4B90E52093763982
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4HgKrn62BXz5vvd;
-        Thu, 28 Oct 2021 15:25:45 -0700 (PDT)
-From:   Isabella Basso <isabbasso@riseup.net>
-To:     geert@linux-m68k.org
-Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
-        brendanhiggins@google.com, dlatypov@google.com,
-        davidgow@google.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com,
-        akpm@linux-foundation.org, skhan@linuxfoundation.org,
-        Isabella Basso <isabellabdoamaral@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>
-Subject: [PATCH v3 2/5] test_hash.c: split test_int_hash into arch-specific functions
-Date:   Thu, 28 Oct 2021 19:25:30 -0300
-Message-Id: <20211028222533.432641-3-isabbasso@riseup.net>
-In-Reply-To: <20211028222533.432641-1-isabbasso@riseup.net>
-References: <20211028222533.432641-1-isabbasso@riseup.net>
+        Thu, 28 Oct 2021 18:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231321AbhJ1WjA (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Oct 2021 18:39:00 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9FC061570
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 15:36:32 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id j28so2216090ila.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Oct 2021 15:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tK1+5HlOuiSkOMddGgoV7U/XOQaHtx3v2HgHVD1iYN8=;
+        b=ZxvSeDwPFW152l1kjOzLqFVTqRIZ1tSyJm/Eu65JwEexV3UdocljKuPe7+igtGft0o
+         4J/OTTf7MgYfOgPneYct2FlOlzmd3wJ7Te3HfdnpZP4bfo3Sw/oO508tPp1qntRlOUPv
+         rf5SEQxfxGDJhvw/ti2Kx+r6hvqzPJVL0Y/6eZEASyPRd9PDy7p6gpnRzw2qzh3OXs1y
+         3clqox8iEkZu6FZ6KkldBcFLkJ0GpBYbtgZ7xpzDKhfZ2OvnPFHLRLRehVSslnV02Fv7
+         sAolhMktaCRwpH5T/eZXbKMykoArybd5dK8+r2/CXawhT7Ok1bcupF4tFoPLRe7fJIck
+         IFhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tK1+5HlOuiSkOMddGgoV7U/XOQaHtx3v2HgHVD1iYN8=;
+        b=fw0IYichS4mtq4UA0wcOy0x54KION4q5CgKHB+K5FrtTvfP9rCtj7hPRgpaQpz9T9y
+         4kwtIQgNU0UTXqLii1ALc0H9SW39UJe3dK/VcShUUhq4So6Tg7qR7qHZ/EKokc7tcr9A
+         oBX71dxbyZq7v8xa3XTjOw6q3DrUVSb1E5XaofVsAoOrvPf9RBJOsRjv3JDaIl8dsySn
+         HXDGvpAz7EsDUOceQ2IKpO4riSSL3qtHKsogRYveMLs0zoIbrP7TuWsxeUtVRxsWmMJ3
+         0P2956Ya+tQzKVzryHTWhKyU+oC+GbSdWaM/B/Lwu/aVBdkIFlKvqGel/h0Ug7dpY4+L
+         s5Tw==
+X-Gm-Message-State: AOAM532WFHAnGUsk9X3e92K3lDXE5UW7OkWT0SKkNTHk8jM9FIgF4ONn
+        DG/wOHBq2+6ww4Qg6WqScM92QXjvWzHlVU6uhlauJg==
+X-Google-Smtp-Source: ABdhPJxyo7q9vBF/AuGwxupKSSnuSRqNqUaOic6kixIS9BztJFEpi+9u+HwsTdYOpdH0TWlimS0TX3kOl+GrKjV/dB0=
+X-Received: by 2002:a05:6e02:190f:: with SMTP id w15mr5046526ilu.121.1635460592112;
+ Thu, 28 Oct 2021 15:36:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211028064154.2301049-1-davidgow@google.com> <20211028064154.2301049-2-davidgow@google.com>
+In-Reply-To: <20211028064154.2301049-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 28 Oct 2021 15:36:20 -0700
+Message-ID: <CAGS_qxoOj+sDOHY8VZv4fw7_XiXqDWcYEC1LAiSUHv38dXh_uw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] kunit: tool: Report an error if any test has no subtests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Isabella Basso <isabellabdoamaral@usp.br>
+On Wed, Oct 27, 2021 at 11:42 PM David Gow <davidgow@google.com> wrote:
+>
+> It's possible for a test to have a subtest header, but zero valid
+> subtests. We used to error on this if the test plan had no subtests
+> listed, but it's possible to have subtests without a test plan (indeed,
+> this is how parameterised tests work).
+>
+> Tests with 0 subtests now have the result NO_TESTS, and will report an
+> error (which does not halt test execution, but is printed in a scary red
+> colour and is noted in the results summary).
 
-Split the test_int_hash function to keep its mainloop separate from
-arch-specific chunks, which are only compiled as needed. This aims at
-improving readability.
+Tested by tweaking ext4 tests (and running with patch 3)
 
-Reviewed-by: David Gow <davidgow@google.com>
-Tested-by: David Gow <davidgow@google.com>
-Signed-off-by: Isabella Basso <isabbasso@riseup.net>
----
-Changes since v2:
-- As suggested by David Gow:
-  1. Add comments to struct elements.
-Changes since v1:
-- As suggested by Marco Elver:
-  1. Add struct for carrying test variables.
+[15:04:33] =============== ext4_inode_test (1 subtest) ================
+[15:04:33] ============== inode_test_xtimestamp_decoding ==============
+[15:04:33] [ERROR] Test inode_test_xtimestamp_decoding: 0 tests run!
+[15:04:33] ====== [NO TESTS RUN] inode_test_xtimestamp_decoding =======
+[15:04:33] ================ [SKIPPED] ext4_inode_test =================
+[15:04:33] ============================================================
+[15:04:33] Testing complete. Passed: 0, Failed: 0, Crashed: 0,
+Skipped: 1, Errors: 1
+[15:04:33] Elapsed time: 48.581s total, 0.000s configuring, 45.486s
+building, 2.992s running
 
- lib/test_hash.c | 91 +++++++++++++++++++++++++++++++++----------------
- 1 file changed, 62 insertions(+), 29 deletions(-)
+It's maybe a bit confusing to have ERROR, NO TESTS RUN, and SKIPPED
+all printed for the same thing.
 
-diff --git a/lib/test_hash.c b/lib/test_hash.c
-index d4b0cfdb0377..2b4fe4976cc4 100644
---- a/lib/test_hash.c
-+++ b/lib/test_hash.c
-@@ -56,6 +56,58 @@ fill_buf(char *buf, size_t len, u32 seed)
- 	}
- }
+An alternative would be to drop the error, giving
+[15:04:33] =============== ext4_inode_test (1 subtest) ================
+[15:04:33] ============== inode_test_xtimestamp_decoding ==============
+[15:04:33] ====== [NO TESTS RUN] inode_test_xtimestamp_decoding =======
+[15:04:33] ================ [SKIPPED] ext4_inode_test =================
+[15:04:33] ============================================================
 
-+/* Holds most testing variables for the int test. */
-+struct test_hash_params {
-+        /* Pointer to integer to be hashed. */
-+	unsigned long long *h64;
-+        /* Low 32-bits of integer to be hashed. */
-+	u32 h0;
-+        /* Arch-specific hash result. */
-+	u32 h1;
-+        /* Generic hash result. */
-+	u32 h2;
-+        /* ORed hashes of given size (in bits). */
-+	u32 (*hash_or)[33];
-+};
-+
-+#ifdef HAVE_ARCH__HASH_32
-+static bool __init
-+test_int__hash_32(struct test_hash_params *params)
-+{
-+	params->hash_or[1][0] |= params->h2 = __hash_32_generic(params->h0);
-+#if HAVE_ARCH__HASH_32 == 1
-+	if (params->h1 != params->h2) {
-+		pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
-+		       params->h0, params->h1, params->h2);
-+		return false;
-+	}
-+#endif
-+	return true;
-+}
-+#endif
-+
-+#ifdef HAVE_ARCH_HASH_64
-+static bool __init
-+test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k)
-+{
-+	params->h2 = hash_64_generic(*params->h64, *k);
-+#if HAVE_ARCH_HASH_64 == 1
-+	if (params->h1 != params->h2) {
-+		pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
-+		       *params->h64, *k, params->h1, params->h2);
-+		return false;
-+	}
-+#else
-+	if (params->h2 > *m) {
-+		pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
-+		       *params->h64, *k, params->h1, *m);
-+		return false;
-+	}
-+#endif
-+	return true;
-+}
-+#endif
-+
- /*
-  * Test the various integer hash functions.  h64 (or its low-order bits)
-  * is the integer to hash.  hash_or accumulates the OR of the hash values,
-@@ -69,19 +121,13 @@ static bool __init
- test_int_hash(unsigned long long h64, u32 hash_or[2][33])
- {
- 	int k;
--	u32 h0 = (u32)h64, h1, h2;
-+	struct test_hash_params params = { &h64, (u32)h64, 0, 0, hash_or };
+But looking at it, I think I prefer the more explicit ERROR being there.
 
- 	/* Test __hash32 */
--	hash_or[0][0] |= h1 = __hash_32(h0);
-+	hash_or[0][0] |= params.h1 = __hash_32(params.h0);
- #ifdef HAVE_ARCH__HASH_32
--	hash_or[1][0] |= h2 = __hash_32_generic(h0);
--#if HAVE_ARCH__HASH_32 == 1
--	if (h1 != h2) {
--		pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
--			h0, h1, h2);
-+	if (!test_int__hash_32(&params))
- 		return false;
--	}
--#endif
- #endif
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
- 	/* Test k = 1..32 bits */
-@@ -89,37 +135,24 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
- 		u32 const m = ((u32)2 << (k-1)) - 1;	/* Low k bits set */
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
- 		/* Test hash_32 */
--		hash_or[0][k] |= h1 = hash_32(h0, k);
--		if (h1 > m) {
--			pr_err("hash_32(%#x, %d) = %#x > %#x", h0, k, h1, m);
-+		hash_or[0][k] |= params.h1 = hash_32(params.h0, k);
-+		if (params.h1 > m) {
-+			pr_err("hash_32(%#x, %d) = %#x > %#x", params.h0, k, params.h1, m);
- 			return false;
- 		}
+A few optional nits below.
 
- 		/* Test hash_64 */
--		hash_or[1][k] |= h1 = hash_64(h64, k);
--		if (h1 > m) {
--			pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, h1, m);
-+		hash_or[1][k] |= params.h1 = hash_64(h64, k);
-+		if (params.h1 > m) {
-+			pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, params.h1, m);
- 			return false;
- 		}
- #ifdef HAVE_ARCH_HASH_64
--		h2 = hash_64_generic(h64, k);
--#if HAVE_ARCH_HASH_64 == 1
--		if (h1 != h2) {
--			pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() "
--				"= %#x", h64, k, h1, h2);
-+		if (!test_int_hash_64(&params, &m, &k))
- 			return false;
--		}
--#else
--		if (h2 > m) {
--			pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
--				h64, k, h1, m);
--			return false;
--		}
--#endif
- #endif
- 	}
+> ---
+>
+> Changes since v2:
+> https://lore.kernel.org/linux-kselftest/20211027013702.2039566-2-davidgow@google.com/
+> - Report NO_TESTS as '[NO TESTS RUN]' in yellow, instead of '[FAILED]'
+>   in red, particularly since it doesn't get counted as a failure.
+>
+>  tools/testing/kunit/kunit_parser.py              | 16 +++++++++++-----
+>  tools/testing/kunit/kunit_tool_test.py           |  9 +++++++++
+>  .../test_is_test_passed-no_tests_no_plan.log     |  7 +++++++
+>  3 files changed, 27 insertions(+), 5 deletions(-)
+>  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 50ded55c168c..68c847e8ca58 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -360,9 +360,6 @@ def parse_test_plan(lines: LineStream, test: Test) -> bool:
+>         test.log.append(lines.pop())
+>         expected_count = int(match.group(1))
+>         test.expected_count = expected_count
+> -       if expected_count == 0:
+> -               test.status = TestStatus.NO_TESTS
+> -               test.add_error('0 tests run!')
+>         return True
+>
+>  TEST_RESULT = re.compile(r'^(ok|not ok) ([0-9]+) (- )?([^#]*)( # .*)?$')
+> @@ -589,6 +586,8 @@ def format_test_result(test: Test) -> str:
+>                 return (green('[PASSED] ') + test.name)
+>         elif test.status == TestStatus.SKIPPED:
+>                 return (yellow('[SKIPPED] ') + test.name)
+> +       elif test.status == TestStatus.NO_TESTS:
+> +               return (yellow('[NO TESTS RUN] ') + test.name)
+>         elif test.status == TestStatus.TEST_CRASHED:
+>                 print_log(test.log)
+>                 return (red('[CRASHED] ') + test.name)
+> @@ -731,6 +730,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>                 # test plan
+>                 test.name = "main"
+>                 parse_test_plan(lines, test)
+> +               parent_test = True
+>         else:
+>                 # If KTAP/TAP header is not found, test must be subtest
+>                 # header or test result line so parse attempt to parser
+> @@ -744,7 +744,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         expected_count = test.expected_count
+>         subtests = []
+>         test_num = 1
+> -       while expected_count is None or test_num <= expected_count:
+> +       while parent_test and (expected_count is None or test_num <= expected_count):
+>                 # Loop to parse any subtests.
+>                 # Break after parsing expected number of tests or
+>                 # if expected number of tests is unknown break when test
+> @@ -779,9 +779,15 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>                         parse_test_result(lines, test, expected_num)
+>                 else:
+>                         test.add_error('missing subtest result line!')
+> +
+> +       # Check for there being no tests
+> +       if parent_test and len(subtests) == 0:
+> +               test.status = TestStatus.NO_TESTS
+> +               test.add_error('0 tests run!')
+> +
+>         # Add statuses to TestCounts attribute in Test object
+>         bubble_up_test_results(test)
+> -       if parent_test:
+> +       if parent_test and not main:
+>                 # If test has subtests and is not the main test object, print
+>                 # footer.
+>                 print_test_footer(test)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index bc8793145713..c59fe0777387 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -208,6 +208,15 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(
+>                         kunit_parser.TestStatus.NO_TESTS,
+>                         result.status)
 
--	(void)h2;	/* Suppress unused variable warning */
- 	return true;
- }
+I'd prefer we split these test cases out.
+Perhaps:
 
---
-2.33.1
+def test_no_tests_empty_plan(self):
+   ...
 
+def test_no_tests_no_plan(self):
+  ... # this new test
+
+> +               no_plan_log = test_data_path('test_is_test_passed-no_tests_no_plan.log')
+> +               with open(no_plan_log) as file:
+> +                       result = kunit_parser.parse_run_tests(
+> +                               kunit_parser.extract_tap_lines(file.readlines()))
+> +               self.assertEqual(0, len(result.test.subtests[0].subtests[0].subtests))
+> +               self.assertEqual(
+> +                       kunit_parser.TestStatus.NO_TESTS,
+> +                       result.test.subtests[0].subtests[0].status)
+
+optional:
+self.assertEqual(1, result.test.counts.errors)
+
+> +
+>
+>         def test_no_kunit_output(self):
+>                 crash_log = test_data_path('test_insufficient_memory.log')
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
+> new file mode 100644
+> index 000000000000..dd873c981108
+> --- /dev/null
+> +++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
+> @@ -0,0 +1,7 @@
+> +TAP version 14
+> +1..1
+> +  # Subtest: suite
+> +  1..1
+> +    # Subtest: case
+> +  ok 1 - case # SKIP
+> +ok 1 - suite
+> --
+> 2.33.0.1079.g6e70778dc9-goog
+>
