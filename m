@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B5DC4321E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 338D9C4167B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C576A6108F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 165376108F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbhJ1UkC (ORCPT
+        id S231337AbhJ1UkC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 28 Oct 2021 16:40:02 -0400
-Received: from mga14.intel.com ([192.55.52.115]:25707 "EHLO mga14.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:2684 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230323AbhJ1Uj6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 16:39:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="230775398"
+        id S231240AbhJ1Uj7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Oct 2021 16:39:59 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="217692547"
 X-IronPort-AV: E=Sophos;i="5.87,190,1631602800"; 
-   d="scan'208";a="230775398"
+   d="scan'208";a="217692547"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:30 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:30 -0700
 X-IronPort-AV: E=Sophos;i="5.87,190,1631602800"; 
-   d="scan'208";a="498562990"
+   d="scan'208";a="498562997"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:29 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -29,9 +29,9 @@ To:     jarkko@kernel.org, linux-sgx@vger.kernel.org, shuah@kernel.org,
         dave.hansen@linux.intel.com
 Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 01/15] selftests/x86/sgx: Fix a benign linker warning
-Date:   Thu, 28 Oct 2021 13:37:26 -0700
-Message-Id: <545aac243037bf5c2640929c4d8ff5c1edfe3ef8.1635447301.git.reinette.chatre@intel.com>
+Subject: [PATCH V2 07/15] selftests/sgx: Dump segments and /proc/self/maps only on failure
+Date:   Thu, 28 Oct 2021 13:37:32 -0700
+Message-Id: <c8f5ca6be6b040c3924d0d7d79f3eca931671a7f.1635447301.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1635447301.git.reinette.chatre@intel.com>
 References: <cover.1635447301.git.reinette.chatre@intel.com>
@@ -41,41 +41,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Sean Christopherson <sean.j.christopherson@intel.com>
+From: Jarkko Sakkinen <jarkko@kernel.org>
 
-Pass a build id of "none" to the linker to suppress a warning about the
-build id being ignored:
+Logging is always a compromise between clarity and detail. The main use
+case for dumping VMA's is when FIXTURE_SETUP() fails, and is less important
+for enclaves that do initialize correctly. Therefore, print the segments
+and /proc/self/maps only in the error case.
 
-  /usr/bin/ld: warning: .note.gnu.build-id section discarded, --build-id
-  ignored.
+Finally, if a single test ever creates multiple enclaves, the amount of
+log lines would become enormous.
 
-Link: https://lore.kernel.org/linux-sgx/20191017030340.18301-2-sean.j.christopherson@intel.com/
-Suggested-by: Cedric Xing <cedric.xing@intel.com>
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V1:
-- Change Cedric's signature to a "Suggested-by" (Jarkko and Cedric).
-- Add signatures from Jarkko and Dave.
+- Add signature from Dave.
 
- tools/testing/selftests/sgx/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/sgx/main.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
-index 7f12d55b97f8..2956584e1e37 100644
---- a/tools/testing/selftests/sgx/Makefile
-+++ b/tools/testing/selftests/sgx/Makefile
-@@ -45,7 +45,7 @@ $(OUTPUT)/sign_key.o: sign_key.S
- 	$(CC) $(HOST_CFLAGS) -c $< -o $@
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 6858a35fed20..deab02f2f3ce 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -127,12 +127,6 @@ FIXTURE_SETUP(enclave)
+ 		ksft_exit_skip("cannot load enclaves\n");
+ 	}
  
- $(OUTPUT)/test_encl.elf: test_encl.lds test_encl.c test_encl_bootstrap.S
--	$(CC) $(ENCL_CFLAGS) -T $^ -o $@
-+	$(CC) $(ENCL_CFLAGS) -T $^ -o $@ -Wl,--build-id=none
+-	for (i = 0; i < self->encl.nr_segments; i++) {
+-		seg = &self->encl.segment_tbl[i];
+-
+-		TH_LOG("0x%016lx 0x%016lx 0x%02x", seg->offset, seg->size, seg->prot);
+-	}
+-
+ 	if (!encl_measure(&self->encl))
+ 		goto err;
  
- EXTRA_CLEAN := \
- 	$(OUTPUT)/test_encl.elf \
+@@ -169,6 +163,17 @@ FIXTURE_SETUP(enclave)
+ 	memset(&self->run, 0, sizeof(self->run));
+ 	self->run.tcs = self->encl.encl_base;
+ 
++	return;
++
++err:
++	encl_delete(&self->encl);
++
++	for (i = 0; i < self->encl.nr_segments; i++) {
++		seg = &self->encl.segment_tbl[i];
++
++		TH_LOG("0x%016lx 0x%016lx 0x%02x", seg->offset, seg->size, seg->prot);
++	}
++
+ 	maps_file = fopen("/proc/self/maps", "r");
+ 	if (maps_file != NULL)  {
+ 		while (fgets(maps_line, sizeof(maps_line), maps_file) != NULL) {
+@@ -181,11 +186,7 @@ FIXTURE_SETUP(enclave)
+ 		fclose(maps_file);
+ 	}
+ 
+-err:
+-	if (!sgx_enter_enclave_sym)
+-		encl_delete(&self->encl);
+-
+-	ASSERT_NE(sgx_enter_enclave_sym, NULL);
++	ASSERT_TRUE(false);
+ }
+ 
+ FIXTURE_TEARDOWN(enclave)
 -- 
 2.25.1
 
