@@ -2,37 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD5BDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B26C4321E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:32:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1455610E5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:32:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 362AB610FC
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 22:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbhJ1Wed (ORCPT
+        id S231480AbhJ1Wee (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Oct 2021 18:34:33 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:55032 "EHLO mx1.riseup.net"
+        Thu, 28 Oct 2021 18:34:34 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:55144 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231252AbhJ1Wec (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 18:34:32 -0400
-X-Greylist: delayed 382 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Oct 2021 18:34:31 EDT
+        id S231364AbhJ1Wed (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Oct 2021 18:34:33 -0400
 Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
          client-signature RSA-PSS (2048 bits) client-digest SHA256)
         (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4HgKs66k51zDySt;
-        Thu, 28 Oct 2021 15:26:02 -0700 (PDT)
+        by mx1.riseup.net (Postfix) with ESMTPS id 4HgKrs5y37zDyPn;
+        Thu, 28 Oct 2021 15:25:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1635459963; bh=1zrC8LR9nAREifaTK92aPZ6b8KhJ7I8x3pYiPbiRazU=;
+        t=1635459950; bh=fRbWeg0VhXGbHg4OzaUU8qpRKtcZaEQ6UnBfb2UHhpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEjlCKgwOVvworSX4AkHNEKAvAD6gh9Wx204AjSW9p0QSEwZ6wEF2/IiufL+4/B0X
-         RDsp7XLgHfsMMocB8ZZhsJFnAWovz1/CCAGFKZAhmBpUL+8u5PFxYk7RXwRgq0RAvQ
-         M8jf7ynCG3X/F7kZZH+A+S3EkHgvZPk6N0zM4kjE=
-X-Riseup-User-ID: 75C1465B27D621C3B87084A5EB2B3C5BBB0E1B3D8B510A156D642E120268B125
+        b=eaqjLgAxTE6JW6iLiIfrKKsfCdSkafjuMdGG0CVSS3VSC/5nH/TR5t+AJ8s/O3R9j
+         5oPqKHbAZ8utdjBDk4smH4IdWsTc9q5c2XxP27lTXldYE3UT2XWqI7yTpOy99BGzKa
+         rvVjdMPLma5JTIuDfwVGKO/TqAZ/gEfbJ6DojNhk=
+X-Riseup-User-ID: 65619DD55AF8BB7BC503F5AFCB4D82A37753925142B240EF4B90E52093763982
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4HgKs24m4Jz5vvd;
-        Thu, 28 Oct 2021 15:25:58 -0700 (PDT)
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4HgKrn62BXz5vvd;
+        Thu, 28 Oct 2021 15:25:45 -0700 (PDT)
 From:   Isabella Basso <isabbasso@riseup.net>
 To:     geert@linux-m68k.org
 Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
@@ -42,15 +41,13 @@ Cc:     ferreiraenzoa@gmail.com, augusto.duraes33@gmail.com,
         ~lkcamp/patches@lists.sr.ht, rodrigosiqueiramelo@gmail.com,
         akpm@linux-foundation.org, skhan@linuxfoundation.org,
         Isabella Basso <isabellabdoamaral@usp.br>,
-        kernel test robot <lkp@intel.com>,
         Isabella Basso <isabbasso@riseup.net>
-Subject: [PATCH v3 5/5] test_hash.c: refactor into kunit
-Date:   Thu, 28 Oct 2021 19:25:33 -0300
-Message-Id: <20211028222533.432641-6-isabbasso@riseup.net>
+Subject: [PATCH v3 2/5] test_hash.c: split test_int_hash into arch-specific functions
+Date:   Thu, 28 Oct 2021 19:25:30 -0300
+Message-Id: <20211028222533.432641-3-isabbasso@riseup.net>
 In-Reply-To: <20211028222533.432641-1-isabbasso@riseup.net>
 References: <20211028222533.432641-1-isabbasso@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -58,413 +55,155 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Isabella Basso <isabellabdoamaral@usp.br>
 
-Use KUnit framework to make tests more easily integrable with CIs. Even
-though these tests are not yet properly written as unit tests this
-change should help in debugging.
-
-Also remove kernel messages (i.e. through pr_info) as KUnit handles all
-debugging output and let it handle module init and exit details.
+Split the test_int_hash function to keep its mainloop separate from
+arch-specific chunks, which are only compiled as needed. This aims at
+improving readability.
 
 Reviewed-by: David Gow <davidgow@google.com>
-Reported-by: kernel test robot <lkp@intel.com>
 Tested-by: David Gow <davidgow@google.com>
-Co-developed-by: Augusto Durães Camargo <augusto.duraes33@gmail.com>
-Signed-off-by: Augusto Durães Camargo <augusto.duraes33@gmail.com>
-Co-developed-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
-Signed-off-by: Enzo Ferreira <ferreiraenzoa@gmail.com>
 Signed-off-by: Isabella Basso <isabbasso@riseup.net>
 ---
 Changes since v2:
 - As suggested by David Gow:
-  1. Remove unnecessary __init bits from KUnit functions.
-  2. Change KUnit's "EXPECT_FALSE"s for "EXPECT_EQ"s.
+  1. Add comments to struct elements.
 Changes since v1:
-- As suggested by David Gow:
-  1. Keep module support.
-  2. Reword commit message.
-- As reported by the kernel test bot:
-  1. Fix compilation for m68k and parisc architectures.
+- As suggested by Marco Elver:
+  1. Add struct for carrying test variables.
 
- lib/Kconfig.debug |  28 ++++---
- lib/Makefile      |   2 +-
- lib/test_hash.c   | 194 +++++++++++++++-------------------------------
- 3 files changed, 81 insertions(+), 143 deletions(-)
+ lib/test_hash.c | 91 +++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 62 insertions(+), 29 deletions(-)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index eb6c4daf5fcb..04eec87c2964 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2204,15 +2204,6 @@ config TEST_RHASHTABLE
-
- 	  If unsure, say N.
-
--config TEST_HASH
--	tristate "Perform selftest on hash functions"
--	help
--	  Enable this option to test the kernel's integer (<linux/hash.h>), and
--	  string (<linux/stringhash.h>) hash functions on boot (or module load).
--
--	  This is intended to help people writing architecture-specific
--	  optimized versions.  If unsure, say N.
--
- config TEST_SIPHASH
- 	tristate "Perform selftest on siphash functions"
- 	help
-@@ -2361,6 +2352,25 @@ config BITFIELD_KUNIT
-
- 	  If unsure, say N.
-
-+config HASH_KUNIT_TEST
-+	tristate "KUnit Test for integer hash functions" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Enable this option to test the kernel's string (<linux/stringhash.h>), and
-+	  integer (<linux/hash.h>) hash functions on boot.
-+
-+	  KUnit tests run during boot and output the results to the debug log
-+	  in TAP format (https://testanything.org/). Only useful for kernel devs
-+	  running the KUnit test harness, and not intended for inclusion into a
-+	  production build.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  This is intended to help people writing architecture-specific
-+	  optimized versions. If unsure, say N.
-+
- config RESOURCE_KUNIT_TEST
- 	tristate "KUnit test for resource API"
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index 02eff11956d4..c8e5c00c07f1 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -62,7 +62,7 @@ obj-$(CONFIG_TEST_BITOPS) += test_bitops.o
- CFLAGS_test_bitops.o += -Werror
- obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
- obj-$(CONFIG_TEST_SIPHASH) += test_siphash.o
--obj-$(CONFIG_TEST_HASH) += test_hash.o
-+obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
- obj-$(CONFIG_TEST_IDA) += test_ida.o
- obj-$(CONFIG_KASAN_KUNIT_TEST) += test_kasan.o
- CFLAGS_test_kasan.o += -fno-builtin
 diff --git a/lib/test_hash.c b/lib/test_hash.c
-index 032849a48da7..bb25fda34794 100644
+index d4b0cfdb0377..2b4fe4976cc4 100644
 --- a/lib/test_hash.c
 +++ b/lib/test_hash.c
-@@ -14,17 +14,15 @@
-  * and hash_64().
-  */
-
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt "\n"
--
- #include <linux/compiler.h>
- #include <linux/types.h>
- #include <linux/module.h>
- #include <linux/hash.h>
- #include <linux/stringhash.h>
--#include <linux/printk.h>
-+#include <kunit/test.h>
-
- /* 32-bit XORSHIFT generator.  Seed must not be zero. */
--static u32 __init __attribute_const__
-+static u32 __attribute_const__
- xorshift(u32 seed)
- {
- 	seed ^= seed << 13;
-@@ -34,7 +32,7 @@ xorshift(u32 seed)
+@@ -56,6 +56,58 @@ fill_buf(char *buf, size_t len, u32 seed)
+ 	}
  }
 
- /* Given a non-zero x, returns a non-zero byte. */
--static u8 __init __attribute_const__
-+static u8 __attribute_const__
- mod255(u32 x)
- {
- 	x = (x & 0xffff) + (x >> 16);	/* 1 <= x <= 0x1fffe */
-@@ -45,8 +43,7 @@ mod255(u32 x)
- }
-
- /* Fill the buffer with non-zero bytes. */
--static void __init
--fill_buf(char *buf, size_t len, u32 seed)
-+static void fill_buf(char *buf, size_t len, u32 seed)
- {
- 	size_t i;
-
-@@ -71,40 +68,32 @@ struct test_hash_params {
- };
-
- #ifdef HAVE_ARCH__HASH_32
--static bool __init
--test_int__hash_32(struct test_hash_params *params)
-+static void
-+test_int__hash_32(struct kunit *test, struct test_hash_params *params)
- {
- 	params->hash_or[1][0] |= params->h2 = __hash_32_generic(params->h0);
- #if HAVE_ARCH__HASH_32 == 1
--	if (params->h1 != params->h2) {
--		pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
--		       params->h0, params->h1, params->h2);
--		return false;
--	}
-+	KUNIT_EXPECT_EQ_MSG(test, params->h1, params->h2,
-+			    "__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
-+			    params->h0, params->h1, params->h2);
- #endif
--	return true;
- }
- #endif
-
- #ifdef HAVE_ARCH_HASH_64
--static bool __init
--test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k)
-+static void
-+test_int_hash_64(struct kunit *test, struct test_hash_params *params, u32 const *m, int *k)
- {
- 	params->h2 = hash_64_generic(*params->h64, *k);
- #if HAVE_ARCH_HASH_64 == 1
--	if (params->h1 != params->h2) {
--		pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
--		       *params->h64, *k, params->h1, params->h2);
--		return false;
--	}
-+	KUNIT_EXPECT_EQ_MSG(test, params->h1, params->h2,
-+			    "hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
-+			    *params->h64, *k, params->h1, params->h2);
- #else
--	if (params->h2 > *m) {
--		pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
--		       *params->h64, *k, params->h1, *m);
--		return false;
--	}
-+	KUNIT_EXPECT_LE_MSG(test, params->h1, params->h2,
-+			    "hash_64_generic(%#llx, %d) = %#x > %#x",
-+			    *params->h64, *k, params->h1, *m);
- #endif
--	return true;
- }
- #endif
-
-@@ -117,8 +106,8 @@ test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k)
-  * inline, the code being tested is actually in the module, and you can
-  * recompile and re-test the module without rebooting.
-  */
--static bool __init
--test_int_hash(unsigned long long h64, u32 hash_or[2][33])
-+static void
-+test_int_hash(struct kunit *test, unsigned long long h64, u32 hash_or[2][33])
++/* Holds most testing variables for the int test. */
++struct test_hash_params {
++        /* Pointer to integer to be hashed. */
++	unsigned long long *h64;
++        /* Low 32-bits of integer to be hashed. */
++	u32 h0;
++        /* Arch-specific hash result. */
++	u32 h1;
++        /* Generic hash result. */
++	u32 h2;
++        /* ORed hashes of given size (in bits). */
++	u32 (*hash_or)[33];
++};
++
++#ifdef HAVE_ARCH__HASH_32
++static bool __init
++test_int__hash_32(struct test_hash_params *params)
++{
++	params->hash_or[1][0] |= params->h2 = __hash_32_generic(params->h0);
++#if HAVE_ARCH__HASH_32 == 1
++	if (params->h1 != params->h2) {
++		pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
++		       params->h0, params->h1, params->h2);
++		return false;
++	}
++#endif
++	return true;
++}
++#endif
++
++#ifdef HAVE_ARCH_HASH_64
++static bool __init
++test_int_hash_64(struct test_hash_params *params, u32 const *m, int *k)
++{
++	params->h2 = hash_64_generic(*params->h64, *k);
++#if HAVE_ARCH_HASH_64 == 1
++	if (params->h1 != params->h2) {
++		pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() = %#x",
++		       *params->h64, *k, params->h1, params->h2);
++		return false;
++	}
++#else
++	if (params->h2 > *m) {
++		pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
++		       *params->h64, *k, params->h1, *m);
++		return false;
++	}
++#endif
++	return true;
++}
++#endif
++
+ /*
+  * Test the various integer hash functions.  h64 (or its low-order bits)
+  * is the integer to hash.  hash_or accumulates the OR of the hash values,
+@@ -69,19 +121,13 @@ static bool __init
+ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
  {
  	int k;
- 	struct test_hash_params params = { &h64, (u32)h64, 0, 0, hash_or };
-@@ -126,8 +115,7 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+-	u32 h0 = (u32)h64, h1, h2;
++	struct test_hash_params params = { &h64, (u32)h64, 0, 0, hash_or };
+
  	/* Test __hash32 */
- 	hash_or[0][0] |= params.h1 = __hash_32(params.h0);
+-	hash_or[0][0] |= h1 = __hash_32(h0);
++	hash_or[0][0] |= params.h1 = __hash_32(params.h0);
  #ifdef HAVE_ARCH__HASH_32
--	if (!test_int__hash_32(&params))
--		return false;
-+	test_int__hash_32(test, &params);
+-	hash_or[1][0] |= h2 = __hash_32_generic(h0);
+-#if HAVE_ARCH__HASH_32 == 1
+-	if (h1 != h2) {
+-		pr_err("__hash_32(%#x) = %#x != __hash_32_generic() = %#x",
+-			h0, h1, h2);
++	if (!test_int__hash_32(&params))
+ 		return false;
+-	}
+-#endif
  #endif
 
  	/* Test k = 1..32 bits */
-@@ -136,29 +124,24 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+@@ -89,37 +135,24 @@ test_int_hash(unsigned long long h64, u32 hash_or[2][33])
+ 		u32 const m = ((u32)2 << (k-1)) - 1;	/* Low k bits set */
 
  		/* Test hash_32 */
- 		hash_or[0][k] |= params.h1 = hash_32(params.h0, k);
--		if (params.h1 > m) {
--			pr_err("hash_32(%#x, %d) = %#x > %#x", params.h0, k, params.h1, m);
--			return false;
--		}
-+		KUNIT_EXPECT_LE_MSG(test, params.h1, m,
-+				    "hash_32(%#x, %d) = %#x > %#x",
-+				    params.h0, k, params.h1, m);
+-		hash_or[0][k] |= h1 = hash_32(h0, k);
+-		if (h1 > m) {
+-			pr_err("hash_32(%#x, %d) = %#x > %#x", h0, k, h1, m);
++		hash_or[0][k] |= params.h1 = hash_32(params.h0, k);
++		if (params.h1 > m) {
++			pr_err("hash_32(%#x, %d) = %#x > %#x", params.h0, k, params.h1, m);
+ 			return false;
+ 		}
 
  		/* Test hash_64 */
- 		hash_or[1][k] |= params.h1 = hash_64(h64, k);
--		if (params.h1 > m) {
--			pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, params.h1, m);
--			return false;
--		}
-+		KUNIT_EXPECT_LE_MSG(test, params.h1, m,
-+				    "hash_64(%#llx, %d) = %#x > %#x",
-+				    h64, k, params.h1, m);
+-		hash_or[1][k] |= h1 = hash_64(h64, k);
+-		if (h1 > m) {
+-			pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, h1, m);
++		hash_or[1][k] |= params.h1 = hash_64(h64, k);
++		if (params.h1 > m) {
++			pr_err("hash_64(%#llx, %d) = %#x > %#x", h64, k, params.h1, m);
+ 			return false;
+ 		}
  #ifdef HAVE_ARCH_HASH_64
--		if (!test_int_hash_64(&params, &m, &k))
+-		h2 = hash_64_generic(h64, k);
+-#if HAVE_ARCH_HASH_64 == 1
+-		if (h1 != h2) {
+-			pr_err("hash_64(%#llx, %d) = %#x != hash_64_generic() "
+-				"= %#x", h64, k, h1, h2);
++		if (!test_int_hash_64(&params, &m, &k))
+ 			return false;
+-		}
+-#else
+-		if (h2 > m) {
+-			pr_err("hash_64_generic(%#llx, %d) = %#x > %#x",
+-				h64, k, h1, m);
 -			return false;
-+		test_int_hash_64(test, &params, &m, &k);
+-		}
+-#endif
  #endif
  	}
--
--	return true;
+
+-	(void)h2;	/* Suppress unused variable warning */
+ 	return true;
  }
 
- #define SIZE 256	/* Run time is cubic in SIZE */
-
--static int __init test_string_or(void)
-+static void test_string_or(struct kunit *test)
- {
- 	char buf[SIZE+1];
- 	u32 string_or = 0;
-@@ -178,20 +161,15 @@ static int __init test_string_or(void)
- 	} /* j */
-
- 	/* The OR of all the hash values should cover all the bits */
--	if (~string_or) {
--		pr_err("OR of all string hash results = %#x != %#x",
--		       string_or, -1u);
--		return -EINVAL;
--	}
--
--	return 0;
-+	KUNIT_EXPECT_EQ_MSG(test, string_or, -1u,
-+			    "OR of all string hash results = %#x != %#x",
-+			    string_or, -1u);
- }
-
--static int __init test_hash_or(void)
-+static void test_hash_or(struct kunit *test)
- {
- 	char buf[SIZE+1];
- 	u32 hash_or[2][33] = { { 0, } };
--	unsigned tests = 0;
- 	unsigned long long h64 = 0;
- 	int i, j;
-
-@@ -206,39 +184,27 @@ static int __init test_hash_or(void)
- 			u32 h0 = full_name_hash(buf+i, buf+i, j-i);
-
- 			/* Check that hashlen_string gets the length right */
--			if (hashlen_len(hashlen) != j-i) {
--				pr_err("hashlen_string(%d..%d) returned length"
--					" %u, expected %d",
--					i, j, hashlen_len(hashlen), j-i);
--				return -EINVAL;
--			}
-+			KUNIT_EXPECT_EQ_MSG(test, hashlen_len(hashlen), j-i,
-+					    "hashlen_string(%d..%d) returned length %u, expected %d",
-+					    i, j, hashlen_len(hashlen), j-i);
- 			/* Check that the hashes match */
--			if (hashlen_hash(hashlen) != h0) {
--				pr_err("hashlen_string(%d..%d) = %08x != "
--					"full_name_hash() = %08x",
--					i, j, hashlen_hash(hashlen), h0);
--				return -EINVAL;
--			}
-+			KUNIT_EXPECT_EQ_MSG(test, hashlen_hash(hashlen), h0,
-+					    "hashlen_string(%d..%d) = %08x != full_name_hash() = %08x",
-+					    i, j, hashlen_hash(hashlen), h0);
-
- 			h64 = h64 << 32 | h0;	/* For use with hash_64 */
--			if (!test_int_hash(h64, hash_or))
--				return -EINVAL;
--			tests++;
-+			test_int_hash(test, h64, hash_or);
- 		} /* i */
- 	} /* j */
-
--	if (~hash_or[0][0]) {
--		pr_err("OR of all __hash_32 results = %#x != %#x",
--			hash_or[0][0], -1u);
--		return -EINVAL;
--	}
-+	KUNIT_EXPECT_EQ_MSG(test, hash_or[0][0], -1u,
-+			    "OR of all __hash_32 results = %#x != %#x",
-+			    hash_or[0][0], -1u);
- #ifdef HAVE_ARCH__HASH_32
- #if HAVE_ARCH__HASH_32 != 1	/* Test is pointless if results match */
--	if (~hash_or[1][0]) {
--		pr_err("OR of all __hash_32_generic results = %#x != %#x",
--			hash_or[1][0], -1u);
--		return -EINVAL;
--	}
-+	KUNIT_EXPECT_EQ_MSG(test, hash_or[1][0], -1u,
-+			    "OR of all __hash_32_generic results = %#x != %#x",
-+			    hash_or[1][0], -1u);
- #endif
- #endif
-
-@@ -246,65 +212,27 @@ static int __init test_hash_or(void)
- 	for (i = 1; i <= 32; i++) {
- 		u32 const m = ((u32)2 << (i-1)) - 1;	/* Low i bits set */
-
--		if (hash_or[0][i] != m) {
--			pr_err("OR of all hash_32(%d) results = %#x "
--				"(%#x expected)", i, hash_or[0][i], m);
--			return -EINVAL;
--		}
--		if (hash_or[1][i] != m) {
--			pr_err("OR of all hash_64(%d) results = %#x "
--				"(%#x expected)", i, hash_or[1][i], m);
--			return -EINVAL;
--		}
-+		KUNIT_EXPECT_EQ_MSG(test, hash_or[0][i], m,
-+				    "OR of all hash_32(%d) results = %#x (%#x expected)",
-+				    i, hash_or[0][i], m);
-+		KUNIT_EXPECT_EQ_MSG(test, hash_or[1][i], m,
-+				    "OR of all hash_64(%d) results = %#x (%#x expected)",
-+				    i, hash_or[1][i], m);
- 	}
--
--	pr_notice("%u tests passed.", tests);
--
--	return 0;
- }
-
--static void __init notice_skipped_tests(void)
--{
--	/* Issue notices about skipped tests. */
--#ifdef HAVE_ARCH__HASH_32
--#if HAVE_ARCH__HASH_32 != 1
--	pr_info("__hash_32() is arch-specific; not compared to generic.");
--#endif
--#else
--	pr_info("__hash_32() has no arch implementation to test.");
--#endif
--#ifdef HAVE_ARCH_HASH_64
--#if HAVE_ARCH_HASH_64 != 1
--	pr_info("hash_64() is arch-specific; not compared to generic.");
--#endif
--#else
--	pr_info("hash_64() has no arch implementation to test.");
--#endif
--}
--
--static int __init
--test_hash_init(void)
--{
--	int ret;
--
--	ret = test_string_or();
--	if (ret < 0)
--		return ret;
--
--	ret = test_hash_or();
--	if (ret < 0)
--		return ret;
--
--	notice_skipped_tests();
-+static struct kunit_case hash_test_cases[] __refdata = {
-+	KUNIT_CASE(test_string_or),
-+	KUNIT_CASE(test_hash_or),
-+	{}
-+};
-
--	return ret;
--}
-+static struct kunit_suite hash_test_suite = {
-+	.name = "hash",
-+	.test_cases = hash_test_cases,
-+};
-
--static void __exit test_hash_exit(void)
--{
--}
-
--module_init(test_hash_init);	/* Does everything */
--module_exit(test_hash_exit);	/* Does nothing */
-+kunit_test_suite(hash_test_suite);
-
- MODULE_LICENSE("GPL");
 --
 2.33.1
 
