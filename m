@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACCC9C4167E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B70C41535
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94F816108F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D2B3D61139
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Oct 2021 20:37:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbhJ1UkC (ORCPT
+        id S231361AbhJ1UkE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Oct 2021 16:40:02 -0400
-Received: from mga14.intel.com ([192.55.52.115]:25710 "EHLO mga14.intel.com"
+        Thu, 28 Oct 2021 16:40:04 -0400
+Received: from mga14.intel.com ([192.55.52.115]:25715 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230498AbhJ1Uj6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Oct 2021 16:39:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="230775400"
+        id S231304AbhJ1UkA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 28 Oct 2021 16:40:00 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10151"; a="230775404"
 X-IronPort-AV: E=Sophos;i="5.87,190,1631602800"; 
-   d="scan'208";a="230775400"
+   d="scan'208";a="230775404"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:30 -0700
 X-IronPort-AV: E=Sophos;i="5.87,190,1631602800"; 
-   d="scan'208";a="498562991"
+   d="scan'208";a="498562993"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2021 13:37:29 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -29,9 +29,9 @@ To:     jarkko@kernel.org, linux-sgx@vger.kernel.org, shuah@kernel.org,
         dave.hansen@linux.intel.com
 Cc:     seanjc@google.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 02/15] x86/sgx: Rename fallback labels in sgx_init()
-Date:   Thu, 28 Oct 2021 13:37:27 -0700
-Message-Id: <120d55cfe68883872cd13977fc8accfa6ef98ce2.1635447301.git.reinette.chatre@intel.com>
+Subject: [PATCH V2 04/15] selftests/sgx: Assign source for each segment
+Date:   Thu, 28 Oct 2021 13:37:29 -0700
+Message-Id: <ca1e02fc9e77fdaf5b6a2b33b462541d099101f3.1635447301.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1635447301.git.reinette.chatre@intel.com>
 References: <cover.1635447301.git.reinette.chatre@intel.com>
@@ -43,61 +43,94 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jarkko Sakkinen <jarkko@kernel.org>
 
-It's hard to add new content to this function because it is time
-consuming to match fallback and its cause. Rename labels in a way
-that the name of error label refers to the site where failure
-happened. This way it is easier to keep on track what is going
-on.
+Define source per segment so that enclave pages can be added from different
+sources, e.g. anonymous VMA for zero pages. In other words, add 'src' field
+to struct encl_segment, and assign it to 'encl->src' for pages inherited
+from the enclave binary.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-[reinette: Placeholder patch - submitted separately upstream
-https://lore.kernel.org/lkml/20211018135744.45527-1-jarkko@kernel.org/
-]
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- arch/x86/kernel/cpu/sgx/main.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Changes since V1:
+- Add signature from Dave.
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 63d3de02bbcc..a6e313f1a82d 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -803,12 +803,12 @@ static int __init sgx_init(void)
+ tools/testing/selftests/sgx/load.c      | 5 +++--
+ tools/testing/selftests/sgx/main.h      | 1 +
+ tools/testing/selftests/sgx/sigstruct.c | 8 ++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
+index 3ebe5d1fe337..5605474aab73 100644
+--- a/tools/testing/selftests/sgx/load.c
++++ b/tools/testing/selftests/sgx/load.c
+@@ -107,7 +107,7 @@ static bool encl_ioc_add_pages(struct encl *encl, struct encl_segment *seg)
+ 	memset(&secinfo, 0, sizeof(secinfo));
+ 	secinfo.flags = seg->flags;
  
- 	if (!sgx_page_reclaimer_init()) {
- 		ret = -ENOMEM;
--		goto err_page_cache;
-+		goto err_reclaimer;
+-	ioc.src = (uint64_t)encl->src + seg->offset;
++	ioc.src = (uint64_t)seg->src;
+ 	ioc.offset = seg->offset;
+ 	ioc.length = seg->size;
+ 	ioc.secinfo = (unsigned long)&secinfo;
+@@ -216,6 +216,7 @@ bool encl_load(const char *path, struct encl *encl)
+ 
+ 		if (j == 0) {
+ 			src_offset = phdr->p_offset & PAGE_MASK;
++			encl->src = encl->bin + src_offset;
+ 
+ 			seg->prot = PROT_READ | PROT_WRITE;
+ 			seg->flags = SGX_PAGE_TYPE_TCS << 8;
+@@ -228,13 +229,13 @@ bool encl_load(const char *path, struct encl *encl)
+ 
+ 		seg->offset = (phdr->p_offset & PAGE_MASK) - src_offset;
+ 		seg->size = (phdr->p_filesz + PAGE_SIZE - 1) & PAGE_MASK;
++		seg->src = encl->src + seg->offset;
+ 
+ 		j++;
  	}
  
- 	ret = misc_register(&sgx_dev_provision);
- 	if (ret)
--		goto err_kthread;
-+		goto err_provision;
+ 	assert(j == encl->nr_segments);
  
- 	/*
- 	 * Always try to initialize the native *and* KVM drivers.
-@@ -821,17 +821,17 @@ static int __init sgx_init(void)
- 	ret = sgx_drv_init();
+-	encl->src = encl->bin + src_offset;
+ 	encl->src_size = encl->segment_tbl[j - 1].offset +
+ 			 encl->segment_tbl[j - 1].size;
  
- 	if (sgx_vepc_init() && ret)
--		goto err_provision;
-+		goto err_driver;
+diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
+index 68672fd86cf9..452d11dc4889 100644
+--- a/tools/testing/selftests/sgx/main.h
++++ b/tools/testing/selftests/sgx/main.h
+@@ -7,6 +7,7 @@
+ #define MAIN_H
  
- 	return 0;
+ struct encl_segment {
++	void *src;
+ 	off_t offset;
+ 	size_t size;
+ 	unsigned int prot;
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+index 92bbc5a15c39..202a96fd81bf 100644
+--- a/tools/testing/selftests/sgx/sigstruct.c
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -289,14 +289,14 @@ static bool mrenclave_eextend(EVP_MD_CTX *ctx, uint64_t offset,
+ static bool mrenclave_segment(EVP_MD_CTX *ctx, struct encl *encl,
+ 			      struct encl_segment *seg)
+ {
+-	uint64_t end = seg->offset + seg->size;
++	uint64_t end = seg->size;
+ 	uint64_t offset;
  
--err_provision:
-+err_driver:
- 	misc_deregister(&sgx_dev_provision);
+-	for (offset = seg->offset; offset < end; offset += PAGE_SIZE) {
+-		if (!mrenclave_eadd(ctx, offset, seg->flags))
++	for (offset = 0; offset < end; offset += PAGE_SIZE) {
++		if (!mrenclave_eadd(ctx, seg->offset + offset, seg->flags))
+ 			return false;
  
--err_kthread:
-+err_provision:
- 	kthread_stop(ksgxd_tsk);
+-		if (!mrenclave_eextend(ctx, offset, encl->src + offset))
++		if (!mrenclave_eextend(ctx, seg->offset + offset, seg->src + offset))
+ 			return false;
+ 	}
  
--err_page_cache:
-+err_reclaimer:
- 	for (i = 0; i < sgx_nr_epc_sections; i++) {
- 		vfree(sgx_epc_sections[i].pages);
- 		memunmap(sgx_epc_sections[i].virt_addr);
 -- 
 2.25.1
 
