@@ -2,147 +2,93 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55551C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 13:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 660BFC433EF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 14:56:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24F6D61181
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 13:19:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AF2C61184
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 14:56:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbhJ2NV5 (ORCPT
+        id S229894AbhJ2O6f (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 29 Oct 2021 09:21:57 -0400
-Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:35183 "EHLO
-        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230213AbhJ2NV5 (ORCPT
+        Fri, 29 Oct 2021 10:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhJ2O6e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 09:21:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1635513568;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=1DOWEZETbYjhRqATGhhndsd9mIBy4tqiyTor3GOhiNI=;
-        b=m90dM9Quj0B07j/9lte+yfczF6iTcA6Odc2LoSKu+6H0BJSqOojrFDK4+Ph0kAoi
-        fmqx+hBs5X/8isUe0pimCJPv5HoAdjstK3gqSoT2P4LN4x/FPmnSOa60aT7celHmlHh
-        zO/FdsXJi1Ecf+sirgV66N9JtlZCAkjJ53lD/YdY=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1635513568;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=1DOWEZETbYjhRqATGhhndsd9mIBy4tqiyTor3GOhiNI=;
-        b=NvanpFhNUiVrvLlTAzUVIQ06hCOua0HeF+XUF0mhA3bByvgHwWm0gcuvpuZ02iic
-        v7DwnH5YrZ4PyxYRULSJE+MloDmgRHLrr0Vtx+yUmv8sJG7EfbY2ooE7ex0TgVA6SpN
-        tIojxMsgcx58efxI5gQs6rPXcp6gv0E/4PZ0F+iU=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20211029
+        Fri, 29 Oct 2021 10:58:34 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1155FC061766
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 07:56:06 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a26so9437276pfr.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Oct 2021 07:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FjCjcYP+D3o8tv9NFpZxsW155sRvSDfbhIEl3Au16T8=;
+        b=fbhsEQHwwevdlsxfPYH0ZOMBGl0MBuTNZ7ZM/mtkL50sTixcSo0LP59DlAS7YgLIeH
+         bd5ffqgdd4NPwRRMPVUM41XFNfQEF4lyvY2qy9/Lhh5gdHAF/RlD3+DNaQeeAL7ckacF
+         uLBqY/pAqpEJF8p+CdGM/OdDjeEMUXe4vrNhRHmNXMw+kQ6GHr1j51B22WZ2cII8JYkY
+         Wtjvk1Ld27LsAm+eskBlsB4uzBEErJsNMfmyQH+nt1IU1CbDeSirNMVr0dGUw9inhgps
+         WU7jJ+CB46GNSD+JDiuUTGANWIGnAeQbKrRIJiJ1ISf8+QJDe1v34NYWmrK1yf14lhQk
+         8hSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FjCjcYP+D3o8tv9NFpZxsW155sRvSDfbhIEl3Au16T8=;
+        b=3x0sUO0YlUG7e/ENhR272/F6EyBDjAFVUtvtYJ9JC25yYtPk7+7rVZt/jaKAysCIcU
+         d85mWEN0JOKTt0CPtfESV6C4RuFr/6Ew5g1o4StT/Wb5N9Hd68lfPNMxRaZo3mT+3NOr
+         vCc4oSU0/EypMwFVosRtvLgEnopAdgJ/DlIbDQHWNHi3gbSJx8o+HWWkxFYvHUHolEpo
+         xLLjRWb/5v/BQ1aa8L9ub7jV9VNbW4Znpx9AD1eUB2ewYffsxJAp6HcdeFdGh7EASQKX
+         lFp4uGkY80s74X1zun/z9ku1+y5eRdEhwNk+JO/HmmRfzJX3jS/3g0/2GpIjX93N2Hsp
+         Eh7w==
+X-Gm-Message-State: AOAM532DUtNXnDPsLc+o8E5/ugTEc4eRHOwSx3Mvqd0aXvG2CtBpk80M
+        EelkiNTO6PT6QW/itmaFgVbREg==
+X-Google-Smtp-Source: ABdhPJw1r41vo9z6GWts/4z+DJNa7FX6eXkNXDzDgmec/E95Um8w49RuJ9Bh5EuGaGZRKpqNN8QPog==
+X-Received: by 2002:a63:9dc5:: with SMTP id i188mr8471251pgd.143.1635519365363;
+        Fri, 29 Oct 2021 07:56:05 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f8sm6253333pjq.29.2021.10.29.07.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Oct 2021 07:56:04 -0700 (PDT)
+Date:   Fri, 29 Oct 2021 14:56:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>, jarkko@kernel.org,
+        linux-sgx@vger.kernel.org, shuah@kernel.org,
+        dave.hansen@linux.intel.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 01/15] selftests/x86/sgx: Fix a benign linker warning
+Message-ID: <YXwLgAdOA1jlsSiq@google.com>
+References: <cover.1635447301.git.reinette.chatre@intel.com>
+ <545aac243037bf5c2640929c4d8ff5c1edfe3ef8.1635447301.git.reinette.chatre@intel.com>
+ <d382d0b0-15fb-5e96-accd-c3b59be72dd3@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100017ccc348a69-19c038be-3cd1-46d3-84fd-5764068ebcc7-000000@email.amazonses.com>
-Date:   Fri, 29 Oct 2021 13:19:28 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2021.10.29-54.240.48.37
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d382d0b0-15fb-5e96-accd-c3b59be72dd3@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.15.0-rc7
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: bdcc9f6a568275aed4cc32fd2312432d2ff1b704
-* git describe: next-20211029
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211029
+On Thu, Oct 28, 2021, Dave Hansen wrote:
+> On 10/28/21 1:37 PM, Reinette Chatre wrote:
+> > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> > 
+> > Pass a build id of "none" to the linker to suppress a warning about the
+> > build id being ignored:
+> > 
+> >   /usr/bin/ld: warning: .note.gnu.build-id section discarded, --build-id
+> >   ignored.
+> 
+> Do we have a good grasp on why this is producing a warning in the first
+> place?  This seems like something that could get merged quickly with one
+> more sentence in the changelog.
 
-## Regressions (compared to next-20211028)
-* i386, kselftest-net
-  - net.so_txtime.sh
-
-* i386, kselftest-rtc
-  - rtc.rtctest
-
-* x15, kselftest-rtc
-  - rtc.rtctest.rtc.alarm_alm_set
-  - rtc.rtctest.rtc.alarm_alm_set_minute
-  - rtc.rtctest.rtc.alarm_wkalm_set
-  - rtc.rtctest.rtc.date_read
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Fixes (compared to next-20211028)
-* qemu_i386, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
-
-* x86, kselftest-lkdtm
-  - lkdtm.SLAB_FREE_DOUBLE.sh
-
-* x86, kselftest-rtc
-  - rtc.rtctest
-
-
-## Test result summary
-total: 2553, pass: 1587, fail: 228, skip: 738, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+The SGX selftests use a custom linker script, tools/testing/selftests/sgx/test_encl.lds,
+to configure the resulting enclave binary so that it's loadable as an enclave
+more or less as-is.  One of the things the script does is drop sections the
+selftests doesn't want, .note* sections being in that category.  I don't recall
+exactly why the script drops sections; I assume it's to simply the loading process.
+Anyways, .note.gnu.build-id is collateral damage and the linker complains.
