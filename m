@@ -2,186 +2,254 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8EE0C4167E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 18:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55495C433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 18:45:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1F4560F4B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 18:45:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E55E61040
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Oct 2021 18:45:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbhJ2Sry (ORCPT
+        id S230126AbhJ2SsL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 29 Oct 2021 14:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhJ2Sri (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Oct 2021 14:47:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D66C061570;
-        Fri, 29 Oct 2021 11:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=r84288GmeDVjDY3xNymFGbcisITDhLv6aqXTm20aeME=; b=LYqJ7TMrp0MnnPGfgthGg9vbez
-        DXw1vHhNAWrrkUSwCZHMibvX7XZ/iK0yLFkMcC0G781lrWojDAbU49dyJN1tn+7q5cph5UEPKjisV
-        24HJwTwf31sjtiKdDIlB4jFuevHg6RcnNeh4iCnYK0BBEGPgXKH6S6HHscKerZiijAic8nralXx3e
-        ro22kqhCUaLezXVMAc7Ll8TPHd1D7BdbHCrXg4HxUUPTLSZUIH3TunoEiraK/BQucC3/S8RBCyd2K
-        8ihq4M5xXvbJ11WDYfvR+h0vIMGEu+qSh3zuB8kv6KAQFluYRGHjmgzONCix8thYKEhWKBy8g9YFe
-        7uBU6PeA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mgWsA-00Bq0O-6h; Fri, 29 Oct 2021 18:45:02 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tj@kernel.org, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, jeyu@kernel.org, shuah@kernel.org
-Cc:     bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        tglx@linutronix.de, mcgrof@kernel.org, keescook@chromium.org,
-        rostedt@goodmis.org, minchan@kernel.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
+        Fri, 29 Oct 2021 14:48:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45266 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231400AbhJ2Sr4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 29 Oct 2021 14:47:56 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 17F0E610CF;
+        Fri, 29 Oct 2021 18:45:26 +0000 (UTC)
+Date:   Fri, 29 Oct 2021 14:45:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     surenb@google.com, hridya@google.com, namhyung@kernel.org,
+        kernel-team@android.com, mhiramat@kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: [PATCH v9 2/6] testing: use the copyleft-next-0.3.1 SPDX tag
-Date:   Fri, 29 Oct 2021 11:44:56 -0700
-Message-Id: <20211029184500.2821444-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211029184500.2821444-1-mcgrof@kernel.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] tracing/histogram: Optimize division by
+ constants
+Message-ID: <20211029144524.367d6789@gandalf.local.home>
+In-Reply-To: <20211029183339.3216491-2-kaleshsingh@google.com>
+References: <20211029183339.3216491-1-kaleshsingh@google.com>
+        <20211029183339.3216491-2-kaleshsingh@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Two selftests drivers exist under the copyleft-next license.
-These drivers were added prior to SPDX practice taking full swing
-in the kernel. Now that we have an SPDX tag for copylef-next-0.3.1
-documented, embrace it and remove the boiler plate.
+On Fri, 29 Oct 2021 11:33:27 -0700
+Kalesh Singh <kaleshsingh@google.com> wrote:
 
-Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc: Kuno Woudt <kuno@frob.nl>
-Cc: Richard Fontana <fontana@sharpeleven.org>
-Cc: copyleft-next@lists.fedorahosted.org
-Cc: Ciaran Farrell <Ciaran.Farrell@suse.com>
-Cc: Christopher De Nicolo <Christopher.DeNicolo@suse.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- lib/test_kmod.c                          | 12 +-----------
- lib/test_sysctl.c                        | 12 +-----------
- tools/testing/selftests/kmod/kmod.sh     | 13 +------------
- tools/testing/selftests/sysctl/sysctl.sh | 12 +-----------
- 4 files changed, 4 insertions(+), 45 deletions(-)
+> If the divisor is a constant use specific division functions to
+> avoid extra branches when the trigger is hit.
+> 
+> If the divisor constant but not a power of 2, the division can be
+> replaced with a multiplication and shift in the following case:
+> 
+> Let X = dividend and Y = divisor.
+> 
+> Choose Z = some power of 2. If Y <= Z, then:
+>     X / Y = (X * (Z / Y)) / Z
+> 
+> (Z / Y) is a constant (mult) which is calculated at parse time, so:
+>     X / Y = (X * mult) / Z
+> 
+> The division by Z can be replaced by a shift since Z is a power of 2:
+>     X / Y = (X * mult) >> shift
+> 
+> As long, as X < Z the results will not be off by more than 1.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> ---
+> 
+> Changes in v2:
+>   - Return -EDOM if divisor is a constant and zero, per Steve
+> 
+>  kernel/trace/trace_events_hist.c | 117 ++++++++++++++++++++++++++++++-
+>  1 file changed, 116 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+> index 364cb3091789..1084aa41f047 100644
+> --- a/kernel/trace/trace_events_hist.c
+> +++ b/kernel/trace/trace_events_hist.c
+> @@ -68,7 +68,8 @@
+>  	C(INVALID_SORT_FIELD,	"Sort field must be a key or a val"),	\
+>  	C(INVALID_STR_OPERAND,	"String type can not be an operand in expression"), \
+>  	C(EXPECT_NUMBER,	"Expecting numeric literal"),		\
+> -	C(UNARY_MINUS_SUBEXPR,	"Unary minus not supported in sub-expressions"),
+> +	C(UNARY_MINUS_SUBEXPR,	"Unary minus not supported in sub-expressions"), \
+> +	C(DIVISION_BY_ZERO,	"Division by zero"),
+>  
+>  #undef C
+>  #define C(a, b)		HIST_ERR_##a
+> @@ -92,6 +93,7 @@ typedef u64 (*hist_field_fn_t) (struct hist_field *field,
+>  #define HIST_FIELDS_MAX		(TRACING_MAP_FIELDS_MAX + TRACING_MAP_VARS_MAX)
+>  #define HIST_ACTIONS_MAX	8
+>  #define HIST_CONST_DIGITS_MAX	21
+> +#define HIST_DIV_SHIFT		20  /* For optimizing division by constants */
+>  
+>  enum field_op_id {
+>  	FIELD_OP_NONE,
+> @@ -160,6 +162,8 @@ struct hist_field {
+>  
+>  	/* Numeric literals are represented as u64 */
+>  	u64				constant;
+> +	/* Used to optimize division by constants */
+> +	u64				div_multiplier;
+>  };
+>  
+>  static u64 hist_field_none(struct hist_field *field,
+> @@ -311,6 +315,72 @@ static u64 hist_field_div(struct hist_field *hist_field,
+>  	return div64_u64(val1, val2);
+>  }
+>  
+> +static u64 div_by_power_of_two(struct hist_field *hist_field,
+> +				struct tracing_map_elt *elt,
+> +				struct trace_buffer *buffer,
+> +				struct ring_buffer_event *rbe,
+> +				void *event)
+> +{
+> +	struct hist_field *operand1 = hist_field->operands[0];
+> +	struct hist_field *operand2 = hist_field->operands[1];
+> +
+> +	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
+> +	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index ce1589391413..d62afd89dc63 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * kmod stress test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 3750323973f4..9e5bd10a930a 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * proc sysctl test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- 
- /*
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index afd42387e8b2..7189715d7960 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -1,18 +1,7 @@
- #!/bin/bash
--#
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
- #
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
--
- # This is a stress test script for kmod, the kernel module loader. It uses
- # test_kmod which exposes a series of knobs for the API for us so we can
- # tweak each test in userspace rather than in kernelspace.
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index 19515dcb7d04..2046c603a4d4 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -1,16 +1,6 @@
- #!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
- 
- # This performs a series tests against the proc sysctl interface.
- 
--- 
-2.30.2
+If these functions are only called when val2 is constant, can't we make it
+such that we get val2 from the hist_field directly? That is:
+
+	u64 val2 = operand2->constant;
+
+That would save us a function call, and an indirect on at that (that gets
+slowed down by spectre).
+
+Same for the ones below.
+
+-- Steve
+
+
+> +
+> +	return val1 >> __ffs64(val2);
+> +}
+> +
+> +static u64 div_by_not_power_of_two(struct hist_field *hist_field,
+> +				struct tracing_map_elt *elt,
+> +				struct trace_buffer *buffer,
+> +				struct ring_buffer_event *rbe,
+> +				void *event)
+> +{
+> +	struct hist_field *operand1 = hist_field->operands[0];
+> +	struct hist_field *operand2 = hist_field->operands[1];
+> +
+> +	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
+> +	u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
+> +
+> +	return div64_u64(val1, val2);
+> +}
+> +
+> +static u64 div_by_mult_and_shift(struct hist_field *hist_field,
+> +				struct tracing_map_elt *elt,
+> +				struct trace_buffer *buffer,
+> +				struct ring_buffer_event *rbe,
+> +				void *event)
+> +{
+> +	struct hist_field *operand1 = hist_field->operands[0];
+> +	struct hist_field *operand2 = hist_field->operands[1];
+> +
+> +	u64 val1 = operand1->fn(operand1, elt, buffer, rbe, event);
+> +
+> +	/*
+> +	 * If the divisor is a constant, do a multiplication and shift instead.
+> +	 *
+> +	 * Choose Z = some power of 2. If Y <= Z, then:
+> +	 *     X / Y = (X * (Z / Y)) / Z
+> +	 *
+> +	 * (Z / Y) is a constant (mult) which is calculated at parse time, so:
+> +	 *     X / Y = (X * mult) / Z
+> +	 *
+> +	 * The division by Z can be replaced by a shift since Z is a power of 2:
+> +	 *     X / Y = (X * mult) >> HIST_DIV_SHIFT
+> +	 *
+> +	 * As long, as X < Z the results will not be off by more than 1.
+> +	 */
+> +	if (val1 < (1 << HIST_DIV_SHIFT)) {
+> +		u64 mult = operand2->div_multiplier;
+> +
+> +		return (val1 * mult + ((1 << HIST_DIV_SHIFT) - 1)) >> HIST_DIV_SHIFT;
+> +	} else {
+> +		u64 val2 = operand2->fn(operand2, elt, buffer, rbe, event);
+> +
+> +		return div64_u64(val1, val2);
+> +	}
+> +}
+> +
+>  static u64 hist_field_mult(struct hist_field *hist_field,
+>  			   struct tracing_map_elt *elt,
+>  			   struct trace_buffer *buffer,
+> @@ -573,6 +643,37 @@ struct snapshot_context {
+>  	void			*key;
+>  };
+>  
+> +
+> +static struct hist_field *find_var_field(struct hist_trigger_data *hist_data,
+> +					 const char *var_name);
+> +
+> +/*
+> + * Returns the specific division function to use if the divisor
+> + * is constant. This avoids extra branches when the trigger is hit.
+> + */
+> +static hist_field_fn_t hist_field_get_div_fn(struct hist_field *divisor)
+> +{
+> +	u64 div;
+> +
+> +	if (divisor->flags & HIST_FIELD_FL_VAR_REF) {
+> +		struct hist_field *var;
+> +
+> +		var = find_var_field(divisor->var.hist_data, divisor->name);
+> +		div = var->constant;
+> +	} else
+> +		div = divisor->constant;
+> +
+> +	if (!(div & (div - 1)))
+> +		return div_by_power_of_two;
+> +
+> +	/* If the divisor is too large, do a regular division */
+> +	if (div > (1 << HIST_DIV_SHIFT))
+> +		return div_by_not_power_of_two;
+> +
+> +	divisor->div_multiplier = div64_u64((u64)(1 << HIST_DIV_SHIFT), div);
+> +	return div_by_mult_and_shift;
+> +}
+> +
+>  static void track_data_free(struct track_data *track_data)
+>  {
+>  	struct hist_elt_data *elt_data;
+> @@ -2575,6 +2676,20 @@ static struct hist_field *parse_expr(struct hist_trigger_data *hist_data,
+>  	expr->operands[0] = operand1;
+>  	expr->operands[1] = operand2;
+>  
+> +
+> +	if (field_op == FIELD_OP_DIV &&
+> +			operand2_flags & HIST_FIELD_FL_CONST) {
+> +		u64 divisor = (var2) ? var2->constant : operand2->constant;
+> +
+> +		if (!divisor) {
+> +			hist_err(file->tr, HIST_ERR_DIVISION_BY_ZERO, errpos(str));
+> +			ret = -EDOM;
+> +			goto free;
+> +		}
+> +
+> +		op_fn = hist_field_get_div_fn(operand2);
+> +	}
+> +
+>  	if (combine_consts) {
+>  		if (var1)
+>  			expr->operands[0] = var1;
 
