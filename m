@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25056C433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Nov 2021 16:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 134F5C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Nov 2021 16:36:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0932E61181
-	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Nov 2021 16:36:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E968961186
+	for <linux-kselftest@archiver.kernel.org>; Mon,  1 Nov 2021 16:36:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbhKAQjQ (ORCPT
+        id S232936AbhKAQj1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 1 Nov 2021 12:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        Mon, 1 Nov 2021 12:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbhKAQiN (ORCPT
+        with ESMTP id S233039AbhKAQig (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Nov 2021 12:38:13 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BFAC061714;
-        Mon,  1 Nov 2021 09:35:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id w15so66412613edc.9;
-        Mon, 01 Nov 2021 09:35:39 -0700 (PDT)
+        Mon, 1 Nov 2021 12:38:36 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EE7C061205;
+        Mon,  1 Nov 2021 09:36:00 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id z20so66628034edc.13;
+        Mon, 01 Nov 2021 09:36:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6XjFwTZJAXBS5ig6cJtvUyJCDN7+Qz6UkUJ2uO4/Ktc=;
-        b=mQAHa9q2BVVuhWSh7J9ud3rXccRlUIm6dVcftCbK+fnnCOYJn3YEPdbJP7vkUOXWE3
-         PPk0EZ3u8iday/wRKju2/nWIInKHo08NE+khYut3l54Qz5jqeP/Y70dXz923EIbwpd8b
-         m8J5iWzWKE9TfoCe13ju45PA8aru7C+KbqhNP6l4cYerXg9+XKn2s+B2+bb2dZYVCjet
-         AiEADa8KcjHTCIoTOgKv9GCCWuizQiVT9MNFFa7LG92Eb7pKuYpD36GyF8k9WUOh6wiI
-         t7sKGBUmfvhcESEfxlPl7eV8MO0QwxZa28LORIBqEEYr/QlICUo0CWt7QnflY6JIXu5u
-         eWiQ==
+        bh=ufYFZBJ9VEr56IXSsNWfLzy7MWr0YUwgDAXQztjCufM=;
+        b=kQLPjL5fQ9m1acixa4Y6AGC2t6mYbM2rE5F62eO3q4bIn8cpiog4AIMD6teAN0jvnt
+         71Ug3EnndFPH5cKkdW/IkUKgQcv6cOLQK2BHGDC4pejzOFWRjx3m9A2YQFQ8w/DAsZt8
+         qzDEuWqJAr5+Ugjj/mITUZSR+E4hp1UHPms2NCKvI10VIfbvxCNWjCpr+JCTgy+z86wY
+         3UYKIob7Q4RsbmFJ8NI5J45eWcyQEqqX5hQSKFk0N8nM8dq3AgjNpjR0t0rvwKAbvefB
+         w/N0oNcMXvYi9d58LCuBDBvXCo0pX9zs8qCbLLzCnrRpngwlunHoWGLv1poRssL/doC7
+         chgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6XjFwTZJAXBS5ig6cJtvUyJCDN7+Qz6UkUJ2uO4/Ktc=;
-        b=JzORaYfEw+NH4OXfLCV3xgUbJNpZ1d/iHSkch2Xe5XS+/1nEU0b1/90pucKG3EtT7r
-         D1BhuVOk7TiaMm5DbWfUiICftlvoNeyb0eT4VZmXMGn6YGIdtYmIGT2+k/VSYmQIMTnq
-         tL4Z5hLOMylSHwtUVO0vi2NRGD5TbiK+V6cxZnsyNjDASK7X+Gz3L1W+9dn9OFc9RSKH
-         aajBhYJjqXGjN3TLLRna63nPZJcM8Cy9go/nPEUM0dhthsOLos+iq4lwmS35EVmGJxaq
-         mOz9RVq9wmHJyp+MqVGacP2xcwRusW1y9dB7m3Ah3MnzLfcJXEHmhc9FQQk1zZErNDKl
-         2cwQ==
-X-Gm-Message-State: AOAM532dTERnzeIWvXGurJZH7pfKay5RT1viHl78VlEFnxicMy586YNF
-        7dUeBChziQx4p7wOryD5iSI=
-X-Google-Smtp-Source: ABdhPJwHjmEmXN3qss1kGSQ4GY4gy7khpDLdzpsGpXXWRbieZhf04tFxmL8C46Q/Udj0+E7KXGUPZw==
-X-Received: by 2002:a05:6402:158:: with SMTP id s24mr42841743edu.189.1635784538298;
-        Mon, 01 Nov 2021 09:35:38 -0700 (PDT)
+        bh=ufYFZBJ9VEr56IXSsNWfLzy7MWr0YUwgDAXQztjCufM=;
+        b=JUARReWQ0eqs6R4VfapblgnZodM3PfwvDgJ1Nmhjd9ZimmUHWN7O3aHKJJpc3E5x8L
+         oYGYxlhk3/mUIKx1BMzQhv8eYaPf77TzC3fWypJM8i4pxigfjwQn2iLdwKZxM/cqzW6K
+         LU+bt4YWMBEWwme8Y8CnaQFLreNO97YtXhY0gGZq2mWK5IyUYoqWYzRNOFke5mcavYid
+         a6mnKSocji73X7H/ncwiRapRpvUpZ79HbDvSOLZg5FPLyBTBVo3rHMybZElyj8h6Jsrw
+         lQv7WQ17whLlfzcKbIzlY1/4jAGnOO9Cm4zWGTD07PhizwOyuS2gIC/ncxmd/+Nic4Ii
+         cEjg==
+X-Gm-Message-State: AOAM532+8tokpHexL/8fB+tv9AvUo4g739wnqxQEEat+5DQvy27VEYrl
+        akdF+VXWODuIZqooLa+QdV0=
+X-Google-Smtp-Source: ABdhPJwOA8sq9VznxmVmIvo0FS3NLldIrMKRpa3xLdbqdxNw2MdXE0lgi+4d2WT+WC7h4uRUin2F1w==
+X-Received: by 2002:a50:f08b:: with SMTP id v11mr37503183edl.96.1635784559186;
+        Mon, 01 Nov 2021 09:35:59 -0700 (PDT)
 Received: from ponky.lan ([2a04:241e:501:3870:f5f:2085:7f25:17c])
-        by smtp.gmail.com with ESMTPSA id f25sm4124583edv.90.2021.11.01.09.35.36
+        by smtp.gmail.com with ESMTPSA id f25sm4124583edv.90.2021.11.01.09.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 09:35:37 -0700 (PDT)
+        Mon, 01 Nov 2021 09:35:58 -0700 (PDT)
 From:   Leonard Crestez <cdleonard@gmail.com>
 To:     David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Dmitry Safonov <0x7f454c46@gmail.com>,
@@ -69,9 +69,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/25] tcp: authopt: Compute packet signatures
-Date:   Mon,  1 Nov 2021 18:34:41 +0200
-Message-Id: <5245f35901015acc6a41d1da92deb96f3e593b7c.1635784253.git.cdleonard@gmail.com>
+Subject: [PATCH v2 18/25] selftests: tcp_authopt: Initial sne test
+Date:   Mon,  1 Nov 2021 18:34:53 +0200
+Message-Id: <cc1f1ce2d723613db48b15249406e9c9f14479a4.1635784253.git.cdleonard@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1635784253.git.cdleonard@gmail.com>
 References: <cover.1635784253.git.cdleonard@gmail.com>
@@ -81,549 +81,301 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Computing tcp authopt packet signatures is a two step process:
+In order to trigger a seq or ack rollover create many connection in a
+loop and check for a "high" value, then make a lot of traffic.
 
-* traffic key is computed based on tcp 4-tuple, initial sequence numbers
-and the secret key.
-* packet mac is computed based on traffic key and content of individual
-packets.
-
-The traffic key could be cached for established sockets but it is not.
-
-A single code path exists for ipv4/ipv6 and input/output. This keeps the
-code short but slightly slower due to lots of conditionals.
-
-On output we read remote IP address from socket members on output, we
-can't use skb network header because it's computed after TCP options.
-
-On input we read remote IP address from skb network headers, we can't
-use socket binding members because those are not available for SYN.
+This relies on both TCP_REPAIR and TCP_REPAIR_AUTHOPT, making it unfit
+for upstream.
 
 Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 ---
- net/ipv4/tcp_authopt.c | 510 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 510 insertions(+)
+ .../tcp_authopt_test/linux_tcp_repair.py      |  67 ++++++
+ .../tcp_authopt/tcp_authopt_test/test_sne.py  | 202 ++++++++++++++++++
+ 2 files changed, 269 insertions(+)
+ create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_repair.py
+ create mode 100644 tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_sne.py
 
-diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-index 5455a9ecfe6b..1fd98d67ec10 100644
---- a/net/ipv4/tcp_authopt.c
-+++ b/net/ipv4/tcp_authopt.c
-@@ -425,5 +425,515 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 	memcpy(&key_info->addr, &opt.addr, sizeof(key_info->addr));
- 	hlist_add_head_rcu(&key_info->node, &info->head);
- 
- 	return 0;
- }
+diff --git a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_repair.py b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_repair.py
+new file mode 100644
+index 000000000000..68f111a207e6
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/linux_tcp_repair.py
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: GPL-2.0
++import socket
++import struct
++from contextlib import contextmanager
++from enum import IntEnum
 +
-+static int tcp_authopt_get_isn(struct sock *sk,
-+			       struct sk_buff *skb,
-+			       int input,
-+			       __be32 *sisn,
-+			       __be32 *disn)
-+{
-+	struct tcp_authopt_info *authopt_info;
-+	struct tcphdr *th = tcp_hdr(skb);
++# Extra sockopts not present in python stdlib
++TCP_REPAIR = 19
++TCP_REPAIR_QUEUE = 20
++TCP_QUEUE_SEQ = 21
++TCP_REPAIR_OPTIONS = 22
++TCP_REPAIR_WINDOW = 29
 +
-+	/* special cases for SYN and SYN/ACK */
-+	if (th->syn && !th->ack) {
-+		*sisn = th->seq;
-+		*disn = 0;
-+		return 0;
-+	}
-+	if (th->syn && th->ack) {
-+		*sisn = th->seq;
-+		*disn = htonl(ntohl(th->ack_seq) - 1);
-+		return 0;
-+	}
 +
-+	/* Fetching authopt_info like this should be safe because authopt_info
-+	 * is never released intil the socket is being closed
-+	 *
-+	 * tcp_timewait_sock is handled but not tcp_request_sock.
-+	 * for the synack case sk should be the listen socket.
-+	 */
-+	rcu_read_lock();
-+	if (unlikely(sk->sk_state == TCP_NEW_SYN_RECV)) {
-+		/* should never happen, sk should be the listen socket */
-+		authopt_info = NULL;
-+		WARN_ONCE(1, "TCP-AO can't sign with request sock\n");
-+		return -EINVAL;
-+	} else if (sk->sk_state == TCP_LISTEN) {
-+		/* Signature computation for non-syn packet on a listen
-+		 * socket is not possible because we lack the initial
-+		 * sequence numbers.
-+		 *
-+		 * Input segments that are not matched by any request,
-+		 * established or timewait socket will get here. These
-+		 * are not normally sent by peers.
-+		 *
-+		 * Their signature might be valid but we don't have
-+		 * enough state to determine that. TCP-MD5 can attempt
-+		 * to validate and reply with a signed RST because it
-+		 * doesn't care about ISNs.
-+		 *
-+		 * Reporting an error from signature code causes the
-+		 * packet to be discarded which is good.
-+		 */
-+		if (input) {
-+			/* Assume this is an ACK to a SYN/ACK
-+			 * This will incorrectly report "failed
-+			 * signature" for segments without a connection.
-+			 */
-+			*sisn = htonl(ntohl(th->seq) - 1);
-+			*disn = htonl(ntohl(th->ack_seq) - 1);
-+			rcu_read_unlock();
-+			return 0;
-+		}
-+		/* This would be an internal bug. */
-+		authopt_info = NULL;
-+		WARN_ONCE(1, "TCP-AO can't sign non-syn from TCP_LISTEN sock\n");
-+		return -EINVAL;
-+	} else if (sk->sk_state == TCP_TIME_WAIT) {
-+		authopt_info = tcp_twsk(sk)->tw_authopt_info;
-+	} else {
-+		authopt_info = rcu_dereference(tcp_sk(sk)->authopt_info);
-+	}
-+	if (!authopt_info) {
-+		rcu_read_unlock();
-+		return -EINVAL;
-+	}
-+	/* Initial sequence numbers for ESTABLISHED connections from info */
-+	if (input) {
-+		*sisn = htonl(authopt_info->dst_isn);
-+		*disn = htonl(authopt_info->src_isn);
-+	} else {
-+		*sisn = htonl(authopt_info->src_isn);
-+		*disn = htonl(authopt_info->dst_isn);
-+	}
-+	rcu_read_unlock();
-+	return 0;
-+}
++class TCP_REPAIR_VAL(IntEnum):
++    OFF = 0
++    ON = 1
++    OFF_NO_WP = -1
 +
-+/* feed traffic key into shash */
-+static int tcp_authopt_shash_traffic_key(struct shash_desc *desc,
-+					 struct sock *sk,
-+					 struct sk_buff *skb,
-+					 bool input,
-+					 bool ipv6)
-+{
-+	struct tcphdr *th = tcp_hdr(skb);
-+	int err;
-+	__be32 sisn, disn;
-+	__be16 digestbits = htons(crypto_shash_digestsize(desc->tfm) * 8);
 +
-+	// RFC5926 section 3.1.1.1
-+	err = crypto_shash_update(desc, "\x01TCP-AO", 7);
-+	if (err)
-+		return err;
++def get_tcp_repair(sock) -> TCP_REPAIR_VAL:
++    return TCP_REPAIR_VAL(sock.getsockopt(socket.SOL_TCP, TCP_REPAIR))
 +
-+	/* Addresses from packet on input and from sk_common on output
-+	 * This is because on output MAC is computed before prepending IP header
-+	 */
-+	if (input) {
-+		if (ipv6)
-+			err = crypto_shash_update(desc, (u8 *)&ipv6_hdr(skb)->saddr, 32);
-+		else
-+			err = crypto_shash_update(desc, (u8 *)&ip_hdr(skb)->saddr, 8);
-+		if (err)
-+			return err;
-+	} else {
-+		if (ipv6) {
-+			err = crypto_shash_update(desc, (u8 *)&sk->sk_v6_rcv_saddr, 16);
-+			if (err)
-+				return err;
-+			err = crypto_shash_update(desc, (u8 *)&sk->sk_v6_daddr, 16);
-+			if (err)
-+				return err;
-+		} else {
-+			err = crypto_shash_update(desc, (u8 *)&sk->sk_rcv_saddr, 4);
-+			if (err)
-+				return err;
-+			err = crypto_shash_update(desc, (u8 *)&sk->sk_daddr, 4);
-+			if (err)
-+				return err;
-+		}
-+	}
 +
-+	/* TCP ports from header */
-+	err = crypto_shash_update(desc, (u8 *)&th->source, 4);
-+	if (err)
-+		return err;
-+	err = tcp_authopt_get_isn(sk, skb, input, &sisn, &disn);
-+	if (err)
-+		return err;
-+	err = crypto_shash_update(desc, (u8 *)&sisn, 4);
-+	if (err)
-+		return err;
-+	err = crypto_shash_update(desc, (u8 *)&disn, 4);
-+	if (err)
-+		return err;
-+	err = crypto_shash_update(desc, (u8 *)&digestbits, 2);
-+	if (err)
-+		return err;
++def set_tcp_repair(sock, val: TCP_REPAIR_VAL) -> None:
++    return sock.setsockopt(socket.SOL_TCP, TCP_REPAIR, int(val))
 +
-+	return 0;
-+}
 +
-+/* Convert a variable-length key to a 16-byte fixed-length key for AES-CMAC
-+ * This is described in RFC5926 section 3.1.1.2
-+ */
-+static int aes_setkey_derived(struct crypto_shash *tfm, u8 *key, size_t keylen)
-+{
-+	static const u8 zeros[16] = {0};
-+	u8 derived_key[16];
-+	int err;
++class TCP_REPAIR_QUEUE_ID(IntEnum):
++    NO_QUEUE = 0
++    RECV_QUEUE = 1
++    SEND_QUEUE = 2
 +
-+	if (WARN_ON_ONCE(crypto_shash_digestsize(tfm) != 16))
-+		return -EINVAL;
-+	err = crypto_shash_setkey(tfm, zeros, sizeof(zeros));
-+	if (err)
-+		return err;
-+	err = crypto_shash_tfm_digest(tfm, key, keylen, derived_key);
-+	if (err)
-+		return err;
-+	return crypto_shash_setkey(tfm, derived_key, sizeof(derived_key));
-+}
 +
-+static int tcp_authopt_setkey(struct crypto_shash *tfm, struct tcp_authopt_key_info *key)
-+{
-+	if (key->alg_id == TCP_AUTHOPT_ALG_AES_128_CMAC_96 && key->keylen != 16)
-+		return aes_setkey_derived(tfm, key->key, key->keylen);
-+	else
-+		return crypto_shash_setkey(tfm, key->key, key->keylen);
-+}
++def get_tcp_repair_queue(sock) -> TCP_REPAIR_QUEUE_ID:
++    return TCP_REPAIR_QUEUE_ID(sock.getsockopt(socket.SOL_TCP, TCP_REPAIR_QUEUE))
 +
-+static int tcp_authopt_get_traffic_key(struct sock *sk,
-+				       struct sk_buff *skb,
-+				       struct tcp_authopt_key_info *key,
-+				       bool input,
-+				       bool ipv6,
-+				       u8 *traffic_key)
-+{
-+	SHASH_DESC_ON_STACK(desc, kdf_tfm);
-+	struct crypto_shash *kdf_tfm;
-+	int err;
 +
-+	kdf_tfm = tcp_authopt_get_kdf_shash(key);
-+	if (IS_ERR(kdf_tfm))
-+		return PTR_ERR(kdf_tfm);
++def set_tcp_repair_queue(sock, val: TCP_REPAIR_QUEUE_ID) -> None:
++    return sock.setsockopt(socket.SOL_TCP, TCP_REPAIR_QUEUE, int(val))
 +
-+	err = tcp_authopt_setkey(kdf_tfm, key);
-+	if (err)
-+		goto out;
 +
-+	desc->tfm = kdf_tfm;
-+	err = crypto_shash_init(desc);
-+	if (err)
-+		goto out;
++def get_tcp_queue_seq(sock) -> int:
++    return struct.unpack("I", sock.getsockopt(socket.SOL_TCP, TCP_QUEUE_SEQ, 4))[0]
 +
-+	err = tcp_authopt_shash_traffic_key(desc, sk, skb, input, ipv6);
-+	if (err)
-+		goto out;
 +
-+	err = crypto_shash_final(desc, traffic_key);
-+	if (err)
-+		goto out;
++def set_tcp_queue_seq(sock, val: int) -> None:
++    return sock.setsockopt(socket.SOL_TCP, TCP_QUEUE_SEQ, val)[0]
 +
-+out:
-+	tcp_authopt_put_kdf_shash(key, kdf_tfm);
-+	return err;
-+}
 +
-+static int crypto_shash_update_zero(struct shash_desc *desc, int len)
-+{
-+	u8 zero = 0;
-+	int i, err;
++@contextmanager
++def tcp_repair_toggle(sock, off_val=TCP_REPAIR_VAL.OFF_NO_WP):
++    """Set TCP_REPAIR on/off as a context"""
++    try:
++        set_tcp_repair(sock, TCP_REPAIR_VAL.ON)
++        yield
++    finally:
++        set_tcp_repair(sock, off_val)
 +
-+	for (i = 0; i < len; ++i) {
-+		err = crypto_shash_update(desc, &zero, 1);
-+		if (err)
-+			return err;
-+	}
 +
-+	return 0;
-+}
++def get_tcp_repair_recv_send_queue_seq(sock):
++    with tcp_repair_toggle(sock):
++        set_tcp_repair_queue(sock, TCP_REPAIR_QUEUE_ID.RECV_QUEUE)
++        recv_seq = get_tcp_queue_seq(sock)
++        set_tcp_repair_queue(sock, TCP_REPAIR_QUEUE_ID.SEND_QUEUE)
++        send_seq = get_tcp_queue_seq(sock)
++        return (recv_seq, send_seq)
+diff --git a/tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_sne.py b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_sne.py
+new file mode 100644
+index 000000000000..180d7cdbd5f3
+--- /dev/null
++++ b/tools/testing/selftests/tcp_authopt/tcp_authopt_test/test_sne.py
+@@ -0,0 +1,202 @@
++# SPDX-License-Identifier: GPL-2.0
++"""Validate SNE implementation for TCP-AO"""
 +
-+static int tcp_authopt_hash_tcp4_pseudoheader(struct shash_desc *desc,
-+					      __be32 saddr,
-+					      __be32 daddr,
-+					      int nbytes)
-+{
-+	struct tcp4_pseudohdr phdr = {
-+		.saddr = saddr,
-+		.daddr = daddr,
-+		.pad = 0,
-+		.protocol = IPPROTO_TCP,
-+		.len = htons(nbytes)
-+	};
-+	return crypto_shash_update(desc, (u8 *)&phdr, sizeof(phdr));
-+}
++import logging
++import socket
++from contextlib import ExitStack
++from ipaddress import ip_address
 +
-+static int tcp_authopt_hash_tcp6_pseudoheader(struct shash_desc *desc,
-+					      struct in6_addr *saddr,
-+					      struct in6_addr *daddr,
-+					      u32 plen)
-+{
-+	int err;
-+	__be32 buf[2];
++import pytest
 +
-+	buf[0] = htonl(plen);
-+	buf[1] = htonl(IPPROTO_TCP);
++from .linux_tcp_authopt import set_tcp_authopt_key_kwargs
++from .linux_tcp_repair import get_tcp_repair_recv_send_queue_seq, tcp_repair_toggle
++from .netns_fixture import NamespaceFixture
++from .scapy_conntrack import TCPConnectionKey, TCPConnectionTracker
++from .scapy_utils import AsyncSnifferContext, create_capture_socket, tcp_seq_wrap
++from .server import SimpleServerThread
++from .utils import (
++    DEFAULT_TCP_SERVER_PORT,
++    check_socket_echo,
++    create_client_socket,
++    create_listen_socket,
++    socket_set_linger,
++)
++from .validator import TcpAuthValidator, TcpAuthValidatorKey
 +
-+	err = crypto_shash_update(desc, (u8 *)saddr, sizeof(*saddr));
-+	if (err)
-+		return err;
-+	err = crypto_shash_update(desc, (u8 *)daddr, sizeof(*daddr));
-+	if (err)
-+		return err;
-+	return crypto_shash_update(desc, (u8 *)&buf, sizeof(buf));
-+}
++logger = logging.getLogger(__name__)
 +
-+/* TCP authopt as found in header */
-+struct tcphdr_authopt {
-+	u8 num;
-+	u8 len;
-+	u8 keyid;
-+	u8 rnextkeyid;
-+	u8 mac[0];
-+};
 +
-+/* Find TCP_AUTHOPT in header.
-+ *
-+ * Returns pointer to TCP_AUTHOPT or NULL if not found.
-+ */
-+static u8 *tcp_authopt_find_option(struct tcphdr *th)
-+{
-+	int length = (th->doff << 2) - sizeof(*th);
-+	u8 *ptr = (u8 *)(th + 1);
++def add_connection_info(
++    tracker: TCPConnectionTracker,
++    saddr,
++    daddr,
++    sport,
++    dport,
++    sisn,
++    disn,
++):
++    client2server_key = TCPConnectionKey(
++        saddr=saddr,
++        daddr=daddr,
++        sport=sport,
++        dport=dport,
++    )
++    client2server_conn = tracker.get_or_create(client2server_key)
++    client2server_conn.sisn = sisn
++    client2server_conn.disn = disn
++    client2server_conn.snd_sne.reset(sisn)
++    client2server_conn.rcv_sne.reset(disn)
++    client2server_conn.found_syn = True
++    client2server_conn.found_synack = True
++    server2client_conn = tracker.get_or_create(client2server_key.rev())
++    server2client_conn.sisn = disn
++    server2client_conn.disn = sisn
++    server2client_conn.snd_sne.reset(disn)
++    server2client_conn.rcv_sne.reset(sisn)
++    server2client_conn.found_syn = True
++    server2client_conn.found_synack = True
 +
-+	while (length >= 2) {
-+		int opcode = *ptr++;
-+		int opsize;
 +
-+		switch (opcode) {
-+		case TCPOPT_EOL:
-+			return NULL;
-+		case TCPOPT_NOP:
-+			length--;
-+			continue;
-+		default:
-+			if (length < 2)
-+				return NULL;
-+			opsize = *ptr++;
-+			if (opsize < 2)
-+				return NULL;
-+			if (opsize > length)
-+				return NULL;
-+			if (opcode == TCPOPT_AUTHOPT)
-+				return ptr - 2;
-+		}
-+		ptr += opsize - 2;
-+		length -= opsize;
-+	}
-+	return NULL;
-+}
++@pytest.mark.parametrize("signed", [False, True])
++def test_high_seq_rollover(exit_stack: ExitStack, signed: bool):
++    """Test SNE by rolling over from a high seq/ack value
 +
-+/** Hash tcphdr options.
-+ *  If include_options is false then only the TCPOPT_AUTHOPT option itself is hashed
-+ *  Maybe we could skip option parsing by assuming the AUTHOPT header is at hash_location-4?
-+ */
-+static int tcp_authopt_hash_opts(struct shash_desc *desc,
-+				 struct tcphdr *th,
-+				 bool include_options)
-+{
-+	int err;
-+	/* start of options */
-+	u8 *tcp_opts = (u8 *)(th + 1);
-+	/* end of options */
-+	u8 *tcp_data = ((u8 *)th) + th->doff * 4;
-+	/* pointer to TCPOPT_AUTHOPT */
-+	u8 *authopt_ptr = tcp_authopt_find_option(th);
-+	u8 authopt_len;
++    Create many connections until a very high seq/ack is found and then transfer
++    enough for those values to roll over.
 +
-+	if (!authopt_ptr)
-+		return -EINVAL;
-+	authopt_len = *(authopt_ptr + 1);
++    A side effect of this approach is that this stresses connection
++    establishment.
++    """
++    overflow = 0x200000
++    bufsize = 0x10000
++    secret_key = b"12345"
++    mode = "echo"
++    validator_enabled = True
 +
-+	if (include_options) {
-+		err = crypto_shash_update(desc, tcp_opts, authopt_ptr - tcp_opts + 4);
-+		if (err)
-+			return err;
-+		err = crypto_shash_update_zero(desc, authopt_len - 4);
-+		if (err)
-+			return err;
-+		err = crypto_shash_update(desc,
-+					  authopt_ptr + authopt_len,
-+					  tcp_data - (authopt_ptr + authopt_len));
-+		if (err)
-+			return err;
-+	} else {
-+		err = crypto_shash_update(desc, authopt_ptr, 4);
-+		if (err)
-+			return err;
-+		err = crypto_shash_update_zero(desc, authopt_len - 4);
-+		if (err)
-+			return err;
-+	}
++    nsfixture = exit_stack.enter_context(NamespaceFixture())
++    server_addr = nsfixture.get_addr(socket.AF_INET, 1)
++    client_addr = nsfixture.get_addr(socket.AF_INET, 2)
++    server_addr_port = (str(server_addr), DEFAULT_TCP_SERVER_PORT)
++    listen_socket = create_listen_socket(
++        ns=nsfixture.server_netns_name,
++        bind_addr=server_addr,
++        listen_depth=1024,
++    )
++    exit_stack.enter_context(listen_socket)
++    if signed:
++        set_tcp_authopt_key_kwargs(listen_socket, key=secret_key)
++    server_thread = SimpleServerThread(listen_socket, mode=mode, bufsize=bufsize)
++    exit_stack.enter_context(server_thread)
 +
-+	return 0;
-+}
++    found = False
++    client_socket = None
++    for iternum in range(50000):
++        try:
++            # Manually assign increasing client ports
++            #
++            # Sometimes linux kills timewait sockets (TCPTimeWaitOverflow) and
++            # then attempts to reuse the port. The stricter validation
++            # requirements of TCP-AO mean the other side of the socket survives
++            # and rejects packets coming from the reused port.
++            #
++            # This issue is not related to SNE so a workaround is acceptable.
++            client_socket = create_client_socket(
++                ns=nsfixture.client_netns_name,
++                bind_addr=client_addr,
++                bind_port=10000 + iternum,
++            )
++            if signed:
++                set_tcp_authopt_key_kwargs(client_socket, key=secret_key)
++            try:
++                client_socket.connect(server_addr_port)
++            except:
++                logger.error("failed connect on iteration %d", iternum, exc_info=True)
++                raise
 +
-+static int skb_shash_frags(struct shash_desc *desc,
-+			   struct sk_buff *skb)
-+{
-+	struct sk_buff *frag_iter;
-+	int err, i;
++            recv_seq, send_seq = get_tcp_repair_recv_send_queue_seq(client_socket)
++            if (recv_seq + overflow > 0x100000000 and mode == "echo") or (
++                send_seq + overflow > 0x100000000
++            ):
++                found = True
++                break
++            # Wait for graceful close to avoid swamping server listen queue.
++            # This makes the test work even with a server listen_depth=1 but set
++            # a very high value anyway.
++            socket_set_linger(client_socket, 1, 1)
++            client_socket.close()
++            client_socket = None
++        finally:
++            if not found and client_socket:
++                client_socket.close()
++    assert found
++    assert client_socket is not None
 +
-+	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
-+		skb_frag_t *f = &skb_shinfo(skb)->frags[i];
-+		u32 p_off, p_len, copied;
-+		struct page *p;
-+		u8 *vaddr;
++    logger.debug("setup recv_seq %08x send_seq %08x", recv_seq, send_seq)
 +
-+		skb_frag_foreach_page(f, skb_frag_off(f), skb_frag_size(f),
-+				      p, p_off, p_len, copied) {
-+			vaddr = kmap_atomic(p);
-+			err = crypto_shash_update(desc, vaddr + p_off, p_len);
-+			kunmap_atomic(vaddr);
-+			if (err)
-+				return err;
-+		}
-+	}
++    # Init validator
++    if signed and validator_enabled:
++        capture_filter = f"tcp port {DEFAULT_TCP_SERVER_PORT}"
++        capture_socket = create_capture_socket(
++            ns=nsfixture.client_netns_name,
++            iface="veth0",
++            filter=capture_filter,
++        )
++        sniffer = exit_stack.enter_context(
++            AsyncSnifferContext(opened_socket=capture_socket)
++        )
++        validator = TcpAuthValidator()
++        validator.keys.append(
++            TcpAuthValidatorKey(key=secret_key, alg_name="HMAC-SHA-1-96")
++        )
 +
-+	skb_walk_frags(skb, frag_iter) {
-+		err = skb_shash_frags(desc, frag_iter);
-+		if (err)
-+			return err;
-+	}
++        # SYN+SYNACK is not captured so initialize connection info manually
++        add_connection_info(
++            validator.tracker,
++            saddr=ip_address(client_addr),
++            daddr=ip_address(server_addr),
++            dport=client_socket.getpeername()[1],
++            sport=client_socket.getsockname()[1],
++            sisn=tcp_seq_wrap(send_seq - 1),
++            disn=tcp_seq_wrap(recv_seq - 1),
++        )
 +
-+	return 0;
-+}
++    logger.info("transfer %d bytes", 2 * overflow)
++    fail_transfer = False
++    for iternum in range(2 * overflow // bufsize):
++        try:
++            if mode == "recv":
++                from .utils import randbytes
 +
-+static int tcp_authopt_hash_packet(struct crypto_shash *tfm,
-+				   struct sock *sk,
-+				   struct sk_buff *skb,
-+				   bool input,
-+				   bool ipv6,
-+				   bool include_options,
-+				   u8 *macbuf)
-+{
-+	struct tcphdr *th = tcp_hdr(skb);
-+	SHASH_DESC_ON_STACK(desc, tfm);
-+	int err;
++                send_buf = randbytes(bufsize)
++                client_socket.sendall(send_buf)
++            else:
++                check_socket_echo(client_socket, bufsize)
++        except:
++            logger.error("failed traffic on iteration %d", iternum, exc_info=True)
++            fail_transfer = True
++            break
 +
-+	/* NOTE: SNE unimplemented */
-+	__be32 sne = 0;
++    new_recv_seq, new_send_seq = get_tcp_repair_recv_send_queue_seq(client_socket)
++    logger.debug("final recv_seq %08x send_seq %08x", new_recv_seq, new_send_seq)
++    assert new_recv_seq < recv_seq or new_send_seq < send_seq
 +
-+	desc->tfm = tfm;
-+	err = crypto_shash_init(desc);
-+	if (err)
-+		return err;
++    # Validate capture
++    if signed and validator_enabled:
++        sniffer.stop()
++        for p in sniffer.results:
++            validator.handle_packet(p)
++        # Allow incomplete connections from FIN/ACK of connections dropped
++        # because of low seq/ack
++        validator.raise_errors(allow_incomplete=True)
++        client_scappy_key = TCPConnectionKey(
++            saddr=ip_address(client_addr),
++            daddr=ip_address(server_addr),
++            dport=client_socket.getpeername()[1],
++            sport=client_socket.getsockname()[1],
++        )
++        client_scappy_conn = validator.tracker.get(client_scappy_key)
++        snd_sne_rollover = client_scappy_conn.snd_sne.sne != 0
++        rcv_sne_rollover = client_scappy_conn.rcv_sne.sne != 0
++        assert snd_sne_rollover or rcv_sne_rollover
 +
-+	err = crypto_shash_update(desc, (u8 *)&sne, 4);
-+	if (err)
-+		return err;
-+
-+	if (ipv6) {
-+		struct in6_addr *saddr;
-+		struct in6_addr *daddr;
-+
-+		if (input) {
-+			saddr = &ipv6_hdr(skb)->saddr;
-+			daddr = &ipv6_hdr(skb)->daddr;
-+		} else {
-+			saddr = &sk->sk_v6_rcv_saddr;
-+			daddr = &sk->sk_v6_daddr;
-+		}
-+		err = tcp_authopt_hash_tcp6_pseudoheader(desc, saddr, daddr, skb->len);
-+		if (err)
-+			return err;
-+	} else {
-+		__be32 saddr;
-+		__be32 daddr;
-+
-+		if (input) {
-+			saddr = ip_hdr(skb)->saddr;
-+			daddr = ip_hdr(skb)->daddr;
-+		} else {
-+			saddr = sk->sk_rcv_saddr;
-+			daddr = sk->sk_daddr;
-+		}
-+		err = tcp_authopt_hash_tcp4_pseudoheader(desc, saddr, daddr, skb->len);
-+		if (err)
-+			return err;
-+	}
-+
-+	// TCP header with checksum set to zero
-+	{
-+		struct tcphdr hashed_th = *th;
-+
-+		hashed_th.check = 0;
-+		err = crypto_shash_update(desc, (u8 *)&hashed_th, sizeof(hashed_th));
-+		if (err)
-+			return err;
-+	}
-+
-+	// TCP options
-+	err = tcp_authopt_hash_opts(desc, th, include_options);
-+	if (err)
-+		return err;
-+
-+	// Rest of SKB->data
-+	err = crypto_shash_update(desc, (u8 *)th + th->doff * 4, skb_headlen(skb) - th->doff * 4);
-+	if (err)
-+		return err;
-+
-+	err = skb_shash_frags(desc, skb);
-+	if (err)
-+		return err;
-+
-+	return crypto_shash_final(desc, macbuf);
-+}
-+
-+/* __tcp_authopt_calc_mac - Compute packet MAC using key
-+ *
-+ * The macbuf output buffer must be large enough to fit the digestsize of the
-+ * underlying transform before truncation.
-+ * This means TCP_AUTHOPT_MAXMACBUF, not TCP_AUTHOPT_MACLEN
-+ */
-+static int __tcp_authopt_calc_mac(struct sock *sk,
-+				  struct sk_buff *skb,
-+				  struct tcp_authopt_key_info *key,
-+				  bool input,
-+				  char *macbuf)
-+{
-+	struct crypto_shash *mac_tfm;
-+	u8 traffic_key[TCP_AUTHOPT_MAX_TRAFFIC_KEY_LEN];
-+	int err;
-+	bool ipv6 = (sk->sk_family != AF_INET);
-+
-+	if (sk->sk_family != AF_INET && sk->sk_family != AF_INET6)
-+		return -EINVAL;
-+
-+	err = tcp_authopt_get_traffic_key(sk, skb, key, input, ipv6, traffic_key);
-+	if (err)
-+		return err;
-+
-+	mac_tfm = tcp_authopt_get_mac_shash(key);
-+	if (IS_ERR(mac_tfm))
-+		return PTR_ERR(mac_tfm);
-+	err = crypto_shash_setkey(mac_tfm, traffic_key, key->alg->traffic_key_len);
-+	if (err)
-+		goto out;
-+
-+	err = tcp_authopt_hash_packet(mac_tfm,
-+				      sk,
-+				      skb,
-+				      input,
-+				      ipv6,
-+				      !(key->flags & TCP_AUTHOPT_KEY_EXCLUDE_OPTS),
-+				      macbuf);
-+
-+out:
-+	tcp_authopt_put_mac_shash(key, mac_tfm);
-+	return err;
-+}
++    assert not fail_transfer
 -- 
 2.25.1
 
