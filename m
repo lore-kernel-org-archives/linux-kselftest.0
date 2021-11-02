@@ -2,170 +2,163 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 552E3C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Nov 2021 16:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E76C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Nov 2021 17:56:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37966610FC
-	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Nov 2021 16:42:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8F6761050
+	for <linux-kselftest@archiver.kernel.org>; Tue,  2 Nov 2021 17:56:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbhKBQom (ORCPT
+        id S232217AbhKBR6p (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Nov 2021 12:44:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26444 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234722AbhKBQol (ORCPT
+        Tue, 2 Nov 2021 13:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230392AbhKBR6p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Nov 2021 12:44:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635871326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wK3CplyUTs+rLFNGYkxFeT0xpcKz1YPPLC+3BDuT/aI=;
-        b=UO+5W/N88ee+Dx8+k7sYJUYM/Pl0gwbmYptrYdElb1e3aBq/E5II2ElLimJ40i2vDx3Ojj
-        3BYg5kwYm5cWCf4umF6puVBYmHNcZwdEYPNWNTxA7gvjr9Q9I//M6+9yAMd4l117xh5WQp
-        NI72HW1fx1+f9tKgrAZMnKcOjAbXs60=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-274-JDpWKD27M_OLN3C2e4iQKg-1; Tue, 02 Nov 2021 12:18:53 -0400
-X-MC-Unique: JDpWKD27M_OLN3C2e4iQKg-1
-Received: by mail-wm1-f69.google.com with SMTP id u14-20020a05600c19ce00b0030d8549d49aso879320wmq.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 09:18:53 -0700 (PDT)
+        Tue, 2 Nov 2021 13:58:45 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74C1C061714
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 Nov 2021 10:56:09 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id y17so22756650ilb.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Nov 2021 10:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=+qNZ28+w6tKknyZQXZDBa8W1+zW67Gkd0XM9jOzlFcA=;
+        b=fjCbPOe+zSGwICRtpTlasEOjrcc4cc9FFhDXgem3iKrRnnlL60mg9Bzjdn31uAbrit
+         opp/23s5CfmRI4/3hJTqw4EwctWcYUgHhEeKPSFLL+8m2QbbRARVgTbzuw4CG+8gJ9/Z
+         esZ17/MvVtuPqJiiGNXLjZ7F1rRAEWSn0VnmQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=wK3CplyUTs+rLFNGYkxFeT0xpcKz1YPPLC+3BDuT/aI=;
-        b=7ZZVNRwK8KHDnWnatFPgyLXbnq+Wa6ojGez8TtOXlEGy6CST+Qzr85+KNreXv4qg5q
-         u5lsK3TmDgEyKr5VJ4hTqOrm7dB5++8PPRAfvrNNwpTNofqTGy10ukdUs6opEq8tGn3v
-         hOZiMotrmJfYwSqpRYFjBVSC/mM0KzM80+Gg5otrvg/n76thmQXIU+CzRGkqLVDUF3sz
-         jIvza7I0aObCcl3q6dVr9uVaGnVWCrkaZKc4RjJEzfGQWiIC5CGjw/JYPnH9mK9JoLc0
-         /5VSioo5x5UNQOmwtEzsFja/6iO0daL5TNjmifY/nRZJLX2Aosjw5YwcaZZQwvIKeIOQ
-         66MQ==
-X-Gm-Message-State: AOAM532uKyujzR9vaJmLM6FqTZbb24zum+VqmYJAfaTXIPWhrNmy24dU
-        OYa4pgY1lY0TVPAPLv5+AmotMGXpvnEIINe15IW+nU0ygSzBOn/CYYodiPJ9D0a2Czog6TQ8xeY
-        41XsO8WQmzzkaeYb1u+iKK3kQL5bV
-X-Received: by 2002:adf:df0b:: with SMTP id y11mr24247330wrl.181.1635869932277;
-        Tue, 02 Nov 2021 09:18:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxRLgXOmmGYC7qrn6wZIz5rGaltkLk0p5nNwexOv2/BGr6u6CjLVcaCTf54oi69NKmWtoLxSQ==
-X-Received: by 2002:adf:df0b:: with SMTP id y11mr24247300wrl.181.1635869932069;
-        Tue, 02 Nov 2021 09:18:52 -0700 (PDT)
-Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id x13sm13871373wrr.47.2021.11.02.09.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 09:18:51 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Kieran Bingham <kbingham@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jessica Yu <jeyu@kernel.org>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 6/6] KVM: selftests: test KVM_GUESTDBG_BLOCKIRQ
-In-Reply-To: <YYFe4LKXiuV+DyZh@google.com>
-References: <20210811122927.900604-1-mlevitsk@redhat.com>
- <20210811122927.900604-7-mlevitsk@redhat.com>
- <137f2dcc-75d2-9d71-e259-dd66d43ad377@redhat.com>
- <87sfwfkhk5.fsf@vitty.brq.redhat.com>
- <b48210a35b3bc6d63beeb33c19b609b3014191dd.camel@redhat.com>
- <YYB2l9bzFhKzobZB@google.com> <87k0hqkf6p.fsf@vitty.brq.redhat.com>
- <YYFe4LKXiuV+DyZh@google.com>
-Date:   Tue, 02 Nov 2021 17:18:49 +0100
-Message-ID: <87fsseo7iu.fsf@vitty.brq.redhat.com>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=+qNZ28+w6tKknyZQXZDBa8W1+zW67Gkd0XM9jOzlFcA=;
+        b=TWkWhoFsPP1yo8OHPVhBwQuZkz8Lnu/KHg9YoAP4oydQdbt5AJyKN6Cj2BwkeaqG/r
+         vs/eLUXSMER41DUAEBNcdtOvmOL101Qxe+WY5TOCrxysVxqsbS/GFcdvGW2tyLlNusx/
+         +uykvFK/q/vdB6EEgb+MDsTYJNQf5LBqJK7dg1E1vEdTihu8PdT8XcgN5Hp/pvsE/QpP
+         Psh76xJ7ReEOsvd6VwEObWXOpTX/M9l5mFyz6NzywjJdsDxGD7HQG0GOS5P8sncpDTa+
+         2kyVdjl2ZazJcQ8HnBWM6cPsLfcb82dPvPoGelnX8qZjo31SUj/k0QMMeDA8rVgTVWfV
+         O39g==
+X-Gm-Message-State: AOAM531GAeWac/pDighwbym/qnpADDEnJhUkAAGrZH1ePlgUkbZGoTVj
+        pPJ6muwheca0gvQ1k3C+SoSFgc7R4sjEJw==
+X-Google-Smtp-Source: ABdhPJzDxfNmBAvqmjEh/nzzXAJDO6dpUas1dONU+/YwgMI9LIVfhOb7eSaDzKU5I0G5N65RNBGyiQ==
+X-Received: by 2002:a05:6e02:ef3:: with SMTP id j19mr21364793ilk.212.1635875769156;
+        Tue, 02 Nov 2021 10:56:09 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a5sm10974005ilf.27.2021.11.02.10.56.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Nov 2021 10:56:08 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest next update for Linux 5.16-rc1
+Message-ID: <5ee0a2b3-d5c1-5664-cb02-c24a7f4cdeaa@linuxfoundation.org>
+Date:   Tue, 2 Nov 2021 11:56:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/mixed;
+ boundary="------------302F752F414E28FD40D17556"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+This is a multi-part message in MIME format.
+--------------302F752F414E28FD40D17556
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> On Tue, Nov 02, 2021, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> > I haven't verified on hardware, but my guess is that this code in vmx_vcpu_run()
->> >
->> > 	/* When single-stepping over STI and MOV SS, we must clear the
->> > 	 * corresponding interruptibility bits in the guest state. Otherwise
->> > 	 * vmentry fails as it then expects bit 14 (BS) in pending debug
->> > 	 * exceptions being set, but that's not correct for the guest debugging
->> > 	 * case. */
->> > 	if (vcpu->guest_debug & KVM_GUESTDBG_SINGLESTEP)
->> > 		vmx_set_interrupt_shadow(vcpu, 0);
->> >
->> > interacts badly with APICv=1.  It will kill the STI shadow and cause the IRQ in
->> > vmcs.GUEST_RVI to be recognized when it (micro-)architecturally should not.  My
->> > head is going in circles trying to sort out what would actually happen.  Maybe
->> > comment out that and/or disable APICv to see if either one makes the test pass?
->> >
->> 
->> Interestingly,
->> 
->> loading 'kvm-intel' with 'enable_apicv=0' makes the test pass, however,
->> commenting out "vmx_set_interrupt_shadow()" as suggested gives a
->> different result (with enable_apicv=1):
->> 
->> # ./x86_64/debug_regs 
->> ==== Test Assertion Failure ====
->>   x86_64/debug_regs.c:179: run->exit_reason == KVM_EXIT_DEBUG && run->debug.arch.exception == DB_VECTOR && run->debug.arch.pc == target_rip && run->debug.arch.dr6 == target_dr6
->>   pid=16352 tid=16352 errno=0 - Success
->>      1	0x0000000000402b33: main at debug_regs.c:179 (discriminator 10)
->>      2	0x00007f36401bd554: ?? ??:0
->>      3	0x00000000004023a9: _start at ??:?
->>   SINGLE_STEP[1]: exit 9 exception -2147483615 rip 0x1 (should be 0x4024d9) dr6 0xffff4ff0 (should be 0xffff4ff0)
->
-> Exit 9 is KVM_EXIT_FAIL_ENTRY, which in this case VM-Entry likely failed due to
-> invalid guest state because there was STI blocking with single-step enabled but
-> no pending BS #DB:
->
->   Bit 14 (BS) must be 1 if the TF flag (bit 8) in the RFLAGS field is 1 and the
->   BTF flag (bit 1) in the IA32_DEBUGCTL field is 0.
->
-> Which is precisely what that hack-a-fix avoids.  There isn't really a clean
-> solution for legacy single-step, AFAIK the only way to avoid this would be to
-> switch KVM_GUESTDBG_SINGLESTEP to use MTF.
->
-> But that mess is a red herring, the test fails with the same signature with APICv=1
-> if the STI is replaced by PUSHF+BTS+POPFD (to avoid the STI shadow).  We all missed
-> this key detail from Vitaly's report:
->
-> SINGLE_STEP[1]: exit 8 exception 1 rip 0x402a25 (should be 0x402a27) dr6 0xffff4ff0 (should be 0xffff4ff0)
->                 ^^^^^^
->
-> Exit '8' is KVM_EXIT_SHUTDOWN, i.e. the arrival of the IRQ hosed the guest because
-> the test doesn't invoke vm_init_descriptor_tables() to install event handlers.
-> The "exception 1" shows up because the run page isn't sanitized by the test, i.e.
-> it's stale data that happens to match.
->
-> So I would fully expect this test to fail with AVIC=1.  The problem is that
-> KVM_GUESTDBG_BLOCKIRQ does absolutely nothing to handle APICv interrupts.  And
-> even if KVM does something to fudge that behavior in the emulated local APIC, the
-> test will then fail miserably virtual IPIs (currently AVIC only).
+Hi Linus,
 
-FWIW, the test doesn't seem to fail on my AMD EPYC system even with "avic=1" ...
+Please pull the following Kselftest next update for Linux 5.16-rc1.
 
->
-> I stand by my original comment that "Deviating this far from architectural behavior
-> will end in tears at some point."  Rather than try to "fix" APICv, I vote to instead
-> either reject KVM_GUESTDBG_BLOCKIRQ if APICv=1, or log a debug message saying that
-> KVM_GUESTDBG_BLOCKIRQ is ineffective with APICv=1.
->
+This Kselftest update for Linux 5.16-rc1 consists of fixes to compile
+time errors and warnings.
 
--- 
-Vitaly
+diff is attached.
 
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 519d81956ee277b4419c723adfb154603c2565ba:
+
+   Linux 5.15-rc6 (2021-10-17 20:00:13 -1000)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.16-rc1
+
+for you to fetch changes up to f35dcaa0a8a29188ed61083d153df1454cf89d08:
+
+   selftests/core: fix conflicting types compile error for close_range() (2021-10-29 13:09:42 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-next-5.16-rc1
+
+This Kselftest update for Linux 5.16-rc1 consists of fixes to compile
+time error and warnings.
+
+----------------------------------------------------------------
+Shuah Khan (3):
+       selftests: kvm: fix mismatched fclose() after popen()
+       selftests: x86: fix [-Wstringop-overread] warn in test_process_vm_readv()
+       selftests/core: fix conflicting types compile error for close_range()
+
+  tools/testing/selftests/core/close_range_test.c        | 2 +-
+  tools/testing/selftests/kvm/x86_64/mmio_warning_test.c | 2 +-
+  tools/testing/selftests/x86/test_vsyscall.c            | 2 +-
+  3 files changed, 3 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+
+--------------302F752F414E28FD40D17556
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-next-5.16-rc1.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-next-5.16-rc1.diff"
+
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+index 73eb29c916d1..aa7d13d91963 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -54,7 +54,7 @@ static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
+ #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+ #endif
+ 
+-TEST(close_range)
++TEST(core_close_range)
+ {
+ 	int i, ret;
+ 	int open_fds[101];
+diff --git a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+index 8039e1eff938..9f55ccd169a1 100644
+--- a/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
++++ b/tools/testing/selftests/kvm/x86_64/mmio_warning_test.c
+@@ -84,7 +84,7 @@ int get_warnings_count(void)
+ 	f = popen("dmesg | grep \"WARNING:\" | wc -l", "r");
+ 	if (fscanf(f, "%d", &warnings) < 1)
+ 		warnings = 0;
+-	fclose(f);
++	pclose(f);
+ 
+ 	return warnings;
+ }
+diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+index 65c141ebfbbd..5b45e6986aea 100644
+--- a/tools/testing/selftests/x86/test_vsyscall.c
++++ b/tools/testing/selftests/x86/test_vsyscall.c
+@@ -497,7 +497,7 @@ static int test_process_vm_readv(void)
+ 	}
+ 
+ 	if (vsyscall_map_r) {
+-		if (!memcmp(buf, (const void *)0xffffffffff600000, 4096)) {
++		if (!memcmp(buf, remote.iov_base, sizeof(buf))) {
+ 			printf("[OK]\tIt worked and read correct data\n");
+ 		} else {
+ 			printf("[FAIL]\tIt worked but returned incorrect data\n");
+
+--------------302F752F414E28FD40D17556--
