@@ -2,49 +2,51 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FF05C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 09:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19CF1C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 09:34:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDA69611BF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 09:33:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F04BC61241
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 09:34:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhKJJgm (ORCPT
+        id S230516AbhKJJgt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Nov 2021 04:36:42 -0500
-Received: from esa3.hc1455-7.c3s2.iphmx.com ([207.54.90.49]:30728 "EHLO
-        esa3.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230507AbhKJJgm (ORCPT
+        Wed, 10 Nov 2021 04:36:49 -0500
+Received: from esa1.hc1455-7.c3s2.iphmx.com ([207.54.90.47]:62495 "EHLO
+        esa1.hc1455-7.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230513AbhKJJgs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Nov 2021 04:36:42 -0500
-IronPort-SDR: 7nUW+A7hS7sFlngFl/1HNkof+dJsrr/cinZpKCSVlCKdtRlFa11eTp9UxfgDXNjUqG3NvfqLJC
- vbk55qD94kBYoqC7edVn2F8KAmbxoMtkk2bOw/PbyF+79qCKxrU9csxiQdE1D3+NLdg2RzTiX7
- k1iPfqVsqdydlHBvHCiAG2dAKFFWImCw0XGaHanCkcNk6L4CmD1yp8PDNs70f0CMle2mxtrxqC
- DoERRIxjuxNlaPye7OR60Z38Di8MH1qaOdn5vovYA8mht3KhcEfaTyiM30SDBJ6UrBGpy2tPKW
- OsDiNBRvd3vg+83VXKmIeyAA
-X-IronPort-AV: E=McAfee;i="6200,9189,10163"; a="52106836"
+        Wed, 10 Nov 2021 04:36:48 -0500
+IronPort-SDR: qwabvvmXmXMsZ6Uged9VN3Zdmzq+u2GIE/6vgKI8uZ8tFbhwx0KyRILaQuhPuTzE6N4p0OajWL
+ w1XrJxSaoYOkWZy+QMU7iBNJYU35omjjplqk+0W5MYW3rmCOabbZpfujgzdMvJ67av2O09SGrO
+ owpBcssdlsbvD9sJtxfY3dmRtu4Ye19ciAjUPvSS8mAro8R3991iK/vbeSt6MQsRXvhBTqjXkl
+ uNYIeRC35qhyT8PEJXmCeeXyti8TypDwXU/XMi/X4gE0wY/zsppBtucHjpNn2P6+a6BBixBLa4
+ kR3hTmaERAY+/qh0X30c4F6r
+X-IronPort-AV: E=McAfee;i="6200,9189,10163"; a="52113929"
 X-IronPort-AV: E=Sophos;i="5.87,223,1631545200"; 
-   d="scan'208";a="52106836"
-Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
-  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 10 Nov 2021 18:33:41 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id D19F324C39C;
-        Wed, 10 Nov 2021 18:33:39 +0900 (JST)
+   d="scan'208";a="52113929"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP; 10 Nov 2021 18:33:59 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 4F3B41013B7;
+        Wed, 10 Nov 2021 18:33:58 +0900 (JST)
 Received: from oym-om3.fujitsu.com (oym-om3.o.css.fujitsu.com [10.85.58.163])
-        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id DFB0CBDB4C;
-        Wed, 10 Nov 2021 18:33:38 +0900 (JST)
+        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 9B04BA56E6;
+        Wed, 10 Nov 2021 18:33:57 +0900 (JST)
 Received: from localhost.localdomain (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om3.fujitsu.com (Postfix) with ESMTP id EE01A40110161;
-        Wed, 10 Nov 2021 18:33:37 +0900 (JST)
+        by oym-om3.fujitsu.com (Postfix) with ESMTP id 85F254006B62C;
+        Wed, 10 Nov 2021 18:33:56 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH 0/3] selftests/resctrl: Add resctrl_tests into kselftest set
-Date:   Wed, 10 Nov 2021 18:33:12 +0900
-Message-Id: <20211110093315.3219191-1-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH 2/3] selftests/resctrl: Return KSFT_SKIP(4) if resctrl filessystem is not supported or resctrl is not run as root
+Date:   Wed, 10 Nov 2021 18:33:14 +0900
+Message-Id: <20211110093315.3219191-3-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20211110093315.3219191-1-tan.shaopeng@jp.fujitsu.com>
+References: <20211110093315.3219191-1-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
@@ -52,40 +54,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+From: "Tan, Shaopeng" <tan.shaopeng@jp.fujitsu.com>
 
-Resctrl_tests is in the kselftest directory, but it cannot use kselftest 
-framework. The aim of this series is to make resctrl_tests run by using 
-kselftest framework and to fix some bug/setting of resctrl_tests when 
-use kselftest framework.
+To unify the return code of resctrl_tests with the return code of
+selftest set, return KSFT_SKIP (4) if resctrl filessystem is not
+supported or resctrl is not run as root.
 
-In kselftest framework, we can build/run resctrl_tests by build/run 
-all tests of kselftest, and we also can use the "TARGETS" variable 
-on the make command line to specify resctrl_tests to build/run.
+Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+---
+ tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-To ensure the resctrl_tests finish in limited time(which is specified 
-by timeout command), set the limited time for resctrl_tests to 120 seconds.
-When resctrl filesystem is not supported or resctrl_tests is not run as 
-root, return skip code of kselftest.  If it is not finish in limited time, 
-terminate resctrl_tests same as when executing ctrl+c.
-
-Thanks,
-
-Tan, Shaopeng (3):
-  selftests/resctrl: Make resctrl_tests run using kselftest framework
-  selftests/resctrl: Return KSFT_SKIP(4) if resctrl filessystem is not
-    supported or resctrl is not run as root
-  selftests/resctrl: Kill the child process created by fork() when the
-    SIGTERM signal comes
-
- tools/testing/selftests/Makefile                |  1 +
- tools/testing/selftests/resctrl/Makefile        | 21 +++++++++------------
- tools/testing/selftests/resctrl/resctrl_tests.c |  4 ++--
- tools/testing/selftests/resctrl/resctrl_val.c   |  1 +
- tools/testing/selftests/resctrl/settings        |  1 +
- 5 files changed, 14 insertions(+), 14 deletions(-)
- create mode 100644 tools/testing/selftests/resctrl/settings
-
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 973f09a..3be0895 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -205,7 +205,7 @@ int main(int argc, char **argv)
+ 	 * 2. We execute perf commands
+ 	 */
+ 	if (geteuid() != 0)
+-		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
++		return ksft_exit_skip("Not running as root, abort testing.\n");
+ 
+ 	/* Detect AMD vendor */
+ 	detect_amd();
+@@ -235,7 +235,7 @@ int main(int argc, char **argv)
+ 	sprintf(bm_type, "fill_buf");
+ 
+ 	if (!check_resctrlfs_support())
+-		return ksft_exit_fail_msg("resctrl FS does not exist\n");
++		return ksft_exit_skip("resctrl FS does not exist\n");
+ 
+ 	filter_dmesg();
+ 
 -- 
 1.8.3.1
 
