@@ -2,137 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E016BC433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 18:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8FD7C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 18:16:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6133611C9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 18:04:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6E216103C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Nov 2021 18:16:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbhKJSHJ (ORCPT
+        id S231143AbhKJSSx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Nov 2021 13:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbhKJSHJ (ORCPT
+        Wed, 10 Nov 2021 13:18:53 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:38906 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229781AbhKJSSx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Nov 2021 13:07:09 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7EBC061764
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Nov 2021 10:04:21 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id y26so7918111lfa.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Nov 2021 10:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LhaYpGZE0UbJvh6Nn3mP+o6sCA1NJHCl7ZX/I6n4rjw=;
-        b=y9IC1G868iVb+OHqDVfF2LTsG3gKZU6xHEChe8Z+2oWK8hUnasf7SIsinMOv/h5tgI
-         TsXk8W4ydBqn/W6pjBnQPpcViFhJZ996Dnprf/PDBPbpFU5/YjJJp+3JW8ZqJI6fd5T6
-         5XgAeELA/04uVUtsecW0lh94hmTOsBHWaFWXVnCnszBCU1+T+JKVc+TsCcpWCbPI5Gmi
-         JZ8IDKypGtAMT3iwwSBJnJ2ABOHRcqG+4q5MMKjDo54it1V3gVH9UaaadQJ9ppC6CtpV
-         UjnpRiPzoNH9Crh6vZGJVTf3vstfk1Id8DGccONhrw/Y26w4sJgEoj+mLGlPOgFWLeGR
-         j4ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LhaYpGZE0UbJvh6Nn3mP+o6sCA1NJHCl7ZX/I6n4rjw=;
-        b=E9EZFHhxxEZoCODsfGk/EQu90CCHgpjZgbWbX8za2+Ji48MqlgrSFbuOM/MnZvwUNG
-         oGNg/s464/JofU9hulbIEm5U+SW2pqmACupgj7yb3WKiNjCqk5JyS7mSuQZ724uFjS7x
-         0eUtlf6dU0Ut247o/ZLsY9FAfeUlgJT/PkjO4iDbGFLuUzn92nNYz+F5jOmEiIgjxRnL
-         L10UlYzkmtiJS/z1+2r1mkFYF6Sd4uwZ7GIGbT2ZGwemeVKWs3NVMJXVueIvzGxPiW1Q
-         iBil2wQTTZdUZr9Pr8zCxIuDD/+iBET8hU5uwqbopGQdvhbh8hcwOw3siVL9zIhmu1yo
-         2I9Q==
-X-Gm-Message-State: AOAM532HNy25ahws6WzK1ZYaSv+BZeiYK0viQLB9iO70n50h6lzrNxbR
-        4nyowzraXxL0FzpOByCEkUBxAQ==
-X-Google-Smtp-Source: ABdhPJxt6kFT7aaYzV2PxgSdguip72HDGxZwRYc1vD3JI8NzgMHgfVJWRaY7qs1AECSc9RTpJWT+dg==
-X-Received: by 2002:a05:6512:3b2a:: with SMTP id f42mr938801lfv.282.1636567459495;
-        Wed, 10 Nov 2021 10:04:19 -0800 (PST)
-Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id h7sm53110lfu.253.2021.11.10.10.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 10:04:19 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     shuah@kernel.org
-Cc:     nathan@kernel.org, ndesaulniers@google.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCHv2] selftests: timens: exec: use 'labs()' over 'abs()'
-Date:   Wed, 10 Nov 2021 19:03:59 +0100
-Message-Id: <20211110180359.2338349-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
-References: <CAK8P3a3ZuL9TQbj+tGkdvRRmEv_jT3OvzmaoFKHwdw=5J1w_SA@mail.gmail.com>
+        Wed, 10 Nov 2021 13:18:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 01A821FD48;
+        Wed, 10 Nov 2021 18:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1636568164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WrfmgeAir/bcyFgACSGpgDgNuM+uhrNAmeRnW3A3QN0=;
+        b=CvbVadvRn6in1GwXmbxlxRhD5agTW4BW2HFq6oifyXHR2R6X4K9nvUrApT3LJ7EKkEzPiP
+        kEYCK/rJTOgzQxglqUQNTOwOVaUTJIVMQtXTo9PwTFj/u4ME10JU1UxVtcEYdjkbeyy4MU
+        X+3kR+EBq/NX4NNVl9w/zfUkh8/cVHQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF4B013C7D;
+        Wed, 10 Nov 2021 18:16:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TdXOLWMMjGF7OQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 10 Nov 2021 18:16:03 +0000
+Date:   Wed, 10 Nov 2021 19:15:58 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     "Moessbauer, Felix" <felix.moessbauer@siemens.com>
+Cc:     "longman@redhat.com" <longman@redhat.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "guro@fb.com" <guro@fb.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "mtosatti@redhat.com" <mtosatti@redhat.com>,
+        "pauld@redhat.com" <pauld@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "jan.kiszka@siemens.com" <jan.kiszka@siemens.com>,
+        "henning.schild@siemens.com" <henning.schild@siemens.com>
+Subject: Re: [PATCH v8 0/6] cgroup/cpuset: Add new cpuset partition type &
+ empty effecitve cpus
+Message-ID: <20211110181558.GB51149@blackbody.suse.cz>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211110111357.17617-1-felix.moessbauer@siemens.com>
+ <20211110135653.GD20566@blackbody.suse.cz>
+ <AM9PR10MB4869C14EAE01B87C0037BF6A89939@AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM9PR10MB4869C14EAE01B87C0037BF6A89939@AM9PR10MB4869.EURPRD10.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When building selftests/timens with clang, the compiler warn about the
-function abs() see below:
+On Wed, Nov 10, 2021 at 03:21:54PM +0000, "Moessbauer, Felix" <felix.moessbauer@siemens.com> wrote:
+> 2. Threads can be started on non-rt CPUs and then bound to a specific rt CPU.
+> This binding can be specified before thread creation via pthread_create.
+> By that, you can make sure that at no point in time a thread has a
+> "forbidden" CPU in its affinities.
 
-exec.c:33:8: error: absolute value function 'abs' given an argument of type 'long' but has parameter of type 'int' which may cause truncation of value [-Werror,-Wabsolute-value]
-                        if (abs(tst.tv_sec - now.tv_sec) > 5)
-                            ^
-exec.c:33:8: note: use function 'labs' instead
-                        if (abs(tst.tv_sec - now.tv_sec) > 5)
-                            ^~~
-                            labs
+It should boil down to some clone$version(2) and sched_setaffinity(2)
+calls, so strictly speaking even with pthread_create(3) the thread is
+shortly running with the parent's affinity.
 
-Rework to store the time difference in a 'long long' and pass that to
-llabs(), since the variable can be an 'int', 'long' or 'long long'
-depending on the architecture and C library.
+> With cgroup2, you cannot guarantee the second aspect, as thread
+> creation and moving to a cgroup is not an atomic operation.
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/timens/exec.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+As suggested by others, CLONE_INTO_CGROUP (into cpuset cgroup) can
+actually "hide" the migration into the clone3() call.
 
-diff --git a/tools/testing/selftests/timens/exec.c b/tools/testing/selftests/timens/exec.c
-index e40dc5be2f66..04439e6ac8a2 100644
---- a/tools/testing/selftests/timens/exec.c
-+++ b/tools/testing/selftests/timens/exec.c
-@@ -21,6 +21,7 @@
- int main(int argc, char *argv[])
- {
- 	struct timespec now, tst;
-+	long long timediff;
- 	int status, i;
- 	pid_t pid;
- 
-@@ -30,7 +31,8 @@ int main(int argc, char *argv[])
- 
- 		for (i = 0; i < 2; i++) {
- 			_gettime(CLOCK_MONOTONIC, &tst, i);
--			if (abs(tst.tv_sec - now.tv_sec) > 5)
-+			timediff = tst.tv_sec - now.tv_sec;
-+			if (llabs(timediff) > 5)
- 				return pr_fail("%ld %ld\n", now.tv_sec, tst.tv_sec);
- 		}
- 		return 0;
-@@ -50,7 +52,8 @@ int main(int argc, char *argv[])
- 
- 	for (i = 0; i < 2; i++) {
- 		_gettime(CLOCK_MONOTONIC, &tst, i);
--		if (abs(tst.tv_sec - now.tv_sec) > 5)
-+		timediff = tst.tv_sec - now.tv_sec;
-+		if (llabs(timediff) > 5)
- 			return pr_fail("%ld %ld\n",
- 					now.tv_sec, tst.tv_sec);
- 	}
-@@ -70,7 +73,8 @@ int main(int argc, char *argv[])
- 		/* Check that a child process is in the new timens. */
- 		for (i = 0; i < 2; i++) {
- 			_gettime(CLOCK_MONOTONIC, &tst, i);
--			if (abs(tst.tv_sec - now.tv_sec - OFFSET) > 5)
-+			timediff = tst.tv_sec - now.tv_sec - OFFSET;
-+			if (llabs(timediff) > 5)
- 				return pr_fail("%ld %ld\n",
- 						now.tv_sec + OFFSET, tst.tv_sec);
- 		}
--- 
-2.33.0
+> At creation time, you cannot set the final affinity mask (as you
+> create it in the non-rt group and there the CPU is not in the
+> cpuset.cpus).
+> Once you move the thread to the rt cgroup, it has a default mask and
+> by that can be executed on other rt cores.
 
+Good point. Perhaps you could work this around by having another level
+of (non-root partition) cpuset cgroups for individual CPUs? (Maybe
+there's more clever approach, this is just first to come into my mind.)
+
+Michal
