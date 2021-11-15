@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63A74C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0202C433F5
 	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CC5461B4C
+	by mail.kernel.org (Postfix) with ESMTP id BA2DA61B51
 	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbhKOPeZ (ORCPT
+        id S236614AbhKOPe2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Nov 2021 10:34:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52970 "EHLO mail.kernel.org"
+        Mon, 15 Nov 2021 10:34:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236713AbhKOPdr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 10:33:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E90516322D;
-        Mon, 15 Nov 2021 15:30:34 +0000 (UTC)
+        id S236693AbhKOPdk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:33:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C1236323D;
+        Mon, 15 Nov 2021 15:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990237;
-        bh=ZO2Nlxhc8pcrLTNv8YBuKfBn0744AE3LcV31TeMER6g=;
+        s=k20201202; t=1636990220;
+        bh=fs6Mo/cNVCXgit6VI25SiK2O86CoOZYuGBLTQAR7ou4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZfXh+EGCZlIUqsyK86SY4JSFQRMsZt5O5U/yt8T6Jig0uT4VhTZJzwacfLqOMKwft
-         xNWPWIBG0n62JpsMFUvLJ1hOBP3M19fi7WL+AFmVQv88UgRBEiGiY5NJkkNweT/Ki0
-         GcCtROHpL/sNFgXA1yXUE1G4tnlFa7LZ4YhtcLFWI0+zyFWl/liS8CPme7+NcORF8H
-         kDIFs9QObbqDuCJQ8IGFhODU+2WBUsRoFEiWYAMlQWzWhXyUui61mSkUl73jXcfsYj
-         H7lv5Rxd9BuJBUMR8Z9tMpsvoPM9g4pol9su2HMOgdlPf87Ld5unlDEP3p+0Qv0trL
-         O18NoktAvgpgA==
+        b=OA7tIDA0qx4Znqs+E4TSok7qvGWrR6KFJ6uZTsJ1+Ld1gQVnILC4IYi7RF1f4VdZb
+         VsEkd++uD24Y8awfBlLok3VAWVBSTjHX/ccMZvBFFQpGisWAML5zl85T/g/DV5audH
+         W3gD2GMIU9o7cA7n5TYaDgFUBRgusHd3dEDpQeAzIhlD5VBYuM8TjzvQx+TBtv3R3+
+         etiajwM3uHv/d7TMgu2uZL9CcmUq+sjknwEFqTJkKP6xPzvt5ukgFarwc3gHzUho/b
+         qmYAK0d5lbPX/Q/0+O+K3WqX+yqo38RGprX97HSc//loSWaYV0yOMgz8tqUTrkV1MM
+         6SWcLxbDEmDrA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,420 +39,378 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 36/37] kselftest/arm64: Add coverage for the ZA ptrace interface
-Date:   Mon, 15 Nov 2021 15:28:34 +0000
-Message-Id: <20211115152835.3212149-37-broonie@kernel.org>
+Subject: [PATCH v6 30/37] kselftest/arm64: Add tests for TPIDR2
+Date:   Mon, 15 Nov 2021 15:28:28 +0000
+Message-Id: <20211115152835.3212149-31-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10074; h=from:subject; bh=ZO2Nlxhc8pcrLTNv8YBuKfBn0744AE3LcV31TeMER6g=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyhvX3bITXncNU9wi3pjkJIG7yLQbwBNxzqWOVy 0XPd4HGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8oQAKCRAk1otyXVSH0HaVB/ 41ac4kYn0WWzwNg5YGsoQT3BZT2wQ3tl62VX5uh/jEdKpTT6dLyH3n2XCBWXET15JHjRVqZDssJq5K 0OH5VJJdDEEoJ70RplOdC6uaqbwvFCZdYndsIpoAvjuVCPw256GqLP1QOoQtIbn+7vPqQy8nu1FOMn 16A9QAK6LgGmdAztW7vqbelzaM07k99vngHg4imPFZtoF4BTdO+Jy0dUZ4JPPXaR+B46Yk3HGlJAWN 26HmgxkWy7RwbY5HUdfsc6mc4T3V/1Po3il3pv3CigfxQKWLaYwLaqk+wUISn8d1tNcnvsCI8cfurY AUAOt711DxqNRvUSTXuFuOfrE8zK7/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8971; h=from:subject; bh=fs6Mo/cNVCXgit6VI25SiK2O86CoOZYuGBLTQAR7ou4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknycYfrKO9wqrVDyN1/vTE4zIqML+ldRAu4nWsi8 L63DQwiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8nAAKCRAk1otyXVSH0OGUB/ 40q/24enCIBTD/ld1yDhbAg8FNQdHEM/o0Xz9vrm4jpd4SvzKiupCa52sJNrqMAPuaDrN8pIm/F25u 6is6Wf56BGJKgwOPsCpHAIv+ciPjfzaCzZ3gkFWAR5kcw+Ll9jn8atF4TCwPRv+qspyX/Sa77Um1em PTWkKuxVd6DB7RZhgTKMPRDlCAV4VubJjBMhT3H8G0+m9udqpemXw0oztMfhGP918bwYeOQZIGqRV+ 9XLO9jOT93Y2hm4OkB7zGD3fm6rFdIBec3z1lfi9R0Dai4wBn/ecdFJ309l/U9a37spUIHFmztlItx VBXWxjYL2tUqw9pO9PS0pOLoUDpnAY
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some basic coverage for the ZA ptrace interface, including walking
-through all the vector lengths supported in the system. As with SVE we do
-not currently validate the data all the way through to the running process.
+The Scalable Matrix Extension adds a new system register TPIDR2 intended to
+be used by libc for its own thread specific use, add some kselftests which
+exercise the ABI for it.
+
+Since this test should with some adjustment work for TPIDR and any other
+similar registers added in future add tests for it in a separate
+directory rather than placing it with the other floating point tests,
+nothing existing looked suitable so I created a new test directory
+called "abi".
+
+Since this feature is intended to be used by libc the test is built as
+freestanding code using nolibc so we don't end up with the test program
+and libc both trying to manage the register simultaneously and
+distrupting each other. As a result of being written using nolibc rather
+than using hwcaps to identify if SME is available in the system we check
+for the default SME vector length configuration in proc, adding hwcap
+support to nolibc seems like disproportionate effort and didn't feel
+entirely idiomatic for what nolibc is trying to do.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore  |   1 +
- tools/testing/selftests/arm64/fp/Makefile    |   3 +-
- tools/testing/selftests/arm64/fp/za-ptrace.c | 353 +++++++++++++++++++
- 3 files changed, 356 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
+ tools/testing/selftests/arm64/abi/.gitignore |   1 +
+ tools/testing/selftests/arm64/abi/Makefile   |   9 +-
+ tools/testing/selftests/arm64/abi/tpidr2.c   | 298 +++++++++++++++++++
+ 3 files changed, 307 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/tpidr2.c
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 1178fecc7aa1..59afc01f2019 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -7,4 +7,5 @@ sve-test
- ssve-test
- vec-syscfg
- vlset
-+za-ptrace
- za-test
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index d77e9903116b..d7fb200d0794 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -1,7 +1,7 @@
+diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
+index b79cf5814c23..b9e54417250d 100644
+--- a/tools/testing/selftests/arm64/abi/.gitignore
++++ b/tools/testing/selftests/arm64/abi/.gitignore
+@@ -1 +1,2 @@
+ syscall-abi
++tpidr2
+diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
+index 96eba974ac8d..c8d7f2495eb2 100644
+--- a/tools/testing/selftests/arm64/abi/Makefile
++++ b/tools/testing/selftests/arm64/abi/Makefile
+@@ -1,8 +1,15 @@
  # SPDX-License-Identifier: GPL-2.0
+ # Copyright (C) 2021 ARM Limited
  
- CFLAGS += -I../../../../../usr/include/
--TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
-+TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
- TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
-@@ -25,5 +25,6 @@ vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
- za-test: za-test.o asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
-+za-ptrace: za-ptrace.o
+-TEST_GEN_PROGS := syscall-abi
++TEST_GEN_PROGS := syscall-abi tpidr2
  
  include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
+ 
+ $(OUTPUT)/syscall-abi: syscall-abi.c syscall-abi-asm.S
++
++# Build with nolibc since TPIDR2 is intended to be actively managed by
++# libc and we're trying to test the functionality that it depends on here.
++$(OUTPUT)/tpidr2: tpidr2.c
++	$(CC) -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
++		-static -include ../../../../include/nolibc/nolibc.h \
++		-ffreestanding -Wall $^ -o $@ -lgcc
+diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
 new file mode 100644
-index 000000000000..6c172a5629dc
+index 000000000000..351a098b503a
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
-@@ -0,0 +1,353 @@
++++ b/tools/testing/selftests/arm64/abi/tpidr2.c
+@@ -0,0 +1,298 @@
 +// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/sched.h>
++#include <linux/wait.h>
++
++#define SYS_TPIDR2 "S3_3_C13_C0_5"
++
++#define EXPECTED_TESTS 5
++
++static void putstr(const char *str)
++{
++	write(1, str, strlen(str));
++}
++
++static void putnum(unsigned int num)
++{
++	char c;
++
++	if (num / 10)
++		putnum(num / 10);
++
++	c = '0' + (num % 10);
++	write(1, &c, 1);
++}
++
++static int tests_run;
++static int tests_passed;
++static int tests_failed;
++static int tests_skipped;
++
++static void set_tpidr2(uint64_t val)
++{
++	asm volatile (
++		"msr	" SYS_TPIDR2 ", %0\n"
++		:
++		: "r"(val)
++		: "cc");
++}
++
++static uint64_t get_tpidr2(void)
++{
++	uint64_t val;
++
++	asm volatile (
++		"mrs	%0, " SYS_TPIDR2 "\n"
++		: "=r"(val)
++		:
++		: "cc");
++
++	return val;
++}
++
++static void print_summary(void)
++{
++	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
++		putstr("# UNEXPECTED TEST COUNT: ");
++
++	putstr("# Totals: pass:");
++	putnum(tests_passed);
++	putstr(" fail:");
++	putnum(tests_failed);
++	putstr(" xfail:0 xpass:0 skip:");
++	putnum(tests_skipped);
++	putstr(" error:0\n");
++}
++
++/* Processes should start with TPIDR2 == 0 */
++static int default_value(void)
++{
++	return get_tpidr2() == 0;
++}
++
++/* If we set TPIDR2 we should read that value */
++static int write_read(void)
++{
++	set_tpidr2(getpid());
++
++	return getpid() == get_tpidr2();
++}
++
++/* If we set a value we should read the same value after scheduling out */
++static int write_sleep_read(void)
++{
++	set_tpidr2(getpid());
++
++	msleep(100);
++
++	return getpid() == get_tpidr2();
++}
++
 +/*
-+ * Copyright (C) 2021 ARM Limited.
++ * If we fork the value in the parent should be unchanged and the
++ * child should start with the same value and be able to set its own
++ * value.
 + */
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/ptrace.h>
-+#include <sys/types.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <asm/sigcontext.h>
-+#include <asm/ptrace.h>
-+
-+#include "../../kselftest.h"
-+
-+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-+
-+/* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
-+#ifndef NT_ARM_ZA
-+#define NT_ARM_ZA 0x40c
-+#endif
-+
-+#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
-+
-+static void fill_buf(char *buf, size_t size)
++static int write_fork_read(void)
 +{
-+	int i;
++	pid_t newpid, waiting, oldpid;
++	int status;
 +
-+	for (i = 0; i < size; i++)
-+		buf[i] = random();
-+}
++	set_tpidr2(getpid());
 +
-+static int do_child(void)
-+{
-+	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
-+		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
-+
-+	if (raise(SIGSTOP))
-+		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static struct user_za_header *get_za(pid_t pid, void **buf, size_t *size)
-+{
-+	struct user_za_header *za;
-+	void *p;
-+	size_t sz = sizeof(*za);
-+	struct iovec iov;
-+
-+	while (1) {
-+		if (*size < sz) {
-+			p = realloc(*buf, sz);
-+			if (!p) {
-+				errno = ENOMEM;
-+				goto error;
-+			}
-+
-+			*buf = p;
-+			*size = sz;
++	oldpid = getpid();
++	newpid = fork();
++	if (newpid == 0) {
++		/* In child */
++		if (get_tpidr2() != oldpid) {
++			putstr("# TPIDR2 changed in child: ");
++			putnum(get_tpidr2());
++			putstr("\n");
++			exit(0);
 +		}
 +
-+		iov.iov_base = *buf;
-+		iov.iov_len = sz;
-+		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_ZA, &iov))
-+			goto error;
-+
-+		za = *buf;
-+		if (za->size <= sz)
-+			break;
-+
-+		sz = za->size;
++		set_tpidr2(getpid());
++		if (get_tpidr2() == getpid()) {
++			exit(1);
++		} else {
++			putstr("# Failed to set TPIDR2 in child\n");
++			exit(0);
++		}
++	}
++	if (newpid < 0) {
++		putstr("# fork() failed: -");
++		putnum(-newpid);
++		putstr("\n");
++		return 0;
 +	}
 +
-+	return za;
++	for (;;) {
++		waiting = waitpid(newpid, &status, 0);
 +
-+error:
-+	return NULL;
-+}
++		if (waiting < 0) {
++			if (errno == EINTR)
++				continue;
++			putstr("# waitpid() failed: ");
++			putnum(errno);
++			putstr("\n");
++			return 0;
++		}
++		if (waiting != newpid) {
++			putstr("# waitpid() returned wrong PID\n");
++			return 0;
++		}
 +
-+static int set_za(pid_t pid, const struct user_za_header *za)
-+{
-+	struct iovec iov;
++		if (!WIFEXITED(status)) {
++			putstr("# child did not exit\n");
++			return 0;
++		}
 +
-+	iov.iov_base = (void *)za;
-+	iov.iov_len = za->size;
-+	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_ZA, &iov);
-+}
++		if (getpid() != get_tpidr2()) {
++			putstr("# TPIDR2 corrupted in parent\n");
++			return 0;
++		}
 +
-+/* Validate attempting to set the specfied VL via ptrace */
-+static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
-+{
-+	struct user_za_header za;
-+	struct user_za_header *new_za = NULL;
-+	size_t new_za_size = 0;
-+	int ret, prctl_vl;
-+
-+	*supported = false;
-+
-+	/* Check if the VL is supported in this process */
-+	prctl_vl = prctl(PR_SME_SET_VL, vl);
-+	if (prctl_vl == -1)
-+		ksft_exit_fail_msg("prctl(PR_SME_SET_VL) failed: %s (%d)\n",
-+				   strerror(errno), errno);
-+
-+	/* If the VL is not supported then a supported VL will be returned */
-+	*supported = (prctl_vl == vl);
-+
-+	/* Set the VL by doing a set with no register payload */
-+	memset(&za, 0, sizeof(za));
-+	za.size = sizeof(za);
-+	za.vl = vl;
-+	ret = set_za(child, &za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u\n", vl);
-+		return;
++		return WEXITSTATUS(status);
 +	}
++}
++
++/*
++ * sys_clone() has a lot of per architecture variation so just define
++ * it here rather than adding it to nolibc, plus the raw API is a
++ * little more convenient for this test.
++ */
++static int sys_clone(unsigned long clone_flags, unsigned long newsp,
++		     int *parent_tidptr, unsigned long tls,
++		     int *child_tidptr)
++{
++	return my_syscall5(__NR_clone, clone_flags, newsp, parent_tidptr, tls,
++			   child_tidptr);
++}
++
++/*
++ * If we clone with CLONE_SETTLS then the value in the parent should
++ * be unchanged and the child should start with zero and be able to
++ * set its own value.
++ */
++static int write_clone_read(void)
++{
++	int parent_tid, child_tid;
++	pid_t parent, waiting;
++	int ret, status;
++
++	parent = getpid();
++	set_tpidr2(parent);
++
++	ret = sys_clone(CLONE_SETTLS, 0, &parent_tid, 0, &child_tid);
++	if (ret == -1) {
++		putstr("# clone() failed\n");
++		putnum(errno);
++		putstr("\n");
++		return 0;
++	}
++
++	if (ret == 0) {
++		/* In child */
++		if (get_tpidr2() != 0) {
++			putstr("# TPIDR2 non-zero in child: ");
++			putnum(get_tpidr2());
++			putstr("\n");
++			exit(0);
++		}
++
++		if (gettid() == 0)
++			putstr("# Child TID==0\n");
++		set_tpidr2(gettid());
++		if (get_tpidr2() == gettid()) {
++			exit(1);
++		} else {
++			putstr("# Failed to set TPIDR2 in child\n");
++			exit(0);
++		}
++	}
++
++	for (;;) {
++		waiting = wait4(ret, &status, __WCLONE, NULL);
++
++		if (waiting < 0) {
++			if (errno == EINTR)
++				continue;
++			putstr("# wait4() failed: ");
++			putnum(errno);
++			putstr("\n");
++			return 0;
++		}
++		if (waiting != ret) {
++			putstr("# wait4() returned wrong PID ");
++			putnum(waiting);
++			putstr("\n");
++			return 0;
++		}
++
++		if (!WIFEXITED(status)) {
++			putstr("# child did not exit\n");
++			return 0;
++		}
++
++		if (parent != get_tpidr2()) {
++			putstr("# TPIDR2 corrupted in parent\n");
++			return 0;
++		}
++
++		return WEXITSTATUS(status);
++	}
++}
++
++#define run_test(name)			     \
++	if (name()) {			     \
++		tests_passed++;		     \
++	} else {			     \
++		tests_failed++;		     \
++		putstr("not ");		     \
++	}				     \
++	putstr("ok ");			     \
++	putnum(++tests_run);		     \
++	putstr(" " #name "\n");
++
++int main(int argc, char **argv)
++{
++	int ret, i;
++
++	putstr("TAP version 13\n");
++	putstr("1..");
++	putnum(EXPECTED_TESTS);
++	putstr("\n");
++
++	putstr("# PID: ");
++	putnum(getpid());
++	putstr("\n");
 +
 +	/*
-+	 * Read back the new register state and verify that we have the
-+	 * same VL that we got from prctl() on ourselves.
++	 * This test is run with nolibc which doesn't support hwcap and
++	 * it's probably disproportionate to implement so instead check
++	 * for the default vector length configuration in /proc.
 +	 */
-+	if (!get_za(child, (void **)&new_za, &new_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u\n", vl);
-+		return;
-+	}
++	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
++	if (ret >= 0) {
++		run_test(default_value);
++		run_test(write_read);
++		run_test(write_sleep_read);
++		run_test(write_fork_read);
++		run_test(write_clone_read);
 +
-+	ksft_test_result(new_za->vl = prctl_vl, "Set VL %u\n", vl);
++	} else {
++		putstr("# SME support not present\n");
 +
-+	free(new_za);
-+}
-+
-+/* Validate attempting to set no ZA data and read it back */
-+static void ptrace_set_no_data(pid_t child, unsigned int vl)
-+{
-+	void *read_buf = NULL;
-+	struct user_za_header write_za;
-+	struct user_za_header *read_za;
-+	size_t read_za_size = 0;
-+	int ret;
-+
-+	/* Set up some data and write it out */
-+	memset(&write_za, 0, sizeof(write_za));
-+	write_za.size = ZA_PT_ZA_OFFSET;
-+	write_za.vl = vl;
-+
-+	ret = set_za(child, &write_za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u no data\n", vl);
-+		return;
-+	}
-+
-+	/* Read the data back */
-+	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u no data\n", vl);
-+		return;
-+	}
-+	read_za = read_buf;
-+
-+	/* We might read more data if there's extensions we don't know */
-+	if (read_za->size < write_za.size) {
-+		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
-+				      vl, write_za.size, read_za->size);
-+		goto out_read;
-+	}
-+
-+	ksft_test_result(read_za->size == write_za.size,
-+			 "Disabled ZA for VL %u\n", vl);
-+
-+out_read:
-+	free(read_buf);
-+}
-+
-+/* Validate attempting to set data and read it back */
-+static void ptrace_set_get_data(pid_t child, unsigned int vl)
-+{
-+	void *write_buf;
-+	void *read_buf = NULL;
-+	struct user_za_header *write_za;
-+	struct user_za_header *read_za;
-+	size_t read_za_size = 0;
-+	unsigned int vq = sve_vq_from_vl(vl);
-+	int ret;
-+	size_t data_size;
-+
-+	data_size = ZA_PT_SIZE(vq);
-+	write_buf = malloc(data_size);
-+	if (!write_buf) {
-+		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
-+				      data_size, vl);
-+		return;
-+	}
-+	write_za = write_buf;
-+
-+	/* Set up some data and write it out */
-+	memset(write_za, 0, data_size);
-+	write_za->size = data_size;
-+	write_za->vl = vl;
-+
-+	fill_buf(write_buf + ZA_PT_ZA_OFFSET, ZA_PT_ZA_SIZE(vq));
-+
-+	ret = set_za(child, write_za);
-+	if (ret != 0) {
-+		ksft_test_result_fail("Failed to set VL %u data\n", vl);
-+		goto out;
-+	}
-+
-+	/* Read the data back */
-+	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
-+		ksft_test_result_fail("Failed to read VL %u data\n", vl);
-+		goto out;
-+	}
-+	read_za = read_buf;
-+
-+	/* We might read more data if there's extensions we don't know */
-+	if (read_za->size < write_za->size) {
-+		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
-+				      vl, write_za->size, read_za->size);
-+		goto out_read;
-+	}
-+
-+	ksft_test_result(memcmp(write_buf + ZA_PT_ZA_OFFSET,
-+				read_buf + ZA_PT_ZA_OFFSET,
-+				ZA_PT_ZA_SIZE(vq)) == 0,
-+			 "Data match for VL %u\n", vl);
-+
-+out_read:
-+	free(read_buf);
-+out:
-+	free(write_buf);
-+}
-+
-+static int do_parent(pid_t child)
-+{
-+	int ret = EXIT_FAILURE;
-+	pid_t pid;
-+	int status;
-+	siginfo_t si;
-+	unsigned int vq, vl;
-+	bool vl_supported;
-+
-+	/* Attach to the child */
-+	while (1) {
-+		int sig;
-+
-+		pid = wait(&status);
-+		if (pid == -1) {
-+			perror("wait");
-+			goto error;
++		for (i = 0; i < EXPECTED_TESTS; i++) {
++			putstr("ok ");
++			putnum(i);
++			putstr(" skipped, TPIDR2 not supported\n");
 +		}
 +
-+		/*
-+		 * This should never happen but it's hard to flag in
-+		 * the framework.
-+		 */
-+		if (pid != child)
-+			continue;
-+
-+		if (WIFEXITED(status) || WIFSIGNALED(status))
-+			ksft_exit_fail_msg("Child died unexpectedly\n");
-+
-+		if (!WIFSTOPPED(status))
-+			goto error;
-+
-+		sig = WSTOPSIG(status);
-+
-+		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
-+
-+			if (errno == EINVAL) {
-+				sig = 0; /* bust group-stop */
-+				goto cont;
-+			}
-+
-+			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
-+
-+		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
-+		    si.si_pid == pid)
-+			break;
-+
-+	cont:
-+		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
-+
-+			ksft_test_result_fail("PTRACE_CONT: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
++		tests_skipped += EXPECTED_TESTS;
 +	}
 +
-+	/* Step through every possible VQ */
-+	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
-+		vl = sve_vl_from_vq(vq);
++	print_summary();
 +
-+		/* First, try to set this vector length */
-+		ptrace_set_get_vl(child, vl, &vl_supported);
-+
-+		/* If the VL is supported validate data set/get */
-+		if (vl_supported) {
-+			ptrace_set_no_data(child, vl);
-+			ptrace_set_get_data(child, vl);
-+		} else {
-+			ksft_test_result_skip("Disabled ZA for VL %u\n", vl);
-+			ksft_test_result_skip("Get and set data for VL %u\n",
-+					      vl);
-+		}
-+	}
-+
-+	ret = EXIT_SUCCESS;
-+
-+error:
-+	kill(child, SIGKILL);
-+
-+disappeared:
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int ret = EXIT_SUCCESS;
-+	pid_t child;
-+
-+	srandom(getpid());
-+
-+	ksft_print_header();
-+	ksft_set_plan(EXPECTED_TESTS);
-+
-+	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+		ksft_exit_skip("SME not available\n");
-+
-+	child = fork();
-+	if (!child)
-+		return do_child();
-+
-+	if (do_parent(child))
-+		ret = EXIT_FAILURE;
-+
-+	ksft_print_cnts();
-+
-+	return ret;
++	return 0;
 +}
 -- 
 2.30.2
