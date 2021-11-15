@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B58CFC43217
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E5FC433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A191861B4C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9C8A61B51
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbhKOPeW (ORCPT
+        id S236504AbhKOPeX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Nov 2021 10:34:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52876 "EHLO mail.kernel.org"
+        Mon, 15 Nov 2021 10:34:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236675AbhKOPdi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 10:33:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EB2663232;
-        Mon, 15 Nov 2021 15:30:07 +0000 (UTC)
+        id S236692AbhKOPdk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:33:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3B02C63225;
+        Mon, 15 Nov 2021 15:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990210;
-        bh=jLrKauMo97jhxOy35VKRzK15Vz0tTJowtBEC7D/upGc=;
+        s=k20201202; t=1636990217;
+        bh=P2l5Y5PDPDJcPc6k74icHUD6sRurj6ctKkCgiE7n3uE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o56RL78/23OnFSb1rBojKq8j/9Xb/ULvGAd0RqDd6FOiWSi+6HCVpWXtxsrKKnYgw
-         O+/oSb1TQ61ZycdMA/wB5+v8lgwb+5Kej7Wx5+dilyp8WZNdb1OagLhUMKZmaRYWs5
-         CdE5QNgY+2vt5UIKXTM7kkIYjrRKdbhaXelMxCBcHKP3Vpce6ouI7rZ2r70jrWF/jP
-         UEUH8CQlsGLdMJSxQ43FnkmSvhN6FyW4agp/8eAGLGZksRx7yzUR7w28p3uwCDFj6k
-         /caQ1rk3co1TZz/VH7XrZJgIY8R2/ZPWSiFuknL1ZpRprr2FMWEgv8l605zOHW4Cse
-         Y2jeK/dpuDxTQ==
+        b=L1TMG5xB/EM1F1+LUyeEf8MPCTGe1hWLcEo5jtO3/aUaGCSVz7wkA7hTaVujjHcm1
+         JoXlagf06TFJYm9Fe+0IrGgZ89/np1YMLKnLo61THGPK2Rs75Z6GOWTwNciNUA5ERm
+         e8oc3LWVBRwz005yqEdIS5noUWcousuztH49TwzaGG5oKH4y902AOyjfg7Diy/pTlG
+         yrk4rPDhcdF6Bn/pjqNfFO7w13iP9BD29BiLebj+G4SRa6pQpVLD2vo/iB1a5qVve1
+         TODddUw0SL6typHgTAWIsLKR/XKkziEy1Gn8dMvrrJSpvrMILEMz+0bX4QsWa0w2Vk
+         3IwTj/VSx1Lxw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,133 +39,77 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 27/37] arm64/sme: Save and restore streaming mode over EFI runtime calls
-Date:   Mon, 15 Nov 2021 15:28:25 +0000
-Message-Id: <20211115152835.3212149-28-broonie@kernel.org>
+Subject: [PATCH v6 29/37] kselftest/arm64: sme: Add streaming SME support to vlset
+Date:   Mon, 15 Nov 2021 15:28:27 +0000
+Message-Id: <20211115152835.3212149-30-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3623; h=from:subject; bh=jLrKauMo97jhxOy35VKRzK15Vz0tTJowtBEC7D/upGc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknya75M88oFp3XXYCMLvzif+Fo9rFzcyfxpqLgB8 f5GkBE2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8mgAKCRAk1otyXVSH0CrjCA CCTyY8MMqo7qUQXkkFCaP3036bBqp0r/M3WKF3BuWSea3flaZipdxCtjWFEovier7SefE+N/nytxCv PPZoz0P5T5y5HRsH4FU1Un3ua8SL4xeYMoMIXTHrVAZLoZBAVXtkE7Aas5mRjM7EXRUC/DchbjZMYl q/3vCgWSEo8XvSUimrp2O1lsf6kxAuBV+n/tM4bitzqlw4bFsne82Zk6Gk34lrGWxu5Ui+QK8VdweH Zw+NEq9Q9eQeZ6U3lBt7I8z5nPv0wIO/gC/DCfA6IUVpQp11HkM2oPJyi5kafKp+DR2MMdzACFNy9L sN4IGpuveiKFHvhoSp7ZtvnAbqHMi7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; h=from:subject; bh=P2l5Y5PDPDJcPc6k74icHUD6sRurj6ctKkCgiE7n3uE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknybOiCWCuqdEhEwDeB0fuhFIzO/DqyGIULZWFjy SmyMmrCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8mwAKCRAk1otyXVSH0Oy0B/ 0ZrRxnTvgmef6rjfdG80+LWS86rfjHK+VBoEuFWmLwdhmgdvof6qLvmMSoZloC/1bmLwl5HAnmPfXS CLS+X4vSlyZNc1+uXfMUUkq/lNzMS1xIXI4KPwR1IZjAhZlUuR/ZupEkmiR/70Qkqz86CnpnB2L/sL NG68bFL6bk+5277y0R8yWJ/svBCRg1C+Vm9nJq2evt+OzVFZT4lHnMsyh+j6sc7Rq7j1xeU4f0Zena cKePMZHq5uKWd8KloUOYTG5AM6YoJQ25GnViqQDPKyJxtxSxtn0FH6ehlEYCPpppg7PZItzliaW3/v pJjVjKide+IiVdwccLsxkK5ewhFdZo
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When saving and restoring the floating point state over an EFI runtime
-call ensure that we handle streaming mode, only handling FFR if we are not
-in streaming mode and ensuring that we are in normal mode over the call
-into runtime services.
-
-We currently assume that ZA will not be modified by runtime services, the
-specification is not yet finalised so this may need updating if that
-changes.
+The Scalable Matrix Extenions (SME) introduces additional register state
+with configurable vector lengths, similar to SVE but configured separately.
+Extend vlset to support configuring this state with a --sme or -s command
+line option.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 47 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 41 insertions(+), 6 deletions(-)
+ tools/testing/selftests/arm64/fp/vlset.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index bb174c1b8ae0..7ad55fa54d03 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -1061,21 +1061,25 @@ int vec_verify_vq_map(enum vec_type type)
+diff --git a/tools/testing/selftests/arm64/fp/vlset.c b/tools/testing/selftests/arm64/fp/vlset.c
+index 308d27a68226..76912a581a95 100644
+--- a/tools/testing/selftests/arm64/fp/vlset.c
++++ b/tools/testing/selftests/arm64/fp/vlset.c
+@@ -22,12 +22,15 @@ static int inherit = 0;
+ static int no_inherit = 0;
+ static int force = 0;
+ static unsigned long vl;
++static int set_ctl = PR_SVE_SET_VL;
++static int get_ctl = PR_SVE_GET_VL;
  
- static void __init sve_efi_setup(void)
- {
--	struct vl_info *info = &vl_info[ARM64_VEC_SVE];
-+	int max_vl = 0;
-+	int i;
- 
- 	if (!IS_ENABLED(CONFIG_EFI))
- 		return;
- 
-+	for (i = 0; i < ARRAY_SIZE(vl_info); i++)
-+		max_vl = max(vl_info[i].max_vl, max_vl);
-+
- 	/*
- 	 * alloc_percpu() warns and prints a backtrace if this goes wrong.
- 	 * This is evidence of a crippled system and we are returning void,
- 	 * so no attempt is made to handle this situation here.
- 	 */
--	if (!sve_vl_valid(info->max_vl))
-+	if (!sve_vl_valid(max_vl))
- 		goto fail;
- 
- 	efi_sve_state = __alloc_percpu(
--		SVE_SIG_REGS_SIZE(sve_vq_from_vl(info->max_vl)), SVE_VQ_BYTES);
-+		SVE_SIG_REGS_SIZE(sve_vq_from_vl(max_vl)), SVE_VQ_BYTES);
- 	if (!efi_sve_state)
- 		goto fail;
- 
-@@ -1857,6 +1861,7 @@ EXPORT_SYMBOL(kernel_neon_end);
- static DEFINE_PER_CPU(struct user_fpsimd_state, efi_fpsimd_state);
- static DEFINE_PER_CPU(bool, efi_fpsimd_state_used);
- static DEFINE_PER_CPU(bool, efi_sve_state_used);
-+static DEFINE_PER_CPU(bool, efi_sm_state);
- 
- /*
-  * EFI runtime services support functions
-@@ -1891,12 +1896,28 @@ void __efi_fpsimd_begin(void)
- 		 */
- 		if (system_supports_sve() && likely(efi_sve_state)) {
- 			char *sve_state = this_cpu_ptr(efi_sve_state);
-+			bool ffr = true;
-+			u64 svcr;
- 
- 			__this_cpu_write(efi_sve_state_used, true);
- 
-+			/* If we are in streaming mode don't touch FFR */
-+			if (system_supports_sme()) {
-+				svcr = read_sysreg_s(SYS_SVCR_EL0);
-+
-+				ffr = svcr & SYS_SVCR_EL0_SM_MASK;
-+
-+				__this_cpu_write(efi_sm_state, ffr);
-+			}
-+
- 			sve_save_state(sve_state + sve_ffr_offset(sve_max_vl()),
- 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
--				       true);
-+				       ffr);
-+
-+			if (system_supports_sme())
-+				sysreg_clear_set_s(SYS_SVCR_EL0,
-+						   SYS_SVCR_EL0_SM_MASK, 0);
-+
- 		} else {
- 			fpsimd_save_state(this_cpu_ptr(&efi_fpsimd_state));
+ static const struct option options[] = {
+ 	{ "force",	no_argument, NULL, 'f' },
+ 	{ "inherit",	no_argument, NULL, 'i' },
+ 	{ "max",	no_argument, NULL, 'M' },
+ 	{ "no-inherit",	no_argument, &no_inherit, 1 },
++	{ "sme",	no_argument, NULL, 's' },
+ 	{ "help",	no_argument, NULL, '?' },
+ 	{}
+ };
+@@ -50,6 +53,9 @@ static int parse_options(int argc, char **argv)
+ 		case 'M':	vl = SVE_VL_MAX; break;
+ 		case 'f':	force = 1; break;
+ 		case 'i':	inherit = 1; break;
++		case 's':	set_ctl = PR_SME_SET_VL;
++				get_ctl = PR_SME_GET_VL;
++				break;
+ 		case 0:		break;
+ 		default:	goto error;
  		}
-@@ -1919,11 +1940,25 @@ void __efi_fpsimd_end(void)
- 		if (system_supports_sve() &&
- 		    likely(__this_cpu_read(efi_sve_state_used))) {
- 			char const *sve_state = this_cpu_ptr(efi_sve_state);
-+			bool ffr = true;
-+
-+			/*
-+			 * Restore streaming mode; EFI calls are
-+			 * normal function calls so should not return in
-+			 * streaming mode.
-+			 */
-+			if (system_supports_sme()) {
-+				if (__this_cpu_read(efi_sm_state)) {
-+					sysreg_clear_set_s(SYS_SVCR_EL0,
-+							   0,
-+							   SYS_SVCR_EL0_SM_MASK);
-+					ffr = false;
-+				}
-+			}
+@@ -125,14 +131,14 @@ int main(int argc, char **argv)
+ 	if (inherit)
+ 		flags |= PR_SVE_VL_INHERIT;
  
--			sve_set_vq(sve_vq_from_vl(sve_get_vl()) - 1);
- 			sve_load_state(sve_state + sve_ffr_offset(sve_max_vl()),
- 				       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
--				       true);
-+				       ffr);
+-	t = prctl(PR_SVE_SET_VL, vl | flags);
++	t = prctl(set_ctl, vl | flags);
+ 	if (t < 0) {
+ 		fprintf(stderr, "%s: PR_SVE_SET_VL: %s\n",
+ 			program_name, strerror(errno));
+ 		goto error;
+ 	}
  
- 			__this_cpu_write(efi_sve_state_used, false);
- 		} else {
+-	t = prctl(PR_SVE_GET_VL);
++	t = prctl(get_ctl);
+ 	if (t == -1) {
+ 		fprintf(stderr, "%s: PR_SVE_GET_VL: %s\n",
+ 			program_name, strerror(errno));
 -- 
 2.30.2
 
