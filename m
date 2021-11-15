@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E758EC433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C43C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB354611BF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 406D9611BF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbhKOPdl (ORCPT
+        id S232131AbhKOPdn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Nov 2021 10:33:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52390 "EHLO mail.kernel.org"
+        Mon, 15 Nov 2021 10:33:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52258 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236608AbhKOPcb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 10:32:31 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A228963225;
-        Mon, 15 Nov 2021 15:29:31 +0000 (UTC)
+        id S236499AbhKOPcR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:32:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 110CF63225;
+        Mon, 15 Nov 2021 15:29:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990174;
-        bh=RaFhcrDxoD/nIJdkBbcH0yh7uVD7oNj4T3LD6S2xcuI=;
+        s=k20201202; t=1636990151;
+        bh=EsccwWGaezX29ISs1V8/2AQu5smndUj9z6l9ktW13mw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BcvDZ4UBrA1MxNlHKaxrQBr2P4w/EgrmP8w4TPNzjpN/hgxVr/vjpoiIXNjoJ/Czj
-         66vWzazeCSZASHdueI/NRvfgpEhTTObgyZx/E87BFaRoXLLczvGbPWHjtU7fX6lOBA
-         tmicdcWarSKFOej3gpnNQFh7bpk65xCKbITqakNADQw7VLgTcTer4kyms/VwELIn3U
-         mTwZJqZGZjUYaGVORrmsTtiLkSM6bj+uF4ayb4uvGSe8TKTuyLxMpP48oNYkEIgkWr
-         c7FuUKjt0SHlqlU1640/Tm5RF2Pq1qRdidfy/Wbe3agHHVvMX2n91nfCBn3CtOBLKy
-         jmcBfxt8utKqQ==
+        b=d+Q9p3JzhJk0m/WU4u5aWxwy6tpx82hWgdvgqYloCK9JhB8RYqtx4h6vGLZ++v7Sw
+         BYopZGTyhy3hFUAG39HPpO5aLE5fa8H4ocyeUSXAEEWWQcyRpAFMPs0IKbRhRjmrVu
+         xz+KnORG/3XIDTo3awZLZFNlPRSNr6bdmgXqqbVTVrPj3IVUgbdCVZXJ0c3q2gaCWU
+         9QUwNKMICCYrxooJuu2ikKkIcSCFy2unvKVXgg58y512YiAykaE/vLFsuTjeOyabKv
+         dkuZkxdD47ShX/KFrHnIJpGT8SLmukT9+n1seDtnFnTDZCRxslGcbCw/c3M70VuVRz
+         DxGr123tXqRtw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,457 +39,665 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 14/37] arm64/sme: Identify supported SME vector lengths at boot
-Date:   Mon, 15 Nov 2021 15:28:12 +0000
-Message-Id: <20211115152835.3212149-15-broonie@kernel.org>
+Subject: [PATCH v6 06/37] kselftest/arm64: Add a test program to exercise the syscall ABI
+Date:   Mon, 15 Nov 2021 15:28:04 +0000
+Message-Id: <20211115152835.3212149-7-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13402; h=from:subject; bh=RaFhcrDxoD/nIJdkBbcH0yh7uVD7oNj4T3LD6S2xcuI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyPimeFff9oRcBxPileLQWxb+QD10N5LYazf+QC pjbu33iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8jwAKCRAk1otyXVSH0HQeB/ 4hk46/fcuoONxY/MH0AekaYzHgB7ERfJ385IsdTN3IUZnoU1eZsNh87pGkZY3YdrFmSKv5XCBRnhWH FFX5CyFMVQLM7em+rGjLIzz16RrATnyVODWo0YkXnbHUhlrCCR1UUIouhibcKVlRQImfMtgjgrWQKD zuQjGYoS/odEKyD3yu0SHpNYn1Mm/jMHcy8Hd2C7I8y3Rm+tlIOkuUklveGidrndc5V0HlN15Opogk 0pvpcfbqss4s544FZRAuRfp2tMero2WpMUki1t6pQPyD+BeBQFtsGYLPfDH5zE9EbLmVToWCRUT5oj nUPHo4WinQ2s0qPz0qlVr6RG4dHoDf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=17548; h=from:subject; bh=EsccwWGaezX29ISs1V8/2AQu5smndUj9z6l9ktW13mw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyJabmFW29E8L7vXvkTvPvC3+p7h9ZZ4BLmZUEc 1Ul/P82JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8iQAKCRAk1otyXVSH0NzpB/ 9qVpwq/qRBeq/6M18Ojb8ryUhGXA7cJTVR+4yqvIcyZ2vds1TgaqREqYLaj0SMesos5wJFGdOilzBl IVEnB86IjsUXItbOiymBjuNaFM41JAAwcxST1E1nvaF8f2XR0jVYglKP9AH0QbiPHaVoWhUkj16xd2 PivuXdqnkxPiPeOqlolB4F50M9QVY/6WQEY9JGyLCHh3gnlXKHM10FjOqUE1d0kUTsnr/f6hKhnDlD fdK385C3OVB04JHNvmJBFJIWvDTojNyZjS4ktFvsxYOeKWz+Gn1biSG/BruGxVewynhyUJCFDEK5jL 3LOnvU/vebtI3BRVty8E8FOA4Z4wc2
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The vector lengths used for SME are controlled through a similar set of
-registers to those for SVE and enumerated using a similar algorithm with
-some slight differences due to the fact that unlike SVE there are no
-restrictions on which combinations of vector lengths can be supported
-nor any mandatory vector lengths which must be implemented.  Add a new
-vector type and implement support for enumerating it.
+Currently we don't have any coverage of the syscall ABI so let's add a very
+dumb test program which sets up register patterns, does a sysscall and then
+checks that the register state after the syscall matches what we expect.
+The program is written in an extremely simplistic fashion with the goal of
+making it easy to verify that it's doing what it thinks it's doing, it is
+not a model of how one should write actual code.
 
-One slightly awkward feature is that we need to read the current vector
-length using the SVE RVDL instruction while in streaming mode.  Rather
-than add an ops structure we add special cases directly in the otherwise
-generic vec_probe_vqs() function, this is a bit inelegant but it's the
-only place where this is an issue.
+Currently we validate the general purpose, FPSIMD and SVE registers. There
+are other thing things that could be covered like FPCR and flags registers,
+these can be covered incrementally - my main focus at the minute is
+covering the ABI for the SVE registers.
+
+The program repeats the tests for all possible SVE vector lengths in case
+some vector length specific optimisation causes issues, as well as testing
+FPSIMD only. It tries two syscalls, getpid() and sched_yield(), in an
+effort to cover both immediate return to userspace and scheduling another
+task though there are no guarantees which cases will be hit.
+
+A new test directory "abi" is added to hold the test, it doesn't seem to
+fit well into any of the existing directories.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/cpu.h        |   3 +
- arch/arm64/include/asm/cpufeature.h |   7 ++
- arch/arm64/include/asm/fpsimd.h     |  44 ++++++++++
- arch/arm64/include/asm/processor.h  |   1 +
- arch/arm64/kernel/cpufeature.c      |  49 +++++++++++
- arch/arm64/kernel/cpuinfo.c         |   4 +
- arch/arm64/kernel/fpsimd.c          | 131 +++++++++++++++++++++++++++-
- 7 files changed, 238 insertions(+), 1 deletion(-)
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ tools/testing/selftests/arm64/abi/.gitignore  |   1 +
+ tools/testing/selftests/arm64/abi/Makefile    |   8 +
+ .../selftests/arm64/abi/syscall-abi-asm.S     | 240 +++++++++++++
+ .../testing/selftests/arm64/abi/syscall-abi.c | 325 ++++++++++++++++++
+ 5 files changed, 575 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/abi/Makefile
+ create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+ create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi.c
 
-diff --git a/arch/arm64/include/asm/cpu.h b/arch/arm64/include/asm/cpu.h
-index 667b66fe1a53..707f30dccbf1 100644
---- a/arch/arm64/include/asm/cpu.h
-+++ b/arch/arm64/include/asm/cpu.h
-@@ -63,6 +63,9 @@ struct cpuinfo_arm64 {
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index ced910fb4019..1e8d9a8f59df 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -4,7 +4,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
  
- 	/* pseudo-ZCR for recording maximum ZCR_EL1 LEN value: */
- 	u64		reg_zcr;
+ ifneq (,$(filter $(ARCH),aarch64 arm64))
+-ARM64_SUBTARGETS ?= tags signal pauth fp mte bti
++ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi
+ else
+ ARM64_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
+new file mode 100644
+index 000000000000..b79cf5814c23
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/.gitignore
+@@ -0,0 +1 @@
++syscall-abi
+diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
+new file mode 100644
+index 000000000000..96eba974ac8d
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2021 ARM Limited
 +
-+	/* pseudo-SMCR for recording maximum ZCR_EL1 LEN value: */
-+	u64		reg_smcr;
- };
- 
- DECLARE_PER_CPU(struct cpuinfo_arm64, cpu_data);
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index 079e9f15c5eb..c5fee98307cb 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -619,6 +619,13 @@ static inline bool id_aa64pfr0_sve(u64 pfr0)
- 	return val > 0;
- }
- 
-+static inline bool id_aa64pfr1_sme(u64 pfr1)
++TEST_GEN_PROGS := syscall-abi
++
++include ../../lib.mk
++
++$(OUTPUT)/syscall-abi: syscall-abi.c syscall-abi-asm.S
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+new file mode 100644
+index 000000000000..983467cfcee0
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+@@ -0,0 +1,240 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021 ARM Limited.
++//
++// Assembly portion of the syscall ABI test
++
++//
++// Load values from memory into registers, invoke a syscall and save the
++// register values back to memory for later checking.  The syscall to be
++// invoked is configured in x8 of the input GPR data.
++//
++// x0:	SVE VL, 0 for FP only
++//
++//	GPRs:	gpr_in, gpr_out
++//	FPRs:	fpr_in, fpr_out
++//	Zn:	z_in, z_out
++//	Pn:	p_in, p_out
++//	FFR:	ffr_in, ffr_out
++
++.arch_extension sve
++
++.globl do_syscall
++do_syscall:
++	// Store callee saved registers x19-x29 (80 bytes) plus x0 and x1
++	stp	x29, x30, [sp, #-112]!
++	mov	x29, sp
++	stp	x0, x1, [sp, #16]
++	stp	x19, x20, [sp, #32]
++	stp	x21, x22, [sp, #48]
++	stp	x23, x24, [sp, #64]
++	stp	x25, x26, [sp, #80]
++	stp	x27, x28, [sp, #96]
++
++	// Load GPRs x8-x28, and save our SP/FP for later comparison
++	ldr	x2, =gpr_in
++	add	x2, x2, #64
++	ldp	x8, x9, [x2], #16
++	ldp	x10, x11, [x2], #16
++	ldp	x12, x13, [x2], #16
++	ldp	x14, x15, [x2], #16
++	ldp	x16, x17, [x2], #16
++	ldp	x18, x19, [x2], #16
++	ldp	x20, x21, [x2], #16
++	ldp	x22, x23, [x2], #16
++	ldp	x24, x25, [x2], #16
++	ldp	x26, x27, [x2], #16
++	ldr	x28, [x2], #8
++	str	x29, [x2], #8		// FP
++	str	x30, [x2], #8		// LR
++
++	// Load FPRs if we're not doing SVE
++	cbnz	x0, 1f
++	ldr	x2, =fpr_in
++	ldp	q0, q1, [x2]
++	ldp	q2, q3, [x2, #16 * 2]
++	ldp	q4, q5, [x2, #16 * 4]
++	ldp	q6, q7, [x2, #16 * 6]
++	ldp	q8, q9, [x2, #16 * 8]
++	ldp	q10, q11, [x2, #16 * 10]
++	ldp	q12, q13, [x2, #16 * 12]
++	ldp	q14, q15, [x2, #16 * 14]
++	ldp	q16, q17, [x2, #16 * 16]
++	ldp	q18, q19, [x2, #16 * 18]
++	ldp	q20, q21, [x2, #16 * 20]
++	ldp	q22, q23, [x2, #16 * 22]
++	ldp	q24, q25, [x2, #16 * 24]
++	ldp	q26, q27, [x2, #16 * 26]
++	ldp	q28, q29, [x2, #16 * 28]
++	ldp	q30, q31, [x2, #16 * 30]
++1:
++
++	// Load the SVE registers if we're doing SVE
++	cbz	x0, 1f
++
++	ldr	x2, =z_in
++	ldr	z0, [x2, #0, MUL VL]
++	ldr	z1, [x2, #1, MUL VL]
++	ldr	z2, [x2, #2, MUL VL]
++	ldr	z3, [x2, #3, MUL VL]
++	ldr	z4, [x2, #4, MUL VL]
++	ldr	z5, [x2, #5, MUL VL]
++	ldr	z6, [x2, #6, MUL VL]
++	ldr	z7, [x2, #7, MUL VL]
++	ldr	z8, [x2, #8, MUL VL]
++	ldr	z9, [x2, #9, MUL VL]
++	ldr	z10, [x2, #10, MUL VL]
++	ldr	z11, [x2, #11, MUL VL]
++	ldr	z12, [x2, #12, MUL VL]
++	ldr	z13, [x2, #13, MUL VL]
++	ldr	z14, [x2, #14, MUL VL]
++	ldr	z15, [x2, #15, MUL VL]
++	ldr	z16, [x2, #16, MUL VL]
++	ldr	z17, [x2, #17, MUL VL]
++	ldr	z18, [x2, #18, MUL VL]
++	ldr	z19, [x2, #19, MUL VL]
++	ldr	z20, [x2, #20, MUL VL]
++	ldr	z21, [x2, #21, MUL VL]
++	ldr	z22, [x2, #22, MUL VL]
++	ldr	z23, [x2, #23, MUL VL]
++	ldr	z24, [x2, #24, MUL VL]
++	ldr	z25, [x2, #25, MUL VL]
++	ldr	z26, [x2, #26, MUL VL]
++	ldr	z27, [x2, #27, MUL VL]
++	ldr	z28, [x2, #28, MUL VL]
++	ldr	z29, [x2, #29, MUL VL]
++	ldr	z30, [x2, #30, MUL VL]
++	ldr	z31, [x2, #31, MUL VL]
++
++	ldr	x2, =ffr_in
++	ldr	p0, [x2, #0]
++	wrffr	p0.b
++
++	ldr	x2, =p_in
++	ldr	p0, [x2, #0, MUL VL]
++	ldr	p1, [x2, #1, MUL VL]
++	ldr	p2, [x2, #2, MUL VL]
++	ldr	p3, [x2, #3, MUL VL]
++	ldr	p4, [x2, #4, MUL VL]
++	ldr	p5, [x2, #5, MUL VL]
++	ldr	p6, [x2, #6, MUL VL]
++	ldr	p7, [x2, #7, MUL VL]
++	ldr	p8, [x2, #8, MUL VL]
++	ldr	p9, [x2, #9, MUL VL]
++	ldr	p10, [x2, #10, MUL VL]
++	ldr	p11, [x2, #11, MUL VL]
++	ldr	p12, [x2, #12, MUL VL]
++	ldr	p13, [x2, #13, MUL VL]
++	ldr	p14, [x2, #14, MUL VL]
++	ldr	p15, [x2, #15, MUL VL]
++1:
++
++	// Do the syscall
++	svc	#0
++
++	// Save GPRs x8-x30
++	ldr	x2, =gpr_out
++	add	x2, x2, #64
++	stp	x8, x9, [x2], #16
++	stp	x10, x11, [x2], #16
++	stp	x12, x13, [x2], #16
++	stp	x14, x15, [x2], #16
++	stp	x16, x17, [x2], #16
++	stp	x18, x19, [x2], #16
++	stp	x20, x21, [x2], #16
++	stp	x22, x23, [x2], #16
++	stp	x24, x25, [x2], #16
++	stp	x26, x27, [x2], #16
++	stp	x28, x29, [x2], #16
++	str	x30, [x2]
++
++	// Restore x0 and x1 for feature checks
++	ldp	x0, x1, [sp, #16]
++
++	// Save FPSIMD state
++	ldr	x2, =fpr_out
++	stp	q0, q1, [x2]
++	stp	q2, q3, [x2, #16 * 2]
++	stp	q4, q5, [x2, #16 * 4]
++	stp	q6, q7, [x2, #16 * 6]
++	stp	q8, q9, [x2, #16 * 8]
++	stp	q10, q11, [x2, #16 * 10]
++	stp	q12, q13, [x2, #16 * 12]
++	stp	q14, q15, [x2, #16 * 14]
++	stp	q16, q17, [x2, #16 * 16]
++	stp	q18, q19, [x2, #16 * 18]
++	stp	q20, q21, [x2, #16 * 20]
++	stp	q22, q23, [x2, #16 * 22]
++	stp	q24, q25, [x2, #16 * 24]
++	stp	q26, q27, [x2, #16 * 26]
++	stp	q28, q29, [x2, #16 * 28]
++	stp	q30, q31, [x2, #16 * 30]
++
++	// Save the SVE state if we have some
++	cbz	x0, 1f
++
++	ldr	x2, =z_out
++	str	z0, [x2, #0, MUL VL]
++	str	z1, [x2, #1, MUL VL]
++	str	z2, [x2, #2, MUL VL]
++	str	z3, [x2, #3, MUL VL]
++	str	z4, [x2, #4, MUL VL]
++	str	z5, [x2, #5, MUL VL]
++	str	z6, [x2, #6, MUL VL]
++	str	z7, [x2, #7, MUL VL]
++	str	z8, [x2, #8, MUL VL]
++	str	z9, [x2, #9, MUL VL]
++	str	z10, [x2, #10, MUL VL]
++	str	z11, [x2, #11, MUL VL]
++	str	z12, [x2, #12, MUL VL]
++	str	z13, [x2, #13, MUL VL]
++	str	z14, [x2, #14, MUL VL]
++	str	z15, [x2, #15, MUL VL]
++	str	z16, [x2, #16, MUL VL]
++	str	z17, [x2, #17, MUL VL]
++	str	z18, [x2, #18, MUL VL]
++	str	z19, [x2, #19, MUL VL]
++	str	z20, [x2, #20, MUL VL]
++	str	z21, [x2, #21, MUL VL]
++	str	z22, [x2, #22, MUL VL]
++	str	z23, [x2, #23, MUL VL]
++	str	z24, [x2, #24, MUL VL]
++	str	z25, [x2, #25, MUL VL]
++	str	z26, [x2, #26, MUL VL]
++	str	z27, [x2, #27, MUL VL]
++	str	z28, [x2, #28, MUL VL]
++	str	z29, [x2, #29, MUL VL]
++	str	z30, [x2, #30, MUL VL]
++	str	z31, [x2, #31, MUL VL]
++
++	ldr	x2, =p_out
++	str	p0, [x2, #0, MUL VL]
++	str	p1, [x2, #1, MUL VL]
++	str	p2, [x2, #2, MUL VL]
++	str	p3, [x2, #3, MUL VL]
++	str	p4, [x2, #4, MUL VL]
++	str	p5, [x2, #5, MUL VL]
++	str	p6, [x2, #6, MUL VL]
++	str	p7, [x2, #7, MUL VL]
++	str	p8, [x2, #8, MUL VL]
++	str	p9, [x2, #9, MUL VL]
++	str	p10, [x2, #10, MUL VL]
++	str	p11, [x2, #11, MUL VL]
++	str	p12, [x2, #12, MUL VL]
++	str	p13, [x2, #13, MUL VL]
++	str	p14, [x2, #14, MUL VL]
++	str	p15, [x2, #15, MUL VL]
++
++	ldr	x2, =ffr_out
++	rdffr	p0.b
++	str	p0, [x2, #0]
++1:
++
++	// Restore callee saved registers x19-x30
++	ldp	x19, x20, [sp, #32]
++	ldp	x21, x22, [sp, #48]
++	ldp	x23, x24, [sp, #64]
++	ldp	x25, x26, [sp, #80]
++	ldp	x27, x28, [sp, #96]
++	ldp	x29, x30, [sp], #112
++
++	ret
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+new file mode 100644
+index 000000000000..d103acf1ab79
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -0,0 +1,325 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021 ARM Limited.
++ */
++
++#include <errno.h>
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <asm/hwcap.h>
++#include <asm/sigcontext.h>
++#include <asm/unistd.h>
++
++#include "../../kselftest.h"
++
++#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
++#define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
++
++extern void do_syscall(int sve_vl);
++
++static void fill_random(void *buf, size_t size)
 +{
-+	u32 val = cpuid_feature_extract_unsigned_field(pfr1, ID_AA64PFR1_SME_SHIFT);
++	int i;
++	uint32_t *lbuf = buf;
 +
-+	return val > 0;
++	/* random() returns a 32 bit number regardless of the size of long */
++	for (i = 0; i < size / sizeof(uint32_t); i++)
++		lbuf[i] = random();
 +}
 +
- static inline bool id_aa64pfr1_mte(u64 pfr1)
- {
- 	u32 val = cpuid_feature_extract_unsigned_field(pfr1, ID_AA64PFR1_MTE_SHIFT);
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index d5f2825a2412..a4c0a5b15e8f 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -78,6 +78,7 @@ extern void sme_kernel_enable(const struct arm64_cpu_capabilities *__unused);
- extern void fa64_kernel_enable(const struct arm64_cpu_capabilities *__unused);
- 
- extern u64 read_zcr_features(void);
-+extern u64 read_smcr_features(void);
- 
- /*
-  * Helpers to translate bit indices in sve_vq_map to VQ values (and
-@@ -172,6 +173,12 @@ static inline void write_vl(enum vec_type type, u64 val)
- 		tmp = read_sysreg_s(SYS_ZCR_EL1) & ~ZCR_ELx_LEN_MASK;
- 		write_sysreg_s(tmp | val, SYS_ZCR_EL1);
- 		break;
-+#endif
-+#ifdef CONFIG_ARM64_SME
-+	case ARM64_VEC_SME:
-+		tmp = read_sysreg_s(SYS_SMCR_EL1) & ~SMCR_ELx_LEN_MASK;
-+		write_sysreg_s(tmp | val, SYS_SMCR_EL1);
-+		break;
- #endif
- 	default:
- 		WARN_ON_ONCE(1);
-@@ -251,6 +258,43 @@ static inline void sve_setup(void) { }
- 
- #endif /* ! CONFIG_ARM64_SVE */
- 
-+#ifdef CONFIG_ARM64_SME
-+
-+extern void __init sme_setup(void);
-+
-+static inline void sme_smstart_sm(void)
-+{
-+	/* SMSTART SM is an alias for MSR SVCRSM, #1 */
-+	asm volatile(".inst 0xd503437f");
-+}
-+
-+static inline void sme_smstop_sm(void)
-+{
-+	/* SMSTOP SM is an alias for MSR SVCRSM, #0 */
-+	asm volatile(".inst 0xd503427f");
-+}
-+
-+static inline int sme_max_vl(void)
-+{
-+	return vec_max_vl(ARM64_VEC_SME);
-+}
-+
-+static inline int sme_max_virtualisable_vl(void)
-+{
-+	return vec_max_virtualisable_vl(ARM64_VEC_SME);
-+}
-+
-+#else
-+
-+static inline void sme_setup(void) { }
-+static inline int sme_max_vl(void) { return 0; }
-+static inline int sme_max_virtualisable_vl(void) { return 0; }
-+
-+static inline void sme_smstart_sm(void) { }
-+static inline void sme_smstop_sm(void) { }
-+
-+#endif /* ! CONFIG_ARM64_SME */
-+
- /* For use by EFI runtime services calls only */
- extern void __efi_fpsimd_begin(void);
- extern void __efi_fpsimd_end(void);
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 6f41b65f9962..df68f0fb0ded 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -117,6 +117,7 @@ struct debug_info {
- 
- enum vec_type {
- 	ARM64_VEC_SVE = 0,
-+	ARM64_VEC_SME,
- 	ARM64_VEC_MAX,
- };
- 
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 3cf60819c354..9d5ce1925dd5 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -564,6 +564,12 @@ static const struct arm64_ftr_bits ftr_zcr[] = {
- 	ARM64_FTR_END,
- };
- 
-+static const struct arm64_ftr_bits ftr_smcr[] = {
-+	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE,
-+		SMCR_ELx_LEN_SHIFT, SMCR_ELx_LEN_SIZE, 0),	/* LEN */
-+	ARM64_FTR_END,
++/*
++ * We also repeat the test for several syscalls to try to expose different
++ * behaviour.
++ */
++static struct syscall_cfg {
++	int syscall_nr;
++	const char *name;
++} syscalls[] = {
++	{ __NR_getpid,		"getpid()" },
++	{ __NR_sched_yield,	"sched_yield()" },
 +};
 +
- /*
-  * Common ftr bits for a 32bit register with all hidden, strict
-  * attributes, with 4bit feature fields and a default safe value of
-@@ -666,6 +672,7 @@ static const struct __ftr_reg_entry {
- 
- 	/* Op1 = 0, CRn = 1, CRm = 2 */
- 	ARM64_FTR_REG(SYS_ZCR_EL1, ftr_zcr),
-+	ARM64_FTR_REG(SYS_SMCR_EL1, ftr_smcr),
- 
- 	/* Op1 = 1, CRn = 0, CRm = 0 */
- 	ARM64_FTR_REG(SYS_GMID_EL1, ftr_gmid),
-@@ -969,6 +976,14 @@ void __init init_cpu_features(struct cpuinfo_arm64 *info)
- 		vec_init_vq_map(ARM64_VEC_SVE);
- 	}
- 
-+	if (id_aa64pfr1_sme(info->reg_id_aa64pfr1)) {
-+		init_cpu_ftr_reg(SYS_SMCR_EL1, info->reg_smcr);
-+		if (IS_ENABLED(CONFIG_ARM64_SME)) {
-+			sme_kernel_enable(NULL);
-+			vec_init_vq_map(ARM64_VEC_SME);
++#define NUM_GPR 31
++uint64_t gpr_in[NUM_GPR];
++uint64_t gpr_out[NUM_GPR];
++
++static void setup_gpr(struct syscall_cfg *cfg, int sve_vl)
++{
++	fill_random(gpr_in, sizeof(gpr_in));
++	gpr_in[8] = cfg->syscall_nr;
++	memset(gpr_out, 0, sizeof(gpr_out));
++}
++
++static int check_gpr(struct syscall_cfg *cfg, int sve_vl)
++{
++	int errors = 0;
++	int i;
++
++	/*
++	 * GPR x0-x7 may be clobbered, and all others should be preserved.
++	 */
++	for (i = 9; i < ARRAY_SIZE(gpr_in); i++) {
++		if (gpr_in[i] != gpr_out[i]) {
++			ksft_print_msg("%s SVE VL %d mismatch in GPR %d: %llx != %llx\n",
++				       cfg->name, sve_vl, i,
++				       gpr_in[i], gpr_out[i]);
++			errors++;
 +		}
 +	}
 +
- 	if (id_aa64pfr1_mte(info->reg_id_aa64pfr1))
- 		init_cpu_ftr_reg(SYS_GMID_EL1, info->reg_gmid);
- 
-@@ -1193,6 +1208,9 @@ void update_cpu_features(int cpu,
- 	taint |= check_update_ftr_reg(SYS_ID_AA64ZFR0_EL1, cpu,
- 				      info->reg_id_aa64zfr0, boot->reg_id_aa64zfr0);
- 
-+	taint |= check_update_ftr_reg(SYS_ID_AA64SMFR0_EL1, cpu,
-+				      info->reg_id_aa64smfr0, boot->reg_id_aa64smfr0);
++	return errors;
++}
 +
- 	if (id_aa64pfr0_sve(info->reg_id_aa64pfr0)) {
- 		taint |= check_update_ftr_reg(SYS_ZCR_EL1, cpu,
- 					info->reg_zcr, boot->reg_zcr);
-@@ -1203,6 +1221,16 @@ void update_cpu_features(int cpu,
- 			vec_update_vq_map(ARM64_VEC_SVE);
- 	}
- 
-+	if (id_aa64pfr1_sme(info->reg_id_aa64pfr1)) {
-+		taint |= check_update_ftr_reg(SYS_SMCR_EL1, cpu,
-+					info->reg_smcr, boot->reg_smcr);
++#define NUM_FPR 32
++uint64_t fpr_in[NUM_FPR * 2];
++uint64_t fpr_out[NUM_FPR * 2];
 +
-+		/* Probe vector lengths, unless we already gave up on SME */
-+		if (id_aa64pfr1_sme(read_sanitised_ftr_reg(SYS_ID_AA64PFR1_EL1)) &&
-+		    !system_capabilities_finalized())
-+			vec_update_vq_map(ARM64_VEC_SME);
++static void setup_fpr(struct syscall_cfg *cfg, int sve_vl)
++{
++	fill_random(fpr_in, sizeof(fpr_in));
++	memset(fpr_out, 0, sizeof(fpr_out));
++}
++
++static int check_fpr(struct syscall_cfg *cfg, int sve_vl)
++{
++	int errors = 0;
++	int i;
++
++	if (!sve_vl) {
++		for (i = 0; i < ARRAY_SIZE(fpr_in); i++) {
++			if (fpr_in[i] != fpr_out[i]) {
++				ksft_print_msg("%s Q%d/%d mismatch %llx != %llx\n",
++					       cfg->name,
++					       i / 2, i % 2,
++					       fpr_in[i], fpr_out[i]);
++				errors++;
++			}
++		}
 +	}
 +
- 	/*
- 	 * The kernel uses the LDGM/STGM instructions and the number of tags
- 	 * they read/write depends on the GMID_EL1.BS field. Check that the
-@@ -2854,6 +2882,23 @@ static void verify_sve_features(void)
- 	/* Add checks on other ZCR bits here if necessary */
- }
- 
-+static void verify_sme_features(void)
-+{
-+	u64 safe_smcr = read_sanitised_ftr_reg(SYS_SMCR_EL1);
-+	u64 smcr = read_smcr_features();
-+
-+	unsigned int safe_len = safe_smcr & SMCR_ELx_LEN_MASK;
-+	unsigned int len = smcr & SMCR_ELx_LEN_MASK;
-+
-+	if (len < safe_len || vec_verify_vq_map(ARM64_VEC_SME)) {
-+		pr_crit("CPU%d: SME: vector length support mismatch\n",
-+			smp_processor_id());
-+		cpu_die_early();
-+	}
-+
-+	/* Add checks on other SMCR bits here if necessary */
++	return errors;
 +}
 +
- static void verify_hyp_capabilities(void)
- {
- 	u64 safe_mmfr1, mmfr0, mmfr1;
-@@ -2906,6 +2951,9 @@ static void verify_local_cpu_capabilities(void)
- 	if (system_supports_sve())
- 		verify_sve_features();
- 
-+	if (system_supports_sme())
-+		verify_sme_features();
++static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
++uint8_t z_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
++uint8_t z_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
 +
- 	if (is_hyp_mode_available())
- 		verify_hyp_capabilities();
- }
-@@ -3023,6 +3071,7 @@ void __init setup_cpu_features(void)
- 		pr_info("emulated: Privileged Access Never (PAN) using TTBR0_EL1 switching\n");
- 
- 	sve_setup();
-+	sme_setup();
- 	minsigstksz_setup();
- 
- 	/* Advertise that we have computed the system capabilities */
-diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index 5b0e9d2643a8..c3c51050b6e7 100644
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -417,6 +417,10 @@ static void __cpuinfo_store_cpu(struct cpuinfo_arm64 *info)
- 	    id_aa64pfr0_sve(info->reg_id_aa64pfr0))
- 		info->reg_zcr = read_zcr_features();
- 
-+	if (IS_ENABLED(CONFIG_ARM64_SME) &&
-+	    id_aa64pfr1_sme(info->reg_id_aa64pfr1))
-+		info->reg_smcr = read_smcr_features();
-+
- 	cpuinfo_detect_icache_policy(info);
- }
- 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 8dde4593ca73..f9b77d0b8e40 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -132,6 +132,12 @@ __ro_after_init struct vl_info vl_info[ARM64_VEC_MAX] = {
- 		.max_virtualisable_vl	= SVE_VL_MIN,
- 	},
- #endif
-+#ifdef CONFIG_ARM64_SME
-+	[ARM64_VEC_SME] = {
-+		.type			= ARM64_VEC_SME,
-+		.name			= "SME",
-+	},
-+#endif
- };
- 
- static unsigned int vec_vl_inherit_flag(enum vec_type type)
-@@ -182,6 +188,20 @@ extern void __percpu *efi_sve_state;
- 
- #endif /* ! CONFIG_ARM64_SVE */
- 
-+#ifdef CONFIG_ARM64_SME
-+
-+static int get_sme_default_vl(void)
++static void setup_z(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	return get_default_vl(ARM64_VEC_SME);
++	fill_random(z_in, sizeof(z_in));
++	fill_random(z_out, sizeof(z_out));
 +}
 +
-+static void set_sme_default_vl(int val)
++static int check_z(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	set_default_vl(ARM64_VEC_SME, val);
-+}
++	size_t reg_size = sve_vl;
++	int errors = 0;
++	int i;
 +
-+#endif
++	if (!sve_vl)
++		return 0;
 +
- DEFINE_PER_CPU(bool, fpsimd_context_busy);
- EXPORT_PER_CPU_SYMBOL(fpsimd_context_busy);
- 
-@@ -399,6 +419,8 @@ static unsigned int find_supported_vector_length(enum vec_type type,
- 
- 	if (vl > max_vl)
- 		vl = max_vl;
-+	if (vl < info->min_vl)
-+		vl = info->min_vl;
- 
- 	bit = find_next_bit(info->vq_map, SVE_VQ_MAX,
- 			    __vq_to_bit(sve_vq_from_vl(vl)));
-@@ -758,12 +780,38 @@ static void vec_probe_vqs(struct vl_info *info,
- 
- 	bitmap_zero(map, SVE_VQ_MAX);
- 
 +	/*
-+	 * Enter streaming mode for SME; we don't use an op as the
-+	 * vector length info is used from KVM.
++	 * After a syscall the low 128 bits of the Z registers should
++	 * be preserved and the rest be zeroed.
 +	 */
-+	switch (info->type) {
-+	case ARM64_VEC_SME:
-+		sme_smstart_sm();
-+		break;
-+	default:
-+		break;
++	for (i = 0; i < SVE_NUM_ZREGS; i++) {
++		void *in = &z_in[reg_size * i];
++		void *out = &z_out[reg_size * i];
++
++		if (memcmp(in, out, SVE_VQ_BYTES) != 0) {
++			ksft_print_msg("%s SVE VL %d Z%d low 128 bits changed\n",
++				       cfg->name, sve_vl, i);
++			errors++;
++		}
++
++		memset(out, 0, SVE_VQ_BYTES);
++		if (memcmp(out, z_zero, reg_size) != 0) {
++			ksft_print_msg("%s SVE VL %d Z%d high bits set\n",
++				       cfg->name, sve_vl, i);
++			errors++;
++		}
 +	}
 +
- 	for (vq = SVE_VQ_MAX; vq >= SVE_VQ_MIN; --vq) {
- 		write_vl(info->type, vq - 1); /* self-syncing */
++	return errors;
++}
 +
- 		vl = sve_get_vl();
++uint8_t p_in[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
++uint8_t p_out[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
 +
-+		/* Minimum VL identified? */
-+		if (sve_vq_from_vl(vl) > vq)
-+			break;
++static void setup_p(struct syscall_cfg *cfg, int sve_vl)
++{
++	fill_random(p_in, sizeof(p_in));
++	fill_random(p_out, sizeof(p_out));
++}
 +
- 		vq = sve_vq_from_vl(vl); /* skip intervening lengths */
- 		set_bit(__vq_to_bit(vq), map);
- 	}
++static int check_p(struct syscall_cfg *cfg, int sve_vl)
++{
++	size_t reg_size = sve_vq_from_vl(sve_vl) * 2; /* 1 bit per VL byte */
 +
-+	switch (info->type) {
-+	case ARM64_VEC_SME:
-+		sme_smstop_sm();
-+		break;
-+	default:
-+		break;
-+	}
- }
- 
- /*
-@@ -1007,7 +1055,88 @@ void fa64_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
- 		       SYS_SMCR_EL1);
- }
- 
--#endif /* CONFIG_ARM64_SVE */
++	int errors = 0;
++	int i;
++
++	if (!sve_vl)
++		return 0;
++
++	/* After a syscall the P registers should be zeroed */
++	for (i = 0; i < SVE_NUM_PREGS * reg_size; i++)
++		if (p_out[i])
++			errors++;
++	if (errors)
++		ksft_print_msg("%s SVE VL %d predicate registers non-zero\n",
++			       cfg->name, sve_vl);
++
++	return errors;
++}
++
++uint8_t ffr_in[__SVE_PREG_SIZE(SVE_VQ_MAX)];
++uint8_t ffr_out[__SVE_PREG_SIZE(SVE_VQ_MAX)];
++
++static void setup_ffr(struct syscall_cfg *cfg, int sve_vl)
++{
++	/*
++	 * It is only valid to set a contiguous set of bits starting
++	 * at 0.  For now since we're expecting this to be cleared by
++	 * a syscall just set all bits.
++	 */
++	memset(ffr_in, 0xff, sizeof(ffr_in));
++	fill_random(ffr_out, sizeof(ffr_out));
++}
++
++static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
++{
++	size_t reg_size = sve_vq_from_vl(sve_vl) * 2;  /* 1 bit per VL byte */
++	int errors = 0;
++	int i;
++
++	if (!sve_vl)
++		return 0;
++
++	/* After a syscall the P registers should be zeroed */
++	for (i = 0; i < reg_size; i++)
++		if (ffr_out[i])
++			errors++;
++	if (errors)
++		ksft_print_msg("%s SVE VL %d FFR non-zero\n",
++			       cfg->name, sve_vl);
++
++	return errors;
++}
++
++typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl);
++typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl);
++
 +/*
-+ * Read the pseudo-SMCR used by cpufeatures to identify the supported
-+ * vector length.
-+ *
-+ * Use only if SME is present.
-+ * This function clobbers the SME vector length.
++ * Each set of registers has a setup function which is called before
++ * the syscall to fill values in a global variable for loading by the
++ * test code and a check function which validates that the results are
++ * as expected.  Vector lengths are passed everywhere, a vector length
++ * of 0 should be treated as do not test.
 + */
-+u64 read_smcr_features(void)
++static struct {
++	setup_fn setup;
++	check_fn check;
++} regset[] = {
++	{ setup_gpr, check_gpr },
++	{ setup_fpr, check_fpr },
++	{ setup_z, check_z },
++	{ setup_p, check_p },
++	{ setup_ffr, check_ffr },
++};
++
++static bool do_test(struct syscall_cfg *cfg, int sve_vl)
 +{
-+	u64 smcr;
-+	unsigned int vq_max;
++	int errors = 0;
++	int i;
 +
-+	sme_kernel_enable(NULL);
-+	sme_smstart_sm();
++	for (i = 0; i < ARRAY_SIZE(regset); i++)
++		regset[i].setup(cfg, sve_vl);
 +
-+	/*
-+	 * Set the maximum possible VL.
-+	 */
-+	write_sysreg_s(read_sysreg_s(SYS_SMCR_EL1) | SMCR_ELx_LEN_MASK,
-+		       SYS_SMCR_EL1);
++	do_syscall(sve_vl);
 +
-+	smcr = read_sysreg_s(SYS_SMCR_EL1);
-+	smcr &= ~(u64)SMCR_ELx_LEN_MASK; /* Only the LEN field */
-+	vq_max = sve_vq_from_vl(sve_get_vl());
-+	smcr |= vq_max - 1; /* set LEN field to maximum effective value */
++	for (i = 0; i < ARRAY_SIZE(regset); i++)
++		errors += regset[i].check(cfg, sve_vl);
 +
-+	sme_smstop_sm();
-+
-+	return smcr;
++	return errors == 0;
 +}
 +
-+void __init sme_setup(void)
++static void test_one_syscall(struct syscall_cfg *cfg)
 +{
-+	struct vl_info *info = &vl_info[ARM64_VEC_SME];
-+	u64 smcr;
-+	int min_bit;
++	int sve_vq, sve_vl;
 +
-+	if (!system_supports_sme())
++	/* FPSIMD only case */
++	ksft_test_result(do_test(cfg, 0),
++			 "%s FPSIMD\n", cfg->name);
++
++	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
 +		return;
 +
-+	/*
-+	 * SME doesn't require any particular vector length be
-+	 * supported but it does require at least one.  We should have
-+	 * disabled the feature entirely while bringing up CPUs but
-+	 * let's double check here.
-+	 */
-+	WARN_ON(bitmap_empty(info->vq_map, SVE_VQ_MAX));
++	for (sve_vq = SVE_VQ_MAX; sve_vq > 0; --sve_vq) {
++		sve_vl = prctl(PR_SVE_SET_VL, sve_vq * 16);
++		if (sve_vl == -1)
++			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
++					   strerror(errno), errno);
 +
-+	min_bit = find_last_bit(info->vq_map, SVE_VQ_MAX);
-+	info->min_vl = sve_vl_from_vq(__bit_to_vq(min_bit));
++		sve_vl &= PR_SVE_VL_LEN_MASK;
 +
-+	smcr = read_sanitised_ftr_reg(SYS_SMCR_EL1);
-+	info->max_vl = sve_vl_from_vq((smcr & SMCR_ELx_LEN_MASK) + 1);
++		if (sve_vq != sve_vq_from_vl(sve_vl))
++			sve_vq = sve_vq_from_vl(sve_vl);
 +
-+	/*
-+	 * Sanity-check that the max VL we determined through CPU features
-+	 * corresponds properly to sme_vq_map.  If not, do our best:
-+	 */
-+	if (WARN_ON(info->max_vl != find_supported_vector_length(ARM64_VEC_SME,
-+								 info->max_vl)))
-+		info->max_vl = find_supported_vector_length(ARM64_VEC_SME,
-+							    info->max_vl);
-+
-+	WARN_ON(info->min_vl > info->max_vl);
-+
-+	/*
-+	 * For the default VL, pick the maximum supported value <= 32
-+	 * (256 bits) if there is one since this is guaranteed not to
-+	 * grow the signal frame when in streaming mode, otherwise the
-+	 * minimum available VL will be used.
-+	 */
-+	set_sme_default_vl(find_supported_vector_length(ARM64_VEC_SME, 32));
-+
-+	pr_info("SME: minimum available vector length %u bytes per vector\n",
-+		info->min_vl);
-+	pr_info("SME: maximum available vector length %u bytes per vector\n",
-+		info->max_vl);
-+	pr_info("SME: default vector length %u bytes per vector\n",
-+		get_sme_default_vl());
++		ksft_test_result(do_test(cfg, sve_vl),
++				 "%s SVE VL %d\n", cfg->name, sve_vl);
++	}
 +}
 +
-+#endif /* CONFIG_ARM64_SME */
- 
- /*
-  * Trapped SVE access
++int sve_count_vls(void)
++{
++	unsigned int vq;
++	int vl_count = 0;
++	int vl;
++
++	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
++		return 0;
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
++					   strerror(errno), errno);
++
++		vl &= PR_SVE_VL_LEN_MASK;
++
++		if (vq != sve_vq_from_vl(vl))
++			vq = sve_vq_from_vl(vl);
++
++		vl_count++;
++	}
++
++	return vl_count;
++}
++
++int main(void)
++{
++	int i;
++
++	srandom(getpid());
++
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(syscalls) * (sve_count_vls() + 1));
++
++	for (i = 0; i < ARRAY_SIZE(syscalls); i++)
++		test_one_syscall(&syscalls[i]);
++
++	ksft_print_cnts();
++
++	return 0;
++}
 -- 
 2.30.2
 
