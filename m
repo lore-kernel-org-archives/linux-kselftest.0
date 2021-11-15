@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C96C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04345C433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:29:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C314B6322A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:29:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9E9161B4C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:29:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbhKOPc1 (ORCPT
+        id S236614AbhKOPcb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Nov 2021 10:32:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52166 "EHLO mail.kernel.org"
+        Mon, 15 Nov 2021 10:32:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52278 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236264AbhKOPcB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 10:32:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 58A7E61B50;
-        Mon, 15 Nov 2021 15:29:03 +0000 (UTC)
+        id S236500AbhKOPcT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:32:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 958186322D;
+        Mon, 15 Nov 2021 15:29:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990145;
-        bh=ci6/NBWhuJhkUbJiH/ilo5xeFYHP10Jd/hZMcWcV25I=;
+        s=k20201202; t=1636990162;
+        bh=f5n1TsPixB4+4OIX1WMAI5WWPXhWMkcXz0KmtgFs79o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L95hx0QplpiMMpg3uR19dreRWmxxHMqNB3RI/yXR8YGDYvlss02zkoMVWcrBJNqil
-         sR+5aIoW/ChXXzZ0aUnqOOflxUAatt1vmTM1BTzjoVkQcq6f2p8dv0LHpOZQ5HFjh9
-         l2gbYrSpVbFpUI3FkZws4gT5jUSyHcj4sBjvteRDwCwVBHb9HLI9hy6RbhcGj2ctqv
-         +i0gfKVc2qDBkZGufKj+BHRXkaQtcRxM18iuTm4ZM8gvGcAhczL+ub3LoMhgrHV0Js
-         i+OrJTOuaf5Vbw91XKymk6DoofQMHORwvU41F6V5Ae0JJnhkPG1z+6mFLQNIhJkvSv
-         vR5DF0igJwYSA==
+        b=VXLyLPSo/8OMSga+KqWoSoyguZfhmz1CS4xTZ89j/f8FWIhynWcNhxvO6soQv1Xg0
+         yX8GsV+Jyzxzg9maqidTDSdLrz9fvM/vL6v95b8YwGfqHRoHE4YiOJlQNAUpfktcKA
+         WdRX1BoKHJgMrBzx2MmOonyIB2mfHioTsD9GGWSCMaOa9rjWfo0PW9Xy8Li0TnO8Mu
+         1jS0asY6yR6EEbBSWSBKh+TcZd+8E+2mwsZ/FCDscLlhj3WaS9kC+UUxMaXmLsggSZ
+         qpG4hZkQQoYFNpebLTDhqA0z7VsTh5+yFkgQuseq9DpFnNzDt6SSG0/Gtle5GRo/qk
+         QyxEjcHQXq1Hg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,490 +39,259 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 04/37] kselftest/arm64: Parameterise ptrace vector length information
-Date:   Mon, 15 Nov 2021 15:28:02 +0000
-Message-Id: <20211115152835.3212149-5-broonie@kernel.org>
+Subject: [PATCH v6 10/37] arm64/sme: System register and exception syndrome definitions
+Date:   Mon, 15 Nov 2021 15:28:08 +0000
+Message-Id: <20211115152835.3212149-11-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16333; h=from:subject; bh=ci6/NBWhuJhkUbJiH/ilo5xeFYHP10Jd/hZMcWcV25I=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyIN1kX0zV2AD0W02uhzR9AenC3rQMow1+Lf+xC 45I3qgGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8iAAKCRAk1otyXVSH0BMlB/ 9Fra3on0MluCZ20GQTz3XVaVAU2yg68I84S355j9KrdTX39uhQ2E+zZ4ZZF0QOgLHVHm5rw1aXBCbV KtF4b1lvSiHeiXzFviKR2eK+zsk9+zh/FFrjkCiRL2yO3gBEcVcmyUT26hajlD4eTSvRAlYtQWbpgs lLZRuGF2H9qRVCfr1TsVo2GqgvDxs3dAK1YlONpHIHmUeWlciFM2p/h7OtvX/k2laUnccAQKInWKl5 /3PGBD+JG+P44Kfwo5AMabz5T1SNkINYelvYOwb1pmZFjgNElG4DkgfkL5Fki9tSqVffAuCemQTt+R bsMJj/+E8buo+UrcdTtlL1xWBLmwtg
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8581; h=from:subject; bh=f5n1TsPixB4+4OIX1WMAI5WWPXhWMkcXz0KmtgFs79o=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyMYqyhS5SKz/NIFMqYu15LDoCG3cASMS4MjDhA O8JIZUuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8jAAKCRAk1otyXVSH0HERB/ wI6vfBJwYOlNflqmsN8mOU4ZsFHrGy9NdgTOsxGIDPAsYoXPqG3HmozuWCkbTFLdhY6jvRI1hlI1LY uSTEWtEA46fGmo/JyX93o5lRo4c+lOYh4Q4/mr4nJiu0IpodljY9sit1AZJL0rCj4z75mlOpRpbatm KYUd8bfEgZMMb+VJPqbX+cXDWB633ghDOqc9yF891cO/MSZGRjRqd495goA3BibL/+ItnbN1fMj5Bq YuCVefBw3AA88O5tb9oyAQcAzQDQ/1oUuEskpmbeQsdhDnYjxwglIqeqTbnbgKQDdFBetcHXLyEwca KVxJ12gwYstnHn//lP+zuDzuA7lhsR
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SME introduces a new mode called streaming mode in which the SVE registers
-have a different vector length. Since the ptrace interface for this is
-based on the existing SVE interface prepare for supporting this by moving
-the regset specific configuration into  struct and passing that around,
-allowing these tests to be reused for streaming mode. As we will also have
-to verify the interoperation of the SVE and streaming SVE regsets don't
-just iterate over an array.
+The arm64 Scalable Matrix Extension (SME) adds some new system registers,
+fields in existing system registers and exception syndromes. This patch
+adds definitions for these for use in future patches implementing support
+for this extension.
+
+Since SME will be the first user of FEAT_HCX in the kernel also include
+the definitions for enumerating it and the HCRX system register it adds.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/sve-ptrace.c | 219 ++++++++++++------
- 1 file changed, 142 insertions(+), 77 deletions(-)
+ arch/arm64/include/asm/esr.h     | 12 ++++++-
+ arch/arm64/include/asm/kvm_arm.h |  1 +
+ arch/arm64/include/asm/sysreg.h  | 58 ++++++++++++++++++++++++++++++++
+ arch/arm64/kernel/traps.c        |  1 +
+ 4 files changed, 71 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index c4417bc48d4f..af798b9d232c 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -21,16 +21,37 @@
+diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+index d52a0b269ee8..43872e0cfd1e 100644
+--- a/arch/arm64/include/asm/esr.h
++++ b/arch/arm64/include/asm/esr.h
+@@ -37,7 +37,8 @@
+ #define ESR_ELx_EC_ERET		(0x1a)	/* EL2 only */
+ /* Unallocated EC: 0x1B */
+ #define ESR_ELx_EC_FPAC		(0x1C)	/* EL1 and above */
+-/* Unallocated EC: 0x1D - 0x1E */
++#define ESR_ELx_EC_SME		(0x1D)
++/* Unallocated EC: 0x1E */
+ #define ESR_ELx_EC_IMP_DEF	(0x1f)	/* EL3 only */
+ #define ESR_ELx_EC_IABT_LOW	(0x20)
+ #define ESR_ELx_EC_IABT_CUR	(0x21)
+@@ -327,6 +328,15 @@
+ #define ESR_ELx_CP15_32_ISS_SYS_CNTFRQ	(ESR_ELx_CP15_32_ISS_SYS_VAL(0, 0, 14, 0) |\
+ 					 ESR_ELx_CP15_32_ISS_DIR_READ)
  
- #include "../../kselftest.h"
++/*
++ * ISS values for SME traps
++ */
++
++#define ESR_ELx_SME_ISS_SME_DISABLED	0
++#define ESR_ELx_SME_ISS_ILL		1
++#define ESR_ELx_SME_ISS_SM_DISABLED	2
++#define ESR_ELx_SME_ISS_ZA_DISABLED	3
++
+ #ifndef __ASSEMBLY__
+ #include <asm/types.h>
  
--#define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
--#define FPSIMD_TESTS 5
--
--#define EXPECTED_TESTS (VL_TESTS + FPSIMD_TESTS)
-+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+index a39fcf318c77..0400b3f895ef 100644
+--- a/arch/arm64/include/asm/kvm_arm.h
++++ b/arch/arm64/include/asm/kvm_arm.h
+@@ -279,6 +279,7 @@
+ #define CPTR_EL2_TCPAC	(1 << 31)
+ #define CPTR_EL2_TAM	(1 << 30)
+ #define CPTR_EL2_TTA	(1 << 20)
++#define CPTR_EL2_TSM	(1 << 12)
+ #define CPTR_EL2_TFP	(1 << CPTR_EL2_TFP_SHIFT)
+ #define CPTR_EL2_TZ	(1 << 8)
+ #define CPTR_NVHE_EL2_RES1	0x000032ff /* known RES1 bits in CPTR_EL2 (nVHE) */
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 16b3f1a1d468..3b767c84a480 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -173,6 +173,7 @@
+ #define SYS_ID_AA64PFR0_EL1		sys_reg(3, 0, 0, 4, 0)
+ #define SYS_ID_AA64PFR1_EL1		sys_reg(3, 0, 0, 4, 1)
+ #define SYS_ID_AA64ZFR0_EL1		sys_reg(3, 0, 0, 4, 4)
++#define SYS_ID_AA64SMFR0_EL1		sys_reg(3, 0, 0, 4, 5)
  
- /* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
- #ifndef NT_ARM_SVE
- #define NT_ARM_SVE 0x405
+ #define SYS_ID_AA64DFR0_EL1		sys_reg(3, 0, 0, 5, 0)
+ #define SYS_ID_AA64DFR1_EL1		sys_reg(3, 0, 0, 5, 1)
+@@ -195,6 +196,8 @@
+ 
+ #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
+ #define SYS_TRFCR_EL1			sys_reg(3, 0, 1, 2, 1)
++#define SYS_SMPRI_EL1			sys_reg(3, 0, 1, 2, 4)
++#define SYS_SMCR_EL1			sys_reg(3, 0, 1, 2, 6)
+ 
+ #define SYS_TTBR0_EL1			sys_reg(3, 0, 2, 0, 0)
+ #define SYS_TTBR1_EL1			sys_reg(3, 0, 2, 0, 1)
+@@ -387,6 +390,8 @@
+ #define TRBIDR_ALIGN_MASK		GENMASK(3, 0)
+ #define TRBIDR_ALIGN_SHIFT		0
+ 
++#define SMPRI_EL1_PRIORITY_MASK		0xf
++
+ #define SYS_PMINTENSET_EL1		sys_reg(3, 0, 9, 14, 1)
+ #define SYS_PMINTENCLR_EL1		sys_reg(3, 0, 9, 14, 2)
+ 
+@@ -442,8 +447,13 @@
+ #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
+ #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
+ #define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
++#define SYS_SMIDR_EL1			sys_reg(3, 1, 0, 0, 6)
+ #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
+ 
++#define SYS_SMIDR_EL1_IMPLEMENTER_SHIFT	24
++#define SYS_SMIDR_EL1_SMPS_SHIFT	15
++#define SYS_SMIDR_EL1_AFFINITY_SHIFT	0
++
+ #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
+ 
+ #define SYS_CTR_EL0			sys_reg(3, 3, 0, 0, 1)
+@@ -452,6 +462,10 @@
+ #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
+ #define SYS_RNDRRS_EL0			sys_reg(3, 3, 2, 4, 1)
+ 
++#define SYS_SVCR_EL0			sys_reg(3, 3, 4, 2, 2)
++#define SYS_SVCR_EL0_ZA_MASK		2
++#define SYS_SVCR_EL0_SM_MASK		1
++
+ #define SYS_PMCR_EL0			sys_reg(3, 3, 9, 12, 0)
+ #define SYS_PMCNTENSET_EL0		sys_reg(3, 3, 9, 12, 1)
+ #define SYS_PMCNTENCLR_EL0		sys_reg(3, 3, 9, 12, 2)
+@@ -468,6 +482,7 @@
+ 
+ #define SYS_TPIDR_EL0			sys_reg(3, 3, 13, 0, 2)
+ #define SYS_TPIDRRO_EL0			sys_reg(3, 3, 13, 0, 3)
++#define SYS_TPIDR2_EL0			sys_reg(3, 3, 13, 0, 5)
+ 
+ #define SYS_SCXTNUM_EL0			sys_reg(3, 3, 13, 0, 7)
+ 
+@@ -537,6 +552,9 @@
+ #define SYS_HFGITR_EL2			sys_reg(3, 4, 1, 1, 6)
+ #define SYS_ZCR_EL2			sys_reg(3, 4, 1, 2, 0)
+ #define SYS_TRFCR_EL2			sys_reg(3, 4, 1, 2, 1)
++#define SYS_HCRX_EL2			sys_reg(3, 4, 1, 2, 2)
++#define SYS_SMPRIMAP_EL2		sys_reg(3, 4, 1, 2, 5)
++#define SYS_SMCR_EL2			sys_reg(3, 4, 1, 2, 6)
+ #define SYS_DACR32_EL2			sys_reg(3, 4, 3, 0, 0)
+ #define SYS_HDFGRTR_EL2			sys_reg(3, 4, 3, 1, 4)
+ #define SYS_HDFGWTR_EL2			sys_reg(3, 4, 3, 1, 5)
+@@ -596,6 +614,7 @@
+ #define SYS_SCTLR_EL12			sys_reg(3, 5, 1, 0, 0)
+ #define SYS_CPACR_EL12			sys_reg(3, 5, 1, 0, 2)
+ #define SYS_ZCR_EL12			sys_reg(3, 5, 1, 2, 0)
++#define SYS_SMCR_EL12			sys_reg(3, 5, 1, 2, 6)
+ #define SYS_TTBR0_EL12			sys_reg(3, 5, 2, 0, 0)
+ #define SYS_TTBR1_EL12			sys_reg(3, 5, 2, 0, 1)
+ #define SYS_TCR_EL12			sys_reg(3, 5, 2, 0, 2)
+@@ -619,6 +638,7 @@
+ #define SYS_CNTV_CVAL_EL02		sys_reg(3, 5, 14, 3, 2)
+ 
+ /* Common SCTLR_ELx flags. */
++#define SCTLR_ELx_ENTP2	(BIT(60))
+ #define SCTLR_ELx_DSSBS	(BIT(44))
+ #define SCTLR_ELx_ATA	(BIT(43))
+ 
+@@ -800,6 +820,7 @@
+ #define ID_AA64PFR0_ELx_32BIT_64BIT	0x2
+ 
+ /* id_aa64pfr1 */
++#define ID_AA64PFR1_SME_SHIFT		24
+ #define ID_AA64PFR1_MPAMFRAC_SHIFT	16
+ #define ID_AA64PFR1_RASFRAC_SHIFT	12
+ #define ID_AA64PFR1_MTE_SHIFT		8
+@@ -810,6 +831,7 @@
+ #define ID_AA64PFR1_SSBS_PSTATE_ONLY	1
+ #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
+ #define ID_AA64PFR1_BT_BTI		0x1
++#define ID_AA64PFR1_SME			1
+ 
+ #define ID_AA64PFR1_MTE_NI		0x0
+ #define ID_AA64PFR1_MTE_EL0		0x1
+@@ -838,6 +860,23 @@
+ #define ID_AA64ZFR0_AES_PMULL		0x2
+ #define ID_AA64ZFR0_SVEVER_SVE2		0x1
+ 
++/* id_aa64smfr0 */
++#define ID_AA64SMFR0_FA64_SHIFT		63
++#define ID_AA64SMFR0_I16I64_SHIFT	52
++#define ID_AA64SMFR0_F64F64_SHIFT	48
++#define ID_AA64SMFR0_I8I32_SHIFT	36
++#define ID_AA64SMFR0_F16F32_SHIFT	35
++#define ID_AA64SMFR0_B16F32_SHIFT	34
++#define ID_AA64SMFR0_F32F32_SHIFT	32
++
++#define ID_AA64SMFR0_FA64		0x1
++#define ID_AA64SMFR0_I16I64		0x4
++#define ID_AA64SMFR0_F64F64		0x1
++#define ID_AA64SMFR0_I8I32		0x4
++#define ID_AA64SMFR0_F16F32		0x1
++#define ID_AA64SMFR0_B16F32		0x1
++#define ID_AA64SMFR0_F32F32		0x1
++
+ /* id_aa64mmfr0 */
+ #define ID_AA64MMFR0_ECV_SHIFT		60
+ #define ID_AA64MMFR0_FGT_SHIFT		56
+@@ -889,6 +928,7 @@
  #endif
  
-+struct vec_type {
-+	const char *name;
-+	unsigned long hwcap_type;
-+	unsigned long hwcap;
-+	int regset;
-+	int prctl_set;
-+};
+ /* id_aa64mmfr1 */
++#define ID_AA64MMFR1_HCX_SHIFT		40
+ #define ID_AA64MMFR1_ETS_SHIFT		36
+ #define ID_AA64MMFR1_TWED_SHIFT		32
+ #define ID_AA64MMFR1_XNX_SHIFT		28
+@@ -1080,6 +1120,22 @@
+ #define ZCR_ELx_LEN_SIZE	9
+ #define ZCR_ELx_LEN_MASK	0x1ff
+ 
++#define SMCR_ELx_FA64_SHIFT	31
++#define SMCR_ELx_FA64_MASK	(1 << SMCR_ELx_FA64_SHIFT)
 +
-+static const struct vec_type vec_types[] = {
-+	{
-+		.name = "SVE",
-+		.hwcap_type = AT_HWCAP,
-+		.hwcap = HWCAP_SVE,
-+		.regset = NT_ARM_SVE,
-+		.prctl_set = PR_SVE_SET_VL,
-+	},
-+};
++/*
++ * The SMCR_ELx_LEN_* definitions intentionally include bits [8:4] which
++ * are reserved by the SME architecture for future expansion of the LEN
++ * field, with compatible semantics.
++ */
++#define SMCR_ELx_LEN_SHIFT	0
++#define SMCR_ELx_LEN_SIZE	9
++#define SMCR_ELx_LEN_MASK	0x1ff
 +
-+#define VL_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
-+#define FLAG_TESTS 2
-+#define FPSIMD_TESTS 3
++#define CPACR_EL1_SMEN_EL1EN	(BIT(24)) /* enable EL1 access */
++#define CPACR_EL1_SMEN_EL0EN	(BIT(25)) /* enable EL0 access, if EL1EN set */
++#define CPACR_EL1_SMEN		(CPACR_EL1_SMEN_EL1EN | CPACR_EL1_SMEN_EL0EN)
 +
-+#define EXPECTED_TESTS ((VL_TESTS + FLAG_TESTS + FPSIMD_TESTS) * ARRAY_SIZE(vec_types))
-+
- static void fill_buf(char *buf, size_t size)
- {
- 	int i;
-@@ -59,7 +80,8 @@ static int get_fpsimd(pid_t pid, struct user_fpsimd_state *fpsimd)
- 	return ptrace(PTRACE_GETREGSET, pid, NT_PRFPREG, &iov);
- }
+ #define CPACR_EL1_ZEN_EL1EN	(BIT(16)) /* enable EL1 access */
+ #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
+ #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
+@@ -1133,6 +1189,8 @@
+ #define TRFCR_ELx_ExTRE			BIT(1)
+ #define TRFCR_ELx_E0TRE			BIT(0)
  
--static struct user_sve_header *get_sve(pid_t pid, void **buf, size_t *size)
-+static struct user_sve_header *get_sve(pid_t pid, const struct vec_type *type,
-+				       void **buf, size_t *size)
- {
- 	struct user_sve_header *sve;
- 	void *p;
-@@ -80,7 +102,7 @@ static struct user_sve_header *get_sve(pid_t pid, void **buf, size_t *size)
++/* HCRX_EL2 definitions */
++#define HCRX_EL2_SMPME_MASK		(1 << 5)
  
- 		iov.iov_base = *buf;
- 		iov.iov_len = sz;
--		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_SVE, &iov))
-+		if (ptrace(PTRACE_GETREGSET, pid, type->regset, &iov))
- 			goto error;
- 
- 		sve = *buf;
-@@ -96,17 +118,18 @@ static struct user_sve_header *get_sve(pid_t pid, void **buf, size_t *size)
- 	return NULL;
- }
- 
--static int set_sve(pid_t pid, const struct user_sve_header *sve)
-+static int set_sve(pid_t pid, const struct vec_type *type,
-+		   const struct user_sve_header *sve)
- {
- 	struct iovec iov;
- 
- 	iov.iov_base = (void *)sve;
- 	iov.iov_len = sve->size;
--	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_SVE, &iov);
-+	return ptrace(PTRACE_SETREGSET, pid, type->regset, &iov);
- }
- 
- /* Validate setting and getting the inherit flag */
--static void ptrace_set_get_inherit(pid_t child)
-+static void ptrace_set_get_inherit(pid_t child, const struct vec_type *type)
- {
- 	struct user_sve_header sve;
- 	struct user_sve_header *new_sve = NULL;
-@@ -118,9 +141,10 @@ static void ptrace_set_get_inherit(pid_t child)
- 	sve.size = sizeof(sve);
- 	sve.vl = sve_vl_from_vq(SVE_VQ_MIN);
- 	sve.flags = SVE_PT_VL_INHERIT;
--	ret = set_sve(child, &sve);
-+	ret = set_sve(child, type, &sve);
- 	if (ret != 0) {
--		ksft_test_result_fail("Failed to set SVE_PT_VL_INHERIT\n");
-+		ksft_test_result_fail("Failed to set %s SVE_PT_VL_INHERIT\n",
-+				      type->name);
- 		return;
- 	}
- 
-@@ -128,35 +152,39 @@ static void ptrace_set_get_inherit(pid_t child)
- 	 * Read back the new register state and verify that we have
- 	 * set the flags we expected.
- 	 */
--	if (!get_sve(child, (void **)&new_sve, &new_sve_size)) {
--		ksft_test_result_fail("Failed to read SVE flags\n");
-+	if (!get_sve(child, type, (void **)&new_sve, &new_sve_size)) {
-+		ksft_test_result_fail("Failed to read %s SVE flags\n",
-+				      type->name);
- 		return;
- 	}
- 
- 	ksft_test_result(new_sve->flags & SVE_PT_VL_INHERIT,
--			 "SVE_PT_VL_INHERIT set\n");
-+			 "%s SVE_PT_VL_INHERIT set\n", type->name);
- 
- 	/* Now clear */
- 	sve.flags &= ~SVE_PT_VL_INHERIT;
--	ret = set_sve(child, &sve);
-+	ret = set_sve(child, type, &sve);
- 	if (ret != 0) {
--		ksft_test_result_fail("Failed to clear SVE_PT_VL_INHERIT\n");
-+		ksft_test_result_fail("Failed to clear %s SVE_PT_VL_INHERIT\n",
-+				      type->name);
- 		return;
- 	}
- 
--	if (!get_sve(child, (void **)&new_sve, &new_sve_size)) {
--		ksft_test_result_fail("Failed to read SVE flags\n");
-+	if (!get_sve(child, type, (void **)&new_sve, &new_sve_size)) {
-+		ksft_test_result_fail("Failed to read %s SVE flags\n",
-+				      type->name);
- 		return;
- 	}
- 
- 	ksft_test_result(!(new_sve->flags & SVE_PT_VL_INHERIT),
--			 "SVE_PT_VL_INHERIT cleared\n");
-+			 "%s SVE_PT_VL_INHERIT cleared\n", type->name);
- 
- 	free(new_sve);
- }
- 
- /* Validate attempting to set the specfied VL via ptrace */
--static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
-+static void ptrace_set_get_vl(pid_t child, const struct vec_type *type,
-+			      unsigned int vl, bool *supported)
- {
- 	struct user_sve_header sve;
- 	struct user_sve_header *new_sve = NULL;
-@@ -166,10 +194,10 @@ static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
- 	*supported = false;
- 
- 	/* Check if the VL is supported in this process */
--	prctl_vl = prctl(PR_SVE_SET_VL, vl);
-+	prctl_vl = prctl(type->prctl_set, vl);
- 	if (prctl_vl == -1)
--		ksft_exit_fail_msg("prctl(PR_SVE_SET_VL) failed: %s (%d)\n",
--				   strerror(errno), errno);
-+		ksft_exit_fail_msg("prctl(PR_%s_SET_VL) failed: %s (%d)\n",
-+				   type->name, strerror(errno), errno);
- 
- 	/* If the VL is not supported then a supported VL will be returned */
- 	*supported = (prctl_vl == vl);
-@@ -178,9 +206,10 @@ static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
- 	memset(&sve, 0, sizeof(sve));
- 	sve.size = sizeof(sve);
- 	sve.vl = vl;
--	ret = set_sve(child, &sve);
-+	ret = set_sve(child, type, &sve);
- 	if (ret != 0) {
--		ksft_test_result_fail("Failed to set VL %u\n", vl);
-+		ksft_test_result_fail("Failed to set %s VL %u\n",
-+				      type->name, vl);
- 		return;
- 	}
- 
-@@ -188,12 +217,14 @@ static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
- 	 * Read back the new register state and verify that we have the
- 	 * same VL that we got from prctl() on ourselves.
- 	 */
--	if (!get_sve(child, (void **)&new_sve, &new_sve_size)) {
--		ksft_test_result_fail("Failed to read VL %u\n", vl);
-+	if (!get_sve(child, type, (void **)&new_sve, &new_sve_size)) {
-+		ksft_test_result_fail("Failed to read %s VL %u\n",
-+				      type->name, vl);
- 		return;
- 	}
- 
--	ksft_test_result(new_sve->vl = prctl_vl, "Set VL %u\n", vl);
-+	ksft_test_result(new_sve->vl = prctl_vl, "Set %s VL %u\n",
-+			 type->name, vl);
- 
- 	free(new_sve);
- }
-@@ -209,7 +240,7 @@ static void check_u32(unsigned int vl, const char *reg,
- }
- 
- /* Access the FPSIMD registers via the SVE regset */
--static void ptrace_sve_fpsimd(pid_t child)
-+static void ptrace_sve_fpsimd(pid_t child, const struct vec_type *type)
- {
- 	void *svebuf = NULL;
- 	size_t svebufsz = 0;
-@@ -219,17 +250,18 @@ static void ptrace_sve_fpsimd(pid_t child)
- 	unsigned char *p;
- 
- 	/* New process should start with FPSIMD registers only */
--	sve = get_sve(child, &svebuf, &svebufsz);
-+	sve = get_sve(child, type, &svebuf, &svebufsz);
- 	if (!sve) {
--		ksft_test_result_fail("get_sve: %s\n", strerror(errno));
-+		ksft_test_result_fail("get_sve(%s): %s\n",
-+				      type->name, strerror(errno));
- 
- 		return;
- 	} else {
--		ksft_test_result_pass("get_sve(FPSIMD)\n");
-+		ksft_test_result_pass("get_sve(%s FPSIMD)\n", type->name);
- 	}
- 
- 	ksft_test_result((sve->flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD,
--			 "Set FPSIMD registers\n");
-+			 "Set FPSIMD registers via %s\n", type->name);
- 	if ((sve->flags & SVE_PT_REGS_MASK) != SVE_PT_REGS_FPSIMD)
- 		goto out;
- 
-@@ -243,9 +275,9 @@ static void ptrace_sve_fpsimd(pid_t child)
- 			p[j] = j;
- 	}
- 
--	if (set_sve(child, sve)) {
--		ksft_test_result_fail("set_sve(FPSIMD): %s\n",
--				      strerror(errno));
-+	if (set_sve(child, type, sve)) {
-+		ksft_test_result_fail("set_sve(%s FPSIMD): %s\n",
-+				      type->name, strerror(errno));
- 
- 		goto out;
- 	}
-@@ -257,16 +289,20 @@ static void ptrace_sve_fpsimd(pid_t child)
- 		goto out;
- 	}
- 	if (memcmp(fpsimd, &new_fpsimd, sizeof(*fpsimd)) == 0)
--		ksft_test_result_pass("get_fpsimd() gave same state\n");
-+		ksft_test_result_pass("%s get_fpsimd() gave same state\n",
-+				      type->name);
- 	else
--		ksft_test_result_fail("get_fpsimd() gave different state\n");
-+		ksft_test_result_fail("%s get_fpsimd() gave different state\n",
-+				      type->name);
- 
- out:
- 	free(svebuf);
- }
- 
- /* Validate attempting to set SVE data and read SVE data */
--static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
-+static void ptrace_set_sve_get_sve_data(pid_t child,
-+					const struct vec_type *type,
-+					unsigned int vl)
- {
- 	void *write_buf;
- 	void *read_buf = NULL;
-@@ -281,8 +317,8 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
- 	data_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
- 	write_buf = malloc(data_size);
- 	if (!write_buf) {
--		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
--				      data_size, vl);
-+		ksft_test_result_fail("Error allocating %d byte buffer for %s VL %u\n",
-+				      data_size, type->name, vl);
- 		return;
- 	}
- 	write_sve = write_buf;
-@@ -306,23 +342,26 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
- 
- 	/* TODO: Generate a valid FFR pattern */
- 
--	ret = set_sve(child, write_sve);
-+	ret = set_sve(child, type, write_sve);
- 	if (ret != 0) {
--		ksft_test_result_fail("Failed to set VL %u data\n", vl);
-+		ksft_test_result_fail("Failed to set %s VL %u data\n",
-+				      type->name, vl);
- 		goto out;
- 	}
- 
- 	/* Read the data back */
--	if (!get_sve(child, (void **)&read_buf, &read_sve_size)) {
--		ksft_test_result_fail("Failed to read VL %u data\n", vl);
-+	if (!get_sve(child, type, (void **)&read_buf, &read_sve_size)) {
-+		ksft_test_result_fail("Failed to read %s VL %u data\n",
-+				      type->name, vl);
- 		goto out;
- 	}
- 	read_sve = read_buf;
- 
- 	/* We might read more data if there's extensions we don't know */
- 	if (read_sve->size < write_sve->size) {
--		ksft_test_result_fail("Wrote %d bytes, only read %d\n",
--				      write_sve->size, read_sve->size);
-+		ksft_test_result_fail("%s wrote %d bytes, only read %d\n",
-+				      type->name, write_sve->size,
-+				      read_sve->size);
- 		goto out_read;
- 	}
- 
-@@ -349,7 +388,8 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
- 	check_u32(vl, "FPCR", write_buf + SVE_PT_SVE_FPCR_OFFSET(vq),
- 		  read_buf + SVE_PT_SVE_FPCR_OFFSET(vq), &errors);
- 
--	ksft_test_result(errors == 0, "Set and get SVE data for VL %u\n", vl);
-+	ksft_test_result(errors == 0, "Set and get %s data for VL %u\n",
-+			 type->name, vl);
- 
- out_read:
- 	free(read_buf);
-@@ -358,7 +398,9 @@ static void ptrace_set_sve_get_sve_data(pid_t child, unsigned int vl)
- }
- 
- /* Validate attempting to set SVE data and read SVE data */
--static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
-+static void ptrace_set_sve_get_fpsimd_data(pid_t child,
-+					   const struct vec_type *type,
-+					   unsigned int vl)
- {
- 	void *write_buf;
- 	struct user_sve_header *write_sve;
-@@ -376,8 +418,8 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
- 	data_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
- 	write_buf = malloc(data_size);
- 	if (!write_buf) {
--		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
--				      data_size, vl);
-+		ksft_test_result_fail("Error allocating %d byte buffer for %s VL %u\n",
-+				      data_size, type->name, vl);
- 		return;
- 	}
- 	write_sve = write_buf;
-@@ -395,16 +437,17 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
- 	fill_buf(write_buf + SVE_PT_SVE_FPSR_OFFSET(vq), SVE_PT_SVE_FPSR_SIZE);
- 	fill_buf(write_buf + SVE_PT_SVE_FPCR_OFFSET(vq), SVE_PT_SVE_FPCR_SIZE);
- 
--	ret = set_sve(child, write_sve);
-+	ret = set_sve(child, type, write_sve);
- 	if (ret != 0) {
--		ksft_test_result_fail("Failed to set VL %u data\n", vl);
-+		ksft_test_result_fail("Failed to set %s VL %u data\n",
-+				      type->name, vl);
- 		goto out;
- 	}
- 
- 	/* Read the data back */
- 	if (get_fpsimd(child, &fpsimd_state)) {
--		ksft_test_result_fail("Failed to read VL %u FPSIMD data\n",
--				      vl);
-+		ksft_test_result_fail("Failed to read %s VL %u FPSIMD data\n",
-+				      type->name, vl);
- 		goto out;
- 	}
- 
-@@ -419,7 +462,8 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
- 		       sizeof(tmp));
- 
- 		if (tmp != fpsimd_state.vregs[i]) {
--			printf("# Mismatch in FPSIMD for VL %u Z%d\n", vl, i);
-+			printf("# Mismatch in FPSIMD for %s VL %u Z%d\n",
-+			       type->name, vl, i);
- 			errors++;
- 		}
- 	}
-@@ -429,8 +473,8 @@ static void ptrace_set_sve_get_fpsimd_data(pid_t child, unsigned int vl)
- 	check_u32(vl, "FPCR", write_buf + SVE_PT_SVE_FPCR_OFFSET(vq),
- 		  &fpsimd_state.fpcr, &errors);
- 
--	ksft_test_result(errors == 0, "Set and get FPSIMD data for VL %u\n",
--			 vl);
-+	ksft_test_result(errors == 0, "Set and get FPSIMD data for %s VL %u\n",
-+			 type->name, vl);
- 
- out:
- 	free(write_buf);
-@@ -440,7 +484,7 @@ static int do_parent(pid_t child)
- {
- 	int ret = EXIT_FAILURE;
- 	pid_t pid;
--	int status;
-+	int status, i;
- 	siginfo_t si;
- 	unsigned int vq, vl;
- 	bool vl_supported;
-@@ -499,26 +543,47 @@ static int do_parent(pid_t child)
- 		}
- 	}
- 
--	/* FPSIMD via SVE regset */
--	ptrace_sve_fpsimd(child);
--
--	/* prctl() flags */
--	ptrace_set_get_inherit(child);
--
--	/* Step through every possible VQ */
--	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
--		vl = sve_vl_from_vq(vq);
-+	for (i = 0; i < ARRAY_SIZE(vec_types); i++) {
-+		/* FPSIMD via SVE regset */
-+		if (getauxval(vec_types[i].hwcap_type) & vec_types[i].hwcap) {
-+			ptrace_sve_fpsimd(child, &vec_types[i]);
-+		} else {
-+			ksft_test_result_skip("%s FPSIMD get via SVE\n",
-+					      vec_types[i].name);
-+			ksft_test_result_skip("%s FPSIMD set via SVE\n",
-+					      vec_types[i].name);
-+			ksft_test_result_skip("%s set read via FPSIMD\n",
-+					      vec_types[i].name);
-+		}
- 
--		/* First, try to set this vector length */
--		ptrace_set_get_vl(child, vl, &vl_supported);
-+		/* prctl() flags */
-+		ptrace_set_get_inherit(child, &vec_types[i]);
-+
-+		/* Step through every possible VQ */
-+		for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
-+			vl = sve_vl_from_vq(vq);
-+
-+			/* First, try to set this vector length */
-+			if (getauxval(vec_types[i].hwcap_type) &
-+			    vec_types[i].hwcap) {
-+				ptrace_set_get_vl(child, &vec_types[i], vl,
-+						  &vl_supported);
-+			} else {
-+				ksft_test_result_skip("%s get/set VL %d\n",
-+						      vec_types[i].name, vl);
-+				vl_supported = false;
-+			}
- 
--		/* If the VL is supported validate data set/get */
--		if (vl_supported) {
--			ptrace_set_sve_get_sve_data(child, vl);
--			ptrace_set_sve_get_fpsimd_data(child, vl);
--		} else {
--			ksft_test_result_skip("set SVE get SVE for VL %d\n", vl);
--			ksft_test_result_skip("set SVE get FPSIMD for VL %d\n", vl);
-+			/* If the VL is supported validate data set/get */
-+			if (vl_supported) {
-+				ptrace_set_sve_get_sve_data(child, &vec_types[i], vl);
-+				ptrace_set_sve_get_fpsimd_data(child, &vec_types[i], vl);
-+			} else {
-+				ksft_test_result_skip("%s set SVE get SVE for VL %d\n",
-+						      vec_types[i].name, vl);
-+				ksft_test_result_skip("%s set SVE get FPSIMD for VL %d\n",
-+						      vec_types[i].name, vl);
-+			}
- 		}
- 	}
- 
+ /* GIC Hypervisor interface registers */
+ /* ICH_MISR_EL2 bit definitions */
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 7b21213a570f..bd2bd39d49a8 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -822,6 +822,7 @@ static const char *esr_class_str[] = {
+ 	[ESR_ELx_EC_SVE]		= "SVE",
+ 	[ESR_ELx_EC_ERET]		= "ERET/ERETAA/ERETAB",
+ 	[ESR_ELx_EC_FPAC]		= "FPAC",
++	[ESR_ELx_EC_SME]		= "SME",
+ 	[ESR_ELx_EC_IMP_DEF]		= "EL3 IMP DEF",
+ 	[ESR_ELx_EC_IABT_LOW]		= "IABT (lower EL)",
+ 	[ESR_ELx_EC_IABT_CUR]		= "IABT (current EL)",
 -- 
 2.30.2
 
