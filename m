@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB4E7C433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63A74C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B79F361B51
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CC5461B4C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:31:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236613AbhKOPeZ (ORCPT
+        id S236575AbhKOPeZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 15 Nov 2021 10:34:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52834 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:52970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236611AbhKOPdr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S236713AbhKOPdr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 15 Nov 2021 10:33:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A531363241;
-        Mon, 15 Nov 2021 15:30:26 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E90516322D;
+        Mon, 15 Nov 2021 15:30:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990229;
-        bh=sxN1a8xKEayg5DMYSIoQV28h/DzgOEuE25PSlg48rmQ=;
+        s=k20201202; t=1636990237;
+        bh=ZO2Nlxhc8pcrLTNv8YBuKfBn0744AE3LcV31TeMER6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nv6GHY0ZwOiJuGssc5i0fAGoOr48cx/k6JtTSTqPeWQzuhH/XXX99WHYsL5x6IMb5
-         ok9erbjv5R3fRTIXjc041ZZqV85VcWxYfMoYAFbxqihTgU9HkAuGrS3Ve85WFFAxrN
-         gGplNjpmKW2vp0hEFjjZ4IomIB+3GOxiLmPtzDNQdZB9eUwLShlY7qgcsmyWPOEoFy
-         7VOMkxXi5+E/UXZleSNhlpl/BK8acfgyVHHmDNMohIDOnYuA0suaySMhxlO+MTm6ct
-         BrTb9QxmYovSdaXg2/qCWgVdkBIID+ZaguGt+cj2x/VUpBvVSSRSMXEnpYqaufIN59
-         C7JijWN8BhANw==
+        b=ZfXh+EGCZlIUqsyK86SY4JSFQRMsZt5O5U/yt8T6Jig0uT4VhTZJzwacfLqOMKwft
+         xNWPWIBG0n62JpsMFUvLJ1hOBP3M19fi7WL+AFmVQv88UgRBEiGiY5NJkkNweT/Ki0
+         GcCtROHpL/sNFgXA1yXUE1G4tnlFa7LZ4YhtcLFWI0+zyFWl/liS8CPme7+NcORF8H
+         kDIFs9QObbqDuCJQ8IGFhODU+2WBUsRoFEiWYAMlQWzWhXyUui61mSkUl73jXcfsYj
+         H7lv5Rxd9BuJBUMR8Z9tMpsvoPM9g4pol9su2HMOgdlPf87Ld5unlDEP3p+0Qv0trL
+         O18NoktAvgpgA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,569 +39,421 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 33/37] kselftest/arm64: Add stress test for SME ZA context switching
-Date:   Mon, 15 Nov 2021 15:28:31 +0000
-Message-Id: <20211115152835.3212149-34-broonie@kernel.org>
+Subject: [PATCH v6 36/37] kselftest/arm64: Add coverage for the ZA ptrace interface
+Date:   Mon, 15 Nov 2021 15:28:34 +0000
+Message-Id: <20211115152835.3212149-37-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11842; h=from:subject; bh=sxN1a8xKEayg5DMYSIoQV28h/DzgOEuE25PSlg48rmQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyezFsX9O4RadpMRYb7e6NrZXUvNfTxcCi9GKKT 8507tRGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8ngAKCRAk1otyXVSH0HzwB/ 9yqMKdW2+nFOetziOt4IeE5iYz7gqcWeubHQirjPZmB2WvMgPDGHBN3mE2x6oYbK/+yl4HiGQ2UD5j PjKqZOf3FeXLMFUkZ3mubYawvwFUk8704uBNO/5IPs0LYbEAcTA6IerZP0DB5gaB20gckYJAo9//ms +bgx9lFgj+Y4MJlmBtEsnrvqVA0gm9gb+CqLlVmHeoqMsNl0WJdljHjXSOuIsqYEr1oHYGY702XHPA MX7GPiKy+3hXTi7kJ4XbM9oOFkw388moQdG9LGqpluk2Fie1OPvy5QzspzCBkp0OwaftcOc7p/1RJd zhYMksKsbBpv/JMV0iqg939IpG3aNf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10074; h=from:subject; bh=ZO2Nlxhc8pcrLTNv8YBuKfBn0744AE3LcV31TeMER6g=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyhvX3bITXncNU9wi3pjkJIG7yLQbwBNxzqWOVy 0XPd4HGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8oQAKCRAk1otyXVSH0HaVB/ 41ac4kYn0WWzwNg5YGsoQT3BZT2wQ3tl62VX5uh/jEdKpTT6dLyH3n2XCBWXET15JHjRVqZDssJq5K 0OH5VJJdDEEoJ70RplOdC6uaqbwvFCZdYndsIpoAvjuVCPw256GqLP1QOoQtIbn+7vPqQy8nu1FOMn 16A9QAK6LgGmdAztW7vqbelzaM07k99vngHg4imPFZtoF4BTdO+Jy0dUZ4JPPXaR+B46Yk3HGlJAWN 26HmgxkWy7RwbY5HUdfsc6mc4T3V/1Po3il3pv3CigfxQKWLaYwLaqk+wUISn8d1tNcnvsCI8cfurY AUAOt711DxqNRvUSTXuFuOfrE8zK7/
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a stress test for context switching of the ZA register state based on
-the similar tests Dave Martin wrote for FPSIMD and SVE registers. The test
-loops indefinitely writing a data pattern to ZA then reading it back and
-verifying that it's what was expected.
-
-Unlike the other tests we manually assemble the SME instructions since at
-present no released toolchain has SME support integrated.
+Add some basic coverage for the ZA ptrace interface, including walking
+through all the vector lengths supported in the system. As with SVE we do
+not currently validate the data all the way through to the running process.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore |   1 +
- tools/testing/selftests/arm64/fp/Makefile   |   3 +
- tools/testing/selftests/arm64/fp/za-stress  |  59 +++
- tools/testing/selftests/arm64/fp/za-test.S  | 431 ++++++++++++++++++++
- 4 files changed, 494 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/za-stress
- create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
+ tools/testing/selftests/arm64/fp/.gitignore  |   1 +
+ tools/testing/selftests/arm64/fp/Makefile    |   3 +-
+ tools/testing/selftests/arm64/fp/za-ptrace.c | 353 +++++++++++++++++++
+ 3 files changed, 356 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
 
 diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 73c600e1ab81..1178fecc7aa1 100644
+index 1178fecc7aa1..59afc01f2019 100644
 --- a/tools/testing/selftests/arm64/fp/.gitignore
 +++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -7,3 +7,4 @@ sve-test
+@@ -7,4 +7,5 @@ sve-test
  ssve-test
  vec-syscfg
  vlset
-+za-test
++za-ptrace
+ za-test
 diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 6d9e4d1922e4..d77e9903116b 100644
+index d77e9903116b..d7fb200d0794 100644
 --- a/tools/testing/selftests/arm64/fp/Makefile
 +++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -6,6 +6,7 @@ TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ CFLAGS += -I../../../../../usr/include/
+-TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
++TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
+ TEST_PROGS_EXTENDED := fpsimd-test fpsimd-stress \
  	rdvl-sme rdvl-sve \
  	sve-test sve-stress \
- 	ssve-test ssve-stress \
-+	za-test za-stress \
- 	vlset
- 
- all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
-@@ -22,5 +23,7 @@ ssve-test: sve-test.S asm-utils.o
- 	$(CC) -DSSVE -nostdlib $^ -o $@
- vec-syscfg: vec-syscfg.o rdvl.o
+@@ -25,5 +25,6 @@ vec-syscfg: vec-syscfg.o rdvl.o
  vlset: vlset.o
-+za-test: za-test.o asm-utils.o
-+	$(CC) -nostdlib $^ -o $@
+ za-test: za-test.o asm-utils.o
+ 	$(CC) -nostdlib $^ -o $@
++za-ptrace: za-ptrace.o
  
  include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/za-stress b/tools/testing/selftests/arm64/fp/za-stress
+diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
 new file mode 100644
-index 000000000000..5ac386b55b95
+index 000000000000..6c172a5629dc
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-stress
-@@ -0,0 +1,59 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2015-2019 ARM Limited.
-+# Original author: Dave Martin <Dave.Martin@arm.com>
-+
-+set -ue
-+
-+NR_CPUS=`nproc`
-+
-+pids=
-+logs=
-+
-+cleanup () {
-+	trap - INT TERM CHLD
-+	set +e
-+
-+	if [ -n "$pids" ]; then
-+		kill $pids
-+		wait $pids
-+		pids=
-+	fi
-+
-+	if [ -n "$logs" ]; then
-+		cat $logs
-+		rm $logs
-+		logs=
-+	fi
-+}
-+
-+interrupt () {
-+	cleanup
-+	exit 0
-+}
-+
-+child_died () {
-+	cleanup
-+	exit 1
-+}
-+
-+trap interrupt INT TERM EXIT
-+
-+for x in `seq 0 $((NR_CPUS * 4))`; do
-+	log=`mktemp`
-+	logs=$logs\ $log
-+	./za-test >$log &
-+	pids=$pids\ $!
-+done
-+
-+# Wait for all child processes to be created:
-+sleep 10
-+
-+while :; do
-+	kill -USR1 $pids
-+done &
-+pids=$pids\ $!
-+
-+wait
-+
-+exit 1
-diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-new file mode 100644
-index 000000000000..76bf49f1c13d
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -0,0 +1,431 @@
++++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
+@@ -0,0 +1,353 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2021 ARM Limited.
-+// Original author: Mark Brown <broonie@kernel.org>
-+//
-+// Scalable Matrix Extension ZA context switch test
-+// Repeatedly writes unique test patterns into each ZA tile
-+// and reads them back to verify integrity.
-+//
-+// for x in `seq 1 NR_CPUS`; do sve-test & pids=$pids\ $! ; done
-+// (leave it running for as long as you want...)
-+// kill $pids
-+
-+#include <asm/unistd.h>
-+#include "assembler.h"
-+#include "asm-offsets.h"
-+
-+.arch_extension sve
-+
-+#define MAXVL     2048
-+#define MAXVL_B   (MAXVL / 8)
-+
 +/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ * Copyright (C) 2021 ARM Limited.
 + */
-+.macro _ldr_za nw, nxbase, offset=0
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
++#include <errno.h>
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <sys/ptrace.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++#include <sys/wait.h>
++#include <asm/sigcontext.h>
++#include <asm/ptrace.h>
 +
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _str_za nw, nxbase, offset=0
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
++#include "../../kselftest.h"
 +
-+.macro smstart
-+	msr	S0_3_C4_C7_3, xzr
-+.endm
++#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 +
-+.macro smstart_sm
-+	msr	S0_3_C4_C3_3, xzr
-+.endm
-+
-+.macro smstop
-+	msr	S0_3_C4_C6_3, xzr
-+.endm
-+
-+.macro smstop_sm
-+	msr	S0_3_C4_C2_3, xzr
-+.endm
-+
-+// Declare some storage space to shadow ZA register contents and a
-+// scratch buffer for a vector.
-+.pushsection .text
-+.data
-+.align 4
-+zaref:
-+	.space	MAXVL_B * MAXVL_B
-+scratch:
-+	.space	MAXVL_B
-+.popsection
-+
-+// Trivial memory copy: copy x2 bytes, starting at address x1, to address x0.
-+// Clobbers x0-x3
-+function memcpy
-+	cmp	x2, #0
-+	b.eq	1f
-+0:	ldrb	w3, [x1], #1
-+	strb	w3, [x0], #1
-+	subs	x2, x2, #1
-+	b.ne	0b
-+1:	ret
-+endfunction
-+
-+// Generate a test pattern for storage in ZA
-+// x0: pid
-+// x1: row in ZA
-+// x2: generation
-+
-+// These values are used to constuct a 32-bit pattern that is repeated in the
-+// scratch buffer as many times as will fit:
-+// bits 31:28	generation number (increments once per test_loop)
-+// bits 27:16	pid
-+// bits 15: 8	row number
-+// bits  7: 0	32-bit lane index
-+
-+function pattern
-+	mov	w3, wzr
-+	bfi	w3, w0, #16, #12	// PID
-+	bfi	w3, w1, #8, #8		// Row
-+	bfi	w3, w2, #28, #4		// Generation
-+
-+	ldr	x0, =scratch
-+	mov	w1, #MAXVL_B / 4
-+
-+0:	str	w3, [x0], #4
-+	add	w3, w3, #1		// Lane
-+	subs	w1, w1, #1
-+	b.ne	0b
-+
-+	ret
-+endfunction
-+
-+// Get the address of shadow data for ZA horizontal vector xn
-+.macro _adrza xd, xn, nrtmp
-+	ldr	\xd, =zaref
-+	smstart_sm
-+	rdvl	x\nrtmp, #1
-+	smstop_sm
-+	madd	\xd, x\nrtmp, \xn, \xd
-+.endm
-+
-+// Set up test pattern in a ZA horizontal vector
-+// x0: pid
-+// x1: row number
-+// x2: generation
-+function setup_za
-+	mov	x4, x30
-+	mov	x12, x1			// Use x12 for vector select
-+
-+	bl	pattern			// Get pattern in scratch buffer
-+	_adrza	x0, x12, 2		// Shadow buffer pointer to x0 and x5
-+	mov	x5, x0
-+	ldr	x1, =scratch
-+	bl	memcpy			// length set up in x2 by _adrza
-+
-+	_ldr_za 12, 5			// load vector w12 from pointer x5
-+
-+	ret	x4
-+endfunction
-+
-+// Trivial memory compare: compare x2 bytes starting at address x0 with
-+// bytes starting at address x1.
-+// Returns only if all bytes match; otherwise, the program is aborted.
-+// Clobbers x0-x5.
-+function memcmp
-+	cbz	x2, 2f
-+
-+	stp	x0, x1, [sp, #-0x20]!
-+	str	x2, [sp, #0x10]
-+
-+	mov	x5, #0
-+0:	ldrb	w3, [x0, x5]
-+	ldrb	w4, [x1, x5]
-+	add	x5, x5, #1
-+	cmp	w3, w4
-+	b.ne	1f
-+	subs	x2, x2, #1
-+	b.ne	0b
-+
-+1:	ldr	x2, [sp, #0x10]
-+	ldp	x0, x1, [sp], #0x20
-+	b.ne	barf
-+
-+2:	ret
-+endfunction
-+
-+// Verify that a ZA vector matches its shadow in memory, else abort
-+// x0: row number
-+// Clobbers x0-x7 and x12.
-+function check_za
-+	mov	x3, x30
-+
-+	mov	x12, x0
-+	_adrza	x5, x0, 6		// pointer to expected value in x5
-+	mov	x4, x0
-+	ldr	x7, =scratch		// x7 is scratch
-+
-+	mov	x0, x7			// Poison scratch
-+	mov	x1, x6
-+	bl	memfill_ae
-+
-+	_str_za 12, 7			// save vector w12 to pointer x7
-+
-+	mov	x0, x5
-+	mov	x1, x7
-+	mov	x2, x6
-+	mov	x30, x3
-+	b	memcmp
-+endfunction
-+
-+// Any SME register modified here can cause corruption in the main
-+// thread -- but *only* the locations modified here.
-+function irritator_handler
-+	// Increment the irritation signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
-+
-+	// Corrupt some random ZA data
-+#if 0
-+	adr	x0, .text + (irritator_handler - .text) / 16 * 16
-+	movi	v0.8b, #1
-+	movi	v9.16b, #2
-+	movi	v31.8b, #3
++/* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
++#ifndef NT_ARM_ZA
++#define NT_ARM_ZA 0x40c
 +#endif
 +
-+	ret
-+endfunction
++#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
 +
-+function terminate_handler
-+	mov	w21, w0
-+	mov	x20, x2
++static void fill_buf(char *buf, size_t size)
++{
++	int i;
 +
-+	puts	"Terminated by signal "
-+	mov	w0, w21
-+	bl	putdec
-+	puts	", no error, iterations="
-+	ldr	x0, [x20, #ucontext_regs + 8 * 22]
-+	bl	putdec
-+	puts	", signals="
-+	ldr	x0, [x20, #ucontext_regs + 8 * 23]
-+	bl	putdecn
++	for (i = 0; i < size; i++)
++		buf[i] = random();
++}
 +
-+	mov	x0, #0
-+	mov	x8, #__NR_exit
-+	svc	#0
-+endfunction
++static int do_child(void)
++{
++	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
++		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
 +
-+// w0: signal number
-+// x1: sa_action
-+// w2: sa_flags
-+// Clobbers x0-x6,x8
-+function setsignal
-+	str	x30, [sp, #-((sa_sz + 15) / 16 * 16 + 16)]!
++	if (raise(SIGSTOP))
++		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
 +
-+	mov	w4, w0
-+	mov	x5, x1
-+	mov	w6, w2
++	return EXIT_SUCCESS;
++}
 +
-+	add	x0, sp, #16
-+	mov	x1, #sa_sz
-+	bl	memclr
++static struct user_za_header *get_za(pid_t pid, void **buf, size_t *size)
++{
++	struct user_za_header *za;
++	void *p;
++	size_t sz = sizeof(*za);
++	struct iovec iov;
 +
-+	mov	w0, w4
-+	add	x1, sp, #16
-+	str	w6, [x1, #sa_flags]
-+	str	x5, [x1, #sa_handler]
-+	mov	x2, #0
-+	mov	x3, #sa_mask_sz
-+	mov	x8, #__NR_rt_sigaction
-+	svc	#0
++	while (1) {
++		if (*size < sz) {
++			p = realloc(*buf, sz);
++			if (!p) {
++				errno = ENOMEM;
++				goto error;
++			}
 +
-+	cbz	w0, 1f
++			*buf = p;
++			*size = sz;
++		}
 +
-+	puts	"sigaction failure\n"
-+	b	.Labort
++		iov.iov_base = *buf;
++		iov.iov_len = sz;
++		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_ZA, &iov))
++			goto error;
 +
-+1:	ldr	x30, [sp], #((sa_sz + 15) / 16 * 16 + 16)
-+	ret
-+endfunction
++		za = *buf;
++		if (za->size <= sz)
++			break;
 +
-+// Main program entry point
-+.globl _start
-+function _start
-+_start:
-+	puts	"Streaming mode "
-+	smstart
++		sz = za->size;
++	}
 +
-+	// Sanity-check and report the vector length
++	return za;
 +
-+	rdvl	x19, #8
-+	cmp	x19, #128
-+	b.lo	1f
-+	cmp	x19, #2048
-+	b.hi	1f
-+	tst	x19, #(8 - 1)
-+	b.eq	2f
++error:
++	return NULL;
++}
 +
-+1:	puts	"bad vector length: "
-+	mov	x0, x19
-+	bl	putdecn
-+	b	.Labort
++static int set_za(pid_t pid, const struct user_za_header *za)
++{
++	struct iovec iov;
 +
-+2:	puts	"vector length:\t"
-+	mov	x0, x19
-+	bl	putdec
-+	puts	" bits\n"
++	iov.iov_base = (void *)za;
++	iov.iov_len = za->size;
++	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_ZA, &iov);
++}
 +
-+	// Obtain our PID, to ensure test pattern uniqueness between processes
-+	mov	x8, #__NR_getpid
-+	svc	#0
-+	mov	x20, x0
++/* Validate attempting to set the specfied VL via ptrace */
++static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
++{
++	struct user_za_header za;
++	struct user_za_header *new_za = NULL;
++	size_t new_za_size = 0;
++	int ret, prctl_vl;
 +
-+	puts	"PID:\t"
-+	mov	x0, x20
-+	bl	putdecn
++	*supported = false;
 +
-+	mov	x23, #0		// Irritation signal count
++	/* Check if the VL is supported in this process */
++	prctl_vl = prctl(PR_SME_SET_VL, vl);
++	if (prctl_vl == -1)
++		ksft_exit_fail_msg("prctl(PR_SME_SET_VL) failed: %s (%d)\n",
++				   strerror(errno), errno);
 +
-+	mov	w0, #SIGINT
-+	adr	x1, terminate_handler
-+	mov	w2, #SA_SIGINFO
-+	bl	setsignal
++	/* If the VL is not supported then a supported VL will be returned */
++	*supported = (prctl_vl == vl);
 +
-+	mov	w0, #SIGTERM
-+	adr	x1, terminate_handler
-+	mov	w2, #SA_SIGINFO
-+	bl	setsignal
++	/* Set the VL by doing a set with no register payload */
++	memset(&za, 0, sizeof(za));
++	za.size = sizeof(za);
++	za.vl = vl;
++	ret = set_za(child, &za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u\n", vl);
++		return;
++	}
 +
-+	mov	w0, #SIGUSR1
-+	adr	x1, irritator_handler
-+	mov	w2, #SA_SIGINFO
-+	orr	w2, w2, #SA_NODEFER
-+	bl	setsignal
++	/*
++	 * Read back the new register state and verify that we have the
++	 * same VL that we got from prctl() on ourselves.
++	 */
++	if (!get_za(child, (void **)&new_za, &new_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u\n", vl);
++		return;
++	}
 +
-+	mov	x22, #0		// generation number, increments per iteration
-+.Ltest_loop:
-+	smstart_sm		// printing/signals/yielding dropped out of SM
-+	rdvl	x0, #8
-+	cmp	x0, x19
-+	b.ne	vl_barf
++	ksft_test_result(new_za->vl = prctl_vl, "Set VL %u\n", vl);
 +
-+	rdvl	x21, #1		// Set up ZA & shadow with test pattern
-+	smstop_sm
-+0:	mov	x0, x20
-+	sub	x1, x21, #1
-+	mov	x2, x22
-+	bl	setup_za
-+	subs	x21, x21, #1
-+	b.ne	0b
++	free(new_za);
++}
 +
-+	and	x8, x22, #127		// Every 128 interations...
-+	cbz	x8, 0f
-+	mov	x8, #__NR_getpid	// (otherwise minimal syscall)
-+	b	1f
-+0:
-+	mov	x8, #__NR_sched_yield	// ...encourage preemption
-+1:
-+	svc	#0
++/* Validate attempting to set no ZA data and read it back */
++static void ptrace_set_no_data(pid_t child, unsigned int vl)
++{
++	void *read_buf = NULL;
++	struct user_za_header write_za;
++	struct user_za_header *read_za;
++	size_t read_za_size = 0;
++	int ret;
 +
-+	mrs	x0, S3_3_C4_C2_2	// SVCR should have ZA=1,SM=0
-+	and	x1, x0, #3
-+	cmp	x1, #2
-+	b.ne	svcr_barf
++	/* Set up some data and write it out */
++	memset(&write_za, 0, sizeof(write_za));
++	write_za.size = ZA_PT_ZA_OFFSET;
++	write_za.vl = vl;
 +
-+	smstart_sm
-+	rdvl	x21, #1			// Verify that the data made it through
-+	rdvl	x24, #1			// Verify that the data made it through
-+	smstop_sm
-+0:	sub	x0, x24, x21
-+	bl	check_za
-+	subs	x21, x21, #1
-+	bne	0b
++	ret = set_za(child, &write_za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u no data\n", vl);
++		return;
++	}
 +
-+	add	x22, x22, #1	// Everything still working
-+	b	.Ltest_loop
++	/* Read the data back */
++	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u no data\n", vl);
++		return;
++	}
++	read_za = read_buf;
 +
-+.Labort:
-+	mov	x0, #0
-+	mov	x1, #SIGABRT
-+	mov	x8, #__NR_kill
-+	svc	#0
-+endfunction
++	/* We might read more data if there's extensions we don't know */
++	if (read_za->size < write_za.size) {
++		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
++				      vl, write_za.size, read_za->size);
++		goto out_read;
++	}
 +
-+function barf
-+// fpsimd.c acitivty log dump hack
-+//	ldr	w0, =0xdeadc0de
-+//	mov	w8, #__NR_exit
-+//	svc	#0
-+// end hack
-+	smstop
-+	mov	x10, x0	// expected data
-+	mov	x11, x1	// actual data
-+	mov	x12, x2	// data size
++	ksft_test_result(read_za->size == write_za.size,
++			 "Disabled ZA for VL %u\n", vl);
 +
-+	puts	"Mismatch: PID="
-+	mov	x0, x20
-+	bl	putdec
-+	puts	", iteration="
-+	mov	x0, x22
-+	bl	putdec
-+	puts	", row="
-+	mov	x0, x21
-+	bl	putdecn
-+	puts	"\tExpected ["
-+	mov	x0, x10
-+	mov	x1, x12
-+	bl	dumphex
-+	puts	"]\n\tGot      ["
-+	mov	x0, x11
-+	mov	x1, x12
-+	bl	dumphex
-+	puts	"]\n"
++out_read:
++	free(read_buf);
++}
 +
-+	mov	x8, #__NR_getpid
-+	svc	#0
-+// fpsimd.c acitivty log dump hack
-+//	ldr	w0, =0xdeadc0de
-+//	mov	w8, #__NR_exit
-+//	svc	#0
-+// ^ end of hack
-+	mov	x1, #SIGABRT
-+	mov	x8, #__NR_kill
-+	svc	#0
-+//	mov	x8, #__NR_exit
-+//	mov	x1, #1
-+//	svc	#0
-+endfunction
++/* Validate attempting to set data and read it back */
++static void ptrace_set_get_data(pid_t child, unsigned int vl)
++{
++	void *write_buf;
++	void *read_buf = NULL;
++	struct user_za_header *write_za;
++	struct user_za_header *read_za;
++	size_t read_za_size = 0;
++	unsigned int vq = sve_vq_from_vl(vl);
++	int ret;
++	size_t data_size;
 +
-+function vl_barf
-+	mov	x10, x0
++	data_size = ZA_PT_SIZE(vq);
++	write_buf = malloc(data_size);
++	if (!write_buf) {
++		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
++				      data_size, vl);
++		return;
++	}
++	write_za = write_buf;
 +
-+	puts	"Bad active VL: "
-+	mov	x0, x10
-+	bl	putdecn
++	/* Set up some data and write it out */
++	memset(write_za, 0, data_size);
++	write_za->size = data_size;
++	write_za->vl = vl;
 +
-+	mov	x8, #__NR_exit
-+	mov	x1, #1
-+	svc	#0
-+endfunction
++	fill_buf(write_buf + ZA_PT_ZA_OFFSET, ZA_PT_ZA_SIZE(vq));
 +
-+function svcr_barf
-+	mov	x10, x0
++	ret = set_za(child, write_za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u data\n", vl);
++		goto out;
++	}
 +
-+	puts	"Bad SVCR: "
-+	mov	x0, x10
-+	bl	putdecn
++	/* Read the data back */
++	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u data\n", vl);
++		goto out;
++	}
++	read_za = read_buf;
 +
-+	mov	x8, #__NR_exit
-+	mov	x1, #1
-+	svc	#0
-+endfunction
++	/* We might read more data if there's extensions we don't know */
++	if (read_za->size < write_za->size) {
++		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
++				      vl, write_za->size, read_za->size);
++		goto out_read;
++	}
++
++	ksft_test_result(memcmp(write_buf + ZA_PT_ZA_OFFSET,
++				read_buf + ZA_PT_ZA_OFFSET,
++				ZA_PT_ZA_SIZE(vq)) == 0,
++			 "Data match for VL %u\n", vl);
++
++out_read:
++	free(read_buf);
++out:
++	free(write_buf);
++}
++
++static int do_parent(pid_t child)
++{
++	int ret = EXIT_FAILURE;
++	pid_t pid;
++	int status;
++	siginfo_t si;
++	unsigned int vq, vl;
++	bool vl_supported;
++
++	/* Attach to the child */
++	while (1) {
++		int sig;
++
++		pid = wait(&status);
++		if (pid == -1) {
++			perror("wait");
++			goto error;
++		}
++
++		/*
++		 * This should never happen but it's hard to flag in
++		 * the framework.
++		 */
++		if (pid != child)
++			continue;
++
++		if (WIFEXITED(status) || WIFSIGNALED(status))
++			ksft_exit_fail_msg("Child died unexpectedly\n");
++
++		if (!WIFSTOPPED(status))
++			goto error;
++
++		sig = WSTOPSIG(status);
++
++		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
++			if (errno == ESRCH)
++				goto disappeared;
++
++			if (errno == EINVAL) {
++				sig = 0; /* bust group-stop */
++				goto cont;
++			}
++
++			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
++					      strerror(errno));
++			goto error;
++		}
++
++		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
++		    si.si_pid == pid)
++			break;
++
++	cont:
++		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
++			if (errno == ESRCH)
++				goto disappeared;
++
++			ksft_test_result_fail("PTRACE_CONT: %s\n",
++					      strerror(errno));
++			goto error;
++		}
++	}
++
++	/* Step through every possible VQ */
++	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
++		vl = sve_vl_from_vq(vq);
++
++		/* First, try to set this vector length */
++		ptrace_set_get_vl(child, vl, &vl_supported);
++
++		/* If the VL is supported validate data set/get */
++		if (vl_supported) {
++			ptrace_set_no_data(child, vl);
++			ptrace_set_get_data(child, vl);
++		} else {
++			ksft_test_result_skip("Disabled ZA for VL %u\n", vl);
++			ksft_test_result_skip("Get and set data for VL %u\n",
++					      vl);
++		}
++	}
++
++	ret = EXIT_SUCCESS;
++
++error:
++	kill(child, SIGKILL);
++
++disappeared:
++	return ret;
++}
++
++int main(void)
++{
++	int ret = EXIT_SUCCESS;
++	pid_t child;
++
++	srandom(getpid());
++
++	ksft_print_header();
++	ksft_set_plan(EXPECTED_TESTS);
++
++	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
++		ksft_exit_skip("SME not available\n");
++
++	child = fork();
++	if (!child)
++		return do_child();
++
++	if (do_parent(child))
++		ret = EXIT_FAILURE;
++
++	ksft_print_cnts();
++
++	return ret;
++}
 -- 
 2.30.2
 
