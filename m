@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7CDCC433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 123C8C433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF43A611BF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3E0763214
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 15:30:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236554AbhKOPdr (ORCPT
+        id S234996AbhKOPds (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Nov 2021 10:33:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52256 "EHLO mail.kernel.org"
+        Mon, 15 Nov 2021 10:33:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234996AbhKOPcR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 10:32:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DABE63227;
-        Mon, 15 Nov 2021 15:29:06 +0000 (UTC)
+        id S236538AbhKOPb6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 10:31:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C7DF63223;
+        Mon, 15 Nov 2021 15:29:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636990148;
-        bh=tSRR1Hx2vQ1L9CglGj8K2kL3Yw2aytBFNKVt5S2lyps=;
+        s=k20201202; t=1636990142;
+        bh=n/w7AweH9L8FxO6JYJptKDInrWPMknCr7JxAnBAUncs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H/D3BDTfNy0t/C7JPbIqrhjLtBsdSXEfvtQOYUjvgvx4gRIbet7vxjLpZn0Rjd8DD
-         f8IcxnLhlVGjX0OlVAy9Xb1da1D0orSOGXHaOZpqSBX7BgfVoH/E88wpk4vvkg7n3c
-         xP/udJdgDb3NgkAUtD/DWd/lgL8VhM8Nr8N/PANncKKyBrQzV+dgOepaFtf7qRd/p1
-         nRBfdAdTCAUeZi4g7BjRkQRG/U0rL+Q+5uEwvtvJ4gZ7EaHanq3GykuZLaygrVpBvI
-         yL2adr22b2/Z+Y/voUkmGSc7sgRDfPH9gpktC7MRxPi3se8jyaZhc5jnfTLT6MMr3k
-         +HoY7Hc/tLujQ==
+        b=CygbMmPYG+fnQSZM/SAXzpUbRa03D6pAtBpzeb1e2B8rza3pL73BuDCMBZYqBjsQo
+         kM1xjrhfPEeTQzfkSjjlYY+A86IQuKczyq3v7lZ+LlXKOXJYk6a+Re09GAAxRmZbA3
+         kEBsh24T5WLQqyCZv2n0ezt34UDoY6R1xZbc2bpUe9ARNR1QQ117+xvuQQMYfA7cKM
+         V0p+gs65FU2l41U8V4KCltawY5D8poqc69NDasviUYTmKaHGv13T6S4V1FGdNDM//Q
+         Z1FFNk8P3toWLLuk+JOFMyYhNGgkAHnDTAUItpHh+0oFRKVtSwpBEdQLNnmvrYZrJX
+         PuURVr7+2XiWA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -38,45 +38,45 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v6 05/37] kselftest/arm64: Allow signal tests to trigger from a function
-Date:   Mon, 15 Nov 2021 15:28:03 +0000
-Message-Id: <20211115152835.3212149-6-broonie@kernel.org>
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Luis Machado <Luis.Machado@arm.com>
+Subject: [PATCH v6 03/37] arm64/sve: Minor clarification of ABI documentation
+Date:   Mon, 15 Nov 2021 15:28:01 +0000
+Message-Id: <20211115152835.3212149-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211115152835.3212149-1-broonie@kernel.org>
 References: <20211115152835.3212149-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1074; h=from:subject; bh=tSRR1Hx2vQ1L9CglGj8K2kL3Yw2aytBFNKVt5S2lyps=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyIapvXFUQP5iZheLLevpxnzZ7rkksc5CJ4Z9nA vpN3VfWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8iAAKCRAk1otyXVSH0KsJB/ 9aMli/dNINOqiuyFcVQXTH0wLdoFEgxoSDS1WYI6P99kml8c902nUG7F2IpGc8WOd2NQXH3FtK5OGR V5+fiEqZ3blaAs5+dJctWUAgpM+cyGUQwI+CNxxltc4kZvnBywuwmE9c+DJNQWU7et3vD5ssYdpZYH s05qS9fvgqAXgqLT5U5EEGt5qe3fwJOgeg4Vd3l1eh8ZbG0cux4KrHz/82JMbvyDKBfvNCgzR2UPac +/rGdUKildB0KZ705nDicImC+1y+w1FE2UGZ7nJzij0ksZxqhS1uifHiPxJO97uDjdEmxUs+Gu8HmC 6lXQXiTcwNRkzMTdi5WhXwvD0nh7PM
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1041; h=from:subject; bh=n/w7AweH9L8FxO6JYJptKDInrWPMknCr7JxAnBAUncs=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhknyHbdYv2hXbEyhOJ3EEommD5opdHGXoM9/MryFW 8NF/teCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYZJ8hwAKCRAk1otyXVSH0CMSB/ 0TGoutx2W+b7XWSOEXm9eq/f+UKd9F4WyUTf3r1vm7U5abFjdYVygVTKfI+mUatLQizVJsAeFlY0jW cY3md1SQyAn5dF4R6aPE3jcIyxdDanTdIjrPCt4K9MtR2/bnIW+cz2neWQjzS3PNHk/4TDfSvXVpuI pIfcEdtAmo0vpXjb1pzV7PjT49+BqR8eEeMfc00RwszrRqfgI6f1qXaRfcJLZb0Wp9EUZnibtaeKkN sH6/b4dB3jjzr2O3zBj13ekHVZGVu2rxbJh1OkhrrNknB6wZuZMHNEFEs4TCukakYz7ONWGEnLx9al I0CIsRSa1V+W7JHVJLJRO4634GGFX1
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently we have the facility to specify custom code to trigger a signal
-but none of the tests use it and for some reason the framework requires us
-to also specify a signal to send as a trigger in order to make use of a
-custom trigger. This doesn't seem to make much sense, instead allow the
-use of a custom trigger function without specifying a signal to inject.
+As suggested by Luis for the SME version of this explicitly say that the
+vector length should be extracted from the return value of a set vector
+length prctl() with a bitwise and rather than just any old and.
 
+Suggested-by: Luis Machado <Luis.Machado@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/signal/test_signals_utils.c | 2 +-
+ Documentation/arm64/sve.rst | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-index 22722abc9dfa..8bb12be87a51 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-@@ -310,7 +310,7 @@ int test_setup(struct tdescr *td)
+diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
+index 03137154299e..9d9a4de5bc34 100644
+--- a/Documentation/arm64/sve.rst
++++ b/Documentation/arm64/sve.rst
+@@ -255,7 +255,7 @@ prctl(PR_SVE_GET_VL)
+     vector length change (which would only normally be the case between a
+     fork() or vfork() and the corresponding execve() in typical use).
  
- int test_run(struct tdescr *td)
- {
--	if (td->sig_trig) {
-+	if (td->sig_trig || td->trigger) {
- 		if (td->trigger)
- 			return td->trigger(td);
- 		else
+-    To extract the vector length from the result, and it with
++    To extract the vector length from the result, bitwise and it with
+     PR_SVE_VL_LEN_MASK.
+ 
+     Return value: a nonnegative value on success, or a negative value on error:
 -- 
 2.30.2
 
