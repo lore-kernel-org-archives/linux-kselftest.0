@@ -2,83 +2,94 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 199F1C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 21:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A0D5C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 23:12:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE2ED619E3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 21:45:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E42361414
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Nov 2021 23:12:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346887AbhKOVrp (ORCPT
+        id S241558AbhKOXPq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Nov 2021 16:47:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351184AbhKOVps (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Nov 2021 16:45:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 576FD61B2C;
-        Mon, 15 Nov 2021 21:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637012569;
-        bh=LVsPdaw2yY7qWBTlOQrq7wYxukq/AP9opsWvdVtsMmI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uqkD3GfTytoMGYLQ5dXGmYjfMgpBUh/3gTTpinb9tYV/suVLU0EYuVg2ADRV+5Kg3
-         sZcYfzrcwmXpyTAzz3Q6u5CEZ/fJGhwoq+vr28dO5Z+T5fox2MNJQhQNeG/0cJxl9v
-         vcslsPEb0h49jfKWUABZYDqf/eBEA2NFd6jifzYkJseGOdFm062QuHB7MlDAlwpomE
-         1J2j4xBNOTZu7Qm+MR0a0sKFyn0vqpkp4PeGqBIM2MGsdxnZFjbsdA6JGvULL4di7f
-         s1R3O9qYO7tqUoTEdnKiffTE/X5gBUvCRCp1D6v1EJkUHtI+YMYmmkSPQDNfFmTkkX
-         kPUyjALAmgHYQ==
-Date:   Mon, 15 Nov 2021 13:42:48 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Machnikowski, Maciej" <maciej.machnikowski@intel.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>
-Cc:     Petr Machata <petrm@nvidia.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "abyagowi@fb.com" <abyagowi@fb.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "idosch@idosch.org" <idosch@idosch.org>,
-        "mkubecek@suse.cz" <mkubecek@suse.cz>,
-        "saeed@kernel.org" <saeed@kernel.org>,
-        "michael.chan@broadcom.com" <michael.chan@broadcom.com>
-Subject: Re: [PATCH v2 net-next 6/6] docs: net: Add description of SyncE
- interfaces
-Message-ID: <20211115134248.5d111036@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <MW5PR11MB58121DC2755B9AADA3516E75EA989@MW5PR11MB5812.namprd11.prod.outlook.com>
-References: <20211105205331.2024623-1-maciej.machnikowski@intel.com>
-        <20211105205331.2024623-7-maciej.machnikowski@intel.com>
-        <87r1bqcyto.fsf@nvidia.com>
-        <MW5PR11MB5812B0A4E6227C6896AC12B5EA929@MW5PR11MB5812.namprd11.prod.outlook.com>
-        <87mtmdcrf2.fsf@nvidia.com>
-        <MW5PR11MB5812D4A8419C37FE9C890D3AEA929@MW5PR11MB5812.namprd11.prod.outlook.com>
-        <87bl2scnly.fsf@nvidia.com>
-        <MW5PR11MB5812034EA5FC331FA5A2D37CEA939@MW5PR11MB5812.namprd11.prod.outlook.com>
-        <874k8kca9t.fsf@nvidia.com>
-        <MW5PR11MB5812757CFF0ACED1D9CFC5A2EA939@MW5PR11MB5812.namprd11.prod.outlook.com>
-        <87y25vbu19.fsf@nvidia.com>
-        <MW5PR11MB58121DC2755B9AADA3516E75EA989@MW5PR11MB5812.namprd11.prod.outlook.com>
+        Mon, 15 Nov 2021 18:15:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45374 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345070AbhKOVbF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Nov 2021 16:31:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637011689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eB9LIJ8wftWZtVC2tmoTuif+x3rpeL1vcMWkA0vO7Oo=;
+        b=ixnw1mcTr19CdHQ0ch6Echv3BASAZnVEpZz0YjCPK9eKtIejvUoakitYWPPQVES4nM6EBK
+        lk3l1ex7YCZJpwRdstvJlmwg2ksU5s+O7cmnjibbHb+BPc0ydoK8s5MB0jLOLs5g8Ez81s
+        hrniOiO5d6CQB15ETzGKuLWEN0nELrU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-193-2Dn2_3U9N7eoU0qXDNUoVQ-1; Mon, 15 Nov 2021 16:28:06 -0500
+X-MC-Unique: 2Dn2_3U9N7eoU0qXDNUoVQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9300D87D545;
+        Mon, 15 Nov 2021 21:28:03 +0000 (UTC)
+Received: from [10.22.33.148] (unknown [10.22.33.148])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0769D10016FC;
+        Mon, 15 Nov 2021 21:27:57 +0000 (UTC)
+Message-ID: <1426905d-f93a-7500-177b-a8e0fae467ab@redhat.com>
+Date:   Mon, 15 Nov 2021 16:27:57 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz> <YZK/A43T+zvu89dl@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YZK/A43T+zvu89dl@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 15 Nov 2021 10:12:25 +0000 Machnikowski, Maciej wrote:
-> > > Netdev owns the PHY, so it needs to enable/disable clock from a given
-> > > port/lane - other than that it's EECs task. Technically - those subsystems
-> > > are separate.  
-> > 
-> > So why is the UAPI conflating the two?  
-> 
-> Because EEC can be a separate external device, but also can be integrated
-> inside the netdev. In the second case it makes more sense to just return
-> the state from a netdev 
 
-I mentioned that we are in a need of such API to Vadim who, among other
-things, works on the OCP Timecard. He indicated interest in developing
-the separate netlink interface for "DPLLs" (the timecard is just an
-atomic clock + GPS, no netdev to hang from). Let's wait for Vadim's work
-to materialize and build on top of that.
+On 11/15/21 15:11, Tejun Heo wrote:
+> Hello,
+>
+> On Mon, Nov 15, 2021 at 08:31:22PM +0100, Michal Koutný wrote:
+>> Now to the constraints and partition setups. I think it's useful to have
+>> a model with which the implementation can be compared with.
+>> I tried to condense some "simple rules" from the descriptions you posted
+>> in v8 plus your response to my remarks in v7 [2]. These should only be
+>> the "validity conditions", not "transition conditions".
+> FWIW, my opinion is pretty much in line with Michal's in this regard. Other
+> than that, everything looks pretty good to me.
+
+Yes, I am going to streamline the documentation as suggested to make it 
+easier to understand.
+
+Coding-wise, do you have other changes you want me to make?
+
+Thanks,
+Longman
+
