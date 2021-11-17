@@ -2,92 +2,88 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44054C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Nov 2021 05:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 517E8C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Nov 2021 08:48:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2335F60E08
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Nov 2021 05:49:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 354CD61C4F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Nov 2021 08:48:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbhKQFv7 (ORCPT
+        id S234596AbhKQIu4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Nov 2021 00:51:59 -0500
-Received: from mga09.intel.com ([134.134.136.24]:56168 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233405AbhKQFv4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Nov 2021 00:51:56 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="233720259"
-X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="233720259"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:48:58 -0800
-X-IronPort-AV: E=Sophos;i="5.87,240,1631602800"; 
-   d="scan'208";a="604603865"
-Received: from xinshuob-mobl.ccr.corp.intel.com (HELO lkp-bingo.fnst-test.com) ([10.255.31.178])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2021 21:48:55 -0800
-From:   Li Zhijian <zhijianx.li@intel.com>
-To:     shuah@kernel.org, kuba@kernel.org, dcaratti@redhat.com,
-        linux-kselftest@vger.kernel.org
-Cc:     lizhijian@cn.fujitsu.com, linux-kernel@vger.kernel.org,
-        lkp@intel.com, philip.li@intel.com,
-        Li Zhijian <zhijianx.li@intel.com>
-Subject: [PATCH v2 3/3] selftests/tc-testing: Fix cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
-Date:   Wed, 17 Nov 2021 13:45:17 +0800
-Message-Id: <20211117054517.31847-3-zhijianx.li@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211117054517.31847-1-zhijianx.li@intel.com>
-References: <20211117054517.31847-1-zhijianx.li@intel.com>
+        Wed, 17 Nov 2021 03:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234595AbhKQIu4 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Nov 2021 03:50:56 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2293DC061766
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 00:47:58 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id y26so5272748lfa.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Nov 2021 00:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9yJIKBkP/hglrN2GamqzYCPrI09C09Ls8U6CmGp4m+U=;
+        b=moB0PXTl70rf/MyP3I0QeYk8t7ub0FlTGV1HzUVW4qwLq9Xj14xVXFtjVrLyw6BZHV
+         PTmyfSC619Hw0rOzwl0Gk8aRJOCpTa0zxRrY6sqOBykhpNz3XTKB0B6Z+9CNxkXOfpnG
+         TmJYkMRwdSN83eXS1M0KI1XKU441hSMu5dKP0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9yJIKBkP/hglrN2GamqzYCPrI09C09Ls8U6CmGp4m+U=;
+        b=7SMM5cEOiL44hPtmEaT7+eMK5btwwUkGfrktmAGLKC+wHXozfFaDLFM7ujHRnblOun
+         Ef4rjDplVvOfnhZMBUPQvSymYzGj26zkG/jrJof03bf0dIdxC8IE9JqWkC86XsYaQ6UP
+         AAMTuB5yMNxJHmLfDZ69c0b/A9/CFxvTsW67OUgEp8UmR4f86DiJJfsp1uBryUhkolTr
+         9EX0N4NVX5LULo28BArqFlO9D6CRQhDdKgfGIh5CO5hW1rjNh7SSnOnAwf61456dtrsN
+         c/ief5pGeURAyLSyK4FN4x+d6kqSUrugVH8tr5Xtpwprj9rsOCYQbxQRLF9mrN/U9Oia
+         fy4Q==
+X-Gm-Message-State: AOAM531qhSfoUEV6TJZR2ly7FNBh525sCIPGbmA+rcXGirsM13lbE04C
+        1n+UZzu8IkKZQE00y2l/WrbePyaHZ5hJEgIrnipGngbREbQ=
+X-Google-Smtp-Source: ABdhPJyup6wdQP7lq2iQ9eWNfwCJm2OJVL9q/glWYOp3IJ6/yAujHKV3SscAIeCa4bAYjVrQ+AV3riR5SoORtlHBpM4=
+X-Received: by 2002:a05:6512:31d:: with SMTP id t29mr13381740lfp.331.1637138876438;
+ Wed, 17 Nov 2021 00:47:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211111161452.86864-1-lmb@cloudflare.com> <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
+In-Reply-To: <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Wed, 17 Nov 2021 08:47:45 +0000
+Message-ID: <CACAyw99EhJ8k4f3zeQMf3pRC+L=hQhK=Rb3UwSz19wt9gnMPrA@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Install netdevsim to provide /sys/bus/netdevsim/new_device interface.
+On Sat, 13 Nov 2021 at 01:27, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> Not sure how you've tested it, but it doesn't work in unpriv:
+> $ test_verifier 789
+> #789/u map in map state pruning FAIL
+> processed 26 insns (limit 1000000) max_states_per_insn 0 total_states
+> 2 peak_states 2 mark_read 1
+> #789/p map in map state pruning OK
 
-It helps to fix:
- # ok 97 9a7d - Change ETS strict band without quantum # skipped - skipped - previous setup failed 11 ce7d
- #
- #
- # -----> prepare stage *** Could not execute: "echo "1 1 4" > /sys/bus/netdevsim/new_device"
- #
- # -----> prepare stage *** Error message: "/bin/sh: 1: cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
- # "
- #
- # -----> prepare stage *** Aborting test run.
- #
- #
- # <_io.BufferedReader name=5> *** stdout ***
- #
+Strange, I have a script that I use for bisecting which uses a minimal
+.config + virtue to run a vm, plus I was debugging in gdb at the same
+time. I might have missed this, apologies.
 
-Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
----
- tools/testing/selftests/tc-testing/config | 1 +
- tools/testing/selftests/tc-testing/tdc.sh | 1 +
- 2 files changed, 2 insertions(+)
+I guess vmtest.sh is the canonical way to run tests now?
 
-diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
-index b1cd7efa4512..a3239d5e40c7 100644
---- a/tools/testing/selftests/tc-testing/config
-+++ b/tools/testing/selftests/tc-testing/config
-@@ -61,6 +61,7 @@ CONFIG_NET_SCH_FIFO=y
- CONFIG_NET_SCH_ETS=m
- CONFIG_NET_SCH_RED=m
- CONFIG_NET_SCH_FQ_PIE=m
-+CONFIG_NETDEVSIM=m
- 
- #
- ## Network testing
-diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
-index 7fe38c76db44..afb0cd86fa3d 100755
---- a/tools/testing/selftests/tc-testing/tdc.sh
-+++ b/tools/testing/selftests/tc-testing/tdc.sh
-@@ -1,5 +1,6 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+modprobe netdevsim
- ./tdc.py -c actions --nobuildebpf
- ./tdc.py -c qdisc
 -- 
-2.32.0
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
