@@ -2,209 +2,187 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79D1FC433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Nov 2021 11:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D107C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Nov 2021 14:51:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58FEA613D3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Nov 2021 11:56:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A0A861548
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Nov 2021 14:51:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344125AbhKRL75 (ORCPT
+        id S229805AbhKROy6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:59:57 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1144 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344232AbhKRL7z (ORCPT
+        Thu, 18 Nov 2021 09:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229649AbhKROy6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Nov 2021 06:59:55 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AIBgk6F023416;
-        Thu, 18 Nov 2021 11:56:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=FenOA346W98FDSn8BoNiTZo+9+WTDEAKBpVat/VSevc=;
- b=gv+IxrHt+AgU+/wxXo1HdO2lK698p3NeQ2q3es8qGY4z8mc1Ph/Q2e3oDv/Zga0LzfFg
- 0avXKdLNBztP+sv3s1lAMUryfXAEfboDwX5pvmuowggP8uTke6jOMx493j/LaqmcvFfh
- LV07uSymzfAeNWl47vuW/aiLdjNg81RD52LLhKHjg8wsdWvTbQ8OJDdz733VhSMqMZ5Z
- Fp/dPyhqqtgR3Nqyy+4Z2L0P3ZR85t5dXCMFj9LDzOrkk0Jg8zXxSfuXDykWuiLxawuz
- s7phIaCk+utdRo+LJ/LIzPcVXrsY6ZwHYtegbokpcoAcI1S3KL1ViWfiGfvdkt3YzD5z nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cdns98upc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Nov 2021 11:56:42 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AIBItEZ001308;
-        Thu, 18 Nov 2021 11:56:41 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cdns98unx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Nov 2021 11:56:41 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AIBlZXc028180;
-        Thu, 18 Nov 2021 11:56:39 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ca50an60h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Nov 2021 11:56:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AIBndc158982760
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Nov 2021 11:49:39 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04F2CA404D;
-        Thu, 18 Nov 2021 11:56:37 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 648C6A405F;
-        Thu, 18 Nov 2021 11:56:36 +0000 (GMT)
-Received: from sig-9-145-38-29.uk.ibm.com (unknown [9.145.38.29])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Nov 2021 11:56:36 +0000 (GMT)
-Message-ID: <06aa2d62d09bcd0a39898f7dcc7fb2fcdc262081.camel@linux.ibm.com>
-Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 18 Nov 2021 12:56:36 +0100
-In-Reply-To: <CAEf4BzZTiyyKLg2y_dSvEEgzjSsCRCeRgt99DmFAHJyGqht8tw@mail.gmail.com>
-References: <20211111161452.86864-1-lmb@cloudflare.com>
-         <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
-         <CACAyw99EhJ8k4f3zeQMf3pRC+L=hQhK=Rb3UwSz19wt9gnMPrA@mail.gmail.com>
-         <20211118010059.c2mixoshcrcz4ywq@ast-mbp>
-         <CAEf4Bza=ZipeiwhvUvLLs9r4dbOUQ6JQTAotmgF6tUr1DAc9pw@mail.gmail.com>
-         <CAEf4BzZTiyyKLg2y_dSvEEgzjSsCRCeRgt99DmFAHJyGqht8tw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -8DdZLycEXqBpoCbV8D2IhZxJP9dCJAy
-X-Proofpoint-ORIG-GUID: eVsQqMjySa30KcufDoTJAdhDqfSSQhxa
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 18 Nov 2021 09:54:58 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2DAC061748
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 06:51:58 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d27so12069448wrb.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Nov 2021 06:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l/3Z4XGcqYwV4V6oJiYgbORs/SEqlAwMD+aKJHi8Aw0=;
+        b=loM5pLXRmcR68RfF6U0PZ3BKyaZb2Jr/o6CnjIAntvneXNEqrHNr7hUcYluL/tLnly
+         FDsuKH7X5M0cMQqBDPP4IGCLTZT7sCCtl068RtVv5M8w3NyRZtcX6r2p4SnVeAc6DUSF
+         CKHB0nJv2kHTDsPFC1SxDFH2lNeinGpB/MOuAEsxTXGFFctRqE22ksPYxfDK7TWze708
+         v00Uv3akr65t5pQgoFcxoj2jT7HCJp3XqLa775zyxu38UHt1Enj2rU90SmytmQKP+8EH
+         M+bVpz+tyCf2IcoPx0RgwfmP63gJend3y8vEd0Xc51LOrKE8120PhFkaR6/4MWbwISQI
+         kyzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l/3Z4XGcqYwV4V6oJiYgbORs/SEqlAwMD+aKJHi8Aw0=;
+        b=sI/7XjsyuvOsH3PHevUL/5fPhSXLbu3DO5QlpFwNu3tByTS2/UawWpvM8/v/eP0AtD
+         ygsi8uNMpp2Yxla+rl7c/5neLylayAJUVS3UJJtqnNeEx0Kf4PzP19jTa1fFMlkoNckn
+         1ntxDX+M7YznftXDJMmD/tjq7S15L97eS+05QwExPgIXkfYqRTuWzBTsITDgZOHJHMg9
+         iiPbjkyDb4cAM9CpyVDDjMrsjnr6E7u0GTSId0bA9yJJJe1Wdq07gfW5lz3tIwqPfOs1
+         RxcWkhcwQM3/NIhW3WTWSMCzRsHlR6iQImBk6nJpgi9JQabdNLkns6EKgTSp/wubQSMs
+         IwBg==
+X-Gm-Message-State: AOAM531STlwCZ++jB9qeXDSfvpsiROEoIP7y15blDL+i7rlk3Ya9pELI
+        gsoRyaHfLbNqyE5TTj/40BOHq2KOF/cEuGp8
+X-Google-Smtp-Source: ABdhPJyNxJobDwtILjTC6h5Cp05n1wiYxhZhxizHmJukDD8j8h6sjQv2l2t4xzah0tH4iZGJPmEgYA==
+X-Received: by 2002:adf:d22a:: with SMTP id k10mr31239898wrh.80.1637247116671;
+        Thu, 18 Nov 2021 06:51:56 -0800 (PST)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id f7sm63154wri.74.2021.11.18.06.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Nov 2021 06:51:56 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v9 0/4] gpio-sim: configfs-based GPIO simulator
+Date:   Thu, 18 Nov 2021 15:51:38 +0100
+Message-Id: <20211118145142.14519-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-18_05,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- phishscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111180067
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2021-11-17 at 17:38 -0800, Andrii Nakryiko wrote:
-> On Wed, Nov 17, 2021 at 5:29 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > 
-> > On Wed, Nov 17, 2021 at 5:01 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > 
-> > > On Wed, Nov 17, 2021 at 08:47:45AM +0000, Lorenz Bauer wrote:
-> > > > On Sat, 13 Nov 2021 at 01:27, Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > 
-> > > > > Not sure how you've tested it, but it doesn't work in unpriv:
-> > > > > $ test_verifier 789
-> > > > > #789/u map in map state pruning FAIL
-> > > > > processed 26 insns (limit 1000000) max_states_per_insn 0
-> > > > > total_states
-> > > > > 2 peak_states 2 mark_read 1
-> > > > > #789/p map in map state pruning OK
-> > > > 
-> > > > Strange, I have a script that I use for bisecting which uses a
-> > > > minimal
-> > > > .config + virtue to run a vm, plus I was debugging in gdb at the
-> > > > same
-> > > > time. I might have missed this, apologies.
-> > > > 
-> > > > I guess vmtest.sh is the canonical way to run tests now?
-> > > 
-> > > vmtest.sh runs test_progs only. That's the minimum bar that
-> > 
-> > It runs test_progs by default, unless something else is requested.
-> > You
-> > can run anything inside it, e.g.:
-> > 
-> > ./vmtest.sh -- ./test_maps
-> > 
-> > BTW, we recently moved configs around in libbpf repo on Github, so
-> > this script broke. I'm sending a fix in a few minutes, hopefully.
-> 
-> ... and of course it's not that simple. [0] recently changed how we
-> build qemu image and vmtest.sh had some assumptions. Some trivial
-> things I fixed, but I'm not too familiar with the init scripts stuff.
-> Adding Ilya and KP to hopefully help with this. Ilya, KP, can you
-> please help restore vmtest.sh functionality?
-> 
-> After fixing few paths:
-> 
-> diff --git a/tools/testing/selftests/bpf/vmtest.sh
-> b/tools/testing/selftests/bpf/vmtest.sh
-> index 027198768fad..7ea40108b85d 100755
-> --- a/tools/testing/selftests/bpf/vmtest.sh
-> +++ b/tools/testing/selftests/bpf/vmtest.sh
-> @@ -13,8 +13,8 @@ DEFAULT_COMMAND="./test_progs"
->  MOUNT_DIR="mnt"
->  ROOTFS_IMAGE="root.img"
->  OUTPUT_DIR="$HOME/.bpf_selftests"
-> -
-> KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config
-> "
-> -
-> KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/latest.config
-> "
-> +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/config-latest.x86_64
-> "
-> +KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/config-latest.x86_64
-> "
->  INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX
-> "
->  NUM_COMPILE_JOBS="$(nproc)"
->  LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
-> @@ -85,7 +85,7 @@ newest_rootfs_version()
->  {
->         {
->         for file in "${!URLS[@]}"; do
-> -               if [[ $file =~ ^libbpf-vmtest-rootfs-(.*)\.tar\.zst$
-> ]]; then
-> +               if [[ $file =~
-> ^x86_64/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
->                         echo "${BASH_REMATCH[1]}"
->                 fi
->         done
-> 
-> ... the next problem is more severe. Script complains about missing
-> /etc/rcS.d, if I just force-created it, when kernel boots we get:
-> 
-> 
-> [    1.050803] ---[ end Kernel panic - not syncing: No working init
-> found.  Try passing init= option to kernel. See Linux
-> Documentation/admin-guide/init.rst for guidance. ]---
-> 
-> 
-> Please help.
-> 
->   [0] https://github.com/libbpf/libbpf/pull/204
+This is another shot at the gpio-sim testing module. As there was no
+reasoning with configfs maintainers for many months, this time the whole
+concept of committable items has been dropped. Instead, each configfs
+chip item (or rather a group - more on that later) exposes a new
+attribute called 'live'. Writing 1 to it brings the chip on-line
+(registers the platform device) and writing 0 tears it down.
 
-I've posted a fix, please give it a try:
+There are some caveats to that approach - for example: we can't block
+the user-space from deleting chip items when chips are live but is just
+handled by silently destroying the chip device in the background.
 
-https://lore.kernel.org/bpf/20211118115225.1349726-1-iii@linux.ibm.com/
+Andy (rightfully) pointed out that parsing of the lists of line names is
+awkward so in this iteration it's been replaced by a system that is more
+elegant and will allow to easily extend configuration options for
+specific GPIO lines. This is achieved by turning the chip's configfs
+item into a configfs group and allowing the user-space to create
+additional items inside it. The items must be called line<offset> (e.g.
+line0, line12 etc.) where the offset part indicates to the module the
+offset for which given item stores the configuration for. Within each
+such line item, there are additional attributes that allow specifying
+configuration for specific lines. Currently we only support the 'name'
+attribute but I plan to extend that to support GPIO hogging too.
 
-Missing was the ${ARCH} prefix when downloading the image, so it ended
-up being empty. Now your ~/.bpf_selftests is poisoned with it, so
-you'll need to run vmtest.sh with -i switch once in order to remove the
-bad image.
+v1 -> v2:
+- add selftests for gpio-sim
+- add helper programs for selftests
+- update the configfs rename callback to work with the new API introduced in
+  v5.11
+- fix a missing quote in the documentation
+- use !! whenever using bits operation that are required to return 0 or 1
+- use provided bitmap API instead of reimplementing copy or fill operations
+- fix a deadlock in gpio_sim_direction_output()
+- add new read-only configfs attributes for mapping of configfs items to GPIO
+  device names
+- and address other minor issues pointed out in reviews of v1
 
-Best regards,
-Ilya
+v2 -> v3:
+- use devm_bitmap_alloc() instead of the zalloc variant if we're initializing
+  the bitmap with 1s
+- drop the patch exporting device_is_bound()
+- don't return -ENODEV from dev_nam and chip_name configfs attributes, return
+  a string indicating that the device is not available yet ('n/a')
+- fix indentation where it makes sense
+- don't protect IDA functions which use their own locking and where it's not
+  needed
+- use kmemdup() instead of kzalloc() + memcpy()
+- collected review tags
+- minor coding style fixes
+
+v3 -> v4:
+- return 'none' instead of 'n/a' from dev_name and chip_name before the device
+  is registered
+- use sysfs_emit() instead of s*printf()
+- drop GPIO_SIM_MAX_PROP as it's only used in an array's definition where it's
+  fine to hardcode the value
+
+v4 -> v5:
+- drop lib patches that are already upstream
+- use BIT() instead of (1UL << bit) for flags
+- fix refcounting for the configfs_dirent in rename()
+- drop d_move() from the rename() callback
+- free memory allocated for the live and pending groups in configfs_d_iput()
+  and not in detach_groups()
+- make sure that if a group of some name is in the live directory, a new group
+  with the same name cannot be created in the pending directory
+
+v5 -> v6:
+- go back to using (1UL << bit) instead of BIT()
+- if the live group dentry doesn't exist for whatever reason at the time when
+  mkdir() in the pending group is called (would be a BUG()), return -ENOENT
+  instead of -EEXIST which should only be returned if given subsystem already
+  exists in either live or pending group
+
+v6 -> v7:
+- as detailed by Andy in commit 6fda593f3082 ("gpio: mockup: Convert to use
+  software nodes") removing device properties after the platform device is
+  removed but before the GPIO device gets dropped can lead to a use-after-free
+  bug - use software nodes to manually control the freeing of the properties
+
+v7 -> v8:
+- fixed some minor coding style issues as pointed out by Andy
+
+v8 -> v9:
+- dropped the patches implementing committable-items and reworked the
+  driver to not use them
+- reworked the gpio-line-names property and configuring specific lines
+  in general
+- many smaller tweaks here and there
+
+Bartosz Golaszewski (4):
+  gpio: sim: new testing module
+  selftests: gpio: provide a helper for reading chip info
+  selftests: gpio: add a helper for reading GPIO line names
+  selftests: gpio: add test cases for gpio-sim
+
+ Documentation/admin-guide/gpio/gpio-sim.rst   |  67 ++
+ drivers/gpio/Kconfig                          |   8 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-sim.c                       | 990 ++++++++++++++++++
+ tools/testing/selftests/gpio/.gitignore       |   2 +
+ tools/testing/selftests/gpio/Makefile         |   4 +-
+ tools/testing/selftests/gpio/config           |   1 +
+ tools/testing/selftests/gpio/gpio-chip-info.c |  57 +
+ tools/testing/selftests/gpio/gpio-line-name.c |  55 +
+ tools/testing/selftests/gpio/gpio-sim.sh      | 266 +++++
+ 10 files changed, 1449 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/admin-guide/gpio/gpio-sim.rst
+ create mode 100644 drivers/gpio/gpio-sim.c
+ create mode 100644 tools/testing/selftests/gpio/gpio-chip-info.c
+ create mode 100644 tools/testing/selftests/gpio/gpio-line-name.c
+ create mode 100755 tools/testing/selftests/gpio/gpio-sim.sh
+
+-- 
+2.25.1
 
