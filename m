@@ -2,344 +2,178 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D635C433F5
-	for <linux-kselftest@archiver.kernel.org>; Sat, 20 Nov 2021 04:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24014C433EF
+	for <linux-kselftest@archiver.kernel.org>; Sun, 21 Nov 2021 09:28:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236995AbhKTEyc (ORCPT
+        id S231296AbhKUJbh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Nov 2021 23:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236913AbhKTExn (ORCPT
+        Sun, 21 Nov 2021 04:31:37 -0500
+Received: from a48-37.smtp-out.amazonses.com ([54.240.48.37]:57443 "EHLO
+        a48-37.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230459AbhKUJbh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Nov 2021 23:53:43 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B409C061758
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 20:50:29 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id l3-20020a170902f68300b00142892d0a86so5686219plg.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Nov 2021 20:50:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=uvNIfQ2xPxMosCuaZIYF62oO8SwPg1ICTimCdNTm9Vg=;
-        b=kkr7HoN4DfwCs24jlS1zFyDomRuE632ceq1FIOuLPKkP5rbmQpiVF2QlY4VWdBv3f1
-         gmqzsT2J6RO1wFTt8ELRkyFxE7vOyk00zgiJmcI++BCKPDYfxgEBhj05WQ7P+HSAClIG
-         uf73/EDXzDcXIsjYc7JgHddA0schC1QFC2zw8I9Et5IeYM5W24UkLIAMwTAZzYEdWFht
-         2+fTz1sSwLrbVTLMUTAkfO39C3FXugos8dhvkeoTBA7tZIIqyRvWvhn/IjKZR6i5U+/j
-         KHdrJPbo07RKeWEdjCMuyNp0MrsGP8F03eJKk+Km8ZFWfPBXNC9PKlY4qEgXEmdbL8PO
-         gdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=uvNIfQ2xPxMosCuaZIYF62oO8SwPg1ICTimCdNTm9Vg=;
-        b=OM3hBgFXewF0dR7/K20z4ccFwCBtZyzv8OS0fpbj+rBRuPaHc9buer7P1Y5NAPgChy
-         8iem6Xq/UI0oEuRWpSwkaTTacre1vcL4xzUbBkIeLsyQqhApSfaInofmhLGYVDK5a5Mt
-         KTONfath4XEeqVC4M1uSjKrgpVVnomfgvcciCqk8t/Q9YaXaQGgkofyUId78/0G3cpi8
-         TCDP2wVJao41mqeuMWLtIDWL4UQSo6A9uj6FTANy4+0/wkHg1V+zT+6P3k8qnOpwxT08
-         9UdsKgcK9/6q6X+G0zkZmnC92o9+aUEsGaeWu88WaB28fGZFCo29psyPE870/TXEfCqt
-         rTsQ==
-X-Gm-Message-State: AOAM530EHyYzw2iYmkdDTDXuREm2dutA0NRcvy2nVtmznvvk2Rp30N8Y
-        MoDMEHlVO8JQ/IdGFowmUTbadsuyOaANz28aYA==
-X-Google-Smtp-Source: ABdhPJxznMEO7QjA++HmqkjBv2dw1jatuQ8Xo0MBwxe+EG5+/zYigHZk1KISXWqJLlEm4pkIXaY6ZL25E8kDU4UWTA==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2cd:202:fa91:560a:d7b4:93])
- (user=almasrymina job=sendgmr) by 2002:a17:90a:c78f:: with SMTP id
- gn15mr6699081pjb.54.1637383828674; Fri, 19 Nov 2021 20:50:28 -0800 (PST)
-Date:   Fri, 19 Nov 2021 20:50:10 -0800
-In-Reply-To: <20211120045011.3074840-1-almasrymina@google.com>
-Message-Id: <20211120045011.3074840-5-almasrymina@google.com>
-Mime-Version: 1.0
-References: <20211120045011.3074840-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v4 4/4] mm, shmem, selftests: add tmpfs memcg= mount option tests
-From:   Mina Almasry <almasrymina@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Roman Gushchin <guro@fb.com>, "Theodore Ts'o" <tytso@mit.edu>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 21 Nov 2021 04:31:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1637486912;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=kKRWo32vrk+yuNlqww9gySJ3Rs3bcePnDdJspBNA7AQ=;
+        b=Xo2QtpGQwG+QpWsLLUZBfHkvhKxuyVAdl0N7/wNto1R2KfIJOkG6vXUwGd+60CCn
+        alK+XydtqPMiIxB/WHMt7TCeL2yCHbr/XeO64KLUzp7C9YNh0d3U/xggR6LcxbWhaIg
+        mEskzAskBTackHhD1NEaYN5B4EAl+vo1j/C+sCnY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1637486912;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=kKRWo32vrk+yuNlqww9gySJ3Rs3bcePnDdJspBNA7AQ=;
+        b=T8MTi8r8YYbFfd6j/xar6U4dOwNvxUVtqxXG4sm4tAG3eY0iai1GoH7ksdfAaAhQ
+        Kfe82wPWogWOG8wDfIEJ4wSIJjcJLq0fmMSdIl3ATLaYEjdwxW+G/bYJ+IMcoY4ytL5
+        icn6+7rtM3AMTMprjnIV+LgwtcIqB7Rb9b+MPHQE=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20211117
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100017d41d36138-496e8b33-5be4-4f63-9316-3e7be15c2fe2-000000@email.amazonses.com>
+Date:   Sun, 21 Nov 2021 09:28:31 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2021.11.21-54.240.48.37
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-- Test mounting and remounting with memcg= succeeds.
-- Test that simple writes in this file system are charged to the correct
-  memecg.
-- Test that on non-pagefault paths the calling process gets an ENOSPC.
-- Test that in pagefault paths the calling process gets a SIGBUS.
+## Build
+* kernel: 5.16.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: fd96a4057bd015d194a4b87e7c149fc2fef3c166
+* git describe: next-20211117
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20211117
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
+## Regressions (compared to next-20211115)
+* dragonboard-410c, kselftest-sync
+  - sync.sync_test
 
----
+* i386, kselftest-net
+  - net.ip_defrag.sh
 
-Changes in v4:
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
 
-- Convert tests to expect ENOSPC/SIGBUS rather than ENOMEM oom behavior.
-- Added remount test.
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
 
----
- tools/testing/selftests/vm/.gitignore     |   1 +
- tools/testing/selftests/vm/mmap_write.c   | 103 +++++++++++++++++++
- tools/testing/selftests/vm/tmpfs-memcg.sh | 116 ++++++++++++++++++++++
- 3 files changed, 220 insertions(+)
- create mode 100644 tools/testing/selftests/vm/mmap_write.c
- create mode 100755 tools/testing/selftests/vm/tmpfs-memcg.sh
+* qemu_x86_64, kselftest-rtc
+  - rtc.rtctest
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 2e7e86e852828..cb229974c5f15 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -19,6 +19,7 @@ madv_populate
- userfaultfd
- mlock-intersect-test
- mlock-random-test
-+mmap_write
- virtual_address_range
- gup_test
- va_128TBswitch
-diff --git a/tools/testing/selftests/vm/mmap_write.c b/tools/testing/selftests/vm/mmap_write.c
-new file mode 100644
-index 0000000000000..88a8468f2128c
---- /dev/null
-+++ b/tools/testing/selftests/vm/mmap_write.c
-@@ -0,0 +1,103 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This program faults memory in tmpfs
-+ */
-+
-+#include <err.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <sys/types.h>
-+#include <sys/shm.h>
-+#include <sys/stat.h>
-+#include <sys/mman.h>
-+
-+/* Global definitions. */
-+
-+/* Global variables. */
-+static const char *self;
-+static char *shmaddr;
-+static int shmid;
-+
-+/*
-+ * Show usage and exit.
-+ */
-+static void exit_usage(void)
-+{
-+	printf("Usage: %s -p <path to tmpfs file> -s <size to map>\n", self);
-+	exit(EXIT_FAILURE);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int fd = 0;
-+	int key = 0;
-+	int *ptr = NULL;
-+	int c = 0;
-+	int size = 0;
-+	char path[256] = "";
-+	int want_sleep = 0, private = 0;
-+	int populate = 0;
-+	int write = 0;
-+	int reserve = 1;
-+
-+	/* Parse command-line arguments. */
-+	setvbuf(stdout, NULL, _IONBF, 0);
-+	self = argv[0];
-+
-+	while ((c = getopt(argc, argv, ":s:p:")) != -1) {
-+		switch (c) {
-+		case 's':
-+			size = atoi(optarg);
-+			break;
-+		case 'p':
-+			strncpy(path, optarg, sizeof(path));
-+			break;
-+		default:
-+			errno = EINVAL;
-+			perror("Invalid arg");
-+			exit_usage();
-+		}
-+	}
-+
-+	printf("%s\n", path);
-+	if (strncmp(path, "", sizeof(path)) != 0) {
-+		printf("Writing to this path: %s\n", path);
-+	} else {
-+		errno = EINVAL;
-+		perror("path not found");
-+		exit_usage();
-+	}
-+
-+	if (size != 0) {
-+		printf("Writing this size: %d\n", size);
-+	} else {
-+		errno = EINVAL;
-+		perror("size not found");
-+		exit_usage();
-+	}
-+
-+	fd = open(path, O_CREAT | O_RDWR, 0777);
-+	if (fd == -1)
-+		err(1, "Failed to open file.");
-+
-+	if (ftruncate(fd, size))
-+		err(1, "failed to ftruncate %s", path);
-+
-+	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (ptr == MAP_FAILED) {
-+		close(fd);
-+		err(1, "Error mapping the file");
-+	}
-+
-+	printf("Writing to memory.\n");
-+	memset(ptr, 1, size);
-+	printf("Done writing to memory.\n");
-+	close(fd);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/vm/tmpfs-memcg.sh b/tools/testing/selftests/vm/tmpfs-memcg.sh
-new file mode 100755
-index 0000000000000..50876992107fd
---- /dev/null
-+++ b/tools/testing/selftests/vm/tmpfs-memcg.sh
-@@ -0,0 +1,116 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CGROUP_PATH=/dev/cgroup/memory/tmpfs-memcg-test
-+REMOUNT_CGROUP_PATH=/dev/cgroup/memory/remount-memcg-test
-+
-+function cleanup() {
-+  rm -rf /mnt/tmpfs/*
-+  umount /mnt/tmpfs
-+  rm -rf /mnt/tmpfs
-+
-+  rmdir $CGROUP_PATH
-+  rmdir $REMOUNT_CGROUP_PATH
-+
-+  echo CLEANUP DONE
-+}
-+
-+function setup() {
-+  mkdir -p $CGROUP_PATH
-+  mkdir -p $REMOUNT_CGROUP_PATH
-+  echo $((10 * 1024 * 1024)) > $CGROUP_PATH/memory.limit_in_bytes
-+  echo 0 > $CGROUP_PATH/cpuset.cpus
-+  echo 0 > $CGROUP_PATH/cpuset.mems
-+
-+  mkdir -p /mnt/tmpfs
-+
-+  echo SETUP DONE
-+}
-+
-+function expect_equal() {
-+  local expected="$1"
-+  local actual="$2"
-+  local error="$3"
-+
-+  if [[ "$actual" != "$expected" ]]; then
-+    echo "expected ($expected) != actual ($actual): $3" >&2
-+    cleanup
-+    exit 1
-+  fi
-+}
-+
-+function expect_ge() {
-+  local expected="$1"
-+  local actual="$2"
-+  local error="$3"
-+
-+  if [[ "$actual" -lt "$expected" ]]; then
-+    echo "expected ($expected) < actual ($actual): $3" >&2
-+    cleanup
-+    exit 1
-+  fi
-+}
-+
-+cleanup
-+setup
-+
-+mount -t tmpfs -o memcg=$REMOUNT_CGROUP_PATH tmpfs /mnt/tmpfs
-+check=$(cat /proc/mounts | grep -i remount-memcg-test)
-+if [ -z "$check" ]; then
-+  echo "tmpfs memcg= was not mounted correctly:"
-+  echo $check
-+  echo "FAILED"
-+  cleanup
-+  exit 1
-+fi
-+
-+mount -t tmpfs -o remount,memcg=$CGROUP_PATH tmpfs /mnt/tmpfs
-+check=$(cat /proc/mounts | grep -i tmpfs-memcg-test)
-+if [ -z "$check" ]; then
-+  echo "tmpfs memcg= was not remounted correctly:"
-+  echo $check
-+  echo "FAILED"
-+  cleanup
-+  exit 1
-+fi
-+
-+TARGET_MEMCG_USAGE=$(cat $CGROUP_PATH/memory.usage_in_bytes)
-+expect_equal 0 "$TARGET_MEMCG_USAGE" "Before echo, memcg usage should be 0"
-+
-+# Echo to allocate a page in the tmpfs
-+echo
-+echo
-+echo hello > /mnt/tmpfs/test
-+TARGET_MEMCG_USAGE=$(cat $CGROUP_PATH/memory.usage_in_bytes)
-+expect_ge 4096 "$TARGET_MEMCG_USAGE" "After echo, memcg usage should be greater than 4096"
-+echo "Echo test succeeded"
-+
-+echo
-+echo
-+tools/testing/selftests/vm/mmap_write -p /mnt/tmpfs/test -s $((1 * 1024 * 1024))
-+TARGET_MEMCG_USAGE=$(cat $CGROUP_PATH/memory.usage_in_bytes)
-+expect_ge $((1 * 1024 * 1024)) "$TARGET_MEMCG_USAGE" "After mmap_write, memcg usage should greater than 1MB"
-+echo "WRITE TEST SUCCEEDED"
-+
-+# SIGBUS the remote container on pagefault.
-+echo
-+echo
-+echo "SIGBUS the process doing the remote charge on hitting the limit of the remote cgroup."
-+echo "This will take a long time because the kernel goes through reclaim retries,"
-+echo "but should eventually the write process should receive a SIGBUS"
-+set +e
-+tools/testing/selftests/vm/mmap_write -p /mnt/tmpfs/test -s $((11 * 1024 * 1024)) &
-+wait $!
-+expect_equal "$?" "135" "mmap_write should have exited with SIGBUS"
-+set -e
-+
-+# ENOSPC the remote container on non pagefault.
-+echo
-+echo
-+echo "OOMing the remote container using cat (non-pagefault)"
-+echo "This will take a long time because the kernel goes through reclaim retries,"
-+echo "but should eventually the cat command should receive an ENOSPC"
-+cat /dev/random > /mnt/tmpfs/random || true
-+
-+cleanup
-+echo TEST PASSED
+* qemu_x86_64, kselftest-timers
+  - timers.rtcpie
+
+* x86, kselftest-rtc
+  - rtc.rtctest
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Fixes (compared to next-20211115)
+* i386, kselftest-net
+  - net.tls
+  - net.tls.tls.12_aes_gcm.send_then_sendfile
+  - net.tls.tls.12_chacha.send_then_sendfile
+  - net.tls.tls.13_aes_gcm.send_then_sendfile
+  - net.tls.tls.13_chacha.send_then_sendfile
+  - net.tls.tls.13_sm4_ccm.send_then_sendfile
+  - net.tls.tls.13_sm4_gcm.send_then_sendfile
+
+* qemu_arm, kselftest-zram
+  - zram.zram.sh
+
+* qemu_x86_64, kselftest-kvm
+  - kvm.rseq_test
+
+* x15, kselftest-cgroup
+  - cgroup.test_freezer
+  - cgroup.test_freezer.test_cgfreezer_ptrace
+
+* x15, kselftest-net
+  - net.so_txtime.sh
+
+
+## Test result summary
+total: 3399, pass: 2048, fail: 292, skip: 1059, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+
 --
-2.34.0.rc2.393.gf8c9666880-goog
+Linaro LKFT
+https://lkft.linaro.org
