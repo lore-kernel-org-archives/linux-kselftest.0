@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C68C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCB61C43217
 	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Nov 2021 23:26:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346389AbhKXXaH (ORCPT
+        id S1346093AbhKXXaH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 24 Nov 2021 18:30:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59924 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:59976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346093AbhKXXaD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 18:30:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49887610CA;
-        Wed, 24 Nov 2021 23:26:52 +0000 (UTC)
+        id S1346454AbhKXXaE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Nov 2021 18:30:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 69461610D0;
+        Wed, 24 Nov 2021 23:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637796412;
-        bh=V7Si2rKAIbKixXcEUKaqm1g9/ZMRskUcNP4lEvlJL0Y=;
+        s=k20201202; t=1637796413;
+        bh=lRJ/N5GUjhcYrGnjq6ZEVTUkHUeayPbcrhjVHjroWcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kYqJhGkB7bIqXExa6JPE7O45QMSeOuNsqFmrBrQyqCbOgJrdE6Y9szmNHpsuAlqTC
-         TlR87oAa9HL3Eo3rCKyBw1/yX02LmUPnUZyBE8Cqv0fMvV9yOo55BeiYHBUHU3RY6f
-         VCb+7lxyNuahvpZBKojvKxx6maJ0Md9E/s0588+SiYSZHcGeCA1JR5x7SDFXk2ZX6e
-         IkeImjKvINmHUv0HV/BljbBqVMXZDwIeXaqbnqS0otDbOKDKAX72/MU4OdSkwajxU1
-         JjRXg7+4FGUz+YA+ggr56RK/ZHt0dmTvP9U5MnmEoLPgx3wZxjdqHKaYEGjmP9qm71
-         xonzSoN3Ucn9g==
+        b=KdilPeLyuIcAulZw8oCCv5J+At5owH7pcy5MRyKvjFjC+kmOkt1l6ON6L/oOSrapG
+         xH+Dojj9Tw2Et0JDfXVY/cPTg9/CPZn9Rux2gVgdngxYoZmEjKNgwCz9cFPVga3Auv
+         ngBHSffuJ8taEuvBor/UBNRbYtD0PSUtNGJHxLJgTVuGLNB6ydDYZ3NZW0xqC1Zxmp
+         1lkqEGbtWF1SUQeG+Jamc9uIprD0TR95PPAil6ti6vXdzzFWvhEoflmZJNZA4Ysf6P
+         DBQ0uDvgbOlRoUoKpaqM/z2cIyHg2qnN1FH0do0uANOmcySyMzV8WOzy7Bpu95TwB2
+         LsbUX1dE1mRug==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, shuah@kernel.org,
@@ -31,9 +31,9 @@ Cc:     netdev@vger.kernel.org, shuah@kernel.org,
         borisp@nvidia.com, john.fastabend@gmail.com, daniel@iogearbox.net,
         vakul.garg@nxp.com, willemb@google.com, vfedorenko@novek.ru,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net 6/9] tls: splice_read: fix accessing pre-processed records
-Date:   Wed, 24 Nov 2021 15:25:54 -0800
-Message-Id: <20211124232557.2039757-7-kuba@kernel.org>
+Subject: [PATCH net 8/9] tls: fix replacing proto_ops
+Date:   Wed, 24 Nov 2021 15:25:56 -0800
+Message-Id: <20211124232557.2039757-9-kuba@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211124232557.2039757-1-kuba@kernel.org>
 References: <20211124232557.2039757-1-kuba@kernel.org>
@@ -43,77 +43,125 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-recvmsg() will put peek()ed and partially read records onto the rx_list.
-splice_read() needs to consult that list otherwise it may miss data.
-Align with recvmsg() and also put partially-read records onto rx_list.
-tls_sw_advance_skb() is pretty pointless now and will be removed in
-net-next.
+We replace proto_ops whenever TLS is configured for RX. But our
+replacement also overrides sendpage_locked, which will crash
+unless TX is also configured. Similarly we plug both of those
+in for TLS_HW (NIC crypto offload) even tho TLS_HW has a completely
+different implementation for TX.
 
-Fixes: 692d7b5d1f91 ("tls: Fix recvmsg() to be able to peek across multiple records")
+Last but not least we always plug in something based on inet_stream_ops
+even though a few of the callbacks differ for IPv6 (getname, release,
+bind).
+
+Use a callback building method similar to what we do for struct proto.
+
+Fixes: c46234ebb4d1 ("tls: RX path for ktls")
+Fixes: d4ffb02dee2f ("net/tls: enable sk_msg redirect to tls socket egress")
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- net/tls/tls_sw.c | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
+ net/tls/tls_main.c | 47 +++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 40 insertions(+), 7 deletions(-)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 2f11f1db917a..d3e7ff90889e 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -2005,6 +2005,7 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
- 	struct sock *sk = sock->sk;
- 	struct sk_buff *skb;
- 	ssize_t copied = 0;
-+	bool from_queue;
- 	int err = 0;
- 	long timeo;
- 	int chunk;
-@@ -2014,14 +2015,20 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index acfba9f1ba72..6bc2879ba637 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -61,7 +61,7 @@ static DEFINE_MUTEX(tcpv6_prot_mutex);
+ static const struct proto *saved_tcpv4_prot;
+ static DEFINE_MUTEX(tcpv4_prot_mutex);
+ static struct proto tls_prots[TLS_NUM_PROTS][TLS_NUM_CONFIG][TLS_NUM_CONFIG];
+-static struct proto_ops tls_sw_proto_ops;
++static struct proto_ops tls_proto_ops[TLS_NUM_PROTS][TLS_NUM_CONFIG][TLS_NUM_CONFIG];
+ static void build_protos(struct proto prot[TLS_NUM_CONFIG][TLS_NUM_CONFIG],
+ 			 const struct proto *base);
  
- 	timeo = sock_rcvtimeo(sk, flags & SPLICE_F_NONBLOCK);
+@@ -71,6 +71,8 @@ void update_sk_prot(struct sock *sk, struct tls_context *ctx)
  
--	skb = tls_wait_data(sk, NULL, flags & SPLICE_F_NONBLOCK, timeo, &err);
--	if (!skb)
--		goto splice_read_end;
-+	from_queue = !skb_queue_empty(&ctx->rx_list);
-+	if (from_queue) {
-+		skb = __skb_dequeue(&ctx->rx_list);
-+	} else {
-+		skb = tls_wait_data(sk, NULL, flags & SPLICE_F_NONBLOCK, timeo,
-+				    &err);
-+		if (!skb)
-+			goto splice_read_end;
+ 	WRITE_ONCE(sk->sk_prot,
+ 		   &tls_prots[ip_ver][ctx->tx_conf][ctx->rx_conf]);
++	WRITE_ONCE(sk->sk_socket->ops,
++		   &tls_proto_ops[ip_ver][ctx->tx_conf][ctx->rx_conf]);
+ }
  
--	err = decrypt_skb_update(sk, skb, NULL, &chunk, &zc, false);
--	if (err < 0) {
--		tls_err_abort(sk, -EBADMSG);
--		goto splice_read_end;
-+		err = decrypt_skb_update(sk, skb, NULL, &chunk, &zc, false);
-+		if (err < 0) {
-+			tls_err_abort(sk, -EBADMSG);
-+			goto splice_read_end;
-+		}
+ int wait_on_pending_writer(struct sock *sk, long *timeo)
+@@ -669,8 +671,6 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 	if (tx) {
+ 		ctx->sk_write_space = sk->sk_write_space;
+ 		sk->sk_write_space = tls_write_space;
+-	} else {
+-		sk->sk_socket->ops = &tls_sw_proto_ops;
  	}
+ 	goto out;
  
- 	/* splice does not support reading control messages */
-@@ -2037,7 +2044,17 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
- 	if (copied < 0)
- 		goto splice_read_end;
+@@ -728,6 +728,39 @@ struct tls_context *tls_ctx_create(struct sock *sk)
+ 	return ctx;
+ }
  
--	tls_sw_advance_skb(sk, skb, copied);
-+	if (!from_queue) {
-+		ctx->recv_pkt = NULL;
-+		__strp_unpause(&ctx->strp);
-+	}
-+	if (chunk < rxm->full_len) {
-+		__skb_queue_head(&ctx->rx_list, skb);
-+		rxm->offset += len;
-+		rxm->full_len -= len;
-+	} else {
-+		consume_skb(skb);
-+	}
++static void build_proto_ops(struct proto_ops ops[TLS_NUM_CONFIG][TLS_NUM_CONFIG],
++			    const struct proto_ops *base)
++{
++	ops[TLS_BASE][TLS_BASE] = *base;
++
++	ops[TLS_SW  ][TLS_BASE] = ops[TLS_BASE][TLS_BASE];
++	ops[TLS_SW  ][TLS_BASE].sendpage_locked	= tls_sw_sendpage_locked;
++
++	ops[TLS_BASE][TLS_SW  ] = ops[TLS_BASE][TLS_BASE];
++	ops[TLS_BASE][TLS_SW  ].splice_read	= tls_sw_splice_read;
++
++	ops[TLS_SW  ][TLS_SW  ] = ops[TLS_SW  ][TLS_BASE];
++	ops[TLS_SW  ][TLS_SW  ].splice_read	= tls_sw_splice_read;
++
++#ifdef CONFIG_TLS_DEVICE
++	ops[TLS_HW  ][TLS_BASE] = ops[TLS_BASE][TLS_BASE];
++	ops[TLS_HW  ][TLS_BASE].sendpage_locked	= NULL;
++
++	ops[TLS_HW  ][TLS_SW  ] = ops[TLS_BASE][TLS_SW  ];
++	ops[TLS_HW  ][TLS_SW  ].sendpage_locked	= NULL;
++
++	ops[TLS_BASE][TLS_HW  ] = ops[TLS_BASE][TLS_SW  ];
++
++	ops[TLS_SW  ][TLS_HW  ] = ops[TLS_SW  ][TLS_SW  ];
++
++	ops[TLS_HW  ][TLS_HW  ] = ops[TLS_HW  ][TLS_SW  ];
++	ops[TLS_HW  ][TLS_HW  ].sendpage_locked	= NULL;
++#endif
++#ifdef CONFIG_TLS_TOE
++	ops[TLS_HW_RECORD][TLS_HW_RECORD] = *base;
++#endif
++}
++
+ static void tls_build_proto(struct sock *sk)
+ {
+ 	int ip_ver = sk->sk_family == AF_INET6 ? TLSV6 : TLSV4;
+@@ -739,6 +772,8 @@ static void tls_build_proto(struct sock *sk)
+ 		mutex_lock(&tcpv6_prot_mutex);
+ 		if (likely(prot != saved_tcpv6_prot)) {
+ 			build_protos(tls_prots[TLSV6], prot);
++			build_proto_ops(tls_proto_ops[TLSV6],
++					sk->sk_socket->ops);
+ 			smp_store_release(&saved_tcpv6_prot, prot);
+ 		}
+ 		mutex_unlock(&tcpv6_prot_mutex);
+@@ -749,6 +784,8 @@ static void tls_build_proto(struct sock *sk)
+ 		mutex_lock(&tcpv4_prot_mutex);
+ 		if (likely(prot != saved_tcpv4_prot)) {
+ 			build_protos(tls_prots[TLSV4], prot);
++			build_proto_ops(tls_proto_ops[TLSV4],
++					sk->sk_socket->ops);
+ 			smp_store_release(&saved_tcpv4_prot, prot);
+ 		}
+ 		mutex_unlock(&tcpv4_prot_mutex);
+@@ -959,10 +996,6 @@ static int __init tls_register(void)
+ 	if (err)
+ 		return err;
  
- splice_read_end:
- 	release_sock(sk);
+-	tls_sw_proto_ops = inet_stream_ops;
+-	tls_sw_proto_ops.splice_read = tls_sw_splice_read;
+-	tls_sw_proto_ops.sendpage_locked   = tls_sw_sendpage_locked;
+-
+ 	tls_device_init();
+ 	tcp_register_ulp(&tcp_tls_ulp_ops);
+ 
 -- 
 2.31.1
 
