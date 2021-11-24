@@ -2,168 +2,75 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAE26C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Nov 2021 11:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34A4FC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 Nov 2021 12:06:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241776AbhKXLqd (ORCPT
+        id S242375AbhKXMJS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 24 Nov 2021 06:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhKXLqR (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Nov 2021 06:46:17 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535BFC061758
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Nov 2021 03:43:07 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id r8so3641120wra.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Nov 2021 03:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sdC8L7KcajeuYgRxRzq/BDd9/Try3NuMaNKMjlQg9Bs=;
-        b=JfQHaBeQHSrZ3rQZiqWsi9BL8YK2+nptrMjPCQoT0ouSL81Mp1dyq4OivxwIBmf/05
-         3m8nxt7MF1vEs9/Ew9m41Z4QJWjU75i1qWcefzNze5JdYdApVfenwAOIuVg4GLSR1W3D
-         blgqLXRG7Wiw5/Q7VMDR7hJfyD+6Wbxr22bQYXzCPDr4nW/YiBMFtw1YeRJyzEq6iPb+
-         F1h2nZ7yXL64w4FPboiT3CdlUpvfw2YanraWyvO3NXkZV/dfs4xg5uwQuTHU+UdHqmyi
-         ynLhKp6+ZMUrbfVx+qE6fy8MvCm3HC7wi9hnShE+GzM4iNeqSvm87oT/5n/I1B+1HB5P
-         MktQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sdC8L7KcajeuYgRxRzq/BDd9/Try3NuMaNKMjlQg9Bs=;
-        b=kOiEZbLaFrRWmAJbIH5JNdRmGAjknaq+6sHFNuRsLVy6uMLe1zcwcMyZ6oClqSQsW6
-         G5WgqXKxb7C7ry9P7v4wNYA9w2WKnHrzHgL/D9dpldVRIl+0MtwTtDJkmlUTWZ1UdZvE
-         nlQ6KijImcCJxqb3JNK8+qtTR7XkL1IOcoXzDgRukOuCbCmOLEe1lEqjI/xVL6X067Am
-         vGy9UYpKi85K7PNvdz4tbK62LonoWpRjMQi9zRPb9AUN6UG8TzlfiMaw2pu6DOmKPd6l
-         jVgVJH7NleJhXDcNspr+/UGFH7EtslMsnW2fVOL6Cca++yeTEkgGLTjY7XEhTM2vb09L
-         iCKw==
-X-Gm-Message-State: AOAM530U8CYYOuurAZR15qcsXPp5qsOVau1He69Cp7DsqaNGIpB3QT61
-        EQj9e70w1J1eRbKzMIvoyC/6yg==
-X-Google-Smtp-Source: ABdhPJxyPOtabszFxtmqMNt8tHaetSgoIQ7WYcSaBCCT9+/X2ptg2utUgV4syQmIjoYP6E73dul3Kw==
-X-Received: by 2002:a5d:6e82:: with SMTP id k2mr18242939wrz.147.1637754185908;
-        Wed, 24 Nov 2021 03:43:05 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id s63sm5165173wme.22.2021.11.24.03.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 03:43:05 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v10 4/5] selftests: gpio: add a helper for reading GPIO line names
-Date:   Wed, 24 Nov 2021 12:42:56 +0100
-Message-Id: <20211124114257.19878-5-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20211124114257.19878-1-brgl@bgdev.pl>
-References: <20211124114257.19878-1-brgl@bgdev.pl>
+        Wed, 24 Nov 2021 07:09:18 -0500
+Received: from mail.jv-coder.de ([5.9.79.73]:46308 "EHLO mail.jv-coder.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241539AbhKXMHi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Nov 2021 07:07:38 -0500
+X-Greylist: delayed 315 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Nov 2021 07:07:37 EST
+Received: from ubuntu.localdomain (unknown [188.192.64.76])
+        by mail.jv-coder.de (Postfix) with ESMTPSA id 11B609FBCD;
+        Wed, 24 Nov 2021 11:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jv-coder.de; s=dkim;
+        t=1637755151; bh=nk79e0vtWG5vI5W6jbeeDTH7jdjOKA8eHaJw9BLhy7c=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=l8HJP1PqqOeL13co0fnbRlmAPGiHa6lvpIGR6E08xuWA7JOF18LP7zL2WTsxitsxt
+         ScjzbANczh/TBR+PkHbf8GYmzgMRpFIti7v2Yx7EK3nX+HaFfeu9wYBr9FxY+Ti1fc
+         EO92CSi7LyVVah54D6f5NtSlvMhmXpBUNBf0/4lY=
+From:   Joerg Vehlow <lkml@jv-coder.de>
+To:     linux-kselftest@vger.kernel.org, keescook@chromium.org,
+        shuah@kernel.org
+Cc:     Joerg Vehlow <joerg.vehlow@aox-tech.de>
+Subject: [PATCH] selftests/exec: Fix build
+Date:   Wed, 24 Nov 2021 12:59:03 +0100
+Message-Id: <20211124115903.1197830-1-lkml@jv-coder.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple program that allows to read GPIO line names from the
-character device. This will be used in gpio-sim selftests.
+From: Joerg Vehlow <joerg.vehlow@aox-tech.de>
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+This fixes
+make: *** No rule to make target 'tools/testing/selftests/exec/pipe', needed by 'all'. Stop.
+
+Targets defined in TEST_DEN_FILES must exist as targets in the makefile,
+but pipe is only created by the test at runtime, so it should be cleaned only.
+
+Fixes: 61016db15b8e ("selftests/exec: Verify execve of non-regular files fail")
+Signed-off-by: Joerg Vehlow <joerg.vehlow@aox-tech.de>
 ---
- tools/testing/selftests/gpio/.gitignore       |  1 +
- tools/testing/selftests/gpio/Makefile         |  2 +-
- tools/testing/selftests/gpio/gpio-line-name.c | 55 +++++++++++++++++++
- 3 files changed, 57 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/gpio/gpio-line-name.c
+ tools/testing/selftests/exec/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/gpio/.gitignore b/tools/testing/selftests/gpio/.gitignore
-index 4ea4f58dab1a..ededb077a3a6 100644
---- a/tools/testing/selftests/gpio/.gitignore
-+++ b/tools/testing/selftests/gpio/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- gpio-mockup-cdev
- gpio-chip-info
-+gpio-line-name
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index a40b818c394e..293aa9749408 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -2,7 +2,7 @@
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index dd61118df66e..ac8acca7a942 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -5,14 +5,14 @@ CFLAGS += -D_GNU_SOURCE
  
- TEST_PROGS := gpio-mockup.sh
- TEST_FILES := gpio-mockup-sysfs.sh
--TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info
-+TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info gpio-line-name
- CFLAGS += -O2 -g -Wall -I../../../../usr/include/
+ TEST_PROGS := binfmt_script non-regular
+ TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
+-TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir pipe
++TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+ TEST_FILES := Makefile
+ 
+ TEST_GEN_PROGS += recursion-depth
+ 
+ EXTRA_CLEAN := $(OUTPUT)/subdir.moved $(OUTPUT)/execveat.moved $(OUTPUT)/xxxxx*	\
+-	       $(OUTPUT)/S_I*.test
++	       $(OUTPUT)/S_I*.test $(OUTPUT)/pipe
  
  include ../lib.mk
-diff --git a/tools/testing/selftests/gpio/gpio-line-name.c b/tools/testing/selftests/gpio/gpio-line-name.c
-new file mode 100644
-index 000000000000..e635cfadbded
---- /dev/null
-+++ b/tools/testing/selftests/gpio/gpio-line-name.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * GPIO character device helper for reading line names.
-+ *
-+ * Copyright (C) 2021 Bartosz Golaszewski <brgl@bgdev.pl>
-+ */
-+
-+#include <fcntl.h>
-+#include <linux/gpio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+
-+static void print_usage(void)
-+{
-+	printf("usage:\n");
-+	printf("  gpio-line-name <chip path> <line offset>\n");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct gpio_v2_line_info info;
-+	int fd, ret;
-+	char *endp;
-+
-+	if (argc != 3) {
-+		print_usage();
-+		return EXIT_FAILURE;
-+	}
-+
-+	fd = open(argv[1], O_RDWR);
-+	if (fd < 0) {
-+		perror("unable to open the GPIO chip");
-+		return EXIT_FAILURE;
-+	}
-+
-+	memset(&info, 0, sizeof(info));
-+	info.offset = strtoul(argv[2], &endp, 10);
-+	if (*endp != '\0') {
-+		print_usage();
-+		return EXIT_FAILURE;
-+	}
-+
-+	ret = ioctl(fd, GPIO_V2_GET_LINEINFO_IOCTL, &info);
-+	if (ret) {
-+		perror("line info ioctl failed");
-+		return EXIT_FAILURE;
-+	}
-+
-+	printf("%s\n", info.name);
-+
-+	return EXIT_SUCCESS;
-+}
+ 
 -- 
 2.25.1
 
