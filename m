@@ -2,24 +2,49 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FBC7C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Nov 2021 15:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11AA3C433EF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Nov 2021 16:13:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351299AbhKZPzV (ORCPT
+        id S1350635AbhKZQQc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 26 Nov 2021 10:55:21 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:34122 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378337AbhKZPxV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Nov 2021 10:53:21 -0500
-X-Greylist: delayed 1259 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Nov 2021 10:53:20 EST
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1mqd9R-0000FR-T0; Fri, 26 Nov 2021 16:28:37 +0100
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     Paolo Bonzini <pbonzini@redhat.com>
+        Fri, 26 Nov 2021 11:16:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60007 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354276AbhKZQOc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 26 Nov 2021 11:14:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637943078;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VpB61RKKcKX+MlDxlfZx6xj32ByRUriXdcJ+FdXVsVo=;
+        b=Z+rzIgjpoGSh3y2Iwt//W1Fur+w9Br5DIR6DwA1QSvZG+XWZEmJcKJDbuP99CCU1cBp+Rv
+        sx3KUMq2OFZhmY31kkevsom1U1cLFXtF8b6tXG/JTAOp7ewD4KXwUQTuh30IFSETK+icKE
+        kw8VrFHW/RjISTx6Bug1I142mxR4vH8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-KH-eGFcOOU6_UGsMnCRNJA-1; Fri, 26 Nov 2021 11:11:15 -0500
+X-MC-Unique: KH-eGFcOOU6_UGsMnCRNJA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DC513190A7A0;
+        Fri, 26 Nov 2021 16:11:13 +0000 (UTC)
+Received: from [10.39.195.16] (unknown [10.39.195.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6AF9510016FE;
+        Fri, 26 Nov 2021 16:11:09 +0000 (UTC)
+Message-ID: <ee41580b-7c1f-eca0-539d-e96f56c7c1db@redhat.com>
+Date:   Fri, 26 Nov 2021 17:11:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] KVM: selftests: page_table_test: fix calculation of
+ guest_test_phys_mem
+Content-Language: en-US
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
 Cc:     Shuah Khan <shuah@kernel.org>,
         Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -30,58 +55,65 @@ Cc:     Shuah Khan <shuah@kernel.org>,
         Yanan Wang <wangyanan55@huawei.com>,
         Andrew Jones <drjones@redhat.com>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: page_table_test: fix calculation of guest_test_phys_mem
-Date:   Fri, 26 Nov 2021 16:28:31 +0100
-Message-Id: <52e487458c3172923549bbcf9dfccfbe6faea60b.1637940473.git.maciej.szmigiero@oracle.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <52e487458c3172923549bbcf9dfccfbe6faea60b.1637940473.git.maciej.szmigiero@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <52e487458c3172923549bbcf9dfccfbe6faea60b.1637940473.git.maciej.szmigiero@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+On 11/26/21 16:28, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> A kvm_page_table_test run with its default settings fails on VMX due to
+> memory region add failure:
+>> ==== Test Assertion Failure ====
+>>   lib/kvm_util.c:952: ret == 0
+>>   pid=10538 tid=10538 errno=17 - File exists
+>>      1  0x00000000004057d1: vm_userspace_mem_region_add at kvm_util.c:947
+>>      2  0x0000000000401ee9: pre_init_before_test at kvm_page_table_test.c:302
+>>      3   (inlined by) run_test at kvm_page_table_test.c:374
+>>      4  0x0000000000409754: for_each_guest_mode at guest_modes.c:53
+>>      5  0x0000000000401860: main at kvm_page_table_test.c:500
+>>      6  0x00007f82ae2d8554: ?? ??:0
+>>      7  0x0000000000401894: _start at ??:?
+>>   KVM_SET_USER_MEMORY_REGION IOCTL failed,
+>>   rc: -1 errno: 17
+>>   slot: 1 flags: 0x0
+>>   guest_phys_addr: 0xc0000000 size: 0x40000000
+> 
+> This is because the memory range that this test is trying to add
+> (0x0c0000000 - 0x100000000) conflicts with LAPIC mapping at 0x0fee00000.
+> 
+> Looking at the code it seems that guest_test_*phys*_mem variable gets
+> mistakenly overwritten with guest_test_*virt*_mem while trying to adjust
+> the former for alignment.
+> With the correct variable adjusted this test runs successfully.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> ---
+>   tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> index 3836322add00..ba1fdc3dcf4a 100644
+> --- a/tools/testing/selftests/kvm/kvm_page_table_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
+> @@ -280,7 +280,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
+>   #ifdef __s390x__
+>   	alignment = max(0x100000, alignment);
+>   #endif
+> -	guest_test_phys_mem = align_down(guest_test_virt_mem, alignment);
+> +	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
+>   
+>   	/* Set up the shared data structure test_args */
+>   	test_args.vm = vm;
+> 
 
-A kvm_page_table_test run with its default settings fails on VMX due to
-memory region add failure:
-> ==== Test Assertion Failure ====
->  lib/kvm_util.c:952: ret == 0
->  pid=10538 tid=10538 errno=17 - File exists
->     1  0x00000000004057d1: vm_userspace_mem_region_add at kvm_util.c:947
->     2  0x0000000000401ee9: pre_init_before_test at kvm_page_table_test.c:302
->     3   (inlined by) run_test at kvm_page_table_test.c:374
->     4  0x0000000000409754: for_each_guest_mode at guest_modes.c:53
->     5  0x0000000000401860: main at kvm_page_table_test.c:500
->     6  0x00007f82ae2d8554: ?? ??:0
->     7  0x0000000000401894: _start at ??:?
->  KVM_SET_USER_MEMORY_REGION IOCTL failed,
->  rc: -1 errno: 17
->  slot: 1 flags: 0x0
->  guest_phys_addr: 0xc0000000 size: 0x40000000
+Queued, thanks.
 
-This is because the memory range that this test is trying to add
-(0x0c0000000 - 0x100000000) conflicts with LAPIC mapping at 0x0fee00000.
+Paolo
 
-Looking at the code it seems that guest_test_*phys*_mem variable gets
-mistakenly overwritten with guest_test_*virt*_mem while trying to adjust
-the former for alignment.
-With the correct variable adjusted this test runs successfully.
-
-Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
----
- tools/testing/selftests/kvm/kvm_page_table_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/kvm_page_table_test.c b/tools/testing/selftests/kvm/kvm_page_table_test.c
-index 3836322add00..ba1fdc3dcf4a 100644
---- a/tools/testing/selftests/kvm/kvm_page_table_test.c
-+++ b/tools/testing/selftests/kvm/kvm_page_table_test.c
-@@ -280,7 +280,7 @@ static struct kvm_vm *pre_init_before_test(enum vm_guest_mode mode, void *arg)
- #ifdef __s390x__
- 	alignment = max(0x100000, alignment);
- #endif
--	guest_test_phys_mem = align_down(guest_test_virt_mem, alignment);
-+	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
- 
- 	/* Set up the shared data structure test_args */
- 	test_args.vm = vm;
