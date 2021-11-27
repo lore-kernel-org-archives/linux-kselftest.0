@@ -2,150 +2,225 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56CD3C433EF
-	for <linux-kselftest@archiver.kernel.org>; Sat, 27 Nov 2021 00:31:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86166C433EF
+	for <linux-kselftest@archiver.kernel.org>; Sat, 27 Nov 2021 03:45:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343558AbhK0AeV (ORCPT
+        id S1352386AbhK0DtC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 26 Nov 2021 19:34:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59400 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343715AbhK0AcU (ORCPT
+        Fri, 26 Nov 2021 22:49:02 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5930 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236666AbhK0DrC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Nov 2021 19:32:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE8A0B82948;
-        Sat, 27 Nov 2021 00:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7921C004E1;
-        Sat, 27 Nov 2021 00:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637972943;
-        bh=o+em8kfwsqJ2QupMLLADRCTDh/5vnvuG3Lnujj+swS4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ChuKe1a/qvSV0k6OZM6tgpE9pKM2SQwFskak0EsRWaRtIwmjFTGmFd9E5R/mClm85
-         bsRrHknhjIGwuKOOHsWQBLhFB3b74n21Jzy5M9FwmtCpwWTgWE34lZeUWhOWYhiJ6m
-         BxkD90PQqWMhLr5YAtddIU/3+QLQ3j/WdNsivPX5pCYgo0sHSghbqtkJD38Yh/1ZNu
-         aI1VjDqP5XUUq4wIuyW14raEB58BbW9WSp/pHWFCOKggbeab+qiMWQVXu5jY0VXV7F
-         vMsoIghKFknfP3JpUOkFspI89yyrTXB0TfKg8eRUgTTHfbK7GpQKjJjC9fJV1OGjmX
-         8iP/jK8oSW9qw==
-Message-ID: <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
+        Fri, 26 Nov 2021 22:47:02 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AR3MVKe023858;
+        Sat, 27 Nov 2021 03:43:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=4eB56somxyCGqXyzYvzkcEQfJwq4cs00pYLIPKTRSd0=;
+ b=BXz4p1Xj33GTpa4ZS2qpnj3JYTWNT/cd1qHmkE5TfflDN2aIbjjXKTQg9Is4MEUfoBPH
+ LUz58cWxIw7bHstALm7r3epXf30chBc+i3Dy7U3Orzq0Xd+D/kxjMKh32CyvaadNvJcP
+ Lf6IDV1yZWI78q5zlHb+tdFTVaz9f42ORL/koD/vfF15vTqO9zcXlSz/jxySRL689/fJ
+ CLuT0SWryUSyaxsPJq9rTJdz8xAs4eB2v/2k1g2CNoFTlbZCQJty+XbKwXz2IbZQ1rFQ
+ FwGqpi1JUqxw4LTGWZONIntRIYWOVDtesJgJa1UdZHwDxIU3hqfRPVPbsGtO1uLAnSnd VA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ckcq386yf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Nov 2021 03:43:45 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AR3YKDW020454;
+        Sat, 27 Nov 2021 03:43:45 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ckcq386ya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Nov 2021 03:43:45 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AR3h0Xo025865;
+        Sat, 27 Nov 2021 03:43:44 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma02dal.us.ibm.com with ESMTP id 3ckca98f7v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 Nov 2021 03:43:44 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AR3hhVI21627784
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 27 Nov 2021 03:43:43 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5AE6AAC05F;
+        Sat, 27 Nov 2021 03:43:43 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30072AC05E;
+        Sat, 27 Nov 2021 03:43:43 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sat, 27 Nov 2021 03:43:43 +0000 (GMT)
+Message-ID: <2557c1e2-b0fa-8729-0eb0-6ae68ee6f653@linux.ibm.com>
+Date:   Fri, 26 Nov 2021 22:43:42 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
 Subject: Re: [PATCH v3 1/3] selftests: tpm2: Probe for available PCR bank
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
         linux-integrity@vger.kernel.org
 Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date:   Sat, 27 Nov 2021 02:29:00 +0200
-In-Reply-To: <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 References: <20211125003827.1360432-1-stefanb@linux.vnet.ibm.com>
-         <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.40.4-1 
-MIME-Version: 1.0
+ <20211125003827.1360432-2-stefanb@linux.vnet.ibm.com>
+ <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <97ddf0f23592b74e7647e3c9b36b37553c594c82.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aUbulO1Y26RYD-7d-PQyEFe0TZSG6FjT
+X-Proofpoint-ORIG-GUID: WXDukT7EUqffygXAbUtycn2irpRL29Gx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-27_01,2021-11-25_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 adultscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111270017
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-T24gV2VkLCAyMDIxLTExLTI0IGF0IDE5OjM4IC0wNTAwLCBTdGVmYW4gQmVyZ2VyIHdyb3RlOgo+
-IEZyb206IFN0ZWZhbiBCZXJnZXIgPHN0ZWZhbmJAbGludXguaWJtLmNvbT4KPiAKPiBQcm9iZSBm
-b3IgYW4gYXZhaWxhYmxlIFBDUiBiYW5rIHRvIGFjY29tbW9kYXRlIGRldmljZXMgdGhhdCBkbyBu
-b3QgaGF2ZSBhCgpXaGF0IGRvZXMgInByb2JpbmcgZm9yIGFuIHZhaWxhYmxlIFBDUiBiYW5rIiBl
-dmVuIG1lYW4/Cgo+IFNIQS0xIFBDUiBiYW5rIG9yIHdob3NlIFNIQS0xIGJhbmsgaXMgZGVhY3Rp
-dmF0ZWQuIFVzZSB0aGUgYmFuayB0aGF0IGNhbgo+IGJlIHVzZWQgZm9yIHRoZSBUUE0yIGNvbW1h
-bmRzLCBzdWNoIGFzIHRoZSBTSEEtMjU2IGJhbmsuCgpUaGlzIGlzIGluY29ycmVjdCwgYXMgdGhl
-IHBhdGNoIGRvZXMgbm90IGhhdmUgY29kZSB0byBxdWVyeQphdmFpbGFibGUgaGFzaCBhbGdvcml0
-aG1zLgoKV2hhdCB0aGUgY29kZSBkb2VzLCBhbmQgb25seSBkb2VzIHRoYXQsIGlzIHRvIHVzZSBT
-SEEtMjU2IGFzwqAKYSBmYWxsYmFjayB3aGVuIFNIQS0xIGlzIG5vdCBlbmFibGVkLgoKL0phcmtr
-bwoKCj4gCj4gU2lnbmVkLW9mZi1ieTogU3RlZmFuIEJlcmdlciA8c3RlZmFuYkBsaW51eC5pYm0u
-Y29tPgo+IC0tLQo+IMKgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdHBtMi90cG0yX3Rlc3RzLnB5
-IHwgMzUgKysrKysrKysrKysrKysrKystLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDI3IGluc2Vy
-dGlvbnMoKyksIDggZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Rw
-bTIvdHBtMl90ZXN0cy5weQo+IGluZGV4IDlkNzY0MzA2ODg3Yi4uNmI4OGZmMGU0N2I5IDEwMDY0
-NAo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weQo+ICsr
-KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3RwbTIvdHBtMl90ZXN0cy5weQo+IEBAIC0yNyw3
-ICsyNywyMyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKgwqDCoMKg
-wqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYucm9vdF9rZXksIGJsb2Is
-IGF1dGgsIE5vbmUpCj4gwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmFzc2VydEVxdWFsKGRhdGEsIHJl
-c3VsdCkKPiDCoAo+ICvCoMKgwqAgZGVmIGRldGVybWluZV9iYW5rX2FsZyhzZWxmKToKPiArwqDC
-oMKgwqDCoMKgwqAgIyBQcm9iZSBmb3IgYXZhaWxhYmxlIFBDUiBiYW5rCj4gK8KgwqDCoMKgwqDC
-oMKgIGZvciBiYW5rX2FsZyBpbiBbdHBtMi5UUE0yX0FMR19TSEExLCB0cG0yLlRQTTJfQUxHX1NI
-QTI1Nl06Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgaGFuZGxlID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRw
-bTIuVFBNMl9TRV9UUklBTCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYu
-Y2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBbMTddLCBiYW5rX2FsZz1iYW5rX2FsZykKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiBiYW5rX2FsZwo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIGV4Y2VwdCB0cG0yLlVua25vd25QQ1JCYW5rRXJyb3I6Cj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwYXNzCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZmlu
-YWxseToKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LmZsdXNo
-X2NvbnRleHQoaGFuZGxlKQo+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gTm9uZQo+ICsKPiDCoMKg
-wqDCoCBkZWYgdGVzdF9zZWFsX3dpdGhfcG9saWN5KHNlbGYpOgo+ICvCoMKgwqDCoMKgwqDCoCBi
-YW5rX2FsZyA9IHNlbGYuZGV0ZXJtaW5lX2JhbmtfYWxnKCkKPiArwqDCoMKgwqDCoMKgwqAgc2Vs
-Zi5hc3NlcnRJc05vdE5vbmUoYmFua19hbGcpCj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAgaGFuZGxl
-ID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9UUklBTCkKPiDC
-oAo+IMKgwqDCoMKgwqDCoMKgwqAgZGF0YSA9ICgnWCcgKiA2NCkuZW5jb2RlKCkKPiBAQCAtMzUs
-NyArNTEsNyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKgwqDCoMKg
-wqDCoMKgwqAgcGNycyA9IFsxNl0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwY3JzKQo+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBw
-Y3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5j
-bGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBwb2xpY3lfZGlnID0gc2VsZi5jbGllbnQuZ2V0X3BvbGljeV9kaWdlc3QoaGFuZGxlKQo+
-IEBAIC00Nyw3ICs2Myw3IEBAIGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0Q2FzZSk6Cj4g
-wqDCoMKgwqDCoMKgwqDCoCBoYW5kbGUgPSBzZWxmLmNsaWVudC5zdGFydF9hdXRoX3Nlc3Npb24o
-dHBtMi5UUE0yX1NFX1BPTElDWSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwIlVzZSBT
-SEEtMjU2IGFzIGEgZmFsbGJhY2sgY3JzKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYu
-Y2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBwY3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5jbGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXN1bHQgPSBzZWxmLmNsaWVudC51bnNl
-YWwoc2VsZi5yb290X2tleSwgYmxvYiwgYXV0aCwgaGFuZGxlKQo+IEBAIC03Miw2ICs4OCw5IEBA
-IGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0Q2FzZSk6Cj4gwqDCoMKgwqDCoMKgwqDCoCBz
-ZWxmLmFzc2VydEVxdWFsKHJjLCB0cG0yLlRQTTJfUkNfQVVUSF9GQUlMKQo+IMKgCj4gwqDCoMKg
-wqAgZGVmIHRlc3RfdW5zZWFsX3dpdGhfd3JvbmdfcG9saWN5KHNlbGYpOgo+ICvCoMKgwqDCoMKg
-wqDCoCBiYW5rX2FsZyA9IHNlbGYuZGV0ZXJtaW5lX2JhbmtfYWxnKCkKPiArwqDCoMKgwqDCoMKg
-wqAgc2VsZi5hc3NlcnRJc05vdE5vbmUoYmFua19hbGcpCj4gKwo+IMKgwqDCoMKgwqDCoMKgwqAg
-aGFuZGxlID0gc2VsZi5jbGllbnQuc3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9UUklB
-TCkKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgZGF0YSA9ICgnWCcgKiA2NCkuZW5jb2RlKCkKPiBA
-QCAtNzksNyArOTgsNyBAQCBjbGFzcyBTbW9rZVRlc3QodW5pdHRlc3QuVGVzdENhc2UpOgo+IMKg
-wqDCoMKgwqDCoMKgwqAgcGNycyA9IFsxNl0KPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgdHJ5Ogo+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFuZGxlLCBw
-Y3JzKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wY3IoaGFu
-ZGxlLCBwY3JzLCBiYW5rX2FsZz1iYW5rX2FsZykKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-c2VsZi5jbGllbnQucG9saWN5X3Bhc3N3b3JkKGhhbmRsZSkKPiDCoAo+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBwb2xpY3lfZGlnID0gc2VsZi5jbGllbnQuZ2V0X3BvbGljeV9kaWdlc3QoaGFu
-ZGxlKQo+IEBAIC05MSwxMyArMTEwLDEzIEBAIGNsYXNzIFNtb2tlVGVzdCh1bml0dGVzdC5UZXN0
-Q2FzZSk6Cj4gwqDCoMKgwqDCoMKgwqDCoCAjIEV4dGVuZCBmaXJzdCBhIFBDUiB0aGF0IGlzIG5v
-dCBwYXJ0IG9mIHRoZSBwb2xpY3kgYW5kIHRyeSB0byB1bnNlYWwuCj4gwqDCoMKgwqDCoMKgwqDC
-oCAjIFRoaXMgc2hvdWxkIHN1Y2NlZWQuCj4gwqAKPiAtwqDCoMKgwqDCoMKgwqAgZHMgPSB0cG0y
-LmdldF9kaWdlc3Rfc2l6ZSh0cG0yLlRQTTJfQUxHX1NIQTEpCj4gLcKgwqDCoMKgwqDCoMKgIHNl
-bGYuY2xpZW50LmV4dGVuZF9wY3IoMSwgKCdYJyAqIGRzKS5lbmNvZGUoKSkKPiArwqDCoMKgwqDC
-oMKgwqAgZHMgPSB0cG0yLmdldF9kaWdlc3Rfc2l6ZShiYW5rX2FsZykKPiArwqDCoMKgwqDCoMKg
-wqAgc2VsZi5jbGllbnQuZXh0ZW5kX3BjcigxLCAoJ1gnICogZHMpLmVuY29kZSgpLCBiYW5rX2Fs
-Zz1iYW5rX2FsZykKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgaGFuZGxlID0gc2VsZi5jbGllbnQu
-c3RhcnRfYXV0aF9zZXNzaW9uKHRwbTIuVFBNMl9TRV9QT0xJQ1kpCj4gwqAKPiDCoMKgwqDCoMKg
-wqDCoMKgIHRyeToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lf
-cGNyKGhhbmRsZSwgcGNycykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5w
-b2xpY3lfcGNyKGhhbmRsZSwgcGNycywgYmFua19hbGc9YmFua19hbGcpCj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LnBvbGljeV9wYXNzd29yZChoYW5kbGUpCj4gwqAKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYu
-cm9vdF9rZXksIGJsb2IsIGF1dGgsIGhhbmRsZSkKPiBAQCAtMTA5LDE0ICsxMjgsMTQgQEAgY2xh
-c3MgU21va2VUZXN0KHVuaXR0ZXN0LlRlc3RDYXNlKToKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAg
-IyBUaGVuLCBleHRlbmQgYSBQQ1IgdGhhdCBpcyBwYXJ0IG9mIHRoZSBwb2xpY3kgYW5kIHRyeSB0
-byB1bnNlYWwuCj4gwqDCoMKgwqDCoMKgwqDCoCAjIFRoaXMgc2hvdWxkIGZhaWwuCj4gLcKgwqDC
-oMKgwqDCoMKgIHNlbGYuY2xpZW50LmV4dGVuZF9wY3IoMTYsICgnWCcgKiBkcykuZW5jb2RlKCkp
-Cj4gK8KgwqDCoMKgwqDCoMKgIHNlbGYuY2xpZW50LmV4dGVuZF9wY3IoMTYsICgnWCcgKiBkcyku
-ZW5jb2RlKCksIGJhbmtfYWxnPWJhbmtfYWxnKQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoCBoYW5k
-bGUgPSBzZWxmLmNsaWVudC5zdGFydF9hdXRoX3Nlc3Npb24odHBtMi5UUE0yX1NFX1BPTElDWSkK
-PiDCoAo+IMKgwqDCoMKgwqDCoMKgwqAgcmMgPSAwCj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgIHRy
-eToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lfcGNyKGhhbmRs
-ZSwgcGNycykKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWxmLmNsaWVudC5wb2xpY3lfcGNy
-KGhhbmRsZSwgcGNycywgYmFua19hbGc9YmFua19hbGcpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHNlbGYuY2xpZW50LnBvbGljeV9wYXNzd29yZChoYW5kbGUpCj4gwqAKPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgcmVzdWx0ID0gc2VsZi5jbGllbnQudW5zZWFsKHNlbGYucm9vdF9rZXks
-IGJsb2IsIGF1dGgsIGhhbmRsZSkKCg==
 
+On 11/26/21 19:29, Jarkko Sakkinen wrote:
+> On Wed, 2021-11-24 at 19:38 -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Probe for an available PCR bank to accommodate devices that do not have a
+> What does "probing for an vailable PCR bank" even mean?
+
+Checking ? Testing ? What's the difference to those words?
+
+
+>
+>> SHA-1 PCR bank or whose SHA-1 bank is deactivated. Use the bank that can
+>> be used for the TPM2 commands, such as the SHA-256 bank.
+> This is incorrect, as the patch does not have code to query
+> available hash algorithms.
+
+I am not sure I understand. The new function determines which PCR banks 
+(SHA-1 or SHA-256) the subsequent tests can use. It tries to execute the 
+policy_pcr command with the given hash bank algorithm (SHA-256 or SHA-1) 
+and if it returns an UnknowPcrBankError it tries the next one in the 
+list. It doesn't need to query available hash algorithms. A TPM 2 may 
+support SHA 256 and yet its SHA 256 bank may be deactivate.
+
+> What the code does, and only does that, is to use SHA-256 as
+> a fallback when SHA-1 is not enabled.
+>
+> /Jarkko
+>
+>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   tools/testing/selftests/tpm2/tpm2_tests.py | 35 +++++++++++++++++-----
+>>   1 file changed, 27 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+>> index 9d764306887b..6b88ff0e47b9 100644
+>> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+>> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+>> @@ -27,7 +27,23 @@ class SmokeTest(unittest.TestCase):
+>>           result = self.client.unseal(self.root_key, blob, auth, None)
+>>           self.assertEqual(data, result)
+>>   
+>> +    def determine_bank_alg(self):
+>> +        # Probe for available PCR bank
+>> +        for bank_alg in [tpm2.TPM2_ALG_SHA1, tpm2.TPM2_ALG_SHA256]:
+>> +            try:
+>> +                handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+>> +                self.client.policy_pcr(handle, [17], bank_alg=bank_alg)
+>> +                return bank_alg
+>> +            except tpm2.UnknownPCRBankError:
+>> +                pass
+>> +            finally:
+>> +                self.client.flush_context(handle)
+>> +        return None
+>> +
+>>       def test_seal_with_policy(self):
+>> +        bank_alg = self.determine_bank_alg()
+>> +        self.assertIsNotNone(bank_alg)
+>> +
+>>           handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+>>   
+>>           data = ('X' * 64).encode()
+>> @@ -35,7 +51,7 @@ class SmokeTest(unittest.TestCase):
+>>           pcrs = [16]
+>>   
+>>           try:
+>> -            self.client.policy_pcr(handle, pcrs)
+>> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>>               self.client.policy_password(handle)
+>>   
+>>               policy_dig = self.client.get_policy_digest(handle)
+>> @@ -47,7 +63,7 @@ class SmokeTest(unittest.TestCase):
+>>           handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
+>>   
+>>           try:
+>> -            self.client.policy_pcr(handle, p"Use SHA-256 as a fallback crs)
+>> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>>               self.client.policy_password(handle)
+>>   
+>>               result = self.client.unseal(self.root_key, blob, auth, handle)
+>> @@ -72,6 +88,9 @@ class SmokeTest(unittest.TestCase):
+>>           self.assertEqual(rc, tpm2.TPM2_RC_AUTH_FAIL)
+>>   
+>>       def test_unseal_with_wrong_policy(self):
+>> +        bank_alg = self.determine_bank_alg()
+>> +        self.assertIsNotNone(bank_alg)
+>> +
+>>           handle = self.client.start_auth_session(tpm2.TPM2_SE_TRIAL)
+>>   
+>>           data = ('X' * 64).encode()
+>> @@ -79,7 +98,7 @@ class SmokeTest(unittest.TestCase):
+>>           pcrs = [16]
+>>   
+>>           try:
+>> -            self.client.policy_pcr(handle, pcrs)
+>> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>>               self.client.policy_password(handle)
+>>   
+>>               policy_dig = self.client.get_policy_digest(handle)
+>> @@ -91,13 +110,13 @@ class SmokeTest(unittest.TestCase):
+>>           # Extend first a PCR that is not part of the policy and try to unseal.
+>>           # This should succeed.
+>>   
+>> -        ds = tpm2.get_digest_size(tpm2.TPM2_ALG_SHA1)
+>> -        self.client.extend_pcr(1, ('X' * ds).encode())
+>> +        ds = tpm2.get_digest_size(bank_alg)
+>> +        self.client.extend_pcr(1, ('X' * ds).encode(), bank_alg=bank_alg)
+>>   
+>>           handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
+>>   
+>>           try:
+>> -            self.client.policy_pcr(handle, pcrs)
+>> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>>               self.client.policy_password(handle)
+>>   
+>>               result = self.client.unseal(self.root_key, blob, auth, handle)
+>> @@ -109,14 +128,14 @@ class SmokeTest(unittest.TestCase):
+>>   
+>>           # Then, extend a PCR that is part of the policy and try to unseal.
+>>           # This should fail.
+>> -        self.client.extend_pcr(16, ('X' * ds).encode())
+>> +        self.client.extend_pcr(16, ('X' * ds).encode(), bank_alg=bank_alg)
+>>   
+>>           handle = self.client.start_auth_session(tpm2.TPM2_SE_POLICY)
+>>   
+>>           rc = 0
+>>   
+>>           try:
+>> -            self.client.policy_pcr(handle, pcrs)
+>> +            self.client.policy_pcr(handle, pcrs, bank_alg=bank_alg)
+>>               self.client.policy_password(handle)
+>>   
+>>               result = self.client.unseal(self.root_key, blob, auth, handle)
