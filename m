@@ -2,142 +2,120 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85295C4332F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Dec 2021 18:06:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1DDCC433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Dec 2021 18:17:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbhLASJ3 (ORCPT
+        id S244283AbhLASU2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Dec 2021 13:09:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53925 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234928AbhLASJ1 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:09:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638381965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nL9jEjCjXMQ2Hi/cW7zIosXzbREOuqBP0onxXEUO1oE=;
-        b=KgWcAPN04AjhIHgwoZYmKDl39i3gUbQ1GrJWAJWrHaDrjZXGlXu2jwnOTFUFc4xSbvSXvk
-        Dr2JQXQPKnHttp/AgcOXXkLs+nH6R5riTRrLBNouBqS3QT8EonxBECYzNsoIDAXd08p2Ty
-        Np3pfEbPvVxWNMQ2oDBICnfI6oj0nfo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-597-EIqUcEKVNQ6Va99TdOtV3w-1; Wed, 01 Dec 2021 13:06:02 -0500
-X-MC-Unique: EIqUcEKVNQ6Va99TdOtV3w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D2561006AA0;
-        Wed,  1 Dec 2021 18:05:59 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AF03845D71;
-        Wed,  1 Dec 2021 18:05:49 +0000 (UTC)
-Message-ID: <4a021678-1896-2d16-4075-f626c7ab8513@redhat.com>
-Date:   Wed, 1 Dec 2021 13:05:44 -0500
+        Wed, 1 Dec 2021 13:20:28 -0500
+Received: from mga04.intel.com ([192.55.52.120]:40321 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243657AbhLASU2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:20:28 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="235250451"
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="235250451"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 10:17:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="460124590"
+Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
+  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2021 10:17:02 -0800
+From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
+To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, arkadiusz.kubalewski@intel.com
+Cc:     richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
+        petrm@nvidia.com
+Subject: [PATCH v4 net-next 0/4] Add ethtool interface for SyncE
+Date:   Wed,  1 Dec 2021 19:02:04 +0100
+Message-Id: <20211201180208.640179-1-maciej.machnikowski@intel.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Synchronous Ethernet networks use a physical layer clock to syntonize
+the frequency across different network elements.
 
-On 12/1/21 11:46, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Tue, Nov 30, 2021 at 10:56:34PM -0500, Waiman Long wrote:
->>> What happens if an isolated domain becomes invalid and then valid again due
->>> to cpu hotplug? Does it go "root invalid" and then back to "isolated"?
->> Yes, the current code allow recovering from an invalid state. In this
->> particular case, the transition will be "isolated" --> "root invalid" -->
->> "isolated".
-> Wouldn't it be clearer if it became "isolated invalid"?
+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+Equipment Clock (EEC) and have the ability to recover synchronization
+from the synchronization inputs - either traffic interfaces or external
+frequency sources.
+The EEC can synchronize its frequency (syntonize) to any of those sources.
+It is also able to select synchronization source through priority tables
+and synchronization status messaging. It also provides neccessary
+filtering and holdover capabilities
 
-You are right. I have overlooked that. Will make the change.
+This patch series introduces basic interface for reading and configuring
+recover clocks on a SyncE capable device
 
+v4:
+- Dropped EEC_STATE reporting (TBD: DPLL subsystem)
+- moved recovered clock configuration to ethtool netlink
 
->
->>> While it isn't necessarily tied to this series, it's a big no-no to restrict
->>> what a parent can do depending on what its descendants are doing. A cgroup
->>> higher up in the hierarchy should be able to change configuration however it
->>> sees fit as deligation breaks down otherwise.
->>>
->>> Maybe you can argue that cpuset is special and shouldn't be subject to such
->>> convention but I can't see strong enough justifications especially given
->>> that most of these restrictions can be broken by hotplug operations anyway
->>> and thus need code to handle those situations.
->> These are all pre-existing restrictions before the introduction of
->> partition. These are checks done in validate_change(). I am just saying out
->> loud the existing behavior. If you think that needs to be changed, I am fine
->> with that. However, it will be a separate patch as it is not a behavior that
->> is introduced by this series.
-> I see. It looks more problematic now with the addtion of the state
-> transition error reporting, more possible state transitions and, well,
-> actual documentation.
+v3:
+- remove RTM_GETRCLKRANGE
+- return state of all possible pins in the RTM_GETRCLKSTATE
+- clarify documentation
 
-I am going to add a patch to take out the child superset limitation for 
-the default hierarchy as I believe it is probably an oversight that we 
-were not aware of before. I would like to keep the exclusivity rule 
-though as I think it makes sense.
+v2:
+- improved documentation
+- fixed kdoc warning
 
->
->> Once an invalid partition is changed to "member", there is no way for a
->> child invalid partition root to recover and become valid again. There is why
->> I force them to become "member" also. I am OK if you believe it is better to
->> keep them in the invalid state forever until we explicitly changed them to
->> "member" eventually.
-> That's because we don't allow turning a cgroup with descendants into a
-> partition, right?
-Yes, that is a major part of it.
->
-> So, when we were first adding the partition support, the thinking was that
-> as it's pretty niche anyway, we can take some aberrations and restrictions,
-> but I don't think it's a good direction to be building up on top of those
-> like this and would much prefer to clean up the rules and restrictions. I
-> know that this has been going on for quite a while and am sorry that am
-> coming back to the same issue repeatedly which isn't necessarily caused by
-> the proposed change. What do you think?
+RFC history:
+v2:
+- removed whitespace changes
+- fix issues reported by test robot
+v3:
+- Changed naming from SyncE to EEC
+- Clarify cover letter and commit message for patch 1
+v4:
+- Removed sync_source and pin_idx info
+- Changed one structure to attributes
+- Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
+  to the recovered clock of a port that returns the state
+v5:
+- add EEC source as an optiona attribute
+- implement support for recovered clocks
+- align states returned by EEC to ITU-T G.781
+v6:
+- fix EEC clock state reporting
+- add documentation
+- fix descriptions in code comments
 
-I think I can relax some of the restrictions, but probably not all of 
-them at this time. We can certainly working on removing as much 
-restriction and limitations as possible in future update to the 
-partition code.
+Maciej Machnikowski (4):
+  ice: add support detecting features based on netlist
+  ethtool: Add ability to configure recovered clock for SyncE feature
+  ice: add support for monitoring SyncE DPLL state
+  ice: add support for SyncE recovered clocks
 
-Cheers,
-Longman
+ Documentation/networking/ethtool-netlink.rst  |  67 +++++
+ drivers/net/ethernet/intel/ice/ice.h          |   7 +
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  70 ++++-
+ drivers/net/ethernet/intel/ice/ice_common.c   | 224 +++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |  20 +-
+ drivers/net/ethernet/intel/ice/ice_devids.h   |   3 +
+ drivers/net/ethernet/intel/ice/ice_ethtool.c  |  97 +++++++
+ drivers/net/ethernet/intel/ice/ice_lib.c      |   6 +-
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  35 +++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  49 ++++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  36 +++
+ drivers/net/ethernet/intel/ice/ice_type.h     |   1 +
+ include/linux/ethtool.h                       |   9 +
+ include/uapi/linux/ethtool_netlink.h          |  21 ++
+ net/ethtool/Makefile                          |   3 +-
+ net/ethtool/netlink.c                         |  20 ++
+ net/ethtool/netlink.h                         |   4 +
+ net/ethtool/synce.c                           | 267 ++++++++++++++++++
+ 18 files changed, 935 insertions(+), 4 deletions(-)
+ create mode 100644 net/ethtool/synce.c
+
+-- 
+2.26.3
 
