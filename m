@@ -2,104 +2,147 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F2CC433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Dec 2021 14:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A2FAC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Dec 2021 14:59:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243151AbhLAPAc (ORCPT
+        id S242900AbhLAPDC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Dec 2021 10:00:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52507 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232627AbhLAPAb (ORCPT
+        Wed, 1 Dec 2021 10:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235157AbhLAPDB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:00:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638370630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nD9oVnkdNcgwBlZTLCOet/WJtrrHTgH+O1SlF9BlPpQ=;
-        b=Hez8sG9JJQUueKmjZ8arfbIRbGBrmnNIAI8DOfChKDmy+yxRyim0nC5LcsKGmh7+Pc2Y3+
-        tRxaG4R8ZK7UMkvBTQXGpxI3jh9w/zqzRGxZFxZ04ZY0ktT/p+ejXCgef3cC26o+ApgLUz
-        kg07m+0Cio9PcjCMa1zzAlNlYdFd+h8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-3u8mdrDTOn6rm3VialThZg-1; Wed, 01 Dec 2021 09:57:09 -0500
-X-MC-Unique: 3u8mdrDTOn6rm3VialThZg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 094FF8042F6;
-        Wed,  1 Dec 2021 14:56:24 +0000 (UTC)
-Received: from [10.22.10.179] (unknown [10.22.10.179])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C07760C05;
-        Wed,  1 Dec 2021 14:56:21 +0000 (UTC)
-Message-ID: <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
-Date:   Wed, 1 Dec 2021 09:56:21 -0500
+        Wed, 1 Dec 2021 10:03:01 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B3C061574
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Dec 2021 06:59:40 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d24so53013528wra.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Dec 2021 06:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RS1vzmzmQeEBjKlSDlmgEppWunZ2lvwJs6T3YgQzeck=;
+        b=PADzr4eyzFeEVSKDETkultCMlz+18FGAcT2+wAOK1FssyF0X1L3HQ1tTsp8n/esGtf
+         oJIwQbQZJIfeuORQAE6fn+d8sBcoe7pzLMmyM7as0o3M/ZAsioDKYEp7zpeuWrAa+qol
+         uz9C5SV6r9cd2PQ3skbPjj6CIDhjl5LBBtYbcpO5TSOe3mtt0fd92JNyiq4cUIfMsiC8
+         ngcjmRFGr0TMe44bqGKuwtfYxI9CelQ5lOEkvJhLzW4NwTdSyN18PQImaeNdtVkrrJ5Y
+         ouKchDn6OAgX4ZfDbjW3ZdjmZ9UnkFGFxPSIiqDJrq/egTrf31/LzTWkphe77foOGJSj
+         HOZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RS1vzmzmQeEBjKlSDlmgEppWunZ2lvwJs6T3YgQzeck=;
+        b=T3VG1fBzpp/0dwevNGdJPMOQacduBfxXX0GNmqgIaDg+n4lgR0+omjNQNm771NKs4v
+         HLvoFR+z4mvDAF/zOvhKdEcO2sJh8kQ/hcAOEupWiPtdHEGVCjewkzmk/pNszzKGUdoI
+         B8Dg/gFfV2ARpDEhfRKQPrRb5n9IINgfgM80PfBT1/OWbbjdS2yFg0UL0DtNu+BP0nYu
+         1s4gLjovDgsjgSKocdhRfwX9zXLwXW0fEtHMEo/bTO6CFj6c7ktVvr0HaD7P02uoKyqQ
+         gwZrlm/+V36Fo+mcAO272ILKvLJUpHnkXmr7DqybpZ+DY+stRGOFQduVIaGqjlVYdQ5H
+         7E9A==
+X-Gm-Message-State: AOAM5318Czp1xL58EpujeRKrvO2itB4N95OX6mdeBNAzUhoIrh/10TXo
+        Yxd7wVRWOOZbc3fW1nxipIeH1A==
+X-Google-Smtp-Source: ABdhPJzz8Jon5yKRGqvms3lrtF2W7TCzv4+iL+ICaMgjz8Dd5EA4Zg3K+dINCyAeL2BBg2cF6G5VlQ==
+X-Received: by 2002:adf:ef84:: with SMTP id d4mr7069949wro.175.1638370779228;
+        Wed, 01 Dec 2021 06:59:39 -0800 (PST)
+Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id a9sm46541wrt.66.2021.12.01.06.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 06:59:38 -0800 (PST)
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        quentin@isovalent.com, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: [PATCH v2 bpf-next] selftests/bpf: Build testing_helpers.o out of tree
+Date:   Wed,  1 Dec 2021 14:51:02 +0000
+Message-Id: <20211201145101.823159-1-jean-philippe@linaro.org>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <20211201141350.GA54766@blackbody.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211201141350.GA54766@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/1/21 09:13, Michal Koutný wrote:
-> On Tue, Nov 30, 2021 at 10:56:34PM -0500, Waiman Long <longman@redhat.com> wrote:
->>>>       A valid parent partition may distribute out all its CPUs to
->>>>       its child partitions as long as it is not the root cgroup and
->>>>       there is no task associated with it.
->>> A valid parent partition which isn't root never has tasks in them to begin
->>> with.
->> I believe there is some corner cases where it is possible to put task in an
->> intermediate partition. That is why I put down this statement.
-> Just mind the threads -- cpuset controller is threaded and having tasks
-> in inner cgroup nodes is a real scenario. I wouldn't consider it a
-> corner case.
->
-> [ Actually, the paragraph could IMO be simplified:
-Right, I shouldn't say corner cases. Having task in an intermediate 
-partition is possible depending on event sequence. I am aware that there 
-are code in the cpuset code to prevent that, but it didn't block all cases.
->> A valid parent partition may distribute out all its CPUs to
->>   its child partitions as long as there is no task associated with it.
-> Assuming there's always at least one kernel thread in the root cgroup
-> that can't be migrated anyway.]
+Add $(OUTPUT) prefix to testing_helpers.o, so it can be built out of
+tree when necessary. At the moment, in addition to being built in-tree
+even when out-of-tree is required, testing_helpers.o is not built with
+the right recipe when cross-building.
 
-I am aware of that. That is why I said root cgroup must have at least 
-one cpu in its "cpuset.cpus.effective".
+For consistency the other helpers, cgroup_helpers and trace_helpers, can
+also be passed as objects instead of source. Use *_HELPERS variable to
+keep the Makefile readable.
 
-Cheers,
-Longman
+Fixes: f87c1930ac29 ("selftests/bpf: Merge test_stub.c into testing_helpers.c")
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+---
+v2: Homogenize cgroup_helpers and trace_helpers.
+v1: https://lore.kernel.org/bpf/20211129111508.404367-1-jean-philippe@linaro.org/
+---
+ tools/testing/selftests/bpf/Makefile | 40 +++++++++++++++-------------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index a6c0e92c86a1..75799506a5d8 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -192,22 +192,26 @@ TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
+ 
+ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
+ 
+-$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_sock: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_sock_addr: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_sockmap: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c testing_helpers.o
+-$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_sock_fields: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_sysctl: cgroup_helpers.c testing_helpers.o
+-$(OUTPUT)/test_tag: testing_helpers.o
+-$(OUTPUT)/test_lirc_mode2_user: testing_helpers.o
+-$(OUTPUT)/xdping: testing_helpers.o
+-$(OUTPUT)/flow_dissector_load: testing_helpers.o
+-$(OUTPUT)/test_maps: testing_helpers.o
+-$(OUTPUT)/test_verifier: testing_helpers.o
++CGROUP_HELPERS	:= $(OUTPUT)/cgroup_helpers.o
++TESTING_HELPERS	:= $(OUTPUT)/testing_helpers.o
++TRACE_HELPERS	:= $(OUTPUT)/trace_helpers.o
++
++$(OUTPUT)/test_dev_cgroup: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_sock_addr: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
++$(OUTPUT)/get_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_cgroup_storage: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_sysctl: $(CGROUP_HELPERS) $(TESTING_HELPERS)
++$(OUTPUT)/test_tag: $(TESTING_HELPERS)
++$(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
++$(OUTPUT)/xdping: $(TESTING_HELPERS)
++$(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
++$(OUTPUT)/test_maps: $(TESTING_HELPERS)
++$(OUTPUT)/test_verifier: $(TESTING_HELPERS)
+ 
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+@@ -535,8 +539,8 @@ $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
+ $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
+ $(OUTPUT)/bench: LDLIBS += -lm
+ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+-		 $(OUTPUT)/testing_helpers.o \
+-		 $(OUTPUT)/trace_helpers.o \
++		 $(TESTING_HELPERS) \
++		 $(TRACE_HELPERS) \
+ 		 $(OUTPUT)/bench_count.o \
+ 		 $(OUTPUT)/bench_rename.o \
+ 		 $(OUTPUT)/bench_trigger.o \
+-- 
+2.34.0
 
