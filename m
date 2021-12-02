@@ -2,92 +2,85 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90FA5C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Dec 2021 02:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECE9DC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Dec 2021 10:59:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351433AbhLBCdz (ORCPT
+        id S1357094AbhLBLCY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Dec 2021 21:33:55 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:38602 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1349878AbhLBCdu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:33:50 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3A4iYuf6Pj5YbMvOTvrR0AlcFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdQS4gjt30jEDnzZOCj+Ab/ffYGWkKd1/YdvipENTu5SHm99gGjLY11k3ESsS9?=
- =?us-ascii?q?pCt6fd1j6vIF3rLaJWFFSqL1u1GAjX7BJ1yHiC0SiuFaOC79CAmjfjQHdIQNca?=
- =?us-ascii?q?fUsxPbV49IMseoUI78wIJqtYAbemRW2thi/uryyHsEAPNNwpPD44hw/nrRCWDE?=
- =?us-ascii?q?xjFkGhwUlQWPZintbJF/pUfJMp3yaqZdxMUTmTId9NWSdovzJnhlo/Y1xwrTN2?=
- =?us-ascii?q?4kLfnaVBMSbnXVeSMoiMOHfH83V4Z/Wpvuko4HKN0hUN/jzSbn9FzydxLnZKtS?=
- =?us-ascii?q?wY1JbCKk+MYO/VdO3gnbfYeo+SafRBTtuTWlSUqaUDEz/xwAUQeMYQG9+NzBm9?=
- =?us-ascii?q?Ss/oVNFglYguKh++sxpq0T+BtgoIoK8yDFIACsHhIzjzDC/siB5fZTM3i/t9F1?=
- =?us-ascii?q?TcYhc1UG/vaIc0DZlJHaBXGfg0KOVoNDp86tPmni2O5cDBCrl+R460t7AD7yA1?=
- =?us-ascii?q?3zaioM8HYftKWSN5JtliXq3iA/GnjBBwectuFxlKt9H+wiuLRtT30VZhUF7Ci8?=
- =?us-ascii?q?PNuxlqJyQQu5Lc+PbegiaDhzBfgBJQEcApJkhfCZJMarCSDJuQRlTXiyJJcgiM?=
- =?us-ascii?q?hZg=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ABanCzalK8cAjLOvvMqKfaHWnVEjpDfIQ3DAb?=
- =?us-ascii?q?v31ZSRFFG/Fw9vre+MjzsCWYtN9/Yh8dcK+7UpVoLUm8yXcX2/h1AV7BZniEhI?=
- =?us-ascii?q?LAFugLgrcKqAeQeREWmNQ86Y5QN4B6CPDVSWNxlNvG5mCDeOoI8Z2q97+JiI7l?=
- =?us-ascii?q?o0tQcQ=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.87,280,1631548800"; 
-   d="scan'208";a="118303354"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 02 Dec 2021 10:30:25 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id B8B644D13BC0;
-        Thu,  2 Dec 2021 10:30:23 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 2 Dec 2021 10:30:22 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Thu, 2 Dec 2021 10:30:23 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
-        <dsahern@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH v2 1/2] selftests: net: remove meaningless help option
-Date:   Thu, 2 Dec 2021 10:29:53 +0800
-Message-ID: <20211202022954.23545-1-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.33.0
+        Thu, 2 Dec 2021 06:02:24 -0500
+Received: from mga14.intel.com ([192.55.52.115]:57432 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357088AbhLBLCU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 Dec 2021 06:02:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236913759"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="236913759"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:58:58 -0800
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="677622974"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:58:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1msjmU-001Me9-H0;
+        Thu, 02 Dec 2021 12:57:38 +0200
+Date:   Thu, 2 Dec 2021 12:57:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <YaimotqSgHzS2wdA@smile.fi.intel.com>
+References: <20211130154127.12272-1-brgl@bgdev.pl>
+ <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com>
+ <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com>
+ <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: B8B644D13BC0.AD59F
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-$ ./fcnal-test.sh -t help
-Test names: help
+On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 
-Looks it intent to list the available tests but it didn't do the right
-thing. I will add another option the do that in the later patch.
+...
 
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/net/fcnal-test.sh | 2 --
- 1 file changed, 2 deletions(-)
+> Let me maybe rephrase the problem: currently, for GPIO devices
+> instantiating multiple banks created outside of the OF or ACPI
+> frameworks (e.g. instantiated manually and configured using a
+> hierarchy of software nodes with a single parent swnode and a number
+> of child swnodes representing the children), it is impossible to
+> assign firmware nodes other than the one representing the top GPIO
+> device to the gpiochip child devices.
+> 
+> In fact if we want to drop the OF APIs entirely from gpiolib - this
+> would be the right first step as for gpio-sim it actually replaces the
+> gc->of_node = some_of_node; assignment that OF-based drivers do for
+> sub-nodes defining banks and it does work with device-tree (I verified
+> that too) thanks to the fwnode abstraction layer.
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 7f5b265fcb90..5cb59947eed2 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -4068,8 +4068,6 @@ do
- 	# setup namespaces and config, but do not run any tests
- 	setup)		 setup; exit 0;;
- 	vrf_setup)	 setup "yes"; exit 0;;
--
--	help)            echo "Test names: $TESTS"; exit 0;;
- 	esac
- done
- 
+In exchange of acknowledgements I confirm that I understood the issue
+you are describing. What I still don't like is this band-aid:ish approach.
+What we really need is to replace of_node by fwnode in GPIO library once
+for all. But it can be done later after your simulation series (or before,
+i.o.w. independently), hence I propose to update TODO and do it separately.
+
 -- 
-2.33.0
-
+With Best Regards,
+Andy Shevchenko
 
 
