@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E775C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Dec 2021 13:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AC89C4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Dec 2021 13:30:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381037AbhLCNdx (ORCPT
+        id S1381055AbhLCNdz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Dec 2021 08:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        Fri, 3 Dec 2021 08:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352201AbhLCNdw (ORCPT
+        with ESMTP id S1381041AbhLCNdy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:33:52 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAACC06175A
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 05:30:28 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so4922178wme.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 05:30:28 -0800 (PST)
+        Fri, 3 Dec 2021 08:33:54 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DD6C06175A
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 05:30:29 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id o13so5692196wrs.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 05:30:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7e6xEEwbqBhZhQQISb76s4iuJL2tqNayyYZPFmmtHH4=;
-        b=vWTjJuTQXs0odnKkfhWfuZ4oq8kHR5dXL67O893IlV1nFtZwNKCGbolEyeydzDXbaq
-         Wd1uhZzp01NdsFTrezCYY8bvYfe1MomJCXNJt9wWdVSwuzwA5IETjVr5WAoeLY7HYPdX
-         lvgzAo4gQITR2jP5onLRfyyOo9daXS4QKAuklmexVRgwaiWEdpNlwZocfGaVGhm/ZsMz
-         HmAvJZgUDNCwCXa/1Zz2E4wRNP0w0MM9HVQ1W3RKN+rC+Gqimf4FRlXDBLRr96yxi9XD
-         uP8Ihetuzr4wZCR/QZ+m+bubmXavbGJ2o9ftgIxrnt1RQI3tM2ju6Gy4+RI+x32UhmRX
-         N6og==
+        bh=OLE3QPwL4b8b/ee9pGQMjsQcF3NssyLlDXPOSMNwayg=;
+        b=inqTLd+UidSJWDiQpapSdiFQCp6X12PxJReDFzdberXJgpVrzCpqsutmvJoqEx4n1H
+         1786xp8mvAO7daoh4uhyOunioChOGtNjTd0z/ccdz+YvlCmZ8mYtoaFNpWv2Bjjc2P0F
+         ofH9Ho6SlWHAuzYIyh0JlpykA/zngdUgolQrUAyI1Nu3haI/IkOB3kWwbNtpwCRpQWZy
+         ncaCW6UviVxnR7p9QPuh9KHVswELItObJvZ8sGZBJwvVfEyNPf8UGbsjN3hFFXvEup35
+         /IOVSajPlDbgAZTstHFFE+GtgzWKm1dEH6fFxcy3hKvRDiWdo+UOYM+6n9g3zhK2a83L
+         SqFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7e6xEEwbqBhZhQQISb76s4iuJL2tqNayyYZPFmmtHH4=;
-        b=nhrTyV51L9AxiXrLWUaUTIvs+e1eoks9FWR39mRWkuq5LCbKhHz9Gi/o3uFiLBgdW7
-         qtwAcHJ68p5cmerqcgClMRWS68NHddXKqpSQplqJ04fpXVj9kgVA5gTFthW+HEMYYBXB
-         NwIx8Jd638KvK25oTbHxidPpYH64ZOz+1sLXRy/ttX+fdzL/c3Y/0b2hx9ZjJEx/VPSD
-         E+o2Ee/azRrFPbAqv+z1ajwTggQBu7CVL+lRg5grYAGPSKXuHSe3pK6AT4ZuUQdpQx62
-         K+yIqksUvSZq6wHnsNEu2dYC3F3LfdSmgObtlN1x27fOVcG7wjSMumyVoZDLt9vIprHp
-         rKEw==
-X-Gm-Message-State: AOAM532NbnCZI4eTEYyYedVjibfUQQPCN0CUl3rO7wC7AuzxcVqCJZI6
-        2K9ouhX/5tS4DAYZ34a/McqyLQ==
-X-Google-Smtp-Source: ABdhPJyikGQKikVXE8VOAWZGP7+3FCDd253ukAlOlSG92UCNjA5/WvL43p099ZzQshT/l/6QKvunaA==
-X-Received: by 2002:a7b:c76e:: with SMTP id x14mr15095724wmk.27.1638538226586;
-        Fri, 03 Dec 2021 05:30:26 -0800 (PST)
+        bh=OLE3QPwL4b8b/ee9pGQMjsQcF3NssyLlDXPOSMNwayg=;
+        b=JLrjumdVqA9P6g++doHlDIY3hN/MkMgewIJ2/LgBu0OwmIhi1E8lpJk7KIpQm+nvzn
+         9ZHwsQSExOSbwG/lwAkEB1ZH7/KZwZRveReDDtNH77DACaUr35dlmwgLfxG9PZHU5RF6
+         +jEnfe1LMBXn8mmzN7rAmgcK5Vxpor9ALwMDAuWG++90G2BYT95No7QaB0hPO1wx/hXE
+         R4XRB0JcUMc64m+bx58agAtOUBCMCrC7cEbUECKtkJegec87GlwoI8ixMPcmy+m3ZOjF
+         8xOX7PC3AfcdvfAiDlBY0/3DDChhk/dqy87236WmNlbW5jWjU31Nwl/g20c1gZLCkMrn
+         bnZQ==
+X-Gm-Message-State: AOAM530+5POBvDeBmrjcpN61DZWV96+57c6x4bIGdtT/E7Ek6LXj1pJx
+        T2D66xbn0aC9sf6XqrSqWuxpUw==
+X-Google-Smtp-Source: ABdhPJzOJMqea8JZBCGLqnGpTk1MW+6vAFHXG0OCTgyHLFydyuZLvxu7ywVJZbvEbqGnkSoo86bLNA==
+X-Received: by 2002:a5d:4ece:: with SMTP id s14mr22409779wrv.371.1638538228347;
+        Fri, 03 Dec 2021 05:30:28 -0800 (PST)
 Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id j11sm2755910wrt.3.2021.12.03.05.30.25
+        by smtp.gmail.com with ESMTPSA id j11sm2755910wrt.3.2021.12.03.05.30.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 05:30:26 -0800 (PST)
+        Fri, 03 Dec 2021 05:30:28 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Kent Gibson <warthog618@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -59,9 +59,9 @@ To:     Kent Gibson <warthog618@gmail.com>,
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in struct gpio_chip
-Date:   Fri,  3 Dec 2021 14:29:59 +0100
-Message-Id: <20211203133003.31786-4-brgl@bgdev.pl>
+Subject: [PATCH v12 5/7] selftests: gpio: provide a helper for reading chip info
+Date:   Fri,  3 Dec 2021 14:30:01 +0100
+Message-Id: <20211203133003.31786-6-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20211203133003.31786-1-brgl@bgdev.pl>
 References: <20211203133003.31786-1-brgl@bgdev.pl>
@@ -71,28 +71,101 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If the driver sets the fwnode in struct gpio_chip, let it take
-precedence over the of_node.
+Add a simple program that allows to retrieve chip properties from the
+GPIO character device. This will be used in gpio-sim selftests.
 
 Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 ---
- drivers/gpio/gpiolib-of.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/gpio/.gitignore       |  1 +
+ tools/testing/selftests/gpio/Makefile         |  2 +-
+ tools/testing/selftests/gpio/gpio-chip-info.c | 57 +++++++++++++++++++
+ 3 files changed, 59 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/gpio/gpio-chip-info.c
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 0ad288ab6262..91dcf2c6cdd8 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -1046,6 +1046,9 @@ void of_gpio_dev_init(struct gpio_chip *gc, struct gpio_device *gdev)
- 	if (gc->parent)
- 		gdev->dev.of_node = gc->parent->of_node;
+diff --git a/tools/testing/selftests/gpio/.gitignore b/tools/testing/selftests/gpio/.gitignore
+index a4969f7ee020..4ea4f58dab1a 100644
+--- a/tools/testing/selftests/gpio/.gitignore
++++ b/tools/testing/selftests/gpio/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ gpio-mockup-cdev
++gpio-chip-info
+diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
+index d7b312b44a62..a40b818c394e 100644
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -2,7 +2,7 @@
  
-+	if (gc->fwnode)
-+		gc->of_node = to_of_node(gc->fwnode);
+ TEST_PROGS := gpio-mockup.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+-TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev
++TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info
+ CFLAGS += -O2 -g -Wall -I../../../../usr/include/
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/gpio/gpio-chip-info.c b/tools/testing/selftests/gpio/gpio-chip-info.c
+new file mode 100644
+index 000000000000..fdc07e742fba
+--- /dev/null
++++ b/tools/testing/selftests/gpio/gpio-chip-info.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * GPIO character device helper for reading chip information.
++ *
++ * Copyright (C) 2021 Bartosz Golaszewski <brgl@bgdev.pl>
++ */
 +
- 	/* If the gpiochip has an assigned OF node this takes precedence */
- 	if (gc->of_node)
- 		gdev->dev.of_node = gc->of_node;
++#include <fcntl.h>
++#include <linux/gpio.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/ioctl.h>
++#include <sys/types.h>
++
++static void print_usage(void)
++{
++	printf("usage:\n");
++	printf("  gpio-chip-info <chip path> [name|label|num-lines]\n");
++}
++
++int main(int argc, char **argv)
++{
++	struct gpiochip_info info;
++	int fd, ret;
++
++	if (argc != 3) {
++		print_usage();
++		return EXIT_FAILURE;
++	}
++
++	fd = open(argv[1], O_RDWR);
++	if (fd < 0) {
++		perror("unable to open the GPIO chip");
++		return EXIT_FAILURE;
++	}
++
++	memset(&info, 0, sizeof(info));
++	ret = ioctl(fd, GPIO_GET_CHIPINFO_IOCTL, &info);
++	if (ret) {
++		perror("chip info ioctl failed");
++		return EXIT_FAILURE;
++	}
++
++	if (strcmp(argv[2], "name") == 0) {
++		printf("%s\n", info.name);
++	} else if (strcmp(argv[2], "label") == 0) {
++		printf("%s\n", info.label);
++	} else if (strcmp(argv[2], "num-lines") == 0) {
++		printf("%u\n", info.lines);
++	} else {
++		fprintf(stderr, "unknown command: %s\n", argv[2]);
++		return EXIT_FAILURE;
++	}
++
++	return EXIT_SUCCESS;
++}
 -- 
 2.25.1
 
