@@ -2,65 +2,66 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76297C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Dec 2021 18:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8385CC433EF
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Dec 2021 18:35:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353255AbhLCS3j (ORCPT
+        id S1359833AbhLCSiX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Dec 2021 13:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        Fri, 3 Dec 2021 13:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353156AbhLCS3j (ORCPT
+        with ESMTP id S1358978AbhLCSiX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:29:39 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFB3C061751
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 10:26:15 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id z8so3579709ilu.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 10:26:15 -0800 (PST)
+        Fri, 3 Dec 2021 13:38:23 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5189BC061751
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Dec 2021 10:34:59 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id e128so4934602iof.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Dec 2021 10:34:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=azf4/wVj2YJvJGUudEUC74MuUs2tvIqRTehotgQgLos=;
-        b=etpD2ROqKqqgjYt9Q/uCdZNOHghaRT7w645Adxn/LYb6EglQRsaBln07VgptPnFZrM
-         8MSJ3Gr2A0fRfZnQaFnqZyHfibGWwWf0Soe7mkpI6pgdL4PT/EMtH3ISNA/82BDx/zUd
-         zEekUFQ/9TRTx0z64t/AlkTXPFBdTV4Ouqr74=
+        bh=Dvb4sebfbgF5tG7jNm/fwyVvE8C324Y2j6ohBL2yz/g=;
+        b=AYvBrz6T9TLZMoIC9kskY1SI7yufrV/ryoGHXv440jZSnPh9Et0mg3C1O5GU8l3OXq
+         Pwy8zESuOHjP9NdlIDKrtYk1lLpHUXaPdxChJZ40GWN5O/Yz1rOynaTkSrswJEoOuG8W
+         rZJgo0ys6O7cyy0NXBGQEjPn4Ui3v3qZ/wg7g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=azf4/wVj2YJvJGUudEUC74MuUs2tvIqRTehotgQgLos=;
-        b=VrSaFpgB9Nk9s8+xW/r5spKanDdNoCR9OrySOgcPItchjZpci2+sA9LOgWA2ZImaK+
-         ABGT+eH4HeXCRyALKDXQaTRlhLAJc83PkGXMsNCq58zK4neN+AG8yLE8ZMByy4JWRNiq
-         n8GvNCj8KWKL+5TP/7Y1hMUoyAPwJgkFWX703IImsc3PBAve5brjz6wBunBv2deDmGSU
-         cx6BfqmWRhrvJV2K5U3OzrcsreWeI23AY7ps9UNp+f0VGLX8jPdE9JpSjvQhs9G2OiFE
-         0DO2j0JqGfTobO9cBeTwUzTxiJildYestlfc7JecZGKJXgCiBD+KizV46NQrQ3wj0/pY
-         KEPg==
-X-Gm-Message-State: AOAM53240xe8RbUNUt9YrowRYqkIj6sb+QvUht48VGHrkxXwbkJ3Cbxj
-        AxQPjvfHZRQNpdYW+MSp6iSqpA==
-X-Google-Smtp-Source: ABdhPJwF/2Juo33NOH6nUb7cPzy8sdxNMpRF4p0w7bbnHZmeBe7kCDABrT64yp5p/PkXTi+Gmzr++g==
-X-Received: by 2002:a92:d246:: with SMTP id v6mr22501374ilg.148.1638555974667;
-        Fri, 03 Dec 2021 10:26:14 -0800 (PST)
+        bh=Dvb4sebfbgF5tG7jNm/fwyVvE8C324Y2j6ohBL2yz/g=;
+        b=c+x4TYxsQHgJWDw26t47orwFrIw3yrXfM3BWz7KBrIxC2ff61MkyhcWRyD/jacydBr
+         XvZSTXys5siqer8JxKmNAZ2jYrnYjJBMfOct0BN/UMY4s3pfyAbNLGs/bOUeMAqHevRC
+         MMOoOdPvkc7PTt1eyc77H7905zUAsdEqxtVScDHx9b/iXNgACNUWH4liLe7RLvzZykzr
+         YymADyx2DYq/62ph16/i4+d1qOy/3JYqPQ4DTW7xWJDXzj4rMv0LbuS0AARUbQu77WME
+         xmOmwIrGC4ZBUXiBFMS3YCzIktak10C8JfmzrRLAMCbwDANp44++UQltjYYGkQ+VFi3E
+         D9ig==
+X-Gm-Message-State: AOAM531pBv6+ihIzhxhBW6zXTXymVBLybbdRSQ3WhjdgPCXGfHkVWweC
+        DhYUm1ZMqM3Z8clFDga+CUo1ew==
+X-Google-Smtp-Source: ABdhPJxGTNb85pzcqMlNpqWNolTOrnkarUma79HNUyQhS0ohb1umtNL2ovXsv7ZwEJYoOeA40LrEoQ==
+X-Received: by 2002:a02:ab8f:: with SMTP id t15mr27279823jan.147.1638556498668;
+        Fri, 03 Dec 2021 10:34:58 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id w1sm1888065ilq.1.2021.12.03.10.26.14
+        by smtp.gmail.com with ESMTPSA id 11sm2153989ilq.23.2021.12.03.10.34.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 10:26:14 -0800 (PST)
-Subject: Re: [PATCH] mnt: remove unneeded conversion to bool
+        Fri, 03 Dec 2021 10:34:58 -0800 (PST)
+Subject: Re: [PATCH] tests: remove unneeded conversion to bool
 To:     davidcomponentone@gmail.com, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     christian.brauner@ubuntu.com, ptikhomirov@virtuozzo.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yang Guang <yang.guang5@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <3a7435c9e7e7aa8f24d22fd576ce912eb0540272.1637737086.git.yang.guang5@zte.com.cn>
+References: <f1fe5f6b00e62a6f70c47f1d8b4c41d5d7d03d7d.1637736469.git.yang.guang5@zte.com.cn>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <07f4ba23-cf4c-6817-f7a4-5428f35d966c@linuxfoundation.org>
-Date:   Fri, 3 Dec 2021 11:26:13 -0700
+Message-ID: <bc39340a-8daf-fbe2-1450-2f074608c08b@linuxfoundation.org>
+Date:   Fri, 3 Dec 2021 11:34:57 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <3a7435c9e7e7aa8f24d22fd576ce912eb0540272.1637737086.git.yang.guang5@zte.com.cn>
+In-Reply-To: <f1fe5f6b00e62a6f70c47f1d8b4c41d5d7d03d7d.1637736469.git.yang.guang5@zte.com.cn>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,13 +69,11 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/24/21 5:56 PM, davidcomponentone@gmail.com wrote:
+On 11/24/21 5:58 PM, davidcomponentone@gmail.com wrote:
 > From: Yang Guang <yang.guang5@zte.com.cn>
 > 
 > The coccinelle report
-> ./tools/testing/selftests/mount/unprivileged-remount-test.c:285:54-59:
-> WARNING: conversion to bool not needed here
-> ./tools/testing/selftests/mount/unprivileged-remount-test.c:207:54-59:
+> ./tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c:225:18-23:
 > WARNING: conversion to bool not needed here
 > Relational and logical operators evaluate to bool,
 > explicit conversion is overly verbose and unneeded.
@@ -82,35 +81,26 @@ On 11/24/21 5:56 PM, davidcomponentone@gmail.com wrote:
 > Reported-by: Zeal Robot <zealci@zte.com.cn>
 > Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 > ---
->   tools/testing/selftests/mount/unprivileged-remount-test.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   .../selftests/move_mount_set_group/move_mount_set_group_test.c  | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/mount/unprivileged-remount-test.c b/tools/testing/selftests/mount/unprivileged-remount-test.c
-> index 584dc6bc3b06..d2917054fe3a 100644
-> --- a/tools/testing/selftests/mount/unprivileged-remount-test.c
-> +++ b/tools/testing/selftests/mount/unprivileged-remount-test.c
-> @@ -204,7 +204,7 @@ bool test_unpriv_remount(const char *fstype, const char *mount_options,
->   		if (!WIFEXITED(status)) {
->   			die("child did not terminate cleanly\n");
->   		}
-> -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
-> +		return WEXITSTATUS(status) == EXIT_SUCCESS;
->   	}
+> diff --git a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> index 860198f83a53..80ff0b692486 100644
+> --- a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> +++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> @@ -222,7 +222,7 @@ static int move_mount_set_group_supported(void)
+>   		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
+>   	umount2("/tmp", MNT_DETACH);
 >   
->   	create_and_enter_userns();
-> @@ -282,7 +282,7 @@ static bool test_priv_mount_unpriv_remount(void)
->   		if (!WIFEXITED(status)) {
->   			die("child did not terminate cleanly\n");
->   		}
-> -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
-> +		return WEXITSTATUS(status) == EXIT_SUCCESS;
->   	}
+> -	return ret < 0 ? false : true;
+> +	return ret >= 0;
+>   }
 >   
->   	orig_mnt_flags = read_mnt_flags(orig_path);
+>   FIXTURE(move_mount_set_group) {
 > 
 
-This change doesn't look right. WEXITSTATUS(status) return could be
-> 1 or 0 or negative.
+In this case it would be better to change the return type for
+move_mount_set_group_supported() to bool
 
 thanks,
 -- Shuah
