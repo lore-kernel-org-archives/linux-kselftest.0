@@ -2,169 +2,124 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58330C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Dec 2021 09:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98271C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Dec 2021 12:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbhLGJiC (ORCPT
+        id S230129AbhLGMbM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Dec 2021 04:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbhLGJhx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 04:37:53 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE8C061D5E
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Dec 2021 01:34:22 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id j3so28222248wrp.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Dec 2021 01:34:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sdC8L7KcajeuYgRxRzq/BDd9/Try3NuMaNKMjlQg9Bs=;
-        b=ywb/DmW9k6t7O2nSfBss1kAD/tJ2j9LcPL3LXT5/Ycmw3gSdTmnwizCmIq0pFx1Puw
-         TRNtvD6lB/dgAsNSyxOoYTfNK/WYMBbZZh4phWFmCDiRdfquO2Yij4B2M7Bnsh3lIcuU
-         +rVdt52t+mh/EVjJ7KsDTUbdn4ITAFvWkirLg/VQ2Qo27FceSNxsMIBw1yVw1RMRRgbv
-         wg1+GjLy8JT8L5ug2VqX9XbVasorxa6carY6e08QRVrWneCr1XDCbkVl/asxha/lkQlg
-         URsmFGZencZN48okTTt7dNI8pTZdogdZ+F/rM80IJz7tRq4Ntd/8llvhoPiB7wXSsT8s
-         p8NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sdC8L7KcajeuYgRxRzq/BDd9/Try3NuMaNKMjlQg9Bs=;
-        b=x6EXrclOzweL4kQ20Ht+RfpzZu7ZMVSe/z5HsOEsZDZrBjCkUoqLY4lpNSvwbh1ZQT
-         y6Xuh26G44QfnliigEgBdJ0U4n/CiWtI8cUMfNEUHhQulXZ+SYyzxewBi+XM8L56H60N
-         W27VajRG/ktOf4BmispPl5FtEo9ozyRvSHdBbOsx+IJF+PEpW2nS1XtREhFAnBGFkgik
-         2G5MN4M4dj0sTvU/p5WcqQCcgMdQMy5TvxNABSk5JwOcpH+fhWk/1zYOLCiYrpkCfhZL
-         GcytrXau79kxYh83kmuDI4Zk+Edua2j/z+SGBhmvYy1lCu8W+7uchMkifPtq74Ae/dvq
-         tH8w==
-X-Gm-Message-State: AOAM533nWqMufe5MacI0AYh7+CdoU0OgtiZ0ii1tH3DfPPq/5CtPduqp
-        rBlVbuBzybeLBTqSwmM/xzhWyZ3Vky3yrwNw
-X-Google-Smtp-Source: ABdhPJwH8GOKljrwzOPGSQTb4LlbveMpYEF876ncfAs3wgLia74zk2iGOPhFf/x0ELT9pvQPTmp3zw==
-X-Received: by 2002:a5d:4a85:: with SMTP id o5mr49389284wrq.109.1638869661378;
-        Tue, 07 Dec 2021 01:34:21 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id k13sm13783291wri.6.2021.12.07.01.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 01:34:21 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
+        Tue, 7 Dec 2021 07:31:12 -0500
+Received: from mga18.intel.com ([134.134.136.126]:15932 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235422AbhLGMbL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Dec 2021 07:31:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224432359"
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="224432359"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 04:27:41 -0800
+X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
+   d="scan'208";a="579821071"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 04:27:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muZWF-003Dpl-L4;
+        Tue, 07 Dec 2021 14:24:27 +0200
+Date:   Tue, 7 Dec 2021 14:24:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Shuah Khan <shuah@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v13 6/7] selftests: gpio: add a helper for reading GPIO line names
-Date:   Tue,  7 Dec 2021 10:34:11 +0100
-Message-Id: <20211207093412.27833-7-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20211207093412.27833-1-brgl@bgdev.pl>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v13 2/7] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <Ya9Seyco7elB2on2@smile.fi.intel.com>
 References: <20211207093412.27833-1-brgl@bgdev.pl>
+ <20211207093412.27833-3-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211207093412.27833-3-brgl@bgdev.pl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple program that allows to read GPIO line names from the
-character device. This will be used in gpio-sim selftests.
+On Tue, Dec 07, 2021 at 10:34:07AM +0100, Bartosz Golaszewski wrote:
+> Software nodes allow us to represent hierarchies for device components
+> that don't have their struct device representation yet - for instance:
+> banks of GPIOs under a common GPIO expander. The core gpiolib core
+> however doesn't offer any way of passing this information from the
+> drivers.
+> 
+> This extends struct gpio_chip with a pointer to fwnode that can be set
+> by the driver and used to pass device properties for child nodes.
+> 
+> This is similar to how we handle device-tree sub-nodes with
+> CONFIG_OF_GPIO enabled.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- tools/testing/selftests/gpio/.gitignore       |  1 +
- tools/testing/selftests/gpio/Makefile         |  2 +-
- tools/testing/selftests/gpio/gpio-line-name.c | 55 +++++++++++++++++++
- 3 files changed, 57 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/gpio/gpio-line-name.c
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/tools/testing/selftests/gpio/.gitignore b/tools/testing/selftests/gpio/.gitignore
-index 4ea4f58dab1a..ededb077a3a6 100644
---- a/tools/testing/selftests/gpio/.gitignore
-+++ b/tools/testing/selftests/gpio/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- gpio-mockup-cdev
- gpio-chip-info
-+gpio-line-name
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index a40b818c394e..293aa9749408 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -2,7 +2,7 @@
- 
- TEST_PROGS := gpio-mockup.sh
- TEST_FILES := gpio-mockup-sysfs.sh
--TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info
-+TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info gpio-line-name
- CFLAGS += -O2 -g -Wall -I../../../../usr/include/
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/gpio/gpio-line-name.c b/tools/testing/selftests/gpio/gpio-line-name.c
-new file mode 100644
-index 000000000000..e635cfadbded
---- /dev/null
-+++ b/tools/testing/selftests/gpio/gpio-line-name.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * GPIO character device helper for reading line names.
-+ *
-+ * Copyright (C) 2021 Bartosz Golaszewski <brgl@bgdev.pl>
-+ */
-+
-+#include <fcntl.h>
-+#include <linux/gpio.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+
-+static void print_usage(void)
-+{
-+	printf("usage:\n");
-+	printf("  gpio-line-name <chip path> <line offset>\n");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct gpio_v2_line_info info;
-+	int fd, ret;
-+	char *endp;
-+
-+	if (argc != 3) {
-+		print_usage();
-+		return EXIT_FAILURE;
-+	}
-+
-+	fd = open(argv[1], O_RDWR);
-+	if (fd < 0) {
-+		perror("unable to open the GPIO chip");
-+		return EXIT_FAILURE;
-+	}
-+
-+	memset(&info, 0, sizeof(info));
-+	info.offset = strtoul(argv[2], &endp, 10);
-+	if (*endp != '\0') {
-+		print_usage();
-+		return EXIT_FAILURE;
-+	}
-+
-+	ret = ioctl(fd, GPIO_V2_GET_LINEINFO_IOCTL, &info);
-+	if (ret) {
-+		perror("line info ioctl failed");
-+		return EXIT_FAILURE;
-+	}
-+
-+	printf("%s\n", info.name);
-+
-+	return EXIT_SUCCESS;
-+}
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> ---
+>  drivers/gpio/gpiolib.c      | 7 ++++++-
+>  include/linux/gpio/driver.h | 2 ++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 22b98a590a88..6af732bf4c99 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -593,13 +593,18 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+>  			       struct lock_class_key *lock_key,
+>  			       struct lock_class_key *request_key)
+>  {
+> -	struct fwnode_handle *fwnode = gc->parent ? dev_fwnode(gc->parent) : NULL;
+> +	struct fwnode_handle *fwnode = NULL;
+>  	unsigned long	flags;
+>  	int		ret = 0;
+>  	unsigned	i;
+>  	int		base = gc->base;
+>  	struct gpio_device *gdev;
+>  
+> +	if (gc->fwnode)
+> +		fwnode = gc->fwnode;
+> +	else if (gc->parent)
+> +		fwnode = dev_fwnode(gc->parent);
+> +
+>  	/*
+>  	 * First: allocate and populate the internal stat container, and
+>  	 * set up the struct device.
+> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+> index a673a359e20b..b0728c8ad90c 100644
+> --- a/include/linux/gpio/driver.h
+> +++ b/include/linux/gpio/driver.h
+> @@ -289,6 +289,7 @@ struct gpio_irq_chip {
+>   *	number or the name of the SoC IP-block implementing it.
+>   * @gpiodev: the internal state holder, opaque struct
+>   * @parent: optional parent device providing the GPIOs
+> + * @fwnode: optional fwnode providing this controller's properties
+>   * @owner: helps prevent removal of modules exporting active GPIOs
+>   * @request: optional hook for chip-specific activation, such as
+>   *	enabling module power and clock; may sleep
+> @@ -377,6 +378,7 @@ struct gpio_chip {
+>  	const char		*label;
+>  	struct gpio_device	*gpiodev;
+>  	struct device		*parent;
+> +	struct fwnode_handle	*fwnode;
+>  	struct module		*owner;
+>  
+>  	int			(*request)(struct gpio_chip *gc,
+> -- 
+> 2.25.1
+> 
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
