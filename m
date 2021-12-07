@@ -2,855 +2,274 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B8FAC4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Dec 2021 17:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9DBAC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Dec 2021 17:25:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239974AbhLGRVC (ORCPT
+        id S231251AbhLGR2e (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Dec 2021 12:21:02 -0500
-Received: from mga06.intel.com ([134.134.136.31]:52283 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239966AbhLGRVB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:21:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298425598"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="298425598"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 09:14:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="605790103"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Dec 2021 09:14:50 -0800
-Received: from debox1-desk4.hsd1.or.comcast.net (unknown [10.251.18.198])
-        by linux.intel.com (Postfix) with ESMTP id 0844C5805EC;
-        Tue,  7 Dec 2021 09:14:50 -0800 (PST)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     lee.jones@linaro.org, hdegoede@redhat.com,
-        david.e.box@linux.intel.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, shuah@kernel.org,
-        mgross@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [V2 4/6] platform/x86: Add Intel Software Defined Silicon driver
-Date:   Tue,  7 Dec 2021 09:14:46 -0800
-Message-Id: <20211207171448.799376-5-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211207171448.799376-1-david.e.box@linux.intel.com>
-References: <20211207171448.799376-1-david.e.box@linux.intel.com>
+        Tue, 7 Dec 2021 12:28:34 -0500
+Received: from mx07-001d1705.pphosted.com ([185.132.183.11]:39916 "EHLO
+        mx07-001d1705.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229800AbhLGR2e (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:28:34 -0500
+Received: from pps.filterd (m0209327.ppops.net [127.0.0.1])
+        by mx08-001d1705.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B7Ga6Wc023496;
+        Tue, 7 Dec 2021 17:24:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=S1;
+ bh=VynsfQKiQPMNyE3R2DXGAuZ5tjg3p/W/UcH7nTS85uI=;
+ b=i1u+Wylxj5E/GXtsDuTHcDFMHJI4+wF8lhNQbdfZFedMvQ3YnqjTes77lOIlCyueqqyU
+ ijXUFrpau5twS8M0LUretkFtIFVbl7MOBV3vLyU8aFRD26CsgiJdeeUvy7ldjmzarDui
+ hIgb+Iuq5kWiI+huKxrJmNHtUjJtRDjenghCGL7CEvyeB2lFwKXE64nhKZAOZK9vGBZ8
+ HfYkT2l0H+Zgx66QZ55Ct5Xk6pDuFum4+5YElg7u0j5wgP06m/B9eQW4KJ9BtbFzNsGZ
+ s/rTU+APd7yTje5+td31np+u65/cKyccME2z5YIgWT52AktiJo1FiAj31LfHfQLA8B2F PA== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by mx08-001d1705.pphosted.com with ESMTP id 3cqy711yvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Dec 2021 17:24:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Deq/ki8kltl5UFVrsPv/Z9pZ5uo6ovHFADbWaKTuYzM0GTdEYPuLIK8dUwIJalS9pb91A+hpCBCDVbtZ3FXu8MRFBVuPdRc5lJmjWtxBjwTu95xDr0ikDH3QFUAlQLVbCgkcu6bZu5/lIK/UIrNqfvyIzxw9s+XfrNF84fXARedg/UuZrOq6HAW+JzVSrkrBYgiI0qRWW7QcvSaGNrQ4iC2tXgC8qGZ84Wlm+dVRXhEd3408cgFLEEoPWB4JOLhKrlli+eOmjzAghEXDvNW0x2X1ijm7ihclm+3bsKULLladhQpKzFC+D3e302XhRJkeQ887fhN9g7ErOQS88W12zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VynsfQKiQPMNyE3R2DXGAuZ5tjg3p/W/UcH7nTS85uI=;
+ b=F2gva0TycUIUGAomnQbex8zSyan1E28HfKhks5vDGrLmWf0tIY5eC1utad97R0jyrD0Y4pd6CAQL3OVNQgvINAOvJ9zdvzria1FLeZJaci36Cz3jyJvkvNP9yi206hrO4hCPK95u6At9qGjK7y+9ysHo4JFOn/yZpOA8PSwUEXhJq5Coi8k8APbwuJ8Y5d/DezUDirpfnF9SgXZYuDBQtXeZUbggnVNHgi48VheC24ERnYtPK2Ng710vDE0/PdhZnbgCt8jwJevw15r6j1MYnjJbSJLFSG67K0+l7K/6JLuITwxzwn5yQ2+mT1lvs78D6ywNdHqyd4xMCBAeaozRcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+Received: from BYAPR13MB2503.namprd13.prod.outlook.com (2603:10b6:a02:cd::33)
+ by BYAPR13MB2551.namprd13.prod.outlook.com (2603:10b6:a02:c1::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.10; Tue, 7 Dec
+ 2021 17:24:49 +0000
+Received: from BYAPR13MB2503.namprd13.prod.outlook.com
+ ([fe80::88c2:9770:40f:4f8]) by BYAPR13MB2503.namprd13.prod.outlook.com
+ ([fe80::88c2:9770:40f:4f8%7]) with mapi id 15.20.4778.007; Tue, 7 Dec 2021
+ 17:24:49 +0000
+From:   <Tim.Bird@sony.com>
+To:     <sharinder@google.com>, <davidgow@google.com>,
+        <brendanhiggins@google.com>, <shuah@kernel.org>, <corbet@lwn.net>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 3/7] Documentation: KUnit: Added KUnit Architecture
+Thread-Topic: [PATCH v2 3/7] Documentation: KUnit: Added KUnit Architecture
+Thread-Index: AQHX6y0Ajbz1WvajSEerwMfcISQtsqwnRoNA
+Date:   Tue, 7 Dec 2021 17:24:49 +0000
+Message-ID: <BYAPR13MB2503D5A5E52D5645C5CA3C3AFD6E9@BYAPR13MB2503.namprd13.prod.outlook.com>
+References: <20211207054019.1455054-1-sharinder@google.com>
+ <20211207054019.1455054-4-sharinder@google.com>
+In-Reply-To: <20211207054019.1455054-4-sharinder@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 915f9610-bd61-4e58-68a9-08d9b9a678ff
+x-ms-traffictypediagnostic: BYAPR13MB2551:EE_
+x-microsoft-antispam-prvs: <BYAPR13MB25515CE5CD8ACAF104E2ACF7FD6E9@BYAPR13MB2551.namprd13.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AXG+zCkrFgxIWU7rGNmUYGe5tG4a9TNHBBePNItJuAwy7H4C2xA3XLDi363XWjQovl4FWHNU9t6TePxUmO3zuR7jkl4so/xEJzFqp9F2kRNq7b6OVh8fjD1xsQIKxIRy1JutMjyBuw7qenyzjecaCPPpLrgUM4xr+H43l5u/dj/AcZcFNYi4EKsxgywNffPZgVuGiJGdN6E4zZfsBtF2yFSdBTE4P4ObnHfRmWP7oRVvObT+dfRQgeUwHw/V08grGayFEp9OYWk5bBekSBooLEwdRzpRZACwqoPRsvbKfSxZNC4ctFagTi+06CvUyLkWCtonFN6ynp5WgbB9K7d81Byeyuk565WXWqg1n6RqP/SdTfTEKCZ3zR8tFfkjrZWxUsvmTuyg67HxfCIxhj7zQ10pglpsYQT9hDeEVtzgGp/+HnKz70AvE2/zJYiLt2vhwBplkmRsI9UzzRk8hWTEu9yi9dodaF6fzM58T9hnqK0n8Bc1Yj2CoglAqaAii7+TAlPz/AQQqYs1rErioqvf2c+AMsIuebyFUgRF+60OcyY9u1u30x/z0FgxdIokx8xJORmSBdbEYqmYYDIpezDyFiD1MVwYtl7n9RkKCZ3MrIH9hd0acOXMB72wFmQmBqMW/41hR0Q854OXhm9ts51DinCoSpd4EvNG2H3qA6FKyK4yveUIedQrZkkI8gbeNsgLa0hWXbfZweF3cbLKr0vals2+/KBI8H1ACMX+uoUlRosVr+nr1uPm3E4nxlAfHWBY6dZjs3DCOmC+NKHza8LCsllY2sgiFTThyZm8Y1lVrdsbojCzp44KrbD5NrupzAl6pVt71uT7OvbUC3SCpenuuA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR13MB2503.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(64756008)(38070700005)(110136005)(5660300002)(82960400001)(54906003)(508600001)(83380400001)(316002)(66446008)(6506007)(55016003)(122000001)(4326008)(71200400001)(9686003)(33656002)(66556008)(186003)(2906002)(26005)(86362001)(8936002)(66946007)(8676002)(7696005)(76116006)(66476007)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MVA4b01YbDVPa0g4MzhBMkxkTEhBNGtNY1NVT0E5L1UxMU5pczh4ZEROdnhG?=
+ =?utf-8?B?dE9YL0NGZE9wY0E4WndTT3VJOGdVNkk3OGhBOFM1NzRWR0hKU1MvZVBFNFpB?=
+ =?utf-8?B?TloyVWl2MWRQNmlsYVhadnNtYzJONzBNaTFvSElyUWN5VUpDMHVHWnovaU90?=
+ =?utf-8?B?SjZwZUNjTk8ySjNtaWw2Ti94dERiVmlhK200UmJzUDVkTWtIdVlMQk1tL1lT?=
+ =?utf-8?B?YlRTSVgwREYvUmpWQjRXUjk1T3lsM0JXWXZ6QkpYMENoNk5mdDNYa0M4cjI3?=
+ =?utf-8?B?cFp2UXFGUjR6SVByR2NhVVJ2V0pKY3ZYZFcxdG1RWnY0SnZvSSt1bzJOQzg1?=
+ =?utf-8?B?STNEd3ErZGlmYSt1WWJ3WHVCK2pzRDNGNkNNdG95eG1yM1l0d1lQTkhjRUdO?=
+ =?utf-8?B?TlZjZkhZMzdIYnVvVlFDVUg0RlArSGNwR0hrLzB1N1Z6eHJHZW5HUm9HdDhP?=
+ =?utf-8?B?Q2x4ZjE5QTE5WTBCTVovcENpQ2ZOL2RsamFqZEVVSENhNU1mSVN0bExYTXBM?=
+ =?utf-8?B?QWpSdmxjcytwbFhOQUNwdkZaVmRLOW5wNlNpTTZnWStuVFRmS3hycHJ4aFBV?=
+ =?utf-8?B?djZHK2VsZ3ROWkVQWmUxeVk1czZRd1l1NEZPTTFMVHY4Y05tdTlXRjd2aFNn?=
+ =?utf-8?B?WDczcDdWNlpHU0pVbllET0tLTmp5SzJiT3RMWklnY3EvZ0xYTC9mbkV4aUZX?=
+ =?utf-8?B?Q3NwWHJKMFB3dk0xVjNzZFNVdGREamxDRUUxeTJrWEFrblpoTldOcEZSMmov?=
+ =?utf-8?B?bWVJYWp2TFNCcU1IdjBrSE1lZFVZb3l4TWxPMnRSK0FoVjBIeHB2ejd2bWtB?=
+ =?utf-8?B?a3BxanF6K2s4aHJZSFJTUUdySjBHYW9wWmxSV3NLeElPelo0eFNJNU9DOUI3?=
+ =?utf-8?B?aE40NUpoNktVbEplZlFGVlNKeVhKMWNRc2pnczBRT0pJZUM1Q2ZPUTlIV25Y?=
+ =?utf-8?B?V2RyT3RhanF2MW16SjcrL1RXOG56eTZuSXpJdS9DTC9jallmVXhkSGwxTk4x?=
+ =?utf-8?B?TlI0djlCOXFQenBUZDBOSjFnemRtazRmcnZTd0FwUHNEUmdibTQ4REZFZGxE?=
+ =?utf-8?B?Z00wNExjRE8yS21zOTcwc2tPcDIzTGhFQmZ4WTNMSzQ3emx6VERWUVVoZTkv?=
+ =?utf-8?B?MHpYSlhrNDFhNVR5NmlSVW5mTHlGYi9JTzI2K1U5L0pGdFFUd2JtNFE2R0Rq?=
+ =?utf-8?B?WnRWSWJFbXBOWE1SL1ZQV3I3L25zdTFWU3lVUWRxR3BSQUJXczVHUVltWFVX?=
+ =?utf-8?B?NTBLYSt3eUZGVTlBamczV0lZYmc1TmZmY3N1VW1CR0Q3cTN4SGwyYisrVW1J?=
+ =?utf-8?B?N0lCYmpLSjFkSUJBMDJYZzEzMTBESTlSZVcxVTB3SHFDV1VJajVCV1A2bHBj?=
+ =?utf-8?B?TThKSmlpSkJkZ2VkMmVha003UXpKK1AvVUQxTGZkWng3Rmg3UXhZUGpLckhq?=
+ =?utf-8?B?NGJQLzBCN2JXbUl2Z2tMYVZpSUJnWG5tenRWZExkTERPYWJaZmE5RjhkUjRV?=
+ =?utf-8?B?V0NlYjNZY2JEQkhTeWZxdG8rNmErSnlhWjVSRmRLSnBuWUVGTit4V3Uxejha?=
+ =?utf-8?B?bkZVekltdEpjNmM5czM2amE5WjhYdXAya3FZeUVvM2RiQzBnd2J4aWlRclVr?=
+ =?utf-8?B?NmJhbEovYmhlUGg5QTNIMWxMcTZuUTIyaHVRMWw1WVNvY1lIMkZnVGJzMFp0?=
+ =?utf-8?B?dzQ1aWNWY2JjWDhVemZvckR2L2tVeFBIM1lONDRxQml1T3F0K0RVTklTUzV0?=
+ =?utf-8?B?YmkvZW5TODQvWVJRTTZuaVpGVlVkOVRYdDJYNzZOZzl4amVNcjJITUx3WWox?=
+ =?utf-8?B?WThrcXNmWnBSNVNpYlM2eXQ1OElmK3FhUEVWRHFLc3d2VnhNaVY5dW9wT0pj?=
+ =?utf-8?B?UDUzRWljb3dUcTZnLzJrVmdDNjFuTS9DQmlxT0RuaVdiWUN5eG9QZVJMVEVh?=
+ =?utf-8?B?OVlOQUpCT2RuWi9GdHkvZ1EydzFoZk4xczlqaEZyeXdKdXNaY0NsUlFGZE41?=
+ =?utf-8?B?SVpPMzFkWnhhdGxZZUNWY0ZyZlM1SjZHN1NrOVo3a1YzTWxlamcySExPMmQz?=
+ =?utf-8?B?ZW5CY2ZJS2tzMDhzclc5VlRhRzMrK2xoV2xnNFhLVkk4Z05yV0FqRkFIb2ts?=
+ =?utf-8?B?Z3k1NGxVdUhoWjltZ2RsUHU1WFMzNUFOY1BlVlppeG1FM1c0K3BWRFNGak9G?=
+ =?utf-8?Q?EzJ7+VNFQz+z7W6b82qWS8s=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR13MB2503.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 915f9610-bd61-4e58-68a9-08d9b9a678ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2021 17:24:49.3441
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lQdcGPnqOXNemVbYRBXlmVCkjlCS/ZTVXU3PSjLfcjbO1shmtk5k4sZ+l7O2zBW9BzAUWNPZVE+Mzyketi8Jnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR13MB2551
+X-Proofpoint-GUID: iREYNJMWlqiMYH3FIzGcY7xAsrUJMOKM
+X-Proofpoint-ORIG-GUID: iREYNJMWlqiMYH3FIzGcY7xAsrUJMOKM
+X-Sony-Outbound-GUID: iREYNJMWlqiMYH3FIzGcY7xAsrUJMOKM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-07_07,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112070108
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
-activating additional silicon features. Features are enabled through a
-license activation process.  The SDSi driver provides a per socket, sysfs
-attribute interface for applications to perform 3 main provisioning
-functions:
-
-1. Provision an Authentication Key Certificate (AKC), a key written to
-   internal NVRAM that is used to authenticate a capability specific
-   activation payload.
-
-2. Provision a Capability Activation Payload (CAP), a token authenticated
-   using the AKC and applied to the CPU configuration to activate a new
-   feature.
-
-3. Read the SDSi State Certificate, containing the CPU configuration
-   state.
-
-The operations perform function specific mailbox commands that forward the
-requests to SDSi hardware to perform authentication of the payloads and
-enable the silicon configuration (to be made available after power
-cycling).
-
-The SDSi device itself is enumerated as an auxiliary device from the
-intel_vsec driver and as such has a build dependency on CONFIG_INTEL_VSEC.
-
-Link: https://github.com/intel/intel-sdsi
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-Reviewed-by: Mark Gross <markgross@kernel.org>
----
-V2
-  - Use sysfs_emit() in guid_show()
-  - Fix language in ABI, suggested by Bjorn
-  - Fix wrong directory name in ABI doc
-
- .../ABI/testing/sysfs-driver-intel_sdsi       |  77 +++
- MAINTAINERS                                   |   5 +
- drivers/platform/x86/intel/Kconfig            |  12 +
- drivers/platform/x86/intel/Makefile           |   2 +
- drivers/platform/x86/intel/sdsi.c             | 571 ++++++++++++++++++
- drivers/platform/x86/intel/vsec.c             |  12 +-
- 6 files changed, 678 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-intel_sdsi
- create mode 100644 drivers/platform/x86/intel/sdsi.c
-
-diff --git a/Documentation/ABI/testing/sysfs-driver-intel_sdsi b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-new file mode 100644
-index 000000000000..6544f35abb98
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
-@@ -0,0 +1,77 @@
-+What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X
-+Date:		Dec 2021
-+KernelVersion:	5.17
-+Contact:	"David E. Box" <david.e.box@linux.intel.com>
-+Description:
-+		This folder contains interface files for accessing Intel
-+		Software Defined Silicon (SDSi) features on a CPU. X
-+		represents the socket instance (though not the socket ID).
-+		The socket ID is determined by reading the registers file
-+		and decoding it per the specification.
-+
-+		Some files communicate with SDSi hardware through a mailbox.
-+		Should the operation fail, one of the following error codes
-+		may be returned:
-+
-+		Error Code	Cause
-+	        ----------	-----
-+	        EIO		General mailbox failure. Log may indicate cause.
-+	        EBUSY		Mailbox is owned by another agent.
-+	        EPERM		SDSI capability is not enabled in hardware.
-+	        EPROTO		Failure in mailbox protocol detected by driver.
-+				See log for details.
-+	        EOVERFLOW	For provision commands, the size of the data
-+				exceeds what may be written.
-+	        ESPIPE		Seeking is not allowed.
-+	        ETIMEDOUT	Failure to complete mailbox transaction in time.
-+
-+What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/guid
-+Date:		Dec 2021
-+KernelVersion:	5.17
-+Contact:	"David E. Box" <david.e.box@linux.intel.com>
-+Description:
-+		(RO) The GUID for the registers file. The GUID identifies
-+		the layout of the registers file in this folder.
-+		Information about the register layouts for a particular GUID
-+		is available at http://github.com/intel/intel-sdsi
-+
-+What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/registers
-+Date:		Dec 2021
-+KernelVersion:	5.17
-+Contact:	"David E. Box" <david.e.box@linux.intel.com>
-+Description:
-+		(RO) Contains information needed by applications to provision
-+		a CPU and monitor status information. The layout of this file
-+		is determined by the GUID in this folder. Information about the
-+		layout for a particular GUID is available at
-+		http://github.com/intel/intel-sdsi
-+
-+What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/provision_akc
-+Date:		Dec 2021
-+KernelVersion:	5.17
-+Contact:	"David E. Box" <david.e.box@linux.intel.com>
-+Description:
-+		(WO) Used to write an Authentication Key Certificate (AKC) to
-+		the SDSi NVRAM for the CPU. The AKC is used to authenticate a
-+		Capability Activation Payload. Mailbox command.
-+
-+What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/provision_cap
-+Date:		Dec 2021
-+KernelVersion:	5.17
-+Contact:	"David E. Box" <david.e.box@linux.intel.com>
-+Description:
-+		(WO) Used to write a Capability Activation Payload (CAP) to the
-+		SDSi NVRAM for the CPU. CAPs are used to activate a given CPU
-+		feature. A CAP is validated by SDSi hardware using a previously
-+		provisioned AKC file. Upon successful authentication, the CPU
-+		configuration is updated. A cold reboot is required to fully
-+		activate the feature. Mailbox command.
-+
-+What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/state_certificate
-+Date:		Dec 2021
-+KernelVersion:	5.17
-+Contact:	"David E. Box" <david.e.box@linux.intel.com>
-+Description:
-+		(RO) Used to read back the current State Certificate for the CPU
-+		from SDSi hardware. The State Certificate contains information
-+		about the current licenses on the CPU. Mailbox command.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cd2b10a86f09..af7f17e7400f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9783,6 +9783,11 @@ S:	Maintained
- F:	arch/x86/include/asm/intel_scu_ipc.h
- F:	drivers/platform/x86/intel_scu_*
- 
-+INTEL SDSI DRIVER
-+M:	David E. Box <david.e.box@linux.intel.com>
-+S:	Supported
-+F:	drivers/platform/x86/intel/sdsi.c
-+
- INTEL SKYLAKE INT3472 ACPI DEVICE DRIVER
- M:	Daniel Scally <djrscally@gmail.com>
- S:	Maintained
-diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
-index 35a5d1a5eba8..0c24b626c6ed 100644
---- a/drivers/platform/x86/intel/Kconfig
-+++ b/drivers/platform/x86/intel/Kconfig
-@@ -147,6 +147,18 @@ config INTEL_RST
- 	  firmware will copy the memory contents back to RAM and resume the OS
- 	  as usual.
- 
-+config INTEL_SDSI
-+	tristate "Intel Software Defined Silicon Driver"
-+	depends on INTEL_VSEC
-+	depends on X86_64
-+	help
-+	  This driver enables access to the Intel Software Defined Silicon
-+	  interface used to provision silicon features with an authentication
-+	  certificate and capability license.
-+
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called intel_sdsi.
-+
- config INTEL_SMARTCONNECT
- 	tristate "Intel Smart Connect disabling driver"
- 	depends on ACPI
-diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
-index 8ecdf709fb17..6a3a4510d89a 100644
---- a/drivers/platform/x86/intel/Makefile
-+++ b/drivers/platform/x86/intel/Makefile
-@@ -26,6 +26,8 @@ intel_int0002_vgpio-y			:= int0002_vgpio.o
- obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
- intel_oaktrail-y			:= oaktrail.o
- obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
-+intel_sdsi-y				:= sdsi.o
-+obj-$(CONFIG_INTEL_SDSI)		+= intel_sdsi.o
- intel_vsec-y				:= vsec.o
- obj-$(CONFIG_INTEL_VSEC)		+= intel_vsec.o
- 
-diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
-new file mode 100644
-index 000000000000..626fe9558bee
---- /dev/null
-+++ b/drivers/platform/x86/intel/sdsi.c
-@@ -0,0 +1,571 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Intel Software Defined Silicon driver
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * All Rights Reserved.
-+ *
-+ * Author: "David E. Box" <david.e.box@linux.intel.com>
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bits.h>
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/slab.h>
-+#include <linux/sysfs.h>
-+#include <linux/types.h>
-+#include <linux/uaccess.h>
-+
-+#include "vsec.h"
-+
-+#define ACCESS_TYPE_BARID		2
-+#define ACCESS_TYPE_LOCAL		3
-+
-+#define SDSI_MIN_SIZE_DWORDS		276
-+#define SDSI_SIZE_CONTROL		8
-+#define SDSI_SIZE_MAILBOX		1024
-+#define SDSI_SIZE_REGS			72
-+#define SDSI_SIZE_CMD			sizeof(u64)
-+
-+/*
-+ * Write messages are currently up to the size of the mailbox
-+ * while read messages are up to 4 times the size of the
-+ * mailbox, sent in packets
-+ */
-+#define SDSI_SIZE_WRITE_MSG		SDSI_SIZE_MAILBOX
-+#define SDSI_SIZE_READ_MSG		(SDSI_SIZE_MAILBOX * 4)
-+
-+#define SDSI_ENABLED_FEATURES_OFFSET	16
-+#define SDSI_ENABLED			BIT(3)
-+#define SDSI_SOCKET_ID_OFFSET		64
-+#define SDSI_SOCKET_ID			GENMASK(3, 0)
-+
-+#define SDSI_MBOX_CMD_SUCCESS		0x40
-+#define SDSI_MBOX_CMD_TIMEOUT		0x80
-+
-+#define MBOX_TIMEOUT_US			2000
-+#define MBOX_TIMEOUT_ACQUIRE_US		1000
-+#define MBOX_POLLING_PERIOD_US		100
-+#define MBOX_MAX_PACKETS		4
-+
-+#define MBOX_OWNER_NONE			0x00
-+#define MBOX_OWNER_INBAND		0x01
-+
-+#define CTRL_RUN_BUSY			BIT(0)
-+#define CTRL_READ_WRITE			BIT(1)
-+#define CTRL_SOM			BIT(2)
-+#define CTRL_EOM			BIT(3)
-+#define CTRL_OWNER			GENMASK(5, 4)
-+#define CTRL_COMPLETE			BIT(6)
-+#define CTRL_READY			BIT(7)
-+#define CTRL_STATUS			GENMASK(15, 8)
-+#define CTRL_PACKET_SIZE		GENMASK(31, 16)
-+#define CTRL_MSG_SIZE			GENMASK(63, 48)
-+
-+#define DISC_TABLE_SIZE			12
-+#define DT_ACCESS_TYPE			GENMASK(3, 0)
-+#define DT_SIZE				GENMASK(27, 12)
-+#define DT_TBIR				GENMASK(2, 0)
-+#define DT_OFFSET(v)			((v) & GENMASK(31, 3))
-+
-+enum sdsi_command {
-+	SDSI_CMD_PROVISION_AKC		= 0x04,
-+	SDSI_CMD_PROVISION_CAP		= 0x08,
-+	SDSI_CMD_READ_STATE		= 0x10,
-+};
-+
-+struct sdsi_mbox_info {
-+	u64	*payload;
-+	u64	*buffer;
-+	int	size;
-+};
-+
-+struct disc_table {
-+	u32	access_info;
-+	u32	guid;
-+	u32	offset;
-+};
-+
-+struct sdsi_priv {
-+	struct mutex		mb_lock;	/* Mailbox access lock */
-+	struct device		*dev;
-+	void __iomem		*control_addr;
-+	void __iomem		*mbox_addr;
-+	void __iomem		*regs_addr;
-+	u32			guid;
-+	bool			sdsi_enabled;
-+};
-+
-+static struct bin_attribute bin_attr_provision_akc;
-+static struct bin_attribute bin_attr_provision_cap;
-+
-+/* SDSi mailbox operations must be performed using 64bit mov instructions */
-+static __always_inline void
-+sdsi_memcpy64_toio(u64 __iomem *to, const u64 *from, size_t count_bytes)
-+{
-+	size_t count = count_bytes / sizeof(*to);
-+	int i;
-+
-+	for (i = 0; i < count; i++)
-+		writeq(from[i], &to[i]);
-+}
-+
-+static __always_inline void
-+sdsi_memcpy64_fromio(u64 *to, const u64 __iomem *from, size_t count_bytes)
-+{
-+	size_t count = count_bytes / sizeof(*to);
-+	int i;
-+
-+	for (i = 0; i < count; i++)
-+		to[i] = readq(&from[i]);
-+}
-+
-+static inline void sdsi_complete_transaction(struct sdsi_priv *priv)
-+{
-+	u64 control = FIELD_PREP(CTRL_COMPLETE, 1);
-+
-+	lockdep_assert_held(&priv->mb_lock);
-+	writeq(control, priv->control_addr);
-+}
-+
-+static int sdsi_status_to_errno(u32 status)
-+{
-+	switch (status) {
-+	case SDSI_MBOX_CMD_SUCCESS:
-+		return 0;
-+	case SDSI_MBOX_CMD_TIMEOUT:
-+		return -ETIMEDOUT;
-+	default:
-+		return -EIO;
-+	}
-+}
-+
-+static int sdsi_mbox_cmd_read(struct sdsi_priv *priv, struct sdsi_mbox_info *info, int *data_size)
-+{
-+	struct device *dev = priv->dev;
-+	u32 total, loop, eom, status, message_size;
-+	u64 control;
-+	int ret;
-+
-+	lockdep_assert_held(&priv->mb_lock);
-+
-+	/* Format and send the read command */
-+	control = FIELD_PREP(CTRL_EOM, 1) |
-+		  FIELD_PREP(CTRL_SOM, 1) |
-+		  FIELD_PREP(CTRL_RUN_BUSY, 1) |
-+		  FIELD_PREP(CTRL_PACKET_SIZE, info->size);
-+	writeq(control, priv->control_addr);
-+
-+	/* For reads, data sizes that are larger than the mailbox size are read in packets. */
-+	total = 0;
-+	loop = 0;
-+	do {
-+		int offset = SDSI_SIZE_MAILBOX * loop;
-+		void __iomem *addr = priv->mbox_addr + offset;
-+		u64 *buf = info->buffer + offset / SDSI_SIZE_CMD;
-+		u32 packet_size;
-+
-+		/* Poll on ready bit */
-+		ret = readq_poll_timeout(priv->control_addr, control, control & CTRL_READY,
-+					 MBOX_POLLING_PERIOD_US, MBOX_TIMEOUT_US);
-+		if (ret)
-+			break;
-+
-+		eom = FIELD_GET(CTRL_EOM, control);
-+		status = FIELD_GET(CTRL_STATUS, control);
-+		packet_size = FIELD_GET(CTRL_PACKET_SIZE, control);
-+		message_size = FIELD_GET(CTRL_MSG_SIZE, control);
-+
-+		ret = sdsi_status_to_errno(status);
-+		if (ret)
-+			break;
-+
-+		/* Only the last packet can be less than the mailbox size. */
-+		if (!eom && packet_size != SDSI_SIZE_MAILBOX) {
-+			dev_err(dev, "Invalid packet size\n");
-+			ret = -EPROTO;
-+			break;
-+		}
-+
-+		if (packet_size > SDSI_SIZE_MAILBOX) {
-+			dev_err(dev, "Packet size to large\n");
-+			ret = -EPROTO;
-+			break;
-+		}
-+
-+		sdsi_memcpy64_fromio(buf, addr, round_up(packet_size, SDSI_SIZE_CMD));
-+
-+		total += packet_size;
-+
-+		sdsi_complete_transaction(priv);
-+	} while (!eom && ++loop < MBOX_MAX_PACKETS);
-+
-+	if (ret) {
-+		sdsi_complete_transaction(priv);
-+		return ret;
-+	}
-+
-+	if (!eom) {
-+		dev_err(dev, "Exceeded read attempts\n");
-+		return -EPROTO;
-+	}
-+
-+	/* Message size check is only valid for multi-packet transfers */
-+	if (loop && total != message_size)
-+		dev_warn(dev, "Read count %d differs from expected count %d\n",
-+			 total, message_size);
-+
-+	*data_size = total;
-+
-+	return 0;
-+}
-+
-+static int sdsi_mbox_cmd_write(struct sdsi_priv *priv, struct sdsi_mbox_info *info)
-+{
-+	u64 control;
-+	u32 status;
-+	int ret;
-+
-+	lockdep_assert_held(&priv->mb_lock);
-+
-+	/* Write rest of the payload */
-+	sdsi_memcpy64_toio(priv->mbox_addr + SDSI_SIZE_CMD, info->payload + 1,
-+			   info->size - SDSI_SIZE_CMD);
-+
-+	/* Format and send the write command */
-+	control = FIELD_PREP(CTRL_EOM, 1) |
-+		  FIELD_PREP(CTRL_SOM, 1) |
-+		  FIELD_PREP(CTRL_RUN_BUSY, 1) |
-+		  FIELD_PREP(CTRL_READ_WRITE, 1) |
-+		  FIELD_PREP(CTRL_PACKET_SIZE, info->size);
-+	writeq(control, priv->control_addr);
-+
-+	/* Poll on run_busy bit */
-+	ret = readq_poll_timeout(priv->control_addr, control, !(control & CTRL_RUN_BUSY),
-+				 MBOX_POLLING_PERIOD_US, MBOX_TIMEOUT_US);
-+
-+	if (ret)
-+		goto release_mbox;
-+
-+	status = FIELD_GET(CTRL_STATUS, control);
-+	ret = sdsi_status_to_errno(status);
-+
-+release_mbox:
-+	sdsi_complete_transaction(priv);
-+
-+	return ret;
-+}
-+
-+static int sdsi_mbox_acquire(struct sdsi_priv *priv, struct sdsi_mbox_info *info)
-+{
-+	u64 control;
-+	u32 owner;
-+	int ret;
-+
-+	lockdep_assert_held(&priv->mb_lock);
-+
-+	/* Check mailbox is available */
-+	control = readq(priv->control_addr);
-+	owner = FIELD_GET(CTRL_OWNER, control);
-+	if (owner != MBOX_OWNER_NONE)
-+		return -EBUSY;
-+
-+	/* Write first qword of payload */
-+	writeq(info->payload[0], priv->mbox_addr);
-+
-+	/* Check for ownership */
-+	ret = readq_poll_timeout(priv->control_addr, control,
-+				 FIELD_GET(CTRL_OWNER, control) & MBOX_OWNER_INBAND,
-+				 MBOX_POLLING_PERIOD_US, MBOX_TIMEOUT_ACQUIRE_US);
-+
-+	return ret;
-+}
-+
-+static int sdsi_mbox_write(struct sdsi_priv *priv, struct sdsi_mbox_info *info)
-+{
-+	int ret;
-+
-+	lockdep_assert_held(&priv->mb_lock);
-+
-+	ret = sdsi_mbox_acquire(priv, info);
-+	if (ret)
-+		return ret;
-+
-+	return sdsi_mbox_cmd_write(priv, info);
-+}
-+
-+static int sdsi_mbox_read(struct sdsi_priv *priv, struct sdsi_mbox_info *info, int *data_size)
-+{
-+	int ret;
-+
-+	lockdep_assert_held(&priv->mb_lock);
-+
-+	ret = sdsi_mbox_acquire(priv, info);
-+	if (ret)
-+		return ret;
-+
-+	return sdsi_mbox_cmd_read(priv, info, data_size);
-+}
-+
-+static ssize_t sdsi_provision(struct sdsi_priv *priv, char *buf, size_t count,
-+			      enum sdsi_command command)
-+{
-+	struct sdsi_mbox_info info;
-+	int ret;
-+
-+	if (!priv->sdsi_enabled)
-+		return -EPERM;
-+
-+	if (count > (SDSI_SIZE_WRITE_MSG - SDSI_SIZE_CMD))
-+		return -EOVERFLOW;
-+
-+	/* Qword aligned message + command qword */
-+	info.size = round_up(count, SDSI_SIZE_CMD) + SDSI_SIZE_CMD;
-+
-+	info.payload = kzalloc(info.size, GFP_KERNEL);
-+	if (!info.payload)
-+		return -ENOMEM;
-+
-+	/* Copy message to payload buffer */
-+	memcpy(info.payload, buf, count);
-+
-+	/* Command is last qword of payload buffer */
-+	info.payload[(info.size - SDSI_SIZE_CMD) / SDSI_SIZE_CMD] = command;
-+
-+	ret = mutex_lock_interruptible(&priv->mb_lock);
-+	if (ret)
-+		goto free_payload;
-+	ret = sdsi_mbox_write(priv, &info);
-+	mutex_unlock(&priv->mb_lock);
-+
-+free_payload:
-+	kfree(info.payload);
-+
-+	return (ret < 0) ? ret : count;
-+}
-+
-+static ssize_t provision_akc_write(struct file *filp, struct kobject *kobj,
-+				   struct bin_attribute *attr, char *buf, loff_t off,
-+				   size_t count)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct sdsi_priv *priv = dev_get_drvdata(dev);
-+
-+	if (off)
-+		return -ESPIPE;
-+
-+	return sdsi_provision(priv, buf, count, SDSI_CMD_PROVISION_AKC);
-+}
-+static BIN_ATTR_WO(provision_akc, SDSI_SIZE_WRITE_MSG);
-+
-+static ssize_t provision_cap_write(struct file *filp, struct kobject *kobj,
-+				   struct bin_attribute *attr, char *buf, loff_t off,
-+				   size_t count)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct sdsi_priv *priv = dev_get_drvdata(dev);
-+
-+	if (off)
-+		return -ESPIPE;
-+
-+	return sdsi_provision(priv, buf, count, SDSI_CMD_PROVISION_CAP);
-+}
-+static BIN_ATTR_WO(provision_cap, SDSI_SIZE_WRITE_MSG);
-+
-+static long state_certificate_read(struct file *filp, struct kobject *kobj,
-+				   struct bin_attribute *attr, char *buf, loff_t off,
-+				   size_t count)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct sdsi_priv *priv = dev_get_drvdata(dev);
-+	u64 command = SDSI_CMD_READ_STATE;
-+	struct sdsi_mbox_info info;
-+	u32 size;
-+	int ret;
-+
-+	if (!priv->sdsi_enabled)
-+		return -EPERM;
-+
-+	if (off)
-+		return -ESPIPE;
-+
-+	/* Buffer for return data */
-+	info.buffer = kmalloc(SDSI_SIZE_READ_MSG, GFP_KERNEL);
-+	if (!info.buffer)
-+		return -ENOMEM;
-+
-+	info.payload = &command;
-+	info.size = sizeof(command);
-+
-+	ret = mutex_lock_interruptible(&priv->mb_lock);
-+	if (ret)
-+		goto free_buffer;
-+	ret = sdsi_mbox_read(priv, &info, &size);
-+	mutex_unlock(&priv->mb_lock);
-+	if (ret < 0)
-+		goto free_buffer;
-+
-+	if (size > count)
-+		size = count;
-+	else
-+		memset(buf, 0, count);
-+
-+	memcpy(buf, info.buffer, size);
-+
-+free_buffer:
-+	kfree(info.buffer);
-+
-+	return (ret < 0) ? ret : count;
-+}
-+static BIN_ATTR(state_certificate, 0400, state_certificate_read, NULL, SDSI_SIZE_READ_MSG);
-+
-+static ssize_t registers_read(struct file *filp, struct kobject *kobj,
-+			      struct bin_attribute *attr, char *buf, loff_t off,
-+			      size_t count)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct sdsi_priv *priv = dev_get_drvdata(dev);
-+	void __iomem *addr = priv->regs_addr;
-+
-+	memcpy_fromio(buf, addr + off, count);
-+
-+	return count;
-+}
-+static BIN_ATTR(registers, 0400, registers_read, NULL, SDSI_SIZE_REGS);
-+
-+static struct bin_attribute *sdsi_bin_attrs[] = {
-+	&bin_attr_registers,
-+	&bin_attr_state_certificate,
-+	&bin_attr_provision_akc,
-+	&bin_attr_provision_cap,
-+	NULL
-+};
-+
-+static ssize_t guid_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct sdsi_priv *priv = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "0x%x\n", priv->guid);
-+}
-+static DEVICE_ATTR_RO(guid);
-+
-+static struct attribute *sdsi_attrs[] = {
-+	&dev_attr_guid.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group sdsi_group = {
-+	.attrs = sdsi_attrs,
-+	.bin_attrs = sdsi_bin_attrs,
-+};
-+__ATTRIBUTE_GROUPS(sdsi);
-+
-+static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *parent,
-+				   struct disc_table *disc_table, struct resource *disc_res)
-+{
-+	u32 access_type = FIELD_GET(DT_ACCESS_TYPE, disc_table->access_info);
-+	u32 size = FIELD_GET(DT_SIZE, disc_table->access_info);
-+	u32 tbir = FIELD_GET(DT_TBIR, disc_table->offset);
-+	u32 offset = DT_OFFSET(disc_table->offset);
-+	u32 features_offset;
-+	struct resource res = {};
-+
-+	/* Starting location of SDSi MMIO region based on access type */
-+	switch (access_type) {
-+	case ACCESS_TYPE_LOCAL:
-+		if (tbir) {
-+			dev_err(priv->dev, "Unsupported BAR index %d for access type %d\n",
-+				tbir, access_type);
-+			return -EINVAL;
-+		}
-+
-+		/*
-+		 * For access_type LOCAL, the base address is as follows:
-+		 * base address = end of discovery region + base offset + 1
-+		 */
-+		res.start = disc_res->end + offset + 1;
-+		break;
-+
-+	case ACCESS_TYPE_BARID:
-+		res.start = pci_resource_start(parent, tbir) + offset;
-+		break;
-+
-+	default:
-+		dev_err(priv->dev, "Unrecognized access_type %d\n", access_type);
-+		return -EINVAL;
-+	}
-+
-+	res.end = res.start + size * sizeof(u32) - 1;
-+	res.flags = IORESOURCE_MEM;
-+
-+	priv->control_addr = devm_ioremap_resource(priv->dev, &res);
-+	if (IS_ERR(priv->control_addr))
-+		return PTR_ERR(priv->control_addr);
-+
-+	priv->mbox_addr = priv->control_addr + SDSI_SIZE_CONTROL;
-+	priv->regs_addr = priv->mbox_addr + SDSI_SIZE_MAILBOX;
-+
-+	features_offset = readq(priv->regs_addr + SDSI_ENABLED_FEATURES_OFFSET);
-+	priv->sdsi_enabled = !!(features_offset & SDSI_ENABLED);
-+
-+	return 0;
-+}
-+
-+static int sdsi_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
-+{
-+	struct intel_vsec_device *intel_cap_dev = auxdev_to_ivdev(auxdev);
-+	struct disc_table disc_table;
-+	struct resource *disc_res;
-+	void __iomem *disc_addr;
-+	struct sdsi_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&auxdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = &auxdev->dev;
-+	mutex_init(&priv->mb_lock);
-+	auxiliary_set_drvdata(auxdev, priv);
-+
-+	/* Get the SDSi discovery table */
-+	disc_res = &intel_cap_dev->resource[0];
-+	disc_addr = devm_ioremap_resource(&auxdev->dev, disc_res);
-+	if (IS_ERR(disc_addr))
-+		return PTR_ERR(disc_addr);
-+
-+	memcpy_fromio(&disc_table, disc_addr, DISC_TABLE_SIZE);
-+
-+	priv->guid = disc_table.guid;
-+
-+	/* Map the SDSi mailbox registers */
-+	ret = sdsi_map_mbox_registers(priv, intel_cap_dev->pcidev, &disc_table, disc_res);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static const struct auxiliary_device_id sdsi_aux_id_table[] = {
-+	{ .name = "intel_vsec.sdsi" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, sdsi_aux_id_table);
-+
-+static struct auxiliary_driver sdsi_aux_driver = {
-+	.driver = {
-+		.dev_groups = sdsi_groups,
-+	},
-+	.id_table	= sdsi_aux_id_table,
-+	.probe		= sdsi_probe,
-+};
-+module_auxiliary_driver(sdsi_aux_driver);
-+
-+MODULE_AUTHOR("David E. Box <david.e.box@linux.intel.com>");
-+MODULE_DESCRIPTION("Intel Software Defined Silicon driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
-index c3bdd75ed690..bed436bf181f 100644
---- a/drivers/platform/x86/intel/vsec.c
-+++ b/drivers/platform/x86/intel/vsec.c
-@@ -32,6 +32,7 @@
- #define TABLE_OFFSET_SHIFT		3
- 
- static DEFINE_IDA(intel_vsec_ida);
-+static DEFINE_IDA(intel_vsec_sdsi_ida);
- 
- /**
-  * struct intel_vsec_header - Common fields of Intel VSEC and DVSEC registers.
-@@ -63,12 +64,14 @@ enum intel_vsec_id {
- 	VSEC_ID_TELEMETRY	= 2,
- 	VSEC_ID_WATCHER		= 3,
- 	VSEC_ID_CRASHLOG	= 4,
-+	VSEC_ID_SDSI		= 65,
- };
- 
- static enum intel_vsec_id intel_vsec_allow_list[] = {
- 	VSEC_ID_TELEMETRY,
- 	VSEC_ID_WATCHER,
- 	VSEC_ID_CRASHLOG,
-+	VSEC_ID_SDSI,
- };
- 
- static const char *intel_vsec_name(enum intel_vsec_id id)
-@@ -83,6 +86,9 @@ static const char *intel_vsec_name(enum intel_vsec_id id)
- 	case VSEC_ID_CRASHLOG:
- 		return "crashlog";
- 
-+	case VSEC_ID_SDSI:
-+		return "sdsi";
-+
- 	default:
- 		return NULL;
- 	}
-@@ -211,7 +217,11 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
- 	intel_vsec_dev->resource = res;
- 	intel_vsec_dev->num_resources = header->num_entries;
- 	intel_vsec_dev->quirks = quirks;
--	intel_vsec_dev->ida = &intel_vsec_ida;
-+
-+	if (header->id == VSEC_ID_SDSI)
-+		intel_vsec_dev->ida = &intel_vsec_sdsi_ida;
-+	else
-+		intel_vsec_dev->ida = &intel_vsec_ida;
- 
- 	return intel_vsec_add_aux(pdev, intel_vsec_dev, intel_vsec_name(header->id));
- }
--- 
-2.25.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBIYXJpbmRlciBTaW5naCA8c2hh
+cmluZGVyQGdvb2dsZS5jb20+DQo+IA0KPiBEZXNjcmliZSB0aGUgY29tcG9uZW50cyBvZiBLVW5p
+dCBhbmQgaG93IHRoZSBrZXJuZWwgbW9kZSBwYXJ0cw0KPiBpbnRlcmFjdCB3aXRoIGt1bml0X3Rv
+b2wuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBIYXJpbmRlciBTaW5naCA8c2hhcmluZGVyQGdvb2ds
+ZS5jb20+DQo+IC0tLQ0KPiAgLi4uL2Rldi10b29scy9rdW5pdC9hcmNoaXRlY3R1cmUucnN0ICAg
+ICAgICAgIHwgMjA2ICsrKysrKysrKysrKysrKysrKw0KPiAgRG9jdW1lbnRhdGlvbi9kZXYtdG9v
+bHMva3VuaXQvaW5kZXgucnN0ICAgICAgIHwgICAyICsNCj4gIC4uLi9rdW5pdC9rdW5pdF9zdWl0
+ZW1lbW9yeWRpYWdyYW0ucG5nICAgICAgICB8IEJpbiAwIC0+IDI0MTc0IGJ5dGVzDQo+ICBEb2N1
+bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC9zdGFydC5yc3QgICAgICAgfCAgIDEgKw0KPiAgNCBm
+aWxlcyBjaGFuZ2VkLCAyMDkgaW5zZXJ0aW9ucygrKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERv
+Y3VtZW50YXRpb24vZGV2LXRvb2xzL2t1bml0L2FyY2hpdGVjdHVyZS5yc3QNCj4gIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC9rdW5pdF9zdWl0ZW1lbW9y
+eWRpYWdyYW0ucG5nDQo+IA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMv
+a3VuaXQvYXJjaGl0ZWN0dXJlLnJzdCBiL0RvY3VtZW50YXRpb24vZGV2LXRvb2xzL2t1bml0L2Fy
+Y2hpdGVjdHVyZS5yc3QNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMDAw
+MDAwLi5iYjBmYjNlM2VkMDENCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9Eb2N1bWVudGF0aW9u
+L2Rldi10b29scy9rdW5pdC9hcmNoaXRlY3R1cmUucnN0DQo+IEBAIC0wLDAgKzEsMjA2IEBADQo+
+ICsuLiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiArDQo+ICs9PT09PT09PT09
+PT09PT09PT0NCj4gK0tVbml0IEFyY2hpdGVjdHVyZQ0KPiArPT09PT09PT09PT09PT09PT09DQo+
+ICsNCj4gK1RoZSBLVW5pdCBhcmNoaXRlY3R1cmUgY2FuIGJlIGRpdmlkZWQgaW50byB0d28gcGFy
+dHM6DQo+ICsNCj4gKy0gS2VybmVsIHRlc3RpbmcgbGlicmFyeQ0KPiArLSBrdW5pdF90b29sIChD
+b21tYW5kIGxpbmUgdGVzdCBoYXJuZXNzKQ0KPiArDQo+ICtJbi1LZXJuZWwgVGVzdGluZyBGcmFt
+ZXdvcmsNCj4gKz09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiArDQo+ICtUaGUga2VybmVs
+IHRlc3RpbmcgbGlicmFyeSBzdXBwb3J0cyBLVW5pdCB0ZXN0cyB3cml0dGVuIGluIEMgdXNpbmcN
+Cj4gK0tVbml0LiBLVW5pdCB0ZXN0cyBhcmUga2VybmVsIGNvZGUuIEtVbml0IGRvZXMgc2V2ZXJh
+bCB0aGluZ3M6DQo+ICsNCj4gKy0gT3JnYW5pemVzIHRlc3RzDQo+ICstIFJlcG9ydHMgdGVzdCBy
+ZXN1bHRzDQo+ICstIFByb3ZpZGVzIHRlc3QgdXRpbGl0aWVzDQo+ICsNCj4gK1Rlc3QgQ2FzZXMN
+Cj4gKy0tLS0tLS0tLS0NCj4gKw0KPiArVGhlIGZ1bmRhbWVudGFsIHVuaXQgaW4gS1VuaXQgaXMg
+dGhlIHRlc3QgY2FzZS4gVGhlIEtVbml0IHRlc3QgY2FzZXMgYXJlDQo+ICtncm91cGVkIGludG8g
+S1VuaXQgc3VpdGVzLiBBIEtVbml0IHRlc3QgY2FzZSBpcyBhIGZ1bmN0aW9uIHdpdGggdHlwZQ0K
+PiArc2lnbmF0dXJlIGBgdm9pZCAoKikoc3RydWN0IGt1bml0ICp0ZXN0KWBgLg0KPiArVGhlc2Ug
+dGVzdCBjYXNlIGZ1bmN0aW9ucyBhcmUgd3JhcHBlZCBpbiBhIHN0cnVjdCBjYWxsZWQNCj4gK2Bg
+c3RydWN0IGt1bml0X2Nhc2VgYC4gRm9yIGNvZGUsIHNlZToNCj4gK2h0dHBzOi8vZWxpeGlyLmJv
+b3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvaW5jbHVkZS9rdW5pdC90ZXN0LmgjTDE0NQ0K
+PiArDQo+ICtJdCBpbmNsdWRlczoNCj4gKw0KPiArLSBgYHJ1bl9jYXNlYGA6IHRoZSBmdW5jdGlv
+biBpbXBsZW1lbnRpbmcgdGhlIGFjdHVhbCB0ZXN0IGNhc2UuDQo+ICstIGBgbmFtZWBgOiB0aGUg
+dGVzdCBjYXNlIG5hbWUuDQo+ICstIGBgZ2VuZXJhdGVfcGFyYW1zYGA6IHRoZSBwYXJhbWV0ZXJp
+emVkIHRlc3RzIGdlbmVyYXRvciBmdW5jdGlvbi4gVGhpcw0KPiArICBpcyBvcHRpb25hbCBmb3Ig
+bm9uLXBhcmFtZXRlcml6ZWQgdGVzdHMuDQo+ICsNCj4gK0VhY2ggS1VuaXQgdGVzdCBjYXNlIGdl
+dHMgYSBgYHN0cnVjdCBrdW5pdGBgIGNvbnRleHQNCj4gK29iamVjdCBwYXNzZWQgdG8gaXQgdGhh
+dCB0cmFja3MgYSBydW5uaW5nIHRlc3QuIFRoZSBLVW5pdCBhc3NlcnRpb24NCj4gK21hY3JvcyBh
+bmQgb3RoZXIgS1VuaXQgdXRpbGl0aWVzIHVzZSB0aGUgYGBzdHJ1Y3Qga3VuaXRgYCBjb250ZXh0
+DQo+ICtvYmplY3QuIEFzIGFuIGV4Y2VwdGlvbiwgdGhlcmUgYXJlIHR3byBmaWVsZHM6DQo+ICsN
+Cj4gKy0gYGAtPnByaXZgYDogVGhlIHNldHVwIGZ1bmN0aW9ucyBjYW4gdXNlIGl0IHRvIHN0b3Jl
+IGFyYml0cmFyeSB0ZXN0DQo+ICsgIHVzZXIgZGF0YS4NCj4gKw0KPiArLSBgYC0+cGFyYW1fdmFs
+dWVgYDogSXQgY29udGFpbnMgdGhlIHBhcmFtZXRlciB2YWx1ZSB3aGljaCBjYW4gYmUNCj4gKyAg
+cmV0cmlldmVkIGluIHRoZSBwYXJhbWV0ZXJpemVkIHRlc3RzLg0KPiArDQo+ICtUZXN0IFN1aXRl
+cw0KPiArLS0tLS0tLS0tLS0NCj4gKw0KPiArQSBLVW5pdCBzdWl0ZSBpbmNsdWRlcyBhIGNvbGxl
+Y3Rpb24gb2YgdGVzdCBjYXNlcy4gVGhlIEtVbml0IHN1aXRlcw0KPiArYXJlIHJlcHJlc2VudGVk
+IGJ5IHRoZSBgYHN0cnVjdCBrdW5pdF9zdWl0ZWBgLiBGb3IgZXhhbXBsZToNCj4gKw0KPiArLi4g
+Y29kZS1ibG9jazo6IGMNCj4gKw0KPiArCXN0YXRpYyBzdHJ1Y3Qga3VuaXRfY2FzZSBleGFtcGxl
+X3Rlc3RfY2FzZXNbXSA9IHsNCj4gKwkJS1VOSVRfQ0FTRShleGFtcGxlX3Rlc3RfZm9vKSwNCj4g
+KwkJS1VOSVRfQ0FTRShleGFtcGxlX3Rlc3RfYmFyKSwNCj4gKwkJS1VOSVRfQ0FTRShleGFtcGxl
+X3Rlc3RfYmF6KSwNCj4gKwkJe30NCj4gKwl9Ow0KPiArDQo+ICsJc3RhdGljIHN0cnVjdCBrdW5p
+dF9zdWl0ZSBleGFtcGxlX3Rlc3Rfc3VpdGUgPSB7DQo+ICsJCS5uYW1lID0gImV4YW1wbGUiLA0K
+PiArCQkuaW5pdCA9IGV4YW1wbGVfdGVzdF9pbml0LA0KPiArCQkuZXhpdCA9IGV4YW1wbGVfdGVz
+dF9leGl0LA0KPiArCQkudGVzdF9jYXNlcyA9IGV4YW1wbGVfdGVzdF9jYXNlcywNCj4gKwl9Ow0K
+PiArCWt1bml0X3Rlc3Rfc3VpdGUoZXhhbXBsZV90ZXN0X3N1aXRlKTsNCj4gKw0KPiArSW4gdGhl
+IGFib3ZlIGV4YW1wbGUsIHRoZSB0ZXN0IHN1aXRlIGBgZXhhbXBsZV90ZXN0X3N1aXRlYGAsIHJ1
+bnMgdGhlDQo+ICt0ZXN0IGNhc2VzIGBgZXhhbXBsZV90ZXN0X2Zvb2BgLCBgYGV4YW1wbGVfdGVz
+dF9iYXJgYCwgYW5kDQo+ICtgYGV4YW1wbGVfdGVzdF9iYXpgYC4gQmVmb3JlIHJ1bm5pbmcgdGhl
+IHRlc3QsIHRoZSBgYGV4YW1wbGVfdGVzdF9pbml0YGANCj4gK2lzIGNhbGxlZCBhbmQgYWZ0ZXIg
+cnVubmluZyB0aGUgdGVzdCwgYGBleGFtcGxlX3Rlc3RfZXhpdGBgIGlzIGNhbGxlZC4NCj4gK1Ro
+ZSBgYGt1bml0X3Rlc3Rfc3VpdGUoZXhhbXBsZV90ZXN0X3N1aXRlKWBgIHJlZ2lzdGVycyB0aGUg
+dGVzdCBzdWl0ZQ0KPiArd2l0aCB0aGUgS1VuaXQgdGVzdCBmcmFtZXdvcmsuDQo+ICsNCj4gK0V4
+ZWN1dG9yDQo+ICstLS0tLS0tLQ0KPiArDQo+ICtUaGUgS1VuaXQgZXhlY3V0b3IgY2FuIGxpc3Qg
+YW5kIHJ1biBidWlsdC1pbiBLVW5pdCB0ZXN0cyBvbiBib290Lg0KPiArVGhlIFRlc3Qgc3VpdGVz
+IGFyZSBzdG9yZWQgaW4gYSBsaW5rZXIgc2VjdGlvbg0KPiArY2FsbGVkIGBgLmt1bml0X3Rlc3Rf
+c3VpdGVzYGAuIEZvciBjb2RlLCBzZWU6DQo+ICtodHRwczovL2VsaXhpci5ib290bGluLmNvbS9s
+aW51eC92NS4xMi9zb3VyY2UvaW5jbHVkZS9hc20tZ2VuZXJpYy92bWxpbnV4Lmxkcy5oI0w5MTgu
+DQo+ICtUaGUgbGlua2VyIHNlY3Rpb24gY29uc2lzdHMgb2YgYW4gYXJyYXkgb2YgcG9pbnRlcnMg
+dG8NCj4gK2Bgc3RydWN0IGt1bml0X3N1aXRlYGAsIGFuZCBpcyBwb3B1bGF0ZWQgYnkgdGhlIGBg
+a3VuaXRfdGVzdF9zdWl0ZXMoKWBgDQo+ICttYWNyby4gVG8gcnVuIGFsbCB0ZXN0cyBjb21waWxl
+ZCBpbnRvIHRoZSBrZXJuZWwsIHRoZSBLVW5pdCBleGVjdXRvcg0KPiAraXRlcmF0ZXMgb3ZlciB0
+aGUgbGlua2VyIHNlY3Rpb24gYXJyYXkuDQo+ICsNCj4gKy4uIGtlcm5lbC1maWd1cmU6OiBrdW5p
+dF9zdWl0ZW1lbW9yeWRpYWdyYW0ucG5nDQo+ICsJOmFsdDoJS1VuaXQgU3VpdGUgTWVtb3J5DQo+
+ICsNCj4gKwlLVW5pdCBTdWl0ZSBNZW1vcnkgRGlhZ3JhbQ0KPiArDQo+ICtPbiB0aGUga2VybmVs
+IGJvb3QsIHRoZSBLVW5pdCBleGVjdXRvciB1c2VzIHRoZSBzdGFydCBhbmQgZW5kIGFkZHJlc3Nl
+cw0KPiArb2YgdGhpcyBzZWN0aW9uIHRvIGl0ZXJhdGUgb3ZlciBhbmQgcnVuIGFsbCB0ZXN0cy4g
+Rm9yIGNvZGUsIHNlZToNCj4gK2h0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVz
+dC9zb3VyY2UvbGliL2t1bml0L2V4ZWN1dG9yLmMNCj4gKw0KPiArV2hlbiBidWlsdCBhcyBhIG1v
+ZHVsZSwgdGhlIGBga3VuaXRfdGVzdF9zdWl0ZXMoKWBgIG1hY3JvIGRlZmluZXMgYQ0KPiArYGBt
+b2R1bGVfaW5pdCgpYGAgZnVuY3Rpb24sIHdoaWNoIHJ1bnMgYWxsIHRoZSB0ZXN0cyBpbiB0aGUg
+Y29tcGlsYXRpb24NCj4gK3VuaXQgaW5zdGVhZCBvZiB1dGlsaXppbmcgdGhlIGV4ZWN1dG9yLg0K
+PiArDQo+ICtJbiBLVW5pdCB0ZXN0cywgc29tZSBlcnJvciBjbGFzc2VzIGRvIG5vdCBhZmZlY3Qg
+b3RoZXIgdGVzdHMNCj4gK29yIHBhcnRzIG9mIHRoZSBrZXJuZWwsIGVhY2ggS1VuaXQgY2FzZSBl
+eGVjdXRlcyBpbiBhIHNlcGFyYXRlIHRocmVhZA0KPiArY29udGV4dC4gRm9yIGNvZGUsIHNlZToN
+Cj4gK2h0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvbGliL2t1
+bml0L3RyeS1jYXRjaC5jI0w1OA0KPiArDQo+ICtBc3NlcnRpb24gTWFjcm9zDQo+ICstLS0tLS0t
+LS0tLS0tLS0tDQo+ICsNCj4gK0tVbml0IHRlc3RzIHZlcmlmeSBzdGF0ZSB1c2luZyBleHBlY3Rh
+dGlvbnMvYXNzZXJ0aW9ucy4NCj4gK0FsbCBleHBlY3RhdGlvbnMvYXNzZXJ0aW9ucyBhcmUgZm9y
+bWF0dGVkIGFzOg0KPiArYGBLVU5JVF97RVhQRUNUfEFTU0VSVH1fPG9wPltfTVNHXShrdW5pdCwg
+cHJvcGVydHlbLCBtZXNzYWdlXSlgYA0KPiArDQo+ICstIGBge0VYUEVDVHxBU1NFUlR9YGAgZGV0
+ZXJtaW5lcyB3aGV0aGVyIHRoZSBjaGVjayBpcyBhbiBhc3NlcnRpb24gb3IgYW4NCj4gKyAgZXhw
+ZWN0YXRpb24uDQo+ICsNCj4gKwktIEZvciBhbiBleHBlY3RhdGlvbiwgaWYgdGhlIGNoZWNrIGZh
+aWxzLCBtYXJrcyB0aGUgdGVzdCBhcyBmYWlsZWQNCj4gKwkgIGFuZCBsb2dzIHRoZSBmYWlsdXJl
+Lg0KPiArDQo+ICsJLSBBbiBhc3NlcnRpb24sIG9uIGZhaWx1cmUsIGNhdXNlcyB0aGUgdGVzdCBj
+YXNlIHRvIHRlcm1pbmF0ZQ0KPiArCSAgaW1tZWRpYXRlbHkuDQo+ICsNCj4gKwkJLSBBc3NlcnRp
+b25zIGNhbGwgZnVuY3Rpb246DQo+ICsJCSAgYGB2b2lkIF9fbm9yZXR1cm4ga3VuaXRfYWJvcnQo
+c3RydWN0IGt1bml0ICopYGAuDQo+ICsNCj4gKwkJLSBgYGt1bml0X2Fib3J0YGAgY2FsbHMgZnVu
+Y3Rpb246DQo+ICsJCSAgYGB2b2lkIF9fbm9yZXR1cm4ga3VuaXRfdHJ5X2NhdGNoX3Rocm93KHN0
+cnVjdCBrdW5pdF90cnlfY2F0Y2ggKnRyeV9jYXRjaClgYC4NCj4gKw0KPiArCQktIGBga3VuaXRf
+dHJ5X2NhdGNoX3Rocm93YGAgY2FsbHMgZnVuY3Rpb246DQo+ICsJCSAgYGB2b2lkIGNvbXBsZXRl
+X2FuZF9leGl0KHN0cnVjdCBjb21wbGV0aW9uICosIGxvbmcpIF9fbm9yZXR1cm47YGANCj4gKwkJ
+ICBhbmQgdGVybWluYXRlcyB0aGUgc3BlY2lhbCB0aHJlYWQgY29udGV4dC4NCj4gKw0KPiArLSBg
+YDxvcD5gYCBkZW5vdGVzIGEgY2hlY2sgd2l0aCBvcHRpb25zOiBgYFRSVUVgYCAoc3VwcGxpZWQg
+cHJvcGVydHkNCj4gKyAgaGFzIHRoZSBib29sZWFuIHZhbHVlIOKAnHRydWXigJ0pLCBgYEVRYGAg
+KHR3byBzdXBwbGllZCBwcm9wZXJ0aWVzIGFyZQ0KPiArICBlcXVhbCksIGBgTk9UX0VSUl9PUl9O
+VUxMYGAgKHN1cHBsaWVkIHBvaW50ZXIgaXMgbm90IG51bGwgYW5kIGRvZXMgbm90DQo+ICsgIGNv
+bnRhaW4gYW4g4oCcZXJy4oCdIHZhbHVlKS4NCj4gKw0KPiArLSBgYFtfTVNHXWBgIHByaW50cyBh
+IGN1c3RvbSBtZXNzYWdlIG9uIGZhaWx1cmUuDQo+ICsNCj4gK1Rlc3QgUmVzdWx0IFJlcG9ydGlu
+Zw0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICtLVW5pdCBwcmludHMgdGVzdCByZXN1bHRz
+IGluIEtUQVAgZm9ybWF0LiBLVEFQIGlzIGJhc2VkIG9uIFRBUDE0LCBzZWU6DQo+ICtodHRwczov
+L2dpdGh1Yi5jb20vaXNhYWNzL3Rlc3Rhbnl0aGluZy5naXRodWIuaW8vYmxvYi90YXAxNC90YXAt
+dmVyc2lvbi0xNC1zcGVjaWZpY2F0aW9uLm1kLg0KPiArS1RBUCAoeWV0IHRvIGJlIHN0YW5kYXJk
+aXplZCBmb3JtYXQpIHdvcmtzIHdpdGggS1VuaXQgYW5kIEtzZWxmdGVzdC4NCj4gK1RoZSBLVW5p
+dCBleGVjdXRvciBwcmludHMgS1RBUCByZXN1bHRzIHRvIGRtZXNnLCBhbmQgZGVidWdmcw0KPiAr
+KGlmIGNvbmZpZ3VyZWQpLg0KPiArDQo+ICtQYXJhbWV0ZXJpemVkIFRlc3RzDQo+ICstLS0tLS0t
+LS0tLS0tLS0tLS0tDQo+ICsNCj4gK0VhY2ggS1VuaXQgcGFyYW1ldGVyaXplZCB0ZXN0IGlzIGFz
+c29jaWF0ZWQgd2l0aCBhIGNvbGxlY3Rpb24gb2YNCj4gK3BhcmFtZXRlcnMuIFRoZSB0ZXN0IGlz
+IGludm9rZWQgbXVsdGlwbGUgdGltZXMsIG9uY2UgZm9yIGVhY2ggcGFyYW1ldGVyDQo+ICt2YWx1
+ZSBhbmQgdGhlIHBhcmFtZXRlciBpcyBzdG9yZWQgaW4gdGhlIGBgcGFyYW1fdmFsdWVgYCBmaWVs
+ZC4NCj4gK1RoZSB0ZXN0IGNhc2UgaW5jbHVkZXMgYSBgYEtVTklUX0NBU0VfUEFSQU0oKWBgIG1h
+Y3JvIHRoYXQgYWNjZXB0cyBhDQo+ICtnZW5lcmF0b3IgZnVuY3Rpb24uDQo+ICtUaGUgZ2VuZXJh
+dG9yIGZ1bmN0aW9uIHJldHVybnMgdGhlIG5leHQgcGFyYW1ldGVyIGdpdmVuIHRvIHRoZQ0KDQpn
+aXZlbiB0byB0aGUgLT4gZ2l2ZW4gdGhlDQoNCj4gK3ByZXZpb3VzIHBhcmFtZXRlciBpbiBwYXJh
+bWV0ZXJpemVkIHRlc3RzLiBJdCBhbHNvIHByb3ZpZGVzIGEgbWFjcm8gdG8NCj4gK2dlbmVyYXRl
+IGNvbW1vbi1jYXNlIGdlbmVyYXRvcnMgYmFzZWQgb24gYXJyYXlzLg0KPiArDQo+ICtGb3IgY29k
+ZSwgc2VlOg0KPiAraHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTIvc291cmNl
+L2luY2x1ZGUva3VuaXQvdGVzdC5oI0wxNzgzDQoNClRoZSByZXN0IGxvb2tzIE9LLCBhcyBmYXIg
+YXMgSSBjYW4gdGVsbC4NCiAtLSBUaW0NCg0K
