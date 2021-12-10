@@ -2,251 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAA3DC433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 16:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D23C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 16:48:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244034AbhLJQv3 (ORCPT
+        id S244135AbhLJQwG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 11:51:29 -0500
-Received: from mail-mw2nam10on2089.outbound.protection.outlook.com ([40.107.94.89]:63201
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244008AbhLJQv2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:51:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V0acFJUId6weqZvWPAUm0du5kE9A2nDwulhL04xPb7JQyPqa4sCwJTEH8PgX9AEs7tKDM/Evcnml1+v1pKjhBWzd1l+nTf30lpl5a7e+5g8ESoi5htuFP/MhmvA+KNvur2MNRPq0QZnHbk9cDva02mhP2z1sWQB4IjuigqxMQhOFSZGwwUtZRg7yKTJH5cqnDKpiJn+kILkAUqX8tzSui3gcekSY/63jCxOS0MIXIcPLCiRkGFLkO9j7YG0gPjsWeKrp0csA+RVb7smtobE9u2aY+xJ/lEwQANXAaKOWP1mfYM0STrIXPIcVzI3W1LjGjhu/sCcPDqowwi+Zetf18A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QuQaYKCvPOEErmoktodgSJ1pfqms9WhM5PkpkYAk2AM=;
- b=QipYgUu/FooS1U9U9jasjNY6A2JYPf574SCMU/Ep4IBSdaXvBH8GZWBY4I03F+bI9vQxtcC1Gesax6iT4TFmbpCWvW0+Qp6hYLmT8Hu2mBMBIb9pO0KcGFIjOLAfDMO466O/iJ90OOALej7xuz8vTae3XbKQGPa1rnWKi+GlOpTCUaA5l70YpKpfLb8EmmhLL7Tiu6S/2A7M/Ioj7hKmhWDZkub7cYNFyXq19KWdmBCcpP1fJ/lPQmJzC0jfpH+1VNIIJcJnQsHDB6ejLS9WJfP5lJrDSXfQXnTsT3QsLXbbV+Gw8xArghw/mmC3UMBjA26ndjbqWLqvTLzy71iESA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QuQaYKCvPOEErmoktodgSJ1pfqms9WhM5PkpkYAk2AM=;
- b=2xXVFzKIT1Wbg2UdBHOZDOha2X2udzsQBlPUdi0AZl/5AYZ66l4tsyvgA/Erweq6+vmpC0pM1keo4b2yvAWUu9XJbiIGmmzY8QWjXdXCTNlE5NOoAAfoA+x2sjya7YwlL6ZfAXP9xjQdxgFm5I9AyUDVz6ZjHeEc0kFqYqav57g=
-Received: from DM5PR18CA0081.namprd18.prod.outlook.com (2603:10b6:3:3::19) by
- DM6PR12MB3418.namprd12.prod.outlook.com (2603:10b6:5:116::31) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.25; Fri, 10 Dec 2021 16:47:50 +0000
-Received: from DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:3:cafe::f2) by DM5PR18CA0081.outlook.office365.com
- (2603:10b6:3:3::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.12 via Frontend
- Transport; Fri, 10 Dec 2021 16:47:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT066.mail.protection.outlook.com (10.13.173.179) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4778.13 via Frontend Transport; Fri, 10 Dec 2021 16:47:50 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 10 Dec
- 2021 10:47:49 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     <linux-kselftest@vger.kernel.org>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, Nathan Tempelman <natet@google.com>,
-        Marc Orr <marcorr@google.com>,
-        "Steve Rutherford" <srutherford@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "David Woodhouse" <dwmw@amazon.co.uk>,
-        Ricardo Koller <ricarkol@google.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Christian Borntraeger" <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        <kvmarm@lists.cs.columbia.edu>
-Subject: [RFC PATCH 00/10] KVM: selftests: Add support for test-selectable ucall implementations
-Date:   Fri, 10 Dec 2021 10:46:10 -0600
-Message-ID: <20211210164620.11636-1-michael.roth@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 10 Dec 2021 11:52:06 -0500
+Received: from mga17.intel.com ([192.55.52.151]:11662 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244049AbhLJQvq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Dec 2021 11:51:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639154891; x=1670690891;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=3DneLS25APrxuNOkGZXo8qRheI95FDwhLX1tqAIeBVg=;
+  b=l8nuBOn477SdCf59NVP3yQX+ff7TTRhvRC55ohvtOymj3j9EAxFHmPp3
+   tNJfWZrZ2amEaB8oJy9D8uyXjjQGrtfqsAkDpy6r5qkEgl0aJUA44QYUR
+   aE52n/BX9zAWRSQ6uPSSe1qlWOvAyx0wGVSEhScKbxNOKnQGOQwbFEp5b
+   9CjphRtHcq8vZZ0kiZg/tDnlfNPJaBwztMUpN0+Ax73032eRFVcrFDRQ8
+   30zzYeWp+ki6BHf1ySJbu+tDX+gjbKH5iFcEKMXPzEpiTLiB9bV73fzqJ
+   Rp2NScd/G+ELZgjTBN0Mu8a73HydqQWoOwdGKkUVw1tV2+QlbgPZXty7O
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="219066203"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="219066203"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 08:48:11 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="607503721"
+Received: from klarson-mobl.amr.corp.intel.com (HELO [10.251.16.229]) ([10.251.16.229])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 08:48:10 -0800
+Subject: Re: [RFC PATCH v5 1/2] selftests/x86: add xsave test during and after
+ signal handling
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Heng Su <heng.su@intel.com>, Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>
+References: <cover.1638513720.git.pengfei.xu@intel.com>
+ <3f02d300118abfb581d85519b733a2db2bb44b10.1638513720.git.pengfei.xu@intel.com>
+ <3f59a9d9-27e6-e6b2-98ff-c18924979cc4@intel.com>
+ <YbLb4k3KKYD2TE/6@xpf.sh.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <a271fd86-c618-ced1-e848-c0649b003a16@intel.com>
+Date:   Fri, 10 Dec 2021 08:48:08 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <YbLb4k3KKYD2TE/6@xpf.sh.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d41b73b3-d8c8-4a13-b21d-08d9bbfccd7e
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3418:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3418E90A938A66D088AB9F0295719@DM6PR12MB3418.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YY05IGuiEYSEsMjqXtFcHmDTmaw1Id0kqHQAX3OjtXvWREvxOExrrjvnJD4tKQstYNl3OVjm9CbfBU2dxsc5WHW4PLYC5Qt8kN5ac5gW4vfQblU7oZah2jZbWL/d8vkt+U2JvyJ337SrkBfuZCosVq5uUoayYjAdmTMLvGnMNNWT6udPaRuHjL8vTv4VnHiGt8Vrq5L2Gc/pF2MSLg4Se/oHJlJS6L7Q6MRDAwtTCLtv0qcMAaOF9mz5g6Y9OSUOSjZpRbghO3jIhFmqVXv/T9aYOcyzpoSYPa24ACYd+FpoAaTvUKVIrp296qMwBrJwmUPgLqgkXrcJFPEaqy79tNfCYwhFDeQMAo08lid28766WmWij4MTu/lTlSa6Q64+/gYsIpMrdmf+733r22QutTMF+v52RQXnqxCYRtUmIPebmHOwQBsiDFPkK2rLvbUR27xI5jtuGffss521wc/xf0URuX41szWGcgxgEKsGkGIdZJl3M0Xr+SmQg0QTTU7yVf/sdosheoB8iT50Fu+j9NIEZAOQw4Nnwh/22AbGpfK7C1EDzp60gBc7w+1PaATtMSOU+Wfa2ceIadD3OrzLeIGVUZoDKx6bbvAwcXMYDfoZlp1/KMZRluvi045f21tgfxMabc2sSMHBsZb+Z2K6v+ldHNhEHFGS7o9CQecu0RMuJVdhy7Uz+Q4qFxmFFlu0NCn5W7WQg0Rzh9FqDybMjSW3kSgFZOyweSzSRwEo3wBOt2uKSaaTKQTeiYEgqb+2sYliHHvGQuSGhn4vWzI4JAlpL0LqpZHKENCVKwEADPgJ5bJgHtjoL9qRy2XL9ClDox7x5te9btgCVAHMyWRUmVO8DRquO1hS7Qq1SnAjuFvo7RYDuq4TD9gOFrcvK9F+V+NlZJ/fU0j3MgQApFgf4jFFZnKMRtcB2oC+kAqo+mY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(2906002)(6666004)(81166007)(356005)(47076005)(26005)(36756003)(186003)(2616005)(4326008)(336012)(16526019)(508600001)(426003)(44832011)(1076003)(316002)(8936002)(8676002)(54906003)(5660300002)(70206006)(86362001)(6916009)(70586007)(966005)(7416002)(40460700001)(82310400004)(83380400001)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2021 16:47:50.2327
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d41b73b3-d8c8-4a13-b21d-08d9bbfccd7e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3418
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These patches are based on kvm/next, and are also available at:
+On 12/9/21 8:47 PM, Pengfei Xu wrote:
+> How about the following changes:
+> Will remove set_avx2_ymm() and will only check XSAVE_MASK_FP, XSAVE_MASK_OPMASK
+> and XSAVE_MASK_PKRU xstates after signal handling and process switch,
 
-  https://github.com/mdroth/linux/commits/sev-selftests-ucall-rfc1
+First and foremost, the whole point of these tests is to ensure that the
+kernel is properly maintaining register state.  Removing registers from
+the test moves *away* from the primary goal of this test.
 
-== BACKGROUND ==
+Second, you just listed three states there.  Have you considered looking
+at whether those have the same problem as the XMM/YMM registers?  Please do.
 
-These patches are a prerequisite for adding selftest support for SEV guests
-and possibly other confidential computing implementations in the future.
-They were motivated by a suggestion Paolo made in response to the initial
-SEV selftest RFC:
+Third (and I've also suggested this before), we should explicitly tell
+the compiler not to use the FPU registers.  This is what the kernel
+does, and it's what allows us to, for instance, make function calls in
+the kernel without clobbering userspace content in XSAVE-managed registers.
 
-  https://lore.kernel.org/lkml/20211025035833.yqphcnf5u3lk4zgg@amd.com/T/#m959b56f9fb4ae6ab973f6ab50fe3ddfacd7c5617
-
-Since the changes touch multiple archs and ended up creating a bit more churn
-than expected, I thought it would be a good idea to carve this out into a
-separate standalone series for reviewers who may be more interested in the
-ucall changes than anything SEV-related.
-
-To summarize, x86 relies on a ucall based on using PIO intructions to generate
-an exit to userspace and provide the GVA of a dynamically-allocated ucall
-struct that resides in guest memory and contains information about how to
-handle/interpret the exit. This doesn't work for SEV guests for 3 main reasons:
-
-  1) The guest memory is generally encrypted during run-time, so the guest
-     needs to ensure the ucall struct is allocated in shared memory.
-  2) The guest page table is also encrypted, so the address would need to be a
-     GPA instead of a GVA.
-  3) The guest vCPU register may also be encrypted in the case of
-     SEV-ES/SEV-SNP, so the approach of examining vCPU register state has
-     additional requirements such as requiring guest code to implement a #VC
-     handler that can provide the appropriate registers via a vmgexit.
-
-To address these issues, the SEV selftest RFC1 patchset introduced a set of new
-SEV-specific interfaces that closely mirrored the functionality of
-ucall()/get_ucall(), but relied on a pre-allocated/static ucall buffer in
-shared guest memory so it that guest code could pass messages/state to the host
-by simply writing to this pre-arranged shared memory region and then generating
-an exit to userspace (via a halt instruction).
-
-Paolo suggested instead implementing support for test/guest-specific ucall
-implementations that could be used as an alternative to the default PIO-based
-ucall implementations as-needed based on test/guest requirements, while still
-allowing for tests to use a common set interfaces like ucall()/get_ucall().
-
-== OVERVIEW ==
-
-This series implements the above functionality by introducing a new ucall_ops
-struct that can be used to register a particular ucall implementation as need,
-then re-implements x86/arm64/s390x in terms of the ucall_ops.
-
-But for the purposes of introducing a new ucall_ops implementation appropriate
-for SEV, there are a couple issues that resulted in the need for some additional
-ucall interfaces as well:
-
-  a) ucall() doesn't take a pointer to the ucall struct it modifies, so to make
-     it work in the case of an implementation that relies a pre-allocated ucall
-     struct in shared guest memory some sort of global lookup functionality
-     would be needed to locate the appropriate ucall struct for a particular
-     VM/vcpu combination, and this would need to be made accessible for use by
-     the guest as well. guests would then need some way of determining what
-     VM/vcpu identifiers they need to use to do the lookup, which to do reliably
-     would likely require seeding the guest with those identifiers in advance,
-     which is possible, but much more easily achievable by simply adding a
-     ucall() alternative that accepts a pointer to the ucall struct for that
-     particular VM/vcpu.
-
-  b) get_ucall() *does* take a pointer to a ucall struct, but currently zeroes
-     it out and uses it to copy the guest's ucall struct into. It *could* be
-     re-purposed to handle the case where the pointer is an actual pointer to
-     the ucall struct in shared guest memory, but that could cause problems
-     since callers would need some idea of what the underlying ucall
-     implementation expects. Ideally the interfaces would be agnostic to the
-     ucall implementation.
-
-So to address those issues, this series also allows ucall implementations to
-optionally be extended to support a set of 'shared' ops that are used in the
-following manner:
-
-  host:
-    uc_gva = ucall_shared_alloc()
-    setup_vm_args(vm, uc_gva)
-
-  guest:
-    ucall_shared(uc_gva, ...)
-
-  host:
-    uget_ucall_shared(uc_gva, ...)
-
-and then implements a new ucall implementation, ucall_ops_halt, based around
-these shared interfaces and halt instructions.
-
-While this doesn't really meet the initial goal of re-using the existing
-ucall interfaces as-is, the hope is that these *_shared interfaces are
-general enough to be re-usable things other than SEV, or at least improve on
-code readability over the initial SEV-specific interfaces.
-
-Any review/comments are greatly appreciated!
-
-----------------------------------------------------------------
-Michael Roth (10):
-      kvm: selftests: move base kvm_util.h declarations to kvm_util_base.h
-      kvm: selftests: move ucall declarations into ucall_common.h
-      kvm: selftests: introduce ucall_ops for test/arch-specific ucall implementations
-      kvm: arm64: selftests: use ucall_ops to define default ucall implementation
-      (COMPILE-TESTED ONLY) kvm: s390: selftests: use ucall_ops to define default ucall implementation
-      kvm: selftests: add ucall interfaces based around shared memory
-      kvm: selftests: add ucall_shared ops for PIO
-      kvm: selftests: introduce ucall implementation based on halt instructions
-      kvm: selftests: add GUEST_SHARED_* macros for shared ucall implementations
-      kvm: selftests: add ucall_test to test various ucall functionality
-
- tools/testing/selftests/kvm/.gitignore             |   1 +
- tools/testing/selftests/kvm/Makefile               |   5 +-
- .../testing/selftests/kvm/include/aarch64/ucall.h  |  18 +
- tools/testing/selftests/kvm/include/kvm_util.h     | 408 +--------------------
- .../testing/selftests/kvm/include/kvm_util_base.h  | 368 +++++++++++++++++++
- tools/testing/selftests/kvm/include/s390x/ucall.h  |  18 +
- tools/testing/selftests/kvm/include/ucall_common.h | 147 ++++++++
- tools/testing/selftests/kvm/include/x86_64/ucall.h |  19 +
- tools/testing/selftests/kvm/lib/aarch64/ucall.c    |  43 +--
- tools/testing/selftests/kvm/lib/s390x/ucall.c      |  45 +--
- tools/testing/selftests/kvm/lib/ucall_common.c     | 133 +++++++
- tools/testing/selftests/kvm/lib/x86_64/ucall.c     |  82 +++--
- tools/testing/selftests/kvm/ucall_test.c           | 182 +++++++++
- 13 files changed, 982 insertions(+), 487 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/aarch64/ucall.h
- create mode 100644 tools/testing/selftests/kvm/include/kvm_util_base.h
- create mode 100644 tools/testing/selftests/kvm/include/s390x/ucall.h
- create mode 100644 tools/testing/selftests/kvm/include/ucall_common.h
- create mode 100644 tools/testing/selftests/kvm/include/x86_64/ucall.h
- create mode 100644 tools/testing/selftests/kvm/lib/ucall_common.c
- create mode 100644 tools/testing/selftests/kvm/ucall_test.c
-
-
+If we did that, then we would only have to worry about calls to things
+*outside* of the test program, like libc.
