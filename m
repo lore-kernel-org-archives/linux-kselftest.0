@@ -2,133 +2,137 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29FB0C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 13:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F82C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 14:00:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbhLJODL (ORCPT
+        id S231716AbhLJOE1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 09:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbhLJODL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 09:03:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BF0C061746
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 05:59:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5B5ECCE2AD2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 13:59:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCC8C00446;
-        Fri, 10 Dec 2021 13:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639144772;
-        bh=3IiC6gTmzS9un9E9shZZcV3BXG07xritOZdkI9ovUoM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rl5LW8uXeU+rio/2EfYZFbe2IebYTm9+bYLXhtWabPM41nMRrNHnGZIlOxG2VDMIA
-         rjJWbvmIMUWlneThDKTZHzlxOpQvC+OP9q5B1s4Itlh4MHog6fP/K5iaVrzRnOdMLB
-         oy8WjhL9HsAAzlXMx3o0+UmbQMK/vQJvssmj1tnc1/S4xrRZIUxn7CI7lX9tv2ojLq
-         XeOlnMDCVvUZujIODm2EczKiC1GJ1O7fqkAZNgGSgFnhwfRjwrL12YQFDMSdN3nGaH
-         9GY5Nb1i3KnRj9ADyQNtjH/gevqc2nNUvYbLEyyUj7F3yifrOKDRBDDIZKPI+gsg9y
-         xQg+A5TcCAOQg==
-Date:   Fri, 10 Dec 2021 13:59:27 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 13/37] arm64/sme: Basic enumeration support
-Message-ID: <YbNdP85r7wu2bQpb@sirena.org.uk>
-References: <20211115152835.3212149-1-broonie@kernel.org>
- <20211115152835.3212149-14-broonie@kernel.org>
- <YbJN1ujpDP1RG1Ll@arm.com>
- <YbJY0P1KZjSFfwtY@sirena.org.uk>
- <YbMuzjU/MSTwBDLY@arm.com>
+        Fri, 10 Dec 2021 09:04:27 -0500
+Received: from mga09.intel.com ([134.134.136.24]:18427 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234344AbhLJOE1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Dec 2021 09:04:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639144852; x=1670680852;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+3xcxnlr+0V9wAyeoMluAwgNokJlt0chsySF41otqNk=;
+  b=GKK4xjSpR9nGJN1KQ9ONToCqDKYOMw8ouS/055Vjq4em96rc+dTsFBGa
+   zsc/s2xJ6zTK+26i1e1Yi1HhEtv4g+1zyO5z/htTMXHcV1zn4GgNHVyVk
+   aqp9mT7YHJXlB3+C1K5/wWeuoWvzd2Jf6e1PyUKAzyWRpuv5nEOo2FrCR
+   Ur2qAVgI8sJcfR+Uoqdgi7srXF7OH/k5Y1wLpK0a0doSbzIdpnoGv8ipX
+   hQgabQtJeI8YMt3+cP8qIgQBpu27N7fxbq73fsmH6ZOC7ysqXiQew+zVO
+   7NnUTQjcAF4Vpcgo5l8KnlfHJyGWMz+0q9GQ502A/8Nucrn5UZx/E2Th5
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238150679"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="238150679"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 06:00:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="612934611"
+Received: from unknown (HELO localhost.igk.intel.com) ([10.102.22.231])
+  by orsmga004.jf.intel.com with ESMTP; 10 Dec 2021 06:00:48 -0800
+From:   Maciej Machnikowski <maciej.machnikowski@intel.com>
+To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, arkadiusz.kubalewski@intel.com
+Cc:     richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
+        petrm@nvidia.com
+Subject: [PATCH v5 net-next 0/4] Add ethtool interface for RClocks
+Date:   Fri, 10 Dec 2021 14:45:46 +0100
+Message-Id: <20211210134550.1195182-1-maciej.machnikowski@intel.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZqIdPc6Fdn3ZgGn8"
-Content-Disposition: inline
-In-Reply-To: <YbMuzjU/MSTwBDLY@arm.com>
-X-Cookie: One picture is worth 128K words.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Synchronous Ethernet networks use a physical layer clock to syntonize
+the frequency across different network elements.
 
---ZqIdPc6Fdn3ZgGn8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+Equipment Clock (EEC) and have the ability to synchronize to reference
+frequency sources.
 
-On Fri, Dec 10, 2021 at 10:41:18AM +0000, Catalin Marinas wrote:
-> On Thu, Dec 09, 2021 at 07:28:16PM +0000, Mark Brown wrote:
+This patch series is a prerequisite for EEC object and adds ability
+to enable recovered clocks in the physical layer of the netdev object.
+Recovered clocks can be used as one of the reference signal by the EEC.
 
-> > > > +#define HWCAP2_SME_B16F32	(1 << 25)
-> > > > +#define HWCAP2_SME_F32F32	(1 << 26)
-> > > > +#define HWCAP2_SME_FA64		(1 << 27)
-> >=20
-> > > At this pace we'll need HWCAP3 pretty soon (since we only allocated
-> > > 32-bit in each). I wonder whether we could instead not bother at all =
-and
-> > > just provide user-space emulation for ID_AA64SMFR0_EL1.
+Further work is required to add the DPLL subsystem, link it to the
+netdev object and create API to read the EEC DPLL state.
 
-> > I think so if people are willing to go along with just having userspace
-> > check the ID register (IIRC access to it already does the right thing
-> > but I need to confirm).  We'll also need to think about how we handle
-> > any new SVE features, that's got a similar thing going on and is most of
-> > the existing usage of HWCAP2.
+v5:
+- rewritten the documentation
+- fixed doxygen headers
 
-> It would be good to get feedback from the libc people. IIRC the ifunc
-> resolver relies currently on the HWCAP bits. Could this be adapted to
-> use the MRS instruction? We'd still keep the main HWCAP2_SME but without
-> the finer-grained bits.
+v4:
+- Dropped EEC_STATE reporting (TBD: DPLL subsystem)
+- moved recovered clock configuration to ethtool netlink
 
-> The other option is to start going into the upper 32-bit of the
-> elf_hwcap. We tried to avoid this some time back when we were still
-> having doubts about merging ILP32.
+v3:
+- remove RTM_GETRCLKRANGE
+- return state of all possible pins in the RTM_GETRCLKSTATE
+- clarify documentation
 
-I'll leave things as they are just now to give more time for feedback.
+v2:
+- improved documentation
+- fixed kdoc warning
 
-> > > I'll comment here rather than the patch introducing has_feature_flag(=
-):
-> > > an alternative would be to add a .field_width option and in
-> > > feature_matches() use cpuid_feature_extract_field_width() directly. A=
-ll
+RFC history:
+v2:
+- removed whitespace changes
+- fix issues reported by test robot
+v3:
+- Changed naming from SyncE to EEC
+- Clarify cover letter and commit message for patch 1
+v4:
+- Removed sync_source and pin_idx info
+- Changed one structure to attributes
+- Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
+  to the recovered clock of a port that returns the state
+v5:
+- add EEC source as an optiona attribute
+- implement support for recovered clocks
+- align states returned by EEC to ITU-T G.781
+v6:
+- fix EEC clock state reporting
+- add documentation
+- fix descriptions in code comments
 
-> > Sure, if people are happy with that - it's a more invasive change since
-> > we don't currently set the widths, I wasn't clear if that was a case of
-> > not needing it right now or a design decision.
 
-> We didn't have a field_width since they were all 4 bits until SVE. If
-> you don't want to touch all the entries in the array, we can say that a
-> 0 value (i.e. not explicitly initialised) means default 4 and update it
-> during init_cpu_features().
+Maciej Machnikowski (4):
+  ice: add support detecting features based on netlist
+  ethtool: Add ability to configure recovered clock for SyncE feature
+  ice: add support for monitoring SyncE DPLL state
+  ice: add support for recovered clocks
 
-It's annoying to have to update everything but it feels more idiomatic
-and less likely to cause surprises later on.
+ Documentation/networking/ethtool-netlink.rst  |  62 ++++
+ drivers/net/ethernet/intel/ice/ice.h          |   7 +
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  70 ++++-
+ drivers/net/ethernet/intel/ice/ice_common.c   | 224 +++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |  20 +-
+ drivers/net/ethernet/intel/ice/ice_devids.h   |   3 +
+ drivers/net/ethernet/intel/ice/ice_ethtool.c  |  96 +++++++
+ drivers/net/ethernet/intel/ice/ice_lib.c      |   6 +-
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  35 +++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  49 ++++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  36 +++
+ drivers/net/ethernet/intel/ice/ice_type.h     |   1 +
+ include/linux/ethtool.h                       |   9 +
+ include/uapi/linux/ethtool_netlink.h          |  21 ++
+ net/ethtool/Makefile                          |   3 +-
+ net/ethtool/netlink.c                         |  20 ++
+ net/ethtool/netlink.h                         |   4 +
+ net/ethtool/synce.c                           | 267 ++++++++++++++++++
+ 18 files changed, 929 insertions(+), 4 deletions(-)
+ create mode 100644 net/ethtool/synce.c
 
---ZqIdPc6Fdn3ZgGn8
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.26.3
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzXT4ACgkQJNaLcl1U
-h9CKhgf/bIRqrmEvRVYRdOJ71WQVNrlpq0nYB5RDVmw34CPswXyaZ+e85JVYlPF9
-aSTLKS3l2H0U9BL8MQIKrGiZiUs/hZEDaff9KUbmjKlNXtftt+OTXwEP/ptuP99R
-SF6BQt2cdRDzTISmpFJrxJthD1ZwMlgh7T36m0CzO1dgQ0B+5R4oj5I1BXsXr84H
-KBxKkrPCA8FICLkTNGs5nuAog5JXCnRg+lIswURpADi1J0NK7RVScQvKE2MnCk1X
-9sV0/NfYoaRkA3lDKs3w5LddVUFitH2O6U8orRRTVqg7fXc3FQcBCV/R9aKYuQT5
-+I+BtBKMMPVBuQ045vIWpaWIDS9Jog==
-=3br8
------END PGP SIGNATURE-----
-
---ZqIdPc6Fdn3ZgGn8--
