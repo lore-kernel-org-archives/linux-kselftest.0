@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CAABC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:33:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 187B4C43217
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:33:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241303AbhLJRhF (ORCPT
+        id S241349AbhLJRhG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 12:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        Fri, 10 Dec 2021 12:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244704AbhLJRhD (ORCPT
+        with ESMTP id S241364AbhLJRhF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:37:03 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA27C0617A1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:28 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id q25so14284096oiw.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:28 -0800 (PST)
+        Fri, 10 Dec 2021 12:37:05 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C531C0617A2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:30 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso10311765ots.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Om7A8iJx3nmhRt21+GcSVSh1CLYidC/pJOApyfAW7NA=;
-        b=SjV4lPhUdKrmpRTjTbfve+d5B769d3IL84XjeCyYyIxveR1xklcF8EADqlliDHUpYJ
-         Frpg+DqzjkTlT32YzOqef4iMfY3Joj/P40H2wHvWyCUffJ0BIvLT3lAq9spBCpTV9VqW
-         fhqvSvrGrkeHAyMG2Gr2cDT7Go5Db+PPVzNi8=
+        bh=NDgcHDpgiGWK9Ew3NHUhEO9yqNh1ILLLayqUXO2p75w=;
+        b=RBvRuhdbY7g+jhhycOa6s6AnQRPB9u+jMTQAdWAGcbZry4Gs71DzkZXrtyFNlzrjYb
+         t6cYRkjUJNJA0VqVa9VD5NUujJb9jkn5OXNmdw0ZBi1zYANnBFWUCoJvVfZtk5h4sJn1
+         eqbzyIxoNgJ2evkyeFqyx5i3WODR+TVyV1f2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Om7A8iJx3nmhRt21+GcSVSh1CLYidC/pJOApyfAW7NA=;
-        b=Ue4D09R5p1ET8zw9EvDl0qJlcP4QPLizbKMjvg/oWTkZCC7wNbsF4QFZhscIZ1xCsf
-         hlaI2L0QOKem+9PNDCDCW8nBxNqHH7QtvnuT6a3zlx678zDwoHjOJz5nVpukjhhSrnPg
-         uuvTAS7b+7CSEBzax0M8eMxIP8kSqJQMWT0W2fxsBZvDmrFQnsDp5NrN2W/3nccA2snw
-         jYCxL8xU+nwQcs36l9ldJ1+HXB5hvL8xi14Y3Px++kLnN7ZSGvqxY/on1jJeT5bZsPdX
-         5RD3C/f8++3p39hUEciBfB+PJa9ifXW4EZ5k/YDsR1TlnqdL41tLULna2Sb+/vygzmRG
-         nvBQ==
-X-Gm-Message-State: AOAM530z9run6plp/ex4tFhKzr0jqqQdAgJXuHD2egtuSpJBtmYEcBpM
-        sV0nRnyRF+3srVEXVDbaItt8Wg==
-X-Google-Smtp-Source: ABdhPJw1xkTM0IGWbm2xBQvRbX572S/iV1SuoJVNLe1QtOfW6SfMXVYKCvQz8AqfVuAHR9tlpezb4g==
-X-Received: by 2002:a05:6808:1a02:: with SMTP id bk2mr13567633oib.52.1639157607755;
-        Fri, 10 Dec 2021 09:33:27 -0800 (PST)
+        bh=NDgcHDpgiGWK9Ew3NHUhEO9yqNh1ILLLayqUXO2p75w=;
+        b=S3ctX08+2fyeppiBMsZCdjnElUZYAPQfTtMKpGhPH0a7uOhKtExBjLzT8AiPLM4oKe
+         ZXmfa1zY5RLKdC6cuQgcNVp6ICdhaspXfi0DkDm/o9NhBLCMc61S2YEwRzZLSunO/ZiK
+         /C2BaJtgPNoVy4On+Q1x62KDS10LRAoNhxG/hKopIaNte0af8ltASnPaTZ5NTOKn9/R0
+         Je27I9I7F1IUFse3ERD2jHDeLYHliWPe6AHHZf6zkYcC8KQmkUSkfRopoKI5jU1Ho0D2
+         84x6OEImLTElQtlI2syT+zOnHYVEKDgPY5M5xtxWSCT5+u64zNcbB1c2GftZ5ztK8LYM
+         VFOg==
+X-Gm-Message-State: AOAM530cbku9/K275hVsh5M618crsOrVrDl5Fw1GNWOhY6BMH2fQAQGw
+        VLKE2ktJo8tbJTZdzeUOYcxkTQ==
+X-Google-Smtp-Source: ABdhPJyA4yaTBTIyZO1xnTM+/bAUFXSJizFV+09oAtmwLgPNp33uTLG6kCjRdELfrCYBpviWIZftqA==
+X-Received: by 2002:a05:6830:118a:: with SMTP id u10mr11939448otq.194.1639157609588;
+        Fri, 10 Dec 2021 09:33:29 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.26
+        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:33:27 -0800 (PST)
+        Fri, 10 Dec 2021 09:33:29 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
         keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
@@ -55,9 +55,9 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 02/12] selftests/arm64: remove ARRAY_SIZE define from vec-syscfg.c
-Date:   Fri, 10 Dec 2021 10:33:12 -0700
-Message-Id: <7f6d7252af5c8efda140b6b5f626b9e5a267016a.1639156389.git.skhan@linuxfoundation.org>
+Subject: [PATCH 04/12] selftests/core: remove ARRAY_SIZE define from close_range_test.c
+Date:   Fri, 10 Dec 2021 10:33:14 -0700
+Message-Id: <0b20692e28c83822bb6b56518791371120582d0e.1639156389.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1639156389.git.skhan@linuxfoundation.org>
 References: <cover.1639156389.git.skhan@linuxfoundation.org>
@@ -72,27 +72,29 @@ individual test files and include header file for the define instead.
 ARRAY_SIZE define is added in a separate patch to prepare for this
 change.
 
-Remove ARRAY_SIZE from vec-syscfg.c and pickup the one defined in
-kselftest.h.
+Remove ARRAY_SIZE from close_range_test.c and pickup the one defined
+in kselftest.h.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/arm64/fp/vec-syscfg.c | 2 --
- 1 file changed, 2 deletions(-)
+ tools/testing/selftests/core/close_range_test.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-index 272b888e018e..c90658811a83 100644
---- a/tools/testing/selftests/arm64/fp/vec-syscfg.c
-+++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-@@ -21,8 +21,6 @@
- #include "../../kselftest.h"
- #include "rdvl.h"
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+index aa7d13d91963..749239930ca8 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -50,10 +50,6 @@ static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
+ 	return syscall(__NR_close_range, fd, max_fd, flags);
+ }
  
--#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+-#endif
 -
- #define ARCH_MIN_VL SVE_VL_MIN
- 
- struct vec_data {
+ TEST(core_close_range)
+ {
+ 	int i, ret;
 -- 
 2.32.0
 
