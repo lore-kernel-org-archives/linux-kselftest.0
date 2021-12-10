@@ -2,117 +2,182 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E75AC433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02580C433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:34:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244492AbhLJRhT (ORCPT
+        id S241575AbhLJRiO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 12:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        Fri, 10 Dec 2021 12:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241059AbhLJRhM (ORCPT
+        with ESMTP id S238003AbhLJRiN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:37:12 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35809C061B38
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:34 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso10287710otj.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:34 -0800 (PST)
+        Fri, 10 Dec 2021 12:38:13 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD36C0617A2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id o4so14157938oia.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4WzsD+UFVzLiH0Fp9HCyUMze55/PXfN1Fv5h1c0wwoc=;
-        b=Qchokgi1K6EjNENIB16rZTHkLbnhJuZXljqbd4G55iiZmPcNdBVkeVbMowdmC9q4qj
-         uM+vvJsP1r/+NUFhjZ04YGOlvj7dYAlIu5fXxMAi7Vp8riHsOdb9yTNfCIZhxOzmilUN
-         fYlr3CYWkIhW0u0R7l+00dYGvA8bO+xcWIlrg=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
+        b=H84W+u8ZuMN5VRT4atnpiZFWjKwGaSqbEQHfol1liXDySnPSsLnLZeqUiIQgXscWrM
+         xC1B49/NW0FYtKotyCwHSl/Nl4z6cHFf6levmetWtX6CoCWhK9T/zDV5sHl8XI+cXGea
+         pkesln0SPt0yZWLC1pN+i0nG5pezdpC2c2oiA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4WzsD+UFVzLiH0Fp9HCyUMze55/PXfN1Fv5h1c0wwoc=;
-        b=aZ9E7zf/u8m6Qw618aMisGx4A8rTY9PQK9e2Qinp1mlCax3uFKpczM5tfLm/jtyFKz
-         UmsFUIlq3ylG+gkNzYSjh6+LNggACX/dq4IVttA+M5siPMsRXljHqMguqA9hgfzD5dno
-         7lhD3+W1gt1/5KvKIkwx4jR/wNSVapSpL2nR5VBV2OWzwweEMWzbIuT0r3T+mij++Y2P
-         R9KK/p/vLJnHLZhw3TpuQi5M9bjEwNUF1pJZQK+iMEffQqOjPMNLJ6E55OT2Ys5y8P9X
-         MRYWghf3/V1WagO+Er+DGkZEfr76yLp0tSdL+bEpR0jfhtvzZvxknMyEyayO7yi1bOnk
-         b9xg==
-X-Gm-Message-State: AOAM530118te+dz93yuSzSiKom40yy9dqqAc4r2ULVdPNHCriUYY3XkU
-        vGKsMD2ZRPU/FkAFv7ttQ37Xuw==
-X-Google-Smtp-Source: ABdhPJyxsZn85HCQXDC0NYZWNPCIdku6oxp+hW2STbG5C8HyB1dqb+FYA6EOrK7FlkRbQQsZUFS6ug==
-X-Received: by 2002:a9d:373:: with SMTP id 106mr12125638otv.127.1639157613531;
-        Fri, 10 Dec 2021 09:33:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
+        b=ytW4NWXuuA+nDLrjpGhp/q+vUpYvJFYnSYjlg9pxhhPei+UHoCb9wvUGxfQ6rXLVLK
+         LWIiWXtqwBQyelPsYlcvapKIvB0GCFFCoLpamvkBXfNdrlmLcHS/pNrcQm9EtCD9DekG
+         sVxUkoIcGATmhMdm5BAdIsQ06CrtpLH6G4buHTnOHerz+sqMLO4R+8Zoz3/vYo2SeMa2
+         /Ggt54oa+qF2LoFAzfuivgo5M76JCyZ+2FUDbpTW0MpZG0joUYigpydRot+AzWiRMBXs
+         Oy5y6RzUiX/8yFsxZkIxHtww62ANJf2RL8S3ByrvOpcEhREVZu7AHDnflKVwKMtXA4RP
+         HaaA==
+X-Gm-Message-State: AOAM530SwV7ZIHsWc6F3yMHBXeo9dR93NK5ow9UsVI1ZKa2K3QNHqwql
+        z+4YkYP9QSykdJJCeKnp3nbE5Q==
+X-Google-Smtp-Source: ABdhPJy15Gc8S3I8657EioGcfpK4uWVD6XI1GMbZgcAgsTrTw4LKvABQ+oBtRdzT3LF81vLPKkbljg==
+X-Received: by 2002:aca:61c6:: with SMTP id v189mr13118314oib.103.1639157677771;
+        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.32
+        by smtp.gmail.com with ESMTPSA id ay40sm808342oib.1.2021.12.10.09.34.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:33:33 -0800 (PST)
+        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
-        kuba@kernel.org, peterz@infradead.org, paulmck@kernel.org,
-        boqun.feng@gmail.com, akpm@linux-foundation.org
+To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH 08/12] selftests/rseq: remove ARRAY_SIZE define from individual tests
-Date:   Fri, 10 Dec 2021 10:33:18 -0700
-Message-Id: <f81e953716b03e9eb2392298b914b703dcfdace8.1639156389.git.skhan@linuxfoundation.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
+Date:   Fri, 10 Dec 2021 10:34:33 -0700
+Message-Id: <20211210173433.13247-1-skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1639156389.git.skhan@linuxfoundation.org>
-References: <cover.1639156389.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ARRAY_SIZE is defined in several selftests. Remove definitions from
-individual test files and include header file for the define instead.
-ARRAY_SIZE define is added in a separate patch to prepare for this
-change.
+ARRAY_SIZE is defined in multiple test files. Remove the definitions
+and include header file for the define instead.
 
-Remove ARRAY_SIZE from rseq tests and pickup the one defined in
-kselftest.h.
+Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
+define.
 
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/testing/selftests/rseq/basic_percpu_ops_test.c | 3 +--
- tools/testing/selftests/rseq/rseq.c                  | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
+ tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
+ tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
+ tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
+ tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
+ 5 files changed, 5 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/rseq/basic_percpu_ops_test.c b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-index eb3f6db36d36..b953a52ff706 100644
---- a/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-+++ b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-@@ -9,10 +9,9 @@
- #include <string.h>
- #include <stddef.h>
+diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+index 1d8918dfbd3f..7a5ebd330689 100644
+--- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
++++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+@@ -5,6 +5,7 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ #include <bpf/bpf_core_read.h>
++#include <bpf/bpf_util.h>
  
-+#include "../kselftest.h"
- #include "rseq.h"
+ #include <errno.h>
  
--#define ARRAY_SIZE(arr)	(sizeof(arr) / sizeof((arr)[0]))
+@@ -23,10 +24,6 @@ bool skip = false;
+ #define BADPTR			0
+ #endif
+ 
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+-#endif
 -
- struct percpu_lock_entry {
- 	intptr_t v;
- } __attribute__((aligned(128)));
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index 7159eb777fd3..fb440dfca158 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -27,10 +27,9 @@
- #include <signal.h>
- #include <limits.h>
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+ 	__uint(max_entries, 1);
+diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
+index 4896fdf816f7..aad30994ecd7 100644
+--- a/tools/testing/selftests/bpf/progs/profiler.inc.h
++++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
+@@ -4,6 +4,7 @@
+ #include <bpf/bpf_core_read.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <bpf/bpf_util.h>
  
-+#include "../kselftest.h"
- #include "rseq.h"
+ #include "profiler.h"
  
--#define ARRAY_SIZE(arr)	(sizeof(arr) / sizeof((arr)[0]))
+@@ -132,10 +133,6 @@ struct {
+ 	__uint(max_entries, 16);
+ } disallowed_exec_inodes SEC(".maps");
+ 
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
+-#endif
 -
- __thread volatile struct rseq __rseq_abi = {
- 	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
- };
+ static INLINE bool IS_ERR(const void* ptr)
+ {
+ 	return IS_ERR_VALUE((unsigned long)ptr);
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+index 553a282d816a..c7c512e0af79 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+@@ -8,10 +8,7 @@
+ #include <linux/bpf.h>
+ 
+ #include <bpf/bpf_helpers.h>
+-
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+-#endif
++#include <bpf/bpf_util.h>
+ 
+ /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
+ #define TCP_MEM_LOOPS 28  /* because 30 doesn't fit into 512 bytes of stack */
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+index 2b64bc563a12..57cda15d0032 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+@@ -8,10 +8,8 @@
+ #include <linux/bpf.h>
+ 
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_util.h>
+ 
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+-#endif
+ 
+ /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
+ #define TCP_MEM_LOOPS 20  /* because 30 doesn't fit into 512 bytes of stack */
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
+index 5489823c83fc..6047c39eb457 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
+@@ -8,6 +8,7 @@
+ #include <linux/bpf.h>
+ 
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_util.h>
+ 
+ /* Max supported length of a string with unsigned long in base 10 (pow2 - 1). */
+ #define MAX_ULONG_STR_LEN 0xF
+@@ -15,10 +16,6 @@
+ /* Max supported length of sysctl value string (pow2). */
+ #define MAX_VALUE_STR_LEN 0x40
+ 
+-#ifndef ARRAY_SIZE
+-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+-#endif
+-
+ const char tcp_mem_name[] = "net/ipv4/tcp_mem";
+ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
 -- 
 2.32.0
 
