@@ -2,100 +2,90 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E27C4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E38CC433EF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 18:00:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238065AbhLJRi4 (ORCPT
+        id S244999AbhLJSEM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 12:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244745AbhLJRhE (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:37:04 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6127BC0617A2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:29 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso10311714ots.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gk7892EwBeQtmWfsZIAYujFfNQTmGWtEjgsjRv69+2g=;
-        b=cLDJy7RNXkPVErf7+3pf0+bZ3jiuNMCjfkw3gOiwUaBeQdzuD8ZZ1Uyk7KdyZ6E3xp
-         RKmfI7bq+6mGVljth/QC8Cfr74lIcmqnuNiEg9nlkAeFPl9jwYm93xx09FxNLnzAS3md
-         xU6p7pqzKYbFQQDoiFq/PwNxoFT6afSbfUla4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gk7892EwBeQtmWfsZIAYujFfNQTmGWtEjgsjRv69+2g=;
-        b=h5HG0iq3Y9VLABqF0G1axWpWj8BSTbnIhEYW0G06uGbEcwCqNhIv29DEgvFbXXVkSE
-         7isbT/gz4MMMNXbBKz2w4Mco67dJyovYOINivtxbZDR2bqn7TKXAfY2z5l41I8fbuP5+
-         i3zBePwIZROAKCrLBpp1R2hELeqJgd+n/L2gN9vDMlMFb7/6MJ0ilREsEiy90e5dAjpI
-         Zusu19RVOAEcerenrcFnU9deRuKJHhWJR+cKsXZCYlTd05kzd7H/21mx9w2YhXyyzQSE
-         4sY8rhvhcW1goDprDKisV8gPY6bLt2D43ZAow3tYzPpfEeDcJNbGYg2lBHQYowzl6CqW
-         WUtQ==
-X-Gm-Message-State: AOAM532STPT0tR+lMEYRT20RSqjKxjoJ+JPHoJBR/sI5UAZ7q8RRwnXG
-        NwmCXbujCQf0EPI6+gVkfEVY2w==
-X-Google-Smtp-Source: ABdhPJy8XksdNtBxn0PbE6EqXjHVZ9t/h8g8/JvDVwy45IUv5fD/F1510mJLv+/gSB4O0/zZ2hb6RA==
-X-Received: by 2002:a05:6830:4391:: with SMTP id s17mr12125024otv.118.1639157608654;
-        Fri, 10 Dec 2021 09:33:28 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:33:28 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
-        kuba@kernel.org, peterz@infradead.org, paulmck@kernel.org,
-        boqun.feng@gmail.com, akpm@linux-foundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH 03/12] selftests/cgroup: remove ARRAY_SIZE define from cgroup_util.h
-Date:   Fri, 10 Dec 2021 10:33:13 -0700
-Message-Id: <093209c9eb91462a6d9d0080112379c78d18a33c.1639156389.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1639156389.git.skhan@linuxfoundation.org>
-References: <cover.1639156389.git.skhan@linuxfoundation.org>
+        Fri, 10 Dec 2021 13:04:12 -0500
+Received: from mga12.intel.com ([192.55.52.136]:54156 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235392AbhLJSEM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Dec 2021 13:04:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10194"; a="218425838"
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="218425838"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:00:36 -0800
+X-IronPort-AV: E=Sophos;i="5.88,196,1635231600"; 
+   d="scan'208";a="544054225"
+Received: from dmales-mobl.amr.corp.intel.com ([10.251.4.94])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 10:00:36 -0800
+Date:   Fri, 10 Dec 2021 10:00:35 -0800 (PST)
+From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+cc:     Matthieu Baerts <matthieu.baerts@tessares.net>, cgel.zte@gmail.com,
+        davem@davemloft.net, shuah@kernel.org, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ye Guojin <ye.guojin@zte.com.cn>,
+        ZealRobot <zealci@zte.com.cn>
+Subject: Re: [PATCH] selftests: mptcp: remove duplicate include in
+ mptcp_inq.c
+In-Reply-To: <20211210075701.06bfced2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Message-ID: <7041cc47-3728-c033-bc97-49d86a1938b9@linux.intel.com>
+References: <20211210071424.425773-1-ye.guojin@zte.com.cn> <ab84ca1f-0f43-d50c-c272-81f64ee31ce8@tessares.net> <20211210065437.27c8fe23@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <20211210065644.192f5159@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <b6c19c9c-de6c-225c-5899-789dfd8e7ae8@tessares.net> <20211210075701.06bfced2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; format=flowed; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ARRAY_SIZE is defined in several selftests. Remove definitions from
-individual test files and include header file for the define instead.
-ARRAY_SIZE define is added in a separate patch to prepare for this
-change.
+On Fri, 10 Dec 2021, Jakub Kicinski wrote:
 
-Remove ARRAY_SIZE from cgroup_util.h and pickup the one defined in
-kselftest.h.
+> On Fri, 10 Dec 2021 16:36:06 +0100 Matthieu Baerts wrote:
+>>> Actually, I take that back, let's hear from Mat, he may want to take
+>>> the patch via his tree.
+>>
+>> We "rebase" our tree on top of net-next every night. I think for such
+>> small patches with no behaviour change and sent directly to netdev ML,
+>> it is probably best to apply them directly. I can check with Mat if it
+>> is an issue if you prefer.
+>
+> Please do, I'm happy to apply the patch but Mat usually prefers to take
+> things thru MPTCP tree.
+>
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/cgroup/cgroup_util.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Jakub -
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
-index 82e59cdf16e7..4f66d10626d2 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/cgroup_util.h
-@@ -2,9 +2,9 @@
- #include <stdbool.h>
- #include <stdlib.h>
- 
--#define PAGE_SIZE 4096
-+#include "../kselftest.h"
- 
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+#define PAGE_SIZE 4096
- 
- #define MB(x) (x << 20)
- 
--- 
-2.32.0
+It is ok with me if you apply this now, for the reasons Matthieu cited.
 
+The usual division of labor between Matthieu and I as MPTCP co-maintainers 
+usually has me upstreaming the patches to netdev, but I do trust 
+Matthieu's judgement on sending out Reviewed-by tags and advising direct 
+appliction to the netdev trees! Also, much like you & David, having offset 
+timezones can be helpful.
+
+Also appreciate your awareness of the normal patch flow for MPTCP, and 
+that you're checking that we're all on the same page.
+
+
+>> I would have applied it in our MPTCP tree if we were sending PR, not to
+>> bother you for such patches but I guess it is best not to have us
+>> sending this patch a second time later :)
+>>
+>> BTW, if you prefer us sending PR over batches of patches, please tell us!
+>
+> Small preference for patches. It's good to have the code on the ML for
+> everyone to look at and mixed PR + patches are a tiny bit more clicking
+> for me.
+>
+
+Good to know.
+
+
+Thanks!
+
+--
+Mat Martineau
+Intel
