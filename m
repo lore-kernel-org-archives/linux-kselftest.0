@@ -2,94 +2,103 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1401DC433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Dec 2021 19:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDA3C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 02:28:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbhLITkN (ORCPT
+        id S236009AbhLJCbg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Dec 2021 14:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        Thu, 9 Dec 2021 21:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbhLITkM (ORCPT
+        with ESMTP id S233852AbhLJCbf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Dec 2021 14:40:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DD1C061746
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 11:36:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A17D8B82614
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Dec 2021 19:36:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21DF2C004DD;
-        Thu,  9 Dec 2021 19:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639078596;
-        bh=qnW/0fZKZPLZGRENdVqRUeULxK089W6WEiNlSncEHRg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AcQU2hSXY3fGRiajjJIYdM9Z0esO8tCko6D9mNqZA+6DaOdyqDUl34uGUEx7xysVU
-         XfJYBtSZBUfJ2Coni5c9QFEN+ZziCHIDWgY3OcURtY7XG0K7WFWFYgITOCxTux9CM8
-         bWL5/5Za6C2DXjkUR2MZ9JYHBoQz6jEojYDt8CewpiBr39QZyMPJTEBUNmP1eo4InP
-         8OwtDkXViDRwMauKNefkVTk8hPXPseTotiSLX8x3oFVlP2AuCRb6HVMmGDwJS/hD4W
-         r7Q1v7wsA8sj6tCQ5PuWnq2yj3zzaYotPEsx29LPzykmEcK43/oH1kNai3blTekOTo
-         C7OybkGsWCxgA==
-Date:   Thu, 9 Dec 2021 19:36:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 00/37] arm64/sme: Initial support for the Scalable
- Matrix Extension
-Message-ID: <YbJav0ffe+GCs9p1@sirena.org.uk>
-References: <20211115152835.3212149-1-broonie@kernel.org>
- <YbJQG/V7wHohpX2x@arm.com>
+        Thu, 9 Dec 2021 21:31:35 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8858DC061746;
+        Thu,  9 Dec 2021 18:28:01 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id k26so7152804pfp.10;
+        Thu, 09 Dec 2021 18:28:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sLFKEFmsq3SGmkOwN4l/i+bv2/Bc/K1S6JMbIUmp7Ck=;
+        b=hoz2DZ2LKoVusNKhN8wWwbGbbyWrLLnhsYoCfDvvlLAyNJqpTBsXsnKXR+eeZ5ubmR
+         ANl729GY4toot5pfQrSpa414UgnI62ZeAi81WYiRhP+rkdFdHf57cIkUHClolnBzxtue
+         wDG22tNe4Bj00vmCM5Jg4TmxJAHN8X5bSTESnH86psJ9u6O3yhZ0CXpNVr521V8XzkbN
+         0TDtZi/ap1eJJnhtQHHJSH1Hx7g4ToGI2uhwmGsNmwTDtIh+IMmLQQ77Lrl+G75uTREP
+         +ZHoH0vlsrba0M1mE1m/Gluuc1g1YUkJVVCe3CaGX0s1JgFrc5kcgRNCOpgtFjVIUBqo
+         iJTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sLFKEFmsq3SGmkOwN4l/i+bv2/Bc/K1S6JMbIUmp7Ck=;
+        b=wY5lJJR866h4d7Ln2eMiRfdo6DjH7ldKMIDqsfMzK2tsfz+nZGUSMwitTucrQ4JNnv
+         9piOjfrmrgSHbjOyXjEu5X7TQ3kDvC9oInOSyigPGK00ySDJGkh3aOo0cyNqJauoBwAX
+         k3Xx3G+PJH6b7jpZ0U220PXip2GdIvmt8DS87SmVVs4JuGHHaojqFWZ0jF4yaBsuEb+J
+         TUv29Rg3bbDAlheKbcYyJ90TOZhoEWfE/aNDsl97t1pe/IwAjnGM7kHJRbRrgVuFLjPY
+         s/F7xOq1Jq8UdPtlC81cWUuM49wFEzF49lKaysL+rKFqIzl2pM5ayKSRgj8PQ0VetFUw
+         L3Cg==
+X-Gm-Message-State: AOAM533KsGaopWUCKJNmkfzW/3Tlwr7ljcOukcisBqJlwh26KnEG2KsC
+        qMM/GkpCl7YZj1zxSkDFMmg=
+X-Google-Smtp-Source: ABdhPJyBQ7dWzxG6EHcpP/IT0r/n7dUp/aJaiwV+9jMU7rctGoAjU0IDu0M+jMJRsOoV7GAfudWn+g==
+X-Received: by 2002:a05:6a00:2d1:b0:4af:437c:5f50 with SMTP id b17-20020a056a0002d100b004af437c5f50mr15348205pft.32.1639103281108;
+        Thu, 09 Dec 2021 18:28:01 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id mi14sm11044267pjb.6.2021.12.09.18.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 18:28:00 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     pbonzini@redhat.com
+Cc:     shuah@kernel.org, seanjc@google.com, vkuznets@redhat.com,
+        ricarkol@google.com, maz@kernel.org, aaronlewis@google.com,
+        like.xu@linux.intel.com, dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cm>
+Subject: [PATCH kvm-next] selftests/kvm: remove unneeded variable
+Date:   Fri, 10 Dec 2021 02:27:55 +0000
+Message-Id: <20211210022755.424428-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ALhnXHHprfpEjnfj"
-Content-Disposition: inline
-In-Reply-To: <YbJQG/V7wHohpX2x@arm.com>
-X-Cookie: One picture is worth 128K words.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
---ALhnXHHprfpEjnfj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Return status directly from function called.
 
-On Thu, Dec 09, 2021 at 06:51:07PM +0000, Catalin Marinas wrote:
+Reported-by: Zeal Robot <zealci@zte.com.cm>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> I had a quick look through this series and made some minor comments but
-> I need to dig deeper into the SME ABI. Ideally someone (Szabolcs?) from
-> the toolchain/libc side should confirm that they are happy with it. In
-> the meantime I can queue the first 6 patches once updated.
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 82c39db91369..80ab802aa8f8 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -931,15 +931,13 @@ int _vcpu_set_msr(struct kvm_vm *vm, uint32_t vcpuid, uint64_t msr_index,
+ 		struct kvm_msrs header;
+ 		struct kvm_msr_entry entry;
+ 	} buffer = {};
+-	int r;
+ 
+ 	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
+ 	memset(&buffer, 0, sizeof(buffer));
+ 	buffer.header.nmsrs = 1;
+ 	buffer.entry.index = msr_index;
+ 	buffer.entry.data = msr_value;
+-	r = ioctl(vcpu->fd, KVM_SET_MSRS, &buffer.header);
+-	return r;
++	return ioctl(vcpu->fd, KVM_SET_MSRS, &buffer.header);
+ }
+ 
+ /*
+-- 
+2.25.1
 
-It'd also be good to get confirmation from someone like Luis or Alan
-that the ptrace interface looks OK for debuggers, I think I've addressed
-all the issues they found on earlier versions.
-
---ALhnXHHprfpEjnfj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGyWr4ACgkQJNaLcl1U
-h9BSvAf/V9L0woOJ5RWNfNVWteEw1C4cfUJ9YZWXaIG6yauB9jw18AmO9+Fj9tiH
-Ngug5vObAXwaI3spsUs7gPjUlgBOgkHPgi3MImhDm+eFvFaM2GSgG122Sh0PTmxI
-evQwz6XBddObUUBuTjAG/FrMsSg+5f/KeGUIe4i8lFp9VhEqMr3iNDLDOQ/hkEw5
-caW9Duz0Ehb5pwzGkMYMLo7X6hhVanEFdZBTdeiZo2yy5OHTWhIoit22fyF/icyy
-93Q9wV1oIbtk6bCgvEfzb8zs7DU8TNSltj99PI+k/z9fjB82vs9Q+lPhieZflaN0
-HsB7b1aEnxwyO6ykZwyCSATv6RkMQA==
-=D+Lp
------END PGP SIGNATURE-----
-
---ALhnXHHprfpEjnfj--
