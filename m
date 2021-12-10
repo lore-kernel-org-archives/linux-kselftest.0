@@ -2,59 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02580C433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 133C9C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 17:35:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241575AbhLJRiO (ORCPT
+        id S233989AbhLJRiz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 12:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        Fri, 10 Dec 2021 12:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238003AbhLJRiN (ORCPT
+        with ESMTP id S244608AbhLJRhB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 12:38:13 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD36C0617A2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id o4so14157938oia.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:34:38 -0800 (PST)
+        Fri, 10 Dec 2021 12:37:01 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62765C0617A1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:26 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id t23so14198105oiw.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 09:33:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
-        b=H84W+u8ZuMN5VRT4atnpiZFWjKwGaSqbEQHfol1liXDySnPSsLnLZeqUiIQgXscWrM
-         xC1B49/NW0FYtKotyCwHSl/Nl4z6cHFf6levmetWtX6CoCWhK9T/zDV5sHl8XI+cXGea
-         pkesln0SPt0yZWLC1pN+i0nG5pezdpC2c2oiA=
+        bh=N5piJeGroEj5EK/nl0Pv9Gmn3OrmZFhy1pHRTuf94YA=;
+        b=g9+QdAKDtcUtq15KKC71Ntw+2MfOqG+XUAQDqkyK7Jg0EbL9dU9e9fXhNMoyUMDS5G
+         SnEWEn5JGFiH1/nSNkFCTpxAiKtRKqutdPjBo0jWoagYZ398eZrrSfq7jzPEDfvmoJ99
+         VuMh+A1ngJiI8532kLDIzoUxuLCkV+f6nJptA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/dJmFjhwnInM6FSSfxFjvPIjNEnQu2yNBTZVyR0edug=;
-        b=ytW4NWXuuA+nDLrjpGhp/q+vUpYvJFYnSYjlg9pxhhPei+UHoCb9wvUGxfQ6rXLVLK
-         LWIiWXtqwBQyelPsYlcvapKIvB0GCFFCoLpamvkBXfNdrlmLcHS/pNrcQm9EtCD9DekG
-         sVxUkoIcGATmhMdm5BAdIsQ06CrtpLH6G4buHTnOHerz+sqMLO4R+8Zoz3/vYo2SeMa2
-         /Ggt54oa+qF2LoFAzfuivgo5M76JCyZ+2FUDbpTW0MpZG0joUYigpydRot+AzWiRMBXs
-         Oy5y6RzUiX/8yFsxZkIxHtww62ANJf2RL8S3ByrvOpcEhREVZu7AHDnflKVwKMtXA4RP
-         HaaA==
-X-Gm-Message-State: AOAM530SwV7ZIHsWc6F3yMHBXeo9dR93NK5ow9UsVI1ZKa2K3QNHqwql
-        z+4YkYP9QSykdJJCeKnp3nbE5Q==
-X-Google-Smtp-Source: ABdhPJy15Gc8S3I8657EioGcfpK4uWVD6XI1GMbZgcAgsTrTw4LKvABQ+oBtRdzT3LF81vLPKkbljg==
-X-Received: by 2002:aca:61c6:: with SMTP id v189mr13118314oib.103.1639157677771;
-        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
+        bh=N5piJeGroEj5EK/nl0Pv9Gmn3OrmZFhy1pHRTuf94YA=;
+        b=4jEcY4yu38jfXyyzwOQsq9iOoWAkIAz1sugGb6GoSIjF/boVqQf3WhvApMQhqaLjPu
+         gl3sWFqm4tgZbwOYQVDcoNta2M0SJMBPp4NvTuCJA3vOftgMTMMBMv6PRHie1dNwmMRr
+         pTTmACX0Z6J0APg3aMhEhzO3PzrJ9eltglhzJWN7G40fHC9p4cNbP+ssiCx77CLeEavv
+         sworudRLX+HBg/DQsP6EgxxN83dJvSLuDKmaWx9zMQNi/CgKYEsN2f2RqGZYOr88M06V
+         KAKWITHGhiSQOeKd9cQ+5MPqp7Ji75b3vXdl9LezQZ+r9WYPExAtIf3dkJA0JaUDfp/b
+         iJXw==
+X-Gm-Message-State: AOAM530xB7EHHuARkfwVEA4ETpm0h4ofPJn7/FqbFwOX5b9eYNSbEooU
+        fi18E8p7+3HoUw2/K60A+1fLAA==
+X-Google-Smtp-Source: ABdhPJwpegtHSTsU291UpONzkrU9vfCDqPTNb+9w5/E07tR0hubuohplY3DJy4sIWD9rkj30iZEy5g==
+X-Received: by 2002:a05:6808:485:: with SMTP id z5mr13675532oid.96.1639157605614;
+        Fri, 10 Dec 2021 09:33:25 -0800 (PST)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id ay40sm808342oib.1.2021.12.10.09.34.37
+        by smtp.gmail.com with ESMTPSA id x4sm892224oiv.35.2021.12.10.09.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 09:34:37 -0800 (PST)
+        Fri, 10 Dec 2021 09:33:25 -0800 (PST)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
+To:     catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        keescook@chromium.org, mic@digikod.net, davem@davemloft.net,
+        kuba@kernel.org, peterz@infradead.org, paulmck@kernel.org,
+        boqun.feng@gmail.com, akpm@linux-foundation.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
-Date:   Fri, 10 Dec 2021 10:34:33 -0700
-Message-Id: <20211210173433.13247-1-skhan@linuxfoundation.org>
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH 00/12] selftests: Remove ARRAY_SIZE duplicate defines
+Date:   Fri, 10 Dec 2021 10:33:10 -0700
+Message-Id: <cover.1639156389.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,122 +65,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ARRAY_SIZE is defined in multiple test files. Remove the definitions
-and include header file for the define instead.
+ARRAY_SIZE is defined in several selftests. There are about 25+
+duplicate defines in various selftests source and header files.
+This patch series removes the duplicated defines.
 
-Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
-define.
+Several tests that define ARRAY_SIZE also include kselftest.h or
+kselftest_harness.h. Remove ARRAY_SIZE defines from them.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
- tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
- tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
- tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
- tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
- 5 files changed, 5 insertions(+), 19 deletions(-)
+Some tests that define ARRAY_SIZE don't include headers that define
+it. Remove ARRAY_SIZE define and include kselftest.h
 
-diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-index 1d8918dfbd3f..7a5ebd330689 100644
---- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-+++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_util.h>
- 
- #include <errno.h>
- 
-@@ -23,10 +24,6 @@ bool skip = false;
- #define BADPTR			0
- #endif
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
--#endif
--
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(max_entries, 1);
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 4896fdf816f7..aad30994ecd7 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -4,6 +4,7 @@
- #include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_util.h>
- 
- #include "profiler.h"
- 
-@@ -132,10 +133,6 @@ struct {
- 	__uint(max_entries, 16);
- } disallowed_exec_inodes SEC(".maps");
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
--#endif
--
- static INLINE bool IS_ERR(const void* ptr)
- {
- 	return IS_ERR_VALUE((unsigned long)ptr);
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-index 553a282d816a..c7c512e0af79 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
-@@ -8,10 +8,7 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
--
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
-+#include <bpf/bpf_util.h>
- 
- /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
- #define TCP_MEM_LOOPS 28  /* because 30 doesn't fit into 512 bytes of stack */
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-index 2b64bc563a12..57cda15d0032 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-@@ -8,10 +8,8 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_util.h>
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
- 
- /* tcp_mem sysctl has only 3 ints, but this test is doing TCP_MEM_LOOPS */
- #define TCP_MEM_LOOPS 20  /* because 30 doesn't fit into 512 bytes of stack */
-diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-index 5489823c83fc..6047c39eb457 100644
---- a/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sysctl_prog.c
-@@ -8,6 +8,7 @@
- #include <linux/bpf.h>
- 
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_util.h>
- 
- /* Max supported length of a string with unsigned long in base 10 (pow2 - 1). */
- #define MAX_ULONG_STR_LEN 0xF
-@@ -15,10 +16,6 @@
- /* Max supported length of sysctl value string (pow2). */
- #define MAX_VALUE_STR_LEN 0x40
- 
--#ifndef ARRAY_SIZE
--#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
--#endif
--
- const char tcp_mem_name[] = "net/ipv4/tcp_mem";
- static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
- {
+The first patch in this series:
+
+- Adds ARRAY_SIZE define to kselftest.h
+- Adds ifndef guard around ARRAY_SIZE define in
+  tools/include/linux/kernel.h and kselftest_harness.h
+- Patches 2-12 do the cleanup and depend on patch 1, hence
+  will have to go through kselftest tree.
+
+Shuah Khan (12):
+  tools: fix ARRAY_SIZE defines in tools and selftests hdrs
+  selftests/arm64: remove ARRAY_SIZE define from vec-syscfg.c
+  selftests/cgroup: remove ARRAY_SIZE define from cgroup_util.h
+  selftests/core: remove ARRAY_SIZE define from close_range_test.c
+  selftests/ir: remove ARRAY_SIZE define from ir_loopback.c
+  selftests/landlock: remove ARRAY_SIZE define from common.h
+  selftests/net: remove ARRAY_SIZE define from individual tests
+  selftests/rseq: remove ARRAY_SIZE define from individual tests
+  selftests/seccomp: remove ARRAY_SIZE define from seccomp_benchmark
+  selftests/sparc64: remove ARRAY_SIZE define from adi-test
+  selftests/timens: remove ARRAY_SIZE define from individual tests
+  selftests/vm: remove ARRAY_SIZE define from individual tests
+
+ tools/include/linux/kernel.h                          | 2 ++
+ tools/testing/selftests/arm64/fp/vec-syscfg.c         | 2 --
+ tools/testing/selftests/cgroup/cgroup_util.h          | 4 ++--
+ tools/testing/selftests/core/close_range_test.c       | 4 ----
+ tools/testing/selftests/ir/ir_loopback.c              | 1 -
+ tools/testing/selftests/kselftest.h                   | 4 ++++
+ tools/testing/selftests/kselftest_harness.h           | 2 ++
+ tools/testing/selftests/landlock/common.h             | 4 ----
+ tools/testing/selftests/net/gro.c                     | 3 ++-
+ tools/testing/selftests/net/ipsec.c                   | 1 -
+ tools/testing/selftests/net/reuseport_bpf.c           | 4 +---
+ tools/testing/selftests/net/rxtimestamp.c             | 2 +-
+ tools/testing/selftests/net/socket.c                  | 3 ++-
+ tools/testing/selftests/net/tcp_fastopen_backup_key.c | 6 ++----
+ tools/testing/selftests/rseq/basic_percpu_ops_test.c  | 3 +--
+ tools/testing/selftests/rseq/rseq.c                   | 3 +--
+ tools/testing/selftests/seccomp/seccomp_benchmark.c   | 2 +-
+ tools/testing/selftests/sparc64/drivers/adi-test.c    | 4 ----
+ tools/testing/selftests/timens/procfs.c               | 2 --
+ tools/testing/selftests/timens/timens.c               | 2 --
+ tools/testing/selftests/vm/mremap_test.c              | 1 -
+ tools/testing/selftests/vm/pkey-helpers.h             | 3 ++-
+ tools/testing/selftests/vm/va_128TBswitch.c           | 2 +-
+ 23 files changed, 24 insertions(+), 40 deletions(-)
+
 -- 
 2.32.0
 
