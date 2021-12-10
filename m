@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2F73C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 13:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29FB0C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Dec 2021 13:59:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbhLJN3Z (ORCPT
+        id S234304AbhLJODL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Dec 2021 08:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        Fri, 10 Dec 2021 09:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbhLJN3Y (ORCPT
+        with ESMTP id S231716AbhLJODL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Dec 2021 08:29:24 -0500
+        Fri, 10 Dec 2021 09:03:11 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31285C0617A1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 05:25:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BF0C061746
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 05:59:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 17342CE2AD8
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 13:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99101C341DB;
-        Fri, 10 Dec 2021 13:25:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5B5ECCE2AD2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Dec 2021 13:59:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCC8C00446;
+        Fri, 10 Dec 2021 13:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639142744;
-        bh=4HnH3TdACgt7zDqkVttFbztqQ7VRnhIfSlUrKPzKZVM=;
+        s=k20201202; t=1639144772;
+        bh=3IiC6gTmzS9un9E9shZZcV3BXG07xritOZdkI9ovUoM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=osCU0IbgC/cIa7rHLTOo6WT2tAKBzfuepfkv8FOsTUsg8P7LJ+iwhbfXgXUn4oAzj
-         M0zOw22W4LjZxqjwcwStn00kOPnaOi+JtibYOuBCv3IZ61Nq8F/zRmi6ZyGBadqzfP
-         CVFsZXLrjOHiFIR5f6+4zN0JGzRvRtWsW5WgsroQZuLbo3/UbrEz+diFcHJ/oXQxG0
-         cc2rCsCKuw3BYvOMOT25odOyxHmBiNotzrKPMHR5hMIIvu9b91MWBnwW8q+XBuh4SR
-         U2ZA0TLgUvLZkz99fIVVIticgfIZT2mWozYwfeYCmoE82o0bhHRgS64sxkGU8MJmQs
-         VnxUW/nOLt8KA==
-Date:   Fri, 10 Dec 2021 13:25:38 +0000
+        b=rl5LW8uXeU+rio/2EfYZFbe2IebYTm9+bYLXhtWabPM41nMRrNHnGZIlOxG2VDMIA
+         rjJWbvmIMUWlneThDKTZHzlxOpQvC+OP9q5B1s4Itlh4MHog6fP/K5iaVrzRnOdMLB
+         oy8WjhL9HsAAzlXMx3o0+UmbQMK/vQJvssmj1tnc1/S4xrRZIUxn7CI7lX9tv2ojLq
+         XeOlnMDCVvUZujIODm2EczKiC1GJ1O7fqkAZNgGSgFnhwfRjwrL12YQFDMSdN3nGaH
+         9GY5Nb1i3KnRj9ADyQNtjH/gevqc2nNUvYbLEyyUj7F3yifrOKDRBDDIZKPI+gsg9y
+         xQg+A5TcCAOQg==
+Date:   Fri, 10 Dec 2021 13:59:27 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Will Deacon <will@kernel.org>,
@@ -45,109 +45,90 @@ Cc:     Will Deacon <will@kernel.org>,
         Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v6 06/37] kselftest/arm64: Add a test program to exercise
- the syscall ABI
-Message-ID: <YbNVUklLMeR6uzm2@sirena.org.uk>
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 13/37] arm64/sme: Basic enumeration support
+Message-ID: <YbNdP85r7wu2bQpb@sirena.org.uk>
 References: <20211115152835.3212149-1-broonie@kernel.org>
- <20211115152835.3212149-7-broonie@kernel.org>
- <YbI3ZfhOO+M5L/9V@arm.com>
- <YbJVPGqADH/cadaU@sirena.org.uk>
- <YbMphO6wwXz54yjB@arm.com>
+ <20211115152835.3212149-14-broonie@kernel.org>
+ <YbJN1ujpDP1RG1Ll@arm.com>
+ <YbJY0P1KZjSFfwtY@sirena.org.uk>
+ <YbMuzjU/MSTwBDLY@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Qeo3l7me56RjvCyj"
+        protocol="application/pgp-signature"; boundary="ZqIdPc6Fdn3ZgGn8"
 Content-Disposition: inline
-In-Reply-To: <YbMphO6wwXz54yjB@arm.com>
+In-Reply-To: <YbMuzjU/MSTwBDLY@arm.com>
 X-Cookie: One picture is worth 128K words.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---Qeo3l7me56RjvCyj
+--ZqIdPc6Fdn3ZgGn8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 10, 2021 at 10:18:44AM +0000, Catalin Marinas wrote:
-> On Thu, Dec 09, 2021 at 07:13:00PM +0000, Mark Brown wrote:
-> > On Thu, Dec 09, 2021 at 05:05:41PM +0000, Catalin Marinas wrote:
+On Fri, Dec 10, 2021 at 10:41:18AM +0000, Catalin Marinas wrote:
+> On Thu, Dec 09, 2021 at 07:28:16PM +0000, Mark Brown wrote:
 
-> > > Nitpick: I think GPL-2.0 is sufficient (i.e. no '-only' suffix), thou=
-gh
-> > > about a quarter seem to use the -only variant.
+> > > > +#define HWCAP2_SME_B16F32	(1 << 25)
+> > > > +#define HWCAP2_SME_F32F32	(1 << 26)
+> > > > +#define HWCAP2_SME_FA64		(1 << 27)
+> >=20
+> > > At this pace we'll need HWCAP3 pretty soon (since we only allocated
+> > > 32-bit in each). I wonder whether we could instead not bother at all =
+and
+> > > just provide user-space emulation for ID_AA64SMFR0_EL1.
 
-> > Yeah, it's that because it's the default for kernel stuff.  Easier to
-> > make it restrictive and then relax later?
+> > I think so if people are willing to go along with just having userspace
+> > check the ID register (IIRC access to it already does the right thing
+> > but I need to confirm).  We'll also need to think about how we handle
+> > any new SVE features, that's got a similar thing going on and is most of
+> > the existing usage of HWCAP2.
 
-> My point was that IIUC GPL-2.0 is equivalent to GPL-2.0-only (not to be
-> confused with GPL-2.0+). Anyway, it's fine by me to keep the -only if
-> you want. It seems that we have nearly the same amount of both
-> throughout the kernel.
+> It would be good to get feedback from the libc people. IIRC the ifunc
+> resolver relies currently on the HWCAP bits. Could this be adapted to
+> use the MRS instruction? We'd still keep the main HWCAP2_SME but without
+> the finer-grained bits.
 
-Ah, I see - I think the thing with -only is to avoid any ambiguity and
-confusion about what's meant.  I'll leave it as is.
+> The other option is to start going into the upper 32-bit of the
+> elf_hwcap. We tried to avoid this some time back when we were still
+> having doubts about merging ILP32.
 
-> > > A downside with forcing zero is that it may prevent us from some
-> > > optimisations in the future. Currently we do an sve_user_discard() on
-> > > the syscall entry path and disable SVE but we could instead do this o=
-nly
-> > > on context switch or when the kernel used Neon.
+I'll leave things as they are just now to give more time for feedback.
 
-> > Yes, this is limiting our options for performance work since we need to
-> > at least take the cost of zeroing the non-shared state on every syscall,
-> > though there's still options for choosing not to disable SVE all the
-> > time (I've got a patch already I need to do a bit more work on).=20
+> > > I'll comment here rather than the patch introducing has_feature_flag(=
+):
+> > > an alternative would be to add a .field_width option and in
+> > > feature_matches() use cpuid_feature_extract_field_width() directly. A=
+ll
 
-> Some people seem to be pretty sensitive to the syscall latency, so I'd
-> like to keep the option to optimise this path if it bites us.
+> > Sure, if people are happy with that - it's a more invasive change since
+> > we don't currently set the widths, I wasn't clear if that was a case of
+> > not needing it right now or a design decision.
 
-If that's what we decide then we should probably just go ahead and start
-taking advantage of it, we do have hardware rolling out imminently so
-people will benefit and the sooner we start doing this the less chance
-there is that it'll end up an ABI implicitly.
+> We didn't have a field_width since they were all 4 bits until SVE. If
+> you don't want to touch all the entries in the array, we can say that a
+> 0 value (i.e. not explicitly initialised) means default 4 and update it
+> during init_cpu_features().
 
-> > The
-> > currently documented behaviour is in line with AAPCS here so you do have
-> > to wonder how likely it is that someone will rely on the zeroing.  On
-> > the other hand anything like only zeroing the state on context switch
-> > would mean that it's more likely that userspace bugs with something
-> > forgetting that the state might be cleared will be intermittent and most
-> > likely hard to reproduce which will make people miserable.  There's a
-> > good chance that bugs will be wrong answers rather than something more
-> > immediate like a fault which really doesn't help there.
+It's annoying to have to update everything but it feels more idiomatic
+and less likely to cause surprises later on.
 
-> If we eventually optimise this path, we could add an option to
-> force-zero the SVE regs on syscall for debugging purposes. But even
-> without this, such software may run into problems. By AAPCS, if the
-> callee doesn't take any SVE arguments, it doesn't need to preserve any
-> of the registers, though it may choose to. Let's take a gettimeofday
-> libc call, it may or may not end up in the kernel. When it's handled by
-> the vDSO, all the SVE regs are preserved but not when doing the syscall.
-> Something like a futex call would be even less predictable.
-
-Not just that but also the fact that most syscalls go through a library
-of some kind which could quite happily use some floating point register
-for something before or after performing the actual syscall.  Like I
-said above I'm not personally convinced that risks are practical ones
-and there's fairly clear benefits.
-
---Qeo3l7me56RjvCyj
+--ZqIdPc6Fdn3ZgGn8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzVVEACgkQJNaLcl1U
-h9BPjAf+J67xTLYEQsrSmblLIXQjzDo+idX9v+xlgLAfFvF3rQNYBlFKE2Nx8g2o
-bmQKW168QbL5CFDfbML7TbkG3jXYzDFSstaZcw9XXcZ8iPumq58rLxa6fx1wfjjn
-YqeOPBxrk7dPS7fyOSwzMnNGKvlkHfnnGTnRTCVs+oACeL2cxKHcqx6GUoFs9ITe
-vncByTrUep+/9vqEi10DhfgjI7Lbnyq95+WhEv+u42Xi0zk7kg3ByI5pV5JdHjZM
-fn7rwMwX7yyGnuBForLi5VWtDkt3A6RL/HerEZZgRmdNLGVZ9EWCG6SbPoVuEAmi
-XtC5atWfGPISz/wdrDiEoN2EaFiPjw==
-=SnaW
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzXT4ACgkQJNaLcl1U
+h9CKhgf/bIRqrmEvRVYRdOJ71WQVNrlpq0nYB5RDVmw34CPswXyaZ+e85JVYlPF9
+aSTLKS3l2H0U9BL8MQIKrGiZiUs/hZEDaff9KUbmjKlNXtftt+OTXwEP/ptuP99R
+SF6BQt2cdRDzTISmpFJrxJthD1ZwMlgh7T36m0CzO1dgQ0B+5R4oj5I1BXsXr84H
+KBxKkrPCA8FICLkTNGs5nuAog5JXCnRg+lIswURpADi1J0NK7RVScQvKE2MnCk1X
+9sV0/NfYoaRkA3lDKs3w5LddVUFitH2O6U8orRRTVqg7fXc3FQcBCV/R9aKYuQT5
++I+BtBKMMPVBuQ045vIWpaWIDS9Jog==
+=3br8
 -----END PGP SIGNATURE-----
 
---Qeo3l7me56RjvCyj--
+--ZqIdPc6Fdn3ZgGn8--
