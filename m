@@ -2,286 +2,196 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8284EC433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Dec 2021 19:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7260FC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Dec 2021 19:53:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242064AbhLMTAR (ORCPT
+        id S235770AbhLMTx2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 13 Dec 2021 14:00:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47888 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242067AbhLMTAQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:00:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639422016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bkKzjijiSKbe6MvRJ5MBgBJTRxbp/4nkJ2nAyZ4TKpU=;
-        b=hNy9BciCCzGVMlXXzYRRSKrzugCHJfPzeDZ3ToyWjioegH50dBMBf84egmRwY5XldG+7YO
-        teZyqLkCVZ2HDWAqCFSuLPpUe6BI/vat+UGYqyoLDATG93hEu12t8c5IIGPd17ZYTQm2B9
-        0Jj6HgwZLjgquWhoMguFF6NtPlDpZNk=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-320-O8zBrFhQONax950cac-0NQ-1; Mon, 13 Dec 2021 14:00:13 -0500
-X-MC-Unique: O8zBrFhQONax950cac-0NQ-1
-Received: by mail-ot1-f69.google.com with SMTP id h34-20020a9d2f25000000b00579e86a64dfso6711336otb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Dec 2021 11:00:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bkKzjijiSKbe6MvRJ5MBgBJTRxbp/4nkJ2nAyZ4TKpU=;
-        b=EXVGu8sJBKQHr/pDZpIVWinH1q/Kd/WMwYBjdp3z11iXmE7ydUaoSZrUKIJdVmLYWB
-         OImVXVSzhYhnigN8YrOLBvbxdoxdkoxAjE4Y416fcQHJy7LMyI9Crlkb9JhlmUF4Cxvm
-         m0VZipiGjasOacbf9npfOlWWXiHTqebdrnwwexKVMbMOcd8vC1OXjw4iPI5kstC6w01D
-         n1T0rxFVsFVrKe7B+9CR3iFDzoVhnLswai9vnPY1gIsuJCrnI2BSmHYdZ6YguZPIOH4l
-         wk+VMHk7HsyJ/uRRbm1X0Y7SX1WzpBFQv4Q/MfOpVTTk2FURDTXDJAsjq/VCt8scW89v
-         O6SQ==
-X-Gm-Message-State: AOAM531XqqdKNH7pY6BcCrbKSn1ki46U1AY4C0xlwPqX18XBKd/RpfUU
-        g+Dr5W/DnD92KopELoXwi+ed4niiaXigZoz/uyacPhLlSDZTcMD3Z9UdmiW54f70EeCdhUzoQ91
-        5dN8JiBxZp8offQY12ivukiDtgvxi
-X-Received: by 2002:a9d:6394:: with SMTP id w20mr366248otk.248.1639422012145;
-        Mon, 13 Dec 2021 11:00:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZ0v/QhdUhMfYMxIrjqAvM0c+I02ce8+c4SY8k5nWNB4ZCTvQ7Vjr3daAhkW6A1qp6SJAUlA==
-X-Received: by 2002:a9d:6394:: with SMTP id w20mr366227otk.248.1639422011805;
-        Mon, 13 Dec 2021 11:00:11 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::49])
-        by smtp.gmail.com with ESMTPSA id n189sm2766729oif.33.2021.12.13.11.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 11:00:11 -0800 (PST)
-Date:   Mon, 13 Dec 2021 11:00:08 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] livepatch: Allow user to specify functions to
- search for on a stack
-Message-ID: <20211213190008.r4rjeytfz5ycbstb@treble>
-References: <20211210124449.21537-1-mbenes@suse.cz>
- <20211210124449.21537-2-mbenes@suse.cz>
+        Mon, 13 Dec 2021 14:53:28 -0500
+Received: from mga11.intel.com ([192.55.52.93]:30251 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233215AbhLMTx1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 13 Dec 2021 14:53:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639425207; x=1670961207;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=4xqZlkN48IDc+c6A1fXoZT/KDwdRKPsbSvmjwsfOheA=;
+  b=Ii/SPfzKw+vItRqgP0Y4Dr7F5qw0Ez2gBU1OMlP0LPajggmftQc4BMHa
+   rLIJXjyp0FI1hvC9KnSuc7F8qBV0ly+Dkoc0+RilJcJzOpxnKUDKKeaIT
+   H41esJPh4IHkxKA+TahtzXoiyRh1mSpZf0dZtcNeWOY4UgGUnKY3p4Zxo
+   CX+IZIKKaEvtNpoPQ+XpnJVWUKwedp2PRwOfn/jiYYSw7cUNpFJnCuU9c
+   aY/wjqhwO5jRjxWlFw5kSJuGmHHNzDvgxXGBo4ND+VxW/HOKjTd6mEZ87
+   i+O2wKQlU36uflUltWnEwt85Zk4DMRVfTRmqmUEWN4Ip7ZfkqgdarXDyo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10197"; a="236345803"
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="236345803"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2021 11:53:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,203,1635231600"; 
+   d="scan'208";a="481635769"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga002.jf.intel.com with ESMTP; 13 Dec 2021 11:53:26 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 11:53:26 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 13 Dec 2021 11:53:26 -0800
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.171)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 13 Dec 2021 11:53:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JdbEUMIG0kxWWRib4thVKp0nmGH0xubMEL7v4riDzQWabBWT4iSNaA6drYUBRaerHgXyz+NNUglf/XDS6ONuM8mxmzDuujVb4q9GHbQITUTtkTxsOObXq+Q7HF8+DppQMqKyWi1cXYB8tHI12ExvAol9B6lA2FaVW2PDIgEiTpYosdhEgsegMU1rOyhoBf1bmKe0e+5HWbKaFrWRyaGktjA99HiRxByeqYGIcyl9D6nUoz6KoRdItrEFTotdeMd3kfoybenus0WkNZMJZb7mW+UGvDejANNQX/VLN0xaLo/9OzriZ5CgECgr/zPC5WMqy3C6ouR5uWWEM9Co4CvjmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2mk2Us9WRmScDoVF0NVWuo8AN4HL5lW52SeJ1xoNLE4=;
+ b=FqdhmCWtZJfmd/coV6NKPbOMwgTYONvqhfpmxKHPepJzcXqs00ZxxLjWj26yHSvPCovDmzW39t/hO2WNCfZ+Xk8Ocb4p0IHJRaYEzwteWOgR8dtNSDf2YC5K3/W4qiPLhNXyADf1pAoAP3+0BqnvMrpACOmfWizzpM44qWSeCPzruuDLv1GGahH3qa4KkF51IdleUXybmmEncc/PdpcDURL0lJeEjCwytxXWGmiQIXvgGAG1sjfOq+tcIfiw6ZUq7eRj+YTpMIap3zHBmkIJ8iwUJOse37ICLHSMhWnjd7rzzALSevUKhz1WNqDjEuad/A0ipEcc+M4evrX7HXhyBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2mk2Us9WRmScDoVF0NVWuo8AN4HL5lW52SeJ1xoNLE4=;
+ b=QlUECd0wcSQTC+Iyn2J75AtuG1/IPZbWMLolZpaktbo09rflWS7uPljvv9hzP0uAvXgf0x5wqaIXPOE8QAOZE0gavLoi0gjGWvlVNL1zUfO4WdGlLOwqrbiDAS/RNDKWvR/H70ECBJqewTFGR0s1uc56bsEp4vSxz9eHdAhRZIQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BN9PR11MB5241.namprd11.prod.outlook.com (2603:10b6:408:132::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.17; Mon, 13 Dec
+ 2021 19:53:24 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4778.018; Mon, 13 Dec 2021
+ 19:53:24 +0000
+Message-ID: <065787e2-68f4-78f1-6f82-1456dc88725b@intel.com>
+Date:   Mon, 13 Dec 2021 11:53:20 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.4.0
+Subject: Re: [PATCH] selftests/sgx: Fix build error caused by missing
+ dependency
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, <dave.hansen@linux.intel.com>,
+        <linux-sgx@vger.kernel.org>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>
+References: <797ff1331cfe540fc378fcc4a4a7b00ff5099fbe.1638905135.git.reinette.chatre@intel.com>
+ <003f62b2fbd37877f7dde9f6cdc693f8c35bf477.camel@kernel.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <003f62b2fbd37877f7dde9f6cdc693f8c35bf477.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MWHPR14CA0024.namprd14.prod.outlook.com
+ (2603:10b6:300:ae::34) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210124449.21537-2-mbenes@suse.cz>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4c789c81-3ab3-4f8d-fb06-08d9be723933
+X-MS-TrafficTypeDiagnostic: BN9PR11MB5241:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR11MB5241E512DE84CCB0CDD72767F8749@BN9PR11MB5241.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3jzWpACMgD1PoL7KbZpkV06vK3O2+El82X19pOpNSWtFCuQQmus0W8XkdWG7WI5sAEHhve7CbjqXVEaAwe1bpnr3NwlhY96W5CmFb9KtVMk29tiT3SrT7/XZujYHiNEEoqCgR4jUI4iDPnR8pDKw4uomMGZ6NsoaMbrZ7k4jO8r52TEBSeNibOzKEMOuCXuw/sNSPO68yTQaBz+AS9kvRAiJVvcgoLKmqVXqepFKEAiwBa4YhFayDnvCSOoAG/wDswvXp3m30ociyAThqZzvhMGVYSuWt/syD1fBINH4gdtjNY59wMiGPrhDmkovHsMkinZ9kJWXDD6x9tq053f2LFEapohfHCX1JCmit5hA+0PjdsQyYpOjwR5YwQv2lHZPaPR4D8/zIOBjGjcwFmvgamAwl+Cqmd1I05Vqh7wSw2jVz3k/N6DVZw8K/zS/lC57EiDJFwfEeZwCnbcemf4wR9bjnv92s8PGnv1JIfWyCohAmDdk2VKWs/43DosGWrs2+wlJiyaIoaV33b+3ebGy9GCdicZ1KL3Ri7SSnCx9lI6jM5jDv64B58Gin2o2kzYpNUvAJZkUV4f4GECWFFNmXyP5qNVwfxT+h8ysbTLKHpdrFQnJs+uELpvf8+sH2TW0kw2qUTU1eaMjLA4dJ+63wVpZvQGF/k53f/LHO4rHoHYZ0rKyPo4bDha2k+BRXATKlKKyVz/dFsFcczHWHKcSLwJM5JqoKEz65Jn9rT1o6j9oXzHJ4MuQJMDW9+EglNH2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6486002)(2616005)(44832011)(8936002)(86362001)(2906002)(26005)(6666004)(8676002)(186003)(36756003)(82960400001)(31686004)(316002)(38100700002)(66476007)(5660300002)(6506007)(6512007)(31696002)(66946007)(508600001)(66556008)(83380400001)(53546011)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjBvWlJoMk9qcDE0L1YxZkl5NFBUVkI0NUhaVURNUk5neGNSVjNuSHc5cC81?=
+ =?utf-8?B?bU42RTF2eE5UcDVkR0x6SnV3SDYvMmxHWkYxWWh4Q3R3aUJxVnhXelJIR3o5?=
+ =?utf-8?B?NlU0bVFZZTdwTVJpR1FUWlJHb3ZKNVRKa3pQQUhOdmpLRDNheHYxNHpkUDd5?=
+ =?utf-8?B?aDNwR0h5eTZmd0lSNngxNWxOeTJ3OWhTQmh0dXpHMzR3UGZ2ZXJsZ0VxQUNT?=
+ =?utf-8?B?czIzVWdYVEZlVnQ5YW5nT3N6MmZSRm1qRnZ4SWdDbWlOaFJBNDBpbHJRVUJl?=
+ =?utf-8?B?ZlVQRVY5Q3hxM1gxelVucjh3SUlKQ0d3clNrZithZi96TGNNaXFHSHl5OXFE?=
+ =?utf-8?B?eHJrdU5WczV0TU84Tm04RWw5Zk9OZ0crNmFLbWQyOFZBc09iQW5QdkRONk9M?=
+ =?utf-8?B?dklLems1QTAwQ1YzTTVybmVKL0dBSkJsdnYzQnBMR2JkWGFNRlA1SFk3WjM0?=
+ =?utf-8?B?YW1yQ2NJV3lMV1cwc2VJM2ZnaklxVXBld1ltSXgxTjFQZi9qNkdVYndqeGdH?=
+ =?utf-8?B?RTQvYk9GSE5xVjljaG84TXdvdnZkMEJydFk2UzF6VTQxOGhiZnBCeWxhOXRh?=
+ =?utf-8?B?RURFalFZSEh3dnpsV0krNlp4KzlSYnlJK1oybHI3c3ZuVXFKL3VpUWViaW5Z?=
+ =?utf-8?B?ZkZqVkdmeTlSYVZ2TFhsWFcrOGd2bG9VZGs1T25TNSsyUTU1Q0twNXVjMk1T?=
+ =?utf-8?B?UUVCcEFycmczZjBFTHNoSlFDTHhYT2hMMWhNRmxRMDZ0dyswUzRKQXA0SVo1?=
+ =?utf-8?B?LzVMZ1d2enNRcCtTYllZOURJNmY1L2FzWG80M2dXakxHcmxFV2Jqd0dzdUZI?=
+ =?utf-8?B?SWg5UkUwTzNGdkowM0tuUDJLS3FXRlQrT25OODkycFNCYzNWQVFmMW1mY2JR?=
+ =?utf-8?B?UWg0UVZDU2R3dnJPWjd5SjA3NnNrbkdWbWY2ckZ5UGczdkZWVUl2V0pwYUFE?=
+ =?utf-8?B?TGhOTXV4OU1MSTlaL2l6T3VjRTlvcUtCRDlGWGhOVFExQlpZMkxwUmxVZndY?=
+ =?utf-8?B?M0l0TjJldWZoWDVWNEFkS0szbVdqVlhkSStRSDdxV292OVVoS1NEbkNlKzRi?=
+ =?utf-8?B?eVNHSldOVkdLS0taNUZtbU5oNjdHRWN3TU5pV0Nqd3VMZ1RSQ1dvT3VJbm0z?=
+ =?utf-8?B?Vy9TNWRpd2wwZmhyc3FvQkY2ZlFTeEt6TjR2TkRoT0xrY2R5azdDZ1BDWHV0?=
+ =?utf-8?B?U2piWUw2cGJYdGovMGdORXdhNHc4LzdleEVITnRmYjVSMXFUQU5WL3ExRnJh?=
+ =?utf-8?B?Y05jNnlBSHQ3TjZpbjRWZ1JTU2RRUUROaG8wSWljM0hYZUF3M2tjaUZPd0xw?=
+ =?utf-8?B?TkE0L244MkpGS1RqenpsWXJhWDJ0VTJWNmJKYU9ZeVpXamgyN3EweFh0WXdU?=
+ =?utf-8?B?OWVKdHYycWFmeWlBMjNaaVdwQUlHelkzYmE2aC9yTzRHRFdYUEdMbjcxMmtZ?=
+ =?utf-8?B?Qk9UcGJtRkVVLzRGVjJ5RjRVQ25QWDF5ZEtOSzFPdXlEck1ES21Lcldvbmxa?=
+ =?utf-8?B?NmlsR3RyM0Ria2RRUlJRSXZWbWk2ZTJjZ3pGLzRJSWc1UHN5RnUrM3E5YThr?=
+ =?utf-8?B?eWNBZVR2NFE1MjNxMGpmMlQzSTFSckVrbkphWGlSRUc1WGl2TUtyS1VXYmw4?=
+ =?utf-8?B?Qlo5VmJpNU90TUM2UXZtUnY2S3FITWpIZVRwOE0xTVVpbVpTRC93b0t3ditV?=
+ =?utf-8?B?OEFxSnFQeVF0ZFJXblF4cXAzaloveDNIc1QzVVZLRU9lb2VjTittZENLdVhM?=
+ =?utf-8?B?SjFhSFNzN0NJLzBnckNiVjRHSEtKT1JrQlR6OVRzdDcrdzBJeVpUQWdXZEk5?=
+ =?utf-8?B?eVJJWGUwbkRXRjFLZFdsWldwUUZNVHIrYTlNRkc5Wi9uM2V0WW9GblAwUDRz?=
+ =?utf-8?B?Y0FLZ3FkOGg1L1lBT3Ywb1pCek8wM3Eya2dGRVZYV2NlaTNIaXRxYWREWGhY?=
+ =?utf-8?B?WlJOaFQxMXhlZUtiRWJjNG5pZ0l6a1hLL1RFZU55S3ViMFBlYlMxT0NYMlBQ?=
+ =?utf-8?B?Y3VqTkNGOC9RbmV2SENnTCtsYlVTeFg2Y2dkelM0NkFaNDBESlA0U3RHWjZW?=
+ =?utf-8?B?M1FuZXZKbjZBV01FczJ3RGMrazVEODlnNVg3MGV0UTU3REFnQVpISmF6NGR2?=
+ =?utf-8?B?Nldxb0NVR0huUjZzazJ4Q3FJSnNCYlR0ek0xU2FJaVk4eEZNSEMrYWlBQUpj?=
+ =?utf-8?B?KzJDZnp4WkdzYkFmM1J5alluaUpaS0ZRWWp6TkxWU3ROQnpML0FXbFE5c2Fp?=
+ =?utf-8?Q?WvhjZpIrTf7/O7WDJhxcEzeFQ7aLz1Axg7uJukMaW8=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c789c81-3ab3-4f8d-fb06-08d9be723933
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2021 19:53:24.6754
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wqsb7gF9o0yyyQCJrKIwnJlnjn90bw1xmxdnVPawWIuIHuFQPN6qHdrksyHUaJzydurIfwVyE1IWDbGIyeWCs9EO7SAHCMRVgJvevmzce28=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5241
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 01:44:48PM +0100, Miroslav Benes wrote:
-> --- a/include/linux/livepatch.h
-> +++ b/include/linux/livepatch.h
-> @@ -29,6 +29,8 @@
->   * @new_func:	pointer to the patched function code
->   * @old_sympos: a hint indicating which symbol position the old function
->   *		can be found (optional)
-> + * @stack_only:	only search for the function (specified by old_name) on any
-> + * 		task's stack
+Hi Jarkko,
 
-This should probably make it clear that it doesn't actually patch the
-function.  How about something like:
+On 12/11/2021 12:15 AM, Jarkko Sakkinen wrote:
+> On Tue, 2021-12-07 at 11:40 -0800, Reinette Chatre wrote:
+>> Commit f0ff2447b861 ("selftests/sgx: Add a new kselftest:
+>> Unclobbered_vdso_oversubscribed") depends on __cpuid() without
+>> providing the dependency and thus introduces a build error:
+>>
+>> $ make
+>> gcc -Wall -Werror -g -I../../../../tools/include -fPIC -z noexecstack -c main.c -o /path/linux/tools/testing/selftests/sgx/main.o
+>> main.c: In function ‘get_total_epc_mem’:
+>> main.c:296:3: error: implicit declaration of function ‘__cpuid’ [-Werror=implicit-function-declaration]
+>>    296 |   __cpuid(&eax, &ebx, &ecx, &edx);
+>>        |   ^~~~~~~
+>> cc1: all warnings being treated as errors
+>> make: *** [Makefile:33: /path/linux/tools/testing/selftests/sgx/main.o] Error 1
+>> $
+>>
+>> Make the kernel's __cpuid() available locally in support of the
+>> test's usage.
+> 
+> It's too abstract, rather
+> 
+> "Clone kernel's __cpuid() implementation to the self-test in order
+>   to make it available for the EPC enumeration code."
 
- * @stack_only:	don't patch old_func; only make sure it's not on the stack
+Will do. Thank you.
 
+> 
+>> Fixes: f0ff2447b861 ("selftests/sgx: Add a new kselftest: Unclobbered_vdso_oversubscribed")
+>> Reported-by: Jarkko Sakkinen <jarkko@kernel.org>
+>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> 
+> The code change is acceptable.
 
->   * @old_func:	pointer to the function being patched
->   * @kobj:	kobject for sysfs resources
->   * @node:	list node for klp_object func_list
-> @@ -66,6 +68,7 @@ struct klp_func {
->  	 * in kallsyms for the given object is used.
->  	 */
->  	unsigned long old_sympos;
-> +	bool stack_only;
->  
->  	/* internal */
->  	void *old_func;
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 335d988bd811..62ff4180dc9b 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -89,6 +89,10 @@ static struct klp_func *klp_find_func(struct klp_object *obj,
->  	struct klp_func *func;
->  
->  	klp_for_each_func(obj, func) {
-> +		/* Do not create nop klp_func for stack_only function */
-> +		if (func->stack_only)
-> +			return func;
-> +
+Thank you.
 
-This has me confused.  Maybe I'm missing something.
-
-First, klp_find_func() is a surprising place for this behavior.
-
-Second, if obj's first func happens to be stack_only, this will short
-circuit the rest of the list traversal and will effectively prevent nops
-for all the rest of the funcs, even if they're *not* stack_only.
-
-Third, I'm not sure this approach would even make sense.  I was thinking
-there are two special cases to consider:
-
-1) If old_func is stack_only, that's effectively the same as !old_func,
-   in which case we don't need a nop.
-
-2) If old_func is *not* stack_only, but new_func *is* stack_only, that's
-   effectively the same as (old_func && !new_func), in which case we
-   *do* want a nop.  Since new_func already exists, we can just convert
-   it from stack_only to nop.
-
-Does that make sense?  Or am I missing something?
-
-For example:
-
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -536,9 +536,23 @@ static int klp_add_object_nops(struct klp_patch *patch,
- 	}
- 
- 	klp_for_each_func(old_obj, old_func) {
-+		if (old_func->stack_only) {
-+			/* equivalent to !old_func; no nop needed */
-+			continue;
-+		}
- 		func = klp_find_func(obj, old_func);
--		if (func)
-+		if (func) {
-+			if (func->stack_only) {
-+				/*
-+				 * equivalent to (old_func && !new_func);
-+				 * convert stack_only to nop:
-+				 */
-+				func->stack_only = false;
-+				func->nop = true;
-+			}
-+
- 			continue;
-+		}
- 
- 		func = klp_alloc_func_nop(old_func, obj);
- 		if (!func)
-
-
-And while we're at it, we may want to rename "{func,obj}" to
-"new_{func,obj}" for those functions which have "old_{func,obj}".  It
-would help prevent confusion between the two.
-
->  		if ((strcmp(old_func->old_name, func->old_name) == 0) &&
->  		    (old_func->old_sympos == func->old_sympos)) {
->  			return func;
-> @@ -499,6 +503,17 @@ static struct klp_func *klp_alloc_func_nop(struct klp_func *old_func,
->  	return func;
->  }
->  
-> +static bool klp_is_object_stack_only(struct klp_object *old_obj)
-> +{
-> +	struct klp_func *old_func;
-> +
-> +	klp_for_each_func(old_obj, old_func)
-> +		if (!old_func->stack_only)
-> +			return false;
-> +
-> +	return true;
-> +}
-> +
->  static int klp_add_object_nops(struct klp_patch *patch,
->  			       struct klp_object *old_obj)
->  {
-> @@ -508,6 +523,13 @@ static int klp_add_object_nops(struct klp_patch *patch,
->  	obj = klp_find_object(patch, old_obj);
->  
->  	if (!obj) {
-> +		/*
-> +		 * Do not create nop klp_object for old_obj which contains
-> +		 * stack_only functions only.
-> +		 */
-> +		if (klp_is_object_stack_only(old_obj))
-> +			return 0;
-
-This code is already pretty self explanatory and the comment isn't
-needed IMO.
-
-> +
->  		obj = klp_alloc_object_dynamic(old_obj->name, patch);
->  		if (!obj)
->  			return -ENOMEM;
-> @@ -723,8 +745,9 @@ static int klp_init_func(struct klp_object *obj, struct klp_func *func)
->  	/*
->  	 * NOPs get the address later. The patched module must be loaded,
->  	 * see klp_init_object_loaded().
-> +	 * stack_only functions do not get new_func addresses at all.
->  	 */
-> -	if (!func->new_func && !func->nop)
-> +	if (!func->new_func && !func->nop && !func->stack_only)
->  		return -EINVAL;
-
-Same here, I'm not sure this comment really helps.
-
->  
->  	if (strlen(func->old_name) >= KSYM_NAME_LEN)
-> @@ -804,6 +827,9 @@ static int klp_init_object_loaded(struct klp_patch *patch,
->  		if (func->nop)
->  			func->new_func = func->old_func;
->  
-> +		if (func->stack_only)
-> +			continue;
-> +
->  		ret = kallsyms_lookup_size_offset((unsigned long)func->new_func,
->  						  &func->new_size, NULL);
->  		if (!ret) {
-> diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
-> index fe316c021d73..221ed691cc7f 100644
-> --- a/kernel/livepatch/patch.c
-> +++ b/kernel/livepatch/patch.c
-> @@ -250,6 +250,9 @@ static void __klp_unpatch_object(struct klp_object *obj, bool nops_only)
->  		if (nops_only && !func->nop)
->  			continue;
->  
-> +		if (func->stack_only)
-> +			continue;
-> +
->  		if (func->patched)
->  			klp_unpatch_func(func);
->  	}
-> @@ -273,6 +276,9 @@ int klp_patch_object(struct klp_object *obj)
->  		return -EINVAL;
->  
->  	klp_for_each_func(obj, func) {
-> +		if (func->stack_only)
-> +			continue;
-> +
-
-Instead of these stack_only checks, we might want to add a new
-klp_for_each_patchable_func() macro.  It could also be used in
-klp_add_object_nops() to filter out old_func->stack_only.
-
->  		ret = klp_patch_func(func);
->  		if (ret) {
->  			klp_unpatch_object(obj);
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index 5683ac0d2566..fa0630fcab1a 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -200,7 +200,10 @@ static int klp_check_stack_func(struct klp_func *func, unsigned long *entries,
->  	for (i = 0; i < nr_entries; i++) {
->  		address = entries[i];
->  
-> -		if (klp_target_state == KLP_UNPATCHED) {
-> +		if (func->stack_only) {
-> +			func_addr = (unsigned long)func->old_func;
-> +			func_size = func->old_size;
-> +		} else if (klp_target_state == KLP_UNPATCHED) {
-
-Hm, what does this mean for the unpatching case?  What if the new
-function's .cold child is on the stack when we're trying to unpatch?
-
-Would it make sense to allow the user specify a 'new_func' for
-stack_only, which is a func to check on the stack when unpatching?  Then
-new_func could point to the new .cold child.  And then
-klp_check_stack_func() wouldn't need a special case.
-
--- 
-Josh
-
+Reinette
