@@ -2,34 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CC6C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Dec 2021 14:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09C47C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Dec 2021 14:21:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239000AbhLMOUr (ORCPT
+        id S238871AbhLMOUI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 13 Dec 2021 09:20:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35416 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239067AbhLMOUp (ORCPT
+        Mon, 13 Dec 2021 09:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238849AbhLMOUH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Dec 2021 09:20:45 -0500
+        Mon, 13 Dec 2021 09:20:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17611C061751;
+        Mon, 13 Dec 2021 06:20:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D314B81063;
-        Mon, 13 Dec 2021 14:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 318B2C34602;
-        Mon, 13 Dec 2021 14:20:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3267B81077;
+        Mon, 13 Dec 2021 14:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF43C34601;
+        Mon, 13 Dec 2021 14:20:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639405243;
-        bh=5P5l0etMpFAAQ9zSzn1DLe3eLYhIM3xLoFaXmuEMGwQ=;
+        s=k20201202; t=1639405204;
+        bh=IgLSsDXku+1K9pPQ4iBiwNQcjZ7/ZAaYJa2R7oEqRzM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gXFJ70m9TFsfyO+td7/kSQqebobgqnezyCfSWIjieI2ajuGJkfReTudLDD//HSIJD
-         Cc9DPIqDwPXIWAJjAALLm1oI6C9VQnYaRS5aSYqZhLb17QosdyWFzIq7SlNowsPsSq
-         gYimyVSIwhASGVzOm+91lDpvABT/xG6RvkaOVFBM29a+2mQEdPNAt/nISxL3wboblu
-         95Yz5G629XfAwbTzoUvs9Ecgv5fiYM7EV2JGkymcMaOwJI76UfkBBe4DJ8sFTagIJa
-         Cz2oA2X+smafEzg2+RfrDEmcFdGNvglBsQAliY6er6ty4+TiDQ5IvaOckcNiSbN8CG
-         FmNhraj1fA+nw==
+        b=s/UcT8GJqek0KYI3mOrt/Cw91R1SvDC29q1t9Fb/Y1vbtyiCeC9Q1tDctwuJtU5MU
+         DZY+zpaoDi8RZi9XrKtqeZEkiSqYUClSzdRMKowELN5CtWyNL1xzDOHfm4yn7Xdyt6
+         TMksbGv5BzlDkmsEb+BSEQdgn33+aqfeso0vY/MoE+wkG/50Uv7gIiaN1kCW6qxzeI
+         Pz2amgOOo9StMfUc7SANDFKtwcLMd3yRq4S/ltbcI2cqm8tCC2wDYwJmd/46alsHCN
+         w9JbOOrxjee/Jy32uveANiT+vigh4vkt5Rubnlan9KJi3DA+nLt259/CnXcE8os1CG
+         WIf5TndLLNv/w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -37,12 +40,12 @@ Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH MANUALSEL 5.4 2/2] KVM: selftests: Make sure kvm_create_max_vcpus test won't hit RLIMIT_NOFILE
-Date:   Mon, 13 Dec 2021 09:20:27 -0500
-Message-Id: <20211213142028.352438-2-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 5.15 5/9] KVM: selftests: Make sure kvm_create_max_vcpus test won't hit RLIMIT_NOFILE
+Date:   Mon, 13 Dec 2021 09:19:38 -0500
+Message-Id: <20211213141944.352249-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211213142028.352438-1-sashal@kernel.org>
-References: <20211213142028.352438-1-sashal@kernel.org>
+In-Reply-To: <20211213141944.352249-1-sashal@kernel.org>
+References: <20211213141944.352249-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,7 +84,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 30 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
-index 231d79e57774e..cfe75536d8a55 100644
+index 0299cd81b8ba2..aa3795cd7bd3d 100644
 --- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
 +++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
 @@ -12,6 +12,7 @@
@@ -92,7 +95,7 @@ index 231d79e57774e..cfe75536d8a55 100644
  
  #include "test_util.h"
  
-@@ -43,10 +44,39 @@ int main(int argc, char *argv[])
+@@ -40,10 +41,39 @@ int main(int argc, char *argv[])
  {
  	int kvm_max_vcpu_id = kvm_check_cap(KVM_CAP_MAX_VCPU_ID);
  	int kvm_max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
@@ -103,8 +106,8 @@ index 231d79e57774e..cfe75536d8a55 100644
 +	int nr_fds_wanted = kvm_max_vcpus + 100;
 +	struct rlimit rl;
  
- 	printf("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
- 	printf("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
+ 	pr_info("KVM_CAP_MAX_VCPU_ID: %d\n", kvm_max_vcpu_id);
+ 	pr_info("KVM_CAP_MAX_VCPUS: %d\n", kvm_max_vcpus);
  
 +	/*
 +	 * Check that we're allowed to open nr_fds_wanted file descriptors and
