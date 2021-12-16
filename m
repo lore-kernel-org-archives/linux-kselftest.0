@@ -2,95 +2,119 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90F11C433FE
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Dec 2021 10:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B24B6C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Dec 2021 12:25:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235885AbhLPKPv (ORCPT
+        id S236383AbhLPMZu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Dec 2021 05:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbhLPKPv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:15:51 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCD5C06173F
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 02:15:51 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id m6so35843442oim.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 02:15:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0ccU4l2gWdShDsgwAqNEPDETHATnNwCJsPsDA5QgM/Y=;
-        b=XmQdVhq0C17djmNUyj3wlktdoOKkm4eWzpJgohNUHt5GLOK704JRnPixIHTzxhjE35
-         L/aBvrCdvrH65uxrQMFkyWR0hklFlraRZb5ofI0XGS/Nw7p8PibJklH3GP8ghfTsAD5j
-         RVnEORaekW+692xz/TgKoCMGN9PpgryF939/YRPg90wINRGgArl60phHyQbnDHVpq9T5
-         kid9x0EXIIU7pvFNJGeN3SEwJzltSu7Z8j9XX2kq2WQV+ohPynzlRlT5l/5N2eDl1xNv
-         KaG0E6+FbRHY2VLcf7LREVBIm6WVyRKUkGX0gBDXtfh1co3O0HHML821/Wi5Js3S3IF/
-         Llrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0ccU4l2gWdShDsgwAqNEPDETHATnNwCJsPsDA5QgM/Y=;
-        b=LVpDpfzxIhUVQjB+OCHqK1wb25fpPrf4KmueLgPrkDY83HczeXZ7uUxAVm8ZI1zJCn
-         sMsv9xLExuWe3F7TCusQVyGg0ZzERpmpDiIDqzQWdgo12MYKweNy33aCESIjsqczf+cm
-         61oMrifF0xDh0aswcx+bYRTS6NRYpj2jsHS8wdyyiyWnniTJuz/tq0dvglkfqL24/SDY
-         pf7S0pBEgZbIUX4NFG0M30PKZG25FvfbJU9jNS5PNorWe2IPSMEnKHL1X6auqhe8tr80
-         mZv6xPEaM4leqbucU+P5sI9XuhILCwSoWordaf+Ub+HW7jKTN0DeBWPketE927Md39Ik
-         MZWg==
-X-Gm-Message-State: AOAM533RUAqCGCcVf6q22dA8VtpoK2Buva6SJO6eWPN7j9FxNN36svwo
-        DF/Qk0onDh/EAnVBHAiUM4812b84jxvxcnE1njRrIg==
-X-Google-Smtp-Source: ABdhPJxBKV3JcsaI3lPlUvHwy9E03kvuSxr/FWXDJBdAzNWTsSfW08Cp4vy5XvLNdV3EDG4w9McVNvfhh7s/9A7J/K4=
-X-Received: by 2002:a05:6808:1903:: with SMTP id bf3mr3417400oib.7.1639649750354;
- Thu, 16 Dec 2021 02:15:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20211216055958.634097-1-sharinder@google.com> <20211216055958.634097-4-sharinder@google.com>
-In-Reply-To: <20211216055958.634097-4-sharinder@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 16 Dec 2021 11:15:38 +0100
-Message-ID: <CANpmjNOGaVgP25xNOSGOyjcA9Lmk4uFmU=f6RrRNJBP_CMEVrQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/7] Documentation: KUnit: Added KUnit Architecture
-To:     Harinder Singh <sharinder@google.com>
-Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
-        corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tim.Bird@sony.com
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 16 Dec 2021 07:25:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:42920 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236461AbhLPMZt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:25:49 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9201F1435;
+        Thu, 16 Dec 2021 04:25:48 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E3CD3F73B;
+        Thu, 16 Dec 2021 04:25:47 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     sjpark@amazon.de, keescook@chromium.org, shuah@kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v3] selftests/kselftest/runner.sh: Pass optional command parameters in environment
+Date:   Thu, 16 Dec 2021 12:25:32 +0000
+Message-Id: <20211216122532.40744-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 16 Dec 2021 at 07:00, Harinder Singh <sharinder@google.com> wrote:
->
-> Describe the components of KUnit and how the kernel mode parts
-> interact with kunit_tool.
->
-> Signed-off-by: Harinder Singh <sharinder@google.com>
-> ---
->  .../dev-tools/kunit/architecture.rst          | 204 ++++++++++++++++++
->  Documentation/dev-tools/kunit/index.rst       |   2 +
->  .../kunit/kunit_suitememorydiagram.png        | Bin 0 -> 24174 bytes
->  Documentation/dev-tools/kunit/start.rst       |   1 +
->  4 files changed, 207 insertions(+)
->  create mode 100644 Documentation/dev-tools/kunit/architecture.rst
->  create mode 100644 Documentation/dev-tools/kunit/kunit_suitememorydiagram.png
+Some testcases allow for optional commandline parameters but as of now
+there is now way to provide such arguments to the runner script.
 
-In response to the other email: Adding binary blobs just creates
-problems, for comparing different versions, and general bloating the
-whole repo, where better alternatives exist.
+Add support to retrieve such optional command parameters fron environment
+variables named so as to include the all-uppercase test executable name,
+sanitized substituting any non-acceptable varname characters with "_",
+following the pattern:
 
-I suppose an ASCII diagram is a bit primitive. :-)
+	KSELFTEST_<UPPERCASE_SANITIZED_TEST_NAME>_ARGS="options"
 
-However, SVG files on the other hand are not binary blobs, they are
-text-markup based (XML), and e.g. diffing them often provides useful
-information about what changed. SVG also has the benefit of being
-vector graphics, and not being limited to one resolution.
+Optional command parameters support is not available if 'tr' is not
+installed on the test system.
 
-Looking at the diagram you added, I think this can easily be turned
-into vector graphics, and most likely will not use up 24KiB as a
-result.
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+v2 --> v3
+- improved varname sanitation
+v1 --> v2
+- using env vars instead of settings file
+- added missing varname sanitation
 
-Thanks,
--- Marco
+Used to configure tests as in:
+
+	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
+
+	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
+---
+ tools/testing/selftests/kselftest/runner.sh | 30 ++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index a9ba782d8ca0..294619ade49f 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -18,6 +18,8 @@ if [ -z "$BASE_DIR" ]; then
+ 	exit 1
+ fi
+ 
++TR_CMD=$(command -v tr)
++
+ # If Perl is unavailable, we must fall back to line-at-a-time prefixing
+ # with sed instead of unbuffered output.
+ tap_prefix()
+@@ -49,6 +51,31 @@ run_one()
+ 
+ 	# Reset any "settings"-file variables.
+ 	export kselftest_timeout="$kselftest_default_timeout"
++
++	# Safe default if tr not available
++	kselftest_cmd_args_ref="KSELFTEST_ARGS"
++
++	# Optional arguments for this command, possibly defined as an
++	# environment variable built using the test executable in all
++	# uppercase and sanitized substituting non acceptable shell
++	# variable name characters with "_" as in:
++	#
++	# 	KSELFTEST_<UPPERCASE_SANITIZED_TESTNAME>_ARGS="<options>"
++	#
++	# e.g.
++	#
++	# 	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
++	#
++	# 	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
++	#
++	if [ -n "$TR_CMD" ]; then
++		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
++					$TR_CMD -d "[:blank:][:cntrl:]" | \
++					$TR_CMD -c "[:alnum:]_" "_" | \
++					$TR_CMD [:lower:] [:upper:])
++		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
++	fi
++
+ 	# Load per-test-directory kselftest "settings" file.
+ 	settings="$BASE_DIR/$DIR/settings"
+ 	if [ -r "$settings" ] ; then
+@@ -69,7 +96,8 @@ run_one()
+ 		echo "# Warning: file $TEST is missing!"
+ 		echo "not ok $test_num $TEST_HDR_MSG"
+ 	else
+-		cmd="./$BASENAME_TEST"
++		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
++		cmd="./$BASENAME_TEST $kselftest_cmd_args"
+ 		if [ ! -x "$TEST" ]; then
+ 			echo "# Warning: file $TEST is not executable"
+ 
+-- 
+2.17.1
+
