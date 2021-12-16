@@ -2,124 +2,236 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B385C4332F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Dec 2021 16:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E15BC4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Dec 2021 17:14:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbhLPQuz (ORCPT
+        id S235874AbhLPROe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Dec 2021 11:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239754AbhLPQuy (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Dec 2021 11:50:54 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC4AC06173E
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 08:50:53 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so3579010wmd.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Dec 2021 08:50:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sT7c6xsY79+p4VjCJ0GuWfCfN2sZ5xBnIoxrf7S6ddA=;
-        b=zXJ8r9ZL0HMuqNYJiTcdyKwaAcd2Hm/hnU26Go6jzk3Hiqo6X0i9NLN9p6AspDCY0V
-         DnjMCTaUmWGj8gTU4jp+mH45CQeZtiarFsCe+yc/f0nDOdAnPxjQC70VaJKYtLnLRShG
-         PfSJ2EX7Nbd5fP3chAm3iaKeLZkRETpU0Ch5pbTy9u16mVSub4HJUIj7TwAybF5baBVB
-         aXLVkPwjApwqDmEmqo9gMgPyBsB+4+3BjQeNQZ7QmKQ6kHmoEpzrgXUATJf+2OTny8zg
-         HYP2jb9qpyT3+5zqx7mRL6VNvRtyMVnbb4ZHIkWgaGVJckVXv43kTDFrMfYDkPpU0rUj
-         fK+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sT7c6xsY79+p4VjCJ0GuWfCfN2sZ5xBnIoxrf7S6ddA=;
-        b=gap5LUPlfV5pQJF00eZ1MSt+5pLBPdPgv8KmOkruoDtRhJLGc7OLcdJaQ1I1Sy0ox9
-         G5zQTKCdTCVQdaGVicLFC6FdpTLY7EkREDukpZz31Uk8syR+wv4vDM9kiDuytKxrAzo3
-         8ta6qVoui3S2AN8YyoYhxWjzCvtUDd+AH6JEOdJuaLItXBr5CKnNDWfKHUY9AdqDLRMJ
-         GF/YXO3KpBmq3MSjWwvAVE7PmAwwUASTEp+nqUtCMU+8WjWE4b/kZEi+T3j9FoEKf36a
-         my4w+56ChHA8CXMRGP3Ww6sMCzj1gbouVpxRgbhfr8yZqUBUCPWHTZpCfm1paWpoV1eo
-         TKWQ==
-X-Gm-Message-State: AOAM530o8BMmduYnVmAsNBI+fqppn1SnKHHn8dOk0liOJ3Ikp3Ls8ijA
-        n5fxt08hkF4f163QOWEDKhFvbw==
-X-Google-Smtp-Source: ABdhPJyYw/JR5XWgtcqwAnuLqgpwIaezx+JHl1pGQ/V7SoktSGt0KL2b9TPIMm6Wy/etnCFJyiPINw==
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr5873052wmn.98.1639673452137;
-        Thu, 16 Dec 2021 08:50:52 -0800 (PST)
-Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id y15sm7438906wry.72.2021.12.16.08.50.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 08:50:51 -0800 (PST)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        quentin@isovalent.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Enable cross-building with clang
-Date:   Thu, 16 Dec 2021 16:38:43 +0000
-Message-Id: <20211216163842.829836-7-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211216163842.829836-1-jean-philippe@linaro.org>
-References: <20211216163842.829836-1-jean-philippe@linaro.org>
+        Thu, 16 Dec 2021 12:14:34 -0500
+Received: from mail-sn1anam02on2062.outbound.protection.outlook.com ([40.107.96.62]:11649
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235503AbhLPROc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:14:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BxYnu5v+TUo9N+9ZMkqh4ugm4kWMv66TkrUmxudUHWM8dJFNCg9ZLBVumRLvLy0O+EY8CAnoMS1jOQLNwtC+cxkxIBiEo1OKesjoupjgyVNX1eVc0bGE+XmrQkldOVrFBGGSkjkJgheffXLF51hh7SlAnPHKenjEc3F/KH02gGg/xPnPAv3vAy5gXHxbYBfju2yactjQQiL/pZqI/d5Uf0HxjroNJdSBWQIx/V+VNYN0LE4fpkihorLzi2tfpJuXjgfX4yhkATWWgVtOvbvIco2MJT5Euf2gSWjVtuKQhgMltx2R+Dp8R382M7iU6IRAO/kj6zBzBkxu0Ak4hM1/Rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qN113x5UlCSYnOdhMTV0BYu1NhwIpLHyGzI3j+MAErA=;
+ b=F+HuKD9LSrWKfKD+hr7MHU5/hGNsgm5zvHUIvnl2tFkcsqYbW8CrZDX8/hKwBUVp2Z4T/lZ0T5GI/1PPt8CzHV172MmlZ/sYJPNY6K/zYcdhoTdKeco/KuVe7XeeFnFPHjgs8XofHqzq9rhLwVsMvUfkoD5+vMcVTnKPANtCpu5LQ+itlrDIL/Q/NO3QbtjbSpadMbav4Mbt/iTQkzPCqP87v+LypxQBkXg30DdZ9f1gYE2uq9aeaw0W9SAfRb8ykbShrk7ovcVy8Nizie1g0FXhahP6Y7bALICGGhqJsPSY2ON5BI99VXegWUlrg5IDo22kmHHWLDMvFxyEq5oP+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qN113x5UlCSYnOdhMTV0BYu1NhwIpLHyGzI3j+MAErA=;
+ b=Ks9fhENm5ADLlKGy8iaq9bcWSIczpyo7fZc7FqsolpfwpLDOci0ecn/u0+rKo1KYC3lSQYX2pHQ8R57z/n0uHEowxnsyHkPAHoX2YHXY1IePDjR1ksOzfrKk9gtdkZ7IutzoWpF9fb0I1P2BaekThaikCbTCScOTIpK/T2cyz8A=
+Received: from DM5PR20CA0015.namprd20.prod.outlook.com (2603:10b6:3:93::25) by
+ CH2PR12MB3813.namprd12.prod.outlook.com (2603:10b6:610:2c::27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.17; Thu, 16 Dec 2021 17:14:29 +0000
+Received: from DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:93:cafe::d5) by DM5PR20CA0015.outlook.office365.com
+ (2603:10b6:3:93::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.15 via Frontend
+ Transport; Thu, 16 Dec 2021 17:14:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT031.mail.protection.outlook.com (10.13.172.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4801.14 via Frontend Transport; Thu, 16 Dec 2021 17:14:29 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 16 Dec
+ 2021 11:14:28 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     <linux-kselftest@vger.kernel.org>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, Nathan Tempelman <natet@google.com>,
+        Marc Orr <marcorr@google.com>,
+        "Steve Rutherford" <srutherford@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        Ricardo Koller <ricarkol@google.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Peter Gonda <pgonda@google.com>
+Subject: [PATCH v2 09/13] KVM: SVM: include CR3 in initial VMSA state for SEV-ES guests
+Date:   Thu, 16 Dec 2021 11:13:54 -0600
+Message-ID: <20211216171358.61140-10-michael.roth@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211216171358.61140-1-michael.roth@amd.com>
+References: <20211216171358.61140-1-michael.roth@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB03.amd.com
+ (10.181.40.144)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9d040d2e-840d-4752-12c7-08d9c0b7853b
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3813:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB3813DA729C6FA19C80B2737595779@CH2PR12MB3813.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TKkTYg9HzcnhxhPeLnXWwpAvLLiebeOX1TD6aXvfkO9Vpqzv6sR9RSncO4i6Q8+Ff9Y6I+Qhp4vNza1KjtBzjTIwsl+vXTgNKskcW6vWXO6f5+ERfEI43gw37asNkRX+z+J4fyukxejy5Zf5H8PsD3rPUmWTB8N8j2mE40ICSrZwJLRU0V5JI5PyqFNYfW6bAoAPmqQMn+s8cGHGJQghsO8TJQ3t5RgED/+EnoePYNjS+F7W1VLPcFFPRfd3BM5n/PoSUMMfrSs5ROsDlLA3oO3SoDuC6RtFwbzI7BHrBdSLT4KSce01O1YW+b0OWc4GXg8+SFVQZ7Gmrq3+oH5nko3qOApGRR46V0Uj8vqHtRxq+4e3KQfnXb4yz7kPJ1Uc/pX6HdKHs9/AHlL+PGDc1b7tkW0H9OwolaBnEeKHGD+9zHzL6VfK6xBemLI/+a1l9iP+1IMXsgEo27T6FbbDINDNvQj15u++/4j5YLGQIYzVJVm5mEdB+XWw3NevM1eNYWo8q2y9GTY6r73tMqFgMtWLaZo6Ad0pb0bXgfNym/hI9ecM7b9vsE9ad2hy9fojTtmm2UQVLz8IKkLTxPkIuRyh1lfnISVFei/M0PXVHmWh69WdGW/NpWNE9KxnvZ4pkCNwSJjSA6HrzD4oUhW6mEk9V8ZXmjY0dTDAVAiRPzS90jVYBP1rTcNyaz2b347S4QOx1yDb3VyXOfAy9fe5Nc/KjdMF+k6gFu3jffuLi9E3J7Uxq8yzv5iZ/1cUDpb0W/dx6NyGR1WFTcph5soLEWTwjpZms8AgCr7k60WnG7w=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(5660300002)(356005)(6916009)(426003)(336012)(82310400004)(83380400001)(40460700001)(8936002)(36860700001)(70206006)(6666004)(4326008)(81166007)(186003)(16526019)(508600001)(7416002)(8676002)(2616005)(47076005)(86362001)(2906002)(70586007)(26005)(1076003)(54906003)(44832011)(316002)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2021 17:14:29.5643
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d040d2e-840d-4752-12c7-08d9c0b7853b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3813
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cross building using clang requires passing the "-target" flag rather
-than using the CROSS_COMPILE prefix. Makefile.include transforms
-CROSS_COMPILE into CLANG_CROSS_FLAGS. Clear CROSS_COMPILE for bpftool
-and the host libbpf, and use the clang flags for urandom_read and bench.
+Normally guests will set up CR3 themselves, but some guests, such as
+kselftests, and potentially CONFIG_PVH guests, rely on being booted
+with paging enabled and CR3 initialized to a pre-allocated page table.
 
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Currently CR3 updates via KVM_SET_SREGS* are not loaded into the guest
+VMCB until just prior to entering the guest. For SEV-ES/SEV-SNP, this
+is too late, since it will have switched over to using the VMSA page
+prior to that point, with the VMSA CR3 copied from the VMCB initial
+CR3 value: 0.
+
+Address this by sync'ing the CR3 value into the VMCB save area
+immediately when KVM_SET_SREGS* is issued so it will find it's way into
+the initial VMSA.
+
+Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Michael Roth <michael.roth@amd.com>
 ---
- tools/testing/selftests/bpf/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  1 +
+ arch/x86/kvm/svm/svm.c             | 19 +++++++++++++++++++
+ arch/x86/kvm/vmx/vmx.c             |  6 ++++++
+ arch/x86/kvm/x86.c                 |  1 +
+ 5 files changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 43f6f3159431..42ffc24e9e71 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -170,7 +170,7 @@ $(OUTPUT)/%:%.c
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index cefe1d81e2e8..a3172bd59690 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -35,6 +35,7 @@ KVM_X86_OP(get_cpl)
+ KVM_X86_OP(set_segment)
+ KVM_X86_OP_NULL(get_cs_db_l_bits)
+ KVM_X86_OP(set_cr0)
++KVM_X86_OP(post_set_cr3)
+ KVM_X86_OP(is_valid_cr4)
+ KVM_X86_OP(set_cr4)
+ KVM_X86_OP(set_efer)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index d5fede05eb5f..22f384320ed1 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1342,6 +1342,7 @@ struct kvm_x86_ops {
+ 			    struct kvm_segment *var, int seg);
+ 	void (*get_cs_db_l_bits)(struct kvm_vcpu *vcpu, int *db, int *l);
+ 	void (*set_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
++	void (*post_set_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+ 	bool (*is_valid_cr4)(struct kvm_vcpu *vcpu, unsigned long cr0);
+ 	void (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+ 	int (*set_efer)(struct kvm_vcpu *vcpu, u64 efer);
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 208566f63bce..76e906d83a84 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1792,6 +1792,24 @@ static void svm_set_gdt(struct kvm_vcpu *vcpu, struct desc_ptr *dt)
+ 	vmcb_mark_dirty(svm->vmcb, VMCB_DT);
+ }
  
- $(OUTPUT)/urandom_read: urandom_read.c
- 	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
++static void svm_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
++{
++	struct vcpu_svm *svm = to_svm(vcpu);
++
++	/*
++	 * For guests that don't set guest_state_protected, the cr3 update is
++	 * handled via kvm_mmu_load() while entering the guest. For guests
++	 * that do (SEV-ES/SEV-SNP), the cr3 update needs to be written to
++	 * VMCB save area now, since the save area will become the initial
++	 * contents of the VMSA, and future VMCB save area updates won't be
++	 * seen.
++	 */
++	if (sev_es_guest(vcpu->kvm)) {
++		svm->vmcb->save.cr3 = cr3;
++		vmcb_mark_dirty(svm->vmcb, VMCB_CR);
++	}
++}
++
+ void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+@@ -4622,6 +4640,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.get_cpl = svm_get_cpl,
+ 	.get_cs_db_l_bits = kvm_get_cs_db_l_bits,
+ 	.set_cr0 = svm_set_cr0,
++	.post_set_cr3 = svm_post_set_cr3,
+ 	.is_valid_cr4 = svm_is_valid_cr4,
+ 	.set_cr4 = svm_set_cr4,
+ 	.set_efer = svm_set_efer,
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 63615d242bdf..075107c1b3f5 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3124,6 +3124,11 @@ static void vmx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+ 		vmcs_writel(GUEST_CR3, guest_cr3);
+ }
  
- $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
- 	$(call msg,MOD,,$@)
-@@ -217,7 +217,7 @@ BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
--		    CC=$(HOSTCC) LD=$(HOSTLD)				       \
-+		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) 	       \
- 		    EXTRA_CFLAGS='-g -O0'				       \
- 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
-@@ -248,7 +248,7 @@ $(HOST_BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
- 		$(APIDIR)/linux/bpf.h					       \
- 		| $(HOST_BUILD_DIR)/libbpf
- 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR)                             \
--		    EXTRA_CFLAGS='-g -O0'				       \
-+		    EXTRA_CFLAGS='-g -O0' ARCH= CROSS_COMPILE=		       \
- 		    OUTPUT=$(HOST_BUILD_DIR)/libbpf/ CC=$(HOSTCC) LD=$(HOSTLD) \
- 		    DESTDIR=$(HOST_SCRATCH_DIR)/ prefix= all install_headers
- endif
-@@ -551,7 +551,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
- 		 $(OUTPUT)/bench_strncmp.o
- 	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
++
++void vmx_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
++{
++}
++
+ static bool vmx_is_valid_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+ {
+ 	/*
+@@ -7597,6 +7602,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+ 	.get_cpl = vmx_get_cpl,
+ 	.get_cs_db_l_bits = vmx_get_cs_db_l_bits,
+ 	.set_cr0 = vmx_set_cr0,
++	.post_set_cr3 = vmx_post_set_cr3,
+ 	.is_valid_cr4 = vmx_is_valid_cr4,
+ 	.set_cr4 = vmx_set_cr4,
+ 	.set_efer = vmx_set_efer,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 26cb3a4cd0e9..c0d84a4c8049 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10609,6 +10609,7 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+ 	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
+ 	vcpu->arch.cr3 = sregs->cr3;
+ 	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
++	static_call(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
  
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
+ 	kvm_set_cr8(vcpu, sregs->cr8);
+ 
 -- 
-2.34.1
+2.25.1
 
