@@ -2,148 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76284C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 12:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2832DC433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 12:44:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244900AbhLVMmf (ORCPT
+        id S232659AbhLVMoX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Dec 2021 07:42:35 -0500
-Received: from mga14.intel.com ([192.55.52.115]:11441 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240591AbhLVMl6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:41:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640176918; x=1671712918;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mcJXn64JGu5vCi+1e3/iFncLwSWAIL5VMmqM8cXOyVs=;
-  b=gZm/tOOtEFwVKRfFvIiFbWESnxJJUXX/nSxdpLh7S12O7U7bag6onCf5
-   Hh8trXZJ8L94s8/AkxsKn6EMWEdAs7O6NgjiZH5o94miSkxjRubasgjEO
-   3WI2xJg/IeCU6jOiBQZ1ZOLLY6K5wHb0aT37DkDElDlT/o14aTvTfOD3t
-   WeRGK7Dt8QzXTwnF8ufpfc5b/dP27A3gXngrsd4bLw+MSjLrjEL+NNqQd
-   gi8d+WT+jHIreKNpKsnuv3p8ioZCytV8/NGVkmeHFdKaHw50Sv5lTK7KD
-   QtjTjmiMRUiQIeRqJEgA1SOmEAu3l54rJWjj7V5SxYd6N8iDi8hpF2amo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833441"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240833441"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:41:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="587002792"
-Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:41:09 -0800
-From:   Jing Liu <jing2.liu@intel.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, pbonzini@redhat.com, corbet@lwn.net,
-        shuah@kernel.org
-Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
-        jing2.liu@linux.intel.com, jing2.liu@intel.com,
-        guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v3 22/22] kvm: x86: Disable interception for IA32_XFD on demand
-Date:   Wed, 22 Dec 2021 04:40:52 -0800
-Message-Id: <20211222124052.644626-23-jing2.liu@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
-References: <20211222124052.644626-1-jing2.liu@intel.com>
+        Wed, 22 Dec 2021 07:44:23 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:44782 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231523AbhLVMoX (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:44:23 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 80D5E2112B;
+        Wed, 22 Dec 2021 12:44:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1640177061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qy9gFIp2QxGl6WSv0UolBUI85R2Q8lLoLh2lTwoavFk=;
+        b=gPSZWtxqFRZZ4KYSXRQOlHU1Vtzaz1MVqqA9I2kvB7ngleLRUnJ0pKIZFbByHTkRhNAhhf
+        JsB3sZtNH4drYNDmMY53AP59YzK0mOQRF9rNJZdPIdY/Lz8ty0td2+IHTTZ3GzrJKbsr5u
+        7S7EVOkAIeUr0UbGMWRmmlw8KcNhjas=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1640177061;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qy9gFIp2QxGl6WSv0UolBUI85R2Q8lLoLh2lTwoavFk=;
+        b=0GCk4fJ1+0SXjygAjwsjRaLC7Mu6dmG1KrJSOe+cpupyUT24+CFPMoDzHQkFsNRVH+mSIS
+        IgVCteXCYXE8/0Ag==
+Received: from quack2.suse.cz (unknown [10.163.28.18])
+        by relay2.suse.de (Postfix) with ESMTP id 66E23A3B83;
+        Wed, 22 Dec 2021 12:44:21 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 4517C1F2CEF; Wed, 22 Dec 2021 13:44:21 +0100 (CET)
+Date:   Wed, 22 Dec 2021 13:44:21 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+Message-ID: <20211222124421.GB685@quack2.suse.cz>
+References: <CAHk-=whxvVQReBqZeaV41=sAWfT4xTfn6sMSWDfkHKVS3zX85w@mail.gmail.com>
+ <5A7D771C-FF95-465E-95F6-CD249FE28381@vmware.com>
+ <CAHk-=wgMuSkumYxeaaxbKFoAbw_gjYo1eRXXSFcBHzNG2xauTA@mail.gmail.com>
+ <CAHk-=whYT0Q1F=bxG0yi=LN5gXY64zBwefsbkLoRiP5p598d5A@mail.gmail.com>
+ <fca16906-8e7d-5d04-6990-dfa8392bad8b@redhat.com>
+ <20211221010312.GC1432915@nvidia.com>
+ <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
+ <20211221235916.GI1432915@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211221235916.GI1432915@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Always intercepting IA32_XFD causes non-negligible overhead when this
-register is updated frequently in the guest.
+On Tue 21-12-21 19:59:16, Jason Gunthorpe wrote:
+> On Tue, Dec 21, 2021 at 06:40:30PM +0100, David Hildenbrand wrote:
+> 
+> > What adds complexity to correctly maintain the "exclusive" state are at
+> > least:
+> > * KSM (might be harder, have to think about it)
+> 
+> I know little about it, but isn't KSM like fork where it is trying to
+> WP pages with the intention of copying them? Shouldn't KSM completely
+> reject WP'ing a page that is under any kind of writable GUP?
 
-Disable r/w emulation after intercepting the first WRMSR(IA32_XFD)
-with a non-zero value.
+I know little about KSM as well but I think fundamentally it has similar
+requirements for anon pages as filesystems have for page cache pages e.g.
+when doing block deduplication or data checksumming... I.e., it needs to
+make sure data in the page is stable and nobody can modify it.
 
-Disable WRMSR emulation implies that IA32_XFD becomes out-of-sync
-with the software states in fpstate and the per-cpu xfd cache. Call
-fpu_sync_guest_vmexit_xfd_state() to bring them back in-sync, before
-preemption is enabled.
-
-p.s. We have confirmed that SDM is being revised to say that
-when setting IA32_XFD[18] the AMX register state is not guaranteed
-to be preserved. This clarification avoids adding mess for a creative
-guest which sets IA32_XFD[18]=1 before saving active AMX state to
-its own storage.
-
-Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-Signed-off-by: Jing Liu <jing2.liu@intel.com>
----
- arch/x86/include/asm/kvm_host.h | 1 +
- arch/x86/kvm/vmx/vmx.c          | 4 ++++
- arch/x86/kvm/vmx/vmx.h          | 2 +-
- arch/x86/kvm/x86.c              | 3 +++
- 4 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index f7a661f35d1a..7b81d324b32a 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -641,6 +641,7 @@ struct kvm_vcpu_arch {
- 	bool tpr_access_reporting;
- 	bool xsaves_enabled;
- 	bool trap_nm;
-+	bool xfd_out_of_sync;
- 	u64 ia32_xss;
- 	u64 microcode_version;
- 	u64 arch_capabilities;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 8595a3e8fbd8..7aaf905e13b4 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -162,6 +162,7 @@ static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
- 	MSR_FS_BASE,
- 	MSR_GS_BASE,
- 	MSR_KERNEL_GS_BASE,
-+	MSR_IA32_XFD,
- 	MSR_IA32_XFD_ERR,
- #endif
- 	MSR_IA32_SYSENTER_CS,
-@@ -1968,6 +1969,9 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_IA32_XFD:
- 		ret = kvm_set_msr_common(vcpu, msr_info);
- 		if (!ret && data) {
-+			vmx_disable_intercept_for_msr(vcpu, MSR_IA32_XFD, MSR_TYPE_RW);
-+			vcpu->arch.xfd_out_of_sync = true;
-+
- 			vcpu->arch.trap_nm = true;
- 			vmx_update_exception_bitmap(vcpu);
- 		}
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index bf9d3051cd6c..0a00242a91e7 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -340,7 +340,7 @@ struct vcpu_vmx {
- 	struct lbr_desc lbr_desc;
- 
- 	/* Save desired MSR intercept (read: pass-through) state */
--#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
-+#define MAX_POSSIBLE_PASSTHROUGH_MSRS	15
- 	struct {
- 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
- 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 3b756ff13103..10a08aa2aa45 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10024,6 +10024,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 	if (vcpu->arch.guest_fpu.xfd_err)
- 		wrmsrl(MSR_IA32_XFD_ERR, 0);
- 
-+	if (vcpu->arch.xfd_out_of_sync)
-+		fpu_sync_guest_vmexit_xfd_state();
-+
- 	/*
- 	 * Consume any pending interrupts, including the possible source of
- 	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.
+								Honza
 -- 
-2.27.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
