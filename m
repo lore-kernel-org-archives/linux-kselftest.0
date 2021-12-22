@@ -2,128 +2,140 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C4ADC433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 16:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 336BCC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 16:55:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343936AbhLVQo4 (ORCPT
+        id S239015AbhLVQzX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Dec 2021 11:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241736AbhLVQoz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:44:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DCFC061574;
-        Wed, 22 Dec 2021 08:44:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OZrPu/M8Hceg766ih22RPa2zy9wilvTWAaB475eNeyA=; b=heWKO8ps0AGajXs8BrNxqvRQjl
-        m7xQxIHpN+ngLUJhGPtz0f2XbHJB56k0M1qMp0M4t2hz05NPrRQ6pGU+pC0oHkuyyde4NdFNusRW0
-        VszzPepp60mZhjTtPk7EwpANozCL0WnQDSM8Z4VWJJLELTya8vM6pCSQLOblJ6qLxwRcTPOdi6Sld
-        onhowzpCdccfg7rhoUWgQ+1WUDlgFF9Wism78juB0cFQ7iIrAgL71Rabkcbpolp30IGNQ4yXXwgHV
-        gf45IZUnI80Fapdgows6u4cSRI7DqAdyCnPbes8xpFinvZMH4WEw39DShQKFBH82vt2IG+tpKonTK
-        Yh0Y/S0w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n04jI-003X5C-GC; Wed, 22 Dec 2021 16:44:40 +0000
-Date:   Wed, 22 Dec 2021 16:44:40 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
- FAULT_FLAG_UNSHARE (!hugetlb)
-Message-ID: <YcNV+C6yeNLRzMH3@casper.infradead.org>
-References: <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
- <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com>
- <20211221190706.GG1432915@nvidia.com>
- <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com>
- <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
- <20211222124141.GA685@quack2.suse.cz>
- <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
- <20211222144255.GE685@quack2.suse.cz>
- <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
- <20211222160846.GH685@quack2.suse.cz>
+        Wed, 22 Dec 2021 11:55:23 -0500
+Received: from mga04.intel.com ([192.55.52.120]:28740 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235517AbhLVQzX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Dec 2021 11:55:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640192123; x=1671728123;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2r5w7nqb1bcFqkZUjfTZWm4iuC1IJSP0qx+HAYi18vw=;
+  b=Phc0xesC+PE66Z739jywVc9GiW1nQGIQ9zJSISkjJIcE0Rg121fa4k1Y
+   Izr7klkAiBjHaJTSrWKLVZE+jE3a3lv63Mbi6yA2sbiaSgZs19llwGDSR
+   slAwwV4QLjidxO6PnCNnmAh2WCIx8qsaZZx0uVNSkWhTEcYLHbSqTXfj4
+   Rsfx2LOTmvOMrBKNoCN/8hpbPJ9hoDANPmPAJu9OMAQFBeBa/Xcf2qjz6
+   NxeRVpEkXQF2U0xC1qiIhqqxrVNAFB6eHyiTPfz23+WewrM3DtDUGj8r2
+   reYWRdH4dMc3Yx/hmdz0EgNDRMj/evp9op+nv6VgwuJTdP/3NxQa4zASl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="239411920"
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="239411920"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:55:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
+   d="scan'208";a="468230211"
+Received: from lajkonik.igk.intel.com ([10.211.8.72])
+  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2021 08:55:17 -0800
+From:   Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org
+Cc:     richardcochran@gmail.com, abyagowi@fb.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kselftest@vger.kernel.org, idosch@idosch.org,
+        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
+        petrm@nvidia.com, vfedorenko@novek.ru,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Subject: [PATCH v6 net-next 0/4] Add ethtool interface for RClocks
+Date:   Wed, 22 Dec 2021 11:39:49 -0500
+Message-Id: <20211222163952.413183-1-arkadiusz.kubalewski@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211222160846.GH685@quack2.suse.cz>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 05:08:46PM +0100, Jan Kara wrote:
-> On Wed 22-12-21 15:48:34, David Hildenbrand wrote:
-> > On 22.12.21 15:42, Jan Kara wrote:
-> > > On Wed 22-12-21 14:09:41, David Hildenbrand wrote:
-> > >>>> IIUC, our COW logic makes sure that a shared anonymous page that might
-> > >>>> still be used by a R/O FOLL_GET cannot be modified, because any attempt
-> > >>>> to modify it would result in a copy.
-> > >>>
-> > >>> Well, we defined FOLL_PIN to mean the intent that the caller wants to access
-> > >>> not only page state (for which is enough FOLL_GET and there are some users
-> > >>> - mostly inside mm - who need this) but also page data. Eventually, we even
-> > >>> wanted to make FOLL_GET unavailable to broad areas of kernel (and keep it
-> > >>> internal to only MM for its dirty deeds ;)) to reduce the misuse of GUP.
-> > >>>
-> > >>> For file pages we need this data vs no-data access distinction so that
-> > >>> filesystems can detect when someone can be accessing page data although the
-> > >>> page is unmapped.  Practically, filesystems care most about when someone
-> > >>> can be *modifying* page data (we need to make sure data is stable e.g. when
-> > >>> writing back data to disk or doing data checksumming or other operations)
-> > >>> so using FOLL_GET when wanting to only read page data should be OK for
-> > >>> filesystems but honestly I would be reluctant to break the rule of "use
-> > >>> FOLL_PIN when wanting to access page data" to keep things simple and
-> > >>> reasonably easy to understand for parties such as filesystem developers or
-> > >>> driver developers who all need to interact with pinned pages...
-> > >>
-> > >> Right, from an API perspective we really want people to use FOLL_PIN.
-> > >>
-> > >> To optimize this case in particular it would help if we would have the
-> > >> FOLL flags on the unpin path. Then we could just decide internally
-> > >> "well, short-term R/O FOLL_PIN can be really lightweight, we can treat
-> > >> this like a FOLL_GET instead". And we would need that as well if we were
-> > >> to keep different counters for R/O vs. R/W pinned.
-> > > 
-> > > Well, I guess the question here is: Which GUP user needs only R/O access to
-> > > page data and is so performance critical that it would be worth it to
-> > > sacrifice API clarity for speed? I'm not aware of any but I was not looking
-> > > really hard...
-> > 
-> > I'd be interested in examples as well. Maybe databases that use O_DIRECT
-> > after fork()?
-> 
-> Well, but O_DIRECT reads must use FOLL_PIN in any case because they modify
-> page data (and so we need to detect them both for COW and filesystem needs).
-> O_DIRECT writes could use FOLL_GET but at this point I'm not convinced it
-> is worth it.
+Synchronous Ethernet networks use a physical layer clock to syntonize
+the frequency across different network elements.
 
-Wow, I didn't realise the plan was to make FOLL_PIN the "default".
-I hoped it was weird crap that was going away soon.  Looks like we'd
-better fix all the bugs in it then ...
+Basic SyncE node defined in the ITU-T G.8264 consist of an Ethernet
+Equipment Clock (EEC) and have the ability to synchronize to reference
+frequency sources.
+
+This patch series is a prerequisite for EEC object and adds ability
+to enable recovered clocks in the physical layer of the netdev object.
+Recovered clocks can be used as one of the reference signal by the EEC.
+
+Further work is required to add the DPLL subsystem, link it to the
+netdev object and create API to read the EEC DPLL state.
+
+v6:
+- adapt to removal of 'enum ice_status' in net-next
+
+v5:
+- rewritten the documentation
+- fixed doxygen headers
+
+v4:
+- Dropped EEC_STATE reporting (TBD: DPLL subsystem)
+- moved recovered clock configuration to ethtool netlink
+
+v3:
+- remove RTM_GETRCLKRANGE
+- return state of all possible pins in the RTM_GETRCLKSTATE
+- clarify documentation
+
+v2:
+- improved documentation
+- fixed kdoc warning
+
+RFC history:
+v2:
+- removed whitespace changes
+- fix issues reported by test robot
+v3:
+- Changed naming from SyncE to EEC
+- Clarify cover letter and commit message for patch 1
+v4:
+- Removed sync_source and pin_idx info
+- Changed one structure to attributes
+- Added EEC_SRC_PORT flag to indicate that the EEC is synchronized
+  to the recovered clock of a port that returns the state
+v5:
+- add EEC source as an optiona attribute
+- implement support for recovered clocks
+- align states returned by EEC to ITU-T G.781
+v6:
+- fix EEC clock state reporting
+- add documentation
+- fix descriptions in code comments
+
+Arkadiusz Kubalewski (4):
+  ice: add support detecting features based on netlist
+  ethtool: Add ability to configure recovered clock for SyncE feature
+  ice: add support for monitoring SyncE DPLL state
+  ice: add support for recovered clocks
+
+ Documentation/networking/ethtool-netlink.rst  |  62 ++++
+ drivers/net/ethernet/intel/ice/ice.h          |   7 +
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  70 ++++-
+ drivers/net/ethernet/intel/ice/ice_common.c   | 224 +++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |  20 ++
+ drivers/net/ethernet/intel/ice/ice_devids.h   |   3 +
+ drivers/net/ethernet/intel/ice/ice_ethtool.c  |  96 +++++++
+ drivers/net/ethernet/intel/ice/ice_lib.c      |   6 +-
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  35 +++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  49 ++++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  36 +++
+ drivers/net/ethernet/intel/ice/ice_type.h     |   1 +
+ include/linux/ethtool.h                       |   9 +
+ include/uapi/linux/ethtool_netlink.h          |  21 ++
+ net/ethtool/Makefile                          |   3 +-
+ net/ethtool/netlink.c                         |  20 ++
+ net/ethtool/netlink.h                         |   4 +
+ net/ethtool/synce.c                           | 267 ++++++++++++++++++
+ 18 files changed, 930 insertions(+), 3 deletions(-)
+ create mode 100644 net/ethtool/synce.c
+
+-- 
+2.31.1
+
