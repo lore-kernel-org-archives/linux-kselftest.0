@@ -2,345 +2,112 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 926D5C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 16:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC93C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 18:40:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344057AbhLVQzn (ORCPT
+        id S1344812AbhLVSks (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Dec 2021 11:55:43 -0500
-Received: from mga07.intel.com ([134.134.136.100]:11454 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344061AbhLVQzm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 11:55:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640192142; x=1671728142;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=T1uOmFIpt7Ukt69HGaYVAUkXOm/Cf0VtzAyzJJOxlhk=;
-  b=CW2ChOSLGtJDrrxN4sVG/v5zMY5Cm+WlLjFaGfBKtoUJys3JJhmQ+MZw
-   NoFYd/f5ZaJ+WlUzgZ7MkKVGhqkumukdttuDfurPhcws4GgChD4IhxcFq
-   ymWUJfr0EC1COzFq9chieB7W0GgdPGh5I8fWR51xfqQfTAlUhHTQ9/P4p
-   +PnUSW+NUo9+6RqWVpGQ2QCBnK2FfN0J1TaolTpmxuhOWO3ER/sGRUGUX
-   Cy/rJr3+BRqqPVR2o0fprubqZ94p9JViJPddNSW43EwCSIUzezuUnvxpW
-   12Hbku10cXP2UZ0hR/z++fzXmxCiteXp+5nFiZyPY2k0c/onVQqp5aaUs
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="304028629"
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="304028629"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 08:55:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="468230285"
-Received: from lajkonik.igk.intel.com ([10.211.8.72])
-  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2021 08:55:38 -0800
-From:   Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-To:     maciej.machnikowski@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     richardcochran@gmail.com, abyagowi@fb.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kselftest@vger.kernel.org, idosch@idosch.org,
-        mkubecek@suse.cz, saeed@kernel.org, michael.chan@broadcom.com,
-        petrm@nvidia.com, vfedorenko@novek.ru,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Subject: [PATCH v6 net-next 4/4] ice: add support for recovered clocks
-Date:   Wed, 22 Dec 2021 11:39:52 -0500
-Message-Id: <20211222163952.413183-4-arkadiusz.kubalewski@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211222163952.413183-1-arkadiusz.kubalewski@intel.com>
-References: <20211222163952.413183-1-arkadiusz.kubalewski@intel.com>
+        Wed, 22 Dec 2021 13:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235445AbhLVSkr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Dec 2021 13:40:47 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ED9C061574
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Dec 2021 10:40:47 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bt1so7234806lfb.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Dec 2021 10:40:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Aq/wssbJW97LOVr0Eh6yDelER0nFi1ZCZpjRsYoDD3M=;
+        b=REM7DgpgJmkfIJdXvPcefxx96s82wJsCzGWmJn0cvbBNm41AzviVhzuNtpthlyec3s
+         UGTiKQqTbUxvgaQ7HgM0DrpzcNs62ueQTQhGdqh1NAJHhNe+Su+eXdejZMNZl6kf7Sg1
+         AOMnLNyEuDxkkkjn3LNUqoR/nzbn3aEL5NIHs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Aq/wssbJW97LOVr0Eh6yDelER0nFi1ZCZpjRsYoDD3M=;
+        b=48D2zyQuWCYC3HZf8M4waPnM8S0hb7cBgRov09J0IFZDrkcV851tmaQSVBp/VIs9Dd
+         SVcTwpWdwWfCQtH3btGqA8KCCQA0qPVMSw4FHukJl7l0aZMrxQ/st4z1T0brbhswZjLZ
+         ZM237P7XQ/tcEh3i9FBkd53srK1Kq/AIjYRUYRC7bz20xGLy5TdAYulmFr4gU6Xnb8+O
+         UZ4dz7UV5K6FX1NocDZnXfjSufSQ7eJaa+IN5TCKLm9FPWjBICr8dMaJg2mf22Nirx7l
+         DkmFMfhuNEXKjdUUcSQdDTIkx1MV7IGDFALma2HpZMiEEVkvEnAegFy+P0bST31a7mGO
+         EZVw==
+X-Gm-Message-State: AOAM533ZsB5ypl9KnUxMxTJ9RBZQD3J4scnwF51ctYgGDifBn09WtBNT
+        cf+zYsP3aZNNbikQcz4ya0lmnLyLnV4F+Q6cXn0=
+X-Google-Smtp-Source: ABdhPJxBt7pUBmAHZpjel8/vJuENEunkSO3mpq9LXUdro8GcG0RHT8fmIGEmfoH/2AXZPZMZ+y9P7Q==
+X-Received: by 2002:a05:6512:3f8d:: with SMTP id x13mr3141819lfa.213.1640198445386;
+        Wed, 22 Dec 2021 10:40:45 -0800 (PST)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id l20sm215023ljb.108.2021.12.22.10.40.45
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Dec 2021 10:40:45 -0800 (PST)
+Received: by mail-lj1-f173.google.com with SMTP id bn20so5202601ljb.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Dec 2021 10:40:45 -0800 (PST)
+X-Received: by 2002:a5d:6211:: with SMTP id y17mr2950577wru.97.1640198434545;
+ Wed, 22 Dec 2021 10:40:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <fd7e3195-4f36-3804-1793-d453d5bd3e9f@redhat.com>
+ <CAHk-=wgQq3H6wfkW7+MmduVgBOqHeiXQN97yCMd+m1mM-1xCLQ@mail.gmail.com>
+ <900b7d4a-a5dc-5c7b-a374-c4a8cc149232@redhat.com> <20211221190706.GG1432915@nvidia.com>
+ <3e0868e6-c714-1bf8-163f-389989bf5189@redhat.com> <dfe1c8d5-6fac-9040-0272-6d77bafa6a16@redhat.com>
+ <20211222124141.GA685@quack2.suse.cz> <4a28e8a0-2efa-8b5e-10b5-38f1fc143a98@redhat.com>
+ <20211222144255.GE685@quack2.suse.cz> <505d3d0f-23ee-0eec-0571-8058b8eedb97@redhat.com>
+ <20211222160846.GH685@quack2.suse.cz>
+In-Reply-To: <20211222160846.GH685@quack2.suse.cz>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 22 Dec 2021 10:40:18 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjUeCUo7dRkzTeqGMJ5-NE4=Xj09mMB0HCkCnMFxsbmwA@mail.gmail.com>
+Message-ID: <CAHk-=wjUeCUo7dRkzTeqGMJ5-NE4=Xj09mMB0HCkCnMFxsbmwA@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] mm: support GUP-triggered unsharing via
+ FAULT_FLAG_UNSHARE (!hugetlb)
+To:     Jan Kara <jack@suse.cz>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Nadav Amit <namit@vmware.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Linux-MM <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Implement ethtool netlink functions for handling recovered clocks
-configuration on ice driver:
-- ETHTOOL_MSG_RCLK_SET
-- ETHTOOL_MSG_RCLK_GET
+On Wed, Dec 22, 2021 at 8:08 AM Jan Kara <jack@suse.cz> wrote:
+>
+> Well, but O_DIRECT reads must use FOLL_PIN in any case because they modify
+> page data (and so we need to detect them both for COW and filesystem needs).
 
-Co-developed-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
-Signed-off-by: Maciej Machnikowski <maciej.machnikowski@intel.com>
-Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
----
- .../net/ethernet/intel/ice/ice_adminq_cmd.h   | 29 ++++++
- drivers/net/ethernet/intel/ice/ice_common.c   | 65 +++++++++++++
- drivers/net/ethernet/intel/ice/ice_common.h   |  6 ++
- drivers/net/ethernet/intel/ice/ice_ethtool.c  | 96 +++++++++++++++++++
- drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  2 +
- 5 files changed, 198 insertions(+)
+Well, O_DIRECT reads do, but not necessarily writes.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-index 98d7a22185ce..4637f0d6b2ab 100644
---- a/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-+++ b/drivers/net/ethernet/intel/ice/ice_adminq_cmd.h
-@@ -1283,6 +1283,31 @@ struct ice_aqc_set_mac_lb {
- 	u8 reserved[15];
- };
- 
-+/* Set PHY recovered clock output (direct 0x0630) */
-+struct ice_aqc_set_phy_rec_clk_out {
-+	u8 phy_output;
-+	u8 port_num;
-+	u8 flags;
-+#define ICE_AQC_SET_PHY_REC_CLK_OUT_OUT_EN	BIT(0)
-+#define ICE_AQC_SET_PHY_REC_CLK_OUT_CURR_PORT	0xFF
-+	u8 rsvd;
-+	__le32 freq;
-+	u8 rsvd2[6];
-+	__le16 node_handle;
-+};
-+
-+/* Get PHY recovered clock output (direct 0x0631) */
-+struct ice_aqc_get_phy_rec_clk_out {
-+	u8 phy_output;
-+	u8 port_num;
-+	u8 flags;
-+#define ICE_AQC_GET_PHY_REC_CLK_OUT_OUT_EN	BIT(0)
-+	u8 rsvd;
-+	__le32 freq;
-+	u8 rsvd2[6];
-+	__le16 node_handle;
-+};
-+
- struct ice_aqc_link_topo_params {
- 	u8 lport_num;
- 	u8 lport_num_valid;
-@@ -2040,6 +2065,8 @@ struct ice_aq_desc {
- 		struct ice_aqc_get_phy_caps get_phy;
- 		struct ice_aqc_set_phy_cfg set_phy;
- 		struct ice_aqc_restart_an restart_an;
-+		struct ice_aqc_set_phy_rec_clk_out set_phy_rec_clk_out;
-+		struct ice_aqc_get_phy_rec_clk_out get_phy_rec_clk_out;
- 		struct ice_aqc_gpio read_write_gpio;
- 		struct ice_aqc_sff_eeprom read_write_sff_param;
- 		struct ice_aqc_set_port_id_led set_port_id_led;
-@@ -2195,6 +2222,8 @@ enum ice_adminq_opc {
- 	ice_aqc_opc_get_link_status			= 0x0607,
- 	ice_aqc_opc_set_event_mask			= 0x0613,
- 	ice_aqc_opc_set_mac_lb				= 0x0620,
-+	ice_aqc_opc_set_phy_rec_clk_out			= 0x0630,
-+	ice_aqc_opc_get_phy_rec_clk_out			= 0x0631,
- 	ice_aqc_opc_get_link_topo			= 0x06E0,
- 	ice_aqc_opc_set_port_id_led			= 0x06E9,
- 	ice_aqc_opc_set_gpio				= 0x06EC,
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.c b/drivers/net/ethernet/intel/ice/ice_common.c
-index cbc83928f3e1..1bbe4b8757db 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.c
-+++ b/drivers/net/ethernet/intel/ice/ice_common.c
-@@ -5245,3 +5245,68 @@ bool ice_is_clock_mux_present_e810t(struct ice_hw *hw)
- 	return true;
- }
- 
-+/**
-+ * ice_aq_set_phy_rec_clk_out - set RCLK phy out
-+ * @hw: pointer to the HW struct
-+ * @phy_output: PHY reference clock output pin
-+ * @enable: GPIO state to be applied
-+ * @freq: PHY output frequency
-+ *
-+ * Set CGU reference priority (0x0630)
-+ * Return 0 on success or negative value on failure.
-+ */
-+int
-+ice_aq_set_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, bool enable,
-+			   u32 *freq)
-+{
-+	struct ice_aqc_set_phy_rec_clk_out *cmd;
-+	struct ice_aq_desc desc;
-+	int status;
-+
-+	ice_fill_dflt_direct_cmd_desc(&desc, ice_aqc_opc_set_phy_rec_clk_out);
-+	cmd = &desc.params.set_phy_rec_clk_out;
-+	cmd->phy_output = phy_output;
-+	cmd->port_num = ICE_AQC_SET_PHY_REC_CLK_OUT_CURR_PORT;
-+	cmd->flags = enable & ICE_AQC_SET_PHY_REC_CLK_OUT_OUT_EN;
-+	cmd->freq = cpu_to_le32(*freq);
-+
-+	status = ice_aq_send_cmd(hw, &desc, NULL, 0, NULL);
-+	if (!status)
-+		*freq = le32_to_cpu(cmd->freq);
-+
-+	return status;
-+}
-+
-+/**
-+ * ice_aq_get_phy_rec_clk_out
-+ * @hw: pointer to the HW struct
-+ * @phy_output: PHY reference clock output pin
-+ * @port_num: Port number
-+ * @flags: PHY flags
-+ * @freq: PHY output frequency
-+ *
-+ * Get PHY recovered clock output (0x0631)
-+ */
-+int
-+ice_aq_get_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, u8 *port_num,
-+			   u8 *flags, u32 *freq)
-+{
-+	struct ice_aqc_get_phy_rec_clk_out *cmd;
-+	struct ice_aq_desc desc;
-+	int status;
-+
-+	ice_fill_dflt_direct_cmd_desc(&desc, ice_aqc_opc_get_phy_rec_clk_out);
-+	cmd = &desc.params.get_phy_rec_clk_out;
-+	cmd->phy_output = phy_output;
-+	cmd->port_num = *port_num;
-+
-+	status = ice_aq_send_cmd(hw, &desc, NULL, 0, NULL);
-+	if (!status) {
-+		*port_num = cmd->port_num;
-+		*flags = cmd->flags;
-+		*freq = le32_to_cpu(cmd->freq);
-+	}
-+
-+	return status;
-+}
-+
-diff --git a/drivers/net/ethernet/intel/ice/ice_common.h b/drivers/net/ethernet/intel/ice/ice_common.h
-index c253c0500512..314c53e31973 100644
---- a/drivers/net/ethernet/intel/ice/ice_common.h
-+++ b/drivers/net/ethernet/intel/ice/ice_common.h
-@@ -168,6 +168,12 @@ int
- ice_aq_get_cgu_dpll_status(struct ice_hw *hw, u8 dpll_num, u8 *ref_state,
- 			   u16 *dpll_state, u64 *phase_offset, u8 *eec_mode);
- int
-+ice_aq_set_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, bool enable,
-+			   u32 *freq);
-+int
-+ice_aq_get_phy_rec_clk_out(struct ice_hw *hw, u8 phy_output, u8 *port_num,
-+			   u8 *flags, u32 *freq);
-+int
- ice_dis_vsi_rdma_qset(struct ice_port_info *pi, u16 count, u32 *qset_teid,
- 		      u16 *q_id);
- int
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index e2e3ef7fba7f..e8a0f99e56a0 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -4055,6 +4055,99 @@ ice_get_module_eeprom(struct net_device *netdev,
- 	return 0;
- }
- 
-+/**
-+ * ice_get_rclk_range - get range of recovered clock indices
-+ * @netdev: network interface device structure
-+ * @min_idx: min rclk index
-+ * @max_idx: max rclk index
-+ * @extack: netlink extended ack
-+ */
-+static int
-+ice_get_rclk_range(struct net_device *netdev, u32 *min_idx, u32 *max_idx,
-+		   struct netlink_ext_ack *extack)
-+{
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
-+
-+	if (!ice_is_feature_supported(pf, ICE_F_CGU))
-+		return -EOPNOTSUPP;
-+
-+	*min_idx = 0;
-+	*max_idx = ICE_RCLK_PIN_MAX;
-+
-+	return 0;
-+}
-+
-+/**
-+ * ice_get_rclk_state - get state of a recovered frequency output pin
-+ * @netdev: network interface device structure
-+ * @out_idx: index of a questioned pin
-+ * @ena: returned state of a pin
-+ * @extack: netlink extended ack
-+ */
-+static int
-+ice_get_rclk_state(struct net_device *netdev, u32 out_idx,
-+		   bool *ena, struct netlink_ext_ack *extack)
-+{
-+	u8 port_num = ICE_AQC_SET_PHY_REC_CLK_OUT_CURR_PORT, flags;
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
-+	u32 freq;
-+	int ret;
-+
-+	if (!ice_is_feature_supported(pf, ICE_F_CGU))
-+		return -EOPNOTSUPP;
-+
-+	if (out_idx > ICE_RCLK_PIN_MAX)
-+		return -EINVAL;
-+
-+	ret = ice_aq_get_phy_rec_clk_out(&pf->hw, out_idx,
-+					 &port_num, &flags, &freq);
-+	if (ret)
-+		return ret;
-+
-+	if (flags & ICE_AQC_GET_PHY_REC_CLK_OUT_OUT_EN)
-+		*ena = true;
-+	else
-+		*ena = false;
-+
-+	return ret;
-+}
-+
-+/**
-+ * ice_set_rclk_out - enable/disable recovered clock redirection to the
-+ * output pin
-+ * @netdev: network interface device structure
-+ * @out_idx: index of pin being configured
-+ * @ena: requested state of a pin
-+ * @extack: netlink extended ack
-+ */
-+static int
-+ice_set_rclk_out(struct net_device *netdev, u32 out_idx, bool ena,
-+		 struct netlink_ext_ack *extack)
-+{
-+	struct ice_netdev_priv *np = netdev_priv(netdev);
-+	struct ice_vsi *vsi = np->vsi;
-+	struct ice_pf *pf = vsi->back;
-+	u32 freq;
-+	int ret;
-+
-+	if (!ice_is_feature_supported(pf, ICE_F_CGU))
-+		return -EOPNOTSUPP;
-+
-+	if (out_idx > ICE_RCLK_PIN_MAX)
-+		return -EINVAL;
-+
-+	ret = ice_aq_set_phy_rec_clk_out(&pf->hw, out_idx,
-+					 ena, &freq);
-+	if (ret)
-+		return ret;
-+
-+	return ret;
-+}
-+
- static const struct ethtool_ops ice_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_USECS |
- 				     ETHTOOL_COALESCE_USE_ADAPTIVE |
-@@ -4100,6 +4193,9 @@ static const struct ethtool_ops ice_ethtool_ops = {
- 	.set_fecparam		= ice_set_fecparam,
- 	.get_module_info	= ice_get_module_info,
- 	.get_module_eeprom	= ice_get_module_eeprom,
-+	.get_rclk_range		= ice_get_rclk_range,
-+	.get_rclk_state		= ice_get_rclk_state,
-+	.set_rclk_out		= ice_set_rclk_out,
- };
- 
- static const struct ethtool_ops ice_ethtool_safe_mode_ops = {
-diff --git a/drivers/net/ethernet/intel/ice/ice_ptp_hw.h b/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-index 28b04ec40bae..865ca680b62e 100644
---- a/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-+++ b/drivers/net/ethernet/intel/ice/ice_ptp_hw.h
-@@ -132,4 +132,6 @@ enum ice_e810t_cgu_pins {
- 	NUM_E810T_CGU_PINS
- };
- 
-+#define ICE_RCLK_PIN_MAX	(REF1N - REF1P)
-+
- #endif /* _ICE_PTP_HW_H_ */
--- 
-2.31.1
+And hey, even reads have been dodgy in the past when we didn't really
+have the pinning logic - there's been a lot of users that just wanted
+it to work for their particular use-case rather than in general and in
+all situations..
 
+             Linus
