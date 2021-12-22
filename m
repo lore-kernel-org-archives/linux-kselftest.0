@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DBEEC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 12:41:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AE85C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 12:41:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244952AbhLVMk7 (ORCPT
+        id S244970AbhLVMlB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Dec 2021 07:40:59 -0500
+        Wed, 22 Dec 2021 07:41:01 -0500
 Received: from mga14.intel.com ([192.55.52.115]:11431 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244934AbhLVMk4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:40:56 -0500
+        id S244921AbhLVMk5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:40:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640176855; x=1671712855;
+  t=1640176857; x=1671712857;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/l/lzu8ovCU50omqsIU1bkVibRLaW4dJhOXZM0Wu658=;
-  b=kcHsJjVr9QGHEFlF3Z81WCUPkOOQVs2CT12iJ4hp1QSMsKnLURLcvHUk
-   SNcTGQTF0jTKiaTcXNbErak+ACB9FXLSfY6vJyVT31LU9WwnVsVm50wqX
-   /7iLkEXZIti8m1rAHvNel1PaOJbAi7nY9VvmcvS8wVoVtYGkT+1tTusi5
-   n6verxne/LWMyy8h2XlYUiVq2qubGFhXhNZidb/uAU/OsSduybE+J2h7O
-   XPvoKwLfQ9jYi3J/gp7QVQB7EcdWU78tXPCMQDCCXStfuz/FgPrt1Sqwd
-   BKnvjK+OBeQB57iYLwlKjUmChjcvkD0SdVHd7shTSQAylwDy061Ajdnai
+  bh=Cq5pl+LFSmydyprw9+uNd5O4QogykkkHwYzeeS4aZ1E=;
+  b=CuinwUQizNZ6fn69KhJekXaE02Mkb/m0FiaQxP7sELVin5MgXKuxVu0I
+   Bu4SQrvu8wCmK1OTK/iAJhhJBvAHz9FpMNxaF3I1dAwCbApqgNSQj/apr
+   RBaxeCTotG3Hie0keHrzpISpioP+otnd85D1yxU9dmrXIYSMappyDi1Af
+   k5P36NZ8Lv4R6+T3PywYPlD9k07N7KNRId0RohHqj19w8EGtQwmgqCGzs
+   0HKy/gtuECPiFK4CkVLoPtw+Mn100ArJxt9BQGNx39MPRYyiw6FeOj31H
+   iJ/Th1gO9nFpdLt0Ge9/IaznD9mofy+nCYBhIe3aU7vD0jvzMYP0NPB+Q
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833406"
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833408"
 X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240833406"
+   d="scan'208";a="240833408"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:40:55 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:40:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="587002705"
+   d="scan'208";a="587002714"
 Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:40:54 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:40:56 -0800
 From:   Jing Liu <jing2.liu@intel.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -44,9 +44,9 @@ To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v3 03/22] kvm: x86: Fix xstate_required_size() to follow XSTATE alignment rule
-Date:   Wed, 22 Dec 2021 04:40:33 -0800
-Message-Id: <20211222124052.644626-4-jing2.liu@intel.com>
+Subject: [PATCH v3 05/22] kvm: x86: Check permitted dynamic xfeatures at KVM_SET_CPUID2
+Date:   Wed, 22 Dec 2021 04:40:35 -0800
+Message-Id: <20211222124052.644626-6-jing2.liu@intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
 References: <20211222124052.644626-1-jing2.liu@intel.com>
@@ -56,35 +56,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CPUID.0xD.1.EBX enumerates the size of the XSAVE area (in compacted
-format) required by XSAVES. If CPUID.0xD.i.ECX[1] is set for a state
-component (i), this state component should be located on the next
-64-bytes boundary following the preceding state component in the
-compacted layout.
+Guest xstate permissions should be set by userspace VMM before vcpu
+creation. Extend KVM_SET_CPUID2 to verify that every feature reported
+in CPUID[0xD] has proper permission set.
 
-Fix xstate_required_size() to follow the alignment rule. AMX is the
-first state component with 64-bytes alignment to catch this bug.
-
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 Signed-off-by: Jing Liu <jing2.liu@intel.com>
 ---
- arch/x86/kvm/cpuid.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kvm/cpuid.c | 36 ++++++++++++++++++++++++------------
+ 1 file changed, 24 insertions(+), 12 deletions(-)
 
 diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 07e9215e911d..148003e26cbb 100644
+index 4855344091b8..a068373a7fbd 100644
 --- a/arch/x86/kvm/cpuid.c
 +++ b/arch/x86/kvm/cpuid.c
-@@ -42,7 +42,8 @@ static u32 xstate_required_size(u64 xstate_bv, bool compacted)
- 		if (xstate_bv & 0x1) {
- 		        u32 eax, ebx, ecx, edx, offset;
- 		        cpuid_count(0xD, feature_bit, &eax, &ebx, &ecx, &edx);
--			offset = compacted ? ret : ebx;
-+			/* ECX[1]: 64B alignment in compacted form */
-+			offset = compacted ? ((ecx & 0x2) ? ALIGN(ret, 64) : ret) : ebx;
- 			ret = max(ret, offset + eax);
- 		}
+@@ -81,7 +81,9 @@ static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
+ 	return NULL;
+ }
  
+-static int kvm_check_cpuid(struct kvm_cpuid_entry2 *entries, int nent)
++static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
++			   struct kvm_cpuid_entry2 *entries,
++			   int nent)
+ {
+ 	struct kvm_cpuid_entry2 *best;
+ 
+@@ -97,6 +99,16 @@ static int kvm_check_cpuid(struct kvm_cpuid_entry2 *entries, int nent)
+ 			return -EINVAL;
+ 	}
+ 
++	/* Check guest permissions for dynamically-enabled xfeatures */
++	best = cpuid_entry2_find(entries, nent, 0xd, 0);
++	if (best) {
++		u64 xfeatures;
++
++		xfeatures = best->eax | ((u64)best->edx << 32);
++		if (xfeatures & ~vcpu->arch.guest_fpu.perm)
++			return -ENXIO;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -277,21 +289,21 @@ u64 kvm_vcpu_reserved_gpa_bits_raw(struct kvm_vcpu *vcpu)
+ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+                         int nent)
+ {
+-    int r;
++	int r;
+ 
+-    r = kvm_check_cpuid(e2, nent);
+-    if (r)
+-        return r;
++	r = kvm_check_cpuid(vcpu, e2, nent);
++	if (r)
++		return r;
+ 
+-    kvfree(vcpu->arch.cpuid_entries);
+-    vcpu->arch.cpuid_entries = e2;
+-    vcpu->arch.cpuid_nent = nent;
++	kvfree(vcpu->arch.cpuid_entries);
++	vcpu->arch.cpuid_entries = e2;
++	vcpu->arch.cpuid_nent = nent;
+ 
+-    kvm_update_kvm_cpuid_base(vcpu);
+-    kvm_update_cpuid_runtime(vcpu);
+-    kvm_vcpu_after_set_cpuid(vcpu);
++	kvm_update_kvm_cpuid_base(vcpu);
++	kvm_update_cpuid_runtime(vcpu);
++	kvm_vcpu_after_set_cpuid(vcpu);
+ 
+-    return 0;
++	return 0;
+ }
+ 
+ /* when an old userspace process fills a new kernel module */
 -- 
 2.27.0
 
