@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11AB2C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 12:41:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 873A7C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Dec 2021 12:41:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244991AbhLVMlD (ORCPT
+        id S244996AbhLVMlE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Dec 2021 07:41:03 -0500
-Received: from mga14.intel.com ([192.55.52.115]:11431 "EHLO mga14.intel.com"
+        Wed, 22 Dec 2021 07:41:04 -0500
+Received: from mga14.intel.com ([192.55.52.115]:11437 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244942AbhLVMk4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Dec 2021 07:40:56 -0500
+        id S244949AbhLVMk6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 Dec 2021 07:40:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640176856; x=1671712856;
+  t=1640176858; x=1671712858;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LPHOJNcJOVDQ0nYxMFW72nlmZ9GdEfRTxGjhRqIVxKw=;
-  b=UWDMfwK3rnD5Bqd4EhgC3apYSKxYamNZ2OdJYwCQJ/M3GtqaVtGeojZ1
-   b/nIMyphAc9OxgLKQbNQMky5pr1PvcreXKLDDOaJhmGz0VGow9tdDaCw4
-   ojFFfiPogxMy2dRBtjlVE+4OxL02PZDs8kh9vwv5a5jsfcFnz1WpxJTUT
-   MAPOpT+9D0r0TIpRv1BK2JuXIHmGZ12cC4di2DA05C15oFbPbUkwP+VqZ
-   aSaGDu3rPa/nCeJQKyH7YiYfpHBvkMFtyTvWbOyuRTYAOwrrKyhEOVC5m
-   e6wC/0w+OBKyO+XryaNqW5q3Skw8qLxwg4ctw/uoku4LmhiuUls54x0u4
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833407"
+  bh=7dXZPVEDoLzyZy2Pl21Dl3pKMjJYI7sq2Em4vBDIQI4=;
+  b=VuwfOyiJ2S6x1w232vI6TyjhOoOcRYhqRX/eGcczTscxQ/qYdGRZYS3T
+   GQXcdd37YB3OC5yeMSPn/HJsy7CDp3syNBP48fkcqjRZ6tDblnN7IG99N
+   94N8NtAlZyzobe4Wm3WNA+OeC7KROp0jHEnD6Q7c+6VuTQJgCU6DG8/4L
+   DSZp62u/so5HRBCvX42xXqZTvp5qeriG+Yp97+xyrLLPO6dvqPMwb1VA7
+   TG2EHCdtzTbae5drkj/nYPBxKOFbxxWaWI1Fy7kB0UwInLjuqiHKwfxuM
+   8vzeZrFH96Ch5v2G/Vyw/ICKHHuF1f1ZVtXhkEMhw8wr2N7o6IVha/CDd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240833410"
 X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240833407"
+   d="scan'208";a="240833410"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:40:56 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 04:40:58 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="587002711"
+   d="scan'208";a="587002718"
 Received: from 984fee00a228.jf.intel.com ([10.165.56.59])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:40:55 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 04:40:57 -0800
 From:   Jing Liu <jing2.liu@intel.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -44,9 +44,9 @@ To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v3 04/22] kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID
-Date:   Wed, 22 Dec 2021 04:40:34 -0800
-Message-Id: <20211222124052.644626-5-jing2.liu@intel.com>
+Subject: [PATCH v3 06/22] x86/fpu: Make XFD initialization in __fpstate_reset() a function argument
+Date:   Wed, 22 Dec 2021 04:40:36 -0800
+Message-Id: <20211222124052.644626-7-jing2.liu@intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211222124052.644626-1-jing2.liu@intel.com>
 References: <20211222124052.644626-1-jing2.liu@intel.com>
@@ -56,65 +56,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KVM_GET_SUPPORTED_CPUID should not include any dynamic xstates in
-CPUID[0xD] if they have not been requested with prctl. Otherwise
-a process which directly passes KVM_GET_SUPPORTED_CPUID to
-KVM_SET_CPUID2 would now fail even if it doesn't intend to use a
-dynamically enabled feature. Userspace must know that prctl is
-required and allocate >4K xstate buffer before setting any dynamic
-bit.
+vCPU threads are different from native tasks regarding to the initial XFD
+value. While all native tasks follow a fixed value (init_fpstate::xfd)
+established by the FPU core at boot, vCPU threads need to obey the reset
+value (i.e. ZERO) defined by the specification, to meet the expectation of
+the guest.
 
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+Let the caller supply an argument and adjust the host and guest related
+invocations accordingly.
+
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Jing Liu <jing2.liu@intel.com>
 ---
- Documentation/virt/kvm/api.rst | 4 ++++
- arch/x86/kvm/cpuid.c           | 9 ++++++---
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ arch/x86/kernel/fpu/core.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index aeeb071c7688..1cf2483246cd 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -1684,6 +1684,10 @@ userspace capabilities, and with user requirements (for example, the
- user may wish to constrain cpuid to emulate older hardware, or for
- feature consistency across a cluster).
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index eddeeb4ed2f5..a78bc547fc03 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -199,7 +199,7 @@ void fpu_reset_from_exception_fixup(void)
+ }
  
-+Dynamically-enabled feature bits need to be requested with
-+``arch_prctl()`` before calling this ioctl. Feature bits that have not
-+been requested are excluded from the result.
-+
- Note that certain capabilities, such as KVM_CAP_X86_DISABLE_EXITS, may
- expose cpuid features (e.g. MONITOR) which are not supported by kvm in
- its default configuration. If userspace enables such capabilities, it
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 148003e26cbb..4855344091b8 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -812,11 +812,13 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 				goto out;
- 		}
- 		break;
--	case 0xd:
--		entry->eax &= supported_xcr0;
-+	case 0xd: {
-+		u64 guest_perm = xstate_get_guest_group_perm();
-+
-+		entry->eax &= supported_xcr0 & guest_perm;
- 		entry->ebx = xstate_required_size(supported_xcr0, false);
- 		entry->ecx = entry->ebx;
--		entry->edx &= supported_xcr0 >> 32;
-+		entry->edx &= (supported_xcr0 & guest_perm) >> 32;
- 		if (!supported_xcr0)
- 			break;
+ #if IS_ENABLED(CONFIG_KVM)
+-static void __fpstate_reset(struct fpstate *fpstate);
++static void __fpstate_reset(struct fpstate *fpstate, u64 xfd);
  
-@@ -863,6 +865,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			entry->edx = 0;
- 		}
- 		break;
-+	}
- 	case 0x12:
- 		/* Intel SGX */
- 		if (!kvm_cpu_cap_has(X86_FEATURE_SGX)) {
+ static void fpu_init_guest_permissions(struct fpu_guest *gfpu)
+ {
+@@ -231,7 +231,8 @@ bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu)
+ 	if (!fpstate)
+ 		return false;
+ 
+-	__fpstate_reset(fpstate);
++	/* Leave xfd to 0 (the reset value defined by spec) */
++	__fpstate_reset(fpstate, 0);
+ 	fpstate_init_user(fpstate);
+ 	fpstate->is_valloc	= true;
+ 	fpstate->is_guest	= true;
+@@ -454,21 +455,21 @@ void fpstate_init_user(struct fpstate *fpstate)
+ 		fpstate_init_fstate(fpstate);
+ }
+ 
+-static void __fpstate_reset(struct fpstate *fpstate)
++static void __fpstate_reset(struct fpstate *fpstate, u64 xfd)
+ {
+ 	/* Initialize sizes and feature masks */
+ 	fpstate->size		= fpu_kernel_cfg.default_size;
+ 	fpstate->user_size	= fpu_user_cfg.default_size;
+ 	fpstate->xfeatures	= fpu_kernel_cfg.default_features;
+ 	fpstate->user_xfeatures	= fpu_user_cfg.default_features;
+-	fpstate->xfd		= init_fpstate.xfd;
++	fpstate->xfd		= xfd;
+ }
+ 
+ void fpstate_reset(struct fpu *fpu)
+ {
+ 	/* Set the fpstate pointer to the default fpstate */
+ 	fpu->fpstate = &fpu->__fpstate;
+-	__fpstate_reset(fpu->fpstate);
++	__fpstate_reset(fpu->fpstate, init_fpstate.xfd);
+ 
+ 	/* Initialize the permission related info in fpu */
+ 	fpu->perm.__state_perm		= fpu_kernel_cfg.default_features;
 -- 
 2.27.0
 
