@@ -2,125 +2,77 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2480EC433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Dec 2021 18:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BF01C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Dec 2021 19:48:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349818AbhLWSVw (ORCPT
+        id S244897AbhLWTsf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Dec 2021 13:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        Thu, 23 Dec 2021 14:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbhLWSVv (ORCPT
+        with ESMTP id S244856AbhLWTse (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Dec 2021 13:21:51 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F37AC061401;
-        Thu, 23 Dec 2021 10:21:51 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id f17so4843159ilj.11;
-        Thu, 23 Dec 2021 10:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oRUs2l6ZeMJEDsITkS4VxxkYh4G2HLR8PEyMwu7ux5Y=;
-        b=Z+oqpgoSb+vRReCCj+8rAPO1e/AxPHDRGYHVvJI5IgOFc8u9L4mzvJq2U2gcVlFWCV
-         FNApvBRKv2YHQr58Y9TpjzCgWw2vclhF15mfGpkWRseX12nzr4sL5+apxo6RqgX/ZWnn
-         z5u9rxvlEHRMskEWLVshOKBmr7AXln/ZhG3P4xurOzLPiJ7Ntqm/nIx9KTWmhzwrKU8V
-         niysS/W7bG9Zjtf2cPWgS3UymJMI5W3znLPKpjSrn6+LVWf97QAX5zmMtBEUhKMzJPPF
-         1UY1kYV7j9BZ91/dj7zCWN9siKq3Epa3ccycr2khMbJmYzmiLLapHNPUWixnBdHY4Kgj
-         0Vow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oRUs2l6ZeMJEDsITkS4VxxkYh4G2HLR8PEyMwu7ux5Y=;
-        b=x2q7Nu3oZMSG9HPvzqg47WJI95bR7t8P4NgGYlQtk/pE7F+8C0FamYIe/cU5WhKWfG
-         KjYdAhRRVfJ5xYmi7ozYBB5YZ9ST84Op3WBAopJPYA3YpkOgVvzliGsF+nsGrXRr72Iq
-         9PKGKSmSIqOkSH/MtT2NUURlH2N+x6jPFjQiu+IRvW8hEx4P4WSwYSZQ+ZZ6L/xM2wST
-         klHneajHmcCPr79LAIB92a2ZMqltkt3WqO0obZ3SUm7tlnGyq5IJAcToeCKmkYdBLkEr
-         09Byf9GDeMAb/s4pgP3pO456aXI0GBnb3cUu0HGcq6zHh5VVeYfa84uImP3YMVWf/pSi
-         7M4w==
-X-Gm-Message-State: AOAM530Bcgf2yvZpHipzaNxClp6aRreQAyvNExTwDtTMQBtutuPaQoSH
-        h4dMirWWZrbwCmb6ief9qXY2la1uRQ9hyb+PlJw=
-X-Google-Smtp-Source: ABdhPJzppK8OQBJ8UFCCzqGUOU1/JpKognXqs+kdRlyz7hMf3MeFWh170Hw579k8dBLqZyDBJ7zuEHBlKqN56k5nKMk=
-X-Received: by 2002:a05:6e02:1a21:: with SMTP id g1mr1640062ile.71.1640283710886;
- Thu, 23 Dec 2021 10:21:50 -0800 (PST)
+        Thu, 23 Dec 2021 14:48:34 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE36C061401;
+        Thu, 23 Dec 2021 11:48:34 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 438FE6A2;
+        Thu, 23 Dec 2021 19:48:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 438FE6A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1640288914; bh=IGCCfzoruXVuNxjJQ9Jvb4MnqEAOH92v0oH47GM483I=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mIB9d8mSJcZEVmgP6booAARhBn9Sy8dNF9ty/YdsEL6LJUIf4+gzbte7iJFZr8KtA
+         KW531Ev3yZ37huTH2OwFthpuvccCxjodxyIDddwTOY1IjulHDn82REKsz5RTZaPyRW
+         Ihz1NtwHdb/4DsvEBLA1eahk61J5YKDQfc7UvolU76RWSxle156KZHWlwakPXNSaxv
+         T3YfO2fASXLb6rE9tt2lE7LWNJOkELqu69/Bc0f8iwJARjlFgBD+8jLQrrOHwlvK6X
+         djKijrHFoezFxbTcDw6GiQv+o9W9OfmB97dXMd9cdQHMYA9IrlmmIntVvHE9I0hwDE
+         6+n8VzayC9HxQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Marco Elver <elver@google.com>,
+        Harinder Singh <sharinder@google.com>
+Cc:     davidgow@google.com, brendanhiggins@google.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tim.Bird@sony.com
+Subject: Re: [PATCH v6 3/7] Documentation: KUnit: Added KUnit Architecture
+In-Reply-To: <CANpmjNMz7nh7Eo97p-ikdE6cyTu_Vge_RJktj68BpC9QHqE7iw@mail.gmail.com>
+References: <20211217044911.798817-1-sharinder@google.com>
+ <20211217044911.798817-4-sharinder@google.com>
+ <CANpmjNMz7nh7Eo97p-ikdE6cyTu_Vge_RJktj68BpC9QHqE7iw@mail.gmail.com>
+Date:   Thu, 23 Dec 2021 12:48:33 -0700
+Message-ID: <87zgordrvy.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20211223052007.4111674-1-pulehui@huawei.com>
-In-Reply-To: <20211223052007.4111674-1-pulehui@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 23 Dec 2021 10:21:39 -0800
-Message-ID: <CAEf4BzY29kWicH0fdh9NnYu4nn1E4odL2ES2EYTGkyvHbo2c4g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix cross compiling error when
- using userspace pt_regs
-To:     Pu Lehui <pulehui@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 8:56 PM Pu Lehui <pulehui@huawei.com> wrote:
->
-> When cross compiling arm64 bpf selftests in x86_64 host, the following
-> error occur:
->
-> progs/loop2.c:20:7: error: incomplete definition of type 'struct
-> user_pt_regs'
->
-> Some archs, like arm64 and riscv, use userspace pt_regs in bpf_tracing.h.
-> When arm64 bpf selftests cross compiling in x86_64 host, clang cannot
-> find the arch specific uapi ptrace.h. We can add arch specific header
-> file directory to fix this issue.
->
-> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> ---
-> v1->v2:
-> - use vmlinux.h directly might lead to verifier fail.
-> - use source arch header file directory suggested by Andrii Nakryiko.
->
->  tools/testing/selftests/bpf/Makefile | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 42ffc24e9e71..1ecb6d192953 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -12,6 +12,7 @@ BPFDIR := $(LIBDIR)/bpf
->  TOOLSINCDIR := $(TOOLSDIR)/include
->  BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
->  APIDIR := $(TOOLSINCDIR)/uapi
-> +ARCH_APIDIR := $(abspath ../../../../arch/$(SRCARCH)/include/uapi)
->  GENDIR := $(abspath ../../../../include/generated)
->  GENHDR := $(GENDIR)/autoconf.h
->
-> @@ -294,7 +295,8 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->  CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
->  BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)                  \
->              -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
-> -            -I$(abspath $(OUTPUT)/../usr/include)
-> +            -I$(abspath $(OUTPUT)/../usr/include)                      \
-> +            -I$(ARCH_APIDIR)
->
+Marco Elver <elver@google.com> writes:
 
-This causes compilation error, see [0]. I think we'll have to wait for
-my patch ([1]) to land and then add kernel-side variants for accessing
-pt_regs.
-
-  [0] https://github.com/kernel-patches/bpf/runs/4614606900?check_suite_focus=true
-  [1] https://patchwork.kernel.org/project/netdevbpf/patch/20211222213924.1869758-1-andrii@kernel.org/
-
-
->  CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
->                -Wno-compare-distinct-pointer-types
-> --
-> 2.25.1
+> On Fri, 17 Dec 2021 at 05:49, Harinder Singh <sharinder@google.com> wrote:
+>>
+>> Describe the components of KUnit and how the kernel mode parts
+>> interact with kunit_tool.
+>>
+>> Signed-off-by: Harinder Singh <sharinder@google.com>
 >
+> Acked-by: Marco Elver <elver@google.com>
+>
+> For the .svg file, I think per
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> at least my Signed-off-by is required, but probably also my
+> Co-developed-by? In any case my SOB for kunit_suitememorydiagram.svg
+> is hereby given:
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+
+This is important; Harinder, please try to be sure to credit things
+properly; I'll add this tag to the patch.
+
+Thanks,
+
+jon
