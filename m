@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF096C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Dec 2021 13:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D159C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Dec 2021 13:15:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240299AbhL2NOd (ORCPT
+        id S240226AbhL2NPD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Dec 2021 08:14:33 -0500
-Received: from mga07.intel.com ([134.134.136.100]:28053 "EHLO mga07.intel.com"
+        Wed, 29 Dec 2021 08:15:03 -0500
+Received: from mga07.intel.com ([134.134.136.100]:28049 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240358AbhL2NOH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:14:07 -0500
+        id S240433AbhL2NOY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Dec 2021 08:14:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640783647; x=1672319647;
+  t=1640783664; x=1672319664;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hRvKYcK6yv9rsCQUr0TnGZVJtGSCMREIPvCaoPI9zgw=;
-  b=Jrhr2mD/RdK8HAH2WlkM3zh3ob1Rp39OH7Kx5MbwBRPe343X5yROx9aD
-   f3JRFoE3aHcnqyxrk3oWHMFGEgEUTzXwhnr1QRf7Gu+bjn9zHbqj6DUQT
-   sMkjsp5pm4s7LfXnASWchOvnZXINFfM5sMc1/DBDJzqgN5yI/1Qa7xB9/
-   g+sBwQPEhnycFTuCgtliaAA9gMeGJBkN1xv1UiKX++rYV4Utpu2vqmLBT
-   jPlu/TaMuPBG1Q3K+NHDGCZtsKXk+Ih8KmyvAZ7ZUSzV2C/PXg9etp9+/
-   SQ54kNB/QYRQDvOw6EMd1dY7hPURG5YYn19w6G8LpkGPidpd+O4F+oofl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304876146"
+  bh=0UD6nWK4GZnEjA/aZDd4WoR0dLayFxRmGDiVQqvy/Kc=;
+  b=geJcottNTgLoZ9YJccnH0vEpfxBulwRTrXE0+ESPfhraNheTg4zxrwlX
+   pL5SXt9dYsF7mbr1CFaXtj8dPhtG/swEl+HDlGfFB865M34mEIzgM/aEB
+   DbsockZt9D3cKx11Li7V8zHCqQJ1NIVvOKzl8XBidN1Kub/q/XAOOyt+X
+   9FlEBrtj3KaFNHA2BpYq+vMbTdKwdYa6lgYAAOugCV653hVbNg4LJbI+I
+   ufLojZVyfh3Br76LK2mV5u1ThLbdiVVqvkXkSAoIoC+BVmI6ipZafevnw
+   K/jH2v3kMMQQ1LFkGoDkKFCIv6AqoJWyMPTJkx7bm3pxOL3RwqGud8kfI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304876154"
 X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="304876146"
+   d="scan'208";a="304876154"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:13:40 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:13:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="666281201"
+   d="scan'208";a="666281207"
 Received: from 984fee00bf64.jf.intel.com ([10.165.54.77])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Dec 2021 05:13:39 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 29 Dec 2021 05:13:41 -0800
 From:   Yang Zhong <yang.zhong@intel.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -44,9 +44,9 @@ To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v4 14/21] kvm: x86: Disable RDMSR interception of IA32_XFD_ERR
-Date:   Wed, 29 Dec 2021 05:13:21 -0800
-Message-Id: <20211229131328.12283-15-yang.zhong@intel.com>
+Subject: [PATCH v4 16/21] kvm: x86: Add CPUID support for Intel AMX
+Date:   Wed, 29 Dec 2021 05:13:23 -0800
+Message-Id: <20211229131328.12283-17-yang.zhong@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211229131328.12283-1-yang.zhong@intel.com>
 References: <20211229131328.12283-1-yang.zhong@intel.com>
@@ -58,52 +58,85 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jing Liu <jing2.liu@intel.com>
 
-Disable read emulation of IA32_XFD_ERR MSR if guest cpuid includes XFD.
-This saves one unnecessary VM-exit in guest #NM handler, given that the
-MSR is already restored with the guest value before the guest is resumed.
+Extend CPUID emulation to support XFD, AMX_TILE, AMX_INT8 and
+AMX_BF16. Adding those bits into kvm_cpu_caps finally activates all
+previous logics in this series.
 
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Jing Liu <jing2.liu@intel.com>
 Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 6 ++++++
- arch/x86/kvm/vmx/vmx.h | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/cpufeatures.h |  2 ++
+ arch/x86/kvm/cpuid.c               | 25 +++++++++++++++++++++++--
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 4e51de876085..638665b3e241 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -162,6 +162,7 @@ static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
- 	MSR_FS_BASE,
- 	MSR_GS_BASE,
- 	MSR_KERNEL_GS_BASE,
-+	MSR_IA32_XFD_ERR,
- #endif
- 	MSR_IA32_SYSENTER_CS,
- 	MSR_IA32_SYSENTER_ESP,
-@@ -7228,6 +7229,11 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index d5b5f2ab87a0..da872b6f8d8b 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -299,7 +299,9 @@
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+ #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
++#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
+ #define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
++#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
+ 
+ /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+ #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index acbc10db550e..bce514637703 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -525,7 +525,8 @@ void kvm_set_cpu_caps(void)
+ 		F(AVX512_4VNNIW) | F(AVX512_4FMAPS) | F(SPEC_CTRL) |
+ 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
+ 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
+-		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16)
++		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
++		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
+ 	);
+ 
+ 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
+@@ -544,7 +545,7 @@ void kvm_set_cpu_caps(void)
+ 	);
+ 
+ 	kvm_cpu_cap_mask(CPUID_D_1_EAX,
+-		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES)
++		F(XSAVEOPT) | F(XSAVEC) | F(XGETBV1) | F(XSAVES) | F(XFD)
+ 	);
+ 
+ 	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
+@@ -670,6 +671,8 @@ static struct kvm_cpuid_entry2 *do_host_cpuid(struct kvm_cpuid_array *array,
+ 	case 0x14:
+ 	case 0x17:
+ 	case 0x18:
++	case 0x1d:
++	case 0x1e:
+ 	case 0x1f:
+ 	case 0x8000001d:
+ 		entry->flags |= KVM_CPUID_FLAG_SIGNIFCANT_INDEX;
+@@ -942,6 +945,24 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 				goto out;
  		}
- 	}
- 
-+	if (boot_cpu_has(X86_FEATURE_XFD))
-+		vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R,
-+					  !guest_cpuid_has(vcpu, X86_FEATURE_XFD));
+ 		break;
++	/* Intel AMX TILE */
++	case 0x1d:
++		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
++			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
++			break;
++		}
 +
-+
- 	set_cr4_guest_host_mask(vmx);
- 
- 	vmx_write_encls_bitmap(vcpu, NULL);
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 4df2ac24ffc1..bf9d3051cd6c 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -340,7 +340,7 @@ struct vcpu_vmx {
- 	struct lbr_desc lbr_desc;
- 
- 	/* Save desired MSR intercept (read: pass-through) state */
--#define MAX_POSSIBLE_PASSTHROUGH_MSRS	13
-+#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
- 	struct {
- 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
- 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
++		for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
++			if (!do_host_cpuid(array, function, i))
++				goto out;
++		}
++		break;
++	case 0x1e: /* TMUL information */
++		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
++			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
++			break;
++		}
++		break;
+ 	case KVM_CPUID_SIGNATURE: {
+ 		const u32 *sigptr = (const u32 *)KVM_SIGNATURE;
+ 		entry->eax = KVM_CPUID_FEATURES;
