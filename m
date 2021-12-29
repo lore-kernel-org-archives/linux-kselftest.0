@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BADCC433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Dec 2021 13:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3276C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Dec 2021 13:15:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240241AbhL2NPD (ORCPT
+        id S240429AbhL2NPL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Dec 2021 08:15:03 -0500
-Received: from mga07.intel.com ([134.134.136.100]:28047 "EHLO mga07.intel.com"
+        Wed, 29 Dec 2021 08:15:11 -0500
+Received: from mga07.intel.com ([134.134.136.100]:28053 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240101AbhL2NOV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Dec 2021 08:14:21 -0500
+        id S240276AbhL2NOc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Dec 2021 08:14:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640783661; x=1672319661;
+  t=1640783672; x=1672319672;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=l+unk1SjgYvBRWnT75U63PDCsoOq0XBUMRh0enPT5Z0=;
-  b=EDn0ANklK71YitG2SKnKTGvhYgLL7lmlf6hhftAO+ZYHeH9XLxGhndWM
-   JEGXx4NzsgzTVzIBzRwYuySSUmC1ha0WsMtBxNWiFtgiNMDneKQCHv3BM
-   kA0DTG90mC2MsxPLlwP7ldbDiEn5Oxhx5ztTQGZqCKUeq6yFKbDMMJgsF
-   BNOUB4E9Rb03aQq/YRQ70xyU4+SmVGTKwoIUWOdmBdOCeKo6R6afo4Z/3
-   rfQo8vmumIYrY5iZnkbwABQ8nQ0CEjRZ7d901G1iiKKOEpVTaWbNkDete
-   0ZGeg3O/PNT/iDkTaDtghmgPtT7H9WHWvkcWks1kmy8bZk0HzaqEJpg3b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304876150"
+  bh=Fnag2JsrCvT03RIc81RlUKs1q0XbDEnd56R7/rL5qvg=;
+  b=Ly2LLsBm2QnPAmju9oLKTSqk+LzswyxGK65dGmhrRqvHG6ynnQ6+UGvs
+   P7lsBFJqNyFxiNf0SAO5mOsykyhp1tgX9N1o8pIcvjfw9DNQWK6mhk/sy
+   BnGI76OhddIRDf5LGnXYgAZkDKEGcxNaAFSMPtRLDsOmukZGTIfMkLPPr
+   TfCVrc/CmEr0hPAPOvRQU75jWBybmfg/wuwQN8yBAlM1emTuqkgdMBONJ
+   qMs63Av/kJRnLrL6CPF5PVTm4M4oHX+LdyG21QF1nVi44nkhfRvEX1dr9
+   onVSjvYHiH6XZ4TZurfB0Ln5w7OiZ4POiY4wbogimMgTYQGTTHG2UqUop
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="304876160"
 X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="304876150"
+   d="scan'208";a="304876160"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:13:41 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2021 05:13:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,245,1635231600"; 
-   d="scan'208";a="666281204"
+   d="scan'208";a="666281210"
 Received: from 984fee00bf64.jf.intel.com ([10.165.54.77])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Dec 2021 05:13:40 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 29 Dec 2021 05:13:42 -0800
 From:   Yang Zhong <yang.zhong@intel.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -44,9 +44,9 @@ To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Cc:     seanjc@google.com, jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v4 15/21] kvm: x86: Add XCR0 support for Intel AMX
-Date:   Wed, 29 Dec 2021 05:13:22 -0800
-Message-Id: <20211229131328.12283-16-yang.zhong@intel.com>
+Subject: [PATCH v4 17/21] x86/fpu: Add uabi_size to guest_fpu
+Date:   Wed, 29 Dec 2021 05:13:24 -0800
+Message-Id: <20211229131328.12283-18-yang.zhong@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211229131328.12283-1-yang.zhong@intel.com>
 References: <20211229131328.12283-1-yang.zhong@intel.com>
@@ -56,45 +56,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jing Liu <jing2.liu@intel.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-Two XCR0 bits are defined for AMX to support XSAVE mechanism. Bit 17
-is for tilecfg and bit 18 is for tiledata.
+Userspace needs to inquire KVM about the buffer size to work
+with the new KVM_SET_XSAVE and KVM_GET_XSAVE2. Add the size info
+to guest_fpu for KVM to access.
 
-The value of XCR0[17:18] is always either 00b or 11b. Also, SDM
-recommends that only 64-bit operating systems enable Intel AMX by
-setting XCR0[18:17]. 32-bit host kernel never sets the tile bits in
-vcpu->arch.guest_supported_xcr0.
-
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Wei Wang <wei.w.wang@intel.com>
 Signed-off-by: Jing Liu <jing2.liu@intel.com>
-Signed-off-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 ---
- arch/x86/kvm/x86.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/fpu/types.h | 5 +++++
+ arch/x86/kernel/fpu/core.c       | 1 +
+ arch/x86/kernel/fpu/xstate.c     | 1 +
+ 3 files changed, 7 insertions(+)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a48a89f73027..bdf89c28d2ce 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -210,7 +210,7 @@ static struct kvm_user_return_msrs __percpu *user_return_msrs;
- #define KVM_SUPPORTED_XCR0     (XFEATURE_MASK_FP | XFEATURE_MASK_SSE \
- 				| XFEATURE_MASK_YMM | XFEATURE_MASK_BNDREGS \
- 				| XFEATURE_MASK_BNDCSR | XFEATURE_MASK_AVX512 \
--				| XFEATURE_MASK_PKRU)
-+				| XFEATURE_MASK_PKRU | XFEATURE_MASK_XTILE)
+diff --git a/arch/x86/include/asm/fpu/types.h b/arch/x86/include/asm/fpu/types.h
+index 3795d0573773..eb7cd1139d97 100644
+--- a/arch/x86/include/asm/fpu/types.h
++++ b/arch/x86/include/asm/fpu/types.h
+@@ -522,6 +522,11 @@ struct fpu_guest {
+ 	 */
+ 	u64				xfd_err;
  
- u64 __read_mostly host_efer;
- EXPORT_SYMBOL_GPL(host_efer);
-@@ -990,6 +990,11 @@ static int __kvm_set_xcr(struct kvm_vcpu *vcpu, u32 index, u64 xcr)
- 		if ((xcr0 & XFEATURE_MASK_AVX512) != XFEATURE_MASK_AVX512)
- 			return 1;
++	/*
++	 * @uabi_size:			Size required for save/restore
++	 */
++	unsigned int			uabi_size;
++
+ 	/*
+ 	 * @fpstate:			Pointer to the allocated guest fpstate
+ 	 */
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 3daea097c618..89d679cc819b 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -240,6 +240,7 @@ bool fpu_alloc_guest_fpstate(struct fpu_guest *gfpu)
+ 	gfpu->fpstate		= fpstate;
+ 	gfpu->xfeatures		= fpu_user_cfg.default_features;
+ 	gfpu->perm		= fpu_user_cfg.default_features;
++	gfpu->uabi_size		= fpu_user_cfg.default_size;
+ 	fpu_init_guest_permissions(gfpu);
+ 
+ 	return true;
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 0c0b2323cdec..10fe072f1c92 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1545,6 +1545,7 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
+ 		newfps->is_confidential = curfps->is_confidential;
+ 		newfps->in_use = curfps->in_use;
+ 		guest_fpu->xfeatures |= xfeatures;
++		guest_fpu->uabi_size = usize;
  	}
-+
-+	if ((xcr0 & XFEATURE_MASK_XTILE) &&
-+	    ((xcr0 & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE))
-+		return 1;
-+
- 	vcpu->arch.xcr0 = xcr0;
  
- 	if ((xcr0 ^ old_xcr0) & XFEATURE_MASK_EXTEND)
+ 	fpregs_lock();
