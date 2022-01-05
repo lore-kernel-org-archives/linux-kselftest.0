@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 437C1C4167B
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Jan 2022 12:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B04D4C4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Jan 2022 12:36:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240163AbiAEMgQ (ORCPT
+        id S240175AbiAEMgR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 Jan 2022 07:36:16 -0500
-Received: from mga04.intel.com ([192.55.52.120]:6474 "EHLO mga04.intel.com"
+        Wed, 5 Jan 2022 07:36:17 -0500
+Received: from mga04.intel.com ([192.55.52.120]:6468 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240105AbiAEMgL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S240119AbiAEMgL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 5 Jan 2022 07:36:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1641386171; x=1672922171;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yBqoKfVLohfyGXaWeQ4n6LnbKVPFY37z/4UJzBWLFPM=;
-  b=fyZDJ1ijFE3d7hjvbYFaYTaJt/GM7iO8ScE4SGZ5//H0LN9XaVMw7jlW
-   ls2f0GojSYOORk85f7F9V9PiNKreQ0UrJ1YOAPma8FXo66UZAXLRComeq
-   ZyuqrjeURG0D8cLp7vCpew58yvolxrMcWWQeZ+TWmqYe47dvo/Fe4TL70
-   BCFYSLJOkD5tgc8yZPKQVWTCDBPWSRQInOB8UqIlVsZNXlQiiQnB4eYgk
-   RUJL1YAwiWn58M+yor6o+9kCU14iytPyBQnKMTIuZKMcOh/gt2Rgi6tDm
-   PAcKy/0Ez5KlDrDZUVxrfx3V6LExmaL/zWRqgPuf5VBFoXmneZ2O24T1v
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="241249380"
+  bh=9ikQIeAI7bgDZMp4PMT+Z9stDWFN29Q+i4g4969BawI=;
+  b=RI/W0qgcuj7F3yYKGlZr+6k3VaTFHi6qeCuzdV3ynk/obIxLK9WjQJ8i
+   59HQTVF8JNK3ZQ/K6AqjNWbFkI70BKxJ2o11QFn90lSetpme+n8d+XsWA
+   kmN4NMAutkz8k5PRPs9lWWnixTj5Vql5xwSwlYrx0mFqHnO2HowHuh/Lg
+   YvwqSPkyii8I5+V7u+vTleOCiDJ2vR7oyjJS1FuZkyXlTe1hOx4XEKA5z
+   tc54K1oa1UkXximyU4zWEmdkrZ8xcMVId8Sya5kIdyv5mXqqHll5H6GIm
+   3Qr8w7NOz+dpg979rkGTOhpzwoQekFyO4Qf1FhSCqxO0js5wmwhw2RkUj
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10217"; a="241249382"
 X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="241249380"
+   d="scan'208";a="241249382"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 04:35:39 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2022 04:35:40 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,263,1635231600"; 
-   d="scan'208";a="591004862"
+   d="scan'208";a="591004871"
 Received: from 984fee00bf64.jf.intel.com ([10.165.54.77])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2022 04:35:38 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jan 2022 04:35:39 -0800
 From:   Yang Zhong <yang.zhong@intel.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -44,9 +44,9 @@ To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Cc:     jun.nakajima@intel.com, kevin.tian@intel.com,
         jing2.liu@linux.intel.com, jing2.liu@intel.com,
         guang.zeng@intel.com, wei.w.wang@intel.com, yang.zhong@intel.com
-Subject: [PATCH v5 12/21] kvm: x86: Intercept #NM for saving IA32_XFD_ERR
-Date:   Wed,  5 Jan 2022 04:35:23 -0800
-Message-Id: <20220105123532.12586-13-yang.zhong@intel.com>
+Subject: [PATCH v5 14/21] kvm: x86: Disable RDMSR interception of IA32_XFD_ERR
+Date:   Wed,  5 Jan 2022 04:35:25 -0800
+Message-Id: <20220105123532.12586-15-yang.zhong@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220105123532.12586-1-yang.zhong@intel.com>
 References: <20220105123532.12586-1-yang.zhong@intel.com>
@@ -58,176 +58,51 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jing Liu <jing2.liu@intel.com>
 
-Guest IA32_XFD_ERR is generally modified in two places:
+This saves one unnecessary VM-exit in guest #NM handler, given that the
+MSR is already restored with the guest value before the guest is resumed.
 
-  - Set by CPU when #NM is triggered;
-  - Cleared by guest in its #NM handler;
-
-Intercept #NM for the first case when a nonzero value is written
-to IA32_XFD. Nonzero indicates that the guest is willing to do
-dynamic fpstate expansion for certain xfeatures, thus KVM needs to
-manage and virtualize guest XFD_ERR properly. The vcpu exception
-bitmap is updated in XFD write emulation according to guest_fpu::xfd.
-
-Save the current XFD_ERR value to the guest_fpu container in the #NM
-VM-exit handler. This must be done with interrupt disabled, otherwise
-the unsaved MSR value may be clobbered by host activity.
-
-The saving operation is conducted conditionally only when guest_fpu:xfd
-includes a non-zero value. Doing so also avoids misread on a platform
-which doesn't support XFD but #NM is triggered due to L1 interception.
-
-Queueing #NM to the guest is postponed to handle_exception_nmi(). This
-goes through the nested_vmx check so a virtual vmexit is queued instead
-when #NM is triggered in L2 but L1 wants to intercept it.
-
-Restore the host value (always ZERO outside of the host #NM
-handler) before enabling interrupt.
-
-Restore the guest value from the guest_fpu container right before
-entering the guest (with interrupt disabled).
-
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Jing Liu <jing2.liu@intel.com>
-Signed-off-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Yang Zhong <yang.zhong@intel.com>
 ---
- arch/x86/kvm/vmx/vmcs.h |  5 +++++
- arch/x86/kvm/vmx/vmx.c  | 48 +++++++++++++++++++++++++++++++++++++++++
- arch/x86/kvm/x86.c      |  6 ++++++
- 3 files changed, 59 insertions(+)
+ arch/x86/kvm/vmx/vmx.c | 6 ++++++
+ arch/x86/kvm/vmx/vmx.h | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/vmx/vmcs.h b/arch/x86/kvm/vmx/vmcs.h
-index 6e5de2e2b0da..e325c290a816 100644
---- a/arch/x86/kvm/vmx/vmcs.h
-+++ b/arch/x86/kvm/vmx/vmcs.h
-@@ -129,6 +129,11 @@ static inline bool is_machine_check(u32 intr_info)
- 	return is_exception_n(intr_info, MC_VECTOR);
- }
- 
-+static inline bool is_nm_fault(u32 intr_info)
-+{
-+	return is_exception_n(intr_info, NM_VECTOR);
-+}
-+
- /* Undocumented: icebp/int1 */
- static inline bool is_icebp(u32 intr_info)
- {
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index fe06b02994e6..939e6aad128c 100644
+index 939e6aad128c..b601dc8a7f13 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -36,6 +36,7 @@
- #include <asm/debugreg.h>
- #include <asm/desc.h>
- #include <asm/fpu/api.h>
-+#include <asm/fpu/xstate.h>
- #include <asm/idtentry.h>
- #include <asm/io.h>
- #include <asm/irq_remapping.h>
-@@ -761,6 +762,13 @@ void vmx_update_exception_bitmap(struct kvm_vcpu *vcpu)
- 		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, match);
+@@ -162,6 +162,7 @@ static u32 vmx_possible_passthrough_msrs[MAX_POSSIBLE_PASSTHROUGH_MSRS] = {
+ 	MSR_FS_BASE,
+ 	MSR_GS_BASE,
+ 	MSR_KERNEL_GS_BASE,
++	MSR_IA32_XFD_ERR,
+ #endif
+ 	MSR_IA32_SYSENTER_CS,
+ 	MSR_IA32_SYSENTER_ESP,
+@@ -7290,6 +7291,11 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 		}
  	}
  
-+	/*
-+	 * Trap #NM if guest xfd contains a non-zero value so guest XFD_ERR
-+	 * can be saved timely.
-+	 */
-+	if (vcpu->arch.guest_fpu.fpstate->xfd)
-+		eb |= (1u << NM_VECTOR);
++	if (kvm_cpu_cap_has(X86_FEATURE_XFD))
++		vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R,
++					  !guest_cpuid_has(vcpu, X86_FEATURE_XFD));
 +
- 	vmcs_write32(EXCEPTION_BITMAP, eb);
- }
- 
-@@ -1967,6 +1975,12 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_KERNEL_GS_BASE:
- 		vmx_write_guest_kernel_gs_base(vmx, data);
- 		break;
-+	case MSR_IA32_XFD:
-+		ret = kvm_set_msr_common(vcpu, msr_info);
-+		/* Update #NM interception according to guest xfd */
-+		if (!ret)
-+			vmx_update_exception_bitmap(vcpu);
-+		break;
- #endif
- 	case MSR_IA32_SYSENTER_CS:
- 		if (is_guest_mode(vcpu))
-@@ -4798,6 +4812,17 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
- 	if (is_machine_check(intr_info) || is_nmi(intr_info))
- 		return 1; /* handled by handle_exception_nmi_irqoff() */
- 
-+	/*
-+	 * Queue the exception here instead of in handle_nm_fault_irqoff().
-+	 * This ensures the nested_vmx check is not skipped so vmexit can
-+	 * be reflected to L1 (when it intercepts #NM) before reaching this
-+	 * point.
-+	 */
-+	if (is_nm_fault(intr_info)) {
-+		kvm_queue_exception(vcpu, NM_VECTOR);
-+		return 1;
-+	}
 +
- 	if (is_invalid_opcode(intr_info))
- 		return handle_ud(vcpu);
+ 	set_cr4_guest_host_mask(vmx);
  
-@@ -6399,6 +6424,26 @@ static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu,
- 	kvm_after_interrupt(vcpu);
- }
+ 	vmx_write_encls_bitmap(vcpu, NULL);
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index acb874db02da..e0922c80c9d1 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -352,7 +352,7 @@ struct vcpu_vmx {
+ 	struct lbr_desc lbr_desc;
  
-+static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
-+{
-+	/*
-+	 * Save xfd_err to guest_fpu before interrupt is enabled, so the
-+	 * MSR value is not clobbered by the host activity before the guest
-+	 * has chance to consume it.
-+	 *
-+	 * We should not blindly read xfd_err here, since this exception
-+	 * might be caused by L1 interception on a platform which doesn't
-+	 * support xfd at all.
-+	 *
-+	 * Do it conditionally upon guest_fpu::xfd. xfd_err matters
-+	 * only when xfd contains a non-zero value.
-+	 *
-+	 * Queuing exception is done in vmx_handle_exit. See comment there.
-+	 */
-+	if (vcpu->arch.guest_fpu.fpstate->xfd)
-+		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-+}
-+
- static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
- {
- 	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
-@@ -6407,6 +6452,9 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
- 	/* if exit due to PF check for async PF */
- 	if (is_page_fault(intr_info))
- 		vmx->vcpu.arch.apf.host_apf_flags = kvm_read_and_reset_apf_flags();
-+	/* if exit due to NM, handle before interrupts are enabled */
-+	else if (is_nm_fault(intr_info))
-+		handle_nm_fault_irqoff(&vmx->vcpu);
- 	/* Handle machine checks before interrupts are enabled */
- 	else if (is_machine_check(intr_info))
- 		kvm_machine_check();
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 21ce65220e38..2c988f8ca616 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9953,6 +9953,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 	if (test_thread_flag(TIF_NEED_FPU_LOAD))
- 		switch_fpu_return();
- 
-+	if (vcpu->arch.guest_fpu.xfd_err)
-+		wrmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-+
- 	if (unlikely(vcpu->arch.switch_db_regs)) {
- 		set_debugreg(0, 7);
- 		set_debugreg(vcpu->arch.eff_db[0], 0);
-@@ -10016,6 +10019,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 
- 	static_call(kvm_x86_handle_exit_irqoff)(vcpu);
- 
-+	if (vcpu->arch.guest_fpu.xfd_err)
-+		wrmsrl(MSR_IA32_XFD_ERR, 0);
-+
- 	/*
- 	 * Consume any pending interrupts, including the possible source of
- 	 * VM-Exit on SVM and any ticks that occur between VM-Exit and now.
+ 	/* Save desired MSR intercept (read: pass-through) state */
+-#define MAX_POSSIBLE_PASSTHROUGH_MSRS	13
++#define MAX_POSSIBLE_PASSTHROUGH_MSRS	14
+ 	struct {
+ 		DECLARE_BITMAP(read, MAX_POSSIBLE_PASSTHROUGH_MSRS);
+ 		DECLARE_BITMAP(write, MAX_POSSIBLE_PASSTHROUGH_MSRS);
