@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 552E9C43217
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jan 2022 12:14:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3982C433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jan 2022 12:14:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiAXMOI (ORCPT
+        id S239588AbiAXMOM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 07:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        Mon, 24 Jan 2022 07:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239317AbiAXMNq (ORCPT
+        with ESMTP id S239337AbiAXMNx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:13:46 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D872FC061756;
-        Mon, 24 Jan 2022 04:13:30 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id s13so20816911ejy.3;
-        Mon, 24 Jan 2022 04:13:30 -0800 (PST)
+        Mon, 24 Jan 2022 07:13:53 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB8CC06175B;
+        Mon, 24 Jan 2022 04:13:34 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id a18so56083203edj.7;
+        Mon, 24 Jan 2022 04:13:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VvHsOkt62ukgW5L9GfPiw5zKOT4L6naWQ2GO/5cmBcg=;
-        b=l6HblCXVK5kcapgt+86ZmupmzKGhqOkwpj1NKhXj7ZhURdjldynN9FfqaKT3ZjECGM
-         DQHB49+otnURJkll7juIjq1stslmraofsupifOnWT9Nj+q/mJUfpI3oy+4qeHRRWVBB4
-         Hp93Nlq24pWSqQ9I7g0Afp+4pT3ujPTWQuhSTiYDCo2sht+4FBysorxEwR6GnMQbSoKc
-         kPytw3153INWAo1KnGtilvdjrUYxK8qJEvJPytrTLTULFFR/eTeiNcskhSdG9foAOC4C
-         tf1u7/LsmFGYDptB92tLpmED30kx1Jzlf4jwH/ppnCQiPKuWUp0OoD6Da9uoa9pMwdBQ
-         LbeA==
+        bh=BT0N+mBdL9R3phVhARFj9DJx7yeK/bOu1MSb5TcmPCI=;
+        b=iuCoTNHG7dG7srRO7V3jovl1cw/MwnjZ5OP1FZ+3bk81s7ZDQxSKzjaX1kSm/ZCxSD
+         g0nay9blXuATdQdBOL3v7qlsxa59ghMYcqEuJ2jze52M05tUXYqik4gkRlMQvf91U35C
+         mjYzMH8hcHqgSi5Ho6Fjl4GkdYQgBuRodnzN6QZYgzt3Q4KTrIZ3ulhW1Vf+AEwfPk9z
+         qUmfWayzHdpNJ4jo40Ovhd3Z5GrDMcauwQP1pr2ntyYmu4bk2U93iNhD9U20SjrZSR2F
+         nLEJPYlq2dot1igqSq/pRC6GwpNFSsuCFg4gBlOMOAltpcQ8wNtxB3hFwoOmp+toHHL/
+         k7jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VvHsOkt62ukgW5L9GfPiw5zKOT4L6naWQ2GO/5cmBcg=;
-        b=2hJAjO69/Be/TFrrIR6uONVjM60AULIUXeEv/JGkIU06aNucA7VYqDVIrV6HSjqp+p
-         Wzh+7JRKBA18gMoyTa2Hu7uFyZqYTOBEllE5rZShfGVidXiIOlKNvqdtozzoKl3RGfm+
-         dazd4LLtrq2LgGH1HfnOUO3iSrYM9W51FJYsVsJNEa9Ipikk6pdlu+Yd+WnHZVJgxfj/
-         8hJVIPUg2myoYjc7UQc0jJpzI6jdoa+CuB8OtK6hbKqKeHEHT2RN3A3PPxCvto0n2hI6
-         2MjMi/nODtLlmjCQ/VJqS/wB1M4Ui9542L1X/w4PFjYB0CiX7P1XbpGm37spjMSAn1Ce
-         td2g==
-X-Gm-Message-State: AOAM530mOQOsqW4v942TFuYGOQvwqMmMHyvXLj8K4k2ieKpXW6hfE0eg
-        R8Jzm0v6xH5kJw5kg1evE0Y=
-X-Google-Smtp-Source: ABdhPJyI5fkHz0d451LDw9HiPltBPJSRl+9VVzZnlJizI9RRD4AhAGtYZoGNRTKKUSpo0gSMOqA02w==
-X-Received: by 2002:a17:907:3da1:: with SMTP id he33mr5907037ejc.250.1643026409370;
-        Mon, 24 Jan 2022 04:13:29 -0800 (PST)
+        bh=BT0N+mBdL9R3phVhARFj9DJx7yeK/bOu1MSb5TcmPCI=;
+        b=NekMtwUg9aI5Ee/zlHK4c3qvwSKM+ODfLVN8y0HRBgMRZQ4qdg5S5XRdddpxf99Z1g
+         yoWOmXI5/rTO/Uxr8eYDML5E+9IOA1jD+RHnhLIG3LrBUM2qlnioZx8GrN0Vfj1mSu8M
+         E7fhfHeoC6EabVSMMBKmgZJA1jcylqLQ6KvbgdyHTQ5H5JP6VC7pcFx/uCCR6MLFi945
+         MxSooZ8qYZu9mTkToWsmXf9QLnbDMCjB3HOZ/Jm9Qfl4p2MJ+Ovx7jQCVr36L6IjYjNc
+         UuT0mCkAUIMIXJ80na67hK/6dyStpvCD2GkqfiCJSyGgL1FDnY2P/MILGf3bN/8Hk3u0
+         KWmw==
+X-Gm-Message-State: AOAM533GhftMsNJsAhp1mKmKY2IOwL2FYssrD8UXlnIBu5bRgUAWgt4I
+        VgGLXpH9+V4oARe6zt8Vbek=
+X-Google-Smtp-Source: ABdhPJx70wonuqw38pu610pwgLLQM/T5YpBn/MMj0Ua19qCBC+ybS6sFSSGUYdHxsN8UGBro3wh1ew==
+X-Received: by 2002:aa7:d547:: with SMTP id u7mr15472231edr.76.1643026413133;
+        Mon, 24 Jan 2022 04:13:33 -0800 (PST)
 Received: from ponky.lan ([2a04:241e:502:a09c:a21f:7a9f:9158:4a40])
-        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.27
+        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 04:13:28 -0800 (PST)
+        Mon, 24 Jan 2022 04:13:32 -0800 (PST)
 From:   Leonard Crestez <cdleonard@gmail.com>
 To:     David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
@@ -68,9 +68,9 @@ Cc:     Shuah Khan <shuah@kernel.org>,
         Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 05/20] tcp: authopt: Compute packet signatures
-Date:   Mon, 24 Jan 2022 14:12:51 +0200
-Message-Id: <487731c7d2c6c4f3f20e9545de6feee6d6d2d13b.1643026076.git.cdleonard@gmail.com>
+Subject: [PATCH v5 07/20] tcp: authopt: Disable via sysctl by default
+Date:   Mon, 24 Jan 2022 14:12:53 +0200
+Message-Id: <051b3a9bb5bc9e7776240a193f1b85836cead600.1643026076.git.cdleonard@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1643026076.git.cdleonard@gmail.com>
 References: <cover.1643026076.git.cdleonard@gmail.com>
@@ -80,522 +80,221 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Computing tcp authopt packet signatures is a two step process:
+This is mainly intended to protect against local privilege escalations
+through a rarely used feature so it is deliberately not namespaced.
 
-* traffic key is computed based on tcp 4-tuple, initial sequence numbers
-and the secret key.
-* packet mac is computed based on traffic key and content of individual
-packets.
+Enforcement is only at the setsockopt level, this should be enough to
+ensure that the tcp_authopt_needed static key never turns on.
 
-The traffic key could be cached for established sockets but it is not.
-
-A single code path exists for ipv4/ipv6 and input/output. This keeps the
-code short but slightly slower due to lots of conditionals.
-
-On output we read remote IP address from socket members on output, we
-can't use skb network header because it's computed after TCP options.
-
-On input we read remote IP address from skb network headers, we can't
-use socket binding members because those are not available for SYN.
+No effort is made to handle disabling when the feature is already in
+use.
 
 Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 ---
- include/net/tcp_authopt.h |   9 +
- net/ipv4/tcp_authopt.c    | 453 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 462 insertions(+)
+ Documentation/networking/ip-sysctl.rst |  6 ++++
+ include/net/tcp_authopt.h              |  1 +
+ net/ipv4/sysctl_net_ipv4.c             | 39 ++++++++++++++++++++++++++
+ net/ipv4/tcp_authopt.c                 | 27 +++++++++++++++++-
+ 4 files changed, 72 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 2572eecc3e86..fb732f134ddd 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -989,10 +989,16 @@ tcp_limit_output_bytes - INTEGER
+ tcp_challenge_ack_limit - INTEGER
+ 	Limits number of Challenge ACK sent per second, as recommended
+ 	in RFC 5961 (Improving TCP's Robustness to Blind In-Window Attacks)
+ 	Default: 1000
+ 
++tcp_authopt - BOOLEAN
++	Enable the TCP Authentication Option (RFC5925), a replacement for TCP
++	MD5 Signatures (RFC2835).
++
++	Default: 0
++
+ UDP variables
+ =============
+ 
+ udp_l3mdev_accept - BOOLEAN
+ 	Enabling this option allows a "global" bound socket to work
 diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
-index bbd0c0977954..7d0a66fcde71 100644
+index 7096e3ad59a6..4c9ec1f39932 100644
 --- a/include/net/tcp_authopt.h
 +++ b/include/net/tcp_authopt.h
-@@ -68,10 +68,19 @@ struct tcp_authopt_info {
- 	u32 src_isn;
- 	/** @dst_isn: Remote Initial Sequence Number */
- 	u32 dst_isn;
+@@ -80,10 +80,11 @@ struct tcphdr_authopt {
  };
  
-+/* TCP authopt as found in header */
-+struct tcphdr_authopt {
-+	u8 num;
-+	u8 len;
-+	u8 keyid;
-+	u8 rnextkeyid;
-+	u8 mac[0];
-+};
-+
  #ifdef CONFIG_TCP_AUTHOPT
+ DECLARE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
+ #define tcp_authopt_needed (static_branch_unlikely(&tcp_authopt_needed_key))
++extern int sysctl_tcp_authopt;
+ 
+ void tcp_authopt_free(struct sock *sk, struct tcp_authopt_info *info);
  void tcp_authopt_clear(struct sock *sk);
  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen);
  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
- int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index 97eb54774924..07de2666314c 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -17,10 +17,11 @@
+ #include <net/udp.h>
+ #include <net/cipso_ipv4.h>
+ #include <net/ping.h>
+ #include <net/protocol.h>
+ #include <net/netevent.h>
++#include <net/tcp_authopt.h>
+ 
+ static int two = 2;
+ static int three __maybe_unused = 3;
+ static int four = 4;
+ static int thousand = 1000;
+@@ -472,10 +473,37 @@ static int proc_fib_multipath_hash_fields(struct ctl_table *table, int write,
+ 
+ 	return ret;
+ }
+ #endif
+ 
++#ifdef CONFIG_TCP_AUTHOPT
++static int proc_tcp_authopt(struct ctl_table *ctl,
++			    int write, void *buffer, size_t *lenp,
++			    loff_t *ppos)
++{
++	int val = sysctl_tcp_authopt;
++	struct ctl_table tmp = {
++		.data = &val,
++		.mode = ctl->mode,
++		.maxlen = sizeof(val),
++		.extra1 = SYSCTL_ZERO,
++		.extra2 = SYSCTL_ONE,
++	};
++	int err;
++
++	err = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (err)
++		return err;
++	if (sysctl_tcp_authopt && !val) {
++		net_warn_ratelimited("Enabling TCP Authentication Option is permanent\n");
++		return -EINVAL;
++	}
++	sysctl_tcp_authopt = val;
++	return 0;
++}
++#endif
++
+ static struct ctl_table ipv4_table[] = {
+ 	{
+ 		.procname	= "tcp_max_orphans",
+ 		.data		= &sysctl_tcp_max_orphans,
+ 		.maxlen		= sizeof(int),
+@@ -583,10 +611,21 @@ static struct ctl_table ipv4_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_douintvec_minmax,
+ 		.extra1		= &sysctl_fib_sync_mem_min,
+ 		.extra2		= &sysctl_fib_sync_mem_max,
+ 	},
++#ifdef CONFIG_TCP_AUTHOPT
++	{
++		.procname	= "tcp_authopt",
++		.data		= &sysctl_tcp_authopt,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_tcp_authopt,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++#endif
+ 	{ }
+ };
+ 
+ static struct ctl_table ipv4_net_table[] = {
+ 	{
 diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-index 9c853e2e0627..06727b4f96e8 100644
+index 694dbc9f3a94..939dfb4a6f12 100644
 --- a/net/ipv4/tcp_authopt.c
 +++ b/net/ipv4/tcp_authopt.c
-@@ -464,10 +464,463 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 	mutex_unlock(&net->mutex);
+@@ -4,10 +4,15 @@
+ #include <net/ipv6.h>
+ #include <net/tcp.h>
+ #include <linux/kref.h>
+ #include <crypto/hash.h>
  
- 	return 0;
++/* This is mainly intended to protect against local privilege escalations through
++ * a rarely used feature so it is deliberately not namespaced.
++ */
++int sysctl_tcp_authopt;
++
+ /* This is enabled when first struct tcp_authopt_info is allocated and never released */
+ DEFINE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
+ EXPORT_SYMBOL(tcp_authopt_needed_key);
+ 
+ /* All current algorithms have a mac length of 12 but crypto API digestsize can be larger */
+@@ -430,17 +435,30 @@ static int _copy_from_sockptr_tolerant(u8 *dst,
+ 		memset(dst + srclen, 0, dstlen - srclen);
+ 
+ 	return err;
  }
  
-+static int tcp_authopt_get_isn(struct sock *sk,
-+			       struct tcp_authopt_info *info,
-+			       struct sk_buff *skb,
-+			       int input,
-+			       __be32 *sisn,
-+			       __be32 *disn)
++static int check_sysctl_tcp_authopt(void)
 +{
-+	struct tcphdr *th = tcp_hdr(skb);
-+
-+	/* Special cases for SYN and SYN/ACK */
-+	if (th->syn && !th->ack) {
-+		*sisn = th->seq;
-+		*disn = 0;
-+		return 0;
-+	}
-+	if (th->syn && th->ack) {
-+		*sisn = th->seq;
-+		*disn = htonl(ntohl(th->ack_seq) - 1);
-+		return 0;
-+	}
-+
-+	if (sk->sk_state == TCP_NEW_SYN_RECV) {
-+		struct tcp_request_sock *rsk = (struct tcp_request_sock *)sk;
-+
-+		if (WARN_ONCE(!input, "Caller passed wrong socket"))
-+			return -EINVAL;
-+		*sisn = htonl(rsk->rcv_isn);
-+		*disn = htonl(rsk->snt_isn);
-+		return 0;
-+	} else if (sk->sk_state == TCP_LISTEN) {
-+		/* Signature computation for non-syn packet on a listen
-+		 * socket is not possible because we lack the initial
-+		 * sequence numbers.
-+		 *
-+		 * Input segments that are not matched by any request,
-+		 * established or timewait socket will get here. These
-+		 * are not normally sent by peers.
-+		 *
-+		 * Their signature might be valid but we don't have
-+		 * enough state to determine that. TCP-MD5 can attempt
-+		 * to validate and reply with a signed RST because it
-+		 * doesn't care about ISNs.
-+		 *
-+		 * Reporting an error from signature code causes the
-+		 * packet to be discarded which is good.
-+		 */
-+		if (WARN_ONCE(!input, "Caller passed wrong socket"))
-+			return -EINVAL;
-+		*sisn = 0;
-+		*disn = 0;
-+		return 0;
-+	}
-+	if (WARN_ONCE(!info, "caller did not pass tcp_authopt_info\n"))
-+		return -EINVAL;
-+	/* Initial sequence numbers for ESTABLISHED connections from info */
-+	if (input) {
-+		*sisn = htonl(info->dst_isn);
-+		*disn = htonl(info->src_isn);
-+	} else {
-+		*sisn = htonl(info->src_isn);
-+		*disn = htonl(info->dst_isn);
-+	}
-+	return 0;
-+}
-+
-+/* Feed one buffer into ahash
-+ * The buffer is assumed to be DMA-able
-+ */
-+static int crypto_ahash_buf(struct ahash_request *req, u8 *buf, uint len)
-+{
-+	struct scatterlist sg;
-+
-+	sg_init_one(&sg, buf, len);
-+	ahash_request_set_crypt(req, &sg, NULL, len);
-+
-+	return crypto_ahash_update(req);
-+}
-+
-+/* feed traffic key into ahash */
-+static int tcp_authopt_ahash_traffic_key(struct tcp_authopt_alg_pool *pool,
-+					 struct sock *sk,
-+					 struct sk_buff *skb,
-+					 struct tcp_authopt_info *info,
-+					 bool input,
-+					 bool ipv6)
-+{
-+	struct tcphdr *th = tcp_hdr(skb);
-+	int err;
-+	__be32 sisn, disn;
-+	__be16 digestbits = htons(crypto_ahash_digestsize(pool->tfm) * 8);
-+	/* For ahash const data buffers don't work so ensure header is on stack */
-+	char traffic_key_context_header[7] = "\x01TCP-AO";
-+
-+	// RFC5926 section 3.1.1.1
-+	err = crypto_ahash_buf(pool->req, traffic_key_context_header, 7);
-+	if (err)
-+		return err;
-+
-+	/* Addresses from packet on input and from sk_common on output
-+	 * This is because on output MAC is computed before prepending IP header
-+	 */
-+	if (input) {
-+		if (ipv6)
-+			err = crypto_ahash_buf(pool->req, (u8 *)&ipv6_hdr(skb)->saddr, 32);
-+		else
-+			err = crypto_ahash_buf(pool->req, (u8 *)&ip_hdr(skb)->saddr, 8);
-+		if (err)
-+			return err;
-+	} else {
-+		if (ipv6) {
-+#if IS_ENABLED(CONFIG_IPV6)
-+			err = crypto_ahash_buf(pool->req, (u8 *)&sk->sk_v6_rcv_saddr, 16);
-+			if (err)
-+				return err;
-+			err = crypto_ahash_buf(pool->req, (u8 *)&sk->sk_v6_daddr, 16);
-+			if (err)
-+				return err;
-+#else
-+			return -EINVAL;
-+#endif
-+		} else {
-+			err = crypto_ahash_buf(pool->req, (u8 *)&sk->sk_rcv_saddr, 4);
-+			if (err)
-+				return err;
-+			err = crypto_ahash_buf(pool->req, (u8 *)&sk->sk_daddr, 4);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	/* TCP ports from header */
-+	err = crypto_ahash_buf(pool->req, (u8 *)&th->source, 4);
-+	if (err)
-+		return err;
-+	err = tcp_authopt_get_isn(sk, info, skb, input, &sisn, &disn);
-+	if (err)
-+		return err;
-+	err = crypto_ahash_buf(pool->req, (u8 *)&sisn, 4);
-+	if (err)
-+		return err;
-+	err = crypto_ahash_buf(pool->req, (u8 *)&disn, 4);
-+	if (err)
-+		return err;
-+	err = crypto_ahash_buf(pool->req, (u8 *)&digestbits, 2);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+/* Convert a variable-length key to a 16-byte fixed-length key for AES-CMAC
-+ * This is described in RFC5926 section 3.1.1.2
-+ */
-+static int aes_setkey_derived(struct crypto_ahash *tfm, struct ahash_request *req,
-+			      u8 *key, size_t keylen)
-+{
-+	static const u8 zeros[16] = {0};
-+	struct scatterlist sg;
-+	u8 derived_key[16];
-+	int err;
-+
-+	if (WARN_ON_ONCE(crypto_ahash_digestsize(tfm) != sizeof(derived_key)))
-+		return -EINVAL;
-+	err = crypto_ahash_setkey(tfm, zeros, sizeof(zeros));
-+	if (err)
-+		return err;
-+	err = crypto_ahash_init(req);
-+	if (err)
-+		return err;
-+	sg_init_one(&sg, key, keylen);
-+	ahash_request_set_crypt(req, &sg, derived_key, keylen);
-+	err = crypto_ahash_digest(req);
-+	if (err)
-+		return err;
-+	return crypto_ahash_setkey(tfm, derived_key, sizeof(derived_key));
-+}
-+
-+static int tcp_authopt_setkey(struct tcp_authopt_alg_pool *pool, struct tcp_authopt_key_info *key)
-+{
-+	if (key->alg_id == TCP_AUTHOPT_ALG_AES_128_CMAC_96 && key->keylen != 16)
-+		return aes_setkey_derived(pool->tfm, pool->req, key->key, key->keylen);
-+	else
-+		return crypto_ahash_setkey(pool->tfm, key->key, key->keylen);
-+}
-+
-+static int tcp_authopt_get_traffic_key(struct sock *sk,
-+				       struct sk_buff *skb,
-+				       struct tcp_authopt_key_info *key,
-+				       struct tcp_authopt_info *info,
-+				       bool input,
-+				       bool ipv6,
-+				       u8 *traffic_key)
-+{
-+	struct tcp_authopt_alg_pool *pool;
-+	int err;
-+
-+	pool = tcp_authopt_get_kdf_pool(key);
-+	if (IS_ERR(pool))
-+		return PTR_ERR(pool);
-+
-+	err = tcp_authopt_setkey(pool, key);
-+	if (err)
-+		goto out;
-+	err = crypto_ahash_init(pool->req);
-+	if (err)
-+		goto out;
-+
-+	err = tcp_authopt_ahash_traffic_key(pool, sk, skb, info, input, ipv6);
-+	if (err)
-+		goto out;
-+
-+	ahash_request_set_crypt(pool->req, NULL, traffic_key, 0);
-+	err = crypto_ahash_final(pool->req);
-+	if (err)
-+		return err;
-+
-+out:
-+	tcp_authopt_put_kdf_pool(key, pool);
-+	return err;
-+}
-+
-+static int crypto_ahash_buf_zero(struct ahash_request *req, int len)
-+{
-+	u8 zeros[TCP_AUTHOPT_MACLEN] = {0};
-+	int buflen, err;
-+
-+	/* In practice this is always called with len exactly 12.
-+	 * Even on input we drop unusual signature sizes early.
-+	 */
-+	while (len) {
-+		buflen = min_t(int, len, sizeof(zeros));
-+		err = crypto_ahash_buf(req, zeros, buflen);
-+		if (err)
-+			return err;
-+		len -= buflen;
++	if (!sysctl_tcp_authopt) {
++		net_warn_ratelimited("TCP Authentication Option disabled by sysctl.\n");
++		return -EPERM;
 +	}
 +
 +	return 0;
 +}
 +
-+static int tcp_authopt_hash_tcp4_pseudoheader(struct tcp_authopt_alg_pool *pool,
-+					      __be32 saddr,
-+					      __be32 daddr,
-+					      int nbytes)
-+{
-+	struct tcp4_pseudohdr phdr = {
-+		.saddr = saddr,
-+		.daddr = daddr,
-+		.pad = 0,
-+		.protocol = IPPROTO_TCP,
-+		.len = htons(nbytes)
-+	};
-+	return crypto_ahash_buf(pool->req, (u8 *)&phdr, sizeof(phdr));
-+}
-+
-+#if IS_ENABLED(CONFIG_IPV6)
-+static int tcp_authopt_hash_tcp6_pseudoheader(struct tcp_authopt_alg_pool *pool,
-+					      struct in6_addr *saddr,
-+					      struct in6_addr *daddr,
-+					      u32 plen)
-+{
-+	int err;
-+	__be32 buf[2];
-+
-+	buf[0] = htonl(plen);
-+	buf[1] = htonl(IPPROTO_TCP);
-+
-+	err = crypto_ahash_buf(pool->req, (u8 *)saddr, sizeof(*saddr));
-+	if (err)
-+		return err;
-+	err = crypto_ahash_buf(pool->req, (u8 *)daddr, sizeof(*daddr));
-+	if (err)
-+		return err;
-+	return crypto_ahash_buf(pool->req, (u8 *)&buf, sizeof(buf));
-+}
-+#endif
-+
-+/** Hash tcphdr options.
-+ *
-+ * If include_options is false then only the TCPOPT_AUTHOPT option itself is hashed
-+ * Point to AO inside TH is passed by the caller
-+ */
-+static int tcp_authopt_hash_opts(struct tcp_authopt_alg_pool *pool,
-+				 struct tcphdr *th,
-+				 struct tcphdr_authopt *aoptr,
-+				 bool include_options)
-+{
-+	int err;
-+	/* start of options */
-+	u8 *tcp_opts = (u8 *)(th + 1);
-+	/* start of options */
-+	u8 *aobuf = (u8 *)aoptr;
-+	u8 aolen = aoptr->len;
-+
-+	if (WARN_ONCE(aoptr->num != TCPOPT_AUTHOPT, "Bad aoptr\n"))
-+		return -EINVAL;
-+
-+	if (include_options) {
-+		/* end of options */
-+		u8 *tcp_data = ((u8 *)th) + th->doff * 4;
-+
-+		err = crypto_ahash_buf(pool->req, tcp_opts, aobuf - tcp_opts + 4);
-+		if (err)
-+			return err;
-+		err = crypto_ahash_buf_zero(pool->req, aolen - 4);
-+		if (err)
-+			return err;
-+		err = crypto_ahash_buf(pool->req, aobuf + aolen, tcp_data - (aobuf + aolen));
-+		if (err)
-+			return err;
-+	} else {
-+		err = crypto_ahash_buf(pool->req, aobuf, 4);
-+		if (err)
-+			return err;
-+		err = crypto_ahash_buf_zero(pool->req, aolen - 4);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tcp_authopt_hash_packet(struct tcp_authopt_alg_pool *pool,
-+				   struct sock *sk,
-+				   struct sk_buff *skb,
-+				   struct tcphdr_authopt *aoptr,
-+				   bool input,
-+				   bool ipv6,
-+				   bool include_options,
-+				   u8 *macbuf)
-+{
-+	struct tcphdr *th = tcp_hdr(skb);
-+	int err;
-+
-+	/* NOTE: SNE unimplemented */
-+	__be32 sne = 0;
-+
-+	err = crypto_ahash_init(pool->req);
-+	if (err)
-+		return err;
-+
-+	err = crypto_ahash_buf(pool->req, (u8 *)&sne, 4);
-+	if (err)
-+		return err;
-+
-+	if (ipv6) {
-+#if IS_ENABLED(CONFIG_IPV6)
-+		struct in6_addr *saddr;
-+		struct in6_addr *daddr;
-+
-+		if (input) {
-+			saddr = &ipv6_hdr(skb)->saddr;
-+			daddr = &ipv6_hdr(skb)->daddr;
-+		} else {
-+			saddr = &sk->sk_v6_rcv_saddr;
-+			daddr = &sk->sk_v6_daddr;
-+		}
-+		err = tcp_authopt_hash_tcp6_pseudoheader(pool, saddr, daddr, skb->len);
-+		if (err)
-+			return err;
-+#else
-+		return -EINVAL;
-+#endif
-+	} else {
-+		__be32 saddr;
-+		__be32 daddr;
-+
-+		if (input) {
-+			saddr = ip_hdr(skb)->saddr;
-+			daddr = ip_hdr(skb)->daddr;
-+		} else {
-+			saddr = sk->sk_rcv_saddr;
-+			daddr = sk->sk_daddr;
-+		}
-+		err = tcp_authopt_hash_tcp4_pseudoheader(pool, saddr, daddr, skb->len);
-+		if (err)
-+			return err;
-+	}
-+
-+	// TCP header with checksum set to zero
-+	{
-+		struct tcphdr hashed_th = *th;
-+
-+		hashed_th.check = 0;
-+		err = crypto_ahash_buf(pool->req, (u8 *)&hashed_th, sizeof(hashed_th));
-+		if (err)
-+			return err;
-+	}
-+
-+	// TCP options
-+	err = tcp_authopt_hash_opts(pool, th, aoptr, include_options);
-+	if (err)
-+		return err;
-+
-+	// Rest of SKB->data
-+	err = tcp_sig_hash_skb_data(pool->req, skb, th->doff << 2);
-+	if (err)
-+		return err;
-+
-+	ahash_request_set_crypt(pool->req, NULL, macbuf, 0);
-+	return crypto_ahash_final(pool->req);
-+}
-+
-+/* __tcp_authopt_calc_mac - Compute packet MAC using key
-+ *
-+ * The macbuf output buffer must be large enough to fit the digestsize of the
-+ * underlying transform before truncation.
-+ * This means TCP_AUTHOPT_MAXMACBUF, not TCP_AUTHOPT_MACLEN
-+ */
-+static int __tcp_authopt_calc_mac(struct sock *sk,
-+				  struct sk_buff *skb,
-+				  struct tcphdr_authopt *aoptr,
-+				  struct tcp_authopt_key_info *key,
-+				  struct tcp_authopt_info *info,
-+				  bool input,
-+				  char *macbuf)
-+{
-+	struct tcp_authopt_alg_pool *mac_pool;
-+	u8 traffic_key[TCP_AUTHOPT_MAX_TRAFFIC_KEY_LEN];
-+	int err;
-+	bool ipv6 = (sk->sk_family != AF_INET);
-+
-+	if (sk->sk_family != AF_INET && sk->sk_family != AF_INET6)
-+		return -EINVAL;
-+
-+	err = tcp_authopt_get_traffic_key(sk, skb, key, info, input, ipv6, traffic_key);
-+	if (err)
-+		return err;
-+
-+	mac_pool = tcp_authopt_get_mac_pool(key);
-+	if (IS_ERR(mac_pool))
-+		return PTR_ERR(mac_pool);
-+	err = crypto_ahash_setkey(mac_pool->tfm, traffic_key, key->alg->traffic_key_len);
-+	if (err)
-+		goto out;
-+	err = crypto_ahash_init(mac_pool->req);
-+	if (err)
-+		return err;
-+
-+	err = tcp_authopt_hash_packet(mac_pool,
-+				      sk,
-+				      skb,
-+				      aoptr,
-+				      input,
-+				      ipv6,
-+				      !(key->flags & TCP_AUTHOPT_KEY_EXCLUDE_OPTS),
-+				      macbuf);
-+
-+out:
-+	tcp_authopt_put_mac_pool(key, mac_pool);
-+	return err;
-+}
-+
- static int tcp_authopt_init_net(struct net *full_net)
+ int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen)
  {
- 	struct netns_tcp_authopt *net = &full_net->tcp_authopt;
+ 	struct tcp_authopt opt;
+ 	struct tcp_authopt_info *info;
+ 	int err;
  
- 	mutex_init(&net->mutex);
+ 	sock_owned_by_me(sk);
++	err = check_sysctl_tcp_authopt();
++	if (err)
++		return err;
+ 
+ 	err = _copy_from_sockptr_tolerant((u8 *)&opt, sizeof(opt), optval, optlen);
+ 	if (err)
+ 		return err;
+ 
+@@ -458,14 +476,18 @@ int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen)
+ 
+ int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct tcp_authopt_info *info;
++	int err;
+ 
++	memset(opt, 0, sizeof(*opt));
+ 	sock_owned_by_me(sk);
++	err = check_sysctl_tcp_authopt();
++	if (err)
++		return err;
+ 
+-	memset(opt, 0, sizeof(*opt));
+ 	info = rcu_dereference_check(tp->authopt_info, lockdep_sock_is_held(sk));
+ 	if (!info)
+ 		return -ENOENT;
+ 
+ 	opt->flags = info->flags & TCP_AUTHOPT_KNOWN_FLAGS;
+@@ -486,10 +508,13 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
+ 	struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
+ 	struct tcp_authopt_alg_imp *alg;
+ 	int err;
+ 
+ 	sock_owned_by_me(sk);
++	err = check_sysctl_tcp_authopt();
++	if (err)
++		return err;
+ 	if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
+ 		return -EPERM;
+ 
+ 	err = _copy_from_sockptr_tolerant((u8 *)&opt, sizeof(opt), optval, optlen);
+ 	if (err)
 -- 
 2.25.1
 
