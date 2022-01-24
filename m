@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B74ECC4332F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jan 2022 12:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD136C41535
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jan 2022 12:14:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241293AbiAXMOY (ORCPT
+        id S238132AbiAXMO4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 07:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        Mon, 24 Jan 2022 07:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239423AbiAXMOF (ORCPT
+        with ESMTP id S239481AbiAXMOL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:14:05 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845DDC06173D;
-        Mon, 24 Jan 2022 04:13:46 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id jx6so20858206ejb.0;
-        Mon, 24 Jan 2022 04:13:46 -0800 (PST)
+        Mon, 24 Jan 2022 07:14:11 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF78C061775;
+        Mon, 24 Jan 2022 04:13:55 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ka4so20793658ejc.11;
+        Mon, 24 Jan 2022 04:13:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BZQgU6EFgHGf71GuYIqNhPbHJCpg6Q1Wvwo7Uooatlo=;
-        b=Q91r2O8Z18GmFv6X0D0d1CTGdZlQGmOHq8Fvmo6kX8TYC+9rN9TZ5EvzUHhqwO1fi0
-         LQ7TnLjHWyWw9cWRHMWuh/ozEq17bTPOpPNEnQ8bnDBnUL1ZXBUuWyo//czj8U1GixOA
-         SHfHPTXqVF9Ul9YqnIdZ6HF68y0H2kwU88Xhqf302b0YWCJf20QkbyqZyvvFaOjfUXHy
-         YIZyF/dfPilXCgyUyEJOyZYXMvN8+/Pl0WyLeDkyP9Z3QhJdR6jGXCLxgeRZ1BU1PGSQ
-         nhi4xsbj0cAr5EhIcdh2t6uXE+1yObXLb+UYI5CslfEX1mJWNzRzY2sAuXrKY3CoJy6I
-         zLUw==
+        bh=UNC6gkaevkv7hTgw1A05+yNvh+7oeAOZgb9Vvub/3OM=;
+        b=cDqTOtti2kL1nuyaQFDfB5KdndSf8u1RxbH9HB18edylM/JjOwJ+FEaTabQUjm/P5k
+         knvS0TFeUD9nm4z09tPsqRS5aShuTi87g/D1VdIs9utwtnfCjjUa2XQpO0a9RBN3KZe2
+         1VIRuhv+gPplGgZ8NKvzVLj7Eco4pln7kG5ae3G+52igILgWU1YzrBV2wkKg9V3LSzLo
+         acB7PtOtmU4DB3MxPFKqBliQ2TwOsPxI/jLNu7dJ/7wOXojeOgnwi3A9EyvbHNjb9b/B
+         zwQXKTWxywQrUj6f6Fdhbq7buJVt/MVE6BwVWFKAJYISD9xcmTZvpiW4kGYSJYI/4gQq
+         d+og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BZQgU6EFgHGf71GuYIqNhPbHJCpg6Q1Wvwo7Uooatlo=;
-        b=qo5rksce4Vwe1rKbzNX0J1Y+FdRa59oGUazxSsj/0nGPdB+MIBF8TU+QAIKaRQCgvV
-         NwadkYX4AhbVhNO5YsQYOPcHt2gQfsic3w9A3jxfySpxMDR0qB0iKZHtDs53C7jklqUw
-         clM6GIqWuzC1d1jD/fOmQlUo9OnvROX868LjGvvq1Y+kgZEtCQdbDOOKCkeP8QurtYql
-         Q6yDfCXLF9L5H5gZdTQOmeLBTJkItMpuXVN1eWCMg2VqQfXMzXNPj091NRRvmcCtR9q4
-         3fv6cYyAoVrhFmhBWJlJcBp8dEnS/eRU4fUteeWfuUUpEpX33chiEKFUbHxFEcTpY4Ok
-         3F0A==
-X-Gm-Message-State: AOAM532xYUwCfMw4Hy7FspYcF03NMzmmneXNs/Ysqp4FDtwVGP2sgPzd
-        iAv01uAz2PUQ1BpAwYUi5kU=
-X-Google-Smtp-Source: ABdhPJx7kTgTpLvqxN7raZAesKTnlGXD7UtoI7pkwSZhCAKnR9L6Y6AKeLd9WTJIkRoi5Wj9fNu5iw==
-X-Received: by 2002:a17:906:a091:: with SMTP id q17mr12116698ejy.669.1643026425041;
-        Mon, 24 Jan 2022 04:13:45 -0800 (PST)
+        bh=UNC6gkaevkv7hTgw1A05+yNvh+7oeAOZgb9Vvub/3OM=;
+        b=uJBAeppRP/zdACnU9unXehJcIxu0ZGNHkA02nBRXt/PqLdRubhdv/4LovN6RXc9AKf
+         c1W5Y7bLI5xFgoIDnjhrD2bKwXvRgm4sW6Ud7VUlsmp+Lkb4RNLXbZbP7CWr3japzDjJ
+         CKqGRR5WLLcsraa6V+kXlpWvIMxwmL4JPNdo0cQVnMzPyPMCGM996jbbzoiN7XKb4u9P
+         2NkNOPwY+TGXpUHx/txxiGkA9IZO8nXLmzsGwl0lc0qOiOudz3yBZMpb3/Ol/3SkCVhl
+         nqf/1ojsy7EnUT5g1pmdh+jiTRqEUIHyKII+b4VqjPhV0xHCf2w8YpvBlohpLxNCXgMc
+         pD2Q==
+X-Gm-Message-State: AOAM533cOfolcl40okZ5LZgmzvaRWckuCOw6Hd+RZdrPP+8yUxLbBB6L
+        6Ze2SyesI8L7kuP1ejytH0E=
+X-Google-Smtp-Source: ABdhPJyIuq7U5jLLWYwdGlS+S4cvtzJ3qD7Q5yjfxwjw62FzQ4x3tHMJZMVDxZtFw5q+jCTwqzgewA==
+X-Received: by 2002:a17:906:36d8:: with SMTP id b24mr11857403ejc.342.1643026434325;
+        Mon, 24 Jan 2022 04:13:54 -0800 (PST)
 Received: from ponky.lan ([2a04:241e:502:a09c:a21f:7a9f:9158:4a40])
-        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.43
+        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 04:13:44 -0800 (PST)
+        Mon, 24 Jan 2022 04:13:53 -0800 (PST)
 From:   Leonard Crestez <cdleonard@gmail.com>
 To:     David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
@@ -68,9 +68,9 @@ Cc:     Shuah Khan <shuah@kernel.org>,
         Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 13/20] tcp: authopt: Add initial l3index support
-Date:   Mon, 24 Jan 2022 14:12:59 +0200
-Message-Id: <3ccf3359bb5fadf6e76edf3cdc87fc04024fc827.1643026076.git.cdleonard@gmail.com>
+Subject: [PATCH v5 18/20] selftests: nettest: Initial tcp_authopt support
+Date:   Mon, 24 Jan 2022 14:13:04 +0200
+Message-Id: <f395c8147b18e167a8dff74bdcac6555e795c43b.1643026076.git.cdleonard@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1643026076.git.cdleonard@gmail.com>
 References: <cover.1643026076.git.cdleonard@gmail.com>
@@ -80,278 +80,297 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a parallel feature to tcp_md5sig.tcpm_ifindex support and allows
-applications to server multiple VRFs with a single socket.
+Add support for configuring TCP Authentication Option. Only a single key
+is supported with default options.
 
-The ifindex argument must be the ifindex of a VRF device and must match
-exactly, keys with ifindex == 0 (outside of VRF) will not match for
-connections inside a VRF.
-
-Keys without the TCP_AUTHOPT_KEY_IFINDEX will ignore ifindex and match
-both inside and outside VRF.
-
+Reviewed-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
 ---
- Documentation/networking/tcp_authopt.rst |  1 +
- include/net/tcp_authopt.h                |  2 +
- include/uapi/linux/tcp.h                 | 11 ++++
- net/ipv4/tcp_authopt.c                   | 71 ++++++++++++++++++++++--
- 4 files changed, 80 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/nettest.c | 156 ++++++++++++++++++++++++--
+ 1 file changed, 145 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/networking/tcp_authopt.rst b/Documentation/networking/tcp_authopt.rst
-index f29fdea7769f..f681d2221ce3 100644
---- a/Documentation/networking/tcp_authopt.rst
-+++ b/Documentation/networking/tcp_authopt.rst
-@@ -37,10 +37,11 @@ expand over time by increasing the size of `struct tcp_authopt_key` and adding
- new flags.
+diff --git a/tools/testing/selftests/net/nettest.c b/tools/testing/selftests/net/nettest.c
+index 3841e5fec7c7..9615489230f8 100644
+--- a/tools/testing/selftests/net/nettest.c
++++ b/tools/testing/selftests/net/nettest.c
+@@ -27,10 +27,11 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <time.h>
+ #include <errno.h>
+ #include <getopt.h>
++#include <stdbool.h>
  
-  * Address binding is optional, by default keys match all addresses
-  * Local address is ignored, matching is done by remote address
-  * Ports are ignored
-+ * It is possible to match a specific VRF by l3index (default is to ignore)
+ #include <linux/xfrm.h>
+ #include <linux/ipsec.h>
+ #include <linux/pfkeyv2.h>
  
- RFC5925 requires that key ids do not overlap when tcp identifiers (addr/port)
- overlap. This is not enforced by linux, configuring ambiguous keys will result
- in packet drops and lost connections.
+@@ -104,10 +105,12 @@ struct sock_args {
+ 	} key_addr;
+ 	unsigned int key_addr_prefix_len;
+ 	/* 0: default, -1: force off, +1: force on */
+ 	int bind_key_ifindex;
  
-diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
-index 3d03fbb186ef..800fde277239 100644
---- a/include/net/tcp_authopt.h
-+++ b/include/net/tcp_authopt.h
-@@ -45,10 +45,12 @@ struct tcp_authopt_key_info {
- 	u8 alg_id;
- 	/** @keylen: Same as &tcp_authopt_key.keylen */
- 	u8 keylen;
- 	/** @key: Same as &tcp_authopt_key.key */
- 	u8 key[TCP_AUTHOPT_MAXKEYLEN];
-+	/** @l3index: Same as &tcp_authopt_key.ifindex */
-+	int l3index;
- 	/** @addr: Same as &tcp_authopt_key.addr */
- 	struct sockaddr_storage addr;
- 	/** @alg: Algorithm implementation matching alg_id */
- 	struct tcp_authopt_alg_imp *alg;
- };
-diff --git a/include/uapi/linux/tcp.h b/include/uapi/linux/tcp.h
-index e02176390519..a7f5f918ed5a 100644
---- a/include/uapi/linux/tcp.h
-+++ b/include/uapi/linux/tcp.h
-@@ -400,15 +400,17 @@ struct tcp_authopt {
-  * enum tcp_authopt_key_flag - flags for `tcp_authopt.flags`
-  *
-  * @TCP_AUTHOPT_KEY_DEL: Delete the key and ignore non-id fields
-  * @TCP_AUTHOPT_KEY_EXCLUDE_OPTS: Exclude TCP options from signature
-  * @TCP_AUTHOPT_KEY_ADDR_BIND: Key only valid for `tcp_authopt.addr`
-+ * @TCP_AUTHOPT_KEY_IFINDEX: Key only valid for `tcp_authopt.ifindex`
-  */
- enum tcp_authopt_key_flag {
- 	TCP_AUTHOPT_KEY_DEL = (1 << 0),
- 	TCP_AUTHOPT_KEY_EXCLUDE_OPTS = (1 << 1),
- 	TCP_AUTHOPT_KEY_ADDR_BIND = (1 << 2),
-+	TCP_AUTHOPT_KEY_IFINDEX = (1 << 3),
- };
++	const char *authopt_password;
++
+ 	/* expected addresses and device index for connection */
+ 	const char *expected_dev;
+ 	const char *expected_server_dev;
+ 	int expected_ifindex;
  
- /**
-  * enum tcp_authopt_alg - Algorithms for TCP Authentication Option
-  */
-@@ -450,10 +452,19 @@ struct tcp_authopt_key {
- 	 * @addr: Key is only valid for this address
- 	 *
- 	 * Ignored unless TCP_AUTHOPT_KEY_ADDR_BIND flag is set
- 	 */
- 	struct __kernel_sockaddr_storage addr;
-+	/**
-+	 * @ifindex: ifindex of vrf (l3mdev_master) interface
-+	 *
-+	 * If the TCP_AUTHOPT_KEY_IFINDEX flag is set then key only applies for
-+	 * connections through this interface. Interface must be an vrf master.
-+	 *
-+	 * This is similar to `tcp_msg5sig.tcpm_ifindex`
-+	 */
-+	int	ifindex;
- };
+@@ -254,10 +257,75 @@ static int switch_ns(const char *ns)
+ 	close(fd);
  
- /* setsockopt(fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE, ...) */
- 
- #define TCP_RECEIVE_ZEROCOPY_FLAG_TLB_CLEAN_HINT 0x1
-diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-index c00b23f1e5af..3d2c4283923f 100644
---- a/net/ipv4/tcp_authopt.c
-+++ b/net/ipv4/tcp_authopt.c
-@@ -1,8 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- 
- #include <net/tcp_authopt.h>
-+#include <net/ip.h>
- #include <net/ipv6.h>
- #include <net/tcp.h>
- #include <linux/kref.h>
- #include <crypto/hash.h>
- 
-@@ -264,10 +265,14 @@ static bool tcp_authopt_key_match_exact(struct tcp_authopt_key_info *info,
- {
- 	if (info->send_id != key->send_id)
- 		return false;
- 	if (info->recv_id != key->recv_id)
- 		return false;
-+	if ((info->flags & TCP_AUTHOPT_KEY_IFINDEX) != (key->flags & TCP_AUTHOPT_KEY_IFINDEX))
-+		return false;
-+	if ((info->flags & TCP_AUTHOPT_KEY_IFINDEX) && info->l3index != key->ifindex)
-+		return false;
- 	if ((info->flags & TCP_AUTHOPT_KEY_ADDR_BIND) != (key->flags & TCP_AUTHOPT_KEY_ADDR_BIND))
- 		return false;
- 	if (info->flags & TCP_AUTHOPT_KEY_ADDR_BIND)
- 		if (!ipvx_addr_match(&info->addr, &key->addr))
- 			return false;
-@@ -333,26 +338,49 @@ static struct tcp_authopt_key_info *tcp_authopt_key_lookup_exact(const struct so
- 			return key_info;
- 
- 	return NULL;
+ 	return ret;
  }
  
-+static bool better_key_match(struct tcp_authopt_key_info *old, struct tcp_authopt_key_info *new)
++/* Fill key identification fields: address and ifindex */
++static void tcp_authopt_key_fill_id(struct tcp_authopt_key *key, struct sock_args *args)
 +{
-+	if (!old)
-+		return true;
-+
-+	/* l3index always overrides non-l3index */
-+	if (old->l3index && new->l3index == 0)
-+		return false;
-+	if (old->l3index == 0 && new->l3index)
-+		return true;
-+
-+	return false;
-+}
-+
- static struct tcp_authopt_key_info *tcp_authopt_lookup_send(struct netns_tcp_authopt *net,
- 							    const struct sock *addr_sk,
- 							    int send_id)
- {
- 	struct tcp_authopt_key_info *result = NULL;
- 	struct tcp_authopt_key_info *key;
-+	int l3index = -1;
- 
- 	hlist_for_each_entry_rcu(key, &net->head, node, 0) {
- 		if (send_id >= 0 && key->send_id != send_id)
- 			continue;
- 		if (key->flags & TCP_AUTHOPT_KEY_ADDR_BIND)
- 			if (!tcp_authopt_key_match_sk_addr(key, addr_sk))
- 				continue;
--		if (result && net_ratelimit())
--			pr_warn("ambiguous tcp authentication keys configured for send\n");
--		result = key;
-+		if (key->flags & TCP_AUTHOPT_KEY_IFINDEX) {
-+			if (l3index < 0)
-+				l3index = l3mdev_master_ifindex_by_index(sock_net(addr_sk),
-+									 addr_sk->sk_bound_dev_if);
-+			if (l3index != key->l3index)
-+				continue;
++	if (args->key_addr_prefix_str) {
++		key->flags |= TCP_AUTHOPT_KEY_ADDR_BIND;
++		switch (args->version) {
++		case AF_INET:
++			memcpy(&key->addr, &args->key_addr.v4, sizeof(args->key_addr.v4));
++			break;
++		case AF_INET6:
++			memcpy(&key->addr, &args->key_addr.v6, sizeof(args->key_addr.v6));
++			break;
++		default:
++			log_error("unknown address family\n");
++			exit(1);
 +		}
-+		if (better_key_match(result, key))
-+			result = key;
-+		else if (result)
-+			net_warn_ratelimited("ambiguous tcp authentication keys configured for send\n");
- 	}
- 
- 	return result;
- }
- 
-@@ -583,19 +611,21 @@ int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
- }
- 
- #define TCP_AUTHOPT_KEY_KNOWN_FLAGS ( \
- 	TCP_AUTHOPT_KEY_DEL | \
- 	TCP_AUTHOPT_KEY_EXCLUDE_OPTS | \
--	TCP_AUTHOPT_KEY_ADDR_BIND)
-+	TCP_AUTHOPT_KEY_ADDR_BIND | \
-+	TCP_AUTHOPT_KEY_IFINDEX)
- 
- int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- {
- 	struct tcp_authopt_key opt;
- 	struct tcp_authopt_info *info;
- 	struct tcp_authopt_key_info *key_info, *old_key_info;
- 	struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
- 	struct tcp_authopt_alg_imp *alg;
-+	int l3index = 0;
- 	int err;
- 
- 	sock_owned_by_me(sk);
- 	err = check_sysctl_tcp_authopt();
- 	if (err)
-@@ -646,10 +676,24 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 		return -EINVAL;
- 	err = tcp_authopt_alg_require(alg);
- 	if (err)
- 		return err;
- 
-+	/* check ifindex is valid (zero is always valid) */
-+	if (opt.flags & TCP_AUTHOPT_KEY_IFINDEX && opt.ifindex) {
-+		struct net_device *dev;
-+
-+		rcu_read_lock();
-+		dev = dev_get_by_index_rcu(sock_net(sk), opt.ifindex);
-+		if (dev && netif_is_l3_master(dev))
-+			l3index = dev->ifindex;
-+		rcu_read_unlock();
-+
-+		if (!l3index)
-+			return -EINVAL;
++		if (args->key_addr_prefix_len) {
++			key->flags |= TCP_AUTHOPT_KEY_PREFIXLEN;
++			key->prefixlen = args->key_addr_prefix_len;
++		}
 +	}
 +
- 	key_info = sock_kmalloc(sk, sizeof(*key_info), GFP_KERNEL | __GFP_ZERO);
- 	if (!key_info)
- 		return -ENOMEM;
- 	mutex_lock(&net->mutex);
- 	kref_init(&key_info->ref);
-@@ -665,10 +709,11 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
- 	key_info->alg_id = opt.alg;
- 	key_info->alg = alg;
- 	key_info->keylen = opt.keylen;
- 	memcpy(key_info->key, opt.key, opt.keylen);
- 	memcpy(&key_info->addr, &opt.addr, sizeof(key_info->addr));
-+	key_info->l3index = l3index;
- 	hlist_add_head_rcu(&key_info->node, &net->head);
- 	mutex_unlock(&net->mutex);
- 
- 	return 0;
- }
-@@ -1455,21 +1500,37 @@ static struct tcp_authopt_key_info *tcp_authopt_lookup_recv(struct sock *sk,
- 							    int recv_id,
- 							    bool *anykey)
- {
- 	struct tcp_authopt_key_info *result = NULL;
- 	struct tcp_authopt_key_info *key;
-+	int l3index = -1;
- 
- 	*anykey = false;
- 	/* multiple matches will cause occasional failures */
- 	hlist_for_each_entry_rcu(key, &net->head, node, 0) {
- 		if (key->flags & TCP_AUTHOPT_KEY_ADDR_BIND &&
- 		    !tcp_authopt_key_match_skb_addr(key, skb))
- 			continue;
-+		if (key->flags & TCP_AUTHOPT_KEY_IFINDEX) {
-+			if (l3index < 0) {
-+				if (skb->protocol == htons(ETH_P_IP)) {
-+					l3index = inet_sdif(skb) ? inet_iif(skb) : 0;
-+				} else if (skb->protocol == htons(ETH_P_IPV6)) {
-+					l3index = inet6_sdif(skb) ? inet6_iif(skb) : 0;
-+				} else {
-+					WARN_ONCE(1, "unexpected skb->protocol=%x", skb->protocol);
-+					continue;
-+				}
-+			}
++	if ((args->ifindex && args->bind_key_ifindex >= 0) || args->bind_key_ifindex >= 1) {
++		key->flags |= TCP_AUTHOPT_KEY_IFINDEX;
++		key->ifindex = args->ifindex;
++		log_msg("TCP_AUTHOPT_KEY_IFINDEX set ifindex=%d\n", key->ifindex);
++	} else {
++		log_msg("TCP_AUTHOPT_KEY_IFINDEX off\n", key->ifindex);
++	}
++}
 +
-+			if (l3index != key->l3index)
-+				continue;
-+		}
- 		*anykey = true;
- 		if (recv_id >= 0 && key->recv_id != recv_id)
- 			continue;
--		if (!result)
-+		if (better_key_match(result, key))
- 			result = key;
- 		else if (result)
- 			net_warn_ratelimited("ambiguous tcp authentication keys configured for recv\n");
++static int tcp_del_authopt(int sd, struct sock_args *args)
++{
++	struct tcp_authopt_key key;
++	int rc;
++
++	memset(&key, 0, sizeof(key));
++	key.flags |= TCP_AUTHOPT_KEY_DEL;
++	tcp_authopt_key_fill_id(&key, args);
++
++	rc = setsockopt(sd, IPPROTO_TCP, TCP_AUTHOPT_KEY, &key, sizeof(key));
++	if (rc < 0)
++		log_err_errno("setsockopt(TCP_AUTHOPT_KEY) del fail");
++
++	return rc;
++}
++
++static int tcp_set_authopt(int sd, struct sock_args *args)
++{
++	struct tcp_authopt_key key;
++	int rc;
++
++	memset(&key, 0, sizeof(key));
++	strcpy((char *)key.key, args->authopt_password);
++	key.keylen = strlen(args->authopt_password);
++	key.alg = TCP_AUTHOPT_ALG_HMAC_SHA_1_96;
++	tcp_authopt_key_fill_id(&key, args);
++
++	rc = setsockopt(sd, IPPROTO_TCP, TCP_AUTHOPT_KEY, &key, sizeof(key));
++	if (rc < 0)
++		log_err_errno("setsockopt(TCP_AUTHOPT_KEY) add fail");
++
++	return rc;
++}
++
+ static int tcp_md5sig(int sd, void *addr, socklen_t alen, struct sock_args *args)
+ {
+ 	int keylen = strlen(args->password);
+ 	struct tcp_md5sig md5sig = {};
+ 	int opt = TCP_MD5SIG;
+@@ -1541,10 +1609,15 @@ static int do_server(struct sock_args *args, int ipc_fd)
+ 	if (args->password && tcp_md5_remote(lsd, args)) {
+ 		close(lsd);
+ 		goto err_exit;
+ 	}
+ 
++	if (args->authopt_password && tcp_set_authopt(lsd, args)) {
++		close(lsd);
++		goto err_exit;
++	}
++
+ 	ipc_write(ipc_fd, 1);
+ 	while (1) {
+ 		log_msg("waiting for client connection.\n");
+ 		FD_ZERO(&rfds);
+ 		FD_SET(lsd, &rfds);
+@@ -1663,10 +1736,13 @@ static int connectsock(void *addr, socklen_t alen, struct sock_args *args)
+ 		goto out;
+ 
+ 	if (args->password && tcp_md5sig(sd, addr, alen, args))
+ 		goto err;
+ 
++	if (args->authopt_password && tcp_set_authopt(sd, args))
++		goto err;
++
+ 	if (args->bind_test_only)
+ 		goto out;
+ 
+ 	if (connect(sd, addr, alen) < 0) {
+ 		if (errno != EINPROGRESS) {
+@@ -1852,11 +1928,11 @@ static int ipc_parent(int cpid, int fd, struct sock_args *args)
+ 
+ 	wait(&status);
+ 	return client_status;
+ }
+ 
+-#define GETOPT_STR  "sr:l:c:p:t:g:P:DRn:M:X:m:d:I:BN:O:SCi6xL:0:1:2:3:Fbqf"
++#define GETOPT_STR  "sr:l:c:p:t:g:P:DRn:M:X:m:A:d:I:BN:O:SCi6xL:0:1:2:3:Fbqf"
+ #define OPT_FORCE_BIND_KEY_IFINDEX 1001
+ #define OPT_NO_BIND_KEY_IFINDEX 1002
+ 
+ static struct option long_opts[] = {
+ 	{"force-bind-key-ifindex", 0, 0, OPT_FORCE_BIND_KEY_IFINDEX},
+@@ -1897,14 +1973,15 @@ static void print_usage(char *prog)
+ 	"    -L len        send random message of given length\n"
+ 	"    -n num        number of times to send message\n"
+ 	"\n"
+ 	"    -M password   use MD5 sum protection\n"
+ 	"    -X password   MD5 password for client mode\n"
+-	"    -m prefix/len prefix and length to use for MD5 key\n"
+-	"    --no-bind-key-ifindex: Force TCP_MD5SIG_FLAG_IFINDEX off\n"
+-	"    --force-bind-key-ifindex: Force TCP_MD5SIG_FLAG_IFINDEX on\n"
++	"    -m prefix/len prefix and length to use for MD5/AO key\n"
++	"    --no-bind-key-ifindex: Force disable binding key to ifindex\n"
++	"    --force-bind-key-ifindex: Force enable binding key to ifindex\n"
+ 	"        (default: only if -I is passed)\n"
++	"    -A password   use RFC5925 TCP Authentication Option with password\n"
+ 	"\n"
+ 	"    -g grp        multicast group (e.g., 239.1.1.1)\n"
+ 	"    -i            interactive mode (default is echo and terminate)\n"
+ 	"\n"
+ 	"    -0 addr       Expected local address\n"
+@@ -1915,17 +1992,64 @@ static void print_usage(char *prog)
+ 	"    -b            Bind test only.\n"
+ 	"    -q            Be quiet. Run test without printing anything.\n"
+ 	, prog, DEFAULT_PORT);
+ }
+ 
+-int main(int argc, char *argv[])
++/* Needs explicit cleanup because keys are global per-namespace */
++void cleanup_tcp_authopt(struct sock_args *args)
++{
++	int fd;
++
++	if (!args->authopt_password)
++		return;
++
++	fd = socket(AF_INET, SOCK_STREAM, 0);
++	if (fd < 0) {
++		log_err_errno("Failed to create socket");
++		return;
++	}
++	tcp_del_authopt(fd, args);
++	close(fd);
++}
++
++static bool cleanup_done;
++static struct sock_args args = {
++	.version = AF_INET,
++	.type    = SOCK_STREAM,
++	.port    = DEFAULT_PORT,
++};
++
++void cleanup(void)
++{
++	if (cleanup_done)
++		return;
++	cleanup_done = true;
++	cleanup_tcp_authopt(&args);
++}
++
++void signal_handler(int num)
++{
++	cleanup();
++}
++
++void atexit_handler(void)
++{
++	cleanup();
++}
++
++/* Explicit cleanup is required for TCP-AO because keys are global. */
++static void register_cleanup(void)
+ {
+-	struct sock_args args = {
+-		.version = AF_INET,
+-		.type    = SOCK_STREAM,
+-		.port    = DEFAULT_PORT,
++	struct sigaction sa = {
++		.sa_handler = signal_handler,
+ 	};
++	sigaction(SIGINT, &sa, NULL);
++	atexit(atexit_handler);
++}
++
++int main(int argc, char *argv[])
++{
+ 	struct protoent *pe;
+ 	int both_mode = 0;
+ 	unsigned int tmp;
+ 	int forever = 0;
+ 	int fd[2];
+@@ -2022,10 +2146,13 @@ int main(int argc, char *argv[])
+ 			args.client_pw = optarg;
+ 			break;
+ 		case 'm':
+ 			args.key_addr_prefix_str = optarg;
+ 			break;
++		case 'A':
++			args.authopt_password = optarg;
++			break;
+ 		case 'S':
+ 			args.use_setsockopt = 1;
+ 			break;
+ 		case 'f':
+ 			args.use_freebind = 1;
+@@ -2085,12 +2212,17 @@ int main(int argc, char *argv[])
+ 	      args.type != SOCK_STREAM)) {
+ 		log_error("MD5 passwords apply to TCP only and require a remote ip for the password\n");
+ 		return 1;
+ 	}
+ 
+-	if (args.key_addr_prefix_str && !args.password) {
+-		log_error("Prefix range for MD5 protection specified without a password\n");
++	if (args.key_addr_prefix_str && !args.password && !args.authopt_password) {
++		log_error("Prefix range for authentication requires -M or -A\n");
++		return 1;
++	}
++
++	if (args.key_addr_prefix_len && args.authopt_password) {
++		log_error("TCP-AO does not support prefix match, only full address\n");
+ 		return 1;
+ 	}
+ 
+ 	if (iter == 0) {
+ 		fprintf(stderr, "Invalid number of messages to send\n");
+@@ -2113,10 +2245,12 @@ int main(int argc, char *argv[])
+ 		fprintf(stderr,
+ 			"Local (server mode) or remote IP (client IP) required\n");
+ 		return 1;
+ 	}
+ 
++	register_cleanup();
++
+ 	if (interactive) {
+ 		prog_timeout = 0;
+ 		msg = NULL;
  	}
  
 -- 
