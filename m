@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9B54C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 00:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72B4CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 03:34:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3409361AbiAYAZp (ORCPT
+        id S1384951AbiAYDen (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 19:25:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57798 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2374572AbiAYARZ (ORCPT
+        Mon, 24 Jan 2022 22:34:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51970 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2374254AbiAYAQh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:17:25 -0500
+        Mon, 24 Jan 2022 19:16:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F4F1B81601
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:17:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E91C340ED;
-        Tue, 25 Jan 2022 00:17:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EFC161545
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E117C340E7;
+        Tue, 25 Jan 2022 00:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643069843;
-        bh=bxmJiz4iJDucMw8+bb1RejhHVADIm4+kHNfyEyijSjk=;
+        s=k20201202; t=1643069796;
+        bh=oW8pCZKYXjjBMZgQkaxtsed3e5u7xxSj/4h8WMIhNyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k9yVRaZd5DG0nNnXa/ByYFgr2XC08I6m1UfjaoLrb+r+7mXOr93/cxS0+ZH6/zgRO
-         Ep2hYD+jPaCR6OCly97cYDomdb9PAg9VaSfPeTJzOT4FC9yFsPV4NFf237S106/uuv
-         aXYCRWaxUtrgyXiXkP6WkQfA/yDd5JgLxt4mGiuVfWMwaKha32VyY9U2vGeqLqU5uP
-         6vqg3qXPgs425gBXjdeBnHPsWxuhCZkaFT73fYzlmasA0r6Hx3UXQm5L305S7UMfJJ
-         DT4ECgIeYOpFcvu0iLZfJF8yDCdQ8vI4hozLJiGlJ2/F/E9nwv1it2GMaAy1A/tTe5
-         ehgVh7ZxX0p6Q==
+        b=sEY3SYdlUT57cDE/UGSwAFQx3z20x0/aHc5rKp4NQ3uOaJ8KsVWO91VEDW+fapyXj
+         Iop0Q2ifOP7fjAGHt9B1cTR0bxSZBVe+yIm2B21l808ZJEq1xsZvd6EpVnvn55ETGF
+         ZTs01+3BgNHIacvMJVq1+r7GnK3esJwwBTr1I9vQ1+NegTlGRiLq83TkcgdTeGz5oK
+         A93T77vyJOruiB4cGjf3Fg+e9bmb518PaaopPjN7SCTC3PSgzun8QR4TKguSylJ+6l
+         ek4iclHkS69UhaZNLvaH6xJ/tS1zwkZelrL2IU8thCgeSxv/siyQMiaQJopSPiS/2p
+         bEk1kVX/r0Ocg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -46,228 +46,306 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v8 31/38] kselftest/arm64: sme: Provide streaming mode SVE stress test
-Date:   Tue, 25 Jan 2022 00:11:07 +0000
-Message-Id: <20220125001114.193425-32-broonie@kernel.org>
+Subject: [PATCH v8 19/38] arm64/sme: Implement ZA signal handling
+Date:   Tue, 25 Jan 2022 00:10:55 +0000
+Message-Id: <20220125001114.193425-20-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220125001114.193425-1-broonie@kernel.org>
 References: <20220125001114.193425-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5076; h=from:subject; bh=bxmJiz4iJDucMw8+bb1RejhHVADIm4+kHNfyEyijSjk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AZsLor7YdTJhC+qpcUC09jl9a2LtWwVEU/ZOxU RA60NfaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AGQAKCRAk1otyXVSH0LmdB/ 9BTwS19EONjT83LwlQjyoErvOIGFeDJO8zL6rU24oYwOXCalFRRRcIPeZXKb8+u6SrWBu5Jd9RMbBo scMWN+kui/GyUT777ox3n0yI/82IGhGx7/1jKDwT89BRsehqzTgaEo3s0k6ZFyM85tZmeaKYGcjErA rIk5v/eMUpxFtfvWoFj+2TNX0NDSOn0rl+w+J6JV20ejJU8IRGKI4CmkNeDEk6IUV4PBPimhUlKHWo VNQCX2fF2E+dkQTaFqWcxwg0x0LNwwRzoaJwdufVUwMoroNhE51xQpPdYyiLCVJJbThjmhjzzCvahK 9xRKrJo/G9fV3XNqpvF1M/90D/111l
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8905; h=from:subject; bh=oW8pCZKYXjjBMZgQkaxtsed3e5u7xxSj/4h8WMIhNyc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AQ0hJdJxo+5Qop2soApSWgxTalG0mokuvaAz99 SzK+WkaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AEAAKCRAk1otyXVSH0CaIB/ wKX6p46yDZ/hX6EqcuBTz5OcbBhLLWKwBB8JvE+btJu3lV/8DHcYVDO388xOgo6czvXEPgAuzwCsaD hb6ii1U8IjvEHmzytDiNkXgCqnLPFas9jD65S3zMFIngMduNiesc26zxBuzS9YLgw1g3TEK/xuRC02 mAnp4hfF7BQE6UR578Yas5HZBwGHGezwgnsJ943YZ855pOw33OEso/G4dDIePSucpyW56o6mL5aluX YwU6DgjozSYT/dndhce/gYx6mip8wfmjD248y8TdyZrDKy/fg6En/jooMot3eULcxkB9N3Duma1uNG SoFylKYSJRbilBe7iBrJ57+2i+7lAb
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-One of the features of SME is the addition of streaming mode, in which we
-have access to a set of streaming mode SVE registers at the SME vector
-length. Since these are accessed using the SVE instructions let's reuse
-the existing SVE stress test for testing with a compile time option for
-controlling the few small differences needed:
+Implement support for ZA in signal handling in a very similar way to how
+we implement support for SVE registers, using a signal context structure
+with optional register state after it. Where present this register state
+stores the ZA matrix as a series of horizontal vectors numbered from 0 to
+VL/8 in the endinanness independent format used for vectors.
 
- - Enter streaming mode immediately on starting the program.
- - In streaming mode FFR is removed so skip reading and writing FFR.
-
-In order to avoid requiring a cutting edge toolchain with SME support
-use the op/CR form for specifying SVCR.
+As with SVE we do not allow changes in the vector length during signal
+return but we do allow ZA to be enabled or disabled.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore  |  1 +
- tools/testing/selftests/arm64/fp/Makefile    |  3 +
- tools/testing/selftests/arm64/fp/ssve-stress | 59 ++++++++++++++++++++
- tools/testing/selftests/arm64/fp/sve-test.S  | 30 ++++++++++
- 4 files changed, 93 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/ssve-stress
+ arch/arm64/include/uapi/asm/sigcontext.h |  41 +++++++
+ arch/arm64/kernel/fpsimd.c               |   3 -
+ arch/arm64/kernel/signal.c               | 139 +++++++++++++++++++++++
+ 3 files changed, 180 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 6e9a610c5e5d..5729a5b1adfc 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -5,5 +5,6 @@ rdvl-sve
- sve-probe-vls
- sve-ptrace
- sve-test
-+ssve-test
- vec-syscfg
- vlset
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index a224fff8082b..e6643c9b0474 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -5,6 +5,7 @@ TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
- TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
-+	ssve-test ssve-stress \
- 	vlset
+diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
+index 3a3366d4fbc2..d45bdf2c8b26 100644
+--- a/arch/arm64/include/uapi/asm/sigcontext.h
++++ b/arch/arm64/include/uapi/asm/sigcontext.h
+@@ -140,6 +140,14 @@ struct sve_context {
  
- all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
-@@ -19,6 +20,8 @@ sve-ptrace: sve-ptrace.o
- sve-probe-vls: sve-probe-vls.o rdvl.o
- sve-test: sve-test.o asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
-+ssve-test: sve-test.S asm-utils.o
-+	$(CC) -DSSVE -nostdlib $^ -o $@
- vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
+ #define SVE_SIG_FLAG_SM	0x1	/* Context describes streaming mode */
  
-diff --git a/tools/testing/selftests/arm64/fp/ssve-stress b/tools/testing/selftests/arm64/fp/ssve-stress
-new file mode 100644
-index 000000000000..e2bd2cc184ad
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/ssve-stress
-@@ -0,0 +1,59 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2015-2019 ARM Limited.
-+# Original author: Dave Martin <Dave.Martin@arm.com>
++#define ZA_MAGIC	0x54366345
 +
-+set -ue
++struct za_context {
++	struct _aarch64_ctx head;
++	__u16 vl;
++	__u16 __reserved[3];
++};
 +
-+NR_CPUS=`nproc`
+ #endif /* !__ASSEMBLY__ */
+ 
+ #include <asm/sve_context.h>
+@@ -259,4 +267,37 @@ struct sve_context {
+ #define SVE_SIG_CONTEXT_SIZE(vq) \
+ 		(SVE_SIG_REGS_OFFSET + SVE_SIG_REGS_SIZE(vq))
+ 
++/*
++ * If the ZA register is enabled for the thread at signal delivery then,
++ * za_context.head.size >= ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za_context.vl))
++ * and the register data may be accessed using the ZA_SIG_*() macros.
++ *
++ * If za_context.head.size < ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za_context.vl))
++ * then ZA was not enabled and no register data was included in which case
++ * ZA register was not enabled for the thread and no register data
++ * the ZA_SIG_*() macros should not be used except for this check.
++ *
++ * The same convention applies when returning from a signal: a caller
++ * will need to remove or resize the za_context block if it wants to
++ * enable the ZA register when it was previously non-live or vice-versa.
++ * This may require the caller to allocate fresh memory and/or move other
++ * context blocks in the signal frame.
++ *
++ * Changing the vector length during signal return is not permitted:
++ * za_context.vl must equal the thread's current SME vector length when
++ * doing a sigreturn.
++ */
 +
-+pids=
-+logs=
++#define ZA_SIG_REGS_OFFSET					\
++	((sizeof(struct za_context) + (__SVE_VQ_BYTES - 1))	\
++		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
 +
-+cleanup () {
-+	trap - INT TERM CHLD
-+	set +e
++#define ZA_SIG_REGS_SIZE(vq) ((vq * __SVE_VQ_BYTES) * (vq * __SVE_VQ_BYTES))
 +
-+	if [ -n "$pids" ]; then
-+		kill $pids
-+		wait $pids
-+		pids=
-+	fi
++#define ZA_SIG_ZAV_OFFSET(vq, n) (ZA_SIG_REGS_OFFSET + \
++				  (SVE_SIG_ZREG_SIZE(vq) * n))
 +
-+	if [ -n "$logs" ]; then
-+		cat $logs
-+		rm $logs
-+		logs=
-+	fi
++#define ZA_SIG_CONTEXT_SIZE(vq) \
++		(ZA_SIG_REGS_OFFSET + ZA_SIG_REGS_SIZE(vq))
++
+ #endif /* _UAPI__ASM_SIGCONTEXT_H */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 33f80512753d..2242c14a5a05 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1190,9 +1190,6 @@ void fpsimd_release_task(struct task_struct *dead_task)
+ 
+ #ifdef CONFIG_ARM64_SME
+ 
+-/* This will move to uapi/asm/sigcontext.h when signals are implemented */
+-#define ZA_SIG_REGS_SIZE(vq) ((vq * __SVE_VQ_BYTES) * (vq * __SVE_VQ_BYTES))
+-
+ /*
+  * Ensure that task->thread.za_state is allocated and sufficiently large.
+  *
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index 5e6ec6ed8a1c..8efa78765cad 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -57,6 +57,7 @@ struct rt_sigframe_user_layout {
+ 	unsigned long fpsimd_offset;
+ 	unsigned long esr_offset;
+ 	unsigned long sve_offset;
++	unsigned long za_offset;
+ 	unsigned long extra_offset;
+ 	unsigned long end_offset;
+ };
+@@ -219,6 +220,7 @@ static int restore_fpsimd_context(struct fpsimd_context __user *ctx)
+ struct user_ctxs {
+ 	struct fpsimd_context __user *fpsimd;
+ 	struct sve_context __user *sve;
++	struct za_context __user *za;
+ };
+ 
+ #ifdef CONFIG_ARM64_SVE
+@@ -347,6 +349,101 @@ extern int restore_sve_fpsimd_context(struct user_ctxs *user);
+ 
+ #endif /* ! CONFIG_ARM64_SVE */
+ 
++#ifdef CONFIG_ARM64_SME
++
++static int preserve_za_context(struct za_context __user *ctx)
++{
++	int err = 0;
++	u16 reserved[ARRAY_SIZE(ctx->__reserved)];
++	unsigned int vl = task_get_sme_vl(current);
++	unsigned int vq;
++
++	if (thread_za_enabled(&current->thread))
++		vq = sve_vq_from_vl(vl);
++	else
++		vq = 0;
++
++	memset(reserved, 0, sizeof(reserved));
++
++	__put_user_error(ZA_MAGIC, &ctx->head.magic, err);
++	__put_user_error(round_up(SVE_SIG_CONTEXT_SIZE(vq), 16),
++			 &ctx->head.size, err);
++	__put_user_error(vl, &ctx->vl, err);
++	BUILD_BUG_ON(sizeof(ctx->__reserved) != sizeof(reserved));
++	err |= __copy_to_user(&ctx->__reserved, reserved, sizeof(reserved));
++
++	if (vq) {
++		/*
++		 * This assumes that the ZA state has already been saved to
++		 * the task struct by calling the function
++		 * fpsimd_signal_preserve_current_state().
++		 */
++		err |= __copy_to_user((char __user *)ctx + ZA_SIG_REGS_OFFSET,
++				      current->thread.za_state,
++				      ZA_SIG_REGS_SIZE(vq));
++	}
++
++	return err ? -EFAULT : 0;
 +}
 +
-+interrupt () {
-+	cleanup
-+	exit 0
++static int restore_za_context(struct user_ctxs __user *user)
++{
++	int err;
++	unsigned int vq;
++	struct za_context za;
++
++	if (__copy_from_user(&za, user->za, sizeof(za)))
++		return -EFAULT;
++
++	if (za.vl != task_get_sme_vl(current))
++		return -EINVAL;
++
++	if (za.head.size <= sizeof(*user->za)) {
++		current->thread.svcr &= ~SYS_SVCR_EL0_ZA_MASK;
++		return 0;
++	}
++
++	vq = sve_vq_from_vl(za.vl);
++
++	if (za.head.size < ZA_SIG_CONTEXT_SIZE(vq))
++		return -EINVAL;
++
++	/*
++	 * Careful: we are about __copy_from_user() directly into
++	 * thread.za_state with preemption enabled, so protection is
++	 * needed to prevent a racing context switch from writing stale
++	 * registers back over the new data.
++	 */
++
++	fpsimd_flush_task_state(current);
++	/* From now, fpsimd_thread_switch() won't touch thread.sve_state */
++
++	sme_alloc(current);
++	if (!current->thread.za_state) {
++		current->thread.svcr &= ~SYS_SVCR_EL0_ZA_MASK;
++		clear_thread_flag(TIF_SME);
++		return -ENOMEM;
++	}
++
++	err = __copy_from_user(current->thread.za_state,
++			       (char __user const *)user->za +
++					ZA_SIG_REGS_OFFSET,
++			       ZA_SIG_REGS_SIZE(vq));
++	if (err)
++		return -EFAULT;
++
++	set_thread_flag(TIF_SME);
++	current->thread.svcr |= SYS_SVCR_EL0_ZA_MASK;
++
++	return 0;
 +}
++#else /* ! CONFIG_ARM64_SME */
 +
-+child_died () {
-+	cleanup
-+	exit 1
-+}
++/* Turn any non-optimised out attempts to use these into a link error: */
++extern int preserve_za_context(void __user *ctx);
++extern int restore_za_context(struct user_ctxs *user);
 +
-+trap interrupt INT TERM EXIT
-+
-+for x in `seq 0 $((NR_CPUS * 4))`; do
-+	log=`mktemp`
-+	logs=$logs\ $log
-+	./ssve-test >$log &
-+	pids=$pids\ $!
-+done
-+
-+# Wait for all child processes to be created:
-+sleep 10
-+
-+while :; do
-+	kill -USR1 $pids
-+done &
-+pids=$pids\ $!
-+
-+wait
-+
-+exit 1
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index f5b1b48ffff2..31764e8370db 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -156,6 +156,7 @@ endfunction
- // We fill the upper lanes of FFR with zeros.
- // Beware: corrupts P0.
- function setup_ffr
-+#ifndef SSVE
- 	mov	x4, x30
++#endif /* ! CONFIG_ARM64_SME */
  
- 	and	w0, w0, #0x3
-@@ -178,6 +179,9 @@ function setup_ffr
- 	wrffr	p0.b
+ static int parse_user_sigframe(struct user_ctxs *user,
+ 			       struct rt_sigframe __user *sf)
+@@ -361,6 +458,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
  
- 	ret	x4
-+#else
-+	ret
-+#endif
- endfunction
+ 	user->fpsimd = NULL;
+ 	user->sve = NULL;
++	user->za = NULL;
  
- // Trivial memory compare: compare x2 bytes starting at address x0 with
-@@ -260,6 +264,7 @@ endfunction
- // Beware -- corrupts P0.
- // Clobbers x0-x5.
- function check_ffr
-+#ifndef SSVE
- 	mov	x3, x30
+ 	if (!IS_ALIGNED((unsigned long)base, 16))
+ 		goto invalid;
+@@ -426,6 +524,19 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 			user->sve = (struct sve_context __user *)head;
+ 			break;
  
- 	ldr	x4, =scratch
-@@ -280,6 +285,9 @@ function check_ffr
- 	mov	x2, x5
- 	mov	x30, x3
- 	b	memcmp
-+#else
-+	ret
-+#endif
- endfunction
- 
- // Any SVE register modified here can cause corruption in the main
-@@ -295,13 +303,26 @@ function irritator_handler
- 	movi	v0.8b, #1
- 	movi	v9.16b, #2
- 	movi	v31.8b, #3
-+#ifndef SSVE
- 	// And P0
- 	rdffr	p0.b
- 	// And FFR
- 	wrffr	p15.b
-+#endif
++		case ZA_MAGIC:
++			if (!system_supports_sme())
++				goto invalid;
 +
-+	ret
-+endfunction
++			if (user->za)
++				goto invalid;
 +
-+#ifdef SSVE
-+function enable_sm
-+	// Set SVCR.SM to 1, equivalent to SMSTART SM but doesn't need a
-+	// SME capable toolchain.
-+	mov	x0, #1
-+	msr	S3_3_C4_C2_2, x0
- 
- 	ret
- endfunction
-+#endif
- 
- function terminate_handler
- 	mov	w21, w0
-@@ -359,6 +380,11 @@ endfunction
- .globl _start
- function _start
- _start:
-+#ifdef SSVE
-+	puts	"Streaming mode "
-+	bl	enable_sm
-+#endif
++			if (size < sizeof(*user->za))
++				goto invalid;
 +
- 	// Sanity-check and report the vector length
- 
- 	rdvl	x19, #8
-@@ -407,6 +433,10 @@ _start:
- 	orr	w2, w2, #SA_NODEFER
- 	bl	setsignal
- 
-+#ifdef SSVE
-+	bl	enable_sm	// syscalls will have exited streaming mode
-+#endif
++			user->za = (struct za_context __user *)head;
++			break;
 +
- 	mov	x22, #0		// generation number, increments per iteration
- .Ltest_loop:
- 	rdvl	x0, #8
+ 		case EXTRA_MAGIC:
+ 			if (have_extra_context)
+ 				goto invalid;
+@@ -549,6 +660,9 @@ static int restore_sigframe(struct pt_regs *regs,
+ 		}
+ 	}
+ 
++	if (err == 0 && system_supports_sme() && user.za)
++		err = restore_za_context(&user);
++
+ 	return err;
+ }
+ 
+@@ -633,6 +747,24 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
+ 			return err;
+ 	}
+ 
++	if (system_supports_sme()) {
++		unsigned int vl;
++		unsigned int vq = 0;
++
++		if (add_all)
++			vl = sme_max_vl();
++		else
++			vl = task_get_sme_vl(current);
++
++		if (thread_za_enabled(&current->thread))
++			vq = sve_vq_from_vl(vl);
++
++		err = sigframe_alloc(user, &user->za_offset,
++				     ZA_SIG_CONTEXT_SIZE(vq));
++		if (err)
++			return err;
++	}
++
+ 	return sigframe_alloc_end(user);
+ }
+ 
+@@ -681,6 +813,13 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+ 		err |= preserve_sve_context(sve_ctx);
+ 	}
+ 
++	/* ZA state if present */
++	if (system_supports_sme() && err == 0 && user->za_offset) {
++		struct za_context __user *za_ctx =
++			apply_user_offset(user, user->za_offset);
++		err |= preserve_za_context(za_ctx);
++	}
++
+ 	if (err == 0 && user->extra_offset) {
+ 		char __user *sfp = (char __user *)user->sigframe;
+ 		char __user *userp =
 -- 
 2.30.2
 
