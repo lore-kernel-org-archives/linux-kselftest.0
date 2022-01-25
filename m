@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D1E6C35270
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61C80C35271
 	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 00:30:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3409354AbiAYAZm (ORCPT
+        id S3409375AbiAYAZu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 19:25:42 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57758 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2374558AbiAYARW (ORCPT
+        Mon, 24 Jan 2022 19:25:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52788 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382763AbiAYARs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:17:22 -0500
+        Mon, 24 Jan 2022 19:17:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A89AB815FE
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:17:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C79C340E7;
-        Tue, 25 Jan 2022 00:17:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0FFC61299
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B65C340E8;
+        Tue, 25 Jan 2022 00:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643069839;
-        bh=3il89y80lqKSeBlP8c8K13FChN+0Rfp1qjkKOqCKgPI=;
+        s=k20201202; t=1643069866;
+        bh=Or9AVgLUKdbiSWN+8SU2UGG+u6koLwhaCiyfY1RVxtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vAdbt2u6qJfKcFqmpmrfXybkDswh9QOGfo1YwHtQf33W5m+xZHJNe1/XIjVMkpRrL
-         ehxrCMu2tXaMXDJn3swwzi3ZupyTlaXnWXLpinsUuHE1808OgEIJanwzkxEqPxGpnH
-         LDRkYfRyG7dH5eWvvOmL30s9NZhT356jF3YduENQhPM0lPjPvSD37iOSd0uCWZTBBK
-         SSKx22gbYcd70Pjgs5YOqp0mQvQ+CbzVRyxM4DD3lzWr3NDSQ2QPG33jNU6E+fTByV
-         xzaNvqjWckAz2IUi5Hl858NrsOLAxehClfwkEuVMtSKXlK+F35sxPIb/ynQ80oVkze
-         +vWThPWr1Rk5g==
+        b=Aslq8Yn7FPhSWiki8nhv66rKrpTH3SpDIQUtaOu52oM1Lc+OWgsUrTyerUr4+R1Sf
+         6NOc4O5npZ90vr8ehvne0M5/16kaPqdLd1kWQG/JFQafWYK5otfDyG2Jnw8fDGkhuu
+         Gsc8VS78aHMEBstglCMCp1r08IuuuS8SRoDPh1vPBwOFHohSVEltlcuSkBlGY6U6uK
+         NR+iS7nAIsPjAhCOGTlHMSHjmszWn5KNzq1TSZob+EK/+lds/uE39kehG4y0Fu+YSk
+         JbFlMbQRcbMA8/lIGT85hGnT+/lDa68v7cDYRaD1M1iD0Y594vPi3vL2qt9UtcRhc1
+         XJUYx1OI8U0pA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -46,135 +46,422 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v8 30/38] kselftest/arm64: Extend vector configuration API tests to cover SME
-Date:   Tue, 25 Jan 2022 00:11:06 +0000
-Message-Id: <20220125001114.193425-31-broonie@kernel.org>
+Subject: [PATCH v8 37/38] kselftest/arm64: Add coverage for the ZA ptrace interface
+Date:   Tue, 25 Jan 2022 00:11:13 +0000
+Message-Id: <20220125001114.193425-38-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220125001114.193425-1-broonie@kernel.org>
 References: <20220125001114.193425-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3696; h=from:subject; bh=3il89y80lqKSeBlP8c8K13FChN+0Rfp1qjkKOqCKgPI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AYN4dR74Qw9LPAlbaGHQMLY9KQX+QsTH0nXuoi YlK5KcGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AGAAKCRAk1otyXVSH0OpKB/ wLT/P0qMYEQbs4q5Te8D+jWyVE3oDYUUinSZAMTR+QLE7tE+HhKsGoTs+LXVLbs4D5qBQRbWhIhZeC aI1H0cmkBD2QZ8fvsiV0ptgwVZw1at2LWNBUfhOUe0gCNPtLeM2dHwwdSaiOZ1Arys+Wh0M6nd4N7a WNHCBWKZ0WPpOl/2cCjmFtbC22X9mkB++nSVtWo2iyco0BFrAnQys9dKJfDj8TdOCm1O6p5iC6hMdL cRl59bMhTCtRhaV+D8UUtNoH4lbH41j/ur0i8PtGwjmmYNbeH75NwIi6v1r0vhVARzMRsVcEVmlgRC 73FjRDtJV4lTNwl5+Fs3jZHNf+rYoe
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10064; h=from:subject; bh=Or9AVgLUKdbiSWN+8SU2UGG+u6koLwhaCiyfY1RVxtQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AezhOmKd+a7ZXnxvpQMJJSUSKWZk8zhhnb3lko O5oOt8uJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AHgAKCRAk1otyXVSH0DriCA CEf+HNOAf8wSHiMtVs7qcIiJr4oubxNnmD7Ny5zZF9NvRw+NPblL/L8ZDY2nX9CwzeP4o1fSQpZU2w MkoU+RyHdpi8FsAKECoBws6VmhaHrZSjGmeTMO8u+6yUDH6ztZuzAcJHPjoypsuQIMnY0sYczp/Z0Y 4uxZsCwS2VcVJgqujsUD/N/BGbec8HJpOMAYBy8D8dHdSggQUVYcl/V9Wf1s9G1n6PQ9/LyXDx7E5C dDy6pd1B4AMdZ4MIlGdg37nGNqZYDIog1W3L1Ey4BLCiQeXjnbEeKEWTHRL9soPw1dDw4tLIbaLd2H pdppShqBvOuiOLWyNx91Zg+1g55H2W
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Provide RDVL helpers for SME and extend the main vector configuration tests
-to cover SME.
+Add some basic coverage for the ZA ptrace interface, including walking
+through all the vector lengths supported in the system. As with SVE we do
+not currently validate the data all the way through to the running process.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore   |  1 +
- tools/testing/selftests/arm64/fp/Makefile     |  3 ++-
- tools/testing/selftests/arm64/fp/rdvl-sme.c   | 14 ++++++++++++++
- tools/testing/selftests/arm64/fp/rdvl.S       |  8 ++++++++
- tools/testing/selftests/arm64/fp/rdvl.h       |  1 +
- tools/testing/selftests/arm64/fp/vec-syscfg.c | 10 ++++++++++
- 6 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sme.c
+ tools/testing/selftests/arm64/fp/.gitignore  |   1 +
+ tools/testing/selftests/arm64/fp/Makefile    |   3 +-
+ tools/testing/selftests/arm64/fp/za-ptrace.c | 354 +++++++++++++++++++
+ 3 files changed, 357 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
 
 diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index c50d86331ed2..6e9a610c5e5d 100644
+index ead3197e720b..d98d3d48b504 100644
 --- a/tools/testing/selftests/arm64/fp/.gitignore
 +++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -1,5 +1,6 @@
- fp-pidbench
- fpsimd-test
-+rdvl-sme
- rdvl-sve
- sve-probe-vls
- sve-ptrace
+@@ -8,4 +8,5 @@ sve-test
+ ssve-test
+ vec-syscfg
+ vlset
++za-ptrace
+ za-test
 diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 95f0b877a060..a224fff8082b 100644
+index 38d2d0d5a0eb..807a8faf8d57 100644
 --- a/tools/testing/selftests/arm64/fp/Makefile
 +++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS += -I../../../../../usr/include/
- TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
- TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
--	rdvl-sve \
-+	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
- 	vlset
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
  
-@@ -13,6 +13,7 @@ fp-pidbench: fp-pidbench.S asm-utils.o
+ CFLAGS += -I../../../../../usr/include/
+-TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
++TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
+ TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
+ 	rdvl-sme rdvl-sve \
+ 	sve-test sve-stress \
+@@ -27,5 +27,6 @@ vec-syscfg: vec-syscfg.o rdvl.o
+ vlset: vlset.o
+ za-test: za-test.o asm-utils.o
  	$(CC) -nostdlib $^ -o $@
- fpsimd-test: fpsimd-test.o asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
-+rdvl-sme: rdvl-sme.o rdvl.o
- rdvl-sve: rdvl-sve.o rdvl.o
- sve-ptrace: sve-ptrace.o
- sve-probe-vls: sve-probe-vls.o rdvl.o
-diff --git a/tools/testing/selftests/arm64/fp/rdvl-sme.c b/tools/testing/selftests/arm64/fp/rdvl-sme.c
++za-ptrace: za-ptrace.o
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
 new file mode 100644
-index 000000000000..49b0b2e08bac
+index 000000000000..692c82624855
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/rdvl-sme.c
-@@ -0,0 +1,14 @@
++++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
+@@ -0,0 +1,354 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+
++/*
++ * Copyright (C) 2021 ARM Limited.
++ */
++#include <errno.h>
++#include <stdbool.h>
++#include <stddef.h>
 +#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <sys/ptrace.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++#include <sys/wait.h>
++#include <asm/sigcontext.h>
++#include <asm/ptrace.h>
 +
-+#include "rdvl.h"
++#include "../../kselftest.h"
++
++/* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
++#ifndef NT_ARM_ZA
++#define NT_ARM_ZA 0x40c
++#endif
++
++#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
++
++static void fill_buf(char *buf, size_t size)
++{
++	int i;
++
++	for (i = 0; i < size; i++)
++		buf[i] = random();
++}
++
++static int do_child(void)
++{
++	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
++		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
++
++	if (raise(SIGSTOP))
++		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
++
++	return EXIT_SUCCESS;
++}
++
++static struct user_za_header *get_za(pid_t pid, void **buf, size_t *size)
++{
++	struct user_za_header *za;
++	void *p;
++	size_t sz = sizeof(*za);
++	struct iovec iov;
++
++	while (1) {
++		if (*size < sz) {
++			p = realloc(*buf, sz);
++			if (!p) {
++				errno = ENOMEM;
++				goto error;
++			}
++
++			*buf = p;
++			*size = sz;
++		}
++
++		iov.iov_base = *buf;
++		iov.iov_len = sz;
++		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_ZA, &iov))
++			goto error;
++
++		za = *buf;
++		if (za->size <= sz)
++			break;
++
++		sz = za->size;
++	}
++
++	return za;
++
++error:
++	return NULL;
++}
++
++static int set_za(pid_t pid, const struct user_za_header *za)
++{
++	struct iovec iov;
++
++	iov.iov_base = (void *)za;
++	iov.iov_len = za->size;
++	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_ZA, &iov);
++}
++
++/* Validate attempting to set the specfied VL via ptrace */
++static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
++{
++	struct user_za_header za;
++	struct user_za_header *new_za = NULL;
++	size_t new_za_size = 0;
++	int ret, prctl_vl;
++
++	*supported = false;
++
++	/* Check if the VL is supported in this process */
++	prctl_vl = prctl(PR_SME_SET_VL, vl);
++	if (prctl_vl == -1)
++		ksft_exit_fail_msg("prctl(PR_SME_SET_VL) failed: %s (%d)\n",
++				   strerror(errno), errno);
++
++	/* If the VL is not supported then a supported VL will be returned */
++	*supported = (prctl_vl == vl);
++
++	/* Set the VL by doing a set with no register payload */
++	memset(&za, 0, sizeof(za));
++	za.size = sizeof(za);
++	za.vl = vl;
++	ret = set_za(child, &za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u\n", vl);
++		return;
++	}
++
++	/*
++	 * Read back the new register state and verify that we have the
++	 * same VL that we got from prctl() on ourselves.
++	 */
++	if (!get_za(child, (void **)&new_za, &new_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u\n", vl);
++		return;
++	}
++
++	ksft_test_result(new_za->vl = prctl_vl, "Set VL %u\n", vl);
++
++	free(new_za);
++}
++
++/* Validate attempting to set no ZA data and read it back */
++static void ptrace_set_no_data(pid_t child, unsigned int vl)
++{
++	void *read_buf = NULL;
++	struct user_za_header write_za;
++	struct user_za_header *read_za;
++	size_t read_za_size = 0;
++	int ret;
++
++	/* Set up some data and write it out */
++	memset(&write_za, 0, sizeof(write_za));
++	write_za.size = ZA_PT_ZA_OFFSET;
++	write_za.vl = vl;
++
++	ret = set_za(child, &write_za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u no data\n", vl);
++		return;
++	}
++
++	/* Read the data back */
++	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u no data\n", vl);
++		return;
++	}
++	read_za = read_buf;
++
++	/* We might read more data if there's extensions we don't know */
++	if (read_za->size < write_za.size) {
++		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
++				      vl, write_za.size, read_za->size);
++		goto out_read;
++	}
++
++	ksft_test_result(read_za->size == write_za.size,
++			 "Disabled ZA for VL %u\n", vl);
++
++out_read:
++	free(read_buf);
++}
++
++/* Validate attempting to set data and read it back */
++static void ptrace_set_get_data(pid_t child, unsigned int vl)
++{
++	void *write_buf;
++	void *read_buf = NULL;
++	struct user_za_header *write_za;
++	struct user_za_header *read_za;
++	size_t read_za_size = 0;
++	unsigned int vq = sve_vq_from_vl(vl);
++	int ret;
++	size_t data_size;
++
++	data_size = ZA_PT_SIZE(vq);
++	write_buf = malloc(data_size);
++	if (!write_buf) {
++		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
++				      data_size, vl);
++		return;
++	}
++	write_za = write_buf;
++
++	/* Set up some data and write it out */
++	memset(write_za, 0, data_size);
++	write_za->size = data_size;
++	write_za->vl = vl;
++
++	fill_buf(write_buf + ZA_PT_ZA_OFFSET, ZA_PT_ZA_SIZE(vq));
++
++	ret = set_za(child, write_za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u data\n", vl);
++		goto out;
++	}
++
++	/* Read the data back */
++	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u data\n", vl);
++		goto out;
++	}
++	read_za = read_buf;
++
++	/* We might read more data if there's extensions we don't know */
++	if (read_za->size < write_za->size) {
++		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
++				      vl, write_za->size, read_za->size);
++		goto out_read;
++	}
++
++	ksft_test_result(memcmp(write_buf + ZA_PT_ZA_OFFSET,
++				read_buf + ZA_PT_ZA_OFFSET,
++				ZA_PT_ZA_SIZE(vq)) == 0,
++			 "Data match for VL %u\n", vl);
++
++out_read:
++	free(read_buf);
++out:
++	free(write_buf);
++}
++
++static int do_parent(pid_t child)
++{
++	int ret = EXIT_FAILURE;
++	pid_t pid;
++	int status;
++	siginfo_t si;
++	unsigned int vq, vl;
++	bool vl_supported;
++
++	/* Attach to the child */
++	while (1) {
++		int sig;
++
++		pid = wait(&status);
++		if (pid == -1) {
++			perror("wait");
++			goto error;
++		}
++
++		/*
++		 * This should never happen but it's hard to flag in
++		 * the framework.
++		 */
++		if (pid != child)
++			continue;
++
++		if (WIFEXITED(status) || WIFSIGNALED(status))
++			ksft_exit_fail_msg("Child died unexpectedly\n");
++
++		if (!WIFSTOPPED(status))
++			goto error;
++
++		sig = WSTOPSIG(status);
++
++		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
++			if (errno == ESRCH)
++				goto disappeared;
++
++			if (errno == EINVAL) {
++				sig = 0; /* bust group-stop */
++				goto cont;
++			}
++
++			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
++					      strerror(errno));
++			goto error;
++		}
++
++		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
++		    si.si_pid == pid)
++			break;
++
++	cont:
++		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
++			if (errno == ESRCH)
++				goto disappeared;
++
++			ksft_test_result_fail("PTRACE_CONT: %s\n",
++					      strerror(errno));
++			goto error;
++		}
++	}
++
++	/* Step through every possible VQ */
++	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
++		vl = sve_vl_from_vq(vq);
++
++		/* First, try to set this vector length */
++		ptrace_set_get_vl(child, vl, &vl_supported);
++
++		/* If the VL is supported validate data set/get */
++		if (vl_supported) {
++			ptrace_set_no_data(child, vl);
++			ptrace_set_get_data(child, vl);
++		} else {
++			ksft_test_result_skip("Disabled ZA for VL %u\n", vl);
++			ksft_test_result_skip("Get and set data for VL %u\n",
++					      vl);
++		}
++	}
++
++	ret = EXIT_SUCCESS;
++
++error:
++	kill(child, SIGKILL);
++
++disappeared:
++	return ret;
++}
 +
 +int main(void)
 +{
-+	int vl = rdvl_sme();
++	int ret = EXIT_SUCCESS;
++	pid_t child;
 +
-+	printf("%d\n", vl);
++	srandom(getpid());
 +
-+	return 0;
++	ksft_print_header();
++
++	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME)) {
++		ksft_set_plan(1);
++		ksft_exit_skip("SME not available\n");
++	}
++
++	ksft_set_plan(EXPECTED_TESTS);
++
++	child = fork();
++	if (!child)
++		return do_child();
++
++	if (do_parent(child))
++		ret = EXIT_FAILURE;
++
++	ksft_print_cnts();
++
++	return ret;
 +}
-diff --git a/tools/testing/selftests/arm64/fp/rdvl.S b/tools/testing/selftests/arm64/fp/rdvl.S
-index c916c1c9defd..1a2ebf07a20c 100644
---- a/tools/testing/selftests/arm64/fp/rdvl.S
-+++ b/tools/testing/selftests/arm64/fp/rdvl.S
-@@ -8,3 +8,11 @@ rdvl_sve:
- 	hint	34			// BTI C
- 	rdvl	x0, #1
- 	ret
-+
-+.globl rdvl_sme
-+rdvl_sme:
-+	hint	34			// BTI C
-+
-+	.inst	0x4bf5820		// RDSVL x0, #1
-+
-+	ret
-diff --git a/tools/testing/selftests/arm64/fp/rdvl.h b/tools/testing/selftests/arm64/fp/rdvl.h
-index 7c9d953fc9e7..5d323679fbc9 100644
---- a/tools/testing/selftests/arm64/fp/rdvl.h
-+++ b/tools/testing/selftests/arm64/fp/rdvl.h
-@@ -3,6 +3,7 @@
- #ifndef RDVL_H
- #define RDVL_H
- 
-+int rdvl_sme(void);
- int rdvl_sve(void);
- 
- #endif
-diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-index c90658811a83..9bcfcdc34ee9 100644
---- a/tools/testing/selftests/arm64/fp/vec-syscfg.c
-+++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-@@ -51,6 +51,16 @@ static struct vec_data vec_data[] = {
- 		.prctl_set = PR_SVE_SET_VL,
- 		.default_vl_file = "/proc/sys/abi/sve_default_vector_length",
- 	},
-+	{
-+		.name = "SME",
-+		.hwcap_type = AT_HWCAP2,
-+		.hwcap = HWCAP2_SME,
-+		.rdvl = rdvl_sme,
-+		.rdvl_binary = "./rdvl-sme",
-+		.prctl_get = PR_SME_GET_VL,
-+		.prctl_set = PR_SME_SET_VL,
-+		.default_vl_file = "/proc/sys/abi/sme_default_vector_length",
-+	},
- };
- 
- static int stdio_read_integer(FILE *f, const char *what, int *val)
 -- 
 2.30.2
 
