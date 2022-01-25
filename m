@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C92BC3526E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D1E6C35270
 	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 00:30:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3409307AbiAYAZ0 (ORCPT
+        id S3409354AbiAYAZm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 19:25:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57688 "EHLO
+        Mon, 24 Jan 2022 19:25:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57758 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2374495AbiAYARK (ORCPT
+        with ESMTP id S2374558AbiAYARW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:17:10 -0500
+        Mon, 24 Jan 2022 19:17:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA5BFB815FA
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FB75C340E8;
-        Tue, 25 Jan 2022 00:17:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A89AB815FE
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:17:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C79C340E7;
+        Tue, 25 Jan 2022 00:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643069827;
-        bh=QxDCYADgLO7Ate8OqAbdluQUXHUE34NK/8kXtjiy66A=;
+        s=k20201202; t=1643069839;
+        bh=3il89y80lqKSeBlP8c8K13FChN+0Rfp1qjkKOqCKgPI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jwC+s/7s94IsN7xSs2fr74xXB9CNZSVS0T/UINwK4FVSpeellMAhwM5ftVTk2cMfX
-         qrGljkUqSxZUmlghBi/UmyStKhSCDiPHDMvqQF5Lbut6kc9j7kZvHuWAGXRVEHG+04
-         u9tk2Yl5iUjM3Ssq3/NDsKupqNMSQOG9Jh0wvqcDe3WSMhdIotF1Ktdch9wulcBpGa
-         gOamL/50BrX4Zb+W/v0mYwJLGmVLXifKR7yLpw9uu4dvvJQ0VbYzE6xSao7oq3eqqt
-         iRiy0mNdZjxBB39y+SG7LjpSROBg283Q19fZxIDCYUbFBIbQ22IHnWRPN+McXgHmBx
-         gY2KmN7Z1WsMw==
+        b=vAdbt2u6qJfKcFqmpmrfXybkDswh9QOGfo1YwHtQf33W5m+xZHJNe1/XIjVMkpRrL
+         ehxrCMu2tXaMXDJn3swwzi3ZupyTlaXnWXLpinsUuHE1808OgEIJanwzkxEqPxGpnH
+         LDRkYfRyG7dH5eWvvOmL30s9NZhT356jF3YduENQhPM0lPjPvSD37iOSd0uCWZTBBK
+         SSKx22gbYcd70Pjgs5YOqp0mQvQ+CbzVRyxM4DD3lzWr3NDSQ2QPG33jNU6E+fTByV
+         xzaNvqjWckAz2IUi5Hl858NrsOLAxehClfwkEuVMtSKXlK+F35sxPIb/ynQ80oVkze
+         +vWThPWr1Rk5g==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -46,53 +46,135 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v8 27/38] arm64/sme: Provide Kconfig for SME
-Date:   Tue, 25 Jan 2022 00:11:03 +0000
-Message-Id: <20220125001114.193425-28-broonie@kernel.org>
+Subject: [PATCH v8 30/38] kselftest/arm64: Extend vector configuration API tests to cover SME
+Date:   Tue, 25 Jan 2022 00:11:06 +0000
+Message-Id: <20220125001114.193425-31-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220125001114.193425-1-broonie@kernel.org>
 References: <20220125001114.193425-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1350; h=from:subject; bh=QxDCYADgLO7Ate8OqAbdluQUXHUE34NK/8kXtjiy66A=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AWO5EXNCblah8mNd3crJRe3Ue7ZJ3oWFjj+/Wo dCuJNvuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AFgAKCRAk1otyXVSH0BRgB/ 43Rva4UBWdtRzqPyhOUWBLfKjPH+8W7qDQFEuBCWTBj9PcLCl7b3lqFoqWdz7f7Qh+oi4KPAg8L8Pq U/4fNAtROOuNwNWSy+9K1tvhIXTOtRLFWAOrkEMKlsroEaTyWQkXIGRK6pNnrwOhGRVml84jxrGJTz BXTmnkfvXknHbP/3oCE0mNkSX+G20BjFLsYeq3xbJYqnb3RQFUQxBNQc7Zz1t8lnwtQqh3LeiRNzks HSd/T5Ltg6on+j4Rf5i9XQazm35+Z/hwTMzb+g/0fB1Fme+T6snLoXjaUkROof30/TLcGloORR63sB w5gSLsrwFsrdLcAQlcWEgGgVaTd+xw
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3696; h=from:subject; bh=3il89y80lqKSeBlP8c8K13FChN+0Rfp1qjkKOqCKgPI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AYN4dR74Qw9LPAlbaGHQMLY9KQX+QsTH0nXuoi YlK5KcGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AGAAKCRAk1otyXVSH0OpKB/ wLT/P0qMYEQbs4q5Te8D+jWyVE3oDYUUinSZAMTR+QLE7tE+HhKsGoTs+LXVLbs4D5qBQRbWhIhZeC aI1H0cmkBD2QZ8fvsiV0ptgwVZw1at2LWNBUfhOUe0gCNPtLeM2dHwwdSaiOZ1Arys+Wh0M6nd4N7a WNHCBWKZ0WPpOl/2cCjmFtbC22X9mkB++nSVtWo2iyco0BFrAnQys9dKJfDj8TdOCm1O6p5iC6hMdL cRl59bMhTCtRhaV+D8UUtNoH4lbH41j/ur0i8PtGwjmmYNbeH75NwIi6v1r0vhVARzMRsVcEVmlgRC 73FjRDtJV4lTNwl5+Fs3jZHNf+rYoe
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that basline support for the Scalable Matrix Extension (SME) is present
-introduce the Kconfig option allowing it to be built. While the feature
-registers don't impose a strong requirement for a system with SME to
-support SVE at runtime the support for streaming mode SVE is mostly
-shared with normal SVE so depend on SVE.
+Provide RDVL helpers for SME and extend the main vector configuration tests
+to cover SME.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/Kconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/arm64/fp/.gitignore   |  1 +
+ tools/testing/selftests/arm64/fp/Makefile     |  3 ++-
+ tools/testing/selftests/arm64/fp/rdvl-sme.c   | 14 ++++++++++++++
+ tools/testing/selftests/arm64/fp/rdvl.S       |  8 ++++++++
+ tools/testing/selftests/arm64/fp/rdvl.h       |  1 +
+ tools/testing/selftests/arm64/fp/vec-syscfg.c | 10 ++++++++++
+ 6 files changed, 36 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sme.c
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 6978140edfa4..f60f3b04ddf5 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1839,6 +1839,17 @@ config ARM64_SVE
- 	  booting the kernel.  If unsure and you are not observing these
- 	  symptoms, you should assume that it is safe to say Y.
+diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+index c50d86331ed2..6e9a610c5e5d 100644
+--- a/tools/testing/selftests/arm64/fp/.gitignore
++++ b/tools/testing/selftests/arm64/fp/.gitignore
+@@ -1,5 +1,6 @@
+ fp-pidbench
+ fpsimd-test
++rdvl-sme
+ rdvl-sve
+ sve-probe-vls
+ sve-ptrace
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index 95f0b877a060..a224fff8082b 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -3,7 +3,7 @@
+ CFLAGS += -I../../../../../usr/include/
+ TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
+ TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
+-	rdvl-sve \
++	rdvl-sme rdvl-sve \
+ 	sve-test sve-stress \
+ 	vlset
  
-+config ARM64_SME
-+	bool "ARM Scalable Matrix Extension support"
-+	default y
-+	depends on ARM64_SVE
-+	help
-+	  The Scalable Matrix Extension (SME) is an extension to the AArch64
-+	  execution state which utilises a substantial subset of the SVE
-+	  instruction set, together with the addition of new architectural
-+	  register state capable of holding two dimensional matrix tiles to
-+	  enable various matrix operations.
+@@ -13,6 +13,7 @@ fp-pidbench: fp-pidbench.S asm-utils.o
+ 	$(CC) -nostdlib $^ -o $@
+ fpsimd-test: fpsimd-test.o asm-utils.o
+ 	$(CC) -nostdlib $^ -o $@
++rdvl-sme: rdvl-sme.o rdvl.o
+ rdvl-sve: rdvl-sve.o rdvl.o
+ sve-ptrace: sve-ptrace.o
+ sve-probe-vls: sve-probe-vls.o rdvl.o
+diff --git a/tools/testing/selftests/arm64/fp/rdvl-sme.c b/tools/testing/selftests/arm64/fp/rdvl-sme.c
+new file mode 100644
+index 000000000000..49b0b2e08bac
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/rdvl-sme.c
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
- config ARM64_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
++#include <stdio.h>
++
++#include "rdvl.h"
++
++int main(void)
++{
++	int vl = rdvl_sme();
++
++	printf("%d\n", vl);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/arm64/fp/rdvl.S b/tools/testing/selftests/arm64/fp/rdvl.S
+index c916c1c9defd..1a2ebf07a20c 100644
+--- a/tools/testing/selftests/arm64/fp/rdvl.S
++++ b/tools/testing/selftests/arm64/fp/rdvl.S
+@@ -8,3 +8,11 @@ rdvl_sve:
+ 	hint	34			// BTI C
+ 	rdvl	x0, #1
+ 	ret
++
++.globl rdvl_sme
++rdvl_sme:
++	hint	34			// BTI C
++
++	.inst	0x4bf5820		// RDSVL x0, #1
++
++	ret
+diff --git a/tools/testing/selftests/arm64/fp/rdvl.h b/tools/testing/selftests/arm64/fp/rdvl.h
+index 7c9d953fc9e7..5d323679fbc9 100644
+--- a/tools/testing/selftests/arm64/fp/rdvl.h
++++ b/tools/testing/selftests/arm64/fp/rdvl.h
+@@ -3,6 +3,7 @@
+ #ifndef RDVL_H
+ #define RDVL_H
+ 
++int rdvl_sme(void);
+ int rdvl_sve(void);
+ 
+ #endif
+diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+index c90658811a83..9bcfcdc34ee9 100644
+--- a/tools/testing/selftests/arm64/fp/vec-syscfg.c
++++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
+@@ -51,6 +51,16 @@ static struct vec_data vec_data[] = {
+ 		.prctl_set = PR_SVE_SET_VL,
+ 		.default_vl_file = "/proc/sys/abi/sve_default_vector_length",
+ 	},
++	{
++		.name = "SME",
++		.hwcap_type = AT_HWCAP2,
++		.hwcap = HWCAP2_SME,
++		.rdvl = rdvl_sme,
++		.rdvl_binary = "./rdvl-sme",
++		.prctl_get = PR_SME_GET_VL,
++		.prctl_set = PR_SME_SET_VL,
++		.default_vl_file = "/proc/sys/abi/sme_default_vector_length",
++	},
+ };
+ 
+ static int stdio_read_integer(FILE *f, const char *what, int *val)
 -- 
 2.30.2
 
