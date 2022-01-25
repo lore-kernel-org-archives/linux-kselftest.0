@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 118D3C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 03:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC72C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 03:36:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1325163AbiAYDgC (ORCPT
+        id S3421213AbiAYDgH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        Mon, 24 Jan 2022 22:36:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3421213AbiAYC02 (ORCPT
+        with ESMTP id S3421274AbiAYC0g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:26:28 -0500
+        Mon, 24 Jan 2022 21:26:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12A3C08B4F6
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 16:16:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFADAC0BF84F
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 16:18:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71240B81229
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3BBC340E7;
-        Tue, 25 Jan 2022 00:16:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F4033B81603
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:17:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE74C340E7;
+        Tue, 25 Jan 2022 00:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643069773;
-        bh=3ak/TkOEva2A1EWWMZ6rEAo+xuM7bHsmgGI8j+vb0mA=;
+        s=k20201202; t=1643069854;
+        bh=ed64zhLtAbkpMXL5V51VDJr543h8QYko5WwjlEnjVQ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=inbbCDS07OBhH/oiFD0HQMdQ+UT1KIGD4wAtk/DfGjsax3CvvSJ9xtHWvaENuQSPo
-         3BIV78ZBbzU2FeY31Cq2pJdgST90aJrDKdYuwo8ADSuOzNIZLAvBiRsO8FtQ7uDpIL
-         GlojiQS3LnX3AVuEaZtL7j8aaV6/3nhcN+6bA9XTfOOwlAIEfaHUqGEIUk3Kar+MXg
-         8rAnb5DXH0xB9J6Gk+nAuVsDkBeZrFLIwBWKsJM5wZUsdNXvbVA1k7+r4W3IED7jUk
-         QkhiKgpa5nMVtUQ1uuL16buDZtXFnQ0Z6s9PQcfs+4Wi2oDMwyenK8TTTcUj7cTe84
-         CyGEtssL8HWeQ==
+        b=johVtIwkhjGtuEI4Q4eeRWaxW5mpXf3eTHwi3Hs/LnRdG6g6Ys8ZYqGTqWo65bt4G
+         Df+pAAkwWosCodXdmexV3BGmfWW5njZKCEsGm2/hLhLW5k1UJTOUtscBusOOMf59J2
+         aWf44CM50KgMouyZV1GUCvyBSOEljL7qBQYR8exWXnXVbszfgLAtAvEzewIOlo3bif
+         6WD7bUAl6Zn/3eycDcqUc1QylVS7zy1MiA0+H22NYgSgiBd6KS3jBLTvqQQ9RNEhCI
+         n0LAR16fpiCR0uDqQFcAsYJMl0ibvpAP2rGzGYnOpJXvoy1M/Ds8ITc00aF6OEvq/o
+         e3dGLA40ncsfw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,178 +49,564 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v8 13/38] arm64/sme: Implement SVCR context switching
-Date:   Tue, 25 Jan 2022 00:10:49 +0000
-Message-Id: <20220125001114.193425-14-broonie@kernel.org>
+Subject: [PATCH v8 34/38] kselftest/arm64: Add stress test for SME ZA context switching
+Date:   Tue, 25 Jan 2022 00:11:10 +0000
+Message-Id: <20220125001114.193425-35-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220125001114.193425-1-broonie@kernel.org>
 References: <20220125001114.193425-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6142; h=from:subject; bh=3ak/TkOEva2A1EWWMZ6rEAo+xuM7bHsmgGI8j+vb0mA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70ALxHICk/aRefIWC+RRWEwIqJy9Ttg8s+gBA7Ye 7XUSftuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9ACwAKCRAk1otyXVSH0C8GB/ 0a2em6RIuEaf0YxlXas1IjktWlgLJ1JmuYyYdk2JVAA34hNDMu5orTxo0a+wdSyMCR8uomH4k9+NSO Mv2WfbPoPZ+0+CCkh3r97LHqJY6ZzX7uqVtNuM++Zm0ZA5tNmlKgy57r0MWhMJJCYGqBRp41Cz454R d2wypkT2Ml/X2t4uVGVyy43uEAmXL3rJ9FN7gFPwgJOHINMU0NAgHED379pWWyeoQPpYLGTTxgRlIt UMkA/Xu59hxVdguHJpiLoLzAK8eW3QaHmUTtZIZOpzjpWwxkjBcDVbBgAskQZJOCnrLJZEw6XmKpBk pcAOk9sc5a9p8Fs5OBp1JhDtzt3dHF
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11739; h=from:subject; bh=ed64zhLtAbkpMXL5V51VDJr543h8QYko5WwjlEnjVQ0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AbdpG8Zl2J2EepYVKuvz25ObyOwtzpjxjcIJ6L skHDa+OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9AGwAKCRAk1otyXVSH0HL2B/ 9mv0ycCG3khmyInlGbHhkqVktK6NcgZNP5AzBKIk/2gB9VQLr8n230BNQEYAyYUPHQwd9Jo+T5+Koy 0MdY7fRku1pMWQeWiMfaT1gqWAlasNxKORuiqiyD4vWgWH3XZFxqXQLCmixiMSlXT4VBIQQghRcRZC a4PEP50laXQwmxZMMXvBQWrM7jQOIS9G7VscJQjq+ImU2if0WukC2Xon880oBTU7RZyoVipUxtuuEQ +68mGeX8IKrbLHIqIBbwJpKgjTbnaPZIyWv3wETwdDfPioOPLOPXWmOUouHsf39/h6aPgfyEiBJ4FC Jmvg9alTDvA6+fgTYyCrUbB4uUSXTM
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In SME the use of both streaming SVE mode and ZA are tracked through
-PSTATE.SM and PSTATE.ZA, visible through the system register SVCR.  In
-order to context switch the floating point state for SME we need to
-context switch the contents of this register as part of context
-switching the floating point state.
+Add a stress test for context switching of the ZA register state based on
+the similar tests Dave Martin wrote for FPSIMD and SVE registers. The test
+loops indefinitely writing a data pattern to ZA then reading it back and
+verifying that it's what was expected.
 
-Since changing the vector length exits streaming SVE mode and disables
-ZA we also make sure we update SVCR appropriately when setting vector
-length, and similarly ensure that new threads have streaming SVE mode
-and ZA disabled.
+Unlike the other tests we manually assemble the SME instructions since at
+present no released toolchain has SME support integrated.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h      |  3 ++-
- arch/arm64/include/asm/processor.h   |  1 +
- arch/arm64/include/asm/thread_info.h |  1 +
- arch/arm64/kernel/fpsimd.c           | 18 +++++++++++++++++-
- arch/arm64/kernel/process.c          |  2 ++
- arch/arm64/kvm/fpsimd.c              |  4 ++++
- 6 files changed, 27 insertions(+), 2 deletions(-)
+ tools/testing/selftests/arm64/fp/.gitignore |   1 +
+ tools/testing/selftests/arm64/fp/Makefile   |   3 +
+ tools/testing/selftests/arm64/fp/za-stress  |  59 +++
+ tools/testing/selftests/arm64/fp/za-test.S  | 426 ++++++++++++++++++++
+ 4 files changed, 489 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/fp/za-stress
+ create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index babf944e7c0c..d1bae65d3dba 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -46,7 +46,8 @@ extern void fpsimd_restore_current_state(void);
- extern void fpsimd_update_current_state(struct user_fpsimd_state const *state);
+diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+index 5729a5b1adfc..ead3197e720b 100644
+--- a/tools/testing/selftests/arm64/fp/.gitignore
++++ b/tools/testing/selftests/arm64/fp/.gitignore
+@@ -8,3 +8,4 @@ sve-test
+ ssve-test
+ vec-syscfg
+ vlset
++za-test
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index e6643c9b0474..38d2d0d5a0eb 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -6,6 +6,7 @@ TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
+ 	rdvl-sme rdvl-sve \
+ 	sve-test sve-stress \
+ 	ssve-test ssve-stress \
++	za-test za-stress \
+ 	vlset
  
- extern void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *state,
--				     void *sve_state, unsigned int sve_vl);
-+				     void *sve_state, unsigned int sve_vl,
-+				     u64 *svcr);
+ all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
+@@ -24,5 +25,7 @@ ssve-test: sve-test.S asm-utils.o
+ 	$(CC) -DSSVE -nostdlib $^ -o $@
+ vec-syscfg: vec-syscfg.o rdvl.o
+ vlset: vlset.o
++za-test: za-test.o asm-utils.o
++	$(CC) -nostdlib $^ -o $@
  
- extern void fpsimd_flush_task_state(struct task_struct *target);
- extern void fpsimd_save_and_flush_cpu_state(void);
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 008a1767ebff..7e08a4d48c24 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -168,6 +168,7 @@ struct thread_struct {
- 	u64			mte_ctrl;
- #endif
- 	u64			sctlr_user;
-+	u64			svcr;
- 	u64			tpidr2_el0;
- };
- 
-diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-index 4e6b58dcd6f9..848739c15de8 100644
---- a/arch/arm64/include/asm/thread_info.h
-+++ b/arch/arm64/include/asm/thread_info.h
-@@ -82,6 +82,7 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
- #define TIF_SSBD		25	/* Wants SSB mitigation */
- #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
-+#define TIF_SME			27	/* SME in use */
- #define TIF_SME_VL_INHERIT	28	/* Inherit SME vl_onexec across exec */
- 
- #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 40ef89120774..a1918b71d335 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -121,6 +121,7 @@
- struct fpsimd_last_state_struct {
- 	struct user_fpsimd_state *st;
- 	void *sve_state;
-+	u64 *svcr;
- 	unsigned int sve_vl;
- };
- 
-@@ -359,6 +360,9 @@ static void task_fpsimd_load(void)
- 	WARN_ON(!system_supports_fpsimd());
- 	WARN_ON(!have_cpu_fpsimd_context());
- 
-+	if (IS_ENABLED(CONFIG_ARM64_SME) && test_thread_flag(TIF_SME))
-+		write_sysreg_s(current->thread.svcr, SYS_SVCR_EL0);
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/fp/za-stress b/tools/testing/selftests/arm64/fp/za-stress
+new file mode 100644
+index 000000000000..5ac386b55b95
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/za-stress
+@@ -0,0 +1,59 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright (C) 2015-2019 ARM Limited.
++# Original author: Dave Martin <Dave.Martin@arm.com>
 +
- 	if (IS_ENABLED(CONFIG_ARM64_SVE) && test_thread_flag(TIF_SVE)) {
- 		sve_set_vq(sve_vq_from_vl(task_get_sve_vl(current)) - 1);
- 		sve_load_state(sve_pffr(&current->thread),
-@@ -384,6 +388,12 @@ static void fpsimd_save(void)
- 	if (test_thread_flag(TIF_FOREIGN_FPSTATE))
- 		return;
- 
-+	if (IS_ENABLED(CONFIG_ARM64_SME) &&
-+	    test_thread_flag(TIF_SME)) {
-+		u64 *svcr = last->svcr;
-+		*svcr = read_sysreg_s(SYS_SVCR_EL0);
-+	}
++set -ue
 +
- 	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
- 	    test_thread_flag(TIF_SVE)) {
- 		if (WARN_ON(sve_get_vl() != last->sve_vl)) {
-@@ -735,6 +745,10 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
- 	if (test_and_clear_tsk_thread_flag(task, TIF_SVE))
- 		sve_to_fpsimd(task);
- 
-+	if (system_supports_sme() && type == ARM64_VEC_SME)
-+		task->thread.svcr &= ~(SYS_SVCR_EL0_SM_MASK |
-+				       SYS_SVCR_EL0_ZA_MASK);
++NR_CPUS=`nproc`
 +
- 	if (task == current)
- 		put_cpu_fpsimd_context();
- 
-@@ -1398,6 +1412,7 @@ static void fpsimd_bind_task_to_cpu(void)
- 	last->st = &current->thread.uw.fpsimd_state;
- 	last->sve_state = current->thread.sve_state;
- 	last->sve_vl = task_get_sve_vl(current);
-+	last->svcr = &current->thread.svcr;
- 	current->thread.fpsimd_cpu = smp_processor_id();
- 
- 	if (system_supports_sve()) {
-@@ -1412,7 +1427,7 @@ static void fpsimd_bind_task_to_cpu(void)
- }
- 
- void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *st, void *sve_state,
--			      unsigned int sve_vl)
-+			      unsigned int sve_vl, u64 *svcr)
- {
- 	struct fpsimd_last_state_struct *last =
- 		this_cpu_ptr(&fpsimd_last_state);
-@@ -1421,6 +1436,7 @@ void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *st, void *sve_state,
- 	WARN_ON(!in_softirq() && !irqs_disabled());
- 
- 	last->st = st;
-+	last->svcr = svcr;
- 	last->sve_state = sve_state;
- 	last->sve_vl = sve_vl;
- }
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index e69a3dcdb0d9..f2d32a29641c 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -310,6 +310,8 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
- 	dst->thread.sve_state = NULL;
- 	clear_tsk_thread_flag(dst, TIF_SVE);
- 
-+	dst->thread.svcr = 0;
++pids=
++logs=
 +
- 	/* clear any pending asynchronous tag fault raised by the parent */
- 	clear_tsk_thread_flag(dst, TIF_MTE_ASYNC_FAULT);
- 
-diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-index 2f48fd362a8c..04698c4bcd30 100644
---- a/arch/arm64/kvm/fpsimd.c
-+++ b/arch/arm64/kvm/fpsimd.c
-@@ -103,6 +103,10 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
- 	WARN_ON_ONCE(!irqs_disabled());
- 
- 	if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
-+		/*
-+		 * Currently we do not support SME guests so SVCR is
-+		 * always 0 and we just need a variable to point to.
-+		 */
- 		fpsimd_bind_state_to_cpu(&vcpu->arch.ctxt.fp_regs,
- 					 vcpu->arch.sve_state,
- 					 vcpu->arch.sve_max_vl);
++cleanup () {
++	trap - INT TERM CHLD
++	set +e
++
++	if [ -n "$pids" ]; then
++		kill $pids
++		wait $pids
++		pids=
++	fi
++
++	if [ -n "$logs" ]; then
++		cat $logs
++		rm $logs
++		logs=
++	fi
++}
++
++interrupt () {
++	cleanup
++	exit 0
++}
++
++child_died () {
++	cleanup
++	exit 1
++}
++
++trap interrupt INT TERM EXIT
++
++for x in `seq 0 $((NR_CPUS * 4))`; do
++	log=`mktemp`
++	logs=$logs\ $log
++	./za-test >$log &
++	pids=$pids\ $!
++done
++
++# Wait for all child processes to be created:
++sleep 10
++
++while :; do
++	kill -USR1 $pids
++done &
++pids=$pids\ $!
++
++wait
++
++exit 1
+diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+new file mode 100644
+index 000000000000..99e1bb3b6b18
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/za-test.S
+@@ -0,0 +1,426 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021 ARM Limited.
++// Original author: Mark Brown <broonie@kernel.org>
++//
++// Scalable Matrix Extension ZA context switch test
++// Repeatedly writes unique test patterns into each ZA tile
++// and reads them back to verify integrity.
++//
++// for x in `seq 1 NR_CPUS`; do sve-test & pids=$pids\ $! ; done
++// (leave it running for as long as you want...)
++// kill $pids
++
++#include <asm/unistd.h>
++#include "assembler.h"
++#include "asm-offsets.h"
++
++.arch_extension sve
++
++#define MAXVL     2048
++#define MAXVL_B   (MAXVL / 8)
++
++/*
++ * LDR (vector to ZA array):
++ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ */
++.macro _ldr_za nw, nxbase, offset=0
++	.inst	0xe1000000			\
++		| (((\nw) & 3) << 13)		\
++		| ((\nxbase) << 5)		\
++		| ((\offset) & 7)
++.endm
++
++/*
++ * STR (vector from ZA array):
++ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
++ */
++.macro _str_za nw, nxbase, offset=0
++	.inst	0xe1200000			\
++		| (((\nw) & 3) << 13)		\
++		| ((\nxbase) << 5)		\
++		| ((\offset) & 7)
++.endm
++
++/*
++ * RDSVL X\nx, #\imm
++ */
++.macro rdsvl nx, imm
++	.inst	0x4bf5800			\
++		| (\imm << 5)			\
++		| (\nx)
++.endm
++
++.macro smstop
++	msr	S0_3_C4_C6_3, xzr
++.endm
++
++.macro smstart_za
++	msr	S0_3_C4_C5_3, xzr
++.endm
++
++// Declare some storage space to shadow ZA register contents and a
++// scratch buffer for a vector.
++.pushsection .text
++.data
++.align 4
++zaref:
++	.space	MAXVL_B * MAXVL_B
++scratch:
++	.space	MAXVL_B
++.popsection
++
++// Trivial memory copy: copy x2 bytes, starting at address x1, to address x0.
++// Clobbers x0-x3
++function memcpy
++	cmp	x2, #0
++	b.eq	1f
++0:	ldrb	w3, [x1], #1
++	strb	w3, [x0], #1
++	subs	x2, x2, #1
++	b.ne	0b
++1:	ret
++endfunction
++
++// Generate a test pattern for storage in ZA
++// x0: pid
++// x1: row in ZA
++// x2: generation
++
++// These values are used to constuct a 32-bit pattern that is repeated in the
++// scratch buffer as many times as will fit:
++// bits 31:28	generation number (increments once per test_loop)
++// bits 27:16	pid
++// bits 15: 8	row number
++// bits  7: 0	32-bit lane index
++
++function pattern
++	mov	w3, wzr
++	bfi	w3, w0, #16, #12	// PID
++	bfi	w3, w1, #8, #8		// Row
++	bfi	w3, w2, #28, #4		// Generation
++
++	ldr	x0, =scratch
++	mov	w1, #MAXVL_B / 4
++
++0:	str	w3, [x0], #4
++	add	w3, w3, #1		// Lane
++	subs	w1, w1, #1
++	b.ne	0b
++
++	ret
++endfunction
++
++// Get the address of shadow data for ZA horizontal vector xn
++.macro _adrza xd, xn, nrtmp
++	ldr	\xd, =zaref
++	rdsvl	\nrtmp, 1
++	madd	\xd, x\nrtmp, \xn, \xd
++.endm
++
++// Set up test pattern in a ZA horizontal vector
++// x0: pid
++// x1: row number
++// x2: generation
++function setup_za
++	mov	x4, x30
++	mov	x12, x1			// Use x12 for vector select
++
++	bl	pattern			// Get pattern in scratch buffer
++	_adrza	x0, x12, 2		// Shadow buffer pointer to x0 and x5
++	mov	x5, x0
++	ldr	x1, =scratch
++	bl	memcpy			// length set up in x2 by _adrza
++
++	_ldr_za 12, 5			// load vector w12 from pointer x5
++
++	ret	x4
++endfunction
++
++// Trivial memory compare: compare x2 bytes starting at address x0 with
++// bytes starting at address x1.
++// Returns only if all bytes match; otherwise, the program is aborted.
++// Clobbers x0-x5.
++function memcmp
++	cbz	x2, 2f
++
++	stp	x0, x1, [sp, #-0x20]!
++	str	x2, [sp, #0x10]
++
++	mov	x5, #0
++0:	ldrb	w3, [x0, x5]
++	ldrb	w4, [x1, x5]
++	add	x5, x5, #1
++	cmp	w3, w4
++	b.ne	1f
++	subs	x2, x2, #1
++	b.ne	0b
++
++1:	ldr	x2, [sp, #0x10]
++	ldp	x0, x1, [sp], #0x20
++	b.ne	barf
++
++2:	ret
++endfunction
++
++// Verify that a ZA vector matches its shadow in memory, else abort
++// x0: row number
++// Clobbers x0-x7 and x12.
++function check_za
++	mov	x3, x30
++
++	mov	x12, x0
++	_adrza	x5, x0, 6		// pointer to expected value in x5
++	mov	x4, x0
++	ldr	x7, =scratch		// x7 is scratch
++
++	mov	x0, x7			// Poison scratch
++	mov	x1, x6
++	bl	memfill_ae
++
++	_str_za 12, 7			// save vector w12 to pointer x7
++
++	mov	x0, x5
++	mov	x1, x7
++	mov	x2, x6
++	mov	x30, x3
++	b	memcmp
++endfunction
++
++// Any SME register modified here can cause corruption in the main
++// thread -- but *only* the locations modified here.
++function irritator_handler
++	// Increment the irritation signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	// Corrupt some random ZA data
++#if 0
++	adr	x0, .text + (irritator_handler - .text) / 16 * 16
++	movi	v0.8b, #1
++	movi	v9.16b, #2
++	movi	v31.8b, #3
++#endif
++
++	ret
++endfunction
++
++function terminate_handler
++	mov	w21, w0
++	mov	x20, x2
++
++	puts	"Terminated by signal "
++	mov	w0, w21
++	bl	putdec
++	puts	", no error, iterations="
++	ldr	x0, [x20, #ucontext_regs + 8 * 22]
++	bl	putdec
++	puts	", signals="
++	ldr	x0, [x20, #ucontext_regs + 8 * 23]
++	bl	putdecn
++
++	mov	x0, #0
++	mov	x8, #__NR_exit
++	svc	#0
++endfunction
++
++// w0: signal number
++// x1: sa_action
++// w2: sa_flags
++// Clobbers x0-x6,x8
++function setsignal
++	str	x30, [sp, #-((sa_sz + 15) / 16 * 16 + 16)]!
++
++	mov	w4, w0
++	mov	x5, x1
++	mov	w6, w2
++
++	add	x0, sp, #16
++	mov	x1, #sa_sz
++	bl	memclr
++
++	mov	w0, w4
++	add	x1, sp, #16
++	str	w6, [x1, #sa_flags]
++	str	x5, [x1, #sa_handler]
++	mov	x2, #0
++	mov	x3, #sa_mask_sz
++	mov	x8, #__NR_rt_sigaction
++	svc	#0
++
++	cbz	w0, 1f
++
++	puts	"sigaction failure\n"
++	b	.Labort
++
++1:	ldr	x30, [sp], #((sa_sz + 15) / 16 * 16 + 16)
++	ret
++endfunction
++
++// Main program entry point
++.globl _start
++function _start
++_start:
++	puts	"Streaming mode "
++	smstart_za
++
++	// Sanity-check and report the vector length
++
++	rdsvl	19, 8
++	cmp	x19, #128
++	b.lo	1f
++	cmp	x19, #2048
++	b.hi	1f
++	tst	x19, #(8 - 1)
++	b.eq	2f
++
++1:	puts	"bad vector length: "
++	mov	x0, x19
++	bl	putdecn
++	b	.Labort
++
++2:	puts	"vector length:\t"
++	mov	x0, x19
++	bl	putdec
++	puts	" bits\n"
++
++	// Obtain our PID, to ensure test pattern uniqueness between processes
++	mov	x8, #__NR_getpid
++	svc	#0
++	mov	x20, x0
++
++	puts	"PID:\t"
++	mov	x0, x20
++	bl	putdecn
++
++	mov	x23, #0		// Irritation signal count
++
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	mov	x22, #0		// generation number, increments per iteration
++.Ltest_loop:
++	rdsvl	0, 8
++	cmp	x0, x19
++	b.ne	vl_barf
++
++	rdsvl	21, 1		// Set up ZA & shadow with test pattern
++0:	mov	x0, x20
++	sub	x1, x21, #1
++	mov	x2, x22
++	bl	setup_za
++	subs	x21, x21, #1
++	b.ne	0b
++
++	and	x8, x22, #127		// Every 128 interations...
++	cbz	x8, 0f
++	mov	x8, #__NR_getpid	// (otherwise minimal syscall)
++	b	1f
++0:
++	mov	x8, #__NR_sched_yield	// ...encourage preemption
++1:
++	svc	#0
++
++	mrs	x0, S3_3_C4_C2_2	// SVCR should have ZA=1,SM=0
++	and	x1, x0, #3
++	cmp	x1, #2
++	b.ne	svcr_barf
++
++	rdsvl	21, 1			// Verify that the data made it through
++	rdsvl	24, 1			// Verify that the data made it through
++0:	sub	x0, x24, x21
++	bl	check_za
++	subs	x21, x21, #1
++	bne	0b
++
++	add	x22, x22, #1	// Everything still working
++	b	.Ltest_loop
++
++.Labort:
++	mov	x0, #0
++	mov	x1, #SIGABRT
++	mov	x8, #__NR_kill
++	svc	#0
++endfunction
++
++function barf
++// fpsimd.c acitivty log dump hack
++//	ldr	w0, =0xdeadc0de
++//	mov	w8, #__NR_exit
++//	svc	#0
++// end hack
++	smstop
++	mov	x10, x0	// expected data
++	mov	x11, x1	// actual data
++	mov	x12, x2	// data size
++
++	puts	"Mismatch: PID="
++	mov	x0, x20
++	bl	putdec
++	puts	", iteration="
++	mov	x0, x22
++	bl	putdec
++	puts	", row="
++	mov	x0, x21
++	bl	putdecn
++	puts	"\tExpected ["
++	mov	x0, x10
++	mov	x1, x12
++	bl	dumphex
++	puts	"]\n\tGot      ["
++	mov	x0, x11
++	mov	x1, x12
++	bl	dumphex
++	puts	"]\n"
++
++	mov	x8, #__NR_getpid
++	svc	#0
++// fpsimd.c acitivty log dump hack
++//	ldr	w0, =0xdeadc0de
++//	mov	w8, #__NR_exit
++//	svc	#0
++// ^ end of hack
++	mov	x1, #SIGABRT
++	mov	x8, #__NR_kill
++	svc	#0
++//	mov	x8, #__NR_exit
++//	mov	x1, #1
++//	svc	#0
++endfunction
++
++function vl_barf
++	mov	x10, x0
++
++	puts	"Bad active VL: "
++	mov	x0, x10
++	bl	putdecn
++
++	mov	x8, #__NR_exit
++	mov	x1, #1
++	svc	#0
++endfunction
++
++function svcr_barf
++	mov	x10, x0
++
++	puts	"Bad SVCR: "
++	mov	x0, x10
++	bl	putdecn
++
++	mov	x8, #__NR_exit
++	mov	x1, #1
++	svc	#0
++endfunction
 -- 
 2.30.2
 
