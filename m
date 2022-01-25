@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9687BC433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 03:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F202CC43217
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 03:37:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1325348AbiAYDgt (ORCPT
+        id S1356428AbiAYDhJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        Mon, 24 Jan 2022 22:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3421399AbiAYC0v (ORCPT
+        with ESMTP id S1378617AbiAYC2V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:26:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42473C08B4E1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 16:15:47 -0800 (PST)
+        Mon, 24 Jan 2022 21:28:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6749DC08B4FE
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jan 2022 16:16:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D50FD61354
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8CEAC340E8;
-        Tue, 25 Jan 2022 00:15:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E6BCB815E0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 00:16:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D6FC340ED;
+        Tue, 25 Jan 2022 00:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643069746;
-        bh=HMQHyHN36InZca7SOj753D+ZgRaa/ByOBuanPgEEWxc=;
+        s=k20201202; t=1643069815;
+        bh=DtugFpthaiK0xEHP2NQTQkSOyUac+uhH3/vXGpUUR8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vJGCBqlutgdfxuViC7p4F4O25Tkjm7Vi7zxGijMXEB/0c8Lh6YUqivxZA8+nq9zgT
-         8YZUkVrQ0ejONkPfZIWTuLSjZL+N29hdodWzKSYn6ZNN9Ves6Kv8+v+96JVYzOKgzD
-         pO5sXbg92IrfYVwBWxBBX9rJ+pHkUbs/iDj84ePTooytv3pxi7DwOHQiYWgaINknFU
-         AgIkZTFyKDhLkfU+hOoR4Lp5nllO67PxpepxswyNQ+lmr8O2gB0dD1j1SaQqXl13lN
-         OUHt4oPXUQH1lyenSWfi2w6WUcaQHit99WKKH/1jMd4OJmBkDYrI9Wu/HtOhEQ3oN7
-         lcCS36TiH30og==
+        b=MpRONCopIekHLaJMTUo6lsVsqnp/pU08JLTIqBjZpIn/0vVSnPd2lEQbtSliIoT2H
+         X53YkuZI4qLbNVo+8WDqd63Jke/FSkvgpEyUYVG2hJ8E4q03T6L+EYvhZWmkClA/EG
+         N8oRIeQ74smjO9tspM2ZYxO2785YWMu0gmiPSoYXyXHpKxZPR2WnxvcMw/Ie5R73qf
+         PfkjSK3TQS0fKk7UcVbqx/KMaUa6MhzYodpIR1hBGGw95gZM7ylKl3t3XIE/8XvRvr
+         qwVzmTvnmK/nm6ze+nVaY80SkWQb2dJed8SdyGsspfwrwZAAKBWwz0L7B+YQglOpBk
+         sntGF2fcPI+Lg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,147 +49,81 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v8 06/38] arm64/sme: Manually encode SME instructions
-Date:   Tue, 25 Jan 2022 00:10:42 +0000
-Message-Id: <20220125001114.193425-7-broonie@kernel.org>
+Subject: [PATCH v8 24/38] KVM: arm64: Hide SME system registers from guests
+Date:   Tue, 25 Jan 2022 00:11:00 +0000
+Message-Id: <20220125001114.193425-25-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220125001114.193425-1-broonie@kernel.org>
 References: <20220125001114.193425-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3671; h=from:subject; bh=HMQHyHN36InZca7SOj753D+ZgRaa/ByOBuanPgEEWxc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh70AGU4t0P2TtzTYSd2s2Hen3CRw27ngQIyNfDOJC 4/nuJxWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYe9ABgAKCRAk1otyXVSH0K7vB/ 0U4TNTZJacfpzOTFso5P+blU86sahrN3FDGigBiaXbFcvcDYJN3dHAobCgATuBPyUFaj7XVsjJdaiS fSzm0KTH+EfMLoyNvlAkA7IjByqL7Eeu1B/937WMlglqIyYvc1hI1HaDssR/Jv++mabQT7mPLTb18F OApA4ZRtN7ijspB8uxTk4AF77L92wa2dRNJiC0tICD8MIq7N3ckM9Mxn/xkFPqDr/1i4yfL7PkkwCB xRmfs3Jr1eNqrl28au6PdQqeF1RgrpmVXLCv3erlGr5OuiUay4pQxuQHyDpSsC/UMNezz1Olb21waQ 1B780W2qdO2emAnkvzYTkFMmBnEm7r
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2580; h=from:subject; bh=DtugFpthaiK0xEHP2NQTQkSOyUac+uhH3/vXGpUUR8E=; b=owGbwMvMwMWocq27KDak/QLjabUkhsT3DiKtEQ8mbXc8LdKt9VpzNqPmVW1TzQKb+6xrWz2D9hWx uG/vZDRmYWDkYpAVU2RZ+yxjVXq4xNb5j+a/ghnEygQyhYGLUwAm4i7O/ofjm9sCZ9WZxZr3ZK7/Tf r1ws5cIUJA6NyUxVvPJz2Q4vqb69bSO0/qyFf/F56l7hGdrVELFveL2K9aK9yl2Pb4UP++Ofc9bXQc 1NwUmw3sTnafyqk+vPBkePw909MS4rNYpxkZ/ez2fPL79NSA+VyGQYeZ9VyZtJg719d8b/NQzT/1x9 K7o+Bw5SP58LvlFYez5fmfJzt6uvU6GEhba8qtZX9mYPNvdW+H973MFx/9e7/0BUvL/5l8w+NS1V0J jknuoqxFmmxyeh01K7kTODKsU59oT3Jd7DMr1P1KVljRFYe79wvPzkhRVLiyNKUqZMqPy+84eA7M6J 82KZlRvaa7+bXLd4689NkcHbcB
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As with SVE rather than impose ambitious toolchain requirements for SME
-we manually encode the few instructions which we require in order to
-perform the work the kernel needs to do. The instructions used to save
-and restore context are provided as assembler macros while those for
-entering and leaving streaming mode are done in asm volatile blocks
-since they are expected to be used from C.
-
-We could do the SMSTART and SMSTOP operations with read/modify/write
-cycles on SVCR but using the aliases provided for individual field
-accesses should be slightly faster. These instructions are aliases for
-MSR but since our minimum toolchain requirements are old enough to mean
-that we can't use the sX_X_cX_cX_X form and they always use xzr rather
-than taking a value like write_sysreg_s() wants we just use .inst.
+For the time being we do not support use of SME by KVM guests, support for
+this will be enabled in future. In order to prevent any side effects or
+side channels via the new system registers, including the EL0 read/write
+register TPIDR2, explicitly undefine all the system registers added by
+SME and mask out the SME bitfield in SYS_ID_AA64PFR1.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h       | 25 +++++++++++++
- arch/arm64/include/asm/fpsimdmacros.h | 53 +++++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
+ arch/arm64/kvm/sys_regs.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index cb24385e3632..c90f7f99a768 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -249,6 +249,31 @@ static inline void sve_setup(void) { }
+diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+index 4dc2fba316ff..43516eda9143 100644
+--- a/arch/arm64/kvm/sys_regs.c
++++ b/arch/arm64/kvm/sys_regs.c
+@@ -1089,6 +1089,8 @@ static u64 read_id_reg(const struct kvm_vcpu *vcpu,
+ 	case SYS_ID_AA64PFR1_EL1:
+ 		if (!kvm_has_mte(vcpu->kvm))
+ 			val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_MTE);
++
++		val &= ~ARM64_FEATURE_MASK(ID_AA64PFR1_SME);
+ 		break;
+ 	case SYS_ID_AA64ISAR1_EL1:
+ 		if (!vcpu_has_ptrauth(vcpu))
+@@ -1508,7 +1510,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+ 	ID_UNALLOCATED(4,2),
+ 	ID_UNALLOCATED(4,3),
+ 	ID_SANITISED(ID_AA64ZFR0_EL1),
+-	ID_UNALLOCATED(4,5),
++	ID_HIDDEN(ID_AA64SMFR0_EL1),
+ 	ID_UNALLOCATED(4,6),
+ 	ID_UNALLOCATED(4,7),
  
- #endif /* ! CONFIG_ARM64_SVE */
+@@ -1551,6 +1553,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
  
-+#ifdef CONFIG_ARM64_SME
-+
-+static inline void sme_smstart_sm(void)
-+{
-+	asm volatile(".inst 0xd503437f");
-+}
-+
-+static inline void sme_smstop_sm(void)
-+{
-+	asm volatile(".inst 0xd503427f");
-+}
-+
-+static inline void sme_smstop(void)
-+{
-+	asm volatile(".inst 0xd503467f");
-+}
-+
-+#else
-+
-+static inline void sme_smstart_sm(void) { }
-+static inline void sme_smstop_sm(void) { }
-+static inline void sme_smstop(void) { }
-+
-+#endif /* ! CONFIG_ARM64_SME */
-+
- /* For use by EFI runtime services calls only */
- extern void __efi_fpsimd_begin(void);
- extern void __efi_fpsimd_end(void);
-diff --git a/arch/arm64/include/asm/fpsimdmacros.h b/arch/arm64/include/asm/fpsimdmacros.h
-index 2509d7dde55a..11c426ddd62c 100644
---- a/arch/arm64/include/asm/fpsimdmacros.h
-+++ b/arch/arm64/include/asm/fpsimdmacros.h
-@@ -93,6 +93,12 @@
- 	.endif
- .endm
+ 	{ SYS_DESC(SYS_ZCR_EL1), NULL, reset_val, ZCR_EL1, 0, .visibility = sve_visibility },
+ 	{ SYS_DESC(SYS_TRFCR_EL1), undef_access },
++	{ SYS_DESC(SYS_SMPRI_EL1), undef_access },
++	{ SYS_DESC(SYS_SMCR_EL1), undef_access },
+ 	{ SYS_DESC(SYS_TTBR0_EL1), access_vm_reg, reset_unknown, TTBR0_EL1 },
+ 	{ SYS_DESC(SYS_TTBR1_EL1), access_vm_reg, reset_unknown, TTBR1_EL1 },
+ 	{ SYS_DESC(SYS_TCR_EL1), access_vm_reg, reset_val, TCR_EL1, 0 },
+@@ -1633,8 +1637,10 @@ static const struct sys_reg_desc sys_reg_descs[] = {
  
-+.macro _sme_check_wv v
-+	.if (\v) < 12 || (\v) > 15
-+		.error "Bad vector select register \v."
-+	.endif
-+.endm
-+
- /* SVE instruction encodings for non-SVE-capable assemblers */
- /* (pre binutils 2.28, all kernel capable clang versions support SVE) */
+ 	{ SYS_DESC(SYS_CCSIDR_EL1), access_ccsidr },
+ 	{ SYS_DESC(SYS_CLIDR_EL1), access_clidr },
++	{ SYS_DESC(SYS_SMIDR_EL1), undef_access },
+ 	{ SYS_DESC(SYS_CSSELR_EL1), access_csselr, reset_unknown, CSSELR_EL1 },
+ 	{ SYS_DESC(SYS_CTR_EL0), access_ctr },
++	{ SYS_DESC(SYS_SVCR_EL0), undef_access },
  
-@@ -174,6 +180,53 @@
- 		| (\np)
- .endm
+ 	{ PMU_SYS_REG(SYS_PMCR_EL0), .access = access_pmcr,
+ 	  .reset = reset_pmcr, .reg = PMCR_EL0 },
+@@ -1674,6 +1680,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
  
-+/* SME instruction encodings for non-SME-capable assemblers */
-+
-+/* RDSVL X\nx, #\imm */
-+.macro _sme_rdsvl nx, imm
-+	_check_general_reg \nx
-+	_check_num (\imm), -0x20, 0x1f
-+	.inst	0x04bf5800			\
-+		| (\nx)				\
-+		| (((\imm) & 0x3f) << 5)
-+.endm
-+
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _sme_str_zav nw, nxbase, offset=0
-+	_sme_check_wv \nw
-+	_check_general_reg \nxbase
-+	_check_num (\offset), -0x100, 0xff
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _sme_ldr_zav nw, nxbase, offset=0
-+	_sme_check_wv \nw
-+	_check_general_reg \nxbase
-+	_check_num (\offset), -0x100, 0xff
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+/*
-+ * Zero the entire ZA array
-+ *	ZERO ZA
-+ */
-+.macro zero_za
-+	.inst 0xc00800ff
-+.endm
-+
- .macro __for from:req, to:req
- 	.if (\from) == (\to)
- 		_for__body %\from
+ 	{ SYS_DESC(SYS_TPIDR_EL0), NULL, reset_unknown, TPIDR_EL0 },
+ 	{ SYS_DESC(SYS_TPIDRRO_EL0), NULL, reset_unknown, TPIDRRO_EL0 },
++	{ SYS_DESC(SYS_TPIDR2_EL0), undef_access },
+ 
+ 	{ SYS_DESC(SYS_SCXTNUM_EL0), undef_access },
+ 
 -- 
 2.30.2
 
