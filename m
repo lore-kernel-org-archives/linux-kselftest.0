@@ -2,246 +2,153 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D7A3C4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jan 2022 21:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC69DC3525A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Jan 2022 01:23:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbiAYVBC (ORCPT
+        id S235828AbiAZBXG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 25 Jan 2022 16:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        Tue, 25 Jan 2022 20:23:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbiAYVAa (ORCPT
+        with ESMTP id S235831AbiAZBXF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:00:30 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D7CC061744
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:00:30 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so43768675ybp.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 13:00:30 -0800 (PST)
+        Tue, 25 Jan 2022 20:23:05 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B05C06161C
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 17:23:05 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id h12so21762831pjq.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jan 2022 17:23:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=YqkYYVDUijJb3enq48ycsmLOVpHOJRJtlNPVHl/a/kE=;
-        b=ERbVknoX/7khuSeu2cYaF+QDYCtbP9/YcqHP0EUZ+yhCZ0j1lgIKoWCzDHOswd8IxE
-         +0doqZ+lCTlwTuqFs1dci1L5vz7xcYz1jCYIG6QdEKL19q+vQlh1pcoshYN5pVfZyder
-         igFR0Yo0OnhCit356/pGttpiijk5pWoYAvfZFeEUqDge0/xXQqjjd/6ROP/TMIyO9u3k
-         lMdzH1AUXvGk5cJu4n0JIG09I+2cACXebH94EcuVk8z5bmYrSTFoSu2aKIgscqVvjNkE
-         rdGgRd4Y7fwSHbeoxGqI5ovgZ09uKGR439vsXksj4MR/B+l97+ERTzrk1ZxPvz4cwrjQ
-         DB2w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qp4BntvRZm9hTr6l3zGlLo/U2BcJeqsTUdhiP4SKrfc=;
+        b=rnMb5VODVOzw+bv9bS2Xh/FWWtA0ngwR5DIt+Eo6WtS6Vq3bu0jdGnsnzLxJOCMDSF
+         3sZYL4sHTlkLgSt07lNK6NTk7Ohc91R982WORpBXrfy32BHbh8apbLZbEq6iNcHcYE+6
+         kLRZgGsIB7vAQDROpGqNVavQ2hWrbh94yAxs9+jhALNKxRMiMVBmQ/5l18fGqc33aSYk
+         /6WzA0JspTrE0U6yjgA+l7V89fh84lGmtLjC23lM723iKZHGvqaXzXWp+uG8Pe8sAMDL
+         c1pei8gFnnxoRhaxF2kRSdqzGHqGs4tQ+EwGyMmp5h+d/AElW0VuAJMeiwXS0gQBPigP
+         aOGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=YqkYYVDUijJb3enq48ycsmLOVpHOJRJtlNPVHl/a/kE=;
-        b=UIk4uDoRDWCG8fiEgSVtX9GwKTpmVWT3qrfsRU8XX/TpEwS/AMp48Q6CfTWBOkr5mh
-         oZZVRnG82+qqxu8aR1re3DKNLZCGEUCfi5AqgS/x66EG05wkGacxIspOMtEL879lX9lm
-         a3JRm8GE5kOELuSjOAyNTy2f/1whIB8kdd56eTKIoAUXUt1t4Ja1SLnLjZO+UffOKXAf
-         gI8trRM/G+9yfhn4cFEf/dk02UUPPf/NxX5szIhS9ZoCHahW0gZhNVEdk9i9GVfdYMk9
-         qfYtmVa6Kg3fpADmxUDlET0qNZvi0aIPVh2n3blUcsHyYumf3Etp2YZ08lC66rkmchTJ
-         O35A==
-X-Gm-Message-State: AOAM5313L5902sv15IeapN/mziq3hqpXEOKJE+BQ03BfFK2wXfa6oyki
-        8nIN1c4JBT3Dm89DYvKqtQKXGfWaI6lTvQ==
-X-Google-Smtp-Source: ABdhPJzyU7p3vBAyJSgLqCH5HT94gvPnhEVqtequpsLgKOKdvykA90racC/jC0o6ux2kEMkbSzMNi+8BHz6baA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ec63:7812:5e4a:c688])
- (user=dlatypov job=sendgmr) by 2002:a25:3b89:: with SMTP id
- i131mr32238446yba.449.1643144429806; Tue, 25 Jan 2022 13:00:29 -0800 (PST)
-Date:   Tue, 25 Jan 2022 13:00:10 -0800
-In-Reply-To: <20220125210011.3817742-1-dlatypov@google.com>
-Message-Id: <20220125210011.3817742-3-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220125210011.3817742-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH 2/3] kunit: consolidate KUNIT_INIT_BINARY_ASSERT_STRUCT macros
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qp4BntvRZm9hTr6l3zGlLo/U2BcJeqsTUdhiP4SKrfc=;
+        b=sBnLZ/y0gaIuxCk/urYJ5Yvn51M0MnNzUnVAiyztE2yAbCKHfzkgjrHmjRhFiK0WRU
+         FH0OT18bDOdCO9D/o3mI5BIv4d3cprWmcIfpbjJbNVEjkPFBgmVFGhsrF6Ju2xw6Ky6J
+         +USG8/pajKL0cNXfW34uoeU2i/Y2fXb/crpQ3moct91xuINhOuteVAzl4r1Par54pU8x
+         gxbfj2FhYrjuTqHxizHeenBmxSlp8fqgMPqhzX1wLMW9uD1aBZyktb2f2aaUdfuY+rLu
+         5mtbi4PCD7c48VV/lF0NgWaVN+tRabWSvcALaBZFy9eI9zMkD1nzPl0pfyh2XSLoUuja
+         +GOA==
+X-Gm-Message-State: AOAM530rtsLsA/Hk058stUFXjeIhVMuB52Li2j9Rnqmsi8sei8HOLsgE
+        EspMdSAy8GgK/tAFNwV89EKN3w==
+X-Google-Smtp-Source: ABdhPJy6cZxhtYaWpqQmPdBWff89FNYeHqo7ViO8layI33gz7tVSxvOa9Wo7gfzqkIxzBwDanL5/MA==
+X-Received: by 2002:a17:90a:e38d:: with SMTP id b13mr6198622pjz.205.1643160184936;
+        Tue, 25 Jan 2022 17:23:04 -0800 (PST)
+Received: from google.com (150.12.83.34.bc.googleusercontent.com. [34.83.12.150])
+        by smtp.gmail.com with ESMTPSA id u16sm220313pfg.192.2022.01.25.17.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 17:23:04 -0800 (PST)
+Date:   Tue, 25 Jan 2022 17:23:00 -0800
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] kselftest: kvm/arm64: Skip tests if we can't create a
+ vgic-v3
+Message-ID: <YfCidIboLDMb/Hy3@google.com>
+References: <20220125192851.3907611-1-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125192851.3907611-1-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We currently have 2 other versions of KUNIT_INIT_BINARY_ASSERT_STRUCT.
-The only differences are that
-* the format funcition they pass is different
-* the types of left_val/right_val should be different (integral,
-pointer, string).
+On Tue, Jan 25, 2022 at 07:28:51PM +0000, Mark Brown wrote:
+> The arch_timer and vgic_irq kselftests assume that they can create a
+> vgic-v3, using the library function vgic_v3_setup() which aborts with a
+> test failure if it is not possible to do so. Since vgic-v3 can only be
+> instantiated on systems where the host has GICv3 this leads to false
+> positives on older systems where that is not the case.
+> 
+> Fix this by changing vgic_v3_setup() to return an error if the vgic can't
+> be instantiated and have the callers skip if this happens. We could also
+> exit flagging a skip in vgic_v3_setup() but this would prevent future test
+> cases conditionally deciding which GIC to use or generally doing more
+> complex output.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/aarch64/arch_timer.c | 7 ++++++-
+>  tools/testing/selftests/kvm/aarch64/vgic_irq.c   | 5 +++++
+>  tools/testing/selftests/kvm/lib/aarch64/vgic.c   | 4 +++-
+>  3 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> index 9ad38bd360a4..791d38404652 100644
+> --- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> +++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+> @@ -366,6 +366,7 @@ static struct kvm_vm *test_vm_create(void)
+>  {
+>  	struct kvm_vm *vm;
+>  	unsigned int i;
+> +	int ret;
+>  	int nr_vcpus = test_args.nr_vcpus;
+>  
+>  	vm = vm_create_default_with_vcpus(nr_vcpus, 0, 0, guest_code, NULL);
+> @@ -382,7 +383,11 @@ static struct kvm_vm *test_vm_create(void)
+>  
+>  	ucall_init(vm, NULL);
+>  	test_init_timer_irq(vm);
+> -	vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+> +	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+> +	if (ret < 0) {
+> +		pr_info("Failed to create vgic-v3, skipping\n");
+> +		exit(KSFT_SKIP);
+> +	}
+>  
+>  	/* Make all the test's cmdline args visible to the guest */
+>  	sync_global_to_guest(vm, test_args);
+> diff --git a/tools/testing/selftests/kvm/aarch64/vgic_irq.c b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+> index e6c7d7f8fbd1..8c6b61b8e6aa 100644
+> --- a/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+> +++ b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
+> @@ -761,6 +761,11 @@ static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split)
+>  
+>  	gic_fd = vgic_v3_setup(vm, 1, nr_irqs,
+>  			GICD_BASE_GPA, GICR_BASE_GPA);
+> +	if (gic_fd < 0) {
+> +		pr_info("Failed to create vgic-v3, skipping\n");
+> +		exit(KSFT_SKIP);
+> +	}
+> +
+>  
+>  	vm_install_exception_handler(vm, VECTOR_IRQ_CURRENT,
+>  		guest_irq_handlers[args.eoi_split][args.level_sensitive]);
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/vgic.c b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> index b3a0fca0d780..647c18733e1b 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
+> @@ -52,7 +52,9 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
+>  			nr_vcpus, nr_vcpus_created);
+>  
+>  	/* Distributor setup */
+> -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
+> +	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, true);
+> +	if (gic_fd == -1)
+> +		return -1;
+>  
+>  	kvm_device_access(gic_fd, KVM_DEV_ARM_VGIC_GRP_NR_IRQS,
+>  			0, &nr_irqs, true);
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> kvmarm mailing list
+> kvmarm@lists.cs.columbia.edu
+> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
 
-The latter doesn't actually matter since these macros are just plumbing
-them along to KUNIT_ASSERTION where they will get type checked.
-
-So combine them all into a single KUNIT_INIT_BINARY_ASSERT_STRUCT that
-now also takes the format function as a parameter.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- include/kunit/assert.h | 68 +++++++-----------------------------------
- include/kunit/test.h   | 20 +++++++------
- 2 files changed, 22 insertions(+), 66 deletions(-)
-
-diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-index 0b3704db54b6..649bfac9f406 100644
---- a/include/kunit/assert.h
-+++ b/include/kunit/assert.h
-@@ -178,23 +178,28 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- 				struct string_stream *stream);
- 
- /**
-- * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a
-- *	&struct kunit_binary_assert.
-+ * KUNIT_INIT_BINARY_ASSERT_STRUCT() - Initializes a binary assert like
-+ *	kunit_binary_assert, kunit_binary_ptr_assert, etc.
-+ *
-+ * @format_func: a function which formats the assert to a string.
-  * @op_str: A string representation of the comparison operator (e.g. "==").
-  * @left_str: A string representation of the expression in the left slot.
-  * @left_val: The actual evaluated value of the expression in the left slot.
-  * @right_str: A string representation of the expression in the right slot.
-  * @right_val: The actual evaluated value of the expression in the right slot.
-  *
-- * Initializes a &struct kunit_binary_assert. Intended to be used in
-- * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-+ * Initializes a binary assert like kunit_binary_assert,
-+ * kunit_binary_ptr_assert, etc. This relies on these structs having the same
-+ * fields but with different types for left_val/right_val.
-+ * This is ultimately used by binary assertion macros like KUNIT_EXPECT_EQ, etc.
-  */
--#define KUNIT_INIT_BINARY_ASSERT_STRUCT(op_str,				       \
-+#define KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,			       \
-+					op_str,				       \
- 					left_str,			       \
- 					left_val,			       \
- 					right_str,			       \
- 					right_val) {			       \
--	.assert = { .format = kunit_binary_assert_format },		       \
-+	.assert = { .format = format_func },				       \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-@@ -229,32 +234,6 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 				    const struct va_format *message,
- 				    struct string_stream *stream);
- 
--/**
-- * KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT() - Initializes a
-- *	&struct kunit_binary_ptr_assert.
-- * @type: The type (assertion or expectation) of this kunit_assert.
-- * @op_str: A string representation of the comparison operator (e.g. "==").
-- * @left_str: A string representation of the expression in the left slot.
-- * @left_val: The actual evaluated value of the expression in the left slot.
-- * @right_str: A string representation of the expression in the right slot.
-- * @right_val: The actual evaluated value of the expression in the right slot.
-- *
-- * Initializes a &struct kunit_binary_ptr_assert. Intended to be used in
-- * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-- */
--#define KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT(op_str,			       \
--					    left_str,			       \
--					    left_val,			       \
--					    right_str,			       \
--					    right_val) {		       \
--	.assert = { .format = kunit_binary_ptr_assert_format },		       \
--	.operation = op_str,						       \
--	.left_text = left_str,						       \
--	.left_value = left_val,						       \
--	.right_text = right_str,					       \
--	.right_value = right_val					       \
--}
--
- /**
-  * struct kunit_binary_str_assert - An expectation/assertion that compares two
-  *	string values (for example, KUNIT_EXPECT_STREQ(test, foo, "bar")).
-@@ -282,29 +261,4 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- 				    const struct va_format *message,
- 				    struct string_stream *stream);
- 
--/**
-- * KUNIT_INIT_BINARY_STR_ASSERT_STRUCT() - Initializes a
-- *	&struct kunit_binary_str_assert.
-- * @op_str: A string representation of the comparison operator (e.g. "==").
-- * @left_str: A string representation of the expression in the left slot.
-- * @left_val: The actual evaluated value of the expression in the left slot.
-- * @right_str: A string representation of the expression in the right slot.
-- * @right_val: The actual evaluated value of the expression in the right slot.
-- *
-- * Initializes a &struct kunit_binary_str_assert. Intended to be used in
-- * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-- */
--#define KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(op_str,			       \
--					    left_str,			       \
--					    left_val,			       \
--					    right_str,			       \
--					    right_val) {		       \
--	.assert = { .format = kunit_binary_str_assert_format },		       \
--	.operation = op_str,						       \
--	.left_text = left_str,						       \
--	.left_value = left_val,						       \
--	.right_text = right_str,					       \
--	.right_value = right_val					       \
--}
--
- #endif /*  _KUNIT_ASSERT_H */
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index bf82c313223b..a93dfb8ff393 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -864,7 +864,7 @@ void kunit_do_failed_assertion(struct kunit *test,
-  */
- #define KUNIT_BASE_BINARY_ASSERTION(test,				       \
- 				    assert_class,			       \
--				    ASSERT_CLASS_INIT,			       \
-+				    format_func,			       \
- 				    assert_type,			       \
- 				    left,				       \
- 				    op,					       \
-@@ -879,11 +879,12 @@ do {									       \
- 			assert_type,					       \
- 			__left op __right,				       \
- 			assert_class,					       \
--			ASSERT_CLASS_INIT(#op,				       \
--					  #left,			       \
--					  __left,			       \
--					  #right,			       \
--					  __right),			       \
-+			KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,	       \
-+							#op,		       \
-+							#left,		       \
-+							__left,		       \
-+							#right,		       \
-+							__right),	       \
- 			fmt,						       \
- 			##__VA_ARGS__);					       \
- } while (0)
-@@ -897,7 +898,7 @@ do {									       \
- 				    ...)				       \
- 	KUNIT_BASE_BINARY_ASSERTION(test,				       \
- 				    kunit_binary_assert,		       \
--				    KUNIT_INIT_BINARY_ASSERT_STRUCT,	       \
-+				    kunit_binary_assert_format,		       \
- 				    assert_type,			       \
- 				    left, op, right,			       \
- 				    fmt,				       \
-@@ -912,7 +913,7 @@ do {									       \
- 				    ...)				       \
- 	KUNIT_BASE_BINARY_ASSERTION(test,				       \
- 				    kunit_binary_ptr_assert,		       \
--				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
-+				    kunit_binary_ptr_assert_format,	       \
- 				    assert_type,			       \
- 				    left, op, right,			       \
- 				    fmt,				       \
-@@ -933,7 +934,8 @@ do {									       \
- 			assert_type,					       \
- 			strcmp(__left, __right) op 0,			       \
- 			kunit_binary_str_assert,			       \
--			KUNIT_INIT_BINARY_STR_ASSERT_STRUCT(#op,	       \
-+			KUNIT_INIT_BINARY_ASSERT_STRUCT(kunit_binary_str_assert_format,\
-+							#op,		       \
- 							#left,		       \
- 							__left,		       \
- 							#right,		       \
--- 
-2.35.0.rc2.247.g8bbb082509-goog
-
+Reviewed-by: Ricardo Koller <ricarkol@google.com>
