@@ -2,96 +2,88 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35F81C28CF5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Jan 2022 19:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C71FC2BA4C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Jan 2022 19:53:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiAZTXQ (ORCPT
+        id S230367AbiAZTxA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 26 Jan 2022 14:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244438AbiAZTXQ (ORCPT
+        Wed, 26 Jan 2022 14:53:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47636 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229481AbiAZTw5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 14:23:16 -0500
-X-Greylist: delayed 485 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Jan 2022 11:23:15 PST
-Received: from forward102o.mail.yandex.net (forward102o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::602])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6FCC061747;
-        Wed, 26 Jan 2022 11:23:15 -0800 (PST)
-Received: from sas1-bdc74852af75.qloud-c.yandex.net (sas1-bdc74852af75.qloud-c.yandex.net [IPv6:2a02:6b8:c14:49b:0:640:bdc7:4852])
-        by forward102o.mail.yandex.net (Yandex) with ESMTP id 642256FF805C;
-        Wed, 26 Jan 2022 22:15:05 +0300 (MSK)
-Received: from sas1-1f4a002bb12a.qloud-c.yandex.net (sas1-1f4a002bb12a.qloud-c.yandex.net [2a02:6b8:c14:3908:0:640:1f4a:2b])
-        by sas1-bdc74852af75.qloud-c.yandex.net (mxback/Yandex) with ESMTP id JlJu1nJfOU-F4cOTLG1;
-        Wed, 26 Jan 2022 22:15:05 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1643224505;
-        bh=O+b5CapC7L3M523CZMVUm6J5g7pUFdehbp9UOnOr/xk=;
-        h=Date:Subject:To:From:Message-Id:Cc;
-        b=E9n8Iml8+ZHxoa+BXBTJos6Ccp1DizV9JZ8zcd2KXVUdGL2hvYFvhQksyriGFd/X6
-         4KM8cyqY4/v95sEXDrc5DXUinnWKZDewTaXIaD+Wfjjf2K4UbXsBmkYh4e1h5N/xz3
-         dr5PYAQbgeDtQyRXrgnXCx8TPtIzwZjIR9nVxCqo=
-Authentication-Results: sas1-bdc74852af75.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by sas1-1f4a002bb12a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id vdrU00sr04-F3IGAhXh;
-        Wed, 26 Jan 2022 22:15:03 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-From:   Stas Sergeev <stsp2@yandex.ru>
-Cc:     Stas Sergeev <stsp2@yandex.ru>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marco Elver <elver@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Gladkov <legion@kernel.org>,
-        Andrew Lutomirski <luto@mit.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Borislav Petkov <bp@suse.de>, Len Brown <len.brown@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] sigaltstack: return only one flag
-Date:   Wed, 26 Jan 2022 22:14:39 +0300
-Message-Id: <20220126191441.3380389-1-stsp2@yandex.ru>
-X-Mailer: git-send-email 2.34.1
+        Wed, 26 Jan 2022 14:52:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77F9C61757
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 19:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF9DC340E3;
+        Wed, 26 Jan 2022 19:52:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643226776;
+        bh=lYnTOPW2Pkwco72TKCwFmkv1sef05aWRjM7kJ34pSNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lf/8QN+efHRUBfI9x5RtjPSYqDl/9+Vt/n2mflRhwUO2g89GtR9sqOYZUNtdYNxCK
+         Mxk5v9efCffbhIjWYHHpgWYumiMyHVdaop1XSqTwg0Mw3nubmEf6oCr8mn51BryUhy
+         rg9YqUPniua+/iqn5yaYxlnm0BbFA6WAZ5aMNUUA16sFRsFmTelG4tOfr3B6ZIEDuN
+         R9s0/LtCeR4Uh0TFGhEx7IgPuXiZwxBpkECopl+QpWaomzGihDbbIGf6y4jdoCDWWd
+         /58BRDmHaJDOgxiC34WfnJaiOQyQ8uP6fI5JuMG4e9OTEOs2FidzXFWhC1TQLDCcJh
+         FCiyXMswOy3NQ==
+Date:   Wed, 26 Jan 2022 19:52:51 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvmarm@lists.cs.columbia.edu, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3] kselftest: kvm/arm64: Skip tests if we can't create a
+ vgic-v3
+Message-ID: <YfGmk1I8l+ROoE/k@sirena.org.uk>
+References: <20220126145242.3473836-1-broonie@kernel.org>
+ <4424dd30-f74b-006f-b540-dbaf02e45e28@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="URcG2D/2QfQA1Gjm"
+Content-Disposition: inline
+In-Reply-To: <4424dd30-f74b-006f-b540-dbaf02e45e28@linuxfoundation.org>
+X-Cookie: Use only in a well-ventilated area.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently sigaltstack() can return multiple flags, for example
-SS_DISABLE|SS_AUTODISARM. This confuses libraries (including asan
-runtime) and contradicts the man page.
 
-Patch 1 fixes this problem by ignoring any flag passed with SS_DISABLE.
-Patch 2 adds a test-case for that scenario.
+--URcG2D/2QfQA1Gjm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
-CC: "Eric W. Biederman" <ebiederm@xmission.com>
-CC: Kees Cook <keescook@chromium.org>
-CC: Jens Axboe <axboe@kernel.dk>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Marco Elver <elver@google.com>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Alexey Gladkov <legion@kernel.org>
-CC: Andrew Lutomirski <luto@mit.edu>
-CC: Shuah Khan <shuah@kernel.org>
-CC: "Chang S. Bae" <chang.seok.bae@intel.com>
-CC: Borislav Petkov <bp@suse.de>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Len Brown <len.brown@intel.com>
-CC: linux-kselftest@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
+On Wed, Jan 26, 2022 at 12:22:41PM -0700, Shuah Khan wrote:
+> On 1/26/22 7:52 AM, Mark Brown wrote:
 
-Stas Sergeev (2):
-  sigaltstack: ignore flags if SS_DISABLE is set
-  selftests: sigaltstack: add new SS_DISABLE test
+> > +	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
+> > +	if (ret < 0) {
+> > +		print_skip("Failed to create vgic-v3");
 
- kernel/signal.c                           |  1 +
- tools/testing/selftests/sigaltstack/sas.c | 48 ++++++++++++-----------
- 2 files changed, 26 insertions(+), 23 deletions(-)
+> Printing the negative error code returned by vgic_v3_setup will be useful.
 
--- 
-2.34.1
+If the function fails for any reason other than the system not
+supporting vgic-v3 it will abort rather than return.
 
+--URcG2D/2QfQA1Gjm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxppIACgkQJNaLcl1U
+h9Drpwf/VP/AtJtHPAgAVlI1NnA4IzzzhMgNH0jsweAqajJFm2bSjc/BLmWJ1PH6
+MdO7y23ckqvapSbg9Gmlw/AhR495m4AmRf1h0mMNdGo6D8fljhbRT0ICiw24GpI9
+H0Tz3wMrTPIIVpr3Iq/LvXYSeLZ0qHsVpZAKC6NoBN/Iok5fWOJBcCvwNMkBsgyl
+GmseUwlAfaHmJxuVX18ZesoAw6poYVHbRjcVEMlsVgl49DOq6yXemS7us3bhr6qJ
+265lzlaP2T1j5nM6lfTORUGlFlWMYLd3Uj3V40iU9zCWiJT5H5VY1Dd0w6vdewOd
+7vKTsJkiQGSaPF5f3+qcgNNIP/1qeg==
+=IcN4
+-----END PGP SIGNATURE-----
+
+--URcG2D/2QfQA1Gjm--
