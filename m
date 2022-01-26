@@ -2,98 +2,122 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA42C636C8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Jan 2022 10:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4F48C28CF5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Jan 2022 10:32:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbiAZK1t (ORCPT
+        id S240056AbiAZKcw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 26 Jan 2022 05:27:49 -0500
-Received: from foss.arm.com ([217.140.110.172]:57884 "EHLO foss.arm.com"
+        Wed, 26 Jan 2022 05:32:52 -0500
+Received: from foss.arm.com ([217.140.110.172]:58250 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232519AbiAZK1k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:27:40 -0500
+        id S240029AbiAZKco (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:32:44 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EAE1C11D4;
-        Wed, 26 Jan 2022 02:27:39 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 251C91FB;
+        Wed, 26 Jan 2022 02:32:44 -0800 (PST)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23E173F766;
-        Wed, 26 Jan 2022 02:27:38 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02A9D3F766;
+        Wed, 26 Jan 2022 02:32:42 -0800 (PST)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     shuah@kernel.org, Cristian Marussi <cristian.marussi@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
-Date:   Wed, 26 Jan 2022 10:27:20 +0000
-Message-Id: <20220126102723.23300-3-cristian.marussi@arm.com>
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v4] selftests/kselftest/runner.sh: Pass optional command parameters in environment
+Date:   Wed, 26 Jan 2022 10:32:30 +0000
+Message-Id: <20220126103230.35285-1-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220126102723.23300-1-cristian.marussi@arm.com>
-References: <20220126102723.23300-1-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
-report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
+Some testcases allow for optional commandline parameters but as of now
+there is now way to provide such arguments to the runner script.
 
-Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
-tests within vdso_test_abi to be considered FAIL when symbol is not found.
+Add support to retrieve such optional command parameters fron environment
+variables named so as to include the all-uppercase test executable name,
+sanitized substituting any non-acceptable varname characters with "_",
+following the pattern:
 
-Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
+	KSELFTEST_<UPPERCASE_SANITIZED_TEST_NAME>_ARGS="options"
 
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Optional command parameters support is not available if 'tr' is not
+installed on the test system.
+
+Cc: Kees Cook <keescook@chromium.org>
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
-Seen as a failure on both a JUNO and a Dragonboard on both recent and old
-kernels/testruns:
+v3 --> v4
+- rebased on v5.17-rc1
+v2 --> v3
+- improved varname sanitation
+v1 --> v2
+- using env vars instead of settings file
+- added missing varname sanitation
 
-root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
-[vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
-The time is 1637922136.675304
-The time is 1637922136.675361000
-The resolution is 0 1
-clock_id: CLOCK_REALTIME [PASS]
-The time is 1927.760604900
-The resolution is 0 1
-clock_id: CLOCK_BOOTTIME [PASS]
-The time is 1637922136.675649700
-The resolution is 0 1
-clock_id: CLOCK_TAI [PASS]
-The time is 1637922136.672000000
-The resolution is 0 4000000
-clock_id: CLOCK_REALTIME_COARSE [PASS]
-The time is 1927.761005600
-The resolution is 0 1
-clock_id: CLOCK_MONOTONIC [PASS]
-The time is 1927.761132780
-The resolution is 0 1
-clock_id: CLOCK_MONOTONIC_RAW [PASS]
-The time is 1927.757093740
-The resolution is 0 4000000
-clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-Could not find __kernel_time              <<< This caused a FAIL as a whole
-root@deb-buster-arm64:~# echo $?
-1
+Usage examples:
 
-e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
+	KSELFTEST_RTCTEST_ARGS="/dev/rtc1" /opt/ksft_fixes/run_kselftest.sh -c rtc
+
+	KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10" /opt/ksft_fixes/run_kselftest.sh -c cpu-hotplug
 ---
- tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kselftest/runner.sh | 30 ++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-index 3d603f1394af..7dcc66d1cecf 100644
---- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-@@ -90,8 +90,9 @@ static int vdso_test_time(void)
- 		(vdso_time_t)vdso_sym(version, name[2]);
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index a9ba782d8ca0..294619ade49f 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -18,6 +18,8 @@ if [ -z "$BASE_DIR" ]; then
+ 	exit 1
+ fi
  
- 	if (!vdso_time) {
-+		/* Skip if symbol not found: consider skipped tests as passed */
- 		printf("Could not find %s\n", name[2]);
--		return KSFT_SKIP;
-+		return KSFT_PASS;
- 	}
++TR_CMD=$(command -v tr)
++
+ # If Perl is unavailable, we must fall back to line-at-a-time prefixing
+ # with sed instead of unbuffered output.
+ tap_prefix()
+@@ -49,6 +51,31 @@ run_one()
  
- 	long ret = vdso_time(NULL);
+ 	# Reset any "settings"-file variables.
+ 	export kselftest_timeout="$kselftest_default_timeout"
++
++	# Safe default if tr not available
++	kselftest_cmd_args_ref="KSELFTEST_ARGS"
++
++	# Optional arguments for this command, possibly defined as an
++	# environment variable built using the test executable in all
++	# uppercase and sanitized substituting non acceptable shell
++	# variable name characters with "_" as in:
++	#
++	# 	KSELFTEST_<UPPERCASE_SANITIZED_TESTNAME>_ARGS="<options>"
++	#
++	# e.g.
++	#
++	# 	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
++	#
++	# 	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
++	#
++	if [ -n "$TR_CMD" ]; then
++		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
++					$TR_CMD -d "[:blank:][:cntrl:]" | \
++					$TR_CMD -c "[:alnum:]_" "_" | \
++					$TR_CMD [:lower:] [:upper:])
++		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
++	fi
++
+ 	# Load per-test-directory kselftest "settings" file.
+ 	settings="$BASE_DIR/$DIR/settings"
+ 	if [ -r "$settings" ] ; then
+@@ -69,7 +96,8 @@ run_one()
+ 		echo "# Warning: file $TEST is missing!"
+ 		echo "not ok $test_num $TEST_HDR_MSG"
+ 	else
+-		cmd="./$BASENAME_TEST"
++		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
++		cmd="./$BASENAME_TEST $kselftest_cmd_args"
+ 		if [ ! -x "$TEST" ]; then
+ 			echo "# Warning: file $TEST is not executable"
+ 
 -- 
 2.17.1
 
