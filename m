@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B42EC3526D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C71C3C2BA4C
 	for <linux-kselftest@archiver.kernel.org>; Wed, 26 Jan 2022 15:13:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242571AbiAZPNj (ORCPT
+        id S242607AbiAZPNk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 26 Jan 2022 10:13:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41350 "EHLO
+        Wed, 26 Jan 2022 10:13:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41820 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242607AbiAZPMk (ORCPT
+        with ESMTP id S235868AbiAZPNj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:12:40 -0500
+        Wed, 26 Jan 2022 10:13:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE6C4B81CA7
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 15:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1E7C340E6;
-        Wed, 26 Jan 2022 15:12:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFBBFB81978
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 15:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04164C340EB;
+        Wed, 26 Jan 2022 15:13:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643209958;
-        bh=ozE2gweVnYm8+WGvKFBpmz6Wvw67yql2wccmrToa5wo=;
+        s=k20201202; t=1643210017;
+        bh=fs6Mo/cNVCXgit6VI25SiK2O86CoOZYuGBLTQAR7ou4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENSOmwE8JZEln3pD0wJb88xDkLfb/mfJCUoRxY2HoVObjxlwoe3khvgE7R+WtXE0Q
-         Ffwi4N1qHcvrX6SpXCJe3vtClFLfEPerVzBaxJoLCZuYsy2jm59XgiK6oHfWC0L9nl
-         xw9pCKMaNu/oWhsoxqR78KSUe93Z4H3cnnZGyzq2jnFrzVu2fiYjYRU2NRvd2kuOI9
-         yqmN6X6XwM31+z8KxY+ptUVcvkyTWvMdq1do9cwvQeztaxlvmA/TNewIyB3UV/T6YT
-         acJFnRqMcPoUv+krYdCdsrkW+jhu6cJO0FRL4nE6Amg0KsSpm0k0kVLdoM/zro+4bh
-         uYykUQqtw1DZw==
+        b=pErGvnuztsHGvB9V8n18kB2xGImqKKlHDr5e5A/e7tZVWVNT4b9jQyTUsXKW7SVCx
+         E3oPfhPT5pw12NL+A+L+kpmp2r7BwjPDf22VRczH5FhXEZ7lKQJEEZk63+UHgELGfy
+         yABmk+VL5Obc5ViXE67GEgSpYScNjMx1AnI0AM2Btdmett1LYG5wTM+1RK3ZcTnz2J
+         ILmKCNjS97EuaS2kdOvGsBmvscSHZH50JkjUFn2kEWf/i1g/w2vsxo1+Sy+Y8Xa4Tz
+         O5K07eh7jurEwCxdqCLZ5sxKSQzFMhX7Ol0p5IfANPMHVeOQ2jUSVoiq8xe2RKFvkC
+         3gtMEKkVnr3yw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -46,237 +46,379 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v9 16/40] arm64/sme: Implement ZA context switching
-Date:   Wed, 26 Jan 2022 15:10:56 +0000
-Message-Id: <20220126151120.3811248-17-broonie@kernel.org>
+Subject: [PATCH v9 30/40] kselftest/arm64: Add tests for TPIDR2
+Date:   Wed, 26 Jan 2022 15:11:10 +0000
+Message-Id: <20220126151120.3811248-31-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220126151120.3811248-1-broonie@kernel.org>
 References: <20220126151120.3811248-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7644; h=from:subject; bh=ozE2gweVnYm8+WGvKFBpmz6Wvw67yql2wccmrToa5wo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8WSDiazh0f/KJVb2hmtlqZufPDDGhlyCHbuaNZFz dX5MOB6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfFkgwAKCRAk1otyXVSH0PgJB/ 9mm/03EEs1ZXrhWhqdTFvKLmy4viRkdEMQTbLfs260O6IGRncTUL8vL4QepqhTV7dik8MJ1J9hiDEt rO3itClZzOqMru52xd/hyY44v9b8J8vCPn8A2BRZYtAt4TNa8CEZaaaLLRXnk1AmH5C9Hq5ajOlmqQ ql8rzTYgIQXzCQ4LqXJEwSg+yKao1+e9XNrYkgddhM8KWRUEN+13tHOvrM/eczx7xHhgkSyD7jhj7A dPkgy3ge/gbeGQAFiICrFNRalmEuEIzsfV3TzFtq1hFbnQa+Sek3SeI+C1Qb6acvdXRdCbP3W9sZ74 zRhRVS2J9gORpLfgxnTgXGe5u4tNA/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8971; h=from:subject; bh=fs6Mo/cNVCXgit6VI25SiK2O86CoOZYuGBLTQAR7ou4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh8WSOYfrKO9wqrVDyN1/vTE4zIqML+ldRAu4nWsi8 L63DQwiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfFkjgAKCRAk1otyXVSH0JSWB/ 9yHXt3fqmFQAGVI165FJk32uX+wIssvPJVV/byhvzzVkCZIbmITtzvHY3DvB9A3ng6BYCGOhWfoMG7 YnFWDx5oqOVG1fAw7TcAstBddPPU0BoZd4dltkHLCcZYSLzruTAlWPHudhRXAnmMrzhY1k+naJ0WxS 9vyCuwWuwFLOvBoBw4MHQSg4wRK4d6ruXcq0EDAuPGO4tRih6833JjK6yeT7yn8wjUj+EI1XT6SiSm D6pGPHqzlu8LGZ54c22xje+B8XyIeChbi+mm7l1Lj1HDSk5VsPffamrC6VsFDG3ok/Hc9Fh+sFzfXx XtEjQPLy06xJs8iw8j9/V/fO0O1zka
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Allocate space for storing ZA on first access to SME and use that to save
-and restore ZA state when context switching. We do this by using the vector
-form of the LDR and STR ZA instructions, these do not require streaming
-mode and have implementation recommendations that they avoid contention
-issues in shared SMCU implementations.
+The Scalable Matrix Extension adds a new system register TPIDR2 intended to
+be used by libc for its own thread specific use, add some kselftests which
+exercise the ABI for it.
 
-Since ZA is architecturally guaranteed to be zeroed when enabled we do not
-need to explicitly zero ZA, either we will be restoring from a saved copy
-or trapping on first use of SME so we know that ZA must be disabled.
+Since this test should with some adjustment work for TPIDR and any other
+similar registers added in future add tests for it in a separate
+directory rather than placing it with the other floating point tests,
+nothing existing looked suitable so I created a new test directory
+called "abi".
+
+Since this feature is intended to be used by libc the test is built as
+freestanding code using nolibc so we don't end up with the test program
+and libc both trying to manage the register simultaneously and
+distrupting each other. As a result of being written using nolibc rather
+than using hwcaps to identify if SME is available in the system we check
+for the default SME vector length configuration in proc, adding hwcap
+support to nolibc seems like disproportionate effort and didn't feel
+entirely idiomatic for what nolibc is trying to do.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h       |  5 ++++-
- arch/arm64/include/asm/fpsimdmacros.h | 22 ++++++++++++++++++++++
- arch/arm64/include/asm/kvm_host.h     |  3 +++
- arch/arm64/include/asm/processor.h    |  1 +
- arch/arm64/kernel/entry-fpsimd.S      | 22 ++++++++++++++++++++++
- arch/arm64/kernel/fpsimd.c            | 20 +++++++++++++-------
- arch/arm64/kvm/fpsimd.c               |  2 +-
- 7 files changed, 66 insertions(+), 9 deletions(-)
+ tools/testing/selftests/arm64/abi/.gitignore |   1 +
+ tools/testing/selftests/arm64/abi/Makefile   |   9 +-
+ tools/testing/selftests/arm64/abi/tpidr2.c   | 298 +++++++++++++++++++
+ 3 files changed, 307 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/tpidr2.c
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 650ec642159c..af404e5b8d82 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -47,7 +47,8 @@ extern void fpsimd_update_current_state(struct user_fpsimd_state const *state);
+diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
+index b79cf5814c23..b9e54417250d 100644
+--- a/tools/testing/selftests/arm64/abi/.gitignore
++++ b/tools/testing/selftests/arm64/abi/.gitignore
+@@ -1 +1,2 @@
+ syscall-abi
++tpidr2
+diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
+index 96eba974ac8d..c8d7f2495eb2 100644
+--- a/tools/testing/selftests/arm64/abi/Makefile
++++ b/tools/testing/selftests/arm64/abi/Makefile
+@@ -1,8 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Copyright (C) 2021 ARM Limited
  
- extern void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *state,
- 				     void *sve_state, unsigned int sve_vl,
--				     unsigned int sme_vl, u64 *svcr);
-+				     void *za_state, unsigned int sme_vl,
-+				     u64 *svcr);
+-TEST_GEN_PROGS := syscall-abi
++TEST_GEN_PROGS := syscall-abi tpidr2
  
- extern void fpsimd_flush_task_state(struct task_struct *target);
- extern void fpsimd_save_and_flush_cpu_state(void);
-@@ -90,6 +91,8 @@ extern void sve_flush_live(bool flush_ffr, unsigned long vq_minus_1);
- extern unsigned int sve_get_vl(void);
- extern void sve_set_vq(unsigned long vq_minus_1);
- extern void sme_set_vq(unsigned long vq_minus_1);
-+extern void za_save_state(void *state);
-+extern void za_load_state(void const *state);
+ include ../../lib.mk
  
- struct arm64_cpu_capabilities;
- extern void sve_kernel_enable(const struct arm64_cpu_capabilities *__unused);
-diff --git a/arch/arm64/include/asm/fpsimdmacros.h b/arch/arm64/include/asm/fpsimdmacros.h
-index a50fa1eab730..35d67e393519 100644
---- a/arch/arm64/include/asm/fpsimdmacros.h
-+++ b/arch/arm64/include/asm/fpsimdmacros.h
-@@ -318,3 +318,25 @@
- 		ldr		w\nxtmp, [\xpfpsr, #4]
- 		msr		fpcr, x\nxtmp
- .endm
+ $(OUTPUT)/syscall-abi: syscall-abi.c syscall-abi-asm.S
 +
-+.macro sme_save_za nxbase, xvl, nw
-+	mov	w\nw, #0
++# Build with nolibc since TPIDR2 is intended to be actively managed by
++# libc and we're trying to test the functionality that it depends on here.
++$(OUTPUT)/tpidr2: tpidr2.c
++	$(CC) -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
++		-static -include ../../../../include/nolibc/nolibc.h \
++		-ffreestanding -Wall $^ -o $@ -lgcc
+diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
+new file mode 100644
+index 000000000000..351a098b503a
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/tpidr2.c
+@@ -0,0 +1,298 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+423:
-+	_sme_str_zav \nw, \nxbase
-+	add	x\nxbase, x\nxbase, \xvl
-+	add	x\nw, x\nw, #1
-+	cmp	\xvl, x\nw
-+	bne	423b
-+.endm
++#include <linux/sched.h>
++#include <linux/wait.h>
 +
-+.macro sme_load_za nxbase, xvl, nw
-+	mov	w\nw, #0
++#define SYS_TPIDR2 "S3_3_C13_C0_5"
 +
-+423:
-+	_sme_ldr_zav \nw, \nxbase
-+	add	x\nxbase, x\nxbase, \xvl
-+	add	x\nw, x\nw, #1
-+	cmp	\xvl, x\nw
-+	bne	423b
-+.endm
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 5bc01e62c08a..7dc85d5a6552 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -280,8 +280,11 @@ struct vcpu_reset_state {
- 
- struct kvm_vcpu_arch {
- 	struct kvm_cpu_context ctxt;
++#define EXPECTED_TESTS 5
 +
-+	/* Guest floating point state */
- 	void *sve_state;
- 	unsigned int sve_max_vl;
-+	u64 svcr;
- 
- 	/* Stage 2 paging state used by the hardware on next switch */
- 	struct kvm_s2_mmu *hw_mmu;
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index 6e2af9de153c..5a5c5edd76df 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -153,6 +153,7 @@ struct thread_struct {
- 
- 	unsigned int		fpsimd_cpu;
- 	void			*sve_state;	/* SVE registers, if any */
-+	void			*za_state;	/* ZA register, if any */
- 	unsigned int		vl[ARM64_VEC_MAX];	/* vector length */
- 	unsigned int		vl_onexec[ARM64_VEC_MAX]; /* vl after next exec */
- 	unsigned long		fault_address;	/* fault info */
-diff --git a/arch/arm64/kernel/entry-fpsimd.S b/arch/arm64/kernel/entry-fpsimd.S
-index 6f88c0f86d50..229436f33df5 100644
---- a/arch/arm64/kernel/entry-fpsimd.S
-+++ b/arch/arm64/kernel/entry-fpsimd.S
-@@ -99,4 +99,26 @@ SYM_FUNC_START(sme_set_vq)
- 	ret
- SYM_FUNC_END(sme_set_vq)
- 
++static void putstr(const char *str)
++{
++	write(1, str, strlen(str));
++}
++
++static void putnum(unsigned int num)
++{
++	char c;
++
++	if (num / 10)
++		putnum(num / 10);
++
++	c = '0' + (num % 10);
++	write(1, &c, 1);
++}
++
++static int tests_run;
++static int tests_passed;
++static int tests_failed;
++static int tests_skipped;
++
++static void set_tpidr2(uint64_t val)
++{
++	asm volatile (
++		"msr	" SYS_TPIDR2 ", %0\n"
++		:
++		: "r"(val)
++		: "cc");
++}
++
++static uint64_t get_tpidr2(void)
++{
++	uint64_t val;
++
++	asm volatile (
++		"mrs	%0, " SYS_TPIDR2 "\n"
++		: "=r"(val)
++		:
++		: "cc");
++
++	return val;
++}
++
++static void print_summary(void)
++{
++	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
++		putstr("# UNEXPECTED TEST COUNT: ");
++
++	putstr("# Totals: pass:");
++	putnum(tests_passed);
++	putstr(" fail:");
++	putnum(tests_failed);
++	putstr(" xfail:0 xpass:0 skip:");
++	putnum(tests_skipped);
++	putstr(" error:0\n");
++}
++
++/* Processes should start with TPIDR2 == 0 */
++static int default_value(void)
++{
++	return get_tpidr2() == 0;
++}
++
++/* If we set TPIDR2 we should read that value */
++static int write_read(void)
++{
++	set_tpidr2(getpid());
++
++	return getpid() == get_tpidr2();
++}
++
++/* If we set a value we should read the same value after scheduling out */
++static int write_sleep_read(void)
++{
++	set_tpidr2(getpid());
++
++	msleep(100);
++
++	return getpid() == get_tpidr2();
++}
++
 +/*
-+ * Save the SME state
-+ *
-+ * x0 - pointer to buffer for state
++ * If we fork the value in the parent should be unchanged and the
++ * child should start with the same value and be able to set its own
++ * value.
 + */
-+SYM_FUNC_START(za_save_state)
-+	_sme_rdsvl	1, 1		// x1 = VL/8
-+	sme_save_za 0, x1, 12
-+	ret
-+SYM_FUNC_END(za_save_state)
++static int write_fork_read(void)
++{
++	pid_t newpid, waiting, oldpid;
++	int status;
++
++	set_tpidr2(getpid());
++
++	oldpid = getpid();
++	newpid = fork();
++	if (newpid == 0) {
++		/* In child */
++		if (get_tpidr2() != oldpid) {
++			putstr("# TPIDR2 changed in child: ");
++			putnum(get_tpidr2());
++			putstr("\n");
++			exit(0);
++		}
++
++		set_tpidr2(getpid());
++		if (get_tpidr2() == getpid()) {
++			exit(1);
++		} else {
++			putstr("# Failed to set TPIDR2 in child\n");
++			exit(0);
++		}
++	}
++	if (newpid < 0) {
++		putstr("# fork() failed: -");
++		putnum(-newpid);
++		putstr("\n");
++		return 0;
++	}
++
++	for (;;) {
++		waiting = waitpid(newpid, &status, 0);
++
++		if (waiting < 0) {
++			if (errno == EINTR)
++				continue;
++			putstr("# waitpid() failed: ");
++			putnum(errno);
++			putstr("\n");
++			return 0;
++		}
++		if (waiting != newpid) {
++			putstr("# waitpid() returned wrong PID\n");
++			return 0;
++		}
++
++		if (!WIFEXITED(status)) {
++			putstr("# child did not exit\n");
++			return 0;
++		}
++
++		if (getpid() != get_tpidr2()) {
++			putstr("# TPIDR2 corrupted in parent\n");
++			return 0;
++		}
++
++		return WEXITSTATUS(status);
++	}
++}
 +
 +/*
-+ * Load the SME state
-+ *
-+ * x0 - pointer to buffer for state
++ * sys_clone() has a lot of per architecture variation so just define
++ * it here rather than adding it to nolibc, plus the raw API is a
++ * little more convenient for this test.
 + */
-+SYM_FUNC_START(za_load_state)
-+	_sme_rdsvl	1, 1		// x1 = VL/8
-+	sme_load_za 0, x1, 12
-+	ret
-+SYM_FUNC_END(za_load_state)
++static int sys_clone(unsigned long clone_flags, unsigned long newsp,
++		     int *parent_tidptr, unsigned long tls,
++		     int *child_tidptr)
++{
++	return my_syscall5(__NR_clone, clone_flags, newsp, parent_tidptr, tls,
++			   child_tidptr);
++}
 +
- #endif /* CONFIG_ARM64_SME */
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 12fef62cf07a..c9e8186e69c0 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -121,6 +121,7 @@
- struct fpsimd_last_state_struct {
- 	struct user_fpsimd_state *st;
- 	void *sve_state;
-+	void *za_state;
- 	u64 *svcr;
- 	unsigned int sve_vl;
- 	unsigned int sme_vl;
-@@ -387,11 +388,15 @@ static void task_fpsimd_load(void)
- 	if (system_supports_sme()) {
- 		unsigned long sme_vl = task_get_sme_vl(current);
- 
-+		/* Ensure VL is set up for restoring data */
- 		if (test_thread_flag(TIF_SME))
- 			sme_set_vq(sve_vq_from_vl(sme_vl) - 1);
- 
- 		write_sysreg_s(current->thread.svcr, SYS_SVCR_EL0);
- 
-+		if (thread_za_enabled(&current->thread))
-+			za_load_state(current->thread.za_state);
++/*
++ * If we clone with CLONE_SETTLS then the value in the parent should
++ * be unchanged and the child should start with zero and be able to
++ * set its own value.
++ */
++static int write_clone_read(void)
++{
++	int parent_tid, child_tid;
++	pid_t parent, waiting;
++	int ret, status;
 +
- 		if (thread_sm_enabled(&current->thread)) {
- 			restore_sve_regs = true;
- 			restore_ffr = system_supports_fa64();
-@@ -435,11 +440,10 @@ static void fpsimd_save(void)
- 		u64 *svcr = last->svcr;
- 		*svcr = read_sysreg_s(SYS_SVCR_EL0);
- 
--		if (thread_za_enabled(&current->thread)) {
--			/* ZA state managment is not implemented yet */
--			force_signal_inject(SIGKILL, SI_KERNEL, 0, 0);
--			return;
--		}
-+		*svcr = read_sysreg_s(SYS_SVCR_EL0);
++	parent = getpid();
++	set_tpidr2(parent);
 +
-+		if (*svcr & SYS_SVCR_EL0_ZA_MASK)
-+			za_save_state(last->za_state);
- 
- 		/* If we are in streaming mode override regular SVE. */
- 		if (*svcr & SYS_SVCR_EL0_SM_MASK) {
-@@ -1477,6 +1481,7 @@ static void fpsimd_bind_task_to_cpu(void)
- 	WARN_ON(!system_supports_fpsimd());
- 	last->st = &current->thread.uw.fpsimd_state;
- 	last->sve_state = current->thread.sve_state;
-+	last->za_state = current->thread.za_state;
- 	last->sve_vl = task_get_sve_vl(current);
- 	last->sme_vl = task_get_sme_vl(current);
- 	last->svcr = &current->thread.svcr;
-@@ -1494,8 +1499,8 @@ static void fpsimd_bind_task_to_cpu(void)
- }
- 
- void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *st, void *sve_state,
--			      unsigned int sve_vl, unsigned int sme_vl,
--			      u64 *svcr)
-+			      unsigned int sve_vl, void *za_state,
-+			      unsigned int sme_vl, u64 *svcr)
- {
- 	struct fpsimd_last_state_struct *last =
- 		this_cpu_ptr(&fpsimd_last_state);
-@@ -1506,6 +1511,7 @@ void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *st, void *sve_state,
- 	last->st = st;
- 	last->svcr = svcr;
- 	last->sve_state = sve_state;
-+	last->za_state = za_state;
- 	last->sve_vl = sve_vl;
- 	last->sme_vl = sme_vl;
- }
-diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-index 902c598b7ed2..338733ac63f8 100644
---- a/arch/arm64/kvm/fpsimd.c
-+++ b/arch/arm64/kvm/fpsimd.c
-@@ -110,7 +110,7 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
- 		fpsimd_bind_state_to_cpu(&vcpu->arch.ctxt.fp_regs,
- 					 vcpu->arch.sve_state,
- 					 vcpu->arch.sve_max_vl,
--					 0);
-+					 NULL, 0, &vcpu->arch.svcr);
- 
- 		clear_thread_flag(TIF_FOREIGN_FPSTATE);
- 		update_thread_flag(TIF_SVE, vcpu_has_sve(vcpu));
++	ret = sys_clone(CLONE_SETTLS, 0, &parent_tid, 0, &child_tid);
++	if (ret == -1) {
++		putstr("# clone() failed\n");
++		putnum(errno);
++		putstr("\n");
++		return 0;
++	}
++
++	if (ret == 0) {
++		/* In child */
++		if (get_tpidr2() != 0) {
++			putstr("# TPIDR2 non-zero in child: ");
++			putnum(get_tpidr2());
++			putstr("\n");
++			exit(0);
++		}
++
++		if (gettid() == 0)
++			putstr("# Child TID==0\n");
++		set_tpidr2(gettid());
++		if (get_tpidr2() == gettid()) {
++			exit(1);
++		} else {
++			putstr("# Failed to set TPIDR2 in child\n");
++			exit(0);
++		}
++	}
++
++	for (;;) {
++		waiting = wait4(ret, &status, __WCLONE, NULL);
++
++		if (waiting < 0) {
++			if (errno == EINTR)
++				continue;
++			putstr("# wait4() failed: ");
++			putnum(errno);
++			putstr("\n");
++			return 0;
++		}
++		if (waiting != ret) {
++			putstr("# wait4() returned wrong PID ");
++			putnum(waiting);
++			putstr("\n");
++			return 0;
++		}
++
++		if (!WIFEXITED(status)) {
++			putstr("# child did not exit\n");
++			return 0;
++		}
++
++		if (parent != get_tpidr2()) {
++			putstr("# TPIDR2 corrupted in parent\n");
++			return 0;
++		}
++
++		return WEXITSTATUS(status);
++	}
++}
++
++#define run_test(name)			     \
++	if (name()) {			     \
++		tests_passed++;		     \
++	} else {			     \
++		tests_failed++;		     \
++		putstr("not ");		     \
++	}				     \
++	putstr("ok ");			     \
++	putnum(++tests_run);		     \
++	putstr(" " #name "\n");
++
++int main(int argc, char **argv)
++{
++	int ret, i;
++
++	putstr("TAP version 13\n");
++	putstr("1..");
++	putnum(EXPECTED_TESTS);
++	putstr("\n");
++
++	putstr("# PID: ");
++	putnum(getpid());
++	putstr("\n");
++
++	/*
++	 * This test is run with nolibc which doesn't support hwcap and
++	 * it's probably disproportionate to implement so instead check
++	 * for the default vector length configuration in /proc.
++	 */
++	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
++	if (ret >= 0) {
++		run_test(default_value);
++		run_test(write_read);
++		run_test(write_sleep_read);
++		run_test(write_fork_read);
++		run_test(write_clone_read);
++
++	} else {
++		putstr("# SME support not present\n");
++
++		for (i = 0; i < EXPECTED_TESTS; i++) {
++			putstr("ok ");
++			putnum(i);
++			putstr(" skipped, TPIDR2 not supported\n");
++		}
++
++		tests_skipped += EXPECTED_TESTS;
++	}
++
++	print_summary();
++
++	return 0;
++}
 -- 
 2.30.2
 
