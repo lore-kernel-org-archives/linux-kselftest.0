@@ -2,162 +2,154 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33DD6C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jan 2022 04:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C97D6C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jan 2022 09:11:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiA0ERE (ORCPT
+        id S234734AbiA0JLn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 26 Jan 2022 23:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiA0ERE (ORCPT
+        Thu, 27 Jan 2022 04:11:43 -0500
+Received: from mail1.bemta34.messagelabs.com ([195.245.231.2]:11426 "EHLO
+        mail1.bemta34.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231837AbiA0JLn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jan 2022 23:17:04 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4485C06161C
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 20:17:03 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so1676885pja.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jan 2022 20:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MlI851lUoHdmSjJoGiyp5I4kiqlKaCdV4NPdXhxRA+8=;
-        b=C8VvuZFe4rCP2uCFSONmb99RN1LdQn529TOYmrpKoK7PYZcziPiAhrOW11oPx+kR43
-         opz70CnPxzxoZTYSSVhdERYlJMV8TdO2QuyuvwmFnkgUYxlX3/+xpOKrqI+Z+SedE8V0
-         b2zhdCzpSnUjJajZlBYXB+FSVxcFj2HkqHfh92IhUWwU9i3Q4biweQtzgZksk14c+YiH
-         52bQWQ89Jcu87pb3B4VxHhWSQojQZDN4MzrgykfnIRP/6lSrZxJ1K92QfFOGFIVPjDYw
-         3UM41Q/sdGDYKwy0SqhzCI9wShehVrMqDwPAZ1e+aIL1TRmW3bpwLdmcoEgNXDTVMahN
-         1OPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MlI851lUoHdmSjJoGiyp5I4kiqlKaCdV4NPdXhxRA+8=;
-        b=bTikZCw2+9MHtkWZfEIZQxa3zE3dYOPP392pPeAV9ljmCKAs98VoX/s+Qj2o68QWoJ
-         ioDz4kH2cPpW4S7G997/eziBLb0SNwqGIT5koJkoPHdkJk7CdAoUCJuyd8Y5sYEKHrmv
-         655swbdkAZXez6Jo+QYKGO0IMYeFjvO7lj0jd5/aRZKCLOV1zyQHWuL1E6nV4BPSg74r
-         2ZicC9F4pTP3gcmbndAPkA3p74Vn54VGQtWVXOe1wl7o82jieZzcfRmh02Sa5FE04Zux
-         nqPNC2KmorcVvh5CbBGRb1HX/vsZge5WEnEP30gGfNH+qhgu15CgBKvUuAnj/3H9kKz1
-         ejjQ==
-X-Gm-Message-State: AOAM533R+g2KMPjYHGx0Pdkh1g53JqyrToCULwCs6QPdx5PJQHR8IMcL
-        zYk92lldl9fj31yk310JSbsrcg==
-X-Google-Smtp-Source: ABdhPJzz3u8vPsKiH9OPkvGE3abpQ/af8KLmu4FJ0c7+83/vDdWzlReCnpAVhOP8ndMIaORK9xGeGg==
-X-Received: by 2002:a17:902:f083:: with SMTP id p3mr2247927pla.72.1643257023220;
-        Wed, 26 Jan 2022 20:17:03 -0800 (PST)
-Received: from google.com (150.12.83.34.bc.googleusercontent.com. [34.83.12.150])
-        by smtp.gmail.com with ESMTPSA id z7sm3556746pfe.49.2022.01.26.20.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 20:17:02 -0800 (PST)
-Date:   Wed, 26 Jan 2022 20:16:59 -0800
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3] kselftest: kvm/arm64: Skip tests if we can't create a
- vgic-v3
-Message-ID: <YfIcu2DMi83eua8C@google.com>
-References: <20220126145242.3473836-1-broonie@kernel.org>
+        Thu, 27 Jan 2022 04:11:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1643274702; i=@fujitsu.com;
+        bh=TTJx396secFY4TWVsYG79piD7SwRnYamK3ghI0u+wu8=;
+        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=J62BY87SA+i4WxUnhEk4b8lgokPBfHhS5tDEm0svJES832gE1yMHoNM8B8y8oU37j
+         7IxVsJ98E3rYRaTD/u4P4OI4Cd3M90uRSo5x0yljSvgnKrWU8+SOyQZSyUFI6uE6aZ
+         1uxfwbdTPQLVOMR3qJZpFKXQvt+pWWDgBzbqX8W5H/wUOZTOR8Fr21imwe5w/BmGzN
+         CejNZcKAqhA5eOVpY+DCa6eAz3LFnbPTxbN6bALbujOdXY9XGJfo/FqcwJdb17ssBO
+         6sUR5mnH0eCHYmGD4Q860RDas2QihhnTvipMU6tHdodQsqZJKalUOpLMZqag4bAZDN
+         hbUrj1CjA8rjQ==
+Received: from [100.115.34.7] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-2.bemta.az-a.eu-west-2.aws.ess.symcld.net id 91/4A-12680-EC162F16; Thu, 27 Jan 2022 09:11:42 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRWlGSWpSXmKPExsViZ8MRons28VO
+  iwf7v2haXd81hs5h+5z2bxa1P/BY/bt1gsdg7fRmrA6vHnWt72Dz2z13D7nFmwRF2j8+b5AJY
+  olgz85LyKxJYM3p3rWUsmC9U8WTDVaYGxmn8XYxcHEICLxklmmbvYIZw9jBK7Fr1k72LkZODT
+  UBT4lnnAmYQW0TASWLj1W5GEJtZoE5i077PbF2MHBzCAn4SDWtUQEwWAVWJfRsSQSp4BTwkvv
+  x9zAZiSwgoSEx5+B5sCqeAp8S9vafZIVa1MEr0tncwQzQISpyc+YQFYryExMEXL5ghmhUlLnV
+  8Y4SwKyRmzWpjmsDIPwtJyywkLQsYmVYxWicVZaZnlOQmZuboGhoY6BoamuoaW+oaGRjoJVbp
+  JuqlluqWpxaX6BrpJZYX66UWF+sVV+Ym56To5aWWbGIEhnVKsfqJHYxPV/7UO8QoycGkJMq7x
+  PxTohBfUn5KZUZicUZ8UWlOavEhRhkODiUJ3vxYoJxgUWp6akVaZg4wxmDSEhw8SiK8fglAad
+  7igsTc4sx0iNQpRkUpcV43kIQASCKjNA+uDRbXlxhlpYR5GRkYGIR4ClKLcjNLUOVfMYpzMCo
+  J86aBTOHJzCuBm/4KaDET0OLf59+BLC5JREhJNTApWa9onJqzkXll16K3Ux34jtYt5n3SUHm4
+  j3WjqneDcFjpwqIg9xdeJwW+1boniojNK2Yw3ZazvDUwzzJ7x4dNJSIar4r+8adXbFub8XyF2
+  c5CmTWW9wRNS2dleq/9etdu4r/MW6pudzY0uqi7LvOZe3Zv7iFRrqWTkzOurm3fzW6r6MB1P/
+  Dsue2nujua9rEL/ea/UNZ1NElGs2e1bFXg/j1zyz47Ouu+PfVIy2NTl079NOHjZ/sOp2/9v9+
+  R87v97Hm7d9abem+TiBf4NulTpluHJ1eD66QtXxU8WVaJrBQqvHbAaAdH8awDi9eHJMhcDf8c
+  r8U2b4V33m8HzStt87XWhJv0ancF5obdN1FiKc5INNRiLipOBACQ3EBnZgMAAA==
+X-Env-Sender: xuyang2018.jy@fujitsu.com
+X-Msg-Ref: server-24.tower-571.messagelabs.com!1643274701!215!1
+X-Originating-IP: [62.60.8.84]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.81.7; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 28723 invoked from network); 27 Jan 2022 09:11:41 -0000
+Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
+  by server-24.tower-571.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Jan 2022 09:11:41 -0000
+Received: from R01UKEXCASM126.r01.fujitsu.local ([10.183.43.178])
+        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id 20R9BXxU019758
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
+        Thu, 27 Jan 2022 09:11:41 GMT
+Received: from localhost.localdomain (10.167.220.84) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.26; Thu, 27 Jan 2022 09:11:36 +0000
+From:   Yang Xu <xuyang2018.jy@fujitsu.com>
+To:     <linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <naresh.kamboju@linaro.org>,
+        <pvorel@suse.cz>, Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: [PATCH v2 2/3] selftests/zram01.sh: Fix compression ratio calculation
+Date:   Thu, 27 Jan 2022 17:11:36 +0800
+Message-ID: <1643274697-3393-2-git-send-email-xuyang2018.jy@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1643274697-3393-1-git-send-email-xuyang2018.jy@fujitsu.com>
+References: <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
+ <1643274697-3393-1-git-send-email-xuyang2018.jy@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126145242.3473836-1-broonie@kernel.org>
+Content-Type: text/plain
+X-Originating-IP: [10.167.220.84]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:52:42PM +0000, Mark Brown wrote:
-> The arch_timer and vgic_irq kselftests assume that they can create a
-> vgic-v3, using the library function vgic_v3_setup() which aborts with a
-> test failure if it is not possible to do so. Since vgic-v3 can only be
-> instantiated on systems where the host has GICv3 this leads to false
-> positives on older systems where that is not the case.
-> 
-> Fix this by changing vgic_v3_setup() to return an error if the vgic can't
-> be instantiated and have the callers skip if this happens. We could also
-> exit flagging a skip in vgic_v3_setup() but this would prevent future test
-> cases conditionally deciding which GIC to use or generally doing more
-> complex output.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> 
-> v3:
->  - Use custom print_skip() helper.
->  - Use internal version of _kvm_create_device.
-> v2:
->  - The test for being able to create the GIC doesn't actually
->    instantiate it, add a call doing so in that case.
-> 
->  tools/testing/selftests/kvm/aarch64/arch_timer.c | 7 ++++++-
->  tools/testing/selftests/kvm/aarch64/vgic_irq.c   | 4 ++++
->  tools/testing/selftests/kvm/lib/aarch64/vgic.c   | 4 +++-
->  3 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-> index 9ad38bd360a4..b08d30bf71c5 100644
-> --- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
-> +++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-> @@ -366,6 +366,7 @@ static struct kvm_vm *test_vm_create(void)
->  {
->  	struct kvm_vm *vm;
->  	unsigned int i;
-> +	int ret;
->  	int nr_vcpus = test_args.nr_vcpus;
->  
->  	vm = vm_create_default_with_vcpus(nr_vcpus, 0, 0, guest_code, NULL);
-> @@ -382,7 +383,11 @@ static struct kvm_vm *test_vm_create(void)
->  
->  	ucall_init(vm, NULL);
->  	test_init_timer_irq(vm);
-> -	vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
-> +	ret = vgic_v3_setup(vm, nr_vcpus, 64, GICD_BASE_GPA, GICR_BASE_GPA);
-> +	if (ret < 0) {
-> +		print_skip("Failed to create vgic-v3");
-> +		exit(KSFT_SKIP);
-> +	}
->  
->  	/* Make all the test's cmdline args visible to the guest */
->  	sync_global_to_guest(vm, test_args);
-> diff --git a/tools/testing/selftests/kvm/aarch64/vgic_irq.c b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
-> index e6c7d7f8fbd1..7eca97799917 100644
-> --- a/tools/testing/selftests/kvm/aarch64/vgic_irq.c
-> +++ b/tools/testing/selftests/kvm/aarch64/vgic_irq.c
-> @@ -761,6 +761,10 @@ static void test_vgic(uint32_t nr_irqs, bool level_sensitive, bool eoi_split)
->  
->  	gic_fd = vgic_v3_setup(vm, 1, nr_irqs,
->  			GICD_BASE_GPA, GICR_BASE_GPA);
-> +	if (gic_fd < 0) {
-> +		print_skip("Failed to create vgic-v3, skipping");
-> +		exit(KSFT_SKIP);
-> +	}
->  
->  	vm_install_exception_handler(vm, VECTOR_IRQ_CURRENT,
->  		guest_irq_handlers[args.eoi_split][args.level_sensitive]);
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/vgic.c b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
-> index b3a0fca0d780..f5cd0c536d85 100644
-> --- a/tools/testing/selftests/kvm/lib/aarch64/vgic.c
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
-> @@ -52,7 +52,9 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
->  			nr_vcpus, nr_vcpus_created);
->  
->  	/* Distributor setup */
-> -	gic_fd = kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, false);
-> +	if (_kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3,
-> +			       false, &gic_fd) != 0)
-> +		return -1;
->  
->  	kvm_device_access(gic_fd, KVM_DEV_ARM_VGIC_GRP_NR_IRQS,
->  			0, &nr_irqs, true);
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> kvmarm mailing list
-> kvmarm@lists.cs.columbia.edu
-> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+zram01 uses `free -m` to measure zram memory usage. The results are no
+sense because they are polluted by all running processes on the system.
 
-Tried both gicv2 and v3 and the change works as expected.
+We Should only calculate the free memory delta for the current process.
+So use the third field of /sys/block/zram<id>/mm_stat to measure memory
+usage instead. The file is available since kernel 4.1.
 
-Tested-by: Ricardo Koller <ricarkol@google.com>
+orig_data_size(first): uncompressed size of data stored in this disk.
+compr_data_size(second): compressed size of data stored in this disk
+mem_used_total(third): the amount of memory allocated for this disk
+
+Also remove useless zram cleanup call in zram_fill_fs and so we don't
+need to cleanup zram twice if fails.
+
+Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
+---
+fix this ie the fowlloing ltp patch does
+https://github.com/linux-test-project/ltp/commit/7310e235
+ tools/testing/selftests/zram/zram01.sh | 30 +++++++-------------------
+ 1 file changed, 8 insertions(+), 22 deletions(-)
+
+diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
+index 114863d9fb87..e9e9eb777e2c 100755
+--- a/tools/testing/selftests/zram/zram01.sh
++++ b/tools/testing/selftests/zram/zram01.sh
+@@ -33,8 +33,6 @@ zram_algs="lzo"
+ 
+ zram_fill_fs()
+ {
+-	local mem_free0=$(free -m | awk 'NR==2 {print $4}')
+-
+ 	for i in $(seq 0 $(($dev_num - 1))); do
+ 		echo "fill zram$i..."
+ 		local b=0
+@@ -45,29 +43,17 @@ zram_fill_fs()
+ 			b=$(($b + 1))
+ 		done
+ 		echo "zram$i can be filled with '$b' KB"
+-	done
+ 
+-	local mem_free1=$(free -m | awk 'NR==2 {print $4}')
+-	local used_mem=$(($mem_free0 - $mem_free1))
++		local mem_used_total=`awk '{print $3}' "/sys/block/zram$i/mm_stat"`
++		local v=$((100 * 1024 * $b / $mem_used_total))
++		if [ "$v" -lt 100 ]; then
++			 echo "FAIL compression ratio: 0.$v:1"
++			 ERR_CODE=-1
++			 return
++		fi
+ 
+-	local total_size=0
+-	for sm in $zram_sizes; do
+-		local s=$(echo $sm | sed 's/M//')
+-		total_size=$(($total_size + $s))
++		echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
+ 	done
+-
+-	echo "zram used ${used_mem}M, zram disk sizes ${total_size}M"
+-
+-	local v=$((100 * $total_size / $used_mem))
+-
+-	if [ "$v" -lt 100 ]; then
+-		echo "FAIL compression ratio: 0.$v:1"
+-		ERR_CODE=-1
+-		zram_cleanup
+-		return
+-	fi
+-
+-	echo "zram compression ratio: $(echo "scale=2; $v / 100 " | bc):1: OK"
+ }
+ 
+ check_prereqs
+-- 
+2.23.0
+
