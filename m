@@ -2,79 +2,87 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD8DDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Feb 2022 03:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21C08C433EF
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Feb 2022 09:40:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356789AbiBDDUR (ORCPT
+        id S1357272AbiBDJkK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Feb 2022 22:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356786AbiBDDUN (ORCPT
+        Fri, 4 Feb 2022 04:40:10 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:50770 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235827AbiBDJkJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Feb 2022 22:20:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6A0C061714;
-        Thu,  3 Feb 2022 19:20:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9114B83656;
-        Fri,  4 Feb 2022 03:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3901C340F7;
-        Fri,  4 Feb 2022 03:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643944810;
-        bh=pE6YpV7FpsnzgBxvUPWZDQMobC/RZ2p2EU/TpNvk24I=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JLfSFp/+7BIjgNtNkkVdu27VsCBG0Ah9VkIEQXacvaICKM8LGRV9e14dPgc/mSoxm
-         CglhicFesbW6iTYZZtPNqO8L5NvRMjSrMMgCS4eLJ1l57KPV0d8xDGws1MHnognm9F
-         EZBNo9NYzAlqOOCwJ7SHT/vMVL9nnITc1peuHE+wZviGCYE5wvnVnKaGphZa8ROuDY
-         dlJAsdwWSlA0LTVZbrrhAQ7rifdEpowgXgb1zfoDqcl3R6Rcjmgu+x538hQjAk3RO8
-         lMbMiXn+uzUqtHbhj7PNd9AQACg+boAqsL8nx5ydB0GFJcqy2BQo07jkXQlQnI9TnH
-         tMonkaGg0Hauw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 878A6E5D08C;
-        Fri,  4 Feb 2022 03:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: fib offload: use sensible tos values
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164394481054.31803.1317546149481406185.git-patchwork-notify@kernel.org>
-Date:   Fri, 04 Feb 2022 03:20:10 +0000
-References: <5e43b343720360a1c0e4f5947d9e917b26f30fbf.1643826556.git.gnault@redhat.com>
-In-Reply-To: <5e43b343720360a1c0e4f5947d9e917b26f30fbf.1643826556.git.gnault@redhat.com>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        idosch@mellanox.com, jiri@mellanox.com
+        Fri, 4 Feb 2022 04:40:09 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D5E621F44E;
+        Fri,  4 Feb 2022 09:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643967608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7HKhPrTrS+osv6KlVAcI7StcH6WyLP6pkUwGJOWdhHg=;
+        b=1Zubdx1CIs9+nAbXwy4aplmFV5+ZkCKLO5Q3LKDG8aNGWS7yq5aarePU4MhYNEh2B5Lzae
+        jOIvcpUmv1OgswK2ZOQDUyjRUZb2jiozUjSjgrQ9dPkQ7sNBoCQLznCBs69mgWy0aY7CgR
+        aU1+1RRyM07kElfwqX+0VGVY426LE6Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643967608;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7HKhPrTrS+osv6KlVAcI7StcH6WyLP6pkUwGJOWdhHg=;
+        b=OkbE/OTd8wkDBW5AphiJJrqFkGyKecAZRm/Ba+pNYbz0jJYIaLGevIFij3A/a5e4MQLwrv
+        QIN6O0pCuCjF1HDQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id AA6E0A3B84;
+        Fri,  4 Feb 2022 09:40:08 +0000 (UTC)
+Date:   Fri, 04 Feb 2022 10:40:08 +0100
+Message-ID: <s5h7dabx953.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org,
+        Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v3 1/2] kselftest: alsa: Check for event generation when we write to controls
+In-Reply-To: <20220202150902.19563-1-broonie@kernel.org>
+References: <20220202150902.19563-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 2 Feb 2022 19:30:28 +0100 you wrote:
-> Although both iproute2 and the kernel accept 1 and 2 as tos values for
-> new routes, those are invalid. These values only set ECN bits, which
-> are ignored during IPv4 fib lookups. Therefore, no packet can actually
-> match such routes. This selftest therefore only succeeds because it
-> doesn't verify that the new routes do actually work in practice (it
-> just checks if the routes are offloaded or not).
+On Wed, 02 Feb 2022 16:09:01 +0100,
+Mark Brown wrote:
 > 
-> [...]
+> Add some coverage of event generation to mixer-test. Rather than doing a
+> separate set of writes designed to trigger events we add a step to the
+> existing write_and_verify() which checks to see if the value we read back
+> from non-volatile controls matches the value before writing and that an
+> event is or isn't generated as appropriate. The "tests" for events then
+> simply check that no spurious or missing events were detected. This avoids
+> needing further logic to generate appropriate values for each control type
+> and maximises coverage.
+> 
+> When checking for events we use a timeout of 0. This relies on the kernel
+> generating any event prior to returning to userspace when setting a control.
+> That is currently the case and it is difficult to see it changing, if it
+> does the test will need to be updated. Using a delay of 0 means that we
+> don't slow things down unduly when checking for no event or when events
+> fail to be generated.
+> 
+> We don't check behaviour for volatile controls since we can't tell what
+> the behaviour is supposed to be for any given control.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Jaroslav Kysela <perex@perex.cz>
 
-Here is the summary with links:
-  - [net-next] selftests: fib offload: use sensible tos values
-    https://git.kernel.org/netdev/net-next/c/bafe517af299
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks, applied now to for-next branch.
 
 
+Takashi
