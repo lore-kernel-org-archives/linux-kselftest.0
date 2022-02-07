@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7498AC4167D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 836CCC4167B
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238561AbiBGPfM (ORCPT
+        id S239355AbiBGPfN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        Mon, 7 Feb 2022 10:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357409AbiBGPZM (ORCPT
+        with ESMTP id S1348243AbiBGPYF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:25:12 -0500
+        Mon, 7 Feb 2022 10:24:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07070C0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF770C0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8720B815A6
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BABC36AE9;
-        Mon,  7 Feb 2022 15:25:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E8A9B815B0
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEA0C340F4;
+        Mon,  7 Feb 2022 15:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247509;
-        bh=814u6qr00Svitr+wGJ4FW2qUnHufihham66MiXu5/2Q=;
+        s=k20201202; t=1644247442;
+        bh=c5P3WzFe/myKJt98GT0tqU73tZQT7e7FvegzOnxWfIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TW/+tkfr2D1c0cdDK73xnMCb9s4qDz4aqtXDy8qS2JXX52VVjmwVOszZhCJVSeli0
-         RmPQjDGN9lJaW8JSoeg1UeJjTJ4xfA2elAs5sVPW/90ayL+y8AmAwJwTIgDUnOeyij
-         csWxN96qe/4o2lZkTnNfWGFKloiq/RKIUiG3++XRuyWUpVzzwCaU3NVGo3THMU4Y2l
-         Qt6sDl2NclDNkH9qjLOCf4ghAqxUZqfYqTJtuvVWvsqSke8lBHXrIk29HHyjmvPKEL
-         TwaigsuQ3I+Qn3X/Pjzd6qPOFPbk+TTP8ZArAktyoNqKt/XTwtf0XLpHjWKCcQrg0z
-         3ORPcg8gDdpfg==
+        b=WkBumWqkdpz43bQWlzm4d80dvU/vfojs9V8ysixVQTKr1N3E+IjEa2PC3xKPd7pAv
+         glPSlEUHRoL6pjj/hwu3T/pT1HixHh5YafpldJddcFOc/fZg8dQ9q5gN8BJ1NrCOAJ
+         +SPIlTns8Op0xFHHfTAmxdACH3L+jxfXSwyDBaG902vyUhevUL0QWCJl5HqtgnRn+T
+         FPbMAPRcftfOOROKoEDaUGsyQQeHipKpdUlouzr0sBijfEvUn9N9LmSM1s/L9ip1g9
+         gOedHi4i44KukA1QAS5aPk2QJqUcjL5U2HtRS4Gtlo4uklJnCDXjgQH80uLBZ2Nm98
+         yyOunXUcz454g==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,86 +49,136 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 30/40] kselftest/arm64: Add manual encodings for SME instructions
-Date:   Mon,  7 Feb 2022 15:20:59 +0000
-Message-Id: <20220207152109.197566-31-broonie@kernel.org>
+Subject: [PATCH v11 14/40] arm64/sme: Implement support for TPIDR2
+Date:   Mon,  7 Feb 2022 15:20:43 +0000
+Message-Id: <20220207152109.197566-15-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1609; h=from:subject; bh=814u6qr00Svitr+wGJ4FW2qUnHufihham66MiXu5/2Q=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjcpQU/zMY016e3r9C1N+w3VbKrNCXwwUgVA8Z4 S6BeLAKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE43AAKCRAk1otyXVSH0JSPB/ sFqRyZJGz84m8hIKOzrXOdJ4N8/Jukp+2huVNit9hIIwBa3Tllk33k2qNgUpNYfi0Zcp2V2xXTgLdD CyuJZVvHjlIw8JEUAEmkF0RXP+k4iNmMccf1kkr6cfj9x5BEx5NcJgEAAUHrL9vMXBwF0+/edhURhh pV/97BbYKwqEevAy7RCZq9wtkWyhHq66mK8bZH6DpYbmnZw2K0O6lG44ahw4d0cuTh0IB8NgRQHGwh 9P8eRjzN34Z2cucDTK7lHMFjwkMtXtTynEb6ZbLvji73SngwfEKb/USWwszhcUINbYQifq52yTIVv0 84b45sgX93InVfyVBcKinXF8tth8z1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4258; h=from:subject; bh=c5P3WzFe/myKJt98GT0tqU73tZQT7e7FvegzOnxWfIU=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjPq7eZ7r91LceN+pOy5udpzbiaxzgFRcvUb03E Y2wAT9eJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4zwAKCRAk1otyXVSH0ESRB/ oDKlmw2p8i8C+nF4VMW0Wie1UQnj0ogKIF1pld0lWR61S8MCXndTwp1fMFj4aXcB4YwFn1Opx0On0l mmS4nfO6lC+Pnp1/mn/ccOAxvcMjEZwAkYWHRER/NvlIAwnIn/IQdx9y+3fBMzZt5tSt0MpBlVIqnn 7FeYhQaQeinCq0g2xNugt7Ra+u9/o36NWJzSjbeVBstgcyGN6dzB5tbRfUuxYfQpZh/mAyAFKO98v2 WHCWDx0IyxVsc0rfoDIbQ5QQJ5MeXLhmCeKj4qShiBU9xnw8at0cCbkE/G9AIGKGIgbpzxmBspJSKM L2xp7qklR14OpbDF8sDKlLdPL4nZao
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As for the kernel so that we don't have ambitious toolchain requirements
-to build the tests manually encode some of the SVE instructions.
+The Scalable Matrix Extension introduces support for a new thread specific
+data register TPIDR2 intended for use by libc. The kernel must save the
+value of TPIDR2 on context switch and should ensure that all new threads
+start off with a default value of 0. Add a field to the thread_struct to
+store TPIDR2 and context switch it with the other thread specific data.
+
+In case there are future extensions which also use TPIDR2 we introduce
+system_supports_tpidr2() and use that rather than system_supports_sme()
+for TPIDR2 handling.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/sme-inst.h | 51 +++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/sme-inst.h
+ arch/arm64/include/asm/cpufeature.h |  5 +++++
+ arch/arm64/include/asm/processor.h  |  1 +
+ arch/arm64/kernel/fpsimd.c          |  4 ++++
+ arch/arm64/kernel/process.c         | 14 ++++++++++++--
+ 4 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/sme-inst.h b/tools/testing/selftests/arm64/fp/sme-inst.h
-new file mode 100644
-index 000000000000..7191e53ca1c0
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/sme-inst.h
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2021-2 ARM Limited.
-+// Original author: Mark Brown <broonie@kernel.org>
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index 9d36035acce3..12252352d2ee 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -747,6 +747,11 @@ static __always_inline bool system_supports_fa64(void)
+ 		cpus_have_const_cap(ARM64_SME_FA64);
+ }
+ 
++static __always_inline bool system_supports_tpidr2(void)
++{
++	return system_supports_sme();
++}
 +
-+#ifndef SME_INST_H
-+#define SME_INST_H
+ static __always_inline bool system_supports_cnp(void)
+ {
+ 	return IS_ENABLED(CONFIG_ARM64_CNP) &&
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index f2c2ebd440e2..008a1767ebff 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -168,6 +168,7 @@ struct thread_struct {
+ 	u64			mte_ctrl;
+ #endif
+ 	u64			sctlr_user;
++	u64			tpidr2_el0;
+ };
+ 
+ static inline unsigned int thread_get_vl(struct thread_struct *thread,
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 1edb3996f9cf..40ef89120774 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1092,6 +1092,10 @@ void sme_kernel_enable(const struct arm64_cpu_capabilities *__always_unused p)
+ 	/* Allow SME in kernel */
+ 	write_sysreg(read_sysreg(CPACR_EL1) | CPACR_EL1_SMEN_EL1EN, CPACR_EL1);
+ 	isb();
 +
-+/*
-+ * RDSVL X\nx, #\imm
-+ */
-+.macro rdsvl nx, imm
-+	.inst	0x4bf5800			\
-+		| (\imm << 5)			\
-+		| (\nx)
-+.endm
-+
-+.macro smstop
-+	msr	S0_3_C4_C6_3, xzr
-+.endm
-+
-+.macro smstart_za
-+	msr	S0_3_C4_C5_3, xzr
-+.endm
-+
-+.macro smstart_sm
-+	msr	S0_3_C4_C3_3, xzr
-+.endm
-+
-+/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _ldr_za nw, nxbase, offset=0
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _str_za nw, nxbase, offset=0
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+#endif
++	/* Allow EL0 to access TPIDR2 */
++	write_sysreg(read_sysreg(SCTLR_EL1) | SCTLR_ELx_ENTP2, SCTLR_EL1);
++	isb();
+ }
+ 
+ /*
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 5369e649fa79..e69a3dcdb0d9 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -250,6 +250,8 @@ void show_regs(struct pt_regs *regs)
+ static void tls_thread_flush(void)
+ {
+ 	write_sysreg(0, tpidr_el0);
++	if (system_supports_tpidr2())
++		write_sysreg_s(0, SYS_TPIDR2_EL0);
+ 
+ 	if (is_compat_task()) {
+ 		current->thread.uw.tp_value = 0;
+@@ -343,6 +345,8 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
+ 		 * out-of-sync with the saved value.
+ 		 */
+ 		*task_user_tls(p) = read_sysreg(tpidr_el0);
++		if (system_supports_tpidr2())
++			p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
+ 
+ 		if (stack_start) {
+ 			if (is_compat_thread(task_thread_info(p)))
+@@ -353,10 +357,12 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
+ 
+ 		/*
+ 		 * If a TLS pointer was passed to clone, use it for the new
+-		 * thread.
++		 * thread.  We also reset TPIDR2 if it's in use.
+ 		 */
+-		if (clone_flags & CLONE_SETTLS)
++		if (clone_flags & CLONE_SETTLS) {
+ 			p->thread.uw.tp_value = tls;
++			p->thread.tpidr2_el0 = 0;
++		}
+ 	} else {
+ 		/*
+ 		 * A kthread has no context to ERET to, so ensure any buggy
+@@ -387,6 +393,8 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
+ void tls_preserve_current_state(void)
+ {
+ 	*task_user_tls(current) = read_sysreg(tpidr_el0);
++	if (system_supports_tpidr2() && !is_compat_task())
++		current->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
+ }
+ 
+ static void tls_thread_switch(struct task_struct *next)
+@@ -399,6 +407,8 @@ static void tls_thread_switch(struct task_struct *next)
+ 		write_sysreg(0, tpidrro_el0);
+ 
+ 	write_sysreg(*task_user_tls(next), tpidr_el0);
++	if (system_supports_tpidr2())
++		write_sysreg_s(next->thread.tpidr2_el0, SYS_TPIDR2_EL0);
+ }
+ 
+ /*
 -- 
 2.30.2
 
