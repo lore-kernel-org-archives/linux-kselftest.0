@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85E1AC35274
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2064C47081
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350650AbiBGPfY (ORCPT
+        id S1355431AbiBGPf1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        Mon, 7 Feb 2022 10:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346602AbiBGPX5 (ORCPT
+        with ESMTP id S1357148AbiBGPZB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:57 -0500
+        Mon, 7 Feb 2022 10:25:01 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7F3C0401CC
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64599C0401C8
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD455B815B1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D2EC004E1;
-        Mon,  7 Feb 2022 15:23:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0165DB815B3
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555D0C340F4;
+        Mon,  7 Feb 2022 15:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247434;
-        bh=IpbUE1LUP1+wV97Or602iA0h2YoCGBZmK9vzxYxrIfM=;
+        s=k20201202; t=1644247497;
+        bh=cgdi638K6gOXeVTGj0VuOwnAnuiVyUDgExwOXHRRVd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Knu0skggysEaiF7IJ8PcypaX8QOJYb/dn7Zj/8PgNBgdvQFk/gZCbnd/8FCsA3O1Y
-         QQqej9fwfXmn5zkrR9V5dWLeFXJRm68KfWdn5VY3c8j08cwoBDACZMKL0uq14+gsvA
-         9jWnG17M39UlC7J2CJ62ZSmmiy5tBBfwQZ7E3EFIjOXRbel8B/0UOXBRy4UEGncoF7
-         kSUSVMYmDfiQCfLVjfI52TBQkqyG5w7W6nKBx5HLmBg362ryyOmtLsJa3NFgbuuJlY
-         MVlg4tNiS+o9h+HJL2bpiKJhs/dSDx/bnmMGdct4c/XksbaPM7Fs0ULn54xuIuGQZ9
-         gZQYOGp7CsahQ==
+        b=NlXWd5ixqoF0p8pvQL7xagRiJlTwmaMkev9JmaYb1BHe3uWYu4iBF0WtKb2EYpgc/
+         5Dfgd01pi/xn7Im75RF2TtsQhNDWDrYrhx36pNNXITvfbWp4DmTZbK5N/C0RjbnJzt
+         16sF8jrJPHOT8nkk8MDxtXF343Hgm+/O3RERLNvhtXrDh2HR3Rybb8xy/X7Xm00BuS
+         HmcffOXGriTrOY4rB7bsxtSzdCpiIu0cqxlAfnSYaDDKkXqTkUZt37209PkmxgM5Nq
+         zF1eaSJga3zSts1BkFbARdDnEvd+lH5V+7uBJBjeoaRU06tezlOYuuMTGMAmpCLFxQ
+         VLE+mPzHOwRCg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,74 +49,129 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 12/40] arm64/sme: Implement sysctl to set the default vector length
-Date:   Mon,  7 Feb 2022 15:20:41 +0000
-Message-Id: <20220207152109.197566-13-broonie@kernel.org>
+Subject: [PATCH v11 27/40] KVM: arm64: Trap SME usage in guest
+Date:   Mon,  7 Feb 2022 15:20:56 +0000
+Message-Id: <20220207152109.197566-28-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1673; h=from:subject; bh=IpbUE1LUP1+wV97Or602iA0h2YoCGBZmK9vzxYxrIfM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjOFgJn/lc8qyFbpsUtXlg3lgi4N72n7+sKm+k1 dP+cSUGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4zgAKCRAk1otyXVSH0BTZB/ 48DmysOVEhKpAJdsED17jy4Q1Ns7i6F5ip4GPRXKoMLStclNHtPu1WNsl1qW1u2FGv6Q3UpcYxqY6w ebMZ368wJEh7e6sYFDX5REG79RlS5dXevN1N2b0e0iKXUMfey3LAV3UZB1aQXxY5cPsolixv9m4GMz 7siONunKrXUuzPpCUzYljbibbB0qmjJbGphd2h8hyraleDggBvje5knSzUPCkA2LR3zF8ObIiegbxC 8PVoBito5t3Uue/7aiPJGrLLpMq0hfA/aXHnIGqlbIfeNkeVAjY2OzxHvvOSFpxAal/wI7/uG/2Vef 6WrYzMMoPc7UUq+M6ditMyeOfE4/zC
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3889; h=from:subject; bh=cgdi638K6gOXeVTGj0VuOwnAnuiVyUDgExwOXHRRVd8=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjansdQYHHzDuSejU2oznqVIQ5HL49mBqqjO83c SNsJ1MqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE42gAKCRAk1otyXVSH0K7fB/ wJ5d0JGHWcNXD0gdwAOrGxpHw00fkcJ+W6scCR31JD97Cj/tcJy8vMGEcGYEu4LXANqq/s/tZqEvsy MEgUXGrVK5Yax/WRxiPaE5wUW28Hyhh3964RYExO2jeRhbJjQCDFYj78BaMfT5WAJgMFtz4Q/SBKlc 1cvlaY1dGICADHRkcwxPPEYP//CVzA84vyQgccgJpPFySgREznIee5s4Sj7GhPbMRtqD9chyIR0QpC 4efGzLWhIdtAzlePER7pe3HinvdwRt5WPZwncIvqAoF3b8CwUeRykBujFLD85dI2nNqNhrpAI0aYjl 64XVT+ygUIGfTNqOqeVVnz95wGDnl1
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As for SVE provide a sysctl which allows the default SME vector length to
-be configured.
+SME defines two new traps which need to be enabled for guests to ensure
+that they can't use SME, one for the main SME operations which mirrors the
+traps for SVE and another for access to TPIDR2 in SCTLR_EL2.
+
+For VHE manage SMEN along with ZEN in activate_traps() and the FP state
+management callbacks, along with SCTLR_EL2.EnTPIDR2.  There is no
+existing dynamic management of SCTLR_EL2.
+
+For nVHE manage TSM in activate_traps() along with the fine grained
+traps for TPIDR2 and SMPRI.  There is no existing dynamic management of
+fine grained traps.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+ arch/arm64/kvm/hyp/nvhe/switch.c | 30 ++++++++++++++++++++++++++++++
+ arch/arm64/kvm/hyp/vhe/switch.c  | 11 ++++++++++-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 3fb2167f8af7..841b9609342f 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -483,6 +483,30 @@ static int __init sve_sysctl_init(void)
- static int __init sve_sysctl_init(void) { return 0; }
- #endif /* ! (CONFIG_ARM64_SVE && CONFIG_SYSCTL) */
+diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+index 6410d21d8695..caace61ea459 100644
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@ -47,10 +47,24 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
+ 		val |= CPTR_EL2_TFP | CPTR_EL2_TZ;
+ 		__activate_traps_fpsimd32(vcpu);
+ 	}
++	if (cpus_have_final_cap(ARM64_SME))
++		val |= CPTR_EL2_TSM;
  
-+#if defined(CONFIG_ARM64_SME) && defined(CONFIG_SYSCTL)
-+static struct ctl_table sme_default_vl_table[] = {
-+	{
-+		.procname	= "sme_default_vector_length",
-+		.mode		= 0644,
-+		.proc_handler	= vec_proc_do_default_vl,
-+		.extra1		= &vl_info[ARM64_VEC_SME],
-+	},
-+	{ }
-+};
-+
-+static int __init sme_sysctl_init(void)
-+{
-+	if (system_supports_sme())
-+		if (!register_sysctl("abi", sme_default_vl_table))
-+			return -EINVAL;
-+
-+	return 0;
-+}
-+
-+#else /* ! (CONFIG_ARM64_SME && CONFIG_SYSCTL) */
-+static int __init sme_sysctl_init(void) { return 0; }
-+#endif /* ! (CONFIG_ARM64_SME && CONFIG_SYSCTL) */
-+
- #define ZREG(sve_state, vq, n) ((char *)(sve_state) +		\
- 	(SVE_SIG_ZREG_OFFSET(vq, n) - SVE_SIG_REGS_OFFSET))
+ 	write_sysreg(val, cptr_el2);
+ 	write_sysreg(__this_cpu_read(kvm_hyp_vector), vbar_el2);
  
-@@ -1681,6 +1705,9 @@ static int __init fpsimd_init(void)
- 	if (cpu_have_named_feature(SME) && !cpu_have_named_feature(SVE))
- 		pr_notice("SME is implemented but not SVE\n");
- 
--	return sve_sysctl_init();
-+	sve_sysctl_init();
-+	sme_sysctl_init();
++	if (cpus_have_final_cap(ARM64_SME)) {
++		val = read_sysreg_s(SYS_HFGRTR_EL2);
++		val &= ~(HFGxTR_EL2_nTPIDR2_EL0_MASK |
++			 HFGxTR_EL2_nSMPRI_EL1_MASK);
++		write_sysreg_s(val, SYS_HFGRTR_EL2);
 +
-+	return 0;
++		val = read_sysreg_s(SYS_HFGWTR_EL2);
++		val &= ~(HFGxTR_EL2_nTPIDR2_EL0_MASK |
++			 HFGxTR_EL2_nSMPRI_EL1_MASK);
++		write_sysreg_s(val, SYS_HFGWTR_EL2);
++	}
++
+ 	if (cpus_have_final_cap(ARM64_WORKAROUND_SPECULATIVE_AT)) {
+ 		struct kvm_cpu_context *ctxt = &vcpu->arch.ctxt;
+ 
+@@ -94,9 +108,25 @@ static void __deactivate_traps(struct kvm_vcpu *vcpu)
+ 
+ 	write_sysreg(this_cpu_ptr(&kvm_init_params)->hcr_el2, hcr_el2);
+ 
++	if (cpus_have_final_cap(ARM64_SME)) {
++		u64 val;
++
++		val = read_sysreg_s(SYS_HFGRTR_EL2);
++		val |= HFGxTR_EL2_nTPIDR2_EL0_MASK |
++			HFGxTR_EL2_nSMPRI_EL1_MASK;
++		write_sysreg_s(val, SYS_HFGRTR_EL2);
++
++		val = read_sysreg_s(SYS_HFGWTR_EL2);
++		val |= HFGxTR_EL2_nTPIDR2_EL0_MASK |
++			HFGxTR_EL2_nSMPRI_EL1_MASK;
++		write_sysreg_s(val, SYS_HFGWTR_EL2);
++	}
++
+ 	cptr = CPTR_EL2_DEFAULT;
+ 	if (vcpu_has_sve(vcpu) && (vcpu->arch.flags & KVM_ARM64_FP_ENABLED))
+ 		cptr |= CPTR_EL2_TZ;
++	if (cpus_have_final_cap(ARM64_SME))
++		cptr &= ~CPTR_EL2_TSM;
+ 
+ 	write_sysreg(cptr, cptr_el2);
+ 	write_sysreg(__kvm_hyp_host_vector, vbar_el2);
+diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
+index 619353b06e38..a4d2fb5c9710 100644
+--- a/arch/arm64/kvm/hyp/vhe/switch.c
++++ b/arch/arm64/kvm/hyp/vhe/switch.c
+@@ -38,7 +38,8 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
+ 
+ 	val = read_sysreg(cpacr_el1);
+ 	val |= CPACR_EL1_TTA;
+-	val &= ~(CPACR_EL1_ZEN_EL0EN | CPACR_EL1_ZEN_EL1EN);
++	val &= ~(CPACR_EL1_ZEN_EL0EN | CPACR_EL1_ZEN_EL1EN |
++		 CPACR_EL1_SMEN_EL0EN | CPACR_EL1_SMEN_EL1EN);
+ 
+ 	/*
+ 	 * With VHE (HCR.E2H == 1), accesses to CPACR_EL1 are routed to
+@@ -59,6 +60,10 @@ static void __activate_traps(struct kvm_vcpu *vcpu)
+ 		__activate_traps_fpsimd32(vcpu);
+ 	}
+ 
++	if (cpus_have_final_cap(ARM64_SME))
++		write_sysreg(read_sysreg(sctlr_el2) & ~SCTLR_ELx_ENTP2,
++			     sctlr_el2);
++
+ 	write_sysreg(val, cpacr_el1);
+ 
+ 	write_sysreg(__this_cpu_read(kvm_hyp_vector), vbar_el1);
+@@ -80,6 +85,10 @@ static void __deactivate_traps(struct kvm_vcpu *vcpu)
+ 	 */
+ 	asm(ALTERNATIVE("nop", "isb", ARM64_WORKAROUND_SPECULATIVE_AT));
+ 
++	if (cpus_have_final_cap(ARM64_SME))
++		write_sysreg(read_sysreg(sctlr_el2) | SCTLR_ELx_ENTP2,
++			     sctlr_el2);
++
+ 	write_sysreg(CPACR_EL1_DEFAULT, cpacr_el1);
+ 	write_sysreg(vectors, vbar_el1);
  }
- core_initcall(fpsimd_init);
 -- 
 2.30.2
 
