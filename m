@@ -2,100 +2,98 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12633C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39570C433FE
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 12:32:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243155AbiBGM2N (ORCPT
+        id S1382629AbiBGM20 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 07:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        Mon, 7 Feb 2022 07:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383137AbiBGLVk (ORCPT
+        with ESMTP id S1382733AbiBGMYW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 06:21:40 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92422C0401E4;
-        Mon,  7 Feb 2022 03:21:26 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so2452677pjh.3;
-        Mon, 07 Feb 2022 03:21:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u1SeK1c7GsxTi1KJRtX41+e8KV9bbkC6jBlAR+v8yco=;
-        b=qek10+XaY11auEJTZ6D2YUOXnJNC2jahYrh8WmWDjUshFRhDhJ9MUUpTlYEZ1NMIxk
-         OJK15B11YbOuuQSFH2zv3+M1qNHESwuLSwwDRnd8qF2BlKd0yf0etXtUzqwqgLzIWmxu
-         X5f/BuOsQtYFxvb+/AjXFs4g0VDQFUwHY2s5OvO570DzRPic/18rXaWBk4Eo/GteEX9M
-         7wQGacG4s4RUi5vg/uaOxIdhZZPotD6Z5dG/iqk3bh4DJqU58gi221g9puGL1MROSccY
-         3FMXdYR5NgOd/ii7X7VguVEijRWdC8skg5uriwOossgj6UvpMQA5KoRGeYMo/RchUYq7
-         jWeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u1SeK1c7GsxTi1KJRtX41+e8KV9bbkC6jBlAR+v8yco=;
-        b=M47+xtL9mMQDHbnpNjL5mYrERhTYZ2+G3UgITKi9qmuLFaa56kIWV9vdpEtKUUCrK+
-         XIQZt3WkcLvkSMuSXxjgjAhDVLAfR6+JqHdZIwQVqFQoX1T78DRdnRRu05VvilqBSrNw
-         gZiy2QmSRrR3iSw24HcI70SJ3FyX441zZq+Na14vB8/tj67DJpwtQ7CIXYqogEP1smOg
-         cOUE2PXH99HhlFgTCAq9yKFBvMSzDlcS3eqp3XxRm9/XYRiVttIunTBgFtVtA31MT58E
-         a+RH+n/EDVn+z3MljPwhdzflTqZhR/6NiHvXPZUuIoczC29lvs2dxYdER4LQj/KmnHCh
-         VLEg==
-X-Gm-Message-State: AOAM530dhQQX7BzJh8Q4tx8P86v6KuI+yBFhONXA7YITqYJ0VP39sS0E
-        KmJOYhOOYmCJKsjYaIynnOc=
-X-Google-Smtp-Source: ABdhPJyyDGXxcAT+b6VN7v+g7nzcvVC6pBxqH3gvy90hhQbUrZ66KZpL9Y/MgLcgt8d+zNOrJd4/eQ==
-X-Received: by 2002:a17:90b:3802:: with SMTP id mq2mr13748921pjb.236.1644232886066;
-        Mon, 07 Feb 2022 03:21:26 -0800 (PST)
-Received: from localhost.localdomain ([2400:2410:93a3:bc00:d659:4e05:9b13:b711])
-        by smtp.gmail.com with ESMTPSA id w11sm11791400pfu.50.2022.02.07.03.21.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 03:21:25 -0800 (PST)
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     brendanhiggins@google.com
-Cc:     akirakawata1@gmail.com, Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] Documentation: KUnit: Fix usage bug
-Date:   Mon,  7 Feb 2022 20:20:44 +0900
-Message-Id: <20220207112043.397074-1-akirakawata1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 7 Feb 2022 07:24:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E93C002B4D;
+        Mon,  7 Feb 2022 04:18:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9B090210E7;
+        Mon,  7 Feb 2022 12:18:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644236292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i4aAhbDoTDfRME9edOXYN8Xd3j7KeUJo6FCdttuCi7Q=;
+        b=qcuQVmPAKpuli8d8JKcy9s2e+6GX/jOzZeZJNIji/24oWaLjPX8+Cz2+qzRBS1bRUmJPDe
+        pYqkF0kg059Fuh0emCFA3zwXUDfANmYFDp+aiQv2AFBdtdSYZWeY8qy3+mQ+BfgWCYW2ra
+        eFvrMzdhrvh2BOyfRa+Pli1YwbUwxbk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 781D913BE6;
+        Mon,  7 Feb 2022 12:18:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AInNHAQOAWLMegAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 07 Feb 2022 12:18:12 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>
+Subject: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check against new user credentials
+Date:   Mon,  7 Feb 2022 13:17:55 +0100
+Message-Id: <20220207121800.5079-2-mkoutny@suse.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220207121800.5079-1-mkoutny@suse.com>
+References: <20220207121800.5079-1-mkoutny@suse.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix a bug of kunit documentation.
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=205773
+The check is currently against the current->cred but since those are
+going to change and we want to check RLIMIT_NPROC condition after the
+switch, supply the capability check with the new cred.
+But since we're checking new_user being INIT_USER any new cred's
+capability-based allowance may be redundant when the check fails and the
+alternative solution would be revert of the commit 2863643fb8b9
+("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
 
-: Quoting Steve Pfetsch:
-:
-: kunit documentation is incorrect:
-: https://kunit.dev/third_party/stable_kernel/docs/usage.html
-: struct rectangle *self = container_of(this, struct shape, parent);
-:
-:
-: Shouldn't it be:
-: struct rectangle *self = container_of(this, struct rectangle, parent);
-: ?
+Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
 
-Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
+Cc: Solar Designer <solar@openwall.com>
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
 ---
- Documentation/dev-tools/kunit/usage.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/sys.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 76af931a332c..1c83e7d60a8a 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -242,7 +242,7 @@ example:
- 
- 	int rectangle_area(struct shape *this)
- 	{
--		struct rectangle *self = container_of(this, struct shape, parent);
-+		struct rectangle *self = container_of(this, struct rectangle, parent);
- 
- 		return self->length * self->width;
- 	};
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 8ea20912103a..48c90dcceff3 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -481,7 +481,8 @@ static int set_user(struct cred *new)
+ 	 */
+ 	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
+ 			new_user != INIT_USER &&
+-			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
++			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
++			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
+ 		current->flags |= PF_NPROC_EXCEEDED;
+ 	else
+ 		current->flags &= ~PF_NPROC_EXCEEDED;
 -- 
-2.25.1
+2.34.1
 
