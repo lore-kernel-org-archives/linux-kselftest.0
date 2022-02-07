@@ -2,205 +2,102 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC5EC433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 20:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5F44C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 20:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241416AbiBGULh (ORCPT
+        id S230473AbiBGU3w (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 15:11:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        Mon, 7 Feb 2022 15:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240453AbiBGUIk (ORCPT
+        with ESMTP id S242125AbiBGU1V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:08:40 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07568C0401E1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:08:40 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id y9so6387051pjf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:08:40 -0800 (PST)
+        Mon, 7 Feb 2022 15:27:21 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A7CC0401E4
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:27:18 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id cz16so14424765edb.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:27:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LNwds3cgV6uMX28QySXkXVMQplA0HsKCenltQ/gMoBA=;
-        b=j258jgaQuSFCKLNbLuL3hr6Uk1FCHwaxDyBxLgVGgZ0arJ4S/Ms8LrI5m+TzWnxBP7
-         AYJe7XCXhyLOOE2e1/5DQnqv5jTOvSXHRSC34HtUW4xAPd5IRwPCivVKJZDfXlVoOnV5
-         sYGZ36Ev6Q1mJM6vb45h5142vJzEhYN0aGLqMn+Y8LUIZovnNTuwduSJzqa4TTvF9LvI
-         8XDwnaqm6MSAved76vNOh0StXkD66tT3gAUYso022ea2JISSaI5PFtw4mhdK0klkaEtf
-         F6rcqby0qSTws2cPiX4xFVG12aR+ZNTJDmsISE4vgH8w4Py6RyI27wd5Xx0uco5kCin8
-         XqTA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y0o7uOOFR/F8wdFMHcK21ektAthAmrg4gw7mo/oxzd4=;
+        b=W+jEhB6BQocffxsFNkW+QnIj1nMaeUqVvtmgY5zdnPDs+Nl9psIec7vViyEMf3K8eY
+         AWEv/EFHjEuuMQtec0OsFSFAEEx748otMn9oQZ4FwkLpJrHKqLz4qMpEz8ccLJjAQnBq
+         4PLvMgxVzPRNB78doQxoaq4QwYt00S4K2U78A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LNwds3cgV6uMX28QySXkXVMQplA0HsKCenltQ/gMoBA=;
-        b=YFZAkHDOTJGPZ91YY1JJ2EGiBWoZkBguLhSU7x4rase2oLV322S2UiQgIh4iETYYDg
-         focmQ3DH4lWZX6Tk5mL0+cspK0WO84L4KLf1qgrcySSsskGsOJAGJJo9ws+iVP8zF4Vu
-         R+uvaZz39LCDTZ2lj63BmPvJgsLKeL55UgSLjtGAm7E7o0chT0Pg65GHkGD2ejWJV13t
-         YbiIvftzoDZ4XFdWg2nXIaoOJvPKWVH8JK6V5GkZTL2xeija9+yaXuaxHlt5pevXtZna
-         AkI9RQR5bErMyMZxC0VxvRsRkT6e9hqCQUvckFiPOgAW3cbbXDz/v5udPmU/Q8P69+tB
-         M2hg==
-X-Gm-Message-State: AOAM532RN1ZaziA+hEAd/gPeDNYRN1nj5Xme05f4OClRZs4u/AIQmedN
-        r9u7TTbmTkwm50ZuQmL10Kb/XhmkGrxEGJG/508HOg==
-X-Google-Smtp-Source: ABdhPJyCyMcvR+grYQyc1blHWaBUPNliRVb5L5Dbb4GWBaCaP0ktKX+iEoVK88cuZrP4dHVThhJlUPBfLOVL/BsHw8E=
-X-Received: by 2002:a17:902:b682:: with SMTP id c2mr1313446pls.126.1644264519213;
- Mon, 07 Feb 2022 12:08:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20220207183308.1829495-1-ribalda@chromium.org>
-In-Reply-To: <20220207183308.1829495-1-ribalda@chromium.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 7 Feb 2022 15:08:30 -0500
-Message-ID: <CAFd5g46X_jptwL5UsebR2Ooq7ubneSZ5p-Qp4BOL9dt2gFhMAw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kunit: Introduce _NULL and _NOT_NULL macros
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y0o7uOOFR/F8wdFMHcK21ektAthAmrg4gw7mo/oxzd4=;
+        b=PL3KyTokd6f47PYbVthxy3m5Wtpqey8wjdaXfx/4xQeTwzsa/xgWOW3u+2bVBPpVfh
+         TsvyCux0ULiivIuQBt75xCik9zb4EbK71/j8LzCyZKn2zVpITbfBFmQT94V7ingzwhUQ
+         cRssBG/kv7cU8Ctjwmh6ZyEpfaM9TeCKEymd+xCF05E7F22A9vaHNK5JXIFWndhFoL9+
+         LafuiSV3j7kQYCYPg9uD+FTDv+JIOhfthU1c3WSe8Y0kIjNCMi7plaaSGirb13JyuIaS
+         tCyh/FkZOlRhd66bqPLUY6nzsznIklhiLF9D3xsR/gmGIQ1gwHQHr7VC0Aj4mtUUvZNe
+         R0ig==
+X-Gm-Message-State: AOAM531ffBcRKd1y+0sOm1fRdMjSvxokpjEtcvuXtCoruMN/iQ34Iwow
+        pa1rGcU0qqddgdugSUuTJMnezA==
+X-Google-Smtp-Source: ABdhPJwZ01sfMnma+G/owZbNQQ6Vbx9u1iDGad+CJgUFIBxKxstM5jut25ZccIWAIp+1Sc/C/BmxZA==
+X-Received: by 2002:a05:6402:1649:: with SMTP id s9mr1266085edx.38.1644265637064;
+        Mon, 07 Feb 2022 12:27:17 -0800 (PST)
+Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id t8sm787893eji.94.2022.02.07.12.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 12:27:16 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v2 2/6] kunit: use NULL macros
+Date:   Mon,  7 Feb 2022 21:27:10 +0100
+Message-Id: <20220207202714.1890024-2-ribalda@chromium.org>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+In-Reply-To: <20220207202714.1890024-1-ribalda@chromium.org>
+References: <20220207202714.1890024-1-ribalda@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 1:33 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Today, when we want to check if a pointer is NULL and not ERR we have
-> two options:
->
-> EXPECT_TRUE(test, ptr == NULL);
->
-> or
->
-> EXPECT_PTR_NE(test, ptr, (struct mystruct *)NULL);
->
-> Create a new set of macros that take care of NULL checks.
+Replace the NULL checks with the more specific and idiomatic NULL macros.
 
-Also worth mentioning that we have a KUNIT_EXPECT_NOT_ERR_OR_NULL()
-(as well as an ASSERT flavor); however, I can imagine circumstances
-where you don't want to check if a pointer is potentially an err_ptr:
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ lib/kunit/kunit-example-test.c | 2 ++
+ lib/kunit/kunit-test.c         | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-https://elixir.bootlin.com/linux/v5.17-rc3/source/include/kunit/test.h#L1586
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index 4bbf37c04eba..91b1df7f59ed 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -91,6 +91,8 @@ static void example_all_expect_macros_test(struct kunit *test)
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, test);
+ 	KUNIT_EXPECT_PTR_EQ(test, NULL, NULL);
+ 	KUNIT_EXPECT_PTR_NE(test, test, NULL);
++	KUNIT_EXPECT_NULL(test, NULL);
++	KUNIT_EXPECT_NOT_NULL(test, test);
+ 
+ 	/* String assertions */
+ 	KUNIT_EXPECT_STREQ(test, "hi", "hi");
+diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+index 555601d17f79..8e2fe083a549 100644
+--- a/lib/kunit/kunit-test.c
++++ b/lib/kunit/kunit-test.c
+@@ -435,7 +435,7 @@ static void kunit_log_test(struct kunit *test)
+ 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+ 				     strstr(suite.log, "along with this."));
+ #else
+-	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
++	KUNIT_EXPECT_NULL(test, test->log);
+ #endif
+ }
+ 
+-- 
+2.35.0.263.gb82422642f-goog
 
-Otherwise - aside from a minor nit below - this looks good. Send me
-the rebased version that Daniel mentioned, and I'll give it a
-reviewed-by.
-
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  include/kunit/test.h | 91 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b26400731c02..a84bf065e64b 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -1395,6 +1395,51 @@ do {                                                                            \
->                                           ##__VA_ARGS__)
->
->  /**
-> + * KUNIT_EXPECT_NULL() - Expects that @ptr is null.
-> + * @test: The test context object.
-> + * @ptr: an arbitrary pointer.
-> + *
-> + * Sets an expectation that the value that @ptr evaluates to is null. This is
-> + * semantically equivalent to KUNIT_EXPECT_PTR_EQ(@test, NULL, ptr).
-> + * See KUNIT_EXPECT_TRUE() for more information.
-> + */
-> +#define KUNIT_EXPECT_NULL(test, ptr)                                          \
-> +       KUNIT_BINARY_PTR_EQ_ASSERTION(test,                                    \
-> +                                     KUNIT_EXPECTATION,                       \
-> +                                     (typeof(ptr))NULL,                       \
-> +                                     ptr)
-
-Minor nit: can you put these new declarations just ahead of the
-existing KUNIT_{EXPECT|ASSERT}_NOT_ERR_OR_NULL() macros that I
-mentioned above respectively?
-
-> +#define KUNIT_EXPECT_NULL_MSG(test, ptr, fmt, ...)                            \
-> +       KUNIT_BINARY_PTR_EQ_MSG_ASSERTION(test,                                \
-> +                                         KUNIT_EXPECTATION,                   \
-> +                                         (typeof(ptr))NULL,                   \
-> +                                         ptr,                                 \
-> +                                         fmt,                                 \
-> +                                         ##__VA_ARGS__)
-> +/**
-> + * KUNIT_EXPECT_NOT_NULL() - Expects that @ptr is not null.
-> + * @test: The test context object.
-> + * @ptr: an arbitrary pointer.
-> + *
-> + * Sets an expectation that the value that @ptr evaluates to is not null. This
-> + * is semantically equivalent to KUNIT_EXPECT_PTR_NE(@test, NULL, ptr).
-> + * See KUNIT_EXPECT_TRUE() for more information.
-> + */
-> +#define KUNIT_EXPECT_NOT_NULL(test, ptr)                                      \
-> +       KUNIT_BINARY_PTR_NE_ASSERTION(test,                                    \
-> +                                     KUNIT_EXPECTATION,                       \
-> +                                     (typeof(ptr))NULL,                       \
-> +                                     ptr)
-> +
-> +#define KUNIT_EXPECT_NOT_NULL_MSG(test, ptr, fmt, ...)                        \
-> +       KUNIT_BINARY_PTR_NE_MSG_ASSERTION(test,                                \
-> +                                         KUNIT_EXPECTATION,                   \
-> +                                         (typeof(ptr))NULL,                   \
-> +                                         ptr,                                 \
-> +                                         fmt,                                 \
-> +                                         ##__VA_ARGS__)
-> +
-> +                          /**
->   * KUNIT_EXPECT_NE() - An expectation that @left and @right are not equal.
->   * @test: The test context object.
->   * @left: an arbitrary expression that evaluates to a primitive C type.
-> @@ -1678,6 +1723,52 @@ do {                                                                            \
->                                           fmt,                                 \
->                                           ##__VA_ARGS__)
->
-> +/**
-> + * KUNIT_ASSERT_NULL() - Asserts that pointers @ptr is null.
-> + * @test: The test context object.
-> + * @ptr: an arbitrary pointer.
-> + *
-> + * Sets an assertion that the values that @ptr evaluates to is null. This is
-> + * the same as KUNIT_EXPECT_NULL(), except it causes an assertion
-> + * failure (see KUNIT_ASSERT_TRUE()) when the assertion is not met.
-> + */
-> +#define KUNIT_ASSERT_NULL(test, ptr) \
-> +       KUNIT_BINARY_PTR_EQ_ASSERTION(test,                                    \
-> +                                     KUNIT_ASSERTION,                         \
-> +                                     (typeof(ptr))NULL,                       \
-> +                                     ptr)
-> +
-> +#define KUNIT_ASSERT_NULL_MSG(test, ptr, fmt, ...) \
-> +       KUNIT_BINARY_PTR_EQ_MSG_ASSERTION(test,                                \
-> +                                         KUNIT_ASSERTION,                     \
-> +                                         (typeof(ptr))NULL,                   \
-> +                                         ptr,                                 \
-> +                                         fmt,                                 \
-> +                                         ##__VA_ARGS__)
-> +
-> +/**
-> + * KUNIT_ASSERT_NOT_NULL() - Asserts that pointers @ptr is not null.
-> + * @test: The test context object.
-> + * @ptr: an arbitrary pointer.
-> + *
-> + * Sets an assertion that the values that @ptr evaluates to is not null. This
-> + * is the same as KUNIT_EXPECT_NOT_NULL(), except it causes an assertion
-> + * failure (see KUNIT_ASSERT_TRUE()) when the assertion is not met.
-> + */
-> +#define KUNIT_ASSERT_NOT_NULL(test, ptr) \
-> +       KUNIT_BINARY_PTR_NE_ASSERTION(test,                                    \
-> +                                     KUNIT_ASSERTION,                         \
-> +                                     (typeof(ptr))NULL,                       \
-> +                                     ptr)
-> +
-> +#define KUNIT_ASSERT_NOT_NULL_MSG(test, ptr, fmt, ...)                        \
-> +       KUNIT_BINARY_PTR_NE_MSG_ASSERTION(test,                                \
-> +                                         KUNIT_ASSERTION,                     \
-> +                                         (typeof(ptr))NULL,                   \
-> +                                         ptr,                                 \
-> +                                         fmt,                                 \
-> +                                         ##__VA_ARGS__)
-> +
->  /**
->   * KUNIT_ASSERT_NE() - An assertion that @left and @right are not equal.
->   * @test: The test context object.
-
-Cheers!
