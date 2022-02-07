@@ -2,257 +2,517 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A18D4C43217
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 13:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D46FC433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:35:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242694AbiBGN1l (ORCPT
+        id S232009AbiBGPe5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 08:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        Mon, 7 Feb 2022 10:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445598AbiBGMmS (ORCPT
+        with ESMTP id S1355431AbiBGPYk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 07:42:18 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0BBE033DB0;
-        Mon,  7 Feb 2022 04:33:57 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 7 Feb 2022 10:24:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D404C0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BBE201F386;
-        Mon,  7 Feb 2022 12:18:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644236292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LOAZl+X1cH+/PE8PnJNA97WZ/FEmmtdAOX5J155V/GY=;
-        b=R8vHFitE3/0c2+aGokRHHqIecoBd082bURHw791MAgCrpS+qdVLAID/ocEGvCoGhMecpAz
-        8vZtgPllVDkkTehtIMbSCysfFSrc9ShUVS4/eJouxWbDJ06PWi1EEGxlqdAAHmc6Siwwl3
-        6vp3aC0jiKvBudbRtwu0d5OAVauMN5M=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97D9113BBC;
-        Mon,  7 Feb 2022 12:18:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2KeSJAQOAWLMegAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 07 Feb 2022 12:18:12 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Eric Biederman <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>
-Subject: [RFC PATCH 2/6] set*uid: Check RLIMIT_PROC against new credentials
-Date:   Mon,  7 Feb 2022 13:17:56 +0100
-Message-Id: <20220207121800.5079-3-mkoutny@suse.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220207121800.5079-1-mkoutny@suse.com>
-References: <20220207121800.5079-1-mkoutny@suse.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F042CB815B3
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DCFC340F3;
+        Mon,  7 Feb 2022 15:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644247476;
+        bh=54fbHBhPsozwjp/3pATyx8OpVN6ucv7EKpZAVjJ2qAQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=T0237IHf3Qd6wr4uImfi51NbqCl9IOkazHNfuBj8SCPidpW6eaEep3lYIJgrGWEgq
+         rZ22gZcXP1Q4m7pIqx+3rAwYaFjnkSHtibqIcZRE6tj0v65OMMi1G1MPAhOUtQPFDD
+         FIbcKXVaWJNt+U+ezsrImewdSidvGehH+1hpsPCShUAOdvseOJhFR0AG3JOULlI+hX
+         Yywcbxqlkc1hWz23UV02hL3sQ9RZGcRMF9V9PsZcZW1VUcI8R3V8aKrLnYuxtbhv54
+         K2z7K1BWjFK+4WEph/H025m5I9MH9Why1QI/klRMFeAOu4kuSpbIbFga5MDywph7Bp
+         i0ePqDeiAwQQw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v11 22/40] arm64/sme: Implement ptrace support for streaming mode SVE registers
+Date:   Mon,  7 Feb 2022 15:20:51 +0000
+Message-Id: <20220207152109.197566-23-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
+References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14915; h=from:subject; bh=54fbHBhPsozwjp/3pATyx8OpVN6ucv7EKpZAVjJ2qAQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjWNBn52S0bIWVYmB4TcfeoCi0Q1cKp21rjNspq DD4Ok3uJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE41gAKCRAk1otyXVSH0GrlB/ 9x1xMpCmPENnlNQz5bT6ysspgPovwRtgTrmfJMmbdyhpX/2AkXT9LQ97RvsYk8AaKpYa7KVmO9QtEx 2Y9+C1x5YHSEIp5lz/C9SYmWOOw3pycC9xgdVf3Oc6HnS95KA29iuFRKt6sOGAoq3NOr77dqdTSUQX PQNQTOp9aOh//mqaN6aFd+8ey4xrbHsYb2un7LD0EIUrSXTG/Bc9YrtDi9KE22MoxXOBYhnot9HSYd hq8ChzaF7ZTrGS9874/yChhdDZIyzr5YVLKL2xSu5fPp64UT1uv5VW6o5vqCi1ZeWfw663gHTDjLXm d2W6BimjCppHHAcRZIFAqaKRbn+3pZ
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The generic idea is that not even root or capable user can force an
-unprivileged user's limit breach. (For historical and security reasons
-this check is postponed from set*uid to execve.) During the switch the
-resource consumption of target the user has to be checked. The commits
-905ae01c4ae2 ("Add a reference to ucounts for each cred") and
-21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts") made the
-check in set_user() look at the old user's consumption.
+The streaming mode SVE registers are represented using the same data
+structures as for SVE but since the vector lengths supported and in use
+may not be the same as SVE we represent them with a new type NT_ARM_SSVE.
+Unfortunately we only have a single 16 bit reserved field available in
+the header so there is no space to fit the current and maximum vector
+length for both standard and streaming SVE mode without redefining the
+structure in a way the creates a complicatd and fragile ABI. Since FFR
+is not present in streaming mode it is read and written as zero.
 
-This version of the fix simply moves the check to the place where the
-actual switch of the accounting structure happens -- set_cred_ucounts().
+Setting NT_ARM_SSVE registers will put the task into streaming mode,
+similarly setting NT_ARM_SVE registers will exit it. Reads that do not
+correspond to the current mode of the task will return the header with
+no register data. For compatibility reasons on write setting no flag for
+the register type will be interpreted as setting SVE registers, though
+users can provide no register data as an alternative mechanism for doing
+so.
 
-The other callers are kept without the check but with the per-userns
-accounting they may be newly subject to the check too.
-The set_cred_ucounts() becomes inconsistent since task->flags are
-passed by the caller but task_rlimit() is implicitly `current`'s, this
-patch is meant to illustrate the issue, nicer implementation is
-possible.
-
-Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- fs/exec.c               |  2 +-
- include/linux/cred.h    |  2 +-
- kernel/cred.c           | 24 +++++++++++++++++++++---
- kernel/fork.c           |  2 +-
- kernel/sys.c            | 21 +++------------------
- kernel/user_namespace.c |  2 +-
- 6 files changed, 28 insertions(+), 25 deletions(-)
+ arch/arm64/include/uapi/asm/ptrace.h |  13 +-
+ arch/arm64/kernel/fpsimd.c           |  21 ++-
+ arch/arm64/kernel/ptrace.c           | 212 +++++++++++++++++++++------
+ include/uapi/linux/elf.h             |   1 +
+ 4 files changed, 190 insertions(+), 57 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index fc598c2652b2..e759e42c61da 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1363,7 +1363,7 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	WRITE_ONCE(me->self_exec_id, me->self_exec_id + 1);
- 	flush_signal_handlers(me, 0);
+diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
+index 758ae984ff97..522b925a78c1 100644
+--- a/arch/arm64/include/uapi/asm/ptrace.h
++++ b/arch/arm64/include/uapi/asm/ptrace.h
+@@ -109,7 +109,7 @@ struct user_hwdebug_state {
+ 	}		dbg_regs[16];
+ };
  
--	retval = set_cred_ucounts(bprm->cred);
-+	retval = set_cred_ucounts(bprm->cred, NULL);
- 	if (retval < 0)
- 		goto out_unlock;
+-/* SVE/FP/SIMD state (NT_ARM_SVE) */
++/* SVE/FP/SIMD state (NT_ARM_SVE & NT_ARM_SSVE) */
  
-diff --git a/include/linux/cred.h b/include/linux/cred.h
-index fcbc6885cc09..455525ab380d 100644
---- a/include/linux/cred.h
-+++ b/include/linux/cred.h
-@@ -170,7 +170,7 @@ extern int set_security_override_from_ctx(struct cred *, const char *);
- extern int set_create_files_as(struct cred *, struct inode *);
- extern int cred_fscmp(const struct cred *, const struct cred *);
- extern void __init cred_init(void);
--extern int set_cred_ucounts(struct cred *);
-+extern int set_cred_ucounts(struct cred *, unsigned int *);
+ struct user_sve_header {
+ 	__u32 size; /* total meaningful regset content in bytes */
+@@ -220,6 +220,7 @@ struct user_sve_header {
+ 	(SVE_PT_SVE_PREG_OFFSET(vq, __SVE_NUM_PREGS) - \
+ 		SVE_PT_SVE_PREGS_OFFSET(vq))
  
- /*
-  * check for validity of credentials
-diff --git a/kernel/cred.c b/kernel/cred.c
-index 473d17c431f3..791cab70b764 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -370,7 +370,7 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
- 		ret = create_user_ns(new);
- 		if (ret < 0)
- 			goto error_put;
--		ret = set_cred_ucounts(new);
-+		ret = set_cred_ucounts(new, NULL);
- 		if (ret < 0)
- 			goto error_put;
- 	}
-@@ -492,7 +492,7 @@ int commit_creds(struct cred *new)
++/* For streaming mode SVE (SSVE) FFR must be read and written as zero */
+ #define SVE_PT_SVE_FFR_OFFSET(vq) \
+ 	(SVE_PT_REGS_OFFSET + __SVE_FFR_OFFSET(vq))
  
- 	/* do it
- 	 * RLIMIT_NPROC limits on user->processes have already been checked
--	 * in set_user().
-+	 * in set_cred_ucounts().
- 	 */
- 	alter_cred_subscribers(new, 2);
- 	if (new->user != old->user || new->user_ns != old->user_ns)
-@@ -663,7 +663,7 @@ int cred_fscmp(const struct cred *a, const struct cred *b)
- }
- EXPORT_SYMBOL(cred_fscmp);
+@@ -240,10 +241,12 @@ struct user_sve_header {
+ 			- SVE_PT_SVE_OFFSET + (__SVE_VQ_BYTES - 1))	\
+ 		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
  
--int set_cred_ucounts(struct cred *new)
-+int set_cred_ucounts(struct cred *new, unsigned int *nproc_flags)
+-#define SVE_PT_SIZE(vq, flags)						\
+-	 (((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE ?		\
+-		  SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, flags)	\
+-		: SVE_PT_FPSIMD_OFFSET + SVE_PT_FPSIMD_SIZE(vq, flags))
++#define SVE_PT_SIZE(vq, flags)						  \
++	 (((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE ?		  \
++		  SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, flags)	  \
++		: ((((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD ?  \
++		    SVE_PT_FPSIMD_OFFSET + SVE_PT_FPSIMD_SIZE(vq, flags) \
++		  : SVE_PT_REGS_OFFSET)))
+ 
+ /* pointer authentication masks (NT_ARM_PAC_MASK) */
+ 
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 2242c14a5a05..8b111b7f2006 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -645,14 +645,19 @@ static void __fpsimd_to_sve(void *sst, struct user_fpsimd_state const *fst,
+  */
+ static void fpsimd_to_sve(struct task_struct *task)
  {
- 	struct task_struct *task = current;
- 	const struct cred *old = task->real_cred;
-@@ -685,6 +685,24 @@ int set_cred_ucounts(struct cred *new)
- 	new->ucounts = new_ucounts;
- 	put_ucounts(old_ucounts);
+-	unsigned int vq;
++	unsigned int vq, vl;
+ 	void *sst = task->thread.sve_state;
+ 	struct user_fpsimd_state const *fst = &task->thread.uw.fpsimd_state;
  
-+	if (!nproc_flags)
-+		return 0;
-+
-+	/*
-+	 * We don't fail in case of NPROC limit excess here because too many
-+	 * poorly written programs don't check set*uid() return code, assuming
-+	 * it never fails if called by root.  We may still enforce NPROC limit
-+	 * for programs doing set*uid()+execve() by harmlessly deferring the
-+	 * failure to the execve() stage.
-+	 */
-+	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
-+			new->user != INIT_USER &&
-+			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
-+			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
-+		*nproc_flags |= PF_NPROC_EXCEEDED;
+ 	if (!system_supports_sve())
+ 		return;
+ 
+-	vq = sve_vq_from_vl(task_get_sve_vl(task));
++	if (thread_sm_enabled(&task->thread))
++		vl = task_get_sme_vl(task);
 +	else
-+		*nproc_flags &= ~PF_NPROC_EXCEEDED;
++		vl = task_get_sve_vl(task);
 +
- 	return 0;
++	vq = sve_vq_from_vl(vl);
+ 	__fpsimd_to_sve(sst, fst, vq);
  }
  
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 7cb21a70737d..a4005c679d29 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -3051,7 +3051,7 @@ int ksys_unshare(unsigned long unshare_flags)
- 		goto bad_unshare_cleanup_cred;
+@@ -669,7 +674,7 @@ static void fpsimd_to_sve(struct task_struct *task)
+  */
+ static void sve_to_fpsimd(struct task_struct *task)
+ {
+-	unsigned int vq;
++	unsigned int vq, vl;
+ 	void const *sst = task->thread.sve_state;
+ 	struct user_fpsimd_state *fst = &task->thread.uw.fpsimd_state;
+ 	unsigned int i;
+@@ -678,7 +683,12 @@ static void sve_to_fpsimd(struct task_struct *task)
+ 	if (!system_supports_sve())
+ 		return;
  
- 	if (new_cred) {
--		err = set_cred_ucounts(new_cred);
-+		err = set_cred_ucounts(new_cred, NULL);
- 		if (err)
- 			goto bad_unshare_cleanup_cred;
- 	}
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 48c90dcceff3..4e4eea30e235 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -472,21 +472,6 @@ static int set_user(struct cred *new)
- 	if (!new_user)
- 		return -EAGAIN;
+-	vq = sve_vq_from_vl(task_get_sve_vl(task));
++	if (thread_sm_enabled(&task->thread))
++		vl = task_get_sme_vl(task);
++	else
++		vl = task_get_sve_vl(task);
++
++	vq = sve_vq_from_vl(vl);
+ 	for (i = 0; i < SVE_NUM_ZREGS; ++i) {
+ 		p = (__uint128_t const *)ZREG(sst, vq, i);
+ 		fst->vregs[i] = arm64_le128_to_cpu(*p);
+@@ -819,8 +829,7 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 	/*
+ 	 * To ensure the FPSIMD bits of the SVE vector registers are preserved,
+ 	 * write any live register state back to task_struct, and convert to a
+-	 * regular FPSIMD thread.  Since the vector length can only be changed
+-	 * with a syscall we can't be in streaming mode while reconfiguring.
++	 * regular FPSIMD thread.
+ 	 */
+ 	if (task == current) {
+ 		get_cpu_fpsimd_context();
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 39dbdfdc38d3..0b8324fa1abc 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -714,21 +714,51 @@ static int system_call_set(struct task_struct *target,
+ #ifdef CONFIG_ARM64_SVE
+ 
+ static void sve_init_header_from_task(struct user_sve_header *header,
+-				      struct task_struct *target)
++				      struct task_struct *target,
++				      enum vec_type type)
+ {
+ 	unsigned int vq;
++	bool active;
++	bool fpsimd_only;
++	enum vec_type task_type;
+ 
+ 	memset(header, 0, sizeof(*header));
+ 
+-	header->flags = test_tsk_thread_flag(target, TIF_SVE) ?
+-		SVE_PT_REGS_SVE : SVE_PT_REGS_FPSIMD;
+-	if (test_tsk_thread_flag(target, TIF_SVE_VL_INHERIT))
+-		header->flags |= SVE_PT_VL_INHERIT;
++	/* Check if the requested registers are active for the task */
++	if (thread_sm_enabled(&target->thread))
++		task_type = ARM64_VEC_SME;
++	else
++		task_type = ARM64_VEC_SVE;
++	active = (task_type == type);
++
++	switch (type) {
++	case ARM64_VEC_SVE:
++		if (test_tsk_thread_flag(target, TIF_SVE_VL_INHERIT))
++			header->flags |= SVE_PT_VL_INHERIT;
++		fpsimd_only = !test_tsk_thread_flag(target, TIF_SVE);
++		break;
++	case ARM64_VEC_SME:
++		if (test_tsk_thread_flag(target, TIF_SME_VL_INHERIT))
++			header->flags |= SVE_PT_VL_INHERIT;
++		fpsimd_only = false;
++		break;
++	default:
++		WARN_ON_ONCE(1);
++		return;
++	}
+ 
+-	header->vl = task_get_sve_vl(target);
++	if (active) {
++		if (fpsimd_only) {
++			header->flags |= SVE_PT_REGS_FPSIMD;
++		} else {
++			header->flags |= SVE_PT_REGS_SVE;
++		}
++	}
++
++	header->vl = task_get_vl(target, type);
+ 	vq = sve_vq_from_vl(header->vl);
+ 
+-	header->max_vl = sve_max_vl();
++	header->max_vl = vec_max_vl(type);
+ 	header->size = SVE_PT_SIZE(vq, header->flags);
+ 	header->max_size = SVE_PT_SIZE(sve_vq_from_vl(header->max_vl),
+ 				      SVE_PT_REGS_SVE);
+@@ -739,19 +769,17 @@ static unsigned int sve_size_from_header(struct user_sve_header const *header)
+ 	return ALIGN(header->size, SVE_VQ_BYTES);
+ }
+ 
+-static int sve_get(struct task_struct *target,
+-		   const struct user_regset *regset,
+-		   struct membuf to)
++static int sve_get_common(struct task_struct *target,
++			  const struct user_regset *regset,
++			  struct membuf to,
++			  enum vec_type type)
+ {
+ 	struct user_sve_header header;
+ 	unsigned int vq;
+ 	unsigned long start, end;
+ 
+-	if (!system_supports_sve())
+-		return -EINVAL;
+-
+ 	/* Header */
+-	sve_init_header_from_task(&header, target);
++	sve_init_header_from_task(&header, target, type);
+ 	vq = sve_vq_from_vl(header.vl);
+ 
+ 	membuf_write(&to, &header, sizeof(header));
+@@ -759,49 +787,61 @@ static int sve_get(struct task_struct *target,
+ 	if (target == current)
+ 		fpsimd_preserve_current_state();
+ 
+-	/* Registers: FPSIMD-only case */
+-
+ 	BUILD_BUG_ON(SVE_PT_FPSIMD_OFFSET != sizeof(header));
+-	if ((header.flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD)
++	BUILD_BUG_ON(SVE_PT_SVE_OFFSET != sizeof(header));
++
++	switch ((header.flags & SVE_PT_REGS_MASK)) {
++	case SVE_PT_REGS_FPSIMD:
+ 		return __fpr_get(target, regset, to);
+ 
+-	/* Otherwise: full SVE case */
++	case SVE_PT_REGS_SVE:
++		start = SVE_PT_SVE_OFFSET;
++		end = SVE_PT_SVE_FFR_OFFSET(vq) + SVE_PT_SVE_FFR_SIZE(vq);
++		membuf_write(&to, target->thread.sve_state, end - start);
+ 
+-	BUILD_BUG_ON(SVE_PT_SVE_OFFSET != sizeof(header));
+-	start = SVE_PT_SVE_OFFSET;
+-	end = SVE_PT_SVE_FFR_OFFSET(vq) + SVE_PT_SVE_FFR_SIZE(vq);
+-	membuf_write(&to, target->thread.sve_state, end - start);
++		start = end;
++		end = SVE_PT_SVE_FPSR_OFFSET(vq);
++		membuf_zero(&to, end - start);
+ 
+-	start = end;
+-	end = SVE_PT_SVE_FPSR_OFFSET(vq);
+-	membuf_zero(&to, end - start);
++		/*
++		 * Copy fpsr, and fpcr which must follow contiguously in
++		 * struct fpsimd_state:
++		 */
++		start = end;
++		end = SVE_PT_SVE_FPCR_OFFSET(vq) + SVE_PT_SVE_FPCR_SIZE;
++		membuf_write(&to, &target->thread.uw.fpsimd_state.fpsr,
++			     end - start);
  
 -	/*
--	 * We don't fail in case of NPROC limit excess here because too many
--	 * poorly written programs don't check set*uid() return code, assuming
--	 * it never fails if called by root.  We may still enforce NPROC limit
--	 * for programs doing set*uid()+execve() by harmlessly deferring the
--	 * failure to the execve() stage.
+-	 * Copy fpsr, and fpcr which must follow contiguously in
+-	 * struct fpsimd_state:
 -	 */
--	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
--			new_user != INIT_USER &&
--			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
--			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
--		current->flags |= PF_NPROC_EXCEEDED;
--	else
--		current->flags &= ~PF_NPROC_EXCEEDED;
+-	start = end;
+-	end = SVE_PT_SVE_FPCR_OFFSET(vq) + SVE_PT_SVE_FPCR_SIZE;
+-	membuf_write(&to, &target->thread.uw.fpsimd_state.fpsr, end - start);
++		start = end;
++		end = sve_size_from_header(&header);
++		return membuf_zero(&to, end - start);
+ 
+-	start = end;
+-	end = sve_size_from_header(&header);
+-	return membuf_zero(&to, end - start);
++	default:
++		return 0;
++	}
+ }
+ 
+-static int sve_set(struct task_struct *target,
++static int sve_get(struct task_struct *target,
+ 		   const struct user_regset *regset,
+-		   unsigned int pos, unsigned int count,
+-		   const void *kbuf, const void __user *ubuf)
++		   struct membuf to)
++{
++	if (!system_supports_sve())
++		return -EINVAL;
++
++	return sve_get_common(target, regset, to, ARM64_VEC_SVE);
++}
++
++static int sve_set_common(struct task_struct *target,
++			  const struct user_regset *regset,
++			  unsigned int pos, unsigned int count,
++			  const void *kbuf, const void __user *ubuf,
++			  enum vec_type type)
+ {
+ 	int ret;
+ 	struct user_sve_header header;
+ 	unsigned int vq;
+ 	unsigned long start, end;
+ 
+-	if (!system_supports_sve())
+-		return -EINVAL;
 -
- 	free_uid(new->user);
- 	new->user = new_user;
- 	return 0;
-@@ -560,7 +545,7 @@ long __sys_setreuid(uid_t ruid, uid_t euid)
- 	if (retval < 0)
- 		goto error;
- 
--	retval = set_cred_ucounts(new);
-+	retval = set_cred_ucounts(new, &current->flags);
- 	if (retval < 0)
- 		goto error;
- 
-@@ -622,7 +607,7 @@ long __sys_setuid(uid_t uid)
- 	if (retval < 0)
- 		goto error;
- 
--	retval = set_cred_ucounts(new);
-+	retval = set_cred_ucounts(new, &current->flags);
- 	if (retval < 0)
- 		goto error;
- 
-@@ -701,7 +686,7 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
- 	if (retval < 0)
- 		goto error;
- 
--	retval = set_cred_ucounts(new);
-+	retval = set_cred_ucounts(new, &current->flags);
- 	if (retval < 0)
- 		goto error;
- 
-diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index 6b2e3ca7ee99..f7eec0b0233b 100644
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -1344,7 +1344,7 @@ static int userns_install(struct nsset *nsset, struct ns_common *ns)
- 	put_user_ns(cred->user_ns);
- 	set_cred_user_ns(cred, get_user_ns(user_ns));
- 
--	if (set_cred_ucounts(cred) < 0)
-+	if (set_cred_ucounts(cred, NULL) < 0)
+ 	/* Header */
+ 	if (count < sizeof(header))
  		return -EINVAL;
+@@ -814,13 +854,37 @@ static int sve_set(struct task_struct *target,
+ 	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
+ 	 * vec_set_vector_length(), which will also validate them for us:
+ 	 */
+-	ret = vec_set_vector_length(target, ARM64_VEC_SVE, header.vl,
++	ret = vec_set_vector_length(target, type, header.vl,
+ 		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
+ 	if (ret)
+ 		goto out;
  
- 	return 0;
+ 	/* Actual VL set may be less than the user asked for: */
+-	vq = sve_vq_from_vl(task_get_sve_vl(target));
++	vq = sve_vq_from_vl(task_get_vl(target, type));
++
++	/* Enter/exit streaming mode */
++	if (system_supports_sme()) {
++		u64 old_svcr = target->thread.svcr;
++
++		switch (type) {
++		case ARM64_VEC_SVE:
++			target->thread.svcr &= ~SYS_SVCR_EL0_SM_MASK;
++			break;
++		case ARM64_VEC_SME:
++			target->thread.svcr |= SYS_SVCR_EL0_SM_MASK;
++			break;
++		default:
++			WARN_ON_ONCE(1);
++			return -EINVAL;
++		}
++
++		/*
++		 * If we switched then invalidate any existing SVE
++		 * state and ensure there's storage.
++		 */
++		if (target->thread.svcr != old_svcr)
++			sve_alloc(target);
++	}
+ 
+ 	/* Registers: FPSIMD-only case */
+ 
+@@ -832,7 +896,10 @@ static int sve_set(struct task_struct *target,
+ 		goto out;
+ 	}
+ 
+-	/* Otherwise: full SVE case */
++	/*
++	 * Otherwise: no registers or full SVE case.  For backwards
++	 * compatibility reasons we treat empty flags as SVE registers.
++	 */
+ 
+ 	/*
+ 	 * If setting a different VL from the requested VL and there is
+@@ -853,8 +920,9 @@ static int sve_set(struct task_struct *target,
+ 
+ 	/*
+ 	 * Ensure target->thread.sve_state is up to date with target's
+-	 * FPSIMD regs, so that a short copyin leaves trailing registers
+-	 * unmodified.
++	 * FPSIMD regs, so that a short copyin leaves trailing
++	 * registers unmodified.  Always enable SVE even if going into
++	 * streaming mode.
+ 	 */
+ 	fpsimd_sync_to_sve(target);
+ 	set_tsk_thread_flag(target, TIF_SVE);
+@@ -890,8 +958,46 @@ static int sve_set(struct task_struct *target,
+ 	return ret;
+ }
+ 
++static int sve_set(struct task_struct *target,
++		   const struct user_regset *regset,
++		   unsigned int pos, unsigned int count,
++		   const void *kbuf, const void __user *ubuf)
++{
++	if (!system_supports_sve())
++		return -EINVAL;
++
++	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
++			      ARM64_VEC_SVE);
++}
++
+ #endif /* CONFIG_ARM64_SVE */
+ 
++#ifdef CONFIG_ARM64_SME
++
++static int ssve_get(struct task_struct *target,
++		   const struct user_regset *regset,
++		   struct membuf to)
++{
++	if (!system_supports_sme())
++		return -EINVAL;
++
++	return sve_get_common(target, regset, to, ARM64_VEC_SME);
++}
++
++static int ssve_set(struct task_struct *target,
++		    const struct user_regset *regset,
++		    unsigned int pos, unsigned int count,
++		    const void *kbuf, const void __user *ubuf)
++{
++	if (!system_supports_sme())
++		return -EINVAL;
++
++	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
++			      ARM64_VEC_SME);
++}
++
++#endif /* CONFIG_ARM64_SME */
++
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ static int pac_mask_get(struct task_struct *target,
+ 			const struct user_regset *regset,
+@@ -1109,6 +1215,9 @@ enum aarch64_regset {
+ #ifdef CONFIG_ARM64_SVE
+ 	REGSET_SVE,
+ #endif
++#ifdef CONFIG_ARM64_SVE
++	REGSET_SSVE,
++#endif
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ 	REGSET_PAC_MASK,
+ 	REGSET_PAC_ENABLED_KEYS,
+@@ -1189,6 +1298,17 @@ static const struct user_regset aarch64_regsets[] = {
+ 		.set = sve_set,
+ 	},
+ #endif
++#ifdef CONFIG_ARM64_SME
++	[REGSET_SSVE] = { /* Streaming mode SVE */
++		.core_note_type = NT_ARM_SSVE,
++		.n = DIV_ROUND_UP(SVE_PT_SIZE(SVE_VQ_MAX, SVE_PT_REGS_SVE),
++				  SVE_VQ_BYTES),
++		.size = SVE_VQ_BYTES,
++		.align = SVE_VQ_BYTES,
++		.regset_get = ssve_get,
++		.set = ssve_set,
++	},
++#endif
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ 	[REGSET_PAC_MASK] = {
+ 		.core_note_type = NT_ARM_PAC_MASK,
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 61bf4774b8f2..61502388683f 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -427,6 +427,7 @@ typedef struct elf64_shdr {
+ #define NT_ARM_PACG_KEYS	0x408	/* ARM pointer authentication generic key */
+ #define NT_ARM_TAGGED_ADDR_CTRL	0x409	/* arm64 tagged address control (prctl()) */
+ #define NT_ARM_PAC_ENABLED_KEYS	0x40a	/* arm64 ptr auth enabled keys (prctl()) */
++#define NT_ARM_SSVE	0x40b		/* ARM Streaming SVE registers */
+ #define NT_ARC_V2	0x600		/* ARCv2 accumulator/extra registers */
+ #define NT_VMCOREDD	0x700		/* Vmcore Device Dump Note */
+ #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
 -- 
-2.34.1
+2.30.2
 
