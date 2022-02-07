@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B8EC433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35613C433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237507AbiBGPfL (ORCPT
+        id S238013AbiBGPfM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
+        Mon, 7 Feb 2022 10:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343939AbiBGPXM (ORCPT
+        with ESMTP id S236920AbiBGPXY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9683C0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:11 -0800 (PST)
+        Mon, 7 Feb 2022 10:23:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64AFC0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 759EA614A0
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA26C340F1;
-        Mon,  7 Feb 2022 15:23:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7273561035
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACE2C004E1;
+        Mon,  7 Feb 2022 15:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247390;
-        bh=+7q3tm71SwRhuirdKp9GKi5rtB4x6+OdJkLWZ94Mc9g=;
+        s=k20201202; t=1644247402;
+        bh=+3VTZZuKVlfj3PHcp/aHFz8BbrWQRRO0ZN8yApxFTHo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nyS53HKEuwVI4z2AM0HqNItdJKhheBjv/YJ0gAx4Mq8eg5SgoBqhlFSR4NtfRToIW
-         3v6zgoyFB3mxN4D0GLUNwR6B7XVuxtFvyx20s9XLE2lLv55IDkbh7Px5fSZsYIKI/y
-         QWeu/PgQlqh3tSnWAyEJd2q35Zo8Ha9EmSOaqqGw0ZJFbVVVtaIlIdVGvqKaKo4dD1
-         9YJAb3wDOYXPQ1BoJL0+wQ3dtGMQyNFlgUKR5wW7TvZb+w9jO8UcW5OtQh9Q9e+ywk
-         9f1NEuG7Bxq1KsBuYGT9r2g/WMaWpHzHzrg0t5yKOJUcbdn4T+FSfIGCKalIKO7uR0
-         /UWVpPyTdWwKQ==
+        b=S6e39YuVcqxvURE1dDlybDtE6+/O3bPloBPqXpGC4cx3/aJeZ4vFmguknMx1Il73d
+         OvBpKGXFrzr2UPbIM278KTNvi5675X2WWDmL5R+I0jGfp9XO2rYrX/YjOgaeI3HCg6
+         fZHNWWFivUptT94eAFlZ+iOcO12nVWwlkhGQuTC57BCPxElHettnZh8yV+xwSJwbcf
+         sFnV/xXB6XtYRNtgwC+XPmGgktO1kGyA3JqJvOCXkX7Db6P6Pi8I/0jOS2iMMmTiuu
+         BeHDypCWwYdXakuwiAwLHogrdV69vbyIr9FwfBfK/NzR5jNwE0UAC1GFmj6ktBQAKv
+         TbZlAeeXLa1rw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,60 +49,54 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 01/40] arm64: Define CPACR_EL1_FPEN similarly to other floating point controls
-Date:   Mon,  7 Feb 2022 15:20:30 +0000
-Message-Id: <20220207152109.197566-2-broonie@kernel.org>
+Subject: [PATCH v11 04/40] kselftest/arm64: Remove local ARRAY_SIZE() definitions
+Date:   Mon,  7 Feb 2022 15:20:33 +0000
+Message-Id: <20220207152109.197566-5-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1837; h=from:subject; bh=+7q3tm71SwRhuirdKp9GKi5rtB4x6+OdJkLWZ94Mc9g=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjFxPwduzBtzQGWnI6lrwWCEEEUoE/eJxky1JgR ndA8iA+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4xQAKCRAk1otyXVSH0ESYB/ 9fL6bPm0vsCLUGpStgzAe/DVjTAO7b8MUPdbPm+5fVwJSe5sqxbir3JmfSpknyuhYWj0Bk5rr6X+bN HYzOxooc21L3xbpQMWD4jZg0aJEjXRu3uu7YpaJbCnMFUyYvCX5Z7tE70MJY7wln+hpe2ru/es4nfO TiDNONxPy6AULsDFkkx5FO8fCchgefxKGylS8MCzaUMWltTN4SoDpo35aiuF2ZLnBZjBqJoYwSjU3k MNzeOy52eEeciwj5Qq4tbi7qHNsCEQPV9C2gNp8VXisTtHBbvQCrLk5Wy9MtuDx1wMVOS9x3W3vfhq DML+d+yS9iahb1YTcM+7Ah69T2gQqn
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1265; h=from:subject; bh=+3VTZZuKVlfj3PHcp/aHFz8BbrWQRRO0ZN8yApxFTHo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjIOOkBxtTD0ogV/fD69P5hPnz9SqSHumCqfc4B xt2smpWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4yAAKCRAk1otyXVSH0E07B/ 0TlC/mxicrwg6RnAylCxB3yQzF3z45C3GndS2h6TJbLqyZPgUp8CbANNcL5GJeFd/9LVR3PGKxMwpZ NItKAxS7Qv/OT6cOT0puDG+d739swVYdMSbyAddDnIgE9ypjbEwQlOF3/AGk76IX2ETb1vMyOaoJyE 1s/O5IFipgYeP1AAweotF/4qkGFPCa1t3qb0CdPOtLW52zkhnLZJU3YUmH3FDpmoOq88Ybme80+Dm8 ckTPs0IjEPj4AG16yXSKeX+7HAzTD3M906CTW3wVljWYPBxaxoUOGIqSLXpkwwZW33uuDLv4/XXi1B /iGh/02ipBtMJwOhSeNIUqhDOCr/VM
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The base floating point, SVE and SME all have enable controls for EL0 and
-EL1 in CPACR_EL1 which have a similar layout and function. Currently the
-basic floating point enable FPEN is defined differently to the SVE control,
-specified as a single define in kvm_arm.h rather than in sysreg.h. Move the
-define to sysreg.h and provide separate EL0 and EL1 control bits so code
-managing the different floating point enables can look consistent.
+An ARRAY_SIZE() has been added to kselftest.h so remove the local versions
+in some of the arm64 selftests.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_arm.h | 1 -
- arch/arm64/include/asm/sysreg.h  | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/arm64/abi/syscall-abi.c | 1 -
+ tools/testing/selftests/arm64/fp/sve-ptrace.c   | 2 --
+ 2 files changed, 3 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-index 01d47c5886dc..eec790842fe2 100644
---- a/arch/arm64/include/asm/kvm_arm.h
-+++ b/arch/arm64/include/asm/kvm_arm.h
-@@ -355,7 +355,6 @@
- 	ECN(SOFTSTP_CUR), ECN(WATCHPT_LOW), ECN(WATCHPT_CUR), \
- 	ECN(BKPT32), ECN(VECTOR32), ECN(BRK64)
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+index d8eeeafb50dc..1e13b7523918 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi.c
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -18,7 +18,6 @@
  
--#define CPACR_EL1_FPEN		(3 << 20)
- #define CPACR_EL1_TTA		(1 << 28)
- #define CPACR_EL1_DEFAULT	(CPACR_EL1_FPEN | CPACR_EL1_ZEN_EL1EN)
+ #include "../../kselftest.h"
  
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 898bee0004ae..1da4c43d597d 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -1097,6 +1097,10 @@
- #define ZCR_ELx_LEN_SIZE	9
- #define ZCR_ELx_LEN_MASK	0x1ff
+-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+ #define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
  
-+#define CPACR_EL1_FPEN_EL1EN	(BIT(20)) /* enable EL1 access */
-+#define CPACR_EL1_FPEN_EL0EN	(BIT(21)) /* enable EL0 access, if EL1EN set */
-+#define CPACR_EL1_FPEN		(CPACR_EL1_FPEN_EL1EN | CPACR_EL1_FPEN_EL0EN)
-+
- #define CPACR_EL1_ZEN_EL1EN	(BIT(16)) /* enable EL1 access */
- #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
- #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
+ extern void do_syscall(int sve_vl);
+diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+index a3c1e67441f9..4bd333768cc4 100644
+--- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
+@@ -21,8 +21,6 @@
+ 
+ #include "../../kselftest.h"
+ 
+-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+-
+ /* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
+ #ifndef NT_ARM_SVE
+ #define NT_ARM_SVE 0x405
 -- 
 2.30.2
 
