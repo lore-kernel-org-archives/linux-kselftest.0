@@ -2,45 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C059C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 13:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2CD3C43219
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 13:28:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiBGN1k (ORCPT
+        id S233076AbiBGN1l (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 08:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        Mon, 7 Feb 2022 08:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445594AbiBGMmS (ORCPT
+        with ESMTP id S1445593AbiBGMmS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 7 Feb 2022 07:42:18 -0500
-X-Greylist: delayed 944 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 04:33:58 PST
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBB4E033DAE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D33BE033DB2;
         Mon,  7 Feb 2022 04:33:57 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DB2991F388;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 84DE11F37E;
         Mon,  7 Feb 2022 12:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1644236292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CS9BI2kyakQST5h0Bh8iX4MIXucTQqH9EtpYM1r+SFU=;
-        b=bqyOAR/Ayx8HfmqJm7xqDwfnnaJaQS1Qv9Tx/Q+FF33WDgwUGGTN7e3wbrcRLHYknmL5Om
-        HmZMg8Jr6e/02m+nPGbCLFRtXL0IkWThH62+sbXAnZpweMZCIcEhJ8/G562/CYTQvgCl2M
-        gtj0TNANCxXwxRIXLjvgdFspEH12zzE=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QzKGUR8l2ANJZZ33siPyM5ZbfG1iAsiLZfA06Eklo2s=;
+        b=t4tem1l8nL6PTmdZ+KQ4TZfGehFe/oB+t+9GgFdng1NUQhi+1jlTKMBMHSdpTLeu3wkInk
+        Le/Dz3WF5awnyQQynQfzCqGdSQgj1lV3Yz95XfP7yHip1fyy9NNH7VNG/ercZMPDt2HPd/
+        JiWKNEsych/QP66n8tcndCK5NjNoLFg=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA6EC13BE6;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 592D713BBC;
         Mon,  7 Feb 2022 12:18:12 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id +E37LAQOAWLMegAAMHmgww
+        id +7w4FQQOAWLMegAAMHmgww
         (envelope-from <mkoutny@suse.com>); Mon, 07 Feb 2022 12:18:12 +0000
 From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
 To:     Eric Biederman <ebiederm@xmission.com>,
@@ -51,12 +49,10 @@ Cc:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
         Ran Xiaokai <ran.xiaokai@zte.com.cn>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Linux Containers <containers@lists.linux-foundation.org>
-Subject: [RFC PATCH 3/6] cred: Count tasks by their real uid into RLIMIT_NPROC
-Date:   Mon,  7 Feb 2022 13:17:57 +0100
-Message-Id: <20220207121800.5079-4-mkoutny@suse.com>
+Subject: [RFC PATCH 0/6] RLIMIT_NPROC in ucounts fixups
+Date:   Mon,  7 Feb 2022 13:17:54 +0100
+Message-Id: <20220207121800.5079-1-mkoutny@suse.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220207121800.5079-1-mkoutny@suse.com>
-References: <20220207121800.5079-1-mkoutny@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -64,53 +60,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Tasks are associated to multiple users at once. Historically and as per
-setrlimit(2) RLIMIT_NPROC is enforce based on real user ID.
+This series is a result of looking deeper into breakage of
+tools/testing/selftests/rlimits/rlimits-per-userns.c after 
+https://lore.kernel.org/r/20220204181144.24462-1-mkoutny@suse.com/
+is applied.
 
-The commit 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-made the accounting structure "indexed" by euid and hence potentially
-account tasks differently.
+The description of the original problem that lead to RLIMIT_NPROC et al.
+ucounts rewrite could be ambiguously interpretted as supporting either
+the case of:
+- never-fork service or
+- fork (RLIMIT_NPROC-1) times service.
 
-The effective user ID may be different e.g. for setuid programs but
-those are exec'd into already existing task (i.e. below limit), so
-different accounting is moot.
+The scenario is weird anyway given existence of pids controller.
 
-Some special setresuid(2) users may notice the difference, justifying
-this fix.
-(This is just illustrative, it piggy-backs onto nproc_flags and should
-be implemented properly.)
+The realization of that scenario relies not only on tracking number of
+processes per user_ns but also newly allows the root to override limit through
+set*uid. The commit message didn't mention that, so it's unclear if it
+was the intention too.
 
-Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- kernel/cred.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I also noticed that the RLIMIT_NPROC enforcing in fork seems subject to TOCTOU
+race (check(nr_tasks),...,nr_tasks++) so the limit is rather advisory (but
+that's not a new thing related to ucounts rewrite).
 
-diff --git a/kernel/cred.c b/kernel/cred.c
-index 791cab70b764..ed247daa1f67 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -668,6 +668,7 @@ int set_cred_ucounts(struct cred *new, unsigned int *nproc_flags)
- 	struct task_struct *task = current;
- 	const struct cred *old = task->real_cred;
- 	struct ucounts *new_ucounts, *old_ucounts = new->ucounts;
-+	kuid_t new_uid = nproc_flags ? new->uid : new->euid;
- 
- 	if (new->user == old->user && new->user_ns == old->user_ns)
- 		return 0;
-@@ -676,10 +677,10 @@ int set_cred_ucounts(struct cred *new, unsigned int *nproc_flags)
- 	 * This optimization is needed because alloc_ucounts() uses locks
- 	 * for table lookups.
- 	 */
--	if (old_ucounts->ns == new->user_ns && uid_eq(old_ucounts->uid, new->euid))
-+	if (old_ucounts->ns == new->user_ns && uid_eq(old_ucounts->uid, new_uid))
- 		return 0;
- 
--	if (!(new_ucounts = alloc_ucounts(new->user_ns, new->euid)))
-+	if (!(new_ucounts = alloc_ucounts(new->user_ns, new_uid)))
- 		return -EAGAIN;
- 
- 	new->ucounts = new_ucounts;
+This series is RFC to discuss relevance of the subtle changes RLIMIT_NPROC to
+ucounts rewrite introduced.
+
+Michal Koutný (6):
+  set_user: Perform RLIMIT_NPROC capability check against new user
+    credentials
+  set*uid: Check RLIMIT_PROC against new credentials
+  cred: Count tasks by their real uid into RLIMIT_NPROC
+  ucounts: Allow root to override RLIMIT_NPROC
+  selftests: Challenge RLIMIT_NPROC in user namespaces
+  selftests: Test RLIMIT_NPROC in clone-created user namespaces
+
+ fs/exec.c                                     |   2 +-
+ include/linux/cred.h                          |   2 +-
+ kernel/cred.c                                 |  29 ++-
+ kernel/fork.c                                 |   2 +-
+ kernel/sys.c                                  |  20 +-
+ kernel/ucount.c                               |   3 +
+ kernel/user_namespace.c                       |   2 +-
+ .../selftests/rlimits/rlimits-per-userns.c    | 233 +++++++++++++++---
+ 8 files changed, 229 insertions(+), 64 deletions(-)
+
 -- 
 2.34.1
 
