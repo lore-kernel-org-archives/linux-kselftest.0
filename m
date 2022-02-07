@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C435BC41535
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D30FCC4167E
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243451AbiBGPfQ (ORCPT
+        id S1343536AbiBGPfS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        Mon, 7 Feb 2022 10:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236762AbiBGPXi (ORCPT
+        with ESMTP id S1378274AbiBGPZf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6560DC0401C8
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:37 -0800 (PST)
+        Mon, 7 Feb 2022 10:25:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E00CC0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24BBFB815B1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595B6C004E1;
-        Mon,  7 Feb 2022 15:23:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A08DD61035
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFD8C340F1;
+        Mon,  7 Feb 2022 15:25:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247414;
-        bh=tClwxBxXeStlBQhw570CauUAMkDJNDdPwv6KEDRDvAE=;
+        s=k20201202; t=1644247533;
+        bh=koywA7hAthCVT8sXD5VTyoBPdMoHOs9dyv3/4Qn5c6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uSGmZyGTc4VNvYWsk5zWoqyoGuWv0cDwzrrHeC3VSL3u7svcWCXFAyOCERcHdW8Pg
-         Tg9V5eH6lOpu/CA3TJhgW6LtuOn4FwP8tmg9JZzeQ9I9Hzqq4lvM7UT1htQ7bgG/2z
-         cAmR/8Ek+KfOOFISNVJ2mX0kjjEqk/E2iHSWJueqJK+EtvValeHdFq3PtGCSUZGix8
-         X5wUQDkws7sdUKno845QmOShTBvfv8y/rWvhau7GTAPrnO0uIWFlTxtiO6KazqfsiI
-         KIPE6GnLb8YUpA6cAwDrtZaw+eSlQSVsbEGPauka2dqqWmH5zFdsHZ1zUsa2kCb/4x
-         6IPYtV1CA6/tw==
+        b=EX5krfDJ8jiFdyJev3627WJu/URVNlZgSRpKgeljV3pvrcJom7LcRoSBoEukF7W1T
+         wqBd1RlSVX8Rh+hY+u/rn6cABUwulXCsrPl/rWhVbFXwr6EKfO/mHVidCrOxjkPR1T
+         lyx7Qib5a9nkikUrA50xClfJofcgHwsFKKpkxmouSDbn/yjzxZwFE4BcTL2W1ZuGzh
+         CbbzXlZ/VRGcMCqaoZh3pV89zKZ3OzXpid3RE8LXu35GVJdHVC81olJDgDE1+/MmX+
+         C8/ftyw2hl4/2TH96YtFQxaG1QC7DyJmSU+x5NMd8jc2DyDhWsC5W7f3MxLrEcOosO
+         lVJjpaH3AMzYA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,274 +49,526 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 07/40] arm64/sme: System register and exception syndrome definitions
-Date:   Mon,  7 Feb 2022 15:20:36 +0000
-Message-Id: <20220207152109.197566-8-broonie@kernel.org>
+Subject: [PATCH v11 36/40] kselftest/arm64: Add stress test for SME ZA context switching
+Date:   Mon,  7 Feb 2022 15:21:05 +0000
+Message-Id: <20220207152109.197566-37-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9085; h=from:subject; bh=tClwxBxXeStlBQhw570CauUAMkDJNDdPwv6KEDRDvAE=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjKDx0r2L48QqKPssZegcV0F8B7481zG5jsAeZU saYOs0mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4ygAKCRAk1otyXVSH0NXQB/ 9KW5K/RNHd5PxVlLWL60qMfOdbeRutb2K5lO+dUwfDPi7CgZD8qvY0xaOl4gNtHnVdq7QxRxhMMNz7 D4ag2cIt64wKE8kSyhX3CNgmoXUtE0keInICJ+R/+UsuYPZ3yXLI5oW5lUGTSu6fWeOW5i/Jye7hCU Q8u/uw0PwFcR9Xz+wxCxukZZa57o05xrgc6ZXbPYpXvweHIIHaZTKsEJGeXoqVJk+3MJOnI4DmPRyG kVCn7bKsvpJA+XJw77sUUMcGpPdCcE7L+ou/vt7sU2WcxKMinueaaGyoKQFOLpfAJD3S7aL8uz9Wrl NQ8OJ1bSdslIjAmGtuikQKtg8uy/HE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11030; h=from:subject; bh=koywA7hAthCVT8sXD5VTyoBPdMoHOs9dyv3/4Qn5c6Y=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjh5an694kAI3DPI2fIjKjT1gn2NTyDGqgThkBQ kA874fqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE44QAKCRAk1otyXVSH0MsxB/ wIqPrRKkjn+90X2EnOUnS4Z7S83x11TmzqpsjxB8LeG4EJegGmly0tu79cBvL2YJy/+C6QwovnTKPY HD2Qlb+7DG/YhvNq6QL5aZBKYStgS991GTdwHrg8AWaavvCLPbKF0h4NmMRnghUcG/B8uBGUmOPfkO S3hS6f7p1vhrVdCXGeEuqRTHehnSz0DorBqp5kAIKj3t/XuLR/BV4LNagr8Y4XmRAFxyzHmtWh164e y8hKzBfm8UiCpqRnzbSyEctTxlRIhqrO1NPG+6hlhbEE6CtavwHXvLlBdr4yq31xpHeVO5hlsBUB5Y MDEAM1e01eCuNbeTbXsh0aqDICRr0m
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The arm64 Scalable Matrix Extension (SME) adds some new system registers,
-fields in existing system registers and exception syndromes. This patch
-adds definitions for these for use in future patches implementing support
-for this extension.
+Add a stress test for context switching of the ZA register state based on
+the similar tests Dave Martin wrote for FPSIMD and SVE registers. The test
+loops indefinitely writing a data pattern to ZA then reading it back and
+verifying that it's what was expected.
 
-Since SME will be the first user of FEAT_HCX in the kernel also include
-the definitions for enumerating it and the HCRX system register it adds.
+Unlike the other tests we manually assemble the SME instructions since at
+present no released toolchain has SME support integrated.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/esr.h     | 12 +++++-
- arch/arm64/include/asm/kvm_arm.h |  1 +
- arch/arm64/include/asm/sysreg.h  | 63 ++++++++++++++++++++++++++++++++
- arch/arm64/kernel/traps.c        |  1 +
- 4 files changed, 76 insertions(+), 1 deletion(-)
+ tools/testing/selftests/arm64/fp/.gitignore |   1 +
+ tools/testing/selftests/arm64/fp/Makefile   |   3 +
+ tools/testing/selftests/arm64/fp/za-stress  |  59 +++
+ tools/testing/selftests/arm64/fp/za-test.S  | 388 ++++++++++++++++++++
+ 4 files changed, 451 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/fp/za-stress
+ create mode 100644 tools/testing/selftests/arm64/fp/za-test.S
 
-diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-index d52a0b269ee8..43872e0cfd1e 100644
---- a/arch/arm64/include/asm/esr.h
-+++ b/arch/arm64/include/asm/esr.h
-@@ -37,7 +37,8 @@
- #define ESR_ELx_EC_ERET		(0x1a)	/* EL2 only */
- /* Unallocated EC: 0x1B */
- #define ESR_ELx_EC_FPAC		(0x1C)	/* EL1 and above */
--/* Unallocated EC: 0x1D - 0x1E */
-+#define ESR_ELx_EC_SME		(0x1D)
-+/* Unallocated EC: 0x1E */
- #define ESR_ELx_EC_IMP_DEF	(0x1f)	/* EL3 only */
- #define ESR_ELx_EC_IABT_LOW	(0x20)
- #define ESR_ELx_EC_IABT_CUR	(0x21)
-@@ -327,6 +328,15 @@
- #define ESR_ELx_CP15_32_ISS_SYS_CNTFRQ	(ESR_ELx_CP15_32_ISS_SYS_VAL(0, 0, 14, 0) |\
- 					 ESR_ELx_CP15_32_ISS_DIR_READ)
+diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+index 5729a5b1adfc..ead3197e720b 100644
+--- a/tools/testing/selftests/arm64/fp/.gitignore
++++ b/tools/testing/selftests/arm64/fp/.gitignore
+@@ -8,3 +8,4 @@ sve-test
+ ssve-test
+ vec-syscfg
+ vlset
++za-test
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index e6643c9b0474..38d2d0d5a0eb 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -6,6 +6,7 @@ TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
+ 	rdvl-sme rdvl-sve \
+ 	sve-test sve-stress \
+ 	ssve-test ssve-stress \
++	za-test za-stress \
+ 	vlset
  
-+/*
-+ * ISS values for SME traps
-+ */
+ all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
+@@ -24,5 +25,7 @@ ssve-test: sve-test.S asm-utils.o
+ 	$(CC) -DSSVE -nostdlib $^ -o $@
+ vec-syscfg: vec-syscfg.o rdvl.o
+ vlset: vlset.o
++za-test: za-test.o asm-utils.o
++	$(CC) -nostdlib $^ -o $@
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/fp/za-stress b/tools/testing/selftests/arm64/fp/za-stress
+new file mode 100644
+index 000000000000..5ac386b55b95
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/za-stress
+@@ -0,0 +1,59 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++# Copyright (C) 2015-2019 ARM Limited.
++# Original author: Dave Martin <Dave.Martin@arm.com>
 +
-+#define ESR_ELx_SME_ISS_SME_DISABLED	0
-+#define ESR_ELx_SME_ISS_ILL		1
-+#define ESR_ELx_SME_ISS_SM_DISABLED	2
-+#define ESR_ELx_SME_ISS_ZA_DISABLED	3
++set -ue
 +
- #ifndef __ASSEMBLY__
- #include <asm/types.h>
- 
-diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-index 1767ded83888..13ae232ec4a1 100644
---- a/arch/arm64/include/asm/kvm_arm.h
-+++ b/arch/arm64/include/asm/kvm_arm.h
-@@ -279,6 +279,7 @@
- #define CPTR_EL2_TCPAC	(1U << 31)
- #define CPTR_EL2_TAM	(1 << 30)
- #define CPTR_EL2_TTA	(1 << 20)
-+#define CPTR_EL2_TSM	(1 << 12)
- #define CPTR_EL2_TFP	(1 << CPTR_EL2_TFP_SHIFT)
- #define CPTR_EL2_TZ	(1 << 8)
- #define CPTR_NVHE_EL2_RES1	0x000032ff /* known RES1 bits in CPTR_EL2 (nVHE) */
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index e66dd9ebc337..6056c9aaab28 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -173,6 +173,7 @@
- #define SYS_ID_AA64PFR0_EL1		sys_reg(3, 0, 0, 4, 0)
- #define SYS_ID_AA64PFR1_EL1		sys_reg(3, 0, 0, 4, 1)
- #define SYS_ID_AA64ZFR0_EL1		sys_reg(3, 0, 0, 4, 4)
-+#define SYS_ID_AA64SMFR0_EL1		sys_reg(3, 0, 0, 4, 5)
- 
- #define SYS_ID_AA64DFR0_EL1		sys_reg(3, 0, 0, 5, 0)
- #define SYS_ID_AA64DFR1_EL1		sys_reg(3, 0, 0, 5, 1)
-@@ -196,6 +197,8 @@
- 
- #define SYS_ZCR_EL1			sys_reg(3, 0, 1, 2, 0)
- #define SYS_TRFCR_EL1			sys_reg(3, 0, 1, 2, 1)
-+#define SYS_SMPRI_EL1			sys_reg(3, 0, 1, 2, 4)
-+#define SYS_SMCR_EL1			sys_reg(3, 0, 1, 2, 6)
- 
- #define SYS_TTBR0_EL1			sys_reg(3, 0, 2, 0, 0)
- #define SYS_TTBR1_EL1			sys_reg(3, 0, 2, 0, 1)
-@@ -388,6 +391,8 @@
- #define TRBIDR_ALIGN_MASK		GENMASK(3, 0)
- #define TRBIDR_ALIGN_SHIFT		0
- 
-+#define SMPRI_EL1_PRIORITY_MASK		0xf
++NR_CPUS=`nproc`
 +
- #define SYS_PMINTENSET_EL1		sys_reg(3, 0, 9, 14, 1)
- #define SYS_PMINTENCLR_EL1		sys_reg(3, 0, 9, 14, 2)
- 
-@@ -443,8 +448,13 @@
- #define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
- #define SYS_CLIDR_EL1			sys_reg(3, 1, 0, 0, 1)
- #define SYS_GMID_EL1			sys_reg(3, 1, 0, 0, 4)
-+#define SYS_SMIDR_EL1			sys_reg(3, 1, 0, 0, 6)
- #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
- 
-+#define SYS_SMIDR_EL1_IMPLEMENTER_SHIFT	24
-+#define SYS_SMIDR_EL1_SMPS_SHIFT	15
-+#define SYS_SMIDR_EL1_AFFINITY_SHIFT	0
++pids=
++logs=
 +
- #define SYS_CSSELR_EL1			sys_reg(3, 2, 0, 0, 0)
- 
- #define SYS_CTR_EL0			sys_reg(3, 3, 0, 0, 1)
-@@ -453,6 +463,10 @@
- #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
- #define SYS_RNDRRS_EL0			sys_reg(3, 3, 2, 4, 1)
- 
-+#define SYS_SVCR_EL0			sys_reg(3, 3, 4, 2, 2)
-+#define SYS_SVCR_EL0_ZA_MASK		2
-+#define SYS_SVCR_EL0_SM_MASK		1
++cleanup () {
++	trap - INT TERM CHLD
++	set +e
 +
- #define SYS_PMCR_EL0			sys_reg(3, 3, 9, 12, 0)
- #define SYS_PMCNTENSET_EL0		sys_reg(3, 3, 9, 12, 1)
- #define SYS_PMCNTENCLR_EL0		sys_reg(3, 3, 9, 12, 2)
-@@ -469,6 +483,7 @@
- 
- #define SYS_TPIDR_EL0			sys_reg(3, 3, 13, 0, 2)
- #define SYS_TPIDRRO_EL0			sys_reg(3, 3, 13, 0, 3)
-+#define SYS_TPIDR2_EL0			sys_reg(3, 3, 13, 0, 5)
- 
- #define SYS_SCXTNUM_EL0			sys_reg(3, 3, 13, 0, 7)
- 
-@@ -538,6 +553,9 @@
- #define SYS_HFGITR_EL2			sys_reg(3, 4, 1, 1, 6)
- #define SYS_ZCR_EL2			sys_reg(3, 4, 1, 2, 0)
- #define SYS_TRFCR_EL2			sys_reg(3, 4, 1, 2, 1)
-+#define SYS_HCRX_EL2			sys_reg(3, 4, 1, 2, 2)
-+#define SYS_SMPRIMAP_EL2		sys_reg(3, 4, 1, 2, 5)
-+#define SYS_SMCR_EL2			sys_reg(3, 4, 1, 2, 6)
- #define SYS_DACR32_EL2			sys_reg(3, 4, 3, 0, 0)
- #define SYS_HDFGRTR_EL2			sys_reg(3, 4, 3, 1, 4)
- #define SYS_HDFGWTR_EL2			sys_reg(3, 4, 3, 1, 5)
-@@ -597,6 +615,7 @@
- #define SYS_SCTLR_EL12			sys_reg(3, 5, 1, 0, 0)
- #define SYS_CPACR_EL12			sys_reg(3, 5, 1, 0, 2)
- #define SYS_ZCR_EL12			sys_reg(3, 5, 1, 2, 0)
-+#define SYS_SMCR_EL12			sys_reg(3, 5, 1, 2, 6)
- #define SYS_TTBR0_EL12			sys_reg(3, 5, 2, 0, 0)
- #define SYS_TTBR1_EL12			sys_reg(3, 5, 2, 0, 1)
- #define SYS_TCR_EL12			sys_reg(3, 5, 2, 0, 2)
-@@ -620,6 +639,7 @@
- #define SYS_CNTV_CVAL_EL02		sys_reg(3, 5, 14, 3, 2)
- 
- /* Common SCTLR_ELx flags. */
-+#define SCTLR_ELx_ENTP2	(BIT(60))
- #define SCTLR_ELx_DSSBS	(BIT(44))
- #define SCTLR_ELx_ATA	(BIT(43))
- 
-@@ -815,6 +835,7 @@
- #define ID_AA64PFR0_ELx_32BIT_64BIT	0x2
- 
- /* id_aa64pfr1 */
-+#define ID_AA64PFR1_SME_SHIFT		24
- #define ID_AA64PFR1_MPAMFRAC_SHIFT	16
- #define ID_AA64PFR1_RASFRAC_SHIFT	12
- #define ID_AA64PFR1_MTE_SHIFT		8
-@@ -825,6 +846,7 @@
- #define ID_AA64PFR1_SSBS_PSTATE_ONLY	1
- #define ID_AA64PFR1_SSBS_PSTATE_INSNS	2
- #define ID_AA64PFR1_BT_BTI		0x1
-+#define ID_AA64PFR1_SME			1
- 
- #define ID_AA64PFR1_MTE_NI		0x0
- #define ID_AA64PFR1_MTE_EL0		0x1
-@@ -853,6 +875,23 @@
- #define ID_AA64ZFR0_AES_PMULL		0x2
- #define ID_AA64ZFR0_SVEVER_SVE2		0x1
- 
-+/* id_aa64smfr0 */
-+#define ID_AA64SMFR0_FA64_SHIFT		63
-+#define ID_AA64SMFR0_I16I64_SHIFT	52
-+#define ID_AA64SMFR0_F64F64_SHIFT	48
-+#define ID_AA64SMFR0_I8I32_SHIFT	36
-+#define ID_AA64SMFR0_F16F32_SHIFT	35
-+#define ID_AA64SMFR0_B16F32_SHIFT	34
-+#define ID_AA64SMFR0_F32F32_SHIFT	32
++	if [ -n "$pids" ]; then
++		kill $pids
++		wait $pids
++		pids=
++	fi
 +
-+#define ID_AA64SMFR0_FA64		0x1
-+#define ID_AA64SMFR0_I16I64		0x4
-+#define ID_AA64SMFR0_F64F64		0x1
-+#define ID_AA64SMFR0_I8I32		0x4
-+#define ID_AA64SMFR0_F16F32		0x1
-+#define ID_AA64SMFR0_B16F32		0x1
-+#define ID_AA64SMFR0_F32F32		0x1
++	if [ -n "$logs" ]; then
++		cat $logs
++		rm $logs
++		logs=
++	fi
++}
 +
- /* id_aa64mmfr0 */
- #define ID_AA64MMFR0_ECV_SHIFT		60
- #define ID_AA64MMFR0_FGT_SHIFT		56
-@@ -904,6 +943,7 @@
- #endif
- 
- /* id_aa64mmfr1 */
-+#define ID_AA64MMFR1_HCX_SHIFT		40
- #define ID_AA64MMFR1_AFP_SHIFT		44
- #define ID_AA64MMFR1_ETS_SHIFT		36
- #define ID_AA64MMFR1_TWED_SHIFT		32
-@@ -1097,9 +1137,24 @@
- #define ZCR_ELx_LEN_SIZE	9
- #define ZCR_ELx_LEN_MASK	0x1ff
- 
-+#define SMCR_ELx_FA64_SHIFT	31
-+#define SMCR_ELx_FA64_MASK	(1 << SMCR_ELx_FA64_SHIFT)
++interrupt () {
++	cleanup
++	exit 0
++}
 +
-+/*
-+ * The SMCR_ELx_LEN_* definitions intentionally include bits [8:4] which
-+ * are reserved by the SME architecture for future expansion of the LEN
-+ * field, with compatible semantics.
-+ */
-+#define SMCR_ELx_LEN_SHIFT	0
-+#define SMCR_ELx_LEN_SIZE	9
-+#define SMCR_ELx_LEN_MASK	0x1ff
++child_died () {
++	cleanup
++	exit 1
++}
 +
- #define CPACR_EL1_FPEN_EL1EN	(BIT(20)) /* enable EL1 access */
- #define CPACR_EL1_FPEN_EL0EN	(BIT(21)) /* enable EL0 access, if EL1EN set */
- 
-+#define CPACR_EL1_SMEN_EL1EN	(BIT(24)) /* enable EL1 access */
-+#define CPACR_EL1_SMEN_EL0EN	(BIT(25)) /* enable EL0 access, if EL1EN set */
++trap interrupt INT TERM EXIT
 +
- #define CPACR_EL1_ZEN_EL1EN	(BIT(16)) /* enable EL1 access */
- #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
- 
-@@ -1152,6 +1207,8 @@
- #define TRFCR_ELx_ExTRE			BIT(1)
- #define TRFCR_ELx_E0TRE			BIT(0)
- 
-+/* HCRX_EL2 definitions */
-+#define HCRX_EL2_SMPME_MASK		(1 << 5)
- 
- /* GIC Hypervisor interface registers */
- /* ICH_MISR_EL2 bit definitions */
-@@ -1215,6 +1272,12 @@
- #define ICH_VTR_TDS_SHIFT	19
- #define ICH_VTR_TDS_MASK	(1 << ICH_VTR_TDS_SHIFT)
- 
-+/* HFG[WR]TR_EL2 bit definitions */
-+#define HFGxTR_EL2_nTPIDR2_EL0_SHIFT	55
-+#define HFGxTR_EL2_nTPIDR2_EL0_MASK	BIT_MASK(HFGxTR_EL2_nTPIDR2_EL0_SHIFT)
-+#define HFGxTR_EL2_nSMPRI_EL1_SHIFT	54
-+#define HFGxTR_EL2_nSMPRI_EL1_MASK	BIT_MASK(HFGxTR_EL2_nSMPRI_EL1_SHIFT)
++for x in `seq 0 $((NR_CPUS * 4))`; do
++	log=`mktemp`
++	logs=$logs\ $log
++	./za-test >$log &
++	pids=$pids\ $!
++done
 +
- #define ARM64_FEATURE_FIELD_BITS	4
- 
- /* Create a mask for the feature bits of the specified feature. */
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 70fc42470f13..88effb25c399 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -822,6 +822,7 @@ static const char *esr_class_str[] = {
- 	[ESR_ELx_EC_SVE]		= "SVE",
- 	[ESR_ELx_EC_ERET]		= "ERET/ERETAA/ERETAB",
- 	[ESR_ELx_EC_FPAC]		= "FPAC",
-+	[ESR_ELx_EC_SME]		= "SME",
- 	[ESR_ELx_EC_IMP_DEF]		= "EL3 IMP DEF",
- 	[ESR_ELx_EC_IABT_LOW]		= "IABT (lower EL)",
- 	[ESR_ELx_EC_IABT_CUR]		= "IABT (current EL)",
++# Wait for all child processes to be created:
++sleep 10
++
++while :; do
++	kill -USR1 $pids
++done &
++pids=$pids\ $!
++
++wait
++
++exit 1
+diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+new file mode 100644
+index 000000000000..9ab6f9cd9623
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/za-test.S
+@@ -0,0 +1,388 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2021 ARM Limited.
++// Original author: Mark Brown <broonie@kernel.org>
++//
++// Scalable Matrix Extension ZA context switch test
++// Repeatedly writes unique test patterns into each ZA tile
++// and reads them back to verify integrity.
++//
++// for x in `seq 1 NR_CPUS`; do sve-test & pids=$pids\ $! ; done
++// (leave it running for as long as you want...)
++// kill $pids
++
++#include <asm/unistd.h>
++#include "assembler.h"
++#include "asm-offsets.h"
++#include "sme-inst.h"
++
++.arch_extension sve
++
++#define MAXVL     2048
++#define MAXVL_B   (MAXVL / 8)
++
++// Declare some storage space to shadow ZA register contents and a
++// scratch buffer for a vector.
++.pushsection .text
++.data
++.align 4
++zaref:
++	.space	MAXVL_B * MAXVL_B
++scratch:
++	.space	MAXVL_B
++.popsection
++
++// Trivial memory copy: copy x2 bytes, starting at address x1, to address x0.
++// Clobbers x0-x3
++function memcpy
++	cmp	x2, #0
++	b.eq	1f
++0:	ldrb	w3, [x1], #1
++	strb	w3, [x0], #1
++	subs	x2, x2, #1
++	b.ne	0b
++1:	ret
++endfunction
++
++// Generate a test pattern for storage in ZA
++// x0: pid
++// x1: row in ZA
++// x2: generation
++
++// These values are used to constuct a 32-bit pattern that is repeated in the
++// scratch buffer as many times as will fit:
++// bits 31:28	generation number (increments once per test_loop)
++// bits 27:16	pid
++// bits 15: 8	row number
++// bits  7: 0	32-bit lane index
++
++function pattern
++	mov	w3, wzr
++	bfi	w3, w0, #16, #12	// PID
++	bfi	w3, w1, #8, #8		// Row
++	bfi	w3, w2, #28, #4		// Generation
++
++	ldr	x0, =scratch
++	mov	w1, #MAXVL_B / 4
++
++0:	str	w3, [x0], #4
++	add	w3, w3, #1		// Lane
++	subs	w1, w1, #1
++	b.ne	0b
++
++	ret
++endfunction
++
++// Get the address of shadow data for ZA horizontal vector xn
++.macro _adrza xd, xn, nrtmp
++	ldr	\xd, =zaref
++	rdsvl	\nrtmp, 1
++	madd	\xd, x\nrtmp, \xn, \xd
++.endm
++
++// Set up test pattern in a ZA horizontal vector
++// x0: pid
++// x1: row number
++// x2: generation
++function setup_za
++	mov	x4, x30
++	mov	x12, x1			// Use x12 for vector select
++
++	bl	pattern			// Get pattern in scratch buffer
++	_adrza	x0, x12, 2		// Shadow buffer pointer to x0 and x5
++	mov	x5, x0
++	ldr	x1, =scratch
++	bl	memcpy			// length set up in x2 by _adrza
++
++	_ldr_za 12, 5			// load vector w12 from pointer x5
++
++	ret	x4
++endfunction
++
++// Trivial memory compare: compare x2 bytes starting at address x0 with
++// bytes starting at address x1.
++// Returns only if all bytes match; otherwise, the program is aborted.
++// Clobbers x0-x5.
++function memcmp
++	cbz	x2, 2f
++
++	stp	x0, x1, [sp, #-0x20]!
++	str	x2, [sp, #0x10]
++
++	mov	x5, #0
++0:	ldrb	w3, [x0, x5]
++	ldrb	w4, [x1, x5]
++	add	x5, x5, #1
++	cmp	w3, w4
++	b.ne	1f
++	subs	x2, x2, #1
++	b.ne	0b
++
++1:	ldr	x2, [sp, #0x10]
++	ldp	x0, x1, [sp], #0x20
++	b.ne	barf
++
++2:	ret
++endfunction
++
++// Verify that a ZA vector matches its shadow in memory, else abort
++// x0: row number
++// Clobbers x0-x7 and x12.
++function check_za
++	mov	x3, x30
++
++	mov	x12, x0
++	_adrza	x5, x0, 6		// pointer to expected value in x5
++	mov	x4, x0
++	ldr	x7, =scratch		// x7 is scratch
++
++	mov	x0, x7			// Poison scratch
++	mov	x1, x6
++	bl	memfill_ae
++
++	_str_za 12, 7			// save vector w12 to pointer x7
++
++	mov	x0, x5
++	mov	x1, x7
++	mov	x2, x6
++	mov	x30, x3
++	b	memcmp
++endfunction
++
++// Any SME register modified here can cause corruption in the main
++// thread -- but *only* the locations modified here.
++function irritator_handler
++	// Increment the irritation signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	// Corrupt some random ZA data
++#if 0
++	adr	x0, .text + (irritator_handler - .text) / 16 * 16
++	movi	v0.8b, #1
++	movi	v9.16b, #2
++	movi	v31.8b, #3
++#endif
++
++	ret
++endfunction
++
++function terminate_handler
++	mov	w21, w0
++	mov	x20, x2
++
++	puts	"Terminated by signal "
++	mov	w0, w21
++	bl	putdec
++	puts	", no error, iterations="
++	ldr	x0, [x20, #ucontext_regs + 8 * 22]
++	bl	putdec
++	puts	", signals="
++	ldr	x0, [x20, #ucontext_regs + 8 * 23]
++	bl	putdecn
++
++	mov	x0, #0
++	mov	x8, #__NR_exit
++	svc	#0
++endfunction
++
++// w0: signal number
++// x1: sa_action
++// w2: sa_flags
++// Clobbers x0-x6,x8
++function setsignal
++	str	x30, [sp, #-((sa_sz + 15) / 16 * 16 + 16)]!
++
++	mov	w4, w0
++	mov	x5, x1
++	mov	w6, w2
++
++	add	x0, sp, #16
++	mov	x1, #sa_sz
++	bl	memclr
++
++	mov	w0, w4
++	add	x1, sp, #16
++	str	w6, [x1, #sa_flags]
++	str	x5, [x1, #sa_handler]
++	mov	x2, #0
++	mov	x3, #sa_mask_sz
++	mov	x8, #__NR_rt_sigaction
++	svc	#0
++
++	cbz	w0, 1f
++
++	puts	"sigaction failure\n"
++	b	.Labort
++
++1:	ldr	x30, [sp], #((sa_sz + 15) / 16 * 16 + 16)
++	ret
++endfunction
++
++// Main program entry point
++.globl _start
++function _start
++_start:
++	puts	"Streaming mode "
++	smstart_za
++
++	// Sanity-check and report the vector length
++
++	rdsvl	19, 8
++	cmp	x19, #128
++	b.lo	1f
++	cmp	x19, #2048
++	b.hi	1f
++	tst	x19, #(8 - 1)
++	b.eq	2f
++
++1:	puts	"bad vector length: "
++	mov	x0, x19
++	bl	putdecn
++	b	.Labort
++
++2:	puts	"vector length:\t"
++	mov	x0, x19
++	bl	putdec
++	puts	" bits\n"
++
++	// Obtain our PID, to ensure test pattern uniqueness between processes
++	mov	x8, #__NR_getpid
++	svc	#0
++	mov	x20, x0
++
++	puts	"PID:\t"
++	mov	x0, x20
++	bl	putdecn
++
++	mov	x23, #0		// Irritation signal count
++
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	mov	x22, #0		// generation number, increments per iteration
++.Ltest_loop:
++	rdsvl	0, 8
++	cmp	x0, x19
++	b.ne	vl_barf
++
++	rdsvl	21, 1		// Set up ZA & shadow with test pattern
++0:	mov	x0, x20
++	sub	x1, x21, #1
++	mov	x2, x22
++	bl	setup_za
++	subs	x21, x21, #1
++	b.ne	0b
++
++	and	x8, x22, #127		// Every 128 interations...
++	cbz	x8, 0f
++	mov	x8, #__NR_getpid	// (otherwise minimal syscall)
++	b	1f
++0:
++	mov	x8, #__NR_sched_yield	// ...encourage preemption
++1:
++	svc	#0
++
++	mrs	x0, S3_3_C4_C2_2	// SVCR should have ZA=1,SM=0
++	and	x1, x0, #3
++	cmp	x1, #2
++	b.ne	svcr_barf
++
++	rdsvl	21, 1			// Verify that the data made it through
++	rdsvl	24, 1			// Verify that the data made it through
++0:	sub	x0, x24, x21
++	bl	check_za
++	subs	x21, x21, #1
++	bne	0b
++
++	add	x22, x22, #1	// Everything still working
++	b	.Ltest_loop
++
++.Labort:
++	mov	x0, #0
++	mov	x1, #SIGABRT
++	mov	x8, #__NR_kill
++	svc	#0
++endfunction
++
++function barf
++// fpsimd.c acitivty log dump hack
++//	ldr	w0, =0xdeadc0de
++//	mov	w8, #__NR_exit
++//	svc	#0
++// end hack
++	smstop
++	mov	x10, x0	// expected data
++	mov	x11, x1	// actual data
++	mov	x12, x2	// data size
++
++	puts	"Mismatch: PID="
++	mov	x0, x20
++	bl	putdec
++	puts	", iteration="
++	mov	x0, x22
++	bl	putdec
++	puts	", row="
++	mov	x0, x21
++	bl	putdecn
++	puts	"\tExpected ["
++	mov	x0, x10
++	mov	x1, x12
++	bl	dumphex
++	puts	"]\n\tGot      ["
++	mov	x0, x11
++	mov	x1, x12
++	bl	dumphex
++	puts	"]\n"
++
++	mov	x8, #__NR_getpid
++	svc	#0
++// fpsimd.c acitivty log dump hack
++//	ldr	w0, =0xdeadc0de
++//	mov	w8, #__NR_exit
++//	svc	#0
++// ^ end of hack
++	mov	x1, #SIGABRT
++	mov	x8, #__NR_kill
++	svc	#0
++//	mov	x8, #__NR_exit
++//	mov	x1, #1
++//	svc	#0
++endfunction
++
++function vl_barf
++	mov	x10, x0
++
++	puts	"Bad active VL: "
++	mov	x0, x10
++	bl	putdecn
++
++	mov	x8, #__NR_exit
++	mov	x1, #1
++	svc	#0
++endfunction
++
++function svcr_barf
++	mov	x10, x0
++
++	puts	"Bad SVCR: "
++	mov	x0, x10
++	bl	putdecn
++
++	mov	x8, #__NR_exit
++	mov	x1, #1
++	svc	#0
++endfunction
 -- 
 2.30.2
 
