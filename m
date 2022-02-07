@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35DBDC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27511C433F5
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239470AbiBGPfO (ORCPT
+        id S239680AbiBGPfO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 7 Feb 2022 10:35:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358822AbiBGPZ0 (ORCPT
+        with ESMTP id S1349198AbiBGPYK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:25:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B036C0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:26 -0800 (PST)
+        Mon, 7 Feb 2022 10:24:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1265BC0401C9
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDA66614A2
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E70C340EF;
-        Mon,  7 Feb 2022 15:25:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE2D0B815AE
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0626C340F0;
+        Mon,  7 Feb 2022 15:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247525;
-        bh=83jtyFMVWibI1yjNMg/LHlTS7+0zPZgbJl1COGo6TzQ=;
+        s=k20201202; t=1644247446;
+        bh=3ak/TkOEva2A1EWWMZ6rEAo+xuM7bHsmgGI8j+vb0mA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IURXw5/qEkV6UBgTfE9gkJnxU1uBM4TEH1oyw/vRT/xjFXEDdPDJBagmR/P9LXtc3
-         FbmwedTS+iehjrpUODaA0R7ikdmXxIMeLwxiZ1nd6oeP+eB7wrFWFPQVBXJwCfqhsy
-         20LLH4VepWuNJHa8ZAH2mwIStfKe9wl6tTo89HN4/ReRPnmUxHB1wkmFvYXJS5Honw
-         tRcR6e6qB4pPV6HsAG7Er9/0IuDH28ANkLS07wpEveDUsHneWFOPAigyAkAYhQZFMD
-         fXlGyn/qUTc4Qagr/t2zKdL4YuQuxfhQa7SadzS6GMz7Wv5/2VgbxfHeL5TiA1YjG7
-         WJnlB4yiaNVxA==
+        b=HSeK0+hglpkeQ+ybvXtdF3aTR8lC+9v2dcFxSHi+6XKrkcFbZfmq0ruFdbY+tfire
+         78HpG1QUJ6y5MTmq6+WnLZfmH1WJW0Y8rkNRrLMUhnRmKBB84uQJTweSjs3qJ5DRTt
+         D50Go8eGCliElsmX784j6Ghewqky2o+kuIdW8mpnd961j5gudCErq80EVcYZkIcDkW
+         Xh4RN+0dEJfx3/DU6QfB2njXxZ+C2DyfDvnBsAAXbDm2Qnn7k6ZGisN3CyuEEY245J
+         hf1Lth5c1g1CKqjpQhig7NCM4vPxZWE9LlkkqjaPobqFy3/HWk+WRJEEweh7k28CNg
+         f6HycjtuGordw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,222 +49,178 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 34/40] kselftest/arm64: sme: Provide streaming mode SVE stress test
-Date:   Mon,  7 Feb 2022 15:21:03 +0000
-Message-Id: <20220207152109.197566-35-broonie@kernel.org>
+Subject: [PATCH v11 15/40] arm64/sme: Implement SVCR context switching
+Date:   Mon,  7 Feb 2022 15:20:44 +0000
+Message-Id: <20220207152109.197566-16-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4975; h=from:subject; bh=83jtyFMVWibI1yjNMg/LHlTS7+0zPZgbJl1COGo6TzQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjfrviavQl4a8DdwF7OMIRRfMIc9t6JKLX4659/ DsKHZUyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE43wAKCRAk1otyXVSH0I9gB/ 9/ozkqNZnkXS4UIQFtYDGHvRH4Ofw69EtsJzY1L3lMOXQGe/Na2QGLwfb7HHV/vEa5AuVNQfyYxEu8 jPAtw2Paz1hq4l78/obyAfENYP88hcmJXon8ngsrYOGp/DInVsk3v8XBH0uIg/V+Wt/eNC1MxHLMVJ /3C9iQgsSGCDIQA4AalUdgrlvoEEhbFFcE6Czfada6xn3Ai4dOhomekLgIbv/xEptBr8XPSUJtyVWV qMIq8k+bE/IVsF83a9gvUao/jQoXAu+7SKMk8B1VdbNtJNvsgKBgcPNfGUP4rffCGynsvilkLL3Gxm bOFedjGYa6R6evCUSqMjB6dhgCMXtg
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6142; h=from:subject; bh=3ak/TkOEva2A1EWWMZ6rEAo+xuM7bHsmgGI8j+vb0mA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjQxHICk/aRefIWC+RRWEwIqJy9Ttg8s+gBA7Ye 7XUSftuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE40AAKCRAk1otyXVSH0Bz2B/ 41/or6wJnJWLV0WkgGyQT8I0f8OnsMLtBUv0hk9K4RLkwXVh6lUPytIWi4PUyECInGqbVTlTbn/3fi vjyJivi2pQXY/60bmEb2/nze0Yd1M2nWTNgxrx6sskYBf1jJKDfYYx+fd1ZCM3ptp/6mcc5J4TLa7L i07xzAsUKUpKh5HYH0vrqsaH1iw8I2jpjFSv404pLNvV34YPSje7KNpKT6+kCiDLGQg/jDlL39lmc0 ca1gHWcTxWv6Fdb61Fcqmd3vhsF1+Joxa3kz4PIliPpTSHAsCwqO/oALhMTVN6LFO4Q56o4sYlsEyD hiqKKU9P4atiI78Qm2va4sIjP3dIiK
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-One of the features of SME is the addition of streaming mode, in which we
-have access to a set of streaming mode SVE registers at the SME vector
-length. Since these are accessed using the SVE instructions let's reuse
-the existing SVE stress test for testing with a compile time option for
-controlling the few small differences needed:
+In SME the use of both streaming SVE mode and ZA are tracked through
+PSTATE.SM and PSTATE.ZA, visible through the system register SVCR.  In
+order to context switch the floating point state for SME we need to
+context switch the contents of this register as part of context
+switching the floating point state.
 
- - Enter streaming mode immediately on starting the program.
- - In streaming mode FFR is removed so skip reading and writing FFR.
-
-In order to avoid requiring a cutting edge toolchain with SME support
-use the op/CR form for specifying SVCR.
+Since changing the vector length exits streaming SVE mode and disables
+ZA we also make sure we update SVCR appropriately when setting vector
+length, and similarly ensure that new threads have streaming SVE mode
+and ZA disabled.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore  |  1 +
- tools/testing/selftests/arm64/fp/Makefile    |  3 +
- tools/testing/selftests/arm64/fp/ssve-stress | 59 ++++++++++++++++++++
- tools/testing/selftests/arm64/fp/sve-test.S  | 20 +++++++
- 4 files changed, 83 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/ssve-stress
+ arch/arm64/include/asm/fpsimd.h      |  3 ++-
+ arch/arm64/include/asm/processor.h   |  1 +
+ arch/arm64/include/asm/thread_info.h |  1 +
+ arch/arm64/kernel/fpsimd.c           | 18 +++++++++++++++++-
+ arch/arm64/kernel/process.c          |  2 ++
+ arch/arm64/kvm/fpsimd.c              |  4 ++++
+ 6 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index 6e9a610c5e5d..5729a5b1adfc 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -5,5 +5,6 @@ rdvl-sve
- sve-probe-vls
- sve-ptrace
- sve-test
-+ssve-test
- vec-syscfg
- vlset
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index a224fff8082b..e6643c9b0474 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -5,6 +5,7 @@ TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
- TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
- 	rdvl-sme rdvl-sve \
- 	sve-test sve-stress \
-+	ssve-test ssve-stress \
- 	vlset
+diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
+index babf944e7c0c..d1bae65d3dba 100644
+--- a/arch/arm64/include/asm/fpsimd.h
++++ b/arch/arm64/include/asm/fpsimd.h
+@@ -46,7 +46,8 @@ extern void fpsimd_restore_current_state(void);
+ extern void fpsimd_update_current_state(struct user_fpsimd_state const *state);
  
- all: $(TEST_GEN_PROGS) $(TEST_PROGS_EXTENDED)
-@@ -19,6 +20,8 @@ sve-ptrace: sve-ptrace.o
- sve-probe-vls: sve-probe-vls.o rdvl.o
- sve-test: sve-test.o asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
-+ssve-test: sve-test.S asm-utils.o
-+	$(CC) -DSSVE -nostdlib $^ -o $@
- vec-syscfg: vec-syscfg.o rdvl.o
- vlset: vlset.o
+ extern void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *state,
+-				     void *sve_state, unsigned int sve_vl);
++				     void *sve_state, unsigned int sve_vl,
++				     u64 *svcr);
  
-diff --git a/tools/testing/selftests/arm64/fp/ssve-stress b/tools/testing/selftests/arm64/fp/ssve-stress
-new file mode 100644
-index 000000000000..e2bd2cc184ad
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/ssve-stress
-@@ -0,0 +1,59 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2015-2019 ARM Limited.
-+# Original author: Dave Martin <Dave.Martin@arm.com>
-+
-+set -ue
-+
-+NR_CPUS=`nproc`
-+
-+pids=
-+logs=
-+
-+cleanup () {
-+	trap - INT TERM CHLD
-+	set +e
-+
-+	if [ -n "$pids" ]; then
-+		kill $pids
-+		wait $pids
-+		pids=
-+	fi
-+
-+	if [ -n "$logs" ]; then
-+		cat $logs
-+		rm $logs
-+		logs=
-+	fi
-+}
-+
-+interrupt () {
-+	cleanup
-+	exit 0
-+}
-+
-+child_died () {
-+	cleanup
-+	exit 1
-+}
-+
-+trap interrupt INT TERM EXIT
-+
-+for x in `seq 0 $((NR_CPUS * 4))`; do
-+	log=`mktemp`
-+	logs=$logs\ $log
-+	./ssve-test >$log &
-+	pids=$pids\ $!
-+done
-+
-+# Wait for all child processes to be created:
-+sleep 10
-+
-+while :; do
-+	kill -USR1 $pids
-+done &
-+pids=$pids\ $!
-+
-+wait
-+
-+exit 1
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index f5b1b48ffff2..589264231a2d 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -13,6 +13,7 @@
- #include <asm/unistd.h>
- #include "assembler.h"
- #include "asm-offsets.h"
-+#include "sme-inst.h"
+ extern void fpsimd_flush_task_state(struct task_struct *target);
+ extern void fpsimd_save_and_flush_cpu_state(void);
+diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
+index 008a1767ebff..7e08a4d48c24 100644
+--- a/arch/arm64/include/asm/processor.h
++++ b/arch/arm64/include/asm/processor.h
+@@ -168,6 +168,7 @@ struct thread_struct {
+ 	u64			mte_ctrl;
+ #endif
+ 	u64			sctlr_user;
++	u64			svcr;
+ 	u64			tpidr2_el0;
+ };
  
- #define NZR	32
- #define NPR	16
-@@ -156,6 +157,7 @@ endfunction
- // We fill the upper lanes of FFR with zeros.
- // Beware: corrupts P0.
- function setup_ffr
-+#ifndef SSVE
- 	mov	x4, x30
+diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+index 4e6b58dcd6f9..848739c15de8 100644
+--- a/arch/arm64/include/asm/thread_info.h
++++ b/arch/arm64/include/asm/thread_info.h
+@@ -82,6 +82,7 @@ int arch_dup_task_struct(struct task_struct *dst,
+ #define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
+ #define TIF_SSBD		25	/* Wants SSB mitigation */
+ #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
++#define TIF_SME			27	/* SME in use */
+ #define TIF_SME_VL_INHERIT	28	/* Inherit SME vl_onexec across exec */
  
- 	and	w0, w0, #0x3
-@@ -178,6 +180,9 @@ function setup_ffr
- 	wrffr	p0.b
+ #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 40ef89120774..a1918b71d335 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -121,6 +121,7 @@
+ struct fpsimd_last_state_struct {
+ 	struct user_fpsimd_state *st;
+ 	void *sve_state;
++	u64 *svcr;
+ 	unsigned int sve_vl;
+ };
  
- 	ret	x4
-+#else
-+	ret
-+#endif
- endfunction
+@@ -359,6 +360,9 @@ static void task_fpsimd_load(void)
+ 	WARN_ON(!system_supports_fpsimd());
+ 	WARN_ON(!have_cpu_fpsimd_context());
  
- // Trivial memory compare: compare x2 bytes starting at address x0 with
-@@ -260,6 +265,7 @@ endfunction
- // Beware -- corrupts P0.
- // Clobbers x0-x5.
- function check_ffr
-+#ifndef SSVE
- 	mov	x3, x30
- 
- 	ldr	x4, =scratch
-@@ -280,6 +286,9 @@ function check_ffr
- 	mov	x2, x5
- 	mov	x30, x3
- 	b	memcmp
-+#else
-+	ret
-+#endif
- endfunction
- 
- // Any SVE register modified here can cause corruption in the main
-@@ -295,10 +304,12 @@ function irritator_handler
- 	movi	v0.8b, #1
- 	movi	v9.16b, #2
- 	movi	v31.8b, #3
-+#ifndef SSVE
- 	// And P0
- 	rdffr	p0.b
- 	// And FFR
- 	wrffr	p15.b
-+#endif
- 
- 	ret
- endfunction
-@@ -359,6 +370,11 @@ endfunction
- .globl _start
- function _start
- _start:
-+#ifdef SSVE
-+	puts	"Streaming mode "
-+	smstart_sm
-+#endif
++	if (IS_ENABLED(CONFIG_ARM64_SME) && test_thread_flag(TIF_SME))
++		write_sysreg_s(current->thread.svcr, SYS_SVCR_EL0);
 +
- 	// Sanity-check and report the vector length
+ 	if (IS_ENABLED(CONFIG_ARM64_SVE) && test_thread_flag(TIF_SVE)) {
+ 		sve_set_vq(sve_vq_from_vl(task_get_sve_vl(current)) - 1);
+ 		sve_load_state(sve_pffr(&current->thread),
+@@ -384,6 +388,12 @@ static void fpsimd_save(void)
+ 	if (test_thread_flag(TIF_FOREIGN_FPSTATE))
+ 		return;
  
- 	rdvl	x19, #8
-@@ -407,6 +423,10 @@ _start:
- 	orr	w2, w2, #SA_NODEFER
- 	bl	setsignal
- 
-+#ifdef SSVE
-+	smstart_sm		// syscalls will have exited streaming mode
-+#endif
++	if (IS_ENABLED(CONFIG_ARM64_SME) &&
++	    test_thread_flag(TIF_SME)) {
++		u64 *svcr = last->svcr;
++		*svcr = read_sysreg_s(SYS_SVCR_EL0);
++	}
 +
- 	mov	x22, #0		// generation number, increments per iteration
- .Ltest_loop:
- 	rdvl	x0, #8
+ 	if (IS_ENABLED(CONFIG_ARM64_SVE) &&
+ 	    test_thread_flag(TIF_SVE)) {
+ 		if (WARN_ON(sve_get_vl() != last->sve_vl)) {
+@@ -735,6 +745,10 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+ 	if (test_and_clear_tsk_thread_flag(task, TIF_SVE))
+ 		sve_to_fpsimd(task);
+ 
++	if (system_supports_sme() && type == ARM64_VEC_SME)
++		task->thread.svcr &= ~(SYS_SVCR_EL0_SM_MASK |
++				       SYS_SVCR_EL0_ZA_MASK);
++
+ 	if (task == current)
+ 		put_cpu_fpsimd_context();
+ 
+@@ -1398,6 +1412,7 @@ static void fpsimd_bind_task_to_cpu(void)
+ 	last->st = &current->thread.uw.fpsimd_state;
+ 	last->sve_state = current->thread.sve_state;
+ 	last->sve_vl = task_get_sve_vl(current);
++	last->svcr = &current->thread.svcr;
+ 	current->thread.fpsimd_cpu = smp_processor_id();
+ 
+ 	if (system_supports_sve()) {
+@@ -1412,7 +1427,7 @@ static void fpsimd_bind_task_to_cpu(void)
+ }
+ 
+ void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *st, void *sve_state,
+-			      unsigned int sve_vl)
++			      unsigned int sve_vl, u64 *svcr)
+ {
+ 	struct fpsimd_last_state_struct *last =
+ 		this_cpu_ptr(&fpsimd_last_state);
+@@ -1421,6 +1436,7 @@ void fpsimd_bind_state_to_cpu(struct user_fpsimd_state *st, void *sve_state,
+ 	WARN_ON(!in_softirq() && !irqs_disabled());
+ 
+ 	last->st = st;
++	last->svcr = svcr;
+ 	last->sve_state = sve_state;
+ 	last->sve_vl = sve_vl;
+ }
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index e69a3dcdb0d9..f2d32a29641c 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -310,6 +310,8 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ 	dst->thread.sve_state = NULL;
+ 	clear_tsk_thread_flag(dst, TIF_SVE);
+ 
++	dst->thread.svcr = 0;
++
+ 	/* clear any pending asynchronous tag fault raised by the parent */
+ 	clear_tsk_thread_flag(dst, TIF_MTE_ASYNC_FAULT);
+ 
+diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+index 2f48fd362a8c..04698c4bcd30 100644
+--- a/arch/arm64/kvm/fpsimd.c
++++ b/arch/arm64/kvm/fpsimd.c
+@@ -103,6 +103,10 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
+ 	WARN_ON_ONCE(!irqs_disabled());
+ 
+ 	if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
++		/*
++		 * Currently we do not support SME guests so SVCR is
++		 * always 0 and we just need a variable to point to.
++		 */
+ 		fpsimd_bind_state_to_cpu(&vcpu->arch.ctxt.fp_regs,
+ 					 vcpu->arch.sve_state,
+ 					 vcpu->arch.sve_max_vl);
 -- 
 2.30.2
 
