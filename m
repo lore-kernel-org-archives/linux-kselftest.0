@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35613C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63AB3C43219
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238013AbiBGPfM (ORCPT
+        id S238697AbiBGPfN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        Mon, 7 Feb 2022 10:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiBGPXY (ORCPT
+        with ESMTP id S1356127AbiBGPYs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64AFC0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:23 -0800 (PST)
+        Mon, 7 Feb 2022 10:24:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753DBC0401CE
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:24:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7273561035
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACE2C004E1;
-        Mon,  7 Feb 2022 15:23:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38136B815A6
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43228C340F2;
+        Mon,  7 Feb 2022 15:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247402;
-        bh=+3VTZZuKVlfj3PHcp/aHFz8BbrWQRRO0ZN8yApxFTHo=;
+        s=k20201202; t=1644247486;
+        bh=+stvVyRnz2H4xbnaEtKWfcp0/IPDCeyODbC6Y5cXcCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S6e39YuVcqxvURE1dDlybDtE6+/O3bPloBPqXpGC4cx3/aJeZ4vFmguknMx1Il73d
-         OvBpKGXFrzr2UPbIM278KTNvi5675X2WWDmL5R+I0jGfp9XO2rYrX/YjOgaeI3HCg6
-         fZHNWWFivUptT94eAFlZ+iOcO12nVWwlkhGQuTC57BCPxElHettnZh8yV+xwSJwbcf
-         sFnV/xXB6XtYRNtgwC+XPmGgktO1kGyA3JqJvOCXkX7Db6P6Pi8I/0jOS2iMMmTiuu
-         BeHDypCWwYdXakuwiAwLHogrdV69vbyIr9FwfBfK/NzR5jNwE0UAC1GFmj6ktBQAKv
-         TbZlAeeXLa1rw==
+        b=BeGQY67CXRWkA02czlOg4e4dKQhn1vgI0TX0Kzvk92P2fXSxyJ5PZWf6JYjOh28HG
+         p/fcLBFTTYtSxmJ0HdA+tLpc5Dt3SvtdUu0aCiagxYI6IPJ2FfmB6Q3516WmUXUlvr
+         sK843zAnWjjzJQUIN0M3GElhb43EQjDIaRJSDys7IPjJ/sroNZ+Q09hJGxtT4+A3i/
+         TMZLeRX92xt/Zwsfw0+rQCGsDpmCTfoa3kob31yRRRK/nCjSj3rCJpcSsa4I3pUOyg
+         3pgwkQtQ4m1aZ8I99dU4lZt6qIvRyb7UXGx/s9GxtOAaCYuZ/siUWdvC4Lq+H3sC9r
+         9f5S4Sk87qJ/A==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,54 +49,51 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 04/40] kselftest/arm64: Remove local ARRAY_SIZE() definitions
-Date:   Mon,  7 Feb 2022 15:20:33 +0000
-Message-Id: <20220207152109.197566-5-broonie@kernel.org>
+Subject: [PATCH v11 24/40] arm64/sme: Disable streaming mode and ZA when flushing CPU state
+Date:   Mon,  7 Feb 2022 15:20:53 +0000
+Message-Id: <20220207152109.197566-25-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1265; h=from:subject; bh=+3VTZZuKVlfj3PHcp/aHFz8BbrWQRRO0ZN8yApxFTHo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjIOOkBxtTD0ogV/fD69P5hPnz9SqSHumCqfc4B xt2smpWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4yAAKCRAk1otyXVSH0E07B/ 0TlC/mxicrwg6RnAylCxB3yQzF3z45C3GndS2h6TJbLqyZPgUp8CbANNcL5GJeFd/9LVR3PGKxMwpZ NItKAxS7Qv/OT6cOT0puDG+d739swVYdMSbyAddDnIgE9ypjbEwQlOF3/AGk76IX2ETb1vMyOaoJyE 1s/O5IFipgYeP1AAweotF/4qkGFPCa1t3qb0CdPOtLW52zkhnLZJU3YUmH3FDpmoOq88Ybme80+Dm8 ckTPs0IjEPj4AG16yXSKeX+7HAzTD3M906CTW3wVljWYPBxaxoUOGIqSLXpkwwZW33uuDLv4/XXi1B /iGh/02ipBtMJwOhSeNIUqhDOCr/VM
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1128; h=from:subject; bh=+stvVyRnz2H4xbnaEtKWfcp0/IPDCeyODbC6Y5cXcCY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjXZjkrllyw3wrZv65gkzLMq7K6hvi8wR5NerZM dVGlefyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE41wAKCRAk1otyXVSH0NQpB/ 9paVTph2pBZxYnT/c1ExiDXuHtp0fK3bfvDPEFT3bvWk96GqS7QwDkwaX2TuIM/QS8Ip7+6FM11I1z /Od20Ab96ZmMgKUnlxByL9hKw4g+pQcJB8Wqz4V6cV185sLmu8Dij7x/1+35pVPTOwft4FvC+uBe2a SSAcH1i11FngQ+xBNThdmdvo+2KWxm8L1AZ98cMW5EcyROtHRU/Bt4sM5M1+GhqyNJFqCD1vP06tLb bs5P0ELeLusAiGHNUThbDtTZbuNMANSC5axgd6WIFW7mUbGV4ZtsVHJsSID+dxJlsU5Bys1zUzt8hF TFjiL/AwQ/WxnrY43MddYL5xVG+cdM
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-An ARRAY_SIZE() has been added to kselftest.h so remove the local versions
-in some of the arm64 selftests.
+Both streaming mode and ZA may increase power consumption when they are
+enabled and streaming mode makes many FPSIMD and SVE instructions undefined
+which will cause problems for any kernel mode floating point so disable
+both when we flush the CPU state. This covers both kernel_neon_begin() and
+idle and after flushing the state a reload is always required anyway.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/syscall-abi.c | 1 -
- tools/testing/selftests/arm64/fp/sve-ptrace.c   | 2 --
- 2 files changed, 3 deletions(-)
+ arch/arm64/kernel/fpsimd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index d8eeeafb50dc..1e13b7523918 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -18,7 +18,6 @@
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 8b111b7f2006..e00d3a9e919c 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1762,6 +1762,15 @@ static void fpsimd_flush_cpu_state(void)
+ {
+ 	WARN_ON(!system_supports_fpsimd());
+ 	__this_cpu_write(fpsimd_last_state.st, NULL);
++
++	/*
++	 * Leaving streaming mode enabled will cause issues for any kernel
++	 * NEON and leaving streaming mode or ZA enabled may increase power
++	 * consumption.
++	 */
++	if (system_supports_sme())
++		sme_smstop();
++
+ 	set_thread_flag(TIF_FOREIGN_FPSTATE);
+ }
  
- #include "../../kselftest.h"
- 
--#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
- #define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
- 
- extern void do_syscall(int sve_vl);
-diff --git a/tools/testing/selftests/arm64/fp/sve-ptrace.c b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-index a3c1e67441f9..4bd333768cc4 100644
---- a/tools/testing/selftests/arm64/fp/sve-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/sve-ptrace.c
-@@ -21,8 +21,6 @@
- 
- #include "../../kselftest.h"
- 
--#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
--
- /* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
- #ifndef NT_ARM_SVE
- #define NT_ARM_SVE 0x405
 -- 
 2.30.2
 
