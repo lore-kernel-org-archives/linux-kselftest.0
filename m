@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1895AC47085
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 081A0C3527A
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377215AbiBGPfa (ORCPT
+        id S1377011AbiBGPf3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
+        Mon, 7 Feb 2022 10:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345108AbiBGPXk (ORCPT
+        with ESMTP id S1380796AbiBGPZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:23:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41D6C0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:39 -0800 (PST)
+        Mon, 7 Feb 2022 10:25:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2A0C0401C1
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 508AB61035
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468C5C340F2;
-        Mon,  7 Feb 2022 15:23:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F080614A4
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D6A0C36AE7;
+        Mon,  7 Feb 2022 15:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247418;
-        bh=HMQHyHN36InZca7SOj753D+ZgRaa/ByOBuanPgEEWxc=;
+        s=k20201202; t=1644247544;
+        bh=ecrSLOMf96U5MDd54SIrznq5/FtGm5nlF0tmprp18dg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RaDkJG5UFzR+PFUH/Cktih1qAaGz1BpcVaXiu+8wx2N8fBhoEUyrqGmsypWqLcyDJ
-         wvRGHTEY87NjdSrkt8v43kNU07jhx7qkeQ1bwNAkV4043CoRaksSJT8MWQ2gy/ILIr
-         cS13TTYBSYhe5K1Er6zkjv441wvoNk1CAFJlCsJ5ey4rllXuNRdK6fIyflNMUSBLTe
-         OaMoTpYjjcprNj/gXImSvJjQizp9HmcMqf39a+Ts+jYUjkvEyUUDZ2gDINzhiYvOy7
-         I7ZT9uulLZOh3uThiY6TwEGu4bEE+MeGYwk96fXn+E+dNeVYTa+FyE8iXvkGNGzHtO
-         /7EDTkwC/LZiw==
+        b=WpdK0x1mRlctitwYvehmKoEx8oeQz6Gc9IfEpIUA5yzBvFmK8o1su60hKjZE4fBXf
+         ChNEWOlThbDMAtlb7ZzUURys10rn91cMw1QT17ES6Kf5gNa6XvrG893UaDsYrKF3rM
+         xFKNMffVv6Cbovn82xH5ysZkxviiMuXL54bQnD4503qptB/rMN83EoE5U2DXDxba35
+         S+W1va1Tn4X2z5MJDXp7R1zzWlMficEV5Vz8Dng2PNNh7NDz/QgujapsD+M4MS5FAq
+         tEWA/0Nrys9PIKL0iIx+gq9iymSuFAei4VhNR/l8N+8uRpYjDS5S/osROuyGP5GHTV
+         T/oEJHIVdyFIw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,147 +49,425 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 08/40] arm64/sme: Manually encode SME instructions
-Date:   Mon,  7 Feb 2022 15:20:37 +0000
-Message-Id: <20220207152109.197566-9-broonie@kernel.org>
+Subject: [PATCH v11 39/40] kselftest/arm64: Add coverage for the ZA ptrace interface
+Date:   Mon,  7 Feb 2022 15:21:08 +0000
+Message-Id: <20220207152109.197566-40-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3671; h=from:subject; bh=HMQHyHN36InZca7SOj753D+ZgRaa/ByOBuanPgEEWxc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjLU4t0P2TtzTYSd2s2Hen3CRw27ngQIyNfDOJC 4/nuJxWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4ywAKCRAk1otyXVSH0GAMB/ 9r5CGhL1EtZIHg+mK4TXgNsO7uYuELjxQxQ3n78fLzcDGxMxoR8R44ZqWmgqx6mU1VVelM90wnmmMa 1+x5JvPphvyA07/N98GXBbNxCHzi9+4KAFEq3DN0p28vywW0dbSU0Yy7vRYiO6Eu4YJpa3O45zOjVR +Mb8INezzMfNN7yEwGDBzHg1PchJwSx+Y2Z6hg2x+nEdagqjcdPLmKIa+bfrc17qfFhDeChDyoIpcz 3IFCV0y4OiCt5Mq1zNz5EMU7EwiDIkalR36gxWbPLQvLdhAnP1ljnvYpSycyehik8Uzj0Cml6go8P3 E6m+IgUmYExixGQW2ZW2o46Kc5va9k
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10245; h=from:subject; bh=ecrSLOMf96U5MDd54SIrznq5/FtGm5nlF0tmprp18dg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjj2ZaSbK1iDKuUELFWCyMD9QZB86HI6pp5bROy KF3LJj6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE44wAKCRAk1otyXVSH0OouB/ 0cEtEYjfWwQaCbheF+6pAtgx0KGWKzVC8B4kXRtacMQRjUxLy+nMdnGDbIg0PGO524wIth2wnVgLHZ BcXHwjmEwvpoiq7CvQP7hVZBzSgrNTiwEKlGm++ivgFAcZbNSKmr9tRY86svC8olAWnH1HlqjTHKTc IwLYKElhVrIIhtkZYlr6qAdjc6XToQWG9/aKc6F+BAr+dLfdDTtP6IjIAqxsn/GF6Uiahl/oZK58rQ 90WxLdBFxSi0Q/ggAnJQGiJiCDZ4pnHLKilYdLwX2beu4kwWtys0MLMA8taCBR9y8OblM1VC6glkr3 ClLZtqRDae9+C7wkJ7mpcJW/bcs8ZL
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As with SVE rather than impose ambitious toolchain requirements for SME
-we manually encode the few instructions which we require in order to
-perform the work the kernel needs to do. The instructions used to save
-and restore context are provided as assembler macros while those for
-entering and leaving streaming mode are done in asm volatile blocks
-since they are expected to be used from C.
-
-We could do the SMSTART and SMSTOP operations with read/modify/write
-cycles on SVCR but using the aliases provided for individual field
-accesses should be slightly faster. These instructions are aliases for
-MSR but since our minimum toolchain requirements are old enough to mean
-that we can't use the sX_X_cX_cX_X form and they always use xzr rather
-than taking a value like write_sysreg_s() wants we just use .inst.
+Add some basic coverage for the ZA ptrace interface, including walking
+through all the vector lengths supported in the system.  Unlike SVE
+doing syscalls does not discard the ZA state so when we set data in ZA
+we run the child process briefly, having it add one to each byte in ZA
+in order to validate that both the vector size and data are being read
+and written as expected when the process runs.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h       | 25 +++++++++++++
- arch/arm64/include/asm/fpsimdmacros.h | 53 +++++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
+ tools/testing/selftests/arm64/fp/.gitignore  |   1 +
+ tools/testing/selftests/arm64/fp/Makefile    |   3 +-
+ tools/testing/selftests/arm64/fp/za-ptrace.c | 354 +++++++++++++++++++
+ 3 files changed, 357 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/za-ptrace.c
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index cb24385e3632..c90f7f99a768 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -249,6 +249,31 @@ static inline void sve_setup(void) { }
+diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
+index ead3197e720b..d98d3d48b504 100644
+--- a/tools/testing/selftests/arm64/fp/.gitignore
++++ b/tools/testing/selftests/arm64/fp/.gitignore
+@@ -8,4 +8,5 @@ sve-test
+ ssve-test
+ vec-syscfg
+ vlset
++za-ptrace
+ za-test
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index 38d2d0d5a0eb..807a8faf8d57 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- #endif /* ! CONFIG_ARM64_SVE */
+ CFLAGS += -I../../../../../usr/include/
+-TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
++TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg za-ptrace
+ TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
+ 	rdvl-sme rdvl-sve \
+ 	sve-test sve-stress \
+@@ -27,5 +27,6 @@ vec-syscfg: vec-syscfg.o rdvl.o
+ vlset: vlset.o
+ za-test: za-test.o asm-utils.o
+ 	$(CC) -nostdlib $^ -o $@
++za-ptrace: za-ptrace.o
  
-+#ifdef CONFIG_ARM64_SME
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/fp/za-ptrace.c b/tools/testing/selftests/arm64/fp/za-ptrace.c
+new file mode 100644
+index 000000000000..692c82624855
+--- /dev/null
++++ b/tools/testing/selftests/arm64/fp/za-ptrace.c
+@@ -0,0 +1,354 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2021 ARM Limited.
++ */
++#include <errno.h>
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <sys/ptrace.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++#include <sys/wait.h>
++#include <asm/sigcontext.h>
++#include <asm/ptrace.h>
 +
-+static inline void sme_smstart_sm(void)
++#include "../../kselftest.h"
++
++/* <linux/elf.h> and <sys/auxv.h> don't like each other, so: */
++#ifndef NT_ARM_ZA
++#define NT_ARM_ZA 0x40c
++#endif
++
++#define EXPECTED_TESTS (((SVE_VQ_MAX - SVE_VQ_MIN) + 1) * 3)
++
++static void fill_buf(char *buf, size_t size)
 +{
-+	asm volatile(".inst 0xd503437f");
++	int i;
++
++	for (i = 0; i < size; i++)
++		buf[i] = random();
 +}
 +
-+static inline void sme_smstop_sm(void)
++static int do_child(void)
 +{
-+	asm volatile(".inst 0xd503427f");
++	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
++		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
++
++	if (raise(SIGSTOP))
++		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
++
++	return EXIT_SUCCESS;
 +}
 +
-+static inline void sme_smstop(void)
++static struct user_za_header *get_za(pid_t pid, void **buf, size_t *size)
 +{
-+	asm volatile(".inst 0xd503467f");
++	struct user_za_header *za;
++	void *p;
++	size_t sz = sizeof(*za);
++	struct iovec iov;
++
++	while (1) {
++		if (*size < sz) {
++			p = realloc(*buf, sz);
++			if (!p) {
++				errno = ENOMEM;
++				goto error;
++			}
++
++			*buf = p;
++			*size = sz;
++		}
++
++		iov.iov_base = *buf;
++		iov.iov_len = sz;
++		if (ptrace(PTRACE_GETREGSET, pid, NT_ARM_ZA, &iov))
++			goto error;
++
++		za = *buf;
++		if (za->size <= sz)
++			break;
++
++		sz = za->size;
++	}
++
++	return za;
++
++error:
++	return NULL;
 +}
 +
-+#else
++static int set_za(pid_t pid, const struct user_za_header *za)
++{
++	struct iovec iov;
 +
-+static inline void sme_smstart_sm(void) { }
-+static inline void sme_smstop_sm(void) { }
-+static inline void sme_smstop(void) { }
++	iov.iov_base = (void *)za;
++	iov.iov_len = za->size;
++	return ptrace(PTRACE_SETREGSET, pid, NT_ARM_ZA, &iov);
++}
 +
-+#endif /* ! CONFIG_ARM64_SME */
++/* Validate attempting to set the specfied VL via ptrace */
++static void ptrace_set_get_vl(pid_t child, unsigned int vl, bool *supported)
++{
++	struct user_za_header za;
++	struct user_za_header *new_za = NULL;
++	size_t new_za_size = 0;
++	int ret, prctl_vl;
 +
- /* For use by EFI runtime services calls only */
- extern void __efi_fpsimd_begin(void);
- extern void __efi_fpsimd_end(void);
-diff --git a/arch/arm64/include/asm/fpsimdmacros.h b/arch/arm64/include/asm/fpsimdmacros.h
-index 2509d7dde55a..11c426ddd62c 100644
---- a/arch/arm64/include/asm/fpsimdmacros.h
-+++ b/arch/arm64/include/asm/fpsimdmacros.h
-@@ -93,6 +93,12 @@
- 	.endif
- .endm
- 
-+.macro _sme_check_wv v
-+	.if (\v) < 12 || (\v) > 15
-+		.error "Bad vector select register \v."
-+	.endif
-+.endm
++	*supported = false;
 +
- /* SVE instruction encodings for non-SVE-capable assemblers */
- /* (pre binutils 2.28, all kernel capable clang versions support SVE) */
- 
-@@ -174,6 +180,53 @@
- 		| (\np)
- .endm
- 
-+/* SME instruction encodings for non-SME-capable assemblers */
++	/* Check if the VL is supported in this process */
++	prctl_vl = prctl(PR_SME_SET_VL, vl);
++	if (prctl_vl == -1)
++		ksft_exit_fail_msg("prctl(PR_SME_SET_VL) failed: %s (%d)\n",
++				   strerror(errno), errno);
 +
-+/* RDSVL X\nx, #\imm */
-+.macro _sme_rdsvl nx, imm
-+	_check_general_reg \nx
-+	_check_num (\imm), -0x20, 0x1f
-+	.inst	0x04bf5800			\
-+		| (\nx)				\
-+		| (((\imm) & 0x3f) << 5)
-+.endm
++	/* If the VL is not supported then a supported VL will be returned */
++	*supported = (prctl_vl == vl);
 +
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _sme_str_zav nw, nxbase, offset=0
-+	_sme_check_wv \nw
-+	_check_general_reg \nxbase
-+	_check_num (\offset), -0x100, 0xff
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
++	/* Set the VL by doing a set with no register payload */
++	memset(&za, 0, sizeof(za));
++	za.size = sizeof(za);
++	za.vl = vl;
++	ret = set_za(child, &za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u\n", vl);
++		return;
++	}
 +
-+/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _sme_ldr_zav nw, nxbase, offset=0
-+	_sme_check_wv \nw
-+	_check_general_reg \nxbase
-+	_check_num (\offset), -0x100, 0xff
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
++	/*
++	 * Read back the new register state and verify that we have the
++	 * same VL that we got from prctl() on ourselves.
++	 */
++	if (!get_za(child, (void **)&new_za, &new_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u\n", vl);
++		return;
++	}
 +
-+/*
-+ * Zero the entire ZA array
-+ *	ZERO ZA
-+ */
-+.macro zero_za
-+	.inst 0xc00800ff
-+.endm
++	ksft_test_result(new_za->vl = prctl_vl, "Set VL %u\n", vl);
 +
- .macro __for from:req, to:req
- 	.if (\from) == (\to)
- 		_for__body %\from
++	free(new_za);
++}
++
++/* Validate attempting to set no ZA data and read it back */
++static void ptrace_set_no_data(pid_t child, unsigned int vl)
++{
++	void *read_buf = NULL;
++	struct user_za_header write_za;
++	struct user_za_header *read_za;
++	size_t read_za_size = 0;
++	int ret;
++
++	/* Set up some data and write it out */
++	memset(&write_za, 0, sizeof(write_za));
++	write_za.size = ZA_PT_ZA_OFFSET;
++	write_za.vl = vl;
++
++	ret = set_za(child, &write_za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u no data\n", vl);
++		return;
++	}
++
++	/* Read the data back */
++	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u no data\n", vl);
++		return;
++	}
++	read_za = read_buf;
++
++	/* We might read more data if there's extensions we don't know */
++	if (read_za->size < write_za.size) {
++		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
++				      vl, write_za.size, read_za->size);
++		goto out_read;
++	}
++
++	ksft_test_result(read_za->size == write_za.size,
++			 "Disabled ZA for VL %u\n", vl);
++
++out_read:
++	free(read_buf);
++}
++
++/* Validate attempting to set data and read it back */
++static void ptrace_set_get_data(pid_t child, unsigned int vl)
++{
++	void *write_buf;
++	void *read_buf = NULL;
++	struct user_za_header *write_za;
++	struct user_za_header *read_za;
++	size_t read_za_size = 0;
++	unsigned int vq = sve_vq_from_vl(vl);
++	int ret;
++	size_t data_size;
++
++	data_size = ZA_PT_SIZE(vq);
++	write_buf = malloc(data_size);
++	if (!write_buf) {
++		ksft_test_result_fail("Error allocating %d byte buffer for VL %u\n",
++				      data_size, vl);
++		return;
++	}
++	write_za = write_buf;
++
++	/* Set up some data and write it out */
++	memset(write_za, 0, data_size);
++	write_za->size = data_size;
++	write_za->vl = vl;
++
++	fill_buf(write_buf + ZA_PT_ZA_OFFSET, ZA_PT_ZA_SIZE(vq));
++
++	ret = set_za(child, write_za);
++	if (ret != 0) {
++		ksft_test_result_fail("Failed to set VL %u data\n", vl);
++		goto out;
++	}
++
++	/* Read the data back */
++	if (!get_za(child, (void **)&read_buf, &read_za_size)) {
++		ksft_test_result_fail("Failed to read VL %u data\n", vl);
++		goto out;
++	}
++	read_za = read_buf;
++
++	/* We might read more data if there's extensions we don't know */
++	if (read_za->size < write_za->size) {
++		ksft_test_result_fail("VL %u wrote %d bytes, only read %d\n",
++				      vl, write_za->size, read_za->size);
++		goto out_read;
++	}
++
++	ksft_test_result(memcmp(write_buf + ZA_PT_ZA_OFFSET,
++				read_buf + ZA_PT_ZA_OFFSET,
++				ZA_PT_ZA_SIZE(vq)) == 0,
++			 "Data match for VL %u\n", vl);
++
++out_read:
++	free(read_buf);
++out:
++	free(write_buf);
++}
++
++static int do_parent(pid_t child)
++{
++	int ret = EXIT_FAILURE;
++	pid_t pid;
++	int status;
++	siginfo_t si;
++	unsigned int vq, vl;
++	bool vl_supported;
++
++	/* Attach to the child */
++	while (1) {
++		int sig;
++
++		pid = wait(&status);
++		if (pid == -1) {
++			perror("wait");
++			goto error;
++		}
++
++		/*
++		 * This should never happen but it's hard to flag in
++		 * the framework.
++		 */
++		if (pid != child)
++			continue;
++
++		if (WIFEXITED(status) || WIFSIGNALED(status))
++			ksft_exit_fail_msg("Child died unexpectedly\n");
++
++		if (!WIFSTOPPED(status))
++			goto error;
++
++		sig = WSTOPSIG(status);
++
++		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
++			if (errno == ESRCH)
++				goto disappeared;
++
++			if (errno == EINVAL) {
++				sig = 0; /* bust group-stop */
++				goto cont;
++			}
++
++			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
++					      strerror(errno));
++			goto error;
++		}
++
++		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
++		    si.si_pid == pid)
++			break;
++
++	cont:
++		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
++			if (errno == ESRCH)
++				goto disappeared;
++
++			ksft_test_result_fail("PTRACE_CONT: %s\n",
++					      strerror(errno));
++			goto error;
++		}
++	}
++
++	/* Step through every possible VQ */
++	for (vq = SVE_VQ_MIN; vq <= SVE_VQ_MAX; vq++) {
++		vl = sve_vl_from_vq(vq);
++
++		/* First, try to set this vector length */
++		ptrace_set_get_vl(child, vl, &vl_supported);
++
++		/* If the VL is supported validate data set/get */
++		if (vl_supported) {
++			ptrace_set_no_data(child, vl);
++			ptrace_set_get_data(child, vl);
++		} else {
++			ksft_test_result_skip("Disabled ZA for VL %u\n", vl);
++			ksft_test_result_skip("Get and set data for VL %u\n",
++					      vl);
++		}
++	}
++
++	ret = EXIT_SUCCESS;
++
++error:
++	kill(child, SIGKILL);
++
++disappeared:
++	return ret;
++}
++
++int main(void)
++{
++	int ret = EXIT_SUCCESS;
++	pid_t child;
++
++	srandom(getpid());
++
++	ksft_print_header();
++
++	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME)) {
++		ksft_set_plan(1);
++		ksft_exit_skip("SME not available\n");
++	}
++
++	ksft_set_plan(EXPECTED_TESTS);
++
++	child = fork();
++	if (!child)
++		return do_child();
++
++	if (do_parent(child))
++		ret = EXIT_FAILURE;
++
++	ksft_print_cnts();
++
++	return ret;
++}
 -- 
 2.30.2
 
