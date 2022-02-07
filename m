@@ -2,91 +2,98 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7581CC4167B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F53BC46467
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343997AbiBHBG1 (ORCPT
+        id S233576AbiBHBGf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 20:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        Mon, 7 Feb 2022 20:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343953AbiBHAPz (ORCPT
+        with ESMTP id S231723AbiBGX53 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:15:55 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F058C061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:15:55 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id s13so46969315ejy.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:15:55 -0800 (PST)
+        Mon, 7 Feb 2022 18:57:29 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CD8C061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:57:29 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id 15so12539455ilg.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 15:57:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KAhtgPEL1/b/o+qskfhoxIg0uA7IhIyD/T0+zZPOZiM=;
-        b=rbqKbdD3i3EmTrfHLDx7sMpIJH/bLNQglBgvWsmQgKQ9ytML40I/BKCZoR3XYchCQu
-         +QxnvhvnRFwgO7b8tJsdhB0nPneEUTYL1FDTDCTIci0zLfqgUWPyO259vJgRyT8jvmHK
-         vFlRmx98HYsdGEwi5KSUDC+kzAm6b5s9ykeJr/iRpK6aiQweGJ0JqhxbqvAaghOpNGhu
-         OxmBw6s1OR9UGt+8GWCbAIQZZDtVRMr62+aqjkS88B0Yg8Q0D+JIA7W+0jRQPc00pNLQ
-         P2B54Vit+dfQE6Ih2YL6x6CQMbsABm2d5IOh+jo669KVfrVHqwaWTvusZvlxTLa7gT/T
-         v5hw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ej/oxUOPfotPxZF6x1ri18KCfGD2YGEa1yg//ehHnUo=;
+        b=JM1m+wmNu9FmFD+riCw6wb0p0d0pPl0h2477lD+tG9SKyf0FsP7JkN9pPVcDr3gd+W
+         j2ePlxvb84+QbHooh0I29hU87nJlmnnGpzAlcozQSqqYKSVKvv0ozt9M9NGf7soKkz/n
+         HC6i2z7jO6xoxajglXYzdv/Xw1DRQ96BgXnt4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KAhtgPEL1/b/o+qskfhoxIg0uA7IhIyD/T0+zZPOZiM=;
-        b=Topz8U4xAH4lP4koQ4t7XmrmtOcHDliO8rUgHQIkqAkKCL9vKWj+JfSFDB0a1FTuSE
-         xM9fcb9k0Y9fLovefZOgfAkeC+Q+Ho1VyLUuzxcPSjqWA0XkeIx42xv1OE56lh8FYn2T
-         ZUzg8eZ/4O11INLlpgLyronXiV78/DyCRH4h0ME1m3gR0Lvv140DMsINpHLBw70gUCJn
-         HToJYpi4jhDeA1qMB/vjqx09IUsZ0obgYMS0iJAVcW0I9LthNus4lUKZz5iXK+yMYySz
-         QJELU/Isl8OI6p0AOnRHDJBUgWMsO5WVJwmyQ0DXG2A9aMHWdL1Xeade8wCM/nBlrYeZ
-         vsHw==
-X-Gm-Message-State: AOAM531Dr1YR6m4TRpjEC08aD9MnKbBoxfq/D0s5QWYedE2NCgXbvund
-        YF/6SLF5IL3ziMx+KMyer08dIcUHDGkIiTvb4CK2XQ==
-X-Google-Smtp-Source: ABdhPJyZsYIHhwzBouA9deqE+mInKXPHL6dCI8OTur7vXfstI/Vmaj95ieogR49ktVz1YtdvvAPgbiXrGsN2Qa9XvJc=
-X-Received: by 2002:a17:906:782:: with SMTP id l2mr1602822ejc.631.1644279353562;
- Mon, 07 Feb 2022 16:15:53 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ej/oxUOPfotPxZF6x1ri18KCfGD2YGEa1yg//ehHnUo=;
+        b=Pu1DVR+yp6PRy6RqYEZ8ouCqgsQ/kiZXbXHnaCLESStOIO7udFjvbFMs3RkJOn4Dfx
+         8CfkHHW5+kYa63PXC25prziQUEoam0wmhOgEMVZmEvOcJ6IEcs5EvKLcAEVox2in8RsC
+         FhwC4iCMfyIckTYhSZhCM6leSu6bLrykcq/FfPUKL7ADYrCs6nbC1YSrvUqorPQjPcDQ
+         F5bOjEWVyY9Z0t49FSZ4+K6ULkXQCUvPy8nTn55ui2gwi8poxofLBH8Weaecq1sQ2hj8
+         wMiVRHyvGNHM1Se+7wEqp3sSd60V6vH7bGcOM525GAhPgmvAiavghCjFHDey5TeuDSV4
+         ScDg==
+X-Gm-Message-State: AOAM533iS05aEO36625ZI3SSwRWa11EbqCVDCxX/7SGaNsJk/pDEayy+
+        j48Tqtofz59rVtppPOy2AluZYg==
+X-Google-Smtp-Source: ABdhPJwk8Uh5JobMOPX23+iidTPeN7IN+ed0TPp/GJ65/GbrujVjigZ3b7VgXcHPdBWjo2As4O2qpQ==
+X-Received: by 2002:a05:6e02:e12:: with SMTP id a18mr886458ilk.200.1644278248618;
+        Mon, 07 Feb 2022 15:57:28 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b4sm2861038iln.15.2022.02.07.15.57.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 15:57:28 -0800 (PST)
+Subject: Re: [PATCH v11 30/40] kselftest/arm64: Add manual encodings for SME
+ instructions
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-31-broonie@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <638b7ae1-6669-5524-318a-6b8a07cf3919@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 16:57:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220207211144.1948690-1-ribalda@chromium.org> <20220207211144.1948690-4-ribalda@chromium.org>
-In-Reply-To: <20220207211144.1948690-4-ribalda@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 7 Feb 2022 16:15:42 -0800
-Message-ID: <CAGS_qxpjTf=PLxh2ucE23_hW4f2ub10fJ5bbw2Qy_10vWUXrCA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] kasan: test: Use NULL macros
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220207152109.197566-31-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 1:11 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Replace PTR_EQ checks with the more idiomatic and specific NULL macros.
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+On 2/7/22 8:20 AM, Mark Brown wrote:
+> As for the kernel so that we don't have ambitious toolchain requirements
+> to build the tests manually encode some of the SVE instructions.
+> 
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+Thank you for thinking about toolchain requirements. Please add a bit more
+information on how these defines are used here in this commit log.
 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  lib/test_kasan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-> index 847cdbefab46..d680f46740b8 100644
-> --- a/lib/test_kasan.c
-> +++ b/lib/test_kasan.c
-> @@ -385,7 +385,7 @@ static void krealloc_uaf(struct kunit *test)
->         kfree(ptr1);
->
->         KUNIT_EXPECT_KASAN_FAIL(test, ptr2 = krealloc(ptr1, size2, GFP_KERNEL));
-> -       KUNIT_ASSERT_PTR_EQ(test, (void *)ptr2, NULL);
-> +       KUNIT_ASSERT_NULL(test, ptr2);
->         KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)ptr1);
->  }
->
-> --
-> 2.35.0.263.gb82422642f-goog
->
+
+Rest looks good to me.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
