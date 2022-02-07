@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4421AC43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24C97C4332F
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbiBGPfL (ORCPT
+        id S238115AbiBGPfM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        Mon, 7 Feb 2022 10:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347972AbiBGPYA (ORCPT
+        with ESMTP id S1358195AbiBGPZU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:24:00 -0500
+        Mon, 7 Feb 2022 10:25:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A52C0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:23:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E8FC0401CA
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9721614A2
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:23:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF016C340F3;
-        Mon,  7 Feb 2022 15:23:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 022D46149F
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD41C340F0;
+        Mon,  7 Feb 2022 15:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247438;
-        bh=B/urqBimz+3K4ZCFBMO8EnKA3FRn7rrK3YpjvULX0fM=;
+        s=k20201202; t=1644247517;
+        bh=fs6Mo/cNVCXgit6VI25SiK2O86CoOZYuGBLTQAR7ou4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QK6QMF1I5slQllBK2QbWKL7ZjcoXy3fBHjvdN3DwK3TF+sg0A7uFAXmxK4gzZLA3u
-         e1jIMHs0cJ2aW1JgCIhj+DOlT72BBXKfm0HKs/gyC00Yn3Tx+v+WayPIe+XbTgP85O
-         b1goOjc7qk5RAvEgfNu9UCTlWZodHhNMhGYQT+6zLuy8IPcXrFKOFZCrecxV3Xnn1F
-         OopaDvVDDontkD3aYvtBAYDCGG7RBzC34vODGFfzry3rq3Q8uZOB2kKCvf/CxXgfC+
-         VZWohRN1vC0sDwuxrZcXrc1A4mZABYjeiIF5daKyh4OJuqkBZ6XmjKmfxT9bACUMot
-         2M6d8TiBqLUYA==
+        b=aN7hDC+R3qcwlXEJ2LyRuyYsbVN1i9ZWw30NAv8XpCc0ta/mexiId9JXa7OEqjLE1
+         wFA9NStcYXsmkJeNBcRI62xw3EbbLiHuEa7O1+ifK2Rv25dbyTJJnVTjgMVmOlaJz0
+         TS/qtH1lUt0EXcoArkNDzdxlNL6DUMFCHWk1Ov5uYZmA/1+2tpeOdz50SaNDwi9fk+
+         /LWoKiDNvEMewdYO08pA7yIoY0LsydHDWwRv6pfe0lAna2IvXUTB/Sxhp+Po+rVUaW
+         74+jedRlZtic+SDp24D38a3sKTF70niyf6UdPuM3a8nmwGIWwc7DwewZJQM6nxaFxb
+         QRcYr0bAseQfA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,184 +49,379 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 13/40] arm64/sme: Implement vector length configuration prctl()s
-Date:   Mon,  7 Feb 2022 15:20:42 +0000
-Message-Id: <20220207152109.197566-14-broonie@kernel.org>
+Subject: [PATCH v11 32/40] kselftest/arm64: Add tests for TPIDR2
+Date:   Mon,  7 Feb 2022 15:21:01 +0000
+Message-Id: <20220207152109.197566-33-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5677; h=from:subject; bh=B/urqBimz+3K4ZCFBMO8EnKA3FRn7rrK3YpjvULX0fM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjP2XcqhBFxXZp1c4U9xXBU+g+VgJg0PVXp8ovU QJ6u6QyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE4zwAKCRAk1otyXVSH0BTOB/ 0QBmR39ohKDg4cZGS1v6IHatdRXCg+gRA6iGxj/hKDrLHWITmHJwRO6vImS9gZ2/Hj4m8syNWjBHYo EUqJuQf5WGqzO007/Rl6WOnePQv4alzM+aa6bOqVx8buBsxZkV4HLI8LxtW0Qi1//PeCJkhyzK85cc uRKM+l1YX/6BD+1kGOvQfseLwbbgTjd9W/sYE7Npo7c+n7/EduK9HpnbuhUvWzMOJgF/q58EnCEOUT Q8s6hpDD+FX4iT7XIuGTLmVdoiah5YFZLclngpBI1bjszeuhN8JhP1KOQ5KhG7t9CBfEP0cBDNuBNt ul+Fq8x+LSPxsG4XS9zQdbG+Jb4K59
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8971; h=from:subject; bh=fs6Mo/cNVCXgit6VI25SiK2O86CoOZYuGBLTQAR7ou4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjeYfrKO9wqrVDyN1/vTE4zIqML+ldRAu4nWsi8 L63DQwiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE43gAKCRAk1otyXVSH0DvQB/ 4tXXjMoL3I91E2jEiiqfDVUsJQMmhpiWDdP6iHDisXiyWcpEAa876MnRON6ULTHeE6hw+IFqSA6RRi c1m4GDIlD1TvbcNykAQlmSJWUw5m6mCgVaDMA2Bx0yUPz/KTZThNBy0tEoUpUkQ5kPYOPrjum700oY PbQ/HfKu0PVOHTZ+dfqpwGEO0xpi18JlyKTpvQ6ubTizSviXB4m7nuGhI+jsCydv7/7m0TRG47t8nW Nl6eNst1TyfBc3cugLN6dQmhF/couwPkjHrpWL6Sw1/lgUIQ97l8GQiI0iF8zYxmvEQ5TLBc/7WPa/ Wthv94CCPxLuqRIjV/jw3OmTHmUDG6
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As for SVE provide a prctl() interface which allows processes to
-configure their SME vector length.
+The Scalable Matrix Extension adds a new system register TPIDR2 intended to
+be used by libc for its own thread specific use, add some kselftests which
+exercise the ABI for it.
+
+Since this test should with some adjustment work for TPIDR and any other
+similar registers added in future add tests for it in a separate
+directory rather than placing it with the other floating point tests,
+nothing existing looked suitable so I created a new test directory
+called "abi".
+
+Since this feature is intended to be used by libc the test is built as
+freestanding code using nolibc so we don't end up with the test program
+and libc both trying to manage the register simultaneously and
+distrupting each other. As a result of being written using nolibc rather
+than using hwcaps to identify if SME is available in the system we check
+for the default SME vector length configuration in proc, adding hwcap
+support to nolibc seems like disproportionate effort and didn't feel
+entirely idiomatic for what nolibc is trying to do.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h      |  4 ++++
- arch/arm64/include/asm/processor.h   |  4 +++-
- arch/arm64/include/asm/thread_info.h |  1 +
- arch/arm64/kernel/fpsimd.c           | 32 ++++++++++++++++++++++++++++
- include/uapi/linux/prctl.h           |  9 ++++++++
- kernel/sys.c                         | 12 +++++++++++
- 6 files changed, 61 insertions(+), 1 deletion(-)
+ tools/testing/selftests/arm64/abi/.gitignore |   1 +
+ tools/testing/selftests/arm64/abi/Makefile   |   9 +-
+ tools/testing/selftests/arm64/abi/tpidr2.c   | 298 +++++++++++++++++++
+ 3 files changed, 307 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/tpidr2.c
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 8cb99b6fe565..babf944e7c0c 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -288,6 +288,8 @@ static inline int sme_max_virtualisable_vl(void)
- }
+diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
+index b79cf5814c23..b9e54417250d 100644
+--- a/tools/testing/selftests/arm64/abi/.gitignore
++++ b/tools/testing/selftests/arm64/abi/.gitignore
+@@ -1 +1,2 @@
+ syscall-abi
++tpidr2
+diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
+index 96eba974ac8d..c8d7f2495eb2 100644
+--- a/tools/testing/selftests/arm64/abi/Makefile
++++ b/tools/testing/selftests/arm64/abi/Makefile
+@@ -1,8 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Copyright (C) 2021 ARM Limited
  
- extern unsigned int sme_get_vl(void);
-+extern int sme_set_current_vl(unsigned long arg);
-+extern int sme_get_current_vl(void);
+-TEST_GEN_PROGS := syscall-abi
++TEST_GEN_PROGS := syscall-abi tpidr2
  
- #else
+ include ../../lib.mk
  
-@@ -299,6 +301,8 @@ static inline void sme_setup(void) { }
- static inline unsigned int sme_get_vl(void) { return 0; }
- static inline int sme_max_vl(void) { return 0; }
- static inline int sme_max_virtualisable_vl(void) { return 0; }
-+static inline int sme_set_current_vl(unsigned long arg) { return -EINVAL; }
-+static inline int sme_get_current_vl(void) { return -EINVAL; }
- 
- #endif /* ! CONFIG_ARM64_SME */
- 
-diff --git a/arch/arm64/include/asm/processor.h b/arch/arm64/include/asm/processor.h
-index df68f0fb0ded..f2c2ebd440e2 100644
---- a/arch/arm64/include/asm/processor.h
-+++ b/arch/arm64/include/asm/processor.h
-@@ -354,9 +354,11 @@ extern void __init minsigstksz_setup(void);
-  */
- #include <asm/fpsimd.h>
- 
--/* Userspace interface for PR_SVE_{SET,GET}_VL prctl()s: */
-+/* Userspace interface for PR_S[MV]E_{SET,GET}_VL prctl()s: */
- #define SVE_SET_VL(arg)	sve_set_current_vl(arg)
- #define SVE_GET_VL()	sve_get_current_vl()
-+#define SME_SET_VL(arg)	sme_set_current_vl(arg)
-+#define SME_GET_VL()	sme_get_current_vl()
- 
- /* PR_PAC_RESET_KEYS prctl */
- #define PAC_RESET_KEYS(tsk, arg)	ptrauth_prctl_reset_keys(tsk, arg)
-diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-index e1317b7c4525..4e6b58dcd6f9 100644
---- a/arch/arm64/include/asm/thread_info.h
-+++ b/arch/arm64/include/asm/thread_info.h
-@@ -82,6 +82,7 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define TIF_SVE_VL_INHERIT	24	/* Inherit SVE vl_onexec across exec */
- #define TIF_SSBD		25	/* Wants SSB mitigation */
- #define TIF_TAGGED_ADDR		26	/* Allow tagged user addresses */
-+#define TIF_SME_VL_INHERIT	28	/* Inherit SME vl_onexec across exec */
- 
- #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
- #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 841b9609342f..1edb3996f9cf 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -149,6 +149,8 @@ static unsigned int vec_vl_inherit_flag(enum vec_type type)
- 	switch (type) {
- 	case ARM64_VEC_SVE:
- 		return TIF_SVE_VL_INHERIT;
-+	case ARM64_VEC_SME:
-+		return TIF_SME_VL_INHERIT;
- 	default:
- 		WARN_ON_ONCE(1);
- 		return 0;
-@@ -801,6 +803,36 @@ int sve_get_current_vl(void)
- 	return vec_prctl_status(ARM64_VEC_SVE, 0);
- }
- 
-+#ifdef CONFIG_ARM64_SME
-+/* PR_SME_SET_VL */
-+int sme_set_current_vl(unsigned long arg)
+ $(OUTPUT)/syscall-abi: syscall-abi.c syscall-abi-asm.S
++
++# Build with nolibc since TPIDR2 is intended to be actively managed by
++# libc and we're trying to test the functionality that it depends on here.
++$(OUTPUT)/tpidr2: tpidr2.c
++	$(CC) -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
++		-static -include ../../../../include/nolibc/nolibc.h \
++		-ffreestanding -Wall $^ -o $@ -lgcc
+diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
+new file mode 100644
+index 000000000000..351a098b503a
+--- /dev/null
++++ b/tools/testing/selftests/arm64/abi/tpidr2.c
+@@ -0,0 +1,298 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/sched.h>
++#include <linux/wait.h>
++
++#define SYS_TPIDR2 "S3_3_C13_C0_5"
++
++#define EXPECTED_TESTS 5
++
++static void putstr(const char *str)
 +{
-+	unsigned long vl, flags;
-+	int ret;
-+
-+	vl = arg & PR_SME_VL_LEN_MASK;
-+	flags = arg & ~vl;
-+
-+	if (!system_supports_sme() || is_compat_task())
-+		return -EINVAL;
-+
-+	ret = vec_set_vector_length(current, ARM64_VEC_SME, vl, flags);
-+	if (ret)
-+		return ret;
-+
-+	return vec_prctl_status(ARM64_VEC_SME, flags);
++	write(1, str, strlen(str));
 +}
 +
-+/* PR_SME_GET_VL */
-+int sme_get_current_vl(void)
++static void putnum(unsigned int num)
 +{
-+	if (!system_supports_sme() || is_compat_task())
-+		return -EINVAL;
++	char c;
 +
-+	return vec_prctl_status(ARM64_VEC_SME, 0);
++	if (num / 10)
++		putnum(num / 10);
++
++	c = '0' + (num % 10);
++	write(1, &c, 1);
 +}
-+#endif /* CONFIG_ARM64_SME */
 +
- static void vec_probe_vqs(struct vl_info *info,
- 			  DECLARE_BITMAP(map, SVE_VQ_MAX))
- {
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index e998764f0262..a5e06dcbba13 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -272,6 +272,15 @@ struct prctl_mm_map {
- # define PR_SCHED_CORE_SCOPE_THREAD_GROUP	1
- # define PR_SCHED_CORE_SCOPE_PROCESS_GROUP	2
- 
-+/* arm64 Scalable Matrix Extension controls */
-+/* Flag values must be in sync with SVE versions */
-+#define PR_SME_SET_VL			63	/* set task vector length */
-+# define PR_SME_SET_VL_ONEXEC		(1 << 18) /* defer effect until exec */
-+#define PR_SME_GET_VL			64	/* get task vector length */
-+/* Bits common to PR_SME_SET_VL and PR_SME_GET_VL */
-+# define PR_SME_VL_LEN_MASK		0xffff
-+# define PR_SME_VL_INHERIT		(1 << 17) /* inherit across exec */
++static int tests_run;
++static int tests_passed;
++static int tests_failed;
++static int tests_skipped;
 +
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index ecc4cf019242..5cd4fffc7cd0 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -116,6 +116,12 @@
- #ifndef SVE_GET_VL
- # define SVE_GET_VL()		(-EINVAL)
- #endif
-+#ifndef SME_SET_VL
-+# define SME_SET_VL(a)		(-EINVAL)
-+#endif
-+#ifndef SME_GET_VL
-+# define SME_GET_VL()		(-EINVAL)
-+#endif
- #ifndef PAC_RESET_KEYS
- # define PAC_RESET_KEYS(a, b)	(-EINVAL)
- #endif
-@@ -2523,6 +2529,12 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 	case PR_SVE_GET_VL:
- 		error = SVE_GET_VL();
- 		break;
-+	case PR_SME_SET_VL:
-+		error = SME_SET_VL(arg2);
-+		break;
-+	case PR_SME_GET_VL:
-+		error = SME_GET_VL();
-+		break;
- 	case PR_GET_SPECULATION_CTRL:
- 		if (arg3 || arg4 || arg5)
- 			return -EINVAL;
++static void set_tpidr2(uint64_t val)
++{
++	asm volatile (
++		"msr	" SYS_TPIDR2 ", %0\n"
++		:
++		: "r"(val)
++		: "cc");
++}
++
++static uint64_t get_tpidr2(void)
++{
++	uint64_t val;
++
++	asm volatile (
++		"mrs	%0, " SYS_TPIDR2 "\n"
++		: "=r"(val)
++		:
++		: "cc");
++
++	return val;
++}
++
++static void print_summary(void)
++{
++	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
++		putstr("# UNEXPECTED TEST COUNT: ");
++
++	putstr("# Totals: pass:");
++	putnum(tests_passed);
++	putstr(" fail:");
++	putnum(tests_failed);
++	putstr(" xfail:0 xpass:0 skip:");
++	putnum(tests_skipped);
++	putstr(" error:0\n");
++}
++
++/* Processes should start with TPIDR2 == 0 */
++static int default_value(void)
++{
++	return get_tpidr2() == 0;
++}
++
++/* If we set TPIDR2 we should read that value */
++static int write_read(void)
++{
++	set_tpidr2(getpid());
++
++	return getpid() == get_tpidr2();
++}
++
++/* If we set a value we should read the same value after scheduling out */
++static int write_sleep_read(void)
++{
++	set_tpidr2(getpid());
++
++	msleep(100);
++
++	return getpid() == get_tpidr2();
++}
++
++/*
++ * If we fork the value in the parent should be unchanged and the
++ * child should start with the same value and be able to set its own
++ * value.
++ */
++static int write_fork_read(void)
++{
++	pid_t newpid, waiting, oldpid;
++	int status;
++
++	set_tpidr2(getpid());
++
++	oldpid = getpid();
++	newpid = fork();
++	if (newpid == 0) {
++		/* In child */
++		if (get_tpidr2() != oldpid) {
++			putstr("# TPIDR2 changed in child: ");
++			putnum(get_tpidr2());
++			putstr("\n");
++			exit(0);
++		}
++
++		set_tpidr2(getpid());
++		if (get_tpidr2() == getpid()) {
++			exit(1);
++		} else {
++			putstr("# Failed to set TPIDR2 in child\n");
++			exit(0);
++		}
++	}
++	if (newpid < 0) {
++		putstr("# fork() failed: -");
++		putnum(-newpid);
++		putstr("\n");
++		return 0;
++	}
++
++	for (;;) {
++		waiting = waitpid(newpid, &status, 0);
++
++		if (waiting < 0) {
++			if (errno == EINTR)
++				continue;
++			putstr("# waitpid() failed: ");
++			putnum(errno);
++			putstr("\n");
++			return 0;
++		}
++		if (waiting != newpid) {
++			putstr("# waitpid() returned wrong PID\n");
++			return 0;
++		}
++
++		if (!WIFEXITED(status)) {
++			putstr("# child did not exit\n");
++			return 0;
++		}
++
++		if (getpid() != get_tpidr2()) {
++			putstr("# TPIDR2 corrupted in parent\n");
++			return 0;
++		}
++
++		return WEXITSTATUS(status);
++	}
++}
++
++/*
++ * sys_clone() has a lot of per architecture variation so just define
++ * it here rather than adding it to nolibc, plus the raw API is a
++ * little more convenient for this test.
++ */
++static int sys_clone(unsigned long clone_flags, unsigned long newsp,
++		     int *parent_tidptr, unsigned long tls,
++		     int *child_tidptr)
++{
++	return my_syscall5(__NR_clone, clone_flags, newsp, parent_tidptr, tls,
++			   child_tidptr);
++}
++
++/*
++ * If we clone with CLONE_SETTLS then the value in the parent should
++ * be unchanged and the child should start with zero and be able to
++ * set its own value.
++ */
++static int write_clone_read(void)
++{
++	int parent_tid, child_tid;
++	pid_t parent, waiting;
++	int ret, status;
++
++	parent = getpid();
++	set_tpidr2(parent);
++
++	ret = sys_clone(CLONE_SETTLS, 0, &parent_tid, 0, &child_tid);
++	if (ret == -1) {
++		putstr("# clone() failed\n");
++		putnum(errno);
++		putstr("\n");
++		return 0;
++	}
++
++	if (ret == 0) {
++		/* In child */
++		if (get_tpidr2() != 0) {
++			putstr("# TPIDR2 non-zero in child: ");
++			putnum(get_tpidr2());
++			putstr("\n");
++			exit(0);
++		}
++
++		if (gettid() == 0)
++			putstr("# Child TID==0\n");
++		set_tpidr2(gettid());
++		if (get_tpidr2() == gettid()) {
++			exit(1);
++		} else {
++			putstr("# Failed to set TPIDR2 in child\n");
++			exit(0);
++		}
++	}
++
++	for (;;) {
++		waiting = wait4(ret, &status, __WCLONE, NULL);
++
++		if (waiting < 0) {
++			if (errno == EINTR)
++				continue;
++			putstr("# wait4() failed: ");
++			putnum(errno);
++			putstr("\n");
++			return 0;
++		}
++		if (waiting != ret) {
++			putstr("# wait4() returned wrong PID ");
++			putnum(waiting);
++			putstr("\n");
++			return 0;
++		}
++
++		if (!WIFEXITED(status)) {
++			putstr("# child did not exit\n");
++			return 0;
++		}
++
++		if (parent != get_tpidr2()) {
++			putstr("# TPIDR2 corrupted in parent\n");
++			return 0;
++		}
++
++		return WEXITSTATUS(status);
++	}
++}
++
++#define run_test(name)			     \
++	if (name()) {			     \
++		tests_passed++;		     \
++	} else {			     \
++		tests_failed++;		     \
++		putstr("not ");		     \
++	}				     \
++	putstr("ok ");			     \
++	putnum(++tests_run);		     \
++	putstr(" " #name "\n");
++
++int main(int argc, char **argv)
++{
++	int ret, i;
++
++	putstr("TAP version 13\n");
++	putstr("1..");
++	putnum(EXPECTED_TESTS);
++	putstr("\n");
++
++	putstr("# PID: ");
++	putnum(getpid());
++	putstr("\n");
++
++	/*
++	 * This test is run with nolibc which doesn't support hwcap and
++	 * it's probably disproportionate to implement so instead check
++	 * for the default vector length configuration in /proc.
++	 */
++	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
++	if (ret >= 0) {
++		run_test(default_value);
++		run_test(write_read);
++		run_test(write_sleep_read);
++		run_test(write_fork_read);
++		run_test(write_clone_read);
++
++	} else {
++		putstr("# SME support not present\n");
++
++		for (i = 0; i < EXPECTED_TESTS; i++) {
++			putstr("ok ");
++			putnum(i);
++			putstr(" skipped, TPIDR2 not supported\n");
++		}
++
++		tests_skipped += EXPECTED_TESTS;
++	}
++
++	print_summary();
++
++	return 0;
++}
 -- 
 2.30.2
 
