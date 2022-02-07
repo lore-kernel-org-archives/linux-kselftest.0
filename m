@@ -2,88 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80360C433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 20:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD829C433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 20:31:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbiBGUaI (ORCPT
+        id S232631AbiBGUa5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 15:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        Mon, 7 Feb 2022 15:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242241AbiBGU1W (ORCPT
+        with ESMTP id S239173AbiBGUaA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 15:27:22 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43CCC0401E6
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:27:19 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id b13so32687325edn.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:27:19 -0800 (PST)
+        Mon, 7 Feb 2022 15:30:00 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95339C0401E2
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 12:29:59 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id j14so22192831ejy.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 12:29:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KXm+9Zz7kQqt2EFBwAfIC5XooSw7CB+RPRatZ+DKukY=;
-        b=NlftQC1QAC85AVhg4e70haxCay1d5UaQ/sYrPd/Ykn5T4wsxmaS8Do2qnK4qoD6W8Z
-         7bQD4HbOh1JjJq2JbX3e+Vbs+W5y69+vEEb2Eq7iOECqiuIyVcl5Ivmo6cAJ/Wnx7tPn
-         ETFG7OFiwue6SqY00x8m4JVuHsRnXituauObc=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l7+lDRwMEEhHx0jHQ997hOwLnkm6ZLU/VDRQObDrGjg=;
+        b=h/r8mcsDCrvh/7u0nd0V74YqNMU2eKFCfuq0kqEPf4RbJIg7PQuqA2CVcAv3RX5ut1
+         lPAkhsE1/dzWsbngO8vzbZn+/upSoeKjAkzO8fw1OQ6OUz75KkR3G97ZvPHK3QOpMeq6
+         k3IORJpl//nu9H08ydgcW+L8cJrxOStKxuVsXS5fV4XVGzX3dws2JnvsMeQM0uq1OPtY
+         AK22jV+fPboRl4EdWwRQxckEMgZrmT2dm3nmxOQVA4S+icbv7eKEwsMNwt9zTF3Thisx
+         8zeO20xn+Vj+g2Bk+6GdDM6t/M4k6FPD95tTzaaqXuKUwrqTK95oLEX44sd/8CJZiLu7
+         CkyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KXm+9Zz7kQqt2EFBwAfIC5XooSw7CB+RPRatZ+DKukY=;
-        b=6EeL5jouzWkjD7MzmDkY+f5KcbFrgjFuVK+ytjsdrbJj70r/1EnYt/7sHRx+KUrpGb
-         qji+z++6RM4m1y3pzAVccopFyLHGvYVC5mEF+4MDDU3dQYfxkHbcpUUiMVVCLtMHPs1o
-         QrNcwQmVr1fCHl7a+1d2hkBUj89QxBSbBaTuj6WZRjsk/m7YFebm5ZW8ErO7+lPEy4w0
-         csZeTZpAYVFEA8sTCrOaKzUIzamIKWNBS72HQOf0wNI1l2MEC7eltW/1IQ7CfwMZCIMw
-         wgQl2LBbeIWFDYbEfA4nl1WDtDZVi+0wZH2/pngs/NBZ6/lUMGTUfYuUDbu6205qSjax
-         qreA==
-X-Gm-Message-State: AOAM5303xgQoIO+RqkCk/sTlPRtVAbv+TY6i5XTWsmEiwBCdLC4wY/QU
-        kGvGTud6tV5ynomaPpxL9L8BCA==
-X-Google-Smtp-Source: ABdhPJzlqQ6oN5LMYSCFOI0DUJfg+KXi1o6eA0wp31mozViPZLaZguKm6kPaK/6AZvov5UeEuUs9MQ==
-X-Received: by 2002:a05:6402:448f:: with SMTP id er15mr1246579edb.222.1644265638490;
-        Mon, 07 Feb 2022 12:27:18 -0800 (PST)
-Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id t8sm787893eji.94.2022.02.07.12.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 12:27:18 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l7+lDRwMEEhHx0jHQ997hOwLnkm6ZLU/VDRQObDrGjg=;
+        b=Bq6KuFLGCvusUr4vLiVmWieWzWDFLb38XweLdLBb7Au8rGfbHR5B4CmWA7RGtRhvhy
+         ldmlDmTEQxt5/upcFvFPGmY7D6ZGy/PWh7zL1F+k9DzAvodgryU0wxp7WyPFJ1lx0BdE
+         vrBhOSke4rcxRE/vSZ/BaT7GAE+mkxe3+ztF70iTEb/pMUfRFCE9kjoy/OYbb4bBpmpJ
+         uhXNiPDQbdCQyTCO/7BPJ4l695pg44bLyUWpt5R4UmOEF0eomggqI5v0aXoq5s0cU1Gm
+         N41AI6fRFzZ2ZvPs0rvZWp4oUhB+ajSONEJFZQdyDQ583doF5NkQPbKgwkC1AWhx8Fgb
+         mcWQ==
+X-Gm-Message-State: AOAM532J1YWrcHfL47WZa0inYt8TJ73v6APZD8qIWV5tdcCGx9FRqkzb
+        hIQrx3W2I79TDHvSa3LO6TfQ6F4+jGxevM2BdCnn6g==
+X-Google-Smtp-Source: ABdhPJx+tIefAbwThfMeNLrz+Ql7EqVZ9lQ8ML14ttETNIJgX2xiITlZo8IoE+o4APCgksfUmbw1VxvQyTrivxiXCd0=
+X-Received: by 2002:a17:907:3f0d:: with SMTP id hq13mr1129891ejc.358.1644265797925;
+ Mon, 07 Feb 2022 12:29:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20220207183308.1829495-1-ribalda@chromium.org> <CAGS_qxoTLwvVjDGbfeOjMrGvh7sck7TDmiVeDXS2S5oyDWiKzA@mail.gmail.com>
+In-Reply-To: <CAGS_qxoTLwvVjDGbfeOjMrGvh7sck7TDmiVeDXS2S5oyDWiKzA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 7 Feb 2022 12:29:46 -0800
+Message-ID: <CAGS_qxrkswforSv4XKGChwOZ0MbTGzCqYKsZq=0Sx6ThMOrheQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] kunit: Introduce _NULL and _NOT_NULL macros
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org,
         Brendan Higgins <brendanhiggins@google.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v2 4/6] kasan: test: Use NULL macros
-Date:   Mon,  7 Feb 2022 21:27:12 +0100
-Message-Id: <20220207202714.1890024-4-ribalda@chromium.org>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-In-Reply-To: <20220207202714.1890024-1-ribalda@chromium.org>
-References: <20220207202714.1890024-1-ribalda@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace PTR_EQ checks with the more idiomatic and specific NULL macros.
+On Mon, Feb 7, 2022 at 11:09 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Mon, Feb 7, 2022 at 10:33 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
+> >
+> > Today, when we want to check if a pointer is NULL and not ERR we have
+> > two options:
+> >
+> > EXPECT_TRUE(test, ptr == NULL);
+> >
+> > or
+> >
+> > EXPECT_PTR_NE(test, ptr, (struct mystruct *)NULL);
+> >
+> > Create a new set of macros that take care of NULL checks.
+>
+> I think we've usually had people do
+>   KUNIT_EXPECT_FALSE(test, nullptr);
+>
+> I'm not personally against having an explicit NULL check, however.
+>
+> But if we want to continue with this, we'll want to rebase on top of
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
+> since a lot of this code has been deleted or refactored.
+> E.g. see https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/include/kunit/test.h?h=kunit
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- lib/test_kasan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I forgot to mention, it'd also be a good idea to update the new
+example test case:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/lib/kunit/kunit-example-test.c?h=kunit#n76
 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index 847cdbefab46..d680f46740b8 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -385,7 +385,7 @@ static void krealloc_uaf(struct kunit *test)
- 	kfree(ptr1);
- 
- 	KUNIT_EXPECT_KASAN_FAIL(test, ptr2 = krealloc(ptr1, size2, GFP_KERNEL));
--	KUNIT_ASSERT_PTR_EQ(test, (void *)ptr2, NULL);
-+	KUNIT_ASSERT_NULL(test, ptr2);
- 	KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)ptr1);
- }
- 
--- 
-2.35.0.263.gb82422642f-goog
-
+e.g. just adding
+  KUNIT_EXPECT_NULL(test, NULL);
+with the rest of the pointer assertions
