@@ -2,85 +2,121 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9584C433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 19:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC980C433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 19:27:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237632AbiBGTOT (ORCPT
+        id S235906AbiBGT1C (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 14:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        Mon, 7 Feb 2022 14:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240120AbiBGTKH (ORCPT
+        with ESMTP id S237153AbiBGTXK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 14:10:07 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A39C0401E1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 11:10:05 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id og43so20967019ejc.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 11:10:05 -0800 (PST)
+        Mon, 7 Feb 2022 14:23:10 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C3C0401DA;
+        Mon,  7 Feb 2022 11:23:10 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id c188so18197652iof.6;
+        Mon, 07 Feb 2022 11:23:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SWmI0He58+fGpGTA8Rm8gAObvQo4qEHhiPU07NkhsrU=;
-        b=BY2v58ypySxXPl14DNPEf62qtxzHENwKaC2tSiBirHnjd+8jAj+M9Fx4gncnOERxH3
-         V2c6XH9eoIkHw24BGVy/I4E4w69o0GsP8LtdldiWnJ9lsAq8Atm5+4l9geyNTv/htxJ5
-         Zfr00RcGOxKGXsqjYskpOlONANfjPLr08K0dUaBcgjzJR640wWPj6pLfckeKalOGbMfv
-         khJgAVtNkYFDGwGL3bJ3Q9sHtKARiXG244dD64COXrcZViaG6RvzjGL/57harSacmt8Z
-         iWPVHnJ+zAuLpncou7X+RkwMEMPyHHRxZvJekATtdzXsvFuXYqgHj4C+fw5nxIGk0xPk
-         0M+Q==
+        bh=6NM7Ake9kho34MN1EmrmT8NV0K8P6BDSXILnmG4EDnQ=;
+        b=GYijXH/rJC/AMLJ2OxzqYk27/RyiwNDq7vFloLi30hoIdxnu5QM4P8/5mXFinUuUsT
+         Vdt/Tyu/YZMW6fkkgZ+iTVLjUnQt0ciXRuauMCez2/Qr+1/yZzv1Zr7A3L/t3JBov4og
+         fs9lzwAp4fzqacsYNCwUMOV18fQ1UWb2Mu2RwnIk+Fga31BKNOA3t8o4wRA8FEvBnZ3U
+         F9PBcZmKqZNPjwa+j2ilMbjBN4zLqRlUfMDors0RvfVECB97zzcGLo99oSOXq8SVjYco
+         REcR0MLUN6zxP7ju/F3F0RFRHZdkIfgy6CkdPO1FAUOEiZ+YSOCrWgbhIaqGdAgJgj+e
+         LoUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SWmI0He58+fGpGTA8Rm8gAObvQo4qEHhiPU07NkhsrU=;
-        b=dflA/JgBCaocuqN+Z2BpOLxKKkQ2Nikrrttv7VulUPdOrjjX+Y+8C+82tSdDkKoo/8
-         EmANFtrVnRm5cpt6fjWvRhiUgmdna7OpH3PbyikGl+bk8EvxMsJH7X4LLdqNwN5lRwA5
-         wzEniyBwOKPnVZVV7UXR4P/+TmKNflLihWkXV0c1Icmh/OJIbFgZ5PiGgJQkiRyrsmfL
-         yZKJyTCjFdKR8k6G4fytsILl9m7nJiGvsFGJee7RcqkG2kXKwKLIGHzrR5Zg3kQ1OfSM
-         9YC34Ej0WB3GndMntOA5XIxJNxpP65VADpAEKhQNU/ttUorn4UtElvrPMpUuHlnI1Az0
-         u+FQ==
-X-Gm-Message-State: AOAM531wHlAQBANgdVe5kTn9S3k/COzkhwHGuc9K3K2QBP03i0Q/rG7N
-        RvVWtDZEmKENwNcnvsb3ch0EXE76ne5ZkpXYIJBVtg==
-X-Google-Smtp-Source: ABdhPJy3ECVc8pD/xbPPYk8vIFDKn6i0MIkRSYgTwZVmQyJo6fFv4uAkSka9bBrQB9xqtIbpVcxWgTWc5yeomuohE14=
-X-Received: by 2002:a17:906:94e:: with SMTP id j14mr844785ejd.369.1644261003744;
- Mon, 07 Feb 2022 11:10:03 -0800 (PST)
+        bh=6NM7Ake9kho34MN1EmrmT8NV0K8P6BDSXILnmG4EDnQ=;
+        b=gq9aLgG+UkBwjRJhzcD6Q+q49rQFpy12Lm7I40dcR68O7UJZ55iHcDpvb0/Ztqunfd
+         ocuuZVag6otODa0fBPNB1qBRdFqf29U+9BvtKhzEkqNnJtoLP4IRd5glt/fHDcyCfFr0
+         JDyvZ0NDoz/VG6WtzxIUc7si78EAT+ZZumdmsCLFfryZZQuIsJ1zeAocpmyIU69qocAY
+         60NARNETg0xm17aaqv394GiT/lqLr7paN92+eyEZFg0FKK2OJK705cShx+fLjRe8FnMC
+         qbmo1/Cv/A8Osxjn/aJ5c7rA7FHKwVxcowzfwwnBIDbD5Ecod6ra+5P8UmVpkt2GboQD
+         2ZeQ==
+X-Gm-Message-State: AOAM533A4RTupN5WutKgx53BcMQd4flApdnVmDlmZaga7s7KyuBSkQWp
+        M3isn2p7XqPCGdM41PN+uBH7NLv/T0K7Bko9rnE=
+X-Google-Smtp-Source: ABdhPJwWdbsMxXEp32Ec06c+K/9QK9+hktthjg6LlBSVY2Qfp+qViF5rI8She+cfTeqM4l6cM1IzJvoV/6C0IZeCc3M=
+X-Received: by 2002:a05:6638:304d:: with SMTP id u13mr571045jak.103.1644261789459;
+ Mon, 07 Feb 2022 11:23:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220207183308.1829495-1-ribalda@chromium.org>
-In-Reply-To: <20220207183308.1829495-1-ribalda@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 7 Feb 2022 11:09:52 -0800
-Message-ID: <CAGS_qxoTLwvVjDGbfeOjMrGvh7sck7TDmiVeDXS2S5oyDWiKzA@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kunit: Introduce _NULL and _NOT_NULL macros
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20220204225817.3918648-1-usama.anjum@collabora.com>
+In-Reply-To: <20220204225817.3918648-1-usama.anjum@collabora.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 7 Feb 2022 11:22:58 -0800
+Message-ID: <CAEf4Bzbf38F39XHJnCKy19m97JZJnhN0+Sr-TAVzZnSKuqzL4w@mail.gmail.com>
+Subject: Re: [PATCH] selftests: Fix build when $(O) points to a relative path
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, kernel@collabora.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 10:33 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
+On Fri, Feb 4, 2022 at 2:59 PM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 >
-> Today, when we want to check if a pointer is NULL and not ERR we have
-> two options:
+> Build of bpf and tc-testing selftests fails when the relative path of
+> the build directory is specified.
 >
-> EXPECT_TRUE(test, ptr == NULL);
+> make -C tools/testing/selftests O=build0
+> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
+> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+> make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
+> ../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
 >
-> or
+> The fix is same as mentioned in commit 150a27328b68 ("bpf, preload: Fix
+> build when $(O) points to a relative path").
 >
-> EXPECT_PTR_NE(test, ptr, (struct mystruct *)NULL);
->
-> Create a new set of macros that take care of NULL checks.
 
-I think we've usually had people do
-  KUNIT_EXPECT_FALSE(test, nullptr);
+I don't think it actually helps building BPF selftest. Even with this
+patch applied, all the feature detection doesn't work, and I get
+reallocarray redefinition failure when bpftool is being built as part
+of selftest.
 
-I'm not personally against having an explicit NULL check, however.
-
-But if we want to continue with this, we'll want to rebase on top of
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=kunit
-since a lot of this code has been deleted or refactored.
-E.g. see https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/include/kunit/test.h?h=kunit
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/Makefile | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 4eda7c7c15694..aa0faf132c35a 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -178,6 +178,7 @@ all: khdr
+>                 BUILD_TARGET=$$BUILD/$$TARGET;                  \
+>                 mkdir $$BUILD_TARGET  -p;                       \
+>                 $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET       \
+> +                               O=$(abs_objtree)                \
+>                                 $(if $(FORCE_TARGETS),|| exit); \
+>                 ret=$$((ret * $$?));                            \
+>         done; exit $$ret;
+> @@ -185,7 +186,8 @@ all: khdr
+>  run_tests: all
+>         @for TARGET in $(TARGETS); do \
+>                 BUILD_TARGET=$$BUILD/$$TARGET;  \
+> -               $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+> +               $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
+> +                               O=$(abs_objtree);                   \
+>         done;
+>
+>  hotplug:
+> --
+> 2.30.2
+>
