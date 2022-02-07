@@ -2,98 +2,89 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C82AC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B755AC43219
 	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 18:37:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbiBGSgx (ORCPT
+        id S234670AbiBGSgx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 7 Feb 2022 13:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240906AbiBGSdP (ORCPT
+        with ESMTP id S236681AbiBGSce (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:33:15 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36816C0401D9
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 10:33:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id eg42so16291799edb.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 10:33:15 -0800 (PST)
+        Mon, 7 Feb 2022 13:32:34 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A19AC0401DA
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 10:32:34 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id p63so17974689iod.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 10:32:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=COoBb1joui25djaKHvMRbQv4Mt4Thb8VpuVozeRERCg=;
-        b=LEDvpjbLxdkIAECgUtmhd0Pewx1MCYa0vTxWBQ5qOvlF9mxSP9MgL2WPumTTF76XQd
-         rs/FWbPD/12K4cKHrCp40Q/xDzWkqd6ZohMpK2WRtXfeE7ZHVZFzkm38chEZFaLfZ+rG
-         TuagRfezFAf5P9Iahh9BeHasERZJQdCttHLnc=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lHF1VpH0DQWDH5n7whaT5A/13tsAV04BQTsvPAisIH0=;
+        b=Dj8tHg/5t1JB+owhj2ZjiEZL01octdxE8ToKWyyO+Mc27jiSIyo4407/YMOcfmzSnt
+         p17FI0FIsTEzmPy2Y5xTPdNLD097MXmh1K+EyMfe5VjMNf1/JZ3EH0bidk6DQhir9imY
+         vQWBjEHVY4rmWu/aXT0leiUl8vc/d8lFpNc4M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=COoBb1joui25djaKHvMRbQv4Mt4Thb8VpuVozeRERCg=;
-        b=3SgdITlnVZ8jDeYFwU38nDht0XqjaqZIXbIKGQ8go/HAZVs/deu2570ZHApHXYI4JD
-         LsMjGTZPLr6ATKBJiP1+QgOOpcaEMizlHz805p7nAZv+mAohxRg+I4ro8aXA1WoVbdNW
-         PuLKCtKsh9jVUEKDPvufC0YJvosDVW9iTVFRm28e/WCRdYTzPMcuQTJxHHoAwIws4LB1
-         E9+2wsGLEz8Kap/NpYxeH+ogISk90LxUuaTTAF8AivmrIakRjv+Zm6rTBBEtOQ61+FQ2
-         4+UbI6VQxs0Y9W9jIzhSxHv/b8wYhM3n+wlGaczaObRCA23Fko6TzIEzIiCMCiXGLNqW
-         OvEQ==
-X-Gm-Message-State: AOAM532VDcA6S1qJoa9XoHKYq3YlVx3O3q5ehSNjLonx0Bu4Pq7nHuBv
-        0S9Tr//vOMnFiNiL/Y6NNBYo5A==
-X-Google-Smtp-Source: ABdhPJyYpPuIcCeeyxuf5tTwSyQd8EC7oNpXtyv9AK75BOvAZ9VzgGG58uhyr6gisCzTKM431Calhg==
-X-Received: by 2002:a05:6402:2789:: with SMTP id b9mr784253ede.308.1644258793829;
-        Mon, 07 Feb 2022 10:33:13 -0800 (PST)
-Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id k15sm3045173eji.64.2022.02.07.10.33.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 10:33:13 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH 5/6] mctp: test: Use NULL macros
-Date:   Mon,  7 Feb 2022 19:33:07 +0100
-Message-Id: <20220207183308.1829495-5-ribalda@chromium.org>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-In-Reply-To: <20220207183308.1829495-1-ribalda@chromium.org>
-References: <20220207183308.1829495-1-ribalda@chromium.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lHF1VpH0DQWDH5n7whaT5A/13tsAV04BQTsvPAisIH0=;
+        b=pnvBysc2kPqF/HyW6yZrlRmsKDiQu1AtpCEcnbkYTwXkIjTAsfx3eYEVw3vzzYayCs
+         emnJv02dF9VuO1uNQTcfxcVyv/EBKsTR44Zy8Lp3cK2B7rIiqzLcrcKJf41KRzUp0/uk
+         QBaUIS6afPMdwYifjmYJirZvo4l/GmGSjW3i3FAKV1743sAIKbZlp4110Zd0qG381meb
+         7sGWo1vXz/FzY8UkJlYhjutEzsgm0giJwMQ7F7OmZE94iZIhSvY6rf9wFGpzB9yh54FT
+         s5cKKWdxlbD3ubNk59Qqb6uTuzzmGE5wA6Q4FSw2iyxQ14IDTmkc2URGAsjFW+vu302s
+         gi0w==
+X-Gm-Message-State: AOAM532gTtylbxO3ObenTQ/MgDyWSjDAdMZIe4ue7jF8PC0r2TbRmye+
+        +ThTs6HNV+q8KVkM1Y0H+2KfJQ==
+X-Google-Smtp-Source: ABdhPJwAi7OgegFLvzLu3DSbiMS8FE+D6rNCLKTStU8ZEgIomXfkDkIRujGcZ3DVxw92MTT9otWwPQ==
+X-Received: by 2002:a5e:c20b:: with SMTP id v11mr398967iop.197.1644258753611;
+        Mon, 07 Feb 2022 10:32:33 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c11sm1632610iln.56.2022.02.07.10.32.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 10:32:33 -0800 (PST)
+Subject: Re: [PATCH][next] kselftest: alsa: fix spelling mistake "desciptor"
+ -> "descriptor"
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shuah Khan <shuah@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220207092235.240284-1-colin.i.king@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3c47e21f-45de-1bd1-a547-225b3ef0ebc0@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 11:32:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220207092235.240284-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace the PTR_EQ NULL checks wit the NULL macros. More idiomatic and
-specific.
+On 2/7/22 2:22 AM, Colin Ian King wrote:
+> There are some spelling mistakes in some ksft messages. Fix them.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>   tools/testing/selftests/alsa/mixer-test.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- net/mctp/test/route-test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Looks good to me. If it goes through sounds tree:
 
-diff --git a/net/mctp/test/route-test.c b/net/mctp/test/route-test.c
-index 750f9f9b4daf..eb70b524c78e 100644
---- a/net/mctp/test/route-test.c
-+++ b/net/mctp/test/route-test.c
-@@ -361,7 +361,7 @@ static void mctp_test_route_input_sk(struct kunit *test)
- 	} else {
- 		KUNIT_EXPECT_NE(test, rc, 0);
- 		skb2 = skb_recv_datagram(sock->sk, 0, 1, &rc);
--		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
-+		KUNIT_EXPECT_NULL(test, skb2);
- 	}
- 
- 	__mctp_route_test_fini(test, dev, rt, sock);
-@@ -430,7 +430,7 @@ static void mctp_test_route_input_sk_reasm(struct kunit *test)
- 		skb_free_datagram(sock->sk, skb2);
- 
- 	} else {
--		KUNIT_EXPECT_PTR_EQ(test, skb2, NULL);
-+		KUNIT_EXPECT_NULL(test, skb2);
- 	}
- 
- 	__mctp_route_test_fini(test, dev, rt, sock);
--- 
-2.35.0.263.gb82422642f-goog
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
+
 
