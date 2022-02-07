@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE15C35278
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 292F3C3527B
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 15:36:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376744AbiBGPf3 (ORCPT
+        id S1378740AbiBGPfb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        Mon, 7 Feb 2022 10:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380832AbiBGPZv (ORCPT
+        with ESMTP id S1380220AbiBGPZk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 10:25:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04AAC0401C1
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:49 -0800 (PST)
+        Mon, 7 Feb 2022 10:25:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88562C0401C8
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 07:25:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FCA861035
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4881AC340EF;
-        Mon,  7 Feb 2022 15:25:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E41DB815A6
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 15:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0D6C004E1;
+        Mon,  7 Feb 2022 15:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644247548;
-        bh=/IsDiGLrik2jwYTUfwMASyDcTKTPn/KCUYF6KIYhml8=;
+        s=k20201202; t=1644247537;
+        bh=qP0P6ZRtwMgX+QzYYUTIWXfhAsm41i8Zgxp3wVw3Py0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kg5PbG5itXPixscYcvQKmZIA8ZEvGao4mgA9H0qpe6Jf9/qoBEBJIgkww8b4/HeTj
-         q7jT+n3P37Ct6qgnWbRSLcEb4I74OjgHB4L/AufwTfBJaHN80Quht7FLvAxrGS6j7S
-         HZd0B3W3rfalZpqWXpvHWexwAsLhpcNuDu4C12rtx0YOOciBJzJyKIGxR5k4CbcGe5
-         JraSo6EkF4o92G4Y6L/HCNnfwLWM/6oslDflEm+iOrKjh6/zWbB/HhnmRXYg6W0pXA
-         cTxwC31BIakK7BWV+ZRoZwxmjkZDBGjYJq6JFMmP7TY9bvg4yVxa/W618bgOj+Ouj4
-         SymgMuzOj1LjA==
+        b=g92qDcWdBOfBWLOqyBeVgFgOwuycTSoSXc2zEYO0/OMUoCKzIp2e3mARgYWQcct7g
+         GOK9Va344SdsOB5bS8oPgmQDkUxB9Ez2eDYm+yKxAnTjyzs7wSWxx9HVnuJvEqXm0n
+         vy7CAPvTauZhi8+04e+i+dbIeu+7N1ECR0MT2nOSIoe1OO2sK8nxZ2t76NW/kjrjiz
+         clFCt4m7pZW96qOHbbmVsiPlcJf78i9K5Sz6pz46zxjy/+dyVJ/FKTiNKf5j9kfvXx
+         wLzzM19BK+F8bWnVn9QGVVcFMlS5G4smIfMZSQdF28RWuHF+zyT+WZrU8UY3Tme+oQ
+         BbwItykBTTsZQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -49,531 +49,552 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v11 40/40] kselftest/arm64: Add SME support to syscall ABI test
-Date:   Mon,  7 Feb 2022 15:21:09 +0000
-Message-Id: <20220207152109.197566-41-broonie@kernel.org>
+Subject: [PATCH v11 37/40] kselftest/arm64: signal: Add SME signal handling tests
+Date:   Mon,  7 Feb 2022 15:21:06 +0000
+Message-Id: <20220207152109.197566-38-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220207152109.197566-1-broonie@kernel.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=14984; h=from:subject; bh=/IsDiGLrik2jwYTUfwMASyDcTKTPn/KCUYF6KIYhml8=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjkeJVDEKktOGfFvufTKaqV0EDA+nJC+unOKEej MYJ6Fv2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE45AAKCRAk1otyXVSH0H2vB/ 9vruNyG9i/Inzv+SS1kENNCx2RgpsI7LanM9erdXP2TJqaWHKEJJoyDaG1tMtCODPtXpq4H1+PCw7r 4J/br77r5frEc4nvYZMlommJoOXgmt4HuXMMwaEv6UmsoKjl33SNXHvPesAeVXW4h29DWE44dF36+e XsB9ONFHzo4RxYe9EspQTVy8i4CYTcARlMAcUJLr/kSgyV7KLeAYL2hviG1aS4/GOBZ1AvCuGU1Kbv R6bmax7buqiCKH6MXymNbsNBvY3WlmMDKNK/451T8A9QHVeJhRiswXppIjkRSeq5Km9uOA+O6tRe1s KPh1EdXo/WqZ2HoIZht5/Eu5LUfml4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14952; h=from:subject; bh=qP0P6ZRtwMgX+QzYYUTIWXfhAsm41i8Zgxp3wVw3Py0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiATjhjfWp0nPLtabvvQduLHqQtsTo8IPYHP4S9YSM 8gdEkuWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYgE44QAKCRAk1otyXVSH0MSTB/ 9QPAiyoY2Tdyya0MHX/qE60d0Ik7eLG9NPEC2wvQHiHPDB3URILxLlpqW0tjKtuDfZ8stcuOnZQoNE x25ZQlAbTD0B6B/6KzdgfBZj5Yw72gYKJRqmYzeNj4q68rP129ouByAzQLjto3RVA3V2xxqb5yLq6w 9zt30/Tt5BrNzyFkdifNUdDxRGWUM5UGeahQe8LhV4q/8zzzbiknrdhOvqD7InfmMzcwgBbUmf5CdG 06rSSmv0/QestKWxaUNyi0ZGO5NlmMe8B+ATm9f9HI0r/Pr0PwFZobVUHvkhgrsu2PNTg6D4Z0LZtI 9N8KhvQ4Iq5n14qXLDndfxFlgBOaKC
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For every possible combination of SVE and SME vector length verify that for
-each possible value of SVCR after a syscall we leave streaming mode and ZA
-is preserved. We don't need to take account of any streaming/non streaming
-SVE vector length changes in the assembler code since the store instructions
-will handle the vector length for us. We log if the system supports FA64 and
-only try to set FFR in streaming mode if it does.
+Add test cases for the SME signal handing ABI patterned off the SVE tests.
+Due to the small size of the tests and the differences in ABI (especially
+around needing to account for both streaming SVE and ZA) there is some code
+duplication here.
+
+We currently cover:
+ - Reporting of the vector length.
+ - Lack of support for changing vector length.
+ - Presence and size of register state for streaming SVE and ZA.
+
+As with the SVE tests we do not yet have any validation of register
+contents.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../selftests/arm64/abi/syscall-abi-asm.S     |  69 +++++-
- .../testing/selftests/arm64/abi/syscall-abi.c | 204 ++++++++++++++++--
- .../testing/selftests/arm64/abi/syscall-abi.h |  15 ++
- 3 files changed, 265 insertions(+), 23 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/abi/syscall-abi.h
+ .../testing/selftests/arm64/signal/.gitignore |   2 +
+ .../selftests/arm64/signal/test_signals.h     |   4 +
+ .../arm64/signal/test_signals_utils.c         |   6 +
+ .../testcases/fake_sigreturn_sme_change_vl.c  |  92 +++++++++++++
+ .../arm64/signal/testcases/sme_trap_no_sm.c   |  38 ++++++
+ .../signal/testcases/sme_trap_non_streaming.c |  45 ++++++
+ .../arm64/signal/testcases/sme_trap_za.c      |  36 +++++
+ .../selftests/arm64/signal/testcases/sme_vl.c |  68 +++++++++
+ .../arm64/signal/testcases/ssve_regs.c        | 129 ++++++++++++++++++
+ 9 files changed, 420 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-index 983467cfcee0..bc70e04224bf 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-@@ -9,15 +9,42 @@
- // invoked is configured in x8 of the input GPR data.
- //
- // x0:	SVE VL, 0 for FP only
-+// x1:	SME VL
- //
- //	GPRs:	gpr_in, gpr_out
- //	FPRs:	fpr_in, fpr_out
- //	Zn:	z_in, z_out
- //	Pn:	p_in, p_out
- //	FFR:	ffr_in, ffr_out
-+//	ZA:	za_in, za_out
-+//	SVCR:	svcr_in, svcr_out
-+
-+#include "syscall-abi.h"
- 
- .arch_extension sve
- 
-+/*
-+ * LDR (vector to ZA array):
-+ *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _ldr_za nw, nxbase, offset=0
-+	.inst	0xe1000000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
-+/*
-+ * STR (vector from ZA array):
-+ *	STR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
-+ */
-+.macro _str_za nw, nxbase, offset=0
-+	.inst	0xe1200000			\
-+		| (((\nw) & 3) << 13)		\
-+		| ((\nxbase) << 5)		\
-+		| ((\offset) & 7)
-+.endm
-+
- .globl do_syscall
- do_syscall:
- 	// Store callee saved registers x19-x29 (80 bytes) plus x0 and x1
-@@ -30,6 +57,24 @@ do_syscall:
- 	stp	x25, x26, [sp, #80]
- 	stp	x27, x28, [sp, #96]
- 
-+	// Set SVCR if we're doing SME
-+	cbz	x1, 1f
-+	adrp	x2, svcr_in
-+	ldr	x2, [x2, :lo12:svcr_in]
-+	msr	S3_3_C4_C2_2, x2
-+1:
-+
-+	// Load ZA if it's enabled - uses x12 as scratch due to SME LDR
-+	tbz	x2, #SVCR_ZA_SHIFT, 1f
-+	mov	w12, #0
-+	ldr	x2, =za_in
-+2:	_ldr_za 12, 2
-+	add	x2, x2, x1
-+	add	x12, x12, #1
-+	cmp	x1, x12
-+	bne	2b
-+1:
-+
- 	// Load GPRs x8-x28, and save our SP/FP for later comparison
- 	ldr	x2, =gpr_in
- 	add	x2, x2, #64
-@@ -68,7 +113,7 @@ do_syscall:
- 	ldp	q30, q31, [x2, #16 * 30]
- 1:
- 
--	// Load the SVE registers if we're doing SVE
-+	// Load the SVE registers if we're doing SVE/SME
- 	cbz	x0, 1f
- 
- 	ldr	x2, =z_in
-@@ -105,9 +150,13 @@ do_syscall:
- 	ldr	z30, [x2, #30, MUL VL]
- 	ldr	z31, [x2, #31, MUL VL]
- 
-+	// Only set a non-zero FFR, test patterns must be zero since the
-+	// syscall should clear it - this lets us handle FA64.
- 	ldr	x2, =ffr_in
-+	cbz	x2, 2f
- 	ldr	p0, [x2, #0]
- 	wrffr	p0.b
-+2:
- 
- 	ldr	x2, =p_in
- 	ldr	p0, [x2, #0, MUL VL]
-@@ -169,6 +218,24 @@ do_syscall:
- 	stp	q28, q29, [x2, #16 * 28]
- 	stp	q30, q31, [x2, #16 * 30]
- 
-+	// Save SVCR if we're doing SME
-+	cbz	x1, 1f
-+	mrs	x2, S3_3_C4_C2_2
-+	adrp	x3, svcr_out
-+	str	x2, [x3, :lo12:svcr_out]
-+1:
-+
-+	// Save ZA if it's enabled - uses x12 as scratch due to SME STR
-+	tbz	x2, #SVCR_ZA_SHIFT, 1f
-+	mov	w12, #0
-+	ldr	x2, =za_out
-+2:	_str_za 12, 2
-+	add	x2, x2, x1
-+	add	x12, x12, #1
-+	cmp	x1, x12
-+	bne	2b
-+1:
-+
- 	// Save the SVE state if we have some
- 	cbz	x0, 1f
- 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index 1e13b7523918..b632bfe9e022 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -18,9 +18,13 @@
- 
- #include "../../kselftest.h"
- 
-+#include "syscall-abi.h"
-+
- #define NUM_VL ((SVE_VQ_MAX - SVE_VQ_MIN) + 1)
- 
--extern void do_syscall(int sve_vl);
-+static int default_sme_vl;
-+
-+extern void do_syscall(int sve_vl, int sme_vl);
- 
- static void fill_random(void *buf, size_t size)
- {
-@@ -48,14 +52,15 @@ static struct syscall_cfg {
- uint64_t gpr_in[NUM_GPR];
- uint64_t gpr_out[NUM_GPR];
- 
--static void setup_gpr(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_gpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
- {
- 	fill_random(gpr_in, sizeof(gpr_in));
- 	gpr_in[8] = cfg->syscall_nr;
- 	memset(gpr_out, 0, sizeof(gpr_out));
- }
- 
--static int check_gpr(struct syscall_cfg *cfg, int sve_vl)
-+static int check_gpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl, uint64_t svcr)
- {
- 	int errors = 0;
- 	int i;
-@@ -79,13 +84,15 @@ static int check_gpr(struct syscall_cfg *cfg, int sve_vl)
- uint64_t fpr_in[NUM_FPR * 2];
- uint64_t fpr_out[NUM_FPR * 2];
- 
--static void setup_fpr(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
- {
- 	fill_random(fpr_in, sizeof(fpr_in));
- 	memset(fpr_out, 0, sizeof(fpr_out));
- }
- 
--static int check_fpr(struct syscall_cfg *cfg, int sve_vl)
-+static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		     uint64_t svcr)
- {
- 	int errors = 0;
- 	int i;
-@@ -109,13 +116,15 @@ static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
- uint8_t z_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
- uint8_t z_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
- 
--static void setup_z(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
- {
- 	fill_random(z_in, sizeof(z_in));
- 	fill_random(z_out, sizeof(z_out));
- }
- 
--static int check_z(struct syscall_cfg *cfg, int sve_vl)
-+static int check_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		   uint64_t svcr)
- {
- 	size_t reg_size = sve_vl;
- 	int errors = 0;
-@@ -126,13 +135,17 @@ static int check_z(struct syscall_cfg *cfg, int sve_vl)
- 
- 	/*
- 	 * After a syscall the low 128 bits of the Z registers should
--	 * be preserved and the rest be zeroed or preserved.
-+	 * be preserved and the rest be zeroed or preserved, except if
-+	 * we were in streaming mode in which case the low 128 bits may
-+	 * also be cleared by the transition out of streaming mode.
- 	 */
- 	for (i = 0; i < SVE_NUM_ZREGS; i++) {
- 		void *in = &z_in[reg_size * i];
- 		void *out = &z_out[reg_size * i];
- 
--		if (memcmp(in, out, SVE_VQ_BYTES) != 0) {
-+		if ((memcmp(in, out, SVE_VQ_BYTES) != 0) &&
-+		    !((svcr & SVCR_SM_MASK) &&
-+		      memcmp(z_zero, out, SVE_VQ_BYTES) == 0)) {
- 			ksft_print_msg("%s SVE VL %d Z%d low 128 bits changed\n",
- 				       cfg->name, sve_vl, i);
- 			errors++;
-@@ -145,13 +158,15 @@ static int check_z(struct syscall_cfg *cfg, int sve_vl)
- uint8_t p_in[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
- uint8_t p_out[SVE_NUM_PREGS * __SVE_PREG_SIZE(SVE_VQ_MAX)];
- 
--static void setup_p(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
- {
- 	fill_random(p_in, sizeof(p_in));
- 	fill_random(p_out, sizeof(p_out));
- }
- 
--static int check_p(struct syscall_cfg *cfg, int sve_vl)
-+static int check_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		   uint64_t svcr)
- {
- 	size_t reg_size = sve_vq_from_vl(sve_vl) * 2; /* 1 bit per VL byte */
- 
-@@ -175,8 +190,19 @@ static int check_p(struct syscall_cfg *cfg, int sve_vl)
- uint8_t ffr_in[__SVE_PREG_SIZE(SVE_VQ_MAX)];
- uint8_t ffr_out[__SVE_PREG_SIZE(SVE_VQ_MAX)];
- 
--static void setup_ffr(struct syscall_cfg *cfg, int sve_vl)
-+static void setup_ffr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
- {
-+	/*
-+	 * If we are in streaming mode and do not have FA64 then FFR
-+	 * is unavailable.
-+	 */
-+	if ((svcr & SVCR_SM_MASK) &&
-+	    !(getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)) {
-+		memset(&ffr_in, 0, sizeof(ffr_in));
-+		return;
-+	}
-+
- 	/*
- 	 * It is only valid to set a contiguous set of bits starting
- 	 * at 0.  For now since we're expecting this to be cleared by
-@@ -186,7 +212,8 @@ static void setup_ffr(struct syscall_cfg *cfg, int sve_vl)
- 	fill_random(ffr_out, sizeof(ffr_out));
- }
- 
--static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
-+static int check_ffr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		     uint64_t svcr)
- {
- 	size_t reg_size = sve_vq_from_vl(sve_vl) * 2;  /* 1 bit per VL byte */
- 	int errors = 0;
-@@ -195,6 +222,10 @@ static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
- 	if (!sve_vl)
- 		return 0;
- 
-+	if ((svcr & SVCR_SM_MASK) &&
-+	    !(getauxval(AT_HWCAP2) & HWCAP2_SME_FA64))
-+		return 0;
-+
- 	/* After a syscall the P registers should be preserved or zeroed */
- 	for (i = 0; i < reg_size; i++)
- 		if (ffr_out[i] && (ffr_in[i] != ffr_out[i]))
-@@ -206,8 +237,65 @@ static int check_ffr(struct syscall_cfg *cfg, int sve_vl)
- 	return errors;
- }
- 
--typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl);
--typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl);
-+uint64_t svcr_in, svcr_out;
-+
-+static void setup_svcr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
-+{
-+	svcr_in = svcr;
-+}
-+
-+static int check_svcr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		      uint64_t svcr)
-+{
-+	int errors = 0;
-+
-+	if (svcr_out & SVCR_SM_MASK) {
-+		ksft_print_msg("%s Still in SM, SVCR %llx\n",
-+			       cfg->name, svcr_out);
-+		errors++;
-+	}
-+
-+	if ((svcr_in & SVCR_ZA_MASK) != (svcr_out & SVCR_ZA_MASK)) {
-+		ksft_print_msg("%s PSTATE.ZA changed, SVCR %llx != %llx\n",
-+			       cfg->name, svcr_in, svcr_out);
-+		errors++;
-+	}
-+
-+	return errors;
-+}
-+
-+uint8_t za_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+uint8_t za_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+
-+static void setup_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		     uint64_t svcr)
-+{
-+	fill_random(za_in, sizeof(za_in));
-+	memset(za_out, 0, sizeof(za_out));
-+}
-+
-+static int check_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
-+{
-+	size_t reg_size = sme_vl * sme_vl;
-+	int errors = 0;
-+
-+	if (!(svcr & SVCR_ZA_MASK))
-+		return 0;
-+
-+	if (memcmp(za_in, za_out, reg_size) != 0) {
-+		ksft_print_msg("SME VL %d ZA does not match\n", sme_vl);
-+		errors++;
-+	}
-+
-+	return errors;
-+}
-+
-+typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+			 uint64_t svcr);
-+typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+			uint64_t svcr);
- 
- /*
-  * Each set of registers has a setup function which is called before
-@@ -225,20 +313,23 @@ static struct {
- 	{ setup_z, check_z },
- 	{ setup_p, check_p },
- 	{ setup_ffr, check_ffr },
-+	{ setup_svcr, check_svcr },
-+	{ setup_za, check_za },
+diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
+index c1742755abb9..4de8eb26d4de 100644
+--- a/tools/testing/selftests/arm64/signal/.gitignore
++++ b/tools/testing/selftests/arm64/signal/.gitignore
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ mangle_*
+ fake_sigreturn_*
++sme_*
++ssve_*
+ sve_*
+ !*.[ch]
+diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+index f909b70d9e98..c70fdec7d7c4 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals.h
++++ b/tools/testing/selftests/arm64/signal/test_signals.h
+@@ -34,11 +34,15 @@
+ enum {
+ 	FSSBS_BIT,
+ 	FSVE_BIT,
++	FSME_BIT,
++	FSME_FA64_BIT,
+ 	FMAX_END
  };
  
--static bool do_test(struct syscall_cfg *cfg, int sve_vl)
-+static bool do_test(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
-+		    uint64_t svcr)
- {
- 	int errors = 0;
- 	int i;
+ #define FEAT_SSBS		(1UL << FSSBS_BIT)
+ #define FEAT_SVE		(1UL << FSVE_BIT)
++#define FEAT_SME		(1UL << FSME_BIT)
++#define FEAT_SME_FA64		(1UL << FSME_FA64_BIT)
  
- 	for (i = 0; i < ARRAY_SIZE(regset); i++)
--		regset[i].setup(cfg, sve_vl);
-+		regset[i].setup(cfg, sve_vl, sme_vl, svcr);
+ /*
+  * A descriptor used to describe and configure a test case.
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+index 5743897984b0..b588d10afd5b 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+@@ -27,6 +27,8 @@ static int sig_copyctx = SIGTRAP;
+ static char const *const feats_names[FMAX_END] = {
+ 	" SSBS ",
+ 	" SVE ",
++	" SME ",
++	" FA64 ",
+ };
  
--	do_syscall(sve_vl);
-+	do_syscall(sve_vl, sme_vl);
- 
- 	for (i = 0; i < ARRAY_SIZE(regset); i++)
--		errors += regset[i].check(cfg, sve_vl);
-+		errors += regset[i].check(cfg, sve_vl, sme_vl, svcr);
- 
- 	return errors == 0;
- }
-@@ -246,9 +337,10 @@ static bool do_test(struct syscall_cfg *cfg, int sve_vl)
- static void test_one_syscall(struct syscall_cfg *cfg)
- {
- 	int sve_vq, sve_vl;
-+	int sme_vq, sme_vl;
- 
- 	/* FPSIMD only case */
--	ksft_test_result(do_test(cfg, 0),
-+	ksft_test_result(do_test(cfg, 0, default_sme_vl, 0),
- 			 "%s FPSIMD\n", cfg->name);
- 
- 	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
-@@ -265,8 +357,36 @@ static void test_one_syscall(struct syscall_cfg *cfg)
- 		if (sve_vq != sve_vq_from_vl(sve_vl))
- 			sve_vq = sve_vq_from_vl(sve_vl);
- 
--		ksft_test_result(do_test(cfg, sve_vl),
-+		ksft_test_result(do_test(cfg, sve_vl, default_sme_vl, 0),
- 				 "%s SVE VL %d\n", cfg->name, sve_vl);
+ #define MAX_FEATS_SZ	128
+@@ -268,6 +270,10 @@ int test_init(struct tdescr *td)
+ 			td->feats_supported |= FEAT_SSBS;
+ 		if (getauxval(AT_HWCAP) & HWCAP_SVE)
+ 			td->feats_supported |= FEAT_SVE;
++		if (getauxval(AT_HWCAP2) & HWCAP2_SME)
++			td->feats_supported |= FEAT_SME;
++		if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
++			td->feats_supported |= FEAT_SME_FA64;
+ 		if (feats_ok(td)) {
+ 			if (td->feats_required & td->feats_supported)
+ 				fprintf(stderr,
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+new file mode 100644
+index 000000000000..7ed762b7202f
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Attempt to change the streaming SVE vector length in a signal
++ * handler, this is not supported and is expected to segfault.
++ */
 +
-+		if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+			continue;
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
 +
-+		for (sme_vq = SVE_VQ_MAX; sme_vq > 0; --sme_vq) {
-+			sme_vl = prctl(PR_SME_SET_VL, sme_vq * 16);
-+			if (sme_vl == -1)
-+				ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
-+						   strerror(errno), errno);
++#include "test_signals_utils.h"
++#include "testcases.h"
 +
-+			sme_vl &= PR_SME_VL_LEN_MASK;
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
 +
-+			if (sme_vq != sve_vq_from_vl(sme_vl))
-+				sme_vq = sve_vq_from_vl(sme_vl);
-+
-+			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+						 SVCR_ZA_MASK | SVCR_SM_MASK),
-+					 "%s SVE VL %d/SME VL %d SM+ZA\n",
-+					 cfg->name, sve_vl, sme_vl);
-+			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+						 SVCR_SM_MASK),
-+					 "%s SVE VL %d/SME VL %d SM\n",
-+					 cfg->name, sve_vl, sme_vl);
-+			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+						 SVCR_ZA_MASK),
-+					 "%s SVE VL %d/SME VL %d ZA\n",
-+					 cfg->name, sve_vl, sme_vl);
-+		}
- 	}
- }
- 
-@@ -299,14 +419,54 @@ int sve_count_vls(void)
- 	return vl_count;
- }
- 
-+int sme_count_vls(void)
++static bool sme_get_vls(struct tdescr *td)
 +{
-+	unsigned int vq;
-+	int vl_count = 0;
-+	int vl;
-+
-+	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
-+		return 0;
-+
-+	/* Ensure we configure a SME VL, used to flag if SVCR is set */
-+	default_sme_vl = 16;
++	int vq, vl;
 +
 +	/*
 +	 * Enumerate up to SVE_VQ_MAX vector lengths
 +	 */
 +	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+		vl = prctl(PR_SME_SET_VL, vq * 16);
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
 +		if (vl == -1)
-+			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
-+					   strerror(errno), errno);
++			return false;
 +
 +		vl &= PR_SME_VL_LEN_MASK;
 +
-+		if (vq != sve_vq_from_vl(vl))
-+			vq = sve_vq_from_vl(vl);
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
 +
-+		vl_count++;
++		vls[nvls++] = vl;
 +	}
 +
-+	return vl_count;
++	/* We need at least two VLs */
++	if (nvls < 2) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
 +}
 +
- int main(void)
- {
- 	int i;
-+	int tests = 1;  /* FPSIMD */
- 
- 	srandom(getpid());
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(syscalls) * (sve_count_vls() + 1));
-+	tests += sve_count_vls();
-+	tests += (sve_count_vls() * sme_count_vls()) * 3;
-+	ksft_set_plan(ARRAY_SIZE(syscalls) * tests);
++static int fake_sigreturn_ssve_change_vl(struct tdescr *td,
++					 siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *sve;
 +
-+	if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
-+		ksft_print_msg("SME with FA64\n");
-+	else if (getauxval(AT_HWCAP2) & HWCAP2_SME)
-+		ksft_print_msg("SME without FA64\n");
- 
- 	for (i = 0; i < ARRAY_SIZE(syscalls); i++)
- 		test_one_syscall(&syscalls[i]);
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.h b/tools/testing/selftests/arm64/abi/syscall-abi.h
++	/* Get a signal context with a SME ZA frame in it */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++
++	if (head->size != sizeof(struct sve_context)) {
++		fprintf(stderr, "Register data present, aborting\n");
++		return 1;
++	}
++
++	sve = (struct sve_context *)head;
++
++	/* No changes are supported; init left us at minimum VL so go to max */
++	fprintf(stderr, "Attempting to change VL from %d to %d\n",
++		sve->vl, vls[0]);
++	sve->vl = vls[0];
++
++	fake_sigreturn(&sf, sizeof(sf), 0);
++
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "FAKE_SIGRETURN_SSVE_CHANGE",
++	.descr = "Attempt to change Streaming SVE VL",
++	.feats_required = FEAT_SME,
++	.sig_ok = SIGSEGV,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = fake_sigreturn_ssve_change_vl,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
 new file mode 100644
-index 000000000000..bda5a87ad381
+index 000000000000..f9d76ae32bba
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2021 ARM Limited.
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that using a streaming mode instruction without enabling it
++ * generates a SIGILL.
 + */
 +
-+#ifndef SYSCALL_ABI_H
-+#define SYSCALL_ABI_H
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
 +
-+#define SVCR_ZA_MASK		2
-+#define SVCR_SM_MASK		1
++#include "test_signals_utils.h"
++#include "testcases.h"
 +
-+#define SVCR_ZA_SHIFT		1
-+#define SVCR_SM_SHIFT		0
++int sme_trap_no_sm_trigger(struct tdescr *td)
++{
++	/* SMSTART ZA ; ADDHA ZA0.S, P0/M, P0/M, Z0.S */
++	asm volatile(".inst 0xd503457f ; .inst 0xc0900000");
 +
-+#endif
++	return 0;
++}
++
++int sme_trap_no_sm_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "SME trap without SM",
++	.descr = "Check that we get a SIGILL if we use streaming mode without enabling it",
++	.timeout = 3,
++	.feats_required = FEAT_SME,   /* We need a SMSTART ZA */
++	.sanity_disabled = true,
++	.trigger = sme_trap_no_sm_trigger,
++	.run = sme_trap_no_sm_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+new file mode 100644
+index 000000000000..e469ae5348e3
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that using an instruction not supported in streaming mode
++ * traps when in streaming mode.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++int sme_trap_non_streaming_trigger(struct tdescr *td)
++{
++	/*
++	 * The framework will handle SIGILL so we need to exit SM to
++	 * stop any other code triggering a further SIGILL down the
++	 * line from using a streaming-illegal instruction.
++	 */
++	asm volatile(".inst 0xd503437f; /* SMSTART ZA */ \
++		      cnt v0.16b, v0.16b; \
++                      .inst 0xd503447f  /* SMSTOP ZA */");
++
++	return 0;
++}
++
++int sme_trap_non_streaming_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "SME SM trap unsupported instruction",
++	.descr = "Check that we get a SIGILL if we use an unsupported instruction in streaming mode",
++	.feats_required = FEAT_SME,
++	.feats_incompatible = FEAT_SME_FA64,
++	.timeout = 3,
++	.sanity_disabled = true,
++	.trigger = sme_trap_non_streaming_trigger,
++	.run = sme_trap_non_streaming_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+new file mode 100644
+index 000000000000..3a7747af4715
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that accessing ZA without enabling it generates a SIGILL.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++int sme_trap_za_trigger(struct tdescr *td)
++{
++	/* ZERO ZA */
++	asm volatile(".inst 0xc00800ff");
++
++	return 0;
++}
++
++int sme_trap_za_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "SME ZA trap",
++	.descr = "Check that we get a SIGILL if we access ZA without enabling",
++	.timeout = 3,
++	.sanity_disabled = true,
++	.trigger = sme_trap_za_trigger,
++	.run = sme_trap_za_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_vl.c b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+new file mode 100644
+index 000000000000..13ff3b35cbaf
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Check that the SME vector length reported in signal contexts is the
++ * expected one.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++unsigned int vl;
++
++static bool get_sme_vl(struct tdescr *td)
++{
++	int ret = prctl(PR_SME_GET_VL);
++	if (ret == -1)
++		return false;
++
++	vl = ret;
++
++	return true;
++}
++
++static int sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct za_context *za;
++
++	/* Get a signal context which should have a ZA frame in it */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, ZA_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No ZA context\n");
++		return 1;
++	}
++	za = (struct za_context *)head;
++
++	if (za->vl != vl) {
++		fprintf(stderr, "ZA sigframe VL %u, expected %u\n",
++			za->vl, vl);
++		return 1;
++	} else {
++		fprintf(stderr, "got expected VL %u\n", vl);
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "SME VL",
++	.descr = "Check that we get the right SME VL reported",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = get_sme_vl,
++	.run = sme_vl,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+new file mode 100644
+index 000000000000..6150862a9cde
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that the streaming SVE register context in signal frames is
++ * set up as expected.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
++
++static bool sme_get_vls(struct tdescr *td)
++{
++	int vq, vl;
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
++
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least one VL */
++	if (nvls < 1) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
++}
++
++static void setup_ssve_regs(void)
++{
++	/* SMSTART SM */
++	asm volatile(".inst 0x7f4303d5");
++
++	/* RDVL x16, #1 so we should have SVE regs; real data is TODO */
++	asm volatile(".inst 0x04bf5030" : : : "x16" );
++}
++
++static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
++			 unsigned int vl)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *ssve;
++
++	fprintf(stderr, "Testing VL %d\n", vl);
++
++	if (prctl(PR_SME_SET_VL, vl) == -1) {
++		fprintf(stderr, "Failed to set VL\n");
++		return 1;
++	}
++
++	/*
++	 * Get a signal context which should have a SVE frame and registers
++	 * in it.
++	 */
++	setup_ssve_regs();
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++
++	ssve = (struct sve_context *)head;
++	if (ssve->vl != vl) {
++		fprintf(stderr, "Got VL %d, expected %d\n", ssve->vl, vl);
++		return 1;
++	}
++
++	/* The actual size validation is done in get_current_context() */
++	fprintf(stderr, "Got expected size %u and VL %d\n",
++		head->size, ssve->vl);
++
++	return 0;
++}
++
++static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	int i;
++
++	for (i = 0; i < nvls; i++) {
++		/*
++		 * TODO: the signal test helpers can't currently cope
++		 * with signal frames bigger than struct sigcontext,
++		 * skip VLs that will trigger that.
++		 */
++		if (vls[i] > 64)
++			continue;
++
++		if (do_one_sme_vl(td, si, uc, vls[i]))
++			return 1;
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "Streaming SVE registers",
++	.descr = "Check that we get the right Streaming SVE registers reported",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = sme_regs,
++};
 -- 
 2.30.2
 
