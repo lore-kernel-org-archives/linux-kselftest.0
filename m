@@ -2,108 +2,150 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B3F6C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Feb 2022 21:39:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE00C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbiBGVjo (ORCPT
+        id S230353AbiBHBGN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 16:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        Mon, 7 Feb 2022 20:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiBGVjo (ORCPT
+        with ESMTP id S233784AbiBHAPm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 16:39:44 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EFBC061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 13:39:43 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id b13so33074738edn.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 13:39:43 -0800 (PST)
+        Mon, 7 Feb 2022 19:15:42 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452CAC061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:15:41 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id e8so12544190ilm.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:15:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JkUXjUfONMEakOKrSs8qeEQ8fO3Su2ebpIj8MlZJxVE=;
-        b=Oq62eM9QvIuCDhAdIj1f86cKklVgCa4pi3jRg64xUBzlO9ICsyvBa/d87BJhtZikAm
-         V8GHeqf7OYkxA3wLr5xT0tMouiyrPVPUOJ/Fl1gyE40k8mhfpJWUH5P9R2+TGmXtaMwH
-         LDEmkyf4eWjrR1gFVR5yf34CJny0KeOz6GrEK61ueilERIDvaf9zXu5zgCedaOzTIItv
-         8WJMpEHCipEvOXSQpUCuI53fwJQ81s98wpoJM0ohoz74TdAeGG1tGsdb4xRjdRcdtMbC
-         E/amJkuBKnug434U2ITh14EBFvPIQVwSWSOOpxG5jNZAYT+FYrD8XFKbzEMSAm7qt/2V
-         gm7g==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BgvLO9hr2V7CyEad4Q9zhVhiiHX9h0qd8phe6mg68zg=;
+        b=diok9UMph6A2H5uNb/Z6KYHIB6dvzX6ttLpuifYYoA6h5s8mSmC/WfCD6n5H1XDOEn
+         lVguHrxhUHRz3IzbcJCaTLPuuRh4WxEZn3yRP09ANS/ytIPq0BzeEYQ6DDLsyP9NqqTx
+         FgBluq9mgpMb5bE/0flXsb4pi3bJwMHofETjk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JkUXjUfONMEakOKrSs8qeEQ8fO3Su2ebpIj8MlZJxVE=;
-        b=3qoQpdcjhfGT47GkJ+8Z4Rj7mnrKTQlQHn6cn3Oq4NBE30anrvT3MM3MOd3my3i122
-         sutIMs8HpoLx2NV547GtEubhnDA63naQN8Xo+RQuWw5b79Zoui96dVfXvj2Q/6o59TF2
-         Yj7GiFuR5IcSg+U8ax+0HUindW+bqvJC8F/AfnjwNdHC03zi4iWhaZ76qPXIcLVP0EOm
-         7yzREIFYsGyK0wt6ls9C6oY2ODC0WURUHHD6/0Ivksy4XJPG8yOZDpsjZrVRu0tFG2i8
-         K4VBbHHmXuQf/k/zORaKajWT57+R5MgowkuP5Tr+f5D2tochk31R/D3opZYXpY+7OVOQ
-         LL8w==
-X-Gm-Message-State: AOAM531Ahiml7o2/nlmwDs9BpMYzJSRfSPn/h3YalSvougwLgC9g6Ica
-        fXYPnAHjmfmE9qedbInNPVvQHzaiYEqr3re5Wx+M3g==
-X-Google-Smtp-Source: ABdhPJyUDCZjErGGp4mC5UrUHbCD59oq5XN+jzmjTXkyVxCwdEhoCDUSc+IKtLPlLIXVjeO3aGer3OK3Gr03k8b/5gM=
-X-Received: by 2002:a05:6402:34d3:: with SMTP id w19mr1422514edc.377.1644269982031;
- Mon, 07 Feb 2022 13:39:42 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BgvLO9hr2V7CyEad4Q9zhVhiiHX9h0qd8phe6mg68zg=;
+        b=eJ+F0+l1Pq2BcSQXC5v3KRK6EDybL/aMSo6Qm2KqxoWuu0HrwaWwt3uIzjKKnn9M9p
+         /eyxliFh/MP/mPW1qT8u0qxFLQqLPue3z1gGZl/wbOYW1V/tKQekvUorRXEXw3RIP0/M
+         7PIeSRMEtqagHOtMQqVL3/gQbIz0ZXeNMN8O3P0QVr5WlEHj+eANnT2dZPBFRJoWEx9R
+         Cnw0Qhrfmn7+LZAmfrqVd2a+3le8eAEE4Pyb+1+cQOWIhcL26k3Dp+Z5pU/VDWqXrALg
+         JsyhjqeUCnZ6vuFVnH8lXhSBcRZA6hP0oOKMlsOvLrwO+s1N22fG4KHbYnw55QfNxbrv
+         xlpA==
+X-Gm-Message-State: AOAM532/Xf6/1T+W8sLToNaI9UkrHcy8axi3+rRtiJcDbHGYxS+PWbkL
+        m9OUJq/QshQtHkpPmmc14J86BYSca0WJ4g==
+X-Google-Smtp-Source: ABdhPJxVvgElyB8fUYMMP/TOaUOJybzRRArhutl3SBXSxLmUM8fI5K7z6iWl6nKzUSAe8HoSX1giEQ==
+X-Received: by 2002:a92:d24b:: with SMTP id v11mr928645ilg.1.1644279340709;
+        Mon, 07 Feb 2022 16:15:40 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b5sm1883555ilr.0.2022.02.07.16.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 16:15:40 -0800 (PST)
+Subject: Re: [PATCH v11 31/40] kselftest/arm64: sme: Add SME support to vlset
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220207152109.197566-1-broonie@kernel.org>
+ <20220207152109.197566-32-broonie@kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fc0d4407-8124-2040-41f5-5de091de588f@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 17:15:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220207211144.1948690-1-ribalda@chromium.org> <20220207211144.1948690-2-ribalda@chromium.org>
-In-Reply-To: <20220207211144.1948690-2-ribalda@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 7 Feb 2022 13:39:30 -0800
-Message-ID: <CAGS_qxo5d5uTcHfG6qxtQjzCkkHfEOKMjgO75bk_WNb6JyYutA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] kunit: use NULL macros
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220207152109.197566-32-broonie@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 1:11 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Replace the NULL checks with the more specific and idiomatic NULL macros.
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+On 2/7/22 8:21 AM, Mark Brown wrote:
+> The Scalable Matrix Extenions (SME) introduces additional register state
+> with configurable vector lengths, similar to SVE but configured separately.
+> Extend vlset to support configuring this state with a --sme or -s command
+> line option.
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+It would be useful to add a -g command to get the current value.
+-g would just do PR_SVE_GET_VL and print the value perhaps?
 
-LGTM, thanks!
-(This will still need Brendan's RB to go in)
-
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  lib/kunit/kunit-example-test.c | 2 ++
->  lib/kunit/kunit-test.c         | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index 4bbf37c04eba..91b1df7f59ed 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -91,6 +91,8 @@ static void example_all_expect_macros_test(struct kunit *test)
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test, test);
->         KUNIT_EXPECT_PTR_EQ(test, NULL, NULL);
->         KUNIT_EXPECT_PTR_NE(test, test, NULL);
-> +       KUNIT_EXPECT_NULL(test, NULL);
-> +       KUNIT_EXPECT_NOT_NULL(test, test);
->
->         /* String assertions */
->         KUNIT_EXPECT_STREQ(test, "hi", "hi");
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index 555601d17f79..8e2fe083a549 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -435,7 +435,7 @@ static void kunit_log_test(struct kunit *test)
->         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
->                                      strstr(suite.log, "along with this."));
->  #else
-> -       KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
-> +       KUNIT_EXPECT_NULL(test, test->log);
->  #endif
->  }
->
-> --
-> 2.35.0.263.gb82422642f-goog
->
+>   tools/testing/selftests/arm64/fp/vlset.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/arm64/fp/vlset.c b/tools/testing/selftests/arm64/fp/vlset.c
+> index 308d27a68226..76912a581a95 100644
+> --- a/tools/testing/selftests/arm64/fp/vlset.c
+> +++ b/tools/testing/selftests/arm64/fp/vlset.c
+> @@ -22,12 +22,15 @@ static int inherit = 0;
+>   static int no_inherit = 0;
+>   static int force = 0;
+>   static unsigned long vl;
+> +static int set_ctl = PR_SVE_SET_VL;
+> +static int get_ctl = PR_SVE_GET_VL;
+>   
+>   static const struct option options[] = {
+>   	{ "force",	no_argument, NULL, 'f' },
+>   	{ "inherit",	no_argument, NULL, 'i' },
+>   	{ "max",	no_argument, NULL, 'M' },
+>   	{ "no-inherit",	no_argument, &no_inherit, 1 },
+> +	{ "sme",	no_argument, NULL, 's' },
+>   	{ "help",	no_argument, NULL, '?' },
+>   	{}
+>   };
+> @@ -50,6 +53,9 @@ static int parse_options(int argc, char **argv)
+>   		case 'M':	vl = SVE_VL_MAX; break;
+>   		case 'f':	force = 1; break;
+>   		case 'i':	inherit = 1; break;
+> +		case 's':	set_ctl = PR_SME_SET_VL;
+> +				get_ctl = PR_SME_GET_VL;
+> +				break;
+>   		case 0:		break;
+>   		default:	goto error;
+>   		}
+> @@ -125,14 +131,14 @@ int main(int argc, char **argv)
+>   	if (inherit)
+>   		flags |= PR_SVE_VL_INHERIT;
+>   
+> -	t = prctl(PR_SVE_SET_VL, vl | flags);
+> +	t = prctl(set_ctl, vl | flags);
+>   	if (t < 0) {
+>   		fprintf(stderr, "%s: PR_SVE_SET_VL: %s\n",
+>   			program_name, strerror(errno));
+>   		goto error;
+>   	}
+>   
+> -	t = prctl(PR_SVE_GET_VL);
+> +	t = prctl(get_ctl);
+>   	if (t == -1) {
+>   		fprintf(stderr, "%s: PR_SVE_GET_VL: %s\n",
+>   			program_name, strerror(errno));
+> 
+
+With the above comment addressed or explained:
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
