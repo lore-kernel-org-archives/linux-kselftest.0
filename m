@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE00C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE712C4167B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiBHBGN (ORCPT
+        id S238997AbiBHBGO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 20:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        Mon, 7 Feb 2022 20:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiBHAPm (ORCPT
+        with ESMTP id S232284AbiBHAKi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:15:42 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452CAC061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:15:41 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id e8so12544190ilm.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:15:41 -0800 (PST)
+        Mon, 7 Feb 2022 19:10:38 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C53C061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:10:37 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id n17so19132177iod.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:10:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BgvLO9hr2V7CyEad4Q9zhVhiiHX9h0qd8phe6mg68zg=;
-        b=diok9UMph6A2H5uNb/Z6KYHIB6dvzX6ttLpuifYYoA6h5s8mSmC/WfCD6n5H1XDOEn
-         lVguHrxhUHRz3IzbcJCaTLPuuRh4WxEZn3yRP09ANS/ytIPq0BzeEYQ6DDLsyP9NqqTx
-         FgBluq9mgpMb5bE/0flXsb4pi3bJwMHofETjk=
+        bh=SrBqlkGqEVLCuNbr1CjFlCILvwaRUMqCDPVo0Ntr/o0=;
+        b=M8Pw3UzPapDdWi2l1ctXXBMaMWbnfhNRRe8y/IVeu6nwyHObA4srpBSdptXAYPntEJ
+         fr2XvaAgjjHmiUBdVR7Qn+T+t4y+/CdVH3jf+W1l9jo48cqHi+jRiWRJYv0OntDu5W0r
+         myAW1P8pWHobosSqZtMLqjhIL05ytrF0BnjCY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=BgvLO9hr2V7CyEad4Q9zhVhiiHX9h0qd8phe6mg68zg=;
-        b=eJ+F0+l1Pq2BcSQXC5v3KRK6EDybL/aMSo6Qm2KqxoWuu0HrwaWwt3uIzjKKnn9M9p
-         /eyxliFh/MP/mPW1qT8u0qxFLQqLPue3z1gGZl/wbOYW1V/tKQekvUorRXEXw3RIP0/M
-         7PIeSRMEtqagHOtMQqVL3/gQbIz0ZXeNMN8O3P0QVr5WlEHj+eANnT2dZPBFRJoWEx9R
-         Cnw0Qhrfmn7+LZAmfrqVd2a+3le8eAEE4Pyb+1+cQOWIhcL26k3Dp+Z5pU/VDWqXrALg
-         JsyhjqeUCnZ6vuFVnH8lXhSBcRZA6hP0oOKMlsOvLrwO+s1N22fG4KHbYnw55QfNxbrv
-         xlpA==
-X-Gm-Message-State: AOAM532/Xf6/1T+W8sLToNaI9UkrHcy8axi3+rRtiJcDbHGYxS+PWbkL
-        m9OUJq/QshQtHkpPmmc14J86BYSca0WJ4g==
-X-Google-Smtp-Source: ABdhPJxVvgElyB8fUYMMP/TOaUOJybzRRArhutl3SBXSxLmUM8fI5K7z6iWl6nKzUSAe8HoSX1giEQ==
-X-Received: by 2002:a92:d24b:: with SMTP id v11mr928645ilg.1.1644279340709;
-        Mon, 07 Feb 2022 16:15:40 -0800 (PST)
+        bh=SrBqlkGqEVLCuNbr1CjFlCILvwaRUMqCDPVo0Ntr/o0=;
+        b=tjnHZymLxN62g/NXujoNXZmJ1DvYN6RbH5ZVlMbFgA170gvj5i1uWP4glY33Az+b2h
+         VT37Gi6XCqMkpzK1AebkYQuLYGu9aM+XN8kdlm+mptqJ5kmKA/Wxog3BfdADiefsHqpj
+         Vt4+7szbicPWWd6rt/nRtrSzzH13B0oXPq7G6Nbo7x4YVAlq0dByTJTHNbsErvVxfg/K
+         iR9NTWbTimmJoPFk9TEdjW86wfMjCA2yyC7Ajp1mTw7Ce79R+dYUTOYp5XNm2bT8AO6B
+         u32wvUbgaE92V1nE8m4s6qSfuTZIeoNZ6fk1rLlF8zlEL2JqN8mz8t7NZc22FWabiYF0
+         h4Xw==
+X-Gm-Message-State: AOAM530inhl93Ujcp3ZccnrlM7YWLQ59LCAHRMAF7BzQd1GX44hPfvQS
+        LuVXgoFYq/zI3Gi8lCLMI5dHlggfHAEEPg==
+X-Google-Smtp-Source: ABdhPJz96efCiEzcb2TCaOoSiUJ9kzp5Ms/xo65+4sdHjaY8FTOBmUmbwg4ZUlnUJMMPRZEDyXvyZQ==
+X-Received: by 2002:a05:6638:328c:: with SMTP id f12mr972239jav.249.1644279036957;
+        Mon, 07 Feb 2022 16:10:36 -0800 (PST)
 Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id b5sm1883555ilr.0.2022.02.07.16.15.39
+        by smtp.gmail.com with ESMTPSA id l16sm3264042ilc.54.2022.02.07.16.10.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 16:15:40 -0800 (PST)
-Subject: Re: [PATCH v11 31/40] kselftest/arm64: sme: Add SME support to vlset
+        Mon, 07 Feb 2022 16:10:36 -0800 (PST)
+Subject: Re: [PATCH v11 06/40] arm64/sme: Provide ABI documentation for SME
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -64,14 +64,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-32-broonie@kernel.org>
+ <20220207152109.197566-7-broonie@kernel.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fc0d4407-8124-2040-41f5-5de091de588f@linuxfoundation.org>
-Date:   Mon, 7 Feb 2022 17:15:39 -0700
+Message-ID: <49da0f58-7a20-e557-54c3-34bd7074f711@linuxfoundation.org>
+Date:   Mon, 7 Feb 2022 17:10:35 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220207152109.197566-32-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-7-broonie@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -79,71 +79,99 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/7/22 8:21 AM, Mark Brown wrote:
-> The Scalable Matrix Extenions (SME) introduces additional register state
-> with configurable vector lengths, similar to SVE but configured separately.
-> Extend vlset to support configuring this state with a --sme or -s command
-> line option.
+Hi Mark,
 
-It would be useful to add a -g command to get the current value.
--g would just do PR_SVE_GET_VL and print the value perhaps?
-
+On 2/7/22 8:20 AM, Mark Brown wrote:
+> Provide ABI documentation for SME similar to that for SVE. Due to the very
+> large overlap around streaming SVE mode in both implementation and
+> interfaces documentation for streaming mode SVE is added to the SVE
+> document rather than the SME one.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   tools/testing/selftests/arm64/fp/vlset.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/fp/vlset.c b/tools/testing/selftests/arm64/fp/vlset.c
-> index 308d27a68226..76912a581a95 100644
-> --- a/tools/testing/selftests/arm64/fp/vlset.c
-> +++ b/tools/testing/selftests/arm64/fp/vlset.c
-> @@ -22,12 +22,15 @@ static int inherit = 0;
->   static int no_inherit = 0;
->   static int force = 0;
->   static unsigned long vl;
-> +static int set_ctl = PR_SVE_SET_VL;
-> +static int get_ctl = PR_SVE_GET_VL;
->   
->   static const struct option options[] = {
->   	{ "force",	no_argument, NULL, 'f' },
->   	{ "inherit",	no_argument, NULL, 'i' },
->   	{ "max",	no_argument, NULL, 'M' },
->   	{ "no-inherit",	no_argument, &no_inherit, 1 },
-> +	{ "sme",	no_argument, NULL, 's' },
->   	{ "help",	no_argument, NULL, '?' },
->   	{}
->   };
-> @@ -50,6 +53,9 @@ static int parse_options(int argc, char **argv)
->   		case 'M':	vl = SVE_VL_MAX; break;
->   		case 'f':	force = 1; break;
->   		case 'i':	inherit = 1; break;
-> +		case 's':	set_ctl = PR_SME_SET_VL;
-> +				get_ctl = PR_SME_GET_VL;
-> +				break;
->   		case 0:		break;
->   		default:	goto error;
->   		}
-> @@ -125,14 +131,14 @@ int main(int argc, char **argv)
->   	if (inherit)
->   		flags |= PR_SVE_VL_INHERIT;
->   
-> -	t = prctl(PR_SVE_SET_VL, vl | flags);
-> +	t = prctl(set_ctl, vl | flags);
->   	if (t < 0) {
->   		fprintf(stderr, "%s: PR_SVE_SET_VL: %s\n",
->   			program_name, strerror(errno));
->   		goto error;
->   	}
->   
-> -	t = prctl(PR_SVE_GET_VL);
-> +	t = prctl(get_ctl);
->   	if (t == -1) {
->   		fprintf(stderr, "%s: PR_SVE_GET_VL: %s\n",
->   			program_name, strerror(errno));
-> 
 
-With the above comment addressed or explained:
+A few typos and missing SPDX comments below.
+> ---
+>   Documentation/arm64/index.rst |   1 +
+>   Documentation/arm64/sme.rst   | 432 ++++++++++++++++++++++++++++++++++
+>   Documentation/arm64/sve.rst   |  70 +++++-
+>   3 files changed, 493 insertions(+), 10 deletions(-)
+>   create mode 100644 Documentation/arm64/sme.rst
+> 
+> diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
+> index 4f840bac083e..ae21f8118830 100644
+> --- a/Documentation/arm64/index.rst
+> +++ b/Documentation/arm64/index.rst
+> @@ -21,6 +21,7 @@ ARM64 Architecture
+>       perf
+>       pointer-authentication
+>       silicon-errata
+> +    sme
+>       sve
+>       tagged-address-abi
+>       tagged-pointers
+> diff --git a/Documentation/arm64/sme.rst b/Documentation/arm64/sme.rst
+> new file mode 100644
+> index 000000000000..15df3157c592
+> --- /dev/null
+> +++ b/Documentation/arm64/sme.rst
+> @@ -0,0 +1,432 @@
+
+Missing SPDX here?
+
+> +===================================================
+> +Scalable Matrix Extension support for AArch64 Linux
+> +===================================================
+> +
+
+
+> +
+> +When returning from a signal handler:
+> +
+> +* If there is no za_context record in the signal frame, or if the record is
+> +  present but contains no register data as desribed in the previous section,
+
+described
+
+> +  then ZA is disabled.
+> +
+
+> +	PR_SME_SET_VL_ONEXEC
+> +
+> +	    Defer the requested vector length change until the next execve()
+> +	    performed by this thread.
+> +
+> +	    The effect is equivalent to implicit exceution of the following
+
+execution
+
+> +	    call immediately after the next execve() (if any) by the thread:
+> +
+
+> +
+> +[3] Documentation/arm64/cpu-feature-registers.rst
+> +
+> +[4] ARM IHI0055C
+> +    http://infocenter.arm.com/help/topic/com.arm.doc.ihi0055c/IHI0055C_beta_aapcs64.pdf
+> +    http://infocenter.arm.com/help/topic/com.arm.doc.subset.swdev.abi/index.html
+> +    Procedure Call Standard for the ARM 64-bit Architecture (AArch64)
+> diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
+> index 9d9a4de5bc34..93c2c2990584 100644
+> --- a/Documentation/arm64/sve.rst
+> +++ b/Documentation/arm64/sve.rst
+> @@ -7,7 +7,9 @@ Author: Dave Martin <Dave.Martin@arm.com>
+>   Date:   4 August 2017
+>   
+
+Missing SPDX perhaps?
+
+>   This document outlines briefly the interface provided to userspace by Linux in
+> -order to support use of the ARM Scalable Vector Extension (SVE).
+> +order to support use of the ARM Scalable Vector Extension (SVE), including
+> +interactions with Streaming SVE mode added by the Scalable Matrix Extension
+> +(SME).
+>   
+
+Looks good otherwise.
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
