@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23505C35274
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 22:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D641C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 22:26:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387070AbiBHWZr (ORCPT
+        id S1386972AbiBHWZr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 8 Feb 2022 17:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386484AbiBHUkk (ORCPT
+        with ESMTP id S1387022AbiBHVqp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:40:40 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF90C0612C1
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 12:40:38 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id p15so1114923ejc.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 12:40:38 -0800 (PST)
+        Tue, 8 Feb 2022 16:46:45 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FE4C0612BA
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 13:46:44 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id c3so495149pls.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 13:46:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=riOd2RA+5KJDbVMnXqZUdH3r+GgY7kzXJ+ElAY7cveY=;
-        b=NaHB/KvNkMyt15RxGmi1HV9jBeCWRKfN/Y/J3QJmYH0O25C91xheRRN24A3kEE+PMy
-         M4gmyTMFy9O490kq/FPlyMXc/lV9CSUBNMigNhTvQRhFmWan3V1t0kkD3+evnzp4LScn
-         KUz4GP3txGZQU0dUO9E/jW69V1HU4TGk/XzfohtEUQJAyA8z1GwZwgOjNHLK9UoAR83Y
-         SAvFbE+ZK7slEi+2HOYKtic9lzwlQ6rGO1pvv57VFsiLJfT1Vk++23lFRw80lxvAgKYe
-         5sogCgzFd1DofXr9bkcLHdNB3jw5BO8P7DczQatrpGBzgOzjtkhX8Vuz5HiCKJ8+8nc/
-         aBXw==
+        bh=eN+hmNONJyG0na16U/kNOjqhgqoQ8Ez+z5PohZnpZkE=;
+        b=LNQPpQeD8iyN++3r8W02WPfs6uZofuPIvByExxMAWF0qDNj4IzqjIBr/W4NTXrsVCZ
+         kjpNceWCbdR5x2EpmL07tmFDmI0wGT7HTbOEds+oWrY3xOrZ2BTS8NJq87UZu8DyVOpy
+         LxcQj/f1C0APcdVz+CzaIwdimXcBaKvXCQsif+vwRxBmjLIiKvoR65m8+jsQjmx2wGmR
+         R1wbVEKbYlrVxRC/jFnmTnULNV9KkWHChtx4i0Ir45fiLL52uRY8LKiwJ64/Mo2I+mZj
+         ba7ar8tKS6y9kqQ8NJdQYOBNQYHls9d6zsJoXQGvy71lMsuUIUKxtup00ETxuIq/ep9n
+         /Fbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=riOd2RA+5KJDbVMnXqZUdH3r+GgY7kzXJ+ElAY7cveY=;
-        b=wliJw9WxcbBpNuiEqyeHEhHLTHUksq0ZvzTSrznsmt0o1EBujY5b3fELzgblSdce+F
-         gKPPcZQm6h7uu59xoK1v4NQlfu97HgOcW2H4/yi8kNAhEJgDmSjmt4jX8TI6zzzry7Uj
-         hfSp0xddAmJoHapfGhoiPLVCnT+8EtSnknDCthDEoQLVuO8adtSpO1J6/2KAwqomYlCy
-         39WyO+W0r/6tD7tlW23bo7i+zdhwL6JeFvCAy+aeFK5IsAucBNTZhevH9mgmfdiCC0Gt
-         k9S1HUHMim0hnoGXzCobkvjxKx/QfiMT9p/0YToXaQMSOgnA0vcxBGbrnvRlqqV2CnQ8
-         zzow==
-X-Gm-Message-State: AOAM5303hSA6DVcdil0apES1iakksHxGgbqcMVHsvYUYkLQ2PVPr1URj
-        B+cKyNL2uY2FstgtNB9Ud0KVbx7mOhwTAQBV3Ont/A==
-X-Google-Smtp-Source: ABdhPJwDL8sKlWlLmV79N7zGT7H/XWpOJzLRcbYM4AcGKmTz0A/oCJ0vaPRAiaLpIvdkIfGDKfN1O19kAyG0CUw88IQ=
-X-Received: by 2002:a17:907:6d20:: with SMTP id sa32mr5259987ejc.425.1644352836393;
- Tue, 08 Feb 2022 12:40:36 -0800 (PST)
+        bh=eN+hmNONJyG0na16U/kNOjqhgqoQ8Ez+z5PohZnpZkE=;
+        b=MTJ6t03Qxc/ost30jXsHJGpf8DK7QNAMyTNfk7fGAW7GDnnYXPH601b5u6RD1FjMBn
+         +FgUSS22UjlknMrVhFcQlJsQFR2YaACpfFBDcVWrKEIbsh+ujGgXQOyBeO/9wKRLO44H
+         fA+CIcxNWjvW/C+L9Uy4quge//vt9SwcyvfGZ43yZ6vVP+YYbxLYsqbcCkroMBuTwb2B
+         dkRSA2ATS1iSHlPoAbulTtinHX+1YEVdhBNQIbxVC15ikwvNkkWvP5Je9HtGQC80n5HI
+         4YHWqi8qWrF4ZgDP/yXjBYZR4Ug5cpkv9LZYwRwoixHz4A7dXUlkjB9la5fIsjRRLern
+         /ptA==
+X-Gm-Message-State: AOAM532M7EiVzhiQ/aRJpmNdbUIgg9EUBQMTG6sBIoNjMAEFLW8jF/of
+        bYJanJHXBlS/tQpbhGhm0C6fMvbsMEO9Ype2KL7N1g==
+X-Google-Smtp-Source: ABdhPJzU8YEy66gam05lnihXH2xqumQUZnJEaa4p6ds3bkY2fyLPDZAWJ4qmz8U1JK3UJhmcPIm38CMIVYxZyGLqMFA=
+X-Received: by 2002:a17:903:187:: with SMTP id z7mr6391730plg.123.1644356803467;
+ Tue, 08 Feb 2022 13:46:43 -0800 (PST)
 MIME-Version: 1.0
 References: <20220208040122.695258-1-davidgow@google.com> <20220208040122.695258-2-davidgow@google.com>
 In-Reply-To: <20220208040122.695258-2-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 8 Feb 2022 12:40:23 -0800
-Message-ID: <CAGS_qxqwb=AVyjNQKvzSAGYmQei3ChQLD383=x+RkeCwe5zS-A@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 8 Feb 2022 16:46:32 -0500
+Message-ID: <CAFd5g47dbWswjdidj-sGJczsCBe3cDG32SO-WEsjmR8HsB6aXA@mail.gmail.com>
 Subject: Re: [PATCH v2 2/3] list: test: Add a test for list_is_head()
 To:     David Gow <davidgow@google.com>
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -64,7 +64,7 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 8:02 PM David Gow <davidgow@google.com> wrote:
+On Mon, Feb 7, 2022 at 11:02 PM David Gow <davidgow@google.com> wrote:
 >
 > list_is_head() was added recently[1], and didn't have a KUnit test. The
 > implementation is trivial, so it's not a particularly exciting test, but
@@ -74,50 +74,4 @@ On Mon, Feb 7, 2022 at 8:02 PM David Gow <davidgow@google.com> wrote:
 >
 > Signed-off-by: David Gow <davidgow@google.com>
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
-
-One very optional suggestion below.
-
-> ---
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20220205061539.273330-2-davidgow@google.com/
-> - Test both non-head elements of the same list and head elements of
->   different lists.
->
-> ---
->  lib/list-test.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index 976e9ae1f3c5..1960615d1a9f 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -252,6 +252,23 @@ static void list_test_list_bulk_move_tail(struct kunit *test)
->         KUNIT_EXPECT_EQ(test, i, 2);
->  }
->
-> +static void list_test_list_is_head(struct kunit *test)
-> +{
-> +       struct list_head a, b, c;
-> +
-> +       /* Two lists: [a] -> b, [c] */
-> +       INIT_LIST_HEAD(&a);
-> +       INIT_LIST_HEAD(&c);
-> +       list_add_tail(&b, &a);
-> +
-> +       KUNIT_EXPECT_TRUE(test, list_is_head(&a, &a));
-> +       /* Non-head element of same list */
-> +       KUNIT_EXPECT_FALSE(test, list_is_head(&a, &b));
-> +       /* Head element of different list */
-> +       KUNIT_EXPECT_FALSE(test, list_is_head(&a, &c));
-
-very optional,
-  KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &c), "Head of a
-different list");
-It goes over 80 char, so probably needs to be line-wrapped, and thus
-doesn't reduce # of lines.
-
-Given the simplicity of this function (checks that its args are
-equal), I highly doubt it should ever fail, and so better error
-messages aren't really much of a bonus.
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
