@@ -2,91 +2,122 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04B00C433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 19:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23505C35274
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 22:25:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385639AbiBHTdj (ORCPT
+        id S1387070AbiBHWZr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Feb 2022 14:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        Tue, 8 Feb 2022 17:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385646AbiBHTdi (ORCPT
+        with ESMTP id S1386484AbiBHUkk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Feb 2022 14:33:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807E4C0612AA;
-        Tue,  8 Feb 2022 11:33:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EB16B81D30;
-        Tue,  8 Feb 2022 19:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E704C004E1;
-        Tue,  8 Feb 2022 19:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644348813;
-        bh=j6XtEB+ENPnGbciXTuSJtaWoaCHxs2vKf+4QGaygzUM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=fz4GjeeTyc4XFzcn1kzh+KCYTWbvlU9xN9LFnJ4iWYFuv64xvbFjM+/GqCKHHVCs6
-         ckUGujGIKNqtd5Ptu4QY9InanPCxE2sh387ZrsyUPaUlFYJTQEKOYNv+FUUeB5AHyE
-         zUmNkAQoEi+2HwsCntVu+JUz0wI9JmqLsFfl4Oz+9/ZfrOLq+5ovRmlYv8PUge3rZb
-         btdXRYKBwM+GOjAyGHIe+JBWUdiANOCKgqKvEvK1EwOG1iKWhAaFZP++3HVd60kl+h
-         BjpX74zO32Oq/bSQsOGDCEm6G9A4RZlDXlXR/++QOd4seJwM8W7rRMOCwDFYrKvP9V
-         Ltw4Bn8t2ZyZQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D794D5C0825; Tue,  8 Feb 2022 11:33:32 -0800 (PST)
-Date:   Tue, 8 Feb 2022 11:33:32 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcutorture: Add missing - to `--do-allmodconfig` in usage
-Message-ID: <20220208193332.GT4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220208105240.43600-1-pmenzel@molgen.mpg.de>
- <20220208180503.GR4285@paulmck-ThinkPad-P17-Gen-1>
- <4c02f06b-bae2-e8a9-6c77-71dd669342f0@molgen.mpg.de>
+        Tue, 8 Feb 2022 15:40:40 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF90C0612C1
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Feb 2022 12:40:38 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id p15so1114923ejc.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Feb 2022 12:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=riOd2RA+5KJDbVMnXqZUdH3r+GgY7kzXJ+ElAY7cveY=;
+        b=NaHB/KvNkMyt15RxGmi1HV9jBeCWRKfN/Y/J3QJmYH0O25C91xheRRN24A3kEE+PMy
+         M4gmyTMFy9O490kq/FPlyMXc/lV9CSUBNMigNhTvQRhFmWan3V1t0kkD3+evnzp4LScn
+         KUz4GP3txGZQU0dUO9E/jW69V1HU4TGk/XzfohtEUQJAyA8z1GwZwgOjNHLK9UoAR83Y
+         SAvFbE+ZK7slEi+2HOYKtic9lzwlQ6rGO1pvv57VFsiLJfT1Vk++23lFRw80lxvAgKYe
+         5sogCgzFd1DofXr9bkcLHdNB3jw5BO8P7DczQatrpGBzgOzjtkhX8Vuz5HiCKJ8+8nc/
+         aBXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=riOd2RA+5KJDbVMnXqZUdH3r+GgY7kzXJ+ElAY7cveY=;
+        b=wliJw9WxcbBpNuiEqyeHEhHLTHUksq0ZvzTSrznsmt0o1EBujY5b3fELzgblSdce+F
+         gKPPcZQm6h7uu59xoK1v4NQlfu97HgOcW2H4/yi8kNAhEJgDmSjmt4jX8TI6zzzry7Uj
+         hfSp0xddAmJoHapfGhoiPLVCnT+8EtSnknDCthDEoQLVuO8adtSpO1J6/2KAwqomYlCy
+         39WyO+W0r/6tD7tlW23bo7i+zdhwL6JeFvCAy+aeFK5IsAucBNTZhevH9mgmfdiCC0Gt
+         k9S1HUHMim0hnoGXzCobkvjxKx/QfiMT9p/0YToXaQMSOgnA0vcxBGbrnvRlqqV2CnQ8
+         zzow==
+X-Gm-Message-State: AOAM5303hSA6DVcdil0apES1iakksHxGgbqcMVHsvYUYkLQ2PVPr1URj
+        B+cKyNL2uY2FstgtNB9Ud0KVbx7mOhwTAQBV3Ont/A==
+X-Google-Smtp-Source: ABdhPJwDL8sKlWlLmV79N7zGT7H/XWpOJzLRcbYM4AcGKmTz0A/oCJ0vaPRAiaLpIvdkIfGDKfN1O19kAyG0CUw88IQ=
+X-Received: by 2002:a17:907:6d20:: with SMTP id sa32mr5259987ejc.425.1644352836393;
+ Tue, 08 Feb 2022 12:40:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4c02f06b-bae2-e8a9-6c77-71dd669342f0@molgen.mpg.de>
+References: <20220208040122.695258-1-davidgow@google.com> <20220208040122.695258-2-davidgow@google.com>
+In-Reply-To: <20220208040122.695258-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 8 Feb 2022 12:40:23 -0800
+Message-ID: <CAGS_qxqwb=AVyjNQKvzSAGYmQei3ChQLD383=x+RkeCwe5zS-A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] list: test: Add a test for list_is_head()
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 07:17:37PM +0100, Paul Menzel wrote:
-> Dear Paul,
-> 
-> 
-> Am 08.02.22 um 19:05 schrieb Paul E. McKenney:
-> > On Tue, Feb 08, 2022 at 11:52:40AM +0100, Paul Menzel wrote:
-> > > The usage currently lists `--doallmodconfig`, resulting in:
-> > > 
-> > >      $ tools/testing/selftests/rcutorture/bin/torture.sh --doallmodconfig
-> > >      Unknown argument --doallmodconfig
-> > >      […]
-> > > 
-> > > Add the missing dash for `--do-allmodconfig`.
-> > > 
-> > > Fixes: a115a775a8d5 ("torture: Add "make allmodconfig" to torture.sh")
-> > > Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > 
-> > Good eyes, thank you!
-> > 
-> > I will add your Reported-by and your Fixes line (with attribution) to
-> > this commit in -rcu:
-> > 
-> > dbc3fa1ffb4b ("torture: Make torture.sh help message match reality")
-> 
-> Oh, I missed that. No need to amend, and sorry for the noise.
+On Mon, Feb 7, 2022 at 8:02 PM David Gow <davidgow@google.com> wrote:
+>
+> list_is_head() was added recently[1], and didn't have a KUnit test. The
+> implementation is trivial, so it's not a particularly exciting test, but
+> it'd be nice to get back to full coverage of the list functions.
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/list.h?id=0425473037db40d9e322631f2d4dc6ef51f97e88
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-No problem, I had to do a rebase to make a bunch of other adjustments
-anyway.  The updated commit should be showing up on a kernel.org mirror
-near you in the near future.  ;-)
+Acked-by: Daniel Latypov <dlatypov@google.com>
 
-							Thanx, Paul
+One very optional suggestion below.
+
+> ---
+>
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20220205061539.273330-2-davidgow@google.com/
+> - Test both non-head elements of the same list and head elements of
+>   different lists.
+>
+> ---
+>  lib/list-test.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/lib/list-test.c b/lib/list-test.c
+> index 976e9ae1f3c5..1960615d1a9f 100644
+> --- a/lib/list-test.c
+> +++ b/lib/list-test.c
+> @@ -252,6 +252,23 @@ static void list_test_list_bulk_move_tail(struct kunit *test)
+>         KUNIT_EXPECT_EQ(test, i, 2);
+>  }
+>
+> +static void list_test_list_is_head(struct kunit *test)
+> +{
+> +       struct list_head a, b, c;
+> +
+> +       /* Two lists: [a] -> b, [c] */
+> +       INIT_LIST_HEAD(&a);
+> +       INIT_LIST_HEAD(&c);
+> +       list_add_tail(&b, &a);
+> +
+> +       KUNIT_EXPECT_TRUE(test, list_is_head(&a, &a));
+> +       /* Non-head element of same list */
+> +       KUNIT_EXPECT_FALSE(test, list_is_head(&a, &b));
+> +       /* Head element of different list */
+> +       KUNIT_EXPECT_FALSE(test, list_is_head(&a, &c));
+
+very optional,
+  KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &c), "Head of a
+different list");
+It goes over 80 char, so probably needs to be line-wrapped, and thus
+doesn't reduce # of lines.
+
+Given the simplicity of this function (checks that its args are
+equal), I highly doubt it should ever fail, and so better error
+messages aren't really much of a bonus.
