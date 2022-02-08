@@ -2,214 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E9A1C4321E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF420C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239865AbiBHBGP (ORCPT
+        id S1343532AbiBHBGQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Feb 2022 20:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        Mon, 7 Feb 2022 20:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiBHAYc (ORCPT
+        with ESMTP id S241874AbiBHASS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Feb 2022 19:24:32 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940DDC061355
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:24:29 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id z7so12578495ilb.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:24:29 -0800 (PST)
+        Mon, 7 Feb 2022 19:18:18 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B9C061355
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Feb 2022 16:18:18 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id s21so18814548ejx.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Feb 2022 16:18:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Vgz3vJoxRCjSxOnu8bDTDSG6VAB8AKydsEfZW+RiuBU=;
-        b=B5KTjIHd8JJqHtNAMC1PzjEXLhYAW2XGJzTUChMhTd6LR06BDZAjdj3VR8ZJl39Lhr
-         UwjfvA8N+T9GscLNPUjTnG9su+HIUOkeeROhdU9c70mhjFhpbXH038YJob6suCbeGYtT
-         C2cZOtAaQX3X8zHX7grA+riPzBbXH6x3G8Z+4=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eIx1vqQAPUu8LMm53/zUpJw9Sxu1UeMfE4UVerJwTWM=;
+        b=HsUaZkqHlbY0DP5/dB+NOk+XHLKcXhDIyHMBohmCekOEo6Mxyaz1Ka26ef7+UKfs+k
+         bUSlvpRm7TI91q+LYmkBCf4MqATj5MwZ+LM8tR4ZTDxX/x8M8VxsQfydSrug3bGb+SW6
+         qeOa7XHUvHglzw4cWLerqCeRRwh+FwmU8YgP0lm0ZUB3BEGByKGqlJgEmqDGlx+qOgRM
+         J5bxn8nsy+rs0Sv+4Q8E4vuEPvXls5QfkOAWphZ+aud5Yic3SvR1GGM83iL4o26R93du
+         7AFnc0EnQpgBgBNXhU8RzG5FjOAX360BxirnhSe7W2faNUBoPcRQjXebhp4qMPUsPn79
+         Mkog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Vgz3vJoxRCjSxOnu8bDTDSG6VAB8AKydsEfZW+RiuBU=;
-        b=fKY+ecGaj4zAWXMiK5u6neOve4Jlrw2yN4NS3C0VeOwwo0/J9L9iWkvrd9UNAg1fYE
-         lGqd3vb7D6aq47BWJ1BmkOr0VHtrjdzMusCIeaHINdysvhU5yI+P23u3vroskV59aY3i
-         HRkoxb2bZWVTA6MVzTLgCXbIoKlc1m7gZ7olMU7AqlIglc0jhOyuYFPyWghGnplN5IuH
-         z++Np+0okK3aiGyiS7coPVwP6L0eU+mthb9G5RNyKW+39rWE0oNjVib9YLronuWZc32n
-         OL0KCo/M6NYIkUHE0+bP5L8Rh+YThszTUIjqqSpRbZWar6YV/1Ay1ultNLd4nlqRiRex
-         iZow==
-X-Gm-Message-State: AOAM530CdbFPRuGI3ak4yWmYTJbIfIOoNJk6+co61ycezmmJQmDDoW6T
-        sGKy2h2w49l3Vv3xlquAD91UuA==
-X-Google-Smtp-Source: ABdhPJxhj/ObwJzAC/vSnKWt7hzqF0me2g8ZGst3fT1kLBYK5mtfxm3nxbacAfWRZVou8UtBvqjbNg==
-X-Received: by 2002:a92:5208:: with SMTP id g8mr963001ilb.310.1644279868967;
-        Mon, 07 Feb 2022 16:24:28 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id t2sm2986140ilp.49.2022.02.07.16.24.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 16:24:28 -0800 (PST)
-Subject: Re: [PATCH v11 33/40] kselftest/arm64: Extend vector configuration
- API tests to cover SME
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        Salil Akerkar <Salil.Akerkar@arm.com>,
-        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-34-broonie@kernel.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <32b86e20-8a4e-42ac-f5d9-188f1d80e412@linuxfoundation.org>
-Date:   Mon, 7 Feb 2022 17:24:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eIx1vqQAPUu8LMm53/zUpJw9Sxu1UeMfE4UVerJwTWM=;
+        b=doIhpQooSASAH6u9K5d+xFHF+LUFA2OrFP8sMFCUs6E2N2ZVf/g+hDTTzzCHmjcQUs
+         qOdMWXvDE/iv0oZ5eh9aT+lFvfn5bbPYb8b7CO1mQUYbNcvJIVD0oZjMe4Rfu+d5Uxnu
+         2IKP3FYo9Y2KErLsng4G6qggXmZuTIU5ho//ySm99H+wpJYcLFqj+rpijGEuZ+HBClsd
+         IECyMboYq/ZT83I31sJAqfX1vd0pznbdbSISRobNkqaad9g2cGkhvO+fvw8KDcI+nLzq
+         TnKes3EtOj+DeeZQDP/dLyzRrHznBRVwYi/DWk00o+l93s7gUJYfHc1P3YV2+pU30jXS
+         iH1Q==
+X-Gm-Message-State: AOAM531yeaTY3WrtC4G8kSMcoGk0HVW91wm72IrFKnaUmEl0Q7IT2aT2
+        3kNZIiWIfzQcwyTY1KBCwXg46z2CGlFpHpHJ6Ugh/A==
+X-Google-Smtp-Source: ABdhPJw3RJc1UuNBtJgY/8WVZgtoAXhmWS9Jt1B5egJZFIhAn9akJOuzK3xWA2sHJktX7U4mTMt72DVYaotARbKvlx0=
+X-Received: by 2002:a17:907:6e28:: with SMTP id sd40mr1599073ejc.170.1644279496489;
+ Mon, 07 Feb 2022 16:18:16 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220207152109.197566-34-broonie@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220207211144.1948690-1-ribalda@chromium.org> <20220207211144.1948690-6-ribalda@chromium.org>
+In-Reply-To: <20220207211144.1948690-6-ribalda@chromium.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 7 Feb 2022 16:18:05 -0800
+Message-ID: <CAGS_qxrK7TBLkoi9ztSJXcoQ+_Z0YC_HWmrp++2C1mc9ierOEg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] apparmor: test: Use NULL macros
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/7/22 8:21 AM, Mark Brown wrote:
-> Provide RDVL helpers for SME and extend the main vector configuration tests
-> to cover SME.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On Mon, Feb 7, 2022 at 1:11 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> Replace the PTR_EQ NULL checks with the more idiomatic and specific NULL
+> macros.
+>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+Acked-by: Daniel Latypov <dlatypov@google.com>
+
 > ---
->   tools/testing/selftests/arm64/fp/.gitignore   |  1 +
->   tools/testing/selftests/arm64/fp/Makefile     |  3 ++-
->   tools/testing/selftests/arm64/fp/rdvl-sme.c   | 14 ++++++++++++++
->   tools/testing/selftests/arm64/fp/rdvl.S       | 10 ++++++++++
->   tools/testing/selftests/arm64/fp/rdvl.h       |  1 +
->   tools/testing/selftests/arm64/fp/vec-syscfg.c | 10 ++++++++++
->   6 files changed, 38 insertions(+), 1 deletion(-)
->   create mode 100644 tools/testing/selftests/arm64/fp/rdvl-sme.c
-> 
-> diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-> index c50d86331ed2..6e9a610c5e5d 100644
-> --- a/tools/testing/selftests/arm64/fp/.gitignore
-> +++ b/tools/testing/selftests/arm64/fp/.gitignore
-> @@ -1,5 +1,6 @@
->   fp-pidbench
->   fpsimd-test
-> +rdvl-sme
->   rdvl-sve
->   sve-probe-vls
->   sve-ptrace
-> diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-> index 95f0b877a060..a224fff8082b 100644
-> --- a/tools/testing/selftests/arm64/fp/Makefile
-> +++ b/tools/testing/selftests/arm64/fp/Makefile
-> @@ -3,7 +3,7 @@
->   CFLAGS += -I../../../../../usr/include/
->   TEST_GEN_PROGS := sve-ptrace sve-probe-vls vec-syscfg
->   TEST_PROGS_EXTENDED := fp-pidbench fpsimd-test fpsimd-stress \
-> -	rdvl-sve \
-> +	rdvl-sme rdvl-sve \
->   	sve-test sve-stress \
->   	vlset
->   
-> @@ -13,6 +13,7 @@ fp-pidbench: fp-pidbench.S asm-utils.o
->   	$(CC) -nostdlib $^ -o $@
->   fpsimd-test: fpsimd-test.o asm-utils.o
->   	$(CC) -nostdlib $^ -o $@
-> +rdvl-sme: rdvl-sme.o rdvl.o
->   rdvl-sve: rdvl-sve.o rdvl.o
->   sve-ptrace: sve-ptrace.o
->   sve-probe-vls: sve-probe-vls.o rdvl.o
-> diff --git a/tools/testing/selftests/arm64/fp/rdvl-sme.c b/tools/testing/selftests/arm64/fp/rdvl-sme.c
-> new file mode 100644
-> index 000000000000..49b0b2e08bac
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/fp/rdvl-sme.c
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <stdio.h>
-> +
-> +#include "rdvl.h"
-> +
-> +int main(void)
-> +{
-> +	int vl = rdvl_sme();
-> +
-> +	printf("%d\n", vl);
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/arm64/fp/rdvl.S b/tools/testing/selftests/arm64/fp/rdvl.S
-> index c916c1c9defd..20dc29996dc6 100644
-> --- a/tools/testing/selftests/arm64/fp/rdvl.S
-> +++ b/tools/testing/selftests/arm64/fp/rdvl.S
-> @@ -1,6 +1,8 @@
->   // SPDX-License-Identifier: GPL-2.0-only
->   // Copyright (C) 2021 ARM Limited.
->   
-> +#include "sme-inst.h"
-> +
->   .arch_extension sve
->   
->   .globl rdvl_sve
-> @@ -8,3 +10,11 @@ rdvl_sve:
->   	hint	34			// BTI C
->   	rdvl	x0, #1
->   	ret
-> +
-> +.globl rdvl_sme
-> +rdvl_sme:
-> +	hint	34			// BTI C
-> +
-> +	rdsvl	0, 1
-> +
-> +	ret
-> diff --git a/tools/testing/selftests/arm64/fp/rdvl.h b/tools/testing/selftests/arm64/fp/rdvl.h
-> index 7c9d953fc9e7..5d323679fbc9 100644
-> --- a/tools/testing/selftests/arm64/fp/rdvl.h
-> +++ b/tools/testing/selftests/arm64/fp/rdvl.h
-> @@ -3,6 +3,7 @@
->   #ifndef RDVL_H
->   #define RDVL_H
->   
-> +int rdvl_sme(void);
->   int rdvl_sve(void);
->   
->   #endif
-> diff --git a/tools/testing/selftests/arm64/fp/vec-syscfg.c b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-> index c90658811a83..9bcfcdc34ee9 100644
-> --- a/tools/testing/selftests/arm64/fp/vec-syscfg.c
-> +++ b/tools/testing/selftests/arm64/fp/vec-syscfg.c
-> @@ -51,6 +51,16 @@ static struct vec_data vec_data[] = {
->   		.prctl_set = PR_SVE_SET_VL,
->   		.default_vl_file = "/proc/sys/abi/sve_default_vector_length",
->   	},
-> +	{
-> +		.name = "SME",
-> +		.hwcap_type = AT_HWCAP2,
-> +		.hwcap = HWCAP2_SME,
-> +		.rdvl = rdvl_sme,
-> +		.rdvl_binary = "./rdvl-sme",
-> +		.prctl_get = PR_SME_GET_VL,
-> +		.prctl_set = PR_SME_SET_VL,
-> +		.default_vl_file = "/proc/sys/abi/sme_default_vector_length",
-> +	},
->   };
->   
->   static int stdio_read_integer(FILE *f, const char *what, int *val)
-> 
-
-Looks good to me.
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+>  security/apparmor/policy_unpack_test.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+> index 533137f45361..5c18d2f19862 100644
+> --- a/security/apparmor/policy_unpack_test.c
+> +++ b/security/apparmor/policy_unpack_test.c
+> @@ -313,7 +313,7 @@ static void policy_unpack_test_unpack_strdup_out_of_bounds(struct kunit *test)
+>         size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
+>
+>         KUNIT_EXPECT_EQ(test, size, 0);
+> -       KUNIT_EXPECT_PTR_EQ(test, string, (char *)NULL);
+> +       KUNIT_EXPECT_NULL(test, string);
+>         KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
+>  }
+>
+> @@ -409,7 +409,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
+>         size = unpack_u16_chunk(puf->e, &chunk);
+>
+>         KUNIT_EXPECT_EQ(test, size, (size_t)0);
+> -       KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
+> +       KUNIT_EXPECT_NULL(test, chunk);
+>         KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
+>  }
+>
+> @@ -431,7 +431,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
+>         size = unpack_u16_chunk(puf->e, &chunk);
+>
+>         KUNIT_EXPECT_EQ(test, size, (size_t)0);
+> -       KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
+> +       KUNIT_EXPECT_NULL(test, chunk);
+>         KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
+>  }
+>
+> --
+> 2.35.0.263.gb82422642f-goog
+>
