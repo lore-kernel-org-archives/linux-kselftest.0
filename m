@@ -2,50 +2,49 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B617EC4167E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Feb 2022 18:41:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7F17C4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Feb 2022 18:41:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240268AbiBISlk (ORCPT
+        id S240276AbiBISll (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 13:41:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        Wed, 9 Feb 2022 13:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240116AbiBISkc (ORCPT
+        with ESMTP id S240578AbiBISlT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:40:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597D9C0401E8
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 10:40:07 -0800 (PST)
+        Wed, 9 Feb 2022 13:41:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E1BC05CBBD
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 10:41:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E961A60DF0
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 18:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F345C340E9;
-        Wed,  9 Feb 2022 18:40:04 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 18:40:01 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFD5DB82381
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 18:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09F8C340ED;
+        Wed,  9 Feb 2022 18:41:08 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 18:41:05 +0000
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Joey Gouly <joey.gouly@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, nd@arm.com, broonie@kernel.org,
         shuah@kernel.org, skhan@linuxfoundation.org, will@kernel.org
-Subject: Re: [PATCH v3 2/6] kselftest/arm64: mte: user_mem: rework error
- handling
-Message-ID: <YgQKgY7yfpVh9Opn@arm.com>
+Subject: Re: [PATCH v3 3/6] kselftest/arm64: mte: user_mem: check different
+ offsets and sizes
+Message-ID: <YgQKwYYIM+ubScUB@arm.com>
 References: <20220209152240.52788-1-joey.gouly@arm.com>
- <20220209152240.52788-3-joey.gouly@arm.com>
+ <20220209152240.52788-4-joey.gouly@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209152240.52788-3-joey.gouly@arm.com>
+In-Reply-To: <20220209152240.52788-4-joey.gouly@arm.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:22:36PM +0000, Joey Gouly wrote:
-> Future commits will have multiple iterations of tests in this function,
-> so make the error handling assume it will pass and then bail out if there
-> is an error.
+On Wed, Feb 09, 2022 at 03:22:37PM +0000, Joey Gouly wrote:
+> To check there are no assumptions in the kernel about buffer sizes or alignments of
+> user space pointers, expand the test to cover different sizes and offsets.
 > 
 > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
 > Cc: Catalin Marinas <catalin.marinas@arm.com>
