@@ -2,52 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95DFBC4332F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Feb 2022 18:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 973EAC433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Feb 2022 18:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbiBISig (ORCPT
+        id S239780AbiBISij (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 13:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        Wed, 9 Feb 2022 13:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239968AbiBISiU (ORCPT
+        with ESMTP id S239903AbiBISiQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:38:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F22C050CE8;
-        Wed,  9 Feb 2022 10:38:10 -0800 (PST)
+        Wed, 9 Feb 2022 13:38:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4A7C05CB9E;
+        Wed,  9 Feb 2022 10:38:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 493FF61C44;
-        Wed,  9 Feb 2022 18:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59DFC340E9;
-        Wed,  9 Feb 2022 18:38:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4045FB82384;
+        Wed,  9 Feb 2022 18:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16482C340F1;
+        Wed,  9 Feb 2022 18:38:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644431889;
-        bh=qpKXmq3SY6mhExkKTzKyH2WV4QpU0WkZoSqvrwQR5fc=;
+        s=k20201202; t=1644431886;
+        bh=6TGHFzWoBF8VCHFHfVRCuz5fx3lT8j5ALTDaaJYk2OE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TQs2z+4+FKLtCsygbZv1IlDz/k5Ww4T9ERLRdZ0o823RzgmvTbda1yzPCmnDzEPjW
-         wObi+7ju/l7MA2HboslaDTViM2GzXjRK2ezDIHxktbdu+UN/ZW9YV9J0BCTlvVRH2o
-         FJQrxPlr3Mkz7XywCGrCyyeHm3uVdUxFBDHLrO/So5q+fSLmaiFAH5e3DPqdSJPZ2j
-         5cP+sz8W9ag3lEZLOIbw7s3qQ6qPuOZIk2Loicxjhsq/oTF8lLQ+cEbQBUP1/22KYY
-         hSCbEd8u/NVaW7c8byAmIjZSgUyuzfEZvahFy8W5cztrhciEhJS8v4gb/uxRd4C0C2
-         WRezOY8uyZBNw==
+        b=Qw0Etd3tRlKn+qSj1d1+xKSpVuGcFfD8XwQD3pUjnOwiM03pSrjPWXyaaioxsnvSY
+         cGe0IXsGfv6/MXrE/6k916i9Xq/knwzyZ6cJPx3nwT6AlN/xDJyx68HxpiziOYzxm1
+         UNYLXk8gXDkaqcpUsxTD/tR3YSgmrY/XB4FBaiMUpsr76RCH93+Qpea4gBUINGMKbV
+         sl7ivfU1DxyIt5jwnUN4RB48vMKmW+QAqoR7knfwKw6OUMpdtcFaXms3cZ4jGbEFEB
+         aNtuEak4/ol2BBMJ+eWx2UMZK8utWzt/FQIW8YzEgbwC58R8tmdxi9GkEnLmTGapal
+         33J2lzjT57n7g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
-        yang xu <xuyang2018.jy@cn.fujitsu.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
+Cc:     =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, keescook@chromium.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 05/36] kselftest: signal all child processes
-Date:   Wed,  9 Feb 2022 13:37:28 -0500
-Message-Id: <20220209183759.47134-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: [PATCH AUTOSEL 5.15 03/36] kunit: tool: Import missing importlib.abc
+Date:   Wed,  9 Feb 2022 13:37:26 -0500
+Message-Id: <20220209183759.47134-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209183759.47134-1-sashal@kernel.org>
 References: <20220209183759.47134-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -55,52 +56,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Li Zhijian <lizhijian@cn.fujitsu.com>
+From: Michał Winiarski <michal.winiarski@intel.com>
 
-[ Upstream commit 92d25637a3a45904292c93f1863c6bbda4e3e38f ]
+[ Upstream commit 235528072f28b3b0a1446279b7eaddda36dbf743 ]
 
-We have some many cases that will create child process as well, such as
-pidfd_wait. Previously, we will signal/kill the parent process when it
-is time out, but this signal will not be sent to its child process. In
-such case, if child process doesn't terminate itself, ksefltest framework
-will hang forever.
+Python 3.10.0 contains:
+9e09849d20 ("bpo-41006: importlib.util no longer imports typing (GH-20938)")
 
-Here we group all its child processes so that kill() can signal all of
-them in timeout.
+It causes importlib.util to no longer import importlib.abs, which leads
+to the following error when trying to use kunit with qemu:
+AttributeError: module 'importlib' has no attribute 'abc'. Did you mean: '_abc'?
 
-Fixed change log: Shuah Khan <skhan@linuxfoundation.org>
+Add the missing import.
 
-Suggested-by: yang xu <xuyang2018.jy@cn.fujitsu.com>
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Michał Winiarski <michal.winiarski@intel.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kselftest_harness.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/kunit/kunit_kernel.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 79a182cfa43ad..78e59620d28de 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -875,7 +875,8 @@ static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
- 	}
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 2c6f916ccbafa..0874e512d109b 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -6,6 +6,7 @@
+ # Author: Felix Guo <felixguoxiuping@gmail.com>
+ # Author: Brendan Higgins <brendanhiggins@google.com>
  
- 	t->timed_out = true;
--	kill(t->pid, SIGKILL);
-+	// signal process group
-+	kill(-(t->pid), SIGKILL);
- }
- 
- void __wait_for_test(struct __test_metadata *t)
-@@ -985,6 +986,7 @@ void __run_test(struct __fixture_metadata *f,
- 		ksft_print_msg("ERROR SPAWNING TEST CHILD\n");
- 		t->passed = 0;
- 	} else if (t->pid == 0) {
-+		setpgrp();
- 		t->fn(t, variant);
- 		if (t->skip)
- 			_exit(255);
++import importlib.abc
+ import importlib.util
+ import logging
+ import subprocess
 -- 
 2.34.1
 
