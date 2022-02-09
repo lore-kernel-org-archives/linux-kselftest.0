@@ -2,54 +2,50 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD2CC43219
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Feb 2022 18:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3923C4321E
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Feb 2022 18:47:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240604AbiBISrX (ORCPT
+        id S240616AbiBISrY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 13:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        Wed, 9 Feb 2022 13:47:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240683AbiBISpW (ORCPT
+        with ESMTP id S241825AbiBISrB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:45:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CB8C0068AD;
-        Wed,  9 Feb 2022 10:43:12 -0800 (PST)
+        Wed, 9 Feb 2022 13:47:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF925C103694;
+        Wed,  9 Feb 2022 10:44:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A0FFB82378;
-        Wed,  9 Feb 2022 18:43:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145E3C340EE;
-        Wed,  9 Feb 2022 18:43:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9482B612BC;
+        Wed,  9 Feb 2022 18:44:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49017C340E7;
+        Wed,  9 Feb 2022 18:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644432189;
-        bh=Kp3T8Uq/wmdAQIvGZCoRhZ+9BMeChwVbO3ac4eqCP1g=;
+        s=k20201202; t=1644432260;
+        bh=0x8uk8ogZkTiQRkXjDuzshmOMcA8a04iiSihN0Uu/A4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lITodSvsY3IUOv8/m1oX6F95sSvBN3btE4wEQGZCgW1ZGQApx4f/RLy6kVfv9gqoz
-         pXKSKDlu/CsMOgiJky6nIwTPM/j1X9rAuR2QP/N7K01SqK/NygL1WxFyUsSYvek0MN
-         /G4usxalvCrIiAJmKYKAnNcXxYFNunx1P2dl5Tb/t3p5zfKBtmf1/urJQhfHBVZeGz
-         IS4TcbMpckiV4qihaI0mLrhvf/nfSZQTLRcWldMBoh6t9yGvtQl5FIRIBXItypdzz1
-         hGuE4gIN2cPE+lCF9+Uaf0ODPnwaBP50bxEAeEcGCN7mjGy6KiXOMAl+ISLX43o13s
-         XhLzBYAS7mh3A==
+        b=NNMcfhQLK0YNiGMuxJzTvBwwn8WwfD2nK1WBhSAq2lmxdpBFjFGGx8MTfmTCKtG9C
+         vNbaqNA7yrB8WfJEPFtwK7/8cpTnDUKd+uM5q/HKCYs6U8HucjmT6CpgJB10tzE73b
+         ywZk2EyA/O3OGD7O0hAlHLAQku+7afOP/1Cu+9UbR33J2+y2hKHHdXOiVI1fXbNJj2
+         LBz97E81Wf+SpgQqe6k8nMovWvu2MYh/VR4iEQH/XJGDuB2sr+uuATNxaDlj4g1Ky1
+         wnqqUR8Rgl1Xh6/bL6mrAPCFlCo4cxQKvMwVRMNJq3KIrcgCo4xjIiye/SFKMxjeiW
+         gYGosgJOqt3wA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+Cc:     Yang Xu <xuyang2018.jy@fujitsu.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
-        shuah@kernel.org, linux-rtc@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 02/15] selftests: rtc: Increase test timeout so that all tests run
-Date:   Wed,  9 Feb 2022 13:42:48 -0500
-Message-Id: <20220209184305.47983-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 02/10] selftests/zram: Skip max_comp_streams interface on newer kernel
+Date:   Wed,  9 Feb 2022 13:44:01 -0500
+Message-Id: <20220209184410.48223-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209184305.47983-1-sashal@kernel.org>
-References: <20220209184305.47983-1-sashal@kernel.org>
+In-Reply-To: <20220209184410.48223-1-sashal@kernel.org>
+References: <20220209184410.48223-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -57,44 +53,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+From: Yang Xu <xuyang2018.jy@fujitsu.com>
 
-[ Upstream commit f034cc1301e7d83d4ec428dd6b8ffb57ca446efb ]
+[ Upstream commit fc4eb486a59d70bd35cf1209f0e68c2d8b979193 ]
 
-The timeout setting for the rtc kselftest is currently 90 seconds. This
-setting is used by the kselftest runner to stop running a test if it
-takes longer than the assigned value.
+Since commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram
+has switched to per-cpu streams. Even kernel still keep this interface for
+some reasons, but writing to max_comp_stream doesn't take any effect. So
+skip it on newer kernel ie 4.7.
 
-However, two of the test cases inside rtc set alarms. These alarms are
-set to the next beginning of the minute, so each of these test cases may
-take up to, in the worst case, 60 seconds.
+The code that comparing kernel version is from xfstests testsuite ext4/053.
 
-In order to allow for all test cases in rtc to run, even in the worst
-case, when using the kselftest runner, the timeout value should be
-increased to at least 120. Set it to 180, so there's some additional
-slack.
-
-Correct operation can be tested by running the following command right
-after the start of a minute (low second count), and checking that all
-test cases run:
-
-	./run_kselftest.sh -c rtc
-
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/rtc/settings | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/zram/zram_lib.sh | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
-index ba4d85f74cd6b..a953c96aa16e1 100644
---- a/tools/testing/selftests/rtc/settings
-+++ b/tools/testing/selftests/rtc/settings
-@@ -1 +1 @@
--timeout=90
-+timeout=180
+diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
+index 9e73a4fb9b0aa..2c1d1c567f854 100755
+--- a/tools/testing/selftests/zram/zram_lib.sh
++++ b/tools/testing/selftests/zram/zram_lib.sh
+@@ -20,6 +20,9 @@ dev_mounted=-1
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++kernel_version=`uname -r | cut -d'.' -f1,2`
++kernel_major=${kernel_version%.*}
++kernel_minor=${kernel_version#*.}
+ 
+ trap INT
+ 
+@@ -34,6 +37,20 @@ check_prereqs()
+ 	fi
+ }
+ 
++kernel_gte()
++{
++	major=${1%.*}
++	minor=${1#*.}
++
++	if [ $kernel_major -gt $major ]; then
++		return 0
++	elif [[ $kernel_major -eq $major && $kernel_minor -ge $minor ]]; then
++		return 0
++	fi
++
++	return 1
++}
++
+ zram_cleanup()
+ {
+ 	echo "zram cleanup"
+@@ -95,6 +112,13 @@ zram_max_streams()
+ {
+ 	echo "set max_comp_streams to zram device(s)"
+ 
++	kernel_gte 4.7
++	if [ $? -eq 0 ]; then
++		echo "The device attribute max_comp_streams was"\
++		               "deprecated in 4.7"
++		return 0
++	fi
++
+ 	local i=0
+ 	for max_s in $zram_max_streams; do
+ 		local sys_path="/sys/block/zram${i}/max_comp_streams"
 -- 
 2.34.1
 
