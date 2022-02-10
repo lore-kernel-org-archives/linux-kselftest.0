@@ -2,76 +2,67 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E71D5C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 748CAC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:17:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiBJCGu (ORCPT
+        id S231261AbiBJCRN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 21:06:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        Wed, 9 Feb 2022 21:17:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiBJCGf (ORCPT
+        with ESMTP id S230372AbiBJCRM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:06:35 -0500
+        Wed, 9 Feb 2022 21:17:12 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD33101B;
-        Wed,  9 Feb 2022 18:01:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032B2261A;
+        Wed,  9 Feb 2022 18:17:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32279B80E19;
-        Thu, 10 Feb 2022 00:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C485C340ED;
-        Thu, 10 Feb 2022 00:36:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B08C4B823DD;
+        Thu, 10 Feb 2022 02:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086CEC340E7;
+        Thu, 10 Feb 2022 02:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644453415;
-        bh=k5nOaZvkcoJ1nvw3IodVvNYhe4/Eh+Uo1hrPiXsvZ2Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tGXJmWd/iKgcDtZu38dqnGlbnszo17yDUi/THH6biq1ZhKmMyEyEPEganLzNHAKlt
-         Y7AZsk1WzwI0g7vpQ3FXC32XWwrvhe5Hg6sG8q0keT4vrG6MZyJrD3pHwNqF6DG8Qj
-         9CAnxR4QsbXErLYvO9MeyrFbT9qPsK548IB6jfYGnxdvztlKP72c6l+axmDaNAmtGn
-         iibJqz2nFzAgyBbQTT+Y2/5aq5t4Vmp8AGaYG0tIogKjxfr652rv/wBt05HDBrq/CK
-         h0KtqopUzYu9A5ZqqgyfUR1JnHVMdDFk8zwM5rJk+3CwmEQn4iXQ2aC6ZcZjqFpsdf
-         T+Kn7lTXu8C5Q==
+        s=k20201202; t=1644459432;
+        bh=HHToa6/fTkupOGCWJ7mpmWaM+9FIcDhOYrxvlOtc1TI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ojhF1+Ss+KFb1GImsC1OiPfPJp4x3pWFHZ9TjBl2r139Zv/ytatX0KDIvbcwIKSti
+         Abg5LffX5zw09hu0zo+68oloYLPhe+GPTnxBYDo323r5Kw5dASH2BM5uL/4iW/QjHZ
+         V8d6GvhT/hK6NEBZ/X4p6S2kXMPFcQ2RMxUZGK7actOnl7O/mbrKY9uMCW8WnxRzUs
+         /yb7w8E6qV6/np2u565hUvNJmtxddYJZFJA6RwkrwQ0KPzYBQjspXY5GvQ0I6FjUM7
+         3UT5yHz2t0DRG0KYB0f0EhAROjpVm13+SvzVTVYE71NI9RA2UCL3ndQsAhZ0G/d+1M
+         lkXsneC+kVAHw==
+Date:   Wed, 9 Feb 2022 18:17:10 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
-        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 02/11] net: ping6: support packet timestamping
-Date:   Wed,  9 Feb 2022 16:36:40 -0800
-Message-Id: <20220210003649.3120861-3-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
+To:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        David Ahern <dsahern@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 02/11] net: ping6: support packet timestamping
+Message-ID: <20220209181710.50a45069@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CANP3RGfqsFNOvtGk6e_3sia0esEknNr2gT-PmcbhRV+S2MEaUA@mail.gmail.com>
 References: <20220210003649.3120861-1-kuba@kernel.org>
+        <20220210003649.3120861-3-kuba@kernel.org>
+        <CANP3RGfqsFNOvtGk6e_3sia0esEknNr2gT-PmcbhRV+S2MEaUA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Nothing prevents the user from requesting timestamping
-on ping6 sockets, yet timestamps are not going to be reported.
-Plumb the flags through.
+On Wed, 9 Feb 2022 16:44:18 -0800 Maciej =C5=BBenczykowski wrote:
+> probably deserves a fixes tag?
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- net/ipv6/ping.c | 1 +
- 1 file changed, 1 insertion(+)
+I went with a "never worked + unlikely a generic app (which depends
+on TS) will use ICMP6 sockets" classification. Let's see if we get=20
+another vote to make this a fix.
 
-diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-index 86a72f7a61cf..3228ccd8abf1 100644
---- a/net/ipv6/ping.c
-+++ b/net/ipv6/ping.c
-@@ -113,6 +113,7 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 
- 	ipcm6_init_sk(&ipc6, np);
- 	ipc6.sockc.mark = sk->sk_mark;
-+	ipc6.sockc.tsflags = sk->sk_tsflags;
- 	fl6.flowlabel = ip6_make_flowinfo(ipc6.tclass, fl6.flowlabel);
- 
- 	dst = ip6_sk_dst_lookup_flow(sk, &fl6, daddr, false);
--- 
-2.34.1
+> otherwise looks fine to me
 
+Thanks!
