@@ -2,100 +2,83 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7A62C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 01:59:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECCC5C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 01:59:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbiBJB70 (ORCPT
+        id S233784AbiBJB73 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 20:59:26 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34090 "EHLO
+        Wed, 9 Feb 2022 20:59:29 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbiBJB7Q (ORCPT
+        with ESMTP id S233651AbiBJB7Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 9 Feb 2022 20:59:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249822AC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E02AB;
         Wed,  9 Feb 2022 17:56:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BA0D6117E;
-        Thu, 10 Feb 2022 00:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299BEC340F2;
-        Thu, 10 Feb 2022 00:36:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B47F616D2;
+        Thu, 10 Feb 2022 00:36:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596DFC340E7;
+        Thu, 10 Feb 2022 00:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644453415;
-        bh=vysQG6m7H3kYsRl6MCsWmusmF/i/5c7bYcQ6nlh4A/4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oa24r4Pvr+UQSz9se0+IO8trhy9w0OHbaZOhBXWx3oeMKDhXzgN1dAARb5bpj0m8s
-         pen+thtr7iM6x/ic6/9RvCpC8e+gNETJC1n4dzKIkTvHBogg5YYJpHnezVApLxuuTv
-         I6oLCKCaecKx7KEcZmQ79lrDQR7s/O9Qh0YmYJdanhcrSkkSMPwIdkfP0Pf1wlHoCC
-         RZcRP8dBbZXRgNevLDujv6GIUsRW1tWppsmoJznBSPeORIz2GpExNeKH1bMfs0A6xQ
-         sC/upS23JPJhc6bf0aICZ3WWjZhcF+ACQDa1YfBdOVKMJ1RSLJks5msIP4ytvQ5rkk
-         VvnUr06ZI0+wQ==
+        s=k20201202; t=1644453413;
+        bh=Nqx9UqIwQAq/YChOaq2hfeu2SItd1xNMbZqtwE17fJ4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RiTwFsZL3FlFooeHoNRq56XjCIfLAFSm2C2s1/QcaO1uKDSPnSLPVT/Hhp/kugU1M
+         9rSMIoM84F6e7PrBinSbU7RLpyuMEifqukUo7WS+6U5msXXN0pz53RH/A7GvQZWxyQ
+         7ChvMvCACs2ebgrOn2GXEBF2B+pPbQC7UGcThDB/1+5fuBlytrPpEwz/rShq9X8UBz
+         +6Odg+tf8UKWeQqw2r0kYp9jwK8YMMtdsBrWn8MXbYEOoiP9b+ugftN4+w8h7ZuVCX
+         CT7G+/w/Y4DHYw8sg9nA1JdlaUehlC2s0Z/EzBKNePazfvNSGDjVS3w0BxCDbgLLIT
+         PapWjsBJ6nvBg==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
         maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
         shuah@kernel.org, linux-kselftest@vger.kernel.org,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 03/11] net: ping6: support setting socket options via cmsg
-Date:   Wed,  9 Feb 2022 16:36:41 -0800
-Message-Id: <20220210003649.3120861-4-kuba@kernel.org>
+Subject: [PATCH net-next 00/11] net: ping6: support basic socket cmsgs
+Date:   Wed,  9 Feb 2022 16:36:38 -0800
+Message-Id: <20220210003649.3120861-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
-References: <20220210003649.3120861-1-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Minor reordering of the code and a call to sock_cmsg_send()
-gives us support for setting the common socket options via
-cmsg (the usual ones - SO_MARK, SO_TIMESTAMPING_OLD, SCM_TXTIME).
+Add support for common SOL_SOCKET cmsgs in ICMPv6 sockets.
+Extend the cmsg tests to cover more cmsgs and socket types.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- net/ipv6/ping.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+SOL_IPV6 cmsgs to follow.
 
-diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-index 3228ccd8abf1..d5544cf67ffe 100644
---- a/net/ipv6/ping.c
-+++ b/net/ipv6/ping.c
-@@ -97,6 +97,14 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
- 		return -EINVAL;
- 
-+	ipcm6_init_sk(&ipc6, np);
-+	ipc6.sockc.tsflags = sk->sk_tsflags;
-+	ipc6.sockc.mark = sk->sk_mark;
-+
-+	err = sock_cmsg_send(sk, msg, &ipc6.sockc);
-+	if (err)
-+		return err;
-+
- 	/* TODO: use ip6_datagram_send_ctl to get options from cmsg */
- 
- 	memset(&fl6, 0, sizeof(fl6));
-@@ -105,15 +113,12 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	fl6.saddr = np->saddr;
- 	fl6.daddr = *daddr;
- 	fl6.flowi6_oif = oif;
--	fl6.flowi6_mark = sk->sk_mark;
-+	fl6.flowi6_mark = ipc6.sockc.mark;
- 	fl6.flowi6_uid = sk->sk_uid;
- 	fl6.fl6_icmp_type = user_icmph.icmp6_type;
- 	fl6.fl6_icmp_code = user_icmph.icmp6_code;
- 	security_sk_classify_flow(sk, flowi6_to_flowi_common(&fl6));
- 
--	ipcm6_init_sk(&ipc6, np);
--	ipc6.sockc.mark = sk->sk_mark;
--	ipc6.sockc.tsflags = sk->sk_tsflags;
- 	fl6.flowlabel = ip6_make_flowinfo(ipc6.tclass, fl6.flowlabel);
- 
- 	dst = ip6_sk_dst_lookup_flow(sk, &fl6, daddr, false);
+Jakub Kicinski (11):
+  net: ping6: remove a pr_debug() statement
+  net: ping6: support packet timestamping
+  net: ping6: support setting socket options via cmsg
+  selftests: net: rename cmsg_so_mark
+  selftests: net: make cmsg_so_mark ready for more options
+  selftests: net: cmsg_sender: support icmp and raw sockets
+  selftests: net: cmsg_so_mark: test ICMP and RAW sockets
+  selftests: net: cmsg_so_mark: test with SO_MARK set by setsockopt
+  selftests: net: cmsg_sender: support setting SO_TXTIME
+  selftests: net: cmsg_sender: support Tx timestamping
+  selftests: net: test standard socket cmsgs across UDP and ICMP sockets
+
+ net/ipv6/ping.c                             |  14 +-
+ tools/testing/selftests/net/.gitignore      |   2 +-
+ tools/testing/selftests/net/Makefile        |   3 +-
+ tools/testing/selftests/net/cmsg_sender.c   | 380 ++++++++++++++++++++
+ tools/testing/selftests/net/cmsg_so_mark.c  |  67 ----
+ tools/testing/selftests/net/cmsg_so_mark.sh |  32 +-
+ tools/testing/selftests/net/cmsg_time.sh    |  83 +++++
+ 7 files changed, 499 insertions(+), 82 deletions(-)
+ create mode 100644 tools/testing/selftests/net/cmsg_sender.c
+ delete mode 100644 tools/testing/selftests/net/cmsg_so_mark.c
+ create mode 100755 tools/testing/selftests/net/cmsg_time.sh
+
 -- 
 2.34.1
 
