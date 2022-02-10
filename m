@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AA9CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 11:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD033C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 11:36:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240991AbiBJLee (ORCPT
+        id S240117AbiBJLgy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Feb 2022 06:34:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39196 "EHLO
+        Thu, 10 Feb 2022 06:36:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbiBJLee (ORCPT
+        with ESMTP id S235635AbiBJLgy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:34:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD611001
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 03:34:35 -0800 (PST)
+        Thu, 10 Feb 2022 06:36:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AE91001
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 03:36:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 803B9CE243E
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 11:34:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D65C004E1;
-        Thu, 10 Feb 2022 11:34:28 +0000 (UTC)
-Date:   Thu, 10 Feb 2022 11:34:25 +0000
+        by sin.source.kernel.org (Postfix) with ESMTPS id E85F0CE22F9
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 11:36:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B049C004E1;
+        Thu, 10 Feb 2022 11:36:49 +0000 (UTC)
+Date:   Thu, 10 Feb 2022 11:36:46 +0000
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -39,27 +39,30 @@ Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 01/40] arm64: Define CPACR_EL1_FPEN similarly to
- other floating point controls
-Message-ID: <YgT4QQmjIHrc74ga@arm.com>
+Subject: Re: [PATCH v11 02/40] arm64: Always use individual bits in CPACR
+ floating point enables
+Message-ID: <YgT4zvgcgeBdjewD@arm.com>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-2-broonie@kernel.org>
+ <20220207152109.197566-3-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207152109.197566-2-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-3-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:20:30PM +0000, Mark Brown wrote:
-> The base floating point, SVE and SME all have enable controls for EL0 and
-> EL1 in CPACR_EL1 which have a similar layout and function. Currently the
-> basic floating point enable FPEN is defined differently to the SVE control,
-> specified as a single define in kvm_arm.h rather than in sysreg.h. Move the
-> define to sysreg.h and provide separate EL0 and EL1 control bits so code
-> managing the different floating point enables can look consistent.
+On Mon, Feb 07, 2022 at 03:20:31PM +0000, Mark Brown wrote:
+> CPACR_EL1 has several bitfields for controlling traps for floating point
+> features to EL1, each of which has a separate bits for EL0 and EL1. Marc
+> Zyngier noted that we are not consistent in our use of defines to
+> manipulate these, sometimes using a define covering the whole field and
+> sometimes using defines for the individual bits. Make this consistent by
+> expanding the whole field defines where they are used (currently only in
+> the KVM code) and deleting them so that no further uses can be
+> introduced.
 > 
+> Suggested-by: Marc Zyngier <maz@kernel.org>
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 
 Acked-by: Catalin Marinas <catalin.marinas@arm.com>
