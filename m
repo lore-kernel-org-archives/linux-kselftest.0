@@ -2,151 +2,159 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E37A0C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA5BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:02:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbiBJCCi convert rfc822-to-8bit (ORCPT
+        id S232936AbiBJCCq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 21:02:38 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33174 "EHLO
+        Wed, 9 Feb 2022 21:02:46 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbiBJCAR (ORCPT
+        with ESMTP id S234385AbiBJCAR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 9 Feb 2022 21:00:17 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458DB103F;
-        Wed,  9 Feb 2022 17:57:21 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:43770)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHyhy-0011Oq-PQ; Wed, 09 Feb 2022 18:57:18 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:44682 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nHyhw-00AMiJ-MT; Wed, 09 Feb 2022 18:57:18 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Solar Designer <solar@openwall.com>
-Cc:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linux Containers <containers@lists.linux-foundation.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <20220207121800.5079-2-mkoutny@suse.com>
-        <20220210011405.GA17076@openwall.com>
-Date:   Wed, 09 Feb 2022 19:57:10 -0600
-In-Reply-To: <20220210011405.GA17076@openwall.com> (Solar Designer's message
-        of "Thu, 10 Feb 2022 02:14:05 +0100")
-Message-ID: <87v8xn8ow9.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26E0D7E;
+        Wed,  9 Feb 2022 17:56:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4E9DB823DD;
+        Thu, 10 Feb 2022 00:36:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF63C340F0;
+        Thu, 10 Feb 2022 00:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644453418;
+        bh=N9tNyaSe13ZsZP0RzUXjkyzbyMgwkUgB1xYpc7beNQQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LzCzIAZp45+AxnLAY54P3aU9h99uvWGqx0N9Fw7chNGk2EvykHsCaSlIUPeR108/X
+         84ntTWUftyNFFonJYTI4KnvFlNVJxTRW4U/+DNCLSXZm7FcjeevIJO9fQcN5tLa7xH
+         QNu9Ett+6jtuXD9qvR3OUBjmJR5KvkYVhYcTWbq7pKymqZwW4NXIQJzQPTmnQ0R+RV
+         IxyFFxGjYmI2gEYieaO7JWBx59Fi4dPP+5CHKKBFPcM2Z1SSiVrU/ncmEYlu/3iJSD
+         srQA8UF5QwDYXIQQ/+rWRXXSXzGjmzugE7XZENMekFDPufBW6uPBjlhErq7MmlH31F
+         VNZ1f7JmgbYTA==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
+        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 08/11] selftests: net: cmsg_so_mark: test with SO_MARK set by setsockopt
+Date:   Wed,  9 Feb 2022 16:36:46 -0800
+Message-Id: <20220210003649.3120861-9-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
+References: <20220210003649.3120861-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nHyhw-00AMiJ-MT;;;mid=<87v8xn8ow9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18XlNqZ8OwOBkY4TyLNlmApbq/5YW22QNU=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check
- against new user credentials
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Solar Designer <solar@openwall.com> writes:
+Test if setting SO_MARK with setsockopt works and if cmsg
+takes precedence over it.
 
-> Hi Michal,
->
-> On Mon, Feb 07, 2022 at 01:17:55PM +0100, Michal Koutný wrote:
->> The check is currently against the current->cred but since those are
->> going to change and we want to check RLIMIT_NPROC condition after the
->> switch, supply the capability check with the new cred.
->> But since we're checking new_user being INIT_USER any new cred's
->> capability-based allowance may be redundant when the check fails and the
->> alternative solution would be revert of the commit 2863643fb8b9
->> ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
->> 
->> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
->> 
->> Cc: Solar Designer <solar@openwall.com>
->> Cc: Christian Brauner <christian.brauner@ubuntu.com>
->> Signed-off-by: Michal Koutný <mkoutny@suse.com>
->> ---
->>  kernel/sys.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git a/kernel/sys.c b/kernel/sys.c
->> index 8ea20912103a..48c90dcceff3 100644
->> --- a/kernel/sys.c
->> +++ b/kernel/sys.c
->> @@ -481,7 +481,8 @@ static int set_user(struct cred *new)
->>  	 */
->>  	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
->>  			new_user != INIT_USER &&
->> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
->> +			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
->> +			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
->>  		current->flags |= PF_NPROC_EXCEEDED;
->>  	else
->>  		current->flags &= ~PF_NPROC_EXCEEDED;
->
-> Thank you for working on this and CC'ing me on it.  This is related to
-> the discussion Christian and I had in September:
->
-> https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
->
-> Christian was going to revert 2863643fb8b9, but apparently that never
-> happened.  Back then, I also suggested:
->
-> "Alternatively, we could postpone the set_user() calls until we're
-> running with the new user's capabilities, but that's an invasive change
-> that's likely to create its own issues."
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/net/cmsg_sender.c   | 14 ++++++++++-
+ tools/testing/selftests/net/cmsg_so_mark.sh | 28 +++++++++++++--------
+ 2 files changed, 31 insertions(+), 11 deletions(-)
 
-I really think we need to do something like that.  Probably just set a
-flag in commit_creds and test later.
+diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
+index edb8c427c7cb..c7586a4b0361 100644
+--- a/tools/testing/selftests/net/cmsg_sender.c
++++ b/tools/testing/selftests/net/cmsg_sender.c
+@@ -29,6 +29,9 @@ struct options {
+ 	bool silent_send;
+ 	const char *host;
+ 	const char *service;
++	struct {
++		unsigned int mark;
++	} sockopt;
+ 	struct {
+ 		unsigned int family;
+ 		unsigned int type;
+@@ -56,6 +59,7 @@ static void __attribute__((noreturn)) cs_usage(const char *bin)
+ 	       "\t\t        (u = UDP (default); i = ICMP; r = RAW)\n"
+ 	       "\n"
+ 	       "\t\t-m val  Set SO_MARK with given value\n"
++	       "\t\t-M val  Set SO_MARK via setsockopt\n"
+ 	       "");
+ 	exit(ERN_HELP);
+ }
+@@ -64,7 +68,7 @@ static void cs_parse_args(int argc, char *argv[])
+ {
+ 	char o;
+ 
+-	while ((o = getopt(argc, argv, "46sp:m:")) != -1) {
++	while ((o = getopt(argc, argv, "46sp:m:M:")) != -1) {
+ 		switch (o) {
+ 		case 's':
+ 			opt.silent_send = true;
+@@ -91,6 +95,9 @@ static void cs_parse_args(int argc, char *argv[])
+ 			opt.mark.ena = true;
+ 			opt.mark.val = atoi(optarg);
+ 			break;
++		case 'M':
++			opt.sockopt.mark = atoi(optarg);
++			break;
+ 		}
+ 	}
+ 
+@@ -175,6 +182,11 @@ int main(int argc, char *argv[])
+ 		sin6->sin6_port = htons(opt.sock.proto);
+ 	}
+ 
++	if (opt.sockopt.mark &&
++	    setsockopt(fd, SOL_SOCKET, SO_MARK,
++		       &opt.sockopt.mark, sizeof(opt.sockopt.mark)))
++		error(ERN_SOCKOPT, errno, "setsockopt SO_MARK");
++
+ 	iov[0].iov_base = buf;
+ 	iov[0].iov_len = sizeof(buf);
+ 
+diff --git a/tools/testing/selftests/net/cmsg_so_mark.sh b/tools/testing/selftests/net/cmsg_so_mark.sh
+index 925f6b9deee2..1650b8622f2f 100755
+--- a/tools/testing/selftests/net/cmsg_so_mark.sh
++++ b/tools/testing/selftests/net/cmsg_so_mark.sh
+@@ -43,19 +43,27 @@ check_result() {
+     fi
+ }
+ 
+-for i in 4 6; do
+-    [ $i == 4 ] && TGT=$TGT4 || TGT=$TGT6
++for ovr in setsock cmsg both; do
++    for i in 4 6; do
++	[ $i == 4 ] && TGT=$TGT4 || TGT=$TGT6
+ 
+-    for p in u i r; do
+-	[ $p == "u" ] && prot=UDP
+-	[ $p == "i" ] && prot=ICMP
+-	[ $p == "r" ] && prot=RAW
++	for p in u i r; do
++	    [ $p == "u" ] && prot=UDP
++	    [ $p == "i" ] && prot=ICMP
++	    [ $p == "r" ] && prot=RAW
+ 
+-	ip netns exec $NS ./cmsg_sender -$i -p $p -m $((MARK + 1)) $TGT 1234
+-	check_result $? 0 "$prot pass"
++	    [ $ovr == "setsock" ] && m="-M"
++	    [ $ovr == "cmsg" ]    && m="-m"
++	    [ $ovr == "both" ]    && m="-M $MARK -m"
+ 
+-	ip netns exec $NS ./cmsg_sender -$i -p $p -m $MARK -s $TGT 1234
+-	check_result $? 1 "$prot rejection"
++	    ip netns exec $NS ./cmsg_sender -$i -p $p $m $((MARK + 1)) $TGT 1234
++	    check_result $? 0 "$prot $ovr - pass"
++
++	    [ $ovr == "diff" ] && m="-M $((MARK + 1)) -m"
++
++	    ip netns exec $NS ./cmsg_sender -$i -p $p $m $MARK -s $TGT 1234
++	    check_result $? 1 "$prot $ovr - rejection"
++	done
+     done
+ done
+ 
+-- 
+2.34.1
 
-I was working on fixes that looked cleaner and I just recently realized
-that the test in fork is almost as bad.  The function has_capability can
-be used but the same kind of problems exist.
-
-I thought I was very quickly going to have patches to post but I need
-to redo everything now that I have noticed the issue in fork, so it will
-be a day or so.
-
-Eric
-
-
-> The change you propose above is similar to that, but is more limited and
-> non-invasive.  That looks good to me.
->
-> However, I think you need to drop the negations of the return value from
-> security_capable().  security_capable() returns 0 or -EPERM, while
-> capable() returns a bool, in kernel/capability.c: ns_capable_common():
->
-> 	capable = security_capable(current_cred(), ns, cap, opts);
-> 	if (capable == 0) {
-> 		current->flags |= PF_SUPERPRIV;
-> 		return true;
-> 	}
-> 	return false;
->
-> Also, your change would result in this no longer setting PF_SUPERPRIV.
-> This may be fine, but you could want to document it.
->
-> On a related note, this comment in security/commoncap.c needs an update:
->
->  * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
->  * and has_capability() functions.  That is, it has the reverse semantics:
->  * cap_has_capability() returns 0 when a task has a capability, but the
->  * kernel's capable() and has_capability() returns 1 for this case.
->
-> cap_has_capability() doesn't actually exist, and perhaps the comment
-> should refer to cap_capable().
->
-> Alexander
