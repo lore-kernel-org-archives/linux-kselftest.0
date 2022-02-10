@@ -2,164 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F275CC43217
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:35:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB619C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 03:20:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiBJCf2 (ORCPT
+        id S229667AbiBJDUU convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 21:35:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47424 "EHLO
+        Wed, 9 Feb 2022 22:20:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiBJCf1 (ORCPT
+        with ESMTP id S229511AbiBJDUU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:35:27 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA2C237D3;
-        Wed,  9 Feb 2022 18:35:29 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id a28so3579984qvb.10;
-        Wed, 09 Feb 2022 18:35:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=74Mm/lTty9d4MomegbPgFDlHGu1ie2dczUGBXMz/OHk=;
-        b=Ho+oKUDtFcihYlMA4zE6jKR75hXzuXnWAHv602EU6A+VpPp4j7NJ43EQW/jLCsPa6j
-         XNDOjjhbtlSjnLfNpIxtW5B6lkbylyeIB7peFdrGf94VGU1Tt6ClEmmbc/jByADDqIvV
-         wUokrcjTzdLiEh/Lfi1v2PQg+zgaFNQmVbfzePkqb9GRYSMLHwT5zutJFrOsvwA2GdC8
-         barSLHHiyrWd1oiQ6jUI/6Zy9dTFjj1h4Kh0m7/FT7nlzylW4N24JGGj3G/5pHi6kPV8
-         pdO87wwKI3JtmRDkpl4I8JHrn8oU2dsaysXfGFyIbdey7RrAPfq/3MbTUm+YciEUwO4S
-         Nirw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=74Mm/lTty9d4MomegbPgFDlHGu1ie2dczUGBXMz/OHk=;
-        b=FROfsYGEn1G0IA49622Wmlh+Jb6ZHxKP/fsV5GM6ZAHD+rUPj7yYjvhDvnRr7uSQws
-         aNKYd96SI3M9Xc6TFYY96/atcP/Uu6XV+pZNnICWJUBbK8KCrzATfF+Vn3lYqoMw0nIv
-         /bUzQq2prPoOI8x9Zimj522noEYuU0TpV3nu4lvA6aws1y51DsWh83hQy4QexOr5YPsM
-         Uo2ulIrjPCR3qHJkVM5keubefFdo4VxTk3LG0CWL/Ka793nUxI7BQhkxA4+/f9ciHK3V
-         vgUchwHYC8BeW5Yb5N4SHWfnRZtPk6569SKTnjEa2xN7i+LEi2qrilR1GV6rEvZ7XTSs
-         l/8w==
-X-Gm-Message-State: AOAM531g+ijRqrK4SNo+iSoYiX4t/z/WeggsazsKvwiziMqHk/zn0Sva
-        R6aFTAlI9DQuPDMCFxB0IPWQYQ1dCQk=
-X-Google-Smtp-Source: ABdhPJzFb4Z7vhifhMjgXsUD6r3HcUwbLHNhGJXD+CRXsxLwWFNI/1nHE3oZiiGaqtEYCi5NiklFEQ==
-X-Received: by 2002:ad4:596d:: with SMTP id eq13mr3577233qvb.131.1644460528277;
-        Wed, 09 Feb 2022 18:35:28 -0800 (PST)
-Received: from localhost.localdomain (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id h11sm1333374qkp.89.2022.02.09.18.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 18:35:27 -0800 (PST)
-From:   frowand.list@gmail.com
-To:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        Tim.Bird@sony.com, Brendan Higgins <brendanhiggins@google.com>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/2] Documentation: dev-tools: clarify KTAP specification wording
-Date:   Wed,  9 Feb 2022 20:35:18 -0600
-Message-Id: <20220210023519.3221051-2-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220210023519.3221051-1-frowand.list@gmail.com>
-References: <20220210023519.3221051-1-frowand.list@gmail.com>
+        Wed, 9 Feb 2022 22:20:20 -0500
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A121EAF5;
+        Wed,  9 Feb 2022 19:20:21 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:41030)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHxEu-00EcR6-Rv; Wed, 09 Feb 2022 17:23:12 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41838 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHxEs-00A1Nk-OT; Wed, 09 Feb 2022 17:23:12 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <20220207121800.5079-5-mkoutny@suse.com>
+Date:   Wed, 09 Feb 2022 18:21:07 -0600
+In-Reply-To: <20220207121800.5079-5-mkoutny@suse.com> ("Michal =?utf-8?Q?K?=
+ =?utf-8?Q?outn=C3=BD=22's?=
+        message of "Mon, 7 Feb 2022 13:17:58 +0100")
+Message-ID: <87a6eza7ws.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1nHxEs-00A1Nk-OT;;;mid=<87a6eza7ws.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+x1wyLwJjAEjidVjc0O5LqBuAMgqtDSuQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [RFC PATCH 4/6] ucounts: Allow root to override RLIMIT_NPROC
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+Michal Koutný <mkoutny@suse.com> writes:
 
-Add the spec version to the title line.
+> Call sites of ucounts_limit_cmp() would allow the global root or capable
+> user to bypass RLIMIT_NPROC on the bottom level of user_ns tree by not
+> looking at ucounts at all.
+>
+> As the traversal up the user_ns tree continues, the ucounts to which the
+> task is charged may switch the owning user (to the creator of user_ns).
+> If the new chargee is root, we don't really care about RLIMIT_NPROC
+> observation, so lift the limit to the max.
+>
+> The result is that an unprivileged user U can globally run more that
+> RLIMIT_NPROC (of user_ns) tasks but within each user_ns it is still
+> limited to RLIMINT_NPROC (as passed into task->signal->rlim) iff the
+> user_nss are created by the privileged user.
 
-Explain likely source of "Unknown lines".
+My apologies.  When I first looked at this I thought this change was
+non-sense.  However I had missed the special logic that happens with
+RLIMIT_NPROC to carefully allow the root user to bypass the NPROC
+limits.
 
-"Unknown lines" in nested tests are optionally indented.
+So yes this does look like something that needs to be addressed as well.
 
-Add "Unknown lines" items to differences between TAP & KTAP list
+Thank you for reporting all of these issues.
 
-Reviewed-by: Tim Bird <Tim.Bird@sony.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+Eric
 
----
-Changes since version 3
-  - Add reviewed by Shuah
-
-Changes since version 2
-  - Add missing quote after word: incorrect
-  - Add Reviewed-by tags
-
-Changes since version 1
-  - Explain likely source of "Unknown lines"
-  - "Unknown line" in nested tests are optionally indented
-  - Add "Unknown lines" items to differences between TAP & KTAP list
-
- Documentation/dev-tools/ktap.rst | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index 878530cb9c27..dfb3f10a8b2d 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--========================================
--The Kernel Test Anything Protocol (KTAP)
--========================================
-+===================================================
-+The Kernel Test Anything Protocol (KTAP), version 1
-+===================================================
- 
- TAP, or the Test Anything Protocol is a format for specifying test results used
- by a number of projects. It's website and specification are found at this `link
-@@ -174,6 +174,13 @@ There may be lines within KTAP output that do not follow the format of one of
- the four formats for lines described above. This is allowed, however, they will
- not influence the status of the tests.
- 
-+This is an important difference from TAP.  Kernel tests may print messages
-+to the system console or a log file.  Both of these destinations may contain
-+messages either from unrelated kernel or userspace activity, or kernel
-+messages from non-test code that is invoked by the test.  The kernel code
-+invoked by the test likely is not aware that a test is in progress and
-+thus can not print the message as a diagnostic message.
-+
- Nested tests
- ------------
- 
-@@ -186,10 +193,13 @@ starting with another KTAP version line and test plan, and end with the overall
- result. If one of the subtests fail, for example, the parent test should also
- fail.
- 
--Additionally, all result lines in a subtest should be indented. One level of
-+Additionally, all lines in a subtest should be indented. One level of
- indentation is two spaces: "  ". The indentation should begin at the version
- line and should end before the parent test's result line.
- 
-+"Unknown lines" are not considered to be lines in a subtest and thus are
-+allowed to be either indented or not indented.
-+
- An example of a test with two nested subtests:
- 
- .. code-block::
-@@ -225,9 +235,11 @@ Major differences between TAP and KTAP
- --------------------------------------
- 
- Note the major differences between the TAP and KTAP specification:
--- yaml and json are not recommended in diagnostic messages
--- TODO directive not recognized
-+- yaml and json are not recommended in KTAP diagnostic messages
-+- TODO directive not recognized in KTAP
- - KTAP allows for an arbitrary number of tests to be nested
-+- TAP includes "Unknown lines" in the category of "Anything else"
-+- TAP says "Unknown lines" are "incorrect"; KTAP allows "Unknown lines"
- 
- The TAP14 specification does permit nested tests, but instead of using another
- nested version line, uses a line of the form
--- 
-Frank Rowand <frank.rowand@sony.com>
-
+>
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> ---
+>  kernel/ucount.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/ucount.c b/kernel/ucount.c
+> index 53ccd96387dd..f52b7273a572 100644
+> --- a/kernel/ucount.c
+> +++ b/kernel/ucount.c
+> @@ -356,6 +356,9 @@ long ucounts_limit_cmp(struct ucounts *ucounts, enum ucount_type type, unsigned
+>  		if (excess > 0)
+>  			return excess;
+>  		max = READ_ONCE(iter->ns->ucount_max[type]);
+> +		/* Next ucounts owned by root? RLIMIT_NPROC is moot */
+> +		if (type == UCOUNT_RLIMIT_NPROC && uid_eq(iter->ns->owner, GLOBAL_ROOT_UID))
+> +			max = LONG_MAX;
+>  	}
+>  	return excess;
+>  }
