@@ -2,101 +2,117 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CCDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53D1CC4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:00:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbiBJCAU (ORCPT
+        id S234428AbiBJCAb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 21:00:20 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33792 "EHLO
+        Wed, 9 Feb 2022 21:00:31 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiBJB7X (ORCPT
+        with ESMTP id S234000AbiBJB7S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:59:23 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32DF28CFB
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Feb 2022 17:36:12 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u16so1825445pfg.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Feb 2022 17:36:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
-        b=SAzNK2jOoju8Kh3tfB4nt1GBgAe2hFe+vZ/ZEcNq9+YseZkdv2Fs4ANx/8Njn2iHYw
-         VgImwzzPwpqjZer2EaG3EFoHGPc7ZAG0lVoML//dwhD2BjDTxWacHXbShQifoKV37Z0B
-         VlqmbomQWjifurbhavxvDrNbK8H8R7Dm5ffKg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
-        b=ZWDvjTwayyAb/AQrmgqV4d0+/ihKoL7XC8Ozv4jM2lMj/5E75DvB0Ben1u1FEDLkur
-         cQrBzTknkYel8woCbJvcO2leSvld4Dn4eCzDOOXF5yS0ua0i9sWSNnO2Xb6qETHBdTS9
-         lAiUU7JAPGsNFvQKa3Ij/EiqNfo9ceUd8iXKqqpwr51mAXtd4bkeDige3qg5rCRirZ5X
-         kmEkuGhrY6GeGZToJMeRxdv0NV3yVO8HrJ6k1X0a5FxEq7iCkZvLumqY+XTEvx12zIM4
-         JFw0n2uowXuUVIzR6uWXCiyQbvc4f3jcqR8CeHwdNqdN+6nOPJMM3aO4Mj/pCvrIdR6q
-         FqVQ==
-X-Gm-Message-State: AOAM532iLr/CSFWFV8m+7i1Ncd+WUX+JfMUmOplnQ4czm/0oe1w9CS8g
-        kt3UfsnztebIUIj8XSv3fFwUIhpPckTADw==
-X-Google-Smtp-Source: ABdhPJx1Wh7HpA/HF6B4EOxrjALlX3FDTxDRKrQ1wIzg5zjIWbRCBbc3R4Vri25XuSFgtzE6GDqv0A==
-X-Received: by 2002:a63:cf05:: with SMTP id j5mr4054620pgg.544.1644453146584;
-        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id lr7sm8382805pjb.42.2022.02.09.16.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jeff Dike <jdike@addtoit.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-um@lists.infradead.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] um: Enable FORTIFY_SOURCE
-Date:   Wed,  9 Feb 2022 16:32:24 -0800
-Message-Id: <20220210003224.773957-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 9 Feb 2022 20:59:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCEF2E6;
+        Wed,  9 Feb 2022 17:56:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88105616DB;
+        Thu, 10 Feb 2022 00:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9C7C340EF;
+        Thu, 10 Feb 2022 00:36:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644453418;
+        bh=PxIkbyZwGV55G2pEaoZIBXGoY5ZXrks2yxbuhwg1wOs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ap5ns3D4pe7Ra/ldu2LPeT0+lP7jpdKNSoAP5aFQSkRTuaxO7Xns0/PxM/1tSVSwG
+         89c1sacklkY8PRTImuV+aqKr2+Rn8OnwaLS6PpcSW1DtzvrKwAWfDjYN+ld2tJXvCi
+         ZP1lCMafwwmHkLveBhg6kr7JvD7Qk23xqu6ZEyfZy0fOkBGFJvxvONNhy+Q0a5osb4
+         WklLBBfAfE13qRwRaD1nLr4gKh84iivg5m/A9ZSGw3tN6fD3HHC2Jp1iAZUWQmB24n
+         8HCiF9SwhACqmg1Nhaabb3r0ACiGEm4X6HsWQ91GRvrr9spF2Vdw35OiFCadryeMKD
+         89mcqJ3otjT0w==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
+        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 07/11] selftests: net: cmsg_so_mark: test ICMP and RAW sockets
+Date:   Wed,  9 Feb 2022 16:36:45 -0800
+Message-Id: <20220210003649.3120861-8-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
+References: <20220210003649.3120861-1-kuba@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=965; h=from:subject; bh=8p9qV7nCUTAMY0NIWHaERW8Fzn7HqVa7AIuy3N51Nyw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiBF0Xl67ZsAL362Vl2CFFWCSHpRPRaKgRKXg0mWx7 ZMVp4xqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgRdFwAKCRCJcvTf3G3AJgidD/ 0ZTEYhKrilkWGasprf9ZIJxdPF1kViXr2K/C6/H7qvfbMkbD5Fg2txX23xhIDwLbpy5MpK6IDxNR2P MaUrUJnHJl0ZNl2PNf2uHwC/kjyyYsTvIHWJcdwDIBceeGQ7ub0Oq7j2vm/ldaha1PEymXloMWDwHz /3fj9YBHe5CKyezHu0V0lUx0hm4jNUDN3meuyyr3VAQ7sclsdreGSU+Ci0IhyaH6KuOlPtxmK+GGXQ r8lfsQiPVm5BJl8l+52BHMXlCQNhs4Nz6qv0Woxb9YML5Dv62TkyeGp/lWSPgPJFsSnnm3oycROEtr YxP3tKf0eBqiYZ/BmpO+svULC2RCO1ZBCuZ3Dl7hWtoC0hj6p2l8MwjH/P/VJDj8Qi4IjNAg8Pk1ou Zh7Fye8CDaK8vxMKBKB0HQ+OmgTnf4CM3eYhEvTQgnzhmnsiHS5rsAhfH0pgDMyp8F+WXGDc9CPYaF dBEixq9z4prhX1xhEZ9oZosu4MH0rUOwjFzaLuqJkSlfpIw8limtRgTkrtVFa4NLOjQqLZ1MAkRx5C B4ipNCCEMFhMf21hLLc54+iBrfAutksrvAhvYx8YLdOX/6nn3doqRqbjRwq38WqJsIzWgWeDv1veIK JO/xEQBVhQRO5nJ3XymXJQv5p2F7scM+73OoDDW+Hg+88tMp6ynYwykvph0A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Enable FORTIFY_SOURCE so running Kunit tests can test fortified
-functions.
+Use new capabilities of cmsg_sender to test ICMP and RAW sockets,
+previously only UDP was tested.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Before SO_MARK support was added to ICMPv6:
+
+  # ./cmsg_so_mark.sh
+   Case ICMP rejection returned 0, expected 1
+  FAIL - 1/12 cases failed
+
+After:
+
+  # ./cmsg_so_mark.sh
+  OK
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- arch/um/Kconfig              | 1 +
- arch/um/os-Linux/user_syms.c | 1 +
- 2 files changed, 2 insertions(+)
+ tools/testing/selftests/net/cmsg_so_mark.sh | 24 ++++++++++++++-------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 4d398b80aea8..746e661395d7 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -9,6 +9,7 @@ config UML
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
-+	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
-index 715594fe5719..d9845b5219ce 100644
---- a/arch/um/os-Linux/user_syms.c
-+++ b/arch/um/os-Linux/user_syms.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define __NO_FORTIFY
- #include <linux/types.h>
- #include <linux/module.h>
+diff --git a/tools/testing/selftests/net/cmsg_so_mark.sh b/tools/testing/selftests/net/cmsg_so_mark.sh
+index 841d706dc91b..925f6b9deee2 100755
+--- a/tools/testing/selftests/net/cmsg_so_mark.sh
++++ b/tools/testing/selftests/net/cmsg_so_mark.sh
+@@ -18,6 +18,8 @@ trap cleanup EXIT
+ # Namespaces
+ ip netns add $NS
  
++ip netns exec $NS sysctl -w net.ipv4.ping_group_range='0 2147483647' > /dev/null
++
+ # Connectivity
+ ip -netns $NS link add type dummy
+ ip -netns $NS link set dev dummy0 up
+@@ -41,15 +43,21 @@ check_result() {
+     fi
+ }
+ 
+-ip netns exec $NS ./cmsg_sender -m $((MARK + 1)) $TGT4 1234
+-check_result $? 0 "IPv4 pass"
+-ip netns exec $NS ./cmsg_sender -m $((MARK + 1)) $TGT6 1234
+-check_result $? 0 "IPv6 pass"
++for i in 4 6; do
++    [ $i == 4 ] && TGT=$TGT4 || TGT=$TGT6
++
++    for p in u i r; do
++	[ $p == "u" ] && prot=UDP
++	[ $p == "i" ] && prot=ICMP
++	[ $p == "r" ] && prot=RAW
++
++	ip netns exec $NS ./cmsg_sender -$i -p $p -m $((MARK + 1)) $TGT 1234
++	check_result $? 0 "$prot pass"
+ 
+-ip netns exec $NS ./cmsg_sender -s -m $MARK $TGT4 1234
+-check_result $? 1 "IPv4 rejection"
+-ip netns exec $NS ./cmsg_sender -s -m $MARK $TGT6 1234
+-check_result $? 1 "IPv6 rejection"
++	ip netns exec $NS ./cmsg_sender -$i -p $p -m $MARK -s $TGT 1234
++	check_result $? 1 "$prot rejection"
++    done
++done
+ 
+ # Summary
+ if [ $BAD -ne 0 ]; then
 -- 
-2.30.2
+2.34.1
 
