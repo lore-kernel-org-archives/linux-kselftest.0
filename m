@@ -2,202 +2,151 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D589C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E37A0C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 02:02:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiBJCCZ (ORCPT
+        id S232752AbiBJCCi convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 21:02:25 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34024 "EHLO
+        Wed, 9 Feb 2022 21:02:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiBJCAQ (ORCPT
+        with ESMTP id S234608AbiBJCAR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:00:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9659D7C;
-        Wed,  9 Feb 2022 17:56:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 894EAB823DF;
-        Thu, 10 Feb 2022 00:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD293C340ED;
-        Thu, 10 Feb 2022 00:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644453419;
-        bh=yt0tTgalQo0Mur9pMyFK1YDa1xPw+j60s2J7DiBzUqQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E3T1WwdspVCCzh81e2bOqpp7eovvx8IzdeqS9OspSm9DhEL6nBpb4/SGLhvbP8yT5
-         PTKw1lZTpmVtAtqUeL0yoVTlVOBLMnegUHtq5mha1Y39yvBrulkN1G0V1PNPKkeMtw
-         gYMpy3D1VqEJ6TlRy4wwxvPY3pyzbllbTdTxp+XdoyhMDvQCHfQgFd2BoAOvP5CnKq
-         LMtqzWNavElZdfTkAKehGSMi1xg7t9jTgdKD7iHjvbh5exQKMDbPQDbpExKPa8g90y
-         aU9BO/uWo3E4uK4D7yx4buBiTWIVih69Ms3TJAIHKIX01GqibPZfciPDhS+CSLEeS4
-         1i397FZJQlPtA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
-        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 09/11] selftests: net: cmsg_sender: support setting SO_TXTIME
-Date:   Wed,  9 Feb 2022 16:36:47 -0800
-Message-Id: <20220210003649.3120861-10-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
-References: <20220210003649.3120861-1-kuba@kernel.org>
+        Wed, 9 Feb 2022 21:00:17 -0500
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458DB103F;
+        Wed,  9 Feb 2022 17:57:21 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:43770)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHyhy-0011Oq-PQ; Wed, 09 Feb 2022 18:57:18 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:44682 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHyhw-00AMiJ-MT; Wed, 09 Feb 2022 18:57:18 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Solar Designer <solar@openwall.com>
+Cc:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <20220207121800.5079-2-mkoutny@suse.com>
+        <20220210011405.GA17076@openwall.com>
+Date:   Wed, 09 Feb 2022 19:57:10 -0600
+In-Reply-To: <20220210011405.GA17076@openwall.com> (Solar Designer's message
+        of "Thu, 10 Feb 2022 02:14:05 +0100")
+Message-ID: <87v8xn8ow9.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1nHyhw-00AMiJ-MT;;;mid=<87v8xn8ow9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18XlNqZ8OwOBkY4TyLNlmApbq/5YW22QNU=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check
+ against new user credentials
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add ability to send delayed packets.
+Solar Designer <solar@openwall.com> writes:
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/net/cmsg_sender.c | 49 +++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 3 deletions(-)
+> Hi Michal,
+>
+> On Mon, Feb 07, 2022 at 01:17:55PM +0100, Michal Koutný wrote:
+>> The check is currently against the current->cred but since those are
+>> going to change and we want to check RLIMIT_NPROC condition after the
+>> switch, supply the capability check with the new cred.
+>> But since we're checking new_user being INIT_USER any new cred's
+>> capability-based allowance may be redundant when the check fails and the
+>> alternative solution would be revert of the commit 2863643fb8b9
+>> ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>> 
+>> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>> 
+>> Cc: Solar Designer <solar@openwall.com>
+>> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+>> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+>> ---
+>>  kernel/sys.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/kernel/sys.c b/kernel/sys.c
+>> index 8ea20912103a..48c90dcceff3 100644
+>> --- a/kernel/sys.c
+>> +++ b/kernel/sys.c
+>> @@ -481,7 +481,8 @@ static int set_user(struct cred *new)
+>>  	 */
+>>  	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
+>>  			new_user != INIT_USER &&
+>> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>> +			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
+>> +			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
+>>  		current->flags |= PF_NPROC_EXCEEDED;
+>>  	else
+>>  		current->flags &= ~PF_NPROC_EXCEEDED;
+>
+> Thank you for working on this and CC'ing me on it.  This is related to
+> the discussion Christian and I had in September:
+>
+> https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
+>
+> Christian was going to revert 2863643fb8b9, but apparently that never
+> happened.  Back then, I also suggested:
+>
+> "Alternatively, we could postpone the set_user() calls until we're
+> running with the new user's capabilities, but that's an invasive change
+> that's likely to create its own issues."
 
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index c7586a4b0361..5a722baa108b 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -6,9 +6,11 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <time.h>
- #include <unistd.h>
- #include <linux/icmp.h>
- #include <linux/icmpv6.h>
-+#include <linux/net_tstamp.h>
- #include <linux/types.h>
- #include <linux/udp.h>
- #include <sys/socket.h>
-@@ -23,6 +25,8 @@ enum {
- 	ERN_SOCK_CREATE,
- 	ERN_RESOLVE,
- 	ERN_CMSG_WR,
-+	ERN_SOCKOPT,
-+	ERN_GETTIME,
- };
- 
- struct options {
-@@ -41,6 +45,10 @@ struct options {
- 		bool ena;
- 		unsigned int val;
- 	} mark;
-+	struct {
-+		bool ena;
-+		unsigned int delay;
-+	} txtime;
- } opt = {
- 	.sock = {
- 		.family	= AF_UNSPEC,
-@@ -49,6 +57,8 @@ struct options {
- 	},
- };
- 
-+static struct timespec time_start_mono;
-+
- static void __attribute__((noreturn)) cs_usage(const char *bin)
- {
- 	printf("Usage: %s [opts] <dst host> <dst port / service>\n", bin);
-@@ -60,6 +70,7 @@ static void __attribute__((noreturn)) cs_usage(const char *bin)
- 	       "\n"
- 	       "\t\t-m val  Set SO_MARK with given value\n"
- 	       "\t\t-M val  Set SO_MARK via setsockopt\n"
-+	       "\t\t-d val  Set SO_TXTIME with given delay (usec)\n"
- 	       "");
- 	exit(ERN_HELP);
- }
-@@ -68,7 +79,7 @@ static void cs_parse_args(int argc, char *argv[])
- {
- 	char o;
- 
--	while ((o = getopt(argc, argv, "46sp:m:M:")) != -1) {
-+	while ((o = getopt(argc, argv, "46sp:m:M:d:")) != -1) {
- 		switch (o) {
- 		case 's':
- 			opt.silent_send = true;
-@@ -91,6 +102,7 @@ static void cs_parse_args(int argc, char *argv[])
- 				cs_usage(argv[0]);
- 			}
- 			break;
-+
- 		case 'm':
- 			opt.mark.ena = true;
- 			opt.mark.val = atoi(optarg);
-@@ -98,6 +110,10 @@ static void cs_parse_args(int argc, char *argv[])
- 		case 'M':
- 			opt.sockopt.mark = atoi(optarg);
- 			break;
-+		case 'd':
-+			opt.txtime.ena = true;
-+			opt.txtime.delay = atoi(optarg);
-+			break;
- 		}
- 	}
- 
-@@ -109,7 +125,7 @@ static void cs_parse_args(int argc, char *argv[])
- }
- 
- static void
--cs_write_cmsg(struct msghdr *msg, char *cbuf, size_t cbuf_sz)
-+cs_write_cmsg(int fd, struct msghdr *msg, char *cbuf, size_t cbuf_sz)
- {
- 	struct cmsghdr *cmsg;
- 	size_t cmsg_len;
-@@ -128,6 +144,30 @@ cs_write_cmsg(struct msghdr *msg, char *cbuf, size_t cbuf_sz)
- 		cmsg->cmsg_len = CMSG_LEN(sizeof(__u32));
- 		*(__u32 *)CMSG_DATA(cmsg) = opt.mark.val;
- 	}
-+	if (opt.txtime.ena) {
-+		struct sock_txtime so_txtime = {
-+			.clockid = CLOCK_MONOTONIC,
-+		};
-+		__u64 txtime;
-+
-+		if (setsockopt(fd, SOL_SOCKET, SO_TXTIME,
-+			       &so_txtime, sizeof(so_txtime)))
-+			error(ERN_SOCKOPT, errno, "setsockopt TXTIME");
-+
-+		txtime = time_start_mono.tv_sec * (1000ULL * 1000 * 1000) +
-+			 time_start_mono.tv_nsec +
-+			 opt.txtime.delay * 1000;
-+
-+		cmsg = (struct cmsghdr *)(cbuf + cmsg_len);
-+		cmsg_len += CMSG_SPACE(sizeof(txtime));
-+		if (cbuf_sz < cmsg_len)
-+			error(ERN_CMSG_WR, EFAULT, "cmsg buffer too small");
-+
-+		cmsg->cmsg_level = SOL_SOCKET;
-+		cmsg->cmsg_type = SCM_TXTIME;
-+		cmsg->cmsg_len = CMSG_LEN(sizeof(txtime));
-+		memcpy(CMSG_DATA(cmsg), &txtime, sizeof(txtime));
-+	}
- 
- 	if (cmsg_len)
- 		msg->msg_controllen = cmsg_len;
-@@ -187,6 +227,9 @@ int main(int argc, char *argv[])
- 		       &opt.sockopt.mark, sizeof(opt.sockopt.mark)))
- 		error(ERN_SOCKOPT, errno, "setsockopt SO_MARK");
- 
-+	if (clock_gettime(CLOCK_MONOTONIC, &time_start_mono))
-+		error(ERN_GETTIME, errno, "gettime MONOTINIC");
-+
- 	iov[0].iov_base = buf;
- 	iov[0].iov_len = sizeof(buf);
- 
-@@ -196,7 +239,7 @@ int main(int argc, char *argv[])
- 	msg.msg_iov = iov;
- 	msg.msg_iovlen = 1;
- 
--	cs_write_cmsg(&msg, cbuf, sizeof(cbuf));
-+	cs_write_cmsg(fd, &msg, cbuf, sizeof(cbuf));
- 
- 	err = sendmsg(fd, &msg, 0);
- 	if (err < 0) {
--- 
-2.34.1
+I really think we need to do something like that.  Probably just set a
+flag in commit_creds and test later.
 
+I was working on fixes that looked cleaner and I just recently realized
+that the test in fork is almost as bad.  The function has_capability can
+be used but the same kind of problems exist.
+
+I thought I was very quickly going to have patches to post but I need
+to redo everything now that I have noticed the issue in fork, so it will
+be a day or so.
+
+Eric
+
+
+> The change you propose above is similar to that, but is more limited and
+> non-invasive.  That looks good to me.
+>
+> However, I think you need to drop the negations of the return value from
+> security_capable().  security_capable() returns 0 or -EPERM, while
+> capable() returns a bool, in kernel/capability.c: ns_capable_common():
+>
+> 	capable = security_capable(current_cred(), ns, cap, opts);
+> 	if (capable == 0) {
+> 		current->flags |= PF_SUPERPRIV;
+> 		return true;
+> 	}
+> 	return false;
+>
+> Also, your change would result in this no longer setting PF_SUPERPRIV.
+> This may be fine, but you could want to document it.
+>
+> On a related note, this comment in security/commoncap.c needs an update:
+>
+>  * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+>  * and has_capability() functions.  That is, it has the reverse semantics:
+>  * cap_has_capability() returns 0 when a task has a capability, but the
+>  * kernel's capable() and has_capability() returns 1 for this case.
+>
+> cap_has_capability() doesn't actually exist, and perhaps the comment
+> should refer to cap_capable().
+>
+> Alexander
