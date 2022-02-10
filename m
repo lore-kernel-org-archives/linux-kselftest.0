@@ -2,83 +2,116 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECCC5C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 01:59:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 102D2C433FE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 10 Feb 2022 01:59:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbiBJB73 (ORCPT
+        id S233648AbiBJB7b (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Feb 2022 20:59:29 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33154 "EHLO
+        Wed, 9 Feb 2022 20:59:31 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbiBJB7Q (ORCPT
+        with ESMTP id S233647AbiBJB7Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 9 Feb 2022 20:59:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E02AB;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2478D2A9;
         Wed,  9 Feb 2022 17:56:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B47F616D2;
-        Thu, 10 Feb 2022 00:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596DFC340E7;
-        Thu, 10 Feb 2022 00:36:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AD5E616E7;
+        Thu, 10 Feb 2022 00:36:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC46FC340F3;
+        Thu, 10 Feb 2022 00:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644453413;
-        bh=Nqx9UqIwQAq/YChOaq2hfeu2SItd1xNMbZqtwE17fJ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RiTwFsZL3FlFooeHoNRq56XjCIfLAFSm2C2s1/QcaO1uKDSPnSLPVT/Hhp/kugU1M
-         9rSMIoM84F6e7PrBinSbU7RLpyuMEifqukUo7WS+6U5msXXN0pz53RH/A7GvQZWxyQ
-         7ChvMvCACs2ebgrOn2GXEBF2B+pPbQC7UGcThDB/1+5fuBlytrPpEwz/rShq9X8UBz
-         +6Odg+tf8UKWeQqw2r0kYp9jwK8YMMtdsBrWn8MXbYEOoiP9b+ugftN4+w8h7ZuVCX
-         CT7G+/w/Y4DHYw8sg9nA1JdlaUehlC2s0Z/EzBKNePazfvNSGDjVS3w0BxCDbgLLIT
-         PapWjsBJ6nvBg==
+        s=k20201202; t=1644453416;
+        bh=0Zcn2spP+v1l17CzmNikMsabblPByh6KQmSW1yNBd9I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YswJp/6BhLwFcSve95j+nFsLSJ4kWGcS+ZwB2np2OybLUMxuq1Lx94EjWJDn4A0YQ
+         uf45OzfjQCa/7q9gm47mKwy6B5LRyH5civM58VWSgWriiC568i7p3719xMfq+LL60V
+         +2d9VF5va0MG05whcyxEe/2luTQXA0a80p6VFYgCsh/4iY5/ABzc59yVUs06Xt/u2P
+         +kjWNzhR7xqGCdxdeE2ao4Q6r3vzrnVR8ka0QXl33Liu/a+nDcsIAh1U+2n8FQOj4e
+         FcFyyFxGzGoOZ7SCR7es2QgfjX826JW6Qk5GLr7boX9kFUF1iCr/eXFuFg00LE05WA
+         94TKWY9iTpOuw==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
         maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
         shuah@kernel.org, linux-kselftest@vger.kernel.org,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 00/11] net: ping6: support basic socket cmsgs
-Date:   Wed,  9 Feb 2022 16:36:38 -0800
-Message-Id: <20220210003649.3120861-1-kuba@kernel.org>
+Subject: [PATCH net-next 04/11] selftests: net: rename cmsg_so_mark
+Date:   Wed,  9 Feb 2022 16:36:42 -0800
+Message-Id: <20220210003649.3120861-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220210003649.3120861-1-kuba@kernel.org>
+References: <20220210003649.3120861-1-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add support for common SOL_SOCKET cmsgs in ICMPv6 sockets.
-Extend the cmsg tests to cover more cmsgs and socket types.
+Rename the file in prep for generalization.
 
-SOL_IPV6 cmsgs to follow.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/net/.gitignore                    | 2 +-
+ tools/testing/selftests/net/Makefile                      | 2 +-
+ .../selftests/net/{cmsg_so_mark.c => cmsg_sender.c}       | 0
+ tools/testing/selftests/net/cmsg_so_mark.sh               | 8 ++++----
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+ rename tools/testing/selftests/net/{cmsg_so_mark.c => cmsg_sender.c} (100%)
 
-Jakub Kicinski (11):
-  net: ping6: remove a pr_debug() statement
-  net: ping6: support packet timestamping
-  net: ping6: support setting socket options via cmsg
-  selftests: net: rename cmsg_so_mark
-  selftests: net: make cmsg_so_mark ready for more options
-  selftests: net: cmsg_sender: support icmp and raw sockets
-  selftests: net: cmsg_so_mark: test ICMP and RAW sockets
-  selftests: net: cmsg_so_mark: test with SO_MARK set by setsockopt
-  selftests: net: cmsg_sender: support setting SO_TXTIME
-  selftests: net: cmsg_sender: support Tx timestamping
-  selftests: net: test standard socket cmsgs across UDP and ICMP sockets
-
- net/ipv6/ping.c                             |  14 +-
- tools/testing/selftests/net/.gitignore      |   2 +-
- tools/testing/selftests/net/Makefile        |   3 +-
- tools/testing/selftests/net/cmsg_sender.c   | 380 ++++++++++++++++++++
- tools/testing/selftests/net/cmsg_so_mark.c  |  67 ----
- tools/testing/selftests/net/cmsg_so_mark.sh |  32 +-
- tools/testing/selftests/net/cmsg_time.sh    |  83 +++++
- 7 files changed, 499 insertions(+), 82 deletions(-)
- create mode 100644 tools/testing/selftests/net/cmsg_sender.c
- delete mode 100644 tools/testing/selftests/net/cmsg_so_mark.c
- create mode 100755 tools/testing/selftests/net/cmsg_time.sh
-
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 7581a7348e1b..21a411b04890 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -35,4 +35,4 @@ test_unix_oob
+ gro
+ ioam6_parser
+ toeplitz
+-cmsg_so_mark
++cmsg_sender
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 9897fa9ab953..8f4c1f16655f 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -52,7 +52,7 @@ TEST_GEN_FILES += gro
+ TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
+ TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls
+ TEST_GEN_FILES += toeplitz
+-TEST_GEN_FILES += cmsg_so_mark
++TEST_GEN_FILES += cmsg_sender
+ 
+ TEST_FILES := settings
+ 
+diff --git a/tools/testing/selftests/net/cmsg_so_mark.c b/tools/testing/selftests/net/cmsg_sender.c
+similarity index 100%
+rename from tools/testing/selftests/net/cmsg_so_mark.c
+rename to tools/testing/selftests/net/cmsg_sender.c
+diff --git a/tools/testing/selftests/net/cmsg_so_mark.sh b/tools/testing/selftests/net/cmsg_so_mark.sh
+index 19c6aab8d0e9..29a623aac74b 100755
+--- a/tools/testing/selftests/net/cmsg_so_mark.sh
++++ b/tools/testing/selftests/net/cmsg_so_mark.sh
+@@ -41,14 +41,14 @@ check_result() {
+     fi
+ }
+ 
+-ip netns exec $NS ./cmsg_so_mark $TGT4 1234 $((MARK + 1))
++ip netns exec $NS ./cmsg_sender $TGT4 1234 $((MARK + 1))
+ check_result $? 0 "IPv4 pass"
+-ip netns exec $NS ./cmsg_so_mark $TGT6 1234 $((MARK + 1))
++ip netns exec $NS ./cmsg_sender $TGT6 1234 $((MARK + 1))
+ check_result $? 0 "IPv6 pass"
+ 
+-ip netns exec $NS ./cmsg_so_mark $TGT4 1234 $MARK
++ip netns exec $NS ./cmsg_sender $TGT4 1234 $MARK
+ check_result $? 1 "IPv4 rejection"
+-ip netns exec $NS ./cmsg_so_mark $TGT6 1234 $MARK
++ip netns exec $NS ./cmsg_sender $TGT6 1234 $MARK
+ check_result $? 1 "IPv6 rejection"
+ 
+ # Summary
 -- 
 2.34.1
 
