@@ -2,71 +2,94 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AC21C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Feb 2022 00:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9143C433EF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Feb 2022 00:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346083AbiBKAHR (ORCPT
+        id S240212AbiBKAeX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Feb 2022 19:07:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36896 "EHLO
+        Thu, 10 Feb 2022 19:34:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346121AbiBKAHP (ORCPT
+        with ESMTP id S1345264AbiBKAeX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:07:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346C526DA;
-        Thu, 10 Feb 2022 16:07:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAB01B82562;
-        Fri, 11 Feb 2022 00:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B990CC340EE;
-        Fri, 11 Feb 2022 00:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644538033;
-        bh=sS/KxknNfnAlRSFto3kxAOr8xBRA0HnfiFsNfw8+PqE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=L5bKHQ1SP42nuyX3gzNbPjjbwn/Y/q82aUjHLgIWcUKTMPlGhc73fw2kRG4DPyICR
-         Yla4uIRAW1KwmWK4DDwwohl208NTOFWM1gCCEcuiTOp/ZoN65YpTlq6HRmR0IADpqA
-         leAezCw5C9x6XX19qYSbS6cq2SQiDQSmrnRXegtIAMBXfeJMb3DYimoRBznOWsjl+1
-         h1haHoZ3WDQ4O2cOSJPSAnpPvDiN5xgK2RUyCF9zUO26Sz+MGQ4+/DNA02aAfsE0cn
-         TtgYt1QFyhR3setVEbpheGE3Xdpsqt4krwf/dHBq0eMCnZLSZqTiNeyRybAJgEWZRD
-         XF1SzFNHzHyaQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A7F2BE6BB38;
-        Fri, 11 Feb 2022 00:07:13 +0000 (UTC)
-Subject: Re: [GIT PULL] KUnit fixes update for Linux 5.17-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <3a0311b2-33af-d13e-e92b-111bfb357a19@linuxfoundation.org>
-References: <3a0311b2-33af-d13e-e92b-111bfb357a19@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <3a0311b2-33af-d13e-e92b-111bfb357a19@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.17-rc4
-X-PR-Tracked-Commit-Id: 92a68053c3468705e2c7c752c9a3f256304a35a6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ff00854812b216e06e92191f036eb0bd1596b2d4
-Message-Id: <164453803367.1838.3016325287793000503.pr-tracker-bot@kernel.org>
-Date:   Fri, 11 Feb 2022 00:07:13 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 10 Feb 2022 19:34:23 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D204E5F79
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 16:34:22 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id d188so9559060iof.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Feb 2022 16:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0B0HAkZcpI/s7VWBoglKXXLpyOgKkv9v/vmy+ecRN2c=;
+        b=YBFn8vHLtalzAuPUIkC8ZRtcGrbAZ6xVdORgh64HH7qdo5w8AwPW4zzB2QVhqAaw0p
+         sqsJOybZdeXuJEC0zh5ShXnUMTddnvMYWVCQzsItaAeMJm5+wdihCjUSoPBlXFRJlAqw
+         zsfUPhL58MBf9iJS6VzFibDJnfNNkCmeQT9sI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0B0HAkZcpI/s7VWBoglKXXLpyOgKkv9v/vmy+ecRN2c=;
+        b=7SggHEGzPQUdMqEY+gOEerCSHNhB9Vy411a1qorR8OrleSoAkCyY5n8zfiIdSFmbSa
+         68pX912t+ACEHc8MeeENalkXpNUgXwFG+Mt0eO6l6arKsSNuQ+FWMHoB0hsDEkwi2EpO
+         sDcxLdeOpaaiZ1/Fv6Hg5kiZ2F/e9Oy7WlIRtoZAMIMWY5fOGtVNnqik3MGA7Atuha4u
+         YTEgI/vMJU4cuC+jKLRF6pEQ5FmQoSdp7LGQw4lAq6HULBObTL5VK/sdHywmG8kXYwmy
+         feHbvrccPbyK9MMBUKsVMtJdWq74FsqaQ0SZ/gmzpHDB1TosD5Lv/H4705Jv71/rXBtm
+         ynMQ==
+X-Gm-Message-State: AOAM532F1mXyxaij6iG9JW1ajyT/YaojY34/HrQ7OWa86G9SnbdT2Zgg
+        85df1p3FPqCegk8JzdgxQq51qw==
+X-Google-Smtp-Source: ABdhPJzHuToV0Q1odU9rDTAN7VCzDbuxMxH0XgDEurznyKV9NzWsA3E+IwHXFpemFoFHBEjUzmREIA==
+X-Received: by 2002:a05:6602:26c7:: with SMTP id g7mr5219039ioo.56.1644539662196;
+        Thu, 10 Feb 2022 16:34:22 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id b12sm8381564ilv.68.2022.02.10.16.34.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 16:34:21 -0800 (PST)
+Subject: Re: [PATCH V2] selftests/exec: Rename file binfmt_script to
+ binfmt_script.py
+To:     Kees Cook <keescook@chromium.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220210222319.1864680-1-usama.anjum@collabora.com>
+ <202202101555.EE737A35@keescook>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <18cf9c45-b270-2c44-9eb8-d6f3e947ae49@linuxfoundation.org>
+Date:   Thu, 10 Feb 2022 17:34:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <202202101555.EE737A35@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Thu, 10 Feb 2022 13:02:20 -0700:
+On 2/10/22 4:55 PM, Kees Cook wrote:
+> On Fri, Feb 11, 2022 at 03:23:19AM +0500, Muhammad Usama Anjum wrote:
+>> Rename file for readability purpose. Update its usage and references.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> This path was suggested while review of the following patch. Please
+>> apply it after applying that one first:
+>> 	selftests/exec: Add non-regular to TEST_GEN_PROGS
+>> Changes in V2:
+>> 	Remove changes from binfmt_script.py, they were wrong
+> 
+> Thanks! :)
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.17-rc4
+Thank you both. I will queue this up for Linux 5.18-rc1
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ff00854812b216e06e92191f036eb0bd1596b2d4
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+thanks,
+-- Shuah
