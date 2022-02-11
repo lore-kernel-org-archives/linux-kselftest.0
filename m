@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B33D6C433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Feb 2022 16:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 467B0C4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Feb 2022 16:42:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiBKQmw (ORCPT
+        id S1351624AbiBKQmy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Feb 2022 11:42:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44798 "EHLO
+        Fri, 11 Feb 2022 11:42:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239618AbiBKQmw (ORCPT
+        with ESMTP id S239618AbiBKQmx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:42:52 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78452D65
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 08:42:50 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id bx2so17313822edb.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 08:42:50 -0800 (PST)
+        Fri, 11 Feb 2022 11:42:53 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20F5D4B
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 08:42:51 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id g7so1338030edb.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Feb 2022 08:42:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ne9bnxO4PK4jt9C/gSl+PDTM3EheSheXGE0rb10tDic=;
-        b=eJVH8qawyVTBLCSWPWiGRU0BRG5bChJSOS86AFKUmAwQP28wio8kX3AvbIQDYMxGea
-         OpbC9YsZnavJCmJUFvHxPjia5MQ9L/V0DtN0HmsiBRuZ2tb6gRODPFKa4HpZSobNW1DK
-         hpa97d+1DkBz3ze/babCdiw+mYbKLMRt8Kij4=
+        bh=Yxy7zthPRWHub+MPiGJfuPkSoZH4U5JEJa8lsfSBR/o=;
+        b=lzPfOcHoLZ/MvAabpJ9+1KHNRqERbZ9ViET9utyITXE8KWzeHk5oIeKmMoB0JCzXfm
+         WjE738yEIaQBcJf2AdwEHYaNko+xo3KTQX+r7maDKtXmDkD6QPcFYY0SwRFn/cudLoI9
+         mkLC68XUZMQo7Qb/T9lbpOdTqnq5/3NAtONZY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ne9bnxO4PK4jt9C/gSl+PDTM3EheSheXGE0rb10tDic=;
-        b=VNOfgwT5KbS+HWOq+SgRwE9ubdRxyz4LRMvOGN0aZm4MaLRncICcq/KWvA3EpZk2U9
-         6T5cFaIyYpYktmRhFF07zHsIm0arW/nwMrV1nyAd6UlCiL3HY/+XS8SYzUEr8ai2YKn6
-         XJROVIr/UkLN1ObZOCFKumyXQA4CPxjfPbv/fCeytOmwC6RiDN0Gy/H74gOV3aJbfiJK
-         Ra1fU1ysIa9xLT8p05Pl/+1by2auhlH3KUzsMKsmyxMtMa1eu3bruvY98EtgJW8f+ymY
-         eLs0jrfpNpSEKl28pQp0TI+tO3KRK1KvPHyIZCDz90+FQ0PoPgBt6kTZrWBTyVB38I9E
-         XCZw==
-X-Gm-Message-State: AOAM532H1EStN8YTvcUIUih6rgBY6+KLVTwNEpj4NWt37WZvzu+PDTRE
-        h4HDzFNmS5hhAbw+fNduxAwI1w==
-X-Google-Smtp-Source: ABdhPJyEK70H5tG8606Z//huqYZksMdOT+gUfcDtP7gw9as16sSq0mkvRiF4OyU4XyFil4PXQBV5WQ==
-X-Received: by 2002:a05:6402:34c7:: with SMTP id w7mr2808333edc.397.1644597769058;
-        Fri, 11 Feb 2022 08:42:49 -0800 (PST)
+        bh=Yxy7zthPRWHub+MPiGJfuPkSoZH4U5JEJa8lsfSBR/o=;
+        b=XVlEff5xtQPJxyTfYLGvKyztQ63Q8ITw2Ap7Cxbj7rtaQELC8+49LcH+FI4Wa9A8P4
+         +wxUZmdJ4P4dgfxvsMNuiE72QHCDatEPvSUvkNdEBRGFmhAxP7EyNy3lG/tsM+0bnBRt
+         D/KnhQS/ALBL9RA1uabMoH/uh9kc4ylXm7uZJd0+ohrZYKhSht57L9O++F9z2P1PG37T
+         LXFRYbazJ2oLbdl1b2gC08W84ritImf9CvkkxIAQ/ZYNOOLCubJNIy7aFjtspBZJvZre
+         xyoVJRqqAtOWrw4wSuvnQjvp+sL9y0osdA8kPlJnAp6pdT/EkgIMJK0Ez3sZOiJ0rUac
+         X3Uw==
+X-Gm-Message-State: AOAM530WyLUZzvfaAXlRRlKP1YmfG/5HpdUbLX7EUMjEKErGUYyejaII
+        gJP5RTMojIVdvvs24oHh4U7Txvx82NOK26+N
+X-Google-Smtp-Source: ABdhPJzOjFHIjOptbXcHITdtxZD2BmaLRrRvZ5js16yJdezTSXuHMvUn/ik1AmIE0i9siNCsjTMHZA==
+X-Received: by 2002:a05:6402:27c9:: with SMTP id c9mr2876049ede.178.1644597770279;
+        Fri, 11 Feb 2022 08:42:50 -0800 (PST)
 Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id i24sm4981233edt.86.2022.02.11.08.42.48
+        by smtp.gmail.com with ESMTPSA id i24sm4981233edt.86.2022.02.11.08.42.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:42:48 -0800 (PST)
+        Fri, 11 Feb 2022 08:42:50 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
 To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org,
@@ -53,9 +53,9 @@ To:     kunit-dev@googlegroups.com, kasan-dev@googlegroups.com,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Daniel Latypov <dlatypov@google.com>
 Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH v6 2/6] kunit: use NULL macros
-Date:   Fri, 11 Feb 2022 17:42:42 +0100
-Message-Id: <20220211164246.410079-2-ribalda@chromium.org>
+Subject: [PATCH v6 4/6] kasan: test: Use NULL macros
+Date:   Fri, 11 Feb 2022 17:42:44 +0100
+Message-Id: <20220211164246.410079-4-ribalda@chromium.org>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 In-Reply-To: <20220211164246.410079-1-ribalda@chromium.org>
 References: <20220211164246.410079-1-ribalda@chromium.org>
@@ -65,40 +65,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace the NULL checks with the more specific and idiomatic NULL macros.
+Replace PTR_EQ checks with the more idiomatic and specific NULL macros.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Acked-by: Daniel Latypov <dlatypov@google.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- lib/kunit/kunit-example-test.c | 2 ++
- lib/kunit/kunit-test.c         | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ lib/test_kasan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index 4bbf37c04eba..91b1df7f59ed 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -91,6 +91,8 @@ static void example_all_expect_macros_test(struct kunit *test)
- 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, test);
- 	KUNIT_EXPECT_PTR_EQ(test, NULL, NULL);
- 	KUNIT_EXPECT_PTR_NE(test, test, NULL);
-+	KUNIT_EXPECT_NULL(test, NULL);
-+	KUNIT_EXPECT_NOT_NULL(test, test);
+diff --git a/lib/test_kasan.c b/lib/test_kasan.c
+index 847cdbefab46..d680f46740b8 100644
+--- a/lib/test_kasan.c
++++ b/lib/test_kasan.c
+@@ -385,7 +385,7 @@ static void krealloc_uaf(struct kunit *test)
+ 	kfree(ptr1);
  
- 	/* String assertions */
- 	KUNIT_EXPECT_STREQ(test, "hi", "hi");
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 555601d17f79..8e2fe083a549 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -435,7 +435,7 @@ static void kunit_log_test(struct kunit *test)
- 	KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
- 				     strstr(suite.log, "along with this."));
- #else
--	KUNIT_EXPECT_PTR_EQ(test, test->log, (char *)NULL);
-+	KUNIT_EXPECT_NULL(test, test->log);
- #endif
+ 	KUNIT_EXPECT_KASAN_FAIL(test, ptr2 = krealloc(ptr1, size2, GFP_KERNEL));
+-	KUNIT_ASSERT_PTR_EQ(test, (void *)ptr2, NULL);
++	KUNIT_ASSERT_NULL(test, ptr2);
+ 	KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)ptr1);
  }
  
 -- 
