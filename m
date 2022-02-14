@@ -2,82 +2,77 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD356C433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Feb 2022 18:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0B49C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Feb 2022 18:45:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbiBNSmx (ORCPT
+        id S230204AbiBNSpU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Feb 2022 13:42:53 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55500 "EHLO
+        Mon, 14 Feb 2022 13:45:20 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235493AbiBNSms (ORCPT
+        with ESMTP id S229741AbiBNSpU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:42:48 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551E76A025;
-        Mon, 14 Feb 2022 10:42:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 0F3981F410C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644864131;
-        bh=7u0HNDo3EDsgorjd5iMF9ffXgHW0CA+ygVimr7HCfN0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PkjQ083apuELxkrX2tqCWqBbzGPsy3ku+Oyj2FCniH85Ru06e9qLtuMs5Wvf7f3G2
-         I3Szy/v2wn2LE288W3CBqQZkn/gTSt95maP9Y/WdaOmrIR5lj+V51PqPR/tLggs5rJ
-         N3ST6Qd2kHz05y9Vr+a8sHAamE+qx+mdCsubn/NO+ZytUk5Wg2K69t9Che8/+YznZl
-         wvuvKl7C9YiQ2McRMk7WfM2kL+VrHSii+IpA2s2Lpbdmczx1jc6ixfg3eVqXT2blnG
-         rzpUzxLs0VVpt25peClCbZWO4u3fcDuoQIcHY1ZMl967I0N0M6DWo3QyJGwzbc+glY
-         967FnTylmzwcg==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Borislav Petkov <bp@suse.de>,
-        linux-sgx@vger.kernel.org (open list:INTEL SGX),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list), David.Laight@ACULAB.COM
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernelci@groups.io
-Subject: [PATCH V2 0/2] selftests: sgx: Fix build of test_sgx
-Date:   Mon, 14 Feb 2022 23:41:07 +0500
-Message-Id: <20220214184109.3739179-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 14 Feb 2022 13:45:20 -0500
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9626E4F1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 10:45:05 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id fy20so39163392ejc.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Feb 2022 10:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vljzReEDh1YRn3bh+4c8BFvDCk/NtDbpZzL5W1vanqE=;
+        b=XL4260/0arBY8YEOBJquYK+5YNZZIQPBcGOddojeTEnuSba3n59w5GJfEfQyss/3Zw
+         mAX2in9deweYvQYM18ArHdIJ4XEKy8qK09l1WcYxT5AL7Rv3J3PEASBUTl4sXn6kh/28
+         LuYY9AbmZVcIXxsvC0vqWFP7ys8yZobKaTDG5MFUfI03fVYETE/zpxpCuHTPgciXw3/V
+         +nIDaPE0sTyNeTPV+Qdl3W3q74vZYeGdTyF1fLRYmpYECI1wzIqPubpQ5FnYQTHOfpXI
+         KRwlCQ2oXusbXZlXJXYIg0GggbQeDR3KXlTZqJd6M9/Y3sILzwZvmAFWlVfdNV7olcNa
+         O65g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vljzReEDh1YRn3bh+4c8BFvDCk/NtDbpZzL5W1vanqE=;
+        b=I4qdu1Hi0pF+yPYUPh+0crHkcbi/hb9BmOY86vZfGdXV9k96WIb1sDOc8R1gg5KfaC
+         gb1BhTLiyGyfaiOwDNnyMydX98mjeuwvMQgJY2bJaLGpuGy0oE6q1/ft3g7seb+0/uC8
+         SPAskxohA+vAvYGP/7NPrBgAINlLlo7oOE7sI5O0VYXh0dRgp0bVha24OanYPCOo1DY1
+         gAyxFy+IBLkQMi4M7Id5E4KjmrRvj5EjBVEtxO/S2njF5F5qGCOu/OZv2OUEUD2FIC8X
+         etI8dZ+LhCUXtpI/+stTyF0p5zTMl7BN232Uc0FkNm/7HPBBByGcGmsguO8HHBx5uPrM
+         5v4A==
+X-Gm-Message-State: AOAM533jgB6OyMHY47nrJLJMZHH+UzyH5yn0ACCH7aiX9mV0iViF9b2N
+        HO7YItBO7+kO68+CO+sgCcIdHod/DMsnusuqRVL6RA==
+X-Google-Smtp-Source: ABdhPJxwt4ksJQa5iyaD0GLiYzuZ2FR3dG1UMpKPN5HCP0Ndk0yKC3kvtKTfG3icmmGwwyhB5cy7bgXzJ62zEPbgZZ0=
+X-Received: by 2002:a17:906:4fca:: with SMTP id i10mr103247ejw.542.1644864193577;
+ Mon, 14 Feb 2022 10:43:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220211094133.265066-1-ribalda@chromium.org> <20220211094133.265066-3-ribalda@chromium.org>
+ <YgY1lzA20zyFcVi3@lahna> <CANiDSCs3+637REhtGjKy+MSnUm-Mh-k1S7Lk9UKqC8JY-k=zTw@mail.gmail.com>
+ <YgaOS8BLz23k6JVq@lahna> <YgaPXhOr/lFny4IS@lahna> <CANiDSCs7M_hSb2njr50_d3z=cx=N9gWHzVe-HkpCV1Au8yVwOw@mail.gmail.com>
+ <CAGS_qxp3OHFwK__wCHBGr9cMsLR=gfD2rhjejXcmFNJ276_ciw@mail.gmail.com> <Ygn1nPpPsM/DDqr1@lahna>
+In-Reply-To: <Ygn1nPpPsM/DDqr1@lahna>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 14 Feb 2022 10:43:02 -0800
+Message-ID: <CAGS_qxo7caqjJCwcOM1E9o8r-FsMpkULc1G8BdN1VEuN_-zz3g@mail.gmail.com>
+Subject: Re: [PATCH v5 3/6] thunderbolt: test: use NULL macros
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>, kunit-dev@googlegroups.com,
+        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CC can have multiple sub-strings like "ccache gcc". Build system of sgx
-selftest is unable to support this use case and test_sgx isn't built.
-Then rsync gives an erorr:
+On Sun, Feb 13, 2022 at 10:24 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+> > Mika, should I propose a patch that updates the test and adds a
+> > drivers/thunderbolt/.kunitconfig with the above contents?
+> >
+> > Then it could be invoked as
+> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/thunderbolt
+>
+> Yes please :)
 
-rsync: [sender] link_stat "//linux/build/kselftest/sgx/test_sgx" failed: No such file or directory (2)
-rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
-
-This can be fixed if CC is considered to have one string while passing to
-check_cc.sh script and inside this script, CC is expanded before execution.
-
-Following build tests have been performed to confirm that these patches
-don't break anything else. The verification has also been done through
-KernelCI scripts locally as KernelCI has caught this bug:
-1) cd tools/testing/selftests && make
-2) make -C tools/testing/selftests
-3) make -C tools/testing/selftests O=build
-4) make -C tools/testing/selftests O=build CC="ccache gcc"
-5) ./kci_build make_kselftest
-
-Muhammad Usama Anjum (2):
-  selftests: x86: add validity check and allow field splitting
-  selftests: sgx: Treat CC as one argument
-
- tools/testing/selftests/sgx/Makefile    | 2 +-
- tools/testing/selftests/x86/check_cc.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
--- 
-2.30.2
-
+Sounds good! Sent out
+https://lore.kernel.org/lkml/20220214184104.1710107-1-dlatypov@google.com/
