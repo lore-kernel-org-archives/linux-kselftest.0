@@ -2,87 +2,78 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 342D2C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Feb 2022 11:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E03C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Feb 2022 14:20:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351478AbiBNLdy (ORCPT
+        id S1345103AbiBNOUV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Feb 2022 06:33:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34094 "EHLO
+        Mon, 14 Feb 2022 09:20:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351552AbiBNLdn (ORCPT
+        with ESMTP id S233252AbiBNOUT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:33:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CBB6623F;
-        Mon, 14 Feb 2022 03:19:06 -0800 (PST)
-Date:   Mon, 14 Feb 2022 12:19:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644837544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TUCDizit6LTXe+/Z7T4+9bqxe+YJSMfI2IhU/DVOtKY=;
-        b=TJuYP9SxAH4EcWDpm6XCS+R8gN3OgxWiK4tgjHkGVvYymALEsSgIduBlSJJ1qH9ItVOp1/
-        HUGLsLiybl53Fip90qHs2BcaiMWrGtrAzOHsEe2xfg5vBIe4+mb62vtHXqe10JvJT5XMbm
-        Z9z0NDAN/42Ie16SsgmxkFKyB1AZvCWQSkPgWYbTSrbhqQfs6wIHqVZMQuiNlrczg0LhAR
-        hNbwjIk5l5TggackMIqZQehE95dNkxdMJJD61kDalHtkO7drqJckUhrjPoVFY/TioWLhXD
-        kg7uTqSCfPjx+bwk68FQT1VRlGeI+53kWTENOgGfilF+9iqywqdwE7WJDw+4oA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644837544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TUCDizit6LTXe+/Z7T4+9bqxe+YJSMfI2IhU/DVOtKY=;
-        b=wnRWctoS8b6dZ6CVHS04P744Fy8jgvdjeIbzBT/reAMI6H2rRDMpfm4yH0kwbtiW6ytm2u
-        LKIcFdCKAdT3UNAg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v3] selftests/ftrace: Do not trace do_softirq because of
- PREEMPT_RT
-Message-ID: <Ygo6pqWmkTWJNNcR@linutronix.de>
-References: <20220214083657.165921-1-krzysztof.kozlowski@canonical.com>
+        Mon, 14 Feb 2022 09:20:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FAB4A3F8;
+        Mon, 14 Feb 2022 06:20:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F7236103D;
+        Mon, 14 Feb 2022 14:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D43AC340EF;
+        Mon, 14 Feb 2022 14:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644848410;
+        bh=wmIB5Xx8YNnUp61IjytANTE6h4pdM98NwtQfxsN8ya8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pYBK/WpdPB+Adjglevy0jGVzBfuBMEdwXHH8BrZbH2MZqZgacGtuvZPO+ImU6k/XQ
+         CfoVzmV+0LFsOBnPGKyZb6xXIlcmwAfzJPZFpyglbLOMtL1pJkXa0vpfyvbq5WqOjG
+         tSo8sA6SGBvCay2POScyPZji8e96hukgYIptsaB3vXjdMuqAa10V5brRc4YNW0a5aD
+         ZjSTkXV1aRZFuTYBu2Mi+jq1OVetpoIyTQ/Te8W2es2IbV+2CRO3vDyuf/KjMYhbhE
+         NiT7Pskq1fzQCNE+GRS4lZpgA0WHmK2C96/cS46WNYVrKjcRITsTAYvUT4YJ2sIsLL
+         1mH8YHiOjboVg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 76C41E74CC2;
+        Mon, 14 Feb 2022 14:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220214083657.165921-1-krzysztof.kozlowski@canonical.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] selftests: net: cmsg_sender: Fix spelling mistake
+ "MONOTINIC" -> "MONOTONIC"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164484841048.14634.689140204535571711.git-patchwork-notify@kernel.org>
+Date:   Mon, 14 Feb 2022 14:20:10 +0000
+References: <20220214093810.44792-1-colin.i.king@gmail.com>
+In-Reply-To: <20220214093810.44792-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-02-14 09:36:57 [+0100], Krzysztof Kozlowski wrote:
-> The PREEMPT_RT patchset does not use do_softirq() function thus trying
-> to filter for do_softirq fails for such kernel:
->=20
->   echo do_softirq
->   ftracetest: 81: echo: echo: I/O error
->=20
-> Choose some other visible function for the test.  The function does not
-> have to be actually executed during the test, because it is only testing
-> filter API interface.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Hello:
 
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> Notes:
-> I understand that the failure does not exist on mainline kernel (only
-> with PREEMPT_RT patchset) but the change does not harm it.
+On Mon, 14 Feb 2022 09:38:10 +0000 you wrote:
+> There is a spelling mistake in an error message. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  tools/testing/selftests/net/cmsg_sender.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, and now it does not sound (to me) like duct tape. Thank you.
+Here is the summary with links:
+  - [next] selftests: net: cmsg_sender: Fix spelling mistake "MONOTINIC" -> "MONOTONIC"
+    https://git.kernel.org/netdev/net-next/c/12d8c11198af
 
-> If it is not suitable alone, please consider it for RT patchset.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-We trying to get it merged so=E2=80=A6
 
-Sebastian
