@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF4A6C4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Feb 2022 15:31:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52CC2C4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Feb 2022 15:33:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240025AbiBOPbj (ORCPT
+        id S240599AbiBOPdw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Feb 2022 10:31:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46296 "EHLO
+        Tue, 15 Feb 2022 10:33:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240245AbiBOPap (ORCPT
+        with ESMTP id S237490AbiBOPdq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 10:30:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F15C1CB9;
-        Tue, 15 Feb 2022 07:29:02 -0800 (PST)
+        Tue, 15 Feb 2022 10:33:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935A8A8EED;
+        Tue, 15 Feb 2022 07:30:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FAA2615F0;
-        Tue, 15 Feb 2022 15:29:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550FCC340ED;
-        Tue, 15 Feb 2022 15:29:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A974B8185B;
+        Tue, 15 Feb 2022 15:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79C1C340F2;
+        Tue, 15 Feb 2022 15:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644938941;
+        s=k20201202; t=1644939016;
         bh=qJwGXYo41BOzEX6oFtnAmcbygBymqUp/dIQMb+BAvlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nahRJDDaW6kPRRFQtFZRYjIY1K+nkmLgmWRu7jbRVDPB44seuo9RjaxscF15R5tff
-         oQ19wh8eePWzkxFRpapxf/9aXWAyYxKHBQkvd8yfqcCTGoESpyICuVAaMWhFIvZ3B7
-         tbPYIRjg6Slu83lySHr9X1zz/a7ZPOPwabJ2EGjm2ru9ryqOI/KfwSDmQvnem1akw9
-         hGTHpuQ96ngyImKwJTL8uc+cculNBQqZNu/DaA0oPbvJj+gI+RDojSOdkOKZnCNzEM
-         sLKMD2scSXYZYijYKR3pE0OzShthzJpJ73I3U7kdke6rCsCwWpYEWWoJBIFgFgr0b2
-         LVv4MANFMkjuQ==
+        b=toB1+tjH280Rxab4Nq+JVo9pwKh2LgmrB5RKdUOE/uZduzmBq6H+kPVbMKU0zRciA
+         mJjElqXB+Ia5qWu2VXlLauPBAzOeaYc1Q9ofQ0lXVEmFzAEM9TYe0xuoRL/CQ7QIf4
+         rnKuOUhTgWna9N07VFKM84d6t5MwYgLND1GNat21OPZwIn9oU4schUGBp82J0EQka1
+         vVU/wx9wZgxXVB0Y+nQ9XZERS9IK36MLzCBk6vtTVihqYDYp7j+g2FssWEL1QI85OU
+         5dgVJLSKVjPoRRLQnzy253nP6+t3FBLXl2mvZFf1bRKOGw1n0MJwlQUR6F9Pq8YZdO
+         u7daHQgz5gUiw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Axel Rasmussen <axelrasmussen@google.com>,
@@ -41,12 +41,12 @@ Cc:     Axel Rasmussen <axelrasmussen@google.com>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         nathan@kernel.org, ndesaulniers@google.com,
         linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 16/33] selftests: fixup build warnings in pidfd / clone3 tests
-Date:   Tue, 15 Feb 2022 10:28:14 -0500
-Message-Id: <20220215152831.580780-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 11/23] selftests: fixup build warnings in pidfd / clone3 tests
+Date:   Tue, 15 Feb 2022 10:29:45 -0500
+Message-Id: <20220215152957.581303-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215152831.580780-1-sashal@kernel.org>
-References: <20220215152831.580780-1-sashal@kernel.org>
+In-Reply-To: <20220215152957.581303-1-sashal@kernel.org>
+References: <20220215152957.581303-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
