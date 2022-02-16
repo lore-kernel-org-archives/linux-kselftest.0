@@ -2,86 +2,112 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27E41C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Feb 2022 23:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22B52C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Feb 2022 02:29:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244789AbiBOXTS (ORCPT
+        id S245668AbiBPC3P (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Feb 2022 18:19:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36116 "EHLO
+        Tue, 15 Feb 2022 21:29:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238655AbiBOXTR (ORCPT
+        with ESMTP id S230075AbiBPC3O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Feb 2022 18:19:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56A8C1C9E
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 15:19:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3466FCE2428
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Feb 2022 23:19:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90EDC340F0;
-        Tue, 15 Feb 2022 23:19:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644967142;
-        bh=a28YIHSUOy9eOFEg+BnX1V/dUAmlqgrDdm7faAdVzFc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e1rp+8+5gXaBRXYjRF+BaMZNC7vqgfQW/QTFAIZ8bCE3dEQkSlNyFeSsZmMz7aDXK
-         PgzcIcVh6CVpMpEJzwhyuKoLx+KqqLLRgmUTQgnl1g3oD5AGD+n4v668LDWZpKClqo
-         OOKx91uvKAvXB6WZE7E6n5HRj6BENQ7oX7DhOeyjv7k6AcpCwfedrDewsQWtRTpWYr
-         M+pqCgt+2T3Lx6dJywwLAr38CT48jtmwRkVGx5uosMiOWgMy6+7NMPE4oGB3LZPjXa
-         RRWuYqc9XL5v5Pe6+wdCy9jJVnCNRnIo3toE8YSndIdmY2AL5s1SaXy2L+NNbFyXbd
-         /uImdp60QQFGA==
-From:   Will Deacon <will@kernel.org>
-To:     Joey Gouly <joey.gouly@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        broonie@kernel.org, nd@arm.com
-Subject: Re: [PATCH v3 0/6] add more test coverage to MTE kselftests
-Date:   Tue, 15 Feb 2022 23:18:31 +0000
-Message-Id: <164494427139.150360.10580448401712881711.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220209152240.52788-1-joey.gouly@arm.com>
-References: <20220209152240.52788-1-joey.gouly@arm.com>
+        Tue, 15 Feb 2022 21:29:14 -0500
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 18:29:02 PST
+Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D32F4D30;
+        Tue, 15 Feb 2022 18:29:02 -0800 (PST)
+IronPort-SDR: O71LzE2HZ2rK+V6H6KRTZDKR9c+9VzwtLs5r4eBl/lqnFWnyp/dJaNtvVF8zOMlsbHYoWfaup2
+ gn2IZiHkPQJU7ArbXDb3JJJMm9+blEVR5Vd23o7jqAcxn44cs6zih0w/9pxbDfeX8BFqsmpVqL
+ bDKG9qNO5FXf4nD4VJkJwF0MCS4IvUelKOSzqkCS5T6rWeaPeu8DdYWuwJ4T87Ro3CcPN404Fu
+ vkFoTx1fKGJHuqhYabIsXfPDX0Fe7EEOa5OWNOwD7CrnClPh35BbHluF4qQs3uI6o8HT4E8G1D
+ C6DO5/RhVwW2r9vJiKPfErcl
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="63437440"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635174000"; 
+   d="scan'208";a="63437440"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP; 16 Feb 2022 11:29:00 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id BDADE97F0C;
+        Wed, 16 Feb 2022 11:28:58 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 0431FD9973;
+        Wed, 16 Feb 2022 11:28:58 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om4.fujitsu.com (Postfix) with ESMTP id C42B94007E8D1;
+        Wed, 16 Feb 2022 11:28:57 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v3 5/5] selftests/resctrl: Fix resctrl_tests' return code to work with selftest framework
+Date:   Wed, 16 Feb 2022 11:26:41 +0900
+Message-Id: <20220216022641.2998318-6-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
+References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 9 Feb 2022 15:22:34 +0000, Joey Gouly wrote:
-> This is a series which refactors and then adds some extra tests for MTE
-> in the kselftest framework.
-> 
-> The issue that these tests are for was was fixed by Robin in
-> 295cf156231c ("arm64: Avoid premature usercopy failure") and based on a
-> simplified example by Catalin [1].
-> 
-> [...]
+In kselftest framework, if a sub test can not run by some reasons,
+the test result should be marked as SKIP rather than FAIL.
+Return KSFT_SKIP(4) instead of KSFT_FAIL(1) if resctrl_tests is not run
+as root or it is run on a test environment which does not support resctrl.
 
-Applied to arm64 (for-next/kselftest), thanks!
+ - ksft_exit_fail_msg(): returns KSFT_FAIL(1)
+ - ksft_exit_skip(): returns KSFT_SKIP(4)
 
-[1/6] kselftest/arm64: mte: user_mem: introduce tag_offset and tag_len
-      https://git.kernel.org/arm64/c/d53f8f8dbe97
-[2/6] kselftest/arm64: mte: user_mem: rework error handling
-      https://git.kernel.org/arm64/c/ff0b9aba30ae
-[3/6] kselftest/arm64: mte: user_mem: check different offsets and sizes
-      https://git.kernel.org/arm64/c/682b064bae87
-[4/6] kselftest/arm64: mte: user_mem: add test type enum
-      https://git.kernel.org/arm64/c/b9fc700176f1
-[5/6] kselftest/arm64: mte: user_mem: add more test types
-      https://git.kernel.org/arm64/c/e8d3974f34fa
-[6/6] kselftest/arm64: mte: user_mem: test a wider range of values
-      https://git.kernel.org/arm64/c/0a775ccb8120
+Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+---
+Some important feedbacks from v1&v2 are addressed as follows:
 
-Cheers,
+- It is important to highlight that a skipped test is marked
+  as successful to not unnecessarily report a feature failure
+  when there actually is a failure in the test environment.
+  => I highligted this content in changelog as follows.
+     "In kselftest framework, if a test is not run by some reason,
+     the test result is marked as SKIP rather than FAIL."
+
+- The subject line can be made more succinct while the details are
+  moved to the commit message.
+  => I made subject line succinct and moved the details to changelog.
+
+- How changing ksft_exit_fail_msg() to ksft_exit_skip() accomplishes
+  the goal of unifying the return code.
+  => In changelog, I explained why return code KSFT_SKIP(4) is needed
+     in kselftest framework and the return code of each function.
+
+ tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 973f09a66e1e..3be0895c492b 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -205,7 +205,7 @@ int main(int argc, char **argv)
+ 	 * 2. We execute perf commands
+ 	 */
+ 	if (geteuid() != 0)
+-		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
++		return ksft_exit_skip("Not running as root, abort testing.\n");
+ 
+ 	/* Detect AMD vendor */
+ 	detect_amd();
+@@ -235,7 +235,7 @@ int main(int argc, char **argv)
+ 	sprintf(bm_type, "fill_buf");
+ 
+ 	if (!check_resctrlfs_support())
+-		return ksft_exit_fail_msg("resctrl FS does not exist\n");
++		return ksft_exit_skip("resctrl FS does not exist\n");
+ 
+ 	filter_dmesg();
+ 
 -- 
-Will
+2.27.0
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
