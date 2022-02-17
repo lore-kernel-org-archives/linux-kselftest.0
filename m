@@ -2,226 +2,157 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17B11C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Feb 2022 01:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD4EC433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Feb 2022 02:59:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiBQBVw (ORCPT
+        id S232055AbiBQC7z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Feb 2022 20:21:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48328 "EHLO
+        Wed, 16 Feb 2022 21:59:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiBQBVp (ORCPT
+        with ESMTP id S232106AbiBQC7z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Feb 2022 20:21:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB59AE7A;
-        Wed, 16 Feb 2022 17:21:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EBB1B820E4;
-        Thu, 17 Feb 2022 01:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF5EC340F1;
-        Thu, 17 Feb 2022 01:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645060887;
-        bh=7NWE1IVVDLfrvjPsykbQ9S4y+9dQ21toLFLjCQGo6dw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dVUq/WUgqq0Za7/Tbm0XOJAHWaVlQw4NTU0jgnx3a+aCa7JZQPEUCofjKMOBhx6Ia
-         AClpjobJsEuYtDVSHvaAEy3pmr1hHVxjChjDPa9fDMIst47TSUrg6ReqWqzV357JBI
-         oGsDYRKrS3hTuT/yxs5lALpIs8o3Pw6WBHxg0ThgeBn8bibLBDGCleQUbjem567ufn
-         leXRuxrwQTjI6RYqr2xNxqqvSJnsF4Yxj48lyYROsjICA/pP5amKlDcWDOVCZOb/mZ
-         D9ENW6krw+2Zshi9FcUIQvjVslvxWI1ptYkrRhoh0MwoabVmRVmxt8R/1c58ggu9ou
-         B/agV6spBZk/A==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, willemb@google.com, lorenzo@google.com,
-        maze@google.com, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 3/5] selftests: net: test IPV6_TCLASS
-Date:   Wed, 16 Feb 2022 17:21:18 -0800
-Message-Id: <20220217012120.61250-4-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220217012120.61250-1-kuba@kernel.org>
-References: <20220217012120.61250-1-kuba@kernel.org>
+        Wed, 16 Feb 2022 21:59:55 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA69C1FFF5F
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Feb 2022 18:59:41 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so2964280wmq.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Feb 2022 18:59:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kn/LDmM7Giwjd+26mVkordTjd0rTELciFT9tMQUQryk=;
+        b=dWYR8YZqLKZ1D9hrocyg1i5E9iNSh/XcwYZebZxs9WfuI9Sl7AygXFIFYUMFUXqIJh
+         pPbd8D/CkRFc8HH/K545+Tbh/NYjfFaULbpvsJE+48r5suK21FhMQr600kF6cpiEOcEZ
+         hIq/U2UIY81GUxg6sSz98GnrqGo+D6i0eHGQCce1Fw5LHFFvWaF0i7THTe8T7j5pukIU
+         wx150gJpCocGcbtZ+MKWyC4ROneXRgDrLmnESdpsdJEV6BnA2CCco2PnLFTqEeB7Tzxt
+         ynRfxGJ0bhcYRWmGKDxdm0AvrAOVx0wdS8lF/7V/pL6d/3usyVZpzwUd9RQwMzZvOZS9
+         5AKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kn/LDmM7Giwjd+26mVkordTjd0rTELciFT9tMQUQryk=;
+        b=2ysAJou5E3V4Ws7mjcwVcQ7+5F+MiIE1mUtisfFoL0aG6As6WQjW0wXfYT4x+XQXBb
+         h54oMBsXTlhHzUeDWadM00GwhZn4BFVbwujY3MISXO41nfPry2rQzxe9KcnigeP9sE6P
+         D91DjXUOZHaFYTqz7Vl2JhTLO1AUm5dqi8nJqDfmu9076U4hai7b+Zq4JpPb0y/8s6RS
+         1OC8pnSd2bIM1gKvV8GSB0vdNtEJZ/8fgpT0qMr+MnFdik1tmPxsOxccdNG7I4GyvJPd
+         79LZsEQbPEwZt4oejdK/4yKpICiBl/SeG9D/o3nltbdIJuCwUZZs4HmfO84RZ5x/12xI
+         ncww==
+X-Gm-Message-State: AOAM532pdHpiSs4FhgPlN3ONRkDmwWjupxsNLZMZ8p9Fyrig4EzPHSCO
+        jYNh/UmFDlwsH6uGyfwBLeRbyHMYszG4Ab3H82TYww==
+X-Google-Smtp-Source: ABdhPJxsqZZCrzn79f6VaiQDnruwqgTNUuolyn2u2fWhw0sOJzG8OE9y9rTC7L0UD/I193BapB+nkoPAnfmCl744MM0=
+X-Received: by 2002:a05:600c:1da4:b0:37c:729:f84d with SMTP id
+ p36-20020a05600c1da400b0037c0729f84dmr4139433wms.131.1645066779319; Wed, 16
+ Feb 2022 18:59:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220217002843.2312603-1-keescook@chromium.org>
+In-Reply-To: <20220217002843.2312603-1-keescook@chromium.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 17 Feb 2022 10:59:27 +0800
+Message-ID: <CABVgOSk=oFxsbSbQE-v65VwR2+mXeGXDDjzq8t7FShwjJ3+kUg@mail.gmail.com>
+Subject: Re: [PATCH] um: Allow builds with Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kbuild@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        x86@kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test setting IPV6_TCLASS via setsockopt and cmsg
-across socket types.
+On Thu, Feb 17, 2022 at 8:28 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Add x86-64 target for Clang+um and update user-offsets.c to use
+> Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> ("kbuild: fix asm-offset generation to work with clang").
+>
+> This lets me run KUnit tests with Clang:
+>
+> $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> ...
+> $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> ...
+>
+> Cc: Jeff Dike <jdike@addtoit.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-um@lists.infradead.org
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-Output without the kernel support (this series):
+Thanks, this worked fine for me, with one small note:
 
-  Case TCLASS ICMP cmsg - packet data returned 1, expected 0
-  Case TCLASS ICMP cmsg - rejection returned 0, expected 1
-  Case TCLASS ICMP diff - pass returned 1, expected 0
-  Case TCLASS ICMP diff - packet data returned 1, expected 0
-  Case TCLASS ICMP diff - rejection returned 0, expected 1
+I get the following warning with clang (13.0.1) under UML (but not
+under x86_64):
+clang: warning: argument unused during compilation:
+'-mno-global-merge' [-Wunused-command-line-argument]
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/net/cmsg_ipv6.sh  | 51 +++++++++++++++++++++++
- tools/testing/selftests/net/cmsg_sender.c | 19 ++++++++-
- 2 files changed, 69 insertions(+), 1 deletion(-)
+It's not really a problem unless -Werror is enabled, though, so this
+is still definitely an improvement over clang not working at all.
 
-diff --git a/tools/testing/selftests/net/cmsg_ipv6.sh b/tools/testing/selftests/net/cmsg_ipv6.sh
-index fb5a8ab7c909..f7bb6ce68c88 100755
---- a/tools/testing/selftests/net/cmsg_ipv6.sh
-+++ b/tools/testing/selftests/net/cmsg_ipv6.sh
-@@ -1,12 +1,16 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+ksft_skip=4
-+
- NS=ns
- IP6=2001:db8:1::1/64
- TGT6=2001:db8:1::2
-+TMPF=`mktemp`
- 
- cleanup()
- {
-+    rm -f $TMPF
-     ip netns del $NS
- }
- 
-@@ -14,6 +18,12 @@ trap cleanup EXIT
- 
- NSEXE="ip netns exec $NS"
- 
-+tcpdump -h | grep immediate-mode >> /dev/null
-+if [ $? -ne 0 ]; then
-+    echo "SKIP - tcpdump with --immediate-mode option required"
-+    exit $ksft_skip
-+fi
-+
- # Namespaces
- ip netns add $NS
- 
-@@ -55,6 +65,47 @@ for ovr in setsock cmsg both diff; do
-     done
- done
- 
-+# IPV6_TCLASS
-+TOS=0x10
-+TOS2=0x20
-+
-+ip -6 -netns $NS rule add tos $TOS lookup 300
-+ip -6 -netns $NS route add table 300 prohibit any
-+
-+for ovr in setsock cmsg both diff; do
-+    for p in u i r; do
-+	[ $p == "u" ] && prot=UDP
-+	[ $p == "i" ] && prot=ICMP
-+	[ $p == "r" ] && prot=RAW
-+
-+	[ $ovr == "setsock" ] && m="-C"
-+	[ $ovr == "cmsg" ]    && m="-c"
-+	[ $ovr == "both" ]    && m="-C $((TOS2)) -c"
-+	[ $ovr == "diff" ]    && m="-C $((TOS )) -c"
-+
-+	$NSEXE nohup tcpdump --immediate-mode -p -ni dummy0 -w $TMPF -c 4 2> /dev/null &
-+	BG=$!
-+	sleep 0.05
-+
-+	$NSEXE ./cmsg_sender -6 -p $p $m $((TOS2)) $TGT6 1234
-+	check_result $? 0 "TCLASS $prot $ovr - pass"
-+
-+	while [ -d /proc/$BG ]; do
-+	    $NSEXE ./cmsg_sender -6 -p u $TGT6 1234
-+	done
-+
-+	tcpdump -r $TMPF -v 2>&1 | grep "class $TOS2" >> /dev/null
-+	check_result $? 0 "TCLASS $prot $ovr - packet data"
-+	rm $TMPF
-+
-+	[ $ovr == "both" ]    && m="-C $((TOS )) -c"
-+	[ $ovr == "diff" ]    && m="-C $((TOS2)) -c"
-+
-+	$NSEXE ./cmsg_sender -6 -p $p $m $((TOS)) -s $TGT6 1234
-+	check_result $? 1 "TCLASS $prot $ovr - rejection"
-+    done
-+done
-+
- # Summary
- if [ $BAD -ne 0 ]; then
-     echo "FAIL - $BAD/$TOTAL cases failed"
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index 844ca6134662..4033cf93eabf 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -46,6 +46,7 @@ struct options {
- 	struct {
- 		unsigned int mark;
- 		unsigned int dontfrag;
-+		unsigned int tclass;
- 	} sockopt;
- 	struct {
- 		unsigned int family;
-@@ -62,6 +63,7 @@ struct options {
- 	} ts;
- 	struct {
- 		struct option_cmsg_u32 dontfrag;
-+		struct option_cmsg_u32 tclass;
- 	} v6;
- } opt = {
- 	.size = 13,
-@@ -91,6 +93,8 @@ static void __attribute__((noreturn)) cs_usage(const char *bin)
- 	       "\t\t-t      Enable time stamp reporting\n"
- 	       "\t\t-f val  Set don't fragment via cmsg\n"
- 	       "\t\t-F val  Set don't fragment via setsockopt\n"
-+	       "\t\t-c val  Set TCLASS via cmsg\n"
-+	       "\t\t-C val  Set TCLASS via setsockopt\n"
- 	       "");
- 	exit(ERN_HELP);
- }
-@@ -99,7 +103,7 @@ static void cs_parse_args(int argc, char *argv[])
- {
- 	char o;
- 
--	while ((o = getopt(argc, argv, "46sS:p:m:M:d:tf:F:")) != -1) {
-+	while ((o = getopt(argc, argv, "46sS:p:m:M:d:tf:F:c:C:")) != -1) {
- 		switch (o) {
- 		case 's':
- 			opt.silent_send = true;
-@@ -147,6 +151,13 @@ static void cs_parse_args(int argc, char *argv[])
- 		case 'F':
- 			opt.sockopt.dontfrag = atoi(optarg);
- 			break;
-+		case 'c':
-+			opt.v6.tclass.ena = true;
-+			opt.v6.tclass.val = atoi(optarg);
-+			break;
-+		case 'C':
-+			opt.sockopt.tclass = atoi(optarg);
-+			break;
- 		}
- 	}
- 
-@@ -202,6 +213,8 @@ cs_write_cmsg(int fd, struct msghdr *msg, char *cbuf, size_t cbuf_sz)
- 			  SOL_SOCKET, SO_MARK, &opt.mark);
- 	ca_write_cmsg_u32(cbuf, cbuf_sz, &cmsg_len,
- 			  SOL_IPV6, IPV6_DONTFRAG, &opt.v6.dontfrag);
-+	ca_write_cmsg_u32(cbuf, cbuf_sz, &cmsg_len,
-+			  SOL_IPV6, IPV6_TCLASS, &opt.v6.tclass);
- 
- 	if (opt.txtime.ena) {
- 		struct sock_txtime so_txtime = {
-@@ -343,6 +356,10 @@ static void ca_set_sockopts(int fd)
- 	    setsockopt(fd, SOL_IPV6, IPV6_DONTFRAG,
- 		       &opt.sockopt.dontfrag, sizeof(opt.sockopt.dontfrag)))
- 		error(ERN_SOCKOPT, errno, "setsockopt IPV6_DONTFRAG");
-+	if (opt.sockopt.tclass &&
-+	    setsockopt(fd, SOL_IPV6, IPV6_TCLASS,
-+		       &opt.sockopt.tclass, sizeof(opt.sockopt.tclass)))
-+		error(ERN_SOCKOPT, errno, "setsockopt IPV6_TCLASS");
- }
- 
- int main(int argc, char *argv[])
--- 
-2.34.1
+With that caveat, this is:
+Tested-by: David Gow <davidgow@google.com>
 
+Cheers,
+-- David
+
+>  arch/x86/um/user-offsets.c | 4 ++--
+>  scripts/Makefile.clang     | 1 +
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> index bae61554abcc..d9071827b515 100644
+> --- a/arch/x86/um/user-offsets.c
+> +++ b/arch/x86/um/user-offsets.c
+> @@ -10,10 +10,10 @@
+>  #include <asm/types.h>
+>
+>  #define DEFINE(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+>
+>  #define DEFINE_LONGS(sym, val) \
+> -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+>
+>  void foo(void)
+>  {
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..857b23de51c6 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+>  ifeq ($(CROSS_COMPILE),)
+> --
+> 2.30.2
+>
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220217002843.2312603-1-keescook%40chromium.org.
