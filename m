@@ -2,58 +2,54 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0714C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Feb 2022 00:10:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DED3EC433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Feb 2022 00:10:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiBRALM (ORCPT
+        id S230024AbiBRALN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Feb 2022 19:11:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47198 "EHLO
+        Thu, 17 Feb 2022 19:11:13 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiBRALM (ORCPT
+        with ESMTP id S230084AbiBRALM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 17 Feb 2022 19:11:12 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E1F58391
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53F85A080
         for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 16:10:51 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id v207-20020a627ad8000000b004e0bb852117so727301pfc.0
+Received: by mail-pl1-x64a.google.com with SMTP id 9-20020a170902c20900b0014dc0faf52fso2712535pll.14
         for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 16:10:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=4GwV0UbQb705sFLySkVzCAThIA3EfMwCC5LKqatKq2w=;
-        b=X6XZEVMjv2lZXcUUO2jKjlrunDXYs7/HCQObdkmNlLSbyef+zYZW1mXbwVKDh1JlrC
-         H11/DRRbdoeRaU08uihVlIO54agTGWuSI24fdNkaoC7ZW/508RzzgplyJWRCETQ6f72i
-         S2fTLXNiWewqtlA8QViPjXFxBIV7UQy+DcdW0RCHm8h+gTnQy1b/ytnYsncTcCx41m/0
-         S6xy4XB4oFtjCAYPXeSolZ9MyvHEKN8ajH6/5hhBr6M/K9QjMBi+gKWmgkSN/9w5ps/+
-         nwmCkzGFFn6GlSs9nliH/bVbAUkxJcFYtOVTg+jn66YLmxdQRC8cvtmFK1iJ1/bGDtQn
-         MtkA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Ul9ql+iTTqhmnlSj4FQU1B61ZnFvUpp625JIDr00zP4=;
+        b=iH0hw9sZO5T5mXF+KYFTa+2aLpNRgCpfDuQHrqWxG2sXpZp0YnDim2M8RFWV9YtzML
+         Ow7XdaKDxc3G36WtKpfkpAUfP+JbaGhPsimDgGaDpXYx7jGjs7ptvrE7FAdQ0/Yk7Tlx
+         DYNS4mPJnrfuu+KnlCGhQeMAkBig8Gr1G/D0fZm1CeEY84pksOYTZ9y3mYeqptRY/8eQ
+         AcAPz2OhNF29ULrSA3t2VuT/lyxxzeJURYrIqRsV2f7PSjglFuZDMg/CDy2miYl1piRz
+         mIpZbbPrBULZ26/YvB7Oh4OaI+Lvt0R9vz5b80Vk72uTShY2r7HURgyGiX5YArlzvner
+         I6zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=4GwV0UbQb705sFLySkVzCAThIA3EfMwCC5LKqatKq2w=;
-        b=YKkfONvNpIRRb8NdiMkKlLouZWO9VQirc6sfa4hMnW1qjj78wH71Rfj2BSN+ElScOC
-         WH7e1eWSmEksgu3Y3p5rR3S56fTisDQlrnQNMNp8ZAFKyDSx+uyz6AKWFPvm1tT2KQg6
-         WGQ3VOs8VndYBLt3G76mxOxo3i/Rop5b2dnNVkFSB8Qn6zH1hKtlLmXKKBagVyzVnuT3
-         cHQ0mwQtnsQFBGlIGTTHk5KEXmqok+QEL6UF7vKQDlIkhw8xpARjfmZgj4oZp6tHeX2P
-         vzQVpdw4LiFD5+czePkKoHNVCEoWQVXxT/R9BuL13uTlgijVR523DcWlAWZyVKcY0A5i
-         Ec2Q==
-X-Gm-Message-State: AOAM5310jRs2fTSO3UPIyYANGMoaen26cvc7Vl1m1MvsspwiQ/lOanCs
-        fsFpM6cM5TUiAapeaBBg9f0Z4slMqnWJ
-X-Google-Smtp-Source: ABdhPJwQP5bHgoOzpFp3TTtpGU/LXL4rOWNuhpg9rKWtCDjat6Uh/iKyoXSWAuOJoZxV9sgnw0uJkIKAZySB
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Ul9ql+iTTqhmnlSj4FQU1B61ZnFvUpp625JIDr00zP4=;
+        b=U0dF+ZpNKZD4yQ4JPOfDJKIIlt47hS0MTcuPu3fOjvyp15NkwuBN+dFSceTnGNMTbe
+         VY/fgqZLxYn/elohMoczH7+iHNJMv3etqzCA3rnpj6rd2kraBXS6vX3LeDJRGCLtHuIP
+         deAbLvDfz+tCuAiWx7TGV//7TWXlWY25nfzW6Unz2nuJnFR+vzUr6sLb5BWnTudlu5tx
+         1njrKkVQ65wTkPllbqi6q012CASVvDaRMdrsFpzqwcHzAyg7NWl5JbagDSyJaO6ZRJBx
+         N8MMWDEgLgQLv+fUYl7kkLcQFAcSdwol4ND5Noz5vjC8AP1pcfGb7ObIYckVtkiCjyYj
+         wYjw==
+X-Gm-Message-State: AOAM531kvubsg4atVfeg3cuQQwN/g5tTYhim7VMaQV92Z3Al5to0zAZy
+        fhjJCJS/Fcju0kFswJtY+bXhImNEIFjA
+X-Google-Smtp-Source: ABdhPJwJx6GIX6LgiSK01ZSWDh5SGAPZYM15TgQTkYGKEeBrUyiZ5+c7zaNW6Fh2AcMdFSwgXC0DE8F64Xj1
 X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
- (user=yuanchu job=sendgmr) by 2002:a17:90a:a50f:b0:1b8:e6ad:f63c with SMTP id
- a15-20020a17090aa50f00b001b8e6adf63cmr199719pjq.1.1645143047006; Thu, 17 Feb
- 2022 16:10:47 -0800 (PST)
-Date:   Fri, 18 Feb 2022 00:10:17 +0000
-In-Reply-To: <20220218001017.3500673-1-yuanchu@google.com>
-Message-Id: <20220218001017.3500673-3-yuanchu@google.com>
+ (user=yuanchu job=sendgmr) by 2002:a05:6a00:8d1:b0:4c9:f1a0:e0d0 with SMTP id
+ s17-20020a056a0008d100b004c9f1a0e0d0mr5396873pfu.53.1645143043680; Thu, 17
+ Feb 2022 16:10:43 -0800 (PST)
+Date:   Fri, 18 Feb 2022 00:10:15 +0000
+Message-Id: <20220218001017.3500673-1-yuanchu@google.com>
 Mime-Version: 1.0
-References: <20220218001017.3500673-1-yuanchu@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH 2/2] selftests/damon: make selftests executable
+Subject: [PATCH 0/2] selftests/damon: trivial fixes
 From:   Yuanchu Xie <yuanchu@google.com>
 To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
         SeongJae Park <sj@kernel.org>
@@ -65,40 +61,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The damon selftests do not have the executable bit on. We fix that by
-setting the x bits on the .sh files similar to other existing shell
-selftests.
+These patches fixes trivial errors with building
+and running DAMON selftests.
 
-Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
+Yuanchu Xie (2):
+  selftests/damon: add damon to selftests root Makefile
+  selftests/damon: make selftests executable
+
+ tools/testing/selftests/Makefile                               | 1 +
  tools/testing/selftests/damon/debugfs_attrs.sh                 | 0
  tools/testing/selftests/damon/debugfs_empty_targets.sh         | 0
  tools/testing/selftests/damon/debugfs_huge_count_read_write.sh | 0
  tools/testing/selftests/damon/debugfs_schemes.sh               | 0
  tools/testing/selftests/damon/debugfs_target_ids.sh            | 0
- 5 files changed, 0 insertions(+), 0 deletions(-)
+ 6 files changed, 1 insertion(+)
  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_schemes.sh
  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
 
-diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
-old mode 100644
-new mode 100755
 -- 
 2.35.1.265.g69c8d7142f-goog
 
