@@ -2,90 +2,202 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81A73C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Feb 2022 00:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B46DC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Feb 2022 02:20:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiBRALP (ORCPT
+        id S231544AbiBRCU4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Feb 2022 19:11:15 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47486 "EHLO
+        Thu, 17 Feb 2022 21:20:56 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiBRALO (ORCPT
+        with ESMTP id S231479AbiBRCU4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Feb 2022 19:11:14 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77955A0B2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 16:10:51 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id a22-20020aa79716000000b004e16e3cc5fcso690932pfg.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 16:10:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=daH+2gut1QW9kZErJcIx6WIChTci/r2UH1rfRtql99A=;
-        b=q6FFpZFF3pNwD7OlZ/4hTa2+tIgGnbd0G+XzZL/u5K1MB7T5d3HgNPpm2WrpsJPGFI
-         qbChI7Kpr1Y4OTN5CIt+CtbUwHq36Dd+XGnXtyuPffUh+44yH9JneNO90sOM503sq9Pt
-         eZKwkuGVLEDIqmylXibuvfO4mWbfbCRMK5t+UM9Ilo+KyaG5HjwenZcHPW8R1weAluSt
-         i263hDw9mxz0nZrOUc3z2zZ9m/JbUInIRuLVFBolt1BGTlkMdal9EsLlqJ9bYGB+yS5s
-         5eibzP96XUS/1KgFsqhE0qyvdkm/TzDcixiWKzx+aATSw/NN755gez1zeV5N/3bhONkt
-         Kp8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=daH+2gut1QW9kZErJcIx6WIChTci/r2UH1rfRtql99A=;
-        b=gevU3DznyIT7TWiKfPqw089Dz1mLG1SZZu58iOgBE2ABlw8SXUZar222FCykA5PzM6
-         mX0SCdnm0BhUeFUj/P5/TbaDy36cBQORrbmHmfwC7BjsnivUIs7ZYY8+u4wPBq38Cv3k
-         HWyPeMSWLJwPnjvVdVmcgHkNZe0sEAtqjOQyvtjEK4jkyTTa4iE0N2RezWQHFI/IdAej
-         WL2ow1T67CGleMnHgtU9NkpPfKrfFQUSQRqJDJPEhFKxkh1AoDDg8vpjQJx35q3JyjKn
-         C2tLh7R8UVtwxT5ESFtjwXOP2UKpsvM+m0YdNTEi+KWk3qWQCu9ihxl192VjMktRYDau
-         6N8Q==
-X-Gm-Message-State: AOAM5317IqIFOmDS4bi6f8djVnKnTpp+ls5aVq5PDjCU4HxsnydWqINe
-        rNkHI46RLiewn3RBebb0vom8z6m+T6d0
-X-Google-Smtp-Source: ABdhPJw6fTpwF9+VtM9cM6JfysP1jGMHMiG5w+LL8NIkGyT/Fp5ts9IYmAvlnIrXQpBFUhpxsnIfEpXhUeXQ
-X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
- (user=yuanchu job=sendgmr) by 2002:a17:90a:a50f:b0:1b8:e6ad:f63c with SMTP id
- a15-20020a17090aa50f00b001b8e6adf63cmr199698pjq.1.1645143045060; Thu, 17 Feb
- 2022 16:10:45 -0800 (PST)
-Date:   Fri, 18 Feb 2022 00:10:16 +0000
-In-Reply-To: <20220218001017.3500673-1-yuanchu@google.com>
-Message-Id: <20220218001017.3500673-2-yuanchu@google.com>
-Mime-Version: 1.0
-References: <20220218001017.3500673-1-yuanchu@google.com>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH 1/2] selftests/damon: add damon to selftests root Makefile
-From:   Yuanchu Xie <yuanchu@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>
-Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
+        Thu, 17 Feb 2022 21:20:56 -0500
+X-Greylist: delayed 77082 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 18:20:39 PST
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7579B7DF;
+        Thu, 17 Feb 2022 18:20:39 -0800 (PST)
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 21I2KCNZ023307;
+        Fri, 18 Feb 2022 11:20:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 21I2KCNZ023307
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645150813;
+        bh=oTkWcaEf9jnFVKJN3p9Suk7c1bsGL0A3lknSj12v+7I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VDAcoaHNdUsbQLowZjruNwVk9mblUqzQo6ITBxcrlZY8Ma44uNYNxVO5bNPVUCt+s
+         1teshno3NGiIKYkFuxIqTE0lp2tDvcQM2/1aF7ViyKuPrSAJFg+YOvDu+3AbP9ieD4
+         yNqvtGdNJ8EtKFAKV9jJBMfgfVWBSsjS7I1WlME1f48bRfvOd4wHHbwn01MtauNIUD
+         FtWmkSBFYZpHKMZrFB3LjAfxv+RVB03iP0e6bV53GYDMLjTxlNEG32ibk4c0THVeFp
+         T8pWE/bPL4ppW9+sbjsdjMlTrKurERvsQgFE80ws1vcqbHBT5DiN3vR1SAn3g47+qu
+         wVt93TczYyScQ==
+X-Nifty-SrcIP: [209.85.216.54]
+Received: by mail-pj1-f54.google.com with SMTP id m7so7385863pjk.0;
+        Thu, 17 Feb 2022 18:20:12 -0800 (PST)
+X-Gm-Message-State: AOAM532xze/2D0u2/mAzCrqinu/8uz3wvXcanIZcpWiSKN03YT5fLUkz
+        MS6ObeFWqAusMwQEJtY/UdgQ6n2UkntUsjj/Gz8=
+X-Google-Smtp-Source: ABdhPJy36VTNx/GOTLfwWDr/Q6D5q1UHnWRQBNMl4BqD+jlNw2u9WpWNKjA00Rdwo2aBqEiQuiXaVDyH9pWT8wCO1AY=
+X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id
+ m23-20020a17090aab1700b001b9b61aaadbmr6008892pjq.77.1645150811855; Thu, 17
+ Feb 2022 18:20:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20220217002843.2312603-1-keescook@chromium.org>
+ <CAK7LNASMobjuAen+_O4eFOgkOoUwf5ANk6_TjL4SdtT47Jge-w@mail.gmail.com> <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
+In-Reply-To: <Yg6I0YZAh5yWYpT2@dev-arch.archlinux-ax161>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 18 Feb 2022 11:19:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARbP_xxc21N4VO95RQNn5MzGW2HpKxS_vxNWy4mqP+GxA@mail.gmail.com>
+Message-ID: <CAK7LNARbP_xxc21N4VO95RQNn5MzGW2HpKxS_vxNWy4mqP+GxA@mail.gmail.com>
+Subject: Re: [PATCH] um: Allow builds with Clang
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the damon selftests are not built with the rest of the
-selftests. We add damon to the list of targets.
+On Fri, Feb 18, 2022 at 2:41 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, Feb 17, 2022 at 01:54:58PM +0900, Masahiro Yamada wrote:
+> > On Thu, Feb 17, 2022 at 9:28 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Add x86-64 target for Clang+um and update user-offsets.c to use
+> > > Clang-friendly assembler, similar to the fix from commit cf0c3e68aa81
+> > > ("kbuild: fix asm-offset generation to work with clang").
+> > >
+> > > This lets me run KUnit tests with Clang:
+> > >
+> > > $ ./tools/testing/kunit/kunit.py config --make_options LLVM=1
+> > > ...
+> > > $ ./tools/testing/kunit/kunit.py run --make_options LLVM=1
+> > > ...
+> > >
+> > > Cc: Jeff Dike <jdike@addtoit.com>
+> > > Cc: Richard Weinberger <richard@nod.at>
+> > > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > Cc: David Gow <davidgow@google.com>
+> > > Cc: linux-um@lists.infradead.org
+> > > Cc: linux-kbuild@vger.kernel.org
+> > > Cc: linux-kselftest@vger.kernel.org
+> > > Cc: kunit-dev@googlegroups.com
+> > > Cc: llvm@lists.linux.dev
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  arch/x86/um/user-offsets.c | 4 ++--
+> > >  scripts/Makefile.clang     | 1 +
+> > >  2 files changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/x86/um/user-offsets.c b/arch/x86/um/user-offsets.c
+> > > index bae61554abcc..d9071827b515 100644
+> > > --- a/arch/x86/um/user-offsets.c
+> > > +++ b/arch/x86/um/user-offsets.c
+> > > @@ -10,10 +10,10 @@
+> > >  #include <asm/types.h>
+> > >
+> > >  #define DEFINE(sym, val) \
+> > > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val))
+> > > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val))
+> > >
+> > >  #define DEFINE_LONGS(sym, val) \
+> > > -       asm volatile("\n->" #sym " %0 " #val : : "i" (val/sizeof(unsigned long)))
+> > > +       asm volatile("\n.ascii \"->" #sym " %0 " #val "\"": : "i" (val/sizeof(unsigned long)))
+> > >
+> > >  void foo(void)
+> > >  {
+> > > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > > index 51fc23e2e9e5..857b23de51c6 100644
+> > > --- a/scripts/Makefile.clang
+> > > +++ b/scripts/Makefile.clang
+> > > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+> > >  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+> > >  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+> > >  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> > > +CLANG_TARGET_FLAGS_um          := x86_64-linux-gnu
+> >
+> >
+> > Does this work for the i386 host?
+> >
+> > UML supports i386 and x86_64 as the host architecture as of now,
+> > but this always compiles UML for x86_64?
+>
+> I think the current code will work because arch/x86/Makefile.um includes
+> -m32 for CONFIG_X86_32, which will implicitly change x86_64-linux-gnu
+> into a 32-bit target triple:
 
-Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- tools/testing/selftests/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+Ah, you are right!
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d08fe4cfe811..ffe453760a12 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += clone3
- TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-+TARGETS += damon
- TARGETS += drivers/dma-buf
- TARGETS += efivarfs
- TARGETS += exec
--- 
-2.35.1.265.g69c8d7142f-goog
 
+>
+> $ echo | clang --target=x86_64-linux-gnu -x c -c -o test.o -
+>
+> $ file test.o
+> test.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
+>
+> $ echo | clang --target=x86_64-linux-gnu -m32 -x c -c -o test.o -
+>
+> $ file test.o
+> test.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+>
+> In fact, we rely on this for ARCH=i386 LLVM=1 right now, as it uses
+> x86_64-linux-gnu for the target flag.
+>
+> While UML only supports x86, maybe it is worth using SUBARCH instead of
+> hardcoding the triple? No strong opinion around that though.
+>
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 51fc23e2e9e5..87285b76adb2 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_powerpc    := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv       := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_um          := $(CLANG_TARGET_FLAGS_$(SUBARCH))
+
+
+LGTM.
+
+I also thought of not passing --target at all for ARCH=um, but
+we decided to override --target all the time (for reproducibility?).
+Anyway, Nathan's way is clean, and looks OK to me.
+
+
+
+
+
+
+
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>
+>  ifeq ($(CROSS_COMPILE),)
+>
+> > >  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> > >
+> > >  ifeq ($(CROSS_COMPILE),)
+> > > --
+> > > 2.30.2
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+
+
+
+--
+Best Regards
+Masahiro Yamada
