@@ -2,70 +2,103 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E44C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Feb 2022 23:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0714C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Feb 2022 00:10:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiBQXvD (ORCPT
+        id S229949AbiBRALM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Feb 2022 18:51:03 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49972 "EHLO
+        Thu, 17 Feb 2022 19:11:12 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiBQXvC (ORCPT
+        with ESMTP id S230092AbiBRALM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Feb 2022 18:51:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0017427F2;
-        Thu, 17 Feb 2022 15:50:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FAE4618CA;
-        Thu, 17 Feb 2022 23:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C72ADC340E8;
-        Thu, 17 Feb 2022 23:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645141846;
-        bh=NpSQ0OTxSO0IrfQSnUyXG5N76XbEGxyx9JaG+Bcbz8g=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=DblQE/Lk5nnxWSAfXcIyV4FAD6GY6pkrLhMVeXd6GlwOqDB78Ry0rVGe0xUAr6PYn
-         P4QffThLC3iZivz+4jD/2DlOnuMp9+8ywgCzZUGtBM+W48pnqSanfIU+/ITzleWBnf
-         LHUj24BxQbUrQAENP5c5LKX7ATKmYqJ3QnJdQ8q9ogq/3HwZGwuOBOSlKSeO7GLqut
-         zhl9hf2hI7oQmW7iB+BzbxgcHxCoiejbCpbDDh/2ezW4hK6tywblyGoweFXZdVTDkk
-         RInODZd4r2ek5xN2EBeQ4w2v5lnIde9B1phxpuVp0HNqKgK5P2cxkYnT1OPYyti2Md
-         AQpW/OJ7DBtpA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6266E6D447;
-        Thu, 17 Feb 2022 23:50:46 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.17-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1b759083-880e-8acc-239b-bba42ec09551@linuxfoundation.org>
-References: <1b759083-880e-8acc-239b-bba42ec09551@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1b759083-880e-8acc-239b-bba42ec09551@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc5
-X-PR-Tracked-Commit-Id: 6fec1ab67f8d60704cc7de64abcfd389ab131542
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9195e5e0adbb8a9a5ee9ef0f9dedf6340d827405
-Message-Id: <164514184673.26956.9171883239443079951.pr-tracker-bot@kernel.org>
-Date:   Thu, 17 Feb 2022 23:50:46 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 17 Feb 2022 19:11:12 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E1F58391
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 16:10:51 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id v207-20020a627ad8000000b004e0bb852117so727301pfc.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Feb 2022 16:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=4GwV0UbQb705sFLySkVzCAThIA3EfMwCC5LKqatKq2w=;
+        b=X6XZEVMjv2lZXcUUO2jKjlrunDXYs7/HCQObdkmNlLSbyef+zYZW1mXbwVKDh1JlrC
+         H11/DRRbdoeRaU08uihVlIO54agTGWuSI24fdNkaoC7ZW/508RzzgplyJWRCETQ6f72i
+         S2fTLXNiWewqtlA8QViPjXFxBIV7UQy+DcdW0RCHm8h+gTnQy1b/ytnYsncTcCx41m/0
+         S6xy4XB4oFtjCAYPXeSolZ9MyvHEKN8ajH6/5hhBr6M/K9QjMBi+gKWmgkSN/9w5ps/+
+         nwmCkzGFFn6GlSs9nliH/bVbAUkxJcFYtOVTg+jn66YLmxdQRC8cvtmFK1iJ1/bGDtQn
+         MtkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=4GwV0UbQb705sFLySkVzCAThIA3EfMwCC5LKqatKq2w=;
+        b=YKkfONvNpIRRb8NdiMkKlLouZWO9VQirc6sfa4hMnW1qjj78wH71Rfj2BSN+ElScOC
+         WH7e1eWSmEksgu3Y3p5rR3S56fTisDQlrnQNMNp8ZAFKyDSx+uyz6AKWFPvm1tT2KQg6
+         WGQ3VOs8VndYBLt3G76mxOxo3i/Rop5b2dnNVkFSB8Qn6zH1hKtlLmXKKBagVyzVnuT3
+         cHQ0mwQtnsQFBGlIGTTHk5KEXmqok+QEL6UF7vKQDlIkhw8xpARjfmZgj4oZp6tHeX2P
+         vzQVpdw4LiFD5+czePkKoHNVCEoWQVXxT/R9BuL13uTlgijVR523DcWlAWZyVKcY0A5i
+         Ec2Q==
+X-Gm-Message-State: AOAM5310jRs2fTSO3UPIyYANGMoaen26cvc7Vl1m1MvsspwiQ/lOanCs
+        fsFpM6cM5TUiAapeaBBg9f0Z4slMqnWJ
+X-Google-Smtp-Source: ABdhPJwQP5bHgoOzpFp3TTtpGU/LXL4rOWNuhpg9rKWtCDjat6Uh/iKyoXSWAuOJoZxV9sgnw0uJkIKAZySB
+X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
+ (user=yuanchu job=sendgmr) by 2002:a17:90a:a50f:b0:1b8:e6ad:f63c with SMTP id
+ a15-20020a17090aa50f00b001b8e6adf63cmr199719pjq.1.1645143047006; Thu, 17 Feb
+ 2022 16:10:47 -0800 (PST)
+Date:   Fri, 18 Feb 2022 00:10:17 +0000
+In-Reply-To: <20220218001017.3500673-1-yuanchu@google.com>
+Message-Id: <20220218001017.3500673-3-yuanchu@google.com>
+Mime-Version: 1.0
+References: <20220218001017.3500673-1-yuanchu@google.com>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH 2/2] selftests/damon: make selftests executable
+From:   Yuanchu Xie <yuanchu@google.com>
+To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>
+Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Thu, 17 Feb 2022 15:24:08 -0700:
+The damon selftests do not have the executable bit on. We fix that by
+setting the x bits on the .sh files similar to other existing shell
+selftests.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc5
+Fixes: 9ab3b0c8ef62 ("selftests/damon: split test cases")
+Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+---
+ tools/testing/selftests/damon/debugfs_attrs.sh                 | 0
+ tools/testing/selftests/damon/debugfs_empty_targets.sh         | 0
+ tools/testing/selftests/damon/debugfs_huge_count_read_write.sh | 0
+ tools/testing/selftests/damon/debugfs_schemes.sh               | 0
+ tools/testing/selftests/damon/debugfs_target_ids.sh            | 0
+ 5 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_attrs.sh
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_schemes.sh
+ mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9195e5e0adbb8a9a5ee9ef0f9dedf6340d827405
-
-Thank you!
-
+diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
+old mode 100644
+new mode 100755
+diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
+old mode 100644
+new mode 100755
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.35.1.265.g69c8d7142f-goog
+
