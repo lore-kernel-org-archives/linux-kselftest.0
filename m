@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B255EC433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Feb 2022 16:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D74CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Feb 2022 16:49:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiBUQso (ORCPT
+        id S237044AbiBUQt0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Feb 2022 11:48:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35754 "EHLO
+        Mon, 21 Feb 2022 11:49:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiBUQsn (ORCPT
+        with ESMTP id S1381245AbiBUQt0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:48:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0818D22BEF
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 08:48:19 -0800 (PST)
+        Mon, 21 Feb 2022 11:49:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C230237C9
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 08:49:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B732B812A9
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 16:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7962DC340E9;
-        Mon, 21 Feb 2022 16:48:14 +0000 (UTC)
-Date:   Mon, 21 Feb 2022 16:48:11 +0000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 152C5612A3
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 16:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAFCC340E9;
+        Mon, 21 Feb 2022 16:48:58 +0000 (UTC)
+Date:   Mon, 21 Feb 2022 16:48:55 +0000
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -39,22 +39,22 @@ Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 12/40] arm64/sme: Implement sysctl to set the default
- vector length
-Message-ID: <YhPCS8ZkLZo7CiFm@arm.com>
+Subject: Re: [PATCH v11 13/40] arm64/sme: Implement vector length
+ configuration prctl()s
+Message-ID: <YhPCdz8iEV8qHPMw@arm.com>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-13-broonie@kernel.org>
+ <20220207152109.197566-14-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207152109.197566-13-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-14-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:20:41PM +0000, Mark Brown wrote:
-> As for SVE provide a sysctl which allows the default SME vector length to
-> be configured.
+On Mon, Feb 07, 2022 at 03:20:42PM +0000, Mark Brown wrote:
+> As for SVE provide a prctl() interface which allows processes to
+> configure their SME vector length.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 
