@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2409C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Feb 2022 16:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 461ADC43217
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Feb 2022 18:26:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiBUQ7Q (ORCPT
+        id S230338AbiBUSXC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Feb 2022 11:59:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47220 "EHLO
+        Mon, 21 Feb 2022 13:23:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350922AbiBUQ7Q (ORCPT
+        with ESMTP id S230184AbiBUSUm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:59:16 -0500
+        Mon, 21 Feb 2022 13:20:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96E322BCE
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 08:58:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87B011A0E
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 10:12:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8155DB815A9
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 16:58:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34152C340E9;
-        Mon, 21 Feb 2022 16:58:47 +0000 (UTC)
-Date:   Mon, 21 Feb 2022 16:58:43 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77456B816FE
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Feb 2022 18:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53059C340E9;
+        Mon, 21 Feb 2022 18:12:39 +0000 (UTC)
+Date:   Mon, 21 Feb 2022 18:12:36 +0000
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -39,32 +39,30 @@ Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v11 14/40] arm64/sme: Implement support for TPIDR2
-Message-ID: <YhPEw/+yGWtWcfMF@arm.com>
+Subject: Re: [PATCH v11 15/40] arm64/sme: Implement SVCR context switching
+Message-ID: <YhPWFMkjLYT06uYT@arm.com>
 References: <20220207152109.197566-1-broonie@kernel.org>
- <20220207152109.197566-15-broonie@kernel.org>
+ <20220207152109.197566-16-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207152109.197566-15-broonie@kernel.org>
+In-Reply-To: <20220207152109.197566-16-broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 03:20:43PM +0000, Mark Brown wrote:
-> The Scalable Matrix Extension introduces support for a new thread specific
-> data register TPIDR2 intended for use by libc. The kernel must save the
-> value of TPIDR2 on context switch and should ensure that all new threads
-> start off with a default value of 0. Add a field to the thread_struct to
-> store TPIDR2 and context switch it with the other thread specific data.
+On Mon, Feb 07, 2022 at 03:20:44PM +0000, Mark Brown wrote:
+> In SME the use of both streaming SVE mode and ZA are tracked through
+> PSTATE.SM and PSTATE.ZA, visible through the system register SVCR.  In
+> order to context switch the floating point state for SME we need to
+> context switch the contents of this register as part of context
+> switching the floating point state.
 > 
-> In case there are future extensions which also use TPIDR2 we introduce
-> system_supports_tpidr2() and use that rather than system_supports_sme()
-> for TPIDR2 handling.
+> Since changing the vector length exits streaming SVE mode and disables
+> ZA we also make sure we update SVCR appropriately when setting vector
+> length, and similarly ensure that new threads have streaming SVE mode
+> and ZA disabled.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
-
-I think this matches the ABI per the documentation (and the subsequent
-discussion we had).
 
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
