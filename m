@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE2CC433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Feb 2022 15:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 794F1C43217
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Feb 2022 15:21:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241968AbiBWPWO (ORCPT
+        id S241929AbiBWPWP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Feb 2022 10:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        Wed, 23 Feb 2022 10:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241935AbiBWPWG (ORCPT
+        with ESMTP id S241936AbiBWPWG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 23 Feb 2022 10:22:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8F638AD;
-        Wed, 23 Feb 2022 07:21:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C962DEA9;
+        Wed, 23 Feb 2022 07:21:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03CCDB82036;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BE51B82079;
+        Wed, 23 Feb 2022 15:21:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240C3C340E7;
         Wed, 23 Feb 2022 15:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78D6C340F0;
-        Wed, 23 Feb 2022 15:21:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645629689;
-        bh=fsNReIQJFT+jC+z1p2lFuwgUrF900obWVOTKEz53GuI=;
+        s=k20201202; t=1645629692;
+        bh=gLwbxRDPJci2RQJi57SUtINNwpIigC9Ki6uR66Ic+V8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rtViweYr5uF27MQ0RE+opEfi+4pB9vpTOFQKPFYb/6LafKH2vHF4K3RcFoTe07uY1
-         O8eBY5VCsodErqMUfEz/h1Nxa/niHKsaht7Bcj0P6dw1SreWpK9u+uumgnUG1IV7io
-         TdohIF1ciHx1hsbhJREheJenV+89C06neP/z9U3W3UBq9ydaJgikEPS3EpAzWOObRz
-         B4S7Ks75MhELSxZ4vwyHpp2Lx3D3ianOGrjF5Ui0yJCOn0gcUGGXNsPePDeFpoAYNP
-         CsOHp5XOpHDilGBP7ml8PI0+JKIZN6udgSsJkfgIgIiGAwtEhlR0pOW70d8xyFoQJt
-         hHhcUus32rlxw==
+        b=A/KfEI8fQPNqx5ZqOlKX0qZKH+VJZmBLYrHgAgj5/u2PGeLFagTBVmzN4uLekj8uq
+         kNQwTDpFjL2fHQR1b2v0YNtINx8WCPk84PMcNWXHlzCYIEPzmLqvYWUkpQPonuBin2
+         IOA7a80QRBU+OJv+IVnV77ypiNaX+DEBRQgATLx8DuWYijT/73R/Q17QU+9FF2qPuz
+         jWeS5lub/eKvuwzxB8nSRoOqwq9vlEs/4r+rHKNH/jGM4uq8a7cBYaGK7d6PYxWyJg
+         LoCLXAexLRdBLjo7PpuaDft1MDomLtGWRG231cvCUDKryQFEmwRvJcBkA56RiPXw/R
+         GwdPvB2t2S/Ow==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
         xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 08/12] mm/damon/sysfs: Support schemes prioritization weights
-Date:   Wed, 23 Feb 2022 15:20:47 +0000
-Message-Id: <20220223152051.22936-9-sj@kernel.org>
+Subject: [PATCH 10/12] mm/damon/sysfs: Support DAMOS stats
+Date:   Wed, 23 Feb 2022 15:20:49 +0000
+Message-Id: <20220223152051.22936-11-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220223152051.22936-1-sj@kernel.org>
 References: <20220223152051.22936-1-sj@kernel.org>
@@ -52,11 +52,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit makes DAMON sysfs interface supports the DAMOS' regions
-prioritization weights feature under quotas limitation.  Specifically,
-this commit adds 'weights' directory under each scheme directory and
-makes kdamond 'state' file writing respects the contents in the
-directory.
+This commit makes DAMON sysfs interface supports the DAMOS stats
+feature.  Specifically, this commit adds 'stats' directory under each
+scheme directory, and makes kdamond 'state' file writing
+('update_schemes_stats') to update the contents of the files under the
+'stats' directory.
+
+As a result, the files hierarchy becomes as below:
 
     /sys/kernel/mm/damon/admin
     │ kdamonds/nr
@@ -78,221 +80,289 @@ directory.
     │ │ │ │ │ │ │ │ nr_accesses/min,max
     │ │ │ │ │ │ │ │ age/min,max
     │ │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
-    │ │ │ │ │ │ │ │ weights/sz,nr_accesses,age    <- NEW DIRECTORY
+    │ │ │ │ │ │ │ │ weights/sz,nr_accesses,age
+    │ │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
+    │ │ │ │ │ │ │ stats/    <- NEW DIRECTORY
+    │ │ │ │ │ │ │ │ nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
     │ │ │ │ │ │ ...
     │ │ │ │ ...
     │ │ ...
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs.c | 157 ++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 154 insertions(+), 3 deletions(-)
+ mm/damon/sysfs.c | 215 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 215 insertions(+)
 
 diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index a14caeb5b6a1..b8596908be7b 100644
+index 9e54ed7316c6..a4ad6b473b0a 100644
 --- a/mm/damon/sysfs.c
 +++ b/mm/damon/sysfs.c
-@@ -115,12 +115,133 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
+@@ -115,6 +115,170 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
  	.default_groups = damon_sysfs_ul_range_groups,
  };
  
 +/*
-+ * scheme/weights directory
++ * schemes/stats directory
 + */
 +
-+struct damon_sysfs_weights {
++struct damon_sysfs_stats {
 +	struct kobject kobj;
-+	unsigned int sz;
-+	unsigned int nr_accesses;
-+	unsigned int age;
++	unsigned long nr_tried;
++	unsigned long sz_tried;
++	unsigned long nr_applied;
++	unsigned long sz_applied;
++	unsigned long qt_exceeds;
 +};
 +
-+static struct damon_sysfs_weights *damon_sysfs_weights_alloc(unsigned int sz,
-+		unsigned int nr_accesses, unsigned int age)
++static struct damon_sysfs_stats *damon_sysfs_stats_alloc(void)
 +{
-+	struct damon_sysfs_weights *weights = kmalloc(sizeof(*weights),
-+			GFP_KERNEL);
-+
-+	if (!weights)
-+		return NULL;
-+	weights->kobj = (struct kobject){};
-+	weights->sz = sz;
-+	weights->nr_accesses = nr_accesses;
-+	weights->age = age;
-+	return weights;
++	return kzalloc(sizeof(struct damon_sysfs_stats), GFP_KERNEL);
 +}
 +
-+static ssize_t damon_sysfs_weights_sz_show(struct kobject *kobj,
++static ssize_t damon_sysfs_stats_nr_tried_show(struct kobject *kobj,
 +		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
 +
-+	return sysfs_emit(buf, "%u\n", weights->sz);
++	return sysfs_emit(buf, "%lu\n", stats->nr_tried);
 +}
 +
-+static ssize_t damon_sysfs_weights_sz_store(struct kobject *kobj,
++static ssize_t damon_sysfs_stats_nr_tried_store(struct kobject *kobj,
 +		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
-+	int err = kstrtouint(buf, 0, &weights->sz);
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
++	int err = kstrtoul(buf, 0, &stats->nr_tried);
 +
 +	if (err)
 +		return -EINVAL;
 +	return count;
 +}
 +
-+static ssize_t damon_sysfs_weights_nr_accesses_show(struct kobject *kobj,
++static ssize_t damon_sysfs_stats_sz_tried_show(struct kobject *kobj,
 +		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
 +
-+	return sysfs_emit(buf, "%u\n", weights->nr_accesses);
++	return sysfs_emit(buf, "%lu\n", stats->sz_tried);
 +}
 +
-+static ssize_t damon_sysfs_weights_nr_accesses_store(struct kobject *kobj,
++static ssize_t damon_sysfs_stats_sz_tried_store(struct kobject *kobj,
 +		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
-+	int err = kstrtouint(buf, 0, &weights->nr_accesses);
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
++	int err = kstrtoul(buf, 0, &stats->sz_tried);
 +
 +	if (err)
 +		return -EINVAL;
 +	return count;
 +}
 +
-+static ssize_t damon_sysfs_weights_age_show(struct kobject *kobj,
++static ssize_t damon_sysfs_stats_nr_applied_show(struct kobject *kobj,
 +		struct kobj_attribute *attr, char *buf)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
 +
-+	return sysfs_emit(buf, "%u\n", weights->age);
++	return sysfs_emit(buf, "%lu\n", stats->nr_applied);
 +}
 +
-+static ssize_t damon_sysfs_weights_age_store(struct kobject *kobj,
++static ssize_t damon_sysfs_stats_nr_applied_store(struct kobject *kobj,
 +		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	struct damon_sysfs_weights *weights = container_of(kobj,
-+			struct damon_sysfs_weights, kobj);
-+	int err = kstrtouint(buf, 0, &weights->age);
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
++	int err = kstrtoul(buf, 0, &stats->nr_applied);
 +
 +	if (err)
 +		return -EINVAL;
 +	return count;
 +}
 +
-+static void damon_sysfs_weights_release(struct kobject *kobj)
++static ssize_t damon_sysfs_stats_sz_applied_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
 +{
-+	kfree(container_of(kobj, struct damon_sysfs_weights, kobj));
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
++
++	return sysfs_emit(buf, "%lu\n", stats->sz_applied);
 +}
 +
-+static struct kobj_attribute damon_sysfs_weights_sz_attr =
-+		__ATTR(sz, 0600, damon_sysfs_weights_sz_show,
-+				damon_sysfs_weights_sz_store);
++static ssize_t damon_sysfs_stats_sz_applied_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
++{
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
++	int err = kstrtoul(buf, 0, &stats->sz_applied);
 +
-+static struct kobj_attribute damon_sysfs_weights_nr_accesses_attr =
-+		__ATTR(nr_accesses, 0600, damon_sysfs_weights_nr_accesses_show,
-+				damon_sysfs_weights_nr_accesses_store);
++	if (err)
++		return -EINVAL;
++	return count;
++}
 +
-+static struct kobj_attribute damon_sysfs_weights_age_attr =
-+		__ATTR(age, 0600, damon_sysfs_weights_age_show,
-+				damon_sysfs_weights_age_store);
++static ssize_t damon_sysfs_stats_qt_exceeds_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
++{
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
 +
-+static struct attribute *damon_sysfs_weights_attrs[] = {
-+	&damon_sysfs_weights_sz_attr.attr,
-+	&damon_sysfs_weights_nr_accesses_attr.attr,
-+	&damon_sysfs_weights_age_attr.attr,
++	return sysfs_emit(buf, "%lu\n", stats->qt_exceeds);
++}
++
++static ssize_t damon_sysfs_stats_qt_exceeds_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
++{
++	struct damon_sysfs_stats *stats = container_of(kobj,
++			struct damon_sysfs_stats, kobj);
++	int err = kstrtoul(buf, 0, &stats->qt_exceeds);
++
++	if (err)
++		return -EINVAL;
++	return count;
++}
++
++static void damon_sysfs_stats_release(struct kobject *kobj)
++{
++	kfree(container_of(kobj, struct damon_sysfs_stats, kobj));
++}
++
++static struct kobj_attribute damon_sysfs_stats_nr_tried_attr =
++		__ATTR(nr_tried, 0400, damon_sysfs_stats_nr_tried_show,
++				damon_sysfs_stats_nr_tried_store);
++
++static struct kobj_attribute damon_sysfs_stats_sz_tried_attr =
++		__ATTR(sz_tried, 0400, damon_sysfs_stats_sz_tried_show,
++				damon_sysfs_stats_sz_tried_store);
++
++static struct kobj_attribute damon_sysfs_stats_nr_applied_attr =
++		__ATTR(nr_applied, 0400, damon_sysfs_stats_nr_applied_show,
++				damon_sysfs_stats_nr_applied_store);
++
++static struct kobj_attribute damon_sysfs_stats_sz_applied_attr =
++		__ATTR(sz_applied, 0400, damon_sysfs_stats_sz_applied_show,
++				damon_sysfs_stats_sz_applied_store);
++
++static struct kobj_attribute damon_sysfs_stats_qt_exceeds_attr =
++		__ATTR(qt_exceeds, 0400, damon_sysfs_stats_qt_exceeds_show,
++				damon_sysfs_stats_qt_exceeds_store);
++
++static struct attribute *damon_sysfs_stats_attrs[] = {
++	&damon_sysfs_stats_nr_tried_attr.attr,
++	&damon_sysfs_stats_sz_tried_attr.attr,
++	&damon_sysfs_stats_nr_applied_attr.attr,
++	&damon_sysfs_stats_sz_applied_attr.attr,
++	&damon_sysfs_stats_qt_exceeds_attr.attr,
 +	NULL,
 +};
-+ATTRIBUTE_GROUPS(damon_sysfs_weights);
++ATTRIBUTE_GROUPS(damon_sysfs_stats);
 +
-+static struct kobj_type damon_sysfs_weights_ktype = {
-+	.release = damon_sysfs_weights_release,
++static struct kobj_type damon_sysfs_stats_ktype = {
++	.release = damon_sysfs_stats_release,
 +	.sysfs_ops = &kobj_sysfs_ops,
-+	.default_groups = damon_sysfs_weights_groups,
++	.default_groups = damon_sysfs_stats_groups,
 +};
 +
  /*
-  * quotas directory
+  * watermarks directory
   */
+@@ -666,6 +830,7 @@ struct damon_sysfs_scheme {
+ 	struct damon_sysfs_access_pattern *access_pattern;
+ 	struct damon_sysfs_quotas *quotas;
+ 	struct damon_sysfs_watermarks *watermarks;
++	struct damon_sysfs_stats *stats;
+ };
  
- struct damon_sysfs_quotas {
- 	struct kobject kobj;
-+	struct damon_sysfs_weights *weights;
- 	unsigned long ms;
- 	unsigned long sz;
- 	unsigned long reset_interval_ms;
-@@ -131,6 +252,29 @@ static struct damon_sysfs_quotas *damon_sysfs_quotas_alloc(void)
- 	return kzalloc(sizeof(struct damon_sysfs_quotas), GFP_KERNEL);
+ /* This should match with enum damos_action */
+@@ -756,6 +921,22 @@ static int damon_sysfs_scheme_set_watermarks(struct damon_sysfs_scheme *scheme)
+ 	return err;
  }
  
-+static int damon_sysfs_quotas_add_dirs(struct damon_sysfs_quotas *quotas)
++static int damon_sysfs_scheme_set_stats(struct damon_sysfs_scheme *scheme)
 +{
-+	struct damon_sysfs_weights *weights;
++	struct damon_sysfs_stats *stats = damon_sysfs_stats_alloc();
 +	int err;
 +
-+	weights = damon_sysfs_weights_alloc(0, 0, 0);
-+	if (!weights)
++	if (!stats)
 +		return -ENOMEM;
-+
-+	err = kobject_init_and_add(&weights->kobj, &damon_sysfs_weights_ktype,
-+			&quotas->kobj, "weights");
++	err = kobject_init_and_add(&stats->kobj, &damon_sysfs_stats_ktype,
++			&scheme->kobj, "stats");
 +	if (err)
-+		kobject_put(&weights->kobj);
++		kobject_put(&stats->kobj);
 +	else
-+		quotas->weights = weights;
++		scheme->stats = stats;
 +	return err;
 +}
 +
-+static void damon_sysfs_quotas_rm_dirs(struct damon_sysfs_quotas *quotas)
-+{
-+	kobject_put(&quotas->weights->kobj);
-+}
-+
- static ssize_t damon_sysfs_quotas_ms_show(struct kobject *kobj,
- 		struct kobj_attribute *attr, char *buf)
+ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
  {
-@@ -393,6 +537,10 @@ static int damon_sysfs_scheme_set_quotas(struct damon_sysfs_scheme *scheme)
- 			&scheme->kobj, "quotas");
+ 	int err;
+@@ -769,8 +950,14 @@ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
+ 	err = damon_sysfs_scheme_set_watermarks(scheme);
  	if (err)
- 		goto out;
-+	err = damon_sysfs_quotas_add_dirs(quotas);
+ 		goto put_quotas_access_pattern_out;
++	err = damon_sysfs_scheme_set_stats(scheme);
 +	if (err)
-+		goto out;
-+	scheme->quotas = quotas;
++		goto put_watermarks_quotas_access_pattern_out;
  	return 0;
  
- out:
-@@ -422,6 +570,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
- {
- 	damon_sysfs_access_pattern_rm_dirs(scheme->access_pattern);
- 	kobject_put(&scheme->access_pattern->kobj);
-+	damon_sysfs_quotas_rm_dirs(scheme->quotas);
++put_watermarks_quotas_access_pattern_out:
++	kobject_put(&scheme->watermarks->kobj);
++	scheme->watermarks = NULL;
+ put_quotas_access_pattern_out:
  	kobject_put(&scheme->quotas->kobj);
+ 	scheme->quotas = NULL;
+@@ -787,6 +974,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
+ 	damon_sysfs_quotas_rm_dirs(scheme->quotas);
+ 	kobject_put(&scheme->quotas->kobj);
+ 	kobject_put(&scheme->watermarks->kobj);
++	kobject_put(&scheme->stats->kobj);
  }
  
-@@ -1671,12 +1820,14 @@ static struct damos *damon_sysfs_mk_scheme(
- 	struct damon_sysfs_access_pattern *pattern =
- 		sysfs_scheme->access_pattern;
- 	struct damon_sysfs_quotas *sysfs_quotas = sysfs_scheme->quotas;
-+	struct damon_sysfs_weights *sysfs_weights = sysfs_quotas->weights;
- 	struct damos_quota quota = {
- 		.ms = sysfs_quotas->ms,
- 		.sz = sysfs_quotas->sz,
--		.weight_sz = 1000,
--		.weight_nr_accesses = 1000,
--		.weight_age = 1000,
-+		.reset_interval = sysfs_quotas->reset_interval_ms,
-+		.weight_sz = sysfs_weights->sz,
-+		.weight_nr_accesses = sysfs_weights->nr_accesses,
-+		.weight_age = sysfs_weights->age,
- 	};
- 	struct damos_watermarks wmarks = {
- 		.metric = DAMOS_WMARK_NONE,
+ static ssize_t damon_sysfs_scheme_action_show(struct kobject *kobj,
+@@ -2163,6 +2351,31 @@ static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
+ 	 */
+ }
+ 
++static int damon_sysfs_update_schemes_stats(struct damon_sysfs_kdamond *kdamond)
++{
++	struct damon_ctx *ctx = kdamond->damon_ctx;
++	struct damos *scheme;
++	int schemes_idx = 0;
++
++	if (!ctx)
++		return -EINVAL;
++	mutex_lock(&ctx->kdamond_lock);
++	damon_for_each_scheme(scheme, ctx) {
++		struct damon_sysfs_schemes *sysfs_schemes;
++		struct damon_sysfs_stats *sysfs_stats;
++
++		sysfs_schemes = kdamond->contexts->contexts_arr[0]->schemes;
++		sysfs_stats = sysfs_schemes->schemes_arr[schemes_idx++]->stats;
++		sysfs_stats->nr_tried = scheme->stat.nr_tried;
++		sysfs_stats->sz_tried = scheme->stat.sz_tried;
++		sysfs_stats->nr_applied = scheme->stat.nr_applied;
++		sysfs_stats->sz_applied = scheme->stat.sz_applied;
++		sysfs_stats->qt_exceeds = scheme->stat.qt_exceeds;
++	}
++	mutex_unlock(&ctx->kdamond_lock);
++	return 0;
++}
++
+ static ssize_t damon_sysfs_kdamond_state_store(struct kobject *kobj,
+ 		struct kobj_attribute *attr, const char *buf, size_t count)
+ {
+@@ -2176,6 +2389,8 @@ static ssize_t damon_sysfs_kdamond_state_store(struct kobject *kobj,
+ 		ret = damon_sysfs_turn_damon_on(kdamond);
+ 	else if (sysfs_streq(buf, "off"))
+ 		ret = damon_sysfs_turn_damon_off(kdamond);
++	else if (sysfs_streq(buf, "update_schemes_stats"))
++		ret = damon_sysfs_update_schemes_stats(kdamond);
+ 	else
+ 		ret = -EINVAL;
+ 	mutex_unlock(&damon_sysfs_lock);
 -- 
 2.17.1
 
