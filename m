@@ -2,387 +2,568 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25272C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69CAFC43219
 	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Feb 2022 15:21:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241940AbiBWPWL (ORCPT
+        id S241909AbiBWPWJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Feb 2022 10:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        Wed, 23 Feb 2022 10:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241885AbiBWPWH (ORCPT
+        with ESMTP id S241920AbiBWPWF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:22:07 -0500
+        Wed, 23 Feb 2022 10:22:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C511141;
-        Wed, 23 Feb 2022 07:21:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B36ACF;
+        Wed, 23 Feb 2022 07:21:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6912DB8207C;
-        Wed, 23 Feb 2022 15:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44345C340F8;
-        Wed, 23 Feb 2022 15:21:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D40C9B8207B;
+        Wed, 23 Feb 2022 15:21:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9606FC340FC;
+        Wed, 23 Feb 2022 15:21:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645629693;
-        bh=5yg9/nCZ41ziXpzo6YFkfA3p9CjNAp5ve/V1Y984iqk=;
+        s=k20201202; t=1645629687;
+        bh=ZGMpJwl2wn458uReV1jkJhAfqxpRPeF4jgkB4IQOVlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YZUnKFGfmz8Dm7RSQkftf28cNHZa3uG97m0sRjNM5sG0CDEvHYVWHNWFacOZWdrTE
-         k54gVYWz4L1rYtySYV9tryBRE8u3QG2T8KDgMb2xmsiNjE9UAEaPOXM3YtUv4golYf
-         Z2tTk1butdX6yoBkItQtuNJ6FcNFeXPPy1WMV7AQl0r7UssXBQD226Fa1QHBYyIyHX
-         pug6r/a+gPELGBHGnEqfPlLihCa1dOec4EUhDcE5yU+E4qco6hKYWhhmVPyWxvSYMS
-         LPTiIb0l7U5wipJLU7Wc1nM89UQ2mvbk2ps7uSRaSuZj78SAE4lagtCEtz1DiDuth1
-         cRbwwWi61VzFg==
+        b=bQ04KSteGlVPPBiAKYH+TmAtI1qYK2xtXYZaXaUS4ALnn1iGb9QPxVa8Sb6kJ2dyt
+         UnaoiU+GG2RzURlgLcUSJta9sotP/5Pped60oPlQ4UdqW/5o8cKo9gTOJRh1DPfw3W
+         VqyXP96ztAFp18RkFGVhGdQZCbXCJcsBFw/8IBmFKal7d0pDkN93tztf4BJLiFDZOI
+         SVoOiOwGONV2gftjOc55Bx7g+ZFf90vXEnGVTGiOLLYANl/GI+QQu3fWGZE5YIY7On
+         xMxaKpxQedZncWQf47rEGfDVKMZ8XrFB/N5MsXrpHfQZojV43v+l6QQ3bprTUjv1ma
+         egnQnfh42lIXw==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
         xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 11/12] selftests/damon: Add a test for DAMON sysfs interface
-Date:   Wed, 23 Feb 2022 15:20:50 +0000
-Message-Id: <20220223152051.22936-12-sj@kernel.org>
+Subject: [PATCH 06/12] mm/damon/sysfs: Support DAMON-based Operation Schemes
+Date:   Wed, 23 Feb 2022 15:20:45 +0000
+Message-Id: <20220223152051.22936-7-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220223152051.22936-1-sj@kernel.org>
 References: <20220223152051.22936-1-sj@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit adds a selftest for DAMON sysfs interface.  It tests the
-functionality of 'nr' files and existence of files in each directory of
-the hierarchy.
+This commit makes DAMON sysfs interface supports the DAMON-based
+operation schemes (DAMOS) feature.  Specifically, this commit adds
+'schemes' directory under each context direcotry, and makes kdamond
+'state' file writing respects the contents in the directory.
+
+Note that this commit doesn't support all features of DAMOS but only the
+target access pattern and action feature.  Supports for quotas,
+prioritization, watermarks will follow.
+
+As a result, the files hierarchy becomes as below:
+
+    /sys/kernel/mm/damon/admin
+    │ kdamonds/nr
+    │ │ 0/state,pid
+    │ │ │ contexts/nr
+    │ │ │ │ 0/operations
+    │ │ │ │ │ monitoring_attrs/intervals/sample_us,aggr_us,update_us
+    │ │ │ │ │ │ nr_regions/min,max
+    │ │ │ │ │ targets/nr
+    │ │ │ │ │ │ 0/pid
+    │ │ │ │ │ │ │ regions/nr
+    │ │ │ │ │ │ │ │ 0/start,end
+    │ │ │ │ │ │ │ │ ...
+    │ │ │ │ │ │ ...
+    │ │ │ │ │ schemes/nr    <- NEW DIRECTORY
+    │ │ │ │ │ │ 0/action
+    │ │ │ │ │ │ │ access_pattern/
+    │ │ │ │ │ │ │ │ sz/min,max
+    │ │ │ │ │ │ │ │ nr_accesses/min,max
+    │ │ │ │ │ │ │ │ age/min,max
+    │ │ │ │ │ │ ...
+    │ │ │ │ ...
+    │ │ ...
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/Makefile |   1 +
- tools/testing/selftests/damon/sysfs.sh | 306 +++++++++++++++++++++++++
- 2 files changed, 307 insertions(+)
- create mode 100755 tools/testing/selftests/damon/sysfs.sh
+ mm/damon/sysfs.c | 418 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 418 insertions(+)
 
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index 937d36ae9a69..0470c5f3e690 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -6,5 +6,6 @@ TEST_GEN_FILES += huge_count_read_write
- TEST_FILES = _chk_dependency.sh _debugfs_common.sh
- TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
- TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
-+TEST_PROGS += sysfs.sh
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index c9ad3808077e..2350a637e662 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -115,6 +115,349 @@ static struct kobj_type damon_sysfs_ul_range_ktype = {
+ 	.default_groups = damon_sysfs_ul_range_groups,
+ };
  
- include ../lib.mk
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-new file mode 100755
-index 000000000000..38a06a2845b5
---- /dev/null
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -0,0 +1,306 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
++/*
++ * access_pattern directory
++ */
 +
-+# Kselftest frmework requirement - SKIP code is 4.
-+ksft_skip=4
++struct damon_sysfs_access_pattern {
++	struct kobject kobj;
++	struct damon_sysfs_ul_range *sz;
++	struct damon_sysfs_ul_range *nr_accesses;
++	struct damon_sysfs_ul_range *age;
++};
 +
-+ensure_write_succ()
++static
++struct damon_sysfs_access_pattern *damon_sysfs_access_pattern_alloc(void)
 +{
-+	file=$1
-+	content=$2
-+	reason=$3
++	struct damon_sysfs_access_pattern *access_pattern =
++		kmalloc(sizeof(*access_pattern), GFP_KERNEL);
 +
-+	if ! echo "$content" > "$file"
-+	then
-+		echo "writing $content to $file failed"
-+		echo "expected success because $reason"
-+		exit 1
-+	fi
++	if (!access_pattern)
++		return NULL;
++	access_pattern->kobj = (struct kobject){};
++	return access_pattern;
 +}
 +
-+ensure_write_fail()
++static int damon_sysfs_access_pattern_add_range_dir(
++		struct damon_sysfs_access_pattern *access_pattern,
++		struct damon_sysfs_ul_range **range_dir_ptr,
++		char *name)
 +{
-+	file=$1
-+	content=$2
-+	reason=$3
++	struct damon_sysfs_ul_range *range = damon_sysfs_ul_range_alloc(0, 0);
++	int err;
 +
-+	if echo "$content" > "$file"
-+	then
-+		echo "writing $content to $file succeed ($fail_reason)"
-+		echo "expected failure because $reason"
-+		exit 1
-+	fi
++	if (!range)
++		return -ENOMEM;
++	err = kobject_init_and_add(&range->kobj, &damon_sysfs_ul_range_ktype,
++			&access_pattern->kobj, name);
++	if (err)
++		kobject_put(&range->kobj);
++	else
++		*range_dir_ptr = range;
++	return err;
 +}
 +
-+ensure_dir()
++static int damon_sysfs_access_pattern_add_dirs(
++		struct damon_sysfs_access_pattern *access_pattern)
 +{
-+	dir=$1
-+	to_ensure=$2
-+	if [ "$to_ensure" = "exist" ] && [ ! -d "$dir" ]
-+	then
-+		echo "$dir dir is expected but not found"
-+		exit 1
-+	elif [ "$to_ensure" = "not_exist" ] && [ -d "$dir" ]
-+	then
-+		echo "$dir dir is not expected but found"
-+		exit 1
-+	fi
++	int err;
++
++	err = damon_sysfs_access_pattern_add_range_dir(access_pattern,
++			&access_pattern->sz, "sz");
++	if (err)
++		goto put_sz_out;
++
++	err = damon_sysfs_access_pattern_add_range_dir(access_pattern,
++			&access_pattern->nr_accesses, "nr_accesses");
++	if (err)
++		goto put_nr_accesses_sz_out;
++
++	err = damon_sysfs_access_pattern_add_range_dir(access_pattern,
++			&access_pattern->age, "age");
++	if (err)
++		goto put_age_nr_accesses_sz_out;
++	return 0;
++
++put_age_nr_accesses_sz_out:
++	kobject_put(&access_pattern->age->kobj);
++	access_pattern->age = NULL;
++put_nr_accesses_sz_out:
++	kobject_put(&access_pattern->nr_accesses->kobj);
++	access_pattern->nr_accesses = NULL;
++put_sz_out:
++	kobject_put(&access_pattern->sz->kobj);
++	access_pattern->sz = NULL;
++	return err;
 +}
 +
-+ensure_file()
++static void damon_sysfs_access_pattern_rm_dirs(
++		struct damon_sysfs_access_pattern *access_pattern)
 +{
-+	file=$1
-+	to_ensure=$2
-+	permission=$3
-+	if [ "$to_ensure" = "exist" ]
-+	then
-+		if [ ! -f "$file" ]
-+		then
-+			echo "$file is expected but not found"
-+			exit 1
-+		fi
-+		perm=$(stat -c "%a" "$file")
-+		if [ ! "$perm" = "$permission" ]
-+		then
-+			echo "$file permission: expected $permission but $perm"
-+			exit 1
-+		fi
-+	elif [ "$to_ensure" = "not_exist" ] && [ -f "$dir" ]
-+	then
-+		echo "$file is not expected but found"
-+		exit 1
-+	fi
++	kobject_put(&access_pattern->sz->kobj);
++	kobject_put(&access_pattern->nr_accesses->kobj);
++	kobject_put(&access_pattern->age->kobj);
 +}
 +
-+test_range()
++static void damon_sysfs_access_pattern_release(struct kobject *kobj)
 +{
-+	range_dir=$1
-+	ensure_dir "$range_dir" "exist"
-+	ensure_file "$range_dir/min" "exist" 600
-+	ensure_file "$range_dir/max" "exist" 600
++	kfree(container_of(kobj, struct damon_sysfs_access_pattern, kobj));
 +}
 +
-+test_stats()
++static struct attribute *damon_sysfs_access_pattern_attrs[] = {
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_access_pattern);
++
++static struct kobj_type damon_sysfs_access_pattern_ktype = {
++	.release = damon_sysfs_access_pattern_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_access_pattern_groups,
++};
++
++/*
++ * scheme directory
++ */
++
++struct damon_sysfs_scheme {
++	struct kobject kobj;
++	enum damos_action action;
++	struct damon_sysfs_access_pattern *access_pattern;
++};
++
++/* This should match with enum damos_action */
++static const char * const damon_sysfs_damos_action_strs[] = {
++	"willneed",
++	"cold",
++	"pageout",
++	"hugepage",
++	"nohugepage",
++	"stat",
++};
++
++static struct damon_sysfs_scheme *damon_sysfs_scheme_alloc(
++		enum damos_action action)
 +{
-+	stats_dir=$1
-+	ensure_dir "$stats_dir" "exist"
-+	for f in nr_tried sz_tried nr_applied sz_applied qt_exceeds
-+	do
-+		ensure_file "$stats_dir/$f" "exist" "400"
-+	done
++	struct damon_sysfs_scheme *scheme = kmalloc(sizeof(*scheme),
++				GFP_KERNEL);
++
++	if (!scheme)
++		return NULL;
++	scheme->kobj = (struct kobject){};
++	scheme->action = action;
++	return scheme;
 +}
 +
-+test_watermarks()
++static int damon_sysfs_scheme_set_access_pattern(
++		struct damon_sysfs_scheme *scheme)
 +{
-+	watermarks_dir=$1
-+	ensure_dir "$watermarks_dir" "exist"
-+	ensure_file "$watermarks_dir/metric" "exist" "600"
-+	ensure_file "$watermarks_dir/interval_us" "exist" "600"
-+	ensure_file "$watermarks_dir/high" "exist" "600"
-+	ensure_file "$watermarks_dir/mid" "exist" "600"
-+	ensure_file "$watermarks_dir/low" "exist" "600"
++	struct damon_sysfs_access_pattern *access_pattern;
++	int err;
++
++	access_pattern = damon_sysfs_access_pattern_alloc();
++	if (!access_pattern)
++		return -ENOMEM;
++	err = kobject_init_and_add(&access_pattern->kobj,
++			&damon_sysfs_access_pattern_ktype, &scheme->kobj,
++			"access_pattern");
++	if (err)
++		goto out;
++	err = damon_sysfs_access_pattern_add_dirs(access_pattern);
++	if (err)
++		goto out;
++	scheme->access_pattern = access_pattern;
++	return 0;
++
++out:
++	kobject_put(&access_pattern->kobj);
++	return err;
 +}
 +
-+test_weights()
++static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
 +{
-+	weights_dir=$1
-+	ensure_dir "$weights_dir" "exist"
-+	ensure_file "$weights_dir/sz" "exist" "600"
-+	ensure_file "$weights_dir/nr_accesses" "exist" "600"
-+	ensure_file "$weights_dir/age" "exist" "600"
++	int err;
++
++	err = damon_sysfs_scheme_set_access_pattern(scheme);
++	if (err)
++		return err;
++	return 0;
 +}
 +
-+test_quotas()
++static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
 +{
-+	quotas_dir=$1
-+	ensure_dir "$quotas_dir" "exist"
-+	ensure_file "$quotas_dir/ms" "exist" 600
-+	ensure_file "$quotas_dir/sz" "exist" 600
-+	ensure_file "$quotas_dir/reset_interval_ms" "exist" 600
-+	test_weights "$quotas_dir/weights"
++	damon_sysfs_access_pattern_rm_dirs(scheme->access_pattern);
++	kobject_put(&scheme->access_pattern->kobj);
 +}
 +
-+test_access_pattern()
++static ssize_t damon_sysfs_scheme_action_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
 +{
-+	access_pattern_dir=$1
-+	ensure_dir "$access_pattern_dir" "exist"
-+	test_range "$access_pattern_dir/age"
-+	test_range "$access_pattern_dir/nr_accesses"
-+	test_range "$access_pattern_dir/sz"
++	struct damon_sysfs_scheme *scheme = container_of(kobj,
++			struct damon_sysfs_scheme, kobj);
++
++	return sysfs_emit(buf, "%s\n",
++			damon_sysfs_damos_action_strs[scheme->action]);
 +}
 +
-+test_scheme()
++static ssize_t damon_sysfs_scheme_action_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	scheme_dir=$1
-+	ensure_dir "$scheme_dir" "exist"
-+	ensure_file "$scheme_dir/action" "exist" "600"
-+	test_access_pattern "$scheme_dir/access_pattern"
-+	test_quotas "$scheme_dir/quotas"
-+	test_watermarks "$scheme_dir/watermarks"
-+	test_stats "$scheme_dir/stats"
++	struct damon_sysfs_scheme *scheme = container_of(kobj,
++			struct damon_sysfs_scheme, kobj);
++	enum damos_action action;
++
++	for (action = 0; action < NR_DAMOS_ACTIONS; action++) {
++		if (sysfs_streq(buf, damon_sysfs_damos_action_strs[action])) {
++			scheme->action = action;
++			return count;
++		}
++	}
++	return -EINVAL;
 +}
 +
-+test_schemes()
++static void damon_sysfs_scheme_release(struct kobject *kobj)
 +{
-+	schemes_dir=$1
-+	ensure_dir "$schemes_dir" "exist"
-+	ensure_file "$schemes_dir/nr" "exist" 600
-+
-+	ensure_write_succ  "$schemes_dir/nr" "1" "valid input"
-+	test_scheme "$schemes_dir/0"
-+
-+	ensure_write_succ  "$schemes_dir/nr" "2" "valid input"
-+	test_scheme "$schemes_dir/0"
-+	test_scheme "$schemes_dir/1"
-+
-+	ensure_write_succ "$schemes_dir/nr" "0" "valid input"
-+	ensure_dir "$schemes_dir/0" "not_exist"
-+	ensure_dir "$schemes_dir/1" "not_exist"
++	kfree(container_of(kobj, struct damon_sysfs_scheme, kobj));
 +}
 +
-+test_region()
++static struct kobj_attribute damon_sysfs_scheme_action_attr = __ATTR(
++		action, 0600, damon_sysfs_scheme_action_show,
++		damon_sysfs_scheme_action_store);
++
++
++static struct attribute *damon_sysfs_scheme_attrs[] = {
++	&damon_sysfs_scheme_action_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_scheme);
++
++static struct kobj_type damon_sysfs_scheme_ktype = {
++	.release = damon_sysfs_scheme_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_scheme_groups,
++};
++
++/*
++ * schemes directory
++ */
++
++struct damon_sysfs_schemes {
++	struct kobject kobj;
++	struct damon_sysfs_scheme **schemes_arr;
++	int nr;
++};
++
++static struct damon_sysfs_schemes *damon_sysfs_schemes_alloc(void)
 +{
-+	region_dir=$1
-+	ensure_dir "$region_dir" "exist"
-+	ensure_file "$region_dir/start" "exist" 600
-+	ensure_file "$region_dir/end" "exist" 600
++	return kzalloc(sizeof(struct damon_sysfs_schemes), GFP_KERNEL);
 +}
 +
-+test_regions()
++static void damon_sysfs_schemes_rm_dirs(struct damon_sysfs_schemes *schemes)
 +{
-+	regions_dir=$1
-+	ensure_dir "$regions_dir" "exist"
-+	ensure_file "$regions_dir/nr" "exist" 600
++	struct damon_sysfs_scheme **schemes_arr = schemes->schemes_arr;
++	int i;
 +
-+	ensure_write_succ  "$regions_dir/nr" "1" "valid input"
-+	test_region "$regions_dir/0"
-+
-+	ensure_write_succ  "$regions_dir/nr" "2" "valid input"
-+	test_region "$regions_dir/0"
-+	test_region "$regions_dir/1"
-+
-+	ensure_write_succ "$regions_dir/nr" "0" "valid input"
-+	ensure_dir "$regions_dir/0" "not_exist"
-+	ensure_dir "$regions_dir/1" "not_exist"
++	for (i = 0; i < schemes->nr; i++) {
++		damon_sysfs_scheme_rm_dirs(schemes_arr[i]);
++		kobject_put(&schemes_arr[i]->kobj);
++	}
++	schemes->nr = 0;
++	kfree(schemes_arr);
++	schemes->schemes_arr = NULL;
 +}
 +
-+test_target()
++static int damon_sysfs_schemes_add_dirs(struct damon_sysfs_schemes *schemes,
++		int nr_schemes)
 +{
-+	target_dir=$1
-+	ensure_dir "$target_dir" "exist"
-+	ensure_file "$target_dir/pid" "exist" "600"
-+	test_regions "$target_dir/regions"
++	struct damon_sysfs_scheme **schemes_arr, *scheme;
++	int err, i;
++
++	damon_sysfs_schemes_rm_dirs(schemes);
++	if (!nr_schemes)
++		return 0;
++
++	schemes_arr = kmalloc_array(nr_schemes, sizeof(*schemes_arr),
++			GFP_KERNEL | __GFP_NOWARN);
++	if (!schemes_arr)
++		return -ENOMEM;
++	schemes->schemes_arr = schemes_arr;
++
++	for (i = 0; i < nr_schemes; i++) {
++		scheme = damon_sysfs_scheme_alloc(DAMOS_STAT);
++		if (!scheme) {
++			damon_sysfs_schemes_rm_dirs(schemes);
++			return -ENOMEM;
++		}
++
++		err = kobject_init_and_add(&scheme->kobj,
++				&damon_sysfs_scheme_ktype, &schemes->kobj,
++				"%d", i);
++		if (err)
++			goto out;
++		err = damon_sysfs_scheme_add_dirs(scheme);
++		if (err)
++			goto out;
++
++		schemes_arr[i] = scheme;
++		schemes->nr++;
++	}
++	return 0;
++
++out:
++	damon_sysfs_schemes_rm_dirs(schemes);
++	kobject_put(&scheme->kobj);
++	return err;
 +}
 +
-+test_targets()
++static ssize_t damon_sysfs_schemes_nr_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
 +{
-+	targets_dir=$1
-+	ensure_dir "$targets_dir" "exist"
-+	ensure_file "$targets_dir/nr" "exist" 600
++	struct damon_sysfs_schemes *schemes = container_of(kobj,
++			struct damon_sysfs_schemes, kobj);
 +
-+	ensure_write_succ  "$targets_dir/nr" "1" "valid input"
-+	test_target "$targets_dir/0"
-+
-+	ensure_write_succ  "$targets_dir/nr" "2" "valid input"
-+	test_target "$targets_dir/0"
-+	test_target "$targets_dir/1"
-+
-+	ensure_write_succ "$targets_dir/nr" "0" "valid input"
-+	ensure_dir "$targets_dir/0" "not_exist"
-+	ensure_dir "$targets_dir/1" "not_exist"
++	return sysfs_emit(buf, "%d\n", schemes->nr);
 +}
 +
-+test_intervals()
++static ssize_t damon_sysfs_schemes_nr_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
 +{
-+	intervals_dir=$1
-+	ensure_dir "$intervals_dir" "exist"
-+	ensure_file "$intervals_dir/aggr_us" "exist" "600"
-+	ensure_file "$intervals_dir/sample_us" "exist" "600"
-+	ensure_file "$intervals_dir/update_us" "exist" "600"
++	struct damon_sysfs_schemes *schemes = container_of(kobj,
++			struct damon_sysfs_schemes, kobj);
++	int nr, err = kstrtoint(buf, 0, &nr);
++
++	if (err)
++		return err;
++	if (nr < 0)
++		return -EINVAL;
++
++	if (!mutex_trylock(&damon_sysfs_lock))
++		return -EBUSY;
++	err = damon_sysfs_schemes_add_dirs(schemes, nr);
++	mutex_unlock(&damon_sysfs_lock);
++	if (err)
++		return err;
++	return count;
 +}
 +
-+test_monitoring_attrs()
++static void damon_sysfs_schemes_release(struct kobject *kobj)
 +{
-+	monitoring_attrs_dir=$1
-+	ensure_dir "$monitoring_attrs_dir" "exist"
-+	test_intervals "$monitoring_attrs_dir/intervals"
-+	test_range "$monitoring_attrs_dir/nr_regions"
++	kfree(container_of(kobj, struct damon_sysfs_schemes, kobj));
 +}
 +
-+test_context()
++static struct kobj_attribute damon_sysfs_schemes_nr_attr = __ATTR(nr, 0600,
++		damon_sysfs_schemes_nr_show, damon_sysfs_schemes_nr_store);
++
++static struct attribute *damon_sysfs_schemes_attrs[] = {
++	&damon_sysfs_schemes_nr_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_schemes);
++
++static struct kobj_type damon_sysfs_schemes_ktype = {
++	.release = damon_sysfs_schemes_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_schemes_groups,
++};
++
+ /*
+  * init region directory
+  */
+@@ -756,6 +1099,7 @@ struct damon_sysfs_context {
+ 	enum damon_ops_id ops_id;
+ 	struct damon_sysfs_attrs *attrs;
+ 	struct damon_sysfs_targets *targets;
++	struct damon_sysfs_schemes *schemes;
+ };
+ 
+ static struct damon_sysfs_context *damon_sysfs_context_alloc(
+@@ -810,6 +1154,23 @@ static int damon_sysfs_context_set_targets(struct damon_sysfs_context *context)
+ 	return 0;
+ }
+ 
++static int damon_sysfs_context_set_schemes(struct damon_sysfs_context *context)
 +{
-+	context_dir=$1
-+	ensure_dir "$context_dir" "exist"
-+	ensure_file "$context_dir/operations" "exist" 600
-+	test_monitoring_attrs "$context_dir/monitoring_attrs"
-+	test_targets "$context_dir/targets"
-+	test_schemes "$context_dir/schemes"
++	struct damon_sysfs_schemes *schemes = damon_sysfs_schemes_alloc();
++	int err;
++
++	if (!schemes)
++		return -ENOMEM;
++	err = kobject_init_and_add(&schemes->kobj, &damon_sysfs_schemes_ktype,
++			&context->kobj, "schemes");
++	if (err) {
++		kobject_put(&schemes->kobj);
++		return err;
++	}
++	context->schemes = schemes;
++	return 0;
 +}
 +
-+test_contexts()
+ static int damon_sysfs_context_add_dirs(struct damon_sysfs_context *context)
+ {
+ 	int err;
+@@ -822,8 +1183,14 @@ static int damon_sysfs_context_add_dirs(struct damon_sysfs_context *context)
+ 	if (err)
+ 		goto put_attrs_out;
+ 
++	err = damon_sysfs_context_set_schemes(context);
++	if (err)
++		goto put_targets_attrs_out;
+ 	return 0;
+ 
++put_targets_attrs_out:
++	kobject_put(&context->targets->kobj);
++	context->targets = NULL;
+ put_attrs_out:
+ 	kobject_put(&context->attrs->kobj);
+ 	context->attrs = NULL;
+@@ -836,6 +1203,8 @@ static void damon_sysfs_context_rm_dirs(struct damon_sysfs_context *context)
+ 	kobject_put(&context->attrs->kobj);
+ 	damon_sysfs_targets_rm_dirs(context->targets);
+ 	kobject_put(&context->targets->kobj);
++	damon_sysfs_schemes_rm_dirs(context->schemes);
++	kobject_put(&context->schemes->kobj);
+ }
+ 
+ static ssize_t damon_sysfs_context_operations_show(struct kobject *kobj,
+@@ -1159,6 +1528,52 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+ 	return 0;
+ }
+ 
++static struct damos *damon_sysfs_mk_scheme(
++		struct damon_sysfs_scheme *sysfs_scheme)
 +{
-+	contexts_dir=$1
-+	ensure_dir "$contexts_dir" "exist"
-+	ensure_file "$contexts_dir/nr" "exist" 600
++	struct damon_sysfs_access_pattern *pattern =
++		sysfs_scheme->access_pattern;
++	struct damos_quota quota = {
++		.ms = 0,
++		.sz = 0,
++		.reset_interval = 0,
++		.weight_sz = 1000,
++		.weight_nr_accesses = 1000,
++		.weight_age = 1000,
++	};
++	struct damos_watermarks wmarks = {
++		.metric = DAMOS_WMARK_NONE,
++		.interval = 0,
++		.high = 0,
++		.mid = 0,
++		.low = 0,
++	};
 +
-+	ensure_write_succ  "$contexts_dir/nr" "1" "valid input"
-+	test_context "$contexts_dir/0"
-+
-+	ensure_write_fail "$contexts_dir/nr" "2" "only 0/1 are supported"
-+	test_context "$contexts_dir/0"
-+
-+	ensure_write_succ "$contexts_dir/nr" "0" "valid input"
-+	ensure_dir "$contexts_dir/0" "not_exist"
++	return damon_new_scheme(pattern->sz->min, pattern->sz->max,
++			pattern->nr_accesses->min, pattern->nr_accesses->max,
++			pattern->age->min, pattern->age->max,
++			sysfs_scheme->action, &quota, &wmarks);
 +}
 +
-+test_kdamond()
++static int damon_sysfs_set_schemes(struct damon_ctx *ctx,
++		struct damon_sysfs_schemes *sysfs_schemes)
 +{
-+	kdamond_dir=$1
-+	ensure_dir "$kdamond_dir" "exist"
-+	ensure_file "$kdamond_dir/state" "exist" "600"
-+	ensure_file "$kdamond_dir/pid" "exist" 400
-+	test_contexts "$kdamond_dir/contexts"
++	int i;
++
++	for (i = 0; i < sysfs_schemes->nr; i++) {
++		struct damos *scheme, *next;
++
++		scheme = damon_sysfs_mk_scheme(sysfs_schemes->schemes_arr[i]);
++		if (!scheme) {
++			damon_for_each_scheme_safe(scheme, next, ctx)
++				damon_destroy_scheme(scheme);
++			return -ENOMEM;
++		}
++		damon_add_scheme(ctx, scheme);
++	}
++	return 0;
 +}
 +
-+test_kdamonds()
-+{
-+	kdamonds_dir=$1
-+	ensure_dir "$kdamonds_dir" "exist"
-+
-+	ensure_file "$kdamonds_dir/nr" "exist" "600"
-+
-+	ensure_write_succ  "$kdamonds_dir/nr" "1" "valid input"
-+	test_kdamond "$kdamonds_dir/0"
-+
-+	ensure_write_succ  "$kdamonds_dir/nr" "2" "valid input"
-+	test_kdamond "$kdamonds_dir/0"
-+	test_kdamond "$kdamonds_dir/1"
-+
-+	ensure_write_succ "$kdamonds_dir/nr" "0" "valid input"
-+	ensure_dir "$kdamonds_dir/0" "not_exist"
-+	ensure_dir "$kdamonds_dir/1" "not_exist"
-+}
-+
-+test_damon_sysfs()
-+{
-+	damon_sysfs=$1
-+	if [ ! -d "$damon_sysfs" ]
-+	then
-+		echo "$damon_sysfs not found"
-+		exit $ksft_skip
-+	fi
-+
-+	test_kdamonds "$damon_sysfs/kdamonds"
-+}
-+
-+check_dependencies()
-+{
-+	if [ $EUID -ne 0 ]
-+	then
-+		echo "Run as root"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+check_dependencies
-+test_damon_sysfs "/sys/kernel/mm/damon/admin"
+ static void damon_sysfs_before_terminate(struct damon_ctx *ctx)
+ {
+ 	struct damon_target *t, *next;
+@@ -1190,6 +1605,9 @@ static struct damon_ctx *damon_sysfs_build_ctx(
+ 	if (err)
+ 		goto out;
+ 	err = damon_sysfs_set_targets(ctx, sys_ctx->targets);
++	if (err)
++		goto out;
++	err = damon_sysfs_set_schemes(ctx, sys_ctx->schemes);
+ 	if (err)
+ 		goto out;
+ 
 -- 
 2.17.1
 
