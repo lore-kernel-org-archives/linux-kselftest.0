@@ -2,191 +2,188 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E416EC433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Feb 2022 00:13:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93828C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Feb 2022 01:32:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245208AbiBXANx (ORCPT
+        id S229545AbiBXBd0 convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Feb 2022 19:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        Wed, 23 Feb 2022 20:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245158AbiBXANx (ORCPT
+        with ESMTP id S229575AbiBXBdZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:13:53 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04093606CC
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 16:13:24 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id r7so881759iot.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Feb 2022 16:13:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XyYknUun+Ddrww1SSrtzpbIs8BRQxV9z2z6D5KQxpAY=;
-        b=PinJWtVZji/D+weJjsqoeKg0vX4N/3QY6c6SUxgAbSzcAbUMYoX4GkQ2fXlSive99Z
-         8a3OWxhikeYSDTUj05HdIx93dBL+yJjJTSlsqm3zWXCDYh8vTsal6pau4lehN9yD2uLX
-         LxpGvmnTJI0M46W6AasnjOXHfl5M43oBeMaBM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XyYknUun+Ddrww1SSrtzpbIs8BRQxV9z2z6D5KQxpAY=;
-        b=a6mfTc5J9RlJMOEx5NXa1aBY2QYklK3Reh/zWnD9QOnAzf+U8y1fSUIM9XiJAk4JKH
-         oF9JPEJnJXG9UJgtMbI0K330a0P9qe0T46d7Lh0ERX8PxMw8XuhU5QN0UAIAUwYfR6Tv
-         YA8+c8uBbfwsKWxS++pP9bRyRmb45c7RCfyzEx20lBtdqKtwJwRuhLl/jytRXroVTp4h
-         v9ka2MYo/vVInTcEq3SHTIy620/oDB31dhM3XuGF5AFNHhVYFEwQb2qsma0zjD9ENGaL
-         XG8++18xXaTBXpe8NE8CCBsHGntAQ5sG2c2J8CIB/wxkhxUOk+7ghlPfe7JAaxoR9+f5
-         hJ9Q==
-X-Gm-Message-State: AOAM533jFnqzAJaPhzFmOabHtFTQ0RkWAjtloq/GE1jHbqWhDHUT95d5
-        SRKje/v40ZFZuBh5JSi8fP6QLg==
-X-Google-Smtp-Source: ABdhPJxaouIBdOY1qgwPhBXj4EVDKZPmWsmeast1LF/IxcJtpuvmSBtOjHEmhERM2vtelB4ZHvX2cg==
-X-Received: by 2002:a02:19c6:0:b0:30e:e6a5:67ad with SMTP id b189-20020a0219c6000000b0030ee6a567admr41420jab.45.1645661603302;
-        Wed, 23 Feb 2022 16:13:23 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id d18sm681572iln.79.2022.02.23.16.13.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 16:13:22 -0800 (PST)
-Subject: Re: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
-To:     "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
- <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
- <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5200cb0b-6417-d97b-7f17-eae4bf4b0901@linuxfoundation.org>
-Date:   Wed, 23 Feb 2022 17:13:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 23 Feb 2022 20:33:25 -0500
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B5449CB4;
+        Wed, 23 Feb 2022 17:32:52 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:35060)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nN2zx-00AMnv-Jv; Wed, 23 Feb 2022 18:32:49 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53688 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nN2zw-00EDEm-Bb; Wed, 23 Feb 2022 18:32:49 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <linus@torvalds.org>
+Cc:     Linux API <linux-api@vger.kernel.org>,
+        Etienne Dechamps <etienne@edechamps.fr>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        Security Officers <security@kernel.org>,
+        Neil Brown <neilb@cse.unsw.edu.au>, NeilBrown <neilb@suse.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>, Jann Horn <jannh@google.com>,
+        Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>
+In-Reply-To: <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
+        (Linus Torvalds's message of "Wed, 23 Feb 2022 11:50:38 -0800")
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr>
+        <20220215101150.GD21589@blackbody.suse.cz>
+        <87zgmi5rhm.fsf@email.froward.int.ebiederm.org>
+        <87fso91n0v.fsf_-_@email.froward.int.ebiederm.org>
+        <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Wed, 23 Feb 2022 19:32:41 -0600
+Message-ID: <87ee3toxqe.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-In-Reply-To: <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1nN2zw-00EDEm-Bb;;;mid=<87ee3toxqe.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+jQZBwXH9ZWGkbzMxdKBeobm1bR1k1t1k=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: How should rlimits, suid exec, and capabilities interact?
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/22/22 12:55 AM, tan.shaopeng@fujitsu.com wrote:
-> Hi Khan,
-> 
->> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
->>> In kselftest framework, all tests can be build/run at a time, and a
->>> sub test also can be build/run individually. As follows:
->>> $ make -C tools/testing/selftests run_tests $ make -C
->>> tools/testing/selftests TARGETS=ptrace run_tests
->>>
->>> However, resctrl_tests cannot be run using kselftest framework, users
->>> have to change directory to tools/testing/selftests/resctrl/, run
->>> "make" to build executable file "resctrl_tests", and run "sudo
->>> ./resctrl_tests" to execute the test.
->>>
->>> To build/run resctrl_tests using kselftest framework.
->>> Modify tools/testing/selftests/Makefile and
->>> tools/testing/selftests/resctrl/Makefile.
->>>
->>> Even after this change, users can still build/run resctrl_tests
->>> without using framework as before.
->>>
->>> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
->>> ---
->>> Some important feedbacks from v1&v2 are addressed as follows:
->>>
->>> - The changelog mentions that changes were made to the resctrl
->>>     selftest Makefile but it does not describe what the change accomplish
->>>     or why they are needed.
->>>     => By changing the Makefile, resctrl_tests can use kselftest
->>>        framework like other sub tests. I described this in changelog.
->>>
->>> - The changelog did not describe how a user may use the kselftest
->>>     framework to run the resctrl tests nor the requested information
->>>     on how existing workflows are impacted.
->>>     => I described how to build/run resctrl_tests with kselftest framework,
->>>        and described the existing workflows are not impacted that users can
->>>        build/run resctrl_tests without using kselftest framework as before.
->>>
->>> - tools/testing/selftests/resctrl/README should be updated.
->>>     => I separate the update of README to a new patch.[patch v3 3/5]
->>>
->>> - Why is the meaning of "EXTRA_SOURCES" (i.e. what is "extra"?) and
->>>     why is "SRCS" no longer sufficient?
->>>     => I referred to other Makefiles, and found "SRCS" is better
->>>        than "EXTRA_SOURCES". So, I updated it to use "SRCS".
->>>
->>>    tools/testing/selftests/Makefile         |  1 +
->>>    tools/testing/selftests/resctrl/Makefile | 20 ++++++--------------
->>>    2 files changed, 7 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/Makefile
->>> b/tools/testing/selftests/Makefile
->>> index c852eb40c4f7..7df397c6893c 100644
->>> --- a/tools/testing/selftests/Makefile
->>> +++ b/tools/testing/selftests/Makefile
->>> @@ -51,6 +51,7 @@ TARGETS += proc
->>>    TARGETS += pstore
->>>    TARGETS += ptrace
->>>    TARGETS += openat2
->>> +TARGETS += resctrl
->>>    TARGETS += rlimits
->>>    TARGETS += rseq
->>>    TARGETS += rtc
->>> diff --git a/tools/testing/selftests/resctrl/Makefile
->>> b/tools/testing/selftests/resctrl/Makefile
->>> index 6bcee2ec91a9..de26638540ba 100644
->>> --- a/tools/testing/selftests/resctrl/Makefile
->>> +++ b/tools/testing/selftests/resctrl/Makefile
->>> @@ -1,17 +1,9 @@
->>> -CC = $(CROSS_COMPILE)gcc
->>> -CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -SRCS=$(wildcard *.c)
->>> -OBJS=$(SRCS:.c=.o)
->>> +CFLAGS += -g -Wall -O2 -D_FORTIFY_SOURCE=2
->>>
->>> -all: resctrl_tests
->>> +TEST_GEN_PROGS := resctrl_tests
->>> +SRCS := $(wildcard *.c)
->>>
->>> -$(OBJS): $(SRCS)
->>> -	$(CC) $(CFLAGS) -c $(SRCS)
->>> +all: $(TEST_GEN_PROGS)
->>>
->>> -resctrl_tests: $(OBJS)
->>> -	$(CC) $(CFLAGS) -o $@ $^
->>> -
->>> -.PHONY: clean
->>> -
->>> -clean:
->>> -	$(RM) $(OBJS) resctrl_tests
->>> +$(TEST_GEN_PROGS): $(SRCS)
->>
->> This patch breaks the test build - the below use-cases fail
->>
->> make kselftest-all TARGETS=resctrl
->> make -C  tools/testing/selftests/ TARGETS=resctrl
->>
->> Also a simple make in tools/testing/selftests/resctr
-> 
-> Thanks for your feedbacks.
-> I applied these patches to the source below and built
-> resctrl_tests successfully using above use-cases on x86/arm machine.
-> (1)
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->   Tag: v5.16
-> (2)
->   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->   Tag: next-20220217
-> 
-> Could you tell me which kernel source you used to build
-> and what error message you got?
-> 
 
-I tried this on Linux 5.17-rc4
+Linus Torvalds <linus@torvalds.org> writes:
 
-thanks,
--- Shuah
+> Basic rule: it's better to be too lenient than to be too strict.
+
+Thank you.  With that guideline I can explore the space of what is
+possible.
+
+Question: Running a suid program today charges the activity of that
+program to the user who ran that program, not to the user the program
+runs as.  Does anyone see a problem with charging the user the program
+runs as?
+
+The reason I want to change which user is charged with a process
+(besides it making more sense in my head) is so that
+"capable(CAP_SYS_RESOURCE)" can be used instead of the magic incantation
+"(cred->user == INIT_USER)".
+
+Today "capable(CAP_SYS_RESOURCE)" with respect to RLIMIT_NPROC is
+effectively meaningless for suid programs because the of the mismatch of
+charging the real user with the effective users credentials.
+
+An accidental experiment happened in v5.14-rc1 in July when the ucount
+rlimit code was merged.  It was only this last week when after Michal
+Koutný discovered the discrepancy through code inspection I merged a
+bug fix because the code was not preserving the existing behavior as
+intended.
+
+
+This behavior has existed in some form since Linux v1.0 when per user
+process limits were added.
+
+The original code in v1.0 was:
+> static int find_empty_process(void)
+> {
+>        int free_task;
+>        int i, tasks_free;
+>        int this_user_tasks;
+> 
+> repeat:
+>        if ((++last_pid) & 0xffff8000)
+>                last_pid=1;
+>        this_user_tasks = 0;
+>        tasks_free = 0;
+>        free_task = -EAGAIN;
+>        i = NR_TASKS;
+>        while (--i > 0) {
+>                if (!task[i]) {
+>                        free_task = i;
+>                        tasks_free++;
+>                        continue;
+>                }
+>                if (task[i]->uid == current->uid)
+>                        this_user_tasks++;
+>                if (task[i]->pid == last_pid || task[i]->pgrp == last_pid ||
+>                    task[i]->session == last_pid)
+>                        goto repeat;
+>        }
+>        if (tasks_free <= MIN_TASKS_LEFT_FOR_ROOT ||
+>            this_user_tasks > MAX_TASKS_PER_USER)
+>                if (current->uid)
+>                        return -EAGAIN;
+>        return free_task;
+> }
+
+Having tracked the use of real uid in limits back this far my guess
+is that it was an accident of the implementation and real uid vs
+effective uid had not be considered.
+
+Does anyone know if choosing the real uid vs the effective uid for
+accounting a users processes was a deliberate decision anywhere in the
+history of Linux?
+
+
+
+Linus you were talking about making it possible to login as I think a
+non-root user to be able to use sudo and kill a fork bomb.
+
+The counter case is apache having a dedicated user for running
+cgi-scripts and using RLIMIT_NPROC to limit how many of those processes
+can exist.  Unless I am misunderstanding something that looks exactly
+like your login as non-root so you can run sudo to kill a fork-bomb.
+
+A comment from an in-process cleanup patch explains this as best I can:
+         /*
+         * In general rlimits are only enforced when a new resource
+         * is acquired.  That would be during fork for RLIMIT_NPROC.
+         * That is insufficient for RLIMIT_NPROC as many attributes of
+         * a new process must be set between fork and exec.
+         *
+         * A case where this matter is when apache runs forks a process
+         * and calls setuid to run cgi-scripts as a different user.
+         * Generating those processes through a code sequence like:
+         *
+         *      fork()
+ 	 *	setrlimit(RLIMIT_NPROC, ...)         
+         *      execve()  -- suid wrapper
+         *      setuid()
+         *      execve()  -- cgi script
+         *
+         * The cgi-scripts are unlikely to fork on their own so unless
+         * RLIMIT_NPROC is checked after the user change and before
+         * the cgi-script starts, RLIMIT_NPROC simply will not be enforced
+         * for the cgi-scripts.
+         *
+         * So the code tracks if between fork and exec if an operation
+         * occurs that could cause the RLIMIT_NPROC check to fail.  If
+         * such an operation has happened re-check RLIMIT_NPROC.
+         */
+
+
+Answered-Question: I was trying to ask if anyone knows of a reason why
+we can't just sanitize the rlimits of the process during suid exec?
+Linus your guideline would appear to allow that behavior.  Unfortunately
+that looks like it would break current usage of apache suexec.
+
+Eric
