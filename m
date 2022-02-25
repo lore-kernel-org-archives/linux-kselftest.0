@@ -2,466 +2,428 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A2FC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Feb 2022 15:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BDCFC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Feb 2022 16:01:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242421AbiBYPyK (ORCPT
+        id S242544AbiBYQBu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Feb 2022 10:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
+        Fri, 25 Feb 2022 11:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242419AbiBYPyH (ORCPT
+        with ESMTP id S242545AbiBYQBt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:54:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087E41D830A;
-        Fri, 25 Feb 2022 07:53:30 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PFp10D010713;
-        Fri, 25 Feb 2022 15:53:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=XrWEtC4fI92R5zD1Wl30ToHOJWl18tWleLxjFg7aGxw=;
- b=MqwOhUkR6RmkAIQg0Ns0KPmN20OaJn1nrJRNENE64Ebm9WBw7IyhRwvG84ueDdhVOCfU
- +h2YmDmin0+0W7/QfvnqulqU8GqXZI89bRTAqXwJwiMW4D8FehlEAVr9J3p1sAhviSzH
- COSXVS04tEAjpIlUXRy4eU6Q3be7fd9laTF3xO8nbyxCPVEk7dAegOXOWPk0l18J7T5j
- pSOwAnFtKzN2ZYlc8bnouSlrtiLoYfu/H/QH8GUwJ2dz0OVUkBC5p7bDOthiwJTqKee+
- IMhzNxbb9HILC8798Rz8AGKPxgQBveSFLXZ7lfyQdMBvMqV3hKO/VAQ6Wj/0Mz65yHq7 Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ef24403hh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 15:53:21 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21PFqfuB023055;
-        Fri, 25 Feb 2022 15:53:21 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ef24403fw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 15:53:21 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PFlqLg013799;
-        Fri, 25 Feb 2022 15:53:18 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3ear69qf95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 15:53:18 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PFrFVv55771562
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Feb 2022 15:53:15 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 75479AE053;
-        Fri, 25 Feb 2022 15:53:15 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 293EBAE055;
-        Fri, 25 Feb 2022 15:53:15 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Feb 2022 15:53:15 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] KVM: s390: selftests: Add macro as abstraction for MEM_OP
-Date:   Fri, 25 Feb 2022 16:53:08 +0100
-Message-Id: <20220225155311.3540514-3-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220225155311.3540514-1-scgl@linux.ibm.com>
-References: <20220211182215.2730017-11-scgl@linux.ibm.com>
- <20220225155311.3540514-1-scgl@linux.ibm.com>
+        Fri, 25 Feb 2022 11:01:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89F8D1F124A
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 08:01:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645804870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w9dhf5wwXThEWj3cf5cdg0iQ4nnKBS281ReX6j2zl94=;
+        b=FaqhwseJpvCX97+JLQIeD9XMzvAEGJwTuDfQLzIRlKbcp2YtAdiXQeRHEg2x73kgwbad8S
+        Zet4hNl4FwZ9Y/YqVr/vinvGKEguCnvA6Ml8qz7E6XbSd0jROhB0hrjxkmF7Yb3d8b5uGD
+        r4ivpeZ01rxS2QkoCpJLl4wcoq+rgd0=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-256-lMKWh98XMUeDSArcutTtug-1; Fri, 25 Feb 2022 11:01:07 -0500
+X-MC-Unique: lMKWh98XMUeDSArcutTtug-1
+Received: by mail-pl1-f197.google.com with SMTP id x18-20020a170902b41200b0014fc2665bddso3218418plr.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Feb 2022 08:01:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w9dhf5wwXThEWj3cf5cdg0iQ4nnKBS281ReX6j2zl94=;
+        b=da8X9tTnjz8zoBCJOJcO1955rntMKxh7iKlgK/uUHoJ+HN2glHIqtcvQ6geKjwel4n
+         pj396m/JLE8aMMG1uF64LU6fljZM1XvwIWou8ZjqpYwFIvleznD4DgfB2mVCntsxrKPu
+         RJPiX9+tRZVtOocj22pw2vu+aMssMl6nitCApVACq8R1ahg3U8lcyH82hXKMNhBqDO8N
+         9d6evkYohbuHDnGxJrokvCjKUQcGk5rXwTkiywW1zYnHqATMrr9EUbIFaAkocIxHGvBK
+         KgFXTAKyf0sLXj9vFvtHHzel1og/zCDqcDWOloJoYSEj6Y2xt6EXqoCzC2oEcBREyMCR
+         76+w==
+X-Gm-Message-State: AOAM531YAXxBGlEPg0C22it2/OfqTYQhK+FkrLW/sW+v+Y88PM3rxXfW
+        UcLRjGE4a4pJr8T3X5i+RSZCzF/rdkijQV9a8jvnECxu8NTwxS1rPWQukkjeY8SFYecNaL4lxeU
+        Zf8zcLry630MD55k8ja9w38HwScvhQ2MJxwBK1hBcc0QB
+X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id r10-20020a17090a560a00b001bc72e73c13mr3732936pjf.246.1645804865964;
+        Fri, 25 Feb 2022 08:01:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwnDxShEdRtw82Y2ve6Ld5WQ6/BwpdkROL6sfF8knWeb+GpiwWno7qGoJpgjLzdJaMj+agHtqJVEo21uvWjJLE=
+X-Received: by 2002:a17:90a:560a:b0:1bc:72e7:3c13 with SMTP id
+ r10-20020a17090a560a00b001bc72e73c13mr3732820pjf.246.1645804864803; Fri, 25
+ Feb 2022 08:01:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HBqSeb1WVhe8qHLpmm08tIjgTLMNnoL6
-X-Proofpoint-GUID: drRb1dBEinsSMAAtZnTMOdbaHPSJHHsm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_08,2022-02-25_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 spamscore=0 mlxlogscore=999
- priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202250091
+References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
+ <YhdsgokMMSEQ0Yc8@kroah.com> <CAO-hwJJcepWJaU9Ytuwe_TiuZUGTq_ivKknX8x8Ws=zBFUp0SQ@mail.gmail.com>
+ <YhjbzxxgxtSxFLe/@kroah.com>
+In-Reply-To: <YhjbzxxgxtSxFLe/@kroah.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 25 Feb 2022 17:00:53 +0100
+Message-ID: <CAO-hwJJpJf-GHzU7-9bhMz7OydNPCucTtrm=-GeOf-Ee5-aKrw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/6] Introduce eBPF support for HID devices
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Peter Hutterer <peter.hutterer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to achieve good test coverage we need to be able to invoke the
-MEM_OP ioctl with all possible parametrizations.
-However, for a given test, we want to be concise and not specify a long
-list of default values for parameters not relevant for the test, so the
-readers attention is not needlessly diverted.
-Add a macro that enables this and convert the existing test to use it.
-The macro emulates named arguments and hides some of the ioctl's
-redundancy, e.g. sets the key flag if an access key is specified.
+On Fri, Feb 25, 2022 at 2:38 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Feb 24, 2022 at 02:49:21PM +0100, Benjamin Tissoires wrote:
+> > Hi Greg,
+> >
+> > Thanks for the quick answer :)
+> >
+> > On Thu, Feb 24, 2022 at 12:31 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, Feb 24, 2022 at 12:08:22PM +0100, Benjamin Tissoires wrote:
+> > > > Hi there,
+> > > >
+> > > > This series introduces support of eBPF for HID devices.
+> > > >
+> > > > I have several use cases where eBPF could be interesting for those
+> > > > input devices:
+> > > >
+> > > > - simple fixup of report descriptor:
+> > > >
+> > > > In the HID tree, we have half of the drivers that are "simple" and
+> > > > that just fix one key or one byte in the report descriptor.
+> > > > Currently, for users of such devices, the process of fixing them
+> > > > is long and painful.
+> > > > With eBPF, we could externalize those fixups in one external repo,
+> > > > ship various CoRe bpf programs and have those programs loaded at boot
+> > > > time without having to install a new kernel (and wait 6 months for the
+> > > > fix to land in the distro kernel)
+> > >
+> > > Why would a distro update such an external repo faster than they update
+> > > the kernel?  Many sane distros update their kernel faster than other
+> > > packages already, how about fixing your distro?  :)
+> >
+> > Heh, I'm going to try to dodge the incoming rhel bullet :)
+> >
+> > It's true that thanks to the work of the stable folks we don't have to
+> > wait 6 months for a fix to come in. However, I think having a single
+> > file to drop in a directory would be easier for development/testing
+> > (and distribution of that file between developers/testers) than
+> > requiring people to recompile their kernel.
+> >
+> > Brain fart: is there any chance we could keep the validated bpf
+> > programs in the kernel tree?
+>
+> That would make the most sense to me.  And allow "slow" distros to
+> override the HID bpf quirks easily if they need to.  If you do that,
+> then most of my objections of the "now the code is in two places that
+> you have to track" goes away :)
 
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390x/memop.c | 272 ++++++++++++++++------
- 1 file changed, 197 insertions(+), 75 deletions(-)
+Unfortunately, I don't think we will be able to have all the bpf
+programs in the kernel.
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index b9b673acb766..e2ad3d70bae4 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -13,6 +13,188 @@
- #include "test_util.h"
- #include "kvm_util.h"
- 
-+enum mop_target {
-+	LOGICAL,
-+	SIDA,
-+	ABSOLUTE,
-+	INVALID,
-+};
-+
-+enum mop_access_mode {
-+	READ,
-+	WRITE,
-+};
-+
-+struct mop_desc {
-+	uintptr_t gaddr;
-+	uintptr_t gaddr_v;
-+	uint64_t set_flags;
-+	unsigned int f_check : 1;
-+	unsigned int f_inject : 1;
-+	unsigned int f_key : 1;
-+	unsigned int _gaddr_v : 1;
-+	unsigned int _set_flags : 1;
-+	unsigned int _sida_offset : 1;
-+	unsigned int _ar : 1;
-+	uint32_t size;
-+	enum mop_target target;
-+	enum mop_access_mode mode;
-+	void *buf;
-+	uint32_t sida_offset;
-+	uint8_t ar;
-+	uint8_t key;
-+};
-+
-+static struct kvm_s390_mem_op ksmo_from_desc(struct mop_desc desc)
-+{
-+	struct kvm_s390_mem_op ksmo = {
-+		.gaddr = (uintptr_t)desc.gaddr,
-+		.size = desc.size,
-+		.buf = ((uintptr_t)desc.buf),
-+		.reserved = "ignored_ignored_ignored_ignored"
-+	};
-+
-+	switch (desc.target) {
-+	case LOGICAL:
-+		if (desc.mode == READ)
-+			ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
-+		if (desc.mode == WRITE)
-+			ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+		break;
-+	case SIDA:
-+		if (desc.mode == READ)
-+			ksmo.op = KVM_S390_MEMOP_SIDA_READ;
-+		if (desc.mode == WRITE)
-+			ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
-+		break;
-+	case ABSOLUTE:
-+		if (desc.mode == READ)
-+			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_READ;
-+		if (desc.mode == WRITE)
-+			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_WRITE;
-+		break;
-+	case INVALID:
-+		ksmo.op = -1;
-+	}
-+	if (desc.f_check)
-+		ksmo.flags |= KVM_S390_MEMOP_F_CHECK_ONLY;
-+	if (desc.f_inject)
-+		ksmo.flags |= KVM_S390_MEMOP_F_INJECT_EXCEPTION;
-+	if (desc._set_flags)
-+		ksmo.flags = desc.set_flags;
-+	if (desc.f_key) {
-+		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
-+		ksmo.key = desc.key;
-+	}
-+	if (desc._ar)
-+		ksmo.ar = desc.ar;
-+	else
-+		ksmo.ar = 0;
-+	if (desc._sida_offset)
-+		ksmo.sida_offset = desc.sida_offset;
-+
-+	return ksmo;
-+}
-+
-+/* vcpu dummy id signifying that vm instead of vcpu ioctl is to occur */
-+const uint32_t VM_VCPU_ID = (uint32_t)-1;
-+
-+struct test_vcpu {
-+	struct kvm_vm *vm;
-+	uint32_t id;
-+};
-+
-+#define PRINT_MEMOP false
-+static void print_memop(uint32_t vcpu_id, const struct kvm_s390_mem_op *ksmo)
-+{
-+	if (!PRINT_MEMOP)
-+		return;
-+
-+	if (vcpu_id == VM_VCPU_ID)
-+		printf("vm memop(");
-+	else
-+		printf("vcpu memop(");
-+	switch (ksmo->op) {
-+	case KVM_S390_MEMOP_LOGICAL_READ:
-+		printf("LOGICAL, READ, ");
-+		break;
-+	case KVM_S390_MEMOP_LOGICAL_WRITE:
-+		printf("LOGICAL, WRITE, ");
-+		break;
-+	case KVM_S390_MEMOP_SIDA_READ:
-+		printf("SIDA, READ, ");
-+		break;
-+	case KVM_S390_MEMOP_SIDA_WRITE:
-+		printf("SIDA, WRITE, ");
-+		break;
-+	case KVM_S390_MEMOP_ABSOLUTE_READ:
-+		printf("ABSOLUTE, READ, ");
-+		break;
-+	case KVM_S390_MEMOP_ABSOLUTE_WRITE:
-+		printf("ABSOLUTE, WRITE, ");
-+		break;
-+	}
-+	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u",
-+	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key);
-+	if (ksmo->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
-+		printf(", CHECK_ONLY");
-+	if (ksmo->flags & KVM_S390_MEMOP_F_INJECT_EXCEPTION)
-+		printf(", INJECT_EXCEPTION");
-+	if (ksmo->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION)
-+		printf(", SKEY_PROTECTION");
-+	puts(")");
-+}
-+
-+static void memop_ioctl(struct test_vcpu vcpu, struct kvm_s390_mem_op *ksmo)
-+{
-+	if (vcpu.id == VM_VCPU_ID)
-+		vm_ioctl(vcpu.vm, KVM_S390_MEM_OP, ksmo);
-+	else
-+		vcpu_ioctl(vcpu.vm, vcpu.id, KVM_S390_MEM_OP, ksmo);
-+}
-+
-+static int err_memop_ioctl(struct test_vcpu vcpu, struct kvm_s390_mem_op *ksmo)
-+{
-+	if (vcpu.id == VM_VCPU_ID)
-+		return _vm_ioctl(vcpu.vm, KVM_S390_MEM_OP, ksmo);
-+	else
-+		return _vcpu_ioctl(vcpu.vm, vcpu.id, KVM_S390_MEM_OP, ksmo);
-+}
-+
-+#define MEMOP(err, vcpu_p, mop_target_p, access_mode_p, buf_p, size_p, ...)	\
-+({										\
-+	struct test_vcpu __vcpu = (vcpu_p);					\
-+	struct mop_desc __desc = {						\
-+		.target = (mop_target_p),					\
-+		.mode = (access_mode_p),					\
-+		.buf = (buf_p),							\
-+		.size = (size_p),						\
-+		__VA_ARGS__							\
-+	};									\
-+	struct kvm_s390_mem_op __ksmo;						\
-+										\
-+	if (__desc._gaddr_v) {							\
-+		if (__desc.target == ABSOLUTE)					\
-+			__desc.gaddr = addr_gva2gpa(__vcpu.vm, __desc.gaddr_v);	\
-+		else								\
-+			__desc.gaddr = __desc.gaddr_v;				\
-+	}									\
-+	__ksmo = ksmo_from_desc(__desc);					\
-+	print_memop(__vcpu.id, &__ksmo);					\
-+	err##memop_ioctl(__vcpu, &__ksmo);					\
-+})
-+
-+#define MOP(...) MEMOP(, __VA_ARGS__)
-+#define ERR_MOP(...) MEMOP(err_, __VA_ARGS__)
-+
-+#define GADDR(a) .gaddr = ((uintptr_t)a)
-+#define GADDR_V(v) ._gaddr_v = 1, .gaddr_v = ((uintptr_t)v)
-+#define CHECK_ONLY .f_check = 1
-+#define SET_FLAGS(f) ._set_flags = 1, .set_flags = (f)
-+#define SIDA_OFFSET(o) ._sida_offset = 1, .sida_offset = (o)
-+#define AR(a) ._ar = 1, .ar = (a)
-+#define KEY(a) .f_key = 1, .key = (a)
-+
- #define VCPU_ID 1
- 
- static uint8_t mem1[65536];
-@@ -20,6 +202,7 @@ static uint8_t mem2[65536];
- 
- struct test_default {
- 	struct kvm_vm *kvm_vm;
-+	struct test_vcpu vcpu;
- 	struct kvm_run *run;
- 	int size;
- };
-@@ -30,6 +213,7 @@ static struct test_default test_default_init(void *guest_code)
- 
- 	t.size = min((size_t)kvm_check_cap(KVM_CAP_S390_MEM_OP), sizeof(mem1));
- 	t.kvm_vm = vm_create_default(VCPU_ID, 0, guest_code);
-+	t.vcpu = (struct test_vcpu) { t.kvm_vm, VCPU_ID };
- 	t.run = vcpu_state(t.kvm_vm, VCPU_ID);
- 	return t;
- }
-@@ -43,20 +227,14 @@ static void guest_copy(void)
- static void test_copy(void)
- {
- 	struct test_default t = test_default_init(guest_copy);
--	struct kvm_s390_mem_op ksmo;
- 	int i;
- 
- 	for (i = 0; i < sizeof(mem1); i++)
- 		mem1[i] = i * i + i;
- 
- 	/* Set the first array */
--	ksmo.gaddr = addr_gva2gpa(t.kvm_vm, (uintptr_t)mem1);
--	ksmo.flags = 0;
--	ksmo.size = t.size;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 0;
--	vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size,
-+	    GADDR(addr_gva2gpa(t.kvm_vm, (uintptr_t)mem1)));
- 
- 	/* Let the guest code copy the first array to the second */
- 	vcpu_run(t.kvm_vm, VCPU_ID);
-@@ -68,13 +246,7 @@ static void test_copy(void)
- 	memset(mem2, 0xaa, sizeof(mem2));
- 
- 	/* Get the second array */
--	ksmo.gaddr = (uintptr_t)mem2;
--	ksmo.flags = 0;
--	ksmo.size = t.size;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
--	ksmo.buf = (uintptr_t)mem2;
--	ksmo.ar = 0;
--	vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	MOP(t.vcpu, LOGICAL, READ, mem2, t.size, GADDR_V(mem2));
- 
- 	TEST_ASSERT(!memcmp(mem1, mem2, t.size),
- 		    "Memory contents do not match!");
-@@ -91,68 +263,31 @@ static void guest_idle(void)
- static void test_errors(void)
- {
- 	struct test_default t = test_default_init(guest_idle);
--	struct kvm_s390_mem_op ksmo;
- 	int rv;
- 
--	/* Check error conditions - first bad size: */
--	ksmo.gaddr = (uintptr_t)mem1;
--	ksmo.flags = 0;
--	ksmo.size = -1;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	/* Bad size: */
-+	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, -1, GADDR_V(mem1));
- 	TEST_ASSERT(rv == -1 && errno == E2BIG, "ioctl allows insane sizes");
- 
- 	/* Zero size: */
--	ksmo.gaddr = (uintptr_t)mem1;
--	ksmo.flags = 0;
--	ksmo.size = 0;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, 0, GADDR_V(mem1));
- 	TEST_ASSERT(rv == -1 && (errno == EINVAL || errno == ENOMEM),
- 		    "ioctl allows 0 as size");
- 
- 	/* Bad flags: */
--	ksmo.gaddr = (uintptr_t)mem1;
--	ksmo.flags = -1;
--	ksmo.size = t.size;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR_V(mem1), SET_FLAGS(-1));
- 	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows all flags");
- 
- 	/* Bad operation: */
--	ksmo.gaddr = (uintptr_t)mem1;
--	ksmo.flags = 0;
--	ksmo.size = t.size;
--	ksmo.op = -1;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, INVALID, WRITE, mem1, t.size, GADDR_V(mem1));
- 	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows bad operations");
- 
- 	/* Bad guest address: */
--	ksmo.gaddr = ~0xfffUL;
--	ksmo.flags = KVM_S390_MEMOP_F_CHECK_ONLY;
--	ksmo.size = t.size;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR((void *)~0xfffUL), CHECK_ONLY);
- 	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
- 
- 	/* Bad host address: */
--	ksmo.gaddr = (uintptr_t)mem1;
--	ksmo.flags = 0;
--	ksmo.size = t.size;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = 0;
--	ksmo.ar = 0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, 0, t.size, GADDR_V(mem1));
- 	TEST_ASSERT(rv == -1 && errno == EFAULT,
- 		    "ioctl does not report bad host memory address");
- 
-@@ -160,29 +295,16 @@ static void test_errors(void)
- 	t.run->psw_mask &= ~(3UL << (63 - 17));
- 	t.run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
- 	vcpu_run(t.kvm_vm, VCPU_ID);              /* To sync new state to SIE block */
--	ksmo.gaddr = (uintptr_t)mem1;
--	ksmo.flags = 0;
--	ksmo.size = t.size;
--	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.ar = 17;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR_V(mem1), AR(17));
- 	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows ARs > 15");
- 	t.run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
- 	vcpu_run(t.kvm_vm, VCPU_ID);                  /* Run to sync new state */
- 
- 	/* Check that the SIDA calls are rejected for non-protected guests */
--	ksmo.gaddr = 0;
--	ksmo.flags = 0;
--	ksmo.size = 8;
--	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
--	ksmo.buf = (uintptr_t)mem1;
--	ksmo.sida_offset = 0x1c0;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, SIDA, READ, mem1, 8, GADDR(0), SIDA_OFFSET(0x1c0));
- 	TEST_ASSERT(rv == -1 && errno == EINVAL,
- 		    "ioctl does not reject SIDA_READ in non-protected mode");
--	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
--	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = ERR_MOP(t.vcpu, SIDA, WRITE, mem1, 8, GADDR(0), SIDA_OFFSET(0x1c0));
- 	TEST_ASSERT(rv == -1 && errno == EINVAL,
- 		    "ioctl does not reject SIDA_WRITE in non-protected mode");
- 
--- 
-2.32.0
+I would say programs that "enable" a device (report descriptor fixup,
+events override, single key remapping) which are there to make the
+device fully functional could likely be stored and loaded by the
+kernel. I have yet to figure out if the suggestion from Yonghong Song
+allows me to also load the bpf program or if it's just a repo in the
+tree for the sources.
+
+However, for USI pens (or any other functionality that needs a new
+high level kernel interface) I don't think we will have them here.
+Unless we want to also bind the public API to dbus (or graybus maybe),
+the bpf program should live in the userspace program so it can update
+it and not be tied to the decisions in the kernel (I'll go more into
+detail later in this reply).
+
+So that's going to be a half and half solution :/
+
+>
+> > > I'm all for the idea of using ebpf for HID devices, but now we have to
+> > > keep track of multiple packages to be in sync here.  Is this making
+> > > things harder overall?
+> >
+> > Probably, and this is also maybe opening a can of worms. Vendors will
+> > be able to say "use that bpf program for my HID device because the
+> > firmware is bogus".
+> >
+> > OTOH, as far as I understand, you can not load a BPF program in the
+> > kernel that uses GPL-declared functions if your BPF program is not
+> > GPL. Which means that if firmware vendors want to distribute blobs
+> > through BPF, either it's GPL and they have to provide the sources, or
+> > it's not happening.
+>
+> You can make the new HID bpf api only availble to GPL programs, and if I
+> were you, that's what I would do just to keep any legal issues from
+> coming up.  Also bundling it with the kernel makes it easier.
+
+Looking at kernel/bpf/bpf_lsm.c I can confirm that it should be easy
+to prevent a program from binding to HID if it's not GPL :)
+
+>
+> > I am not entirely clear on which plan I want to have for userspace.
+> > I'd like to have libinput on board, but right now, Peter's stance is
+> > "not in my garden" (and he has good reasons for it).
+> > So my initial plan is to cook and hold the bpf programs in hid-tools,
+> > which is the repo I am using for the regression tests on HID.
+>
+> Why isn't the hid regression tests in the kernel tree also?  That would
+> allow all of the testers out there to test things much easier than
+> having to suck down another test repo (like Linaro and 0-day and
+> kernelci would be forced to do).
+
+2 years ago I would have argued that the ease of development of
+gitlab.fd.o was more suited to a fast moving project.
+
+Now... The changes in the core part of the code don't change much so
+yes, merging it in the kernel might have a lot of benefits outside of
+what you said. The most immediate one is that I could require fixes to
+be provided with a test, and merge them together, without having to
+hold them until Linus releases a new version.
+
+If nobody complains of having the regression tests in python with
+pytest and some Python 3.6+ features, that is definitely something I
+should look for.
+
+>
+> > I plan on building a systemd intrinsic that would detect the HID
+> > VID/PID and then load the various BPF programs associated with the
+> > small fixes.
+> > Note that everything can not be fixed through eBPF, simply because at
+> > boot we don't always have the root partition mounted.
+>
+> Root partitions are now on HID devices?  :)
+
+Sorry for not being clear :)
+
+I mean that if you need a bpf program to be loaded from userspace at
+boot to make your keyboard functional, then you need to have the root
+partition mounted (or put the program in the initrd) so udev can load
+it. Now if your keyboard is supposed to give the password used to
+decrypt your root partition but you need a bpf program on that said
+partition to make it functional, you are screwed :)
+
+>
+> > > > - Universal Stylus Interface (or any other new fancy feature that
+> > > >   requires a new kernel API)
+> > > >
+> > > > See [0].
+> > > > Basically, USI pens are requiring a new kernel API because there are
+> > > > some channels of communication our HID and input stack are not capable
+> > > > of. Instead of using hidraw or creating new sysfs or ioctls, we can rely
+> > > > on eBPF to have the kernel API controlled by the consumer and to not
+> > > > impact the performances by waking up userspace every time there is an
+> > > > event.
+> > >
+> > > How is userspace supposed to interact with these devices in a unified
+> > > way then?  This would allow random new interfaces to be created, one
+> > > each for each device, and again, be a pain to track for a distro to keep
+> > > in sync.  And how are you going to keep the ebpf interface these
+> > > provides in sync with the userspace program?
+> >
+> > Right now, the idea we have is to export the USI specifics through
+> > dbus. This has a couple of advantages: we are not tied to USI and can
+> > "emulate" those parameters by storing them on disk instead of in the
+> > pen, and this is easily accessible from all applications directly.
+> >
+> > I am trying to push to have one implementation of that dbus service
+> > with the Intel and ChromeOS folks so general linux doesn't have to
+> > recreate it. But if you look at it, with hidraw nothing prevents
+> > someone from writing such a library/daemon in its own world without
+> > sharing it with anybody.
+> >
+> > The main advantage of eBPF compared to hidraw is that you can analyse
+> > the incoming event without waking userspace and only wake it up when
+> > there is something noticeable.
+>
+> That is a very good benefit, and one that many battery-powered devices
+> would like.
+>
+> > In terms of random interfaces, yes, this is a good point. But the way
+> > I see it is that we can provide one kernel API (eBPF for HID) which we
+> > will maintain and not have to maintain forever a badly designed kernel
+> > API for a specific device. Though also note that USI is a HID standard
+> > (I think there is a second one), so AFAICT, the same bpf program
+> > should be able to be generic enough to be cross vendor. So there will
+> > be one provider only for USI.
+>
+> Ok, that's good to know.
+>
+> <good stuff snipped>
+>
+> > Yeah, I completely understand the view. However, please keep in mind
+> > that most of it (though not firewall and some corner cases of tracing)
+> > is already possible to do through hidraw.
+> > One other example of that is SDL. We got Sony involved to create a
+> > nice driver for the DualSense controller (the PS5 one), but they
+> > simply ignore it and use plain HID (through hidraw). They have the
+> > advantage of this being cross-platform and can provide a consistent
+> > experience across platforms. And as a result, in the kernel, we have
+> > to hands up the handling of the device whenever somebody opens a
+> > hidraw node for those devices (Steam is also doing the same FWIW).
+> >
+> > Which reminds me that I also have another use-case: joystick
+> > dead-zone. You can have a small filter that configures the dead zone
+> > and doesn't even wake up userspace for those hardware glitches...
+>
+> hidraw is a big issue, and I understand why vendors use that and prefer
+> it over writing a kernel driver.  They can control it and ship it to
+> users and it makes life easier for them.  It's also what Windows has
+> been doing for decades now, so it's a comfortable interface for them to
+> write their code in userspace.
+>
+> But, now you are going to ask them to use bpf instead?  Why would they
+> switch off of hidraw to use this api?  What benefit are you going to
+> provide them here for that?
+
+Again, there are 2 big classes of users of hid-bpf ("you" here is a
+developer in general):
+1. you need to fix your device
+2. you need to add a new kernel API
+
+2. can be entirely done with hidraw:
+- you open the hidraw node
+- you parse every incoming event
+- out of that you build up your high level API
+
+This is what we are doing in libratbag for instance to support gaming
+mice that need extra features. We try to not read every single event,
+but some mice are done in a way we don't have a choice.
+
+With bpf, you could:
+- load the bpf program
+- have the kernel (bpf program) parse the incoming report without
+waking up user space
+- when something changes (a given button is pressed) the bpf program
+notifies userspace with an event
+- then userspace builds its own API on top of it (forward that change
+through dbus for example)
+
+As far as 1., the aim is not to replace hidraw but the kernel drivers
+themselves:
+instead of having a formal driver loaded in the kernel, you can rely
+on a bpf program to do whatever needs to be done to make the device
+working.
+
+If the FW is wrong and the report descriptor messes up a button
+mapping, you can change that with bpf instead of having a specific
+driver for it.
+And of course, using hidraw for that just doesn't work because the
+event stream you get from hidraw is for the process only. In BPF, we
+can change the event flow for anybody, which allows much more power
+(but this is scarier too).
+
+This class of bpf program should actually reside in the kernel tree so
+everybody can benefit from it (circling back to your first point).
+
+So I am not deprecating hidraw nor I am not asking them to use bpf instead.
+But when you are interested in just one byte in the report, bpf allows
+you to speed up your program and save battery.
+
+>
+> This is why I've delayed doing bpf for USB.  Right now we have a nice
+> cross-platform way to write userspace USB drivers using usbfs/libusb.
+> All a bpf api to USB would be doing is much the same thing that libusb
+> does, for almost no real added benefit that I can tell.
+>
+> USB, is a really "simple" networking like protocol (send/recieve
+> packets).  So it ties into the bpf model well.  But the need to use bpf
+> for USB so far I don't have a real justification.
+>
+> And the same thing here.  Yes it is cool, and personally I love it, but
+> what is going to get people off of hidraw to use this instead?  You
+> can'd drop hidraw now (just like I can't drop usbfs), so all this means
+> is we have yet-another-way to do something on the system.  Is that a
+> good idea?  I don't know.
+>
+> Also you mention dbus as the carrier for the HID information to
+> userspace programs.  Is dbus really the right thing for sending streams
+> of input data around?  Yes it will probably work, but I don't think it
+> was designed for that at all, so the overhead involved might just
+> overshadow any of the improvements you made using bpf.  And also, you
+> could do this today with hidraw, right?
+
+Let me go into more details regarding USI.
+Peter drafted a WIP for the dbus API at
+https://gitlab.freedesktop.org/whot/usid. Unfortunately that's the
+only tangent thing I can share right now for it, and it doesn't even
+have the bpf part ;).
+
+Basically the dbus API will export just the USI bits we care about:
+- Preferred Color: the 8-bit Web color or 24 bit RGB color assigned to
+the device
+- Preferred Line Width: the physical width (e.g. 2mm)
+- Preferred Line Style: One of Ink, Pencil, Highlighter, Chisel
+Marker, Brush, No Preference.
+
+The rest of the event stream will still continue to go through evdev,
+and not dbus.
+
+The bpf program we should have here parses the incoming report and
+whenever there is a change in those 3 properties above, it raises an
+event to the dbus daemon which will in turn forward that to its
+clients.
+On the other side, when a client needs to have a color change for
+instance, it sets the dbus property and then the dbus daemon might
+either store the data on disk or on the pen through bpf and HID.
+
+So yes, you can do that with hidraw but that means you need to parse
+all incoming reports in userspace for events that will likely occur
+every once in a while.
+
+In my mind, the dbus operations here are to replace the kernel API you
+might want to create instead. In that case, Tero started with 2
+in-kernel possibilities: a sysfs entry we could read/write, or a new
+ioctl attached to the evdev node (it was actually a separate char
+device).
+
+>
+> > Anyway, IOW, I think the bpf approach will allow kernel-like
+> > performances of hidraw applications, and I would be more inclined to
+> > ask people to move their weird issue in userspace thanks to that.
+>
+> I like this from a "everyone should use bpf" point of view, but how are
+> you going to tell people "use bpf over hidraw" in a way that gets them
+> to do so?  If you have a good answer for that, I might just steal it for
+> the bpf-USB interface as well :)
+>
+
+I don't think we can have a generic answer here unfortunately. It will
+depend on the use case:
+- SDL/Steam -> they are interested in the entire stream of events, so
+we can't really tell them to use bpf, unless if they want to fix a
+deadzone of a joystick
+- if the idea is to fix the device (spurious event, wrong key mapping,
+drift of one coordinate), hidraw doesn't apply, and bpf is IMO better
+than writing a kernel module as long as we can ship them with the
+kernel (because of the cost of compiling a driver/kernel and testing
+is much higher than just inserting a BPF program in the running
+kernel)
+- if the idea is to add a new kernel API or functionality to a device
+(a new haptic FF implementation, some USI properties, something unique
+enough to not be generic and have a properly defined API), then bpf is
+a good choice because by tying the bpf program with the high level API
+from userspace we can ensure we don't have to maintain this kernel API
+with all its bugs forever. And here, you could use hidraw but if you
+need to filter a small amount of information in the event stream
+instead of just using Set/Get reports, then BPF is much more
+efficient.
+
+I don't know enough about the USB use case you have for libusb (I know
+mostly the input ones ;-P) to be able to give you an answer there.
+
+Cheers,
+Benjamin
 
