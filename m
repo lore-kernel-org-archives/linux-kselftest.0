@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97CAEC433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Feb 2022 15:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91E80C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Feb 2022 15:53:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242404AbiBYPx7 (ORCPT
+        id S242356AbiBYPyK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Feb 2022 10:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        Fri, 25 Feb 2022 10:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242398AbiBYPx6 (ORCPT
+        with ESMTP id S242418AbiBYPyG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Feb 2022 10:53:58 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151B91D3AE3;
-        Fri, 25 Feb 2022 07:53:26 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PEHE29008642;
-        Fri, 25 Feb 2022 15:53:23 GMT
+        Fri, 25 Feb 2022 10:54:06 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67211D8309;
+        Fri, 25 Feb 2022 07:53:29 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21PFUWuG022489;
+        Fri, 25 Feb 2022 15:53:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=b/9bBvjgzbg022NLVuh043z7Uu3m1YE7tOn1F7kdD1c=;
- b=RgdMBpQChEWsZ7tIPSYhFwPVF4bFYtQGFCopMFwU3NeGe52GOk2Gvf8fCFvuD39nx7EY
- RWvV4s0pN9J0+fkehbdvLY7TtFMawUOkgk9jk4TyAEDvk3TZCltY+V3TEV7iu3Bo5MXZ
- mVd6u4TNmMCTIG2sY+BHqeD57qyVilAcyzfpGXjCSD0hPPM0jiTDCN4JBXGMOpcqhq0S
- 7727UQR2Fzp90YMygxV6qdeohfnJUfFQaqzmzeXBJqfaKcmNrGUayEUHdoTc3mwi7iAg
- 4J8FfCoJzHK5Cpc3KBIzsWo+AZv5GIakltLFLchjyWbOtPGWh9zHl6nG0ScSQKoQhR5s 8A== 
+ bh=2ogOS//cahrFm4Jnefr/DqAH8Rip6ky1aUxtPAySv9c=;
+ b=lgweCH/cyrItxXB0QYsPXARahnV89M5BarUh6aOy0y5I2oPhE4JqdqNKM51A40lJCowy
+ rBoBiBbw6Jca/pI90/0WqEzphqYqirPG34dXu27EI326qbj1l8enuzx5tc2/Aeqf02Fv
+ ka8jLFq5pNmyDk4tDAw3sWEJ06oMFtTqtdvYvtGcGQFKadl2ZdiuHY89s4nQaHAEB+Rq
+ LBCP6NLIF9iHLaB3dF0bCaf9lOFyQ53WQnvtPanX2pVauZMQsYWCQ11W6IJVttkv05RG
+ bFqWEYzPhArFVke/YaP5f13jxvl0Q2kK8AZmwi/J0WiG1qm0y52xudpc9P+Op1U6w/ZZ Cg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ef0r9jmtm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 15:53:23 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21PEHQKm009028;
-        Fri, 25 Feb 2022 15:53:22 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ef0r9jmsv-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eeyc056cx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 25 Feb 2022 15:53:22 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PFqnpQ022412;
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21PF0sxr009175;
         Fri, 25 Feb 2022 15:53:21 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3eaqtjsskj-1
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eeyc056be-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Feb 2022 15:53:20 +0000
+        Fri, 25 Feb 2022 15:53:21 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21PFr6hN002005;
+        Fri, 25 Feb 2022 15:53:19 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3eaqtk7f36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Feb 2022 15:53:19 +0000
 Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PFrFc557606446
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21PFrFTH55771566
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Feb 2022 15:53:15 GMT
+        Fri, 25 Feb 2022 15:53:16 GMT
 Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1357DAE04D;
+        by IMSVA (Postfix) with ESMTP id D32B8AE053;
         Fri, 25 Feb 2022 15:53:15 +0000 (GMT)
 Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB185AE05A;
-        Fri, 25 Feb 2022 15:53:14 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 8B291AE04D;
+        Fri, 25 Feb 2022 15:53:15 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Feb 2022 15:53:14 +0000 (GMT)
+        Fri, 25 Feb 2022 15:53:15 +0000 (GMT)
 From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
@@ -68,9 +68,9 @@ Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Thomas Huth <thuth@redhat.com>,
         David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/5] KVM: s390: selftests: Split memop tests
-Date:   Fri, 25 Feb 2022 16:53:07 +0100
-Message-Id: <20220225155311.3540514-2-scgl@linux.ibm.com>
+Subject: [PATCH v2 3/5] KVM: s390: selftests: Add named stages for memop test
+Date:   Fri, 25 Feb 2022 16:53:09 +0100
+Message-Id: <20220225155311.3540514-4-scgl@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220225155311.3540514-1-scgl@linux.ibm.com>
 References: <20220211182215.2730017-11-scgl@linux.ibm.com>
@@ -78,279 +78,122 @@ References: <20220211182215.2730017-11-scgl@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wYo0Q6dVzu2kln6hsDRmnDdG9oKCOCHT
-X-Proofpoint-GUID: PgIM61WcF7KBblBLUh_6OmG24Rq7pvTz
+X-Proofpoint-ORIG-GUID: Kq7PkzzONr3aPwgV9feyw6QFw3aFqmGt
+X-Proofpoint-GUID: 4p89SVXFBExlonh3Iakljj0he-i4oKp6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-25_09,2022-02-25_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2022-02-25_08,2022-02-25_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 mlxlogscore=999 spamscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2202250091
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Split success case/copy test from error test, making them independent.
-This means they do not share state and are easier to understand.
-Also, new test can be added in the same manner without affecting the old
-ones. In order to make that simpler, introduce functionality for the
-setup of commonly used variables.
+The stages synchronize guest and host execution.
+This helps the reader and constraits the execution of the test -- if the
+observed staging differs from the expected the test fails.
 
 Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 ---
- tools/testing/selftests/kvm/s390x/memop.c | 137 +++++++++++++---------
- 1 file changed, 82 insertions(+), 55 deletions(-)
+ tools/testing/selftests/kvm/s390x/memop.c | 44 +++++++++++++++++------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index d19c3ffdea3f..b9b673acb766 100644
+index e2ad3d70bae4..d01e48c7c5e8 100644
 --- a/tools/testing/selftests/kvm/s390x/memop.c
 +++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -18,71 +18,82 @@
- static uint8_t mem1[65536];
- static uint8_t mem2[65536];
- 
--static void guest_code(void)
-+struct test_default {
-+	struct kvm_vm *kvm_vm;
-+	struct kvm_run *run;
-+	int size;
-+};
-+
-+static struct test_default test_default_init(void *guest_code)
- {
--	int i;
-+	struct test_default t;
- 
--	for (;;) {
--		for (i = 0; i < sizeof(mem2); i++)
--			mem2[i] = mem1[i];
--		GUEST_SYNC(0);
--	}
-+	t.size = min((size_t)kvm_check_cap(KVM_CAP_S390_MEM_OP), sizeof(mem1));
-+	t.kvm_vm = vm_create_default(VCPU_ID, 0, guest_code);
-+	t.run = vcpu_state(t.kvm_vm, VCPU_ID);
-+	return t;
+@@ -218,10 +218,32 @@ static struct test_default test_default_init(void *guest_code)
+ 	return t;
  }
  
--int main(int argc, char *argv[])
-+static void guest_copy(void)
++enum stage {
++	/* Synced state set by host, e.g. DAT */
++	STAGE_INITED,
++	/* Guest did nothing */
++	STAGE_IDLED,
++	/* Guest copied memory (locations up to test case) */
++	STAGE_COPIED,
++};
++
++#define HOST_SYNC(vcpu_p, stage)					\
++({									\
++	struct test_vcpu __vcpu = (vcpu_p);				\
++	struct ucall uc;						\
++	int __stage = (stage);						\
++									\
++	vcpu_run(__vcpu.vm, __vcpu.id);					\
++	get_ucall(__vcpu.vm, __vcpu.id, &uc);				\
++	ASSERT_EQ(uc.cmd, UCALL_SYNC);					\
++	ASSERT_EQ(uc.args[1], __stage);					\
++})									\
++
+ static void guest_copy(void)
  {
--	struct kvm_vm *vm;
--	struct kvm_run *run;
--	struct kvm_s390_mem_op ksmo;
--	int rv, i, maxsize;
--
--	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
--
--	maxsize = kvm_check_cap(KVM_CAP_S390_MEM_OP);
--	if (!maxsize) {
--		print_skip("CAP_S390_MEM_OP not supported");
--		exit(KSFT_SKIP);
--	}
--	if (maxsize > sizeof(mem1))
--		maxsize = sizeof(mem1);
-+	memcpy(&mem2, &mem1, sizeof(mem2));
-+	GUEST_SYNC(0);
-+}
++	GUEST_SYNC(STAGE_INITED);
+ 	memcpy(&mem2, &mem1, sizeof(mem2));
+-	GUEST_SYNC(0);
++	GUEST_SYNC(STAGE_COPIED);
+ }
  
--	/* Create VM */
--	vm = vm_create_default(VCPU_ID, 0, guest_code);
--	run = vcpu_state(vm, VCPU_ID);
-+static void test_copy(void)
-+{
-+	struct test_default t = test_default_init(guest_copy);
-+	struct kvm_s390_mem_op ksmo;
-+	int i;
- 
+ static void test_copy(void)
+@@ -232,16 +254,13 @@ static void test_copy(void)
  	for (i = 0; i < sizeof(mem1); i++)
  		mem1[i] = i * i + i;
  
++	HOST_SYNC(t.vcpu, STAGE_INITED);
++
  	/* Set the first array */
--	ksmo.gaddr = addr_gva2gpa(vm, (uintptr_t)mem1);
-+	ksmo.gaddr = addr_gva2gpa(t.kvm_vm, (uintptr_t)mem1);
- 	ksmo.flags = 0;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 0;
--	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+-	MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size,
+-	    GADDR(addr_gva2gpa(t.kvm_vm, (uintptr_t)mem1)));
++	MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR_V(mem1));
  
  	/* Let the guest code copy the first array to the second */
--	vcpu_run(vm, VCPU_ID);
--	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
-+	vcpu_run(t.kvm_vm, VCPU_ID);
-+	TEST_ASSERT(t.run->exit_reason == KVM_EXIT_S390_SIEIC,
- 		    "Unexpected exit reason: %u (%s)\n",
--		    run->exit_reason,
--		    exit_reason_str(run->exit_reason));
-+		    t.run->exit_reason,
-+		    exit_reason_str(t.run->exit_reason));
+-	vcpu_run(t.kvm_vm, VCPU_ID);
+-	TEST_ASSERT(t.run->exit_reason == KVM_EXIT_S390_SIEIC,
+-		    "Unexpected exit reason: %u (%s)\n",
+-		    t.run->exit_reason,
+-		    exit_reason_str(t.run->exit_reason));
++	HOST_SYNC(t.vcpu, STAGE_COPIED);
  
  	memset(mem2, 0xaa, sizeof(mem2));
  
- 	/* Get the second array */
- 	ksmo.gaddr = (uintptr_t)mem2;
- 	ksmo.flags = 0;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
- 	ksmo.buf = (uintptr_t)mem2;
- 	ksmo.ar = 0;
--	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+@@ -256,8 +275,9 @@ static void test_copy(void)
  
--	TEST_ASSERT(!memcmp(mem1, mem2, maxsize),
-+	TEST_ASSERT(!memcmp(mem1, mem2, t.size),
- 		    "Memory contents do not match!");
+ static void guest_idle(void)
+ {
++	GUEST_SYNC(STAGE_INITED); /* for consistency's sake */
+ 	for (;;)
+-		GUEST_SYNC(0);
++		GUEST_SYNC(STAGE_IDLED);
+ }
  
-+	kvm_vm_free(t.kvm_vm);
-+}
+ static void test_errors(void)
+@@ -265,6 +285,8 @@ static void test_errors(void)
+ 	struct test_default t = test_default_init(guest_idle);
+ 	int rv;
+ 
++	HOST_SYNC(t.vcpu, STAGE_INITED);
 +
-+static void guest_idle(void)
-+{
-+	for (;;)
-+		GUEST_SYNC(0);
-+}
-+
-+static void test_errors(void)
-+{
-+	struct test_default t = test_default_init(guest_idle);
-+	struct kvm_s390_mem_op ksmo;
-+	int rv;
-+
- 	/* Check error conditions - first bad size: */
- 	ksmo.gaddr = (uintptr_t)mem1;
- 	ksmo.flags = 0;
-@@ -90,7 +101,7 @@ int main(int argc, char *argv[])
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+ 	/* Bad size: */
+ 	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, -1, GADDR_V(mem1));
  	TEST_ASSERT(rv == -1 && errno == E2BIG, "ioctl allows insane sizes");
- 
- 	/* Zero size: */
-@@ -100,65 +111,65 @@ int main(int argc, char *argv[])
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv == -1 && (errno == EINVAL || errno == ENOMEM),
- 		    "ioctl allows 0 as size");
- 
- 	/* Bad flags: */
- 	ksmo.gaddr = (uintptr_t)mem1;
- 	ksmo.flags = -1;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows all flags");
- 
- 	/* Bad operation: */
- 	ksmo.gaddr = (uintptr_t)mem1;
- 	ksmo.flags = 0;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = -1;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows bad operations");
- 
- 	/* Bad guest address: */
- 	ksmo.gaddr = ~0xfffUL;
- 	ksmo.flags = KVM_S390_MEMOP_F_CHECK_ONLY;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
- 
- 	/* Bad host address: */
- 	ksmo.gaddr = (uintptr_t)mem1;
- 	ksmo.flags = 0;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = 0;
- 	ksmo.ar = 0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv == -1 && errno == EFAULT,
- 		    "ioctl does not report bad host memory address");
- 
+@@ -294,11 +316,11 @@ static void test_errors(void)
  	/* Bad access register: */
--	run->psw_mask &= ~(3UL << (63 - 17));
--	run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
--	vcpu_run(vm, VCPU_ID);              /* To sync new state to SIE block */
-+	t.run->psw_mask &= ~(3UL << (63 - 17));
-+	t.run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
-+	vcpu_run(t.kvm_vm, VCPU_ID);              /* To sync new state to SIE block */
- 	ksmo.gaddr = (uintptr_t)mem1;
- 	ksmo.flags = 0;
--	ksmo.size = maxsize;
-+	ksmo.size = t.size;
- 	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.ar = 17;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+ 	t.run->psw_mask &= ~(3UL << (63 - 17));
+ 	t.run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
+-	vcpu_run(t.kvm_vm, VCPU_ID);              /* To sync new state to SIE block */
++	HOST_SYNC(t.vcpu, STAGE_IDLED); /* To sync new state to SIE block */
+ 	rv = ERR_MOP(t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR_V(mem1), AR(17));
  	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows ARs > 15");
--	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
--	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
-+	t.run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
-+	vcpu_run(t.kvm_vm, VCPU_ID);                  /* Run to sync new state */
+ 	t.run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+-	vcpu_run(t.kvm_vm, VCPU_ID);                  /* Run to sync new state */
++	HOST_SYNC(t.vcpu, STAGE_IDLED); /* Run to sync new state */
  
  	/* Check that the SIDA calls are rejected for non-protected guests */
- 	ksmo.gaddr = 0;
-@@ -167,15 +178,31 @@ int main(int argc, char *argv[])
- 	ksmo.op = KVM_S390_MEMOP_SIDA_READ;
- 	ksmo.buf = (uintptr_t)mem1;
- 	ksmo.sida_offset = 0x1c0;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv == -1 && errno == EINVAL,
- 		    "ioctl does not reject SIDA_READ in non-protected mode");
- 	ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
--	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	rv = _vcpu_ioctl(t.kvm_vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
- 	TEST_ASSERT(rv == -1 && errno == EINVAL,
- 		    "ioctl does not reject SIDA_WRITE in non-protected mode");
- 
--	kvm_vm_free(vm);
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int memop_cap;
-+
-+	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
-+
-+	memop_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP);
-+	if (!memop_cap) {
-+		print_skip("CAP_S390_MEM_OP not supported");
-+		exit(KSFT_SKIP);
-+	}
-+
-+	test_copy();
-+	test_errors();
- 
- 	return 0;
- }
+ 	rv = ERR_MOP(t.vcpu, SIDA, READ, mem1, 8, GADDR(0), SIDA_OFFSET(0x1c0));
 -- 
 2.32.0
 
