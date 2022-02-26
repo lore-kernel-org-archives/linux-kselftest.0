@@ -2,108 +2,89 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F772C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Feb 2022 14:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E60C433FE
+	for <linux-kselftest@archiver.kernel.org>; Sat, 26 Feb 2022 21:23:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241364AbiBQOyE (ORCPT
+        id S229723AbiBZVXl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Feb 2022 09:54:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58404 "EHLO
+        Sat, 26 Feb 2022 16:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiBQOyD (ORCPT
+        with ESMTP id S229715AbiBZVXk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Feb 2022 09:54:03 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF9A12CC04;
-        Thu, 17 Feb 2022 06:53:44 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21HElCPF013571;
-        Thu, 17 Feb 2022 14:53:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Ie7MjdehH0xnUFlpIS6Po+Kb9Gi8VBM1gokV58n/GvI=;
- b=jzVjkUnBVuHd1EoH7jlJVt+slnwYl6cVaWO0XomYNJapAtfCUtBL204EONcm67VTnymL
- fBR7hx2yVKkFNQX3MsF6ClQTyn9jR1LfJgEkWpBPqqi5QRUHQGAkScSLC2ojwDhhrhWU
- vHTbt305o+IUBGS35pJetgJiVj0GIKG5F3PXYx0GMTqa/3Vytz4XWWhNwn8IuwJ1kxCY
- gYv7eQOzaVmNXS7TcFN/kfy/h0+X4l4Zrm8K/h5/41OVJnFGXA00tzicgUF6es1ve2vv
- I4x2/0rfCFbhNogH2T6Jifqc5xPV8NqcXOD3G+ikRmdOi1fBe+NxKnkECnDtnf7j7Wuc fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e9reb84hb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 14:53:44 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21HEmhYu021962;
-        Thu, 17 Feb 2022 14:53:43 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e9reb84gw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 14:53:43 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21HEjSgM017823;
-        Thu, 17 Feb 2022 14:53:42 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e64hakdqu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Feb 2022 14:53:41 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21HErcOZ38928790
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Feb 2022 14:53:38 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7FDB64C04E;
-        Thu, 17 Feb 2022 14:53:38 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 306F94C058;
-        Thu, 17 Feb 2022 14:53:38 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Feb 2022 14:53:38 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: 
-Date:   Thu, 17 Feb 2022 15:53:34 +0100
-Message-Id: <20220217145336.1794778-1-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220211182215.2730017-11-scgl@linux.ibm.com>
-References: <20220211182215.2730017-11-scgl@linux.ibm.com>
+        Sat, 26 Feb 2022 16:23:40 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15A726CCFF
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Feb 2022 13:23:03 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id d10so17486677eje.10
+        for <linux-kselftest@vger.kernel.org>; Sat, 26 Feb 2022 13:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QWZ01UyCGLSlDNqY8JjmkSJKDtH9axWGLl/d6bmmI2A=;
+        b=WlGYT50nOVvuXCTkZs/10ZQqFCXwEQYkBIcwA0Y/acruuDAB44TEduCAL4R6Udyyad
+         qkTAOxCgVb2nbIjw/fyRFYxHzS29h5Pg83h+8mij7A3qMN8RQklxh8yUrGulN7PivGY+
+         hUYVMjAdySTlbRg30aBwanlkuNDn3pUTW+QdsZjf6jl/CVgtm1BTi+W6Czi6mIlkK0f3
+         x5EaPszIZlqLaKLmXIKHnc8F+SE6+RMNj1dICYpTgVOn/4tuJxWLONqJNgEGSogx0oTT
+         1vn1k/TyZzC9+01TQPYHTw/X+dRdjf+paaCrRQl9EIgIrX3Qv631Q5nG2RnR2AlOUpe7
+         21Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QWZ01UyCGLSlDNqY8JjmkSJKDtH9axWGLl/d6bmmI2A=;
+        b=GD15kQvQFnzaAChW9Xh7wmHYi3VXlrBU/C5w4TbtoUvNOjRDnnTFD2vM8Lnp8bM5tU
+         BYudloL091rfnkYofagtpVSS+1FbVl65QqggGG3JWOGPGEKHOVdr3TbzQqUrXik74mzD
+         XKyqHzNEIjh+s0HK9PHwn8hnLOeP7J3h6NHv9Yw6oinVBmhtslFZW8DC8hLbFaiU+hnn
+         Ew9Ra6OyjXKXT98ORU9YGmTiYnLy/pUcLe9BElt5z7EM0Jk+S3gp0cM+oVIl0aJCgeKV
+         DG5JVkY+GmZCSnLIUHK0Ll21AQil2xd1ZaTunowRNPAz0JjnbBhaQ4AmFjyd7ylcFdup
+         H+fg==
+X-Gm-Message-State: AOAM531P1siTWDM6IznzWwWKL9c+5bG52lfCLdBD5QccDCbE69oOgrST
+        4lJ7817W6BaHYZD5xI5t++GXAAYRksK1rBSS3sDZ6g==
+X-Google-Smtp-Source: ABdhPJzuScH+m3ha4aSMHjV6W8J6w5omN6qOU4v7f1V/dh9CaAT5DYg75KBcpPiUNiYff+VTdF81kU/L1x4ojJK2gOc=
+X-Received: by 2002:a17:906:6a2a:b0:6cf:d228:790c with SMTP id
+ qw42-20020a1709066a2a00b006cfd228790cmr11014296ejc.75.1645910582220; Sat, 26
+ Feb 2022 13:23:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: yb_-3ly1ZlzcQmP_teriXRah2OQ5U6rz
-X-Proofpoint-GUID: JuWzhVlCiSepSFdTxWpeHWwRRLdxted9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-17_05,2022-02-17_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=826 mlxscore=0 clxscore=1015 malwarescore=0 phishscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202170066
+References: <20220226033054.2860933-1-dlatypov@google.com> <CABVgOSksQBD4F8UaKE3N8D-_U65w_t+OwchQ1G52YnAb1a4YUg@mail.gmail.com>
+In-Reply-To: <CABVgOSksQBD4F8UaKE3N8D-_U65w_t+OwchQ1G52YnAb1a4YUg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Sat, 26 Feb 2022 13:22:50 -0800
+Message-ID: <CAGS_qxpCH_R9h41r=ycV4aRkXH50mUR5HdODYUF-tTqLbPwuAw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: more descriptive metavars/--help output
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Subject: [PATCH 0/2] memop selftest for storage key checking
+On Fri, Feb 25, 2022 at 8:29 PM David Gow <davidgow@google.com> wrote:
+> > @@ -292,11 +290,11 @@ def add_common_opts(parser) -> None:
+> >                              help='Path to Kconfig fragment that enables KUnit tests.'
+> >                              ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
+> >                              'will get  automatically appended.',
+> > -                            metavar='kunitconfig')
+> > +                            metavar='KUNITCONFIG')
+>
+> Is it worth making this something like FILE or PATH instead.
+> PATH_TO_KUNITCONFIG would be verbose, but this is a path being given,
+> so just KUNITCONFIG is still a bit useless.
 
-As previously mentioned, I rewrote the memop selftest.
-It makes heavy use of macros, but that should be fine for a test.
-Feedback appreciated.
-Requires Thomas' recent SIDA memop selftest patch.
+Here's what the complete help output looks like right now:
+  --kunitconfig KUNITCONFIG
+                        Path to Kconfig fragment that enables KUnit tests. If
+                        given a directory, (e.g. lib/kunit), "/.kunitconfig"
+                        will get automatically appended.
 
-Janis Schoetterl-Glausch (2):
-  KVM: s390: selftests: Refactor memop test
-  KVM: s390: selftests: Test vm and vcpu memop with keys
+So I didn't think it mattered too much if we left it as-is.
+But I like PATH (since users can use a dir, FILE felt potentially
+misleading, even if  technically correct).
 
- tools/testing/selftests/kvm/s390x/memop.c | 741 ++++++++++++++++++----
- 1 file changed, 623 insertions(+), 118 deletions(-)
-
--- 
-2.32.0
-
+Will send a v2 with the typo in the commit fixed and this changed to PATH.
