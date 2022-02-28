@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93FEDC43217
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Feb 2022 08:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11685C4167D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Feb 2022 08:13:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiB1IOG (ORCPT
+        id S233888AbiB1IOG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 28 Feb 2022 03:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiB1IOE (ORCPT
+        with ESMTP id S233877AbiB1IOF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Feb 2022 03:14:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64123A1A1;
-        Mon, 28 Feb 2022 00:13:24 -0800 (PST)
+        Mon, 28 Feb 2022 03:14:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE93D4A6;
+        Mon, 28 Feb 2022 00:13:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 16F95CE0F1F;
-        Mon, 28 Feb 2022 08:13:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82A04C340F1;
-        Mon, 28 Feb 2022 08:13:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAC9D6113B;
+        Mon, 28 Feb 2022 08:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D6EC340F7;
+        Mon, 28 Feb 2022 08:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646036001;
-        bh=48SspnIY8Mv/hNKxVnNU0pFRA74zfoDOFL5EUJr0EI0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IBwRqvkpJjGzGUirT8VYTXjMqEVsY/GJleK+6ZfMleYp9PMtx6EmeE+1vjVZYzRll
-         I8ruqTYfrup7sgPWXexev/+T1pJoIbB8LpJl1BbLOyWdXyZdjbpVZbjw5b91NiSrDu
-         Qcs8CtoRe8NDXkOcQGZBUWRqSJhLTY6fU7YRDoZ5WTklONjwHrYLvC567wylpMZLB1
-         x1S96JGDOJ2MNUHwW0l/NMhfSgT/X/gWLULpUEvkYq/z+VDUGXkQ2H8uqYVV6aTIbF
-         /pfduC4igsAHKOw6JulcFcViIxJDogtugRFkRVw5BSQCIR9NmMQOjxR1uBTscZIxSI
-         aZA4sO5RvtX9A==
+        s=k20201202; t=1646036006;
+        bh=KddJdFqVOnq0xfhpG7XfrROWOOfyL2vi8LybdSNAuAQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eOaS0cZTCGEKizv7WXc4cbDiBQNt/wL730I+FiDxE26p9x5SYan3c73iR7TOl5PHz
+         ttfKeUedOAWzERNVGxfPZE5Z2x3XS2kJVINkSGQI2EO+UevZBCCuJCh95Ttdm5MML/
+         8UnyEvIUmknKVBiPzhuZLjNzti4RDy3Kh8lVFbD7S8zcqJy7Dte/NBS3SMdzAH6PoC
+         3ubaJf47ELIRRnjm2hYM9U6Q6qTnWyjQ/drxxWhLee+PKQTbd+klQ9j+mCm3A9KnkJ
+         15tgbVeyQfX4HIlt3orIRSP7xbdK7x5ZvXY3pZwbA0hsXgpitkuFxDX5mnvdeMB+S7
+         q5BUYjb26/dYQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
@@ -40,10 +40,12 @@ Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
         linux-damon@amazon.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v3 00/13] Introduce DAMON sysfs interface
-Date:   Mon, 28 Feb 2022 08:13:01 +0000
-Message-Id: <20220228081314.5770-1-sj@kernel.org>
+Subject: [PATCH v3 04/13] mm/damon/sysfs: Link DAMON for virtual address spaces monitoring
+Date:   Mon, 28 Feb 2022 08:13:05 +0000
+Message-Id: <20220228081314.5770-5-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220228081314.5770-1-sj@kernel.org>
+References: <20220228081314.5770-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,44 +53,16 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changes from Previous Version (v2)
-==================================
+This commit links the DAMON sysfs interface to DAMON so that users can
+control DAMON via the interface.  In detail, this commit makes writing
+'on' to 'state' file constructs DAMON contexts based on values that
+users have written to relevant sysfs files and start the context.  It
+supports only virtual address spaces monitoring at the moment, though.
 
-Compared to the v2 of this patchset
-(https://lore.kernel.org/linux-mm/20220225130712.12682-1-sj@kernel.org/), this
-version contains below changes.
-
-- Put real details in the ABI document (Greg KH)
-- Update 'Date:' in ABI document from Feb 2022 to Mar 2022 (Greg KH)
-
-Introduction
-============
-
-DAMON's debugfs-based user interface (DAMON_DBGFS) served very well, so far.
-However, it unnecessarily depends on debugfs, while DAMON is not aimed to be
-used for only debugging.  Also, the interface receives multiple values via one
-file.  For example, schemes file receives 18 values.  As a result, it is
-inefficient, hard to be used, and difficult to be extended.  Especially,
-keeping backward compatibility of user space tools is getting only challenging.
-It would be better to implement another reliable and flexible interface and
-deprecate DAMON_DBGFS in long term.
-
-For the reason, this patchset introduces a sysfs-based new user interface of
-DAMON.  The idea of the new interface is, using directory hierarchies and
-having one dedicated file for each value.  For a short example, users can do
-the virtual address monitoring via the interface as below:
-
-    # cd /sys/kernel/mm/damon/admin/
-    # echo 1 > kdamonds/nr_kdamonds
-    # echo 1 > kdamonds/0/contexts/nr_contexts
-    # echo vaddr > kdamonds/0/contexts/0/operations
-    # echo 1 > kdamonds/0/contexts/0/targets/nr_targets
-    # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid_target
-    # echo on > kdamonds/0/state
-
-A brief representation of the files hierarchy of DAMON sysfs interface is as
-below.  Childs are represented with indentation, directories are having '/'
-suffix, and files in each directory are separated by comma.
+The files hierarchy of DAMON sysfs interface after this commit is shown
+below.  In the below figure, parents-children relations are represented
+with indentations, each directory is having ``/`` suffix, and files in
+each directory are separated by comma (",").
 
     /sys/kernel/mm/damon/admin
     │ kdamonds/nr_kdamonds
@@ -100,147 +74,236 @@ suffix, and files in each directory are separated by comma.
     │ │ │ │ │ │ nr_regions/min,max
     │ │ │ │ │ targets/nr_targets
     │ │ │ │ │ │ 0/pid_target
-    │ │ │ │ │ │ │ regions/nr_regions
-    │ │ │ │ │ │ │ │ 0/start,end
-    │ │ │ │ │ │ │ │ ...
-    │ │ │ │ │ │ ...
-    │ │ │ │ │ schemes/nr_schemes
-    │ │ │ │ │ │ 0/action
-    │ │ │ │ │ │ │ access_pattern/
-    │ │ │ │ │ │ │ │ sz/min,max
-    │ │ │ │ │ │ │ │ nr_accesses/min,max
-    │ │ │ │ │ │ │ │ age/min,max
-    │ │ │ │ │ │ │ quotas/ms,bytes,reset_interval_ms
-    │ │ │ │ │ │ │ │ weights/sz_permil,nr_accesses_permil,age_permil
-    │ │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
-    │ │ │ │ │ │ │ stats/nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
     │ │ │ │ │ │ ...
     │ │ │ │ ...
     │ │ ...
 
-Detailed usage of the files will be described in the final Documentation patch
-of this patchset.
+The usage is straightforward.  Writing a number ('N') to each 'nr_*'
+file makes directories named '0' to 'N-1'.  Users can construct DAMON
+contexts by writing proper values to the files in the straightforward
+manner and start each kdamond by writing 'on' to 'kdamonds/<N>/state'.
 
-Main Difference Between DAMON_DBGFS and DAMON_SYSFS
----------------------------------------------------
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/sysfs.c | 192 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 189 insertions(+), 3 deletions(-)
 
-At the moment, DAMON_DBGFS and DAMON_SYSFS provides same features.  One
-important difference between them is their exclusiveness.  DAMON_DBGFS works in
-an exclusive manner, so that no DAMON worker thread (kdamond) in the system can
-run concurrently and interfere somehow.  For the reason, DAMON_DBGFS asks users
-to construct all monitoring contexts and start them at once.  It's not a big
-problem but makes the operation a little bit complex and unflexible.
-
-For more flexible usage, DAMON_SYSFS moves the responsibility of preventing any
-possible interference to the admins and work in a non-exclusive manner.  That
-is, users can configure and start contexts one by one.  Note that DAMON
-respects both exclusive groups and non-exclusive groups of contexts, in a
-manner similar to that of reader-writer locks.  That is, if any exclusive
-monitoring contexts (e.g., contexts that started via DAMON_DBGFS) are running,
-DAMON_SYSFS does not start new contexts, and vice versa.
-
-Future Plan of DAMON_DBGFS Deprecation
-======================================
-
-Once this patchset is merged, DAMON_DBGFS development will be frozen.  That is,
-we will maintain it to work as is now so that no users will be break.  But, it
-will not be extended to provide any new feature of DAMON.  The support will be
-continued only until next LTS release.  After that, we will drop DAMON_DBGFS.
-
-User-space Tooling Compatibility
---------------------------------
-
-As DAMON_SYSFS provides all features of DAMON_DBGFS, all user space tooling can
-move to DAMON_SYSFS.  As we will continue supporting DAMON_DBGFS until next LTS
-kernel release, user space tools would have enough time to move to DAMON_SYSFS.
-
-The official user space tool, damo[1], is already supporting both DAMON_SYSFS
-and DAMON_DBGFS.  Both correctness tests[2] and performance tests[3] of DAMON
-using DAMON_SYSFS also passed.
-
-[1] https://github.com/awslabs/damo
-[2] https://github.com/awslabs/damon-tests/tree/master/corr
-[3] https://github.com/awslabs/damon-tests/tree/master/perf
-
-Complete Git Tree
-=================
-
-You can get the complete git tree from
-https://git.kernel.org/sj/h/damon/sysfs/patches/v2.
-
-Sequence of Patches
-===================
-
-First two patches (patches 1-2) make core changes for DAMON_SYSFS.  The first
-one (patch 1) allows non-exclusive DAMON contexts so that DAMON_SYSFS can work
-in non-exclusive mode, while the second one (patch 2) adds size of DAMON enum
-types so that DAMON API users can safely iterate the enums.
-
-Third patch (patch 3) implements basic sysfs stub for virtual address spaces
-monitoring.  Note that this implements only sysfs files and DAMON is not
-linked.  Fourth patch (patch 4) links the DAMON_SYSFS to DAMON so that users
-can control DAMON using the sysfs files.
-
-Following six patches (patches 5-10) implements other DAMON features that
-DAMON_DBGFS supports one by one (physical address space monitoring, DAMON-based
-operation schemes, schemes quotas, schemes prioritization weights, schemes
-watermarks, and schemes stats).
-
-Following patch (patch 11) adds a simple selftest for DAMON_SYSFS, and the
-final one (patch 12) documents DAMON_SYSFS.
-
-Patch History
-=============
-
-Changes from v2
-(https://lore.kernel.org/linux-mm/20220225130712.12682-1-sj@kernel.org/)
-- Put real details in the ABI document (Greg KH)
-- Update 'Date:' in ABI document from Feb 2022 to Mar 2022 (Greg KH)
-
-Changes from v1
-(https://lore.kernel.org/linux-mm/20220223152051.22936-1-sj@kernel.org/)
-- Use __ATTR_R{O,W}_MODE() instead of __ATTR() (Greg KH)
-- Change some file names for using __ATTR_R{O,W}_MODE() (Greg KH)
-- Add ABI document (Greg KH)
-
-Chages from RFC
-(https://lore.kernel.org/linux-mm/20220217161938.8874-1-sj@kernel.org/)
-- Implement all DAMON debugfs interface providing features
-- Writeup documents
-- Add more selftests
-
-SeongJae Park (13):
-  mm/damon/core: Allow non-exclusive DAMON start/stop
-  mm/damon/core: Add number of each enum type values
-  mm/damon: Implement a minimal stub for sysfs-based DAMON interface
-  mm/damon/sysfs: Link DAMON for virtual address spaces monitoring
-  mm/damon/sysfs: Support the physical address space monitoring
-  mm/damon/sysfs: Support DAMON-based Operation Schemes
-  mm/damon/sysfs: Support DAMOS quotas
-  mm/damon/sysfs: Support schemes prioritization
-  mm/damon/sysfs: Support DAMOS watermarks
-  mm/damon/sysfs: Support DAMOS stats
-  selftests/damon: Add a test for DAMON sysfs interface
-  Docs/admin-guide/mm/damon/usage: Document DAMON sysfs interface
-  Docs/ABI/testing: Add DAMON sysfs interface ABI document
-
- .../ABI/testing/sysfs-kernel-mm-damon         |  274 ++
- Documentation/admin-guide/mm/damon/usage.rst  |  350 ++-
- MAINTAINERS                                   |    1 +
- include/linux/damon.h                         |    6 +-
- mm/damon/Kconfig                              |    7 +
- mm/damon/Makefile                             |    1 +
- mm/damon/core.c                               |   23 +-
- mm/damon/dbgfs.c                              |    2 +-
- mm/damon/reclaim.c                            |    2 +-
- mm/damon/sysfs.c                              | 2594 +++++++++++++++++
- tools/testing/selftests/damon/Makefile        |    1 +
- tools/testing/selftests/damon/sysfs.sh        |  306 ++
- 12 files changed, 3550 insertions(+), 17 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-mm-damon
- create mode 100644 mm/damon/sysfs.c
- create mode 100755 tools/testing/selftests/damon/sysfs.sh
-
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index 87cf28ae6a6f..9221c93db6cc 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -806,22 +806,208 @@ static void damon_sysfs_kdamond_rm_dirs(struct damon_sysfs_kdamond *kdamond)
+ 	kobject_put(&kdamond->contexts->kobj);
+ }
+ 
++static bool damon_sysfs_ctx_running(struct damon_ctx *ctx)
++{
++	bool running;
++
++	mutex_lock(&ctx->kdamond_lock);
++	running = ctx->kdamond != NULL;
++	mutex_unlock(&ctx->kdamond_lock);
++	return running;
++}
++
+ static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 		char *buf)
+ {
+-	return -EINVAL;
++	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
++			struct damon_sysfs_kdamond, kobj);
++	struct damon_ctx *ctx = kdamond->damon_ctx;
++	bool running;
++
++	if (!ctx)
++		running = false;
++	else
++		running = damon_sysfs_ctx_running(ctx);
++
++	return sysfs_emit(buf, "%s\n", running ? "on" : "off");
++}
++
++static int damon_sysfs_set_attrs(struct damon_ctx *ctx,
++		struct damon_sysfs_attrs *sys_attrs)
++{
++	struct damon_sysfs_intervals *sys_intervals = sys_attrs->intervals;
++	struct damon_sysfs_ul_range *sys_nr_regions =
++		sys_attrs->nr_regions_range;
++
++	return damon_set_attrs(ctx, sys_intervals->sample_us,
++			sys_intervals->aggr_us, sys_intervals->update_us,
++			sys_nr_regions->min, sys_nr_regions->max);
++}
++
++static void damon_sysfs_destroy_targets(struct damon_ctx *ctx)
++{
++	struct damon_target *t, *next;
++
++	damon_for_each_target_safe(t, next, ctx) {
++		if (ctx->ops.id == DAMON_OPS_VADDR)
++			put_pid(t->pid);
++		damon_destroy_target(t);
++	}
++}
++
++static int damon_sysfs_set_targets(struct damon_ctx *ctx,
++		struct damon_sysfs_targets *sysfs_targets)
++{
++	int i;
++
++	for (i = 0; i < sysfs_targets->nr; i++) {
++		struct damon_sysfs_target *sys_target =
++			sysfs_targets->targets_arr[i];
++		struct damon_target *t = damon_new_target();
++
++		if (!t) {
++			damon_sysfs_destroy_targets(ctx);
++			return -ENOMEM;
++		}
++		if (ctx->ops.id == DAMON_OPS_VADDR) {
++			t->pid = find_get_pid(sys_target->pid);
++			if (!t->pid) {
++				damon_sysfs_destroy_targets(ctx);
++				return -EINVAL;
++			}
++		}
++		damon_add_target(ctx, t);
++	}
++	return 0;
++}
++
++static void damon_sysfs_before_terminate(struct damon_ctx *ctx)
++{
++	struct damon_target *t, *next;
++
++	if (ctx->ops.id != DAMON_OPS_VADDR)
++		return;
++
++	mutex_lock(&ctx->kdamond_lock);
++	damon_for_each_target_safe(t, next, ctx) {
++		put_pid(t->pid);
++		damon_destroy_target(t);
++	}
++	mutex_unlock(&ctx->kdamond_lock);
++}
++
++static struct damon_ctx *damon_sysfs_build_ctx(
++		struct damon_sysfs_context *sys_ctx)
++{
++	struct damon_ctx *ctx = damon_new_ctx();
++	int err;
++
++	if (!ctx)
++		return ERR_PTR(-ENOMEM);
++
++	err = damon_select_ops(ctx, sys_ctx->ops_id);
++	if (err)
++		goto out;
++	err = damon_sysfs_set_attrs(ctx, sys_ctx->attrs);
++	if (err)
++		goto out;
++	err = damon_sysfs_set_targets(ctx, sys_ctx->targets);
++	if (err)
++		goto out;
++
++	ctx->callback.before_terminate = damon_sysfs_before_terminate;
++	return ctx;
++
++out:
++	damon_destroy_ctx(ctx);
++	return ERR_PTR(err);
++}
++
++static int damon_sysfs_turn_damon_on(struct damon_sysfs_kdamond *kdamond)
++{
++	struct damon_ctx *ctx;
++	int err;
++
++	if (kdamond->damon_ctx &&
++			damon_sysfs_ctx_running(kdamond->damon_ctx))
++		return -EBUSY;
++	/* TODO: support multiple contexts per kdamond */
++	if (kdamond->contexts->nr != 1)
++		return -EINVAL;
++
++	if (kdamond->damon_ctx)
++		damon_destroy_ctx(kdamond->damon_ctx);
++	kdamond->damon_ctx = NULL;
++
++	ctx = damon_sysfs_build_ctx(kdamond->contexts->contexts_arr[0]);
++	if (IS_ERR(ctx))
++		return PTR_ERR(ctx);
++	err = damon_start(&ctx, 1, false);
++	if (err) {
++		damon_destroy_ctx(ctx);
++		return err;
++	}
++	kdamond->damon_ctx = ctx;
++	return err;
++}
++
++static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
++{
++	if (!kdamond->damon_ctx)
++		return -EINVAL;
++	return damon_stop(&kdamond->damon_ctx, 1);
++	/*
++	 * To allow users show final monitoring results of already turned-off
++	 * DAMON, we free kdamond->damon_ctx in next
++	 * damon_sysfs_turn_damon_on(), or kdamonds_nr_store()
++	 */
+ }
+ 
+ static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 		const char *buf, size_t count)
+ {
+-	return -EINVAL;
++	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
++			struct damon_sysfs_kdamond, kobj);
++	ssize_t ret;
++
++	if (!mutex_trylock(&damon_sysfs_lock))
++		return -EBUSY;
++	if (sysfs_streq(buf, "on"))
++		ret = damon_sysfs_turn_damon_on(kdamond);
++	else if (sysfs_streq(buf, "off"))
++		ret = damon_sysfs_turn_damon_off(kdamond);
++	else
++		ret = -EINVAL;
++	mutex_unlock(&damon_sysfs_lock);
++	if (!ret)
++		ret = count;
++	return ret;
+ }
+ 
+ static ssize_t pid_show(struct kobject *kobj,
+ 		struct kobj_attribute *attr, char *buf)
+ {
+-	return -EINVAL;
++	struct damon_sysfs_kdamond *kdamond = container_of(kobj,
++			struct damon_sysfs_kdamond, kobj);
++	struct damon_ctx *ctx;
++	int pid;
++
++	if (!mutex_trylock(&damon_sysfs_lock))
++		return -EBUSY;
++	ctx = kdamond->damon_ctx;
++	if (!ctx) {
++		pid = -1;
++		goto out;
++	}
++	mutex_lock(&ctx->kdamond_lock);
++	if (!ctx->kdamond)
++		pid = -1;
++	else
++		pid = ctx->kdamond->pid;
++	mutex_unlock(&ctx->kdamond_lock);
++out:
++	mutex_unlock(&damon_sysfs_lock);
++	return sysfs_emit(buf, "%d\n", pid);
+ }
+ 
+ static void damon_sysfs_kdamond_release(struct kobject *kobj)
 -- 
 2.17.1
 
