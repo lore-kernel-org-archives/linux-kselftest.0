@@ -2,103 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D386C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Feb 2022 07:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FF8CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Feb 2022 08:13:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbiB1HHN (ORCPT
+        id S233872AbiB1IOF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Feb 2022 02:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        Mon, 28 Feb 2022 03:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiB1HHM (ORCPT
+        with ESMTP id S233871AbiB1IOC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Feb 2022 02:07:12 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFE5673D7;
-        Sun, 27 Feb 2022 23:06:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 0D9F41F41AF1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646031993;
-        bh=W4cIZpdLZKXfFvwZZ+vsbBlehwZDS/nqRnEXlzdwp6s=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=cuMuERxUAM9UyFWWVvFpdOUavoGkKxn4uhETONY6udK+t36aNX3SuF8haWruqjVfQ
-         w124lo3P6zuGvofyierrkssR2QQ3HrUTvzicN8bCBNK8fcDh0hOZupPZ6qxC3XobhR
-         RvvsrEnaCAJtWs53GLAXpgqr8sJT8DGOY2MCl0BrHbtBuNF2FHzSE+i04hXGABVv7M
-         T5XUsRC3gadjE9o/m+1pe+jz5//WB0f6zYnawT81WadMb7jUirBt4HiyODrOO1ANW4
-         nzHOHIUvl1ysgwvFsOTSk9myKTGeYYv7Z2bDrCS2qgYvzKYbwuXa3NjaKod3OkdJwF
-         kAV09xtEOn8hw==
-Message-ID: <0c22d702-b451-e9b3-8d3f-7c28ca71c1da@collabora.com>
-Date:   Mon, 28 Feb 2022 12:06:22 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernelci@groups.io,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
- CFI_FORWARD_PROTO
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220217205620.2512094-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Mon, 28 Feb 2022 03:14:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B358A3982E;
+        Mon, 28 Feb 2022 00:13:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 511376113E;
+        Mon, 28 Feb 2022 08:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8042C340F5;
+        Mon, 28 Feb 2022 08:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646036003;
+        bh=BN0RNQE82EItJGsbrfD48UPrIRDNL1uB0fAkgBxI96s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eMPQ99d7L+8u0ScKHFIEi4QDToF/MjC8QOxZUEXFsheRKnbvV4JKB23MAePs/A6+Q
+         8Y7LyJYmyQUeT6CVdWd2iMb9hipz0jfh19mDXBrc9QPvjA9ykqd06rGv5ScHz3yJk5
+         u0eubieU5MU8nxbCoHKHk2fvKiRC9iITuBZnIkI0NoLOMotjsZ5mDUziSRYw6T8ALs
+         YRAsRImBqkY3CJKvI870qXe9OFrqZxlShnZTPFZwghHNotgsgnKDfr2cuJJZzhLtvl
+         VERVJbdP//7hRamzSMi56HSeFQ4G/WdM1v2kzcv7r3Adj3ggpI0NKLsrdoSmJ07tXX
+         j5tBMRAhxvlVw==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
+        xhao@linux.alibaba.com, gregkh@linuxfoundation.org,
+        linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH v3 02/13] mm/damon/core: Add number of each enum type values
+Date:   Mon, 28 Feb 2022 08:13:03 +0000
+Message-Id: <20220228081314.5770-3-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220228081314.5770-1-sj@kernel.org>
+References: <20220228081314.5770-1-sj@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+This commit declares the number of legal values for each DAMON enum
+types to make traversals of such DAMON enum types easy and safe.
 
-Any thoughts?
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ include/linux/damon.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On 2/18/22 1:56 AM, Muhammad Usama Anjum wrote:
-> Add config options which are needed for LKDTM sub-tests.
-> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
-> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
-> INIT_ON_FREE_DEFAULT_ON config.
-> 
-> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
-> kind. Turn it off for now by default until proper support.
-> 
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  tools/testing/selftests/lkdtm/config    | 2 ++
->  tools/testing/selftests/lkdtm/tests.txt | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-> index 46f39ee762086..adc9fa60057c5 100644
-> --- a/tools/testing/selftests/lkdtm/config
-> +++ b/tools/testing/selftests/lkdtm/config
-> @@ -2,8 +2,10 @@ CONFIG_LKDTM=y
->  CONFIG_DEBUG_LIST=y
->  CONFIG_SLAB_FREELIST_HARDENED=y
->  CONFIG_FORTIFY_SOURCE=y
-> +CONFIG_GCC_PLUGIN_STACKLEAK=y
->  CONFIG_HARDENED_USERCOPY=y
->  CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
-> +CONFIG_INIT_ON_FREE_DEFAULT_ON=y
->  CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
->  CONFIG_UBSAN=y
->  CONFIG_UBSAN_BOUNDS=y
-> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-> index 6b36b7f5dcf96..aa947b0ce1eeb 100644
-> --- a/tools/testing/selftests/lkdtm/tests.txt
-> +++ b/tools/testing/selftests/lkdtm/tests.txt
-> @@ -72,7 +72,7 @@ USERCOPY_STACK_FRAME_FROM
->  USERCOPY_STACK_BEYOND
->  USERCOPY_KERNEL
->  STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
-> -CFI_FORWARD_PROTO
-> +#CFI_FORWARD_PROTO
->  FORTIFIED_STRSCPY
->  FORTIFIED_OBJECT
->  FORTIFIED_SUBOBJECT
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index f8e99e47d747..f23cbfa4248d 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -87,6 +87,7 @@ struct damon_target {
+  * @DAMOS_HUGEPAGE:	Call ``madvise()`` for the region with MADV_HUGEPAGE.
+  * @DAMOS_NOHUGEPAGE:	Call ``madvise()`` for the region with MADV_NOHUGEPAGE.
+  * @DAMOS_STAT:		Do nothing but count the stat.
++ * @NR_DAMOS_ACTIONS:	Total number of DAMOS actions
+  */
+ enum damos_action {
+ 	DAMOS_WILLNEED,
+@@ -95,6 +96,7 @@ enum damos_action {
+ 	DAMOS_HUGEPAGE,
+ 	DAMOS_NOHUGEPAGE,
+ 	DAMOS_STAT,		/* Do nothing but only record the stat */
++	NR_DAMOS_ACTIONS,
+ };
+ 
+ /**
+@@ -157,10 +159,12 @@ struct damos_quota {
+  *
+  * @DAMOS_WMARK_NONE:		Ignore the watermarks of the given scheme.
+  * @DAMOS_WMARK_FREE_MEM_RATE:	Free memory rate of the system in [0,1000].
++ * @NR_DAMOS_WMARK_METRICS:	Total number of DAMOS watermark metrics
+  */
+ enum damos_wmark_metric {
+ 	DAMOS_WMARK_NONE,
+ 	DAMOS_WMARK_FREE_MEM_RATE,
++	NR_DAMOS_WMARK_METRICS,
+ };
+ 
+ /**
+-- 
+2.17.1
+
