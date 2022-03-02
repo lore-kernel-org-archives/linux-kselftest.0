@@ -2,131 +2,181 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EDDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Mar 2022 10:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D27C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Mar 2022 11:15:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241065AbiCBKrd (ORCPT
+        id S241460AbiCBLQA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Mar 2022 05:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        Wed, 2 Mar 2022 06:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbiCBKrc (ORCPT
+        with ESMTP id S241344AbiCBLPw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Mar 2022 05:47:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC9CBECD9;
-        Wed,  2 Mar 2022 02:46:49 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2229rrsd007841;
-        Wed, 2 Mar 2022 10:46:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=R/c1L+XnDZeU+pqemOA1d/0xhmMdRl79pBFJwINA7Ug=;
- b=hp8phhNnrxPiX6zTkoOec+aEfuIurokLmT02O2qMiPl8Ziu70z6GyFKJNmZlJmV3v3X6
- WAQOssFql09Ou9V5BTsxzq6AsmqvXVgoqCKmSyNAzisWlYoK3vhWCOkRM6TxRFbraywm
- HibgvDw66vO8hsnf0p22TeXVyuai3nn1AIm8lDOnoasCAUs7N4Bx7X8T89MccLsV9TRG
- d6/phmHO0J5KkSGClzIHyCjn/HG3K91BJeJnPx/bEN8rg9Y3Kx3Wj58FTur1LTpYjYR5
- 5yACrPGG/BMqkhchcIJGYT3RH4ryFOyJrY05sMgVKn21UyimNOAXr7D2G2iPEyK1OTlz UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej6bt0yf4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 10:46:47 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 222AQI9M035647;
-        Wed, 2 Mar 2022 10:46:46 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ej6bt0yeg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 10:46:46 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 222AgdBD001503;
-        Wed, 2 Mar 2022 10:46:44 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3efbu9edbv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Mar 2022 10:46:44 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 222Akc7M52429234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Mar 2022 10:46:38 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB2C9A404D;
-        Wed,  2 Mar 2022 10:46:38 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56A92A4040;
-        Wed,  2 Mar 2022 10:46:38 +0000 (GMT)
-Received: from [9.145.41.193] (unknown [9.145.41.193])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Mar 2022 10:46:38 +0000 (GMT)
-Message-ID: <3bf9c7c4-4475-ad12-d146-a97b33d1e4ba@linux.ibm.com>
-Date:   Wed, 2 Mar 2022 11:46:38 +0100
+        Wed, 2 Mar 2022 06:15:52 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F4060DAF;
+        Wed,  2 Mar 2022 03:14:35 -0800 (PST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K7s1K3cK2z67NJM;
+        Wed,  2 Mar 2022 19:13:25 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Mar 2022 12:14:32 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <zohar@linux.ibm.com>, <shuah@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <revest@chromium.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v3 2/9] ima: Always return a file measurement in ima_file_hash()
+Date:   Wed, 2 Mar 2022 12:13:57 +0100
+Message-ID: <20220302111404.193900-3-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220302111404.193900-1-roberto.sassu@huawei.com>
+References: <20220302111404.193900-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 1/3] drivers/s390/char: Add Ultravisor io device
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220223144830.44039-1-seiden@linux.ibm.com>
- <20220223144830.44039-2-seiden@linux.ibm.com>
- <7058948f-5514-4f8f-c974-f1ac624d67c3@linux.ibm.com>
-From:   Steffen Eiden <seiden@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <7058948f-5514-4f8f-c974-f1ac624d67c3@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: R4lSi8PuL08S3V5pOrTWqVLz_RM67ugJ
-X-Proofpoint-ORIG-GUID: W8UryUt5yXhPz5sBjhTtd8XoOKiTBPNf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-02_01,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 phishscore=0
- mlxlogscore=999 impostorscore=0 spamscore=0 mlxscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2203020043
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+__ima_inode_hash() checks if a digest has been already calculated by
+looking for the integrity_iint_cache structure associated to the passed
+inode.
 
+Users of ima_file_hash() (e.g. eBPF) might be interested in obtaining the
+information without having to setup an IMA policy so that the digest is
+always available at the time they call this function.
 
-On 3/2/22 11:34, Janosch Frank wrote:
-> On 2/23/22 15:48, Steffen Eiden wrote:
->> This patch adds a new miscdevice to expose some Ultravisor functions
->> to userspace. Userspace can send IOCTLs to the uvdevice that will then
->> emit a corresponding Ultravisor Call and hands the result over to
->> userspace. The uvdevice is available if the Ultravisor Call facility is
->> present.
->>
->> Userspace is now able to call the Query Ultravisor Information
->> Ultravisor Command through the uvdevice.
->>
->> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
->> ---
-[...]
->> +
->> +config S390_UV_UAPI
->> +    def_tristate y
->> +    prompt "Ultravisor userspace API"
->> +    depends on PROTECTED_VIRTUALIZATION_GUEST
-> 
-> Please drop the dependency.
-> We want this to be available to both guest and host as QUI is available 
-> in both environments and more calls like this could follow.
-> 
-> We could put an option around the attestation but the savings are not 
-> worth the effort.
+In addition, they likely expect the digest to be fresh, e.g. recalculated
+by IMA after a file write. Although getting the digest from the
+bprm_committed_creds hook (as in the eBPF test) ensures that the digest is
+fresh, as the IMA hook is executed before that hook, this is not always the
+case (e.g. for the mmap_file hook).
 
-Makes sense. I will drop the dependency in v3.
+Call ima_collect_measurement() in __ima_inode_hash(), if the file
+descriptor is available (passed by ima_file_hash()) and the digest is not
+available/not fresh, and store the file measurement in a temporary
+integrity_iint_cache structure.
 
-Steffen
+This change does not cause memory usage increase, due to using the
+temporary integrity_iint_cache structure, and due to freeing the
+ima_digest_data structure inside integrity_iint_cache before exiting from
+__ima_inode_hash().
+
+For compatibility reasons, the behavior of ima_inode_hash() remains
+unchanged.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima_main.c | 46 ++++++++++++++++++++++---------
+ 1 file changed, 33 insertions(+), 13 deletions(-)
+
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 946ba8a12eab..ed1a82f1def3 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -520,20 +520,38 @@ int ima_file_check(struct file *file, int mask)
+ }
+ EXPORT_SYMBOL_GPL(ima_file_check);
+ 
+-static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
++static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
++			    size_t buf_size)
+ {
+-	struct integrity_iint_cache *iint;
+-	int hash_algo;
++	struct integrity_iint_cache *iint = NULL, tmp_iint;
++	int rc, hash_algo;
+ 
+-	if (!ima_policy_flag)
+-		return -EOPNOTSUPP;
++	if (ima_policy_flag) {
++		iint = integrity_iint_find(inode);
++		if (iint)
++			mutex_lock(&iint->mutex);
++	}
++
++	if ((!iint || !(iint->flags & IMA_COLLECTED)) && file) {
++		if (iint)
++			mutex_unlock(&iint->mutex);
++
++		memset(&tmp_iint, 0, sizeof(tmp_iint));
++		tmp_iint.inode = inode;
++		mutex_init(&tmp_iint.mutex);
++
++		rc = ima_collect_measurement(&tmp_iint, file, NULL, 0,
++					     ima_hash_algo, NULL);
++		if (rc < 0)
++			return -EOPNOTSUPP;
++
++		iint = &tmp_iint;
++		mutex_lock(&iint->mutex);
++	}
+ 
+-	iint = integrity_iint_find(inode);
+ 	if (!iint)
+ 		return -EOPNOTSUPP;
+ 
+-	mutex_lock(&iint->mutex);
+-
+ 	/*
+ 	 * ima_file_hash can be called when ima_collect_measurement has still
+ 	 * not been called, we might not always have a hash.
+@@ -552,12 +570,14 @@ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+ 	hash_algo = iint->ima_hash->algo;
+ 	mutex_unlock(&iint->mutex);
+ 
++	if (iint == &tmp_iint)
++		kfree(iint->ima_hash);
++
+ 	return hash_algo;
+ }
+ 
+ /**
+- * ima_file_hash - return the stored measurement if a file has been hashed and
+- * is in the iint cache.
++ * ima_file_hash - return a measurement of the file
+  * @file: pointer to the file
+  * @buf: buffer in which to store the hash
+  * @buf_size: length of the buffer
+@@ -570,7 +590,7 @@ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+  * The file hash returned is based on the entire file, including the appended
+  * signature.
+  *
+- * If IMA is disabled or if no measurement is available, return -EOPNOTSUPP.
++ * If the measurement cannot be performed, return -EOPNOTSUPP.
+  * If the parameters are incorrect, return -EINVAL.
+  */
+ int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+@@ -578,7 +598,7 @@ int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+ 	if (!file)
+ 		return -EINVAL;
+ 
+-	return __ima_inode_hash(file_inode(file), buf, buf_size);
++	return __ima_inode_hash(file_inode(file), file, buf, buf_size);
+ }
+ EXPORT_SYMBOL_GPL(ima_file_hash);
+ 
+@@ -605,7 +625,7 @@ int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+ 	if (!inode)
+ 		return -EINVAL;
+ 
+-	return __ima_inode_hash(inode, buf, buf_size);
++	return __ima_inode_hash(inode, NULL, buf, buf_size);
+ }
+ EXPORT_SYMBOL_GPL(ima_inode_hash);
+ 
+-- 
+2.32.0
+
