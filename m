@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C51DBC433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Mar 2022 17:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12B4BC4167B
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Mar 2022 17:32:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241167AbiCDRdJ (ORCPT
+        id S241212AbiCDRdL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Mar 2022 12:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        Fri, 4 Mar 2022 12:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241329AbiCDRdE (ORCPT
+        with ESMTP id S241284AbiCDRc7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:33:04 -0500
+        Fri, 4 Mar 2022 12:32:59 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E4441CD9D0
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Mar 2022 09:32:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 526451CDDF4
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Mar 2022 09:32:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646415135;
+        s=mimecast20190719; t=1646415129;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jXjAemh+tgaeshWdU0Zw5DqV+Jw6OpdtZV+yJ3YWHiI=;
-        b=C1Fa/jY7gUFx+oZV11T/bN8KB1Zkgee6kafC35dN8OUh8KK6C6rLeYcJ0t1qJD4bMzKiV5
-        k4hL1vzyyURZyLnKTF9NfbKik295+tJwhtIY1QHWJWqh7VpnG0YuPm9gqUGgc18IWgAIqw
-        0fBiXkmw1MxJfBPGhXhQ4iMMItDp/ik=
+        bh=AHXclG4UU3SsFO1lmPzG4KrgiciUiPhbXYLOOW1McYw=;
+        b=XSOzhtgDj71yWS0i3hC8RXZTNAm7xOcTDtd17r5CPRlzbIXVGC/tuf6iT4r2BQK6BQgeYc
+        M9Rnts2iXxkR1LPFdLvfzPuNpKKeDxj6OkmS7508mThR0HuFrGgipoNVMDNRO3UGOobQSk
+        jROIvGVBcdotMg3sK5sVYqwc8VMpkdQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-hTrIEclbMQmRMq9TQ7IA5A-1; Fri, 04 Mar 2022 12:32:12 -0500
-X-MC-Unique: hTrIEclbMQmRMq9TQ7IA5A-1
+ us-mta-438-dEgrSUCrOImgtxojmRx8Bg-1; Fri, 04 Mar 2022 12:32:04 -0500
+X-MC-Unique: dEgrSUCrOImgtxojmRx8Bg-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 59BC51091DA0;
-        Fri,  4 Mar 2022 17:32:10 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C19BA1091DA1;
+        Fri,  4 Mar 2022 17:32:01 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 49C2486595;
-        Fri,  4 Mar 2022 17:32:06 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C5B2886595;
+        Fri,  4 Mar 2022 17:31:44 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v2 11/28] samples/bpf: add a report descriptor fixup
-Date:   Fri,  4 Mar 2022 18:28:35 +0100
-Message-Id: <20220304172852.274126-12-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v2 09/28] libbpf: add new attach type BPF_HID_RDESC_FIXUP
+Date:   Fri,  4 Mar 2022 18:28:33 +0100
+Message-Id: <20220304172852.274126-10-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
 References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -68,8 +68,7 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-the program inverts the definition of X and Y at a given place in the
-report descriptor of my mouse.
+Adds the SEC definiton for report descriptor fixups.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
@@ -78,44 +77,21 @@ Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 changes in v2:
 - split the series by bpf/libbpf/hid/selftests and samples
 ---
- samples/bpf/hid_mouse_kern.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ tools/lib/bpf/libbpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/samples/bpf/hid_mouse_kern.c b/samples/bpf/hid_mouse_kern.c
-index c24a12e06b40..958820caaf5d 100644
---- a/samples/bpf/hid_mouse_kern.c
-+++ b/samples/bpf/hid_mouse_kern.c
-@@ -62,5 +62,30 @@ int hid_x_event(struct hid_bpf_ctx *ctx)
- 	return 0;
- }
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 356bbd3ad2c7..192ef3901251 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8681,6 +8681,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
+ 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+ 	SEC_DEF("hid/device_event",	HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("hid/rdesc_fixup",	HID, BPF_HID_RDESC_FIXUP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
+ };
  
-+SEC("hid/rdesc_fixup")
-+int hid_rdesc_fixup(struct hid_bpf_ctx *ctx)
-+{
-+	if (ctx->type != HID_BPF_RDESC_FIXUP)
-+		return 0;
-+
-+	bpf_printk("rdesc: %02x %02x %02x",
-+		   ctx->data[0],
-+		   ctx->data[1],
-+		   ctx->data[2]);
-+	bpf_printk("       %02x %02x %02x",
-+		   ctx->data[3],
-+		   ctx->data[4],
-+		   ctx->data[5]);
-+	bpf_printk("       %02x %02x %02x ...",
-+		   ctx->data[6],
-+		   ctx->data[7],
-+		   ctx->data[8]);
-+
-+	ctx->data[39] = 0x31;
-+	ctx->data[41] = 0x30;
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
- u32 _version SEC("version") = LINUX_VERSION_CODE;
+ #define MAX_TYPE_NAME_SIZE 32
 -- 
 2.35.1
 
