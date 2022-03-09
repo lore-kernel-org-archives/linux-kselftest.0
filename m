@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E6B3C35278
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4B02C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiCIRFk (ORCPT
+        id S236964AbiCIRFm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        Wed, 9 Mar 2022 12:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238969AbiCIREQ (ORCPT
+        with ESMTP id S238951AbiCIREN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:04:16 -0500
+        Wed, 9 Mar 2022 12:04:13 -0500
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BCF19F458
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 08:53:03 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d11b6259adso18979867b3.19
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 08:53:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C00419E08E
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 08:53:01 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dbf4238d6bso19409517b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 08:53:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc:content-transfer-encoding;
-        bh=ArtryYFgH5mlYpraW6Z9pzBKDmlE5B7N8QDWxuF8nCw=;
-        b=ET2G8YAxigglCgwH9ORXjYEpMOwkLAxVMGluElrrT20Iij1J38dmr6UP8EdlHvk4DN
-         azfkhu/4N5mTJEJm6TVVmQy58D9W8S5IKUZrU96emS4lJxesAiyxiaL+UhI4peXvb1ET
-         2NfRSubT3bKB7llEizgDSk5WlvkFPBL2wIZ+UrsonprCR0wGscERyJLQ5lFI6A7C+Mqr
-         bBt/5MUBkAllxZeIaBAydEb4kU5tR1u3dOU4OHuIMqo5beiURrjjfEoxT78k7cZx6CKK
-         JslptEply/Lv5cfDpBB3GPPAcjhXmY9D9nxBJ4PiqVjPoV/QbfVEvtvJmrpZObB+eaR2
-         BMJg==
+        bh=lhHGzZoREQNnf55wN1HaeVUD3hjLL00JJ5cetBP+eaQ=;
+        b=gKIbC0k/5p+fyNlConlMN+xPe/ebk8ebvd/uWg6T6vooL8MMIfva9qwy7Lpdbivqq7
+         oJoIgx2KDTrB7PC2LXU6JYkOQgHlH1J78wsI/1CybgkEOgCETFPbvTPvvBZjF3KtEYrW
+         804ENocSNg1iNY0zuUQhjo4BolEmxZkdv9JShsHPaP3w6yigklJE9Q9l+xaJDLCwR09A
+         4DGED7VchRj5zoSQ42M5Way/Ra/0h5dn8HeEz5ZQ9KAEmdn2oNLN4RDfrLj7Imh7317M
+         J7FgGxhT0IWthtTIVaNXYJbTS5HECV7f+G560rkLLiA/e5xw92yjAG61zMDzxkzWjfrM
+         JpaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc:content-transfer-encoding;
-        bh=ArtryYFgH5mlYpraW6Z9pzBKDmlE5B7N8QDWxuF8nCw=;
-        b=xoofeE3elCyYzZIa9o1YKFDIt9R+6uHYv+P47UaF4zRGAHTWJU21ZBrL6DkmES7HnG
-         5jmdop8WN/f6wEPlHGz42h3uWpOqayLjc+8AN24LG3tff8tD7Y4vcYcQmcz2Kk+0G9gO
-         yoNPNG7mmsFkiKENZckWfZ96LBo9CYMdvqbtTDjD5qIiijElB6ZCnRQkRWwehBjkQiaf
-         lPCZjFfLbt3SxPWqDGYyXlxwOYnNtPvEMU/ZTWUree1F85Ex9HADEwWPzVryIZfa2LEp
-         8u1YN82Ljd6tFQJRqTwuKUWOSzURIfpU1BeL2pXOEykqUxXIMXPSiNnKVxgoaMPHciYS
-         OZzA==
-X-Gm-Message-State: AOAM530suRbKmgOhl9dhEemitxh+kMSZT+d2Ny3qHKCxEdvelT7QYEv2
-        PpCOVEwpYMJZIbOak71ibBDZa2uKTP/rpRY=
-X-Google-Smtp-Source: ABdhPJwhCCM8fnCv/YYjH2ItlE07Kq6zIIhQQNOdvRKBR0On1xzyi6be0Wrkn7kWsIBobS2Z6B4GB8mh7xehQH8=
+        bh=lhHGzZoREQNnf55wN1HaeVUD3hjLL00JJ5cetBP+eaQ=;
+        b=0Q+ldlGGWYYvgOkmNYA72M6yIn5hfRq6wpGQ4p7Cn/8IIoWn8XVQCcG69fSbyBtx1+
+         saHAkNby5wrfbyaOzeQyIhln0n38uSyhcYHFrrjfcFKrgPw/8+8qRBE9ki1zSNDaZpcl
+         Fphawlpsmxhglo4RgIeIJL7oE3lCHjO/z+NuNPyYkK867cqlx6ec/4QfawSp2kj3vnFe
+         mYXK0fdfYPMXMGBI681BY0QxKRpyX2vL4kozZ7eFOPltogXc2CoBzLKuHEcZqmSPWvP+
+         NLOdla/ThWNw7Yi5gEiXGlcGYCijABssVM+X9RUH2R6a3i+rxdAKv9RJNzTf1sof70tv
+         VqNQ==
+X-Gm-Message-State: AOAM5306/mqqNkR46NT9PS809q6ooK/Wok5Gy/42XjnkPLFTIfCr/SaT
+        wywW2L+ub0Jz3xdaQjLh8pZpqdHgKtQJCyQ=
+X-Google-Smtp-Source: ABdhPJwK4yKwsDlaoEUAS3Vm5fm7rENo1CQsEFqudzHVLPT45CzkuU3D+7W8hxwy+2V9Wem//6DQfWjRXmIBTMk=
 X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a25:3403:0:b0:628:a2e4:ae8a with SMTP id
- b3-20020a253403000000b00628a2e4ae8amr504446yba.219.1646844771702; Wed, 09 Mar
- 2022 08:52:51 -0800 (PST)
-Date:   Wed,  9 Mar 2022 16:52:16 +0000
+ (user=tjmercier job=sendgmr) by 2002:a05:6902:1541:b0:628:a0ed:ad49 with SMTP
+ id r1-20020a056902154100b00628a0edad49mr513167ybu.419.1646844765074; Wed, 09
+ Mar 2022 08:52:45 -0800 (PST)
+Date:   Wed,  9 Mar 2022 16:52:14 +0000
 In-Reply-To: <20220309165222.2843651-1-tjmercier@google.com>
-Message-Id: <20220309165222.2843651-7-tjmercier@google.com>
+Message-Id: <20220309165222.2843651-5-tjmercier@google.com>
 Mime-Version: 1.0
 References: <20220309165222.2843651-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [RFC v3 6/8] binder: Add a buffer flag to relinquish ownership of fds
+Subject: [RFC v3 4/8] dmabuf: heaps: export system_heap buffers with GPU
+ cgroup charging
 From:   "T.J. Mercier" <tjmercier@google.com>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -93,148 +94,141 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Hridya Valsaraju <hridya@google.com>
 
-This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
-that a process sending an fd array to another process over binder IPC
-can set to relinquish ownership of the fds being sent for memory
-accounting purposes. If the flag is found to be set during the fd array
-translation and the fd is for a DMA-BUF, the buffer is uncharged from
-the sender's cgroup and charged to the receiving process's cgroup
-instead.
-
-It is up to the sending process to ensure that it closes the fds
-regardless of whether the transfer failed or succeeded.
-
-Most graphics shared memory allocations in Android are done by the
-graphics allocator HAL process. On requests from clients, the HAL process
-allocates memory and sends the fds to the clients over binder IPC.
-The graphics allocator HAL will not retain any references to the
-buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for fd
-arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
-correctly charge the buffers to the client processes instead of the
-graphics allocator HAL.
-
-Since this is a new feature exposed to userspace, the kernel and userspace
-must be compatible for the accounting to work for transfers. In all cases
-the allocation and transport of DMA buffers via binder will succeed, but
-only when both the kernel supports, and userspace depends on this feature
-will the transfer accounting work. The possible scenarios are detailed
-below:
-
-1. new kernel + old userspace
-The kernel supports the feature but userspace does not use it. The old
-userspace won't mount the new cgroup controller, accounting is not
-performed, charge is not transferred.
-
-2. old kernel + new userspace
-The new cgroup controller is not supported by the kernel, accounting is
-not performed, charge is not transferred.
-
-3. old kernel + old userspace
-Same as #2
-
-4. new kernel + new userspace
-Cgroup is mounted, feature is supported and used.
+All DMA heaps now register a new GPU cgroup device upon creation, and the
+system_heap now exports buffers associated with its GPU cgroup device for
+tracking purposes.
 
 Signed-off-by: Hridya Valsaraju <hridya@google.com>
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
 ---
 v3 changes
-Remove android from title per Todd Kjos.
-
 Use more common dual author commit message format per John Stultz.
-
-Include details on behavior for all combinations of kernel/userspace
-versions in changelog (thanks Suren Baghdasaryan) per Greg Kroah-Hartman.
 
 v2 changes
 Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
 heap to a single dma-buf function for all heaps per Daniel Vetter and
 Christian K=C3=B6nig.
 ---
- drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
- include/uapi/linux/android/binder.h |  1 +
- 2 files changed, 27 insertions(+)
+ drivers/dma-buf/dma-heap.c          | 27 +++++++++++++++++++++++++++
+ drivers/dma-buf/heaps/system_heap.c |  3 +++
+ include/linux/dma-heap.h            | 11 +++++++++++
+ 3 files changed, 41 insertions(+)
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 8351c5638880..f50d88ded188 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -42,6 +42,7 @@
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 8f5848aa144f..885072427775 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -7,6 +7,7 @@
+  */
 =20
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-=20
-+#include <linux/dma-buf.h>
- #include <linux/fdtable.h>
- #include <linux/file.h>
- #include <linux/freezer.h>
-@@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct list_hea=
-d *pf_head,
- {
- 	binder_size_t fdi, fd_buf_size;
- 	binder_size_t fda_offset;
-+	bool transfer_gpu_charge =3D false;
- 	const void __user *sender_ufda_base;
- 	struct binder_proc *proc =3D thread->proc;
-+	struct binder_proc *target_proc =3D t->to_proc;
- 	int ret;
-=20
- 	fd_buf_size =3D sizeof(u32) * fda->num_fds;
-@@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct list_hea=
-d *pf_head,
- 	if (ret)
- 		return ret;
-=20
-+	if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
-+		parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
-+		transfer_gpu_charge =3D true;
-+
- 	for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
- 		u32 fd;
-+		struct dma_buf *dmabuf;
-+		struct gpucg *gpucg;
-+
- 		binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
- 		binder_size_t sender_uoffset =3D fdi * sizeof(fd);
-=20
-@@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct list_hea=
-d *pf_head,
- 						  in_reply_to);
- 		if (ret)
- 			return ret > 0 ? -EINVAL : ret;
-+
-+		if (!transfer_gpu_charge)
-+			continue;
-+
-+		dmabuf =3D dma_buf_get(fd);
-+		if (IS_ERR(dmabuf))
-+			continue;
-+
-+		gpucg =3D gpucg_get(target_proc->tsk);
-+		ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
-+		if (ret) {
-+			pr_warn("%d:%d Unable to transfer DMA-BUF fd charge to %d",
-+				proc->pid, thread->pid, target_proc->pid);
-+			gpucg_put(gpucg);
-+		}
-+		dma_buf_put(dmabuf);
- 	}
- 	return 0;
- }
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/andro=
-id/binder.h
-index 3246f2c74696..169fd5069a1a 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -137,6 +137,7 @@ struct binder_buffer_object {
-=20
- enum {
- 	BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
-+	BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
+ #include <linux/cdev.h>
++#include <linux/cgroup_gpu.h>
+ #include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/dma-buf.h>
+@@ -31,6 +32,7 @@
+  * @heap_devt		heap device node
+  * @list		list head connecting to list of heaps
+  * @heap_cdev		heap char device
++ * @gpucg_dev		gpu cgroup device for memory accounting
+  *
+  * Represents a heap of memory from which buffers can be made.
+  */
+@@ -41,6 +43,9 @@ struct dma_heap {
+ 	dev_t heap_devt;
+ 	struct list_head list;
+ 	struct cdev heap_cdev;
++#ifdef CONFIG_CGROUP_GPU
++	struct gpucg_device gpucg_dev;
++#endif
  };
 =20
- /* struct binder_fd_array_object - object describing an array of fds in a =
-buffer
+ static LIST_HEAD(heap_list);
+@@ -216,6 +221,26 @@ const char *dma_heap_get_name(struct dma_heap *heap)
+ 	return heap->name;
+ }
+=20
++#ifdef CONFIG_CGROUP_GPU
++/**
++ * dma_heap_get_gpucg_dev() - get struct gpucg_device for the heap.
++ * @heap: DMA-Heap to get the gpucg_device struct for.
++ *
++ * Returns:
++ * The gpucg_device struct for the heap. NULL if the GPU cgroup controller=
+ is
++ * not enabled.
++ */
++struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
++{
++	return &heap->gpucg_dev;
++}
++#else /* CONFIG_CGROUP_GPU */
++struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
++{
++	return NULL;
++}
++#endif /* CONFIG_CGROUP_GPU */
++
+ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ {
+ 	struct dma_heap *heap, *h, *err_ret;
+@@ -288,6 +313,8 @@ struct dma_heap *dma_heap_add(const struct dma_heap_exp=
+ort_info *exp_info)
+ 	list_add(&heap->list, &heap_list);
+ 	mutex_unlock(&heap_list_lock);
+=20
++	gpucg_register_device(dma_heap_get_gpucg_dev(heap), exp_info->name);
++
+ 	return heap;
+=20
+ err2:
+diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/sy=
+stem_heap.c
+index ab7fd896d2c4..752a05c3cfe2 100644
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -395,6 +395,9 @@ static struct dma_buf *system_heap_allocate(struct dma_=
+heap *heap,
+ 	exp_info.ops =3D &system_heap_buf_ops;
+ 	exp_info.size =3D buffer->len;
+ 	exp_info.flags =3D fd_flags;
++#ifdef CONFIG_CGROUP_GPU
++	exp_info.gpucg_dev =3D dma_heap_get_gpucg_dev(heap);
++#endif
+ 	exp_info.priv =3D buffer;
+ 	dmabuf =3D dma_buf_export(&exp_info);
+ 	if (IS_ERR(dmabuf)) {
+diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
+index 0c05561cad6e..e447a61d054e 100644
+--- a/include/linux/dma-heap.h
++++ b/include/linux/dma-heap.h
+@@ -10,6 +10,7 @@
+ #define _DMA_HEAPS_H
+=20
+ #include <linux/cdev.h>
++#include <linux/cgroup_gpu.h>
+ #include <linux/types.h>
+=20
+ struct dma_heap;
+@@ -59,6 +60,16 @@ void *dma_heap_get_drvdata(struct dma_heap *heap);
+  */
+ const char *dma_heap_get_name(struct dma_heap *heap);
+=20
++/**
++ * dma_heap_get_gpucg_dev() - get a pointer to the struct gpucg_device for=
+ the
++ * heap.
++ * @heap: DMA-Heap to retrieve gpucg_device for.
++ *
++ * Returns:
++ * The gpucg_device struct for the heap.
++ */
++struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap);
++
+ /**
+  * dma_heap_add - adds a heap to dmabuf heaps
+  * @exp_info:		information needed to register this heap
 --=20
 2.35.1.616.g0bdcbb4464-goog
 
