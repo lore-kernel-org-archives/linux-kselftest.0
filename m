@@ -2,129 +2,57 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5617BC433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 08:32:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC4AEC4167B
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 08:59:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiCIIdU (ORCPT
+        id S231633AbiCIJA4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Mar 2022 03:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        Wed, 9 Mar 2022 04:00:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiCIIdS (ORCPT
+        with ESMTP id S231651AbiCIJAy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:33:18 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E965710A7D9
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 00:32:19 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id u61so2749416ybi.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 00:32:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fXNP/dUkerz8xKSj4rusJS07a77a18F1+lKC1sYQrwk=;
-        b=BYKNESOGJPcopvgpGHl5UVuspsI04F8GafhdZGlcVkZ6HbM6TAVK4+ugwrI/Y21rhh
-         5gdnaqrwCYQXJ54Y/lJsWXsEhigJsim58ymxtiYJHHPVS/nfBBQPDMsBwkq1+35w3yLv
-         Hf9W49DIaDoA4/TzB1iEZqkiFXSGTGGIISHq38fw9PccBpGB1WdW1fJHmH6TTpmA04nj
-         jmr7VG1nhbaoF2ASRMovFZKXx9lHGkvtgF8jBDcXFQvqjYE/83jTHEBhP30O9ho1vZru
-         I8gmPQwWJ3deMOvuWsgMM5+QXurinWs1n+0hsOPuauvAPuKZtlWnLWgQdn6aTqsBWkZ1
-         i+Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fXNP/dUkerz8xKSj4rusJS07a77a18F1+lKC1sYQrwk=;
-        b=qDuDqKS9fC/0ghRRSzs9OGYeYhWV3aN5QXN3fiCXAF459doL4F7oWo7f23tLq7RopG
-         hVQelUvqLfsqpFxSmjV3whoITCkyf43xl3eGvgUaZ7HvjpVhE8ix1lWcnD7p6ymO9l0Q
-         boEt3QjGC5bSgAnz06q+kh+Yzngi7MUfUMJUDeUWjd5AWaUKAH9x3iED6BnrA1ZaucbC
-         Aik7wBoPIal2ziSeyLdyDqAzuaZ1N2yypdVCYvrEf0gRBUS+tV5As3DaF/Sijj2NS+RK
-         8KBFlEelXYo7R50VIUlzo74pIVJ8xKWpAAS6SGcbHkEau3ogOVplvWZCS9dEFLLyswpQ
-         hI8w==
-X-Gm-Message-State: AOAM531rvZ4V/Nenh9cvJcm5PZZl91KHyhc2FqW7gE/K7efrQnoakRoj
-        E5HcMiGBh0/Q4rrf5Ebyh7oRLuxokVPn0n0KZtBZVQ==
-X-Google-Smtp-Source: ABdhPJzxWtL7dOcNyXG6U+l8RXi0WRUpo5Pn/KAfrEpDnvbNZLdBNKsWeAt1dhv+sEkaeo3erEwCndhlBb1RRx1dGv8=
-X-Received: by 2002:a05:6902:184:b0:628:233e:31fe with SMTP id
- t4-20020a056902018400b00628233e31femr14839424ybh.609.1646814738911; Wed, 09
- Mar 2022 00:32:18 -0800 (PST)
+        Wed, 9 Mar 2022 04:00:54 -0500
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3503041614
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 00:59:56 -0800 (PST)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id 962F1433A4; Wed,  9 Mar 2022 09:55:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1646816163; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=FBSzHagRbE3hyEqAUAyuCruqj4WwDuxD9Kh6OY2TZdROgBDwmsk2/EgrSTeQmP68S
+         UdIQrshtxr92NqsEFI4kmjw3WxrrIx8LSat8OWZzmpiOzhnu0hinm9ZpaKsCO6z8up
+         Rp47wz1VIujBWq/MbfdCJeVUT2QwD44BUDkwXbHRuH4UfXhiz1pp/LdHT7UZCE7o1q
+         6J9hiKoYUGqOE9BCchyFhAnIrFocxZdgPr51/XwpjlRu3gSquyuCL6oCu6c+w5CA8L
+         xZbb6TtuRxhVNmAWR73CmnbOy6HJl9WEKyQuNPwE+h8mwyY7hH5t7FU+g/wiWURGy8
+         y5syQYOOv27Iw==
+Received: by mail.olerise.pl for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 08:55:55 GMT
+Message-ID: <20220309084500-0.1.27.nrl1.0.0shl3ipvrm@olerise.pl>
+Date:   Wed,  9 Mar 2022 08:55:55 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-References: <20220309083753.1561921-1-liupeng256@huawei.com> <20220309083753.1561921-4-liupeng256@huawei.com>
-In-Reply-To: <20220309083753.1561921-4-liupeng256@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 9 Mar 2022 09:31:42 +0100
-Message-ID: <CANpmjNN6iRS1xfXq6_dKQaHJ83zrU7heZCWL2odauc=_zkmQog@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] kfence: test: try to avoid test_gfpzero trigger rcu_stall
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     brendanhiggins@google.com, glider@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        wangkefeng.wang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 9 Mar 2022 at 09:19, 'Peng Liu' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> When CONFIG_KFENCE_NUM_OBJECTS is set to a big number, kfence
-> kunit-test-case test_gfpzero will eat up nearly all the CPU's
-> resources and rcu_stall is reported as the following log which
-> is cut from a physical server.
->
->   rcu: INFO: rcu_sched self-detected stall on CPU
->   rcu:  68-....: (14422 ticks this GP) idle=6ce/1/0x4000000000000002
->   softirq=592/592 fqs=7500 (t=15004 jiffies g=10677 q=20019)
->   Task dump for CPU 68:
->   task:kunit_try_catch state:R  running task
->   stack:    0 pid: 9728 ppid:     2 flags:0x0000020a
->   Call trace:
->    dump_backtrace+0x0/0x1e4
->    show_stack+0x20/0x2c
->    sched_show_task+0x148/0x170
->    ...
->    rcu_sched_clock_irq+0x70/0x180
->    update_process_times+0x68/0xb0
->    tick_sched_handle+0x38/0x74
->    ...
->    gic_handle_irq+0x78/0x2c0
->    el1_irq+0xb8/0x140
->    kfree+0xd8/0x53c
->    test_alloc+0x264/0x310 [kfence_test]
->    test_gfpzero+0xf4/0x840 [kfence_test]
->    kunit_try_run_case+0x48/0x20c
->    kunit_generic_run_threadfn_adapter+0x28/0x34
->    kthread+0x108/0x13c
->    ret_from_fork+0x10/0x18
->
-> To avoid rcu_stall and unacceptable latency, a schedule point is
-> added to test_gfpzero.
->
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+Dzie=C5=84 dobry,
 
-Reviewed-by: Marco Elver <elver@google.com>
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
+
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
+
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
 
-> ---
->  mm/kfence/kfence_test.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-> index caed6b4eba94..1b50f70a4c0f 100644
-> --- a/mm/kfence/kfence_test.c
-> +++ b/mm/kfence/kfence_test.c
-> @@ -627,6 +627,7 @@ static void test_gfpzero(struct kunit *test)
->                         kunit_warn(test, "giving up ... cannot get same object back\n");
->                         return;
->                 }
-> +               cond_resched();
->         }
->
->         for (i = 0; i < size; i++)
-> --
-> 2.18.0.huawei.25
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220309083753.1561921-4-liupeng256%40huawei.com.
+Pozdrawiam
+Miko=C5=82aj Rudzik
