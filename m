@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C393C43217
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 08:19:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 438CFC4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 08:19:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbiCIIUn (ORCPT
+        id S231287AbiCIIUo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Mar 2022 03:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        Wed, 9 Mar 2022 03:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiCIIUi (ORCPT
+        with ESMTP id S229955AbiCIIUm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 03:20:38 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1AFEC5EC;
-        Wed,  9 Mar 2022 00:19:39 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KD4k00LnFz1GCDF;
-        Wed,  9 Mar 2022 16:14:48 +0800 (CST)
+        Wed, 9 Mar 2022 03:20:42 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2736166A58;
+        Wed,  9 Mar 2022 00:19:41 -0800 (PST)
+Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KD4k241ZNzbc0G;
+        Wed,  9 Mar 2022 16:14:50 +0800 (CST)
 Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 16:19:36 +0800
+ 15.1.2308.21; Wed, 9 Mar 2022 16:19:39 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Mar 2022 16:19:35 +0800
+ 15.1.2308.21; Wed, 9 Mar 2022 16:19:38 +0800
 From:   Peng Liu <liupeng256@huawei.com>
 To:     <brendanhiggins@google.com>, <glider@google.com>,
         <elver@google.com>, <dvyukov@google.com>,
@@ -34,10 +34,12 @@ To:     <brendanhiggins@google.com>, <glider@google.com>,
         <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
         <kasan-dev@googlegroups.com>, <linux-mm@kvack.org>
 CC:     <wangkefeng.wang@huawei.com>, <liupeng256@huawei.com>
-Subject: [PATCH v2 0/3] kunit: fix a UAF bug and do some optimization
-Date:   Wed, 9 Mar 2022 08:37:50 +0000
-Message-ID: <20220309083753.1561921-1-liupeng256@huawei.com>
+Subject: [PATCH v2 3/3] kfence: test: try to avoid test_gfpzero trigger rcu_stall
+Date:   Wed, 9 Mar 2022 08:37:53 +0000
+Message-ID: <20220309083753.1561921-4-liupeng256@huawei.com>
 X-Mailer: git-send-email 2.18.0.huawei.25
+In-Reply-To: <20220309083753.1561921-1-liupeng256@huawei.com>
+References: <20220309083753.1561921-1-liupeng256@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.112.125]
@@ -48,23 +50,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series is to fix UAF when running kfence test case test_gfpzero,
-which is time costly. This UAF bug can be easily triggered by setting
-CONFIG_KFENCE_NUM_OBJECTS = 65535. Furthermore, some optimization for
-kunit tests has been done.
+When CONFIG_KFENCE_NUM_OBJECTS is set to a big number, kfence
+kunit-test-case test_gfpzero will eat up nearly all the CPU's
+resources and rcu_stall is reported as the following log which
+is cut from a physical server.
 
-v1->v2:
-  Change log is updated.
+  rcu: INFO: rcu_sched self-detected stall on CPU
+  rcu: 	68-....: (14422 ticks this GP) idle=6ce/1/0x4000000000000002
+  softirq=592/592 fqs=7500 (t=15004 jiffies g=10677 q=20019)
+  Task dump for CPU 68:
+  task:kunit_try_catch state:R  running task
+  stack:    0 pid: 9728 ppid:     2 flags:0x0000020a
+  Call trace:
+   dump_backtrace+0x0/0x1e4
+   show_stack+0x20/0x2c
+   sched_show_task+0x148/0x170
+   ...
+   rcu_sched_clock_irq+0x70/0x180
+   update_process_times+0x68/0xb0
+   tick_sched_handle+0x38/0x74
+   ...
+   gic_handle_irq+0x78/0x2c0
+   el1_irq+0xb8/0x140
+   kfree+0xd8/0x53c
+   test_alloc+0x264/0x310 [kfence_test]
+   test_gfpzero+0xf4/0x840 [kfence_test]
+   kunit_try_run_case+0x48/0x20c
+   kunit_generic_run_threadfn_adapter+0x28/0x34
+   kthread+0x108/0x13c
+   ret_from_fork+0x10/0x18
 
-Peng Liu (3):
-  kunit: fix UAF when run kfence test case test_gfpzero
-  kunit: make kunit_test_timeout compatible with comment
-  kfence: test: try to avoid test_gfpzero trigger rcu_stall
+To avoid rcu_stall and unacceptable latency, a schedule point is
+added to test_gfpzero.
 
- lib/kunit/try-catch.c   | 3 ++-
- mm/kfence/kfence_test.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Signed-off-by: Peng Liu <liupeng256@huawei.com>
+---
+ mm/kfence/kfence_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
+index caed6b4eba94..1b50f70a4c0f 100644
+--- a/mm/kfence/kfence_test.c
++++ b/mm/kfence/kfence_test.c
+@@ -627,6 +627,7 @@ static void test_gfpzero(struct kunit *test)
+ 			kunit_warn(test, "giving up ... cannot get same object back\n");
+ 			return;
+ 		}
++		cond_resched();
+ 	}
+ 
+ 	for (i = 0; i < size; i++)
 -- 
 2.18.0.huawei.25
 
