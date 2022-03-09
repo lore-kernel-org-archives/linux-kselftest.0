@@ -2,233 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4B02C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 17:04:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39579C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Mar 2022 19:23:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbiCIRFm (ORCPT
+        id S237890AbiCITYG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Mar 2022 12:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        Wed, 9 Mar 2022 14:24:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238951AbiCIREN (ORCPT
+        with ESMTP id S237845AbiCITYC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Mar 2022 12:04:13 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C00419E08E
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 08:53:01 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dbf4238d6bso19409517b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 08:53:01 -0800 (PST)
+        Wed, 9 Mar 2022 14:24:02 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9E662CC
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Mar 2022 11:22:38 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id mr24-20020a17090b239800b001bf0a375440so6182818pjb.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Mar 2022 11:22:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=lhHGzZoREQNnf55wN1HaeVUD3hjLL00JJ5cetBP+eaQ=;
-        b=gKIbC0k/5p+fyNlConlMN+xPe/ebk8ebvd/uWg6T6vooL8MMIfva9qwy7Lpdbivqq7
-         oJoIgx2KDTrB7PC2LXU6JYkOQgHlH1J78wsI/1CybgkEOgCETFPbvTPvvBZjF3KtEYrW
-         804ENocSNg1iNY0zuUQhjo4BolEmxZkdv9JShsHPaP3w6yigklJE9Q9l+xaJDLCwR09A
-         4DGED7VchRj5zoSQ42M5Way/Ra/0h5dn8HeEz5ZQ9KAEmdn2oNLN4RDfrLj7Imh7317M
-         J7FgGxhT0IWthtTIVaNXYJbTS5HECV7f+G560rkLLiA/e5xw92yjAG61zMDzxkzWjfrM
-         JpaQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EGDyT1tV4o9cHKMKOSJ3P2N73OyIn36r8ZT+WWtaSJM=;
+        b=P3jlJdlcuRzTGM75HGWF/LMggRln9TBb5LmJMnvuIOGvG3qun+eTmyDhrv/uDFhR4x
+         2rRPgGPDonzNxn9Kdz38C3xhATNJF0sWHhN17OSHklZtpgB0nyUGry6M7NH8Mz82PkWp
+         PNkSZetwAWx9v8zeTEYzobhRIH0eyUHBeTkVU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=lhHGzZoREQNnf55wN1HaeVUD3hjLL00JJ5cetBP+eaQ=;
-        b=0Q+ldlGGWYYvgOkmNYA72M6yIn5hfRq6wpGQ4p7Cn/8IIoWn8XVQCcG69fSbyBtx1+
-         saHAkNby5wrfbyaOzeQyIhln0n38uSyhcYHFrrjfcFKrgPw/8+8qRBE9ki1zSNDaZpcl
-         Fphawlpsmxhglo4RgIeIJL7oE3lCHjO/z+NuNPyYkK867cqlx6ec/4QfawSp2kj3vnFe
-         mYXK0fdfYPMXMGBI681BY0QxKRpyX2vL4kozZ7eFOPltogXc2CoBzLKuHEcZqmSPWvP+
-         NLOdla/ThWNw7Yi5gEiXGlcGYCijABssVM+X9RUH2R6a3i+rxdAKv9RJNzTf1sof70tv
-         VqNQ==
-X-Gm-Message-State: AOAM5306/mqqNkR46NT9PS809q6ooK/Wok5Gy/42XjnkPLFTIfCr/SaT
-        wywW2L+ub0Jz3xdaQjLh8pZpqdHgKtQJCyQ=
-X-Google-Smtp-Source: ABdhPJwK4yKwsDlaoEUAS3Vm5fm7rENo1CQsEFqudzHVLPT45CzkuU3D+7W8hxwy+2V9Wem//6DQfWjRXmIBTMk=
-X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
- (user=tjmercier job=sendgmr) by 2002:a05:6902:1541:b0:628:a0ed:ad49 with SMTP
- id r1-20020a056902154100b00628a0edad49mr513167ybu.419.1646844765074; Wed, 09
- Mar 2022 08:52:45 -0800 (PST)
-Date:   Wed,  9 Mar 2022 16:52:14 +0000
-In-Reply-To: <20220309165222.2843651-1-tjmercier@google.com>
-Message-Id: <20220309165222.2843651-5-tjmercier@google.com>
-Mime-Version: 1.0
-References: <20220309165222.2843651-1-tjmercier@google.com>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [RFC v3 4/8] dmabuf: heaps: export system_heap buffers with GPU
- cgroup charging
-From:   "T.J. Mercier" <tjmercier@google.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EGDyT1tV4o9cHKMKOSJ3P2N73OyIn36r8ZT+WWtaSJM=;
+        b=iWKBIstz4uK5FIC7Xfe7uxIbBS+e4fT9nIHbeXbU99Jid8E0149MyXb+Z2TKxvFcuF
+         j39qsINnNzg/g6D5LAV6yr5PtEYlbw5T1i8tm/wtAQq8+vgagkvPaIS1a6BtwC1FNx2p
+         RD7KK9IwuPcwlRr+PByrz9wD1whUSCxnx2mo/fvEfl3w+utPi/MxhtC85OT4Uw+M4eUI
+         JFDAanMTFAaedmPAXdMnBAsDmxZOjPLNPm7G/zuxQZFbJdCshbb/rZc/YA31OJ7KRbyd
+         0FQTzSBw682at5T94PqQ2DItZdWtGZ3kRm7LGPwWsTV+4nQowco0mEK0EyCtcKXrjZOM
+         tbIw==
+X-Gm-Message-State: AOAM5305NmNmnenkMCiFXJeTibJoplkZHeLpFxBK9Fjir4qPdbvHc2mH
+        bLKHS3jbj7aEa8KVLgHuq0umC7dwiL2oTg==
+X-Google-Smtp-Source: ABdhPJw5gr8lbO9F2RqImWEl0bBFwqjL2c9fLYlBLZjv04LnRfLSQ8pP+jqGmegKk7VNUOlTqTF6iA==
+X-Received: by 2002:a17:90a:2d0:b0:1bc:4fc0:6fb7 with SMTP id d16-20020a17090a02d000b001bc4fc06fb7mr1047827pjd.196.1646853758046;
+        Wed, 09 Mar 2022 11:22:38 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k19-20020a056a00135300b004f734327960sm4129111pfu.106.2022.03.09.11.22.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 11:22:37 -0800 (PST)
+Date:   Wed, 9 Mar 2022 11:22:37 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com,
-        "T.J. Mercier" <tjmercier@google.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
+ CFI_FORWARD_PROTO
+Message-ID: <202203091122.A51B31230A@keescook>
+References: <20220217205620.2512094-1-usama.anjum@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217205620.2512094-1-usama.anjum@collabora.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Hridya Valsaraju <hridya@google.com>
+On Fri, Feb 18, 2022 at 01:56:19AM +0500, Muhammad Usama Anjum wrote:
+> Add config options which are needed for LKDTM sub-tests.
+> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
+> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
+> INIT_ON_FREE_DEFAULT_ON config.
+> 
+> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
+> kind. Turn it off for now by default until proper support.
 
-All DMA heaps now register a new GPU cgroup device upon creation, and the
-system_heap now exports buffers associated with its GPU cgroup device for
-tracking purposes.
+Building under LTO Clang on arm64, this is available. What's the right
+way to add a CONFIG that isn't always available?
 
-Signed-off-by: Hridya Valsaraju <hridya@google.com>
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
+-Kees
 
----
-v3 changes
-Use more common dual author commit message format per John Stultz.
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Fixes: 46d1a0f03d66 ("selftests/lkdtm: Add tests for LKDTM targets")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/lkdtm/config    | 2 ++
+>  tools/testing/selftests/lkdtm/tests.txt | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
+> index 46f39ee762086..adc9fa60057c5 100644
+> --- a/tools/testing/selftests/lkdtm/config
+> +++ b/tools/testing/selftests/lkdtm/config
+> @@ -2,8 +2,10 @@ CONFIG_LKDTM=y
+>  CONFIG_DEBUG_LIST=y
+>  CONFIG_SLAB_FREELIST_HARDENED=y
+>  CONFIG_FORTIFY_SOURCE=y
+> +CONFIG_GCC_PLUGIN_STACKLEAK=y
+>  CONFIG_HARDENED_USERCOPY=y
+>  CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
+> +CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+>  CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+>  CONFIG_UBSAN=y
+>  CONFIG_UBSAN_BOUNDS=y
+> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+> index 6b36b7f5dcf96..aa947b0ce1eeb 100644
+> --- a/tools/testing/selftests/lkdtm/tests.txt
+> +++ b/tools/testing/selftests/lkdtm/tests.txt
+> @@ -72,7 +72,7 @@ USERCOPY_STACK_FRAME_FROM
+>  USERCOPY_STACK_BEYOND
+>  USERCOPY_KERNEL
+>  STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+> -CFI_FORWARD_PROTO
+> +#CFI_FORWARD_PROTO
+>  FORTIFIED_STRSCPY
+>  FORTIFIED_OBJECT
+>  FORTIFIED_SUBOBJECT
+> -- 
+> 2.30.2
+> 
 
-v2 changes
-Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
-heap to a single dma-buf function for all heaps per Daniel Vetter and
-Christian K=C3=B6nig.
----
- drivers/dma-buf/dma-heap.c          | 27 +++++++++++++++++++++++++++
- drivers/dma-buf/heaps/system_heap.c |  3 +++
- include/linux/dma-heap.h            | 11 +++++++++++
- 3 files changed, 41 insertions(+)
-
-diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-index 8f5848aa144f..885072427775 100644
---- a/drivers/dma-buf/dma-heap.c
-+++ b/drivers/dma-buf/dma-heap.c
-@@ -7,6 +7,7 @@
-  */
-=20
- #include <linux/cdev.h>
-+#include <linux/cgroup_gpu.h>
- #include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/dma-buf.h>
-@@ -31,6 +32,7 @@
-  * @heap_devt		heap device node
-  * @list		list head connecting to list of heaps
-  * @heap_cdev		heap char device
-+ * @gpucg_dev		gpu cgroup device for memory accounting
-  *
-  * Represents a heap of memory from which buffers can be made.
-  */
-@@ -41,6 +43,9 @@ struct dma_heap {
- 	dev_t heap_devt;
- 	struct list_head list;
- 	struct cdev heap_cdev;
-+#ifdef CONFIG_CGROUP_GPU
-+	struct gpucg_device gpucg_dev;
-+#endif
- };
-=20
- static LIST_HEAD(heap_list);
-@@ -216,6 +221,26 @@ const char *dma_heap_get_name(struct dma_heap *heap)
- 	return heap->name;
- }
-=20
-+#ifdef CONFIG_CGROUP_GPU
-+/**
-+ * dma_heap_get_gpucg_dev() - get struct gpucg_device for the heap.
-+ * @heap: DMA-Heap to get the gpucg_device struct for.
-+ *
-+ * Returns:
-+ * The gpucg_device struct for the heap. NULL if the GPU cgroup controller=
- is
-+ * not enabled.
-+ */
-+struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-+{
-+	return &heap->gpucg_dev;
-+}
-+#else /* CONFIG_CGROUP_GPU */
-+struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap)
-+{
-+	return NULL;
-+}
-+#endif /* CONFIG_CGROUP_GPU */
-+
- struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
- {
- 	struct dma_heap *heap, *h, *err_ret;
-@@ -288,6 +313,8 @@ struct dma_heap *dma_heap_add(const struct dma_heap_exp=
-ort_info *exp_info)
- 	list_add(&heap->list, &heap_list);
- 	mutex_unlock(&heap_list_lock);
-=20
-+	gpucg_register_device(dma_heap_get_gpucg_dev(heap), exp_info->name);
-+
- 	return heap;
-=20
- err2:
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/sy=
-stem_heap.c
-index ab7fd896d2c4..752a05c3cfe2 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -395,6 +395,9 @@ static struct dma_buf *system_heap_allocate(struct dma_=
-heap *heap,
- 	exp_info.ops =3D &system_heap_buf_ops;
- 	exp_info.size =3D buffer->len;
- 	exp_info.flags =3D fd_flags;
-+#ifdef CONFIG_CGROUP_GPU
-+	exp_info.gpucg_dev =3D dma_heap_get_gpucg_dev(heap);
-+#endif
- 	exp_info.priv =3D buffer;
- 	dmabuf =3D dma_buf_export(&exp_info);
- 	if (IS_ERR(dmabuf)) {
-diff --git a/include/linux/dma-heap.h b/include/linux/dma-heap.h
-index 0c05561cad6e..e447a61d054e 100644
---- a/include/linux/dma-heap.h
-+++ b/include/linux/dma-heap.h
-@@ -10,6 +10,7 @@
- #define _DMA_HEAPS_H
-=20
- #include <linux/cdev.h>
-+#include <linux/cgroup_gpu.h>
- #include <linux/types.h>
-=20
- struct dma_heap;
-@@ -59,6 +60,16 @@ void *dma_heap_get_drvdata(struct dma_heap *heap);
-  */
- const char *dma_heap_get_name(struct dma_heap *heap);
-=20
-+/**
-+ * dma_heap_get_gpucg_dev() - get a pointer to the struct gpucg_device for=
- the
-+ * heap.
-+ * @heap: DMA-Heap to retrieve gpucg_device for.
-+ *
-+ * Returns:
-+ * The gpucg_device struct for the heap.
-+ */
-+struct gpucg_device *dma_heap_get_gpucg_dev(struct dma_heap *heap);
-+
- /**
-  * dma_heap_add - adds a heap to dmabuf heaps
-  * @exp_info:		information needed to register this heap
---=20
-2.35.1.616.g0bdcbb4464-goog
-
+-- 
+Kees Cook
