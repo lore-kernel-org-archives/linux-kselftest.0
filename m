@@ -2,254 +2,960 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A37C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Mar 2022 15:08:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6099AC43219
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Mar 2022 16:25:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348537AbiCKPJ7 (ORCPT
+        id S1350246AbiCKQ0i (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Mar 2022 10:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        Fri, 11 Mar 2022 11:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348518AbiCKPJ6 (ORCPT
+        with ESMTP id S1350313AbiCKQ0d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Mar 2022 10:09:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C521C0260
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 07:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647011333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=F/08TVTeX7qJdWIo3uuJ3+sRiIGvopv0E/DcuimI5Vg=;
-        b=A5M8jWZzAIB9ji5a5Zrc8ZIQjKMMTBCLHmuls3Kr3zAimYd92o3yAAQAmCDxfyfxn2pPlq
-        0Qjk+LzL+/R0kSWpkOKAlq4e0LMWCto+WvSjKhdw007tk4tFEu10Yjg4GBw+Y+2kvUbHhu
-        8GvpYW2pICIS6O9FpPy4K3c4yinIUYg=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-163-O_B-qQqRP7y5iZSq6Lc4og-1; Fri, 11 Mar 2022 10:08:50 -0500
-X-MC-Unique: O_B-qQqRP7y5iZSq6Lc4og-1
-Received: by mail-pg1-f197.google.com with SMTP id bh9-20020a056a02020900b0036c0d29eb3eso4991744pgb.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Mar 2022 07:08:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F/08TVTeX7qJdWIo3uuJ3+sRiIGvopv0E/DcuimI5Vg=;
-        b=mVX9k+86L8Hju0MVp8lFUQqr7xUwc13yJHhWFCGHkPHcg9CBBgZpkdkzWVXevexYO0
-         SbVlpgLamovENKdGFNvHdLzx6PJe4n674IEhutiuN777R5oj/My5FkUw8FNciJ3CYBfB
-         gZoJQErDZQJ1jL3/SsdsRsq39jEbc6oUq9oc9QY2yDNqPG5x++aCMC/APJa62z0wu0Ej
-         r15vkkOBj8Te31HLrCxTY0Ut6mP4iVXRDKHJq0Cc7lD5QwbAdAqAY53fMzuqz4VdWpQi
-         A2eYheEMGqvuEQZ8fErO1TBAENzpf0MLCE/NOltEs4SiS1x2qAsX5hH1Tr34yZIkRZnI
-         MuOA==
-X-Gm-Message-State: AOAM5318y0ftzlv+66Au2Z45cauxnshjSYHKKtW5D/U/crlP3ATyqVFd
-        JAWccELQL1RMzZPYhKgJcoSrPoUt3oypYgaQMf+XkfuYqbKRDCdYxXp6mTPh3b9Af0iIEAp5WFc
-        pzNDATshWjtaP/qvpxC17+4g/sy3E9CCzNf7IQAEF49Ds
-X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id x17-20020a170902e05100b00151b4853453mr10676975plx.116.1647011329126;
-        Fri, 11 Mar 2022 07:08:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwP66U88wrg4Uba/sXa89zRWh8cpyDVryV2J34r/lzVwh1XrWMHAvI+0SP9yFnM0v3WNYY/Auphd33L2Zn2V7A=
-X-Received: by 2002:a17:902:e051:b0:151:b485:3453 with SMTP id
- x17-20020a170902e05100b00151b4853453mr10676930plx.116.1647011328721; Fri, 11
- Mar 2022 07:08:48 -0800 (PST)
+        Fri, 11 Mar 2022 11:26:33 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61940117C9E;
+        Fri, 11 Mar 2022 08:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1647015895;
+  x=1678551895;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rpTqoknbDOn72Q+UH1BdHCLF3yJZId72jHd8FypIw5U=;
+  b=KcTKg2XaTrn9jOPkhoLZo2g8hqlxgAXxCaFNkEUNe/XZTLF/5fsg9L3y
+   OdLoqHasFsEuGvrL3LfvL090oX71yeOWW3ecNOCg5CRf+I4/teuL4zz8q
+   zMRpnGKbSJm78pKxDDIf8lPxKmJ7h5A7ZoY7fCl1J8428NVg2XHRtx3IP
+   HamRXuPpMPfjpfU5el/1ezL+8usJUFiYcUOUkQq50sZPpsE5RhVzmuCtb
+   GlPBe3U083ksEsKd3lktBBvV7a22ilYu8l3sbdXHFS1b3dVyUgpK1PX/f
+   P6feCGwcFEvaubxiuyGKtPJibVVktt5rCamgOBh80lBzcGZwrjj9VfM5S
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <shuah@kernel.org>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
+        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
+        <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: [RFC v1 02/10] roadtest: add C backend
+Date:   Fri, 11 Mar 2022 17:24:37 +0100
+Message-ID: <20220311162445.346685-3-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-13-benjamin.tissoires@redhat.com> <YiJdRQxYzfncfTR5@kroah.com>
- <CAO-hwJJ3Yi+JLr40J8nXccjF8PrjiQw1w0Bskz8QHXdNVh1n+A@mail.gmail.com>
- <YiM/tTYeuAcnz/Xh@kroah.com> <CAPhsuW4Yhpr6jeY8QCCvUcg_1REGWRRy7m5GXZw5Ehtt3eyAHQ@mail.gmail.com>
-In-Reply-To: <CAPhsuW4Yhpr6jeY8QCCvUcg_1REGWRRy7m5GXZw5Ehtt3eyAHQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 11 Mar 2022 16:08:37 +0100
-Message-ID: <CAO-hwJ+BuTsSJdH=dmtyNKcQw-vJ4up+MzZRcbN2E+aa=9iPnQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 12/28] bpf/hid: add hid_{get|set}_data helpers
-To:     Song Liu <song@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 1:41 AM Song Liu <song@kernel.org> wrote:
->
-> On Sat, Mar 5, 2022 at 2:47 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sat, Mar 05, 2022 at 11:33:07AM +0100, Benjamin Tissoires wrote:
-> > > On Fri, Mar 4, 2022 at 7:41 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Fri, Mar 04, 2022 at 06:28:36PM +0100, Benjamin Tissoires wrote:
-> > > > > When we process an incoming HID report, it is common to have to account
-> > > > > for fields that are not aligned in the report. HID is using 2 helpers
-> > > > > hid_field_extract() and implement() to pick up any data at any offset
-> > > > > within the report.
-> > > > >
-> > > > > Export those 2 helpers in BPF programs so users can also rely on them.
-> > > > > The second net worth advantage of those helpers is that now we can
-> > > > > fetch data anywhere in the report without knowing at compile time the
-> > > > > location of it. The boundary checks are done in hid-bpf.c, to prevent
-> > > > > a memory leak.
-> > > > >
-> > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > changes in v2:
-> > > > > - split the patch with libbpf and HID left outside.
-> > > > > ---
-> > > > >  include/linux/bpf-hid.h        |  4 +++
-> > > > >  include/uapi/linux/bpf.h       | 32 ++++++++++++++++++++
-> > > > >  kernel/bpf/hid.c               | 53 ++++++++++++++++++++++++++++++++++
-> > > > >  tools/include/uapi/linux/bpf.h | 32 ++++++++++++++++++++
-> > > > >  4 files changed, 121 insertions(+)
-> > > > >
-> > > > > diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
-> > > > > index 0c5000b28b20..69bb28523ceb 100644
-> > > > > --- a/include/linux/bpf-hid.h
-> > > > > +++ b/include/linux/bpf-hid.h
-> > > > > @@ -93,6 +93,10 @@ struct bpf_hid_hooks {
-> > > > >       int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> > > > >       void (*link_attached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> > > > >       void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
-> > > > > +     int (*hid_get_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
-> > > > > +                         u64 offset, u32 n, u8 *data, u64 data_size);
-> > > > > +     int (*hid_set_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
-> > > > > +                         u64 offset, u32 n, u8 *data, u64 data_size);
-> > > > >  };
-> > > > >
-> > > > >  #ifdef CONFIG_BPF
-> > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > > index a7a8d9cfcf24..4845a20e6f96 100644
-> > > > > --- a/include/uapi/linux/bpf.h
-> > > > > +++ b/include/uapi/linux/bpf.h
-> > > > > @@ -5090,6 +5090,36 @@ union bpf_attr {
-> > > > >   *   Return
-> > > > >   *           0 on success, or a negative error in case of failure. On error
-> > > > >   *           *dst* buffer is zeroed out.
-> > > > > + *
-> > > > > + * int bpf_hid_get_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
-> > > > > + *   Description
-> > > > > + *           Get the data of size n (in bits) at the given offset (bits) in the
-> > > > > + *           ctx->event.data field and store it into data.
-> > > > > + *
-> > > > > + *           if n is less or equal than 32, we can address with bit precision,
-> > > > > + *           the value in the buffer. However, data must be a pointer to a u32
-> > > > > + *           and size must be 4.
-> > > > > + *
-> > > > > + *           if n is greater than 32, offset and n must be a multiple of 8
-> > > > > + *           and the result is working with a memcpy internally.
-> > > > > + *   Return
-> > > > > + *           The length of data copied into data. On error, a negative value
-> > > > > + *           is returned.
-> > > > > + *
-> > > > > + * int bpf_hid_set_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
-> > > > > + *   Description
-> > > > > + *           Set the data of size n (in bits) at the given offset (bits) in the
-> > > > > + *           ctx->event.data field.
-> > > > > + *
-> > > > > + *           if n is less or equal than 32, we can address with bit precision,
-> > > > > + *           the value in the buffer. However, data must be a pointer to a u32
-> > > > > + *           and size must be 4.
-> > > > > + *
-> > > > > + *           if n is greater than 32, offset and n must be a multiple of 8
-> > > > > + *           and the result is working with a memcpy internally.
-> > > > > + *   Return
-> > > > > + *           The length of data copied into ctx->event.data. On error, a negative
-> > > > > + *           value is returned.
-> > > >
-> > >
-> > > Quick answer on this one (before going deeper with the other remarks next week):
-> > >
-> > > > Wait, nevermind my reviewed-by previously, see my comment about how this
-> > > > might be split into 4:
-> > > >         bpf_hid_set_bytes()
-> > > >         bpf_hid_get_bytes()
-> > > >         bpf_hid_set_bits()
-> > > >         bpf_hid_get_bits()
-> > > >
-> > > > Should be easier to understand and maintain over time, right?
-> > >
-> > > Yes, definitively. I thought about adding a `bytes` suffix to the
-> > > function name for n > 32, but not the `bits` one, meaning the API was
-> > > still bunkers in my head.
->
-> Do we really need per-bit access? I was under the impression that only
-> one BPF program is working on a ctx/buffer at a time, so we can just do
-> read-modify-write at byte level, no?
->
+Add the C parts of the roadtest framework.  This uses QEMU's
+libvhost-user to implement the device side of virtio-user and
+virtio-gpio and bridge them to the Python portions of the backend.
 
-Yes, we really need per-bit access, and yes only one BPF program is
-working on a ctx/buffer at a time.
+The C backend is also responsible for starting UML after the virtio
+device implementations are initialized.
 
-The per-bit access is a HID requirement and a much more convenient way
-of accessing data in the buffer. Well, there is another advantage too
-that I'll add later.
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ tools/testing/roadtest/src/backend.c | 884 +++++++++++++++++++++++++++
+ 1 file changed, 884 insertions(+)
+ create mode 100644 tools/testing/roadtest/src/backend.c
 
-Basically, in the HID world, HW makers are trying to 'compact' the
-reports their device is sending to a minimum value.
-
-For instance, when you have a 3 buttons + wheel mouse you may need:
-3 bits of information for the 3 buttons
-4 bits for the wheel
-16 bits for X
-16 bits for Y.
-
-This usually translates almost verbatim in the report (we can add one
-bit of padding between buttons and wheel), which means that accessing
-the wheel data requires the user to access the offset 4 (bits) of size
-4 bits in the report.
-
-Some HW vendors are not even bothering aligning the data, so this can
-be messy from time to time with just plain byte access.
-All in all, the HID report descriptor gives you that information, and
-internally, the HID stack stores the offset in bits and the sizes in
-bits to access them without too much trouble.
-
-The second advantage I have with these 2 accessors is that it allows
-me to not know statically the offset and size values. Because the
-helper in the kernel checks them for me, I can use registers values
-that are unknown to the verifier and can basically have:
-
-```
-__u64 offsetX = 0;
-__u64 offsetY = 0;
-__u32 sizeX = 0;
-__u32 sizeY = 0;
-
-SEC("hid/device_event")
-int invert_xy(struct hid_bpf_ctx *ctx)
-{
-  __u16 x, y;
-
-  if (sizeX == 16) {
-    x = bpf_hid_get_bits(ctx, offsetX, sizeX);
-    bpf_hid_set_bits(ctx, offsetX, -x);
-  }
-  if (sizeY == 16) {
-    y = bpf_hid_get_bits(ctx, offsetY, sizeY);
-    bpf_hid_set_bits(ctx, offsetY, -y);
-  }
-  return 0;
-}
-```
-
-Then, I have my userspace program parse the report descriptor, set the
-correct values for size{X|Y} and offset{X|Y} and I can have this
-program compiled once and redistributed many times.
-
-Cheers,
-Benjamin
+diff --git a/tools/testing/roadtest/src/backend.c b/tools/testing/roadtest/src/backend.c
+new file mode 100644
+index 000000000000..d5ac08b20fd9
+--- /dev/null
++++ b/tools/testing/roadtest/src/backend.c
+@@ -0,0 +1,884 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright Axis Communications AB
++
++#define PY_SSIZE_T_CLEAN
++#include <Python.h>
++
++#include <err.h>
++#include <getopt.h>
++#include <stdlib.h>
++#include <sys/epoll.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++#include <sys/un.h>
++#include <unistd.h>
++#include <stdio.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <linux/virtio_gpio.h>
++#include <linux/virtio_i2c.h>
++#include <linux/kernel.h>
++#include <linux/list.h>
++
++#include "libvhost-user.h"
++
++enum watch_type {
++	LISTEN,
++	SOCKET_WATCH,
++	VU_WATCH,
++};
++
++struct watch {
++	VuDev *dev;
++	enum watch_type type;
++	int fd;
++	void *func;
++	void *data;
++	struct list_head list;
++};
++
++struct vhost_user_i2c {
++	VuDev dev;
++	FILE *control;
++};
++
++struct vhost_user_gpio {
++	VuDev dev;
++	FILE *control;
++	VuVirtqElement *irq_elements[64];
++};
++
++#define dbg(...)                                                               \
++	do {                                                                   \
++		if (0) {                                                       \
++			fprintf(stderr, __VA_ARGS__);                          \
++		}                                                              \
++	} while (0)
++
++static LIST_HEAD(watches);
++
++static int epfd;
++
++static PyObject *py_i2c_read, *py_i2c_write, *py_process_control;
++static PyObject *py_gpio_set_irq_type, *py_gpio_unmask;
++
++static const char *opt_main_script;
++static char *opt_gpio_socket;
++static char *opt_i2c_socket;
++
++static struct vhost_user_gpio gpio;
++static struct vhost_user_i2c i2c;
++
++static void dump_iov(const char *what, struct iovec *iovec, unsigned int count)
++{
++	int i;
++
++	dbg("dumping %s with count %u\n", what, count);
++
++	for (i = 0; i < count; i++) {
++		struct iovec *iov = &iovec[0];
++
++		dbg("i %d base %p len %zu\n", i, iov->iov_base, iov->iov_len);
++	}
++}
++
++static bool i2c_read(struct vhost_user_i2c *vi, uint16_t addr, void *data,
++		     size_t len)
++{
++	PyObject *pArgs, *pValue;
++
++	dbg("i2c read addr %#x len %zu\n", addr, len);
++
++	pArgs = PyTuple_New(1);
++	pValue = PyLong_FromLong(len);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyObject_CallObject(py_i2c_read, pArgs);
++	Py_DECREF(pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		return false;
++	}
++
++	unsigned char *buffer;
++	Py_ssize_t length;
++
++	if (PyBytes_AsStringAndSize(pValue, (char **)&buffer, &length) < 0) {
++		PyErr_Print();
++		errx(1, "invalid result from i2c.read()");
++	}
++	if (length != len) {
++		errx(1,
++		     "unexpected length from i2c.read(), expected %zu, got %zu",
++		     len, length);
++	}
++
++	memcpy(data, buffer, len);
++
++	return true;
++}
++
++static bool i2c_write(struct vhost_user_i2c *vi, uint16_t addr,
++		      const void *data, size_t len)
++{
++	PyObject *pArgs, *pValue;
++
++	dbg("i2c write addr %#x len %zu\n", addr, len);
++
++	pArgs = PyTuple_New(1);
++	pValue = PyBytes_FromStringAndSize(data, len);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyObject_CallObject(py_i2c_write, pArgs);
++	Py_DECREF(pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		return false;
++	}
++
++	return true;
++}
++
++static void gpio_send_irq_response(struct vhost_user_gpio *gpio,
++				   unsigned int pin, unsigned int status);
++
++static PyObject *cbackend_trigger_gpio_irq(PyObject *self, PyObject *args)
++{
++	unsigned int pin;
++
++	if (!PyArg_ParseTuple(args, "I", &pin))
++		return NULL;
++
++	dbg("trigger gpio %u irq\n", pin);
++
++	gpio_send_irq_response(&gpio, pin, VIRTIO_GPIO_IRQ_STATUS_VALID);
++
++	Py_RETURN_NONE;
++}
++
++static PyMethodDef EmbMethods[] = {
++	{ "trigger_gpio_irq", cbackend_trigger_gpio_irq, METH_VARARGS,
++	  "Return the number of arguments received by the process." },
++	{ NULL, NULL, 0, NULL }
++};
++
++static PyModuleDef EmbModule = { PyModuleDef_HEAD_INIT,
++				 "cbackend",
++				 NULL,
++				 -1,
++				 EmbMethods,
++				 NULL,
++				 NULL,
++				 NULL,
++				 NULL };
++
++static PyObject *PyInit_cbackend(void)
++{
++	return PyModule_Create(&EmbModule);
++}
++
++static void init_python_i2c(PyObject *backend)
++{
++	PyObject *i2c = PyObject_GetAttrString(backend, "i2c");
++
++	if (!i2c) {
++		PyErr_Print();
++		errx(1, "Error getting backend.i2c");
++	}
++
++	py_i2c_read = PyObject_GetAttrString(i2c, "read");
++	if (!py_i2c_read) {
++		PyErr_Print();
++		errx(1, "Error getting i2c.read");
++	}
++
++	py_i2c_write = PyObject_GetAttrString(i2c, "write");
++	if (!py_i2c_write) {
++		PyErr_Print();
++		errx(1, "Error getting i2c.write");
++	}
++}
++
++static void init_python_gpio(PyObject *backend)
++{
++	PyObject *gpio = PyObject_GetAttrString(backend, "gpio");
++
++	if (!gpio) {
++		PyErr_Print();
++		errx(1, "error getting backend.gpio");
++	}
++
++	py_gpio_set_irq_type = PyObject_GetAttrString(gpio, "set_irq_type");
++	if (!py_gpio_set_irq_type) {
++		PyErr_Print();
++		errx(1, "error getting gpio.set_irq_type");
++	}
++
++	py_gpio_unmask = PyObject_GetAttrString(gpio, "unmask");
++	if (!py_gpio_unmask) {
++		PyErr_Print();
++		errx(1, "error getting gpio.unmask");
++	}
++}
++
++static void init_python(void)
++{
++	PyObject *mainmod, *backend;
++	FILE *file;
++
++	PyImport_AppendInittab("cbackend", &PyInit_cbackend);
++
++	Py_Initialize();
++
++	file = fopen(opt_main_script, "r");
++	if (!file)
++		err(1, "open %s", opt_main_script);
++
++	if (PyRun_SimpleFile(file, "main.py") < 0) {
++		PyErr_Print();
++		errx(1, "error running %s", opt_main_script);
++	}
++	fclose(file);
++
++	mainmod = PyImport_AddModule("__main__");
++	if (!mainmod) {
++		PyErr_Print();
++		errx(1, "error getting __main__");
++	}
++
++	backend = PyObject_GetAttrString(mainmod, "backend");
++	if (!backend) {
++		PyErr_Print();
++		errx(1, "error getting backend");
++	}
++
++	py_process_control = PyObject_GetAttrString(backend, "process_control");
++	if (!py_process_control) {
++		PyErr_Print();
++		errx(1, "error getting backend.process_control");
++	}
++
++	init_python_i2c(backend);
++	init_python_gpio(backend);
++}
++
++static void i2c_handle_cmdq(VuDev *dev, int qidx)
++{
++	struct vhost_user_i2c *vi =
++		container_of(dev, struct vhost_user_i2c, dev);
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++	VuVirtqElement *elem;
++
++	for (;;) {
++		struct virtio_i2c_out_hdr *hdr;
++		struct iovec *resultv;
++		size_t used = 0;
++		bool ok = true;
++
++		elem = vu_queue_pop(dev, vq, sizeof(VuVirtqElement));
++		if (!elem)
++			break;
++
++		dbg("elem %p index %u out_num %u in_num %u\n", elem,
++		    elem->index, elem->out_num, elem->in_num);
++		dump_iov("out", elem->out_sg, elem->out_num);
++		dump_iov("in", elem->in_sg, elem->in_num);
++
++		assert(elem->out_sg[0].iov_len == sizeof(*hdr));
++		hdr = elem->out_sg[0].iov_base;
++
++		if (elem->out_num == 2 && elem->in_num == 1) {
++			struct iovec *data = &elem->out_sg[1];
++
++			ok = i2c_write(vi, hdr->addr, data->iov_base,
++				       data->iov_len);
++			resultv = &elem->in_sg[0];
++		} else if (elem->out_num == 1 && elem->in_num == 2) {
++			struct iovec *data = &elem->in_sg[0];
++
++			ok = i2c_read(vi, hdr->addr, data->iov_base,
++				      data->iov_len);
++			resultv = &elem->in_sg[1];
++			used += data->iov_len;
++		} else {
++			assert(false);
++		}
++
++		struct virtio_i2c_in_hdr *inhdr = resultv->iov_base;
++
++		inhdr->status = ok ? VIRTIO_I2C_MSG_OK : VIRTIO_I2C_MSG_ERR;
++
++		used += sizeof(*inhdr);
++		vu_queue_push(dev, vq, elem, used);
++		free(elem);
++	}
++
++	vu_queue_notify(&vi->dev, vq);
++}
++
++static void i2c_queue_set_started(VuDev *dev, int qidx, bool started)
++{
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++
++	dbg("queue started %d:%d\n", qidx, started);
++
++	vu_set_queue_handler(dev, vq, started ? i2c_handle_cmdq : NULL);
++}
++
++static bool i2cquit;
++static bool gpioquit;
++
++static void remove_watch(VuDev *dev, int fd);
++
++static int i2c_process_msg(VuDev *dev, VhostUserMsg *vmsg, int *do_reply)
++{
++	if (vmsg->request == VHOST_USER_NONE) {
++		dbg("i2c disconnect");
++		remove_watch(dev, -1);
++		i2cquit = true;
++		return true;
++	}
++	return false;
++}
++static int gpio_process_msg(VuDev *dev, VhostUserMsg *vmsg, int *do_reply)
++{
++	if (vmsg->request == VHOST_USER_NONE) {
++		dbg("gpio disconnect");
++		remove_watch(dev, -1);
++		gpioquit = true;
++		return true;
++	}
++	return false;
++}
++
++static uint64_t i2c_get_features(VuDev *dev)
++{
++	return 1ull << VIRTIO_I2C_F_ZERO_LENGTH_REQUEST;
++}
++
++static const VuDevIface i2c_iface = {
++	.get_features = i2c_get_features,
++	.queue_set_started = i2c_queue_set_started,
++	.process_msg = i2c_process_msg,
++};
++
++static void gpio_send_irq_response(struct vhost_user_gpio *gpio,
++				   unsigned int pin, unsigned int status)
++{
++	assert(pin < ARRAY_SIZE(gpio->irq_elements));
++
++	VuVirtqElement *elem = gpio->irq_elements[pin];
++	VuVirtq *vq = vu_get_queue(&gpio->dev, 1);
++
++	if (!elem) {
++		dbg("no irq buf for pin %d\n", pin);
++		assert(status != VIRTIO_GPIO_IRQ_STATUS_VALID);
++		return;
++	}
++
++	struct virtio_gpio_irq_response *resp;
++
++	assert(elem->out_num == 1);
++	assert(elem->in_sg[0].iov_len == sizeof(*resp));
++
++	resp = elem->in_sg[0].iov_base;
++	resp->status = status;
++
++	vu_queue_push(&gpio->dev, vq, elem, sizeof(*resp));
++	gpio->irq_elements[pin] = NULL;
++	free(elem);
++
++	vu_queue_notify(&gpio->dev, vq);
++}
++
++static void gpio_set_irq_type(struct vhost_user_gpio *gpio, unsigned int pin,
++			      unsigned int type)
++{
++	PyObject *pArgs, *pValue;
++
++	pArgs = PyTuple_New(2);
++	pValue = PyLong_FromLong(pin);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyLong_FromLong(type);
++	PyTuple_SetItem(pArgs, 1, pValue);
++
++	pValue = PyObject_CallObject(py_gpio_set_irq_type, pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		errx(1, "error from gpio.set_irq_type()");
++	}
++	Py_DECREF(pArgs);
++
++	if (type == VIRTIO_GPIO_IRQ_TYPE_NONE) {
++		gpio_send_irq_response(gpio, pin,
++				       VIRTIO_GPIO_IRQ_STATUS_INVALID);
++	}
++}
++
++static void gpio_unmask(struct vhost_user_gpio *vi, unsigned int gpio)
++{
++	PyObject *pArgs, *pValue;
++
++	pArgs = PyTuple_New(1);
++	pValue = PyLong_FromLong(gpio);
++	PyTuple_SetItem(pArgs, 0, pValue);
++
++	pValue = PyObject_CallObject(py_gpio_unmask, pArgs);
++	if (!pValue) {
++		PyErr_Print();
++		errx(1, "error from gpio.unmask()");
++	}
++	Py_DECREF(pArgs);
++}
++
++static void gpio_handle_cmdq(VuDev *dev, int qidx)
++{
++	struct vhost_user_gpio *vi =
++		container_of(dev, struct vhost_user_gpio, dev);
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++	VuVirtqElement *elem;
++
++	while (1) {
++		struct virtio_gpio_request *req;
++		struct virtio_gpio_response *resp;
++
++		elem = vu_queue_pop(dev, vq, sizeof(VuVirtqElement));
++		if (!elem)
++			break;
++
++		dbg("elem %p index %u out_num %u in_num %u\n", elem,
++		    elem->index, elem->out_num, elem->in_num);
++
++		dump_iov("out", elem->out_sg, elem->out_num);
++		dump_iov("in", elem->in_sg, elem->in_num);
++
++		assert(elem->out_num == 1);
++		assert(elem->in_num == 1);
++
++		assert(elem->out_sg[0].iov_len == sizeof(*req));
++		assert(elem->in_sg[0].iov_len == sizeof(*resp));
++
++		req = elem->out_sg[0].iov_base;
++		resp = elem->in_sg[0].iov_base;
++
++		dbg("req type %#x gpio %#x value %#x\n", req->type, req->gpio,
++		    req->value);
++
++		switch (req->type) {
++		case VIRTIO_GPIO_MSG_IRQ_TYPE:
++			gpio_set_irq_type(vi, req->gpio, req->value);
++			break;
++		default:
++			/*
++			 * The other types couldhooked up to Python later for
++			 * testing of drivers' control of GPIOs.
++			 */
++			break;
++		}
++
++		resp->status = VIRTIO_GPIO_STATUS_OK;
++		resp->value = 0;
++
++		vu_queue_push(dev, vq, elem, sizeof(*resp));
++		free(elem);
++	}
++
++	vu_queue_notify(&vi->dev, vq);
++}
++
++static void gpio_handle_eventq(VuDev *dev, int qidx)
++{
++	struct vhost_user_gpio *vi =
++		container_of(dev, struct vhost_user_gpio, dev);
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++	VuVirtqElement *elem;
++
++	for (;;) {
++		struct virtio_gpio_irq_request *req;
++		struct virtio_gpio_irq_response *resp;
++
++		elem = vu_queue_pop(dev, vq, sizeof(VuVirtqElement));
++		if (!elem)
++			break;
++
++		dbg("elem %p index %u out_num %u in_num %u\n", elem,
++		    elem->index, elem->out_num, elem->in_num);
++
++		dump_iov("out", elem->out_sg, elem->out_num);
++		dump_iov("in", elem->in_sg, elem->in_num);
++
++		assert(elem->out_num == 1);
++		assert(elem->in_num == 1);
++
++		assert(elem->out_sg[0].iov_len == sizeof(*req));
++		assert(elem->in_sg[0].iov_len == sizeof(*resp));
++
++		req = elem->out_sg[0].iov_base;
++		resp = elem->in_sg[0].iov_base;
++
++		dbg("irq req gpio %#x\n", req->gpio);
++
++		assert(req->gpio < ARRAY_SIZE(vi->irq_elements));
++		assert(vi->irq_elements[req->gpio] == NULL);
++
++		vi->irq_elements[req->gpio] = elem;
++
++		gpio_unmask(vi, req->gpio);
++	}
++}
++
++static void gpio_queue_set_started(VuDev *dev, int qidx, bool started)
++{
++	VuVirtq *vq = vu_get_queue(dev, qidx);
++
++	dbg("%s %d:%d\n", __func__, qidx, started);
++
++	if (qidx == 0)
++		vu_set_queue_handler(dev, vq,
++				     started ? gpio_handle_cmdq : NULL);
++	if (qidx == 1)
++		vu_set_queue_handler(dev, vq,
++				     started ? gpio_handle_eventq : NULL);
++}
++
++static int gpio_get_config(VuDev *dev, uint8_t *config, uint32_t len)
++{
++	struct vhost_user_gpio *gpio =
++		container_of(dev, struct vhost_user_gpio, dev);
++	static struct virtio_gpio_config gpioconfig = {
++		.ngpio = ARRAY_SIZE(gpio->irq_elements),
++	};
++
++	dbg("%s: len %u\n", __func__, len);
++
++	if (len > sizeof(struct virtio_gpio_config))
++		return -1;
++
++	memcpy(config, &gpioconfig, len);
++
++	return 0;
++}
++
++static uint64_t gpio_get_protocol_features(VuDev *dev)
++{
++	return 1ull << VHOST_USER_PROTOCOL_F_CONFIG;
++}
++
++static uint64_t gpio_get_features(VuDev *dev)
++{
++	return 1ull << VIRTIO_GPIO_F_IRQ;
++}
++
++static const VuDevIface gpio_vuiface = {
++	.get_features = gpio_get_features,
++	.queue_set_started = gpio_queue_set_started,
++	.process_msg = gpio_process_msg,
++	.get_config = gpio_get_config,
++	.get_protocol_features = gpio_get_protocol_features,
++};
++
++static void panic(VuDev *dev, const char *err)
++{
++	fprintf(stderr, "panicking!");
++	abort();
++}
++
++static struct watch *new_watch(struct VuDev *dev, int fd, enum watch_type type,
++			       void *func, void *data)
++{
++	struct watch *watch = malloc(sizeof(*watch));
++
++	assert(watch);
++
++	watch->dev = dev;
++	watch->fd = fd;
++	watch->func = func;
++	watch->data = data;
++	watch->type = type;
++
++	list_add(&watch->list, &watches);
++
++	return watch;
++}
++
++static void set_watch(VuDev *dev, int fd, int condition, vu_watch_cb cb,
++		      void *data)
++{
++	struct watch *watch = new_watch(dev, fd, VU_WATCH, cb, data);
++	int ret;
++
++	struct epoll_event ev = {
++		.events = EPOLLIN,
++		.data.ptr = watch,
++	};
++
++	dbg("set watch epfd %d fd %d condition %d cb %p\n", epfd, fd, condition,
++	    cb);
++
++	epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL);
++
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev);
++	if (ret < 0)
++		err(1, "epoll_ctl");
++}
++
++static void remove_watch(VuDev *dev, int fd)
++{
++	struct watch *watch, *tmp;
++
++	list_for_each_entry_safe(watch, tmp, &watches, list) {
++		if (watch->dev != dev)
++			continue;
++		if (fd >= 0 && watch->fd != fd)
++			continue;
++
++		epoll_ctl(epfd, EPOLL_CTL_DEL, watch->fd, NULL);
++
++		list_del(&watch->list);
++		free(watch);
++	}
++}
++
++static int unix_listen(const char *path)
++{
++	struct sockaddr_un un = {
++		.sun_family = AF_UNIX,
++	};
++	int sock;
++	int ret;
++
++	unlink(path);
++
++	sock = socket(PF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
++	if (sock < 0)
++		err(1, "socket");
++
++	memcpy(&un.sun_path, path, strlen(path));
++
++	ret = bind(sock, (struct sockaddr *)&un, sizeof(un));
++	if (ret < 0)
++		err(1, "bind");
++
++	ret = listen(sock, 1);
++	if (ret < 0)
++		err(1, "listen");
++
++	return sock;
++}
++
++static void dev_add_watch(int epfd, struct watch *watch)
++{
++	struct epoll_event event = {
++		.events = EPOLLIN | EPOLLONESHOT,
++		.data.ptr = watch,
++	};
++	int ret;
++
++	ret = epoll_ctl(epfd, EPOLL_CTL_ADD, watch->fd, &event);
++	if (ret < 0)
++		err(1, "EPOLL_CTL_ADD");
++}
++
++static VuDev *gpio_init(int epfd, const char *path)
++{
++	struct watch *watch;
++	VuDev *dev;
++	int lsock;
++	bool rc;
++
++	lsock = unix_listen(path);
++	if (lsock < 0)
++		err(1, "listen %s", path);
++
++	rc = vu_init(&gpio.dev, 2, lsock, panic, NULL, set_watch,
++		     remove_watch, &gpio_vuiface);
++	assert(rc == true);
++
++	dev = &gpio.dev;
++	watch = new_watch(dev, lsock, LISTEN, vu_dispatch, dev);
++
++	dev_add_watch(epfd, watch);
++
++	return dev;
++}
++
++static VuDev *i2c_init(int epfd, const char *path)
++{
++	static struct vhost_user_i2c i2c = {};
++	VuDev *dev = &i2c.dev;
++	struct watch *watch;
++	int lsock;
++	bool rc;
++
++	lsock = unix_listen(path);
++	if (lsock < 0)
++		err(1, "listen %s", path);
++
++	rc = vu_init(dev, 1, lsock, panic, NULL, set_watch,
++		     remove_watch, &i2c_iface);
++	assert(rc == true);
++
++	watch = new_watch(dev, lsock, LISTEN, vu_dispatch, dev);
++
++	dev_add_watch(epfd, watch);
++
++	return dev;
++}
++
++static pid_t run_uml(char **argv)
++{
++	int log, null, ret;
++	pid_t pid;
++
++	pid = fork();
++	if (pid < 0)
++		err(1, "fork");
++	if (pid > 0)
++		return pid;
++
++	chdir(getenv("ROADTEST_WORK_DIR"));
++
++	log = open("uml.txt", O_WRONLY | O_TRUNC | O_APPEND | O_CREAT, 0600);
++	if (log < 0)
++		err(1, "open uml.txt");
++
++	null = open("/dev/null", O_RDONLY);
++	if (null < 0)
++		err(1, "open null");
++
++	ret = dup2(null, 0);
++	if (ret < 0)
++		err(1, "dup2");
++
++	ret = dup2(log, 1);
++	if (ret < 0)
++		err(1, "dup2");
++
++	ret = dup2(log, 2);
++	if (ret < 0)
++		err(1, "dup2");
++
++	execvpe(argv[0], argv, environ);
++	err(1, "execve");
++
++	return -1;
++}
++
++int main(int argc, char *argv[])
++{
++	static struct option long_option[] = {
++		{ "main-script", required_argument, 0, 'm' },
++		{ "gpio-socket", required_argument, 0, 'g' },
++		{ "i2c-socket", required_argument, 0, 'i' },
++	};
++
++	while (1) {
++		int c = getopt_long(argc, argv, "", long_option, NULL);
++
++		if (c == -1)
++			break;
++
++		switch (c) {
++		case 'm':
++			opt_main_script = optarg;
++			break;
++
++		case 'g':
++			opt_gpio_socket = optarg;
++			break;
++
++		case 'i':
++			opt_i2c_socket = optarg;
++			break;
++
++		default:
++			errx(1, "getopt");
++		}
++	}
++
++	if (!opt_main_script || !opt_gpio_socket || !opt_i2c_socket)
++		errx(1, "Invalid arguments");
++
++	epfd = epoll_create1(EPOLL_CLOEXEC);
++	if (epfd < 0)
++		err(1, "epoll_create1");
++
++	init_python();
++
++	gpio_init(epfd, opt_gpio_socket);
++	i2c_init(epfd, opt_i2c_socket);
++
++	run_uml(&argv[optind]);
++
++	while (1) {
++		struct epoll_event events[10];
++		int nfds;
++		int i;
++
++		nfds = epoll_wait(epfd, events, ARRAY_SIZE(events), -1);
++		if (nfds < 0) {
++			if (errno == EINTR) {
++				continue;
++
++				err(1, "epoll_wait");
++			}
++		}
++
++		if (!PyObject_CallObject(py_process_control, NULL)) {
++			PyErr_Print();
++			errx(1, "error from backend.process_control");
++		}
++
++		for (i = 0; i < nfds; i++) {
++			struct epoll_event *event = &events[i];
++			struct watch *watch = event->data.ptr;
++			int fd;
++
++			switch (watch->type) {
++			case LISTEN:
++				fd = accept(watch->fd, NULL, NULL);
++				close(watch->fd);
++				if (fd == -1)
++					err(1, "accept");
++
++				watch->dev->sock = fd;
++				watch->fd = fd;
++				watch->type = SOCKET_WATCH;
++
++				struct epoll_event event = {
++					.events = EPOLLIN,
++					.data.ptr = watch,
++				};
++
++				int ret = epoll_ctl(epfd, EPOLL_CTL_ADD, fd,
++						    &event);
++				if (ret < 0)
++					err(1, "epoll_ctl");
++
++				break;
++			case SOCKET_WATCH:
++				vu_dispatch(watch->dev);
++				break;
++			case VU_WATCH:
++				((vu_watch_cb)(watch->func))(watch->dev, POLLIN,
++							     watch->data);
++				break;
++			default:
++				fprintf(stderr, "abort!");
++				abort();
++			}
++		}
++
++		if (i2cquit && gpioquit)
++			break;
++	}
++
++	vu_deinit(&i2c.dev);
++	vu_deinit(&gpio.dev);
++
++	Py_Finalize();
++
++	return 0;
++}
+-- 
+2.34.1
 
