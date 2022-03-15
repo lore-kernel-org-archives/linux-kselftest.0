@@ -2,215 +2,153 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8FA4C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Mar 2022 16:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9809EC4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Mar 2022 16:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350057AbiCOQaq (ORCPT
+        id S1350155AbiCOQqE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Mar 2022 12:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        Tue, 15 Mar 2022 12:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350010AbiCOQap (ORCPT
+        with ESMTP id S1350156AbiCOQqD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:30:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D4A56C3E;
-        Tue, 15 Mar 2022 09:29:33 -0700 (PDT)
+        Tue, 15 Mar 2022 12:46:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E4E5717A;
+        Tue, 15 Mar 2022 09:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647361773; x=1678897773;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5bWJ1aLHhnxNHrTHdW/lDQbheo4ws+MyK4EncLb5sbM=;
-  b=KvA5YrFx2G3CWHBYBaMaGVg4YJiB5keas9t0cFEsg/KYBk8nj5f7PlT2
-   pTCIQ7j8m+XRM8oC835CmeZM8gnjMyO1r3U3VP4MXdtk/ZQTA0iNoxp1l
-   T5P+S5Gi+cpz2HQZCgmL+Cf7Kbj6MFDvl7QK6gMsTMXOQKiP/6+FC/OH9
-   jsD1BM6kQdHqPlbqg1Qwr8skEi7CKPhYpsq0+SSM5itpK5fwgEwahJF0I
-   WFPGzUQ4GkpC1fxAoCGRxN3POkrJ9irLvVlh0b39sqv/y8zfDjXbmMmcQ
-   tVBVg8VveMqafE/jyMWbVJ/WTR2MB2DErzTgbUDHzicxDL2OXBjJ1qTCR
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="281125062"
+  t=1647362690; x=1678898690;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g8Bmok9TU2BixmwZBvkUyF3g21CNVOQYbFMkghV/9hU=;
+  b=ZFCkRvPrNx8FfAuDED5T941/GgRhmiT2IwpQf6G1q38L/1c4owCa5sMJ
+   MA1A+wggtXLYoApGbbKJhf4pcV0an48r5Zl1Q9MvI47ZiKzQa5Bs7VJCy
+   kKbD+fcrYVbYbipJ80FdW+s8Op06cMu/7Bvw/IVTXXzW8VGS7SM66v5dD
+   w/Ht/Zw0OrNf0wV6fADRpxjZHSy62W7UzjYU0H+jUCjNGgw7V3tIyEJU5
+   Q05t2lQdquCSe3Xc9aquyzTa3E4iBDDO5qreEwHwXfuR46Rk05yqRb0XL
+   eQcTwMXyGvhy1TQCwn92Rpel5qBFsp50o0AQpvTRmgnb857aX3Rw9MXGH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="342782291"
 X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="281125062"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:29:19 -0700
+   d="scan'208";a="342782291"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:44:48 -0700
 X-IronPort-AV: E=Sophos;i="5.90,184,1643702400"; 
-   d="scan'208";a="690255507"
-Received: from lepple-mobl1.ger.corp.intel.com (HELO [10.252.56.30]) ([10.252.56.30])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:29:14 -0700
-Message-ID: <daf2136a-d6ff-558c-e9bb-c7a45dd1c43f@linux.intel.com>
-Date:   Tue, 15 Mar 2022 18:29:12 +0200
+   d="scan'208";a="714236355"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 09:44:47 -0700
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+        sandipan@linux.ibm.com, fweimer@redhat.com,
+        desnesn@linux.vnet.ibm.com, mingo@kernel.org,
+        bauerman@linux.ibm.com, mpe@ellerman.id.au, msuchanek@suse.de,
+        linux-mm@kvack.org, chang.seok.bae@intel.com, bp@suse.de,
+        tglx@linutronix.de, hpa@zytor.com, x86@kernel.org, luto@kernel.org
+Subject: [PATCH V2 3/4] selftests/x86/amx: Use provided __cpuid_count() macro
+Date:   Tue, 15 Mar 2022 09:44:27 -0700
+Message-Id: <1eb321d7cbded690f22b6cb91b29b82234cb4be0.1647360971.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1647360971.git.reinette.chatre@intel.com>
+References: <cover.1647360971.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH bpf-next v2 03/28] HID: hook up with bpf
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
- <20220304172852.274126-4-benjamin.tissoires@redhat.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-In-Reply-To: <20220304172852.274126-4-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Benjamin,
+kselftest.h makes the __cpuid_count() macro available
+to conveniently call the CPUID instruction.
 
-On 04/03/2022 19:28, Benjamin Tissoires wrote:
-> Now that BPF can be compatible with HID, add the capability into HID.
-> drivers/hid/hid-bpf.c takes care of the glue between bpf and HID, and
-> hid-core can then inject any incoming event from the device into a BPF
-> program to filter/analyze it.
->
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> ---
->
-> changes in v2:
-> - split the series by bpf/libbpf/hid/selftests and samples
-> - addressed review comments from v1
-> ---
->   drivers/hid/Makefile   |   1 +
->   drivers/hid/hid-bpf.c  | 157 +++++++++++++++++++++++++++++++++++++++++
->   drivers/hid/hid-core.c |  21 +++++-
->   include/linux/hid.h    |  11 +++
->   4 files changed, 187 insertions(+), 3 deletions(-)
->   create mode 100644 drivers/hid/hid-bpf.c
->
-> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-> index 6d3e630e81af..08d2d7619937 100644
-> --- a/drivers/hid/Makefile
-> +++ b/drivers/hid/Makefile
-> @@ -4,6 +4,7 @@
->   #
->   hid-y			:= hid-core.o hid-input.o hid-quirks.o
->   hid-$(CONFIG_DEBUG_FS)		+= hid-debug.o
-> +hid-$(CONFIG_BPF)		+= hid-bpf.o
->   
->   obj-$(CONFIG_HID)		+= hid.o
->   obj-$(CONFIG_UHID)		+= uhid.o
-> diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
-> new file mode 100644
-> index 000000000000..8120e598de9f
-> --- /dev/null
-> +++ b/drivers/hid/hid-bpf.c
-> @@ -0,0 +1,157 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *  BPF in HID support for Linux
-> + *
-> + *  Copyright (c) 2022 Benjamin Tissoires
-> + */
-> +
-> +#include <linux/filter.h>
-> +#include <linux/mutex.h>
-> +#include <linux/slab.h>
-> +
-> +#include <uapi/linux/bpf_hid.h>
-> +#include <linux/hid.h>
-> +
-> +static int __hid_bpf_match_sysfs(struct device *dev, const void *data)
-> +{
-> +	struct kernfs_node *kn = dev->kobj.sd;
-> +	struct kernfs_node *uevent_kn;
-> +
-> +	uevent_kn = kernfs_find_and_get_ns(kn, "uevent", NULL);
-> +
-> +	return uevent_kn == data;
-> +}
-> +
-> +static struct hid_device *hid_bpf_fd_to_hdev(int fd)
-> +{
-> +	struct device *dev;
-> +	struct hid_device *hdev;
-> +	struct fd f = fdget(fd);
-> +	struct inode *inode;
-> +	struct kernfs_node *node;
-> +
-> +	if (!f.file) {
-> +		hdev = ERR_PTR(-EBADF);
-> +		goto out;
-> +	}
-> +
-> +	inode = file_inode(f.file);
-> +	node = inode->i_private;
-> +
-> +	dev = bus_find_device(&hid_bus_type, NULL, node, __hid_bpf_match_sysfs);
-> +
-> +	if (dev)
-> +		hdev = to_hid_device(dev);
-> +	else
-> +		hdev = ERR_PTR(-EINVAL);
-> +
-> + out:
-> +	fdput(f);
-> +	return hdev;
-> +}
-> +
-> +static int hid_bpf_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
-> +{
-> +	int err = 0;
-> +
-> +	switch (type) {
-> +	case BPF_HID_ATTACH_DEVICE_EVENT:
-> +		if (!hdev->bpf.ctx) {
-> +			hdev->bpf.ctx = bpf_hid_allocate_ctx(hdev, HID_BPF_MAX_BUFFER_SIZE);
-> +			if (IS_ERR(hdev->bpf.ctx)) {
-> +				err = PTR_ERR(hdev->bpf.ctx);
-> +				hdev->bpf.ctx = NULL;
-> +			}
-> +		}
-> +		break;
-> +	default:
-> +		/* do nothing */
+Remove the local CPUID wrapper and use __cpuid_count()
+from kselftest.h instead.
 
-These cause following error:
+__cpuid_count() from kselftest.h is used instead of the
+macro provided by the compiler since gcc v4.4 (via cpuid.h)
+because the selftest needs to be supported with gcc v3.2,
+the minimal required version for stable kernels.
 
+Cc: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+Changes since V1:
+- Update changelog
+- No longer include cpuid.h but obtain __cpuid_count() from
+  kselftest.h.
 
-   CC      drivers/hid/hid-bpf.o
-drivers/hid/hid-bpf.c: In function ‘hid_bpf_link_attach’:
-drivers/hid/hid-bpf.c:88:2: error: label at end of compound statement
-    88 |  default:
-       |  ^~~~~~~
-drivers/hid/hid-bpf.c: In function ‘hid_bpf_link_attached’:
-drivers/hid/hid-bpf.c:101:2: error: label at end of compound statement
-   101 |  default:
-       |  ^~~~~~~
-drivers/hid/hid-bpf.c: In function ‘hid_bpf_array_detached’:
-drivers/hid/hid-bpf.c:116:2: error: label at end of compound statement
-   116 |  default:
-       |  ^~~~~~~
-make[2]: *** [scripts/Makefile.build:288: drivers/hid/hid-bpf.o] Error 1
-make[1]: *** [scripts/Makefile.build:550: drivers/hid] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1831: drivers] Error 2
+ tools/testing/selftests/x86/amx.c | 24 +++++++-----------------
+ 1 file changed, 7 insertions(+), 17 deletions(-)
 
-To fix that, you need to add a break statement at end:
-
-default:
-
-     /* do nothing */
-
-     break;
-
-Same for couple of other occurrences in the file.
-
--Tero
-
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index 3615ef4a48bb..d463ea30d90f 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -17,6 +17,8 @@
+ #include <sys/syscall.h>
+ #include <sys/wait.h>
+ 
++#include "../kselftest.h" /* For __cpuid_count() */
++
+ #ifndef __x86_64__
+ # error This test is 64-bit only
+ #endif
+@@ -45,13 +47,6 @@ static inline uint64_t xgetbv(uint32_t index)
+ 	return eax + ((uint64_t)edx << 32);
+ }
+ 
+-static inline void cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
+-{
+-	asm volatile("cpuid;"
+-		     : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
+-		     : "0" (*eax), "2" (*ecx));
+-}
+-
+ static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
+ {
+ 	uint32_t rfbm_lo = rfbm;
+@@ -115,9 +110,7 @@ static inline void check_cpuid_xsave(void)
+ 	 * support for the XSAVE feature set, including
+ 	 * XGETBV.
+ 	 */
+-	eax = 1;
+-	ecx = 0;
+-	cpuid(&eax, &ebx, &ecx, &edx);
++	__cpuid_count(1, 0, eax, ebx, ecx, edx);
+ 	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+ 		fatal_error("cpuid: no CPU xsave support");
+ 	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+@@ -140,9 +133,8 @@ static void check_cpuid_xtiledata(void)
+ {
+ 	uint32_t eax, ebx, ecx, edx;
+ 
+-	eax = CPUID_LEAF_XSTATE;
+-	ecx = CPUID_SUBLEAF_XSTATE_USER;
+-	cpuid(&eax, &ebx, &ecx, &edx);
++	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER,
++		      eax, ebx, ecx, edx);
+ 
+ 	/*
+ 	 * EBX enumerates the size (in bytes) required by the XSAVE
+@@ -153,10 +145,8 @@ static void check_cpuid_xtiledata(void)
+ 	 */
+ 	xbuf_size = ebx;
+ 
+-	eax = CPUID_LEAF_XSTATE;
+-	ecx = XFEATURE_XTILEDATA;
+-
+-	cpuid(&eax, &ebx, &ecx, &edx);
++	__cpuid_count(CPUID_LEAF_XSTATE, XFEATURE_XTILEDATA,
++		      eax, ebx, ecx, edx);
+ 	/*
+ 	 * eax: XTILEDATA state component size
+ 	 * ebx: XTILEDATA state component offset in user buffer
+-- 
+2.25.1
 
