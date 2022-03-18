@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F246DC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 07:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA93EC433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 07:59:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbiCRIAk (ORCPT
+        id S231319AbiCRIAr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Mar 2022 04:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        Fri, 18 Mar 2022 04:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiCRIAj (ORCPT
+        with ESMTP id S233428AbiCRIAq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:00:39 -0400
-Received: from esa3.hc1455-7.c3s2.iphmx.com (esa3.hc1455-7.c3s2.iphmx.com [207.54.90.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F60F175879;
-        Fri, 18 Mar 2022 00:59:21 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="66729508"
+        Fri, 18 Mar 2022 04:00:46 -0400
+Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECB317DCB5;
+        Fri, 18 Mar 2022 00:59:28 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="66595754"
 X-IronPort-AV: E=Sophos;i="5.90,191,1643641200"; 
-   d="scan'208";a="66729508"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa3.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Mar 2022 16:59:19 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 77D9BE0628;
-        Fri, 18 Mar 2022 16:59:18 +0900 (JST)
+   d="scan'208";a="66595754"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Mar 2022 16:59:26 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id DEE6BCA240;
+        Fri, 18 Mar 2022 16:59:24 +0900 (JST)
 Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
-        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id BF28BCFB6D;
-        Fri, 18 Mar 2022 16:59:17 +0900 (JST)
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 13FBFDA9E4;
+        Fri, 18 Mar 2022 16:59:24 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om3.fujitsu.com (Postfix) with ESMTP id 76B9440060542;
-        Fri, 18 Mar 2022 16:59:17 +0900 (JST)
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id B3ED94006F185;
+        Fri, 18 Mar 2022 16:59:23 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com, Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v6 1/6] selftests/resctrl: Kill child process before parent process terminates if SIGTERM is received
-Date:   Fri, 18 Mar 2022 16:58:02 +0900
-Message-Id: <20220318075807.2921063-2-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH v6 3/6] selftests/resctrl: Fix resctrl_tests' return code to work with selftest framework
+Date:   Fri, 18 Mar 2022 16:58:04 +0900
+Message-Id: <20220318075807.2921063-4-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
 References: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
@@ -49,36 +49,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In kselftest framework, a sub test is run using the timeout utility
-and it will send SIGTERM to the test upon timeout.
+In kselftest framework, if a sub test can not run by some reasons,
+the test result should be marked as SKIP rather than FAIL.
+Return KSFT_SKIP(4) instead of KSFT_FAIL(1) if resctrl_tests is not run
+as root or it is run on a test environment which does not support resctrl.
 
-In resctrl_tests, a child process is created by fork() to
-run benchmark but SIGTERM is not set in sigaction().
-If SIGTERM signal is received, the parent process will be killed,
-but the child process still exists.
-
-kill child process before parent process terminates
-if SIGTERM signal is received.
+ - ksft_exit_fail_msg(): returns KSFT_FAIL(1)
+ - ksft_exit_skip(): returns KSFT_SKIP(4)
 
 Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/resctrl_val.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/resctrl/resctrl_tests.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 95224345c78e..b32b96356ec7 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -678,6 +678,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
- 	sigemptyset(&sigact.sa_mask);
- 	sigact.sa_flags = SA_SIGINFO;
- 	if (sigaction(SIGINT, &sigact, NULL) ||
-+	    sigaction(SIGTERM, &sigact, NULL) ||
- 	    sigaction(SIGHUP, &sigact, NULL)) {
- 		perror("# sigaction");
- 		ret = errno;
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 973f09a66e1e..ed7e1a995b01 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -205,7 +205,7 @@ int main(int argc, char **argv)
+ 	 * 2. We execute perf commands
+ 	 */
+ 	if (geteuid() != 0)
+-		return ksft_exit_fail_msg("Not running as root, abort testing.\n");
++		return ksft_exit_skip("Not running as root. Skipping...\n");
+ 
+ 	/* Detect AMD vendor */
+ 	detect_amd();
+@@ -235,7 +235,7 @@ int main(int argc, char **argv)
+ 	sprintf(bm_type, "fill_buf");
+ 
+ 	if (!check_resctrlfs_support())
+-		return ksft_exit_fail_msg("resctrl FS does not exist\n");
++		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config options.\n");
+ 
+ 	filter_dmesg();
+ 
 -- 
 2.27.0
 
