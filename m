@@ -2,115 +2,56 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B4E0C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 08:00:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C35C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 08:48:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbiCRIB4 (ORCPT
+        id S233903AbiCRIt2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Mar 2022 04:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        Fri, 18 Mar 2022 04:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbiCRIBx (ORCPT
+        with ESMTP id S233948AbiCRIt0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:01:53 -0400
-Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858A41ED069;
-        Fri, 18 Mar 2022 01:00:33 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="54746925"
-X-IronPort-AV: E=Sophos;i="5.90,191,1643641200"; 
-   d="scan'208";a="54746925"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Mar 2022 16:59:29 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 5B95EC9F6E;
-        Fri, 18 Mar 2022 16:59:28 +0900 (JST)
-Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
-        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id A147314EF3;
-        Fri, 18 Mar 2022 16:59:26 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om3.fujitsu.com (Postfix) with ESMTP id 6B4A8400C06B0;
-        Fri, 18 Mar 2022 16:59:26 +0900 (JST)
-From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v6 4/6] selftests/resctrl: Make resctrl_tests run using kselftest framework
-Date:   Fri, 18 Mar 2022 16:58:05 +0900
-Message-Id: <20220318075807.2921063-5-tan.shaopeng@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
-References: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
+        Fri, 18 Mar 2022 04:49:26 -0400
+Received: from mail.postform.pl (mail.postform.pl [195.231.64.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ED260F6
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 01:48:08 -0700 (PDT)
+Received: by mail.postform.pl (Postfix, from userid 1001)
+        id 8A150A3EFE; Fri, 18 Mar 2022 08:38:02 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=postform.pl; s=mail;
+        t=1647592725; bh=Cp7iEcBs6UYsUZoqwaSKv66JiG6VJnuY7Lx3D9vYwU4=;
+        h=Date:From:To:Subject:From;
+        b=aJmn5odQ47n62Z2MbPUZ8XNiAFnpaq3jGTdKucu6sXwZ9nDZJbk1a/MMRv/Dgny74
+         q35WcmfLIwTePkt44QenfuK+SVtxygbBP2l24evnS0CYKk0+LATZD7/j/h6g3pFv9D
+         q1TVp31oWZYzNac54fT44QIMZBShWzaKPKAuN0bdIi0bc2rCU6C9D8T+gx+S6ZyFxs
+         sUjPYh8c0+X6J0EWmfjcsaSIKFlBBb4vBA69TaByDmIZUlYpp6MK+vnKOLeR9mntYF
+         vzk3iWE+Fqp145QssDSdWEJwjAPKhKqbpKPFfgjVvy/YljjpSroLoQ8qnos1Og7fCR
+         2SZKy84/qDNPw==
+Received: by mail.postform.pl for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 08:36:44 GMT
+Message-ID: <20220318074502-0.1.1i.jodl.0.uch89oo5md@postform.pl>
+Date:   Fri, 18 Mar 2022 08:36:44 GMT
+From:   "Norbert Karecki" <norbert.karecki@postform.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.postform.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In kselftest framework, all tests can be build/run at a time,
-and a sub test also can be build/run individually. As follows:
-$ make kselftest-all TARGETS=resctrl
-$ make -C tools/testing/selftests run_tests
-$ make -C tools/testing/selftests TARGETS=resctrl run_tests
+Dzie=C5=84 dobry,
 
-However, resctrl_tests cannot be run using kselftest framework,
-users have to change directory to tools/testing/selftests/resctrl/,
-run "make" to build executable file "resctrl_tests",
-and run "sudo ./resctrl_tests" to execute the test.
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-To build/run resctrl_tests using kselftest framework.
-Modify tools/testing/selftests/Makefile
-and tools/testing/selftests/resctrl/Makefile.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-Even after this change, users can still build/run resctrl_tests
-without using framework as before.
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
-Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
----
- tools/testing/selftests/Makefile         |  1 +
- tools/testing/selftests/resctrl/Makefile | 17 ++++-------------
- 2 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d08fe4cfe811..6138354b3760 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -52,6 +52,7 @@ TARGETS += proc
- TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
-+TARGETS += resctrl
- TARGETS += rlimits
- TARGETS += rseq
- TARGETS += rtc
-diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-index 6bcee2ec91a9..bee5fa8f1ac9 100644
---- a/tools/testing/selftests/resctrl/Makefile
-+++ b/tools/testing/selftests/resctrl/Makefile
-@@ -1,17 +1,8 @@
--CC = $(CROSS_COMPILE)gcc
- CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
--SRCS=$(wildcard *.c)
--OBJS=$(SRCS:.c=.o)
-+CFLAGS += $(KHDR_INCLUDES)
- 
--all: resctrl_tests
-+TEST_GEN_PROGS := resctrl_tests
- 
--$(OBJS): $(SRCS)
--	$(CC) $(CFLAGS) -c $(SRCS)
-+include ../lib.mk
- 
--resctrl_tests: $(OBJS)
--	$(CC) $(CFLAGS) -o $@ $^
--
--.PHONY: clean
--
--clean:
--	$(RM) $(OBJS) resctrl_tests
-+$(OUTPUT)/resctrl_tests: $(wildcard *.c)
--- 
-2.27.0
-
+Pozdrawiam
+Norbert Karecki
