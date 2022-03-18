@@ -2,43 +2,44 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CEB6C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 07:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D7ADC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 08:00:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbiCRIAy (ORCPT
+        id S229499AbiCRIBt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Mar 2022 04:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        Fri, 18 Mar 2022 04:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiCRIAx (ORCPT
+        with ESMTP id S233545AbiCRIBs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 04:00:53 -0400
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C2917E37F;
-        Fri, 18 Mar 2022 00:59:33 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="66311278"
+        Fri, 18 Mar 2022 04:01:48 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Mar 2022 01:00:30 PDT
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834EE1ED048;
+        Fri, 18 Mar 2022 01:00:30 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="54746912"
 X-IronPort-AV: E=Sophos;i="5.90,191,1643641200"; 
-   d="scan'208";a="66311278"
-Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Mar 2022 16:59:32 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 50216E07E9;
-        Fri, 18 Mar 2022 16:59:30 +0900 (JST)
+   d="scan'208";a="54746912"
+Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP; 18 Mar 2022 16:59:23 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 8C838CA243;
+        Fri, 18 Mar 2022 16:59:22 +0900 (JST)
 Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 79181E6A67;
-        Fri, 18 Mar 2022 16:59:29 +0900 (JST)
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id BCEA11075AD;
+        Fri, 18 Mar 2022 16:59:21 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om3.fujitsu.com (Postfix) with ESMTP id 2B257400C15EF;
-        Fri, 18 Mar 2022 16:59:29 +0900 (JST)
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 6553C4006F185;
+        Fri, 18 Mar 2022 16:59:21 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v6 5/6] selftests/resctrl: Update README about using kselftest framework to build/run resctrl_tests
-Date:   Fri, 18 Mar 2022 16:58:06 +0900
-Message-Id: <20220318075807.2921063-6-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH v6 2/6] selftests/resctrl: Change the default limited time to 120 seconds
+Date:   Fri, 18 Mar 2022 16:58:03 +0900
+Message-Id: <20220318075807.2921063-3-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
 References: <20220318075807.2921063-1-tan.shaopeng@jp.fujitsu.com>
@@ -49,83 +50,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-resctrl_tests can be built or run using kselftests framework.
-Add description on how to do so in README.
+When testing on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz the resctrl
+selftests fail due to timeout after exceeding the default time limit of
+45 seconds. On this system the test takes about 68 seconds.
+Since the failing test by default accesses a fixed size of memory, the
+execution time should not vary significantly between different environment.
+A new default of 120 seconds should be sufficient yet easy to customize
+with the introduction of the "settings" file for reference.
 
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/README | 39 +++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 7 deletions(-)
+ tools/testing/selftests/resctrl/settings | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 tools/testing/selftests/resctrl/settings
 
-diff --git a/tools/testing/selftests/resctrl/README b/tools/testing/selftests/resctrl/README
-index 3d2bbd4fa3aa..58d0cb4e6a16 100644
---- a/tools/testing/selftests/resctrl/README
-+++ b/tools/testing/selftests/resctrl/README
-@@ -12,24 +12,49 @@ Allocation test on Intel RDT hardware. More tests will be added in the future.
- And the test suit can be extended to cover AMD QoS and ARM MPAM hardware
- as well.
- 
-+resctrl_tests can be run with or without kselftest framework.
-+
-+WITH KSELFTEST FRAMEWORK
-+=======================
-+
- BUILD
- -----
- 
--Run "make" to build executable file "resctrl_tests".
-+Build executable file "resctrl_tests" from top level directory of the kernel source:
-+ $ make -C tools/testing/selftests TARGETS=resctrl
- 
- RUN
- ---
- 
--To use resctrl_tests, root or sudoer privileges are required. This is because
--the test needs to mount resctrl file system and change contents in the file
--system.
-+Run resctrl_tests as sudo or root since the test needs to mount resctrl file
-+system and change contents in the file system.
-+Using kselftest framework will run all supported tests within resctrl_tests:
-+
-+ $ sudo make -C tools/testing/selftests TARGETS=resctrl run_tests
-+
-+More details about kselftest framework can be found in
-+Documentation/dev-tools/kselftest.rst.
-+
-+WITHOUT KSELFTEST FRAMEWORK
-+===========================
-+
-+BUILD
-+-----
-+
-+Build executable file "resctrl_tests" from this directory(tools/testing/selftests/resctrl/):
-+  $ make
-+
-+RUN
-+---
- 
-+Run resctrl_tests as sudo or root since the test needs to mount resctrl file
-+system and change contents in the file system.
- Executing the test without any parameter will run all supported tests:
- 
--	sudo ./resctrl_tests
-+ $ sudo ./resctrl_tests
- 
- OVERVIEW OF EXECUTION
-----------------------
-+=====================
- 
- A test case has four stages:
- 
-@@ -41,7 +66,7 @@ A test case has four stages:
-   - teardown: umount resctrl and clear temporary files.
- 
- ARGUMENTS
-----------
-+=========
- 
- Parameter '-h' shows usage information.
- 
+diff --git a/tools/testing/selftests/resctrl/settings b/tools/testing/selftests/resctrl/settings
+new file mode 100644
+index 000000000000..a383f3d4565b
+--- /dev/null
++++ b/tools/testing/selftests/resctrl/settings
+@@ -0,0 +1,3 @@
++# If running time is longer than 120 seconds when new tests are added in
++# the future, increase timeout here.
++timeout=120
 -- 
 2.27.0
 
