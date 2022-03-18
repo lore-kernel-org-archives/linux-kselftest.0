@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4FDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 16:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09708C4321E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Mar 2022 16:18:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239033AbiCRQTd (ORCPT
+        id S238820AbiCRQTw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Mar 2022 12:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        Fri, 18 Mar 2022 12:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238967AbiCRQTU (ORCPT
+        with ESMTP id S238827AbiCRQSL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Mar 2022 12:19:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAE4318005A
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 09:17:59 -0700 (PDT)
+        Fri, 18 Mar 2022 12:18:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72568200945
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Mar 2022 09:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647620278;
+        s=mimecast20190719; t=1647620197;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8nJYYlBY7G+EkGr1cCCnY5dDxM56e+iZoTRwhxTl+8k=;
-        b=G+9YJJjLU4ndS6ZzuDom4Lp3zk1XTyed/tjH9gnqjExKdtsONFnUsjGxnlCaD5oQ70WkuG
-        CCE/MLQCrkdX7WfCbDdSHRNTvVSZWSmEmZCi1Rjpr7WMsR9SfnVlEriu11kPmR9wKveLvB
-        3EFDXrhMSxGa6k3jRL3M7uMxgUJjhd8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8pb2b2yBvlyePXc4neaXnpSmeAYYQklyRoO6YAaoGbs=;
+        b=CgFRV8nMCc4NPi95IwikJfyHz/rHRrU+t/08kCa9ZA1rvdLgO0KOEo1IcsaAzP8tU2MuXT
+        2QDVNcZZt/sDmhMjlAvvlEaJyGHG21JcWOCdjgg5j71qOHdKgmohhL35PTUPCWlVO1eU+u
+        8pnRtOBAWduGz977b2JvF2ECR97dnnk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-qlLdcQmqOwKSVMP1eIqycg-1; Fri, 18 Mar 2022 12:17:55 -0400
-X-MC-Unique: qlLdcQmqOwKSVMP1eIqycg-1
+ us-mta-137-AanS3ePaM0SrClnrgLZ8Og-1; Fri, 18 Mar 2022 12:16:35 -0400
+X-MC-Unique: AanS3ePaM0SrClnrgLZ8Og-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D534D38035BB;
-        Fri, 18 Mar 2022 16:17:53 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9A6C899EC1;
+        Fri, 18 Mar 2022 16:16:28 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B208A7AD1;
-        Fri, 18 Mar 2022 16:17:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 95DC833250;
+        Fri, 18 Mar 2022 16:16:22 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v3 13/17] HID: bpf: implement hid_bpf_get|set_bits
-Date:   Fri, 18 Mar 2022 17:15:24 +0100
-Message-Id: <20220318161528.1531164-14-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v3 04/17] libbpf: add HID program type and API
+Date:   Fri, 18 Mar 2022 17:15:15 +0100
+Message-Id: <20220318161528.1531164-5-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
 References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -68,100 +68,211 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Export implement() outside of hid-core.c and use this and
-hid_field_extract() to implement the helprs for hid-bpf.
+HID-bpf program type are needing new SECs.
+To bind a hid-bpf program, we can rely on bpf_program__attach_fd()
+so export a new function to the API.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 changes in v3:
-- renamed hid_{get|set}_data into hid_{get|set}_bits
+- squashed the libbpf changes into 1
+- moved bpf_program__attach_hid to 0.8.0
+- added SEC_DEF("hid/driver_event")
 
 changes in v2:
 - split the series by bpf/libbpf/hid/selftests and samples
-- allow for n > 32, by relying on memcpy
 ---
- drivers/hid/hid-bpf.c  | 29 +++++++++++++++++++++++++++++
- drivers/hid/hid-core.c |  4 ++--
- include/linux/hid.h    |  2 ++
- 3 files changed, 33 insertions(+), 2 deletions(-)
+ tools/include/uapi/linux/bpf.h | 31 +++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c         | 23 +++++++++++++++++------
+ tools/lib/bpf/libbpf.h         |  2 ++
+ tools/lib/bpf/libbpf.map       |  1 +
+ 4 files changed, 51 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
-index 45c87ff47324..650dd5e54919 100644
---- a/drivers/hid/hid-bpf.c
-+++ b/drivers/hid/hid-bpf.c
-@@ -122,6 +122,33 @@ static void hid_bpf_array_detach(struct hid_device *hdev, enum bpf_hid_attach_ty
- 	}
- }
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 99fab54ae9c0..0e8438e93768 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -952,6 +952,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_LSM,
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
++	BPF_PROG_TYPE_HID,
+ };
  
-+static int hid_bpf_get_bits(struct hid_device *hdev, u8 *buf, size_t buf_size, u64 offset, u32 n,
-+			    u32 *data)
-+{
-+	if (n > 32)
-+		return -EINVAL;
+ enum bpf_attach_type {
+@@ -997,6 +998,10 @@ enum bpf_attach_type {
+ 	BPF_SK_REUSEPORT_SELECT,
+ 	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+ 	BPF_PERF_EVENT,
++	BPF_HID_DEVICE_EVENT,
++	BPF_HID_RDESC_FIXUP,
++	BPF_HID_USER_EVENT,
++	BPF_HID_DRIVER_EVENT,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+@@ -1011,6 +1016,7 @@ enum bpf_link_type {
+ 	BPF_LINK_TYPE_NETNS = 5,
+ 	BPF_LINK_TYPE_XDP = 6,
+ 	BPF_LINK_TYPE_PERF_EVENT = 7,
++	BPF_LINK_TYPE_HID = 8,
+ 
+ 	MAX_BPF_LINK_TYPE,
+ };
+@@ -1118,6 +1124,16 @@ enum bpf_link_type {
+  */
+ #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
+ 
++/* HID flag used in BPF_LINK_CREATE command
++ *
++ * NONE(default): The bpf program will be added at the tail of the list
++ * of existing bpf program for this type.
++ *
++ * BPF_F_INSERT_HEAD: The bpf program will be added at the beginning
++ * of the list of existing bpf program for this type..
++ */
++#define BPF_F_INSERT_HEAD	(1U << 0)
 +
-+	if (((offset + n) >> 3) >= buf_size)
-+		return -E2BIG;
-+
-+	*data = hid_field_extract(hdev, buf, offset, n);
-+	return n;
-+}
-+
-+static int hid_bpf_set_bits(struct hid_device *hdev, u8 *buf, size_t buf_size, u64 offset, u32 n,
-+			    u32 data)
-+{
-+	if (n > 32)
-+		return -EINVAL;
-+
-+	if (((offset + n) >> 3) >= buf_size)
-+		return -E2BIG;
-+
-+	/* data must be a pointer to a u32 */
-+	implement(hdev, buf, offset, n, data);
-+	return n;
-+}
-+
- static int hid_bpf_run_progs(struct hid_device *hdev, struct hid_bpf_ctx_kern *ctx)
- {
- 	enum bpf_hid_attach_type type;
-@@ -223,6 +250,8 @@ int __init hid_bpf_module_init(void)
- 		.pre_link_attach = hid_bpf_pre_link_attach,
- 		.post_link_attach = hid_bpf_post_link_attach,
- 		.array_detach = hid_bpf_array_detach,
-+		.hid_get_bits = hid_bpf_get_bits,
-+		.hid_set_bits = hid_bpf_set_bits,
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * the following extensions:
+  *
+@@ -5129,6 +5145,16 @@ union bpf_attr {
+  *		The **hash_algo** is returned on success,
+  *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
+  *		invalid arguments are passed.
++ *
++ * void *bpf_hid_get_data(void *ctx, u64 offset, u64 size)
++ *	Description
++ *		Returns a pointer to the data associated with context at the given
++ *		offset and size (in bytes).
++ *
++ *		Note: the returned pointer is refcounted and must be dereferenced
++ *		by a call to bpf_hid_discard;
++ *	Return
++ *		The pointer to the data. On error, a null value is returned.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5325,6 +5351,7 @@ union bpf_attr {
+ 	FN(copy_from_user_task),	\
+ 	FN(skb_set_tstamp),		\
+ 	FN(ima_file_hash),		\
++	FN(hid_get_data),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+@@ -5925,6 +5952,10 @@ struct bpf_link_info {
+ 		struct {
+ 			__u32 ifindex;
+ 		} xdp;
++		struct  {
++			__s32 hidraw_number;
++			__u32 attach_type;
++		} hid;
  	};
+ } __attribute__((aligned(8)));
  
- 	bpf_hid_set_hooks(&hooks);
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 3182c39db006..4f669dcddc08 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1416,8 +1416,8 @@ static void __implement(u8 *report, unsigned offset, int n, u32 value)
- 	}
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 43161fdd44bb..6b9ba313eb5b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8675,6 +8675,10 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+ 	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
+ 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("hid/device_event",	HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT),
++	SEC_DEF("hid/rdesc_fixup",	HID, BPF_HID_RDESC_FIXUP, SEC_ATTACHABLE_OPT),
++	SEC_DEF("hid/user_event",	HID, BPF_HID_USER_EVENT, SEC_ATTACHABLE_OPT),
++	SEC_DEF("hid/driver_event",	HID, BPF_HID_DRIVER_EVENT, SEC_ATTACHABLE_OPT),
+ };
+ 
+ static size_t custom_sec_def_cnt;
+@@ -10630,10 +10634,11 @@ static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_li
+ 
+ static struct bpf_link *
+ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id,
+-		       const char *target_name)
++		       const char *target_name, __u32 flags)
+ {
+ 	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
+-			    .target_btf_id = btf_id);
++			    .target_btf_id = btf_id,
++			    .flags = flags);
+ 	enum bpf_attach_type attach_type;
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+@@ -10667,19 +10672,19 @@ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id
+ struct bpf_link *
+ bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd)
+ {
+-	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
++	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup", 0);
  }
  
--static void implement(const struct hid_device *hid, u8 *report,
--		      unsigned offset, unsigned n, u32 value)
-+void implement(const struct hid_device *hid, u8 *report, unsigned int offset, unsigned int n,
-+	       u32 value)
+ struct bpf_link *
+ bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd)
  {
- 	if (unlikely(n > 32)) {
- 		hid_warn(hid, "%s() called with n (%d) > 32! (%s)\n",
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 66d949d10b78..7454e844324c 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -944,6 +944,8 @@ bool hid_compare_device_paths(struct hid_device *hdev_a,
- s32 hid_snto32(__u32 value, unsigned n);
- __u32 hid_field_extract(const struct hid_device *hid, __u8 *report,
- 		     unsigned offset, unsigned n);
-+void implement(const struct hid_device *hid, u8 *report, unsigned int offset, unsigned int n,
-+	       u32 value);
+-	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
++	return bpf_program__attach_fd(prog, netns_fd, 0, "netns", 0);
+ }
  
- #ifdef CONFIG_PM
- int hid_driver_suspend(struct hid_device *hdev, pm_message_t state);
+ struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex)
+ {
+ 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
+-	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
++	return bpf_program__attach_fd(prog, ifindex, 0, "xdp", 0);
+ }
+ 
+ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+@@ -10705,7 +10710,7 @@ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+ 		if (btf_id < 0)
+ 			return libbpf_err_ptr(btf_id);
+ 
+-		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
++		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace", 0);
+ 	} else {
+ 		/* no target, so use raw_tracepoint_open for compatibility
+ 		 * with old kernels
+@@ -10760,6 +10765,12 @@ static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_l
+ 	return libbpf_get_error(*link);
+ }
+ 
++struct bpf_link *
++bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd, __u32 flags)
++{
++	return bpf_program__attach_fd(prog, hid_fd, 0, "hid", flags);
++}
++
+ struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
+ {
+ 	struct bpf_link *link = NULL;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index c1b0c2ef14d8..13dff4865da5 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -529,6 +529,8 @@ struct bpf_iter_attach_opts {
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_iter(const struct bpf_program *prog,
+ 			 const struct bpf_iter_attach_opts *opts);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_hid(const struct bpf_program *prog, int hid_fd, __u32 flags);
+ 
+ /*
+  * Libbpf allows callers to adjust BPF programs before being loaded
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index df1b947792c8..cd8da9a8bf36 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -442,6 +442,7 @@ LIBBPF_0.7.0 {
+ 
+ LIBBPF_0.8.0 {
+ 	global:
++		bpf_program__attach_hid;
+ 		libbpf_register_prog_handler;
+ 		libbpf_unregister_prog_handler;
+ } LIBBPF_0.7.0;
 -- 
 2.35.1
 
