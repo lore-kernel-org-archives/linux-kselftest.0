@@ -2,111 +2,100 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 990BFC433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Mar 2022 22:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A19AAC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Mar 2022 23:04:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbiCUW5k (ORCPT
+        id S232146AbiCUXGA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Mar 2022 18:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        Mon, 21 Mar 2022 19:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiCUW5P (ORCPT
+        with ESMTP id S232198AbiCUXFn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:57:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817B83B2073;
-        Mon, 21 Mar 2022 15:37:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B520BB81A61;
-        Mon, 21 Mar 2022 21:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7E5C340F2;
-        Mon, 21 Mar 2022 21:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647899585;
-        bh=qYe/uBk0ndVaKY+4X1OhfMJEXd3Z6e/VbB81NnZOuOc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m7u+vGjuU+kjaU5T6xXNPRR2Kej2ocgXxK1oSfdVwVdJsbbu3/AMHRBC/8YPM13GB
-         tqCxrGaRiXW2Vn2W62qxKUuP4Ufuo6b4bCxQ+6qDygiA/WyJe1f3QDISU5twDsfDYv
-         vzUxy85giTapQamuIi3JFzqzCwIPn8eXzdIe0jmbh70lP41XdurgxMpvlYWYA0FfOP
-         77EnX0SmVAdfeL93YBIvn5/kkMxbdpI+3Bh9tDu8qQ0r4tIlihElaLnEhaAAz4XFJr
-         xMZ4X+qI0j7hYy5nk9Cl+minAbJkjl8cn4IO8/oEBxWVSgbQvVrH1o9bw0IbXc+k0C
-         aM0dlaH+37BKg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yosry Ahmed <yosryahmed@google.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 5/5] selftests: vm: fix clang build error multiple output files
-Date:   Mon, 21 Mar 2022 17:52:53 -0400
-Message-Id: <20220321215256.490267-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220321215256.490267-1-sashal@kernel.org>
-References: <20220321215256.490267-1-sashal@kernel.org>
+        Mon, 21 Mar 2022 19:05:43 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B9335501;
+        Mon, 21 Mar 2022 15:53:04 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:52:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1647903126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5vBCwulztWfYNXCCd5nLd9nkIIOOV0oW+khzPjrbeWg=;
+        b=WhEhuNzza4VU68ud6Ylk9EXGGT/FqYsp8gRvcpumIshsDFuRNUhzze9i/IFBcfpGRGRo4Z
+        8w/aDAuBtP7Szrv0C9eNc9TUxV09+PPP9DVzxK9o/d07lpkTAIpOsgec9nWYxC8JyZxmSU
+        8ylMDSwXN4hmRmJZKfogCkLIuLCH+f8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/14] bpf: Allow not to charge bpf memory
+Message-ID: <YjkBkIHde+fWHw9K@carbon.dhcp.thefacebook.com>
+References: <20220319173036.23352-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yosry Ahmed <yosryahmed@google.com>
+Hello, Yafang!
 
-[ Upstream commit 1c4debc443ef7037dcb7c4f08c33b9caebd21d2e ]
+Thank you for continuing working on this!
 
-When building the vm selftests using clang, some errors are seen due to
-having headers in the compilation command:
+On Sat, Mar 19, 2022 at 05:30:22PM +0000, Yafang Shao wrote:
+> After switching to memcg-based bpf memory accounting, the bpf memory is
+> charged to the loader's memcg by defaut, that causes unexpected issues for
+> us. For instance, the container of the loader-which loads the bpf programs
+> and pins them on bpffs-may restart after pinning the progs and maps. After
+> the restart, the pinned progs and maps won't belong to the new container
+> any more, while they actually belong to an offline memcg left by the
+> previous generation. That inconsistent behavior will make trouble for the
+> memory resource management for this container.
 
-  clang -Wall -I ../../../../usr/include  -no-pie    gup_test.c ../../../../mm/gup_test.h -lrt -lpthread -o .../tools/testing/selftests/vm/gup_test
-  clang: error: cannot specify -o when generating multiple output files
-  make[1]: *** [../lib.mk:146: .../tools/testing/selftests/vm/gup_test] Error 1
+I'm looking at this text and increasingly feeling that it's not a bpf-specific
+problem and it shouldn't be solved as one.
 
-Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
-since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
-file lib.mk.
+Is there any significant reason why the loader can't temporarily enter the
+root cgroup before creating bpf maps/progs? I know it will require some changes
+in the userspace code, but so do new bpf flags.
 
-Link: https://lkml.kernel.org/r/20220304000645.1888133-1-yosryahmed@google.com
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/vm/Makefile | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> The reason why these progs and maps have to be persistent across multiple
+> generations is that these progs and maps are also used by other processes
+> which are not in this container. IOW, they can't be removed when this
+> container is restarted. Take a specific example, bpf program for clsact
+> qdisc is loaded by a agent running in a container, which not only loads
+> bpf program but also processes the data generated by this program and do
+> some other maintainace things.
+> 
+> In order to keep the charging behavior consistent, we used to consider a
+> way to recharge these pinned maps and progs again after the container is
+> restarted, but after the discussion[1] with Roman, we decided to go
+> another direction that don't charge them to the container in the first
+> place. TL;DR about the mentioned disccussion: recharging is not a generic
+> solution and it may take too much risk.
+> 
+> This patchset is the solution of no charge. Two flags are introduced in
+> union bpf_attr, one for bpf map and another for bpf prog. The user who
+> doesn't want to charge to current memcg can use these two flags. These two
+> flags are only permitted for sys admin as these memory will be accounted to
+> the root memcg only.
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index d9605bd10f2d..acf5eaeef9ff 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
- 
-+LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-+
- include local_config.mk
- 
- uname_M := $(shell uname -m 2>/dev/null || echo not)
-@@ -139,10 +141,6 @@ endif
- 
- $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
- 
--$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
--
--$(OUTPUT)/hmm-tests: local_config.h
--
- # HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
- $(OUTPUT)/hmm-tests: LDLIBS += $(HMM_EXTRA_LIBS)
- 
--- 
-2.34.1
+If we're going with bpf-specific flags (which I'd prefer not to), let's
+define them as the way to create system-wide bpf objects which are expected
+to outlive the original cgroup. With expectations that they will be treated
+as belonging to the root cgroup by any sort of existing or future resource
+accounting (e.g. if we'll start accounting CPU used by bpf prgrams).
 
+But then again: why just not create them in the root cgroup?
+
+Thanks!
