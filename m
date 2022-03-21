@@ -2,167 +2,492 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE36AC433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Mar 2022 20:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 660CFC433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 21 Mar 2022 22:45:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351870AbiCUU21 (ORCPT
+        id S229773AbiCUWq4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 21 Mar 2022 16:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
+        Mon, 21 Mar 2022 18:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344532AbiCUU20 (ORCPT
+        with ESMTP id S229585AbiCUWqw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Mar 2022 16:28:26 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4406F165BB8;
-        Mon, 21 Mar 2022 13:27:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gZbO0KdhBiORkhiif0BsALcp9sgyuD+KeZa9N38C1tR1Ot7cZcDsR9dC/UcNM5hq3DayL2RTi5W9AIqrZfLkXtDlxenGJQtggQxdKiGS2vFd4VfvzwMmWXk+8jaaSRFi3j5KHqnNEI5Sr/kCGKHa04pktENxuU252WRJPne4GuuCUZfKsCal7Flg+UoGXvHAcx2j3C3tGMQlD0/1wn55yfT6bEQ83IoscRAmpaflVxCvJkuugL5s8n5rYvZno7bDgpdVj0/x7Ptf+5Uq9E60SOTzSXvN1bCecrCPvzNPxMUMQBQhtaYntNb6lKWWJjRSeMci5Ke0PcHL/dvc1IuWlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sFbAVOgB5L3qOPG9VdCAPxzY821z39LgMQbDCE9M8Vo=;
- b=OUg0iO/X+cTz1etgFk3FkL284IZp2MmSPIrokeTItQXghEWV08gI9zYUMqUuwsvrH4afx/2NXonAzhn/TlgpE1y2xzSJ8S522QJy+f3nt48Idj6d3zsSZ87s79i/79AoCIBkCkqIwzEgPGWa0DLeLsjZzQJBmZCcuq5pUXYRAvG8s749twKmvqnev4MlZGAefOAyGCMAWCmbKcuE+sbUZB3KKdxG0FbnlTQp//7DiZvEGpU8ZeWlagZvTD0qnwu8CG6DjILuhJ11+dvQiD4D6WNtWpCpgoIDR/iHWpoCPQf5Gk5d/AaIu5ThmELIpJPEdW9zU+uDD0jvYSrIfgZgHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sFbAVOgB5L3qOPG9VdCAPxzY821z39LgMQbDCE9M8Vo=;
- b=O6BRFysnBo22kJOzG33391zJ3P1+7YUzmBUm9pGfnxJ3h+B9z6RFZnCumP+C/LhgfIiHcrVtbV/g6MDeT1+QxLar/5P7r2yeIM/zi03WlTqlaTt+SZ1gLHfeOPVlIVGiCu+APv31PUyN3bmoX2vyXjWOdQkvw7rGcBRGQuS6t05ziwk5mP8ROLChnXjwAv0ivBx7seP6w3DZjEvvJpj6BbZvQrWFZbu+P2XNlzSAGuXGrziMLP+B4fC3YG2TpR7I6pkNKkFwE7Ez3tUug0wprFUlFOvCp7MGsKosZ9MRXVKTt92qXBpJfvr7MlNV1JycStcHoOv0YXMb9rmUarfuNg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by MWHPR12MB1504.namprd12.prod.outlook.com (2603:10b6:301:c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Mon, 21 Mar
- 2022 20:26:57 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::40a6:6e1d:b057:a036]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::40a6:6e1d:b057:a036%6]) with mapi id 15.20.5081.023; Mon, 21 Mar 2022
- 20:26:57 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        Mon, 21 Mar 2022 18:46:52 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C6B32BC1F;
+        Mon, 21 Mar 2022 15:25:21 -0700 (PDT)
+Date:   Mon, 21 Mar 2022 15:23:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1647901399;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0PoRxyCNZyFj70PP5U+yk5A784SR14yEEvMXF3ao0Hs=;
+        b=k3HjKgHPWmG6ejRHhFTB2rDCs3QJDtzExJJx4o6gDhaPINlM2HuiQqqImId7++FRDOEh+R
+        c8x8yyqNMrEOZkWzSFnLur9bdU3trTN+uBdC9u1P6K1cBWA5/rNavQAQ3vRlRlQJm/I7et
+        74LhXGFharP361v63/BVHyaYt+f6Gk0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>, Yang Shi <shy828301@gmail.com>,
         Miaohe Lin <linmiaohe@huawei.com>,
         Hugh Dickins <hughd@google.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/5] mm: memcg: make memcg huge page split support any order split.
-Date:   Mon, 21 Mar 2022 16:26:55 -0400
-X-Mailer: MailMate (1.14r5870)
-Message-ID: <2FBD6D12-EDBE-4061-8738-E5E333F2367C@nvidia.com>
-In-Reply-To: <YjjX/bZrUmQfFjHC@casper.infradead.org>
+Subject: Re: [RFC PATCH 5/5] mm: huge_memory: enable debugfs to split huge
+ pages to any order.
+Message-ID: <Yjj6z3zYFUIKujHR@carbon.dhcp.thefacebook.com>
 References: <20220321142128.2471199-1-zi.yan@sent.com>
- <20220321142128.2471199-2-zi.yan@sent.com>
- <YjjKh2NoWGcq28Oo@carbon.dhcp.thefacebook.com>
- <0001CABA-9436-4EFF-9C7F-F67300D09DA1@nvidia.com>
- <YjjX/bZrUmQfFjHC@casper.infradead.org>
-Content-Type: multipart/signed;
- boundary="=_MailMate_2F541385-50E7-4360-9312-72AE9C63E581_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0314.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::19) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+ <20220321142128.2471199-6-zi.yan@sent.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f5b324fe-a083-41ef-4a46-08da0b79256d
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1504:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1504BEB793E325E97F490560C2169@MWHPR12MB1504.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JdGMmIWHqJ6ypqNeOOMf8yIJYGLTe5M0tHoPXicXWhe/cBYDAHjc5IpTTmnkvWT6Iym9kT8oaWEt8O2jB2vDnHEsdF4OTVDaxqNDTh/LTkIKpYnXcu+Cff4JWzlPnOCQv3kQNKSF8L/4jaaw/JV7+wiT0zxRqncVfacAA7JzDmgcwuVu3gRhY/YenYt1OBUH6spkXm+ZFQHmw6PBJ0MH+xjpZhswD5SXXGsFjbPEtbCGr7o0S2WBzu7WdFdjyI9nZbwBulLkW9j1HupOT330ArswawzlcMzu+Wy0gSDZUK4/sczDlzLyITIyBta0UOa3lcBX3jWz1ipZrQVZDiLcHRH/0GtM4vxthuqSYrFZZwdryyGG+QkNQ5MuIsvteUcPcGmUFXpInookKqy10A3ZnhHzGgVgWKpdxCjAZj2RN9tsH1NvD71MrTcB4salIzQsEwBwQ1vXvqgxxs22njzOFvF2MP0ozokIxnIWIsVMMAi/VLSMC70C0NYRDOSijpt+TI/k80n+v6Em2Lc74/TTB0mOjsqV1rtCv0F2VAoi7G6Ui86nZAwi4fmaRHhjDoasyC6RidIFOlEkLIhsmTIvlwPn9wc/y/Qeg61FAKmbISxznkqtSnTQIBPU4z08xhxsHBi6DGuOcmvfMBchF5x6si2+Wvie81hCHWqaaT1ZQUD7h4IKnKomjU/VqqWbwZQczHM+eRzja/xGitqSGNZgqv18i4yXmcOqiVw/blKUgkLs/36Y5fz16cBEVjmKBw2d
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(6486002)(53546011)(6512007)(8936002)(21480400003)(7416002)(86362001)(235185007)(2616005)(33656002)(316002)(36756003)(26005)(186003)(66556008)(6916009)(4326008)(2906002)(54906003)(66946007)(66476007)(8676002)(38100700002)(5660300002)(6506007)(14583001)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+fCjQHpwU1zqSFJVuuguqPGXfn+HT2uT1FiR5ndIECRSFrWBCBRZX6cv1iK3?=
- =?us-ascii?Q?FxXspqlIY6swy1K0cDYuHfh84DLp0KnT8jKePKMdwNAorOMBsYM/DOFtwy/r?=
- =?us-ascii?Q?YzzhcMEMwSbvf8nLhjtfe6PiyaTFLysyY4/LUKFLeJpCZBF//L6hCD7oIcqu?=
- =?us-ascii?Q?g3GdXwTG6Wt6IuwZwVJUDZ6fo2Why360GQ1jIt0wtlxScw9fQ/UNBoE1ALCc?=
- =?us-ascii?Q?QA4KRSnTHy1w/wtyf4LmMxAeXNtRi87quPguXRVHYoSJtGuYsHtynbIL7OUt?=
- =?us-ascii?Q?FkUatbYvuhLCW3dumqFWYwV2VmJxajhbllQRYE3Y7KqcVJswFpKNMcZR2HGv?=
- =?us-ascii?Q?Q5TYaT9PEXrdKkyOMxHxLdBeSnHGqWqc6BTZ84dk+gi86pw+4FRl0Ohf+wu6?=
- =?us-ascii?Q?k0gM1sTfU1KahdfgZrL26SP2Jc5vZmxfTA9WALwCkPJKrLyhgG2IU68sIwZV?=
- =?us-ascii?Q?mrEM0VVMxdjWd+Glo1bs9TLgjZ8K+f71/xbx/L8HF9GUD6k87dtfRaO/dFCK?=
- =?us-ascii?Q?mRWIazgKCvC4hEx9NJbX5eRKep9tJA2UV76ptZlod2Q9m6N3LCWwb25j6HaG?=
- =?us-ascii?Q?UgGeL2NsPIMxahDZMfdj91DRwYzLR82IxEOngDrZupOxHKOz3YkgEOr/FBav?=
- =?us-ascii?Q?o8Z4jcvqGZqwoaA8PuE88YR+CLQlE7U5Ml9S8JAnyBL3KEMHCwMoW1SVPjhd?=
- =?us-ascii?Q?d+YYJEjuk0BMuHTAgeOwuP8S+747FVIs2LZmu1EKUUJiTmTOfLbipXa4QqtA?=
- =?us-ascii?Q?HwVwuLT8WbxEL1cN/XuLTeAGSfLcoX5wSXK5DVx9VDoqymKhZEjUJM2tJP1q?=
- =?us-ascii?Q?AZk+CEQRq63F7zJIAZUY9elc+1vvmd1kHXR2cSZcQBa0wvUf64811qRubCun?=
- =?us-ascii?Q?JLyTdi7H1qfoIaRK78dEocGUCnLJVy5si+dg5FdmO7pxJuX+uHFmT1uLnU+s?=
- =?us-ascii?Q?sR5rKNFV2MAjyLwpwHFawhxy9P0Tr+Q18iuBH5sNVbA+bvQ9nM3BxB9wMUKd?=
- =?us-ascii?Q?U/vFtJucZD05BGHBzxfXwwHRYZX7dlULIWK8in8x2NAOIhEloZbfHMOueofZ?=
- =?us-ascii?Q?/7bkE2ovng0Odgjl2tAqjWTGeygItvvr9amrNwpHRa8bNDrfEBqbJ6nG7b+B?=
- =?us-ascii?Q?RMQY2Kdd+IwfiuM9KNuxTTI4L3oUoSxY1wn5dMTMkjrSvL8lUpPr3qYVy1vD?=
- =?us-ascii?Q?NWRnhUp+6gULQjyf7QbnvqUPN0o6ODtAk22zq+zcjxmdEwZ6N/QcyhHLF1rn?=
- =?us-ascii?Q?YvjVs7jU6a4C3j5K9iBT/FAxoxOtiTH8OmPXcXfxreOsbnd1xpOqFffPF9xY?=
- =?us-ascii?Q?bpMTF9RR29DAqQjxHsv4FF1vHOxaYNA8ORMskUqPGs8RIT7d3OewduAfCgz+?=
- =?us-ascii?Q?p/2w6bXmE3x+IF7hTyJ22cpPoJqPVrqIPZj93HKJ1iwEmseDPZ5vE/DULYhY?=
- =?us-ascii?Q?xHU5ER0PKP4Fsh4F6+PCOin2zTAPjI4F?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5b324fe-a083-41ef-4a46-08da0b79256d
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Mar 2022 20:26:57.4932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XH8FX1ft2ApTKrL5nOforLoqtvKeWFR0L238w1AQIy4Ptkyf2DWVsB+8fzol5RDT
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1504
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321142128.2471199-6-zi.yan@sent.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=_MailMate_2F541385-50E7-4360-9312-72AE9C63E581_=
-Content-Type: text/plain
+On Mon, Mar 21, 2022 at 10:21:28AM -0400, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> It is used to test split_huge_page_to_list_to_order for pagecache THPs.
+> Also add test cases for split_huge_page_to_list_to_order via both
+> debugfs, truncating a file, and punching holes in a file.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
 
-On 21 Mar 2022, at 15:54, Matthew Wilcox wrote:
+Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-> On Mon, Mar 21, 2022 at 03:07:46PM -0400, Zi Yan wrote:
->> Yes. Will change it to new_nr to be consistent.
->
-> uh, you're going to call ilog2?
+Thanks!
 
-fortunately, no. Inside split_page_memcg(), I probably
-need to add VM_BUG_ON(nr % new_nr != 0) to make sure
-new_nr is a divisor of nr, since there are a couple
-of nr / new_nr operations. Otherwise, new_nr works.
-
->
-> I think this would look less inconsistent if 'nr' were an unsigned long
-> (how long until we need 16GB pages?  Think PPC already supports those)
-
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_2F541385-50E7-4360-9312-72AE9C63E581_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmI435APHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhUJIAP/0CzSz8P2XRJkZdEbGhs9vL53wFcpYK/PFGx
-uT4zo+m6uD/rpMvXfGAvp9rebHsSbru2PFo4BIuPuaiuuuqFv7ESdHHDv9x5Y7jc
-dV44hJjFEh+sTMJPORbdwk28U974xQYab4Ay1dAn5eemWg7GpQm3GOsa9aa6TT0J
-Bg/OLxsswJoKkVAPLEzRo9r9JpVh09Jgmic0kAHTLTsbckKxvKu+H0CUzXxcZm5T
-46j2jpInUExeLDwrROzxSQ9OFrE3RliH5ojmKHWjxikWVRyEmA8YEu2+PAz8fy8s
-3/FlI9lFFbe+j9iSeSe46l/A/guyK6HTORXDmy9pf2DXByYbOgIS5f5jT1K7QVNl
-PzJrn/VZ9PPcVHHFKL1rinRo4TuAiyr1q0qeUiOGdAyvcmIyX75V01PIxSqNbKuL
-qEYGaNsr84ekpbACtY0VpRGVlIbQfZnFb/e8FEko9dFYL8oMLyaoWDHj7eFWN4RU
-xk+zU9szLijVJaJw9jOpawZ0pPlNv68NzMIpcNSRXDZnajxBfslmnrDA5JwM+QqU
-mS1mUepZUb2Br3Sk2t7wH/K2cvmnHLQDThcHpPv+cDR+kKEV7L9XxOh8LNDZBFmD
-wP/ri2AdsnDN9SVatmf7hcZU2y13FGKiS73584xn6sgl4QXeK0m6en3RfVjnj4IZ
-9bAK/5nO
-=1XBK
------END PGP SIGNATURE-----
-
---=_MailMate_2F541385-50E7-4360-9312-72AE9C63E581_=--
+> ---
+>  mm/huge_memory.c                              |  26 ++-
+>  .../selftests/vm/split_huge_page_test.c       | 219 +++++++++++++++---
+>  2 files changed, 201 insertions(+), 44 deletions(-)
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 76db0092a1e2..7645bb12fcbc 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2856,7 +2856,7 @@ static inline bool vma_not_suitable_for_thp_split(struct vm_area_struct *vma)
+>  }
+>  
+>  static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+> -				unsigned long vaddr_end)
+> +				unsigned long vaddr_end, unsigned int new_order)
+>  {
+>  	int ret = 0;
+>  	struct task_struct *task;
+> @@ -2926,7 +2926,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+>  		if (!trylock_page(page))
+>  			goto next;
+>  
+> -		if (!split_huge_page(page))
+> +		if (!split_huge_page_to_list_to_order(page, NULL, new_order))
+>  			split++;
+>  
+>  		unlock_page(page);
+> @@ -2944,7 +2944,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
+>  }
+>  
+>  static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
+> -				pgoff_t off_end)
+> +				pgoff_t off_end, unsigned int new_order)
+>  {
+>  	struct filename *file;
+>  	struct file *candidate;
+> @@ -2984,7 +2984,7 @@ static int split_huge_pages_in_file(const char *file_path, pgoff_t off_start,
+>  		if (!trylock_page(fpage))
+>  			goto next;
+>  
+> -		if (!split_huge_page(fpage))
+> +		if (!split_huge_page_to_list_to_order(fpage, NULL, new_order))
+>  			split++;
+>  
+>  		unlock_page(fpage);
+> @@ -3009,10 +3009,14 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
+>  {
+>  	static DEFINE_MUTEX(split_debug_mutex);
+>  	ssize_t ret;
+> -	/* hold pid, start_vaddr, end_vaddr or file_path, off_start, off_end */
+> +	/*
+> +	 * hold pid, start_vaddr, end_vaddr, new_order or
+> +	 * file_path, off_start, off_end, new_order
+> +	 */
+>  	char input_buf[MAX_INPUT_BUF_SZ];
+>  	int pid;
+>  	unsigned long vaddr_start, vaddr_end;
+> +	unsigned int new_order = 0;
+>  
+>  	ret = mutex_lock_interruptible(&split_debug_mutex);
+>  	if (ret)
+> @@ -3041,29 +3045,29 @@ static ssize_t split_huge_pages_write(struct file *file, const char __user *buf,
+>  			goto out;
+>  		}
+>  
+> -		ret = sscanf(buf, "0x%lx,0x%lx", &off_start, &off_end);
+> -		if (ret != 2) {
+> +		ret = sscanf(buf, "0x%lx,0x%lx,%d", &off_start, &off_end, &new_order);
+> +		if (ret != 2 && ret != 3) {
+>  			ret = -EINVAL;
+>  			goto out;
+>  		}
+> -		ret = split_huge_pages_in_file(file_path, off_start, off_end);
+> +		ret = split_huge_pages_in_file(file_path, off_start, off_end, new_order);
+>  		if (!ret)
+>  			ret = input_len;
+>  
+>  		goto out;
+>  	}
+>  
+> -	ret = sscanf(input_buf, "%d,0x%lx,0x%lx", &pid, &vaddr_start, &vaddr_end);
+> +	ret = sscanf(input_buf, "%d,0x%lx,0x%lx,%d", &pid, &vaddr_start, &vaddr_end, &new_order);
+>  	if (ret == 1 && pid == 1) {
+>  		split_huge_pages_all();
+>  		ret = strlen(input_buf);
+>  		goto out;
+> -	} else if (ret != 3) {
+> +	} else if (ret != 3 && ret != 4) {
+>  		ret = -EINVAL;
+>  		goto out;
+>  	}
+>  
+> -	ret = split_huge_pages_pid(pid, vaddr_start, vaddr_end);
+> +	ret = split_huge_pages_pid(pid, vaddr_start, vaddr_end, new_order);
+>  	if (!ret)
+>  		ret = strlen(input_buf);
+>  out:
+> diff --git a/tools/testing/selftests/vm/split_huge_page_test.c b/tools/testing/selftests/vm/split_huge_page_test.c
+> index 52497b7b9f1d..af01e7dca9c8 100644
+> --- a/tools/testing/selftests/vm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/vm/split_huge_page_test.c
+> @@ -16,6 +16,7 @@
+>  #include <sys/mount.h>
+>  #include <malloc.h>
+>  #include <stdbool.h>
+> +#include <time.h>
+>  
+>  uint64_t pagesize;
+>  unsigned int pageshift;
+> @@ -24,10 +25,11 @@ uint64_t pmd_pagesize;
+>  #define PMD_SIZE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
+>  #define SPLIT_DEBUGFS "/sys/kernel/debug/split_huge_pages"
+>  #define SMAP_PATH "/proc/self/smaps"
+> +#define THP_FS_PATH "/mnt/thp_fs"
+>  #define INPUT_MAX 80
+>  
+> -#define PID_FMT "%d,0x%lx,0x%lx"
+> -#define PATH_FMT "%s,0x%lx,0x%lx"
+> +#define PID_FMT "%d,0x%lx,0x%lx,%d"
+> +#define PATH_FMT "%s,0x%lx,0x%lx,%d"
+>  
+>  #define PFN_MASK     ((1UL<<55)-1)
+>  #define KPF_THP      (1UL<<22)
+> @@ -75,23 +77,6 @@ static uint64_t read_pmd_pagesize(void)
+>  	return strtoul(buf, NULL, 10);
+>  }
+>  
+> -static int write_file(const char *path, const char *buf, size_t buflen)
+> -{
+> -	int fd;
+> -	ssize_t numwritten;
+> -
+> -	fd = open(path, O_WRONLY);
+> -	if (fd == -1)
+> -		return 0;
+> -
+> -	numwritten = write(fd, buf, buflen - 1);
+> -	close(fd);
+> -	if (numwritten < 1)
+> -		return 0;
+> -
+> -	return (unsigned int) numwritten;
+> -}
+> -
+>  static void write_debugfs(const char *fmt, ...)
+>  {
+>  	char input[INPUT_MAX];
+> @@ -106,11 +91,6 @@ static void write_debugfs(const char *fmt, ...)
+>  		printf("%s: Debugfs input is too long\n", __func__);
+>  		exit(EXIT_FAILURE);
+>  	}
+> -
+> -	if (!write_file(SPLIT_DEBUGFS, input, ret + 1)) {
+> -		perror(SPLIT_DEBUGFS);
+> -		exit(EXIT_FAILURE);
+> -	}
+>  }
+>  
+>  #define MAX_LINE_LENGTH 500
+> @@ -124,7 +104,7 @@ static bool check_for_pattern(FILE *fp, const char *pattern, char *buf)
+>  	return false;
+>  }
+>  
+> -static uint64_t check_huge(void *addr)
+> +static uint64_t check_huge(void *addr, const char *prefix)
+>  {
+>  	uint64_t thp = 0;
+>  	int ret;
+> @@ -149,13 +129,13 @@ static uint64_t check_huge(void *addr)
+>  		goto err_out;
+>  
+>  	/*
+> -	 * Fetch the AnonHugePages: in the same block and check the number of
+> +	 * Fetch the @prefix in the same block and check the number of
+>  	 * hugepages.
+>  	 */
+> -	if (!check_for_pattern(fp, "AnonHugePages:", buffer))
+> +	if (!check_for_pattern(fp, prefix, buffer))
+>  		goto err_out;
+>  
+> -	if (sscanf(buffer, "AnonHugePages:%10ld kB", &thp) != 1) {
+> +	if (sscanf(&buffer[strlen(prefix)], "%10ld kB", &thp) != 1) {
+>  		printf("Reading smap error\n");
+>  		exit(EXIT_FAILURE);
+>  	}
+> @@ -184,7 +164,7 @@ void split_pmd_thp(void)
+>  	for (i = 0; i < len; i++)
+>  		one_page[i] = (char)i;
+>  
+> -	thp_size = check_huge(one_page);
+> +	thp_size = check_huge(one_page, "AnonHugePages:");
+>  	if (!thp_size) {
+>  		printf("No THP is allocated\n");
+>  		exit(EXIT_FAILURE);
+> @@ -192,7 +172,7 @@ void split_pmd_thp(void)
+>  
+>  	/* split all THPs */
+>  	write_debugfs(PID_FMT, getpid(), (uint64_t)one_page,
+> -		(uint64_t)one_page + len);
+> +		(uint64_t)one_page + len, 0);
+>  
+>  	for (i = 0; i < len; i++)
+>  		if (one_page[i] != (char)i) {
+> @@ -201,7 +181,7 @@ void split_pmd_thp(void)
+>  		}
+>  
+>  
+> -	thp_size = check_huge(one_page);
+> +	thp_size = check_huge(one_page, "AnonHugePages:");
+>  	if (thp_size) {
+>  		printf("Still %ld kB AnonHugePages not split\n", thp_size);
+>  		exit(EXIT_FAILURE);
+> @@ -249,7 +229,7 @@ void split_pte_mapped_thp(void)
+>  	for (i = 0; i < len; i++)
+>  		one_page[i] = (char)i;
+>  
+> -	thp_size = check_huge(one_page);
+> +	thp_size = check_huge(one_page, "AnonHugePages:");
+>  	if (!thp_size) {
+>  		printf("No THP is allocated\n");
+>  		exit(EXIT_FAILURE);
+> @@ -284,7 +264,7 @@ void split_pte_mapped_thp(void)
+>  
+>  	/* split all remapped THPs */
+>  	write_debugfs(PID_FMT, getpid(), (uint64_t)pte_mapped,
+> -		      (uint64_t)pte_mapped + pagesize * 4);
+> +		      (uint64_t)pte_mapped + pagesize * 4, 0);
+>  
+>  	/* smap does not show THPs after mremap, use kpageflags instead */
+>  	thp_size = 0;
+> @@ -371,20 +351,193 @@ void split_file_backed_thp(void)
+>  	printf("file-backed THP split test done, please check dmesg for more information\n");
+>  }
+>  
+> +void create_pagecache_thp_and_fd(const char *testfile, size_t fd_size, int *fd, char **addr)
+> +{
+> +	size_t i;
+> +	int dummy;
+> +
+> +	srand(time(NULL));
+> +
+> +	*fd = open(testfile, O_CREAT | O_RDWR, 0664);
+> +	if (*fd == -1) {
+> +		perror("Failed to create a file at "THP_FS_PATH);
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	for (i = 0; i < fd_size; i++) {
+> +		unsigned char byte = (unsigned char)i;
+> +
+> +		write(*fd, &byte, sizeof(byte));
+> +	}
+> +	close(*fd);
+> +	sync();
+> +	*fd = open("/proc/sys/vm/drop_caches", O_WRONLY);
+> +	if (*fd == -1) {
+> +		perror("open drop_caches");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +	if (write(*fd, "3", 1) != 1) {
+> +		perror("write to drop_caches");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +	close(*fd);
+> +
+> +	*fd = open(testfile, O_RDWR);
+> +	if (*fd == -1) {
+> +		perror("Failed to open a file at "THP_FS_PATH);
+> +		exit(EXIT_FAILURE);
+> +	}
+> +
+> +	*addr = mmap(NULL, fd_size, PROT_READ|PROT_WRITE, MAP_SHARED, *fd, 0);
+> +	if (*addr == (char *)-1) {
+> +		perror("cannot mmap");
+> +		exit(1);
+> +	}
+> +	madvise(*addr, fd_size, MADV_HUGEPAGE);
+> +
+> +	for (size_t i = 0; i < fd_size; i++)
+> +		dummy += *(*addr + i);
+> +
+> +	if (!check_huge(*addr, "FilePmdMapped:")) {
+> +		printf("No pagecache THP generated, please mount a filesystem "
+> +			"supporting pagecache THP at "THP_FS_PATH"\n");
+> +		exit(EXIT_FAILURE);
+> +	}
+> +}
+> +
+> +void split_thp_in_pagecache_to_order(size_t fd_size, int order)
+> +{
+> +	int fd;
+> +	char *addr;
+> +	size_t i;
+> +	const char testfile[] = THP_FS_PATH "/test";
+> +
+> +	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
+> +
+> +	printf("split %ld kB pagecache page to order %d ... ", fd_size >> 10, order);
+> +	write_debugfs(PID_FMT, getpid(), (uint64_t)addr, (uint64_t)addr + fd_size, order);
+> +
+> +	for (i = 0; i < fd_size; i++)
+> +		if (*(addr + i) != (char)i) {
+> +			printf("%lu byte corrupted in the file\n", i);
+> +			exit(EXIT_FAILURE);
+> +		}
+> +
+> +	close(fd);
+> +	unlink(testfile);
+> +	printf("done\n");
+> +}
+> +
+> +void truncate_thp_in_pagecache_to_order(size_t fd_size, int order)
+> +{
+> +	int fd;
+> +	char *addr;
+> +	size_t i;
+> +	const char testfile[] = THP_FS_PATH "/test";
+> +
+> +	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
+> +
+> +	printf("truncate %ld kB pagecache page to size %lu kB ... ", fd_size >> 10, 4UL << order);
+> +	ftruncate(fd, pagesize << order);
+> +
+> +	for (i = 0; i < (pagesize << order); i++)
+> +		if (*(addr + i) != (char)i) {
+> +			printf("%lu byte corrupted in the file\n", i);
+> +			exit(EXIT_FAILURE);
+> +		}
+> +
+> +	close(fd);
+> +	unlink(testfile);
+> +	printf("done\n");
+> +}
+> +
+> +void punch_hole_in_pagecache_thp(size_t fd_size, off_t offset[], off_t len[], int n)
+> +{
+> +	int fd, j;
+> +	char *addr;
+> +	size_t i;
+> +	const char testfile[] = THP_FS_PATH "/test";
+> +
+> +	create_pagecache_thp_and_fd(testfile, fd_size, &fd, &addr);
+> +
+> +	for (j = 0; j < n; j++) {
+> +		printf("addr: %lx, punch a hole at offset %ld kB with len %ld kB ... ",
+> +			(unsigned long)addr, offset[j] >> 10, len[j] >> 10);
+> +		fallocate(fd, FALLOC_FL_PUNCH_HOLE|FALLOC_FL_KEEP_SIZE, offset[j], len[j]);
+> +		printf("done\n");
+> +	}
+> +
+> +	for (i = 0; i < fd_size; i++) {
+> +		int in_hole = 0;
+> +
+> +		for (j = 0; j < n; j++)
+> +			if (i >= offset[j] && i <= (offset[j] + len[j])) {
+> +				in_hole = 1;
+> +				break;
+> +			}
+> +
+> +		if (in_hole) {
+> +			if (*(addr + i)) {
+> +				printf("%lu byte non-zero after punch\n", i);
+> +				exit(EXIT_FAILURE);
+> +			}
+> +			continue;
+> +		}
+> +		if (*(addr + i) != (char)i) {
+> +			printf("%lu byte corrupted in the file\n", i);
+> +			exit(EXIT_FAILURE);
+> +		}
+> +	}
+> +
+> +	close(fd);
+> +	unlink(testfile);
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+> +	int i;
+> +	size_t fd_size;
+> +	off_t offset[2], len[2];
+> +
+>  	if (geteuid() != 0) {
+>  		printf("Please run the benchmark as root\n");
+>  		exit(EXIT_FAILURE);
+>  	}
+>  
+> +	setbuf(stdout, NULL);
+> +
+>  	pagesize = getpagesize();
+>  	pageshift = ffs(pagesize) - 1;
+>  	pmd_pagesize = read_pmd_pagesize();
+> +	fd_size = 2 * pmd_pagesize;
+>  
+>  	split_pmd_thp();
+>  	split_pte_mapped_thp();
+>  	split_file_backed_thp();
+>  
+> +	for (i = 8; i >= 0; i--)
+> +		if (i != 1)
+> +			split_thp_in_pagecache_to_order(fd_size, i);
+> +
+> +	/*
+> +	 * for i is 1, truncate code in the kernel should create order-0 pages
+> +	 * instead of order-1 THPs, since order-1 THP is not supported. No error
+> +	 * is expected.
+> +	 */
+> +	for (i = 8; i >= 0; i--)
+> +		truncate_thp_in_pagecache_to_order(fd_size, i);
+> +
+> +	offset[0] = 123 * pagesize;
+> +	offset[1] = 4 * pagesize;
+> +	len[0] = 200 * pagesize;
+> +	len[1] = 16 * pagesize;
+> +	punch_hole_in_pagecache_thp(fd_size, offset, len, 2);
+> +
+> +	offset[0] = 259 * pagesize + pagesize / 2;
+> +	offset[1] = 33 * pagesize;
+> +	len[0] = 129 * pagesize;
+> +	len[1] = 16 * pagesize;
+> +	punch_hole_in_pagecache_thp(fd_size, offset, len, 2);
+> +
+>  	return 0;
+>  }
+> -- 
+> 2.35.1
+> 
