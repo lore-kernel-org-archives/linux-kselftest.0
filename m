@@ -2,71 +2,73 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B74C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Mar 2022 20:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0476DC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Mar 2022 20:44:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344493AbiCWUBh (ORCPT
+        id S1344774AbiCWUqG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 23 Mar 2022 16:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        Wed, 23 Mar 2022 16:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344528AbiCWUBg (ORCPT
+        with ESMTP id S1344699AbiCWUqF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Mar 2022 16:01:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69AEE673F3;
-        Wed, 23 Mar 2022 13:00:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 065F1B8207A;
-        Wed, 23 Mar 2022 20:00:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A6B81C340ED;
-        Wed, 23 Mar 2022 20:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648065603;
-        bh=gDYLmJHTHA1I5fCV9vNQdTGcUZDrmr6ZaaX1mXQFTDg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=FS1ulpP8qRof5etfUSzY40ANSpoLoy8GDtoIzrDVkxssPeHDbof8TbFNxvy6f/MR9
-         AY53L1yOxHUlDgzq7Z/WPoGjYl/HrYrdSg6tThricqy17fr9u556BHv2cMauaJtJJk
-         V9kq2WWpV/pnPyyyaD0emxC52hAH1sMp/Hq71dLUfwLX6kaPw5x/SF09Ji9MdP1Nvp
-         wCKWTr9PSdxt5P62KY4m++DpVjAHtD4RzCr7WbPndjzxa/2kYokCu8iyfEmYjV/mlz
-         HQ+Ij6Zdt7iYBnY/AezUFLekRpuGy49zaoZDE9hezT58lhu+lHl3FEeRkuYGz6XkEH
-         h4b6omSozrEGw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F251E6D402;
-        Wed, 23 Mar 2022 20:00:03 +0000 (UTC)
-Subject: Re: [GIT PULL] KUnit update for Linux 5.18-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <d138a93a-997f-bfb6-6119-83aa2c00a49d@linuxfoundation.org>
-References: <d138a93a-997f-bfb6-6119-83aa2c00a49d@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <d138a93a-997f-bfb6-6119-83aa2c00a49d@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.18-rc1
-X-PR-Tracked-Commit-Id: 5debe5bfa02c4c8922bd2d0f82c9c3a70bec8944
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d51b1b33c51d147b757f042b4d336603b699f362
-Message-Id: <164806560358.26344.11058438695228933587.pr-tracker-bot@kernel.org>
-Date:   Wed, 23 Mar 2022 20:00:03 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Wed, 23 Mar 2022 16:46:05 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2952317E39
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:44:35 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id bg10so5271416ejb.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Mar 2022 13:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fku+6iImykDpE+CdH3YcTn8A/1C3dv28NZDezDdlHeA=;
+        b=rimwbpV92tuw99iYIZcPP347gpbCZyZKY7+HLhuMNjxqBEIUJGedYOaKWL8CI0zcSk
+         vOvurYQQum/fciyrg2WsD7KRdnRN+pzyneThjc5hZ4p9KDQDjUebNPa79cw/O9ozgLDp
+         Xpx0l5+IGUamRixms2I6vIeLiwe2x5bynRPuvNsf0deVj9wqEHDUfNnJZ4XuLEuj4P0a
+         7hZSB07TRVp/DXAvi9PttVy1r+lhb5gU36RkkslV7ZcBHZ3fRi7KfYhodu9VYeqBivYX
+         PcYIHKbjf1soCUSz2Z9y0OcvGrWzlU4lPgxesOi8bu2G6ItZi5AFOCcH+eeSON/HlZK2
+         MmFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fku+6iImykDpE+CdH3YcTn8A/1C3dv28NZDezDdlHeA=;
+        b=1GpxFB2pvmXvME0cAwr7ztLuZK9KmVFFuUDJ9jsDCDz0SKYAmLMLHlmBSbaZBwERjY
+         1kRPg+I2bUIZ9FbQxUlz1+KBMjcVSRpH/yr+i85JdPrMNcXqf85dADUKVsSCYzCySFFe
+         K8iimdlUQlL1uH6ILC32cEqydNzbMxzCp4DoCKr5TiflfZZ86cEeDmjl/DjjvcIBRRi1
+         bAFA1JjvL2FB2nCCMBMsFnbzkqcEbnrBA0qiGKwxOFPGVACRxe04ywJbcu73BBneNkOc
+         aN9VSwL97ZPNT8QkRf6ShzCcPoJOzbbC3fjdrJf4l2vmMnk9/mI4+W6ipqS7cQy195mX
+         hQYg==
+X-Gm-Message-State: AOAM5325TuAgNrfUEjnYglNEcwQNvV911ZcDKCmkWVakZ1WgMBW3mAe7
+        UJxnyRrqSPt25fGEiDwyOdI+JhRLQGU4XByLA0vgtCH/WBsKdw==
+X-Google-Smtp-Source: ABdhPJzbgI6L52aqCemnXWTbsdkQBP6+95otwHdTetv5DDL4bb/WZyoNa0gq2syjMy8NySL4wZvNGMiG7HH+7xh7pL0=
+X-Received: by 2002:a17:907:c018:b0:6df:e31b:d912 with SMTP id
+ ss24-20020a170907c01800b006dfe31bd912mr2121035ejc.196.1648068273445; Wed, 23
+ Mar 2022 13:44:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220118190922.1557074-1-dlatypov@google.com> <20220118190922.1557074-2-dlatypov@google.com>
+In-Reply-To: <20220118190922.1557074-2-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 23 Mar 2022 16:44:21 -0400
+Message-ID: <CAFd5g44Er-cy=uRENk3Myc_Hq1H9uxqWOzQ7A+3+F4_rU8DezQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] kunit: tool: make --json handling a bit clearer
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Mon, 21 Mar 2022 19:51:52 -0600:
+On Tue, Jan 18, 2022 at 2:09 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Currently kunit_json.get_json_result() will output the JSON-ified test
+> output to json_path, but iff it's not "stdout".
+>
+> Instead, move the responsibility entirely over to the one caller.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.18-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d51b1b33c51d147b757f042b4d336603b699f362
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
