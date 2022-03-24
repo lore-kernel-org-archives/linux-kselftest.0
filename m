@@ -2,128 +2,90 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AE26C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C05D8C43217
 	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Mar 2022 23:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355736AbiCXXUq (ORCPT
+        id S1355716AbiCXXUr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 24 Mar 2022 19:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        Thu, 24 Mar 2022 19:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355723AbiCXXUp (ORCPT
+        with ESMTP id S1355725AbiCXXUp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 24 Mar 2022 19:20:45 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3E553A62
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA6953A65
         for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id s72so5033617pgc.5
+Received: by mail-pj1-x1034.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso6612724pjb.5
         for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O+W+ADoWLoOEU6HBF2tydQ14SzjI5R4yTLibkuVNSzI=;
-        b=j81dgt71J0dbVcOzA5AbnzZ2giZC/bZ1k//nKXbyqwAoqAdx7xDLBPE08Y+w6zgljY
-         ht+5MxHamQSMEcHb+BnecXhzpA0uEAtXJG+6qN+P64TATCdQttlnTVttQeKgrcG2SxX0
-         ydlt4L8mOnm4EhQbR4vnVsmLeN52cxWdvZKt8=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aC5jQY9bRnYXoBxm9qQ+y9WHEA+pJxVxqWzjjYx0m1I=;
+        b=oA+MqEoqMQu9A6xghfI0ELS0LM4GC+4mjJLlvg2u64H/WKew5OS26j4VhdPFP9nJLN
+         D+Kiom5gt5FZ8Ma13gpxGCc8hEoqrSn3sRqDzYOl7P0cPtOJo/8aioVlTzfHueupvsgn
+         Sw4JoFlOz+3TxnbzEh2T9tNhddnekWpHPge9I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O+W+ADoWLoOEU6HBF2tydQ14SzjI5R4yTLibkuVNSzI=;
-        b=UaCRQPxMNgyyKFiAJ/uWZzqsjPzYnaCXuIYEBzgCYfa+UlqjJPce8aeVPnGACYMtEv
-         nMdAWyNxawpb0Od0nTTNi7LQVMA0kKhs0RP4pJZDFcaipIVDeH5o3Pf00Lkg4mXk2ePE
-         DMip5C3wboEAl7aUhHjwU/v5zeCdXnQS544UhqKYs+FwiKq2PNktCWHRF/OA5GudRkbq
-         oLLoCV3PGL40Umdin/wQGCaDybmHYYWtfVAh0cdBTOIXpreUsL238frzMPhhKXjvri3+
-         lWCP8q1vCzCwWpkM3C6osbJUrIq0hjXC9Zj6YML/uzvt5gjDYXJ3bSB8sVwfBfq6m7Xu
-         9YPg==
-X-Gm-Message-State: AOAM532/p/ultMsH9kH3aXtJA9jgZqLibktnBRxsuK4yC25BOwnRYTtc
-        t3/Fto1G9wIIgPd7XdIB5fFQ0Q==
-X-Google-Smtp-Source: ABdhPJwgn8KFoQhC6OlMAFWWee+pIw34BL/z1l6uAZT83dRmrhlsq00kPIDyo+QLfiGUltyKod5FbQ==
-X-Received: by 2002:a65:6753:0:b0:385:fa8a:188f with SMTP id c19-20020a656753000000b00385fa8a188fmr5725762pgu.499.1648163951829;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aC5jQY9bRnYXoBxm9qQ+y9WHEA+pJxVxqWzjjYx0m1I=;
+        b=as9JOosmYR7huRtmbyAdbHkkqq2RfALAaL4DBB5q8i0klUmLRADDU6UCnWl5zSGglW
+         2d1l3dCLW+NLdH405VaKXe3ze6VDP/Mw4zI2FiyqXdvRr+HE5vgjMSnKUvqT/xiGJ+Yc
+         oAJCZPuYgfLXMO518RHnw2A9TqE0yyhWBrQmYvDicaxPd9gTsWmLHKrbOVGL/Q2Dg1KZ
+         bvknx3LQaAME47pt2tXBNKECXRH9oFhFGJ6mZ3QibJmiMfwMSJNqG02CN3BdfyUNV+rJ
+         C7FKcz6TOTzKXjl0k1JHGUi/xLsl8Ryjct+S2YfQ46Nw9o9ymHjUnSKodvz7cZ5Q0qeX
+         dUiw==
+X-Gm-Message-State: AOAM5308fM75K/x4hE7aG8AcKYjMYvExbWYwjsX5BHlcNvozptl+Ve50
+        WH//Vu7BtHJV58/DDC2r5c5mrD0b1UA+3A==
+X-Google-Smtp-Source: ABdhPJys0y4Rqi32hQUzml9sTZ388KFpz7yOfQvUTUBaqOcXtzcvypFvAAVg8/s5kxR0ABf7GApT6A==
+X-Received: by 2002:a17:90b:4b4f:b0:1c7:d415:5b79 with SMTP id mi15-20020a17090b4b4f00b001c7d4155b79mr3707070pjb.96.1648163951978;
         Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm4445176pfh.83.2022.03.24.16.19.11
+        by smtp.gmail.com with ESMTPSA id pc13-20020a17090b3b8d00b001c775679f58sm8347708pjb.37.2022.03.24.16.19.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     shuah@kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
         Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
+        Will Drewry <wad@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2] selftests/harness: Pass variant to teardown
-Date:   Thu, 24 Mar 2022 16:19:07 -0700
-Message-Id: <20220324231907.1363887-3-keescook@chromium.org>
+Subject: [PATCH 0/2] selftests/harness: Run TEARDOWN for ASSERT failures
+Date:   Thu, 24 Mar 2022 16:19:05 -0700
+Message-Id: <20220324231907.1363887-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220324231907.1363887-1-keescook@chromium.org>
-References: <20220324231907.1363887-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2243; i=keescook@chromium.org; h=from:subject; bh=s5I+YaMjoeoicBYfZgT6+xmRuT2Bm5TDH0htvPF34tc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiPPxreGpnoDVxBHq9oVJfM656X06ztHfoXOlmN4Yv QJnuxHqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYjz8awAKCRCJcvTf3G3AJnT3D/ 0XU6tnnx16d5AyjCasjLRVDC5yZ/UlbVu0DMwVB+G1AhW8inYAXpheEnmign/IoRe60RQy98YQ6nSb tEKU3X9OgUOyMGUcLNPbe7fCAhyCeqU55cmNOF8T/c0/JQhA1IrlPKTXasQzxr+zyp/lqlq5jC2HNs FqvAVNihqqr0lNTtL8M966mwZJDCPkbT1MzbYNlJ0Ey+oG1Mj5g/QirkhhbAqC/HtHAg9v8As4p/wX q/1dXZp+roY4rcnaT/DK2WarVWsLCqCN23tazgJtdH2xchB/1DWEPypWIe6kOs6PTEj4Z1hSCBUNb/ fuSSKd/GccSxWd7PwA4dO3RzuChOjq8wF7bdozfLbUh7Zqyg7ag7KPYA9hMpN4oeUu9zVRmKH7oA4S Z8bMs2yvv0Fv8B0p9s5h7azjbi281KnpzFjLyuVCPZzw8H7vp+K3IVn7GO1IiW5dB0Vjh3PGAdRc7t 2xVsDe3lgxkEYLqcXtLk/ofsRGhFVrgcrr4dpP4KiqP8k0P2O+wD8yHUjiJPrb7+IyJLEGn/cojpkh DnE5srpBV6ofaLA/BL0HJkIlI2B7ESgczPoo5r2rRtCEfksQYTBoOn6duKvHRTABV8ZFPJXoMfDdrr ez8x6D3Pbk4hJs+wSy/heSsojmeCuuXgNK7jY/XX+ffGM7m/x9GtJkPyD0Aw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=578; h=from:subject; bh=eudHDlYS5FCMACsF/D8OI3ViMhC3c/UTt+QVDjCKUEM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiPPxqiFnYXLfN5FlkoqOQIU4BW60uwDtifEMQw2b+ qcYQYIaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYjz8agAKCRCJcvTf3G3AJvYaD/ 97JfOL/uskgeKMPuG9xP8+vzHXjf/RRqlLoVU3Adpf4IK5nhpHQktA2v0fuvR6f/q+m5IF40NNZOoc ydXWkt4r/eG02It9johJ1GuvN60PRdQe8ispjkQUCDoT5Kockw8YfFyKVcBslSSjS21mCZO8JUb3qd pmu4eivrwyV5jC+ZMIyoHkOHT28fBssdAI8gfYoPFJxPsKQIhevSVLPoxMikE2pPCPw4m8/J4KtcjK hR0YTVNm7gBvQGK857tDFVNcZebnFs+NHWSVIIiqPrmuFbDxw1gxE5zKTZhsj5JCb1iXOwAA4tQC8Z ipsOO5FlumCycIvkjblwG7XcZz/5AruCL1ge5KnkJRvTND3Zu8c2hM9IwAQqlM6QZSl+IQgF1CTeZ7 SrcFFNv/lrm53VY/eAkEn5FZZVD+qBUy/g7KO9GX3lWiQsJufD27QaF7Wh7RTT+Lnsiac2r6YyIDf/ 8defmq3MK4Phfd4E9BpO//rqR3z/hHwU68KWfRv0Ec2m5A95W6KPWNjwh0ySiMmu3TOMn0kDBCp1ik iAYtoWN2LZ2U8lXvaHzVmRq2xAd0Pzp2+lI7fTA1r7eo8bwV61ani75KOl8wrw0qpgNmZZAw3Eh68w NdyPPU2RXX7+QaGYqoCvWq1DjbvZBqzHQdpydNH3up9cpj59WQ37zUqY05Ow==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+Hi,
 
-FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as "variant".
+I've needed TEARDOWN for ASSERT tests for a while now. It just took me a
+while to figure out how to do it. Also included is a patch from Willem
+de Bruijn that got lost, which makes sure that variants are passed to
+TEARDOWN, since they may be needed there too.
 
-In some cases, the variant will change the setup, such that expectations
-also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
+Thanks!
 
-The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
-right above.
+-Kees
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20201210231010.420298-1-willemdebruijn.kernel@gmail.com
----
- tools/testing/selftests/kselftest_harness.h | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Kees Cook (1):
+  selftests/harness: Run TEARDOWN for ASSERT failures
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index bef08f824eb5..f5cb5fd1d974 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -291,7 +291,9 @@
- #define FIXTURE_TEARDOWN(fixture_name) \
- 	void fixture_name##_teardown( \
- 		struct __test_metadata __attribute__((unused)) *_metadata, \
--		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
-+		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
-+		const FIXTURE_VARIANT(fixture_name) \
-+			__attribute__((unused)) *variant)
- 
- /**
-  * FIXTURE_VARIANT() - Optionally called once per fixture
-@@ -306,9 +308,9 @@
-  *       ...
-  *     };
-  *
-- * Defines type of constant parameters provided to FIXTURE_SETUP() and TEST_F()
-- * as *variant*. Variants allow the same tests to be run with different
-- * arguments.
-+ * Defines type of constant parameters provided to FIXTURE_SETUP(), TEST_F() and
-+ * FIXTURE_TEARDOWN as *variant*. Variants allow the same tests to be run with
-+ * different arguments.
-  */
- #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
- 
-@@ -391,7 +393,7 @@
- 			fixture_name##_##test_name(_metadata, &self, variant->data); \
- 		} \
- 		if (_metadata->setup_completed) \
--			fixture_name##_teardown(_metadata, &self); \
-+			fixture_name##_teardown(_metadata, &self, variant->data); \
- 		__test_check_assert(_metadata); \
- 	} \
- 	static struct __test_metadata \
+Willem de Bruijn (1):
+  selftests/harness: Pass variant to teardown
+
+ tools/testing/selftests/kselftest_harness.h | 59 ++++++++++++++-------
+ 1 file changed, 40 insertions(+), 19 deletions(-)
+
 -- 
 2.32.0
 
