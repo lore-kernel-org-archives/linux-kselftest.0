@@ -2,91 +2,128 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26ADCC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Mar 2022 22:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AE26C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Mar 2022 23:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244301AbiCXWlL (ORCPT
+        id S1355736AbiCXXUq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 24 Mar 2022 18:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        Thu, 24 Mar 2022 19:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241538AbiCXWlK (ORCPT
+        with ESMTP id S1355723AbiCXXUp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Mar 2022 18:41:10 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763AADD60
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 15:39:37 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e689dfe112so47042497b3.20
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 15:39:37 -0700 (PDT)
+        Thu, 24 Mar 2022 19:20:45 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3E553A62
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id s72so5033617pgc.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
-        b=rJBaV6pGwEOAZ5/DKw9WgYD8sOUIGzatpRwyLoMMfvhusF5BeyvsRwUwZWCNGuIDQ1
-         nQB8oCdC9bv1EZ+2GtysbZIqyvqAenpHbQez/WxBwBE3CGVb3xXwPXtQKDi9eaWQ6y7j
-         ZKrHVPDblW1plXoohNvFqYI+YSZ7lUzU+JDZLa+az53ILzpYvrYIYeB4+yyJZ67EEn+X
-         fen1X83tGjPFdNkCIFZgPgVXkkcmBf7dBg8tE2ndTF7IzTTWpZI4Ahz8CtlYV5thWf5L
-         xduypsO2tFYJpKt92zfyi3vjDV+lUkUnpditqzgfS6Zi5K3l63GEjp2/MNklpuAspxgA
-         4uIQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=O+W+ADoWLoOEU6HBF2tydQ14SzjI5R4yTLibkuVNSzI=;
+        b=j81dgt71J0dbVcOzA5AbnzZ2giZC/bZ1k//nKXbyqwAoqAdx7xDLBPE08Y+w6zgljY
+         ht+5MxHamQSMEcHb+BnecXhzpA0uEAtXJG+6qN+P64TATCdQttlnTVttQeKgrcG2SxX0
+         ydlt4L8mOnm4EhQbR4vnVsmLeN52cxWdvZKt8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=YffvJKmqGnNOFrJNUBozqcvaEBhfok9GG307YN+iOis=;
-        b=uW6q91D3fWCuyhH410ps0DalpPOZbqnhbZoj2qBsZrTzDBa/QGLrM7f7/rMxanWhM2
-         4Y45yHnRlyhdJanS9THULKUCmoYMvDvu5POG7s8N6srK22H99BLjvFO9rizjeRvQXPLT
-         kVvqb8HV8+/+93XW4oy3nO4s3qqXPhKjW7OeDdvZ2fajmaZ74z7L5DLcAic06ur0WWOn
-         jyG2KX1r0CplKYQitoaYfK6FsVLOMZL3GPe/KyEyuZ4hGgQwgrTHdR/2t04+HVuRyuiU
-         eAOI/54HuM65z/afU3cK+uPbXF1D5Ls7XBBdDuX6zIIsR/t8twXWF68HBlGoi6x3tw09
-         QAQQ==
-X-Gm-Message-State: AOAM532x2XKfwlQtHm9c5Y6fDbrHij4ejh+wS00ErFHqb9SoorjTBmxA
-        V+RVkJ6Fnxu6LxhQr5EHmraoX/pFt6/+NkVi+lvF
-X-Google-Smtp-Source: ABdhPJzQniIe8bkEpjEUmGcF7TUYcFhdcZfxtrsrsS9hsTOunibTFJjXrnGim1HZIuwmtVj5ERBh+6ALOnRpNeXOLmhR
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:9892:9f7f:2c27:2968])
- (user=axelrasmussen job=sendgmr) by 2002:a25:3f87:0:b0:633:bbe5:c9d9 with
- SMTP id m129-20020a253f87000000b00633bbe5c9d9mr6992182yba.115.1648161576861;
- Thu, 24 Mar 2022 15:39:36 -0700 (PDT)
-Date:   Thu, 24 Mar 2022 15:39:29 -0700
-In-Reply-To: <20220324223929.1893741-1-axelrasmussen@google.com>
-Message-Id: <20220324223929.1893741-2-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220324223929.1893741-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH 2/2] selftests: fix an unused variable warning in pidfd selftest
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=O+W+ADoWLoOEU6HBF2tydQ14SzjI5R4yTLibkuVNSzI=;
+        b=UaCRQPxMNgyyKFiAJ/uWZzqsjPzYnaCXuIYEBzgCYfa+UlqjJPce8aeVPnGACYMtEv
+         nMdAWyNxawpb0Od0nTTNi7LQVMA0kKhs0RP4pJZDFcaipIVDeH5o3Pf00Lkg4mXk2ePE
+         DMip5C3wboEAl7aUhHjwU/v5zeCdXnQS544UhqKYs+FwiKq2PNktCWHRF/OA5GudRkbq
+         oLLoCV3PGL40Umdin/wQGCaDybmHYYWtfVAh0cdBTOIXpreUsL238frzMPhhKXjvri3+
+         lWCP8q1vCzCwWpkM3C6osbJUrIq0hjXC9Zj6YML/uzvt5gjDYXJ3bSB8sVwfBfq6m7Xu
+         9YPg==
+X-Gm-Message-State: AOAM532/p/ultMsH9kH3aXtJA9jgZqLibktnBRxsuK4yC25BOwnRYTtc
+        t3/Fto1G9wIIgPd7XdIB5fFQ0Q==
+X-Google-Smtp-Source: ABdhPJwgn8KFoQhC6OlMAFWWee+pIw34BL/z1l6uAZT83dRmrhlsq00kPIDyo+QLfiGUltyKod5FbQ==
+X-Received: by 2002:a65:6753:0:b0:385:fa8a:188f with SMTP id c19-20020a656753000000b00385fa8a188fmr5725762pgu.499.1648163951829;
+        Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm4445176pfh.83.2022.03.24.16.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     shuah@kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Willem de Bruijn <willemb@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 2/2] selftests/harness: Pass variant to teardown
+Date:   Thu, 24 Mar 2022 16:19:07 -0700
+Message-Id: <20220324231907.1363887-3-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220324231907.1363887-1-keescook@chromium.org>
+References: <20220324231907.1363887-1-keescook@chromium.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2243; i=keescook@chromium.org; h=from:subject; bh=s5I+YaMjoeoicBYfZgT6+xmRuT2Bm5TDH0htvPF34tc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiPPxreGpnoDVxBHq9oVJfM656X06ztHfoXOlmN4Yv QJnuxHqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYjz8awAKCRCJcvTf3G3AJnT3D/ 0XU6tnnx16d5AyjCasjLRVDC5yZ/UlbVu0DMwVB+G1AhW8inYAXpheEnmign/IoRe60RQy98YQ6nSb tEKU3X9OgUOyMGUcLNPbe7fCAhyCeqU55cmNOF8T/c0/JQhA1IrlPKTXasQzxr+zyp/lqlq5jC2HNs FqvAVNihqqr0lNTtL8M966mwZJDCPkbT1MzbYNlJ0Ey+oG1Mj5g/QirkhhbAqC/HtHAg9v8As4p/wX q/1dXZp+roY4rcnaT/DK2WarVWsLCqCN23tazgJtdH2xchB/1DWEPypWIe6kOs6PTEj4Z1hSCBUNb/ fuSSKd/GccSxWd7PwA4dO3RzuChOjq8wF7bdozfLbUh7Zqyg7ag7KPYA9hMpN4oeUu9zVRmKH7oA4S Z8bMs2yvv0Fv8B0p9s5h7azjbi281KnpzFjLyuVCPZzw8H7vp+K3IVn7GO1IiW5dB0Vjh3PGAdRc7t 2xVsDe3lgxkEYLqcXtLk/ofsRGhFVrgcrr4dpP4KiqP8k0P2O+wD8yHUjiJPrb7+IyJLEGn/cojpkh DnE5srpBV6ofaLA/BL0HJkIlI2B7ESgczPoo5r2rRtCEfksQYTBoOn6duKvHRTABV8ZFPJXoMfDdrr ez8x6D3Pbk4hJs+wSy/heSsojmeCuuXgNK7jY/XX+ffGM7m/x9GtJkPyD0Aw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I fixed a few warnings like this in commit e2aa5e650b07
-("selftests: fixup build warnings in pidfd / clone3 tests"), but I
-missed this one by mistake. Since this variable is unused, remove it.
+From: Willem de Bruijn <willemb@google.com>
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+FIXTURE_VARIANT data is passed to FIXTURE_SETUP and TEST_F as "variant".
+
+In some cases, the variant will change the setup, such that expectations
+also change on teardown. Also pass variant to FIXTURE_TEARDOWN.
+
+The new FIXTURE_TEARDOWN logic is identical to that in FIXTURE_SETUP,
+right above.
+
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Acked-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20201210231010.420298-1-willemdebruijn.kernel@gmail.com
 ---
- tools/testing/selftests/pidfd/pidfd_wait.c | 1 -
- 1 file changed, 1 deletion(-)
+ tools/testing/selftests/kselftest_harness.h | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-index 17999e082aa7..070c1c876df1 100644
---- a/tools/testing/selftests/pidfd/pidfd_wait.c
-+++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-@@ -95,7 +95,6 @@ TEST(wait_states)
- 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
- 		.exit_signal = SIGCHLD,
- 	};
--	int ret;
- 	pid_t pid;
- 	siginfo_t info = {
- 		.si_signo = 0,
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index bef08f824eb5..f5cb5fd1d974 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -291,7 +291,9 @@
+ #define FIXTURE_TEARDOWN(fixture_name) \
+ 	void fixture_name##_teardown( \
+ 		struct __test_metadata __attribute__((unused)) *_metadata, \
+-		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self)
++		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
++		const FIXTURE_VARIANT(fixture_name) \
++			__attribute__((unused)) *variant)
+ 
+ /**
+  * FIXTURE_VARIANT() - Optionally called once per fixture
+@@ -306,9 +308,9 @@
+  *       ...
+  *     };
+  *
+- * Defines type of constant parameters provided to FIXTURE_SETUP() and TEST_F()
+- * as *variant*. Variants allow the same tests to be run with different
+- * arguments.
++ * Defines type of constant parameters provided to FIXTURE_SETUP(), TEST_F() and
++ * FIXTURE_TEARDOWN as *variant*. Variants allow the same tests to be run with
++ * different arguments.
+  */
+ #define FIXTURE_VARIANT(fixture_name) struct _fixture_variant_##fixture_name
+ 
+@@ -391,7 +393,7 @@
+ 			fixture_name##_##test_name(_metadata, &self, variant->data); \
+ 		} \
+ 		if (_metadata->setup_completed) \
+-			fixture_name##_teardown(_metadata, &self); \
++			fixture_name##_teardown(_metadata, &self, variant->data); \
+ 		__test_check_assert(_metadata); \
+ 	} \
+ 	static struct __test_metadata \
 -- 
-2.35.1.1021.g381101b075-goog
+2.32.0
 
