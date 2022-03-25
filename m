@@ -2,203 +2,156 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6431C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Mar 2022 23:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2966C433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Mar 2022 00:08:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355730AbiCXXUs (ORCPT
+        id S1357031AbiCYAK0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 24 Mar 2022 19:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        Thu, 24 Mar 2022 20:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355674AbiCXXUq (ORCPT
+        with ESMTP id S1357046AbiCYAKU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Mar 2022 19:20:46 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B4353A6C
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id m18so1449542plx.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
+        Thu, 24 Mar 2022 20:10:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C52C1D33A
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 17:08:46 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id p15so12310253ejc.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Mar 2022 17:08:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hHqHFFpa5oC69fP2FCgHGpOKvKQX1YCTBf3TwuzqoNE=;
-        b=fbPYArlQx50iamshoEvn1TUlzgo8nWqHeGT1DZrpWtdbibFNTV6wW8L8MN+mUwu78D
-         j7P2ArS6H90s7rwUyr0sxDKM9fsF1WYahCHQ7azDJj9iWysPgN+3SlUgNK5M2AHrc81M
-         ttdYc+utjjAxAxTilwOxhrxnbY4W3GIr5grwM=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y7wMnxNk+tFQvni2rBWt4t7AH2KkYUciRkPUXBc+4o4=;
+        b=f9A+eMl7EIu4/AUZVRTIHt1/Jclk2w65EZD4M1fVInUFYkMY62B9XCbYLOQ9lelSOq
+         WX6/E9XvZjmW9v+So29/74XblXh0K+g9/0bgaA3jGgXqvFZPmi+MZR6QFoUSR0cpuIOH
+         YCpEtVljNca9GODUpUNJpxT8LtBZOXCG716+ML1A+1gHLTC/otq8ajFrX9uAaUD1dPBK
+         gzlULoVQgRZ1IEHRJ+vihgFeKF4meKGqHI3L1JlDijLbOlo5E3ecMydLHUGbBIYKXzXH
+         kbqZq7c/SwJr0HudXd/ooG8Prjs8LX0IXbAXTLZ7K3iKxIh4jpOmx23DM6ZnnHdr6J1a
+         FMSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hHqHFFpa5oC69fP2FCgHGpOKvKQX1YCTBf3TwuzqoNE=;
-        b=HCEr3jkdOfXozBxTDNy05uoweRsiXo2KhNsdc9eaI9qD9xyw7cIziMxhCVsFKy13q8
-         JjW9meq7Ioe/8uukiu1iurlU5z8Vd/XUuSJKQ10vvX3YYwt28IL/BkfV4k1AbIYZFYDh
-         KSBX7gCFNP13vGCPYUdTr9yL7jlJFCVTMgNA3D9Kz8rl9R/GRNn/DKlTfA1E+YmAFky+
-         L/Mrcx8BIiHzsuMLgyfeNqdxQoacOpf0W0J3JoEU4VMhp0knee2RV2g493igR22LOVDu
-         jospj4D79NPKiBxCl07amqzqM2H3IOJRE8Ey8piMy3WvUF/38/AwgSGpliqromWppBOA
-         O+SQ==
-X-Gm-Message-State: AOAM531xpbdkIXP7DINw0t42tFhzdSKOA6x3Kt1TFLw2Dq1lsXqdddYr
-        G58SM++bDh0iHqkFO5BDrXDjlw==
-X-Google-Smtp-Source: ABdhPJyinT6/QqXNhFeVGMB3xAneGt9oNUVvO0KLBd4YjvoKSluJGfVLAlNsGCC57y/VWwRG5TTJ7w==
-X-Received: by 2002:a17:90b:4c09:b0:1c7:6c8:43c8 with SMTP id na9-20020a17090b4c0900b001c706c843c8mr9032037pjb.208.1648163952166;
-        Thu, 24 Mar 2022 16:19:12 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm4532608pfi.170.2022.03.24.16.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 16:19:11 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     shuah@kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 1/2] selftests/harness: Run TEARDOWN for ASSERT failures
-Date:   Thu, 24 Mar 2022 16:19:06 -0700
-Message-Id: <20220324231907.1363887-2-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220324231907.1363887-1-keescook@chromium.org>
-References: <20220324231907.1363887-1-keescook@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y7wMnxNk+tFQvni2rBWt4t7AH2KkYUciRkPUXBc+4o4=;
+        b=mHZ1U1hLJC6fazOk3wLRyaH2k2Ojn/rmZZSe/xrsTiwOMPYsJVT1KjwZw0X1G/fBDX
+         mtp5kagDybgPLF9p9x9cQJgw8pb9QROQhxrNoIlnaaLTZARkaAT18jvW5htNSIjrx6/4
+         5K90DNl7G7X9vNWNTAknX3VJc+SeOXvBuvlU9IAwrF1cqJF5ibdlqQqpbKrLk5on4Spp
+         RYBD2ThjhspxPygAqnpWGQxMsx9E7lYj9CDb+eOJuD4+68tLEGBIQgUBYVaVUhzIOFA3
+         s9oSwEq6BcPxO0PH8wmVua4R9A469FbkyakOi+/0/Fti9f0vjXsXAFZqS/WX1qaZ7BX5
+         1MHw==
+X-Gm-Message-State: AOAM530hi21qOPI55IeGn1snVJLm8yBzjbYuAxx1vuD0+PkYsTcwTRKM
+        eXE0G4Nk2Ra3fPU5bpe9joBr59SyvelVs1RYYovDGw==
+X-Google-Smtp-Source: ABdhPJwOqL0/px4nT//CIWu4d9IwswpkLRJw00d9Z2tKOIp2ubo1jTlzaXKnFSAQBUGcr6u2xzSDR/uocFsYUrUSOJw=
+X-Received: by 2002:a17:906:c282:b0:6ce:369d:3d5 with SMTP id
+ r2-20020a170906c28200b006ce369d03d5mr8781565ejz.425.1648166924426; Thu, 24
+ Mar 2022 17:08:44 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4758; h=from:subject; bh=0T38HzU8+bm6Q63KaidvXUMnrp8eZqY57zLg3zH/o/A=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiPPxqSDr1CXvbwH34M5fSblmZaNneFSzMpiTGM0d/ 90+F5zOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYjz8agAKCRCJcvTf3G3AJvTkEA CiPMfWYC5z46AFuK+F0bbhaBC7z8ty/oP2ut2DxuQ9zJF5vCCWzPy8utegmyQzqLf2G0eVtyqOGLA9 z9R9IsyvhdqahTqCs4CnSQM+1ExmovNFrvnxVm2MPTC4Hw4HOrEXQ147p6fAyWRHJXku5oFEicURd8 +Zav83ohj2PSDwsvr/O7zOcbXlCptbA9XeyFUqoFbGRK3knG7QFNXnePKxARzYFkCiwemV+3RnC2eZ r+f8i8t+E1Z74jecj/DYjKuhRsdi7sx7YuwJ6SfmOfSt89ajcL/MDUMfBVday5TkZmsCw74zvi+8pA xSfHgm/rTyrCU68weOtWsZrr9mQ5kI9lFA/aISU/JWE/zf4vJwDwc/8jeU/W/Nf+YFnLo4Q0Su+2LJ MfywZYFxT8F1GLSpi6ncvYYtE4kxAmCztIu1lHc7o7ZKWX6OTj/MwQsHB5JZNw1W0J2HjJHzKzHdUM GwNTfZO9OBUqsk1YcIn/vK/NcjdTLFG5rlOTct+BXr4wH5SKU+vorUrHFUi8Eb8HeoW5ARNLN+4CrH TuXaXLkeDaI3rmiXb3dztoHGv9DQwncJ8OoYZXDdt+8W3BKZq1kHvSptD1ILQDf2LcU8l2eMnsSvqB 2pmEvJ+17rfn/4DFUN/oLJehWqghehI/Pgx8U/7OqYsr3S+7+DdQVs9kj78g==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20220316024432.1454366-1-dlatypov@google.com> <CABVgOSkvmuiHfG11VRsQhigOLw_-5HYWjJrQrA4Vy18MvUpW9w@mail.gmail.com>
+ <CAGS_qxpCoyr0_xpRVpjMwAALn49iShGAs-MuBrYHwrEJhKcZUA@mail.gmail.com> <CAFd5g46N6kbcknJxAug3nkEqe5Q+UuqYAfh8AhPkfPzeQFX8PA@mail.gmail.com>
+In-Reply-To: <CAFd5g46N6kbcknJxAug3nkEqe5Q+UuqYAfh8AhPkfPzeQFX8PA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 24 Mar 2022 19:08:33 -0500
+Message-ID: <CAGS_qxrHQvYfe0qimYxrqmbszWASwHVokDTS3+4X6Ehqpa1Nhg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: split resource API from test.h into new resource.h
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kselftest test harness has traditionally not run the registered
-TEARDOWN handler when a test encountered an ASSERT. This creates
-unexpected situations and tests need to be very careful about using
-ASSERT, which seems a needless hurdle for test writers.
+On Wed, Mar 23, 2022 at 6:51 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
 
-Because of the harness's design for optional failure handlers, the
-original implementation of ASSERT used an abort() to immediately
-stop execution, but that meant the context for running teardown was
-lost. Instead, use setjmp/longjmp so that teardown can be done.
+<snip>
 
-Failed SETUP routines continue to not be followed by TEARDOWN, though.
+>
+> Another alternative workaround is to split even more stuff out into
+> other header files.
+>
+> Personally I would prefer not to wrap the lock/unlock functions; I
+> like seeing the kind of locking that's happening. Plus, such a helper
+> would be pretty gross:
+>
+> void kunit_lock(struct kunit *test, unsigned long* flags) {...}
 
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- tools/testing/selftests/kselftest_harness.h | 49 ++++++++++++++-------
- 1 file changed, 34 insertions(+), 15 deletions(-)
+That's exactly why I didn't bother to try and wrap it, yeah.
 
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 471eaa7b3a3f..bef08f824eb5 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -64,6 +64,7 @@
- #include <sys/types.h>
- #include <sys/wait.h>
- #include <unistd.h>
-+#include <setjmp.h>
- 
- #include "kselftest.h"
- 
-@@ -183,7 +184,10 @@
- 		struct __test_metadata *_metadata, \
- 		struct __fixture_variant_metadata *variant) \
- 	{ \
--		test_name(_metadata); \
-+		_metadata->setup_completed = true; \
-+		if (setjmp(_metadata->env) == 0) \
-+			test_name(_metadata); \
-+		__test_check_assert(_metadata); \
- 	} \
- 	static struct __test_metadata _##test_name##_object = \
- 		{ .name = #test_name, \
-@@ -356,10 +360,7 @@
-  * Defines a test that depends on a fixture (e.g., is part of a test case).
-  * Very similar to TEST() except that *self* is the setup instance of fixture's
-  * datatype exposed for use by the implementation.
-- *
-- * Warning: use of ASSERT_* here will skip TEARDOWN.
-  */
--/* TODO(wad) register fixtures on dedicated test lists. */
- #define TEST_F(fixture_name, test_name) \
- 	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
- 
-@@ -381,12 +382,17 @@
- 		/* fixture data is alloced, setup, and torn down per call. */ \
- 		FIXTURE_DATA(fixture_name) self; \
- 		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
--		fixture_name##_setup(_metadata, &self, variant->data); \
--		/* Let setup failure terminate early. */ \
--		if (!_metadata->passed) \
--			return; \
--		fixture_name##_##test_name(_metadata, &self, variant->data); \
--		fixture_name##_teardown(_metadata, &self); \
-+		if (setjmp(_metadata->env) == 0) { \
-+			fixture_name##_setup(_metadata, &self, variant->data); \
-+			/* Let setup failure terminate early. */ \
-+			if (!_metadata->passed) \
-+				return; \
-+			_metadata->setup_completed = true; \
-+			fixture_name##_##test_name(_metadata, &self, variant->data); \
-+		} \
-+		if (_metadata->setup_completed) \
-+			fixture_name##_teardown(_metadata, &self); \
-+		__test_check_assert(_metadata); \
- 	} \
- 	static struct __test_metadata \
- 		      _##fixture_name##_##test_name##_object = { \
-@@ -683,7 +689,7 @@
-  */
- #define OPTIONAL_HANDLER(_assert) \
- 	for (; _metadata->trigger; _metadata->trigger = \
--			__bail(_assert, _metadata->no_print, _metadata->step))
-+			__bail(_assert, _metadata))
- 
- #define __INC_STEP(_metadata) \
- 	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
-@@ -830,6 +836,9 @@ struct __test_metadata {
- 	bool timed_out;	/* did this test timeout instead of exiting? */
- 	__u8 step;
- 	bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
-+	bool aborted;	/* stopped test due to failed ASSERT */
-+	bool setup_completed; /* did setup finish? */
-+	jmp_buf env;	/* for exiting out of test early */
- 	struct __test_results *results;
- 	struct __test_metadata *prev, *next;
- };
-@@ -848,16 +857,26 @@ static inline void __register_test(struct __test_metadata *t)
- 	__LIST_APPEND(t->fixture->tests, t);
- }
- 
--static inline int __bail(int for_realz, bool no_print, __u8 step)
-+static inline int __bail(int for_realz, struct __test_metadata *t)
- {
-+	/* if this is ASSERT, return immediately. */
- 	if (for_realz) {
--		if (no_print)
--			_exit(step);
--		abort();
-+		t->aborted = true;
-+		longjmp(t->env, 1);
- 	}
-+	/* otherwise, end the for loop and continue. */
- 	return 0;
- }
- 
-+static inline void __test_check_assert(struct __test_metadata *t)
-+{
-+	if (t->aborted) {
-+		if (t->no_print)
-+			_exit(t->step);
-+		abort();
-+	}
-+}
-+
- struct __test_metadata *__active_test;
- static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
- {
--- 
-2.32.0
+>
+> It wouldn't actually clean up the call site, just facilitate breaking
+> out code into a header.
+>
+> > > making users include this separately is probably the right thing to
+> > > do, as nesting the headers like this is a bit ugly, but I won't lose
+> > > sleep over leaving it till later.
+> >
+> > Ack, I can add a TODO to indicate we want to clean this up?
+>
+> I am fine with this.
 
+To clarify, are you saying you're fine w/ the nested header as-is, or
+fine with it + a TODO?
+
+>
+> > It's a bit annoying right now, but it'll only get more annoying in the future.
+> >
+> > >
+> > > >
+> > > > Now the first big comment in test.h is about kunit_case, which is a lot
+> > > > more relevant to what a new user wants to know.
+> > > >
+> > > > A side effect of this is git blame won't properly track history by
+> > > > default, users need to run
+> > > > $ git blame -L ,1 -C17 include/kunit/resource.h
+> > >
+> > > This is a pain, but is probably worth it. Thanks for including the
+> > > command in the commit message, which should mitigate it slightly.
+> > >
+> > > >
+> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > > ---
+> > >
+> > > This was starting to annoy me, too, as it was a pain to read through
+> > > everything in test.h. It'll be a bit of short-term pain,
+> > > merge-conflict wise if we have other changes to the resource system
+> > > (which I fear is likely), but is worth it.
+> > >
+> > > Reviewed-by: David Gow <davidgow@google.com>
+> > >
+> > > -- David
+> > >
+> > > >
+> > > > NOTE: this file doesn't split out code from test.c to a new resource.c
+> > > > file.
+> > > > I'm primarily concerned with users trying to read the headers, so I
+> > > > didn't think messing up git blame (w/ default settings) was worth it.
+> > > > But I can make that change if it feels appropriate (it might also be
+> > > > messier).
+> > >
+> > > Personally, I think it's probably worth splitting this out as well.
+> > > And the sooner we do it, the less history we'll obscure. :-)
+> >
+> > Yeah, that was my thought.
+> > But if you think this would help users, then I think we have a case to
+> > make this change.
+> >
+> > Should I send a v2 with resource.c split out?
+> > Brendan (and any others who have an opinion), what's your preference?
+>
+> I personally don't think test.c is so huge that it is a problem to
+> understand, but I can see it getting there.
+>
+> If it's going to happen, sooner is probably better.
+
+Ack.
+I can work on adding a second patch on to this series that splits out
+resource.c?
+
+That causes more churn for the other in-flight patches, but we already
+have some since David has some changes in test.h.
