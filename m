@@ -2,77 +2,97 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE4CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Mar 2022 17:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91684C433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Mar 2022 17:40:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiC1RHs (ORCPT
+        id S238341AbiC1RmL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Mar 2022 13:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        Mon, 28 Mar 2022 13:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244373AbiC1RHs (ORCPT
+        with ESMTP id S244624AbiC1RmI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:07:48 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BFC62110
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Mar 2022 10:06:06 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id w7so25899855lfd.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Mar 2022 10:06:06 -0700 (PDT)
+        Mon, 28 Mar 2022 13:42:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA17D5D1A2
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Mar 2022 10:40:26 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bg10so30214374ejb.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Mar 2022 10:40:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jOAa7WpMNgbqgji3fRQGom5Ba+QYEkdDzROArpIBjvc=;
-        b=ENw5v98dathuIv0v3Q532b+NqOLHiJ3fyUjwxxYyseIx+Nx5kyLtsaLjIcefkdeNL9
-         IS6mlD38Idl9cNFzUflS7/2bSe2H7jFluyt13j3tgOhoffcXGXLpz23Ge1bsEIbDnUbs
-         uddK+qnZk5D44idwiIMTVrkTNlCVx83nc1JIxtSICXQJtfnKuLN4r5aFF3zd4PP2jBR+
-         W5DUogc99JJoE1vCVXg6EKYnkXel5NSQI4bV+tkaNEPPGtApavU02ID1WMvX5Qufg8y0
-         PzzkYtZ72vpzJUSjqofTtQk6sJM5nkuZBHNUjZ26vrcxREbqZBunnlsTnWE/4lXHcsYR
-         zFXg==
+        bh=jt/2KJODcgfg0427B2D9EMe8ii/7j8vJOFClANb3PD0=;
+        b=AIx7uFeBO7lezvIfbwU6IX2xiruO53nNSMLWYwdOxDucBEV2PxHLFJojbplpKiVB1C
+         aDvZnIIrbYCYvNyDBBdDhSsPJE0TG1vXL/+ARJ+2Wv7EHWJ+54rlhXes03XZRTHacBA4
+         cfEQX5YLfQaiQqYbkIR27B7WnvXwhz/7RenoWcJ3158WT3DMMKcNnAkJH7GPN525P7hj
+         J9cUBslhYZwxudBmBR/Lh/PJPKw2MDBebfYmCdZZqh8xjsiP1PUozNicgLb0d2EXpLyu
+         oyo9tBgeDNfEl9eVVi5PwPqBUaBTbJws67i5wjUo4V9mQHOvbF8OMIc28rGvLBpV84cX
+         xkAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jOAa7WpMNgbqgji3fRQGom5Ba+QYEkdDzROArpIBjvc=;
-        b=P1r7h5gAYVyIUBFl9Shm4i/JgX9tA1YGYu151JZlaTCMBslkvCU/7Bt02IJ9ZKAdxu
-         TtSzXgJxfZSR5yLfMMaqWrm2bhJiMMX5PvjvN5e/d8bAwiHh4eWJFQyFe0tP0Rx8ASoq
-         ekFBhX5sIBb4frPoszHtbFRBaJEUCCVFjIawhvUs+4ZNOHZ+sWiGomtc/8SX8KNOa/6d
-         sDs5PoX8jOjtdHO80pTswn7ud/uI7s8L3aMUjmdwA0SaVgssD/Aw5+e/bpyG+4cvUk2i
-         i5bpIShNvwFMm0Yos0Qx12G06zt0a+DHiZNUn/GigtOqEdM45ReeVnxBHj6BfqpBq5LO
-         LQbg==
-X-Gm-Message-State: AOAM532kWm4UYUWzDXnSViR/k7PaMu8dmYG48pVCcsIQmvpNTLRr+/U0
-        Rooj3IY3+7BwldOmaV3D50S8VQ7G2Q3hY3KXN0bs4n/stoZlew==
-X-Google-Smtp-Source: ABdhPJxr5kjWcCV8tG3lkJMUxSBK+Y8LJ8mhkQigVG3HvLYkVCUYHLrC4mkFAkK1Pl+r45CjbUgT+lgIchcrUtFocJo=
-X-Received: by 2002:a17:907:d06:b0:6e0:e2f5:4f55 with SMTP id
- gn6-20020a1709070d0600b006e0e2f54f55mr13018196ejc.618.1648486724923; Mon, 28
- Mar 2022 09:58:44 -0700 (PDT)
+        bh=jt/2KJODcgfg0427B2D9EMe8ii/7j8vJOFClANb3PD0=;
+        b=KPnhKHJJ5LsZBYFjNXDtmlO7jWCObRSU7v9j5N/v3J466I7/oHfnYFGmPufzQPuCA4
+         uYKjt2AbMOQPe20IExBH8DkeXlYdsB5c/ePnaHsWo49pjsxLzMHuQxvK55F4T8zC7Mxn
+         BllD/oeyHSqWBxoBXsgUF0D7VHT/d9kZ5PAKK23oinBKtGQzqPipZ+V4XZIgqFK6eNLo
+         2JfJyDK5Aa6pS2cER+BCPznlBlsMBjFF4uc49hignbEPH7fK5uwLr4OzGkbqCX31O8Tm
+         tq5MMgb1EFJFmmI9KwxYUlMC3o6ax0Zjwd/w1d9+cPXN7l5oiCiraS6mKO5FQIQ9DKaN
+         WTzw==
+X-Gm-Message-State: AOAM531jxZjlEsfiLjF4vqOffiuhOs1s57qz/UFK8dL2vCodLoqGdZvt
+        aCaiALLC+zKAGgEPwYBFsBz34A5U7pts1mtRJDPSmw==
+X-Google-Smtp-Source: ABdhPJwsOs66+UXvMtZ/P41ZXdOJx64Q6ugDoNZ7WVGczKBfExknstGF3U0wlEmtO6Rzb3z7Wv0hB75cIK9CqpLelOA=
+X-Received: by 2002:a17:906:c282:b0:6ce:369d:3d5 with SMTP id
+ r2-20020a170906c28200b006ce369d03d5mr29674650ejz.425.1648489225178; Mon, 28
+ Mar 2022 10:40:25 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220326002013.483394-1-dlatypov@google.com> <20220326002013.483394-2-dlatypov@google.com>
-In-Reply-To: <20220326002013.483394-2-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 28 Mar 2022 12:58:33 -0400
-Message-ID: <CAFd5g47yH1bOCHS4JDSw0=bzpqj6bECy564=gUKTBzwjXjk-Wg@mail.gmail.com>
+ <CABVgOSm+o=t=8hgR=T676rHJjWp0p-VXeoZt28G0kVqURqCGMg@mail.gmail.com>
+In-Reply-To: <CABVgOSm+o=t=8hgR=T676rHJjWp0p-VXeoZt28G0kVqURqCGMg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 28 Mar 2022 12:40:14 -0500
+Message-ID: <CAGS_qxrx-ZMUhTqkfOEGsA5O0cZW13mNmo4YV-2n7-wiUAeHkA@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] kunit: split resource API impl from test.c into
  new resource.c
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 8:20 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Fri, Mar 25, 2022 at 11:27 PM David Gow <davidgow@google.com> wrote:
 >
-> We've split out the declarations from include/kunit/test.h into
-> resource.h.
-> This patch splits out the definitions as well for consistency.
+> On Sat, Mar 26, 2022 at 8:20 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > We've split out the declarations from include/kunit/test.h into
+> > resource.h.
+> > This patch splits out the definitions as well for consistency.
+> >
+> > A side effect of this is git blame won't properly track history by
+> > default, users need to run
+> > $ git blame -L ,1 -C13 lib/kunit/resource.c
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
 >
-> A side effect of this is git blame won't properly track history by
-> default, users need to run
-> $ git blame -L ,1 -C13 lib/kunit/resource.c
+> Looks good and works fine here. I'm going to try to rebase most of the
+> other resource system stuff I'm working on on top of these (which will
+> likely end up moving a bunch of code _again_, but is probably the
+> least terrible of all the available options).
 >
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> One nitpick (newline at end of file) below, otherwise this is good.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Huh, I had thought checkpatch --strict would catch this.
+I guess not.
+
+Fixing this and sending out a v3.
+
+>
+> Reviewed-by: David Gow <davidgow@google.com>
