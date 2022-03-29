@@ -2,124 +2,186 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C9B4C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Mar 2022 21:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 628E3C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Mar 2022 22:54:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbiC2Vop (ORCPT
+        id S238503AbiC2W4H (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 29 Mar 2022 17:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
+        Tue, 29 Mar 2022 18:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiC2Von (ORCPT
+        with ESMTP id S238547AbiC2W4G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Mar 2022 17:44:43 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1DB38BDE
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 14:43:00 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2dc7bdd666fso154630487b3.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 14:43:00 -0700 (PDT)
+        Tue, 29 Mar 2022 18:56:06 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C52BA33B
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 15:54:22 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id j15so37987131eje.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Mar 2022 15:54:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=MPuCjGFRCgC2i5OJuvXhL/tDoctAierRSaLs34LAj+8=;
-        b=Ckg8PgV4Y5J+WH6h8bc2lXH7ZAQEOvLdyTpGeaNlrns1vLITdVrGSmez1YsZlH03n0
-         WWU0gIWuWiAVcvegJDqBLIOOVDpmt+zbH4LKG88u6XPH/H1SAWnfnVPNX7l+hbeWRJyo
-         Hq88vSNuKVU2MexMDV4OeV0Dh1DP7rQDePvbMZRuGl7MdAsRjW3w/6+J0wsI5QcRxobg
-         REJMBOid2aEIjcw2NylrRbWQ9NkBP/2OAfQuEet4ZrxkGsN+urNIaJG2JUrAWAN8Vbxy
-         mQOYkQMss5W2eG/VMYVOD7sL1Jc2/HRMIZLeJaz0XwEmkXCdmEVG1HEzMnQddwujebXu
-         JlHQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zd9bA/vVsUljfZ2zHhaCGxU4BtZMVvpzyOofaCZaWSI=;
+        b=jk/9TmsoatIgO07065kxR/5mB1wQ8q4FUWIvnM39nXT7UfRE+1LkZl/noVHNBe5oT3
+         GH7nAcSb6gtqiNbisLO2gWbXMx8YcXx6uQ2Lyyj+sNMuf1JFkbhUscK/ZZK/njpz1XgI
+         HlWL7fwMMn2nk+x+Rdox8d8O8cyRaBtZFgTT8AOObpFDivUSvnkz++BBkIZWHrJCMdEV
+         LbmUlyzSAzIJrNbAm3a2J7dv/cypv+lwBYSxsEClhOFnBWXtN7J1Zlj11np+Wf7zGT2B
+         vzxftyArV2jMUz4zQrAQ/+lu4yjtPE8xV29c0K6DeI1RQB+t8L20MwR4HS2IpJ7r9IgB
+         bnJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=MPuCjGFRCgC2i5OJuvXhL/tDoctAierRSaLs34LAj+8=;
-        b=3NdP/8dGDQ33dNtAewKZvQ6GCE9SgpQmjcD6RmlMjXNrepOfO980b6TbF8p3+YuVo0
-         Uw0qyPjxV9TEFVqOOlgBE+Yb5Y4lF3VBc6UcMLyLvUo3efbh/RC7KYHqAML/wkJ5uyjt
-         K5SNkL98v+unYQ7yycwRpr+twA9gMS8tq8uW9hRo5Fno9YRjHHBke+rR+p5WWANh7EGX
-         zmDafrhEk//nXrxmd+7Rl9RwmL/GUXlH0gMNNsIjgRVQiAo+iP6tFfAtLRS0xzvtOj6I
-         B3S/wPHVi8W0LZnwWzK7Kwzb3jDHwol60Vy7adaa4TRCOb+pjvQ6bvsyX31CU/MEWk6M
-         +V0w==
-X-Gm-Message-State: AOAM53266uuxDl6xjP/fgobxRxrIf8kv0fKIcUfADMr0jBxWLdIgFmd4
-        yZiEtH1y+9QxBEsVmSNdDv5HlnImpTQWWA==
-X-Google-Smtp-Source: ABdhPJxgwS59m++wv0AAc8cTwrw4lPFrVjuIFqtg/grH47+/aNAcU6p9KVXhnM1BzsC2BbyrBVCMiLBX9l23pA==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:d547:f5e2:5493:d519])
- (user=dlatypov job=sendgmr) by 2002:a25:bf88:0:b0:633:93e9:b2fc with SMTP id
- l8-20020a25bf88000000b0063393e9b2fcmr29718813ybk.202.1648590179382; Tue, 29
- Mar 2022 14:42:59 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:42:48 -0700
-Message-Id: <20220329214248.1330868-1-dlatypov@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH] kunit: tool: print clearer error message when there's no TAP output
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zd9bA/vVsUljfZ2zHhaCGxU4BtZMVvpzyOofaCZaWSI=;
+        b=CMDG6bCG7ID6EaF6rVbYw1T+7LjTRCWS4ocrYvsaKN7/IaDcl6uhSCuOIB+MlkDPxO
+         gvH2wTn4n6WrbWcIprrkV2YdxA5RxaViP87ptW+ix7YCBHq8Kh9Mfa9pEL/DaC62S+la
+         QyKEaCpiJ5s714DYyNvmQogb8ZOAByaWgwBg7Q8ubTISVkvPI2az5TL++FImskdoNZJ1
+         eXxPk2VobXCoMv4hMZTJtEJx3pAj0FsH6Qup26xpOJzdI4URUkNZKwViz5h/L9qskU6Q
+         kggA1OCEyPvshn4mJ5+qzne8/0m0ba+kHxbiTwxcYHbCbWNhOg1H91xEiuAOdF6wrHrJ
+         +1lg==
+X-Gm-Message-State: AOAM533m2yWNrLeHksB8BRl1G70CaEa6WYgYUk1Zv6VzK4V1rloBxaEe
+        9oRvKTWB8735sNW/5nDdyEZ9E3OAAktRh7EmuGwGZg==
+X-Google-Smtp-Source: ABdhPJxwwDVBkhAhwsoFm6aYbSMA/hHzkmazRu/kdl9EQO+9cGUdq6cPt2m4qwpklWi6AbAZ/G+JEZ1xcJeV2qm3IGs=
+X-Received: by 2002:a17:907:1622:b0:6df:d1a2:d4a3 with SMTP id
+ hb34-20020a170907162200b006dfd1a2d4a3mr35715153ejc.542.1648594460875; Tue, 29
+ Mar 2022 15:54:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220329103919.2376818-1-lv.ruyi@zte.com.cn> <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
+In-Reply-To: <CAGS_qxpCHgp7ToQV9UALPy-4nyHDcdpWOCCd3duz-L6EgYPpOg@mail.gmail.com>
 From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 29 Mar 2022 17:54:09 -0500
+Message-ID: <CAGS_qxr1VZz+Tzxpwzcx_HtPhWxSONPYEshPNyf=diUw2X6VDg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: add null pointer check
+To:     cgel.zte@gmail.com
+Cc:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Before:
-$ ./tools/testing/kunit/kunit.py parse /dev/null
-...
-[ERROR] Test : invalid KTAP input!
+On Tue, Mar 29, 2022 at 2:29 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Tue, Mar 29, 2022 at 5:39 AM <cgel.zte@gmail.com> wrote:
+> >
+> > From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> >
+> > kmalloc and kcalloc is a memory allocation function which can return NULL
+> > when some internal memory errors happen. Add null pointer check to avoid
+> > dereferencing null pointer.
+> >
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> > ---
+> >  lib/kunit/executor.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 22640c9ee819..be21d0451367 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+> >
+> >         /* Use memcpy to workaround copy->name being const. */
+> >         copy = kmalloc(sizeof(*copy), GFP_KERNEL);
+> > +       if (!copy)
+> > +               return NULL;
+>
+> While this is technically correct to check, in this context it's less clear.
+> If we can't allocate this memory, we likely can't run any subsequent
+> tests, either because the test cases will want to allocate some memory
+> and/or KUnit will need to allocate some for internal bookkeeping.
+>
+> The existing code (and by extension this patch) "handles" OOM
+> situations by silently dropping test suites/cases.
+> So I sort of intentionally figured we should let it crash early in
+> this case since that's probably more debuggable.
+>
+> This code does check for NULL returns earlier on in the call chain, i.e.
+>
+> first in kunit_filter_suites()
+>    158          copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+>    159          filtered.start = copy;
+>    160          if (!copy) { /* won't be able to run anything, return
+> an empty set */
+>    161                  filtered.end = copy;
+>    162                  return filtered;
+>    163          }
+>
+> and second in kunit_filter_subsuite()
+>    107          filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
+>    108          if (!filtered)
+>    109                  return NULL;
+>
+> The first kmalloc_array() is our first allocation in this file.
+> If we can't handle that, then things are really going wrong, and I
+> assumed there'd be plenty of debug messages in dmesg, so silently
+> returning is probably fine.
+> The second one also felt similar.
+>
+> So I think that
+> * it's highly unlikely that we pass those checks and fail on these new
+> ones (we're not allocating much)
+> * if we do fail, this is now harder to debug since it's partially
+> running tests, partially not
+>
+> Should we instead rework the code to more clearly signal allocation
+> errors instead of overloading NULL to mean "no matches or error?"
 
-After:
-$ ./tools/testing/kunit/kunit.py parse /dev/null
-...
-[ERROR] Test <missing>: could not find any KTAP output!
+More concretely, I'm thinking something like this:
 
-This error message gets printed out when extract_tap_output() yielded no
-lines. So while it could be because of malformed KTAP output from KUnit,
-it could also be due to to not having any KTAP output at all.
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 22640c9ee819..a5c29a32a33a 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite,
+const char *test_glob)
 
-Try and make the error message here more clear.
+        /* Use memcpy to workaround copy->name being const. */
+        copy = kmalloc(sizeof(*copy), GFP_KERNEL);
++       if (!copy)
++               return ERR_PTR(-ENOMEM);
+        memcpy(copy, suite, sizeof(*copy));
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_parser.py    | 3 ++-
- tools/testing/kunit/kunit_tool_test.py | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+        filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
++       if (!filtered)
++               return ERR_PTR(-ENOMEM);
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 05ff334761dd..103d95a66a7e 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -817,7 +817,8 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
- 	lines = extract_tap_lines(kernel_output)
- 	test = Test()
- 	if not lines:
--		test.add_error('invalid KTAP input!')
-+		test.name = '<missing>'
-+		test.add_error('could not find any KTAP output!')
- 		test.status = TestStatus.FAILURE_TO_PARSE_TESTS
- 	else:
- 		test = parse_test(lines, 0, [])
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 352369dffbd9..f14934853ea1 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -226,7 +226,7 @@ class KUnitParserTest(unittest.TestCase):
- 		with open(crash_log) as file:
- 			result = kunit_parser.parse_run_tests(
- 				kunit_parser.extract_tap_lines(file.readlines()))
--		print_mock.assert_any_call(StrContains('invalid KTAP input!'))
-+		print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
- 		print_mock.stop()
- 		self.assertEqual(0, len(result.subtests))
- 
-@@ -559,7 +559,7 @@ class KUnitMainTest(unittest.TestCase):
- 		self.assertEqual(e.exception.code, 1)
- 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
- 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
--		self.print_mock.assert_any_call(StrContains('invalid KTAP input!'))
-+		self.print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
- 
- 	def test_exec_no_tests(self):
- 		self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+        n = 0;
+        kunit_suite_for_each_test_case(suite, test_case) {
+@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const
+* const subsuite,
 
-base-commit: 13776ebb9964b2ea66ffb8c824c0762eed6da784
--- 
-2.35.1.1021.g381101b075-goog
+        filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
+        if (!filtered)
+-               return NULL;
++               return ERR_PTR(-ENOMEM);
 
+        n = 0;
+        for (i = 0; subsuite[i] != NULL; ++i) {
+                if (!glob_match(filter->suite_glob, subsuite[i]->name))
+                        continue;
+                filtered_suite = kunit_filter_tests(subsuite[i],
+filter->test_glob);
+-               if (filtered_suite)
++               if (IS_ERR(filtered_suite))
++                       return ERR_CAST(filtered_suite);
++               else if (filtered_suite)
+                        filtered[n++] = filtered_suite;
+        }
+        filtered[n] = NULL;
+@@ -166,6 +172,8 @@ static struct suite_set kunit_filter_suites(const
+struct suite_set *suite_set,
+
+        for (i = 0; i < max; ++i) {
+                filtered_subsuite =
+kunit_filter_subsuite(suite_set->start[i], &filter);
++               if (IS_ERR(filtered_subsuite))
++                       return filtered; // TODO: how do we signal this?
+                if (filtered_subsuite)
+                        *copy++ = filtered_subsuite;
+        }
+
+> Or maybe just adding some pr_err() calls is sufficient.
