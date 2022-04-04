@@ -2,124 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 930F3C4167E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57E60C433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Apr 2022 21:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348121AbiDDV1m (ORCPT
+        id S237663AbiDDVyM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        Mon, 4 Apr 2022 17:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379222AbiDDQrT (ORCPT
+        with ESMTP id S1379933AbiDDVas (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:47:19 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053335DFF;
-        Mon,  4 Apr 2022 09:45:22 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y10so9499225pfa.7;
-        Mon, 04 Apr 2022 09:45:22 -0700 (PDT)
+        Mon, 4 Apr 2022 17:30:48 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A736AA180
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Apr 2022 14:14:00 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id g22so12660257edz.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Apr 2022 14:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
-        b=K+zWzR4ruy+ZtnYKb3uQ8qPZ1rB96be4f9KbPJeqM2bII/wOKRfwJBp9khKYpdzZNw
-         p/HQY9ehgjEtNQA3UubppVVM2P3enmFvLuFNI2VYINSU8+ehqH1PUud6XiJrJ31Fx+1N
-         9Mw4kdlWm8JhkOo4TWsGUExTMTrl3ji9q4OyAg57DWOcT4X54WgiyRHSF39tOum+DFz/
-         PCtuDEaRjqI075K956dVofjVavlxFPT9gfTJwGH1zzpqTw6kmRYZ/vPvlJ9mLorG7VCX
-         xOWeFzQd44DIsWpLNCyHiCC/aZXwnF4wxYBBg6HkBljldJPYGG7drQ/eGiaJ8MNzP9Y2
-         FmlA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S5JDtmIs58TRR3YM1MH2n9ydceKzu8ZMJYE0EAd1fdA=;
+        b=mXu+kbIOllUFvjcA3fMxHjtto4SRHNogC5DNMGt298LCEFBZj/4pCFusAyxJJwXDFE
+         aknCc84+LN9asN3z8ABlK1Neu52RGYbDbxQ/x7wMjt8hgDbCi8gC3h63ehV3//RUcjEQ
+         uXd8VnYduxNmDzxwkqs5cArm2NvcR5NWQ29lBNGTdYvQoscK7mpNXBKQ0tLJIvZZx8EK
+         UHAQPh+V4qvmOeqTkgtiZtN6T1lQfPOOloeTXFuwpCBWe7cbtmQqJ4Ou8yw7CeR2UsF3
+         4uTo3/Qh87ML1kHT+0XUbhJ3pDx3kqchZRWH52MVse9/W3tOmLVYxXkyLWDShcPe6WYR
+         SzQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
-        b=H5VRk/Lfvm1WmWeEu5Pj03YQ5HzxULNix3HL42gNovU5fKBi7Gfq+4c+wbHof6fnQm
-         XNFPEXGTD4+ynVRz5sjhefZVBQyCYni/zgBfZYZUlauvUF/0TlubP1Jh5HD6J0w1uzEA
-         xd+EsaBE8kaUTeJkP4xEkm1smhchDjCdWWLO9spfK5Get9tmPKA+UK2KARrZKkd5J54Z
-         3C8qSmi7WsaVpUGd7j/jOMgXw7eSee1bLrXhYiURwlQG6KXACPCPqR+9Z99RAjE5y/Ez
-         PMSn7+A7K7JP7cers2kBKctOca37cPsDIPpa0YYGxMFJcX8aVp7UepO0VS5ODfbJriG+
-         +8jg==
-X-Gm-Message-State: AOAM531Tm4Rj2wahuchYVJh2nL1TtMys4h6x3Z/TGjhGiKRNMZW8wLJb
-        yAZMKXk5NrOJadGD9Sg/reo=
-X-Google-Smtp-Source: ABdhPJykjuTWmrEFansk8XIVGuyt/Galx5GJ9a/oS+WxZ9T0MRsu62DxJHiJKdurLYFsP8Kx1hHJDA==
-X-Received: by 2002:a63:338e:0:b0:398:4302:c503 with SMTP id z136-20020a63338e000000b003984302c503mr633219pgz.217.1649090721580;
-        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id np8-20020a17090b4c4800b001c70aeab380sm11035pjb.41.2022.04.04.09.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix issues in parse_num_list()
-Date:   Tue,  5 Apr 2022 00:45:14 +0800
-Message-Id: <20220404164514.1814897-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S5JDtmIs58TRR3YM1MH2n9ydceKzu8ZMJYE0EAd1fdA=;
+        b=15HnHUJYqo/HemnfxskUiUe54+Z2R2UA2zzw0GjntvmwUJmXbwPYO/G8/P8pNm3ttH
+         zNNxPtdZqpUhktvvK1UOOvaN5WOpER3Ac+cajRE6YOZO9yDPx+ygsTemTqFm1u6wY6lk
+         8Omv7jm+4j9NoUTUmNSyCIu1iVy1GvXpaH4+YhilarMy7bPSc14ECiwJu8OI9wJ1wlpy
+         Im2KW4MKBgJcFYbyNDZhtIa1SzrOe23EVPvEr3HoRo5JW8Fh8TiieCK7P1SI9ilPDaJk
+         ZBQ81aIXr5kfuiBFn3TdIY/z9cc3fDEsDilSdbuCJM10nHkgcLfRxHWg03Lh1M3E7liT
+         iirA==
+X-Gm-Message-State: AOAM530p4BYrk/g11ZEBSYwsvDB6Lvwa9XwW2G1en4k9TEWbVTZAD7BY
+        DAy1ExwIoa82xYPX7yiKEcu52b26EdxjdotS6Lf/3A==
+X-Google-Smtp-Source: ABdhPJyMO0ydKmS0siYdaHdVOwsHoBm4w6Sf5vzl64BwKlS1ZlQJjG/60KDSEZUZzhTTg4BvzwEuDDfUH50t+IgZaN8=
+X-Received: by 2002:a05:6402:d0a:b0:418:ec3b:2242 with SMTP id
+ eb10-20020a0564020d0a00b00418ec3b2242mr83168edb.229.1649106839033; Mon, 04
+ Apr 2022 14:13:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220318021314.3225240-1-davidgow@google.com> <20220318021314.3225240-3-davidgow@google.com>
+In-Reply-To: <20220318021314.3225240-3-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 4 Apr 2022 16:13:47 -0500
+Message-ID: <CAGS_qxqtMpjKX+CMF6eBUWfsc-TKR9-Bk+hYM=PHa0_wUtQQuA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] kunit: expose ftrace-based API for stubbing out
+ functions during tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are some issues in parse_num_list():
+On Thu, Mar 17, 2022 at 9:13 PM David Gow <davidgow@google.com> wrote:
+> +
+> +/** KUNIT_STUBBABLE - marks a function as stubbable when stubbing support is
+> + * enabled.
+> + *
+> + * Stubbing uses ftrace internally, so we can only stub out functions when they
+> + * are not inlined. This macro eavlautes to noinline when stubbing support is
 
-1. The end variable is assigned twice when parsing_end is true.
-2. The function does not check that parsing_end should finally be false.
+Just noting a couple typos lest they be forgotten:
+*evaluates
 
-Clean up parse_num_list() and fix these issues.
+> + * enabled to thus make it safe.
+> + *
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+<snip>
 
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 795b6798ccee..82f0e2d99c23 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- 		if (errno)
- 			return -errno;
- 
--		if (parsing_end)
--			end = num;
--		else
-+		if (!parsing_end) {
- 			start = num;
-+			if (*next == '-') {
-+				s = next + 1;
-+				parsing_end = true;
-+				continue;
-+			}
-+		}
- 
--		if (!parsing_end && *next == '-') {
--			s = next + 1;
--			parsing_end = true;
--			continue;
--		} else if (*next == ',') {
-+		if (*next == ',') {
- 			parsing_end = false;
- 			s = next + 1;
- 			end = num;
-@@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- 			set[i] = true;
- 	}
- 
--	if (!set)
-+	if (!set || parsing_end)
- 		return -EINVAL;
- 
- 	*num_set = set;
--- 
-2.35.1
+> + *
+> + *     void replacement_func(int n)
+> + *     {
+> + *             pr_info("replacement_func() called with %d", n);
+> + *             return 42;
+> + *     }
+> + *
+> + *     void example_test(struct kunit *test)
+> + *     {
+> + *             kunit_active_ftrace_stub(test, real_func, replacement_func);
 
+*activate
