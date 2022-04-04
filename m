@@ -2,444 +2,210 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 687BFC43217
-	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F69FC43219
+	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379713AbiDDV1d (ORCPT
+        id S1382360AbiDDV1s (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        Mon, 4 Apr 2022 17:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380487AbiDDUS0 (ORCPT
+        with ESMTP id S1379593AbiDDRnx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:18:26 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ED7DF20
-        for <linux-kselftest@vger.kernel.org>; Mon,  4 Apr 2022 13:16:28 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id r13so22346452ejd.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Apr 2022 13:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n1ib/jDfUzihK9xuV8zGLa9FEMAJ9vNd2XvqvSY7jCE=;
-        b=j38KLjBxu1pupDwsC/mbWCdECKlaVGMKhL1i41JSSG6ZrUFDUKA3GltQMqZacy4t0k
-         /U7uTiFEaGK42UuwQi/3X6do/M1eQ+MlHk+qfpTFa4OtvYxrrSWcCP5U2y+8XljQ2Z1T
-         LcWurBs64cH5LNTZGAOLOBMzHbI0rRGV6DmkpVbzbdfFhN0u6dHe5Xts2ab/37DmIXad
-         gfjRJ6BpfP/z6prpckr5NioRvmwQVmDXR1XEM1/9ai6c0+r9Qa3udmxSVeRgNc9zfHrn
-         9MW3KgPEOEya8Q+Kz/pYe2J6OWpFxdGp0y+BAbzDhUqgRsqCtSrD7AS8EI4JfmzJlSLd
-         Oqfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n1ib/jDfUzihK9xuV8zGLa9FEMAJ9vNd2XvqvSY7jCE=;
-        b=DGi7q1K1On/LQy+s8UwZ8E6zjJZ10Bq34EN7vHL0PmSZ0NgDD8nTa5aMtbV0ktUKgE
-         s7korgxDFMfHsE2T/RE4f52X3WXKaU1Dmym3Q8qrTckqiAP1GQhrHm/RuToKaZsFvSeg
-         KQAW2uPonrcBdlsaozFeojTmMPLMiAfxLxdxjncvLaL9xHfVtatKNqTT1K8lDi8C8zil
-         UNbvzPfiz0YJfKpp6sZ+HmbWEHCVxLMMV8Dbazf0t6nKjKmaMyfOA3agim4pJKtgXCxK
-         7BMJiV4ZFF9Wn0u/3sFFQt4vQetk4Rb8oMU6Mo8aFH+awoRAzrz1PSMYfvJa+jAt5M/T
-         G4Dg==
-X-Gm-Message-State: AOAM532hNEKSTkD8bE5dZvrwVQfa5J9y9pV1xKM4iU9G5S95N2/hJaft
-        /oWjgO6/MAqcHnZkDWgbwYwPKDats04VX1Lkez+mwA==
-X-Google-Smtp-Source: ABdhPJwTx2uwIoWqKwtsiv5Bmz10IcP07QVLaWGsoicKIHBRcTSyTyE/tU0Ds3z+vqDeg3cGpJbdqfr8bZwrFhDd/sw=
-X-Received: by 2002:a17:907:c018:b0:6df:e31b:d912 with SMTP id
- ss24-20020a170907c01800b006dfe31bd912mr1864013ejc.196.1649103386602; Mon, 04
- Apr 2022 13:16:26 -0700 (PDT)
+        Mon, 4 Apr 2022 13:43:53 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFA931DE7;
+        Mon,  4 Apr 2022 10:41:56 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXJ2M5Zdkz683S6;
+        Tue,  5 Apr 2022 01:40:11 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Apr 2022 19:41:53 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Mon, 4 Apr 2022 19:41:53 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     KP Singh <kpsingh@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Topic: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Index: AQHYQsxoL5kXhl8+JE6PJPNWV+NOTqzYppqAgABrSsCAAo7zgIAAEt0AgARYGMA=
+Date:   Mon, 4 Apr 2022 17:41:53 +0000
+Message-ID: <b702f57ee63640d987055438ec77a016@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+ <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+In-Reply-To: <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.208.245]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220318021314.3225240-1-davidgow@google.com> <20220318021314.3225240-2-davidgow@google.com>
-In-Reply-To: <20220318021314.3225240-2-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 4 Apr 2022 16:16:15 -0400
-Message-ID: <CAFd5g46zjsrz16mYmu1Q57dYkch6J2FO1XkM9XwS=cWiUidz6g@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] kunit: Expose 'static stub' API to redirect functions
-To:     David Gow <davidgow@google.com>, Steve Muckle <smuckle@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+Steve Muckle
-
-On Thu, Mar 17, 2022 at 10:13 PM David Gow <davidgow@google.com> wrote:
->
-> Add a simple way of redirecting calls to functions by including a
-> special prologue in the "real" function which checks to see if the
-> replacement function should be called (and, if so, calls it).
->
-> To redirect calls to a function, make the first (non-declaration) line
-> of the function:
->
->         KUNIT_STATIC_STUB_REDIRECT(function_name, [function arguments]);
->
-> (This will compile away to nothing if KUnit is not enabled, otherwise it
-> will check if a redirection is active, call the replacement function,
-> and return.)
->
-> Calls to the real function can be redirected to a replacement using:
->
->         kunit_activate_static_stub(test, real_fn, replacement_fn);
->
-> The redirection will only affect calls made from within the kthread of
-> the current test, and will be automatically disabled when the test
-> completes. It can also be manually disabled with
-> kunit_deactivate_static_stub().
->
-> The 'example' KUnit test suite has a more complete example.
->
-> This is intended to be an alternative to ftrace-based stubbing (see the
-> next patch), with different tradeoffs.
->
-> In particular:
-> - 'static stubs' work on all architectures, and don't have any
->   dependencies.
->   - There's no separate Kconfig option to enable them, they always
->     exist.
-> - They must be explicitly opted-into by the function being replaced
->   (which can be good or bad depending on your POV)
-> - They have a greater performance penalty when not in active use (as
->   every call to the real function must check to see if the stub is
->   enabled)
-> - They could more easily be extended to pass additional context to
->   replacement functions.
->
-> Co-developed-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  include/kunit/static_stub.h    | 106 ++++++++++++++++++++++++++++
->  lib/kunit/Makefile             |   1 +
->  lib/kunit/kunit-example-test.c |  39 ++++++++++
->  lib/kunit/static_stub.c        | 125 +++++++++++++++++++++++++++++++++
->  4 files changed, 271 insertions(+)
->  create mode 100644 include/kunit/static_stub.h
->  create mode 100644 lib/kunit/static_stub.c
->
-> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
-> new file mode 100644
-> index 000000000000..020e0e9110f2
-> --- /dev/null
-> +++ b/include/kunit/static_stub.h
-> @@ -0,0 +1,106 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KUnit function redirection (static stubbing) API.
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: David Gow <davidgow@google.com>
-> + */
-> +#ifndef _KUNIT_STATIC_STUB_H
-> +#define _KUNIT_STATIC_STUB_H
-> +
-> +#if !IS_REACHABLE(CONFIG_KUNIT)
-> +
-> +/* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
-> +#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
-> +
-> +#else
-> +
-> +#include <kunit/test.h>
-> +
-> +#include <linux/compiler.h> /* for {un,}likely() */
-> +#include <linux/sched.h> /* for task_struct */
-> +
-> +/* Returns the address of the replacement function. */
-> +void *__kunit_get_static_stub_address(struct kunit *test, void *real_fn_addr);
-> +
-> +/**
-> + * KUNIT_STATIC_STUB_REDIRECT() - call a replacement 'static stub' if one exists
-> + * @real_fn_name: The name of this function (as an identifier, not a string)
-> + * @args: All of the arguments passed to this function
-> + *
-> + * This is a function prologue which is used to allow calls to the current
-> + * function to be redirected by a KUnit test. KUnit tests can call
-> + * kunit_activate_static_stub() to pass a replacement function in. The
-> + * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
-> + * will then return from the function. If the caller is not in a KUnit context,
-> + * the function will continue execution as normal.
-> + *
-> + * Example:
-> + *
-> + * .. code-block:: c
-> + *     int real_func(int n)
-> + *     {
-> + *             KUNIT_STATIC_STUB_REDIRECT(real_func, n);
-> + *             return 0;
-> + *     }
-> + *
-> + *     void replacement_func(int n)
-> + *     {
-> + *             return 42;
-> + *     }
-> + *
-> + *     void example_test(struct kunit *test)
-> + *     {
-> + *             kunit_activate_static_stub(test, real_func, replacement_func);
-> + *             KUNIT_EXPECT_EQ(test, real_func(1), 42);
-> + *     }
-> + *
-> + */
-> +#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...)              \
-> +do {                                                                   \
-> +       typeof(&real_fn_name) replacement;                              \
-> +       struct kunit *current_test = current->kunit_test;               \
-> +                                                                       \
-> +       if (likely(!current_test))                                      \
-> +               break;                                                  \
-> +                                                                       \
-> +       KUNIT_ASSERT_STREQ_MSG(current_test, __func__, #real_fn_name,   \
-> +                              "Static stub function name mismatch");   \
-> +                                                                       \
-> +       replacement = __kunit_get_static_stub_address(current_test,     \
-> +                                                       &real_fn_name); \
-> +                                                                       \
-> +       if (unlikely(replacement))                                      \
-> +               return replacement(args);                               \
-> +} while (0)
-> +
-> +/* Helper function for kunit_activate_static_stub(). The macro does
-> + * typechecking, so use it instead.
-> + */
-> +void __kunit_activate_static_stub(struct kunit *test,
-> +                                 void *real_fn_addr,
-> +                                 void *replacement_addr);
-> +
-> +/**
-> + * kunit_activate_static_stub() - replace a function using static stubs.
-> + * @test: A pointer to the 'struct kunit' test context for the current test.
-> + * @real_fn_addr: The address of the function to replace.
-> + * @replacement_addr: The address of the function to replace it with.
-> + *
-> + * When activated, calls to real_fn_addr from within this test (even if called
-> + * indirectly) will instead call replacement_addr. The function pointed to by
-> + * real_fn_addr must begin with the static stub prologue in
-> + * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
-> + * replacement_addr must have the same type.
-> + *
-> + * The redirection can be disabled again with kunit_deactivate_static_stub().
-> + */
-> +#define kunit_activate_static_stub(test, real_fn_addr, replacement_addr) do {  \
-> +       typecheck(typeof(real_fn_addr), replacement_addr);                      \
-> +       __kunit_activate_static_stub(test, real_fn_addr, replacement_addr);     \
-> +} while (0)
-> +
-> +void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr);
-> +
-> +#endif
-> +#endif
-> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> index c49f4ffb6273..f9e929700782 100644
-> --- a/lib/kunit/Makefile
-> +++ b/lib/kunit/Makefile
-> @@ -1,6 +1,7 @@
->  obj-$(CONFIG_KUNIT) +=                 kunit.o
->
->  kunit-objs +=                          test.o \
-> +                                       static_stub.o \
->                                         string-stream.o \
->                                         assert.o \
->                                         try-catch.o \
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index 51099b0ca29c..670c21e74446 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -7,6 +7,7 @@
->   */
->
->  #include <kunit/test.h>
-> +#include <kunit/static_stub.h>
->
->  /*
->   * This is the most fundamental element of KUnit, the test case. A test case
-> @@ -69,6 +70,43 @@ static void example_mark_skipped_test(struct kunit *test)
->         /* This line should run */
->         kunit_info(test, "You should see this line.");
->  }
-> +
-> +/* This is a function we'll replace with static stubs. */
-> +static int add_one(int i)
-> +{
-> +       /* This will trigger the stub if active. */
-> +       KUNIT_STATIC_STUB_REDIRECT(add_one, i);
-> +
-> +       return i + 1;
-> +}
-> +
-> +/* This is used as a replacement for the above function. */
-> +static int subtract_one(int i)
-> +{
-> +       /* We don't need to trigger the stub from the replacement. */
-> +
-> +       return i - 1;
-> +}
-> +
-> +/*
-> + * This test shows the use of static stubs.
-> + */
-> +static void example_static_stub_test(struct kunit *test)
-> +{
-> +       /* By default, function is not stubbed. */
-> +       KUNIT_EXPECT_EQ(test, add_one(1), 2);
-> +
-> +       /* Replace add_one() with subtract_one(). */
-> +       kunit_activate_static_stub(test, add_one, subtract_one);
-> +
-> +       /* add_one() is now replaced. */
-> +       KUNIT_EXPECT_EQ(test, add_one(1), 0);
-> +
-> +       /* Return add_one() to normal. */
-> +       kunit_deactivate_static_stub(test, add_one);
-> +       KUNIT_EXPECT_EQ(test, add_one(1), 2);
-> +}
-> +
->  /*
->   * Here we make a list of all the test cases we want to add to the test suite
->   * below.
-> @@ -83,6 +121,7 @@ static struct kunit_case example_test_cases[] = {
->         KUNIT_CASE(example_simple_test),
->         KUNIT_CASE(example_skip_test),
->         KUNIT_CASE(example_mark_skipped_test),
-> +       KUNIT_CASE(example_static_stub_test),
->         {}
->  };
->
-> diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
-> new file mode 100644
-> index 000000000000..b06b88f82dd7
-> --- /dev/null
-> +++ b/lib/kunit/static_stub.c
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit function redirection (static stubbing) API.
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: David Gow <davidgow@google.com>
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <kunit/static_stub.h>
-> +
-> +
-> +/* Context for a static stub. This is stored in the resource data. */
-> +struct kunit_static_stub_ctx {
-> +       void *real_fn_addr;
-> +       void *replacement_addr;
-> +};
-> +
-> +static void __kunit_static_stub_resource_free(struct kunit_resource *res)
-> +{
-> +       kfree(res->data);
-> +}
-> +
-> +/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
-> +static bool __kunit_static_stub_resource_match(struct kunit *test,
-> +                                               struct kunit_resource *res,
-> +                                               void *match_real_fn_addr)
-> +{
-> +       /* This pointer is only valid if res is a static stub resource. */
-> +       struct kunit_static_stub_ctx *ctx = res->data;
-> +
-> +       /* Make sure the resource is a static stub resource. */
-> +       if (res->free != &__kunit_static_stub_resource_free)
-> +               return false;
-> +
-> +       return ctx->real_fn_addr == match_real_fn_addr;
-> +}
-> +
-> +/* Returns the address of the replacement function. */
-> +void *__kunit_get_static_stub_address(struct kunit *test, void *real_fn_addr)
-> +{
-> +       struct kunit_resource *res;
-> +       struct kunit_static_stub_ctx *ctx;
-> +       void *replacement_addr;
-> +
-> +       res = kunit_find_resource(test,
-> +                                 __kunit_static_stub_resource_match,
-> +                                 real_fn_addr);
-> +
-> +       if (!res)
-> +               return NULL;
-> +
-> +       ctx = res->data;
-> +       replacement_addr = ctx->replacement_addr;
-> +       kunit_put_resource(res);
-> +       return replacement_addr;
-> +}
-> +EXPORT_SYMBOL_GPL(__kunit_get_static_stub_address);
-> +
-> +void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr)
-> +{
-> +       struct kunit_resource *res;
-> +
-> +       KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-> +                               "Tried to deactivate a NULL stub.");
-> +
-> +       /* Look up the existing stub for this function. */
-> +       res = kunit_find_resource(test,
-> +                                 __kunit_static_stub_resource_match,
-> +                                 real_fn_addr);
-> +
-> +       /* Error out if the stub doesn't exist. */
-> +       KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
-> +                               "Tried to deactivate a nonexistent stub.");
-> +
-> +       /* Free the stub. We 'put' twice, as we got a reference
-> +        * from kunit_find_resource()
-> +        */
-> +       kunit_remove_resource(test, res);
-> +       kunit_put_resource(res);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_deactivate_static_stub);
-> +
-> +/* Helper function for kunit_activate_static_stub(). The macro does
-> + * typechecking, so use it instead.
-> + */
-> +void __kunit_activate_static_stub(struct kunit *test,
-> +                                 void *real_fn_addr,
-> +                                 void *replacement_addr)
-> +{
-> +       struct kunit_static_stub_ctx *ctx;
-> +       struct kunit_resource *res;
-> +
-> +       KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-> +                               "Tried to activate a stub for function NULL");
-> +
-> +       /* If the replacement address is NULL, deactivate the stub. */
-> +       if (!replacement_addr) {
-> +               kunit_deactivate_static_stub(test, replacement_addr);
-> +               return;
-> +       }
-> +
-> +       /* Look up any existing stubs for this function, and replace them. */
-> +       res = kunit_find_resource(test,
-> +                                 __kunit_static_stub_resource_match,
-> +                                 real_fn_addr);
-> +       if (res) {
-> +               ctx = res->data;
-> +               ctx->replacement_addr = replacement_addr;
-> +
-> +               /* We got an extra reference from find_resource(), so put it. */
-> +               kunit_put_resource(res);
-> +       } else {
-> +               ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
-> +               ctx->real_fn_addr = real_fn_addr;
-> +               ctx->replacement_addr = replacement_addr;
-> +               res = kunit_alloc_resource(test, NULL,
-> +                                    &__kunit_static_stub_resource_free,
-> +                                    GFP_KERNEL, ctx);
-> +       }
-> +}
-> +EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
-> +
-> +
-> --
-> 2.35.1.894.gb6a874cedc-goog
->
+PiBGcm9tOiBLUCBTaW5naCBbbWFpbHRvOmtwc2luZ2hAa2VybmVsLm9yZ10NCj4gU2VudDogU2F0
+dXJkYXksIEFwcmlsIDIsIDIwMjIgMzowMyBBTQ0KPiBPbiBTYXQsIEFwciAyLCAyMDIyIGF0IDE6
+NTUgQU0gQWxleGVpIFN0YXJvdm9pdG92DQo+IDxhbGV4ZWkuc3Rhcm92b2l0b3ZAZ21haWwuY29t
+PiB3cm90ZToNCj4gPg0KPiA+IE9uIFRodSwgTWFyIDMxLCAyMDIyIGF0IDA4OjI1OjIyQU0gKzAw
+MDAsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPiA+IEZyb206IEFsZXhlaSBTdGFyb3ZvaXRv
+diBbbWFpbHRvOmFsZXhlaS5zdGFyb3ZvaXRvdkBnbWFpbC5jb21dDQo+ID4gPiA+IFNlbnQ6IFRo
+dXJzZGF5LCBNYXJjaCAzMSwgMjAyMiA0OjI3IEFNDQo+ID4gPiA+IE9uIE1vbiwgTWFyIDI4LCAy
+MDIyIGF0IDA3OjUwOjE1UE0gKzAyMDAsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPiA+ID4g
+ZUJQRiBhbHJlYWR5IGFsbG93cyBwcm9ncmFtcyB0byBiZSBwcmVsb2FkZWQgYW5kIGtlcHQgcnVu
+bmluZw0KPiB3aXRob3V0DQo+ID4gPiA+ID4gaW50ZXJ2ZW50aW9uIGZyb20gdXNlciBzcGFjZS4g
+VGhlcmUgaXMgYSBkZWRpY2F0ZWQga2VybmVsIG1vZHVsZQ0KPiBjYWxsZWQNCj4gPiA+ID4gPiBi
+cGZfcHJlbG9hZCwgd2hpY2ggY29udGFpbnMgdGhlIGxpZ2h0IHNrZWxldG9uIG9mIHRoZSBpdGVy
+YXRvcnNfYnBmDQo+IGVCUEYNCj4gPiA+ID4gPiBwcm9ncmFtLiBJZiB0aGlzIG1vZHVsZSBpcyBl
+bmFibGVkIGluIHRoZSBrZXJuZWwgY29uZmlndXJhdGlvbiwgaXRzDQo+IGxvYWRpbmcNCj4gPiA+
+ID4gPiB3aWxsIGJlIHRyaWdnZXJlZCB3aGVuIHRoZSBicGYgZmlsZXN5c3RlbSBpcyBtb3VudGVk
+ICh1bmxlc3MgdGhlDQo+IG1vZHVsZSBpcw0KPiA+ID4gPiA+IGJ1aWx0LWluKSwgYW5kIHRoZSBs
+aW5rcyBvZiBpdGVyYXRvcnNfYnBmIGFyZSBwaW5uZWQgaW4gdGhhdCBmaWxlc3lzdGVtDQo+ID4g
+PiA+ID4gKHRoZXkgd2lsbCBhcHBlYXIgYXMgdGhlIHByb2dzLmRlYnVnIGFuZCBtYXBzLmRlYnVn
+IGZpbGVzKS4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IEhvd2V2ZXIsIHRoZSBjdXJyZW50IG1lY2hh
+bmlzbSwgaWYgdXNlZCB0byBwcmVsb2FkIGFuIExTTSwgd291bGQNCj4gbm90DQo+ID4gPiA+IG9m
+ZmVyDQo+ID4gPiA+ID4gdGhlIHNhbWUgc2VjdXJpdHkgZ3VhcmFudGVlcyBvZiBMU01zIGludGVn
+cmF0ZWQgaW4gdGhlIHNlY3VyaXR5DQo+ID4gPiA+IHN1YnN5c3RlbS4NCj4gPiA+ID4gPiBBbHNv
+LCBpdCBpcyBub3QgZ2VuZXJpYyBlbm91Z2ggdG8gYmUgdXNlZCBmb3IgcHJlbG9hZGluZyBhcmJp
+dHJhcnkgZUJQRg0KPiA+ID4gPiA+IHByb2dyYW1zLCB1bmxlc3MgdGhlIGJwZl9wcmVsb2FkIGNv
+ZGUgaXMgaGVhdmlseSBtb2RpZmllZC4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IE1vcmUgc3BlY2lm
+aWNhbGx5LCB0aGUgc2VjdXJpdHkgcHJvYmxlbXMgYXJlOg0KPiA+ID4gPiA+IC0gYW55IHByb2dy
+YW0gY2FuIGJlIHBpbm5lZCB0byB0aGUgYnBmIGZpbGVzeXN0ZW0gd2l0aG91dCBsaW1pdGF0aW9u
+cw0KPiA+ID4gPiA+ICAgKHVubGVzcyBhIE1BQyBtZWNoYW5pc20gZW5mb3JjZXMgc29tZSByZXN0
+cmljdGlvbnMpOw0KPiA+ID4gPiA+IC0gcHJvZ3JhbXMgYmVpbmcgZXhlY3V0ZWQgY2FuIGJlIHRl
+cm1pbmF0ZWQgYXQgYW55IHRpbWUgYnkgZGVsZXRpbmcNCj4gdGhlDQo+ID4gPiA+ID4gICBwaW5u
+ZWQgb2JqZWN0cyBvciB1bm1vdW50aW5nIHRoZSBicGYgZmlsZXN5c3RlbS4NCj4gPiA+ID4NCj4g
+PiA+ID4gU28gbWFueSB0aGluZ3MgdG8gdW50YW5nbGUgaGVyZS4NCj4gPiA+DQo+ID4gPiBIaSBB
+bGV4ZWkNCj4gPiA+DQo+ID4gPiB0aGFua3MgZm9yIHRha2luZyB0aGUgdGltZSB0byBwcm92aWRl
+IHN1Y2ggZGV0YWlsZWQNCj4gPiA+IGV4cGxhbmF0aW9uLg0KPiA+ID4NCj4gPiA+ID4gVGhlIGFi
+b3ZlIHBhcmFncmFwaHMgYXJlIG1pc2xlYWRpbmcgYW5kIGluY29ycmVjdC4NCj4gPiA+ID4gVGhl
+IGNvbW1pdCBsb2cgc291bmRzIGxpa2UgdGhlcmUgYXJlIHNlY3VyaXR5IGlzc3VlcyB0aGF0IHRo
+aXMNCj4gPiA+ID4gcGF0Y2ggc2V0IGlzIGZpeGluZy4NCj4gPiA+ID4gVGhpcyBpcyBub3QgdHJ1
+ZS4NCj4gDQo+ICsxIHRoZXNlIGFyZSBub3Qgc2VjdXJpdHkgaXNzdWVzLiBUaGV5IGFyZSBsaW1p
+dGF0aW9ucyBvZiB5b3VyIE1BQyBwb2xpY3kuDQo+IA0KPiA+ID4NCj4gPiA+IEkgcmVpdGVyYXRl
+IHRoZSBnb2FsOiBlbmZvcmNlIGEgbWFuZGF0b3J5IHBvbGljeSB3aXRoDQo+ID4gPiBhbiBvdXQt
+b2YtdHJlZSBMU00gKGEga2VybmVsIG1vZHVsZSBpcyBmaW5lKSwgd2l0aCB0aGUNCj4gPiA+IHNh
+bWUgZ3VhcmFudGVlcyBvZiBMU01zIGludGVncmF0ZWQgaW4gdGhlIHNlY3VyaXR5DQo+ID4gPiBz
+dWJzeXN0ZW0uDQo+ID4NCj4gPiBUbyBtYWtlIGl0IDEwMCUgY2xlYXI6DQo+ID4gQW55IGluLWtl
+cm5lbCBmZWF0dXJlIHRoYXQgYmVuZWZpdHMgb3V0LW9mLXRyZWUgbW9kdWxlIHdpbGwgYmUgcmVq
+ZWN0ZWQuDQo+ID4NCj4gPiA+IFRoZSByb290IHVzZXIgaXMgbm90IHBhcnQgb2YgdGhlIFRDQiAo
+aS5lLiBpcyB1bnRydXN0ZWQpLA0KPiA+ID4gYWxsIHRoZSBjaGFuZ2VzIHRoYXQgdXNlciB3YW50
+cyB0byBtYWtlIG11c3QgYmUgc3ViamVjdA0KPiA+ID4gb2YgZGVjaXNpb24gYnkgdGhlIExTTSBl
+bmZvcmNpbmcgdGhlIG1hbmRhdG9yeSBwb2xpY3kuDQo+ID4gPg0KPiA+ID4gSSB0aG91Z2h0IGFi
+b3V0IGFkZGluZyBzdXBwb3J0IGZvciBMU01zIGZyb20ga2VybmVsDQo+ID4gPiBtb2R1bGVzIHZp
+YSBhIG5ldyBidWlsdC1pbiBMU00gKGNhbGxlZCBMb2FkTFNNKSwgYnV0DQo+IA0KPiBLZXJuZWwg
+bW9kdWxlcyBjYW5ub3QgaW1wbGVtZW50IExTTXMsIHRoaXMgaGFzIGFscmVhZHkgYmVlbg0KPiBw
+cm9wb3NlZCBvbiB0aGUgbGlzdHMgYW5kIGhhcyBiZWVuIHJlamVjdGVkLg0KDQpMb29raW5nIGF0
+IGNvbW1pdCBjYjgwZGRjNjcxNTIgKCJicGY6IENvbnZlcnQgYnBmX3ByZWxvYWQua28NCnRvIHVz
+ZSBsaWdodCBza2VsZXRvbi4iKSwgSSBnb3QgdGhhdCBpdCBpcyB0aGUgbW9zdCBlZmZpY2llbnQg
+d2F5DQp0byBsb2FkIGFuIGVCUEYgcHJvZ3JhbSAoZG9lcyBub3QgZXZlbiByZXF1aXJlIGxpYmJw
+ZikuDQoNCkFub3RoZXIgYWR2YW50YWdlIHdhcyB0aGF0IHdlIGdldCBpbnRlZ3JpdHkgdmVyaWZp
+Y2F0aW9uDQpmcm9tIHRoZSBtb2R1bGUgaW5mcmFzdHJ1Y3R1cmUuIFRoaXMgd291bGQgaGF2ZSBi
+ZWVuIHRoZQ0Kb3B0aW1hbCBzb2x1dGlvbiBpbiB0ZXJtcyBvZiBkZXBlbmRlbmNpZXMuIEVuZm9y
+Y2luZw0KaW50ZWdyaXR5IGNvdWxkIGJlIHR1cm5lZCBvbiB3aXRoIHRoZSBtb2R1bGUuc2lnX2Vu
+Zm9yY2UNCmtlcm5lbCBvcHRpb24uDQoNCklmIHdlIHN3aXRjaCB0byB1c2VyIHNwYWNlLCB0aGUg
+Y2hvaWNlIHdvdWxkIGJlIElNQS4NCkhvd2V2ZXIsIGluIG15IHVzZSBjYXNlIChESUdMSU0pIGl0
+IHdvdWxkIGJlIHVzZWQganVzdA0KZm9yIHRoZSBwdXJwb3NlIG9mIGRvaW5nIGludGVncml0eSB2
+ZXJpZmljYXRpb25zIHByZS1pbml0Lg0KDQpUaGlua2luZyB3aGljaCBwb2xpY3kgY291bGQgYmUg
+aW1wbGVtZW50ZWQgZm9yIHN1Y2ggcHVycG9zZSwNCm1heWJlIHNvbWV0aGluZyBsaWtlIGFwcHJh
+aXNlIGV2ZXJ5IHByb2Nlc3MgdGhhdCBpcyBub3QgbGlua2VkDQp0byBhbiBleGVjdXRhYmxlPyBB
+bmQgc2luY2UgdGhlcmUgYXJlIG5vIHhhdHRycyBpbiB0aGUgaW5pdGlhbA0KcmFtIGRpc2ssIGNv
+dWxkIEkgYXBwZW5kIGEgbW9kdWxlIHNpZ25hdHVyZSB0byBhbiBFTEYgYmluYXJ5Pw0KDQpUaGFu
+a3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhS
+QiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFpob25nIFJvbmdodWENCg0KPiA+
+IFN1Y2ggYXBwcm9hY2ggd2lsbCBiZSByZWplY3RlZC4gU2VlIGFib3ZlLg0KPiA+DQo+ID4gPiA+
+IEkgc3VzcGVjdCB0aGVyZSBpcyBodWdlIGNvbmZ1c2lvbiBvbiB3aGF0IHRoZXNlIHR3byAicHJv
+Z3MuZGVidWciDQo+ID4gPiA+IGFuZCAibWFwcy5kZWJ1ZyIgZmlsZXMgYXJlIGluIGEgYnBmZnMg
+aW5zdGFuY2UuDQo+ID4gPiA+IFRoZXkgYXJlIGRlYnVnIGZpbGVzIHRvIHByZXR0eSBwcmluZyBs
+b2FkZWQgbWFwcyBhbmQgcHJvZ3MgZm9yIGZvbGtzDQo+IHdobw0KPiA+ID4gPiBsaWtlIHRvIHVz
+ZSAnY2F0JyB0byBleGFtaW5lIHRoZSBzdGF0ZSBvZiB0aGUgc3lzdGVtIGluc3RlYWQgb2YgJ2Jw
+ZnRvb2wnLg0KPiA+ID4gPiBUaGUgcm9vdCBjYW4gcmVtb3ZlIHRoZXNlIGZpbGVzIGZyb20gYnBm
+ZnMuDQo+ID4gPiA+DQo+ID4gPiA+IFRoZXJlIGlzIG5vIHJlYXNvbiBmb3Iga2VybmVsIG1vZHVs
+ZSB0byBwaW4gaXRzIGJwZiBwcm9ncy4NCj4gPiA+ID4gSWYgeW91IHdhbnQgdG8gZGV2ZWxvcCBE
+SUdMSU0gYXMgYSBrZXJuZWwgbW9kdWxlIHRoYXQgdXNlcyBsaWdodA0KPiBza2VsZXRvbg0KPiA+
+ID4gPiBqdXN0IGRvOg0KPiA+ID4gPiAjaW5jbHVkZSA8bGludXgvaW5pdC5oPg0KPiA+ID4gPiAj
+aW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ID4gPiA+ICNpbmNsdWRlICJkaWdsaW0ubHNrZWwu
+aCINCj4gPiA+ID4NCj4gPiA+ID4gc3RhdGljIHN0cnVjdCBkaWdsaW1fYnBmICpza2VsOw0KPiA+
+ID4gPg0KPiA+ID4gPiBzdGF0aWMgaW50IF9faW5pdCBsb2FkKHZvaWQpDQo+ID4gPiA+IHsNCj4g
+PiA+ID4gICAgICAgICBza2VsID0gZGlnbGltX2JwZl9fb3Blbl9hbmRfbG9hZCgpOw0KPiA+ID4g
+PiAgICAgICAgIGVyciA9IGRpZ2xpbV9icGZfX2F0dGFjaChza2VsKTsNCj4gPiA+ID4gfQ0KPiA+
+ID4gPiAvKiBkZXRhY2ggc2tlbCBpbiBfX2ZpbmkgKi8NCj4gPiA+ID4NCj4gPiA+ID4gSXQncyBy
+ZWFsbHkgdGhhdCBzaG9ydC4NCj4gPiA+ID4NCj4gPiA+ID4gVGhlbiB5b3Ugd2lsbCBiZSBhYmxl
+IHRvDQo+ID4gPiA+IC0gaW5zbW9kIGRpZ2xpbS5rbyAtPiB3aWxsIGxvYWQgYW5kIGF0dGFjaCBi
+cGYgcHJvZ3MuDQo+ID4gPiA+IC0gcm1tb2QgZGlnbGltIC0+IHdpbGwgZGV0YWNoIHRoZW0uDQo+
+ID4gPg0KPiA+ID4gcm9vdCBjYW4gc3RvcCB0aGUgTFNNIHdpdGhvdXQgY29uc3VsdGluZyB0aGUg
+c2VjdXJpdHkNCj4gPiA+IHBvbGljeS4gVGhlIGdvYWwgb2YgaGF2aW5nIHJvb3QgdW50cnVzdGVk
+IGlzIG5vdCBhY2hpZXZlZC4NCj4gDQo+IE9mY291cnNlLCB0aGlzIGlzIGFuIGlzc3VlLCBpZiB5
+b3UgYXJlIHVzaW5nIEJQRiB0byBkZWZpbmUgYSBNQUMNCj4gcG9saWN5LCB0aGUgcG9saWN5DQo+
+IG5lZWRzIHRvIGJlIGNvbXByZWhlbnNpdmUgdG8gcHJldmVudCBpdHNlbGYgZnJvbSBiZWluZyBv
+dmVycmlkZGVuLiBUaGlzIGlzDQo+IHdoeQ0KPiBXZSBoYXZlIHNvIG1hbnkgTFNNIGhvb2tzLiBJ
+ZiB5b3UgdGhpbmsgc29tZSBhcmUgbWlzc2luZywgbGV0J3MgYWRkIHRoZW0uDQo+IA0KPiBUaGlz
+IGlzIHdoeSBpbXBsZW1lbnRpbmcgYSBwb2xpY3kgaXMgbm90IHRyaXZpYWwsIGJ1dCB3ZSBuZWVk
+IHRvIGFsbG93DQo+IHVzZXJzIHRvIGJ1aWxkDQo+IHN1Y2ggcG9saWNpZXMgd2l0aCB0aGUgaGVs
+cCBmcm9tIHRoZSBrZXJuZWwgYW5kIG5vdCBieSB1c2luZw0KPiBvdXQtb2YtdHJlZSBtb2R1bGVz
+Lg0KPiANCj4gSSBkbyB0aGluayB3ZSBjYW4gYWRkIHNvbWUgbW9yZSBoZWxwZXJzIChlLmcuIGZv
+ciBtb2RpZnlpbmcgeGF0dHJzDQo+IGZyb20gQlBGKSB0aGF0DQo+IHdvdWxkIGhlbHAgdXMgYnVp
+bGQgY29tcGxleCBwb2xpY2llcy4NCj4gDQo+ID4NCj4gPiBPdXQtb2YtdHJlZSBtb2R1bGUgY2Fu
+IGRvIGFueSBoYWNrLg0KPiA+IEZvciBleGFtcGxlOg0KPiA+IDEuIGRvbid0IGRvIGRldGFjaCBz
+a2VsIGluIF9fZmluaQ0KPiA+ICAgcm1tb2Qgd2lsbCByZW1vdmUgdGhlIG1vZHVsZSwgYnV0IGJw
+ZiBwcm9ncyB3aWxsIGtlZXAgcnVubmluZy4NCj4gPiAyLiBkbyBtb2R1bGVfZ2V0KFRISVNfTU9E
+VUxFKSBpbiBfX2luaXQNCj4gPiAgIHJtbW9kIHdpbGwgcmV0dXJuIEVCVVNZDQo+ID4gICBhbmQg
+aGF2ZSBzb21lIG91dC1vZi1iYW5kIHdheSBvZiBkcm9wcGluZyBtb2QgcmVmY250Lg0KPiA+IDMu
+IGhhY2sgaW50byBzeXNfZGVsZXRlX21vZHVsZS4gaWYgbW9kdWxlX25hbWU9PWRpZ2xlbSByZXR1
+cm4gRUJVU1kuDQo+ID4gNC4gYWRkIHByb3BlciBMU00gaG9vayB0byBkZWxldGVfbW9kdWxlDQo+
+IA0KPiArMSBJIHJlY29tbWVuZCB0aGlzIChidXQgbm90IGZyb20gYW4gb3V0IG9mIHRyZWUgbW9k
+dWxlKQ0KPiANCj4gPg0KPiA+ID4gTXkgcG9pbnQgd2FzIHRoYXQgcGlubmluZyBwcm9ncyBzZWVt
+cyB0byBiZSB0aGUNCj4gPiA+IHJlY29tbWVuZGVkIHdheSBvZiBrZWVwaW5nIHRoZW0gcnVubmlu
+Zy4NCj4gPg0KPiA+IE5vdCBxdWl0ZS4gYnBmX2xpbmsgcmVmY250IGlzIHdoYXQga2VlcHMgcHJv
+Z3MgYXR0YWNoZWQuDQo+ID4gYnBmZnMgaXMgbWFpbmx5IHVzZWQgZm9yOg0KPiA+IC0gdG8gcGFz
+cyBtYXBzL2xpbmtzIGZyb20gb25lIHByb2Nlc3MgdG8gYW5vdGhlcg0KPiA+IHdoZW4gcGFzc2lu
+ZyBmZCBpcyBub3QgcG9zc2libGUuDQo+ID4gLSB0byBzb2x2ZSB0aGUgY2FzZSBvZiBjcmFzaGlu
+ZyB1c2VyIHNwYWNlLg0KPiA+IFRoZSB1c2VyIHNwYWNlIGFnZW50IHdpbGwgcmVzdGFydCBhbmQg
+d2lsbCBwaWNrIHVwIHdoZXJlDQo+ID4gaXQncyBsZWZ0IGJ5IHJlYWRpbmcgbWFwLCBsaW5rLCBw
+cm9nIEZEcyBmcm9tIGJwZmZzLg0KPiA+IC0gcGlubmluZyBicGYgaXRlcmF0b3JzIHRoYXQgYXJl
+IGxhdGVyIHVzZWQgdG8gJ2NhdCcgc3VjaCBmaWxlcy4NCj4gPiBUaGF0IGlzIHdoYXQgYnBmX3By
+ZWxvYWQgaXMgZG9pbmcgYnkgY3JlYXRpbmcgdHdvIGRlYnVnDQo+ID4gZmlsZXMgIm1hcHMuZGVi
+dWciIGFuZCAicHJvZ3MuZGVidWciLg0KPiA+DQo+ID4gPiBQaW5uaW5nDQo+ID4gPiB0aGVtIHRv
+IHVucmVhY2hhYmxlIGlub2RlcyBpbnR1aXRpdmVseSBsb29rZWQgdGhlDQo+ID4gPiB3YXkgdG8g
+Z28gZm9yIGFjaGlldmluZyB0aGUgc3RhdGVkIGdvYWwuDQo+ID4NCj4gPiBXZSBjYW4gY29uc2lk
+ZXIgaW5vZGVzIGluIGJwZmZzIHRoYXQgYXJlIG5vdCB1bmxpbmthYmxlIGJ5IHJvb3QNCj4gPiBp
+biB0aGUgZnV0dXJlLCBidXQgY2VydGFpbmx5IG5vdCBmb3IgdGhpcyB1c2UgY2FzZS4NCj4gDQo+
+IENhbiB0aGlzIG5vdCBiZSBhbHJlYWR5IGRvbmUgYnkgYWRkaW5nIGEgQlBGX0xTTSBwcm9ncmFt
+IHRvIHRoZQ0KPiBpbm9kZV91bmxpbmsgTFNNIGhvb2s/DQo+IA0KPiA+DQo+ID4gPiBPciBtYXli
+ZSBJDQo+ID4gPiBzaG91bGQganVzdCBpbmNyZW1lbnQgdGhlIHJlZmVyZW5jZSBjb3VudCBvZiBs
+aW5rcw0KPiA+ID4gYW5kIGRvbid0IGRlY3JlbWVudCBkdXJpbmcgYW4gcm1tb2Q/DQo+ID4NCj4g
+PiBJIHN1Z2dlc3QgdG8gYWJhbmRvbiBvdXQtb2YtdHJlZSBnb2FsLg0KPiA+IE9ubHkgdGhlbiB3
+ZSBjYW4gaGVscCBhbmQgY29udGludWUgdGhpcyBkaXNjdXNzaW9uLg0KPiANCj4gKzENCg==
