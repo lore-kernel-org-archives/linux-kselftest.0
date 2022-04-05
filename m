@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A2CC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 084E7C4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242078AbiDEOvt (ORCPT
+        id S242031AbiDEOvm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        Tue, 5 Apr 2022 10:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238977AbiDEOUo (ORCPT
+        with ESMTP id S1355258AbiDEOVj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:20:44 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FEF5549B;
-        Tue,  5 Apr 2022 06:09:18 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id k14so11022227pga.0;
-        Tue, 05 Apr 2022 06:09:18 -0700 (PDT)
+        Tue, 5 Apr 2022 10:21:39 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393F652F0;
+        Tue,  5 Apr 2022 06:09:34 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q142so9209584pgq.9;
+        Tue, 05 Apr 2022 06:09:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=D9yWoQxE74uWounzZsZbgmdR8XONo5+WgLUX+EXW7Z8=;
-        b=KURZ5TfwC+Mjg5DvYFjx2YrvBBBFYOoLqPy/A7esmpRI6qm0mhLgIHNQpmAQeUUdjD
-         ufmt7CakkG43pjH0ZBp5gfw/uUn0cIcey0jiZ4jGjnGZG5+iuTAl3lZ2ICO4silCOA+L
-         XQir94lJuO3g8buPBrt/KMMs7GAjcOtA/yynOC+EkuRlp3AKWjPLooOB2YaJfflm27xW
-         KI+dzb/5xGwtDATy7d5u16tWforC/Olatz+xV9EMNhtenyCDKvwRM8YSEDMeOLuT7xYl
-         O+BYrjdLWgQPF8et51KrCOChlZncbVhb/rKHKpt7KV7Eq9HA0qs25wFYwN7xmlUQXfdy
-         CpZQ==
+        bh=kEvX7e1LRk8hq7EVC3eBy2OeVtrJmQlrIB7WWAJzilU=;
+        b=aAXm1ETsLlBg2pebplD2DAO8ZOpD8sm3uSZtJsg9vwmAg0ZExijiYvoiZr+4iG4e1H
+         U6rm2IL2gwyTBTywqvmn2Sp4+ZmiUrNFw9Lgw2i1AEWZzsatJYBQxpPAyuUpLYpFa6lc
+         ED7oiFFQ7NlzuzTbS3cEvSPfFcqosfZn6Hg5s6YHDuDRo5ckOPI3yT0xXrnR3bKcp3HI
+         iB835vR/jzg0XQz6k0bROHd162OQruI4Lli449zaxIwYM9eZqUaZzSJv1mYLqidZwv5n
+         BnCXZkfOGdSGH/2ab8++dCS2CGDkCQGA9+3A7JrbU3XGSfiWhYT+PcQczYScoU1ywNgg
+         b6EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D9yWoQxE74uWounzZsZbgmdR8XONo5+WgLUX+EXW7Z8=;
-        b=XFHAhspHtJRKOJ7RxFbQXuIF2kJBh56FQAJN+lbpcsGZ8otoTzZjMUErtus0qt3IJv
-         mNT/B/FSX5ATavVLeYaKtd5KMIDifomwmtLxjbViMzz/9oYccvRaPjIVuCsAgYsHbPgy
-         zT6mKhl8hWu6bkKmMngIRTBq66sBenESguDozCkGl3PnHCOXYyIjCfqpO8uLwQk9lNT7
-         MMcK3FN6I2se3JdY73aGC2Ma//bdbVGvCRXXjgC/dg6oPB/K6C/BInt6GWsl2dRNb3zX
-         mONHqXP+APgguFD45nAAHHxtj5CPPZ3GxgVyQGgx/GpdIMVLsw9CvSiHOYYoOQVo1I91
-         mujw==
-X-Gm-Message-State: AOAM533OiCJexn2bW4AfWEwZULjQymaxG2YX8nh5tJOwAMa2fjgvxWVt
-        abWeRxO7pkwl1zChTB9mkcc=
-X-Google-Smtp-Source: ABdhPJy2vJ2L1malfBBRM4cUlBP0TGqjnTwoaOudz/gCM9UJz+7FLPzRsYKm3er60S2yrMqPr+FaVA==
-X-Received: by 2002:a63:2cd5:0:b0:398:997f:a440 with SMTP id s204-20020a632cd5000000b00398997fa440mr2932196pgs.344.1649164157652;
-        Tue, 05 Apr 2022 06:09:17 -0700 (PDT)
+        bh=kEvX7e1LRk8hq7EVC3eBy2OeVtrJmQlrIB7WWAJzilU=;
+        b=Xo7l+gXtcUyGJeJCTOc0j+FFgYGZug6RcWPt9jlS8DWoaTpEinekObjl4LlQLmtd6P
+         VZtXpKEntW+hj4qI5A+RWGazRXU6hwwYEMevIaWpfaVNeP9QnaM/6b84YprlVsndy5cS
+         hx1lSVK6zXXeDW6VMxRm53Wug1m3JNJtZnBHRNI3zcaXQuxqflC97is8o55TiHnFjwAi
+         HoKkqcS36RDqBJBT300iyeyOfKfkdk04wr3K8y7Dd3ELoDAtRp0LwuNZ2fmOzSJ2juf5
+         VnEg/XIhr3CyBKLjckBrcQqbTreEsPtfIcXHsRGo4SjV+zGoP1OhbpWT/F/T28jNTcW2
+         Qs6Q==
+X-Gm-Message-State: AOAM533K6lbM2VB27pqNOah3iPOZuuqUita6+vXMws//jBmlaLeRW0Rq
+        S0ZBOpoCbrshWU15ZtEwGfM=
+X-Google-Smtp-Source: ABdhPJzV/FBtnA3fMwNnZGWzf3lprriAFgMU658FYakS9xPeDccuO6wPRtGV1fDrEV7npZ5AzY+Teg==
+X-Received: by 2002:a05:6a00:87:b0:4fb:39f9:bb9d with SMTP id c7-20020a056a00008700b004fb39f9bb9dmr3585296pfj.48.1649164174417;
+        Tue, 05 Apr 2022 06:09:34 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.16
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:17 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:33 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 02/27] bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in xdpxceiver
-Date:   Tue,  5 Apr 2022 13:08:33 +0000
-Message-Id: <20220405130858.12165-3-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 15/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tag
+Date:   Tue,  5 Apr 2022 13:08:46 +0000
+Message-Id: <20220405130858.12165-16-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -67,43 +67,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explicitly set libbpf 1.0 API mode, then we can avoid using the deprecated
-RLIMIT_MEMLOCK.
+Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
+included bpf_rlimit.h.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_tag.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 5f8296d29e77..cfcb031323c5 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -90,7 +90,6 @@
- #include <string.h>
- #include <stddef.h>
- #include <sys/mman.h>
--#include <sys/resource.h>
- #include <sys/types.h>
- #include <sys/queue.h>
- #include <time.h>
-@@ -1448,14 +1447,13 @@ static void ifobject_delete(struct ifobject *ifobj)
+diff --git a/tools/testing/selftests/bpf/test_tag.c b/tools/testing/selftests/bpf/test_tag.c
+index 0851c42ee31c..5546b05a0486 100644
+--- a/tools/testing/selftests/bpf/test_tag.c
++++ b/tools/testing/selftests/bpf/test_tag.c
+@@ -20,7 +20,6 @@
+ #include <bpf/bpf.h>
  
- int main(int argc, char **argv)
- {
--	struct rlimit _rlim = { RLIM_INFINITY, RLIM_INFINITY };
- 	struct pkt_stream *pkt_stream_default;
- 	struct ifobject *ifobj_tx, *ifobj_rx;
- 	struct test_spec test;
- 	u32 i, j;
+ #include "../../../include/linux/filter.h"
+-#include "bpf_rlimit.h"
+ #include "testing_helpers.h"
  
--	if (setrlimit(RLIMIT_MEMLOCK, &_rlim))
--		exit_with_error(errno);
+ static struct bpf_insn prog[BPF_MAXINSNS];
+@@ -189,6 +188,9 @@ int main(void)
+ 	uint32_t tests = 0;
+ 	int i, fd_map;
+ 
 +	/* Use libbpf 1.0 API mode */
 +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
- 
- 	ifobj_tx = ifobject_create();
- 	if (!ifobj_tx)
++
+ 	fd_map = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(int),
+ 				sizeof(int), 1, &opts);
+ 	assert(fd_map > 0);
 -- 
 2.17.1
 
