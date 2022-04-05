@@ -2,101 +2,140 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E302CC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F0EC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:49:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240348AbiDEOtq (ORCPT
+        id S234050AbiDEOt6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        Tue, 5 Apr 2022 10:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbiDEOUx (ORCPT
+        with ESMTP id S1377013AbiDENMq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:20:53 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA258E46;
-        Tue,  5 Apr 2022 06:09:22 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so2628464pjm.0;
-        Tue, 05 Apr 2022 06:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mdYdVPAM9TjLW7Qxa7yxcAiGGUheU0V9dPD7DbrjxTA=;
-        b=ei4Kh822WYlJNzn+z8zEAd5WjpuxNPJi/lb7utgNIyA8xjzaNmTsyh0xa4F2xT9LMa
-         8wC9Pb9+4sx43D57skHv9pMBkT1TG6iTdvkFdc6tZxdwNRKjoQOZUmd9HS7EtMmeUvg7
-         0BTfygINdzNsElCCrs4DsNhSbCLP1yw3RHZOnsLo1zHMKvIMnbzDuGSqz+KeN08YvrbI
-         Izo08xvxJlk/YZvPmV4dAYaX4MiJ+Gtv/MMqZrpdkMnO23GIczdJYty5ZAPhAF/dYfsP
-         tuhfdyUMLq4DBrGepvjXdW+jUEIDlZ25uVsZ1vqiTGzz7usVehML2Uzo/8y8HCK52htX
-         vhRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mdYdVPAM9TjLW7Qxa7yxcAiGGUheU0V9dPD7DbrjxTA=;
-        b=2eIAIHiKZsvJ6DsOwVAxT5Y3e+8CGgxLPhP3HGn8saR7xupKW3SxulWW1ZVRTnrh+W
-         zlpqmREcyD0JtvLdlvqyNT3KtmAUYBnC3At5Beeu5YCvfXwpkGfe72qBAc9DWvyxyNO5
-         n3VXnaB5tVZ0oC5HYyCTMdb1GLpO2R1g7D3Uya2FaBUwYko0xjJZJesbMl7TYQZq1CB5
-         ug8uM6jQvAgiKmJjrYQKYVKpMjJ8KlUxZ8HpTrkjJUJ43ViW5L6OWWHS+d9QFGTklgZu
-         d4fdKWWTmb6oydK7AUXPjRuqYiBSEYwf0gZN6VHRx6oZ3Ow0PAksxayllmGnojKJVTyk
-         VHhw==
-X-Gm-Message-State: AOAM531J8SXObEuiOcTSwBLGa2QTKH1Y2U7bUzQbtzjYzmWsQGf4rQWg
-        /iKcZ5uAq85o6TX6sBPC2O8=
-X-Google-Smtp-Source: ABdhPJxFOTSUprEHPohGXe61eZTXc4R9Uiz1QOBijsy8FiDFanzFwWP7mqzoFI1NVN1goXLrFKysRw==
-X-Received: by 2002:a17:90a:c70f:b0:1bf:3e2d:6cfa with SMTP id o15-20020a17090ac70f00b001bf3e2d6cfamr4051043pjt.70.1649164161570;
-        Tue, 05 Apr 2022 06:09:21 -0700 (PDT)
-Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:20 -0700 (PDT)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 05/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in get_cgroup_id_user
-Date:   Tue,  5 Apr 2022 13:08:36 +0000
-Message-Id: <20220405130858.12165-6-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
-References: <20220405130858.12165-1-laoar.shao@gmail.com>
+        Tue, 5 Apr 2022 09:12:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF7D120D9D;
+        Tue,  5 Apr 2022 05:12:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2FE681F745;
+        Tue,  5 Apr 2022 12:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649160767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YGolTQlWegdqsJgfgfOCgFdotBM/n5qIvgfFfvEjxd0=;
+        b=BK6a6qL8o7p/MJgbNqqctnSF5bmv5BGKuuqBTv2USITbTpPoKI1f15ogW871KoTo/RdheN
+        2ofE8y9/q59bmAhdL1seIYTAGQd263xP4FVoKwCcc/FYdRc3tUwqP3pmlISrihOeY4NF+U
+        B5AcViJAx3CYaDGctEIJbO7LJzMoxwU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA5C913A04;
+        Tue,  5 Apr 2022 12:12:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id s8TPKD4yTGIlCAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 05 Apr 2022 12:12:46 +0000
+Date:   Tue, 5 Apr 2022 14:12:45 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
+Message-ID: <20220405121245.GA30368@blackbody.suse.cz>
+References: <20220328035951.1817417-1-tjmercier@google.com>
+ <20220328035951.1817417-6-tjmercier@google.com>
+ <20220329152142.GA15794@blackbody.suse.cz>
+ <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-included bpf_rlimit.h.
+On Fri, Apr 01, 2022 at 11:41:36AM -0700, "T.J. Mercier" <tjmercier@google.com> wrote:
+> This link doesn't work for me, but I think you're referring to the
+> discussion about your "RAM_backed_buffers" comment from March 23rd.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- tools/testing/selftests/bpf/get_cgroup_id_user.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+(Oops, it's a non-public message. But yes, you guessed it right ;-))
 
-diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
-index 3a7b82bd9e94..e021cc67dc02 100644
---- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
-+++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
-@@ -20,7 +20,6 @@
- 
- #include "cgroup_helpers.h"
- #include "testing_helpers.h"
--#include "bpf_rlimit.h"
- 
- #define CHECK(condition, tag, format...) ({		\
- 	int __ret = !!(condition);			\
-@@ -67,6 +66,9 @@ int main(int argc, char **argv)
- 	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
- 		return 1;
- 
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
- 	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
- 		goto cleanup_cgroup_env;
--- 
-2.17.1
+> Anyway the test I did goes like this: enable memcg and gpu cgoups
+> tracking and run a process that allocates 100MiB of dmabufs. Observe
+> memcg and gpu accounting values before and after the allocation.
 
+Thanks for this measurement/dem/demoo.
+
+> Before
+> # cat memory.current gpu.memory.current
+> 14909440
+> system 0
+> 
+> <Test program does the allocation of 100MiB of dmabufs>
+> 
+> After
+> # cat memory.current gpu.memory.current
+> 48025600
+> system 104857600
+> 
+> So the memcg value increases by about 30 MiB while the gpu values
+> increases by 100 MiB.
+
+> This is with kmem enabled, and the /proc/maps
+> file for this process indicates that the majority of that 30 MiB is
+> kernel memory.
+
+> I think this result shows that neither the kernel nor process memory
+> overlap with the gpu cgroup tracking of these allocations.
+
+It depends how the semantics of the 'system' entry is defined, no?
+As I grasped from other thread, the 'total' is going to be removed, so
+'system' represents exclusively device memory?
+
+
+> So despite the fact that these buffers are in main memory, they are
+> allocated in a way that does not result in memcg attribution. (It
+> looks to me like __GFP_ACCOUNT is not set for these.)
+
+(I thought you knew what dmabufs your program used :-p)
+
+So, the goal is to do the tracking and migrations only via the gpu cg
+layer, regardless how memcg charges it (or not).
+
+(I have no opinion on that, I'm just summing it so that we're on the
+same page.)
+
+Michal
