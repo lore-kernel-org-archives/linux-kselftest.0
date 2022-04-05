@@ -2,152 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2FFC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Apr 2022 05:20:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCFA5C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbiDFFWi (ORCPT
+        id S238105AbiDFFWm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        Wed, 6 Apr 2022 01:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1845804AbiDFCBU (ORCPT
+        with ESMTP id S1585461AbiDEX74 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:01:20 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEF724B0B1;
-        Tue,  5 Apr 2022 16:28:49 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id e22so1024084ioe.11;
-        Tue, 05 Apr 2022 16:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PUMn2pJdmTqU9T1LboNHqySso6NmNTYjmvIQ/4E+6jg=;
-        b=gNe8qsL51ziO0gB71BLSIYx0dhQmBI6zDUfVHVMAec4jf0pQWeA1zZ2h4sxZU8GVXA
-         gwUULa+cnWQ/VxFgfOj97piyqAh4IFJLybVUZPOCK9XmdbSbzVB2zd3tGNBgypwj1rPh
-         9muXPJS+9ogRaxX9AaruMwEI28RqkVAL4VCFJBahhFKgRrqycnSZO67AiPJq57+Jg0hN
-         rkbNi5jOgama1LtciEKjBZY0SR+ZZVR6qdmiR80UIKktan1Dvey1RiQ+ZlK3Zw+5Migj
-         3daCkrMJ2AETNxGIOuJDRDH2L7/CvWH+q99dqTdC3xZ0VlLhj0MZAV5UWFtqFqID5Lo2
-         fHvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PUMn2pJdmTqU9T1LboNHqySso6NmNTYjmvIQ/4E+6jg=;
-        b=rN3eEdp/SYNWmwvXGfgmKmKZsRrv4BzKOFEm4SxYML0J3qPzFiMoipP6baKEfG1JbN
-         upXHLesc1oJ8+1XZwwRz2gT5tos+y48BVwhvoQDkPSLOws9RJ9bpnjvQJ+xmVALREHxy
-         pxhix35DWiagjAu6foNxRXriCmMitlmBJ1NkdgYx6SjOY8YiCfRV5QfSPasqypMOLdU9
-         7nIaWhU3sxAhUVE6EdLjsJw24eTUq7ZNBfkoDYoUbqmvF2N9TuyS8MVvQtYYA2wX0+/6
-         ehZXep5Eq2U721KJ/pgYk25qEtR71tl8QnJGStJcXMQ44GnCCWtBdj6qmd2N/rCCbnvI
-         Btsg==
-X-Gm-Message-State: AOAM532HDWpEaATrBYEa+fP5TB21WjqzzdlZpzjVssOyoiV4qUE6oJ/j
-        l3D439WzCFShQE4z7G2dTon4vGVGKfpmxD2dakw=
-X-Google-Smtp-Source: ABdhPJyKqUsGJx3oQJikLMMo7nQ3XQuZBU6aXhgu0HkBIbtVmBQTJNGbQwnmNfviladdps3TCxWYY7vRUoJCBgdNSMY=
-X-Received: by 2002:a6b:8bd7:0:b0:646:2804:5c73 with SMTP id
- n206-20020a6b8bd7000000b0064628045c73mr2711308iod.112.1649201328273; Tue, 05
- Apr 2022 16:28:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAEf4BzZrc=wr4FLkWkOSEeprzybA8JTipsnr_U1kYA0785WkTw@mail.gmail.com>
- <20220405062403.22591-1-ytcoode@gmail.com>
-In-Reply-To: <20220405062403.22591-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 16:28:37 -0700
-Message-ID: <CAEf4BzbSbMMoZM-3fkhZnbxk0bu5ySDO782WGbgcKUzs-u6N_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix issues in parse_num_list()
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        john fastabend <john.fastabend@gmail.com>,
-        Martin Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        Tue, 5 Apr 2022 19:59:56 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D637037;
+        Tue,  5 Apr 2022 15:18:11 -0700 (PDT)
+Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nbrUx-0007Bs-JV; Wed, 06 Apr 2022 00:18:03 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nbrUx-000Q5a-4g; Wed, 06 Apr 2022 00:18:03 +0200
+Subject: Re: [PATCH bpf v4] bpf: Support dual-stack sockets in
+ bpf_tcp_check_syncookie
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Arthur Fabre <afabre@cloudflare.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>
+References: <20220329133001.2283509-1-maximmi@nvidia.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ece21940-90fc-2bf7-19da-770cf0956542@iogearbox.net>
+Date:   Wed, 6 Apr 2022 00:18:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20220329133001.2283509-1-maximmi@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26503/Tue Apr  5 10:19:26 2022)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 11:24 PM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> There are some issues in parse_num_list():
->
-> First, the end variable is assigned twice when parsing_end is true, it is
-> unnecessary.
->
-> Second, the function does not check that parsing_end is false after parsing
-> argument. Thus, if the final part of the argument is something like '4-',
-> parse_num_list() will discard it instead of returning -EINVAL.
->
-> Clean up parse_num_list() and fix these issues.
->
-> Before:
->
->  $ ./test_progs -n 2,4-
->  #2 atomic_bounds:OK
->  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> After:
->
->  $ ./test_progs -n 2,4-
->  Failed to parse test numbers.
->
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
-> v1 -> v2: add more details to commit message
->
->  tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-> index 795b6798ccee..82f0e2d99c23 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.c
-> +++ b/tools/testing/selftests/bpf/testing_helpers.c
-> @@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
->                 if (errno)
->                         return -errno;
->
-> -               if (parsing_end)
-> -                       end = num;
-> -               else
-> +               if (!parsing_end) {
->                         start = num;
-> +                       if (*next == '-') {
-> +                               s = next + 1;
-> +                               parsing_end = true;
-> +                               continue;
-> +                       }
-> +               }
->
-> -               if (!parsing_end && *next == '-') {
-> -                       s = next + 1;
-> -                       parsing_end = true;
-> -                       continue;
-> -               } else if (*next == ',') {
+Hey Maxim,
 
-I think the new structure of the code is actually harder to follow and
-there is no need to change this code in the first place just to
-optimize away parsing_end assignmet.
+On 3/29/22 3:30 PM, Maxim Mikityanskiy wrote:
+> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
+> validates the address family of the socket. It supports IPv4 packets in
+> AF_INET6 dual-stack sockets.
+> 
+> On the other hand, bpf_tcp_check_syncookie looks only at the address
+> family of the socket, ignoring the real IP version in headers, and
+> validates only the packet size. This implementation has some drawbacks:
+> 
+> 1. Packets are not validated properly, allowing a BPF program to trick
+>     bpf_tcp_check_syncookie into handling an IPv6 packet on an IPv4
+>     socket.
+> 
+> 2. Dual-stack sockets fail the checks on IPv4 packets. IPv4 clients end
+>     up receiving a SYNACK with the cookie, but the following ACK gets
+>     dropped.
+> 
+> This patch fixes these issues by changing the checks in
+> bpf_tcp_check_syncookie to match the ones in bpf_tcp_gen_syncookie. IP
+> version from the header is taken into account, and it is validated
+> properly with address family.
+> 
+> Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
+> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
 
-> +               if (*next == ',') {
->                         parsing_end = false;
->                         s = next + 1;
->                         end = num;
-> @@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
->                         set[i] = true;
->         }
->
-> -       if (!set)
-> +       if (!set || parsing_end)
->                 return -EINVAL;
->
+Could you do one final spin (while retaining Arthur's Ack) by splitting
+off the selftest into a separate commit? Otherwise stable folks likely
+won't be able to pick the fix up. Otherwise lgtm.
 
-this is a real fix, please submit just and drop the first part of the patch
-
->         *num_set = set;
-> --
-> 2.35.1
->
+Thanks,
+Daniel
