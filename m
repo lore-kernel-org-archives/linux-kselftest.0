@@ -2,157 +2,161 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14248C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Apr 2022 23:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24580C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 02:36:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242848AbiDDXOc (ORCPT
+        id S229775AbiDECiL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 4 Apr 2022 19:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        Mon, 4 Apr 2022 22:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243560AbiDDXLl (ORCPT
+        with ESMTP id S229862AbiDECiE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:11:41 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CE810A3
-        for <linux-kselftest@vger.kernel.org>; Mon,  4 Apr 2022 15:48:44 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id yy13so23057367ejb.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Apr 2022 15:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vmQtSeoAc+Nq1zeZ+fcOy7GISIYvQy3s9Qy54NdzuHU=;
-        b=o04wJ+0ZKldbQAUg1OrIlnIW+Sx2rrgZN889EJaxXOUiYl1aFr9M2h/mAs5Hq/qfKP
-         TTsqt/3k7wIv4hpJjvaqoJLYI8N+Bs3w+hQCNbH+TXLubgXpeWh9UMVwIGRxTbT+0HRe
-         OYkEmZn4RdjGxdIuFmDsnKDyQOrtx7luLwYQu2jkxEZvv0Yiu0qJGhOT3Zb7QdH6VHX4
-         lyfyTbnXIgPDJjdPXj+suT0Ge2pmL/GV7WS9mY3h2pmqDceIKSocUZYNRQa/uR3YhX2e
-         7ywzIGVVVuGNqcwOXumeP3m+tRQvyS2P01JKNHoObHinqn6TKWcZZ9J4CRbY+KGcDH/K
-         P29A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vmQtSeoAc+Nq1zeZ+fcOy7GISIYvQy3s9Qy54NdzuHU=;
-        b=swacwv/biaXIu2WlYBnKcAoH2su3gQaWw1rf1CJEg4dcEhMUIjFunAdQVMp4cUDsS1
-         1XPGG+Mwlffo4xlL/1pvM9kftjj9MsEyLi0HE//JLbYVc+efij1Wu8sWokvv0Sv55nv7
-         BbAMxMR41J0tlW8XB0fbYZz3d2cMzCpaGg946M9ER+Y/7gbisIXeQE3tRzwhd3gnIPjT
-         lkpyxkQHVWfmOb6Jy47TLncqV7lD14qdAUI4VMDiANcghXBY58/kL6Ti0fDk0nhfCRJT
-         eZFBw49RI5r7gk8cwHtWNDuungYV5XMIDaiIhX5jYJ2f7amUBYvxjcO6SpfCdgsDAwl9
-         HyZA==
-X-Gm-Message-State: AOAM533gggguH7wLjJfIjxAVl3GwYvtmwtMhf1+6xhQXFOqLF8EX/xrv
-        rfnKCkmYMyEC9wCzQ9tOWQy/f9EVp/LHrdGZgPXWTw==
-X-Google-Smtp-Source: ABdhPJzdIQ4vB761RUi6v1HI1p4UzqyOOA0GSKBjTMp6EdtjdhHQq8XELB1I6aQFcv0w/hp4QKxJhGCbQx/1j27ysbA=
-X-Received: by 2002:a17:906:37cd:b0:6e0:bdb6:f309 with SMTP id
- o13-20020a17090637cd00b006e0bdb6f309mr500240ejc.394.1649112523031; Mon, 04
- Apr 2022 15:48:43 -0700 (PDT)
+        Mon, 4 Apr 2022 22:38:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D4E2F4961
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Apr 2022 18:37:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF6BE61689
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 00:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4110FC3411F
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 00:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649116837;
+        bh=zFyw1VrfGv7NEuMWOTezqzL8GubbV0WO1PDpwo/w7kk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IzT8pKglPQrYQePYYNDTTvWosEy8MxZkq3wR0piD8u7iSz63ghJ7anCpsXVy8rPww
+         h8sb6BeBAosTUPJfJSBf5tC/Uc9Zc7IhUFp3EN+3Y4bey3Juna89uPMBgdz3W6AXN8
+         KvMFgfyNzawLqWgHmU50yAJKNxBLRXw3d+NWJeiFYcgugGX/GADSzk/5G8g9++kPxr
+         OpF27iOsOSCNOr0NIjmDYXJCtgmcKH1aCT/Qss+bZqX0jw6YqWJZnXdaS1BIF6FzjI
+         YW3kHL8sWBe0nwkHW+VswjM/Okte+nrlOhP3czPdm/y4SX3zE8ViE7mZZZHIzCb+Y/
+         aCTsH/tzvnYAg==
+Received: by mail-ed1-f53.google.com with SMTP id w18so6738904edi.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Apr 2022 17:00:37 -0700 (PDT)
+X-Gm-Message-State: AOAM531OhGqqKtwJ04Zm3BJAnwb9DmSa4bdWi+PBWJR+1GgQ5gTE9V8b
+        /5PgRJ4HYi8+jrpwbh7qePPr54Gy9epDmpiSXIYK7A==
+X-Google-Smtp-Source: ABdhPJx00CBmV+NQNnGWVZ6pCbTPeYWoi7t9WNITl4M8WQe+QSjOqLEi5/uSRAkUXHVhCjpjoCKilOkyYU4kDA3K4zE=
+X-Received: by 2002:aa7:c157:0:b0:418:f8e3:4c87 with SMTP id
+ r23-20020aa7c157000000b00418f8e34c87mr671966edp.271.1649116835186; Mon, 04
+ Apr 2022 17:00:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311072859.2174624-1-brendanhiggins@google.com> <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
-In-Reply-To: <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 4 Apr 2022 18:48:31 -0400
-Message-ID: <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
- init code
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        martin.fernandez@eclypsium.com, daniel.gutson@eclypsium.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        jk@codeconstruct.com.au
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+ <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+ <c2e57f10b62940eba3cfcae996e20e3c@huawei.com> <CAADnVQJSso+GSXC-QmNmj0GBPZzxRCRfqAcQbqD-6y0CtMSopQ@mail.gmail.com>
+In-Reply-To: <CAADnVQJSso+GSXC-QmNmj0GBPZzxRCRfqAcQbqD-6y0CtMSopQ@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 5 Apr 2022 02:00:24 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+Message-ID: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Tue, Apr 5, 2022 at 12:49 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Hi Brendan,
->
-> On 3/11/22 12:28 AM, Brendan Higgins wrote:
-> > Add support for a new kind of kunit_suite registration macro called
-> > kunit_test_init_suite(); this new registration macro allows the
-> > registration of kunit_suites that reference functions marked __init and
-> > data marked __initdata.
+> On Mon, Apr 4, 2022 at 10:21 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
 > >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Reviewed-by: David Gow <davidgow@google.com>
-> > ---
-> >
->
-> I almost applied it ...
->
-> > This is a follow-up to the RFC here[1].
-> >
-> > This patch is in response to a KUnit user issue[2] in which the user was
-> > attempting to test some init functions; although this is a functional
-> > solution as long as KUnit tests only run during the init phase, we will
-> > need to do more work if we ever allow tests to run after the init phase
-> > is over; it is for this reason that this patch adds a new registration
-> > macro rather than simply modifying the existing macros.
-> >
-> > Changes since last version:
-> >   - I added more to the kunit_test_init_suites() kernel-doc comment
-> >     detailing "how" the modpost warnings are suppressed in addition to
-> >     the existing information regarding "why" it is OK for the modpost
-> >     warnings to be suppressed.
-> >
-> > [1] https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
-> > [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-> >
-> > ---
-> >   include/kunit/test.h | 26 ++++++++++++++++++++++++++
-> >   1 file changed, 26 insertions(+)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index b26400731c02..7f303a06bc97 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
-> >
-> >   #define kunit_test_suite(suite)     kunit_test_suites(&suite)
-> >
-> > +/**
-> > + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-> > + *                         containing init functions or init data.
-> > + *
-> > + * @__suites: a statically allocated list of &struct kunit_suite.
-> > + *
-> > + * This functions identically as &kunit_test_suites() except that it suppresses
-> > + * modpost warnings for referencing functions marked __init or data marked
-> > + * __initdata; this is OK because currently KUnit only runs tests upon boot
-> > + * during the init phase or upon loading a module during the init phase.
-> > + *
-> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-> > + * tests must be excluded.
-> > + *
-> > + * The only thing this macro does that's different from kunit_test_suites is
-> > + * that it suffixes the array and suite declarations it makes with _probe;
-> > + * modpost suppresses warnings about referencing init data for symbols named in
-> > + * this manner.
-> > + */
-> > +#define kunit_test_init_suites(__suites...)                          \
-> > +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
-> > +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
-> > +                         ##__suites)
-> > +
-> > +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
-> > +
-> >   #define kunit_suite_for_each_test_case(suite, test_case)            \
-> >       for (test_case = suite->test_cases; test_case->run_case; test_case++)
-> >
-> >
->
-> The naming of the function and macro are rather confusing and can become
-> error prone. Let's find better naming scheme.
+> > > From: Djalal Harouni [mailto:tixxdz@gmail.com]
+> > > Sent: Monday, April 4, 2022 9:45 AM
+> > > On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
+> > > >
+> > > > On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > ...
+> > > > >
+> > > > > > Pinning
+> > > > > > them to unreachable inodes intuitively looked the
+> > > > > > way to go for achieving the stated goal.
+> > > > >
+> > > > > We can consider inodes in bpffs that are not unlinkable by root
+> > > > > in the future, but certainly not for this use case.
+> > > >
+> > > > Can this not be already done by adding a BPF_LSM program to the
+> > > > inode_unlink LSM hook?
+> > > >
+> > >
+> > > Also, beside of the inode_unlink... and out of curiosity: making sysfs/bpffs/
+> > > readonly after pinning, then using bpf LSM hooks
+> > > sb_mount|remount|unmount...
+> > > family combining bpf() LSM hook... isn't this enough to:
+> > > 1. Restrict who can pin to bpffs without using a full MAC
+> > > 2. Restrict who can delete or unmount bpf filesystem
+> > >
 
-Yeah, I wasn't sure about the name. I didn't have any better ideas
-initially though. Any suggestions?
+I like this approach better, you will have to restrict the BPF, if you
+want to implement MAC policy using BPF.
 
-> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+Can you please try implementing something using these hooks?
+
+> > > ?
 > >
+> > I'm thinking to implement something like this.
+> >
+> > First, I add a new program flag called
+> > BPF_F_STOP_ONCONFIRM, which causes the ref count
+> > of the link to increase twice at creation time. In this way,
+> > user space cannot make the link disappear, unless a
+> > confirmation is explicitly sent via the bpf() system call.
+
+I don't like this approach, this just sounds like an intentional
+dangling reference, prone to refcounting errors and it does not
+really solve the purpose you want to achieve.
+
+And you will still need a policy around the BPF syscall,
+so why not just use the LSM hooks as suggested above?
+
+> >
+> > Another advantage is that other LSMs can decide
+> > whether or not they allow a program with this flag
+> > (in the bpf security hook).
+> >
+> > This would work regardless of the method used to
+> > load the eBPF program (user space or kernel space).
+> >
+> > Second, I extend the bpf() system call with a new
+> > subcommand, BPF_LINK_CONFIRM_STOP, which
+> > decreases the ref count for the link of the programs
+> > with the BPF_F_STOP_ONCONFIRM flag. I will also
+> > introduce a new security hook (something like
+> > security_link_confirm_stop), so that an LSM has the
+> > opportunity to deny the stop (the bpf security hook
+> > would not be sufficient to determine exactly for
+> > which link the confirmation is given, an LSM should
+> > be able to deny the stop for its own programs).
+> >
+> > What do you think?
 >
-> thanks,
-> -- Shuah
+> Hack upon a hack? Makes no sense.
