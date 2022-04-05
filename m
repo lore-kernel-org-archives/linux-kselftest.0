@@ -2,113 +2,161 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A2FC41535
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C90C4167E
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 23:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349367AbiDEXgh (ORCPT
+        id S1349147AbiDEXgd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        Tue, 5 Apr 2022 19:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452812AbiDEPzf (ORCPT
+        with ESMTP id S1573065AbiDERvL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:55:35 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172177B546;
-        Tue,  5 Apr 2022 07:57:25 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id bx5so12076459pjb.3;
-        Tue, 05 Apr 2022 07:57:25 -0700 (PDT)
+        Tue, 5 Apr 2022 13:51:11 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED0AD9EBA
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 10:49:11 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id q26so8185117edc.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 10:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0fNKMdl5EgB8iVKO3jm7hq1ylGNE7urfWADlkF8zHzk=;
-        b=ouZF9rErW74fo9ZonM3kbl48QBEP9m7ukEs8xbgviCGPBdG1trn8OYOgkunWQrv9Xp
-         6AsDq1Mz0OFkH2tTIlJgL6697IdMgJIPV0xamecang18e+ZTD9QzKrLKIOemtmNtZW6t
-         xMPbhL1GoZEAY6Vnb/Yj+ErgsRHJiFecRFJ2obcylz0YhPP5CkxJZqjNp9VG6pqKtxsD
-         U/JfTW3WzHYACaSRHW++KVgDT/a69ci5QEadZN53z7/PEuEX4DIIcYJtAvRS1y5+32vF
-         Nt5yBVd89OcTKFi9DIAkhjJiu7wvvHFYZiWP8TTmuLgqCpceUoKOnQWWRSKZRJiimpqL
-         se1g==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RXCW1evSnb4oJ88sHTAFEYTq0HTuOW2ocRpwnA3InQ4=;
+        b=DFediYf4lKdcEGd6wHnf3P2A1rH9d97LcubT3QP6yRNY6vUA82uDkOevPceh0sN/Wl
+         AzNDVgFuK6V76WaqpSYAiG2hRF9Re4Ov3xlC/Ms7hpW9uCTQ7y898MEv8Ijbqhc6SxXo
+         QvfpY4jywVuV6j8Ii/P3vkQXreEU44Hlqin6E5RTxZAap0ziUpyUXuD83coag22gB7nJ
+         kP94eXAsBC1cr7hK8pVNGZaStSW21SliZd84A/wTh+8QK9KZdm23HHaRa8zC2IVlp4fq
+         sk905jrtMt/I2FOoTaeCu/ArrkOR8UVb6SsiWhRhquLKZ90pI6vt79FBY7MRBMWLMUZ2
+         L8SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0fNKMdl5EgB8iVKO3jm7hq1ylGNE7urfWADlkF8zHzk=;
-        b=vYW9t33g0mxb9quEvP2AO+OL4fglUipaaue7Jn8kSMSyggi9I4tVVoYb1ZXNCjTfKw
-         dMgGvz7n/v/2l0d/Q8ntK1RVDPfYBBuVtHWPi/Ocu0GgqgPbCIhhYGq4wh8IE25ZCSv+
-         w5O9y5ZFytVQRiwrzSO4b7+rtwNA9rdc6NMpKIYdzqXL26lEiGaqJiCLWQoCuaIxCEP5
-         JfoAq2NMWVpu+p21kXNfmTjxb4yzhoVq/l0yi6sSxbyv8grvzl2Cy3wNNShDvYcShVr0
-         nhQicEUC2AJq0N13Bk8czCGgxtxVJ44HCFXMSVJEt9SawSvHcq5r9JO/gzhTfVnkb7NO
-         wO6Q==
-X-Gm-Message-State: AOAM532WEqjPW57GTP92zfbAVf/4h2mDAwh2k0R/RAJM2f9B3Q0Rc2Ti
-        P9CEOfJotoe9hUIS9roRUv0=
-X-Google-Smtp-Source: ABdhPJxNnD+uON5FVNi6s4DMI5cEjuwS1ZmzNMYMxcdxqmxddZ+4IwfYpWLoUaQhrUAbn0pDSnfLsg==
-X-Received: by 2002:a17:90a:4604:b0:1bc:8bdd:4a63 with SMTP id w4-20020a17090a460400b001bc8bdd4a63mr4582646pjg.147.1649170644566;
-        Tue, 05 Apr 2022 07:57:24 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b001c779e82af6sm2687794pjf.48.2022.04.05.07.57.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 07:57:23 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix file descriptor leak in load_kallsyms()
-Date:   Tue,  5 Apr 2022 22:57:11 +0800
-Message-Id: <20220405145711.49543-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RXCW1evSnb4oJ88sHTAFEYTq0HTuOW2ocRpwnA3InQ4=;
+        b=F6cne4fEESYTT9ckWuZ76ffd6pLt3qKtY9X/dCDySLyzBZvX30sZKFuKByhLEi1FFl
+         P4xmFFXkjZq1PcfFjc170Y0/CS92oH3c9oyHw1hC2HDQAd4fjFfcKgvl40Au0ZbaQ45+
+         wyrMyGEVXqLCd3nYXxOxzeDMQgGxomIefYOMchG/LjvoY208cenuSPWiWr3DyQ3Y2caX
+         T2zQglGzAvPoZQdxtaOhXMCcebc7GssvsoUnmAtU5Bmd5O8DdENEjWpiGfsEMkXIIu5N
+         pMuyUUtCePmPC3I4plbp6tRPFfNf34YLNvpHolsLVQ7jpr6zvZhKcjaE0kRbwLuUhvaC
+         tT5Q==
+X-Gm-Message-State: AOAM530jSUKTkKIcrfyVkIYrjcPCU3hqQgUn4L7g1vavjYStXLCVtB1C
+        0Zaxi1oiAcMnqr7lTJpZi7gekNhobyAm18Drc6w5vg==
+X-Google-Smtp-Source: ABdhPJy3kLISS/qYYRzMDmjCuhPu7OU3AJeQfL+t2mEx7NkNwMYgXC85KD1rOoe+vR5iNyCwy95ZqCXnaDcme/ng0CI=
+X-Received: by 2002:aa7:d98f:0:b0:41c:bf0f:4c45 with SMTP id
+ u15-20020aa7d98f000000b0041cbf0f4c45mr4818393eds.379.1649180950052; Tue, 05
+ Apr 2022 10:49:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220328035951.1817417-1-tjmercier@google.com>
+ <20220328035951.1817417-6-tjmercier@google.com> <20220329152142.GA15794@blackbody.suse.cz>
+ <CABdmKX2874NdYCBzpKLnqWhZQDkC2wKz4ZL_aFNqrec6iAutpQ@mail.gmail.com> <20220405121245.GA30368@blackbody.suse.cz>
+In-Reply-To: <20220405121245.GA30368@blackbody.suse.cz>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 5 Apr 2022 10:48:58 -0700
+Message-ID: <CABdmKX0aF5zXozbb7npcEq3PgaeDE=gaGLf+jYY4oRKW9N+46g@mail.gmail.com>
+Subject: Re: [RFC v4 5/8] dmabuf: Add gpu cgroup charge transfer function
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
+On Tue, Apr 5, 2022 at 5:12 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
+>
+> On Fri, Apr 01, 2022 at 11:41:36AM -0700, "T.J. Mercier" <tjmercier@googl=
+e.com> wrote:
+> > This link doesn't work for me, but I think you're referring to the
+> > discussion about your "RAM_backed_buffers" comment from March 23rd.
+>
+> (Oops, it's a non-public message. But yes, you guessed it right ;-))
+>
+> > Anyway the test I did goes like this: enable memcg and gpu cgoups
+> > tracking and run a process that allocates 100MiB of dmabufs. Observe
+> > memcg and gpu accounting values before and after the allocation.
+>
+> Thanks for this measurement/dem/demoo.
+>
+> > Before
+> > # cat memory.current gpu.memory.current
+> > 14909440
+> > system 0
+> >
+> > <Test program does the allocation of 100MiB of dmabufs>
+> >
+> > After
+> > # cat memory.current gpu.memory.current
+> > 48025600
+> > system 104857600
+> >
+> > So the memcg value increases by about 30 MiB while the gpu values
+> > increases by 100 MiB.
+>
+> > This is with kmem enabled, and the /proc/maps
+> > file for this process indicates that the majority of that 30 MiB is
+> > kernel memory.
+>
+> > I think this result shows that neither the kernel nor process memory
+> > overlap with the gpu cgroup tracking of these allocations.
+>
+> It depends how the semantics of the 'system' entry is defined, no?
+> As I grasped from other thread, the 'total' is going to be removed, so
+> 'system' represents exclusively device memory?
+>
+That's right. The system charges (soon to be renamed "system-heap")
+result only from an allocator (in this case the system heap) deciding
+to call gpucg_try_charge for the buffer which is entirely device
+memory.
+>
+> > So despite the fact that these buffers are in main memory, they are
+> > allocated in a way that does not result in memcg attribution. (It
+> > looks to me like __GFP_ACCOUNT is not set for these.)
+>
+> (I thought you knew what dmabufs your program used :-p)
+>
+I'm coming up to speed on a lot of new-to-me code here. :)
+Just for completeness, these buffers were allocated with
+libdmabufheap's AllocSystem.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+> So, the goal is to do the tracking and migrations only via the gpu cg
+> layer, regardless how memcg charges it (or not).
+>
+> (I have no opinion on that, I'm just summing it so that we're on the
+> same page.)
+>
+Yes, this reflects my intention and current state of the code in this serie=
+s.
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 3d6217e3aff7..9c4be2cdb21a 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -25,15 +25,12 @@ static int ksym_cmp(const void *p1, const void *p2)
- 
- int load_kallsyms(void)
- {
--	FILE *f = fopen("/proc/kallsyms", "r");
-+	FILE *f;
- 	char func[256], buf[256];
- 	char symbol;
- 	void *addr;
- 	int i = 0;
- 
--	if (!f)
--		return -ENOENT;
--
- 	/*
- 	 * This is called/used from multiplace places,
- 	 * load symbols just once.
-@@ -41,6 +38,10 @@ int load_kallsyms(void)
- 	if (sym_cnt)
- 		return 0;
- 
-+	f = fopen("/proc/kallsyms", "r");
-+	if (!f)
-+		return -ENOENT;
-+
- 	while (fgets(buf, sizeof(buf), f)) {
- 		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
- 			break;
--- 
-2.35.1
+> Michal
 
+Thanks,
+T.J.
