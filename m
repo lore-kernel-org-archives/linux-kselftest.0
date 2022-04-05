@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BBFDC3527A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D36FC35276
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 23:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243941AbiDEXfz (ORCPT
+        id S231445AbiDEXfw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
+        Tue, 5 Apr 2022 19:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457678AbiDEQfi (ORCPT
+        with ESMTP id S1457248AbiDEQC7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:35:38 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F93E30F
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 09:33:39 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id z128so11454083pgz.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 09:33:39 -0700 (PDT)
+        Tue, 5 Apr 2022 12:02:59 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB3FA191
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 08:35:29 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id o20so5480332pla.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 08:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=zWBBZP2Ge2Nksq3DccogUggooHf9rEbUDXGMPb63QNE=;
-        b=7Vhgm4+k+KifomvXHJFQrKJ6NiBP7XFIG/215kKOSWP3h4NXZ4vBpebQ/XiP2cyikN
-         r1PFAoRePAGNn2UZU2zHwHLm4Q0tpvkabqrtLqNkZTruGTcbG/MharlEycgYEtjPk/4s
-         8ONyF0YfQ/lO7xppxkca3dEWaOyAQOHjt0lLVV+zA9i637XhFtgnnxlmSIZ2LFj2n3Hi
-         W3SahOy/w26+xv9/dG5suAFEMy5bYfdax5l/dBTduk1ng9z6ELJ6gVh3oTSSzTwKdfHC
-         FSdkVxFTeN3QKk3n+9bKHGUOPJ/h8ZS3KzeRPqIoKAQv6Uvs2QJbaE66+9VQ3/HPEjF1
-         +OBw==
+        bh=E3viHWyrw88OQ52bbc6yL0DIf4/ILOrBz/b75V+55e4=;
+        b=y2+d1AF3ktdlgpctLqVj9g7Sn0CRyh8kfMIpiz4aeR5vj6UnGBYGpEP054g3xeFFHN
+         iB0qMSlINmWNHZ6FU8limmEQP0LUDuK7S2Wv7FhkTTDNDEgX4jGT5VcMkcNJ+o9Ix5Sj
+         uLETkGv0pjgLDhGplHUl0cgMGn9M8sNHIXuexdJ1dBw6fdVmjwyemlWjQH4z1kaGgLXt
+         1EvdG+I4os7C8LrO8pzOHmLelRkxPUyqOfSVk6YQZ9g8aDkIKbNiWYS/7JC8Y0RaRRfo
+         hfV3XBnTwskpFdc1uGMN0p68Bb7JM7r9SPUYPXruT/nMslbCWDVzh5gTndfDMckDr7Vn
+         fGWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=zWBBZP2Ge2Nksq3DccogUggooHf9rEbUDXGMPb63QNE=;
-        b=t15b/frU+tssewcJnRfc6hTwfeswA+NRJqpvOy2R2dpIj8wOg/WQsb77UvPO6i97U0
-         6IwjF4pf9EXrDjyCLnhVpUhoOwXPwa1FyNxSATAsmhAP8eaUaXr/eU4/gBWHiENs13c6
-         EtnyNNhwQgqpnu7xspwv5Oz+khtX1Bkk04uczUKLpdhT2kQddzDKJv91WE0JSTq1Bcbr
-         9Vh4q3lBNQ5vTwd/2SGzMKxYI6JAKajAfZWUu/U+j7pBgui3eeN1NFt1W/SChSxhS3OJ
-         ABhGa9++FCe8vlyVcCUyzlu825lp+1LN214qfgEpIqaQwY7hih871mdjP8xIF2ouVa1T
-         9Osg==
-X-Gm-Message-State: AOAM53342R6wv/H3cj4PR4LQbCdLKnSaxS2gSBqr/H3Hdvew16o1LXyM
-        W7TJivokb5iVBrt1KNTuGJIJ1A==
-X-Google-Smtp-Source: ABdhPJwkC4uHyHSFwCAUlucx++zTyXvzOun1ivWW1WONm00c6iD/q2fbKk6Hk+YfFU0kJkumEjuZ6g==
-X-Received: by 2002:a63:981a:0:b0:398:49ba:a65e with SMTP id q26-20020a63981a000000b0039849baa65emr3540948pgd.231.1649176418716;
-        Tue, 05 Apr 2022 09:33:38 -0700 (PDT)
+        bh=E3viHWyrw88OQ52bbc6yL0DIf4/ILOrBz/b75V+55e4=;
+        b=tjk7ZDFtqIF0iAlEVexfgix4xZ1pwB/M2DTf2y4FAwQNjGE/0KYgS78N9eRffyq0we
+         IYnNOummNU8GNREh5kwydGlZNg1APp0C3WDMuuVSxFdgXkk3ejNy4visMp7QiI3J4SQC
+         YiitDw/mJYjx4a0Hz1PcbHuZbVSupShb+Dv1Ivvm36u0e/aywi95JYvGnhFj+3HKQ8hu
+         AwaUQ4nzr4Y6W9rO+DxJMXLqQ9KwgmNaXclny1jTn8iMubfoR/YkEGKm+hgzoAk4MR/M
+         RTqck8Gs4qh6RIgXc1G2W793SYcqKfoEGaXuFyplWY0xtCzlpm9ifsEggMz94vCK03sz
+         R3Rg==
+X-Gm-Message-State: AOAM5330KOjZFihiKZe7gJUk1e8LyWUL1wIjIURpzzgXug9RLUxMY2Jd
+        gj4bmyhERqlLCamD33uSHMs7vw==
+X-Google-Smtp-Source: ABdhPJzhm+QE8U85AsxEeVhvQNbhsJshYDLh1Lga3VCE8uipsNYHurjm0rBkPT4X452Vv/doON81dg==
+X-Received: by 2002:a17:902:e547:b0:156:c4e4:c0c7 with SMTP id n7-20020a170902e54700b00156c4e4c0c7mr4069801plf.61.1649172928946;
+        Tue, 05 Apr 2022 08:35:28 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b00398d8b19bbfsm13896995pge.23.2022.04.05.09.33.38
+        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004f0f9696578sm17368029pfl.141.2022.04.05.08.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:33:38 -0700 (PDT)
-Message-ID: <624c6f62.1c69fb81.b133d.4cbf@mx.google.com>
-Date:   Tue, 05 Apr 2022 09:33:38 -0700 (PDT)
+        Tue, 05 Apr 2022 08:35:28 -0700 (PDT)
+Message-ID: <624c61c0.1c69fb81.ebaff.cfaf@mx.google.com>
+Date:   Tue, 05 Apr 2022 08:35:28 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: kselftest
 X-Kernelci-Branch: next
 X-Kernelci-Kernel: v5.18-rc1
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-lkdtm: 1 runs, 1 regressions (v5.18-rc1)
+X-Kernelci-Report-Type: build
+Subject: kselftest/next build: 7 builds: 0 failed, 7 passed (v5.18-rc1)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -66,64 +66,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-lkdtm: 1 runs, 1 regressions (v5.18-rc1)
+kselftest/next build: 7 builds: 0 failed, 7 passed (v5.18-rc1)
 
-Regressions Summary
--------------------
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v5.18-rc1/
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+Tree: kselftest
+Branch: next
+Git Describe: v5.18-rc1
+Git Commit: 3123109284176b1532874591f7c81f3837bbdc17
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v5.1=
-8-rc1/plan/kselftest-lkdtm/
+Detailed per-defconfig build reports:
 
-  Test:     kselftest-lkdtm
-  Tree:     kselftest
-  Branch:   next
-  Describe: v5.18-rc1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      3123109284176b1532874591f7c81f3837bbdc17 =
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
 
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
 
-Test Regressions
----------------- =
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
 
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
 
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
 
-
-  Details:     https://kernelci.org/test/plan/id/624c5e5953d4870b59ae0690
-
-  Results:     56 PASS, 8 FAIL, 26 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v5.18-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v5.18-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220401.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.lkdtm_READ_AFTER_FREE_sh: https://kernelci.org/test/cas=
-e/id/624c5e5953d4870b59ae06cc
-        new failure (last pass: v5.17-rc5-22-gf6d344cd5fa6) =
-
- =20
+---
+For more info write to <info@kernelci.org>
