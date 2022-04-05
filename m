@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 084E7C4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2396C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242031AbiDEOvm (ORCPT
+        id S242259AbiDEOwE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        Tue, 5 Apr 2022 10:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355258AbiDEOVj (ORCPT
+        with ESMTP id S1347302AbiDEOV2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:21:39 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393F652F0;
-        Tue,  5 Apr 2022 06:09:34 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q142so9209584pgq.9;
-        Tue, 05 Apr 2022 06:09:34 -0700 (PDT)
+        Tue, 5 Apr 2022 10:21:28 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3683759A6F;
+        Tue,  5 Apr 2022 06:09:26 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r66so2155543pgr.3;
+        Tue, 05 Apr 2022 06:09:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kEvX7e1LRk8hq7EVC3eBy2OeVtrJmQlrIB7WWAJzilU=;
-        b=aAXm1ETsLlBg2pebplD2DAO8ZOpD8sm3uSZtJsg9vwmAg0ZExijiYvoiZr+4iG4e1H
-         U6rm2IL2gwyTBTywqvmn2Sp4+ZmiUrNFw9Lgw2i1AEWZzsatJYBQxpPAyuUpLYpFa6lc
-         ED7oiFFQ7NlzuzTbS3cEvSPfFcqosfZn6Hg5s6YHDuDRo5ckOPI3yT0xXrnR3bKcp3HI
-         iB835vR/jzg0XQz6k0bROHd162OQruI4Lli449zaxIwYM9eZqUaZzSJv1mYLqidZwv5n
-         BnCXZkfOGdSGH/2ab8++dCS2CGDkCQGA9+3A7JrbU3XGSfiWhYT+PcQczYScoU1ywNgg
-         b6EA==
+        bh=CCF1afPoawtHj0JOT1YQhvzf/ufI9/Oj+shVoKXn1Y8=;
+        b=fZLMgfdtHl+NM3WmcMNrwWJPDKgRQt2/1OM07KtMCrcmk2U2vmIpJBjscRNQAcklge
+         RuBehxhNk/sFgRQ/ja43GuH+Plx5oh3u/OiQ5wETBNtWNVWY+2DN9ijhri17gBzNdKTy
+         MVb9nvuzayns4tOL0GFFORhcDfseJQFVnPSQ9k7vYAC5RSesEQqC2tgDRRb0xR2bHjrf
+         Malb7fC47ISfHqvEZ+CZDlPNPFRMKkZKdttRzrFoAFOeS0YPm1CNf1hxEuzEKtisUvls
+         fq9JWFXhzkkmfaWmHXIHY7cDAVUexFXXryUdluZC868pnTX7J2fMbS4m87wjj36Q8/xj
+         e0Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kEvX7e1LRk8hq7EVC3eBy2OeVtrJmQlrIB7WWAJzilU=;
-        b=Xo7l+gXtcUyGJeJCTOc0j+FFgYGZug6RcWPt9jlS8DWoaTpEinekObjl4LlQLmtd6P
-         VZtXpKEntW+hj4qI5A+RWGazRXU6hwwYEMevIaWpfaVNeP9QnaM/6b84YprlVsndy5cS
-         hx1lSVK6zXXeDW6VMxRm53Wug1m3JNJtZnBHRNI3zcaXQuxqflC97is8o55TiHnFjwAi
-         HoKkqcS36RDqBJBT300iyeyOfKfkdk04wr3K8y7Dd3ELoDAtRp0LwuNZ2fmOzSJ2juf5
-         VnEg/XIhr3CyBKLjckBrcQqbTreEsPtfIcXHsRGo4SjV+zGoP1OhbpWT/F/T28jNTcW2
-         Qs6Q==
-X-Gm-Message-State: AOAM533K6lbM2VB27pqNOah3iPOZuuqUita6+vXMws//jBmlaLeRW0Rq
-        S0ZBOpoCbrshWU15ZtEwGfM=
-X-Google-Smtp-Source: ABdhPJzV/FBtnA3fMwNnZGWzf3lprriAFgMU658FYakS9xPeDccuO6wPRtGV1fDrEV7npZ5AzY+Teg==
-X-Received: by 2002:a05:6a00:87:b0:4fb:39f9:bb9d with SMTP id c7-20020a056a00008700b004fb39f9bb9dmr3585296pfj.48.1649164174417;
-        Tue, 05 Apr 2022 06:09:34 -0700 (PDT)
+        bh=CCF1afPoawtHj0JOT1YQhvzf/ufI9/Oj+shVoKXn1Y8=;
+        b=n8AKa5I4lvLgqsGh7unM/4K5AaA5/3nqYvFKhFQ5+PH5Ln6fxkz3Q79ProBahA6xMc
+         ByzotV5hvL6t8B+E9RiUniXytAkwY7jIENFsCS6wSUflj1BSFVGnyyo5M0ZQ+y9Tqp/Y
+         iuv2gtqpeJJN7VLNvVzlxPSSq7Y3BR8y0znbyZYIyQkPtk1GEk3SRFOa2msi8BBQODBf
+         f2eFqO4Lni0AfW4paA57IQuPFkXXchgU1zyheL/qGajvs6rrGRf7yg1EowTpEpL3NNDq
+         XmaScyFfpsjgRvZb5DB1g+rPmIwOhLrJ6kOrbnnrXGdCoZ1mIJUwfuOdhApy4Qo8loAd
+         Dz4A==
+X-Gm-Message-State: AOAM5327GPGq0HpgOUNJwATszqrsqzV8CljDK4kZwOOFU42cPCp5N+ac
+        FX/tf+OOdPLyz0buR/okfKk=
+X-Google-Smtp-Source: ABdhPJy0gv5QTBC2xRp/kRNuSuV/7NhyZvy59r7ywNFTqEeprnQIDvH98c+dZzkcvN3HTsksVxmQqQ==
+X-Received: by 2002:a62:6d47:0:b0:4fe:15fa:301d with SMTP id i68-20020a626d47000000b004fe15fa301dmr3531643pfc.29.1649164165715;
+        Tue, 05 Apr 2022 06:09:25 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.33
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:33 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:24 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 15/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tag
-Date:   Tue,  5 Apr 2022 13:08:46 +0000
-Message-Id: <20220405130858.12165-16-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 08/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lpm_map
+Date:   Tue,  5 Apr 2022 13:08:39 +0000
+Message-Id: <20220405130858.12165-9-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -72,31 +72,31 @@ included bpf_rlimit.h.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/test_tag.c | 4 +++-
+ tools/testing/selftests/bpf/test_lpm_map.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_tag.c b/tools/testing/selftests/bpf/test_tag.c
-index 0851c42ee31c..5546b05a0486 100644
---- a/tools/testing/selftests/bpf/test_tag.c
-+++ b/tools/testing/selftests/bpf/test_tag.c
-@@ -20,7 +20,6 @@
+diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
+index aa294612e0a7..789c9748d241 100644
+--- a/tools/testing/selftests/bpf/test_lpm_map.c
++++ b/tools/testing/selftests/bpf/test_lpm_map.c
+@@ -26,7 +26,6 @@
  #include <bpf/bpf.h>
  
- #include "../../../include/linux/filter.h"
+ #include "bpf_util.h"
 -#include "bpf_rlimit.h"
- #include "testing_helpers.h"
  
- static struct bpf_insn prog[BPF_MAXINSNS];
-@@ -189,6 +188,9 @@ int main(void)
- 	uint32_t tests = 0;
- 	int i, fd_map;
+ struct tlpm_node {
+ 	struct tlpm_node *next;
+@@ -791,6 +790,9 @@ int main(void)
+ 	/* we want predictable, pseudo random tests */
+ 	srand(0xf00ba1);
  
 +	/* Use libbpf 1.0 API mode */
 +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
 +
- 	fd_map = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(int),
- 				sizeof(int), 1, &opts);
- 	assert(fd_map > 0);
+ 	test_lpm_basic();
+ 	test_lpm_order();
+ 
 -- 
 2.17.1
 
