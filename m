@@ -2,87 +2,203 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F309C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 23:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA82C4321E
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 23:52:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245531AbiDEXgG (ORCPT
+        id S1348650AbiDEXgR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        Tue, 5 Apr 2022 19:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443055AbiDEPix (ORCPT
+        with ESMTP id S1457752AbiDEQj4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:38:53 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F8F143C7C;
-        Tue,  5 Apr 2022 06:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649166856;
-  x=1680702856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WhCHZK9GJJLMq21n9Wjs02V4Hy6iol3pV60QmFhYnXI=;
-  b=jOu26AEgH52kLCEHGCDNClrCiuGQsqC0mMbV00LsCQ6D7yvqs5Dp0cZy
-   optIlXUGOYK/V04EhtXgmp6AGk/51aFLQeuyzPywOKdv2JKXA+l+F6zE7
-   jxHOIV1w+04HJPidE7bujX1V1JGCLkwHL1iXL+GF9c51ejPvh7kJHrDJF
-   sWsJXpEG7H3IcBsiHwqDNa1ca2VTQ5eAIIHcwcVTTvxCwHveoCzsrgoBD
-   Qg4rKYHk/O7G0KuyvCJLe6mEPgEtYSv+lMmSdwpvvs1oz0dylwi73F+Ak
-   1fDOQjfbIzc4yDvOAyiXUKMXCl58iv6V6IbDYllLso+PQ6F552TycWKbq
-   w==;
-Date:   Tue, 5 Apr 2022 15:54:12 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 01/10] roadtest: import libvhost-user from QEMU
-Message-ID: <20220405135412.GB28574@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-2-vincent.whitchurch@axis.com>
- <7f405d8d09a83954aa3411eff8b71ee687c7ec33.camel@sipsolutions.net>
+        Tue, 5 Apr 2022 12:39:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71331D8F79
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 09:37:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13C5DB81E8F
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 16:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC816C385A9
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 16:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649176674;
+        bh=Godeb1QF1XaLrnNDs3lSu+RGeizZyertdC0hYAIHClw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=V6/Ti81/S9L4MlpLAn5DRhR99XayCtbqbXK56WhDTzqS22tC9iUG6ovrODd04zPWy
+         daYxzoRUUdj3YYWH6bx2gqsih+zeARgfngBNlDG4SxHjc/qfL18ZYeFqcfUcCt5JSf
+         gtoDM6crrBsBg4znMCDoqc3g+e6zDiGLcvAb8dKY9SygRQFX+Ljx6qGBCViFwYnd3t
+         eSHJNHxymW7LBYYJji/EPuCrvGf4s7QEEbVk3RVTnr0fd/qR6KJ0HsiNQboLd9lAiB
+         hWclcqtoii7fw1ULYNWr2yT6WnHCgV+eUOSTrwN9kBq3emMoQoaBFfBQtaK1SV8O1c
+         Z0aQsDMVRUDtQ==
+Received: by mail-ej1-f44.google.com with SMTP id p15so27859036ejc.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 09:37:54 -0700 (PDT)
+X-Gm-Message-State: AOAM530GIA4LX4wWfvQ2e57UKgu/+WogYXapJEADt8uRDGSgEUZ2NUNV
+        hZb8Y6AQ7Gj+EIJ2yTFZ98SYPJUgAuq/gUMaubt5Kw==
+X-Google-Smtp-Source: ABdhPJzKjYrImTJI9WyByUp50Mj9PCG8J06DWt1ucdJTqdDxCPRpsxJHnkt2Vhm9WUOmFxdnESIK5CAyDWTZbEBHta8=
+X-Received: by 2002:a17:907:6089:b0:6db:a3d7:3fa9 with SMTP id
+ ht9-20020a170907608900b006dba3d73fa9mr4556278ejc.593.1649176672844; Tue, 05
+ Apr 2022 09:37:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7f405d8d09a83954aa3411eff8b71ee687c7ec33.camel@sipsolutions.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+ <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+ <c2e57f10b62940eba3cfcae996e20e3c@huawei.com> <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+ <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com> <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
+In-Reply-To: <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 5 Apr 2022 18:37:42 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ4KwWykYjb0DJ1SHe9syiefqgfjDB8om7RNx10vZ3UiKg@mail.gmail.com>
+Message-ID: <CACYkzJ4KwWykYjb0DJ1SHe9syiefqgfjDB8om7RNx10vZ3UiKg@mail.gmail.com>
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 02:00:10PM +0100, Johannes Berg wrote:
-> On Fri, 2022-03-11 at 17:24 +0100, Vincent Whitchurch wrote:
-> > Import the libvhost-user from QEMU for use in the implementation of the
-> > virtio devices in the roadtest backend.
-> 
-> So hm, I wonder if this is the sensible thing to do?
-> 
-> Not that I mind importing qemu code, but:
-> 
->  1) the implementation is rather complex in some places, and has support
->     for a LOT of virtio/vhost-user features that are really not needed
->     in these cases, for performance etc. It's also close to 4k LOC.
+On Tue, Apr 5, 2022 at 6:22 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> On 4/5/2022 8:29 AM, Roberto Sassu wrote:
+> >> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
+> >> Sent: Tuesday, April 5, 2022 4:50 PM
+> >> On 4/4/2022 10:20 AM, Roberto Sassu wrote:
+> >>>> From: Djalal Harouni [mailto:tixxdz@gmail.com]
+> >>>> Sent: Monday, April 4, 2022 9:45 AM
+> >>>> On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
+> >>>>> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
+> >>>>> <alexei.starovoitov@gmail.com> wrote:
+> >>>> ...
+> >>>>>>> Pinning
+> >>>>>>> them to unreachable inodes intuitively looked the
+> >>>>>>> way to go for achieving the stated goal.
+> >>>>>> We can consider inodes in bpffs that are not unlinkable by root
+> >>>>>> in the future, but certainly not for this use case.
+> >>>>> Can this not be already done by adding a BPF_LSM program to the
+> >>>>> inode_unlink LSM hook?
+> >>>>>
+> >>>> Also, beside of the inode_unlink... and out of curiosity: making
+> >> sysfs/bpffs/
+> >>>> readonly after pinning, then using bpf LSM hooks
+> >>>> sb_mount|remount|unmount...
+> >>>> family combining bpf() LSM hook... isn't this enough to:
+> >>>> 1. Restrict who can pin to bpffs without using a full MAC
+> >>>> 2. Restrict who can delete or unmount bpf filesystem
+> >>>>
+> >>>> ?
+> >>> I'm thinking to implement something like this.
+> >>>
+> >>> First, I add a new program flag called
+> >>> BPF_F_STOP_ONCONFIRM, which causes the ref count
+> >>> of the link to increase twice at creation time. In this way,
+> >>> user space cannot make the link disappear, unless a
+> >>> confirmation is explicitly sent via the bpf() system call.
+> >>>
+> >>> Another advantage is that other LSMs can decide
+> >>> whether or not they allow a program with this flag
+> >>> (in the bpf security hook).
+> >>>
+> >>> This would work regardless of the method used to
+> >>> load the eBPF program (user space or kernel space).
+> >>>
+> >>> Second, I extend the bpf() system call with a new
+> >>> subcommand, BPF_LINK_CONFIRM_STOP, which
+> >>> decreasres the ref count for the link of the programs
+> >>> with the BPF_F_STOP_ONCONFIRM flag. I will also
+> >>> introduce a new security hook (something like
+> >>> security_link_confirm_stop), so that an LSM has the
+> >>> opportunity to deny the stop (the bpf security hook
+> >>> would not be sufficient to determine exactly for
+> >>> which link the confirmation is given, an LSM should
+> >>> be able to deny the stop for its own programs).
+> >> Would you please stop referring to a set of eBPF programs
+> >> loaded into the BPF LSM as an LSM? Call it a BPF security
+> >> module (BSM) if you must use an abbreviation. An LSM is a
+> >> provider of security_ hooks. In your case that is BPF. When
+> >> you call the set of eBPF programs an LSM it is like calling
+> >> an SELinux policy an LSM.
+> > An eBPF program could be a provider of security_ hooks
+> > too.
+>
+> No, it can't. If I look in /sys/kernel/security/lsm what
+> you see is "bpf". The LSM is BPF. What BPF does in its
+> hooks is up to it and its responsibility.
+>
+> >   The bpf LSM is an aggregator, similarly to your
+> > infrastructure to manage built-in LSMs. Maybe, calling
+> > it second-level LSM or secondary LSM would better
+> > represent this new class.
+>
+> It isn't an LSM, and adding a qualifier doesn't make it
+> one and only adds to the confusion.
+>
+> > The only differences are the registration method, (SEC
+> > directive instead of DEFINE_LSM), and what the hook
+> > implementation can access.
+>
+> Those two things pretty well define what an LSM is.
+>
+> > The implementation of a security_ hook via eBPF can
+> > follow the same structure of built-in LSMs, i.e. it can be
+> > uniquely responsible for enforcing and be policy-agnostic,
+> > and can retrieve the decisions based on a policy from a
+> > component implemented somewhere else.
+>
+> The BPF LSM provides mechanism. The eBPF programs provide policy.
 
-Is this really a problem given that the code is imported as-is?  The
-intention is not to have to make a lot of local modifications to it in
-the kernel tree.  The code is stable and presumably well-tested
-upstream, and upstream maintains it as a separate library (in the QEMU
-source tree though) to encourage reuse.
+Yeah, let's stick what we call an LSM in the kernel, Here,
+"bpf" is the LSM like selinux,apparmor and this is what you set in
+CONFIG_LSM or pass on cmdline as lsm= and can be seen
+in /sys/kernel/security/lsm
 
->  2) the implementation doesn't support time-travel mode which might come
->     in handy
+Calling your BPF programs an LSM will just confuse people.
 
-True, but I don't see the external time-travel controller stuff being
-too useful for the kinds of tests this framework is targeting.
+>
+> >
+> > Hopefully, I understood the basic principles correctly.
+> > I let the eBPF maintainers comment on this.
+> >
+> > Thanks
+> >
+> > Roberto
+> >
+> > HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> > Managing Director: Li Peng, Zhong Ronghua
+> >
+> >>> What do you think?
+> >>>
+> >>> Thanks
+> >>>
+> >>> Roberto
+> >>>
+> >>> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> >>> Managing Director: Li Peng, Zhong Ronghua
