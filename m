@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE72C433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBEF6C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:47:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240098AbiDEOtZ (ORCPT
+        id S240308AbiDEOte (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        Tue, 5 Apr 2022 10:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344603AbiDEOXe (ORCPT
+        with ESMTP id S239713AbiDEOWz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:23:34 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054216E57D;
-        Tue,  5 Apr 2022 06:09:51 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id bo5so12049081pfb.4;
-        Tue, 05 Apr 2022 06:09:50 -0700 (PDT)
+        Tue, 5 Apr 2022 10:22:55 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0986A433;
+        Tue,  5 Apr 2022 06:09:46 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id bo5so12048814pfb.4;
+        Tue, 05 Apr 2022 06:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=viexwUu6gnOnfIlYwhyzP+WSqVfYyHd1EwzTfJFHZY4=;
-        b=nPPziC8khx4ZMAODfwzHa85gBNwjsRXugR8TTtPF7f9QdLZj1Jizd0gjzQy6hSsoiu
-         NRwWLXwd7njSn+2RzIapMw4pHcMonOfxa+AQOy8lXvp+iq3q4mDIgDdWxg+5CiRRfW9m
-         j1u+wj2YNdMZR5nXCLtEoYCX/fdsm4ff9A4eWFFvVYP5BZl9CweGg9hzFm6zvWHpGGsd
-         LCYnkFUNOzz/IuXJ/eMmAZIyRhv8dK91TmTLEorB8u+VtMcsJZVauuOBQiZl37Ai4Q7R
-         3I8cRtWJpBHTuh3YjVq1e+seAqhiAYG41k/6eTSRm3nJiOx0+IkJTpE0y61J+6XjAUAG
-         njXA==
+        bh=6m7ShcbASdrto/3TsaoHbBXRCyYeXuWGLlXaER69zS8=;
+        b=OSQiFVkSzzdo38CkZyMYBw1cWEhozWr71fgIEwkmRokuJmsa6OfIdmGOHPyKVK8vOC
+         z8VvyKZZWxj012CK6f5dln/zgBaYFiUp2cY4uS93vOTwCsx4xrOHY9Zb72xnHhms2Lh8
+         YNVsWSLFmQvKIvNVbFjj5RU9S8W5eYaJbyplCDAwtLy96FrrVLb676yZGyR1cgJcpPDs
+         Z3QJcrXNqFkdN5RxX1BATSptpGSSyEZSrPhAb76i6LcegqpL7iEoB1VkJjFFT4AbwBT8
+         cieKdNo9+bqmPy4GqMdq2CH3l+01Zfp/2juhp6F9834jEnNylc/POBHb/ZyYQ9cUYrPm
+         vBEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=viexwUu6gnOnfIlYwhyzP+WSqVfYyHd1EwzTfJFHZY4=;
-        b=J0wtzGtlDji3Zjt2Oe4aheW2tdkq2M+BQGAaehTP7DBWSlNaAxtDzoYzXiMoi7wRdH
-         2vdrKcWvLjSIH3OoVvxpW3RdzTYkEZZ1xI193FzlKDRUO83+CPzAGaNNFnmPZ33rKJCP
-         fnM6Gi+hgQwGVHEx5YhPY32L2437n6i746MQ48dd3odzJXGzSQJZS8jHTIGLRGgatj3a
-         GMzXabt94XBpVCVCZPsKv83oeheYLnC7hg6qLWD3Le/hWdaCIczKNMXiZaVVbWBbWbtR
-         bKmz1ZZwU7yjYE6C+9TKWKNn3hKNFR5hj2aryOwNt3qDPa+5MJJiOq/xyTRw/LL//XRf
-         h8zA==
-X-Gm-Message-State: AOAM533RGVTjWPT1JFAjT14io9SeJQQ5tplpMS4I/qHI4MUxb2lLwoqC
-        iyjiGKRlDM/UJ61joQlFYIc=
-X-Google-Smtp-Source: ABdhPJzz8Z80hgaw7IgYqAslbwHdj0QKDlGnoyg4O/lXKfpHYZ2L2hSGuBJL27+FCuzrgHcdhuQrrQ==
-X-Received: by 2002:a65:6951:0:b0:381:f10:ccaa with SMTP id w17-20020a656951000000b003810f10ccaamr2723596pgq.587.1649164190512;
-        Tue, 05 Apr 2022 06:09:50 -0700 (PDT)
+        bh=6m7ShcbASdrto/3TsaoHbBXRCyYeXuWGLlXaER69zS8=;
+        b=49NcARhslURQaEPXuEpQPwUIOZosS5BD+mvVFu2JdzVniA5Q/PSz+GvsAe1MIokFvJ
+         EZip2a4g5FFnUh1hj6C4HvjFKzK6Q28Kaw9XnxC4tYm+JHh/gFy7i2Ow+F7bmuac78hF
+         0bxKZw3Pd7tfdhge0+xE4tErjYjwTUoEcHU7KrP/g8PaZnCmRGF9cVgzrr+JTu1VfxWk
+         xCuTYEyFa/27kdsOQeLdmP7mEqy2DBVDnsEbQDbUG6CkFxYwxzXe4zQWyjNFegXj+H6T
+         JVZzmK7DToaJ7OKS/wEVJ/FLitpyQwkOIOOZwFNoTlceDC1CStbrA0MWvtdeVsccyUqG
+         XPYA==
+X-Gm-Message-State: AOAM532n5O0XuUz+aJDJLPnu+KLF3vK8IAafI7pAap8OxZIU0AgLQqdc
+        uqKI9nm01Boh0MEq53XLLg8=
+X-Google-Smtp-Source: ABdhPJxQqYtQUBceYfwYXVOgG/KTSA2UXDDpRCn8C+rr/K3M+nQqpLD5s8QxDg+zQmz5kDfQqJt5JQ==
+X-Received: by 2002:a05:6a00:1d85:b0:4fa:9dba:f1f2 with SMTP id z5-20020a056a001d8500b004fa9dbaf1f2mr3592645pfw.31.1649164181867;
+        Tue, 05 Apr 2022 06:09:41 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.49
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:50 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:40 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 26/27] bpf: bpftool: remove RLIMIT_MEMLOCK
-Date:   Tue,  5 Apr 2022 13:08:57 +0000
-Message-Id: <20220405130858.12165-27-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 20/27] bpf: selftests: No need to include sys/resource.h in some files
+Date:   Tue,  5 Apr 2022 13:08:51 +0000
+Message-Id: <20220405130858.12165-21-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -67,131 +67,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As we have already set LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK, we don't need to
-bump RLIMIT_MEMLOCK any more.
+sys/resource.h is useless in these files.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/bpf/bpftool/common.c     | 8 --------
- tools/bpf/bpftool/feature.c    | 2 --
- tools/bpf/bpftool/main.h       | 2 --
- tools/bpf/bpftool/map.c        | 2 --
- tools/bpf/bpftool/pids.c       | 1 -
- tools/bpf/bpftool/prog.c       | 3 ---
- tools/bpf/bpftool/struct_ops.c | 2 --
- 7 files changed, 20 deletions(-)
+ tools/testing/selftests/bpf/bench.c              | 1 -
+ tools/testing/selftests/bpf/prog_tests/btf.c     | 1 -
+ tools/testing/selftests/bpf/xdp_redirect_multi.c | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 0c1e06cf50b9..c740142c24d8 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -17,7 +17,6 @@
- #include <linux/magic.h>
- #include <net/if.h>
- #include <sys/mount.h>
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index f973320e6dbf..f061cc20e776 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -8,7 +8,6 @@
+ #include <fcntl.h>
+ #include <pthread.h>
+ #include <sys/sysinfo.h>
 -#include <sys/resource.h>
- #include <sys/stat.h>
- #include <sys/vfs.h>
- 
-@@ -119,13 +118,6 @@ static bool is_bpffs(char *path)
- 	return (unsigned long)st_fs.f_type == BPF_FS_MAGIC;
- }
- 
--void set_max_rlimit(void)
--{
--	struct rlimit rinf = { RLIM_INFINITY, RLIM_INFINITY };
--
--	setrlimit(RLIMIT_MEMLOCK, &rinf);
--}
--
- static int
- mnt_fs(const char *target, const char *type, char *buff, size_t bufflen)
- {
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index f041c4a6a1f2..be130e35462f 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -1136,8 +1136,6 @@ static int do_probe(int argc, char **argv)
- 	__u32 ifindex = 0;
- 	char *ifname;
- 
--	set_max_rlimit();
--
- 	while (argc) {
- 		if (is_prefix(*argv, "kernel")) {
- 			if (target != COMPONENT_UNSPEC) {
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 6e9277ffc68c..aa99ffab451a 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -102,8 +102,6 @@ int detect_common_prefix(const char *arg, ...);
- void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
- void usage(void) __noreturn;
- 
--void set_max_rlimit(void);
--
- int mount_tracefs(const char *target);
- 
- struct obj_ref {
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index c26378f20831..877387ef79c7 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1342,8 +1342,6 @@ static int do_create(int argc, char **argv)
- 		goto exit;
- 	}
- 
--	set_max_rlimit();
--
- 	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, &attr);
- 	if (fd < 0) {
- 		p_err("map create failed: %s", strerror(errno));
-diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
-index bb6c969a114a..e2d00d3cd868 100644
---- a/tools/bpf/bpftool/pids.c
-+++ b/tools/bpf/bpftool/pids.c
-@@ -108,7 +108,6 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
- 		p_err("failed to create hashmap for PID references");
- 		return -1;
- 	}
--	set_max_rlimit();
- 
- 	skel = pid_iter_bpf__open();
- 	if (!skel) {
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 8643b37d4e43..5c2c63df92e8 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1604,8 +1604,6 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 		}
- 	}
- 
--	set_max_rlimit();
--
- 	if (verifier_logs)
- 		/* log_level1 + log_level2 + stats, but not stable UAPI */
- 		open_opts.kernel_log_level = 1 + 2 + 4;
-@@ -2303,7 +2301,6 @@ static int do_profile(int argc, char **argv)
- 		}
- 	}
- 
--	set_max_rlimit();
- 	err = profiler_bpf__load(profile_obj);
- 	if (err) {
- 		p_err("failed to load profile_obj");
-diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
-index e08a6ff2866c..2535f079ed67 100644
---- a/tools/bpf/bpftool/struct_ops.c
-+++ b/tools/bpf/bpftool/struct_ops.c
-@@ -501,8 +501,6 @@ static int do_register(int argc, char **argv)
- 	if (libbpf_get_error(obj))
- 		return -1;
- 
--	set_max_rlimit();
--
- 	if (bpf_object__load(obj)) {
- 		bpf_object__close(obj);
- 		return -1;
+ #include <signal.h>
+ #include "bench.h"
+ #include "testing_helpers.h"
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index ec823561b912..84aae639ddb5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -8,7 +8,6 @@
+ #include <linux/filter.h>
+ #include <linux/unistd.h>
+ #include <bpf/bpf.h>
+-#include <sys/resource.h>
+ #include <libelf.h>
+ #include <gelf.h>
+ #include <string.h>
+diff --git a/tools/testing/selftests/bpf/xdp_redirect_multi.c b/tools/testing/selftests/bpf/xdp_redirect_multi.c
+index aaedbf4955c3..c03b3a75991f 100644
+--- a/tools/testing/selftests/bpf/xdp_redirect_multi.c
++++ b/tools/testing/selftests/bpf/xdp_redirect_multi.c
+@@ -10,7 +10,6 @@
+ #include <net/if.h>
+ #include <unistd.h>
+ #include <libgen.h>
+-#include <sys/resource.h>
+ #include <sys/ioctl.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
 -- 
 2.17.1
 
