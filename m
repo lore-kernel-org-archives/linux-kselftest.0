@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07EEDC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 569C6C43217
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240681AbiDEOvK (ORCPT
+        id S240900AbiDEOvQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
+        Tue, 5 Apr 2022 10:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345397AbiDEOXh (ORCPT
+        with ESMTP id S1351048AbiDEOVe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:23:37 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9371B6EB09;
-        Tue,  5 Apr 2022 06:09:52 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b15so12046178pfm.5;
-        Tue, 05 Apr 2022 06:09:52 -0700 (PDT)
+        Tue, 5 Apr 2022 10:21:34 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FE9633BD;
+        Tue,  5 Apr 2022 06:09:31 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id n6-20020a17090a670600b001caa71a9c4aso2596498pjj.1;
+        Tue, 05 Apr 2022 06:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=p5W0HLSh4kxqEqKp2k4JC+MHyJDV7uD5B6J5wpWqKsQ=;
-        b=IUrZgFVxLvUPKV9t6MtsKjNwVW68RgltIuuuX/CtEngtGPzi6LibkcCu8EnM4BaOcG
-         Kk4CQqMrNx2hIaj+GQiQyVZPlBpGvBl8wDts2N+EpsWfR//91R1dbFchUFHSnXTNrwBE
-         Pg4XJJUVxyciMRFFDcpfU9uGTg3uAy1VSMXAKYSAUaWZvAc4p8ckVtrQZ8SSDVK8afoX
-         Hs0mN/b2oM/AxPQ/4+bVsdkamX+UNJbECTTFWZctktcFzNGvAtQY81Ifrf7T/wFgRJ5Q
-         cZoYemtVF0R7y9bbxw8ugWN4PwI8HP/wzMmvd0/VywfN8lYw310/9GC323eZFVoBSQ+K
-         /09Q==
+        bh=L2Y09Fm29d5V0kooRPYIrgnrM+dN9Kb0W+QMB0HxDog=;
+        b=K23t6+RuKE6Vtx/HECQ+PtH02ni9Cx5JzbLS4IIl5J/7REkhS9PlSHaPNF2+KjIrD9
+         VhHqZqeTxoMBpwTXMKexW9/rXsbq3L9NE/DooxqburW148ZN1tnjjt1u7vb29hPzJTna
+         22OjPWmaKvIv6DldBonyYW1Oj7/qwx4Oj3Fw4NdQm0be1Af2kd/8HvUoWWeQas0jGpIi
+         3WtK4qgKtGaK/O1QjPp+NcMdE0Ba58gL+eNDw0enHFTqAq9QcXpOrQlAC5xEvCFTs4Sg
+         cWbATxmCj6hceB9SX+spsD12ngF7sy6ZapRjMxaL0pL6fcHP5uMc1V7R6OLf2L/QlPFk
+         dPXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=p5W0HLSh4kxqEqKp2k4JC+MHyJDV7uD5B6J5wpWqKsQ=;
-        b=e5WimeB7xezHKPyS8burIIwG86JqyqyKchneR42UuChsCETWLYUyrtSmxnnGPgMWAx
-         Di4utADKQRm1LMAnfoZnfvt/7pUyI2EMhq9GfxeJtMjxPM39S1rdE1Qdd0MXTR6Ux0R5
-         G4ib4RbHDtmnjexG1oDC8MDQmzyyIRz9IRyKcE4wkLMOPOj6ssesxYeVkMuMCvcDQJjt
-         ye8omh1B8hyQpL42wa44cNMvAyltbF4l3uQHGjBY7MFVZwaBC1r7aa3lfDPIOPON7Por
-         F4ZuO5t8mwnQoLR4eSR3XQR4aKHpt7fi2Svo1KEtGdl6W1d1hDTvVPVadKnXJk5ygdvq
-         jnXA==
-X-Gm-Message-State: AOAM531w6KMFmg+ArBxU5kDQROnUozQYWdR8/q+RcH1DANXMxiPcnUKG
-        kGh/BCw/s8FhmBavVJMvaMQ=
-X-Google-Smtp-Source: ABdhPJzkThtzZC3V01k4BfUs/xUspZwDN3SdLfsy8x3gKseNaIL0SJXHA89TvdcN4iWr31ahrKSRsg==
-X-Received: by 2002:a63:df4a:0:b0:399:460d:2da with SMTP id h10-20020a63df4a000000b00399460d02damr2769002pgj.315.1649164191900;
-        Tue, 05 Apr 2022 06:09:51 -0700 (PDT)
+        bh=L2Y09Fm29d5V0kooRPYIrgnrM+dN9Kb0W+QMB0HxDog=;
+        b=LBJnJ5YG7ZC3duG9hsNWW4yCLYD5OjL5n/a+gn4/gG0ZhA1LcwpjJb/KVuq42m1mI3
+         jkUUytr91DfN+EGJCufGwfgkuQCTZjtkpi0XRKfBdsz70ManNGEn4Ra4kEm223Ziqqzt
+         t6Hp8Ep7MDHgBONCEentSoZYt/EiaDijYYVU4esFms5HheVwVuIiu8dE541CJgFK7h3d
+         VnoAQ+8HrkRtmHHA76lR6PrbKuxg6pAq7hREXoZ+FEoSFFlGlVFQOADLHVBomkEtBe8R
+         tXUeyQfccbYTyxmIeMrqGounBibzCWcIP8xZ3KlHrtV8kQfPrebuW9RK8ag9qgnPiYkd
+         SVww==
+X-Gm-Message-State: AOAM5334kamcCwTXXArH4IiCHag6reb6KFRyi86D31MPvlHMvLahVRVq
+        3lB+xEEciRrkd0mscYsJtGkPrxzuURuErzJwYYY=
+X-Google-Smtp-Source: ABdhPJwKrHuWQtQ5QiMjq8t9byz9ksElkwK5NKETyMFwAs7XhLbmdyasFJktF8YmuqrlPlqBcTToFg==
+X-Received: by 2002:a17:903:18d:b0:156:1262:9714 with SMTP id z13-20020a170903018d00b0015612629714mr3550447plg.20.1649164170678;
+        Tue, 05 Apr 2022 06:09:30 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.50
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:51 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:30 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 27/27] bpf: runqslower: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
-Date:   Tue,  5 Apr 2022 13:08:58 +0000
-Message-Id: <20220405130858.12165-28-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 12/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock
+Date:   Tue,  5 Apr 2022 13:08:43 +0000
+Message-Id: <20220405130858.12165-13-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -67,57 +67,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explicitly set libbpf 1.0 API mode, then we can avoid using the deprecated
-RLIMIT_MEMLOCK.
+Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
+included bpf_rlimit.h.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/bpf/runqslower/runqslower.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ tools/testing/selftests/bpf/test_sock.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
-index d78f4148597f..83c5993a139a 100644
---- a/tools/bpf/runqslower/runqslower.c
-+++ b/tools/bpf/runqslower/runqslower.c
-@@ -4,7 +4,6 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
--#include <sys/resource.h>
- #include <time.h>
- #include <bpf/libbpf.h>
- #include <bpf/bpf.h>
-@@ -88,16 +87,6 @@ int libbpf_print_fn(enum libbpf_print_level level,
- 	return vfprintf(stderr, format, args);
- }
+diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
+index fe10f8134278..6c4494076bbf 100644
+--- a/tools/testing/selftests/bpf/test_sock.c
++++ b/tools/testing/selftests/bpf/test_sock.c
+@@ -14,7 +14,6 @@
  
--static int bump_memlock_rlimit(void)
--{
--	struct rlimit rlim_new = {
--		.rlim_cur	= RLIM_INFINITY,
--		.rlim_max	= RLIM_INFINITY,
--	};
--
--	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
--}
--
- void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
- {
- 	const struct runq_event *e = data;
-@@ -133,11 +122,8 @@ int main(int argc, char **argv)
+ #include "cgroup_helpers.h"
+ #include <bpf/bpf_endian.h>
+-#include "bpf_rlimit.h"
+ #include "bpf_util.h"
  
- 	libbpf_set_print(libbpf_print_fn);
+ #define CG_PATH		"/foo"
+@@ -541,6 +540,9 @@ int main(int argc, char **argv)
+ 	if (cgfd < 0)
+ 		goto err;
  
--	err = bump_memlock_rlimit();
--	if (err) {
--		fprintf(stderr, "failed to increase rlimit: %d", err);
--		return 1;
--	}
 +	/* Use libbpf 1.0 API mode */
 +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
++
+ 	if (run_tests(cgfd))
+ 		goto err;
  
- 	obj = runqslower_bpf__open();
- 	if (!obj) {
 -- 
 2.17.1
 
