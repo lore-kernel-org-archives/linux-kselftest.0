@@ -2,55 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46479C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 850F6C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235825AbiDFFWw (ORCPT
+        id S231531AbiDFFXQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        Wed, 6 Apr 2022 01:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587547AbiDFAJi (ORCPT
+        with ESMTP id S1850378AbiDFCwO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:09:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B549DE08E;
-        Tue,  5 Apr 2022 15:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=s5Rv2jt7aGLImfLJIiM/5w3K8YUbSOEx+pvCk6I5VMo=; b=rqdoUew930ZZ6zrAnlfvmOF/zf
-        +YntEDiQq+lDqmtSifeD/BGDKf4g7GkHYLxudkmzdyK5cgH/wZucpnSc1cOEeqX5tzdZylyEm9uz5
-        KjdjRJUUJa9gUj9572C6PlpVQLKxTlLKuASQa0lhQMLBp52OQqySbhM/BMq/qghF0J67yro+frIqg
-        XoDZgXOLgGwC3tfbvt999mOTUy6LqjcaDRWq7nkQZS2B3zJXHLy8ItBQFTzk4vxBpz7SFXJ3cmjCe
-        SB/I/ptIkVnavZf3lWoOGDw3MGZDfUUipM9KeUyy8WAfhHKBIIH3x+GfmL+nyBA2iw4nUlGS8cNsW
-        Tu+LgHDw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbrjU-0077Ix-P6; Tue, 05 Apr 2022 22:33:04 +0000
-Date:   Tue, 5 Apr 2022 23:33:04 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftest/vm clarify error statement in gup_test
-Message-ID: <YkzDoBUAhydtvnR0@casper.infradead.org>
-References: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
+        Tue, 5 Apr 2022 22:52:14 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66054181149;
+        Tue,  5 Apr 2022 16:52:16 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id e22so1074856ioe.11;
+        Tue, 05 Apr 2022 16:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
+        b=qP2Je91cC5X9wuYLjZp8TH9PNetiSDkDUC4K9LVY0XsP70Z0P360X7QBCcp544wpWn
+         uj80MoZx+E/whCCVsJBl7bHFLs4zX9YT1v0DtGIo2TXQVILm6wSdrAYbxEVLaPSpMPRG
+         SIKIBtv9TFPsCcXbNOHKCqINnfCryFkkOuEUG17CZIPI7EC5N++bXiQLtbGUwI3G1ktC
+         B4WGJJrB9L4fEuvWaEKUmpTr1MxaOMVrexGTVXwlaRX188e8xQqjFFpGQ/W7Qw+DtTJ8
+         44qAfRFH+M9VBi0NFgLYpeT8wWfgUW7inCLoeNUEeDAjzmUxiUZdp/P9BBnkLKTi4zUx
+         rLGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
+        b=jdmo3pXGSLArTYozWH56R61Sa9Vm8CKn635zT3jwKfS6G9VwiGq4bMj1JGW9CWrIOC
+         zgZE0A9nu4gni9LSjQ04SWMPAmBsI/0DMPKKQASMPPCisp5MjyHQ3OVKnXvS+lqqBhS+
+         IrIYLQVlyQjkeQ4lU7+8XZ69SKvya7elwuXCydLM6ftV8DChQHldjiNBt0U9hOzzTghu
+         zgzsrQ11B6JFK79XWsA7ObyiiZ9KImBdGY/V8b5H7bePn8uc3LvbObG+OH182xmkd5GF
+         x+uP2goSxS/RGteWy1y61OHLobZTJLr6OzQySzcsXDJkaS7ybD0Hb2RqDeoxLXNZRB9T
+         nwPA==
+X-Gm-Message-State: AOAM533CEvHxR5iN4a6VcaGJ1GLQ7vWPtbG4Rz4rjPUfl+VRlZB4EMAP
+        bG9KOKVZeuBjyzxtK3lQd+zE4KQgH8bLN7SuFRw=
+X-Google-Smtp-Source: ABdhPJw6QDEx6357RD8/tWoPiOfZM+DJ9CdKHEhzqAWEeOUPTScS2FluYFnoR+Xgdc6Cy4lLB2keEra95hY1Z8CnTU4=
+X-Received: by 2002:a05:6638:772:b0:319:e4eb:adb with SMTP id
+ y18-20020a056638077200b00319e4eb0adbmr3287706jad.237.1649202733374; Tue, 05
+ Apr 2022 16:52:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
+References: <20220405163728.56471-1-ytcoode@gmail.com>
+In-Reply-To: <20220405163728.56471-1-ytcoode@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 5 Apr 2022 16:52:02 -0700
+Message-ID: <CAEf4BzZLw-QeXgb1HRR-b3D5NqQRs_iqOFcZmokvmf6rXTy-iw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 09:48:09PM +0000, Sidhartha Kumar wrote:
-> -		perror("open");
-> -		exit(1);
-> +		switch (errno) {
-> +		case EACCES:
-> +			if (getuid())
-> +				printf("Please run this test as root\n");
+On Tue, Apr 5, 2022 at 9:39 AM Yuntao Wang <ytcoode@gmail.com> wrote:
+>
+> The checks preceding CHECK macro are redundant, remove them.
+>
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+> index 16048978a1ef..5f2ab720dabd 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+> @@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
+>                         good_user_stack = true;
+>         }
+>
+> -       if (!good_kern_stack)
+> -           CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
+> -       if (!good_user_stack)
+> -           CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
+> +       CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
+> +       CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
 
-Shouldn't all these be fprintf(stderr, ...); ?
+I suspect it was to avoid super long verbose logs, as each CHECK()
+emits one line into output and here we might be getting a lot of
+samples. So let's keep it as is. But for the future let's try getting
+rid of CHECK()s as much as possible in favor of ASSERT_xxx(). Thanks.
 
+>  }
+>
+>  void test_get_stack_raw_tp(void)
+> --
+> 2.35.1
+>
