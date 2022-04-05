@@ -2,103 +2,86 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94993C4707E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67CADC4707A
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 23:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354125AbiDEXg6 (ORCPT
+        id S1352378AbiDEXgw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        Tue, 5 Apr 2022 19:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444293AbiDEWVC (ORCPT
+        with ESMTP id S1443917AbiDEPk2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:21:02 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E02DA6D5;
-        Tue,  5 Apr 2022 13:47:02 -0700 (PDT)
+        Tue, 5 Apr 2022 11:40:28 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3ED14DFE5;
+        Tue,  5 Apr 2022 07:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649191622; x=1680727622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5oM6Tbg3YS4sB6Uf6R0fiZCcMu82OqpwkpFDAxE4yH4=;
-  b=FW+KnMELhHxYWkklzmhF84FYlIxwlOv6PDYgwjGPlzaUUhLubZU2Nkoy
-   S3/pSpi9Bx2vPGzXWP/CSCjDDSJKOsoU/YjpVNUBSFvPVKwFNoEdK+L/5
-   u0iQhniJlvSQcYMFOF4GzQCW1HrnocwD6RnIMYv7WavI3WQTex8gvyhBQ
-   8=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 05 Apr 2022 13:47:02 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 13:47:02 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 13:47:01 -0700
-Received: from [10.110.72.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
- 13:46:59 -0700
-Message-ID: <82b87aee-09c2-fbad-7613-4e298bcb3431@quicinc.com>
-Date:   Tue, 5 Apr 2022 13:46:58 -0700
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649167344;
+  x=1680703344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Quhq+ANDcyqCuN52eIRgLzLh2IoR3G+Ogb7BY7KkCbE=;
+  b=JfWw2js+sHio6dbd67N4f+BKvGcgXqC+jL6zGIBTKIXzryvcIE7qzxyL
+   fAQhMiRTFUrAJ9Wa9Uqfp6pjIffGUKwtBeQ6kq96gPt0Rcx4I/SQa6+tq
+   /4wesHmr64EULkm16LIV+z66YSSuwmFC/PzXL8EuTqLIbViL5BoPaBUqM
+   MtOqJqtCNazap6UZeRrAMa2IfhYQDY98cmlHqo9nrqZ99WVlsnTUi5tsv
+   ZAz3dFApD9DyI+D9oPjtyKzsvhacBT2JvmJ8EVp/x4TIpKfI2wC/zqp6Y
+   037kX7KxN0Pk+KkpeKGXDQrZUbxYVdVVHYyPgtan+kxbYXgNOylSg7HWN
+   g==;
+Date:   Tue, 5 Apr 2022 16:02:21 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <shuah@kernel.org>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
+        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>
+Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
+Message-ID: <20220405140221.GC28574@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+ <20220311162445.346685-10-vincent.whitchurch@axis.com>
+ <YiuPvkQroV/WdFpx@sirena.org.uk>
+ <20220317151326.GA7832@axis.com>
+ <YjN1ksNGujV611Ka@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH bpf-next v3 07/27] bpf: selftests: Set libbpf 1.0 API mode
- explicitly in get_cgroup_id_user
-Content-Language: en-US
-To:     Yafang Shao <laoar.shao@gmail.com>, <andrii@kernel.org>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
-        <songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <shuah@kernel.org>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-References: <20220405130858.12165-1-laoar.shao@gmail.com>
- <20220405130858.12165-8-laoar.shao@gmail.com>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20220405130858.12165-8-laoar.shao@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YjN1ksNGujV611Ka@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/5/2022 6:08 AM, Yafang Shao wrote:
-> Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-> included bpf_rlimit.h.
+On Thu, Mar 17, 2022 at 05:53:22PM +0000, Mark Brown wrote:
+> On Thu, Mar 17, 2022 at 04:13:26PM +0100, Vincent Whitchurch wrote:
+> > On Fri, Mar 11, 2022 at 06:06:54PM +0000, Mark Brown wrote:
 > 
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> ---
->   tools/testing/selftests/bpf/test_dev_cgroup.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > +    @classmethod
+> > > > +    def setUpClass(cls) -> None:
+> > > > +        insmod("tps6286x-regulator")
 > 
-> diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
+> > > Shouldn't this get figured out when the device gets created in DT (if it
+> > > doesn't I guess the tests found a bug...)?
+> 
+> > The system isn't set up to load modules automatically.  The reason for
+> > this is to give the test cases full control of when the module is loaded
+> > and unload, since the tests could want to load the module with specific
+> > options.
+> 
+> That seems like the uncommon case which could remove the module if it
+> explicitly needed it.
 
-patch subject should refer to test_dev_cgroup
-(currently has same subject as 05/27)
+Another reason was to get the tests to test module unloading since I've
+seen a lot of especially new driver writers forget to test that, but I
+realise that for most normal drivers that should be mostly covered by
+the fact that we test device unbinding.
 
-> index c299d3452695..7886265846a0 100644
-> --- a/tools/testing/selftests/bpf/test_dev_cgroup.c
-> +++ b/tools/testing/selftests/bpf/test_dev_cgroup.c
-> @@ -15,7 +15,6 @@
->   
->   #include "cgroup_helpers.h"
->   #include "testing_helpers.h"
-> -#include "bpf_rlimit.h"
->   
->   #define DEV_CGROUP_PROG "./dev_cgroup.o"
->   
-> @@ -28,6 +27,9 @@ int main(int argc, char **argv)
->   	int prog_fd, cgroup_fd;
->   	__u32 prog_cnt;
->   
-> +	/* Use libbpf 1.0 API mode */
-> +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-> +
->   	if (bpf_prog_test_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
->   			  &obj, &prog_fd)) {
->   		printf("Failed to load DEV_CGROUP program\n");
-
+So I went ahead and implemented this and it seems to work.  As you
+hinted earlier, this also means that the modalias stuff gets tested, and
+as we know that's been broken in the recent past for a bunch of drivers,
+so that's another advantage to automatic module loading, besides the
+boilerplate reduction in the tests.
