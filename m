@@ -2,110 +2,103 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32A5FC35276
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94993C4707E
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 23:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351844AbiDEXgr (ORCPT
+        id S1354125AbiDEXg6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
+        Tue, 5 Apr 2022 19:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392189AbiDEPft (ORCPT
+        with ESMTP id S1444293AbiDEWVC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:35:49 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518DA12D;
-        Tue,  5 Apr 2022 06:48:07 -0700 (PDT)
+        Tue, 5 Apr 2022 18:21:02 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E02DA6D5;
+        Tue,  5 Apr 2022 13:47:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649166488;
-  x=1680702488;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=79rrKpJvSV/IyMMLjk1fyhAdjuzODykc4KbTAF2mUFs=;
-  b=FiOVSqtEplqlpGbV24QKDAr+i8WFGbW038mF84zzzjMGLHloCAF5NPgY
-   spNiGw/JW64vBk2PDKMYeRrzNnvvX9UHBY/B/HepKgx6Ad8lZokZPYdBy
-   7OpaZ9BsvHs1aZCwW+kuNlJhW2Z2+5tJgZDQoPpNYBx3HZTZqRoW8yTb2
-   L/kbhgJPZ67FRSZN5VimMCXaFg5e7MBpW2w5kOfvVuD4jRmwgAUY0TEzv
-   O9FAaZn51Fi/MSdDTB4FNunqqBA9Ty8O7mk1/2xsvz1tde3N99GsfhgrV
-   4GYLxtosbMlYV/YxgZvfwIh/MPM7kvdpyaf1CLkQR25ioPVRlRFcC7BrW
-   w==;
-Date:   Tue, 5 Apr 2022 15:48:05 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 08/10] iio: light: vcnl4000: add roadtest
-Message-ID: <20220405134805.GA28574@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-9-vincent.whitchurch@axis.com>
- <20220320170253.5b946c84@jic23-huawei>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649191622; x=1680727622;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5oM6Tbg3YS4sB6Uf6R0fiZCcMu82OqpwkpFDAxE4yH4=;
+  b=FW+KnMELhHxYWkklzmhF84FYlIxwlOv6PDYgwjGPlzaUUhLubZU2Nkoy
+   S3/pSpi9Bx2vPGzXWP/CSCjDDSJKOsoU/YjpVNUBSFvPVKwFNoEdK+L/5
+   u0iQhniJlvSQcYMFOF4GzQCW1HrnocwD6RnIMYv7WavI3WQTex8gvyhBQ
+   8=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 05 Apr 2022 13:47:02 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 13:47:02 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 5 Apr 2022 13:47:01 -0700
+Received: from [10.110.72.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
+ 13:46:59 -0700
+Message-ID: <82b87aee-09c2-fbad-7613-4e298bcb3431@quicinc.com>
+Date:   Tue, 5 Apr 2022 13:46:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220320170253.5b946c84@jic23-huawei>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH bpf-next v3 07/27] bpf: selftests: Set libbpf 1.0 API mode
+ explicitly in get_cgroup_id_user
+Content-Language: en-US
+To:     Yafang Shao <laoar.shao@gmail.com>, <andrii@kernel.org>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <kafai@fb.com>,
+        <songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <shuah@kernel.org>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+References: <20220405130858.12165-1-laoar.shao@gmail.com>
+ <20220405130858.12165-8-laoar.shao@gmail.com>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20220405130858.12165-8-laoar.shao@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Mar 20, 2022 at 06:02:53PM +0100, Jonathan Cameron wrote:
-> Very interesting bit of work. My current approach for similar testing
-> is to write a qemu model for the hardware, but that currently
-> requires carefully crafted tests. Most of the time I'm only doing
-> that to verify refactoring of existing drivers. 
-
-Thank you for taking a look!
-
-> One thing that makes me nervous here is the python element though
-> as I've not written significant python in about 20 years.
-> That is going to be a burden for kernel developers and maintainers...
-> Nothing quite like badly written tests to make for a mess in the long run
-> and I suspect my python for example would be very very badly written :)
-
-There's a bunch of static checkers to ensure that the code follows some
-basic guidelines, and CI can check that the tests work consistently, and
-also calculate metrics such as test execution time and code coverage, so
-even non-idiomatic Python in the tests wouldn't be entirely broken.
-
-And unlike driver code, if the tests for a particular driver later do
-turn out to be bad (in what way?), we could just throw those particular
-tests out without breaking anybody's system.
-
-> Cut and paste will of course get us a long way...
-
-Isn't some amount of copy/paste followed by modification to be expected
-even if the framework is written in say C (just as there's already
-copy/paste + modification involved when writing drivers)?
-
-As for the core logic of individual driver tests excluding the framework
-bits, I have a hard time imagining what Python syntax looks like to
-someone with no knowledge of Python, so yes, I guess it's going to be
-harder to review.
-
-> I dream of a world where every driver is testable by people with out hardware
-> but I fear it may be a while yet.  Hopefully this will get us a little
-> closer!
+On 4/5/2022 6:08 AM, Yafang Shao wrote:
+> Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
+> included bpf_rlimit.h.
 > 
-> I more or less follow what is going on here (good docs btw in the earlier
-> patch definitely helped).
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/test_dev_cgroup.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> So far I'm thoroughly in favour of road test subject to actually being
-> able to review the tests or getting sufficient support to do so.
-> It's a 'how to scale it' question really...
+> diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
 
-Would rewriting the framework in C and forcing tests to be written in
-that language mean that maintainers would be able to review tests
-without external support?
+patch subject should refer to test_dev_cgroup
+(currently has same subject as 05/27)
+
+> index c299d3452695..7886265846a0 100644
+> --- a/tools/testing/selftests/bpf/test_dev_cgroup.c
+> +++ b/tools/testing/selftests/bpf/test_dev_cgroup.c
+> @@ -15,7 +15,6 @@
+>   
+>   #include "cgroup_helpers.h"
+>   #include "testing_helpers.h"
+> -#include "bpf_rlimit.h"
+>   
+>   #define DEV_CGROUP_PROG "./dev_cgroup.o"
+>   
+> @@ -28,6 +27,9 @@ int main(int argc, char **argv)
+>   	int prog_fd, cgroup_fd;
+>   	__u32 prog_cnt;
+>   
+> +	/* Use libbpf 1.0 API mode */
+> +	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+> +
+>   	if (bpf_prog_test_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
+>   			  &obj, &prog_fd)) {
+>   		printf("Failed to load DEV_CGROUP program\n");
+
