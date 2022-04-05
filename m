@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3533AC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07EEDC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Apr 2022 14:56:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240506AbiDEOvB (ORCPT
+        id S240681AbiDEOvK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        Tue, 5 Apr 2022 10:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386611AbiDEOWO (ORCPT
+        with ESMTP id S1345397AbiDEOXh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:22:14 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B28266CBA;
-        Tue,  5 Apr 2022 06:09:40 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id bo5so12048496pfb.4;
-        Tue, 05 Apr 2022 06:09:40 -0700 (PDT)
+        Tue, 5 Apr 2022 10:23:37 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9371B6EB09;
+        Tue,  5 Apr 2022 06:09:52 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b15so12046178pfm.5;
+        Tue, 05 Apr 2022 06:09:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=37SR7Zn31WWBGX9RkRYaZCh1XxNUj+JjDrpjS5zX3xw=;
-        b=JNksm1P71eENbHVREKVq7V+oFiG698bw+ibxUTkrtCwpk5e589wfIVtk06SzOGK6ea
-         26zybbYD2Fgn7VqAqwdHWyvRNKU35j4ZUD8hoCUbV4XFijZkRNQvE3w/SV+bCfpe6VrB
-         Smlol8WNulgRXh9nAg1lRgjpCb9k4KtTP0xB4PewZ/iMyVqP413FdHcwW+z5AzFmpS1W
-         xgq5jdgzwuEYQFqE3CfTkSGtB5N2rcR1LCsY53jDILv/j1JgFJ9lCArekaUuu6Chyw4d
-         6BKppHQJMJ7wSY1VFCiKxesks6Z72sg9QnfhG71Y8eYOvCDmiaCDt7oiHVMuGzuI5Xiu
-         BkQA==
+        bh=p5W0HLSh4kxqEqKp2k4JC+MHyJDV7uD5B6J5wpWqKsQ=;
+        b=IUrZgFVxLvUPKV9t6MtsKjNwVW68RgltIuuuX/CtEngtGPzi6LibkcCu8EnM4BaOcG
+         Kk4CQqMrNx2hIaj+GQiQyVZPlBpGvBl8wDts2N+EpsWfR//91R1dbFchUFHSnXTNrwBE
+         Pg4XJJUVxyciMRFFDcpfU9uGTg3uAy1VSMXAKYSAUaWZvAc4p8ckVtrQZ8SSDVK8afoX
+         Hs0mN/b2oM/AxPQ/4+bVsdkamX+UNJbECTTFWZctktcFzNGvAtQY81Ifrf7T/wFgRJ5Q
+         cZoYemtVF0R7y9bbxw8ugWN4PwI8HP/wzMmvd0/VywfN8lYw310/9GC323eZFVoBSQ+K
+         /09Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=37SR7Zn31WWBGX9RkRYaZCh1XxNUj+JjDrpjS5zX3xw=;
-        b=vrY5iY2gbMaEGg2ssE+Eg1JE/1xYZymO6iSH+PdqikUC8Ij78M67kxM6o8NTWOGAGQ
-         EmOM2xRA/yeq0MkivmHe0Ubmg//jVPEpTxberqqTtwOxqxXNtiR290wg7AR9aUbmGayh
-         pmd76jeNDZBKgn7f7NYeoei5NIKep5To5uQesJtVZ3ZyPk0VlsC87+Wmgu6n9//ScvIi
-         UjnvEtVTk9c6ZI0PlWuNcCVZTUpAhY9Kv/VU4Kt/hWi1xqWwSwnI4u6AArgUDV4iZlEG
-         DVZtuDmL1cVuPE7guSaSwfuaGiM9zuoi8kCGL2vOW6jp9lsvZCsKtZ3tFW2nQVmboBIh
-         NChg==
-X-Gm-Message-State: AOAM532CHCwHQx6sVangCrl8//m5JT6oVjoL7GxTvcRc/rGGmQAfbbSW
-        2jZQrdh5TGPyRedOlr6Y77c=
-X-Google-Smtp-Source: ABdhPJwWpczVL736y96tsDeroidAaWlHqfGEIpmpIQzcnUDPLxSVjZc0aijMy2B9dtOd04PvJ+/HUQ==
-X-Received: by 2002:a63:7741:0:b0:386:330e:1dcd with SMTP id s62-20020a637741000000b00386330e1dcdmr2744552pgc.71.1649164179481;
-        Tue, 05 Apr 2022 06:09:39 -0700 (PDT)
+        bh=p5W0HLSh4kxqEqKp2k4JC+MHyJDV7uD5B6J5wpWqKsQ=;
+        b=e5WimeB7xezHKPyS8burIIwG86JqyqyKchneR42UuChsCETWLYUyrtSmxnnGPgMWAx
+         Di4utADKQRm1LMAnfoZnfvt/7pUyI2EMhq9GfxeJtMjxPM39S1rdE1Qdd0MXTR6Ux0R5
+         G4ib4RbHDtmnjexG1oDC8MDQmzyyIRz9IRyKcE4wkLMOPOj6ssesxYeVkMuMCvcDQJjt
+         ye8omh1B8hyQpL42wa44cNMvAyltbF4l3uQHGjBY7MFVZwaBC1r7aa3lfDPIOPON7Por
+         F4ZuO5t8mwnQoLR4eSR3XQR4aKHpt7fi2Svo1KEtGdl6W1d1hDTvVPVadKnXJk5ygdvq
+         jnXA==
+X-Gm-Message-State: AOAM531w6KMFmg+ArBxU5kDQROnUozQYWdR8/q+RcH1DANXMxiPcnUKG
+        kGh/BCw/s8FhmBavVJMvaMQ=
+X-Google-Smtp-Source: ABdhPJzkThtzZC3V01k4BfUs/xUspZwDN3SdLfsy8x3gKseNaIL0SJXHA89TvdcN4iWr31ahrKSRsg==
+X-Received: by 2002:a63:df4a:0:b0:399:460d:2da with SMTP id h10-20020a63df4a000000b00399460d02damr2769002pgj.315.1649164191900;
+        Tue, 05 Apr 2022 06:09:51 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.38
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:38 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:51 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 19/27] bpf: selftests: Get rid of bpf_rlimit.h
-Date:   Tue,  5 Apr 2022 13:08:50 +0000
-Message-Id: <20220405130858.12165-20-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 27/27] bpf: runqslower: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
+Date:   Tue,  5 Apr 2022 13:08:58 +0000
+Message-Id: <20220405130858.12165-28-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -67,49 +67,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All the files which included bpf_rlimit.h have been set strict mode
-explicitly, so we can get rid of it now.
+Explicitly set libbpf 1.0 API mode, then we can avoid using the deprecated
+RLIMIT_MEMLOCK.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/bpf_rlimit.h | 28 ------------------------
- 1 file changed, 28 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/bpf_rlimit.h
+ tools/bpf/runqslower/runqslower.c | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bpf_rlimit.h b/tools/testing/selftests/bpf/bpf_rlimit.h
-deleted file mode 100644
-index 9dac9b30f8ef..000000000000
---- a/tools/testing/selftests/bpf/bpf_rlimit.h
-+++ /dev/null
-@@ -1,28 +0,0 @@
+diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
+index d78f4148597f..83c5993a139a 100644
+--- a/tools/bpf/runqslower/runqslower.c
++++ b/tools/bpf/runqslower/runqslower.c
+@@ -4,7 +4,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
 -#include <sys/resource.h>
--#include <stdio.h>
--
--static  __attribute__((constructor)) void bpf_rlimit_ctor(void)
+ #include <time.h>
+ #include <bpf/libbpf.h>
+ #include <bpf/bpf.h>
+@@ -88,16 +87,6 @@ int libbpf_print_fn(enum libbpf_print_level level,
+ 	return vfprintf(stderr, format, args);
+ }
+ 
+-static int bump_memlock_rlimit(void)
 -{
--	struct rlimit rlim_old, rlim_new = {
+-	struct rlimit rlim_new = {
 -		.rlim_cur	= RLIM_INFINITY,
 -		.rlim_max	= RLIM_INFINITY,
 -	};
 -
--	getrlimit(RLIMIT_MEMLOCK, &rlim_old);
--	/* For the sake of running the test cases, we temporarily
--	 * set rlimit to infinity in order for kernel to focus on
--	 * errors from actual test cases and not getting noise
--	 * from hitting memlock limits. The limit is on per-process
--	 * basis and not a global one, hence destructor not really
--	 * needed here.
--	 */
--	if (setrlimit(RLIMIT_MEMLOCK, &rlim_new) < 0) {
--		perror("Unable to lift memlock rlimit");
--		/* Trying out lower limit, but expect potential test
--		 * case failures from this!
--		 */
--		rlim_new.rlim_cur = rlim_old.rlim_cur + (1UL << 20);
--		rlim_new.rlim_max = rlim_old.rlim_max + (1UL << 20);
--		setrlimit(RLIMIT_MEMLOCK, &rlim_new);
--	}
+-	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
 -}
+-
+ void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
+ {
+ 	const struct runq_event *e = data;
+@@ -133,11 +122,8 @@ int main(int argc, char **argv)
+ 
+ 	libbpf_set_print(libbpf_print_fn);
+ 
+-	err = bump_memlock_rlimit();
+-	if (err) {
+-		fprintf(stderr, "failed to increase rlimit: %d", err);
+-		return 1;
+-	}
++	/* Use libbpf 1.0 API mode */
++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+ 
+ 	obj = runqslower_bpf__open();
+ 	if (!obj) {
 -- 
 2.17.1
 
