@@ -2,106 +2,89 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 850F6C433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC24C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Apr 2022 07:22:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiDFFXQ (ORCPT
+        id S233875AbiDFHRF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        Wed, 6 Apr 2022 03:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1850378AbiDFCwO (ORCPT
+        with ESMTP id S1454453AbiDFGoO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:52:14 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66054181149;
-        Tue,  5 Apr 2022 16:52:16 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e22so1074856ioe.11;
-        Tue, 05 Apr 2022 16:52:16 -0700 (PDT)
+        Wed, 6 Apr 2022 02:44:14 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39FC1C16E8
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Apr 2022 21:44:22 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so2860240wms.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Apr 2022 21:44:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
-        b=qP2Je91cC5X9wuYLjZp8TH9PNetiSDkDUC4K9LVY0XsP70Z0P360X7QBCcp544wpWn
-         uj80MoZx+E/whCCVsJBl7bHFLs4zX9YT1v0DtGIo2TXQVILm6wSdrAYbxEVLaPSpMPRG
-         SIKIBtv9TFPsCcXbNOHKCqINnfCryFkkOuEUG17CZIPI7EC5N++bXiQLtbGUwI3G1ktC
-         B4WGJJrB9L4fEuvWaEKUmpTr1MxaOMVrexGTVXwlaRX188e8xQqjFFpGQ/W7Qw+DtTJ8
-         44qAfRFH+M9VBi0NFgLYpeT8wWfgUW7inCLoeNUEeDAjzmUxiUZdp/P9BBnkLKTi4zUx
-         rLGw==
+        bh=e1+rSoTUFj3WU/eLBjLIgKZMH01AWeNOKksTlBoI6QI=;
+        b=DZ356kbwx5IGdFHW0oHIMS7b7EvtD/qoADxDb3OCAQsNy1e/3rk+O6v1Hin+9fHM+w
+         8YqIdfgn96Z+8lR/e9ASQ3ksjl+FNnPdAdUm2+RQdYwNoXTgTXoMmEGa76DCWF7gfBUL
+         oKQ9OsGLPk05HGzDi42x5w+msAtGdWaYaIqrEJiF5vYr3hbgkZSJu2/xuBheXSzuSkdD
+         WOxPvzQ8Q5YPN+/86k1RZ4stBMQRuQfdD8rd6KFDKmkv3h4E0v/yX7tZksqWzQGW4eaL
+         4TRxoR7LGSY9TJroykH/kpFBz83Ju2+XPgxlkW7QvV2C0PW4k18tlPzNGrBG1qnKcloJ
+         Rl8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
-        b=jdmo3pXGSLArTYozWH56R61Sa9Vm8CKn635zT3jwKfS6G9VwiGq4bMj1JGW9CWrIOC
-         zgZE0A9nu4gni9LSjQ04SWMPAmBsI/0DMPKKQASMPPCisp5MjyHQ3OVKnXvS+lqqBhS+
-         IrIYLQVlyQjkeQ4lU7+8XZ69SKvya7elwuXCydLM6ftV8DChQHldjiNBt0U9hOzzTghu
-         zgzsrQ11B6JFK79XWsA7ObyiiZ9KImBdGY/V8b5H7bePn8uc3LvbObG+OH182xmkd5GF
-         x+uP2goSxS/RGteWy1y61OHLobZTJLr6OzQySzcsXDJkaS7ybD0Hb2RqDeoxLXNZRB9T
-         nwPA==
-X-Gm-Message-State: AOAM533CEvHxR5iN4a6VcaGJ1GLQ7vWPtbG4Rz4rjPUfl+VRlZB4EMAP
-        bG9KOKVZeuBjyzxtK3lQd+zE4KQgH8bLN7SuFRw=
-X-Google-Smtp-Source: ABdhPJw6QDEx6357RD8/tWoPiOfZM+DJ9CdKHEhzqAWEeOUPTScS2FluYFnoR+Xgdc6Cy4lLB2keEra95hY1Z8CnTU4=
-X-Received: by 2002:a05:6638:772:b0:319:e4eb:adb with SMTP id
- y18-20020a056638077200b00319e4eb0adbmr3287706jad.237.1649202733374; Tue, 05
- Apr 2022 16:52:13 -0700 (PDT)
+        bh=e1+rSoTUFj3WU/eLBjLIgKZMH01AWeNOKksTlBoI6QI=;
+        b=mJj+aZ7be/m+vKKBocio647x/+lJBF1RRLzTZPm+7BNJJb2SCkNQs69b5AgFnD+SpT
+         VNzQ2UPSVQq2BqhZkHcxyTGrggsNhresg2DUosb6w9usVxm/+4Qm1RAov1XrodxMd0Wu
+         oGqnqGyjDWjvukQztn05jRYpoAYX5Ab6FmLMnQ5DZ7G8TZRz86WfD2gm3UJBftqxTcqR
+         SLotXSIomPUBg4sKmrshrCbFlqZ2bKnEiuEfguNmubVSVtT+7XDiNfgQ+DgHZ1QZmp0s
+         ig/umb2klhhRmb9srWcveSdki2RfmBGP72FF5Tt8d849cLItxxt2iw4ZFULUK1HESwP+
+         AM5Q==
+X-Gm-Message-State: AOAM5323gjohBzkrrf6TCY11aU0nE8wvH5SdExvJHVaMa60rC2jxhAHX
+        a9/KlkriZJVunRGTG3knPePZtqvNiVLFmhUnTKX6fw==
+X-Google-Smtp-Source: ABdhPJzUeoLh2rgohUoRmso6+QuCiyytCmkErXglSSd5mbHd/aI3A9xMIPS+cvm8RRGxxq/lcUpM6xrBahrJyk5gvpg=
+X-Received: by 2002:a05:600c:6004:b0:38c:6c00:4316 with SMTP id
+ az4-20020a05600c600400b0038c6c004316mr5854562wmb.6.1649220261185; Tue, 05 Apr
+ 2022 21:44:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405163728.56471-1-ytcoode@gmail.com>
-In-Reply-To: <20220405163728.56471-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 16:52:02 -0700
-Message-ID: <CAEf4BzZLw-QeXgb1HRR-b3D5NqQRs_iqOFcZmokvmf6rXTy-iw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+References: <20220405190619.540177-1-dlatypov@google.com>
+In-Reply-To: <20220405190619.540177-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 6 Apr 2022 12:44:10 +0800
+Message-ID: <CABVgOSmJ+oOLqK-yVtr-AhtOSQ8RxMo9hB0uLR6-p_mBrME3Hg@mail.gmail.com>
+Subject: Re: [PATCH] lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 9:39 AM Yuntao Wang <ytcoode@gmail.com> wrote:
+On Wed, Apr 6, 2022 at 3:06 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> The checks preceding CHECK macro are redundant, remove them.
+> This is in line with Documentation/dev-tools/kunit/style.rst.
+> Some of these tests predate that so they don't follow this convention.
 >
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> With this and commit b0841b51cac9 ("kunit: arch/um/configs: Enable
+> KUNIT_ALL_TESTS by default"), kunit.py will now run these tests by
+> default. This hopefully makes it easier to run and maintain the tests.
+> If any of these were to start failing, people would notice much quicker.
+>
+> Note: this commit doesn't update LINEAR_RANGES_TEST since that would
+> select its dependency (LINEAR_RANGES). We don't want KUNIT_ALL_TESTS
+> to enable anything other than test kconfigs.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> index 16048978a1ef..5f2ab720dabd 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> @@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
->                         good_user_stack = true;
->         }
->
-> -       if (!good_kern_stack)
-> -           CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-> -       if (!good_user_stack)
-> -           CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
-> +       CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-> +       CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
 
-I suspect it was to avoid super long verbose logs, as each CHECK()
-emits one line into output and here we might be getting a lot of
-samples. So let's keep it as is. But for the future let's try getting
-rid of CHECK()s as much as possible in favor of ASSERT_xxx(). Thanks.
+I'd forgotten these were missing KUNIT_ALL_TESTS support, thanks!
 
->  }
->
->  void test_get_stack_raw_tp(void)
-> --
-> 2.35.1
->
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
