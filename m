@@ -2,67 +2,69 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7E3DC433EF
-	for <linux-kselftest@archiver.kernel.org>; Sat,  9 Apr 2022 01:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 769EBC433F5
+	for <linux-kselftest@archiver.kernel.org>; Sat,  9 Apr 2022 01:09:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237480AbiDIBLT (ORCPT
+        id S239904AbiDIBLW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 8 Apr 2022 21:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        Fri, 8 Apr 2022 21:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238680AbiDIBLT (ORCPT
+        with ESMTP id S239330AbiDIBLU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:11:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E5637A92;
-        Fri,  8 Apr 2022 18:09:13 -0700 (PDT)
+        Fri, 8 Apr 2022 21:11:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A605337A92;
+        Fri,  8 Apr 2022 18:09:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 846C8621BB;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D68EB82DFB;
+        Sat,  9 Apr 2022 01:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 09B38C385A3;
         Sat,  9 Apr 2022 01:09:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E838AC385A1;
-        Sat,  9 Apr 2022 01:09:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649466552;
-        bh=slwUthlbtJFP504ndOrMg0gfY1MxpkP2Rj4g5JgbMWA=;
+        s=k20201202; t=1649466553;
+        bh=FQuzKu6yg787WQYGd+91H/VL60/wz5Prh4W0gVs0DZ0=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tb29OFpy8a8YcB9RbsHrLHLVkZi+RD60WCGHyOGT4S/eQJ5tHZb09Kgj6QbpaXFEC
-         kWIXDwaWtq9B0BOvqGv/7zvUB5ZfjkbzpdUQtMk+64HQwuCN5wvW6EnRNOTpVTKVFR
-         Ce2PXTpbtTKLSDknDj4Hc/gSdkuvxSU8t7JDQroeWVX5fa+FVNqX2K/GHPr2ssvnOO
-         5oUk0otfK9w/rNs/T24dxI3kFzJRlMQ4YHOMr4ECDN5KvIYdVsh0CyMZVeSD0/2/oB
-         SXovXiczGA++QLlDJ8DpHV++PAKzvCnnfgeQ0pM5caEJv+X9uWDod4DVidoHJlMwrB
-         mYYme6b+sh3vg==
+        b=NB4vcqorZS5LH7gNVbozsE6T7hKOnplij5N3YcDIUI2pJGZJAtWaCabR420QdBN4q
+         C3lSPlZX8C9vLgiiHrN6M+yM/46CsWMBUT8YbgDQgOjiapP7P87T/Ipj5GEQZha4h/
+         hwQGOajE4QGfxrOxE21tZ3AEN35UQAizmE40BD5TD1ECo9kFZasva9OF09c8LkHpCG
+         KoZwuDVlD/0yvFGou9oefHKBl6mmz6Aqi4vRAeVQEBj2m/5y+7yxNHeFvNU3+BpVYz
+         KjcMq9GBlsxPatndjqkA3Dh+L2wcyo5FFTvMrBOxI1d4hLpd30mmBLxdji0+16+BU8
+         4I7/DK/j0GAag==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5609E85B76;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6E49E8DCCE;
         Sat,  9 Apr 2022 01:09:12 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.18-rc2
+Subject: Re: [GIT PULL] KUnit update for Linux 5.18-rc2
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <e4798810-fdb4-d436-ed19-0d0d38138002@linuxfoundation.org>
-References: <e4798810-fdb4-d436-ed19-0d0d38138002@linuxfoundation.org>
+In-Reply-To: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
+References: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <e4798810-fdb4-d436-ed19-0d0d38138002@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.18-rc2
-X-PR-Tracked-Commit-Id: 79ee8aa31d518c1fd5f3b1b1ac39dd1fb4dc7039
+X-PR-Tracked-Message-Id: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.18-rc2
+X-PR-Tracked-Commit-Id: 02c7efa43627163e489a8db87882445a0ff381f7
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9abb16bad5d802e4a1fce3a498d5ee6a334e84a4
-Message-Id: <164946655286.8314.11620926656499077754.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 6c7376da23587738ab0e84b8b90b6cc02db5181e
+Message-Id: <164946655294.8314.14661504987868871783.pr-tracker-bot@kernel.org>
 Date:   Sat, 09 Apr 2022 01:09:12 +0000
 To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah@kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 8 Apr 2022 12:36:38 -0600:
+The pull request you sent on Fri, 8 Apr 2022 12:55:58 -0600:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.18-rc2
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.18-rc2
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9abb16bad5d802e4a1fce3a498d5ee6a334e84a4
+https://git.kernel.org/torvalds/c/6c7376da23587738ab0e84b8b90b6cc02db5181e
 
 Thank you!
 
