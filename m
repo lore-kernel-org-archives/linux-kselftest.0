@@ -2,60 +2,121 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE27DC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Apr 2022 21:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04537C433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Apr 2022 23:28:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiDLVGk (ORCPT
+        id S230377AbiDLXaZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Apr 2022 17:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        Tue, 12 Apr 2022 19:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbiDLVGd (ORCPT
+        with ESMTP id S230264AbiDLX3b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Apr 2022 17:06:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B918115470D;
-        Tue, 12 Apr 2022 13:54:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5352761C54;
-        Tue, 12 Apr 2022 20:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A248C385A1;
-        Tue, 12 Apr 2022 20:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649796069;
-        bh=YBvi7BvRSFhTBMnNDQglW7gASkP9HGdcSPqceH085lI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aeILG2DvCifC4VQbXqYyZL6IYHEItaTTEt7soKXalXltcIDglD7Pna4yAKKMsn/qG
-         lKQ8QtJofwT1FT1yzZo8Mi9p+ZqJxF5eoa1ZHH3WyZe0DYWjM71Bi+BbiVwJa8bDmW
-         jgI2XdYfWONemapxaloIcZy26WSTHGHRN+kxBy4o=
-Date:   Tue, 12 Apr 2022 13:41:08 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tue, 12 Apr 2022 19:29:31 -0400
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E7516809D
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Apr 2022 15:30:44 -0700 (PDT)
+Received: by mail-oi1-x249.google.com with SMTP id k25-20020a544699000000b002fa69ba89b6so84971oic.19
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Apr 2022 15:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=u+9yLdrvqv+15A9PShNP0Bj2lgMYcE44VCQG0+LZtrY=;
+        b=mwfr+1QL20PQIeOZQZw4zuZEGgBuBUOGgqdqpg6THGQZKaFw5Wj8PV8H59rdqaaBLU
+         96DEcj2/yCle2oJspe3XQ+wvE7SynQC2qq8T45bjBHdWr775iHRDb1Awf9JLNlMzGg0Z
+         g9Vavh5XkBcZCDWPUCYqQaA2bJ40hvxQocKz/LgmqNRswWSq0TrGjsidj6Uh160Cxgg9
+         Br/LGeUfE2qBk04WfS9pWdcxkZ6ZfhQUGAQUPaDVZVTwx2AivA1G7qb2eWdfFOoTI0KO
+         79/zwiYoOluzurGB1K8giL4K789L/VwUjzCmIrbzk2s/dgPratqPJ30cmLHHGCauiOdw
+         Ag0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=u+9yLdrvqv+15A9PShNP0Bj2lgMYcE44VCQG0+LZtrY=;
+        b=Z4ZDXVCV4vvbd71yc0gCWstB6gu/k8Da12tAIFirgOVqLFvMRJNuqAWQ6msq3Rn0my
+         62fnIoAp8rMWiBB1ny4HMvUEkMEizy1amPU3i6/J/rPrHtByUDtsfubX37U+pGXgU38o
+         /SsLEGhYacLbotqZUm7mQrD8Muypkb9oVAThgN05PO5qxmPEae9PHb4RN3NAGMgk9bGM
+         ocgmeORTB3yU25tARbYYLHFCBEOjjl5dU2u8zZ+JNC7/mrpmQU10CNum891feCW9EKS0
+         qHXJdxztH9lROO+Y78mPg1NWp97orgJSwKCrOV7lb8C2NUFoikFAOQfOqDudUwB/qWB9
+         OyuQ==
+X-Gm-Message-State: AOAM533jYzQ/31PTrGwP3atdw/iLGxAbnnIS5EfMD59xanjSnhNZm5Zt
+        5wxm7g+Us3ddtwTho9qyNtAQa5LhVoMhNPKv3ILp
+X-Google-Smtp-Source: ABdhPJzT2Zt45zo3Wf9Ef/5d1NiGtDnKycptXlg/R76ipboiOT8KRuG6nigv1WkYm1tB4Mt/wit/6RMj+xbJNsBmESHI
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:8927:f9ed:8b14:ddae])
+ (user=axelrasmussen job=sendgmr) by 2002:a17:90b:3c47:b0:1cb:8121:dcc8 with
+ SMTP id pm7-20020a17090b3c4700b001cb8121dcc8mr6997487pjb.35.1649795391430;
+ Tue, 12 Apr 2022 13:29:51 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 13:29:42 -0700
+In-Reply-To: <20220412202942.386981-1-axelrasmussen@google.com>
+Message-Id: <20220412202942.386981-2-axelrasmussen@google.com>
+Mime-Version: 1.0
+References: <20220412202942.386981-1-axelrasmussen@google.com>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH 2/2] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
         "Dmitry V . Levin" <ldv@altlinux.org>,
         Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-Message-Id: <20220412134108.b95b6c92183b3d9c1dd11b47@linux-foundation.org>
-In-Reply-To: <20220412202942.386981-1-axelrasmussen@google.com>
-References: <20220412202942.386981-1-axelrasmussen@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Shuah Khan <shuah@kernel.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 12 Apr 2022 13:29:41 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
+Prefer this new interface, but if using it fails for any reason just
+fall back to using userfaultfd(2) as before.
 
-> To achieve this, add a /dev/userfaultfd misc device.
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-An update to $(grep -rl userfault Documentation/) seems appropriate?
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 92a4516f8f0d..a50c430f036c 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -383,13 +383,32 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+ 	}
+ }
+ 
++static void __userfaultfd_open_dev(void)
++{
++	int fd;
++
++	uffd = -1;
++	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
++	if (fd < 0)
++		return;
++
++	uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
++		     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	close(fd);
++}
++
+ static void userfaultfd_open(uint64_t *features)
+ {
+ 	struct uffdio_api uffdio_api;
+ 
+-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	__userfaultfd_open_dev();
++	if (uffd < 0) {
++		printf("/dev/userfaultfd failed, fallback to userfaultfd(2)\n");
++		uffd = syscall(__NR_userfaultfd,
++			       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	}
+ 	if (uffd < 0)
+-		err("userfaultfd syscall not available in this kernel");
++		err("userfaultfd syscall failed");
+ 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
+ 
+ 	uffdio_api.api = UFFD_API;
+-- 
+2.35.1.1178.g4f1659d476-goog
+
