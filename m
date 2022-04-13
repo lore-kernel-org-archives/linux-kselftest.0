@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58AC3C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DC60C4332F
 	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 21:11:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239064AbiDMVNZ (ORCPT
+        id S237765AbiDMVN1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Apr 2022 17:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        Wed, 13 Apr 2022 17:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239016AbiDMVNI (ORCPT
+        with ESMTP id S239017AbiDMVNI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 13 Apr 2022 17:13:08 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA20B44A33;
-        Wed, 13 Apr 2022 14:10:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29007403DD;
+        Wed, 13 Apr 2022 14:10:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649884245; x=1681420245;
+  t=1649884246; x=1681420246;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AG6HQ4kB97od1maoqQHJCA/lJ05JBa4Z0R1kc99zw8s=;
-  b=QPxH4aI0LgVTwK6eQeTMdv2ITsWPgS7cdFRo5FDAzvizLFC7dMLBiBKO
-   4k1tm7tuavb9wMFei5XuZxoBlxpKu/HSlvvZTp8Ji4IeitEwXAHcSd3UJ
-   sYJiTgmEC0lISe/32d6ocy0+f2xhWz9KkPkf/K2qbdYXGMkEsU2ZrjLrO
-   FvXX+SoRQcVrYxRxNOEjj+n9C6VoM42VTfL9/aVusdMXHf/mMH7L/DvDz
-   OgeQT43g8b87TKNDOilN92y9VS0N/mcvEB7RE8oevObK198CDV3HWka1i
-   heLxpijH2aMBZ0Par9PNGVqwauKR2yielsr2Pn+PVYbO4aGRcBbjyrTnH
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219018"
+  bh=jmqAQwuCUmDetLsAl9v02bXs5ro0p8fy3L9oNgVQF4E=;
+  b=IBM8ULSiXI5RifXlZCrJo1RZj7azTBjLLqrc0QsiiRBWJFYlTi6P+VwN
+   5KJ7+aY+1bNk6axsQ9nWoXxEv55zJC2FMEinsAacr2T4AWmIYh+oj0vQW
+   ntVv81JTSiY8EDU8MzQFvCdTII9yOb/opYWByZJdptMEt6qIUY5/R+HGg
+   4KL9/pP7JGR65NYO0kVVVRpAwaCWLBz0+a2a3ANaHLWz1GoB34WgHi7Ce
+   YxibFtT3npa+SU+py+FdjHLRi6bIxg2RPO03FaCWEoWwisfh/ocz9FKPw
+   L4s05hB7qDs8CfRmnrLicFPHAa/WeLAiKzFFNDmiOqK6ShThLBUWYoIWP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219024"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323219018"
+   d="scan'208";a="323219024"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:43 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725054265"
+   d="scan'208";a="725054273"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:42 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:43 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
 To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
         bp@alien8.de, luto@kernel.org, mingo@redhat.com,
@@ -47,9 +47,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V4 10/31] x86/sgx: Create utility to validate user provided offset and length
-Date:   Wed, 13 Apr 2022 14:10:10 -0700
-Message-Id: <4db3422a6b6f04191a50584a9ae5de0a2dd96b4f.1649878359.git.reinette.chatre@intel.com>
+Subject: [PATCH V4 12/31] x86/sgx: Export sgx_encl_{grow,shrink}()
+Date:   Wed, 13 Apr 2022 14:10:12 -0700
+Message-Id: <8d33cff2a2c4e23ff9745dd78935582fd0053cd8.1649878359.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1649878359.git.reinette.chatre@intel.com>
 References: <cover.1649878359.git.reinette.chatre@intel.com>
@@ -59,72 +59,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-User provided offset and length is validated when parsing the parameters
-of the SGX_IOC_ENCLAVE_ADD_PAGES ioctl(). Extract this validation
-(with consistent use of IS_ALIGNED) into a utility that can be used
-by the SGX2 ioctl()s that will also provide these values.
+In order to use sgx_encl_{grow,shrink}() in the page augmentation code
+located in encl.c, export these functions.
 
+Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V3:
 - Add Jarkko's Reviewed-by tag.
-- Consistently use IS_ALIGNED(). (Jarkko)
 
-Changes since V1:
-- New patch
+Changes since V2:
+- New patch.
 
- arch/x86/kernel/cpu/sgx/ioctl.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/sgx/encl.h  | 2 ++
+ arch/x86/kernel/cpu/sgx/ioctl.c | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+index 07abfc70c8e3..9d673d9531f0 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.h
++++ b/arch/x86/kernel/cpu/sgx/encl.h
+@@ -120,5 +120,7 @@ bool sgx_va_page_full(struct sgx_va_page *va_page);
+ void sgx_encl_free_epc_page(struct sgx_epc_page *page);
+ struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+ 					 unsigned long addr);
++struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl);
++void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page);
+ 
+ #endif /* _X86_ENCL_H */
 diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index 83df20e3e633..a66795e0b685 100644
+index 21078c6643f7..2df27dd8b30d 100644
 --- a/arch/x86/kernel/cpu/sgx/ioctl.c
 +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -372,6 +372,26 @@ static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long src,
- 	return ret;
+@@ -17,7 +17,7 @@
+ #include "encl.h"
+ #include "encls.h"
+ 
+-static struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
++struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
+ {
+ 	struct sgx_va_page *va_page = NULL;
+ 	void *err;
+@@ -43,7 +43,7 @@ static struct sgx_va_page *sgx_encl_grow(struct sgx_encl *encl)
+ 	return va_page;
  }
  
-+/*
-+ * Ensure user provided offset and length values are valid for
-+ * an enclave.
-+ */
-+static int sgx_validate_offset_length(struct sgx_encl *encl,
-+				      unsigned long offset,
-+				      unsigned long length)
-+{
-+	if (!IS_ALIGNED(offset, PAGE_SIZE))
-+		return -EINVAL;
-+
-+	if (!length || !IS_ALIGNED(length, PAGE_SIZE))
-+		return -EINVAL;
-+
-+	if (offset + length - PAGE_SIZE >= encl->size)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- /**
-  * sgx_ioc_enclave_add_pages() - The handler for %SGX_IOC_ENCLAVE_ADD_PAGES
-  * @encl:       an enclave pointer
-@@ -425,14 +445,10 @@ static long sgx_ioc_enclave_add_pages(struct sgx_encl *encl, void __user *arg)
- 	if (copy_from_user(&add_arg, arg, sizeof(add_arg)))
- 		return -EFAULT;
+-static void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page)
++void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page)
+ {
+ 	encl->page_cnt--;
  
--	if (!IS_ALIGNED(add_arg.offset, PAGE_SIZE) ||
--	    !IS_ALIGNED(add_arg.src, PAGE_SIZE))
--		return -EINVAL;
--
--	if (!add_arg.length || add_arg.length & (PAGE_SIZE - 1))
-+	if (!IS_ALIGNED(add_arg.src, PAGE_SIZE))
- 		return -EINVAL;
- 
--	if (add_arg.offset + add_arg.length - PAGE_SIZE >= encl->size)
-+	if (sgx_validate_offset_length(encl, add_arg.offset, add_arg.length))
- 		return -EINVAL;
- 
- 	if (copy_from_user(&secinfo, (void __user *)add_arg.secinfo,
 -- 
 2.25.1
 
