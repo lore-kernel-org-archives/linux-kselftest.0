@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF1C0C43217
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 21:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E107C4167B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 21:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238967AbiDMVNk (ORCPT
+        id S238886AbiDMVNl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Apr 2022 17:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        Wed, 13 Apr 2022 17:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239011AbiDMVNH (ORCPT
+        with ESMTP id S239040AbiDMVNL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:13:07 -0400
+        Wed, 13 Apr 2022 17:13:11 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627C23A5C1;
-        Wed, 13 Apr 2022 14:10:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E3B44A33;
+        Wed, 13 Apr 2022 14:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649884245; x=1681420245;
+  t=1649884250; x=1681420250;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OXPfbaFXmvgsbCmIRR+xO9GdT1TQ8nzKB+sNNYKHV9E=;
-  b=a5zWOEDR0z44UJzkwK/MVrXm5DIP1IJDzeXEfvlqpKm9I5ihkvCpg/6C
-   AKBJrT0Fgd6dJLXROqtbEtpGafrjTni4NB0rxUY/VqArgYUgiQX5lCzg3
-   jZlLSsbzJ4jQelOgO+QgZ3vPdG48l2E9NTFFlfgw0wYxDwqZiv6tgg1tN
-   HJETOmJu+tHkm53yREA/YuC/8osfpn+0z2+eiYJO45hlqHJ9ffywFJe0/
-   68skNgb0f7J1YR0HbTXL06MuIADaogQ7JmEfIRatazNQQzOzTg/szNmQo
-   AZbJqcsoH3wbGTGu0YfGsjy7sW7dozGHt3VBVOuVzDP9378GsTjMHNCBS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219017"
+  bh=GiU+SVNL1a1zl8isjEY1AJ7ug5DjCIg0sIHkukAZDzE=;
+  b=Ld3D8A8gRu1yU+uUUAjZvTb6D8cOUNvVxF5FxxUpk8WUwyehk+Fi8ie8
+   2SxBvTi3rPk9ranYWaOL0GPAzVGS51mONKlXAElUqMvsZfTLkO83XDfhV
+   0VjHjsT5/MEZDzQ5bn7miTvfZKS1OR3Roix7spyOotUFPa5GK20M35HGf
+   AnJLECdmnOovkoFVrWEWQe2CiDmstTmO3vR2yNqTcCVEWYVVdcmMYCpep
+   aNH9xpBsV0kxZOhddVUocMnOMSN78WAD8ufpWBBrca2eHs7+YMEHpXeJz
+   get+N3GiJaYlDcS6ZSxTQ2NS0nf8Z9LW3e8dgZkCnQmOwMz4jT9+iS/P4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219051"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323219017"
+   d="scan'208";a="323219051"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:42 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:45 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725054262"
+   d="scan'208";a="725054303"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:42 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:45 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
 To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
         bp@alien8.de, luto@kernel.org, mingo@redhat.com,
@@ -47,9 +47,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V4 09/31] x86/sgx: Make sgx_ipi_cb() available internally
-Date:   Wed, 13 Apr 2022 14:10:09 -0700
-Message-Id: <41e34a579bd81ea4085e27ae4bf16c73914340ca.1649878359.git.reinette.chatre@intel.com>
+Subject: [PATCH V4 21/31] Documentation/x86: Introduce enclave runtime management section
+Date:   Wed, 13 Apr 2022 14:10:21 -0700
+Message-Id: <21b97a8e9275706f14d6bc652a0f2cfdd5d9648e.1649878359.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1649878359.git.reinette.chatre@intel.com>
 References: <cover.1649878359.git.reinette.chatre@intel.com>
@@ -59,51 +59,54 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ETRACK function followed by an IPI to all CPUs within an enclave
-is a common pattern with more frequent use in support of SGX2.
+Enclave runtime management is introduced following the pattern
+of the section describing enclave building. Provide a brief
+summary of enclave runtime management, pointing to the functions
+implementing the ioctl()s that will contain details within their
+kernel-doc.
 
-Make the (empty) IPI callback function available internally in
-preparation for usage by SGX2.
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
-Changes since V3:
-- Add Jarkko's Reviewed-by tag.
+No changes since V3.
+
+Changes since V2:
+- Remove references to ioctl() to relax permissions and update to reflect
+  function renaming sgx_ioc_enclave_restrict_perm() ->
+  sgx_ioc_enclave_restrict_permissions().
+- Rename sgx_ioc_enclave_modt -> sgx_ioc_enclave_modify_type
 
 Changes since V1:
-- Replace "for more usages" by "for usage by SGX2" (Jarkko)
+- New patch.
 
- arch/x86/kernel/cpu/sgx/main.c | 2 +-
- arch/x86/kernel/cpu/sgx/sgx.h  | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ Documentation/x86/sgx.rst | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index ce9e87d5f8ec..6e2cb7564080 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -172,7 +172,7 @@ static int __sgx_encl_ewb(struct sgx_epc_page *epc_page, void *va_slot,
- 	return ret;
- }
+diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
+index 265568a9292c..10287c558485 100644
+--- a/Documentation/x86/sgx.rst
++++ b/Documentation/x86/sgx.rst
+@@ -100,6 +100,21 @@ pages and establish enclave page permissions.
+                sgx_ioc_enclave_init
+                sgx_ioc_enclave_provision
  
--static void sgx_ipi_cb(void *info)
-+void sgx_ipi_cb(void *info)
- {
- }
- 
-diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
-index 0f17def9fe6f..b30cee4de903 100644
---- a/arch/x86/kernel/cpu/sgx/sgx.h
-+++ b/arch/x86/kernel/cpu/sgx/sgx.h
-@@ -90,6 +90,8 @@ void sgx_mark_page_reclaimable(struct sgx_epc_page *page);
- int sgx_unmark_page_reclaimable(struct sgx_epc_page *page);
- struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim);
- 
-+void sgx_ipi_cb(void *info);
++Enclave runtime management
++--------------------------
 +
- #ifdef CONFIG_X86_SGX_KVM
- int __init sgx_vepc_init(void);
- #else
++Systems supporting SGX2 additionally support changes to initialized
++enclaves: modifying enclave page permissions and type, and dynamically
++adding and removing of enclave pages. When an enclave accesses an address
++within its address range that does not have a backing page then a new
++regular page will be dynamically added to the enclave. The enclave is
++still required to run EACCEPT on the new page before it can be used.
++
++.. kernel-doc:: arch/x86/kernel/cpu/sgx/ioctl.c
++   :functions: sgx_ioc_enclave_restrict_permissions
++               sgx_ioc_enclave_modify_type
++               sgx_ioc_enclave_remove_pages
++
+ Enclave vDSO
+ ------------
+ 
 -- 
 2.25.1
 
