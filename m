@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1384C43217
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 21:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FA3BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 21:11:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238898AbiDMVNh (ORCPT
+        id S238826AbiDMVNi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Apr 2022 17:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        Wed, 13 Apr 2022 17:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239028AbiDMVNK (ORCPT
+        with ESMTP id S239041AbiDMVNL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:13:10 -0400
+        Wed, 13 Apr 2022 17:13:11 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B812E403DD;
-        Wed, 13 Apr 2022 14:10:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57455403DD;
+        Wed, 13 Apr 2022 14:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649884247; x=1681420247;
+  t=1649884249; x=1681420249;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yK22RGe3nO+0ZgGZg7W5iqsFblwZqguGvabrtl7H49E=;
-  b=G+N8TzcD1mH+rx9q6knkUUdoKpiekmWgh1CLcrZCYQ5jsa4iVgOeGfS7
-   W1Jq2eeLFOAL1OP5S8a6bdQaKlb4bDYUCPpkIN1JNBDHL/dD3lZTulj8O
-   y+oDYF+ObIoYqpfwD0tpBxm672wjQFaeA4eCxbG53dSsup3tOYV7lUmtq
-   5QYtxBjK7EpjXmGG1vDF83Af8iFG7gY7aQM0pNlHsDWrDsoWrZ6oXzCFQ
-   B3l6a7zLV+PwRnLWhOAH+6iRHC2Fxi9ueZJZXgAfqVsp98FlH7oL2D56H
-   dBiA1whoZOyn1ScSIHA2jneR6ct665vM6R8jtCWdM6SdspdTxGvRqMfBK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219036"
+  bh=EXCxTzS8QRMUlezOFvEemdragzbqEBeovAke5UNC638=;
+  b=TJVYuMUUrMZVT6VPV+24wtOz06Wt/QZusfdRzhjam1H1Dg4icA/WkMkM
+   6MKMsQ3X9E3DuUVQg1MPurhZBbEbib9cc74KEhHF17EvzB+0bbhJuQFBK
+   LfKQIOU95+AjGe/RxXf881ikJL/wSkANuuFWNHDs71/4T886qL7jmXze+
+   acwc5w1wxCe9AZjnGQTFMHCdqFQ9wM9UVQJdKN/ufS87NrPmOerpZ0V+h
+   ADpJ20SgdPCtfe6kXalTLvUWbvWdYMd9yuycxvTK80klCaKPjZcHG7gsB
+   RfgJVl0oS4s4aVsM53x6wdhgoad4I4IJbgxA6EQJfBVwjgjGTP0FV/15k
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219049"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323219036"
+   d="scan'208";a="323219049"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:44 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:45 -0700
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725054287"
+   d="scan'208";a="725054299"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:44 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:45 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
 To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
         bp@alien8.de, luto@kernel.org, mingo@redhat.com,
@@ -47,9 +47,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V4 16/31] x86/sgx: Support adding of pages to an initialized enclave
-Date:   Wed, 13 Apr 2022 14:10:16 -0700
-Message-Id: <2293bdca025ce54bd2996783e187e209f9c0f5f2.1649878359.git.reinette.chatre@intel.com>
+Subject: [PATCH V4 20/31] x86/sgx: Free up EPC pages directly to support large page ranges
+Date:   Wed, 13 Apr 2022 14:10:20 -0700
+Message-Id: <0cf06e239fbc6e09b23936cf83a6c65271734d0b.1649878359.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1649878359.git.reinette.chatre@intel.com>
 References: <cover.1649878359.git.reinette.chatre@intel.com>
@@ -59,207 +59,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With SGX1 an enclave needs to be created with its maximum memory demands
-allocated. Pages cannot be added to an enclave after it is initialized.
-SGX2 introduces a new function, ENCLS[EAUG], that can be used to add
-pages to an initialized enclave. With SGX2 the enclave still needs to
-set aside address space for its maximum memory demands during enclave
-creation, but all pages need not be added before enclave initialization.
-Pages can be added during enclave runtime.
+The page reclaimer ensures availability of EPC pages across all
+enclaves. In support of this it runs independently from the
+individual enclaves in order to take locks from the different
+enclaves as it writes pages to swap.
 
-Add support for dynamically adding pages to an initialized enclave,
-architecturally limited to RW permission at creation but allowed to
-obtain RWX permissions after trusted enclave runs EMODPE. Add pages
-via the page fault handler at the time an enclave address without a
-backing enclave page is accessed, potentially directly reclaiming
-pages if no free pages are available.
+When needing to load a page from swap an EPC page needs to be
+available for its contents to be loaded into. Loading an existing
+enclave page from swap does not reclaim EPC pages directly if
+none are available, instead the reclaimer is woken when the
+available EPC pages are found to be below a watermark.
 
-The enclave is still required to run ENCLU[EACCEPT] on the page before
-it can be used. A useful flow is for the enclave to run ENCLU[EACCEPT]
-on an uninitialized address. This will trigger the page fault handler
-that will add the enclave page and return execution to the enclave to
-repeat the ENCLU[EACCEPT] instruction, this time successful.
+When iterating over a large number of pages in an oversubscribed
+environment there is a race between the reclaimer woken up and
+EPC pages reclaimed fast enough for the page operations to proceed.
 
-If the enclave accesses an uninitialized address in another way, for
-example by expanding the enclave stack to a page that has not yet been
-added, then the page fault handler would add the page on the first
-write but upon returning to the enclave the instruction that triggered
-the page fault would be repeated and since ENCLU[EACCEPT] was not run
-yet it would trigger a second page fault, this time with the SGX flag
-set in the page fault error code. This can only be recovered by entering
-the enclave again and directly running the ENCLU[EACCEPT] instruction on
-the now initialized address.
+Ensure there are EPC pages available before attempting to load
+a page that may potentially be pulled from swap into an available
+EPC page.
 
-Accessing an uninitialized address from outside the enclave also
-triggers this flow but the page will remain inaccessible (access will
-result in #PF) until accepted from within the enclave via
-ENCLU[EACCEPT].
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V3:
-- Add Jarkko's Reviewed-by tag.
-- Add Jarkko's Tested-by tag.
-- Call sgx_encl_grow() with sgx_encl->lock held as made possible with
-  change to sgx_encl_grow() making calling of reclaimer optional.
+- Add Jarkko's Acked-by tag.
+- Rename sgx_direct_reclaim() to sgx_reclaim_direct(). (Jarkko)
+- Add Dave's provided comments to sgx_reclaim_direct(). (Dave)
 
-Changes since V2:
-- Remove runtime tracking of EPCM permissions
-  (sgx_encl_page->vm_run_prot_bits) (Jarkko).
-- Move export of sgx_encl_{grow,shrink}() to separate patch. (Jarkko)
-- Use sgx_encl_page_alloc(). (Jarkko)
-- Set max allowed permissions to be RWX (Jarkko). Update changelog
-  to indicate the change and use comment in code as
-  created by Jarkko in:
-https://lore.kernel.org/linux-sgx/20220306053211.135762-4-jarkko@kernel.org
-- Do not set protection bits but let it be inherited by VMA (Jarkko)
+Changes since v1:
+- Reword commit message.
 
-Changes since V1:
-- Fix subject line "to initialized" -> "to an initialized" (Jarkko).
-- Move text about hardware's PENDING state to the patch that introduces
-  the ENCLS[EAUG] wrapper (Jarkko).
-- Ensure kernel-doc uses brackets when referring to function.
+ arch/x86/kernel/cpu/sgx/ioctl.c |  6 ++++++
+ arch/x86/kernel/cpu/sgx/main.c  | 11 +++++++++++
+ arch/x86/kernel/cpu/sgx/sgx.h   |  1 +
+ 3 files changed, 18 insertions(+)
 
- arch/x86/kernel/cpu/sgx/encl.c | 117 +++++++++++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 92516aeca405..7ccda6fe1f8f 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -194,6 +194,112 @@ struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
- 	return __sgx_encl_load_page(encl, entry);
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index f9a1654a49b7..83674d054c13 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -745,6 +745,8 @@ sgx_enclave_restrict_permissions(struct sgx_encl *encl,
+ 	for (c = 0 ; c < modp->length; c += PAGE_SIZE) {
+ 		addr = encl->base + modp->offset + c;
+ 
++		sgx_reclaim_direct();
++
+ 		mutex_lock(&encl->lock);
+ 
+ 		entry = sgx_encl_load_page(encl, addr);
+@@ -910,6 +912,8 @@ static long sgx_enclave_modify_type(struct sgx_encl *encl,
+ 	for (c = 0 ; c < modt->length; c += PAGE_SIZE) {
+ 		addr = encl->base + modt->offset + c;
+ 
++		sgx_reclaim_direct();
++
+ 		mutex_lock(&encl->lock);
+ 
+ 		entry = sgx_encl_load_page(encl, addr);
+@@ -1095,6 +1099,8 @@ static long sgx_encl_remove_pages(struct sgx_encl *encl,
+ 	for (c = 0 ; c < params->length; c += PAGE_SIZE) {
+ 		addr = encl->base + params->offset + c;
+ 
++		sgx_reclaim_direct();
++
+ 		mutex_lock(&encl->lock);
+ 
+ 		entry = sgx_encl_load_page(encl, addr);
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 6e2cb7564080..0e8741a80cf3 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -370,6 +370,17 @@ static bool sgx_should_reclaim(unsigned long watermark)
+ 	       !list_empty(&sgx_active_page_list);
  }
  
-+/**
-+ * sgx_encl_eaug_page() - Dynamically add page to initialized enclave
-+ * @vma:	VMA obtained from fault info from where page is accessed
-+ * @encl:	enclave accessing the page
-+ * @addr:	address that triggered the page fault
-+ *
-+ * When an initialized enclave accesses a page with no backing EPC page
-+ * on a SGX2 system then the EPC can be added dynamically via the SGX2
-+ * ENCLS[EAUG] instruction.
-+ *
-+ * Returns: Appropriate vm_fault_t: VM_FAULT_NOPAGE when PTE was installed
-+ * successfully, VM_FAULT_SIGBUS or VM_FAULT_OOM as error otherwise.
++/*
++ * sgx_reclaim_direct() should be called (without enclave's mutex held)
++ * in locations where SGX memory resources might be low and might be
++ * needed in order to make forward progress.
 + */
-+static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
-+				     struct sgx_encl *encl, unsigned long addr)
++void sgx_reclaim_direct(void)
 +{
-+	struct sgx_pageinfo pginfo = {0};
-+	struct sgx_encl_page *encl_page;
-+	struct sgx_epc_page *epc_page;
-+	struct sgx_va_page *va_page;
-+	unsigned long phys_addr;
-+	u64 secinfo_flags;
-+	vm_fault_t vmret;
-+	int ret;
-+
-+	if (!test_bit(SGX_ENCL_INITIALIZED, &encl->flags))
-+		return VM_FAULT_SIGBUS;
-+
-+	/*
-+	 * Ignore internal permission checking for dynamically added pages.
-+	 * They matter only for data added during the pre-initialization
-+	 * phase. The enclave decides the permissions by the means of
-+	 * EACCEPT, EACCEPTCOPY and EMODPE.
-+	 */
-+	secinfo_flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_X;
-+	encl_page = sgx_encl_page_alloc(encl, addr - encl->base, secinfo_flags);
-+	if (IS_ERR(encl_page))
-+		return VM_FAULT_OOM;
-+
-+	epc_page = sgx_alloc_epc_page(encl_page, true);
-+	if (IS_ERR(epc_page)) {
-+		kfree(encl_page);
-+		return VM_FAULT_SIGBUS;
-+	}
-+
-+	mutex_lock(&encl->lock);
-+
-+	va_page = sgx_encl_grow(encl, false);
-+	if (IS_ERR(va_page)) {
-+		ret = PTR_ERR(va_page);
-+		goto err_out_unlock;
-+	}
-+
-+	if (va_page)
-+		list_add(&va_page->list, &encl->va_pages);
-+
-+	ret = xa_insert(&encl->page_array, PFN_DOWN(encl_page->desc),
-+			encl_page, GFP_KERNEL);
-+	/*
-+	 * If ret == -EBUSY then page was created in another flow while
-+	 * running without encl->lock
-+	 */
-+	if (ret)
-+		goto err_out_shrink;
-+
-+	pginfo.secs = (unsigned long)sgx_get_epc_virt_addr(encl->secs.epc_page);
-+	pginfo.addr = encl_page->desc & PAGE_MASK;
-+	pginfo.metadata = 0;
-+
-+	ret = __eaug(&pginfo, sgx_get_epc_virt_addr(epc_page));
-+	if (ret)
-+		goto err_out;
-+
-+	encl_page->encl = encl;
-+	encl_page->epc_page = epc_page;
-+	encl_page->type = SGX_PAGE_TYPE_REG;
-+	encl->secs_child_cnt++;
-+
-+	sgx_mark_page_reclaimable(encl_page->epc_page);
-+
-+	phys_addr = sgx_get_epc_phys_addr(epc_page);
-+	/*
-+	 * Do not undo everything when creating PTE entry fails - next #PF
-+	 * would find page ready for a PTE.
-+	 */
-+	vmret = vmf_insert_pfn(vma, addr, PFN_DOWN(phys_addr));
-+	if (vmret != VM_FAULT_NOPAGE) {
-+		mutex_unlock(&encl->lock);
-+		return VM_FAULT_SIGBUS;
-+	}
-+	mutex_unlock(&encl->lock);
-+	return VM_FAULT_NOPAGE;
-+
-+err_out:
-+	xa_erase(&encl->page_array, PFN_DOWN(encl_page->desc));
-+
-+err_out_shrink:
-+	sgx_encl_shrink(encl, va_page);
-+err_out_unlock:
-+	mutex_unlock(&encl->lock);
-+	sgx_encl_free_epc_page(epc_page);
-+	kfree(encl_page);
-+
-+	return VM_FAULT_SIGBUS;
++	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
++		sgx_reclaim_pages();
 +}
 +
- static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+ static int ksgxd(void *p)
  {
- 	unsigned long addr = (unsigned long)vmf->address;
-@@ -213,6 +319,17 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
- 	if (unlikely(!encl))
- 		return VM_FAULT_SIGBUS;
+ 	set_freezable();
+diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
+index b30cee4de903..0f2020653fba 100644
+--- a/arch/x86/kernel/cpu/sgx/sgx.h
++++ b/arch/x86/kernel/cpu/sgx/sgx.h
+@@ -86,6 +86,7 @@ static inline void *sgx_get_epc_virt_addr(struct sgx_epc_page *page)
+ struct sgx_epc_page *__sgx_alloc_epc_page(void);
+ void sgx_free_epc_page(struct sgx_epc_page *page);
  
-+	/*
-+	 * The page_array keeps track of all enclave pages, whether they
-+	 * are swapped out or not. If there is no entry for this page and
-+	 * the system supports SGX2 then it is possible to dynamically add
-+	 * a new enclave page. This is only possible for an initialized
-+	 * enclave that will be checked for right away.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_SGX2) &&
-+	    (!xa_load(&encl->page_array, PFN_DOWN(addr))))
-+		return sgx_encl_eaug_page(vma, encl, addr);
-+
- 	mutex_lock(&encl->lock);
- 
- 	entry = sgx_encl_load_page_in_vma(encl, addr, vma->vm_flags);
++void sgx_reclaim_direct(void);
+ void sgx_mark_page_reclaimable(struct sgx_epc_page *page);
+ int sgx_unmark_page_reclaimable(struct sgx_epc_page *page);
+ struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim);
 -- 
 2.25.1
 
