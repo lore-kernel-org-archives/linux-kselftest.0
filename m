@@ -2,115 +2,168 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B88EC4167E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 21:11:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA586C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Apr 2022 23:08:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239063AbiDMVNt (ORCPT
+        id S239115AbiDMXKq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Apr 2022 17:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        Wed, 13 Apr 2022 19:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238998AbiDMVNF (ORCPT
+        with ESMTP id S239127AbiDMXKp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Apr 2022 17:13:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433FA3AA77;
-        Wed, 13 Apr 2022 14:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649884243; x=1681420243;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bp3cIysKGbvkmL/gcaIqhOUdMRw7qGIRpQbHGfemHLI=;
-  b=H93S0kahsQ4j4UyWFwXdSw3J2pDYDqXbb+lIVGTC07us2sR9gMZgaV0S
-   Fjcz/PpzCPIBr1nnjXVojJraF3bGYkLMUgd8M3k0P2CrHfBOXM37S5lNt
-   XII6+uaRG7Krjb6OJeieg5pll5CLgHOmB3/+j0vHQZmbHIVAhUUMmCNsm
-   YLhWMHtBwwU8rbDcx+9HJsHSpa9KmmAxTYcfBU+Pg+HvzKA8xXhF4gKNB
-   QS7q6C0/kvE3lVSfP6rjD8QpEdciez8Sb/S1wk7QKD3K9YVOydVOzf9Pg
-   nEqGpZ2peMiOJJEYD0OsPQl+w1mhx/v85RHW4W6MtIV4U+OO+7nXtdRL4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="323219000"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="323219000"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:41 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="725054243"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 14:10:40 -0700
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V4 03/31] x86/sgx: Add wrapper for SGX2 EMODT function
-Date:   Wed, 13 Apr 2022 14:10:03 -0700
-Message-Id: <d2e89bf4e7b92386867c22320ab74b20bb0b0306.1649878359.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1649878359.git.reinette.chatre@intel.com>
-References: <cover.1649878359.git.reinette.chatre@intel.com>
+        Wed, 13 Apr 2022 19:10:45 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A856A37AAB;
+        Wed, 13 Apr 2022 16:08:22 -0700 (PDT)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1neln7-0002b3-6M; Thu, 14 Apr 2022 00:48:49 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1neln6-000WBX-JK; Thu, 14 Apr 2022 00:48:48 +0200
+Subject: Re: [PATCH bpf-next v5 4/6] bpf: Add helpers to issue and check SYN
+ cookies in XDP
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org
+Cc:     Tariq Toukan <tariqt@nvidia.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>
+References: <20220413134120.3253433-1-maximmi@nvidia.com>
+ <20220413134120.3253433-5-maximmi@nvidia.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <e75057fd-42d4-071e-b8b9-0b93e643adfd@iogearbox.net>
+Date:   Thu, 14 Apr 2022 00:48:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220413134120.3253433-5-maximmi@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26511/Wed Apr 13 10:22:45 2022)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a wrapper for the EMODT ENCLS leaf function used to
-change the type of an enclave page as maintained in the
-SGX hardware's Enclave Page Cache Map (EPCM).
+On 4/13/22 3:41 PM, Maxim Mikityanskiy wrote:
+[...]
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 7446b0ba4e38..428cc63ecdf7 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7425,6 +7425,124 @@ static const struct bpf_func_proto bpf_skb_set_tstamp_proto = {
+>   	.arg3_type      = ARG_ANYTHING,
+>   };
+>   
+> +BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv4, struct iphdr *, iph,
+> +	   struct tcphdr *, th, u32, th_len)
+> +{
+> +#ifdef CONFIG_SYN_COOKIES
+> +	u32 cookie;
+> +	u16 mss;
+> +
+> +	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
+> +		return -EINVAL;
+> +
+> +	mss = tcp_parse_mss_option(th, 0) ?: TCP_MSS_DEFAULT;
+> +	cookie = __cookie_v4_init_sequence(iph, th, &mss);
+> +
+> +	return cookie | ((u64)mss << 32);
+> +#else
+> +	return -EOPNOTSUPP;
+> +#endif /* CONFIG_SYN_COOKIES */
 
-EMODT:
-1) Updates the EPCM page type of the enclave page.
-2) Sets the MODIFIED bit in the EPCM entry of the enclave page.
-   This bit is reset by the enclave by invoking ENCLU leaf
-   function EACCEPT or EACCEPTCOPY.
+This (and for other added helpers below) will be rather tricky to probe for availability
+e.g. via `bpftool feature probe [...]`. Much better if you wrap the ifdef CONFIG_SYN_COOKIES
+around the {xdp,tc_cls_act}_func_proto() instead as we do elsewhere.
 
-Access from within the enclave to the enclave page is not possible
-while the MODIFIED bit is set.
-
-After changing the enclave page type by issuing EMODT the kernel
-needs to collaborate with the hardware to ensure that no logical
-processor continues to hold a reference to the changed page. This
-is required to ensure no required security checks are circumvented
-and is required for the enclave's EACCEPT/EACCEPTCOPY to succeed.
-Ensuring that no references to the changed page remain is
-accomplished with the ETRACK flow.
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changes since V3:
-- Add Jarkko's Reviewed-by tag.
-
-Changes since V1:
-- Split original patch ("x86/sgx: Add wrappers for SGX2 functions")
-  in three to introduce the SGX2 functions separately (Jarkko).
-- Rewrite commit message to include how the EPCM within the hardware
-  is changed by the SGX2 function as well as the calling
-  conditions (Jarkko).
-
- arch/x86/kernel/cpu/sgx/encls.h | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
-index 2b091912f038..7a1ecf704ec1 100644
---- a/arch/x86/kernel/cpu/sgx/encls.h
-+++ b/arch/x86/kernel/cpu/sgx/encls.h
-@@ -221,4 +221,10 @@ static inline int __emodpr(struct sgx_secinfo *secinfo, void *addr)
- 	return __encls_ret_2(EMODPR, secinfo, addr);
- }
- 
-+/* Change the type of an EPC page. */
-+static inline int __emodt(struct sgx_secinfo *secinfo, void *addr)
-+{
-+	return __encls_ret_2(EMODT, secinfo, addr);
-+}
-+
- #endif /* _X86_ENCLS_H */
--- 
-2.25.1
-
+> +}
+> +
+> +static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv4_proto = {
+> +	.func		= bpf_tcp_raw_gen_syncookie_ipv4,
+> +	.gpl_only	= true, /* __cookie_v4_init_sequence() is GPL */
+> +	.pkt_access	= true,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_MEM,
+> +	.arg1_size	= sizeof(struct iphdr),
+> +	.arg2_type	= ARG_PTR_TO_MEM,
+> +	.arg3_type	= ARG_CONST_SIZE,
+> +};
+> +
+> +BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv6, struct ipv6hdr *, iph,
+> +	   struct tcphdr *, th, u32, th_len)
+> +{
+> +#ifndef CONFIG_SYN_COOKIES
+> +	return -EOPNOTSUPP;
+> +#elif !IS_BUILTIN(CONFIG_IPV6)
+> +	return -EPROTONOSUPPORT;
+> +#else
+> +	const u16 mss_clamp = IPV6_MIN_MTU - sizeof(struct tcphdr) -
+> +		sizeof(struct ipv6hdr);
+> +	u32 cookie;
+> +	u16 mss;
+> +
+> +	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
+> +		return -EINVAL;
+> +
+> +	mss = tcp_parse_mss_option(th, 0) ?: mss_clamp;
+> +	cookie = __cookie_v6_init_sequence(iph, th, &mss);
+> +
+> +	return cookie | ((u64)mss << 32);
+> +#endif
+> +}
+> +
+> +static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv6_proto = {
+> +	.func		= bpf_tcp_raw_gen_syncookie_ipv6,
+> +	.gpl_only	= true, /* __cookie_v6_init_sequence() is GPL */
+> +	.pkt_access	= true,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_MEM,
+> +	.arg1_size	= sizeof(struct ipv6hdr),
+> +	.arg2_type	= ARG_PTR_TO_MEM,
+> +	.arg3_type	= ARG_CONST_SIZE,
+> +};
+[...]
+>   
+>   bool bpf_helper_changes_pkt_data(void *func)
+> @@ -7837,6 +7955,14 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return &bpf_tcp_check_syncookie_proto;
+>   	case BPF_FUNC_tcp_gen_syncookie:
+>   		return &bpf_tcp_gen_syncookie_proto;
+> +	case BPF_FUNC_tcp_raw_gen_syncookie_ipv4:
+> +		return &bpf_tcp_raw_gen_syncookie_ipv4_proto;
+> +	case BPF_FUNC_tcp_raw_gen_syncookie_ipv6:
+> +		return &bpf_tcp_raw_gen_syncookie_ipv6_proto;
+> +	case BPF_FUNC_tcp_raw_check_syncookie_ipv4:
+> +		return &bpf_tcp_raw_check_syncookie_ipv4_proto;
+> +	case BPF_FUNC_tcp_raw_check_syncookie_ipv6:
+> +		return &bpf_tcp_raw_check_syncookie_ipv6_proto;
+>   #endif
+>   	default:
+>   		return bpf_sk_base_func_proto(func_id);
