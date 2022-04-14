@@ -2,166 +2,113 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B88C433FE
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Apr 2022 17:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC1F1C4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Apr 2022 17:26:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245506AbiDNRTi (ORCPT
+        id S235027AbiDNR2c (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Apr 2022 13:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        Thu, 14 Apr 2022 13:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345812AbiDNRTP (ORCPT
+        with ESMTP id S235885AbiDNR2b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:19:15 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654DF6310;
-        Thu, 14 Apr 2022 10:15:57 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EGg2VI029058;
-        Thu, 14 Apr 2022 17:15:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=zZRdcGLcIn5cE4lPD6CeWBQhju46dsEH9q8WluE8gf4=;
- b=cRLTtpOhPoaQQOhJr+YkL/QnwjQNnoj1GNDtE81ygt7Gz206s//3OxPW5AstN6MtLKQU
- 1/TKGz/aBlZZpcEOSQEs5lCqfx2wdo0XHMUFSqLpfRbjvRUCOnEAndsjMmhRX99R7pV6
- G9n6TEB6PZNMae5JhCI578m/HUI89PqCXxLhydlXwtWZYSwOKAARfjspmH5aOi7pZC7S
- eVijP38ao/m7BV5DVDKWe+3jScxbmXsTB4JYgw75yo/NPhx+TcZGWufmUwaMtPns3VIY
- +jB2fwlYe8flMr3EammycZGXyuPm7rAp2d4F68MMt21qZv4QJBjL4/+f/edqV8K7jSkU lA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb1rsdhw5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Apr 2022 17:15:47 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23EHCN2K028929;
-        Thu, 14 Apr 2022 17:15:46 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9kyh1n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Apr 2022 17:15:46 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WMHTH4bQn/i6BLYMFll0mKJQ/JLfQEZNQdQu0nicN3CDN97OJbpECDVKZpSZuX9PdQnuOs3nN2dJyV4v9QPbsjwjchhCxQ16Uv+9hiWTUx5wDLkTIWQ4P1jTRuS8q/Rewk1SewaO4G4wFPFoOCcnjBwmsn7qoOqxjcVQNFgFovXE2raXTqfioiNdNPpi7fHi/6BtYWTmtYHZI9QqOnkmroMC8/tTm7D1Ju/StU3efE5eQn1l4IAci989371Fhh0S0ykLrYd1nBYZCjRFkTVe2a7zwjp07WCSfO/MIAd4X4OIVKiIxRzM8nNosvNojCuUbWM73WMYaIT+GDFZt8tT0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zZRdcGLcIn5cE4lPD6CeWBQhju46dsEH9q8WluE8gf4=;
- b=Qt0BXLmrNVCnCh2YGD7FELCVhIGYKFue8Jvpmd3W/1dSvCU18C3ioV/SdFEn896DXh/mp8gIdNDFYvuSEgQLoVLq2RbU4t+Q6+SxozT3OB631Roi05idU9YDj8XVKDJWgrdPDSl6MiIC6Tp6YGqBcYWM2eAYHxBSa5FgBA9igfaWasA53o0j4jKQ9UGgahDFIIxqPo/dD7NspFsjpE8JLGAGwYTLYK3WpQcW3uVX7iYsCp5jT9Zri3AYEAAntUotgNW8cN0pnwvQTxHyK7zDQ5kQWV23SzTOcuMtOaTCTfbzJM8fUcCw3o9hc0KCbgTG7fNvhlQxO6EaIbVO1t3tIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 14 Apr 2022 13:28:31 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA5FC9B70
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Apr 2022 10:26:05 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q12so5307009pgj.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Apr 2022 10:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zZRdcGLcIn5cE4lPD6CeWBQhju46dsEH9q8WluE8gf4=;
- b=T/GFGWku+CEbrcJ0vuaGFy8PCM4TLIdP7mhcKflOBCiuHcLHpjT4l0YmdhVGAzJ0aiYLwJGirKrVCb/xadECWhDoElg1TkTLWe9fY1+Ll0EURdZ40I+rl11krHt54jcru6uhatXk4f9YUDPhs0w/U52qENmENcxHEvJSI57/Rzo=
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
- by DM5PR10MB1516.namprd10.prod.outlook.com (2603:10b6:3:7::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.29; Thu, 14 Apr 2022 17:15:44 +0000
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::a8c2:7a0b:5845:1675]) by CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::a8c2:7a0b:5845:1675%8]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
- 17:15:44 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     shuah@kernel.org, akpm@linux-foundation.org
-Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] selftest/vm: support xfail in mremap_test
-Date:   Thu, 14 Apr 2022 17:15:28 +0000
-Message-Id: <20220414171529.62058-4-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
-References: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SN4PR0401CA0007.namprd04.prod.outlook.com
- (2603:10b6:803:21::17) To CH0PR10MB5113.namprd10.prod.outlook.com
- (2603:10b6:610:c9::8)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sz07fc6I7lIWKPKMNOVSVRZPVjZ/2q5aP50+7giwSck=;
+        b=dF21I7xa+PEEtOju0dwSpmZ52AgeF8q9DD0slppiVuAkzhepRjGULhGl9GSpaBaN9k
+         HGkp6aPpOc9KxYswilZx68HsiWuwoTmPMmPrje77QTltrR3lFASV4DzIG9UcRcdjscvl
+         ffQJoIJtZdVAFsLtEgdP6aUWUI6OZWXIZjpoHl3BRmAwNH9B7bKriI3kN7Xrrghy+8ok
+         w96Q/Nfe2bAgEu0mE0P095/9Fkk+kENEDAlaKx9Spnw61TPbAyCwio9dXAHsqa2FB/20
+         SpIpeNvGk1Tj/340dPGN1lPPWwoBdi2stjlFsfs5ae5cBCgS/HibP9ne/pdbI3MJwjXl
+         PXkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sz07fc6I7lIWKPKMNOVSVRZPVjZ/2q5aP50+7giwSck=;
+        b=3aut52IcAwHfRMxa1QrVzl1pY0EmvGGeNpgZe9gdRbSaR2TgF6q47JzzBuJAaOJUDH
+         i/riGlfKryBOu0AFzQGQT939i7CGEG5Dgk/F752dklNyl/yzFSop/Uoua6htpds/YzZA
+         kru3h7iSQt/98J5bYlPNMg4NlNXFxUkAL7LdtcUGiuiHpq1tG1OYwJR3ncTnmpjB5tvH
+         WcxJyCPeHlQABTy62sDzprJUcDrqdXIfdjGJrfP8ReUIle4DcKc/lgD28hqClHPTbP1F
+         gxLEkR23qmXiHClwg2mBLCGyqZX1zhCn556yW/n/1PT9QYxXvFytJq9I8rGpu3J8LFel
+         ABrA==
+X-Gm-Message-State: AOAM531u34IrkWWUCbtlGVM5i80WAp77aomD/5a11xgeIq4TotYA6ngz
+        mc/15YqGheCY7V20/940AcsV3N+PMDD1pDgT9AfXgA==
+X-Google-Smtp-Source: ABdhPJx93mXSCF+yEz9k2YvFHTy3Z6BKK4DmU6/ANhw2gPmq6Vl/jGOlUzeXD9No5PoS/iQzRus81pzLrcNCfCP0TIY=
+X-Received: by 2002:a05:6a00:17a6:b0:505:a751:8354 with SMTP id
+ s38-20020a056a0017a600b00505a7518354mr5003805pfg.82.1649957165014; Thu, 14
+ Apr 2022 10:26:05 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4d506e9a-bccb-4fbe-5783-08da1e3a68fe
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1516:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB151601EFA5377A7D66E9DCA295EF9@DM5PR10MB1516.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6CAr/51hZtb7ydlwWAn70VT3Ewc5gkCg9/US3KWSWhU7NNBUbcchwGd10vR0kBp1puBgyowY2Oz4QXvv9oKhZa2bCL9nhRJYUJbmTZYSBUwLZytWxNgQf3Sic0kgZOv/h8KiHrVRUz9a9S5OGDon8Z9KBtLFxsOd4+Wol+byCsQbya4J+zzZ657EJ8bWOAwdtGM0jFYpiDnbQyNpbCVQqgFULGWlKACPot+gFJjbs01hUq6ASzKpxkmL0cfI+VeG0QAPO9PDJ07MAwj6OqC6fjWFe4nTiUi+du0QOIMnyiNIeylHu/5x8H9HLPjWzeGsqHmiiE02tlVwntLC+Bt1zKxi5iCZDZq40Mhegq4SV3vPLAlsHqA1CKIJae8OCDOEfJg3FGBpRxar+FlSTrUEoEfaaGiExUrWnQNuW2j0nelg3IFFMWXgBPzXYoFa+DZSn1RFjHuNnlgG1xbJQ3T8CULmnd/RH7qFvzDN46HWw6EYur3PycaHA9Xi6g6yBP65FXT0UWTFh2ylhvq5zvy9KWzFL9SLEo6FgRhipmW8ES8E3rTBwzuxX37H6fVZh6u9cqVBtGnhDXB9SpVTu+TGz0o8SjSpBw08ZnziwREkgwGTlUc5UcwBwgAISdA4c89YM2W4WbMIAahWtyrIDuI5u3wX9rscSxpBaHAaK2PU2AEuKzIwiHJRz2XLdUlwPqXNzc9FK8WdEttUxYcRip5QYQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66946007)(4326008)(8676002)(5660300002)(44832011)(36756003)(6486002)(52116002)(316002)(66556008)(508600001)(2906002)(6506007)(4744005)(66476007)(6666004)(8936002)(186003)(6512007)(83380400001)(2616005)(26005)(1076003)(38350700002)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hFs02Y+57VuRj5TE611RbqK83G7yP6liOIKuim/TOR+u0UFi1Zf8WlcP+Vmq?=
- =?us-ascii?Q?iP65quFaD10KTzgzVtFYpThenSit9jH1XkKUhuZivXqu47oZlkjYn/ipksrX?=
- =?us-ascii?Q?YDzcY7JlTKAketjeTjsgN46/iq2UpIz1OCwiJTRmuPsNcqFD/IagzijiQ5z3?=
- =?us-ascii?Q?YjMNePsCywyXSnJ2RmyWqsg+C0xFBK/BIuCLAp90yBTmloz4eTDqcmFBTMip?=
- =?us-ascii?Q?DfBczAOCOL4fncBlKNf8oJT8a+vjW2K/1yHg/4GuaNFpfsVOyR+6JRp2RMBK?=
- =?us-ascii?Q?sQm2/JhpfyZeIN8lq9oeQkQAucJqEwE3mUv3fJaXQZR0IS1/crkk8DeqY4tc?=
- =?us-ascii?Q?dpqEqKch2b0bXGppBoQ7PRy/yZxUX52zFVkrJe82rYRR0O7JATt8lnMGkcf2?=
- =?us-ascii?Q?8fY5xjgywmzs2LvaUjfq8LJ04dQiNubBcz2AjXK54foPRD953XZs1yFRINHw?=
- =?us-ascii?Q?XlsQhpP2W+piGAq+YtYLfeESY6OuK22iG9wwqYdo5pBdRTq1JVy822lkkTFc?=
- =?us-ascii?Q?vZZsFbJaSfnrHMrMWjmqCZcXi6iPCmuIMkK2rFTy7LITClN4IfTIIWODwBSl?=
- =?us-ascii?Q?5VbSyM8apihVwjxL+Md2TMjAMS548FAzzb8V5Wf/xIHy1/o2MRYTzxG2HIcz?=
- =?us-ascii?Q?rMOGkPR1ILL9c+/oksvRl9Kko3xHaGoV8xWCmHmmgvTHY+qKZoR39ukC9rWh?=
- =?us-ascii?Q?dxRCgWWZDBHGgp/KIQv/TCe3mhgnijQZjLQdwSKbEqU3cMpxKMckK0zlfdQ2?=
- =?us-ascii?Q?MKLiWmvrFGk3HXg2H2Wj1b07HBqhYCeaXptQoRnd5n9L310uszBknLYdzPjQ?=
- =?us-ascii?Q?YghjiYTOHiMhp8xxXvla2A40++0mgSRhMSW6zMX0o6N8kg9n/mQAY8d5zNkU?=
- =?us-ascii?Q?rpes7o/OZrQHj2X6KprEo9euq6rHfRDA7Di1DRr8uuAHgLjp75vmJr6gNMqw?=
- =?us-ascii?Q?1ejT15LkrVa79ZqyrrKpFz19NlT4l8F/6x1iRw0elmVW55TuSbtGBwI/h2DL?=
- =?us-ascii?Q?VuZAe7sqR6B28Aow/N90+F2foWy5P2FFmZ2mJ9Ir+zmDCuFLSio2YJn9dSQZ?=
- =?us-ascii?Q?MHebeCpouFNrKSp6CbXNUKizt8nZdbXyYuc3ZClFDyGvyGfcyZuRIv4RtAhv?=
- =?us-ascii?Q?wfyYntGlDWjewOBa0Myzn9r2W6W43pfmLSuNgmXmtZoO4TscYIb8RpP4bT5e?=
- =?us-ascii?Q?7UJUPKNrrVF+tB8B8feYu5Nb1i6yNBqPVcnCqq9l96lHaBNzf1E2UJL6eEvO?=
- =?us-ascii?Q?ImGXZSMIgiEeVQmbewhDWXzmKzJbWprbJmgKAAWkqN8TpLqcGAvl8VtVtUia?=
- =?us-ascii?Q?4eFs2YiLQUuzk/XrNp1Mf8QO6vCQ+BNZSf0Xx5zR4tCkTDY4djXFEI6gN+QZ?=
- =?us-ascii?Q?9xVaxp+GSPwBlNdtJ3bZ24PLCcClfKiDg5S5jxTQao5CsDfhyETWMEIdJzIt?=
- =?us-ascii?Q?VOVtpOBvGbIcpESWZFrZhAPqbhzRB/6ukQILjqst5pGtSfHmDHLsiFIw7iVe?=
- =?us-ascii?Q?I7Dq73phTiZAqwI7kz7yWAJIXTBy4IlOXNrFg9nTNcekWeNuAarcei25vSlh?=
- =?us-ascii?Q?nwbyATijc5M6OeAcAXGERVjEOeXU7Omkq/uydEPbzRCYYY1JTnroSTmR0qZ8?=
- =?us-ascii?Q?pbHDbmvo3EVjk7/ewwLGZjZoATq7w53YOh3h3Lu686/2UR5arLA2i0WdPU76?=
- =?us-ascii?Q?Ajibe2N19Sgg7fc0U+aepWLlYycRjKibXgLih67Qvo/rQK1bu6gYyTvZrAtm?=
- =?us-ascii?Q?ymC29echjACew5Bs0QBOi/krzwm5R/Q=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d506e9a-bccb-4fbe-5783-08da1e3a68fe
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 17:15:44.6344
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1pfKUMzC9IbbexkusaBMqulhoX+kbJIAsBC20srNWqNI0jpADFb9j16wPt0I+Vqi7W/phxTRCMixbOaTZ7uAJjaR7dVPuFO4GE5/v6r5Zjc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1516
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-14_04:2022-04-14,2022-04-14 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- spamscore=0 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204140092
-X-Proofpoint-ORIG-GUID: hup11fRWNqslPdzbF-7gU-jQfeWJ4DZ6
-X-Proofpoint-GUID: hup11fRWNqslPdzbF-7gU-jQfeWJ4DZ6
+References: <20220408045743.1432968-1-yosryahmed@google.com>
+ <20220408045743.1432968-2-yosryahmed@google.com> <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+ <YlBCeadBqbeVvALK@dhcp22.suse.cz> <YlBM/HlPyPUZew5N@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
+ <CAJD7tkbFjbGJ7CnNogpGq5enh_uhP8T5c0U+ku9PfwMoVLf2gg@mail.gmail.com>
+In-Reply-To: <CAJD7tkbFjbGJ7CnNogpGq5enh_uhP8T5c0U+ku9PfwMoVLf2gg@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 14 Apr 2022 10:25:29 -0700
+Message-ID: <CAJD7tkYJj2O-zaux9BZxJxG+JBjPrwRYKXPAAAh7i9GVE53VGQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>,
+        Dan Schatzberg <schatzberg.dan@gmail.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use ksft_test_result_xfail for the tests which
-are expected to fail.
+On Fri, Apr 8, 2022 at 1:08 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Fri, Apr 8, 2022 at 7:55 AM Dan Schatzberg <schatzberg.dan@gmail.com> wrote:
+> >
+> > On Fri, Apr 08, 2022 at 04:11:05PM +0200, Michal Hocko wrote:
+> > > Regarding "max" as a possible input. I am not really sure to be honest.
+> > > I can imagine that it could be legit to simply reclaim all the charges
+> > > (e.g. before removing the memcg) which should be achieveable by
+> > > reclaiming the reported consumption. Or what exactly should be the
+> > > semantic?
+> >
+> > Yeah, it just allows you to avoid reading memory.current to just
+> > reclaim everything if you can specify "max" - you're still protected
+> > by nretries to eventually bail out. Mostly, though I just feel like
+> > supporting "max" makes memory.reclaim semetric with a lot of the
+> > cgroup memory control files which tend to support "max".
+>
+> One possible approach here is to have force_empty behavior when we
+> write "max" to memory.reclaim. From Google's perspective we don't have
+> a preference, but it seems to me like logical behavior. We can do this
+> either by directly calling mem_cgroup_force_empty() or just draining
+> stock and lrus in memory_reclaim().
+>
+> This actually brings up another interesting point. Do you think we
+> should drain lrus if try_to_free_mem_cgroup_pages() fails to reclaim
+> the request amount? We can do this after the first call or before the
+> last one. It could introduce more evictable pages for
+> try_to_free_mem_cgroup_pages() to free.
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
----
- tools/testing/selftests/vm/mremap_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index 98e9cff34aa7..ace9c3596ed7 100644
---- a/tools/testing/selftests/vm/mremap_test.c
-+++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -269,7 +269,7 @@ static void run_mremap_test_case(struct test test_case, int *failures,
- 
- 	if (remap_time < 0) {
- 		if (test_case.expect_failure)
--			ksft_test_result_pass("%s\n\tExpected mremap failure\n",
-+			ksft_test_result_xfail("%s\n\tExpected mremap failure\n",
- 					      test_case.name);
- 		else {
- 			ksft_test_result_fail("%s\n", test_case.name);
--- 
-2.27.0
-
+Hey Michal, any thoughts on this? I am looking for feedback on this
+before I send out v4.
