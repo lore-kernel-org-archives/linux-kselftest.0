@@ -2,88 +2,175 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DDF9C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Apr 2022 11:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43F82C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Apr 2022 11:52:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237118AbiDNLeO (ORCPT
+        id S242542AbiDNLzA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Apr 2022 07:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        Thu, 14 Apr 2022 07:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbiDNLeN (ORCPT
+        with ESMTP id S229990AbiDNLzA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:34:13 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB5285BE4;
-        Thu, 14 Apr 2022 04:31:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 45C821F4158A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649935908;
-        bh=GPpOOW8Wi1fl7Wg5T7uDGlFz2uhTlfR0tze2KF/L4Lg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=UNTcHiMRdJz5bAEsKI68i50wj9NtfZnA/r0GFYHgPGAzdykI8Cq47yn9uuSLN8P0/
-         Y+GZxS4QY2rf3BFceguyH2Q7YREa74twPjBXhiZRiAoliwknDoeHuOapiLOFPkCzX4
-         fxhgIYrM2NT7va7AGXGb9KRV38vvEQkQJymIu95UzYNy7pFjfu05WlLicOp4Uu8sTG
-         v30hsDPOUT+lRCJHhdo+QwxFU1Xrva8VBi8mMKXMb0rePIvuZIwvgLtIXYceQa7tTU
-         ZtF2sfEbHEt6elpONPggbDbNmwXS4SfyaZqt2xsiPjftonwtq+aDNn7pDmt2ZGXmKm
-         grhM6pIdIWhrA==
-Message-ID: <8049e2a9-a478-4c6a-afcd-3aa4434a0590@collabora.com>
-Date:   Thu, 14 Apr 2022 16:31:42 +0500
+        Thu, 14 Apr 2022 07:55:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD6885BF1;
+        Thu, 14 Apr 2022 04:52:35 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EA54MU018264;
+        Thu, 14 Apr 2022 11:52:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=jy6pMQzK/sf8v366NBgPB3PYCPB+8C4yfgy5SBgvW3Y=;
+ b=tgF4ss+6jsyV8m931IWh9QfUAVC56aDeu/A48s+gAUWCQXC1fvq2rBAm02huw4ytowIS
+ 36xflN2eEt1EXUhl5ODJ0qwpwkOaW2FkcbquAMsxT3HU2lZGqOGxL3D2LsvxXGF+CQ+F
+ 9gYWIKA2C1EnhneWYjI9eflyse8pEDugSrgNlUmNXySyKACrUrQM2SHFyMljtCN8WVeC
+ nhHx0RpbdRQOf0l2ha8WtbC/gN/MkldbiNPwuI0/QyZ5IVr6Fcguvq4Yjy0h63eJv5By
+ BWOFUD/xIFKRH3DPz1lo9gprrtk/HNvNlI1bdPv4t9yUz9PNGjC+u5nXo6sDm9tIyHgb ZQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefr9kums-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:52:33 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23EBmkUR029691;
+        Thu, 14 Apr 2022 11:52:32 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefr9kumf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:52:32 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EBmNSR017259;
+        Thu, 14 Apr 2022 11:52:30 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fb1s90dm0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:52:30 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23EBqRnO28377370
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 11:52:27 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 00E6E11C04C;
+        Thu, 14 Apr 2022 11:52:27 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D92D11C050;
+        Thu, 14 Apr 2022 11:52:26 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.1.140])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Apr 2022 11:52:26 +0000 (GMT)
+Date:   Thu, 14 Apr 2022 13:51:10 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Subject: Re: [PATCH 3/4] KVM: s390: selftests: Use TAP interface in the
+ tprot test
+Message-ID: <20220414135110.6b2baead@p-imbrenda>
+In-Reply-To: <20220414105322.577439-4-thuth@redhat.com>
+References: <20220414105322.577439-1-thuth@redhat.com>
+        <20220414105322.577439-4-thuth@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernelci@groups.io,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/lkdtm: add config and turn off
- CFI_FORWARD_PROTO
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-References: <20220217205620.2512094-1-usama.anjum@collabora.com>
- <202203091122.A51B31230A@keescook>
- <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <62c11336-cac1-8501-19fe-980ebfa050e9@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AO3WHVyr4ZmKOBM1HWGIwUff5spqNczk
+X-Proofpoint-GUID: CMHZIyZlHUCLL3bEQbOI3Ew4HdtuwSmF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_03,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ clxscore=1015 spamscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204140063
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Any thoughts?
+On Thu, 14 Apr 2022 12:53:21 +0200
+Thomas Huth <thuth@redhat.com> wrote:
 
-On 3/10/22 10:21 PM, Muhammad Usama Anjum wrote:
-> On 3/10/22 12:22 AM, Kees Cook wrote:
->> On Fri, Feb 18, 2022 at 01:56:19AM +0500, Muhammad Usama Anjum wrote:
->>> Add config options which are needed for LKDTM sub-tests.
->>> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
->>> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
->>> INIT_ON_FREE_DEFAULT_ON config.
->>>
->>> CFI_FORWARD_PROTO always fails as there is no active CFI system of some
->>> kind. Turn it off for now by default until proper support.
->>
->> Building under LTO Clang on arm64, this is available. What's the right
->> way to add a CONFIG that isn't always available?
->>
->> -Kees
-> Yeah, as you had mentioned
-> (https://github.com/kernelci/kernelci-project/issues/84#issuecomment-1042015431):
+> The tprot test currently does not have any output (unless one of
+> the TEST_ASSERT statement fails), so it's hard to say for a user
+> whether a certain new sub-test has been included in the binary or
+> not. Let's make this a little bit more user-friendly and include
+> some TAP output via the kselftests.h interface.
 > 
-> CFI_FORWARD_PROTO is going to fail unless there is an active CFI system
-> in place of some kind. Right now this depends on arm64+Clang. In the
-> future, this will be arch-agnostic+Clang, but for the moment, it should
-> be safe to exclude this test.
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/s390x/tprot.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
-> In this patch, I'm turning off CFI_FORWARD_PROTO by default here. We can
-> re-enable it when it becomes arch agnostic. CFI_FORWARD_PROTO cannot be
-> turned off by using a config. Please let me know your thoughts otherwise.
-> 
+> diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
+> index c097b9db495e..a714b4206e95 100644
+> --- a/tools/testing/selftests/kvm/s390x/tprot.c
+> +++ b/tools/testing/selftests/kvm/s390x/tprot.c
+> @@ -8,6 +8,7 @@
+>  #include <sys/mman.h>
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+> +#include "kselftest.h"
+>  
+>  #define PAGE_SHIFT 12
+>  #define PAGE_SIZE (1 << PAGE_SHIFT)
+> @@ -69,6 +70,7 @@ enum stage {
+>  	STAGE_INIT_FETCH_PROT_OVERRIDE,
+>  	TEST_FETCH_PROT_OVERRIDE,
+>  	TEST_STORAGE_PROT_OVERRIDE,
+> +	NUM_STAGES			/* this must be the last entry */
+>  };
+>  
+>  struct test {
+> @@ -196,6 +198,7 @@ static void guest_code(void)
+>  	}									\
+>  	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
+>  	ASSERT_EQ(uc.args[1], __stage);						\
+> +	ksft_test_result_pass("" #stage "\n");					\
+>  })
+>  
+>  int main(int argc, char *argv[])
+> @@ -204,6 +207,9 @@ int main(int argc, char *argv[])
+>  	struct kvm_run *run;
+>  	vm_vaddr_t guest_0_page;
+>  
+> +	ksft_print_header();
+> +	ksft_set_plan(NUM_STAGES - 1);	/* STAGE_END is not counted, thus - 1 */
+> +
+>  	vm = vm_create_default(VCPU_ID, 0, guest_code);
+>  	run = vcpu_state(vm, VCPU_ID);
+>  
+> @@ -213,7 +219,7 @@ int main(int argc, char *argv[])
+>  
+>  	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
+>  	if (guest_0_page != 0)
+> -		print_skip("Did not allocate page at 0 for fetch protection override tests");
+> +		ksft_print_msg("Did not allocate page at 0 for fetch protection override tests\n");
 
--- 
-Muhammad Usama Anjum
+will this print a skip, though?
+
+or you don't want to print a skip because then the numbering in the
+planning doesn't match anymore? in which case, is there an easy way to
+fix it?
+
+>  	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
+>  	if (guest_0_page == 0)
+>  		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
+> @@ -224,4 +230,8 @@ int main(int argc, char *argv[])
+>  	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
+>  	run->kvm_dirty_regs = KVM_SYNC_CRS;
+>  	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
+> +
+> +	kvm_vm_free(vm);
+> +
+> +	ksft_finished();
+>  }
+
