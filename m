@@ -2,133 +2,128 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D3CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Apr 2022 10:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65DD0C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Apr 2022 11:10:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242526AbiDNK4G (ORCPT
+        id S242555AbiDNLND (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Apr 2022 06:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        Thu, 14 Apr 2022 07:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242038AbiDNK4C (ORCPT
+        with ESMTP id S242637AbiDNLMm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:56:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23CD57E5BA
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Apr 2022 03:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649933614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qezaIFsTkLoWKaonJSnIU/m+cPX3t3dpi0YKUuYR714=;
-        b=XvF3/g0+6bXbgfEkDsAPWEEV2WDBXkDgVLtGx4qY8RZ8Dwa4mmby+iHk1z0h7w5RNrA4qV
-        itZ0Y2Kq7hv76MtUH5HAZlnUj7fS5AKPYuadROK4pMlTtzVZJojbNziYvO8GFK92iWY4ym
-        soNcXxcriHCCL4ytQhZUmcYPQErzE58=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-nt_ZLx7LN_edxJW2oG7ggg-1; Thu, 14 Apr 2022 06:53:30 -0400
-X-MC-Unique: nt_ZLx7LN_edxJW2oG7ggg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3134801E95;
-        Thu, 14 Apr 2022 10:53:29 +0000 (UTC)
-Received: from thuth.com (dhcp-192-232.str.redhat.com [10.33.192.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 708ABC28114;
-        Thu, 14 Apr 2022 10:53:28 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Subject: [PATCH 3/4] KVM: s390: selftests: Use TAP interface in the tprot test
-Date:   Thu, 14 Apr 2022 12:53:21 +0200
-Message-Id: <20220414105322.577439-4-thuth@redhat.com>
-In-Reply-To: <20220414105322.577439-1-thuth@redhat.com>
-References: <20220414105322.577439-1-thuth@redhat.com>
+        Thu, 14 Apr 2022 07:12:42 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C770275F1;
+        Thu, 14 Apr 2022 04:10:17 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id BD45B1F47906
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649934616;
+        bh=+NgjZupD5wwEYhR/W/dOI+H5h6tCv9XM0TMTi/9Tyz0=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=BxsBZjuvqoMbUGWzaRqZe6oW3kPle+jm4aysOI5Urd2tndHUzND+x84Rz86d1Rn+q
+         Dvig8HifOmU0FaSAxecqAfwb/YP7wMVwIPZeENHQy227JbZlp/MWvLH5p4ai+s3OWI
+         n9uhf6JnIldCn9u++GCyNTh+FDhPWZGpHsujWGWpuMJT1mGDy5VozrKjts6wMxXsF0
+         yuL4kb9MPc5mPPoJMLgb7t12O/lQTjkFfx5YQ9mV/MqygFDRSu1RhSW97tuQWvTu1F
+         MZkWinPXvNx0YSgfpC6l9efecBh9syqJWtcImv+NZD47Mw4kkcj+pbTnG97QtacyLW
+         gTeJVQO4g7J/A==
+Message-ID: <b00ea362-1d9d-601c-8481-b562c26e53b5@collabora.com>
+Date:   Thu, 14 Apr 2022 16:10:06 +0500
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     usama.anjum@collabora.com, Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        kernel@collabora.com, kernelci@groups.io,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] Makefile: Fix separate output directory build of
+ kselftests
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20220223191016.1658728-1-usama.anjum@collabora.com>
+ <63c5d7ad-b0b2-9b37-16c3-354ac10858b6@collabora.com>
+ <CAK7LNATkTPEBPWBSv6Rum0siHiHcJ0Q7VvPVoUQFH=S0M1fqow@mail.gmail.com>
+ <d10a70cf-24a5-997a-09df-0bb2f4146b86@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <d10a70cf-24a5-997a-09df-0bb2f4146b86@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The tprot test currently does not have any output (unless one of
-the TEST_ASSERT statement fails), so it's hard to say for a user
-whether a certain new sub-test has been included in the binary or
-not. Let's make this a little bit more user-friendly and include
-some TAP output via the kselftests.h interface.
+Hi,
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- tools/testing/selftests/kvm/s390x/tprot.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+At this time:
+make kselftest-all (works)
+make kselftest-all O=/tmp (works)
+make kselftest-all O=build (doesn't work, investigation was shared)
+make kselftest-all O=build/build2 (works)
 
-diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
-index c097b9db495e..a714b4206e95 100644
---- a/tools/testing/selftests/kvm/s390x/tprot.c
-+++ b/tools/testing/selftests/kvm/s390x/tprot.c
-@@ -8,6 +8,7 @@
- #include <sys/mman.h>
- #include "test_util.h"
- #include "kvm_util.h"
-+#include "kselftest.h"
- 
- #define PAGE_SHIFT 12
- #define PAGE_SIZE (1 << PAGE_SHIFT)
-@@ -69,6 +70,7 @@ enum stage {
- 	STAGE_INIT_FETCH_PROT_OVERRIDE,
- 	TEST_FETCH_PROT_OVERRIDE,
- 	TEST_STORAGE_PROT_OVERRIDE,
-+	NUM_STAGES			/* this must be the last entry */
- };
- 
- struct test {
-@@ -196,6 +198,7 @@ static void guest_code(void)
- 	}									\
- 	ASSERT_EQ(uc.cmd, UCALL_SYNC);						\
- 	ASSERT_EQ(uc.args[1], __stage);						\
-+	ksft_test_result_pass("" #stage "\n");					\
- })
- 
- int main(int argc, char *argv[])
-@@ -204,6 +207,9 @@ int main(int argc, char *argv[])
- 	struct kvm_run *run;
- 	vm_vaddr_t guest_0_page;
- 
-+	ksft_print_header();
-+	ksft_set_plan(NUM_STAGES - 1);	/* STAGE_END is not counted, thus - 1 */
-+
- 	vm = vm_create_default(VCPU_ID, 0, guest_code);
- 	run = vcpu_state(vm, VCPU_ID);
- 
-@@ -213,7 +219,7 @@ int main(int argc, char *argv[])
- 
- 	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
- 	if (guest_0_page != 0)
--		print_skip("Did not allocate page at 0 for fetch protection override tests");
-+		ksft_print_msg("Did not allocate page at 0 for fetch protection override tests\n");
- 	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
- 	if (guest_0_page == 0)
- 		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
-@@ -224,4 +230,8 @@ int main(int argc, char *argv[])
- 	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
- 	run->kvm_dirty_regs = KVM_SYNC_CRS;
- 	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
-+
-+	kvm_vm_free(vm);
-+
-+	ksft_finished();
- }
+I'd shared my final thoughts in the last email. I don't see any other
+solution. If anybody has any other thoughts on how to cleanly fix `make
+kselftest-all O=build`, do share.
+
+Thanks,
+Usama
+
+On 4/4/22 4:09 PM, Muhammad Usama Anjum wrote:
+> From [Makefile](https://elixir.bootlin.com/linux/latest/source/Makefile):
+> ```
+> ifeq ($(abs_srctree),$(abs_objtree))
+>         # building in the source tree
+>         srctree := .
+> 	building_out_of_srctree :=
+> else
+>         ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))
+>                 # building in a subdirectory of the source tree
+>                 srctree := ..
+>         else
+>                 srctree := $(abs_srctree)
+>         endif
+> 	building_out_of_srctree := 1
+> endif
+> ```
+> `ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))` condition is setting
+> `srctree` to `..`. This is wrong. This condition isn't considering that
+> `header_install` doesn't depend on `abs_srctree and abs_objtree`. This
+> condition needs to be tweaked or removed for the `install_headers` to
+> work fine and fix this issue. I've added `KBUILD_ABS_SRCTREE=1` to the
+> kselftest target which sets the `srctree` to `abs_srctree` and thus
+> forcefully affecting only kselftest targets. This seems like the clean
+> fix. Alternatively we should remove this condition `ifeq
+> ($(abs_srctree)/,$(dir $(abs_objtree)))` but it'll affect other targets
+> as well.
+> 
+> Complete details of investigation can be found here:
+> https://github.com/kernelci/kernelci-project/issues/92#issuecomment-1087406222
+> 
+> On 3/17/22 11:08 PM, Masahiro Yamada wrote:
+>> On Thu, Mar 17, 2022 at 7:49 PM Muhammad Usama Anjum
+>> <usama.anjum@collabora.com> wrote:
+>>>
+>>> Reminder. Shuah is okay with this patch. Any thoughts?
+>>
+>> I do not think this is the right fix,
+>> but something you just happen to find working.
+>>
+>>
+>> The Make is working in a wrong directory, that is why
+>> the relative path does not work
+>> (and you use the absolute path to work around it)
+>>
+> `ifeq ($(abs_srctree)/,$(dir $(abs_objtree))) \ srctree := ..` has
+> broken the `make headers_install` when called through
+> selftests/Makefile. We can remove it or use the absolute path each time.
+> 
+
 -- 
-2.27.0
-
+Muhammad Usama Anjum
