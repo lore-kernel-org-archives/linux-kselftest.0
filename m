@@ -2,95 +2,78 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F77CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Apr 2022 10:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B87BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Apr 2022 10:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350739AbiDSKbR (ORCPT
+        id S241331AbiDSKfb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Apr 2022 06:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
+        Tue, 19 Apr 2022 06:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350712AbiDSKbK (ORCPT
+        with ESMTP id S232153AbiDSKfb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:31:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641832CCA4
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:28:24 -0700 (PDT)
+        Tue, 19 Apr 2022 06:35:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D729CBE
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 03:32:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5C91ECE1763
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:28:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F64C385A7;
-        Tue, 19 Apr 2022 10:28:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D2361236
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 10:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10D7C385A7;
+        Tue, 19 Apr 2022 10:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650364100;
-        bh=34rEfnqbjHz3xCdTv2DILwIPZbwZa5CKK5iLFEGhXK0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VrjQ4UMyn44dOJoChwWt+queZWuyg4hKc04nI10qVUJ7s2pwwvB4sQbFAj7Vdlno3
-         G6uePOVgPET57kA8gVT/GgMmzo56bfB7EttO9EN4DAAbpADx9U6ZjX/BcCBG9rBU94
-         nGfAhNPYdVW8gAecaEBKqC+eike84408vjQxmmTtRd+L1+BbNRQi2iqsufFaUmSAXD
-         3+QTcx6F06hZipWOSzv1lv0gio0YorGiWboshC/HxSdpH+UV8wg1CrnBQxAWnt4VdN
-         6r+A46xi6VURdD+dfsgPxSnwiB7HhKCPiS3HqH5Ckt/RWSqYPiCJPrK1FKS0cHE4QK
-         JzL/Ya6Ql8Y7w==
+        s=k20201202; t=1650364368;
+        bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mYGFakqveSm6zpPCXpvLb2cZM9slX3UsiH1YS46BsSnZ8T28ujvCiOEQhaoEoCizF
+         ElqvYLQI+ArjEXM68Kip/D3RDynXi3lwEqmkgdKJ5cLhL2gVMkHptQsk/b7Sw/y7Dv
+         R0ZyD+OIi5C5MWXml+CI2UnxTY55Ns+kYZRjXX+wpN0yxHj4E04Gfkdz7Tqw/gnU7D
+         /LWKLRPIMIXduQmBgKo04CyV78/lb7E9+6zg4MSKJLb57PYJAz+8kcELuBwXF6C9V0
+         b1Ua8V+DftPUwUs85LAmy9QGvTWQvB/mqn5OOucd69RCEpZFPDh4AgPKVj8STio9av
+         LQvObFy7Y9C+w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Joey Gouly <joey.gouly@arm.com>,
-        inux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v2 3/4] kselftest/arm64: Refactor parameter checking in mte_switch_mode()
-Date:   Tue, 19 Apr 2022 11:28:07 +0100
-Message-Id: <20220419102808.24522-4-broonie@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/4] kselftest/arm64: Miscelaneous MTE test updates
+Date:   Tue, 19 Apr 2022 11:32:39 +0100
+Message-Id: <20220419103243.24774-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419102808.24522-1-broonie@kernel.org>
-References: <20220419102808.24522-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1469; h=from:subject; bh=34rEfnqbjHz3xCdTv2DILwIPZbwZa5CKK5iLFEGhXK0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo60sgCHfdzOtIithI78zwesLOJSNsoRWIPM1F1x xF8GIpOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6OtAAKCRAk1otyXVSH0GWeB/ 90cd8aj3BhHopt+I9pf2QwuwwI0Tv6iESeWMq6Qp1vohcv5jovPT2/aOFWm5YghRbw0+jq8RtIs4Rb ZO+SYFOjMEb+zSh1u/bJrRWD+MPzz3xFF9ZS485OX5X53QXSKTQJWzWex8iVmwKNK5kQcSQeyUYt9Y iXhNY/sT0+G+BwZ+BZNmKlDbJwnvdxX3WWVC/9YTbajJMK1XVNeaRRfTbfa4I6pzcCXDOJf1en2Ab3 Nychhdazn8zYwGY5At9femnGXwfu1RUEb5NMVZXJofrG/rHUh/9Wbq+gidEpACMtan7fVkO7Vl2PTU aQVbSCPAbDIYdumIHAfd094z+CHtY8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=995; h=from:subject; bh=jrRh+8wStvVN/Hd3Nb9FI4sSmTpR9aUxzMnC0aqDmSA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXo/Ghgr6cFblAnK9/EUiZlU+z0dC4fFztExS0t+2 LfeGPNeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6PxgAKCRAk1otyXVSH0FMrB/ 9bqW2u7B1dYSn5wZ+oDxPXjkJrZyVGNXvM6wmruJq6zP1zTU8IgaKwibFz8S/tQTNcqKIdgwHW7g28 T7mIGmEqRAa2A6jEV+ofRnCgjsCogJQSjqnuUM/dwi0JT+fq1dov5dPebVY8ezg3E3xUJ4KUnBPxMQ kRkYMF6dlZ4Pz9UrQ0lJiY4AbjoLyIqVRPYY/huKZ9UmYxfI3H6KITLSkhonG6FmSjuk0cPx/PxQvq OFQniQ9wf+qKGxsbh6xOtr9Ltycn/HWrJy6fyYY8/vfSX8VmFlHwK/lhoPT4CPnlPbyNk2euQjJxgg TqqDn047pX7zbTIn5uZtu5d9o0GIj4
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently we just have a big if statement with a non-specific diagnostic
-checking both the mode and the tag. Since we'll need to dynamically check
-for asymmetric mode support in the system and to improve debugability split
-these checks out.
+This series is just a set of minor tweaks and improvements for the MTE
+tests that I did while working on the asymmetric mode support for
+userspace which seemed like they might be worth keeping even though the
+prctl() for asymmetric mode got removed.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
----
- .../testing/selftests/arm64/mte/mte_common_util.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+v2:
+ - Rebase onto v5.18-rc3
 
-diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-index 5327aa958171..260206f4dce0 100644
---- a/tools/testing/selftests/arm64/mte/mte_common_util.c
-+++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-@@ -273,9 +273,18 @@ int mte_switch_mode(int mte_option, unsigned long incl_mask)
- {
- 	unsigned long en = 0;
- 
--	if (!(mte_option == MTE_SYNC_ERR || mte_option == MTE_ASYNC_ERR ||
--	      mte_option == MTE_NONE_ERR || incl_mask <= MTE_ALLOW_NON_ZERO_TAG)) {
--		ksft_print_msg("FAIL: Invalid mte config option\n");
-+	switch (mte_option) {
-+	case MTE_NONE_ERR:
-+	case MTE_SYNC_ERR:
-+	case MTE_ASYNC_ERR:
-+		break;
-+	default:
-+		ksft_print_msg("FAIL: Invalid MTE option %x\n", mte_option);
-+		return -EINVAL;
-+	}
-+
-+	if (!(incl_mask <= MTE_ALLOW_NON_ZERO_TAG)) {
-+		ksft_print_msg("FAIL: Invalid incl_mask %lx\n", incl_mask);
- 		return -EINVAL;
- 	}
- 	en = PR_TAGGED_ADDR_ENABLE;
+Mark Brown (4):
+  kselftest/arm64: Handle more kselftest result codes in MTE helpers
+  kselftest/arm64: Log unexpected asynchronous MTE faults
+  kselftest/arm64: Refactor parameter checking in mte_switch_mode()
+  kselftest/arm64: Add simple test for MTE prctl
+
+ tools/testing/selftests/arm64/mte/.gitignore  |   1 +
+ .../testing/selftests/arm64/mte/check_prctl.c | 119 ++++++++++++++++++
+ .../selftests/arm64/mte/mte_common_util.c     |  19 ++-
+ .../selftests/arm64/mte/mte_common_util.h     |  15 ++-
+ 4 files changed, 149 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/mte/check_prctl.c
+
+
+base-commit: b2d229d4ddb17db541098b83524d901257e93845
 -- 
 2.30.2
 
