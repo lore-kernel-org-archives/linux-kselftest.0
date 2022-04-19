@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B344AC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Apr 2022 11:25:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7906AC43217
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Apr 2022 11:25:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242145AbiDSL2e (ORCPT
+        id S242576AbiDSL2f (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Apr 2022 07:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        Tue, 19 Apr 2022 07:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351327AbiDSL1d (ORCPT
+        with ESMTP id S242223AbiDSL2e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:27:33 -0400
+        Tue, 19 Apr 2022 07:28:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44A81107
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 04:24:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC8B25281
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 04:25:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F5FA61355
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 11:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D1EC385A5;
-        Tue, 19 Apr 2022 11:24:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DB4D612D2
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Apr 2022 11:25:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01815C385A7;
+        Tue, 19 Apr 2022 11:25:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650367489;
-        bh=SOhyiZfcilTi1jtTr96Ysza7wdP79JwWdIScH7dbYIk=;
+        s=k20201202; t=1650367550;
+        bh=giUwEVOR8PE/N8iAp+aznU3w/GIVws84dQIV3+9geeo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h6sKpN9isgSExRnrcRimmDOxnunZuqhQkAm/htPXGG9hQrdY4E1gmUdAz2B/t1Zhi
-         MqnsXf8irhKhBG9dxIQq/bDCnHLwXF/bWovBf0WCan8UakHhQphcoqhJ/JpX5MnwUr
-         u5Qu/oOn7jKodsUK+inrWpPXmf8abB7zF6MUNPqBy1qcotm+lmHKRSR4nCX0UEzLVb
-         bWV8OMC36xUJvv8FkMBdn8M/9k/9//A6fgw4y33JNrhpb1rSQUy4tSjitqDp+UELSs
-         lVE4K5VDx39MagM6QZvniscC3V9KlKLPwA2io4VQkPoMshftx0njuJMU9k/qIY7ccW
-         AKrx+FICpRHMQ==
+        b=RAuPguvepq1OvQnYt5RxK1qoi/UxW+qHLjO2tuc6inOHeX0NXBgYvYFZj3xbukb9C
+         ZLkF4Y0uD6ulHUfTCQ4D6FS7ndFtdP5BPqOcHTSJnC7GmUG3VIteUUT5yMfiyhQtsx
+         6tNY1XQshUBxojkxsA+8aQpg5oROO1YqJ26Xw/gmYU0aNdMpAI/gkpkQbGVTyRpUxP
+         W9OwVltjZJNf9t61/7IiZYhR7+8eIK63g0tIDUrlpYIj/5VXBMJtZLjnWrdWIlQ+lO
+         bqFJ6EgKfcUVRmizuZyoYZjgopJFC6YcSd+baqQNoGDIvlUBRA3y3HqcwqxLy5643A
+         crSsV6KsoabBw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -50,521 +50,697 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v14 20/39] arm64/sme: Implement ptrace support for streaming mode SVE registers
-Date:   Tue, 19 Apr 2022 12:22:28 +0100
-Message-Id: <20220419112247.711548-21-broonie@kernel.org>
+Subject: [PATCH v14 35/39] kselftest/arm64: signal: Add SME signal handling tests
+Date:   Tue, 19 Apr 2022 12:22:43 +0100
+Message-Id: <20220419112247.711548-36-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419112247.711548-1-broonie@kernel.org>
 References: <20220419112247.711548-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16966; h=from:subject; bh=SOhyiZfcilTi1jtTr96Ysza7wdP79JwWdIScH7dbYIk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXpt3Qpij5CnmGmi8brhajaP61OvK6D+rvhYBMF54 NB4+mV6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6bdwAKCRAk1otyXVSH0HKaB/ oDl0Fo6BUNC+DrWFZXSs3Q87/S5o/NOj4joW1gRJZFiHnrINQT+Sk3ZbvQY97w0l46w2a5T14yryxy Lpk1YAA4KkYeaSqSU8ji6SSMJr411wbBnfdtXI2EfmRX3+0XKDoKJ8TpWLuQ9nQcdiWGHI3gdPFR2d rOMTcpaQHhydRny9YpEGBBNS7dvI+nLdf73La8hkaXKnzPe1oIyX7w/tROj+IE/nFG8p8b1H+1/b2c s925ycHQoiN4M61jQrDmpZfYUr34cRzVQPtPkdxp3uMcP/7nKbhJWSVFX27oXS7vsIEWPNIbKV9No6 SgqUo0Qjr5rRJGtPR0Ww68Gc7qcett
+X-Developer-Signature: v=1; a=openpgp-sha256; l=18532; h=from:subject; bh=giUwEVOR8PE/N8iAp+aznU3w/GIVws84dQIV3+9geeo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiXpuDLQLEtFiqGgTRFF4hJ4Iuly+/PO4z8Rlvs9UX iAJr3RSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYl6bgwAKCRAk1otyXVSH0EeCB/ 9R8sv1oCvZfLV3NgjpKtrxIi+/Fb5QlxxyCBrfqdV90X4fPutRTCO/844ybWz7SFhCDGWAtQxcnMTs zEJQivnmNpYn8FUHCmoyGkBXvgSFhFfdUCGMyO7uAvcUzXO6EgR9AB9sD8WBR8v1sNOVZA9dhvI7y/ vF9fT0XqEoPRlzCpdN8+mVk8gIwc+waPQlc40tsLkc9qDGEu/qbLgQuwz3A1jkiKqCcF09wee6pJdc xJAc0K3mymaZ3HrBAMqIS+XfzR0YuVtmp0AWSyfbZBH0J05Zjn2QwhA5nRtB9McGPd5MEQTxchZWdk bJ/tBODwZsZKmObDIVPDeeGNgMXpsX
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The streaming mode SVE registers are represented using the same data
-structures as for SVE but since the vector lengths supported and in use
-may not be the same as SVE we represent them with a new type NT_ARM_SSVE.
-Unfortunately we only have a single 16 bit reserved field available in
-the header so there is no space to fit the current and maximum vector
-length for both standard and streaming SVE mode without redefining the
-structure in a way the creates a complicatd and fragile ABI. Since FFR
-is not present in streaming mode it is read and written as zero.
+Add test cases for the SME signal handing ABI patterned off the SVE tests.
+Due to the small size of the tests and the differences in ABI (especially
+around needing to account for both streaming SVE and ZA) there is some code
+duplication here.
 
-Setting NT_ARM_SSVE registers will put the task into streaming mode,
-similarly setting NT_ARM_SVE registers will exit it. Reads that do not
-correspond to the current mode of the task will return the header with
-no register data. For compatibility reasons on write setting no flag for
-the register type will be interpreted as setting SVE registers, though
-users can provide no register data as an alternative mechanism for doing
-so.
+We currently cover:
+ - Reporting of the vector length.
+ - Lack of support for changing vector length.
+ - Presence and size of register state for streaming SVE and ZA.
+
+As with the SVE tests we do not yet have any validation of register
+contents.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/include/asm/fpsimd.h      |   1 +
- arch/arm64/include/uapi/asm/ptrace.h |  13 +-
- arch/arm64/kernel/fpsimd.c           |  31 +++-
- arch/arm64/kernel/ptrace.c           | 214 +++++++++++++++++++++------
- include/uapi/linux/elf.h             |   1 +
- 5 files changed, 201 insertions(+), 59 deletions(-)
+ .../testing/selftests/arm64/signal/.gitignore |   3 +
+ .../selftests/arm64/signal/test_signals.h     |   4 +
+ .../arm64/signal/test_signals_utils.c         |   6 +
+ .../testcases/fake_sigreturn_sme_change_vl.c  |  92 ++++++++++++
+ .../arm64/signal/testcases/sme_trap_no_sm.c   |  38 +++++
+ .../signal/testcases/sme_trap_non_streaming.c |  45 ++++++
+ .../arm64/signal/testcases/sme_trap_za.c      |  36 +++++
+ .../selftests/arm64/signal/testcases/sme_vl.c |  68 +++++++++
+ .../arm64/signal/testcases/ssve_regs.c        | 135 ++++++++++++++++++
+ .../arm64/signal/testcases/za_regs.c          | 128 +++++++++++++++++
+ 10 files changed, 555 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/za_regs.c
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 6c33bc832ed4..5afcd0709aae 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -144,6 +144,7 @@ struct vl_info {
- extern void sve_alloc(struct task_struct *task);
- extern void fpsimd_release_task(struct task_struct *task);
- extern void fpsimd_sync_to_sve(struct task_struct *task);
-+extern void fpsimd_force_sync_to_sve(struct task_struct *task);
- extern void sve_sync_to_fpsimd(struct task_struct *task);
- extern void sve_sync_from_fpsimd_zeropad(struct task_struct *task);
- 
-diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
-index 758ae984ff97..522b925a78c1 100644
---- a/arch/arm64/include/uapi/asm/ptrace.h
-+++ b/arch/arm64/include/uapi/asm/ptrace.h
-@@ -109,7 +109,7 @@ struct user_hwdebug_state {
- 	}		dbg_regs[16];
+diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
+index c1742755abb9..e8d2b57f73ec 100644
+--- a/tools/testing/selftests/arm64/signal/.gitignore
++++ b/tools/testing/selftests/arm64/signal/.gitignore
+@@ -1,5 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ mangle_*
+ fake_sigreturn_*
++sme_*
++ssve_*
+ sve_*
++za_*
+ !*.[ch]
+diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+index f909b70d9e98..c70fdec7d7c4 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals.h
++++ b/tools/testing/selftests/arm64/signal/test_signals.h
+@@ -34,11 +34,15 @@
+ enum {
+ 	FSSBS_BIT,
+ 	FSVE_BIT,
++	FSME_BIT,
++	FSME_FA64_BIT,
+ 	FMAX_END
  };
  
--/* SVE/FP/SIMD state (NT_ARM_SVE) */
-+/* SVE/FP/SIMD state (NT_ARM_SVE & NT_ARM_SSVE) */
+ #define FEAT_SSBS		(1UL << FSSBS_BIT)
+ #define FEAT_SVE		(1UL << FSVE_BIT)
++#define FEAT_SME		(1UL << FSME_BIT)
++#define FEAT_SME_FA64		(1UL << FSME_FA64_BIT)
  
- struct user_sve_header {
- 	__u32 size; /* total meaningful regset content in bytes */
-@@ -220,6 +220,7 @@ struct user_sve_header {
- 	(SVE_PT_SVE_PREG_OFFSET(vq, __SVE_NUM_PREGS) - \
- 		SVE_PT_SVE_PREGS_OFFSET(vq))
- 
-+/* For streaming mode SVE (SSVE) FFR must be read and written as zero */
- #define SVE_PT_SVE_FFR_OFFSET(vq) \
- 	(SVE_PT_REGS_OFFSET + __SVE_FFR_OFFSET(vq))
- 
-@@ -240,10 +241,12 @@ struct user_sve_header {
- 			- SVE_PT_SVE_OFFSET + (__SVE_VQ_BYTES - 1))	\
- 		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
- 
--#define SVE_PT_SIZE(vq, flags)						\
--	 (((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE ?		\
--		  SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, flags)	\
--		: SVE_PT_FPSIMD_OFFSET + SVE_PT_FPSIMD_SIZE(vq, flags))
-+#define SVE_PT_SIZE(vq, flags)						  \
-+	 (((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_SVE ?		  \
-+		  SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, flags)	  \
-+		: ((((flags) & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD ?  \
-+		    SVE_PT_FPSIMD_OFFSET + SVE_PT_FPSIMD_SIZE(vq, flags) \
-+		  : SVE_PT_REGS_OFFSET)))
- 
- /* pointer authentication masks (NT_ARM_PAC_MASK) */
- 
-diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 80f7ca12f855..94f06e9d37cf 100644
---- a/arch/arm64/kernel/fpsimd.c
-+++ b/arch/arm64/kernel/fpsimd.c
-@@ -643,7 +643,7 @@ static void fpsimd_to_sve(struct task_struct *task)
- 	if (!system_supports_sve())
- 		return;
- 
--	vq = sve_vq_from_vl(task_get_sve_vl(task));
-+	vq = sve_vq_from_vl(thread_get_cur_vl(&task->thread));
- 	__fpsimd_to_sve(sst, fst, vq);
- }
- 
-@@ -660,7 +660,7 @@ static void fpsimd_to_sve(struct task_struct *task)
-  */
- static void sve_to_fpsimd(struct task_struct *task)
- {
--	unsigned int vq;
-+	unsigned int vq, vl;
- 	void const *sst = task->thread.sve_state;
- 	struct user_fpsimd_state *fst = &task->thread.uw.fpsimd_state;
- 	unsigned int i;
-@@ -669,7 +669,8 @@ static void sve_to_fpsimd(struct task_struct *task)
- 	if (!system_supports_sve())
- 		return;
- 
--	vq = sve_vq_from_vl(task_get_sve_vl(task));
-+	vl = thread_get_cur_vl(&task->thread);
-+	vq = sve_vq_from_vl(vl);
- 	for (i = 0; i < SVE_NUM_ZREGS; ++i) {
- 		p = (__uint128_t const *)ZREG(sst, vq, i);
- 		fst->vregs[i] = arm64_le128_to_cpu(*p);
-@@ -717,6 +718,19 @@ void sve_alloc(struct task_struct *task)
- }
- 
- 
-+/*
-+ * Force the FPSIMD state shared with SVE to be updated in the SVE state
-+ * even if the SVE state is the current active state.
-+ *
-+ * This should only be called by ptrace.  task must be non-runnable.
-+ * task->thread.sve_state must point to at least sve_state_size(task)
-+ * bytes of allocated kernel memory.
-+ */
-+void fpsimd_force_sync_to_sve(struct task_struct *task)
-+{
-+	fpsimd_to_sve(task);
-+}
-+
  /*
-  * Ensure that task->thread.sve_state is up to date with respect to
-  * the user task, irrespective of when SVE is in use or not.
-@@ -727,7 +741,8 @@ void sve_alloc(struct task_struct *task)
-  */
- void fpsimd_sync_to_sve(struct task_struct *task)
- {
--	if (!test_tsk_thread_flag(task, TIF_SVE))
-+	if (!test_tsk_thread_flag(task, TIF_SVE) &&
-+	    !thread_sm_enabled(&task->thread))
- 		fpsimd_to_sve(task);
- }
+  * A descriptor used to describe and configure a test case.
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+index 5743897984b0..b588d10afd5b 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+@@ -27,6 +27,8 @@ static int sig_copyctx = SIGTRAP;
+ static char const *const feats_names[FMAX_END] = {
+ 	" SSBS ",
+ 	" SVE ",
++	" SME ",
++	" FA64 ",
+ };
  
-@@ -741,7 +756,8 @@ void fpsimd_sync_to_sve(struct task_struct *task)
-  */
- void sve_sync_to_fpsimd(struct task_struct *task)
- {
--	if (test_tsk_thread_flag(task, TIF_SVE))
-+	if (test_tsk_thread_flag(task, TIF_SVE) ||
-+	    thread_sm_enabled(&task->thread))
- 		sve_to_fpsimd(task);
- }
- 
-@@ -766,7 +782,7 @@ void sve_sync_from_fpsimd_zeropad(struct task_struct *task)
- 	if (!test_tsk_thread_flag(task, TIF_SVE))
- 		return;
- 
--	vq = sve_vq_from_vl(task_get_sve_vl(task));
-+	vq = sve_vq_from_vl(thread_get_cur_vl(&task->thread));
- 
- 	memset(sst, 0, SVE_SIG_REGS_SIZE(vq));
- 	__fpsimd_to_sve(sst, fst, vq);
-@@ -810,8 +826,7 @@ int vec_set_vector_length(struct task_struct *task, enum vec_type type,
- 	/*
- 	 * To ensure the FPSIMD bits of the SVE vector registers are preserved,
- 	 * write any live register state back to task_struct, and convert to a
--	 * regular FPSIMD thread.  Since the vector length can only be changed
--	 * with a syscall we can't be in streaming mode while reconfiguring.
-+	 * regular FPSIMD thread.
- 	 */
- 	if (task == current) {
- 		get_cpu_fpsimd_context();
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 230a47b9189e..60185c27b394 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -713,21 +713,51 @@ static int system_call_set(struct task_struct *target,
- #ifdef CONFIG_ARM64_SVE
- 
- static void sve_init_header_from_task(struct user_sve_header *header,
--				      struct task_struct *target)
-+				      struct task_struct *target,
-+				      enum vec_type type)
- {
- 	unsigned int vq;
-+	bool active;
-+	bool fpsimd_only;
-+	enum vec_type task_type;
- 
- 	memset(header, 0, sizeof(*header));
- 
--	header->flags = test_tsk_thread_flag(target, TIF_SVE) ?
--		SVE_PT_REGS_SVE : SVE_PT_REGS_FPSIMD;
--	if (test_tsk_thread_flag(target, TIF_SVE_VL_INHERIT))
--		header->flags |= SVE_PT_VL_INHERIT;
-+	/* Check if the requested registers are active for the task */
-+	if (thread_sm_enabled(&target->thread))
-+		task_type = ARM64_VEC_SME;
-+	else
-+		task_type = ARM64_VEC_SVE;
-+	active = (task_type == type);
+ #define MAX_FEATS_SZ	128
+@@ -268,6 +270,10 @@ int test_init(struct tdescr *td)
+ 			td->feats_supported |= FEAT_SSBS;
+ 		if (getauxval(AT_HWCAP) & HWCAP_SVE)
+ 			td->feats_supported |= FEAT_SVE;
++		if (getauxval(AT_HWCAP2) & HWCAP2_SME)
++			td->feats_supported |= FEAT_SME;
++		if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
++			td->feats_supported |= FEAT_SME_FA64;
+ 		if (feats_ok(td)) {
+ 			if (td->feats_required & td->feats_supported)
+ 				fprintf(stderr,
+diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+new file mode 100644
+index 000000000000..7ed762b7202f
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Attempt to change the streaming SVE vector length in a signal
++ * handler, this is not supported and is expected to segfault.
++ */
 +
-+	switch (type) {
-+	case ARM64_VEC_SVE:
-+		if (test_tsk_thread_flag(target, TIF_SVE_VL_INHERIT))
-+			header->flags |= SVE_PT_VL_INHERIT;
-+		fpsimd_only = !test_tsk_thread_flag(target, TIF_SVE);
-+		break;
-+	case ARM64_VEC_SME:
-+		if (test_tsk_thread_flag(target, TIF_SME_VL_INHERIT))
-+			header->flags |= SVE_PT_VL_INHERIT;
-+		fpsimd_only = false;
-+		break;
-+	default:
-+		WARN_ON_ONCE(1);
-+		return;
-+	}
- 
--	header->vl = task_get_sve_vl(target);
-+	if (active) {
-+		if (fpsimd_only) {
-+			header->flags |= SVE_PT_REGS_FPSIMD;
-+		} else {
-+			header->flags |= SVE_PT_REGS_SVE;
-+		}
-+	}
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
 +
-+	header->vl = task_get_vl(target, type);
- 	vq = sve_vq_from_vl(header->vl);
- 
--	header->max_vl = sve_max_vl();
-+	header->max_vl = vec_max_vl(type);
- 	header->size = SVE_PT_SIZE(vq, header->flags);
- 	header->max_size = SVE_PT_SIZE(sve_vq_from_vl(header->max_vl),
- 				      SVE_PT_REGS_SVE);
-@@ -738,19 +768,17 @@ static unsigned int sve_size_from_header(struct user_sve_header const *header)
- 	return ALIGN(header->size, SVE_VQ_BYTES);
- }
- 
--static int sve_get(struct task_struct *target,
--		   const struct user_regset *regset,
--		   struct membuf to)
-+static int sve_get_common(struct task_struct *target,
-+			  const struct user_regset *regset,
-+			  struct membuf to,
-+			  enum vec_type type)
- {
- 	struct user_sve_header header;
- 	unsigned int vq;
- 	unsigned long start, end;
- 
--	if (!system_supports_sve())
--		return -EINVAL;
--
- 	/* Header */
--	sve_init_header_from_task(&header, target);
-+	sve_init_header_from_task(&header, target, type);
- 	vq = sve_vq_from_vl(header.vl);
- 
- 	membuf_write(&to, &header, sizeof(header));
-@@ -758,49 +786,61 @@ static int sve_get(struct task_struct *target,
- 	if (target == current)
- 		fpsimd_preserve_current_state();
- 
--	/* Registers: FPSIMD-only case */
--
- 	BUILD_BUG_ON(SVE_PT_FPSIMD_OFFSET != sizeof(header));
--	if ((header.flags & SVE_PT_REGS_MASK) == SVE_PT_REGS_FPSIMD)
-+	BUILD_BUG_ON(SVE_PT_SVE_OFFSET != sizeof(header));
++#include "test_signals_utils.h"
++#include "testcases.h"
 +
-+	switch ((header.flags & SVE_PT_REGS_MASK)) {
-+	case SVE_PT_REGS_FPSIMD:
- 		return __fpr_get(target, regset, to);
- 
--	/* Otherwise: full SVE case */
-+	case SVE_PT_REGS_SVE:
-+		start = SVE_PT_SVE_OFFSET;
-+		end = SVE_PT_SVE_FFR_OFFSET(vq) + SVE_PT_SVE_FFR_SIZE(vq);
-+		membuf_write(&to, target->thread.sve_state, end - start);
- 
--	BUILD_BUG_ON(SVE_PT_SVE_OFFSET != sizeof(header));
--	start = SVE_PT_SVE_OFFSET;
--	end = SVE_PT_SVE_FFR_OFFSET(vq) + SVE_PT_SVE_FFR_SIZE(vq);
--	membuf_write(&to, target->thread.sve_state, end - start);
-+		start = end;
-+		end = SVE_PT_SVE_FPSR_OFFSET(vq);
-+		membuf_zero(&to, end - start);
- 
--	start = end;
--	end = SVE_PT_SVE_FPSR_OFFSET(vq);
--	membuf_zero(&to, end - start);
-+		/*
-+		 * Copy fpsr, and fpcr which must follow contiguously in
-+		 * struct fpsimd_state:
-+		 */
-+		start = end;
-+		end = SVE_PT_SVE_FPCR_OFFSET(vq) + SVE_PT_SVE_FPCR_SIZE;
-+		membuf_write(&to, &target->thread.uw.fpsimd_state.fpsr,
-+			     end - start);
- 
--	/*
--	 * Copy fpsr, and fpcr which must follow contiguously in
--	 * struct fpsimd_state:
--	 */
--	start = end;
--	end = SVE_PT_SVE_FPCR_OFFSET(vq) + SVE_PT_SVE_FPCR_SIZE;
--	membuf_write(&to, &target->thread.uw.fpsimd_state.fpsr, end - start);
-+		start = end;
-+		end = sve_size_from_header(&header);
-+		return membuf_zero(&to, end - start);
- 
--	start = end;
--	end = sve_size_from_header(&header);
--	return membuf_zero(&to, end - start);
-+	default:
-+		return 0;
-+	}
- }
- 
--static int sve_set(struct task_struct *target,
-+static int sve_get(struct task_struct *target,
- 		   const struct user_regset *regset,
--		   unsigned int pos, unsigned int count,
--		   const void *kbuf, const void __user *ubuf)
-+		   struct membuf to)
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
++
++static bool sme_get_vls(struct tdescr *td)
 +{
-+	if (!system_supports_sve())
-+		return -EINVAL;
++	int vq, vl;
 +
-+	return sve_get_common(target, regset, to, ARM64_VEC_SVE);
-+}
-+
-+static int sve_set_common(struct task_struct *target,
-+			  const struct user_regset *regset,
-+			  unsigned int pos, unsigned int count,
-+			  const void *kbuf, const void __user *ubuf,
-+			  enum vec_type type)
- {
- 	int ret;
- 	struct user_sve_header header;
- 	unsigned int vq;
- 	unsigned long start, end;
- 
--	if (!system_supports_sve())
--		return -EINVAL;
--
- 	/* Header */
- 	if (count < sizeof(header))
- 		return -EINVAL;
-@@ -813,13 +853,37 @@ static int sve_set(struct task_struct *target,
- 	 * Apart from SVE_PT_REGS_MASK, all SVE_PT_* flags are consumed by
- 	 * vec_set_vector_length(), which will also validate them for us:
- 	 */
--	ret = vec_set_vector_length(target, ARM64_VEC_SVE, header.vl,
-+	ret = vec_set_vector_length(target, type, header.vl,
- 		((unsigned long)header.flags & ~SVE_PT_REGS_MASK) << 16);
- 	if (ret)
- 		goto out;
- 
- 	/* Actual VL set may be less than the user asked for: */
--	vq = sve_vq_from_vl(task_get_sve_vl(target));
-+	vq = sve_vq_from_vl(task_get_vl(target, type));
-+
-+	/* Enter/exit streaming mode */
-+	if (system_supports_sme()) {
-+		u64 old_svcr = target->thread.svcr;
-+
-+		switch (type) {
-+		case ARM64_VEC_SVE:
-+			target->thread.svcr &= ~SYS_SVCR_EL0_SM_MASK;
-+			break;
-+		case ARM64_VEC_SME:
-+			target->thread.svcr |= SYS_SVCR_EL0_SM_MASK;
-+			break;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return -EINVAL;
-+		}
-+
-+		/*
-+		 * If we switched then invalidate any existing SVE
-+		 * state and ensure there's storage.
-+		 */
-+		if (target->thread.svcr != old_svcr)
-+			sve_alloc(target);
-+	}
- 
- 	/* Registers: FPSIMD-only case */
- 
-@@ -828,10 +892,15 @@ static int sve_set(struct task_struct *target,
- 		ret = __fpr_set(target, regset, pos, count, kbuf, ubuf,
- 				SVE_PT_FPSIMD_OFFSET);
- 		clear_tsk_thread_flag(target, TIF_SVE);
-+		if (type == ARM64_VEC_SME)
-+			fpsimd_force_sync_to_sve(target);
- 		goto out;
- 	}
- 
--	/* Otherwise: full SVE case */
 +	/*
-+	 * Otherwise: no registers or full SVE case.  For backwards
-+	 * compatibility reasons we treat empty flags as SVE registers.
++	 * Enumerate up to SVE_VQ_MAX vector lengths
 +	 */
- 
- 	/*
- 	 * If setting a different VL from the requested VL and there is
-@@ -852,8 +921,9 @@ static int sve_set(struct task_struct *target,
- 
- 	/*
- 	 * Ensure target->thread.sve_state is up to date with target's
--	 * FPSIMD regs, so that a short copyin leaves trailing registers
--	 * unmodified.
-+	 * FPSIMD regs, so that a short copyin leaves trailing
-+	 * registers unmodified.  Always enable SVE even if going into
-+	 * streaming mode.
- 	 */
- 	fpsimd_sync_to_sve(target);
- 	set_tsk_thread_flag(target, TIF_SVE);
-@@ -889,8 +959,46 @@ static int sve_set(struct task_struct *target,
- 	return ret;
- }
- 
-+static int sve_set(struct task_struct *target,
-+		   const struct user_regset *regset,
-+		   unsigned int pos, unsigned int count,
-+		   const void *kbuf, const void __user *ubuf)
-+{
-+	if (!system_supports_sve())
-+		return -EINVAL;
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
 +
-+	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
-+			      ARM64_VEC_SVE);
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least two VLs */
++	if (nvls < 2) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
 +}
 +
- #endif /* CONFIG_ARM64_SVE */
- 
-+#ifdef CONFIG_ARM64_SME
-+
-+static int ssve_get(struct task_struct *target,
-+		   const struct user_regset *regset,
-+		   struct membuf to)
++static int fake_sigreturn_ssve_change_vl(struct tdescr *td,
++					 siginfo_t *si, ucontext_t *uc)
 +{
-+	if (!system_supports_sme())
-+		return -EINVAL;
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *sve;
 +
-+	return sve_get_common(target, regset, to, ARM64_VEC_SME);
++	/* Get a signal context with a SME ZA frame in it */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++
++	if (head->size != sizeof(struct sve_context)) {
++		fprintf(stderr, "Register data present, aborting\n");
++		return 1;
++	}
++
++	sve = (struct sve_context *)head;
++
++	/* No changes are supported; init left us at minimum VL so go to max */
++	fprintf(stderr, "Attempting to change VL from %d to %d\n",
++		sve->vl, vls[0]);
++	sve->vl = vls[0];
++
++	fake_sigreturn(&sf, sizeof(sf), 0);
++
++	return 1;
 +}
 +
-+static int ssve_set(struct task_struct *target,
-+		    const struct user_regset *regset,
-+		    unsigned int pos, unsigned int count,
-+		    const void *kbuf, const void __user *ubuf)
-+{
-+	if (!system_supports_sme())
-+		return -EINVAL;
++struct tdescr tde = {
++	.name = "FAKE_SIGRETURN_SSVE_CHANGE",
++	.descr = "Attempt to change Streaming SVE VL",
++	.feats_required = FEAT_SME,
++	.sig_ok = SIGSEGV,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = fake_sigreturn_ssve_change_vl,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
+new file mode 100644
+index 000000000000..f9d76ae32bba
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_no_sm.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that using a streaming mode instruction without enabling it
++ * generates a SIGILL.
++ */
 +
-+	return sve_set_common(target, regset, pos, count, kbuf, ubuf,
-+			      ARM64_VEC_SME);
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++int sme_trap_no_sm_trigger(struct tdescr *td)
++{
++	/* SMSTART ZA ; ADDHA ZA0.S, P0/M, P0/M, Z0.S */
++	asm volatile(".inst 0xd503457f ; .inst 0xc0900000");
++
++	return 0;
 +}
 +
-+#endif /* CONFIG_ARM64_SME */
++int sme_trap_no_sm_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
 +
- #ifdef CONFIG_ARM64_PTR_AUTH
- static int pac_mask_get(struct task_struct *target,
- 			const struct user_regset *regset,
-@@ -1108,6 +1216,9 @@ enum aarch64_regset {
- #ifdef CONFIG_ARM64_SVE
- 	REGSET_SVE,
- #endif
-+#ifdef CONFIG_ARM64_SVE
-+	REGSET_SSVE,
-+#endif
- #ifdef CONFIG_ARM64_PTR_AUTH
- 	REGSET_PAC_MASK,
- 	REGSET_PAC_ENABLED_KEYS,
-@@ -1188,6 +1299,17 @@ static const struct user_regset aarch64_regsets[] = {
- 		.set = sve_set,
- 	},
- #endif
-+#ifdef CONFIG_ARM64_SME
-+	[REGSET_SSVE] = { /* Streaming mode SVE */
-+		.core_note_type = NT_ARM_SSVE,
-+		.n = DIV_ROUND_UP(SVE_PT_SIZE(SVE_VQ_MAX, SVE_PT_REGS_SVE),
-+				  SVE_VQ_BYTES),
-+		.size = SVE_VQ_BYTES,
-+		.align = SVE_VQ_BYTES,
-+		.regset_get = ssve_get,
-+		.set = ssve_set,
-+	},
-+#endif
- #ifdef CONFIG_ARM64_PTR_AUTH
- 	[REGSET_PAC_MASK] = {
- 		.core_note_type = NT_ARM_PAC_MASK,
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 787c657bfae8..a8dc688e1826 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -431,6 +431,7 @@ typedef struct elf64_shdr {
- #define NT_ARM_PACG_KEYS	0x408	/* ARM pointer authentication generic key */
- #define NT_ARM_TAGGED_ADDR_CTRL	0x409	/* arm64 tagged address control (prctl()) */
- #define NT_ARM_PAC_ENABLED_KEYS	0x40a	/* arm64 ptr auth enabled keys (prctl()) */
-+#define NT_ARM_SSVE	0x40b		/* ARM Streaming SVE registers */
- #define NT_ARC_V2	0x600		/* ARCv2 accumulator/extra registers */
- #define NT_VMCOREDD	0x700		/* Vmcore Device Dump Note */
- #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
++struct tdescr tde = {
++	.name = "SME trap without SM",
++	.descr = "Check that we get a SIGILL if we use streaming mode without enabling it",
++	.timeout = 3,
++	.feats_required = FEAT_SME,   /* We need a SMSTART ZA */
++	.sanity_disabled = true,
++	.trigger = sme_trap_no_sm_trigger,
++	.run = sme_trap_no_sm_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+new file mode 100644
+index 000000000000..e469ae5348e3
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_non_streaming.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that using an instruction not supported in streaming mode
++ * traps when in streaming mode.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++int sme_trap_non_streaming_trigger(struct tdescr *td)
++{
++	/*
++	 * The framework will handle SIGILL so we need to exit SM to
++	 * stop any other code triggering a further SIGILL down the
++	 * line from using a streaming-illegal instruction.
++	 */
++	asm volatile(".inst 0xd503437f; /* SMSTART ZA */ \
++		      cnt v0.16b, v0.16b; \
++                      .inst 0xd503447f  /* SMSTOP ZA */");
++
++	return 0;
++}
++
++int sme_trap_non_streaming_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "SME SM trap unsupported instruction",
++	.descr = "Check that we get a SIGILL if we use an unsupported instruction in streaming mode",
++	.feats_required = FEAT_SME,
++	.feats_incompatible = FEAT_SME_FA64,
++	.timeout = 3,
++	.sanity_disabled = true,
++	.trigger = sme_trap_non_streaming_trigger,
++	.run = sme_trap_non_streaming_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c b/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+new file mode 100644
+index 000000000000..3a7747af4715
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_trap_za.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that accessing ZA without enabling it generates a SIGILL.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++int sme_trap_za_trigger(struct tdescr *td)
++{
++	/* ZERO ZA */
++	asm volatile(".inst 0xc00800ff");
++
++	return 0;
++}
++
++int sme_trap_za_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	return 1;
++}
++
++struct tdescr tde = {
++	.name = "SME ZA trap",
++	.descr = "Check that we get a SIGILL if we access ZA without enabling",
++	.timeout = 3,
++	.sanity_disabled = true,
++	.trigger = sme_trap_za_trigger,
++	.run = sme_trap_za_run,
++	.sig_ok = SIGILL,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_vl.c b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+new file mode 100644
+index 000000000000..13ff3b35cbaf
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Check that the SME vector length reported in signal contexts is the
++ * expected one.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++unsigned int vl;
++
++static bool get_sme_vl(struct tdescr *td)
++{
++	int ret = prctl(PR_SME_GET_VL);
++	if (ret == -1)
++		return false;
++
++	vl = ret;
++
++	return true;
++}
++
++static int sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct za_context *za;
++
++	/* Get a signal context which should have a ZA frame in it */
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, ZA_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No ZA context\n");
++		return 1;
++	}
++	za = (struct za_context *)head;
++
++	if (za->vl != vl) {
++		fprintf(stderr, "ZA sigframe VL %u, expected %u\n",
++			za->vl, vl);
++		return 1;
++	} else {
++		fprintf(stderr, "got expected VL %u\n", vl);
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "SME VL",
++	.descr = "Check that we get the right SME VL reported",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = get_sme_vl,
++	.run = sme_vl,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+new file mode 100644
+index 000000000000..9022a6cab4b3
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
+@@ -0,0 +1,135 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that the streaming SVE register context in signal frames is
++ * set up as expected.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
++
++static bool sme_get_vls(struct tdescr *td)
++{
++	int vq, vl;
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SME_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
++
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least one VL */
++	if (nvls < 1) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
++}
++
++static void setup_ssve_regs(void)
++{
++	/* smstart sm; real data is TODO */
++	asm volatile(".inst 0xd503437f" : : : );
++}
++
++static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
++			 unsigned int vl)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct sve_context *ssve;
++	int ret;
++
++	fprintf(stderr, "Testing VL %d\n", vl);
++
++	ret = prctl(PR_SME_SET_VL, vl);
++	if (ret != vl) {
++		fprintf(stderr, "Failed to set VL, got %d\n", ret);
++		return 1;
++	}
++
++	/*
++	 * Get a signal context which should have a SVE frame and registers
++	 * in it.
++	 */
++	setup_ssve_regs();
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No SVE context\n");
++		return 1;
++	}
++
++	ssve = (struct sve_context *)head;
++	if (ssve->vl != vl) {
++		fprintf(stderr, "Got VL %d, expected %d\n", ssve->vl, vl);
++		return 1;
++	}
++
++	/* The actual size validation is done in get_current_context() */
++	fprintf(stderr, "Got expected size %u and VL %d\n",
++		head->size, ssve->vl);
++
++	return 0;
++}
++
++static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	int i;
++
++	for (i = 0; i < nvls; i++) {
++		/*
++		 * TODO: the signal test helpers can't currently cope
++		 * with signal frames bigger than struct sigcontext,
++		 * skip VLs that will trigger that.
++		 */
++		if (vls[i] > 64) {
++			printf("Skipping VL %u due to stack size\n", vls[i]);
++			continue;
++		}
++
++		if (do_one_sme_vl(td, si, uc, vls[i]))
++			return 1;
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "Streaming SVE registers",
++	.descr = "Check that we get the right Streaming SVE registers reported",
++	/*
++	 * We shouldn't require FA64 but things like memset() used in the
++	 * helpers might use unsupported instructions so for now disable
++	 * the test unless we've got the full instruction set.
++	 */
++	.feats_required = FEAT_SME | FEAT_SME_FA64,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = sme_regs,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/za_regs.c b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
+new file mode 100644
+index 000000000000..b94e4f99fcac
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that the ZA register context in signal frames is set up as
++ * expected.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++struct fake_sigframe sf;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
++
++static bool sme_get_vls(struct tdescr *td)
++{
++	int vq, vl;
++
++	/*
++	 * Enumerate up to SVE_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SVE_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
++
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least one VL */
++	if (nvls < 1) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
++}
++
++static void setup_za_regs(void)
++{
++	/* smstart za; real data is TODO */
++	asm volatile(".inst 0xd503457f" : : : );
++}
++
++static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
++			 unsigned int vl)
++{
++	size_t resv_sz, offset;
++	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
++	struct za_context *za;
++
++	fprintf(stderr, "Testing VL %d\n", vl);
++
++	if (prctl(PR_SME_SET_VL, vl) != vl) {
++		fprintf(stderr, "Failed to set VL\n");
++		return 1;
++	}
++
++	/*
++	 * Get a signal context which should have a SVE frame and registers
++	 * in it.
++	 */
++	setup_za_regs();
++	if (!get_current_context(td, &sf.uc))
++		return 1;
++
++	resv_sz = GET_SF_RESV_SIZE(sf);
++	head = get_header(head, ZA_MAGIC, resv_sz, &offset);
++	if (!head) {
++		fprintf(stderr, "No ZA context\n");
++		return 1;
++	}
++
++	za = (struct za_context *)head;
++	if (za->vl != vl) {
++		fprintf(stderr, "Got VL %d, expected %d\n", za->vl, vl);
++		return 1;
++	}
++
++	/* The actual size validation is done in get_current_context() */
++	fprintf(stderr, "Got expected size %u and VL %d\n",
++		head->size, za->vl);
++
++	return 0;
++}
++
++static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	int i;
++
++	for (i = 0; i < nvls; i++) {
++		/*
++		 * TODO: the signal test helpers can't currently cope
++		 * with signal frames bigger than struct sigcontext,
++		 * skip VLs that will trigger that.
++		 */
++		if (vls[i] > 32) {
++			printf("Skipping VL %u due to stack size\n", vls[i]);
++			continue;
++		}
++
++		if (do_one_sme_vl(td, si, uc, vls[i]))
++			return 1;
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "ZA register",
++	.descr = "Check that we get the right ZA registers reported",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = sme_regs,
++};
 -- 
 2.30.2
 
