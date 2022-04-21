@@ -2,58 +2,211 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58AA3C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Apr 2022 20:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B102C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Apr 2022 22:50:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392168AbiDUUGF (ORCPT
+        id S233045AbiDUWwy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Apr 2022 16:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        Thu, 21 Apr 2022 18:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392165AbiDUUGE (ORCPT
+        with ESMTP id S1391913AbiDUWwb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 16:06:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825C649FB7;
-        Thu, 21 Apr 2022 13:03:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C00461D1D;
-        Thu, 21 Apr 2022 20:03:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352ACC385A1;
-        Thu, 21 Apr 2022 20:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650571393;
-        bh=Aq9XfMUM5vNTE1Fx5se8LnP97Njf85xBlqPbEYPalh0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rTK9QaAXRP9bzz5ylD7Y8FPwLWC0cg0IzJhupm4/2Ttqd27Z7Iel+6OTiMI0+jKvi
-         ZsQ5HZiIKpghu7h4Ib6dIzxPBWGP/t74oQeef06i+B1jTv6JJ+ft31HzkwiP2Bh9on
-         bkDM05lpNu/hr+bNFQu1LOV0im02Ob+tvbC4dKCE=
-Date:   Thu, 21 Apr 2022 13:03:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] selftest/vm: verify remap destination address in
- mremap_test
-Message-Id: <20220421130312.45122e12437c017dcb676342@linux-foundation.org>
-In-Reply-To: <76cd8347-a8d0-3b56-a202-17ba2a73503d@linuxfoundation.org>
-References: <20220420215721.4868-1-sidhartha.kumar@oracle.com>
-        <20220420215721.4868-2-sidhartha.kumar@oracle.com>
-        <76cd8347-a8d0-3b56-a202-17ba2a73503d@linuxfoundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Thu, 21 Apr 2022 18:52:31 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3302B46B09
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 15:49:39 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f4dc56af69so21195687b3.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 15:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=xa3gPtQxiIaZQi4cOdGfuCjGLSoIDga5By+KnB16kpE=;
+        b=WDlmKDHDZdMB81vcHg2wWwoZSgM+ke7xK/5wdN1pMuGhi2snEtkLZRZojK+iBRPim8
+         j2+0mQW+4OmahwojdP5OQ9Bbj8QhExOsbr3qCM3HO4JesmgSTyiqJqnaQUlk1fxXIYDq
+         eMtNdpAESyzwOwHEP01uBBXFslQy4/EPjk5FrJQ5z86PhWDSqoOA5OyfI7wyu0Iwd0Z2
+         CZIB3lS9ph+NQvfYLwZ0w4NhZI6PRNorTGePhPTk9SpAoDEysEFQOYIvUYIjI5yH02dF
+         0qQfaKFYxHfeKQk035UW+lrYG5/G2ok2BQt4OI3iVW5xNSv67TCS8nig7Ddiqn9vC776
+         +fGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=xa3gPtQxiIaZQi4cOdGfuCjGLSoIDga5By+KnB16kpE=;
+        b=z9rw2n9qNKvr+8ZDuxJ3XOE2qmmqP/5RzxXMJLyRyITLo1aIE/tQ4n+JvhRccUoEix
+         6WwKGMw+Au4xE2rPPCKIwCE01gxoPdjfrYSLwwS7cmdI6Rvzdj2Zw0pRuT/6clxVTDSa
+         6z9OVQQCayEQozXipB7FVDaa7QpOpAMWusyoXPpUqH8hh5YsjvwPT62OBnKjQHIpLJo0
+         WheO885N02DRpSUjcEupcMBp3aHZ8UmcFnFe/lJDMyplQ6p6QkQy2QJIMjUiHAw0dUxN
+         CxDtoF0ybf3vJs04X1+H5NlqiKUZp4eiD2o4pZpCA9D47Sk7c7ydgErMUPdX38S3HI0T
+         p9nw==
+X-Gm-Message-State: AOAM530xtdaCVQimbZfPwm11IhGIl735AWiu5USzN+Jk/gUHZCHFrvi8
+        Ry90iBeqN92OBra7Jr/YY/WruJmP9/XEEvpQnsX2
+X-Google-Smtp-Source: ABdhPJyTTCf2svggIwr9nVzNCUTwcDrim/NzWmwq3A8at+Bmgx+n1PF/K5eXW8gfPrSMeg8bcOnzbQUvmcRh2a6eONb+
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:1cc4:3b55:a67d:61fa])
+ (user=axelrasmussen job=sendgmr) by 2002:a5b:24e:0:b0:63d:cba0:3d55 with SMTP
+ id g14-20020a5b024e000000b0063dcba03d55mr1880487ybp.613.1650581378449; Thu,
+ 21 Apr 2022 15:49:38 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:49:28 -0700
+In-Reply-To: <20220421224928.1848230-1-axelrasmussen@google.com>
+Message-Id: <20220421224928.1848230-2-axelrasmussen@google.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220421224928.1848230-1-axelrasmussen@google.com>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+Subject: [PATCH 2/2] selftests: vm: fix shellcheck warnings in run_vmtests.sh
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 21 Apr 2022 13:31:56 -0600 Shuah Khan <skhan@linuxfoundation.org> wrote:
+These might not be issues yet, but they make the script more fragile.
+Also by fixing them we give a better example to future readers, who
+might copy/paste or otherwise re-use snippets from our script.
 
-> Andrew, please let me know if you would like me to take this
-> through kselftest tree.
+- Use "read -r", since we don't ever want read to be interpreting '\'
+  characters as escape sequences...
+- Quote variables, to deal with spaces properly.
+- Use $() instead of the older and harder-to-nest ``.
+- Get rid of superfluous "$" prefixes inside arithmetic $(()).
 
-I'm easy.  If it turns up in linux-next via your tree, I drop the -mm copy.
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/vm/run_vmtests.sh | 55 +++++++++++------------
+ 1 file changed, 27 insertions(+), 28 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index 2d5a3da42cbe..a2302b5faaf2 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -9,12 +9,12 @@ mnt=./huge
+ exitcode=0
+ 
+ #get huge pagesize and freepages from /proc/meminfo
+-while read name size unit; do
++while read -r name size unit; do
+ 	if [ "$name" = "HugePages_Free:" ]; then
+-		freepgs=$size
++		freepgs="$size"
+ 	fi
+ 	if [ "$name" = "Hugepagesize:" ]; then
+-		hpgsize_KB=$size
++		hpgsize_KB="$size"
+ 	fi
+ done < /proc/meminfo
+ 
+@@ -30,27 +30,26 @@ needmem_KB=$((half_ufd_size_MB * 2 * 1024))
+ 
+ #set proper nr_hugepages
+ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+-	nr_hugepgs=`cat /proc/sys/vm/nr_hugepages`
++	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
+ 	needpgs=$((needmem_KB / hpgsize_KB))
+ 	tries=2
+-	while [ $tries -gt 0 ] && [ $freepgs -lt $needpgs ]; do
+-		lackpgs=$(( $needpgs - $freepgs ))
++	while [ "$tries" -gt 0 ] && [ "$freepgs" -lt "$needpgs" ]; do
++		lackpgs=$((needpgs - freepgs))
+ 		echo 3 > /proc/sys/vm/drop_caches
+-		echo $(( $lackpgs + $nr_hugepgs )) > /proc/sys/vm/nr_hugepages
+-		if [ $? -ne 0 ]; then
++		if ! echo $((lackpgs + nr_hugepgs)) > /proc/sys/vm/nr_hugepages; then
+ 			echo "Please run this test as root"
+ 			exit $ksft_skip
+ 		fi
+-		while read name size unit; do
++		while read -r name size unit; do
+ 			if [ "$name" = "HugePages_Free:" ]; then
+ 				freepgs=$size
+ 			fi
+ 		done < /proc/meminfo
+ 		tries=$((tries - 1))
+ 	done
+-	if [ $freepgs -lt $needpgs ]; then
++	if [ "$freepgs" -lt "$needpgs" ]; then
+ 		printf "Not enough huge pages available (%d < %d)\n" \
+-		       $freepgs $needpgs
++		       "$freepgs" "$needpgs"
+ 		exit 1
+ 	fi
+ else
+@@ -60,11 +59,11 @@ fi
+ 
+ #filter 64bit architectures
+ ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
+-if [ -z $ARCH ]; then
+-  ARCH=`uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/'`
++if [ -z "$ARCH" ]; then
++	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
+ fi
+ VADDR64=0
+-echo "$ARCH64STR" | grep $ARCH && VADDR64=1
++echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
+ 
+ # Usage: run_test [test binary] [arbitrary test arguments...]
+ run_test() {
+@@ -85,28 +84,28 @@ run_test() {
+ 	fi
+ }
+ 
+-mkdir $mnt
+-mount -t hugetlbfs none $mnt
++mkdir "$mnt"
++mount -t hugetlbfs none "$mnt"
+ 
+ run_test ./hugepage-mmap
+ 
+-shmmax=`cat /proc/sys/kernel/shmmax`
+-shmall=`cat /proc/sys/kernel/shmall`
++shmmax=$(cat /proc/sys/kernel/shmmax)
++shmall=$(cat /proc/sys/kernel/shmall)
+ echo 268435456 > /proc/sys/kernel/shmmax
+ echo 4194304 > /proc/sys/kernel/shmall
+ run_test ./hugepage-shm
+-echo $shmmax > /proc/sys/kernel/shmmax
+-echo $shmall > /proc/sys/kernel/shmall
++echo "$shmmax" > /proc/sys/kernel/shmmax
++echo "$shmall" > /proc/sys/kernel/shmall
+ 
+ run_test ./map_hugetlb
+ 
+-run_test ./hugepage-mremap $mnt/huge_mremap
+-rm -f $mnt/huge_mremap
++run_test ./hugepage-mremap "$mnt"/huge_mremap
++rm -f "$mnt"/huge_mremap
+ 
+ run_test ./hugepage-vmemmap
+ 
+-run_test ./hugetlb-madvise $mnt/madvise-test
+-rm -f $mnt/madvise-test
++run_test ./hugetlb-madvise "$mnt"/madvise-test
++rm -f "$mnt"/madvise-test
+ 
+ echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
+ echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+@@ -124,13 +123,13 @@ run_test ./gup_test -ct -F 0x1 0 19 0x1000
+ run_test ./userfaultfd anon 20 16
+ # Test requires source and destination huge pages.  Size of source
+ # (half_ufd_size_MB) is passed as argument to test.
+-run_test ./userfaultfd hugetlb $half_ufd_size_MB 32
++run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+ run_test ./userfaultfd shmem 20 16
+ 
+ #cleanup
+-umount $mnt
+-rm -rf $mnt
+-echo $nr_hugepgs > /proc/sys/vm/nr_hugepages
++umount "$mnt"
++rm -rf "$mnt"
++echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+ 
+ run_test ./compaction_test
+ 
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
+
