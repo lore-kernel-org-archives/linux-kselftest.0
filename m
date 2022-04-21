@@ -2,79 +2,109 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4864C433F5
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Apr 2022 14:50:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59777C433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Apr 2022 15:29:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386977AbiDUOxe (ORCPT
+        id S1390076AbiDUPcH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Apr 2022 10:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        Thu, 21 Apr 2022 11:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390047AbiDUOxX (ORCPT
+        with ESMTP id S1390073AbiDUPcG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 10:53:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632181BE94;
-        Thu, 21 Apr 2022 07:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A906E61A90;
-        Thu, 21 Apr 2022 14:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A648C385AA;
-        Thu, 21 Apr 2022 14:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650552612;
-        bh=hi1BHCF9UrqgrKaE8tKFI8d1XD0rxWot5QXbcog6rhU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vAta382Hs2CpbnAFkAMlXdGd/FCND3QVA3inG3bcNJNmV5a66iVYDFJSpS088fxw9
-         SU/R4v8G8qPZ6jDglNeUwKoUQdWRfu9eDyscOs/1dYCAn5hLZ9I6DXRkLJIXiM3S+g
-         p1sO4eF4jvBz0eOxEd/ZP2Quv1g1BpznzJxVJqQu15CBef68Zb6cvVHNSeh8GpD6ey
-         C6/CDitsxKJBeSELkrMoJMnuifX1N4l78EKiTnCU18bh0hEFtj7ZHllHDPLDHneHhA
-         iliHXPvSv/g5KHsrn5M4ao+wT9tIuqMTblK51ELSRg/SUqxg5yXxRZbwtg2Hb1E4D0
-         DppWlxHXPgSYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3D0BE8DD85;
-        Thu, 21 Apr 2022 14:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 21 Apr 2022 11:32:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F12427D9;
+        Thu, 21 Apr 2022 08:29:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9226B210E8;
+        Thu, 21 Apr 2022 15:29:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650554954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RV5rQtKD1L0kzu5MzZI5K9lX63PDvyISkNn1Gj3yB4c=;
+        b=wg5OXcqUYEx1GH/gW/JMLrPS3wcK6OHp0zGR2Onv9lH29Ffx2JCbbHlPhOdCy7IP9lujZ5
+        SF6bd294Wd65NceIvCOeyT1tUoxEW2/XHF9L2XrFSDXxDKkPlO2rjsYRCLJ3l6GQCbdBvY
+        XQJZn8RonhFCJHN/C71W7lHTDV/82ng=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650554954;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RV5rQtKD1L0kzu5MzZI5K9lX63PDvyISkNn1Gj3yB4c=;
+        b=sNE19Ip2mfrijXTfQT6xNI2DCmza4USfwXmi/DKeDC3Yx5Zlk9KIO3B8idnt88U5tCj8zK
+        WTzodxUrV9dktxDg==
+Received: from alsa1.nue.suse.com (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 8910B2C14E;
+        Thu, 21 Apr 2022 15:29:14 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Nick Terrell <terrelln@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/5] selftests: firmware: Use smaller dictionary for XZ compression
+Date:   Thu, 21 Apr 2022 17:29:05 +0200
+Message-Id: <20220421152908.4718-3-tiwai@suse.de>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220421152908.4718-1-tiwai@suse.de>
+References: <20220421152908.4718-1-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix attach tests retcode checks
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165055261192.3130.12571525492244740722.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Apr 2022 14:50:11 +0000
-References: <20220421130104.1582053-1-asavkov@redhat.com>
-In-Reply-To: <20220421130104.1582053-1-asavkov@redhat.com>
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     laoar.shao@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+The xz -9 option leads to an unnecessarily too large dictionary that
+isn't really suitable for the kernel firmware loader.  Pass the
+dictionary size explicitly, instead.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+While we're at it, make the xz command call defined in $RUN_XZ for
+simplicity.
 
-On Thu, 21 Apr 2022 15:01:04 +0200 you wrote:
-> Switching to libbpf 1.0 API broke test_sock and test_sysctl as they
-> check for return of bpf_prog_attach to be exactly -1. Switch the check
-> to '< 0' instead.
-> 
-> Fixes: b858ba8c52b6 ("selftests/bpf: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK")
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> 
-> [...]
+Fixes: 108ae07c5036 ("selftests: firmware: Add compressed firmware tests")
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ tools/testing/selftests/firmware/fw_filesystem.sh | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix attach tests retcode checks
-    https://git.kernel.org/bpf/bpf-next/c/920fd5e1771d
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
+index c2a2a100114b..731f011def78 100755
+--- a/tools/testing/selftests/firmware/fw_filesystem.sh
++++ b/tools/testing/selftests/firmware/fw_filesystem.sh
+@@ -11,6 +11,8 @@ TEST_REQS_FW_SET_CUSTOM_PATH="yes"
+ TEST_DIR=$(dirname $0)
+ source $TEST_DIR/fw_lib.sh
+ 
++RUN_XZ="xz -C crc32 --lzma2=dict=2MiB"
++
+ check_mods
+ check_setup
+ verify_reqs
+@@ -410,9 +412,9 @@ test_request_firmware_nowait_custom()
+ 	RANDOM_FILE_PATH=$(setup_random_file)
+ 	RANDOM_FILE="$(basename $RANDOM_FILE_PATH)"
+ 	if [ "$2" = "both" ]; then
+-		xz -9 -C crc32 -k $RANDOM_FILE_PATH
++		$RUN_XZ -k $RANDOM_FILE_PATH
+ 	elif [ "$2" = "xzonly" ]; then
+-		xz -9 -C crc32 $RANDOM_FILE_PATH
++		$RUN_XZ $RANDOM_FILE_PATH
+ 	fi
+ 	config_set_name $RANDOM_FILE
+ 	config_trigger_async
+@@ -501,7 +503,7 @@ test_request_partial_firmware_into_buf_nofile 2 10
+ test "$HAS_FW_LOADER_COMPRESS" != "yes" && exit 0
+ 
+ # test with both files present
+-xz -9 -C crc32 -k $FW
++$RUN_XZ -k $FW
+ config_set_name $NAME
+ echo
+ echo "Testing with both plain and xz files present..."
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.31.1
 
