@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6551AC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4067C4321E
 	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Apr 2022 23:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442706AbiDUXrl (ORCPT
+        id S1442733AbiDUXrm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Apr 2022 19:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        Thu, 21 Apr 2022 19:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442734AbiDUXrh (ORCPT
+        with ESMTP id S1442751AbiDUXrk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Apr 2022 19:47:37 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3372B3C73E
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 83-20020a630556000000b003aa61747c38so3598413pgf.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 16:44:46 -0700 (PDT)
+        Thu, 21 Apr 2022 19:47:40 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9993648893
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 16:44:49 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id x23-20020a170902b41700b0015906c1ea31so3278704plr.20
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Apr 2022 16:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=o1jm2ZxrobVfc+EDXZbKA8synQY3urRJFo8ts6M9Cos=;
-        b=XNmIj+vh/zg85pOZ7hddsPc4rZoBWgPyUKppuibPQ8HpozXmQF4+KbncIhebNDLW+A
-         OaXTK2I3Y4FSfd6Gk2xjKvidVm8LAaC0kUVGEo9TUpGjqdno7WSghhitFdSbSpl49CsV
-         tN/y2CDjCmmhUJ5bWM3jDcayzcK/VRUFAN/fq1h0P/eGY5Hy+hXEJyzvjDolAnIyIh8w
-         7uodhfP1m0/4SgHnVku88XUlvSW+55VzyEWrQhAUPNeD6F+CC6uOkZE3RyW5PPK9/T9U
-         kH6ybVBPt6zTUU/GcTYAtffLbYejeX7CoHq85fV8abFrT+jgJziiU3RQIdVNZSFNsFws
-         rRVA==
+        bh=soZcA9y3PeE+zbNMS5WF05IaFn1Ub9nCQnWDGl/9EM4=;
+        b=AMOxrzCggH4xAXjA65k6jRVjeYiHvCQ4JBuinSbQFuHWjpOZVImwxNzZ4vHPZohQTB
+         aXciCJTbhyQ9+Fe7fHynuCvh/GMWKc3btZ9Y358IdMT3cFDnaS8nhl8U83WMeiZ8Ithp
+         MPQW59CsoBRg/kR2IuaK+bMzzTxWWtYyKW/Dy7he+lQj4bZ/W17RnhFraPRXsfm66/d7
+         5UbhQH01hqjEcs/bA2iTiTpfx8hnyPldqhb6oZiRPAgE1LWc9rycFDzbTK1wLpo4gCLg
+         /eJv/edTk29F2NU8C8gWTD76IZam53QbHxr/hDRN522g8VA/T1AOWy7SPpB7vGrVABsz
+         FexA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=o1jm2ZxrobVfc+EDXZbKA8synQY3urRJFo8ts6M9Cos=;
-        b=4grLz5FDdi0/3E6PQtEmBFV/zH4KUiSLqaNINQH/qoP5jCwFb0xgSdp+WY+JXIXgdt
-         b45QaDmKO+CdXjArF5KqnpdaxVSh5vI8VLa9ywdEsIQ0JGmxHTH1O3I+5CHSwkMqpdh9
-         5N8m7tLJvepnbLdB9hx+OJ6lsXAj2UwXiiPkw+bAVuHw0Wb1oiIMd8vj1SEMgU3lZmu4
-         Q4xux5FFy0e4/4650EwFdDvZ2ZQdQ2J7zEOfR/Op23singujiFN+s2baYe/wdCg2OzWw
-         7wiQRCPJaE8edpRCXUMOrr0e7rUgFZ1PHZVZLMwuPYoxo+TUuorCSvOzE8rK0wOYikIU
-         Dn/A==
-X-Gm-Message-State: AOAM530p5KOc+vMOSaVi1FZ2aAYTsBjoOSHzBe9OPzECi87KZlBeceHk
-        Y+oiDqYfAirwVj7+WfgZlqXDNvH8uappeFqt
-X-Google-Smtp-Source: ABdhPJxtoageBQNYvSk1VtKpcFUVPUrVFQmq32PJxpSAW3BoTHti1Uz9DhnW0LOQD3FUjL5L64RLR2rvuttIZXXf
+        bh=soZcA9y3PeE+zbNMS5WF05IaFn1Ub9nCQnWDGl/9EM4=;
+        b=Ee/G8rfM+hA1kFkwp/pW4tqXzTqSnhSgb60wXX1YrJ5br0tNU+pjSY8q0AzfQpMIs2
+         j3+Gy6d80jQEmK9FILUzhVhra6E2wZ+C1vLfus+SSLwvx2R7Vj5BBhWyeBAl0q4QoZhj
+         DfYcmf/EtweN+5zjngW6Ad5RinF/WWtWo5/LIXLjG7ys5emhQyG5qZipNd+thL2dXGdV
+         6i7KUPl/JAzDzG5y0NF9B38MWuHanUorMR+JKZHTHmkPnr0dbjX/pBa5h00jnCXOjqNL
+         zyU/6cqZ0ymnlhWysq9AsENwfpfU1OiZZCIThHMVP69+0NZtMcAWyuyoNXjDUZJ7U8jT
+         iWSg==
+X-Gm-Message-State: AOAM530YAuKril9NwjhfRPGx9oa1SobKaT4gUcHCcbwaKdKy1L8ZTgbA
+        HIKeGRhtAljfRRAAhVqHwLmz+xFaNqaZI3XX
+X-Google-Smtp-Source: ABdhPJz2CcjMs+n1pq6zI6202/dU8xhtLt6Efq3KS5h9gllRzFGCi7i+ft39wZ54kqGMAmjNN828QLIvEM5o94Aq
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90b:4c85:b0:1d4:bc0b:90eb with SMTP
- id my5-20020a17090b4c8500b001d4bc0b90ebmr2179433pjb.171.1650584685622; Thu,
- 21 Apr 2022 16:44:45 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 23:44:24 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:90b:2384:b0:1cb:5223:9dc4 with SMTP
+ id mr4-20020a17090b238400b001cb52239dc4mr191635pjb.1.1650584688532; Thu, 21
+ Apr 2022 16:44:48 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 23:44:26 +0000
 In-Reply-To: <20220421234426.3494842-1-yosryahmed@google.com>
-Message-Id: <20220421234426.3494842-3-yosryahmed@google.com>
+Message-Id: <20220421234426.3494842-5-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220421234426.3494842-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v4 2/4] selftests: cgroup: return -errno from
- cg_read()/cg_write() on failure
+Subject: [PATCH v4 4/4] selftests: cgroup: add a selftest for memory.reclaim
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
@@ -81,123 +80,119 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, cg_read()/cg_write() returns 0 on success and -1 on failure.
-Modify them to return the -errno on failure.
+Add a new test for memory.reclaim that verifies that the interface
+correctly reclaims memory as intended, from both anon and file pages.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- tools/testing/selftests/cgroup/cgroup_util.c | 44 +++++++++-----------
- 1 file changed, 19 insertions(+), 25 deletions(-)
+ .../selftests/cgroup/test_memcontrol.c        | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index dbaa7aabbb4a..e6f3679cdcc0 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -19,6 +19,7 @@
- #include "cgroup_util.h"
- #include "../clone3/clone3_selftests.h"
- 
-+/* Returns read len on success, or -errno on failure. */
- static ssize_t read_text(const char *path, char *buf, size_t max_len)
- {
- 	ssize_t len;
-@@ -26,35 +27,29 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
- 
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0)
--		return fd;
-+		return -errno;
- 
- 	len = read(fd, buf, max_len - 1);
--	if (len < 0)
--		goto out;
- 
--	buf[len] = 0;
--out:
-+	if (len >= 0)
-+		buf[len] = 0;
-+
- 	close(fd);
--	return len;
-+	return len < 0 ? -errno : len;
- }
- 
-+/* Returns written len on success, or -errno on failure. */
- static ssize_t write_text(const char *path, char *buf, ssize_t len)
- {
- 	int fd;
- 
- 	fd = open(path, O_WRONLY | O_APPEND);
- 	if (fd < 0)
--		return fd;
-+		return -errno;
- 
- 	len = write(fd, buf, len);
--	if (len < 0) {
--		close(fd);
--		return len;
--	}
--
- 	close(fd);
--
--	return len;
-+	return len < 0 ? -errno : len;
- }
- 
- char *cg_name(const char *root, const char *name)
-@@ -87,16 +82,16 @@ char *cg_control(const char *cgroup, const char *control)
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index f2ffb3a30194..5f7c20de2426 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -760,6 +760,91 @@ static int test_memcg_max(const char *root)
  	return ret;
  }
  
-+/* Returns 0 on success, or -errno on failure. */
- int cg_read(const char *cgroup, const char *control, char *buf, size_t len)
++/*
++ * This test checks that memory.reclaim reclaims the given
++ * amount of memory (from both anon and file).
++ */
++static int test_memcg_reclaim(const char *root)
++{
++	int ret = KSFT_FAIL, fd, retries;
++	char *memcg;
++	long current, to_reclaim;
++	char buf[64];
++
++	memcg = cg_name(root, "memcg_test");
++	if (!memcg)
++		goto cleanup;
++
++	if (cg_create(memcg))
++		goto cleanup;
++
++	current = cg_read_long(memcg, "memory.current");
++	if (current != 0)
++		goto cleanup;
++
++	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
++	sleep(1);
++
++	fd = get_temp_fd();
++	if (fd < 0)
++		goto cleanup;
++
++	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
++	sleep(1);
++
++	current = cg_read_long(memcg, "memory.current");
++	if (!values_close(current, MB(100), 10))
++		goto cleanup;
++
++	/*
++	 * Reclaim until current reaches 30M, make sure to reclaim over 50M to
++	 * hit both anon and file.
++	 */
++	retries = 5;
++	while (true) {
++		int err;
++
++		current = cg_read_long(memcg, "memory.current");
++		to_reclaim = current - MB(30);
++
++		/*
++		 * We only keep looping if we get EAGAIN, which means we could
++		 * not reclaim the full amount.
++		 */
++		if (to_reclaim <= 0)
++			goto cleanup;
++
++
++		snprintf(buf, sizeof(buf), "%ld", to_reclaim);
++		err = cg_write(memcg, "memory.reclaim", buf);
++		if (!err) {
++			/*
++			 * If writing succeeds, then the written amount should have been
++			 * fully reclaimed (and maybe more).
++			 */
++			current = cg_read_long(memcg, "memory.current");
++			if (!values_close(current, MB(30), 3) && current > MB(30))
++				goto cleanup;
++			break;
++		}
++
++		/* The kernel could not reclaim the full amount, try again. */
++		if (err == -EAGAIN && retries--)
++			continue;
++
++		/* We got an unexpected error or ran out of retries. */
++		goto cleanup;
++	}
++
++	ret = KSFT_PASS;
++cleanup:
++	cg_destroy(memcg);
++	free(memcg);
++	close(fd);
++
++	return ret;
++}
++
+ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
  {
- 	char path[PATH_MAX];
-+	ssize_t ret;
- 
- 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
- 
--	if (read_text(path, buf, len) >= 0)
--		return 0;
--
--	return -1;
-+	ret = read_text(path, buf, len);
-+	return ret >= 0 ? 0 : ret;
- }
- 
- int cg_read_strcmp(const char *cgroup, const char *control,
-@@ -177,17 +172,15 @@ long cg_read_lc(const char *cgroup, const char *control)
- 	return cnt;
- }
- 
-+/* Returns 0 on success, or -errno on failure. */
- int cg_write(const char *cgroup, const char *control, char *buf)
- {
- 	char path[PATH_MAX];
--	ssize_t len = strlen(buf);
-+	ssize_t len = strlen(buf), ret;
- 
- 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
--
--	if (write_text(path, buf, len) == len)
--		return 0;
--
--	return -1;
-+	ret = write_text(path, buf, len);
-+	return ret == len ? 0 : ret;
- }
- 
- int cg_find_unified_root(char *root, size_t len)
-@@ -545,7 +538,8 @@ ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t
- 	else
- 		snprintf(path, sizeof(path), "/proc/%d/%s", pid, item);
- 
--	return read_text(path, buf, size);
-+	size = read_text(path, buf, size);
-+	return size < 0 ? -1 : size;
- }
- 
- int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
+ 	long mem_max = (long)arg;
+@@ -1263,6 +1348,7 @@ struct memcg_test {
+ 	T(test_memcg_high),
+ 	T(test_memcg_high_sync),
+ 	T(test_memcg_max),
++	T(test_memcg_reclaim),
+ 	T(test_memcg_oom_events),
+ 	T(test_memcg_swap_max),
+ 	T(test_memcg_sock),
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
