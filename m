@@ -2,270 +2,184 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF36C43219
-	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:35:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E52CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:44:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbiDVWid (ORCPT
+        id S233810AbiDVWrZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 22 Apr 2022 18:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        Fri, 22 Apr 2022 18:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbiDVWhu (ORCPT
+        with ESMTP id S233170AbiDVWrP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:37:50 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FED1F9E07
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:56 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c011e3e9so9979977b3.23
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:56 -0700 (PDT)
+        Fri, 22 Apr 2022 18:47:15 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6169239210E
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 15:07:44 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id h83so9997009iof.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 15:07:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZKwYZFMlPmL6KMhQQz8m//PR2YxeSx2kvEK7QsVigJI=;
-        b=csJYqjI7+4H3NJVJax9NGS3pNlt2RUYB3+3McYgDnf45op0d8iUq0yCVP4z+6JvUFf
-         2Cpb+TtSM43LXHqZExuKefroEz7gh03gyTWpMXuqRZSxtuP2YUeMnuRu69CM4h9NHqu1
-         Rt1m64uZho/RVKCFiWhSXEHProJQP+tXVbfJDgG/1mE9kiZDWXOLeAbrnJgOQ5uYKaBq
-         Baf2Z8XNif2KvlAHnovD2kwKU8KrPFdCWw6E/ubPmigUIOAAwqklhC5yORD60kwFj8M7
-         dV8w1yeJbu4JN5R08puEouNqPqaZwWoAvF3Gdbt5JP6S2N5c4GIRczR2DvpbQeHh3uEK
-         7FCA==
+        bh=YNHylfXe0yuI3nWPKEVPbWc3jAVoQ9y+hq0D/Seu+wY=;
+        b=lZeOnkWJfpNbpL47S03ry8Z3kSVOMOveo/jk2nJZUCVzPXBnjFkIA5qcm5wo/j9wal
+         dToQD7czP+VDPM078c7el16Q1aZe6nbNwzGDLS1XDXYwpVkpsNJqwJypOn7+to3xdWR8
+         3oKX/drZ7bmJalyV/wnad3jVhzCaQtJWOxf3Bm0ia6JFeq+CqiBT5j8Fw1M2JQ+4ETxm
+         QXwZMqup8qvcM15nXfDB1he5rvr4FY7BMBGzR2W4HvnyM4XtqFs6HzlCI7+q84UnMcKm
+         6XhvjRcKaCUidgoN7Z7ZOSeAKGYbwmIvKM8UEM2menTjD9cXKxT3sYopxGDu0HM62RIb
+         sEPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ZKwYZFMlPmL6KMhQQz8m//PR2YxeSx2kvEK7QsVigJI=;
-        b=5oHvFwFT3CeozHwDC/XfdndXjbaZsWlSathnKAbSZEXIezEW5EpJzr9Qlfd8uOTGtF
-         GfeE1fS7XwOm8Psg1oqIL5zeO5x0g+In+wHU8MxGH4kEXKR8+RiIrWmodU3Pfsqa0muv
-         wmnklnhCt+ez//zbrzQRonclze2z3owDVN35AzdtY5oXwGfF59irPCF2bGSexHUcwzsx
-         j5GPPWoo+gTTIvlxojElOtTjY+nHpbi9x8t4tchwJuO7zNGTiU0ib3gcb4KvI3GYRg+Q
-         42lF+Egu7EKEA2pAKjFVYeppp2zDWxy+/HWHgX8yAMd49BYpJPqAyCipjVZXfWl83QiE
-         LGvw==
-X-Gm-Message-State: AOAM533DDnCQgyfznilpUDEKl27YPUNiDu10OAfJEBpGVLg0oAVcySK+
-        d1jx/hdhgOzj25QruyGr0rvLS3inIX6pOeB9ndwb
-X-Google-Smtp-Source: ABdhPJwxCsTz9OxLMDOgPGwJ76n2p6bPU/yWKc6iqu2BypRG7Slj3og+uNJnovkB/PwFjYqyrErsxCwHfIK4qfTFl31r
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:7ba6:20ac:a8f7:1dbd])
- (user=axelrasmussen job=sendgmr) by 2002:a25:8382:0:b0:63d:6201:fa73 with
- SMTP id t2-20020a258382000000b0063d6201fa73mr6272316ybk.55.1650662995479;
- Fri, 22 Apr 2022 14:29:55 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:29:41 -0700
-In-Reply-To: <20220422212945.2227722-1-axelrasmussen@google.com>
-Message-Id: <20220422212945.2227722-3-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine grained
- access control
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YNHylfXe0yuI3nWPKEVPbWc3jAVoQ9y+hq0D/Seu+wY=;
+        b=1rq0hJqbaR/E8eoAEt2lPSE5bSYPfFSmAt3IKIkVlyKDSgWnqJaKyYhQ3S+dPMx6/8
+         Z5Ic9K8d5MXU/WbYGoozfVcl++OicwiOmQHtEzrg9U6bKwKTf+IHcs4Wvra+yN3wzSui
+         FjgL1N6wy9OGflBbXDrWmsE76zR4aaZZucJxsTodoNftk4CAtsYcgnHdamfsUUczuDAi
+         gIrzDJ2+yPj89It0ZmeYuQ7xRSfG9MdABtreI9d4dcWiPLoNluD0sWCxBlTN5pW3EtjP
+         1VeonOJ1B1IXgFbZeL+I2Lk3d9m4wR83QQbYUmLbxU2SQ8g8Bz2bPKG3PqnriKNzbZRD
+         lxIA==
+X-Gm-Message-State: AOAM530U+s3fG3uhEIXTYWEH6uVlBdh0Kqgfq9cdsdw6eBAUY4JhI53E
+        L921xUAYgYbnmpgFqyoNg3UW6H1tVGiP37LzrLOHh1akmp4=
+X-Google-Smtp-Source: ABdhPJwo+ze5pPYHakIgsi/peB9ZO2hJVC0Rs6hOgkZCZ+dBJmbZPicpRp+7K8Orccv9dtaFx0imB8ejZX4fb+fg/c8=
+X-Received: by 2002:a05:6638:12cb:b0:323:da89:2caa with SMTP id
+ v11-20020a05663812cb00b00323da892caamr2971436jas.314.1650665246174; Fri, 22
+ Apr 2022 15:07:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220421224928.1848230-1-axelrasmussen@google.com> <20220422145456.1e9f22220b1ad502aa56628d@linux-foundation.org>
+In-Reply-To: <20220422145456.1e9f22220b1ad502aa56628d@linux-foundation.org>
 From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
+Date:   Fri, 22 Apr 2022 15:06:49 -0700
+Message-ID: <CAJHvVciPBM7vRnruDZ3iuYMgwqapB2U6TBtD74s1P-40ZNRy6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: vm: refactor run_vmtests.sh to reduce boilerplate
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Historically, it has been shown that intercepting kernel faults with
-userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
-of time) can be exploited, or at least can make some kinds of exploits
-easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
-changed things so, in order for kernel faults to be handled by
-userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
-must be configured so that any unprivileged user can do it.
+Since this is a revert, I guess the diff is "backwards" -- meaning,
+others were proposing *adding* $ksft_skip handling to some tests?
 
-In a typical implementation of a hypervisor with live migration (take
-QEMU/KVM as one such example), we do indeed need to be able to handle
-kernel faults. But, both options above are less than ideal:
+if that's the case, then I agree none of those diffs are needed, my
+change should properly handle $ksft_skip for all tests now and in the
+future.
 
-- Toggling the sysctl increases attack surface by allowing any
-  unprivileged user to do it.
-
-- Granting the live migration process CAP_SYS_PTRACE gives it this
-  ability, but *also* the ability to "observe and control the
-  execution of another process [...], and examine and change [its]
-  memory and registers" (from ptrace(2)). This isn't something we need
-  or want to be able to do, so granting this permission violates the
-  "principle of least privilege".
-
-This is all a long winded way to say: we want a more fine-grained way to
-grant access to userfaultfd, without granting other additional
-permissions at the same time.
-
-To achieve this, add a /dev/userfaultfd misc device. This device
-provides an alternative to the userfaultfd(2) syscall for the creation
-of new userfaultfds. The idea is, any userfaultfds created this way will
-be able to handle kernel faults, without the caller having any special
-capabilities. Access to this mechanism is instead restricted using e.g.
-standard filesystem permissions.
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c                 | 79 ++++++++++++++++++++++++++------
- include/uapi/linux/userfaultfd.h |  4 ++
- 2 files changed, 69 insertions(+), 14 deletions(-)
-
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index aa0c47cb0d16..16d7573ab41a 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -29,6 +29,7 @@
- #include <linux/ioctl.h>
- #include <linux/security.h>
- #include <linux/hugetlb.h>
-+#include <linux/miscdevice.h>
- 
- int sysctl_unprivileged_userfaultfd __read_mostly;
- 
-@@ -65,6 +66,8 @@ struct userfaultfd_ctx {
- 	unsigned int flags;
- 	/* features requested from the userspace */
- 	unsigned int features;
-+	/* whether or not to handle kernel faults */
-+	bool handle_kernel_faults;
- 	/* released */
- 	bool released;
- 	/* memory mappings are changing because of non-cooperative event */
-@@ -410,13 +413,8 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
- 
- 	if (ctx->features & UFFD_FEATURE_SIGBUS)
- 		goto out;
--	if ((vmf->flags & FAULT_FLAG_USER) == 0 &&
--	    ctx->flags & UFFD_USER_MODE_ONLY) {
--		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
--			"sysctl knob to 1 if kernel faults must be handled "
--			"without obtaining CAP_SYS_PTRACE capability\n");
-+	if (!(vmf->flags & FAULT_FLAG_USER) && !ctx->handle_kernel_faults)
- 		goto out;
--	}
- 
- 	/*
- 	 * If it's already released don't get it. This avoids to loop
-@@ -2064,19 +2062,33 @@ static void init_once_userfaultfd_ctx(void *mem)
- 	seqcount_spinlock_init(&ctx->refile_seq, &ctx->fault_pending_wqh.lock);
- }
- 
--SYSCALL_DEFINE1(userfaultfd, int, flags)
-+static inline bool userfaultfd_allowed(bool is_syscall, int flags)
-+{
-+	bool kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
-+	bool allow_unprivileged = sysctl_unprivileged_userfaultfd;
-+
-+	/* userfaultfd(2) access is controlled by sysctl + capability. */
-+	if (is_syscall && kernel_faults) {
-+		if (!allow_unprivileged && !capable(CAP_SYS_PTRACE))
-+			return false;
-+	}
-+
-+	/*
-+	 * For /dev/userfaultfd, access is to be controlled using e.g.
-+	 * permissions on the device node. We assume this is correctly
-+	 * configured by userspace, so we simply allow access here.
-+	 */
-+
-+	return true;
-+}
-+
-+static int new_userfaultfd(bool is_syscall, int flags)
- {
- 	struct userfaultfd_ctx *ctx;
- 	int fd;
- 
--	if (!sysctl_unprivileged_userfaultfd &&
--	    (flags & UFFD_USER_MODE_ONLY) == 0 &&
--	    !capable(CAP_SYS_PTRACE)) {
--		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
--			"sysctl knob to 1 if kernel faults must be handled "
--			"without obtaining CAP_SYS_PTRACE capability\n");
-+	if (!userfaultfd_allowed(is_syscall, flags))
- 		return -EPERM;
--	}
- 
- 	BUG_ON(!current->mm);
- 
-@@ -2095,6 +2107,11 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
- 	refcount_set(&ctx->refcount, 1);
- 	ctx->flags = flags;
- 	ctx->features = 0;
-+	/*
-+	 * If UFFD_USER_MODE_ONLY is not set, then userfaultfd_allowed() above
-+	 * decided that kernel faults were allowed and should be handled.
-+	 */
-+	ctx->handle_kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
- 	ctx->released = false;
- 	atomic_set(&ctx->mmap_changing, 0);
- 	ctx->mm = current->mm;
-@@ -2110,8 +2127,42 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
- 	return fd;
- }
- 
-+SYSCALL_DEFINE1(userfaultfd, int, flags)
-+{
-+	return new_userfaultfd(true, flags);
-+}
-+
-+static int userfaultfd_dev_open(struct inode *inode, struct file *file)
-+{
-+	return 0;
-+}
-+
-+static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
-+{
-+	if (cmd != USERFAULTFD_IOC_NEW)
-+		return -EINVAL;
-+
-+	return new_userfaultfd(false, flags);
-+}
-+
-+static const struct file_operations userfaultfd_dev_fops = {
-+	.open = userfaultfd_dev_open,
-+	.unlocked_ioctl = userfaultfd_dev_ioctl,
-+	.compat_ioctl = compat_ptr_ioctl,
-+	.owner = THIS_MODULE,
-+	.llseek = noop_llseek,
-+};
-+
-+static struct miscdevice userfaultfd_misc = {
-+	.minor = MISC_DYNAMIC_MINOR,
-+	.name = "userfaultfd",
-+	.fops = &userfaultfd_dev_fops
-+};
-+
- static int __init userfaultfd_init(void)
- {
-+	WARN_ON(misc_register(&userfaultfd_misc));
-+
- 	userfaultfd_ctx_cachep = kmem_cache_create("userfaultfd_ctx_cache",
- 						sizeof(struct userfaultfd_ctx),
- 						0,
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index ef739054cb1c..032a35b3bbd2 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -12,6 +12,10 @@
- 
- #include <linux/types.h>
- 
-+/* ioctls for /dev/userfaultfd */
-+#define USERFAULTFD_IOC 0xAA
-+#define USERFAULTFD_IOC_NEW _IOWR(USERFAULTFD_IOC, 0x00, int)
-+
- /*
-  * If the UFFDIO_API is upgraded someday, the UFFDIO_UNREGISTER and
-  * UFFDIO_WAKE ioctls should be defined as _IOW and not as _IOR.  In
--- 
-2.36.0.rc2.479.g8af0fa9b8e-goog
-
+On Fri, Apr 22, 2022 at 2:55 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Thu, 21 Apr 2022 15:49:27 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
+>
+> > Previously, each test printed out its own header, dealt with its own
+> > return code, etc. By just putting this standard stuff in a function, we
+> > can delete > 300 lines from the script.
+> >
+> > This also makes adding future tests easier. And, it gets rid of various
+> > inconsistencies that already exist:
+> >
+> > - Some tests correctly deal with ksft_skip, but others don't.
+> > - Some tests just print the executable name, others print arguments, and
+> >   yet others print some comment in the header.
+> > - Most tests print out a header with two separator lines, but not the
+> >   HMM smoke test or the memfd_secret test, which only print one.
+> > - We had a redundant "exit" at the end, with all the boilerplate it's an
+> >   easy oversight.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >  tools/testing/selftests/vm/run_vmtests.sh | 459 +++-------------------
+> >  1 file changed, 64 insertions(+), 395 deletions(-)
+>
+> Well that's nice.
+>
+> There were a bunch of changes already pending in this file but I think
+> with this patch, they become unneeded.  So I just reverted them all.
+> please double check?
+>
+>
+> --- a/tools/testing/selftests/vm/run_vmtests.sh~revert-1
+> +++ a/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -162,32 +162,22 @@ echo "----------------------------------
+>  echo "running: gup_test -u # get_user_pages_fast() benchmark"
+>  echo "------------------------------------------------------"
+>  ./gup_test -u
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "------------------------------------------------------"
+>  echo "running: gup_test -a # pin_user_pages_fast() benchmark"
+>  echo "------------------------------------------------------"
+>  ./gup_test -a
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "------------------------------------------------------------"
+> @@ -195,16 +185,11 @@ echo "# Dump pages 0, 19, and 4096, usin
+>  echo "running: gup_test -ct -F 0x1 0 19 0x1000 # dump_page() test"
+>  echo "------------------------------------------------------------"
+>  ./gup_test -ct -F 0x1 0 19 0x1000
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "-------------------"
+> @@ -306,16 +291,11 @@ echo "-------------------"
+>  echo "running mremap_test"
+>  echo "-------------------"
+>  ./mremap_test
+> -ret_val=$?
+> -
+> -if [ $ret_val -eq 0 ]; then
+> -       echo "[PASS]"
+> -elif [ $ret_val -eq $ksft_skip ]; then
+> -        echo "[SKIP]"
+> -        exitcode=$ksft_skip
+> -else
+> +if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+> +else
+> +       echo "[PASS]"
+>  fi
+>
+>  echo "-----------------"
+> _
+>
