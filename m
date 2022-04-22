@@ -2,149 +2,73 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9E8C433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 17:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62E8AC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 18:43:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiDVRiV (ORCPT
+        id S229500AbiDVSp4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 22 Apr 2022 13:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        Fri, 22 Apr 2022 14:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiDVRhl (ORCPT
+        with ESMTP id S229581AbiDVSp4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:37:41 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABF7FE5EF;
-        Fri, 22 Apr 2022 10:34:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C02dUtDRKRM1g8mAG8TRFE7Ln3uGTMPC4rjsotQyZXHT0pCQwmJb5OQX60BWB7KGC1Gd5nVmdXmZ/x6CqyhB0Aa5qXinXfZvE5+OK3KsvhQYwx1AK9G0E+1d3BVx4OEhbOBxO0lZkfgweX3hfdjLNUPWafX8P7boGIfP8QGlSHkGREAiv9BW2nOXloa9+6VkzKsmEjic2jp2SfPPRo04Z+aSbQvAkn1dS+dhsH3Z5nvWnVxtc/FNrpRk5Dda8L38zlnhyM6FU34MBAKG0bTgvxkkcG9WKA1JHa7rHpGbyyttNLuscTJ11qfCwMS45wQWXDEz5pOvXqvGhK3uVfQxBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ceeGsQYgi1i09dOkw/xW9S/NUSgxrVXoQZ4vKjoj1Xc=;
- b=TU1Q/nztvaL3tPJDIbOttBfqfiT56YjcmirMYBaDqItk9E1phO7kAZxTOa30VbtZGGRGl4EjfOYqrYGkXJ2o2eFK6B5xbVnAlZfRKT0twL3KH3NPiUecC6ZWUxXlwRUgeGiHhXvETxZNZLnbNhOdOzcdazyt8jzB2n9tYnBhhX2ccIdId71czgsD7pggfF/8UNsSMl0wOW/DstYAajDqOZXPsiFk66TiKJlHtlfdbmNU47lqOIWWiTomN7gwX+mPQf9ZAiIC3DPAy2+0I5va6gA8g35krQTkRJRaeO+FN0j1+0hH35fD3S/1I47VqgLA0rZHGA3f+CXSYex2Klx8QA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ceeGsQYgi1i09dOkw/xW9S/NUSgxrVXoQZ4vKjoj1Xc=;
- b=Udo46AraQfap0sbrYPJTfACQs+4TR90j3riSv1tM0yvo0ZTD8oqBLILw9WwpsJxjGiSZw9z5v7I8HYqydKmRtg06hFyb/6JwnG9l5l2Ey3l8Jdi785z8DHirS7QnJZig/5plI19swldpq/EgbKCn3KPp2sfhhr5CJI7iQxA/vhIvEPtxH4Z2RYu4NSYBYrkdzQ3TmPXrqgdPA+YRtcMq3u8o7HqBBzz8VD8gKkcdFlfp9r+WgyZCUr2DEWa6Xs0DqzByDxrGHG92KsYTsJX/PB6/xpRrGP5GDfgL1i6U6X9hIUHdxTgZEfA+rKBl0tIHKP7OND1ILKOOCjeDmZ4WgQ==
-Received: from DS7PR03CA0355.namprd03.prod.outlook.com (2603:10b6:8:55::30) by
- MN2PR12MB3822.namprd12.prod.outlook.com (2603:10b6:208:166::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Fri, 22 Apr
- 2022 17:24:43 +0000
-Received: from DM6NAM11FT034.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:55:cafe::9e) by DS7PR03CA0355.outlook.office365.com
- (2603:10b6:8:55::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
- Transport; Fri, 22 Apr 2022 17:24:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- DM6NAM11FT034.mail.protection.outlook.com (10.13.173.47) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5186.14 via Frontend Transport; Fri, 22 Apr 2022 17:24:43 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 22 Apr
- 2022 17:24:42 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
- 2022 10:24:42 -0700
-Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Fri, 22 Apr
- 2022 10:24:34 -0700
-From:   Maxim Mikityanskiy <maximmi@nvidia.com>
-To:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>
-CC:     Tariq Toukan <tariqt@nvidia.com>, Martin KaFai Lau <kafai@fb.com>,
-        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David Ahern" <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        "Florent Revest" <revest@chromium.org>,
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>, <pabeni@redhat.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>
-Subject: [PATCH bpf-next v6 1/6] bpf: Use ipv6_only_sock in bpf_tcp_gen_syncookie
-Date:   Fri, 22 Apr 2022 20:24:17 +0300
-Message-ID: <20220422172422.4037988-2-maximmi@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220422172422.4037988-1-maximmi@nvidia.com>
-References: <20220422172422.4037988-1-maximmi@nvidia.com>
+        Fri, 22 Apr 2022 14:45:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432C31E1757
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 11:41:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37394B8321F
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 18:36:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269B7C385A4;
+        Fri, 22 Apr 2022 18:36:02 +0000 (UTC)
+Date:   Fri, 22 Apr 2022 19:35:59 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Salil Akerkar <Salil.Akerkar@arm.com>,
+        Basant Kumar Dwivedi <Basant.KumarDwivedi@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Luca Salabrino <luca.scalabrino@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v14 00/39] arm64/sme: Initial support for the Scalable
+ Matrix Extension
+Message-ID: <YmL1j9KH7nRVUYih@arm.com>
+References: <20220419112247.711548-1-broonie@kernel.org>
+ <65c761cedb3b6e56f4a03fd196a3a767@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2ff8327c-80a7-4e0f-ec81-08da2484fda0
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3822:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB38221B096CBBC8548740E2E6DCF79@MN2PR12MB3822.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +OkCaQOo9KH/cV45tzLBu19NIEPiE0zZllH9N/ILm6xEod/BnWn6Uotno3N7Gdmu7J3eQ3Q7PwXyzGQeV166vcIoEhr0TA3Ku9F2WPSAdbYgR6bso+/511fhUioyCY8GjrL5CUV1fv9KsNzO+5m8f1AicQQ/IWTOV7vcJVv5PHtnlrVsLkFCCfGCjsKhHYFjZXAR3yqNmoiz8nWYi74aQ+718aGkPVfvB89jLsI8/zwFWvCM6+okruN6TXnYVdGvsKV+ymCQzaI3W4qGEpabG8dnlwrMgiu29sXFqhDLo/ANEwxonIj3w0tICS9qyk8V6pqpO6pgZszoIixShvc5yvuW0qMQQDNC7pinbMMqHtR7dNyiXcWnnm38f2I89UIfqqpBJNw8CZlN6QMpNJySTzqQ0bXqklI1PpsAuKS8J5j7zUZLvkArXKtoF/xKMPIMZyxlnvfKcwGT7PazsYyKteJbUSFHzWK9YQ69nvPnbGA1SKwYr/bNMMOh4yKyRcXMwSY/iKATZ2fvZIk1zSUZ9BPBvxBm2f1x+edzRsVSN5LyZGUMt9JBqnkV/zPGt6rSRflbE0uZBlwfg+8wg8UVCQid8o1+gj7xCckNAsF3CS2aeXU7p1Duvw+Z+WYuSYiIEOywdKB+1bqXCotoKDo6DX1F7yCgConDjzcwl7FEFJVRKwMUFjFwFKbwYDAgowQkByMuSiiPWmCPwaxw0x0AaA==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(83380400001)(36756003)(70586007)(1076003)(70206006)(107886003)(336012)(2906002)(4326008)(86362001)(8676002)(316002)(110136005)(54906003)(40460700003)(7696005)(4744005)(6666004)(186003)(81166007)(26005)(426003)(356005)(508600001)(2616005)(5660300002)(47076005)(82310400005)(7416002)(8936002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 17:24:43.4717
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ff8327c-80a7-4e0f-ec81-08da2484fda0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT034.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3822
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65c761cedb3b6e56f4a03fd196a3a767@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Instead of querying the sk_ipv6only field directly, use the dedicated
-ipv6_only_sock helper.
+On Fri, Apr 22, 2022 at 06:10:27PM +0100, Marc Zyngier wrote:
+> On 2022-04-19 12:22, Mark Brown wrote:
+> > This series provides initial support for the ARMv9 Scalable Matrix
+> > Extension (SME).  SME takes the approach used for vectors in SVE and
+> > extends this to provide architectural support for matrix operations.  A
+> > more detailed overview can be found in [1].
+> 
+> For the KVM patches:
+> 
+> Reviewed-by: Marc Zyngier <maz@kernel.org>
+> 
+> Catalin: the KVM patches are likely to slash a bit with the
+> WFxT stuff as well. It'd be good to swap stable branches!
 
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Lorenz Bauer <lmb@cloudflare.com>
-Acked-by: Petar Penkov <ppenkov@google.com>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I queued patches 3-27 on the arm64 for-next/sme, the rest went on the
+for-next/kselftest branch but b4 didn't handle this well.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 8847316ee20e..207a13db5c80 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7099,7 +7099,7 @@ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk, void *, iph, u32, iph_len,
- 	 */
- 	switch (((struct iphdr *)iph)->version) {
- 	case 4:
--		if (sk->sk_family == AF_INET6 && sk->sk_ipv6only)
-+		if (sk->sk_family == AF_INET6 && ipv6_only_sock(sk))
- 			return -EINVAL;
- 
- 		mss = tcp_v4_get_syncookie(sk, iph, th, &cookie);
 -- 
-2.30.2
-
+Catalin
