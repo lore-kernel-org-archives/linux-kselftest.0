@@ -2,68 +2,161 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 830EBC433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 18:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4FBAC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiDVSyU (ORCPT
+        id S232856AbiDVWcR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 22 Apr 2022 14:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        Fri, 22 Apr 2022 18:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiDVSyT (ORCPT
+        with ESMTP id S232944AbiDVWcH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 14:54:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EB81FEC69
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 11:47:09 -0700 (PDT)
+        Fri, 22 Apr 2022 18:32:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3F0324C79;
+        Fri, 22 Apr 2022 14:54:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 749BA60EBA
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 18:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75413C385A4;
-        Fri, 22 Apr 2022 18:27:39 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] kselftest/arm64: Miscelaneous MTE test updates
-Date:   Fri, 22 Apr 2022 19:27:37 +0100
-Message-Id: <165065199613.1610925.5358882219916662365.b4-ty@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419103243.24774-1-broonie@kernel.org>
-References: <20220419103243.24774-1-broonie@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FBCFB832C3;
+        Fri, 22 Apr 2022 21:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4A48C385A4;
+        Fri, 22 Apr 2022 21:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650664497;
+        bh=BHXV0YOJHr2WM2YchlEQurnNcQ9G+9t5xI2geAAdRgY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iGGqtTPs/Shjsut4v8AhxTjmcP0yty7k0GpImOSyAPTRxxD261KW9ru192wle1d/g
+         adYtTm/zXG/dElLaOgX66EwhRPAZb0wlWlW9e0weRuVHMTfsNlfjyoW0DybS5Q4tol
+         pXMW/S6T5UanpnUXjYtXemKFzxfpHNEHTX/b0vV4=
+Date:   Fri, 22 Apr 2022 14:54:56 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests: vm: refactor run_vmtests.sh to reduce
+ boilerplate
+Message-Id: <20220422145456.1e9f22220b1ad502aa56628d@linux-foundation.org>
+In-Reply-To: <20220421224928.1848230-1-axelrasmussen@google.com>
+References: <20220421224928.1848230-1-axelrasmussen@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 19 Apr 2022 11:32:39 +0100, Mark Brown wrote:
-> This series is just a set of minor tweaks and improvements for the MTE
-> tests that I did while working on the asymmetric mode support for
-> userspace which seemed like they might be worth keeping even though the
-> prctl() for asymmetric mode got removed.
+On Thu, 21 Apr 2022 15:49:27 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
+
+> Previously, each test printed out its own header, dealt with its own
+> return code, etc. By just putting this standard stuff in a function, we
+> can delete > 300 lines from the script.
 > 
-> v2:
->  - Rebase onto v5.18-rc3
+> This also makes adding future tests easier. And, it gets rid of various
+> inconsistencies that already exist:
 > 
-> [...]
+> - Some tests correctly deal with ksft_skip, but others don't.
+> - Some tests just print the executable name, others print arguments, and
+>   yet others print some comment in the header.
+> - Most tests print out a header with two separator lines, but not the
+>   HMM smoke test or the memfd_secret test, which only print one.
+> - We had a redundant "exit" at the end, with all the boilerplate it's an
+>   easy oversight.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  tools/testing/selftests/vm/run_vmtests.sh | 459 +++-------------------
+>  1 file changed, 64 insertions(+), 395 deletions(-)
 
-Applied to arm64 (for-next/kselftest), thanks!
+Well that's nice.
 
-[1/4] kselftest/arm64: Handle more kselftest result codes in MTE helpers
-      https://git.kernel.org/arm64/c/eb89cf6f913f
-[2/4] kselftest/arm64: Log unexpected asynchronous MTE faults
-      https://git.kernel.org/arm64/c/929e073bcbfb
-[3/4] kselftest/arm64: Refactor parameter checking in mte_switch_mode()
-      https://git.kernel.org/arm64/c/df0a991023e0
-[4/4] kselftest/arm64: Add simple test for MTE prctl
-      https://git.kernel.org/arm64/c/78387d9f017f
+There were a bunch of changes already pending in this file but I think
+with this patch, they become unneeded.  So I just reverted them all. 
+please double check?
 
--- 
-Catalin
+
+--- a/tools/testing/selftests/vm/run_vmtests.sh~revert-1
++++ a/tools/testing/selftests/vm/run_vmtests.sh
+@@ -162,32 +162,22 @@ echo "----------------------------------
+ echo "running: gup_test -u # get_user_pages_fast() benchmark"
+ echo "------------------------------------------------------"
+ ./gup_test -u
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
+ 
+ echo "------------------------------------------------------"
+ echo "running: gup_test -a # pin_user_pages_fast() benchmark"
+ echo "------------------------------------------------------"
+ ./gup_test -a
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
+ 
+ echo "------------------------------------------------------------"
+@@ -195,16 +185,11 @@ echo "# Dump pages 0, 19, and 4096, usin
+ echo "running: gup_test -ct -F 0x1 0 19 0x1000 # dump_page() test"
+ echo "------------------------------------------------------------"
+ ./gup_test -ct -F 0x1 0 19 0x1000
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
+ 
+ echo "-------------------"
+@@ -306,16 +291,11 @@ echo "-------------------"
+ echo "running mremap_test"
+ echo "-------------------"
+ ./mremap_test
+-ret_val=$?
+-
+-if [ $ret_val -eq 0 ]; then
+-	echo "[PASS]"
+-elif [ $ret_val -eq $ksft_skip ]; then
+-	 echo "[SKIP]"
+-	 exitcode=$ksft_skip
+-else
++if [ $? -ne 0 ]; then
+ 	echo "[FAIL]"
+ 	exitcode=1
++else
++	echo "[PASS]"
+ fi
+ 
+ echo "-----------------"
+_
 
