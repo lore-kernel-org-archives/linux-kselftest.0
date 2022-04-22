@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60D0AC43217
-	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEF36C43219
+	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:35:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbiDVWic (ORCPT
+        id S233501AbiDVWid (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 22 Apr 2022 18:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        Fri, 22 Apr 2022 18:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbiDVWhz (ORCPT
+        with ESMTP id S233860AbiDVWhu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:37:55 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE47288EDE
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:30:01 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id a11-20020a25660b000000b006457c936631so4612542ybc.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:30:01 -0700 (PDT)
+        Fri, 22 Apr 2022 18:37:50 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FED1F9E07
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:56 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c011e3e9so9979977b3.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BoyidSMyUmqDlYzeEP7zIQ3rGwHdvB7avXDVy08761s=;
-        b=i6OlZZVuB93oXNW0rTUa3oTx5Wl6MFZGMztF7zW6l8uv5ZXP4VZ9/BlQ/fIJ2bNj5S
-         czzlvWKkurK9uKgLUtRxQx52c1k65fe/FZAngeSjsnDddI45UExXmV5LwP9IrqFxD2IL
-         rtOStuM0sMGjHQrlSNKyNGZRZVNEsl2JeX44VJMGESx5Y7WYCCaPLOPxkCwlFNBhKVDk
-         Qw8fn7GcIem22OY4dCLEKW72OsbVeJfMJDIVUycXbzEA3IIOpcnx7NgdQXCA8ZQAouml
-         KftTE01eZE8W63qMuu8ZiPsmT/z34kLTk6gjP+7TIvUM+Wt/kSuOwHlhRL1JNn39s4sE
-         62UQ==
+        bh=ZKwYZFMlPmL6KMhQQz8m//PR2YxeSx2kvEK7QsVigJI=;
+        b=csJYqjI7+4H3NJVJax9NGS3pNlt2RUYB3+3McYgDnf45op0d8iUq0yCVP4z+6JvUFf
+         2Cpb+TtSM43LXHqZExuKefroEz7gh03gyTWpMXuqRZSxtuP2YUeMnuRu69CM4h9NHqu1
+         Rt1m64uZho/RVKCFiWhSXEHProJQP+tXVbfJDgG/1mE9kiZDWXOLeAbrnJgOQ5uYKaBq
+         Baf2Z8XNif2KvlAHnovD2kwKU8KrPFdCWw6E/ubPmigUIOAAwqklhC5yORD60kwFj8M7
+         dV8w1yeJbu4JN5R08puEouNqPqaZwWoAvF3Gdbt5JP6S2N5c4GIRczR2DvpbQeHh3uEK
+         7FCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BoyidSMyUmqDlYzeEP7zIQ3rGwHdvB7avXDVy08761s=;
-        b=nfhrX2G7fQt78FWV+DEUzQel00iiA8FVk1ppyVjzgnO0ut58iZs1te5wYTqDnDf10E
-         bgl5EtKyAjzBuU0Iit1SLUTPG+mCXt6Av+QqjSWGrBcuRC8NQQeVO9Al7EFCmI5C9enb
-         040FPQn6lgbQLEJAoS2Jk3CVhXxjqEZKXHSldY6SyCTHrmf3teSRO+94TsPu/1Ikd0WU
-         6aGLAxpesp1PhsMq5moa3y/q9TBMDbOUZQ8gckVsnjLA+JPhATFWFQ2vYHClCrjD6kQ0
-         A+rrlj6zsv59LEh5KlprFtXUvD7zgUhlO4COGhfdo5SblivemIfvMvpuaiADb05eByIA
-         ifOQ==
-X-Gm-Message-State: AOAM5335qN6r4FSwdyRkQNJeld3bTNWM65eZ1umbPUHCuSWIYbyhLYYa
-        ebwbyAIqsngiOBXdVsNgxF0cdmIXXnd8Lp5gRuk+
-X-Google-Smtp-Source: ABdhPJyyc9freLfS6Q7maf39aEdLRh07bXNJn2H9FTDAgzp1lfS3Y4cI9xMNuZVlhb0cZNxgd4sxJOv/WouvvrTj1H7F
+        bh=ZKwYZFMlPmL6KMhQQz8m//PR2YxeSx2kvEK7QsVigJI=;
+        b=5oHvFwFT3CeozHwDC/XfdndXjbaZsWlSathnKAbSZEXIezEW5EpJzr9Qlfd8uOTGtF
+         GfeE1fS7XwOm8Psg1oqIL5zeO5x0g+In+wHU8MxGH4kEXKR8+RiIrWmodU3Pfsqa0muv
+         wmnklnhCt+ez//zbrzQRonclze2z3owDVN35AzdtY5oXwGfF59irPCF2bGSexHUcwzsx
+         j5GPPWoo+gTTIvlxojElOtTjY+nHpbi9x8t4tchwJuO7zNGTiU0ib3gcb4KvI3GYRg+Q
+         42lF+Egu7EKEA2pAKjFVYeppp2zDWxy+/HWHgX8yAMd49BYpJPqAyCipjVZXfWl83QiE
+         LGvw==
+X-Gm-Message-State: AOAM533DDnCQgyfznilpUDEKl27YPUNiDu10OAfJEBpGVLg0oAVcySK+
+        d1jx/hdhgOzj25QruyGr0rvLS3inIX6pOeB9ndwb
+X-Google-Smtp-Source: ABdhPJwxCsTz9OxLMDOgPGwJ76n2p6bPU/yWKc6iqu2BypRG7Slj3og+uNJnovkB/PwFjYqyrErsxCwHfIK4qfTFl31r
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:7ba6:20ac:a8f7:1dbd])
- (user=axelrasmussen job=sendgmr) by 2002:a81:56d5:0:b0:2f4:c9b2:575f with
- SMTP id k204-20020a8156d5000000b002f4c9b2575fmr6944685ywb.111.1650663000214;
- Fri, 22 Apr 2022 14:30:00 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:29:43 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a25:8382:0:b0:63d:6201:fa73 with
+ SMTP id t2-20020a258382000000b0063d6201fa73mr6272316ybk.55.1650662995479;
+ Fri, 22 Apr 2022 14:29:55 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 14:29:41 -0700
 In-Reply-To: <20220422212945.2227722-1-axelrasmussen@google.com>
-Message-Id: <20220422212945.2227722-5-axelrasmussen@google.com>
+Message-Id: <20220422212945.2227722-3-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20220422212945.2227722-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 4/6] userfaultfd: update documentation to describe /dev/userfaultfd
+Subject: [PATCH v2 2/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -78,92 +79,193 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explain the different ways to create a new userfaultfd, and how access
-control works for each way.
+Historically, it has been shown that intercepting kernel faults with
+userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
+of time) can be exploited, or at least can make some kinds of exploits
+easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
+changed things so, in order for kernel faults to be handled by
+userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
+must be configured so that any unprivileged user can do it.
+
+In a typical implementation of a hypervisor with live migration (take
+QEMU/KVM as one such example), we do indeed need to be able to handle
+kernel faults. But, both options above are less than ideal:
+
+- Toggling the sysctl increases attack surface by allowing any
+  unprivileged user to do it.
+
+- Granting the live migration process CAP_SYS_PTRACE gives it this
+  ability, but *also* the ability to "observe and control the
+  execution of another process [...], and examine and change [its]
+  memory and registers" (from ptrace(2)). This isn't something we need
+  or want to be able to do, so granting this permission violates the
+  "principle of least privilege".
+
+This is all a long winded way to say: we want a more fine-grained way to
+grant access to userfaultfd, without granting other additional
+permissions at the same time.
+
+To achieve this, add a /dev/userfaultfd misc device. This device
+provides an alternative to the userfaultfd(2) syscall for the creation
+of new userfaultfds. The idea is, any userfaultfds created this way will
+be able to handle kernel faults, without the caller having any special
+capabilities. Access to this mechanism is instead restricted using e.g.
+standard filesystem permissions.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- Documentation/admin-guide/mm/userfaultfd.rst | 38 ++++++++++++++++++--
- Documentation/admin-guide/sysctl/vm.rst      |  3 ++
- 2 files changed, 39 insertions(+), 2 deletions(-)
+ fs/userfaultfd.c                 | 79 ++++++++++++++++++++++++++------
+ include/uapi/linux/userfaultfd.h |  4 ++
+ 2 files changed, 69 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 6528036093e1..4c079b5377d4 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
- Design
- ======
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index aa0c47cb0d16..16d7573ab41a 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -29,6 +29,7 @@
+ #include <linux/ioctl.h>
+ #include <linux/security.h>
+ #include <linux/hugetlb.h>
++#include <linux/miscdevice.h>
  
--Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
-+Userspace creates a new userfaultfd, initializes it, and registers one or more
-+regions of virtual memory with it. Then, any page faults which occur within the
-+region(s) result in a message being delivered to the userfaultfd, notifying
-+userspace of the fault.
+ int sysctl_unprivileged_userfaultfd __read_mostly;
  
- The ``userfaultfd`` (aside from registering and unregistering virtual
- memory ranges) provides two primary functionalities:
-@@ -39,7 +42,7 @@ Vmas are not suitable for page- (or hugepage) granular fault tracking
- when dealing with virtual address spaces that could span
- Terabytes. Too many vmas would be needed for that.
+@@ -65,6 +66,8 @@ struct userfaultfd_ctx {
+ 	unsigned int flags;
+ 	/* features requested from the userspace */
+ 	unsigned int features;
++	/* whether or not to handle kernel faults */
++	bool handle_kernel_faults;
+ 	/* released */
+ 	bool released;
+ 	/* memory mappings are changing because of non-cooperative event */
+@@ -410,13 +413,8 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
  
--The ``userfaultfd`` once opened by invoking the syscall, can also be
-+The ``userfaultfd``, once created, can also be
- passed using unix domain sockets to a manager process, so the same
- manager process could handle the userfaults of a multitude of
- different processes without them being aware about what is going on
-@@ -50,6 +53,37 @@ is a corner case that would currently return ``-EBUSY``).
- API
- ===
+ 	if (ctx->features & UFFD_FEATURE_SIGBUS)
+ 		goto out;
+-	if ((vmf->flags & FAULT_FLAG_USER) == 0 &&
+-	    ctx->flags & UFFD_USER_MODE_ONLY) {
+-		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
+-			"sysctl knob to 1 if kernel faults must be handled "
+-			"without obtaining CAP_SYS_PTRACE capability\n");
++	if (!(vmf->flags & FAULT_FLAG_USER) && !ctx->handle_kernel_faults)
+ 		goto out;
+-	}
  
-+Creating a userfaultfd
-+----------------------
-+
-+There are two mechanisms to create a userfaultfd. There are various ways to
-+restrict this too, since userfaultfds which handle kernel page faults have
-+historically been a useful tool for exploiting the kernel.
-+
-+The first is the userfaultfd(2) syscall. Access to this is controlled in several
-+ways:
-+
-+- By default, the userfaultfd will be able to handle kernel page faults. This
-+  can be disabled by passing in UFFD_USER_MODE_ONLY.
-+
-+- If vm.unprivileged_userfaultfd is 0, then the caller must *either* have
-+  CAP_SYS_PTRACE, or pass in UFFD_USER_MODE_ONLY.
-+
-+- If vm.unprivileged_userfaultfd is 1, then no particular privilege is needed to
-+  use this syscall, even if UFFD_USER_MODE_ONLY is *not* set.
-+
-+Alternatively, userfaultfds can be created by opening /dev/userfaultfd, and
-+issuing a USERFAULTFD_IOC_NEW ioctl to this device. Access to this device is
-+controlled via normal filesystem permissions (user/group/mode for example) - no
-+additional permission (capability/sysctl) is needed to be able to handle kernel
-+faults this way. This is useful because it allows e.g. a specific user or group
-+to be able to create kernel-fault-handling userfaultfds, without allowing it
-+more broadly, or granting more privileges in addition to that particular ability
-+(CAP_SYS_PTRACE). In other words, it allows permissions to be minimized.
-+
-+Initializing up a userfaultfd
-+------------------------
-+
- When first opened the ``userfaultfd`` must be enabled invoking the
- ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
- a later API version) which will specify the ``read/POLLIN`` protocol
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index f4804ce37c58..8682d5fbc8ea 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -880,6 +880,9 @@ calls without any restrictions.
+ 	/*
+ 	 * If it's already released don't get it. This avoids to loop
+@@ -2064,19 +2062,33 @@ static void init_once_userfaultfd_ctx(void *mem)
+ 	seqcount_spinlock_init(&ctx->refile_seq, &ctx->fault_pending_wqh.lock);
+ }
  
- The default value is 0.
+-SYSCALL_DEFINE1(userfaultfd, int, flags)
++static inline bool userfaultfd_allowed(bool is_syscall, int flags)
++{
++	bool kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
++	bool allow_unprivileged = sysctl_unprivileged_userfaultfd;
++
++	/* userfaultfd(2) access is controlled by sysctl + capability. */
++	if (is_syscall && kernel_faults) {
++		if (!allow_unprivileged && !capable(CAP_SYS_PTRACE))
++			return false;
++	}
++
++	/*
++	 * For /dev/userfaultfd, access is to be controlled using e.g.
++	 * permissions on the device node. We assume this is correctly
++	 * configured by userspace, so we simply allow access here.
++	 */
++
++	return true;
++}
++
++static int new_userfaultfd(bool is_syscall, int flags)
+ {
+ 	struct userfaultfd_ctx *ctx;
+ 	int fd;
  
-+An alternative to this sysctl / the userfaultfd(2) syscall is to create
-+userfaultfds via /dev/userfaultfd. See
-+Documentation/admin-guide/mm/userfaultfd.rst.
+-	if (!sysctl_unprivileged_userfaultfd &&
+-	    (flags & UFFD_USER_MODE_ONLY) == 0 &&
+-	    !capable(CAP_SYS_PTRACE)) {
+-		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
+-			"sysctl knob to 1 if kernel faults must be handled "
+-			"without obtaining CAP_SYS_PTRACE capability\n");
++	if (!userfaultfd_allowed(is_syscall, flags))
+ 		return -EPERM;
+-	}
  
- user_reserve_kbytes
- ===================
+ 	BUG_ON(!current->mm);
+ 
+@@ -2095,6 +2107,11 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+ 	refcount_set(&ctx->refcount, 1);
+ 	ctx->flags = flags;
+ 	ctx->features = 0;
++	/*
++	 * If UFFD_USER_MODE_ONLY is not set, then userfaultfd_allowed() above
++	 * decided that kernel faults were allowed and should be handled.
++	 */
++	ctx->handle_kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
+ 	ctx->released = false;
+ 	atomic_set(&ctx->mmap_changing, 0);
+ 	ctx->mm = current->mm;
+@@ -2110,8 +2127,42 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+ 	return fd;
+ }
+ 
++SYSCALL_DEFINE1(userfaultfd, int, flags)
++{
++	return new_userfaultfd(true, flags);
++}
++
++static int userfaultfd_dev_open(struct inode *inode, struct file *file)
++{
++	return 0;
++}
++
++static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
++{
++	if (cmd != USERFAULTFD_IOC_NEW)
++		return -EINVAL;
++
++	return new_userfaultfd(false, flags);
++}
++
++static const struct file_operations userfaultfd_dev_fops = {
++	.open = userfaultfd_dev_open,
++	.unlocked_ioctl = userfaultfd_dev_ioctl,
++	.compat_ioctl = compat_ptr_ioctl,
++	.owner = THIS_MODULE,
++	.llseek = noop_llseek,
++};
++
++static struct miscdevice userfaultfd_misc = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "userfaultfd",
++	.fops = &userfaultfd_dev_fops
++};
++
+ static int __init userfaultfd_init(void)
+ {
++	WARN_ON(misc_register(&userfaultfd_misc));
++
+ 	userfaultfd_ctx_cachep = kmem_cache_create("userfaultfd_ctx_cache",
+ 						sizeof(struct userfaultfd_ctx),
+ 						0,
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index ef739054cb1c..032a35b3bbd2 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -12,6 +12,10 @@
+ 
+ #include <linux/types.h>
+ 
++/* ioctls for /dev/userfaultfd */
++#define USERFAULTFD_IOC 0xAA
++#define USERFAULTFD_IOC_NEW _IOWR(USERFAULTFD_IOC, 0x00, int)
++
+ /*
+  * If the UFFDIO_API is upgraded someday, the UFFDIO_UNREGISTER and
+  * UFFDIO_WAKE ioctls should be defined as _IOW and not as _IOR.  In
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
