@@ -2,55 +2,58 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D5AC433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59C1AC43219
+	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Apr 2022 22:35:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233321AbiDVWi3 (ORCPT
+        id S233395AbiDVWia (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 22 Apr 2022 18:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        Fri, 22 Apr 2022 18:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiDVWh2 (ORCPT
+        with ESMTP id S233939AbiDVWhx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:37:28 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773101F3130
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:51 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w77-20020a25df50000000b00647c3e65bc0so81762ybg.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:51 -0700 (PDT)
+        Fri, 22 Apr 2022 18:37:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4A9286AB3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:58 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7be51e6a9so11672687b3.22
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Apr 2022 14:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=2OUrHBVQ2XGsiWEMmpN9lcaXOoCh5x5IHeSwakaqCjU=;
-        b=Aow8LWdbHQ8mE+wjvovuTbsPF39TiJA6sPYxg2JQZd+23m8l/+XB1F9qkMvdVXNRg0
-         fZev5Etdz1q0hIsgyZWbSaFZjTBdJ9VWCFBRU8eBVfHaxsBOGqI7cDhN5oo9gC413a3m
-         gvWZRS9e7nI30010ze8OFrC8V0LO6LXC6C5UwdqfIs2kLN7U21jZtH7KzWi2ief0rAaS
-         CYQdE1MI7oRVde8cp8DeJ4sP2q24P5vdBoqq4mORARm3WuCFCIS7zNqsMlQPsYyrhUDe
-         LO3euRkIUxqJygFfIefkCW2M4IxKVAvFPsRkNRhJwmmkIG9+Oudn+R7bw4c5wsDDt67i
-         rj5w==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=3u4/NkkFqdFi5mqy1tDjNb7vVlfXM8Eh6uSpLtQT30E=;
+        b=ZGYpRbKPRC+XBA+J9Pgv5tGqSeG77393GIEZtav9y5jdJsYVHZu6DE9FQuFF3DOF0J
+         FuNiC+t/6dWddinYIxjJazPTVsQGm4aYgH1xVag1JT6yX/rutxG2D6vqOIO+3jvrxoR8
+         LlhdASQ+SYkAZPZBLnxf4QMwcqJESUmBcKLtRd4PizkS49zRHMGslMRd8FZVM8HCDQAt
+         pWB3BEBVFbk8ZupnaeI9yKetCZBkqXpEgICQya4F2EDK8WndIiiM1gyXfMdKP/S13U/+
+         dxciIAdWsYURvLxXEf7S3BZ8X/iFqLMyaOoYK1FYEq3MotK1Ig03rgQM9CL5HwBdNlNN
+         PzAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=2OUrHBVQ2XGsiWEMmpN9lcaXOoCh5x5IHeSwakaqCjU=;
-        b=UP9xkUVVotNeKmmSlgjqhDUi3K4Ea6+QOahzVLw/+5TaeoKLpmpcQ/V/kaIYab3tr9
-         pnyDbS7bDSRo5RolHaO1Xx69I7i9K6uTdsNCfXEsbHW+psr/S+mG02XLN2wTzONTOh4m
-         Ayck83+WB8yTMT19hTC69wbIdAOUPmPu3dr5Jnbpk8YhIKhIQD/KI7INJFCGoY/Js06+
-         Xlqo1ZzUVSTYYRkuvW8aHDdBwVX45W+/uqChIj8w4Cwn9g/3hb3IlBaXqQZFr1iui0xA
-         4zlOWrhvZxv9YmKWyMzwFJaqvpcgCqli/ZGkNjzA29orAkTjOIGU/xb/250jx/lscIxn
-         Keaw==
-X-Gm-Message-State: AOAM5313jR/RYl5CyoKNONSSXasRFfORCiSEAOR+bEpdfkc5k55tmZXT
-        stpw9MHFQqZF5trNj1o2r1s0HPInY40a0wzPKxMR
-X-Google-Smtp-Source: ABdhPJzN20+x39HHCgsQ8s+XetICyuwHBA/K5CIlhrR9l07xTY2TvqCOCgmubuPwmhK7ht8/vTRA3nNCJmwDMnx0uVbs
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=3u4/NkkFqdFi5mqy1tDjNb7vVlfXM8Eh6uSpLtQT30E=;
+        b=HWHSG/Yw+ZWQaFMcsv0WNmdxs3YMeW9CKn3DYxwbTfMxcgTX74Y/B9MHub/Lb90cLp
+         NXeoJenpvzG+OZo3/KfmGb5dIdSFvi+Xqj75/Ri7eWIUa/xpMae7QnMxKJEtymtYoexW
+         0B20cF3lB5WqTU5mTG3H4lDZICThRrTke3BUdxFyCrqTh81MHfKh9kH4/GvMbfqFITcg
+         6DptHbSkmaggXYyFtD8SsBUzOB319csT8/gWpGDuHV1JfkHP4DzRHn5atS59DL7Ul76M
+         STdJrUOZHDNsz7NcLXyUBfXBUY1zqb9ykXx7JsFipyhQDjym/QuNM44AlM7DrlmYnGq+
+         Hv+g==
+X-Gm-Message-State: AOAM530zLuZi7tMJ3aGkqXFkPzWtLTSL1XX5oZKSgu83c94xfTD4Ru0A
+        7YaF8tP1kI9JpYlPWZCVgp33qDeKCDi8O611kRha
+X-Google-Smtp-Source: ABdhPJwut5kVL9//x/VuhvU7tnMAPFLYjWnVV3LoUrrKiz5XT6olvUf5+q/YJhl4rhX6qANLKIq5vC52x37lwR9oMUtA
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:7ba6:20ac:a8f7:1dbd])
- (user=axelrasmussen job=sendgmr) by 2002:a25:9f90:0:b0:624:521e:d4a5 with
- SMTP id u16-20020a259f90000000b00624521ed4a5mr6505440ybq.230.1650662990723;
- Fri, 22 Apr 2022 14:29:50 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:29:39 -0700
-Message-Id: <20220422212945.2227722-1-axelrasmussen@google.com>
+ (user=axelrasmussen job=sendgmr) by 2002:a25:40c4:0:b0:645:88a3:eb8b with
+ SMTP id n187-20020a2540c4000000b0064588a3eb8bmr5324286yba.193.1650662997965;
+ Fri, 22 Apr 2022 14:29:57 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 14:29:42 -0700
+In-Reply-To: <20220422212945.2227722-1-axelrasmussen@google.com>
+Message-Id: <20220422212945.2227722-4-axelrasmussen@google.com>
 Mime-Version: 1.0
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v2 0/6] userfaultfd: add /dev/userfaultfd for fine grained
- access control
+Subject: [PATCH v2 3/6] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -75,39 +78,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series is based on torvalds/master, but additionally the run_vmtests.sh
-changes assume my refactor [1] has been applied first.
+We clearly want to ensure both userfaultfd(2) and /dev/userfaultfd keep
+working into the future, so just run the test twice, using each
+interface.
 
-The series is split up like so:
-- Patch 1 is a simple fixup which we should take in any case (even by itself).
-- Patches 2-4 add the feature, basic support for it to the selftest, and docs.
-- Patches 5-6 make the selftest configurable, so you can test one or the other
-  instead of always both. If we decide this is overcomplicated, we could just
-  drop these two patches and take the rest of the series.
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 31 ++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-[1]: https://patchwork.kernel.org/project/linux-mm/patch/20220421224928.1848230-1-axelrasmussen@google.com/
-
-Changelog:
-v1->v2:
-  - Add documentation update.
-  - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
-
-Axel Rasmussen (6):
-  selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
-  userfaultfd: add /dev/userfaultfd for fine grained access control
-  userfaultfd: selftests: modify selftest to use /dev/userfaultfd
-  userfaultfd: update documentation to describe /dev/userfaultfd
-  userfaultfd: selftests: make /dev/userfaultfd testing configurable
-  selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
-
- Documentation/admin-guide/mm/userfaultfd.rst | 38 +++++++++-
- Documentation/admin-guide/sysctl/vm.rst      |  3 +
- fs/userfaultfd.c                             | 79 ++++++++++++++++----
- include/uapi/linux/userfaultfd.h             |  4 +
- tools/testing/selftests/vm/run_vmtests.sh    | 11 ++-
- tools/testing/selftests/vm/userfaultfd.c     | 60 +++++++++++++--
- 6 files changed, 170 insertions(+), 25 deletions(-)
-
---
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 92a4516f8f0d..12ae742a9981 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -77,6 +77,9 @@ static int bounces;
+ #define TEST_SHMEM	3
+ static int test_type;
+ 
++/* test using /dev/userfaultfd, instead of userfaultfd(2) */
++static bool test_dev_userfaultfd;
++
+ /* exercise the test_uffdio_*_eexist every ALARM_INTERVAL_SECS */
+ #define ALARM_INTERVAL_SECS 10
+ static volatile bool test_uffdio_copy_eexist = true;
+@@ -383,13 +386,31 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+ 	}
+ }
+ 
++static void __userfaultfd_open_dev(void)
++{
++	int fd;
++
++	uffd = -1;
++	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
++	if (fd < 0)
++		return;
++
++	uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
++		     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	close(fd);
++}
++
+ static void userfaultfd_open(uint64_t *features)
+ {
+ 	struct uffdio_api uffdio_api;
+ 
+-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	if (test_dev_userfaultfd)
++		__userfaultfd_open_dev();
++	else
++		uffd = syscall(__NR_userfaultfd,
++			       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+ 	if (uffd < 0)
+-		err("userfaultfd syscall not available in this kernel");
++		err("creating userfaultfd failed");
+ 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
+ 
+ 	uffdio_api.api = UFFD_API;
+@@ -1698,6 +1719,12 @@ int main(int argc, char **argv)
+ 	}
+ 	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+ 	       nr_pages, nr_pages_per_cpu);
++
++	test_dev_userfaultfd = false;
++	if (userfaultfd_stress())
++		return 1;
++
++	test_dev_userfaultfd = true;
+ 	return userfaultfd_stress();
+ }
+ 
+-- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
