@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 582E0C43217
-	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Apr 2022 15:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ECEDC433F5
+	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Apr 2022 15:35:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbiDXPiK (ORCPT
+        id S234312AbiDXPiM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 24 Apr 2022 11:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        Sun, 24 Apr 2022 11:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239844AbiDXPbZ (ORCPT
+        with ESMTP id S240463AbiDXPb1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Apr 2022 11:31:25 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65045171C03;
-        Sun, 24 Apr 2022 08:28:24 -0700 (PDT)
+        Sun, 24 Apr 2022 11:31:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770F0171C03;
+        Sun, 24 Apr 2022 08:28:26 -0700 (PDT)
 Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KmX6265dFzGp58;
-        Sun, 24 Apr 2022 23:25:46 +0800 (CST)
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KmX3s4ZJMzCs9k;
+        Sun, 24 Apr 2022 23:23:53 +0800 (CST)
 Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
  (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 24 Apr
- 2022 23:28:20 +0800
+ 2022 23:28:22 +0800
 From:   Xu Kuohai <xukuohai@huawei.com>
 To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
@@ -59,9 +59,9 @@ CC:     Catalin Marinas <catalin.marinas@arm.com>,
         Mark Brown <broonie@kernel.org>,
         Delyan Kratunov <delyank@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 5/7] bpf, arm64: Support to poke bpf prog
-Date:   Sun, 24 Apr 2022 11:40:26 -0400
-Message-ID: <20220424154028.1698685-6-xukuohai@huawei.com>
+Subject: [PATCH bpf-next v3 7/7] selftests/bpf: Fix trivial typo in fentry_fexit.c
+Date:   Sun, 24 Apr 2022 11:40:28 -0400
+Message-ID: <20220424154028.1698685-8-xukuohai@huawei.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220424154028.1698685-1-xukuohai@huawei.com>
 References: <20220424154028.1698685-1-xukuohai@huawei.com>
@@ -76,117 +76,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-1. Set up the bpf prog entry in the same way as fentry to support
-   trampoline. Now bpf prog entry looks like this:
-
-   bti c        // if BTI enabled
-   mov x9, x30  // save lr
-   nop          // to be replaced with jump instruction
-   paciasp      // if PAC enabled
-
-2. Update bpf_arch_text_poke() to poke bpf prog. If the instruction
-   to be poked is bpf prog's first instruction, skip to the nop
-   instruction in the prog entry.
+The "ipv6" word in assertion message should be "fentry_fexit".
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- arch/arm64/net/bpf_jit.h      |  1 +
- arch/arm64/net/bpf_jit_comp.c | 41 +++++++++++++++++++++++++++--------
- 2 files changed, 33 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index 194c95ccc1cf..1c4b0075a3e2 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -270,6 +270,7 @@
- #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
- #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
- #define A64_BTI_JC A64_HINT(AARCH64_INSN_HINT_BTIJC)
-+#define A64_NOP    A64_HINT(AARCH64_INSN_HINT_NOP)
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+index 130f5b82d2e6..e3c139bde46e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
  
- /* DMB */
- #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 3f9bdfec54c4..293bdefc5d0c 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -237,14 +237,23 @@ static bool is_lsi_offset(int offset, int scale)
- 	return true;
- }
+ 	prog_fd = fexit_skel->progs.test1.prog_fd;
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+-	ASSERT_OK(err, "ipv6 test_run");
+-	ASSERT_OK(topts.retval, "ipv6 test retval");
++	ASSERT_OK(err, "fentry_fexit test_run");
++	ASSERT_OK(topts.retval, "fentry_fexit test retval");
  
--/* Tail call offset to jump into */
--#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
--	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
--#define PROLOGUE_OFFSET 9
-+#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
-+#define BTI_INSNS	1
-+#else
-+#define BTI_INSNS	0
-+#endif
-+
-+#if IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
-+#define PAC_INSNS	1
- #else
--#define PROLOGUE_OFFSET 8
-+#define PAC_INSNS	0
- #endif
- 
-+/* Tail call offset to jump into */
-+#define PROLOGUE_OFFSET	(BTI_INSNS + 2 + PAC_INSNS + 8)
-+/* Offset of nop instruction in bpf prog entry to be poked */
-+#define POKE_OFFSET	(BTI_INSNS + 1)
-+
- static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- {
- 	const struct bpf_prog *prog = ctx->prog;
-@@ -281,12 +290,15 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	 *
- 	 */
- 
-+	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
-+		emit(A64_BTI_C, ctx);
-+
-+	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
-+	emit(A64_NOP, ctx);
-+
- 	/* Sign lr */
- 	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
- 		emit(A64_PACIASP, ctx);
--	/* BTI landing pad */
--	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
--		emit(A64_BTI_C, ctx);
- 
- 	/* Save FP and LR registers to stay align with ARM64 AAPCS */
- 	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
-@@ -1552,9 +1564,11 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
- 	u32 old_insn;
- 	u32 new_insn;
- 	u32 replaced;
-+	unsigned long offset = ~0UL;
- 	enum aarch64_insn_branch_type branch_type;
-+	char namebuf[KSYM_NAME_LEN];
- 
--	if (!is_bpf_text_address((long)ip))
-+	if (!__bpf_address_lookup((unsigned long)ip, NULL, &offset, namebuf))
- 		/* Only poking bpf text is supported. Since kernel function
- 		 * entry is set up by ftrace, we reply on ftrace to poke kernel
- 		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
-@@ -1565,6 +1579,15 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
- 		 */
- 		return -EINVAL;
- 
-+	/* bpf entry */
-+	if (offset == 0UL)
-+		/* skip to the nop instruction in bpf prog entry:
-+		 * bti c	// if BTI enabled
-+		 * mov x9, x30
-+		 * nop
-+		 */
-+		ip = (u32 *)ip + POKE_OFFSET;
-+
- 	if (poke_type == BPF_MOD_CALL)
- 		branch_type = AARCH64_INSN_BRANCH_LINK;
- 	else
+ 	fentry_res = (__u64 *)fentry_skel->bss;
+ 	fexit_res = (__u64 *)fexit_skel->bss;
 -- 
 2.30.2
 
