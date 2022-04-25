@@ -2,54 +2,59 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DFC9C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Apr 2022 19:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 318B2C4332F
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Apr 2022 19:01:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244773AbiDYTEE (ORCPT
+        id S244785AbiDYTEF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 25 Apr 2022 15:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        Mon, 25 Apr 2022 15:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244785AbiDYTEC (ORCPT
+        with ESMTP id S244807AbiDYTED (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Apr 2022 15:04:02 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8194B1A9B
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 12:00:50 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id s68-20020a637747000000b003aaff19b95bso3808943pgc.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 12:00:50 -0700 (PDT)
+        Mon, 25 Apr 2022 15:04:03 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFE1E5E17
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 12:00:58 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id k2-20020a170902ba8200b0015613b12004so10014059pls.22
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Apr 2022 12:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=u7aSCooaSdm5AbeQgc4mEIZKOx9WN8oAB22VArgUr9o=;
-        b=SuyUCmC+8fnn1/O7RvexP4Bun5cSxBx1sd6O/1H7oKjQcRlUzBc7Bt5knel7INSyCT
-         TE/6ByM9b+hsj1G0tr2mL+zLSAwDzapaydUgTsEV402eJbk6MFsRXuR2Zs7wSIl1kB3L
-         kM1IJRVsDfkrGPtIyCOk2w0Dcm2Ui7PibJAyNe5F2X4o2o3XViG/Mb3Gb5qUL3O65dss
-         oa10bPUcqXV571PY4lkn6ZsjfPx4Gr5+vTIcS9Ja1j6OtRizQTClkmTwHXynPTok2zix
-         xUXMgzdz/Su53W1QXZRAn/l8NCJFbP5egoirBvhNqKzR/LvG2ktSdhYieYmOtOJnaE5h
-         N+Fw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=OERxjUiMWr1cQdsDG2DOpxyattqqP1OOWWgJQWH3L+Q=;
+        b=jny3uMCrVBnmU4KDEBjxFsNJ+VQFDuZs2Of3Od5sz8dt2N8StM4QwzqkfKRfsR2PfJ
+         04xxC8sY4WVBXUNIHQnO3TDQtNk2mQI5Bv9TrMkGE46T+NAgqKUPQzVfhj1gB8tDph5u
+         UmK+li0N/cdU24sX+whw1L8S1DSaDJ4Y+wD/WlGONCStk3DPn7EmkqUT0OgZ8aYJ6dyn
+         D5vmzhn/g+i+rRip2IlvPQOMq/Yv8PFURN8S3CPi5j868Dex+B48+XwMpbVAMJy/W7AT
+         cJzzCERjoZDLjEcEDQyUGJOSErR614eYQY7PZP9qDV4G7CSk3yjVAqmJHqS+FU2WYbGN
+         gDwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=u7aSCooaSdm5AbeQgc4mEIZKOx9WN8oAB22VArgUr9o=;
-        b=jjg7tcJMbNxTo60qepqRdQQ8e+zKD1+SHsjojBcHvl17qeT8NEtgYHmENyU+Q2kiMg
-         siPN3nrjN4AXtGneg1OCGLYEL8zjprZdpe5GAMg+Nv4Wr8mQVjWlCMbLVead6Ve1aUHx
-         /4YQpSNNOkscCJwdEkLy6XHwrAKP9CjE1H0vnCP3AgCiNU3pf+Dv6kK8tX834mPdmJay
-         s0uvlFdJwWx1pFqLeahAlhW0FA/2urvmJObBCgkkveJUW06y/xfvJgrqpWAOGXJ/3qec
-         rRsSPUI9n3lLMs+oaEJlT+6hgRpmsqKtIfRugCBOL/U/J3vezNYKnWSQBnUQ5ne7b1Fd
-         yXrw==
-X-Gm-Message-State: AOAM531AK8yf3cBGTKl89Kran5LYirBMuG8j+odjry5xC+6/QF0UmFUA
-        3Hd5YnB4gkhJM04QHrHvaYG923vaLrv9BGR5
-X-Google-Smtp-Source: ABdhPJyC6Btrh9g9zSX3rXPfqbFSX9w9P0umwQPU2xZn6+TTPWH6+X7xS5z3iAFd4B9xmvUavECuvuXybuhg3bvR
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=OERxjUiMWr1cQdsDG2DOpxyattqqP1OOWWgJQWH3L+Q=;
+        b=HS8Am5msMxZsomApuJYkQZITK7nvX+y1epCwV5bphL0iVVfcaU4SmWMbaMefzW136o
+         Cvp6S1L7cod2/+kXZ2r+8j74FMe8TAYvABD34VTuutZOpnr6HHqxXaj1xGxQwHdpDNZp
+         9dV0oDBazp3ekJQIptnUoPNqc3NDAGXazhKTdxnOSTM/kM4b58YkX8Cjo67rsEUVEn/b
+         bz9wJiSxzB1RIrU3uu5kVTPQohQ6exUfREDDBOjcioMY0RlVc+1uJwqvcPgZOsunPDV3
+         gPoZGp1rqxG6pZRpuPGI+GDnUOZoM9LC2AmCSALFxpTdPsJ9RhVZcKLCFGiC3K3pwFAZ
+         QEWA==
+X-Gm-Message-State: AOAM530EH/9k7Ri4eiX23sYvw4cJ2LBQcbBFStCcXpw5A0eJ9t+/ePa5
+        xdCt4qHCeEe/RmInZIaW/dcxqCZCde94i+AQ
+X-Google-Smtp-Source: ABdhPJyuLEwI6VGaaT+2zi+YCPqvG9+iIGmxhIFRCLcY9IfcS41UvuhS+EBApDVh5mp5ySwJen6WcU1Wg3Nk6iDY
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90a:bb8f:b0:1d9:650e:10f5 with SMTP
- id v15-20020a17090abb8f00b001d9650e10f5mr8800254pjr.148.1650913250098; Mon,
- 25 Apr 2022 12:00:50 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 19:00:36 +0000
-Message-Id: <20220425190040.2475377-1-yosryahmed@google.com>
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:c986:b0:1d9:56e7:4e83 with SMTP
+ id w6-20020a17090ac98600b001d956e74e83mr693654pjt.1.1650913256918; Mon, 25
+ Apr 2022 12:00:56 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 19:00:38 +0000
+In-Reply-To: <20220425190040.2475377-1-yosryahmed@google.com>
+Message-Id: <20220425190040.2475377-3-yosryahmed@google.com>
 Mime-Version: 1.0
+References: <20220425190040.2475377-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v5 0/4] memcg: introduce per-memcg proactive reclaim
+Subject: [PATCH v5 2/4] selftests: cgroup: return -errno from
+ cg_read()/cg_write() on failure
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
@@ -74,64 +79,124 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series adds a memory.reclaim proactive reclaim interface.
-The rationale behind the interface and how it works are in the first
-patch.
+Currently, cg_read()/cg_write() returns 0 on success and -1 on failure.
+Modify them to return the -errno on failure.
 
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Shakeel Butt <shakeelb@google.com>
 ---
+ tools/testing/selftests/cgroup/cgroup_util.c | 44 +++++++++-----------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
 
-Changes in V5:
-- Fixed comment formating and added Co-developed-by in patch 1.
-- Modified selftest to work if swap is enabled or not, and retry
-  multiple times to wait for background allocation before failing
-  with a clear message.
-
-Changes in V4:
-mm/memcontrol.c:
-- Return -EINTR on signal_pending().
-- On the final retry, drain percpu lru caches hoping that it might
-  introduce some evictable pages for reclaim.
-- Simplified the retry loop as suggested by Dan Schatzberg.
-
-selftests:
-- Always return -errno on failure from cg_write() (whether open() or
-  write() fail), also update cg_read() and read_text() to return -errno
-  as well for consistency. Also make sure to correctly check that the
-  whole buffer was written in cg_write().
-- Added a maximum number of retries for the reclaim selftest.
-
-Changes in V3:
-- Fix cg_write() (in patch 2) to properly return -1 if open() fails
-  and not fail if len == errno.
-- Remove debug printf() in patch 3.
-
-Changes in V2:
-- Add the interface to root as well.
-- Added a selftest.
-- Documented the interface as a nested-keyed interface, which makes
-  adding optional arguments in the future easier (see doc updates in the
-  first patch).
-- Modified the commit message to reflect changes and added a timeout
-  argument as a suggested possible extension
-- Return -EAGAIN if the kernel fails to reclaim the full requested
-  amount.
-
----
-
-Shakeel Butt (1):
-  memcg: introduce per-memcg reclaim interface
-
-Yosry Ahmed (3):
-  selftests: cgroup: return -errno from cg_read()/cg_write() on failure
-  selftests: cgroup: fix alloc_anon_noexit() instantly freeing memory
-  selftests: cgroup: add a selftest for memory.reclaim
-
- Documentation/admin-guide/cgroup-v2.rst       |  21 ++++
- mm/memcontrol.c                               |  45 +++++++
- tools/testing/selftests/cgroup/cgroup_util.c  |  44 +++----
- .../selftests/cgroup/test_memcontrol.c        | 114 +++++++++++++++++-
- 4 files changed, 197 insertions(+), 27 deletions(-)
-
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index dbaa7aabbb4a..e6f3679cdcc0 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -19,6 +19,7 @@
+ #include "cgroup_util.h"
+ #include "../clone3/clone3_selftests.h"
+ 
++/* Returns read len on success, or -errno on failure. */
+ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+ {
+ 	ssize_t len;
+@@ -26,35 +27,29 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+ 
+ 	fd = open(path, O_RDONLY);
+ 	if (fd < 0)
+-		return fd;
++		return -errno;
+ 
+ 	len = read(fd, buf, max_len - 1);
+-	if (len < 0)
+-		goto out;
+ 
+-	buf[len] = 0;
+-out:
++	if (len >= 0)
++		buf[len] = 0;
++
+ 	close(fd);
+-	return len;
++	return len < 0 ? -errno : len;
+ }
+ 
++/* Returns written len on success, or -errno on failure. */
+ static ssize_t write_text(const char *path, char *buf, ssize_t len)
+ {
+ 	int fd;
+ 
+ 	fd = open(path, O_WRONLY | O_APPEND);
+ 	if (fd < 0)
+-		return fd;
++		return -errno;
+ 
+ 	len = write(fd, buf, len);
+-	if (len < 0) {
+-		close(fd);
+-		return len;
+-	}
+-
+ 	close(fd);
+-
+-	return len;
++	return len < 0 ? -errno : len;
+ }
+ 
+ char *cg_name(const char *root, const char *name)
+@@ -87,16 +82,16 @@ char *cg_control(const char *cgroup, const char *control)
+ 	return ret;
+ }
+ 
++/* Returns 0 on success, or -errno on failure. */
+ int cg_read(const char *cgroup, const char *control, char *buf, size_t len)
+ {
+ 	char path[PATH_MAX];
++	ssize_t ret;
+ 
+ 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+ 
+-	if (read_text(path, buf, len) >= 0)
+-		return 0;
+-
+-	return -1;
++	ret = read_text(path, buf, len);
++	return ret >= 0 ? 0 : ret;
+ }
+ 
+ int cg_read_strcmp(const char *cgroup, const char *control,
+@@ -177,17 +172,15 @@ long cg_read_lc(const char *cgroup, const char *control)
+ 	return cnt;
+ }
+ 
++/* Returns 0 on success, or -errno on failure. */
+ int cg_write(const char *cgroup, const char *control, char *buf)
+ {
+ 	char path[PATH_MAX];
+-	ssize_t len = strlen(buf);
++	ssize_t len = strlen(buf), ret;
+ 
+ 	snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+-
+-	if (write_text(path, buf, len) == len)
+-		return 0;
+-
+-	return -1;
++	ret = write_text(path, buf, len);
++	return ret == len ? 0 : ret;
+ }
+ 
+ int cg_find_unified_root(char *root, size_t len)
+@@ -545,7 +538,8 @@ ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t
+ 	else
+ 		snprintf(path, sizeof(path), "/proc/%d/%s", pid, item);
+ 
+-	return read_text(path, buf, size);
++	size = read_text(path, buf, size);
++	return size < 0 ? -1 : size;
+ }
+ 
+ int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
