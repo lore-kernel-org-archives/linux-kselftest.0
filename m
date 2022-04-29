@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13EC9C433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Apr 2022 23:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 501ECC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Apr 2022 23:57:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381894AbiD3AAZ (ORCPT
+        id S1381900AbiD3AAZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Fri, 29 Apr 2022 20:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381900AbiD3AAY (ORCPT
+        with ESMTP id S1381899AbiD3AAY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 29 Apr 2022 20:00:24 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D31F3EA88
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 16:56:59 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id b6-20020a170902d50600b0015d1eb8c82eso4854054plg.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 16:56:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0273E0FE
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 16:56:56 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id b10-20020a170902bd4a00b0015e7ee90842so1251754plx.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Apr 2022 16:56:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Y2U6N/SaFktITLsdt43NK/igdRg3kVW252737IBt0LU=;
-        b=ZGtQirrtNgXHKRVauFBtG+/sgxRYvk5XZr0WfLUwxPVfzq71bBqkfVmqmZJFCCYzAM
-         EeR6l9JIrhRPwfAFrPtu7ReRC9acMq0O2cxebjqEH3+dd7Aq7Xw5fn7FO86LDCdjh1vM
-         McqYBJcvqSt4izZK5Cx2P14o4+3iJDE5hrGA8ZUvln3LftkJXlqFqhiijXAm4YzEbr1K
-         HgSew1IkNTU2D6cX62XJfYwiOMP9cdMsU3P6sWd+5gEHoT4S/NuKeGQ7LioUaQU9n7gU
-         8rRW4CN8j7cvRn89ri03+6o6a3hs0vGLtCagVgA7AWQMLAcA6hmDMaFTk6YTalDxwADS
-         fsNA==
+        bh=Y+Q/IXhaWsRAPmKMqULGXX6gjgm8gHDF6bR4ysCjcTo=;
+        b=H/13hmb9fVxI5t1ZecWpaw4gTqW7NjrFKShggGtAwvAf8hZmL82HID/5Map25vz02f
+         ktp6VKa70yyumJRkYLfJaRo9vDQ6YyB+n7lpORTxXymQSBN4ANL7B8UHNPnPjY1M2u6P
+         CbG0uV8ARLnKoGfgidygLgxZTAttlvlhnjHcGLGaaRR2WelA8P4TW0Xg/Da6c1HMDkXd
+         D38+qOA1Q8G3Fj+ZJgfQNcXgRB5WK8npWF7gC3eLrTqMVQi+AekZP9J1sM/iatsIvodG
+         HakktZ7TjQk2UsmNZHuaLxjG8VZ6nU+v8cOBjoKEvrZoUvK3JdEmts6GnFRPJPQNymZX
+         v+TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Y2U6N/SaFktITLsdt43NK/igdRg3kVW252737IBt0LU=;
-        b=wYOPueV0TeQh/45SfMvqgl3VEARwmT3m6t/cSJH2UTksDSkW3wVtdNf4xSfg2txlR5
-         yv+eu8MWhHElvRhXbj0U2Cb41IIA79PNwgemJqTkzPmLgFzqfPl3w4urqJX8BPHlPCAY
-         ZYqHD0IuMET//K/u5w8SEHy3W2lMoEYgqpmuGCLFyVH36yjiKPc/ozVewm1kMwTAQUqg
-         6ec+ydaN7VtHbN6DdMdxd0PJz8Q0mqDhOOYJNeslGeJKL0S5a97/rSSbU0aPzW55L4mk
-         TUN7dzQg+4ZgCczs+VNaYU8sPqzw04GoJwnTPVwjdhkaD6dsS8ceRrRiVl9otD98PJLS
-         t82A==
-X-Gm-Message-State: AOAM533ctqeFMqmDMpMnDptEf1jIHzhoEJ43WFkErfmqWGEwfptCGeNB
-        wdcSTLmz0d38VazfjZ8jtcatKp0ctW8WbQ==
-X-Google-Smtp-Source: ABdhPJybU3tuDpqq8Uoh7B87O4KK/KSqVfWaE8DjxnMMELo/U7FUT5BAmeuLOCGT+nBWxSAB5NqgEkWT32gRSg==
+        bh=Y+Q/IXhaWsRAPmKMqULGXX6gjgm8gHDF6bR4ysCjcTo=;
+        b=FTF3I+oGkw01tkJNrz1ttOjIVK7UndfbOypFRaKJyLswfYJXevh64U2pxySfXZB2pL
+         ZphXr6K1chJoT8uHfL3T3g8NER6sp+hSV9bKakiB0WQoDFQv/ay4qJQPY3kUp3AbsItv
+         KQUB8h4dO9itcMPvMxpOecplt2i7yOIrlnBYCh9lGWS62wQwcBRntfw3IgDfOj0ZqAZp
+         ADdIFfZjosccdW6j25Cw+Z6TE/LmyGVxl+9bKpy1gQl4gctIxQGfScL2kVWcYmD1FlQC
+         LhN6hQY5CdvoxSU+Aed0MK6LdnQQDM8wSTY58uWe8Hh2hnNt4Y+9uiDk2QHgD+Ps84vc
+         XnzA==
+X-Gm-Message-State: AOAM530GkKDFZBG8iNpOAk9WNyR3a8PiHwg4lipdwaRi9b2AWQXyPXmI
+        iMDc99nCAdJX2DoDGMSk2GltuX627NvbzA==
+X-Google-Smtp-Source: ABdhPJx1Wjp0vuZg+qCJHHMrbauEyHFfDDCreh69orOH9EOfyhL5teusuGJLQDzJe0MC0WXjrog7rMPbfFQzzw==
 X-Received: from zllamas.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:4c])
- (user=cmllamas job=sendgmr) by 2002:a17:90a:3486:b0:1d9:3abd:42ed with SMTP
- id p6-20020a17090a348600b001d93abd42edmr6692184pjb.32.1651276619241; Fri, 29
- Apr 2022 16:56:59 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 23:56:43 +0000
+ (user=cmllamas job=sendgmr) by 2002:a05:6a00:1494:b0:50d:4b12:8dfa with SMTP
+ id v20-20020a056a00149400b0050d4b128dfamr1188736pfu.43.1651276615642; Fri, 29
+ Apr 2022 16:56:55 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 23:56:41 +0000
 In-Reply-To: <20220429235644.697372-1-cmllamas@google.com>
-Message-Id: <20220429235644.697372-5-cmllamas@google.com>
+Message-Id: <20220429235644.697372-3-cmllamas@google.com>
 Mime-Version: 1.0
 References: <20220429235644.697372-1-cmllamas@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v2 4/5] binder: convert logging macros into functions
+Subject: [PATCH v2 2/5] binder: add BINDER_GET_EXTENDED_ERROR ioctl
 From:   Carlos Llamas <cmllamas@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
@@ -73,85 +73,191 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Converting binder_debug() and binder_user_error() macros into functions
-reduces the overall object size by 16936 bytes when cross-compiled with
-aarch64-linux-gnu-gcc 11.2.0:
-
-$ size drivers/android/binder.o.{old,new}
-   text	   data	    bss	    dec	    hex	filename
-  77935	   6168	  20264	 104367	  197af	drivers/android/binder.o.old
-  65551	   1616	  20264	  87431	  15587	drivers/android/binder.o.new
-
-This is particularly beneficial to functions binder_transaction() and
-binder_thread_write() which repeatedly use these macros and are both
-part of the critical path for all binder transactions.
-
-$ nm --size vmlinux.{old,new} |grep ' binder_transaction$'
-0000000000002f60 t binder_transaction
-0000000000002358 t binder_transaction
-
-$ nm --size vmlinux.{old,new} |grep binder_thread_write
-0000000000001c54 t binder_thread_write
-00000000000014a8 t binder_thread_write
+Provide a userspace mechanism to pull precise error information upon
+failed operations. Extending the current error codes returned by the
+interfaces allows userspace to better determine the course of action.
+This could be for instance, retrying a failed transaction at a later
+point and thus offloading the error handling from the driver.
 
 Signed-off-by: Carlos Llamas <cmllamas@google.com>
 ---
- drivers/android/binder.c | 41 ++++++++++++++++++++++++++++------------
- 1 file changed, 29 insertions(+), 12 deletions(-)
+ drivers/android/binder.c            | 60 +++++++++++++++++++++++++++++
+ drivers/android/binder_internal.h   |  3 ++
+ include/uapi/linux/android/binder.h | 16 ++++++++
+ 3 files changed, 79 insertions(+)
 
 diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index b9df0c8a68d3..bfb21e258427 100644
+index f0885baa53a1..b9df0c8a68d3 100644
 --- a/drivers/android/binder.c
 +++ b/drivers/android/binder.c
-@@ -133,19 +133,36 @@ static int binder_set_stop_on_user_error(const char *val,
- module_param_call(stop_on_user_error, binder_set_stop_on_user_error,
- 	param_get_int, &binder_stop_on_user_error, 0644);
+@@ -147,6 +147,13 @@ module_param_call(stop_on_user_error, binder_set_stop_on_user_error,
+ 			binder_stop_on_user_error = 2; \
+ 	} while (0)
  
--#define binder_debug(mask, x...) \
--	do { \
--		if (binder_debug_mask & mask) \
--			pr_info_ratelimited(x); \
--	} while (0)
-+static __printf(2, 3) void binder_debug(int mask, const char *format, ...)
-+{
-+	struct va_format vaf;
-+	va_list args;
++#define binder_set_extended_error(ee, _id, _command, _param) \
++	do { \
++		(ee)->id = _id; \
++		(ee)->command = _command; \
++		(ee)->param = _param; \
++	} while (0)
++
+ #define to_flat_binder_object(hdr) \
+ 	container_of(hdr, struct flat_binder_object, hdr)
  
--#define binder_user_error(x...) \
--	do { \
--		if (binder_debug_mask & BINDER_DEBUG_USER_ERROR) \
--			pr_info_ratelimited(x); \
--		if (binder_stop_on_user_error) \
--			binder_stop_on_user_error = 2; \
--	} while (0)
-+	if (binder_debug_mask & mask) {
-+		va_start(args, format);
-+		vaf.va = &args;
-+		vaf.fmt = format;
-+		pr_info_ratelimited("%pV", &vaf);
-+		va_end(args);
-+	}
-+}
-+
-+static __printf(1, 2) void binder_user_error(const char *format, ...)
+@@ -2697,6 +2704,24 @@ static struct binder_node *binder_get_node_refs_for_txn(
+ 	return target_node;
+ }
+ 
++static void binder_set_txn_from_error(struct binder_transaction *t, int id,
++				      uint32_t command, int32_t param)
 +{
-+	struct va_format vaf;
-+	va_list args;
++	struct binder_thread *from = binder_get_txn_from_and_acq_inner(t);
 +
-+	if (binder_debug_mask & BINDER_DEBUG_USER_ERROR) {
-+		va_start(args, format);
-+		vaf.va = &args;
-+		vaf.fmt = format;
-+		pr_info_ratelimited("%pV", &vaf);
-+		va_end(args);
++	if (!from) {
++		/* annotation for sparse */
++		__release(&from->proc->inner_lock);
++		return;
 +	}
 +
-+	if (binder_stop_on_user_error)
-+		binder_stop_on_user_error = 2;
++	/* don't override existing errors */
++	if (from->ee.command == BR_OK)
++		binder_set_extended_error(&from->ee, id, command, param);
++	binder_inner_proc_unlock(from->proc);
++	binder_thread_dec_tmpref(from);
 +}
++
+ static void binder_transaction(struct binder_proc *proc,
+ 			       struct binder_thread *thread,
+ 			       struct binder_transaction_data *tr, int reply,
+@@ -2742,6 +2767,10 @@ static void binder_transaction(struct binder_proc *proc,
+ 	e->offsets_size = tr->offsets_size;
+ 	strscpy(e->context_name, proc->context->name, BINDERFS_MAX_NAME);
  
- #define binder_set_extended_error(ee, _id, _command, _param) \
- 	do { \
++	binder_inner_proc_lock(proc);
++	binder_set_extended_error(&thread->ee, t_debug_id, BR_OK, 0);
++	binder_inner_proc_unlock(proc);
++
+ 	if (reply) {
+ 		binder_inner_proc_lock(proc);
+ 		in_reply_to = thread->transaction_stack;
+@@ -3487,10 +3516,16 @@ static void binder_transaction(struct binder_proc *proc,
+ 
+ 	BUG_ON(thread->return_error.cmd != BR_OK);
+ 	if (in_reply_to) {
++		binder_set_txn_from_error(in_reply_to, t_debug_id,
++				return_error, return_error_param);
+ 		thread->return_error.cmd = BR_TRANSACTION_COMPLETE;
+ 		binder_enqueue_thread_work(thread, &thread->return_error.work);
+ 		binder_send_failed_reply(in_reply_to, return_error);
+ 	} else {
++		binder_inner_proc_lock(proc);
++		binder_set_extended_error(&thread->ee, t_debug_id,
++				return_error, return_error_param);
++		binder_inner_proc_unlock(proc);
+ 		thread->return_error.cmd = return_error;
+ 		binder_enqueue_thread_work(thread, &thread->return_error.work);
+ 	}
+@@ -4628,6 +4663,7 @@ static struct binder_thread *binder_get_thread_ilocked(
+ 	thread->return_error.cmd = BR_OK;
+ 	thread->reply_error.work.type = BINDER_WORK_RETURN_ERROR;
+ 	thread->reply_error.cmd = BR_OK;
++	thread->ee.command = BR_OK;
+ 	INIT_LIST_HEAD(&new_thread->waiting_thread_node);
+ 	return thread;
+ }
+@@ -5066,6 +5102,25 @@ static int binder_ioctl_get_freezer_info(
+ 	return 0;
+ }
+ 
++static int binder_ioctl_get_extended_error(struct binder_thread *thread,
++					   void __user *ubuf)
++{
++	struct binder_extended_error *ee = &thread->ee;
++
++	binder_inner_proc_lock(thread->proc);
++	if (copy_to_user(ubuf, ee, sizeof(*ee))) {
++		binder_inner_proc_unlock(thread->proc);
++		return -EFAULT;
++	}
++
++	ee->id = 0;
++	ee->command = BR_OK;
++	ee->param = 0;
++	binder_inner_proc_unlock(thread->proc);
++
++	return 0;
++}
++
+ static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ {
+ 	int ret;
+@@ -5274,6 +5329,11 @@ static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 		binder_inner_proc_unlock(proc);
+ 		break;
+ 	}
++	case BINDER_GET_EXTENDED_ERROR:
++		ret = binder_ioctl_get_extended_error(thread, ubuf);
++		if (ret < 0)
++			goto err;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		goto err;
+diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+index d6b6b8cb7346..7c366a854125 100644
+--- a/drivers/android/binder_internal.h
++++ b/drivers/android/binder_internal.h
+@@ -480,6 +480,8 @@ struct binder_proc {
+  *                        (only accessed by this thread)
+  * @reply_error:          transaction errors reported by target thread
+  *                        (protected by @proc->inner_lock)
++ * @ee:                   extended error information from this thread
++ *                        (protected by @proc->inner_lock)
+  * @wait:                 wait queue for thread work
+  * @stats:                per-thread statistics
+  *                        (atomics, no lock needed)
+@@ -504,6 +506,7 @@ struct binder_thread {
+ 	bool process_todo;
+ 	struct binder_error return_error;
+ 	struct binder_error reply_error;
++	struct binder_extended_error ee;
+ 	wait_queue_head_t wait;
+ 	struct binder_stats stats;
+ 	atomic_t tmp_ref;
+diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+index 11157fae8a8e..e6ee8cae303b 100644
+--- a/include/uapi/linux/android/binder.h
++++ b/include/uapi/linux/android/binder.h
+@@ -236,6 +236,21 @@ struct binder_frozen_status_info {
+ 	__u32            async_recv;
+ };
+ 
++/* struct binder_extened_error - extended error information
++ * @id:		identifier for the failed operation
++ * @command:	command as defined by binder_driver_return_protocol
++ * @param:	parameter holding a negative errno value
++ *
++ * Used with BINDER_GET_EXTENDED_ERROR. This extends the error information
++ * returned by the driver upon a failed operation. Userspace can pull this
++ * data to properly handle specific error scenarios.
++ */
++struct binder_extended_error {
++	__u32	id;
++	__u32	command;
++	__s32	param;
++};
++
+ #define BINDER_WRITE_READ		_IOWR('b', 1, struct binder_write_read)
+ #define BINDER_SET_IDLE_TIMEOUT		_IOW('b', 3, __s64)
+ #define BINDER_SET_MAX_THREADS		_IOW('b', 5, __u32)
+@@ -249,6 +264,7 @@ struct binder_frozen_status_info {
+ #define BINDER_FREEZE			_IOW('b', 14, struct binder_freeze_info)
+ #define BINDER_GET_FROZEN_INFO		_IOWR('b', 15, struct binder_frozen_status_info)
+ #define BINDER_ENABLE_ONEWAY_SPAM_DETECTION	_IOW('b', 16, __u32)
++#define BINDER_GET_EXTENDED_ERROR	_IOWR('b', 17, struct binder_extended_error)
+ 
+ /*
+  * NOTE: Two special error codes you should check for when calling
 -- 
 2.36.0.464.gb9c8b46e94-goog
 
