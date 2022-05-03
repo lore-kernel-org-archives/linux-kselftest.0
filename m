@@ -2,286 +2,177 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0DAFC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 May 2022 16:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D6EBC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 May 2022 17:14:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239375AbiECQ0k (ORCPT
+        id S240145AbiECRR6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 May 2022 12:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        Tue, 3 May 2022 13:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239428AbiECQ0g (ORCPT
+        with ESMTP id S240119AbiECRRw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 12:26:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A87233BFA0
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 May 2022 09:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651594977;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hEKf86UxwDCvpt+864rXzxa52E7yfUlgedIxaiwjylk=;
-        b=AZ5neMkadSwRwm3cuqBYMPC4C7I0rxNJSi8ybAzJN2zh6cBeYvmLNCXn+Gwk0JKMp71dcs
-        wqWBQsJfLlX7KZnHloWBzb1BgvBHteB7dYSe+5wYSRN/7gPrxtu3LMi72dLW6cJaGuCAen
-        Br7+4yJWQ3bXkXIyV1tIJ9kQriM5R28=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-281-lxq4CaWzN022BQDolwPhBQ-1; Tue, 03 May 2022 12:22:39 -0400
-X-MC-Unique: lxq4CaWzN022BQDolwPhBQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CADC31C05135;
-        Tue,  3 May 2022 16:22:38 +0000 (UTC)
-Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 25DF2463E17;
-        Tue,  3 May 2022 16:22:38 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v10 3/8] cgroup/cpuset: Allow no-task partition to have empty cpuset.cpus.effective
-Date:   Tue,  3 May 2022 12:21:44 -0400
-Message-Id: <20220503162149.1764245-4-longman@redhat.com>
-In-Reply-To: <20220503162149.1764245-1-longman@redhat.com>
-References: <20220503162149.1764245-1-longman@redhat.com>
+        Tue, 3 May 2022 13:17:52 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2040.outbound.protection.outlook.com [40.107.237.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBB139816;
+        Tue,  3 May 2022 10:14:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GhhO+CshGLtr0EDi77ZiGtMnhRDhO41vhrdF7irZrRnMzLdQcdSt5N3tl+y8RVxJmiOfaAhJfIb2iQ4DLi8ZqEm1nBwX6R7MGOoawUvHBqJbuFzhESiQ0uU3c5or2Ir+FjjUFuE18NWB+/Xr0jBCp5ArbGMtNDd7kzVj7PVOsQXp7+ruXnn222ED2blu3k5S3IVUuqVUSGJwisq2W8S1iEvu5azZO7LdXLopA58xA84yauxsxKHIljAYop6FL2EpsxF3iROPVqU9YHx3WFIzVdl3ffs6YW7dWPoNozfCITuy+r5leEGsopk2rXJYS+W4feYJXHAGxqIBKEr39qwCIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vu18XptJmXDYd1FgmwWXxeRXH4IsJBCNTpxrDIND9eI=;
+ b=ZTH4B6OXROx3gsrnr7Urv37IGBmz8H9tQK7TAhjYhVS+j7B6iJhm7lbEce5dkbEQfr97w3bzuITaKx2ffEQZyH/On63iEtlMzvdDg8gzclqhokaxIVV9e1PepYrc50EaRtSnPTChqalOKluKHC2unxgQrIhuFhlowFxAq+9lIl9M537IEE0LP7Aw7v2HXj2Xmm8Bn8gj+hzVvKQV2VpVxn4E6Zo5gqggUgyKghn/ILu9LHwDvbieJgRQ+MWK/IpamhlGiGnv5lACoaworQqhZ7R9G4QoWRr5J0TfTujxcPavi9XEVoN4AQf1MyDWYoKp3QqthXwp4WYcSsHVyKn5yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vu18XptJmXDYd1FgmwWXxeRXH4IsJBCNTpxrDIND9eI=;
+ b=Ht5GEeRNk5oOGsaJBwx2oc7a8wS7tCi3x49aG6AJRLGJ71sRfgjspxhJsAeHvR96OMrErsslqeLQRSBvNX/Z3fhfdj6FdB2AAtsz6FYSJlfhnWPYJ6P1hSh4nDfX1o70wgQVCjWqB1QAC1vvvqWPOOeb62x051CE3mk7s8bDFxxjFr8nHKxJcJpsCkUaWCJNTibRNBrel4Tvy1t5uDShcNsoa0teX7WeCG6103Cu6m0wrohFH3+AfbPHRoiqi0LWK4tIPwO4w3cqnyb1dkUc6IT+qDcahbd2ZrcdExIBQ6BfgojYRHFbp4Ma0/V0tZVCqzlqlf56jBZVQi7yw5vixA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL1PR12MB5142.namprd12.prod.outlook.com (2603:10b6:208:312::22)
+ by SA0PR12MB4398.namprd12.prod.outlook.com (2603:10b6:806:9f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Tue, 3 May
+ 2022 17:14:17 +0000
+Received: from BL1PR12MB5142.namprd12.prod.outlook.com
+ ([fe80::cdc2:b13d:821b:d3d7]) by BL1PR12MB5142.namprd12.prod.outlook.com
+ ([fe80::cdc2:b13d:821b:d3d7%3]) with mapi id 15.20.5206.024; Tue, 3 May 2022
+ 17:14:17 +0000
+Message-ID: <873772fc-9ec6-b9bc-4671-8c59150b3050@nvidia.com>
+Date:   Tue, 3 May 2022 20:14:01 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH bpf-next v8 4/5] bpf: Add selftests for raw syncookie
+ helpers
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20220429111541.339853-1-maximmi@nvidia.com>
+ <20220429111541.339853-5-maximmi@nvidia.com>
+ <CAADnVQJrRONd+pPpfahyzLG7WCP54y_eoNb_8zCsN_m=S_OSZQ@mail.gmail.com>
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+In-Reply-To: <CAADnVQJrRONd+pPpfahyzLG7WCP54y_eoNb_8zCsN_m=S_OSZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0099.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2bc::20) To BL1PR12MB5142.namprd12.prod.outlook.com
+ (2603:10b6:208:312::22)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 95e08384-6be9-4313-be52-08da2d285ac2
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4398:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB43984586C28D9A6A8787D8D0DCC09@SA0PR12MB4398.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oalrFzqG/Otmg5pRgOLOsiU5u9P+QhSfM6oE56cDKc+c+BAicCWbAXkFzNijrbg5Fda9cBN5YZzAT/YMdD0mRkh4TPtUjgqF423B0aoNPAkAv1Q0UDtWdbfmihhiKfa0LYiWF9geCgeMmftx8GqXHsMcLNQlBmpX2lilSY0zF4VyBRTXSupdjDJaio00hNQttvaC1ipTdCNolh82BCoI2Qv2Q/DztMW+c6QNyfgRIRZ92ibhc6W1hsM+l47t2fwgEfAjKBvMYPgpNPXqlvDa+BZKpCBhKMeKWsOZG3xF8FdYZQEgwe/OZMKQf+zjEoNW85xdwMby1o2fqYjyCii/G+k1E4yA7vA5LmHHnTASImzfhV2hKOw/JGvtYQEU9AZIoMP2ydbWEMsuMgTGcDyvgrEVTwP/WPdnZ6bdITk4zB9BOpoUeglH1fN/SxYxBO0scvhMQ3qdHJ4IAoD9cRFXzwt5uKEc5wCP3TCSKE4AaWgpjvXUAppMKE7rjIulOuDKxgGgql6df+GfvEgWVKwXpHt/+m3C9ZogI/+r575NCty1d6uQ9huPyx+Kyzz9futahI3Y+GJ+oRDe7Gkl2HxAghGkqwtPjqy70H+2SFYCUr15QqacSU/aoyZGUK+CrTPoGVOvF2XqYH4oR6C4wVg8gf76aarBVdb4JnGCI0vWGvyccUviEvu3wIxBZwmGEXhb68vXpT+c/zmnksqHyqiEUWv8/PpRrbYq8ZH/inDKfqoN3Skt4OAgDf0X7YV91c71GGIz15J/SEGDr006fWVCJEDg/2vV/Qb46PGmcKUe1ey+yvgqnpGRA/aKAG95uNZk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5142.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(86362001)(508600001)(5660300002)(8936002)(7416002)(966005)(6666004)(53546011)(6512007)(31686004)(186003)(66946007)(36756003)(316002)(54906003)(6916009)(8676002)(66476007)(66556008)(2616005)(38100700002)(26005)(6506007)(2906002)(4326008)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bDVCTCtFNC9lWXNSRll2SFg4Nzdlc0FXbFIyekNVSDNvMFJrNitYZWhqUENO?=
+ =?utf-8?B?WkVIdjVOQ2RaczNCcHZuYWk4SG9oOVdSbmtjSmxEZUFuQ1JzRGtXTUNtSy92?=
+ =?utf-8?B?RGdaRDE1UTBZdDJPSk5ud0ZGbVhlV21XeStlZ1BOSUZTTG5nZUF1ZDBNSGt4?=
+ =?utf-8?B?aVYvODhLRjRNV3loSVBuSEh6N0dFdGZGTWh5MlhnOEJmenpldUJTUFY4WnY0?=
+ =?utf-8?B?WVdwL211WnoxdDRSVmNCWmlpMkR4YWtsOXYvd0d0dmU4RnhJdVFDbzhFNWZO?=
+ =?utf-8?B?N1BMSjVUdFdTYnAxY0podWlQV2l1bisyMy9NTGxieDRnK2EwZXdRemJQcmJW?=
+ =?utf-8?B?WjlWR1RMLyt1VW1qME45dXVROGdxcmVmK2RFTkpibzdsQkpvVmcrK1kzNmtt?=
+ =?utf-8?B?Z2RsOGhpY1hyWS8rd1ZWbnFvM01XTVN5SlJqY1FyL3JIUGJSWlVNa1RrZWZs?=
+ =?utf-8?B?OE9sanF5bTNhU0FlbDh1bUM5NE9GdXk0aGVJclZSM2xVeGxId1R0Z3NVNndq?=
+ =?utf-8?B?VWhUVU1ta1lSeGZKZkwvR2h5Q09XNGR1SGthbDhreVpuN0VxWWpmUGR4R2NW?=
+ =?utf-8?B?TXNkNDlLcGR4QWx3dlEyR1p4eitsREVkaElOSlJHSXVrQnM3NGVueEo0TjF3?=
+ =?utf-8?B?WWZpRmYrNEYvK0RwYU5JMEhNUjR5ZVgxZGVSRG94cVYrNWhoSjBxK0ZadFdK?=
+ =?utf-8?B?SkNGOEc4OTZkM2puVFZMS1FVekZHK2JvelU5VGJ5VXBMNGx2MkRjdlMxMWtv?=
+ =?utf-8?B?MXRISnFvMHFUdDdESUFUY2lWQTJpbWI1QVFjNWVLM0VKQjRuV0tJcS9jWTkz?=
+ =?utf-8?B?c21FM2c0NmZldmc3WngzNWo3RElJNjI4ai8xUjdXbDd4eHBXZktJaHloaDE4?=
+ =?utf-8?B?LzVMVkgyNjBrZkN0VDFrRXZPL3dDZ1NYVzV5d0RkaVhNMUFoVCs5ZiswWEFQ?=
+ =?utf-8?B?ZzRxaFdXa2lzZXY1b3hBamNLQVBXaFI2bTFJQlBRYlZteE9XOHJNZC8zQldT?=
+ =?utf-8?B?Wmk5QlhGdCtFRTJSOUFRMmFTR0w2V0ZtenUvRXZSVGdHL3c3bkdmbHhTNFlC?=
+ =?utf-8?B?WVFoU3RsYTg3bU9IN1FIaW1uNEMzUzhxTFVOdnZJQ2pYaytSSi9UeWFpR0FB?=
+ =?utf-8?B?NEM2LzdZMmFlNlMwVWkrR1NmakxUYll0QUQ3UGhEMWNoWHZMNU16d25RcUdL?=
+ =?utf-8?B?OWN0MjdpL0pmaStoaUEvRE9veEx0UG9nZ3N1WERWMVFmMmlZR2JRTDd6N2Fr?=
+ =?utf-8?B?L1VVNk9FbiswVFR0RVVDR210OS9kdE5qRThQTVRrZTUxUWhSeCtPMmRTMXNx?=
+ =?utf-8?B?bkZYYnR5SkFlaG5WOXhIQ1U3aGR1VmsxZHpNR3hkSm5Jb3RCVGhsT2ZrakZi?=
+ =?utf-8?B?NC9MbkVsQW1FcU1VVHZHaTdSelBJNnNOWmZqSUw4NkhJaFRTOXpkQmIwRS9z?=
+ =?utf-8?B?OUs5dmVicndvakpTdkpsaTFpVkFTaUFEQXo4MVdaV3pWUkJvYTV3OGpPeWhF?=
+ =?utf-8?B?NGREeXBveHk5MTBGRFZIK2NoTk9KRytwd0pkdVlMc1c1dXZxSWlvN0tGbzBG?=
+ =?utf-8?B?bGJxUEs1T2VVdEYrdlZtY2Jkbld4MTZFTUNsVnBQTTF5d2hWU05URUlKaWgz?=
+ =?utf-8?B?eHBKdGRrRGtxVVZ6MHJZcW8yemZ1elV1a3lldFQzV2hRTmZaNGUzNlJHQmNO?=
+ =?utf-8?B?b0VNSzVpVDM2VVlIRXBrekU5cHVkL0hPOVd6Q240bVlveUFKVm9vdmt6Vlg2?=
+ =?utf-8?B?RVNiUHA1YjVSOWdwTmVyU2I2S3d3UjVENXBBeHJmbzBlQUx6eExzUmtDd2tO?=
+ =?utf-8?B?OE9tUitnZGphZTY2bzdyOGpnSUtyUjRtdzkyY1VvSjVyS1JVeEVVSlg3WUxF?=
+ =?utf-8?B?SXovRUZDNHIvcDhJb29oRVpYMEJtZy9yaDVaZGlYcTdoSSt5MHAwcWk2S2JC?=
+ =?utf-8?B?WVY4OER0aDRzdWxyTXVDSS9oYXJYbCttZkJ0N1VqdEg0UWN4QTFNOFZaU1Y2?=
+ =?utf-8?B?czhBRGJPWk9SOU95SWZIejFFSzhWUzFHbHNrVy9zWXI3cjM0aWNJNzUrdHA2?=
+ =?utf-8?B?SDh2U0RpeUtPY1FLaUgxUFIyWmN3Rnp6RFo3Vm9RaGF1MVpDbEJzNkZWVHQx?=
+ =?utf-8?B?SmZ4TDRRY0RKdXdUY1RNUnBCU0Z0WGczbmtzVTUzMEF2a2dUZCtiRGtDWDZt?=
+ =?utf-8?B?QjQ5dmhqdXArbmtQeGhpNXhjNmlWbkpxUEFjeTU3cTVtYVByd3JLVUw2cmJ6?=
+ =?utf-8?B?ZG8xRzh1bmlNS0VRa0ZhZEN2SXlqeTJjWHJxWHMvOEJnR2IrVEIrWWxyc2Vu?=
+ =?utf-8?B?dWFuSmxxUXUyUGU5NVBPQVY2dG9mb2RrZWdmanYzajQvSGczdFg1QT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95e08384-6be9-4313-be52-08da2d285ac2
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5142.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 17:14:17.7093
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sgN+PKbLYbpjlk07ZyT83qcV7luggzT8ozK6UCyVajpzjBva+PCWbcz+KOVYhTYLNmKb8O/kGCA96R5/2J0C6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4398
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, a partition root cannot have empty "cpuset.cpus.effective".
-As a result, a parent partition root cannot distribute out all its CPUs
- to child partitions with no CPUs left. However in most cases, there
-shouldn't be any tasks associated with intermediate nodes of the default
- hierarchy. So the current rule is too restrictive and can waste valuable
- CPU resource.
+On 2022-04-29 19:41, Alexei Starovoitov wrote:
+> On Fri, Apr 29, 2022 at 4:16 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+>> +       SYS("iptables -t raw -I PREROUTING \
+>> +           -i tmp1 -p tcp -m tcp --syn --dport 8080 -j CT --notrack");
+>> +       SYS("iptables -t filter -A INPUT \
+>> +           -i tmp1 -p tcp -m tcp --dport 8080 -m state --state INVALID,UNTRACKED \
+>> +           -j SYNPROXY --sack-perm --timestamp --wscale 7 --mss 1460");
+>> +       SYS("iptables -t filter -A INPUT \
+>> +           -i tmp1 -m state --state INVALID -j DROP");
+>> +
+>> +       ctrl_file = SYS_OUT("./xdp_synproxy --iface tmp1 --ports 8080 --single \
+>> +                           --mss4 1460 --mss6 1440 --wscale 7 --ttl 64");
+> 
+> That doesn't work for test_progs-no_alu32.
+> sh: line 1: ./xdp_synproxy: No such file or directory
+> https://github.com/kernel-patches/bpf/runs/6227226675?check_suite_focus=true#step:6:7380
+> 
+> and going to be fragile in general.
+> Could you launch it as a kthread or fork it
+> like other tests are doing ?
 
-To address this issue, we are now allowing a partition to have empty
-"cpuset.cpus.effective" as long as it has no task. Therefore, a parent
-partition with no task can now have all its CPUs distributed out to its
-child partitions. The top cpuset always have some house-keeping tasks
-running and so its list of effective cpu can't never be empty.
-
-Once a partition with empty "cpuset.cpus.effective" is formed, no
-new task can be moved into it until "cpuset.cpus.effective" becomes
-non-empty.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c | 111 +++++++++++++++++++++++++++++++----------
- 1 file changed, 84 insertions(+), 27 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index d156a39d7a08..7d9abd50a1b9 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -412,6 +412,41 @@ static inline bool is_in_v2_mode(void)
- 	      (cpuset_cgrp_subsys.root->flags & CGRP_ROOT_CPUSET_V2_MODE);
- }
- 
-+/**
-+ * partition_is_populated - check if partition has tasks
-+ * @cs: partition root to be checked
-+ * @excluded_child: a child cpuset to be excluded in task checking
-+ * Return: true if there are tasks, false otherwise
-+ *
-+ * It is assumed that @cs is a valid partition root. @excluded_child should
-+ * be non-NULL when this cpuset is going to become a partition itself.
-+ */
-+static inline bool partition_is_populated(struct cpuset *cs,
-+					  struct cpuset *excluded_child)
-+{
-+	struct cgroup_subsys_state *css;
-+	struct cpuset *child;
-+
-+	if (cs->css.cgroup->nr_populated_csets)
-+		return true;
-+	if (!excluded_child && !cs->nr_subparts_cpus)
-+		return cgroup_is_populated(cs->css.cgroup);
-+
-+	rcu_read_lock();
-+	cpuset_for_each_child(child, css, cs) {
-+		if (child == excluded_child)
-+			continue;
-+		if (is_partition_valid(child))
-+			continue;
-+		if (cgroup_is_populated(child->css.cgroup)) {
-+			rcu_read_unlock();
-+			return true;
-+		}
-+	}
-+	rcu_read_unlock();
-+	return false;
-+}
-+
- /*
-  * Return in pmask the portion of a task's cpusets's cpus_allowed that
-  * are online and are capable of running the task.  If none are found,
-@@ -1252,22 +1287,25 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 	if ((cmd != partcmd_update) && css_has_online_children(&cs->css))
- 		return -EBUSY;
- 
--	/*
--	 * Enabling partition root is not allowed if not all the CPUs
--	 * can be granted from parent's effective_cpus or at least one
--	 * CPU will be left after that.
--	 */
--	if ((cmd == partcmd_enable) &&
--	   (!cpumask_subset(cs->cpus_allowed, parent->effective_cpus) ||
--	     cpumask_equal(cs->cpus_allowed, parent->effective_cpus)))
--		return -EINVAL;
--
--	/*
--	 * A cpumask update cannot make parent's effective_cpus become empty.
--	 */
- 	adding = deleting = false;
- 	old_prs = new_prs = cs->partition_root_state;
- 	if (cmd == partcmd_enable) {
-+		/*
-+		 * Enabling partition root is not allowed if not all the CPUs
-+		 * can be granted from parent's effective_cpus.
-+		 */
-+		if (!cpumask_subset(cs->cpus_allowed, parent->effective_cpus))
-+			return -EINVAL;
-+
-+		/*
-+		 * A parent can be left with no CPU as long as there is no
-+		 * task directly associated with the parent partition. For
-+		 * such a parent, no new task can be moved into it.
-+		 */
-+		if (partition_is_populated(parent, cs) &&
-+		    cpumask_equal(cs->cpus_allowed, parent->effective_cpus))
-+			return -EINVAL;
-+
- 		cpumask_copy(tmp->addmask, cs->cpus_allowed);
- 		adding = true;
- 	} else if (cmd == partcmd_disable) {
-@@ -1289,9 +1327,10 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 		adding = cpumask_andnot(tmp->addmask, tmp->addmask,
- 					parent->subparts_cpus);
- 		/*
--		 * Return error if the new effective_cpus could become empty.
-+		 * Return error if the new effective_cpus could become empty
-+		 * and there are tasks in the parent.
- 		 */
--		if (adding &&
-+		if (adding && partition_is_populated(parent, cs) &&
- 		    cpumask_equal(parent->effective_cpus, tmp->addmask)) {
- 			if (!deleting)
- 				return -EINVAL;
-@@ -1317,8 +1356,8 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 		 */
- 		adding = cpumask_and(tmp->addmask, cs->cpus_allowed,
- 				     parent->effective_cpus);
--		part_error = cpumask_equal(tmp->addmask,
--					   parent->effective_cpus);
-+		part_error = cpumask_equal(tmp->addmask, parent->effective_cpus) &&
-+			     partition_is_populated(parent, cs);
- 	}
- 
- 	if (cmd == partcmd_update) {
-@@ -1420,9 +1459,15 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 
- 		/*
- 		 * If it becomes empty, inherit the effective mask of the
--		 * parent, which is guaranteed to have some CPUs.
-+		 * parent, which is guaranteed to have some CPUs unless
-+		 * it is a partition root that has explicitly distributed
-+		 * out all its CPUs.
- 		 */
- 		if (is_in_v2_mode() && cpumask_empty(tmp->new_cpus)) {
-+			if (is_partition_valid(cp) &&
-+			    cpumask_equal(cp->cpus_allowed, cp->subparts_cpus))
-+				goto update_parent_subparts;
-+
- 			cpumask_copy(tmp->new_cpus, parent->effective_cpus);
- 			if (!cp->use_parent_ecpus) {
- 				cp->use_parent_ecpus = true;
-@@ -1444,6 +1489,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 			continue;
- 		}
- 
-+update_parent_subparts:
- 		/*
- 		 * update_parent_subparts_cpumask() should have been called
- 		 * for cs already in update_cpumask(). We should also call
-@@ -2249,6 +2295,13 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
- 	    (cpumask_empty(cs->cpus_allowed) || nodes_empty(cs->mems_allowed)))
- 		goto out_unlock;
- 
-+	/*
-+	 * On default hierarchy, task cannot be moved to a cpuset with empty
-+	 * effective cpus.
-+	 */
-+	if (is_in_v2_mode() && cpumask_empty(cs->effective_cpus))
-+		goto out_unlock;
-+
- 	cgroup_taskset_for_each(task, css, tset) {
- 		ret = task_can_attach(task, cs->cpus_allowed);
- 		if (ret)
-@@ -3115,7 +3168,8 @@ hotplug_update_tasks(struct cpuset *cs,
- 		     struct cpumask *new_cpus, nodemask_t *new_mems,
- 		     bool cpus_updated, bool mems_updated)
- {
--	if (cpumask_empty(new_cpus))
-+	/* A partition root is allowed to have empty effective cpus */
-+	if (cpumask_empty(new_cpus) && !is_partition_valid(cs))
- 		cpumask_copy(new_cpus, parent_cs(cs)->effective_cpus);
- 	if (nodes_empty(*new_mems))
- 		*new_mems = parent_cs(cs)->effective_mems;
-@@ -3184,10 +3238,11 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 
- 	/*
- 	 * In the unlikely event that a partition root has empty
--	 * effective_cpus or its parent becomes invalid, we have to
--	 * transition it to the invalid state.
-+	 * effective_cpus with tasks or its parent becomes invalid, we
-+	 * have to transition it to the invalid state.
- 	 */
--	if (is_partition_valid(cs) && (cpumask_empty(&new_cpus) ||
-+	if (is_partition_valid(cs) &&
-+	   ((cpumask_empty(&new_cpus) && partition_is_populated(cs, NULL)) ||
- 	    is_partition_invalid(parent))) {
- 		if (cs->nr_subparts_cpus) {
- 			spin_lock_irq(&callback_lock);
-@@ -3198,13 +3253,15 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 		}
- 
- 		/*
--		 * If the effective_cpus is empty because the child
--		 * partitions take away all the CPUs, we can keep
--		 * the current partition and let the child partitions
--		 * fight for available CPUs.
-+		 * Force the partition to become invalid if either one of
-+		 * the following conditions hold:
-+		 * 1) empty effective cpus but not valid empty partition.
-+		 * 2) parent is invalid or doesn't grant any cpus to child
-+		 *    partitions.
- 		 */
- 		if (is_partition_invalid(parent) ||
--		     cpumask_empty(&new_cpus)) {
-+		    (cpumask_empty(&new_cpus) &&
-+		     partition_is_populated(cs, NULL))) {
- 			int old_prs;
- 
- 			update_parent_subparts_cpumask(cs, partcmd_disable,
--- 
-2.27.0
-
+A similar thing is done for the urandom_read binary used in another 
+test. What I missed is adding my binary to the Makefile the same way. 
+After adding it, both test_progs and test_progs-no_alu32 pass. 
+Respinning with the fix.
