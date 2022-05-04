@@ -2,86 +2,242 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B64AC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 00:30:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D3BDC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 00:31:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244716AbiEDAeB (ORCPT
+        id S244683AbiEDAfQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 May 2022 20:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        Tue, 3 May 2022 20:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244683AbiEDAdu (ORCPT
+        with ESMTP id S244654AbiEDAfP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 20:33:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235CC140A6;
-        Tue,  3 May 2022 17:30:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 3 May 2022 20:35:15 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E741AF03;
+        Tue,  3 May 2022 17:31:40 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id B64C02C0C28;
+        Wed,  4 May 2022 00:25:24 +0000 (UTC)
+Received: from pdx1-sub0-mail-a241.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 7F9E42C197B;
+        Wed,  4 May 2022 00:25:23 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651623923; a=rsa-sha256;
+        cv=none;
+        b=cEoPu6kERrPorAWzwKhl5iQYp2TOMXPNxO51fO7WY0aDZqpGO42Im9ssl9F0LsU+o2l7ZB
+        rL8HixG9Q9YbddpjVjzIXJonePtmV4bmXyKBz0HGduR2Zk0s7XOpce8yN/BKJvH8LhCDX+
+        7oTtHwWlYQ1MfWTPLffFpgZZV7DlrozWMy1hO99lMxY8w7thSqmvgC06fFYZDZU74ihxpv
+        rJf59KsKOPRWnPQAe99w+aIS63SZWNqSV4/EEA6FEX6hbpV5snKVLMfgqXwKBoLmeXFvp8
+        P/NQU3RZR20wVy1D0kh2eSLBcB87Cy5J1V+1hlxPmdixZusUQADc7EmpgWz/cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1651623923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=Hdg6qiQIlirwga0S1D4eAt0+896iFphupiKzUuqyi/Q=;
+        b=TAggbjMiNCTCeXU/LbfQrHxfiZMsJx6ACMrKwvXz/Zm6Xh+phKtkA0lG44TztFXnBBcpjY
+        D6lSwBgiBT6VADeEU2UoZZwPd2z00HmBKaDasKaYhjHXHmpf/KquTrmCRZ5DI+TP0iqFCS
+        gtxc9CRZb0iTnhc0gbPsPFuJhifTIVjE1qHO62NDODWT28mgU/4LwtQ8pKFXzGAekJ6IuQ
+        KvijZ/DJnAUhHcq4AKTvXqYaC5Mn7l9+S0WF45luTwDjlttivVFfIGmyBVmyBST/Ig9jVe
+        TGmCOorcyujog35EgGN6OSaHc/yis98UMxKyFaPD67NLQdmT4tF9q/PNutkqJw==
+ARC-Authentication-Results: i=1;
+        rspamd-fdd564cbf-kgpdw;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Towering-Name: 7796fde944d0d166_1651623924363_2581278341
+X-MC-Loop-Signature: 1651623924362:418608808
+X-MC-Ingress-Time: 1651623924362
+Received: from pdx1-sub0-mail-a241.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.96.96.26 (trex/6.7.1);
+        Wed, 04 May 2022 00:25:24 +0000
+Received: from offworld (unknown [8.34.116.185])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5F2661898;
-        Wed,  4 May 2022 00:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3147C385AF;
-        Wed,  4 May 2022 00:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651624212;
-        bh=KglZuKagv0gxyqvRJeEFFLrjR00kKp2Es5+aP8KqLCo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EeyEI1GdWm4F4DokikeqeKYKcGNKhfOlCb/a2TFROJK/ArROTd4C2zVPiEZRIOukD
-         VXOpuFu9R016IP6MFqCTz0ejALYO1ny08t6zlwLmP/WKICBQ0i6dbsaeTUlRixR0iU
-         15AUq/hXHNG+gNyBnBHQusl+Kxh2fSLIxTtdcuf5iZ+sKgJx1OPlFB9sGtDSVaeNBR
-         A4rLY2Gn4IVBCQG+2hHTBx/1lF4+EVij7c9cALTSVWGCzTRhWe2ab+Jt2Y/FA9pvhp
-         wyfFbeU80dd9ZbHnHd0YENhIaaIN7mkurx64BLdSG2G8ZhGqgNcWGLn/oVDKic2Y3Q
-         CLim5x4gvf2Hw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA0A9F03847;
-        Wed,  4 May 2022 00:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a241.dreamhost.com (Postfix) with ESMTPSA id 4KtHfT5mZnz1g;
+        Tue,  3 May 2022 17:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1651623923;
+        bh=Hdg6qiQIlirwga0S1D4eAt0+896iFphupiKzUuqyi/Q=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=rgUIAvoTFpTkfb3mIEefutvc2YskV5Y59hB3NobYW57orXBSp86moSb5KsmPlkCEy
+         4T/OCMcMwH3iZPPxh1h5nPyhB5fAoZvimb0PcS3XNJnjchUw+DQD/rmQpqIdf+f7uP
+         HOImaf1V1Ac64X8bg7vcd8m686bCjLbNV7gKUzITd5iFTYPS8pEJeZNgalR+b6lVKW
+         E9ssdneLShN65tkb6grnT8Z2jjV42h94o4otHpZ4KqnX2SpPKGJmHBu+SmOU9abMGq
+         AahW7vdKwo/9qR48/jfMRq4blgJXsSGsGT/yQLzMmetNKmFwcd9rAwulvFe1OM/VSC
+         vrBjviOfCrqyw==
+Date:   Tue, 3 May 2022 17:13:34 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Michal =?utf-8?B?S291dG7Dr8K/wr0=?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v5 1/4] memcg: introduce per-memcg reclaim interface
+Message-ID: <20220504001334.4va3c5ul33jbauti@offworld>
+Mail-Followup-To: Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Michal =?utf-8?B?S291dG7Dr8K/wr0=?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>
+References: <20220425190040.2475377-1-yosryahmed@google.com>
+ <20220425190040.2475377-2-yosryahmed@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: forwarding: add basic QoS classification
- test for Ocelot switches
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165162421182.21688.5454422128647214455.git-patchwork-notify@kernel.org>
-Date:   Wed, 04 May 2022 00:30:11 +0000
-References: <20220502155424.4098917-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20220502155424.4098917-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        pabeni@redhat.com, edumazet@google.com, f.fainelli@gmail.com,
-        vivien.didelot@gmail.com, andrew@lunn.ch, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        yangbo.lu@nxp.com, xiaoliang.yang_1@nxp.com, idosch@nvidia.com,
-        petrm@nvidia.com, maxime.chevallier@bootlin.com,
-        colin.foster@in-advantage.com, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220425190040.2475377-2-yosryahmed@google.com>
+User-Agent: NeoMutt/20220408
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Mon, 25 Apr 2022, Yosry Ahmed wrote:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+>From: Shakeel Butt <shakeelb@google.com>
+>
+>Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
+>
+>Use case: Proactive Reclaim
+>---------------------------
+>
+>A userspace proactive reclaimer can continuously probe the memcg to
+>reclaim a small amount of memory. This gives more accurate and
+>up-to-date workingset estimation as the LRUs are continuously
+>sorted and can potentially provide more deterministic memory
+>overcommit behavior. The memory overcommit controller can provide
+>more proactive response to the changing behavior of the running
+>applications instead of being reactive.
+>
+>A userspace reclaimer's purpose in this case is not a complete replacement
+>for kswapd or direct reclaim, it is to proactively identify memory savings
+>opportunities and reclaim some amount of cold pages set by the policy
+>to free up the memory for more demanding jobs or scheduling new jobs.
+>
+>A user space proactive reclaimer is used in Google data centers.
+>Additionally, Meta's TMO paper recently referenced a very similar
+>interface used for user space proactive reclaim:
+>https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
+>
+>Benefits of a user space reclaimer:
+>-----------------------------------
+>
+>1) More flexible on who should be charged for the cpu of the memory
+>reclaim. For proactive reclaim, it makes more sense to be centralized.
+>
+>2) More flexible on dedicating the resources (like cpu). The memory
+>overcommit controller can balance the cost between the cpu usage and
+>the memory reclaimed.
+>
+>3) Provides a way to the applications to keep their LRUs sorted, so,
+>under memory pressure better reclaim candidates are selected. This also
+>gives more accurate and uptodate notion of working set for an
+>application.
+>
+>Why memory.high is not enough?
+>------------------------------
+>
+>- memory.high can be used to trigger reclaim in a memcg and can
+>  potentially be used for proactive reclaim.
+>  However there is a big downside in using memory.high. It can potentially
+>  introduce high reclaim stalls in the target application as the
+>  allocations from the processes or the threads of the application can hit
+>  the temporary memory.high limit.
+>
+>- Userspace proactive reclaimers usually use feedback loops to decide
+>  how much memory to proactively reclaim from a workload. The metrics
+>  used for this are usually either refaults or PSI, and these metrics
+>  will become messy if the application gets throttled by hitting the
+>  high limit.
+>
+>- memory.high is a stateful interface, if the userspace proactive
+>  reclaimer crashes for any reason while triggering reclaim it can leave
+>  the application in a bad state.
+>
+>- If a workload is rapidly expanding, setting memory.high to proactively
+>  reclaim memory can result in actually reclaiming more memory than
+>  intended.
+>
+>The benefits of such interface and shortcomings of existing interface
+>were further discussed in this RFC thread:
+>https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+>
+>Interface:
+>----------
+>
+>Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
+>trigger reclaim in the target memory cgroup.
+>
+>The interface is introduced as a nested-keyed file to allow for future
+>optional arguments to be easily added to configure the behavior of
+>reclaim.
+>
+>Possible Extensions:
+>--------------------
+>
+>- This interface can be extended with an additional parameter or flags
+>  to allow specifying one or more types of memory to reclaim from (e.g.
+>  file, anon, ..).
+>
+>- The interface can also be extended with a node mask to reclaim from
+>  specific nodes. This has use cases for reclaim-based demotion in memory
+>  tiering systens.
+>
+>- A similar per-node interface can also be added to support proactive
+>  reclaim and reclaim-based demotion in systems without memcg.
+>
+>- Add a timeout parameter to make it easier for user space to call the
+>  interface without worrying about being blocked for an undefined amount
+>  of time.
+>
+>For now, let's keep things simple by adding the basic functionality.
+>
+>[yosryahmed@google.com: worked on versions v2 onwards, refreshed to
+>current master, updated commit message based on recent
+>discussions and use cases]
+>
+>Signed-off-by: Shakeel Butt <shakeelb@google.com>
+>Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
+>Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+>Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+>Acked-by: Michal Hocko <mhocko@suse.com>
+>Acked-by: Wei Xu <weixugc@google.com>
+>Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-On Mon,  2 May 2022 18:54:24 +0300 you wrote:
-> Test basic (port-default, VLAN PCP and IP DSCP) QoS classification for
-> Ocelot switches. Advanced QoS classification using tc filters is covered
-> by tc_flower_chains.sh in the same directory.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  .../selftests/drivers/net/ocelot/basic_qos.sh | 253 ++++++++++++++++++
->  1 file changed, 253 insertions(+)
->  create mode 100755 tools/testing/selftests/drivers/net/ocelot/basic_qos.sh
-
-Here is the summary with links:
-  - [net-next] selftests: forwarding: add basic QoS classification test for Ocelot switches
-    https://git.kernel.org/netdev/net-next/c/7d4e91e06486
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
