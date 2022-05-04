@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AAEAC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 00:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93607C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 00:16:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244506AbiEDAPb (ORCPT
+        id S232574AbiEDAUC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 May 2022 20:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        Tue, 3 May 2022 20:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244504AbiEDAPa (ORCPT
+        with ESMTP id S230071AbiEDAUB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 20:15:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F04C14087;
-        Tue,  3 May 2022 17:11:57 -0700 (PDT)
+        Tue, 3 May 2022 20:20:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233CA42A0F;
+        Tue,  3 May 2022 17:16:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AC3861839;
-        Wed,  4 May 2022 00:11:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62B4C385A4;
-        Wed,  4 May 2022 00:11:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 123AE61831;
+        Wed,  4 May 2022 00:16:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E05AC385A9;
+        Wed,  4 May 2022 00:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651623116;
-        bh=G+aZGUAr0FfQ9F3/qjycZ/CR4Cv6boS+C83q1nKXSqs=;
+        s=k20201202; t=1651623386;
+        bh=f0fsh6Uc4bvfHGbrVz3cXfk5QnV5TefLA9ufcSBuzxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y755J25ivPjrwAchjwtRXCl12Pb8K0fw3kyVxOnTlY6Hdxzz2F0OglpCYZixitNmV
-         guNWSmrZ2F5uNigbRYyIyN6oc76Ff3DD+O3b203M1sNgd3jSr8YnqNsqDt7Ay4KwA3
-         ycS3Bwk/Ip9sSVfM87PEpEzJULU+VC6CssAWgxBikYhSA9iHnjFdIQuP2LU5itqH2m
-         m5cxVR56lYwOlqtUlZplpI4fJd88Ue/Wvxt/Jt+dSQPWL4MAAcmjtVFaqN9K5jAs0s
-         2iBtC1+kqUZzwiseH+WqDSaZ3kZFNCqH9YkfeS/EDkABmqzAdJ2b1bJPPZyGggKhB5
-         Bgb8J9jiZy0dA==
+        b=jscYW4T6U4umNohgMaY+Q1fsw/2XLRV9HG6KGqA7hbElV2MUqKTNqWUNrWIzCPO+D
+         DxLer4Vou9TOXU04cV+vjPps/7rBvHKiPvGihZ9HITtGt6tu0ViOxpR+c5EnMuevv3
+         H9cciHi9w6Yamms/5Oxq6isF9k0chkjeMeEnzaVtrVTV7GrDvEm+5p0wJWn1eUYJIe
+         CqiXkYZlgCehLWtI7Ml1KbtHSptjfzGyePKOZmkzfHB4EWKs4WFd0WohQ9PexgVhTc
+         ejw3pgQO3A6oec9GV++fR7Ffj+7H025rTCT82vPLLCQ5miMpoi3TQN3i8jPL3rMsZT
+         5XWJwcpifeyyw==
 From:   SeongJae Park <sj@kernel.org>
 To:     Yuanchu Xie <yuanchu@google.com>
 Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
         SeongJae Park <sj@kernel.org>, rientjes@google.com,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] selftests/damon: suppress compiler warnings for huge_count_read_write
-Date:   Wed,  4 May 2022 00:11:53 +0000
-Message-Id: <20220504001153.119485-1-sj@kernel.org>
+Subject: Re: [PATCH v2 2/2] selftests/damon: add damon to selftests root Makefile
+Date:   Wed,  4 May 2022 00:16:22 +0000
+Message-Id: <20220504001622.132117-1-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504000358.1174849-1-yuanchu@google.com>
+In-Reply-To: <20220504000358.1174849-2-yuanchu@google.com>
 References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,16 +51,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Yuanchu, thank you for this patch!
+On Wed, 4 May 2022 00:03:58 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
 
-On Wed, 4 May 2022 00:03:57 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
-
-> The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
-> use '__GFP_NOWARN' for user-specified size buffer allocation")
-> intentionally writes and reads with a large count to cause
-> allocation failure and check for kernel warnings. We suppress
-> the compiler warnings for these calls as they work as intended.
+> Currently the damon selftests are not built with the rest of the
+> selftests. We add damon to the list of targets.
 > 
+> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
 > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 
 Reviewed-by: SeongJae Park <sj@kernel.org>
@@ -69,25 +65,21 @@ Reviewed-by: SeongJae Park <sj@kernel.org>
 Thanks,
 SJ
 
-[...]
 > ---
->  tools/testing/selftests/damon/Makefile | 3 +++
->  1 file changed, 3 insertions(+)
+>  tools/testing/selftests/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-> index 0470c5f3e690..a300b4c5b373 100644
-> --- a/tools/testing/selftests/damon/Makefile
-> +++ b/tools/testing/selftests/damon/Makefile
-> @@ -1,6 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Makefile for damon selftests
->  
-> +CFLAGS += -Wno-stringop-overread
-> +CFLAGS += -Wno-stringop-overflow
-> +
->  TEST_GEN_FILES += huge_count_read_write
->  
->  TEST_FILES = _chk_dependency.sh _debugfs_common.sh
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 2319ec87f53d..bd2ac8b3bf1f 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -9,6 +9,7 @@ TARGETS += clone3
+>  TARGETS += core
+>  TARGETS += cpufreq
+>  TARGETS += cpu-hotplug
+> +TARGETS += damon
+>  TARGETS += drivers/dma-buf
+>  TARGETS += efivarfs
+>  TARGETS += exec
 > -- 
 > 2.36.0.464.gb9c8b46e94-goog
-> 
