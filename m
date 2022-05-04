@@ -2,93 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 071C9C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 18:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0DCFC4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 18:44:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377586AbiEDSje (ORCPT
+        id S1354844AbiEDSrx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 May 2022 14:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        Wed, 4 May 2022 14:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377184AbiEDSi2 (ORCPT
+        with ESMTP id S1377014AbiEDSrs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 14:38:28 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FF44FC6A
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 11:29:19 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id ij27-20020a170902ab5b00b0015d41282214so1102072plb.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 11:29:19 -0700 (PDT)
+        Wed, 4 May 2022 14:47:48 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3F36576
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 11:44:08 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so2017915pjf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 11:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=8y34WRUMkXGaI7LiirYCxdfq8R7sMsgfnkBgNzio7vc=;
-        b=izXY7EVw92FzDfdevAMJvFOBnGz+CSM6UkMIvsTglpiKteCgoZp6QifGhzq1D4Dl+i
-         ca0HEhFdNXai4YsJumOdVHvmxKc8ym0x0dz0St7Q6XoPZTF+NO0x7edWwSQNIZpaq8bk
-         kL0iikHDGg++XGlx99/jFSXxot6+qQJ2KhEppwK0hm9hotUM/Sm4GyhPfhts9lB17crq
-         i+vOmM8CMAhyBDy0kvP73FtHqit/Rrrc1kCS1017Jwr9Y/cfzWT4ipdkOFYso7UepntB
-         qK7LSOsDdboMtlc46i27pL7TUpEow9zhMVfNK7WpB8BonYucl67mrDoXR4Wz55RDwe2T
-         CPGw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oe43FQiG0EzUZSwlDenCMxyLflMORQ+HtlOEqB8VlVA=;
+        b=XnA1TFA9Fh6f4piPiyq/dAyT6o7T0dTKnHiP+r9bZmMi+ttga/YwNQElvol4XlIqg8
+         5afqHEdKCXO8QEpF1JeXagIhRUl2ROvzgixxZYFDTn66biqzPl+4+cGrWlckcxesbs0V
+         PpV6dmWyTSyykxOdOOANji5wyMDUd4cls3uhg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=8y34WRUMkXGaI7LiirYCxdfq8R7sMsgfnkBgNzio7vc=;
-        b=uP+oFwZfJVi67scC/nqZPI8y1quy32Hv1H2gsve24Im/llpNIaFiq2nWpBk2vbOTlv
-         2DgmGyC99+NwXKds0FlQbxdvJn9gSydx1L65vfkV843KykLU9bmjL6ppIqS1djXX0iCA
-         ajY83E4r7XhHVCkvBqvSCoz+er5s1iGBLebEHCsTbjUDxo2m1Ag1PqWTLlkuLXDJ51cW
-         AywNX3cZljFnEsET3LoI+3br8yOcGEnrd+WvnujsuCDA1udgucHCv8aImiLzIpaXWMyL
-         QheGYSBRuY/I9X98f2+oB6DZmqjmxpZrmCaFjpFrAIO57J3hB2tK2cBUTr+up5i/6/eg
-         HXLg==
-X-Gm-Message-State: AOAM530Gh2CLTupJoUeACYw8lDP64/JSgAIfq6GcJBL9JaIjU6h6s5F6
-        zqVjJfq4Qma3St5L1C04gdfZdTdOTTl/
-X-Google-Smtp-Source: ABdhPJz3R/tzVrU+GfQpvY/EakNRjlgGc3rdRnTdOp7XNw4RRoGUgJkJqCBw4Q5RqkYLf56sAroZKd5Rmhyk
-X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
- (user=yuanchu job=sendgmr) by 2002:aa7:8888:0:b0:50f:2e7a:76b7 with SMTP id
- z8-20020aa78888000000b0050f2e7a76b7mr6455495pfe.48.1651688958824; Wed, 04 May
- 2022 11:29:18 -0700 (PDT)
-Date:   Wed,  4 May 2022 18:29:08 +0000
-In-Reply-To: <20220504001153.119485-1-sj@kernel.org>
-Message-Id: <20220504182908.1322874-1-yuanchu@google.com>
-Mime-Version: 1.0
-References: <20220504001153.119485-1-sj@kernel.org>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
-From:   Yuanchu Xie <yuanchu@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>
-Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oe43FQiG0EzUZSwlDenCMxyLflMORQ+HtlOEqB8VlVA=;
+        b=rXeNK0sbUp6KWj2BPvnzF5T1bfu6sNU0ZeJV7nbzS6PPEZF8VWe/5l4QB4yOP39G8r
+         0ZKuaoRCFtE7vlKjVJDTWH5pyn1RP0bZKXwWk1HpFXw159lO+DsLeml84OAU6C+0MsMr
+         f3O0UgRKduyRXTcYd+KRu1XmoGDTu1KBjlZCgc8prTMfHf0ZeMvpf/yVuojKKdMHFGWf
+         ds+ruT2o0clsNbf8vbp9eA6z877sQGz2YcRRTL/XKYeo8dg8Kfar/4hkQU92H2TKZoVc
+         jo2rz6UT0SiRZPordGZtCMc8kpQ7liICUv3w5b4JFXmu11qyaHzFP5HQV6f73zNyjCeH
+         dyBA==
+X-Gm-Message-State: AOAM533mUunZIHV7GH4wsV6MblyKbpLcxovv3Faq0T3j2RPO3NdKCBK9
+        pityWtfQj/lByZJJd4pzOZMctjzLoAkV7w==
+X-Google-Smtp-Source: ABdhPJygwZxM4lRozsPV6mEjYbV+xHDzUeqet/CyZZIxT24CiVokiYTttmc6WzTwJfsOpKtodAXblA==
+X-Received: by 2002:a17:903:18b:b0:15e:92b9:783 with SMTP id z11-20020a170903018b00b0015e92b90783mr20706653plg.30.1651689848360;
+        Wed, 04 May 2022 11:44:08 -0700 (PDT)
+Received: from [192.168.120.250] (wsip-70-166-189-147.ph.ph.cox.net. [70.166.189.147])
+        by smtp.gmail.com with ESMTPSA id q12-20020a63f94c000000b003c14af50635sm15141662pgk.77.2022.05.04.11.44.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 11:44:07 -0700 (PDT)
+Subject: Re: [PATCH] selftests: mqueue: fix all errors
+To:     Sebin Sebastian <mailmesebin00@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220504101720.5201-1-mailmesebin00@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fb86cba0-e9dd-7e66-d3c9-53b8b89d9469@linuxfoundation.org>
+Date:   Wed, 4 May 2022 12:44:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220504101720.5201-1-mailmesebin00@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
-use '__GFP_NOWARN' for user-specified size buffer allocation")
-intentionally writes and reads with a large count to cause
-allocation failure and check for kernel warnings. We suppress
-the compiler warnings for these calls as they work as intended.
+On 5/4/22 4:17 AM, Sebin Sebastian wrote:
+> All errors and styling issues were fixed.
+> 
+> Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
 
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please include details on how you found the problems and the log from the tool
 
-diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-index ad7a6b4cf338..91bd80c75cd9 100644
---- a/tools/testing/selftests/damon/huge_count_read_write.c
-+++ b/tools/testing/selftests/damon/huge_count_read_write.c
-@@ -2,6 +2,8 @@
- /*
-  * Author: SeongJae Park <sj@kernel.org>
-  */
-+#pragma GCC diagnostic ignored "-Wstringop-overflow"
-+#pragma GCC diagnostic ignored "-Wstringop-overread"
- 
- #include <fcntl.h>
- #include <stdlib.h>
--- 
-2.36.0.464.gb9c8b46e94-goog
+> ---
+>   .../testing/selftests/mqueue/mq_open_tests.c  | 19 ++++++++++++-------
+>   1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mqueue/mq_open_tests.c b/tools/testing/selftests/mqueue/mq_open_tests.c
+> index 9403ac01ba11..c3cb40eae1e9 100644
+> --- a/tools/testing/selftests/mqueue/mq_open_tests.c
+> +++ b/tools/testing/selftests/mqueue/mq_open_tests.c
+> @@ -59,12 +59,12 @@ char *default_queue_path = "/test1";
+>   mqd_t queue = -1;
+>   
+>   static inline void __set(FILE *stream, int value, char *err_msg);
+> -void shutdown(int exit_val, char *err_cause, int line_no);
+> + void shutdown(int exit_val, char *err_cause, int line_no);
+I don't see any change in this line
 
+Including the log helps me understand why these changes are necessary.
+
+thanks,
+-- Shuah
