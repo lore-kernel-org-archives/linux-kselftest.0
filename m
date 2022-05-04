@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 915EBC433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 22:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80B25C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 22:55:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379803AbiEDW6j (ORCPT
+        id S1379828AbiEDW6l (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 May 2022 18:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        Wed, 4 May 2022 18:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379754AbiEDW5n (ORCPT
+        with ESMTP id S1379277AbiEDW6K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 18:57:43 -0400
+        Wed, 4 May 2022 18:58:10 -0400
 Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF22D53A64;
-        Wed,  4 May 2022 15:52:00 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id c125so3053592iof.9;
-        Wed, 04 May 2022 15:52:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB4D5469A;
+        Wed,  4 May 2022 15:52:06 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id r27so3077787iot.1;
+        Wed, 04 May 2022 15:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/yECAIQpVJu3JU/pGNaIuw7xSCvhNujVf2mLOqXUlas=;
-        b=CGY48g7LDIwrxmADUwlOZtS9Wuf0SYUAqOrZ9BasTt7ZJ9tTTeIkGuUxAO5Sl/sIn1
-         y9Y6irebmgIp4PCpAzz0jinfWLs5g/gj2VoqFRQw4S4nv7LddF4l8pTVg/BQ9cpPfpDd
-         LmjOfVPFvivNNPAwCZdjSqYKZcTorfM9FDpwz5MjLcr3cSWx0l7cRoQnBLZtAMyxAZQA
-         Xk4aWCWPzwNhKnUYPeZ2eAv6Je1OV9XzLhddTQ5nvUA3+qMjHo2B++HZSH7VkU/BZlYb
-         XK9KRk5mRLuex9xxjgpx6OFr8x9SiKEooCF8ARWGi24rvvel+jXdlrnCwIskIu13hAVF
-         Ku6Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qPy6cGZiVn9/0omaO+YfLe4SKbdSU3+fUcFNm6w49Kc=;
+        b=Z5e4PVqRZ3ZwoKj8x9aPrzkkAEc0QVBpouupChjpPGGs4ajRWKxB6FZqVsoR2YAGBt
+         eCzrjaFYsRh5fEZA7ef7WccYCWAerqmiVC1zHW6jHk0KfmPtLgnZ/ThACwcGsmkC4Kty
+         hzTHeyQDQTOmoVIIkT2H3HWXY5/v2bCbc89iuDJdLyDWaj1NKGnn9p/hyC81o/GTk46H
+         6d+OsQqZzSH2MElJy8Q/EL4ZXfRu06OY0w9Do835t34y/O23+meMHNRG/p7W6XT9rij8
+         pFLMC353sef/SqIO/cDIABK+IDr5lp1lDNQtuzoOtxfCbSrggYOFD4coy+ZvuFpJNlWy
+         X9vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/yECAIQpVJu3JU/pGNaIuw7xSCvhNujVf2mLOqXUlas=;
-        b=G6cfWq5YXhYQ/MgmYEXD5Yne8wdakgLRzseRR2pYJPaQ4OCwkov26L4QA1A0G1Wptb
-         hsHGiPGXEo+Tl23Q62u9X0LP8M9Xs6aDxHc74tF2S84iri1c2QZev/lgGiPEdx/KEsM7
-         lIc6k2KU3oEDp2YDy82z6xYRge7tvdPzv3ThocqRiQmFGhAVxKHanlOyLo5AjsZAkd0b
-         LkNNkw6Ds+Tf+kB5HckQdKB25tFsB0SkTzSFdgggMDVi3iChCW13rSgeExnKPUGCmLdQ
-         JDSC9Bo0UME3W8/WgQkBXetC5xH74NRiXNaDPv5T9qSWWQUjyGnp2pr41jS9IXtZtRWu
-         RLQA==
-X-Gm-Message-State: AOAM532/8lWmPkvSjz0edacOpgQKiQM1UwontEAe709RCtspyaA1Zx1g
-        zhiWqr0CmUodFiG87E7xqIA=
-X-Google-Smtp-Source: ABdhPJxnAWQpfsmSZqFrknjlSk2A6xtbXqmlrrzpyFWqHtAyHnWVW1cVZBGNUO0IuuNuZ/Wee5QP0Q==
-X-Received: by 2002:a05:6602:2d0d:b0:659:aa9e:95a0 with SMTP id c13-20020a0566022d0d00b00659aa9e95a0mr9104400iow.106.1651704719875;
-        Wed, 04 May 2022 15:51:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qPy6cGZiVn9/0omaO+YfLe4SKbdSU3+fUcFNm6w49Kc=;
+        b=cFmahDDmHHD9HCMz3BuqdTQznHQr3x5ARtqcnAByhRrN7LBq3qUlWU7sAlvKVebti5
+         RCaAZp0sE7dITU22bv4c4zvUMMIK+oqjqXGiu4M26qizGdfX13VStGKhqTD29Fjte9GE
+         pvqWnXSt6e8+8yovo57r2mTAiDnW/clYWwpUl5fT/uTWHcwQlmZ2pYP//xNUQ3oTyhQ7
+         rywXId35jX9EdozOnpMFRN+cvJIeR1TmL4VyRAO35OQB4hOtVt59e4LBUbVTK6NSZDDy
+         FJdV4cNmP7bTSSuQsO/4keO160RTVHSE925jujDN/vG1nJE1pRxNJjP29NCUgX4T5g7I
+         dXqw==
+X-Gm-Message-State: AOAM530dpB/vlGryv9clHPhF1YstvcdcNj+TdZZBSvBaDOLxTOl1ad9U
+        ENttdBVK9b5NGUsRJmIdOjA=
+X-Google-Smtp-Source: ABdhPJzSQVwE7Bb+9mGRgCfNyffXiYGtwDfkeBKWE6u3UzUmpHek9/hw9VzPJkOGmhwIFOTMJskXFA==
+X-Received: by 2002:a05:6638:144b:b0:321:589b:a8ea with SMTP id l11-20020a056638144b00b00321589ba8eamr10245216jad.296.1651704721781;
+        Wed, 04 May 2022 15:52:01 -0700 (PDT)
 Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:94d4:5fe2:e117:e7c3])
-        by smtp.gmail.com with ESMTPSA id i25-20020a02b699000000b0032b608e2926sm66372jam.9.2022.05.04.15.51.58
+        by smtp.gmail.com with ESMTPSA id i25-20020a02b699000000b0032b608e2926sm66372jam.9.2022.05.04.15.52.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 15:51:59 -0700 (PDT)
+        Wed, 04 May 2022 15:52:01 -0700 (PDT)
 From:   frowand.list@gmail.com
 To:     Frank Rowand <frowand.list@gmail.com>,
         David Gow <davidgow@google.com>,
@@ -60,10 +60,12 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
         kernelci@groups.io, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] begin KTAP spec v2 process
-Date:   Wed,  4 May 2022 17:51:50 -0500
-Message-Id: <20220504225152.1451440-1-frowand.list@gmail.com>
+Subject: [PATCH v2 2/2] ktap_v2: change "version 1" to "version 2" in examples
+Date:   Wed,  4 May 2022 17:51:52 -0500
+Message-Id: <20220504225152.1451440-3-frowand.list@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220504225152.1451440-1-frowand.list@gmail.com>
+References: <20220504225152.1451440-1-frowand.list@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -72,29 +74,91 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Frank Rowand <frank.rowand@sony.com>
 
-The process to create version 2 of the KTAP Specification is documented
-in email discussions.  I am attempting to capture this information at
+Change the "version line" in example output from
+"KTAP version 1" to "KTAP version 2".
 
-   https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
+Change version that should be used by compliant tests from 1 to 2.
 
-I am already not following the suggested process, which says:
-"...please try to follow this principal of one major topic per email
-thread."  I think that is ok in this case because the two patches
-are related and (hopefully) not controversial.
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+---
+ Documentation/dev-tools/ktap.rst | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-Changes since patch version 1:
-   - drop patch 1/2.  Jonathan Corbet has already applied this patch
-     into version 1 of the Specification
-   - rename patch 2/2 to patch 1/2, with updated patch comment
-   - add new patch 2/2
-
-Frank Rowand (2):
-  ktap_v2: change version to 2-rc in KTAP specification
-  ktap_v2: change "version 1" to "version 2" in examples
-
- Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
+diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+index 37b5dc61bfb8..c78bb46a4430 100644
+--- a/Documentation/dev-tools/ktap.rst
++++ b/Documentation/dev-tools/ktap.rst
+@@ -39,6 +39,7 @@ version of the (K)TAP standard the result is compliant with.
+ 
+ For example:
+ - "KTAP version 1"
++- "KTAP version 2"
+ - "TAP version 13"
+ - "TAP version 14"
+ 
+@@ -46,7 +47,7 @@ Note that, in KTAP, subtests also begin with a version line, which denotes the
+ start of the nested test results. This differs from TAP14, which uses a
+ separate "Subtest" line.
+ 
+-While, going forward, "KTAP version 1" should be used by compliant tests, it
++While, going forward, "KTAP version 2" should be used by compliant tests, it
+ is expected that most parsers and other tooling will accept the other versions
+ listed here for compatibility with existing tests and frameworks.
+ 
+@@ -204,9 +205,9 @@ An example of a test with two nested subtests:
+ 
+ .. code-block:: none
+ 
+-	KTAP version 1
++	KTAP version 2
+ 	1..1
+-	  KTAP version 1
++	  KTAP version 2
+ 	  1..2
+ 	  ok 1 test_1
+ 	  not ok 2 test_2
+@@ -217,11 +218,11 @@ An example format with multiple levels of nested testing:
+ 
+ .. code-block:: none
+ 
+-	KTAP version 1
++	KTAP version 2
+ 	1..2
+-	  KTAP version 1
++	  KTAP version 2
+ 	  1..2
+-	    KTAP version 1
++	    KTAP version 2
+ 	    1..2
+ 	    not ok 1 test_1
+ 	    ok 2 test_2
+@@ -252,21 +253,21 @@ Example KTAP output
+ --------------------
+ .. code-block:: none
+ 
+-	KTAP version 1
++	KTAP version 2
+ 	1..1
+-	  KTAP version 1
++	  KTAP version 2
+ 	  1..3
+-	    KTAP version 1
++	    KTAP version 2
+ 	    1..1
+ 	    # test_1: initializing test_1
+ 	    ok 1 test_1
+ 	  ok 1 example_test_1
+-	    KTAP version 1
++	    KTAP version 2
+ 	    1..2
+ 	    ok 1 test_1 # SKIP test_1 skipped
+ 	    ok 2 test_2
+ 	  ok 2 example_test_2
+-	    KTAP version 1
++	    KTAP version 2
+ 	    1..3
+ 	    ok 1 test_1
+ 	    # test_2: FAIL
 -- 
 Frank Rowand <frank.rowand@sony.com>
 
