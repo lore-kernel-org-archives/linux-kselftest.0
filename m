@@ -2,242 +2,77 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D3BDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 00:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EF24C433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 May 2022 04:50:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244683AbiEDAfQ (ORCPT
+        id S235027AbiEDEyG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 May 2022 20:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
+        Wed, 4 May 2022 00:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244654AbiEDAfP (ORCPT
+        with ESMTP id S233505AbiEDEyF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 May 2022 20:35:15 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E741AF03;
-        Tue,  3 May 2022 17:31:40 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id B64C02C0C28;
-        Wed,  4 May 2022 00:25:24 +0000 (UTC)
-Received: from pdx1-sub0-mail-a241.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 7F9E42C197B;
-        Wed,  4 May 2022 00:25:23 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651623923; a=rsa-sha256;
-        cv=none;
-        b=cEoPu6kERrPorAWzwKhl5iQYp2TOMXPNxO51fO7WY0aDZqpGO42Im9ssl9F0LsU+o2l7ZB
-        rL8HixG9Q9YbddpjVjzIXJonePtmV4bmXyKBz0HGduR2Zk0s7XOpce8yN/BKJvH8LhCDX+
-        7oTtHwWlYQ1MfWTPLffFpgZZV7DlrozWMy1hO99lMxY8w7thSqmvgC06fFYZDZU74ihxpv
-        rJf59KsKOPRWnPQAe99w+aIS63SZWNqSV4/EEA6FEX6hbpV5snKVLMfgqXwKBoLmeXFvp8
-        P/NQU3RZR20wVy1D0kh2eSLBcB87Cy5J1V+1hlxPmdixZusUQADc7EmpgWz/cg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651623923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Hdg6qiQIlirwga0S1D4eAt0+896iFphupiKzUuqyi/Q=;
-        b=TAggbjMiNCTCeXU/LbfQrHxfiZMsJx6ACMrKwvXz/Zm6Xh+phKtkA0lG44TztFXnBBcpjY
-        D6lSwBgiBT6VADeEU2UoZZwPd2z00HmBKaDasKaYhjHXHmpf/KquTrmCRZ5DI+TP0iqFCS
-        gtxc9CRZb0iTnhc0gbPsPFuJhifTIVjE1qHO62NDODWT28mgU/4LwtQ8pKFXzGAekJ6IuQ
-        KvijZ/DJnAUhHcq4AKTvXqYaC5Mn7l9+S0WF45luTwDjlttivVFfIGmyBVmyBST/Ig9jVe
-        TGmCOorcyujog35EgGN6OSaHc/yis98UMxKyFaPD67NLQdmT4tF9q/PNutkqJw==
-ARC-Authentication-Results: i=1;
-        rspamd-fdd564cbf-kgpdw;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Towering-Name: 7796fde944d0d166_1651623924363_2581278341
-X-MC-Loop-Signature: 1651623924362:418608808
-X-MC-Ingress-Time: 1651623924362
-Received: from pdx1-sub0-mail-a241.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.96.96.26 (trex/6.7.1);
-        Wed, 04 May 2022 00:25:24 +0000
-Received: from offworld (unknown [8.34.116.185])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a241.dreamhost.com (Postfix) with ESMTPSA id 4KtHfT5mZnz1g;
-        Tue,  3 May 2022 17:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1651623923;
-        bh=Hdg6qiQIlirwga0S1D4eAt0+896iFphupiKzUuqyi/Q=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=rgUIAvoTFpTkfb3mIEefutvc2YskV5Y59hB3NobYW57orXBSp86moSb5KsmPlkCEy
-         4T/OCMcMwH3iZPPxh1h5nPyhB5fAoZvimb0PcS3XNJnjchUw+DQD/rmQpqIdf+f7uP
-         HOImaf1V1Ac64X8bg7vcd8m686bCjLbNV7gKUzITd5iFTYPS8pEJeZNgalR+b6lVKW
-         E9ssdneLShN65tkb6grnT8Z2jjV42h94o4otHpZ4KqnX2SpPKGJmHBu+SmOU9abMGq
-         AahW7vdKwo/9qR48/jfMRq4blgJXsSGsGT/yQLzMmetNKmFwcd9rAwulvFe1OM/VSC
-         vrBjviOfCrqyw==
-Date:   Tue, 3 May 2022 17:13:34 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Michal =?utf-8?B?S291dG7Dr8K/wr0=?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v5 1/4] memcg: introduce per-memcg reclaim interface
-Message-ID: <20220504001334.4va3c5ul33jbauti@offworld>
-Mail-Followup-To: Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Michal =?utf-8?B?S291dG7Dr8K/wr0=?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-References: <20220425190040.2475377-1-yosryahmed@google.com>
- <20220425190040.2475377-2-yosryahmed@google.com>
+        Wed, 4 May 2022 00:54:05 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6654317E10
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 May 2022 21:50:30 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d22so417340plr.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 May 2022 21:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=nDnIq4AJplcQ+V/YkmM9MByHrS7SNaW6zevcswA9vuo=;
+        b=E+q3rvnQG7/uAG7CxQ8bGZmNH9iz0VFV8fu2I2ORaDNUWXrRmj6iEyM2NpydbymxmP
+         +Pq//57c8Z4Wo3HZ+KUP9MCFEgh0ToLzWfYII/dD0x/Ps/Tz+PfDXlqNgGKcLl+Y9LdW
+         MpAg66Yty4ZeDNaenulGJbsESaQjMmKW3oBBrsu/6e8DDYkqSKuy7eYi4XP1YxnZEr5+
+         lBoIykh3Uq63FTr7xeugs00+/rrQtkxObkNaVFTpt/+AhLeOQNktBT0O3xzt9STPXLDx
+         mKPaHjZXKd1lnUSjUUh420CgP+2w1PQuSx4YlGv7tAD8/GFD9lpewulJ58PsM2udwIxp
+         Vb5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=nDnIq4AJplcQ+V/YkmM9MByHrS7SNaW6zevcswA9vuo=;
+        b=KMsPzSL1Zieij6wTYoY1ESijVtX9fcauvjFGZxTU5/wvSZYxOCaYwIM2OJSYxvN1EW
+         n6gXuY5Skiy2xTcZM7m59re1tBtoIb9jVC8wHxNjSp9LM8e0d1kjvoEiWdzLMIClpGvY
+         hTj/hPxEfkXPglSMSB6lRhrFQhaIA8HHDovrbsUM/jn5GCLwQZIyYc6bv7/ChvTG2rQk
+         AN53N5uYc1Ap0KqtQ6tR6RCYxpaA9NdL/annR8ytNA+u99DA6Mh3k+qXKo4RhpSs0XU+
+         0769U4ghWR3xI+iE9jrrfh61WTDiCT/vYCPD3WISB/OiGliM90/r0batvMGCvkwUhoFK
+         eXEQ==
+X-Gm-Message-State: AOAM530w6wTz+yCgADzah19/dqE6PsHh3u/eMKj1F4C+ex0/onSh4zaZ
+        C8GNtk5muxkkIs8oD4yuMHYHTRtSwZ507g==
+X-Google-Smtp-Source: ABdhPJzPnzlabVWMQ4GQHpHNvKJk1TekE2nin/8E/4hKug+e48n/j2/Bmix2rpjWzhj9bkppl8LSWA==
+X-Received: by 2002:a17:90a:b395:b0:1dc:a402:bd4 with SMTP id e21-20020a17090ab39500b001dca4020bd4mr97878pjr.238.1651639829760;
+        Tue, 03 May 2022 21:50:29 -0700 (PDT)
+Received: from [2620:15c:29:204:81bf:3703:f79b:1d5] ([2620:15c:29:204:81bf:3703:f79b:1d5])
+        by smtp.gmail.com with ESMTPSA id z21-20020aa791d5000000b0050dc76281ddsm7157513pfa.183.2022.05.03.21.50.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 21:50:29 -0700 (PDT)
+Date:   Tue, 3 May 2022 21:50:28 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     Yuanchu Xie <yuanchu@google.com>
+cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] selftests/damon: add damon to selftests root
+ Makefile
+In-Reply-To: <20220504000358.1174849-2-yuanchu@google.com>
+Message-ID: <11379f3f-441e-4851-7d4d-61ec68abc59@google.com>
+References: <f6cc50f0-318f-097f-af13-271a2fb4d645@linuxfoundation.org> <20220504000358.1174849-1-yuanchu@google.com> <20220504000358.1174849-2-yuanchu@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220425190040.2475377-2-yosryahmed@google.com>
-User-Agent: NeoMutt/20220408
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 25 Apr 2022, Yosry Ahmed wrote:
+On Wed, 4 May 2022, Yuanchu Xie wrote:
 
->From: Shakeel Butt <shakeelb@google.com>
->
->Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
->
->Use case: Proactive Reclaim
->---------------------------
->
->A userspace proactive reclaimer can continuously probe the memcg to
->reclaim a small amount of memory. This gives more accurate and
->up-to-date workingset estimation as the LRUs are continuously
->sorted and can potentially provide more deterministic memory
->overcommit behavior. The memory overcommit controller can provide
->more proactive response to the changing behavior of the running
->applications instead of being reactive.
->
->A userspace reclaimer's purpose in this case is not a complete replacement
->for kswapd or direct reclaim, it is to proactively identify memory savings
->opportunities and reclaim some amount of cold pages set by the policy
->to free up the memory for more demanding jobs or scheduling new jobs.
->
->A user space proactive reclaimer is used in Google data centers.
->Additionally, Meta's TMO paper recently referenced a very similar
->interface used for user space proactive reclaim:
->https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
->
->Benefits of a user space reclaimer:
->-----------------------------------
->
->1) More flexible on who should be charged for the cpu of the memory
->reclaim. For proactive reclaim, it makes more sense to be centralized.
->
->2) More flexible on dedicating the resources (like cpu). The memory
->overcommit controller can balance the cost between the cpu usage and
->the memory reclaimed.
->
->3) Provides a way to the applications to keep their LRUs sorted, so,
->under memory pressure better reclaim candidates are selected. This also
->gives more accurate and uptodate notion of working set for an
->application.
->
->Why memory.high is not enough?
->------------------------------
->
->- memory.high can be used to trigger reclaim in a memcg and can
->  potentially be used for proactive reclaim.
->  However there is a big downside in using memory.high. It can potentially
->  introduce high reclaim stalls in the target application as the
->  allocations from the processes or the threads of the application can hit
->  the temporary memory.high limit.
->
->- Userspace proactive reclaimers usually use feedback loops to decide
->  how much memory to proactively reclaim from a workload. The metrics
->  used for this are usually either refaults or PSI, and these metrics
->  will become messy if the application gets throttled by hitting the
->  high limit.
->
->- memory.high is a stateful interface, if the userspace proactive
->  reclaimer crashes for any reason while triggering reclaim it can leave
->  the application in a bad state.
->
->- If a workload is rapidly expanding, setting memory.high to proactively
->  reclaim memory can result in actually reclaiming more memory than
->  intended.
->
->The benefits of such interface and shortcomings of existing interface
->were further discussed in this RFC thread:
->https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
->
->Interface:
->----------
->
->Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
->trigger reclaim in the target memory cgroup.
->
->The interface is introduced as a nested-keyed file to allow for future
->optional arguments to be easily added to configure the behavior of
->reclaim.
->
->Possible Extensions:
->--------------------
->
->- This interface can be extended with an additional parameter or flags
->  to allow specifying one or more types of memory to reclaim from (e.g.
->  file, anon, ..).
->
->- The interface can also be extended with a node mask to reclaim from
->  specific nodes. This has use cases for reclaim-based demotion in memory
->  tiering systens.
->
->- A similar per-node interface can also be added to support proactive
->  reclaim and reclaim-based demotion in systems without memcg.
->
->- Add a timeout parameter to make it easier for user space to call the
->  interface without worrying about being blocked for an undefined amount
->  of time.
->
->For now, let's keep things simple by adding the basic functionality.
->
->[yosryahmed@google.com: worked on versions v2 onwards, refreshed to
->current master, updated commit message based on recent
->discussions and use cases]
->
->Signed-off-by: Shakeel Butt <shakeelb@google.com>
->Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
->Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
->Acked-by: Johannes Weiner <hannes@cmpxchg.org>
->Acked-by: Michal Hocko <mhocko@suse.com>
->Acked-by: Wei Xu <weixugc@google.com>
->Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Currently the damon selftests are not built with the rest of the
+> selftests. We add damon to the list of targets.
+> 
+> Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Acked-by: David Rientjes <rientjes@google.com>
