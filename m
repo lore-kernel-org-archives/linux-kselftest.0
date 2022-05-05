@@ -2,105 +2,116 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34365C433FE
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 May 2022 00:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6BFBC433F5
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 May 2022 00:27:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiEEAFG (ORCPT
+        id S231204AbiEEAar (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 May 2022 20:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        Wed, 4 May 2022 20:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382740AbiEDXux (ORCPT
+        with ESMTP id S230133AbiEEAaq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 May 2022 19:50:53 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055E521824
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 16:47:16 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id d5so3957173wrb.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 16:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a3PQkN+gf21RggCfRlbnzAg3Y0IDK9AvrHUeXDspmDA=;
-        b=s8D0hdEErUtB/tOqqi5koPP1ObIltDHxJsF3vu7tUYKf+QVqE2BCZwe8TwmjVrWD/p
-         tZYhf6h5cY5lziFt0dxJxyYtlSU3McdElqedVlwADKJdcMW3hEghSebK86BKQW5Gk1rb
-         h5RLyhUpDnIbB+E5g3WraStYDvzpqQwqSxKw/FT08LqpZ21OKQdNbLlDufQWqebOYO6o
-         RL8UdgO3Vne1Od0ianbjpjNNU5emYhQSEnSwmyU8z94ORg7Xfr45C6XXUIPg44vwPA+9
-         HfwPApdY1k0FIIsOo8YZalDDuZ7z2+ZizWaJ+xN+YlhWvw0IZBOcBjYhbgdEwstQh2OK
-         m1Jg==
+        Wed, 4 May 2022 20:30:46 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 17:27:04 PDT
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E3FB45060
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 May 2022 17:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651710423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x+VFB+RbqDxtdPfXH5fs43HvbZapK8JlXZrJfass0jo=;
+        b=iPcBX47jh+qpj+j3L6zJpDUABVmc0DGKs38DLwZZTCppKkBRD2p7OwdK9KfwZNdASWxQhW
+        wsFxvmh2N1CVOQ6iRfSCS57M/BWUikrlyWZ3uLFu8aVR2oym7NhoT8rghivtGSWpraxVtd
+        yGzWHAezDOkbCVCtNeLUEAwjfO5jgA8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-67-fo4V7Ae7OfOGecZyX4ny4Q-1; Wed, 04 May 2022 20:25:58 -0400
+X-MC-Unique: fo4V7Ae7OfOGecZyX4ny4Q-1
+Received: by mail-qv1-f71.google.com with SMTP id kc6-20020a056214410600b0045a97658c7dso2033171qvb.16
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 May 2022 17:25:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a3PQkN+gf21RggCfRlbnzAg3Y0IDK9AvrHUeXDspmDA=;
-        b=WaZmxinIUOCMEQg2Gc9BJpK8nPc62uHSUibLPMZikbI6VB9ei9acDHv2JA2PJUchC+
-         MT4NRQt3LU3hx0W+5YSBqYme9LusKJzySzA4z+2HvJpToxzi2x5XMaqUyIZxBuGHvx53
-         fEmVFNBodtLWyaqSpmLl7yJMWCvBzE5ByE8QCghu2DnbxVmIJYe+PMRm67FtIOWSaFch
-         j07pEU9prMUOROA2Rnv7uK0uQenHGUs2qYSDT1AVPHJdZBn2GKc1kGWO6OTiRRYmkORF
-         xZ2czhgWMtzTwRuLmLSUPazQFWvnMiKQdocmCOyDEMtmsJT3PXeuvqvr8AQUxohu/WHW
-         /Osg==
-X-Gm-Message-State: AOAM533LBa2/QoXhHgT6B8e5a4GmyZ4eGRWjPcnawj00b6C5Y3iH+40b
-        7UYNhq2HMuQ0jZuYZSnE6AaGtIRe1F9+T3FvxuKfQUriLL778cxQ
-X-Google-Smtp-Source: ABdhPJzN9nXRY0rWdpKSs9VMyqTX6gCV58pFw17JVL2dLkl7aPqx0Pb6NzKnucrrh1/uy2r/4hTaEa/rbvBUIDIILUQ=
-X-Received: by 2002:a5d:6b0e:0:b0:20a:dd17:e452 with SMTP id
- v14-20020a5d6b0e000000b0020add17e452mr18161313wrw.501.1651708034493; Wed, 04
- May 2022 16:47:14 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=x+VFB+RbqDxtdPfXH5fs43HvbZapK8JlXZrJfass0jo=;
+        b=eiUKj8CFxr68v3GlS7utF2aasUb8C1wdXI4HVFcRmMa3IpyKXZq7pEzk1Yb0CTFX2Q
+         xqQGkhlpxAF6U0jIAT3NxrVXSS9BmT5lCusiQsxCMgtwWmRLtVk07CT1rsQPRXZMUQ8Q
+         sUG8DlwPAhhHIBmDF0Ndpzcw+lFpONvK27xQpeBPHYKu0THFI0suoEdlNH+PsGynHVEm
+         nwFJBzKea/SETF45aJ61mzZosbNMaogL+ewcy6A5dq7s/SUz3Vrx3++BnVB9XDSLA4rR
+         o+UhD6xQLWYX9Xy+3UTEcyqObt2wofpnT8LY8bynxdo3wDcjx7GTWeFwy1V+gDNV5wdc
+         E0wA==
+X-Gm-Message-State: AOAM531RXD2jc3NUmhJU4kVhKLYfsTirHy/SLvWwTKr71YfFM+ODdUXQ
+        CMVMk78awz29Cdx7tgJGBz29TExV4lWBbDeybHtABseSwfLvfd55YnNcQSVbTNFN+pHQsHfSFWV
+        TQ9GYduDrpt/3cqEFEvVppBZkiwSS
+X-Received: by 2002:a05:620a:45a5:b0:6a0:455:b829 with SMTP id bp37-20020a05620a45a500b006a00455b829mr7166822qkb.450.1651710358147;
+        Wed, 04 May 2022 17:25:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzDVIxSAgnbeoc2yDLtyhSKIPinnZELTTVOPCTW8YB9dKfNNvKXWcHNIVe6LME42AGiK4No6A==
+X-Received: by 2002:a05:620a:45a5:b0:6a0:455:b829 with SMTP id bp37-20020a05620a45a500b006a00455b829mr7166816qkb.450.1651710357920;
+        Wed, 04 May 2022 17:25:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:5610:6e80::41? ([2600:1700:5610:6e80::41])
+        by smtp.gmail.com with ESMTPSA id n1-20020ac81e01000000b002f39b99f679sm18727qtl.19.2022.05.04.17.25.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 17:25:57 -0700 (PDT)
+Message-ID: <9b00397e-f0fd-18c2-8268-c071257443cd@redhat.com>
+Date:   Wed, 4 May 2022 20:25:56 -0400
 MIME-Version: 1.0
-References: <20220502093625.GA23225@kernel.org> <CAGS_qxoc=AnkzUtaFpJvF08Z_Z15h9sZxYNQT5-S9C7aM4poEg@mail.gmail.com>
- <CANiq72m70q+zviHVNSV_AEwOByVBiMuSQL5vyo2UMMpD-vd+_Q@mail.gmail.com>
- <CABVgOSmkZ9EXijBRx_pvS=Opizb1z2632B5rVsd1WRNOL5o8GA@mail.gmail.com> <CANiq72kVLzOu_3UjoUiSp5y+H0tA+SQYNQ=fsuhtg=i6MQe=Fg@mail.gmail.com>
-In-Reply-To: <CANiq72kVLzOu_3UjoUiSp5y+H0tA+SQYNQ=fsuhtg=i6MQe=Fg@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 5 May 2022 07:47:03 +0800
-Message-ID: <CABVgOS=77WFFV1Xu5vQD6DPJODRr0f+qxJTRgJWS0qobv6vDaA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: take `kunit_assert` as `const`
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] selftests: vm: Makefile: rename TARGETS to VMTARGETS
+Content-Language: en-US
+To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+References: <20220504214032.1283777-1-jsavitz@redhat.com>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <20220504214032.1283777-1-jsavitz@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 5, 2022 at 3:26 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Hi David,
->
-> On Wed, May 4, 2022 at 4:05 PM David Gow <davidgow@google.com> wrote:
-> >
-> > I definitely agree here -- I can't recall any particular plan that
-> > would require this to be non-const, and we can always change it back
-> > if we really need to.
->
-> That is good to know, thanks! Out-of-tree users can always be a surprise... :)
->
-> > Very exciting! I assume that's the PR here:
-> > https://github.com/Rust-for-Linux/linux/pull/757
->
-> Indeed! I hope you like it -- we are taking the documentation tests in
-> Rust (which are a very lightweight way of writing examples which
-> double as tests) and generating KUnit test cases on the fly. For the
-> moment it is just for the `kernel` crate, but the idea is to
-> generalize it for modules etc.
->
-> By the way, since you saw the PR... do you know if KUnit relies (or
-> will rely) on "stack-dumping" functions like `longjmp`?
 
-I don't think so -- though there's no fundamental individual tests
-couldn't use them if it made sense for them.
 
-KUnit spins off a new kthread per test, and uses
-kthread_complete_and_exit() to unwind when an assertion fails. See
-lib/kunit/try-catch.c for the actual implementation. The only really
-dodgy bit is the test timeout support, which attempts to stop a thread
-with kthread_stop(), and IIRC has some problems.
+On 5/4/22 17:40, Joel Savitz wrote:
+> The tools/testing/selftests/vm/Makefile uses the variable TARGETS
+> internally to generate a list of platform-specific binary build targets
+> suffixed with _{32,64}. When building the selftests using its own
+> Makefile directly, such as via the following command run in a kernel
+> tree:
+> 
+> # make -C tools/testing/selftests install TARGETS="vm"
+> 
+> One receives an error such as the following:
+> 
+> make: Entering directory '/root/linux/tools/testing/selftests'
+> make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
+> make[1]: Entering directory '/root/linux'
+>   INSTALL ./usr/include
+> make[1]: Leaving directory '/root/linux'
+> make[1]: Entering directory '/root/linux/tools/testing/selftests/vm'
+> make[1]: *** No rule to make target 'vm.c', needed by '/root/linux/tools/testing/selftests/vm/vm_64'.  Stop.
+> make[1]: Leaving directory '/root/linux/tools/testing/selftests/vm'
+> make: *** [Makefile:175: all] Error 2
+> make: Leaving directory '/root/linux/tools/testing/selftests'
+> 
+> The TARGETS variable passed to tools/testing/selftests/Makefile collides
+> with the TARGETS used in tools/testing/selftests/vm/Makefile, so rename
+> the latter to VMTARGETS, eliminating the collision with no functional
+> change.
+> 
+> Fixes: f21fda8f6453 ("selftests: vm: pkeys: fix multilib builds for
+> x86")
+> 
+> Signed-off-by: Joel Savitz <jsavitz@redhat.comTested-by: Nico Pache <npache@redhat.com>
+Acked-by: Nico Pache <npache@redhat.com>
 
-Hope that helps!
--- David
