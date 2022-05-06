@@ -2,114 +2,151 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C33EBC433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 May 2022 16:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 236FBC433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 May 2022 21:12:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443815AbiEFQfw (ORCPT
+        id S1444292AbiEFVQA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 May 2022 12:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        Fri, 6 May 2022 17:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443807AbiEFQfw (ORCPT
+        with ESMTP id S234769AbiEFVP7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 May 2022 12:35:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCF447043
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 May 2022 09:32:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9257261F63
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 May 2022 16:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 835ADC385A8;
-        Fri,  6 May 2022 16:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651854728;
-        bh=jSnD0cHZgKQr/BZwlCSFcoI5OOZKJagDpEmOkbvOllc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bt1n0d97NafcxKKjumDtZSPn4SHzOWqXPnl78vT+49eINFnh5BnSgkgK/RNBsY7Qh
-         GacasUZWwj9nDUcylkklWagpMVB5vBV+hoMHo7uvSr9jfACzr3UTn/n+iT6/69uykA
-         W8wtS9RGMYPWpFfR6tBZRBgk4zed3GHnfuwY/jQvyia1jJsWMLcfX5/oZn8lzHNGr0
-         jXy11t9dTPtZFbqrf40Bc36kb6yfYglUifXnIOAHSSpyyQBtBuXMy2jGbQEPrxiowG
-         JZvxELZZbBtzxnZW+xNOltLdVo7jIwUecY5JA+DXpop4VTlSxvXtv2vc+P6BS8snb7
-         bdhv0aGtOESvg==
-Date:   Fri, 6 May 2022 17:32:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [ARM64] status of MTE selftests?
-Message-ID: <YnVNADyaft0WkNHu@sirena.org.uk>
-References: <87wney4svy.fsf@redhat.com>
+        Fri, 6 May 2022 17:15:59 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F976EC7B;
+        Fri,  6 May 2022 14:12:15 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id i22so5580791ila.1;
+        Fri, 06 May 2022 14:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S4OxoVMwYpNwbrGj4NKGMSUgtBwSQCWc2E0fSlFQJtE=;
+        b=jsVP1iDrUumwbjhE98Y+o+fYPdQTFQ+kEQkVPfu3XOOqxoDWmHKY6SEVExZlYJs7SX
+         1XImN/INIRNhMstxtMw1njpkH4XqWtz/deAgpyNNqm1u+P15hFG3jUWOuo9f/9jDPm2h
+         uNtX574SnvjuBUCk9R+l/DD2O+ya+zeOzeSpySo5d1bNSqTTGDURTxvbIrBduCTWaFST
+         nV14SBWpHoYNU8VHTyV9epVKskZr13LXCcFJvJXQ5yDjaDGDeux8cMHr9+cMR9M8/9Yv
+         dpCcgK4J9W3o6vkYMePoZuQFZpGMZZpk65HmNN1e8sXObePkTY03fFuqsNajNBD6P0lG
+         vf9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S4OxoVMwYpNwbrGj4NKGMSUgtBwSQCWc2E0fSlFQJtE=;
+        b=za0R/84pAIf4VvN1rhDqIaTfzCJ57C3DDTuy+OWSK/JOFlLlUzDX35bpcECwg5NPr9
+         HZm4Hyg03pH6NbyE1rUQt1zKZ5u01j9dQDFbJKQRL1FTPFMLKPKbszHnjqO6q+Pe2wGH
+         JC7kn5IAnTX0+C6JxSUayIH52qP+M4v4IuuOyHMG/mqLvAWNvGhOxN18dsxImDd5psEv
+         sJtYNZv7iGc/tGGBfms+pXt4xcuQTsXlE8v77iODVN9UttVrBRxDlK9pUDCAoiOZ1FGp
+         F+bnZmOazi3WVuepzeyrTCIzEb7zW2W1u3wSdhEf/a5G9LwQhYklM6WPnfN+rE1io5cg
+         7Lnw==
+X-Gm-Message-State: AOAM5339ZZLPZuJJ65ByLNyGEJ02lDHJgjEzn0/zruCvMkNU7gYH47dM
+        z9NUvc4r2lE4Z+KztTzCGCev/+KUEXQXf+9qGcs=
+X-Google-Smtp-Source: ABdhPJxLB+Z+rDhsxemCPyaFDhQEmIC5l9UvjlCfN1f+VU1VibPtYe7vL6/SSellQFTIiGdYCtViSjhxHesHve1yhas=
+X-Received: by 2002:a92:6406:0:b0:2bb:f1de:e13e with SMTP id
+ y6-20020a926406000000b002bbf1dee13emr2038491ilb.305.1651871534347; Fri, 06
+ May 2022 14:12:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="px+JFNFucHJ5J4QS"
-Content-Disposition: inline
-In-Reply-To: <87wney4svy.fsf@redhat.com>
-X-Cookie: <Culus-> libc6 is not essential :|
+References: <20220503171437.666326-1-maximmi@nvidia.com> <20220503171437.666326-3-maximmi@nvidia.com>
+In-Reply-To: <20220503171437.666326-3-maximmi@nvidia.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 6 May 2022 14:12:03 -0700
+Message-ID: <CAEf4Bzb-y7-5PG2vjdy__Jqwb2n2hPPQ_8Xs9R_cnenwT-AyTg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 2/5] bpf: Allow helpers to accept pointers
+ with a fixed size
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>, pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, May 3, 2022 at 10:15 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+>
+> Before this commit, the BPF verifier required ARG_PTR_TO_MEM arguments
+> to be followed by ARG_CONST_SIZE holding the size of the memory region.
+> The helpers had to check that size in runtime.
+>
+> There are cases where the size expected by a helper is a compile-time
+> constant. Checking it in runtime is an unnecessary overhead and waste of
+> BPF registers.
+>
+> This commit allows helpers to accept ARG_PTR_TO_MEM arguments without
+> the corresponding ARG_CONST_SIZE, given that they define the memory
+> region size in struct bpf_func_proto.
 
---px+JFNFucHJ5J4QS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think it's much less confusing and cleaner to have
+ARG_PTR_TO_FIXED_SIZE_MEM (or whatever similar name), instead of
+adding special casing to ARG_PTR_TO_MEM.
 
-On Fri, May 06, 2022 at 04:50:41PM +0200, Cornelia Huck wrote:
+>
+> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> ---
+>  include/linux/bpf.h   | 10 ++++++++++
+>  kernel/bpf/verifier.c | 26 +++++++++++++++-----------
+>  2 files changed, 25 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index be94833d390a..255ae3652225 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -514,6 +514,16 @@ struct bpf_func_proto {
+>                 };
+>                 u32 *arg_btf_id[5];
+>         };
+> +       union {
+> +               struct {
+> +                       size_t arg1_size;
+> +                       size_t arg2_size;
+> +                       size_t arg3_size;
+> +                       size_t arg4_size;
+> +                       size_t arg5_size;
+> +               };
+> +               size_t arg_size[5];
+> +       };
 
-> I'm currently trying to run the MTE selftests on the FVP simulator (Base
-> Model)[1], mainly to verify things are sane on the host before wiring up
-> the KVM support in QEMU. However, I'm seeing some failures (the non-mte
-> tests seemed all fine):
+We have almost 250 instances of struct bpf_func_proto variables:
 
-> Are the MTE tests supposed to work on the FVP model? Something broken in
-> my config? Anything I can debug?
+$ rg 'const struct bpf_func_proto.* = \{' | wc -l
+244
 
-I would expect them to work, they seemed happy when I was doing
-the async mode support IIRC and a quick spin with -next in qemu
-everything seems fine, I'm travelling so don't have the
-environment for models to hand right now.
+You are adding 40 bytes to it just to use it for 1-2 special
+prototypes. It is quite expensive, IMHO, to increase vmlinux image
+size by 10KB just for this.
 
-> [1] Command line:
-> "$MODEL" \
-> -C cache_state_modelled=0 \
-> -C bp.refcounter.non_arch_start_at_default=1 \
-> -C bp.secure_memory=false \
-> -C cluster0.has_arm_v8-1=1 \
-> -C cluster0.has_arm_v8-2=1 \
-> -C cluster0.has_arm_v8-3=1 \
-> -C cluster0.has_arm_v8-4=1 \
-> -C cluster0.has_arm_v8-5=1 \
-> -C cluster0.has_amu=1 \
-> -C cluster0.NUM_CORES=4 \
-> -C cluster0.memory_tagging_support_level=2 \
-> -a "cluster0.*=$AXF" \
+Should we reuse arg_btf_id union (same argument won't be PTR_TO_BTF_ID
+and PTR_TO_FIXED_SIZE_MEM, right)? Or alternatively special-case those
+few prototypes in verifier code directly when trying to fetch memory
+size?
 
-> where $AXF contains a kernel at v5.18-rc5-16-g107c948d1d3e[2] and an
-> initrd built by mbuto[3] from that level with a slightly tweaked "kselftests"
-> profile (adding /dev/shm).
 
-What are you using for EL3 with the model?  Both TF-A and
-boot-wrapper are in regular use, TF-A gets *way* more testing
-than boot-wrapper which is mostly used by individual developers.
+>         int *ret_btf_id; /* return value btf_id */
+>         bool (*allowed)(const struct bpf_prog *prog);
+>  };
 
---px+JFNFucHJ5J4QS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ1TYQACgkQJNaLcl1U
-h9C4Jgf/UX+N11GgBtM3iud9fb83+ebihZyFyptGvzAXboVY4dHgB5Zaw9YD2NPW
-eiJnuFyZA9M5UHBfLpL3jdz2yDv1ue/+0XtXOTldx+dQlGWSDLNRVoFKRchWSvZ7
-cfjlmO8BT/qsXR3vv+LhOBOB5FvzSqkw9Hfbgy3g+1oXOcwE7POeJ05cE9ndQUwv
-8gkZK3OLWvj16CuSz5xZK3hIgy1k8//LWRV/ji2v1SHWI/HemO+1QnqXeoAAVYfI
-S3z9ETC/JXvmUjRi5vtE7Qsac90yFFUDMbhUfL0yyzx2I6fjTAY8pQsE/9M9qvmp
-b64rwpn0AxPqe76njNLspx3O6PxgkQ==
-=D1dc
------END PGP SIGNATURE-----
-
---px+JFNFucHJ5J4QS--
+[...]
