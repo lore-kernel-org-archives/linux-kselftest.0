@@ -2,60 +2,66 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF94C433EF
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 May 2022 08:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 158C7C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 May 2022 09:45:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237916AbiEFIEv (ORCPT
+        id S1390711AbiEFJtI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 May 2022 04:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
+        Fri, 6 May 2022 05:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239088AbiEFIEt (ORCPT
+        with ESMTP id S1390710AbiEFJtH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 May 2022 04:04:49 -0400
-X-Greylist: delayed 884 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 01:01:07 PDT
-Received: from mail.greatagencyonline.pl (mail.greatagencyonline.pl [89.40.125.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956DC20F58
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 May 2022 01:01:07 -0700 (PDT)
-Received: by mail.greatagencyonline.pl (Postfix, from userid 1001)
-        id 6E9F7AAA0B; Fri,  6 May 2022 08:43:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=greatagencyonline.pl;
-        s=mail; t=1651823049;
-        bh=ksvwLPFdjL017OLwir5xHXy3Vmrj/5fhZ5DwBI62qzc=;
-        h=Date:From:To:Subject:From;
-        b=m+Xx+i9fKVWz4hvEAo0vbxHxS9AdfurjKJLshWi8erA/JR4tv2aagpBCiWlwYqgff
-         Xj4SXR4V6aN7Lody5UaXjaHz1jiH02jGoI37Oy8rgk/WjAWOXzd5SrxWm+B0axCC3f
-         7qIdi2LN1MO0xDl7wQHoXdohmEdxAXE1nQRYqg/9sC03FCAIyysWVxTlssRBF9aLyP
-         SQ77AwsjR/ozvqsqZYL0Bj5g/MH3dWr4HyK0+WFqHp5+gPnYf6ueFKgChnJFY7U7bj
-         dIDRMHhr/LHDqxkpzML6BBsVjDudfnZQN3XI03DvxiXJ929xbdb82vw1oW8xv0E4cf
-         EVwaTvv8cp4VA==
-Received: by mail.greatagencyonline.pl for <linux-kselftest@vger.kernel.org>; Fri,  6 May 2022 07:43:41 GMT
-Message-ID: <20220506073002-0.1.3r.k1st.0.lroee3y02i@greatagencyonline.pl>
-Date:   Fri,  6 May 2022 07:43:41 GMT
-From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= 
-        <mikolaj.rudzik@greatagencyonline.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.greatagencyonline.pl
+        Fri, 6 May 2022 05:49:07 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2AD5FD4;
+        Fri,  6 May 2022 02:45:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VCRMIRC_1651830313;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VCRMIRC_1651830313)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 06 May 2022 17:45:19 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     pbonzini@redhat.com
+Cc:     shuah@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] KVM: selftests: riscv: Remove unneeded semicolon
+Date:   Fri,  6 May 2022 17:45:12 +0800
+Message-Id: <20220506094512.116729-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Fix the following coccicheck warnings:
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
+./tools/testing/selftests/kvm/lib/riscv/processor.c:353:3-4: Unneeded
+semicolon.
 
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ tools/testing/selftests/kvm/lib/riscv/processor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+index 3961487a4870..e17333518af2 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/processor.c
++++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+@@ -350,7 +350,7 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+ 		case 7:
+ 			id = RISCV_CORE_REG(regs.a7);
+ 			break;
+-		};
++		}
+ 		set_reg(vm, vcpuid, id, va_arg(ap, uint64_t));
+ 	}
+ 
+-- 
+2.20.1.7.g153144c
 
-
-Pozdrawiam,
-Miko=C5=82aj Rudzik
