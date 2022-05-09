@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFD2C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 May 2022 10:07:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30193C433EF
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 May 2022 10:08:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbiEIKLf (ORCPT
+        id S231409AbiEIKMt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 May 2022 06:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        Mon, 9 May 2022 06:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbiEIKL2 (ORCPT
+        with ESMTP id S233003AbiEIKMh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 May 2022 06:11:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7AE17943B;
-        Mon,  9 May 2022 03:07:34 -0700 (PDT)
+        Mon, 9 May 2022 06:12:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C190233A7D;
+        Mon,  9 May 2022 03:08:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8BF4B810F1;
-        Mon,  9 May 2022 10:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3209C385AB;
-        Mon,  9 May 2022 10:03:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D74460AB0;
+        Mon,  9 May 2022 10:06:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 426A8C385AF;
+        Mon,  9 May 2022 10:06:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652090633;
-        bh=SAaxmh7JCTQ5AyunYOWk9KzOOZpZ1/HBEY1fJLv6yEY=;
+        s=k20201202; t=1652090770;
+        bh=PCf4krPgNa/IY5fUBgJeLAYCiLEpbimXw3qnMtZQu1c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q0Mri90rjbpyyTTkaq7YMQRWkne1VJDNrszIq+6KPlG3KFBqw9OvbULy3/Ssoi1HH
-         dEcOEBaawAV4lJtj95wcs1RRWcvNNYIAV0Zm5Nm8fRvPCJtfWeIsBxyqEeg9bgxhXZ
-         YDpz7kRrgtMiSiZwDdy8nwTLI8w+g04IxNHiQLg3e6ZunjrcCv8I9Ruyl2qNimNqJI
-         5bDoy3tNU61BUksdBfsO0sJq3PRcxC4ef/T92nIujKx8iTOOtRAl5ghXYCBBi3VfbL
-         Xki4JCbYFs3YmgJBjFeCwRUW3Hjc3ZhpzKyZde+aaYCSlItRArEmr2Nc8BQ8kBPqEj
-         Nd0ndpffXni4Q==
-Date:   Mon, 9 May 2022 12:03:46 +0200
+        b=end9uHtjBKgnQjOzr66HnJAxoQH7YXKeGFoMz2wzMasIPSaR1FDipiGbJ91A/nlX+
+         /9YWfA12nv+WVYFRMAJrbiB9saz0xMr50vPtC28y3dql+66du+SMpWpk5tIOjb9leM
+         3CHXjZE6UJJipB7bVsPViTJa1XuEtedP8uFfbAm1TSLtQ6Bbn4Vo1gFY2ifZcaHu+l
+         kYE1gtXlTZfIk58uEuEfpBWKXAfA77yXefIQhz5bFw5O6YjF/ABiGqEBnldzCaGd5k
+         o6aqp1yMKHHSemu4TzjLwMGsPzd4+fCGNITHDxT77pEYmPkmaiN25Hlrht1/GVahBK
+         3C6Oq+Vh9NP4A==
+Date:   Mon, 9 May 2022 12:06:04 +0200
 From:   Christian Brauner <brauner@kernel.org>
 To:     Carlos Llamas <cmllamas@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,25 +47,25 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>, Li Li <dualli@google.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] binderfs: add extended_error feature entry
-Message-ID: <20220509100346.s3hnvub7pjl7vmp2@wittgenstein>
+Subject: Re: [PATCH v2 1/5] binder: add failed transaction logging info
+Message-ID: <20220509100604.wswe2xvju2cpwvbn@wittgenstein>
 References: <20220429235644.697372-1-cmllamas@google.com>
- <20220429235644.697372-4-cmllamas@google.com>
+ <20220429235644.697372-2-cmllamas@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220429235644.697372-4-cmllamas@google.com>
+In-Reply-To: <20220429235644.697372-2-cmllamas@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:56:42PM +0000, Carlos Llamas wrote:
-> Add extended_error to the binderfs feature list, to help userspace
-> determine whether the BINDER_GET_EXTENDED_ERROR ioctl is supported by
-> the binder driver.
+On Fri, Apr 29, 2022 at 11:56:40PM +0000, Carlos Llamas wrote:
+> Make sure we log relevant information about failed transactions such as
+> the target proc/thread, call type and transaction id. These details are
+> particularly important when debugging userspace issues.
 > 
 > Signed-off-by: Carlos Llamas <cmllamas@google.com>
 > ---
 
 Looks good to me,
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
