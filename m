@@ -2,86 +2,86 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C20C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 May 2022 06:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65879C4321E
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 May 2022 09:49:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiEIG2V (ORCPT
+        id S235549AbiEIJxW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 May 2022 02:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        Mon, 9 May 2022 05:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiEIGSC (ORCPT
+        with ESMTP id S238203AbiEIJpd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 May 2022 02:18:02 -0400
-X-Greylist: delayed 2285 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 May 2022 23:14:10 PDT
-Received: from relay3.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A7CEAD27
-        for <linux-kselftest@vger.kernel.org>; Sun,  8 May 2022 23:14:10 -0700 (PDT)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id DA84C2FD39;
-        Mon,  9 May 2022 05:36:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id B49131E;
-        Mon,  9 May 2022 05:36:01 +0000 (UTC)
-Message-ID: <918affc0a0a91dab08647696ed6587021264f25f.camel@perches.com>
-Subject: Re: [PATCH] KVM: selftests: riscv: Remove unneeded semicolon
-From:   Joe Perches <joe@perches.com>
-To:     Anup Patel <anup@brainfault.org>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        KVM General <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Date:   Sun, 08 May 2022 22:36:01 -0700
-In-Reply-To: <CAAhSdy15CE5ZUROH-mOwhpR0AuwsK8h+8W-Kd0jxwsTixpQOQg@mail.gmail.com>
-References: <20220506094512.116729-1-jiapeng.chong@linux.alibaba.com>
-         <CAAhSdy15CE5ZUROH-mOwhpR0AuwsK8h+8W-Kd0jxwsTixpQOQg@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 9 May 2022 05:45:33 -0400
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DD27161;
+        Mon,  9 May 2022 02:41:36 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso10440034wma.0;
+        Mon, 09 May 2022 02:41:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MIo4iJaNWWiT8L0aREHccyFQKBU+YIpBaS+29bvc/oc=;
+        b=CljfGAPOH+8alNnaPgQ/ZfOeWWCyDXqWHuFhGjBWPlxXe37Lt6k538+7qYpiz24Uxh
+         wwCnpfootpzp2ttGz1SYDaY7+99KCpsz+fl5o1BG5x26uGCJl7WBi9pFJjh8xxmFF4A6
+         sfeVUHaFyqhkPTbuggUYfTosqoZ22ySb3B/8IkPYFoX6Dn/pwD0bemYob/2cu7I+NfHi
+         D424KCaeTqVKYsMI1omxqI3JViqArtz2hVFrQUv0MNcYF+W/ts0rP9ccBbXprFueBxqw
+         Vtall6hKoE7EYpGehq4xKEj3ijfm1tt/d1HlyDySG+5W0tIiDYhmM5WRzmDIlec7zksg
+         pRvQ==
+X-Gm-Message-State: AOAM533KIFwgy+QVhvkpxh3AYNikqIrIyQ27BWhMOFcfuqzwOeS77UP1
+        /bOyxv5AlGam4Z60i8hhRaI=
+X-Google-Smtp-Source: ABdhPJz/KKcTrgbBKiQDbLem0UVallm03r9n1V5yq/fpMjCoclkduFXgbKOowrI9BpO7enF+NSOlDA==
+X-Received: by 2002:a7b:c4c8:0:b0:394:26c5:b79e with SMTP id g8-20020a7bc4c8000000b0039426c5b79emr15176076wmk.15.1652089180818;
+        Mon, 09 May 2022 02:39:40 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id w7-20020adfee47000000b0020c5253d8efsm10503017wro.59.2022.05.09.02.39.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 02:39:40 -0700 (PDT)
+Date:   Mon, 9 May 2022 09:39:38 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, live-patching@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v6 00/23] Rust support
+Message-ID: <20220509093938.fdrh5hhhreqi46wn@liuwe-devbox-debian-v2>
+References: <20220507052451.12890-1-ojeda@kernel.org>
+ <202205070056.ACC3C3D@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: q34mkbymsd5c8i4guxezgn8qm5yedycu
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: B49131E
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/6eHbjh40QHHy98IswUgEhKu3HfsOuVzY=
-X-HE-Tag: 1652074561-122139
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202205070056.ACC3C3D@keescook>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2022-05-09 at 10:37 +0530, Anup Patel wrote:
-> On Fri, May 6, 2022 at 3:15 PM Jiapeng Chong
-> <jiapeng.chong@linux.alibaba.com> wrote:
+On Sat, May 07, 2022 at 01:06:18AM -0700, Kees Cook wrote:
+> On Sat, May 07, 2022 at 07:23:58AM +0200, Miguel Ojeda wrote:
+> > ## Patch series status
 > > 
-> > Fix the following coccicheck warnings:
-> > 
-> > ./tools/testing/selftests/kvm/lib/riscv/processor.c:353:3-4: Unneeded
-> > semicolon.
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > The Rust support is still to be considered experimental. However,
+> > support is good enough that kernel developers can start working on the
+> > Rust abstractions for subsystems and write drivers and other modules.
 > 
-> In future, please CC kvm-riscv@lists.infradead.org for KVM RISC-V related
-> patches.
+> I'd really like to see this landed for a few reasons:
+> 
+> - It's under active development, and I'd rather review the changes
+>   "normally", incrementally, etc. Right now it can be hard to re-review
+>   some of the "mostly the same each version" patches in the series.
+> 
+> - I'd like to break the catch-22 of "ask for a new driver to be
+>   written in rust but the rust support isn't landed" vs "the rust
+>   support isn't landed because there aren't enough drivers". It
+>   really feels like "release early, release often" is needed here;
+>   it's hard to develop against -next. :)
 
-Perhaps add or update some MAINTAINERS entry as this list is not
-currently specified by:
-
-$ ./scripts/get_maintainer.pl -f tools/testing/selftests/kvm/lib/riscv/processor.c --nogit --nogit-fallback
-Paolo Bonzini <pbonzini@redhat.com> (supporter:KERNEL VIRTUAL MACHINE (KVM))
-Shuah Khan <shuah@kernel.org> (maintainer:KERNEL SELFTEST FRAMEWORK)
-Paul Walmsley <paul.walmsley@sifive.com> (supporter:RISC-V ARCHITECTURE)
-Palmer Dabbelt <palmer@dabbelt.com> (supporter:RISC-V ARCHITECTURE)
-Albert Ou <aou@eecs.berkeley.edu> (supporter:RISC-V ARCHITECTURE)
-kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM))
-linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
-linux-kernel@vger.kernel.org (open list)
-$
-
-
++1 to both points. :-)
