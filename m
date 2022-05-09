@@ -2,86 +2,90 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65879C4321E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 May 2022 09:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 601CEC433F5
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 May 2022 10:05:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235549AbiEIJxW (ORCPT
+        id S230125AbiEIKJb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 May 2022 05:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        Mon, 9 May 2022 06:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238203AbiEIJpd (ORCPT
+        with ESMTP id S229671AbiEIKJ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 May 2022 05:45:33 -0400
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DD27161;
-        Mon,  9 May 2022 02:41:36 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso10440034wma.0;
-        Mon, 09 May 2022 02:41:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MIo4iJaNWWiT8L0aREHccyFQKBU+YIpBaS+29bvc/oc=;
-        b=CljfGAPOH+8alNnaPgQ/ZfOeWWCyDXqWHuFhGjBWPlxXe37Lt6k538+7qYpiz24Uxh
-         wwCnpfootpzp2ttGz1SYDaY7+99KCpsz+fl5o1BG5x26uGCJl7WBi9pFJjh8xxmFF4A6
-         sfeVUHaFyqhkPTbuggUYfTosqoZ22ySb3B/8IkPYFoX6Dn/pwD0bemYob/2cu7I+NfHi
-         D424KCaeTqVKYsMI1omxqI3JViqArtz2hVFrQUv0MNcYF+W/ts0rP9ccBbXprFueBxqw
-         Vtall6hKoE7EYpGehq4xKEj3ijfm1tt/d1HlyDySG+5W0tIiDYhmM5WRzmDIlec7zksg
-         pRvQ==
-X-Gm-Message-State: AOAM533KIFwgy+QVhvkpxh3AYNikqIrIyQ27BWhMOFcfuqzwOeS77UP1
-        /bOyxv5AlGam4Z60i8hhRaI=
-X-Google-Smtp-Source: ABdhPJz/KKcTrgbBKiQDbLem0UVallm03r9n1V5yq/fpMjCoclkduFXgbKOowrI9BpO7enF+NSOlDA==
-X-Received: by 2002:a7b:c4c8:0:b0:394:26c5:b79e with SMTP id g8-20020a7bc4c8000000b0039426c5b79emr15176076wmk.15.1652089180818;
-        Mon, 09 May 2022 02:39:40 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id w7-20020adfee47000000b0020c5253d8efsm10503017wro.59.2022.05.09.02.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 02:39:40 -0700 (PDT)
-Date:   Mon, 9 May 2022 09:39:38 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, live-patching@vger.kernel.org,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v6 00/23] Rust support
-Message-ID: <20220509093938.fdrh5hhhreqi46wn@liuwe-devbox-debian-v2>
-References: <20220507052451.12890-1-ojeda@kernel.org>
- <202205070056.ACC3C3D@keescook>
+        Mon, 9 May 2022 06:09:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534D92655E5;
+        Mon,  9 May 2022 03:05:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA255B810B6;
+        Mon,  9 May 2022 10:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 49070C385B0;
+        Mon,  9 May 2022 10:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652090412;
+        bh=29mSpAua4b8hjk9GKvTkGUR9JajuXItC18hWIP0Js8A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=O11DO6mYOO600sMRMllIbjLkarWSnk5FMiBm79/PWIWaAuiYSyCCavJbhm0hg+KzO
+         DQhvNtMZW5ILPkNUbD5QfiTkLpLy2r8rN0C4RFyBUFqWqEyq0PHK/vo4GSiPM9XEIO
+         4ftwcJxqiiW+g9c41Dk/7ixHMPjSBQ+V+3VYAvp/yAkWglySpqoylz3rCT7ifKJ5rR
+         9jfF5PMeSRvJMI1TDFZyug/E5Oyzv3EXur/Pryk6tj+c9MaiGqWVnUMDvtCgduQBMS
+         u/c0O76qUzl4o/VEiQ5Id0B0eKAcdigpVH/e0S5/6MdV5VVSjbqPFjPWauHcBka19r
+         eYmpP52r2ieow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30B4DE85D8A;
+        Mon,  9 May 2022 10:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205070056.ACC3C3D@keescook>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 1/2] net: fix wrong network header length
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165209041219.866.7810964831911496184.git-patchwork-notify@kernel.org>
+Date:   Mon, 09 May 2022 10:00:12 +0000
+References: <20220505054850.4878-1-lina.wang@mediatek.com>
+In-Reply-To: <20220505054850.4878-1-lina.wang@mediatek.com>
+To:     Lina Wang <lina.wang@mediatek.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, matthias.bgg@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, hawk@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, edumazet@google.com,
+        willemb@google.com, maze@google.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 07, 2022 at 01:06:18AM -0700, Kees Cook wrote:
-> On Sat, May 07, 2022 at 07:23:58AM +0200, Miguel Ojeda wrote:
-> > ## Patch series status
-> > 
-> > The Rust support is still to be considered experimental. However,
-> > support is good enough that kernel developers can start working on the
-> > Rust abstractions for subsystems and write drivers and other modules.
-> 
-> I'd really like to see this landed for a few reasons:
-> 
-> - It's under active development, and I'd rather review the changes
->   "normally", incrementally, etc. Right now it can be hard to re-review
->   some of the "mostly the same each version" patches in the series.
-> 
-> - I'd like to break the catch-22 of "ask for a new driver to be
->   written in rust but the rust support isn't landed" vs "the rust
->   support isn't landed because there aren't enough drivers". It
->   really feels like "release early, release often" is needed here;
->   it's hard to develop against -next. :)
+Hello:
 
-+1 to both points. :-)
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 5 May 2022 13:48:49 +0800 you wrote:
+> When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+> several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+> ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> network_header\transport_header\mac_header have been updated as ipv4 acts,
+> but other skbs in frag_list didnot update anything, just ipv6 packets.
+> 
+> udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+> frag_list and make sure right udp payload is delivered to user space.
+> Unfortunately, other skbs in frag_list who are still ipv6 packets are
+> updated like the first skb and will have wrong transport header length.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v6,1/2] net: fix wrong network header length
+    https://git.kernel.org/netdev/net/c/cf3ab8d4a797
+  - [v6,2/2] selftests net: add UDP GRO fraglist + bpf self-tests
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
