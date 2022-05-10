@@ -2,84 +2,176 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A575C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3E91C4332F
 	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 16:45:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343929AbiEJQtu (ORCPT
+        id S242155AbiEJQtu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 10 May 2022 12:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347636AbiEJQtm (ORCPT
+        with ESMTP id S1347645AbiEJQts (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 12:49:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902217644
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:45:43 -0700 (PDT)
+        Tue, 10 May 2022 12:49:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22946275FF
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:45:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 355FC61811
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 16:45:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CB6C385CD;
-        Tue, 10 May 2022 16:45:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC330B81DF7
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 16:45:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBEBC385CC;
+        Tue, 10 May 2022 16:45:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652201142;
-        bh=+doQH0V5WrVXFxAnPAr+9FVdqU2NMS/NTVoUQBr2X+o=;
+        s=k20201202; t=1652201146;
+        bh=JdUSFlmAMJMiTXobkuC/AlKO+jPpDo6M4+rYKVDk2Yo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xv9eky1VFhK56OWO3K77S8T1rRWOuwNbwJe+FCozmudeb9zKoxClA3BFioSorp/gb
-         gfkvjNFnFN0zP7HriN6UPE/ypz1iamEPB/U3md1C5NdQl3ynf1dDXBrMciN2sk+orm
-         m6eJ+sIn2WUKtijbYMHDQ/0AOsjEiCQkrpYzz4AMZJU1jUv1Fl6tq8Tk3ni2weAVSJ
-         b4V2UryOGyF3LwaspcYkKRt3ICiJrQSJN9HlBL547qL2YJoOS4OBcpOgujYhwTxltm
-         h8hmCfwG2+0+KMY49y6tbpPH/xVE7SejEa4xL5efGIGcXvGUPOoFgDy2HaclCGFS2M
-         7A3JoESBo7rXQ==
+        b=rPzTYr+WVV2y1oJqvW80ygBmKoAop6d3D2u/BkYnLL7PHUScWDMhVMJnQXsHu1dv5
+         TDBA9gJZvbdadKemkhDUYxy+FgwcUHQeAZE7tqxoR3VRaKzys9mao8NHuWwMhhev2D
+         TCOvMMnDD2rC3YeUBAJPdvW+4DNR8jNXsQx578T7DqZkQh8t4uayoGfw4nuZUN0xyN
+         xhhWu45mVGOHGQZP7NS1+CUvwEDI3Hlt0otl5xhbqvCJnbSoZ26psgRaJXBaVIWDJP
+         DYb8WknGNhCc6STvWOar7+krJsyh9qohfsPSb8sr01oOw2EOlDDZpU63YDkYeBZUKO
+         2IV+JJnOsIeJg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Joey Gouly <joey.gouly@arm.com>, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 2/5] selftests/arm64: Allow zero tags in mte_switch_mode()
-Date:   Tue, 10 May 2022 17:45:17 +0100
-Message-Id: <20220510164520.768783-3-broonie@kernel.org>
+Subject: [PATCH v1 4/5] selftests/arm64: Remove casts to/from void in check_tags_inclusion
+Date:   Tue, 10 May 2022 17:45:19 +0100
+Message-Id: <20220510164520.768783-5-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220510164520.768783-1-broonie@kernel.org>
 References: <20220510164520.768783-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1213; h=from:subject; bh=+doQH0V5WrVXFxAnPAr+9FVdqU2NMS/NTVoUQBr2X+o=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiepacjqDNrDfpJZfEr3DwpfcqFuan/SeP5LzD9VQK CAX7dCOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYnqWnAAKCRAk1otyXVSH0J00B/ 9k/VvTk83ITffqPZeHO8yhTPM8kJJUMoPQtCnahbvYY1OwB7szGoyB69Ksb9u0KDxGFLwSFTVsU1fZ iikZJrX2AFqJzAEa05XE2SqW6bBRUFuI8xev6pE4/PcViccpkIsXgzIO9ZOraB6LBpS1YgDLsUVcHu BcBXJuVxPR6tO62kuqg4mY3uZhQTy9u4CHgucvjNfryW/5d11nTl3rktiH6RQQ5C4S7fR7sSgHXDeA v4vmYt0TT+sw7oU2xIZ6yP+wBz2ht2aNsQ6f9xz9S0g+vHn0nUYGjSDB7RWZk2ceeoBQ/MHajDBuMW 84U8eieohLqlUZyHsMIdAW8Glum/zH
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5393; h=from:subject; bh=JdUSFlmAMJMiTXobkuC/AlKO+jPpDo6M4+rYKVDk2Yo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiepaeCzI2vR3Tz8922+7B6ZA0MGW9qigOMqDYzLf5 4AmiuZaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYnqWngAKCRAk1otyXVSH0MmJB/ sHjyiHXljNYCoYvAftRh5NlOi+l8olqXD8uTq7m9TZTov3ZK9GyjXKBRIgVMjfjtkXeo77MxnmpSnK F/LDG5dqUdE3ZkOiUMCp0PYreuPJZVJ8jxNdnIeoL4CzBDYbclwmceoVKbDEl9ceg3SuisFbp++Ulk 5goWIEhCptytI282QOEbhWkUTXeCnsv7I5KsjHZ6xDehrASdpMQLMu25CMRvsn0oxQKhxXI08WbXTV qJF235n486Ax0ShYHb9in36+Ut2wjqHh9qiJGFRg/elf+7MxiHP0/K2YspLBsYARa6rzU5papwY067 qNUQXCJajEtDTBLPm1bseDyQ7ryz3x
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-mte_switch_mode() currently rejects attempts to set a zero tag however
-there are tests such as check_tags_inclusion which attempt to cover cases
-with zero tags using mte_switch_mode(). Since it is not clear why we are
-rejecting zero tags change the test to accept them.
-
-The issue has not previously been as apparent as it should be since the
-return value of mte_switch_mode() was not always checked in the callers
-and the tests weren't otherwise failing.
+Void pointers may be freely used with other pointer types in C, any casts
+between void * and other pointer types serve no purpose other than to
+mask potential warnings. Drop such casts from check_tags_inclusion to
+help with future review of the code.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/mte/mte_common_util.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../arm64/mte/check_tags_inclusion.c          | 24 +++++++++----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/mte/mte_common_util.c b/tools/testing/selftests/arm64/mte/mte_common_util.c
-index 260206f4dce0..6ff4c4bcbff1 100644
---- a/tools/testing/selftests/arm64/mte/mte_common_util.c
-+++ b/tools/testing/selftests/arm64/mte/mte_common_util.c
-@@ -283,7 +283,7 @@ int mte_switch_mode(int mte_option, unsigned long incl_mask)
- 		return -EINVAL;
- 	}
+diff --git a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+index d180ba3df990..2b1425b92b69 100644
+--- a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
++++ b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
+@@ -23,7 +23,7 @@ static int verify_mte_pointer_validity(char *ptr, int mode)
+ {
+ 	mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE);
+ 	/* Check the validity of the tagged pointer */
+-	memset((void *)ptr, '1', BUFFER_SIZE);
++	memset(ptr, '1', BUFFER_SIZE);
+ 	mte_wait_after_trig();
+ 	if (cur_mte_cxt.fault_valid) {
+ 		ksft_print_msg("Unexpected fault recorded for %p-%p in mode %x\n",
+@@ -51,7 +51,7 @@ static int check_single_included_tags(int mem_type, int mode)
+ 	char *ptr;
+ 	int tag, run, ret, result = KSFT_PASS;
  
--	if (!(incl_mask <= MTE_ALLOW_NON_ZERO_TAG)) {
-+	if (incl_mask & ~MT_INCLUDE_TAG_MASK) {
- 		ksft_print_msg("FAIL: Invalid incl_mask %lx\n", incl_mask);
- 		return -EINVAL;
+-	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
++	ptr = mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
+ 				   mem_type, false) != KSFT_PASS)
+ 		return KSFT_FAIL;
+@@ -62,7 +62,7 @@ static int check_single_included_tags(int mem_type, int mode)
+ 			result = KSFT_FAIL;
+ 		/* Try to catch a excluded tag by a number of tries. */
+ 		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
+-			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
++			ptr = mte_insert_tags(ptr, BUFFER_SIZE);
+ 			/* Check tag value */
+ 			if (MT_FETCH_TAG((uintptr_t)ptr) == tag) {
+ 				ksft_print_msg("FAIL: wrong tag = 0x%x with include mask=0x%x\n",
+@@ -74,7 +74,7 @@ static int check_single_included_tags(int mem_type, int mode)
+ 			result = verify_mte_pointer_validity(ptr, mode);
+ 		}
  	}
+-	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
++	mte_free_memory_tag_range(ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
+ 	return result;
+ }
+ 
+@@ -84,7 +84,7 @@ static int check_multiple_included_tags(int mem_type, int mode)
+ 	int tag, run, result = KSFT_PASS;
+ 	unsigned long excl_mask = 0;
+ 
+-	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
++	ptr = mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
+ 				   mem_type, false) != KSFT_PASS)
+ 		return KSFT_FAIL;
+@@ -94,7 +94,7 @@ static int check_multiple_included_tags(int mem_type, int mode)
+ 		mte_switch_mode(mode, MT_INCLUDE_VALID_TAGS(excl_mask));
+ 		/* Try to catch a excluded tag by a number of tries. */
+ 		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
+-			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
++			ptr = mte_insert_tags(ptr, BUFFER_SIZE);
+ 			/* Check tag value */
+ 			if (MT_FETCH_TAG((uintptr_t)ptr) < tag) {
+ 				ksft_print_msg("FAIL: wrong tag = 0x%x with include mask=0x%x\n",
+@@ -106,7 +106,7 @@ static int check_multiple_included_tags(int mem_type, int mode)
+ 			result = verify_mte_pointer_validity(ptr, mode);
+ 		}
+ 	}
+-	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
++	mte_free_memory_tag_range(ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
+ 	return result;
+ }
+ 
+@@ -115,7 +115,7 @@ static int check_all_included_tags(int mem_type, int mode)
+ 	char *ptr;
+ 	int run, ret, result = KSFT_PASS;
+ 
+-	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
++	ptr = mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
+ 				   mem_type, false) != KSFT_PASS)
+ 		return KSFT_FAIL;
+@@ -132,7 +132,7 @@ static int check_all_included_tags(int mem_type, int mode)
+ 		 */
+ 		result = verify_mte_pointer_validity(ptr, mode);
+ 	}
+-	mte_free_memory_tag_range((void *)ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
++	mte_free_memory_tag_range(ptr, BUFFER_SIZE, mem_type, 0, MT_GRANULE_SIZE);
+ 	return result;
+ }
+ 
+@@ -141,7 +141,7 @@ static int check_none_included_tags(int mem_type, int mode)
+ 	char *ptr;
+ 	int run, ret;
+ 
+-	ptr = (char *)mte_allocate_memory(BUFFER_SIZE, mem_type, 0, false);
++	ptr = mte_allocate_memory(BUFFER_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE, mem_type, false) != KSFT_PASS)
+ 		return KSFT_FAIL;
+ 
+@@ -159,12 +159,12 @@ static int check_none_included_tags(int mem_type, int mode)
+ 		}
+ 		mte_initialize_current_context(mode, (uintptr_t)ptr, BUFFER_SIZE);
+ 		/* Check the write validity of the untagged pointer */
+-		memset((void *)ptr, '1', BUFFER_SIZE);
++		memset(ptr, '1', BUFFER_SIZE);
+ 		mte_wait_after_trig();
+ 		if (cur_mte_cxt.fault_valid)
+ 			break;
+ 	}
+-	mte_free_memory((void *)ptr, BUFFER_SIZE, mem_type, false);
++	mte_free_memory(ptr, BUFFER_SIZE, mem_type, false);
+ 	if (cur_mte_cxt.fault_valid)
+ 		return KSFT_FAIL;
+ 	else
 -- 
 2.30.2
 
