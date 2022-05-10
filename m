@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56647C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 15:35:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D66C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 15:35:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346113AbiEJPjk (ORCPT
+        id S1346065AbiEJPjm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 11:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        Tue, 10 May 2022 11:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346053AbiEJPjc (ORCPT
+        with ESMTP id S1346079AbiEJPjf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 11:39:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1612227B7E
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 08:34:39 -0700 (PDT)
+        Tue, 10 May 2022 11:39:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B17D7E44F9
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 08:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652196878;
+        s=mimecast20190719; t=1652196882;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PNnKWWk7Jmb907Uh0WEG8kZc964QPOGA4FR9wyuTc4M=;
-        b=he+QjNMubBCP4lHZXA04bwcRYuNU0IkitjOHnesXMyclLA2jfJeh07BUlp2FOcr/bdPwEB
-        pbUIgNGX1eiooQw/3NFLgjbn+9lr5ZTShzRREc9NcVtuPtUd64RKthzq6QMci7MPDsD9Km
-        ErbPaT8bADssSJxkGA2uTP+Wy2/erSg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=YnwNeI53+luFhZ27pBHLwHfTHIocqJ3v5y0np/qYgCY=;
+        b=HeT26zXiJ/+WcjMg6iacgDl4yi2yxCXLCPJDBnRaVqBKbopkXQFrLNwop8i2PJrLGlxABm
+        EuToRprGYkOnVrj18e+c+gOZDiI7K5sb2EChCgIy8/pf6jjG9kn1TEJyJp+pdIFFbj64FC
+        FUZpeVGDBbx6WbEmzQmVKR81L71crpY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-99-ULunYGgUPMOXJdqN3FvKPQ-1; Tue, 10 May 2022 11:34:34 -0400
-X-MC-Unique: ULunYGgUPMOXJdqN3FvKPQ-1
+ us-mta-256-DQYqf0BrMzCJSwc1HBa2Cg-1; Tue, 10 May 2022 11:34:37 -0400
+X-MC-Unique: DQYqf0BrMzCJSwc1HBa2Cg-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A56C4899EC1;
-        Tue, 10 May 2022 15:34:33 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9AAB53C977CD;
+        Tue, 10 May 2022 15:34:36 +0000 (UTC)
 Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 37CDB401E31;
-        Tue, 10 May 2022 15:34:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28A46401E31;
+        Tue, 10 May 2022 15:34:36 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -53,9 +53,9 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         Marcelo Tosatti <mtosatti@redhat.com>,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v11 2/8] cgroup/cpuset: Miscellaneous cleanups & add helper functions
-Date:   Tue, 10 May 2022 11:34:07 -0400
-Message-Id: <20220510153413.400020-3-longman@redhat.com>
+Subject: [PATCH v11 8/8] kselftest/cgroup: Add cpuset v2 partition root state test
+Date:   Tue, 10 May 2022 11:34:13 -0400
+Message-Id: <20220510153413.400020-9-longman@redhat.com>
 In-Reply-To: <20220510153413.400020-1-longman@redhat.com>
 References: <20220510153413.400020-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -66,458 +66,809 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The partition root state (PRS) macro names do not currently match the
-external names. Change them to match the external names and add helper
-functions to read or change the state.
-
-Shorten the cpuset argument of update_parent_subparts_cpumask() to cs
-to match other cpuset functions.
-
-Remove the new_prs argument from notify_partition_change() as the
-cs->partition_root_state has already been set to new_prs before it
-is called.
-
-There is no functional change.
+Add a test script test_cpuset_prs.sh with a helper program wait_inotify
+for exercising the cpuset v2 partition root state code.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 165 +++++++++++++++++++++--------------------
- 1 file changed, 86 insertions(+), 79 deletions(-)
+ tools/testing/selftests/cgroup/Makefile       |   5 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       | 674 ++++++++++++++++++
+ tools/testing/selftests/cgroup/wait_inotify.c |  87 +++
+ 3 files changed, 764 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+ create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index d90f33b068a3..d156a39d7a08 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -175,20 +175,18 @@ struct cpuset {
- /*
-  * Partition root states:
-  *
-- *   0 - not a partition root
-- *
-+ *   0 - member (not a partition root)
-  *   1 - partition root
-- *
-  *  -1 - invalid partition root
-- *       None of the cpus in cpus_allowed can be put into the parent's
-- *       subparts_cpus. In this case, the cpuset is not a real partition
-- *       root anymore.  However, the CPU_EXCLUSIVE bit will still be set
-- *       and the cpuset can be restored back to a partition root if the
-- *       parent cpuset can give more CPUs back to this child cpuset.
-  */
--#define PRS_DISABLED		0
--#define PRS_ENABLED		1
--#define PRS_ERROR		-1
-+#define PRS_MEMBER		0
-+#define PRS_ROOT		1
-+#define PRS_INVALID_ROOT	-1
+diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+index 745fe25fa0b9..01687418b92f 100644
+--- a/tools/testing/selftests/cgroup/Makefile
++++ b/tools/testing/selftests/cgroup/Makefile
+@@ -1,10 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -Wall -pthread
+ 
+-all:
++all: ${HELPER_PROGS}
+ 
+ TEST_FILES     := with_stress.sh
+-TEST_PROGS     := test_stress.sh
++TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
++TEST_GEN_FILES := wait_inotify
+ TEST_GEN_PROGS = test_memcontrol
+ TEST_GEN_PROGS += test_kmem
+ TEST_GEN_PROGS += test_core
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+new file mode 100755
+index 000000000000..3ee12f8dc752
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -0,0 +1,674 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test for cpuset v2 partition root state (PRS)
++#
++# The sched verbose flag is set, if available, so that the console log
++# can be examined for the correct setting of scheduling domain.
++#
 +
-+static inline bool is_prs_invalid(int prs_state)
-+{
-+	return prs_state < 0;
-+}
- 
- /*
-  * Temporary cpumasks for working with partitions that are passed among
-@@ -268,25 +266,35 @@ static inline int is_spread_slab(const struct cpuset *cs)
- 	return test_bit(CS_SPREAD_SLAB, &cs->flags);
- }
- 
--static inline int is_partition_root(const struct cpuset *cs)
-+static inline int is_partition_valid(const struct cpuset *cs)
- {
- 	return cs->partition_root_state > 0;
- }
- 
-+static inline int is_partition_invalid(const struct cpuset *cs)
-+{
-+	return cs->partition_root_state < 0;
++skip_test() {
++	echo "$1"
++	echo "Test SKIPPED"
++	exit 0
 +}
 +
-+static inline void set_partition_invalid(struct cpuset *cs)
++[[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
++
++# Set sched verbose flag, if available
++[[ -d /sys/kernel/debug/sched ]] && echo Y > /sys/kernel/debug/sched/verbose
++
++# Get wait_inotify location
++WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
++
++# Find cgroup v2 mount point
++CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
++[[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
++
++CPUS=$(lscpu | grep "^CPU(s)" | sed -e "s/.*:[[:space:]]*//")
++[[ $CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
++
++# Set verbose flag and delay factor
++PROG=$1
++VERBOSE=
++DELAY_FACTOR=1
++while [[ "$1" = -* ]]
++do
++	case "$1" in
++		-v) VERBOSE=1
++		    break
++		    ;;
++		-d) DELAY_FACTOR=$2
++		    shift
++		    break
++		    ;;
++		*)  echo "Usage: $PROG [-v] [-d <delay-factor>"
++		    exit
++		    ;;
++	esac
++	shift
++done
++
++cd $CGROUP2
++echo +cpuset > cgroup.subtree_control
++[[ -d test ]] || mkdir test
++cd test
++
++# Pause in ms
++pause()
 +{
-+	cs->partition_root_state = PRS_INVALID_ROOT;
++	DELAY=$1
++	LOOP=0
++	while [[ $LOOP -lt $DELAY_FACTOR ]]
++	do
++		sleep $DELAY
++		((LOOP++))
++	done
++	return 0
 +}
 +
- /*
-  * Send notification event of whenever partition_root_state changes.
-  */
--static inline void notify_partition_change(struct cpuset *cs,
--					   int old_prs, int new_prs)
-+static inline void notify_partition_change(struct cpuset *cs, int old_prs)
- {
--	if (old_prs != new_prs)
--		cgroup_file_notify(&cs->partition_file);
-+	if (old_prs == cs->partition_root_state)
-+		return;
-+	cgroup_file_notify(&cs->partition_file);
- }
- 
- static struct cpuset top_cpuset = {
- 	.flags = ((1 << CS_ONLINE) | (1 << CS_CPU_EXCLUSIVE) |
- 		  (1 << CS_MEM_EXCLUSIVE)),
--	.partition_root_state = PRS_ENABLED,
-+	.partition_root_state = PRS_ROOT,
- };
- 
- /**
-@@ -875,7 +883,7 @@ static int generate_sched_domains(cpumask_var_t **domains,
- 			csa[csn++] = cp;
- 
- 		/* skip @cp's subtree if not a partition root */
--		if (!is_partition_root(cp))
-+		if (!is_partition_valid(cp))
- 			pos_css = css_rightmost_descendant(pos_css);
- 	}
- 	rcu_read_unlock();
-@@ -1081,7 +1089,7 @@ static void rebuild_sched_domains_locked(void)
- 	if (top_cpuset.nr_subparts_cpus) {
- 		rcu_read_lock();
- 		cpuset_for_each_descendant_pre(cs, pos_css, &top_cpuset) {
--			if (!is_partition_root(cs)) {
-+			if (!is_partition_valid(cs)) {
- 				pos_css = css_rightmost_descendant(pos_css);
- 				continue;
- 			}
-@@ -1215,11 +1223,11 @@ enum subparts_cmd {
-  * cpumask changes that violates the cpu exclusivity rule will not be
-  * permitted when checked by validate_change().
-  */
--static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
-+static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 					  struct cpumask *newmask,
- 					  struct tmpmasks *tmp)
- {
--	struct cpuset *parent = parent_cs(cpuset);
-+	struct cpuset *parent = parent_cs(cs);
- 	int adding;	/* Moving cpus from effective_cpus to subparts_cpus */
- 	int deleting;	/* Moving cpus from subparts_cpus to effective_cpus */
- 	int old_prs, new_prs;
-@@ -1232,16 +1240,16 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 	 * The new cpumask, if present, or the current cpus_allowed must
- 	 * not be empty.
- 	 */
--	if (!is_partition_root(parent) ||
-+	if (!is_partition_valid(parent) ||
- 	   (newmask && cpumask_empty(newmask)) ||
--	   (!newmask && cpumask_empty(cpuset->cpus_allowed)))
-+	   (!newmask && cpumask_empty(cs->cpus_allowed)))
- 		return -EINVAL;
- 
- 	/*
- 	 * Enabling/disabling partition root is not allowed if there are
- 	 * online children.
- 	 */
--	if ((cmd != partcmd_update) && css_has_online_children(&cpuset->css))
-+	if ((cmd != partcmd_update) && css_has_online_children(&cs->css))
- 		return -EBUSY;
- 
- 	/*
-@@ -1250,20 +1258,20 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 	 * CPU will be left after that.
- 	 */
- 	if ((cmd == partcmd_enable) &&
--	   (!cpumask_subset(cpuset->cpus_allowed, parent->effective_cpus) ||
--	     cpumask_equal(cpuset->cpus_allowed, parent->effective_cpus)))
-+	   (!cpumask_subset(cs->cpus_allowed, parent->effective_cpus) ||
-+	     cpumask_equal(cs->cpus_allowed, parent->effective_cpus)))
- 		return -EINVAL;
- 
- 	/*
- 	 * A cpumask update cannot make parent's effective_cpus become empty.
- 	 */
- 	adding = deleting = false;
--	old_prs = new_prs = cpuset->partition_root_state;
-+	old_prs = new_prs = cs->partition_root_state;
- 	if (cmd == partcmd_enable) {
--		cpumask_copy(tmp->addmask, cpuset->cpus_allowed);
-+		cpumask_copy(tmp->addmask, cs->cpus_allowed);
- 		adding = true;
- 	} else if (cmd == partcmd_disable) {
--		deleting = cpumask_and(tmp->delmask, cpuset->cpus_allowed,
-+		deleting = cpumask_and(tmp->delmask, cs->cpus_allowed,
- 				       parent->subparts_cpus);
- 	} else if (newmask) {
- 		/*
-@@ -1273,7 +1281,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 		 * addmask = newmask & parent->effective_cpus
- 		 *		     & ~parent->subparts_cpus
- 		 */
--		cpumask_andnot(tmp->delmask, cpuset->cpus_allowed, newmask);
-+		cpumask_andnot(tmp->delmask, cs->cpus_allowed, newmask);
- 		deleting = cpumask_and(tmp->delmask, tmp->delmask,
- 				       parent->subparts_cpus);
- 
-@@ -1307,44 +1315,44 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 		 * pre-shrunk in case there is a change in the cpu list.
- 		 * So no deletion is needed.
- 		 */
--		adding = cpumask_and(tmp->addmask, cpuset->cpus_allowed,
-+		adding = cpumask_and(tmp->addmask, cs->cpus_allowed,
- 				     parent->effective_cpus);
- 		part_error = cpumask_equal(tmp->addmask,
- 					   parent->effective_cpus);
- 	}
- 
- 	if (cmd == partcmd_update) {
--		int prev_prs = cpuset->partition_root_state;
-+		int prev_prs = cs->partition_root_state;
- 
- 		/*
--		 * Check for possible transition between PRS_ENABLED
--		 * and PRS_ERROR.
-+		 * Check for possible transition between PRS_ROOT
-+		 * and PRS_INVALID_ROOT.
- 		 */
--		switch (cpuset->partition_root_state) {
--		case PRS_ENABLED:
-+		switch (cs->partition_root_state) {
-+		case PRS_ROOT:
- 			if (part_error)
--				new_prs = PRS_ERROR;
-+				new_prs = PRS_INVALID_ROOT;
- 			break;
--		case PRS_ERROR:
-+		case PRS_INVALID_ROOT:
- 			if (!part_error)
--				new_prs = PRS_ENABLED;
-+				new_prs = PRS_ROOT;
- 			break;
- 		}
- 		/*
- 		 * Set part_error if previously in invalid state.
- 		 */
--		part_error = (prev_prs == PRS_ERROR);
-+		part_error = is_prs_invalid(prev_prs);
- 	}
- 
--	if (!part_error && (new_prs == PRS_ERROR))
-+	if (!part_error && is_prs_invalid(new_prs))
- 		return 0;	/* Nothing need to be done */
- 
--	if (new_prs == PRS_ERROR) {
-+	if (is_prs_invalid(new_prs)) {
- 		/*
- 		 * Remove all its cpus from parent's subparts_cpus.
- 		 */
- 		adding = false;
--		deleting = cpumask_and(tmp->delmask, cpuset->cpus_allowed,
-+		deleting = cpumask_and(tmp->delmask, cs->cpus_allowed,
- 				       parent->subparts_cpus);
- 	}
- 
-@@ -1377,10 +1385,10 @@ static int update_parent_subparts_cpumask(struct cpuset *cpuset, int cmd,
- 	parent->nr_subparts_cpus = cpumask_weight(parent->subparts_cpus);
- 
- 	if (old_prs != new_prs)
--		cpuset->partition_root_state = new_prs;
-+		cs->partition_root_state = new_prs;
- 
- 	spin_unlock_irq(&callback_lock);
--	notify_partition_change(cpuset, old_prs, new_prs);
-+	notify_partition_change(cs, old_prs);
- 
- 	return cmd == partcmd_update;
- }
-@@ -1445,15 +1453,14 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 		old_prs = new_prs = cp->partition_root_state;
- 		if ((cp != cs) && old_prs) {
- 			switch (parent->partition_root_state) {
--			case PRS_DISABLED:
-+			case PRS_MEMBER:
- 				/*
- 				 * If parent is not a partition root or an
- 				 * invalid partition root, clear its state
- 				 * and its CS_CPU_EXCLUSIVE flag.
- 				 */
--				WARN_ON_ONCE(cp->partition_root_state
--					     != PRS_ERROR);
--				new_prs = PRS_DISABLED;
-+				WARN_ON_ONCE(!is_partition_invalid(cp));
-+				new_prs = PRS_MEMBER;
- 
- 				/*
- 				 * clear_bit() is an atomic operation and
-@@ -1465,16 +1472,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 				clear_bit(CS_CPU_EXCLUSIVE, &cp->flags);
- 				break;
- 
--			case PRS_ENABLED:
-+			case PRS_ROOT:
- 				if (update_parent_subparts_cpumask(cp, partcmd_update, NULL, tmp))
- 					update_tasks_cpumask(parent);
- 				break;
- 
--			case PRS_ERROR:
-+			case PRS_INVALID_ROOT:
- 				/*
- 				 * When parent is invalid, it has to be too.
- 				 */
--				new_prs = PRS_ERROR;
-+				new_prs = PRS_INVALID_ROOT;
- 				break;
- 			}
- 		}
-@@ -1486,7 +1493,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 		spin_lock_irq(&callback_lock);
- 
- 		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
--		if (cp->nr_subparts_cpus && (new_prs != PRS_ENABLED)) {
-+		if (cp->nr_subparts_cpus && !is_partition_valid(cp)) {
- 			cp->nr_subparts_cpus = 0;
- 			cpumask_clear(cp->subparts_cpus);
- 		} else if (cp->nr_subparts_cpus) {
-@@ -1518,7 +1525,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 			cp->partition_root_state = new_prs;
- 
- 		spin_unlock_irq(&callback_lock);
--		notify_partition_change(cp, old_prs, new_prs);
-+		notify_partition_change(cp, old_prs);
- 
- 		WARN_ON(!is_in_v2_mode() &&
- 			!cpumask_equal(cp->cpus_allowed, cp->effective_cpus));
-@@ -1534,7 +1541,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp)
- 		if (!cpumask_empty(cp->cpus_allowed) &&
- 		    is_sched_load_balance(cp) &&
- 		   (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys) ||
--		    is_partition_root(cp)))
-+		    is_partition_valid(cp)))
- 			need_rebuild_sched_domains = true;
- 
- 		rcu_read_lock();
-@@ -2034,10 +2041,11 @@ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
- 	return err;
- }
- 
--/*
-+/**
-  * update_prstate - update partition_root_state
-- * cs: the cpuset to update
-- * new_prs: new partition root state
-+ * @cs: the cpuset to update
-+ * @new_prs: new partition root state
-+ * Return: 0 if successful, < 0 if error
-  *
-  * Call with cpuset_rwsem held.
-  */
-@@ -2054,7 +2062,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	 * Cannot force a partial or invalid partition root to a full
- 	 * partition root.
- 	 */
--	if (new_prs && (old_prs == PRS_ERROR))
-+	if (new_prs && is_prs_invalid(old_prs))
- 		return -EINVAL;
- 
- 	if (alloc_cpumasks(NULL, &tmpmask))
-@@ -2085,7 +2093,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		 * Turning off partition root will clear the
- 		 * CS_CPU_EXCLUSIVE bit.
- 		 */
--		if (old_prs == PRS_ERROR) {
-+		if (is_prs_invalid(old_prs)) {
- 			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
- 			err = 0;
- 			goto out;
-@@ -2111,7 +2119,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		spin_lock_irq(&callback_lock);
- 		cs->partition_root_state = new_prs;
- 		spin_unlock_irq(&callback_lock);
--		notify_partition_change(cs, old_prs, new_prs);
-+		notify_partition_change(cs, old_prs);
- 	}
- 
- 	free_cpumasks(NULL, &tmpmask);
-@@ -2604,13 +2612,13 @@ static int sched_partition_show(struct seq_file *seq, void *v)
- 	struct cpuset *cs = css_cs(seq_css(seq));
- 
- 	switch (cs->partition_root_state) {
--	case PRS_ENABLED:
-+	case PRS_ROOT:
- 		seq_puts(seq, "root\n");
- 		break;
--	case PRS_DISABLED:
-+	case PRS_MEMBER:
- 		seq_puts(seq, "member\n");
- 		break;
--	case PRS_ERROR:
-+	case PRS_INVALID_ROOT:
- 		seq_puts(seq, "root invalid\n");
- 		break;
- 	}
-@@ -2630,9 +2638,9 @@ static ssize_t sched_partition_write(struct kernfs_open_file *of, char *buf,
- 	 * Convert "root" to ENABLED, and convert "member" to DISABLED.
- 	 */
- 	if (!strcmp(buf, "root"))
--		val = PRS_ENABLED;
-+		val = PRS_ROOT;
- 	else if (!strcmp(buf, "member"))
--		val = PRS_DISABLED;
-+		val = PRS_MEMBER;
- 	else
- 		return -EINVAL;
- 
-@@ -2931,7 +2939,7 @@ static void cpuset_css_offline(struct cgroup_subsys_state *css)
- 	cpus_read_lock();
- 	percpu_down_write(&cpuset_rwsem);
- 
--	if (is_partition_root(cs))
-+	if (is_partition_valid(cs))
- 		update_prstate(cs, 0);
- 
- 	if (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys) &&
-@@ -3176,11 +3184,11 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 
- 	/*
- 	 * In the unlikely event that a partition root has empty
--	 * effective_cpus or its parent becomes erroneous, we have to
--	 * transition it to the erroneous state.
-+	 * effective_cpus or its parent becomes invalid, we have to
-+	 * transition it to the invalid state.
- 	 */
--	if (is_partition_root(cs) && (cpumask_empty(&new_cpus) ||
--	   (parent->partition_root_state == PRS_ERROR))) {
-+	if (is_partition_valid(cs) && (cpumask_empty(&new_cpus) ||
-+	    is_partition_invalid(parent))) {
- 		if (cs->nr_subparts_cpus) {
- 			spin_lock_irq(&callback_lock);
- 			cs->nr_subparts_cpus = 0;
-@@ -3195,30 +3203,29 @@ static void cpuset_hotplug_update_tasks(struct cpuset *cs, struct tmpmasks *tmp)
- 		 * the current partition and let the child partitions
- 		 * fight for available CPUs.
- 		 */
--		if ((parent->partition_root_state == PRS_ERROR) ||
-+		if (is_partition_invalid(parent) ||
- 		     cpumask_empty(&new_cpus)) {
- 			int old_prs;
- 
- 			update_parent_subparts_cpumask(cs, partcmd_disable,
- 						       NULL, tmp);
- 			old_prs = cs->partition_root_state;
--			if (old_prs != PRS_ERROR) {
-+			if (!is_prs_invalid(old_prs)) {
- 				spin_lock_irq(&callback_lock);
--				cs->partition_root_state = PRS_ERROR;
-+				set_partition_invalid(cs);
- 				spin_unlock_irq(&callback_lock);
--				notify_partition_change(cs, old_prs, PRS_ERROR);
-+				notify_partition_change(cs, old_prs);
- 			}
- 		}
- 		cpuset_force_rebuild();
- 	}
- 
- 	/*
--	 * On the other hand, an erroneous partition root may be transitioned
-+	 * On the other hand, an invalid partition root may be transitioned
- 	 * back to a regular one or a partition root with no CPU allocated
--	 * from the parent may change to erroneous.
-+	 * from the parent may change to invalid.
- 	 */
--	if (is_partition_root(parent) &&
--	   ((cs->partition_root_state == PRS_ERROR) ||
-+	if (is_partition_valid(parent) && (is_partition_invalid(cs) ||
- 	    !cpumask_intersects(&new_cpus, parent->subparts_cpus)) &&
- 	     update_parent_subparts_cpumask(cs, partcmd_update, NULL, tmp))
- 		cpuset_force_rebuild();
++console_msg()
++{
++	MSG=$1
++	echo "$MSG"
++	echo "" > /dev/console
++	echo "$MSG" > /dev/console
++	pause 0.01
++}
++
++test_partition()
++{
++	EXPECTED_VAL=$1
++	echo $EXPECTED_VAL > cpuset.cpus.partition
++	[[ $? -eq 0 ]] || exit 1
++	ACTUAL_VAL=$(cat cpuset.cpus.partition)
++	[[ $ACTUAL_VAL != $EXPECTED_VAL ]] && {
++		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $EXPECTED_VAL"
++		echo "Test FAILED"
++		exit 1
++	}
++}
++
++test_effective_cpus()
++{
++	EXPECTED_VAL=$1
++	ACTUAL_VAL=$(cat cpuset.cpus.effective)
++	[[ "$ACTUAL_VAL" != "$EXPECTED_VAL" ]] && {
++		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$EXPECTED_VAL'"
++		echo "Test FAILED"
++		exit 1
++	}
++}
++
++# Adding current process to cgroup.procs as a test
++test_add_proc()
++{
++	OUTSTR="$1"
++	ERRMSG=$((echo $$ > cgroup.procs) |& cat)
++	echo $ERRMSG | grep -q "$OUTSTR"
++	[[ $? -ne 0 ]] && {
++		echo "cgroup.procs: expect '$OUTSTR', got '$ERRMSG'"
++		echo "Test FAILED"
++		exit 1
++	}
++	echo $$ > $CGROUP2/cgroup.procs	# Move out the task
++}
++
++#
++# Testing the new "isolated" partition root type
++#
++test_isolated()
++{
++	echo 2-3 > cpuset.cpus
++	TYPE=$(cat cpuset.cpus.partition)
++	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
++
++	console_msg "Change from member to root"
++	test_partition root
++
++	console_msg "Change from root to isolated"
++	test_partition isolated
++
++	console_msg "Change from isolated to member"
++	test_partition member
++
++	console_msg "Change from member to isolated"
++	test_partition isolated
++
++	console_msg "Change from isolated to root"
++	test_partition root
++
++	console_msg "Change from root to member"
++	test_partition member
++
++	#
++	# Testing partition root with no cpu
++	#
++	console_msg "Distribute all cpus to child partition"
++	echo +cpuset > cgroup.subtree_control
++	test_partition root
++
++	mkdir A1
++	cd A1
++	echo 2-3 > cpuset.cpus
++	test_partition root
++	test_effective_cpus 2-3
++	cd ..
++	test_effective_cpus ""
++
++	console_msg "Moving task to partition test"
++	test_add_proc "No space left"
++	cd A1
++	test_add_proc ""
++	cd ..
++
++	console_msg "Shrink and expand child partition"
++	cd A1
++	echo 2 > cpuset.cpus
++	cd ..
++	test_effective_cpus 3
++	cd A1
++	echo 2-3 > cpuset.cpus
++	cd ..
++	test_effective_cpus ""
++
++	# Cleaning up
++	console_msg "Cleaning up"
++	echo $$ > $CGROUP2/cgroup.procs
++	[[ -d A1 ]] && rmdir A1
++}
++
++#
++# Cpuset controller state transition test matrix.
++#
++# Cgroup test hierarchy
++#
++# test -- A1 -- A2 -- A3
++#      \- B1
++#
++#  P<v> = set cpus.partition (0:member, 1:root, 2:isolated, -1:root invalid)
++#  C<l> = add cpu-list
++#  S<p> = use prefix in subtree_control
++#  T    = put a task into cgroup
++#  O<c>-<v> = Write <v> to CPU online file of <c>
++#
++SETUP_A123_PARTITIONS="C1-3:P1:S+ C2-3:P1:S+ C3:P1"
++TEST_MATRIX=(
++	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
++	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
++	"  S+    C0-1     .      .    C2-3    S+    C4-5     .      .     0 A2:0-1"
++	"  S+    C0-1     .      .    C2-3    P1      .      .      .     0 "
++	"  S+    C0-1     .      .    C2-3   P1:S+ C0-1:P1   .      .     0 "
++	"  S+    C0-1     .      .    C2-3   P1:S+  C1:P1    .      .     0 "
++	"  S+   C0-1:S+   .      .    C2-3     .      .      .     P1     0 "
++	"  S+   C0-1:P1   .      .    C2-3    S+     C1      .      .     0 "
++	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .      .     0 "
++	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .     P1     0 "
++	"  S+   C0-1:P1   .      .    C2-3   C4-5     .      .      .     0 A1:4-5"
++	"  S+   C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
++	"  S+    C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
++	"  S+    C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
++	"  S+ C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1,A2:2-3"
++	"  S+ C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1,A2:2-3"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3,A2:3 A1:P1,A2:P0"
++	"  S+ C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4,A2:2"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:,B1:0-2 A1:P1,A2:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
++
++	# CPU offlining cases:
++	"  S+    C0-1     .      .    C2-3    S+    C4-5     .     O2-0   0 A1:0-1,B1:3"
++	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0    .      .      .     0 A1:0-1,A2:3"
++	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0   O2-1    .      .     0 A1:0-1,A2:2-3"
++	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0    .      .      .     0 A1:0,A2:2-3"
++	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0   O1-1    .      .     0 A1:0-1,A2:2-3"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
++	"  S+ C2-3:P1:S+  C3:P2  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
++	"  S+ C2-3:P1:S+  C3:P2  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0    .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
++	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0    .      .      .     0 A1:2,A2: A1:P1,A2:P1"
++	"  S+ C2-3:P1:S+  C3:P1  .      .    T:O2-0   .      .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
++	"  S+ C2-3:P1:S+  C3:P1  .      .      .    T:O3-0   .      .     0 A1:2,A2:2 A1:P1,A2:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    .     O1-0    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .     O2-0    .      .      .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .     O3-0    .      .      .     0 A1:1,A2:2,A3: A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0   .      .     0 A1:1,A2:3,A3:3 A1:P1,A2:P1,A3:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0   .     0 A1:1,A2:2,A3:2 A1:P1,A2:P1,A3:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O1-1    .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0  O2-1    .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0  O3-1   0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O1-1    .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
++	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O2-1    .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
++
++	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
++	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
++	#
++	# Incorrect change to cpuset.cpus invalidates partition root
++	#
++	# Adding CPUs to partition root that are not in parent's
++	# cpuset.cpus is allowed, but those extra CPUs are ignored.
++	"  S+ C2-3:P1:S+ C3:P1   .      .      .     C2-4    .      .     0 A1:,A2:2-3 A1:P1,A2:P1"
++
++	# Taking away all CPUs from parent or itself if there are tasks
++	# will make the partition invalid.
++	"  S+ C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
++
++	# Changing a partition root to member makes child partitions invalid
++	"  S+ C2-3:P1:S+  C3:P1  .      .      P0     .      .      .     0 A1:2-3,A2:3 A1:P0,A2:P-1"
++	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    P0     .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P0,A3:P-1"
++
++	# cpuset.cpus can contains cpus not in parent's cpuset.cpus as long
++	# as they overlap.
++	"  S+ C2-3:P1:S+  .      .      .      .   C3-4:P1   .      .     0 A1:2,A2:3 A1:P1,A2:P1"
++
++	# Deletion of CPUs distributed to child cgroup is allowed.
++	"  S+ C0-1:P1:S+ C1      .    C2-3   C4-5     .      .      .     0 A1:4-5,A2:4-5"
++
++	# To become a valid partition root, cpuset.cpus must overlap parent's
++	# cpuset.cpus.
++	"  S+   C0-1:P1   .      .    C2-3    S+   C4-5:P1   .      .     0 A1:0-1,A2:0-1 A1:P1,A2:P-1"
++
++	# Enabling partition with child cpusets is allowed
++	"  S+   C0-1:S+  C1      .    C2-3    P1      .      .      .     0 A1:0-1,A2:1 A1:P1"
++
++	# A partition root with non-partition root parent is invalid, but it
++	# can be made valid if its parent becomes a partition root too.
++	"  S+   C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1,A2:1 A1:P0,A2:P-2"
++	"  S+   C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0,A2:1 A1:P1,A2:P2"
++
++	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
++	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
++	# Failure cases:
++
++	# Any change to cpuset.cpus of a partition root must be exclusive.
++	"  S+   C0-1:P1   .      .    C2-3   C0-2     .      .      .     1 "
++	"  S+    C0-1     .      .   C2-3:P1   .      .      .     C1     1 "
++	"  S+ C2-3:P1:S+  C2:P1  .     C1    C1-3     .      .      .     1 "
++
++	# A task cannot be added to a partition with no cpu
++	"  S+ C2-3:P1:S+  C3:P1  .      .    O2-0:T   .      .      .     1 A1:,A2:3 A1:P1,A2:P1"
++)
++
++#
++# Write to the cpu online file
++#  $1 - <c>-<v> where <c> = cpu number, <v> value to be written
++#
++write_cpu_online()
++{
++	CPU=${1%-*}
++	VAL=${1#*-}
++	CPUFILE=//sys/devices/system/cpu/cpu${CPU}/online
++	if [[ $VAL -eq 0 ]]
++	then
++		OFFLINE_CPUS="$OFFLINE_CPUS $CPU"
++	else
++		[[ -n "$OFFLINE_CPUS" ]] && {
++			OFFLINE_CPUS=$(echo $CPU $CPU $OFFLINE_CPUS | fmt -1 |\
++					sort | uniq -u)
++		}
++	fi
++	echo $VAL > $CPUFILE
++	pause 0.01
++}
++
++#
++# Set controller state
++#  $1 - cgroup directory
++#  $2 - state
++#  $3 - showerr
++#
++# The presence of ":" in state means transition from one to the next.
++#
++set_ctrl_state()
++{
++	TMPMSG=/tmp/.msg_$$
++	CGRP=$1
++	STATE=$2
++	SHOWERR=${3}${VERBOSE}
++	CTRL=${CTRL:=$CONTROLLER}
++	HASERR=0
++	REDIRECT="2> $TMPMSG"
++	[[ -z "$STATE" || "$STATE" = '.' ]] && return 0
++
++	rm -f $TMPMSG
++	for CMD in $(echo $STATE | sed -e "s/:/ /g")
++	do
++		TFILE=$CGRP/cgroup.procs
++		SFILE=$CGRP/cgroup.subtree_control
++		PFILE=$CGRP/cpuset.cpus.partition
++		CFILE=$CGRP/cpuset.cpus
++		S=$(expr substr $CMD 1 1)
++		if [[ $S = S ]]
++		then
++			PREFIX=${CMD#?}
++			COMM="echo ${PREFIX}${CTRL} > $SFILE"
++			eval $COMM $REDIRECT
++		elif [[ $S = C ]]
++		then
++			CPUS=${CMD#?}
++			COMM="echo $CPUS > $CFILE"
++			eval $COMM $REDIRECT
++		elif [[ $S = P ]]
++		then
++			VAL=${CMD#?}
++			case $VAL in
++			0)  VAL=member
++			    ;;
++			1)  VAL=root
++			    ;;
++			2)  VAL=isolated
++			    ;;
++			*)
++			    echo "Invalid partition state - $VAL"
++			    exit 1
++			    ;;
++			esac
++			COMM="echo $VAL > $PFILE"
++			eval $COMM $REDIRECT
++		elif [[ $S = O ]]
++		then
++			VAL=${CMD#?}
++			write_cpu_online $VAL
++		elif [[ $S = T ]]
++		then
++			COMM="echo 0 > $TFILE"
++			eval $COMM $REDIRECT
++		fi
++		RET=$?
++		[[ $RET -ne 0 ]] && {
++			[[ -n "$SHOWERR" ]] && {
++				echo "$COMM"
++				cat $TMPMSG
++			}
++			HASERR=1
++		}
++		pause 0.01
++		rm -f $TMPMSG
++	done
++	return $HASERR
++}
++
++set_ctrl_state_noerr()
++{
++	CGRP=$1
++	STATE=$2
++	[[ -d $CGRP ]] || mkdir $CGRP
++	set_ctrl_state $CGRP $STATE 1
++	[[ $? -ne 0 ]] && {
++		echo "ERROR: Failed to set $2 to cgroup $1!"
++		exit 1
++	}
++}
++
++online_cpus()
++{
++	[[ -n "OFFLINE_CPUS" ]] && {
++		for C in $OFFLINE_CPUS
++		do
++			write_cpu_online ${C}-1
++		done
++	}
++}
++
++#
++# Return 1 if the list of effective cpus isn't the same as the initial list.
++#
++reset_cgroup_states()
++{
++	echo 0 > $CGROUP2/cgroup.procs
++	online_cpus
++	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
++	set_ctrl_state . S-
++	pause 0.01
++}
++
++dump_states()
++{
++	for DIR in A1 A1/A2 A1/A2/A3 B1
++	do
++		ECPUS=$DIR/cpuset.cpus.effective
++		PRS=$DIR/cpuset.cpus.partition
++		[[ -e $ECPUS ]] && echo "$ECPUS: $(cat $ECPUS)"
++		[[ -e $PRS   ]] && echo "$PRS: $(cat $PRS)"
++	done
++}
++
++#
++# Check effective cpus
++# $1 - check string, format: <cgroup>:<cpu-list>[,<cgroup>:<cpu-list>]*
++#
++check_effective_cpus()
++{
++	CHK_STR=$1
++	for CHK in $(echo $CHK_STR | sed -e "s/,/ /g")
++	do
++		set -- $(echo $CHK | sed -e "s/:/ /g")
++		CGRP=$1
++		CPUS=$2
++		[[ $CGRP = A2 ]] && CGRP=A1/A2
++		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
++		FILE=$CGRP/cpuset.cpus.effective
++		[[ -e $FILE ]] || return 1
++		[[ $CPUS = $(cat $FILE) ]] || return 1
++	done
++}
++
++#
++# Check cgroup states
++#  $1 - check string, format: <cgroup>:<state>[,<cgroup>:<state>]*
++#
++check_cgroup_states()
++{
++	CHK_STR=$1
++	for CHK in $(echo $CHK_STR | sed -e "s/,/ /g")
++	do
++		set -- $(echo $CHK | sed -e "s/:/ /g")
++		CGRP=$1
++		STATE=$2
++		FILE=
++		EVAL=$(expr substr $STATE 2 2)
++		[[ $CGRP = A2 ]] && CGRP=A1/A2
++		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
++
++		case $STATE in
++			P*) FILE=$CGRP/cpuset.cpus.partition
++			    ;;
++			*)  echo "Unknown state: $STATE!"
++			    exit 1
++			    ;;
++		esac
++		VAL=$(cat $FILE)
++
++		case "$VAL" in
++			member) VAL=0
++				;;
++			root)	VAL=1
++				;;
++			isolated)
++				VAL=2
++				;;
++			"root invalid"*)
++				VAL=-1
++				;;
++			"isolated invalid"*)
++				VAL=-2
++				;;
++		esac
++		[[ $EVAL != $VAL ]] && return 1
++	done
++	return 0
++}
++
++#
++# Run cpuset state transition test
++#  $1 - test matrix name
++#
++# This test is somewhat fragile as delays (sleep x) are added in various
++# places to make sure state changes are fully propagated before the next
++# action. These delays may need to be adjusted if running in a slower machine.
++#
++run_state_test()
++{
++	TEST=$1
++	CONTROLLER=cpuset
++	CPULIST=0-6
++	I=0
++	eval CNT="\${#$TEST[@]}"
++
++	reset_cgroup_states
++	echo $CPULIST > cpuset.cpus
++	echo root > cpuset.cpus.partition
++	console_msg "Running state transition test ..."
++
++	while [[ $I -lt $CNT ]]
++	do
++		echo "Running test $I ..." > /dev/console
++		eval set -- "\${$TEST[$I]}"
++		ROOT=$1
++		OLD_A1=$2
++		OLD_A2=$3
++		OLD_A3=$4
++		OLD_B1=$5
++		NEW_A1=$6
++		NEW_A2=$7
++		NEW_A3=$8
++		NEW_B1=$9
++		RESULT=${10}
++		ECPUS=${11}
++		STATES=${12}
++
++		set_ctrl_state_noerr .        $ROOT
++		set_ctrl_state_noerr A1       $OLD_A1
++		set_ctrl_state_noerr A1/A2    $OLD_A2
++		set_ctrl_state_noerr A1/A2/A3 $OLD_A3
++		set_ctrl_state_noerr B1       $OLD_B1
++		RETVAL=0
++		set_ctrl_state A1       $NEW_A1; ((RETVAL += $?))
++		set_ctrl_state A1/A2    $NEW_A2; ((RETVAL += $?))
++		set_ctrl_state A1/A2/A3 $NEW_A3; ((RETVAL += $?))
++		set_ctrl_state B1       $NEW_B1; ((RETVAL += $?))
++
++		[[ $RETVAL -ne $RESULT ]] && {
++			echo "Test $TEST[$I] failed result check!"
++			eval echo \"\${$TEST[$I]}\"
++			dump_states
++			online_cpus
++			exit 1
++		}
++
++		[[ -n "$ECPUS" && "$ECPUS" != . ]] && {
++			check_effective_cpus $ECPUS
++			[[ $? -ne 0 ]] && {
++				echo "Test $TEST[$I] failed effective CPU check!"
++				eval echo \"\${$TEST[$I]}\"
++				echo
++				dump_states
++				online_cpus
++				exit 1
++			}
++		}
++
++		[[ -n "$STATES" ]] && {
++			check_cgroup_states $STATES
++			[[ $? -ne 0 ]] && {
++				echo "FAILED: Test $TEST[$I] failed states check!"
++				eval echo \"\${$TEST[$I]}\"
++				echo
++				dump_states
++				online_cpus
++				exit 1
++			}
++		}
++
++		reset_cgroup_states
++		#
++		# Check to see if effective cpu list changes
++		#
++		pause 0.05
++		NEWLIST=$(cat cpuset.cpus.effective)
++		[[ $NEWLIST != $CPULIST ]] && {
++			echo "Effective cpus changed to $NEWLIST after test $I!"
++			exit 1
++		}
++		[[ -n "$VERBOSE" ]] && echo "Test $I done."
++		((I++))
++	done
++	echo "All $I tests of $TEST PASSED."
++
++	echo member > cpuset.cpus.partition
++}
++
++#
++# Wait for inotify event for the given file and read it
++# $1: cgroup file to wait for
++# $2: file to store the read result
++#
++wait_inotify()
++{
++	CGROUP_FILE=$1
++	OUTPUT_FILE=$2
++
++	$WAIT_INOTIFY $CGROUP_FILE
++	cat $CGROUP_FILE > $OUTPUT_FILE
++}
++
++#
++# Test if inotify events are properly generated when going into and out of
++# invalid partition state.
++#
++test_inotify()
++{
++	ERR=0
++	PRS=/tmp/.prs_$$
++	[[ -f $WAIT_INOTIFY ]] || {
++		echo "wait_inotify not found, inotify test SKIPPED."
++		return
++	}
++
++	pause 0.01
++	echo 1 > cpuset.cpus
++	echo 0 > cgroup.procs
++	echo root > cpuset.cpus.partition
++	pause 0.01
++	rm -f $PRS
++	wait_inotify $PWD/cpuset.cpus.partition $PRS &
++	pause 0.01
++	set_ctrl_state . "O1-0"
++	pause 0.01
++	check_cgroup_states ".:P-1"
++	if [[ $? -ne 0 ]]
++	then
++		echo "FAILED: Inotify test - partition not invalid"
++		ERR=1
++	elif [[ ! -f $PRS ]]
++	then
++		echo "FAILED: Inotify test - event not generated"
++		ERR=1
++		kill %1
++	elif [[ $(cat $PRS) != "root invalid"* ]]
++	then
++		echo "FAILED: Inotify test - incorrect state"
++		cat $PRS
++		ERR=1
++	fi
++	online_cpus
++	echo member > cpuset.cpus.partition
++	echo 0 > ../cgroup.procs
++	if [[ $ERR -ne 0 ]]
++	then
++		exit 1
++	else
++		echo "Inotify test PASSED"
++	fi
++}
++
++run_state_test TEST_MATRIX
++test_isolated
++test_inotify
++echo "All tests PASSED."
++cd ..
++rmdir test
+diff --git a/tools/testing/selftests/cgroup/wait_inotify.c b/tools/testing/selftests/cgroup/wait_inotify.c
+new file mode 100644
+index 000000000000..e11b431e1b62
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/wait_inotify.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Wait until an inotify event on the given cgroup file.
++ */
++#include <linux/limits.h>
++#include <sys/inotify.h>
++#include <sys/mman.h>
++#include <sys/ptrace.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++static const char usage[] = "Usage: %s [-v] <cgroup_file>\n";
++static char *file;
++static int verbose;
++
++static inline void fail_message(char *msg)
++{
++	fprintf(stderr, msg, file);
++	exit(1);
++}
++
++int main(int argc, char *argv[])
++{
++	char *cmd = argv[0];
++	int c, fd;
++	struct pollfd fds = { .events = POLLIN, };
++
++	while ((c = getopt(argc, argv, "v")) != -1) {
++		switch (c) {
++		case 'v':
++			verbose++;
++			break;
++		}
++		argv++, argc--;
++	}
++
++	if (argc != 2) {
++		fprintf(stderr, usage, cmd);
++		return -1;
++	}
++	file = argv[1];
++	fd = open(file, O_RDONLY);
++	if (fd < 0)
++		fail_message("Cgroup file %s not found!\n");
++	close(fd);
++
++	fd = inotify_init();
++	if (fd < 0)
++		fail_message("inotify_init() fails on %s!\n");
++	if (inotify_add_watch(fd, file, IN_MODIFY) < 0)
++		fail_message("inotify_add_watch() fails on %s!\n");
++	fds.fd = fd;
++
++	/*
++	 * poll waiting loop
++	 */
++	for (;;) {
++		int ret = poll(&fds, 1, 10000);
++
++		if (ret < 0) {
++			if (errno == EINTR)
++				continue;
++			perror("poll");
++			exit(1);
++		}
++		if ((ret > 0) && (fds.revents & POLLIN))
++			break;
++	}
++	if (verbose) {
++		struct inotify_event events[10];
++		long len;
++
++		usleep(1000);
++		len = read(fd, events, sizeof(events));
++		printf("Number of events read = %ld\n",
++			len/sizeof(struct inotify_event));
++	}
++	close(fd);
++	return 0;
++}
 -- 
 2.27.0
 
