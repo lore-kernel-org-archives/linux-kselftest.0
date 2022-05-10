@@ -2,117 +2,174 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66DC8C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 17:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3052CC433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 18:09:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348177AbiEJRbn (ORCPT
+        id S1348534AbiEJSNS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 13:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        Tue, 10 May 2022 14:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348119AbiEJRb0 (ORCPT
+        with ESMTP id S242384AbiEJSNR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 13:31:26 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C9F1EEDE
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:27:24 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id g20so20841778edw.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 10:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HiJXspw+XXqRAk8vbWsIcG6KKaomwpOqMcuau12q5j4=;
-        b=l4OjCZhdF+uEbp7Nc5W8GzH4w1orFwvhDBIJnO+/nYkVEJkhGx11/s5f9/qz/B84+o
-         lxowYN95PdzNUl8RQvisra6uT+XW3IZdhiN+iey4DZgCK7BU+USuwe72eEtbCdIihVkk
-         AvwQWyV/bgFjypdruN3oD4Xi9q8Quwc+3ucw6xXxnXoHt93MdHSZlQWnm0f577YpU50J
-         9GwBTnVC/kPmnSxOTaInURBfI9PRLKPQZrpt7eUQgBZNEXil3ZXaecz2VpIkSR6KrtWE
-         j7szHqt8jianLsWTCWEQKRbfi0RDljYgkqIKVnq9JbBCrskrLJcAJz95KWQkIgpQ53fO
-         9lXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HiJXspw+XXqRAk8vbWsIcG6KKaomwpOqMcuau12q5j4=;
-        b=TxR++GxLwkT3A5v7ff8tzAuF/BFozeg251/Grz37bXvYgYaJUf9NDaVCxqT5CR9OGM
-         UMsx9qFVgToldKPjTE543ln3Nl2ACBMtcz7Jz1UkMqtItKMYeGNwX90h/JL3aTBmppux
-         9uhT/Y9i1YCSxOC7CBc7MgaA6jS1zlL7qvTP/AF68xf/6mGOXN0rxpM8tpt3Nj8GKR76
-         ygwf0TUwSOA3BFUehTJwo15ugVzhANZ9Qr6NYNnBraEDVfcIaveHqhiVQIgBQD4FDCQL
-         cy3m8snljUmKe+BxwZk4/GeCw+EzSc+sRMjDU1eovF/XYhsiz4v7tVOdkMykzVAby8Bj
-         NB9g==
-X-Gm-Message-State: AOAM531zJBl5R8K1nZ8f3mJnDNuSQoL5782H7cDrd679ticcTgt3eTdK
-        WZYn2854dMw0KMsU8uqOLzbKNH8xHpkuGwpPWywNayovAH4=
-X-Google-Smtp-Source: ABdhPJx2kSgAU2XY/27rj6V2tZzvTpxBTH9s2dEI4WHLt7Xvikp7+Mq8td5ekP+J6cRnKA+sx1pJ5K2Mc8vf9imokWg=
-X-Received: by 2002:a05:6402:3590:b0:427:ba05:6f19 with SMTP id
- y16-20020a056402359000b00427ba056f19mr24886754edc.334.1652203643134; Tue, 10
- May 2022 10:27:23 -0700 (PDT)
+        Tue, 10 May 2022 14:13:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C1F638E;
+        Tue, 10 May 2022 11:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652206158; x=1683742158;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ivBpL5HnS4kxK8A+br9TE9DoQDLk+9xCSwo83rASwUU=;
+  b=durzGNU9hqvtXEptRk84MV+fRZgio7I1KiKUl/O1kRb+5/UQTpejpRBC
+   gXrjA/mC7524s5yrD6+FYtH3l6JnYeQ/igNFsbjbA/37r2gi5T/2wPWxp
+   6oqY+2W2/1XtyEOq+CiuKYsT+TrtNePM7amGxe/CBO3+khM8CBBCHgoYQ
+   QmGNkoklxs7DW0SPtuQeXdhhmS+HVf87eDh4t1XaiLUBFvQshNWnGibA4
+   dJoIdc5gkrojTTVeFBKMESaJUSJPJHim/2Tnatp/HWqODRHpyp2OXALZ/
+   0y66zSdbBS6Cv5Ukg1Udoi3jEb+WhZTZ/W6lHvXFRSpyswAIv9+C+1I9g
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057498"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="330057498"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="541908742"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:16 -0700
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V5 01/31] x86/sgx: Add short descriptions to ENCLS wrappers
+Date:   Tue, 10 May 2022 11:08:37 -0700
+Message-Id: <5e78a1126711cbd692d5b8132e0683873398f69e.1652137848.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1652137848.git.reinette.chatre@intel.com>
+References: <cover.1652137848.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-References: <20220509204909.2464496-1-dlatypov@google.com> <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
-In-Reply-To: <CABVgOSnwFe18Em327c3bx7z0A9VfujbjdKgofoSRafFOsOjfwQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 10 May 2022 10:27:12 -0700
-Message-ID: <CAGS_qxr+MOnWgz3B7+J12-Tj3VGERVRqrYg4uF0_FkBxa2hRdQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: misc cleanups
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 9, 2022 at 11:22 PM David Gow <davidgow@google.com> wrote:
->
-> On Tue, May 10, 2022 at 4:49 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > This primarily comes from running pylint over kunit tool code and
-> > ignoring some warnings we don't care about.
-> > If we ever got a fully clean setup, we could add this to run_checks.py,
-> > but we're not there yet.
-> >
-> > Fix things like
-> > * Drop unused imports
-> > * check `is None`, not `== None` (see PEP 8)
-> > * remove redundant parens around returns
-> > * remove redundant `else` / convert `elif` to `if` where appropriate
->
-> Personally, I find the explicit 'elif' much more readable in most of
-> these cases, but if we're annoying a linter, I guess we should change
-> them...
+The SGX ENCLS instruction uses EAX to specify an SGX function and
+may require additional registers, depending on the SGX function.
+ENCLS invokes the specified privileged SGX function for managing
+and debugging enclaves. Macros are used to wrap the ENCLS
+functionality and several wrappers are used to wrap the macros to
+make the different SGX functions accessible in the code.
 
-Same, some of them felt a tad more readable, but using `if` is a bit
-more explicit about the actual control flow.
-For short branches, like most of the ones here, they don't make too
-much of a difference, but for longer blocks of code, this can help.
+The wrappers of the supported SGX functions are cryptic. Add short
+descriptions of each as a comment.
 
-E.g. if one sees
-  elif check2():
-     do_thing2()
-one might think they can tack on a
-  do_cleanup()
-and have it run for all branches, if they're not careful.
+Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+No changes since V4.
 
->
-> > * rename make_arch_qemuconfig() param to base_kunitconfig (this is the
-> >   name used in the subclass, and it's a better one)
-> > * kunit_tool_test: check the exit code for SystemExit (could be 0)
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> All of these changes seem correct to me, even if I'm not sure I'd
-> bother with most of them if they weren't causing pylint to show
-> errors.
->
-> Given that apparently it does, though, I'm okay with it going through.
-> (I'll just grumble quietly in my corner. :-))
+Changes since V3:
+- Add Jarkko's Reviewed-by tag.
 
-To be fair, we could ignore more of these warnings.
-If we ever try to get the code clean wrt linter warnings, we'd already
-need to tweak the settings.
+Changes since V1:
+- Fix commit message and subject to not refer to descriptions as
+"changelog descriptions" or "shortlog descriptions" (Jarkko).
+- Improve all descriptions with guidance from Jarkko.
 
-But I think I've taken care of most of the reasonable warnings in this patch.
+ arch/x86/kernel/cpu/sgx/encls.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
+index fa04a73daf9c..0e22fa8f77c5 100644
+--- a/arch/x86/kernel/cpu/sgx/encls.h
++++ b/arch/x86/kernel/cpu/sgx/encls.h
+@@ -136,57 +136,71 @@ static inline bool encls_failed(int ret)
+ 	ret;						\
+ 	})
+ 
++/* Initialize an EPC page into an SGX Enclave Control Structure (SECS) page. */
+ static inline int __ecreate(struct sgx_pageinfo *pginfo, void *secs)
+ {
+ 	return __encls_2(ECREATE, pginfo, secs);
+ }
+ 
++/* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
+ static inline int __eextend(void *secs, void *addr)
+ {
+ 	return __encls_2(EEXTEND, secs, addr);
+ }
+ 
++/*
++ * Associate an EPC page to an enclave either as a REG or TCS page
++ * populated with the provided data.
++ */
+ static inline int __eadd(struct sgx_pageinfo *pginfo, void *addr)
+ {
+ 	return __encls_2(EADD, pginfo, addr);
+ }
+ 
++/* Finalize enclave build, initialize enclave for user code execution. */
+ static inline int __einit(void *sigstruct, void *token, void *secs)
+ {
+ 	return __encls_ret_3(EINIT, sigstruct, secs, token);
+ }
+ 
++/* Disassociate EPC page from its enclave and mark it as unused. */
+ static inline int __eremove(void *addr)
+ {
+ 	return __encls_ret_1(EREMOVE, addr);
+ }
+ 
++/* Copy data to an EPC page belonging to a debug enclave. */
+ static inline int __edbgwr(void *addr, unsigned long *data)
+ {
+ 	return __encls_2(EDGBWR, *data, addr);
+ }
+ 
++/* Copy data from an EPC page belonging to a debug enclave. */
+ static inline int __edbgrd(void *addr, unsigned long *data)
+ {
+ 	return __encls_1_1(EDGBRD, *data, addr);
+ }
+ 
++/* Track that software has completed the required TLB address clears. */
+ static inline int __etrack(void *addr)
+ {
+ 	return __encls_ret_1(ETRACK, addr);
+ }
+ 
++/* Load, verify, and unblock an EPC page. */
+ static inline int __eldu(struct sgx_pageinfo *pginfo, void *addr,
+ 			 void *va)
+ {
+ 	return __encls_ret_3(ELDU, pginfo, addr, va);
+ }
+ 
++/* Make EPC page inaccessible to enclave, ready to be written to memory. */
+ static inline int __eblock(void *addr)
+ {
+ 	return __encls_ret_1(EBLOCK, addr);
+ }
+ 
++/* Initialize an EPC page into a Version Array (VA) page. */
+ static inline int __epa(void *addr)
+ {
+ 	unsigned long rbx = SGX_PAGE_TYPE_VA;
+@@ -194,6 +208,7 @@ static inline int __epa(void *addr)
+ 	return __encls_2(EPA, rbx, addr);
+ }
+ 
++/* Invalidate an EPC page and write it out to main memory. */
+ static inline int __ewb(struct sgx_pageinfo *pginfo, void *addr,
+ 			void *va)
+ {
+-- 
+2.25.1
+
