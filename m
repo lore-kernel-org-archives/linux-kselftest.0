@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC98C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0711C43219
 	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 18:09:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348669AbiEJSNi (ORCPT
+        id S1348665AbiEJSNk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 14:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
+        Tue, 10 May 2022 14:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348608AbiEJSN0 (ORCPT
+        with ESMTP id S1348581AbiEJSN0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 10 May 2022 14:13:26 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C67F29820;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6CE2DD5C;
         Tue, 10 May 2022 11:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1652206168; x=1683742168;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=6MmFC/P7PHWENM/7pD3aeR70sEQG/z/SlZ7AM86ayZc=;
-  b=C8zfSixeRKXpsOMaMbzr8+szYq7r9dFBiM6RR0xfmjRMFGKBX2kelXOq
-   40ka31EFjUdH3MlxSGDSi48TyU/dPyfcewsejZRBHiAwU4dR0w6chIgde
-   stDWx5gvQbJqeYTdqas79EzzatvXDfUxrGdfpOKHaksb50TfhZo0bo5Dd
-   5shBl03JqHhBJj6I+0eW31waSYCHNVslZhxbqhn7/+vh13Q95QCzzNYNT
-   EWlZtbhcCj6s+EcyMfVF2sjH3wyHzyla4rwFggx44PS17Vuw1Kr5lQ66z
-   ta59wL0q75b207HLH179oiE2khKze6DQfEO+KVcxx8uvdzsTp9aUuEU3O
+  bh=LZYUQ4ZuqVJrdMTAzphGGNYBigUo0uo2YDekZ8Y7bBI=;
+  b=IdtStUpTjKgsS+f1y7+WWQahQuh/DkoefL40hu+k77ep6Oq/7qYe/5oZ
+   FfQ6tUzS0xbBoULW3LM7Q8T9Qb7DgebJbJqw4q1G5a34vmgZr+hIuKyfw
+   g4Z2PtOjqEEdV+GRjFhzWtO1WQS6A5Ex4LC/F44Vx3tWrUFO6gL0b/HYC
+   L9JL/eovGq3AU1uQ9U/POIT+OREdFQ1AK2j/1Be1zUSwi64Xm4GJfxs7w
+   apKdMeyhTqVJoPcc+/nrWyF+L3ipcH7h29oYA83q9lyeC9evRGtNXgmyI
+   z+pchqOCdQ4e5UgpXgpuH6OdQ2Yfdr6GQTfmAgT7c1VYpdnwZb7YU72CL
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057540"
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057543"
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="330057540"
+   d="scan'208";a="330057543"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:17 -0700
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="541908815"
+   d="scan'208";a="541908824"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:17 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -47,9 +47,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V5 21/31] Documentation/x86: Introduce enclave runtime management section
-Date:   Tue, 10 May 2022 11:08:57 -0700
-Message-Id: <1da0b9a938b28e68e6870ebd5291490d680e700b.1652137848.git.reinette.chatre@intel.com>
+Subject: [PATCH V5 23/31] selftests/sgx: Add test for TCS page permission changes
+Date:   Tue, 10 May 2022 11:08:59 -0700
+Message-Id: <0121ad1b21befb94519072e2c18b89aa5dca00d4.1652137848.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1652137848.git.reinette.chatre@intel.com>
 References: <cover.1652137848.git.reinette.chatre@intel.com>
@@ -59,58 +59,121 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Enclave runtime management is introduced following the pattern
-of the section describing enclave building. Provide a brief
-summary of enclave runtime management, pointing to the functions
-implementing the ioctl()s that will contain details within their
-kernel-doc.
+Kernel should not allow permission changes on TCS pages. Add test to
+confirm this behavior.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
-Changes since V4:
-- Rename sgx_ioc_enclave_modify_type -> sgx_ioc_enclave_modify_types.
-  (Jarkko)
-- Add Jarkko's Reviewed-by tag.
+No changes since V4.
+
+Changes since V3:
+- Add Jarkko's Acked-by tag.
+- User provides only new permissions in
+  SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS ioctl(), replacing secinfo. (Jarkko)
+- Use SGX page permission bits instead of VMA protection bits.
 
 Changes since V2:
-- Remove references to ioctl() to relax permissions and update to reflect
-  function renaming sgx_ioc_enclave_restrict_perm() ->
-  sgx_ioc_enclave_restrict_permissions().
-- Rename sgx_ioc_enclave_modt -> sgx_ioc_enclave_modify_type
+- Update to use new struct name struct sgx_enclave_restrict_perm -> struct
+  sgx_enclave_restrict_permissions. (Jarkko)
 
 Changes since V1:
-- New patch.
+- Adapt test to the kernel interface changes: the ioctl() name change
+  and providing entire secinfo as parameter.
+- Rewrite error path to reduce line lengths.
 
- Documentation/x86/sgx.rst | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/testing/selftests/sgx/main.c | 71 ++++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/Documentation/x86/sgx.rst b/Documentation/x86/sgx.rst
-index 265568a9292c..2bcbffacbed5 100644
---- a/Documentation/x86/sgx.rst
-+++ b/Documentation/x86/sgx.rst
-@@ -100,6 +100,21 @@ pages and establish enclave page permissions.
-                sgx_ioc_enclave_init
-                sgx_ioc_enclave_provision
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index 46eac09cd955..016ae3e5f398 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -121,6 +121,24 @@ static Elf64_Sym *vdso_symtab_get(struct vdso_symtab *symtab, const char *name)
+ 	return NULL;
+ }
  
-+Enclave runtime management
-+--------------------------
++/*
++ * Return the offset in the enclave where the TCS segment can be found.
++ * The first RW segment loaded is the TCS.
++ */
++static off_t encl_get_tcs_offset(struct encl *encl)
++{
++	int i;
 +
-+Systems supporting SGX2 additionally support changes to initialized
-+enclaves: modifying enclave page permissions and type, and dynamically
-+adding and removing of enclave pages. When an enclave accesses an address
-+within its address range that does not have a backing page then a new
-+regular page will be dynamically added to the enclave. The enclave is
-+still required to run EACCEPT on the new page before it can be used.
++	for (i = 0; i < encl->nr_segments; i++) {
++		struct encl_segment *seg = &encl->segment_tbl[i];
 +
-+.. kernel-doc:: arch/x86/kernel/cpu/sgx/ioctl.c
-+   :functions: sgx_ioc_enclave_restrict_permissions
-+               sgx_ioc_enclave_modify_types
-+               sgx_ioc_enclave_remove_pages
++		if (i == 0 && seg->prot == (PROT_READ | PROT_WRITE))
++			return seg->offset;
++	}
 +
- Enclave vDSO
- ------------
++	return -1;
++}
++
+ /*
+  * Return the offset in the enclave where the data segment can be found.
+  * The first RW segment loaded is the TCS, skip that to get info on the
+@@ -567,6 +585,59 @@ TEST_F(enclave, pte_permissions)
+ 	EXPECT_EQ(self->run.exception_addr, 0);
+ }
  
++/*
++ * Modifying permissions of TCS page should not be possible.
++ */
++TEST_F(enclave, tcs_permissions)
++{
++	struct sgx_enclave_restrict_permissions ioc;
++	int ret, errno_save;
++
++	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
++
++	memset(&self->run, 0, sizeof(self->run));
++	self->run.tcs = self->encl.encl_base;
++
++	memset(&ioc, 0, sizeof(ioc));
++
++	/*
++	 * Ensure kernel supports needed ioctl() and system supports needed
++	 * commands.
++	 */
++
++	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS, &ioc);
++	errno_save = ret == -1 ? errno : 0;
++
++	/*
++	 * Invalid parameters were provided during sanity check,
++	 * expect command to fail.
++	 */
++	ASSERT_EQ(ret, -1);
++
++	/* ret == -1 */
++	if (errno_save == ENOTTY)
++		SKIP(return,
++		     "Kernel does not support SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS ioctl()");
++	else if (errno_save == ENODEV)
++		SKIP(return, "System does not support SGX2");
++
++	/*
++	 * Attempt to make TCS page read-only. This is not allowed and
++	 * should be prevented by the kernel.
++	 */
++	ioc.offset = encl_get_tcs_offset(&self->encl);
++	ioc.length = PAGE_SIZE;
++	ioc.permissions = SGX_SECINFO_R;
++
++	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS, &ioc);
++	errno_save = ret == -1 ? errno : 0;
++
++	EXPECT_EQ(ret, -1);
++	EXPECT_EQ(errno_save, EINVAL);
++	EXPECT_EQ(ioc.result, 0);
++	EXPECT_EQ(ioc.count, 0);
++}
++
+ /*
+  * Enclave page permission test.
+  *
 -- 
 2.25.1
 
