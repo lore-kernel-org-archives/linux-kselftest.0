@@ -2,99 +2,128 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D988BC433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 16:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60533C43217
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 16:45:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347599AbiEJQtt (ORCPT
+        id S1347636AbiEJQtv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 12:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        Tue, 10 May 2022 12:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347634AbiEJQtm (ORCPT
+        with ESMTP id S236527AbiEJQtr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 12:49:42 -0400
+        Tue, 10 May 2022 12:49:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBF025EB
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:45:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FF71CFF2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 09:45:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D80E0B81E21
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 16:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF950C385C2;
-        Tue, 10 May 2022 16:45:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00FAFB81DA5
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 16:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F87C385C2;
+        Tue, 10 May 2022 16:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652201140;
-        bh=bBHuZB3zULNvaFpsWT5fr9FYDtOLi0zeAPokTzmjfqA=;
+        s=k20201202; t=1652201144;
+        bh=0cKVUWis1xhOjJJFymdC0c8pQI3TwhTLrNfwGP0ncPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0kH0KjY7YmTJqcLEqtzoV6mQ7/6HsHcrGuQ0cFFhrPh4lWuvdJADQP/JM1XuBH3B
-         aefboBw3QNsZSUcYLdImZhDjWMxZg3mA2YoSYLLUQCDHyiLa/JGtvKQI/7KTfWhIFA
-         a2An9p1L+a1AH/V6E7j9w8tnTgIaHs52kgbhCSJik97U5OoSRyOwuAbWEiwhyzkJ96
-         ADt5I1b+hX/FMDJnSU/FT282UnS/wmVyhBR1sO3yt4SPgiL8hdYdqhFlM9dpZe3UML
-         bxpS6RwOQoROr7jhBKNRsW8YNpZVvjxxEq01AgCxlpwmmpOA4ThrxR7O9yS9qHcTfc
-         1BIMjEvOn9uOg==
+        b=UocCC2nU0PdRxUuAvT6yNqsEVksAAEv4xrdq2mppRbBz+i8sn/aX8nlzyI9dt93gh
+         /i0RbSFrfN58yBCtjxfXPkhOJLJpz++GibfJ1de+z5eWAhpXVVyN4qBxfZ5yscGtnC
+         DUz/BhFkMFOPoAo8cInnBwOO3BKxfPslSJ2b55SvavDctRphAh80qfA31qlKJw+D61
+         JFXQmk8l6qaFyHMn3zT6EEmp1g49nyHDVBb1qh5vnjhgiyFOF2knyNqjafxmGTGxq3
+         ZsU/4MXJoCzEWWJskl6rAPw2nzteDNWvjLCACKa3QBEZUF6tO3tXgd9M+Nnl2q4jlK
+         nE8ZIoL+eMitQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc:     Joey Gouly <joey.gouly@arm.com>, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/5] selftests/arm64: Log errors in verify_mte_pointer_validity()
-Date:   Tue, 10 May 2022 17:45:16 +0100
-Message-Id: <20220510164520.768783-2-broonie@kernel.org>
+Subject: [PATCH v1 3/5] selftests/arm64: Check failures to set tags in check_tags_inclusion
+Date:   Tue, 10 May 2022 17:45:18 +0100
+Message-Id: <20220510164520.768783-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220510164520.768783-1-broonie@kernel.org>
 References: <20220510164520.768783-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1644; h=from:subject; bh=bBHuZB3zULNvaFpsWT5fr9FYDtOLi0zeAPokTzmjfqA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiepac0Qgac1/NPxTWgAvIWHQ7dB/Ha+LUV0+zx+lD hB9kdGGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYnqWnAAKCRAk1otyXVSH0HqvB/ 9r00srnCW5vRnGS7RGk9uO6oewU+8+jGFd3VY+5pUq/uW6fjtW/meoNm2InIiWmW6dVxjnYMktXPo7 hv28YH+RxRVtkrG2cS4YYHKHkh9nD77sN3IvkQVLl2bqUMPVFqyzrqSMnXd08dZmJsinvhHZ8UHX3I Pndjzlp5sz6ltQT6lszV8iIxQaVSOnf6VE0ZWvWrhwMW3wsrpycb08O9His9QUmq+4vs4o9BSKIwUs 5hwDgxKEHssNyRteQQdykimeLF/96XmAfv7G8qrH4wTphvVgLyWz6Zqy1AWr/8Ef+4DJE/rUMzltpZ o0Vu1ITbiyQgaocMVEOG48V4pZ42m/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3100; h=from:subject; bh=0cKVUWis1xhOjJJFymdC0c8pQI3TwhTLrNfwGP0ncPY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiepadwcjCghw03u2C4QRkkECWrCYPmnlFG2cD9N9q Ff1j56+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYnqWnQAKCRAk1otyXVSH0JzvCA CF//KO+GghYYk75IIFjElDQUSOjNqaeluflcV2C0mLiL0D77v06fjAXe4Wgu9lTvNXsIXQ8G9X5vPr uXJ4rqxBGPsMVKWSwVFSdq61/3iPB+o0HWEY+/kmvq/+mjk/2tTN4kGOtAR9mdmxjIGCyq8FPmWaxp 1VAhXnDqLBPMb/XMqZGrXYSbOlL5jCd36vDHDm1Qrvyf3E51psieYP0MO29ZudKKbOgsOleTJ+J2F3 DGMbrItfzsPpVTOWW2shWWE0u/E+it3wDrUZ7Qe7GzTPHp7/mcN/7AQ7a2totTAfPWukoJZfPxG+ml yz1tE64iWPTJ4lunVl2rz+GsnlyaFd
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When we detect a problem in verify_mte_pointer_validity() while checking
-tags we don't log what the problem was which makes debugging harder. Add
-some diagnostics.
+The MTE check_tags_inclusion test uses the mte_switch_mode() helper but
+ignores the return values it generates meaning we might not be testing
+the things we're trying to test, fail the test if it reports an error.
+The helper will log any errors it returns.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../selftests/arm64/mte/check_tags_inclusion.c       | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ .../selftests/arm64/mte/check_tags_inclusion.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
-index deaef1f61076..b906914997ce 100644
+index b906914997ce..d180ba3df990 100644
 --- a/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
 +++ b/tools/testing/selftests/arm64/mte/check_tags_inclusion.c
-@@ -25,8 +25,11 @@ static int verify_mte_pointer_validity(char *ptr, int mode)
- 	/* Check the validity of the tagged pointer */
- 	memset((void *)ptr, '1', BUFFER_SIZE);
- 	mte_wait_after_trig();
--	if (cur_mte_cxt.fault_valid)
-+	if (cur_mte_cxt.fault_valid) {
-+		ksft_print_msg("Unexpected fault recorded for %p-%p in mode %x\n",
-+			       ptr, ptr + BUFFER_SIZE, mode);
- 		return KSFT_FAIL;
-+	}
- 	/* Proceed further for nonzero tags */
- 	if (!MT_FETCH_TAG((uintptr_t)ptr))
- 		return KSFT_PASS;
-@@ -34,10 +37,13 @@ static int verify_mte_pointer_validity(char *ptr, int mode)
- 	/* Check the validity outside the range */
- 	ptr[BUFFER_SIZE] = '2';
- 	mte_wait_after_trig();
--	if (!cur_mte_cxt.fault_valid)
-+	if (!cur_mte_cxt.fault_valid) {
-+		ksft_print_msg("No valid fault recorded for %p in mode %x\n",
-+			       ptr, mode);
- 		return KSFT_FAIL;
--	else
-+	} else {
- 		return KSFT_PASS;
-+	}
- }
- 
+@@ -49,7 +49,7 @@ static int verify_mte_pointer_validity(char *ptr, int mode)
  static int check_single_included_tags(int mem_type, int mode)
+ {
+ 	char *ptr;
+-	int tag, run, result = KSFT_PASS;
++	int tag, run, ret, result = KSFT_PASS;
+ 
+ 	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
+@@ -57,7 +57,9 @@ static int check_single_included_tags(int mem_type, int mode)
+ 		return KSFT_FAIL;
+ 
+ 	for (tag = 0; (tag < MT_TAG_COUNT) && (result == KSFT_PASS); tag++) {
+-		mte_switch_mode(mode, MT_INCLUDE_VALID_TAG(tag));
++		ret = mte_switch_mode(mode, MT_INCLUDE_VALID_TAG(tag));
++		if (ret != 0)
++			result = KSFT_FAIL;
+ 		/* Try to catch a excluded tag by a number of tries. */
+ 		for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
+ 			ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
+@@ -111,14 +113,16 @@ static int check_multiple_included_tags(int mem_type, int mode)
+ static int check_all_included_tags(int mem_type, int mode)
+ {
+ 	char *ptr;
+-	int run, result = KSFT_PASS;
++	int run, ret, result = KSFT_PASS;
+ 
+ 	ptr = (char *)mte_allocate_memory(BUFFER_SIZE + MT_GRANULE_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE + MT_GRANULE_SIZE,
+ 				   mem_type, false) != KSFT_PASS)
+ 		return KSFT_FAIL;
+ 
+-	mte_switch_mode(mode, MT_INCLUDE_TAG_MASK);
++	ret = mte_switch_mode(mode, MT_INCLUDE_TAG_MASK);
++	if (ret != 0)
++		return KSFT_FAIL;
+ 	/* Try to catch a excluded tag by a number of tries. */
+ 	for (run = 0; (run < RUNS) && (result == KSFT_PASS); run++) {
+ 		ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
+@@ -135,13 +139,15 @@ static int check_all_included_tags(int mem_type, int mode)
+ static int check_none_included_tags(int mem_type, int mode)
+ {
+ 	char *ptr;
+-	int run;
++	int run, ret;
+ 
+ 	ptr = (char *)mte_allocate_memory(BUFFER_SIZE, mem_type, 0, false);
+ 	if (check_allocated_memory(ptr, BUFFER_SIZE, mem_type, false) != KSFT_PASS)
+ 		return KSFT_FAIL;
+ 
+-	mte_switch_mode(mode, MT_EXCLUDE_TAG_MASK);
++	ret = mte_switch_mode(mode, MT_EXCLUDE_TAG_MASK);
++	if (ret != 0)
++		return KSFT_FAIL;
+ 	/* Try to catch a excluded tag by a number of tries. */
+ 	for (run = 0; run < RUNS; run++) {
+ 		ptr = (char *)mte_insert_tags(ptr, BUFFER_SIZE);
 -- 
 2.30.2
 
