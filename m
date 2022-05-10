@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD8FC43217
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 18:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1FF1C4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 18:09:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348664AbiEJSNg (ORCPT
+        id S1348666AbiEJSNi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 14:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        Tue, 10 May 2022 14:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348577AbiEJSNZ (ORCPT
+        with ESMTP id S1348588AbiEJSNZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 10 May 2022 14:13:25 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C052DD79;
-        Tue, 10 May 2022 11:09:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404B236B6A;
+        Tue, 10 May 2022 11:09:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652206165; x=1683742165;
+  t=1652206167; x=1683742167;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DuxL9oYyXbFCTNHVeaGMeVzitcnd3IGWqcsktj8f+D8=;
-  b=O+jIfJRxDvBASKYGexWSkXGE/AK6HIHagjccw/wD2nNMJqcZ9KTKfDm+
-   dvRQqAlm5ZKL9/2ncs8AZ3cEycKm5PSUxwSHIx8mDokbKnnV1f525uVL1
-   ikuzzikmHiHtdfI7BEcWESt8TvE1Dfng36XBKSHiZe6QDwtvyqJm6uBpX
-   mZRnSEgOsTP8DDdIleHGKo56G+RzNMhqT0scyANTDGiCpfLbA43xYK7Ot
-   BwR5l+3EAFvEZszQJb8n1xz/sMgVf91PjwKpT6KME5YTqEk162Z0WZ8dk
-   j56b+ROP+MlEuhb5X0Fh9JVliA36Pu3QHQOY0RaSB/DfDL5a+7VrZOevU
+  bh=M40VmsIZSMAQnXy2fiMzB9dJ6j02gyL03bmPj3DIr8w=;
+  b=BqozWgF9QKYN4OC+XwEXZMav2nAuV4Fesqa2Xgo1s+wU4YooAh/2/IJl
+   ufp2+b+/9vufo0dqlXz9a/CEyYznLRzoh6Kuv070eHe5RpN6ggOmgsz/2
+   9gSkcIgPxXe5pbp1nlG2Sctkk4nqoYZIvl1llgSb5uJtiFzH/AQ1IWGJL
+   vyZh4fdRR3zk/hY2iGPQ6KSqQCyVFtgf/ZvLM1RxKMvtmW7lRXOS6PUip
+   uT9wTiCMPf4pcqihFwysplxf5yw7wGvlU1mgnN8l4ia4OL2CqVvQ8Jhxg
+   icnidQ5kHsyGUo71lIyqpIuc81X9wah1smG20e/rMDa7X1drbmbb04yde
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057531"
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057538"
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="330057531"
+   d="scan'208";a="330057538"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:17 -0700
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="541908791"
+   d="scan'208";a="541908806"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:16 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:17 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
 To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
         bp@alien8.de, luto@kernel.org, mingo@redhat.com,
@@ -47,9 +47,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V5 15/31] x86/sgx: Support restricting of enclave page permissions
-Date:   Tue, 10 May 2022 11:08:51 -0700
-Message-Id: <082cee986f3c1a2f4fdbf49501d7a8c5a98446f8.1652137848.git.reinette.chatre@intel.com>
+Subject: [PATCH V5 19/31] x86/sgx: Support complete page removal
+Date:   Tue, 10 May 2022 11:08:55 -0700
+Message-Id: <b75ee93e96774e38bb44a24b8e9bbfb67b08b51b.1652137848.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1652137848.git.reinette.chatre@intel.com>
 References: <cover.1652137848.git.reinette.chatre@intel.com>
@@ -59,148 +59,114 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In the initial (SGX1) version of SGX, pages in an enclave need to be
-created with permissions that support all usages of the pages, from the
-time the enclave is initialized until it is unloaded. For example,
-pages used by a JIT compiler or when code needs to otherwise be
-relocated need to always have RWX permissions.
+The SGX2 page removal flow was introduced in previous patch and is
+as follows:
+1) Change the type of the pages to be removed to SGX_PAGE_TYPE_TRIM
+   using the ioctl() SGX_IOC_ENCLAVE_MODIFY_TYPES introduced in
+   previous patch.
+2) Approve the page removal by running ENCLU[EACCEPT] from within
+   the enclave.
+3) Initiate actual page removal using the ioctl()
+   SGX_IOC_ENCLAVE_REMOVE_PAGES introduced here.
 
-SGX2 includes a new function ENCLS[EMODPR] that is run from the kernel
-and can be used to restrict the EPCM permissions of regular enclave
-pages within an initialized enclave.
+Support the final step of the SGX2 page removal flow with ioctl()
+SGX_IOC_ENCLAVE_REMOVE_PAGES. With this ioctl() the user specifies
+a page range that should be removed. All pages in the provided
+range should have the SGX_PAGE_TYPE_TRIM page type and the request
+will fail with EPERM (Operation not permitted) if a page that does
+not have the correct type is encountered. Page removal can fail
+on any page within the provided range. Support partial success by
+returning the number of pages that were successfully removed.
 
-Introduce ioctl() SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS to support
-restricting EPCM permissions. With this ioctl() the user specifies
-a page range and the EPCM permissions to be applied to all pages in
-the provided range. ENCLS[EMODPR] is run to restrict the EPCM
-permissions followed by the ENCLS[ETRACK] flow that will ensure
-no cached linear-to-physical address mappings to the changed
-pages remain.
+Since actual page removal will succeed even if ENCLU[EACCEPT] was not
+run from within the enclave the ENCLU[EMODPR] instruction with RWX
+permissions is used as a no-op mechanism to ensure ENCLU[EACCEPT] was
+successfully run from within the enclave before the enclave page is
+removed.
 
-It is possible for the permission change request to fail on any
-page within the provided range, either with an error encountered
-by the kernel or by the SGX hardware while running
-ENCLS[EMODPR]. To support partial success the ioctl() returns an
-error code based on failures encountered by the kernel as well
-as two result output parameters: one for the number of pages
-that were successfully changed and one for the SGX return code.
-
-The page table entry permissions are not impacted by the EPCM
-permission changes. VMAs and PTEs will continue to allow the
-maximum vetted permissions determined at the time the pages
-are added to the enclave. The SGX error code in a page fault
-will indicate if it was an EPCM permission check that prevented
-an access attempt.
-
-No checking is done to ensure that the permissions are actually
-being restricted. This is because the enclave may have relaxed
-the EPCM permissions from within the enclave without the kernel
-knowing. An attempt to relax permissions using this call will
-be ignored by the hardware.
+If the user omits running SGX_IOC_ENCLAVE_REMOVE_PAGES the pages will
+still be removed when the enclave is unloaded.
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
 Tested-by: Haitao Huang <haitao.huang@intel.com>
 Tested-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 Changes since V4:
-- Add Vijay's Tested-by tag.
-- Add Jarkko's Reviewed-by and Tested-by tags.
 - Add Haitao's Tested-by tag.
-- Revert change that required minimum of read permissions since
-  requesting zero permissions is valid. Return earlier
-  parameter check to ensure read permission accompanies write
-  permission. (Vijay)
+- Add Vijay's Tested-by tag.
+- Add Jarkko's Tested-by tag.
 
 Changes since V3:
-- User provides only new permissions, replacing secinfo. (Jarkko)
-- Expand comments of sgx_enclave_etrack() to document the
-  context in which the function is safe to use.
+- Add Jarkko's Reviewed-by tag.
+- Rename SGX_IOC_ENCLAVE_MODIFY_TYPE to
+  SGX_IOC_ENCLAVE_MODIFY_TYPES. (Jarkko)
 
 Changes since V2:
-- Include the sgx_ioc_sgx2_ready() utility
-  that previously was in "x86/sgx: Support relaxing of enclave page
-  permissions" that is removed from the next version.
-- Few renames requested by Jarkko:
-  struct sgx_enclave_restrict_perm ->
-         struct sgx_enclave_restrict_permissions
-  sgx_enclave_restrict_perm()     ->
-         sgx_enclave_restrict_permissions()
-  sgx_ioc_enclave_restrict_perm() ->
-         sgx_ioc_enclave_restrict_permissions()
-- Make EPCM permissions independent from kernel view of
-  permissions.  (Jarkko)
-  - Remove attempt at runtime tracking of EPCM permissions
-    (sgx_encl_page->vm_run_prot_bits).
-  - Do not flush page table entries - they are no longer impacted by
-    EPCM permission changes.
-  - Modify changelog to reflect new architecture.
-- Ensure at least PROT_READ is requested - enclave requires read
-  access to the page for commands like EMODPE and EACCEPT. (Jarkko)
+- Adjust ioctl number since removal of
+  SGX_IOC_ENCLAVE_RELAX_PERMISSIONS.
 
 Changes since V1:
-- Change terminology to use "relax" instead of "extend" to refer to
-  the case when enclave page permissions are added (Dave).
-- Use ioctl() in commit message (Dave).
-- Add examples on what permissions would be allowed (Dave).
-- Split enclave page permission changes into two ioctl()s, one for
-  permission restricting (SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS)
-  and one for permission relaxing (SGX_IOC_ENCLAVE_RELAX_PERMISSIONS)
-  (Jarkko).
-- In support of the ioctl() name change the following names have been
-  changed:
-  struct sgx_page_modp -> struct sgx_enclave_restrict_perm
-  sgx_ioc_page_modp() -> sgx_ioc_enclave_restrict_perm()
-  sgx_page_modp() -> sgx_enclave_restrict_perm()
-- ioctl() takes entire secinfo as input instead of
-  page permissions only (Jarkko).
-- Fix kernel-doc to include () in function name.
-- Create and use utility for the ETRACK flow.
-- Fixups in comments
+- Update comments to refer to new ioctl() names SGX_IOC_PAGE_MODT ->
+  SGX_IOC_ENCLAVE_MODIFY_TYPE.
+- Fix kernel-doc to have () as part of function name.
+- Change name of ioctl():
+  SGX_IOC_PAGE_REMOVE -> SGX_IOC_ENCLAVE_REMOVE_PAGES (Jarkko).
+- With the above name change the page removal ioctl() has its name
+  aligned with existing SGX_IOC_ENCLAVE_ADD_PAGES ioctl(). Also align
+  naming of struct and functions:
+  struct sgx_page_remove -> struct sgx_enclave_remove_pages
+  sgx_page_remove() -> sgx_encl_remove_pages()
+  sgx_ioc_page_remove() -> sgx_ioc_enclave_remove_pages()
+- Use new SGX2 checking helper.
+- When loading enclave page, make error code consistent with other
+  instances to help user distinguish between permanent and temporary
+  failures.
 - Move kernel-doc to function that provides documentation for
   Documentation/x86/sgx.rst.
 - Remove redundant comment.
-- Make explicit which members of struct sgx_enclave_restrict_perm
-  are for output (Dave).
+- Use offset/length validation utility.
+- Make explicit which member of struct sgx_enclave_remove_pages is for
+  output (Dave).
 
- arch/x86/include/uapi/asm/sgx.h |  21 ++++
- arch/x86/kernel/cpu/sgx/ioctl.c | 216 ++++++++++++++++++++++++++++++++
- 2 files changed, 237 insertions(+)
+ arch/x86/include/uapi/asm/sgx.h |  21 +++++
+ arch/x86/kernel/cpu/sgx/ioctl.c | 145 ++++++++++++++++++++++++++++++++
+ 2 files changed, 166 insertions(+)
 
 diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-index f4b81587e90b..82648c006470 100644
+index 567f6166c24a..2dd35bbdc822 100644
 --- a/arch/x86/include/uapi/asm/sgx.h
 +++ b/arch/x86/include/uapi/asm/sgx.h
-@@ -29,6 +29,8 @@ enum sgx_page_flags {
- 	_IOW(SGX_MAGIC, 0x03, struct sgx_enclave_provision)
- #define SGX_IOC_VEPC_REMOVE_ALL \
- 	_IO(SGX_MAGIC, 0x04)
-+#define SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS \
-+	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_permissions)
+@@ -33,6 +33,8 @@ enum sgx_page_flags {
+ 	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_permissions)
+ #define SGX_IOC_ENCLAVE_MODIFY_TYPES \
+ 	_IOWR(SGX_MAGIC, 0x06, struct sgx_enclave_modify_types)
++#define SGX_IOC_ENCLAVE_REMOVE_PAGES \
++	_IOWR(SGX_MAGIC, 0x07, struct sgx_enclave_remove_pages)
  
  /**
   * struct sgx_enclave_create - parameter structure for the
-@@ -76,6 +78,25 @@ struct sgx_enclave_provision {
- 	__u64 fd;
+@@ -117,6 +119,25 @@ struct sgx_enclave_modify_types {
+ 	__u64 count;
  };
  
 +/**
-+ * struct sgx_enclave_restrict_permissions - parameters for ioctl
-+ *                                        %SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS
++ * struct sgx_enclave_remove_pages - %SGX_IOC_ENCLAVE_REMOVE_PAGES parameters
 + * @offset:	starting page offset (page aligned relative to enclave base
 + *		address defined in SECS)
 + * @length:	length of memory (multiple of the page size)
-+ * @permissions:new permission bits for pages in range described by @offset
-+ *              and @length
-+ * @result:	(output) SGX result code of ENCLS[EMODPR] function
 + * @count:	(output) bytes successfully changed (multiple of page size)
++ *
++ * Regular (PT_REG) or TCS (PT_TCS) can be removed from an initialized
++ * enclave if the system supports SGX2. First, the %SGX_IOC_ENCLAVE_MODIFY_TYPES
++ * ioctl() should be used to change the page type to PT_TRIM. After that
++ * succeeds ENCLU[EACCEPT] should be run from within the enclave and then
++ * %SGX_IOC_ENCLAVE_REMOVE_PAGES can be used to complete the page removal.
 + */
-+struct sgx_enclave_restrict_permissions {
++struct sgx_enclave_remove_pages {
 +	__u64 offset;
 +	__u64 length;
-+	__u64 permissions;
-+	__u64 result;
 +	__u64 count;
 +};
 +
@@ -208,84 +174,24 @@ index f4b81587e90b..82648c006470 100644
  
  /**
 diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index 5d41aa204761..720188d86ed4 100644
+index 9ccafbfc4811..1a2595f261d3 100644
 --- a/arch/x86/kernel/cpu/sgx/ioctl.c
 +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -660,6 +660,218 @@ static long sgx_ioc_enclave_provision(struct sgx_encl *encl, void __user *arg)
- 	return sgx_set_attribute(&encl->attributes_mask, params.fd);
+@@ -1071,6 +1071,148 @@ static long sgx_ioc_enclave_modify_types(struct sgx_encl *encl,
+ 	return ret;
  }
  
-+/*
-+ * Ensure enclave is ready for SGX2 functions. Readiness is checked
-+ * by ensuring the hardware supports SGX2 and the enclave is initialized
-+ * and thus able to handle requests to modify pages within it.
-+ */
-+static int sgx_ioc_sgx2_ready(struct sgx_encl *encl)
-+{
-+	if (!(cpu_feature_enabled(X86_FEATURE_SGX2)))
-+		return -ENODEV;
-+
-+	if (!test_bit(SGX_ENCL_INITIALIZED, &encl->flags))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Some SGX functions require that no cached linear-to-physical address
-+ * mappings are present before they can succeed. Collaborate with
-+ * hardware via ENCLS[ETRACK] to ensure that all cached
-+ * linear-to-physical address mappings belonging to all threads of
-+ * the enclave are cleared. See sgx_encl_cpumask() for details.
-+ *
-+ * Must be called with enclave's mutex held from the time the
-+ * SGX function requiring that no cached linear-to-physical mappings
-+ * are present is executed until this ETRACK flow is complete.
-+ */
-+static int sgx_enclave_etrack(struct sgx_encl *encl)
-+{
-+	void *epc_virt;
-+	int ret;
-+
-+	epc_virt = sgx_get_epc_virt_addr(encl->secs.epc_page);
-+	ret = __etrack(epc_virt);
-+	if (ret) {
-+		/*
-+		 * ETRACK only fails when there is an OS issue. For
-+		 * example, two consecutive ETRACK was sent without
-+		 * completed IPI between.
-+		 */
-+		pr_err_once("ETRACK returned %d (0x%x)", ret, ret);
-+		/*
-+		 * Send IPIs to kick CPUs out of the enclave and
-+		 * try ETRACK again.
-+		 */
-+		on_each_cpu_mask(sgx_encl_cpumask(encl), sgx_ipi_cb, NULL, 1);
-+		ret = __etrack(epc_virt);
-+		if (ret) {
-+			pr_err_once("ETRACK repeat returned %d (0x%x)",
-+				    ret, ret);
-+			return -EFAULT;
-+		}
-+	}
-+	on_each_cpu_mask(sgx_encl_cpumask(encl), sgx_ipi_cb, NULL, 1);
-+
-+	return 0;
-+}
-+
 +/**
-+ * sgx_enclave_restrict_permissions() - Restrict EPCM permissions
-+ * @encl:	Enclave to which the pages belong.
-+ * @modp:	Checked parameters from user on which pages need modifying and
-+ *              their new permissions.
++ * sgx_encl_remove_pages() - Remove trimmed pages from SGX enclave
++ * @encl:	Enclave to which the pages belong
++ * @params:	Checked parameters from user on which pages need to be removed
 + *
 + * Return:
 + * - 0:		Success.
 + * - -errno:	Otherwise.
 + */
-+static long
-+sgx_enclave_restrict_permissions(struct sgx_encl *encl,
-+				 struct sgx_enclave_restrict_permissions *modp)
++static long sgx_encl_remove_pages(struct sgx_encl *encl,
++				  struct sgx_enclave_remove_pages *params)
 +{
 +	struct sgx_encl_page *entry;
 +	struct sgx_secinfo secinfo;
@@ -295,10 +201,10 @@ index 5d41aa204761..720188d86ed4 100644
 +	int ret;
 +
 +	memset(&secinfo, 0, sizeof(secinfo));
-+	secinfo.flags = modp->permissions & SGX_SECINFO_PERMISSION_MASK;
++	secinfo.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_X;
 +
-+	for (c = 0 ; c < modp->length; c += PAGE_SIZE) {
-+		addr = encl->base + modp->offset + c;
++	for (c = 0 ; c < params->length; c += PAGE_SIZE) {
++		addr = encl->base + params->offset + c;
 +
 +		mutex_lock(&encl->lock);
 +
@@ -308,52 +214,47 @@ index 5d41aa204761..720188d86ed4 100644
 +			goto out_unlock;
 +		}
 +
-+		/*
-+		 * Changing EPCM permissions is only supported on regular
-+		 * SGX pages. Attempting this change on other pages will
-+		 * result in #PF.
-+		 */
-+		if (entry->type != SGX_PAGE_TYPE_REG) {
-+			ret = -EINVAL;
++		if (entry->type != SGX_PAGE_TYPE_TRIM) {
++			ret = -EPERM;
 +			goto out_unlock;
 +		}
 +
 +		/*
-+		 * Apart from ensuring that read-access remains, do not verify
-+		 * the permission bits requested. Kernel has no control over
-+		 * how EPCM permissions can be relaxed from within the enclave.
-+		 * ENCLS[EMODPR] can only remove existing EPCM permissions,
-+		 * attempting to set new permissions will be ignored by the
-+		 * hardware.
++		 * ENCLS[EMODPR] is a no-op instruction used to inform if
++		 * ENCLU[EACCEPT] was run from within the enclave. If
++		 * ENCLS[EMODPR] is run with RWX on a trimmed page that is
++		 * not yet accepted then it will return
++		 * %SGX_PAGE_NOT_MODIFIABLE, after the trimmed page is
++		 * accepted the instruction will encounter a page fault.
 +		 */
-+
-+		/* Change EPCM permissions. */
 +		epc_virt = sgx_get_epc_virt_addr(entry->epc_page);
 +		ret = __emodpr(&secinfo, epc_virt);
-+		if (encls_faulted(ret)) {
-+			/*
-+			 * All possible faults should be avoidable:
-+			 * parameters have been checked, will only change
-+			 * permissions of a regular page, and no concurrent
-+			 * SGX1/SGX2 ENCLS instructions since these
-+			 * are protected with mutex.
-+			 */
-+			pr_err_once("EMODPR encountered exception %d\n",
-+				    ENCLS_TRAPNR(ret));
-+			ret = -EFAULT;
-+			goto out_unlock;
-+		}
-+		if (encls_failed(ret)) {
-+			modp->result = ret;
-+			ret = -EFAULT;
++		if (!encls_faulted(ret) || ENCLS_TRAPNR(ret) != X86_TRAP_PF) {
++			ret = -EPERM;
 +			goto out_unlock;
 +		}
 +
-+		ret = sgx_enclave_etrack(encl);
-+		if (ret) {
-+			ret = -EFAULT;
++		if (sgx_unmark_page_reclaimable(entry->epc_page)) {
++			ret = -EBUSY;
 +			goto out_unlock;
 +		}
++
++		/*
++		 * Do not keep encl->lock because of dependency on
++		 * mmap_lock acquired in sgx_zap_enclave_ptes().
++		 */
++		mutex_unlock(&encl->lock);
++
++		sgx_zap_enclave_ptes(encl, addr);
++
++		mutex_lock(&encl->lock);
++
++		sgx_encl_free_epc_page(entry->epc_page);
++		encl->secs_child_cnt--;
++		entry->epc_page = NULL;
++		xa_erase(&encl->page_array, PFN_DOWN(entry->desc));
++		sgx_encl_shrink(encl, NULL);
++		kfree(entry);
 +
 +		mutex_unlock(&encl->lock);
 +	}
@@ -364,35 +265,41 @@ index 5d41aa204761..720188d86ed4 100644
 +out_unlock:
 +	mutex_unlock(&encl->lock);
 +out:
-+	modp->count = c;
++	params->count = c;
 +
 +	return ret;
 +}
 +
 +/**
-+ * sgx_ioc_enclave_restrict_permissions() - handler for
-+ *                                        %SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS
++ * sgx_ioc_enclave_remove_pages() - handler for %SGX_IOC_ENCLAVE_REMOVE_PAGES
 + * @encl:	an enclave pointer
-+ * @arg:	userspace pointer to a &struct sgx_enclave_restrict_permissions
-+ *		instance
++ * @arg:	userspace pointer to &struct sgx_enclave_remove_pages instance
 + *
-+ * SGX2 distinguishes between relaxing and restricting the enclave page
-+ * permissions maintained by the hardware (EPCM permissions) of pages
-+ * belonging to an initialized enclave (after SGX_IOC_ENCLAVE_INIT).
++ * Final step of the flow removing pages from an initialized enclave. The
++ * complete flow is:
 + *
-+ * EPCM permissions cannot be restricted from within the enclave, the enclave
-+ * requires the kernel to run the privileged level 0 instructions ENCLS[EMODPR]
-+ * and ENCLS[ETRACK]. An attempt to relax EPCM permissions with this call
-+ * will be ignored by the hardware.
++ * 1) User changes the type of the pages to be removed to %SGX_PAGE_TYPE_TRIM
++ *    using the %SGX_IOC_ENCLAVE_MODIFY_TYPES ioctl().
++ * 2) User approves the page removal by running ENCLU[EACCEPT] from within
++ *    the enclave.
++ * 3) User initiates actual page removal using the
++ *    %SGX_IOC_ENCLAVE_REMOVE_PAGES ioctl() that is handled here.
++ *
++ * First remove any page table entries pointing to the page and then proceed
++ * with the actual removal of the enclave page and data in support of it.
++ *
++ * VA pages are not affected by this removal. It is thus possible that the
++ * enclave may end up with more VA pages than needed to support all its
++ * pages.
 + *
 + * Return:
 + * - 0:		Success
 + * - -errno:	Otherwise
 + */
-+static long sgx_ioc_enclave_restrict_permissions(struct sgx_encl *encl,
-+						 void __user *arg)
++static long sgx_ioc_enclave_remove_pages(struct sgx_encl *encl,
++					 void __user *arg)
 +{
-+	struct sgx_enclave_restrict_permissions params;
++	struct sgx_enclave_remove_pages params;
 +	long ret;
 +
 +	ret = sgx_ioc_sgx2_ready(encl);
@@ -405,21 +312,10 @@ index 5d41aa204761..720188d86ed4 100644
 +	if (sgx_validate_offset_length(encl, params.offset, params.length))
 +		return -EINVAL;
 +
-+	if (params.permissions & ~SGX_SECINFO_PERMISSION_MASK)
++	if (params.count)
 +		return -EINVAL;
 +
-+	/*
-+	 * Fail early if invalid permissions requested to prevent ENCLS[EMODPR]
-+	 * from faulting later when the CPU does the same check.
-+	 */
-+	if ((params.permissions & SGX_SECINFO_W) &&
-+	    !(params.permissions & SGX_SECINFO_R))
-+		return -EINVAL;
-+
-+	if (params.result || params.count)
-+		return -EINVAL;
-+
-+	ret = sgx_enclave_restrict_permissions(encl, &params);
++	ret = sgx_encl_remove_pages(encl, &params);
 +
 +	if (copy_to_user(arg, &params, sizeof(params)))
 +		return -EFAULT;
@@ -430,13 +326,12 @@ index 5d41aa204761..720188d86ed4 100644
  long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
  {
  	struct sgx_encl *encl = filep->private_data;
-@@ -681,6 +893,10 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	case SGX_IOC_ENCLAVE_PROVISION:
- 		ret = sgx_ioc_enclave_provision(encl, (void __user *)arg);
+@@ -1099,6 +1241,9 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+ 	case SGX_IOC_ENCLAVE_MODIFY_TYPES:
+ 		ret = sgx_ioc_enclave_modify_types(encl, (void __user *)arg);
  		break;
-+	case SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS:
-+		ret = sgx_ioc_enclave_restrict_permissions(encl,
-+							   (void __user *)arg);
++	case SGX_IOC_ENCLAVE_REMOVE_PAGES:
++		ret = sgx_ioc_enclave_remove_pages(encl, (void __user *)arg);
 +		break;
  	default:
  		ret = -ENOIOCTLCMD;
