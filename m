@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3052CC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8D56C43217
 	for <linux-kselftest@archiver.kernel.org>; Tue, 10 May 2022 18:09:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348534AbiEJSNS (ORCPT
+        id S1348550AbiEJSNV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 14:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        Tue, 10 May 2022 14:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242384AbiEJSNR (ORCPT
+        with ESMTP id S1348536AbiEJSNS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 14:13:17 -0400
+        Tue, 10 May 2022 14:13:18 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C1F638E;
-        Tue, 10 May 2022 11:09:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E33C29820;
+        Tue, 10 May 2022 11:09:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652206158; x=1683742158;
+  t=1652206160; x=1683742160;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ivBpL5HnS4kxK8A+br9TE9DoQDLk+9xCSwo83rASwUU=;
-  b=durzGNU9hqvtXEptRk84MV+fRZgio7I1KiKUl/O1kRb+5/UQTpejpRBC
-   gXrjA/mC7524s5yrD6+FYtH3l6JnYeQ/igNFsbjbA/37r2gi5T/2wPWxp
-   6oqY+2W2/1XtyEOq+CiuKYsT+TrtNePM7amGxe/CBO3+khM8CBBCHgoYQ
-   QmGNkoklxs7DW0SPtuQeXdhhmS+HVf87eDh4t1XaiLUBFvQshNWnGibA4
-   dJoIdc5gkrojTTVeFBKMESaJUSJPJHim/2Tnatp/HWqODRHpyp2OXALZ/
-   0y66zSdbBS6Cv5Ukg1Udoi3jEb+WhZTZ/W6lHvXFRSpyswAIv9+C+1I9g
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057498"
+  bh=J1dxio/jrdcQWYirsDtrovCCz05E7xe6apx4ehqATxw=;
+  b=jhi1SR1rvOP92zjU9OAYti48+L9wgnN8VftELU3CryHUUcxQ2G63G6WG
+   5kpkttNJgg8NDhEFwAnK384MPuzYQp0QnkpGeVqHkoCk+24g1VC6gB/Ri
+   h8/43N812wWn7u4D9ZL/4+mUyO+kGuv2ExkBZQhPj79MSdiciSUTXsv06
+   LAnmFdahYsMa2n+4TWXW6dbzp3Kvbn+WoWuDj/zy9ZqmlFsAv1Nq5AMnB
+   uPngTsWRUa3Z4GWrofA+gQWGUbsWAttvw8Dx5RL/yGwUA6o0oexjmCKKm
+   ZFupOq7GSQ47/xcL9o+D+EY0avLiNt3NCTpQYxbw7h++gg7po2Ng6o37c
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="330057503"
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="330057498"
+   d="scan'208";a="330057503"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:16 -0700
 X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
-   d="scan'208";a="541908742"
+   d="scan'208";a="541908749"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:09:16 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -47,9 +47,9 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V5 01/31] x86/sgx: Add short descriptions to ENCLS wrappers
-Date:   Tue, 10 May 2022 11:08:37 -0700
-Message-Id: <5e78a1126711cbd692d5b8132e0683873398f69e.1652137848.git.reinette.chatre@intel.com>
+Subject: [PATCH V5 03/31] x86/sgx: Add wrapper for SGX2 EMODT function
+Date:   Tue, 10 May 2022 11:08:39 -0700
+Message-Id: <dba63a8c0db1d510b940beee1ba2a8207efeb1f1.1652137848.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1652137848.git.reinette.chatre@intel.com>
 References: <cover.1652137848.git.reinette.chatre@intel.com>
@@ -59,17 +59,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The SGX ENCLS instruction uses EAX to specify an SGX function and
-may require additional registers, depending on the SGX function.
-ENCLS invokes the specified privileged SGX function for managing
-and debugging enclaves. Macros are used to wrap the ENCLS
-functionality and several wrappers are used to wrap the macros to
-make the different SGX functions accessible in the code.
+Add a wrapper for the EMODT ENCLS leaf function used to
+change the type of an enclave page as maintained in the
+SGX hardware's Enclave Page Cache Map (EPCM).
 
-The wrappers of the supported SGX functions are cryptic. Add short
-descriptions of each as a comment.
+EMODT:
+1) Updates the EPCM page type of the enclave page.
+2) Sets the MODIFIED bit in the EPCM entry of the enclave page.
+   This bit is reset by the enclave by invoking ENCLU leaf
+   function EACCEPT or EACCEPTCOPY.
 
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+Access from within the enclave to the enclave page is not possible
+while the MODIFIED bit is set.
+
+After changing the enclave page type by issuing EMODT the kernel
+needs to collaborate with the hardware to ensure that no logical
+processor continues to hold a reference to the changed page. This
+is required to ensure no required security checks are circumvented
+and is required for the enclave's EACCEPT/EACCEPTCOPY to succeed.
+Ensuring that no references to the changed page remain is
+accomplished with the ETRACK flow.
+
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
@@ -79,97 +89,30 @@ Changes since V3:
 - Add Jarkko's Reviewed-by tag.
 
 Changes since V1:
-- Fix commit message and subject to not refer to descriptions as
-"changelog descriptions" or "shortlog descriptions" (Jarkko).
-- Improve all descriptions with guidance from Jarkko.
+- Split original patch ("x86/sgx: Add wrappers for SGX2 functions")
+  in three to introduce the SGX2 functions separately (Jarkko).
+- Rewrite commit message to include how the EPCM within the hardware
+  is changed by the SGX2 function as well as the calling
+  conditions (Jarkko).
 
- arch/x86/kernel/cpu/sgx/encls.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/x86/kernel/cpu/sgx/encls.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
-index fa04a73daf9c..0e22fa8f77c5 100644
+index 2b091912f038..7a1ecf704ec1 100644
 --- a/arch/x86/kernel/cpu/sgx/encls.h
 +++ b/arch/x86/kernel/cpu/sgx/encls.h
-@@ -136,57 +136,71 @@ static inline bool encls_failed(int ret)
- 	ret;						\
- 	})
- 
-+/* Initialize an EPC page into an SGX Enclave Control Structure (SECS) page. */
- static inline int __ecreate(struct sgx_pageinfo *pginfo, void *secs)
- {
- 	return __encls_2(ECREATE, pginfo, secs);
+@@ -221,4 +221,10 @@ static inline int __emodpr(struct sgx_secinfo *secinfo, void *addr)
+ 	return __encls_ret_2(EMODPR, secinfo, addr);
  }
  
-+/* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
- static inline int __eextend(void *secs, void *addr)
- {
- 	return __encls_2(EEXTEND, secs, addr);
- }
- 
-+/*
-+ * Associate an EPC page to an enclave either as a REG or TCS page
-+ * populated with the provided data.
-+ */
- static inline int __eadd(struct sgx_pageinfo *pginfo, void *addr)
- {
- 	return __encls_2(EADD, pginfo, addr);
- }
- 
-+/* Finalize enclave build, initialize enclave for user code execution. */
- static inline int __einit(void *sigstruct, void *token, void *secs)
- {
- 	return __encls_ret_3(EINIT, sigstruct, secs, token);
- }
- 
-+/* Disassociate EPC page from its enclave and mark it as unused. */
- static inline int __eremove(void *addr)
- {
- 	return __encls_ret_1(EREMOVE, addr);
- }
- 
-+/* Copy data to an EPC page belonging to a debug enclave. */
- static inline int __edbgwr(void *addr, unsigned long *data)
- {
- 	return __encls_2(EDGBWR, *data, addr);
- }
- 
-+/* Copy data from an EPC page belonging to a debug enclave. */
- static inline int __edbgrd(void *addr, unsigned long *data)
- {
- 	return __encls_1_1(EDGBRD, *data, addr);
- }
- 
-+/* Track that software has completed the required TLB address clears. */
- static inline int __etrack(void *addr)
- {
- 	return __encls_ret_1(ETRACK, addr);
- }
- 
-+/* Load, verify, and unblock an EPC page. */
- static inline int __eldu(struct sgx_pageinfo *pginfo, void *addr,
- 			 void *va)
- {
- 	return __encls_ret_3(ELDU, pginfo, addr, va);
- }
- 
-+/* Make EPC page inaccessible to enclave, ready to be written to memory. */
- static inline int __eblock(void *addr)
- {
- 	return __encls_ret_1(EBLOCK, addr);
- }
- 
-+/* Initialize an EPC page into a Version Array (VA) page. */
- static inline int __epa(void *addr)
- {
- 	unsigned long rbx = SGX_PAGE_TYPE_VA;
-@@ -194,6 +208,7 @@ static inline int __epa(void *addr)
- 	return __encls_2(EPA, rbx, addr);
- }
- 
-+/* Invalidate an EPC page and write it out to main memory. */
- static inline int __ewb(struct sgx_pageinfo *pginfo, void *addr,
- 			void *va)
- {
++/* Change the type of an EPC page. */
++static inline int __emodt(struct sgx_secinfo *secinfo, void *addr)
++{
++	return __encls_ret_2(EMODT, secinfo, addr);
++}
++
+ #endif /* _X86_ENCLS_H */
 -- 
 2.25.1
 
