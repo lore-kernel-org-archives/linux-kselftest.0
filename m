@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 918ECC433F5
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 May 2022 00:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0909CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 May 2022 00:08:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239154AbiEKAI0 (ORCPT
+        id S239470AbiEKAIk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 May 2022 20:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        Tue, 10 May 2022 20:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239225AbiEKAIZ (ORCPT
+        with ESMTP id S229593AbiEKAIh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 May 2022 20:08:25 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23C02ED4B
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:23 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id i6-20020a17090a718600b001dc87aca289so329902pjk.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:23 -0700 (PDT)
+        Tue, 10 May 2022 20:08:37 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6F93D497
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:28 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id z19-20020a62d113000000b0050d183adf6fso231111pfg.19
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 May 2022 17:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nd70IAruy6YLk7HF+wmxASsgGrGBVsuWU+XIZwvh4Kw=;
-        b=nhFPNERpqCW2rbwKZXsNo79ee146E7oAuRVFLoP1ULP1eLhKBZkBSWGlvsR3Buku1a
-         LrFupfFPfU4SygJO3xlFTVJkZon9R0M3LCnghz0wiLa1uWHVtSlqckrCxf98GzQd1cWH
-         rb0EsdVmyTnTNjTjeCEK4r/KM1nYOFzWN80jJtWwzzs50Q6PHlpuu3moK5L6jyZ5/iCu
-         8wFdv3qhr1iVLv4gmcu+EQscizQT9MMTJBy9j1GHVn14TS8Lpbnc6VK8SpprHPTbpVxN
-         5NHZrJ70cnR7POPlCM7If2iz52B88ke1Eq5dKx+4ngNc47S7T9J1H3M2CF3UmI3TanrW
-         1okg==
+        bh=ousdsQMGoWGPLGfdJHRlc9S6OKJxuNlkPfZprs239LE=;
+        b=e3rAodX5f8r102qY1GuiiUNVeM6ToTpHYpSFbU4cVPlW3L9nkcmzWJgDA9lX+agIkr
+         Qd/bEFbE9ZCvcix75fmuOcnctpaM6mvYi4Gfiw+o24cYfyNIq5I0zDiUPvmsBPlXs729
+         HrOSPCyCn7ZI0Qy92j8PyfGtDJrCsCRQIe3RM3/roq6okzGovg5YE6P0S2cyeW0Hsx/E
+         F9uOz81XMpK6On/HDJXdfcGYs6j/Cc75gc8HlGFYSeEq5BQ+kjrRDldiCso5cNyeWzxA
+         S3CFwBiAUqGMPL2ERrhipC20Wzs7FZ6/gI2ZK47SUW/9tm79/wYkxDmNHVIbaaNR43Ym
+         IfBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nd70IAruy6YLk7HF+wmxASsgGrGBVsuWU+XIZwvh4Kw=;
-        b=uQW7PCd2hZANeU+o6HYaIAuqHoihUnr6F79y/joIXYqEWKuO/ih9HR/WIMJg96Ce+2
-         Ye37Ba2h8CVThmv5Z9nM7du7/HpeAVBsckoZ0fnnS14K4ulb5YhTsl3haW7xgMi1V+g1
-         Z50OdPO9ccVAydBZYsQ91spr5ZaIudNEWe6LJomApoD9sMb/1dRAdEQl7rzNzE5fBmi4
-         TRwwTieuM5rJyLFyxudxgF3//HmxSLwPcvvPyhyCQ23caLpcY7rfm3RhnpEQ6mbLrzDb
-         Jfo+7F494E8lwO5uF6NYw+CCIXKBrhjTZJA8st23a0tMvHCaHE4rvEg/bpasxU1fKtl7
-         RXeg==
-X-Gm-Message-State: AOAM532XpVq1QVztXLsZSmMI4IK4gpxlWxmywSfqwQPvNs+asttomsT9
-        2HVMmMuWF1+i8sERGz54SLxLErak/VR9TGv7
-X-Google-Smtp-Source: ABdhPJz43OpKlmYlcMGSh78/cL9Iy9s6NHLb4cSgmpzz40FSTyAhNdUD62Iydw0OAWV3QlFAIOgqxxRMVhzAdxYm
+        bh=ousdsQMGoWGPLGfdJHRlc9S6OKJxuNlkPfZprs239LE=;
+        b=OIjQ0bb471p7PIVrgBRe2EQpmQYTHGVL7fAfsv2RT8+azGKOsR+ac7a9fsr9oLsRWe
+         dHc0l2ZPnwa5P93mP731k7XWNKxnGZuTuH4e0jsTDDWrIIrRCm6EKV0YMzpk2FvDmCP6
+         iHA9MGw6qQc5MTVpljm+UdU2OPjaHY37r7Rir1oVw3jTO4E8yn+7ChX/pWBkXZJCiIoE
+         64XzaoUTPBtWzU3YmklldxLfBa0oFy0TdGVqKQxs9zacOsVl+KUwasNW/0CUdYivwbW6
+         Qami1/vYaDKqT0hfwt7tHdvtDz99ZCc685YsGhV4yNV+g3G6cVjQx23cCP0BLch0KFew
+         baUQ==
+X-Gm-Message-State: AOAM5313N2nV+oDTDl1hYMtjfE0LS2ZiLV8g3G6Nr3twkzu7XrVTSwdC
+        Jw3K75ajjtvHrjnY7PtTuqQmzuuFdxOUsA29
+X-Google-Smtp-Source: ABdhPJzTmLb9y8mDaPQrDC9lq/Q88kd08tL6Wmu2p9a7OyjMRa4/Lb3QJlT+4la0xLIeV0XCQla+8xYaGu3VNwyk
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:90b:3e8b:b0:1dc:e920:e072 with SMTP
- id rj11-20020a17090b3e8b00b001dce920e072mr2380190pjb.151.1652227703435; Tue,
- 10 May 2022 17:08:23 -0700 (PDT)
-Date:   Wed, 11 May 2022 00:08:03 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:902:e549:b0:15e:aa63:6fd8 with SMTP
+ id n9-20020a170902e54900b0015eaa636fd8mr22998658plf.152.1652227707794; Tue,
+ 10 May 2022 17:08:27 -0700 (PDT)
+Date:   Wed, 11 May 2022 00:08:05 +0000
 In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
-Message-Id: <20220511000811.384766-2-vannapurve@google.com>
+Message-Id: <20220511000811.384766-4-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220511000811.384766-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [RFC V2 PATCH 1/8] selftests: kvm: Fix inline assembly for hypercall
+Subject: [RFC V2 PATCH 3/8] selftests: kvm: priv_memfd_test: Add support for
+ memory conversion
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -77,29 +78,120 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix inline assembly for hypercall to explicitly set
-eax with hypercall number to allow the implementation
-to work even in cases where compiler would inline the
-function.
+Add handling of explicit private/shared memory conversion using
+KVM_HC_MAP_GPA_RANGE and implicit memory conversion by handling
+KVM_EXIT_MEMORY_ERROR.
 
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/priv_memfd_test.c | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 9f000dfb5594..4d88e1a553bf 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1461,7 +1461,7 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+diff --git a/tools/testing/selftests/kvm/priv_memfd_test.c b/tools/testing/selftests/kvm/priv_memfd_test.c
+index bbb58c62e186..55e24c893b07 100644
+--- a/tools/testing/selftests/kvm/priv_memfd_test.c
++++ b/tools/testing/selftests/kvm/priv_memfd_test.c
+@@ -155,6 +155,83 @@ static struct test_run_helper priv_memfd_testsuite[] = {
+ 	},
+ };
  
- 	asm volatile("vmcall"
- 		     : "=a"(r)
--		     : "b"(a0), "c"(a1), "d"(a2), "S"(a3));
-+		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
- 	return r;
- }
++static void handle_vm_exit_hypercall(struct kvm_run *run,
++	uint32_t test_id)
++{
++	uint64_t gpa, npages, attrs;
++	int priv_memfd =
++		priv_memfd_testsuite[test_id].priv_memfd;
++	int ret;
++	int fallocate_mode;
++
++	if (run->hypercall.nr != KVM_HC_MAP_GPA_RANGE) {
++		TEST_FAIL("Unhandled Hypercall %lld\n",
++					run->hypercall.nr);
++	}
++
++	gpa = run->hypercall.args[0];
++	npages = run->hypercall.args[1];
++	attrs = run->hypercall.args[2];
++
++	if ((gpa < TEST_MEM_GPA) || ((gpa +
++		(npages << MIN_PAGE_SHIFT)) > TEST_MEM_END)) {
++		TEST_FAIL("Unhandled gpa 0x%lx npages %ld\n",
++			gpa, npages);
++	}
++
++	if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
++		fallocate_mode = 0;
++	else {
++		fallocate_mode = (FALLOC_FL_PUNCH_HOLE |
++			FALLOC_FL_KEEP_SIZE);
++	}
++	pr_info("Converting off 0x%lx pages 0x%lx to %s\n",
++		(gpa - TEST_MEM_GPA), npages,
++		fallocate_mode ?
++			"shared" : "private");
++	ret = fallocate(priv_memfd, fallocate_mode,
++		(gpa - TEST_MEM_GPA),
++		npages << MIN_PAGE_SHIFT);
++	TEST_ASSERT(ret != -1,
++		"fallocate failed in hc handling");
++	run->hypercall.ret = 0;
++}
++
++static void handle_vm_exit_memory_error(struct kvm_run *run,
++	uint32_t test_id)
++{
++	uint64_t gpa, size, flags;
++	int ret;
++	int priv_memfd =
++		priv_memfd_testsuite[test_id].priv_memfd;
++	int fallocate_mode;
++
++	gpa = run->memory.gpa;
++	size = run->memory.size;
++	flags = run->memory.flags;
++
++	if ((gpa < TEST_MEM_GPA) || ((gpa + size)
++					> TEST_MEM_END)) {
++		TEST_FAIL("Unhandled gpa 0x%lx size 0x%lx\n",
++			gpa, size);
++	}
++
++	if (flags & KVM_MEMORY_EXIT_FLAG_PRIVATE)
++		fallocate_mode = 0;
++	else {
++		fallocate_mode = (FALLOC_FL_PUNCH_HOLE |
++				FALLOC_FL_KEEP_SIZE);
++	}
++	pr_info("Converting off 0x%lx size 0x%lx to %s\n",
++		(gpa - TEST_MEM_GPA), size,
++		fallocate_mode ?
++			"shared" : "private");
++	ret = fallocate(priv_memfd, fallocate_mode,
++		(gpa - TEST_MEM_GPA), size);
++	TEST_ASSERT(ret != -1,
++		"fallocate failed in memory error handling");
++}
++
+ static void vcpu_work(struct kvm_vm *vm, uint32_t test_id)
+ {
+ 	struct kvm_run *run;
+@@ -181,6 +258,16 @@ static void vcpu_work(struct kvm_vm *vm, uint32_t test_id)
+ 			continue;
+ 		}
  
++		if (run->exit_reason == KVM_EXIT_HYPERCALL) {
++			handle_vm_exit_hypercall(run, test_id);
++			continue;
++		}
++
++		if (run->exit_reason == KVM_EXIT_MEMORY_ERROR) {
++			handle_vm_exit_memory_error(run, test_id);
++			continue;
++		}
++
+ 		TEST_FAIL("Unhandled VCPU exit reason %d\n", run->exit_reason);
+ 		break;
+ 	}
 -- 
 2.36.0.550.gb090851708-goog
 
