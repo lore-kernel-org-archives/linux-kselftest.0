@@ -2,99 +2,97 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE573C433F5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 May 2022 19:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F141FC433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 May 2022 19:53:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345276AbiEPTG1 (ORCPT
+        id S235928AbiEPTxR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 May 2022 15:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        Mon, 16 May 2022 15:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345325AbiEPTGK (ORCPT
+        with ESMTP id S1347901AbiEPTwY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 15:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F31920BD8;
-        Mon, 16 May 2022 12:06:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBB50614CB;
-        Mon, 16 May 2022 19:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83024C385AA;
-        Mon, 16 May 2022 19:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652727967;
-        bh=2Resw6p+2SXUmxtcyRn6SOdYMRyAbxOVblDDKJZfhuk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BSfKI3ipMdkFD4rYZrdaySQegpDAWsCAylzId9ynBGOuOqecfeWt14fH5AoEc7BHS
-         V8gAZ8FUYAWZ7+5K/4PIDrD6pGIIdrV0O2Jn6D6ulUbwttrVFEhG/G9b0Md4pdqADY
-         53Xfp2wtiTvaziCmhPIFbYVTjPjsMkMemaBd4jPHGp7NQtU+tEhOGlW+KsaU0+Uy//
-         GqydFI+z4tPURPZqkSW3aoa95B2I32CoYGYQEgbbShn5S4SKud+VDFCFP1PSKk/hrU
-         wBLkQLJ+Vw6ANisqhMcgiJZpjptSCT72a9hpW4OU0IhEEp1d+2ZA0FAxOElhbv5Pqe
-         BtFm85iRWxmGA==
-Date:   Mon, 16 May 2022 12:06:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-sh@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        kunit-dev@googlegroups.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 1e1b28b936aed946122b4e0991e7144fdbbfd77e
-Message-ID: <20220516120605.7a6bb562@kernel.org>
-In-Reply-To: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
-References: <6280f965.kTCPpIEVY9TwoNre%lkp@intel.com>
+        Mon, 16 May 2022 15:52:24 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DB044A36
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 12:48:04 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id a10so17096490ioe.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 12:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jv0Y4sH5q/+cOZfXrfwTFO+h4KwTbyJ3ZtbRwi7S/Lw=;
+        b=ew4Tb8MqwPRgVuYAPzp9N7lmT/ezFUb7lubqLPv59RNbYaQaoA5L8MiagwGWoqJS+m
+         mJSCtEETbHjNrCvgJ3WxZXwSyGLzGP0KKuvPZ5QT89vJo9753DV3+XFIuNU2CrNgdlkq
+         AGGAZK+plrK3X/ebH1vd4e3nGfSjYYXbUQz5w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jv0Y4sH5q/+cOZfXrfwTFO+h4KwTbyJ3ZtbRwi7S/Lw=;
+        b=fQGgYg0B5tM3vYMWWZ219niIkqPrF5+6b6/IvxzITYrB5Wiln7sVFs8BDInaz9EQSR
+         6Xe7Hk44CAtNDfhY1QqbeNXPquBKV9iDpknypT/QplFLAJb1+gyuF7EyoitQLU3TYDO4
+         DcjwIkMQnE4imd3QTctJGU0xRdLoQyB/7tt+Oo9zphBloOekP1Fv2llXXM9eq+bAfz0a
+         OH9nF3S2RAfdyWpkm3/9EyTmrtf7zdbVgn9lkl5Zv/qnwi/4p5lNf5ct+st+nYyGMh7z
+         xhQk8eFlt0eaR2GFhlD3KwRsNxBnKFCxHfncdMGZ2Dvr/F7uFbBqwjoPZCvbpXZ1/Ns5
+         nGZg==
+X-Gm-Message-State: AOAM532JWrt35A2p94oq0a1Rejy00UdCyvCa91GcbRLhH5j8cWxNt+j+
+        FWgBkyk8/IP6mrbtIb+VyhdW6w==
+X-Google-Smtp-Source: ABdhPJyAdniB3khueIn2Dh+Ov6csoMG5jsxnWQuJefh/OMfBiYSo9cbu73uQvNWHPrzQHmVDZjn2ww==
+X-Received: by 2002:a05:6638:2191:b0:32b:b7af:1228 with SMTP id s17-20020a056638219100b0032bb7af1228mr10056071jaj.13.1652730482764;
+        Mon, 16 May 2022 12:48:02 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p12-20020a056e02104c00b002cd7dc16ae4sm88740ilj.1.2022.05.16.12.48.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 12:48:02 -0700 (PDT)
+Subject: Re: [PATCH] kselftests/ir : Improve readability of modprobe error
+ message
+To:     Gautam Menghani <gautammenghani201@gmail.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220513190721.16482-1-gautammenghani201@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a763b159-0072-b883-5e47-65f86bec66dd@linuxfoundation.org>
+Date:   Mon, 16 May 2022 13:48:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20220513190721.16482-1-gautammenghani201@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 15 May 2022 21:00:21 +0800 kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 1e1b28b936aed946122b4e0991e7144fdbbfd77e  Add linux-next specific files for 20220513
+On 5/13/22 1:07 PM, Gautam Menghani wrote:
+> Improve the readability of error message which says module not found.
+> The new behaviour is consistent with the modprobe command.
 > 
-> Error/Warning reports:
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>   tools/testing/selftests/ir/ir_loopback.sh | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> https://lore.kernel.org/linux-mm/202204181931.klAC6fWo-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205031017.4TwMan3l-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205150051.3RzuooAG-lkp@intel.com
-> https://lore.kernel.org/linux-mm/202205150117.sd6HzBVm-lkp@intel.com
-> https://lore.kernel.org/lkml/202205100617.5UUm3Uet-lkp@intel.com
-> https://lore.kernel.org/llvm/202204210555.DNvfHvIb-lkp@intel.com
-> https://lore.kernel.org/llvm/202205060132.uhqyUx1l-lkp@intel.com
-> https://lore.kernel.org/llvm/202205120010.zWBednzM-lkp@intel.com
-> https://lore.kernel.org/llvm/202205141122.qihFGUem-lkp@intel.com
+> diff --git a/tools/testing/selftests/ir/ir_loopback.sh b/tools/testing/selftests/ir/ir_loopback.sh
+> index b90dc9939f45..aff9299c9416 100755
+> --- a/tools/testing/selftests/ir/ir_loopback.sh
+> +++ b/tools/testing/selftests/ir/ir_loopback.sh
+> @@ -10,7 +10,7 @@ if [ $UID != 0 ]; then
+>   fi
+>   
+>   if ! /sbin/modprobe -q -n rc-loopback; then
+> -        echo "ir_loopback: module rc-loopback is not found [SKIP]"
+> +        echo "ir_loopback: module rc-loopback is not found in /lib/modules/`uname -r` [SKIP]"
+>           exit $ksft_skip
+>   fi
+>   
 > 
-> Error/Warning: (recently discovered and may have been fixed)
-> 
-> <command-line>: fatal error: ./include/generated/utsrelease.h: No such file or directory
-> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-> arch/x86/kvm/pmu.h:20:32: warning: 'vmx_icl_pebs_cpu' defined but not used [-Wunused-const-variable=]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5102:7: warning: variable 'allow_lttpr_non_transparent_mode' set but not used [-Wunused-but-set-variable]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5147:6: warning: no previous prototype for function 'dp_parse_lttpr_mode' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1364:5: warning: no previous prototype for 'amdgpu_discovery_get_mall_info' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c:1983:6: warning: no previous prototype for function 'gfx_v11_0_rlc_stop' [-Wmissing-prototypes]
-> drivers/gpu/drm/amd/amdgpu/soc21.c:171:6: warning: no previous prototype for 'soc21_grbm_select' [-Wmissing-prototypes]
-> drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: 'ssd130x_spi_table' defined but not used [-Wunused-const-variable=]
-> drivers/hwmon/nct6775-platform.c:199:9: sparse:    unsigned char
-> drivers/hwmon/nct6775-platform.c:199:9: sparse:    void
-> drivers/video/fbdev/omap/hwa742.c:492:5: warning: no previous prototype for 'hwa742_update_window_async' [-Wmissing-prototypes]
-> fs/buffer.c:2254:5: warning: stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
-> fs/ntfs/aops.c:378:12: warning: stack frame size (2224) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
-> kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
-> kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
 
-Is this report CCed everywhere or there's a reason why netdev@ is CCed?
-I'm trying to figure out we need to care and it's not obvious..
+Applied to linux-kselftest next for 5.19-rc1
+
+thanks,
+-- Shuah
