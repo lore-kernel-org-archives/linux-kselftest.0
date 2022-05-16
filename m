@@ -2,110 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB31AC4332F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 May 2022 19:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17F43C433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 May 2022 20:08:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346589AbiEPTyj (ORCPT
+        id S230465AbiEPUIK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 May 2022 15:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        Mon, 16 May 2022 16:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347953AbiEPTwf (ORCPT
+        with ESMTP id S1348166AbiEPT62 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 May 2022 15:52:35 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74BA45055
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 12:48:07 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id e1-20020a17090a118100b001df53dfd969so2010736pja.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 May 2022 12:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Qkg0VjWV3dsGLC/CTbEN1HI3toMCNaiLgVonfkXEzUI=;
-        b=ELl/+bvBtXGZEAVx8mem5Q3fzIyUxLAZGICbsmjVju4tZ944Iwcorx7cGW1jTq1iYe
-         ktSPcF4PizIiRw0N0DST0B1W3+to2EnvgNTAv9TXxjOGKn7LubfIoqpPLlMhOA6+bwBm
-         BXaevB4q+4AcFdXD98nI4UDZoDP27eMKHOKqaTwOufzSl1HLCiZOrKbruZnnN4BXEOSg
-         D76Qm4xAyw/pTTdIyEUXvh3tcyRqCi8MqQszIB6DB+NcoXAULeUsSU60PL29iVlFkB3n
-         QAnltMu6gSJA9SeEJx6l8qjBmc9ZUy4LjMJg+CRP+1+NAQvzhI3eeHQUsDlR4OK8tn6q
-         iHfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Qkg0VjWV3dsGLC/CTbEN1HI3toMCNaiLgVonfkXEzUI=;
-        b=ne2eZf7g40ca5o9/MeOrzmLjmZ2RtQME4Wz0LhKYZs3gceNiP/M+9sKeC6YsfVKxL/
-         e8Cwh8+qPr/3XigHnZRO7THrlcow+mMS4etJ2OJ+Qu4NaY9gY+7XeVGtmfsm32iU67xC
-         2jw4tjbLPZfPmmaDIwQEx6MeCzNynOwvBsie5sSD6FY1h+wK5C1bAhWedRZudED6yd4q
-         mupFf8QA7J/bcmYS/FgXDY/1EATgfPdIsDmq0Q2N2J/RMpJKJ/X9B3Hjh65CZrQv5Ywj
-         BVpFAK0FsNMeY1cxJizFcVChZodkWcvDJsAPo4wTt4CqupaasZHbHzW2uc2YVtua0dA4
-         0ytg==
-X-Gm-Message-State: AOAM531inEFfp5dg2OksBOjhNo218YLPYWjbM5c0b3en3r7Oj1U6+qca
-        m5u4tZtR8zqc3xHPxT70jlXskADfMm4d3Q==
-X-Google-Smtp-Source: ABdhPJz0foU0ikc41QMADjDWwlkzr82FMjEnCkBdlOiEAm5yyAiZw9tbfdq+oePhNzVyIsOmA4tEa+4C3+OyWQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:8f91:3848:5672:cb59])
- (user=dlatypov job=sendgmr) by 2002:a17:90a:990c:b0:1df:fb1:bc2f with SMTP id
- b12-20020a17090a990c00b001df0fb1bc2fmr14623551pjp.79.1652730486427; Mon, 16
- May 2022 12:48:06 -0700 (PDT)
-Date:   Mon, 16 May 2022 12:47:28 -0700
-Message-Id: <20220516194730.1546328-1-dlatypov@google.com>
+        Mon, 16 May 2022 15:58:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FCB49264;
+        Mon, 16 May 2022 12:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84DA2B81616;
+        Mon, 16 May 2022 19:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 935D8C385AA;
+        Mon, 16 May 2022 19:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652730612;
+        bh=c9r69ta/pgxS3FOpdoClSBJRVIanwTUSIou4mXA0xUE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WgaBWsOAOi6+eSvu+qcU0oRd7ohRjg2NXoreiK/6vli6xzxmefDn1Rl/E2OqUAuX5
+         qOwQozDSYm/Jj7EmXsZNnxk8gQLzxpAt5XVjOf4cYEbfWoPxS1PGx5O6L3SLqoRh0q
+         SgAjbp2rAemKlBR3RLVhWv8nUMMZbVpSw5Pg7uD4=
+Date:   Mon, 16 May 2022 12:50:10 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] selftests: vm: add process_mrelease tests
+Message-Id: <20220516125010.53ab9a27733f361e5965ed7f@linux-foundation.org>
+In-Reply-To: <20220516075538.1276644-1-surenb@google.com>
+References: <20220516075538.1276644-1-surenb@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 1/3] kunit: tool: drop unused load_config argument
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's always set to true except in one test case.
-And in that test case it can safely be set to true anyways.
+On Mon, 16 May 2022 00:55:38 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_kernel.py    | 4 ----
- tools/testing/kunit/kunit_tool_test.py | 2 +-
- 2 files changed, 1 insertion(+), 5 deletions(-)
+> Introduce process_mrelease syscall sanity tests which include tests
+> which expect to fail:
+> - process_mrelease with invalid pidfd and flags inputs
+> - process_mrelease on a live process with no pending signals
+> and valid process_mrelease usage which is expected to succeed.
+> Because process_mrelease has to be used against a process with a pending
+> SIGKILL, it's possible that the process exits before process_mrelease
+> gets called. In such cases we retry the test with a victim that allocates
+> twice more memory up to 1GB. This would require the victim process to
+> spend more time during exit and process_mrelease has a better chance of
+> catching the process before it exits and succeeding.
+> 
+> On success the test reports the amount of memory the child had to
+> allocate for reaping to succeed. Sample output:
+>     Success reaping a child with 1MB of memory allocations
+> 
+> On failure the test reports the failure. Sample outputs:
+>     All process_mrelease attempts failed!
+>     process_mrelease: Invalid argument
+> 
+> ...
+>
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -287,6 +287,22 @@ else
+>  	echo "[PASS]"
+>  fi
+>  
+> +echo "---------------------"
+> +echo "running mrelease_test"
+> +echo "---------------------"
+> +./mrelease_test
+> +ret_val=$?
+> +
+> +if [ $ret_val -eq 0 ]; then
+> +	echo "[PASS]"
+> +elif [ $ret_val -eq $ksft_skip ]; then
+> +	 echo "[SKIP]"
+> +	 exitcode=$ksft_skip
+> +else
+> +	echo "[FAIL]"
+> +	exitcode=1
+> +fi
+> +
+>  echo "-------------------"
+>  echo "running mremap_test"
+>  echo "-------------------"
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 3539efaf99ba..8bc8305ba817 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -219,7 +219,6 @@ class LinuxSourceTree:
- 	def __init__(
- 	      self,
- 	      build_dir: str,
--	      load_config=True,
- 	      kunitconfig_path='',
- 	      kconfig_add: Optional[List[str]]=None,
- 	      arch=None,
-@@ -233,9 +232,6 @@ class LinuxSourceTree:
- 			self._arch = 'um' if arch is None else arch
- 			self._ops = get_source_tree_ops(self._arch, cross_compile)
- 
--		if not load_config:
--			return
--
- 		if kunitconfig_path:
- 			if os.path.isdir(kunitconfig_path):
- 				kunitconfig_path = os.path.join(kunitconfig_path, KUNITCONFIG_PATH)
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 25a2eb3bf114..b9158017ece6 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -393,7 +393,7 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 			return subprocess.Popen(['echo "hi\nbye"'], shell=True, text=True, stdout=subprocess.PIPE)
- 
- 		with tempfile.TemporaryDirectory('') as build_dir:
--			tree = kunit_kernel.LinuxSourceTree(build_dir, load_config=False)
-+			tree = kunit_kernel.LinuxSourceTree(build_dir)
- 			mock.patch.object(tree._ops, 'start', side_effect=fake_start).start()
- 
- 			with self.assertRaises(ValueError):
+Can you please redo this against
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm branch mm-stable
+or mm-unstable.  Or against linux-next?
 
-base-commit: 8a7ccad38f8b25c8202efd69371a022357286400
--- 
-2.36.1.124.g0e6072fb45-goog
-
+This script now has a helper function run_test which I think can be
+used here.
