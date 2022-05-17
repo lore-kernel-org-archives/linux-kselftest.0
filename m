@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 536F4C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 07:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AC6AC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 07:08:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239053AbiEQHI2 (ORCPT
+        id S241029AbiEQHIO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 May 2022 03:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        Tue, 17 May 2022 03:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241096AbiEQHIP (ORCPT
+        with ESMTP id S239088AbiEQHIF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 03:08:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940C147AF0;
-        Tue, 17 May 2022 00:07:56 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2RxQ2bQ8z1JCTY;
-        Tue, 17 May 2022 15:06:34 +0800 (CST)
+        Tue, 17 May 2022 03:08:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BCE47565;
+        Tue, 17 May 2022 00:07:44 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2Rxp417bzhZMf;
+        Tue, 17 May 2022 15:06:54 +0800 (CST)
 Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
  (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 15:07:53 +0800
+ 2022 15:07:38 +0800
 From:   Xu Kuohai <xukuohai@huawei.com>
 To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
@@ -59,9 +59,9 @@ CC:     Catalin Marinas <catalin.marinas@arm.com>,
         Mark Brown <broonie@kernel.org>,
         Delyan Kratunov <delyank@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v4 6/6] selftests/bpf: Fix trivial typo in fentry_fexit.c
-Date:   Tue, 17 May 2022 03:18:38 -0400
-Message-ID: <20220517071838.3366093-7-xukuohai@huawei.com>
+Subject: [PATCH bpf-next v4 2/6] ftrace: Fix deadloop caused by direct call in ftrace selftest
+Date:   Tue, 17 May 2022 03:18:34 -0400
+Message-ID: <20220517071838.3366093-3-xukuohai@huawei.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220517071838.3366093-1-xukuohai@huawei.com>
 References: <20220517071838.3366093-1-xukuohai@huawei.com>
@@ -76,29 +76,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The "ipv6" word in assertion message should be "fentry_fexit".
+After direct call is enabled for arm64, ftrace selftest enters a
+dead loop:
 
+<trace_selftest_dynamic_test_func>:
+00  bti     c
+01  mov     x9, x30                            <trace_direct_tramp>:
+02  bl      <trace_direct_tramp>    ---------->     ret
+                                                     |
+                                         lr/x30 is 03, return to 03
+                                                     |
+03  mov     w0, #0x0   <-----------------------------|
+     |                                               |
+     |                   dead loop!                  |
+     |                                               |
+04  ret   ---- lr/x30 is still 03, go back to 03 ----|
+
+The reason is that when the direct caller trace_direct_tramp() returns
+to the patched function trace_selftest_dynamic_test_func(), lr is still
+the address after the instrumented instruction in the patched function,
+so when the patched function exits, it returns to itself!
+
+To fix this issue, we need to restore lr before trace_direct_tramp()
+exits, so rewrite a dedicated trace_direct_tramp() for arm64.
+
+Reported-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
 ---
- tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/ftrace.h  | 10 ++++++++++
+ arch/arm64/kernel/entry-ftrace.S | 10 ++++++++++
+ kernel/trace/trace_selftest.c    |  2 ++
+ 3 files changed, 22 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..e3c139bde46e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
+diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+index 14a35a5df0a1..6f6b184e72fb 100644
+--- a/arch/arm64/include/asm/ftrace.h
++++ b/arch/arm64/include/asm/ftrace.h
+@@ -126,6 +126,16 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
+ 	 */
+ 	return !strcmp(sym + 8, name);
+ }
++
++#ifdef CONFIG_FTRACE_SELFTEST
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
++
++#define trace_direct_tramp trace_direct_tramp
++extern void trace_direct_tramp(void);
++
++#endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
++#endif /* CONFIG_FTRACE_SELFTEST */
++
+ #endif /* ifndef __ASSEMBLY__ */
  
- 	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "ipv6 test_run");
--	ASSERT_OK(topts.retval, "ipv6 test retval");
-+	ASSERT_OK(err, "fentry_fexit test_run");
-+	ASSERT_OK(topts.retval, "fentry_fexit test retval");
+ #endif /* __ASM_FTRACE_H */
+diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+index dfe62c55e3a2..a47e87d4d3dd 100644
+--- a/arch/arm64/kernel/entry-ftrace.S
++++ b/arch/arm64/kernel/entry-ftrace.S
+@@ -357,3 +357,13 @@ SYM_CODE_START(return_to_handler)
+ 	ret
+ SYM_CODE_END(return_to_handler)
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
++
++#ifdef CONFIG_FTRACE_SELFTEST
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
++SYM_FUNC_START(trace_direct_tramp)
++	mov x10, x30
++	mov x30, x9
++	ret x10
++SYM_FUNC_END(trace_direct_tramp)
++#endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
++#endif /* CONFIG_FTRACE_SELFTEST */
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index abcadbe933bb..e7ccd0d10c39 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -785,8 +785,10 @@ static struct fgraph_ops fgraph_ops __initdata  = {
+ };
  
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
++#ifndef trace_direct_tramp
+ noinline __noclone static void trace_direct_tramp(void) { }
+ #endif
++#endif
+ 
+ /*
+  * Pretty much the same than for the function tracer from which the selftest
 -- 
 2.30.2
 
