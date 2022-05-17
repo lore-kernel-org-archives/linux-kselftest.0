@@ -2,43 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 845F5C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 07:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F235C433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 07:38:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241606AbiEQHg7 (ORCPT
+        id S241677AbiEQHh6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 May 2022 03:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        Tue, 17 May 2022 03:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241557AbiEQHgu (ORCPT
+        with ESMTP id S242212AbiEQHgV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 03:36:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 089354839F
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 00:36:47 -0700 (PDT)
+        Tue, 17 May 2022 03:36:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 754124839F
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 00:36:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652773007;
+        s=mimecast20190719; t=1652772974;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pQ8Tbw3YXlfFnImshaS6CSiXIKXl6akxMQXuGl5HlAA=;
-        b=H7jSsizinrG8nZErCw/ytFK20Fk3uOSAT2IHyDT5nRYZp/cDlb+P32jQqxa9JFRXytViAh
-        1Hap16PZJPyckgYQGkbAILxVl34BM1rAPYTKYhThRRwEJh1H1NBEsL4QVRcRnOqZh32VSz
-        MGM0WqFckrFENZCR4mqZ2R8G2JqJj44=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=R/nCNh/sCUOBHWKGEEFcQigdVp1a4yiAhFMpL8jlQok=;
+        b=VptWKs0PYcmSlvruenrxZyFcQ5ibLCOU/1qqq8hliLg1zfkUV7LUZa0IKaTuUskDgFEOgJ
+        fFxIbLVVb3Kq6wgB/sMMxH1+jw4m9kmJ1FI6HGWXJQsWPUmt0RInM3akMZK62P49frQcb8
+        AKPfHj6q8b/waYSEH5sTaN9YJh+tta8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-Mlcp5x2wPqa4VISOC-SGlw-1; Tue, 17 May 2022 03:36:44 -0400
-X-MC-Unique: Mlcp5x2wPqa4VISOC-SGlw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-161-6NBg8HGqOkOXwcR6MHJViA-1; Tue, 17 May 2022 03:36:11 -0400
+X-MC-Unique: 6NBg8HGqOkOXwcR6MHJViA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 404C9101AA47;
-        Tue, 17 May 2022 07:36:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F9BD299E75D;
+        Tue, 17 May 2022 07:36:10 +0000 (UTC)
 Received: from asgard.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 771137774;
-        Tue, 17 May 2022 07:36:39 +0000 (UTC)
-Date:   Tue, 17 May 2022 09:36:36 +0200
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C0E4E5739B3;
+        Tue, 17 May 2022 07:36:05 +0000 (UTC)
+Date:   Tue, 17 May 2022 09:36:03 +0200
 From:   Eugene Syromiatnikov <esyr@redhat.com>
 To:     Jiri Olsa <jolsa@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -53,66 +52,64 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/4] bpf_trace: handle compat in copy_user_syms
-Message-ID: <2a56d66cf4b9430982e81233f49d6c54988df056.1652772731.git.esyr@redhat.com>
-References: <cover.1652772731.git.esyr@redhat.com>
+Subject: [PATCH bpf-next v3 0/4] Fix 32-bit arch and compat support for the
+ kprobe_multi attach type
+Message-ID: <cover.1652772731.git.esyr@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1652772731.git.esyr@redhat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For compat processes, userspace size for syms pointers is different.
-Provide compat handling for copying array elements from the user space.
+As suggested in [1], the kprobe_multi interface is to be fixed for 32-bit
+architectures and compat, rather then disabled.  As it turned out,
+there are a couple of additional problems that are to be addressed:
+ - the absence of size overflow checks, leading to possible
+   out-of-bounds writes (addressed by the first patch; this one likely has
+   to be fixed in 5.18, where the version of the patch from [3]
+   may be preferrable, along with [4] to avoid applying the rest
+   of the series);
+ - the assumption that long has the same size as u64, which would make
+   cookies arrays size calculation incorrect on 32-bit architectures
+   (addressed by the second patch);
+ - the addrs array passing API, that is incompatible with compat and has
+   to be changed (addressed in the fourth patch): those are kernel
+   addresses and not user ones (as was incorrectly stated in [2]);
+   this change is only semantical for 64-bit user/kernelspace,
+   so it shouldn't impact ABI there, at least.
 
-Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
----
- kernel/trace/bpf_trace.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+[1] https://lore.kernel.org/lkml/CAADnVQ+2gwhcMht4PuDnDOFKY68Wsq8QFz4Y69NBX_TLaSexQQ@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/20220510184155.GA8295@asgard.redhat.com/
+[3] https://lore.kernel.org/lkml/20220516230455.GA25103@asgard.redhat.com/
+[4] https://lore.kernel.org/lkml/20220506142148.GA24802@asgard.redhat.com/
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index a93a54f..9d3028a 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2253,6 +2253,24 @@ struct user_syms {
- 	char *buf;
- };
- 
-+static inline int get_arr_ptr(unsigned long *p,
-+			      unsigned long __user *uaddr, u32 idx)
-+{
-+	if (unlikely(in_compat_syscall())) {
-+		compat_uptr_t __user *compat_uaddr = (compat_uptr_t __user *)uaddr;
-+		compat_uptr_t val;
-+		int err;
-+
-+		err = __get_user(val, compat_uaddr + idx);
-+		if (!err)
-+			*p = val;
-+
-+		return err;
-+	} else {
-+		return __get_user(*p, uaddr + idx);
-+	}
-+}
-+
- static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32 cnt)
- {
- 	unsigned long __user usymbol;
-@@ -2270,7 +2288,7 @@ static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32
- 		goto error;
- 
- 	for (p = buf, i = 0; i < cnt; i++) {
--		if (__get_user(usymbol, usyms + i)) {
-+		if (get_arr_ptr(&usymbol, usyms, i)) {
- 			err = -EFAULT;
- 			goto error;
- 		}
+v3:
+ - Rebased on top of bpf-next
+ - Removed unnecessary size/cookies_size assignments as suggested
+   by Yonghong Sond
+
+v2: https://lore.kernel.org/lkml/20220516230441.GA22091@asgard.redhat.com/
+ - Fixed the isses reported by CI
+
+v1: https://lore.kernel.org/lkml/20220516182657.GA28596@asgard.redhat.com/
+
+Eugene Syromiatnikov (4):
+  bpf_trace: check size for overflow in bpf_kprobe_multi_link_attach
+  bpf_trace: support 32-bit kernels in bpf_kprobe_multi_link_attach
+  bpf_trace: handle compat in copy_user_syms
+  bpf_trace: pass array of u64 values in kprobe_multi.addrs
+
+ kernel/trace/bpf_trace.c                           | 67 ++++++++++++++++------
+ tools/lib/bpf/bpf.h                                |  2 +-
+ tools/lib/bpf/libbpf.c                             |  8 +--
+ tools/lib/bpf/libbpf.h                             |  2 +-
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
+ .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +--
+ 6 files changed, 62 insertions(+), 27 deletions(-)
+
 -- 
 2.1.4
 
