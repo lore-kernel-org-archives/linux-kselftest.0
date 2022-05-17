@@ -2,216 +2,191 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 629F4C433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 07:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9632FC433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 07:07:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbiEQHCY (ORCPT
+        id S234360AbiEQHHg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 May 2022 03:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        Tue, 17 May 2022 03:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240831AbiEQHCN (ORCPT
+        with ESMTP id S232105AbiEQHHe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 03:02:13 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC98246B27;
-        Tue, 17 May 2022 00:01:53 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GIXOXI022452;
-        Tue, 17 May 2022 00:01:37 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=6h5xm4JmQFoTFEIY7PgLbaJWKi6rfumkFvziukNEZ9s=;
- b=gqHSsxV4G19VlT9tDaIQUeA8JKrsoZSX4DtWC9wBM6gveHM+zwu5OwBGuruu4C7CoeJK
- ElzDinaMnKiHmjzxelpZftNBRqFivrDrEELH7HeILcw31wMt8UtmP5zNwuHy0mx8wuEo
- b6+ITF3Kr0ACVcPm5ynHOrz8kFXNJo67ZVc= 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g2a8u74e2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 00:01:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WA2hkMxdxIBjJgFVWBwS7oU6Dqmbd4ZvsfiibyRhUebVLJ56PUZQFFQ8nJfAsJBDch5kJ8jyKjE0b41no583hhDO2NGTWOk40e8pDZFgqUlKN4swxLjunaMEDDK5qjIn/X6hGb9lILUFNvMWMRamuKTvCjkpI2K8yjW3cjBmp5qPxwZDMUtV2UnTR+wgUhLpn16HE8sivJCG+KCYUSxKri3yBGcvk4z6Vu2WzViDC5sWfqgWpKNca9fDvHxk9u9ckhB6fbkvsywiWzKkD3NwDR67wIP7NKhUFRw+tDazNfXC03psl6/8t/jQ44ZvpF+67djIAa8tmxFs/VFqeDiTJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6h5xm4JmQFoTFEIY7PgLbaJWKi6rfumkFvziukNEZ9s=;
- b=mxpZB5CwZsM+1hEbphUPlbZaZp70A4IJb0Zn74RJumAdBmp9GuG0aX9SZtNis6iwgUxe1aMnm1J66ulbI5TL0TY/iaL7RBl1NDxkeQ5keeuqROG3JLH/3n/DAocnM+U0ezUXidwPZGWgTnMVjZm0q33fXf0sJ6QJla1HHNeBgJUAs6uyMWYbjoDd/FDkxed8aTm276KGRnrnM0qMBsUcoA8+T43r4D4HS/f3Kj2N17q+1TnUYkvy8IhQhV6ZZFYllZnlQ+FCLbYi0coMVqSgaMN8jyqTNjZ2tzubcuH+aluKV3TIWa3AZNqXx2mTR3oMdWpZcpKYMwZdpaWsc0649w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SJ0PR15MB4201.namprd15.prod.outlook.com (2603:10b6:a03:2ab::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Tue, 17 May
- 2022 07:01:34 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::5811:4996:bbfd:3c53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::5811:4996:bbfd:3c53%7]) with mapi id 15.20.5273.013; Tue, 17 May 2022
- 07:01:34 +0000
-Message-ID: <d54a6bd2-904c-f4c4-5ee0-dd8fe6c64679@fb.com>
-Date:   Tue, 17 May 2022 00:01:32 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH bpf v2 1/4] bpf_trace: check size for overflow in
- bpf_kprobe_multi_link_attach
-Content-Language: en-US
-To:     Eugene Syromiatnikov <esyr@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tue, 17 May 2022 03:07:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27EF46B08;
+        Tue, 17 May 2022 00:07:31 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2RxY1HtxzhZ9q;
+        Tue, 17 May 2022 15:06:41 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 15:07:27 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-References: <20220516230455.GA25103@asgard.redhat.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220516230455.GA25103@asgard.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0002.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::7) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next v4 0/6] bpf trampoline for arm64
+Date:   Tue, 17 May 2022 03:18:32 -0400
+Message-ID: <20220517071838.3366093-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ecd9a164-d5b4-44e7-6125-08da37d31451
-X-MS-TrafficTypeDiagnostic: SJ0PR15MB4201:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR15MB4201DDD8B324325C9AE5FD33D3CE9@SJ0PR15MB4201.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PlZ71q5vfPrxa3WvLcFyo2fEjqRJM5184yFav7eVl1fG2o6jxY+baH96mmqOTYxKi/FFprtwgrlcPUodltfq44+L01ngDWF9FmFxvCbkECy5DJYHGHP6b1Bur6IIXlcqc6ofBD36xa9TaEXW13mSkjpxbxm1L0mBvpnOcaCFd4UdiMIW/17TqCXhlx6TO9ZHZF+aI1WXqH0qnh0kr42B/YwJaKFWjGtYdOt9/+zjzV5D+/JAo6HjrqlcLpubunjJBop8ZwUv9keeJODjPkjb6v4mscH5EXDAAdqCy7JPP1YhCmGzG7eue9mN5EofCPUj6bmS1ztFu+08WLZx4zcQUncSDBELT1idco5LRgyNdTmskw+RpUsFEcGp02vLwwhj0xyUpI0VJm3L5x1eqET0vj6BQm1bPByePvvioPe8Yr4OkIW3RgmWN9Dv5VHwlstVnQu69sxLSucI2jkcHEL+2KPbrkQdJgT7c3wmu18XiTksAqn86+/wk+nhROw6DvCBZ1jIFOk6yqGwtHVbtWwBx6uXZpFoDl2CzxTi4xKAOH+BSYu+RWNltKTrlE2TdWjNgoQKlVd5tWEbH7z4VOqJQnK2ZaQ/lgwPkX9zdFhA11plc/Bm0ZVQBoLPQBdQznJG12ZwBN6yUJOLK7bs2qlVMj2uzl3sjHGIs+fO9/AaK2QDQ1wGS75ltR6fQpVSwPttxUxVFcpVz3ykFLlUBx1FII6QcCqdaGq80S7k9Fuv+Rt6Bda/qkKoLZMCs/3TtWWI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(31696002)(83380400001)(2906002)(6506007)(52116002)(6512007)(53546011)(316002)(7416002)(186003)(2616005)(508600001)(8936002)(6486002)(66476007)(66946007)(66556008)(38100700002)(4326008)(54906003)(36756003)(110136005)(31686004)(8676002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N3UvNm5LZUJqTHo4VWl6eGh2N282RHY3VXlraS8xSGNweWFvWmpybXkwZ0lv?=
- =?utf-8?B?UWsveTU0UFdrMXhiekJjczJoank5MG4wMFA4V2JUTHB1TEw3ZUNOM0ZZRW5h?=
- =?utf-8?B?VE9pM3Y3TmU4bG96d1A3NXRYUXZtYmR3eTdNa0RLc2RVOWhWc2Njb3FuLy9S?=
- =?utf-8?B?MVJrSjFMTEpKb0FuMjRCK0txTmRtV3JmWkhOaFhiUVJUeldlVWNjcG43aXZS?=
- =?utf-8?B?STV1ZkFCTGlycmhoK1lzanZtMG0xSXB0emFjVlhpNHlmTXRKaVoxRjFJZXk0?=
- =?utf-8?B?Y0tvcFh3WXhsM3RRWno1N2M0STRqQzBKb1kvZUYrYnZLTnBGNDR5TFVDK20r?=
- =?utf-8?B?Ym5PWXdkS0xBMnVWYjh2TnR5bFlNSWRHdFlsQ3F1WllyWjcvZlBBaStETENS?=
- =?utf-8?B?QXBZR1RJMmxoOU91ZCtjM01WY3NidDZZYWwwb3NnY2U0YlhjY2xVMVNyak4x?=
- =?utf-8?B?Q3ZlWEFISkJUMHBQOTBhSFpVbjl0bUFtbm0vMDVVbmpBNnZ0c1FTMmFzVGt0?=
- =?utf-8?B?MDNWTHdMVitlZUZBL3lsRE9CN3ZmeG9keG8yQmtQV3VWWTBYQUtaTmFJNG00?=
- =?utf-8?B?dWxudzkzKzhOUmhnMnBIODlEWmtwYWIzR09XdDFVRTlTRDE3K3NWL0IwUEg1?=
- =?utf-8?B?MXcwaWNLTjNtcndtQ0ZYTnBpSTJ0UE80S09XRTlWQUgvclVCS0VjNFhWVTJH?=
- =?utf-8?B?c0U4dkdlTFN1b1ljZ1Jzbjh5eUdKdUphNyt5NXVMV1lIcnFpc0NRNDVwOFFj?=
- =?utf-8?B?SURrUkRJRXhTV0EyT2Y3NEhZTkUxdU95cHZlb3V1OXVWcDNCMkFzWlpSZkR1?=
- =?utf-8?B?S3pOb0poeWp2dDNBYTFyT0xkdUg3ZXlNNFl5aFlVbWdrb0NEaVM3M1ZuVExx?=
- =?utf-8?B?OVdlM2RHbzh4R3QyKzQ4U1Q2QmdlWmg4UG5jd2pTT25CTTBrUWtHRHUvT043?=
- =?utf-8?B?b21KcXozdWQ0eU1paHhDcnN5VG52dDFtd3JGNmJMKy93aXZ3b0k3VDk3Nk05?=
- =?utf-8?B?WWtGV25DZUtWdk5PdzdlUS9yR1pQQzd5Z2w0UWFYU0VyYlZSdUR2M0RnaFVK?=
- =?utf-8?B?Z2FTNFJtZFNTNDR6Wk0ybU5neWVNazQxeHlqQTFYVmFOZmptcWdYaUNhTlhW?=
- =?utf-8?B?T3FVajhMSG95SEdmb2lCRlBheDNQbWdOcm4zVVppRmxKazV5ZlNXTVplM0hI?=
- =?utf-8?B?cC85TTlMSUplRXFLcm5sZ041MDk2U29DNCtlMjhnWXRka1RHM2oyM3Bndmxi?=
- =?utf-8?B?WUtZakI2VUd1VENRV3VHZC9Nb1pEbDBTZVkyS1pxZWd3QkRuR2RyZFFoSzlS?=
- =?utf-8?B?ZWVIWklYMGlNM05Mdlh0cHFJeEdmUU5Ja0h4SlhPa2k1RzV6Z1RjbDVjeklK?=
- =?utf-8?B?dWdleGJNOEM3M3J3ajQwc25JWWx0dXZSN0lLcHpFdFU0M1liVzhKVnpzYnpR?=
- =?utf-8?B?YkM2Y2trbHNJU2pTb0szSkFCQlV4ZFZ2VWdxeVdKR0I5T0pxOXROaGxoakZQ?=
- =?utf-8?B?RGVVbjBPeW1qd0R6UkJVZ2VmZG5XbWxMU1F0NWhpWnVmVmZZZ3ZMeHYraUJQ?=
- =?utf-8?B?MkZmWUtDbGJvbVZFell1dEl1OTQ4akwrWlJXUldaM1lkcTFvMkhVQ3pLV2o3?=
- =?utf-8?B?dmo0TWNFbHBLZnM4VHZWVTB1c3FsMGdHU1lMRnBQZ2F0dU9Ta1dsUkRzMk42?=
- =?utf-8?B?dDcrS0U0TjJrVHVWdjgrUU45dFdsaVltd0l3Qm9mb0VRZkF6Tm9Kd1pyQU1M?=
- =?utf-8?B?VnBuVEhmN0xrNWdQenMvSSszU2VNMDEwRzZoMVFPSHY3am5VNm9yalFlamg4?=
- =?utf-8?B?TnUzQVZabTNxd0hXdE1odTdGWDhERjNyck56amhuSFBBZUpSa2xUOVc2ZFpx?=
- =?utf-8?B?NExFM1JudTBGdmNDd2R0L3dwci90ZThra3NKU040Y1Jaa3hrbU9kNmxXaUpX?=
- =?utf-8?B?QkNmMDgzT2IwdE1SdmdiM3RickhzOE05NzlvL0kvRGNDbVk0NVRrd0dtb3Rh?=
- =?utf-8?B?Zm9EaGg1N1UzYTVjdUVnQmRFekNtenNCZDZYZVZyZ25CRHVwN3l3UVhQMnpG?=
- =?utf-8?B?aUVvZHdtN09OK094NExsUEJPSHVSUFJaTnpZNDRQWE5PRlJDVlc0UnB4RjJj?=
- =?utf-8?B?cTlHMzMwL25UVzh3aTJXY0xvN0JVZ0xJRlpUUXNwQXd4Nlpla2tGOGdEVjZZ?=
- =?utf-8?B?RCs4NzRPa3pJYmJCYm8vejFPVU9QS2JtRzlSSEE1ZnNKNWJacTh1bmFodEVi?=
- =?utf-8?B?SysyYjJnQkFtRFl5WUJVdUR4UVp3bmtZNWRLNjNQekRVcURtMU5yTVZQRmdn?=
- =?utf-8?B?RncxSnFuOStyMnIwQktIeUVSa1Mvd01oRkEvVmErMlNXLzA0WHJ4RU5jSkJ0?=
- =?utf-8?Q?ili7B1zxpQcRqaTU=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecd9a164-d5b4-44e7-6125-08da37d31451
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 07:01:34.6101
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cPd6kcMIsSKrvTUxGOTW4qZUJKrJO61VHm0LTilTFIERPVdINvK27yVVOvFWCOMq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4201
-X-Proofpoint-ORIG-GUID: 1YpaJ4p7uccOXTKK67h0pTQzskj6P-of
-X-Proofpoint-GUID: 1YpaJ4p7uccOXTKK67h0pTQzskj6P-of
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_01,2022-05-16_02,2022-02-23_01
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
+Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
+result:
+ #9  /1     bpf_cookie/kprobe:OK
+ #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
+ #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
+ #9  /4     bpf_cookie/uprobe:OK
+ #9  /5     bpf_cookie/tracepoint:OK
+ #9  /6     bpf_cookie/perf_event:OK
+ #9  /7     bpf_cookie/trampoline:OK
+ #9  /8     bpf_cookie/lsm:OK
+ #9         bpf_cookie:FAIL
+ #18 /1     bpf_tcp_ca/dctcp:OK
+ #18 /2     bpf_tcp_ca/cubic:OK
+ #18 /3     bpf_tcp_ca/invalid_license:OK
+ #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+ #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+ #18        bpf_tcp_ca:OK
+ #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+ #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+ #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+ #51 /4     dummy_st_ops/dummy_multiple_args:OK
+ #51        dummy_st_ops:OK
+ #55        fentry_fexit:OK
+ #56        fentry_test:OK
+ #57 /1     fexit_bpf2bpf/target_no_callees:OK
+ #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+ #57 /3     fexit_bpf2bpf/func_replace:OK
+ #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+ #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+ #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+ #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+ #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+ #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+ #57        fexit_bpf2bpf:OK
+ #58        fexit_sleep:OK
+ #59        fexit_stress:OK
+ #60        fexit_test:OK
+ #67        get_func_args_test:OK
+ #68        get_func_ip_test:OK
+ #104       modify_return:OK
+ #237       xdp_bpf2bpf:OK
 
-On 5/16/22 4:04 PM, Eugene Syromiatnikov wrote:
-> Check that size would not overflow before calculation (and return
-> -EOVERFLOW if it will), to prevent potential out-of-bounds write
-> with the following copy_from_user.  Add the same check
-> to kprobe_multi_resolve_syms in case it will be called from elsewhere
-> in the future.
-> 
-> Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-> ---
->   kernel/trace/bpf_trace.c | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index d8553f4..f1d4e68 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2352,12 +2352,15 @@ static int
->   kprobe_multi_resolve_syms(const void __user *usyms, u32 cnt,
->   			  unsigned long *addrs)
->   {
-> -	unsigned long addr, size;
-> +	unsigned long addr, sym_size;
-> +	u32 size;
->   	const char __user **syms;
->   	int err = -ENOMEM;
->   	unsigned int i;
->   	char *func;
->   
-> +	if (check_mul_overflow(cnt, (u32)sizeof(*syms), &size))
-> +		return -EOVERFLOW;
->   	size = cnt * sizeof(*syms);
+bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
+failed due to lack of multi_kprobe on arm64.
 
-The statement 'size = cnt * sizeof(*syms)' can be removed right?
-Here, the 'size' will be computed properly with check_mul_overflow()
-if 0 is returned.
+v4:
+- Run the test cases on raspberry pi 4b
+- Rebase and add cookie to trampoline
+- As Steve suggested, move trace_direct_tramp() back to entry-ftrace.S to
+  avoid messing up generic code with architecture specific code
+- As Jakub suggested, merge patch 4 and patch 5 of v3 to provide full function
+  in one patch
+- As Mark suggested, add a comment for the use of aarch64_insn_patch_text_nosync()
+- Do not generate trampoline for long jump to avoid triggering ftrace_bug
+- Round stack size to multiples of 16B to avoid SPAlignmentFault
+- Use callee saved register x20 to reduce the use of mov_i64
+- Add missing BTI J instructions
+- Trivial spelling and code sytle fixes
 
->   	syms = kvzalloc(size, GFP_KERNEL);
->   	if (!syms)
-> @@ -2382,9 +2385,9 @@ kprobe_multi_resolve_syms(const void __user *usyms, u32 cnt,
->   		addr = kallsyms_lookup_name(func);
->   		if (!addr)
->   			goto error;
-> -		if (!kallsyms_lookup_size_offset(addr, &size, NULL))
-> +		if (!kallsyms_lookup_size_offset(addr, &sym_size, NULL))
->   			goto error;
-> -		addr = ftrace_location_range(addr, addr + size - 1);
-> +		addr = ftrace_location_range(addr, addr + sym_size - 1);
->   		if (!addr)
->   			goto error;
->   		addrs[i] = addr;
-> @@ -2429,6 +2432,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->   	if (!cnt)
->   		return -EINVAL;
->   
-> +	if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
-> +		return -EOVERFLOW;
->   	size = cnt * sizeof(*addrs);
+v3: https://lore.kernel.org/bpf/20220424154028.1698685-1-xukuohai@huawei.com/
+- Append test results for bpf_tcp_ca, dummy_st_ops, fexit_bpf2bpf,
+  xdp_bpf2bpf
+- Support to poke bpf progs
+- Fix return value of arch_prepare_bpf_trampoline() to the total number
+  of bytes instead of number of instructions 
+- Do not check whether CONFIG_DYNAMIC_FTRACE_WITH_REGS is enabled in
+  arch_prepare_bpf_trampoline, since the trampoline may be hooked to a bpf
+  prog
+- Restrict bpf_arch_text_poke() to poke bpf text only, as kernel functions
+  are poked by ftrace
+- Rewrite trace_direct_tramp() in inline assembly in trace_selftest.c
+  to avoid messing entry-ftrace.S
+- isolate arch_ftrace_set_direct_caller() with macro
+  CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to avoid compile error
+  when this macro is disabled
+- Some trivial code sytle fixes
 
-Same here, 'size = ...' is not needed.
+v2: https://lore.kernel.org/bpf/20220414162220.1985095-1-xukuohai@huawei.com/
+- Add Song's ACK
+- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+  style (patch 3)
+- Fix a deadloop issue in ftrace selftest (patch 2)
+- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+  ftrace direct call is not only used by bpf trampoline.
 
->   	addrs = kvmalloc(size, GFP_KERNEL);
->   	if (!addrs)
+v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
+
+Xu Kuohai (6):
+  arm64: ftrace: Add ftrace direct call support
+  ftrace: Fix deadloop caused by direct call in ftrace selftest
+  bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+  selftests/bpf: Fix trivial typo in fentry_fexit.c
+
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/ftrace.h               |  22 +
+ arch/arm64/kernel/asm-offsets.c               |   1 +
+ arch/arm64/kernel/entry-ftrace.S              |  28 +-
+ arch/arm64/net/bpf_jit.h                      |   1 +
+ arch/arm64/net/bpf_jit_comp.c                 | 523 +++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c                   |  20 -
+ include/linux/bpf.h                           |   6 +
+ kernel/bpf/bpf_struct_ops.c                   |   4 +-
+ kernel/bpf/trampoline.c                       |  34 +-
+ kernel/trace/trace_selftest.c                 |   2 +
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ 12 files changed, 603 insertions(+), 44 deletions(-)
+
+-- 
+2.30.2
+
